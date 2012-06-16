@@ -18,12 +18,11 @@ public class mod_UniversalElectricity extends NetworkMod implements IGuiHandler
 	@Override
 	public void load()
 	{
+		MinecraftForge.setGuiHandler(this, this);
 		UniversalElectricity.load();
 		UniversalComponents.load();
 		UniversalComponents.MachineRenderType = ModLoader.getUniqueBlockModelID(this, true);
 		UniversalElectricity.registerAddon(this, this.getVersion());
-		
-		MinecraftForge.setGuiHandler(this, this);
 	}
 	
 	@Override

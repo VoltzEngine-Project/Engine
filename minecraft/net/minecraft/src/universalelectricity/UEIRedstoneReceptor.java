@@ -9,7 +9,7 @@ import net.minecraft.src.universalelectricity.components.TileEntityBatteryBox;
  * @author Calclavia
  *
  */
-public interface UEIPowerRedstone
+public interface UEIRedstoneReceptor
 {
 	/**
 	 * Called when the block is powered on by redstone

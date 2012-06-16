@@ -73,7 +73,6 @@ public abstract class UEBlockConductor extends BlockContainer
         super.onBlockAdded(world, x, y, z);
         
         this.updateConductorTileEntity(world, x, y, z);
-        world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
     }
 
     /**
@@ -86,7 +85,6 @@ public abstract class UEBlockConductor extends BlockContainer
     	super.onNeighborBlockChange(world, x, y, z, blockID);
         
     	this.updateConductorTileEntity(world, x, y, z);
-    	world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
     }
 	
 	public void updateConductorTileEntity(World world, int x, int y, int z)

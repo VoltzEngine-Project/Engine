@@ -6,20 +6,18 @@ import java.util.Random;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.MathHelper;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.mod_UniversalElectricity;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEBlockMachine;
 import net.minecraft.src.universalelectricity.UEIPowerRedstone;
 import net.minecraft.src.universalelectricity.UEIRotatable;
-import net.minecraft.src.universalelectricity.UniversalElectricity;
 
 /**
  * The metadata machine class for all Universal Components machines
@@ -46,98 +44,6 @@ public class BlockUCMachine extends UEBlockMachine implements ITextureProvider
     {
     	return UCBlock.textureFile;
     }
-    
-    /**
-     * A randomly called display update to be able to add particles or other items for display
-     */
-    @Override
-    public void randomDisplayTick(World par1World, int x, int y, int z, Random par5Random)
-    {
-    	TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
-    	
-    	if(tileEntity instanceof TileEntityCoalGenerator)
-    	{
-	        if(((TileEntityCoalGenerator)tileEntity).generateRate > 0)
-	        {
-	            int var6 = (int)((TileEntityCoalGenerator)tileEntity).getDirection();
-	            float var7 = (float)x + 0.5F;
-	            float var8 = (float)y + 0.0F + par5Random.nextFloat() * 6.0F / 16.0F;
-	            float var9 = (float)z + 0.5F;
-	            float var10 = 0.52F;
-	            float var11 = par5Random.nextFloat() * 0.6F - 0.3F;
-	
-	            if (var6 == 5)
-	            {
-	                par1World.spawnParticle("smoke", (double)(var7 - var10), (double)var8, (double)(var9 + var11), 0.0D, 0.0D, 0.0D);
-	                par1World.spawnParticle("flame", (double)(var7 - var10), (double)var8, (double)(var9 + var11), 0.0D, 0.0D, 0.0D);
-	            }
-	            else if (var6 == 4)
-	            {
-	                par1World.spawnParticle("smoke", (double)(var7 + var10), (double)var8, (double)(var9 + var11), 0.0D, 0.0D, 0.0D);
-	                par1World.spawnParticle("flame", (double)(var7 + var10), (double)var8, (double)(var9 + var11), 0.0D, 0.0D, 0.0D);
-	            }
-	            else if (var6 == 3)
-	            {
-	                par1World.spawnParticle("smoke", (double)(var7 + var11), (double)var8, (double)(var9 - var10), 0.0D, 0.0D, 0.0D);
-	                par1World.spawnParticle("flame", (double)(var7 + var11), (double)var8, (double)(var9 - var10), 0.0D, 0.0D, 0.0D);
-	            }
-	            else if (var6 == 2)
-	            {
-	                par1World.spawnParticle("smoke", (double)(var7 + var11), (double)var8, (double)(var9 + var10), 0.0D, 0.0D, 0.0D);
-	                par1World.spawnParticle("flame", (double)(var7 + var11), (double)var8, (double)(var9 + var10), 0.0D, 0.0D, 0.0D);
-	            }
-	        }
-    	}
-    }
-    
-    @Override
-	public int getBlockTexture(IBlockAccess par1iBlockAccess, int x, int y, int z, int side)
-    {
-    	TileEntity tileEntity = par1iBlockAccess.getBlockTileEntity(x, y, z);
-    	
-    	if(tileEntity == null) return this.blockIndexInTexture;
-    	
-    	int metadata = par1iBlockAccess.getBlockMetadata(x, y, z);
-    	
-    	if (side == 0 || side == 1)
-        {
-            return this.blockIndexInTexture;
-        }
-        else
-        {
-        	//If it is the front side
-        	if(side == ((UEIRotatable)tileEntity).getDirection())
-        	{
-        		switch(metadata)
-        		{
-        			case 0: return this.blockIndexInTexture + 3;
-        			case 1: return this.blockIndexInTexture + 3;
-        			case 2: return this.blockIndexInTexture + 2;
-        		}
-        	}
-        	//If it is the back side
-        	else if(side == UniversalElectricity.getOrientationFromSide(((UEIRotatable)tileEntity).getDirection(), (byte)2))
-        	{
-        		switch(metadata)
-        		{
-        			case 0: return this.blockIndexInTexture + 2;
-        			case 1: return this.blockIndexInTexture + 5;
-        			case 2: return this.blockIndexInTexture + 6;
-        		}
-        	}
-
-            
-            if(metadata == 0)
-            {
-            	return this.blockIndexInTexture + 4;
-            }
-            else
-            {
-            	return this.blockIndexInTexture+1;
-            }
-        }
-    	
-	}
     
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
@@ -241,22 +147,18 @@ public class BlockUCMachine extends UEBlockMachine implements ITextureProvider
     {
 		int metadata = par1World.getBlockMetadata(x, y, z);
 
-        if (!par1World.isRemote)
-        {
-        	
-            TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
+        TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
 
-            if (tileEntity != null)
-            {
-            	switch(metadata)
-            	{
-	            	case 0: ModLoader.openGUI(par5EntityPlayer, new GUIBatteryBox(par5EntityPlayer.inventory, ((TileEntityBatteryBox)tileEntity))); break;
-	            	case 1:	ModLoader.openGUI(par5EntityPlayer, new GUICoalGenerator(par5EntityPlayer.inventory, ((TileEntityCoalGenerator)tileEntity))); break;
-	            	case 2:	ModLoader.openGUI(par5EntityPlayer, new GUIElectricFurnace(par5EntityPlayer.inventory, ((TileEntityElectricFurnace)tileEntity))); break;
-            	}
-            	
-            	return true;
-            }
+        if (tileEntity != null)
+        {
+        	switch(metadata)
+        	{
+            	case 0: par5EntityPlayer.openGui(new mod_UniversalElectricity(), 1997, par1World, x, y, z); break;
+            	/*case 1:	ModLoader.openGUI(par5EntityPlayer, new GUICoalGenerator(par5EntityPlayer.inventory, ((TileEntityCoalGenerator)tileEntity))); break;
+            	case 2:	ModLoader.openGUI(par5EntityPlayer, new GUIElectricFurnace(par5EntityPlayer.inventory, ((TileEntityElectricFurnace)tileEntity))); break;
+        	*/}
+        	
+        	return true;
         }
         
         return false;
