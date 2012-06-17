@@ -11,7 +11,7 @@ import net.minecraft.src.World;
 /**
  * REQUIRED
  * Extend from this class if your item requires electricity or to be charged.
- * @author Calclavia
+ * @author Henry
  *
  */
 public abstract class UEElectricItem extends Item

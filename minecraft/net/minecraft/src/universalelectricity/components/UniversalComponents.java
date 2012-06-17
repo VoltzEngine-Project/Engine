@@ -1,20 +1,24 @@
 package net.minecraft.src.universalelectricity.components;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.CraftingManager;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.RenderBlocks;
-import net.minecraft.src.forge.IOreHandler;
+import net.minecraft.src.TileEntity;
+import net.minecraft.src.World;
 import net.minecraft.src.forge.MinecraftForgeClient;
 import net.minecraft.src.forge.oredict.OreDictionary;
+import net.minecraft.src.forge.oredict.ShapedOreRecipe;
 import net.minecraft.src.universalelectricity.UEBlockRenderer;
 import net.minecraft.src.universalelectricity.UERenderBlocks;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.UniversalOreData;
 
-public class UniversalComponents implements IOreHandler
+public class UniversalComponents
 {
 	public static final String filePath = "/universalcomponents/";
 	
@@ -45,8 +49,6 @@ public class UniversalComponents implements IOreHandler
 	
 	public static void load()
 	{
-		OreDictionary.registerOreHandler(new UniversalComponents());
-
 		//Preload textures
 		MinecraftForgeClient.preloadTexture(UCBlock.textureFile);
 		MinecraftForgeClient.preloadTexture(UCItem.textureFile);
@@ -78,6 +80,7 @@ public class UniversalComponents implements IOreHandler
 		OreDictionary.registerOre("ingotCopper", ItemCopperIngot);
 		OreDictionary.registerOre("ingotTin", ItemTinIngot);
 		OreDictionary.registerOre("ingotBronze", ItemBronzeIngot);
+		OreDictionary.registerOre("ingotSteel", ItemSteelIngot);
 		
 		//Use this recipe if you want an uncharged battery
 		ItemStack unchargedBattery = new ItemStack(ItemBattery);
@@ -97,34 +100,23 @@ public class UniversalComponents implements IOreHandler
 		ModLoader.addRecipe(new ItemStack(BlockMachine, 1, 1), new Object [] {"!@!", "$#$", "!?!", '!', ItemSteelPlate, '@', ItemCopperWire, '?', ItemCircuit, '#', ItemMotor, '$', Block.stoneOvenIdle});
 		//Electric Furnace
 		ModLoader.addRecipe(new ItemStack(BlockMachine, 1, 2), new Object [] {"!!!", "!?!", "!#!", '!', ItemSteelIngot, '#', ItemCircuit, '?', ItemSteelPlate});
-		//Copper Ore
+		//Copper
 		FurnaceRecipes.smelting().addSmelting(UniversalElectricity.getOre(CopperOreID).blockID, UniversalElectricity.getOreMetadata(CopperOreID), new ItemStack(ItemCopperIngot));
-		//Tin Ore
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(ItemCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"}));
+		//Tin
 		FurnaceRecipes.smelting().addSmelting(UniversalElectricity.getOre(TinOreID).blockID, UniversalElectricity.getOreMetadata(TinOreID), new ItemStack(ItemTinIngot));
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(ItemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal}));
 		//Steel
 		ModLoader.addRecipe(new ItemStack(ItemSteelClump), new Object [] {"!#!", '!', Item.coal, '#', Item.ingotIron});
 		ModLoader.addSmelting(ItemSteelClump.shiftedIndex, new ItemStack(ItemSteelIngot));
-		ModLoader.addRecipe(new ItemStack(ItemSteelPlate), new Object [] {" ! ", "!!!", " ! ", '!', ItemSteelIngot});
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(ItemSteelPlate), new Object [] {" ! ", "!!!", " ! ", '!', "ingotSteel"}));
 		//Bronze
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(ItemBronzeClump, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"}));
 		ModLoader.addSmelting(ItemBronzeClump.shiftedIndex, new ItemStack(ItemBronzeIngot));
 		//Circuit
         ModLoader.addRecipe(new ItemStack(ItemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', ItemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', ItemCopperWire});
         ModLoader.addRecipe(new ItemStack(ItemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', ItemCircuit});
         ModLoader.addRecipe(new ItemStack(ItemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(ItemCircuit, 1, 1), '#', Block.blockLapis});
-	}
-	
-	@Override
-	public void registerOre(String oreClass, ItemStack ore)
-	{
-		if(oreClass.equals("ingotCopper"))
-        {
-			ModLoader.addRecipe(new ItemStack(ItemCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', ore});
-        }
-		else if(oreClass.equals("ingotTin"))
-        {
-			//Battery
-			ModLoader.addRecipe(new ItemStack(ItemBattery), new Object [] {" ! ", "!#!", "!?!", '!', ore, '?', Item.redstone, '#', Item.coal});
-        }
 	}
 	
 	public static void renderInvBlock(RenderBlocks renderBlocks, Block block, int metadata, int renderType)
@@ -133,5 +125,22 @@ public class UniversalComponents implements IOreHandler
 		{
 	        new UERenderBlocks().renderBlockAsItemWithMetadata(block, metadata);
 		}
+	}
+	
+	public static Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+	{
+		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+		
+		if (tileEntity != null)
+        {
+			switch(ID)
+			{
+				case 0: return new GUIBatteryBox(player.inventory, ((TileEntityBatteryBox)tileEntity));
+				case 1: return new GUICoalGenerator(player.inventory, ((TileEntityCoalGenerator)tileEntity));
+				case 2: return new GUIElectricFurnace(player.inventory, ((TileEntityElectricFurnace)tileEntity));
+			}
+        }
+		
+		return null;
 	}
 }

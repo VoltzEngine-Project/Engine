@@ -13,12 +13,12 @@ import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEElectricItem;
 import net.minecraft.src.universalelectricity.UEIConsumer;
-import net.minecraft.src.universalelectricity.UEIPowerRedstone;
 import net.minecraft.src.universalelectricity.UEIProducer;
+import net.minecraft.src.universalelectricity.UEIRedstoneReceptor;
 import net.minecraft.src.universalelectricity.UEIRotatable;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 
-public class TileEntityBatteryBox extends TileEntity implements UEIPowerRedstone, IPowerReceptor, ITextureProvider, UEIProducer, UEIConsumer, IInventory, ISidedInventory, UEIRotatable
+public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneReceptor, IPowerReceptor, ITextureProvider, UEIProducer, UEIConsumer, IInventory, ISidedInventory, UEIRotatable
 {
 	public int electricityStored = 0;
 	public byte facingDirection = 0;

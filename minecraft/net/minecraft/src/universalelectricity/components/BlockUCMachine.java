@@ -15,6 +15,7 @@ import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.mod_UniversalElectricity;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEBlockMachine;
 import net.minecraft.src.universalelectricity.UEIRedstoneReceptor;
@@ -243,20 +244,12 @@ public class BlockUCMachine extends UEBlockMachine implements ITextureProvider
 
         if (!par1World.isRemote)
         {
-        	
-            TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
-
-            if (tileEntity != null)
-            {
-            	switch(metadata)
-            	{
-	            	case 0: ModLoader.openGUI(par5EntityPlayer, new GUIBatteryBox(par5EntityPlayer.inventory, ((TileEntityBatteryBox)tileEntity))); break;
-	            	case 1:	ModLoader.openGUI(par5EntityPlayer, new GUICoalGenerator(par5EntityPlayer.inventory, ((TileEntityCoalGenerator)tileEntity))); break;
-	            	case 2:	ModLoader.openGUI(par5EntityPlayer, new GUIElectricFurnace(par5EntityPlayer.inventory, ((TileEntityElectricFurnace)tileEntity))); break;
-            	}
-            	
-            	return true;
-            }
+        	switch(metadata)
+        	{
+            	case 0: par5EntityPlayer.openGui(UniversalElectricity.getInstance(), 0, par1World, x, y, z); return true;
+            	case 1:	par5EntityPlayer.openGui(UniversalElectricity.getInstance(), 1, par1World, x, y, z); return true;
+            	case 2:	par5EntityPlayer.openGui(UniversalElectricity.getInstance(), 2, par1World, x, y, z); return true;
+        	}
         }
         
         return false;

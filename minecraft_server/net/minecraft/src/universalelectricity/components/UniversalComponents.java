@@ -1,10 +1,13 @@
 package net.minecraft.src.universalelectricity.components;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
+import net.minecraft.src.TileEntity;
+import net.minecraft.src.World;
 import net.minecraft.src.forge.IOreHandler;
 import net.minecraft.src.forge.oredict.OreDictionary;
 import net.minecraft.src.universalelectricity.UniversalElectricity;

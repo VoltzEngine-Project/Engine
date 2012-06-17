@@ -9,6 +9,7 @@ import java.util.Random;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
+import net.minecraft.src.mod_UniversalElectricity;
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.NetworkMod;
@@ -25,6 +26,11 @@ public class UniversalElectricity
 	public static int oreBlockID = UniversalElectricity.getConfigID(configuration, "Universal Ores", 198, true);
 	public static final UEBlockOre[] BlockOre = {new UEBlockOre(oreBlockID), new UEBlockOre(oreBlockID+1)};
 
+	public static mod_UniversalElectricity getInstance()
+	{
+		return mod_UniversalElectricity.instance;
+	}
+	
 	public static void registerAddon(NetworkMod networkmod, String version)
 	{
 		String[] versionNumbers = getVersion().split("\\.");

@@ -13,8 +13,8 @@ import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEElectricItem;
 import net.minecraft.src.universalelectricity.UEIConsumer;
-import net.minecraft.src.universalelectricity.UEIRedstoneReceptor;
 import net.minecraft.src.universalelectricity.UEIProducer;
+import net.minecraft.src.universalelectricity.UEIRedstoneReceptor;
 import net.minecraft.src.universalelectricity.UEIRotatable;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 

@@ -6,6 +6,7 @@ import net.minecraft.src.forge.IGuiHandler;
 import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.NetworkMod;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
+import net.minecraft.src.universalelectricity.components.GUIBatteryBox;
 import net.minecraft.src.universalelectricity.components.UniversalComponents;
 
 /**
@@ -15,9 +16,12 @@ import net.minecraft.src.universalelectricity.components.UniversalComponents;
 
 public class mod_UniversalElectricity extends NetworkMod implements IGuiHandler
 {
+	public static mod_UniversalElectricity instance;
+	
 	@Override
 	public void load()
 	{
+		instance = this;
 		MinecraftForge.setGuiHandler(this, this);
 		UniversalElectricity.load();
 		UniversalComponents.load();
@@ -46,7 +50,6 @@ public class mod_UniversalElectricity extends NetworkMod implements IGuiHandler
 	@Override
 	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		System.out.println("WORKING "+ID);
-		return null;
+		return UniversalComponents.getGuiElement(ID, player, world, x, y, z);
 	}
 }

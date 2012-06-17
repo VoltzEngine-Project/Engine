@@ -39,9 +39,9 @@ public class Vector3 extends Vector2
     }
     
     //Returns the values as an int
-    public int intX() { return (int)Math.round(this.x); }
-    public int intY() { return (int)Math.round(this.y); }
-    public int intZ() { return (int)Math.round(this.z); }
+    public int intX() { return (int)Math.floor(this.x); }
+    public int intY() { return (int)Math.floor(this.y); }
+    public int intZ() { return (int)Math.floor(this.z); }
 
     /**
      * Converts from Vec3D into a Vector3

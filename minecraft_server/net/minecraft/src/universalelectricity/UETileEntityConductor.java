@@ -236,7 +236,7 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 	public boolean isDisabled() { return false; }
 	
 	/**
-     * Gets the block type at the location of this entity.
+     * Gets the block type at the location of this entity (client-only).
      */
     public Block getBlockType()
     {
