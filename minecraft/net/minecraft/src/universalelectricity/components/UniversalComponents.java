@@ -7,20 +7,28 @@ import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
+import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet1Login;
 import net.minecraft.src.RenderBlocks;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.forge.IConnectionHandler;
+import net.minecraft.src.forge.IGuiHandler;
+import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.MinecraftForgeClient;
 import net.minecraft.src.forge.oredict.OreDictionary;
 import net.minecraft.src.forge.oredict.ShapedOreRecipe;
 import net.minecraft.src.universalelectricity.UEBlockRenderer;
+import net.minecraft.src.universalelectricity.UEPacketManager;
 import net.minecraft.src.universalelectricity.UERenderBlocks;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.UniversalOreData;
 
-public class UniversalComponents
+public class UniversalComponents implements IGuiHandler, IConnectionHandler
 {
 	public static final String filePath = "/universalcomponents/";
+	
+	public static UEPacketManager packetManager = new UEPacketManager("UElectricity");
 	
 	/**
 	 * Here is where all the Universal Components are defined. You may reference to these variables.
@@ -47,11 +55,13 @@ public class UniversalComponents
 	public static final Item ItemSteelPlate = new UCItem("Steel Plate", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Steel Plate", 1597, false), 8);
 	public static final Item ItemMotor = new UCItem("Motor", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Motor", 1598, false), 9);
 	
-	public static void load()
+	public void load()
 	{
 		//Preload textures
 		MinecraftForgeClient.preloadTexture(UCBlock.textureFile);
 		MinecraftForgeClient.preloadTexture(UCItem.textureFile);
+		
+		MinecraftForge.registerConnectionHandler(this);
 				
 		//Register Blocks
 		ModLoader.registerBlock(BlockMachine, ItemBlockUCMachine.class);
@@ -127,7 +137,7 @@ public class UniversalComponents
 		}
 	}
 	
-	public static Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		
@@ -143,4 +153,16 @@ public class UniversalComponents
 		
 		return null;
 	}
+
+	@Override
+	public void onConnect(NetworkManager network) { }
+
+	@Override
+	public void onLogin(NetworkManager network, Packet1Login login)
+	{
+		UniversalComponents.packetManager.registerChannel(network);
+	}
+
+	@Override
+	public void onDisconnect(NetworkManager network, String message, Object[] args) { }
 }

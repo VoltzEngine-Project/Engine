@@ -7,15 +7,9 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 {
 	//The amount of electricity stored in the conductor
 	protected int electricityStored = 0;
-	
-	//The maximum amount of electricity this conductor can take
-	protected int capacity = 0;
 
 	//Stores information on all connected blocks around this tile entity
 	public TileEntity[] connectedBlocks = {null, null, null, null, null, null};
-
-	//Checks if this is the first the tile entity updates
-	protected boolean firstUpdate = true;
 	
 	/**
 	 * The tile entity of the closest electric consumer. Null if none. Use this to detect if electricity
@@ -81,103 +75,97 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 	@Override
     public void updateEntity()
 	{
-		if(this.firstUpdate)
-		{
-			//Update some variables
-			UEBlockConductor conductorBlock = (UEBlockConductor)this.getBlockType();			
-			this.capacity = (conductorBlock).conductorCapacity();
-			((UEBlockConductor)this.getBlockType()).updateConductorTileEntity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-			this.firstUpdate = false;
-		}
+		UEBlockConductor.updateConductorTileEntity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 		
-
-		//Spread the electricity to neighboring blocks
-		byte connectedUnits = 0;
-		byte connectedConductors = 1;
-		int averageElectricity = this.electricityStored;
-		this.closestConsumer = null;
-		
-		Vector3 currentPosition = new Vector3(this.xCoord, this.yCoord, this.zCoord);
-
 		//Find the connected unit with the least amount of electricity and give more to them
-		for(byte i = 0; i < 6; i++)
+		if(!this.worldObj.isRemote)
         {
-			if(connectedBlocks[i] != null)
-			{
-				if(connectedBlocks[i] instanceof UEIConsumer || connectedBlocks[i] instanceof UEIProducer)
-				{
-					connectedUnits ++;
-					
-					if(connectedBlocks[i].getClass() == this.getClass())
-					{
-						averageElectricity += ((UETileEntityConductor)connectedBlocks[i]).electricityStored;
-						
-						TileEntity tileEntity = ((UETileEntityConductor)connectedBlocks[i]).closestConsumer;
-						
-						if(tileEntity != null)
-						{
-							this.closestConsumer = tileEntity;
-						}
-					
-						connectedConductors ++;
-					}	
-					else if(connectedBlocks[i] instanceof UEIConsumer)
-					{
-						if(((UEIConsumer)connectedBlocks[i]).canReceiveElectricity(UniversalElectricity.getOrientationFromSide(i, (byte)2)))
-						{
-							this.closestConsumer = connectedBlocks[i];
-						}
-					}
-						
-				}
-			}
-        }
-		
-		averageElectricity = averageElectricity/connectedConductors;
-		
-		
-		float averageWatt = 0;
-
-		if(connectedUnits > 0)
-		{
+			//Spread the electricity to neighboring blocks
+			byte connectedUnits = 0;
+			byte connectedConductors = 1;
+			int averageElectricity = this.electricityStored;
+			this.closestConsumer = null;
+			
+			Vector3 currentPosition = new Vector3(this.xCoord, this.yCoord, this.zCoord);
+			
 			for(byte i = 0; i < 6; i++)
 	        {
 				if(connectedBlocks[i] != null)
 				{
-					//Spread the electricity among the different blocks
-					if(connectedBlocks[i] instanceof UEIConsumer && this.electricityStored > 0)
-					{						
-						if(((UEIConsumer)connectedBlocks[i]).canReceiveElectricity(UniversalElectricity.getOrientationFromSide(i, (byte)2)))
-						{
-							int transferElectricityAmount  = 0;
-							UEIConsumer connectedConsumer = ((UEIConsumer)connectedBlocks[i]);
-							
-							if(connectedBlocks[i].getClass() == this.getClass() && this.electricityStored > ((UETileEntityConductor)connectedConsumer).electricityStored)
-							{
-								transferElectricityAmount = Math.max(Math.min(averageElectricity - ((UETileEntityConductor)connectedConsumer).electricityStored, this.electricityStored), 0);
-							}
-							else if(!(connectedConsumer instanceof UETileEntityConductor))
-							{
-								transferElectricityAmount = this.electricityStored;
-							}
-							
-							int rejectedElectricity = connectedConsumer.onReceiveElectricity(transferElectricityAmount, this.getVolts(), UniversalElectricity.getOrientationFromSide(i, (byte)2));
-							this.electricityStored = Math.max(Math.min(this.electricityStored - transferElectricityAmount + rejectedElectricity, this.capacity), 0);
-						}
-					}
-					
-					if(connectedBlocks[i] instanceof UEIProducer && this.electricityStored < this.getElectricityCapacity())
+					if(connectedBlocks[i] instanceof UEIConsumer || connectedBlocks[i] instanceof UEIProducer)
 					{
-						if(((UEIProducer)connectedBlocks[i]).canProduceElectricity(UniversalElectricity.getOrientationFromSide(i, (byte)2)))
+						connectedUnits ++;
+						
+						if(connectedBlocks[i].getClass() == this.getClass())
 						{
-							int gainedElectricity = ((UEIProducer)connectedBlocks[i]).onProduceElectricity(this.capacity-this.electricityStored, this.getVolts(), UniversalElectricity.getOrientationFromSide(i, (byte)2));
-							this.onReceiveElectricity(gainedElectricity, ((UEIProducer)connectedBlocks[i]).getVolts(), i);
+							averageElectricity += ((UETileEntityConductor)connectedBlocks[i]).electricityStored;
+							
+							TileEntity tileEntity = ((UETileEntityConductor)connectedBlocks[i]).closestConsumer;
+							
+							if(tileEntity != null)
+							{
+								this.closestConsumer = tileEntity;
+							}
+						
+							connectedConductors ++;
+						}	
+						else if(connectedBlocks[i] instanceof UEIConsumer)
+						{
+							if(((UEIConsumer)connectedBlocks[i]).canReceiveElectricity(UniversalElectricity.getOrientationFromSide(i, (byte)2)))
+							{
+								this.closestConsumer = connectedBlocks[i];
+							}
 						}
+							
 					}
 				}
 	        }
-		}
-    	
+			
+			averageElectricity = averageElectricity/connectedConductors;
+			
+			
+			float averageWatt = 0;
+	
+			if(connectedUnits > 0)
+			{
+				for(byte i = 0; i < 6; i++)
+		        {
+					if(connectedBlocks[i] != null)
+					{
+						//Spread the electricity among the different blocks
+						if(connectedBlocks[i] instanceof UEIConsumer && this.electricityStored > 0)
+						{						
+							if(((UEIConsumer)connectedBlocks[i]).canReceiveElectricity(UniversalElectricity.getOrientationFromSide(i, (byte)2)))
+							{
+								int transferElectricityAmount  = 0;
+								UEIConsumer connectedConsumer = ((UEIConsumer)connectedBlocks[i]);
+								
+								if(connectedBlocks[i].getClass() == this.getClass() && this.electricityStored > ((UETileEntityConductor)connectedConsumer).electricityStored)
+								{
+									transferElectricityAmount = Math.max(Math.min(averageElectricity - ((UETileEntityConductor)connectedConsumer).electricityStored, this.electricityStored), 0);
+								}
+								else if(!(connectedConsumer instanceof UETileEntityConductor))
+								{
+									transferElectricityAmount = this.electricityStored;
+								}
+								
+								int rejectedElectricity = connectedConsumer.onReceiveElectricity(transferElectricityAmount, this.getVolts(), UniversalElectricity.getOrientationFromSide(i, (byte)2));
+								this.electricityStored = Math.max(Math.min(this.electricityStored - transferElectricityAmount + rejectedElectricity, this.getElectricityCapacity()), 0);
+							}
+						}
+						
+						if(connectedBlocks[i] instanceof UEIProducer && this.electricityStored < this.getElectricityCapacity())
+						{
+							if(((UEIProducer)connectedBlocks[i]).canProduceElectricity(UniversalElectricity.getOrientationFromSide(i, (byte)2)))
+							{
+								int gainedElectricity = ((UEIProducer)connectedBlocks[i]).onProduceElectricity(this.getElectricityCapacity()-this.electricityStored, this.getVolts(), UniversalElectricity.getOrientationFromSide(i, (byte)2));
+								this.onReceiveElectricity(gainedElectricity, ((UEIProducer)connectedBlocks[i]).getVolts(), i);
+							}
+						}
+					}
+		        }
+			}
+        }
 	}
 	
 	/**
@@ -197,12 +185,6 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
     {
     	return this.electricityStored;
     }
-    
-    @Override
-    public int getElectricityCapacity()
-	{
-		return this.capacity;
-	}
 	
 	/**
      * Reads a tile entity from NBT.
@@ -212,7 +194,6 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
     {
         super.readFromNBT(par1NBTTagCompound);
         this.electricityStored = par1NBTTagCompound.getInteger("electricityStored");
-        this.capacity = par1NBTTagCompound.getInteger("capacity");
     }
 
     /**
@@ -223,7 +204,6 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
     {
     	super.writeToNBT(par1NBTTagCompound);
     	par1NBTTagCompound.setInteger("electricityStored", this.electricityStored);
-    	par1NBTTagCompound.setInteger("capacity", this.capacity);
     }
     
     //Conductors can not be disabled
@@ -233,5 +213,4 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 
 	@Override
 	public boolean isDisabled() { return false; }
-	
 }

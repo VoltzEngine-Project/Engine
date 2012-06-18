@@ -1,10 +1,15 @@
 package net.minecraft.src.universalelectricity.components;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
+import net.minecraft.src.NetworkManager;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.buildcraft.api.IPowerReceptor;
 import net.minecraft.src.buildcraft.api.PowerFramework;
@@ -13,12 +18,13 @@ import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEElectricItem;
 import net.minecraft.src.universalelectricity.UEIConsumer;
+import net.minecraft.src.universalelectricity.UEIPacketReceiver;
 import net.minecraft.src.universalelectricity.UEIProducer;
 import net.minecraft.src.universalelectricity.UEIRedstoneReceptor;
 import net.minecraft.src.universalelectricity.UEIRotatable;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 
-public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneReceptor, IPowerReceptor, ITextureProvider, UEIProducer, UEIConsumer, IInventory, ISidedInventory, UEIRotatable
+public class TileEntityBatteryBox extends TileEntity implements UEIPacketReceiver, UEIRedstoneReceptor, IPowerReceptor, ITextureProvider, UEIProducer, UEIConsumer, IInventory, ISidedInventory, UEIRotatable
 {
 	public int electricityStored = 0;
 	public byte facingDirection = 0;
@@ -41,6 +47,8 @@ public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneRecep
 			powerProvider = PowerFramework.currentFramework.createPowerProvider();
 			powerProvider.configure(0, 1, this.getElectricityCapacity(), 120, this.getElectricityCapacity());
 		}
+		
+	  	UniversalComponents.packetManager.registerPacketUser(this);
 	}
 	
 	
@@ -124,28 +132,31 @@ public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneRecep
 				this.powerProvider.energyStored = 0;
 			}
 	    	
-	    	//The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
-	    	if (this.containingItems[0] != null && this.electricityStored > 0)
+	    	if(!this.worldObj.isRemote)
 	        {
-	            if (this.containingItems[0].getItem() instanceof UEElectricItem)
-	            {
-	            	UEElectricItem electricItem = (UEElectricItem)this.containingItems[0].getItem();
-	            	int rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-	            	this.onProduceElectricity(electricItem.getTransferRate() - rejectedElectricity, electricItem.getVolts(), (byte)-1);
-	            }
-	        }
-	    	//The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
-	    	if (this.containingItems[1] != null && this.electricityStored < this.getElectricityCapacity())
-	        {
-	            if (this.containingItems[1].getItem() instanceof UEElectricItem)
-	            {
-	            	UEElectricItem electricItem = (UEElectricItem)this.containingItems[1].getItem();
-	            	if(electricItem.canProduceElectricity())
-	            	{
-		            	int receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
-		            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
-	            	}
-	            }
+		    	//The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
+		    	if (this.containingItems[0] != null && this.electricityStored > 0)
+		        {
+		            if (this.containingItems[0].getItem() instanceof UEElectricItem)
+		            {
+		            	UEElectricItem electricItem = (UEElectricItem)this.containingItems[0].getItem();
+		            	int rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
+		            	this.onProduceElectricity(electricItem.getTransferRate() - rejectedElectricity, electricItem.getVolts(), (byte)-1);
+		            }
+		        }
+		    	//The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
+		    	if (this.containingItems[1] != null && this.electricityStored < this.getElectricityCapacity())
+		        {
+		            if (this.containingItems[1].getItem() instanceof UEElectricItem)
+		            {
+		            	UEElectricItem electricItem = (UEElectricItem)this.containingItems[1].getItem();
+		            	if(electricItem.canProduceElectricity())
+		            	{
+			            	int receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
+			            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
+		            	}
+		            }
+		        }
 	        }
     	}
     }
@@ -346,5 +357,29 @@ public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneRecep
 	public boolean isDisabled()
 	{
 		return this.disableTicks > -1;
+	}
+
+	@Override
+	public void onPacketData(NetworkManager network, String channel, byte[] data)
+	{
+		DataInputStream dataStream = new DataInputStream(new ByteArrayInputStream(data));
+
+        try
+        {
+        	int packetID = dataStream.readInt();
+        	this.facingDirection = (byte)dataStream.readDouble();
+        	this.electricityStored = (int)dataStream.readDouble();
+        	this.disableTicks = (int)dataStream.readDouble();
+        }
+        catch(IOException e)
+        {
+             e.printStackTrace();
+        }
+	}
+
+	@Override
+	public int getPacketID()
+	{
+		return 2;
 	}
 }

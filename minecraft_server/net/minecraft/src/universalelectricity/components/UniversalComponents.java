@@ -1,21 +1,30 @@
 package net.minecraft.src.universalelectricity.components;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.CraftingManager;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
+import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet1Login;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import net.minecraft.src.forge.IOreHandler;
+import net.minecraft.src.forge.IConnectionHandler;
+import net.minecraft.src.forge.IGuiHandler;
+import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.oredict.OreDictionary;
+import net.minecraft.src.forge.oredict.ShapedOreRecipe;
+import net.minecraft.src.universalelectricity.UEPacketManager;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.UniversalOreData;
 
-public class UniversalComponents implements IOreHandler
+public class UniversalComponents implements IGuiHandler, IConnectionHandler
 {
 	public static final String filePath = "/universalcomponents/";
+	
+	public static UEPacketManager packetManager = new UEPacketManager("UElectricity");
 	
 	/**
 	 * Here is where all the Universal Components are defined. You may reference to these variables.
@@ -42,10 +51,10 @@ public class UniversalComponents implements IOreHandler
 	public static final Item ItemSteelPlate = new UCItem("Steel Plate", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Steel Plate", 1597, false), 8);
 	public static final Item ItemMotor = new UCItem("Motor", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Motor", 1598, false), 9);
 	
-	public static void load()
+	public void load()
 	{
-		OreDictionary.registerOreHandler(new UniversalComponents());
-				
+		MinecraftForge.registerConnectionHandler(this);
+		
 		//Register Blocks
 		ModLoader.registerBlock(BlockMachine, ItemBlockUCMachine.class);
 		ModLoader.registerBlock(BlockCopperWire);
@@ -73,6 +82,7 @@ public class UniversalComponents implements IOreHandler
 		OreDictionary.registerOre("ingotCopper", ItemCopperIngot);
 		OreDictionary.registerOre("ingotTin", ItemTinIngot);
 		OreDictionary.registerOre("ingotBronze", ItemBronzeIngot);
+		OreDictionary.registerOre("ingotSteel", ItemSteelIngot);
 		
 		//Use this recipe if you want an uncharged battery
 		ItemStack unchargedBattery = new ItemStack(ItemBattery);
@@ -92,33 +102,51 @@ public class UniversalComponents implements IOreHandler
 		ModLoader.addRecipe(new ItemStack(BlockMachine, 1, 1), new Object [] {"!@!", "$#$", "!?!", '!', ItemSteelPlate, '@', ItemCopperWire, '?', ItemCircuit, '#', ItemMotor, '$', Block.stoneOvenIdle});
 		//Electric Furnace
 		ModLoader.addRecipe(new ItemStack(BlockMachine, 1, 2), new Object [] {"!!!", "!?!", "!#!", '!', ItemSteelIngot, '#', ItemCircuit, '?', ItemSteelPlate});
-		//Copper Ore
+		//Copper
 		FurnaceRecipes.smelting().addSmelting(UniversalElectricity.getOre(CopperOreID).blockID, UniversalElectricity.getOreMetadata(CopperOreID), new ItemStack(ItemCopperIngot));
-		//Tin Ore
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(ItemCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"}));
+		//Tin
 		FurnaceRecipes.smelting().addSmelting(UniversalElectricity.getOre(TinOreID).blockID, UniversalElectricity.getOreMetadata(TinOreID), new ItemStack(ItemTinIngot));
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(ItemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal}));
 		//Steel
 		ModLoader.addRecipe(new ItemStack(ItemSteelClump), new Object [] {"!#!", '!', Item.coal, '#', Item.ingotIron});
 		ModLoader.addSmelting(ItemSteelClump.shiftedIndex, new ItemStack(ItemSteelIngot));
-		ModLoader.addRecipe(new ItemStack(ItemSteelPlate), new Object [] {" ! ", "!!!", " ! ", '!', ItemSteelIngot});
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(ItemSteelPlate), new Object [] {" ! ", "!!!", " ! ", '!', "ingotSteel"}));
 		//Bronze
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(ItemBronzeClump, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"}));
 		ModLoader.addSmelting(ItemBronzeClump.shiftedIndex, new ItemStack(ItemBronzeIngot));
 		//Circuit
         ModLoader.addRecipe(new ItemStack(ItemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', ItemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', ItemCopperWire});
         ModLoader.addRecipe(new ItemStack(ItemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', ItemCircuit});
         ModLoader.addRecipe(new ItemStack(ItemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(ItemCircuit, 1, 1), '#', Block.blockLapis});
 	}
-	
-	@Override
-	public void registerOre(String oreClass, ItemStack ore)
+
+	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		if(oreClass.equals("ingotCopper"))
+		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+		
+		if (tileEntity != null)
         {
-			ModLoader.addRecipe(new ItemStack(ItemCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', ore});
+			switch(ID)
+			{
+				case 0: return new ContainerBatteryBox(player.inventory, ((TileEntityBatteryBox)tileEntity));
+				case 1: return new ContainerCoalGenerator(player.inventory, ((TileEntityCoalGenerator)tileEntity));
+				case 2: return new ContainerElectricFurnace(player.inventory, ((TileEntityElectricFurnace)tileEntity));
+			}
         }
-		else if(oreClass.equals("ingotTin"))
-        {
-			//Battery
-			ModLoader.addRecipe(new ItemStack(ItemBattery), new Object [] {" ! ", "!#!", "!?!", '!', ore, '?', Item.redstone, '#', Item.coal});
-        }
+		
+		return null;
 	}
+
+	@Override
+	public void onConnect(NetworkManager network) { }
+
+	@Override
+	public void onLogin(NetworkManager network, Packet1Login login)
+	{
+		UniversalComponents.packetManager.registerChannel(network);
+	}
+
+	@Override
+	public void onDisconnect(NetworkManager network, String message, Object[] args) { }
 }

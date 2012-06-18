@@ -25,4 +25,10 @@ public class TileEntityCopperWire extends UETileEntityConductor
 			this.worldObj.spawnParticle("largesmoke", this.xCoord, this.yCoord, this.zCoord, 0, 0, 0);
         }
 	}
+
+	@Override
+	public int getElectricityCapacity()
+	{
+		return 120;
+	}
 }

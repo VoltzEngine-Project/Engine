@@ -89,11 +89,4 @@ public class BlockCopperWire extends UEBlockConductor
     {
     	return new TileEntityCopperWire();
     }
-	
-	//Per tick
-	@Override
-	public int conductorCapacity()
-	{
-		return 120;
-	}
 }

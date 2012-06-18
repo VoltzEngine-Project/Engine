@@ -111,6 +111,8 @@ public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneRecep
     @Override
 	public void updateEntity()
     {    	
+    	UniversalComponents.packetManager.sendPacketData(2, new double[]{this.facingDirection, this.electricityStored, this.disableTicks});
+
     	if(disableTicks > -1)
     	{
     		this.disableTicks --;
@@ -124,28 +126,31 @@ public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneRecep
 				this.powerProvider.energyStored = 0;
 			}
 	    	
-	    	//The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
-	    	if (this.containingItems[0] != null && this.electricityStored > 0)
+	    	if(!this.worldObj.isRemote)
 	        {
-	            if (this.containingItems[0].getItem() instanceof UEElectricItem)
-	            {
-	            	UEElectricItem electricItem = (UEElectricItem)this.containingItems[0].getItem();
-	            	int rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-	            	this.onProduceElectricity(electricItem.getTransferRate() - rejectedElectricity, electricItem.getVolts(), (byte)-1);
-	            }
-	        }
-	    	//The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
-	    	if (this.containingItems[1] != null && this.electricityStored < this.getElectricityCapacity())
-	        {
-	            if (this.containingItems[1].getItem() instanceof UEElectricItem)
-	            {
-	            	UEElectricItem electricItem = (UEElectricItem)this.containingItems[1].getItem();
-	            	if(electricItem.canProduceElectricity())
-	            	{
-		            	int receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
-		            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
-	            	}
-	            }
+		    	//The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
+		    	if (this.containingItems[0] != null && this.electricityStored > 0)
+		        {
+		            if (this.containingItems[0].getItem() instanceof UEElectricItem)
+		            {
+		            	UEElectricItem electricItem = (UEElectricItem)this.containingItems[0].getItem();
+		            	int rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
+		            	this.onProduceElectricity(electricItem.getTransferRate() - rejectedElectricity, electricItem.getVolts(), (byte)-1);
+		            }
+		        }
+		    	//The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
+		    	if (this.containingItems[1] != null && this.electricityStored < this.getElectricityCapacity())
+		        {
+		            if (this.containingItems[1].getItem() instanceof UEElectricItem)
+		            {
+		            	UEElectricItem electricItem = (UEElectricItem)this.containingItems[1].getItem();
+		            	if(electricItem.canProduceElectricity())
+		            	{
+			            	int receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
+			            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
+		            	}
+		            }
+		        }
 	        }
     	}
     }
@@ -340,7 +345,6 @@ public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneRecep
 	{
 		this.disableTicks = duration;
 	}
-
 
 	@Override
 	public boolean isDisabled()

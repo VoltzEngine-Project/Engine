@@ -87,7 +87,7 @@ public abstract class UEBlockConductor extends BlockContainer
     	this.updateConductorTileEntity(world, x, y, z);
     }
 	
-	public void updateConductorTileEntity(World world, int x, int y, int z)
+	public static void updateConductorTileEntity(World world, int x, int y, int z)
 	{
 		for(byte i = 0; i < 6; i++)
         {
@@ -96,11 +96,6 @@ public abstract class UEBlockConductor extends BlockContainer
         	conductorTileEntity.addConnection(getUEUnit(world, x, y, z, i), i);
         }
 	}
-	
-	/**
-	 * @return The electricity flow of this conductor in ticks
-	 */
-	public abstract int conductorCapacity();
 	
 	/**
 	 * In your Block Conductor class you must specify the UETileEntityConductor class.

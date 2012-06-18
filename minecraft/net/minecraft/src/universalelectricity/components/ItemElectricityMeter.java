@@ -25,20 +25,23 @@ public class ItemElectricityMeter extends Item implements ITextureProvider
     @Override
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7)
     {
-    	//Check to make sure the meter has electricity.
-    	TileEntity tileEntity = par3World.getBlockTileEntity(par4, par5, par6);
-        if(tileEntity != null)
+    	if(!par3World.isRemote)
         {
-        	if(tileEntity instanceof UETileEntityConductor)
-        	{
-        		par2EntityPlayer.addChatMessage("Electricity Flow: "+UniversalElectricity.getWattDisplay( ((UETileEntityConductor)tileEntity).getStoredElectricity()*20 ));
-        		return true;
-        	}
-        	else if(tileEntity instanceof UEIConsumer)
-        	{
-        		par2EntityPlayer.addChatMessage("Electricity: "+UniversalElectricity.getWattDisplay(((UEIConsumer)tileEntity).getStoredElectricity()*20)+"/"+UniversalElectricity.getWattDisplay(((UEIConsumer)tileEntity).getElectricityCapacity()));
-        		return true;
-        	}
+	    	//Check to make sure the meter has electricity.
+	    	TileEntity tileEntity = par3World.getBlockTileEntity(par4, par5, par6);
+	        if(tileEntity != null)
+	        {
+	        	if(tileEntity instanceof UETileEntityConductor)
+	        	{
+	        		par2EntityPlayer.addChatMessage("Electricity Flow: "+UniversalElectricity.getWattDisplay( ((UETileEntityConductor)tileEntity).getStoredElectricity()*20 ));
+	        		return true;
+	        	}
+	        	else if(tileEntity instanceof UEIConsumer)
+	        	{
+	        		par2EntityPlayer.addChatMessage("Electricity: "+UniversalElectricity.getWattDisplay(((UEIConsumer)tileEntity).getStoredElectricity()*20)+"/"+UniversalElectricity.getWattDisplay(((UEIConsumer)tileEntity).getElectricityCapacity()));
+	        		return true;
+	        	}
+	        }
         }
         return false;
     }

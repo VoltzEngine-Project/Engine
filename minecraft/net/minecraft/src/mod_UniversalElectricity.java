@@ -14,17 +14,18 @@ import net.minecraft.src.universalelectricity.components.UniversalComponents;
  * @author Calclavia
  */
 
-public class mod_UniversalElectricity extends NetworkMod implements IGuiHandler
+public class mod_UniversalElectricity extends NetworkMod
 {
 	public static mod_UniversalElectricity instance;
+	public static final UniversalComponents universalComponents = new UniversalComponents();
 	
 	@Override
 	public void load()
 	{
-		instance = this;
-		MinecraftForge.setGuiHandler(this, this);
+		this.instance = this;
+		MinecraftForge.setGuiHandler(this, universalComponents);
 		UniversalElectricity.load();
-		UniversalComponents.load();
+		universalComponents.load();
 		UniversalComponents.MachineRenderType = ModLoader.getUniqueBlockModelID(this, true);
 		UniversalElectricity.registerAddon(this, this.getVersion());
 	}
@@ -45,11 +46,5 @@ public class mod_UniversalElectricity extends NetworkMod implements IGuiHandler
 	public void renderInvBlock(RenderBlocks renderBlocks, Block block, int metadata, int renderType)
 	{
 		UniversalComponents.renderInvBlock(renderBlocks, block, metadata, renderType);
-	}
-	
-	@Override
-	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-	{
-		return UniversalComponents.getGuiElement(ID, player, world, x, y, z);
 	}
 }

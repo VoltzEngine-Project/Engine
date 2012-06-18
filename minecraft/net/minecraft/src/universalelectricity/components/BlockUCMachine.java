@@ -11,11 +11,9 @@ import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.MathHelper;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import net.minecraft.src.mod_UniversalElectricity;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEBlockMachine;
 import net.minecraft.src.universalelectricity.UEIRedstoneReceptor;
@@ -252,7 +250,7 @@ public class BlockUCMachine extends UEBlockMachine implements ITextureProvider
         	}
         }
         
-        return false;
+        return true;
     }
     
     /**

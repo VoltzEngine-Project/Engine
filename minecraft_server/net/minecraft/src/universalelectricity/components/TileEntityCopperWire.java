@@ -5,12 +5,6 @@ import net.minecraft.src.universalelectricity.UETileEntityConductor;
 
 public class TileEntityCopperWire extends UETileEntityConductor
 {
-	@Override
-	public int getVolts()
-	{
-		return 120;
-	}
-	
 	/**
 	 * Called when the conductor's voltage becomes higher than it should be.
 	 * @param volts - The amount of volts being forced into the conductor
@@ -25,4 +19,17 @@ public class TileEntityCopperWire extends UETileEntityConductor
 			this.worldObj.spawnParticle("largesmoke", this.xCoord, this.yCoord, this.zCoord, 0, 0, 0);
         }
 	}
+	
+	@Override
+	public int getElectricityCapacity()
+	{
+		return 120;
+	}
+	
+	@Override
+	public int getVolts()
+	{
+		return 120;
+	}
+	
 }

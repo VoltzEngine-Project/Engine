@@ -16,13 +16,18 @@ import net.minecraft.src.universalelectricity.UniversalElectricity;
 
 public class TileEntityElectricFurnace extends TileEntity implements ITextureProvider, UEIConsumer, IInventory, ISidedInventory, UEIRotatable
 {
+	//The amount of ticks requried to smelt this item
+	public static final int smeltingTimeRequired = 160;
+		
+	//The electricity stored in this tile entity
 	public int electricityStored = 0;
+	
 	//How many ticks has this item been smelting for?
 	public int smeltingTicks = 0;
+	
+	//The facing direction of this tile entity
 	public byte facingDirection = 0;
-	//Constants
-	//The amount of ticks requried to smelt this item
-	public final int smeltingTimeRequired = 160;
+	
 	 /**
      * The ItemStacks that hold the items currently being used in the battery box
      */
@@ -70,58 +75,62 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
     @Override
 	public void updateEntity()
     {
+    	UniversalComponents.packetManager.sendPacketData(3, new double[]{this.facingDirection, this.electricityStored, this.smeltingTicks, this.disableTicks});
+
     	if(disableTicks > -1)
     	{
     		this.disableTicks --;
     	}
     	else
     	{
-	    	//The bottom slot is for portable batteries
-	    	if (this.containingItems[0] != null && this.electricityStored < this.getElectricityCapacity())
+    		if(!this.worldObj.isRemote)
 	        {
-	            if (this.containingItems[0].getItem() instanceof UEElectricItem)
-	            {
-		           	UEElectricItem electricItem = (UEElectricItem)this.containingItems[0].getItem();
-		           	
-	            	if(electricItem.canProduceElectricity())
-		           	{
-		            	int receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-		            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
+		    	//The bottom slot is for portable batteries
+		    	if (this.containingItems[0] != null && this.electricityStored < this.getElectricityCapacity())
+		        {
+		            if (this.containingItems[0].getItem() instanceof UEElectricItem)
+		            {
+			           	UEElectricItem electricItem = (UEElectricItem)this.containingItems[0].getItem();
+			           	
+		            	if(electricItem.canProduceElectricity())
+			           	{
+			            	int receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
+			            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
+			            }
 		            }
-	            }
+		        }
+		    	//The left slot contains the item to be smelted
+		    	if(this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
+		        {
+			    	//Use all the electricity
+		        	this.electricityStored = 0;
+		        	this.smeltingTicks = this.smeltingTimeRequired;
+		        }
+		    	
+		        //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
+		        if(this.canSmelt() && this.smeltingTicks > 0)
+		    	{
+		    		//Update some variables.
+		    		this.smeltingTicks --;
+		    		this.electricityStored -= this.getElectricityCapacity()/this.smeltingTimeRequired;
+		    		//When the item is finished smelting
+		    		if(this.smeltingTicks == 0)
+		    		{
+		    			if(this.containingItems[2] == null)
+		    			{
+		    				this.containingItems[2] = FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]);
+		    			}
+		    			else if(this.containingItems[2] == FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]))
+		    			{
+		    				this.containingItems[2].stackSize ++;
+		    			}
+		    			
+		    			this.decrStackSize(1, 1);
+		    			this.smeltingTicks = 0;
+		    		}
+		    	}
 	        }
-	    	//The left slot contains the item to be smelted
-	    	if(this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
-	        {
-		    	//Use all the electricity
-	        	this.electricityStored = 0;
-	        	this.smeltingTicks = this.smeltingTimeRequired;
-	        }
-	    	
-	        //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
-	        if(this.canSmelt() && this.smeltingTicks > 0)
-	    	{
-	    		//Update some variables.
-	    		this.smeltingTicks --;
-	    		this.electricityStored -= this.getElectricityCapacity()/this.smeltingTimeRequired;
-	    		//When the item is finished smelting
-	    		if(this.smeltingTicks == 0)
-	    		{
-	    			if(this.containingItems[2] == null)
-	    			{
-	    				this.containingItems[2] = FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]);
-	    			}
-	    			else if(this.containingItems[2] == FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]))
-	    			{
-	    				this.containingItems[2].stackSize ++;
-	    			}
-	    			
-	    			this.decrStackSize(1, 1);
-	    			this.smeltingTicks = 0;
-	    		}
-	    	}
     	}
-        
     }
     //Check all conditions and see if we can start smelting
     public boolean canSmelt()

@@ -17,12 +17,13 @@ import net.minecraft.src.universalelectricity.UniversalElectricity;
 public class TileEntityCoalGenerator extends TileEntity implements ITextureProvider, UEIProducer, IInventory, ISidedInventory, UEIRotatable
 {
 	//Maximum possible generation rate of watts in SECONDS
-	public int maxGenerateRate = 560;
+	public static final int maxGenerateRate = 560;
+		
+	//The direction in which this tile entity is facing
+	public byte facingDirection = 0;
 	
 	//Current generation rate based on hull heat. In TICKS.
 	public float generateRate = 0;
-		
-	public byte facingDirection = 0;
 	
 	public UETileEntityConductor connectedWire = null;
 	 /**
@@ -61,6 +62,8 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
     @Override
 	public void updateEntity()
     {    	
+    	UniversalComponents.packetManager.sendPacketData(1, new double[]{this.facingDirection, this.generateRate, this.disableTicks});
+
     	//Check nearby blocks and see if the conductor is full. If so, then it is connected
     	TileEntity tileEntity = UEBlockConductor.getUEUnit(this.worldObj, this.xCoord, this.yCoord, this.zCoord, UniversalElectricity.getOrientationFromSide(this.facingDirection, (byte)2));
     	
@@ -79,7 +82,7 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
     	}
     	else
     	{	
-	    	if (!this.worldObj.isRemote)
+	    	if(!this.worldObj.isRemote)
 	        {
 		    	//The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
 		    	if (this.containingItems[0] != null && this.connectedWire != null && this.connectedWire.getStoredElectricity() < this.connectedWire.getElectricityCapacity())
@@ -112,6 +115,7 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
         	this.generateRate = (float)Math.max(this.generateRate-0.05, 0);
         }
     }
+    
     /**
      * Reads a tile entity from NBT.
      */
@@ -274,7 +278,6 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
 	{
 		this.disableTicks = duration;
 	}
-
 
 	@Override
 	public boolean isDisabled()

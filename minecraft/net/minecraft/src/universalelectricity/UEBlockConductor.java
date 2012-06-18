@@ -73,6 +73,8 @@ public abstract class UEBlockConductor extends BlockContainer
         super.onBlockAdded(world, x, y, z);
         
         this.updateConductorTileEntity(world, x, y, z);
+        
+        world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
     }
 
     /**
@@ -81,13 +83,11 @@ public abstract class UEBlockConductor extends BlockContainer
      */
 	@Override
     public void onNeighborBlockChange(World world, int x, int y, int z, int blockID)
-    {
-    	super.onNeighborBlockChange(world, x, y, z, blockID);
-        
+    {        
     	this.updateConductorTileEntity(world, x, y, z);
     }
 	
-	public void updateConductorTileEntity(World world, int x, int y, int z)
+	public static void updateConductorTileEntity(World world, int x, int y, int z)
 	{
 		for(byte i = 0; i < 6; i++)
         {
@@ -96,11 +96,6 @@ public abstract class UEBlockConductor extends BlockContainer
         	conductorTileEntity.addConnection(getUEUnit(world, x, y, z, i), i);
         }
 	}
-	
-	/**
-	 * @return The electricity flow of this conductor in ticks
-	 */
-	public abstract int conductorCapacity();
 	
 	/**
 	 * In your Block Conductor class you must specify the UETileEntityConductor class.

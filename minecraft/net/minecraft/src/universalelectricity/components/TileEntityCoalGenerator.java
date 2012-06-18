@@ -1,29 +1,36 @@
 package net.minecraft.src.universalelectricity.components;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
+import net.minecraft.src.NetworkManager;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEBlockConductor;
+import net.minecraft.src.universalelectricity.UEIPacketReceiver;
 import net.minecraft.src.universalelectricity.UEIProducer;
 import net.minecraft.src.universalelectricity.UEIRotatable;
 import net.minecraft.src.universalelectricity.UETileEntityConductor;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 
-public class TileEntityCoalGenerator extends TileEntity implements ITextureProvider, UEIProducer, IInventory, ISidedInventory, UEIRotatable
+public class TileEntityCoalGenerator extends TileEntity implements ITextureProvider, UEIProducer, IInventory, ISidedInventory, UEIRotatable, UEIPacketReceiver
 {
 	//Maximum possible generation rate of watts in SECONDS
-	public int maxGenerateRate = 560;
+	public static final int maxGenerateRate = 560;
+		
+	//The direction in which this tile entity is facing
+	public byte facingDirection = 0;
 	
 	//Current generation rate based on hull heat. In TICKS.
 	public float generateRate = 0;
 		
-	public byte facingDirection = 0;
-	
 	public UETileEntityConductor connectedWire = null;
 	 /**
      * The number of ticks that a fresh copy of the currently-burning item would keep the furnace burning for
@@ -36,7 +43,12 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
     
     //The ticks in which this tile entity is disabled. -1 = Not disabled
   	private int disableTicks = -1;
-    
+  	
+  	public TileEntityCoalGenerator()
+  	{
+  		UniversalComponents.packetManager.registerPacketUser(this);
+  	}
+  	    
     @Override
 	public int onProduceElectricity(int maxWatt, int voltage, byte side)
     {
@@ -79,7 +91,7 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
     	}
     	else
     	{	
-	    	if (!this.worldObj.isRemote)
+	    	if(!this.worldObj.isRemote)
 	        {
 		    	//The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
 		    	if (this.containingItems[0] != null && this.connectedWire != null && this.connectedWire.getStoredElectricity() < this.connectedWire.getElectricityCapacity())
@@ -96,20 +108,23 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
 	        }
     	}
     	
-    	//Starts generating electricity if the device is heated up
-    	if (this.itemCookTime > 0)
+    	if(!this.worldObj.isRemote)
         {
-            this.itemCookTime --;
-            
-            if(this.connectedWire != null && this.connectedWire.getStoredElectricity() < this.connectedWire.getElectricityCapacity() && !this.isDisabled())
-            {
-            	this.generateRate = (float)Math.min(this.generateRate+Math.min((this.generateRate)*0.001+0.0015, 0.05F), this.maxGenerateRate/20);
-            }
-        }
-
-    	if(this.connectedWire == null || this.itemCookTime <= 0)
-    	{
-        	this.generateRate = (float)Math.max(this.generateRate-0.05, 0);
+	    	//Starts generating electricity if the device is heated up
+	    	if (this.itemCookTime > 0)
+	        {
+	            this.itemCookTime --;
+	            
+	            if(this.connectedWire != null && this.connectedWire.getStoredElectricity() < this.connectedWire.getElectricityCapacity() && !this.isDisabled())
+	            {
+	            	this.generateRate = (float)Math.min(this.generateRate+Math.min((this.generateRate)*0.001+0.0015, 0.05F), this.maxGenerateRate/20);
+	            }
+	        }
+	
+	    	if(this.connectedWire == null || this.itemCookTime <= 0)
+	    	{
+	        	this.generateRate = (float)Math.max(this.generateRate-0.05, 0);
+	        }
         }
     }
     /**
@@ -227,9 +242,7 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
         }
 	}
 	@Override
-	public String getInvName() {
-		return "Coal Generator";
-	}
+	public String getInvName() { return "Coal Generator"; }
 	@Override
 	public int getInventoryStackLimit()
 	{
@@ -280,5 +293,29 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
 	public boolean isDisabled()
 	{
 		return this.disableTicks > -1;
+	}
+	
+	@Override
+	public void onPacketData(NetworkManager network, String channel, byte[] data)
+	{		
+		DataInputStream dataStream = new DataInputStream(new ByteArrayInputStream(data));
+
+        try
+        {
+        	int packetID = dataStream.readInt();
+        	this.facingDirection = (byte)dataStream.readDouble();
+        	this.generateRate = (float)dataStream.readDouble();
+        	this.disableTicks = (int)dataStream.readDouble();
+        }
+        catch(IOException e)
+        {
+             e.printStackTrace();
+        }
+	}
+
+	@Override
+	public int getPacketID()
+	{
+		return 1;
 	}
 }

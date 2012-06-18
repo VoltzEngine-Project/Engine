@@ -1,4 +1,8 @@
 package net.minecraft.src.universalelectricity.components;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.FurnaceRecipes;
@@ -6,23 +10,30 @@ import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
+import net.minecraft.src.NetworkManager;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEElectricItem;
 import net.minecraft.src.universalelectricity.UEIConsumer;
+import net.minecraft.src.universalelectricity.UEIPacketReceiver;
 import net.minecraft.src.universalelectricity.UEIRotatable;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 
-public class TileEntityElectricFurnace extends TileEntity implements ITextureProvider, UEIConsumer, IInventory, ISidedInventory, UEIRotatable
+public class TileEntityElectricFurnace extends TileEntity implements ITextureProvider, UEIConsumer, IInventory, ISidedInventory, UEIRotatable, UEIPacketReceiver
 {
+	//The amount of ticks requried to smelt this item
+	public static final int smeltingTimeRequired = 160;
+		
+	//The electricity stored in this tile entity
 	public int electricityStored = 0;
+	
 	//How many ticks has this item been smelting for?
 	public int smeltingTicks = 0;
+	
+	//The facing direction of this tile entity
 	public byte facingDirection = 0;
-	//Constants
-	//The amount of ticks requried to smelt this item
-	public final int smeltingTimeRequired = 160;
+	
 	 /**
      * The ItemStacks that hold the items currently being used in the battery box
      */
@@ -31,6 +42,11 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
     //The ticks in which this tile entity is disabled. -1 = Not disabled
   	private int disableTicks = -1;
     
+  	public TileEntityElectricFurnace()
+	{
+	  	UniversalComponents.packetManager.registerPacketUser(this);
+	}
+  	
     /**
 	 * onRecieveElectricity is called whenever a Universal Electric conductor sends a packet of electricity to the consumer (which is this block).
 	 * @param watts - The amount of watts this block received.
@@ -76,50 +92,53 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
     	}
     	else
     	{
-	    	//The bottom slot is for portable batteries
-	    	if (this.containingItems[0] != null && this.electricityStored < this.getElectricityCapacity())
+    		if(!this.worldObj.isRemote)
 	        {
-	            if (this.containingItems[0].getItem() instanceof UEElectricItem)
-	            {
-		           	UEElectricItem electricItem = (UEElectricItem)this.containingItems[0].getItem();
-		           	
-	            	if(electricItem.canProduceElectricity())
-		           	{
-		            	int receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-		            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
+		    	//The bottom slot is for portable batteries
+		    	if (this.containingItems[0] != null && this.electricityStored < this.getElectricityCapacity())
+		        {
+		            if (this.containingItems[0].getItem() instanceof UEElectricItem)
+		            {
+			           	UEElectricItem electricItem = (UEElectricItem)this.containingItems[0].getItem();
+			           	
+		            	if(electricItem.canProduceElectricity())
+			           	{
+			            	int receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
+			            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
+			            }
 		            }
-	            }
+		        }
+		    	//The left slot contains the item to be smelted
+		    	if(this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
+		        {
+			    	//Use all the electricity
+		        	this.electricityStored = 0;
+		        	this.smeltingTicks = this.smeltingTimeRequired;
+		        }
+		    	
+		        //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
+		        if(this.canSmelt() && this.smeltingTicks > 0)
+		    	{
+		    		//Update some variables.
+		    		this.smeltingTicks --;
+		    		this.electricityStored -= this.getElectricityCapacity()/this.smeltingTimeRequired;
+		    		//When the item is finished smelting
+		    		if(this.smeltingTicks == 0)
+		    		{
+		    			if(this.containingItems[2] == null)
+		    			{
+		    				this.containingItems[2] = FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]);
+		    			}
+		    			else if(this.containingItems[2] == FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]))
+		    			{
+		    				this.containingItems[2].stackSize ++;
+		    			}
+		    			
+		    			this.decrStackSize(1, 1);
+		    			this.smeltingTicks = 0;
+		    		}
+		    	}
 	        }
-	    	//The left slot contains the item to be smelted
-	    	if(this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
-	        {
-		    	//Use all the electricity
-	        	this.electricityStored = 0;
-	        	this.smeltingTicks = this.smeltingTimeRequired;
-	        }
-	    	
-	        //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
-	        if(this.canSmelt() && this.smeltingTicks > 0)
-	    	{
-	    		//Update some variables.
-	    		this.smeltingTicks --;
-	    		this.electricityStored -= this.getElectricityCapacity()/this.smeltingTimeRequired;
-	    		//When the item is finished smelting
-	    		if(this.smeltingTicks == 0)
-	    		{
-	    			if(this.containingItems[2] == null)
-	    			{
-	    				this.containingItems[2] = FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]);
-	    			}
-	    			else if(this.containingItems[2] == FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]))
-	    			{
-	    				this.containingItems[2].stackSize ++;
-	    			}
-	    			
-	    			this.decrStackSize(1, 1);
-	    			this.smeltingTicks = 0;
-	    		}
-	    	}
     	}
         
     }
@@ -336,5 +355,30 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 	public boolean isDisabled()
 	{
 		return this.disableTicks > -1;
+	}
+
+	@Override
+	public void onPacketData(NetworkManager network, String channel, byte[] data)
+	{
+		DataInputStream dataStream = new DataInputStream(new ByteArrayInputStream(data));
+
+        try
+        {
+        	int packetID = dataStream.readInt();
+        	this.facingDirection = (byte)dataStream.readDouble();
+        	this.electricityStored = (int)dataStream.readDouble();
+        	this.smeltingTicks = (int)dataStream.readDouble();
+        	this.disableTicks = (int)dataStream.readDouble();
+        }
+        catch(IOException e)
+        {
+             e.printStackTrace();
+        }
+	}
+
+	@Override
+	public int getPacketID()
+	{
+		return 3;
 	}
 }

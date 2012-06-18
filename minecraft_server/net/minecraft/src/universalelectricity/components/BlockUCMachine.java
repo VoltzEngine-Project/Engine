@@ -13,7 +13,6 @@ import net.minecraft.src.MathHelper;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import net.minecraft.src.mod_UniversalElectricity;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEBlockMachine;
 import net.minecraft.src.universalelectricity.UEIRedstoneReceptor;
@@ -148,15 +147,12 @@ public class BlockUCMachine extends UEBlockMachine implements ITextureProvider
     {
 		int metadata = par1World.getBlockMetadata(x, y, z);
 
-        if (!par1World.isRemote)
-        {
-        	switch(metadata)
-        	{
-            	case 0: par5EntityPlayer.openGui(UniversalElectricity.getInstance(), 0, par1World, x, y, z); return true;
-            	case 1:	par5EntityPlayer.openGui(UniversalElectricity.getInstance(), 1, par1World, x, y, z); return true;
-            	case 2:	par5EntityPlayer.openGui(UniversalElectricity.getInstance(), 2, par1World, x, y, z); return true;
-        	}
-        }
+    	switch(metadata)
+    	{
+        	case 0: par5EntityPlayer.openGui(UniversalElectricity.getInstance(), 0, par1World, x, y, z); return true;
+        	case 1:	par5EntityPlayer.openGui(UniversalElectricity.getInstance(), 1, par1World, x, y, z); return true;
+        	case 2:	par5EntityPlayer.openGui(UniversalElectricity.getInstance(), 2, par1World, x, y, z); return true;
+    	}        
         
         return false;
     }
