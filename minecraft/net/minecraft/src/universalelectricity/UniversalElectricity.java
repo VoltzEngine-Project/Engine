@@ -171,6 +171,67 @@ public class UniversalElectricity
 	}
 	
 	/**
+	 * Returns the amount of amps.
+	 * @param watts
+ 	 * @param volts
+	 * @return The amount of amps
+	 */
+	public static double getAmps(int watts, int volts)
+	{		
+		double amps = (double)watts/(double)volts;
+		return amps;
+	}
+	
+	/**
+	 * Return a string with the amount of amps for displaying.
+	 * @param amps
+	 * @return The string for displaying amps
+	 */
+	public static String getAmpDisplay(double amps)
+	{
+		String displayAmps;
+		
+		int i = Double.compare(amps, (double)1);
+		int j = Double.compare(amps, (double)1000);
+		
+		if(i < 0)
+		{
+			displayAmps = roundTwoDecimals(amps*1000)+" mA";
+		}else if(j > 0)
+		{
+			displayAmps = roundTwoDecimals(amps/1000)+" KA";
+		}
+		else
+		{
+			displayAmps = roundTwoDecimals(amps)+" A";
+		}
+		
+		return displayAmps;
+	}
+	
+	public static String getAmpDisplayFull(double amps)
+	{
+		String displayAmps;
+		
+		int i = Double.compare(amps, (double)1);
+		int j = Double.compare(amps, (double)1000);
+		
+		if(i < 0)
+		{
+			displayAmps = roundTwoDecimals(amps*1000)+" MilliAmps";
+		}else if(j > 0)
+		{
+			displayAmps = roundTwoDecimals(amps/1000)+" KiloAmps";
+		}
+		else
+		{
+			displayAmps = roundTwoDecimals(amps)+" Amps";
+		}
+		
+		return displayAmps;
+	}
+	
+	/**
 	 * Return a string with the amount of watts for displaying.
 	 * @param watts
 	 * @return The string for displaying watts
