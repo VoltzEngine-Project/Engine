@@ -218,10 +218,10 @@ public class UniversalElectricity
 		
 		if(i < 0)
 		{
-			displayAmps = roundTwoDecimals(amps*1000)+" MilliAmps";
+			displayAmps = roundTwoDecimals(amps*1000)+" Milliamps";
 		}else if(j > 0)
 		{
-			displayAmps = roundTwoDecimals(amps/1000)+" KiloAmps";
+			displayAmps = roundTwoDecimals(amps/1000)+" Kiloamps";
 		}
 		else
 		{
@@ -229,6 +229,56 @@ public class UniversalElectricity
 		}
 		
 		return displayAmps;
+	}
+	
+	/**
+	 * Return a string with the amount of volts for displaying.
+	 * @param volts
+	 * @return The string for displaying volts
+	 */
+	public static String getVoltDisplay(int volts)
+	{
+		String displayVolt;
+		
+		if(volts > 1000000)
+		{
+			displayVolt = roundTwoDecimals((double)volts/1000000)+" MV";
+		}
+		if(volts > 1000)
+		{
+			displayVolt = roundTwoDecimals((double)volts/1000)+" KV";
+		}
+		else
+		{
+			displayVolt = volts+" V";
+		}
+		
+		return displayVolt;
+	}
+	   
+	public static String getVoltDisplayFull(int volts)
+	{
+		String displayVolt;
+		
+		if(volts > 1000000)
+		{
+			displayVolt = roundTwoDecimals((double)volts/1000000)+" Megavolts";
+		}
+		if(volts > 1000)
+		{
+			displayVolt = roundTwoDecimals((double)volts/1000)+" Kilovolts";
+		}
+		else if (volts == 1)
+		{
+			displayVolt = volts+" volt";
+		}
+		else
+		{
+			displayVolt = volts+" Watts";
+		}
+		
+		
+		return displayVolt;
 	}
 	
 	/**
