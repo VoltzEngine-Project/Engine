@@ -31,7 +31,7 @@ public class ItemElectricityMeter extends Item implements ITextureProvider
         {
         	if(tileEntity instanceof UETileEntityConductor)
         	{
-        		par2EntityPlayer.addChatMessage("Electricity Flow: "+UniversalElectricity.getWattDisplay( ((UETileEntityConductor)tileEntity).getStoredElectricity()*20 ));
+        		par2EntityPlayer.addChatMessage("Electricity Flow: "+UniversalElectricity.getWattDisplay( ((UETileEntityConductor)tileEntity).getStoredElectricity()*20 )+", "+UniversalElectricity.getAmpDisplay(UniversalElectricity.getAmps( ((UETileEntityConductor)tileEntity).getStoredElectricity()*20, ((UETileEntityConductor)tileEntity).getVolts())) +", "+UniversalElectricity.getVoltDisplay(((UETileEntityConductor)tileEntity).getVolts()));
         		return true;
         	}
         	else if(tileEntity instanceof UEIConsumer)

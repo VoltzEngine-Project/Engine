@@ -170,6 +170,117 @@ public class UniversalElectricity
 	}
 	
 	/**
+	 * Returns the amount of amps.
+	 * @param watts
+ 	 * @param volts
+	 * @return The amount of amps
+	 */
+	public static double getAmps(int watts, int volts)
+	{		
+		double amps = (double)watts/(double)volts;
+		return amps;
+	}
+	
+	/**
+	 * Return a string with the amount of amps for displaying.
+	 * @param amps
+	 * @return The string for displaying amps
+	 */
+	public static String getAmpDisplay(double amps)
+	{
+		String displayAmps;
+		
+		int i = Double.compare(amps, (double)1);
+		int j = Double.compare(amps, (double)1000);
+		
+		if(i < 0)
+		{
+			displayAmps = roundTwoDecimals(amps*1000)+" mA";
+		}else if(j > 0)
+		{
+			displayAmps = roundTwoDecimals(amps/1000)+" KA";
+		}
+		else
+		{
+			displayAmps = roundTwoDecimals(amps)+" A";
+		}
+		
+		return displayAmps;
+	}
+	
+	public static String getAmpDisplayFull(double amps)
+	{
+		String displayAmps;
+		
+		int i = Double.compare(amps, (double)1);
+		int j = Double.compare(amps, (double)1000);
+		
+		if(i < 0)
+		{
+			displayAmps = roundTwoDecimals(amps*1000)+" Milliamps";
+		}else if(j > 0)
+		{
+			displayAmps = roundTwoDecimals(amps/1000)+" Kiloamps";
+		}
+		else
+		{
+			displayAmps = roundTwoDecimals(amps)+" Amps";
+		}
+		
+		return displayAmps;
+	}
+	
+	/**
+	 * Return a string with the amount of volts for displaying.
+	 * @param volts
+	 * @return The string for displaying volts
+	 */
+	public static String getVoltDisplay(int volts)
+	{
+		String displayVolt;
+		
+		if(volts > 1000000)
+		{
+			displayVolt = roundTwoDecimals((double)volts/1000000)+" MV";
+		}
+		if(volts > 1000)
+		{
+			displayVolt = roundTwoDecimals((double)volts/1000)+" KV";
+		}
+		else
+		{
+			displayVolt = volts+" V";
+		}
+		
+		return displayVolt;
+	}
+	   
+	public static String getVoltDisplayFull(int volts)
+	{
+		String displayVolt;
+		
+		if(volts > 1000000)
+		{
+			displayVolt = roundTwoDecimals((double)volts/1000000)+" Megavolts";
+		}
+		if(volts > 1000)
+		{
+			displayVolt = roundTwoDecimals((double)volts/1000)+" Kilovolts";
+		}
+		else if (volts == 1)
+		{
+			displayVolt = volts+" volt";
+		}
+		else
+		{
+			displayVolt = volts+" Watts";
+		}
+		
+		
+		return displayVolt;
+	}
+	
+	/**
 	 * Return a string with the amount of watts for displaying.
 	 * @param watts
 	 * @return The string for displaying watts
