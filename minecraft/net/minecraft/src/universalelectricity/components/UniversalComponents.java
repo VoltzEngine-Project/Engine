@@ -51,7 +51,6 @@ public class UniversalComponents implements IGuiHandler, IConnectionHandler
 	public static final Item ItemCopperWire = new ItemCopperWire(UniversalElectricity.getConfigID(UniversalElectricity.configuration, "ItemCopperWire", 1593, false), 21);
 	public static final Item ItemBronzeIngot = new UCItem("Bronze Ingot", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "BronzeIngot", 1594, false), 7);
 	public static final Item ItemBronzeClump = new UCItem("Bronze Clump", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "BronzeClump", 1595, false), 6);
-	public static final Item ItemFuel = new UCItem("Fuel", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Fuel", 1596, false), 4);
 	public static final Item ItemSteelPlate = new UCItem("Steel Plate", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Steel Plate", 1597, false), 8);
 	public static final Item ItemMotor = new UCItem("Motor", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Motor", 1598, false), 9);
 	
@@ -92,24 +91,19 @@ public class UniversalComponents implements IGuiHandler, IConnectionHandler
 		OreDictionary.registerOre("ingotBronze", ItemBronzeIngot);
 		OreDictionary.registerOre("ingotSteel", ItemSteelIngot);
 		
-		//Use this recipe if you want an uncharged battery
-		ItemStack unchargedBattery = new ItemStack(ItemBattery);
-		unchargedBattery.setItemDamage(((ItemBattery)ItemBattery).getElectricityCapacity());
 		//Recipes
 		//Motor
 		ModLoader.addRecipe(new ItemStack(ItemMotor), new Object [] {"@!@", "!#!", "@!@", '!', ItemSteelPlate, '#', ItemCircuit, '@', ItemCopperWire});
 		//Wrench
-		ModLoader.addRecipe(new ItemStack(ItemWrench), new Object [] {"! !", " ! ", " ! ", '!', ItemSteelIngot});
-		//Fuel
-		ModLoader.addRecipe(new ItemStack(ItemFuel), new Object [] {"!!!", "!#!", "!!!", '!', Item.coal, '#', Item.bucketWater});
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(ItemWrench), new Object [] {"! !", " ! ", " ! ", '!', "ingotSteel"}));
 		//Electricity Meter
-		ModLoader.addRecipe(new ItemStack(ItemElectricityMeter), new Object [] {"!?!", "!#!", "!!!", '!', ItemSteelIngot, '?', ItemCopperWire, '#', ItemCircuit});
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(ItemElectricityMeter), new Object [] {"!?!", "!#!", "!!!", '!', "ingotSteel", '?', ItemCopperWire, '#', ItemCircuit}));
 		//Battery Box
-		ModLoader.addRecipe(new ItemStack(BlockMachine, 1, 0), new Object [] {"!?!", "???", "!?!", '!', ItemSteelPlate, '?', unchargedBattery});
+		ModLoader.addRecipe(new ItemStack(BlockMachine, 1, 0), new Object [] {"!?!", "???", "!?!", '!', ItemSteelPlate, '?', (((ItemBattery)ItemBattery).getChargedItemStack()) });
 		//Coal Generator
 		ModLoader.addRecipe(new ItemStack(BlockMachine, 1, 1), new Object [] {"!@!", "$#$", "!?!", '!', ItemSteelPlate, '@', ItemCopperWire, '?', ItemCircuit, '#', ItemMotor, '$', Block.stoneOvenIdle});
 		//Electric Furnace
-		ModLoader.addRecipe(new ItemStack(BlockMachine, 1, 2), new Object [] {"!!!", "!?!", "!#!", '!', ItemSteelIngot, '#', ItemCircuit, '?', ItemSteelPlate});
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(BlockMachine, 1, 2), new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '#', ItemCircuit, '?', ItemSteelPlate}));
 		//Copper
 		FurnaceRecipes.smelting().addSmelting(UniversalElectricity.getOre(CopperOreID).blockID, UniversalElectricity.getOreMetadata(CopperOreID), new ItemStack(ItemCopperIngot));
 		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(ItemCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"}));

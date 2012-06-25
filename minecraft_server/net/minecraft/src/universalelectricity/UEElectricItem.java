@@ -135,6 +135,20 @@ public abstract class UEElectricItem extends Item
     public abstract int getVolts();
     
     /**
+     * Returns a charged version of the electric item. Use this if you want
+     * the crafting recipe to use a charged version of the electric item
+     * instead of an empty version of the electric item
+     * @return The ItemStack of a fully charged electric item
+     */
+    public ItemStack getChargedItemStack()
+    {
+    	ItemStack chargedItem = new ItemStack(this);
+    	chargedItem.setItemDamage(this.getElectricityCapacity());
+    	
+    	return chargedItem;
+    }
+    
+    /**
      * Adds a charged version and a non-charged version of this item. You may replace
      * this function if you do not wish to have a charged version of your electric item.
      * 

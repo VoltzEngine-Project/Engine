@@ -14,6 +14,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEBlockConductor;
+import net.minecraft.src.universalelectricity.UEElectricItem;
 import net.minecraft.src.universalelectricity.UEIPacketReceiver;
 import net.minecraft.src.universalelectricity.UEIProducer;
 import net.minecraft.src.universalelectricity.UEIRotatable;
@@ -93,7 +94,7 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
     	{	
 	    	if(!this.worldObj.isRemote)
 	        {
-		    	//The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
+	    		//Coal Geneator
 		    	if (this.containingItems[0] != null && this.connectedWire != null && this.connectedWire.getStoredElectricity() < this.connectedWire.getElectricityCapacity())
 		        {
 		            if(this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)

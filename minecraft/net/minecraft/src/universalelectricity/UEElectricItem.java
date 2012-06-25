@@ -8,6 +8,7 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
+import net.minecraft.src.universalelectricity.components.ItemBattery;
 
 /**
  * REQUIRED
@@ -52,7 +53,8 @@ public abstract class UEElectricItem extends Item
     
     @Override
     /**
-     * Called when item is crafted/smelted. Used only by maps so far.
+     * Makes sure the item is uncharged when it is crafted and not charged. 
+     * Change this if you do not want this to happen!
      */
     public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
@@ -159,6 +161,20 @@ public abstract class UEElectricItem extends Item
      * @return The Voltage of this item
      */
     public abstract int getVolts();
+    
+    /**
+     * Returns a charged version of the electric item. Use this if you want
+     * the crafting recipe to use a charged version of the electric item
+     * instead of an empty version of the electric item
+     * @return The ItemStack of a fully charged electric item
+     */
+    public ItemStack getChargedItemStack()
+    {
+    	ItemStack chargedItem = new ItemStack(this);
+    	chargedItem.setItemDamage(this.getElectricityCapacity());
+    	
+    	return chargedItem;
+    }
     
     /**
      * Adds a charged version and a non-charged version of this item. You may replace

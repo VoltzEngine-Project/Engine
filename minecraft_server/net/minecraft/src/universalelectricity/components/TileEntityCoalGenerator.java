@@ -84,7 +84,7 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
     	{	
 	    	if(!this.worldObj.isRemote)
 	        {
-		    	//The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
+		    	//Coal
 		    	if (this.containingItems[0] != null && this.connectedWire != null && this.connectedWire.getStoredElectricity() < this.connectedWire.getElectricityCapacity())
 		        {
 		            if(this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)

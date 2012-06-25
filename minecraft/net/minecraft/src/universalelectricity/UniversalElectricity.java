@@ -96,7 +96,7 @@ public class UniversalElectricity
 	
 	public static String getVersion()
 	{
-		return "0.3.0";
+		return "0.3.1";
 	}
 	
 	//------------------ FUNCTIONS AND HOOKS ----------------------
@@ -178,8 +178,7 @@ public class UniversalElectricity
 	 */
 	public static double getAmps(int watts, int volts)
 	{		
-		double amps = (double)watts/(double)volts;
-		return amps;
+		return (double)watts/(double)volts;
 	}
 	
 	/**

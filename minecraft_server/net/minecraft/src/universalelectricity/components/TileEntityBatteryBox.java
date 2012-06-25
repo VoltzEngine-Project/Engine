@@ -6,9 +6,6 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.buildcraft.api.IPowerReceptor;
-import net.minecraft.src.buildcraft.api.PowerFramework;
-import net.minecraft.src.buildcraft.api.PowerProvider;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEElectricItem;
@@ -18,7 +15,7 @@ import net.minecraft.src.universalelectricity.UEIRedstoneReceptor;
 import net.minecraft.src.universalelectricity.UEIRotatable;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 
-public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneReceptor, IPowerReceptor, ITextureProvider, UEIProducer, UEIConsumer, IInventory, ISidedInventory, UEIRotatable
+public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneReceptor, ITextureProvider, UEIProducer, UEIConsumer, IInventory, ISidedInventory, UEIRotatable
 {
 	public int electricityStored = 0;
 	public byte facingDirection = 0;
@@ -29,21 +26,21 @@ public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneRecep
     
 	private boolean isPowered = false;
 	
-	private PowerProvider powerProvider;
+	//private PowerProvider powerProvider;
 	
 	//The ticks in which this tile entity is disabled. -1 = Not disabled
 	private int disableTicks = -1;
 	
 	public TileEntityBatteryBox()
-	{
+	{/*
 		if (PowerFramework.currentFramework != null)
 		{
 			powerProvider = PowerFramework.currentFramework.createPowerProvider();
 			powerProvider.configure(0, 1, this.getElectricityCapacity(), 120, this.getElectricityCapacity());
-		}
+		}*/
 	}
 	
-	
+	/*
 	@Override
 	public void setPowerProvider(PowerProvider provider)
 	{
@@ -65,7 +62,7 @@ public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneRecep
 	public int powerRequest()
 	{
 		return 120;
-	}
+	}*/
 	
     @Override
     public int onReceiveElectricity(int watts, int voltage, byte side)
@@ -119,13 +116,13 @@ public class TileEntityBatteryBox extends TileEntity implements UEIRedstoneRecep
     	}
     	else
     	{
-	    	//Accept Buildcraft Electricity
+	    	/*Accept Buildcraft Electricity
 	    	if (this.powerProvider != null)
 			{
 				this.onReceiveElectricity((int)this.powerProvider.energyStored*13, this.getVolts(), (byte)-1);
 				this.powerProvider.energyStored = 0;
 			}
-	    	
+	    	*/
 	    	if(!this.worldObj.isRemote)
 	        {
 		    	//The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
