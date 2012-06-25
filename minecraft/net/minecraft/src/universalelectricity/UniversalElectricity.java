@@ -18,7 +18,7 @@ import net.minecraft.src.forge.oredict.OreDictionary;
 
 public class UniversalElectricity
 {
-	public static final Configuration configuration = new Configuration(new File(Minecraft.getMinecraftDir(), "config/UniversalElectricity.cfg"));
+	public static final Configuration configuration = new Configuration(new File(Minecraft.getMinecraftDir(), "config/UniversalElectricity/UniversalElectricity.cfg"));
 	
 	private static final List<NetworkMod> Addons = new ArrayList<NetworkMod>();
 	
