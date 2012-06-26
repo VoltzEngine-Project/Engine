@@ -9,6 +9,11 @@ package net.minecraft.src.universalelectricity;
 public interface UEIConsumer extends UEIDisableable
 {
 	/**
+	 * needsEnergy is a boolean that applies to whether or not the machine needs energy.
+	 * If the tile entity is a conductor,
+	 */
+	 boolean needsEnergy;
+	/**
 	 * onRecieveElectricity is called whenever a Universal Electric conductor sends a packet of electricity to the consumer (which is this block).
 	 * @param watts - The amount of watts this block received.
 	 * @param voltage - The voltage the tile entity is receiving.
