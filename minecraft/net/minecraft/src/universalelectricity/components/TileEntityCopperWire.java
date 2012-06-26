@@ -18,12 +18,14 @@ public class TileEntityCopperWire extends UETileEntityConductor
 	@Override
 	protected void overCharge(int volts)
 	{
-		//If the voltage is twice the normal voltage, explode.
-		if(volts > this.getVolts())
+		//If the voltage to high for this type of cable, burn.
+		this.worldObj.spawnParticle("largesmoke", (double)this.xCoord + 0.5D, (double)this.yCoord + 0.7D, (double)this.zCoord + 0.5D, 0, 0, 0);
+		++counter;
+		
+		if(counter == 50)
 		{
 			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.fire.blockID);
-			this.worldObj.spawnParticle("largesmoke", this.xCoord, this.yCoord, this.zCoord, 0, 0, 0);
-        }
+		}
 	}
 
 	@Override
@@ -31,4 +33,6 @@ public class TileEntityCopperWire extends UETileEntityConductor
 	{
 		return 120;
 	}
+	
+	private int counter;
 }
