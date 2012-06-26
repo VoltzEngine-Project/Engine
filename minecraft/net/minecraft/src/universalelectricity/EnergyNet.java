@@ -23,9 +23,8 @@ class EnergyNet{
   public void updateEnergyNet(){
     for(UEIConsumer machine : targets){
         if(machine.needsPower){
-            this.canEnergyFlow == true;
             runningTargets.add(machine);
-        }else if(!machine.needsPower){
+        }else{
             try{
                 runningTargets.remove(machine);
             }catch(Exception e){}
