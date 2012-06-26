@@ -6,9 +6,10 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UEBlockConductor;
 
-public class BlockCopperWire extends UEBlockConductor 
+public class BlockCopperWire extends UEBlockConductor implements ITextureProvider
 {	
 	public BlockCopperWire(int id)
 	{
@@ -18,6 +19,7 @@ public class BlockCopperWire extends UEBlockConductor
 		this.setResistance(0.2F);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
 		this.setRequiresSelfNotify();
+		this.blockIndexInTexture = 7;
 	}
     
 	/**
@@ -88,5 +90,11 @@ public class BlockCopperWire extends UEBlockConductor
 	public TileEntity getBlockEntity()
     {
     	return new TileEntityCopperWire();
+    }
+	
+    @Override
+    public String getTextureFile()
+    {
+    	return UCBlock.textureFile;
     }
 }
