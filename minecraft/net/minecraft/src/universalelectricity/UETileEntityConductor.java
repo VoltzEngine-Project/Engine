@@ -11,6 +11,10 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 	//Stores information on all connected blocks around this tile entity
 	public TileEntity[] connectedBlocks = {null, null, null, null, null, null};
 	
+	//The amount of ticks that the conductor is receiving the overCharge
+	private int overChargeTicks;
+
+	
 	/**
 	 * The tile entity of the closest electric consumer. Null if none. Use this to detect if electricity
 	 * should transfer
@@ -45,7 +49,10 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
     {
 	 	if(voltage > this.getVolts())
 		{
-			this.overCharge(voltage);
+	 		overChargeTicks++;
+			this.overCharge(voltage, overChargeTicks);
+		}else{
+			overChargeTicks = 0;
 		}
 	 
     	if(canReceiveElectricity(side))
@@ -171,8 +178,9 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 	/**
 	 * Called when the conductor's voltage becomes higher than it should be.
 	 * @param volts - The amount of volts being forced into the conductor
+	 * @param ticks - The amount of ticks that the conductor is receiving the overCharge
 	 */
-	protected void overCharge(int volts)
+	protected void overCharge(int volts, int ticks)
 	{
 		
 	}

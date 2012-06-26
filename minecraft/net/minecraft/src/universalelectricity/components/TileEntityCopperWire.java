@@ -14,15 +14,15 @@ public class TileEntityCopperWire extends UETileEntityConductor
 	/**
 	 * Called when the conductor's voltage becomes higher than it should be.
 	 * @param volts - The amount of volts being forced into the conductor
+	 * @param ticks - The amount of ticks that the conductor is receiving the overCharge
 	 */
 	@Override
-	protected void overCharge(int volts)
+	protected void overCharge(int volts, int ticks)
 	{
 		//If the voltage to high for this type of cable, burn.
 		this.worldObj.spawnParticle("largesmoke", (double)this.xCoord + 0.5D, (double)this.yCoord + 0.7D, (double)this.zCoord + 0.5D, 0, 0, 0);
-		++counter;
 		
-		if(counter == 50)
+		if(ticks == 50)
 		{
 			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.fire.blockID);
 		}
@@ -34,5 +34,4 @@ public class TileEntityCopperWire extends UETileEntityConductor
 		return 120;
 	}
 	
-	private int counter;
 }
