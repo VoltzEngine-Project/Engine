@@ -3,22 +3,8 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.FurnaceRecipes;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
-import net.minecraft.src.NetworkManager;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.forge.ISidedInventory;
-import net.minecraft.src.forge.ITextureProvider;
-import net.minecraft.src.universalelectricity.UEElectricItem;
-import net.minecraft.src.universalelectricity.UEIConsumer;
-import net.minecraft.src.universalelectricity.UEIPacketReceiver;
-import net.minecraft.src.universalelectricity.UEIRotatable;
-import net.minecraft.src.universalelectricity.UniversalElectricity;
+import net.minecraft.src.*;
+import net.minecraft.src.universalelectricity.*;
 
 public class TileEntityElectricFurnace extends TileEntity implements ITextureProvider, UEIConsumer, IInventory, ISidedInventory, UEIRotatable, UEIPacketReceiver
 {
