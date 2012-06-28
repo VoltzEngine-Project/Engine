@@ -58,7 +58,7 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
     	if(canReceiveElectricity(side) && voltage != 0)
 		{
     		double rejectedElectricity = Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0);
-    		double electricityLoss = (Math.pow(UniversalElectricity.getAmps(watts - rejectedElectricity, voltage), 2))* this.getresistance();
+    		double electricityLoss = (Math.pow(UniversalElectricity.getAmps(watts - rejectedElectricity, voltage), 2))* this.getResistance();
 			this.electricityStored = Math.max(this.electricityStored + (watts - rejectedElectricity) - (electricityLoss), 0);
 			System.out.println(UniversalElectricity.getAmps(watts - rejectedElectricity, voltage));
 			return rejectedElectricity;
