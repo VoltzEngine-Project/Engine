@@ -81,6 +81,11 @@ public abstract class UEBlockMachine extends BlockContainer
     		}
     	}
     	
+    	if(par5EntityPlayer.isSneaking())
+    	{
+    		return false;
+    	}
+    	
     	return this.machineActivated(par1World, x, y, z, par5EntityPlayer);
     }
     
