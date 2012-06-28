@@ -15,7 +15,7 @@ public interface UEIConsumer extends UEIDisableable
 	 * @param side - The side of the block in which the electricity came from.
 	 * @return watts - The amount of rejected power to be sent back into the conductor
 	 */
-	public int onReceiveElectricity(int watts, int voltage, byte side);
+	public double onReceiveElectricity(double watts, int voltage, byte side);
 	
 	/**
 	 * You can use this to check if a wire can connect to this UE consumer to properly render the graphics
@@ -27,12 +27,12 @@ public interface UEIConsumer extends UEIDisableable
 	/**
 	 * @return Return the stored electricity in this consumer. Called by conductors to spread electricity to this unit.
 	 */
-	public int getStoredElectricity();
+	public double getStoredElectricity();
 	
 	/**
 	 * @return Return the maximum amount of stored electricity this consumer can get.
 	 */
-	public int getElectricityCapacity();
+	public double getElectricityCapacity();
 	
 	/**
 	 * Gets the voltage of the electricity consumer. Used in a conductor to find the voltage difference.

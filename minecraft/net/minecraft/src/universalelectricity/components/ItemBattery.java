@@ -29,9 +29,9 @@ public class ItemBattery extends UEElectricItem implements ITextureProvider
      * @return - The amount of electricity maximum capacity
      */
     @Override
-	public int getElectricityCapacity()
+	public double getElectricityCapacity()
     {
-    	return 15000;
+    	return 15000.0;
     }
     
     /**
@@ -50,9 +50,9 @@ public class ItemBattery extends UEElectricItem implements ITextureProvider
      * @return - The amount of electricity maximum capacity
      */
     @Override
-	public int getTransferRate()
+	public double getTransferRate()
     {
-    	return 100;
+    	return 100.0;
     }
 
 	@Override

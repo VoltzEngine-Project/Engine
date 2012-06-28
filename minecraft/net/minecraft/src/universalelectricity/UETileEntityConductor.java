@@ -6,7 +6,7 @@ import net.minecraft.src.TileEntity;
 public abstract class UETileEntityConductor extends TileEntity implements UEIConsumer
 {
 	//The amount of electricity stored in the conductor
-	protected int electricityStored = 0;
+	protected double electricityStored = 0.0;
 
 	//Stores information on all connected blocks around this tile entity
 	public TileEntity[] connectedBlocks = {null, null, null, null, null, null};
@@ -45,7 +45,7 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 	 * @return watt - The amount of rejected power to be sent back into the conductor
 	 */
 	 @Override
-    public int onReceiveElectricity(int watts, int voltage, byte side)
+    public double onReceiveElectricity(double watts, int voltage, byte side)
     {
 	 	if(voltage > this.getVolts())
 		{
@@ -55,10 +55,12 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 			overChargeTicks = 0;
 		}
 	 
-    	if(canReceiveElectricity(side))
+    	if(canReceiveElectricity(side) && voltage != 0)
 		{
-	    	int rejectedElectricity = Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0);
-			this.electricityStored = Math.max(this.electricityStored+watts - rejectedElectricity, 0);
+    		double rejectedElectricity = Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0);
+    		double electricityLoss = (Math.pow(UniversalElectricity.getAmps(watts - rejectedElectricity, voltage), 2))* this.getresistance();
+			this.electricityStored = Math.max(this.electricityStored + (watts - rejectedElectricity) - (electricityLoss), 0);
+			System.out.println(UniversalElectricity.getAmps(watts - rejectedElectricity, voltage));
 			return rejectedElectricity;
 		}
     	
@@ -90,7 +92,7 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 			//Spread the electricity to neighboring blocks
 			byte connectedUnits = 0;
 			byte connectedConductors = 1;
-			int averageElectricity = this.electricityStored;
+			double averageElectricity = this.electricityStored;
 			this.closestConsumer = null;
 			
 			Vector3 currentPosition = new Vector3(this.xCoord, this.yCoord, this.zCoord);
@@ -131,7 +133,7 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 			averageElectricity = averageElectricity/connectedConductors;
 			
 			
-			float averageWatt = 0;
+			//float averageWatt = 0;
 	
 			if(connectedUnits > 0)
 			{
@@ -140,24 +142,24 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 					if(connectedBlocks[i] != null)
 					{
 						//Spread the electricity among the different blocks
-						if(connectedBlocks[i] instanceof UEIConsumer && this.electricityStored > 0)
+						if(connectedBlocks[i] instanceof UEIConsumer && this.electricityStored > 0.0)
 						{						
 							if(((UEIConsumer)connectedBlocks[i]).canReceiveElectricity(UniversalElectricity.getOrientationFromSide(i, (byte)2)))
 							{
-								int transferElectricityAmount  = 0;
+								double transferElectricityAmount  = 0.0;
 								UEIConsumer connectedConsumer = ((UEIConsumer)connectedBlocks[i]);
 								
 								if(connectedBlocks[i].getClass() == this.getClass() && this.electricityStored > ((UETileEntityConductor)connectedConsumer).electricityStored)
 								{
-									transferElectricityAmount = Math.max(Math.min(averageElectricity - ((UETileEntityConductor)connectedConsumer).electricityStored, this.electricityStored), 0);
+									transferElectricityAmount = Math.max(Math.min(averageElectricity - ((UETileEntityConductor)connectedConsumer).electricityStored, this.electricityStored), 0.0);
 								}
 								else if(!(connectedConsumer instanceof UETileEntityConductor))
 								{
 									transferElectricityAmount = this.electricityStored;
 								}
 								
-								int rejectedElectricity = connectedConsumer.onReceiveElectricity(transferElectricityAmount, this.getVolts(), UniversalElectricity.getOrientationFromSide(i, (byte)2));
-								this.electricityStored = Math.max(Math.min(this.electricityStored - transferElectricityAmount + rejectedElectricity, this.getElectricityCapacity()), 0);
+								double rejectedElectricity = connectedConsumer.onReceiveElectricity(transferElectricityAmount, this.getVolts(), UniversalElectricity.getOrientationFromSide(i, (byte)2));
+								this.electricityStored = Math.max(Math.min(this.electricityStored - transferElectricityAmount + rejectedElectricity, this.getElectricityCapacity()), 0.0);
 							}
 						}
 						
@@ -165,7 +167,7 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 						{
 							if(((UEIProducer)connectedBlocks[i]).canProduceElectricity(UniversalElectricity.getOrientationFromSide(i, (byte)2)))
 							{
-								int gainedElectricity = ((UEIProducer)connectedBlocks[i]).onProduceElectricity(this.getElectricityCapacity()-this.electricityStored, this.getVolts(), UniversalElectricity.getOrientationFromSide(i, (byte)2));
+								double gainedElectricity = ((UEIProducer)connectedBlocks[i]).onProduceElectricity(this.getElectricityCapacity()-this.electricityStored, this.getVolts(), UniversalElectricity.getOrientationFromSide(i, (byte)2));
 								this.onReceiveElectricity(gainedElectricity, ((UEIProducer)connectedBlocks[i]).getVolts(), i);
 							}
 						}
@@ -189,7 +191,7 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 	 * @return Return the stored electricity in this consumer. Called by conductors to spread electricity to this unit.
 	 */
     @Override
-	public int getStoredElectricity()
+	public double getStoredElectricity()
     {
     	return this.electricityStored;
     }
@@ -201,7 +203,7 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readFromNBT(par1NBTTagCompound);
-        this.electricityStored = par1NBTTagCompound.getInteger("electricityStored");
+        this.electricityStored = par1NBTTagCompound.getDouble("electricityStored");
     }
 
     /**
@@ -211,7 +213,7 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
     	super.writeToNBT(par1NBTTagCompound);
-    	par1NBTTagCompound.setInteger("electricityStored", this.electricityStored);
+    	par1NBTTagCompound.setDouble("electricityStored", this.electricityStored);
     }
     
     //Conductors can not be disabled
@@ -221,4 +223,11 @@ public abstract class UETileEntityConductor extends TileEntity implements UEICon
 
 	@Override
 	public boolean isDisabled() { return false; }
+	
+	/**
+	 * Gets the resistance of the conductor. Used to calculate energy loss.
+	 * A higher resistance means a higher energy loss.
+	 * @return The amount of Ohm's. E.g 1.2Ω or 3.0Ω
+	 */
+	public abstract double getResistance();
 }

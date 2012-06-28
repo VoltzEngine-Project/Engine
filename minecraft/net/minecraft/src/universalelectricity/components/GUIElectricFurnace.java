@@ -35,7 +35,7 @@ protected void drawGuiContainerForegroundLayer()
        }
        else
        {
-    	   displayText = Math.round((double)this.tileEntity.electricityStored/(double)this.tileEntity.getElectricityCapacity()*100)+"%";
+    	   displayText = Math.round(this.tileEntity.electricityStored/this.tileEntity.getElectricityCapacity()*100)+"%";
        }
        this.fontRenderer.drawString("Electricity: "+displayText, 80, 53, 4210752);
        this.fontRenderer.drawString("Smelting:", 10, 28, 4210752);

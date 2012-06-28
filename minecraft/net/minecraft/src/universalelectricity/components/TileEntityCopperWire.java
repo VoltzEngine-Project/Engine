@@ -29,9 +29,13 @@ public class TileEntityCopperWire extends UETileEntityConductor
 	}
 
 	@Override
-	public int getElectricityCapacity()
+	public double getElectricityCapacity()
 	{
-		return 120;
+		return 120.0;
 	}
-	
+
+	@Override
+	public double getResistance() {
+		return 0.3;
+	}
 }
