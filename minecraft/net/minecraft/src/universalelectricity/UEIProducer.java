@@ -15,7 +15,7 @@ public interface UEIProducer extends UEIDisableable
 	 * @param side - The side of block in which the conductor is on
 	 * @return watts - Return the amount of watts the conductor should receive from this producer
 	 */
-	public int onProduceElectricity(int maxWatts, int voltage, byte side);
+	public double onProduceElectricity(double watts, int voltage, byte side);
 	
 	/**
 	 * You can use this to check if a wire can connect to this UE consumer to properly render the graphics

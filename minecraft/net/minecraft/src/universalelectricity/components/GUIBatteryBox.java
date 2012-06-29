@@ -28,7 +28,7 @@ public class GUIBatteryBox extends GuiContainer
     {
         this.fontRenderer.drawString("Battery Box", 65, 6, 4210752);
         this.fontRenderer.drawString("Electricity", 98, 30, 4210752);
-        String electricityStored = tileEntity.electricityStored+"";
+        //String electricityStored = tileEntity.electricityStored+"";
         String displayText = UniversalElectricity.getWattDisplay(tileEntity.electricityStored);
         
         String displayText2 = UniversalElectricity.getWattDisplay(tileEntity.getElectricityCapacity());

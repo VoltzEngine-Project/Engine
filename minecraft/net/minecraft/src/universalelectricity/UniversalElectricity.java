@@ -176,7 +176,7 @@ public class UniversalElectricity
  	 * @param volts
 	 * @return The amount of amps
 	 */
-	public static double getAmps(int watts, int volts)
+	public static double getAmps(double watts, int volts)
 	{		
 		return (double)watts/(double)volts;
 	}
@@ -190,13 +190,10 @@ public class UniversalElectricity
 	{
 		String displayAmps;
 		
-		int i = Double.compare(amps, (double)1);
-		int j = Double.compare(amps, (double)1000);
-		
-		if(i < 0)
+		if(amps < 1.0)
 		{
-			displayAmps = roundTwoDecimals(amps*1000)+" mA";
-		}else if(j > 0)
+			displayAmps = (int)(amps*1000)+" mA";
+		}else if(amps > 1000)
 		{
 			displayAmps = roundTwoDecimals(amps/1000)+" KA";
 		}
@@ -212,13 +209,10 @@ public class UniversalElectricity
 	{
 		String displayAmps;
 		
-		int i = Double.compare(amps, (double)1);
-		int j = Double.compare(amps, (double)1000);
-		
-		if(i < 0)
+		if(amps < 1.0)
 		{
-			displayAmps = roundTwoDecimals(amps*1000)+" Milliamps";
-		}else if(j > 0)
+			displayAmps = (int)(amps*1000)+" Milliamps";
+		}else if(amps > 1000)
 		{
 			displayAmps = roundTwoDecimals(amps/1000)+" Kiloamps";
 		}
@@ -241,11 +235,11 @@ public class UniversalElectricity
 		
 		if(volts > 1000000)
 		{
-			displayVolt = roundTwoDecimals((double)volts/1000000)+" MV";
+			displayVolt = roundTwoDecimals(volts/1000000)+" MV";
 		}
 		if(volts > 1000)
 		{
-			displayVolt = roundTwoDecimals((double)volts/1000)+" KV";
+			displayVolt = roundTwoDecimals(volts/1000)+" KV";
 		}
 		else
 		{
@@ -261,11 +255,11 @@ public class UniversalElectricity
 		
 		if(volts > 1000000)
 		{
-			displayVolt = roundTwoDecimals((double)volts/1000000)+" Megavolts";
+			displayVolt = roundTwoDecimals(volts/1000000)+" Megavolts";
 		}
 		if(volts > 1000)
 		{
-			displayVolt = roundTwoDecimals((double)volts/1000)+" Kilovolts";
+			displayVolt = roundTwoDecimals(volts/1000)+" Kilovolts";
 		}
 		else if (volts == 1)
 		{
@@ -273,9 +267,8 @@ public class UniversalElectricity
 		}
 		else
 		{
-			displayVolt = volts+" Watts";
+			displayVolt = volts+" volts";
 		}
-		
 		
 		return displayVolt;
 	}
@@ -285,45 +278,45 @@ public class UniversalElectricity
 	 * @param watts
 	 * @return The string for displaying watts
 	 */
-	public static String getWattDisplay(int watts)
+	public static String getWattDisplay(double watts)
 	{
 		String displayWatt;
 		
 		if(watts > 1000000)
 		{
-			displayWatt = roundTwoDecimals((double)watts/1000000)+" MW";
+			displayWatt = roundTwoDecimals(watts/1000000)+" MW";
 		}
 		if(watts > 1000)
 		{
-			displayWatt = roundTwoDecimals((double)watts/1000)+" KW";
+			displayWatt = roundTwoDecimals(watts/1000)+" KW";
 		}
 		else
 		{
-			displayWatt = watts+" W";
+			displayWatt = (int)watts+" W";
 		}
 		
 		return displayWatt;
 	}
 	   
-	public static String getWattDisplayFull(int watts)
+	public static String getWattDisplayFull(double watts)
 	{
 		String displayWatt;
 		
 		if(watts > 1000000)
 		{
-			displayWatt = roundTwoDecimals((double)watts/1000000)+" Megawatts";
+			displayWatt = roundTwoDecimals(watts/1000000)+" Megawatts";
 		}
 		if(watts > 1000)
 		{
-			displayWatt = roundTwoDecimals((double)watts/1000)+" Kilowatts";
+			displayWatt = roundTwoDecimals(watts/1000)+" Kilowatts";
 		}
 		else if (watts == 1)
 		{
-			displayWatt = watts+" Watt";
+			displayWatt = (int)watts+" Watt";
 		}
 		else
 		{
-			displayWatt = watts+" Watts";
+			displayWatt = (int)watts+" Watts";
 		}
 		
 		
@@ -336,18 +329,21 @@ public class UniversalElectricity
      * @param The number
      * @return The rounded number
      */
-    public static float roundTwoDecimals(double d)
+    public static double roundTwoDecimals(double d)
     {
-    	try
-    	{
-    		DecimalFormat twoDForm = new DecimalFormat("#.##");
-            return Float.valueOf(twoDForm.format(d));
-    	}
-    	catch (Exception e)
-    	{
-    		return (float)Math.floor(d);
-    	}
-    	
+    	int j = (int) (d * 100);
+    	return j / 100.0;
+    }
+    
+    /**
+     * Rounds a number to one decimal place
+     * @param The number
+     * @return The rounded number
+     */
+    public static double roundOneDecimal(double d)
+    {
+    	int j = (int) (d * 10);
+    	return j / 10.0;
     }
     
     /**

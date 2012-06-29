@@ -23,7 +23,7 @@ import net.minecraft.src.universalelectricity.UniversalElectricity;
 
 public class TileEntityBatteryBox extends TileEntity implements UEIPacketReceiver, UEIRedstoneReceptor, ITextureProvider, UEIProducer, UEIConsumer, IInventory, ISidedInventory, UEIRotatable
 {
-	public int electricityStored = 0;
+	public double electricityStored = 0.0;
 	public byte facingDirection = 0;
 	 /**
      * The ItemStacks that hold the items currently being used in the battery box
@@ -73,28 +73,28 @@ public class TileEntityBatteryBox extends TileEntity implements UEIPacketReceive
 	}*/
 	
     @Override
-    public int onReceiveElectricity(int watts, int voltage, byte side)
+    public double onReceiveElectricity(double watts, int voltage, byte side)
     {
     	//Only accept electricity from the front side
     	if(canReceiveElectricity(side) || side == -1)
 		{
-	    	int rejectedElectricity = Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0);
-			this.electricityStored = Math.max(this.electricityStored+watts - rejectedElectricity, 0);
+    		double rejectedElectricity = Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0.0);
+			this.electricityStored = Math.max(this.electricityStored+watts - rejectedElectricity, 0.0);
 			return rejectedElectricity;
 		}
     	return watts;
     }
     @Override
-	public int onProduceElectricity(int maxWatt, int voltage, byte side)
+	public double onProduceElectricity(double maxWatt, int voltage, byte side)
     {
 		//Only produce electricity on the back side.
     	if((canProduceElectricity(side) && !isPowered) || side == -1)
 		{
-    		int electricityToGive = Math.min(this.electricityStored, maxWatt);
+    		double electricityToGive = Math.min(this.electricityStored, maxWatt);
     		this.electricityStored -= electricityToGive;
         	return electricityToGive;
 		} 	
-    	return 0;
+    	return 0.0;
 	}
     
     @Override
@@ -137,7 +137,7 @@ public class TileEntityBatteryBox extends TileEntity implements UEIPacketReceive
 		            if (this.containingItems[0].getItem() instanceof UEElectricItem)
 		            {
 		            	UEElectricItem electricItem = (UEElectricItem)this.containingItems[0].getItem();
-		            	int rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
+		            	double rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
 		            	this.onProduceElectricity(electricItem.getTransferRate() - rejectedElectricity, electricItem.getVolts(), (byte)-1);
 		            }
 		        }
@@ -149,7 +149,7 @@ public class TileEntityBatteryBox extends TileEntity implements UEIPacketReceive
 		            	UEElectricItem electricItem = (UEElectricItem)this.containingItems[1].getItem();
 		            	if(electricItem.canProduceElectricity())
 		            	{
-			            	int receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
+		            		double receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
 			            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
 		            	}
 		            }
@@ -164,7 +164,7 @@ public class TileEntityBatteryBox extends TileEntity implements UEIPacketReceive
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
     	super.readFromNBT(par1NBTTagCompound);
-    	this.electricityStored = par1NBTTagCompound.getInteger("electricityStored");
+    	this.electricityStored = par1NBTTagCompound.getDouble("electricityStored");
     	this.isPowered = par1NBTTagCompound.getBoolean("isPowered");
     	this.facingDirection = par1NBTTagCompound.getByte("facingDirection");
     	NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
@@ -186,7 +186,7 @@ public class TileEntityBatteryBox extends TileEntity implements UEIPacketReceive
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
     	super.writeToNBT(par1NBTTagCompound);
-    	par1NBTTagCompound.setInteger("electricityStored", this.electricityStored);
+    	par1NBTTagCompound.setDouble("electricityStored", this.electricityStored);
     	par1NBTTagCompound.setBoolean("isPowered", this.isPowered);
     	par1NBTTagCompound.setByte("facingDirection", this.facingDirection);
     	
@@ -207,14 +207,14 @@ public class TileEntityBatteryBox extends TileEntity implements UEIPacketReceive
 	 * @return Return the stored electricity in this consumer. Called by conductors to spread electricity to this unit.
 	 */
     @Override
-	public int getStoredElectricity()
+	public double getStoredElectricity()
     {
     	return this.electricityStored;
     }
     @Override
-    public int getElectricityCapacity()
+    public double getElectricityCapacity()
 	{
-		return 100000;
+		return 100000.0;
 	}
 	@Override
 	public int getStartInventorySide(int side)
@@ -365,7 +365,7 @@ public class TileEntityBatteryBox extends TileEntity implements UEIPacketReceive
         {
         	int packetID = dataStream.readInt();
         	this.facingDirection = (byte)dataStream.readDouble();
-        	this.electricityStored = (int)dataStream.readDouble();
+        	this.electricityStored = dataStream.readDouble();
         	this.disableTicks = (int)dataStream.readDouble();
         }
         catch(IOException e)

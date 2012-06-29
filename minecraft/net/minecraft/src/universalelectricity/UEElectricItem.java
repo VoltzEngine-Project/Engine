@@ -22,7 +22,7 @@ public abstract class UEElectricItem extends Item
     {
         super(par1);
         this.setMaxStackSize(1);
-        this.setMaxDamage(getElectricityCapacity());
+        this.setMaxDamage((int) getElectricityCapacity());
         this.setNoRepair();
     }
     
@@ -34,7 +34,7 @@ public abstract class UEElectricItem extends Item
     public void addInformation(ItemStack par1ItemStack, List par2List)
     {
     	String color = "";
-    	int storedWatts = this.getElectricityStored(par1ItemStack);
+    	double storedWatts = this.getElectricityStored(par1ItemStack);
     	
     	if(storedWatts <= this.getElectricityCapacity()/3)
     	{
@@ -48,7 +48,7 @@ public abstract class UEElectricItem extends Item
     	{
     		color = "\u00a76";
     	}
-    	par2List.add(color+UniversalElectricity.getWattDisplay(storedWatts)+" - "+ Math.round(((double)storedWatts/(double)this.getElectricityCapacity())*100)+"%");
+    	par2List.add(color+UniversalElectricity.getWattDisplay(storedWatts)+" - "+ Math.round((storedWatts/this.getElectricityCapacity())*100)+"%");
     }
     
     @Override
@@ -58,7 +58,7 @@ public abstract class UEElectricItem extends Item
      */
     public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
-    	par1ItemStack.setItemDamage(this.getElectricityCapacity());
+    	par1ItemStack.setItemDamage((int) this.getElectricityCapacity());
     }
 
     
@@ -68,9 +68,9 @@ public abstract class UEElectricItem extends Item
      * @param itemStack - The ItemStack of this item
      * @return Return the rejected electricity from this item
      */
-    public int onReceiveElectricity(int watts, ItemStack itemStack)
+    public double onReceiveElectricity(double watts, ItemStack itemStack)
     {
-    	int rejectedElectricity = Math.max((this.getElectricityStored(itemStack) + watts) - this.getElectricityCapacity(), 0);
+    	double rejectedElectricity = Math.max((this.getElectricityStored(itemStack) + watts) - this.getElectricityCapacity(), 0);
 		this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) + watts - rejectedElectricity);
 		return rejectedElectricity;
     }
@@ -81,9 +81,9 @@ public abstract class UEElectricItem extends Item
      * @param itemStack - The ItemStack of this item
      * @return The electricity that is given to the requester
      */
-    public int onUseElectricity(int watts, ItemStack itemStack)
+    public double onUseElectricity(double watts, ItemStack itemStack)
     {
-    	int electricityToUse = Math.min(this.getElectricityStored(itemStack), watts);
+    	double electricityToUse = Math.min(this.getElectricityStored(itemStack), watts);
 		this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) - electricityToUse);
 		return electricityToUse;
     }
@@ -109,9 +109,9 @@ public abstract class UEElectricItem extends Item
     /**
      * This function sets the electriicty. Do not directly call this function.
      * Try to use onReceiveElectricity or onUseElectricity instead.
-     * @param amount - The amount of electricity in watts
+     * @param watts - The amount of electricity in watts
      */
-    protected void setElectricityStored(ItemStack itemStack, int amount)
+    protected void setElectricityStored(ItemStack itemStack, double watts)
     {
     	//Saves the frequency in the itemstack
 		if (itemStack.stackTagCompound == null)
@@ -119,27 +119,27 @@ public abstract class UEElectricItem extends Item
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
 
-		int electricityStored = Math.max(Math.min(amount, this.getElectricityCapacity()), 0);
+		double electricityStored = Math.max(Math.min(watts, this.getElectricityCapacity()), 0);
 		
-		itemStack.stackTagCompound.setInteger("electricity", electricityStored);
+		itemStack.stackTagCompound.setDouble("electricity", electricityStored);
 		
-		itemStack.setItemDamage(getElectricityCapacity() - electricityStored);
+		itemStack.setItemDamage((int) (getElectricityCapacity() - electricityStored));
     }
     
     /**
      * This function is called to get the electricity stored in this item
      * @return - The amount of electricity stored
      */
-    protected int getElectricityStored(ItemStack itemStack)
+    protected double getElectricityStored(ItemStack itemStack)
     {
     	if (itemStack.stackTagCompound == null)
 		{
     		return 0;
 		}
     	
-    	int electricityStored = itemStack.stackTagCompound.getInteger("electricity");
+    	double electricityStored = itemStack.stackTagCompound.getDouble("electricity");
     	
-    	itemStack.setItemDamage(getElectricityCapacity() - electricityStored);
+    	itemStack.setItemDamage((int) (getElectricityCapacity() - electricityStored));
     	
     	return electricityStored;	
     }
@@ -148,13 +148,13 @@ public abstract class UEElectricItem extends Item
      * This function is called to get the electricity maximum capacity in this item
      * @return - The amount of electricity maximum capacity
      */
-    public abstract int getElectricityCapacity();
+    public abstract double getElectricityCapacity();
     
     /**
      * This function is called to get the maximum transfer rate this electric item can receive per tick
      * @return - The amount of electricity maximum capacity
      */
-    public abstract int getTransferRate();
+    public abstract double getTransferRate();
     
     /**
      * Gets the voltage of this item
@@ -171,7 +171,7 @@ public abstract class UEElectricItem extends Item
     public ItemStack getChargedItemStack()
     {
     	ItemStack chargedItem = new ItemStack(this);
-    	chargedItem.setItemDamage(this.getElectricityCapacity());
+    	chargedItem.setItemDamage((int) this.getElectricityCapacity());
     	
     	return chargedItem;
     }
@@ -187,7 +187,7 @@ public abstract class UEElectricItem extends Item
     {       
     	//Add an uncharged version of the electric item
     	ItemStack unchargedItem = new ItemStack(this, 1);
-    	unchargedItem.setItemDamage(this.getElectricityCapacity());
+    	unchargedItem.setItemDamage((int) this.getElectricityCapacity());
     	itemList.add(unchargedItem);
     	//Add an electric item to the creative list that is fully charged
     	ItemStack chargedItem = new ItemStack(this, 1);
