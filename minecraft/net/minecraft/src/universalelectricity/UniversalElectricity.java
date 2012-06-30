@@ -72,7 +72,7 @@ public class UniversalElectricity
 			displayAmps = (int)(amps*1000)+" mA";
 		}else if(amps > 1000)
 		{
-			displayAmps = roundTwoDecimals(amps/1000)+" KA";
+			displayAmps = roundOneDecimal(amps/1000)+" KA";
 		}
 		else
 		{
@@ -91,7 +91,7 @@ public class UniversalElectricity
 			displayAmps = (int)(amps*1000)+" Milliamps";
 		}else if(amps > 1000)
 		{
-			displayAmps = roundTwoDecimals(amps/1000)+" Kiloamps";
+			displayAmps = roundOneDecimal(amps/1000)+" Kiloamps";
 		}
 		else
 		{
@@ -112,11 +112,11 @@ public class UniversalElectricity
 		
 		if(volts > 1000000)
 		{
-			displayVolt = roundTwoDecimals(volts/1000000)+" MV";
+			displayVolt = roundOneDecimal(volts/1000000)+" MV";
 		}
 		if(volts > 1000)
 		{
-			displayVolt = roundTwoDecimals(volts/1000)+" KV";
+			displayVolt = roundOneDecimal(volts/1000)+" KV";
 		}
 		else
 		{
@@ -132,11 +132,11 @@ public class UniversalElectricity
 		
 		if(volts > 1000000)
 		{
-			displayVolt = roundTwoDecimals(volts/1000000)+" Megavolts";
+			displayVolt = roundOneDecimal(volts/1000000)+" Megavolts";
 		}
 		if(volts > 1000)
 		{
-			displayVolt = roundTwoDecimals(volts/1000)+" Kilovolts";
+			displayVolt = roundOneDecimal(volts/1000)+" Kilovolts";
 		}
 		else if (volts == 1)
 		{
@@ -161,11 +161,11 @@ public class UniversalElectricity
 		
 		if(watts > 1000000)
 		{
-			displayWatt = roundTwoDecimals(watts/1000000)+" MW";
+			displayWatt = roundOneDecimal(watts/1000000)+" MW";
 		}
 		if(watts > 1000)
 		{
-			displayWatt = roundTwoDecimals(watts/1000)+" KW";
+			displayWatt = roundOneDecimal(watts/1000)+" KW";
 		}
 		else
 		{
@@ -181,11 +181,11 @@ public class UniversalElectricity
 		
 		if(watts > 1000000)
 		{
-			displayWatt = roundTwoDecimals(watts/1000000)+" Megawatts";
+			displayWatt = roundOneDecimal(watts/1000000)+" Megawatts";
 		}
 		if(watts > 1000)
 		{
-			displayWatt = roundTwoDecimals(watts/1000)+" Kilowatts";
+			displayWatt = roundOneDecimal(watts/1000)+" Kilowatts";
 		}
 		else if (watts == 1)
 		{
