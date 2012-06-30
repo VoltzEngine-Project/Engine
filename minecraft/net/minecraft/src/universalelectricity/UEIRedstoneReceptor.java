@@ -1,6 +1,5 @@
 package net.minecraft.src.universalelectricity;
 
-import net.minecraft.src.universalelectricity.components.TileEntityBatteryBox;
 
 /**
  * OPTIONAL

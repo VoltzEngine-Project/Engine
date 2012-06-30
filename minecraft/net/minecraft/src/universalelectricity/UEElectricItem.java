@@ -8,7 +8,6 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
-import net.minecraft.src.universalelectricity.components.ItemBattery;
 
 /**
  * REQUIRED

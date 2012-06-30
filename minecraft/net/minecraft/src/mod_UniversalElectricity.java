@@ -5,9 +5,9 @@ import java.util.Random;
 import net.minecraft.src.forge.IGuiHandler;
 import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.NetworkMod;
+import net.minecraft.src.universalelectricity.GUIBatteryBox;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
-import net.minecraft.src.universalelectricity.components.GUIBatteryBox;
-import net.minecraft.src.universalelectricity.components.UniversalComponents;
+import net.minecraft.src.universalelectricity.api.UERecipes;
 
 /**
  * This class is basically just a loader for Universal Components
@@ -17,18 +17,26 @@ import net.minecraft.src.universalelectricity.components.UniversalComponents;
 public class mod_UniversalElectricity extends NetworkMod
 {
 	public static mod_UniversalElectricity instance;
-	public static final UniversalComponents universalComponents = new UniversalComponents();
 	
 	@Override
 	public void load()
 	{
 		this.instance = this;
-		MinecraftForge.setGuiHandler(this, universalComponents);
-		UniversalElectricity.load();
-		universalComponents.load();
-		UniversalComponents.MachineRenderType = ModLoader.getUniqueBlockModelID(this, true);
-		UniversalElectricity.registerAddon(this, this.getVersion());
+		UniversalElectricity universalElectricity = new UniversalElectricity();
+		MinecraftForge.setGuiHandler(this, universalElectricity);
+		universalElectricity.load();
+		universalElectricity.MachineRenderType = ModLoader.getUniqueBlockModelID(this, true);
+		universalElectricity.registerAddon(this, this.getVersion());
 	}
+	
+	/**
+     * Finish loading your mod
+     */
+	@Override
+    public void modsLoaded()
+    {
+		UERecipes.initialize();
+    }
 	
 	@Override
 	public String getVersion()
@@ -45,6 +53,6 @@ public class mod_UniversalElectricity extends NetworkMod
 	@Override
 	public void renderInvBlock(RenderBlocks renderBlocks, Block block, int metadata, int renderType)
 	{
-		UniversalComponents.renderInvBlock(renderBlocks, block, metadata, renderType);
+		UniversalElectricity.renderInvBlock(renderBlocks, block, metadata, renderType);
 	}
 }

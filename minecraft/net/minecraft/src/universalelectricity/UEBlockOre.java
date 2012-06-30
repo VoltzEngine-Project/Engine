@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
+import net.minecraft.src.universalelectricity.api.UniversalOreData;
 
 /**
  * A class used by Universal Electricity to create metadata ores. You can ignore this class.

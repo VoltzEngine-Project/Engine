@@ -2,6 +2,7 @@ package net.minecraft.src.universalelectricity;
 
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.universalelectricity.api.Vector3;
 
 public abstract class UETileEntityConductor extends TileEntity implements UEIConsumer
 {

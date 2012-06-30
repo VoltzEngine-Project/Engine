@@ -7,20 +7,76 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.Block;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
+import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet1Login;
+import net.minecraft.src.RenderBlocks;
+import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraft.src.mod_UniversalElectricity;
 import net.minecraft.src.forge.Configuration;
+import net.minecraft.src.forge.IConnectionHandler;
+import net.minecraft.src.forge.IGuiHandler;
 import net.minecraft.src.forge.MinecraftForge;
+import net.minecraft.src.forge.MinecraftForgeClient;
 import net.minecraft.src.forge.NetworkMod;
 import net.minecraft.src.forge.oredict.OreDictionary;
+import net.minecraft.src.universalelectricity.api.UERecipes;
+import net.minecraft.src.universalelectricity.api.UniversalOreData;
 
-public class UniversalElectricity
+public class UniversalElectricity implements IGuiHandler, IConnectionHandler
 {
 	public static final Configuration configuration = new Configuration(new File(Minecraft.getMinecraftDir(), "config/UniversalElectricity/UniversalElectricity.cfg"));
 	
-	private static final List<NetworkMod> Addons = new ArrayList<NetworkMod>();
+	public static final String filePath = "/universalelectricity/textures/";
+
+	public static UEPacketManager packetManager = new UEPacketManager("UElectricity");
+
+	/**
+	 * Here is where all the Universal Components are defined. You may reference to these variables.
+	 */
+	public static final int CopperOreID = getConfigID(configuration, "Copper Ore Metadata", 0, true);
+
+	public static final int TinOreID = getConfigID(configuration, "Tin Ore Metadata", 1, true);
+
+	public static int MachineRenderType;
+
+	public static final Block BlockMachine = new BlockUCMachine(getConfigID(configuration, "Universal Components Machine", 190, true), 0);
+
+	public static final Block BlockCopperWire = new BlockCopperWire(getConfigID(configuration, "CopperWire", 191, true));
+
+	public static final Item ItemBattery = new ItemBattery(getConfigID(configuration, "Battery", 1585, false), 0);
+
+	public static final Item ItemElectricityMeter = new ItemElectricityMeter(getConfigID(configuration, "ElectricityMeter", 1586, false), 19);
+
+	public static final Item ItemWrench = new ItemWrench(getConfigID(configuration, "Wrench", 1587, false), 20);
+
+	public static final Item ItemCopperIngot = new UCItem("Copper Ingot", getConfigID(configuration, "CopperIngot", 1588, false), 1);
+
+	public static final Item ItemTinIngot = new UCItem("Tin Ingot", getConfigID(configuration, "TinIngot", 1589, false), 2);
+
+	public static final Item ItemSteelIngot = new UCItem("Steel Ingot", getConfigID(configuration, "SteelIngot", 1590, false), 3);
+
+	public static final Item ItemSteelClump = new UCItem("Steel Clump", getConfigID(configuration, "SteelClump", 1591, false), 5);
+
+	public static final Item ItemCircuit = new ItemCircuit(getConfigID(configuration, "Circuit", 1592, false), 16);
+
+	public static final Item ItemCopperWire = new ItemCopperWire(getConfigID(configuration, "ItemCopperWire", 1593, false), 21);
+
+	public static final Item ItemBronzeIngot = new UCItem("Bronze Ingot", getConfigID(configuration, "BronzeIngot", 1594, false), 7);
+
+	public static final Item ItemBronzeClump = new UCItem("Bronze Clump", getConfigID(configuration, "BronzeClump", 1595, false), 6);
+
+	public static final Item ItemSteelPlate = new UCItem("Steel Plate", getConfigID(configuration, "Steel Plate", 1597, false), 8);
+
+	public static final Item ItemMotor = new UCItem("Motor", getConfigID(configuration, "Motor", 1598, false), 9);
+
+	
+	public static final List<NetworkMod> addons = new ArrayList<NetworkMod>();
 	
 	//Universal Blocks
 	public static final int maxOreBlocks = 2;
@@ -54,14 +110,80 @@ public class UniversalElectricity
         	System.out.println("Universal Electricity add-on minor version "+version+" mismatch with version " + getVersion());
         }
 		
-		Addons.add(networkmod);
+		addons.add(networkmod);
 		System.out.println("Loaded Universal Add-On: "+networkmod.getName());
 	}
 	
-	public static void load()
+	public void load()
 	{		
 		ModLoader.registerBlock(BlockOre[0], ItemUniversalOre0.class);
 		ModLoader.registerBlock(BlockOre[1], ItemUniversalOre1.class);
+		
+		//Preload textures
+		MinecraftForgeClient.preloadTexture(UCBlock.textureFile);
+		MinecraftForgeClient.preloadTexture(UCItem.textureFile);
+		
+		MinecraftForge.registerConnectionHandler(this);
+				
+		//Register Blocks
+		ModLoader.registerBlock(UniversalElectricity.BlockMachine, ItemBlockUCMachine.class);
+		ModLoader.registerBlock(UniversalElectricity.BlockCopperWire);
+		
+		//Add Names for Special Items
+		ModLoader.addName(UniversalElectricity.ItemElectricityMeter, "Electricity Meter");
+		ModLoader.addName(UniversalElectricity.ItemBattery, "Basic Battery");
+		ModLoader.addName(UniversalElectricity.BlockCopperWire, "Copper Wire");
+		ModLoader.addName(new ItemStack(UniversalElectricity.ItemCircuit, 1, 0), "Basic Circuit");
+        ModLoader.addName(new ItemStack(UniversalElectricity.ItemCircuit, 1, 1), "Advanced Circuit");
+        ModLoader.addName(new ItemStack(UniversalElectricity.ItemCircuit, 1, 2), "Elite Circuit");
+        ModLoader.addName(new ItemStack(UniversalElectricity.BlockMachine, 1, 0), "Battery Box");
+        ModLoader.addName(new ItemStack(UniversalElectricity.BlockMachine, 1, 1), "Coal Generator");
+        ModLoader.addName(new ItemStack(UniversalElectricity.BlockMachine, 1, 2), "Electric Furnace");
+		
+		//Register Tile Entities
+		ModLoader.registerTileEntity(TileEntityCopperWire.class, "TileEntityCopperWire", new RenderCopperWire());
+		ModLoader.registerTileEntity(TileEntityBatteryBox.class, "TileEntityBatteryBox", new UEBlockRenderer());
+		ModLoader.registerTileEntity(TileEntityCoalGenerator.class, "TileEntityCoalGenerator", new UEBlockRenderer());
+		ModLoader.registerTileEntity(TileEntityElectricFurnace.class, "TileEntityElectricFurnace", new UEBlockRenderer());
+		
+		//Add Ores
+		UniversalElectricity.addOre(UniversalElectricity.CopperOreID, new UniversalOreData("Copper Ore", "oreCopper", ModLoader.addOverride("/terrain.png", UniversalElectricity.filePath+"copper.png"), 60, 46, 8));
+		UniversalElectricity.addOre(UniversalElectricity.TinOreID, new UniversalOreData("Tin Ore", "oreTin", ModLoader.addOverride("/terrain.png", UniversalElectricity.filePath+"tin.png"), 60, 35, 6));
+		OreDictionary.registerOre("ingotCopper", UniversalElectricity.ItemCopperIngot);
+		OreDictionary.registerOre("ingotTin", UniversalElectricity.ItemTinIngot);
+		OreDictionary.registerOre("ingotBronze", UniversalElectricity.ItemBronzeIngot);
+		OreDictionary.registerOre("ingotSteel", UniversalElectricity.ItemSteelIngot);
+		
+		//Recipes
+		//Motor
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.ItemMotor), new Object [] {"@!@", "!#!", "@!@", '!', UniversalElectricity.ItemSteelPlate, '#', UniversalElectricity.ItemCircuit, '@', UniversalElectricity.ItemCopperWire});
+		//Wrench
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.ItemWrench), new Object [] {"! !", " ! ", " ! ", '!', "ingotSteel"});
+		//Electricity Meter
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.ItemElectricityMeter), new Object [] {"!?!", "!#!", "!!!", '!', "ingotSteel", '?', UniversalElectricity.ItemCopperWire, '#', UniversalElectricity.ItemCircuit});
+		//Battery Box
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.BlockMachine, 1, 0), new Object [] {"!?!", "???", "!?!", '!', UniversalElectricity.ItemSteelPlate, '?', (((ItemBattery)UniversalElectricity.ItemBattery).getChargedItemStack()) });
+		//Coal Generator
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.BlockMachine, 1, 1), new Object [] {"!@!", "$#$", "!?!", '!', UniversalElectricity.ItemSteelPlate, '@', UniversalElectricity.ItemCopperWire, '?', UniversalElectricity.ItemCircuit, '#', UniversalElectricity.ItemMotor, '$', Block.stoneOvenIdle});
+		//Electric Furnace
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.BlockMachine, 1, 2), new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '#', UniversalElectricity.ItemCircuit, '?', UniversalElectricity.ItemSteelPlate});
+		//Copper
+		UERecipes.addSmelting(new ItemStack(UniversalElectricity.getOre(UniversalElectricity.CopperOreID), 1, UniversalElectricity.getOreMetadata(UniversalElectricity.CopperOreID)), new ItemStack(UniversalElectricity.ItemCopperIngot));
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.ItemCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"});
+		//Tin
+		UERecipes.addSmelting(new ItemStack(UniversalElectricity.getOre(UniversalElectricity.TinOreID).blockID, 1, UniversalElectricity.getOreMetadata(UniversalElectricity.TinOreID)), new ItemStack(UniversalElectricity.ItemTinIngot));
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.ItemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal});
+		//Steel
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.ItemSteelClump), new Object [] {"!#!", '!', Item.coal, '#', Item.ingotIron});
+		UERecipes.addSmelting(UniversalElectricity.ItemSteelClump, new ItemStack(UniversalElectricity.ItemSteelIngot));
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.ItemSteelPlate), new Object [] {" ! ", "!!!", " ! ", '!', "ingotSteel"});
+		//Bronze
+		UERecipes.addRecipe(UniversalElectricity.ItemBronzeClump, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
+		UERecipes.addSmelting(UniversalElectricity.ItemBronzeClump, new ItemStack(UniversalElectricity.ItemBronzeIngot));
+		//Circuit
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.ItemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', UniversalElectricity.ItemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', UniversalElectricity.ItemCopperWire});
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.ItemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', UniversalElectricity.ItemCircuit});
+		UERecipes.addRecipe(new ItemStack(UniversalElectricity.ItemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(UniversalElectricity.ItemCircuit, 1, 1), '#', Block.blockLapis});
 	}
 	
 	//Generate the surface of the world based on all registered universal ores.
@@ -446,4 +568,42 @@ public class UniversalElectricity
         configuration.save();
         return id;
 	}
+
+	public static void renderInvBlock(RenderBlocks renderBlocks, Block block, int metadata, int renderType)
+	{
+		if(renderType == UniversalElectricity.MachineRenderType)
+		{
+	        new UERenderBlocks().renderBlockAsItemWithMetadata(block, metadata);
+		}
+	}
+	
+	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+	{
+		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+		
+		if (tileEntity != null)
+        {
+			switch(ID)
+			{
+				case 0: return new GUIBatteryBox(player.inventory, ((TileEntityBatteryBox)tileEntity));
+				case 1: return new GUICoalGenerator(player.inventory, ((TileEntityCoalGenerator)tileEntity));
+				case 2: return new GUIElectricFurnace(player.inventory, ((TileEntityElectricFurnace)tileEntity));
+			}
+        }
+		
+		return null;
+	}
+
+	@Override
+	public void onConnect(NetworkManager network) { }
+
+	@Override
+	public void onLogin(NetworkManager network, Packet1Login login)
+	{
+		UniversalElectricity.packetManager.registerChannel(network);
+	}
+
+	@Override
+	public void onDisconnect(NetworkManager network, String message, Object[] args) { }
+
 }

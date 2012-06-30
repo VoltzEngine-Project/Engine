@@ -2,6 +2,7 @@ package net.minecraft.src.universalelectricity;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.universalelectricity.api.Vector3;
 
 /**
  * Interface to be applied to tile entity blocks that occupies more than one block space. Useful for large machines.

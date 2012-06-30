@@ -9,7 +9,6 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import net.minecraft.src.universalelectricity.components.UniversalComponents;
 
 /**
  * A block you may extend from to create your machine blocks! You do not have to extend from this block if 
@@ -64,7 +63,7 @@ public abstract class UEBlockMachine extends BlockContainer
     	 */
     	if(par5EntityPlayer.inventory.getCurrentItem() != null)
     	{
-    		if(par5EntityPlayer.inventory.getCurrentItem().itemID == UniversalComponents.ItemWrench.shiftedIndex)
+    		if(par5EntityPlayer.inventory.getCurrentItem().itemID == UniversalElectricity.ItemWrench.shiftedIndex)
         	{
     			if(this.onUseWrench(par1World, x, y, z, par5EntityPlayer))
     			{

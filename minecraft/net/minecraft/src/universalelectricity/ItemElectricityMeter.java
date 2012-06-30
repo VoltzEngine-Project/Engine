@@ -1,4 +1,4 @@
-package net.minecraft.src.universalelectricity.components;
+package net.minecraft.src.universalelectricity;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
@@ -6,9 +6,6 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
-import net.minecraft.src.universalelectricity.UEIConsumer;
-import net.minecraft.src.universalelectricity.UETileEntityConductor;
-import net.minecraft.src.universalelectricity.UniversalElectricity;
 
 public class ItemElectricityMeter extends Item implements ITextureProvider
 {
@@ -33,12 +30,12 @@ public class ItemElectricityMeter extends Item implements ITextureProvider
 	        {
 	        	if(tileEntity instanceof UETileEntityConductor)
 	        	{
-	        		par2EntityPlayer.addChatMessage("Electricity Flow: "+UniversalElectricity.getWattDisplay( ((UETileEntityConductor)tileEntity).getStoredElectricity()*20 )+", "+UniversalElectricity.getAmpDisplay(UniversalElectricity.getAmps( ((UETileEntityConductor)tileEntity).getStoredElectricity()*20, ((UETileEntityConductor)tileEntity).getVolts())) +", "+UniversalElectricity.getVoltDisplay(((UETileEntityConductor)tileEntity).getVolts()));
+	        		par2EntityPlayer.addChatMessage("Electricity Flow: "+UniversalElectricity.getWattDisplay( ((UETileEntityConductor)tileEntity).getStoredElectricity())+", "+UniversalElectricity.getAmpDisplay(UniversalElectricity.getAmps( ((UETileEntityConductor)tileEntity).getStoredElectricity(), ((UETileEntityConductor)tileEntity).getVolts())) +", "+UniversalElectricity.getVoltDisplay(((UETileEntityConductor)tileEntity).getVolts()));
 	        		return true;
 	        	}
 	        	else if(tileEntity instanceof UEIConsumer)
 	        	{
-	        		par2EntityPlayer.addChatMessage("Electricity: "+UniversalElectricity.getWattDisplay(((UEIConsumer)tileEntity).getStoredElectricity()*20)+"/"+UniversalElectricity.getWattDisplay(((UEIConsumer)tileEntity).getElectricityCapacity()));
+	        		par2EntityPlayer.addChatMessage("Electricity: "+UniversalElectricity.getWattDisplay(((UEIConsumer)tileEntity).getStoredElectricity())+"/"+UniversalElectricity.getWattDisplay(((UEIConsumer)tileEntity).getElectricityCapacity()));
 	        		return true;
 	        	}
 	        }

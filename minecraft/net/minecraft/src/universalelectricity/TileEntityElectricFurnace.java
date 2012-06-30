@@ -1,24 +1,12 @@
-package net.minecraft.src.universalelectricity.components;
+package net.minecraft.src.universalelectricity;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.FurnaceRecipes;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
-import net.minecraft.src.NetworkManager;
-import net.minecraft.src.TileEntity;
+import net.minecraft.src.*;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
-import net.minecraft.src.universalelectricity.UEElectricItem;
-import net.minecraft.src.universalelectricity.UEIConsumer;
-import net.minecraft.src.universalelectricity.UEIPacketReceiver;
-import net.minecraft.src.universalelectricity.UEIRotatable;
-import net.minecraft.src.universalelectricity.UniversalElectricity;
+import net.minecraft.src.universalelectricity.*;
 
 public class TileEntityElectricFurnace extends TileEntity implements ITextureProvider, UEIConsumer, IInventory, ISidedInventory, UEIRotatable, UEIPacketReceiver
 {
@@ -26,7 +14,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 	public static final int smeltingTimeRequired = 160;
 		
 	//The electricity stored in this tile entity
-	public int electricityStored = 0;
+	public double electricityStored = 0.0;
 	
 	//How many ticks has this item been smelting for?
 	public int smeltingTicks = 0;
@@ -44,7 +32,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
     
   	public TileEntityElectricFurnace()
 	{
-	  	UniversalComponents.packetManager.registerPacketUser(this);
+	  	UniversalElectricity.packetManager.registerPacketUser(this);
 	}
   	
     /**
@@ -55,7 +43,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 	 * @return watts - The amount of rejected power to be sent back into the conductor
 	 */
     @Override
-    public int onReceiveElectricity(int watts, int voltage, byte side)
+    public double onReceiveElectricity(double watts, int voltage, byte side)
     {
     	if(voltage > this.getVolts())
     	{
@@ -65,8 +53,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
     	//Only accept electricity from the front side
     	if(canReceiveElectricity(side) || side == -1)
 		{
-	    	int rejectedElectricity = Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0);
-			this.electricityStored = Math.max(this.electricityStored+watts - rejectedElectricity, 0);
+    		double rejectedElectricity = Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0.0);
+			this.electricityStored = Math.max(this.electricityStored+watts - rejectedElectricity, 0.0);
 			return rejectedElectricity;
 		}
     	return watts;
@@ -103,7 +91,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 			           	
 		            	if(electricItem.canProduceElectricity())
 			           	{
-			            	int receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
+			            	double receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
 			            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
 			            }
 		            }
@@ -181,7 +169,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
     	super.readFromNBT(par1NBTTagCompound);
-    	this.electricityStored = par1NBTTagCompound.getInteger("electricityStored");
+    	this.electricityStored = par1NBTTagCompound.getDouble("electricityStored");
     	this.facingDirection = par1NBTTagCompound.getByte("facingDirection");
     	this.smeltingTicks = par1NBTTagCompound.getInteger("smeltingTicks");
     	NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
@@ -203,7 +191,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
     	super.writeToNBT(par1NBTTagCompound);
-    	par1NBTTagCompound.setInteger("electricityStored", this.electricityStored);
+    	par1NBTTagCompound.setDouble("electricityStored", this.electricityStored);
     	par1NBTTagCompound.setByte("facingDirection", this.facingDirection);
     	par1NBTTagCompound.setInteger("smeltingTicks", this.smeltingTicks);
     	NBTTagList var2 = new NBTTagList();
@@ -223,14 +211,14 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 	 * @return Return the stored electricity in this consumer. Called by conductors to spread electricity to this unit.
 	 */
     @Override
-	public int getStoredElectricity()
+	public double getStoredElectricity()
     {
     	return this.electricityStored;
     }
     @Override
-    public int getElectricityCapacity()
+    public double getElectricityCapacity()
 	{
-		return 1800;
+		return 1800.0;
 	}
 	@Override
 	public int getStartInventorySide(int side)
@@ -366,7 +354,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
         {
         	int packetID = dataStream.readInt();
         	this.facingDirection = (byte)dataStream.readDouble();
-        	this.electricityStored = (int)dataStream.readDouble();
+        	this.electricityStored = dataStream.readDouble();
         	this.smeltingTicks = (int)dataStream.readDouble();
         	this.disableTicks = (int)dataStream.readDouble();
         }

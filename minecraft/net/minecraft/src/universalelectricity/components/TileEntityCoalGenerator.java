@@ -51,14 +51,14 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
   	}
   	    
     @Override
-	public double onProduceElectricity(double maxWatt, int voltage, byte side)
+	public int onProduceElectricity(int maxWatt, int voltage, byte side)
     {
 		//Only produce electricity on the back side.
-    	if(canProduceElectricity(side) && maxWatt > 0.0)
+    	if(canProduceElectricity(side) && maxWatt > 0)
 		{
 	        return Math.min(maxWatt, (int)generateRate);
 		}
-    	return 0.0;
+    	return 0;
 	}
     
     @Override

@@ -1,10 +1,9 @@
-package net.minecraft.src.universalelectricity.components;
+package net.minecraft.src.universalelectricity;
 
 import java.util.List;
 
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.forge.ITextureProvider;
-import net.minecraft.src.universalelectricity.UEElectricItem;
 
 public class ItemBattery extends UEElectricItem implements ITextureProvider
 {
@@ -29,9 +28,9 @@ public class ItemBattery extends UEElectricItem implements ITextureProvider
      * @return - The amount of electricity maximum capacity
      */
     @Override
-	public int getElectricityCapacity()
+	public double getElectricityCapacity()
     {
-    	return 15000;
+    	return 15000.0;
     }
     
     /**
@@ -50,9 +49,9 @@ public class ItemBattery extends UEElectricItem implements ITextureProvider
      * @return - The amount of electricity maximum capacity
      */
     @Override
-	public int getTransferRate()
+	public double getTransferRate()
     {
-    	return 100;
+    	return 100.0;
     }
 
 	@Override

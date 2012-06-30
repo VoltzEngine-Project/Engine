@@ -1,9 +1,8 @@
-package net.minecraft.src.universalelectricity.components;
+package net.minecraft.src.universalelectricity;
 
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.StatCollector;
-import net.minecraft.src.universalelectricity.UniversalElectricity;
 
 import org.lwjgl.opengl.GL11;
 
@@ -48,7 +47,7 @@ public class GUICoalGenerator extends GuiContainer
         }
         else
         {
-        	displayText = UniversalElectricity.getWattDisplay((int)(tileEntity.generateRate*20));
+        	displayText = UniversalElectricity.getWattDisplay(tileEntity.generateRate*20);
         }
         this.fontRenderer.drawString(displayText, (int)(105-displayText.length()*1.25), 45, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
