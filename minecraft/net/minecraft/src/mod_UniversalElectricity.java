@@ -2,12 +2,14 @@ package net.minecraft.src;
 
 import java.util.Random;
 
-import net.minecraft.src.forge.IGuiHandler;
-import net.minecraft.src.forge.MinecraftForge;
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.forge.NetworkMod;
-import net.minecraft.src.universalelectricity.GUIBatteryBox;
+import net.minecraft.src.universalelectricity.ItemUniversalOre0;
+import net.minecraft.src.universalelectricity.ItemUniversalOre1;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
-import net.minecraft.src.universalelectricity.api.UERecipes;
+import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
+import net.minecraft.src.universalelectricity.ore.UEOreManager;
+import net.minecraft.src.universalelectricity.recipe.UERecipeManager;
 
 /**
  * This class is basically just a loader for Universal Components
@@ -15,27 +17,18 @@ import net.minecraft.src.universalelectricity.api.UERecipes;
  */
 
 public class mod_UniversalElectricity extends NetworkMod
-{
-	public static mod_UniversalElectricity instance;
-	
+{	
 	@Override
 	public void load()
 	{
-		this.instance = this;
-		UniversalElectricity universalElectricity = new UniversalElectricity();
-		MinecraftForge.setGuiHandler(this, universalElectricity);
-		universalElectricity.load();
-		universalElectricity.MachineRenderType = ModLoader.getUniqueBlockModelID(this, true);
-		universalElectricity.registerAddon(this, this.getVersion());
+		ModLoader.registerBlock(UEOreManager.BlockOre[0], ItemUniversalOre0.class);
+		ModLoader.registerBlock(UEOreManager.BlockOre[1], ItemUniversalOre1.class);
 	}
 	
-	/**
-     * Finish loading your mod
-     */
 	@Override
     public void modsLoaded()
     {
-		UERecipes.initialize();
+		UERecipeManager.initialize();
     }
 	
 	@Override
@@ -44,15 +37,23 @@ public class mod_UniversalElectricity extends NetworkMod
 		return UniversalElectricity.getVersion();
 	}
 	
+	/**
+     * Ticked every game tick if you have subscribed to tick events through {@link ModLoader#setInGameHook(BaseMod, boolean, boolean)}
+     * 
+     * @param time the rendering subtick time (0.0-1.0)
+     * @param minecraftInstance the client
+     * @return true to continue receiving ticks
+     */
 	@Override
-	public void generateSurface(World world, Random rand, int chunkX, int chunkZ)
+    public boolean onTickInGame(float time, Minecraft minecraftInstance)
     {
-		UniversalElectricity.generateSurface(world, rand, chunkX, chunkZ);
+		ElectricityManager.onUpdate();
+        return true;
     }
 	
 	@Override
-	public void renderInvBlock(RenderBlocks renderBlocks, Block block, int metadata, int renderType)
-	{
-		UniversalElectricity.renderInvBlock(renderBlocks, block, metadata, renderType);
-	}
+	public void generateSurface(World world, Random rand, int chunkX, int chunkZ)
+    {
+		UEOreManager.generateSurface(world, rand, chunkX, chunkZ);
+    }
 }

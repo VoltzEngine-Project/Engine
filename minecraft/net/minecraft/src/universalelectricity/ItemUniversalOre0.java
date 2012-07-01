@@ -2,6 +2,7 @@ package net.minecraft.src.universalelectricity;
 
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.universalelectricity.ore.UEOreManager;
 
 public class ItemUniversalOre0 extends ItemBlock
 {
@@ -24,7 +25,7 @@ public class ItemUniversalOre0 extends ItemBlock
         return (new StringBuilder())
                 .append(super.getItemName())
                 .append(".")
-                .append(UniversalElectricity.BlockOre[0].ores[itemstack.getItemDamage()].name)
+                .append(UEOreManager.BlockOre[0].ores[itemstack.getItemDamage()].name)
                 .toString();
     }
 	

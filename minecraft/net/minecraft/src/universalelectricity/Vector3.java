@@ -43,6 +43,11 @@ public class Vector3 extends Vector2
     public int intY() { return (int)Math.floor(this.y); }
     public int intZ() { return (int)Math.floor(this.z); }
 
+    public static boolean isPointInRegion(Vector3 point, Vector3 minPoint, Vector3 maxPoint)
+    {
+        return (point.x > minPoint.x && point.x < maxPoint.x) && (point.y > minPoint.y && point.y < maxPoint.y) && (point.z > minPoint.z && point.z < maxPoint.z);
+    }
+    
     /**
      * Converts from Vec3D into a Vector3
      */

@@ -32,6 +32,15 @@ public class Vector2
         this.x = x;
         this.y = y;
     }
+    
+    //Returns the values as an int
+    public int intX() { return (int)Math.floor(this.x); }
+    public int intY() { return (int)Math.floor(this.y); }
+    
+    public static boolean isPointInRegion(Vector3 point, Vector3 minPoint, Vector3 maxPoint)
+    {
+        return (point.x > minPoint.x && point.x < maxPoint.x) && (point.y > minPoint.y && point.y < maxPoint.y);
+    }
 
     public static double distance(Vector2 par1, Vector2 par2)
     {
