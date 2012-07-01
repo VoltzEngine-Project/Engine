@@ -31,13 +31,13 @@ protected void drawGuiContainerForegroundLayer()
        
        if(this.tileEntity.isDisabled())
        {
-       		displayText = "?!!";
+       		displayText = "Disabled!";
        }
        else
        {
-    	   displayText = Math.round(this.tileEntity.electricityStored/this.tileEntity.getElectricityCapacity()*100)+"%";
+    	   displayText = "Ready";
        }
-       this.fontRenderer.drawString("Electricity: "+displayText, 80, 53, 4210752);
+       this.fontRenderer.drawString("Status: "+displayText, 80, 53, 4210752);
        this.fontRenderer.drawString("Smelting:", 10, 28, 4210752);
        this.fontRenderer.drawString("Battery:", 10, 53, 4210752);
        this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);

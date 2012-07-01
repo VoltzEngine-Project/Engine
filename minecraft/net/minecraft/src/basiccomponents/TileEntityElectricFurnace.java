@@ -15,18 +15,17 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
-import net.minecraft.src.universalelectricity.electricity.IElectricityConsumer;
+import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
+import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
+import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.IRotatable;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityElectricFurnace extends TileEntity implements ITextureProvider, IElectricityConsumer, IInventory, ISidedInventory,  IPacketReceiver
+public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory,  IPacketReceiver
 {
 	//The amount of ticks requried to smelt this item
 	public static final int smeltingTimeRequired = 160;
-		
-	//The electricity stored in this tile entity
-	public double electricityStored = 0.0;
 	
 	//How many ticks has this item been smelting for?
 	public int smeltingTicks = 0;
@@ -36,63 +35,34 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
      */
     private ItemStack[] containingItems = new ItemStack[3];
     
-    //The ticks in which this tile entity is disabled. -1 = Not disabled
-  	private int disableTicks = -1;
-    
   	public TileEntityElectricFurnace()
 	{
   		BasicComponents.packetManager.registerPacketUser(this);
+  		ElectricityManager.registerElectricUnit(this);
 	}
   	
-    /**
-	 * onRecieveElectricity is called whenever a Universal Electric conductor sends a packet of electricity to the consumer (which is this block).
-	 * @param watts - The amount of watts this block received.
-	 * @param voltage - The voltage the tile entity is receiving.
-	 * @param side - The side of the block in which the electricity came from.
-	 * @return watts - The amount of rejected power to be sent back into the conductor
-	 */
-    @Override
-    public double onReceiveElectricity(double watts, int voltage, byte side)
-    {
-    	if(voltage > this.getVolts())
-    	{
-    		 this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 0.5F);
-    	}
-    	
-    	//Only accept electricity from the front side
-    	if(canReceiveElectricity(side) || side == -1)
-		{
-    		double rejectedElectricity = Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0.0);
-			this.electricityStored = Math.max(this.electricityStored+watts - rejectedElectricity, 0.0);
-			return rejectedElectricity;
-		}
-    	return watts;
-    }
-    
     @Override
     public boolean canReceiveElectricity(byte side)
     {
     	return side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3) && !this.isDisabled();
     }
   
-    
-    /**
-     * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
-     * ticks and creates a new spawn inside its implementation.
-     */
     @Override
-	public void updateEntity()
-    {
-    	if(disableTicks > -1)
+	public void onUpdate(float watts, float voltage, byte side)
+	{
+    	super.onUpdate(watts, voltage, side);
+    	
+		if(voltage > this.getVoltage())
     	{
-    		this.disableTicks --;
+    		 this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 0.5F);
     	}
-    	else
+		    	
+    	if(!this.isDisabled() && watts > 5*this.getTickInterval())
     	{
     		if(!this.worldObj.isRemote)
 	        {
 		    	//The bottom slot is for portable batteries
-		    	if (this.containingItems[0] != null && this.electricityStored < this.getElectricityCapacity())
+		    	if (this.containingItems[0] != null)
 		        {
 		            if (this.containingItems[0].getItem() instanceof ItemElectric)
 		            {
@@ -101,15 +71,13 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 		            	if(electricItem.canProduceElectricity())
 			           	{
 			            	double receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-			            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
+			            	//this.onUpdate(receivedElectricity, electricItem.getVolts(), (byte)-1);
 			            }
 		            }
 		        }
 		    	//The left slot contains the item to be smelted
 		    	if(this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
 		        {
-			    	//Use all the electricity
-		        	this.electricityStored = 0;
 		        	this.smeltingTicks = this.smeltingTimeRequired;
 		        }
 		    	
@@ -118,7 +86,6 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 		    	{
 		    		//Update some variables.
 		    		this.smeltingTicks --;
-		    		this.electricityStored -= this.getElectricityCapacity()/this.smeltingTimeRequired;
 		    		//When the item is finished smelting
 		    		if(this.smeltingTicks == 0)
 		    		{
@@ -137,8 +104,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 		    	}
 	        }
     	}
-        
-    }
+	}
+    
     //Check all conditions and see if we can start smelting
     public boolean canSmelt()
     {
@@ -163,11 +130,6 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 				return false;
 			}
     	}
-    	
-		if(this.electricityStored < this.getElectricityCapacity()/this.smeltingTimeRequired)
-		{
-			return false;
-		}
 		
     	return true;
     }
@@ -178,7 +140,6 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
     	super.readFromNBT(par1NBTTagCompound);
-    	this.electricityStored = par1NBTTagCompound.getDouble("electricityStored");
     	this.smeltingTicks = par1NBTTagCompound.getInteger("smeltingTicks");
     	NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.containingItems = new ItemStack[this.getSizeInventory()];
@@ -199,7 +160,6 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
     	super.writeToNBT(par1NBTTagCompound);
-    	par1NBTTagCompound.setDouble("electricityStored", this.electricityStored);
     	par1NBTTagCompound.setInteger("smeltingTicks", this.smeltingTicks);
     	NBTTagList var2 = new NBTTagList();
         for (int var3 = 0; var3 < this.containingItems.length; ++var3)
@@ -214,19 +174,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
         }
         par1NBTTagCompound.setTag("Items", var2);
     }
-    /**
-	 * @return Return the stored electricity in this consumer. Called by conductors to spread electricity to this unit.
-	 */
-    @Override
-	public double getStoredElectricity()
-    {
-    	return this.electricityStored;
-    }
-    @Override
-    public double getElectricityCapacity()
-	{
-		return 1800.0;
-	}
+
 	@Override
 	public int getStartInventorySide(int side)
 	{
@@ -322,22 +270,9 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 	}
 
 	@Override
-	public int getVolts()
+	public float getVoltage()
 	{
-		return 120;
-	}
-	
-	@Override
-	public void onDisable(int duration)
-	{
-		this.disableTicks = duration;
-	}
-
-
-	@Override
-	public boolean isDisabled()
-	{
-		return this.disableTicks > -1;
+		return 120F;
 	}
 
 	@Override
@@ -348,9 +283,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
         try
         {
         	int packetID = dataStream.readInt();
-        	this.electricityStored = dataStream.readDouble();
         	this.smeltingTicks = (int)dataStream.readDouble();
-        	this.disableTicks = (int)dataStream.readDouble();
         }
         catch(IOException e)
         {
@@ -362,5 +295,12 @@ public class TileEntityElectricFurnace extends TileEntity implements ITexturePro
 	public int getPacketID()
 	{
 		return 3;
+	}
+
+	
+	@Override
+	public int getTickInterval()
+	{
+		return 2;
 	}
 }

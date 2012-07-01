@@ -20,7 +20,8 @@ public class mod_UniversalElectricity extends NetworkMod
 {	
 	@Override
 	public void load()
-	{
+	{	
+		ModLoader.setInGameHook(this, true, true);
 		ModLoader.registerBlock(UEOreManager.BlockOre[0], ItemUniversalOre0.class);
 		ModLoader.registerBlock(UEOreManager.BlockOre[1], ItemUniversalOre1.class);
 	}

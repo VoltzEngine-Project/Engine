@@ -2,37 +2,32 @@ package net.minecraft.src.universalelectricity.extend;
 
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.World;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.Vector3;
-import net.minecraft.src.universalelectricity.electricity.IElectricityConsumer;
-import net.minecraft.src.universalelectricity.electricity.IElectricityProducer;
+import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
 
-public abstract class TileEntityConductor extends TileEntity implements IElectricityConsumer
+/**
+ * REQUIRED
+ * This tile entity is for all conductors.
+ * @author Calclavia
+ *
+ */
+public abstract class TileEntityConductor extends TileEntity
 {
-	//The amount of electricity stored in the conductor
-	protected double electricityStored = 0.0;
-
-	//Stores information on all connected blocks around this tile entity
+	/**
+	 * Stores information on the blocks that this conductor is connected to
+	 */
 	public TileEntity[] connectedBlocks = {null, null, null, null, null, null};
 	
-	//The amount of ticks that the conductor is receiving the overCharge
-	private int overChargeTicks;
-
-	
 	/**
-	 * The tile entity of the closest electric consumer. Null if none. Use this to detect if electricity
-	 * should transfer
-	 */
-	public TileEntity closestConsumer = null;
-	
-	/**
-	 * This function adds a connection between this conductor and the UE unit
+	 * Adds a connection between this conductor and a UE unit
 	 * @param tileEntity - Must be either a producer, consumer or a conductor
 	 * @param side - side in which the connection is coming from
 	 */
 	public void addConnection(TileEntity tileEntity, byte side)
 	{
-		if(tileEntity instanceof IElectricityProducer || tileEntity instanceof IElectricityConsumer)
+		if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricUnit)
 		{
 			this.connectedBlocks[side] = tileEntity;
 		}
@@ -43,47 +38,23 @@ public abstract class TileEntityConductor extends TileEntity implements IElectri
 	}
 	
 	/**
-	 * onRecieveElectricity is called whenever a Universal Electric conductor sends a packet of electricity to the consumer (which is this block).
-	 * @param watts - The amount of watt this block recieved
-	 * @param side - The side of the block in which the electricity came from
-	 * @return watt - The amount of rejected power to be sent back into the conductor
-	 */
-	 @Override
-    public double onReceiveElectricity(double watts, int voltage, byte side)
+     * Determines if this TileEntity requires update calls.
+     * @return True if you want updateEntity() to be called, false if not
+     */
+    public boolean canUpdate()
     {
-	 	if(voltage > this.getVolts())
+    	if(this.worldObj != null)
 		{
-	 		overChargeTicks++;
-			this.overCharge(voltage, overChargeTicks);
-		}else{
-			overChargeTicks = 0;
-		}
-	 
-    	if(canReceiveElectricity(side) && voltage != 0)
-		{
-    		double rejectedElectricity = Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0);
-    		double electricityLoss = (Math.pow(UniversalElectricity.getAmps(watts - rejectedElectricity, voltage), 2))* this.getResistance();
-			this.electricityStored = Math.max(this.electricityStored + (watts - rejectedElectricity) - (electricityLoss), 0);
-			return rejectedElectricity;
+			BlockConductor.updateConductorTileEntity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 		}
     	
-    	return watts;
+        return false;
     }
-
-	/**
-	 * You can use this to check if a wire can connect to this UE consumer to properly render the graphics
-	 * @return Returns true or false if this consumer can receive electricity at this given tick or moment.
-	 */
-	@Override
-	public boolean canReceiveElectricity(byte side)
-	{
-		return true;
-	}
 	
 	/**
      * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
      * ticks and creates a new spawn inside its implementation.
-     */
+     
 	@Override
     public void updateEntity()
 	{
@@ -178,59 +149,12 @@ public abstract class TileEntityConductor extends TileEntity implements IElectri
 		        }
 			}
         }
-	}
-	
-	/**
-	 * Called when the conductor's voltage becomes higher than it should be.
-	 * @param volts - The amount of volts being forced into the conductor
-	 * @param ticks - The amount of ticks that the conductor is receiving the overCharge
-	 */
-	protected void overCharge(int volts, int ticks)
-	{
-		
-	}
-
-	/**
-	 * @return Return the stored electricity in this consumer. Called by conductors to spread electricity to this unit.
-	 */
-    @Override
-	public double getStoredElectricity()
-    {
-    	return this.electricityStored;
-    }
-	
-	/**
-     * Reads a tile entity from NBT.
-     */
-    @Override
-	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
-    {
-        super.readFromNBT(par1NBTTagCompound);
-        this.electricityStored = par1NBTTagCompound.getDouble("electricityStored");
-    }
-
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
-	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
-    {
-    	super.writeToNBT(par1NBTTagCompound);
-    	par1NBTTagCompound.setDouble("electricityStored", this.electricityStored);
-    }
-    
-    //Conductors can not be disabled
-    @Override
-	public void onDisable(int duration) { }
-
-
-	@Override
-	public boolean isDisabled() { return false; }
+	}*/
 	
 	/**
 	 * Gets the resistance of the conductor. Used to calculate energy loss.
 	 * A higher resistance means a higher energy loss.
-	 * @return The amount of Ohm's. E.g 1.2Ω or 3.0Ω
+	 * @return The amount of Ohm's. E.g 1.2Ohms or 3.0Ohms
 	 */
 	public abstract double getResistance();
 }

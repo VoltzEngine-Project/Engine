@@ -14,13 +14,14 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
-import net.minecraft.src.universalelectricity.electricity.IElectricityProducer;
+import net.minecraft.src.universalelectricity.electricity.*;
+import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.BlockConductor;
 import net.minecraft.src.universalelectricity.extend.IRotatable;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityCoalGenerator extends TileEntity implements ITextureProvider, IElectricityProducer, IInventory, ISidedInventory, IPacketReceiver
+public class TileEntityCoalGenerator extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory, IPacketReceiver
 {
 	//Maximum possible generation rate of watts in SECONDS
 	public static final int maxGenerateRate = 560;
@@ -28,7 +29,7 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
 	//Current generation rate based on hull heat. In TICKS.
 	public float generateRate = 0;
 		
-	public TileEntityConductor connectedWire = null;
+	public TileEntity connectedElectricUnit = null;
 	 /**
      * The number of ticks that a fresh copy of the currently-burning item would keep the furnace burning for
      */
@@ -44,54 +45,38 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
   	public TileEntityCoalGenerator()
   	{
   		BasicComponents.packetManager.registerPacketUser(this);
+  		ElectricityManager.registerElectricUnit(this);
   	}
-  	    
-    @Override
-	public double onProduceElectricity(double maxWatt, int voltage, byte side)
-    {
-		//Only produce electricity on the back side.
-    	if(canProduceElectricity(side) && maxWatt > 0.0)
-		{
-	        return Math.min(maxWatt, (int)generateRate);
-		}
-    	return 0.0;
-	}
-    
-    @Override
+  	 
     public boolean canProduceElectricity(byte side)
     {
     	return side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3) && !this.isDisabled();
     }
     
-    /**
-     * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
-     * ticks and creates a new spawn inside its implementation.
-     */
     @Override
-	public void updateEntity()
-    {    	
+    public void onUpdate(float watts, float voltage, byte side)
+	{
+    	super.onUpdate(watts, voltage, side);
+    	
     	//Check nearby blocks and see if the conductor is full. If so, then it is connected
     	TileEntity tileEntity = BlockConductor.getUEUnit(this.worldObj, this.xCoord, this.yCoord, this.zCoord, UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
     	
-    	if(tileEntity instanceof TileEntityConductor)
+    	if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricUnit)
     	{
-    		this.connectedWire = (TileEntityConductor)tileEntity;
+    		this.connectedElectricUnit = tileEntity;
     	}
     	else
     	{
-    		this.connectedWire = null;
+    		this.connectedElectricUnit = null;
     	}
     	
-    	if(disableTicks > -1)
-    	{
-    		this.disableTicks --;
-    	}
-    	else
+    	
+    	if(disableTicks <= 0)
     	{	
 	    	if(!this.worldObj.isRemote)
 	        {
 	    		//Coal Geneator
-		    	if (this.containingItems[0] != null && this.connectedWire != null && this.connectedWire.getStoredElectricity() < this.connectedWire.getElectricityCapacity())
+		    	if (this.containingItems[0] != null && this.connectedElectricUnit != null)
 		        {
 		            if(this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)
 		            {
@@ -112,18 +97,25 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
 	        {
 	            this.itemCookTime --;
 	            
-	            if(this.connectedWire != null && this.connectedWire.getStoredElectricity() < this.connectedWire.getElectricityCapacity() && !this.isDisabled())
+	            if(this.connectedElectricUnit != null)
 	            {
 	            	this.generateRate = (float)Math.min(this.generateRate+Math.min((this.generateRate)*0.001+0.0015, 0.05F), this.maxGenerateRate/20);
 	            }
 	        }
 	
-	    	if(this.connectedWire == null || this.itemCookTime <= 0)
+	    	if(this.connectedElectricUnit == null || this.itemCookTime <= 0)
 	    	{
 	        	this.generateRate = (float)Math.max(this.generateRate-0.05, 0);
 	        }
+	    	
+	    	if(this.generateRate > 1)
+	    	{
+	    		ElectricityManager.produceElectricity(this.connectedElectricUnit, UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2), this.generateRate, this.getVoltage());
+	    	}
         }
+    	
     }
+    
     /**
      * Reads a tile entity from NBT.
      */
@@ -260,7 +252,7 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
 	}
 
 	@Override
-	public int getVolts()
+	public float getVoltage()
 	{
 		return 120;
 	}
@@ -297,6 +289,12 @@ public class TileEntityCoalGenerator extends TileEntity implements ITextureProvi
 
 	@Override
 	public int getPacketID()
+	{
+		return 1;
+	}
+
+	@Override
+	public int getTickInterval()
 	{
 		return 1;
 	}

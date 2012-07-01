@@ -3,12 +3,114 @@ package net.minecraft.src.universalelectricity.electricity;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.src.TileEntity;
+import net.minecraft.src.World;
+import net.minecraft.src.universalelectricity.Vector3;
+import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
+
+/**
+ * This class is used to manage electricity transfering and flow
+ * @author Calclavia
+ *
+ */
 public class ElectricityManager
 {
-	private static List<ElectricityConnection> connections = new ArrayList<ElectricityConnection>();
-	  
+	private static List<IElectricUnit> electricUnits = new ArrayList<IElectricUnit>();
+	
+	private static List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
+	
+	public static int inGameTicks = 0;
+	
+	/**
+	 * Registers an electricity consumer for it to receive electricity.
+	 * Call it in your consumer's tile entity constructor like this:
+	 * ElectricityManager.registerConsumer(this);
+	 * @param newUnit - The consumer to be registered.
+	 */
+	public static void registerElectricUnit(IElectricUnit newUnit)
+	{
+		if(!electricUnits.contains(newUnit))
+		{
+			electricUnits.add(newUnit);
+		}
+	}
+	
+	/**
+	 * Produces electricity into a specific position
+	 * @param target - The tile entity in which the electricity is being produced into
+	 * @param side - The side in which the electricity is coming in from. 0-5 byte.
+	 */
+	public static void produceElectricity(TileEntity target, byte side, float watts, float voltage)
+	{		
+		if(target != null)
+		{
+			if(target instanceof TileEntityConductor)
+			{
+				//Find a path between this conductor and all connected units and
+				//try to send the electricity to them directly
+			}
+			else if(target instanceof IElectricUnit)
+			{
+				IElectricUnit electricUnit = (IElectricUnit)target;
+				
+				if(electricUnit.canReceiveElectricity(side))
+				{
+					//Add to the electricity transfer queue to transfer in the update function
+					electricityTransferQueue.add(new ElectricityTransferData(electricUnit, side, watts, voltage));
+				}
+			}
+		}
+	}
+	
 	public static void onUpdate()
 	{
-		//Send electricity from all connected producers to consumers
-	}         
+		for(IElectricUnit electricUnit : electricUnits)
+		{
+			//Cleanup useless units
+			if(electricUnit == null)
+			{
+				electricUnits.remove(electricUnit);
+				break;
+			}
+			else if(((TileEntity)electricUnit).isInvalid())
+			{
+				electricUnits.remove(electricUnit);
+				break;
+			}
+			
+			if(inGameTicks % electricUnit.getTickInterval() == 0 && electricUnit.getTickInterval() > 0)
+			{
+				float watts = 0;
+				float voltage = 0;
+				byte side = -1;
+				
+				
+				//Try to stack all electricity from one side into one update
+				for(int i = 0; i < electricityTransferQueue.size(); i ++)
+				{
+					if(electricityTransferQueue.get(i).eletricUnit == electricUnit)
+					{
+						//If the side is not set for this tick
+						if(side == -1)
+						{
+							watts = electricityTransferQueue.get(i).watts;
+							voltage = electricityTransferQueue.get(i).voltage;
+							side = electricityTransferQueue.get(i).side;
+							electricityTransferQueue.remove(i);
+						}
+						else if(electricityTransferQueue.get(i).side == side)
+						{
+							watts += electricityTransferQueue.get(i).watts;
+							voltage = Math.min(voltage, electricityTransferQueue.get(i).voltage);
+							electricityTransferQueue.remove(i);
+						}
+					}
+				}
+				
+				electricUnit.onUpdate(watts, voltage, side);
+			}
+		}
+		
+		inGameTicks ++;
+	}
 }

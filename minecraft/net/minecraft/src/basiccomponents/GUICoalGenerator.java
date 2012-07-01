@@ -34,7 +34,7 @@ public class GUICoalGenerator extends GuiContainer
         {
         	displayText = "Disabled";
         }
-        else if(tileEntity.connectedWire == null)
+        else if(tileEntity.connectedElectricUnit == null)
         {
         	displayText = "Not Connected";
         }

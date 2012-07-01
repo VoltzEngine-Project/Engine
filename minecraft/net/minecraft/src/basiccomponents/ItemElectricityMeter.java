@@ -7,7 +7,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
-import net.minecraft.src.universalelectricity.electricity.IElectricityConsumer;
+import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 
 public class ItemElectricityMeter extends Item implements ITextureProvider
@@ -30,17 +30,17 @@ public class ItemElectricityMeter extends Item implements ITextureProvider
 	    	//Check to make sure the meter has electricity.
 	    	TileEntity tileEntity = par3World.getBlockTileEntity(par4, par5, par6);
 	        if(tileEntity != null)
-	        {
+	        {/*
 	        	if(tileEntity instanceof TileEntityConductor)
 	        	{
-	        		par2EntityPlayer.addChatMessage("Electricity Flow: "+UniversalElectricity.getWattDisplay( ((TileEntityConductor)tileEntity).getStoredElectricity())+", "+UniversalElectricity.getAmpDisplay(UniversalElectricity.getAmps( ((TileEntityConductor)tileEntity).getStoredElectricity(), ((TileEntityConductor)tileEntity).getVolts())) +", "+UniversalElectricity.getVoltDisplay(((TileEntityConductor)tileEntity).getVolts()));
+	        		//par2EntityPlayer.addChatMessage("Electricity Flow: "+UniversalElectricity.getWattDisplay( ((TileEntityConductor)tileEntity).getStoredElectricity())+", "+UniversalElectricity.getAmpDisplay(UniversalElectricity.getAmps( ((TileEntityConductor)tileEntity).getStoredElectricity(), ((TileEntityConductor)tileEntity).getVolts())) +", "+UniversalElectricity.getVoltDisplay(((TileEntityConductor)tileEntity).getVolts()));
 	        		return true;
 	        	}
 	        	else if(tileEntity instanceof IElectricityConsumer)
 	        	{
 	        		par2EntityPlayer.addChatMessage("Electricity: "+UniversalElectricity.getWattDisplay(((IElectricityConsumer)tileEntity).getStoredElectricity())+"/"+UniversalElectricity.getWattDisplay(((IElectricityConsumer)tileEntity).getElectricityCapacity()));
 	        		return true;
-	        	}
+	        	}*/
 	        }
         }
         return false;

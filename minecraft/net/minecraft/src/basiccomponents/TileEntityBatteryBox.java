@@ -16,15 +16,16 @@ import net.minecraft.src.World;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
-import net.minecraft.src.universalelectricity.electricity.IElectricityConsumer;
-import net.minecraft.src.universalelectricity.electricity.IElectricityProducer;
+import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
+import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
+import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.IRedstoneProvider;
 import net.minecraft.src.universalelectricity.extend.IRedstoneReceptor;
 import net.minecraft.src.universalelectricity.extend.IRotatable;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityBatteryBox extends TileEntity implements IPacketReceiver, IRedstoneProvider, ITextureProvider, IElectricityProducer, IElectricityConsumer, IInventory, ISidedInventory, IRotatable
+public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPacketReceiver, IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory
 {
 	public double electricityStored = 0.0;
 	public byte facingDirection = 0;
@@ -43,43 +44,25 @@ public class TileEntityBatteryBox extends TileEntity implements IPacketReceiver,
 	public TileEntityBatteryBox()
 	{
 		BasicComponents.packetManager.registerPacketUser(this);
+  		ElectricityManager.registerElectricUnit(this);
 	}
-	
+    
     @Override
-    public double onReceiveElectricity(double watts, int voltage, byte side)
-    {
-    	//Only accept electricity from the front side
-    	if(canReceiveElectricity(side) || side == -1)
+	public void onUpdate(float watts, float voltage, byte side)
+	{
+    	super.onUpdate(watts, voltage, side);
+    	
+		if(canReceiveElectricity(side) || side == -1)
 		{
     		double rejectedElectricity = Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0.0);
 			this.electricityStored = Math.max(this.electricityStored+watts - rejectedElectricity, 0.0);
-			return rejectedElectricity;
 		}
-    	return watts;
-    }
-    @Override
-	public double onProduceElectricity(double maxWatt, int voltage, byte side)
-    {
-		//Only produce electricity on the back side.
-    	if((canProduceElectricity(side) && !isPowered) || side == -1)
-		{
-    		double electricityToGive = Math.min(this.electricityStored, maxWatt);
-    		this.electricityStored -= electricityToGive;
-        	return electricityToGive;
-		} 	
-    	return 0.0;
 	}
     
     @Override
     public boolean canReceiveElectricity(byte side)
     {
     	return side == this.facingDirection && !this.isDisabled();
-    }
-    
-    @Override
-    public boolean canProduceElectricity(byte side)
-    {
-    	return side == UniversalElectricity.getOrientationFromSide(this.facingDirection, (byte)2) && disableTicks == -1;
     }
     
     /**
@@ -111,7 +94,7 @@ public class TileEntityBatteryBox extends TileEntity implements IPacketReceiver,
 		            {
 		            	ItemElectric electricItem = (ItemElectric)this.containingItems[0].getItem();
 		            	double rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-		            	this.onProduceElectricity(electricItem.getTransferRate() - rejectedElectricity, electricItem.getVolts(), (byte)-1);
+		            	//this.onProduceElectricity(electricItem.getTransferRate() - rejectedElectricity, electricItem.getVolts(), (byte)-1);
 		            }
 		        }
 		    	//The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
@@ -123,7 +106,6 @@ public class TileEntityBatteryBox extends TileEntity implements IPacketReceiver,
 		            	if(electricItem.canProduceElectricity())
 		            	{
 		            		double receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
-			            	this.onReceiveElectricity(receivedElectricity, electricItem.getVolts(), (byte)-1);
 		            	}
 		            }
 		        }
@@ -179,16 +161,15 @@ public class TileEntityBatteryBox extends TileEntity implements IPacketReceiver,
     /**
 	 * @return Return the stored electricity in this consumer. Called by conductors to spread electricity to this unit.
 	 */
-    @Override
 	public double getStoredElectricity()
     {
     	return this.electricityStored;
     }
-    @Override
     public double getElectricityCapacity()
 	{
 		return 100000.0;
 	}
+    
 	@Override
 	public int getStartInventorySide(int side)
 	{
@@ -278,18 +259,6 @@ public class TileEntityBatteryBox extends TileEntity implements IPacketReceiver,
 	public void closeChest() { }
 	
 	@Override
-	public byte getDirection()
-	{
-		return this.facingDirection;
-	}
-	
-	@Override
-	public void setDirection(byte facingDirection)
-	{
-		this.facingDirection = facingDirection;
-	}
-	
-	@Override
 	public String getTextureFile()
 	{
 		return BasicComponents.blockTextureFile;
@@ -297,9 +266,9 @@ public class TileEntityBatteryBox extends TileEntity implements IPacketReceiver,
 
 
 	@Override
-	public int getVolts()
+	public float getVoltage()
 	{
-		return 120;
+		return 120F;
 	}
 	
 	@Override
@@ -350,5 +319,11 @@ public class TileEntityBatteryBox extends TileEntity implements IPacketReceiver,
 	{
 		
 		return false;
+	}
+	
+	@Override
+	public int getTickInterval()
+	{
+		return 1;
 	}
 }

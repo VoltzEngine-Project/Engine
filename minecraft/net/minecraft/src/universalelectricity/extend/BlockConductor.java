@@ -13,8 +13,7 @@ import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
-import net.minecraft.src.universalelectricity.electricity.IElectricityConsumer;
-import net.minecraft.src.universalelectricity.electricity.IElectricityProducer;
+import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
 
 public abstract class BlockConductor extends BlockContainer
 {
@@ -45,26 +44,21 @@ public abstract class BlockConductor extends BlockContainer
 		
 		//Check if the designated block is a UE Unit - producer, consumer or a conductor
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-
-		TileEntity returnValue = null;
 		
-		if(tileEntity instanceof IElectricityConsumer)
+		if(tileEntity instanceof TileEntityConductor)
 		{
-			if(((IElectricityConsumer)tileEntity).canReceiveElectricity(UniversalElectricity.getOrientationFromSide(side, (byte)2)))
+			return tileEntity;
+		}
+		
+		if(tileEntity instanceof IElectricUnit)
+		{
+			if(((IElectricUnit)tileEntity).canReceiveElectricity(UniversalElectricity.getOrientationFromSide(side, (byte)2)))
 			{
-				returnValue = tileEntity;
+				return tileEntity;
 			}
 		}
 		
-		if (tileEntity instanceof IElectricityProducer)
-		{
-			if(((IElectricityProducer)tileEntity).canProduceElectricity(UniversalElectricity.getOrientationFromSide(side, (byte)2)))
-			{
-				returnValue = tileEntity;
-			}
-		}
-		
-		return returnValue;
+		return null;
 	}
 	
 	/**
@@ -96,7 +90,11 @@ public abstract class BlockConductor extends BlockContainer
         {
             //Update the tile entity on neighboring blocks
         	TileEntityConductor conductorTileEntity = (TileEntityConductor)world.getBlockTileEntity(x, y, z);
-        	conductorTileEntity.addConnection(getUEUnit(world, x, y, z, i), i);
+        	
+        	if(conductorTileEntity != null)
+        	{
+            	conductorTileEntity.addConnection(getUEUnit(world, x, y, z, i), i);
+        	}
         }
 	}
 	
