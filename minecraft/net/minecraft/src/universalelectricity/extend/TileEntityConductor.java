@@ -15,6 +15,8 @@ import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
  */
 public abstract class TileEntityConductor extends TileEntity
 {
+	public int connectionID = 0;
+	
 	/**
 	 * Stores information on the blocks that this conductor is connected to
 	 */

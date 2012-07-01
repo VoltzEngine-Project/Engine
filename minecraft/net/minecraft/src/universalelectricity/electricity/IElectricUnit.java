@@ -11,18 +11,20 @@ public interface IElectricUnit extends IDisableable
 {	
 	/**
 	 * Called every time a tick interval (specified in getConsumerTickInterval()).
-	 * @param watts
-	 * @param voltage
-	 * @param side
+	 * @param watts - Amount of watts this electric unit is receiving. Won't exceed the electricity need.
+	 * @param voltage - The voltage of the electricity sent
+	 * @param side - The side of the block in which the electricity is coming from
 	 */
 	public void onUpdate(float watts, float voltage, byte side);
 	
 	/**
 	 * You can use this to check if a wire can connect to this UE consumer to properly render the graphics
 	 * @param side - The side in which the electricity is coming from.
-	 * @return Returns true or false if this consumer can receive electricity at this given tick or moment.
+	 * @return Return 0 if this unit does not need electricity (sole producer)
+	 * and return the amount of watts this needs if any at all. Recommended
+	 * to return the max electricity capacity.
 	 */
-	public boolean canReceiveElectricity(byte side);
+	public float needsElectricity(byte side);
 	
 	/**
 	 * Gets the voltage of the electricity consumer. Used in a conductor to find the voltage difference.

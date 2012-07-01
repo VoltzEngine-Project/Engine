@@ -29,7 +29,6 @@ public class BlockElectricFurnace extends BlockMachine implements ITextureProvid
     	this.blockIndexInTexture = textureIndex;
     	this.setStepSound(soundMetalFootstep);
     	this.setRequiresSelfNotify();
-    	this.setTickRandomly(true);
     }
     
     @Override

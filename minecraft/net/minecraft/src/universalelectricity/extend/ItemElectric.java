@@ -68,9 +68,9 @@ public abstract class ItemElectric extends Item
      * @param itemStack - The ItemStack of this item
      * @return Return the rejected electricity from this item
      */
-    public double onReceiveElectricity(double watts, ItemStack itemStack)
+    public float onReceiveElectricity(float watts, ItemStack itemStack)
     {
-    	double rejectedElectricity = Math.max((this.getElectricityStored(itemStack) + watts) - this.getElectricityCapacity(), 0);
+    	float rejectedElectricity = Math.max((this.getElectricityStored(itemStack) + watts) - this.getElectricityCapacity(), 0);
 		this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) + watts - rejectedElectricity);
 		return rejectedElectricity;
     }
@@ -81,9 +81,9 @@ public abstract class ItemElectric extends Item
      * @param itemStack - The ItemStack of this item
      * @return The electricity that is given to the requester
      */
-    public double onUseElectricity(double watts, ItemStack itemStack)
+    public float onUseElectricity(float watts, ItemStack itemStack)
     {
-    	double electricityToUse = Math.min(this.getElectricityStored(itemStack), watts);
+    	float electricityToUse = Math.min(this.getElectricityStored(itemStack), watts);
 		this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) - electricityToUse);
 		return electricityToUse;
     }
@@ -111,7 +111,7 @@ public abstract class ItemElectric extends Item
      * Try to use onReceiveElectricity or onUseElectricity instead.
      * @param watts - The amount of electricity in watts
      */
-    protected void setElectricityStored(ItemStack itemStack, double watts)
+    protected void setElectricityStored(ItemStack itemStack, float watts)
     {
     	//Saves the frequency in the itemstack
 		if (itemStack.stackTagCompound == null)
@@ -119,9 +119,9 @@ public abstract class ItemElectric extends Item
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
 
-		double electricityStored = Math.max(Math.min(watts, this.getElectricityCapacity()), 0);
+		float electricityStored = Math.max(Math.min(watts, this.getElectricityCapacity()), 0);
 		
-		itemStack.stackTagCompound.setDouble("electricity", electricityStored);
+		itemStack.stackTagCompound.setFloat("electricity", electricityStored);
 		
 		itemStack.setItemDamage((int) (getElectricityCapacity() - electricityStored));
     }
@@ -130,14 +130,14 @@ public abstract class ItemElectric extends Item
      * This function is called to get the electricity stored in this item
      * @return - The amount of electricity stored
      */
-    protected double getElectricityStored(ItemStack itemStack)
+    protected float getElectricityStored(ItemStack itemStack)
     {
     	if (itemStack.stackTagCompound == null)
 		{
     		return 0;
 		}
     	
-    	double electricityStored = itemStack.stackTagCompound.getDouble("electricity");
+    	float electricityStored = itemStack.stackTagCompound.getFloat("electricity");
     	
     	itemStack.setItemDamage((int) (getElectricityCapacity() - electricityStored));
     	
@@ -148,19 +148,19 @@ public abstract class ItemElectric extends Item
      * This function is called to get the electricity maximum capacity in this item
      * @return - The amount of electricity maximum capacity
      */
-    public abstract double getElectricityCapacity();
+    public abstract float getElectricityCapacity();
     
     /**
      * This function is called to get the maximum transfer rate this electric item can receive per tick
      * @return - The amount of electricity maximum capacity
      */
-    public abstract double getTransferRate();
+    public abstract float getTransferRate();
     
     /**
      * Gets the voltage of this item
      * @return The Voltage of this item
      */
-    public abstract int getVolts();
+    public abstract float getVolts();
     
     /**
      * Returns a charged version of the electric item. Use this if you want

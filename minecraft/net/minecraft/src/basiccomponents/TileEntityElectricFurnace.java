@@ -25,10 +25,15 @@ import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory,  IPacketReceiver
 {
 	//The amount of ticks requried to smelt this item
-	public static final int smeltingTimeRequired = 160;
+	public static final int smeltingTimeRequired = 150;
 	
 	//How many ticks has this item been smelting for?
 	public int smeltingTicks = 0;
+	
+	public int electricityStored = 0;
+	
+	//Per Tick
+	public final int electricityRequired = 4;
 	
 	 /**
      * The ItemStacks that hold the items currently being used in the battery box
@@ -40,12 +45,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
   		BasicComponents.packetManager.registerPacketUser(this);
   		ElectricityManager.registerElectricUnit(this);
 	}
-  	
-    @Override
-    public boolean canReceiveElectricity(byte side)
-    {
-    	return side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3) && !this.isDisabled();
-    }
   
     @Override
 	public void onUpdate(float watts, float voltage, byte side)
@@ -56,8 +55,10 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     	{
     		 this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 0.5F);
     	}
-		    	
-    	if(!this.isDisabled() && watts > 5*this.getTickInterval())
+		
+		this.electricityStored += watts*this.getTickInterval();
+						
+    	if(this.electricityStored >= this.electricityRequired && !this.isDisabled())
     	{
     		if(!this.worldObj.isRemote)
 	        {
@@ -102,6 +103,8 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 		    			this.smeltingTicks = 0;
 		    		}
 		    	}
+		        
+		        this.electricityStored = 0;
 	        }
     	}
 	}
@@ -133,6 +136,18 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 		
     	return true;
     }
+	
+	@Override
+	public float needsElectricity(byte side)
+	{
+		if(side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3) && !this.isDisabled())
+		{
+			return Math.max(0, this.electricityRequired*this.getTickInterval()-this.electricityStored);
+		}
+
+		return 0;
+	}
+	
     /**
      * Reads a tile entity from NBT.
      */
@@ -301,6 +316,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	@Override
 	public int getTickInterval()
 	{
-		return 2;
+		return 1;
 	}
 }

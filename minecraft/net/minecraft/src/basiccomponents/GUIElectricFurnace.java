@@ -23,7 +23,7 @@ public class GUIElectricFurnace extends GuiContainer
    * Draw the foreground layer for the GuiContainer (everything in front of the items)
    */
    @Override
-protected void drawGuiContainerForegroundLayer()
+   protected void drawGuiContainerForegroundLayer()
    {
        this.fontRenderer.drawString("Electric Furnace", 60, 6, 4210752);
        
@@ -33,10 +33,15 @@ protected void drawGuiContainerForegroundLayer()
        {
        		displayText = "Disabled!";
        }
-       else
+       else if(this.tileEntity.smeltingTicks > 0)
        {
     	   displayText = "Ready";
        }
+       else
+       {
+    	   displayText = "Idle";
+       }
+       
        this.fontRenderer.drawString("Status: "+displayText, 80, 53, 4210752);
        this.fontRenderer.drawString("Smelting:", 10, 28, 4210752);
        this.fontRenderer.drawString("Battery:", 10, 53, 4210752);

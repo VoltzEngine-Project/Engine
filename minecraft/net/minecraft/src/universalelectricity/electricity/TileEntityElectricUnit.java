@@ -34,9 +34,9 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
 	}
 
 	@Override
-	public boolean canReceiveElectricity(byte side)
+	public float needsElectricity(byte side)
 	{
-		return false;
+		return 0;
 	}
 
 	@Override

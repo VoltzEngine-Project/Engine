@@ -16,8 +16,8 @@ import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 public class ElectricityManager
 {
 	private static List<IElectricUnit> electricUnits = new ArrayList<IElectricUnit>();
-	
 	private static List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
+	private static ElectricityConnection[] wireConnections = new ElectricityConnection[999999999];
 	
 	public static int inGameTicks = 0;
 	
@@ -36,6 +36,30 @@ public class ElectricityManager
 	}
 	
 	/**
+	 * Registers a UE conductor
+	 * @param conductor - The conductor tile entity
+	 * @return - The ID of the connection line that is assigned to this conductor
+	 */
+	public static int registerConductor(TileEntityConductor conductor)
+	{
+		/*
+		Calclavia: I am not sure how to effectively find all the connected electric
+		units to send the electricity to them directly. Any suggestions how?
+		for(byte i = 0; i < 6; i++)
+		{
+			if(conductor.connectedBlocks[i] != null)
+			{
+				
+			}
+		}
+		if(!wireConnections.contains(conductor))
+		{
+			wireConnections.add(conductor);
+		}*/
+		return 0;
+	}
+	
+	/**
 	 * Produces electricity into a specific position
 	 * @param target - The tile entity in which the electricity is being produced into
 	 * @param side - The side in which the electricity is coming in from. 0-5 byte.
@@ -46,14 +70,30 @@ public class ElectricityManager
 		{
 			if(target instanceof TileEntityConductor)
 			{
-				//Find a path between this conductor and all connected units and
-				//try to send the electricity to them directly
+				//Find a path between this conductor and all connected units and try to send the electricity to them directly
+				TileEntityConductor conductor = (TileEntityConductor)target;
+				
+				if(wireConnections[conductor.connectionID] != null)
+				{
+					List<IElectricUnit> connectedUnits = wireConnections[conductor.connectionID].getConnectedElectricUnits();
+					float leftOverWatts = watts;
+					
+					for(IElectricUnit electricUnit : connectedUnits)
+					{
+						if(electricUnit.needsElectricity(side) > 0)
+						{
+				    		float transferWatts = Math.max(0, Math.min(leftOverWatts, Math.min(watts/connectedUnits.size(), electricUnit.needsElectricity(side))));
+				    		leftOverWatts -= transferWatts;
+							electricityTransferQueue.add(new ElectricityTransferData(electricUnit, side, transferWatts, voltage));
+						}
+					}
+				}
 			}
 			else if(target instanceof IElectricUnit)
 			{
 				IElectricUnit electricUnit = (IElectricUnit)target;
 				
-				if(electricUnit.canReceiveElectricity(side))
+				if(electricUnit.needsElectricity(side) > 0)
 				{
 					//Add to the electricity transfer queue to transfer in the update function
 					electricityTransferQueue.add(new ElectricityTransferData(electricUnit, side, watts, voltage));

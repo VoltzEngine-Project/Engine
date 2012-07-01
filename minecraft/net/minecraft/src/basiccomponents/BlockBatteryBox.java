@@ -30,7 +30,6 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
     	this.blockIndexInTexture = textureIndex;
     	this.setStepSound(soundMetalFootstep);
     	this.setRequiresSelfNotify();
-    	this.setTickRandomly(true);
     }
     
     @Override
@@ -172,7 +171,7 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
     public boolean isPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
     	IRedstoneProvider tileEntity = (IRedstoneProvider)par1IBlockAccess.getBlockTileEntity(x, y, z);
-        return tileEntity.isPoweringTo((byte)side);
+    	return tileEntity.isPoweringTo((byte)side);
     }
 
     /**
@@ -181,7 +180,7 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
     public boolean isIndirectlyPoweringTo(World par1World, int x, int y, int z, int side)
     {
     	IRedstoneProvider tileEntity = (IRedstoneProvider)par1World.getBlockTileEntity(x, y, z);
-        return tileEntity.isIndirectlyPoweringTo((byte)side);
+    	return tileEntity.isIndirectlyPoweringTo((byte)side);
     }
     
     /**

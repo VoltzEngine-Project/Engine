@@ -52,7 +52,7 @@ public abstract class BlockConductor extends BlockContainer
 		
 		if(tileEntity instanceof IElectricUnit)
 		{
-			if(((IElectricUnit)tileEntity).canReceiveElectricity(UniversalElectricity.getOrientationFromSide(side, (byte)2)))
+			if(((IElectricUnit)tileEntity).needsElectricity(UniversalElectricity.getOrientationFromSide(side, (byte)2)) > 0)
 			{
 				return tileEntity;
 			}

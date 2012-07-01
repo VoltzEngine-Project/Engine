@@ -19,16 +19,20 @@ import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
+import net.minecraft.src.universalelectricity.extend.BlockConductor;
 import net.minecraft.src.universalelectricity.extend.IRedstoneProvider;
 import net.minecraft.src.universalelectricity.extend.IRedstoneReceptor;
 import net.minecraft.src.universalelectricity.extend.IRotatable;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
+import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
 public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPacketReceiver, IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory
 {
-	public double electricityStored = 0.0;
-	public byte facingDirection = 0;
+	public float electricityStored = 0;
+	
+	public float prevElectricityStored = 0;
+
 	 /**
      * The ItemStacks that hold the items currently being used in the battery box
      */
@@ -48,43 +52,31 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	}
     
     @Override
+    public float needsElectricity(byte side)
+    {
+    	if(side == this.getBlockMetadata() && !this.isDisabled())
+    	{
+    		return this.getElectricityCapacity()-this.electricityStored;
+    	}
+    	
+    	return 0;
+    }
+    
+    @Override
 	public void onUpdate(float watts, float voltage, byte side)
 	{
     	super.onUpdate(watts, voltage, side);
     	
-		if(canReceiveElectricity(side) || side == -1)
-		{
-    		double rejectedElectricity = Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0.0);
-			this.electricityStored = Math.max(this.electricityStored+watts - rejectedElectricity, 0.0);
-		}
-	}
-    
-    @Override
-    public boolean canReceiveElectricity(byte side)
-    {
-    	return side == this.facingDirection && !this.isDisabled();
-    }
-    
-    /**
-     * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
-     * ticks and creates a new spawn inside its implementation.
-     */
-    @Override
-	public void updateEntity()
-    {    	
-    	if(disableTicks > -1)
+    	if(!this.isDisabled())
     	{
-    		this.disableTicks --;
-    	}
-    	else
-    	{
-	    	/*Accept Buildcraft Electricity
-	    	if (this.powerProvider != null)
+    		this.prevElectricityStored = this.electricityStored;
+    		
+			if(needsElectricity(side) > 0)
 			{
-				this.onReceiveElectricity((int)this.powerProvider.energyStored*13, this.getVolts(), (byte)-1);
-				this.powerProvider.energyStored = 0;
-			}*/
-	    	
+				float rejectedElectricity = (float) Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0.0);
+				this.electricityStored = (float) Math.max(this.electricityStored+watts - rejectedElectricity, 0.0);
+			}
+			
 	    	if(!this.worldObj.isRemote)
 	        {
 		    	//The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
@@ -93,8 +85,8 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 		            if (this.containingItems[0].getItem() instanceof ItemElectric)
 		            {
 		            	ItemElectric electricItem = (ItemElectric)this.containingItems[0].getItem();
-		            	double rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-		            	//this.onProduceElectricity(electricItem.getTransferRate() - rejectedElectricity, electricItem.getVolts(), (byte)-1);
+		            	float rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
+		            	this.electricityStored -= electricItem.getTransferRate() - rejectedElectricity;
 		            }
 		        }
 		    	//The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
@@ -105,13 +97,36 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 		            	ItemElectric electricItem = (ItemElectric)this.containingItems[1].getItem();
 		            	if(electricItem.canProduceElectricity())
 		            	{
-		            		double receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
+		            		float receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
+		        			this.electricityStored = Math.max(this.electricityStored+receivedElectricity, 0);
 		            	}
 		            }
 		        }
 	        }
+	    	
+	    	if(this.electricityStored == this.getElectricityCapacity() && this.prevElectricityStored != this.electricityStored)
+	    	{
+	    		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
+	    	}
+	    	
+	    	if(this.electricityStored > 0)
+	    	{
+		    	TileEntity tileEntity = BlockConductor.getUEUnit(this.worldObj, this.xCoord, this.yCoord, this.zCoord, UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2));
+
+		    	if(tileEntity != null)
+		    	{
+			    	if(tileEntity instanceof IElectricUnit)
+			    	{
+			    		float electricityNeeded = ((IElectricUnit) tileEntity).needsElectricity(UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
+			    		float transferElectricity = Math.min(200, Math.min(this.electricityStored, electricityNeeded));
+			    		ElectricityManager.produceElectricity(tileEntity, UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3), transferElectricity, this.getVoltage());
+			    		this.electricityStored -= transferElectricity;
+			    	}
+		    	}
+		    }
     	}
     }
+    
     /**
      * Reads a tile entity from NBT.
      */
@@ -119,9 +134,8 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
     	super.readFromNBT(par1NBTTagCompound);
-    	this.electricityStored = par1NBTTagCompound.getDouble("electricityStored");
+    	this.electricityStored = par1NBTTagCompound.getFloat("electricityStored");
     	this.isPowered = par1NBTTagCompound.getBoolean("isPowered");
-    	this.facingDirection = par1NBTTagCompound.getByte("facingDirection");
     	NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.containingItems = new ItemStack[this.getSizeInventory()];
         for (int var3 = 0; var3 < var2.tagCount(); ++var3)
@@ -141,9 +155,8 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
     	super.writeToNBT(par1NBTTagCompound);
-    	par1NBTTagCompound.setDouble("electricityStored", this.electricityStored);
+    	par1NBTTagCompound.setFloat("electricityStored", this.electricityStored);
     	par1NBTTagCompound.setBoolean("isPowered", this.isPowered);
-    	par1NBTTagCompound.setByte("facingDirection", this.facingDirection);
     	
     	NBTTagList var2 = new NBTTagList();
         for (int var3 = 0; var3 < this.containingItems.length; ++var3)
@@ -158,16 +171,10 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
         }
         par1NBTTagCompound.setTag("Items", var2);
     }
-    /**
-	 * @return Return the stored electricity in this consumer. Called by conductors to spread electricity to this unit.
-	 */
-	public double getStoredElectricity()
-    {
-    	return this.electricityStored;
-    }
-    public double getElectricityCapacity()
+	
+    public float getElectricityCapacity()
 	{
-		return 100000.0;
+		return 100000;
 	}
     
 	@Override
@@ -183,6 +190,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
         }
         return 2;
 	}
+	
 	@Override
 	public int getSizeInventorySide(int side) { return getSizeInventory(); }
 	@Override
@@ -264,26 +272,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 		return BasicComponents.blockTextureFile;
 	}
 
-
-	@Override
-	public float getVoltage()
-	{
-		return 120F;
-	}
-	
-	@Override
-	public void onDisable(int duration)
-	{
-		this.disableTicks = duration;
-	}
-
-
-	@Override
-	public boolean isDisabled()
-	{
-		return this.disableTicks > -1;
-	}
-
 	@Override
 	public void onPacketData(NetworkManager network, String channel, byte[] data)
 	{
@@ -292,8 +280,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
         try
         {
         	int packetID = dataStream.readInt();
-        	this.facingDirection = (byte)dataStream.readDouble();
-        	this.electricityStored = dataStream.readDouble();
+        	this.electricityStored = dataStream.readFloat();
         	this.disableTicks = (int)dataStream.readDouble();
         }
         catch(IOException e)
@@ -311,14 +298,13 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	@Override
 	public boolean isPoweringTo(byte side)
 	{
-		return false;
+		return (this.electricityStored == this.getElectricityCapacity());
 	}
 
 	@Override
 	public boolean isIndirectlyPoweringTo(byte side)
 	{
-		
-		return false;
+		return isPoweringTo(side);
 	}
 	
 	@Override

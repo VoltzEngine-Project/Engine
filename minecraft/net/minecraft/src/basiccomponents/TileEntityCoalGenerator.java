@@ -15,7 +15,6 @@ import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.electricity.*;
-import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.BlockConductor;
 import net.minecraft.src.universalelectricity.extend.IRotatable;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
@@ -71,7 +70,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     	}
     	
     	
-    	if(disableTicks <= 0)
+    	if(!this.isDisabled())
     	{	
 	    	if(!this.worldObj.isRemote)
 	        {
@@ -110,7 +109,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	    	
 	    	if(this.generateRate > 1)
 	    	{
-	    		ElectricityManager.produceElectricity(this.connectedElectricUnit, UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2), this.generateRate, this.getVoltage());
+	    		ElectricityManager.produceElectricity(this.connectedElectricUnit, UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2), this.generateRate*this.getTickInterval(), this.getVoltage());
 	    	}
         }
     	
