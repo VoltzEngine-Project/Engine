@@ -5,6 +5,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.Vector3;
+import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
 
 /**
@@ -15,12 +16,18 @@ import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
  */
 public abstract class TileEntityConductor extends TileEntity
 {
-	public int connectionID = 0;
+	public int connectionID = -1;
 	
 	/**
 	 * Stores information on the blocks that this conductor is connected to
 	 */
 	public TileEntity[] connectedBlocks = {null, null, null, null, null, null};
+	
+	public TileEntityConductor()
+	{
+		this.connectionID = ElectricityManager.registerConductor(this);
+		System.out.println(this.connectionID);
+	}
 	
 	/**
 	 * Adds a connection between this conductor and a UE unit
@@ -32,6 +39,11 @@ public abstract class TileEntityConductor extends TileEntity
 		if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricUnit)
 		{
 			this.connectedBlocks[side] = tileEntity;
+			
+			if(tileEntity instanceof TileEntityConductor)
+			{
+				ElectricityManager.mergeConnection(this.connectionID, ((TileEntityConductor)tileEntity).connectionID);
+			}
 		}
 		else
 		{

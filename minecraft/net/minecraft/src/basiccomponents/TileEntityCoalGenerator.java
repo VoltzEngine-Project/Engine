@@ -14,6 +14,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
+import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.*;
 import net.minecraft.src.universalelectricity.extend.BlockConductor;
 import net.minecraft.src.universalelectricity.extend.IRotatable;
@@ -58,7 +59,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     	super.onUpdate(watts, voltage, side);
     	
     	//Check nearby blocks and see if the conductor is full. If so, then it is connected
-    	TileEntity tileEntity = BlockConductor.getUEUnit(this.worldObj, this.xCoord, this.yCoord, this.zCoord, UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
+    	TileEntity tileEntity = UniversalElectricity.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
     	
     	if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricUnit)
     	{

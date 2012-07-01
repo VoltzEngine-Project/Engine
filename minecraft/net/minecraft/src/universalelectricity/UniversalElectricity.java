@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.TileEntity;
+import net.minecraft.src.World;
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.NetworkMod;
+import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
+import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 
 public class UniversalElectricity
 {
@@ -297,6 +301,58 @@ public class UniversalElectricity
     	
     	return -1;
     }
+    
+	/**
+	 * Checks if the block is being connected to a conductor
+	 * @param world - The world in which this conductor block is in
+	 * @param x - The X axis of the conductor
+	 * @param y - The Y axis of the conductor
+	 * @param z - The Z axis of the conductor
+	 * @return Returns the tile entity for the block on the designated side. Returns null if not a UE Unit
+	 */
+	public static TileEntity getUEUnitFromSide(World world, Vector3 position, byte side)
+	{
+		position = getPositionFromSide(position, side);
+		
+		//Check if the designated block is a UE Unit - producer, consumer or a conductor
+		TileEntity tileEntity = world.getBlockTileEntity(position.intX(), position.intY(), position.intZ());
+		
+		if(tileEntity instanceof TileEntityConductor)
+		{
+			return tileEntity;
+		}
+		
+		if(tileEntity instanceof IElectricUnit)
+		{
+			if(((IElectricUnit)tileEntity).needsElectricity(UniversalElectricity.getOrientationFromSide(side, (byte)2)) > 0)
+			{
+				return tileEntity;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Gets a position relative to another position's side
+	 * @param position - The position
+	 * @param side - The side. 0-5
+	 * @return The position relative to the original position's side
+	 */
+	public static Vector3 getPositionFromSide(Vector3 position, byte side)
+	{
+		switch(side)
+		{
+			case 0: position.y -= 1; break;
+			case 1: position.y += 1; break;
+			case 2: position.z += 1; break;
+			case 3: position.z -= 1; break;
+			case 4: position.x += 1; break;
+			case 5: position.x -= 1; break;
+		}
+		
+		return position;
+	}
 
 	/**
 	 * Gets the ID of a block or item from the configuration file

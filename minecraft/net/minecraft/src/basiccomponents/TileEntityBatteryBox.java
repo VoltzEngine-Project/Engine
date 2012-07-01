@@ -16,6 +16,7 @@ import net.minecraft.src.World;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
+import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
@@ -111,7 +112,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	    	
 	    	if(this.electricityStored > 0)
 	    	{
-		    	TileEntity tileEntity = BlockConductor.getUEUnit(this.worldObj, this.xCoord, this.yCoord, this.zCoord, UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2));
+		    	TileEntity tileEntity = UniversalElectricity.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2));
 
 		    	if(tileEntity != null)
 		    	{

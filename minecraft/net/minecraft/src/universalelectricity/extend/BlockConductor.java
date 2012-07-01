@@ -13,6 +13,7 @@ import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
+import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
 
 public abstract class BlockConductor extends BlockContainer
@@ -20,45 +21,6 @@ public abstract class BlockConductor extends BlockContainer
 	public BlockConductor(int id, Material material)
 	{
 		super(id, material);
-	}
-	
-	/**
-	 * Checks if the block is being connected to a conductor
-	 * @param world - The world in which this conductor block is in
-	 * @param x - The X axis of the conductor
-	 * @param y - The Y axis of the conductor
-	 * @param z - The Z axis of the conductor
-	 * @return Returns the tile entity for the block on the designated side. Returns null if not a UE Unit
-	 */
-	public static TileEntity getUEUnit(World world, int x, int y, int z, byte side)
-	{
-		switch(side)
-		{
-			case 0: y -= 1; break;
-			case 1: y += 1; break;
-			case 2: z += 1; break;
-			case 3: z -= 1; break;
-			case 4: x += 1; break;
-			case 5: x -= 1; break;
-		}
-		
-		//Check if the designated block is a UE Unit - producer, consumer or a conductor
-		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		
-		if(tileEntity instanceof TileEntityConductor)
-		{
-			return tileEntity;
-		}
-		
-		if(tileEntity instanceof IElectricUnit)
-		{
-			if(((IElectricUnit)tileEntity).needsElectricity(UniversalElectricity.getOrientationFromSide(side, (byte)2)) > 0)
-			{
-				return tileEntity;
-			}
-		}
-		
-		return null;
 	}
 	
 	/**
@@ -90,11 +52,7 @@ public abstract class BlockConductor extends BlockContainer
         {
             //Update the tile entity on neighboring blocks
         	TileEntityConductor conductorTileEntity = (TileEntityConductor)world.getBlockTileEntity(x, y, z);
-        	
-        	if(conductorTileEntity != null)
-        	{
-            	conductorTileEntity.addConnection(getUEUnit(world, x, y, z, i), i);
-        	}
+        	conductorTileEntity.addConnection(UniversalElectricity.getUEUnitFromSide(world, new Vector3(x, y, z), i), i);
         }
 	}
 	

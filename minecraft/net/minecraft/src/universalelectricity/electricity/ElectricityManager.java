@@ -17,7 +17,7 @@ public class ElectricityManager
 {
 	private static List<IElectricUnit> electricUnits = new ArrayList<IElectricUnit>();
 	private static List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
-	private static ElectricityConnection[] wireConnections = new ElectricityConnection[999999999];
+	private static List<ElectricityConnection> wireConnections = new ArrayList<ElectricityConnection>();
 	
 	public static int inGameTicks = 0;
 	
@@ -40,22 +40,55 @@ public class ElectricityManager
 	 * @param conductor - The conductor tile entity
 	 * @return - The ID of the connection line that is assigned to this conductor
 	 */
-	public static int registerConductor(TileEntityConductor conductor)
+	public static int registerConductor(TileEntityConductor newConductor)
 	{
-		/*
-		Calclavia: I am not sure how to effectively find all the connected electric
-		units to send the electricity to them directly. Any suggestions how?
-		for(byte i = 0; i < 6; i++)
+		for(int i = 0; i < wireConnections.size(); i++)
 		{
-			if(conductor.connectedBlocks[i] != null)
+			wireConnections.get(i).cleanUpArray();
+			
+			if(wireConnections.get(i).conductors.size() == 0)
 			{
-				
+				wireConnections.remove(i);
 			}
 		}
-		if(!wireConnections.contains(conductor))
+		
+		int ID = wireConnections.size();
+		wireConnections.add(new ElectricityConnection(10, newConductor));
+		
+		return ID;
+	}
+	
+	public static int mergeConnection(int ID1, int ID2)
+	{
+		ElectricityConnection connection1 = wireConnections.get(ID1);
+		ElectricityConnection connection2 = wireConnections.get(ID2);
+		
+		connection1.conductors.addAll(connection2.conductors);
+		
+		wireConnections.set(ID1, connection1);
+		
+		for(TileEntityConductor conductor : connection2.conductors)
 		{
-			wireConnections.add(conductor);
-		}*/
+			conductor.connectionID = ID1;
+		}
+		
+		wireConnections.remove(ID2);
+		
+		System.out.println("Merged");
+		
+		return ID1;
+	}
+	
+	public static int getConnectionByID(int ID)
+	{
+		for(int i = 0; i < wireConnections.size(); i++)
+		{
+			if(wireConnections.get(i).ID == ID)
+			{
+				return i;
+			}
+		}
+		
 		return 0;
 	}
 	
@@ -73,9 +106,9 @@ public class ElectricityManager
 				//Find a path between this conductor and all connected units and try to send the electricity to them directly
 				TileEntityConductor conductor = (TileEntityConductor)target;
 				
-				if(wireConnections[conductor.connectionID] != null)
+				if(wireConnections.get(conductor.connectionID) != null)
 				{
-					List<IElectricUnit> connectedUnits = wireConnections[conductor.connectionID].getConnectedElectricUnits();
+					List<IElectricUnit> connectedUnits = wireConnections.get(conductor.connectionID).getConnectedElectricUnits();
 					float leftOverWatts = watts;
 					
 					for(IElectricUnit electricUnit : connectedUnits)

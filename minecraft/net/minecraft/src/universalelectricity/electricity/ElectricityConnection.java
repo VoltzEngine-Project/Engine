@@ -11,9 +11,9 @@ public class ElectricityConnection
 	public int ID;
 	public List<TileEntityConductor> conductors = new ArrayList<TileEntityConductor>();
 	
-	public ElectricityConnection(/*int ID, */TileEntityConductor conductor)
+	public ElectricityConnection(int ID, TileEntityConductor conductor)
 	{
-		//this.ID = ID;
+		this.ID = ID;
 		this.conductors.add(conductor);
 	}
 	
