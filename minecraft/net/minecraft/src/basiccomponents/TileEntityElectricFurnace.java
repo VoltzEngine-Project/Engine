@@ -25,7 +25,7 @@ import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory,  IPacketReceiver
 {
 	//The amount of ticks requried to smelt this item
-	public static final int smeltingTimeRequired = 150;
+	public final int smeltingTimeRequired = 150;
 	
 	//How many ticks has this item been smelting for?
 	public int smeltingTicks = 0;
@@ -42,7 +42,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     
   	public TileEntityElectricFurnace()
 	{
-  		BasicComponents.packetManager.registerPacketUser(this);
   		ElectricityManager.registerElectricUnit(this);
 	}
   	
@@ -53,7 +52,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 		{
 			return Math.max(0, this.electricityRequired-this.electricityStored);
 		}
-
 		return 0;
 	}
   	
@@ -90,7 +88,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	        }
 		
 			this.electricityStored += watts;
-										
+						
 	    	if(this.electricityStored >= this.electricityRequired && !this.isDisabled())
 	    	{
 	    		
@@ -103,10 +101,10 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 		        //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
 		        if(this.canSmelt() && this.smeltingTicks > 0)
 		    	{
-		    		//Update some variables.
-		    		this.smeltingTicks --;
+		    		this.smeltingTicks -= this.getTickInterval();
+		    		
 		    		//When the item is finished smelting
-		    		if(this.smeltingTicks == 0)
+		    		if(this.smeltingTicks < 1*this.getTickInterval())
 		    		{
 		    			if(this.containingItems[2] == null)
 		    			{
@@ -323,6 +321,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	@Override
 	public int getTickInterval()
 	{
-		return 1;
+		return 3;
 	}
 }

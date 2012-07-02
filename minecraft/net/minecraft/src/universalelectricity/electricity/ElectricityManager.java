@@ -61,22 +61,20 @@ public class ElectricityManager
 			ElectricityConnection connection2 = getConnectionByID(ID2);
 			
 			connection1.conductors.addAll(connection2.conductors);
-			connection1.setID(getMaxConnectionID());
+			connection1.setID(ID1);
 			
 			wireConnections.remove(connection2);
-			
-			System.out.println("Merged to: "+ID1);
 		}
 	}
 	
 	/**
-	 * Seperate one connction line into two different ones between two conductors.
+	 * Separate one connection line into two different ones between two conductors.
 	 * This function does this by resetting all wires in the connection line and
 	 * making them each reconnect.
 	 * @param conductorA - existing conductor
 	 * @param conductorB - broken/invalid conductor
 	 */
-	public static void seperateConnection(TileEntityConductor conductorA, TileEntityConductor conductorB)
+	public static void splitConnection(TileEntityConductor conductorA, TileEntityConductor conductorB)
 	{
 		ElectricityConnection connection = getConnectionByID(conductorA.connectionID);
 		connection.cleanUpArray();
@@ -88,12 +86,14 @@ public class ElectricityManager
 		
 		for(TileEntityConductor conductor : connection.conductors)
 		{
-			conductor.refreshConnectedBlocks();
+			for(byte i = 0; i < 6; i++)
+	        {
+				conductor.updateConnectionWithoutSplit(UniversalElectricity.getUEUnitFromSide(conductor.worldObj, new Vector3(conductor.xCoord, conductor.yCoord, conductor.zCoord), i), i);
+	        }
 		}
 		
-		wireConnections.remove(connection);
-		
-		System.out.println("Seperated");
+		System.out.println("Removed Connection");
+
 	}
 	
 	/**
@@ -182,6 +182,8 @@ public class ElectricityManager
 						}
 					}
 				}
+				
+				
 			}			
 		}
 	}

@@ -28,33 +28,7 @@ public class ElectricityConnection
 			newConductor.connectionID = this.ID;
 		}
 	}
-	/*
-	public List<IElectricUnit> getConnectedElectricUnits()
-	{
-		this.cleanUpArray();
-		
-		List<IElectricUnit> returnArray = new ArrayList<IElectricUnit>();
-		
-		for(TileEntityConductor conductor : conductors)
-		{
-			for(TileEntity tileEntity : conductor.connectedBlocks)
-			{
-				if(tileEntity != null)
-				{
-					if(tileEntity instanceof IElectricUnit)
-					{
-						if(!returnArray.contains((IElectricUnit)tileEntity))
-						{
-							returnArray.add((IElectricUnit)tileEntity);
-						}
-					}
-				}
-			}
-		}
-		
-		return returnArray;
-	}
-	
+
 	/**
 	 * Get only the electric units that can receive electricity from the given side.
 	 */
@@ -74,7 +48,7 @@ public class ElectricityConnection
 				{
 					if(tileEntity instanceof IElectricUnit)
 					{
-						if(!returnArray.contains((IElectricUnit)tileEntity))
+						if(!returnArray.contains((IElectricUnit)tileEntity) && ((IElectricUnit)tileEntity).canReceiveFromSide(UniversalElectricity.getOrientationFromSide(i, (byte)2) ))
 						{
 							returnArray.add((IElectricUnit)tileEntity);
 						}

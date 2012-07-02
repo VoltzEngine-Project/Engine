@@ -55,22 +55,22 @@ public class BlockCoalGenerator extends BlockMachine implements ITextureProvider
             float var10 = 0.52F;
             float var11 = par5Random.nextFloat() * 0.6F - 0.3F;
 
-            if (var6 == 5)
+            if (var6 == 4)
             {
                 par1World.spawnParticle("smoke", (double)(var7 - var10), (double)var8, (double)(var9 + var11), 0.0D, 0.0D, 0.0D);
                 par1World.spawnParticle("flame", (double)(var7 - var10), (double)var8, (double)(var9 + var11), 0.0D, 0.0D, 0.0D);
             }
-            else if (var6 == 4)
+            else if (var6 == 5)
             {
                 par1World.spawnParticle("smoke", (double)(var7 + var10), (double)var8, (double)(var9 + var11), 0.0D, 0.0D, 0.0D);
                 par1World.spawnParticle("flame", (double)(var7 + var10), (double)var8, (double)(var9 + var11), 0.0D, 0.0D, 0.0D);
             }
-            else if (var6 == 3)
+            else if (var6 == 2)
             {
                 par1World.spawnParticle("smoke", (double)(var7 + var11), (double)var8, (double)(var9 - var10), 0.0D, 0.0D, 0.0D);
                 par1World.spawnParticle("flame", (double)(var7 + var11), (double)var8, (double)(var9 - var10), 0.0D, 0.0D, 0.0D);
             }
-            else if (var6 == 2)
+            else if (var6 == 3)
             {
                 par1World.spawnParticle("smoke", (double)(var7 + var11), (double)var8, (double)(var9 + var10), 0.0D, 0.0D, 0.0D);
                 par1World.spawnParticle("flame", (double)(var7 + var11), (double)var8, (double)(var9 + var10), 0.0D, 0.0D, 0.0D);

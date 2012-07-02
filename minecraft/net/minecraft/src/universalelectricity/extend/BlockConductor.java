@@ -52,7 +52,8 @@ public abstract class BlockConductor extends BlockContainer
         {
             //Update the tile entity on neighboring blocks
         	TileEntityConductor conductorTileEntity = (TileEntityConductor)world.getBlockTileEntity(x, y, z);
-        	conductorTileEntity.addConnection(UniversalElectricity.getUEUnitFromSide(world, new Vector3(x, y, z), i), i);
+        	
+        	conductorTileEntity.updateConnection(UniversalElectricity.getUEUnitFromSide(world, new Vector3(x, y, z), i), i);
         }
 	}
 	
