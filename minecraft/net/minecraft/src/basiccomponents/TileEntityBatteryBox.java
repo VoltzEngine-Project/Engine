@@ -53,9 +53,9 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	}
     
     @Override
-    public float needsElectricity(byte side)
+    public float electricityRequest()
     {
-    	if(side == this.getBlockMetadata() && !this.isDisabled())
+    	if(!this.isDisabled())
     	{
     		return this.getElectricityCapacity()-this.electricityStored;
     	}
@@ -64,9 +64,15 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
     }
     
     @Override
+	public boolean canReceiveFromSide(byte side)
+    {
+		return side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
+	}
+    
+    @Override
 	public boolean canConnect(byte side)
     {
-		return side == this.getBlockMetadata() || side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
+		return canReceiveFromSide(side) || side == this.getBlockMetadata();
 	}
     
     @Override
@@ -78,7 +84,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
     	{
     		this.prevElectricityStored = this.electricityStored;
     		
-			if(needsElectricity(side) > 0)
+			if(electricityRequest() > 0 && canConnect(side))
 			{
 				float rejectedElectricity = (float) Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0.0);
 				this.electricityStored = (float) Math.max(this.electricityStored+watts - rejectedElectricity, 0.0);
@@ -122,11 +128,11 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 
 		    	if(tileEntity != null)
 		    	{
-			    	if(tileEntity instanceof IElectricUnit)
+			    	if(tileEntity instanceof TileEntityConductor)
 			    	{
-			    		float electricityNeeded = ((IElectricUnit) tileEntity).needsElectricity(UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
-			    		float transferElectricity = Math.min(200, Math.min(this.electricityStored, electricityNeeded));
-			    		ElectricityManager.produceElectricity(tileEntity, UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3), transferElectricity, this.getVoltage());
+			    		float electricityNeeded = ElectricityManager.electricityRequired(((TileEntityConductor)tileEntity).connectionID);
+			    		float transferElectricity = Math.min(100, Math.min(this.electricityStored, electricityNeeded));
+			    		ElectricityManager.produceElectricity((TileEntityConductor)tileEntity, transferElectricity, this.getVoltage());
 			    		this.electricityStored -= transferElectricity;
 			    	}
 		    	}
@@ -319,6 +325,4 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	{
 		return 1;
 	}
-
-	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 
@@ -47,6 +48,11 @@ public class ElectricityManager
 		wireConnections.add(new ElectricityConnection(getMaxConnectionID(), newConductor));
 	}
 	
+	/**
+	 * Merges two connection lines together into one.
+	 * @param ID1 - ID of connection line
+	 * @param ID2 - ID of connection line
+	 */
 	public static void mergeConnection(int ID1, int ID2)
 	{
 		if(ID1 != ID2)
@@ -58,9 +64,43 @@ public class ElectricityManager
 			connection1.setID(getMaxConnectionID());
 			
 			wireConnections.remove(connection2);
+			
+			System.out.println("Merged to: "+ID1);
 		}
 	}
 	
+	/**
+	 * Seperate one connction line into two different ones between two conductors.
+	 * This function does this by resetting all wires in the connection line and
+	 * making them each reconnect.
+	 * @param conductorA - existing conductor
+	 * @param conductorB - broken/invalid conductor
+	 */
+	public static void seperateConnection(TileEntityConductor conductorA, TileEntityConductor conductorB)
+	{
+		ElectricityConnection connection = getConnectionByID(conductorA.connectionID);
+		connection.cleanUpArray();
+		
+		for(TileEntityConductor conductor : connection.conductors)
+		{
+			conductor.reset();
+		}
+		
+		for(TileEntityConductor conductor : connection.conductors)
+		{
+			conductor.refreshConnectedBlocks();
+		}
+		
+		wireConnections.remove(connection);
+		
+		System.out.println("Seperated");
+	}
+	
+	/**
+	 * Gets a electricity wire connection line by it's connection ID
+	 * @param ID
+	 * @return
+	 */
 	public static ElectricityConnection getConnectionByID(int ID)
 	{
 		cleanUpConnections();
@@ -76,6 +116,9 @@ public class ElectricityManager
 		return null;
 	}
 	
+	/**
+	 * Clean up and remove useless connections
+	 */
 	public static void cleanUpConnections()
 	{
 		for(int i = 0; i < wireConnections.size(); i++)
@@ -89,6 +132,10 @@ public class ElectricityManager
 		}
 	}
 	
+	/**
+	 * Get the highest connection ID. Use this to assign new wire connection lines
+	 * @return
+	 */
 	public static int getMaxConnectionID()
 	{
 		maxConnectionID ++;
@@ -96,49 +143,84 @@ public class ElectricityManager
 	}
 	
 	/**
-	 * Produces electricity into a specific position
-	 * @param target - The tile entity in which the electricity is being produced into
+	 * Produces electricity into a specific conductor and distribute it evenly into different machines
+	 * @param targetConductor - The tile entity in which the electricity is being produced into
 	 * @param side - The side in which the electricity is coming in from. 0-5 byte.
 	 */
-	public static void produceElectricity(TileEntity target, byte side, float watts, float voltage)
+	public static void produceElectricity(TileEntityConductor targetConductor, float watts, float voltage)
 	{		
-		if(target != null)
+		if(targetConductor != null && watts > 0 && voltage > 0)
 		{
-			if(target instanceof TileEntityConductor)
-			{
-				//Find a path between this conductor and all connected units and try to send the electricity to them directly
-				TileEntityConductor conductor = (TileEntityConductor)target;
-				ElectricityConnection connection = getConnectionByID(conductor.connectionID);
+			//Find a path between this conductor and all connected units and try to send the electricity to them directly
+			ElectricityConnection connection = getConnectionByID(targetConductor.connectionID);
+			
+			if(connection != null)
+			{							
+				List<IElectricUnit> allElectricUnitsInLine = connection.getConnectedElectricUnits();
 				
-				if(connection != null)
+				float leftOverWatts = watts;
+	
+				for(TileEntityConductor conductor : connection.conductors)
 				{
-					List<IElectricUnit> connectedUnits = connection.getConnectedElectricUnits();
-					float leftOverWatts = watts;
-					
-					for(IElectricUnit electricUnit : connectedUnits)
+					for(byte i = 0; i < conductor.connectedBlocks.length; i++)
 					{
-						//ITS GIVING THE WRONG SIDE
-						if(electricUnit.needsElectricity(side) > 0)
+						TileEntity tileEntity = conductor.connectedBlocks[i];
+						
+						if(tileEntity != null)
 						{
-				    		float transferWatts = Math.max(0, Math.min(leftOverWatts, Math.min(watts/connectedUnits.size(), electricUnit.needsElectricity(side))));
-				    		leftOverWatts -= transferWatts;
-							electricityTransferQueue.add(new ElectricityTransferData(electricUnit, side, transferWatts, voltage));
-							System.out.println("Added to queue");
+							if(tileEntity instanceof IElectricUnit)
+							{
+								IElectricUnit electricUnit = (IElectricUnit)tileEntity;
+								
+								if(electricUnit.electricityRequest() > 0 && electricUnit.canReceiveFromSide(UniversalElectricity.getOrientationFromSide(i, (byte)2)))
+								{
+						    		float transferWatts = Math.max(0, Math.min(leftOverWatts, Math.min(watts/allElectricUnitsInLine.size(), electricUnit.electricityRequest())));
+						    		leftOverWatts -= transferWatts;
+									electricityTransferQueue.add(new ElectricityTransferData(electricUnit, UniversalElectricity.getOrientationFromSide(i, (byte)2), transferWatts, voltage));
+								}
+							}
+						}
+					}
+				}
+			}			
+		}
+	}
+	
+	/**
+	 * Checks if the current connection line needs electricity
+	 * @return - The amount of electricity this connection line needs
+	 */
+	public static float electricityRequired(int ID)
+	{
+		ElectricityConnection connection = getConnectionByID(ID);
+		
+		float need = 0;
+		
+		if(connection != null)
+		{
+			for(TileEntityConductor conductor : connection.conductors)
+			{
+				for(byte i = 0; i < conductor.connectedBlocks.length; i++)
+				{
+					TileEntity tileEntity = conductor.connectedBlocks[i];
+					
+					if(tileEntity != null)
+					{
+						if(tileEntity instanceof IElectricUnit)
+						{
+							IElectricUnit electricUnit = (IElectricUnit)tileEntity;
+							
+							if(electricUnit.canReceiveFromSide(UniversalElectricity.getOrientationFromSide(i, (byte)2)))
+							{
+								need += electricUnit.electricityRequest();
+							}
 						}
 					}
 				}
 			}
-			else if(target instanceof IElectricUnit)
-			{
-				IElectricUnit electricUnit = (IElectricUnit)target;
-				
-				if(electricUnit.needsElectricity(side) > 0)
-				{
-					//Add to the electricity transfer queue to transfer in the update function
-					electricityTransferQueue.add(new ElectricityTransferData(electricUnit, side, watts, voltage));
-				}
-			}
 		}
+
+		return need;
 	}
 	
 	public static void onUpdate()

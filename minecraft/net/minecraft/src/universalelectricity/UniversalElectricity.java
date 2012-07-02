@@ -50,7 +50,11 @@ public class UniversalElectricity
 		return "0.4.0";
 	}
 	
-	//------------------ FUNCTIONS AND HOOKS ----------------------
+	/*------------------ FUNCTIONS AND HOOKS ----------------------
+		Some formulas to note:
+	*   Wattage = Voltage x Amps (W = V X I)
+	*   Voltage = Amperage x Resistance (V = I x R)
+	*/
 	/**
 	 * Returns the amount of amps.
 	 * @param watts
@@ -324,7 +328,7 @@ public class UniversalElectricity
 		
 		if(tileEntity instanceof IElectricUnit)
 		{
-			if(((IElectricUnit)tileEntity).needsElectricity(UniversalElectricity.getOrientationFromSide(side, (byte)2)) > 0)
+			if(((IElectricUnit)tileEntity).canConnect(UniversalElectricity.getOrientationFromSide(side, (byte)2)))
 			{
 				return tileEntity;
 			}

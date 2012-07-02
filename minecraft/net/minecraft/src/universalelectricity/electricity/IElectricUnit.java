@@ -18,20 +18,24 @@ public interface IElectricUnit extends IDisableable
 	public void onUpdate(float watts, float voltage, byte side);
 	
 	/**
-	 * You can use this to check if a wire can connect to this UE consumer to properly render the graphics
-	 * @param side - The side in which the electricity is coming from.
-	 * @return Return 0 if this unit does not need electricity (sole producer)
-	 * and return the amount of watts this needs if any at all. Recommended
-	 * to return the max electricity capacity.
+	 * How much electricity this electric unit needs/wants. Recommend for you
+	 * to return the max electricity storage of this machine (if there is one).
 	 */
-	public float needsElectricity(byte side);
+	public float electricityRequest();
 	
 	/**
-	 * Can this machine visually connect to this specific side?
+	 * Can this machine visually connect to a wire on this specific side?
 	 * @param side. 0-5 byte
 	 * @return - True if so.
 	 */
 	public boolean canConnect(byte side);
+	
+	/**
+	 * Can this unit receive electricity from this specific side
+	 * @param side. 0-5 byte
+	 * @return - True if so.
+	 */
+	public boolean canReceiveFromSide(byte side);
 	
 	/**
 	 * Gets the voltage of the electricity consumer. Used in a conductor to find the voltage difference.

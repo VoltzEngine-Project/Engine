@@ -23,6 +23,9 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
 		return this.disabledTicks > 0;
 	}
 
+	/**
+	 * Called evert tick. Super this!
+	 */
 	@Override
 	public void onUpdate(float watts, float voltage, byte side)
 	{
@@ -32,11 +35,11 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
 			return;
 		}
 	}
-
+	
 	@Override
-	public float needsElectricity(byte side)
-	{
-		return 0;
+	public boolean canConnect(byte side)
+    {
+  		return this.canReceiveFromSide(side);
 	}
 
 	@Override

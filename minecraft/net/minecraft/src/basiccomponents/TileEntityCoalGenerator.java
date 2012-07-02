@@ -29,7 +29,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	//Current generation rate based on hull heat. In TICKS.
 	public float generateRate = 0;
 		
-	public TileEntity connectedElectricUnit = null;
+	public TileEntityConductor connectedElectricUnit = null;
 	 /**
      * The number of ticks that a fresh copy of the currently-burning item would keep the furnace burning for
      */
@@ -54,9 +54,15 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     }
     
     @Override
+	public boolean canReceiveFromSide(byte side)
+    {
+		return false;
+	}
+    
+    @Override
 	public boolean canConnect(byte side)
     {
-		return side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
+		return side == this.getBlockMetadata();
 	}
     
     @Override
@@ -67,9 +73,16 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     	//Check nearby blocks and see if the conductor is full. If so, then it is connected
     	TileEntity tileEntity = UniversalElectricity.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
     	
-    	if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricUnit)
+    	if(tileEntity instanceof TileEntityConductor)
     	{
-    		this.connectedElectricUnit = tileEntity;
+    		if(ElectricityManager.electricityRequired(((TileEntityConductor)tileEntity).connectionID) > 0)
+    		{
+    			this.connectedElectricUnit = (TileEntityConductor)tileEntity;
+    		}
+    		else
+    		{
+    			this.connectedElectricUnit = null;
+    		}
     	}
     	else
     	{
@@ -116,7 +129,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	    	
 	    	if(this.generateRate > 1)
 	    	{
-	    		ElectricityManager.produceElectricity(this.connectedElectricUnit, UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2), this.generateRate*this.getTickInterval(), this.getVoltage());
+	    		ElectricityManager.produceElectricity(this.connectedElectricUnit, this.generateRate*this.getTickInterval(), this.getVoltage());
 	    	}
         }
     	
@@ -303,5 +316,11 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	public int getTickInterval()
 	{
 		return 1;
+	}
+
+	@Override
+	public float electricityRequest()
+	{
+		return 0;
 	}
 }

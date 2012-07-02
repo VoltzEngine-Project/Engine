@@ -30,10 +30,10 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	//How many ticks has this item been smelting for?
 	public int smeltingTicks = 0;
 	
-	public int electricityStored = 0;
+	public float electricityStored = 0;
 	
 	//Per Tick
-	public final int electricityRequired = 4;
+	public final float electricityRequired = 4;
 	
 	 /**
      * The ItemStacks that hold the items currently being used in the battery box
@@ -47,52 +47,53 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	}
   	
   	@Override
-	public float needsElectricity(byte side)
+	public float electricityRequest()
 	{
-		if(this.canConnect(side) && !this.isDisabled())
+		if(!this.isDisabled() && this.canSmelt())
 		{
-			return Math.max(0, this.electricityRequired*this.getTickInterval()-this.electricityStored);
+			return Math.max(0, this.electricityRequired-this.electricityStored);
 		}
 
 		return 0;
 	}
   	
-  	@Override
-	public boolean canConnect(byte side)
-    {
-		return side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3);
-	}
-  
+  	public boolean canReceiveFromSide(byte side)
+  	{
+		return side == this.getBlockMetadata();
+  	}
+  	
     @Override
 	public void onUpdate(float watts, float voltage, byte side)
 	{
     	super.onUpdate(watts, voltage, side);
-    	
-		if(voltage > this.getVoltage())
-    	{
-    		 this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 0.5F);
-    	}
 		
-		this.electricityStored += watts*this.getTickInterval();
-						
-    	if(this.electricityStored >= this.electricityRequired && !this.isDisabled())
-    	{
-    		if(!this.worldObj.isRemote)
+		if(!this.worldObj.isRemote)
+        {			
+			if(voltage > this.getVoltage())
+	    	{
+	    		 this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 0.7F);
+	    	}
+			
+			//The bottom slot is for portable batteries
+	    	if(this.containingItems[0] != null)
 	        {
-		    	//The bottom slot is for portable batteries
-		    	if (this.containingItems[0] != null)
-		        {
-		            if (this.containingItems[0].getItem() instanceof ItemElectric)
-		            {
-			           	ItemElectric electricItem = (ItemElectric)this.containingItems[0].getItem();
-			           	
-		            	if(electricItem.canProduceElectricity())
-			           	{
-			            	double receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-			            	//this.onUpdate(receivedElectricity, electricItem.getVolts(), (byte)-1);
-			            }
-		            }
-		        }
+	            if(this.containingItems[0].getItem() instanceof ItemElectric)
+	            {
+		           	ItemElectric electricItem = (ItemElectric)this.containingItems[0].getItem();
+		           	
+	            	if(electricItem.canProduceElectricity())
+		           	{
+		            	double receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
+		            	this.electricityStored += receivedElectricity;
+		           	}
+	            }
+	        }
+		
+			this.electricityStored += watts;
+										
+	    	if(this.electricityStored >= this.electricityRequired && !this.isDisabled())
+	    	{
+	    		
 		    	//The left slot contains the item to be smelted
 		    	if(this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
 		        {
@@ -122,8 +123,8 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 		    	}
 		        
 		        this.electricityStored = 0;
-	        }
-    	}
+	    	}
+        }
 	}
     
     //Check all conditions and see if we can start smelting

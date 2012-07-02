@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 
 public class ElectricityConnection
@@ -27,7 +28,7 @@ public class ElectricityConnection
 			newConductor.connectionID = this.ID;
 		}
 	}
-	
+	/*
 	public List<IElectricUnit> getConnectedElectricUnits()
 	{
 		this.cleanUpArray();
@@ -38,6 +39,37 @@ public class ElectricityConnection
 		{
 			for(TileEntity tileEntity : conductor.connectedBlocks)
 			{
+				if(tileEntity != null)
+				{
+					if(tileEntity instanceof IElectricUnit)
+					{
+						if(!returnArray.contains((IElectricUnit)tileEntity))
+						{
+							returnArray.add((IElectricUnit)tileEntity);
+						}
+					}
+				}
+			}
+		}
+		
+		return returnArray;
+	}
+	
+	/**
+	 * Get only the electric units that can receive electricity from the given side.
+	 */
+	public List<IElectricUnit> getConnectedElectricUnits()
+	{
+		this.cleanUpArray();
+		
+		List<IElectricUnit> returnArray = new ArrayList<IElectricUnit>();
+		
+		for(TileEntityConductor conductor : conductors)
+		{
+			for(byte i = 0; i < conductor.connectedBlocks.length; i++)
+			{
+				TileEntity tileEntity = conductor.connectedBlocks[i];
+				
 				if(tileEntity != null)
 				{
 					if(tileEntity instanceof IElectricUnit)
