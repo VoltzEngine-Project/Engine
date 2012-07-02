@@ -16,17 +16,17 @@ import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.extend.BlockMachine;
-import net.minecraft.src.universalelectricity.extend.IRedstoneProvider;
 
 
-public class BlockBatteryBox extends BlockMachine implements ITextureProvider
+public class BlockCoalGenerator extends BlockMachine implements ITextureProvider
 {
-    public BlockBatteryBox(int id, int textureIndex)
+    public BlockCoalGenerator(int id, int textureIndex)
     {
-    	super("Battery Box", id, Material.wood);
+    	super("Coal Generator", id, Material.wood);
     	this.blockIndexInTexture = textureIndex;
     	this.setStepSound(soundMetalFootstep);
     	this.setRequiresSelfNotify();
+    	this.setTickRandomly(true);
     }
     
     @Override
@@ -35,10 +35,14 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
     	return BasicComponents.blockTextureFile;
     }
     
-	@Override
-	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
-	{
-		if (side == 0 || side == 1)
+    /**
+     * Retrieves the block texture to use based on the display side. Args: iBlockAccess, x, y, z, side
+     */
+    public int getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+    {
+    	int metadata = par1IBlockAccess.getBlockMetadata(x, y, z);
+    	
+    	if (side == 0 || side == 1)
         {
             return this.blockIndexInTexture;
         }
@@ -47,15 +51,41 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
         	//If it is the front side
         	if(side == metadata)
         	{
-        		return this.blockIndexInTexture + 3;
+        			return this.blockIndexInTexture + 5;
         	}
         	//If it is the back side
         	else if(side == UniversalElectricity.getOrientationFromSide((byte)metadata, (byte)2))
         	{
-        		return this.blockIndexInTexture + 2;
+        		return this.blockIndexInTexture + 3;
+        		
         	}
+            
+            return this.blockIndexInTexture+1;
+        }
+    }
 
-            return this.blockIndexInTexture + 4;
+	@Override
+	public int getBlockTextureFromSide(int side)
+	{
+		if (side == 0 || side == 1)
+        {
+            return this.blockIndexInTexture;
+        }
+        else
+        {
+        	//If it is the front side
+        	if(side == 3)
+        	{
+        			return this.blockIndexInTexture + 5;
+        	}
+        	//If it is the back side
+        	else if(side == 2)
+        	{
+        		return this.blockIndexInTexture + 3;
+        		
+        	}
+            
+            return this.blockIndexInTexture+1;
         }
 	}
     
@@ -65,15 +95,15 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
     @Override
     public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
     {
-    	int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         int change = 3;
         
     	switch (angle)
         {
-        	case 0: change = 5; break;
-        	case 1: change = 3; break;
-        	case 2: change = 4; break;
-        	case 3: change = 2; break;
+        	case 0: change = 2; break;
+        	case 1: change = 5; break;
+        	case 2: change = 3; break;
+        	case 3: change = 4; break;
         }
     	
     	par1World.setBlockMetadataWithNotify(x, y, z, change);
@@ -90,7 +120,6 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
 	    	case 3: par1World.setBlockMetadataWithNotify(x, y, z, 4); break;
 	    	case 4: par1World.setBlockMetadataWithNotify(x, y, z, 2); break;
 		}	
-		
 		return true;
     }
     
@@ -104,7 +133,7 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
 
         if (!par1World.isRemote)
         {
-        	par5EntityPlayer.openGui(BasicComponents.getInstance(), 0, par1World, x, y, z); return true;
+        	par5EntityPlayer.openGui(BasicComponents.getInstance(), 1, par1World, x, y, z); return true;
         }
         
         return true;
@@ -163,30 +192,12 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
     }
     
     /**
-     * Is this block powering the block on the specified side
-     */
-    public boolean isPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-    {
-    	IRedstoneProvider tileEntity = (IRedstoneProvider)par1IBlockAccess.getBlockTileEntity(x, y, z);
-    	return tileEntity.isPoweringTo((byte)side);
-    }
-
-    /**
-     * Is this block indirectly powering the block on the specified side
-     */
-    public boolean isIndirectlyPoweringTo(World par1World, int x, int y, int z, int side)
-    {
-    	IRedstoneProvider tileEntity = (IRedstoneProvider)par1World.getBlockTileEntity(x, y, z);
-    	return tileEntity.isIndirectlyPoweringTo((byte)side);
-    }
-    
-    /**
      * Returns the TileEntity used by this block.
      */
     @Override
-    public TileEntity getBlockEntity(int metadata)
+    public TileEntity getBlockEntity()
     {
-    	return new TileEntityBatteryBox();	
+    	return new TileEntityCoalGenerator();
     }
     
     @Override

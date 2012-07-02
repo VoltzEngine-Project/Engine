@@ -1,15 +1,10 @@
 package net.minecraft.src.basiccomponents;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
-import net.minecraft.src.NetworkManager;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
@@ -18,9 +13,8 @@ import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
-import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityCoalGenerator extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory, IPacketReceiver
+public class TileEntityCoalGenerator extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory
 {
 	//Maximum possible generation rate of watts in SECONDS
 	public static final int maxGenerateRate = 560;
@@ -40,7 +34,6 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
   	
   	public TileEntityCoalGenerator()
   	{
-  		BasicComponents.packetManager.registerPacketUser(this);
   		ElectricityManager.registerElectricUnit(this);
   	}
   	 
@@ -64,29 +57,28 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     @Override
     public void onUpdate(float watts, float voltage, byte side)
 	{
+    	//Check nearby blocks and see if the conductor is full. If so, then it is connected
+    	TileEntity tileEntity = UniversalElectricity.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
+    	
+    	if(tileEntity instanceof TileEntityConductor)
+    	{
+    		if(ElectricityManager.electricityRequired(((TileEntityConductor)tileEntity).connectionID) > 0)
+    		{
+    			this.connectedElectricUnit = (TileEntityConductor)tileEntity;
+    		}
+    		else
+    		{
+    			this.connectedElectricUnit = null;
+    		}
+    	}
+    	else
+    	{
+    		this.connectedElectricUnit = null;
+    	}
+    	
     	if(!this.worldObj.isRemote)
         {
 	    	super.onUpdate(watts, voltage, side);
-	    	
-	    	//Check nearby blocks and see if the conductor is full. If so, then it is connected
-	    	TileEntity tileEntity = UniversalElectricity.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
-	    	
-	    	if(tileEntity instanceof TileEntityConductor)
-	    	{
-	    		if(ElectricityManager.electricityRequired(((TileEntityConductor)tileEntity).connectionID) > 0)
-	    		{
-	    			this.connectedElectricUnit = (TileEntityConductor)tileEntity;
-	    		}
-	    		else
-	    		{
-	    			this.connectedElectricUnit = null;
-	    		}
-	    	}
-	    	else
-	    	{
-	    		this.connectedElectricUnit = null;
-	    	}
-	    	
 	    	
 	    	if(!this.isDisabled())
 	    	{	
@@ -126,6 +118,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	    	}
         }
     	
+    	BasicComponents.packetManager.sendPacketData(1, new double[]{this.generateRate, this.disabledTicks});
     }
     
     /**
@@ -267,29 +260,6 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	public float getVoltage()
 	{
 		return 120;
-	}
-	
-	@Override
-	public void onPacketData(NetworkManager network, String channel, byte[] data)
-	{		
-		DataInputStream dataStream = new DataInputStream(new ByteArrayInputStream(data));
-
-        try
-        {
-        	int packetID = dataStream.readInt();
-        	this.generateRate = (float)dataStream.readDouble();
-        	this.disabledTicks = (int)dataStream.readDouble();
-        }
-        catch(IOException e)
-        {
-             e.printStackTrace();
-        }
-	}
-
-	@Override
-	public int getPacketID()
-	{
-		return 1;
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package net.minecraft.src.basiccomponents;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.src.EntityItem;
@@ -17,8 +16,6 @@ import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.extend.BlockMachine;
-import net.minecraft.src.universalelectricity.extend.IRedstoneReceptor;
-import net.minecraft.src.universalelectricity.extend.IRotatable;
 
 
 public class BlockCoalGenerator extends BlockMachine implements ITextureProvider

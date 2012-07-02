@@ -51,7 +51,7 @@ public abstract class TileEntityConductor extends TileEntity
 			}
 			 
 			this.connectedBlocks[side] = null;
-		}		
+		}
 	}
 	
 	public void updateConnectionWithoutSplit(TileEntity tileEntity, byte side)

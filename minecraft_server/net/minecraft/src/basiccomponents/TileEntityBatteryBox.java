@@ -1,15 +1,10 @@
 package net.minecraft.src.basiccomponents;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
-import net.minecraft.src.NetworkManager;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
@@ -20,9 +15,8 @@ import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit
 import net.minecraft.src.universalelectricity.extend.IRedstoneProvider;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
-import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPacketReceiver, IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory
+public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory
 {
 	public float electricityStored = 0;
 	
@@ -42,7 +36,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	
 	public TileEntityBatteryBox()
 	{
-		BasicComponents.packetManager.registerPacketUser(this);
   		ElectricityManager.registerElectricUnit(this);
 	}
     
@@ -109,7 +102,8 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 		            	}
 		            }
 		        }
-		    	
+	        
+	    	
 		    	if(this.electricityStored == this.getElectricityCapacity() && this.prevElectricityStored != this.electricityStored)
 		    	{
 		    		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
@@ -132,6 +126,8 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 			    }
 			}
         }
+    	
+    	BasicComponents.packetManager.sendPacketData(0, new double[]{this.electricityStored, this.disabledTicks});
     }
     
     /**
@@ -277,31 +273,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	public String getTextureFile()
 	{
 		return BasicComponents.blockTextureFile;
-	}
-
-	@Override
-	public void onPacketData(NetworkManager network, String channel, byte[] data)
-	{
-		DataInputStream dataStream = new DataInputStream(new ByteArrayInputStream(data));
-
-        try
-        {
-        	int packetID = dataStream.readInt();
-        	this.electricityStored = dataStream.readFloat();
-        	this.disableTicks = (int)dataStream.readDouble();
-        	
-        	System.out.println(this.electricityStored);
-        }
-        catch(IOException e)
-        {
-             e.printStackTrace();
-        }
-	}
-
-	@Override
-	public int getPacketID()
-	{
-		return 0;
 	}
 
 	@Override

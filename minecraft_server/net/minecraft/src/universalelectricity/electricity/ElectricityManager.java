@@ -230,11 +230,6 @@ public class ElectricityManager
 	
 	public static void onUpdate()
 	{
-		for(TileEntityConductor conductor : electricConductors)
-		{
-			conductor.refreshConnectedBlocks();
-		}
-		
 		for(IElectricUnit electricUnit : electricUnits)
 		{
 			//Cleanup useless units

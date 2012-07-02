@@ -1,12 +1,10 @@
 package net.minecraft.src;
 
-import net.minecraft.src.basiccomponents.BCItem;
 import net.minecraft.src.basiccomponents.BasicComponents;
-import net.minecraft.src.basiccomponents.GUIBatteryBox;
-import net.minecraft.src.basiccomponents.GUICoalGenerator;
-import net.minecraft.src.basiccomponents.GUIElectricFurnace;
+import net.minecraft.src.basiccomponents.ContainerBatteryBox;
+import net.minecraft.src.basiccomponents.ContainerCoalGenerator;
+import net.minecraft.src.basiccomponents.ContainerElectricFurnace;
 import net.minecraft.src.basiccomponents.ItemBattery;
-import net.minecraft.src.basiccomponents.RenderCopperWire;
 import net.minecraft.src.basiccomponents.TileEntityBatteryBox;
 import net.minecraft.src.basiccomponents.TileEntityCoalGenerator;
 import net.minecraft.src.basiccomponents.TileEntityCopperWire;
@@ -14,7 +12,6 @@ import net.minecraft.src.basiccomponents.TileEntityElectricFurnace;
 import net.minecraft.src.forge.IConnectionHandler;
 import net.minecraft.src.forge.IGuiHandler;
 import net.minecraft.src.forge.MinecraftForge;
-import net.minecraft.src.forge.MinecraftForgeClient;
 import net.minecraft.src.forge.NetworkMod;
 import net.minecraft.src.forge.oredict.OreDictionary;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
@@ -42,9 +39,6 @@ public class mod_BasicComponents extends NetworkMod implements IGuiHandler, ICon
 	public void modsLoaded()
 	{	
 		//Preload textures
-		MinecraftForgeClient.preloadTexture(BasicComponents.blockTextureFile);
-		MinecraftForgeClient.preloadTexture(BCItem.textureFile);
-		
 		MinecraftForge.registerConnectionHandler(this);
 				
 		//Register Blocks
@@ -65,7 +59,7 @@ public class mod_BasicComponents extends NetworkMod implements IGuiHandler, ICon
         ModLoader.addName(BasicComponents.BlockElectricFurnace, "Electric Furnace");
 		
 		//Register Tile Entities
-		ModLoader.registerTileEntity(TileEntityCopperWire.class, "TileEntityCopperWire", new RenderCopperWire());
+		ModLoader.registerTileEntity(TileEntityCopperWire.class, "TileEntityCopperWire");
 		ModLoader.registerTileEntity(TileEntityBatteryBox.class, "TileEntityBatteryBox");
 		ModLoader.registerTileEntity(TileEntityCoalGenerator.class, "TileEntityCoalGenerator");
 		ModLoader.registerTileEntity(TileEntityElectricFurnace.class, "TileEntityElectricFurnace");
@@ -125,9 +119,9 @@ public class mod_BasicComponents extends NetworkMod implements IGuiHandler, ICon
         {
 			switch(ID)
 			{
-				case 0: return new GUIBatteryBox(player.inventory, ((TileEntityBatteryBox)tileEntity));
-				case 1: return new GUICoalGenerator(player.inventory, ((TileEntityCoalGenerator)tileEntity));
-				case 2: return new GUIElectricFurnace(player.inventory, ((TileEntityElectricFurnace)tileEntity));
+				case 0: return new ContainerBatteryBox(player.inventory, ((TileEntityBatteryBox)tileEntity));
+				case 1: return new ContainerCoalGenerator(player.inventory, ((TileEntityCoalGenerator)tileEntity));
+				case 2: return new ContainerElectricFurnace(player.inventory, ((TileEntityElectricFurnace)tileEntity));
 			}
         }
 		

@@ -1,8 +1,4 @@
 package net.minecraft.src.basiccomponents;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.FurnaceRecipes;
@@ -10,15 +6,13 @@ import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
-import net.minecraft.src.NetworkManager;
 import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
-import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory,  IPacketReceiver
+public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory
 {
 	//The amount of ticks requried to smelt this item
 	public final int smeltingTimeRequired = 150;
@@ -119,6 +113,8 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 		        this.electricityStored = 0;
 	    	}
         }
+		
+    	BasicComponents.packetManager.sendPacketData(2, new double[]{this.smeltingTicks, this.disabledTicks});
 	}
     
     //Check all conditions and see if we can start smelting
@@ -291,30 +287,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 		return 120F;
 	}
 
-	@Override
-	public void onPacketData(NetworkManager network, String channel, byte[] data)
-	{
-		DataInputStream dataStream = new DataInputStream(new ByteArrayInputStream(data));
-
-        try
-        {
-        	int packetID = dataStream.readInt();
-        	this.smeltingTicks = (int)dataStream.readDouble();
-        	this.disabledTicks = (int)dataStream.readDouble();
-        }
-        catch(IOException e)
-        {
-             e.printStackTrace();
-        }
-	}
-
-	@Override
-	public int getPacketID()
-	{
-		return 2;
-	}
-
-	
 	@Override
 	public int getTickInterval()
 	{
