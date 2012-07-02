@@ -27,6 +27,13 @@ public interface IElectricUnit extends IDisableable
 	public float needsElectricity(byte side);
 	
 	/**
+	 * Can this machine visually connect to this specific side?
+	 * @param side. 0-5 byte
+	 * @return - True if so.
+	 */
+	public boolean canConnect(byte side);
+	
+	/**
 	 * Gets the voltage of the electricity consumer. Used in a conductor to find the voltage difference.
 	 * If the voltage is too high, things might explode.
 	 * @return The amount of volts. E.g 120v or 240v

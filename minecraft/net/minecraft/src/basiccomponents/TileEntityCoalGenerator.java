@@ -50,8 +50,14 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
   	 
     public boolean canProduceElectricity(byte side)
     {
-    	return side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3) && !this.isDisabled();
+    	return canConnect(side) && !this.isDisabled();
     }
+    
+    @Override
+	public boolean canConnect(byte side)
+    {
+		return side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
+	}
     
     @Override
     public void onUpdate(float watts, float voltage, byte side)

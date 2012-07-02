@@ -18,6 +18,7 @@ public class ElectricityManager
 	private static List<IElectricUnit> electricUnits = new ArrayList<IElectricUnit>();
 	private static List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
 	private static List<ElectricityConnection> wireConnections = new ArrayList<ElectricityConnection>();
+	private static int maxConnectionID = 0;
 	
 	public static int inGameTicks = 0;
 	
@@ -40,7 +41,42 @@ public class ElectricityManager
 	 * @param conductor - The conductor tile entity
 	 * @return - The ID of the connection line that is assigned to this conductor
 	 */
-	public static int registerConductor(TileEntityConductor newConductor)
+	public static void registerConductor(TileEntityConductor newConductor)
+	{
+		cleanUpConnections();
+		wireConnections.add(new ElectricityConnection(getMaxConnectionID(), newConductor));
+	}
+	
+	public static void mergeConnection(int ID1, int ID2)
+	{
+		if(ID1 != ID2)
+		{
+			ElectricityConnection connection1 = getConnectionByID(ID1);
+			ElectricityConnection connection2 = getConnectionByID(ID2);
+			
+			connection1.conductors.addAll(connection2.conductors);
+			connection1.setID(getMaxConnectionID());
+			
+			wireConnections.remove(connection2);
+		}
+	}
+	
+	public static ElectricityConnection getConnectionByID(int ID)
+	{
+		cleanUpConnections();
+		
+		for(int i = 0; i < wireConnections.size(); i++)
+		{
+			if(wireConnections.get(i).getID() == ID)
+			{
+				return wireConnections.get(i);
+			}
+		}
+		
+		return null;
+	}
+	
+	public static void cleanUpConnections()
 	{
 		for(int i = 0; i < wireConnections.size(); i++)
 		{
@@ -51,45 +87,12 @@ public class ElectricityManager
 				wireConnections.remove(i);
 			}
 		}
-		
-		int ID = wireConnections.size();
-		wireConnections.add(new ElectricityConnection(10, newConductor));
-		
-		return ID;
 	}
 	
-	public static int mergeConnection(int ID1, int ID2)
+	public static int getMaxConnectionID()
 	{
-		ElectricityConnection connection1 = wireConnections.get(ID1);
-		ElectricityConnection connection2 = wireConnections.get(ID2);
-		
-		connection1.conductors.addAll(connection2.conductors);
-		
-		wireConnections.set(ID1, connection1);
-		
-		for(TileEntityConductor conductor : connection2.conductors)
-		{
-			conductor.connectionID = ID1;
-		}
-		
-		wireConnections.remove(ID2);
-		
-		System.out.println("Merged");
-		
-		return ID1;
-	}
-	
-	public static int getConnectionByID(int ID)
-	{
-		for(int i = 0; i < wireConnections.size(); i++)
-		{
-			if(wireConnections.get(i).ID == ID)
-			{
-				return i;
-			}
-		}
-		
-		return 0;
+		maxConnectionID ++;
+		return maxConnectionID;
 	}
 	
 	/**
@@ -105,19 +108,22 @@ public class ElectricityManager
 			{
 				//Find a path between this conductor and all connected units and try to send the electricity to them directly
 				TileEntityConductor conductor = (TileEntityConductor)target;
+				ElectricityConnection connection = getConnectionByID(conductor.connectionID);
 				
-				if(wireConnections.get(conductor.connectionID) != null)
+				if(connection != null)
 				{
-					List<IElectricUnit> connectedUnits = wireConnections.get(conductor.connectionID).getConnectedElectricUnits();
+					List<IElectricUnit> connectedUnits = connection.getConnectedElectricUnits();
 					float leftOverWatts = watts;
 					
 					for(IElectricUnit electricUnit : connectedUnits)
 					{
+						//ITS GIVING THE WRONG SIDE
 						if(electricUnit.needsElectricity(side) > 0)
 						{
 				    		float transferWatts = Math.max(0, Math.min(leftOverWatts, Math.min(watts/connectedUnits.size(), electricUnit.needsElectricity(side))));
 				    		leftOverWatts -= transferWatts;
 							electricityTransferQueue.add(new ElectricityTransferData(electricUnit, side, transferWatts, voltage));
+							System.out.println("Added to queue");
 						}
 					}
 				}

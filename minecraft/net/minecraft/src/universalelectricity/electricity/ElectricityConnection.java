@@ -8,13 +8,13 @@ import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 
 public class ElectricityConnection
 {
-	public int ID;
+	private int ID;
 	public List<TileEntityConductor> conductors = new ArrayList<TileEntityConductor>();
 	
 	public ElectricityConnection(int ID, TileEntityConductor conductor)
 	{
 		this.ID = ID;
-		this.conductors.add(conductor);
+		this.addConductor(conductor);
 	}
 	
 	public void addConductor(TileEntityConductor newConductor)
@@ -24,6 +24,7 @@ public class ElectricityConnection
 		if(!conductors.contains(newConductor))
 		{
 			conductors.add(newConductor);
+			newConductor.connectionID = this.ID;
 		}
 	}
 	
@@ -66,5 +67,21 @@ public class ElectricityConnection
 				conductors.remove(i);
 			}
 		}
+	}
+	
+	public void setID(int ID)
+	{
+		this.ID = ID;
+		this.cleanUpArray();
+		
+		for(TileEntityConductor conductor : this.conductors)
+		{
+			conductor.connectionID = this.ID;
+		}
+	}
+	
+	public int getID()
+	{
+		return this.ID;
 	}
 }

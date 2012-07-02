@@ -45,6 +45,23 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
   		BasicComponents.packetManager.registerPacketUser(this);
   		ElectricityManager.registerElectricUnit(this);
 	}
+  	
+  	@Override
+	public float needsElectricity(byte side)
+	{
+		if(this.canConnect(side) && !this.isDisabled())
+		{
+			return Math.max(0, this.electricityRequired*this.getTickInterval()-this.electricityStored);
+		}
+
+		return 0;
+	}
+  	
+  	@Override
+	public boolean canConnect(byte side)
+    {
+		return side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3);
+	}
   
     @Override
 	public void onUpdate(float watts, float voltage, byte side)
@@ -136,17 +153,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 		
     	return true;
     }
-	
-	@Override
-	public float needsElectricity(byte side)
-	{
-		if(side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3) && !this.isDisabled())
-		{
-			return Math.max(0, this.electricityRequired*this.getTickInterval()-this.electricityStored);
-		}
-
-		return 0;
-	}
 	
     /**
      * Reads a tile entity from NBT.

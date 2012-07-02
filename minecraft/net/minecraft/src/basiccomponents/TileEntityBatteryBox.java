@@ -64,6 +64,12 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
     }
     
     @Override
+	public boolean canConnect(byte side)
+    {
+		return side == this.getBlockMetadata() || side == UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
+	}
+    
+    @Override
 	public void onUpdate(float watts, float voltage, byte side)
 	{
     	super.onUpdate(watts, voltage, side);
@@ -313,4 +319,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	{
 		return 1;
 	}
+
+	
 }
