@@ -22,6 +22,8 @@ import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
 public class TileEntityCoalGenerator extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory, IPacketReceiver
 {
+	private static int maxPacketID = 0;
+
 	//Maximum possible generation rate of watts in SECONDS
 	public static final int maxGenerateRate = 560;
 	
@@ -40,6 +42,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
   	
   	public TileEntityCoalGenerator()
   	{
+  		maxPacketID ++;
   		BasicComponents.packetManager.registerPacketUser(this);
   		ElectricityManager.registerElectricUnit(this);
   	}
@@ -270,26 +273,24 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	}
 	
 	@Override
-	public void onPacketData(NetworkManager network, String channel, byte[] data)
-	{		
-		DataInputStream dataStream = new DataInputStream(new ByteArrayInputStream(data));
-
-        try
-        {
-        	int packetID = dataStream.readInt();
-        	this.generateRate = (float)dataStream.readDouble();
-        	this.disabledTicks = (int)dataStream.readDouble();
-        }
-        catch(IOException e)
-        {
-             e.printStackTrace();
-        }
+	public void onPacketData(NetworkManager network, String channel, DataInputStream dataStream)
+	{
+		try
+		{
+			this.generateRate = (float)dataStream.readDouble();
+		    this.disabledTicks = (int)dataStream.readDouble();
+		     	
+		}
+		catch(IOException e)
+		{
+		     e.printStackTrace();
+		}		
 	}
 
 	@Override
 	public int getPacketID()
 	{
-		return 1;
+		return 2;
 	}
 
 	@Override

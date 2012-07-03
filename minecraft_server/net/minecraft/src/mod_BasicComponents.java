@@ -48,7 +48,6 @@ public class mod_BasicComponents extends NetworkMod implements IGuiHandler, ICon
 		ModLoader.registerBlock(BasicComponents.BlockElectricFurnace);
 		
 		//Add Names for Special Items
-		ModLoader.addName(BasicComponents.ItemElectricityMeter, "Electricity Meter");
 		ModLoader.addName(BasicComponents.ItemBattery, "Basic Battery");
 		ModLoader.addName(BasicComponents.BlockCopperWire, "Copper Wire");
 		ModLoader.addName(new ItemStack(BasicComponents.ItemCircuit, 1, 0), "Basic Circuit");
@@ -77,8 +76,6 @@ public class mod_BasicComponents extends NetworkMod implements IGuiHandler, ICon
 		UERecipeManager.addRecipe(new ItemStack(BasicComponents.ItemMotor), new Object [] {"@!@", "!#!", "@!@", '!', BasicComponents.ItemSteelPlate, '#', BasicComponents.ItemCircuit, '@', BasicComponents.ItemCopperWire});
 		//Wrench
 		UERecipeManager.addRecipe(new ItemStack(BasicComponents.ItemWrench), new Object [] {"! !", " ! ", " ! ", '!', "ingotSteel"});
-		//Electricity Meter
-		UERecipeManager.addRecipe(new ItemStack(BasicComponents.ItemElectricityMeter), new Object [] {"!?!", "!#!", "!!!", '!', "ingotSteel", '?', BasicComponents.ItemCopperWire, '#', BasicComponents.ItemCircuit});
 		//Battery Box
 		UERecipeManager.addRecipe(BasicComponents.BlockBatteryBox, new Object [] {"!?!", "???", "!?!", '!', BasicComponents.ItemSteelPlate, '?', (((ItemBattery)BasicComponents.ItemBattery).getChargedItemStack()) });
 		//Coal Generator

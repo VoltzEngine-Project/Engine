@@ -34,7 +34,7 @@ public class GUICoalGenerator extends GuiContainer
         {
         	displayText = "Disabled";
         }
-        else if(tileEntity.connectedElectricUnit == null)
+        else if(tileEntity.connectedElectricUnit == null && !tileEntity.worldObj.isRemote)
         {
         	displayText = "Not Connected";
         }

@@ -24,6 +24,8 @@ import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
 public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPacketReceiver, IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory
 {
+	private static int maxPacketID = 0;
+
 	public float electricityStored = 0;
 	
 	public float prevElectricityStored = 0;
@@ -42,6 +44,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	
 	public TileEntityBatteryBox()
 	{
+		maxPacketID++;
 		BasicComponents.packetManager.registerPacketUser(this);
   		ElectricityManager.registerElectricUnit(this);
 	}
@@ -278,32 +281,27 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	{
 		return BasicComponents.blockTextureFile;
 	}
-
+	
 	@Override
-	public void onPacketData(NetworkManager network, String channel, byte[] data)
+	public void onPacketData(NetworkManager network, String channel, DataInputStream dataStream)
 	{
-		DataInputStream dataStream = new DataInputStream(new ByteArrayInputStream(data));
-
-        try
-        {
-        	int packetID = dataStream.readInt();
-        	this.electricityStored = dataStream.readFloat();
-        	this.disableTicks = (int)dataStream.readDouble();
-        	
-        	System.out.println(this.electricityStored);
-        }
-        catch(IOException e)
-        {
+		 try
+		 {
+        	this.electricityStored = (float)dataStream.readDouble();
+        	this.disableTicks = (int)dataStream.readDouble();        	
+		 }
+		 catch(IOException e)
+		 {
              e.printStackTrace();
-        }
+		 }		
 	}
-
+	
 	@Override
 	public int getPacketID()
 	{
-		return 0;
+		return 1;
 	}
-
+	
 	@Override
 	public boolean isPoweringTo(byte side)
 	{

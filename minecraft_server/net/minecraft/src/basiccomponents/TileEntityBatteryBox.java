@@ -127,7 +127,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
 			}
         }
     	
-    	BasicComponents.packetManager.sendPacketData(0, new double[]{this.electricityStored, this.disabledTicks});
+    	BasicComponents.packetManager.sendPacketData(1, new double[]{this.electricityStored, this.disabledTicks});
     }
     
     /**

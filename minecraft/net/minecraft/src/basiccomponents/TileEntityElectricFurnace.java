@@ -20,6 +20,8 @@ import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
 public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory,  IPacketReceiver
 {
+	private static int maxPacketID = 0;
+
 	//The amount of ticks requried to smelt this item
 	public final int smeltingTimeRequired = 150;
 	
@@ -38,6 +40,8 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     
   	public TileEntityElectricFurnace()
 	{
+  		maxPacketID++;
+		BasicComponents.packetManager.registerPacketUser(this);
   		ElectricityManager.registerElectricUnit(this);
 	}
   	
@@ -292,28 +296,32 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	}
 
 	@Override
-	public void onPacketData(NetworkManager network, String channel, byte[] data)
+	public void onPacketData(NetworkManager network, String channel, DataInputStream dataStream)
 	{
-		DataInputStream dataStream = new DataInputStream(new ByteArrayInputStream(data));
-
-        try
-        {
-        	int packetID = dataStream.readInt();
-        	this.smeltingTicks = (int)dataStream.readDouble();
-        	this.disabledTicks = (int)dataStream.readDouble();
-        }
-        catch(IOException e)
-        {
+		 try
+		 {
+			 this.smeltingTicks = (int)dataStream.readDouble();
+	         this.disabledTicks = (int)dataStream.readDouble();
+		 }
+		 catch(IOException e)
+		 {
              e.printStackTrace();
-        }
+		 }		
 	}
-
+	
 	@Override
 	public int getPacketID()
 	{
-		return 2;
+		return 3;
 	}
 
+	/**
+     * Called when a client event is received with the event number and argument, see World.sendClientEvent
+     */
+    public void receiveClientEvent(int par1, int par2)
+    {
+    	System.out.println("revceived");
+    }
 	
 	@Override
 	public int getTickInterval()

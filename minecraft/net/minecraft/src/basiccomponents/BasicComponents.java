@@ -43,8 +43,7 @@ public class BasicComponents
 	public static final Block BlockCoalGenerator = new BlockCoalGenerator(UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Coal Generator", blockIDPrefix+2, true), 0);
 	public static final Block BlockElectricFurnace = new BlockElectricFurnace(UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Electric Furnace", blockIDPrefix+3, true), 0);
 	
-	public static final Item ItemBattery = new ItemBattery(UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Battery", 1585, false), 0);
-	public static final Item ItemElectricityMeter = new ItemElectricityMeter(UniversalElectricity.getConfigID(UniversalElectricity.configuration, "ElectricityMeter", 1586, false), 19);
+	public static final Item ItemBattery = new ItemBattery(UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Battery", 1586, false), 0);
 	public static final Item ItemWrench = new ItemWrench(UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Wrench", 1587, false), 20);
 	public static final Item ItemCopperIngot = new BCItem("Copper Ingot", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "CopperIngot", 1588, false), 1);
 	public static final Item ItemTinIngot = new BCItem("Tin Ingot", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "TinIngot", 1589, false), 2);

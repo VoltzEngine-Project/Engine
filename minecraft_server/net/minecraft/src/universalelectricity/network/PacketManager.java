@@ -47,7 +47,7 @@ public class PacketManager implements IPacketHandler
         }
         catch(IOException e)
         {
-                e.printStackTrace();
+        	e.printStackTrace();
         }
 
         Packet250CustomPayload packet = new Packet250CustomPayload();

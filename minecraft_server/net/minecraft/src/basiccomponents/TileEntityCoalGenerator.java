@@ -118,7 +118,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	    	}
         }
     	
-    	BasicComponents.packetManager.sendPacketData(1, new double[]{this.generateRate, this.disabledTicks});
+    	BasicComponents.packetManager.sendPacketData(2, new double[]{this.generateRate, this.disabledTicks});
     }
     
     /**

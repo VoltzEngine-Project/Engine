@@ -114,7 +114,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	    	}
         }
 		
-    	BasicComponents.packetManager.sendPacketData(2, new double[]{this.smeltingTicks, this.disabledTicks});
+    	BasicComponents.packetManager.sendPacketData(3, new double[]{this.smeltingTicks, this.disabledTicks});
 	}
     
     //Check all conditions and see if we can start smelting

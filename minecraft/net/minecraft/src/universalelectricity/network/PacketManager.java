@@ -43,11 +43,12 @@ public class PacketManager implements IPacketHandler
 		DataInputStream dataStream = new DataInputStream(new ByteArrayInputStream(data));
 		
         int packetID = -1;
+        int packetTypeID = -1;
         int[] packetData = new int[1];
         
         try
         {
-        	packetID = dataStream.readInt();
+        	packetTypeID = dataStream.readInt();
         }
         catch(IOException e)
         {
@@ -56,9 +57,9 @@ public class PacketManager implements IPacketHandler
         
 		for(IPacketReceiver packetUser : packetUsers)
 		{
-			if(packetUser.getPacketID() == packetID)
+			if(packetUser.getPacketID() == packetTypeID && packetUser.getPacketID() == packetID)
 			{
-				packetUser.onPacketData(network, channel, data);
+				packetUser.onPacketData(network, channel, dataStream);
 			}
 		}
 	}
