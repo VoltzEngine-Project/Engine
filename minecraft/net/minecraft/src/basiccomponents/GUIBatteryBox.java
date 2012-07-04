@@ -27,15 +27,16 @@ public class GUIBatteryBox extends GuiContainer
 	protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString("Battery Box", 65, 6, 4210752);
-        this.fontRenderer.drawString("Electricity", 98, 30, 4210752);
-        //String electricityStored = tileEntity.electricityStored+"";
+
         String displayText = UniversalElectricity.getWattDisplay(tileEntity.electricityStored);
         
         String displayText2 = UniversalElectricity.getWattDisplay(tileEntity.getElectricityCapacity());
         if(this.tileEntity.isDisabled()) displayText2 = "Disabled";
         
-        this.fontRenderer.drawString(displayText, 110-displayText.length(), 40, 4210752);
-        this.fontRenderer.drawString("Capacity: "+displayText2, 80, 60, 4210752);
+        this.fontRenderer.drawString(displayText, 110-displayText.length(), 30, 4210752);
+        this.fontRenderer.drawString("Capacity: "+displayText2, 80, 40, 4210752);
+        this.fontRenderer.drawString("Voltage: "+(int)this.tileEntity.getVoltage(), 90, 60, 4210752);
+        
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 

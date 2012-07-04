@@ -15,24 +15,18 @@ import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit
 import net.minecraft.src.universalelectricity.extend.IRedstoneProvider;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
+import net.minecraft.src.universalelectricity.network.IPacketSender;
 
-public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory
+public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory, IPacketSender
 {
 	public float electricityStored = 0;
 	
-	public float prevElectricityStored = 0;
-
 	 /**
      * The ItemStacks that hold the items currently being used in the battery box
      */
     private ItemStack[] containingItems = new ItemStack[2];
-    
-	private boolean isPowered = false;
-	
-	//private PowerProvider powerProvider;
-	
-	//The ticks in which this tile entity is disabled. -1 = Not disabled
-	private int disableTicks = -1;
+
+	private boolean isFull;
 	
 	public TileEntityBatteryBox()
 	{
@@ -70,9 +64,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
     		super.onUpdate(watts, voltage, side);
 
 	    	if(!this.isDisabled())
-	    	{
-	    		this.prevElectricityStored = this.electricityStored;
-	    		
+	    	{	    		
 				if(electricityRequest() > 0 && canConnect(side))
 				{
 					float rejectedElectricity = (float) Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0.0);
@@ -102,12 +94,19 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
 		            	}
 		            }
 		        }
-	        
-	    	
-		    	if(this.electricityStored == this.getElectricityCapacity() && this.prevElectricityStored != this.electricityStored)
+		    	
+		    	boolean isFullThisCheck = false;
+		    	if(this.electricityStored >= this.getElectricityCapacity())
 		    	{
+		    		isFullThisCheck = true;
+		    	}
+		    	
+		    	if(this.isFull != isFullThisCheck)
+		    	{
+		    		this.isFull = isFullThisCheck;
 		    		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
 		    	}
+		    	
 		    	
 		    	if(this.electricityStored > 0)
 		    	{
@@ -127,8 +126,9 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
 			}
         }
     	
-    	BasicComponents.packetManager.sendPacketData(1, new double[]{this.electricityStored, this.disabledTicks});
-    }
+    	BasicComponents.packetManager.sendPacketData(this, new double[]{this.electricityStored, this.disabledTicks});
+
+	}
     
     /**
      * Reads a tile entity from NBT.
@@ -138,7 +138,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
     {
     	super.readFromNBT(par1NBTTagCompound);
     	this.electricityStored = par1NBTTagCompound.getFloat("electricityStored");
-    	this.isPowered = par1NBTTagCompound.getBoolean("isPowered");
     	NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.containingItems = new ItemStack[this.getSizeInventory()];
         for (int var3 = 0; var3 < var2.tagCount(); ++var3)
@@ -159,7 +158,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
     {
     	super.writeToNBT(par1NBTTagCompound);
     	par1NBTTagCompound.setFloat("electricityStored", this.electricityStored);
-    	par1NBTTagCompound.setBoolean("isPowered", this.isPowered);
     	
     	NBTTagList var2 = new NBTTagList();
         for (int var3 = 0; var3 < this.containingItems.length; ++var3)
@@ -278,7 +276,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
 	@Override
 	public boolean isPoweringTo(byte side)
 	{
-		return (this.electricityStored == this.getElectricityCapacity());
+		return this.isFull;
 	}
 
 	@Override
@@ -289,6 +287,12 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
 	
 	@Override
 	public int getTickInterval()
+	{
+		return 1;
+	}
+
+	@Override
+	public int getPacketID()
 	{
 		return 1;
 	}

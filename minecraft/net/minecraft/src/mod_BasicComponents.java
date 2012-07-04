@@ -1,5 +1,7 @@
 package net.minecraft.src;
 
+import java.util.Random;
+
 import net.minecraft.src.basiccomponents.BCItem;
 import net.minecraft.src.basiccomponents.BasicComponents;
 import net.minecraft.src.basiccomponents.GUIBatteryBox;
@@ -18,8 +20,10 @@ import net.minecraft.src.forge.MinecraftForgeClient;
 import net.minecraft.src.forge.NetworkMod;
 import net.minecraft.src.forge.oredict.OreDictionary;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
+import net.minecraft.src.universalelectricity.ore.BlockUEOre;
 import net.minecraft.src.universalelectricity.ore.OreData;
 import net.minecraft.src.universalelectricity.ore.UEOreManager;
+import net.minecraft.src.universalelectricity.ore.WorldGenMinableMetadata;
 import net.minecraft.src.universalelectricity.recipe.UERecipeManager;
 
 /**
@@ -142,4 +146,22 @@ public class mod_BasicComponents extends NetworkMod implements IGuiHandler, ICon
 
 	@Override
 	public void onDisconnect(NetworkManager network, String message, Object[] args) { }
+	
+	/*Attempt to generate oil failed.
+	@Override
+	public void generateSurface(World world, Random rand, int chunkX, int chunkZ)
+    {
+		Block blockOil = Block.lavaStill;
+		
+    	//Generate Copper
+        for(int l = 0; l < 30; l++)
+        {
+            int i1 = chunkX + rand.nextInt(16);
+            int j1 = rand.nextInt(60);
+            int k1 = chunkZ + rand.nextInt(16);
+            (new WorldGenLiquids(blockOil.blockID)).generate(world, rand, i1, j1, k1);
+        }
+	
+    }*/
+ 
 }

@@ -27,6 +27,9 @@ public class GUIElectricFurnace extends GuiContainer
    {
        this.fontRenderer.drawString("Electric Furnace", 60, 6, 4210752);
        
+       this.fontRenderer.drawString("Smelting:", 10, 28, 4210752);
+       this.fontRenderer.drawString("Battery:", 10, 53, 4210752);
+       
        String displayText = "";
        
        if(this.tileEntity.isDisabled())
@@ -42,9 +45,9 @@ public class GUIElectricFurnace extends GuiContainer
     	   displayText = "Idle";
        }
        
-       this.fontRenderer.drawString("Status: "+displayText, 80, 53, 4210752);
-       this.fontRenderer.drawString("Smelting:", 10, 28, 4210752);
-       this.fontRenderer.drawString("Battery:", 10, 53, 4210752);
+       this.fontRenderer.drawString("Status: "+displayText, 90, 48, 4210752);
+       this.fontRenderer.drawString("Voltage: "+(int)this.tileEntity.getVoltage(), 89, 60, 4210752);
+
        this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
    }
 

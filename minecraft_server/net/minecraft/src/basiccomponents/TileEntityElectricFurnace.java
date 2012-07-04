@@ -11,8 +11,9 @@ import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
+import net.minecraft.src.universalelectricity.network.IPacketSender;
 
-public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory
+public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IPacketSender, ITextureProvider, IInventory, ISidedInventory
 {
 	//The amount of ticks requried to smelt this item
 	public final int smeltingTimeRequired = 150;
@@ -114,7 +115,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	    	}
         }
 		
-    	BasicComponents.packetManager.sendPacketData(3, new double[]{this.smeltingTicks, this.disabledTicks});
+    	BasicComponents.packetManager.sendPacketData(this, new double[]{this.smeltingTicks, this.disabledTicks});
 	}
     
     //Check all conditions and see if we can start smelting
@@ -289,6 +290,12 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 
 	@Override
 	public int getTickInterval()
+	{
+		return 3;
+	}
+	
+	@Override
+	public int getPacketID()
 	{
 		return 3;
 	}

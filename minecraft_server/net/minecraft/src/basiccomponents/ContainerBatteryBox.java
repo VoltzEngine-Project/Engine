@@ -52,15 +52,7 @@ public class ContainerBatteryBox extends Container
             ItemStack var4 = var3.getStack();
             var2 = var4.copy();
 
-            if (par1 == 2)
-            {
-                if (!this.mergeItemStack(var4, 3, 38, true))
-                {
-                    return null;
-                }
-
-            }
-            else if(par1 != 1 && par1 != 0)
+            if(par1 != 0 && par1 != 1)
             {
                 if(var4.getItem() instanceof ItemElectric)
                 {
@@ -78,8 +70,6 @@ public class ContainerBatteryBox extends Container
                             return null;
                         }
                     }
-                	
-                	
                 }
                 else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
                 {

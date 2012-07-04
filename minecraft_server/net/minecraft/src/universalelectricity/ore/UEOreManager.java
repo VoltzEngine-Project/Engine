@@ -12,7 +12,7 @@ import net.minecraft.src.universalelectricity.UniversalElectricity;
 public class UEOreManager
 {
 	public static final int maxOreBlocks = 2;
-	public static int oreBlockID = UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Universal Ores", 198, true);
+	public static int oreBlockID = UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Universal Ores", 3968, true);
 	public static final BlockUEOre[] BlockOre = {new BlockUEOre(oreBlockID), new BlockUEOre(oreBlockID+1)};
 	
 	/**

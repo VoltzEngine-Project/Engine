@@ -51,15 +51,7 @@ public class ContainerCoalGenerator extends Container
             ItemStack var4 = var3.getStack();
             var2 = var4.copy();
 
-            if (par1 == 2)
-            {
-                if (!this.mergeItemStack(var4, 3, 37, true))
-                {
-                    return null;
-                }
-
-            }
-            else if(par1 != 0)
+            if(par1 != 0)
             {
                 if(var4.itemID == Item.coal.shiftedIndex)
                 {

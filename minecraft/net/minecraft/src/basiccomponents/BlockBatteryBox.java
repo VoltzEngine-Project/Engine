@@ -165,6 +165,7 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
     /**
      * Is this block powering the block on the specified side
      */
+    @Override
     public boolean isPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
     	IRedstoneProvider tileEntity = (IRedstoneProvider)par1IBlockAccess.getBlockTileEntity(x, y, z);
@@ -174,6 +175,7 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
     /**
      * Is this block indirectly powering the block on the specified side
      */
+    @Override
     public boolean isIndirectlyPoweringTo(World par1World, int x, int y, int z, int side)
     {
     	IRedstoneProvider tileEntity = (IRedstoneProvider)par1World.getBlockTileEntity(x, y, z);
@@ -193,5 +195,17 @@ public class BlockBatteryBox extends BlockMachine implements ITextureProvider
     public boolean isOpaqueCube()
     {
         return false;
+    }
+    
+    @Override
+    public boolean renderAsNormalBlock()
+    {
+        return false;
+    }
+    
+    @Override
+    public boolean canProvidePower()
+    {
+        return true;
     }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.src.NetworkManager;
+import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.IPacketHandler;
 import net.minecraft.src.forge.MessageManager;
 
@@ -42,25 +43,36 @@ public class PacketManager implements IPacketHandler
 	{
 		DataInputStream dataStream = new DataInputStream(new ByteArrayInputStream(data));
 		
-        int packetID = -1;
-        int packetTypeID = -1;
-        int[] packetData = new int[1];
-        
         try
         {
-        	packetTypeID = dataStream.readInt();
+        	int packetID = dataStream.readInt();
+        	
+        	for(IPacketReceiver packetUser : packetUsers)
+    		{
+    			if(packetUser.getPacketID() == packetID)
+    			{
+    				if(packetUser instanceof TileEntity)
+    				{
+    					int xCoord = dataStream.readInt();
+    					int yCoord = dataStream.readInt();
+    					int zCoord = dataStream.readInt();
+
+    					if(((TileEntity)packetUser).xCoord == xCoord && ((TileEntity)packetUser).yCoord == yCoord && ((TileEntity)packetUser).zCoord == zCoord)
+    					{
+        					packetUser.onPacketData(network, channel, dataStream);
+        					return;
+    					}
+    				}
+    				else
+    				{
+    					packetUser.onPacketData(network, channel, dataStream);
+    				}
+    			}
+    		}
         }
         catch(IOException e)
         {
              e.printStackTrace();
         }
-        
-		for(IPacketReceiver packetUser : packetUsers)
-		{
-			if(packetUser.getPacketID() == packetTypeID && packetUser.getPacketID() == packetID)
-			{
-				packetUser.onPacketData(network, channel, dataStream);
-			}
-		}
 	}
 }

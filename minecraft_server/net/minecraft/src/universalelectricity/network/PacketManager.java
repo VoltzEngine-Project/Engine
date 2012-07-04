@@ -7,6 +7,7 @@ import java.io.IOException;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
+import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.IPacketHandler;
 import net.minecraft.src.forge.MessageManager;
 
@@ -31,14 +32,22 @@ public class PacketManager implements IPacketHandler
 		
 	}
 	
-	public void sendPacketData(int ID, double[] otherData)
+	public void sendPacketData(IPacketSender sender, double[] otherData)
 	{
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         DataOutputStream data = new DataOutputStream(bytes);
         
         try
         {
-        	data.writeInt(ID);
+        	data.writeInt(sender.getPacketID());
+        	
+        	//If it's a tile entity, send it's coordinates
+        	if(sender instanceof TileEntity)
+        	{
+        		data.writeInt(((TileEntity)sender).xCoord);
+        		data.writeInt(((TileEntity)sender).yCoord);
+        		data.writeInt(((TileEntity)sender).zCoord);
+        	}
         	
         	for(double dataValue : otherData)
         	{
