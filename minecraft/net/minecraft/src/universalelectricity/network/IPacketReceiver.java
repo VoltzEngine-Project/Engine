@@ -3,7 +3,6 @@ package net.minecraft.src.universalelectricity.network;
 import java.io.DataInputStream;
 
 import net.minecraft.src.NetworkManager;
-import net.minecraft.src.forge.IPacketHandler;
 
 public interface IPacketReceiver
 {

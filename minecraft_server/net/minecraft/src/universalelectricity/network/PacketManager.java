@@ -48,6 +48,12 @@ public class PacketManager implements IPacketHandler
         		data.writeInt(((TileEntity)sender).yCoord);
         		data.writeInt(((TileEntity)sender).zCoord);
         	}
+        	else
+        	{
+        		data.writeInt(0);
+        		data.writeInt(0);
+        		data.writeInt(0);
+        	}
         	
         	for(double dataValue : otherData)
         	{

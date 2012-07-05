@@ -1,5 +1,4 @@
 package net.minecraft.src.basiccomponents;
-import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -64,7 +63,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	public void onUpdate(float watts, float voltage, byte side)
 	{
     	super.onUpdate(watts, voltage, side);
-		
+    	
 		if(!this.worldObj.isRemote)
         {			
 			if(voltage > this.getVoltage())
@@ -106,19 +105,14 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 		    		//When the item is finished smelting
 		    		if(this.smeltingTicks < 1*this.getTickInterval())
 		    		{
-		    			if(this.containingItems[2] == null)
-		    			{
-		    				this.containingItems[2] = FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]);
-		    			}
-		    			else if(this.containingItems[2] == FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]))
-		    			{
-		    				this.containingItems[2].stackSize ++;
-		    			}
-		    			
-		    			this.decrStackSize(1, 1);
+		    			this.smeltItem();
 		    			this.smeltingTicks = 0;
 		    		}
 		    	}
+		        else
+		        {
+		        	this.smeltingTicks = 0;
+		        }
 		        
 		        this.electricityStored = 0;
 	    	}
@@ -151,6 +145,33 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     	}
 		
     	return true;
+    }
+
+    /**
+     * Turn one item from the furnace source stack into the appropriate smelted item in the furnace result stack
+     */
+    public void smeltItem()
+    {
+        if (this.canSmelt())
+        {
+            ItemStack resultItemStack = FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]);
+            
+            if (this.containingItems[2] == null)
+            {
+                this.containingItems[2] = resultItemStack.copy();
+            }
+            else if(this.containingItems[2].isItemEqual(resultItemStack))
+            {
+                this.containingItems[2].stackSize ++;
+            }
+
+            this.containingItems[1].stackSize --;
+
+            if (this.containingItems[1].stackSize <= 0)
+            {
+                this.containingItems[1] = null;
+            }
+        }
     }
 	
     /**

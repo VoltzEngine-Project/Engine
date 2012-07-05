@@ -89,7 +89,6 @@ public class mod_BasicComponents extends NetworkMod implements IGuiHandler, ICon
 		UERecipeManager.addSmelting(new ItemStack(UEOreManager.getOre(BasicComponents.TinOreID).blockID, 1, UEOreManager.getOreMetadata(BasicComponents.TinOreID)), new ItemStack(BasicComponents.ItemTinIngot));
 		UERecipeManager.addRecipe(new ItemStack(BasicComponents.ItemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal});
 		//Steel
-		UERecipeManager.addRecipe(new ItemStack(BasicComponents.ItemSteelClump), new Object [] {"!#!", '!', Item.coal, '#', Item.ingotIron});
 		UERecipeManager.addRecipe(new ItemStack(BasicComponents.ItemSteelClump), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
 		UERecipeManager.addSmelting(BasicComponents.ItemSteelClump, new ItemStack(BasicComponents.ItemSteelIngot));
 		UERecipeManager.addRecipe(new ItemStack(BasicComponents.ItemSteelPlate), new Object [] {" ! ", "!!!", " ! ", '!', "ingotSteel"});

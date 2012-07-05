@@ -47,16 +47,16 @@ public class PacketManager implements IPacketHandler
         {
         	int packetID = dataStream.readInt();
         	
+        	int xCoord = dataStream.readInt();
+			int yCoord = dataStream.readInt();
+			int zCoord = dataStream.readInt();
+        	
         	for(IPacketReceiver packetUser : packetUsers)
     		{
     			if(packetUser.getPacketID() == packetID)
     			{
     				if(packetUser instanceof TileEntity)
     				{
-    					int xCoord = dataStream.readInt();
-    					int yCoord = dataStream.readInt();
-    					int zCoord = dataStream.readInt();
-
     					if(((TileEntity)packetUser).xCoord == xCoord && ((TileEntity)packetUser).yCoord == yCoord && ((TileEntity)packetUser).zCoord == zCoord)
     					{
         					packetUser.onPacketData(network, channel, dataStream);

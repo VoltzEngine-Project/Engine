@@ -1,5 +1,4 @@
 package net.minecraft.src.basiccomponents;
-import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
