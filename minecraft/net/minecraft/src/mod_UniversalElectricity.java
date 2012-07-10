@@ -57,4 +57,16 @@ public class mod_UniversalElectricity extends NetworkMod
     {
 		UEOreManager.generateSurface(world, rand, chunkX, chunkZ);
     }
+	
+	@Override
+    public boolean clientSideRequired()
+    {
+            return true;
+    }
+
+    @Override
+    public boolean serverSideRequired()
+    {
+            return false;
+    }
 }
