@@ -11,14 +11,14 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
 {
     
     /** The disabled ticks. */
-    protected int disabledTicks;
+    protected int disabledTicks = 0;
 
     /**
      * Instantiates a new tile entity electric unit.
      */
     public TileEntityElectricUnit()
     {
-        disabledTicks = 0;
+    	ElectricityManager.registerElectricUnit(this);
     }
 
     /* (non-Javadoc)

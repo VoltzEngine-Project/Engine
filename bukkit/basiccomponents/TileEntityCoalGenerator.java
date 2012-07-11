@@ -11,6 +11,7 @@ import universalelectricity.UniversalElectricity;
 import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
+import universalelectricity.extend.ISlotInput;
 import universalelectricity.extend.TileEntityConductor;
 import universalelectricity.network.IPacketSender;
 import forge.ISidedInventory;
@@ -20,7 +21,7 @@ import forge.ITextureProvider;
 /**
  * The Class TileEntityCoalGenerator.
  */
-public class TileEntityCoalGenerator extends TileEntityElectricUnit implements IPacketSender, ITextureProvider, IInventory, ISidedInventory
+public class TileEntityCoalGenerator extends TileEntityElectricUnit implements  ISlotInput, IPacketSender, ITextureProvider, IInventory, ISidedInventory
 {
     
     /** The Constant maxGenerateRate. */
@@ -405,4 +406,19 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	public void setMaxStackSize(int arg0) {
 		// TODO Auto-generated method stub
 	}
+
+	/* (non-Javadoc)
+	 * @see universalelectricity.extend.ISlotInput#getSlotInputs(net.minecraft.server.ItemStack)
+	 */
+	@Override
+	public int[] getSlotInputs(ItemStack item)
+	{
+		if(item.id == Item.COAL.id)
+		{
+			return new int[]{0};
+		}
+		
+		return null;
+	}
+
 }

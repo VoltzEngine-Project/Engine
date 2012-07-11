@@ -10,6 +10,8 @@ import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
 import universalelectricity.extend.IRedstoneProvider;
+import universalelectricity.extend.ISlotInput;
+import universalelectricity.extend.ISlotOuput;
 import universalelectricity.extend.ItemElectric;
 import universalelectricity.extend.TileEntityConductor;
 import universalelectricity.network.IPacketSender;
@@ -20,7 +22,7 @@ import forge.ITextureProvider;
 /**
  * The Class TileEntityBatteryBox.
  */
-public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory, IPacketSender
+public class TileEntityBatteryBox extends TileEntityElectricUnit implements ISlotInput, ISlotOuput, IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory, IPacketSender
 {
     
     /** The electricity stored. */
@@ -414,6 +416,29 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
 	@Override
 	public void setMaxStackSize(int arg0) {
 		// TODO Auto-generated method stub
-		
 	}
+	
+	/* (non-Javadoc)
+	 * @see universalelectricity.extend.ISlotOuput#getSlotOutputs()
+	 */
+	@Override
+	public int[] getSlotOutputs()
+	{
+		return new int[]{0, 1};
+	}
+
+	/* (non-Javadoc)
+	 * @see universalelectricity.extend.ISlotInput#getSlotInputs(net.minecraft.server.ItemStack)
+	 */
+	@Override
+	public int[] getSlotInputs(ItemStack item)
+	{
+		if(item.getItem() instanceof ItemElectric)
+		{
+			return new int[]{0, 1};
+		}
+		
+		return null;
+	}
+
 }

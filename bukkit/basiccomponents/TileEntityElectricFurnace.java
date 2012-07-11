@@ -9,6 +9,8 @@ import net.minecraft.server.NBTTagCompound;
 import net.minecraft.server.NBTTagList;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
+import universalelectricity.extend.ISlotInput;
+import universalelectricity.extend.ISlotOuput;
 import universalelectricity.extend.ItemElectric;
 import universalelectricity.network.IPacketSender;
 import forge.ISidedInventory;
@@ -18,7 +20,7 @@ import forge.ITextureProvider;
 /**
  * The Class TileEntityElectricFurnace.
  */
-public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IPacketSender, ITextureProvider, IInventory, ISidedInventory
+public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ISlotInput, ISlotOuput, IPacketSender, ITextureProvider, IInventory, ISidedInventory
 {
     
     /** The smelting time required. */
@@ -41,10 +43,10 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
      */
     public TileEntityElectricFurnace()
     {
+    	ElectricityManager.registerElectricUnit(this);
         smeltingTicks = 0;
         electricityStored = 0.0F;
         containingItems = new ItemStack[3];
-        ElectricityManager.registerElectricUnit(this);
     }
 
     /* (non-Javadoc)
@@ -447,4 +449,32 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	public void setMaxStackSize(int arg0) {
 		
 	}
+	
+	/* (non-Javadoc)
+	 * @see universalelectricity.extend.ISlotOutput#getSlotOutputs()
+	 */
+	@Override
+	public int[] getSlotOutputs()
+	{
+		return new int[]{2};
+	}
+	
+	/* (non-Javadoc)
+	 * @see universalelectricity.extend.ISlotInput#getSlotInputs(net.minecraft.server.ItemStack)
+	 */
+	@Override
+	public int[] getSlotInputs(ItemStack item)
+	{
+		if(FurnaceRecipes.getInstance().getSmeltingResult(item) != null)
+		{
+			return new int[]{1};
+		}
+		else if(item.getItem() instanceof ItemElectric)
+		{
+			return new int[]{0};
+		}
+		
+		return null;
+	}
+
 }
