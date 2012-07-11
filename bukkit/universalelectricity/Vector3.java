@@ -1,7 +1,9 @@
 package universalelectricity;
 
+import net.minecraft.server.Entity;
 import net.minecraft.server.MathHelper;
 import net.minecraft.server.NBTTagCompound;
+import net.minecraft.server.TileEntity;
 import net.minecraft.server.Vec3D;
 
 
@@ -13,12 +15,9 @@ public class Vector3 extends Vector2
     
     /** The z. */
     public double z;
-    
+
     /** The Constant side. */
-    public static final Vector3 side[] =
-    {
-        new Vector3(0, 1, 0), new Vector3(0, -1, 0), new Vector3(0, 0, -1), new Vector3(0, 0, 1), new Vector3(1, 0, 0), new Vector3(-1, 0, 0)
-    };
+    public static final Vector3[] side = {new Vector3(0, 1, 0), new Vector3(0, -1, 0), new Vector3(0, 0, -1), new Vector3(0, 0, 1), new Vector3(1, 0, 0), new Vector3(-1, 0, 0)};
 
     /**
      * Instantiates a new vector3.
@@ -31,127 +30,143 @@ public class Vector3 extends Vector2
     /**
      * Instantiates a new vector3.
      *
-     * @param i the i
-     * @param j the j
-     * @param k the k
+     * @param x the x
+     * @param y the y
+     * @param z the z
      */
-    public Vector3(int i, int j, int k)
+    public Vector3(int x, int y, int z)
     {
-        x = i;
-        y = j;
-        z = k;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     /**
      * Instantiates a new vector3.
      *
-     * @param d the d
-     * @param d1 the d1
-     * @param d2 the d2
+     * @param x the x
+     * @param y the y
+     * @param z the z
      */
-    public Vector3(double d, double d1, double d2)
+    public Vector3(double x, double y, double z)
     {
-        x = d;
-        y = d1;
-        z = d2;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
-
-    /* (non-Javadoc)
-     * @see universalelectricity.Vector2#intX()
+    
+    /**
+     * Returns the coordinates as integers.
+     *
+     * @return the int
      */
-    public int intX()
-    {
-        return (int)Math.floor(x);
-    }
-
+    public int intX() { return (int)Math.floor(this.x); }
+    
     /* (non-Javadoc)
      * @see universalelectricity.Vector2#intY()
      */
-    public int intY()
-    {
-        return (int)Math.floor(y);
-    }
-
+    public int intY() { return (int)Math.floor(this.y); }
+    
     /**
      * Int z.
      *
      * @return the int
      */
-    public int intZ()
-    {
-        return (int)Math.floor(z);
-    }
+    public int intZ() { return (int)Math.floor(this.z); }
 
     /**
-     * Checks if is point in region.
+     * Converts a TileEntity's position into Vector3.
      *
-     * @param vector3 the vector3
-     * @param vector3_1 the vector3_1
-     * @param vector3_2 the vector3_2
-     * @return true, if is point in region
-     */
-    public static boolean isPointInRegion(Vector3 vector3, Vector3 vector3_1, Vector3 vector3_2)
-    {
-        return vector3.x > vector3_1.x && vector3.x < vector3_2.x && vector3.y > vector3_1.y && vector3.y < vector3_2.y && vector3.z > vector3_1.z && vector3.z < vector3_2.z;
-    }
-
-    /**
-     * Convert.
-     *
-     * @param vec3d the vec3d
+     * @param entity the entity
      * @return the vector3
      */
-    public static Vector3 convert(Vec3D vec3d)
+    public static Vector3 get(Entity entity)
     {
-        return new Vector3(vec3d.a, vec3d.b, vec3d.c);
+    	return new Vector3(entity.locX, entity.locY, entity.locZ);
+    }
+    
+    /**
+     * Converts an entity's position into Vector3.
+     *
+     * @param entity the entity
+     * @return the vector3
+     */
+    public static Vector3 get(TileEntity entity)
+    {
+    	return new Vector3(entity.x, entity.y, entity.z);
+    }
+    
+    /**
+     * Converts from Vec3D into a Vector3.
+     *
+     * @param par1 the par1
+     * @return the vector3
+     */
+    public static Vector3 get(Vec3D par1)
+    {
+        return new Vector3(par1.a, par1.b, par1.c);
     }
 
     /**
-     * Checks if is equal.
+     * Converts this Vector3 into a Vector2 by dropping the Y axis.
+     *
+     * @return the vector2
+     */
+    public Vector2 toVector2()
+    {
+        return new Vector2(this.x, this.z);
+    }
+
+    /**
+     * Converts this vector three into a Minecraft Vec3D object.
+     *
+     * @return the vec3 d
+     */
+    public Vec3D toVec3D()
+    {
+        return Vec3D.a(this.x, this.y, this.z);
+    }
+    
+    /**
+     * Checks if a Vector3 point is located inside a region.
+     *
+     * @param point the point
+     * @param minPoint the min point
+     * @param maxPoint the max point
+     * @return true, if is point in region
+     */
+    public static boolean isPointInRegion(Vector3 point, Vector3 minPoint, Vector3 maxPoint)
+    {
+        return (point.x > minPoint.x && point.x < maxPoint.x) && (point.y > minPoint.y && point.y < maxPoint.y) && (point.z > minPoint.z && point.z < maxPoint.z);
+    }
+    
+    /**
+     * Compares two vectors and see if they are equal. True if so.
      *
      * @param vector3 the vector3
      * @return true, if is equal
      */
     public boolean isEqual(Vector3 vector3)
     {
-        return x == vector3.x && y == vector3.y && z == vector3.z;
+    	return (this.x == vector3.x && this.y == vector3.y && this.z == vector3.z);
     }
+   
 
     /**
-     * To vector2.
+     * Gets the distance between two vectors.
      *
-     * @return the vector2
+     * @param par1 the par1
+     * @param par2 the par2
+     * @return The distance
      */
-    public Vector2 toVector2()
+    public static double distance(Vector3 par1, Vector3 par2)
     {
-        return new Vector2(x, z);
+        double var2 = par1.x - par2.x;
+        double var4 = par1.y - par2.y;
+        double var6 = par1.z - par2.z;
+        return MathHelper.sqrt(var2 * var2 + var4 * var4 + var6 * var6);
     }
-
-    /**
-     * To vec3 d.
-     *
-     * @return the vec3 d
-     */
-    public Vec3D toVec3D()
-    {
-        return Vec3D.create(x, y, z);
-    }
-
-    /**
-     * Distance.
-     *
-     * @param vector3 the vector3
-     * @param vector3_1 the vector3_1
-     * @return the double
-     */
-    public static double distance(Vector3 vector3, Vector3 vector3_1)
-    {
-        double d = vector3.x - vector3_1.x;
-        double d1 = vector3.y - vector3_1.y;
-        double d2 = vector3.z - vector3_1.z;
-        return (double)MathHelper.sqrt(d * d + d1 * d1 + d2 * d2);
-    }
-
+    
     /**
      * Distance to.
      *
@@ -160,139 +175,144 @@ public class Vector3 extends Vector2
      */
     public double distanceTo(Vector3 vector3)
     {
-        double d = vector3.x - x;
-        double d1 = vector3.y - y;
-        double d2 = vector3.z - z;
-        return (double)MathHelper.sqrt(d * d + d1 * d1 + d2 * d2);
+        double var2 = vector3.x - this.x;
+        double var4 = vector3.y - this.y;
+        double var6 = vector3.z - this.z;
+        return MathHelper.sqrt(var2 * var2 + var4 * var4 + var6 * var6);
     }
-
+    
     /**
      * Subtract.
      *
-     * @param vector3 the vector3
-     * @param vector3_1 the vector3_1
+     * @param par1 the par1
+     * @param par2 the par2
      * @return the vector3
      */
-    public static Vector3 subtract(Vector3 vector3, Vector3 vector3_1)
+    public static Vector3 subtract(Vector3 par1, Vector3 par2)
     {
-        return new Vector3(vector3.x - vector3_1.x, vector3.y - vector3_1.y, vector3.z - vector3_1.z);
+        return new Vector3(par1.x - par2.x, par1.y - par2.y, par1.z - par2.z);
     }
-
+    
     /**
      * Adds the.
      *
-     * @param vector3 the vector3
-     * @param vector3_1 the vector3_1
+     * @param par1 the par1
+     * @param par2 the par2
      * @return the vector3
      */
-    public static Vector3 add(Vector3 vector3, Vector3 vector3_1)
+    public static Vector3 add(Vector3 par1, Vector3 par2)
     {
-        return new Vector3(vector3.x + vector3_1.x, vector3.y + vector3_1.y, vector3.z + vector3_1.z);
+        return new Vector3(par1.x + par2.x, par1.y + par2.y, par1.z + par2.z);
     }
-
+    
     /**
      * Adds the.
      *
-     * @param vector3 the vector3
-     * @param d the d
+     * @param par1 the par1
+     * @param par2 the par2
      * @return the vector3
      */
-    public static Vector3 add(Vector3 vector3, double d)
+    public static Vector3 add(Vector3 par1, double par2)
     {
-        return new Vector3(vector3.x + d, vector3.y + d, vector3.z + d);
+        return new Vector3(par1.x + par2, par1.y + par2, par1.z + par2);
     }
-
+    
     /**
      * Adds the.
      *
-     * @param vector3 the vector3
+     * @param par1 the par1
      */
-    public void add(Vector3 vector3)
+    public void add(Vector3 par1)
     {
-        x += vector3.x;
-        y += vector3.y;
-        z += vector3.z;
+        this.x += par1.x;
+        this.y += par1.y;
+        this.z += par1.z;
     }
-
+    
     /* (non-Javadoc)
      * @see universalelectricity.Vector2#add(double)
      */
-    public void add(double d)
+    @Override
+	public void add(double par1)
     {
-        x += d;
-        y += d;
-        z += d;
+        this.x += par1;
+        this.y += par1;
+        this.z += par1;
     }
-
+    
     /**
      * Multiply.
      *
-     * @param vector3 the vector3
-     * @param vector3_1 the vector3_1
+     * @param par1 the par1
+     * @param par2 the par2
      * @return the vector3
      */
-    public static Vector3 multiply(Vector3 vector3, Vector3 vector3_1)
+    public static Vector3 multiply(Vector3 par1, Vector3 par2)
     {
-        return new Vector3(vector3.x * vector3_1.x, vector3.y * vector3_1.y, vector3.z * vector3_1.z);
+        return new Vector3(par1.x * par2.x, par1.y * par2.y, par1.z * par2.z);
     }
-
+    
     /**
      * Multiply.
      *
-     * @param vector3 the vector3
-     * @param d the d
+     * @param par1 the par1
+     * @param par2 the par2
      * @return the vector3
      */
-    public static Vector3 multiply(Vector3 vector3, double d)
+    public static Vector3 multiply(Vector3 par1, double par2)
     {
-        return new Vector3(vector3.x * d, vector3.y * d, vector3.z * d);
+        return new Vector3(par1.x * par2, par1.y * par2, par1.z * par2);
     }
-
+    
+    
     /**
      * Read from nbt.
      *
-     * @param s the s
-     * @param nbttagcompound the nbttagcompound
+     * @param prefix the prefix
+     * @param par1NBTTagCompound the par1 nbt tag compound
      * @return the vector3
      */
-    public static Vector3 readFromNBT(String s, NBTTagCompound nbttagcompound)
+    public static Vector3 readFromNBT(String prefix, NBTTagCompound par1NBTTagCompound)
     {
-        Vector3 vector3 = new Vector3();
-        vector3.x = nbttagcompound.getDouble((new StringBuilder()).append(s).append("X").toString());
-        vector3.y = nbttagcompound.getDouble((new StringBuilder()).append(s).append("Y").toString());
-        vector3.z = nbttagcompound.getDouble((new StringBuilder()).append(s).append("Z").toString());
-        return vector3;
+    	Vector3 tempVector = new Vector3();
+    	tempVector.x = par1NBTTagCompound.getDouble(prefix+"X");
+    	tempVector.y = par1NBTTagCompound.getDouble(prefix+"Y");
+    	tempVector.z = par1NBTTagCompound.getDouble(prefix+"Z");
+    	
+    	return tempVector;
     }
-
+    
     /**
-     * Write to nbt.
+     * Saves this Vector3 to disk.
      *
-     * @param s the s
-     * @param nbttagcompound the nbttagcompound
+     * @param prefix - The prefix of this save. Use some unique string.
+     * @param par1NBTTagCompound - The NBT compound object to save the data in
      */
-    public void writeToNBT(String s, NBTTagCompound nbttagcompound)
+    public void writeToNBT(String prefix, NBTTagCompound par1NBTTagCompound)
     {
-        nbttagcompound.setDouble((new StringBuilder()).append(s).append("X").toString(), x);
-        nbttagcompound.setDouble((new StringBuilder()).append(s).append("Y").toString(), y);
-        nbttagcompound.setDouble((new StringBuilder()).append(s).append("Z").toString(), z);
+    	par1NBTTagCompound.setDouble(prefix+"X", this.x);
+    	par1NBTTagCompound.setDouble(prefix+"Y", this.y);
+    	par1NBTTagCompound.setDouble(prefix+"Z", this.z);
     }
-
+    
     /* (non-Javadoc)
      * @see universalelectricity.Vector2#round()
      */
-    public Vector3 round()
+    @Override
+	public Vector3 round()
     {
-        return new Vector3(Math.round(x), Math.round(y), Math.round(z));
+        return new Vector3(Math.round(this.x), Math.round(this.y), Math.round(this.z));
     }
-
+    
     /* (non-Javadoc)
      * @see universalelectricity.Vector2#floor()
      */
-    public Vector3 floor()
+    @Override
+	public Vector3 floor()
     {
-        return new Vector3(Math.floor(x), Math.floor(y), Math.floor(z));
+        return new Vector3(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z));
     }
-
+    
     /**
      * Top.
      *
@@ -302,7 +322,7 @@ public class Vector3 extends Vector2
     {
         return add(this, side[0]);
     }
-
+    
     /**
      * Bottom.
      *
@@ -312,7 +332,7 @@ public class Vector3 extends Vector2
     {
         return add(this, side[1]);
     }
-
+    
     /**
      * Front.
      *
@@ -322,7 +342,7 @@ public class Vector3 extends Vector2
     {
         return add(this, side[2]);
     }
-
+    
     /**
      * Back.
      *
@@ -332,7 +352,7 @@ public class Vector3 extends Vector2
     {
         return add(this, side[3]);
     }
-
+    
     /**
      * Left.
      *
@@ -342,7 +362,7 @@ public class Vector3 extends Vector2
     {
         return add(this, side[4]);
     }
-
+    
     /**
      * Right.
      *
@@ -352,12 +372,13 @@ public class Vector3 extends Vector2
     {
         return add(this, side[5]);
     }
-
+    
     /* (non-Javadoc)
      * @see universalelectricity.Vector2#output()
      */
-    public String output()
+    @Override
+	public String output()
     {
-        return (new StringBuilder()).append("Vector3: ").append(x).append(",").append(y).append(",").append(z).toString();
+        return "Vector3: " + this.x + "," + this.y + "," + this.z;
     }
 }

@@ -21,6 +21,6 @@ public class TileEntityCopperWire extends TileEntityConductor
      */
     public double getResistance()
     {
-        return 0.29999999999999999D;
+        return 0.3D;
     }
 }

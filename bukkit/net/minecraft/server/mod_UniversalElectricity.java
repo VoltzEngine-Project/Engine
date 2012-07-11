@@ -22,8 +22,8 @@ public class mod_UniversalElectricity extends NetworkMod
     {
     }
 
-    /* (non-Javadoc)
-     * @see net.minecraft.server.BaseMod#load()
+    /**
+     * Load.
      */
     public void load()
     {
@@ -32,24 +32,29 @@ public class mod_UniversalElectricity extends NetworkMod
         ModLoader.registerBlock(UEOreManager.BlockOre[1], universalelectricity.ItemUniversalOre1.class);
     }
 
-    /* (non-Javadoc)
-     * @see net.minecraft.server.BaseMod#modsLoaded()
+    /**
+     * Mods loaded.
      */
     public void modsLoaded()
     {
         UERecipeManager.initialize();
     }
 
-    /* (non-Javadoc)
-     * @see net.minecraft.server.BaseMod#getVersion()
+    /**
+     * Gets the version.
+     *
+     * @return the version
      */
     public String getVersion()
     {
         return UniversalElectricity.getVersion();
     }
 
-    /* (non-Javadoc)
-     * @see net.minecraft.server.BaseMod#onTickInGame(net.minecraft.server.MinecraftServer)
+    /**
+     * On tick in game.
+     *
+     * @param minecraftserver the minecraftserver
+     * @return true, if successful
      */
     public boolean onTickInGame(MinecraftServer minecraftserver)
     {
@@ -57,11 +62,38 @@ public class mod_UniversalElectricity extends NetworkMod
         return true;
     }
 
-    /* (non-Javadoc)
-     * @see net.minecraft.server.BaseMod#generateSurface(net.minecraft.server.World, java.util.Random, int, int)
+    /**
+     * Generate surface.
+     *
+     * @param world the world
+     * @param random the random
+     * @param i the i
+     * @param j the j
      */
     public void generateSurface(World world, Random random, int i, int j)
     {
         UEOreManager.generateSurface(world, random, i, j);
+    }
+ 	
+ 	/**
+	  * Client side required.
+	  *
+	  * @return true, if successful
+	  */
+	 @Override
+    public boolean clientSideRequired()
+    {
+            return true;
+    }
+
+    /**
+     * Server side required.
+     *
+     * @return true, if successful
+     */
+    @Override
+    public boolean serverSideRequired()
+    {
+            return false;
     }
 }

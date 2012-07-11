@@ -75,9 +75,9 @@ public class Vector2
      * @param vector3_2 the vector3_2
      * @return true, if is point in region
      */
-    public static boolean isPointInRegion(Vector3 vector3, Vector3 vector3_1, Vector3 vector3_2)
+    public static boolean isPointInRegion(Vector2 vector2, Vector2 vector2_1, Vector2 vector2_2)
     {
-        return vector3.x > vector3_1.x && vector3.x < vector3_2.x && vector3.y > vector3_1.y && vector3.y < vector3_2.y;
+        return vector2.x > vector2_1.x && vector2.x < vector2_2.x && vector2.y > vector2_1.y && vector2.y < vector2_2.y;
     }
 
     /**
