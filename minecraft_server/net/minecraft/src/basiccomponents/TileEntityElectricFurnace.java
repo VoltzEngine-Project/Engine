@@ -10,10 +10,12 @@ import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
+import net.minecraft.src.universalelectricity.extend.ISlotInput;
+import net.minecraft.src.universalelectricity.extend.ISlotOuput;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.network.IPacketSender;
 
-public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IPacketSender, ITextureProvider, IInventory, ISidedInventory
+public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ISlotInput, ISlotOuput, IPacketSender, ITextureProvider, IInventory, ISidedInventory
 {
 	//The amount of ticks requried to smelt this item
 	public final int smeltingTimeRequired = 150;
@@ -269,6 +271,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             return null;
         }
 	}
+	
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
@@ -278,10 +281,10 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             par2ItemStack.stackSize = this.getInventoryStackLimit();
         }
 	}
+	
 	@Override
-	public String getInvName() {
-		return "Electric Furnace";
-	}
+	public String getInvName() { return "Electric Furnace"; }
+	
 	@Override
 	public int getInventoryStackLimit()
 	{
@@ -319,5 +322,26 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	public int getPacketID()
 	{
 		return 3;
+	}
+	
+	@Override
+	public int[] getSlotOutputs()
+	{
+		return new int[]{2};
+	}
+
+	@Override
+	public int[] getSlotInputs(ItemStack item)
+	{
+		if(FurnaceRecipes.smelting().getSmeltingResult(item) != null)
+		{
+			return new int[]{1};
+		}
+		else if(item.getItem() instanceof ItemElectric)
+		{
+			return new int[]{0};
+		}
+		
+		return null;
 	}
 }

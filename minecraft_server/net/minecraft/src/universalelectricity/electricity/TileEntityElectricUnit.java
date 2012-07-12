@@ -12,6 +12,11 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
 {
 	protected int disabledTicks = 0;
 	
+	public TileEntityElectricUnit()
+	{
+  		ElectricityManager.registerElectricUnit(this);
+	}
+	
 	@Override
 	public void onDisable(int duration)
 	{

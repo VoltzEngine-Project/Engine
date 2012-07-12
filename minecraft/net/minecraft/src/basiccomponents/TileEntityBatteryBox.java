@@ -17,11 +17,13 @@ import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.IRedstoneProvider;
+import net.minecraft.src.universalelectricity.extend.ISlotInput;
+import net.minecraft.src.universalelectricity.extend.ISlotOuput;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPacketReceiver, IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory
+public class TileEntityBatteryBox extends TileEntityElectricUnit implements ISlotInput, ISlotOuput, IPacketReceiver, IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory
 {
 	public float electricityStored = 0;
 	
@@ -310,5 +312,22 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 	public int getTickInterval()
 	{
 		return 1;
+	}
+
+	@Override
+	public int[] getSlotOutputs()
+	{
+		return new int[]{0, 1};
+	}
+
+	@Override
+	public int[] getSlotInputs(ItemStack item)
+	{
+		if(item.getItem() instanceof ItemElectric)
+		{
+			return new int[]{0, 1};
+		}
+		
+		return null;
 	}
 }

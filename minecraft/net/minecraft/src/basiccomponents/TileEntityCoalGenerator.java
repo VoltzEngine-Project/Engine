@@ -16,10 +16,13 @@ import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
+import net.minecraft.src.universalelectricity.extend.ISlotInput;
+import net.minecraft.src.universalelectricity.extend.ISlotOuput;
+import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityCoalGenerator extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory, IPacketReceiver
+public class TileEntityCoalGenerator extends TileEntityElectricUnit implements ISlotInput, ITextureProvider, IInventory, ISidedInventory, IPacketReceiver
 {
 	private static int maxPacketID = 0;
 
@@ -302,5 +305,16 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	public float electricityRequest()
 	{
 		return 0;
+	}
+
+	@Override
+	public int[] getSlotInputs(ItemStack item)
+	{
+		if(item.itemID == Item.coal.shiftedIndex)
+		{
+			return new int[]{0};
+		}
+		
+		return null;
 	}
 }

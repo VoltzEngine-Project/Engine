@@ -12,10 +12,11 @@ import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
+import net.minecraft.src.universalelectricity.extend.ISlotInput;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.universalelectricity.network.IPacketSender;
 
-public class TileEntityCoalGenerator extends TileEntityElectricUnit implements IPacketSender, ITextureProvider, IInventory, ISidedInventory
+public class TileEntityCoalGenerator extends TileEntityElectricUnit implements ISlotInput, IPacketSender, ITextureProvider, IInventory, ISidedInventory
 {
 	//Maximum possible generation rate of watts in SECONDS
 	public static final int maxGenerateRate = 560;
@@ -279,5 +280,16 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	public int getPacketID()
 	{
 		return 2;
+	}
+	
+	@Override
+	public int[] getSlotInputs(ItemStack item)
+	{
+		if(item.itemID == Item.coal.shiftedIndex)
+		{
+			return new int[]{0};
+		}
+		
+		return null;
 	}
 }

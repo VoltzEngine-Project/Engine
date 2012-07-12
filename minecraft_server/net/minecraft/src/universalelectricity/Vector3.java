@@ -1,16 +1,15 @@
 package net.minecraft.src.universalelectricity;
 
+import net.minecraft.src.Entity;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3D;
 
 /**
  * Vector3 Class is used for defining objects in a 3D space. Vector3 makes it easier to handle the coordinates of objects. Instead of
  * fumbling with x, y and z variables, all x, y and z variables are stored in one class. Vector3.x, Vector3.y, Vector3.z.
- *
- * Constructor: int x, int y, int z
- * Constructor: () - default would set x, y and z to 0.
- * @author Henry
+ * @author Calclavia
  */
 
 public class Vector3 extends Vector2
@@ -38,38 +37,39 @@ public class Vector3 extends Vector2
         this.z = z;
     }
     
-    //Returns the values as an int
+    /**
+     * Returns the coordinates as integers
+     */
     public int intX() { return (int)Math.floor(this.x); }
     public int intY() { return (int)Math.floor(this.y); }
     public int intZ() { return (int)Math.floor(this.z); }
 
-    public static boolean isPointInRegion(Vector3 point, Vector3 minPoint, Vector3 maxPoint)
+    /**
+     * Converts a TileEntity's position into Vector3
+     */
+    public static Vector3 get(Entity entity)
     {
-        return (point.x > minPoint.x && point.x < maxPoint.x) && (point.y > minPoint.y && point.y < maxPoint.y) && (point.z > minPoint.z && point.z < maxPoint.z);
+    	return new Vector3(entity.posX, entity.posY, entity.posZ);
+    }
+    
+    /**
+     * Converts an entity's position into Vector3
+     */
+    public static Vector3 get(TileEntity entity)
+    {
+    	return new Vector3(entity.xCoord, entity.yCoord, entity.zCoord);
     }
     
     /**
      * Converts from Vec3D into a Vector3
      */
-    public static Vector3 convert(Vec3D par1)
+    public static Vector3 get(Vec3D par1)
     {
         return new Vector3(par1.xCoord, par1.yCoord, par1.zCoord);
     }
-    
+
     /**
-     * Compares two vectors and see if they are equal
-     * @param vector3 - The vector3 you are comparing with
-     * @return True if it is equal
-     */
-    public boolean isEqual(Vector3 vector3)
-    {
-    	return (this.x == vector3.x && this.y == vector3.y && this.z == vector3.z);
-    }
-    
-    /**
-     * Conver the vector3 into a vector2
-     * @param par1
-     * @return
+     * Converts this Vector3 into a Vector2 by dropping the Y axis.
      */
     public Vector2 toVector2()
     {
@@ -78,12 +78,28 @@ public class Vector3 extends Vector2
 
     /**
      * Converts this vector three into a Minecraft Vec3D object
-     * @return
      */
     public Vec3D toVec3D()
     {
         return Vec3D.createVector(this.x, this.y, this.z);
     }
+    
+    /**
+     * Checks if a Vector3 point is located inside a region
+     */
+    public static boolean isPointInRegion(Vector3 point, Vector3 minPoint, Vector3 maxPoint)
+    {
+        return (point.x > minPoint.x && point.x < maxPoint.x) && (point.y > minPoint.y && point.y < maxPoint.y) && (point.z > minPoint.z && point.z < maxPoint.z);
+    }
+    
+    /**
+     * Compares two vectors and see if they are equal. True if so.
+     */
+    public boolean isEqual(Vector3 vector3)
+    {
+    	return (this.x == vector3.x && this.y == vector3.y && this.z == vector3.z);
+    }
+   
 
     /**
      * Gets the distance between two vectors

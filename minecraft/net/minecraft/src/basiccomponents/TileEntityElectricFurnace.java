@@ -14,10 +14,12 @@ import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
+import net.minecraft.src.universalelectricity.extend.ISlotInput;
+import net.minecraft.src.universalelectricity.extend.ISlotOuput;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory,  IPacketReceiver
+public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ISlotInput, ISlotOuput, ITextureProvider, IInventory, ISidedInventory,  IPacketReceiver
 {
 	private static int maxPacketID = 0;
 
@@ -39,9 +41,9 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     
   	public TileEntityElectricFurnace()
 	{
+  		ElectricityManager.registerElectricUnit(this);
   		maxPacketID++;
 		BasicComponents.packetManager.registerPacketUser(this);
-  		ElectricityManager.registerElectricUnit(this);
 	}
   	
   	@Override
@@ -262,6 +264,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             return null;
         }
 	}
+	
 	@Override
 	public ItemStack getStackInSlotOnClosing(int par1)
 	{
@@ -276,6 +279,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             return null;
         }
 	}
+	
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
@@ -285,22 +289,25 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             par2ItemStack.stackSize = this.getInventoryStackLimit();
         }
 	}
+	
 	@Override
-	public String getInvName() {
-		return "Electric Furnace";
-	}
+	public String getInvName() { return "Electric Furnace"; }
+	
 	@Override
 	public int getInventoryStackLimit()
 	{
 		return 64;
 	}
+	
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
 	{
         return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
+	
 	@Override
 	public void openChest() { }
+	
 	@Override
 	public void closeChest() { }
 
@@ -336,17 +343,30 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 		return 3;
 	}
 
-	/**
-     * Called when a client event is received with the event number and argument, see World.sendClientEvent
-     */
-    public void receiveClientEvent(int par1, int par2)
-    {
-    	System.out.println("revceived");
-    }
-	
 	@Override
 	public int getTickInterval()
 	{
 		return 3;
+	}
+
+	@Override
+	public int[] getSlotOutputs()
+	{
+		return new int[]{2};
+	}
+
+	@Override
+	public int[] getSlotInputs(ItemStack item)
+	{
+		if(FurnaceRecipes.smelting().getSmeltingResult(item) != null)
+		{
+			return new int[]{1};
+		}
+		else if(item.getItem() instanceof ItemElectric)
+		{
+			return new int[]{0};
+		}
+		
+		return null;
 	}
 }
