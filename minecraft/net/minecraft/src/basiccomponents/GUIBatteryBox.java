@@ -24,19 +24,20 @@ public class GUIBatteryBox extends GuiContainer
      * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */
     @Override
-	protected void drawGuiContainerForegroundLayer()
+    protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString("Battery Box", 65, 6, 4210752);
-
         String displayText = UniversalElectricity.getWattDisplay(tileEntity.electricityStored);
-        
         String displayText2 = UniversalElectricity.getWattDisplay(tileEntity.getElectricityCapacity());
-        if(this.tileEntity.isDisabled()) displayText2 = "Disabled";
-        
-        this.fontRenderer.drawString(displayText, 110-displayText.length(), 30, 4210752);
-        this.fontRenderer.drawString("Capacity: "+displayText2, 80, 40, 4210752);
-        this.fontRenderer.drawString("Voltage: "+(int)this.tileEntity.getVoltage(), 90, 60, 4210752);
-        
+
+        if (this.tileEntity.isDisabled())
+        {
+            displayText2 = "Disabled";
+        }
+
+        this.fontRenderer.drawString(displayText, 110 - displayText.length(), 30, 4210752);
+        this.fontRenderer.drawString("Capacity: " + displayText2, 80, 40, 4210752);
+        this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 90, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
@@ -44,16 +45,15 @@ public class GUIBatteryBox extends GuiContainer
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
     @Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
+    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
-        int var4 = this.mc.renderEngine.getTexture(BasicComponents.filePath+"BatteryBox.png");
+        int var4 = this.mc.renderEngine.getTexture(BasicComponents.filePath + "BatteryBox.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(var4);
         containerWidth = (this.width - this.xSize) / 2;
         containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
-        
-        int scale = (int)(((double)this.tileEntity.electricityStored/this.tileEntity.getElectricityCapacity())*72);
+        int scale = (int)(((double)this.tileEntity.electricityStored / this.tileEntity.getElectricityCapacity()) * 72);
         this.drawTexturedModalRect(containerWidth + 87, containerHeight + 51, 176, 0, scale, 20);
     }
 }

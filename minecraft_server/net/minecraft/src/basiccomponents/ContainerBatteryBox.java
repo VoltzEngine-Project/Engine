@@ -9,7 +9,7 @@ import net.minecraft.src.universalelectricity.extend.ItemElectric;
 
 public class ContainerBatteryBox extends Container
 {
-	private TileEntityBatteryBox batteryBox;
+    private TileEntityBatteryBox batteryBox;
 
     public ContainerBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBatteryBox batteryBox)
     {
@@ -33,18 +33,18 @@ public class ContainerBatteryBox extends Container
     }
 
     @Override
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+    public boolean canInteractWith(EntityPlayer par1EntityPlayer)
     {
         return this.batteryBox.isUseableByPlayer(par1EntityPlayer);
     }
-    
+
     /**
      * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
     @Override
-	public ItemStack transferStackInSlot(int par1)
+    public ItemStack transferStackInSlot(int par1)
     {
-    	ItemStack var2 = null;
+        ItemStack var2 = null;
         Slot var3 = (Slot)this.inventorySlots.get(par1);
 
         if (var3 != null && var3.getHasStack())
@@ -52,20 +52,20 @@ public class ContainerBatteryBox extends Container
             ItemStack var4 = var3.getStack();
             var2 = var4.copy();
 
-            if(par1 != 0 && par1 != 1)
+            if (par1 != 0 && par1 != 1)
             {
-                if(var4.getItem() instanceof ItemElectric)
+                if (var4.getItem() instanceof ItemElectric)
                 {
-                    if(((ItemElectric)var4.getItem()).canProduceElectricity())
+                    if (((ItemElectric)var4.getItem()).canProduceElectricity())
                     {
-                    	if(!this.mergeItemStack(var4, 1, 2, false))
+                        if (!this.mergeItemStack(var4, 1, 2, false))
                         {
                             return null;
                         }
                     }
                     else
                     {
-                    	if(!this.mergeItemStack(var4, 0, 1, false))
+                        if (!this.mergeItemStack(var4, 0, 1, false))
                         {
                             return null;
                         }

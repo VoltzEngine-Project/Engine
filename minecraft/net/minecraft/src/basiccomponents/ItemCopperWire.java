@@ -21,11 +21,11 @@ public class ItemCopperWire extends BCItem
      * True if something happen and false if it don't. This is for ITEMS, not BLOCKS !
      */
     @Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7)
+    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7)
     {
-    	int blockID = par3World.getBlockId(par4, par5, par6);
-    	
-    	if (blockID == Block.snow.blockID)
+        int blockID = par3World.getBlockId(par4, par5, par6);
+
+        if (blockID == Block.snow.blockID)
         {
             par7 = 1;
         }
@@ -61,7 +61,7 @@ public class ItemCopperWire extends BCItem
                 ++par4;
             }
         }
-    	
+
         if (par3World.canBlockBePlacedAt(this.spawnID, par4, par5, par6, false, par7))
         {
             Block var9 = Block.blocksList[this.spawnID];
@@ -75,12 +75,10 @@ public class ItemCopperWire extends BCItem
                 }
 
                 --par1ItemStack.stackSize;
-                
                 return true;
             }
         }
 
         return false;
     }
-
 }

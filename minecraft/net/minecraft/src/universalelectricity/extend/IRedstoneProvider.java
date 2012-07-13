@@ -1,6 +1,5 @@
 package net.minecraft.src.universalelectricity.extend;
 
-
 /**
  * This should be applied on tile entities that can provide redstone power
  * @author Henry
@@ -8,8 +7,7 @@ package net.minecraft.src.universalelectricity.extend;
  */
 public interface IRedstoneProvider
 {
-	
-	public boolean isPoweringTo(byte side);
-	
-	public boolean isIndirectlyPoweringTo(byte side);
+    public boolean isPoweringTo(byte side);
+
+    public boolean isIndirectlyPoweringTo(byte side);
 }

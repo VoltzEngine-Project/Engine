@@ -13,45 +13,45 @@ import net.minecraft.src.Material;
  */
 public class BlockUEOre extends Block
 {
-	//A list containing all the ores.
-	public OreData[] ores = new OreData[16];
-	
-	public BlockUEOre(int id)
-	{
-		super(id, Material.rock);
-		this.setBlockName("Ore");
-		this.setHardness(3.0F);
-		this.setResistance(5.0F);
-		this.setStepSound(soundStoneFootstep);
-	}
-	
-	@Override
-	protected int damageDropped(int metadata)
+    //A list containing all the ores.
+    public OreData[] ores = new OreData[16];
+
+    public BlockUEOre(int id)
+    {
+        super(id, Material.rock);
+        this.setBlockName("Ore");
+        this.setHardness(3.0F);
+        this.setResistance(5.0F);
+        this.setStepSound(soundStoneFootstep);
+    }
+
+    @Override
+    protected int damageDropped(int metadata)
     {
         return metadata;
     }
 
-	/**
+    /**
      * Returns the block texture based on the side being looked at.  Args: side
      */
     @Override
-	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
+    public int getBlockTextureFromSideAndMetadata(int side, int metadata)
     {
-    	return ores[metadata].getBlockTextureFromSide(side);
+        return ores[metadata].getBlockTextureFromSide(side);
     }
-	
-	@Override
-	public void addCreativeItems(ArrayList itemList)
+
+    @Override
+    public void addCreativeItems(ArrayList itemList)
     {
-		for(int i = 0; i < ores.length; i++)
-		{
-			if(ores[i] != null)
-			{
-				if(ores[i].addToCreativeList())
-				{
-					itemList.add(new ItemStack(this, 1, i));
-				}
-			}
-		}
+        for (int i = 0; i < ores.length; i++)
+        {
+            if (ores[i] != null)
+            {
+                if (ores[i].addToCreativeList())
+                {
+                    itemList.add(new ItemStack(this, 1, i));
+                }
+            }
+        }
     }
 }

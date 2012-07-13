@@ -4,9 +4,9 @@ import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 
 public class TileEntityCopperWire extends TileEntityConductor
 {
-	@Override
-	public double getResistance()
-	{
-		return 0.3;
-	}
+    @Override
+    public double getResistance()
+    {
+        return 0.3;
+    }
 }

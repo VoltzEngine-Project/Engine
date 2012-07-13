@@ -32,11 +32,17 @@ public class Vector2
         this.x = x;
         this.y = y;
     }
-    
+
     //Returns the values as an int
-    public int intX() { return (int)Math.floor(this.x); }
-    public int intY() { return (int)Math.floor(this.y); }
-    
+    public int intX()
+    {
+        return (int)Math.floor(this.x);
+    }
+    public int intY()
+    {
+        return (int)Math.floor(this.y);
+    }
+
     public static boolean isPointInRegion(Vector2 point, Vector2 minPoint, Vector2 maxPoint)
     {
         return (point.x > minPoint.x && point.x < maxPoint.x) && (point.y > minPoint.y && point.y < maxPoint.y);
@@ -48,41 +54,41 @@ public class Vector2
         double var4 = par1.y - par2.y;
         return MathHelper.sqrt_double(var2 * var2 + var4 * var4);
     }
-    
+
     public static double slope(Vector2 par1, Vector2 par2)
     {
         double var2 = par1.x - par2.x;
         double var4 = par1.y - par2.y;
-        return var4/var2;
+        return var4 / var2;
     }
-    
+
     public void add(Vector2 par1)
     {
         this.x += par1.x;
         this.y += par1.y;
     }
-    
+
     public void add(double par1)
     {
         this.x += par1;
         this.y += par1;
     }
-    
+
     public Vector2 round()
     {
         return new Vector2(Math.round(this.x), Math.round(this.y));
     }
-    
+
     public Vector2 floor()
     {
         return new Vector2(Math.floor(this.x), Math.floor(this.y));
     }
-    
+
     public String output()
     {
         return "Vector2: " + this.x + "," + this.y;
     }
-    
+
     public void op()
     {
         System.out.println(output());

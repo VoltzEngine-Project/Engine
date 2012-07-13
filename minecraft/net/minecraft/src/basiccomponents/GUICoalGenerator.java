@@ -24,35 +24,35 @@ public class GUICoalGenerator extends GuiContainer
      * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */
     @Override
-	protected void drawGuiContainerForegroundLayer()
+    protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString("Coal Generator", 55, 6, 4210752);
         this.fontRenderer.drawString("Generating", 90, 33, 4210752);
         String displayText = "";
-        
-        if(this.tileEntity.isDisabled())
+
+        if (this.tileEntity.isDisabled())
         {
-        	displayText = "Disabled";
+            displayText = "Disabled";
         }
-        else if(tileEntity.connectedElectricUnit == null && !tileEntity.worldObj.isRemote)
+        else if (tileEntity.connectedElectricUnit == null && !tileEntity.worldObj.isRemote)
         {
-        	displayText = "Not Connected";
+            displayText = "Not Connected";
         }
-        else if(tileEntity.generateRate*20 <= 0)
+        else if (tileEntity.generateRate * 20 <= 0)
         {
-        	displayText = "Not Generating";
+            displayText = "Not Generating";
         }
-        else if(tileEntity.generateRate*20 < 20)
+        else if (tileEntity.generateRate * 20 < 20)
         {
-        	displayText = "Hull Heat: "+(int)(tileEntity.generateRate*100)+"%";
+            displayText = "Hull Heat: " + (int)(tileEntity.generateRate * 100) + "%";
         }
         else
         {
-        	displayText = UniversalElectricity.getWattDisplay(tileEntity.generateRate*20);
+            displayText = UniversalElectricity.getWattDisplay(tileEntity.generateRate * 20);
         }
-        this.fontRenderer.drawString(displayText, (int)(105-displayText.length()*1.25), 45, 4210752);
-        this.fontRenderer.drawString("Voltage: "+(int)this.tileEntity.getVoltage(), 85, 60, 4210752);
 
+        this.fontRenderer.drawString(displayText, (int)(105 - displayText.length() * 1.25), 45, 4210752);
+        this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 85, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
@@ -60,9 +60,9 @@ public class GUICoalGenerator extends GuiContainer
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
     @Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
+    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
-        int var4 = this.mc.renderEngine.getTexture(BasicComponents.filePath+"CoalGenerator.png");
+        int var4 = this.mc.renderEngine.getTexture(BasicComponents.filePath + "CoalGenerator.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(var4);
         containerWidth = (this.width - this.xSize) / 2;

@@ -7,15 +7,15 @@ package net.minecraft.src.universalelectricity.extend;
  */
 public interface ITier
 {
-	/**
-	 * Gets the tier of this object
-	 * @return - The tier
-	 */
-	public int getTier();
+    /**
+     * Gets the tier of this object
+     * @return - The tier
+     */
+    public int getTier();
 
-	/**
-	 * Sets the tier of the object
-	 * @param tier - The tier to be set
-	 */
-	public void setTier(int tier);
+    /**
+     * Sets the tier of the object
+     * @param tier - The tier to be set
+     */
+    public void setTier(int tier);
 }

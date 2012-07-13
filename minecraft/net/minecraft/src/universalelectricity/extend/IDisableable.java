@@ -7,16 +7,15 @@ package net.minecraft.src.universalelectricity.extend;
  */
 public interface IDisableable
 {
+    /**
+     * This is called when the tile entity is to be disabled.
+     * @param duration - The duration of the disable in ticks.
+     */
+    public void onDisable(int duration);
 
-	/**
-	 * This is called when the tile entity is to be disabled.
-	 * @param duration - The duration of the disable in ticks.
-	 */
-	public void onDisable(int duration);
-	
-	/**
-	 * Called to see if this tile entity is disabled.
-	 * @return True if the tile entity is disabled.
-	 */
-	public boolean isDisabled();
+    /**
+     * Called to see if this tile entity is disabled.
+     * @return True if the tile entity is disabled.
+     */
+    public boolean isDisabled();
 }

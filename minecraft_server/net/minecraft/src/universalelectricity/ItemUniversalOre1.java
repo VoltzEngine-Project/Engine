@@ -6,21 +6,21 @@ import net.minecraft.src.universalelectricity.ore.UEOreManager;
 
 public class ItemUniversalOre1 extends ItemBlock
 {
-	public ItemUniversalOre1(int id) 
-	{
-		super(id);
+    public ItemUniversalOre1(int id)
+    {
+        super(id);
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
-	}
-	
-	@Override
-	public int getMetadata(int damage)
+    }
+
+    @Override
+    public int getMetadata(int damage)
     {
         return damage;
     }
 
-	@Override
-	public String getItemNameIS(ItemStack itemstack)
+    @Override
+    public String getItemNameIS(ItemStack itemstack)
     {
         return (new StringBuilder())
                 .append(super.getItemName())
@@ -28,5 +28,4 @@ public class ItemUniversalOre1 extends ItemBlock
                 .append(UEOreManager.BlockOre[1].ores[itemstack.getItemDamage()].name)
                 .toString();
     }
-	
 }

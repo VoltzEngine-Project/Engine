@@ -11,7 +11,7 @@ import net.minecraft.src.universalelectricity.extend.ItemElectric;
 
 public class ContainerElectricFurnace extends Container
 {
-	private TileEntityElectricFurnace tileEntity;
+    private TileEntityElectricFurnace tileEntity;
 
     public ContainerElectricFurnace(InventoryPlayer par1InventoryPlayer, TileEntityElectricFurnace tileEntity)
     {
@@ -36,83 +36,82 @@ public class ContainerElectricFurnace extends Container
     }
 
     @Override
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+    public boolean canInteractWith(EntityPlayer par1EntityPlayer)
     {
         return this.tileEntity.isUseableByPlayer(par1EntityPlayer);
     }
-    
+
     /**
      * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
     @Override
-	public ItemStack transferStackInSlot(int par1)
+    public ItemStack transferStackInSlot(int par1)
     {
-    	 ItemStack var2 = null;
-         Slot var3 = (Slot)this.inventorySlots.get(par1);
+        ItemStack var2 = null;
+        Slot var3 = (Slot)this.inventorySlots.get(par1);
 
-         if (var3 != null && var3.getHasStack())
-         {
-             ItemStack var4 = var3.getStack();
-             var2 = var4.copy();
+        if (var3 != null && var3.getHasStack())
+        {
+            ItemStack var4 = var3.getStack();
+            var2 = var4.copy();
 
-             if (par1 == 2)
-             {
-                 if (!this.mergeItemStack(var4, 3, 39, true))
-                 {
-                     return null;
-                 }
+            if (par1 == 2)
+            {
+                if (!this.mergeItemStack(var4, 3, 39, true))
+                {
+                    return null;
+                }
+            }
+            else if (par1 != 1 && par1 != 0)
+            {
+                if (var4.getItem() instanceof ItemElectric)
+                {
+                    if (!this.mergeItemStack(var4, 0, 1, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (FurnaceRecipes.smelting().getSmeltingResult(var4) != null)
+                {
+                    if (!this.mergeItemStack(var4, 1, 2, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (par1 >= 3 && par1 < 30)
+                {
+                    if (!this.mergeItemStack(var4, 30, 39, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 3, 30, false))
+                {
+                    return null;
+                }
+            }
+            else if (!this.mergeItemStack(var4, 3, 39, false))
+            {
+                return null;
+            }
 
-             }
-             else if (par1 != 1 && par1 != 0)
-             {
-                 if(var4.getItem() instanceof ItemElectric)
-                 {
-                     if (!this.mergeItemStack(var4, 0, 1, false))
-                     {
-                         return null;
-                     }
-                 }
-                 else if(FurnaceRecipes.smelting().getSmeltingResult(var4) != null)
-                 {
-                     if (!this.mergeItemStack(var4, 1, 2, false))
-                     {
-                         return null;
-                     }
-                 }
-                 else if (par1 >= 3 && par1 < 30)
-                 {
-                     if (!this.mergeItemStack(var4, 30, 39, false))
-                     {
-                         return null;
-                     }
-                 }
-                 else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 3, 30, false))
-                 {
-                     return null;
-                 }
-             }
-             else if (!this.mergeItemStack(var4, 3, 39, false))
-             {
-                 return null;
-             }
+            if (var4.stackSize == 0)
+            {
+                var3.putStack((ItemStack)null);
+            }
+            else
+            {
+                var3.onSlotChanged();
+            }
 
-             if (var4.stackSize == 0)
-             {
-                 var3.putStack((ItemStack)null);
-             }
-             else
-             {
-                 var3.onSlotChanged();
-             }
+            if (var4.stackSize == var2.stackSize)
+            {
+                return null;
+            }
 
-             if (var4.stackSize == var2.stackSize)
-             {
-                 return null;
-             }
+            var3.onPickupFromSlot(var4);
+        }
 
-             var3.onPickupFromSlot(var4);
-         }
-
-         return var2;
+        return var2;
     }
 }

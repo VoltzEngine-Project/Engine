@@ -6,19 +6,19 @@ import net.minecraft.src.forge.ITextureProvider;
 
 public class BCItem extends Item implements ITextureProvider
 {
-	public static String textureFile = BasicComponents.filePath+"items.png";
-	
-	public BCItem(String name, int id, int texture)
-	{
-		super(id);
-		this.iconIndex = texture;
-		this.setItemName(name);
-		ModLoader.addName(this, name);
-	}
+    public static String textureFile = BasicComponents.filePath + "items.png";
 
-	@Override
-	public String getTextureFile()
+    public BCItem(String name, int id, int texture)
     {
-    	return textureFile;
+        super(id);
+        this.iconIndex = texture;
+        this.setItemName(name);
+        ModLoader.addName(this, name);
+    }
+
+    @Override
+    public String getTextureFile()
+    {
+        return textureFile;
     }
 }

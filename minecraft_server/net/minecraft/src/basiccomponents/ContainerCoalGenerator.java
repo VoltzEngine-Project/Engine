@@ -9,7 +9,7 @@ import net.minecraft.src.Slot;
 
 public class ContainerCoalGenerator extends Container
 {
-	private TileEntityCoalGenerator tileEntity;
+    private TileEntityCoalGenerator tileEntity;
 
     public ContainerCoalGenerator(InventoryPlayer par1InventoryPlayer, TileEntityCoalGenerator tileEntity)
     {
@@ -32,18 +32,18 @@ public class ContainerCoalGenerator extends Container
     }
 
     @Override
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+    public boolean canInteractWith(EntityPlayer par1EntityPlayer)
     {
         return this.tileEntity.isUseableByPlayer(par1EntityPlayer);
     }
-    
+
     /**
      * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
     @Override
-	public ItemStack transferStackInSlot(int par1)
+    public ItemStack transferStackInSlot(int par1)
     {
-    	ItemStack var2 = null;
+        ItemStack var2 = null;
         Slot var3 = (Slot)this.inventorySlots.get(par1);
 
         if (var3 != null && var3.getHasStack())
@@ -51,9 +51,9 @@ public class ContainerCoalGenerator extends Container
             ItemStack var4 = var3.getStack();
             var2 = var4.copy();
 
-            if(par1 != 0)
+            if (par1 != 0)
             {
-                if(var4.itemID == Item.coal.shiftedIndex)
+                if (var4.itemID == Item.coal.shiftedIndex)
                 {
                     if (!this.mergeItemStack(var4, 0, 1, false))
                     {

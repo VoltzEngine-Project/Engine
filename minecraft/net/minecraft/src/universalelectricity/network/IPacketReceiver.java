@@ -6,13 +6,13 @@ import net.minecraft.src.NetworkManager;
 
 public interface IPacketReceiver
 {
-	/**
-	 * A ID for this type of packet
-	 * @return
-	 */
-	public int getPacketID();
-	
-	/**
+    /**
+     * A ID for this type of packet
+     * @return
+     */
+    public int getPacketID();
+
+    /**
      * Called when we receive a Packet250CustomPayload for a channel that this
      * handler is registered to.
      *

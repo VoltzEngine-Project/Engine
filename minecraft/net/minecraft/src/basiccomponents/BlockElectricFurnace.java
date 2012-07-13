@@ -17,75 +17,74 @@ import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.extend.BlockMachine;
 
-
 public class BlockElectricFurnace extends BlockMachine implements ITextureProvider
 {
     public BlockElectricFurnace(int id, int textureIndex)
     {
-    	super("Electric Furnace", id, Material.wood);
-    	this.blockIndexInTexture = textureIndex;
-    	this.setStepSound(soundMetalFootstep);
-    	this.setRequiresSelfNotify();
+        super("Electric Furnace", id, Material.wood);
+        this.blockIndexInTexture = textureIndex;
+        this.setStepSound(soundMetalFootstep);
+        this.setRequiresSelfNotify();
     }
-    
+
     @Override
     public String getTextureFile()
     {
-    	return BasicComponents.blockTextureFile;
+        return BasicComponents.blockTextureFile;
     }
-    
+
     /**
      * Retrieves the block texture to use based on the display side. Args: iBlockAccess, x, y, z, side
      */
     public int getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
-    	int metadata = par1IBlockAccess.getBlockMetadata(x, y, z);
-    	
-    	if (side == 0 || side == 1)
+        int metadata = par1IBlockAccess.getBlockMetadata(x, y, z);
+
+        if (side == 0 || side == 1)
         {
             return this.blockIndexInTexture;
         }
         else
         {
-        	//If it is the front side
-        	if(side == metadata)
-        	{
-        		return this.blockIndexInTexture + 6;
-        	}
-        	//If it is the back side
-        	else if(side == UniversalElectricity.getOrientationFromSide((byte)metadata, (byte)2))
-        	{
-        		return this.blockIndexInTexture + 2;
-        	}
+            //If it is the front side
+            if (side == metadata)
+            {
+                return this.blockIndexInTexture + 6;
+            }
+            //If it is the back side
+            else if (side == UniversalElectricity.getOrientationFromSide((byte)metadata, (byte)2))
+            {
+                return this.blockIndexInTexture + 2;
+            }
 
-            return this.blockIndexInTexture+1;
+            return this.blockIndexInTexture + 1;
         }
     }
-    
+
     @Override
-	public int getBlockTextureFromSide(int side)
-	{
-		if (side == 0 || side == 1)
+    public int getBlockTextureFromSide(int side)
+    {
+        if (side == 0 || side == 1)
         {
             return this.blockIndexInTexture;
         }
         else
         {
-        	//If it is the front side
-        	if(side == 3)
-        	{
-        		return this.blockIndexInTexture + 6;
-        	}
-        	//If it is the back side
-        	else if(side == 2)
-        	{
-        		return this.blockIndexInTexture + 2;
-        	}
+            //If it is the front side
+            if (side == 3)
+            {
+                return this.blockIndexInTexture + 6;
+            }
+            //If it is the back side
+            else if (side == 2)
+            {
+                return this.blockIndexInTexture + 2;
+            }
 
-            return this.blockIndexInTexture+1;
+            return this.blockIndexInTexture + 1;
         }
-	}
-    
+    }
+
     /**
      * Called when the block is placed in the world.
      */
@@ -94,56 +93,79 @@ public class BlockElectricFurnace extends BlockMachine implements ITextureProvid
     {
         int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         int change = 3;
-        
-    	switch (angle)
+
+        switch (angle)
         {
-        	case 0: change = 2; break;
-        	case 1: change = 5; break;
-        	case 2: change = 3; break;
-        	case 3: change = 4; break;
+            case 0:
+                change = 2;
+                break;
+
+            case 1:
+                change = 5;
+                break;
+
+            case 2:
+                change = 3;
+                break;
+
+            case 3:
+                change = 4;
+                break;
         }
-    	
-    	par1World.setBlockMetadataWithNotify(x, y, z, change);
+
+        par1World.setBlockMetadataWithNotify(x, y, z, change);
     }
-    
+
     @Override
     public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
     {
-    	//Reorient the block
-		switch(par1World.getBlockMetadata(x, y, z))
-		{
-			case 2: par1World.setBlockMetadataWithNotify(x, y, z, 5); break;
-	    	case 5: par1World.setBlockMetadataWithNotify(x, y, z, 3); break;
-	    	case 3: par1World.setBlockMetadataWithNotify(x, y, z, 4); break;
-	    	case 4: par1World.setBlockMetadataWithNotify(x, y, z, 2); break;
-		}	
-		
-		return true;
+        //Reorient the block
+        switch (par1World.getBlockMetadata(x, y, z))
+        {
+            case 2:
+                par1World.setBlockMetadataWithNotify(x, y, z, 5);
+                break;
+
+            case 5:
+                par1World.setBlockMetadataWithNotify(x, y, z, 3);
+                break;
+
+            case 3:
+                par1World.setBlockMetadataWithNotify(x, y, z, 4);
+                break;
+
+            case 4:
+                par1World.setBlockMetadataWithNotify(x, y, z, 2);
+                break;
+        }
+
+        return true;
     }
-    
+
     /**
      * Called when the block is right clicked by the player
      */
     @Override
     public boolean machineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
     {
-		int metadata = par1World.getBlockMetadata(x, y, z);
+        int metadata = par1World.getBlockMetadata(x, y, z);
 
-        if(!par1World.isRemote)
+        if (!par1World.isRemote)
         {
-        	par5EntityPlayer.openGui(BasicComponents.getInstance(), 2, par1World, x, y, z); return true;
+            par5EntityPlayer.openGui(BasicComponents.getInstance(), 2, par1World, x, y, z);
+            return true;
         }
-        
+
         return true;
     }
-    
+
     /**
      * Called whenever the block is removed.
      */
     @Override
     public void onBlockRemoval(World par1World, int par2, int par3, int par4)
     {
-    	IInventory tileEntity = (IInventory)par1World.getBlockTileEntity(par2, par3, par4);
+        IInventory tileEntity = (IInventory)par1World.getBlockTileEntity(par2, par3, par4);
 
         if (tileEntity != null)
         {
@@ -153,7 +175,7 @@ public class BlockElectricFurnace extends BlockMachine implements ITextureProvid
 
                 if (var7 != null)
                 {
-                	Random random = new Random();
+                    Random random = new Random();
                     float var8 = random.nextFloat() * 0.8F + 0.1F;
                     float var9 = random.nextFloat() * 0.8F + 0.1F;
                     float var10 = random.nextFloat() * 0.8F + 0.1F;
@@ -183,21 +205,20 @@ public class BlockElectricFurnace extends BlockMachine implements ITextureProvid
                     }
                 }
             }
-            
         }
 
         super.onBlockRemoval(par1World, par2, par3, par4);
     }
-    
+
     /**
      * Returns the TileEntity used by this block.
      */
     @Override
     public TileEntity getBlockEntity()
     {
-    	return new TileEntityElectricFurnace();
+        return new TileEntityElectricFurnace();
     }
-    
+
     @Override
     public boolean isOpaqueCube()
     {

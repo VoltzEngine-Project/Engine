@@ -25,7 +25,7 @@ public abstract class ItemElectric extends Item
         this.setMaxDamage((int) getElectricityCapacity());
         this.setNoRepair();
     }
-    
+
     /**
      * Allows items to add custom lines of information to the mouseover description. If you want to add more
      * information to your item, you can super.addInformation() to keep the electiricty info in the item info bar.
@@ -33,35 +33,35 @@ public abstract class ItemElectric extends Item
     @Override
     public void addInformation(ItemStack par1ItemStack, List par2List)
     {
-    	String color = "";
-    	double storedWatts = this.getElectricityStored(par1ItemStack);
-    	
-    	if(storedWatts <= this.getElectricityCapacity()/3)
-    	{
-    		color = "\u00a74";
-    	}
-    	else if(storedWatts > this.getElectricityCapacity()*2/3)
-    	{
-    		color = "\u00a72";
-    	}
-    	else
-    	{
-    		color = "\u00a76";
-    	}
-    	par2List.add(color+UniversalElectricity.getWattDisplay(storedWatts)+" - "+ Math.round((storedWatts/this.getElectricityCapacity())*100)+"%");
+        String color = "";
+        double storedWatts = this.getElectricityStored(par1ItemStack);
+
+        if (storedWatts <= this.getElectricityCapacity() / 3)
+        {
+            color = "\u00a74";
+        }
+        else if (storedWatts > this.getElectricityCapacity() * 2 / 3)
+        {
+            color = "\u00a72";
+        }
+        else
+        {
+            color = "\u00a76";
+        }
+
+        par2List.add(color + UniversalElectricity.getWattDisplay(storedWatts) + " - " + Math.round((storedWatts / this.getElectricityCapacity()) * 100) + "%");
     }
-    
+
     @Override
     /**
-     * Makes sure the item is uncharged when it is crafted and not charged. 
+     * Makes sure the item is uncharged when it is crafted and not charged.
      * Change this if you do not want this to happen!
      */
     public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
-    	par1ItemStack.setItemDamage((int) this.getElectricityCapacity());
+        par1ItemStack.setItemDamage((int) this.getElectricityCapacity());
     }
 
-    
     /**
      * Called when this item is being "recharged" or receiving electricity.
      * @param watts - The amount of watts this item is receiving.
@@ -70,11 +70,11 @@ public abstract class ItemElectric extends Item
      */
     public float onReceiveElectricity(float watts, ItemStack itemStack)
     {
-    	float rejectedElectricity = Math.max((this.getElectricityStored(itemStack) + watts) - this.getElectricityCapacity(), 0);
-		this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) + watts - rejectedElectricity);
-		return rejectedElectricity;
+        float rejectedElectricity = Math.max((this.getElectricityStored(itemStack) + watts) - this.getElectricityCapacity(), 0);
+        this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) + watts - rejectedElectricity);
+        return rejectedElectricity;
     }
-    
+
     /**
      * Called when this item's electricity is being used.
      * @param watts - The amount of electricity requested from this item
@@ -83,29 +83,29 @@ public abstract class ItemElectric extends Item
      */
     public float onUseElectricity(float watts, ItemStack itemStack)
     {
-    	float electricityToUse = Math.min(this.getElectricityStored(itemStack), watts);
-		this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) - electricityToUse);
-		return electricityToUse;
+        float electricityToUse = Math.min(this.getElectricityStored(itemStack), watts);
+        this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) - electricityToUse);
+        return electricityToUse;
     }
-    
+
     /**
-	 * @return Returns true or false if this consumer can receive electricity at this given tick or moment.
-	 */
-	public boolean canReceiveElectricity()
+     * @return Returns true or false if this consumer can receive electricity at this given tick or moment.
+     */
+    public boolean canReceiveElectricity()
     {
-    	return true;
+        return true;
     }
-	
-	/**
-	 * Can this item give out electricity when placed in an tile entity? Electric items like batteries
-	 * should be able to produce electricity (if they are rechargable).
-	 * @return - True or False.
-	 */
-	public boolean canProduceElectricity()
-	{
-		return false;
-	}
-    
+
+    /**
+     * Can this item give out electricity when placed in an tile entity? Electric items like batteries
+     * should be able to produce electricity (if they are rechargable).
+     * @return - True or False.
+     */
+    public boolean canProduceElectricity()
+    {
+        return false;
+    }
+
     /**
      * This function sets the electriicty. Do not directly call this function.
      * Try to use onReceiveElectricity or onUseElectricity instead.
@@ -113,55 +113,51 @@ public abstract class ItemElectric extends Item
      */
     protected void setElectricityStored(ItemStack itemStack, float watts)
     {
-    	//Saves the frequency in the itemstack
-		if (itemStack.stackTagCompound == null)
-		{
-			itemStack.setTagCompound(new NBTTagCompound());
-		}
+        //Saves the frequency in the itemstack
+        if (itemStack.stackTagCompound == null)
+        {
+            itemStack.setTagCompound(new NBTTagCompound());
+        }
 
-		float electricityStored = Math.max(Math.min(watts, this.getElectricityCapacity()), 0);
-		
-		itemStack.stackTagCompound.setFloat("electricity", electricityStored);
-		
-		itemStack.setItemDamage((int) (getElectricityCapacity() - electricityStored));
+        float electricityStored = Math.max(Math.min(watts, this.getElectricityCapacity()), 0);
+        itemStack.stackTagCompound.setFloat("electricity", electricityStored);
+        itemStack.setItemDamage((int)(getElectricityCapacity() - electricityStored));
     }
-    
+
     /**
      * This function is called to get the electricity stored in this item
      * @return - The amount of electricity stored
      */
     protected float getElectricityStored(ItemStack itemStack)
     {
-    	if (itemStack.stackTagCompound == null)
-		{
-    		return 0;
-		}
-    	
-    	float electricityStored = itemStack.stackTagCompound.getFloat("electricity");
-    	
-    	itemStack.setItemDamage((int) (getElectricityCapacity() - electricityStored));
-    	
-    	return electricityStored;	
+        if (itemStack.stackTagCompound == null)
+        {
+            return 0;
+        }
+
+        float electricityStored = itemStack.stackTagCompound.getFloat("electricity");
+        itemStack.setItemDamage((int)(getElectricityCapacity() - electricityStored));
+        return electricityStored;
     }
-    
+
     /**
      * This function is called to get the electricity maximum capacity in this item
      * @return - The amount of electricity maximum capacity
      */
     public abstract float getElectricityCapacity();
-    
+
     /**
      * This function is called to get the maximum transfer rate this electric item can receive per tick
      * @return - The amount of electricity maximum capacity
      */
     public abstract float getTransferRate();
-    
+
     /**
      * Gets the voltage of this item
      * @return The Voltage of this item
      */
     public abstract float getVolts();
-    
+
     /**
      * Returns a charged version of the electric item. Use this if you want
      * the crafting recipe to use a charged version of the electric item
@@ -170,28 +166,27 @@ public abstract class ItemElectric extends Item
      */
     public ItemStack getChargedItemStack()
     {
-    	ItemStack chargedItem = new ItemStack(this);
-    	chargedItem.setItemDamage((int) this.getElectricityCapacity());
-    	
-    	return chargedItem;
+        ItemStack chargedItem = new ItemStack(this);
+        chargedItem.setItemDamage((int) this.getElectricityCapacity());
+        return chargedItem;
     }
-    
+
     /**
      * Adds a charged version and a non-charged version of this item. You may replace
      * this function if you do not wish to have a charged version of your electric item.
-     * 
+     *
      * @param itemList The list of items currently in the creative inventory
      */
     @Override
-	public void addCreativeItems(ArrayList itemList)
-    {       
-    	//Add an uncharged version of the electric item
-    	ItemStack unchargedItem = new ItemStack(this, 1);
-    	unchargedItem.setItemDamage((int) this.getElectricityCapacity());
-    	itemList.add(unchargedItem);
-    	//Add an electric item to the creative list that is fully charged
-    	ItemStack chargedItem = new ItemStack(this, 1);
-    	this.setElectricityStored(chargedItem, ((ItemElectric)chargedItem.getItem()).getElectricityCapacity());
-    	itemList.add(chargedItem);
+    public void addCreativeItems(ArrayList itemList)
+    {
+        //Add an uncharged version of the electric item
+        ItemStack unchargedItem = new ItemStack(this, 1);
+        unchargedItem.setItemDamage((int) this.getElectricityCapacity());
+        itemList.add(unchargedItem);
+        //Add an electric item to the creative list that is fully charged
+        ItemStack chargedItem = new ItemStack(this, 1);
+        this.setElectricityStored(chargedItem, ((ItemElectric)chargedItem.getItem()).getElectricityCapacity());
+        itemList.add(chargedItem);
     }
 }

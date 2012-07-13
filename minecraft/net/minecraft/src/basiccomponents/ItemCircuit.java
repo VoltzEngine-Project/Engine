@@ -16,25 +16,25 @@ public class ItemCircuit extends BCItem
     }
 
     @Override
-	public int getMetadata(int damage)
+    public int getMetadata(int damage)
     {
         return damage;
     }
 
     @Override
-	public String getItemNameIS(ItemStack itemstack)
+    public String getItemNameIS(ItemStack itemstack)
     {
         return names[itemstack.getItemDamage()];
     }
 
     @Override
-	public int getIconFromDamage(int i)
+    public int getIconFromDamage(int i)
     {
         return this.iconIndex + i;
     }
 
     @Override
-	public void addCreativeItems(ArrayList itemList)
+    public void addCreativeItems(ArrayList itemList)
     {
         for (int i = 0; i < names.length; i++)
         {

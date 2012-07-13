@@ -36,30 +36,39 @@ public class Vector3 extends Vector2
         this.y = y;
         this.z = z;
     }
-    
+
     /**
      * Returns the coordinates as integers
      */
-    public int intX() { return (int)Math.floor(this.x); }
-    public int intY() { return (int)Math.floor(this.y); }
-    public int intZ() { return (int)Math.floor(this.z); }
+    public int intX()
+    {
+        return (int)Math.floor(this.x);
+    }
+    public int intY()
+    {
+        return (int)Math.floor(this.y);
+    }
+    public int intZ()
+    {
+        return (int)Math.floor(this.z);
+    }
 
     /**
      * Converts a TileEntity's position into Vector3
      */
     public static Vector3 get(Entity entity)
     {
-    	return new Vector3(entity.posX, entity.posY, entity.posZ);
+        return new Vector3(entity.posX, entity.posY, entity.posZ);
     }
-    
+
     /**
      * Converts an entity's position into Vector3
      */
     public static Vector3 get(TileEntity entity)
     {
-    	return new Vector3(entity.xCoord, entity.yCoord, entity.zCoord);
+        return new Vector3(entity.xCoord, entity.yCoord, entity.zCoord);
     }
-    
+
     /**
      * Converts from Vec3D into a Vector3
      */
@@ -83,7 +92,7 @@ public class Vector3 extends Vector2
     {
         return Vec3D.createVector(this.x, this.y, this.z);
     }
-    
+
     /**
      * Checks if a Vector3 point is located inside a region
      */
@@ -91,15 +100,14 @@ public class Vector3 extends Vector2
     {
         return (point.x > minPoint.x && point.x < maxPoint.x) && (point.y > minPoint.y && point.y < maxPoint.y) && (point.z > minPoint.z && point.z < maxPoint.z);
     }
-    
+
     /**
      * Compares two vectors and see if they are equal. True if so.
      */
     public boolean isEqual(Vector3 vector3)
     {
-    	return (this.x == vector3.x && this.y == vector3.y && this.z == vector3.z);
+        return (this.x == vector3.x && this.y == vector3.y && this.z == vector3.z);
     }
-   
 
     /**
      * Gets the distance between two vectors
@@ -112,7 +120,7 @@ public class Vector3 extends Vector2
         double var6 = par1.z - par2.z;
         return MathHelper.sqrt_double(var2 * var2 + var4 * var4 + var6 * var6);
     }
-    
+
     public double distanceTo(Vector3 vector3)
     {
         double var2 = vector3.x - this.x;
@@ -120,58 +128,56 @@ public class Vector3 extends Vector2
         double var6 = vector3.z - this.z;
         return MathHelper.sqrt_double(var2 * var2 + var4 * var4 + var6 * var6);
     }
-    
+
     public static Vector3 subtract(Vector3 par1, Vector3 par2)
     {
         return new Vector3(par1.x - par2.x, par1.y - par2.y, par1.z - par2.z);
     }
-    
+
     public static Vector3 add(Vector3 par1, Vector3 par2)
     {
         return new Vector3(par1.x + par2.x, par1.y + par2.y, par1.z + par2.z);
     }
-    
+
     public static Vector3 add(Vector3 par1, double par2)
     {
         return new Vector3(par1.x + par2, par1.y + par2, par1.z + par2);
     }
-    
+
     public void add(Vector3 par1)
     {
         this.x += par1.x;
         this.y += par1.y;
         this.z += par1.z;
     }
-    
+
     @Override
-	public void add(double par1)
+    public void add(double par1)
     {
         this.x += par1;
         this.y += par1;
         this.z += par1;
     }
-    
+
     public static Vector3 multiply(Vector3 par1, Vector3 par2)
     {
         return new Vector3(par1.x * par2.x, par1.y * par2.y, par1.z * par2.z);
     }
-    
+
     public static Vector3 multiply(Vector3 par1, double par2)
     {
         return new Vector3(par1.x * par2, par1.y * par2, par1.z * par2);
     }
-    
-    
+
     public static Vector3 readFromNBT(String prefix, NBTTagCompound par1NBTTagCompound)
     {
-    	Vector3 tempVector = new Vector3();
-    	tempVector.x = par1NBTTagCompound.getDouble(prefix+"X");
-    	tempVector.y = par1NBTTagCompound.getDouble(prefix+"Y");
-    	tempVector.z = par1NBTTagCompound.getDouble(prefix+"Z");
-    	
-    	return tempVector;
+        Vector3 tempVector = new Vector3();
+        tempVector.x = par1NBTTagCompound.getDouble(prefix + "X");
+        tempVector.y = par1NBTTagCompound.getDouble(prefix + "Y");
+        tempVector.z = par1NBTTagCompound.getDouble(prefix + "Z");
+        return tempVector;
     }
-    
+
     /**
      * Saves this Vector3 to disk
      * @param prefix - The prefix of this save. Use some unique string.
@@ -179,18 +185,18 @@ public class Vector3 extends Vector2
      */
     public void writeToNBT(String prefix, NBTTagCompound par1NBTTagCompound)
     {
-    	par1NBTTagCompound.setDouble(prefix+"X", this.x);
-    	par1NBTTagCompound.setDouble(prefix+"Y", this.y);
-    	par1NBTTagCompound.setDouble(prefix+"Z", this.z);
+        par1NBTTagCompound.setDouble(prefix + "X", this.x);
+        par1NBTTagCompound.setDouble(prefix + "Y", this.y);
+        par1NBTTagCompound.setDouble(prefix + "Z", this.z);
     }
-    
+
     @Override
-	public Vector3 round()
+    public Vector3 round()
     {
         return new Vector3(Math.round(this.x), Math.round(this.y), Math.round(this.z));
     }
     @Override
-	public Vector3 floor()
+    public Vector3 floor()
     {
         return new Vector3(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z));
     }
@@ -219,7 +225,7 @@ public class Vector3 extends Vector2
         return add(this, side[5]);
     }
     @Override
-	public String output()
+    public String output()
     {
         return "Vector3: " + this.x + "," + this.y + "," + this.z;
     }

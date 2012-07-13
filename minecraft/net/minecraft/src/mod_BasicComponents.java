@@ -1,7 +1,5 @@
 package net.minecraft.src;
 
-import java.util.Random;
-
 import net.minecraft.src.basiccomponents.BCItem;
 import net.minecraft.src.basiccomponents.BasicComponents;
 import net.minecraft.src.basiccomponents.GUIBatteryBox;
@@ -20,10 +18,8 @@ import net.minecraft.src.forge.MinecraftForgeClient;
 import net.minecraft.src.forge.NetworkMod;
 import net.minecraft.src.forge.oredict.OreDictionary;
 import net.minecraft.src.universalelectricity.UniversalElectricity;
-import net.minecraft.src.universalelectricity.ore.BlockUEOre;
 import net.minecraft.src.universalelectricity.ore.OreData;
 import net.minecraft.src.universalelectricity.ore.UEOreManager;
-import net.minecraft.src.universalelectricity.ore.WorldGenMinableMetadata;
 import net.minecraft.src.universalelectricity.recipe.UERecipeManager;
 
 /**
