@@ -8,7 +8,7 @@ import net.minecraft.src.Material;
 
 /**
  * A class used by Universal Electricity to create metadata ores. You can ignore this class.
- * @author Henry
+ * @author Calclavia
  *
  */
 public class BlockUEOre extends Block
@@ -37,6 +37,11 @@ public class BlockUEOre extends Block
     @Override
     public int getBlockTextureFromSideAndMetadata(int side, int metadata)
     {
+    	if(ores[metadata] == null)
+    	{
+    		return 0;
+    	}
+    	
         return ores[metadata].getBlockTextureFromSide(side);
     }
 
