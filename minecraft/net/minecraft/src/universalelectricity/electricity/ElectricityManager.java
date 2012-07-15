@@ -224,8 +224,9 @@ public class ElectricityManager
 
     public static void onUpdate()
     {
-        for(TileEntityConductor conductor : electricConductors)
+        for(int j = 0; j < electricConductors.size(); j ++)
         {
+        	TileEntityConductor conductor  = electricConductors.get(j);
             conductor.refreshConnectedBlocks();
         }
 
