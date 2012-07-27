@@ -14,12 +14,10 @@ import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
-import net.minecraft.src.universalelectricity.extend.ISlotInput;
-import net.minecraft.src.universalelectricity.extend.ISlotOuput;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ISlotInput, ISlotOuput, ITextureProvider, IInventory, ISidedInventory,  IPacketReceiver
+public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory,  IPacketReceiver
 {
     private static int maxPacketID = 0;
 
@@ -226,23 +224,20 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     @Override
     public int getStartInventorySide(int side)
     {
-        if (side == 0)
+        if(side == 0 || side == 1)
         {
-            return 1;
-        }
-
-        if (side == 1)
-        {
-            return 0;
+            return side;
         }
 
         return 2;
     }
+    
     @Override
     public int getSizeInventorySide(int side)
     {
-        return getSizeInventory();
+        return 1;
     }
+    
     @Override
     public int getSizeInventory()
     {
@@ -370,26 +365,5 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     public int getTickInterval()
     {
         return 3;
-    }
-
-    @Override
-    public int[] getSlotOutputs(byte side)
-    {
-        return new int[] {2};
-    }
-
-    @Override
-    public int[] getSlotInputs(ItemStack item, byte side)
-    {
-        if (FurnaceRecipes.smelting().getSmeltingResult(item) != null)
-        {
-            return new int[] {1};
-        }
-        else if (item.getItem() instanceof ItemElectric)
-        {
-            return new int[] {0};
-        }
-
-        return null;
     }
 }

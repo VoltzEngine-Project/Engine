@@ -22,10 +22,15 @@ public class ItemUniversalOre1 extends ItemBlock
     @Override
     public String getItemNameIS(ItemStack itemstack)
     {
-        return (new StringBuilder())
-                .append(super.getItemName())
-                .append(".")
-                .append(UEOreManager.BlockOre[1].ores[itemstack.getItemDamage()].name)
-                .toString();
+    	if(UEOreManager.BlockOre[1].ores[itemstack.getItemDamage()] != null)
+    	{
+	        return (new StringBuilder())
+	                .append(super.getItemName())
+	                .append(".")
+	                .append(UEOreManager.BlockOre[1].ores[itemstack.getItemDamage()].name)
+	                .toString();
+    	}
+    	
+    	return "";
     }
 }

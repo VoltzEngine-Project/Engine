@@ -10,12 +10,10 @@ import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
-import net.minecraft.src.universalelectricity.extend.ISlotInput;
-import net.minecraft.src.universalelectricity.extend.ISlotOuput;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.network.IPacketSender;
 
-public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ISlotInput, ISlotOuput, IPacketSender, ITextureProvider, IInventory, ISidedInventory
+public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IPacketSender, ITextureProvider, IInventory, ISidedInventory
 {
     //The amount of ticks requried to smelt this item
     public final int smeltingTimeRequired = 150;
@@ -220,23 +218,20 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     @Override
     public int getStartInventorySide(int side)
     {
-        if (side == 0)
+        if(side == 0 || side == 1)
         {
-            return 1;
-        }
-
-        if (side == 1)
-        {
-            return 0;
+            return side;
         }
 
         return 2;
     }
+    
     @Override
     public int getSizeInventorySide(int side)
     {
-        return getSizeInventory();
+        return 1;
     }
+    
     @Override
     public int getSizeInventory()
     {
@@ -346,26 +341,5 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     public int getPacketID()
     {
         return 3;
-    }
-
-    @Override
-    public int[] getSlotOutputs(byte side)
-    {
-        return new int[] {2};
-    }
-
-    @Override
-    public int[] getSlotInputs(ItemStack item, byte side)
-    {
-        if (FurnaceRecipes.smelting().getSmeltingResult(item) != null)
-        {
-            return new int[] {1};
-        }
-        else if (item.getItem() instanceof ItemElectric)
-        {
-            return new int[] {0};
-        }
-
-        return null;
     }
 }

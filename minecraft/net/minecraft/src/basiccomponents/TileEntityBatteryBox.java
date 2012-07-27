@@ -17,13 +17,11 @@ import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.IRedstoneProvider;
-import net.minecraft.src.universalelectricity.extend.ISlotInput;
-import net.minecraft.src.universalelectricity.extend.ISlotOuput;
 import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityBatteryBox extends TileEntityElectricUnit implements ISlotInput, ISlotOuput, IPacketReceiver, IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory
+public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPacketReceiver, IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory
 {
     public float electricityStored = 0;
 
@@ -206,8 +204,9 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements ISlo
     @Override
     public int getSizeInventorySide(int side)
     {
-        return getSizeInventory();
+        return 1;
     }
+    
     @Override
     public int getSizeInventory()
     {
@@ -334,29 +333,5 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements ISlo
     public int getTickInterval()
     {
         return 1;
-    }
-
-    @Override
-    public int[] getSlotOutputs(byte side)
-    {
-        return new int[] {0, 1};
-    }
-
-    @Override
-    public int[] getSlotInputs(ItemStack item, byte side)
-    {
-        if (item.getItem() instanceof ItemElectric)
-        {
-        	if(((ItemElectric)item.getItem()).canProduceElectricity())
-        	{
-        		return new int[] {1};
-        	}
-        	else
-        	{
-        		return new int[] {0};
-        	}
-        }
-
-        return null;
     }
 }

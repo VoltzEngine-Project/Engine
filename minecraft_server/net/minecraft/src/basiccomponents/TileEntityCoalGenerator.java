@@ -12,11 +12,10 @@ import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
-import net.minecraft.src.universalelectricity.extend.ISlotInput;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.universalelectricity.network.IPacketSender;
 
-public class TileEntityCoalGenerator extends TileEntityElectricUnit implements ISlotInput, IPacketSender, ITextureProvider, IInventory, ISidedInventory
+public class TileEntityCoalGenerator extends TileEntityElectricUnit implements IPacketSender, ITextureProvider, IInventory, ISidedInventory
 {
     //Maximum possible generation rate of watts in SECONDS
     public static final int maxGenerateRate = 560;
@@ -170,26 +169,19 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
         par1NBTTagCompound.setTag("Items", var2);
     }
+
     @Override
     public int getStartInventorySide(int side)
     {
-        if (side == 0)
-        {
-            return 1;
-        }
-
-        if (side == 1)
-        {
-            return 0;
-        }
-
-        return 2;
+        return 0;
     }
+    
     @Override
     public int getSizeInventorySide(int side)
     {
-        return getSizeInventory();
+        return 1;
     }
+    
     @Override
     public int getSizeInventory()
     {
@@ -302,16 +294,5 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     public int getPacketID()
     {
         return 2;
-    }
-
-    @Override
-    public int[] getSlotInputs(ItemStack item, byte side)
-    {
-        if (item.itemID == Item.coal.shiftedIndex)
-        {
-            return new int[] {0};
-        }
-
-        return null;
     }
 }
