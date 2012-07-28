@@ -48,11 +48,11 @@ public class BasicComponents
     public static final Item ItemCopperIngot = new BCItem("Copper Ingot", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "CopperIngot", 1588, false), 1);
     public static final Item ItemTinIngot = new BCItem("Tin Ingot", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "TinIngot", 1589, false), 2);
     public static final Item ItemSteelIngot = new BCItem("Steel Ingot", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "SteelIngot", 1590, false), 3);
-    public static final Item ItemSteelClump = new BCItem("Steel Clump", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "SteelClump", 1591, false), 5);
+    public static final Item ItemSteelClump = new BCItem("Steel Alloy", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "SteelClump", 1591, false), 5);
     public static final Item ItemCircuit = new ItemCircuit(UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Circuit", 1592, false), 16);
     public static final Item ItemCopperWire = new ItemCopperWire(UniversalElectricity.getConfigID(UniversalElectricity.configuration, "ItemCopperWire", 1593, false), 21);
     public static final Item ItemBronzeIngot = new BCItem("Bronze Ingot", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "BronzeIngot", 1594, false), 7);
-    public static final Item ItemBronzeClump = new BCItem("Bronze Clump", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "BronzeClump", 1595, false), 6);
+    public static final Item ItemBronzeClump = new BCItem("Bronze Alloy", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "BronzeClump", 1595, false), 6);
     public static final Item ItemSteelPlate = new BCItem("Steel Plate", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Steel Plate", 1597, false), 8);
     public static final Item ItemMotor = new BCItem("Motor", UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Motor", 1598, false), 9);
 }
