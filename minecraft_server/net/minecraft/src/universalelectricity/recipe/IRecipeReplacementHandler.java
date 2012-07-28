@@ -15,9 +15,9 @@ public interface IRecipeReplacementHandler
      * @param recipe - The recipe attempted to being replaced
      * @return - Return null if not replacing this recipe or a new recipe input replacement
      */
-    public Object[] onReplaceShapedRecipe(UERecipe recipe);
+    public UERecipe onReplaceShapedRecipe(UERecipe recipe);
 
-    public Object[] onReplaceShapelessRecipe(UERecipe recipe);
+    public UERecipe onReplaceShapelessRecipe(UERecipe recipe);
 
-    public ItemStack onReplaceSmeltingRecipe(UEFurnaceRecipe recipe);
+    public UEFurnaceRecipe onReplaceSmeltingRecipe(UEFurnaceRecipe recipe);
 }
