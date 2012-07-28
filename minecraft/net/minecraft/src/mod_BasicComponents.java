@@ -70,8 +70,16 @@ public class mod_BasicComponents extends NetworkMod implements IGuiHandler, ICon
 		ModLoader.registerTileEntity(TileEntityElectricFurnace.class, "TileEntityElectricFurnace");
 		
 		//Add Ores
-		UEOreManager.addOre(BasicComponents.CopperOreID, new OreData("Copper Ore", "oreCopper", ModLoader.addOverride("/terrain.png", BasicComponents.filePath+"copper.png"), 60, 46, 8));
-		UEOreManager.addOre(BasicComponents.TinOreID, new OreData("Tin Ore", "oreTin", ModLoader.addOverride("/terrain.png", BasicComponents.filePath+"tin.png"), 60, 35, 6));
+		try{
+			UEOreManager.addOre(BasicComponents.CopperOreID, new OreData("Copper Ore", "oreCopper", ModLoader.addOverride("/terrain.png", BasicComponents.filePath+"copper.png"), 60, 46, 8));
+		}catch(RuntimeException ex){
+			System.out.println("[CRITICAL] Could not add copper ore, metadata already taken!!");
+		}
+		try{
+			UEOreManager.addOre(BasicComponents.TinOreID, new OreData("Tin Ore", "oreTin", ModLoader.addOverride("/terrain.png", BasicComponents.filePath+"tin.png"), 60, 35, 6));
+		}catch(RuntimeException ex){
+			System.out.println("[CRITICAL] Could not add tin ore, metadata already taken!!");
+		}
 		OreDictionary.registerOre("ingotCopper", BasicComponents.ItemCopperIngot);
 		OreDictionary.registerOre("ingotTin", BasicComponents.ItemTinIngot);
 		OreDictionary.registerOre("ingotBronze", BasicComponents.ItemBronzeIngot);
