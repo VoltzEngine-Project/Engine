@@ -22,7 +22,7 @@ public class UEOreManager
      * @id - The ID can not be greater than 32
      * @param A UniversalOreData class consisting of all data needed to generate this ore.
      */
-    public static void addOre(int newID, OreData universalOre)
+    public static void addOre(int newID, OreData universalOre) throws RuntimeException
     {
         if (newID > 16 * maxOreBlocks)
         {
