@@ -65,10 +65,9 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
 
             if (!this.isDisabled())
             {
-                if (electricityRequest() > 0 && canConnect(side))
+            	if(this.electricityRequest() > 0 && this.canReceiveFromSide(side))
                 {
-                    float rejectedElectricity = (float) Math.max((this.electricityStored + watts) - this.getElectricityCapacity(), 0.0);
-                    this.electricityStored = (float) Math.max(this.electricityStored + watts - rejectedElectricity, 0.0);
+                	this.electricityStored = Math.min(this.getElectricityCapacity(), this.electricityStored+watts);
                 }
 
                 //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.

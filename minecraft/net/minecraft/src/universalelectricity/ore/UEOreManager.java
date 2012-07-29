@@ -30,6 +30,7 @@ public class UEOreManager
         }
 
         int i = (int)Math.floor(newID / 16);
+        
         //Change the metadata to the correct amount
         int metadata = newID - 16 * i;
 

@@ -124,7 +124,7 @@ public class UERecipeManager
                 {
                     if (recipeHandler.onReplaceShapedRecipe(recipe) != null)
                     {
-                        shapedRecipes.set(shapedRecipes.indexOf(recipe), recipeHandler.onReplaceRecipe(recipe));
+                    	recipe = recipeHandler.onReplaceShapedRecipe(recipe);
                     }
                 }
 
@@ -132,7 +132,7 @@ public class UERecipeManager
                 {
                     if (recipeHandler.onReplaceShapelessRecipe(recipe) != null)
                     {
-                        shaplessRecipes.set(shaplessRecipes.indexOf(recipe), recipeHandler.onReplaceRecipe(recipe));
+                    	recipe = recipeHandler.onReplaceShapelessRecipe(recipe);
                     }
                 }
 
@@ -140,7 +140,7 @@ public class UERecipeManager
                 {
                     if (recipeHandler.onReplaceSmeltingRecipe(recipe) != null)
                     {
-                        furnaceRecipes.set(furnaceRecipes.indexOf(recipe), recipeHandler.onReplaceRecipe(recipe));
+                    	recipe = recipeHandler.onReplaceSmeltingRecipe(recipe);
                     }
                 }
             }
