@@ -70,16 +70,9 @@ public class mod_BasicComponents extends NetworkMod implements IGuiHandler, ICon
 		ModLoader.registerTileEntity(TileEntityElectricFurnace.class, "TileEntityElectricFurnace");
 		
 		//Add Ores
-		try{
-			UEOreManager.addOre(BasicComponents.CopperOreID, new OreData("Copper Ore", "oreCopper", ModLoader.addOverride("/terrain.png", BasicComponents.filePath+"copper.png"), 60, 46, 8));
-		}catch(RuntimeException ex){
-			System.out.println("[CRITICAL] Could not add copper ore, metadata already taken!!");
-		}
-		try{
-			UEOreManager.addOre(BasicComponents.TinOreID, new OreData("Tin Ore", "oreTin", ModLoader.addOverride("/terrain.png", BasicComponents.filePath+"tin.png"), 60, 35, 6));
-		}catch(RuntimeException ex){
-			System.out.println("[CRITICAL] Could not add tin ore, metadata already taken!!");
-		}
+		UEOreManager.addOre(BasicComponents.CopperOreID, new OreData("Copper Ore", "oreCopper", ModLoader.addOverride("/terrain.png", BasicComponents.filePath+"copper.png"), 60, 70, 6));
+		UEOreManager.addOre(BasicComponents.TinOreID, new OreData("Tin Ore", "oreTin", ModLoader.addOverride("/terrain.png", BasicComponents.filePath+"tin.png"), 60, 50, 5));
+
 		OreDictionary.registerOre("ingotCopper", BasicComponents.ItemCopperIngot);
 		OreDictionary.registerOre("ingotTin", BasicComponents.ItemTinIngot);
 		OreDictionary.registerOre("ingotBronze", BasicComponents.ItemBronzeIngot);
@@ -149,22 +142,4 @@ public class mod_BasicComponents extends NetworkMod implements IGuiHandler, ICon
 
 	@Override
 	public void onDisconnect(NetworkManager network, String message, Object[] args) { }
-	
-	/*Attempt to generate oil failed.
-	@Override
-	public void generateSurface(World world, Random rand, int chunkX, int chunkZ)
-    {
-		Block blockOil = Block.lavaStill;
-		
-    	//Generate Copper
-        for(int l = 0; l < 30; l++)
-        {
-            int i1 = chunkX + rand.nextInt(16);
-            int j1 = rand.nextInt(60);
-            int k1 = chunkZ + rand.nextInt(16);
-            (new WorldGenLiquids(blockOil.blockID)).generate(world, rand, i1, j1, k1);
-        }
-	
-    }*/
- 
 }

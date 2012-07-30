@@ -12,7 +12,7 @@ public class OreData
 {
     public String name;
 
-    public String oreDiectionaryName;
+    public String oreDictionaryName;
 
     public int minGenerateLevel;
 
@@ -58,7 +58,7 @@ public class OreData
         this.blockIndexTexture = textureIndex;
         this.harvestTool = harvestTool;
         this.harvestLevel = harvestLevel;
-        this.oreDiectionaryName = oreDiectionaryName;
+        this.oreDictionaryName = oreDiectionaryName;
     }
 
     //A simplified version of the constructor

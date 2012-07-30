@@ -13,36 +13,59 @@ import net.minecraft.src.universalelectricity.UniversalElectricity;
 public class UEOreManager
 {
     public static final int maxOreBlocks = 2;
-    public static int oreBlockID = UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Universal Ores", 3968, true);
-    public static final BlockUEOre[] BlockOre = {new BlockUEOre(oreBlockID), new BlockUEOre(oreBlockID + 1)};
+    public static final int oreBlockID = UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Universal Ores", 3968, true);
+    public static final BlockUEOre[] blockOre = {new BlockUEOre(oreBlockID), new BlockUEOre(oreBlockID + 1)};
 
     /**
      * Adds and automatically generates a new ore in the ground.
      * Uses metadata so your ore will not take up any block IDs.
      * @id - The ID can not be greater than 32
      * @param A UniversalOreData class consisting of all data needed to generate this ore.
+     * @return True if the ore is successfully added.
      */
-    public static void addOre(int newID, OreData universalOre) throws RuntimeException
+    public static boolean addOre(int newID, OreData universalOre)
     {
         if (newID > 16 * maxOreBlocks)
         {
             throw new RuntimeException("Universal ore ID is too high!");
         }
+        
+        /**
+         * Check each and every ore. If the ore already exists (added by another
+         * UE mod or such) then it will not add the ore and return false.
+         */
 
+        for(BlockUEOre oreBlock : blockOre)
+        {
+        	for(OreData oreData : oreBlock.ores)
+        	{
+        		if(oreData != null)
+        		{
+	        		if(oreData.oreDictionaryName == universalOre.oreDictionaryName)
+	        		{
+	        			return false;
+	        		}
+        		}
+        	}
+        }
+        
         int i = (int)Math.floor(newID / 16);
+        
         //Change the metadata to the correct amount
         int metadata = newID - 16 * i;
 
         //Assign a metdata to the ore
-        if (BlockOre[i].ores[metadata] != null)
+        if (blockOre[i].ores[metadata] != null)
         {
             throw new RuntimeException("Universal Electricity ore " + newID + " ID has been taken already!");
         }
 
-        BlockOre[i].ores[metadata] = universalOre;
-        ModLoader.addName(new ItemStack(BlockOre[i], 1, metadata), universalOre.name);
-        MinecraftForge.setBlockHarvestLevel(BlockOre[i], metadata, universalOre.harvestTool, universalOre.harvestLevel);
-        OreDictionary.registerOre(universalOre.oreDiectionaryName, new ItemStack(BlockOre[i], 1, metadata));
+        blockOre[i].ores[metadata] = universalOre;
+        ModLoader.addName(new ItemStack(blockOre[i], 1, metadata), universalOre.name);
+        MinecraftForge.setBlockHarvestLevel(blockOre[i], metadata, universalOre.harvestTool, universalOre.harvestLevel);
+        OreDictionary.registerOre(universalOre.oreDictionaryName, new ItemStack(blockOre[i], 1, metadata));
+        
+        return true;
     }
 
     /**
@@ -56,9 +79,9 @@ public class UEOreManager
         {
             int i = (int)Math.floor(oreID / 16);
 
-            if (BlockOre[i] != null)
+            if (blockOre[i] != null)
             {
-                return BlockOre[i];
+                return blockOre[i];
             }
         }
 
@@ -77,7 +100,7 @@ public class UEOreManager
         {
             int i = (int)Math.floor(id / 16);
 
-            if (BlockOre[i] != null)
+            if (blockOre[i] != null)
             {
                 return id - 16 * i;
             }
@@ -89,25 +112,28 @@ public class UEOreManager
     //Generate the surface of the world based on all registered universal ores.
     public static void generateSurface(World world, Random rand, int chunkX, int chunkZ)
     {
-        for (int var1 = 0; var1 < BlockOre.length; var1 ++)
+        for (int j = 0; j < blockOre.length; j ++)
         {
-            if (BlockOre[var1] != null)
+            if (blockOre[j] != null)
             {
-                BlockUEOre blockOre = BlockOre[var1];
+                BlockUEOre oreBlock = blockOre[j];
 
-                for (int i = 0; i < blockOre.ores.length; i++)
+                for (int i = 0; i < oreBlock.ores.length; i++)
                 {
-                    if (blockOre.ores[i] != null)
+                    if (oreBlock.ores[i] != null)
                     {
-                        if (blockOre.ores[i].shouldGenerate)
+                    	
+                        if (oreBlock.ores[i].shouldGenerate)
                         {
+                        	WorldGenMinable worldGenMinable = new WorldGenMinable(oreBlock.blockID, oreBlock.ores[i].amountPerBranch, i);
+
                             //Generate Copper
-                            for (int l = 0; l < blockOre.ores[i].amountPerChunk; l++)
+                            for (int l = 0; l < oreBlock.ores[i].amountPerChunk; l++)
                             {
-                                int i1 = chunkX + rand.nextInt(16);
-                                int j1 = rand.nextInt(blockOre.ores[i].maxGenerateLevel) + blockOre.ores[i].minGenerateLevel;
-                                int k1 = chunkZ + rand.nextInt(16);
-                                (new WorldGenMinable(blockOre.blockID, blockOre.ores[i].amountPerBranch, i)).generate(world, rand, i1, j1, k1);
+                                int x = chunkX + rand.nextInt(16);
+                                int y = rand.nextInt(oreBlock.ores[i].maxGenerateLevel) + oreBlock.ores[i].minGenerateLevel;
+                                int z = chunkZ + rand.nextInt(16);
+                            	worldGenMinable.generate(world, rand, x, y, z);
                             }
                         }
                     }
