@@ -187,7 +187,7 @@ public class BlockCoalGenerator extends BlockMachine implements ITextureProvider
      * Called when the block is right clicked by the player
      */
     @Override
-    public boolean machineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
     {
         int metadata = par1World.getBlockMetadata(x, y, z);
 

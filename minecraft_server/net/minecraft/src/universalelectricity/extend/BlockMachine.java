@@ -16,7 +16,7 @@ import net.minecraft.src.basiccomponents.BasicComponents;
  * you do not want to. It's optional but it comes with some useful functions that will make coding easier
  * for you.
  */
-public abstract class BlockMachine extends BlockContainer
+public abstract class BlockMachine extends BlockContainer implements IWrenchable
 {
     public BlockMachine(String name, int id, Material material)
     {
@@ -50,6 +50,7 @@ public abstract class BlockMachine extends BlockContainer
     }
 
     /**
+     * DO NOT OVERRIDE THIS FUNCTION!
      * Called when the block is right clicked by the player. This modified version detects
      * electric items and wrench actions on your machine block. Do not override this function.
      * Use machineActivated instead! (It does the same thing)
@@ -66,30 +67,40 @@ public abstract class BlockMachine extends BlockContainer
         {
             if (par5EntityPlayer.inventory.getCurrentItem().itemID == BasicComponents.ItemWrench.shiftedIndex)
             {
-                if (this.onUseWrench(par1World, x, y, z, par5EntityPlayer))
-                {
-                    par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
-                    return true;
-                }
+                par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+                return false;
             }
             else if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof ItemElectric)
             {
-                if (this.onUseElectricItem(par1World, x, y, z, par5EntityPlayer))
+                if(this.onUseElectricItem(par1World, x, y, z, par5EntityPlayer))
                 {
                     return true;
                 }
             }
         }
 
-        if (par5EntityPlayer.isSneaking())
+        if(par5EntityPlayer.isSneaking())
         {
-            return false;
+        	return this.onSneakMachineActivated(par1World, x, y, z, par5EntityPlayer);
         }
 
-        return this.machineActivated(par1World, x, y, z, par5EntityPlayer);
+        return this.onMachineActivated(par1World, x, y, z, par5EntityPlayer);
     }
 
-    public boolean machineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+    /**
+     * Called when the machine is right clicked by the player
+     * @return True if something happens
+     */
+    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+    {
+        return false;
+    }
+    
+    /**
+     * Called when the machine is right clicked by the player while sneaking (shift clicking)
+     * @return True if something happens
+     */
+    public boolean onSneakMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
     {
         return false;
     }
@@ -107,9 +118,20 @@ public abstract class BlockMachine extends BlockContainer
      * Called when a player uses a wrench on the machine
      * @return True if some happens
      */
+    @Override
     public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
     {
         return false;
+    }
+    
+    /**
+     * Called when a player uses a wrench on the machine while sneaking
+     * @return True if some happens
+     */
+    @Override
+    public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+    {
+    	return this.onUseWrench(par1World, x, y, z, par5EntityPlayer);
     }
 
     /**
