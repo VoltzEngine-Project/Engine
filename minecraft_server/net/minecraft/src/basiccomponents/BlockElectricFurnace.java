@@ -14,7 +14,7 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
-import net.minecraft.src.universalelectricity.UniversalElectricity;
+import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.extend.BlockMachine;
 
 public class BlockElectricFurnace extends BlockMachine implements ITextureProvider
@@ -52,7 +52,7 @@ public class BlockElectricFurnace extends BlockMachine implements ITextureProvid
                 return this.blockIndexInTexture + 6;
             }
             //If it is the back side
-            else if (side == UniversalElectricity.getOrientationFromSide((byte)metadata, (byte)2))
+            else if (side == Vector3.getOrientationFromSide((byte)metadata, (byte)2))
             {
                 return this.blockIndexInTexture + 2;
             }

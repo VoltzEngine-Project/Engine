@@ -61,12 +61,18 @@ public class mod_UniversalElectricity extends NetworkMod
 	@Override
     public boolean clientSideRequired()
     {
-            return true;
+        return true;
     }
 
     @Override
     public boolean serverSideRequired()
     {
-            return false;
+        return false;
+    }
+    
+    @Override
+	public String getName()
+    {
+        return "Universal Electricity";
     }
 }

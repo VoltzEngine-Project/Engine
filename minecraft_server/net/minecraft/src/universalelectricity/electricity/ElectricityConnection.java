@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.universalelectricity.UniversalElectricity;
+import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 
 public class ElectricityConnection
@@ -47,7 +47,7 @@ public class ElectricityConnection
                 {
                     if (tileEntity instanceof IElectricUnit)
                     {
-                        if (!returnArray.contains((IElectricUnit)tileEntity) && ((IElectricUnit)tileEntity).canReceiveFromSide(UniversalElectricity.getOrientationFromSide(i, (byte)2)))
+                        if (!returnArray.contains((IElectricUnit)tileEntity) && ((IElectricUnit)tileEntity).canReceiveFromSide(Vector3.getOrientationFromSide(i, (byte)2)))
                         {
                             returnArray.add((IElectricUnit)tileEntity);
                         }

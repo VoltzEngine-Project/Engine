@@ -229,4 +229,104 @@ public class Vector3 extends Vector2
     {
         return "Vector3: " + this.x + "," + this.y + "," + this.z;
     }
+    
+    /**
+	 * Gets a position relative to another position's side
+	 * @param position - The position
+	 * @param side - The side. 0-5
+	 * @return The position relative to the original position's side
+	 */
+	public void modifyPositionFromSide(byte side)
+	{
+	    switch (side)
+	    {
+	        case 0: this.y -= 1; break;
+	        case 1: this.y += 1; break;
+	        case 2: this.z += 1; break;
+	        case 3: this.z -= 1; break;
+	        case 4: this.x += 1; break;
+	        case 5: this.x -= 1; break;
+	    }	
+	}
+
+    /**
+	 * Finds the side of a block depending on it's facing direction from the given side.
+	 * The side numbers are compatible with the function"getBlockTextureFromSideAndMetadata".
+	 *
+	 *  Bottom: 0;
+	 *  Top: 1;
+	 *	Back: 2;
+	 *	Front: 3;
+	 *	Left: 4;
+	 *	Right: 5;
+	 * @param front - The direction in which this block is facing/front. Use a number between 0 and 5. Default is 3.
+	 * @param side - The side you are trying to find. A number between 0 and 5.
+	 * @return The side relative to the facing direction.
+	 */
+	
+	public static byte getOrientationFromSide(byte front, byte side)
+	{
+	    switch (front)
+	    {
+	        case 0:
+	            switch (side)
+	            {
+	                case 0: return 3;
+	                case 1: return 4;
+	                case 2: return 1;
+	                case 3: return 0;
+	                case 4: return 4;
+	                case 5: return 5;
+	            }
+	
+	        case 1:
+	            switch (side)
+	            {
+	                case 0: return 4;
+	                case 1: return 3;
+	                case 2: return 0;
+	                case 3: return 1;
+	                case 4: return 4;
+	                case 5: return 5;
+	            }
+	
+	        case 2:
+	            switch (side)
+	            {
+	                case 0: return 0;
+	                case 1: return 1;
+	                case 2: return 3;
+	                case 3: return 2;
+	                case 4: return 5;
+	                case 5: return 4;
+	            }
+	
+	        case 3:
+	            return side;
+	
+	        case 4:
+	            switch (side)
+	            {
+	                case 0: return 0;
+	                case 1: return 1;
+	                case 2: return 5;
+	                case 3: return 4;
+	                case 4: return 3;
+	                case 5: return 2;
+	            }
+	
+	        case 5:
+	            switch (side)
+	            {
+	                case 0: return 0;
+	                case 1: return 1;
+	                case 2: return 4;
+	                case 3: return 5;
+	                case 4: return 2;
+	                case 5: return 3;
+	            }
+	    }
+	
+	    return -1;
+	}
 }

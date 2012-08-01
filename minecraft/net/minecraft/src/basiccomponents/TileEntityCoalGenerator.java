@@ -70,7 +70,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
         {
             super.onUpdate(watts, voltage, side);
             //Check nearby blocks and see if the conductor is full. If so, then it is connected
-            TileEntity tileEntity = UniversalElectricity.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), UniversalElectricity.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
+            TileEntity tileEntity = UniversalElectricity.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
 
             if (tileEntity instanceof TileEntityConductor)
             {

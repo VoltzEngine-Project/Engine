@@ -236,142 +236,6 @@ public class UniversalElectricity
     }
 
     /**
-     * Finds the side of a block depending on it's facing direction from the given side.
-     * The side numbers are compatible with the function"getBlockTextureFromSideAndMetadata".
-     *
-     *  Bottom: 0;
-     *  Top: 1;
-     *	Back: 2;
-     *	Front: 3;
-     *	Left: 4;
-     *	Right: 5;
-     * @param front - The direction in which this block is facing/front. Use a number between 0 and 5. Default is 3.
-     * @param side - The side you are trying to find. A number between 0 and 5.
-     * @return The side relative to the facing direction.
-     */
-
-    public static byte getOrientationFromSide(byte front, byte side)
-    {
-        switch (front)
-        {
-            case 0:
-                switch (side)
-                {
-                    case 0:
-                        return 3;
-
-                    case 1:
-                        return 4;
-
-                    case 2:
-                        return 1;
-
-                    case 3:
-                        return 0;
-
-                    case 4:
-                        return 4;
-
-                    case 5:
-                        return 5;
-                }
-
-            case 1:
-                switch (side)
-                {
-                    case 0:
-                        return 4;
-
-                    case 1:
-                        return 3;
-
-                    case 2:
-                        return 0;
-
-                    case 3:
-                        return 1;
-
-                    case 4:
-                        return 4;
-
-                    case 5:
-                        return 5;
-                }
-
-            case 2:
-                switch (side)
-                {
-                    case 0:
-                        return 0;
-
-                    case 1:
-                        return 1;
-
-                    case 2:
-                        return 3;
-
-                    case 3:
-                        return 2;
-
-                    case 4:
-                        return 5;
-
-                    case 5:
-                        return 4;
-                }
-
-            case 3:
-                return side;
-
-            case 4:
-                switch (side)
-                {
-                    case 0:
-                        return 0;
-
-                    case 1:
-                        return 1;
-
-                    case 2:
-                        return 5;
-
-                    case 3:
-                        return 4;
-
-                    case 4:
-                        return 3;
-
-                    case 5:
-                        return 2;
-                }
-
-            case 5:
-                switch (side)
-                {
-                    case 0:
-                        return 0;
-
-                    case 1:
-                        return 1;
-
-                    case 2:
-                        return 4;
-
-                    case 3:
-                        return 5;
-
-                    case 4:
-                        return 2;
-
-                    case 5:
-                        return 3;
-                }
-        }
-
-        return -1;
-    }
-
-    /**
      * Checks if the block is being connected to a conductor
      * @param world - The world in which this conductor block is in
      * @param x - The X axis of the conductor
@@ -381,7 +245,7 @@ public class UniversalElectricity
      */
     public static TileEntity getUEUnitFromSide(World world, Vector3 position, byte side)
     {
-        position = getPositionFromSide(position, side);
+    	position.modifyPositionFromSide(side);
         //Check if the designated block is a UE Unit - producer, consumer or a conductor
         TileEntity tileEntity = world.getBlockTileEntity(position.intX(), position.intY(), position.intZ());
 
@@ -392,51 +256,13 @@ public class UniversalElectricity
 
         if (tileEntity instanceof IElectricUnit)
         {
-            if (((IElectricUnit)tileEntity).canConnect(UniversalElectricity.getOrientationFromSide(side, (byte)2)))
+            if (((IElectricUnit)tileEntity).canConnect(Vector3.getOrientationFromSide(side, (byte)2)))
             {
                 return tileEntity;
             }
         }
 
         return null;
-    }
-
-    /**
-     * Gets a position relative to another position's side
-     * @param position - The position
-     * @param side - The side. 0-5
-     * @return The position relative to the original position's side
-     */
-    public static Vector3 getPositionFromSide(Vector3 position, byte side)
-    {
-        switch (side)
-        {
-            case 0:
-                position.y -= 1;
-                break;
-
-            case 1:
-                position.y += 1;
-                break;
-
-            case 2:
-                position.z += 1;
-                break;
-
-            case 3:
-                position.z -= 1;
-                break;
-
-            case 4:
-                position.x += 1;
-                break;
-
-            case 5:
-                position.x -= 1;
-                break;
-        }
-
-        return position;
     }
 
     /**
