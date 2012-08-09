@@ -2,7 +2,6 @@ package net.minecraft.src.universalelectricity.extend;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
-import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
 
 /**
  * REQUIRED

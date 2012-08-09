@@ -7,17 +7,15 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.ISidedInventory;
-import net.minecraft.src.forge.ITextureProvider;
-import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
+import net.minecraft.src.universalelectricity.extend.IItemElectric;
 import net.minecraft.src.universalelectricity.extend.IRedstoneProvider;
-import net.minecraft.src.universalelectricity.extend.ItemElectric;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.universalelectricity.network.IPacketSender;
 
-public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRedstoneProvider, ITextureProvider, IInventory, ISidedInventory, IPacketSender
+public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRedstoneProvider, IInventory, ISidedInventory, IPacketSender
 {
     public float electricityStored = 0;
 
@@ -73,9 +71,9 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
                 //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
                 if (this.containingItems[0] != null && this.electricityStored > 0)
                 {
-                    if (this.containingItems[0].getItem() instanceof ItemElectric)
+                    if (this.containingItems[0].getItem() instanceof IItemElectric)
                     {
-                        ItemElectric electricItem = (ItemElectric)this.containingItems[0].getItem();
+                        IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
                         float rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
                         this.electricityStored -= electricItem.getTransferRate() - rejectedElectricity;
                     }
@@ -84,9 +82,9 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
                 //The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
                 if (this.containingItems[1] != null && this.electricityStored < this.getElectricityCapacity())
                 {
-                    if (this.containingItems[1].getItem() instanceof ItemElectric)
+                    if (this.containingItems[1].getItem() instanceof IItemElectric)
                     {
-                        ItemElectric electricItem = (ItemElectric)this.containingItems[1].getItem();
+                        IItemElectric electricItem = (IItemElectric)this.containingItems[1].getItem();
 
                         if (electricItem.canProduceElectricity())
                         {
@@ -111,7 +109,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
 
                 if (this.electricityStored > 0)
                 {
-                    TileEntity tileEntity = UniversalElectricity.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2));
+                    TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2));
 
                     if (tileEntity != null)
                     {
@@ -127,7 +125,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
             }
         }
 
-        BasicComponents.packetManager.sendPacketData(this, new double[] {this.electricityStored, this.disabledTicks});
+        BasicComponents.PACKET_MANAGER.sendPacketData(this, new double[] {this.electricityStored, this.disabledTicks});
     }
 
     /**
@@ -286,12 +284,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
     public void openChest() { }
     @Override
     public void closeChest() { }
-
-    @Override
-    public String getTextureFile()
-    {
-        return BasicComponents.blockTextureFile;
-    }
 
     @Override
     public boolean isPoweringTo(byte side)

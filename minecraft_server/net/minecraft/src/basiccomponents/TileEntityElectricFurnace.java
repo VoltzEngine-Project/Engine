@@ -7,13 +7,12 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.forge.ISidedInventory;
-import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
-import net.minecraft.src.universalelectricity.extend.ItemElectric;
+import net.minecraft.src.universalelectricity.extend.IItemElectric;
 import net.minecraft.src.universalelectricity.network.IPacketSender;
 
-public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IPacketSender, ITextureProvider, IInventory, ISidedInventory
+public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IPacketSender, IInventory, ISidedInventory
 {
     //The amount of ticks requried to smelt this item
     public final int smeltingTimeRequired = 150;
@@ -67,9 +66,9 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             //The bottom slot is for portable batteries
             if (this.containingItems[0] != null)
             {
-                if (this.containingItems[0].getItem() instanceof ItemElectric)
+                if (this.containingItems[0].getItem() instanceof IItemElectric)
                 {
-                    ItemElectric electricItem = (ItemElectric)this.containingItems[0].getItem();
+                    IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
 
                     if (electricItem.canProduceElectricity())
                     {
@@ -110,7 +109,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             }
         }
 
-        BasicComponents.packetManager.sendPacketData(this, new double[] {this.smeltingTicks, this.disabledTicks});
+        BasicComponents.PACKET_MANAGER.sendPacketData(this, new double[] {this.smeltingTicks, this.disabledTicks});
     }
 
     //Check all conditions and see if we can start smelting
@@ -318,12 +317,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     public void openChest() { }
     @Override
     public void closeChest() { }
-
-    @Override
-    public String getTextureFile()
-    {
-        return BasicComponents.blockTextureFile;
-    }
 
     @Override
     public float getVoltage()

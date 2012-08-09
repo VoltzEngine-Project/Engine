@@ -11,18 +11,14 @@ import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.forge.ISidedInventory;
-import net.minecraft.src.forge.ITextureProvider;
-import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityCoalGenerator extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory, IPacketReceiver
+public class TileEntityCoalGenerator extends TileEntityElectricUnit implements IInventory, ISidedInventory, IPacketReceiver
 {
-    private static int maxPacketID = 0;
-
     //Maximum possible generation rate of watts in SECONDS
     public static final int maxGenerateRate = 560;
 
@@ -41,8 +37,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
     public TileEntityCoalGenerator()
     {
-        maxPacketID ++;
-        BasicComponents.packetManager.registerPacketUser(this);
+        BasicComponents.PACKET_MANAGER.registerPacketUser(this);
         ElectricityManager.registerElectricUnit(this);
     }
 
@@ -70,7 +65,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
         {
             super.onUpdate(watts, voltage, side);
             //Check nearby blocks and see if the conductor is full. If so, then it is connected
-            TileEntity tileEntity = UniversalElectricity.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
+            TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
 
             if (tileEntity instanceof TileEntityConductor)
             {
@@ -270,12 +265,6 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     public void openChest() { }
     @Override
     public void closeChest() { }
-
-    @Override
-    public String getTextureFile()
-    {
-        return BasicComponents.blockTextureFile;
-    }
 
     @Override
     public float getVoltage()

@@ -12,9 +12,9 @@ import net.minecraft.src.universalelectricity.UniversalElectricity;
 
 public class UEOreManager
 {
-    public static final int maxOreBlocks = 2;
-    public static final int oreBlockID = UniversalElectricity.getConfigID(UniversalElectricity.configuration, "Universal Ores", 3968, true);
-    public static final BlockUEOre[] blockOre = {new BlockUEOre(oreBlockID), new BlockUEOre(oreBlockID + 1)};
+    public static final int MAX_ORE_BLOCKS = 2;
+    public static final int ORE_BLOCK_ID = UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Universal Ores", 3968, true);
+    public static final BlockUEOre[] blockOre = {new BlockUEOre(ORE_BLOCK_ID), new BlockUEOre(ORE_BLOCK_ID + 1)};
 
     /**
      * Adds and automatically generates a new ore in the ground.
@@ -25,7 +25,7 @@ public class UEOreManager
      */
     public static boolean addOre(int newID, OreData universalOre)
     {
-        if (newID > 16 * maxOreBlocks)
+        if (newID > 16 * MAX_ORE_BLOCKS)
         {
             throw new RuntimeException("Universal ore ID is too high!");
         }
@@ -75,7 +75,7 @@ public class UEOreManager
      */
     public static BlockUEOre getOre(int oreID)
     {
-        if (oreID <= 16 * maxOreBlocks)
+        if (oreID <= 16 * MAX_ORE_BLOCKS)
         {
             int i = (int)Math.floor(oreID / 16);
 
@@ -96,7 +96,7 @@ public class UEOreManager
      */
     public static int getOreMetadata(int id)
     {
-        if (id <= 16 * maxOreBlocks)
+        if (id <= 16 * MAX_ORE_BLOCKS)
         {
             int i = (int)Math.floor(id / 16);
 
@@ -107,6 +107,16 @@ public class UEOreManager
         }
 
         return -1;
+    }
+    
+    /**
+     * Gets the item stack corresponding to your ore ID
+     * @param id
+     * @return
+     */
+    public static ItemStack getOreItemStack(int id)
+    {
+    	return new ItemStack(getOre(id), 1, getOreMetadata(id));
     }
 
     //Generate the surface of the world based on all registered universal ores.
@@ -122,7 +132,6 @@ public class UEOreManager
                 {
                     if (oreBlock.ores[i] != null)
                     {
-                    	
                         if (oreBlock.ores[i].shouldGenerate)
                         {
                         	WorldGenMinable worldGenMinable = new WorldGenMinable(oreBlock.blockID, oreBlock.ores[i].amountPerBranch, i);

@@ -17,7 +17,7 @@ public class RenderCopperWire extends TileEntitySpecialRenderer
     public void renderAModelAt(TileEntityCopperWire tileEntity, double d, double d1, double d2, float f)
     {
         //Texture file
-        bindTextureByName(BasicComponents.filePath + "CopperWire.png");
+        bindTextureByName(BasicComponents.FILE_PATH + "CopperWire.png");
         GL11.glPushMatrix();
         GL11.glTranslatef((float) d + 0.5F, (float) d1 + 1.5F, (float) d2 + 0.5F);
         GL11.glScalef(1.0F, -1F, -1F);

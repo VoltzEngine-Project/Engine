@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.Vector3;
+import net.minecraft.src.universalelectricity.extend.IElectricUnit;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 
 /**
@@ -92,7 +92,7 @@ public class ElectricityManager
         {
             for (byte i = 0; i < 6; i++)
             {
-                conductor.updateConnectionWithoutSplit(UniversalElectricity.getUEUnitFromSide(conductor.worldObj, new Vector3(conductor.xCoord, conductor.yCoord, conductor.zCoord), i), i);
+                conductor.updateConnectionWithoutSplit(Vector3.getUEUnitFromSide(conductor.worldObj, new Vector3(conductor.xCoord, conductor.yCoord, conductor.zCoord), i), i);
             }
         }
     }

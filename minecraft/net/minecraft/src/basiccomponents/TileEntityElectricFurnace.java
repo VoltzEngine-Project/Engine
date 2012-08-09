@@ -11,13 +11,12 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.forge.ISidedInventory;
-import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
-import net.minecraft.src.universalelectricity.extend.ItemElectric;
+import net.minecraft.src.universalelectricity.extend.IItemElectric;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
 
-public class TileEntityElectricFurnace extends TileEntityElectricUnit implements ITextureProvider, IInventory, ISidedInventory,  IPacketReceiver
+public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IInventory, ISidedInventory,  IPacketReceiver
 {
     private static int maxPacketID = 0;
 
@@ -41,7 +40,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     {
         ElectricityManager.registerElectricUnit(this);
         maxPacketID++;
-        BasicComponents.packetManager.registerPacketUser(this);
+        BasicComponents.PACKET_MANAGER.registerPacketUser(this);
     }
 
     @Override
@@ -75,9 +74,9 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             //The bottom slot is for portable batteries
             if (this.containingItems[0] != null)
             {
-                if (this.containingItems[0].getItem() instanceof ItemElectric)
+                if (this.containingItems[0].getItem() instanceof IItemElectric)
                 {
-                    ItemElectric electricItem = (ItemElectric)this.containingItems[0].getItem();
+                    IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
 
                     if (electricItem.canProduceElectricity())
                     {
@@ -328,12 +327,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 
     @Override
     public void closeChest() { }
-
-    @Override
-    public String getTextureFile()
-    {
-        return BasicComponents.blockTextureFile;
-    }
 
     @Override
     public float getVoltage()

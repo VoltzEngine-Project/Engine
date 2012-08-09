@@ -16,7 +16,7 @@ import net.minecraft.src.universalelectricity.UniversalElectricity;
  * @author Henry
  *
  */
-public abstract class ItemElectric extends Item
+public abstract class ItemElectric extends Item implements IItemElectric
 {
     public ItemElectric(int par1)
     {
@@ -111,7 +111,7 @@ public abstract class ItemElectric extends Item
      * Try to use onReceiveElectricity or onUseElectricity instead.
      * @param watts - The amount of electricity in watts
      */
-    protected void setElectricityStored(ItemStack itemStack, float watts)
+    public void setElectricityStored(ItemStack itemStack, float watts)
     {
         //Saves the frequency in the itemstack
         if (itemStack.stackTagCompound == null)
@@ -128,7 +128,7 @@ public abstract class ItemElectric extends Item
      * This function is called to get the electricity stored in this item
      * @return - The amount of electricity stored
      */
-    protected float getElectricityStored(ItemStack itemStack)
+    public float getElectricityStored(ItemStack itemStack)
     {
         if (itemStack.stackTagCompound == null)
         {
@@ -186,7 +186,7 @@ public abstract class ItemElectric extends Item
         itemList.add(unchargedItem);
         //Add an electric item to the creative list that is fully charged
         ItemStack chargedItem = new ItemStack(this, 1);
-        this.setElectricityStored(chargedItem, ((ItemElectric)chargedItem.getItem()).getElectricityCapacity());
+        this.setElectricityStored(chargedItem, ((IItemElectric)chargedItem.getItem()).getElectricityCapacity());
         itemList.add(chargedItem);
     }
 }

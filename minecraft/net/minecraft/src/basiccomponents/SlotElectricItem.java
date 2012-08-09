@@ -3,7 +3,7 @@ package net.minecraft.src.basiccomponents;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import net.minecraft.src.universalelectricity.extend.ItemElectric;
+import net.minecraft.src.universalelectricity.extend.IItemElectric;
 
 /**
  * This slot should be used by any container that needs the slot for an electric item only
@@ -23,6 +23,6 @@ public class SlotElectricItem extends Slot
     @Override
     public boolean isItemValid(ItemStack par1ItemStack)
     {
-        return par1ItemStack.getItem() instanceof ItemElectric;
+        return par1ItemStack.getItem() instanceof IItemElectric;
     }
 }

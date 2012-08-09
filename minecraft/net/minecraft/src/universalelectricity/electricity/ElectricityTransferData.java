@@ -1,5 +1,7 @@
 package net.minecraft.src.universalelectricity.electricity;
 
+import net.minecraft.src.universalelectricity.extend.IElectricUnit;
+
 public class ElectricityTransferData
 {
     public IElectricUnit eletricUnit;

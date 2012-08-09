@@ -7,7 +7,7 @@ import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import net.minecraft.src.SlotFurnace;
-import net.minecraft.src.universalelectricity.extend.ItemElectric;
+import net.minecraft.src.universalelectricity.extend.IItemElectric;
 
 public class ContainerElectricFurnace extends Container
 {
@@ -64,7 +64,7 @@ public class ContainerElectricFurnace extends Container
             }
             else if (par1 != 1 && par1 != 0)
             {
-                if (var4.getItem() instanceof ItemElectric)
+                if (var4.getItem() instanceof IItemElectric)
                 {
                     if (!this.mergeItemStack(var4, 0, 1, false))
                     {

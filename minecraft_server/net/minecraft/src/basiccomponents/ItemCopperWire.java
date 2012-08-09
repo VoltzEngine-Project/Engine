@@ -7,7 +7,7 @@ import net.minecraft.src.World;
 
 public class ItemCopperWire extends BCItem
 {
-    private int spawnID = BasicComponents.BlockCopperWire.blockID;
+    private int spawnID = BasicComponents.blockCopperWire.blockID;
 
     public ItemCopperWire(int id, int texture)
     {

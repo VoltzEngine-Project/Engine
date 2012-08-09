@@ -5,6 +5,9 @@ import net.minecraft.src.MathHelper;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3D;
+import net.minecraft.src.World;
+import net.minecraft.src.universalelectricity.extend.IElectricUnit;
+import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 
 /**
  * Vector3 Class is used for defining objects in a 3D space. Vector3 makes it easier to handle the coordinates of objects. Instead of
@@ -242,14 +245,44 @@ public class Vector3 extends Vector2
 	    {
 	        case 0: this.y -= 1; break;
 	        case 1: this.y += 1; break;
-	        case 2: this.z += 1; break;
-	        case 3: this.z -= 1; break;
-	        case 4: this.x += 1; break;
-	        case 5: this.x -= 1; break;
+	        case 2: this.z -= 1; break;
+	        case 3: this.z += 1; break;
+	        case 4: this.x -= 1; break;
+	        case 5: this.x += 1; break;
 	    }	
 	}
 
     /**
+	 * Checks if the block is being connected to a conductor
+	 * @param world - The world in which this conductor block is in
+	 * @param x - The X axis of the conductor
+	 * @param y - The Y axis of the conductor
+	 * @param z - The Z axis of the conductor
+	 * @return Returns the tile entity for the block on the designated side. Returns null if not a UE Unit
+	 */
+	public static TileEntity getUEUnitFromSide(World world, Vector3 position, byte side)
+	{
+	    position.modifyPositionFromSide(side);
+	    //Check if the designated block is a UE Unit - producer, consumer or a conductor
+	    TileEntity tileEntity = world.getBlockTileEntity(position.intX(), position.intY(), position.intZ());
+	
+	    if (tileEntity instanceof TileEntityConductor)
+	    {
+	        return tileEntity;
+	    }
+	
+	    if (tileEntity instanceof IElectricUnit)
+	    {
+	        if (((IElectricUnit)tileEntity).canConnect(getOrientationFromSide(side, (byte)2)))
+	        {
+	            return tileEntity;
+	        }
+	    }
+	
+	    return null;
+	}
+
+	/**
 	 * Finds the side of a block depending on it's facing direction from the given side.
 	 * The side numbers are compatible with the function"getBlockTextureFromSideAndMetadata".
 	 *

@@ -1,6 +1,7 @@
 package net.minecraft.src.universalelectricity.electricity;
 
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.universalelectricity.extend.IElectricUnit;
 
 /**
  * An easier way to implement the methods with default values set.
@@ -29,7 +30,7 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
     }
 
     /**
-     * Called evert tick. Super this!
+     * Called every tick. Super this!
      */
     @Override
     public void onUpdate(float watts, float voltage, byte side)

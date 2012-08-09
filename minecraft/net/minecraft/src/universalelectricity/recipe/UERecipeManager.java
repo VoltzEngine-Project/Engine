@@ -114,7 +114,7 @@ public class UERecipeManager
     public static void initialize()
     {
         //Replace all recipes
-        for (NetworkMod addon : UniversalElectricity.addons)
+        for (NetworkMod addon : UniversalElectricity.MODS)
         {
             if (addon instanceof IRecipeReplacementHandler)
             {

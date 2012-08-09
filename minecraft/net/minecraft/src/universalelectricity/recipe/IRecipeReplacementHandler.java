@@ -1,6 +1,5 @@
 package net.minecraft.src.universalelectricity.recipe;
 
-import net.minecraft.src.ItemStack;
 
 /**
  * Implement this class into your BaseMod class if you wish to replace default UE recipes.

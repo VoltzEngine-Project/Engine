@@ -2,12 +2,9 @@ package net.minecraft.src.basiccomponents;
 
 import java.util.Random;
 
-import net.minecraft.src.Block;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
-import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.extend.BlockConductor;
 
 public class BlockCopperWire extends BlockConductor implements ITextureProvider
@@ -57,7 +54,7 @@ public class BlockCopperWire extends BlockConductor implements ITextureProvider
     @Override
     public int idDropped(int par1, Random par2Random, int par3)
     {
-        return BasicComponents.ItemCopperWire.shiftedIndex;
+        return BasicComponents.itemCopperWire.shiftedIndex;
     }
 
     /**

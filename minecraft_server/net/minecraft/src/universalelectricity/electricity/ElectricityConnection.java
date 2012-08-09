@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.universalelectricity.Vector3;
+import net.minecraft.src.universalelectricity.extend.IElectricUnit;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 
 public class ElectricityConnection

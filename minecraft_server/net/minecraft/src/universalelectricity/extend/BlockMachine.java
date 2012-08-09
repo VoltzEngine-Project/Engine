@@ -4,19 +4,22 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.src.BlockContainer;
+import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
+import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import net.minecraft.src.basiccomponents.BasicComponents;
+import buildcraft.api.tools.IToolWrench;
 
 /**
  * A block you may extend from to create your machine blocks! You do not have to extend from this block if
  * you do not want to. It's optional but it comes with some useful functions that will make coding easier
  * for you.
  */
-public abstract class BlockMachine extends BlockContainer implements IWrenchable
+public abstract class BlockMachine extends BlockContainer
 {
     public BlockMachine(String name, int id, Material material)
     {
@@ -65,12 +68,20 @@ public abstract class BlockMachine extends BlockContainer implements IWrenchable
          */
         if (par5EntityPlayer.inventory.getCurrentItem() != null)
         {
-            if (par5EntityPlayer.inventory.getCurrentItem().itemID == BasicComponents.ItemWrench.shiftedIndex)
+            if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IToolWrench)
             {
+            	if(par5EntityPlayer.isSneaking())
+                {
+            		this.onSneakUseWrench(par1World, x, y, z, par5EntityPlayer);
+                }
+            	else
+            	{
+            		this.onUseWrench(par1World, x, y, z, par5EntityPlayer);
+            	}
                 par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
                 return false;
             }
-            else if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof ItemElectric)
+            else if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IItemElectric)
             {
                 if(this.onUseElectricItem(par1World, x, y, z, par5EntityPlayer))
                 {
@@ -83,8 +94,10 @@ public abstract class BlockMachine extends BlockContainer implements IWrenchable
         {
         	return this.onSneakMachineActivated(par1World, x, y, z, par5EntityPlayer);
         }
-
-        return this.onMachineActivated(par1World, x, y, z, par5EntityPlayer);
+        else
+        {
+        	return this.onMachineActivated(par1World, x, y, z, par5EntityPlayer);
+        }
     }
 
     /**
@@ -118,7 +131,6 @@ public abstract class BlockMachine extends BlockContainer implements IWrenchable
      * Called when a player uses a wrench on the machine
      * @return True if some happens
      */
-    @Override
     public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
     {
         return false;
@@ -128,7 +140,6 @@ public abstract class BlockMachine extends BlockContainer implements IWrenchable
      * Called when a player uses a wrench on the machine while sneaking
      * @return True if some happens
      */
-    @Override
     public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
     {
     	return this.onUseWrench(par1World, x, y, z, par5EntityPlayer);
@@ -142,6 +153,63 @@ public abstract class BlockMachine extends BlockContainer implements IWrenchable
     public TileEntity getBlockEntity()
     {
         return null;
+    }
+    
+    /**
+     * Override this if you don't need it. This will eject all items out
+     * of this machine if it has an inventory
+     */
+    @Override
+    public void onBlockRemoval(World par1World, int x, int y, int z)
+    {
+        TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
+
+        if(tileEntity != null)
+        {
+        	if(tileEntity instanceof IInventory)
+        	{
+        		IInventory inventory = (IInventory)tileEntity;
+        		
+	            for (int var6 = 0; var6 < inventory.getSizeInventory(); ++var6)
+	            {
+	                ItemStack var7 = inventory.getStackInSlot(var6);
+	
+	                if (var7 != null)
+	                {
+	                    Random random = new Random();
+	                    float var8 = random.nextFloat() * 0.8F + 0.1F;
+	                    float var9 = random.nextFloat() * 0.8F + 0.1F;
+	                    float var10 = random.nextFloat() * 0.8F + 0.1F;
+	
+	                    while (var7.stackSize > 0)
+	                    {
+	                        int var11 = random.nextInt(21) + 10;
+	
+	                        if (var11 > var7.stackSize)
+	                        {
+	                            var11 = var7.stackSize;
+	                        }
+	
+	                        var7.stackSize -= var11;
+	                        EntityItem var12 = new EntityItem(par1World, (x + var8), (y + var9), (z + var10), new ItemStack(var7.itemID, var11, var7.getItemDamage()));
+	
+	                        if (var7.hasTagCompound())
+	                        {
+	                            var12.item.setTagCompound((NBTTagCompound)var7.getTagCompound().copy());
+	                        }
+	
+	                        float var13 = 0.05F;
+	                        var12.motionX = ((float)random.nextGaussian() * var13);
+	                        var12.motionY = ((float)random.nextGaussian() * var13 + 0.2F);
+	                        var12.motionZ = ((float)random.nextGaussian() * var13);
+	                        par1World.spawnEntityInWorld(var12);
+	                    }
+	                }
+	            }
+        	}
+        }
+
+        super.onBlockRemoval(par1World, x, y, z);
     }
 
     /**

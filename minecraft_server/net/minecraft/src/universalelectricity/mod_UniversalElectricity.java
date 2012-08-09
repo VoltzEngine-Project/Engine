@@ -1,12 +1,12 @@
-package net.minecraft.src;
+package net.minecraft.src.universalelectricity;
 
 import java.util.Random;
 
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.BaseMod;
+import net.minecraft.src.ModLoader;
+import net.minecraft.src.World;
 import net.minecraft.src.forge.NetworkMod;
-import net.minecraft.src.universalelectricity.ItemUniversalOre0;
-import net.minecraft.src.universalelectricity.ItemUniversalOre1;
-import net.minecraft.src.universalelectricity.UniversalElectricity;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.ore.UEOreManager;
 import net.minecraft.src.universalelectricity.recipe.UERecipeManager;

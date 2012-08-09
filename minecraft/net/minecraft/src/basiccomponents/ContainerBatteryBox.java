@@ -5,7 +5,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import net.minecraft.src.universalelectricity.extend.ItemElectric;
+import net.minecraft.src.universalelectricity.extend.IItemElectric;
 
 public class ContainerBatteryBox extends Container
 {
@@ -54,9 +54,9 @@ public class ContainerBatteryBox extends Container
 
             if (par1 != 0 && par1 != 1)
             {
-                if (var4.getItem() instanceof ItemElectric)
+                if (var4.getItem() instanceof IItemElectric)
                 {
-                    if (((ItemElectric)var4.getItem()).canProduceElectricity())
+                    if (((IItemElectric)var4.getItem()).canProduceElectricity())
                     {
                         if (!this.mergeItemStack(var4, 1, 2, false))
                         {

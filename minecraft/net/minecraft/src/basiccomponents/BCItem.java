@@ -6,7 +6,7 @@ import net.minecraft.src.forge.ITextureProvider;
 
 public class BCItem extends Item implements ITextureProvider
 {
-    public static String textureFile = BasicComponents.filePath + "items.png";
+    public static String textureFile = BasicComponents.FILE_PATH + "items.png";
 
     public BCItem(String name, int id, int texture)
     {

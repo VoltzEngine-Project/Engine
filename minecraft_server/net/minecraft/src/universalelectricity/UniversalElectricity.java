@@ -4,28 +4,24 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.NetworkMod;
-import net.minecraft.src.universalelectricity.electricity.IElectricUnit;
-import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 
 public class UniversalElectricity
 {
-    public static final Configuration configuration = new Configuration(new File("config/UniversalElectricity/UniversalElectricity.cfg"));
+    public static final Configuration CONFIGURATION = new Configuration(new File("config/UniversalElectricity/UniversalElectricity.cfg"));
 
-    public static final List<NetworkMod> addons = new ArrayList<NetworkMod>();
+    public static final List<NetworkMod> MODS = new ArrayList<NetworkMod>();
 
-    public static void registerAddon(NetworkMod networkmod, String version)
+    public static void registerMod(NetworkMod networkmod, String version)
     {
         String[] versionNumbers = getVersion().split("\\.");
         String[] addonVersionNumbers = version.split("\\.");
 
         if (Integer.parseInt(addonVersionNumbers[0]) != Integer.parseInt(versionNumbers[0]))
         {
-            MinecraftForge.killMinecraft("Universal Electricity", "Add-on major version mismatch, expecting " + getVersion());
+            MinecraftForge.killMinecraft("Universal Electricity", "UE mod major version mismatch, expecting " + getVersion());
         }
         else if (Integer.parseInt(addonVersionNumbers[1]) > Integer.parseInt(versionNumbers[1]))
         {
@@ -33,20 +29,20 @@ public class UniversalElectricity
         }
         else if (Integer.parseInt(addonVersionNumbers[1]) < Integer.parseInt(versionNumbers[1]))
         {
-            MinecraftForge.killMinecraft("Universal Electricity", "Add-on minor version mismatch, need at least " + getVersion());
+            MinecraftForge.killMinecraft("Universal Electricity", "UE mod minor version mismatch, need at least " + getVersion());
         }
         else if (Integer.parseInt(addonVersionNumbers[2]) != Integer.parseInt(versionNumbers[2]))
         {
-            System.out.println("Universal Electricity add-on minor version " + version + " mismatch with version " + getVersion());
+            System.out.println("UE mod minor version " + version + " mismatch with version " + getVersion());
         }
 
-        addons.add(networkmod);
-        System.out.println("Loaded Universal Add-On: " + networkmod.getName());
+        MODS.add(networkmod);
+        System.out.println("Loaded Universal Electricity Mod: " + networkmod.getName());
     }
 
     public static String getVersion()
     {
-        return "0.4.6";
+        return "0.5.0";
     }
 
     /*------------------ FUNCTIONS AND HOOKS ----------------------
@@ -162,6 +158,57 @@ public class UniversalElectricity
     }
 
     /**
+     * Return a string with the amount of joules for displaying.
+     * @param joules
+     * @return The string for displaying joules
+     */
+    public static String getJouleDisplay(double joules)
+    {
+        String displayJoules;
+
+        if (joules > 1000000)
+        {
+            displayJoules = roundOneDecimal(joules / 1000000) + " MJ";
+        }
+
+        if (joules > 1000)
+        {
+            displayJoules = roundOneDecimal(joules / 1000) + " KJ";
+        }
+        else
+        {
+            displayJoules = (int)joules + " J";
+        }
+
+        return displayJoules;
+    }
+
+    public static String getJouleDisplayFull(double joules)
+    {
+        String displayJoules;
+
+        if (joules > 1000000)
+        {
+            displayJoules = roundOneDecimal(joules / 1000000) + " Megajoule";
+        }
+
+        if (joules > 1000)
+        {
+            displayJoules = roundOneDecimal(joules / 1000) + " Kilojoule";
+        }
+        else if (joules == 1)
+        {
+            displayJoules = (int)joules + " Joule";
+        }
+        else
+        {
+            displayJoules = (int)joules + " Joules";
+        }
+
+        return displayJoules;
+    }
+    
+    /**
      * Return a string with the amount of watts for displaying.
      * @param watts
      * @return The string for displaying watts
@@ -232,36 +279,6 @@ public class UniversalElectricity
     {
         int j = (int)(d * 10);
         return j / 10.0;
-    }
-
-    /**
-     * Checks if the block is being connected to a conductor
-     * @param world - The world in which this conductor block is in
-     * @param x - The X axis of the conductor
-     * @param y - The Y axis of the conductor
-     * @param z - The Z axis of the conductor
-     * @return Returns the tile entity for the block on the designated side. Returns null if not a UE Unit
-     */
-    public static TileEntity getUEUnitFromSide(World world, Vector3 position, byte side)
-    {
-        position.modifyPositionFromSide(side);
-        //Check if the designated block is a UE Unit - producer, consumer or a conductor
-        TileEntity tileEntity = world.getBlockTileEntity(position.intX(), position.intY(), position.intZ());
-
-        if (tileEntity instanceof TileEntityConductor)
-        {
-            return tileEntity;
-        }
-
-        if (tileEntity instanceof IElectricUnit)
-        {
-            if (((IElectricUnit)tileEntity).canConnect(Vector3.getOrientationFromSide(side, (byte)2)))
-            {
-                return tileEntity;
-            }
-        }
-
-        return null;
     }
 
     /**

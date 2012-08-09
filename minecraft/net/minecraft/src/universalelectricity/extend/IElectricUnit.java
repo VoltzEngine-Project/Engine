@@ -1,6 +1,5 @@
-package net.minecraft.src.universalelectricity.electricity;
+package net.minecraft.src.universalelectricity.extend;
 
-import net.minecraft.src.universalelectricity.extend.IDisableable;
 
 /**
  * The UEIConsumer interface is an interface that must be applied to all tile entities that can receive electricity.
@@ -12,9 +11,9 @@ public interface IElectricUnit extends IDisableable
     /**
      * Called every time a tick interval (specified in getConsumerTickInterval()).
      *
-     * @param watts - Amount of watts this electric unit is receiving.
+     * @param joules - Amount of joules this electric unit is receiving.
      * This won't exceed the electricityRequest() amount.
-     * NOTE! THIS WILL GIVE THE DELTA WATTAGE!
+     * NOTE! THIS WILL GIVE THE DELTA JOULES!
      * This means that if your electric unit's tick interval
      * is 10, it will give all 10 ticks of electricity at once. It will stack
      * up all the electricity you received over the ticks and hand it
@@ -27,7 +26,7 @@ public interface IElectricUnit extends IDisableable
      *
      * @param side - The side of the block in which the electricity is coming from.
      */
-    public void onUpdate(float watts, float voltage, byte side);
+    public void onUpdate(float joules, float voltage, byte side);
 
     /**
      * How much electricity this electric unit needs/wants PER TICK/THIS TICK.

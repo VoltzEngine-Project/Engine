@@ -76,9 +76,9 @@ public class OreData
     //Checks the config file and see if Universal Electricity should generate this ore
     private static boolean shouldGenerateOre(String oreName)
     {
-        UniversalElectricity.configuration.load();
-        boolean shouldGenerate = Boolean.parseBoolean(UniversalElectricity.configuration.getOrCreateBooleanProperty("Generate " + oreName, Configuration.CATEGORY_GENERAL, true).value);
-        UniversalElectricity.configuration.save();
+        UniversalElectricity.CONFIGURATION.load();
+        boolean shouldGenerate = Boolean.parseBoolean(UniversalElectricity.CONFIGURATION.getOrCreateBooleanProperty("Generate " + oreName, Configuration.CATEGORY_GENERAL, true).value);
+        UniversalElectricity.CONFIGURATION.save();
         return shouldGenerate;
     }
 
