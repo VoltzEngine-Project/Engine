@@ -55,7 +55,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     @Override
     public boolean canConnect(byte side)
     {
-        return side == this.getBlockMetadata();
+        return side == Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
         {
             super.onUpdate(watts, voltage, side);
             //Check nearby blocks and see if the conductor is full. If so, then it is connected
-            TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)3));
+            TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2));
 
             if (tileEntity instanceof TileEntityConductor)
             {

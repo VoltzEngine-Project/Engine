@@ -45,13 +45,13 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
     @Override
     public boolean canReceiveFromSide(byte side)
     {
-        return side == this.getBlockMetadata();
+        return side == Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
     }
 
     @Override
     public boolean canConnect(byte side)
     {
-        return canReceiveFromSide(side) || side == Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
+        return canReceiveFromSide(side) || side == this.getBlockMetadata();
     }
 
     @Override
@@ -109,7 +109,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IRed
 
                 if (this.electricityStored > 0)
                 {
-                    TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2));
+                    TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), (byte)this.getBlockMetadata());
 
                     if (tileEntity != null)
                     {

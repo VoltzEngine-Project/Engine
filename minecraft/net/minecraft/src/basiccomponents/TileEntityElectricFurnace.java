@@ -11,6 +11,7 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.forge.ISidedInventory;
+import net.minecraft.src.universalelectricity.Vector3;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.IItemElectric;
@@ -56,7 +57,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 
     public boolean canReceiveFromSide(byte side)
     {
-        return side == this.getBlockMetadata();
+        return side == Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
     }
 
     @Override

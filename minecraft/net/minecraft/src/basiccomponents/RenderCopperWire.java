@@ -34,22 +34,22 @@ public class RenderCopperWire extends TileEntitySpecialRenderer
 
         if (tileEntity.connectedBlocks[2] != null)
         {
-            model.renderFront();
+        	model.renderBack();
         }
 
         if (tileEntity.connectedBlocks[3] != null)
         {
-            model.renderBack();
+        	model.renderFront();
         }
 
         if (tileEntity.connectedBlocks[4] != null)
         {
-            model.renderRight();
+        	model.renderLeft();
         }
 
         if (tileEntity.connectedBlocks[5] != null)
         {
-            model.renderLeft();
+        	model.renderRight();
         }
 
         model.renderMiddle();
