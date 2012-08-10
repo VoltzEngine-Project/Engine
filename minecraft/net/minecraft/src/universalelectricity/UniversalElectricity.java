@@ -43,7 +43,7 @@ public class UniversalElectricity
 
     public static String getVersion()
     {
-        return "0.5.0";
+        return "0.4.7";
     }
 
     /*------------------ FUNCTIONS AND HOOKS ----------------------
