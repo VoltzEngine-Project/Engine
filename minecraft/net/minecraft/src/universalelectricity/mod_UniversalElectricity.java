@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.src.BaseMod;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
+import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.NetworkMod;
 import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.ore.UEOreManager;
@@ -21,6 +22,7 @@ public class mod_UniversalElectricity extends NetworkMod
 	@Override
 	public void load()
 	{	
+		MinecraftForge.versionDetect("Universal Electricity", 3, 4, 9);
 		ModLoader.setInGameHook(this, true, true);
 		ModLoader.registerBlock(UEOreManager.blockOre[0], ItemUniversalOre0.class);
 		ModLoader.registerBlock(UEOreManager.blockOre[1], ItemUniversalOre1.class);

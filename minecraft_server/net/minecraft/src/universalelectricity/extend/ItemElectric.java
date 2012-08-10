@@ -1,12 +1,14 @@
 package net.minecraft.src.universalelectricity.extend;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
+import net.minecraft.src.universalelectricity.UniversalElectricity;
 
 /**
  * REQUIRED
@@ -36,26 +38,26 @@ public abstract class ItemElectric extends Item implements IItemElectric
 
     /**
      * Called when this item is being "recharged" or receiving electricity.
-     * @param watts - The amount of watts this item is receiving.
+     * @param joules - The amount of joules this item is receiving.
      * @param itemStack - The ItemStack of this item
      * @return Return the rejected electricity from this item
      */
-    public float onReceiveElectricity(float watts, ItemStack itemStack)
+    public float onReceiveElectricity(float joules, ItemStack itemStack)
     {
-        float rejectedElectricity = Math.max((this.getElectricityStored(itemStack) + watts) - this.getElectricityCapacity(), 0);
-        this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) + watts - rejectedElectricity);
+        float rejectedElectricity = Math.max((this.getElectricityStored(itemStack) + joules) - this.getElectricityCapacity(), 0);
+        this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) + joules - rejectedElectricity);
         return rejectedElectricity;
     }
 
     /**
      * Called when this item's electricity is being used.
-     * @param watts - The amount of electricity requested from this item
+     * @param joules - The amount of electricity requested from this item
      * @param itemStack - The ItemStack of this item
      * @return The electricity that is given to the requester
      */
-    public float onUseElectricity(float watts, ItemStack itemStack)
+    public float onUseElectricity(float joules, ItemStack itemStack)
     {
-        float electricityToUse = Math.min(this.getElectricityStored(itemStack), watts);
+        float electricityToUse = Math.min(this.getElectricityStored(itemStack), joules);
         this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) - electricityToUse);
         return electricityToUse;
     }
@@ -81,9 +83,9 @@ public abstract class ItemElectric extends Item implements IItemElectric
     /**
      * This function sets the electriicty. Do not directly call this function.
      * Try to use onReceiveElectricity or onUseElectricity instead.
-     * @param watts - The amount of electricity in watts
+     * @param joules - The amount of electricity in joules
      */
-    public void setElectricityStored(ItemStack itemStack, float watts)
+    public void setElectricityStored(ItemStack itemStack, float joules)
     {
         //Saves the frequency in the itemstack
         if (itemStack.stackTagCompound == null)
@@ -91,7 +93,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
             itemStack.setTagCompound(new NBTTagCompound());
         }
 
-        float electricityStored = Math.max(Math.min(watts, this.getElectricityCapacity()), 0);
+        float electricityStored = Math.max(Math.min(joules, this.getElectricityCapacity()), 0);
         itemStack.stackTagCompound.setFloat("electricity", electricityStored);
         itemStack.setItemDamage((int)(getElectricityCapacity() - electricityStored));
     }
