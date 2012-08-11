@@ -301,18 +301,7 @@ public class Vector3 extends Vector2
 	{
 	    switch (front)
 	    {
-	        case 0:
-	            switch (side)
-	            {
-	                case 0: return 4;
-	                case 1: return 5;
-	                case 2: return 0;
-	                case 3: return 1;
-	                case 4: return 2;
-	                case 5: return 3;
-	            }
-	
-	        case 1:
+		    case 0:
 	            switch (side)
 	            {
 	                case 0: return 3;
@@ -322,7 +311,18 @@ public class Vector3 extends Vector2
 	                case 4: return 5;
 	                case 5: return 4;
 	            }
-	
+	            
+		    case 1:
+		            switch (side)
+		            {
+		                case 0: return 4;
+		                case 1: return 5;
+	                case 2: return 0;
+	                case 3: return 1;
+	                case 4: return 2;
+	                case 5: return 3;
+	            }
+
 	        case 2:
 	            switch (side)
 	            {

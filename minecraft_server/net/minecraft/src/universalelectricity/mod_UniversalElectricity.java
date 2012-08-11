@@ -40,6 +40,12 @@ public class mod_UniversalElectricity extends NetworkMod
 		return UniversalElectricity.getVersion();
 	}
 	
+	@Override
+	public String getPriorities()
+    {
+        return "before:*";
+    }
+	
 	/**
      * Ticked every game tick if you have subscribed to tick events through {@link ModLoader#setInGameHook(BaseMod, boolean, boolean)}
      * 
