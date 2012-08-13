@@ -31,6 +31,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 
 /**
@@ -58,6 +59,7 @@ public class BasicComponents
      * Here is where all the Universal Components are defined. You may reference to these variables.
      */
     public static final int BLOCK_ID_PREFIX = 3970;
+    
     public static final Block blockOre = new BlockBCOre(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Copper and Tin Ores", BLOCK_ID_PREFIX-1, true));
     public static final Block blockCopperWire = new BlockCopperWire(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Copper_Wire", BLOCK_ID_PREFIX, true));
     public static final Block blockBatteryBox = new BlockBatteryBox(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Battery_Box", BLOCK_ID_PREFIX + 1, true), 0);
@@ -87,6 +89,7 @@ public class BasicComponents
     	//MinecraftForge.versionDetect("Universal Electricity", 3, 3, 8);
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 		GameRegistry.registerWorldGenerator(new OreGenerator());
+    	TickRegistry.registerTickHandler(new ElectricityManager(), Side.CLIENT);
     	TickRegistry.registerTickHandler(new ElectricityManager(), Side.SERVER);
 
 		proxy.preInit();
@@ -103,8 +106,7 @@ public class BasicComponents
 		GameRegistry.registerBlock(blockBatteryBox);
 		GameRegistry.registerBlock(blockCoalGenerator);
 		GameRegistry.registerBlock(blockElectricFurnace);
-		
-		//Add Names for Special Items
+				
 		ModLoader.addName(new ItemStack(blockOre, 1, 0), "Copper Ore");
 		ModLoader.addName(new ItemStack(blockOre, 1, 1), "Tin Ore");
 
@@ -113,6 +115,7 @@ public class BasicComponents
 		ModLoader.addName(new ItemStack(itemCircuit, 1, 0), "Basic Circuit");
         ModLoader.addName(new ItemStack(itemCircuit, 1, 1), "Advanced Circuit");
         ModLoader.addName(new ItemStack(itemCircuit, 1, 2), "Elite Circuit");
+
         ModLoader.addName(blockBatteryBox, "Battery Box");
         ModLoader.addName(blockCoalGenerator, "Coal Generator");
         ModLoader.addName(blockElectricFurnace, "Electric Furnace");

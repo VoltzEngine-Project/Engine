@@ -1,6 +1,7 @@
 package universalelectricity.electricity;
 
 import universalelectricity.extend.IElectricUnit;
+import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
 
 /**
@@ -75,5 +76,27 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
     public boolean canUpdate()
     {
         return false;
+    }
+    
+    @Override
+    public int getBlockMetadata()
+    {
+        if (this.blockMetadata == -1)
+        {
+            this.blockMetadata = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        }
+
+        return this.blockMetadata;
+    }
+    
+    @Override
+    public Block getBlockType()
+    {
+        if (this.blockType == null)
+        {
+            this.blockType = Block.blocksList[this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord)];
+        }
+
+        return this.blockType;
     }
 }
