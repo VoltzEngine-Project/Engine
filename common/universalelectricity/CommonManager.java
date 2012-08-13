@@ -12,7 +12,7 @@ import net.minecraft.src.Item;
  * @author Calclavia
  *
  */
-public class UEItemManager 
+public class CommonManager 
 {
 	private static final List<Item> items = new ArrayList<Item>();
 	private static final List<Block> blocks = new ArrayList<Block>();

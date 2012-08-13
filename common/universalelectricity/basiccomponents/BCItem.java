@@ -5,8 +5,6 @@ import net.minecraft.src.ModLoader;
 
 public class BCItem extends Item
 {
-    public static String textureFile = BasicComponents.FILE_PATH + "items.png";
-
     public BCItem(String name, int id, int texture)
     {
         super(id);
@@ -18,6 +16,6 @@ public class BCItem extends Item
     @Override
     public String getTextureFile()
     {
-        return textureFile;
+        return BasicComponents.ITEM_TEXTURE_FILE;
     }
 }

@@ -89,7 +89,7 @@ public class Vector2
         return "Vector2: " + this.x + "," + this.y;
     }
 
-    public void op()
+    public void printVector()
     {
         System.out.println(output());
     }

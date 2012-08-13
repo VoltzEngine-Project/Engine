@@ -132,10 +132,9 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
                     }
                 }
             }
+            
+            PacketManager.sendTileEntityPacket(this, "BasicComponents", new double[] {this.electricityStored, this.disabledTicks});
         }
-        
-        if(!this.worldObj.isRemote)
-        PacketManager.sendTileEntityPacket(this, "BasicComponents", new double[] {this.electricityStored, this.disabledTicks});
     }
 
     /**

@@ -29,7 +29,7 @@ public class BlockCoalGenerator extends BlockMachine
     @Override
     public String getTextureFile()
     {
-        return BasicComponents.blockTextureFile;
+        return BasicComponents.BLOCK_TEXTURE_FILE;
     }
 
     /**
@@ -40,7 +40,7 @@ public class BlockCoalGenerator extends BlockMachine
     {
         TileEntityCoalGenerator tileEntity = (TileEntityCoalGenerator)par1World.getBlockTileEntity(x, y, z);
 
-        if (tileEntity.generateRate > 0)
+        if (tileEntity.generateWatts > 0)
         {
             int var6 = par1World.getBlockMetadata(x, y, z);
             float var7 = (float)x + 0.5F;

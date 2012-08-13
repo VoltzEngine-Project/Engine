@@ -76,6 +76,6 @@ public class BlockCopperWire extends BlockConductor
     @Override
     public String getTextureFile()
     {
-        return BasicComponents.blockTextureFile;
+        return BasicComponents.BLOCK_TEXTURE_FILE;
     }
 }

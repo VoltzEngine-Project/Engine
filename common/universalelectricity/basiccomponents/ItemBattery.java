@@ -58,7 +58,7 @@ public class ItemBattery extends ItemElectric
     @Override
     public String getTextureFile()
     {
-        return BCItem.textureFile;
+        return BasicComponents.ITEM_TEXTURE_FILE;
     }
 
     @Override

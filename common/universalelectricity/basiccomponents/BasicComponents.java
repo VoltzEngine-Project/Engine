@@ -3,28 +3,32 @@ package universalelectricity.basiccomponents;
 import java.util.Random;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.ChunkProviderGenerate;
 import net.minecraft.src.IChunkProvider;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
+import universalelectricity.OreGenData;
+import universalelectricity.OreGenerator;
 import universalelectricity.UniversalElectricity;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.network.PacketManager;
 import universalelectricity.recipe.UERecipeManager;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.BaseMod;
+import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -36,19 +40,20 @@ import cpw.mods.fml.common.registry.TickRegistry;
  */
 
 @Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.version)
-@BaseMod(channels = { "BasicComponents" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
+@NetworkMod(channels = { "BasicComponents" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 
-public class BasicComponents implements IWorldGenerator
+public class BasicComponents
 {
     public static final String FILE_PATH = "/basiccomponents/textures/";
-    public static final String blockTextureFile = FILE_PATH + "blocks.png";
+    public static final String BLOCK_TEXTURE_FILE = FILE_PATH + "blocks.png";
+    public static final String ITEM_TEXTURE_FILE = FILE_PATH + "items.png";
     
     @Instance
     public static BasicComponents instance;
     
     @SidedProxy(clientSide = "universalelectricity.basiccomponents.BCClientProxy", serverSide = "universalelectricity.basiccomponents.BCCommonProxy")
 	public static BCCommonProxy proxy;
-    
+        
     /**
      * Here is where all the Universal Components are defined. You may reference to these variables.
      */
@@ -81,9 +86,9 @@ public class BasicComponents implements IWorldGenerator
 
     	//MinecraftForge.versionDetect("Universal Electricity", 3, 3, 8);
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
-		GameRegistry.registerWorldGenerator(this);
+		GameRegistry.registerWorldGenerator(new OreGenerator());
     	TickRegistry.registerTickHandler(new ElectricityManager(), Side.SERVER);
-		
+
 		proxy.preInit();
     }
     
@@ -94,62 +99,66 @@ public class BasicComponents implements IWorldGenerator
     	
 		//Register Blocks
     	GameRegistry.registerBlock(blockOre, ItemBCOre.class);
-		GameRegistry.registerBlock(BasicComponents.blockCopperWire);
-		GameRegistry.registerBlock(BasicComponents.blockBatteryBox);
-		GameRegistry.registerBlock(BasicComponents.blockCoalGenerator);
-		GameRegistry.registerBlock(BasicComponents.blockElectricFurnace);
+		GameRegistry.registerBlock(blockCopperWire);
+		GameRegistry.registerBlock(blockBatteryBox);
+		GameRegistry.registerBlock(blockCoalGenerator);
+		GameRegistry.registerBlock(blockElectricFurnace);
 		
 		//Add Names for Special Items
-		ModLoader.addName(BasicComponents.itemBattery, "Basic Battery");
-		ModLoader.addName(BasicComponents.blockCopperWire, "Copper Wire");
-		ModLoader.addName(new ItemStack(BasicComponents.itemCircuit, 1, 0), "Basic Circuit");
-        ModLoader.addName(new ItemStack(BasicComponents.itemCircuit, 1, 1), "Advanced Circuit");
-        ModLoader.addName(new ItemStack(BasicComponents.itemCircuit, 1, 2), "Elite Circuit");
-        ModLoader.addName(BasicComponents.blockBatteryBox, "Battery Box");
-        ModLoader.addName(BasicComponents.blockCoalGenerator, "Coal Generator");
-        ModLoader.addName(BasicComponents.blockElectricFurnace, "Electric Furnace");
+		ModLoader.addName(new ItemStack(blockOre, 1, 0), "Copper Ore");
+		ModLoader.addName(new ItemStack(blockOre, 1, 1), "Tin Ore");
+
+		ModLoader.addName(itemBattery, "Basic Battery");
+		ModLoader.addName(blockCopperWire, "Copper Wire");
+		ModLoader.addName(new ItemStack(itemCircuit, 1, 0), "Basic Circuit");
+        ModLoader.addName(new ItemStack(itemCircuit, 1, 1), "Advanced Circuit");
+        ModLoader.addName(new ItemStack(itemCircuit, 1, 2), "Elite Circuit");
+        ModLoader.addName(blockBatteryBox, "Battery Box");
+        ModLoader.addName(blockCoalGenerator, "Coal Generator");
+        ModLoader.addName(blockElectricFurnace, "Electric Furnace");
 		
 		//Register Tile Entities
 		ModLoader.registerTileEntity(TileEntityBatteryBox.class, "TileEntityBatteryBox");
 		ModLoader.registerTileEntity(TileEntityCoalGenerator.class, "TileEntityCoalGenerator");
 		ModLoader.registerTileEntity(TileEntityElectricFurnace.class, "TileEntityElectricFurnace");
 		
-		OreDictionary.registerOre("oreCopper", new ItemStack(blockOre, 1, 0));
-		OreDictionary.registerOre("oreTin", new ItemStack(blockOre, 1, 1));
-		OreDictionary.registerOre("ingotCopper", BasicComponents.itemCopperIngot);
-		OreDictionary.registerOre("ingotTin", BasicComponents.itemTinIngot);
-		OreDictionary.registerOre("ingotBronze", BasicComponents.itemBronzeIngot);
-		OreDictionary.registerOre("ingotSteel", BasicComponents.itemSteelIngot);
+		OreDictionary.registerOre("ingotCopper", itemCopperIngot);
+		OreDictionary.registerOre("ingotTin", itemTinIngot);
+		OreDictionary.registerOre("ingotBronze", itemBronzeIngot);
+		OreDictionary.registerOre("ingotSteel", itemSteelIngot);
+		
+		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Copper Ore", "oreCopper", new ItemStack(blockOre, 1, 0), 60, 40, 5));
+		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Tin Ore", "oreTin", new ItemStack(blockOre, 1, 1), 60, 30, 3));
 		
 		//Recipes
 		//Motor
-		UERecipeManager.addRecipe(new ItemStack(BasicComponents.itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', BasicComponents.itemSteelPlate, '#', BasicComponents.itemCircuit, '@', BasicComponents.itemCopperWire});
+		UERecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', itemSteelPlate, '#', itemCircuit, '@', itemCopperWire});
 		//Wrench
-		UERecipeManager.addRecipe(new ItemStack(BasicComponents.itemWrench), new Object [] {"! !", " ! ", " ! ", '!', "ingotSteel"});
+		UERecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {"! !", " ! ", " ! ", '!', "ingotSteel"});
 		//Battery Box
-		UERecipeManager.addRecipe(BasicComponents.blockBatteryBox, new Object [] {"!?!", "???", "!?!", '!', BasicComponents.itemSteelPlate, '?', (((ItemBattery)BasicComponents.itemBattery).getChargedItemStack()) });
+		UERecipeManager.addRecipe(blockBatteryBox, new Object [] {"!?!", "???", "!?!", '!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getChargedItemStack()) });
 		//Coal Generator
-		UERecipeManager.addRecipe(BasicComponents.blockCoalGenerator, new Object [] {"!@!", "$#$", "!?!", '!', BasicComponents.itemSteelPlate, '@', BasicComponents.itemCopperWire, '?', BasicComponents.itemCircuit, '#', BasicComponents.itemMotor, '$', Block.stoneOvenIdle});
+		UERecipeManager.addRecipe(blockCoalGenerator, new Object [] {"!@!", "$#$", "!?!", '!', itemSteelPlate, '@', itemCopperWire, '?', itemCircuit, '#', itemMotor, '$', Block.stoneOvenIdle});
 		//Electric Furnace
-		UERecipeManager.addRecipe(BasicComponents.blockElectricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '#', BasicComponents.itemCircuit, '?', BasicComponents.itemSteelPlate});
+		UERecipeManager.addRecipe(blockElectricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '#', itemCircuit, '?', itemSteelPlate});
 		//Copper
-		UERecipeManager.addSmelting(new ItemStack(blockOre, 1, 0), new ItemStack(BasicComponents.itemCopperIngot));
-		UERecipeManager.addRecipe(new ItemStack(BasicComponents.itemCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"});
+		UERecipeManager.addSmelting(new ItemStack(blockOre, 1, 0), new ItemStack(itemCopperIngot));
+		UERecipeManager.addRecipe(new ItemStack(itemCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"});
 		//Tin
-		UERecipeManager.addSmelting(new ItemStack(blockOre, 1, 1), new ItemStack(BasicComponents.itemTinIngot));
-		UERecipeManager.addRecipe(new ItemStack(BasicComponents.itemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal});
+		UERecipeManager.addSmelting(new ItemStack(blockOre, 1, 1), new ItemStack(itemTinIngot));
+		UERecipeManager.addRecipe(new ItemStack(itemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal});
 		
 		//Steel
-		UERecipeManager.addRecipe(new ItemStack(BasicComponents.itemSteelClump), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
-		UERecipeManager.addSmelting(BasicComponents.itemSteelClump, new ItemStack(BasicComponents.itemSteelIngot));
-		UERecipeManager.addRecipe(new ItemStack(BasicComponents.itemSteelPlate), new Object [] {" ! ", "!!!", " ! ", '!', "ingotSteel"});
+		UERecipeManager.addRecipe(new ItemStack(itemSteelClump), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
+		UERecipeManager.addSmelting(itemSteelClump, new ItemStack(itemSteelIngot));
+		UERecipeManager.addRecipe(new ItemStack(itemSteelPlate), new Object [] {" ! ", "!!!", " ! ", '!', "ingotSteel"});
 		//Bronze
-		UERecipeManager.addRecipe(BasicComponents.itemBronzeClump, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
-		UERecipeManager.addSmelting(BasicComponents.itemBronzeClump, new ItemStack(BasicComponents.itemBronzeIngot));
+		UERecipeManager.addRecipe(itemBronzeClump, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
+		UERecipeManager.addSmelting(itemBronzeClump, new ItemStack(itemBronzeIngot));
 		//Circuit
-		UERecipeManager.addRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', BasicComponents.itemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', BasicComponents.itemCopperWire});
-		UERecipeManager.addRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', BasicComponents.itemCircuit});
-		UERecipeManager.addRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(BasicComponents.itemCircuit, 1, 1), '#', Block.blockLapis});
+		UERecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', itemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', itemCopperWire});
+		UERecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', itemCircuit});
+		UERecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(itemCircuit, 1, 1), '#', Block.blockLapis});
     }
     
     @PostInit
@@ -158,9 +167,4 @@ public class BasicComponents implements IWorldGenerator
     	UERecipeManager.initialize();
 	}
 
-	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
-	{
-		
-	}
 }

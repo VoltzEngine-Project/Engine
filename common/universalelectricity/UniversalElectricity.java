@@ -4,23 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.Configuration;
-import universalelectricity.basiccomponents.BasicComponents;
-import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.network.PacketManager;
-import universalelectricity.recipe.UERecipeManager;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.Mod.Init;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.BaseMod;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
 
 public class UniversalElectricity
 {

@@ -20,8 +20,8 @@ public class BCClientProxy extends BCCommonProxy
 	public void preInit()
 	{
 		//Preload textures
-		MinecraftForgeClient.preloadTexture(BasicComponents.blockTextureFile);
-		MinecraftForgeClient.preloadTexture(BCItem.textureFile);
+		MinecraftForgeClient.preloadTexture(BasicComponents.BLOCK_TEXTURE_FILE);
+		MinecraftForgeClient.preloadTexture(BasicComponents.ITEM_TEXTURE_FILE);
 	}
 	
 	@Override

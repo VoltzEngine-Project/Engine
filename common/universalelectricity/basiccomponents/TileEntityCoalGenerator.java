@@ -28,7 +28,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     public static final int maxGenerateRate = 560;
 
     //Current generation rate based on hull heat. In TICKS.
-    public float generateRate = 0;
+    public float generateWatts = 0;
 
     public TileEntityConductor connectedElectricUnit = null;
     /**
@@ -96,7 +96,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
                     {
                         if (this.itemCookTime <= 0)
                         {
-                            itemCookTime = Math.max(500 - (int)(this.generateRate * 20), 200);
+                            itemCookTime = Math.max(500 - (int)(this.generateWatts * 20), 200);
                             this.decrStackSize(0, 1);
                         }
                     }
@@ -109,24 +109,23 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
                     if (this.connectedElectricUnit != null)
                     {
-                        this.generateRate = (float)Math.min(this.generateRate + Math.min((this.generateRate) * 0.001 + 0.0015, 0.05F), this.maxGenerateRate / 20);
+                        this.generateWatts = (float)Math.min(this.generateWatts + Math.min((this.generateWatts) * 0.0007 + 0.001, 0.05F), this.maxGenerateRate / 20);
                     }
                 }
 
                 if (this.connectedElectricUnit == null || this.itemCookTime <= 0)
                 {
-                    this.generateRate = (float)Math.max(this.generateRate - 0.05, 0);
+                    this.generateWatts = (float)Math.max(this.generateWatts - 0.05, 0);
                 }
 
-                if (this.generateRate > 1)
+                if (this.generateWatts > 1)
                 {
-                    ElectricityManager.produceElectricity(this.connectedElectricUnit, this.generateRate * this.getTickInterval(), this.getVoltage());
+                    ElectricityManager.produceElectricity(this.connectedElectricUnit, this.generateWatts * this.getTickInterval(), this.getVoltage());
                 }
             }
+            
+            PacketManager.sendTileEntityPacket(this, "BasicComponents", new double[] {this.generateWatts, this.disabledTicks});
         }
-        
-        if(!this.worldObj.isRemote)
-        PacketManager.sendTileEntityPacket(this, "BasicComponents", new double[] {this.generateRate, this.disabledTicks});
     }
 
     /**
@@ -137,7 +136,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     {
         super.readFromNBT(par1NBTTagCompound);
         this.itemCookTime = par1NBTTagCompound.getInteger("itemCookTime");
-        this.generateRate = par1NBTTagCompound.getFloat("generateRate");
+        this.generateWatts = par1NBTTagCompound.getFloat("generateRate");
         NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.containingItems = new ItemStack[this.getSizeInventory()];
 
@@ -160,7 +159,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     {
         super.writeToNBT(par1NBTTagCompound);
         par1NBTTagCompound.setInteger("itemCookTime", this.itemCookTime);
-        par1NBTTagCompound.setFloat("generateRate", (int)this.generateRate);
+        par1NBTTagCompound.setFloat("generateRate", (int)this.generateWatts);
         NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.containingItems.length; ++var3)
@@ -296,7 +295,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	{
 		try
         {
-            this.generateRate = (float)dataStream.readDouble();
+            this.generateWatts = (float)dataStream.readDouble();
             this.disabledTicks = (int)dataStream.readDouble();
         }
         catch (Exception e)

@@ -25,7 +25,7 @@ public class BlockElectricFurnace extends BlockMachine
     @Override
     public String getTextureFile()
     {
-        return BasicComponents.blockTextureFile;
+        return BasicComponents.BLOCK_TEXTURE_FILE;
     }
 
     /**

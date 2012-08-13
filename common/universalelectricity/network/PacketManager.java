@@ -16,8 +16,19 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
 import cpw.mods.fml.common.network.IPacketHandler;
+import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.Player;
 
+/**
+ * This class is used for sending and receiving packets between the server
+ * and the client. You can directly use this by registering this packet manager
+ * with NetworkMod. Example:
+ * @NetworkMod(channels = { "BasicComponents" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
+ * 
+ * Check out {@link #BasicComponents} for better reference.
+ * 
+ * @author Calclavia
+ */
 public class PacketManager implements IPacketHandler
 {
 	@Override
