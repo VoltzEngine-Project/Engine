@@ -64,24 +64,13 @@ public class BlockBatteryBox extends BlockMachine
 
         switch (angle)
         {
-            case 0:
-                change = 5;
-                break;
-
-            case 1:
-                change = 3;
-                break;
-
-            case 2:
-                change = 4;
-                break;
-
-            case 3:
-                change = 2;
-                break;
+            case 0: par1World.setBlockMetadataWithNotify(x, y, z, 5); break;
+            case 1: par1World.setBlockMetadataWithNotify(x, y, z, 3); break;
+            case 2: par1World.setBlockMetadataWithNotify(x, y, z, 4); break;
+            case 3: par1World.setBlockMetadataWithNotify(x, y, z, 2); break;
         }
 
-        par1World.setBlockMetadataWithNotify(x, y, z, change);
+       
     }
 
     @Override
@@ -90,21 +79,10 @@ public class BlockBatteryBox extends BlockMachine
         //Reorient the block
         switch (par1World.getBlockMetadata(x, y, z))
         {
-            case 2:
-                par1World.setBlockMetadataWithNotify(x, y, z, 5);
-                break;
-
-            case 5:
-                par1World.setBlockMetadataWithNotify(x, y, z, 3);
-                break;
-
-            case 3:
-                par1World.setBlockMetadataWithNotify(x, y, z, 4);
-                break;
-
-            case 4:
-                par1World.setBlockMetadataWithNotify(x, y, z, 2);
-                break;
+            case 2: par1World.setBlockMetadataWithNotify(x, y, z, 5); break;
+            case 5: par1World.setBlockMetadataWithNotify(x, y, z, 3); break;
+            case 3: par1World.setBlockMetadataWithNotify(x, y, z, 4); break;
+            case 4: par1World.setBlockMetadataWithNotify(x, y, z, 2); break;
         }
 
         return true;
@@ -116,8 +94,6 @@ public class BlockBatteryBox extends BlockMachine
     @Override
     public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
     {
-        int metadata = par1World.getBlockMetadata(x, y, z);
-
         if (!par1World.isRemote)
         {
             par5EntityPlayer.openGui(BasicComponents.getInstance(), 0, par1World, x, y, z);

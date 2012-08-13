@@ -3,6 +3,8 @@ package net.minecraft.src.universalelectricity.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.Mod;
+
 import net.minecraft.src.BaseMod;
 import net.minecraft.src.Block;
 import net.minecraft.src.CraftingManager;
@@ -114,11 +116,11 @@ public class UERecipeManager
     public static void initialize()
     {
         //Replace all recipes
-        for (BaseMod addon : UniversalElectricity.MODS)
+        for (Object mods : UniversalElectricity.MODS)
         {
-            if (addon instanceof IRecipeReplacementHandler)
+            if (mods instanceof IRecipeReplacementHandler)
             {
-                IRecipeReplacementHandler recipeHandler = (IRecipeReplacementHandler)addon;
+                IRecipeReplacementHandler recipeHandler = (IRecipeReplacementHandler)mods;
 
                 for (UERecipe recipe : shapedRecipes)
                 {

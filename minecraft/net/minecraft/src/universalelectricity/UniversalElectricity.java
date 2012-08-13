@@ -6,16 +6,15 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraft.src.BaseMod;
+import cpw.mods.fml.common.Mod;
 
 public class UniversalElectricity
 {
     public static final Configuration CONFIGURATION = new Configuration(new File(Minecraft.getMinecraftDir(), "config/UniversalElectricity/UniversalElectricity.cfg"));
+    public static final List<Object> MODS = new ArrayList<Object>();
+    public static final String version = "0.5.0";
 
-    public static final List<BaseMod> MODS = new ArrayList<BaseMod>();
-
-    public static void registerMod(BaseMod networkmod, String version)
+    public static void registerMod(Object networkmod, String modName, String version)
     {
         String[] versionNumbers = getVersion().split("\\.");
         String[] addonVersionNumbers = version.split("\\.");
@@ -38,15 +37,15 @@ public class UniversalElectricity
         }
 
         MODS.add(networkmod);
-        System.out.println("Loaded Universal Electricity Mod: " + networkmod.getName());
+        System.out.println("Loaded Universal Electricity Mod: " + modName);
     }
 
     public static String getVersion()
     {
-        return "0.5.0";
+        return version;
     }
 
-    /*------------------ FUNCTIONS AND HOOKS ----------------------
+    /*------------------ FUNCTIONS ----------------------
     	Some formulas to note:
     *   Wattage = Voltage x Amps (W = V X I)
     *   Voltage = Amperage x Resistance (V = I x R)

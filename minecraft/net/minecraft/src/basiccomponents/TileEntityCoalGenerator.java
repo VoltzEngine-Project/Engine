@@ -2,6 +2,8 @@ package net.minecraft.src.basiccomponents;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import com.google.common.io.ByteArrayDataInput;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
@@ -15,6 +17,7 @@ import net.minecraft.src.universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.universalelectricity.electricity.TileEntityElectricUnit;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
+import net.minecraft.src.universalelectricity.network.PacketManager;
 import net.minecraftforge.common.ISidedInventory;
 import net.minecraftforge.common.Orientation;
 
@@ -38,7 +41,6 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
     public TileEntityCoalGenerator()
     {
-        BasicComponents.PACKET_MANAGER.registerPacketUser(this);
         ElectricityManager.registerElectricUnit(this);
     }
 
@@ -121,6 +123,9 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
                 }
             }
         }
+        
+        if(!this.worldObj.isRemote)
+        PacketManager.sendTileEntityPacket(this, "BasicComponents", new double[] {this.generateRate, this.disabledTicks});
     }
 
     /**
@@ -274,26 +279,6 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     }
 
     @Override
-    public void onPacketData(NetworkManager network, String channel, DataInputStream dataStream)
-    {
-        try
-        {
-            this.generateRate = (float)dataStream.readDouble();
-            this.disabledTicks = (int)dataStream.readDouble();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public int getPacketID()
-    {
-        return 2;
-    }
-
-    @Override
     public int getTickInterval()
     {
         return 1;
@@ -304,4 +289,18 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     {
         return 0;
     }
+
+	@Override
+	public void handlePacketData(NetworkManager network, String channel, ByteArrayDataInput dataStream) 
+	{
+		try
+        {
+            this.generateRate = (float)dataStream.readDouble();
+            this.disabledTicks = (int)dataStream.readDouble();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+	}
 }

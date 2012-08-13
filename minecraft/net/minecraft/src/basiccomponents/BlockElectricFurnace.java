@@ -147,7 +147,7 @@ public class BlockElectricFurnace extends BlockMachine
 
         if (!par1World.isRemote)
         {
-            par5EntityPlayer.openGui(BasicComponents.getInstance(), 2, par1World, x, y, z);
+            par5EntityPlayer.openGui(BasicComponents.instance, 2, par1World, x, y, z);
             return true;
         }
 

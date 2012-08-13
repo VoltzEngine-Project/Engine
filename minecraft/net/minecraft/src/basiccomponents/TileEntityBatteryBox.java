@@ -3,6 +3,8 @@ package net.minecraft.src.basiccomponents;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import com.google.common.io.ByteArrayDataInput;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
@@ -17,6 +19,7 @@ import net.minecraft.src.universalelectricity.extend.IItemElectric;
 import net.minecraft.src.universalelectricity.extend.IRedstoneProvider;
 import net.minecraft.src.universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.universalelectricity.network.IPacketReceiver;
+import net.minecraft.src.universalelectricity.network.PacketManager;
 import net.minecraftforge.common.ISidedInventory;
 import net.minecraftforge.common.Orientation;
 
@@ -33,7 +36,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 
     public TileEntityBatteryBox()
     {
-        BasicComponents.PACKET_MANAGER.registerPacketUser(this);
         ElectricityManager.registerElectricUnit(this);
     }
 
@@ -130,6 +132,9 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
                 }
             }
         }
+        
+        if(!this.worldObj.isRemote)
+        PacketManager.sendTileEntityPacket(this, "BasicComponents", new double[] {this.electricityStored, this.disabledTicks});
     }
 
     /**
@@ -290,26 +295,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
     public void closeChest() { }
 
     @Override
-    public void onPacketData(NetworkManager network, String channel, DataInputStream dataStream)
-    {
-        try
-        {
-            this.electricityStored = (float)dataStream.readDouble();
-            this.disabledTicks = (int)dataStream.readDouble();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public int getPacketID()
-    {
-        return 1;
-    }
-
-    @Override
     public boolean isPoweringTo(byte side)
     {
         return isFull;
@@ -326,4 +311,18 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
     {
         return 1;
     }
+
+	@Override
+	public void handlePacketData(NetworkManager network, String channel, ByteArrayDataInput dataStream)
+	{
+		try
+        {
+            this.electricityStored = (float)dataStream.readDouble();
+            this.disabledTicks = (int)dataStream.readDouble();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+	}
 }

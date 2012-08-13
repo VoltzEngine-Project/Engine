@@ -2,23 +2,14 @@ package net.minecraft.src.universalelectricity.network;
 
 import java.io.DataInputStream;
 
+import com.google.common.io.ByteArrayDataInput;
+
 import net.minecraft.src.NetworkManager;
 
 public interface IPacketReceiver
 {
     /**
-     * A ID for this type of packet
-     * @return
+     * Sends the tileEntity the rest of the data
      */
-    public int getPacketID();
-
-    /**
-     * Called when we receive a Packet250CustomPayload for a channel that this
-     * handler is registered to.
-     *
-     * @param network The NetworkManager for the current connection.
-     * @param channel The Channel the message came on.
-     * @param data The message payload.
-     */
-    public void onPacketData(NetworkManager network, String channel, DataInputStream dataStream);
+    public void handlePacketData(NetworkManager network, String channel, ByteArrayDataInput dataStream);
 }

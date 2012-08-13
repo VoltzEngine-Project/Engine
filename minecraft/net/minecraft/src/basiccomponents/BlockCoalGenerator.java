@@ -190,7 +190,7 @@ public class BlockCoalGenerator extends BlockMachine
 
         if (!par1World.isRemote)
         {
-            par5EntityPlayer.openGui(BasicComponents.getInstance(), 1, par1World, x, y, z);
+            par5EntityPlayer.openGui(BasicComponents.instance, 1, par1World, x, y, z);
             return true;
         }
 
