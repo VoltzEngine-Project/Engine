@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
-
+import net.minecraft.src.TileEntity;
 import universalelectricity.Vector3;
 import universalelectricity.extend.IElectricUnit;
 import universalelectricity.extend.TileEntityConductor;
-
-import net.minecraft.src.TileEntity;
+import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.TickType;
 
 /**
  * This class is used to manage electricity transfering and flow

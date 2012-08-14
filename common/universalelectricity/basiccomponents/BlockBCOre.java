@@ -1,7 +1,6 @@
 package universalelectricity.basiccomponents;
 
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
@@ -15,6 +14,7 @@ public class BlockBCOre extends Block
 		super(id, 14, Material.rock);
         this.setCreativeTab(CreativeTabs.tabBlock);
         this.setBlockName("BCOre");
+        this.setHardness(2f);
 	}
 	
 	@Override

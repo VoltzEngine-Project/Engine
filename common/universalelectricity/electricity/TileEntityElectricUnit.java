@@ -1,8 +1,8 @@
 package universalelectricity.electricity;
 
-import universalelectricity.extend.IElectricUnit;
 import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
+import universalelectricity.extend.IElectricUnit;
 
 /**
  * An easier way to implement the methods with default values set.

@@ -3,11 +3,6 @@ package universalelectricity.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-import universalelectricity.UniversalElectricity;
-
-import cpw.mods.fml.common.Mod;
-
-import net.minecraft.src.BaseMod;
 import net.minecraft.src.Block;
 import net.minecraft.src.CraftingManager;
 import net.minecraft.src.FurnaceRecipes;

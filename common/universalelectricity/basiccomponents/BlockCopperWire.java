@@ -2,11 +2,10 @@ package universalelectricity.basiccomponents;
 
 import java.util.Random;
 
-import universalelectricity.extend.BlockConductor;
-
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import universalelectricity.extend.BlockConductor;
 
 public class BlockCopperWire extends BlockConductor
 {

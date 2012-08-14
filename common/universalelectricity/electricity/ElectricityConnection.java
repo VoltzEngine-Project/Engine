@@ -3,11 +3,10 @@ package universalelectricity.electricity;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.src.TileEntity;
 import universalelectricity.Vector3;
 import universalelectricity.extend.IElectricUnit;
 import universalelectricity.extend.TileEntityConductor;
-
-import net.minecraft.src.TileEntity;
 
 public class ElectricityConnection
 {

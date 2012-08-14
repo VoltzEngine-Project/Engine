@@ -1,8 +1,14 @@
 package universalelectricity.basiccomponents;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IInventory;
+import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.NBTTagList;
+import net.minecraft.src.NetworkManager;
+import net.minecraft.src.TileEntity;
+import net.minecraftforge.common.ISidedInventory;
+import net.minecraftforge.common.Orientation;
 import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
@@ -13,16 +19,6 @@ import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
-
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
-import net.minecraft.src.NetworkManager;
-import net.minecraft.src.TileEntity;
-import net.minecraftforge.common.ISidedInventory;
-import net.minecraftforge.common.Orientation;
 
 public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
 {

@@ -1,15 +1,9 @@
 package universalelectricity.basiccomponents;
 
-import java.util.Random;
-
 import net.minecraft.src.Block;
-import net.minecraft.src.ChunkProviderGenerate;
-import net.minecraft.src.IChunkProvider;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
-import net.minecraft.src.World;
-import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.OreGenData;
@@ -18,7 +12,6 @@ import universalelectricity.UniversalElectricity;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.network.PacketManager;
 import universalelectricity.recipe.RecipeManager;
-import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -32,7 +25,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 
 /**
@@ -61,9 +53,7 @@ public class BasicComponents
      */
     public static final int BLOCK_ID_PREFIX = 3970;
     
-    @cpw.mods.fml.common.Mod.Block(name = "BCOre")
     public static final Block blockOre = new BlockBCOre(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Copper and Tin Ores", BLOCK_ID_PREFIX-1, true));
-    @cpw.mods.fml.common.Mod.Block(name = "Copper Wire")
     public static final Block blockCopperWire = new BlockCopperWire(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Copper_Wire", BLOCK_ID_PREFIX, true));
     public static final Block blockBatteryBox = new BlockBatteryBox(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Battery_Box", BLOCK_ID_PREFIX + 1, true), 0);
     public static final Block blockCoalGenerator = new BlockCoalGenerator(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Coal_Generator", BLOCK_ID_PREFIX + 2, true), 0);

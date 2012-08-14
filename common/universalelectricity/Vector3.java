@@ -1,13 +1,13 @@
 package universalelectricity;
 
-import universalelectricity.extend.IElectricUnit;
-import universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.Entity;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
+import universalelectricity.extend.IElectricUnit;
+import universalelectricity.extend.TileEntityConductor;
 
 /**
  * Vector3 Class is used for defining objects in a 3D space. Vector3 makes it easier to handle the coordinates of objects. Instead of

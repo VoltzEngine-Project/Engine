@@ -1,10 +1,8 @@
 package universalelectricity.network;
 
-import java.io.DataInputStream;
+import net.minecraft.src.NetworkManager;
 
 import com.google.common.io.ByteArrayDataInput;
-
-import net.minecraft.src.NetworkManager;
 
 public interface IPacketReceiver
 {

@@ -1,8 +1,5 @@
 package universalelectricity.basiccomponents;
 
-import universalelectricity.Vector3;
-import universalelectricity.extend.BlockMachine;
-import universalelectricity.extend.IRedstoneProvider;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
@@ -11,6 +8,9 @@ import net.minecraft.src.Material;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import universalelectricity.Vector3;
+import universalelectricity.extend.BlockMachine;
+import universalelectricity.extend.IRedstoneProvider;
 
 public class BlockBatteryBox extends BlockMachine
 {

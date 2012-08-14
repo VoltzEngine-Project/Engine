@@ -1,9 +1,10 @@
 package universalelectricity;
 
+import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-import universalelectricity.UniversalElectricity;
 
 /**
  * This class is used for storing ore generation data. If you are too
@@ -38,8 +39,6 @@ public class OreGenData
     
     public boolean generateEnd = false;
 
-    private boolean isAddToCreativeList;
-
     /**
      * What harvest level does this machine need to be acquired?
      */
@@ -58,7 +57,7 @@ public class OreGenData
      * @param amountPerChunk - The amount of ores to generate per chunk
      * @param amountPerBranch - The amount of ores to generate in a clutter. E.g coal generates with a lot of other coal next to it. How much do you want?
      */
-    public OreGenData(String name, String oreDiectionaryName, ItemStack stack, int minGenerateLevel, int maxGenerateLevel, int amountPerChunk, int amountPerBranch, boolean addToCreativeList, String harvestTool, int harvestLevel)
+    public OreGenData(String name, String oreDiectionaryName, ItemStack stack, int minGenerateLevel, int maxGenerateLevel, int amountPerChunk, int amountPerBranch, String harvestTool, int harvestLevel)
     {
         this.name = name;
         this.minGenerateLevel = minGenerateLevel;
@@ -66,19 +65,19 @@ public class OreGenData
         this.amountPerChunk = amountPerChunk;
         this.amountPerBranch = amountPerBranch;
         this.shouldGenerate = shouldGenerateOre(name);
-        this.isAddToCreativeList = addToCreativeList;
         this.harvestTool = harvestTool;
         this.harvestLevel = harvestLevel;
         this.oreDictionaryName = oreDiectionaryName;
         this.oreStack = stack;
         
 		OreDictionary.registerOre(oreDictionaryName, stack);
+		MinecraftForge.setBlockHarvestLevel(Block.blocksList[stack.itemID], harvestTool, harvestLevel);
     }
 
     //A simplified version of the constructor
     public OreGenData(String name, String oreDiectionaryName, ItemStack stack, int maxGenerateLevel, int amountPerChunk, int amountPerBranch)
     {
-        this(name, oreDiectionaryName, stack, 0, maxGenerateLevel, amountPerChunk, amountPerBranch, true, "pickaxe", 2);
+        this(name, oreDiectionaryName, stack, 0, maxGenerateLevel, amountPerChunk, amountPerBranch, "pickaxe", 1);
     }
 
     //You may inherit from this class and change this function if you want a custom texture render for your ore.

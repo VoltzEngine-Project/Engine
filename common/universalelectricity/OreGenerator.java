@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import cpw.mods.fml.common.IWorldGenerator;
-
 import net.minecraft.src.ChunkProviderGenerate;
 import net.minecraft.src.IChunkProvider;
 import net.minecraft.src.World;
 import net.minecraft.src.WorldGenMinable;
+import cpw.mods.fml.common.IWorldGenerator;
 
 public class OreGenerator implements IWorldGenerator
 {

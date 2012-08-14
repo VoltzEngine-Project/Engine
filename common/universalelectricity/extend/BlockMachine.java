@@ -1,6 +1,5 @@
 package universalelectricity.extend;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.src.BlockContainer;

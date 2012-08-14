@@ -2,9 +2,8 @@ package universalelectricity.basiccomponents;
 
 import java.util.List;
 
-import universalelectricity.extend.ItemElectric;
-
 import net.minecraft.src.ItemStack;
+import universalelectricity.extend.ItemElectric;
 
 public class ItemBattery extends ItemElectric
 {

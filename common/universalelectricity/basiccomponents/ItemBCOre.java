@@ -1,6 +1,5 @@
 package universalelectricity.basiccomponents;
 
-import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ItemStack;
 
