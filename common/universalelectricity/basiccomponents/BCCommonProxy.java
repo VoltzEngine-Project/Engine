@@ -1,10 +1,10 @@
 package universalelectricity.basiccomponents;
 
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.extend.CommonProxy;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BCCommonProxy extends CommonProxy
 {
@@ -14,7 +14,7 @@ public class BCCommonProxy extends CommonProxy
 	@Override
 	public void init()
 	{
-		ModLoader.registerTileEntity(TileEntityCopperWire.class, "TileEntityCopperWire");
+		GameRegistry.registerTileEntity(TileEntityCopperWire.class, "TileEntityCopperWire");
 	}
 	
 	@Override

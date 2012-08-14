@@ -10,13 +10,14 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.OreGenData;
 import universalelectricity.OreGenerator;
 import universalelectricity.UniversalElectricity;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.network.PacketManager;
-import universalelectricity.recipe.UERecipeManager;
+import universalelectricity.recipe.RecipeManager;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -60,7 +61,9 @@ public class BasicComponents
      */
     public static final int BLOCK_ID_PREFIX = 3970;
     
+    @cpw.mods.fml.common.Mod.Block(name = "BCOre")
     public static final Block blockOre = new BlockBCOre(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Copper and Tin Ores", BLOCK_ID_PREFIX-1, true));
+    @cpw.mods.fml.common.Mod.Block(name = "Copper Wire")
     public static final Block blockCopperWire = new BlockCopperWire(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Copper_Wire", BLOCK_ID_PREFIX, true));
     public static final Block blockBatteryBox = new BlockBatteryBox(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Battery_Box", BLOCK_ID_PREFIX + 1, true), 0);
     public static final Block blockCoalGenerator = new BlockCoalGenerator(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Coal_Generator", BLOCK_ID_PREFIX + 2, true), 0);
@@ -71,11 +74,11 @@ public class BasicComponents
     public static final Item itemCopperIngot = new BCItem("Copper Ingot", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Copper_Ingot", 1588, false), 1);
     public static final Item itemTinIngot = new BCItem("Tin Ingot", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Tin_Ingot", 1589, false), 2);
     public static final Item itemSteelIngot = new BCItem("Steel Ingot", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Steel_Ingot", 1590, false), 3);
-    public static final Item itemSteelClump = new BCItem("Steel Alloy", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Steel_Clump", 1591, false), 5);
+    public static final Item itemSteelAlloy = new BCItem("Steel Alloy", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Steel_Clump", 1591, false), 5);
     public static final Item itemCircuit = new ItemCircuit(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Circuit", 1592, false), 16);
     public static final Item itemCopperWire = new ItemCopperWire(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Item_Copper_Wire", 1593, false), 21);
     public static final Item itemBronzeIngot = new BCItem("Bronze Ingot", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Ingot", 1594, false), 7);
-    public static final Item itemBronzeClump = new BCItem("Bronze Alloy", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Clump", 1595, false), 6);
+    public static final Item itemBronzeAlloy = new BCItem("Bronze Alloy", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Clump", 1595, false), 6);
     public static final Item itemSteelPlate = new BCItem("Steel Plate", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Steel_Plate", 1597, false), 8);
     public static final Item itemMotor = new BCItem("Motor", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Motor", 1598, false), 9);
 
@@ -85,8 +88,17 @@ public class BasicComponents
 		instance = this;
 		
 		UniversalElectricity.registerMod(this, "Basic Componenets", UniversalElectricity.getVersion());
-
-    	//MinecraftForge.versionDetect("Universal Electricity", 3, 3, 8);
+		
+		//Checks to make sure Forge is the correction version...
+		if(ForgeVersion.getMajorVersion() != 4)
+		{
+			throw new RuntimeException("Forge version is way too old!");
+		}
+		if(ForgeVersion.getMinorVersion() < 0)
+		{
+			throw new RuntimeException("Forge version is kind of too old!");
+		}
+		
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 		GameRegistry.registerWorldGenerator(new OreGenerator());
     	TickRegistry.registerTickHandler(new ElectricityManager(), Side.CLIENT);
@@ -135,39 +147,37 @@ public class BasicComponents
 		
 		//Recipes
 		//Motor
-		UERecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', itemSteelPlate, '#', itemCircuit, '@', itemCopperWire});
+		RecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', itemSteelPlate, '#', itemCircuit, '@', itemCopperWire});
 		//Wrench
-		UERecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {"! !", " ! ", " ! ", '!', "ingotSteel"});
+		RecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {"! !", " ! ", " ! ", '!', "ingotSteel"});
 		//Battery Box
-		UERecipeManager.addRecipe(blockBatteryBox, new Object [] {"!?!", "???", "!?!", '!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getChargedItemStack()) });
+		RecipeManager.addRecipe(blockBatteryBox, new Object [] {"!?!", "???", "!?!", '!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getChargedItemStack()) });
 		//Coal Generator
-		UERecipeManager.addRecipe(blockCoalGenerator, new Object [] {"!@!", "$#$", "!?!", '!', itemSteelPlate, '@', itemCopperWire, '?', itemCircuit, '#', itemMotor, '$', Block.stoneOvenIdle});
+		RecipeManager.addRecipe(blockCoalGenerator, new Object [] {"!@!", "$#$", "!?!", '!', itemSteelPlate, '@', itemCopperWire, '?', itemCircuit, '#', itemMotor, '$', Block.stoneOvenIdle});
 		//Electric Furnace
-		UERecipeManager.addRecipe(blockElectricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '#', itemCircuit, '?', itemSteelPlate});
+		RecipeManager.addRecipe(blockElectricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '#', itemCircuit, '?', itemSteelPlate});
 		//Copper
-		UERecipeManager.addSmelting(new ItemStack(blockOre, 1, 0), new ItemStack(itemCopperIngot));
-		UERecipeManager.addRecipe(new ItemStack(itemCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"});
+		RecipeManager.addSmelting(new ItemStack(blockOre, 1, 0), new ItemStack(itemCopperIngot));
+		RecipeManager.addRecipe(new ItemStack(itemCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"});
 		//Tin
-		UERecipeManager.addSmelting(new ItemStack(blockOre, 1, 1), new ItemStack(itemTinIngot));
-		UERecipeManager.addRecipe(new ItemStack(itemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal});
-		
+		RecipeManager.addSmelting(new ItemStack(blockOre, 1, 1), new ItemStack(itemTinIngot));
+		RecipeManager.addRecipe(new ItemStack(itemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal});
 		//Steel
-		UERecipeManager.addRecipe(new ItemStack(itemSteelClump), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
-		UERecipeManager.addSmelting(itemSteelClump, new ItemStack(itemSteelIngot));
-		UERecipeManager.addRecipe(new ItemStack(itemSteelPlate), new Object [] {" ! ", "!!!", " ! ", '!', "ingotSteel"});
+		RecipeManager.addRecipe(new ItemStack(itemSteelAlloy), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
+		RecipeManager.addSmelting(itemSteelAlloy, new ItemStack(itemSteelIngot));
+		RecipeManager.addRecipe(new ItemStack(itemSteelPlate), new Object [] {" ! ", "!!!", " ! ", '!', "ingotSteel"});
 		//Bronze
-		UERecipeManager.addRecipe(itemBronzeClump, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
-		UERecipeManager.addSmelting(itemBronzeClump, new ItemStack(itemBronzeIngot));
+		RecipeManager.addRecipe(itemBronzeAlloy, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
+		RecipeManager.addSmelting(itemBronzeAlloy, new ItemStack(itemBronzeIngot));
 		//Circuit
-		UERecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', itemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', itemCopperWire});
-		UERecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', itemCircuit});
-		UERecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(itemCircuit, 1, 1), '#', Block.blockLapis});
+		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', itemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', itemCopperWire});
+		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', itemCircuit});
+		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(itemCircuit, 1, 1), '#', Block.blockLapis});
     }
     
     @PostInit
    	public void modsLoaded(FMLPostInitializationEvent evt) 
 	{
-    	UERecipeManager.initialize();
+    	RecipeManager.addRecipes();
 	}
-
 }

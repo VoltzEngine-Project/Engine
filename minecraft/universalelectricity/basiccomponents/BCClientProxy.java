@@ -1,18 +1,11 @@
 package universalelectricity.basiccomponents;
 
-import net.minecraft.client.Minecraft;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.client.MinecraftForgeClient;
-import universalelectricity.basiccomponents.BCCommonProxy;
-import universalelectricity.basiccomponents.BCItem;
-import universalelectricity.basiccomponents.BasicComponents;
-import universalelectricity.basiccomponents.TileEntityBatteryBox;
-import universalelectricity.basiccomponents.TileEntityCoalGenerator;
-import universalelectricity.basiccomponents.TileEntityCopperWire;
-import universalelectricity.basiccomponents.TileEntityElectricFurnace;
 
 public class BCClientProxy extends BCCommonProxy
 {
@@ -27,7 +20,7 @@ public class BCClientProxy extends BCCommonProxy
 	@Override
 	public void init()
 	{
-		ModLoader.registerTileEntity(TileEntityCopperWire.class, "TileEntityCopperWire", new RenderCopperWire());
+		ClientRegistry.registerTileEntity(TileEntityCopperWire.class, "TileEntityCopperWire", new RenderCopperWire());
 	}
 	
 	@Override
