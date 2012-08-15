@@ -19,7 +19,7 @@ public class Vector3 extends Vector2
 {
     public double z;
 
-    public static final Vector3[] side = {new Vector3(0, 1, 0), new Vector3(0, -1, 0), new Vector3(0, 0, -1), new Vector3(0, 0, 1), new Vector3(1, 0, 0), new Vector3(-1, 0, 0)};
+    public static final Vector3[] side = {new Vector3(0, -1, 0), new Vector3(0, 1, 0), new Vector3(0, 0, -1), new Vector3(0, 0, 1), new Vector3(-1, 0, 0), new Vector3(1, 0, 0)};
 
     public Vector3()
     {

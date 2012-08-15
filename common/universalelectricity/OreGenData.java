@@ -71,7 +71,7 @@ public class OreGenData
         this.oreStack = stack;
         
 		OreDictionary.registerOre(oreDictionaryName, stack);
-		MinecraftForge.setBlockHarvestLevel(Block.blocksList[stack.itemID], harvestTool, harvestLevel);
+		MinecraftForge.setBlockHarvestLevel(Block.blocksList[stack.itemID], stack.getItemDamage(), harvestTool, harvestLevel);
     }
 
     //A simplified version of the constructor
