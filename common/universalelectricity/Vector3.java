@@ -6,6 +6,7 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.extend.IElectricUnit;
 import universalelectricity.extend.TileEntityConductor;
 
@@ -239,9 +240,9 @@ public class Vector3 extends Vector2
 	 * @param side - The side. 0-5
 	 * @return The position relative to the original position's side
 	 */
-	public void modifyPositionFromSide(byte side)
+	public void modifyPositionFromSide(ForgeDirection side)
 	{
-	    switch (side)
+	    switch (side.ordinal())
 	    {
 	        case 0: this.y -= 1; break;
 	        case 1: this.y += 1; break;
@@ -260,7 +261,7 @@ public class Vector3 extends Vector2
 	 * @param z - The Z axis of the conductor
 	 * @return Returns the tile entity for the block on the designated side. Returns null if not a UE Unit
 	 */
-	public static TileEntity getUEUnitFromSide(World world, Vector3 position, byte side)
+	public static TileEntity getUEUnitFromSide(World world, Vector3 position, ForgeDirection side)
 	{
 		position.modifyPositionFromSide(side);
 	    //Check if the designated block is a UE Unit - producer, consumer or a conductor
@@ -273,7 +274,7 @@ public class Vector3 extends Vector2
 	
 	    if (tileEntity instanceof IElectricUnit)
 	    {
-	        if (((IElectricUnit)tileEntity).canConnect(getOrientationFromSide(side, (byte)2)))
+	        if (((IElectricUnit)tileEntity).canConnect(getOrientationFromSide(side, ForgeDirection.NORTH)))
 	        {
 	            return tileEntity;
 	        }
@@ -297,69 +298,69 @@ public class Vector3 extends Vector2
 	 * @return The side relative to the facing direction.
 	 */
 	
-	public static byte getOrientationFromSide(byte front, byte side)
+	public static ForgeDirection getOrientationFromSide(ForgeDirection front, ForgeDirection side)
 	{
-	    switch (front)
+	    switch (front.ordinal())
 	    {
 		    case 0:
-	            switch (side)
+	            switch (side.ordinal())
 	            {
-	                case 0: return 3;
-	                case 1: return 2;
-	                case 2: return 1;
-	                case 3: return 0;
-	                case 4: return 5;
-	                case 5: return 4;
+	                case 0: return ForgeDirection.getOrientation(3);
+	                case 1: return ForgeDirection.getOrientation(2);
+	                case 2: return ForgeDirection.getOrientation(1);
+	                case 3: return ForgeDirection.getOrientation(0);
+	                case 4: return ForgeDirection.getOrientation(5);
+	                case 5: return ForgeDirection.getOrientation(4);
 	            }
 	            
 		    case 1:
-		            switch (side)
-		            {
-		                case 0: return 4;
-		                case 1: return 5;
-	                case 2: return 0;
-	                case 3: return 1;
-	                case 4: return 2;
-	                case 5: return 3;
+		         switch (side.ordinal())
+		         {
+		                case 0: return ForgeDirection.getOrientation(4);
+		                case 1: return ForgeDirection.getOrientation(5);
+		                case 2: return ForgeDirection.getOrientation(0);
+		                case 3: return ForgeDirection.getOrientation(1);
+		                case 4: return ForgeDirection.getOrientation(2);
+		                case 5: return ForgeDirection.getOrientation(3);
 	            }
 
 	        case 2:
-	            switch (side)
+	            switch (side.ordinal())
 	            {
-	                case 0: return 0;
-	                case 1: return 1;
-	                case 2: return 3;
-	                case 3: return 2;
-	                case 4: return 5;
-	                case 5: return 4;
+	                case 0: return ForgeDirection.getOrientation(0);
+	                case 1: return ForgeDirection.getOrientation(1);
+	                case 2: return ForgeDirection.getOrientation(3);
+	                case 3: return ForgeDirection.getOrientation(2);
+	                case 4: return ForgeDirection.getOrientation(5);
+	                case 5: return ForgeDirection.getOrientation(4);
 	            }
 	
 	        case 3:
 	            return side;
 	
 	        case 4:
-	            switch (side)
+	            switch (side.ordinal())
 	            {
-	                case 0: return 0;
-	                case 1: return 1;
-	                case 2: return 5;
-	                case 3: return 4;
-	                case 4: return 3;
-	                case 5: return 2;
+	                case 0: return ForgeDirection.getOrientation(0);
+	                case 1: return ForgeDirection.getOrientation(1);
+	                case 2: return ForgeDirection.getOrientation(5);
+	                case 3: return ForgeDirection.getOrientation(4);
+	                case 4: return ForgeDirection.getOrientation(3);
+	                case 5: return ForgeDirection.getOrientation(2);
 	            }
 	
 	        case 5:
-	            switch (side)
+	            switch (side.ordinal())
 	            {
-	                case 0: return 0;
-	                case 1: return 1;
-	                case 2: return 4;
-	                case 3: return 5;
-	                case 4: return 2;
-	                case 5: return 3;
+	                case 0: return ForgeDirection.getOrientation(0);
+	                case 1: return ForgeDirection.getOrientation(1);
+	                case 2: return ForgeDirection.getOrientation(4);
+	                case 3: return ForgeDirection.getOrientation(5);
+	                case 4: return ForgeDirection.getOrientation(2);
+	                case 5: return ForgeDirection.getOrientation(3);
 	            }
 	    }
 	
-	    return -1;
+	    return ForgeDirection.UNKNOWN;
 	}
 }

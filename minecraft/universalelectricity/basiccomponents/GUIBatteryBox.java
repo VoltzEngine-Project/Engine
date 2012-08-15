@@ -7,9 +7,6 @@ import net.minecraft.src.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import universalelectricity.UniversalElectricity;
-import universalelectricity.basiccomponents.BasicComponents;
-import universalelectricity.basiccomponents.ContainerBatteryBox;
-import universalelectricity.basiccomponents.TileEntityBatteryBox;
 
 
 public class GUIBatteryBox extends GuiContainer

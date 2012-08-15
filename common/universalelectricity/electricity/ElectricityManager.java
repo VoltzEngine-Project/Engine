@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.src.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.Vector3;
 import universalelectricity.extend.IElectricUnit;
 import universalelectricity.extend.TileEntityConductor;
@@ -12,7 +13,7 @@ import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
 /**
- * This class is used to manage electricity transfering and flow
+ * This class is used to manage electricity transferring and flow
  * @author Calclavia
  *
  */
@@ -95,7 +96,7 @@ public class ElectricityManager implements ITickHandler
         {
             for (byte i = 0; i < 6; i++)
             {
-                conductor.updateConnectionWithoutSplit(Vector3.getUEUnitFromSide(conductor.func_70314_l(), new Vector3(conductor.xCoord, conductor.yCoord, conductor.zCoord), i), i);
+                conductor.updateConnectionWithoutSplit(Vector3.getUEUnitFromSide(conductor.func_70314_l(), new Vector3(conductor.xCoord, conductor.yCoord, conductor.zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
             }
         }
     }
@@ -175,11 +176,11 @@ public class ElectricityManager implements ITickHandler
                             {
                                 IElectricUnit electricUnit = (IElectricUnit)tileEntity;
 
-                                if (electricUnit.electricityRequest() > 0 && electricUnit.canReceiveFromSide(Vector3.getOrientationFromSide(i, (byte)2)))
+                                if (electricUnit.electricityRequest() > 0 && electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                                 {
                                     float transferWatts = Math.max(0, Math.min(leftOverWatts, Math.min(watts / allElectricUnitsInLine.size(), electricUnit.electricityRequest())));
                                     leftOverWatts -= transferWatts;
-                                    electricityTransferQueue.add(new ElectricityTransferData(electricUnit, Vector3.getOrientationFromSide(i, (byte)2), transferWatts, voltage));
+                                    electricityTransferQueue.add(new ElectricityTransferData(electricUnit, ForgeDirection.getOrientation(i).getOpposite(), transferWatts, voltage));
                                 }
                             }
                         }
@@ -212,7 +213,7 @@ public class ElectricityManager implements ITickHandler
                         {
                             IElectricUnit electricUnit = (IElectricUnit)tileEntity;
 
-                            if (electricUnit.canReceiveFromSide(Vector3.getOrientationFromSide(i, (byte)2)))
+                            if (electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                             {
                                 need += electricUnit.electricityRequest();
                             }
@@ -254,7 +255,7 @@ public class ElectricityManager implements ITickHandler
             {
                 float watts = 0;
                 float voltage = 0;
-                byte side = -1;
+                ForgeDirection side = ForgeDirection.UNKNOWN;
 
                 //Try to stack all electricity from one side into one update
                 for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
@@ -262,7 +263,7 @@ public class ElectricityManager implements ITickHandler
                     if (electricityTransferQueue.get(ii).eletricUnit == electricUnit)
                     {
                         //If the side is not set for this tick
-                        if (side == -1)
+                        if (side == ForgeDirection.UNKNOWN)
                         {
                             watts = electricityTransferQueue.get(ii).watts;
                             voltage = electricityTransferQueue.get(ii).voltage;
@@ -294,7 +295,7 @@ public class ElectricityManager implements ITickHandler
 	@Override
 	public EnumSet<TickType> ticks()
 	{
-		return EnumSet.of(TickType.SERVER, TickType.CLIENT);
+		return EnumSet.of(TickType.SERVER);
 	}
 
 	@Override

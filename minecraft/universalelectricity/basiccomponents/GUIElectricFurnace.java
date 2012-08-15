@@ -6,10 +6,6 @@ import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.basiccomponents.BasicComponents;
-import universalelectricity.basiccomponents.ContainerElectricFurnace;
-import universalelectricity.basiccomponents.TileEntityElectricFurnace;
-
 
 public class GUIElectricFurnace extends GuiContainer
 {

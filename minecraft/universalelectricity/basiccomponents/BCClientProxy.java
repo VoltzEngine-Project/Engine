@@ -1,11 +1,11 @@
 package universalelectricity.basiccomponents;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import cpw.mods.fml.client.registry.ClientRegistry;
 
 public class BCClientProxy extends BCCommonProxy
 {

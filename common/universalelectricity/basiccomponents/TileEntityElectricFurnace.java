@@ -7,9 +7,8 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import net.minecraftforge.common.Orientation;
-import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
 import universalelectricity.extend.IItemElectric;
@@ -21,7 +20,7 @@ import com.google.common.io.ByteArrayDataInput;
 public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IInventory, ISidedInventory,  IPacketReceiver
 {
     //The amount of ticks requried to smelt this item
-    public final int smeltingTimeRequired = 150;
+    public final int smeltingTimeRequired = 180;
 
     //How many ticks has this item been smelting for?
     public int smeltingTicks = 0;
@@ -52,13 +51,13 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
         return 0;
     }
 
-    public boolean canReceiveFromSide(byte side)
+    public boolean canReceiveFromSide(ForgeDirection side)
     {
-        return side == Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
+        return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
     }
 
     @Override
-    public void onUpdate(float watts, float voltage, byte side)
+    public void onUpdate(float watts, float voltage, ForgeDirection side)
     {
         super.onUpdate(watts, voltage, side);
 
@@ -221,7 +220,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     }
 
     @Override
-    public int getStartInventorySide(Orientation side)
+    public int getStartInventorySide(ForgeDirection side)
     {
         if(side == side.DOWN || side == side.UP)
         {
@@ -232,7 +231,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     }
     
     @Override
-    public int getSizeInventorySide(Orientation side)
+    public int getSizeInventorySide(ForgeDirection side)
     {
         return 1;
     }

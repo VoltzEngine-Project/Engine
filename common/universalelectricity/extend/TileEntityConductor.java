@@ -1,6 +1,7 @@
 package universalelectricity.extend;
 
 import net.minecraft.src.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.electricity.ElectricityManager;
 
 /**
@@ -28,11 +29,11 @@ public abstract class TileEntityConductor extends TileEntity
      * @param tileEntity - Must be either a producer, consumer or a conductor
      * @param side - side in which the connection is coming from
      */
-    public void updateConnection(TileEntity tileEntity, byte side)
+    public void updateConnection(TileEntity tileEntity, ForgeDirection side)
     {
         if (tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricUnit)
         {
-            this.connectedBlocks[side] = tileEntity;
+            this.connectedBlocks[side.ordinal()] = tileEntity;
 
             if (tileEntity instanceof TileEntityConductor)
             {
@@ -41,23 +42,23 @@ public abstract class TileEntityConductor extends TileEntity
         }
         else
         {
-            if (this.connectedBlocks[side] != null)
+            if (this.connectedBlocks[side.ordinal()] != null)
             {
-                if (this.connectedBlocks[side] instanceof TileEntityConductor)
+                if (this.connectedBlocks[side.ordinal()] instanceof TileEntityConductor)
                 {
-                    ElectricityManager.splitConnection(this, (TileEntityConductor)this.connectedBlocks[side]);
+                    ElectricityManager.splitConnection(this, (TileEntityConductor)this.connectedBlocks[side.ordinal()]);
                 }
             }
 
-            this.connectedBlocks[side] = null;
+            this.connectedBlocks[side.ordinal()] = null;
         }
     }
 
-    public void updateConnectionWithoutSplit(TileEntity tileEntity, byte side)
+    public void updateConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
     {
         if (tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricUnit)
         {
-            this.connectedBlocks[side] = tileEntity;
+            this.connectedBlocks[side.ordinal()] = tileEntity;
 
             if (tileEntity instanceof TileEntityConductor)
             {
@@ -66,7 +67,7 @@ public abstract class TileEntityConductor extends TileEntity
         }
         else
         {
-            this.connectedBlocks[side] = null;
+            this.connectedBlocks[side.ordinal()] = null;
         }
     }
 

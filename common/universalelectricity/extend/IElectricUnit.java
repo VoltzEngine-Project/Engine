@@ -1,5 +1,7 @@
 package universalelectricity.extend;
 
+import net.minecraftforge.common.ForgeDirection;
+
 
 /**
  * The UEIConsumer interface is an interface that must be applied to all tile entities that can receive electricity.
@@ -26,7 +28,7 @@ public interface IElectricUnit extends IDisableable
      *
      * @param side - The side of the block in which the electricity is coming from.
      */
-    public void onUpdate(float joules, float voltage, byte side);
+    public void onUpdate(float joules, float voltage, ForgeDirection side);
 
     /**
      * How much electricity this electric unit needs/wants PER TICK/THIS TICK.
@@ -41,14 +43,14 @@ public interface IElectricUnit extends IDisableable
      * @param side. 0-5 byte
      * @return - True if so.
      */
-    public boolean canConnect(byte side);
+    public boolean canConnect(ForgeDirection side);
 
     /**
      * Can this unit receive electricity from this specific side
      * @param side. 0-5 byte
      * @return - True if so.
      */
-    public boolean canReceiveFromSide(byte side);
+    public boolean canReceiveFromSide(ForgeDirection side);
 
     /**
      * Gets the voltage of the electricity consumer. Used in a conductor to find the voltage difference.

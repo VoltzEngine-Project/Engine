@@ -5,21 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraftforge.common.Configuration;
+import universalelectricity.electricity.ElectricityManager;
 
 public class UniversalElectricity
 {
     public static final Configuration CONFIGURATION = new Configuration(new File("config/UniversalElectricity/UniversalElectricity.cfg"));
     public static final List<Object> MODS = new ArrayList<Object>();
-    public static final String version = "0.5.0";
+    public static final String VERSION = "0.5.0";
+    
+    public static final ElectricityManager electricityManager = new ElectricityManager();
     
     public static void registerMod(Object networkmod, String modName, String version)
     {
-        String[] versionNumbers = getVersion().split("\\.");
+        String[] versionNumbers = version.split("\\.");
         String[] addonVersionNumbers = version.split("\\.");
 
         if (Integer.parseInt(addonVersionNumbers[0]) != Integer.parseInt(versionNumbers[0]))
         {
-            throw new RuntimeException("Universal Electricity mod major version mismatch, expecting " + getVersion());
+            throw new RuntimeException("Universal Electricity mod major version mismatch, expecting " + version);
         }
         else if (Integer.parseInt(addonVersionNumbers[1]) > Integer.parseInt(versionNumbers[1]))
         {
@@ -27,20 +30,15 @@ public class UniversalElectricity
         }
         else if (Integer.parseInt(addonVersionNumbers[1]) < Integer.parseInt(versionNumbers[1]))
         {
-        	throw new RuntimeException("Universal Electricity mod minor version mismatch, need at least " + getVersion());
+        	throw new RuntimeException("Universal Electricity mod minor version mismatch, need at least " + version);
         }
         else if (Integer.parseInt(addonVersionNumbers[2]) != Integer.parseInt(versionNumbers[2]))
         {
-            System.out.println("UE mod minor version " + version + " mismatch with version " + getVersion());
+            System.out.println("UE mod minor version " + version + " mismatch with version " + version);
         }
 
         MODS.add(networkmod);
         System.out.println("Loaded Universal Electricity Mod: " + modName);
-    }
-
-    public static String getVersion()
-    {
-        return version;
     }
 
     /*------------------ FUNCTIONS ----------------------

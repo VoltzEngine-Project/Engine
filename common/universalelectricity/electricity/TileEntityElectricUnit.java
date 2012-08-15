@@ -2,6 +2,7 @@ package universalelectricity.electricity;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.extend.IElectricUnit;
 
 /**
@@ -34,7 +35,7 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
      * Called every tick. Super this!
      */
     @Override
-    public void onUpdate(float watts, float voltage, byte side)
+    public void onUpdate(float watts, float voltage, ForgeDirection side)
     {
         if (this.disabledTicks > 0)
         {
@@ -44,7 +45,7 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
     }
 
     @Override
-    public boolean canConnect(byte side)
+    public boolean canConnect(ForgeDirection side)
     {
         return this.canReceiveFromSide(side);
     }

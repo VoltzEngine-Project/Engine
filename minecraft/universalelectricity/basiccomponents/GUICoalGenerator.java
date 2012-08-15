@@ -7,9 +7,6 @@ import net.minecraft.src.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import universalelectricity.UniversalElectricity;
-import universalelectricity.basiccomponents.BasicComponents;
-import universalelectricity.basiccomponents.ContainerCoalGenerator;
-import universalelectricity.basiccomponents.TileEntityCoalGenerator;
 
 
 public class GUICoalGenerator extends GuiContainer

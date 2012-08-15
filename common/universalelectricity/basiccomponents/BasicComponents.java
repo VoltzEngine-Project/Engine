@@ -3,7 +3,6 @@ package universalelectricity.basiccomponents;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.OreGenData;
@@ -25,6 +24,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 
 /**
@@ -33,7 +33,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
  *
  */
 
-@Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.version)
+@Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.VERSION)
 @NetworkMod(channels = { "BasicComponents" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 
 public class BasicComponents
@@ -77,7 +77,7 @@ public class BasicComponents
     {    	
 		instance = this;
 		
-		UniversalElectricity.registerMod(this, "Basic Componenets", UniversalElectricity.getVersion());
+		UniversalElectricity.registerMod(this, "Basic Componenets", UniversalElectricity.VERSION);
 		
 		//Checks to make sure Forge is the correction version...
 		if(ForgeVersion.getMajorVersion() != 4)
@@ -93,6 +93,13 @@ public class BasicComponents
 		GameRegistry.registerWorldGenerator(new OreGenerator());
     	TickRegistry.registerTickHandler(new ElectricityManager(), Side.CLIENT);
     	TickRegistry.registerTickHandler(new ElectricityManager(), Side.SERVER);
+    	
+    	//Register Blocks
+    	GameRegistry.registerBlock(blockOre, ItemBCOre.class);
+		GameRegistry.registerBlock(blockCopperWire);
+		GameRegistry.registerBlock(blockBatteryBox);
+		GameRegistry.registerBlock(blockCoalGenerator);
+		GameRegistry.registerBlock(blockElectricFurnace);
 
 		proxy.preInit();
     }
@@ -101,31 +108,24 @@ public class BasicComponents
 	public void load(FMLInitializationEvent evt)
     {
     	proxy.init();
-    	
-		//Register Blocks
-    	GameRegistry.registerBlock(blockOre, ItemBCOre.class);
-		GameRegistry.registerBlock(blockCopperWire);
-		GameRegistry.registerBlock(blockBatteryBox);
-		GameRegistry.registerBlock(blockCoalGenerator);
-		GameRegistry.registerBlock(blockElectricFurnace);
-				
-		ModLoader.addName(new ItemStack(blockOre, 1, 0), "Copper Ore");
-		ModLoader.addName(new ItemStack(blockOre, 1, 1), "Tin Ore");
+    					
+    	LanguageRegistry.addName(new ItemStack(blockOre, 1, 0), "Copper Ore");
+		LanguageRegistry.addName(new ItemStack(blockOre, 1, 1), "Tin Ore");
 
-		ModLoader.addName(itemBattery, "Basic Battery");
-		ModLoader.addName(blockCopperWire, "Copper Wire");
-		ModLoader.addName(new ItemStack(itemCircuit, 1, 0), "Basic Circuit");
-        ModLoader.addName(new ItemStack(itemCircuit, 1, 1), "Advanced Circuit");
-        ModLoader.addName(new ItemStack(itemCircuit, 1, 2), "Elite Circuit");
+		LanguageRegistry.addName(itemBattery, "Basic Battery");
+		LanguageRegistry.addName(blockCopperWire, "Copper Wire");
+		LanguageRegistry.addName(new ItemStack(itemCircuit, 1, 0), "Basic Circuit");
+        LanguageRegistry.addName(new ItemStack(itemCircuit, 1, 1), "Advanced Circuit");
+        LanguageRegistry.addName(new ItemStack(itemCircuit, 1, 2), "Elite Circuit");
 
-        ModLoader.addName(blockBatteryBox, "Battery Box");
-        ModLoader.addName(blockCoalGenerator, "Coal Generator");
-        ModLoader.addName(blockElectricFurnace, "Electric Furnace");
+        LanguageRegistry.addName(blockBatteryBox, "Battery Box");
+        LanguageRegistry.addName(blockCoalGenerator, "Coal Generator");
+        LanguageRegistry.addName(blockElectricFurnace, "Electric Furnace");
 		
 		//Register Tile Entities
-		ModLoader.registerTileEntity(TileEntityBatteryBox.class, "TileEntityBatteryBox");
-		ModLoader.registerTileEntity(TileEntityCoalGenerator.class, "TileEntityCoalGenerator");
-		ModLoader.registerTileEntity(TileEntityElectricFurnace.class, "TileEntityElectricFurnace");
+		GameRegistry.registerTileEntity(TileEntityBatteryBox.class, "TileEntityBatteryBox");
+		GameRegistry.registerTileEntity(TileEntityCoalGenerator.class, "TileEntityCoalGenerator");
+		GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, "TileEntityElectricFurnace");
 		
 		OreDictionary.registerOre("ingotCopper", itemCopperIngot);
 		OreDictionary.registerOre("ingotTin", itemTinIngot);

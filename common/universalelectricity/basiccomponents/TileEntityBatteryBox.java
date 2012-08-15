@@ -7,8 +7,8 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import net.minecraftforge.common.Orientation;
 import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
@@ -48,19 +48,19 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
     }
 
     @Override
-    public boolean canReceiveFromSide(byte side)
+    public boolean canReceiveFromSide(ForgeDirection side)
     {
-        return side == Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
+        return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
     }
 
     @Override
-    public boolean canConnect(byte side)
+    public boolean canConnect(ForgeDirection side)
     {
-        return canReceiveFromSide(side) || side == this.getBlockMetadata();
+        return canReceiveFromSide(side) || side.ordinal() == this.getBlockMetadata();
     }
 
     @Override
-    public void onUpdate(float watts, float voltage, byte side)
+    public void onUpdate(float watts, float voltage, ForgeDirection side)
     {
         if (!this.worldObj.isRemote)
         {
@@ -114,7 +114,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 
                 if (this.electricityStored > 0)
                 {
-                    TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), (byte)this.getBlockMetadata());
+                    TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
 
                     if (tileEntity != null)
                     {
@@ -185,7 +185,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
     }
 
     @Override
-    public int getStartInventorySide(Orientation side)
+    public int getStartInventorySide(ForgeDirection side)
     {
         if(side == side.DOWN)
         {
@@ -201,7 +201,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
     }
 
     @Override
-    public int getSizeInventorySide(Orientation side)
+    public int getSizeInventorySide(ForgeDirection side)
     {
         return 1;
     }

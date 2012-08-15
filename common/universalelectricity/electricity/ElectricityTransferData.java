@@ -1,5 +1,6 @@
 package universalelectricity.electricity;
 
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.extend.IElectricUnit;
 
 public class ElectricityTransferData
@@ -7,9 +8,9 @@ public class ElectricityTransferData
     public IElectricUnit eletricUnit;
     public float watts;
     public float voltage;
-    public byte side;
+    public ForgeDirection side;
 
-    public ElectricityTransferData(IElectricUnit eletricUnit, byte side, float watts, float voltage)
+    public ElectricityTransferData(IElectricUnit eletricUnit, ForgeDirection side, float watts, float voltage)
     {
         this.eletricUnit = eletricUnit;
         this.side = side;

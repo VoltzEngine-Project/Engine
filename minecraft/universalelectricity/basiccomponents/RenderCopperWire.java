@@ -5,9 +5,6 @@ import net.minecraft.src.TileEntitySpecialRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.basiccomponents.BasicComponents;
-import universalelectricity.basiccomponents.TileEntityCopperWire;
-
 
 public class RenderCopperWire extends TileEntitySpecialRenderer
 {

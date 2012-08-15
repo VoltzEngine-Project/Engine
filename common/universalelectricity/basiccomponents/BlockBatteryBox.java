@@ -8,7 +8,7 @@ import net.minecraft.src.Material;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import universalelectricity.Vector3;
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.extend.BlockMachine;
 import universalelectricity.extend.IRedstoneProvider;
 
@@ -44,7 +44,7 @@ public class BlockBatteryBox extends BlockMachine
                 return this.blockIndexInTexture + 3;
             }
             //If it is the back side
-            else if (side == Vector3.getOrientationFromSide((byte)metadata, (byte)2))
+            else if (side == ForgeDirection.getOrientation(metadata).getOpposite().ordinal())
             {
                 return this.blockIndexInTexture + 2;
             }

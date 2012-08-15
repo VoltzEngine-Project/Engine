@@ -7,8 +7,8 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import net.minecraftforge.common.Orientation;
 import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
@@ -21,7 +21,7 @@ import com.google.common.io.ByteArrayDataInput;
 public class TileEntityCoalGenerator extends TileEntityElectricUnit implements IInventory, ISidedInventory, IPacketReceiver
 {
     //Maximum possible generation rate of watts in SECONDS
-    public static final int maxGenerateRate = 560;
+    public static final int maxGenerateRate = 550;
 
     //Current generation rate based on hull heat. In TICKS.
     public float generateWatts = 0;
@@ -41,31 +41,31 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
         ElectricityManager.registerElectricUnit(this);
     }
 
-    public boolean canProduceElectricity(byte side)
+    public boolean canProduceElectricity(ForgeDirection side)
     {
         return canConnect(side) && !this.isDisabled();
     }
 
     @Override
-    public boolean canReceiveFromSide(byte side)
+    public boolean canReceiveFromSide(ForgeDirection side)
     {
         return false;
     }
 
     @Override
-    public boolean canConnect(byte side)
+    public boolean canConnect(ForgeDirection side)
     {
-        return side == Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2);
+        return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
     }
 
     @Override
-    public void onUpdate(float watts, float voltage, byte side)
+    public void onUpdate(float watts, float voltage, ForgeDirection side)
     {
         if (!this.worldObj.isRemote)
         {
             super.onUpdate(watts, voltage, side);
             //Check nearby blocks and see if the conductor is full. If so, then it is connected
-            TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), Vector3.getOrientationFromSide((byte)this.getBlockMetadata(), (byte)2));
+            TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite());
 
             if (tileEntity instanceof TileEntityConductor)
             {
@@ -105,7 +105,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
                     if (this.connectedElectricUnit != null)
                     {
-                        this.generateWatts = (float)Math.min(this.generateWatts + Math.min((this.generateWatts) * 0.0007 + 0.001, 0.05F), this.maxGenerateRate / 20);
+                        this.generateWatts = (float)Math.min(this.generateWatts + Math.min((this.generateWatts) * 0.0005 + 0.0009, 0.04F), this.maxGenerateRate / 20);
                     }
                 }
 
@@ -173,13 +173,13 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     }
     
     @Override
-    public int getStartInventorySide(Orientation side)
+    public int getStartInventorySide(ForgeDirection side)
     {
         return 0;
     }
     
     @Override
-    public int getSizeInventorySide(Orientation side)
+    public int getSizeInventorySide(ForgeDirection side)
     {
         return 1;
     }
