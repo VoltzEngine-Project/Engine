@@ -28,32 +28,56 @@ import cpw.mods.fml.common.network.Player;
  * 
  * @author Calclavia
  */
-public class PacketManager implements IPacketHandler
+public class PacketManager implements IPacketHandler, IPacketReceiver
 {
+	public enum PacketType
+	{
+		UNSPECIFIED, TILEENTITY;
+		
+	    public static PacketType get(int id)
+		{
+	    	if (id >= 0 && id < PacketType.values().length)
+	        {
+	            return PacketType.values()[id];
+	        }
+	        return UNSPECIFIED;
+		}
+	}
+	
 	@Override
 	public void onPacketData(NetworkManager network, Packet250CustomPayload packet, Player player)
 	{
 		try
         {
 			ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
-			int x = data.readInt();
-			int y = data.readInt();
-			int z = data.readInt();
 			
-			World world = ((EntityPlayer)player).worldObj;
+			PacketType packetType = PacketType.get(data.readInt());
 			
-			if(world != null)
+			if(packetType == PacketType.TILEENTITY)
 			{
-				TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+				int x = data.readInt();
+				int y = data.readInt();
+				int z = data.readInt();
 				
-				if(tileEntity != null)
+				World world = ((EntityPlayer)player).worldObj;
+				
+				if(world != null)
 				{
-					if(tileEntity instanceof IPacketReceiver)
+					TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+					
+					if(tileEntity != null)
 					{
-						((IPacketReceiver)tileEntity).handlePacketData(network, packet.channel, data);
-						
+						if(tileEntity instanceof IPacketReceiver)
+						{
+							((IPacketReceiver)tileEntity).handlePacketData(network, packet, ((EntityPlayer)player), data);
+							
+						}
 					}
 				}
+			}
+			else
+			{
+				this.handlePacketData(network, packet, ((EntityPlayer)player), data);
 			}
         }
         catch(Exception e)
@@ -69,6 +93,8 @@ public class PacketManager implements IPacketHandler
 
         try
         {
+            data.writeInt(PacketType.TILEENTITY.ordinal());
+        	
             data.writeInt(sender.xCoord);
             data.writeInt(sender.yCoord);
             data.writeInt(sender.zCoord);
@@ -88,9 +114,45 @@ public class PacketManager implements IPacketHandler
 
         try
         {
+            data.writeInt(PacketType.TILEENTITY.ordinal());
+
             data.writeInt(sender.xCoord);
             data.writeInt(sender.yCoord);
             data.writeInt(sender.zCoord);
+
+            sendPacketToServer(channelName, bytes, data, sendData);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+	
+	public static void sendUnspecifiedPacket(String channelName, Object... sendData)
+    {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream data = new DataOutputStream(bytes);
+
+        try
+        {
+            data.writeInt(PacketType.UNSPECIFIED.ordinal());
+
+            sendPacketToClients(channelName, bytes, data, sendData);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+	
+	public static void sendUnspecifiedPacketToServer(String channelName, Object... sendData)
+    {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream data = new DataOutputStream(bytes);
+
+        try
+        {
+            data.writeInt(PacketType.UNSPECIFIED.ordinal());
 
             sendPacketToServer(channelName, bytes, data, sendData);
         }
@@ -204,5 +266,11 @@ public class PacketManager implements IPacketHandler
 			System.out.println("Sending packet to server failed.");
             e.printStackTrace();
         }
+	}
+
+	@Override
+	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+	{
+
 	}
 }

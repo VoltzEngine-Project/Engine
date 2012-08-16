@@ -6,6 +6,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
@@ -125,7 +126,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     }
     
     @Override
-	public void handlePacketData(NetworkManager network, String channel, ByteArrayDataInput dataStream) 
+	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
         {
