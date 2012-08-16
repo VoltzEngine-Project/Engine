@@ -129,9 +129,23 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
                 }
             }
             
-            PacketManager.sendTileEntityPacket(this, "BasicComponents", new double[] {this.electricityStored, this.disabledTicks});
+            PacketManager.sendTileEntityPacket(this, "BasicComponents", this.electricityStored, this.disabledTicks);
         }
     }
+    
+    @Override
+	public void handlePacketData(NetworkManager network, String channel, ByteArrayDataInput dataStream)
+	{
+		try
+        {
+            this.electricityStored = dataStream.readFloat();
+            this.disabledTicks = dataStream.readInt();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+	}
 
     /**
      * Reads a tile entity from NBT.
@@ -307,18 +321,4 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
     {
         return 1;
     }
-
-	@Override
-	public void handlePacketData(NetworkManager network, String channel, ByteArrayDataInput dataStream)
-	{
-		try
-        {
-            this.electricityStored = (float)dataStream.readDouble();
-            this.disabledTicks = (int)dataStream.readDouble();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-	}
 }

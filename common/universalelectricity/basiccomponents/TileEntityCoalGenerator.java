@@ -120,9 +120,23 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
                 }
             }
             
-            PacketManager.sendTileEntityPacket(this, "BasicComponents", new double[] {this.generateWatts, this.disabledTicks});
+            PacketManager.sendTileEntityPacket(this, "BasicComponents", this.generateWatts, this.disabledTicks);
         }
     }
+    
+    @Override
+	public void handlePacketData(NetworkManager network, String channel, ByteArrayDataInput dataStream) 
+	{
+		try
+        {
+            this.generateWatts = dataStream.readFloat();
+            this.disabledTicks = dataStream.readInt();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+	}
 
     /**
      * Reads a tile entity from NBT.
@@ -285,18 +299,4 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     {
         return 0;
     }
-
-	@Override
-	public void handlePacketData(NetworkManager network, String channel, ByteArrayDataInput dataStream) 
-	{
-		try
-        {
-            this.generateWatts = (float)dataStream.readDouble();
-            this.disabledTicks = (int)dataStream.readDouble();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-	}
 }

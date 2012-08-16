@@ -113,9 +113,23 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
                 this.electricityStored = 0;
             }
             
-            PacketManager.sendTileEntityPacket(this, "BasicComponents", new double[] {this.smeltingTicks, this.disabledTicks});
+            PacketManager.sendTileEntityPacket(this, "BasicComponents", this.smeltingTicks, this.disabledTicks);
         }
     }
+    
+    @Override
+	public void handlePacketData(NetworkManager network, String channel, ByteArrayDataInput dataStream)
+	{
+		try
+        {
+            this.smeltingTicks = dataStream.readInt();
+            this.disabledTicks = dataStream.readInt();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+	}
 
     //Check all conditions and see if we can start smelting
     public boolean canSmelt()
@@ -338,18 +352,4 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     {
         return 3;
     }
-
-	@Override
-	public void handlePacketData(NetworkManager network, String channel, ByteArrayDataInput dataStream)
-	{
-		try
-        {
-            this.smeltingTicks = (int)dataStream.readDouble();
-            this.disabledTicks = (int)dataStream.readDouble();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-	}
 }

@@ -4,17 +4,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.minecraft.src.ModLoader;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import universalelectricity.basiccomponents.BasicComponents;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 /**
@@ -39,7 +40,7 @@ public class PacketManager implements IPacketHandler
 			int y = data.readInt();
 			int z = data.readInt();
 			
-			World world = BasicComponents.proxy.getWorld();
+			World world = ((EntityPlayer)player).worldObj;
 			
 			if(world != null)
 			{
@@ -61,8 +62,7 @@ public class PacketManager implements IPacketHandler
         }
 	}
 	
-	
-	public static void sendTileEntityPacket(TileEntity sender, String channelName, double[] sendData)
+	public static void sendTileEntityPacket(TileEntity sender, String channelName, Object... sendData)
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         DataOutputStream data = new DataOutputStream(bytes);
@@ -73,20 +73,136 @@ public class PacketManager implements IPacketHandler
             data.writeInt(sender.yCoord);
             data.writeInt(sender.zCoord);
 
-            for(double dataValue : sendData)
-            {
-                data.writeDouble(dataValue);
-            }
+            sendPacketToClients(channelName, bytes, data, sendData);
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
-
-        Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = channelName;
-        packet.data = bytes.toByteArray();
-        packet.length = packet.data.length;
-        ModLoader.getMinecraftServerInstance().getConfigurationManager().sendPacketToAllPlayers(packet);
     }
+	
+	public static void sendTileEntityPacketToServer(TileEntity sender, String channelName, Object... sendData)
+    {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream data = new DataOutputStream(bytes);
+
+        try
+        {
+            data.writeInt(sender.xCoord);
+            data.writeInt(sender.yCoord);
+            data.writeInt(sender.zCoord);
+
+            sendPacketToServer(channelName, bytes, data, sendData);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+	
+	public static void sendPacketToClients(String channelName, ByteArrayOutputStream bytes, DataOutputStream data, Object... sendData)
+	{
+		try
+		{
+			for(Object dataValue : sendData)
+	        {
+	        	if(dataValue instanceof Integer)
+	        	{
+	        		data.writeInt((Integer)dataValue);
+	        	}
+	        	else if(dataValue instanceof Float)
+	        	{
+	        		data.writeFloat((Float)dataValue);
+	        	}
+	        	else if(dataValue instanceof Double)
+	        	{
+	        		data.writeDouble((Double)dataValue);
+	        	}
+	        	else if(dataValue instanceof Byte)
+	        	{
+	        		data.writeByte((Byte)dataValue);
+	        	}
+	        	else if(dataValue instanceof Boolean)
+	        	{
+	        		data.writeBoolean((Boolean)dataValue);
+	        	}
+	        	else if(dataValue instanceof String)
+	        	{
+	        		data.writeUTF((String)dataValue);
+	        	}
+	        	else if(dataValue instanceof Short)
+	        	{
+	        		data.writeShort((Short)dataValue);
+	        	}
+	        	else if(dataValue instanceof Long)
+	        	{
+	        		data.writeLong((Long)dataValue);
+	        	}
+	        }
+	        
+	        Packet250CustomPayload packet = new Packet250CustomPayload();
+	        packet.channel = channelName;
+	        packet.data = bytes.toByteArray();
+	        packet.length = packet.data.length;
+	        FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendPacketToAllPlayers(packet);
+		}
+		catch (IOException e)
+        {
+			System.out.println("Sending packet to client failed.");
+            e.printStackTrace();
+        }
+	}
+	
+	public static void sendPacketToServer(String channelName, ByteArrayOutputStream bytes, DataOutputStream data, Object... sendData)
+	{
+		try
+		{
+			for(Object dataValue : sendData)
+	        {
+	        	if(dataValue instanceof Integer)
+	        	{
+	        		data.writeInt((Integer)dataValue);
+	        	}
+	        	else if(dataValue instanceof Float)
+	        	{
+	        		data.writeFloat((Float)dataValue);
+	        	}
+	        	else if(dataValue instanceof Double)
+	        	{
+	        		data.writeDouble((Double)dataValue);
+	        	}
+	        	else if(dataValue instanceof Byte)
+	        	{
+	        		data.writeByte((Byte)dataValue);
+	        	}
+	        	else if(dataValue instanceof Boolean)
+	        	{
+	        		data.writeBoolean((Boolean)dataValue);
+	        	}
+	        	else if(dataValue instanceof String)
+	        	{
+	        		data.writeUTF((String)dataValue);
+	        	}
+	        	else if(dataValue instanceof Short)
+	        	{
+	        		data.writeShort((Short)dataValue);
+	        	}
+	        	else if(dataValue instanceof Long)
+	        	{
+	        		data.writeLong((Long)dataValue);
+	        	}
+	        }
+            
+            Packet250CustomPayload packet = new Packet250CustomPayload();
+            packet.channel = channelName;
+            packet.data = bytes.toByteArray();
+            packet.length = packet.data.length;
+            PacketDispatcher.sendPacketToServer(packet);
+		}
+		catch (IOException e)
+        {
+			System.out.println("Sending packet to server failed.");
+            e.printStackTrace();
+        }
+	}
 }

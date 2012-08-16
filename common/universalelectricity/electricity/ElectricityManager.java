@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.Vector3;
 import universalelectricity.extend.IElectricUnit;
@@ -19,6 +20,8 @@ import cpw.mods.fml.common.TickType;
  */
 public class ElectricityManager implements ITickHandler
 {
+	public World worldObj;
+	
     private static List<IElectricUnit> electricUnits = new ArrayList<IElectricUnit>();
     private static List<TileEntityConductor> electricConductors = new ArrayList<TileEntityConductor>();
 
