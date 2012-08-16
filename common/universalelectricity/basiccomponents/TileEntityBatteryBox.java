@@ -68,10 +68,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 
             if (!this.isDisabled())
             {
-                if(this.electricityRequest() > 0 && this.canReceiveFromSide(side))
-                {
-                	this.electricityStored = Math.min(this.getElectricityCapacity(), this.electricityStored+watts);
-                }
+                this.electricityStored = Math.min(this.getElectricityCapacity(), Math.max(0, this.electricityStored+watts));
 
                 //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
                 if (this.containingItems[0] != null && this.electricityStored > 0)

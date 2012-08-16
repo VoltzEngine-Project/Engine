@@ -1,7 +1,6 @@
 package universalelectricity.basiccomponents;
 
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -39,11 +38,5 @@ public class BCClientProxy extends BCCommonProxy
         }
 		
 		return null;
-	}
-	
-	@Override
-	public World getWorld()
-	{
-		return ModLoader.getMinecraftInstance().theWorld;
 	}
 }
