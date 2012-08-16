@@ -40,9 +40,4 @@ public class BCCommonProxy extends CommonProxy
 		
 		return null;
 	}
-	
-	public World getWorld()
-	{
-		return null;
-	}
 }
