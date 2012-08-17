@@ -154,54 +154,54 @@ public class UniversalElectricity
     }
 
     /**
-     * Return a string with the amount of joules for displaying.
-     * @param joules
-     * @return The string for displaying joules
+     * Return a string with the amount of amp-hour for displaying.
+     * @param amp-hours
+     * @return The string for displaying amp-hours
      */
-    public static String getJouleDisplay(double joules)
+    public static String getAmpHourDisplay(double ampHours)
     {
-        String displayJoules;
+        String displayAmpHours;
 
-        if (joules > 1000000)
+        if (ampHours > 1000000)
         {
-            displayJoules = roundOneDecimal(joules / 1000000) + " MJ";
+            displayAmpHours = roundOneDecimal(ampHours / 1000000) + " mAs";
         }
 
-        if (joules > 1000)
+        if (ampHours > 1000)
         {
-            displayJoules = roundOneDecimal(joules / 1000) + " KJ";
+            displayAmpHours = roundOneDecimal(ampHours / 1000) + " mAh";
         }
         else
         {
-            displayJoules = (int)joules + " J";
+            displayAmpHours = (int)ampHours + " Ah";
         }
 
-        return displayJoules;
+        return displayAmpHours;
     }
 
-    public static String getJouleDisplayFull(double joules)
+    public static String getAmpHourDisplayFull(double ampHours)
     {
-        String displayJoules;
+        String displayAmpHours;
 
-        if (joules > 1000000)
+        if (ampHours > 1000000)
         {
-            displayJoules = roundOneDecimal(joules / 1000000) + " Megajoule";
+            displayAmpHours = roundOneDecimal(ampHours / 1000000) + " Milliamp-seconds";
         }
 
-        if (joules > 1000)
+        if (ampHours > 1000)
         {
-            displayJoules = roundOneDecimal(joules / 1000) + " Kilojoule";
+            displayAmpHours = roundOneDecimal(ampHours / 1000) + " Milliamp-hours";
         }
-        else if (joules == 1)
+        else if (ampHours == 1)
         {
-            displayJoules = (int)joules + " Joule";
+            displayAmpHours = (int)ampHours + " Amp-hour";
         }
         else
         {
-            displayJoules = (int)joules + " Joules";
+            displayAmpHours = (int)ampHours + " Amp-hours";
         }
 
-        return displayJoules;
+        return displayAmpHours;
     }
     
     /**

@@ -50,7 +50,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
             color = "\u00a76";
         }
 
-        par2List.add(color + UniversalElectricity.getWattDisplay(storedJoules) + " - " + Math.round((storedJoules / this.getElectricityCapacity()) * 100) + "%");
+        par2List.add(color + UniversalElectricity.getAmpHourDisplay(storedJoules) + " - " + Math.round((storedJoules / this.getElectricityCapacity()) * 100) + "%");
     }
 
     @Override

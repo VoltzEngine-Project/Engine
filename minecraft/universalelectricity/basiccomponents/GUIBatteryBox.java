@@ -29,8 +29,8 @@ public class GUIBatteryBox extends GuiContainer
     protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString("Battery Box", 65, 6, 4210752);
-        String displayText = UniversalElectricity.getJouleDisplay(tileEntity.electricityStored);
-        String displayText2 = UniversalElectricity.getJouleDisplay(tileEntity.getElectricityCapacity());
+        String displayText = UniversalElectricity.getAmpHourDisplay(tileEntity.electricityStored);
+        String displayText2 = UniversalElectricity.getAmpHourDisplay(tileEntity.getElectricityCapacity());
 
         if (this.tileEntity.isDisabled())
         {
