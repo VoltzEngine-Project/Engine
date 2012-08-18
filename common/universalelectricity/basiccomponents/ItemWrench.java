@@ -4,7 +4,7 @@ import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityPlayer;
 import buildcraft.api.tools.IToolWrench;
 
-public class ItemWrench extends BCItem implements IToolWrench
+public class ItemWrench extends ItemBC implements IToolWrench
 {
     public ItemWrench(int par1, int par2)
     {

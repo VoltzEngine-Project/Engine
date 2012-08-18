@@ -7,7 +7,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
 
-public class ItemCopperWire extends BCItem
+public class ItemCopperWire extends ItemBC
 {
     private int spawnID = BasicComponents.blockCopperWire.blockID;
 
