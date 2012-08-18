@@ -7,6 +7,7 @@ import net.minecraft.src.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 
+
 public class GUIElectricFurnace extends GuiContainer
 {
     private TileEntityElectricFurnace tileEntity;

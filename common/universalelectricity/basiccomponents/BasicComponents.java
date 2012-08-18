@@ -91,8 +91,6 @@ public class BasicComponents
 		
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 		GameRegistry.registerWorldGenerator(new OreGenerator());
-    	TickRegistry.registerTickHandler(new ElectricityManager(), Side.CLIENT);
-    	TickRegistry.registerTickHandler(new ElectricityManager(), Side.SERVER);
     	
     	//Register Blocks
     	GameRegistry.registerBlock(blockOre, ItemBCOre.class);

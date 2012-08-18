@@ -298,7 +298,7 @@ public class ElectricityManager implements ITickHandler
 	@Override
 	public EnumSet<TickType> ticks()
 	{
-		return EnumSet.of(TickType.SERVER);
+		return EnumSet.of(TickType.SERVER, TickType.CLIENT);
 	}
 
 	@Override

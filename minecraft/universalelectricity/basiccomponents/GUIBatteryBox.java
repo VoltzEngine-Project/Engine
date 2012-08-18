@@ -28,7 +28,7 @@ public class GUIBatteryBox extends GuiContainer
     @Override
     protected void drawGuiContainerForegroundLayer()
     {
-        this.fontRenderer.drawString("Battery Box", 65, 6, 4210752);
+        this.fontRenderer.drawString(this.tileEntity.getInvName(), 65, 6, 4210752);
         String displayText = UniversalElectricity.getAmpHourDisplay(tileEntity.electricityStored);
         String displayText2 = UniversalElectricity.getAmpHourDisplay(tileEntity.getElectricityCapacity());
 
@@ -38,7 +38,7 @@ public class GUIBatteryBox extends GuiContainer
         }
 
         this.fontRenderer.drawString(displayText, 110 - displayText.length(), 30, 4210752);
-        this.fontRenderer.drawString("Capacity: " + displayText2, 80, 40, 4210752);
+        this.fontRenderer.drawString("Max: " + displayText2, 85, 40, 4210752);
         this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 90, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }

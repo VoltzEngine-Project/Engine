@@ -6,6 +6,7 @@ import net.minecraft.src.TileEntitySpecialRenderer;
 import org.lwjgl.opengl.GL11;
 
 
+
 public class RenderCopperWire extends TileEntitySpecialRenderer
 {
     private ModelCopperWire model;

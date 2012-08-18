@@ -1,11 +1,9 @@
 package universalelectricity.extend;
 
-import universalelectricity.basiccomponents.TileEntityBatteryBox;
-
 /**
  * OPTIONAL
  * This interface should be applied onto all tile entities that needs to receive redstone power.
- * Look at {@link TileEntityBatteryBox} for reference.
+ * Look at TileEntityBatteryBox for reference.
  * @author Calclavia
  *
  */
