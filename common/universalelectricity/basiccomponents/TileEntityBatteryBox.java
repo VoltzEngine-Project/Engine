@@ -1,5 +1,6 @@
 package universalelectricity.basiccomponents;
 
+import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
@@ -13,6 +14,7 @@ import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
+import universalelectricity.extend.IElectricityStorage;
 import universalelectricity.extend.IItemElectric;
 import universalelectricity.extend.IRedstoneProvider;
 import universalelectricity.extend.TileEntityConductor;
@@ -21,9 +23,11 @@ import universalelectricity.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
+public class TileEntityBatteryBox extends TileEntityElectricUnit implements IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
 {
-    public float electricityStored = 0;
+	public static final int ELECTRICITY_CAPACITY = 100000;
+	
+    private float electricityStored = 0;
 
     /**
     * The ItemStacks that hold the items currently being used in the battery box
@@ -42,7 +46,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
     {
         if (!this.isDisabled())
         {
-            return this.getElectricityCapacity() - this.electricityStored;
+            return ELECTRICITY_CAPACITY - this.electricityStored;
         }
 
         return 0;
@@ -66,11 +70,16 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
         if (!this.worldObj.isRemote)
         {
             super.onUpdate(watts, voltage, side);
+            
+            if (voltage > this.getVoltage())
+            {
+                this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
+            }
 
             if (!this.isDisabled())
             {
-                this.electricityStored = Math.min(this.getElectricityCapacity(), Math.max(0, this.electricityStored+watts));
-
+                this.setAmpHours(this.electricityStored+watts);
+                
                 //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
                 if (this.containingItems[0] != null && this.electricityStored > 0)
                 {
@@ -83,7 +92,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
                 }
 
                 //The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
-                if (this.containingItems[1] != null && this.electricityStored < this.getElectricityCapacity())
+                if (this.containingItems[1] != null && this.electricityStored < ELECTRICITY_CAPACITY)
                 {
                     if (this.containingItems[1].getItem() instanceof IItemElectric)
                     {
@@ -99,7 +108,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
 
                 boolean isFullThisCheck = false;
 
-                if (this.electricityStored >= this.getElectricityCapacity())
+                if (this.electricityStored >= ELECTRICITY_CAPACITY)
                 {
                     isFullThisCheck = true;
                 }
@@ -189,11 +198,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
         }
 
         par1NBTTagCompound.setTag("Items", var2);
-    }
-
-    public float getElectricityCapacity()
-    {
-        return 100000;
     }
 
     @Override
@@ -319,4 +323,16 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IPac
     {
         return 1;
     }
+
+	@Override
+	public float getAmpHours()
+	{
+		return this.electricityStored;
+	}
+
+	@Override
+	public void setAmpHours(float AmpHours)
+	{
+		this.electricityStored = Math.max(0, Math.min(AmpHours, ELECTRICITY_CAPACITY));
+	}
 }

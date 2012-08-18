@@ -232,61 +232,68 @@ public class ElectricityManager implements ITickHandler
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
-		for(int j = 0; j < electricConductors.size(); j ++)
-        {
-        	TileEntityConductor conductor  = electricConductors.get(j);
-            conductor.refreshConnectedBlocks();
-        }
-
-        for(int i = 0; i < electricUnits.size(); i++)
-        {
-        	IElectricUnit electricUnit = electricUnits.get(i);
-        	
-            //Cleanup useless units
-            if (electricUnit == null)
-            {
-                electricUnits.remove(electricUnit);
-                break;
-            }
-            else if (((TileEntity)electricUnit).isInvalid())
-            {
-                electricUnits.remove(electricUnit);
-                break;
-            }
-
-            if (inGameTicks % electricUnit.getTickInterval() == 0 && electricUnit.getTickInterval() > 0)
-            {
-                float watts = 0;
-                float voltage = 0;
-                ForgeDirection side = ForgeDirection.UNKNOWN;
-
-                //Try to stack all electricity from one side into one update
-                for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
-                {
-                    if (electricityTransferQueue.get(ii).eletricUnit == electricUnit)
-                    {
-                        //If the side is not set for this tick
-                        if (side == ForgeDirection.UNKNOWN)
-                        {
-                            watts = electricityTransferQueue.get(ii).watts;
-                            voltage = electricityTransferQueue.get(ii).voltage;
-                            side = electricityTransferQueue.get(ii).side;
-                            electricityTransferQueue.remove(ii);
-                        }
-                        else if (electricityTransferQueue.get(ii).side == side)
-                        {
-                            watts += electricityTransferQueue.get(ii).watts;
-                            voltage = Math.min(voltage, electricityTransferQueue.get(ii).voltage);
-                            electricityTransferQueue.remove(ii);
-                        }
-                    }
-                }
-
-                electricUnit.onUpdate(watts, voltage, side);
-            }
-        }
-
-        inGameTicks ++;
+		try
+		{
+			for(int j = 0; j < electricConductors.size(); j ++)
+	        {
+	        	TileEntityConductor conductor  = electricConductors.get(j);
+	            conductor.refreshConnectedBlocks();
+	        }
+	
+	        for(int i = 0; i < electricUnits.size(); i++)
+	        {
+	        	IElectricUnit electricUnit = electricUnits.get(i);
+	        	
+	            //Cleanup useless units
+	            if (electricUnit == null)
+	            {
+	                electricUnits.remove(electricUnit);
+	                break;
+	            }
+	            else if (((TileEntity)electricUnit).isInvalid())
+	            {
+	                electricUnits.remove(electricUnit);
+	                break;
+	            }
+	
+	            if (inGameTicks % electricUnit.getTickInterval() == 0 && electricUnit.getTickInterval() > 0)
+	            {
+	                float watts = 0;
+	                float voltage = 0;
+	                ForgeDirection side = ForgeDirection.UNKNOWN;
+	
+	                //Try to stack all electricity from one side into one update
+	                for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
+	                {
+	                    if (electricityTransferQueue.get(ii).eletricUnit == electricUnit)
+	                    {
+	                        //If the side is not set for this tick
+	                        if (side == ForgeDirection.UNKNOWN)
+	                        {
+	                            watts = electricityTransferQueue.get(ii).watts;
+	                            voltage = electricityTransferQueue.get(ii).voltage;
+	                            side = electricityTransferQueue.get(ii).side;
+	                            electricityTransferQueue.remove(ii);
+	                        }
+	                        else if (electricityTransferQueue.get(ii).side == side)
+	                        {
+	                            watts += electricityTransferQueue.get(ii).watts;
+	                            voltage = Math.min(voltage, electricityTransferQueue.get(ii).voltage);
+	                            electricityTransferQueue.remove(ii);
+	                        }
+	                    }
+	                }
+	
+	                electricUnit.onUpdate(watts, voltage, side);
+	            }
+	        }
+	
+	        inGameTicks ++;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override

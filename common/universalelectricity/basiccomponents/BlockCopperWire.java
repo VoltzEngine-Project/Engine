@@ -2,7 +2,10 @@ package universalelectricity.basiccomponents;
 
 import java.util.Random;
 
+import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
+import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.extend.BlockConductor;
@@ -76,5 +79,10 @@ public class BlockCopperWire extends BlockConductor
     public String getTextureFile()
     {
         return BasicComponents.BLOCK_TEXTURE_FILE;
+    }
+    
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+    {
+        return new ItemStack(BasicComponents.itemCopperWire, 1);
     }
 }

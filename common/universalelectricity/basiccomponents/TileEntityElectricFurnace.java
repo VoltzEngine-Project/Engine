@@ -62,11 +62,11 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     {
         super.onUpdate(watts, voltage, side);
 
-        if (!this.worldObj.isRemote)
+        if(!this.worldObj.isRemote)
         {
             if (voltage > this.getVoltage())
             {
-                this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 0.7F);
+                this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
             }
 
             //The bottom slot is for portable batteries

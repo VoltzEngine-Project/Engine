@@ -13,7 +13,7 @@ public interface IElectricUnit extends IDisableable
     /**
      * Called every time a tick interval (specified in getConsumerTickInterval()).
      *
-     * @param joules - Amount of joules this electric unit is receiving.
+     * @param amps - Amount of amps this electric unit is receiving.
      * This won't exceed the electricityRequest() amount.
      * NOTE! THIS WILL GIVE THE DELTA JOULES!
      * This means that if your electric unit's tick interval
@@ -28,7 +28,7 @@ public interface IElectricUnit extends IDisableable
      *
      * @param side - The side of the block in which the electricity is coming from.
      */
-    public void onUpdate(float joules, float voltage, ForgeDirection side);
+    public void onUpdate(float amps, float voltage, ForgeDirection side);
 
     /**
      * How much electricity this electric unit needs/wants PER TICK/THIS TICK.
