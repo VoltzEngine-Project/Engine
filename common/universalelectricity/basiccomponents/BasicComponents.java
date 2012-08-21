@@ -74,7 +74,7 @@ public class BasicComponents
 
     @PreInit
 	public void preInit(FMLPreInitializationEvent event)
-    {    	
+    {
 		instance = this;
 		
 		UniversalElectricity.registerMod(this, "Basic Componenets", UniversalElectricity.VERSION);
@@ -131,7 +131,7 @@ public class BasicComponents
 		OreDictionary.registerOre("ingotSteel", itemSteelIngot);
 		
 		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Copper Ore", "oreCopper", new ItemStack(blockOre, 1, 0), 60, 40, 5));
-		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Tin Ore", "oreTin", new ItemStack(blockOre, 1, 1), 60, 30, 3));
+		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Tin Ore", "oreTin", new ItemStack(blockOre, 1, 1), 60, 33, 4));
 		
 		//Recipes
 		//Motor

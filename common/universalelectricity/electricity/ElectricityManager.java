@@ -99,7 +99,7 @@ public class ElectricityManager implements ITickHandler
         {
             for (byte i = 0; i < 6; i++)
             {
-                conductor.updateConnectionWithoutSplit(Vector3.getUEUnitFromSide(conductor.func_70314_l(), new Vector3(conductor.xCoord, conductor.yCoord, conductor.zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+                conductor.updateConnectionWithoutSplit(Vector3.getUEUnitFromSide(conductor.getWorld(), new Vector3(conductor.xCoord, conductor.yCoord, conductor.zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
             }
         }
     }

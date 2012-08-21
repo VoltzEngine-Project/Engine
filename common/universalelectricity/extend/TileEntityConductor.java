@@ -1,6 +1,7 @@
 package universalelectricity.extend;
 
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.electricity.ElectricityManager;
 
@@ -101,4 +102,9 @@ public abstract class TileEntityConductor extends TileEntity
      * @return The amount of Ohm's. E.g 1.2Ohms or 3.0Ohms
      */
     public abstract double getResistance();
+    
+    public World getWorld()
+    {
+    	return this.worldObj;
+    }
 }
