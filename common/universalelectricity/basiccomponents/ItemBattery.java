@@ -61,7 +61,7 @@ public class ItemBattery extends ItemElectric
     }
 
     @Override
-    public float getVolts()
+    public float getVoltage()
     {
         return 20;
     }

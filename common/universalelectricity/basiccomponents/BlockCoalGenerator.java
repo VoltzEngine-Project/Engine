@@ -17,12 +17,11 @@ public class BlockCoalGenerator extends BlockMachine
 {
     public BlockCoalGenerator(int id, int textureIndex)
     {
-        super("Coal Generator", id, Material.wood);
+        super("Coal Generator", id, Material.wood, CreativeTabs.tabDeco);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();
         this.setTickRandomly(true);
-        this.setCreativeTab(CreativeTabs.tabBlock);
     }
 
     @Override

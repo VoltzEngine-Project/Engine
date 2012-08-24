@@ -17,7 +17,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
  * Adds recipes with full Forge ore dictionary support and replaceable by add-ons.
  * Use UERecipes.addRecipe(....) like how you use ModLoader.addRecipe.
  * 
- * MAKE SURE YOU ADD/REPLACE YOUR RECIPE BEFORE ModsLoaded()/@PostInit OR IT WONT BE REPLACABLE!
+ * MAKE SURE YOU ADD/REPLACE YOUR RECIPE BEFORE @PostInit OR IT WONT BE REPLACABLE!
  * @author Calclavia
  *
  */

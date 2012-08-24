@@ -52,26 +52,26 @@ public class BasicComponents
      * Here is where all the Universal Components are defined. You may reference to these variables.
      */
     public static final int BLOCK_ID_PREFIX = 3970;
-    public static final Block blockOre = new BlockBCOre(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Copper and Tin Ores", BLOCK_ID_PREFIX-1, true));
-    public static final Block blockCopperWire = new BlockCopperWire(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Copper_Wire", BLOCK_ID_PREFIX, true));
-    public static final Block blockBatteryBox = new BlockBatteryBox(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Battery_Box", BLOCK_ID_PREFIX + 1, true), 0);
-    public static final Block blockCoalGenerator = new BlockCoalGenerator(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Coal_Generator", BLOCK_ID_PREFIX + 2, true), 0);
-    public static final Block blockElectricFurnace = new BlockElectricFurnace(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Electric_Furnace", BLOCK_ID_PREFIX + 3, true), 0);
+    public static final Block blockOre = new BlockBCOre(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper and Tin Ores", BLOCK_ID_PREFIX-1));
+    public static final Block blockCopperWire = new BlockCopperWire(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper_Wire", BLOCK_ID_PREFIX));
+    public static final Block blockBatteryBox = new BlockBatteryBox(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Battery_Box", BLOCK_ID_PREFIX + 1), 0);
+    public static final Block blockCoalGenerator = new BlockCoalGenerator(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Coal_Generator", BLOCK_ID_PREFIX + 2), 0);
+    public static final Block blockElectricFurnace = new BlockElectricFurnace(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Electric_Furnace", BLOCK_ID_PREFIX + 3), 0);
 
     public static final int ITEM_ID_PREFIX = 13970;
-    public static final Item itemBattery = new ItemBattery(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Battery", ITEM_ID_PREFIX, false), 0);
-    public static final Item itemWrench = new ItemWrench(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Wrench", ITEM_ID_PREFIX+1, false), 20);
-    public static final Item itemCopperIngot = new ItemBC("Copper Ingot", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Copper_Ingot", ITEM_ID_PREFIX+2, false), 1);
-    public static final Item itemTinIngot = new ItemBC("Tin Ingot", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Tin_Ingot", ITEM_ID_PREFIX+3, false), 2);
-    public static final Item itemSteelIngot = new ItemBC("Steel Ingot", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Steel_Ingot", ITEM_ID_PREFIX+4, false), 3);
-    public static final Item itemSteelAlloy = new ItemBC("Steel Alloy", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Steel_Clump", ITEM_ID_PREFIX+5, false), 5);
-    public static final Item itemCircuit = new ItemCircuit(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Circuit", ITEM_ID_PREFIX+6, false), 16);
-    public static final Item itemCopperWire = new ItemCopperWire(UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Item_Copper_Wire", ITEM_ID_PREFIX+7, false), 21);
-    public static final Item itemBronzeIngot = new ItemBC("Bronze Ingot", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Ingot", ITEM_ID_PREFIX+8, false), 7);
-    public static final Item itemBronzeAlloy = new ItemBC("Bronze Alloy", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Clump", ITEM_ID_PREFIX+9, false), 6);
-    public static final Item itemSteelPlate = new ItemBC("Steel Plate", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", ITEM_ID_PREFIX+10, false), 8);
-    public static final Item itemBronzePlate = new ItemBC("Bronze Plate", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Bronze Plate", ITEM_ID_PREFIX+11, false), 8);
-    public static final Item itemMotor = new ItemBC("Motor", UniversalElectricity.getConfigID(UniversalElectricity.CONFIGURATION, "Motor", ITEM_ID_PREFIX+12, false), 9);
+    public static final Item itemBattery = new ItemBattery(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Battery", ITEM_ID_PREFIX), 0);
+    public static final Item itemWrench = new ItemWrench(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Wrench", ITEM_ID_PREFIX+1), 20);
+    public static final Item itemCopperIngot = new ItemBC("Copper Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper_Ingot", ITEM_ID_PREFIX+2), 1);
+    public static final Item itemTinIngot = new ItemBC("Tin Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin_Ingot", ITEM_ID_PREFIX+3), 2);
+    public static final Item itemSteelIngot = new ItemBC("Steel Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel_Ingot", ITEM_ID_PREFIX+4), 3);
+    public static final Item itemSteelAlloy = new ItemBC("Steel Alloy", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel_Clump", ITEM_ID_PREFIX+5), 5);
+    public static final Item itemCircuit = new ItemCircuit(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Circuit", ITEM_ID_PREFIX+6), 16);
+    public static final Item itemCopperWire = new ItemCopperWire(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Item_Copper_Wire", ITEM_ID_PREFIX+7), 21);
+    public static final Item itemBronzeIngot = new ItemBC("Bronze Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Ingot", ITEM_ID_PREFIX+8), 7);
+    public static final Item itemBronzeAlloy = new ItemBC("Bronze Alloy", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Clump", ITEM_ID_PREFIX+9), 6);
+    public static final Item itemSteelPlate = new ItemBC("Steel Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", ITEM_ID_PREFIX+10), 8);
+    public static final Item itemBronzePlate = new ItemBC("Bronze Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Plate", ITEM_ID_PREFIX+11), 8);
+    public static final Item itemMotor = new ItemBC("Motor", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", ITEM_ID_PREFIX+12), 9);
 
     @PreInit
 	public void preInit(FMLPreInitializationEvent event)
@@ -163,11 +163,12 @@ public class BasicComponents
 		RecipeManager.addRecipe(itemBronzeAlloy, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
 		RecipeManager.addSmelting(itemBronzeAlloy, new ItemStack(itemBronzeIngot));
 		RecipeManager.addRecipe(new ItemStack(itemBronzePlate), new Object [] {" ! ", "! !", " ! ", '!', "ingotBronze"});
-		RecipeManager.addRecipe(new ItemStack(itemBronzeIngot, 3), new Object [] {itemSteelPlate});
+		RecipeManager.addShapelessRecipe(new ItemStack(itemBronzeIngot, 3), new Object [] {itemSteelPlate});
 		//Circuit
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', itemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', itemCopperWire});
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', itemCircuit});
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(itemCircuit, 1, 1), '#', Block.blockLapis});
+    	
     }
     
     @PostInit

@@ -16,7 +16,7 @@ public interface IItemElectric
 
     public float getTransferRate();
     
-    public float getVolts();
+    public float getVoltage();
     
     public void setElectricityStored(ItemStack itemStack, float joules);
     

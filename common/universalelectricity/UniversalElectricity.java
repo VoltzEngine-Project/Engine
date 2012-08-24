@@ -11,7 +11,7 @@ public class UniversalElectricity
 {
     public static final Configuration CONFIGURATION = new Configuration(new File("config/UniversalElectricity/UniversalElectricity.cfg"));
     public static final List<Object> MODS = new ArrayList<Object>();
-    public static final String VERSION = "0.5.1";
+    public static final String VERSION = "0.5.2";
     
     public static final ElectricityManager electricityManager = new ElectricityManager();
     
@@ -158,50 +158,58 @@ public class UniversalElectricity
      * @param amp-hours
      * @return The string for displaying amp-hours
      */
-    public static String getAmpHourDisplay(double ampHours)
+    public static String getAmpHourDisplay(float ampHours)
     {
         String displayAmpHours;
-
-        if (ampHours > 1000000)
-        {
-            displayAmpHours = roundOneDecimal(ampHours / 1000000) + " mAs";
-        }
-
+        
         if (ampHours > 1000)
         {
-            displayAmpHours = roundOneDecimal(ampHours / 1000) + " mAh";
+            displayAmpHours = roundTwoDecimals(ampHours / 1000) + " kAh";
+        }
+        else if (ampHours > 0)
+        {
+            displayAmpHours = (int)ampHours + " Ah";
         }
         else
         {
-            displayAmpHours = (int)ampHours + " Ah";
+            displayAmpHours = roundOneDecimal(ampHours * 1000) + " mAh";
         }
 
         return displayAmpHours;
     }
+    
+    /**
+     * Gets the amp hours based on the watts and the voltage per second
+     * @return
+     */
+    public static String getAmpHourDisplay(float watts, float voltage)
+    {    			
+    	return getAmpHourDisplay((watts/voltage)*3600);
+    }
 
     public static String getAmpHourDisplayFull(double ampHours)
     {
-        String displayAmpHours;
-
-        if (ampHours > 1000000)
-        {
-            displayAmpHours = roundOneDecimal(ampHours / 1000000) + " Milliamp-seconds";
-        }
-
+    	String displayAmpHours;
+        
         if (ampHours > 1000)
         {
-            displayAmpHours = roundOneDecimal(ampHours / 1000) + " Milliamp-hours";
+            displayAmpHours = roundTwoDecimals(ampHours / 1000) + " kiloamp-hours";
         }
-        else if (ampHours == 1)
+        else if (ampHours > 0)
         {
-            displayAmpHours = (int)ampHours + " Amp-hour";
+            displayAmpHours = (int)ampHours + " amp-hours";
         }
         else
         {
-            displayAmpHours = (int)ampHours + " Amp-hours";
+            displayAmpHours = roundOneDecimal(ampHours * 1000) + " milliamp-hours";
         }
 
         return displayAmpHours;
+    }
+    
+    public static String getAmpHourDisplayFull(float watts, float voltage)
+    {    			
+    	return getAmpHourDisplayFull((watts/voltage)*3600);
     }
     
     /**
@@ -278,38 +286,37 @@ public class UniversalElectricity
     }
 
     /**
-     * Gets the ID of a block or item from the configuration file
+     * Gets the ID of a block from the configuration file
      * @param name - The name of the block or item
      * @param defaultID - The default ID of the block or item. Any errors will restore this block/item ID
-     * @param isBlock - Is this object a block or an item?
      * @return The block or item ID
      */
-    public static int getConfigID(Configuration configuration, String name, int defaultID, boolean isBlock)
+    public static int getBlockConfigID(Configuration configuration, String name, int defaultID)
     {
-    	//Gets rid of all unwanted characters
-    	name = name.replaceAll(" ", "_");
-    	name = name.replaceAll("-", "_");
-
         configuration.load();
         int id = defaultID;
 
-        if (isBlock)
-        {
-            id = Integer.parseInt(configuration.getOrCreateIntProperty(name, Configuration.CATEGORY_BLOCK, defaultID).value);
+        id = Integer.parseInt(configuration.getOrCreateIntProperty(name, Configuration.CATEGORY_BLOCK, defaultID).value);
 
-            if (id < 100)
-            {
-                return defaultID;
-            }
+        if (id <= 136)
+        {
+            return defaultID;
         }
-        else
-        {
-            id = Integer.parseInt(configuration.getOrCreateIntProperty(name, Configuration.CATEGORY_ITEM, defaultID).value);
+          
+        configuration.save();
+        return id;
+    }
+    
+    public static int getItemConfigID(Configuration configuration, String name, int defaultID)
+    {
+        configuration.load();
+        int id = defaultID;
 
-            if (id < 256)
-            {
-                return defaultID;
-            }
+        id = Integer.parseInt(configuration.getOrCreateIntProperty(name, Configuration.CATEGORY_ITEM, defaultID).value);
+
+        if (id < 256)
+        {
+            return defaultID;
         }
 
         configuration.save();

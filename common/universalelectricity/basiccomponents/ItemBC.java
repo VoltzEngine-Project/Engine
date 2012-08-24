@@ -6,13 +6,18 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ItemBC extends Item
 {
-    public ItemBC(String name, int id, int texture)
+    public ItemBC(String name, int id, int texture, CreativeTabs creativeTab)
     {
         super(id);
         this.iconIndex = texture;
         this.setItemName(name);
-        this.setTabToDisplayOn(CreativeTabs.tabRedstone);
+        this.setTabToDisplayOn(creativeTab);
         LanguageRegistry.addName(this, name);
+    }
+    
+    public ItemBC(String name, int id, int texture)
+    {
+    	this(name, id, texture, CreativeTabs.tabMaterials);
     }
 
     @Override

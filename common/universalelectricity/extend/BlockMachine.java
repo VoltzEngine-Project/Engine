@@ -3,6 +3,7 @@ package universalelectricity.extend;
 import java.util.Random;
 
 import net.minecraft.src.BlockContainer;
+import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -25,6 +26,12 @@ public abstract class BlockMachine extends BlockContainer
         super(id, material);
         this.setBlockName(name);
         this.setHardness(0.5F);
+    }
+    
+    public BlockMachine(String name, int id, Material material, CreativeTabs creativeTab)
+    {
+    	this(name, id, material);
+    	this.setCreativeTab(creativeTab);
     }
 
     @Override
@@ -71,14 +78,14 @@ public abstract class BlockMachine extends BlockContainer
             {
             	if(par5EntityPlayer.isSneaking())
                 {
-            		this.onSneakUseWrench(par1World, x, y, z, par5EntityPlayer);
+                    par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+            		return this.onSneakUseWrench(par1World, x, y, z, par5EntityPlayer);
                 }
             	else
             	{
-            		this.onUseWrench(par1World, x, y, z, par5EntityPlayer);
-            	}
-                par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
-                return false;
+                    par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+            		return this.onUseWrench(par1World, x, y, z, par5EntityPlayer);
+            	}	
             }
             else if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IItemElectric)
             {
