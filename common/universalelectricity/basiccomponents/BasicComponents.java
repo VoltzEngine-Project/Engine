@@ -69,9 +69,9 @@ public class BasicComponents
     public static final Item itemCopperWire = new ItemCopperWire(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Item_Copper_Wire", ITEM_ID_PREFIX+7), 21);
     public static final Item itemBronzeIngot = new ItemBC("Bronze Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Ingot", ITEM_ID_PREFIX+8), 7);
     public static final Item itemBronzeAlloy = new ItemBC("Bronze Alloy", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Clump", ITEM_ID_PREFIX+9), 6);
-    public static final Item itemSteelPlate = new ItemBC("Steel Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", ITEM_ID_PREFIX+10), 8);
+    public static final Item itemSteelPlate = new ItemBC("Steel Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", ITEM_ID_PREFIX+10), 9);
     public static final Item itemBronzePlate = new ItemBC("Bronze Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Plate", ITEM_ID_PREFIX+11), 8);
-    public static final Item itemMotor = new ItemBC("Motor", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", ITEM_ID_PREFIX+12), 9);
+    public static final Item itemMotor = new ItemBC("Motor", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", ITEM_ID_PREFIX+12), 10);
 
     @PreInit
 	public void preInit(FMLPreInitializationEvent event)
