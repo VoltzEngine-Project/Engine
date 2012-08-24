@@ -265,7 +265,7 @@ public class ElectricityManager implements ITickHandler
 	                //Try to stack all electricity from one side into one update
 	                for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
 	                {
-	                    if (electricityTransferQueue.get(ii).eletricUnit == electricUnit)
+	                    if (electricityTransferQueue.get(ii).electricUnit == electricUnit)
 	                    {
 	                        //If the side is not set for this tick
 	                        if (side == ForgeDirection.UNKNOWN)

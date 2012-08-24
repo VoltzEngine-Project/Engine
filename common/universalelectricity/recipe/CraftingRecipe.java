@@ -2,18 +2,18 @@ package universalelectricity.recipe;
 
 import net.minecraft.src.ItemStack;
 
-public class Recipe
+public class CraftingRecipe
 {
     public ItemStack output;
     public Object[] input;
 
-    public Recipe(ItemStack output, Object[] input)
+    public CraftingRecipe(ItemStack output, Object[] input)
     {
         this.output = output;
         this.input = input;
     }
     
-    public boolean isEqual(Recipe comparingRecipe)
+    public boolean isEqual(CraftingRecipe comparingRecipe)
     {
     	if(this.input == comparingRecipe.input && this.output == comparingRecipe.output)
     	{

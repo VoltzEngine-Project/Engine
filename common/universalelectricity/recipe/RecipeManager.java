@@ -1,7 +1,9 @@
 package universalelectricity.recipe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.CraftingManager;
@@ -22,18 +24,19 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 public class RecipeManager
 {
 	//Crafting Recipes
-    private static final List<Recipe> shapedRecipes = new ArrayList<Recipe>();
-    private static final List<Recipe> shapelessRecipes = new ArrayList<Recipe>();
+	private static final List<CraftingRecipe> SHAPED_RECIPES = new ArrayList<CraftingRecipe>();
+	private static final List<CraftingRecipe> SHAPELESS_RECIPES = new ArrayList<CraftingRecipe>();
+	
     //Smelting Recipes
-    private static final List<SmeltingRecipe> smeltingRecipes = new ArrayList<SmeltingRecipe>();
+	private static final List<SmeltingRecipe> SMELTING_RECIPES = new ArrayList<SmeltingRecipe>();
 
-    //Custom recipes for UE machines
-    private static final List<CustomRecipe> customRecipes = new ArrayList<CustomRecipe>();
+    //Custom recipe handlers for UE machines
+	private static final Map<String, IRecipeHandler> RECIPE_HANDLERS = new HashMap<String, IRecipeHandler>();
     
     //Shaped Recipes
     public static void addRecipe(ItemStack output, Object[] input)
     {
-        shapedRecipes.add(new Recipe(output, input));
+        SHAPED_RECIPES.add(new CraftingRecipe(output, input));
     }
 
     public static void addRecipe(Item output, Object[] input)
@@ -46,11 +49,11 @@ public class RecipeManager
         addRecipe(new ItemStack(output), input);
     }
     
-    public static List<Recipe> getRecipes() { return shapedRecipes; }
+    public static List<CraftingRecipe> getRecipes() { return SHAPED_RECIPES; }
     
-    public static Recipe getRecipeByOutput(ItemStack output)
+    public static CraftingRecipe getRecipeByOutput(ItemStack output)
     {
-    	for(Recipe recipe : shapedRecipes)
+    	for(CraftingRecipe recipe : SHAPED_RECIPES)
         {
             if(recipe.output == output)
             {
@@ -63,7 +66,7 @@ public class RecipeManager
     //Shapeless Recipes
     public static void addShapelessRecipe(ItemStack output, Object[] input)
     {
-        shapelessRecipes.add(new Recipe(output, input));
+        SHAPELESS_RECIPES.add(new CraftingRecipe(output, input));
     }
 
     public static void addShapelessRecipe(Item output, Object[] input)
@@ -76,11 +79,11 @@ public class RecipeManager
         addShapelessRecipe(new ItemStack(output), input);
     }
     
-    public static List<Recipe> getShapelessRecipes() { return shapelessRecipes; }
+    public static List<CraftingRecipe> getShapelessRecipes() { return SHAPELESS_RECIPES; }
     
-    public static Recipe getShapelessRecipeByOutput(ItemStack output)
+    public static CraftingRecipe getShapelessRecipeByOutput(ItemStack output)
     {
-    	for(Recipe recipe : shapelessRecipes)
+    	for(CraftingRecipe recipe : SHAPELESS_RECIPES)
         {
             if(recipe.output == output)
             {
@@ -93,7 +96,7 @@ public class RecipeManager
     //Furnace Smelting Recipes
     public static void addSmelting(ItemStack input, ItemStack output)
     {
-        smeltingRecipes.add(new SmeltingRecipe(output, input));
+        SMELTING_RECIPES.add(new SmeltingRecipe(output, input));
     }
 
     public static void addSmelting(Item input, ItemStack output)
@@ -101,11 +104,11 @@ public class RecipeManager
         addSmelting(new ItemStack(input), output);
     }
     
-    public static List<SmeltingRecipe> getSmeltingRecipes() { return smeltingRecipes; }
+    public static List<SmeltingRecipe> getSmeltingRecipes() { return SMELTING_RECIPES; }
     
     public static SmeltingRecipe getSmeltingRecipeByOutput(ItemStack output)
     {
-    	for(SmeltingRecipe recipe : smeltingRecipes)
+    	for(SmeltingRecipe recipe : SMELTING_RECIPES)
         {
             if(recipe.output == output)
             {
@@ -114,45 +117,34 @@ public class RecipeManager
         }
 		return null;
     }
-    
     /**
-     * Adds a custom recipe for a custom UE machine that other mods can access.
-     * 
-     * @param name - The name of your machine. Grinder will have the name "Grinder".
-     * 				Other mods will be using this name to find the recipes 
-     * 				corresponding to the MACHINE (not the output item!).
-     * @param input - All possible inputs in as an object array.
-     * @param output - All possible outputs from this input as an object array.
+     * Registers your {@link #IRecipeHandler} to the Recipe Manager so other UE mods can access and modify your recipes.
+     * @param handlerName - The name of your recipe handler. Make it something unique. This String is what other mods
+     * will be using to access your recipe handler.
+     * @param handler - An instance of your IRecipeHandler
      */
-    public static void addCustomRecipe(String name, Object[] input, Object[] output)
+    public static void registerRecipeHandler(String handlerName, IRecipeHandler handler)
     {
-    	customRecipes.add(new CustomRecipe(name, output, input));
-    }
-    
-    public static List<CustomRecipe> getCustomRecipesByName(String name)
-    {
-    	List<CustomRecipe> returnArray = new ArrayList<CustomRecipe>();
-    	
-    	for(CustomRecipe recipe: customRecipes)
+    	if(!RECIPE_HANDLERS.containsKey(handlerName))
     	{
-    		if(recipe.name == name)
-    		{
-    			returnArray.add(recipe);
-    		}
+    		RECIPE_HANDLERS.put(handlerName, handler);
     	}
-    	
-    	return returnArray;
     }
     
-    public static List<CustomRecipe> getAllCustomRecipes() { return customRecipes; }
+    public static IRecipeHandler getRecipeHandler(String name)
+    {
+    	return RECIPE_HANDLERS.get(name);
+    }
+    
+    public static Map<String, IRecipeHandler> getAllCustomRecipes() { return RECIPE_HANDLERS; }
 
     /**
      * Replacement functions must be called before post mod initialization!
      */
     
-    public static void replaceRecipe(Recipe recipeToReplace, Recipe newRecipe)
+    public static void replaceRecipe(CraftingRecipe recipeToReplace, CraftingRecipe newRecipe)
     {
-    	for(Recipe recipe : shapedRecipes)
+    	for(CraftingRecipe recipe : SHAPED_RECIPES)
         {
             if(recipe.isEqual(recipeToReplace))
             {
@@ -161,9 +153,9 @@ public class RecipeManager
         }
     }
     
-    public static void replaceShapelessRecipe(Recipe recipeToReplace, Recipe newRecipe)
+    public static void replaceShapelessRecipe(CraftingRecipe recipeToReplace, CraftingRecipe newRecipe)
     {
-    	for(Recipe recipe : shapelessRecipes)
+    	for(CraftingRecipe recipe : SHAPELESS_RECIPES)
         {
             if(recipe.isEqual(recipeToReplace))
             {
@@ -174,7 +166,7 @@ public class RecipeManager
     
     public static void replaceSmeltingRecipe(SmeltingRecipe recipeToReplace, SmeltingRecipe newRecipe)
     {
-        for(SmeltingRecipe recipe : smeltingRecipes)
+        for(SmeltingRecipe recipe : SMELTING_RECIPES)
         {
             if(recipe.isEqual(recipeToReplace))
             {
@@ -188,17 +180,17 @@ public class RecipeManager
      */
     public static void addRecipes()
     {
-        for (Recipe recipe : shapedRecipes)
+        for (CraftingRecipe recipe : SHAPED_RECIPES)
         {
             CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(recipe.output, recipe.input));
         }
 
-        for (Recipe recipe : shapelessRecipes)
+        for (CraftingRecipe recipe : SHAPELESS_RECIPES)
         {
             CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(recipe.output, recipe.input));
         }
 
-        for (SmeltingRecipe recipe : smeltingRecipes)
+        for (SmeltingRecipe recipe : SMELTING_RECIPES)
         {
             FurnaceRecipes.smelting().addSmelting(recipe.input.itemID, recipe.input.getItemDamage(), recipe.output);
         }
