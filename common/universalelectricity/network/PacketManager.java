@@ -206,7 +206,11 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	        packet.channel = channelName;
 	        packet.data = bytes.toByteArray();
 	        packet.length = packet.data.length;
-	        FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendPacketToAllPlayers(packet);
+	        
+	        if(FMLCommonHandler.instance().getMinecraftServerInstance() != null)
+	        {
+	        	FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendPacketToAllPlayers(packet);
+	        }
 		}
 		catch (IOException e)
         {
