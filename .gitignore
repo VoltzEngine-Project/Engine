@@ -10,13 +10,13 @@
 /reobf/*
 /runtime/*
 /temp/*
+CHANGELOG
+LICENSE.txt
 
 /src/minecraft/*
 /src/minecraft_server/*
 /src/common/*
-!/src/common/dries007/
-!/src/common/*.info
-!/src/common/SP.png
+!/includes/*
 
 !/README
 
