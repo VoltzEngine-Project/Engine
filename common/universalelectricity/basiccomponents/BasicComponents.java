@@ -33,7 +33,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
  *
  */
 
-@Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.VERSION)
+@Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.VERSION, dependencies = "before:*")
 @NetworkMod(channels = { "BasicComponents" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 
 public class BasicComponents

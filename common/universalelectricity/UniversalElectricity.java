@@ -17,7 +17,7 @@ public class UniversalElectricity
     
     public static void registerMod(Object networkmod, String modName, String version)
     {
-        String[] versionNumbers = version.split("\\.");
+        String[] versionNumbers = VERSION.split("\\.");
         String[] addonVersionNumbers = version.split("\\.");
 
         if (Integer.parseInt(addonVersionNumbers[0]) != Integer.parseInt(versionNumbers[0]))
