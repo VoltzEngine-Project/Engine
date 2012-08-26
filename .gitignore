@@ -16,7 +16,8 @@ LICENSE.txt
 /src/minecraft/*
 /src/minecraft_server/*
 /src/common/*
-!/includes/*
+!/src/common/mcmod.info
+!/textures/*
 
 !/README
 
