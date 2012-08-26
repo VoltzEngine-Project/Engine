@@ -18,7 +18,7 @@ LICENSE.txt
 /src/common/*
 !/src/common/mcmod.info
 !/textures/*
-!/version.txt
+!/modversion.txt
 !/README
 
 *.bat
