@@ -157,12 +157,12 @@ public class BasicComponents
 		//Steel
 		RecipeManager.addRecipe(new ItemStack(itemSteelAlloy), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
 		RecipeManager.addSmelting(itemSteelAlloy, new ItemStack(itemSteelIngot));
-		RecipeManager.addRecipe(new ItemStack(itemSteelPlate), new Object [] {" ! ", "! !", " ! ", '!', "ingotSteel"});
+		RecipeManager.addRecipe(new ItemStack(itemSteelPlate), new Object [] {"!!", "!!", '!', "ingotSteel"});
 		RecipeManager.addShapelessRecipe(new ItemStack(itemSteelIngot, 3), new Object [] {itemSteelPlate});
 		//Bronze
 		RecipeManager.addRecipe(itemBronzeAlloy, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
 		RecipeManager.addSmelting(itemBronzeAlloy, new ItemStack(itemBronzeIngot));
-		RecipeManager.addRecipe(new ItemStack(itemBronzePlate), new Object [] {" ! ", "! !", " ! ", '!', "ingotBronze"});
+		RecipeManager.addRecipe(new ItemStack(itemBronzePlate), new Object [] {"!!", "!!", '!', "ingotBronze"});
 		RecipeManager.addShapelessRecipe(new ItemStack(itemBronzeIngot, 3), new Object [] {itemSteelPlate});
 		//Circuit
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', itemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', itemCopperWire});
