@@ -14,6 +14,8 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -44,48 +46,6 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 		}
 	}
 	
-	@Override
-	public void onPacketData(NetworkManager network, Packet250CustomPayload packet, Player player)
-	{
-		try
-        {
-			ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
-			
-			PacketType packetType = PacketType.get(data.readInt());
-			
-			if(packetType == PacketType.TILEENTITY)
-			{
-				int x = data.readInt();
-				int y = data.readInt();
-				int z = data.readInt();
-				
-				World world = ((EntityPlayer)player).worldObj;
-				
-				if(world != null)
-				{
-					TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-					
-					if(tileEntity != null)
-					{
-						if(tileEntity instanceof IPacketReceiver)
-						{
-							((IPacketReceiver)tileEntity).handlePacketData(network, packet, ((EntityPlayer)player), data);
-							
-						}
-					}
-				}
-			}
-			else
-			{
-				this.handlePacketData(network, packet, ((EntityPlayer)player), data);
-			}
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-	}
-	
 	public static void sendTileEntityPacket(TileEntity sender, String channelName, Object... sendData)
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -100,6 +60,34 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
             data.writeInt(sender.zCoord);
 
             sendPacketToClients(channelName, bytes, data, sendData);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+	
+	public static void sendTileEntityPacketWithRange(TileEntity sender, String channelName, double range, Object... sendData)
+    {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream data = new DataOutputStream(bytes);
+
+        try
+        {
+            data.writeInt(PacketType.TILEENTITY.ordinal());
+        	
+            data.writeInt(sender.xCoord);
+            data.writeInt(sender.yCoord);
+            data.writeInt(sender.zCoord);
+
+            data = encodeDataStream(data, sendData);
+	        
+	        Packet250CustomPayload packet = new Packet250CustomPayload();
+	        packet.channel = channelName;
+	        packet.data = bytes.toByteArray();
+	        packet.length = packet.data.length;
+	        
+	        PacketDispatcher.sendPacketToAllAround(sender.xCoord, sender.yCoord, sender.zCoord, range, sender.worldObj.getWorldInfo().getDimension(), packet);
         }
         catch (IOException e)
         {
@@ -166,41 +154,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	{
 		try
 		{
-			for(Object dataValue : sendData)
-	        {
-	        	if(dataValue instanceof Integer)
-	        	{
-	        		data.writeInt((Integer)dataValue);
-	        	}
-	        	else if(dataValue instanceof Float)
-	        	{
-	        		data.writeFloat((Float)dataValue);
-	        	}
-	        	else if(dataValue instanceof Double)
-	        	{
-	        		data.writeDouble((Double)dataValue);
-	        	}
-	        	else if(dataValue instanceof Byte)
-	        	{
-	        		data.writeByte((Byte)dataValue);
-	        	}
-	        	else if(dataValue instanceof Boolean)
-	        	{
-	        		data.writeBoolean((Boolean)dataValue);
-	        	}
-	        	else if(dataValue instanceof String)
-	        	{
-	        		data.writeUTF((String)dataValue);
-	        	}
-	        	else if(dataValue instanceof Short)
-	        	{
-	        		data.writeShort((Short)dataValue);
-	        	}
-	        	else if(dataValue instanceof Long)
-	        	{
-	        		data.writeLong((Long)dataValue);
-	        	}
-	        }
+			data = encodeDataStream(data, sendData);
 	        
 	        Packet250CustomPayload packet = new Packet250CustomPayload();
 	        packet.channel = channelName;
@@ -212,14 +166,33 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	        	FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendPacketToAllPlayers(packet);
 	        }
 		}
-		catch (IOException e)
+		catch (Exception e)
         {
 			System.out.println("Sending packet to client failed.");
             e.printStackTrace();
         }
 	}
-	
+
 	public static void sendPacketToServer(String channelName, ByteArrayOutputStream bytes, DataOutputStream data, Object... sendData)
+	{
+		try
+		{
+			data = encodeDataStream(data, sendData);
+            
+            Packet250CustomPayload packet = new Packet250CustomPayload();
+            packet.channel = channelName;
+            packet.data = bytes.toByteArray();
+            packet.length = packet.data.length;
+            PacketDispatcher.sendPacketToServer(packet);
+		}
+		catch(Exception e)
+        {
+			System.out.println("Sending packet to server failed.");
+            e.printStackTrace();
+        }
+	}
+	
+	public static DataOutputStream encodeDataStream(DataOutputStream data, Object... sendData)
 	{
 		try
 		{
@@ -258,16 +231,57 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	        		data.writeLong((Long)dataValue);
 	        	}
 	        }
-            
-            Packet250CustomPayload packet = new Packet250CustomPayload();
-            packet.channel = channelName;
-            packet.data = bytes.toByteArray();
-            packet.length = packet.data.length;
-            PacketDispatcher.sendPacketToServer(packet);
+			
+			return data;
+			
 		}
 		catch (IOException e)
         {
-			System.out.println("Sending packet to server failed.");
+			System.out.println("Packet data encoding failed.");
+            e.printStackTrace();
+        }
+		
+		return data;
+	}
+	
+	@Override
+	public void onPacketData(NetworkManager network, Packet250CustomPayload packet, Player player)
+	{
+		try
+        {
+			ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
+			
+			PacketType packetType = PacketType.get(data.readInt());
+			
+			if(packetType == PacketType.TILEENTITY)
+			{
+				int x = data.readInt();
+				int y = data.readInt();
+				int z = data.readInt();
+				
+				World world = ((EntityPlayer)player).worldObj;
+				
+				if(world != null)
+				{
+					TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+					
+					if(tileEntity != null)
+					{
+						if(tileEntity instanceof IPacketReceiver)
+						{
+							((IPacketReceiver)tileEntity).handlePacketData(network, packet, ((EntityPlayer)player), data);
+							
+						}
+					}
+				}
+			}
+			else
+			{
+				this.handlePacketData(network, packet, ((EntityPlayer)player), data);
+			}
+        }
+        catch(Exception e)
+        {
             e.printStackTrace();
         }
 	}

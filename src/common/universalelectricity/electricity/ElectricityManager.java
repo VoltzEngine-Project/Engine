@@ -7,6 +7,8 @@ import java.util.List;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.WorldEvent.Load;
 import universalelectricity.Vector3;
 import universalelectricity.extend.IElectricUnit;
 import universalelectricity.extend.TileEntityConductor;
@@ -29,7 +31,9 @@ public class ElectricityManager implements ITickHandler
     private static List<ElectricityConnection> wireConnections = new ArrayList<ElectricityConnection>();
     private static int maxConnectionID = 0;
 
-    public static long inGameTicks = 0;
+    public long inGameTicks = 0;
+    
+    public boolean refreshConductors = false;
 
     /**
      * Registers an electricity consumer for it to receive electricity.
@@ -157,12 +161,12 @@ public class ElectricityManager implements ITickHandler
      */
     public static void produceElectricity(TileEntityConductor targetConductor, float watts, float voltage)
     {
-        if (targetConductor != null && watts > 0 && voltage > 0)
+        if(targetConductor != null && watts > 0 && voltage > 0)
         {
             //Find a path between this conductor and all connected units and try to send the electricity to them directly
             ElectricityConnection connection = getConnectionByID(targetConductor.connectionID);
 
-            if (connection != null)
+            if(connection != null)
             {
                 List<IElectricUnit> allElectricUnitsInLine = connection.getConnectedElectricUnits();
                 float leftOverWatts = watts;
@@ -234,12 +238,6 @@ public class ElectricityManager implements ITickHandler
 	{
 		try
 		{
-			for(int j = 0; j < electricConductors.size(); j ++)
-	        {
-	        	TileEntityConductor conductor  = electricConductors.get(j);
-	            conductor.refreshConnectedBlocks();
-	        }
-	
 	        for(int i = 0; i < electricUnits.size(); i++)
 	        {
 	        	IElectricUnit electricUnit = electricUnits.get(i);
@@ -256,35 +254,38 @@ public class ElectricityManager implements ITickHandler
 	                break;
 	            }
 	
-	            if (inGameTicks % electricUnit.getTickInterval() == 0 && electricUnit.getTickInterval() > 0)
+	            if(electricUnit.getTickInterval() > 0)
 	            {
-	                float watts = 0;
-	                float voltage = 0;
-	                ForgeDirection side = ForgeDirection.UNKNOWN;
-	
-	                //Try to stack all electricity from one side into one update
-	                for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
-	                {
-	                    if (electricityTransferQueue.get(ii).electricUnit == electricUnit)
-	                    {
-	                        //If the side is not set for this tick
-	                        if (side == ForgeDirection.UNKNOWN)
-	                        {
-	                            watts = electricityTransferQueue.get(ii).watts;
-	                            voltage = electricityTransferQueue.get(ii).voltage;
-	                            side = electricityTransferQueue.get(ii).side;
-	                            electricityTransferQueue.remove(ii);
-	                        }
-	                        else if (electricityTransferQueue.get(ii).side == side)
-	                        {
-	                            watts += electricityTransferQueue.get(ii).watts;
-	                            voltage = Math.min(voltage, electricityTransferQueue.get(ii).voltage);
-	                            electricityTransferQueue.remove(ii);
-	                        }
-	                    }
-	                }
-	
-	                electricUnit.onUpdate(watts, voltage, side);
+		            if(inGameTicks % electricUnit.getTickInterval() == 0)
+		            {
+		                float watts = 0;
+		                float voltage = 0;
+		                ForgeDirection side = ForgeDirection.UNKNOWN;
+		
+		                //Try to stack all electricity from one side into one update
+		                for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
+		                {
+		                    if (electricityTransferQueue.get(ii).electricUnit == electricUnit)
+		                    {
+		                        //If the side is not set for this tick
+		                        if (side == ForgeDirection.UNKNOWN)
+		                        {
+		                            watts = electricityTransferQueue.get(ii).watts;
+		                            voltage = electricityTransferQueue.get(ii).voltage;
+		                            side = electricityTransferQueue.get(ii).side;
+		                            electricityTransferQueue.remove(ii);
+		                        }
+		                        else if (electricityTransferQueue.get(ii).side == side)
+		                        {
+		                            watts += electricityTransferQueue.get(ii).watts;
+		                            voltage = Math.min(voltage, electricityTransferQueue.get(ii).voltage);
+		                            electricityTransferQueue.remove(ii);
+		                        }
+		                    }
+		                }
+		
+		                electricUnit.onUpdate(watts, voltage, side);
+		            }
 	            }
 	        }
 	
@@ -299,7 +300,16 @@ public class ElectricityManager implements ITickHandler
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		
+		if(this.refreshConductors)
+		{
+			for(int j = 0; j < electricConductors.size(); j ++)
+	        {
+	        	TileEntityConductor conductor  = electricConductors.get(j);
+	            conductor.refreshConnectedBlocks();
+	        }
+			
+			this.refreshConductors = false;
+		}
 	}
 
 	@Override
@@ -312,5 +322,11 @@ public class ElectricityManager implements ITickHandler
 	public String getLabel()
 	{
 		return "Electricity Manager";
+	}
+	
+	@ForgeSubscribe
+	public void loadWorld(Load event)
+	{
+		this.refreshConductors = true;
 	}
 }

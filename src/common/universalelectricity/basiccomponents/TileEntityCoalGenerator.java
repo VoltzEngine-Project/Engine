@@ -25,7 +25,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     public static final int maxGenerateRate = 550;
 
     //Current generation rate based on hull heat. In TICKS.
-    public float generateWatts = 0;
+    public float generateWatts, prevGenerateWatts = 0;
 
     public TileEntityConductor connectedElectricUnit = null;
     /**
@@ -36,7 +36,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     * The ItemStacks that hold the items currently being used in the battery box
     */
     private ItemStack[] containingItems = new ItemStack[1];
-
+	
     public TileEntityCoalGenerator()
     {
         ElectricityManager.registerElectricUnit(this);
@@ -62,67 +62,67 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     @Override
     public void onUpdate(float watts, float voltage, ForgeDirection side)
     {
-        if (!this.worldObj.isRemote)
-        {
-            super.onUpdate(watts, voltage, side);
-            //Check nearby blocks and see if the conductor is full. If so, then it is connected
-            TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite());
+        super.onUpdate(watts, voltage, side);
+        
+        this.prevGenerateWatts = this.generateWatts;
+        
+        //Check nearby blocks and see if the conductor is full. If so, then it is connected
+        TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite());
 
-            if (tileEntity instanceof TileEntityConductor)
+        if (tileEntity instanceof TileEntityConductor)
+        {
+            if (ElectricityManager.electricityRequired(((TileEntityConductor)tileEntity).connectionID) > 0)
             {
-                if (ElectricityManager.electricityRequired(((TileEntityConductor)tileEntity).connectionID) > 0)
-                {
-                    this.connectedElectricUnit = (TileEntityConductor)tileEntity;
-                }
-                else
-                {
-                    this.connectedElectricUnit = null;
-                }
+                this.connectedElectricUnit = (TileEntityConductor)tileEntity;
             }
             else
             {
                 this.connectedElectricUnit = null;
             }
+        }
+        else
+        {
+            this.connectedElectricUnit = null;
+        }
 
-            if (!this.isDisabled())
+        if (!this.isDisabled())
+        {
+            //Coal Geneator
+            if (this.containingItems[0] != null && this.connectedElectricUnit != null)
             {
-                //Coal Geneator
-                if (this.containingItems[0] != null && this.connectedElectricUnit != null)
+                if (this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)
                 {
-                    if (this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)
+                    if (this.itemCookTime <= 0)
                     {
-                        if (this.itemCookTime <= 0)
-                        {
-                            itemCookTime = Math.max(500 - (int)(this.generateWatts * 20), 200);
-                            this.decrStackSize(0, 1);
-                        }
+                        itemCookTime = Math.max(500 - (int)(this.generateWatts * 20), 200);
+                        this.decrStackSize(0, 1);
                     }
-                }
-
-                //Starts generating electricity if the device is heated up
-                if (this.itemCookTime > 0)
-                {
-                    this.itemCookTime --;
-
-                    if (this.connectedElectricUnit != null)
-                    {
-                        this.generateWatts = (float)Math.min(this.generateWatts + Math.min((this.generateWatts) * 0.0005 + 0.0009, 0.04F), this.maxGenerateRate / 20);
-                    }
-                }
-
-                if (this.connectedElectricUnit == null || this.itemCookTime <= 0)
-                {
-                    this.generateWatts = (float)Math.max(this.generateWatts - 0.05, 0);
-                }
-
-                if (this.generateWatts > 1)
-                {
-                    ElectricityManager.produceElectricity(this.connectedElectricUnit, this.generateWatts * this.getTickInterval(), this.getVoltage());
                 }
             }
-            
-            PacketManager.sendTileEntityPacket(this, "BasicComponents", this.generateWatts, this.disabledTicks);
+
+            //Starts generating electricity if the device is heated up
+            if (this.itemCookTime > 0)
+            {
+                this.itemCookTime --;
+
+                if (this.connectedElectricUnit != null)
+                {
+                    this.generateWatts = (float)Math.min(this.generateWatts + Math.min((this.generateWatts) * 0.0005 + 0.0009, 0.04F), this.maxGenerateRate / 20);
+                }
+            }
+
+            if(this.connectedElectricUnit == null || this.itemCookTime <= 0)
+            {
+                this.generateWatts = (float)Math.max(this.generateWatts - 0.05, 0);
+            }
+
+            if(this.generateWatts > 1)
+            {
+                ElectricityManager.produceElectricity(this.connectedElectricUnit, this.generateWatts * this.getTickInterval(), this.getVoltage());
+            }
         }
+        
+        PacketManager.sendTileEntityPacket(this, "BasicComponents", this.generateWatts, this.disabledTicks);
     }
     
     @Override
@@ -290,14 +290,19 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     }
 
     @Override
-    public int getTickInterval()
-    {
-        return 1;
-    }
-
-    @Override
     public float electricityRequest()
     {
+        return 0;
+    }
+    
+    @Override
+    public int getTickInterval()
+    {
+    	if(!this.worldObj.isRemote)
+    	{
+            return 1;
+    	}
+    	
         return 0;
     }
 }

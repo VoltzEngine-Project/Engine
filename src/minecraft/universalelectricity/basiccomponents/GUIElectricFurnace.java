@@ -6,7 +6,7 @@ import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-
+import universalelectricity.network.PacketManager;
 
 public class GUIElectricFurnace extends GuiContainer
 {
@@ -19,6 +19,19 @@ public class GUIElectricFurnace extends GuiContainer
     {
         super(new ContainerElectricFurnace(par1InventoryPlayer, tileEntity));
         this.tileEntity = tileEntity;
+    }
+    
+    public void initGui()
+    {
+    	super.initGui();
+    	PacketManager.sendTileEntityPacketToServer(tileEntity, "BasicComponents", (int)2);
+    }
+    
+    @Override
+    public void onGuiClosed()
+    {
+    	super.onGuiClosed();
+    	PacketManager.sendTileEntityPacketToServer(tileEntity, "BasicComponents", (int)3);
     }
 
     /**

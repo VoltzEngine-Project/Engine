@@ -1,5 +1,6 @@
 package universalelectricity.basiccomponents;
 
+import universalelectricity.UniversalElectricity;
 import universalelectricity.electricity.ElectricityManager;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
@@ -18,7 +19,7 @@ public class BCClientProxy extends BCCommonProxy
 		MinecraftForgeClient.preloadTexture(BasicComponents.BLOCK_TEXTURE_FILE);
 		MinecraftForgeClient.preloadTexture(BasicComponents.ITEM_TEXTURE_FILE);
 		
-    	TickRegistry.registerTickHandler(new ElectricityManager(), Side.CLIENT);
+    	TickRegistry.registerTickHandler(UniversalElectricity.electricityManager, Side.CLIENT);
 	}
 	
 	@Override

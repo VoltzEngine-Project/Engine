@@ -1,9 +1,16 @@
 package universalelectricity.extend;
 
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.network.IPacketReceiver;
+import universalelectricity.network.PacketManager;
+
+import com.google.common.io.ByteArrayDataInput;
 
 /**
  * REQUIRED
@@ -11,7 +18,7 @@ import universalelectricity.electricity.ElectricityManager;
  * @author Calclavia
  *
  */
-public abstract class TileEntityConductor extends TileEntity
+public abstract class TileEntityConductor extends TileEntity implements IPacketReceiver
 {
     public int connectionID = 0;
 
@@ -53,11 +60,16 @@ public abstract class TileEntityConductor extends TileEntity
 
             this.connectedBlocks[side.ordinal()] = null;
         }
+        
+        if(!this.worldObj.isRemote)
+        {
+        	PacketManager.sendTileEntityPacket(this, "BasicComponents", 1);
+        }
     }
 
     public void updateConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
     {
-        if (tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricUnit)
+        if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricUnit)
         {
             this.connectedBlocks[side.ordinal()] = tileEntity;
 
@@ -70,15 +82,38 @@ public abstract class TileEntityConductor extends TileEntity
         {
             this.connectedBlocks[side.ordinal()] = null;
         }
+        
+        if(!this.worldObj.isRemote)
+        {
+        	PacketManager.sendTileEntityPacket(this, "BasicComponents", 1);
+        }
     }
+    
+    @Override
+	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	{
+		try
+        {
+            int ID = dataStream.readInt();
+            
+            if(ID == 1)
+            {
+                this.refreshConnectedBlocks();
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+	}
 
     /**
      * Determines if this TileEntity requires update calls.
      * @return True if you want updateEntity() to be called, false if not
      */
+    @Override
     public boolean canUpdate()
     {
-        this.refreshConnectedBlocks();
         return false;
     }
 

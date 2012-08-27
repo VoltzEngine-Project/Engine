@@ -7,6 +7,7 @@ import net.minecraft.src.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import universalelectricity.UniversalElectricity;
+import universalelectricity.network.PacketManager;
 
 
 public class GUIBatteryBox extends GuiContainer
@@ -20,6 +21,19 @@ public class GUIBatteryBox extends GuiContainer
     {
         super(new ContainerBatteryBox(par1InventoryPlayer, batteryBox));
         this.tileEntity = batteryBox;
+    }
+    
+    public void initGui()
+    {
+    	super.initGui();
+    	PacketManager.sendTileEntityPacketToServer(tileEntity, "BasicComponents", (int)2);
+    }
+    
+    @Override
+    public void onGuiClosed()
+    {
+    	super.onGuiClosed();
+    	PacketManager.sendTileEntityPacketToServer(tileEntity, "BasicComponents", (int)3);
     }
 
     /**

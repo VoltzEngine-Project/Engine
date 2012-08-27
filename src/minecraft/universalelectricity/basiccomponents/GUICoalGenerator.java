@@ -7,6 +7,7 @@ import net.minecraft.src.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import universalelectricity.UniversalElectricity;
+import universalelectricity.network.PacketManager;
 
 
 public class GUICoalGenerator extends GuiContainer
@@ -21,7 +22,7 @@ public class GUICoalGenerator extends GuiContainer
         super(new ContainerCoalGenerator(par1InventoryPlayer, tileEntity));
         this.tileEntity = tileEntity;
     }
-
+    
     /**
      * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */

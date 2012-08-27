@@ -4,11 +4,11 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.ForgeVersion;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.OreGenData;
 import universalelectricity.OreGenerator;
 import universalelectricity.UniversalElectricity;
-import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.network.PacketManager;
 import universalelectricity.recipe.RecipeManager;
 import cpw.mods.fml.common.Mod;
@@ -16,7 +16,6 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -25,7 +24,6 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
 
 /**
  * A static class where you can reference variables from here
@@ -92,7 +90,8 @@ public class BasicComponents
 		
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 		GameRegistry.registerWorldGenerator(new OreGenerator());
-    	
+		MinecraftForge.EVENT_BUS.register(UniversalElectricity.electricityManager);
+		
     	//Register Blocks
     	GameRegistry.registerBlock(blockOre, ItemBCOre.class);
 		GameRegistry.registerBlock(blockCopperWire);

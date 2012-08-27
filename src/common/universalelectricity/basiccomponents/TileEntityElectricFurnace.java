@@ -35,6 +35,8 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     * The ItemStacks that hold the items currently being used in the battery box
     */
     private ItemStack[] containingItems = new ItemStack[3];
+    
+    private boolean sendPacketToClients = false;
 
     public TileEntityElectricFurnace()
     {
@@ -62,60 +64,57 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     {
         super.onUpdate(watts, voltage, side);
 
-        if(!this.worldObj.isRemote)
+        if (voltage > this.getVoltage())
         {
-            if (voltage > this.getVoltage())
-            {
-                this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
-            }
+            this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
+        }
 
-            //The bottom slot is for portable batteries
-            if (this.containingItems[0] != null)
+        //The bottom slot is for portable batteries
+        if (this.containingItems[0] != null)
+        {
+            if (this.containingItems[0].getItem() instanceof IItemElectric)
             {
-                if (this.containingItems[0].getItem() instanceof IItemElectric)
+                IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
+
+                if (electricItem.canProduceElectricity())
                 {
-                    IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
-
-                    if (electricItem.canProduceElectricity())
-                    {
-                        double receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-                        this.electricityStored += receivedElectricity;
-                    }
+                    double receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
+                    this.electricityStored += receivedElectricity;
                 }
             }
+        }
 
-            this.electricityStored += watts;
+        this.electricityStored += watts;
 
-            if (this.electricityStored >= this.electricityRequired && !this.isDisabled())
+        if (this.electricityStored >= this.electricityRequired && !this.isDisabled())
+        {
+            //The left slot contains the item to be smelted
+            if (this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
             {
-                //The left slot contains the item to be smelted
-                if (this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
-                {
-                    this.smeltingTicks = this.smeltingTimeRequired;
-                }
+                this.smeltingTicks = this.smeltingTimeRequired;
+            }
 
-                //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
-                if (this.canSmelt() && this.smeltingTicks > 0)
-                {
-                    this.smeltingTicks -= this.getTickInterval();
+            //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
+            if (this.canSmelt() && this.smeltingTicks > 0)
+            {
+                this.smeltingTicks -= this.getTickInterval();
 
-                    //When the item is finished smelting
-                    if (this.smeltingTicks < 1 * this.getTickInterval())
-                    {
-                        this.smeltItem();
-                        this.smeltingTicks = 0;
-                    }
-                }
-                else
+                //When the item is finished smelting
+                if (this.smeltingTicks < 1 * this.getTickInterval())
                 {
+                    this.smeltItem();
                     this.smeltingTicks = 0;
                 }
-
-                this.electricityStored = 0;
             }
-            
-            PacketManager.sendTileEntityPacket(this, "BasicComponents", this.smeltingTicks, this.disabledTicks);
+            else
+            {
+                this.smeltingTicks = 0;
+            }
+
+            this.electricityStored = 0;
         }
+        
+        PacketManager.sendTileEntityPacket(this, "BasicComponents", (int)1,this.smeltingTicks, this.disabledTicks);
     }
     
     @Override
@@ -123,8 +122,21 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	{
 		try
         {
-            this.smeltingTicks = dataStream.readInt();
-            this.disabledTicks = dataStream.readInt();
+  			int ID = dataStream.readInt();
+			
+			if(ID == 1)
+			{
+				this.smeltingTicks = dataStream.readInt();
+	            this.disabledTicks = dataStream.readInt();
+			}
+			else if(ID == 2)
+			{
+				this.sendPacketToClients = true;
+			}
+			else if(ID == 3)
+			{
+				this.sendPacketToClients = false;
+			}
         }
         catch (Exception e)
         {
@@ -351,6 +363,11 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     @Override
     public int getTickInterval()
     {
-        return 3;
+    	if(!this.worldObj.isRemote)
+    	{
+            return 3;
+    	}
+    	
+        return 0;
     }
 }

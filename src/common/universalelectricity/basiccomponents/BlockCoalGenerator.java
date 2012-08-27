@@ -32,13 +32,13 @@ public class BlockCoalGenerator extends BlockMachine
 
     /**
      * A randomly called display update to be able to add particles or other items for display
-     */
+    */
     @Override
     public void randomDisplayTick(World par1World, int x, int y, int z, Random par5Random)
     {
         TileEntityCoalGenerator tileEntity = (TileEntityCoalGenerator)par1World.getBlockTileEntity(x, y, z);
 
-        if (tileEntity.generateWatts > 0)
+        if(tileEntity.generateWatts > 0)
         {
             int var6 = par1World.getBlockMetadata(x, y, z);
             float var7 = (float)x + 0.5F;

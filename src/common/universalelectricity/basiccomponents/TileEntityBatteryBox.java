@@ -35,10 +35,12 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     private ItemStack[] containingItems = new ItemStack[2];
 
     private boolean isFull = false;
+    
+    private boolean sendPacketToClients = false;
 
     public TileEntityBatteryBox()
     {
-        ElectricityManager.registerElectricUnit(this);
+    	super();
     }
 
     @Override
@@ -67,76 +69,76 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     @Override
     public void onUpdate(float watts, float voltage, ForgeDirection side)
     {
-        if (!this.worldObj.isRemote)
+        super.onUpdate(watts, voltage, side);
+        
+        if (voltage > this.getVoltage())
         {
-            super.onUpdate(watts, voltage, side);
+            this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
+        }
+
+        if (!this.isDisabled())
+        {
+            this.setAmpHours(this.electricityStored+watts);
             
-            if (voltage > this.getVoltage())
+            //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
+            if (this.containingItems[0] != null && this.electricityStored > 0)
             {
-                this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
+                if (this.containingItems[0].getItem() instanceof IItemElectric)
+                {
+                    IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
+                    float rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
+                    this.electricityStored -= electricItem.getTransferRate() - rejectedElectricity;
+                }
             }
 
-            if (!this.isDisabled())
+            //The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
+            if (this.containingItems[1] != null && this.electricityStored < ELECTRICITY_CAPACITY)
             {
-                this.setAmpHours(this.electricityStored+watts);
-                
-                //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
-                if (this.containingItems[0] != null && this.electricityStored > 0)
+                if (this.containingItems[1].getItem() instanceof IItemElectric)
                 {
-                    if (this.containingItems[0].getItem() instanceof IItemElectric)
+                    IItemElectric electricItem = (IItemElectric)this.containingItems[1].getItem();
+
+                    if (electricItem.canProduceElectricity())
                     {
-                        IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
-                        float rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-                        this.electricityStored -= electricItem.getTransferRate() - rejectedElectricity;
-                    }
-                }
-
-                //The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
-                if (this.containingItems[1] != null && this.electricityStored < ELECTRICITY_CAPACITY)
-                {
-                    if (this.containingItems[1].getItem() instanceof IItemElectric)
-                    {
-                        IItemElectric electricItem = (IItemElectric)this.containingItems[1].getItem();
-
-                        if (electricItem.canProduceElectricity())
-                        {
-                            float receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
-                            this.electricityStored = Math.max(this.electricityStored + receivedElectricity, 0);
-                        }
-                    }
-                }
-
-                boolean isFullThisCheck = false;
-
-                if (this.electricityStored >= ELECTRICITY_CAPACITY)
-                {
-                    isFullThisCheck = true;
-                }
-
-                if (this.isFull != isFullThisCheck)
-                {
-                    this.isFull = isFullThisCheck;
-                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
-                }
-
-                if (this.electricityStored > 0)
-                {
-                    TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
-
-                    if (tileEntity != null)
-                    {
-                        if (tileEntity instanceof TileEntityConductor)
-                        {
-                            float electricityNeeded = ElectricityManager.electricityRequired(((TileEntityConductor)tileEntity).connectionID);
-                            float transferElectricity = Math.min(100, Math.min(this.electricityStored, electricityNeeded));
-                            ElectricityManager.produceElectricity((TileEntityConductor)tileEntity, transferElectricity, this.getVoltage());
-                            this.electricityStored -= transferElectricity;
-                        }
+                        float receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
+                        this.electricityStored = Math.max(this.electricityStored + receivedElectricity, 0);
                     }
                 }
             }
-            
-            PacketManager.sendTileEntityPacket(this, "BasicComponents", this.electricityStored, this.disabledTicks);
+
+            boolean isFullThisCheck = false;
+
+            if (this.electricityStored >= ELECTRICITY_CAPACITY)
+            {
+                isFullThisCheck = true;
+            }
+
+            if (this.isFull != isFullThisCheck)
+            {
+                this.isFull = isFullThisCheck;
+                this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
+            }
+
+            if (this.electricityStored > 0)
+            {
+                TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
+
+                if (tileEntity != null)
+                {
+                    if (tileEntity instanceof TileEntityConductor)
+                    {
+                        float electricityNeeded = ElectricityManager.electricityRequired(((TileEntityConductor)tileEntity).connectionID);
+                        float transferElectricity = Math.min(100, Math.min(this.electricityStored, electricityNeeded));
+                        ElectricityManager.produceElectricity((TileEntityConductor)tileEntity, transferElectricity, this.getVoltage());
+                        this.electricityStored -= transferElectricity;
+                    }
+                }
+            }
+        }
+        
+        if(this.sendPacketToClients)
+        {
+        	PacketManager.sendTileEntityPacket(this, "BasicComponents", (int)1, this.electricityStored, this.disabledTicks);
         }
     }
     
@@ -145,8 +147,21 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 	{
 		try
         {
-            this.electricityStored = dataStream.readFloat();
-            this.disabledTicks = dataStream.readInt();
+			int ID = dataStream.readInt();
+			
+			if(ID == 1)
+			{
+	            this.electricityStored = dataStream.readFloat();
+	            this.disabledTicks = dataStream.readInt();
+			}
+			else if(ID == 2)
+			{
+				this.sendPacketToClients = true;
+			}
+			else if(ID == 3)
+			{
+				this.sendPacketToClients = false;
+			}
         }
         catch(Exception e)
         {
@@ -318,12 +333,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
         return isPoweringTo(side);
     }
 
-    @Override
-    public int getTickInterval()
-    {
-        return 1;
-    }
-
 	@Override
 	public float getAmpHours()
 	{
@@ -335,4 +344,15 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 	{
 		this.electricityStored = Math.max(0, Math.min(AmpHours, ELECTRICITY_CAPACITY));
 	}
+	
+	@Override
+    public int getTickInterval()
+    {
+    	if(!this.worldObj.isRemote)
+    	{
+            return 1;
+    	}
+    	
+        return 0;
+    }
 }
