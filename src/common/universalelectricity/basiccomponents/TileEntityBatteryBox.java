@@ -138,7 +138,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
         
         if(this.sendPacketToClients)
         {
-        	PacketManager.sendTileEntityPacket(this, "BasicComponents", (int)1, this.electricityStored, this.disabledTicks);
+        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, (int)1, this.electricityStored, this.disabledTicks);
         }
     }
     

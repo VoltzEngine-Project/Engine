@@ -114,7 +114,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             this.electricityStored = 0;
         }
         
-        PacketManager.sendTileEntityPacket(this, "BasicComponents", (int)1,this.smeltingTicks, this.disabledTicks);
+        PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, (int)1,this.smeltingTicks, this.disabledTicks);
     }
     
     @Override
