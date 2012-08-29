@@ -57,14 +57,13 @@ public class BasicComponents
     public static final Block blockElectricFurnace = new BlockElectricFurnace(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Electric_Furnace", BLOCK_ID_PREFIX + 3), 0);
 
     public static final int ITEM_ID_PREFIX = 13970;
-    public static final Item itemBattery = new ItemBattery(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Battery", ITEM_ID_PREFIX), 0);
-    public static final Item itemWrench = new ItemWrench(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Wrench", ITEM_ID_PREFIX+1), 20);
-    public static final Item itemCopperIngot = new ItemBC("Copper Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper_Ingot", ITEM_ID_PREFIX+2), 1);
-    public static final Item itemTinIngot = new ItemBC("Tin Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin_Ingot", ITEM_ID_PREFIX+3), 2);
-    public static final Item itemSteelIngot = new ItemBC("Steel Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel_Ingot", ITEM_ID_PREFIX+4), 3);
-    public static final Item itemSteelAlloy = new ItemBC("Steel Alloy", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel_Clump", ITEM_ID_PREFIX+5), 5);
-    public static final Item itemCircuit = new ItemCircuit(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Circuit", ITEM_ID_PREFIX+6), 16);
-    public static final Item itemCopperWire = new ItemCopperWire(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Item_Copper_Wire", ITEM_ID_PREFIX+7), 21);
+    public static final Item itemBattery = new ItemBattery(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Battery", ITEM_ID_PREFIX+1), 0);
+    public static final Item itemWrench = new ItemWrench(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Wrench", ITEM_ID_PREFIX+2), 20);
+    public static final Item itemCopperIngot = new ItemBC("Copper Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper_Ingot", ITEM_ID_PREFIX+3), 1);
+    public static final Item itemTinIngot = new ItemBC("Tin Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin_Ingot", ITEM_ID_PREFIX+4), 2);
+    public static final Item itemSteelIngot = new ItemBC("Steel Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel_Ingot", ITEM_ID_PREFIX+5), 3);
+    public static final Item itemSteelAlloy = new ItemBC("Steel Alloy", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel_Clump", ITEM_ID_PREFIX+6), 5);
+    public static final Item itemCircuit = new ItemCircuit(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Circuit", ITEM_ID_PREFIX+7), 16);
     public static final Item itemBronzeIngot = new ItemBC("Bronze Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Ingot", ITEM_ID_PREFIX+8), 7);
     public static final Item itemBronzeAlloy = new ItemBC("Bronze Alloy", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Clump", ITEM_ID_PREFIX+9), 6);
     public static final Item itemSteelPlate = new ItemBC("Steel Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", ITEM_ID_PREFIX+10), 9);
@@ -135,21 +134,21 @@ public class BasicComponents
 		
 		//Recipes
 		//Motor
-		RecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', itemSteelPlate, '#', itemCircuit, '@', itemCopperWire});
+		RecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', itemSteelPlate, '#', itemCircuit, '@', blockCopperWire});
 		//Wrench
 		RecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {"! !", " ! ", " ! ", '!', "ingotSteel"});
 		//Battery Box
 		RecipeManager.addRecipe(blockBatteryBox, new Object [] {"!?!", "???", "!?!", '!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getChargedItemStack()) });
 		RecipeManager.addShapelessRecipe(new ItemStack(itemSteelPlate, 4), new Object [] {blockBatteryBox});
 		//Coal Generator
-		RecipeManager.addRecipe(blockCoalGenerator, new Object [] {"!@!", "$#$", "!?!", '!', itemSteelPlate, '@', itemCopperWire, '?', itemCircuit, '#', itemMotor, '$', Block.stoneOvenIdle});
+		RecipeManager.addRecipe(blockCoalGenerator, new Object [] {"!@!", "$#$", "!?!", '!', itemSteelPlate, '@', blockCopperWire, '?', itemCircuit, '#', itemMotor, '$', Block.stoneOvenIdle});
 		RecipeManager.addShapelessRecipe(new ItemStack(itemSteelPlate, 4), new Object [] {blockCoalGenerator});
 		//Electric Furnace
 		RecipeManager.addRecipe(blockElectricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '#', itemCircuit, '?', itemSteelPlate});
 		RecipeManager.addShapelessRecipe(new ItemStack(itemSteelIngot, 7), new Object [] {blockElectricFurnace});
 		//Copper
 		RecipeManager.addSmelting(new ItemStack(blockOre, 1, 0), new ItemStack(itemCopperIngot));
-		RecipeManager.addRecipe(new ItemStack(itemCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"});
+		RecipeManager.addRecipe(new ItemStack(blockCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"});
 		//Tin
 		RecipeManager.addSmelting(new ItemStack(blockOre, 1, 1), new ItemStack(itemTinIngot));
 		RecipeManager.addRecipe(new ItemStack(itemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal});
@@ -164,7 +163,7 @@ public class BasicComponents
 		RecipeManager.addRecipe(new ItemStack(itemBronzePlate), new Object [] {"!!", "!!", '!', "ingotBronze"});
 		RecipeManager.addShapelessRecipe(new ItemStack(itemBronzeIngot, 3), new Object [] {itemSteelPlate});
 		//Circuit
-		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', itemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', itemCopperWire});
+		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', itemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', blockCopperWire});
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', itemCircuit});
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(itemCircuit, 1, 1), '#', Block.blockLapis});
     	

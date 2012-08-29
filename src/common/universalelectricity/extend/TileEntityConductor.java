@@ -136,7 +136,13 @@ public abstract class TileEntityConductor extends TileEntity implements IPacketR
      * A higher resistance means a higher energy loss.
      * @return The amount of Ohm's. E.g 1.2Ohms or 3.0Ohms
      */
-    public abstract double getResistance();
+    public abstract float getResistance();
+    
+    /**
+     * The maximum amount of voltage this conductor can handle before exploding
+     * @return The amount of voltage in volts
+     */
+    public abstract float getVoltage();
     
     public World getWorld()
     {

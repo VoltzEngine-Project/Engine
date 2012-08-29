@@ -1,11 +1,7 @@
 package universalelectricity.basiccomponents;
 
-import java.util.Random;
-
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Material;
-import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.extend.BlockConductor;
@@ -20,7 +16,8 @@ public class BlockCopperWire extends BlockConductor
         this.setResistance(0.2F);
         this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
         this.setRequiresSelfNotify();
-        this.blockIndexInTexture = 7;
+        this.blockIndexInTexture = 19;
+        this.setCreativeTab(CreativeTabs.tabRedstone);
     }
 
     /**
@@ -51,24 +48,6 @@ public class BlockCopperWire extends BlockConductor
         return -1;
     }
 
-    /**
-     * Returns the ID of the items to drop on destruction.
-     */
-    @Override
-    public int idDropped(int par1, Random par2Random, int par3)
-    {
-        return BasicComponents.itemCopperWire.shiftedIndex;
-    }
-
-    /**
-     * Returns the quantity of items to drop on block destruction.
-     */
-    @Override
-    public int quantityDropped(Random par1Random)
-    {
-        return 1;
-    }
-
     @Override
     public TileEntity createNewTileEntity(World var1)
     {
@@ -78,11 +57,6 @@ public class BlockCopperWire extends BlockConductor
     @Override
     public String getTextureFile()
     {
-        return BasicComponents.BLOCK_TEXTURE_FILE;
-    }
-    
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
-    {
-        return new ItemStack(BasicComponents.itemCopperWire, 1);
+        return BasicComponents.ITEM_TEXTURE_FILE;
     }
 }
