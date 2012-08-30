@@ -160,12 +160,12 @@ public abstract class ItemElectric extends Item implements IItemElectric
     public abstract float getVoltage();
 
     /**
-     * Returns a charged version of the electric item. Use this if you want
+     * Returns an uncharged version of the electric item. Use this if you want
      * the crafting recipe to use a charged version of the electric item
      * instead of an empty version of the electric item
      * @return The ItemStack of a fully charged electric item
      */
-    public ItemStack getChargedItemStack()
+    public ItemStack getUnchargedItemStack()
     {
         ItemStack chargedItem = new ItemStack(this);
         chargedItem.setItemDamage((int) this.getElectricityCapacity());

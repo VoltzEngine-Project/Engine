@@ -22,7 +22,7 @@ import com.google.common.io.ByteArrayDataInput;
 public class TileEntityCoalGenerator extends TileEntityElectricUnit implements IInventory, ISidedInventory, IPacketReceiver
 {
     //Maximum possible generation rate of watts in SECONDS
-    public static final int maxGenerateRate = 550;
+    public static final int maxGenerateRate = 560;
 
     //Current generation rate based on hull heat. In TICKS.
     public float generateWatts, prevGenerateWatts = 0;
@@ -94,7 +94,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
                 {
                     if (this.itemCookTime <= 0)
                     {
-                        itemCookTime = Math.max(500 - (int)(this.generateWatts * 20), 200);
+                        itemCookTime = Math.max(600 - (int)(this.generateWatts * 20), 250);
                         this.decrStackSize(0, 1);
                     }
                 }

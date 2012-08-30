@@ -134,21 +134,21 @@ public class BasicComponents
 		
 		//Recipes
 		//Motor
-		RecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', itemSteelPlate, '#', itemCircuit, '@', blockCopperWire});
+		RecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', "ingotSteel", '#', itemCircuit, '@', blockCopperWire});
 		//Wrench
 		RecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {"! !", " ! ", " ! ", '!', "ingotSteel"});
 		//Battery Box
-		RecipeManager.addRecipe(blockBatteryBox, new Object [] {"!?!", "???", "!?!", '!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getChargedItemStack()) });
+		RecipeManager.addRecipe(blockBatteryBox, new Object [] {"!?!", "???", "#?#", '#', Block.wood,'!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getUnchargedItemStack()) });
 		RecipeManager.addShapelessRecipe(new ItemStack(itemSteelPlate, 4), new Object [] {blockBatteryBox});
 		//Coal Generator
-		RecipeManager.addRecipe(blockCoalGenerator, new Object [] {"!@!", "$#$", "!?!", '!', itemSteelPlate, '@', blockCopperWire, '?', itemCircuit, '#', itemMotor, '$', Block.stoneOvenIdle});
+		RecipeManager.addRecipe(blockCoalGenerator, new Object [] {"!@!", "$#$", "???", '?', Block.wood, '!', itemSteelPlate, '@', blockCopperWire, '#', itemMotor, '$', Block.stoneOvenIdle});
 		RecipeManager.addShapelessRecipe(new ItemStack(itemSteelPlate, 4), new Object [] {blockCoalGenerator});
 		//Electric Furnace
 		RecipeManager.addRecipe(blockElectricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '#', itemCircuit, '?', itemSteelPlate});
 		RecipeManager.addShapelessRecipe(new ItemStack(itemSteelIngot, 7), new Object [] {blockElectricFurnace});
 		//Copper
 		RecipeManager.addSmelting(new ItemStack(blockOre, 1, 0), new ItemStack(itemCopperIngot));
-		RecipeManager.addRecipe(new ItemStack(blockCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"});
+		RecipeManager.addRecipe(new ItemStack(blockCopperWire, 7), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"});
 		//Tin
 		RecipeManager.addSmelting(new ItemStack(blockOre, 1, 1), new ItemStack(itemTinIngot));
 		RecipeManager.addRecipe(new ItemStack(itemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal});
@@ -156,16 +156,16 @@ public class BasicComponents
 		RecipeManager.addRecipe(new ItemStack(itemSteelAlloy), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
 		RecipeManager.addSmelting(itemSteelAlloy, new ItemStack(itemSteelIngot));
 		RecipeManager.addRecipe(new ItemStack(itemSteelPlate), new Object [] {"!!", "!!", '!', "ingotSteel"});
-		RecipeManager.addShapelessRecipe(new ItemStack(itemSteelIngot, 3), new Object [] {itemSteelPlate});
+		RecipeManager.addSmelting(itemSteelPlate, new ItemStack(itemSteelIngot, 3));
 		//Bronze
 		RecipeManager.addRecipe(itemBronzeAlloy, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
 		RecipeManager.addSmelting(itemBronzeAlloy, new ItemStack(itemBronzeIngot));
 		RecipeManager.addRecipe(new ItemStack(itemBronzePlate), new Object [] {"!!", "!!", '!', "ingotBronze"});
-		RecipeManager.addShapelessRecipe(new ItemStack(itemBronzeIngot, 3), new Object [] {itemSteelPlate});
+		RecipeManager.addSmelting(itemBronzePlate, new ItemStack(itemBronzeIngot, 3));
 		//Circuit
-		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', itemSteelPlate, '?', Item.ingotGold, '#', Item.redstone, '!', blockCopperWire});
+		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', itemBronzePlate, '?', Item.goldNugget, '#', Item.redstone, '!', blockCopperWire});
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', itemCircuit});
-		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(itemCircuit, 1, 1), '#', Block.blockLapis});
+		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(itemCircuit, 1, 1), '#', new ItemStack(Item.dyePowder, 1, 4)});
     	
     }
     
