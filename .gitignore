@@ -16,6 +16,8 @@ LICENSE.txt
 /src/minecraft/*
 /src/minecraft_server/*
 /src/common/*
+!/src/minecraft/universalelectricity/
+!/src/common/universalelectricity/
 !/src/common/mcmod.info
 !/textures/*
 !/modversion.txt
