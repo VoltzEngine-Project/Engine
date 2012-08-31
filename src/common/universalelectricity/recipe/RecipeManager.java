@@ -104,6 +104,11 @@ public class RecipeManager
         addSmelting(new ItemStack(input), output);
     }
     
+    public static void addSmelting(Block input, ItemStack output)
+    {
+        addSmelting(new ItemStack(input), output);
+    }
+    
     public static List<SmeltingRecipe> getSmeltingRecipes() { return SMELTING_RECIPES; }
     
     public static SmeltingRecipe getSmeltingRecipeByOutput(ItemStack output)

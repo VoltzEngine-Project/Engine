@@ -4,17 +4,40 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.NetHandler;
+import net.minecraft.src.NetLoginHandler;
+import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet1Login;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.WorldEvent.Load;
+import net.minecraftforge.event.world.WorldEvent.Save;
 import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.network.PacketManager;
+import universalelectricity.recipe.RecipeManager;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.PostInit;
+import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.IConnectionHandler;
+import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.common.registry.GameRegistry;
 
-public class UniversalElectricity
+@Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.VERSION, dependencies = "after:*")
+@NetworkMod(clientSideRequired = true, serverSideRequired = false, connectionHandler = UniversalElectricity.class)
+
+public class UniversalElectricity implements IConnectionHandler
 {
     public static final Configuration CONFIGURATION = new Configuration(new File("config/UniversalElectricity/UniversalElectricity.cfg"));
     public static final List<Object> MODS = new ArrayList<Object>();
-    public static final String VERSION = "0.6.1";
+    public static final String VERSION = "0.7.0";
     
-    public static final ElectricityManager electricityManager = new ElectricityManager();
-    
+    public static UniversalElectricity instance;
+        
     public static void registerMod(Object networkmod, String modName, String version)
     {
         String[] versionNumbers = VERSION.split("\\.");
@@ -40,251 +63,36 @@ public class UniversalElectricity
         MODS.add(networkmod);
         System.out.println("Loaded Universal Electricity Mod: " + modName);
     }
-
-    /*------------------ FUNCTIONS ----------------------
-    	Some formulas to note:
-    *   Wattage = Voltage x Amps (W = V X I)
-    *   Voltage = Amperage x Resistance (V = I x R)
-    */
-    /**
-     * Returns the amount of amps.
-     * @param watts
-     * @param volts
-     * @return The amount of amps
-     */
-    public static double getAmps(double watts, int volts)
+    
+    @PreInit
+   	public void preInit(FMLPreInitializationEvent event)
     {
-        return (double)watts / (double)volts;
-    }
-
-    /**
-     * Return a string with the amount of amps for displaying.
-     * @param amps
-     * @return The string for displaying amps
-     */
-    public static String getAmpDisplay(double amps)
-    {
-        String displayAmps;
-
-        if (amps < 1.0)
-        {
-            displayAmps = (int)(amps * 1000) + " mA";
-        }
-        else if (amps > 1000)
-        {
-            displayAmps = roundOneDecimal(amps / 1000) + " KA";
-        }
-        else
-        {
-            displayAmps = roundTwoDecimals(amps) + " A";
-        }
-
-        return displayAmps;
-    }
-
-    public static String getAmpDisplayFull(double amps)
-    {
-        String displayAmps;
-
-        if (amps < 1.0)
-        {
-            displayAmps = (int)(amps * 1000) + " Milliamps";
-        }
-        else if (amps > 1000)
-        {
-            displayAmps = roundOneDecimal(amps / 1000) + " Kiloamps";
-        }
-        else
-        {
-            displayAmps = roundTwoDecimals(amps) + " Amps";
-        }
-
-        return displayAmps;
-    }
-
-    /**
-     * Return a string with the amount of volts for displaying.
-     * @param volts
-     * @return The string for displaying volts
-     */
-    public static String getVoltDisplay(int volts)
-    {
-        String displayVolt;
-
-        if (volts > 1000000)
-        {
-            displayVolt = roundOneDecimal(volts / 1000000) + " MV";
-        }
-
-        if (volts > 1000)
-        {
-            displayVolt = roundOneDecimal(volts / 1000) + " KV";
-        }
-        else
-        {
-            displayVolt = volts + " V";
-        }
-
-        return displayVolt;
-    }
-
-    public static String getVoltDisplayFull(int volts)
-    {
-        String displayVolt;
-
-        if (volts > 1000000)
-        {
-            displayVolt = roundOneDecimal(volts / 1000000) + " Megavolts";
-        }
-
-        if (volts > 1000)
-        {
-            displayVolt = roundOneDecimal(volts / 1000) + " Kilovolts";
-        }
-        else if (volts == 1)
-        {
-            displayVolt = volts + " volt";
-        }
-        else
-        {
-            displayVolt = volts + " volts";
-        }
-
-        return displayVolt;
-    }
-
-    /**
-     * Return a string with the amount of amp-hour for displaying.
-     * @param amp-hours
-     * @return The string for displaying amp-hours
-     */
-    public static String getAmpHourDisplay(float ampHours)
-    {
-        String displayAmpHours;
-        
-        if (ampHours > 1000)
-        {
-            displayAmpHours = roundTwoDecimals(ampHours / 1000) + " kAh";
-        }
-        else if (ampHours > 0)
-        {
-            displayAmpHours = (int)ampHours + " Ah";
-        }
-        else
-        {
-            displayAmpHours = roundOneDecimal(ampHours * 1000) + " mAh";
-        }
-
-        return displayAmpHours;
+   		instance = this;
+   		
+   		GameRegistry.registerWorldGenerator(new OreGenerator());
+   		MinecraftForge.EVENT_BUS.register(this.instance);
+   		
+		ElectricityManager.instance = new ElectricityManager(null);
     }
     
-    /**
-     * Gets the amp hours based on the watts and the voltage per second
-     * @return
-     */
-    public static String getAmpHourDisplay(float watts, float voltage)
-    {    			
-    	return getAmpHourDisplay((watts/voltage)*3600);
-    }
+    @PostInit
+   	public void modsLoaded(FMLPostInitializationEvent evt) 
+	{
+    	RecipeManager.addRecipes();
+	}
 
-    public static String getAmpHourDisplayFull(double ampHours)
-    {
-    	String displayAmpHours;
-        
-        if (ampHours > 1000)
-        {
-            displayAmpHours = roundTwoDecimals(ampHours / 1000) + " kiloamp-hours";
-        }
-        else if (ampHours > 0)
-        {
-            displayAmpHours = (int)ampHours + " amp-hours";
-        }
-        else
-        {
-            displayAmpHours = roundOneDecimal(ampHours * 1000) + " milliamp-hours";
-        }
-
-        return displayAmpHours;
-    }
+    @ForgeSubscribe
+	public void onWorldLoad(Load event)
+	{
+    	ElectricityManager.instance.reset(event.world);
+	}
     
-    public static String getAmpHourDisplayFull(float watts, float voltage)
-    {    			
-    	return getAmpHourDisplayFull((watts/voltage)*3600);
-    }
+    @ForgeSubscribe
+	public void onWorldSave(Save event)
+	{
+    	ElectricityManager.instance.reset(event.world);
+	}
     
-    /**
-     * Return a string with the amount of watts for displaying.
-     * @param watts
-     * @return The string for displaying watts
-     */
-    public static String getWattDisplay(double watts)
-    {
-        String displayWatt;
-
-        if (watts > 1000000)
-        {
-            displayWatt = roundOneDecimal(watts / 1000000) + " MW";
-        }
-
-        if (watts > 1000)
-        {
-            displayWatt = roundOneDecimal(watts / 1000) + " KW";
-        }
-        else
-        {
-            displayWatt = (int)watts + " W";
-        }
-
-        return displayWatt;
-    }
-
-    public static String getWattDisplayFull(double watts)
-    {
-        String displayWatt;
-
-        if (watts > 1000000)
-        {
-            displayWatt = roundOneDecimal(watts / 1000000) + " Megawatts";
-        }
-
-        if (watts > 1000)
-        {
-            displayWatt = roundOneDecimal(watts / 1000) + " Kilowatts";
-        }
-        else if (watts == 1)
-        {
-            displayWatt = (int)watts + " Watt";
-        }
-        else
-        {
-            displayWatt = (int)watts + " Watts";
-        }
-
-        return displayWatt;
-    }
-
-    /**
-     * Rounds a number to two decimal places
-     * @param The number
-     * @return The rounded number
-     */
-    public static double roundTwoDecimals(double d)
-    {
-        int j = (int)(d * 100);
-        return j / 100.0;
-    }
-
-    /**
-     * Rounds a number to one decimal place
-     * @param The number
-     * @return The rounded number
-     */
-    public static double roundOneDecimal(double d)
-    {
-        int j = (int)(d * 10);
-        return j / 10.0;
-    }
-
     /**
      * Gets the ID of a block from the configuration file
      * @param name - The name of the block or item
@@ -322,4 +130,40 @@ public class UniversalElectricity
         configuration.save();
         return id;
     }
+
+	@Override
+	public void playerLoggedIn(Player player, NetHandler netHandler, NetworkManager manager)
+	{
+		
+	}
+
+	@Override
+	public String connectionReceived(NetLoginHandler netHandler, NetworkManager manager) 
+	{
+		return null;
+	}
+
+	@Override
+	public void connectionOpened(NetHandler netClientHandler, String server, int port, NetworkManager manager)
+	{
+		
+	}
+
+	@Override
+	public void connectionOpened(NetHandler netClientHandler, MinecraftServer server, NetworkManager manager)
+	{
+		
+	}
+
+	@Override
+	public void connectionClosed(NetworkManager manager)
+	{
+		
+	}
+
+	@Override
+	public void clientLoggedIn(NetHandler clientHandler, NetworkManager manager, Packet1Login login)
+	{
+    	ElectricityManager.instance.reset(null);
+	}
 }

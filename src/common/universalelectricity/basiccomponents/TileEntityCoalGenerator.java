@@ -39,7 +39,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	
     public TileEntityCoalGenerator()
     {
-        ElectricityManager.registerElectricUnit(this);
+        super();
     }
 
     public boolean canProduceElectricity(ForgeDirection side)
@@ -71,7 +71,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
         if (tileEntity instanceof TileEntityConductor)
         {
-            if (ElectricityManager.electricityRequired(((TileEntityConductor)tileEntity).connectionID) > 0)
+            if (ElectricityManager.instance.electricityRequired(((TileEntityConductor)tileEntity).connectionID) > 0)
             {
                 this.connectedElectricUnit = (TileEntityConductor)tileEntity;
             }
@@ -118,7 +118,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
             if(this.generateWatts > 1)
             {
-                ElectricityManager.produceElectricity(this.connectedElectricUnit, this.generateWatts * this.getTickInterval(), this.getVoltage());
+                ElectricityManager.instance.produceElectricity(this.connectedElectricUnit, this.generateWatts * this.getTickInterval(), this.getVoltage());
             }
         }
         

@@ -45,7 +45,7 @@ public abstract class TileEntityConductor extends TileEntity implements IPacketR
 
             if (tileEntity instanceof TileEntityConductor)
             {
-                ElectricityManager.mergeConnection(this.connectionID, ((TileEntityConductor)tileEntity).connectionID);
+                ElectricityManager.instance.mergeConnection(this.connectionID, ((TileEntityConductor)tileEntity).connectionID);
             }
         }
         else
@@ -54,7 +54,7 @@ public abstract class TileEntityConductor extends TileEntity implements IPacketR
             {
                 if (this.connectedBlocks[side.ordinal()] instanceof TileEntityConductor)
                 {
-                    ElectricityManager.splitConnection(this, (TileEntityConductor)this.connectedBlocks[side.ordinal()]);
+                    ElectricityManager.instance.splitConnection(this, (TileEntityConductor)this.connectedBlocks[side.ordinal()]);
                 }
             }
 
@@ -75,7 +75,7 @@ public abstract class TileEntityConductor extends TileEntity implements IPacketR
 
             if (tileEntity instanceof TileEntityConductor)
             {
-                ElectricityManager.mergeConnection(this.connectionID, ((TileEntityConductor)tileEntity).connectionID);
+                ElectricityManager.instance.mergeConnection(this.connectionID, ((TileEntityConductor)tileEntity).connectionID);
             }
         }
         else
@@ -120,7 +120,7 @@ public abstract class TileEntityConductor extends TileEntity implements IPacketR
     public void reset()
     {
         this.connectionID = 0;
-        ElectricityManager.registerConductor(this);
+        ElectricityManager.instance.registerConductor(this);
     }
 
     public void refreshConnectedBlocks()

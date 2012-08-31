@@ -16,7 +16,7 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
 
     public TileEntityElectricUnit()
     {
-        ElectricityManager.registerElectricUnit(this);
+        ElectricityManager.instance.registerElectricUnit(this);
     }
 
     @Override

@@ -3,7 +3,8 @@ package universalelectricity.basiccomponents;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import universalelectricity.UniversalElectricity;
+import net.minecraftforge.common.DimensionManager;
+import universalelectricity.electricity.ElectricityTicker;
 import universalelectricity.extend.CommonProxy;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -14,7 +15,7 @@ public class BCCommonProxy extends CommonProxy
 	@Override
 	public void preInit()
 	{ 
-    	TickRegistry.registerTickHandler(UniversalElectricity.electricityManager, Side.SERVER);
+		TickRegistry.registerTickHandler(new ElectricityTicker(), Side.SERVER);
 	}
 	
 	@Override

@@ -5,15 +5,17 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.OreGenData;
 import universalelectricity.OreGenerator;
 import universalelectricity.UniversalElectricity;
+import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.network.PacketManager;
 import universalelectricity.recipe.RecipeManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
-import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
@@ -31,7 +33,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
  *
  */
 
-@Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.VERSION, dependencies = "before:*")
+@Mod(modid = "BasicComponenets", name = "Basic Componenets", version = UniversalElectricity.VERSION, dependencies = "before:*")
 @NetworkMod(channels = { "BasicComponents" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 
 public class BasicComponents
@@ -40,7 +42,6 @@ public class BasicComponents
     public static final String BLOCK_TEXTURE_FILE = FILE_PATH + "blocks.png";
     public static final String ITEM_TEXTURE_FILE = FILE_PATH + "items.png";
     
-    @Instance
     public static BasicComponents instance;
     
     @SidedProxy(clientSide = "universalelectricity.basiccomponents.BCClientProxy", serverSide = "universalelectricity.basiccomponents.BCCommonProxy")
@@ -48,7 +49,7 @@ public class BasicComponents
         
     /**
      * Here is where all the Universal Components are defined. You may reference to these variables.
-     */
+    */
     public static final int BLOCK_ID_PREFIX = 3970;
     public static final Block blockOre = new BlockBCOre(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper and Tin Ores", BLOCK_ID_PREFIX-1));
     public static final Block blockCopperWire = new BlockCopperWire(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper_Wire", BLOCK_ID_PREFIX));
@@ -59,13 +60,13 @@ public class BasicComponents
     public static final int ITEM_ID_PREFIX = 13970;
     public static final Item itemBattery = new ItemBattery(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Battery", ITEM_ID_PREFIX+1), 0);
     public static final Item itemWrench = new ItemWrench(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Wrench", ITEM_ID_PREFIX+2), 20);
-    public static final Item itemCopperIngot = new ItemBC("Copper Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper_Ingot", ITEM_ID_PREFIX+3), 1);
-    public static final Item itemTinIngot = new ItemBC("Tin Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin_Ingot", ITEM_ID_PREFIX+4), 2);
-    public static final Item itemSteelIngot = new ItemBC("Steel Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel_Ingot", ITEM_ID_PREFIX+5), 3);
-    public static final Item itemSteelAlloy = new ItemBC("Steel Alloy", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel_Clump", ITEM_ID_PREFIX+6), 5);
+    public static final Item itemCopperIngot = new ItemBC("Copper Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Ingot", ITEM_ID_PREFIX+3), 1);
+    public static final Item itemTinIngot = new ItemBC("Tin Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Ingot", ITEM_ID_PREFIX+4), 2);
+    public static final Item itemSteelIngot = new ItemBC("Steel Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Ingot", ITEM_ID_PREFIX+5), 3);
+    public static final Item itemSteelDust = new ItemBC("Steel Dust", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Dust", ITEM_ID_PREFIX+6), 5);
     public static final Item itemCircuit = new ItemCircuit(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Circuit", ITEM_ID_PREFIX+7), 16);
-    public static final Item itemBronzeIngot = new ItemBC("Bronze Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Ingot", ITEM_ID_PREFIX+8), 7);
-    public static final Item itemBronzeAlloy = new ItemBC("Bronze Alloy", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze_Clump", ITEM_ID_PREFIX+9), 6);
+    public static final Item itemBronzeIngot = new ItemBC("Bronze Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Ingot", ITEM_ID_PREFIX+8), 7);
+    public static final Item itemBronzeDust = new ItemBC("Bronze Dust", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Dust", ITEM_ID_PREFIX+9), 6);
     public static final Item itemSteelPlate = new ItemBC("Steel Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", ITEM_ID_PREFIX+10), 9);
     public static final Item itemBronzePlate = new ItemBC("Bronze Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Plate", ITEM_ID_PREFIX+11), 8);
     public static final Item itemMotor = new ItemBC("Motor", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", ITEM_ID_PREFIX+12), 10);
@@ -88,9 +89,7 @@ public class BasicComponents
 		}
 		
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
-		GameRegistry.registerWorldGenerator(new OreGenerator());
-		MinecraftForge.EVENT_BUS.register(UniversalElectricity.electricityManager);
-		
+
     	//Register Blocks
     	GameRegistry.registerBlock(blockOre, ItemBCOre.class);
 		GameRegistry.registerBlock(blockCopperWire);
@@ -138,14 +137,14 @@ public class BasicComponents
 		//Wrench
 		RecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {"! !", " ! ", " ! ", '!', "ingotSteel"});
 		//Battery Box
-		RecipeManager.addRecipe(blockBatteryBox, new Object [] {"!?!", "???", "#?#", '#', Block.wood,'!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getUnchargedItemStack()) });
-		RecipeManager.addShapelessRecipe(new ItemStack(itemSteelPlate, 4), new Object [] {blockBatteryBox});
+		RecipeManager.addRecipe(blockBatteryBox, new Object [] {"?!?", "#?#", "?!?", '#', blockCopperWire,'!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getUnchargedItemStack()) });
+		RecipeManager.addSmelting(blockBatteryBox, new ItemStack(itemSteelDust, 6));
 		//Coal Generator
-		RecipeManager.addRecipe(blockCoalGenerator, new Object [] {"!@!", "$#$", "???", '?', Block.wood, '!', itemSteelPlate, '@', blockCopperWire, '#', itemMotor, '$', Block.stoneOvenIdle});
-		RecipeManager.addShapelessRecipe(new ItemStack(itemSteelPlate, 4), new Object [] {blockCoalGenerator});
+		RecipeManager.addRecipe(blockCoalGenerator, new Object [] {"!@!", "$#$", "???", '?', "ingotBronze", '!', itemSteelPlate, '@', blockCopperWire, '#', itemMotor, '$', Block.stoneOvenIdle});
+		RecipeManager.addSmelting(blockCoalGenerator, new ItemStack(itemSteelDust, 6));
 		//Electric Furnace
-		RecipeManager.addRecipe(blockElectricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '#', itemCircuit, '?', itemSteelPlate});
-		RecipeManager.addShapelessRecipe(new ItemStack(itemSteelIngot, 7), new Object [] {blockElectricFurnace});
+		RecipeManager.addRecipe(blockElectricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '#', itemCircuit, '?', itemBronzePlate});
+		RecipeManager.addSmelting(blockElectricFurnace, new ItemStack(itemSteelDust, 6));
 		//Copper
 		RecipeManager.addSmelting(new ItemStack(blockOre, 1, 0), new ItemStack(itemCopperIngot));
 		RecipeManager.addRecipe(new ItemStack(blockCopperWire, 7), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"});
@@ -153,25 +152,18 @@ public class BasicComponents
 		RecipeManager.addSmelting(new ItemStack(blockOre, 1, 1), new ItemStack(itemTinIngot));
 		RecipeManager.addRecipe(new ItemStack(itemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal});
 		//Steel
-		RecipeManager.addRecipe(new ItemStack(itemSteelAlloy), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
-		RecipeManager.addSmelting(itemSteelAlloy, new ItemStack(itemSteelIngot));
+		RecipeManager.addRecipe(new ItemStack(itemSteelDust), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
+		RecipeManager.addSmelting(itemSteelDust, new ItemStack(itemSteelIngot));
 		RecipeManager.addRecipe(new ItemStack(itemSteelPlate), new Object [] {"!!", "!!", '!', "ingotSteel"});
-		RecipeManager.addSmelting(itemSteelPlate, new ItemStack(itemSteelIngot, 3));
+		RecipeManager.addSmelting(itemSteelPlate, new ItemStack(itemSteelDust, 3));
 		//Bronze
-		RecipeManager.addRecipe(itemBronzeAlloy, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
-		RecipeManager.addSmelting(itemBronzeAlloy, new ItemStack(itemBronzeIngot));
+		RecipeManager.addRecipe(itemBronzeDust, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
+		RecipeManager.addSmelting(itemBronzeDust, new ItemStack(itemBronzeIngot));
 		RecipeManager.addRecipe(new ItemStack(itemBronzePlate), new Object [] {"!!", "!!", '!', "ingotBronze"});
-		RecipeManager.addSmelting(itemBronzePlate, new ItemStack(itemBronzeIngot, 3));
+		RecipeManager.addSmelting(itemBronzePlate, new ItemStack(itemBronzeDust, 3));
 		//Circuit
-		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "?@?", "!#!", '@', itemBronzePlate, '?', Item.goldNugget, '#', Item.redstone, '!', blockCopperWire});
+		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "#@#", "!#!", '@', itemSteelPlate, '#', Item.redstone, '!', blockCopperWire});
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', itemCircuit});
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(itemCircuit, 1, 1), '#', new ItemStack(Item.dyePowder, 1, 4)});
-    	
     }
-    
-    @PostInit
-   	public void modsLoaded(FMLPostInitializationEvent evt) 
-	{
-    	RecipeManager.addRecipes();
-	}
 }

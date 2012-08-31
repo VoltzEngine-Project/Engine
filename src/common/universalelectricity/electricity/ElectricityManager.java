@@ -7,33 +7,78 @@ import java.util.List;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.world.WorldEvent.Load;
 import universalelectricity.Vector3;
 import universalelectricity.extend.IElectricUnit;
 import universalelectricity.extend.TileEntityConductor;
 import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.registry.TickRegistry;
 
 /**
- * This class is used to manage electricity transferring and flow
+ * This class is used to manage electricity transferring and flow. It is also used to call updates on UE tile entities.
+ * 
+ * Electricity Manager is made for each world so it doesn't conflict with electricity devices in different dimensions.
  * @author Calclavia
  *
  */
-public class ElectricityManager implements ITickHandler
+public class ElectricityManager
 {
+	/*
+    public static final List<ElectricityManager> instances = new ArrayList<ElectricityManager>();
+    
+    /**
+     * Gets an electricity manager instance.
+     * @param worldObj
+     * @return The Electricity Manager for this world. Will never return null.
+     *
+    public static ElectricityManager get(World worldObj)
+    {
+    	if(worldObj == null)
+    	{
+    		System.out.println("World cannot be null when getting an electricity manager!");
+    		return null;
+    	}
+    	
+    	for(ElectricityManager manager : instances)
+    	{
+    		if(manager.worldObj == worldObj)
+    		{
+    			return manager;
+    		}
+    	}
+    	
+    	ElectricityManager newManager = new ElectricityManager(worldObj);
+    	instances.add(newManager);
+		return newManager;
+    }
+    */
+	
+	public static ElectricityManager instance;
+
 	public World worldObj;
 	
-    private static List<IElectricUnit> electricUnits = new ArrayList<IElectricUnit>();
-    private static List<TileEntityConductor> electricConductors = new ArrayList<TileEntityConductor>();
+    private List<IElectricUnit> electricUnits = new ArrayList<IElectricUnit>();
+    private List<TileEntityConductor> electricConductors = new ArrayList<TileEntityConductor>();
 
-    private static List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
-    private static List<ElectricityConnection> wireConnections = new ArrayList<ElectricityConnection>();
-    private static int maxConnectionID = 0;
+    private List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
+    private List<ElectricityConnection> wireConnections = new ArrayList<ElectricityConnection>();
+    private int maxConnectionID = 0;
 
     public long inGameTicks = 0;
     
-    public boolean refreshConductors = false;
+    public int refreshConductors;
+    
+    public ElectricityManager(World worldObj)
+    {
+    	this.reset(worldObj);
+    }
+    
+    public void reset(World worldObj)
+    {
+    	this.worldObj = worldObj;
+    	this.refreshConductors = 20*10;
+    }
 
     /**
      * Registers an electricity consumer for it to receive electricity.
@@ -41,11 +86,11 @@ public class ElectricityManager implements ITickHandler
      * ElectricityManager.registerConsumer(this);
      * @param newUnit - The consumer to be registered.
      */
-    public static void registerElectricUnit(IElectricUnit newUnit)
+    public void registerElectricUnit(IElectricUnit newUnit)
     {
-        if (!electricUnits.contains(newUnit))
+        if (!this.electricUnits.contains(newUnit))
         {
-            electricUnits.add(newUnit);
+        	this.electricUnits.add(newUnit);
         }
     }
 
@@ -54,14 +99,14 @@ public class ElectricityManager implements ITickHandler
      * @param conductor - The conductor tile entity
      * @return - The ID of the connection line that is assigned to this conductor
      */
-    public static void registerConductor(TileEntityConductor newConductor)
+    public void registerConductor(TileEntityConductor newConductor)
     {
         cleanUpConnections();
-        wireConnections.add(new ElectricityConnection(getMaxConnectionID(), newConductor));
+        this.wireConnections.add(new ElectricityConnection(getMaxConnectionID(), newConductor));
 
-        if (!electricConductors.contains(newConductor))
+        if (!this.electricConductors.contains(newConductor))
         {
-            electricConductors.add(newConductor);
+        	this.electricConductors.add(newConductor);
         }
     }
 
@@ -70,15 +115,15 @@ public class ElectricityManager implements ITickHandler
      * @param ID1 - ID of connection line
      * @param ID2 - ID of connection line
      */
-    public static void mergeConnection(int ID1, int ID2)
+    public void mergeConnection(int ID1, int ID2)
     {
-        if (ID1 != ID2)
+        if(ID1 != ID2)
         {
             ElectricityConnection connection1 = getConnectionByID(ID1);
             ElectricityConnection connection2 = getConnectionByID(ID2);
             connection1.conductors.addAll(connection2.conductors);
             connection1.setID(ID1);
-            wireConnections.remove(connection2);
+            this.wireConnections.remove(connection2);
         }
     }
 
@@ -89,17 +134,17 @@ public class ElectricityManager implements ITickHandler
      * @param conductorA - existing conductor
      * @param conductorB - broken/invalid conductor
      */
-    public static void splitConnection(TileEntityConductor conductorA, TileEntityConductor conductorB)
+    public void splitConnection(TileEntityConductor conductorA, TileEntityConductor conductorB)
     {
         ElectricityConnection connection = getConnectionByID(conductorA.connectionID);
         connection.cleanUpArray();
 
-        for (TileEntityConductor conductor : connection.conductors)
+        for(TileEntityConductor conductor : connection.conductors)
         {
             conductor.reset();
         }
 
-        for (TileEntityConductor conductor : connection.conductors)
+        for(TileEntityConductor conductor : connection.conductors)
         {
             for (byte i = 0; i < 6; i++)
             {
@@ -113,15 +158,15 @@ public class ElectricityManager implements ITickHandler
      * @param ID
      * @return
      */
-    public static ElectricityConnection getConnectionByID(int ID)
+    public ElectricityConnection getConnectionByID(int ID)
     {
         cleanUpConnections();
 
-        for (int i = 0; i < wireConnections.size(); i++)
+        for (int i = 0; i < this.wireConnections.size(); i++)
         {
-            if (wireConnections.get(i).getID() == ID)
+            if (this.wireConnections.get(i).getID() == ID)
             {
-                return wireConnections.get(i);
+                return this.wireConnections.get(i);
             }
         }
 
@@ -131,15 +176,15 @@ public class ElectricityManager implements ITickHandler
     /**
      * Clean up and remove useless connections
      */
-    public static void cleanUpConnections()
+    public void cleanUpConnections()
     {
-        for (int i = 0; i < wireConnections.size(); i++)
+        for (int i = 0; i < this.wireConnections.size(); i++)
         {
-            wireConnections.get(i).cleanUpArray();
+        	this.wireConnections.get(i).cleanUpArray();
 
-            if (wireConnections.get(i).conductors.size() == 0)
+            if (this.wireConnections.get(i).conductors.size() == 0)
             {
-                wireConnections.remove(i);
+            	this.wireConnections.remove(i);
             }
         }
     }
@@ -148,10 +193,10 @@ public class ElectricityManager implements ITickHandler
      * Get the highest connection ID. Use this to assign new wire connection lines
      * @return
      */
-    public static int getMaxConnectionID()
+    public int getMaxConnectionID()
     {
-        maxConnectionID ++;
-        return maxConnectionID;
+    	this.maxConnectionID ++;
+        return this.maxConnectionID;
     }
 
     /**
@@ -159,12 +204,12 @@ public class ElectricityManager implements ITickHandler
      * @param targetConductor - The tile entity in which the electricity is being produced into
      * @param side - The side in which the electricity is coming in from. 0-5 byte.
      */
-    public static void produceElectricity(TileEntityConductor targetConductor, float watts, float voltage)
+    public void produceElectricity(TileEntityConductor targetConductor, float watts, float voltage)
     {
         if(targetConductor != null && watts > 0 && voltage > 0)
         {
             //Find a path between this conductor and all connected units and try to send the electricity to them directly
-            ElectricityConnection connection = getConnectionByID(targetConductor.connectionID);
+            ElectricityConnection connection = this.getConnectionByID(targetConductor.connectionID);
 
             if(connection != null)
             {
@@ -187,7 +232,7 @@ public class ElectricityManager implements ITickHandler
                                 {
                                     float transferWatts = Math.max(0, Math.min(leftOverWatts, Math.min(watts / allElectricUnitsInLine.size(), electricUnit.electricityRequest())));
                                     leftOverWatts -= transferWatts;
-                                    electricityTransferQueue.add(new ElectricityTransferData(electricUnit, ForgeDirection.getOrientation(i).getOpposite(), transferWatts, voltage));
+                                    this.electricityTransferQueue.add(new ElectricityTransferData(electricUnit, ForgeDirection.getOrientation(i).getOpposite(), transferWatts, voltage));
                                 }
                             }
                         }
@@ -201,9 +246,9 @@ public class ElectricityManager implements ITickHandler
      * Checks if the current connection line needs electricity
      * @return - The amount of electricity this connection line needs
      */
-    public static float electricityRequired(int ID)
+    public float electricityRequired(int ID)
     {
-        ElectricityConnection connection = getConnectionByID(ID);
+        ElectricityConnection connection = this.getConnectionByID(ID);
         float need = 0;
 
         if (connection != null)
@@ -232,8 +277,19 @@ public class ElectricityManager implements ITickHandler
 
         return need;
     }
+    
+    /**
+     * This function is called to refresh all conductors in UE
+     */
+    public void refreshConductors()
+    {
+		for(int j = 0; j < this.electricConductors.size(); j ++)
+        {
+        	TileEntityConductor conductor  = this.electricConductors.get(j);
+            conductor.refreshConnectedBlocks();
+        }
+    }
 
-	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
 		try
@@ -297,36 +353,12 @@ public class ElectricityManager implements ITickHandler
 		}
 	}
 
-	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		if(this.refreshConductors)
+		if(this.refreshConductors > 0)
 		{
-			for(int j = 0; j < electricConductors.size(); j ++)
-	        {
-	        	TileEntityConductor conductor  = electricConductors.get(j);
-	            conductor.refreshConnectedBlocks();
-	        }
-			
-			this.refreshConductors = false;
+			this.refreshConductors();
+			this.refreshConductors --;
 		}
-	}
-
-	@Override
-	public EnumSet<TickType> ticks()
-	{
-		return EnumSet.of(TickType.SERVER, TickType.CLIENT);
-	}
-
-	@Override
-	public String getLabel()
-	{
-		return "Electricity Manager";
-	}
-	
-	@ForgeSubscribe
-	public void loadWorld(Load event)
-	{
-		this.refreshConductors = true;
 	}
 }

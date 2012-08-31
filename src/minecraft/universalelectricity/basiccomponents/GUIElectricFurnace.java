@@ -14,6 +14,8 @@ public class GUIElectricFurnace extends GuiContainer
 
     private int containerWidth;
     private int containerHeight;
+    
+    private long GUITicks = 0;
 
     public GUIElectricFurnace(InventoryPlayer par1InventoryPlayer, TileEntityElectricFurnace tileEntity)
     {
@@ -24,14 +26,25 @@ public class GUIElectricFurnace extends GuiContainer
     public void initGui()
     {
     	super.initGui();
-    	PacketManager.sendTileEntityPacketToServer(tileEntity, "BasicComponents", (int)2);
+    	PacketManager.sendTileEntityPacketToServer(this.tileEntity, "BasicComponents", (int)-1, true);
     }
     
     @Override
     public void onGuiClosed()
     {
     	super.onGuiClosed();
-    	PacketManager.sendTileEntityPacketToServer(tileEntity, "BasicComponents", (int)3);
+    	PacketManager.sendTileEntityPacketToServer(this.tileEntity, "BasicComponents", (int)-1, false);
+    }
+    
+    public void updateScreen()
+    {
+    	super.updateScreen();
+    	
+    	if(GUITicks % 100 == 0)
+    	{
+    		PacketManager.sendTileEntityPacketToServer(this.tileEntity, "BasicComponents", (int)-1, true);
+    	}
+    	GUITicks ++;
     }
 
     /**

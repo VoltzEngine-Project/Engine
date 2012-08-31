@@ -2,13 +2,14 @@ package universalelectricity.extend;
 
 import java.util.List;
 
+import universalelectricity.electricity.ElectricUnit;
+
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
-import universalelectricity.UniversalElectricity;
 
 /**
  * REQUIRED
@@ -18,13 +19,18 @@ import universalelectricity.UniversalElectricity;
  */
 public abstract class ItemElectric extends Item implements IItemElectric
 {
-    public ItemElectric(int par1)
+    public ItemElectric(int id, CreativeTabs tabs)
     {
-        super(par1);
+        super(id);
         this.setMaxStackSize(1);
         this.setMaxDamage((int) getElectricityCapacity());
         this.setNoRepair();
-        this.setTabToDisplayOn(CreativeTabs.tabTools);
+        this.setTabToDisplayOn(tabs);
+    }
+    
+    public ItemElectric(int id)
+    {
+        this(id, CreativeTabs.tabTools);
     }
 
     /**
@@ -50,7 +56,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
             color = "\u00a76";
         }
 
-        par2List.add(color + UniversalElectricity.getAmpHourDisplay(watts, this.getVoltage()) + " - " + Math.round((watts / this.getElectricityCapacity()) * 100) + "%");
+        par2List.add(color + ElectricUnit.getAmpHourDisplay(watts, this.getVoltage()) + " - " + Math.round((watts / this.getElectricityCapacity()) * 100) + "%");
     }
 
     @Override

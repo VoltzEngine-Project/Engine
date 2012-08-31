@@ -38,11 +38,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     
     private boolean sendPacketToClients = false;
 
-    public TileEntityElectricFurnace()
-    {
-        ElectricityManager.registerElectricUnit(this);
-    }
-
     @Override
     public float electricityRequest()
     {
@@ -124,18 +119,14 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
         {
   			int ID = dataStream.readInt();
 			
-			if(ID == 1)
+  			if(ID == -1)
+			{
+				this.sendPacketToClients = dataStream.readBoolean();
+			}
+			else if(ID == 1)
 			{
 				this.smeltingTicks = dataStream.readInt();
 	            this.disabledTicks = dataStream.readInt();
-			}
-			else if(ID == 2)
-			{
-				this.sendPacketToClients = true;
-			}
-			else if(ID == 3)
-			{
-				this.sendPacketToClients = false;
 			}
         }
         catch (Exception e)

@@ -127,9 +127,9 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
                 {
                     if (tileEntity instanceof TileEntityConductor)
                     {
-                        float electricityNeeded = ElectricityManager.electricityRequired(((TileEntityConductor)tileEntity).connectionID);
+                        float electricityNeeded = ElectricityManager.instance.electricityRequired(((TileEntityConductor)tileEntity).connectionID);
                         float transferElectricity = Math.min(100, Math.min(this.electricityStored, electricityNeeded));
-                        ElectricityManager.produceElectricity((TileEntityConductor)tileEntity, transferElectricity, this.getVoltage());
+                        ElectricityManager.instance.produceElectricity((TileEntityConductor)tileEntity, transferElectricity, this.getVoltage());
                         this.electricityStored -= transferElectricity;
                     }
                 }
@@ -149,19 +149,16 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
         {
 			int ID = dataStream.readInt();
 			
-			if(ID == 1)
+			if(ID == -1)
+			{
+				this.sendPacketToClients = dataStream.readBoolean();
+			}
+			else if(ID == 1)
 			{
 	            this.electricityStored = dataStream.readFloat();
 	            this.disabledTicks = dataStream.readInt();
 			}
-			else if(ID == 2)
-			{
-				this.sendPacketToClients = true;
-			}
-			else if(ID == 3)
-			{
-				this.sendPacketToClients = false;
-			}
+			
         }
         catch(Exception e)
         {

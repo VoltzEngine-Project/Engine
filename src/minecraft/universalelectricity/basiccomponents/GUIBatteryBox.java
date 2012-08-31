@@ -6,7 +6,7 @@ import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.UniversalElectricity;
+import universalelectricity.electricity.ElectricUnit;
 import universalelectricity.network.PacketManager;
 
 
@@ -16,6 +16,8 @@ public class GUIBatteryBox extends GuiContainer
 
     private int containerWidth;
     private int containerHeight;
+    
+    private long GUITicks = 0;
 
     public GUIBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBatteryBox batteryBox)
     {
@@ -26,14 +28,25 @@ public class GUIBatteryBox extends GuiContainer
     public void initGui()
     {
     	super.initGui();
-    	PacketManager.sendTileEntityPacketToServer(tileEntity, "BasicComponents", (int)2);
+    	PacketManager.sendTileEntityPacketToServer(this.tileEntity, "BasicComponents", (int)-1, true);
     }
     
     @Override
     public void onGuiClosed()
     {
     	super.onGuiClosed();
-    	PacketManager.sendTileEntityPacketToServer(tileEntity, "BasicComponents", (int)3);
+    	PacketManager.sendTileEntityPacketToServer(this.tileEntity, "BasicComponents", (int)-1, false);
+    }
+    
+    public void updateScreen()
+    {
+    	super.updateScreen();
+    	
+    	if(GUITicks % 100 == 0)
+    	{
+    		PacketManager.sendTileEntityPacketToServer(this.tileEntity, "BasicComponents", (int)-1, true);
+    	}
+    	GUITicks ++;
     }
 
     /**
@@ -43,8 +56,8 @@ public class GUIBatteryBox extends GuiContainer
     protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString(this.tileEntity.getInvName(), 65, 6, 4210752);
-        String displayText = UniversalElectricity.getAmpHourDisplay(tileEntity.getAmpHours());
-        String displayText2 = UniversalElectricity.getAmpHourDisplay(tileEntity.ELECTRICITY_CAPACITY);
+        String displayText = ElectricUnit.getAmpHourDisplay(tileEntity.getAmpHours());
+        String displayText2 = ElectricUnit.getAmpHourDisplay(tileEntity.ELECTRICITY_CAPACITY);
 
         if (this.tileEntity.isDisabled())
         {
