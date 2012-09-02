@@ -4,13 +4,13 @@ import net.minecraft.src.ItemStack;
 
 public class SmeltingRecipe
 {
-    public ItemStack output;
     public ItemStack input;
+    public ItemStack output;
 
-    public SmeltingRecipe(ItemStack output, ItemStack input)
+    public SmeltingRecipe(ItemStack input, ItemStack output)
     {
-        this.output = output;
         this.input = input;
+        this.output = output;
     }
     
     public boolean isEqual(SmeltingRecipe comparingRecipe)

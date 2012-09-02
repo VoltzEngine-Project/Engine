@@ -96,7 +96,7 @@ public class RecipeManager
     //Furnace Smelting Recipes
     public static void addSmelting(ItemStack input, ItemStack output)
     {
-        SMELTING_RECIPES.add(new SmeltingRecipe(output, input));
+        SMELTING_RECIPES.add(new SmeltingRecipe(input, output));
     }
 
     public static void addSmelting(Item input, ItemStack output)

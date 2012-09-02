@@ -21,7 +21,7 @@ import com.google.common.io.ByteArrayDataInput;
 public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IInventory, ISidedInventory,  IPacketReceiver
 {
     //The amount of ticks requried to smelt this item
-    public final int smeltingTimeRequired = 180;
+    public final int smeltingTimeRequired = 160;
 
     //How many ticks has this item been smelting for?
     public int smeltingTicks = 0;
