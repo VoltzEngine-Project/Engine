@@ -33,7 +33,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
  *
  */
 
-@Mod(modid = "BasicComponenets", name = "Basic Componenets", version = UniversalElectricity.VERSION, dependencies = "before:*")
+@Mod(modid = "BasicComponents", name = "Basic Componenets", version = UniversalElectricity.VERSION, dependencies = "before:*")
 @NetworkMod(channels = { "BasicComponents" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 
 public class BasicComponents
@@ -135,7 +135,7 @@ public class BasicComponents
 		//Motor
 		RecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', "ingotSteel", '#', itemCircuit, '@', blockCopperWire});
 		//Wrench
-		RecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {"! !", " ! ", " ! ", '!', "ingotSteel"});
+		RecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {"! !", "?!?", "?!?", '!', "ingotSteel", '?', Item.leather});
 		//Battery Box
 		RecipeManager.addRecipe(blockBatteryBox, new Object [] {"?!?", "#?#", "?!?", '#', blockCopperWire,'!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getUnchargedItemStack()) });
 		RecipeManager.addSmelting(blockBatteryBox, new ItemStack(itemSteelDust, 6));
