@@ -10,7 +10,6 @@ import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
 import universalelectricity.extend.IItemElectric;
 import universalelectricity.network.IPacketReceiver;

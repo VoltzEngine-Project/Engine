@@ -86,7 +86,7 @@ public class BasicComponents
 		 * Manager Liquid.
 		 */
 		LiquidManager.liquids.add(new LiquidData(new LiquidStack(oilStill, LiquidManager.BUCKET_VOLUME), new LiquidStack(oilMoving, LiquidManager.BUCKET_VOLUME), new ItemStack(itemOilBucket), new ItemStack(Item.bucketEmpty)));
-		MinecraftForge.EVENT_BUS.register(new OilBucketHandler());
+		MinecraftForge.EVENT_BUS.register(itemOilBucket);
 
 		//Checks to make sure Forge is the correction version...
 		if(ForgeVersion.getMajorVersion() != 4)

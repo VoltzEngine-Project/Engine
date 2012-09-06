@@ -3,7 +3,6 @@ package universalelectricity.basiccomponents;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import net.minecraftforge.common.DimensionManager;
 import universalelectricity.electricity.ElectricityTicker;
 import universalelectricity.extend.CommonProxy;
 import cpw.mods.fml.common.Side;

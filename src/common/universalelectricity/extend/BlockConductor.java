@@ -9,8 +9,6 @@ package universalelectricity.extend;
  */
 
 import net.minecraft.src.BlockContainer;
-import net.minecraft.src.DamageSource;
-import net.minecraft.src.Entity;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;

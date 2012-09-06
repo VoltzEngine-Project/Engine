@@ -1,16 +1,10 @@
 package universalelectricity.basiccomponents;
 
-import java.util.Random;
-
-import buildcraft.api.liquids.ILiquid;
-
-import net.minecraft.src.Block;
-import net.minecraft.src.BlockFluid;
 import net.minecraft.src.BlockStationary;
-import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.Material;
 import net.minecraft.src.World;
+import buildcraft.api.liquids.ILiquid;
 /**
  * 
  * @author Cammygames

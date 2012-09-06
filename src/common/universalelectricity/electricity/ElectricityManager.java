@@ -10,10 +10,7 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.Vector3;
 import universalelectricity.extend.IElectricUnit;
 import universalelectricity.extend.TileEntityConductor;
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.registry.TickRegistry;
 
 /**
  * This class is used to manage electricity transferring and flow. It is also used to call updates on UE tile entities.

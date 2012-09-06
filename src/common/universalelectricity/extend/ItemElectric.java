@@ -2,14 +2,13 @@ package universalelectricity.extend;
 
 import java.util.List;
 
-import universalelectricity.electricity.ElectricUnit;
-
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
+import universalelectricity.electricity.ElectricUnit;
 
 /**
  * REQUIRED

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.src.DamageSource;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.MapColor;
 import net.minecraft.src.Material;
 import net.minecraft.src.NetHandler;
@@ -15,6 +15,7 @@ import net.minecraft.src.Packet1Login;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import universalelectricity.electricity.ElectricityManager;
@@ -88,6 +89,15 @@ public class UniversalElectricity implements IConnectionHandler
 	{
     	RecipeManager.addRecipes();
 	}
+    
+    @ForgeSubscribe
+    public void onEntityDeath(LivingDeathEvent event)
+    {
+    	if(event.entity instanceof EntityPlayer)
+    	{
+        	ElectricityManager.instance.reset(event.entity.worldObj);
+    	}
+    }
 
     @ForgeSubscribe
 	public void onWorldLoad(Load event)
