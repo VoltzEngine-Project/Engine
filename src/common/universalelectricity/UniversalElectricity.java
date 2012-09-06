@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.DamageSource;
+import net.minecraft.src.MapColor;
+import net.minecraft.src.Material;
 import net.minecraft.src.NetHandler;
 import net.minecraft.src.NetLoginHandler;
 import net.minecraft.src.NetworkManager;
@@ -37,6 +40,11 @@ public class UniversalElectricity implements IConnectionHandler
     public static final String VERSION = "0.7.0";
         
     public static UniversalElectricity instance;
+    
+    /**
+	 * Use this material for all your machine blocks. It can be breakable by hand.
+	 */
+	public static final Material machine = new Material(MapColor.ironColor);
         
     public static void registerMod(Object networkmod, String modName, String version)
     {
@@ -63,7 +71,7 @@ public class UniversalElectricity implements IConnectionHandler
         MODS.add(networkmod);
         System.out.println("Loaded Universal Electricity Mod: " + modName);
     }
-    
+
     @PreInit
    	public void preInit(FMLPreInitializationEvent event)
     {

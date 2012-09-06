@@ -3,8 +3,6 @@ package universalelectricity.basiccomponents;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.MapColor;
-import net.minecraft.src.Material;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
@@ -46,8 +44,6 @@ public class BasicComponents
     
     @SidedProxy(clientSide = "universalelectricity.basiccomponents.BCClientProxy", serverSide = "universalelectricity.basiccomponents.BCCommonProxy")
 	public static BCCommonProxy proxy;
-    
-    public static final Material machine = new Material(MapColor.ironColor);
     
     /**
      * Here is where all the Universal Components are defined. You may reference to these variables.

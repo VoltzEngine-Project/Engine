@@ -9,6 +9,7 @@ import net.minecraft.src.MathHelper;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.UniversalElectricity;
 import universalelectricity.extend.BlockMachine;
 import universalelectricity.extend.IRedstoneProvider;
 
@@ -16,7 +17,7 @@ public class BlockBatteryBox extends BlockMachine
 {
     public BlockBatteryBox(int id, int textureIndex)
     {
-        super("Battery Box", id, BasicComponents.machine, CreativeTabs.tabDeco);
+        super("Battery Box", id, UniversalElectricity.machine, CreativeTabs.tabDeco);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();

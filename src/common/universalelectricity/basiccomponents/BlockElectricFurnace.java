@@ -9,13 +9,14 @@ import net.minecraft.src.MathHelper;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.UniversalElectricity;
 import universalelectricity.extend.BlockMachine;
 
 public class BlockElectricFurnace extends BlockMachine
 {
     public BlockElectricFurnace(int id, int textureIndex)
     {
-        super("Electric Furnace", id, BasicComponents.machine, CreativeTabs.tabDeco);
+        super("Electric Furnace", id, UniversalElectricity.machine, CreativeTabs.tabDeco);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();

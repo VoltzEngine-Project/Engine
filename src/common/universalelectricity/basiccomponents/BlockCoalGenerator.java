@@ -11,13 +11,14 @@ import net.minecraft.src.MathHelper;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.UniversalElectricity;
 import universalelectricity.extend.BlockMachine;
 
 public class BlockCoalGenerator extends BlockMachine
 {
     public BlockCoalGenerator(int id, int textureIndex)
     {
-        super("Coal Generator", id, BasicComponents.machine, CreativeTabs.tabDeco);
+        super("Coal Generator", id, UniversalElectricity.machine, CreativeTabs.tabDeco);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();
