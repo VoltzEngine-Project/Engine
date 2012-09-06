@@ -12,13 +12,12 @@ import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.Material;
 import net.minecraft.src.World;
 /**
- * 
  * @author Cammygames
- * 
- * Oil Flowing
+ * This class contains the block for oil
  * 
  */
-public class BlockFlowingLiquid extends BlockFluid implements ILiquid	{
+public class BlockOilFlowing extends BlockFluid implements ILiquid
+{
 
 	/**
      * Number of horizontally adjacent liquid source blocks. Diagonal doesn't count. Only source blocks of the same
@@ -38,14 +37,14 @@ public class BlockFlowingLiquid extends BlockFluid implements ILiquid	{
      */
     int[] flowCost = new int[4];
 
-	public BlockFlowingLiquid(int id, int textureindex) {
+	public BlockOilFlowing(int id)
+	{
 		super(id, Material.water);
-		
-		setHardness(100F);
-		setLightOpacity(3);
-        this.setCreativeTab(CreativeTabs.tabBlock);
+		this.setHardness(80F);
+		this.setLightOpacity(0);
         this.setRequiresSelfNotify();
         this.disableStats();
+        this.setBlockName("oilMoving");
 	}
     
     /**
@@ -57,29 +56,23 @@ public class BlockFlowingLiquid extends BlockFluid implements ILiquid	{
         par1World.setBlockAndMetadata(par2, par3, par4, this.blockID + 1, var5);
         par1World.markBlocksDirty(par2, par3, par4, par2, par3, par4);
     }
-
-    public boolean getBlocksMovement(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
-    {
-        return this.blockMaterial != Material.lava;
-    }
+    
     /**
-     * @author Cammygames
      * Gets the color of the water
      */
-    public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
+    @Override
+    public int colorMultiplier(IBlockAccess par1IBlockAccess, int x, int y, int z)
     {
-    	  if (this.blockMaterial == Material.water)
-          {
-              return 0x000000;
-          }
-    	return 0x000000;
+    	return 0;
     }
+    
     /**
      * Ticks the block if it's been scheduled
      */
-    public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random)
+    @Override
+    public void updateTick(World par1World, int x, int y, int z, Random par5Random)
     {
-        int var6 = this.getFlowDecay(par1World, par2, par3, par4);
+        int var6 = this.getFlowDecay(par1World, x, y, z);
         byte var7 = 1;
 
         if (this.blockMaterial == Material.lava && !par1World.provider.isHellWorld)
@@ -94,10 +87,10 @@ public class BlockFlowingLiquid extends BlockFluid implements ILiquid	{
         {
             byte var9 = -100;
             this.numAdjacentSources = 0;
-            int var12 = this.getSmallestFlowDecay(par1World, par2 - 1, par3, par4, var9);
-            var12 = this.getSmallestFlowDecay(par1World, par2 + 1, par3, par4, var12);
-            var12 = this.getSmallestFlowDecay(par1World, par2, par3, par4 - 1, var12);
-            var12 = this.getSmallestFlowDecay(par1World, par2, par3, par4 + 1, var12);
+            int var12 = this.getSmallestFlowDecay(par1World, x - 1, y, z, var9);
+            var12 = this.getSmallestFlowDecay(par1World, x + 1, y, z, var12);
+            var12 = this.getSmallestFlowDecay(par1World, x, y, z - 1, var12);
+            var12 = this.getSmallestFlowDecay(par1World, x, y, z + 1, var12);
             var10 = var12 + var7;
 
             if (var10 >= 8 || var12 < 0)
@@ -105,9 +98,9 @@ public class BlockFlowingLiquid extends BlockFluid implements ILiquid	{
                 var10 = -1;
             }
 
-            if (this.getFlowDecay(par1World, par2, par3 + 1, par4) >= 0)
+            if (this.getFlowDecay(par1World, x, y + 1, z) >= 0)
             {
-                int var11 = this.getFlowDecay(par1World, par2, par3 + 1, par4);
+                int var11 = this.getFlowDecay(par1World, x, y + 1, z);
 
                 if (var11 >= 8)
                 {
@@ -121,11 +114,11 @@ public class BlockFlowingLiquid extends BlockFluid implements ILiquid	{
 
             if (this.numAdjacentSources >= 2 && this.blockMaterial == Material.water)
             {
-                if (par1World.getBlockMaterial(par2, par3 - 1, par4).isSolid())
+                if (par1World.getBlockMaterial(x, y - 1, z).isSolid())
                 {
                     var10 = 0;
                 }
-                else if (par1World.getBlockMaterial(par2, par3 - 1, par4) == this.blockMaterial && par1World.getBlockMetadata(par2, par3, par4) == 0)
+                else if (par1World.getBlockMaterial(x, y - 1, z) == this.blockMaterial && par1World.getBlockMetadata(x, y, z) == 0)
                 {
                     var10 = 0;
                 }
@@ -141,7 +134,7 @@ public class BlockFlowingLiquid extends BlockFluid implements ILiquid	{
             {
                 if (var8)
                 {
-                    this.updateFlow(par1World, par2, par3, par4);
+                    this.updateFlow(par1World, x, y, z);
                 }
             }
             else
@@ -150,42 +143,42 @@ public class BlockFlowingLiquid extends BlockFluid implements ILiquid	{
 
                 if (var10 < 0)
                 {
-                    par1World.setBlockWithNotify(par2, par3, par4, 0);
+                    par1World.setBlockWithNotify(x, y, z, 0);
                 }
                 else
                 {
-                    par1World.setBlockMetadataWithNotify(par2, par3, par4, var10);
-                    par1World.scheduleBlockUpdate(par2, par3, par4, this.blockID, this.tickRate());
-                    par1World.notifyBlocksOfNeighborChange(par2, par3, par4, this.blockID);
+                    par1World.setBlockMetadataWithNotify(x, y, z, var10);
+                    par1World.scheduleBlockUpdate(x, y, z, this.blockID, this.tickRate());
+                    par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
                 }
             }
         }
         else
         {
-            this.updateFlow(par1World, par2, par3, par4);
+            this.updateFlow(par1World, x, y, z);
         }
 
-        if (this.liquidCanDisplaceBlock(par1World, par2, par3 - 1, par4))
+        if (this.liquidCanDisplaceBlock(par1World, x, y - 1, z))
         {
-            if (this.blockMaterial == Material.lava && par1World.getBlockMaterial(par2, par3 - 1, par4) == Material.water)
+            if (this.blockMaterial == Material.lava && par1World.getBlockMaterial(x, y - 1, z) == Material.water)
             {
-                par1World.setBlockWithNotify(par2, par3 - 1, par4, Block.stone.blockID);
-                this.triggerLavaMixEffects(par1World, par2, par3 - 1, par4);
+                par1World.setBlockWithNotify(x, y - 1, z, Block.stone.blockID);
+                this.triggerLavaMixEffects(par1World, x, y - 1, z);
                 return;
             }
 
             if (var6 >= 8)
             {
-                this.flowIntoBlock(par1World, par2, par3 - 1, par4, var6);
+                this.flowIntoBlock(par1World, x, y - 1, z, var6);
             }
             else
             {
-                this.flowIntoBlock(par1World, par2, par3 - 1, par4, var6 + 8);
+                this.flowIntoBlock(par1World, x, y - 1, z, var6 + 8);
             }
         }
-        else if (var6 >= 0 && (var6 == 0 || this.blockBlocksFlow(par1World, par2, par3 - 1, par4)))
+        else if (var6 >= 0 && (var6 == 0 || this.blockBlocksFlow(par1World, x, y - 1, z)))
         {
-            boolean[] var13 = this.getOptimalFlowDirections(par1World, par2, par3, par4);
+            boolean[] var13 = this.getOptimalFlowDirections(par1World, x, y, z);
             var10 = var6 + var7;
 
             if (var6 >= 8)
@@ -200,22 +193,22 @@ public class BlockFlowingLiquid extends BlockFluid implements ILiquid	{
 
             if (var13[0])
             {
-                this.flowIntoBlock(par1World, par2 - 1, par3, par4, var10);
+                this.flowIntoBlock(par1World, x - 1, y, z, var10);
             }
 
             if (var13[1])
             {
-                this.flowIntoBlock(par1World, par2 + 1, par3, par4, var10);
+                this.flowIntoBlock(par1World, x + 1, y, z, var10);
             }
 
             if (var13[2])
             {
-                this.flowIntoBlock(par1World, par2, par3, par4 - 1, var10);
+                this.flowIntoBlock(par1World, x, y, z - 1, var10);
             }
 
             if (var13[3])
             {
-                this.flowIntoBlock(par1World, par2, par3, par4 + 1, var10);
+                this.flowIntoBlock(par1World, x, y, z + 1, var10);
             }
         }
     }
@@ -372,6 +365,12 @@ public class BlockFlowingLiquid extends BlockFluid implements ILiquid	{
         return this.isOptimalFlowDirection;
     }
 
+    @Override
+    public int getRenderBlockPass()
+    {
+        return 0;
+    }
+    
     /**
      * Returns true if block at coords blocks fluids
      */

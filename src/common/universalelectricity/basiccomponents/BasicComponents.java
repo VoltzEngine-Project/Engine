@@ -1,30 +1,26 @@
 package universalelectricity.basiccomponents;
 
-import buildcraft.api.liquids.LiquidData;
-import buildcraft.api.liquids.LiquidDictionary;
-import buildcraft.api.liquids.LiquidManager;
-import buildcraft.api.liquids.LiquidStack;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.MapColor;
+import net.minecraft.src.Material;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.OreGenData;
 import universalelectricity.OreGenerator;
 import universalelectricity.UniversalElectricity;
-import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.network.PacketManager;
 import universalelectricity.recipe.RecipeManager;
+import buildcraft.api.liquids.LiquidData;
+import buildcraft.api.liquids.LiquidManager;
+import buildcraft.api.liquids.LiquidStack;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
-import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -50,7 +46,9 @@ public class BasicComponents
     
     @SidedProxy(clientSide = "universalelectricity.basiccomponents.BCClientProxy", serverSide = "universalelectricity.basiccomponents.BCCommonProxy")
 	public static BCCommonProxy proxy;
-        
+    
+    public static final Material machine = new Material(MapColor.ironColor);
+    
     /**
      * Here is where all the Universal Components are defined. You may reference to these variables.
     */
@@ -60,8 +58,8 @@ public class BasicComponents
     public static final Block blockBatteryBox = new BlockBatteryBox(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Battery_Box", BLOCK_ID_PREFIX + 1), 0);
     public static final Block blockCoalGenerator = new BlockCoalGenerator(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Coal_Generator", BLOCK_ID_PREFIX + 2), 0);
     public static final Block blockElectricFurnace = new BlockElectricFurnace(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Electric_Furnace", BLOCK_ID_PREFIX + 3), 0);
-    public static final Block oilMoving = new BlockFlowingLiquid(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Flowing", BLOCK_ID_PREFIX + 4), 0).setHardness(100F).setLightOpacity(0).setBlockName("oilMoving");
-    public static final Block oilStill = new BlockStillLiquid(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Still", BLOCK_ID_PREFIX + 5), 0).setHardness(100F).setLightOpacity(0).setBlockName("oilStill");
+    public static final Block oilMoving = new BlockOilFlowing(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Flowing", BLOCK_ID_PREFIX + 4));
+    public static final Block oilStill = new BlockOilStill(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Still", BLOCK_ID_PREFIX + 5));
     
     
     public static final int ITEM_ID_PREFIX = 13970;

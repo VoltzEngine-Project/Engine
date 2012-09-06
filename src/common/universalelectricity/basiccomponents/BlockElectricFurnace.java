@@ -15,7 +15,7 @@ public class BlockElectricFurnace extends BlockMachine
 {
     public BlockElectricFurnace(int id, int textureIndex)
     {
-        super("Electric Furnace", id, Material.circuits, CreativeTabs.tabDeco);
+        super("Electric Furnace", id, BasicComponents.machine, CreativeTabs.tabDeco);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();
