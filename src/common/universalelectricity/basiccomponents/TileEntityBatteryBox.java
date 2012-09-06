@@ -92,7 +92,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
             }
 
             //The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
-            if(this.containingItems[1] != null && this.electricityStored < ELECTRICITY_CAPACITY)
+            if (this.containingItems[1] != null && this.electricityStored < ELECTRICITY_CAPACITY)
             {
                 if (this.containingItems[1].getItem() instanceof IItemElectric)
                 {
@@ -108,18 +108,18 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 
             boolean isFullThisCheck = false;
 
-            if(this.electricityStored >= ELECTRICITY_CAPACITY)
+            if (this.electricityStored >= ELECTRICITY_CAPACITY)
             {
                 isFullThisCheck = true;
             }
 
-            if(this.isFull != isFullThisCheck)
+            if (this.isFull != isFullThisCheck)
             {
                 this.isFull = isFullThisCheck;
                 this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
             }
 
-            if(this.electricityStored > 0)
+            if (this.electricityStored > 0)
             {
                 TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
 

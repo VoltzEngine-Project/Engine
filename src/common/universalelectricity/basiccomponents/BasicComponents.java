@@ -1,5 +1,9 @@
 package universalelectricity.basiccomponents;
 
+import buildcraft.api.liquids.LiquidData;
+import buildcraft.api.liquids.LiquidDictionary;
+import buildcraft.api.liquids.LiquidManager;
+import buildcraft.api.liquids.LiquidStack;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
@@ -28,12 +32,12 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 /**
- * A static class where you can reference variables from here
+ * The main class for managing Basic Component items and blocks.
  * @author Calclavia
  *
  */
 
-@Mod(modid = "BasicComponents", name = "Basic Componenets", version = UniversalElectricity.VERSION, dependencies = "before:*")
+@Mod(modid = "BasicComponents", name = "Basic Components", version = UniversalElectricity.VERSION, dependencies = "before:*")
 @NetworkMod(channels = { "BasicComponents" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 
 public class BasicComponents
@@ -56,7 +60,10 @@ public class BasicComponents
     public static final Block blockBatteryBox = new BlockBatteryBox(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Battery_Box", BLOCK_ID_PREFIX + 1), 0);
     public static final Block blockCoalGenerator = new BlockCoalGenerator(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Coal_Generator", BLOCK_ID_PREFIX + 2), 0);
     public static final Block blockElectricFurnace = new BlockElectricFurnace(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Electric_Furnace", BLOCK_ID_PREFIX + 3), 0);
-
+    public static final Block oilMoving = new BlockFlowingLiquid(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Flowing", BLOCK_ID_PREFIX + 4), 0).setHardness(100F).setLightOpacity(0).setBlockName("oilMoving");
+    public static final Block oilStill = new BlockStillLiquid(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Still", BLOCK_ID_PREFIX + 5), 0).setHardness(100F).setLightOpacity(0).setBlockName("oilStill");
+    
+    
     public static final int ITEM_ID_PREFIX = 13970;
     public static final Item itemBattery = new ItemBattery(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Battery", ITEM_ID_PREFIX+1), 0);
     public static final Item itemWrench = new ItemWrench(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Wrench", ITEM_ID_PREFIX+2), 20);
@@ -70,7 +77,9 @@ public class BasicComponents
     public static final Item itemSteelPlate = new ItemBC("Steel Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", ITEM_ID_PREFIX+10), 9);
     public static final Item itemBronzePlate = new ItemBC("Bronze Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Plate", ITEM_ID_PREFIX+11), 8);
     public static final Item itemMotor = new ItemBC("Motor", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", ITEM_ID_PREFIX+12), 10);
-
+    public static final Item itemOilBucket = new ItemOilBucket("Oil Bucket", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Oil Bucket", ITEM_ID_PREFIX+13), 4);
+    
+    
     @PreInit
 	public void preInit(FMLPreInitializationEvent event)
     {
@@ -78,6 +87,13 @@ public class BasicComponents
 		
 		UniversalElectricity.registerMod(this, "Basic Componenets", UniversalElectricity.VERSION);
 		
+		/**
+		 * @author Cammygames
+		 * Manager Liquid.
+		 */
+		LiquidManager.liquids.add(new LiquidData(new LiquidStack(oilStill, LiquidManager.BUCKET_VOLUME), new LiquidStack(oilMoving, LiquidManager.BUCKET_VOLUME), new ItemStack(itemOilBucket), new ItemStack(Item.bucketEmpty)));
+		MinecraftForge.EVENT_BUS.register(new OilBucketHandler());
+
 		//Checks to make sure Forge is the correction version...
 		if(ForgeVersion.getMajorVersion() != 4)
 		{
@@ -96,7 +112,9 @@ public class BasicComponents
 		GameRegistry.registerBlock(blockBatteryBox);
 		GameRegistry.registerBlock(blockCoalGenerator);
 		GameRegistry.registerBlock(blockElectricFurnace);
-
+		GameRegistry.registerBlock(oilMoving);
+		GameRegistry.registerBlock(oilStill);
+		
 		proxy.preInit();
     }
     
@@ -108,12 +126,15 @@ public class BasicComponents
     	LanguageRegistry.addName(new ItemStack(blockOre, 1, 0), "Copper Ore");
 		LanguageRegistry.addName(new ItemStack(blockOre, 1, 1), "Tin Ore");
 
+		LanguageRegistry.addName(oilMoving, "Oil Moving");
+		LanguageRegistry.addName(oilStill, "Oil Still");
 		LanguageRegistry.addName(itemBattery, "Basic Battery");
 		LanguageRegistry.addName(blockCopperWire, "Copper Wire");
 		LanguageRegistry.addName(new ItemStack(itemCircuit, 1, 0), "Basic Circuit");
         LanguageRegistry.addName(new ItemStack(itemCircuit, 1, 1), "Advanced Circuit");
         LanguageRegistry.addName(new ItemStack(itemCircuit, 1, 2), "Elite Circuit");
-
+        LanguageRegistry.addName(itemOilBucket, "Oil Bucket");
+        
         LanguageRegistry.addName(blockBatteryBox, "Battery Box");
         LanguageRegistry.addName(blockCoalGenerator, "Coal Generator");
         LanguageRegistry.addName(blockElectricFurnace, "Electric Furnace");
@@ -121,19 +142,20 @@ public class BasicComponents
 		//Register Tile Entities
 		GameRegistry.registerTileEntity(TileEntityBatteryBox.class, "TileEntityBatteryBox");
 		GameRegistry.registerTileEntity(TileEntityCoalGenerator.class, "TileEntityCoalGenerator");
-		GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, "TileEntityElectricFurnace");
+		GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, "TileEntityElectricFurnace");		
 		
 		OreDictionary.registerOre("ingotCopper", itemCopperIngot);
 		OreDictionary.registerOre("ingotTin", itemTinIngot);
 		OreDictionary.registerOre("ingotBronze", itemBronzeIngot);
 		OreDictionary.registerOre("ingotSteel", itemSteelIngot);
 		
+		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Oil", "oilMoving", new ItemStack(oilMoving, 1, 0), 60, 40, 10));
 		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Copper Ore", "oreCopper", new ItemStack(blockOre, 1, 0), 60, 40, 5));
 		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Tin Ore", "oreTin", new ItemStack(blockOre, 1, 1), 60, 33, 4));
 		
 		//Recipes
 		//Motor
-		RecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', "ingotSteel", '#', itemCircuit, '@', blockCopperWire});
+		RecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', blockCopperWire});
 		//Wrench
 		RecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {"! !", "?!?", "?!?", '!', "ingotSteel", '?', Item.leather});
 		//Battery Box
@@ -143,7 +165,7 @@ public class BasicComponents
 		RecipeManager.addRecipe(blockCoalGenerator, new Object [] {"!@!", "$#$", "???", '?', "ingotBronze", '!', itemSteelPlate, '@', blockCopperWire, '#', itemMotor, '$', Block.stoneOvenIdle});
 		RecipeManager.addSmelting(blockCoalGenerator, new ItemStack(itemSteelDust, 6));
 		//Electric Furnace
-		RecipeManager.addRecipe(blockElectricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '#', itemCircuit, '?', itemBronzePlate});
+		RecipeManager.addRecipe(blockElectricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '?', itemCircuit, '#', itemMotor});
 		RecipeManager.addSmelting(blockElectricFurnace, new ItemStack(itemSteelDust, 6));
 		//Copper
 		RecipeManager.addSmelting(new ItemStack(blockOre, 1, 0), new ItemStack(itemCopperIngot));
