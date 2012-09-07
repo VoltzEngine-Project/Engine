@@ -21,7 +21,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 public class TileEntityCoalGenerator extends TileEntityElectricUnit implements IInventory, ISidedInventory, IPacketReceiver
 {
-    public static final int MAX_GENERATE_RATE = 560;
+    public static final int MAX_GENERATE_RATE = 400;
 
     public float generateWatts, prevGenerateWatts = 0;
 
@@ -92,7 +92,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
                 {
                     if (this.itemCookTime <= 0)
                     {
-                        itemCookTime = Math.max(600 - (int)(this.generateWatts*20), 250);
+                        itemCookTime = Math.max(700 - (int)(this.generateWatts*20), 300);
                         this.decrStackSize(0, 1);
                     }
                 }
@@ -105,7 +105,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
                 if (this.connectedElectricUnit != null)
                 {
-                    this.generateWatts = (float)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.0005 + 0.0009) * this.getTickInterval(), 0.8f), this.MAX_GENERATE_RATE*20);
+                    this.generateWatts = (float)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.0005 + 0.001) * this.getTickInterval(), 0.8f), this.MAX_GENERATE_RATE*20);
                 }
             }
 
