@@ -9,12 +9,12 @@ package universalelectricity.extend;
 public interface IElectricityStorage
 {
 	/**
-	 * Returns the amount of Amp-hours this unit has stored.
+	 * Returns the amount of Watt-hours this unit has stored.
 	 */
-	public float getAmpHours();
+	public float getWattHours();
 	
 	/**
-	 * Sets the amount of Amp-hours this unit has stored.
+	 * Sets the amount of Watt-hours this unit has stored.
 	 */
-	public void setAmpHours(float AmpHours);
+	public void setWattHours(float wattHours);
 }

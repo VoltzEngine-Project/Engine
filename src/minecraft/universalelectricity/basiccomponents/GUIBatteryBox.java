@@ -6,7 +6,7 @@ import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.electricity.ElectricUnit;
+import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.network.PacketManager;
 
 
@@ -56,8 +56,8 @@ public class GUIBatteryBox extends GuiContainer
     protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString(this.tileEntity.getInvName(), 65, 6, 4210752);
-        String displayText = ElectricUnit.getAmpHourDisplay(tileEntity.getAmpHours());
-        String displayText2 = ElectricUnit.getAmpHourDisplay(tileEntity.ELECTRICITY_CAPACITY);
+        String displayText = ElectricInfo.getWattHourDisplay(tileEntity.getAmpHours());
+        String displayText2 = ElectricInfo.getWattHourDisplay(ElectricInfo.getWattHourDisplay((tileEntity.AMP_CAPACITY*tileEntity.getVoltage())/3600));
 
         if (this.tileEntity.isDisabled())
         {
@@ -82,7 +82,7 @@ public class GUIBatteryBox extends GuiContainer
         containerWidth = (this.width - this.xSize) / 2;
         containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
-        int scale = (int)(((double)this.tileEntity.getAmpHours() / this.tileEntity.ELECTRICITY_CAPACITY) * 72);
+        int scale = (int)(((double)this.tileEntity.getAmpHours() / this.tileEntity.AMP_CAPACITY) * 72);
         this.drawTexturedModalRect(containerWidth + 87, containerHeight + 51, 176, 0, scale, 20);
     }
 }

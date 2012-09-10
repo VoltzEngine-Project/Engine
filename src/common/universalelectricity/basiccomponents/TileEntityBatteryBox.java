@@ -25,9 +25,9 @@ import com.google.common.io.ByteArrayDataInput;
 
 public class TileEntityBatteryBox extends TileEntityElectricUnit implements IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
 {
-	public static final int ELECTRICITY_CAPACITY = 100000;
+	public static final int AMP_CAPACITY = 100000;
 	
-    private float electricityStored = 0;
+    private float ampStored = 0;
 
     /**
     * The ItemStacks that hold the items currently being used in the battery box
@@ -48,7 +48,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     {
         if (!this.isDisabled())
         {
-            return ELECTRICITY_CAPACITY - this.electricityStored;
+            return AMP_CAPACITY - this.ampStored;
         }
 
         return 0;
@@ -67,9 +67,9 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     }
 
     @Override
-    public void onUpdate(float watts, float voltage, ForgeDirection side)
+    public void onUpdate(float amps, float voltage, ForgeDirection side)
     {
-        super.onUpdate(watts, voltage, side);
+        super.onUpdate(amps, voltage, side);
         
         if (voltage > this.getVoltage())
         {
@@ -78,21 +78,21 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 
         if (!this.isDisabled())
         {
-            this.setAmpHours(this.electricityStored+watts);
+            this.setWattHours(this.ampStored+amps);
             
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
-            if (this.containingItems[0] != null && this.electricityStored > 0)
+            if (this.containingItems[0] != null && this.ampStored > 0)
             {
                 if (this.containingItems[0].getItem() instanceof IItemElectric)
                 {
                     IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
                     float rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-                    this.electricityStored -= electricItem.getTransferRate() - rejectedElectricity;
+                    this.ampStored -= electricItem.getTransferRate() - rejectedElectricity;
                 }
             }
 
             //The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
-            if (this.containingItems[1] != null && this.electricityStored < ELECTRICITY_CAPACITY)
+            if (this.containingItems[1] != null && this.ampStored < AMP_CAPACITY)
             {
                 if (this.containingItems[1].getItem() instanceof IItemElectric)
                 {
@@ -101,14 +101,14 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
                     if (electricItem.canProduceElectricity())
                     {
                         float receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
-                        this.electricityStored = Math.max(this.electricityStored + receivedElectricity, 0);
+                        this.ampStored = Math.max(this.ampStored + receivedElectricity, 0);
                     }
                 }
             }
 
             boolean isFullThisCheck = false;
 
-            if (this.electricityStored >= ELECTRICITY_CAPACITY)
+            if (this.ampStored >= AMP_CAPACITY)
             {
                 isFullThisCheck = true;
             }
@@ -119,7 +119,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
                 this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
             }
 
-            if (this.electricityStored > 0)
+            if (this.ampStored > 0)
             {
                 TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
 
@@ -128,9 +128,9 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
                     if (tileEntity instanceof TileEntityConductor)
                     {
                         float electricityNeeded = ElectricityManager.instance.electricityRequired(((TileEntityConductor)tileEntity).connectionID);
-                        float transferElectricity = Math.min(100, Math.min(this.electricityStored, electricityNeeded));
-                        ElectricityManager.instance.produceElectricity((TileEntityConductor)tileEntity, transferElectricity, this.getVoltage());
-                        this.electricityStored -= transferElectricity;
+                        float transferAmps = Math.min(this.getVoltage(), Math.min(this.ampStored, electricityNeeded));
+                        ElectricityManager.instance.produceElectricity((TileEntityConductor)tileEntity, transferAmps, this.getVoltage());
+                        this.ampStored -= transferAmps;
                     }
                 }
             }
@@ -138,7 +138,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
         
         if(this.sendPacketToClients)
         {
-        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, (int)1, this.electricityStored, this.disabledTicks);
+        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, (int)1, this.ampStored, this.disabledTicks);
         }
     }
     
@@ -155,7 +155,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 			}
 			else if(ID == 1)
 			{
-	            this.electricityStored = dataStream.readFloat();
+	            this.ampStored = dataStream.readFloat();
 	            this.disabledTicks = dataStream.readInt();
 			}
 			
@@ -173,7 +173,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readFromNBT(par1NBTTagCompound);
-        this.electricityStored = par1NBTTagCompound.getFloat("electricityStored");
+        this.ampStored = par1NBTTagCompound.getFloat("electricityStored");
         NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.containingItems = new ItemStack[this.getSizeInventory()];
 
@@ -195,7 +195,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.writeToNBT(par1NBTTagCompound);
-        par1NBTTagCompound.setFloat("electricityStored", this.electricityStored);
+        par1NBTTagCompound.setFloat("electricityStored", this.ampStored);
         NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.containingItems.length; ++var3)
@@ -329,17 +329,17 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     {
         return isPoweringTo(side);
     }
+    
+    @Override
+    public float getWattHours()
+    {
+    	return (this.ampStored*this.getVoltage())/3600;
+    }
 
 	@Override
-	public float getAmpHours()
+	public void setWattHours(float wattHours)
 	{
-		return this.electricityStored;
-	}
-
-	@Override
-	public void setAmpHours(float AmpHours)
-	{
-		this.electricityStored = Math.max(0, Math.min(AmpHours, ELECTRICITY_CAPACITY));
+		this.ampStored = Math.max(0, Math.min((wattHours*3600)/this.getVoltage(), AMP_CAPACITY));
 	}
 	
 	@Override

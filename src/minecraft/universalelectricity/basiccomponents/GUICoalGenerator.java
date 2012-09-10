@@ -6,7 +6,7 @@ import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.electricity.ElectricUnit;
+import universalelectricity.electricity.ElectricInfo;
 
 
 public class GUICoalGenerator extends GuiContainer
@@ -40,17 +40,17 @@ public class GUICoalGenerator extends GuiContainer
         {
             displayText = "Not Connected";
         }
-        else if (tileEntity.generateWatts * 20 <= 0)
+        else if (tileEntity.generateAmps * 20 <= 0)
         {
             displayText = "Not Generating";
         }
-        else if (tileEntity.generateWatts * 20 < 20)
+        else if (tileEntity.generateAmps * 20 < 20)
         {
-            displayText = "Hull Heat: " + (int)(tileEntity.generateWatts * 100) + "%";
+            displayText = "Hull Heat: " + (int)(tileEntity.generateAmps * 100) + "%";
         }
         else
         {
-            displayText = ElectricUnit.getWattDisplay(tileEntity.generateWatts * 20);
+            displayText = ElectricInfo.getWattDisplay(tileEntity.generateAmps * 20 * tileEntity.getVoltage());
         }
 
         this.fontRenderer.drawString(displayText, (int)(105 - displayText.length() * 1.25), 45, 4210752);
