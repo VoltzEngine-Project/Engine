@@ -29,16 +29,20 @@ public class ItemOilBucket extends ItemBucket
     @ForgeSubscribe
     public void onBucketFill(FillBucketEvent event)
     {
-    	World worldObj = event.world;
-    	MovingObjectPosition position = event.target;
-    	
-    	int blockID = worldObj.getBlockId(position.blockX, position.blockY, position.blockZ);
-
-		if((blockID == BasicComponents.oilStill.blockID || blockID == BasicComponents.oilMoving.blockID) && worldObj.getBlockMetadata(position.blockX, position.blockY, position.blockZ) == 0)
-		{
-			worldObj.setBlockWithNotify(position.blockX, position.blockY, position.blockZ, 0);
-			event.result = new ItemStack(BasicComponents.itemOilBucket);
-			event.setHandeled();
-		}
+    	if(event.current.itemID == Item.bucketEmpty.shiftedIndex)
+    	{
+	    	World worldObj = event.world;
+	    	MovingObjectPosition position = event.target;
+	    	
+	    	int blockID = worldObj.getBlockId(position.blockX, position.blockY, position.blockZ);
+	
+			if((blockID == BasicComponents.oilStill.blockID || blockID == BasicComponents.oilMoving.blockID) && worldObj.getBlockMetadata(position.blockX, position.blockY, position.blockZ) == 0)
+			{
+				worldObj.setBlockWithNotify(position.blockX, position.blockY, position.blockZ, 0);
+				event.result = new ItemStack(BasicComponents.itemOilBucket);
+				event.current.stackSize --;
+				event.setHandeled();
+			}
+    	}
     }
 }
