@@ -21,7 +21,7 @@ LICENSE.txt
 !/src/common/buildcraft/
 !/src/common/universalelectricity/
 !/src/common/mcmod.info
-!/textures/*
+!/resources/*
 !/modversion.txt
 !/README
 
