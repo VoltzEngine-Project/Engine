@@ -12,6 +12,7 @@
 /temp/*
 CHANGELOG
 LICENSE.txt
+7za.exe
 
 /src/minecraft/*
 /src/minecraft_server/*

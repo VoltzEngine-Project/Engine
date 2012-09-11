@@ -146,7 +146,6 @@ public class RecipeManager
     /**
      * Replacement functions must be called before post mod initialization!
      */
-    
     public static void replaceRecipe(CraftingRecipe recipeToReplace, CraftingRecipe newRecipe)
     {
     	for(CraftingRecipe recipe : SHAPED_RECIPES)
@@ -178,6 +177,55 @@ public class RecipeManager
             	recipe = newRecipe;
             }
         }
+    }
+    
+    /**
+     * Finds and returns all recipes that have this specific output
+     * @param output - The output of the recipe.
+     */
+    public static List<CraftingRecipe> findRecipe(ItemStack output)
+    {
+    	List<CraftingRecipe> returnList = new ArrayList<CraftingRecipe>();
+    	
+    	for(CraftingRecipe recipe : SHAPED_RECIPES)
+        {
+            if(recipe.output.isItemEqual(output))
+            {
+            	returnList.add(recipe);
+            }
+        }
+    	
+    	return returnList;
+    }
+    
+    public static List<CraftingRecipe> findShapelessRecipe(ItemStack output)
+    {
+    	List<CraftingRecipe> returnList = new ArrayList<CraftingRecipe>();
+    	
+    	for(CraftingRecipe recipe : SHAPELESS_RECIPES)
+        {
+            if(recipe.output.isItemEqual(output))
+            {
+            	returnList.add(recipe);
+            }
+        }
+    	
+    	return returnList;
+    }
+    
+    public static List<SmeltingRecipe> findSmeltingRecipe(ItemStack output)
+    {
+    	List<SmeltingRecipe> returnList = new ArrayList<SmeltingRecipe>();
+    	
+    	for(SmeltingRecipe recipe : SMELTING_RECIPES)
+        {
+            if(recipe.output.isItemEqual(output))
+            {
+            	returnList.add(recipe);
+            }
+        }
+    	
+    	return returnList;
     }
     
     /**
