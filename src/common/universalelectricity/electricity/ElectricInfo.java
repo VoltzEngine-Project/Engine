@@ -140,6 +140,11 @@ public class ElectricInfo
 			unitName = unit.getPlural();
 		}
 		
+		if(value == 0)
+		{
+	    	return value + " " + unitName;
+		}
+		
 		if(value <= MeasurementUnit.MICRO.process)
 	    {
 	    	return roundDecimals(MeasurementUnit.MICRO.process(value), significantFigures) + " " + MeasurementUnit.MICRO.getName(isShort)+unitName;
