@@ -9,6 +9,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
 import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 
 /**
  * REQUIRED
@@ -55,7 +56,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
             color = "\u00a76";
         }
 
-        par2List.add(color + ElectricInfo.getWattHourDisplay(watts/3600) + " - " + Math.round((watts / this.getElectricityCapacity()) * 100) + "%");
+        par2List.add(color + ElectricInfo.getDisplay(ElectricInfo.getWattHours(watts), ElectricUnit.WATT_HOUR) + " - " + Math.round((watts / this.getElectricityCapacity()) * 100) + "%");
     }
 
     @Override

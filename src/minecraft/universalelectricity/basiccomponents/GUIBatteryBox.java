@@ -7,6 +7,7 @@ import net.minecraft.src.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 import universalelectricity.network.PacketManager;
 
 
@@ -56,16 +57,16 @@ public class GUIBatteryBox extends GuiContainer
     protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString(this.tileEntity.getInvName(), 65, 6, 4210752);
-        String displayText = ElectricInfo.getWattHourDisplay(tileEntity.getAmpHours());
-        String displayText2 = ElectricInfo.getWattHourDisplay(ElectricInfo.getWattHourDisplay((tileEntity.AMP_CAPACITY*tileEntity.getVoltage())/3600));
+        String displayText = ElectricInfo.getDisplay(tileEntity.getWattHours(), ElectricUnit.WATT_HOUR, 4, true);
+        String displayText2 = ElectricInfo.getDisplaySimple(ElectricInfo.getWattHours(tileEntity.AMP_CAPACITY, tileEntity.getVoltage()), ElectricUnit.WATT_HOUR, 0);
 
         if (this.tileEntity.isDisabled())
         {
             displayText2 = "Disabled";
         }
 
-        this.fontRenderer.drawString(displayText, 110 - displayText.length(), 30, 4210752);
-        this.fontRenderer.drawString("Max: " + displayText2, 85, 40, 4210752);
+        this.fontRenderer.drawString(displayText + " of", 99 - displayText.length(), 30, 4210752);
+        this.fontRenderer.drawString(displayText2, 80, 40, 4210752);
         this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 90, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
@@ -79,10 +80,11 @@ public class GUIBatteryBox extends GuiContainer
         int var4 = this.mc.renderEngine.getTexture(BasicComponents.FILE_PATH + "BatteryBox.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(var4);
+        
         containerWidth = (this.width - this.xSize) / 2;
         containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
-        int scale = (int)(((double)this.tileEntity.getAmpHours() / this.tileEntity.AMP_CAPACITY) * 72);
+        int scale = (int)(((double)this.tileEntity.ampStored / this.tileEntity.AMP_CAPACITY) * 72);
         this.drawTexturedModalRect(containerWidth + 87, containerHeight + 51, 176, 0, scale, 20);
     }
 }

@@ -38,14 +38,7 @@ public class BlockOilStill extends BlockStationary implements ILiquid
             this.setNotStationary(par1World, par2, par3, par4);
         }
     }
-    /**
-     * @author Cammygames
-     * Gets the color of the water
-     */
-    public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
-    {
-    	return 0;
-    }
+
     /**
      * Changes the block ID to that of an updating fluid.
      */
@@ -85,4 +78,15 @@ public class BlockOilStill extends BlockStationary implements ILiquid
 		return 0;
 	}
 
+	@Override
+    public int getRenderBlockPass()
+    {
+    	return 0;
+    }
+	
+	@Override
+	public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
+    {
+    	return 0x11111111;
+    }
 }

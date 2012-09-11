@@ -83,7 +83,7 @@ public class BasicComponents
 		
 		/**
 		 * @author Cammygames
-		 * Manager Liquid.
+		 * Liquid Manager
 		 */
 		LiquidManager.liquids.add(new LiquidData(new LiquidStack(oilStill, LiquidManager.BUCKET_VOLUME), new LiquidStack(oilMoving, LiquidManager.BUCKET_VOLUME), new ItemStack(itemOilBucket), new ItemStack(Item.bucketEmpty)));
 		MinecraftForge.EVENT_BUS.register(itemOilBucket);
@@ -143,11 +143,12 @@ public class BasicComponents
 		OreDictionary.registerOre("ingotBronze", itemBronzeIngot);
 		OreDictionary.registerOre("ingotSteel", itemSteelIngot);
 		
-		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Oil", "oilMoving", new ItemStack(oilMoving, 1, 0), 60, 40, 10));
 		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Copper Ore", "oreCopper", new ItemStack(blockOre, 1, 0), 60, 40, 5));
 		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Tin Ore", "oreTin", new ItemStack(blockOre, 1, 1), 60, 33, 4));
 		
 		//Recipes
+		//Oil Bucket
+		RecipeManager.addRecipe(new ItemStack(itemOilBucket), new Object [] {"CCC", "CBC", "CCC", 'B', Item.bucketWater, 'C', Item.coal});
 		//Motor
 		RecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', blockCopperWire});
 		//Wrench

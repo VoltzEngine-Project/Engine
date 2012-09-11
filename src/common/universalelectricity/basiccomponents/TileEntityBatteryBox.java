@@ -12,6 +12,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.Vector3;
+import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
 import universalelectricity.extend.IElectricityStorage;
@@ -27,7 +28,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 {
 	public static final int AMP_CAPACITY = 100000;
 	
-    private float ampStored = 0;
+	public float ampStored = 0;
 
     /**
     * The ItemStacks that hold the items currently being used in the battery box
@@ -44,7 +45,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     }
 
     @Override
-    public float electricityRequest()
+    public float ampRequest()
     {
         if (!this.isDisabled())
         {
@@ -78,7 +79,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 
         if (!this.isDisabled())
         {
-            this.setWattHours(this.ampStored+amps);
+        	this.ampStored = Math.max(Math.min(this.ampStored+amps, AMP_CAPACITY), 0);
             
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
             if (this.containingItems[0] != null && this.ampStored > 0)
@@ -333,13 +334,13 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     @Override
     public float getWattHours()
     {
-    	return (this.ampStored*this.getVoltage())/3600;
+    	return ElectricInfo.getWattHours(this.ampStored, this.getVoltage());
     }
 
 	@Override
 	public void setWattHours(float wattHours)
 	{
-		this.ampStored = Math.max(0, Math.min((wattHours*3600)/this.getVoltage(), AMP_CAPACITY));
+		this.ampStored = ElectricInfo.getAmpsFromWattHours(wattHours, this.getVoltage());
 	}
 	
 	@Override

@@ -444,23 +444,28 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
             par1World.scheduleBlockUpdate(par2, par3, par4, this.blockID, this.tickRate());
         }
     }
+    
 	@Override
-	public int stillLiquidId() {
+	public int stillLiquidId()
+	{
 		return BasicComponents.oilStill.blockID;
 	}
 
 	@Override
-	public boolean isMetaSensitive() {
+	public boolean isMetaSensitive()
+	{
 		return false;
 	}
 
 	@Override
-	public int stillLiquidMeta() {
+	public int stillLiquidMeta()
+	{
 		return 0;
 	}
 	
 	@Override
-	public boolean isBlockReplaceable(World world, int i, int j, int k) {
+	public boolean isBlockReplaceable(World world, int i, int j, int k)
+	{
 		return true;
 	}
 

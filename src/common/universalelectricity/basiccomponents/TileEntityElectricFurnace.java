@@ -38,7 +38,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     private boolean sendPacketToClients = false;
 
     @Override
-    public float electricityRequest()
+    public float ampRequest()
     {
         if (!this.isDisabled() && this.canSmelt())
         {

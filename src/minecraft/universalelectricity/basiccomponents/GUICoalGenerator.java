@@ -7,6 +7,7 @@ import net.minecraft.src.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 
 
 public class GUICoalGenerator extends GuiContainer
@@ -50,10 +51,10 @@ public class GUICoalGenerator extends GuiContainer
         }
         else
         {
-            displayText = ElectricInfo.getWattDisplay(tileEntity.generateAmps * 20 * tileEntity.getVoltage());
+            displayText = ElectricInfo.getDisplay(ElectricInfo.getWatts(tileEntity.generateAmps*20, tileEntity.getVoltage()), ElectricUnit.WATT);
         }
 
-        this.fontRenderer.drawString(displayText, (int)(105 - displayText.length() * 1.25), 45, 4210752);
+        this.fontRenderer.drawString(displayText, (int)(103 - displayText.length() * 1.25), 45, 4210752);
         this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 85, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }

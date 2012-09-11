@@ -6,6 +6,8 @@ import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
+import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 import universalelectricity.network.PacketManager;
 
 public class GUIElectricFurnace extends GuiContainer
@@ -72,7 +74,7 @@ public class GUIElectricFurnace extends GuiContainer
         }
 
         this.fontRenderer.drawString("Status: " + displayText, 90, 48, 4210752);
-        this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 89, 60, 4210752);
+        this.fontRenderer.drawString("Voltage: " + ElectricInfo.getDisplayShort(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE), 89, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
