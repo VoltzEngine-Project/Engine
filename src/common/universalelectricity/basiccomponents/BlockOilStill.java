@@ -83,10 +83,10 @@ public class BlockOilStill extends BlockStationary implements ILiquid
     {
     	return 0;
     }
-	
+	//TODO fix this so your oil is not so dark
 	@Override
 	public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
     {
-    	return 0x11111111;
+    	return 0x11111110;
     }
 }

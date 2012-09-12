@@ -71,12 +71,6 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
     {
         int var6 = this.getFlowDecay(par1World, x, y, z);
         byte var7 = 1;
-
-        if (this.blockMaterial == Material.lava && !par1World.provider.isHellWorld)
-        {
-            var7 = 2;
-        }
-
         boolean var8 = true;
         int var10;
 
@@ -108,7 +102,8 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
                     var10 = var11 + 8;
                 }
             }
-
+            //Used to turn a flowing source with two solid sources into a solid source
+            /**
             if (this.numAdjacentSources >= 2 && this.blockMaterial == Material.water)
             {
                 if (par1World.getBlockMaterial(x, y - 1, z).isSolid())
@@ -120,13 +115,7 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
                     var10 = 0;
                 }
             }
-
-            if (this.blockMaterial == Material.lava && var6 < 8 && var10 < 8 && var10 > var6 && par5Random.nextInt(4) != 0)
-            {
-                var10 = var6;
-                var8 = false;
-            }
-
+             **/
             if (var10 == var6)
             {
                 if (var8)
@@ -140,6 +129,7 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 
                 if (var10 < 0)
                 {
+                	//updates block
                     par1World.setBlockWithNotify(x, y, z, 0);
                 }
                 else
@@ -157,13 +147,6 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 
         if (this.liquidCanDisplaceBlock(par1World, x, y - 1, z))
         {
-            if (this.blockMaterial == Material.lava && par1World.getBlockMaterial(x, y - 1, z) == Material.water)
-            {
-                par1World.setBlockWithNotify(x, y - 1, z, Block.stone.blockID);
-                this.triggerLavaMixEffects(par1World, x, y - 1, z);
-                return;
-            }
-
             if (var6 >= 8)
             {
                 this.flowIntoBlock(par1World, x, y - 1, z, var6);
