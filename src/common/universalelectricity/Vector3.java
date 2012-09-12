@@ -56,6 +56,14 @@ public class Vector3 extends Vector2
     {
         return (int)Math.floor(this.z);
     }
+    
+    /**
+     * Makes a new copy of this Vector. Prevents variable referencing problems.
+     */
+    public Vector3 copy()
+    {
+    	return new Vector3(this.x, this.y, this.z);
+    }
 
     /**
      * Converts a TileEntity's position into Vector3

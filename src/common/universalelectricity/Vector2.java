@@ -42,6 +42,15 @@ public class Vector2
     {
         return (int)Math.floor(this.y);
     }
+    
+    /**
+     * Makes a new copy of this Vector. Prevents variable referencing problems.
+     */
+    public Vector2 copy()
+    {
+    	return new Vector2(this.x, this.y);
+    }
+
 
     public static boolean isPointInRegion(Vector2 point, Vector2 minPoint, Vector2 maxPoint)
     {
