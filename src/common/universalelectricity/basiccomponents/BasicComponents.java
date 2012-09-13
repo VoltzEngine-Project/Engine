@@ -31,11 +31,13 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
  *
  */
 
-@Mod(modid = "BasicComponents", name = "Basic Components", version = UniversalElectricity.VERSION, dependencies = "before:*")
+@Mod(modid = "BasicComponents", name = "Basic Components", version = BasicComponents.VERSION, dependencies = "before:*")
 @NetworkMod(channels = { "BasicComponents" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 
 public class BasicComponents
 {
+    protected static final String VERSION = "0.8.1";
+
     public static final String FILE_PATH = "/basiccomponents/textures/";
     public static final String BLOCK_TEXTURE_FILE = FILE_PATH + "blocks.png";
     public static final String ITEM_TEXTURE_FILE = FILE_PATH + "items.png";
@@ -79,7 +81,7 @@ public class BasicComponents
     {
 		instance = this;
 		
-		UniversalElectricity.registerMod(this, "Basic Componenets", UniversalElectricity.VERSION);
+		UniversalElectricity.registerMod(this, "Basic Componenets", VERSION);
 		
 		/**
 		 * @author Cammygames

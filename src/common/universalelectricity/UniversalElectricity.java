@@ -36,9 +36,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class UniversalElectricity implements IConnectionHandler
 {
+	protected static final String VERSION = "0.8.1";
+
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
 	public static final List<Object> MODS = new ArrayList<Object>();
-    public static final String VERSION = "0.8.0";
         
     public static UniversalElectricity instance;
     
@@ -49,24 +50,16 @@ public class UniversalElectricity implements IConnectionHandler
         
     public static void registerMod(Object networkmod, String modName, String version)
     {
-        String[] versionNumbers = VERSION.split("\\.");
-        String[] addonVersionNumbers = version.split("\\.");
+        String[] ueVersionNumbers = VERSION.split("\\.");
+        String[] modVersionNumbers = version.split("\\.");
 
-        if (Integer.parseInt(addonVersionNumbers[0]) != Integer.parseInt(versionNumbers[0]))
+        if (Integer.parseInt(modVersionNumbers[0]) != Integer.parseInt(ueVersionNumbers[0]) || Integer.parseInt(modVersionNumbers[1]) != Integer.parseInt(ueVersionNumbers[1]))
         {
-            throw new RuntimeException("Universal Electricity mod major version mismatch, expecting " + version);
+            throw new RuntimeException("Universal Electricity version mismatch, expecting " + version);
         }
-        else if (Integer.parseInt(addonVersionNumbers[1]) > Integer.parseInt(versionNumbers[1]))
+        else if (Integer.parseInt(modVersionNumbers[2]) > Integer.parseInt(ueVersionNumbers[2]))
         {
-        	throw new RuntimeException("Universal Electricity too old, need at least " + version);
-        }
-        else if (Integer.parseInt(addonVersionNumbers[1]) < Integer.parseInt(versionNumbers[1]))
-        {
-        	throw new RuntimeException("Universal Electricity mod minor version mismatch, need at least " + version);
-        }
-        else if (Integer.parseInt(addonVersionNumbers[2]) != Integer.parseInt(versionNumbers[2]))
-        {
-            System.out.println("UE mod minor version " + version + " mismatch with version " + version);
+            throw new RuntimeException("Universal Electricity too old, expecting at least" + version);
         }
 
         MODS.add(networkmod);

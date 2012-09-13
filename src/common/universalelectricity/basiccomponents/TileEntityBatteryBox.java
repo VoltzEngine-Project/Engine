@@ -25,9 +25,7 @@ import universalelectricity.network.PacketManager;
 import com.google.common.io.ByteArrayDataInput;
 
 public class TileEntityBatteryBox extends TileEntityElectricUnit implements IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
-{
-	public static final int AMP_CAPACITY = 100000;
-	
+{	
 	public float ampStored = 0;
 
     /**
@@ -49,7 +47,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     {
         if (!this.isDisabled())
         {
-            return AMP_CAPACITY - this.ampStored;
+            return this.getMaxWattHours() - this.ampStored;
         }
 
         return 0;
@@ -79,7 +77,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 
         if (!this.isDisabled())
         {
-        	this.ampStored = Math.max(Math.min(this.ampStored+amps, AMP_CAPACITY), 0);
+        	this.ampStored = Math.max(Math.min(this.ampStored+amps, this.getMaxWattHours()), 0);
             
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
             if (this.containingItems[0] != null && this.ampStored > 0)
@@ -93,7 +91,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
             }
 
             //The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
-            if (this.containingItems[1] != null && this.ampStored < AMP_CAPACITY)
+            if (this.containingItems[1] != null && this.ampStored < this.getMaxWattHours())
             {
                 if (this.containingItems[1].getItem() instanceof IItemElectric)
                 {
@@ -109,7 +107,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 
             boolean isFullThisCheck = false;
 
-            if (this.ampStored >= AMP_CAPACITY)
+            if (this.ampStored >= this.getMaxWattHours())
             {
                 isFullThisCheck = true;
             }
@@ -341,6 +339,12 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 	public void setWattHours(float wattHours)
 	{
 		this.ampStored = ElectricInfo.getAmpsFromWattHours(wattHours, this.getVoltage());
+	}
+	
+	@Override
+	public float getMaxWattHours()
+	{
+		return 100000;
 	}
 	
 	@Override
