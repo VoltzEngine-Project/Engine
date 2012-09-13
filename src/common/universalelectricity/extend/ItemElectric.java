@@ -3,6 +3,7 @@ package universalelectricity.extend;
 import java.util.List;
 
 import net.minecraft.src.CreativeTabs;
+import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
@@ -23,7 +24,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
     {
         super(id);
         this.setMaxStackSize(1);
-        this.setMaxDamage((int) getElectricityCapacity());
+        this.setMaxDamage((int)this.getElectricityCapacity());
         this.setNoRepair();
         this.setTabToDisplayOn(tabs);
     }
@@ -41,7 +42,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
     public void addInformation(ItemStack par1ItemStack, List par2List)
     {
         String color = "";
-        float watts = this.getElectricityStored(par1ItemStack);
+        float watts = this.getWattHoursStored(par1ItemStack);
 
         if (watts <= this.getElectricityCapacity() / 3)
         {
@@ -59,14 +60,25 @@ public abstract class ItemElectric extends Item implements IItemElectric
         par2List.add(color + ElectricInfo.getDisplay(ElectricInfo.getWattHours(watts), ElectricUnit.WATT_HOUR) + " - " + Math.round((watts / this.getElectricityCapacity()) * 100) + "%");
     }
 
+    /**
+     * Make sure you super this method!
+     */
     @Override
+    public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5)
+    {
+    	//Makes sure the damage is set correctly for this electric item!
+    	ItemElectric item = ((ItemElectric)par1ItemStack.getItem());
+    	item.setWattHoursStored(par1ItemStack, item.getWattHoursStored(par1ItemStack));
+    }
+    
     /**
      * Makes sure the item is uncharged when it is crafted and not charged.
      * Change this if you do not want this to happen!
      */
+    @Override
     public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
-        par1ItemStack.setItemDamage((int) this.getElectricityCapacity());
+    	par1ItemStack = this.getUnchargedItemStack();
     }
 
     /**
@@ -77,8 +89,8 @@ public abstract class ItemElectric extends Item implements IItemElectric
      */
     public float onReceiveElectricity(float ampHours, ItemStack itemStack)
     {
-        float rejectedElectricity = Math.max((this.getElectricityStored(itemStack) + ampHours) - this.getElectricityCapacity(), 0);
-        this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) + ampHours - rejectedElectricity);
+        float rejectedElectricity = Math.max((this.getWattHoursStored(itemStack) + ampHours) - this.getElectricityCapacity(), 0);
+        this.setWattHoursStored(itemStack, this.getWattHoursStored(itemStack) + ampHours - rejectedElectricity);
         return rejectedElectricity;
     }
 
@@ -90,8 +102,8 @@ public abstract class ItemElectric extends Item implements IItemElectric
      */
     public float onUseElectricity(float ampHours, ItemStack itemStack)
     {
-        float electricityToUse = Math.min(this.getElectricityStored(itemStack), ampHours);
-        this.setElectricityStored(itemStack, this.getElectricityStored(itemStack) - electricityToUse);
+        float electricityToUse = Math.min(this.getWattHoursStored(itemStack), ampHours);
+        this.setWattHoursStored(itemStack, this.getWattHoursStored(itemStack) - electricityToUse);
         return electricityToUse;
     }
 
@@ -116,9 +128,9 @@ public abstract class ItemElectric extends Item implements IItemElectric
     /**
      * This function sets the electriicty. Do not directly call this function.
      * Try to use onReceiveElectricity or onUseElectricity instead.
-     * @param ampHours - The amount of electricity in joules
+     * @param wattHours - The amount of electricity in joules
      */
-    public void setElectricityStored(ItemStack itemStack, float ampHours)
+    public void setWattHoursStored(ItemStack itemStack, float wattHours)
     {
         //Saves the frequency in the itemstack
         if (itemStack.stackTagCompound == null)
@@ -126,7 +138,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
             itemStack.setTagCompound(new NBTTagCompound());
         }
 
-        float electricityStored = Math.max(Math.min(ampHours, this.getElectricityCapacity()), 0);
+        float electricityStored = Math.max(Math.min(wattHours, this.getElectricityCapacity()), 0);
         itemStack.stackTagCompound.setFloat("electricity", electricityStored);
         itemStack.setItemDamage((int)(getElectricityCapacity() - electricityStored));
     }
@@ -135,7 +147,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
      * This function is called to get the electricity stored in this item
      * @return - The amount of electricity stored in watts
      */
-    public float getElectricityStored(ItemStack itemStack)
+    public float getWattHoursStored(ItemStack itemStack)
     {
         if(itemStack.stackTagCompound == null)
         {
@@ -187,7 +199,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
         par3List.add(unchargedItem);
         //Add an electric item to the creative list that is fully charged
         ItemStack chargedItem = new ItemStack(this, 1);
-        this.setElectricityStored(chargedItem, ((IItemElectric)chargedItem.getItem()).getElectricityCapacity());
+        this.setWattHoursStored(chargedItem, ((IItemElectric)chargedItem.getItem()).getElectricityCapacity());
         par3List.add(chargedItem);
     }
 }

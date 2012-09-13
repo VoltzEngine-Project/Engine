@@ -145,8 +145,8 @@ public class BasicComponents
 		OreDictionary.registerOre("ingotBronze", itemBronzeIngot);
 		OreDictionary.registerOre("ingotSteel", itemSteelIngot);
 		
-		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Copper Ore", "oreCopper", new ItemStack(blockOre, 1, 0), 60, 40, 5));
-		OreGenerator.ORES_TO_GENERATE.add(new OreGenData("Tin Ore", "oreTin", new ItemStack(blockOre, 1, 1), 60, 33, 4));
+		OreGenerator.addOre(new OreGenData("Copper Ore", "oreCopper", new ItemStack(blockOre, 1, 0), 60, 50, 5));
+		OreGenerator.removeOre(new OreGenData("Tin Ore", "oreTin", new ItemStack(blockOre, 1, 1), 60, 40, 4));
 		
 		//Recipes
 		//Oil Bucket
@@ -154,7 +154,7 @@ public class BasicComponents
 		//Motor
 		RecipeManager.addRecipe(new ItemStack(itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', blockCopperWire});
 		//Wrench
-		RecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {"! !", "?!?", "?!?", '!', "ingotSteel", '?', Item.leather});
+		RecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {" S ", " SS", "S  ", 'S', "ingotSteel"});
 		//Battery Box
 		RecipeManager.addRecipe(blockBatteryBox, new Object [] {"?!?", "#?#", "?!?", '#', blockCopperWire,'!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getUnchargedItemStack()) });
 		RecipeManager.addSmelting(blockBatteryBox, new ItemStack(itemSteelDust, 6));
@@ -171,7 +171,7 @@ public class BasicComponents
 		//Tin
 		RecipeManager.addSmelting(new ItemStack(blockOre, 1, 1), new ItemStack(itemTinIngot));
 		//Battery
-		RecipeManager.addRecipe(new ItemStack(itemBattery), new Object [] {" ! ", "!#!", "!?!", '!', "ingotTin", '?', Item.redstone, '#', Item.coal});
+		RecipeManager.addRecipe(new ItemStack(itemBattery), new Object [] {" T ", "TRT", "TCT", 'T', "ingotTin", 'R', Item.redstone, 'C', Item.coal});
 		//Steel
 		RecipeManager.addRecipe(new ItemStack(itemSteelDust), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
 		RecipeManager.addSmelting(itemSteelDust, new ItemStack(itemSteelIngot));

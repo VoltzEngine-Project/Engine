@@ -229,6 +229,81 @@ public class RecipeManager
     }
     
     /**
+     * Removes all recipes with the specific output.
+     */
+    public static void removeRecipe(ItemStack output)
+    {    	
+    	for(CraftingRecipe recipe : SHAPED_RECIPES)
+        {
+            if(recipe.output.isItemEqual(output))
+            {
+            	SHAPED_RECIPES.remove(recipe);
+            }
+        }
+    }
+    
+    public static void removeShapelessRecipe(ItemStack output)
+    {    	
+    	for(CraftingRecipe recipe : SHAPELESS_RECIPES)
+        {
+            if(recipe.output.isItemEqual(output))
+            {
+            	SHAPELESS_RECIPES.remove(recipe);
+            }
+        }
+    }
+    
+    public static void removeSmeltingRecipe(ItemStack output)
+    {    	
+    	for(SmeltingRecipe recipe : SMELTING_RECIPES)
+        {
+            if(recipe.output.isItemEqual(output))
+            {
+            	SMELTING_RECIPES.remove(recipe);
+            }
+        }
+    }
+    
+    /**
+     * Removes a specific recipe from the list.
+     */
+    public static void removeRecipe(CraftingRecipe output)
+    {    	
+    	for(CraftingRecipe recipe : SHAPED_RECIPES)
+        {
+            if(recipe.isEqual(output))
+            {
+            	SHAPED_RECIPES.remove(recipe);
+            	return;
+            }
+        }
+    }
+    
+    public static void removeShapelessRecipe(CraftingRecipe output)
+    {    	
+    	for(CraftingRecipe recipe : SHAPELESS_RECIPES)
+        {
+            if(recipe.isEqual(output))
+            {
+            	SHAPELESS_RECIPES.remove(recipe);
+            	return;
+            }
+        }
+    }
+    
+    public static void removeSmeltingRecipe(SmeltingRecipe output)
+    {    	
+    	for(SmeltingRecipe recipe : SMELTING_RECIPES)
+        {
+            if(recipe.isEqual(output))
+            {
+            	SMELTING_RECIPES.remove(recipe);
+            	return;
+            }
+        }
+    }
+    
+    /**
      * Called in post init by {@link #BasicComponenets} to add all recipes. Don't call this function.
      */
     public static void addRecipes()

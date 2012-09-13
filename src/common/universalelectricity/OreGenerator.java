@@ -15,11 +15,26 @@ import cpw.mods.fml.common.IWorldGenerator;
 public class OreGenerator implements IWorldGenerator
 {
 	/**
-	 * Add your ore data to this list of ores for it to automatically generate!
-	 * No hassle indeed!
+	 * Add your ore data to this list of ores for it to automatically generate! No hassle indeed!
 	 */
-	public static final List<OreGenData> ORES_TO_GENERATE = new ArrayList<OreGenData>();
-		
+	private static final List<OreGenData> ORES_TO_GENERATE = new ArrayList<OreGenData>();
+	
+	/**
+	 * Adds an ore to the ore generate list. Do this in pre-init.
+	 */
+	public static void addOre(OreGenData data)
+	{
+		ORES_TO_GENERATE.add(data);
+	}
+	
+	/**
+	 * Removes an ore to the ore generate list. Do this in init.
+	 */
+	public static void removeOre(OreGenData data)
+	{
+		ORES_TO_GENERATE.remove(data);
+	}
+	
 	@Override
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
 	{

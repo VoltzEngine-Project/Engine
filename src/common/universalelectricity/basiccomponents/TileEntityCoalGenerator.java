@@ -21,9 +21,9 @@ import com.google.common.io.ByteArrayDataInput;
 
 public class TileEntityCoalGenerator extends TileEntityElectricUnit implements IInventory, ISidedInventory, IPacketReceiver
 {
-    public static final int MAX_GENERATE_AMPS = 400;
+    public static final int MAX_GENERATE_WATTS = 400;
 
-    public float generateAmps, prevGenerateAmps = 0;
+    public float generateWatts = 0;
 
     public TileEntityConductor connectedElectricUnit = null;
     /**
@@ -61,9 +61,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     public void onUpdate(float watts, float voltage, ForgeDirection side)
     {
         super.onUpdate(watts, voltage, side);
-        
-        this.prevGenerateAmps = this.generateAmps;
-        
+                
         //Check nearby blocks and see if the conductor is full. If so, then it is connected
         TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite());
 
@@ -92,7 +90,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
                 {
                     if (this.itemCookTime <= 0)
                     {
-                        itemCookTime = Math.max(600 - (int)(this.generateAmps*20), 300);
+                        itemCookTime = Math.max(600 - (int)(this.generateWatts*20), 300);
                         this.decrStackSize(0, 1);
                     }
                 }
@@ -105,22 +103,22 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
                 if (this.connectedElectricUnit != null)
                 {
-                    this.generateAmps = (float)Math.min(this.generateAmps + Math.min((this.generateAmps * 0.0005 + 0.001) * this.getTickInterval(), 0.8f), this.MAX_GENERATE_AMPS*20);
+                    this.generateWatts = (float)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.0005 + 0.001) * this.getTickInterval(), 0.8f), this.MAX_GENERATE_WATTS*20);
                 }
             }
-
+            
             if(this.connectedElectricUnit == null || this.itemCookTime <= 0)
             {
-                this.generateAmps = (float)Math.max(this.generateAmps - 0.08, 0);
+                this.generateWatts = (float)Math.max(this.generateWatts - 0.08, 0);
             }
 
-            if(this.generateAmps > 1)
+            if(this.generateWatts > 1)
             {
-                ElectricityManager.instance.produceElectricity(this.connectedElectricUnit, this.generateAmps * this.getTickInterval(), this.getVoltage());
+                ElectricityManager.instance.produceElectricity(this.connectedElectricUnit, this.generateWatts/this.getVoltage() * this.getTickInterval(), this.getVoltage());
             }
         }
         
-        PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 25, this.generateAmps, this.disabledTicks);
+        PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 25, this.generateWatts, this.disabledTicks);
     }
     
     @Override
@@ -128,7 +126,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	{
 		try
         {
-            this.generateAmps = dataStream.readFloat();
+            this.generateWatts = dataStream.readFloat();
             this.disabledTicks = dataStream.readInt();
         }
         catch (Exception e)
@@ -145,7 +143,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     {
         super.readFromNBT(par1NBTTagCompound);
         this.itemCookTime = par1NBTTagCompound.getInteger("itemCookTime");
-        this.generateAmps = par1NBTTagCompound.getFloat("generateRate");
+        this.generateWatts = par1NBTTagCompound.getFloat("generateRate");
         NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.containingItems = new ItemStack[this.getSizeInventory()];
 
@@ -168,7 +166,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     {
         super.writeToNBT(par1NBTTagCompound);
         par1NBTTagCompound.setInteger("itemCookTime", this.itemCookTime);
-        par1NBTTagCompound.setFloat("generateRate", (int)this.generateAmps);
+        par1NBTTagCompound.setFloat("generateRate", (int)this.generateWatts);
         NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.containingItems.length; ++var3)

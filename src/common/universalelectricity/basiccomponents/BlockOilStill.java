@@ -1,8 +1,12 @@
 package universalelectricity.basiccomponents;
 
 import net.minecraft.src.BlockStationary;
+import net.minecraft.src.Entity;
+import net.minecraft.src.EntityLiving;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.Material;
+import net.minecraft.src.Potion;
+import net.minecraft.src.PotionEffect;
 import net.minecraft.src.World;
 import buildcraft.api.liquids.ILiquid;
 /**
@@ -83,10 +87,26 @@ public class BlockOilStill extends BlockStationary implements ILiquid
     {
     	return 0;
     }
-	//TODO fix this so your oil is not so dark
+	
 	@Override
 	public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
     {
+		//TODO fix this so your oil is not so dark
     	return 0x11111110;
+    }
+	
+	/**
+     * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
+     */
+	@Override
+    public void onEntityCollidedWithBlock(World par1World, int x, int y, int z, Entity par5Entity)
+    {
+    	if(par5Entity instanceof EntityLiving)
+    	{
+    		if(par5Entity.isInsideOfMaterial(this.blockMaterial))
+    		{
+		    	((EntityLiving)par5Entity).addPotionEffect(new PotionEffect(Potion.blindness.id, 20, 2));
+    		}
+    	}
     }
 }

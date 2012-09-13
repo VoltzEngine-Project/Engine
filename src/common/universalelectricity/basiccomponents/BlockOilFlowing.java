@@ -4,8 +4,12 @@ import java.util.Random;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockFluid;
+import net.minecraft.src.Entity;
+import net.minecraft.src.EntityLiving;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.Material;
+import net.minecraft.src.Potion;
+import net.minecraft.src.PotionEffect;
 import net.minecraft.src.World;
 import buildcraft.api.liquids.ILiquid;
 /**
@@ -452,4 +456,18 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 		return true;
 	}
 
+	/**
+     * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
+     */
+	@Override
+    public void onEntityCollidedWithBlock(World par1World, int x, int y, int z, Entity par5Entity)
+    {
+    	if(par5Entity instanceof EntityLiving)
+    	{
+    		if(par5Entity.isInsideOfMaterial(this.blockMaterial))
+    		{
+		    	((EntityLiving)par5Entity).addPotionEffect(new PotionEffect(Potion.blindness.id, 20, 2));
+    		}
+    	}
+    }
 }

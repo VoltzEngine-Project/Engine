@@ -18,7 +18,7 @@ public interface IItemElectric
     
     public float getVoltage();
     
-    public void setElectricityStored(ItemStack itemStack, float joules);
+    public void setWattHoursStored(ItemStack itemStack, float wattHours);
     
-    public float getElectricityStored(ItemStack itemStack);
+    public float getWattHoursStored(ItemStack itemStack);
 }

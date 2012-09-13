@@ -41,17 +41,17 @@ public class GUICoalGenerator extends GuiContainer
         {
             displayText = "Not Connected";
         }
-        else if (tileEntity.generateAmps * 20 <= 0)
+        else if (tileEntity.generateWatts * 20 <= 0)
         {
             displayText = "Not Generating";
         }
-        else if (tileEntity.generateAmps * 20 < 20)
+        else if (tileEntity.generateWatts * 20 < 20)
         {
-            displayText = "Hull Heat: " + (int)(tileEntity.generateAmps * 100) + "%";
+            displayText = "Hull Heat: " + (int)(tileEntity.generateWatts * 100) + "%";
         }
         else
         {
-            displayText = ElectricInfo.getDisplay(ElectricInfo.getWatts(tileEntity.generateAmps*20, tileEntity.getVoltage()), ElectricUnit.WATT);
+            displayText = ElectricInfo.getDisplay(tileEntity.generateWatts*20, ElectricUnit.WATT);
         }
 
         this.fontRenderer.drawString(displayText, (int)(103 - displayText.length() * 1.25), 45, 4210752);
