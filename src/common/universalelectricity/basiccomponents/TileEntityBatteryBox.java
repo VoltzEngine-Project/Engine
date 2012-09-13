@@ -12,7 +12,6 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.Vector3;
-import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
 import universalelectricity.extend.IElectricityStorage;
@@ -32,7 +31,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 
     private boolean isFull = false;
     
-    private boolean sendPacketToClients = false;
+    private boolean isGUIOpen = false;
 
     public TileEntityBatteryBox()
     {
@@ -132,7 +131,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
             }
         }
         
-        if(this.sendPacketToClients)
+        if(this.isGUIOpen)
         {
         	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, (int)1, this.wattHourStored, this.disabledTicks);
         }
@@ -147,7 +146,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 			
 			if(ID == -1)
 			{
-				this.sendPacketToClients = dataStream.readBoolean();
+				this.isGUIOpen = dataStream.readBoolean();
 			}
 			else if(ID == 1)
 			{

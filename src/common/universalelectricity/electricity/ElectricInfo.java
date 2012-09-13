@@ -182,8 +182,18 @@ public class ElectricInfo
 	{
 		if(value > 1)
 		{
+			if(significantFigures < 1)
+	    	{
+		    	return (int)value + " " + unit.getPlural();
+	    	}
+			
 	    	return roundDecimals(value, significantFigures) + " " + unit.getPlural();
 		}
+		
+		if(significantFigures < 1)
+    	{
+	    	return (int)value + " " + unit.name;
+    	}
 		
     	return roundDecimals(value, significantFigures) + " " + unit.name;
 	}

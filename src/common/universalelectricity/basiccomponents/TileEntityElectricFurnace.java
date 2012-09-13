@@ -25,7 +25,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     //How many ticks has this item been smelting for?
     public int smeltingTicks = 0;
 
-    public float electricityStored = 0;
+    public float ampsReceived = 0;
 
     //Per Tick
     public final float electricityRequired = 4;
@@ -35,14 +35,14 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     */
     private ItemStack[] containingItems = new ItemStack[3];
     
-    private boolean sendPacketToClients = false;
+    private boolean isGUIOpen = false;
 
     @Override
     public float ampRequest()
     {
         if (!this.isDisabled() && this.canSmelt())
         {
-            return Math.max(0, this.electricityRequired - this.electricityStored);
+            return Math.max(0, this.electricityRequired - this.ampsReceived);
         }
 
         return 0;
@@ -73,14 +73,14 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
                 if (electricItem.canProduceElectricity())
                 {
                     double receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-                    this.electricityStored += receivedElectricity;
+                    this.ampsReceived += receivedElectricity;
                 }
             }
         }
 
-        this.electricityStored += watts;
+        this.ampsReceived += watts;
 
-        if (this.electricityStored >= this.electricityRequired && !this.isDisabled())
+        if (this.ampsReceived >= this.electricityRequired && !this.isDisabled())
         {
             //The left slot contains the item to be smelted
             if (this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
@@ -105,10 +105,13 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
                 this.smeltingTicks = 0;
             }
 
-            this.electricityStored = 0;
+            this.ampsReceived = 0;
         }
         
-        PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, (int)1,this.smeltingTicks, this.disabledTicks);
+        if(this.isGUIOpen)
+        {
+        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, (int)1,this.smeltingTicks, this.disabledTicks);
+        }
     }
     
     @Override
@@ -120,7 +123,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 			
   			if(ID == -1)
 			{
-				this.sendPacketToClients = dataStream.readBoolean();
+				this.isGUIOpen = dataStream.readBoolean();
 			}
 			else if(ID == 1)
 			{
