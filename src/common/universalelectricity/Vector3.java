@@ -1,7 +1,9 @@
 package universalelectricity;
 
+import net.minecraft.src.ChunkCoordinates;
 import net.minecraft.src.Entity;
 import net.minecraft.src.MathHelper;
+import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3;
@@ -68,17 +70,17 @@ public class Vector3 extends Vector2
     /**
      * Converts a TileEntity's position into Vector3
      */
-    public static Vector3 get(Entity entity)
+    public static Vector3 get(Entity par1)
     {
-        return new Vector3(entity.posX, entity.posY, entity.posZ);
+        return new Vector3(par1.posX, par1.posY, par1.posZ);
     }
 
     /**
      * Converts an entity's position into Vector3
      */
-    public static Vector3 get(TileEntity entity)
+    public static Vector3 get(TileEntity par1)
     {
-        return new Vector3(entity.xCoord, entity.yCoord, entity.zCoord);
+        return new Vector3(par1.xCoord, par1.yCoord, par1.zCoord);
     }
 
     /**
@@ -87,6 +89,22 @@ public class Vector3 extends Vector2
     public static Vector3 get(Vec3 par1)
     {
         return new Vector3(par1.xCoord, par1.yCoord, par1.zCoord);
+    }
+    
+    /**
+     * Converts a MovingObjectPosition to Vector3
+     */
+    public static Vector3 get(MovingObjectPosition par1)
+    {
+        return new Vector3(par1.blockX, par1.blockY, par1.blockZ);
+    }
+    
+    /**
+     * Converts a MovingObjectPosition to Vector3
+     */
+    public static Vector3 get(ChunkCoordinates par1)
+    {
+        return new Vector3(par1.posX, par1.posY, par1.posZ);
     }
 
     /**
