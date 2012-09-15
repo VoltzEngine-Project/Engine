@@ -6,15 +6,15 @@ import universalelectricity.extend.IElectricUnit;
 public class ElectricityTransferData
 {
     public IElectricUnit electricUnit;
-    public float watts;
+    public float amps;
     public float voltage;
     public ForgeDirection side;
 
-    public ElectricityTransferData(IElectricUnit electricUnit, ForgeDirection side, float watts, float voltage)
+    public ElectricityTransferData(IElectricUnit electricUnit, ForgeDirection side, float amps, float voltage)
     {
         this.electricUnit = electricUnit;
         this.side = side;
-        this.watts = watts;
+        this.amps = amps;
         this.voltage = voltage;
     }
 }

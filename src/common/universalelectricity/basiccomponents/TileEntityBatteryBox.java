@@ -12,6 +12,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.Vector3;
+import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
 import universalelectricity.extend.IElectricityStorage;
@@ -39,7 +40,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     }
 
     @Override
-    public float ampRequest()
+    public float wattRequest()
     {
         if (!this.isDisabled())
         {
@@ -73,7 +74,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 
         if (!this.isDisabled())
         {
-        	this.setWattHours(this.wattHourStored+(amps*voltage));
+        	this.setWattHours(this.wattHourStored+ElectricInfo.getWattHours(amps, voltage));
             
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
             if (this.containingItems[0] != null && this.wattHourStored > 0)
@@ -82,7 +83,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
                 {
                     IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
                     float rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-                    this.wattHourStored -= electricItem.getTransferRate() - rejectedElectricity;
+                    this.setWattHours(this.wattHourStored - (electricItem.getTransferRate() - rejectedElectricity));
                 }
             }
 
@@ -95,8 +96,8 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 
                     if (electricItem.canProduceElectricity())
                     {
-                        float receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
-                        this.wattHourStored = Math.max(this.wattHourStored + receivedElectricity, 0);
+                        float wattHourReceived = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
+                        this.setWattHours(this.wattHourStored + wattHourReceived);
                     }
                 }
             }
@@ -122,10 +123,10 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
                 {
                     if (tileEntity instanceof TileEntityConductor)
                     {
-                        float electricityNeeded = ElectricityManager.instance.electricityRequired(((TileEntityConductor)tileEntity).connectionID);
-                        float transferAmps = Math.min(this.getVoltage(), Math.min(this.wattHourStored, electricityNeeded));
+                        float wattsNeeded = ElectricityManager.instance.getElectricityRequired(((TileEntityConductor)tileEntity).connectionID);
+                        float transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 10000), 0);                        
                         ElectricityManager.instance.produceElectricity((TileEntityConductor)tileEntity, transferAmps, this.getVoltage());
-                        this.wattHourStored -= transferAmps;
+                        this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
                     }
                 }
             }
@@ -326,13 +327,13 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     }
     
     @Override
-    public float getWattHours()
+    public float getWattHours(Object... data)
     {
     	return this.wattHourStored;
     }
 
 	@Override
-	public void setWattHours(float wattHours)
+	public void setWattHours(float wattHours, Object... data)
 	{
 		this.wattHourStored = Math.max(Math.min(wattHours, this.getMaxWattHours()), 0);
 	}
@@ -340,7 +341,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 	@Override
 	public float getMaxWattHours()
 	{
-		return 100000;
+		return 1000;
 	}
 	
 	@Override

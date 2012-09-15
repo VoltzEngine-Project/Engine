@@ -65,8 +65,8 @@ public class GUIBatteryBox extends GuiContainer
             displayMaxWattHours = "Disabled";
         }
 
-        this.fontRenderer.drawString(displayWattHours + " of", 99 - displayWattHours.length(), 30, 4210752);
-        this.fontRenderer.drawString(displayMaxWattHours, 76, 40, 4210752);
+        this.fontRenderer.drawString(displayWattHours + " of", 98 - displayWattHours.length(), 30, 4210752);
+        this.fontRenderer.drawString(displayMaxWattHours, 83, 40, 4210752);
         this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 90, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }

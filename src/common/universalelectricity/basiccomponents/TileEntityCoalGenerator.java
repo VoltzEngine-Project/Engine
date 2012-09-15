@@ -21,8 +21,16 @@ import com.google.common.io.ByteArrayDataInput;
 
 public class TileEntityCoalGenerator extends TileEntityElectricUnit implements IInventory, ISidedInventory, IPacketReceiver
 {
-    public static final int MAX_GENERATE_WATTS = 300;
+    public static final int MAX_GENERATE_WATTS = 10000;
+    
+    /**
+     * Amount of heat the coal generator needs before generating electricity.
+     */
+    public static final int MIN_GENERATE_WATTS = 100;
 
+    /**
+     * Per second
+     */
     public float generateWatts = 0;
 
     public TileEntityConductor connectedElectricUnit = null;
@@ -67,7 +75,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
         if (tileEntity instanceof TileEntityConductor)
         {
-            if (ElectricityManager.instance.electricityRequired(((TileEntityConductor)tileEntity).connectionID) > 0)
+            if (ElectricityManager.instance.getElectricityRequired(((TileEntityConductor)tileEntity).connectionID) > 0)
             {
                 this.connectedElectricUnit = (TileEntityConductor)tileEntity;
             }
@@ -83,36 +91,35 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
         if (!this.isDisabled())
         {
-            //Coal Geneator
-            if (this.containingItems[0] != null && this.connectedElectricUnit != null)
-            {
-                if (this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)
-                {
-                    if (this.itemCookTime <= 0)
-                    {
-                        itemCookTime = Math.max(600 - (int)(this.generateWatts*20), 300);
-                        this.decrStackSize(0, 1);
-                    }
-                }
-            }
-
-            //Starts generating electricity if the device is heated up
+        	//Starts generating electricity if the device is heated up
             if (this.itemCookTime > 0)
             {
                 this.itemCookTime -= this.getTickInterval();
 
                 if (this.connectedElectricUnit != null)
                 {
-                    this.generateWatts = (float)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.0005 + 0.001) * this.getTickInterval(), 0.8f), this.MAX_GENERATE_WATTS/20);
+                    this.generateWatts = (float)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.5 + 10), 100), this.MAX_GENERATE_WATTS);
                 }
             }
             
-            if(this.connectedElectricUnit == null || this.itemCookTime <= 0)
+            if (this.containingItems[0] != null && this.connectedElectricUnit != null)
             {
-                this.generateWatts = (float)Math.max(this.generateWatts - 0.08, 0);
+                if (this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)
+                {
+                    if (this.itemCookTime <= 0)
+                    {
+                        itemCookTime = 300;
+                        this.decrStackSize(0, 1);
+                    }
+                }
             }
 
-            if(this.generateWatts > 1)
+            if(this.connectedElectricUnit == null || this.itemCookTime <= 0)
+            {
+                this.generateWatts = (float)Math.max(this.generateWatts - 100, 0);
+            }
+
+            if(this.generateWatts > MIN_GENERATE_WATTS)
             {
                 ElectricityManager.instance.produceElectricity(this.connectedElectricUnit, this.generateWatts/this.getVoltage() * this.getTickInterval(), this.getVoltage());
             }
@@ -286,7 +293,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     }
 
     @Override
-    public float ampRequest()
+    public float wattRequest()
     {
         return 0;
     }

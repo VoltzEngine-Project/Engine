@@ -37,24 +37,24 @@ public class GUICoalGenerator extends GuiContainer
         {
             displayText = "Disabled";
         }
-        else if (tileEntity.connectedElectricUnit == null && !tileEntity.func_70314_l().isRemote)
+        else if (this.tileEntity.connectedElectricUnit == null && !tileEntity.func_70314_l().isRemote)
         {
             displayText = "Not Connected";
         }
-        else if (tileEntity.generateWatts * 20 <= 0)
+        else if (this.tileEntity.generateWatts <= 0)
         {
             displayText = "Not Generating";
         }
-        else if (tileEntity.generateWatts * 20 < 20)
+        else if (this.tileEntity.generateWatts < this.tileEntity.MIN_GENERATE_WATTS)
         {
-            displayText = "Hull Heat: " + (int)(tileEntity.generateWatts * 100) + "%";
+            displayText = "Hull Heat: " + (int)(this.tileEntity.generateWatts/this.tileEntity.MIN_GENERATE_WATTS * 100) + "%";
         }
         else
         {
-            displayText = ElectricInfo.getDisplay(tileEntity.generateWatts*20, ElectricUnit.WATT);
+            displayText = ElectricInfo.getDisplay(tileEntity.generateWatts, ElectricUnit.WATT);
         }
 
-        this.fontRenderer.drawString(displayText, (int)(103 - displayText.length() * 1.25), 45, 4210752);
+        this.fontRenderer.drawString(displayText, (int)(100 - displayText.length() * 1.25), 45, 4210752);
         this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 85, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }

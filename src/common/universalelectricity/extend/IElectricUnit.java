@@ -31,12 +31,12 @@ public interface IElectricUnit extends IDisableable
     public void onUpdate(float ampere, float voltage, ForgeDirection side);
 
     /**
-     * How many amps does this electrical unit need per tick?
+     * How many watts does this electrical unit need per tick?
      * Recommend for you to return the max electricity storage of this machine (if there is one).
      *
      * Set this to 0 if your electric unit can not receive electricity.
      */
-    public float ampRequest();
+    public float wattRequest();
 
     /**
      * Can this machine visually connect to a wire on this specific side?
@@ -53,7 +53,7 @@ public interface IElectricUnit extends IDisableable
     public boolean canReceiveFromSide(ForgeDirection side);
 
     /**
-     * Gets the voltage of the electricity consumer. Used in a conductor to find the voltage difference.
+     * Gets the voltage of the electricity consumer. Used in a conductor to find the potential difference.
      * If the voltage is too high, things might explode.
      * @return The amount of volts. E.g 120v or 240v
      */

@@ -28,9 +28,9 @@ public class ItemBattery extends ItemElectric
      * @return - The amount of electricity maximum capacity
      */
     @Override
-    public float getElectricityCapacity()
+    public float getMaxWattHours()
     {
-        return 15000;
+        return 200;
     }
 
     /**
@@ -45,13 +45,13 @@ public class ItemBattery extends ItemElectric
     }
 
     /**
-     * This function is called to get the maximum transfer rate this electric item can recieve per tick
+     * This function is called to get the maximum transfer rate this electric item can receive per tick
      * @return - The amount of electricity maximum capacity
      */
     @Override
     public float getTransferRate()
     {
-        return 100;
+        return 1;
     }
 
     @Override

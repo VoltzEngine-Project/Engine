@@ -201,9 +201,9 @@ public class ElectricityManager
      * @param targetConductor - The tile entity in which the electricity is being produced into
      * @param side - The side in which the electricity is coming in from. 0-5 byte.
      */
-    public void produceElectricity(TileEntityConductor targetConductor, float watts, float voltage)
+    public void produceElectricity(TileEntityConductor targetConductor, float amps, float voltage)
     {
-        if(targetConductor != null && watts > 0 && voltage > 0)
+        if(targetConductor != null && amps > 0 && voltage > 0)
         {
             //Find a path between this conductor and all connected units and try to send the electricity to them directly
             ElectricityConnection connection = this.getConnectionByID(targetConductor.connectionID);
@@ -211,7 +211,7 @@ public class ElectricityManager
             if(connection != null)
             {
                 List<IElectricUnit> allElectricUnitsInLine = connection.getConnectedElectricUnits();
-                float leftOverWatts = watts;
+                float leftOverAmps = amps;
 
                 for (TileEntityConductor conductor : connection.conductors)
                 {
@@ -225,11 +225,11 @@ public class ElectricityManager
                             {
                                 IElectricUnit electricUnit = (IElectricUnit)tileEntity;
 
-                                if (electricUnit.ampRequest() > 0 && electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
+                                if (electricUnit.wattRequest() > 0 && electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                                 {
-                                    float transferWatts = Math.max(0, Math.min(leftOverWatts, Math.min(watts / allElectricUnitsInLine.size(), electricUnit.ampRequest())));
-                                    leftOverWatts -= transferWatts;
-                                    this.electricityTransferQueue.add(new ElectricityTransferData(electricUnit, ForgeDirection.getOrientation(i).getOpposite(), transferWatts, voltage));
+                                    float transferAmps = Math.max(0, Math.min(leftOverAmps, Math.min(amps / allElectricUnitsInLine.size(), ElectricInfo.getAmps(electricUnit.wattRequest(), electricUnit.getVoltage()) )));
+                                    leftOverAmps -= transferAmps;
+                                    this.electricityTransferQueue.add(new ElectricityTransferData(electricUnit, ForgeDirection.getOrientation(i).getOpposite(), transferAmps, voltage));
                                 }
                             }
                         }
@@ -241,9 +241,9 @@ public class ElectricityManager
 
     /**
      * Checks if the current connection line needs electricity
-     * @return - The amount of electricity this connection line needs
+     * @return - The amount of watts this connection line needs
      */
-    public float electricityRequired(int ID)
+    public float getElectricityRequired(int ID)
     {
         ElectricityConnection connection = this.getConnectionByID(ID);
         float need = 0;
@@ -264,7 +264,7 @@ public class ElectricityManager
 
                             if (electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                             {
-                                need += electricUnit.ampRequest();
+                                need += electricUnit.wattRequest();
                             }
                         }
                     }
@@ -323,14 +323,14 @@ public class ElectricityManager
 		                        //If the side is not set for this tick
 		                        if (side == ForgeDirection.UNKNOWN)
 		                        {
-		                            watts = electricityTransferQueue.get(ii).watts;
+		                            watts = electricityTransferQueue.get(ii).amps;
 		                            voltage = electricityTransferQueue.get(ii).voltage;
 		                            side = electricityTransferQueue.get(ii).side;
 		                            electricityTransferQueue.remove(ii);
 		                        }
 		                        else if (electricityTransferQueue.get(ii).side == side)
 		                        {
-		                            watts += electricityTransferQueue.get(ii).watts;
+		                            watts += electricityTransferQueue.get(ii).amps;
 		                            voltage = Math.min(voltage, electricityTransferQueue.get(ii).voltage);
 		                            electricityTransferQueue.remove(ii);
 		                        }

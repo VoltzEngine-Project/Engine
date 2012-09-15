@@ -24,7 +24,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
     {
         super(id);
         this.setMaxStackSize(1);
-        this.setMaxDamage((int)this.getElectricityCapacity());
+        this.setMaxDamage((int)this.getMaxWattHours());
         this.setNoRepair();
         this.setTabToDisplayOn(tabs);
     }
@@ -42,13 +42,13 @@ public abstract class ItemElectric extends Item implements IItemElectric
     public void addInformation(ItemStack par1ItemStack, List par2List)
     {
         String color = "";
-        float watts = this.getWattHoursStored(par1ItemStack);
+        float watts = this.getWattHours(par1ItemStack);
 
-        if (watts <= this.getElectricityCapacity() / 3)
+        if (watts <= this.getMaxWattHours() / 3)
         {
             color = "\u00a74";
         }
-        else if (watts > this.getElectricityCapacity() * 2 / 3)
+        else if (watts > this.getMaxWattHours() * 2 / 3)
         {
             color = "\u00a72";
         }
@@ -57,7 +57,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
             color = "\u00a76";
         }
 
-        par2List.add(color + ElectricInfo.getDisplay(ElectricInfo.getWattHours(watts), ElectricUnit.WATT_HOUR) + " - " + Math.round((watts / this.getElectricityCapacity()) * 100) + "%");
+        par2List.add(color + ElectricInfo.getDisplay(ElectricInfo.getWattHours(watts), ElectricUnit.WATT_HOUR) + " - " + Math.round((watts / this.getMaxWattHours()) * 100) + "%");
     }
 
     /**
@@ -68,7 +68,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
     {
     	//Makes sure the damage is set correctly for this electric item!
     	ItemElectric item = ((ItemElectric)par1ItemStack.getItem());
-    	item.setWattHoursStored(par1ItemStack, item.getWattHoursStored(par1ItemStack));
+    	item.setWattHours(item.getWattHours(par1ItemStack), par1ItemStack);
     }
     
     /**
@@ -83,27 +83,27 @@ public abstract class ItemElectric extends Item implements IItemElectric
 
     /**
      * Called when this item is being "recharged" or receiving electricity.
-     * @param ampHours - The amount of joules this item is receiving.
+     * @param wattHourReceive - The amount of watt hours this item is receiving.
      * @param itemStack - The ItemStack of this item
      * @return Return the rejected electricity from this item
      */
-    public float onReceiveElectricity(float ampHours, ItemStack itemStack)
+    public float onReceiveElectricity(float wattHourReceive, ItemStack itemStack)
     {
-        float rejectedElectricity = Math.max((this.getWattHoursStored(itemStack) + ampHours) - this.getElectricityCapacity(), 0);
-        this.setWattHoursStored(itemStack, this.getWattHoursStored(itemStack) + ampHours - rejectedElectricity);
+        float rejectedElectricity = Math.max((this.getWattHours(itemStack) + wattHourReceive) - this.getMaxWattHours(), 0);
+        this.setWattHours(this.getWattHours(itemStack) + wattHourReceive - rejectedElectricity, itemStack);
         return rejectedElectricity;
     }
 
     /**
      * Called when this item's electricity is being used.
-     * @param ampHours - The amount of electricity requested from this item
+     * @param wattHourRequest - The amount of electricity requested from this item
      * @param itemStack - The ItemStack of this item
      * @return The electricity that is given to the requester
      */
-    public float onUseElectricity(float ampHours, ItemStack itemStack)
+    public float onUseElectricity(float wattHourRequest, ItemStack itemStack)
     {
-        float electricityToUse = Math.min(this.getWattHoursStored(itemStack), ampHours);
-        this.setWattHoursStored(itemStack, this.getWattHoursStored(itemStack) - electricityToUse);
+        float electricityToUse = Math.min(this.getWattHours(itemStack), wattHourRequest);
+        this.setWattHours(this.getWattHours(itemStack) - electricityToUse, itemStack);
         return electricityToUse;
     }
 
@@ -130,40 +130,48 @@ public abstract class ItemElectric extends Item implements IItemElectric
      * Try to use onReceiveElectricity or onUseElectricity instead.
      * @param wattHours - The amount of electricity in joules
      */
-    public void setWattHoursStored(ItemStack itemStack, float wattHours)
+    @Override
+    public void setWattHours(float wattHours, Object... data)
     {
-        //Saves the frequency in the itemstack
-        if (itemStack.stackTagCompound == null)
-        {
-            itemStack.setTagCompound(new NBTTagCompound());
-        }
+    	if(data[0] instanceof ItemStack)
+    	{
+    		ItemStack itemStack = (ItemStack)data[0];
+    		
+    		//Saves the frequency in the itemstack
+            if (itemStack.stackTagCompound == null)
+            {
+                itemStack.setTagCompound(new NBTTagCompound());
+            }
 
-        float electricityStored = Math.max(Math.min(wattHours, this.getElectricityCapacity()), 0);
-        itemStack.stackTagCompound.setFloat("electricity", electricityStored);
-        itemStack.setItemDamage((int)(getElectricityCapacity() - electricityStored));
+            float electricityStored = Math.max(Math.min(wattHours, this.getMaxWattHours()), 0);
+            itemStack.stackTagCompound.setFloat("electricity", electricityStored);
+            itemStack.setItemDamage((int)(getMaxWattHours() - electricityStored));
+    	}
     }
 
     /**
      * This function is called to get the electricity stored in this item
      * @return - The amount of electricity stored in watts
      */
-    public float getWattHoursStored(ItemStack itemStack)
+    @Override
+    public float getWattHours(Object... data)
     {
-        if(itemStack.stackTagCompound == null)
-        {
-            return 0;
-        }
+    	if(data[0] instanceof ItemStack)
+    	{
+    		ItemStack itemStack = (ItemStack)data[0];
 
-        float electricityStored = itemStack.stackTagCompound.getFloat("electricity");
-        itemStack.setItemDamage((int)(getElectricityCapacity() - electricityStored));
-        return electricityStored;
+    		if(itemStack.stackTagCompound == null)
+	        {
+	            return 0;
+	        }
+	
+	        float electricityStored = itemStack.stackTagCompound.getFloat("electricity");
+	        itemStack.setItemDamage((int)(getMaxWattHours() - electricityStored));
+	        return electricityStored;
+    	}
+    	
+    	return -1;
     }
-
-    /**
-     * This function is called to get the electricity maximum capacity in this item
-     * @return - The amount of electricity maximum capacity
-     */
-    public abstract float getElectricityCapacity();
 
     /**
      * This function is called to get the maximum transfer rate this electric item can receive per tick
@@ -186,7 +194,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
     public ItemStack getUnchargedItemStack()
     {
         ItemStack chargedItem = new ItemStack(this);
-        chargedItem.setItemDamage((int) this.getElectricityCapacity());
+        chargedItem.setItemDamage((int) this.getMaxWattHours());
         return chargedItem;
     }
 
@@ -195,11 +203,11 @@ public abstract class ItemElectric extends Item implements IItemElectric
     {
     	//Add an uncharged version of the electric item
         ItemStack unchargedItem = new ItemStack(this, 1);
-        unchargedItem.setItemDamage((int) this.getElectricityCapacity());
+        unchargedItem.setItemDamage((int) this.getMaxWattHours());
         par3List.add(unchargedItem);
         //Add an electric item to the creative list that is fully charged
         ItemStack chargedItem = new ItemStack(this, 1);
-        this.setWattHoursStored(chargedItem, ((IItemElectric)chargedItem.getItem()).getElectricityCapacity());
+        this.setWattHours(((IItemElectric)chargedItem.getItem()).getMaxWattHours(), chargedItem);
         par3List.add(chargedItem);
     }
 }

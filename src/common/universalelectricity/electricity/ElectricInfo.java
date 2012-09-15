@@ -81,7 +81,7 @@ public class ElectricInfo
 	
 	public static float getAmpsFromWattHours(float wattHours, float voltage)
 	{
-		return wattHours/voltage;
+		return getWatts(wattHours)/voltage;
 	}
 	
 	public static float getWattHoursFromAmpHours(float ampHours, float voltage)
@@ -111,7 +111,7 @@ public class ElectricInfo
 	
 	public static float getWattHours(float amps, float voltage)
 	{
-		return getWatts(amps, voltage)/3600;
+		return getWattHours(getWatts(amps, voltage));
 	}
 	
 	public static float getResistance(float amps, float voltage)
@@ -145,12 +145,12 @@ public class ElectricInfo
 	    	return value + " " + unitName;
 		}
 		
-		if(value <= MeasurementUnit.MICRO.process)
+		if(value <= MeasurementUnit.MILLI.process)
 	    {
 	    	return roundDecimals(MeasurementUnit.MICRO.process(value), significantFigures) + " " + MeasurementUnit.MICRO.getName(isShort)+unitName;
 	    }
 		
-		if(value <= MeasurementUnit.MILLI.process)
+		if(value < 1)
 	    {
 	    	return roundDecimals(MeasurementUnit.MILLI.process(value), significantFigures) + " " + MeasurementUnit.MILLI.getName(isShort)+unitName;
 	    }

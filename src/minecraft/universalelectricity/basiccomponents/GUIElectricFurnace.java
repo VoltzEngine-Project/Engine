@@ -66,15 +66,16 @@ public class GUIElectricFurnace extends GuiContainer
         }
         else if (this.tileEntity.smeltingTicks > 0)
         {
-            displayText = "Ready";
+            displayText = "Smelting";
         }
         else
         {
             displayText = "Idle";
         }
 
-        this.fontRenderer.drawString("Status: " + displayText, 90, 48, 4210752);
-        this.fontRenderer.drawString("Voltage: " + ElectricInfo.getDisplayShort(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE), 89, 60, 4210752);
+        this.fontRenderer.drawString("Status: " + displayText, 82, 45, 4210752);
+        this.fontRenderer.drawString("Voltage: " + ElectricInfo.getDisplayShort(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE), 82, 56, 4210752);
+        this.fontRenderer.drawString("Require: " + ElectricInfo.getDisplayShort(this.tileEntity.WATTS_PER_TICK, ElectricUnit.WATT), 82, 68, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
@@ -93,7 +94,7 @@ public class GUIElectricFurnace extends GuiContainer
 
         if (this.tileEntity.smeltingTicks > 0)
         {
-            int scale = (int)(((double)this.tileEntity.smeltingTicks / this.tileEntity.smeltingTimeRequired) * 23);
+            int scale = (int)(((double)this.tileEntity.smeltingTicks / this.tileEntity.SMELTING_TIME_REQUIRED) * 23);
             this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
         }
     }

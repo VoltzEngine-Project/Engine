@@ -10,6 +10,7 @@ import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.TileEntityElectricUnit;
 import universalelectricity.extend.IItemElectric;
 import universalelectricity.network.IPacketReceiver;
@@ -19,17 +20,15 @@ import com.google.common.io.ByteArrayDataInput;
 
 public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IInventory, ISidedInventory,  IPacketReceiver
 {
-    //The amount of ticks requried to smelt this item
-    public final int smeltingTimeRequired = 160;
+	//The amount of watts required by the electric furnace per tick
+    public final float WATTS_PER_TICK = 500;
+
+    //The amount of ticks required to smelt this item
+    public final int SMELTING_TIME_REQUIRED = 160;
 
     //How many ticks has this item been smelting for?
     public int smeltingTicks = 0;
-
-    public float ampsReceived = 0;
-
-    //Per Tick
-    public final float electricityRequired = 4;
-
+    
     /**
     * The ItemStacks that hold the items currently being used in the battery box
     */
@@ -38,11 +37,11 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     private boolean isGUIOpen = false;
 
     @Override
-    public float ampRequest()
+    public float wattRequest()
     {
-        if (!this.isDisabled() && this.canSmelt())
+        if(!this.isDisabled() && this.canSmelt())
         {
-            return Math.max(0, this.electricityRequired - this.ampsReceived);
+            return this.WATTS_PER_TICK/this.getTickInterval();
         }
 
         return 0;
@@ -54,15 +53,17 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     }
 
     @Override
-    public void onUpdate(float watts, float voltage, ForgeDirection side)
+    public void onUpdate(float amps, float voltage, ForgeDirection side)
     {
-        super.onUpdate(watts, voltage, side);
+        super.onUpdate(amps, voltage, side);
 
         if (voltage > this.getVoltage())
         {
             this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
         }
-
+        
+        float wattsReceived = ElectricInfo.getWatts(amps, voltage);
+                
         //The bottom slot is for portable batteries
         if (this.containingItems[0] != null)
         {
@@ -72,20 +73,18 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 
                 if (electricItem.canProduceElectricity())
                 {
-                    double receivedElectricity = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-                    this.ampsReceived += receivedElectricity;
+                    float receivedWattHours = electricItem.onUseElectricity(Math.min(electricItem.getTransferRate(), ElectricInfo.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
+                    wattsReceived += ElectricInfo.getWatts(receivedWattHours);
                 }
             }
         }
-
-        this.ampsReceived += watts;
-
-        if (this.ampsReceived >= this.electricityRequired && !this.isDisabled())
+        
+        if(wattsReceived >= this.WATTS_PER_TICK && !this.isDisabled())
         {
             //The left slot contains the item to be smelted
             if (this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
             {
-                this.smeltingTicks = this.smeltingTimeRequired;
+                this.smeltingTicks = this.SMELTING_TIME_REQUIRED;
             }
 
             //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
@@ -104,8 +103,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             {
                 this.smeltingTicks = 0;
             }
-
-            this.ampsReceived = 0;
         }
         
         if(this.isGUIOpen)
@@ -361,6 +358,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             return 3;
     	}
     	
-        return 0;
+        return -1;
     }
 }
