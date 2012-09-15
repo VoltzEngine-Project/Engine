@@ -108,7 +108,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
                 {
                     if (this.itemCookTime <= 0)
                     {
-                        itemCookTime = 300;
+                        itemCookTime = 280;
                         this.decrStackSize(0, 1);
                     }
                 }
@@ -116,7 +116,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
             if(this.connectedElectricUnit == null || this.itemCookTime <= 0)
             {
-                this.generateWatts = (float)Math.max(this.generateWatts - 100, 0);
+                this.generateWatts = (float)Math.max(this.generateWatts - 150, 0);
             }
 
             if(this.generateWatts > MIN_GENERATE_WATTS)
