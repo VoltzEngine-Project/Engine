@@ -6,7 +6,8 @@ import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-import universalelectricity.OreGenData;
+import universalelectricity.OreGenBase;
+import universalelectricity.OreGenReplaceStone;
 import universalelectricity.OreGenerator;
 import universalelectricity.UniversalElectricity;
 import universalelectricity.network.PacketManager;
@@ -75,6 +76,9 @@ public class BasicComponents
     public static final Item itemMotor = new ItemBC("Motor", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", ITEM_ID_PREFIX+12), 10);
     public static final Item itemOilBucket = new ItemOilBucket("Oil Bucket", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Oil Bucket", ITEM_ID_PREFIX+13), 4);
     
+    
+    public static final OreGenBase copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(blockOre, 1, 0), 0, 60, 50, 5);
+    public static final OreGenBase tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(blockOre, 1, 1), 0, 60, 40, 4);
     
     @PreInit
 	public void preInit(FMLPreInitializationEvent event)
@@ -145,8 +149,11 @@ public class BasicComponents
 		OreDictionary.registerOre("ingotBronze", itemBronzeIngot);
 		OreDictionary.registerOre("ingotSteel", itemSteelIngot);
 		
-		OreGenerator.addOre(new OreGenData("Copper Ore", "oreCopper", new ItemStack(blockOre, 1, 0), 60, 50, 5));
-		OreGenerator.removeOre(new OreGenData("Tin Ore", "oreTin", new ItemStack(blockOre, 1, 1), 60, 40, 4));
+		OreGenerator.addOre(copperOreGeneration); //add all ores
+		OreGenerator.addOre(tinOreGeneration);
+		
+		copperOreGeneration.enable(); // only enable copper
+		//tinOreGeneration.enable(); // tin will not generate
 		
 		//Recipes
 		//Oil Bucket
