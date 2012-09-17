@@ -1,7 +1,12 @@
 package universalelectricity;
 
+import java.util.Random;
+
 import net.minecraft.src.Block;
+import net.minecraft.src.IChunkProvider;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.MathHelper;
+import net.minecraft.src.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
@@ -13,19 +18,11 @@ import net.minecraftforge.oredict.OreDictionary;
  * @author Calclavia
  *
  */
-public class OreGenData
+public abstract class OreGenBase
 {
     public String name;
 
     public String oreDictionaryName;
-
-    public int minGenerateLevel;
-
-    public int maxGenerateLevel;
-
-    public int amountPerChunk;
-
-    public int amountPerBranch;
 
     public boolean shouldGenerate;
 
@@ -33,12 +30,10 @@ public class OreGenData
     
     public ItemStack oreStack;
     
-    public boolean generateSurface = true;
+    public int oreID; // for performance reasons
     
-    public boolean generateNether = false;
+    public int oreMeta; // for performance reasons
     
-    public boolean generateEnd = false;
-
     /**
      * What harvest level does this machine need to be acquired?
      */
@@ -57,29 +52,26 @@ public class OreGenData
      * @param amountPerChunk - The amount of ores to generate per chunk
      * @param amountPerBranch - The amount of ores to generate in a clutter. E.g coal generates with a lot of other coal next to it. How much do you want?
      */
-    public OreGenData(String name, String oreDiectionaryName, ItemStack stack, int minGenerateLevel, int maxGenerateLevel, int amountPerChunk, int amountPerBranch, String harvestTool, int harvestLevel)
+    public OreGenBase(String name, String oreDiectionaryName, ItemStack stack, String harvestTool, int harvestLevel)
     {
         this.name = name;
-        this.minGenerateLevel = minGenerateLevel;
-        this.maxGenerateLevel = maxGenerateLevel;
-        this.amountPerChunk = amountPerChunk;
-        this.amountPerBranch = amountPerBranch;
-        this.shouldGenerate = shouldGenerateOre(name);
+        this.shouldGenerate = false;
         this.harvestTool = harvestTool;
         this.harvestLevel = harvestLevel;
         this.oreDictionaryName = oreDiectionaryName;
         this.oreStack = stack;
+        this.oreID = stack.itemID;
+        this.oreMeta = stack.getItemDamage();
         
 		OreDictionary.registerOre(oreDictionaryName, stack);
 		MinecraftForge.setBlockHarvestLevel(Block.blocksList[stack.itemID], stack.getItemDamage(), harvestTool, harvestLevel);
     }
 
-    //A simplified version of the constructor
-    public OreGenData(String name, String oreDiectionaryName, ItemStack stack, int maxGenerateLevel, int amountPerChunk, int amountPerBranch)
-    {
-        this(name, oreDiectionaryName, stack, 0, maxGenerateLevel, amountPerChunk, amountPerBranch, "pickaxe", 1);
+    public OreGenBase enable(){
+        this.shouldGenerate = shouldGenerateOre(name);
+        return this;
     }
-
+    
     //You may inherit from this class and change this function if you want a custom texture render for your ore.
     public int getBlockTextureFromSide(int side)
     {
@@ -94,4 +86,8 @@ public class OreGenData
         UniversalElectricity.CONFIGURATION.save();
         return shouldGenerate;
     }
+	
+    public abstract void generate(World world, Random random, int varX, int varZ);
+
+	public abstract boolean isOreGeneratedInWorld(World world, IChunkProvider chunkGenerator);
 }

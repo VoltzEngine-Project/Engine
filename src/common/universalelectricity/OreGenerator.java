@@ -17,12 +17,12 @@ public class OreGenerator implements IWorldGenerator
 	/**
 	 * Add your ore data to this list of ores for it to automatically generate! No hassle indeed!
 	 */
-	private static final List<OreGenData> ORES_TO_GENERATE = new ArrayList<OreGenData>();
+	private static final List<OreGenBase> ORES_TO_GENERATE = new ArrayList<OreGenBase>();
 	
 	/**
 	 * Adds an ore to the ore generate list. Do this in pre-init.
 	 */
-	public static void addOre(OreGenData data)
+	public static void addOre(OreGenBase data)
 	{
 		ORES_TO_GENERATE.add(data);
 	}
@@ -30,7 +30,7 @@ public class OreGenerator implements IWorldGenerator
 	/**
 	 * Removes an ore to the ore generate list. Do this in init.
 	 */
-	public static void removeOre(OreGenData data)
+	public static void removeOre(OreGenBase data)
 	{
 		ORES_TO_GENERATE.remove(data);
 	}
@@ -42,26 +42,11 @@ public class OreGenerator implements IWorldGenerator
 		chunkZ = chunkZ << 4;
 		
 		//Checks to make sure this is the normal world 
-		for(OreGenData oreData : ORES_TO_GENERATE)
+		for(OreGenBase oreData : ORES_TO_GENERATE)
         {
-            if(oreData.shouldGenerate && 
-            	((oreData.generateSurface && chunkGenerator instanceof ChunkProviderGenerate) ||
-            	(oreData.generateNether && chunkGenerator instanceof ChunkProviderHell) ||
-            	(oreData.generateEnd && chunkGenerator instanceof ChunkProviderEnd)
-            	))
+            if(oreData.shouldGenerate && oreData.isOreGeneratedInWorld(world, chunkGenerator))
             {
-            	WorldGenMinable worldGenMinable = new WorldGenMinable(oreData.oreStack.itemID, oreData.oreStack.getItemDamage(), oreData.amountPerBranch);
-
-                for (int i = 0; i < oreData.amountPerChunk; i++)
-                {
-                    int x = chunkX + rand.nextInt(16);
-                    int y = rand.nextInt(oreData.maxGenerateLevel) + oreData.minGenerateLevel;
-                    int z = chunkZ + rand.nextInt(16);
-                    
-        			int randAmount = rand.nextInt(8);
-
-                	worldGenMinable.generate(world, rand, x, y, z);
-                }
+            	oreData.generate(world, rand, chunkX, chunkZ);
             }
      
         }
