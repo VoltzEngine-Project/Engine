@@ -201,7 +201,7 @@ public class ElectricityManager
      * @param targetConductor - The tile entity in which the electricity is being produced into
      * @param side - The side in which the electricity is coming in from. 0-5 byte.
      */
-    public void produceElectricity(TileEntityConductor targetConductor, float amps, float voltage)
+    public void produceElectricity(TileEntityConductor targetConductor, double amps, double voltage)
     {
         if(targetConductor != null && amps > 0 && voltage > 0)
         {
@@ -211,7 +211,7 @@ public class ElectricityManager
             if(connection != null)
             {
                 List<IElectricUnit> allElectricUnitsInLine = connection.getConnectedElectricUnits();
-                float leftOverAmps = amps;
+                double leftOverAmps = amps;
 
                 for (TileEntityConductor conductor : connection.conductors)
                 {
@@ -227,7 +227,7 @@ public class ElectricityManager
 
                                 if (electricUnit.wattRequest() > 0 && electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                                 {
-                                    float transferAmps = Math.max(0, Math.min(leftOverAmps, Math.min(amps / allElectricUnitsInLine.size(), ElectricInfo.getAmps(electricUnit.wattRequest(), electricUnit.getVoltage()) )));
+                                    double transferAmps = Math.max(0, Math.min(leftOverAmps, Math.min(amps / allElectricUnitsInLine.size(), ElectricInfo.getAmps(electricUnit.wattRequest(), electricUnit.getVoltage()) )));
                                     leftOverAmps -= transferAmps;
                                     this.electricityTransferQueue.add(new ElectricityTransferData(electricUnit, ForgeDirection.getOrientation(i).getOpposite(), transferAmps, voltage));
                                 }
@@ -243,10 +243,10 @@ public class ElectricityManager
      * Checks if the current connection line needs electricity
      * @return - The amount of watts this connection line needs
      */
-    public float getElectricityRequired(int ID)
+    public double getElectricityRequired(int ID)
     {
         ElectricityConnection connection = this.getConnectionByID(ID);
-        float need = 0;
+        double need = 0;
 
         if (connection != null)
         {
@@ -311,8 +311,8 @@ public class ElectricityManager
 	            {
 		            if(inGameTicks % electricUnit.getTickInterval() == 0)
 		            {
-		                float watts = 0;
-		                float voltage = 0;
+		                double watts = 0;
+		                double voltage = 0;
 		                ForgeDirection side = ForgeDirection.UNKNOWN;
 		
 		                //Try to stack all electricity from one side into one update

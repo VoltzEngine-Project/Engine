@@ -69,57 +69,57 @@ public class ElectricInfo
 		}
 	}
 	
-	public static float getAmps(float watts, float voltage)
+	public static double getAmps(double watts, double voltage)
 	{
 		return watts/voltage;
 	}
 	
-	public static float getAmps(float ampHours)
+	public static double getAmps(double ampHours)
 	{
 		return ampHours*3600;
 	}
 	
-	public static float getAmpsFromWattHours(float wattHours, float voltage)
+	public static double getAmpsFromWattHours(double wattHours, double voltage)
 	{
 		return getWatts(wattHours)/voltage;
 	}
 	
-	public static float getWattHoursFromAmpHours(float ampHours, float voltage)
+	public static double getWattHoursFromAmpHours(double ampHours, double voltage)
 	{
 		return ampHours*voltage;
 	}
 	
-	public static float getAmpHours(float amps)
+	public static double getAmpHours(double amps)
 	{
 		return amps/3600;
 	}
 	
-	public static float getWatts(float amps, float voltage)
+	public static double getWatts(double amps, double voltage)
 	{
 		return amps*voltage;
 	}
 	
-	public static float getWatts(float wattHours)
+	public static double getWatts(double wattHours)
 	{
 		return wattHours*3600;
 	}
 	
-	public static float getWattHours(float watts)
+	public static double getWattHours(double watts)
 	{
 		return watts/3600;
 	}
 	
-	public static float getWattHours(float amps, float voltage)
+	public static double getWattHours(double amps, double voltage)
 	{
 		return getWattHours(getWatts(amps, voltage));
 	}
 	
-	public static float getResistance(float amps, float voltage)
+	public static double getResistance(double amps, double voltage)
 	{
 		return voltage/amps;
 	}
 	
-	public static float getConductance(float amps, float voltage)
+	public static double getConductance(double amps, double voltage)
 	{
 		return amps/voltage;
 	}
@@ -127,7 +127,7 @@ public class ElectricInfo
 	/**
 	 * Displays the unit as text. Works only for positive numbers.
 	 */
-	public static String getDisplay(float value, ElectricUnit unit, int significantFigures, boolean isShort)
+	public static String getDisplay(double value, ElectricUnit unit, int significantFigures, boolean isShort)
 	{
 		String unitName = unit.name;
 		
@@ -168,17 +168,17 @@ public class ElectricInfo
     	return roundDecimals(value, significantFigures) + " " + unitName;
 	}
 	
-	public static String getDisplayShort(float value, ElectricUnit unit)
+	public static String getDisplayShort(double value, ElectricUnit unit)
 	{
 		return getDisplay(value, unit, 2, true);
 	}
 	
-	public static String getDisplay(float value, ElectricUnit unit)
+	public static String getDisplay(double value, ElectricUnit unit)
 	{
 		return getDisplay(value, unit, 2, false);
 	}
 	
-	public static String getDisplaySimple(float value, ElectricUnit unit, int significantFigures)
+	public static String getDisplaySimple(double value, ElectricUnit unit, int significantFigures)
 	{
 		if(value > 1)
 		{

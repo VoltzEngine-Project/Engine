@@ -4,6 +4,7 @@ import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.NBTTagFloat;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
@@ -31,7 +32,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     /**
      * Per second
      */
-    public float generateWatts = 0;
+    public double generateWatts = 0;
 
     public TileEntityConductor connectedElectricUnit = null;
     /**
@@ -66,7 +67,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     }
 
     @Override
-    public void onUpdate(float watts, float voltage, ForgeDirection side)
+    public void onUpdate(double watts, double voltage, ForgeDirection side)
     {
         super.onUpdate(watts, voltage, side);
                 
@@ -98,7 +99,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
                 if (this.connectedElectricUnit != null)
                 {
-                    this.generateWatts = (float)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.5 + 10), 100), this.MAX_GENERATE_WATTS);
+                    this.generateWatts = (double)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.5 + 10), 100), this.MAX_GENERATE_WATTS);
                 }
             }
             
@@ -116,7 +117,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
             if(this.connectedElectricUnit == null || this.itemCookTime <= 0)
             {
-                this.generateWatts = (float)Math.max(this.generateWatts - 150, 0);
+                this.generateWatts = (double)Math.max(this.generateWatts - 150, 0);
             }
 
             if(this.generateWatts > MIN_GENERATE_WATTS)
@@ -133,7 +134,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 	{
 		try
         {
-            this.generateWatts = dataStream.readFloat();
+            this.generateWatts = dataStream.readDouble();
             this.disabledTicks = dataStream.readInt();
         }
         catch (Exception e)
@@ -150,7 +151,12 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     {
         super.readFromNBT(par1NBTTagCompound);
         this.itemCookTime = par1NBTTagCompound.getInteger("itemCookTime");
-        this.generateWatts = par1NBTTagCompound.getFloat("generateRate");
+
+        if (par1NBTTagCompound.getTag("generateRate") instanceof NBTTagFloat){
+        	this.generateWatts = par1NBTTagCompound.getFloat("generateRate");
+        }else{
+            this.generateWatts = par1NBTTagCompound.getDouble("generateRate");
+        }
         NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.containingItems = new ItemStack[this.getSizeInventory()];
 
@@ -173,7 +179,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     {
         super.writeToNBT(par1NBTTagCompound);
         par1NBTTagCompound.setInteger("itemCookTime", this.itemCookTime);
-        par1NBTTagCompound.setFloat("generateRate", (int)this.generateWatts);
+        par1NBTTagCompound.setDouble("generateRate", (int)this.generateWatts);
         NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.containingItems.length; ++var3)
@@ -287,13 +293,13 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     public void closeChest() { }
 
     @Override
-    public float getVoltage()
+    public double getVoltage()
     {
         return 120;
     }
 
     @Override
-    public float wattRequest()
+    public double wattRequest()
     {
         return 0;
     }

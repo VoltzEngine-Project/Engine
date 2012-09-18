@@ -35,7 +35,7 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
      * Called every tick. Super this!
      */
     @Override
-    public void onUpdate(float ampere, float voltage, ForgeDirection side)
+    public void onUpdate(double ampere, double voltage, ForgeDirection side)
     {
         if (this.disabledTicks > 0)
         {
@@ -51,7 +51,7 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
     }
 
     @Override
-    public float getVoltage()
+    public double getVoltage()
     {
         return 120;
     }

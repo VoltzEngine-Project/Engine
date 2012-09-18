@@ -28,7 +28,7 @@ public class ItemBattery extends ItemElectric
      * @return - The amount of electricity maximum capacity
      */
     @Override
-    public float getMaxWattHours()
+    public double getMaxWattHours()
     {
         return 200;
     }
@@ -49,7 +49,7 @@ public class ItemBattery extends ItemElectric
      * @return - The amount of electricity maximum capacity
      */
     @Override
-    public float getTransferRate()
+    public double getTransferRate()
     {
         return 1;
     }
@@ -61,7 +61,7 @@ public class ItemBattery extends ItemElectric
     }
 
     @Override
-    public float getVoltage()
+    public double getVoltage()
     {
         return 20;
     }
