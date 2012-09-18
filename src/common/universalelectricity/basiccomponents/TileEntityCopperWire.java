@@ -11,7 +11,7 @@ public class TileEntityCopperWire extends TileEntityConductor
     }
 
 	@Override
-	public double getVoltage()
+	public double getMaxVoltage()
 	{
 		return 500;
 	}

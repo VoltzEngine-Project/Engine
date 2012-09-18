@@ -1,11 +1,13 @@
 package universalelectricity.extend;
 
+import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.basiccomponents.BasicComponents;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
@@ -18,7 +20,7 @@ import com.google.common.io.ByteArrayDataInput;
  * @author Calclavia
  *
  */
-public abstract class TileEntityConductor extends TileEntity implements IPacketReceiver
+public abstract class TileEntityConductor extends TileEntity
 {
     public int connectionID = 0;
 
@@ -63,7 +65,7 @@ public abstract class TileEntityConductor extends TileEntity implements IPacketR
         
         if(!this.worldObj.isRemote)
         {
-        	PacketManager.sendTileEntityPacket(this, "BasicComponents", 1);
+        	this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, 0, 0);
         }
     }
 
@@ -85,27 +87,18 @@ public abstract class TileEntityConductor extends TileEntity implements IPacketR
         
         if(!this.worldObj.isRemote)
         {
-        	PacketManager.sendTileEntityPacket(this, "BasicComponents", 1);
+        	this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, 0, 0);
         }
     }
     
     @Override
-	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
-	{
-		try
-        {
-            int ID = dataStream.readInt();
-            
-            if(ID == 1)
-            {
-                this.refreshConnectedBlocks();
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-	}
+    public void receiveClientEvent(int key, int value)
+    {
+    	if(this.worldObj.isRemote)
+    	{
+    		this.refreshConnectedBlocks();
+    	}
+    }
 
     /**
      * Determines if this TileEntity requires update calls.
@@ -142,10 +135,20 @@ public abstract class TileEntityConductor extends TileEntity implements IPacketR
      * The maximum amount of voltage this conductor can handle before exploding
      * @return The amount of voltage in volts
      */
-    public abstract double getVoltage();
+    public abstract double getMaxVoltage();
     
     public World getWorld()
     {
     	return this.worldObj;
+    }
+    
+    public Block getBlockType()
+    {
+        if (this.blockType == null)
+        {
+            this.blockType = Block.blocksList[this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord)];
+        }
+
+        return this.blockType;
     }
 }

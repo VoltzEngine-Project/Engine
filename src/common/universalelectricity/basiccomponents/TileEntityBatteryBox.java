@@ -33,7 +33,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 
     private boolean isFull = false;
     
-    private boolean isGUIOpen = false;
+	private int playersUsing = 0;
 
     public TileEntityBatteryBox()
     {
@@ -73,7 +73,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
             this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
         }
 
-        if (!this.isDisabled())
+        if(!this.isDisabled())
         {
         	this.setWattHours(this.wattHourStored+ElectricInfo.getWattHours(amps, voltage));
             
@@ -133,9 +133,12 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
             }
         }
         
-        if(this.isGUIOpen)
+        if(!this.worldObj.isRemote)
         {
-        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, (int)1, this.wattHourStored, this.disabledTicks);
+	        if(ElectricityManager.instance.inGameTicks % 20 == 0 && this.playersUsing > 0)
+	        {
+	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+	        }
         }
     }
     
@@ -144,24 +147,27 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 	{
 		try
         {
-			int ID = dataStream.readInt();
-			
-			if(ID == -1)
-			{
-				this.isGUIOpen = dataStream.readBoolean();
-			}
-			else if(ID == 1)
-			{
-	            this.wattHourStored = dataStream.readDouble();
-	            this.disabledTicks = dataStream.readInt();
-			}
-			
+			this.wattHourStored = dataStream.readDouble();
+	        this.disabledTicks = dataStream.readInt();
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
 	}
+    
+    @Override
+    public void openChest()
+    {
+    	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+    	this.playersUsing  ++;
+    }
+    
+    @Override
+    public void closeChest()
+    {
+    	this.playersUsing --;
+    }
 
     /**
      * Reads a tile entity from NBT.
@@ -316,11 +322,7 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
     {
         return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
     }
-    @Override
-    public void openChest() { }
-    @Override
-    public void closeChest() { }
-
+    
     @Override
     public boolean isPoweringTo(byte side)
     {
@@ -354,11 +356,6 @@ public class TileEntityBatteryBox extends TileEntityElectricUnit implements IEle
 	@Override
     public int getTickInterval()
     {
-    	if(!this.worldObj.isRemote)
-    	{
-            return 1;
-    	}
-    	
-        return 0;
+    	return 1;
     }
 }

@@ -1,5 +1,6 @@
 package universalelectricity.extend;
 
+import net.minecraft.src.EntityPlayer;
 import net.minecraftforge.common.ForgeDirection;
 
 
@@ -70,4 +71,9 @@ public interface IElectricUnit extends IDisableable
      * @return - The tick intervals. Returns 0 if you wish it to not tick at all.
      */
     public int getTickInterval();
+    
+    /**
+     * Called when a player logs into a server. Works also in single player.
+     */
+    public void onPlayerLoggedIn(EntityPlayer player);
 }

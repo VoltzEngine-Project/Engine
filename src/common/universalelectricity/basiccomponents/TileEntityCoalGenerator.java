@@ -22,6 +22,9 @@ import com.google.common.io.ByteArrayDataInput;
 
 public class TileEntityCoalGenerator extends TileEntityElectricUnit implements IInventory, ISidedInventory, IPacketReceiver
 {
+	/**
+	 * Maximum amount of energy needed to generate electricity
+	 */
     public static final int MAX_GENERATE_WATTS = 10000;
     
     /**
@@ -29,10 +32,12 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
      */
     public static final int MIN_GENERATE_WATTS = 100;
 
+	private static final int BASE_ACCELERATION = 10;
+
     /**
      * Per second
      */
-    public double generateWatts = 0;
+    public double prevGenerateWatts, generateWatts = 0;
 
     public TileEntityConductor connectedElectricUnit = null;
     /**
@@ -43,6 +48,10 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     * The ItemStacks that hold the items currently being used in the battery box
     */
     private ItemStack[] containingItems = new ItemStack[1];
+
+	private int playersUsing = 0;
+
+	private boolean sendUpdate = true;
 	
     public TileEntityCoalGenerator()
     {
@@ -70,6 +79,8 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     public void onUpdate(double watts, double voltage, ForgeDirection side)
     {
         super.onUpdate(watts, voltage, side);
+        
+        this.prevGenerateWatts = this.generateWatts;
                 
         //Check nearby blocks and see if the conductor is full. If so, then it is connected
         TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite());
@@ -99,7 +110,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
 
                 if (this.connectedElectricUnit != null)
                 {
-                    this.generateWatts = (double)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.5 + 10), 100), this.MAX_GENERATE_WATTS);
+                    this.generateWatts = (double)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.5 + BASE_ACCELERATION), 100), this.MAX_GENERATE_WATTS);
                 }
             }
             
@@ -126,7 +137,15 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
             }
         }
 
-        PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 25, this.generateWatts, this.disabledTicks);
+        if(ElectricityManager.instance.inGameTicks % 20/this.getTickInterval() == 0 && this.playersUsing > 0)
+        {
+        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
+        }
+        else if(this.sendUpdate || (this.prevGenerateWatts != this.generateWatts && this.generateWatts <= BASE_ACCELERATION*2))
+        {
+        	this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, BasicComponents.blockCoalGenerator.blockID, 1, (int)this.generateWatts);
+        	this.sendUpdate = false;
+        }
     }
     
     @Override
@@ -142,6 +161,34 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
             e.printStackTrace();
         }
 	}
+    
+    @Override
+    public void receiveClientEvent(int key, int value)
+    {
+    	if(this.worldObj.isRemote)
+    	{
+    		this.generateWatts = value;
+    	}
+    }
+    
+    @Override
+    public void onPlayerLoggedIn(EntityPlayer player)
+    {
+    	this.sendUpdate = true;
+    }
+    
+    @Override
+    public void openChest()
+    {
+    	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
+    	this.playersUsing ++;
+    }
+    
+    @Override
+    public void closeChest()
+    {
+    	this.playersUsing --;
+    }
 
     /**
      * Reads a tile entity from NBT.
@@ -287,10 +334,6 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     {
         return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
     }
-    @Override
-    public void openChest() { }
-    @Override
-    public void closeChest() { }
 
     @Override
     public double getVoltage()
@@ -312,6 +355,6 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
             return 20;
     	}
     	
-        return 0;
+        return -1;
     }
 }

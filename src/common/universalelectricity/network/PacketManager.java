@@ -268,7 +268,6 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 						if(tileEntity instanceof IPacketReceiver)
 						{
 							((IPacketReceiver)tileEntity).handlePacketData(network, packet, ((EntityPlayer)player), data);
-							
 						}
 					}
 				}

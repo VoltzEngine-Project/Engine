@@ -145,7 +145,7 @@ public class UniversalElectricity implements IConnectionHandler
 	@Override
 	public void playerLoggedIn(Player player, NetHandler netHandler, NetworkManager manager)
 	{
-		
+		ElectricityManager.instance.onPlayerLoggedIn((EntityPlayer)player);
 	}
 
 	@Override
@@ -176,5 +176,6 @@ public class UniversalElectricity implements IConnectionHandler
 	public void clientLoggedIn(NetHandler clientHandler, NetworkManager manager, Packet1Login login)
 	{
     	ElectricityManager.instance.reset(null);
+    	
 	}
 }

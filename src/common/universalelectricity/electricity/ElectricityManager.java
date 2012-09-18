@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -21,39 +22,7 @@ import cpw.mods.fml.common.TickType;
  */
 public class ElectricityManager
 {
-	/*
-    public static final List<ElectricityManager> instances = new ArrayList<ElectricityManager>();
-    
-    /**
-     * Gets an electricity manager instance.
-     * @param worldObj
-     * @return The Electricity Manager for this world. Will never return null.
-     *
-    public static ElectricityManager get(World worldObj)
-    {
-    	if(worldObj == null)
-    	{
-    		System.out.println("World cannot be null when getting an electricity manager!");
-    		return null;
-    	}
-    	
-    	for(ElectricityManager manager : instances)
-    	{
-    		if(manager.worldObj == worldObj)
-    		{
-    			return manager;
-    		}
-    	}
-    	
-    	ElectricityManager newManager = new ElectricityManager(worldObj);
-    	instances.add(newManager);
-		return newManager;
-    }
-    */
-	
 	public static ElectricityManager instance;
-
-	public World worldObj;
 	
     private List<IElectricUnit> electricUnits = new ArrayList<IElectricUnit>();
     private List<TileEntityConductor> electricConductors = new ArrayList<TileEntityConductor>();
@@ -66,14 +35,13 @@ public class ElectricityManager
     
     public int refreshConductors;
     
-    public ElectricityManager(World worldObj)
+    public ElectricityManager()
     {
-    	this.reset(worldObj);
+    	this.reset();
     }
     
-    public void reset(World worldObj)
+    public void reset()
     {
-    	this.worldObj = worldObj;
     	this.refreshConductors = 20*10;
     }
 
@@ -276,6 +244,27 @@ public class ElectricityManager
     }
     
     /**
+     * Calls all the machine tileEntities's onPLayerLoggedIn function.
+     */
+    public void onPlayerLoggedIn(EntityPlayer player)
+	{
+		try
+		{
+			for(int i = 0; i < electricUnits.size(); i++)
+	        {
+				if(electricUnits.get(i) != null)
+				{
+					electricUnits.get(i).onPlayerLoggedIn(player);
+				}
+	        }
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+    
+    /**
      * This function is called to refresh all conductors in UE
      */
     public void refreshConductors()
@@ -285,6 +274,7 @@ public class ElectricityManager
         	TileEntityConductor conductor  = this.electricConductors.get(j);
             conductor.refreshConnectedBlocks();
         }
+
     }
 
 	public void tickStart(EnumSet<TickType> type, Object... tickData)

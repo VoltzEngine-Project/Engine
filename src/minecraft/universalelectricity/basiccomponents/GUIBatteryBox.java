@@ -18,36 +18,10 @@ public class GUIBatteryBox extends GuiContainer
     private int containerWidth;
     private int containerHeight;
     
-    private long GUITicks = 0;
-
     public GUIBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBatteryBox batteryBox)
     {
         super(new ContainerBatteryBox(par1InventoryPlayer, batteryBox));
         this.tileEntity = batteryBox;
-    }
-    
-    public void initGui()
-    {
-    	super.initGui();
-    	PacketManager.sendTileEntityPacketToServer(this.tileEntity, "BasicComponents", (int)-1, true);
-    }
-    
-    @Override
-    public void onGuiClosed()
-    {
-    	super.onGuiClosed();
-    	PacketManager.sendTileEntityPacketToServer(this.tileEntity, "BasicComponents", (int)-1, false);
-    }
-    
-    public void updateScreen()
-    {
-    	super.updateScreen();
-    	
-    	if(GUITicks % 100 == 0)
-    	{
-    		PacketManager.sendTileEntityPacketToServer(this.tileEntity, "BasicComponents", (int)-1, true);
-    	}
-    	GUITicks ++;
     }
 
     /**

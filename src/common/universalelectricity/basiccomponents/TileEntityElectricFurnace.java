@@ -11,6 +11,7 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityElectricUnit;
 import universalelectricity.extend.IItemElectric;
 import universalelectricity.network.IPacketReceiver;
@@ -36,7 +37,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     */
     private ItemStack[] containingItems = new ItemStack[3];
     
-    private boolean isGUIOpen = false;
+	private int playersUsing = 0;
 
     @Override
     public double wattRequest()
@@ -109,9 +110,9 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
             this.wattsReceived = 0;
         }
         
-        if(this.isGUIOpen)
+        if(ElectricityManager.instance.inGameTicks % (int)(20/this.getTickInterval()) == 0 && this.playersUsing > 0)
         {
-        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, (int)1,this.smeltingTicks, this.disabledTicks);
+        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.smeltingTicks, this.disabledTicks);
         }
     }
     
@@ -120,17 +121,8 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 	{
 		try
         {
-  			int ID = dataStream.readInt();
-			
-  			if(ID == -1)
-			{
-				this.isGUIOpen = dataStream.readBoolean();
-			}
-			else if(ID == 1)
-			{
-				this.smeltingTicks = dataStream.readInt();
-	            this.disabledTicks = dataStream.readInt();
-			}
+  			this.smeltingTicks = dataStream.readInt();
+	        this.disabledTicks = dataStream.readInt();
         }
         catch (Exception e)
         {
@@ -138,6 +130,20 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
         }
 	}
 
+    @Override
+    public void openChest()
+    {
+    	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.smeltingTicks, this.disabledTicks);
+    	this.playersUsing  ++;
+    }
+    
+    @Override
+    public void closeChest()
+    {
+    	this.playersUsing  --;
+    }
+
+    
     //Check all conditions and see if we can start smelting
     public boolean canSmelt()
     {
@@ -343,12 +349,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     }
 
     @Override
-    public void openChest() { }
-
-    @Override
-    public void closeChest() { }
-
-    @Override
     public double getVoltage()
     {
         return 120;
@@ -359,9 +359,9 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     {
     	if(!this.worldObj.isRemote)
     	{
-            return 3;
+    		return 3;
     	}
     	
-        return -1;
+    	return -1;
     }
 }

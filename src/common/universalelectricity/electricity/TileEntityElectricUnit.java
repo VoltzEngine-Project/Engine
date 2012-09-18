@@ -1,6 +1,7 @@
 package universalelectricity.electricity;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.extend.IElectricUnit;
@@ -17,6 +18,12 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
     public TileEntityElectricUnit()
     {
         ElectricityManager.instance.registerElectricUnit(this);
+    }
+    
+    @Override
+    public void onPlayerLoggedIn(EntityPlayer player)
+    {
+    	
     }
 
     @Override
