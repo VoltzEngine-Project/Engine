@@ -32,7 +32,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
      */
     public static final int MIN_GENERATE_WATTS = 100;
 
-	private static final int BASE_ACCELERATION = 10;
+	private static final int BASE_ACCELERATION = 5;
 
     /**
      * Per second
@@ -146,6 +146,8 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
         	this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, BasicComponents.blockCoalGenerator.blockID, 1, (int)this.generateWatts);
         	this.sendUpdate = false;
         }
+        
+        
     }
     
     @Override

@@ -74,7 +74,7 @@ public class UniversalElectricity implements IConnectionHandler
    		GameRegistry.registerWorldGenerator(new OreGenerator());
    		MinecraftForge.EVENT_BUS.register(this.instance);
    		
-		ElectricityManager.instance = new ElectricityManager(null);
+		ElectricityManager.instance = new ElectricityManager();
     }
     
     @PostInit
@@ -88,20 +88,20 @@ public class UniversalElectricity implements IConnectionHandler
     {
     	if(event.entity instanceof EntityPlayer)
     	{
-        	ElectricityManager.instance.reset(event.entity.worldObj);
+        	ElectricityManager.instance.reset();
     	}
     }
 
     @ForgeSubscribe
 	public void onWorldLoad(Load event)
 	{
-    	ElectricityManager.instance.reset(event.world);
+    	ElectricityManager.instance.reset();
 	}
     
     @ForgeSubscribe
 	public void onWorldSave(Save event)
 	{
-    	ElectricityManager.instance.reset(event.world);
+    	ElectricityManager.instance.reset();
 	}
     
     /**
@@ -175,7 +175,7 @@ public class UniversalElectricity implements IConnectionHandler
 	@Override
 	public void clientLoggedIn(NetHandler clientHandler, NetworkManager manager, Packet1Login login)
 	{
-    	ElectricityManager.instance.reset(null);
+    	ElectricityManager.instance.reset();
     	
 	}
 }
