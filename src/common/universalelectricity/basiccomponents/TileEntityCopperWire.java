@@ -5,13 +5,13 @@ import universalelectricity.extend.TileEntityConductor;
 public class TileEntityCopperWire extends TileEntityConductor
 {
     @Override
-    public float getResistance()
+    public double getResistance()
     {
-        return 0.3f;
+        return 0.3;
     }
 
 	@Override
-	public float getVoltage()
+	public double getVoltage()
 	{
 		return 500;
 	}

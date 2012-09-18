@@ -4,15 +4,15 @@ import net.minecraft.src.ItemStack;
 
 public interface IItemElectric extends IElectricityStorage
 {
-    public float onReceiveElectricity(float wattHourReceive, ItemStack itemStack);
+    public double onReceiveElectricity(double wattHourReceive, ItemStack itemStack);
     
-    public float onUseElectricity(float wattHourRequest, ItemStack itemStack);
+    public double onUseElectricity(double wattHourRequest, ItemStack itemStack);
     
     public boolean canReceiveElectricity();
     
     public boolean canProduceElectricity();
     
-    public float getTransferRate();
+    public double getTransferRate();
     
-    public float getVoltage();
+    public double getVoltage();
 }

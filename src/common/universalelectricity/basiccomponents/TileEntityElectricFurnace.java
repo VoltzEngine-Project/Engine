@@ -21,7 +21,7 @@ import com.google.common.io.ByteArrayDataInput;
 public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IInventory, ISidedInventory,  IPacketReceiver
 {
 	//The amount of watts required by the electric furnace per tick
-    public final float WATTS_PER_TICK = 300;
+    public final double WATTS_PER_TICK = 300;
 
     //The amount of ticks required to smelt this item
     public final int SMELTING_TIME_REQUIRED = 150;
@@ -29,7 +29,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     //How many ticks has this item been smelting for?
     public int smeltingTicks = 0;
     
-    public float wattsReceived = 0;
+    public double wattsReceived = 0;
     
     /**
     * The ItemStacks that hold the items currently being used in the battery box
@@ -39,7 +39,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     private boolean isGUIOpen = false;
 
     @Override
-    public float wattRequest()
+    public double wattRequest()
     {
         if(!this.isDisabled() && this.canSmelt())
         {
@@ -55,7 +55,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     }
 
     @Override
-    public void onUpdate(float amps, float voltage, ForgeDirection side)
+    public void onUpdate(double amps, double voltage, ForgeDirection side)
     {
         super.onUpdate(amps, voltage, side);
 
@@ -75,7 +75,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
 
                 if (electricItem.canProduceElectricity())
                 {
-                    float receivedWattHours = electricItem.onUseElectricity(Math.min(electricItem.getTransferRate(), ElectricInfo.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
+                    double receivedWattHours = electricItem.onUseElectricity(Math.min(electricItem.getTransferRate(), ElectricInfo.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
                     this.wattsReceived += ElectricInfo.getWatts(receivedWattHours);
                 }
             }
@@ -349,9 +349,9 @@ public class TileEntityElectricFurnace extends TileEntityElectricUnit implements
     public void closeChest() { }
 
     @Override
-    public float getVoltage()
+    public double getVoltage()
     {
-        return 120F;
+        return 120;
     }
 
     @Override

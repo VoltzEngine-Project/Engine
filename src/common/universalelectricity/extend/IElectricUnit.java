@@ -28,7 +28,7 @@ public interface IElectricUnit extends IDisableable
      *
      * @param side - The side of the block in which the electricity is coming from.
      */
-    public void onUpdate(float ampere, float voltage, ForgeDirection side);
+    public void onUpdate(double ampere, double voltage, ForgeDirection side);
 
     /**
      * How many watts does this electrical unit need per tick?
@@ -36,7 +36,7 @@ public interface IElectricUnit extends IDisableable
      *
      * Set this to 0 if your electric unit can not receive electricity.
      */
-    public float wattRequest();
+    public double wattRequest();
 
     /**
      * Can this machine visually connect to a wire on this specific side?
@@ -57,7 +57,7 @@ public interface IElectricUnit extends IDisableable
      * If the voltage is too high, things might explode.
      * @return The amount of volts. E.g 120v or 240v
      */
-    public float getVoltage();
+    public double getVoltage();
 
     /**
      * How many world ticks there should be before this tile entity gets ticked?
