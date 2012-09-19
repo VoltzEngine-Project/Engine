@@ -47,6 +47,16 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
         this.disableStats();
         this.setBlockName("oilMoving");
 	}
+	
+	public void onNeighborBlockChange(World par1World, int x, int y, int z, int blockID)
+    {
+        super.onNeighborBlockChange(par1World, x, y, z, blockID);
+
+        if (par1World.getBlockId(x, y, z) == Block.fire.blockID)
+        {
+        	par1World.setBlockWithNotify(x, y, z, Block.fire.blockID);
+        }
+    }
     
     /**
      * Updates the flow for the BlockFlowing object.

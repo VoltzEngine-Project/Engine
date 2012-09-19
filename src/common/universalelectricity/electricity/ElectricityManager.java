@@ -37,10 +37,10 @@ public class ElectricityManager
     
     public ElectricityManager()
     {
-    	this.reset();
+    	this.timedConductorRefresh();
     }
     
-    public void reset()
+    public void timedConductorRefresh()
     {
     	this.refreshConductors = 20*10;
     }

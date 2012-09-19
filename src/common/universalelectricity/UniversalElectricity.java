@@ -88,20 +88,20 @@ public class UniversalElectricity implements IConnectionHandler
     {
     	if(event.entity instanceof EntityPlayer)
     	{
-        	ElectricityManager.instance.reset();
+        	ElectricityManager.instance.timedConductorRefresh();
     	}
     }
 
     @ForgeSubscribe
 	public void onWorldLoad(Load event)
 	{
-    	ElectricityManager.instance.reset();
+    	ElectricityManager.instance.timedConductorRefresh();
 	}
     
     @ForgeSubscribe
 	public void onWorldSave(Save event)
 	{
-    	ElectricityManager.instance.reset();
+    	ElectricityManager.instance.timedConductorRefresh();
 	}
     
     /**
@@ -175,7 +175,7 @@ public class UniversalElectricity implements IConnectionHandler
 	@Override
 	public void clientLoggedIn(NetHandler clientHandler, NetworkManager manager, Packet1Login login)
 	{
-    	ElectricityManager.instance.reset();
+    	ElectricityManager.instance.timedConductorRefresh();
     	
 	}
 }

@@ -1,5 +1,6 @@
 package universalelectricity.basiccomponents;
 
+import net.minecraft.src.Block;
 import net.minecraft.src.BlockStationary;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityLiving;
@@ -33,13 +34,17 @@ public class BlockOilStill extends BlockStationary implements ILiquid
      * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
      * their own) Args: x, y, z, neighbor blockID
      */
-    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5)
+    public void onNeighborBlockChange(World par1World, int x, int y, int z, int blockID)
     {
-        super.onNeighborBlockChange(par1World, par2, par3, par4, par5);
+        super.onNeighborBlockChange(par1World, x, y, z, blockID);
 
-        if (par1World.getBlockId(par2, par3, par4) == this.blockID)
+        if (par1World.getBlockId(x, y, z) == this.blockID)
         {
-            this.setNotStationary(par1World, par2, par3, par4);
+            this.setNotStationary(par1World, x, y, z);
+        }
+        else if (par1World.getBlockId(x, y, z) == Block.fire.blockID)
+        {
+        	par1World.setBlockWithNotify(x, y, z, Block.fire.blockID);
         }
     }
 

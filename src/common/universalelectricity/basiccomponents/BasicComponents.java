@@ -1,6 +1,8 @@
 package universalelectricity.basiccomponents;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.ForgeVersion;
@@ -15,6 +17,7 @@ import universalelectricity.recipe.RecipeManager;
 import buildcraft.api.liquids.LiquidData;
 import buildcraft.api.liquids.LiquidManager;
 import buildcraft.api.liquids.LiquidStack;
+import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.PreInit;
@@ -35,7 +38,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 @Mod(modid = "BasicComponents", name = "Basic Components", version = BasicComponents.VERSION, dependencies = "before:*")
 @NetworkMod(channels = { "BasicComponents" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 
-public class BasicComponents
+public class BasicComponents implements ICraftingHandler
 {
     protected static final String VERSION = "0.8.1";
 
@@ -114,6 +117,7 @@ public class BasicComponents
 		GameRegistry.registerBlock(blockElectricFurnace);
 		GameRegistry.registerBlock(oilMoving);
 		GameRegistry.registerBlock(oilStill);
+		GameRegistry.registerCraftingHandler(this);
 		
 		proxy.preInit();
     }
@@ -194,4 +198,29 @@ public class BasicComponents
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', itemCircuit});
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(itemCircuit, 1, 1), '#', Block.blockLapis});
     }
+
+	@Override
+	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix)
+	{System.out.println("CALLED");
+		if(item.itemID == itemOilBucket.shiftedIndex)
+		{
+			for(int i = 0; i < craftMatrix.getSizeInventory(); i++)
+			{
+				if(craftMatrix.getStackInSlot(i) != null)
+				{
+					if(craftMatrix.getStackInSlot(i).itemID == Item.bucketWater.shiftedIndex)
+					{
+						craftMatrix.setInventorySlotContents(i, null);
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onSmelting(EntityPlayer player, ItemStack item)
+	{
+
+	}
 }
