@@ -2,6 +2,8 @@ package universalelectricity.basiccomponents;
 
 import java.util.Random;
 
+import universalelectricity.Vector3;
+
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockFluid;
 import net.minecraft.src.Entity;
@@ -11,6 +13,7 @@ import net.minecraft.src.Material;
 import net.minecraft.src.Potion;
 import net.minecraft.src.PotionEffect;
 import net.minecraft.src.World;
+import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.liquids.ILiquid;
 /**
  * @author Cammygames
@@ -48,13 +51,43 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
         this.setBlockName("oilMoving");
 	}
 	
+	@Override
+	public void onBlockAdded(World par1World, int x, int y, int z)
+    {
+    	super.onBlockAdded(par1World, x, y, z);
+    	
+    	for(byte i = 0; i < 6; i++)
+        {
+    		Vector3 neighborPosition = new Vector3(x, y, z);
+    		neighborPosition.modifyPositionFromSide(ForgeDirection.getOrientation(i));
+    		
+    		int neighborBlockID = par1World.getBlockId(neighborPosition.intX(), neighborPosition.intY(), neighborPosition.intZ());
+    		
+    		if(neighborBlockID == Block.fire.blockID || neighborBlockID == Block.lavaMoving.blockID || neighborBlockID ==  Block.lavaStill.blockID)
+            {
+    			par1World.setBlockWithNotify(x, y, z, Block.fire.blockID);
+    			par1World.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), "random.fizz", 0.5F, 2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
+            	par1World.spawnParticle("largesmoke", (double)x + Math.random(), (double)y + 1.2D, (double)z + Math.random(), 0.0D, 0.0D, 0.0D);
+    			return;
+            }
+        }
+    	
+    	if (par1World.getBlockId(x, y, z) == this.blockID)
+        {
+            par1World.scheduleBlockUpdate(x, y, z, this.blockID, this.tickRate());
+        }
+    }
+	
+	@Override
 	public void onNeighborBlockChange(World par1World, int x, int y, int z, int blockID)
     {
         super.onNeighborBlockChange(par1World, x, y, z, blockID);
 
-        if (par1World.getBlockId(x, y, z) == Block.fire.blockID)
+        if(blockID == Block.fire.blockID || blockID == Block.lavaMoving.blockID || blockID ==  Block.lavaStill.blockID)
         {
         	par1World.setBlockWithNotify(x, y, z, Block.fire.blockID);
+        	par1World.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), "random.fizz", 0.5F, 2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
+        	par1World.spawnParticle("largesmoke", (double)x + Math.random(), (double)y + 1.2D, (double)z + Math.random(), 0.0D, 0.0D, 0.0D);
         }
     }
     
@@ -427,19 +460,6 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
     {
         Material var5 = par1World.getBlockMaterial(par2, par3, par4);
         return var5 == this.blockMaterial ? false : (var5 == Material.lava ? false : !this.blockBlocksFlow(par1World, par2, par3, par4));
-    }
-
-    /**
-     * Called whenever the block is added into the world. Args: world, x, y, z
-     */
-    public void onBlockAdded(World par1World, int par2, int par3, int par4)
-    {
-        super.onBlockAdded(par1World, par2, par3, par4);
-
-        if (par1World.getBlockId(par2, par3, par4) == this.blockID)
-        {
-            par1World.scheduleBlockUpdate(par2, par3, par4, this.blockID, this.tickRate());
-        }
     }
     
 	@Override

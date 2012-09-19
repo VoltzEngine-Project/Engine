@@ -1,5 +1,7 @@
 package universalelectricity.basiccomponents;
 
+import universalelectricity.Vector3;
+import universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockStationary;
 import net.minecraft.src.Entity;
@@ -8,7 +10,9 @@ import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.Material;
 import net.minecraft.src.Potion;
 import net.minecraft.src.PotionEffect;
+import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.liquids.ILiquid;
 /**
  * 
@@ -19,8 +23,7 @@ import buildcraft.api.liquids.ILiquid;
  */
 public class BlockOilStill extends BlockStationary implements ILiquid
 {
-
-	protected BlockOilStill(int id)
+	public BlockOilStill(int id)
 	{
 		super(id, Material.water);
 		this.setHardness(80F);
@@ -30,21 +33,46 @@ public class BlockOilStill extends BlockStationary implements ILiquid
         this.setBlockName("oilStill");
 	}
 	
+	@Override
+    public void onBlockAdded(World par1World, int x, int y, int z)
+    {
+    	super.onBlockAdded(par1World, x, y, z);
+    	
+    	for(byte i = 0; i < 6; i++)
+        {
+    		Vector3 neighborPosition = new Vector3(x, y, z);
+    		neighborPosition.modifyPositionFromSide(ForgeDirection.getOrientation(i));
+    		
+    		int neighborBlockID = par1World.getBlockId(neighborPosition.intX(), neighborPosition.intY(), neighborPosition.intZ());
+    		
+    		if(neighborBlockID == Block.fire.blockID || neighborBlockID == Block.lavaMoving.blockID || neighborBlockID ==  Block.lavaStill.blockID)
+            {
+    			par1World.setBlockWithNotify(x, y, z, Block.fire.blockID);
+    			par1World.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), "random.fizz", 0.5F, 2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
+            	par1World.spawnParticle("largesmoke", (double)x + Math.random(), (double)y + 1.2D, (double)z + Math.random(), 0.0D, 0.0D, 0.0D);
+    			return;
+            }
+        }
+    }
+	
     /**
      * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
      * their own) Args: x, y, z, neighbor blockID
      */
-    public void onNeighborBlockChange(World par1World, int x, int y, int z, int blockID)
+	@Override
+    public void onNeighborBlockChange(World par1World, int x, int y, int z, int neighborBlockID)
     {
-        super.onNeighborBlockChange(par1World, x, y, z, blockID);
+        super.onNeighborBlockChange(par1World, x, y, z, neighborBlockID);
 
         if (par1World.getBlockId(x, y, z) == this.blockID)
         {
             this.setNotStationary(par1World, x, y, z);
         }
-        else if (par1World.getBlockId(x, y, z) == Block.fire.blockID)
+        else if(neighborBlockID == Block.fire.blockID || neighborBlockID == Block.lavaMoving.blockID || neighborBlockID ==  Block.lavaStill.blockID)
         {
         	par1World.setBlockWithNotify(x, y, z, Block.fire.blockID);
+        	par1World.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), "random.fizz", 0.5F, 2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
+        	par1World.spawnParticle("largesmoke", (double)x + Math.random(), (double)y + 1.2D, (double)z + Math.random(), 0.0D, 0.0D, 0.0D);
         }
     }
 
