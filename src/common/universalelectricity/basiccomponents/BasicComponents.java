@@ -76,9 +76,11 @@ public class BasicComponents implements ICraftingHandler
     public static final Item itemBronzeDust = new ItemBC("Bronze Dust", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Dust", ITEM_ID_PREFIX+9), 6);
     public static final Item itemSteelPlate = new ItemBC("Steel Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", ITEM_ID_PREFIX+10), 9);
     public static final Item itemBronzePlate = new ItemBC("Bronze Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Plate", ITEM_ID_PREFIX+11), 8);
-    public static final Item itemMotor = new ItemBC("Motor", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", ITEM_ID_PREFIX+12), 10);
+    public static final Item itemMotor = new ItemBC("Motor", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", ITEM_ID_PREFIX+12), 12);
     public static final Item itemOilBucket = new ItemOilBucket("Oil Bucket", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Oil Bucket", ITEM_ID_PREFIX+13), 4);
-    
+    public static final Item itemCopperPlate = new ItemBC("Copper Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Plate", ITEM_ID_PREFIX+14), 10);
+    public static final Item itemTinPlate = new ItemBC("Tin Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Plate", ITEM_ID_PREFIX+15), 11);
+
     
     public static final OreGenBase copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(blockOre, 1, 0), 0, 60, 50, 5);
     public static final OreGenBase tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(blockOre, 1, 1), 0, 60, 40, 4);
