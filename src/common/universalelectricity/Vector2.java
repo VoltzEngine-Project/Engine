@@ -11,7 +11,7 @@ import net.minecraft.src.MathHelper;
  * @author Calclavia
  */
 
-public class Vector2
+public class Vector2 implements Cloneable
 {
     public double x;
     public double y;
@@ -46,7 +46,8 @@ public class Vector2
     /**
      * Makes a new copy of this Vector. Prevents variable referencing problems.
      */
-    public Vector2 copy()
+    @Override
+    public Vector2 clone()
     {
     	return new Vector2(this.x, this.y);
     }

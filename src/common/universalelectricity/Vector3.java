@@ -18,7 +18,7 @@ import universalelectricity.extend.TileEntityConductor;
  * @author Calclavia
  */
 
-public class Vector3 extends Vector2
+public class Vector3 extends Vector2 implements Cloneable
 {
     public double z;
 
@@ -62,7 +62,8 @@ public class Vector3 extends Vector2
     /**
      * Makes a new copy of this Vector. Prevents variable referencing problems.
      */
-    public Vector3 copy()
+    @Override
+    public Vector3 clone()
     {
     	return new Vector3(this.x, this.y, this.z);
     }
@@ -130,7 +131,7 @@ public class Vector3 extends Vector2
     {
         return (point.x > minPoint.x && point.x < maxPoint.x) && (point.y > minPoint.y && point.y < maxPoint.y) && (point.z > minPoint.z && point.z < maxPoint.z);
     }
-
+    
     /**
      * Compares two vectors and see if they are equal. True if so.
      */

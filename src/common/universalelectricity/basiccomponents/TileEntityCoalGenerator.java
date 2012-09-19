@@ -200,12 +200,7 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     {
         super.readFromNBT(par1NBTTagCompound);
         this.itemCookTime = par1NBTTagCompound.getInteger("itemCookTime");
-
-        if (par1NBTTagCompound.getTag("generateRate") instanceof NBTTagFloat){
-        	this.generateWatts = par1NBTTagCompound.getFloat("generateRate");
-        }else{
-            this.generateWatts = par1NBTTagCompound.getDouble("generateRate");
-        }
+        this.generateWatts = par1NBTTagCompound.getDouble("generateRate");
         NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.containingItems = new ItemStack[this.getSizeInventory()];
 
@@ -228,7 +223,7 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     {
         super.writeToNBT(par1NBTTagCompound);
         par1NBTTagCompound.setInteger("itemCookTime", this.itemCookTime);
-        par1NBTTagCompound.setDouble("generateRate", (int)this.generateWatts);
+        par1NBTTagCompound.setDouble("generateRate", this.generateWatts);
         NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.containingItems.length; ++var3)
@@ -352,11 +347,11 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     @Override
     public int getTickInterval()
     {
-    	if(!this.worldObj.isRemote && this.worldObj.getChunkProvider().chunkExists(this.xCoord >> 4, this.zCoord >> 4))
+    	if(!this.worldObj.isRemote)
     	{
             return 20;
     	}
-    	if(!this.worldObj.isRemote)System.out.println("NOT UPDATED!");
+    	
         return -1;
     }
 }

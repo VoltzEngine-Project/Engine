@@ -176,12 +176,7 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
     public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readFromNBT(par1NBTTagCompound);
-        
-        if (par1NBTTagCompound.getTag("electricityStored") instanceof NBTTagFloat){
-        	this.wattHourStored = par1NBTTagCompound.getFloat("electricityStored");
-        }else{
-            this.wattHourStored = par1NBTTagCompound.getDouble("electricityStored");
-        }
+        this.wattHourStored = par1NBTTagCompound.getDouble("electricityStored");
         
         NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.containingItems = new ItemStack[this.getSizeInventory()];
