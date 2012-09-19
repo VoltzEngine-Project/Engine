@@ -13,14 +13,14 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.electricity.TileEntityElectricUnit;
+import universalelectricity.electricity.TileEntityMachine;
 import universalelectricity.extend.TileEntityConductor;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityCoalGenerator extends TileEntityElectricUnit implements IInventory, ISidedInventory, IPacketReceiver
+public class TileEntityCoalGenerator extends TileEntityMachine implements IInventory, ISidedInventory, IPacketReceiver
 {
 	/**
 	 * Maximum amount of energy needed to generate electricity
@@ -352,11 +352,11 @@ public class TileEntityCoalGenerator extends TileEntityElectricUnit implements I
     @Override
     public int getTickInterval()
     {
-    	if(!this.worldObj.isRemote)
+    	if(!this.worldObj.isRemote && this.worldObj.getChunkProvider().chunkExists(this.xCoord >> 4, this.zCoord >> 4))
     	{
             return 20;
     	}
-    	
+    	if(!this.worldObj.isRemote)System.out.println("NOT UPDATED!");
         return -1;
     }
 }

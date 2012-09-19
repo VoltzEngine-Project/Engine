@@ -4,23 +4,44 @@ import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.extend.IElectricUnit;
+import universalelectricity.extend.IMachine;
 
 /**
- * An easier way to implement the methods with default values set.
+ * An easier way to implement the methods from IMachine with default values set.
  * @author Calclavia
- *
  */
-public abstract class TileEntityElectricUnit extends TileEntity implements IElectricUnit
+public abstract class TileEntityMachine extends TileEntity implements IMachine
 {
     protected int disabledTicks = 0;
 
-    public TileEntityElectricUnit()
+    public TileEntityMachine()
     {
         ElectricityManager.instance.registerElectricUnit(this);
     }
     
+    /**
+     * Called every tick. Super this!
+     */
     @Override
+    public void onUpdate(double ampere, double voltage, ForgeDirection side)
+    {
+        if (this.disabledTicks > 0)
+        {
+            this.disabledTicks -= this.getTickInterval();
+            this.whileDisable(ampere, voltage, side);
+            return;
+        }
+    }
+    
+    /**
+     * Called every tick while this tile entity is disabled.
+     */
+    protected void whileDisable(double ampere, double voltage, ForgeDirection side)
+    {
+		
+	}
+
+	@Override
     public void onPlayerLoggedIn(EntityPlayer player)
     {
     	
@@ -36,19 +57,6 @@ public abstract class TileEntityElectricUnit extends TileEntity implements IElec
     public boolean isDisabled()
     {
         return this.disabledTicks > 0;
-    }
-
-    /**
-     * Called every tick. Super this!
-     */
-    @Override
-    public void onUpdate(double ampere, double voltage, ForgeDirection side)
-    {
-        if (this.disabledTicks > 0)
-        {
-            this.disabledTicks -= this.getTickInterval();
-            return;
-        }
     }
 
     @Override

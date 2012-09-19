@@ -9,7 +9,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.extend.IElectricUnit;
+import universalelectricity.extend.IMachine;
 import universalelectricity.extend.TileEntityConductor;
 
 /**
@@ -298,9 +298,9 @@ public class Vector3 extends Vector2
 	        return tileEntity;
 	    }
 	
-	    if (tileEntity instanceof IElectricUnit)
+	    if (tileEntity instanceof IMachine)
 	    {
-	        if (((IElectricUnit)tileEntity).canConnect(getOrientationFromSide(side, ForgeDirection.NORTH)))
+	        if (((IMachine)tileEntity).canConnect(getOrientationFromSide(side, ForgeDirection.NORTH)))
 	        {
 	            return tileEntity;
 	        }

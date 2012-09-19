@@ -41,7 +41,7 @@ public abstract class TileEntityConductor extends TileEntity
      */
     public void updateConnection(TileEntity tileEntity, ForgeDirection side)
     {
-        if (tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricUnit)
+        if (tileEntity instanceof TileEntityConductor || tileEntity instanceof IMachine)
         {
             this.connectedBlocks[side.ordinal()] = tileEntity;
 
@@ -71,7 +71,7 @@ public abstract class TileEntityConductor extends TileEntity
 
     public void updateConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
     {
-        if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricUnit)
+        if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IMachine)
         {
             this.connectedBlocks[side.ordinal()] = tileEntity;
 

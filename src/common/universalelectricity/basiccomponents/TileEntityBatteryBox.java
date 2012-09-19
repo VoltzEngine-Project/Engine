@@ -15,7 +15,7 @@ import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.electricity.TileEntityElectricUnit;
+import universalelectricity.electricity.TileEntityMachine;
 import universalelectricity.extend.IElectricityStorage;
 import universalelectricity.extend.IItemElectric;
 import universalelectricity.extend.IRedstoneProvider;
@@ -25,7 +25,7 @@ import universalelectricity.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityBatteryBox extends TileEntityElectricUnit implements IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
+public class TileEntityBatteryBox extends TileEntityMachine implements IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
 {	
 	private double wattHourStored = 0;
 

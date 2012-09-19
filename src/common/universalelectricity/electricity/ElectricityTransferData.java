@@ -1,16 +1,16 @@
 package universalelectricity.electricity;
 
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.extend.IElectricUnit;
+import universalelectricity.extend.IMachine;
 
 public class ElectricityTransferData
 {
-    public IElectricUnit electricUnit;
+    public IMachine electricUnit;
     public double amps;
     public double voltage;
     public ForgeDirection side;
 
-    public ElectricityTransferData(IElectricUnit electricUnit, ForgeDirection side, double amps, double voltage)
+    public ElectricityTransferData(IMachine electricUnit, ForgeDirection side, double amps, double voltage)
     {
         this.electricUnit = electricUnit;
         this.side = side;

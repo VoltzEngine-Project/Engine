@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.extend.IElectricUnit;
+import universalelectricity.extend.IMachine;
 import universalelectricity.extend.TileEntityConductor;
 
 public class ElectricityConnection
@@ -33,10 +33,10 @@ public class ElectricityConnection
     /**
      * Get only the electric units that can receive electricity from the given side.
      */
-    public List<IElectricUnit> getConnectedElectricUnits()
+    public List<IMachine> getConnectedElectricUnits()
     {
         this.cleanUpArray();
-        List<IElectricUnit> returnArray = new ArrayList<IElectricUnit>();
+        List<IMachine> returnArray = new ArrayList<IMachine>();
 
         for (TileEntityConductor conductor : conductors)
         {
@@ -46,11 +46,11 @@ public class ElectricityConnection
 
                 if (tileEntity != null)
                 {
-                    if (tileEntity instanceof IElectricUnit)
+                    if (tileEntity instanceof IMachine)
                     {
-                        if (!returnArray.contains((IElectricUnit)tileEntity) && ((IElectricUnit)tileEntity).canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
+                        if (!returnArray.contains((IMachine)tileEntity) && ((IMachine)tileEntity).canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                         {
-                            returnArray.add((IElectricUnit)tileEntity);
+                            returnArray.add((IMachine)tileEntity);
                         }
                     }
                 }

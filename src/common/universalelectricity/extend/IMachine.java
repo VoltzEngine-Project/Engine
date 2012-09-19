@@ -5,11 +5,11 @@ import net.minecraftforge.common.ForgeDirection;
 
 
 /**
- * The UEIConsumer interface is an interface that must be applied to all tile entities that can receive electricity.
+ * The IMachine interface is an interface that must be applied to all tile entities that can input or output electricity.
  * @author Calclavia
  *
  */
-public interface IElectricUnit extends IDisableable
+public interface IMachine extends IDisableable
 {
     /**
      * Called every time a tick interval (specified in getConsumerTickInterval()).

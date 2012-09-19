@@ -9,7 +9,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.Vector3;
-import universalelectricity.extend.IElectricUnit;
+import universalelectricity.extend.IMachine;
 import universalelectricity.extend.TileEntityConductor;
 import cpw.mods.fml.common.TickType;
 
@@ -24,7 +24,7 @@ public class ElectricityManager
 {
 	public static ElectricityManager instance;
 	
-    private List<IElectricUnit> electricUnits = new ArrayList<IElectricUnit>();
+    private List<IMachine> electricUnits = new ArrayList<IMachine>();
     private List<TileEntityConductor> electricConductors = new ArrayList<TileEntityConductor>();
 
     private List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
@@ -51,7 +51,7 @@ public class ElectricityManager
      * ElectricityManager.registerConsumer(this);
      * @param newUnit - The consumer to be registered.
      */
-    public void registerElectricUnit(IElectricUnit newUnit)
+    public void registerElectricUnit(IMachine newUnit)
     {
         if (!this.electricUnits.contains(newUnit))
         {
@@ -178,7 +178,7 @@ public class ElectricityManager
 
             if(connection != null)
             {
-                List<IElectricUnit> allElectricUnitsInLine = connection.getConnectedElectricUnits();
+                List<IMachine> allElectricUnitsInLine = connection.getConnectedElectricUnits();
                 double leftOverAmps = amps;
 
                 for (TileEntityConductor conductor : connection.conductors)
@@ -189,9 +189,9 @@ public class ElectricityManager
 
                         if (tileEntity != null)
                         {
-                            if (tileEntity instanceof IElectricUnit)
+                            if (tileEntity instanceof IMachine)
                             {
-                                IElectricUnit electricUnit = (IElectricUnit)tileEntity;
+                                IMachine electricUnit = (IMachine)tileEntity;
 
                                 if (electricUnit.wattRequest() > 0 && electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                                 {
@@ -226,9 +226,9 @@ public class ElectricityManager
 
                     if (tileEntity != null)
                     {
-                        if (tileEntity instanceof IElectricUnit)
+                        if (tileEntity instanceof IMachine)
                         {
-                            IElectricUnit electricUnit = (IElectricUnit)tileEntity;
+                            IMachine electricUnit = (IMachine)tileEntity;
 
                             if (electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                             {
@@ -283,7 +283,7 @@ public class ElectricityManager
 		{
 	        for(int i = 0; i < electricUnits.size(); i++)
 	        {
-	        	IElectricUnit electricUnit = electricUnits.get(i);
+	        	IMachine electricUnit = electricUnits.get(i);
 	        	
 	            //Cleanup useless units
 	            if (electricUnit == null)

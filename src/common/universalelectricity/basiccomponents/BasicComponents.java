@@ -121,6 +121,11 @@ public class BasicComponents implements ICraftingHandler
 		GameRegistry.registerBlock(oilStill);
 		GameRegistry.registerCraftingHandler(this);
 		
+		OreDictionary.registerOre("ingotCopper", itemCopperIngot);
+		OreDictionary.registerOre("ingotTin", itemTinIngot);
+		OreDictionary.registerOre("ingotBronze", itemBronzeIngot);
+		OreDictionary.registerOre("ingotSteel", itemSteelIngot);
+		
 		proxy.preInit();
     }
     
@@ -145,21 +150,15 @@ public class BasicComponents implements ICraftingHandler
         LanguageRegistry.addName(blockCoalGenerator, "Coal Generator");
         LanguageRegistry.addName(blockElectricFurnace, "Electric Furnace");
 		
-		//Register Tile Entities
 		GameRegistry.registerTileEntity(TileEntityBatteryBox.class, "TileEntityBatteryBox");
 		GameRegistry.registerTileEntity(TileEntityCoalGenerator.class, "TileEntityCoalGenerator");
 		GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, "TileEntityElectricFurnace");		
 		
-		OreDictionary.registerOre("ingotCopper", itemCopperIngot);
-		OreDictionary.registerOre("ingotTin", itemTinIngot);
-		OreDictionary.registerOre("ingotBronze", itemBronzeIngot);
-		OreDictionary.registerOre("ingotSteel", itemSteelIngot);
-		
-		OreGenerator.addOre(copperOreGeneration); //add all ores
+		OreGenerator.addOre(copperOreGeneration);
 		OreGenerator.addOre(tinOreGeneration);
 		
-		copperOreGeneration.enable(); // only enable copper
-		//tinOreGeneration.enable(); // tin will not generate
+		copperOreGeneration.enable();
+		tinOreGeneration.enable();
 		
 		//Recipes
 		//Oil Bucket
@@ -188,13 +187,18 @@ public class BasicComponents implements ICraftingHandler
 		//Steel
 		RecipeManager.addRecipe(new ItemStack(itemSteelDust), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
 		RecipeManager.addSmelting(itemSteelDust, new ItemStack(itemSteelIngot));
-		RecipeManager.addRecipe(new ItemStack(itemSteelPlate), new Object [] {"!!", "!!", '!', "ingotSteel"});
 		RecipeManager.addSmelting(itemSteelPlate, new ItemStack(itemSteelDust, 3));
 		//Bronze
 		RecipeManager.addRecipe(itemBronzeDust, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
 		RecipeManager.addSmelting(itemBronzeDust, new ItemStack(itemBronzeIngot));
-		RecipeManager.addRecipe(new ItemStack(itemBronzePlate), new Object [] {"!!", "!!", '!', "ingotBronze"});
 		RecipeManager.addSmelting(itemBronzePlate, new ItemStack(itemBronzeDust, 3));
+		
+		//Plates
+		RecipeManager.addRecipe(new ItemStack(itemCopperPlate), new Object [] {"!!", "!!", '!', "ingotCopper"});
+		RecipeManager.addRecipe(new ItemStack(itemTinPlate), new Object [] {"!!", "!!", '!', "ingotTin"});
+		RecipeManager.addRecipe(new ItemStack(itemSteelPlate), new Object [] {"!!", "!!", '!', "ingotSteel"});
+		RecipeManager.addRecipe(new ItemStack(itemBronzePlate), new Object [] {"!!", "!!", '!', "ingotBronze"});
+
 		//Circuit
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 0), new Object [] {"!#!", "#@#", "!#!", '@', itemSteelPlate, '#', Item.redstone, '!', blockCopperWire});
 		RecipeManager.addRecipe(new ItemStack(itemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', itemCircuit});
@@ -203,7 +207,7 @@ public class BasicComponents implements ICraftingHandler
 
 	@Override
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix)
-	{System.out.println("CALLED");
+	{
 		if(item.itemID == itemOilBucket.shiftedIndex)
 		{
 			for(int i = 0; i < craftMatrix.getSizeInventory(); i++)

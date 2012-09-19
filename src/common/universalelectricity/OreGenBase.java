@@ -30,9 +30,9 @@ public abstract class OreGenBase
     
     public ItemStack oreStack;
     
-    public int oreID; // for performance reasons
+    public int oreID;
     
-    public int oreMeta; // for performance reasons
+    public int oreMeta;
     
     /**
      * What harvest level does this machine need to be acquired?

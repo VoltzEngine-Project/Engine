@@ -12,14 +12,14 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.electricity.TileEntityElectricUnit;
+import universalelectricity.electricity.TileEntityMachine;
 import universalelectricity.extend.IItemElectric;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityElectricFurnace extends TileEntityElectricUnit implements IInventory, ISidedInventory,  IPacketReceiver
+public class TileEntityElectricFurnace extends TileEntityMachine implements IInventory, ISidedInventory,  IPacketReceiver
 {
 	//The amount of watts required by the electric furnace per tick
     public final double WATTS_PER_TICK = 300;
