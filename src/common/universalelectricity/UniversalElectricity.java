@@ -36,7 +36,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class UniversalElectricity implements IConnectionHandler
 {
-	protected static final String VERSION = "0.8.1";
+	protected static final String VERSION = "0.8.2";
 
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
 	public static final List<Object> MODS = new ArrayList<Object>();
