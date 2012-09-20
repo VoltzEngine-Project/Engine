@@ -8,7 +8,6 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
-import universalelectricity.network.PacketManager;
 
 
 public class GUIBatteryBox extends GuiContainer

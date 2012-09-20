@@ -16,7 +16,7 @@ public class BlockBatteryBox extends BlockMachine
 {
     public BlockBatteryBox(int id, int textureIndex)
     {
-        super("Battery Box", id, UniversalElectricity.machine, CreativeTabs.tabDeco);
+        super("Battery Box", id, UniversalElectricity.machine, CreativeTabs.tabDecorations);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();

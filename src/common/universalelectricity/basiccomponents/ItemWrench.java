@@ -11,7 +11,7 @@ public class ItemWrench extends ItemBC implements IToolWrench
         super("Wrench", par1, par2);
         this.setIconIndex(par2);
         this.setMaxStackSize(1);
-        this.setTabToDisplayOn(CreativeTabs.tabTools);
+        this.setCreativeTab(CreativeTabs.tabTools);
     }
 
 	@Override

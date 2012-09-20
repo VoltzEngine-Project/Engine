@@ -11,7 +11,7 @@ public class ItemBC extends Item
         super(id);
         this.iconIndex = texture;
         this.setItemName(name);
-        this.setTabToDisplayOn(creativeTab);
+        this.setCreativeTab(creativeTab);
         LanguageRegistry.addName(this, name);
     }
     

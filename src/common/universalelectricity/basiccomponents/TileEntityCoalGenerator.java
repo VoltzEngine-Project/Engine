@@ -4,7 +4,6 @@ import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagFloat;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
@@ -32,7 +31,7 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
      */
     public static final int MIN_GENERATE_WATTS = 100;
 
-	private static final int BASE_ACCELERATION = 5;
+	private static final float BASE_ACCELERATION = 2.5f;
 
     /**
      * Per second
@@ -74,14 +73,10 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     {
         return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
     }
-
+    
     @Override
-    public void onUpdate(double watts, double voltage, ForgeDirection side)
+    public void updateEntity() 
     {
-        super.onUpdate(watts, voltage, side);
-        
-        this.prevGenerateWatts = this.generateWatts;
-                
         //Check nearby blocks and see if the conductor is full. If so, then it is connected
         TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite());
 
@@ -101,54 +96,58 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
             this.connectedElectricUnit = null;
         }
 
-        if (!this.isDisabled())
+        if(!this.worldObj.isRemote)
         {
-        	//Starts generating electricity if the device is heated up
-            if (this.itemCookTime > 0)
-            {
-                this.itemCookTime -= this.getTickInterval();
+	        if(!this.isDisabled())
+	        {
+	        	this.prevGenerateWatts = this.generateWatts;
+	
+	        	//Starts generating electricity if the device is heated up
+	            if (this.itemCookTime > 0)
+	            {
+	                this.itemCookTime --;
+	
+	                if (this.connectedElectricUnit != null)
+	                {
+	                    this.generateWatts = (double)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.025 + BASE_ACCELERATION), 5), this.MAX_GENERATE_WATTS);
+	                }
+	            }
+	            
+	            if (this.containingItems[0] != null && this.connectedElectricUnit != null)
+	            {
+	                if (this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)
+	                {
+	                    if (this.itemCookTime <= 0)
+	                    {
+	                        itemCookTime = 280;
+	                        this.decrStackSize(0, 1);
+	                    }
+	                }
+	            }
+	
+	            if(this.connectedElectricUnit == null || this.itemCookTime <= 0)
+	            {
+	                this.generateWatts = (double)Math.max(this.generateWatts - 8, 0);
+	            }
+	
+	            if(this.generateWatts > MIN_GENERATE_WATTS)
+	            {
+	                ElectricityManager.instance.produceElectricity(this.connectedElectricUnit, this.generateWatts/this.getVoltage(), this.getVoltage());
+	            }
+	        }
 
-                if (this.connectedElectricUnit != null)
-                {
-                    this.generateWatts = (double)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.5 + BASE_ACCELERATION), 100), this.MAX_GENERATE_WATTS);
-                }
-            }
-            
-            if (this.containingItems[0] != null && this.connectedElectricUnit != null)
-            {
-                if (this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)
-                {
-                    if (this.itemCookTime <= 0)
-                    {
-                        itemCookTime = 280;
-                        this.decrStackSize(0, 1);
-                    }
-                }
-            }
-
-            if(this.connectedElectricUnit == null || this.itemCookTime <= 0)
-            {
-                this.generateWatts = (double)Math.max(this.generateWatts - 150, 0);
-            }
-
-            if(this.generateWatts > MIN_GENERATE_WATTS)
-            {
-                ElectricityManager.instance.produceElectricity(this.connectedElectricUnit, this.generateWatts/this.getVoltage() * this.getTickInterval(), this.getVoltage());
-            }
+	        if(ElectricityManager.inGameTicks % 20 == 0 && this.playersUsing > 0)
+	        {
+	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
+	        }
+	        else if(this.sendUpdate || (this.prevGenerateWatts != this.generateWatts && this.generateWatts <= BASE_ACCELERATION*2))
+	        {
+	        	this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, BasicComponents.blockCoalGenerator.blockID, 1, (int)this.generateWatts);
+	        	this.sendUpdate = false;
+	        }
         }
-
-        if(ElectricityManager.instance.inGameTicks % 20/this.getTickInterval() == 0 && this.playersUsing > 0)
-        {
-        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
-        }
-        else if(this.sendUpdate || (this.prevGenerateWatts != this.generateWatts && this.generateWatts <= BASE_ACCELERATION*2))
-        {
-        	this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, BasicComponents.blockCoalGenerator.blockID, 1, (int)this.generateWatts);
-        	this.sendUpdate = false;
-        }
-        
-        
     }
+
     
     @Override
 	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
@@ -345,13 +344,8 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     }
     
     @Override
-    public int getTickInterval()
+    public int getReceiveInterval()
     {
-    	if(!this.worldObj.isRemote)
-    	{
-            return 20;
-    	}
-    	
         return -1;
     }
 }

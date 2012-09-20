@@ -44,7 +44,7 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
     {
         if(!this.isDisabled() && this.canSmelt())
         {
-            return this.WATTS_PER_TICK/this.getTickInterval();
+            return this.WATTS_PER_TICK/this.getReceiveInterval();
         }
 
         return 0;
@@ -56,9 +56,9 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
     }
 
     @Override
-    public void onUpdate(double amps, double voltage, ForgeDirection side)
+    public void onReceive(double amps, double voltage, ForgeDirection side)
     {
-        super.onUpdate(amps, voltage, side);
+        super.onReceive(amps, voltage, side);
 
         if (voltage > this.getVoltage())
         {
@@ -93,10 +93,10 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
             //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
             if (this.canSmelt() && this.smeltingTicks > 0)
             {
-                this.smeltingTicks -= this.getTickInterval();
+                this.smeltingTicks -= this.getReceiveInterval();
 
                 //When the item is finished smelting
-                if (this.smeltingTicks < 1 * this.getTickInterval())
+                if (this.smeltingTicks < 1 * this.getReceiveInterval())
                 {
                     this.smeltItem();
                     this.smeltingTicks = 0;
@@ -110,7 +110,7 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
             this.wattsReceived = 0;
         }
         
-        if(ElectricityManager.instance.inGameTicks % (int)(20/this.getTickInterval()) == 0 && this.playersUsing > 0)
+        if(ElectricityManager.instance.inGameTicks % (int)(20/this.getReceiveInterval()) == 0 && this.playersUsing > 0)
         {
         	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.smeltingTicks, this.disabledTicks);
         }
@@ -355,7 +355,7 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
     }
 
     @Override
-    public int getTickInterval()
+    public int getReceiveInterval()
     {
     	if(!this.worldObj.isRemote)
     	{

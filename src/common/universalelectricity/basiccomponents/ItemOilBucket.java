@@ -15,7 +15,7 @@ public class ItemOilBucket extends ItemBucket
 	{
 		super(id, BasicComponents.oilMoving.blockID);
 		this.setIconIndex(texture);
-		this.setTabToDisplayOn(CreativeTabs.tabMisc);
+		this.setCreativeTab(CreativeTabs.tabMisc);
 		this.setContainerItem(Item.bucketEmpty);
 		this.setItemName("Oil Bucket");
 	}

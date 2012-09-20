@@ -14,7 +14,7 @@ public class ItemCircuit extends ItemBC
         super("Circuit", id, texture);
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
-        this.setTabToDisplayOn(CreativeTabs.tabMaterials);
+        this.setCreativeTab(CreativeTabs.tabMaterials);
     }
 
     @Override

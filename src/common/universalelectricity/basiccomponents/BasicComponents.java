@@ -5,7 +5,6 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
-import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.OreGenBase;
@@ -90,24 +89,15 @@ public class BasicComponents implements ICraftingHandler
     {
 		instance = this;
 		
+		UniversalElectricity.forgeLock(4, 1, 2, true);
 		UniversalElectricity.registerMod(this, "Basic Componenets", VERSION);
 		
 		/**
 		 * @author Cammygames
-		 * Liquid Manager
+		 * Thanks to Cammygames for writing the Liquid Manager for UE oil.
 		 */
 		LiquidManager.liquids.add(new LiquidData(new LiquidStack(oilStill, LiquidManager.BUCKET_VOLUME), new LiquidStack(oilMoving, LiquidManager.BUCKET_VOLUME), new ItemStack(itemOilBucket), new ItemStack(Item.bucketEmpty)));
-		MinecraftForge.EVENT_BUS.register(itemOilBucket);
-
-		//Checks to make sure Forge is the correction version...
-		if(ForgeVersion.getMajorVersion() != 4)
-		{
-			throw new RuntimeException("Forge version is way too old!");
-		}
-		if(ForgeVersion.getMinorVersion() < 0)
-		{
-			throw new RuntimeException("Forge version is kind of too old!");
-		}
+		MinecraftForge.EVENT_BUS.register(itemOilBucket);		
 		
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 

@@ -85,7 +85,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	        packet.data = bytes.toByteArray();
 	        packet.length = packet.data.length;
 	        
-	        PacketDispatcher.sendPacketToAllAround(sender.xCoord, sender.yCoord, sender.zCoord, range, sender.worldObj.provider.worldType, packet);
+	        PacketDispatcher.sendPacketToAllAround(sender.xCoord, sender.yCoord, sender.zCoord, range, sender.worldObj.provider.dimensionId, packet);
         }
         catch (IOException e)
         {

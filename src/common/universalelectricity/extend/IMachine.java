@@ -12,24 +12,15 @@ import net.minecraftforge.common.ForgeDirection;
 public interface IMachine extends IDisableable
 {
     /**
-     * Called every time a tick interval (specified in getConsumerTickInterval()).
-     *
-     * @param ampere - Amount of amps this electric unit is receiving.
-     * This won't exceed the electricityRequest() amount.
-     * NOTE! THIS WILL GIVE THE DELTA JOULES!
-     * This means that if your electric unit's tick interval
-     * is 10, it will give all 10 ticks of electricity at once. It will stack
-     * up all the electricity you received over the ticks and hand it
-     * over at once so you don't lose the electricity you are supposed
-     * to get even if your electric unit doesn't tick every tick.
-     *
+     * Called every tick on this machine.
+     * 
+     * @param amps - Amount of amps this electric unit is receiving.
      * @param voltage - The voltage of the electricity sent. If more than one
      * packet is being sent to you in this update, the highest voltage will
      * override.
-     *
      * @param side - The side of the block in which the electricity is coming from.
      */
-    public void onUpdate(double ampere, double voltage, ForgeDirection side);
+    public void onReceive(double amps, double voltage, ForgeDirection side);
 
     /**
      * How many watts does this electrical unit need per tick?
@@ -68,9 +59,9 @@ public interface IMachine extends IDisableable
      *
      * Note: You can change this in real time and it will update the amount of
      * ticks your machine gets.
-     * @return - The tick intervals. Returns 0 if you wish it to not tick at all.
+     * @return - The tick intervals. Returns -1 if you wish it to not tick at all.
      */
-    public int getTickInterval();
+    public int getReceiveInterval();
     
     /**
      * Called when a player logs into a server. Works also in single player.

@@ -27,7 +27,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
         this.setMaxStackSize(1);
         this.setMaxDamage((int)this.getMaxWattHours());
         this.setNoRepair();
-        this.setTabToDisplayOn(tabs);
+        this.setCreativeTab(tabs);
     }
     
     public ItemElectric(int id)

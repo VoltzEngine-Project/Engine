@@ -5,7 +5,6 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagFloat;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
@@ -64,9 +63,9 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
     }
 
     @Override
-    public void onUpdate(double amps, double voltage, ForgeDirection side)
+    public void onReceive(double amps, double voltage, ForgeDirection side)
     {
-        super.onUpdate(amps, voltage, side);
+        super.onReceive(amps, voltage, side);
         
         if (voltage > this.getVoltage())
         {
@@ -349,7 +348,7 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
 	}
 	
 	@Override
-    public int getTickInterval()
+    public int getReceiveInterval()
     {
     	return 1;
     }

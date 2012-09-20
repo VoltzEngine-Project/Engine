@@ -1,7 +1,5 @@
 package universalelectricity.basiccomponents;
 
-import universalelectricity.Vector3;
-import universalelectricity.extend.TileEntityConductor;
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockStationary;
 import net.minecraft.src.Entity;
@@ -10,9 +8,9 @@ import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.Material;
 import net.minecraft.src.Potion;
 import net.minecraft.src.PotionEffect;
-import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.Vector3;
 import buildcraft.api.liquids.ILiquid;
 /**
  * 

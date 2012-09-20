@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.Vector3;
 import universalelectricity.extend.IMachine;
@@ -31,7 +30,7 @@ public class ElectricityManager
     private List<ElectricityConnection> wireConnections = new ArrayList<ElectricityConnection>();
     private int maxConnectionID = 0;
 
-    public long inGameTicks = 0;
+    public static long inGameTicks = 0;
     
     public int refreshConductors;
     
@@ -297,9 +296,9 @@ public class ElectricityManager
 	                break;
 	            }
 	
-	            if(electricUnit.getTickInterval() > 0)
+	            if(electricUnit.getReceiveInterval() > 0)
 	            {
-		            if(inGameTicks % electricUnit.getTickInterval() == 0)
+		            if(inGameTicks % electricUnit.getReceiveInterval() == 0)
 		            {
 		                double watts = 0;
 		                double voltage = 0;
@@ -327,12 +326,17 @@ public class ElectricityManager
 		                    }
 		                }
 		
-		                electricUnit.onUpdate(watts, voltage, side);
+		                electricUnit.onReceive(watts, voltage, side);
 		            }
 	            }
 	        }
 	
 	        inGameTicks ++;
+	        
+	        if(inGameTicks >= Long.MAX_VALUE)
+	        {
+	        	inGameTicks = 0;
+	        }
 		}
 		catch(Exception e)
 		{

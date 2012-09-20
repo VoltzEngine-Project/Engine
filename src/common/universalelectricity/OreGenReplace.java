@@ -2,7 +2,6 @@ package universalelectricity;
 
 import java.util.Random;
 
-import net.minecraft.src.Block;
 import net.minecraft.src.ChunkProviderEnd;
 import net.minecraft.src.ChunkProviderGenerate;
 import net.minecraft.src.ChunkProviderHell;
@@ -10,9 +9,6 @@ import net.minecraft.src.IChunkProvider;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.World;
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * This class is used for storing ore generation data. If you are too

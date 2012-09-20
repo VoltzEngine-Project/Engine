@@ -2,8 +2,6 @@ package universalelectricity.basiccomponents;
 
 import java.util.Random;
 
-import universalelectricity.Vector3;
-
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockFluid;
 import net.minecraft.src.Entity;
@@ -14,6 +12,7 @@ import net.minecraft.src.Potion;
 import net.minecraft.src.PotionEffect;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.Vector3;
 import buildcraft.api.liquids.ILiquid;
 /**
  * @author Cammygames

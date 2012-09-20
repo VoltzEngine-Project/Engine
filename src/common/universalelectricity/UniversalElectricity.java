@@ -13,6 +13,7 @@ import net.minecraft.src.NetLoginHandler;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet1Login;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -103,6 +104,36 @@ public class UniversalElectricity implements IConnectionHandler
 	{
     	ElectricityManager.instance.timedConductorRefresh();
 	}
+    
+    public static void forgeLock(int major, int minor, int revision, boolean strict)
+    {
+    	if(ForgeVersion.getMajorVersion() != major)
+		{
+			throw new RuntimeException("Universal Electricity: Wrong Minecraft Forge version! Get: "+major+"."+minor+"."+revision);
+		}
+		
+    	if(ForgeVersion.getMinorVersion() < minor)
+		{
+			throw new RuntimeException("Universal Electricity: Minecraft Forge minor version is too old! Get: "+major+"."+minor+"."+revision);
+		}
+    	
+    	if(ForgeVersion.getRevisionVersion() < revision)
+		{
+    		if(strict)
+    		{
+    			throw new RuntimeException("Universal Electricity: Minecraft Forge revision version is too old! Get: "+major+"."+minor+"."+revision);
+    		}
+    		else
+    		{
+    			System.out.println("Universal Electricity Warning: Minecraft Forge is not the specified version. Odd things might happen.");
+    		}
+		}
+    }
+    
+    public static void forgeLock(int major, int minor, int revision)
+    {
+    	forgeLock(major, minor, revision, false);
+    }
     
     /**
      * Gets the ID of a block from the configuration file

@@ -23,11 +23,11 @@ public abstract class TileEntityMachine extends TileEntity implements IMachine
      * Called every tick. Super this!
      */
     @Override
-    public void onUpdate(double ampere, double voltage, ForgeDirection side)
+    public void onReceive(double ampere, double voltage, ForgeDirection side)
     {
         if (this.disabledTicks > 0)
         {
-            this.disabledTicks -= this.getTickInterval();
+            this.disabledTicks -= this.getReceiveInterval();
             this.whileDisable(ampere, voltage, side);
             return;
         }
@@ -71,27 +71,23 @@ public abstract class TileEntityMachine extends TileEntity implements IMachine
         return 120;
     }
 
-    /**
-     * How many world ticks there should be before this tile entity gets ticked?
-     * E.x Returning "1" will make this tile entity tick every single tick.
-     * @return - The tick intervals. Returns 0 if you wish it to not tick at all.
-     */
     @Override
-    public int getTickInterval()
+    public int getReceiveInterval()
     {
         return 1;
     }
 
     /**
      * Determines if this TileEntity requires update calls.
-     * A UE TileEntity DOES NOT need update calls because the updates will be called
-     * via the ElectricityManager reducing lag.
+     * As of 0.8.3, you should use tile entity ticks for your actions and use
+     * onReceive for electricity reception ONLY to prevent concurrent modification
+     * crashes.
      * @return True if you want updateEntity() to be called, false if not
      */
     @Override
     public boolean canUpdate()
     {
-        return false;
+        return true;
     }
     
     @Override

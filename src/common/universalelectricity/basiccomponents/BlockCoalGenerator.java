@@ -17,7 +17,7 @@ public class BlockCoalGenerator extends BlockMachine
 {
     public BlockCoalGenerator(int id, int textureIndex)
     {
-        super("Coal Generator", id, UniversalElectricity.machine, CreativeTabs.tabDeco);
+        super("Coal Generator", id, UniversalElectricity.machine, CreativeTabs.tabDecorations);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();
