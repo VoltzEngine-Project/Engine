@@ -183,16 +183,26 @@ public class BlockBasicMachine extends BlockMachine
     public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
     {
     	int metadata = par1World.getBlockMetadata(x, y, z);
-
+    	int original = metadata;
+    	
     	int change = 0;
+    	    	
+    	if(metadata >= ELECTRIC_FURNACE_METADATA)
+		{
+    		original -= ELECTRIC_FURNACE_METADATA;
+		}
+		else if(metadata >= BATTERY_BOX_METADATA)
+		{
+			original -= BATTERY_BOX_METADATA;
+		}
     	
         //Reorient the block
-        switch (par1World.getBlockMetadata(x, y, z))
+        switch (original)
         {
-            case 2: change = 3; break;
-            case 5: change = 1; break;
-            case 3: change = 2; break;
-            case 4: change = 0; break;
+            case 0: change = 3; break;
+            case 3: change = 1; break;
+            case 1: change = 2; break;
+            case 2: change = 0; break;
         }
         
         if(metadata >= ELECTRIC_FURNACE_METADATA)
