@@ -96,47 +96,47 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
             this.connectedElectricUnit = null;
         }
 
+        if(!this.isDisabled())
+        {
+        	this.prevGenerateWatts = this.generateWatts;
+
+        	//Starts generating electricity if the device is heated up
+            if (this.itemCookTime > 0)
+            {
+                this.itemCookTime --;
+
+                if (this.connectedElectricUnit != null)
+                {
+                    this.generateWatts = (double)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.025 + BASE_ACCELERATION), 5), this.MAX_GENERATE_WATTS);
+                }
+            }
+            
+            if (this.containingItems[0] != null && this.connectedElectricUnit != null)
+            {
+                if (this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)
+                {
+                    if (this.itemCookTime <= 0)
+                    {
+                        itemCookTime = 280;
+                        this.decrStackSize(0, 1);
+                    }
+                }
+            }
+
+            if(this.connectedElectricUnit == null || this.itemCookTime <= 0)
+            {
+                this.generateWatts = (double)Math.max(this.generateWatts - 8, 0);
+            }
+
+            if(this.generateWatts > MIN_GENERATE_WATTS)
+            {
+                ElectricityManager.instance.produceElectricity(this.connectedElectricUnit, (this.generateWatts/this.getVoltage())/20, this.getVoltage());
+            }
+        }
+        
         if(!this.worldObj.isRemote)
         {
-	        if(!this.isDisabled())
-	        {
-	        	this.prevGenerateWatts = this.generateWatts;
-	
-	        	//Starts generating electricity if the device is heated up
-	            if (this.itemCookTime > 0)
-	            {
-	                this.itemCookTime --;
-	
-	                if (this.connectedElectricUnit != null)
-	                {
-	                    this.generateWatts = (double)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.025 + BASE_ACCELERATION), 5), this.MAX_GENERATE_WATTS);
-	                }
-	            }
-	            
-	            if (this.containingItems[0] != null && this.connectedElectricUnit != null)
-	            {
-	                if (this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)
-	                {
-	                    if (this.itemCookTime <= 0)
-	                    {
-	                        itemCookTime = 280;
-	                        this.decrStackSize(0, 1);
-	                    }
-	                }
-	            }
-	
-	            if(this.connectedElectricUnit == null || this.itemCookTime <= 0)
-	            {
-	                this.generateWatts = (double)Math.max(this.generateWatts - 8, 0);
-	            }
-	
-	            if(this.generateWatts > MIN_GENERATE_WATTS)
-	            {
-	                ElectricityManager.instance.produceElectricity(this.connectedElectricUnit, this.generateWatts/this.getVoltage(), this.getVoltage());
-	            }
-	        }
-
-	        if(ElectricityManager.inGameTicks % 20 == 0 && this.playersUsing > 0)
+	        if(ElectricityManager.inGameTicks % 40 == 0 && this.playersUsing > 0)
 	        {
 	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
 	        }
@@ -181,7 +181,11 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     @Override
     public void openChest()
     {
-    	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
+    	if(!this.worldObj.isRemote)
+        {
+    		PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
+        }
+    	
     	this.playersUsing ++;
     }
     

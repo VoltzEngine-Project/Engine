@@ -66,53 +66,61 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
         }
         
         this.wattsReceived += ElectricInfo.getWatts(amps, voltage);
-                
-        //The bottom slot is for portable batteries
-        if (this.containingItems[0] != null)
-        {
-            if (this.containingItems[0].getItem() instanceof IItemElectric)
-            {
-                IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
-
-                if (electricItem.canProduceElectricity())
-                {
-                    double receivedWattHours = electricItem.onUseElectricity(Math.min(electricItem.getTransferRate(), ElectricInfo.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
-                    this.wattsReceived += ElectricInfo.getWatts(receivedWattHours);
-                }
-            }
-        }
-        
-        if(this.wattsReceived >= this.WATTS_PER_TICK && !this.isDisabled())
-        {
-            //The left slot contains the item to be smelted
-            if (this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
-            {
-                this.smeltingTicks = this.SMELTING_TIME_REQUIRED;
-            }
-
-            //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
-            if (this.canSmelt() && this.smeltingTicks > 0)
-            {
-                this.smeltingTicks -= this.getReceiveInterval();
-
-                //When the item is finished smelting
-                if (this.smeltingTicks < 1 * this.getReceiveInterval())
-                {
-                    this.smeltItem();
-                    this.smeltingTicks = 0;
-                }
-            }
-            else
-            {
-                this.smeltingTicks = 0;
-            }
-            
-            this.wattsReceived = 0;
-        }
-        
-        if(ElectricityManager.instance.inGameTicks % (int)(20/this.getReceiveInterval()) == 0 && this.playersUsing > 0)
-        {
-        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.smeltingTicks, this.disabledTicks);
+    }
+    
+    @Override
+    public void updateEntity() 
+    {     
+    	
+	        //The bottom slot is for portable batteries
+	        if (this.containingItems[0] != null)
+	        {
+	            if (this.containingItems[0].getItem() instanceof IItemElectric)
+	            {
+	                IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
+	
+	                if (electricItem.canProduceElectricity())
+	                {
+	                    double receivedWattHours = electricItem.onUseElectricity(Math.min(electricItem.getTransferRate(), ElectricInfo.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
+	                    this.wattsReceived += ElectricInfo.getWatts(receivedWattHours);
+	                }
+	            }
+	        }
+	        
+	        if(this.wattsReceived >= this.WATTS_PER_TICK && !this.isDisabled())
+	        {
+	            //The left slot contains the item to be smelted
+	            if (this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
+	            {
+	                this.smeltingTicks = this.SMELTING_TIME_REQUIRED;
+	            }
+	
+	            //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
+	            if (this.canSmelt() && this.smeltingTicks > 0)
+	            {
+	                this.smeltingTicks -= this.getReceiveInterval();
+	
+	                //When the item is finished smelting
+	                if (this.smeltingTicks < 1 * this.getReceiveInterval())
+	                {
+	                    this.smeltItem();
+	                    this.smeltingTicks = 0;
+	                }
+	            }
+	            else
+	            {
+	                this.smeltingTicks = 0;
+	            }
+	            
+	            this.wattsReceived = 0;
+	        }
+	        
+	    if(!this.worldObj.isRemote)
+	    {
+   	        if(ElectricityManager.instance.inGameTicks % 20 == 0 && this.playersUsing > 0)
+	        {
+	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.smeltingTicks, this.disabledTicks);
+	        }
         }
     }
     
@@ -133,7 +141,10 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
     @Override
     public void openChest()
     {
-    	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.smeltingTicks, this.disabledTicks);
+    	if(!this.worldObj.isRemote)
+        {
+    		PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.smeltingTicks, this.disabledTicks);
+        }
     	this.playersUsing  ++;
     }
     
@@ -352,16 +363,5 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
     public double getVoltage()
     {
         return 120;
-    }
-
-    @Override
-    public int getReceiveInterval()
-    {
-    	if(!this.worldObj.isRemote)
-    	{
-    		return 3;
-    	}
-    	
-    	return -1;
     }
 }

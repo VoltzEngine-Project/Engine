@@ -71,11 +71,18 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
         {
             this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
         }
-
+        
         if(!this.isDisabled())
         {
         	this.setWattHours(this.wattHourStored+ElectricInfo.getWattHours(amps, voltage));
-            
+        }
+    }
+    
+    @Override
+    public void updateEntity() 
+    {
+        if(!this.isDisabled())
+        {            
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
             if (this.containingItems[0] != null && this.wattHourStored > 0)
             {
@@ -134,7 +141,7 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
         
         if(!this.worldObj.isRemote)
         {
-	        if(ElectricityManager.instance.inGameTicks % 20 == 0 && this.playersUsing > 0)
+	        if(ElectricityManager.instance.inGameTicks % 40 == 0 && this.playersUsing > 0)
 	        {
 	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
 	        }
@@ -158,7 +165,11 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
     @Override
     public void openChest()
     {
-    	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+    	if(!this.worldObj.isRemote)
+        {
+    		PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+        }
+    	
     	this.playersUsing  ++;
     }
     
@@ -346,10 +357,4 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
 	{
 		return 1000;
 	}
-	
-	@Override
-    public int getReceiveInterval()
-    {
-    	return 1;
-    }
 }
