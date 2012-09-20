@@ -53,13 +53,13 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
     @Override
     public boolean canReceiveFromSide(ForgeDirection side)
     {
-        return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
+        return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
     }
 
     @Override
     public boolean canConnect(ForgeDirection side)
     {
-        return canReceiveFromSide(side) || side.ordinal() == this.getBlockMetadata();
+        return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
 
             if (this.wattHourStored > 0)
             {
-                TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
+                TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
 
                 if (tileEntity != null)
                 {
@@ -141,7 +141,7 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
         
         if(!this.worldObj.isRemote)
         {
-	        if(ElectricityManager.instance.inGameTicks % 40 == 0 && this.playersUsing > 0)
+	        if(ElectricityManager.inGameTicks % 40 == 0 && this.playersUsing > 0)
 	        {
 	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
 	        }

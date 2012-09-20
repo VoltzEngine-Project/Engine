@@ -31,7 +31,7 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
      */
     public static final int MIN_GENERATE_WATTS = 100;
 
-	private static final float BASE_ACCELERATION = 2.5f;
+	private static final float BASE_ACCELERATION = 0.08f;
 
     /**
      * Per second
@@ -57,11 +57,6 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
         super();
     }
 
-    public boolean canProduceElectricity(ForgeDirection side)
-    {
-        return canConnect(side) && !this.isDisabled();
-    }
-
     @Override
     public boolean canReceiveFromSide(ForgeDirection side)
     {
@@ -71,14 +66,14 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     @Override
     public boolean canConnect(ForgeDirection side)
     {
-        return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
+        return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2);
     }
     
     @Override
     public void updateEntity() 
     {
         //Check nearby blocks and see if the conductor is full. If so, then it is connected
-        TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite());
+        TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2));
 
         if (tileEntity instanceof TileEntityConductor)
         {
@@ -107,7 +102,7 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
 
                 if (this.connectedElectricUnit != null)
                 {
-                    this.generateWatts = (double)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.025 + BASE_ACCELERATION), 5), this.MAX_GENERATE_WATTS);
+                    this.generateWatts = (double)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.001 + BASE_ACCELERATION), 5), this.MAX_GENERATE_WATTS);
                 }
             }
             
@@ -136,13 +131,13 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
         
         if(!this.worldObj.isRemote)
         {
-	        if(ElectricityManager.inGameTicks % 40 == 0 && this.playersUsing > 0)
+	        if(ElectricityManager.inGameTicks % 60 == 0 && this.playersUsing > 0)
 	        {
 	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
 	        }
 	        else if(this.sendUpdate || (this.prevGenerateWatts != this.generateWatts && this.generateWatts <= BASE_ACCELERATION*2))
 	        {
-	        	this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, BasicComponents.blockCoalGenerator.blockID, 1, (int)this.generateWatts);
+	        	PacketManager.sendTileEntityPacket(this, "BasicComponents", this.generateWatts, this.disabledTicks);
 	        	this.sendUpdate = false;
 	        }
         }
@@ -154,23 +149,17 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
 	{
 		try
         {
-            this.generateWatts = dataStream.readDouble();
-            this.disabledTicks = dataStream.readInt();
+			if(this.worldObj.isRemote)
+			{
+	            this.generateWatts = dataStream.readDouble();
+	            this.disabledTicks = dataStream.readInt();
+			}
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
 	}
-    
-    @Override
-    public void receiveClientEvent(int key, int value)
-    {
-    	if(this.worldObj.isRemote)
-    	{
-    		this.generateWatts = value;
-    	}
-    }
     
     @Override
     public void onPlayerLoggedIn(EntityPlayer player)

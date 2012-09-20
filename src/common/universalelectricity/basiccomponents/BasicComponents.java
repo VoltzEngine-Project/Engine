@@ -54,14 +54,11 @@ public class BasicComponents implements ICraftingHandler
      * Here is where all the Universal Components are defined. You may reference to these variables.
     */
     public static final int BLOCK_ID_PREFIX = 3970;
-    public static final Block blockOre = new BlockBCOre(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper and Tin Ores", BLOCK_ID_PREFIX-1));
-    public static final Block blockCopperWire = new BlockCopperWire(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper_Wire", BLOCK_ID_PREFIX));
-    public static final Block blockBatteryBox = new BlockBatteryBox(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Battery_Box", BLOCK_ID_PREFIX + 1), 0);
-    public static final Block blockCoalGenerator = new BlockCoalGenerator(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Coal_Generator", BLOCK_ID_PREFIX + 2), 0);
-    public static final Block blockElectricFurnace = new BlockElectricFurnace(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Electric_Furnace", BLOCK_ID_PREFIX + 3), 0);
-    public static final Block oilMoving = new BlockOilFlowing(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Flowing", BLOCK_ID_PREFIX + 4));
-    public static final Block oilStill = new BlockOilStill(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Still", BLOCK_ID_PREFIX + 5));
-    
+    public static final Block blockOre = new BlockBCOre(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper and Tin Ores", BLOCK_ID_PREFIX));
+    public static final Block blockCopperWire = new BlockCopperWire(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper_Wire", BLOCK_ID_PREFIX + 1));
+    public static final Block oilMoving = new BlockOilFlowing(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Flowing", BLOCK_ID_PREFIX + 2));
+    public static final Block oilStill = new BlockOilStill(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Still", BLOCK_ID_PREFIX + 3));
+    public static final BlockBasicMachine blockMachine = new BlockBasicMachine(UniversalElectricity.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Basic Machine", BLOCK_ID_PREFIX + 4), 0);
     
     public static final int ITEM_ID_PREFIX = 13970;
     public static final Item itemBattery = new ItemBattery(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Battery", ITEM_ID_PREFIX+1), 0);
@@ -103,12 +100,10 @@ public class BasicComponents implements ICraftingHandler
 
     	//Register Blocks
     	GameRegistry.registerBlock(blockOre, ItemBCOre.class);
-		GameRegistry.registerBlock(blockCopperWire);
-		GameRegistry.registerBlock(blockBatteryBox);
-		GameRegistry.registerBlock(blockCoalGenerator);
-		GameRegistry.registerBlock(blockElectricFurnace);
+		GameRegistry.registerBlock(blockMachine, ItemBasicMachine.class);
 		GameRegistry.registerBlock(oilMoving);
 		GameRegistry.registerBlock(oilStill);
+		GameRegistry.registerBlock(blockCopperWire);
 		GameRegistry.registerCraftingHandler(this);
 		
 		OreDictionary.registerOre("ingotCopper", itemCopperIngot);
@@ -136,9 +131,9 @@ public class BasicComponents implements ICraftingHandler
         LanguageRegistry.addName(new ItemStack(itemCircuit, 1, 2), "Elite Circuit");
         LanguageRegistry.addName(itemOilBucket, "Oil Bucket");
         
-        LanguageRegistry.addName(blockBatteryBox, "Battery Box");
-        LanguageRegistry.addName(blockCoalGenerator, "Coal Generator");
-        LanguageRegistry.addName(blockElectricFurnace, "Electric Furnace");
+        LanguageRegistry.addName(blockMachine.getCoalGenerator(), "Coal Generator");
+        LanguageRegistry.addName(blockMachine.getBatteryBox(), "Battery Box");
+		LanguageRegistry.addName(blockMachine.getElectricFurnace(), "Electric Furnace");
 		
 		GameRegistry.registerTileEntity(TileEntityBatteryBox.class, "TileEntityBatteryBox");
 		GameRegistry.registerTileEntity(TileEntityCoalGenerator.class, "TileEntityCoalGenerator");
@@ -158,14 +153,14 @@ public class BasicComponents implements ICraftingHandler
 		//Wrench
 		RecipeManager.addRecipe(new ItemStack(itemWrench), new Object [] {" S ", " SS", "S  ", 'S', "ingotSteel"});
 		//Battery Box
-		RecipeManager.addRecipe(blockBatteryBox, new Object [] {"?!?", "#?#", "?!?", '#', blockCopperWire,'!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getUnchargedItemStack()) });
-		RecipeManager.addSmelting(blockBatteryBox, new ItemStack(itemSteelDust, 6));
+		RecipeManager.addRecipe(blockMachine.getBatteryBox(), new Object [] {"?!?", "#?#", "?!?", '#', blockCopperWire,'!', itemSteelPlate, '?', (((ItemBattery)itemBattery).getUnchargedItemStack()) });
+		RecipeManager.addSmelting(blockMachine.getBatteryBox(), new ItemStack(itemSteelDust, 6));
 		//Coal Generator
-		RecipeManager.addRecipe(blockCoalGenerator, new Object [] {"!@!", "$#$", "???", '?', "ingotBronze", '!', itemSteelPlate, '@', blockCopperWire, '#', itemMotor, '$', Block.stoneOvenIdle});
-		RecipeManager.addSmelting(blockCoalGenerator, new ItemStack(itemSteelDust, 6));
+		RecipeManager.addRecipe(blockMachine.getCoalGenerator(), new Object [] {"!@!", "$#$", "???", '?', "ingotBronze", '!', itemSteelPlate, '@', blockCopperWire, '#', itemMotor, '$', Block.stoneOvenIdle});
+		RecipeManager.addSmelting(blockMachine.getCoalGenerator(), new ItemStack(itemSteelDust, 6));
 		//Electric Furnace
-		RecipeManager.addRecipe(blockElectricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '?', itemCircuit, '#', itemMotor});
-		RecipeManager.addSmelting(blockElectricFurnace, new ItemStack(itemSteelDust, 6));
+		RecipeManager.addRecipe(blockMachine.getElectricFurnace(), new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '?', itemCircuit, '#', itemMotor});
+		RecipeManager.addSmelting(blockMachine.getElectricFurnace(), new ItemStack(itemSteelDust, 6));
 		//Copper
 		RecipeManager.addSmelting(new ItemStack(blockOre, 1, 0), new ItemStack(itemCopperIngot));
 		//Copper Wire
