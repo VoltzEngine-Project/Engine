@@ -39,7 +39,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class BasicComponents implements ICraftingHandler
 {
-    protected static final String VERSION = "0.8.2";
+    protected static final String VERSION = "0.8.3";
 
     public static final String FILE_PATH = "/basiccomponents/textures/";
     public static final String BLOCK_TEXTURE_FILE = FILE_PATH + "blocks.png";
