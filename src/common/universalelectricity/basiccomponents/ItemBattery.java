@@ -3,7 +3,7 @@ package universalelectricity.basiccomponents;
 import java.util.List;
 
 import net.minecraft.src.ItemStack;
-import universalelectricity.extend.ItemElectric;
+import universalelectricity.prefab.ItemElectric;
 
 public class ItemBattery extends ItemElectric
 {

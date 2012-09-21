@@ -1,5 +1,8 @@
 package universalelectricity.basiccomponents;
 
+import ic2.api.Direction;
+import ic2.api.IEnergyAcceptor;
+import ic2.api.IEnergyEmitter;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -11,16 +14,16 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityMachine;
-import universalelectricity.extend.IElectricityStorage;
-import universalelectricity.extend.IItemElectric;
-import universalelectricity.extend.IRedstoneProvider;
-import universalelectricity.extend.TileEntityConductor;
+import universalelectricity.implement.IElectricityStorage;
+import universalelectricity.implement.IItemElectric;
+import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
+import universalelectricity.prefab.TileEntityConductor;
+import universalelectricity.prefab.Vector3;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
@@ -28,7 +31,7 @@ import buildcraft.api.power.PowerProvider;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityBatteryBox extends TileEntityMachine implements IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
+public class TileEntityBatteryBox extends TileEntityMachine implements IEnergyEmitter, IEnergyAcceptor, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
 {	
 	private double wattHourStored = 0;
 
@@ -69,6 +72,24 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IPowerRec
 	{
 		return powerProvider.getMaxEnergyReceived();
 	}
+	
+	@Override
+	public boolean isAddedToEnergyNet()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
+	{
+		return this.canReceiveFromSide(direction.toForgeDirection());
+	}
+
+	@Override
+	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
+	{
+		return false;
+	}
 
     @Override
     public double wattRequest()
@@ -86,6 +107,8 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IPowerRec
     {
         return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
     }
+    
+    
 
     @Override
     public boolean canConnect(ForgeDirection side)
@@ -94,9 +117,9 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IPowerRec
     }
 
     @Override
-    public void onReceive(double amps, double voltage, ForgeDirection side)
+    public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
     {
-        super.onReceive(amps, voltage, side);
+        super.onReceive(sender, amps, voltage, side);
         
         if (voltage > this.getVoltage())
         {
@@ -169,7 +192,7 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IPowerRec
                     {
                         double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((TileEntityConductor)tileEntity).connectionID);
                         double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 10000), 0);                        
-                        ElectricityManager.instance.produceElectricity((TileEntityConductor)tileEntity, transferAmps, this.getVoltage());
+                        ElectricityManager.instance.produceElectricity(this, (TileEntityConductor)tileEntity, transferAmps, this.getVoltage());
                         this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
                     }
                 }

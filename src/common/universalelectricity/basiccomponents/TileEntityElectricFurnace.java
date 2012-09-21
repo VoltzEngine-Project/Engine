@@ -8,12 +8,13 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
+import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityMachine;
-import universalelectricity.extend.IItemElectric;
+import universalelectricity.implement.IItemElectric;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
 
@@ -44,7 +45,7 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
     {
         if(!this.isDisabled() && this.canSmelt())
         {
-            return this.WATTS_PER_TICK/this.getReceiveInterval();
+            return this.WATTS_PER_TICK;
         }
 
         return 0;
@@ -56,9 +57,9 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
     }
 
     @Override
-    public void onReceive(double amps, double voltage, ForgeDirection side)
+    public void onReceive(TileEntity entity, double amps, double voltage, ForgeDirection side)
     {
-        super.onReceive(amps, voltage, side);
+        super.onReceive(entity, amps, voltage, side);
 
         if (voltage > this.getVoltage())
         {
@@ -97,10 +98,10 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
             //Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
             if (this.canSmelt() && this.smeltingTicks > 0)
             {
-                this.smeltingTicks -= this.getReceiveInterval();
+                this.smeltingTicks --;
 
                 //When the item is finished smelting
-                if (this.smeltingTicks < 1 * this.getReceiveInterval())
+                if (this.smeltingTicks < 1)
                 {
                     this.smeltItem();
                     this.smeltingTicks = 0;

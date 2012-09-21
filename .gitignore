@@ -21,6 +21,7 @@ LICENSE.txt
 /Backup
 !/src/minecraft/universalelectricity/
 !/src/common/buildcraft/
+!/src/common/ic2/
 !/src/common/universalelectricity/
 !/src/common/mcmod.info
 !/resources/*

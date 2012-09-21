@@ -4,7 +4,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.electricity.ElectricityTicker;
-import universalelectricity.extend.CommonProxy;
+import universalelectricity.prefab.CommonProxy;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;

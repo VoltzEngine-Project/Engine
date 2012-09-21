@@ -13,8 +13,8 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.UniversalElectricity;
-import universalelectricity.extend.BlockMachine;
-import universalelectricity.extend.IRedstoneProvider;
+import universalelectricity.implement.IRedstoneProvider;
+import universalelectricity.prefab.BlockMachine;
 
 public class BlockBasicMachine extends BlockMachine
 {

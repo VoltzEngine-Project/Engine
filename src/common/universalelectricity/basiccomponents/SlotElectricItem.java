@@ -3,7 +3,7 @@ package universalelectricity.basiccomponents;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import universalelectricity.extend.IItemElectric;
+import universalelectricity.implement.IItemElectric;
 
 /**
  * This slot should be used by any container that needs the slot for an electric item only

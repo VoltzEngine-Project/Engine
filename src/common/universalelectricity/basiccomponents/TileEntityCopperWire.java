@@ -1,13 +1,13 @@
 package universalelectricity.basiccomponents;
 
-import universalelectricity.extend.TileEntityConductor;
+import universalelectricity.prefab.TileEntityConductor;
 
 public class TileEntityCopperWire extends TileEntityConductor
 {
     @Override
     public double getResistance()
     {
-        return 0.3;
+        return 0.0000000168;
     }
 
 	@Override

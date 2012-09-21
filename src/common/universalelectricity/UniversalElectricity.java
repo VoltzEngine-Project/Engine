@@ -20,6 +20,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.ore.OreGenerator;
 import universalelectricity.recipe.RecipeManager;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;

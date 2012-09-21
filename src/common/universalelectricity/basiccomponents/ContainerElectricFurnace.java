@@ -7,7 +7,7 @@ import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import net.minecraft.src.SlotFurnace;
-import universalelectricity.extend.IItemElectric;
+import universalelectricity.implement.IItemElectric;
 
 public class ContainerElectricFurnace extends Container
 {

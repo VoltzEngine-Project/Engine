@@ -7,9 +7,9 @@ import java.util.List;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.Vector3;
-import universalelectricity.extend.IMachine;
-import universalelectricity.extend.TileEntityConductor;
+import universalelectricity.implement.IElectricityReceiver;
+import universalelectricity.prefab.TileEntityConductor;
+import universalelectricity.prefab.Vector3;
 import cpw.mods.fml.common.TickType;
 
 /**
@@ -23,11 +23,11 @@ public class ElectricityManager
 {
 	public static ElectricityManager instance;
 	
-    private List<IMachine> electricUnits = new ArrayList<IMachine>();
+    private List<IElectricityReceiver> electricUnits = new ArrayList<IElectricityReceiver>();
     private List<TileEntityConductor> electricConductors = new ArrayList<TileEntityConductor>();
 
     private List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
-    private List<ElectricityConnection> wireConnections = new ArrayList<ElectricityConnection>();
+    private List<ElectricityNetwork> wireConnections = new ArrayList<ElectricityNetwork>();
     private int maxConnectionID = 0;
 
     public static long inGameTicks = 0;
@@ -50,7 +50,7 @@ public class ElectricityManager
      * ElectricityManager.registerConsumer(this);
      * @param newUnit - The consumer to be registered.
      */
-    public void registerElectricUnit(IMachine newUnit)
+    public void registerElectricUnit(IElectricityReceiver newUnit)
     {
         if (!this.electricUnits.contains(newUnit))
         {
@@ -66,7 +66,7 @@ public class ElectricityManager
     public void registerConductor(TileEntityConductor newConductor)
     {
         cleanUpConnections();
-        this.wireConnections.add(new ElectricityConnection(getMaxConnectionID(), newConductor));
+        this.wireConnections.add(new ElectricityNetwork(getMaxConnectionID(), newConductor));
 
         if (!this.electricConductors.contains(newConductor))
         {
@@ -83,8 +83,8 @@ public class ElectricityManager
     {
         if(ID1 != ID2)
         {
-            ElectricityConnection connection1 = getConnectionByID(ID1);
-            ElectricityConnection connection2 = getConnectionByID(ID2);
+            ElectricityNetwork connection1 = getConnectionByID(ID1);
+            ElectricityNetwork connection2 = getConnectionByID(ID2);
             connection1.conductors.addAll(connection2.conductors);
             connection1.setID(ID1);
             this.wireConnections.remove(connection2);
@@ -100,7 +100,7 @@ public class ElectricityManager
      */
     public void splitConnection(TileEntityConductor conductorA, TileEntityConductor conductorB)
     {
-        ElectricityConnection connection = getConnectionByID(conductorA.connectionID);
+        ElectricityNetwork connection = getConnectionByID(conductorA.connectionID);
         connection.cleanUpArray();
 
         for(TileEntityConductor conductor : connection.conductors)
@@ -122,7 +122,7 @@ public class ElectricityManager
      * @param ID
      * @return
      */
-    public ElectricityConnection getConnectionByID(int ID)
+    public ElectricityNetwork getConnectionByID(int ID)
     {
         cleanUpConnections();
 
@@ -168,16 +168,16 @@ public class ElectricityManager
      * @param targetConductor - The tile entity in which the electricity is being produced into
      * @param side - The side in which the electricity is coming in from. 0-5 byte.
      */
-    public void produceElectricity(TileEntityConductor targetConductor, double amps, double voltage)
+    public void produceElectricity(TileEntity sender, TileEntityConductor targetConductor, double amps, double voltage)
     {
         if(targetConductor != null && amps > 0 && voltage > 0)
         {
             //Find a path between this conductor and all connected units and try to send the electricity to them directly
-            ElectricityConnection connection = this.getConnectionByID(targetConductor.connectionID);
+            ElectricityNetwork connection = this.getConnectionByID(targetConductor.connectionID);
 
             if(connection != null)
             {
-                List<IMachine> allElectricUnitsInLine = connection.getConnectedElectricUnits();
+                List<IElectricityReceiver> allElectricUnitsInLine = connection.getConnectedElectricUnits();
                 double leftOverAmps = amps;
 
                 for (TileEntityConductor conductor : connection.conductors)
@@ -188,15 +188,15 @@ public class ElectricityManager
 
                         if (tileEntity != null)
                         {
-                            if (tileEntity instanceof IMachine)
+                            if (tileEntity instanceof IElectricityReceiver)
                             {
-                                IMachine electricUnit = (IMachine)tileEntity;
+                                IElectricityReceiver electricUnit = (IElectricityReceiver)tileEntity;
 
                                 if (electricUnit.wattRequest() > 0 && electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                                 {
                                     double transferAmps = Math.max(0, Math.min(leftOverAmps, Math.min(amps / allElectricUnitsInLine.size(), ElectricInfo.getAmps(electricUnit.wattRequest(), electricUnit.getVoltage()) )));
                                     leftOverAmps -= transferAmps;
-                                    this.electricityTransferQueue.add(new ElectricityTransferData(electricUnit, ForgeDirection.getOrientation(i).getOpposite(), transferAmps, voltage));
+                                    this.electricityTransferQueue.add(new ElectricityTransferData(sender, electricUnit, ForgeDirection.getOrientation(i).getOpposite(), transferAmps, voltage));
                                 }
                             }
                         }
@@ -212,7 +212,7 @@ public class ElectricityManager
      */
     public double getElectricityRequired(int ID)
     {
-        ElectricityConnection connection = this.getConnectionByID(ID);
+        ElectricityNetwork connection = this.getConnectionByID(ID);
         double need = 0;
 
         if (connection != null)
@@ -225,9 +225,9 @@ public class ElectricityManager
 
                     if (tileEntity != null)
                     {
-                        if (tileEntity instanceof IMachine)
+                        if (tileEntity instanceof IElectricityReceiver)
                         {
-                            IMachine electricUnit = (IMachine)tileEntity;
+                            IElectricityReceiver electricUnit = (IElectricityReceiver)tileEntity;
 
                             if (electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                             {
@@ -282,7 +282,7 @@ public class ElectricityManager
 		{
 	        for(int i = 0; i < electricUnits.size(); i++)
 	        {
-	        	IMachine electricUnit = electricUnits.get(i);
+	        	IElectricityReceiver electricUnit = electricUnits.get(i);
 	        	
 	            //Cleanup useless units
 	            if (electricUnit == null)
@@ -295,40 +295,33 @@ public class ElectricityManager
 	                electricUnits.remove(electricUnit);
 	                break;
 	            }
-	
-	            if(electricUnit.getReceiveInterval() > 0)
-	            {
-		            if(inGameTicks % electricUnit.getReceiveInterval() == 0)
-		            {
-		                double watts = 0;
-		                double voltage = 0;
-		                ForgeDirection side = ForgeDirection.UNKNOWN;
-		
-		                //Try to stack all electricity from one side into one update
-		                for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
-		                {
-		                    if (electricityTransferQueue.get(ii).electricUnit == electricUnit)
-		                    {
-		                        //If the side is not set for this tick
-		                        if (side == ForgeDirection.UNKNOWN)
-		                        {
-		                            watts = electricityTransferQueue.get(ii).amps;
-		                            voltage = electricityTransferQueue.get(ii).voltage;
-		                            side = electricityTransferQueue.get(ii).side;
-		                            electricityTransferQueue.remove(ii);
-		                        }
-		                        else if (electricityTransferQueue.get(ii).side == side)
-		                        {
-		                            watts += electricityTransferQueue.get(ii).amps;
-		                            voltage = Math.min(voltage, electricityTransferQueue.get(ii).voltage);
-		                            electricityTransferQueue.remove(ii);
-		                        }
-		                    }
-		                }
-		
-		                electricUnit.onReceive(watts, voltage, side);
-		            }
-	            }
+	            
+                for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
+                {
+	                double amps = 0;
+	                double voltage = 0;
+	                ForgeDirection side = ForgeDirection.UNKNOWN;
+	                
+                    if (electricityTransferQueue.get(ii).receiver == electricUnit)
+                    {
+                        //If the side is not set for this tick
+                        if (side == ForgeDirection.UNKNOWN)
+                        {
+                            amps = electricityTransferQueue.get(ii).amps;
+                            voltage = electricityTransferQueue.get(ii).voltage;
+                            side = electricityTransferQueue.get(ii).side;
+                            electricityTransferQueue.remove(ii);
+                        }
+                        else if (electricityTransferQueue.get(ii).side == side)
+                        {
+                            amps += electricityTransferQueue.get(ii).amps;
+                            voltage = Math.min(voltage, electricityTransferQueue.get(ii).voltage);
+                            electricityTransferQueue.remove(ii);
+                        }
+                    }
+                    
+	                electricUnit.onReceive(electricityTransferQueue.get(ii).sender, amps, voltage, side);
+                }
 	        }
 	
 	        inGameTicks ++;

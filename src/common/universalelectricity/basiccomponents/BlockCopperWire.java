@@ -4,7 +4,7 @@ import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import universalelectricity.extend.BlockConductor;
+import universalelectricity.prefab.BlockConductor;
 
 public class BlockCopperWire extends BlockConductor
 {

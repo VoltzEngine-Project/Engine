@@ -10,12 +10,12 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.TileEntityMachine;
-import universalelectricity.extend.TileEntityConductor;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
+import universalelectricity.prefab.TileEntityConductor;
+import universalelectricity.prefab.Vector3;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -125,7 +125,7 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
 
             if(this.generateWatts > MIN_GENERATE_WATTS)
             {
-                ElectricityManager.instance.produceElectricity(this.connectedElectricUnit, (this.generateWatts/this.getVoltage())/20, this.getVoltage());
+                ElectricityManager.instance.produceElectricity(this, this.connectedElectricUnit, (this.generateWatts/this.getVoltage())/20, this.getVoltage());
             }
         }
         
@@ -334,11 +334,5 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     public double wattRequest()
     {
         return 0;
-    }
-    
-    @Override
-    public int getReceiveInterval()
-    {
-        return -1;
     }
 }

@@ -4,13 +4,13 @@ import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.extend.IMachine;
+import universalelectricity.implement.IElectricityReceiver;
 
 /**
  * An easier way to implement the methods from IMachine with default values set.
  * @author Calclavia
  */
-public abstract class TileEntityMachine extends TileEntity implements IMachine
+public abstract class TileEntityMachine extends TileEntity implements IElectricityReceiver
 {
     protected int disabledTicks = 0;
 
@@ -23,11 +23,11 @@ public abstract class TileEntityMachine extends TileEntity implements IMachine
      * Called every tick. Super this!
      */
     @Override
-    public void onReceive(double ampere, double voltage, ForgeDirection side)
+    public void onReceive(TileEntity entity, double ampere, double voltage, ForgeDirection side)
     {
         if (this.disabledTicks > 0)
         {
-            this.disabledTicks -= this.getReceiveInterval();
+            this.disabledTicks --;
             this.whileDisable(ampere, voltage, side);
             return;
         }
@@ -69,12 +69,6 @@ public abstract class TileEntityMachine extends TileEntity implements IMachine
     public double getVoltage()
     {
         return 120;
-    }
-
-    @Override
-    public int getReceiveInterval()
-    {
-        return 1;
     }
 
     /**

@@ -1,18 +1,21 @@
 package universalelectricity.electricity;
 
+import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.extend.IMachine;
+import universalelectricity.implement.IElectricityReceiver;
 
 public class ElectricityTransferData
 {
-    public IMachine electricUnit;
+	public TileEntity sender;
+	public IElectricityReceiver receiver;
     public double amps;
     public double voltage;
     public ForgeDirection side;
 
-    public ElectricityTransferData(IMachine electricUnit, ForgeDirection side, double amps, double voltage)
+    public ElectricityTransferData(TileEntity sender, IElectricityReceiver receiver, ForgeDirection side, double amps, double voltage)
     {
-        this.electricUnit = electricUnit;
+    	this.sender = sender;
+    	this.receiver = receiver;
         this.side = side;
         this.amps = amps;
         this.voltage = voltage;
