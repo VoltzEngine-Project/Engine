@@ -108,8 +108,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     {
         return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
     }
-    
-    
 
     @Override
     public boolean canConnect(ForgeDirection side)
