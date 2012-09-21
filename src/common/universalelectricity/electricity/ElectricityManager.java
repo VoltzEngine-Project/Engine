@@ -109,7 +109,7 @@ public class ElectricityManager
         {
             for (byte i = 0; i < 6; i++)
             {
-                conductor.updateConnectionWithoutSplit(Vector3.getUEUnitFromSide(conductor.getWorld(), new Vector3(conductor.xCoord, conductor.yCoord, conductor.zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+                conductor.updateConnectionWithoutSplit(Vector3.getConnectorFromSide(conductor.getWorld(), new Vector3(conductor.xCoord, conductor.yCoord, conductor.zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
             }
         }
     }
@@ -274,28 +274,11 @@ public class ElectricityManager
 	            
                 for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
                 {
-	                double amps = 0;
-	                double voltage = 0;
-	                ForgeDirection side = ForgeDirection.UNKNOWN;
-	                
                     if (electricityTransferQueue.get(ii).receiver == electricUnit)
                     {
-                        //If the side is not set for this tick
-                        if (side == ForgeDirection.UNKNOWN)
-                        {
-                            amps = electricityTransferQueue.get(ii).amps;
-                            voltage = electricityTransferQueue.get(ii).voltage;
-                            side = electricityTransferQueue.get(ii).side;
-                        }
-                        else if (electricityTransferQueue.get(ii).side == side)
-                        {
-                            amps += electricityTransferQueue.get(ii).amps;
-                            voltage = Math.min(voltage, electricityTransferQueue.get(ii).voltage);
-                        }
-                    }
-                    
-	                electricUnit.onReceive(electricityTransferQueue.get(ii).sender, amps, voltage, side);
-	                electricityTransferQueue.remove(ii);
+                    	electricUnit.onReceive(electricityTransferQueue.get(ii).sender, electricityTransferQueue.get(ii).amps, electricityTransferQueue.get(ii).voltage, electricityTransferQueue.get(ii).side);
+    	                electricityTransferQueue.remove(ii);
+                    }              
                 }
 	        }
 		}

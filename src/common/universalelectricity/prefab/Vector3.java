@@ -9,7 +9,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.implement.IElectricityReceiver;
+import universalelectricity.implement.IConnector;
 
 /**
  * Vector3 Class is used for defining objects in a 3D space. Vector3 makes it easier to handle the coordinates of objects. Instead of
@@ -287,7 +287,7 @@ public class Vector3 extends Vector2 implements Cloneable
 	 * @param z - The Z axis of the conductor
 	 * @return Returns the tile entity for the block on the designated side. Returns null if not a UE Unit
 	 */
-	public static TileEntity getUEUnitFromSide(World world, Vector3 position, ForgeDirection side)
+	public static TileEntity getConnectorFromSide(World world, Vector3 position, ForgeDirection side)
 	{
 		position.modifyPositionFromSide(side);
 	    //Check if the designated block is a UE Unit - producer, consumer or a conductor
@@ -298,9 +298,9 @@ public class Vector3 extends Vector2 implements Cloneable
 	        return tileEntity;
 	    }
 	
-	    if (tileEntity instanceof IElectricityReceiver)
+	    if (tileEntity instanceof IConnector)
 	    {
-	        if (((IElectricityReceiver)tileEntity).canConnect(getOrientationFromSide(side, ForgeDirection.NORTH)))
+	        if (((IConnector)tileEntity).canConnect(getOrientationFromSide(side, ForgeDirection.NORTH)))
 	        {
 	            return tileEntity;
 	        }

@@ -69,7 +69,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
     	super.updateEntity();
     	
         //Check nearby blocks and see if the conductor is full. If so, then it is connected
-        TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2));
+        TileEntity tileEntity = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2));
 
         if (tileEntity instanceof TileEntityConductor)
         {
@@ -91,7 +91,6 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
         {
         	this.prevGenerateWatts = this.generateWatts;
 
-        	//Starts generating electricity if the device is heated up
             if (this.itemCookTime > 0)
             {
                 this.itemCookTime --;
@@ -119,7 +118,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
                 this.generateWatts = (double)Math.max(this.generateWatts - 8, 0);
             }
 
-            if(this.generateWatts > MIN_GENERATE_WATTS)
+            if(this.generateWatts > MIN_GENERATE_WATTS && this.connectedElectricUnit != null)
             {
                 ElectricityManager.instance.produceElectricity(this, this.connectedElectricUnit, (this.generateWatts/this.getVoltage())/20, this.getVoltage());
             }

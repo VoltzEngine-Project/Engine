@@ -6,6 +6,7 @@ import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
+import universalelectricity.implement.IConnector;
 import universalelectricity.implement.IElectricityReceiver;
 
 /**
@@ -35,7 +36,7 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
      */
     public void updateConnection(TileEntity tileEntity, ForgeDirection side)
     {
-        if (tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricityReceiver)
+        if (tileEntity instanceof TileEntityConductor || tileEntity instanceof IConnector)
         {
             this.connectedBlocks[side.ordinal()] = tileEntity;
 
@@ -65,7 +66,7 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
 
     public void updateConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
     {
-        if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IElectricityReceiver)
+        if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IConnector)
         {
             this.connectedBlocks[side.ordinal()] = tileEntity;
 

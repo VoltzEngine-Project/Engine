@@ -46,7 +46,7 @@ public abstract class BlockConductor extends BlockContainer
                 if (tileEntity instanceof TileEntityConductor)
                 {
                     TileEntityConductor conductorTileEntity = (TileEntityConductor)tileEntity;
-                    conductorTileEntity.updateConnection(Vector3.getUEUnitFromSide(world, new Vector3(x, y, z), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+                    conductorTileEntity.updateConnection(Vector3.getConnectorFromSide(world, new Vector3(x, y, z), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
                 }
             }
         }
