@@ -4,14 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.MapColor;
 import net.minecraft.src.Material;
-import net.minecraft.src.NetHandler;
-import net.minecraft.src.NetLoginHandler;
-import net.minecraft.src.NetworkManager;
-import net.minecraft.src.Packet1Login;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,6 +15,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.network.ConnectionHandler;
 import universalelectricity.ore.OreGenerator;
 import universalelectricity.recipe.RecipeManager;
 import cpw.mods.fml.common.Loader;
@@ -28,15 +24,13 @@ import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.IConnectionHandler;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.VERSION, dependencies = "after:*")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false, connectionHandler = UniversalElectricity.class)
+@NetworkMod(clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class)
 
-public class UniversalElectricity implements IConnectionHandler
+public class UniversalElectricity
 {
 	protected static final String VERSION = "0.8.3";
 
@@ -173,41 +167,4 @@ public class UniversalElectricity implements IConnectionHandler
         configuration.save();
         return id;
     }
-
-	@Override
-	public void playerLoggedIn(Player player, NetHandler netHandler, NetworkManager manager)
-	{
-		ElectricityManager.instance.onPlayerLoggedIn((EntityPlayer)player);
-	}
-
-	@Override
-	public String connectionReceived(NetLoginHandler netHandler, NetworkManager manager) 
-	{
-		return null;
-	}
-
-	@Override
-	public void connectionOpened(NetHandler netClientHandler, String server, int port, NetworkManager manager)
-	{
-		
-	}
-
-	@Override
-	public void connectionOpened(NetHandler netClientHandler, MinecraftServer server, NetworkManager manager)
-	{
-		
-	}
-
-	@Override
-	public void connectionClosed(NetworkManager manager)
-	{
-		
-	}
-
-	@Override
-	public void clientLoggedIn(NetHandler clientHandler, NetworkManager manager, Packet1Login login)
-	{
-    	ElectricityManager.instance.timedConductorRefresh();
-    	
-	}
 }

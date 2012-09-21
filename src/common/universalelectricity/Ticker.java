@@ -1,20 +1,18 @@
-package universalelectricity.electricity;
+package universalelectricity;
 
 import java.util.EnumSet;
 
+import universalelectricity.electricity.ElectricityManager;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
-public class ElectricityTicker implements ITickHandler
+public class Ticker implements ITickHandler
 {
+	public static long inGameTicks = 0;
+
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
-	{	/*
-		for(ElectricityManager instance : ElectricityManager.instances)
-		{
-			instance.tickStart(type, tickData);
-		}*/
-		
+	{
 		if(ElectricityManager.instance != null)
 		{
 			ElectricityManager.instance.tickStart(type, tickData);
@@ -24,16 +22,17 @@ public class ElectricityTicker implements ITickHandler
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		/*
-		for(ElectricityManager instance : ElectricityManager.instances)
-		{
-			instance.tickEnd(type, tickData);
-		}*/
-		
 		if(ElectricityManager.instance != null)
 		{
 			ElectricityManager.instance.tickEnd(type, tickData);
 		}
+		
+		inGameTicks ++;
+        
+        if(inGameTicks >= Long.MAX_VALUE)
+        {
+        	inGameTicks = 0;
+        }
 	}
 
 	@Override

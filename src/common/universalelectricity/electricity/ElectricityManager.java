@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.implement.IElectricityReceiver;
@@ -30,8 +29,6 @@ public class ElectricityManager
     private List<ElectricityNetwork> wireConnections = new ArrayList<ElectricityNetwork>();
     private int maxConnectionID = 0;
 
-    public static long inGameTicks = 0;
-    
     public int refreshConductors;
     
     public ElectricityManager()
@@ -241,28 +238,7 @@ public class ElectricityManager
 
         return need;
     }
-    
-    /**
-     * Calls all the machine tileEntities's onPLayerLoggedIn function.
-     */
-    public void onPlayerLoggedIn(EntityPlayer player)
-	{
-		try
-		{
-			for(int i = 0; i < electricUnits.size(); i++)
-	        {
-				if(electricUnits.get(i) != null)
-				{
-					electricUnits.get(i).onPlayerLoggedIn(player);
-				}
-	        }
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-    
+
     /**
      * This function is called to refresh all conductors in UE
      */
@@ -310,25 +286,17 @@ public class ElectricityManager
                             amps = electricityTransferQueue.get(ii).amps;
                             voltage = electricityTransferQueue.get(ii).voltage;
                             side = electricityTransferQueue.get(ii).side;
-                            electricityTransferQueue.remove(ii);
                         }
                         else if (electricityTransferQueue.get(ii).side == side)
                         {
                             amps += electricityTransferQueue.get(ii).amps;
                             voltage = Math.min(voltage, electricityTransferQueue.get(ii).voltage);
-                            electricityTransferQueue.remove(ii);
                         }
                     }
                     
 	                electricUnit.onReceive(electricityTransferQueue.get(ii).sender, amps, voltage, side);
+	                electricityTransferQueue.remove(ii);
                 }
-	        }
-	
-	        inGameTicks ++;
-	        
-	        if(inGameTicks >= Long.MAX_VALUE)
-	        {
-	        	inGameTicks = 0;
 	        }
 		}
 		catch(Exception e)

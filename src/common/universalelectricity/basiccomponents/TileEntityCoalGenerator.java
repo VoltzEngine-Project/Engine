@@ -10,16 +10,18 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import universalelectricity.Ticker;
 import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.electricity.TileEntityMachine;
+import universalelectricity.implement.IElectricityProducer;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityConductor;
+import universalelectricity.prefab.TileEntityDisableable;
 import universalelectricity.prefab.Vector3;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityCoalGenerator extends TileEntityMachine implements IInventory, ISidedInventory, IPacketReceiver
+public class TileEntityCoalGenerator extends TileEntityDisableable implements IElectricityProducer, IInventory, ISidedInventory, IPacketReceiver
 {
 	/**
 	 * Maximum amount of energy needed to generate electricity
@@ -49,20 +51,12 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     private ItemStack[] containingItems = new ItemStack[1];
 
 	private int playersUsing = 0;
-
-	private boolean sendUpdate = true;
 	
     public TileEntityCoalGenerator()
     {
         super();
     }
-
-    @Override
-    public boolean canReceiveFromSide(ForgeDirection side)
-    {
-        return false;
-    }
-
+    
     @Override
     public boolean canConnect(ForgeDirection side)
     {
@@ -72,6 +66,8 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     @Override
     public void updateEntity() 
     {
+    	super.updateEntity();
+    	
         //Check nearby blocks and see if the conductor is full. If so, then it is connected
         TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2));
 
@@ -131,14 +127,9 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
         
         if(!this.worldObj.isRemote)
         {
-	        if(ElectricityManager.inGameTicks % 60 == 0 && this.playersUsing > 0)
+	        if(Ticker.inGameTicks % 60 == 0 && this.playersUsing > 0)
 	        {
 	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
-	        }
-	        else if(this.sendUpdate || (this.prevGenerateWatts != this.generateWatts && this.generateWatts <= BASE_ACCELERATION*2))
-	        {
-	        	PacketManager.sendTileEntityPacket(this, "BasicComponents", this.generateWatts, this.disabledTicks);
-	        	this.sendUpdate = false;
 	        }
         }
     }
@@ -160,12 +151,6 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
             e.printStackTrace();
         }
 	}
-    
-    @Override
-    public void onPlayerLoggedIn(EntityPlayer player)
-    {
-    	this.sendUpdate = true;
-    }
     
     @Override
     public void openChest()
@@ -249,11 +234,13 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     {
         return this.containingItems.length;
     }
+    
     @Override
     public ItemStack getStackInSlot(int par1)
     {
         return this.containingItems[par1];
     }
+    
     @Override
     public ItemStack decrStackSize(int par1, int par2)
     {
@@ -284,6 +271,7 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
             return null;
         }
     }
+    
     @Override
     public ItemStack getStackInSlotOnClosing(int par1)
     {
@@ -298,6 +286,7 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
             return null;
         }
     }
+    
     @Override
     public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
     {
@@ -308,16 +297,19 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
             par2ItemStack.stackSize = this.getInventoryStackLimit();
         }
     }
+    
     @Override
     public String getInvName()
     {
         return "Coal Generator";
     }
+    
     @Override
     public int getInventoryStackLimit()
     {
         return 64;
     }
+    
     @Override
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
@@ -328,11 +320,5 @@ public class TileEntityCoalGenerator extends TileEntityMachine implements IInven
     public double getVoltage()
     {
         return 120;
-    }
-
-    @Override
-    public double wattRequest()
-    {
-        return 0;
     }
 }

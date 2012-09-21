@@ -48,7 +48,8 @@ public class OreGenReplace extends OreGenBase
         this.replaceID = replaceID;
     }
     
-    public void generate(World world, Random random, int varX, int varZ) {
+    public void generate(World world, Random random, int varX, int varZ)
+    {
 
         for (int i = 0; i < this.amountPerChunk; i++)
         {
@@ -60,7 +61,8 @@ public class OreGenReplace extends OreGenBase
 	}
 	
 
-	public boolean generateReplace(World par1World, Random par2Random, int par3, int par4, int par5) {
+	public boolean generateReplace(World par1World, Random par2Random, int par3, int par4, int par5)
+	{
         float var6 = par2Random.nextFloat() * (float)Math.PI;
         double var7 = (double)((float)(par3 + 8) + MathHelper.sin(var6) * (float)this.amountPerBranch / 8.0F);
         double var9 = (double)((float)(par3 + 8) - MathHelper.sin(var6) * (float)this.amountPerBranch / 8.0F);
@@ -116,7 +118,8 @@ public class OreGenReplace extends OreGenBase
 	}
 
 	@Override
-	public boolean isOreGeneratedInWorld(World world, IChunkProvider chunkGenerator) {
+	public boolean isOreGeneratedInWorld(World world, IChunkProvider chunkGenerator)
+	{
 		return ((this.generateSurface && chunkGenerator instanceof ChunkProviderGenerate) ||
 	             (this.generateNether && chunkGenerator instanceof ChunkProviderHell) ||
 	             (this.generateEnd && chunkGenerator instanceof ChunkProviderEnd)

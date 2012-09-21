@@ -2,7 +2,7 @@ package universalelectricity.implement;
 
 import net.minecraft.src.ItemStack;
 
-public interface IItemElectric extends IElectricityStorage
+public interface IItemElectric extends IElectricityStorage, IVoltage
 {
     public double onReceiveElectricity(double wattHourReceive, ItemStack itemStack);
     
@@ -12,7 +12,5 @@ public interface IItemElectric extends IElectricityStorage
     
     public boolean canProduceElectricity();
     
-    public double getTransferRate();
-    
-    public double getVoltage();
+    public double getTransferRate();   
 }

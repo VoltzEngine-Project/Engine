@@ -11,16 +11,16 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import universalelectricity.Ticker;
 import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.electricity.TileEntityMachine;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
+import universalelectricity.prefab.TileEntityElectricityReceiver;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityElectricFurnace extends TileEntityMachine implements IInventory, ISidedInventory,  IPacketReceiver
+public class TileEntityElectricFurnace extends TileEntityElectricityReceiver implements IInventory, ISidedInventory,  IPacketReceiver
 {
 	//The amount of watts required by the electric furnace per tick
     public final double WATTS_PER_TICK = 300;
@@ -59,8 +59,6 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
     @Override
     public void onReceive(TileEntity entity, double amps, double voltage, ForgeDirection side)
     {
-        super.onReceive(entity, amps, voltage, side);
-
         if (voltage > this.getVoltage())
         {
             this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
@@ -117,7 +115,7 @@ public class TileEntityElectricFurnace extends TileEntityMachine implements IInv
 
 	    if(!this.worldObj.isRemote)
 	    {
-   	        if(ElectricityManager.inGameTicks % 20 == 0 && this.playersUsing > 0)
+   	        if(Ticker.inGameTicks % 20 == 0 && this.playersUsing > 0)
 	        {
 	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.smeltingTicks, this.disabledTicks);
 	        }

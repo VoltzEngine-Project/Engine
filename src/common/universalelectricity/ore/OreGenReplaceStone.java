@@ -2,7 +2,8 @@ package universalelectricity.ore;
 
 import net.minecraft.src.ItemStack;
 
-public class OreGenReplaceStone extends OreGenReplace {
+public class OreGenReplaceStone extends OreGenReplace
+{
 	public OreGenReplaceStone(String name, String oreDiectionaryName, ItemStack stack, int replaceID, int minGenerateLevel, int maxGenerateLevel, int amountPerChunk, int amountPerBranch, String harvestTool, int harvestLevel)
     {
     	super(name, oreDiectionaryName, stack, 1, minGenerateLevel, maxGenerateLevel, amountPerChunk, amountPerBranch, harvestTool, harvestLevel);

@@ -67,7 +67,8 @@ public abstract class OreGenBase
 		MinecraftForge.setBlockHarvestLevel(Block.blocksList[stack.itemID], stack.getItemDamage(), harvestTool, harvestLevel);
     }
 
-    public OreGenBase enable(){
+    public OreGenBase enable()
+    {
         this.shouldGenerate = shouldGenerateOre(name);
         return this;
     }

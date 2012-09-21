@@ -1,6 +1,5 @@
 package universalelectricity.implement;
 
-import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -10,7 +9,7 @@ import net.minecraftforge.common.ForgeDirection;
  * @author Calclavia
  *
  */
-public interface IElectricityReceiver extends IDisableable, IConnector
+public interface IElectricityReceiver extends IDisableable, IConnector, IVoltage
 {
     /**
      * Called every tick on this machine.
@@ -37,18 +36,4 @@ public interface IElectricityReceiver extends IDisableable, IConnector
      * @return - True if so.
      */
     public boolean canReceiveFromSide(ForgeDirection side);
-
-    /**
-     * Gets the voltage of the electricity consumer. Used in a conductor to find the potential difference.
-     * If the voltage is too high, things might explode.
-     * @return The amount of volts. E.g 120v or 240v
-     */
-    public double getVoltage();
-    
-    /**
-     * Called when a player logs into a server. Works also in single player.
-     * You can use this to reset some functions and stuff but leave it
-     * blank in most cases.
-     */
-    public void onPlayerLoggedIn(EntityPlayer player);
 }
