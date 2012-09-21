@@ -21,10 +21,14 @@ import universalelectricity.extend.IRedstoneProvider;
 import universalelectricity.extend.TileEntityConductor;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
+import buildcraft.api.power.PowerProvider;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityBatteryBox extends TileEntityMachine implements IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
+public class TileEntityBatteryBox extends TileEntityMachine implements IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
 {	
 	private double wattHourStored = 0;
 
@@ -33,18 +37,45 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
     private boolean isFull = false;
     
 	private int playersUsing = 0;
+	
+	public PowerProvider powerProvider;
 
     public TileEntityBatteryBox()
     {
     	super();
     }
+    
+    @Override
+	public void setPowerProvider(IPowerProvider provider)
+    {
+    	if(PowerFramework.currentFramework != null)
+    	{
+    		powerProvider = (PowerProvider) PowerFramework.currentFramework.createPowerProvider();
+    		powerProvider.configure(20, 25, 25, 25, (int)ElectricInfo.getWatts(getMaxWattHours()));
+    	}
+	}
+
+	@Override
+	public IPowerProvider getPowerProvider()
+	{
+		return powerProvider;
+	}
+
+	@Override
+	public void doWork() { }
+
+	@Override
+	public int powerRequest()
+	{
+		return powerProvider.getMaxEnergyReceived();
+	}
 
     @Override
     public double wattRequest()
     {
         if (!this.isDisabled())
         {
-            return this.getMaxWattHours() - this.wattHourStored;
+            return ElectricInfo.getWatts(this.getMaxWattHours()) - ElectricInfo.getWatts(this.wattHourStored);
         }
 
         return 0;
@@ -70,11 +101,17 @@ public class TileEntityBatteryBox extends TileEntityMachine implements IElectric
         if (voltage > this.getVoltage())
         {
             this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
+            return;
         }
         
         if(!this.isDisabled())
         {
         	this.setWattHours(this.wattHourStored+ElectricInfo.getWattHours(amps, voltage));
+        	
+        	if(this.powerProvider != null)
+        	{
+        		this.setWattHours(this.wattHourStored+this.powerProvider.useEnergy(25, 25, true));
+        	}
         }
     }
     
