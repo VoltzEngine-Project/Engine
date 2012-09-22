@@ -24,7 +24,10 @@ import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IElectricityStorage;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.implement.IRedstoneProvider;
+import universalelectricity.network.ConnectionHandler;
+import universalelectricity.network.ConnectionHandler.ConnectionType;
 import universalelectricity.network.IPacketReceiver;
+import universalelectricity.network.ISimpleConnectionHandler;
 import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
@@ -36,7 +39,7 @@ import buildcraft.api.power.PowerProvider;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
+public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, ISimpleConnectionHandler
 {	
 	public static final int IC2_RATIO = 300;
 	
@@ -52,9 +55,12 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	
 	public boolean initialized = false;
 
+	private boolean sendUpdate = false;
+
     public TileEntityBatteryBox()
     {
     	super();
+    	ConnectionHandler.registerConnectionHandler(this);
     }
     
     @Override
@@ -251,12 +257,22 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
         
         if(!this.worldObj.isRemote)
         {
-	        if(Ticker.inGameTicks % 40 == 0 && this.playersUsing > 0)
+	        if(this.sendUpdate || (Ticker.inGameTicks % 40 == 0 && this.playersUsing > 0))
 	        {
 	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+	        	this.sendUpdate = false;
 	        }
         }
     }
+    
+    @Override
+	public void handelConnection(ConnectionType type, Object... data)
+    {
+    	if(type == ConnectionType.LOGIN_SERVER)
+    	{
+    		this.sendUpdate  = true;
+    	}
+	}
     
     @Override
 	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 

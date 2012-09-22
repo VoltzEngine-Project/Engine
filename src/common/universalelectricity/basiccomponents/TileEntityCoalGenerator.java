@@ -13,15 +13,18 @@ import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.Ticker;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IElectricityProducer;
+import universalelectricity.network.ConnectionHandler;
 import universalelectricity.network.IPacketReceiver;
+import universalelectricity.network.ISimpleConnectionHandler;
 import universalelectricity.network.PacketManager;
+import universalelectricity.network.ConnectionHandler.ConnectionType;
 import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.TileEntityDisableable;
 import universalelectricity.prefab.Vector3;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityCoalGenerator extends TileEntityDisableable implements IElectricityProducer, IInventory, ISidedInventory, IPacketReceiver
+public class TileEntityCoalGenerator extends TileEntityDisableable implements IElectricityProducer, IInventory, ISidedInventory, IPacketReceiver, ISimpleConnectionHandler
 {
 	/**
 	 * Maximum amount of energy needed to generate electricity
@@ -51,10 +54,13 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
     private ItemStack[] containingItems = new ItemStack[1];
 
 	private int playersUsing = 0;
+
+	private boolean sendUpdate = false;
 	
     public TileEntityCoalGenerator()
     {
         super();
+    	ConnectionHandler.registerConnectionHandler(this);
     }
     
     @Override
@@ -126,13 +132,22 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
         
         if(!this.worldObj.isRemote)
         {
-	        if(Ticker.inGameTicks % 60 == 0 && this.playersUsing > 0)
+	        if(this.sendUpdate || Ticker.inGameTicks % 60 == 0 && this.playersUsing > 0)
 	        {
 	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
+	        	this.sendUpdate = false;
 	        }
         }
     }
-
+    
+    @Override
+   	public void handelConnection(ConnectionType type, Object... data)
+    {
+       	if(type == ConnectionType.LOGIN_SERVER)
+       	{
+       		this.sendUpdate = true;
+       	}
+   	}
     
     @Override
 	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 

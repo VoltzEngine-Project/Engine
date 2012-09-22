@@ -10,8 +10,10 @@ import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
+import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MathHelper;
+import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -187,7 +189,6 @@ public class BlockBasicMachine extends BlockMachine
     public void onNeighborBlockChange(World par1World, int x, int y, int z, int par4)
     {
     	//This makes sure battery boxes can only have wires on it's correct side placed.
-    	
     	int metadata = par1World.getBlockMetadata(x, y, z);
 
     	if(metadata >= BATTERY_BOX_METADATA && metadata < ELECTRIC_FURNACE_METADATA)
@@ -378,4 +379,37 @@ public class BlockBasicMachine extends BlockMachine
         par3List.add(this.getElectricFurnace());
     }
 
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+    {
+        int id = idPicked(world, x, y, z);
+        
+        if (id == 0)
+        {
+            return null;
+        }
+
+        Item item = Item.itemsList[id];
+        if (item == null)
+        {
+            return null;
+        }
+        
+        int metadata = getDamageValue(world, x, y, z);
+        
+        if(metadata >= ELECTRIC_FURNACE_METADATA)
+		{
+        	metadata = ELECTRIC_FURNACE_METADATA;
+		}
+		else if(metadata >= BATTERY_BOX_METADATA)
+		{
+			metadata = BATTERY_BOX_METADATA;
+		}
+		else
+		{
+			metadata = COAL_GENERATOR_METADATA;
+		}
+
+        return new ItemStack(id, 1, metadata);
+    }
 }
