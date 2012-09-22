@@ -66,7 +66,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     	if(PowerFramework.currentFramework != null)
     	{
 	    	powerProvider = PowerFramework.currentFramework.createPowerProvider();
-			powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxWattHours()*UniversalElectricity.BC3_RATIO));
+			powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxWattHours()/UniversalElectricity.BC3_RATIO));
     	}
     }
     
@@ -127,7 +127,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
         {
         	if(this.powerProvider != null)
         	{
-        		this.setWattHours(this.wattHourStored+this.powerProvider.useEnergy(25, 25, true));
+        		this.setWattHours(this.wattHourStored + this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO);
         	}
         	
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
@@ -465,7 +465,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public int powerRequest()
 	{
-		return (int) Math.ceil((this.getMaxWattHours() - this.wattHourStored)*UniversalElectricity.BC3_RATIO);
+		return (int) Math.ceil((this.getMaxWattHours() - this.wattHourStored)/UniversalElectricity.BC3_RATIO);
 	}
 
 	/**
@@ -497,7 +497,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public int getCapacity() 
 	{
-		return (int)(getMaxWattHours()/UniversalElectricity.IC2_RATIO);
+		return (int)(this.getMaxWattHours()/UniversalElectricity.IC2_RATIO);
 	}
 
 	@Override
@@ -524,7 +524,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		double inputElectricity = euAmount * UniversalElectricity.IC2_RATIO;
 		
 		double rejectedElectricity = Math.max(this.wattHourStored - (this.wattHourStored - inputElectricity), 0);
-		
+		System.out.println(inputElectricity);
 		this.setWattHours(wattHourStored + inputElectricity);
 		
 		return (int) rejectedElectricity;
