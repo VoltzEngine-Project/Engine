@@ -189,9 +189,9 @@ public class ElectricityManager
                             {
                                 IElectricityReceiver electricUnit = (IElectricityReceiver)tileEntity;
 
-                                if (electricUnit.wattRequest() > 0 && electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
+                                if (Math.ceil(electricUnit.wattRequest()) > 0 && electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                                 {
-                                    double transferAmps = Math.max(0, Math.min(leftOverAmps, Math.min(amps / allElectricUnitsInLine.size(), ElectricInfo.getAmps(electricUnit.wattRequest(), electricUnit.getVoltage()) )));
+                                    double transferAmps = Math.max(0, Math.min(leftOverAmps, Math.min(amps / allElectricUnitsInLine.size(), ElectricInfo.getAmps(Math.ceil(electricUnit.wattRequest()), electricUnit.getVoltage()) )));
                                     leftOverAmps -= transferAmps;
                                     this.electricityTransferQueue.add(new ElectricityTransferData(sender, electricUnit, ForgeDirection.getOrientation(i).getOpposite(), transferAmps, voltage));
                                 }
@@ -228,7 +228,7 @@ public class ElectricityManager
 
                             if (electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                             {
-                                need += electricUnit.wattRequest();
+                                need += Math.ceil(electricUnit.wattRequest());
                             }
                         }
                     }

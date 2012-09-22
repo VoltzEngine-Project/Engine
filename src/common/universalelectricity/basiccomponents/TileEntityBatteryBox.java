@@ -1,6 +1,12 @@
 package universalelectricity.basiccomponents;
 
-import ic2.api.*;
+import ic2.api.Direction;
+import ic2.api.ElectricItem;
+import ic2.api.EnergyNet;
+import ic2.api.IElectricItem;
+import ic2.api.IEnergySink;
+import ic2.api.IEnergySource;
+import ic2.api.IEnergyStorage;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -129,11 +135,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
         if(!this.isDisabled())
         {
         	this.setWattHours(this.wattHourStored+ElectricInfo.getWattHours(amps, voltage));
-        	
-        	if(this.powerProvider != null)
-        	{
-        		this.setWattHours(this.wattHourStored+this.powerProvider.useEnergy(25, 25, true));
-        	}
         }
     }
     
@@ -144,12 +145,26 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     	
     	if(!this.initialized)
     	{
-    		EnergyNet.getForWorld(worldObj).addTileEntity(this);
+    		try
+    		{
+    			Class.forName("ic2.common.EnergyNet");
+	    		EnergyNet.getForWorld(worldObj).addTileEntity(this);
+    		}
+    		catch(Exception e)
+    		{
+    			System.out.println("Failed to locate Industrialcraft 2! Disabling IC2 compatibility.");
+    		}
+    		
     		this.initialized = true;
     	}
     	
         if(!this.isDisabled())
-        {            
+        {
+        	if(this.powerProvider != null)
+        	{
+        		this.setWattHours(this.wattHourStored+this.powerProvider.useEnergy(25, 25, true));
+        	}
+        	
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
             if (this.containingItems[0] != null && this.wattHourStored > 0)
             {
@@ -203,10 +218,18 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
             }
 
-            if(this.wattHourStored*IC2_RATIO >= 32)
+            try
+    		{
+    			Class.forName("ic2.common.EnergyNet");
+	            if(this.wattHourStored*IC2_RATIO >= 32)
+	            {
+	            	setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*.04);
+	            	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+	            }
+    		}
+            catch(Exception e)
             {
-            	setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*.04);
-            	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+            	
             }
             
             if (this.wattHourStored > 0)
@@ -218,7 +241,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                     if (tileEntity instanceof TileEntityConductor)
                     {
                         double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((TileEntityConductor)tileEntity).connectionID);
-                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 10000), 0);                        
+                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 15), 0);                        
                         ElectricityManager.instance.produceElectricity(this, (TileEntityConductor)tileEntity, transferAmps, this.getVoltage());
                         this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
                     } 

@@ -1,8 +1,11 @@
 package universalelectricity.basiccomponents;
 
+import ic2.api.IEnergyConductor;
+
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
@@ -15,6 +18,7 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.UniversalElectricity;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.BlockMachine;
+import universalelectricity.prefab.Vector3;
 
 public class BlockBasicMachine extends BlockMachine
 {
@@ -177,6 +181,40 @@ public class BlockBasicMachine extends BlockMachine
             }
         }
        
+    }
+    
+    @Override
+    public void onNeighborBlockChange(World par1World, int x, int y, int z, int par4)
+    {
+    	//This makes sure battery boxes can only have wires on it's correct side placed.
+    	
+    	int metadata = par1World.getBlockMetadata(x, y, z);
+
+    	if(metadata >= BATTERY_BOX_METADATA && metadata < ELECTRIC_FURNACE_METADATA)
+        {
+    		TileEntityBatteryBox tileEntity = (TileEntityBatteryBox)par1World.getBlockTileEntity(x, y, z);
+    		
+    		for (byte i = 0; i < 6; i++)
+    		{
+        		Vector3 position = new Vector3(x, y, z);
+    			position.modifyPositionFromSide(ForgeDirection.getOrientation(i));
+	            
+    			if(!tileEntity.canConnect(ForgeDirection.getOrientation(i).getOpposite()))
+    			{
+		            if(par1World.getBlockTileEntity(position.intX(), position.intY(), position.intZ()) != null)
+		    		{
+		            	//IEnergyConductor
+		            	if(par1World.getBlockTileEntity(position.intX(), position.intY(), position.intZ()) instanceof IEnergyConductor)
+		            	{
+			    			int neighborBlockID = par1World.getBlockId(position.intX(), position.intY(), position.intZ());
+		
+			            	Block.blocksList[neighborBlockID].dropBlockAsItem(par1World, position.intX(), position.intY(), position.intZ(), par1World.getBlockMetadata(position.intX(), position.intY(), position.intZ()), 0);
+			            	par1World.setBlockWithNotify(position.intX(), position.intY(), position.intZ(), 0);
+		            	}
+		    		}
+    			}
+    		}
+        }
     }
 
     @Override
