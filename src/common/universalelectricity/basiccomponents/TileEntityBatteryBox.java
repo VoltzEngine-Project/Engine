@@ -52,7 +52,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     
 	private int playersUsing = 0;
 	
-	public PowerProvider powerProvider;
+	public IPowerProvider powerProvider;
 	
 	public boolean initialized = false;
 
@@ -62,51 +62,14 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     {
     	super();
     	ConnectionHandler.registerConnectionHandler(this);
-    }
-    
-    @Override
-	public void setPowerProvider(IPowerProvider provider)
-    {
+    	
     	if(PowerFramework.currentFramework != null)
     	{
-    		powerProvider = (PowerProvider) PowerFramework.currentFramework.createPowerProvider();
-    		powerProvider.configure(20, 25, 25, 25, (int)ElectricInfo.getWatts(getMaxWattHours()));
+	    	powerProvider = PowerFramework.currentFramework.createPowerProvider();
+			powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxWattHours()*UniversalElectricity.BC3_RATIO));
     	}
-	}
-
-	@Override
-	public IPowerProvider getPowerProvider()
-	{
-		return powerProvider;
-	}
-
-	@Override
-	public void doWork() { }
-
-	@Override
-	public int powerRequest()
-	{
-		return (int) Math.ceil((this.getMaxWattHours() - this.wattHourStored)*UniversalElectricity.BC3_RATIO);
-	}
-	
-	@Override
-	public boolean isAddedToEnergyNet()
-	{
-		return initialized;
-	}
-
-	@Override
-	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
-	{
-		return canReceiveFromSide(direction.toForgeDirection());
-	}
-
-	@Override
-	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
-	{
-		return direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
-	}
-
+    }
+    
     @Override
     public double wattRequest()
     {
@@ -179,7 +142,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 else if(this.containingItems[0].getItem() instanceof IElectricItem)
                 {
                 	double sent = ElectricItem.charge(containingItems[0], (int) (wattHourStored*UniversalElectricity.IC2_RATIO), 3, false, false)*.04;
-                	setWattHours(wattHourStored - sent);
+                	this.setWattHours(wattHourStored - sent);
                 }
             }
 
@@ -202,11 +165,12 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 	if(item.canProvideEnergy())
                 	{
                 		double gain = ElectricItem.discharge(containingItems[1], (int) ((int)(getMaxWattHours()-wattHourStored)*UniversalElectricity.IC2_RATIO), 3, false, false)*.04;
-                		setWattHours(wattHourStored + gain);
+                		this.setWattHours(wattHourStored + gain);
                 	}
                 }
             }
 
+            //Power redstone if the battery box is full
             boolean isFullThisCheck = false;
 
             if (this.wattHourStored >= this.getMaxWattHours())
@@ -219,18 +183,19 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 this.isFull = isFullThisCheck;
                 this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
             }
-
-            if(Loader.isModLoaded("IC2"))
-    		{
-	            if(this.wattHourStored*UniversalElectricity.IC2_RATIO >= 32)
-	            {
-	            	setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*.04);
-	            	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
-	            }
-    		}
             
+            //Output electricity
             if (this.wattHourStored > 0)
             {
+            	 if(Loader.isModLoaded("IC2"))
+         		{
+     	            if(this.wattHourStored/UniversalElectricity.IC2_RATIO >= 32)
+     	            {
+     	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*.04);
+     	            	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+     	            }
+         		}
+         		
                 TileEntity tileEntity = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
 
                 if (tileEntity != null)
@@ -474,43 +439,94 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	{
 		return 1000;
 	}
+	
+	/**
+	 * BUILDCRAFT FUNCTIONS
+	 */
+	@Override
+	public void setPowerProvider(IPowerProvider provider)
+    {
+    	if(PowerFramework.currentFramework != null)
+    	{
+    		powerProvider = (PowerProvider) PowerFramework.currentFramework.createPowerProvider();
+    		powerProvider.configure(20, 25, 25, 25, (int)ElectricInfo.getWatts(getMaxWattHours()));
+    	}
+	}
 
+	@Override
+	public IPowerProvider getPowerProvider()
+	{
+		return powerProvider;
+	}
+
+	@Override
+	public void doWork() { System.out.println("DID WORK"); }
+
+	@Override
+	public int powerRequest()
+	{
+		return (int) Math.ceil((this.getMaxWattHours() - this.wattHourStored)*UniversalElectricity.BC3_RATIO);
+	}
+
+	/**
+	 * INDUSTRIALCRAFT FUNCTIONS
+	 */
 	public int getStored() 
 	{
-		return (int) (this.wattHourStored*UniversalElectricity.IC2_RATIO);
+		return (int) (this.wattHourStored/UniversalElectricity.IC2_RATIO);
+	}
+	
+	@Override
+	public boolean isAddedToEnergyNet()
+	{
+		return initialized;
 	}
 
+	@Override
+	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
+	{
+		return canReceiveFromSide(direction.toForgeDirection());
+	}
+
+	@Override
+	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
+	{
+		return direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
+	}
+
+	@Override
 	public int getCapacity() 
 	{
-		return (int)(getMaxWattHours()*UniversalElectricity.IC2_RATIO);
+		return (int)(getMaxWattHours()/UniversalElectricity.IC2_RATIO);
 	}
 
+	@Override
 	public int getOutput() 
 	{
 		return 32;
 	}
 
+	@Override
 	public int getMaxEnergyOutput()
 	{
 		return 32;
 	}
 
+	@Override
 	public boolean demandsEnergy()
 	{
 		return this.wattHourStored < getMaxWattHours();
 	}
 
-	public int injectEnergy(Direction directionFrom, int amount) 
+	@Override
+	public int injectEnergy(Direction directionFrom, int euAmount) 
 	{
-		int need = amount;
+		double inputElectricity = euAmount * UniversalElectricity.IC2_RATIO;
 		
-		if(this.wattHourStored*UniversalElectricity.IC2_RATIO + amount >= getMaxWattHours()*UniversalElectricity.IC2_RATIO + 32)
-		{
-			need = (int)(getMaxWattHours()*UniversalElectricity.IC2_RATIO + 32 - this.wattHourStored*UniversalElectricity.IC2_RATIO - 1);
-		}
+		double rejectedElectricity = Math.max(this.wattHourStored - (this.wattHourStored - inputElectricity), 0);
 		
-		this.wattHourStored += (need*.04);
+		this.setWattHours(wattHourStored + inputElectricity);
 		
-		return amount - need;
+		return (int) rejectedElectricity;
 	}
 }
