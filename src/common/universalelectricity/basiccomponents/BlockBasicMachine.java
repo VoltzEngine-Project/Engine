@@ -202,15 +202,20 @@ public class BlockBasicMachine extends BlockMachine
 	            
     			if(!tileEntity.canConnect(ForgeDirection.getOrientation(i).getOpposite()))
     			{
-		            if(par1World.getBlockTileEntity(position.intX(), position.intY(), position.intZ()) != null)
+    				TileEntity neighborTile = par1World.getBlockTileEntity(position.intX(), position.intY(), position.intZ());
+		            if(neighborTile != null)
 		    		{
 		            	//IEnergyConductor
-		            	if(par1World.getBlockTileEntity(position.intX(), position.intY(), position.intZ()) instanceof IEnergyConductor)
+		            	if(neighborTile instanceof IEnergyConductor)
 		            	{
 			    			int neighborBlockID = par1World.getBlockId(position.intX(), position.intY(), position.intZ());
 		
-			            	Block.blocksList[neighborBlockID].dropBlockAsItem(par1World, position.intX(), position.intY(), position.intZ(), par1World.getBlockMetadata(position.intX(), position.intY(), position.intZ()), 0);
-			            	par1World.setBlockWithNotify(position.intX(), position.intY(), position.intZ(), 0);
+			    			if(Block.blocksList[neighborBlockID] != null)
+			    			{
+			    				Block.blocksList[neighborBlockID].dropBlockAsItem(par1World, position.intX(), position.intY(), position.intZ(), par1World.getBlockMetadata(position.intX(), position.intY(), position.intZ()), 0);
+			    			}
+			    			
+			    			par1World.setBlockWithNotify(position.intX(), position.intY(), position.intZ(), 0);
 		            	}
 		    		}
     			}
