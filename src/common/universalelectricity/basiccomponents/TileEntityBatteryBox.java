@@ -156,6 +156,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     		{
     			EnergyNet.getForWorld(worldObj).addTileEntity(this);
     		}
+    		
     		this.initialized = true;
     	}
     	
@@ -177,7 +178,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 }
                 else if(this.containingItems[0].getItem() instanceof IElectricItem)
                 {
-                	double sent = ElectricItem.charge(containingItems[0], (int)wattHourStored*UniversalElectricity.IC2_RATIO, 3, false, false)*.04;
+                	double sent = ElectricItem.charge(containingItems[0], (int) (wattHourStored*UniversalElectricity.IC2_RATIO), 3, false, false)*.04;
                 	setWattHours(wattHourStored - sent);
                 }
             }
@@ -200,7 +201,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 	IElectricItem item = (IElectricItem)containingItems[1].getItem();
                 	if(item.canProvideEnergy())
                 	{
-                		double gain = ElectricItem.discharge(containingItems[1], (int)(getMaxWattHours()-wattHourStored)*UniversalElectricity.IC2_RATIO, 3, false, false)*.04;
+                		double gain = ElectricItem.discharge(containingItems[1], (int) ((int)(getMaxWattHours()-wattHourStored)*UniversalElectricity.IC2_RATIO), 3, false, false)*.04;
                 		setWattHours(wattHourStored + gain);
                 	}
                 }
@@ -476,12 +477,12 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
 	public int getStored() 
 	{
-		return (int)this.wattHourStored*UniversalElectricity.IC2_RATIO;
+		return (int) (this.wattHourStored*UniversalElectricity.IC2_RATIO);
 	}
 
 	public int getCapacity() 
 	{
-		return (int)getMaxWattHours()*UniversalElectricity.IC2_RATIO;
+		return (int)(getMaxWattHours()*UniversalElectricity.IC2_RATIO);
 	}
 
 	public int getOutput() 
