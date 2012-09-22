@@ -1,5 +1,6 @@
 package universalelectricity.basiccomponents;
 
+import ic2.api.IElectricItem;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
@@ -23,6 +24,6 @@ public class SlotElectricItem extends Slot
     @Override
     public boolean isItemValid(ItemStack par1ItemStack)
     {
-        return par1ItemStack.getItem() instanceof IItemElectric;
+        return par1ItemStack.getItem() instanceof IItemElectric || par1ItemStack.getItem() instanceof IElectricItem;
     }
 }

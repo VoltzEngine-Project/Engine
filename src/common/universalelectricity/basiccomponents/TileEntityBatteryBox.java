@@ -1,8 +1,6 @@
 package universalelectricity.basiccomponents;
 
-import ic2.api.Direction;
-import ic2.api.IEnergyAcceptor;
-import ic2.api.IEnergyEmitter;
+import ic2.api.*;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -32,8 +30,10 @@ import buildcraft.api.power.PowerProvider;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IEnergyEmitter, IEnergyAcceptor, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
+public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
 {	
+	public static final int IC2_RATIO = 300;
+	
 	private double wattHourStored = 0;
 
     private ItemStack[] containingItems = new ItemStack[2];
@@ -43,6 +43,8 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	private int playersUsing = 0;
 	
 	public PowerProvider powerProvider;
+	
+	public boolean initialized = false;
 
     public TileEntityBatteryBox()
     {
@@ -77,19 +79,19 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public boolean isAddedToEnergyNet()
 	{
-		return false;
+		return initialized;
 	}
 
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
 	{
-		return this.canReceiveFromSide(direction.toForgeDirection());
+		return canReceiveFromSide(direction.toForgeDirection());
 	}
 
 	@Override
 	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
 	{
-		return false;
+		return direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
 	}
 
     @Override
@@ -138,6 +140,14 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     @Override
     public void updateEntity() 
     {
+    	super.updateEntity();
+    	
+    	if(!this.initialized)
+    	{
+    		EnergyNet.getForWorld(worldObj).addTileEntity(this);
+    		this.initialized = true;
+    	}
+    	
         if(!this.isDisabled())
         {            
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
@@ -148,6 +158,11 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                     IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
                     double rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
                     this.setWattHours(this.wattHourStored - (electricItem.getTransferRate() - rejectedElectricity));
+                }
+                else if(this.containingItems[0].getItem() instanceof IElectricItem)
+                {
+                	double sent = ElectricItem.charge(containingItems[0], (int)wattHourStored*IC2_RATIO, 3, false, false)*.04;
+                	setWattHours(wattHourStored - sent);
                 }
             }
 
@@ -164,6 +179,15 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                         this.setWattHours(this.wattHourStored + wattHourReceived);
                     }
                 }
+                else if(containingItems[1].getItem() instanceof IElectricItem)
+                {
+                	IElectricItem item = (IElectricItem)containingItems[1].getItem();
+                	if(item.canProvideEnergy())
+                	{
+                		double gain = ElectricItem.discharge(containingItems[1], (int)(getMaxWattHours()-wattHourStored)*IC2_RATIO, 3, false, false)*.04;
+                		setWattHours(wattHourStored + gain);
+                	}
+                }
             }
 
             boolean isFullThisCheck = false;
@@ -179,6 +203,12 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
             }
 
+            if(this.wattHourStored*IC2_RATIO >= 32)
+            {
+            	setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*.04);
+            	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+            }
+            
             if (this.wattHourStored > 0)
             {
                 TileEntity tileEntity = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
@@ -191,7 +221,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                         double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 10000), 0);                        
                         ElectricityManager.instance.produceElectricity(this, (TileEntityConductor)tileEntity, transferAmps, this.getVoltage());
                         this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
-                    }
+                    } 
                 }
             }
         }
@@ -388,7 +418,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     @Override
     public boolean isPoweringTo(byte side)
     {
-        return isFull;
+        return this.isFull;
     }
 
     @Override
@@ -413,5 +443,44 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	public double getMaxWattHours()
 	{
 		return 1000;
+	}
+
+	public int getStored() 
+	{
+		return (int)this.wattHourStored*IC2_RATIO;
+	}
+
+	public int getCapacity() 
+	{
+		return (int)getMaxWattHours()*IC2_RATIO;
+	}
+
+	public int getOutput() 
+	{
+		return 32;
+	}
+
+	public int getMaxEnergyOutput()
+	{
+		return 32;
+	}
+
+	public boolean demandsEnergy()
+	{
+		return this.wattHourStored < getMaxWattHours();
+	}
+
+	public int injectEnergy(Direction directionFrom, int amount) 
+	{
+		int need = amount;
+		
+		if(this.wattHourStored*IC2_RATIO + amount >= getMaxWattHours()*IC2_RATIO + 32)
+		{
+			need = (int)(getMaxWattHours()*IC2_RATIO + 32 - this.wattHourStored*IC2_RATIO - 1);
+		}
+		
+		this.wattHourStored += (need*.04);
+		
+		return amount - need;
 	}
 }
