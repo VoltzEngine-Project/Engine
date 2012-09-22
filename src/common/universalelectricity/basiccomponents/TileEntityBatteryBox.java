@@ -66,7 +66,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     	if(PowerFramework.currentFramework != null)
     	{
 	    	powerProvider = PowerFramework.currentFramework.createPowerProvider();
-			powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxWattHours()/UniversalElectricity.BC3_RATIO));
+			powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxWattHours()*UniversalElectricity.BC3_RATIO));
     	}
     }
     
@@ -141,7 +141,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 }
                 else if(this.containingItems[0].getItem() instanceof IElectricItem)
                 {
-                	double sent = ElectricItem.charge(containingItems[0], (int) (wattHourStored*UniversalElectricity.IC2_RATIO), 3, false, false)*.04;
+                	double sent = ElectricItem.charge(containingItems[0], (int) (wattHourStored*UniversalElectricity.Wh_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
                 	this.setWattHours(wattHourStored - sent);
                 }
             }
@@ -164,7 +164,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 	IElectricItem item = (IElectricItem)containingItems[1].getItem();
                 	if(item.canProvideEnergy())
                 	{
-                		double gain = ElectricItem.discharge(containingItems[1], (int) ((int)(getMaxWattHours()-wattHourStored)*UniversalElectricity.IC2_RATIO), 3, false, false)*.04;
+                		double gain = ElectricItem.discharge(containingItems[1], (int) ((int)(getMaxWattHours()-wattHourStored)*UniversalElectricity.Wh_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
                 		this.setWattHours(wattHourStored + gain);
                 	}
                 }
@@ -187,14 +187,13 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
             //Output electricity
             if (this.wattHourStored > 0)
             {
-            	 if(Loader.isModLoaded("IC2"))
-         		{
-     	            if(this.wattHourStored/UniversalElectricity.IC2_RATIO >= 32)
-     	            {
-     	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*.04);
-     	            	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
-     	            }
-         		}
+            	if(Loader.isModLoaded("IC2"))
+            	{
+	 	            if(this.wattHourStored*UniversalElectricity.Wh_IC2_RATIO >= 32)
+	 	            {
+	 	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
+	 	            }
+            	}
          		
                 TileEntity tileEntity = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
 
@@ -460,12 +459,12 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	}
 
 	@Override
-	public void doWork() { System.out.println("DID WORK"); }
+	public void doWork() { }
 
 	@Override
 	public int powerRequest()
 	{
-		return (int) Math.ceil((this.getMaxWattHours() - this.wattHourStored)/UniversalElectricity.BC3_RATIO);
+		return (int) Math.ceil((this.getMaxWattHours() - this.wattHourStored)*UniversalElectricity.BC3_RATIO);
 	}
 
 	/**
@@ -473,7 +472,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	 */
 	public int getStored() 
 	{
-		return (int) (this.wattHourStored/UniversalElectricity.IC2_RATIO);
+		return (int) (this.wattHourStored*UniversalElectricity.IC2_RATIO);
 	}
 	
 	@Override
@@ -521,10 +520,9 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public int injectEnergy(Direction directionFrom, int euAmount) 
 	{
-		double inputElectricity = euAmount * UniversalElectricity.IC2_RATIO;
+		double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
 		
 		double rejectedElectricity = Math.max(this.wattHourStored - (this.wattHourStored - inputElectricity), 0);
-		System.out.println(inputElectricity);
 		this.setWattHours(wattHourStored + inputElectricity);
 		
 		return (int) rejectedElectricity;
