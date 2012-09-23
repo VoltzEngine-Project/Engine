@@ -10,7 +10,7 @@ import net.minecraftforge.common.ForgeDirection;
 public interface IConnector
 {
     /**
-     * Can this machine visually connect to a wire on this specific side?
+     * Can this tile entity visually connect to a wire on this specific side?
      * @param side. 0-5 byte
      * @return - True if so.
      */

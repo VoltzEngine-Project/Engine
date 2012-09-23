@@ -1,6 +1,7 @@
 package universalelectricity.basiccomponents;
 
 import net.minecraft.src.Block;
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.TileEntityConductor;
 
 public class TileEntityCopperWire extends TileEntityConductor

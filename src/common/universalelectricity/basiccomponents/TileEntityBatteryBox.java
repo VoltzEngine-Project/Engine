@@ -64,12 +64,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     {
     	super();
     	ConnectionHandler.registerConnectionHandler(this);
-    	
-    	if(PowerFramework.currentFramework != null)
-    	{
-	    	powerProvider = PowerFramework.currentFramework.createPowerProvider();
-			powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxWattHours()*UniversalElectricity.BC3_RATIO));
-    	}
+    	this.setPowerProvider(null);
     }
     
     @Override
@@ -189,38 +184,40 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
             //Output electricity
             if (this.wattHourStored > 0)
             {
-                TileEntity tileEntity = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
+                TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
             	
-                if (tileEntity != null)
+                //Output IC2 energy
+            	if(Loader.isModLoaded("IC2"))
+            	{
+	 	            if(this.wattHourStored*UniversalElectricity.Wh_IC2_RATIO >= 32)
+	 	            {
+	 	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
+	 	            }
+            	}
+            	
+            	//Output BC energy
+            	if(Loader.isModLoaded("BuildCraft|Transport"))
+            	{
+	 	            if(this.isPoweredTile(tileEntity))
+	 	            {
+	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
+	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
+	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.wattHourStored), 54000), 0);
+	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.Wh_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
+	 	            	this.setWattHours(this.wattHourStored - transferWattHours);
+	 	            }
+            	}
+            	
+                TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
+                
+                if (connector != null)
                 {
-                	//Output IC2 energy
-                	if(Loader.isModLoaded("IC2"))
-                	{
-    	 	            if(this.wattHourStored*UniversalElectricity.Wh_IC2_RATIO >= 32)
-    	 	            {
-    	 	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
-    	 	            }
-                	}
-                	
-                	//Output BC energy
-                	if(Loader.isModLoaded("BuildCraft|Transport"))
-                	{
-    	 	            if(this.isPoweredTile(tileEntity))
-    	 	            {
-    	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
-    	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
-    	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.wattHourStored), 54000), 0);
-    	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.Wh_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
-    	 	            	this.setWattHours(this.wattHourStored - transferWattHours);
-    	 	            }
-                	}
-                	
                 	//Output UE electricity
-                    if (tileEntity instanceof TileEntityConductor)
+                    if (connector instanceof TileEntityConductor)
                     {
-                        double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)tileEntity).getConnectionID());
+                        double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
                         double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 15), 0);                        
-                        ElectricityManager.instance.produceElectricity(this, (IConductor)tileEntity, transferAmps, this.getVoltage());
+                        ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
                         this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
                     } 
                 }
@@ -469,8 +466,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		{
 			IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 			IPowerProvider provider = receptor.getPowerProvider();
-			System.out.println(provider);
-			return provider != null;// && provider.getClass().getSuperclass().equals(PowerProvider.class);
+			return provider != null && provider.getClass().getSuperclass().equals(PowerProvider.class);
 		}
 
 		return false;
@@ -479,7 +475,18 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public void setPowerProvider(IPowerProvider provider)
     {
-		this.powerProvider = provider;
+		if(provider == null)
+		{
+			if(PowerFramework.currentFramework != null)
+	    	{
+		    	powerProvider = PowerFramework.currentFramework.createPowerProvider();
+				powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxWattHours()*UniversalElectricity.BC3_RATIO));
+	    	}
+		}
+		else
+		{
+			this.powerProvider = provider;
+		}
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import net.minecraftforge.common.ForgeDirection;
  * @author Calclavia
  *
  */
-public interface IConductor
+public interface IConductor extends IConnector
 {
 	/**
 	 * The ID of the connection this conductor is in.

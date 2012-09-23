@@ -145,6 +145,12 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
     	return this.worldObj;
     }
     
+    @Override
+	public boolean canConnect(ForgeDirection side) 
+    {
+		return true;
+	}
+    
     public Block getBlockType()
     {
         if (this.blockType == null)

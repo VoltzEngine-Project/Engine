@@ -278,26 +278,20 @@ public class Vector3 extends Vector2 implements Cloneable
 	        case 5: this.x += 1; break;
 	    }	
 	}
+	
+	public static TileEntity getTileEntityFromSide(World world, Vector3 position, ForgeDirection side)
+	{
+		position.modifyPositionFromSide(side);
+		return world.getBlockTileEntity(position.intX(), position.intY(), position.intZ());
+	}
 
     /**
-	 * Checks if the block is being connected to a conductor
-	 * @param world - The world in which this conductor block is in
-	 * @param x - The X axis of the conductor
-	 * @param y - The Y axis of the conductor
-	 * @param z - The Z axis of the conductor
-	 * @return Returns the tile entity for the block on the designated side. Returns null if not a UE Unit
+	 * Gets a connector unit based on the given side.
 	 */
 	public static TileEntity getConnectorFromSide(World world, Vector3 position, ForgeDirection side)
 	{
-		position.modifyPositionFromSide(side);
-	    //Check if the designated block is a UE Unit - producer, consumer or a conductor
-	    TileEntity tileEntity = world.getBlockTileEntity(position.intX(), position.intY(), position.intZ());
-	
-	    if (tileEntity instanceof TileEntityConductor)
-	    {
-	        return tileEntity;
-	    }
-	
+	    TileEntity tileEntity = getTileEntityFromSide(world, position, side);
+
 	    if (tileEntity instanceof IConnector)
 	    {
 	        if (((IConnector)tileEntity).canConnect(getOrientationFromSide(side, ForgeDirection.NORTH)))
