@@ -331,10 +331,10 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
         if(side == side.UP)
         {
-            return 0;
+            return 1;
         }
 
-        return 2;
+        return 0;
     }
 
     @Override
