@@ -21,7 +21,6 @@ import universalelectricity.UniversalElectricity;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.Vector3;
-import buildcraft.api.power.IPowerReceptor;
 import cpw.mods.fml.common.Loader;
 
 public class BlockBasicMachine extends BlockMachine
@@ -185,12 +184,7 @@ public class BlockBasicMachine extends BlockMachine
             }
         }
        
-    }
-    
-    @Override
-    public void onBlockAdded(World par1World, int x, int y, int z)
-    {
-    	this.checkForConductors(par1World, x, y, z);
+        this.checkForConductors(par1World, x, y, z);
     }
     
     @Override
@@ -231,7 +225,7 @@ public class BlockBasicMachine extends BlockMachine
 		            		}
 		            		catch (Exception e)
 		            		{
-		            			
+		            			System.out.println("Failed to identify Buildcraft class. Contact UE developers to update their API!");
 		            		}
 		            	}
 		            	

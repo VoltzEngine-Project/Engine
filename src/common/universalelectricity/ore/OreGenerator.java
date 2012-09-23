@@ -24,6 +24,24 @@ public class OreGenerator implements IWorldGenerator
 	}
 	
 	/**
+	 * Checks to see if this ore 
+	 * @param oreName
+	 * @return
+	 */
+	public static boolean oreExists(String oreName)
+	{
+		for(OreGenBase ore: ORES_TO_GENERATE)
+		{
+			if(ore.oreDictionaryName == oreName)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Removes an ore to the ore generate list. Do this in init.
 	 */
 	public static void removeOre(OreGenBase data)

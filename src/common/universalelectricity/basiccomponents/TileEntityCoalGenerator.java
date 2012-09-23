@@ -12,13 +12,13 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.Ticker;
 import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityProducer;
 import universalelectricity.network.ConnectionHandler;
+import universalelectricity.network.ConnectionHandler.ConnectionType;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.ISimpleConnectionHandler;
 import universalelectricity.network.PacketManager;
-import universalelectricity.network.ConnectionHandler.ConnectionType;
-import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.TileEntityDisableable;
 import universalelectricity.prefab.Vector3;
 
@@ -43,7 +43,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
      */
     public double prevGenerateWatts, generateWatts = 0;
 
-    public TileEntityConductor connectedElectricUnit = null;
+    public IConductor connectedElectricUnit = null;
     /**
     * The number of ticks that a fresh copy of the currently-burning item would keep the furnace burning for
     */
@@ -77,11 +77,11 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
         //Check nearby blocks and see if the conductor is full. If so, then it is connected
         TileEntity tileEntity = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2));
 
-        if (tileEntity instanceof TileEntityConductor)
+        if (tileEntity instanceof IConductor)
         {
-            if (ElectricityManager.instance.getElectricityRequired(((TileEntityConductor)tileEntity).connectionID) > 0)
+            if (ElectricityManager.instance.getElectricityRequired( ((IConductor)tileEntity).getConnectionID()) > 0)
             {
-                this.connectedElectricUnit = (TileEntityConductor)tileEntity;
+                this.connectedElectricUnit = (IConductor)tileEntity;
             }
             else
             {

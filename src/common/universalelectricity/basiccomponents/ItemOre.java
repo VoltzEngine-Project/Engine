@@ -3,11 +3,11 @@ package universalelectricity.basiccomponents;
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ItemStack;
 
-public class ItemBCOre extends ItemBlock
+public class ItemOre extends ItemBlock
 {
     private String[] ores = {"Copper Ore", "Tin Ore"};
 
-	public ItemBCOre(int id)
+	public ItemOre(int id)
     {
         super(id);
         this.setMaxDamage(0);

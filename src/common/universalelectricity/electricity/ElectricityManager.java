@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityReceiver;
 import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.Vector3;
@@ -23,7 +24,7 @@ public class ElectricityManager
 	public static ElectricityManager instance;
 	
     private List<IElectricityReceiver> electricUnits = new ArrayList<IElectricityReceiver>();
-    private List<TileEntityConductor> electricConductors = new ArrayList<TileEntityConductor>();
+    private List<IConductor> electricConductors = new ArrayList<IConductor>();
 
     private List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
     private List<ElectricityNetwork> wireConnections = new ArrayList<ElectricityNetwork>();
@@ -97,19 +98,19 @@ public class ElectricityManager
      */
     public void splitConnection(TileEntityConductor conductorA, TileEntityConductor conductorB)
     {
-        ElectricityNetwork connection = getConnectionByID(conductorA.connectionID);
+        ElectricityNetwork connection = getConnectionByID(conductorA.getConnectionID());
         connection.cleanUpArray();
 
-        for(TileEntityConductor conductor : connection.conductors)
+        for(IConductor conductor : connection.conductors)
         {
             conductor.reset();
         }
 
-        for(TileEntityConductor conductor : connection.conductors)
+        for(IConductor conductor : connection.conductors)
         {
             for (byte i = 0; i < 6; i++)
             {
-                conductor.updateConnectionWithoutSplit(Vector3.getConnectorFromSide(conductor.getWorld(), new Vector3(conductor.xCoord, conductor.yCoord, conductor.zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+                conductor.updateConnectionWithoutSplit(Vector3.getConnectorFromSide(conductor.getWorld(), new Vector3(((TileEntity)conductor).xCoord, ((TileEntity)conductor).yCoord, ((TileEntity)conductor).zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
             }
         }
     }
@@ -161,39 +162,53 @@ public class ElectricityManager
     }
 
     /**
-     * Produces electricity into a specific conductor and distribute it evenly into different machines
-     * @param targetConductor - The tile entity in which the electricity is being produced into
-     * @param side - The side in which the electricity is coming in from. 0-5 byte.
+     * Produces electricity into a specific wire which will be distributed across the electricity network.
+     * @param sender - The machine sending the electricity.
+     * @param targetConductor - The conductor receiving the electricity (or connected to the machine).
+     * @param amps - The amount of amps this machine is sending.
+     * @param voltage 0 The amount of volts this machine is sending.
      */
-    public void produceElectricity(TileEntity sender, TileEntityConductor targetConductor, double amps, double voltage)
+    public void produceElectricity(TileEntity sender, IConductor targetConductor, double amps, double voltage)
     {
         if(targetConductor != null && amps > 0 && voltage > 0)
         {
             //Find a path between this conductor and all connected units and try to send the electricity to them directly
-            ElectricityNetwork connection = this.getConnectionByID(targetConductor.connectionID);
+            ElectricityNetwork electricityNetwork = this.getConnectionByID(targetConductor.getConnectionID());
 
-            if(connection != null)
+            if(electricityNetwork != null)
             {
-                List<IElectricityReceiver> allElectricUnitsInLine = connection.getConnectedElectricUnits();
+                List<IElectricityReceiver> allElectricUnitsInLine = electricityNetwork.getConnectedReceivers();
                 double leftOverAmps = amps;
 
-                for (TileEntityConductor conductor : connection.conductors)
+                for (IConductor conductor : electricityNetwork.conductors)
                 {
-                    for (byte i = 0; i < conductor.connectedBlocks.length; i++)
+                    for (byte i = 0; i < conductor.getConnectedBlocks().length; i++)
                     {
-                        TileEntity tileEntity = conductor.connectedBlocks[i];
+                        TileEntity tileEntity = conductor.getConnectedBlocks()[i];
 
                         if (tileEntity != null)
                         {
                             if (tileEntity instanceof IElectricityReceiver)
                             {
-                                IElectricityReceiver electricUnit = (IElectricityReceiver)tileEntity;
+                                IElectricityReceiver receiver = (IElectricityReceiver)tileEntity;
 
-                                if (Math.ceil(electricUnit.wattRequest()) > 0 && electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
+                                if (Math.ceil(receiver.wattRequest()) > 0 && receiver.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                                 {
-                                    double transferAmps = Math.max(0, Math.min(leftOverAmps, Math.min(amps / allElectricUnitsInLine.size(), ElectricInfo.getAmps(Math.ceil(electricUnit.wattRequest()), electricUnit.getVoltage()) )));
+                                    double transferAmps = Math.max(0, Math.min(leftOverAmps, Math.min(amps / allElectricUnitsInLine.size(), ElectricInfo.getAmps(Math.ceil(receiver.wattRequest()), receiver.getVoltage()) )));
                                     leftOverAmps -= transferAmps;
-                                    this.electricityTransferQueue.add(new ElectricityTransferData(sender, electricUnit, ForgeDirection.getOrientation(i).getOpposite(), transferAmps, voltage));
+                                    
+                                    //Calculate electricity loss
+                                    double distance = Vector3.distance(Vector3.get(sender), Vector3.get((TileEntity)receiver));
+                                    double ampsReceived = transferAmps - (transferAmps * transferAmps * targetConductor.getResistance() * distance)/voltage;
+                                    double voltsReceived = voltage - (transferAmps * targetConductor.getResistance() * distance);
+                                    
+                                    if(ampsReceived > conductor.getMaxAmps())
+                                    {
+                                    	electricityNetwork.meltDown();
+                                    	return;
+                                    }
+                                    
+                                    this.electricityTransferQueue.add(new ElectricityTransferData(sender, receiver, ForgeDirection.getOrientation(i).getOpposite(), ampsReceived, voltsReceived));
                                 }
                             }
                         }
@@ -214,11 +229,11 @@ public class ElectricityManager
 
         if (connection != null)
         {
-            for (TileEntityConductor conductor : connection.conductors)
+            for (IConductor conductor : connection.conductors)
             {
-                for (byte i = 0; i < conductor.connectedBlocks.length; i++)
+                for (byte i = 0; i < conductor.getConnectedBlocks().length; i++)
                 {
-                    TileEntity tileEntity = conductor.connectedBlocks[i];
+                    TileEntity tileEntity = conductor.getConnectedBlocks()[i];
 
                     if (tileEntity != null)
                     {
@@ -246,7 +261,7 @@ public class ElectricityManager
     {
 		for(int j = 0; j < this.electricConductors.size(); j ++)
         {
-        	TileEntityConductor conductor  = this.electricConductors.get(j);
+        	IConductor conductor  = this.electricConductors.get(j);
             conductor.refreshConnectedBlocks();
         }
 

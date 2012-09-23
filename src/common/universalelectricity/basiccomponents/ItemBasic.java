@@ -4,9 +4,9 @@ import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class ItemBC extends Item
+public class ItemBasic extends Item
 {
-    public ItemBC(String name, int id, int texture, CreativeTabs creativeTab)
+    public ItemBasic(String name, int id, int texture, CreativeTabs creativeTab)
     {
         super(id);
         this.iconIndex = texture;
@@ -15,7 +15,7 @@ public class ItemBC extends Item
         LanguageRegistry.addName(this, name);
     }
     
-    public ItemBC(String name, int id, int texture)
+    public ItemBasic(String name, int id, int texture)
     {
     	this(name, id, texture, CreativeTabs.tabMaterials);
     }

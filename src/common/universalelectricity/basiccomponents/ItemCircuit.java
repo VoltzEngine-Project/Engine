@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.ItemStack;
 
-public class ItemCircuit extends ItemBC
+public class ItemCircuit extends ItemBasic
 {
     private String[] names = new String[] {"Basic Circuit", "Adavanced Circuit", "Elite Circuit"};
 

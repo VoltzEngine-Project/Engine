@@ -63,19 +63,19 @@ public class BasicComponents implements ICraftingHandler
     public static final int ITEM_ID_PREFIX = 13970;
     public static final Item itemBattery = new ItemBattery(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Battery", ITEM_ID_PREFIX+1), 0);
     public static final Item itemWrench = new ItemWrench(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Wrench", ITEM_ID_PREFIX+2), 20);
-    public static final Item itemCopperIngot = new ItemBC("Copper Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Ingot", ITEM_ID_PREFIX+3), 1);
-    public static final Item itemTinIngot = new ItemBC("Tin Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Ingot", ITEM_ID_PREFIX+4), 2);
-    public static final Item itemSteelIngot = new ItemBC("Steel Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Ingot", ITEM_ID_PREFIX+5), 3);
-    public static final Item itemSteelDust = new ItemBC("Steel Dust", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Dust", ITEM_ID_PREFIX+6), 5);
+    public static final Item itemCopperIngot = new ItemBasic("Copper Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Ingot", ITEM_ID_PREFIX+3), 1);
+    public static final Item itemTinIngot = new ItemBasic("Tin Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Ingot", ITEM_ID_PREFIX+4), 2);
+    public static final Item itemSteelIngot = new ItemBasic("Steel Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Ingot", ITEM_ID_PREFIX+5), 3);
+    public static final Item itemSteelDust = new ItemBasic("Steel Dust", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Dust", ITEM_ID_PREFIX+6), 5);
     public static final Item itemCircuit = new ItemCircuit(UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Circuit", ITEM_ID_PREFIX+7), 16);
-    public static final Item itemBronzeIngot = new ItemBC("Bronze Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Ingot", ITEM_ID_PREFIX+8), 7);
-    public static final Item itemBronzeDust = new ItemBC("Bronze Dust", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Dust", ITEM_ID_PREFIX+9), 6);
-    public static final Item itemSteelPlate = new ItemBC("Steel Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", ITEM_ID_PREFIX+10), 9);
-    public static final Item itemBronzePlate = new ItemBC("Bronze Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Plate", ITEM_ID_PREFIX+11), 8);
-    public static final Item itemMotor = new ItemBC("Motor", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", ITEM_ID_PREFIX+12), 12);
+    public static final Item itemBronzeIngot = new ItemBasic("Bronze Ingot", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Ingot", ITEM_ID_PREFIX+8), 7);
+    public static final Item itemBronzeDust = new ItemBasic("Bronze Dust", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Dust", ITEM_ID_PREFIX+9), 6);
+    public static final Item itemSteelPlate = new ItemBasic("Steel Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", ITEM_ID_PREFIX+10), 9);
+    public static final Item itemBronzePlate = new ItemBasic("Bronze Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Plate", ITEM_ID_PREFIX+11), 8);
+    public static final Item itemMotor = new ItemBasic("Motor", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", ITEM_ID_PREFIX+12), 12);
     public static final Item itemOilBucket = new ItemOilBucket("Oil Bucket", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Oil Bucket", ITEM_ID_PREFIX+13), 4);
-    public static final Item itemCopperPlate = new ItemBC("Copper Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Plate", ITEM_ID_PREFIX+14), 10);
-    public static final Item itemTinPlate = new ItemBC("Tin Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Plate", ITEM_ID_PREFIX+15), 11);
+    public static final Item itemCopperPlate = new ItemBasic("Copper Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Plate", ITEM_ID_PREFIX+14), 10);
+    public static final Item itemTinPlate = new ItemBasic("Tin Plate", UniversalElectricity.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Plate", ITEM_ID_PREFIX+15), 11);
 
     
     public static final OreGenBase copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(blockOre, 1, 0), 0, 60, 50, 5);
@@ -99,11 +99,11 @@ public class BasicComponents implements ICraftingHandler
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
     	//Register Blocks
-    	GameRegistry.registerBlock(blockOre, ItemBCOre.class);
+    	GameRegistry.registerBlock(blockOre, ItemOre.class);
 		GameRegistry.registerBlock(blockMachine, ItemBasicMachine.class);
+		GameRegistry.registerBlock(blockCopperWire, ItemCopperWire.class);
 		GameRegistry.registerBlock(oilMoving);
 		GameRegistry.registerBlock(oilStill);
-		GameRegistry.registerBlock(blockCopperWire);
 		GameRegistry.registerCraftingHandler(this);
 		
 		OreDictionary.registerOre("ingotCopper", itemCopperIngot);
@@ -125,7 +125,7 @@ public class BasicComponents implements ICraftingHandler
 		LanguageRegistry.addName(oilMoving, "Oil Moving");
 		LanguageRegistry.addName(oilStill, "Oil Still");
 		LanguageRegistry.addName(itemBattery, "Basic Battery");
-		LanguageRegistry.addName(blockCopperWire, "Copper Wire");
+		LanguageRegistry.addName(new ItemStack(blockCopperWire, 1, 0), "Copper Wire");
 		LanguageRegistry.addName(new ItemStack(itemCircuit, 1, 0), "Basic Circuit");
         LanguageRegistry.addName(new ItemStack(itemCircuit, 1, 1), "Advanced Circuit");
         LanguageRegistry.addName(new ItemStack(itemCircuit, 1, 2), "Elite Circuit");

@@ -7,7 +7,6 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IConnector;
-import universalelectricity.implement.IElectricityReceiver;
 
 /**
  * REQUIRED
@@ -17,7 +16,7 @@ import universalelectricity.implement.IElectricityReceiver;
  */
 public abstract class TileEntityConductor extends TileEntity implements IConductor
 {
-    public int connectionID = 0;
+    private int connectionID = 0;
 
     /**
      * Stores information on the blocks that this conductor is connected to
@@ -27,6 +26,24 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
     public TileEntityConductor()
     {
         this.reset();
+    }
+    
+    @Override
+    public int getConnectionID()
+    {
+    	return this.connectionID;
+    }
+    
+    @Override
+    public void setConnectionID(int ID)
+    {
+    	this.connectionID = ID;
+    }
+    
+    @Override
+    public TileEntity[] getConnectedBlocks()
+    {
+    	return connectedBlocks;
     }
 
     /**
@@ -64,6 +81,7 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         }
     }
 
+    @Override
     public void updateConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
     {
         if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IConnector)
@@ -105,12 +123,14 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         return false;
     }
 
+    @Override
     public void reset()
     {
         this.connectionID = 0;
         ElectricityManager.instance.registerConductor(this);
     }
 
+    @Override
     public void refreshConnectedBlocks()
     {
         if (this.worldObj != null)
@@ -119,6 +139,7 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         }
     }
 
+    @Override
     public World getWorld()
     {
     	return this.worldObj;

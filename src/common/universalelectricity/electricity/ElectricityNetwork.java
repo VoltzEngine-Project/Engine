@@ -5,44 +5,44 @@ import java.util.List;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityReceiver;
-import universalelectricity.prefab.TileEntityConductor;
 
 public class ElectricityNetwork
 {
     private int ID;
-    public List<TileEntityConductor> conductors = new ArrayList<TileEntityConductor>();
+    public List<IConductor> conductors = new ArrayList<IConductor>();
 
-    public ElectricityNetwork(int ID, TileEntityConductor conductor)
+    public ElectricityNetwork(int ID, IConductor conductor)
     {
         this.ID = ID;
         this.addConductor(conductor);
     }
 
-    public void addConductor(TileEntityConductor newConductor)
+    public void addConductor(IConductor newConductor)
     {
         this.cleanUpArray();
 
         if (!conductors.contains(newConductor))
         {
             conductors.add(newConductor);
-            newConductor.connectionID = this.ID;
+            newConductor.setConnectionID(this.ID);
         }
     }
 
     /**
      * Get only the electric units that can receive electricity from the given side.
      */
-    public List<IElectricityReceiver> getConnectedElectricUnits()
+    public List<IElectricityReceiver> getConnectedReceivers()
     {
         this.cleanUpArray();
         List<IElectricityReceiver> returnArray = new ArrayList<IElectricityReceiver>();
 
-        for (TileEntityConductor conductor : conductors)
+        for (IConductor conductor : conductors)
         {
-            for (byte i = 0; i < conductor.connectedBlocks.length; i++)
+            for (byte i = 0; i < conductor.getConnectedBlocks().length; i++)
             {
-                TileEntity tileEntity = conductor.connectedBlocks[i];
+                TileEntity tileEntity = conductor.getConnectedBlocks()[i];
 
                 if (tileEntity != null)
                 {
@@ -68,7 +68,7 @@ public class ElectricityNetwork
             {
                 conductors.remove(i);
             }
-            else if (conductors.get(i).isInvalid())
+            else if (((TileEntity)conductors.get(i)).isInvalid())
             {
                 conductors.remove(i);
             }
@@ -80,9 +80,9 @@ public class ElectricityNetwork
         this.ID = ID;
         this.cleanUpArray();
 
-        for (TileEntityConductor conductor : this.conductors)
+        for (IConductor conductor : this.conductors)
         {
-            conductor.connectionID = this.ID;
+            conductor.setConnectionID(this.ID);
         }
     }
 
@@ -90,4 +90,14 @@ public class ElectricityNetwork
     {
         return this.ID;
     }
+
+	public void meltDown()
+	{
+		this.cleanUpArray();
+		
+		for (int i = 0; i < conductors.size(); i++)
+        {
+			conductors.get(i).onConductorMelt();
+        }
+	}
 }

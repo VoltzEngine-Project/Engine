@@ -17,7 +17,7 @@ import universalelectricity.implement.IItemElectric;
 /**
  * REQUIRED
  * Extend from this class if your item requires electricity or to be charged.
- * @author Henry
+ * @author Calclavia
  *
  */
 public abstract class ItemElectric extends Item implements IItemElectric
