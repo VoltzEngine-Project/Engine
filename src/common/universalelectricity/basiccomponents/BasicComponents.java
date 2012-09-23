@@ -86,7 +86,7 @@ public class BasicComponents implements ICraftingHandler
     {
 		instance = this;
 		
-		UniversalElectricity.forgeLock(4, 1, 2, true);
+		UniversalElectricity.forgeLock(4, 1, 2, false);
 		UniversalElectricity.registerMod(this, "Basic Componenets", VERSION);
 		
 		/**

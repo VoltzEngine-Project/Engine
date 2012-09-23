@@ -21,6 +21,8 @@ import universalelectricity.UniversalElectricity;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.Vector3;
+import buildcraft.api.power.IPowerReceptor;
+import cpw.mods.fml.common.Loader;
 
 public class BlockBasicMachine extends BlockMachine
 {
@@ -186,7 +188,18 @@ public class BlockBasicMachine extends BlockMachine
     }
     
     @Override
+    public void onBlockAdded(World par1World, int x, int y, int z)
+    {
+    	this.checkForConductors(par1World, x, y, z);
+    }
+    
+    @Override
     public void onNeighborBlockChange(World par1World, int x, int y, int z, int par4)
+    {
+    	this.checkForConductors(par1World, x, y, z);
+    }
+    
+    public void checkForConductors(World par1World, int x, int y, int z)
     {
     	//This makes sure battery boxes can only have wires on it's correct side placed.
     	int metadata = par1World.getBlockMetadata(x, y, z);
@@ -205,8 +218,25 @@ public class BlockBasicMachine extends BlockMachine
     				TileEntity neighborTile = par1World.getBlockTileEntity(position.intX(), position.intY(), position.intZ());
 		            if(neighborTile != null)
 		    		{
+		            	boolean tossPipe = false;
+		            	
+		            	if(Loader.isModLoaded("BuildCraft|Transport"))
+		            	{
+		            		try
+		            		{
+		            			if(neighborTile.getClass() == Class.forName("buildcraft.transport.TileGenericPipe"))
+		            			{
+		            				tossPipe = true;
+		            			}
+		            		}
+		            		catch (Exception e)
+		            		{
+		            			
+		            		}
+		            	}
+		            	
 		            	//IEnergyConductor
-		            	if(neighborTile instanceof IEnergyConductor)
+		            	if(neighborTile instanceof IEnergyConductor || tossPipe)
 		            	{
 			    			int neighborBlockID = par1World.getBlockId(position.intX(), position.intY(), position.intZ());
 		

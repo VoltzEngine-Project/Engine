@@ -40,14 +40,14 @@ public class UniversalElectricity
     public static UniversalElectricity instance;
     
     //One IC2 EU is 0.012 Watt Hours. EU to Watt Hour
-  	public static final float IC2_RATIO = 0.00535f;
+  	public static final float IC2_RATIO = 0.005f;
   	
   	//One MJ is 13 Watt Hours. MJ to Watt Hour
-  	public static final float BC3_RATIO = 0.0535f;
+  	public static final float BC3_RATIO = 0.05f;
   	
-  	public static final float Wh_IC2_RATIO = 187;
+  	public static final float Wh_IC2_RATIO = 180;
   	
-  	public static final float Wh_BC_RATIO = 18.7f;
+  	public static final float Wh_BC_RATIO = 18f;
     
     /**
 	 * Use this material for all your machine blocks. It can be breakable by hand.
