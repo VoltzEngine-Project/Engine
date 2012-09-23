@@ -214,7 +214,7 @@ public class BlockBasicMachine extends BlockMachine
     				if(neighborTile != null)
 		    		{
 		            	boolean tossPipe = false;
-		            	
+		            	/*
 		            	if(Loader.isModLoaded("BuildCraft|Transport"))
 		            	{
 		            		try
@@ -228,7 +228,7 @@ public class BlockBasicMachine extends BlockMachine
 		            		{
 		            			System.out.println("Failed to identify Buildcraft class. Contact UE developers to update their API!");
 		            		}
-		            	}
+		            	}*/
 		            	
 		            	//IEnergyConductor
 		            	if(neighborTile instanceof IEnergyConductor || tossPipe)

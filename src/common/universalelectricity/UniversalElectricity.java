@@ -32,7 +32,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class UniversalElectricity
 {
-	protected static final String VERSION = "0.8.3";
+	protected static final String VERSION = "0.8.4";
 
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
 	public static final List<Object> MODS = new ArrayList<Object>();
@@ -40,10 +40,10 @@ public class UniversalElectricity
     public static UniversalElectricity instance;
     
     //One IC2 EU is 0.012 Watt Hours. EU to Watt Hour
-  	public static final float IC2_RATIO = 0.004f;
+  	public static final float IC2_RATIO = 0.0045f;
   	
   	//One MJ is 13 Watt Hours. MJ to Watt Hour
-  	public static final float BC3_RATIO = 0.03f;
+  	public static final float BC3_RATIO = 0.04f;
   	
   	public static final float Wh_IC2_RATIO = 1/IC2_RATIO;
   	
