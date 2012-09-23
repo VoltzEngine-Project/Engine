@@ -212,8 +212,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.wattHourStored), 54000), 0);
     	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.Wh_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
     	 	            	this.setWattHours(this.wattHourStored - transferWattHours);
-    	 	            	
-    	 	            	System.out.println("TRANSFERRING BC ENERGY: "+(transferWattHours*UniversalElectricity.Wh_BC_RATIO));
     	 	            }
                 	}
                 	
@@ -465,13 +463,13 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	/**
 	 * Is this tile entity a BC tile?
 	 */
-	public boolean isPoweredTile(TileEntity tile)
+	public boolean isPoweredTile(TileEntity tileEntity)
 	{
-		if(tile instanceof IPowerReceptor) 
+		if(tileEntity instanceof IPowerReceptor) 
 		{
-			IPowerReceptor receptor = (IPowerReceptor) tile;
+			IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 			IPowerProvider provider = receptor.getPowerProvider();
-
+			System.out.println(provider);
 			return provider != null;// && provider.getClass().getSuperclass().equals(PowerProvider.class);
 		}
 
