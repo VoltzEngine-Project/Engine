@@ -206,14 +206,15 @@ public class BlockBasicMachine extends BlockMachine
     		{
         		Vector3 position = new Vector3(x, y, z);
     			position.modifyPositionFromSide(ForgeDirection.getOrientation(i));
-	            
+
     			if(!tileEntity.canConnect(ForgeDirection.getOrientation(i).getOpposite()))
     			{
     				TileEntity neighborTile = par1World.getBlockTileEntity(position.intX(), position.intY(), position.intZ());
-		            if(neighborTile != null)
+		            
+    				if(neighborTile != null)
 		    		{
 		            	boolean tossPipe = false;
-		            	/*
+		            	
 		            	if(Loader.isModLoaded("BuildCraft|Transport"))
 		            	{
 		            		try
@@ -227,24 +228,29 @@ public class BlockBasicMachine extends BlockMachine
 		            		{
 		            			System.out.println("Failed to identify Buildcraft class. Contact UE developers to update their API!");
 		            		}
-		            	}*/
+		            	}
 		            	
 		            	//IEnergyConductor
 		            	if(neighborTile instanceof IEnergyConductor || tossPipe)
 		            	{
-			    			int neighborBlockID = par1World.getBlockId(position.intX(), position.intY(), position.intZ());
-		
-			    			if(Block.blocksList[neighborBlockID] != null)
-			    			{
-			    				Block.blocksList[neighborBlockID].dropBlockAsItem(par1World, position.intX(), position.intY(), position.intZ(), par1World.getBlockMetadata(position.intX(), position.intY(), position.intZ()), 0);
-			    			}
-			    			
-			    			par1World.setBlockWithNotify(position.intX(), position.intY(), position.intZ(), 0);
+			    			this.breakConductor(par1World, position);
 		            	}
 		    		}
-    			}
+    			}  			
     		}
         }
+    }
+    
+    public void breakConductor(World par1World, Vector3 position)
+    {
+    	int neighborBlockID = par1World.getBlockId(position.intX(), position.intY(), position.intZ());
+		
+		if(Block.blocksList[neighborBlockID] != null)
+		{
+			Block.blocksList[neighborBlockID].dropBlockAsItem(par1World, position.intX(), position.intY(), position.intZ(), par1World.getBlockMetadata(position.intX(), position.intY(), position.intZ()), 0);
+		}
+		
+		par1World.setBlockWithNotify(position.intX(), position.intY(), position.intZ(), 0);
     }
 
     @Override
