@@ -126,7 +126,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 
             if(this.generateWatts > MIN_GENERATE_WATTS && this.connectedElectricUnit != null)
             {
-                ElectricityManager.instance.produceElectricity(this, this.connectedElectricUnit, (this.generateWatts/this.getVoltage()), this.getVoltage());
+                ElectricityManager.instance.produceElectricity(this, this.connectedElectricUnit, (this.generateWatts/this.getVoltage())/20, this.getVoltage());
             }
         }
         

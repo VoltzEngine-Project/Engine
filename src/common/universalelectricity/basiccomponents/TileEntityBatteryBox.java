@@ -212,6 +212,8 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.wattHourStored), 54000), 0);
     	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.Wh_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
     	 	            	this.setWattHours(this.wattHourStored - transferWattHours);
+    	 	            	
+    	 	            	System.out.println("TRANSFERRING BC ENERGY: "+(transferWattHours*UniversalElectricity.Wh_BC_RATIO));
     	 	            }
                 	}
                 	
