@@ -59,7 +59,6 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 	
     public TileEntityCoalGenerator()
     {
-        super();
     	ConnectionHandler.registerConnectionHandler(this);
     }
     

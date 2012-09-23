@@ -189,19 +189,19 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
             //Output electricity
             if (this.wattHourStored > 0)
             {
-            	//Output IC2 energy
-            	if(Loader.isModLoaded("IC2"))
-            	{
-	 	            if(this.wattHourStored*UniversalElectricity.Wh_IC2_RATIO >= 32)
-	 	            {
-	 	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
-	 	            }
-            	}
-         		
                 TileEntity tileEntity = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
             	
                 if (tileEntity != null)
                 {
+                	//Output IC2 energy
+                	if(Loader.isModLoaded("IC2"))
+                	{
+    	 	            if(this.wattHourStored*UniversalElectricity.Wh_IC2_RATIO >= 32)
+    	 	            {
+    	 	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
+    	 	            }
+                	}
+                	
                 	//Output BC energy
                 	if(Loader.isModLoaded("BuildCraft|Transport"))
                 	{
@@ -472,7 +472,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 			IPowerReceptor receptor = (IPowerReceptor) tile;
 			IPowerProvider provider = receptor.getPowerProvider();
 
-			return provider != null && provider.getClass().getSuperclass().equals(PowerProvider.class);
+			return provider != null;// && provider.getClass().getSuperclass().equals(PowerProvider.class);
 		}
 
 		return false;
