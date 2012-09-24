@@ -191,11 +191,11 @@ public class UELoader implements ICraftingHandler
 		//Battery
 		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemBattery), new Object [] {" T ", "TRT", "TCT", 'T', "ingotTin", 'R', Item.redstone, 'C', Item.coal});
 		//Steel
-		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron});
+		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object [] {"!#!", '!', new ItemStack(Item.coal, 1, 1), '#', Item.ingotIron}, UniversalElectricity.CONFIGURATION, true);
 		RecipeManager.addSmelting(BasicComponents.itemSteelDust, new ItemStack(BasicComponents.itemSteelIngot));
 		RecipeManager.addSmelting(BasicComponents.itemSteelPlate, new ItemStack(BasicComponents.itemSteelDust, 3));
 		//Bronze
-		RecipeManager.addRecipe(BasicComponents.itemBronzeDust, new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"});
+		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemBronzeDust), new Object [] {"!#!", '!', "ingotCopper",  '#', "ingotTin"}, UniversalElectricity.CONFIGURATION, true);
 		RecipeManager.addSmelting(BasicComponents.itemBronzeDust, new ItemStack(BasicComponents.itemBronzeIngot));
 		RecipeManager.addSmelting(BasicComponents.itemBronzePlate, new ItemStack(BasicComponents.itemBronzeDust, 3));
 		

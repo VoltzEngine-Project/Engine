@@ -10,8 +10,10 @@ import net.minecraft.src.CraftingManager;
 import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import universalelectricity.UniversalElectricity;
 
 /**
  * Adds recipes with full Forge ore dictionary support and replaceable by add-ons.
@@ -49,6 +51,20 @@ public class RecipeManager
         addRecipe(new ItemStack(output), input);
     }
     
+    /**
+     * Use this function if you want to check if the recipe is allowed in the configuration file.
+     */
+    public static void addRecipe(ItemStack output, Object[] input, Configuration config, boolean defaultBoolean)
+    {
+    	if(config != null)
+    	{
+    		if(UniversalElectricity.getConfigData(config, "Allow "+output.getItemName()+" Crafting", defaultBoolean))
+    		{
+    			addRecipe(output, input);
+    		}
+    	}
+    }
+    
     public static List<CraftingRecipe> getRecipes() { return SHAPED_RECIPES; }
     
     public static CraftingRecipe getRecipeByOutput(ItemStack output)
@@ -79,6 +95,20 @@ public class RecipeManager
         addShapelessRecipe(new ItemStack(output), input);
     }
     
+    /**
+     * Use this function if you want to check if the recipe is allowed in the configuration file.
+     */
+    public static void addShapelessRecipe(ItemStack output, Object[] input, Configuration config, boolean defaultBoolean)
+    {
+    	if(config != null)
+    	{
+    		if(UniversalElectricity.getConfigData(config, "Allow "+output.getItemName()+" Crafting", defaultBoolean))
+    		{
+    			addShapelessRecipe(output, input);
+    		}
+    	}
+    }
+    
     public static List<CraftingRecipe> getShapelessRecipes() { return SHAPELESS_RECIPES; }
     
     public static CraftingRecipe getShapelessRecipeByOutput(ItemStack output)
@@ -107,6 +137,20 @@ public class RecipeManager
     public static void addSmelting(Block input, ItemStack output)
     {
         addSmelting(new ItemStack(input), output);
+    }
+    
+    /**
+     * Use this function if you want to check if the recipe is allowed in the configuration file.
+     */
+    public static void addSmelting(ItemStack input, ItemStack output, Configuration config, boolean defaultBoolean)
+    {
+    	if(config != null)
+    	{
+    		if(UniversalElectricity.getConfigData(config, "Allow "+output.getItemName()+" Smelting", defaultBoolean))
+    		{
+    			addSmelting(input, output);
+    		}
+    	}
     }
     
     public static List<SmeltingRecipe> getSmeltingRecipes() { return SMELTING_RECIPES; }
@@ -157,6 +201,7 @@ public class RecipeManager
         }
     }
     
+   
     public static void replaceShapelessRecipe(CraftingRecipe recipeToReplace, CraftingRecipe newRecipe)
     {
     	for(CraftingRecipe recipe : SHAPELESS_RECIPES)
