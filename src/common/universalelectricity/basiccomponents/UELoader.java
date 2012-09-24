@@ -43,7 +43,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
  * for Universal Electricity to run properly.
  */
 @Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.VERSION, dependencies = "before:*")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
+@NetworkMod(channels = "BasicComponents", clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 
 public class UELoader implements ICraftingHandler
 {

@@ -9,7 +9,7 @@ import com.google.common.io.ByteArrayDataInput;
 public interface IPacketReceiver
 {
     /**
-     * Sends the tileEntity the rest of the data
+     * Sends some data to the tile entity.
      */
     public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream);
 }

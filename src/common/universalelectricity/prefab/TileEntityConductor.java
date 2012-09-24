@@ -1,12 +1,19 @@
 package universalelectricity.prefab;
 
+import com.google.common.io.ByteArrayDataInput;
+
 import net.minecraft.src.Block;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IConnector;
+import universalelectricity.network.IPacketReceiver;
+import universalelectricity.network.PacketManager;
 
 /**
  * REQUIRED
@@ -14,7 +21,7 @@ import universalelectricity.implement.IConnector;
  * @author Calclavia
  *
  */
-public abstract class TileEntityConductor extends TileEntity implements IConductor
+public abstract class TileEntityConductor extends TileEntity implements IConductor, IPacketReceiver
 {
     private int connectionID = 0;
 
@@ -77,7 +84,7 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         
         if(!this.worldObj.isRemote)
         {
-        	this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, 0, 0);
+        	PacketManager.sendTileEntityPacket(this, "BasicComponents");
         }
     }
 
@@ -100,19 +107,19 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         
         if(!this.worldObj.isRemote)
         {
-        	this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, 0, 0);
+        	PacketManager.sendTileEntityPacket(this, "BasicComponents");
         }
     }
     
     @Override
-    public void receiveClientEvent(int key, int value)
+    public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
     	if(this.worldObj.isRemote)
     	{
     		this.refreshConnectedBlocks();
     	}
     }
-
+    
     /**
      * Determines if this TileEntity requires update calls.
      * @return True if you want updateEntity() to be called, false if not

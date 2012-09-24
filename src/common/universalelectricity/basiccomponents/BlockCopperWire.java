@@ -63,10 +63,4 @@ public class BlockCopperWire extends BlockConductor
     {
         return BasicComponents.ITEM_TEXTURE_FILE;
     }
-    
-    @Override
-    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
-    {
-        par5Entity.attackEntityFrom(UEDamageSource.electrocution, 1);
-    }
 }

@@ -1,31 +1,12 @@
 package universalelectricity;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.MapColor;
 import net.minecraft.src.Material;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.ForgeVersion;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.world.WorldEvent.Load;
-import net.minecraftforge.event.world.WorldEvent.Save;
-import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.network.ConnectionHandler;
-import universalelectricity.ore.OreGenerator;
-import universalelectricity.recipe.RecipeManager;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class UniversalElectricity
 {
@@ -34,10 +15,10 @@ public class UniversalElectricity
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
     
     //One IC2 EU is 0.012 Watt Hours. EU to Watt Hour
-  	public static final float IC2_RATIO = 0.0045f;
+  	public static final float IC2_RATIO = getConfigData(CONFIGURATION, "IC2 to UE Conversion Ratio", (int)(0.0045f*100000))/100000;
   	
   	//One MJ is 13 Watt Hours. MJ to Watt Hour
-  	public static final float BC3_RATIO = 0.04f;
+  	public static final float BC3_RATIO = getConfigData(CONFIGURATION, "BC3 to UE Conversion Ratio", (int)(0.04f*100000))/100000;;
   	
   	public static final float Wh_IC2_RATIO = 1/IC2_RATIO;
   	
@@ -78,18 +59,30 @@ public class UniversalElectricity
     	forgeLock(major, minor, revision, false);
     }
     
-    /**
-     * Gets the ID of a block from the configuration file
-     * @param name - The name of the block or item
-     * @param defaultID - The default ID of the block or item. Any errors will restore this block/item ID
-     * @return The block or item ID
-     */
+    public static int getConfigData(Configuration configuration, String name, int defaultInt)
+    {
+        configuration.load();
+        int returnInt = defaultInt;
+        returnInt = Integer.parseInt(configuration.getOrCreateIntProperty(name, Configuration.CATEGORY_GENERAL, defaultInt).value);
+        configuration.save();
+        return returnInt;
+    }
+    
+    public static boolean getConfigData(Configuration configuration, String name, boolean defaultBoolean)
+    {
+        configuration.load();
+        boolean returnBoolean = defaultBoolean;
+        returnBoolean = Boolean.parseBoolean(configuration.getOrCreateBooleanProperty(name, Configuration.CATEGORY_GENERAL, defaultBoolean).value);
+        configuration.save();
+        return returnBoolean;
+    }
+    
     public static int getBlockConfigID(Configuration configuration, String name, int defaultID)
     {
         configuration.load();
         int id = defaultID;
 
-        id = Integer.parseInt(configuration.getOrCreateIntProperty(name, Configuration.CATEGORY_BLOCK, defaultID).value);
+        id = Integer.parseInt(configuration.getOrCreateBlockIdProperty(name, defaultID).value);
 
         if (id <= 136)
         {

@@ -23,10 +23,10 @@ import com.google.common.io.ByteArrayDataInput;
 public class TileEntityElectricFurnace extends TileEntityElectricityReceiver implements IInventory, ISidedInventory,  IPacketReceiver
 {
 	//The amount of watts required by the electric furnace per tick
-    public final double WATTS_PER_TICK = 300;
+    public final double WATTS_PER_TICK = 250;
 
     //The amount of ticks required to smelt this item
-    public final int SMELTING_TIME_REQUIRED = 150;
+    public final int SMELTING_TIME_REQUIRED = 140;
 
     //How many ticks has this item been smelting for?
     public int smeltingTicks = 0;
