@@ -15,10 +15,10 @@ public class UniversalElectricity
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
     
     //One IC2 EU is 0.012 Watt Hours. EU to Watt Hour
-  	public static final float IC2_RATIO = getConfigData(CONFIGURATION, "IC2 to UE Conversion Ratio", (int)(0.0045f*100000))/100000;
+  	public static final float IC2_RATIO = (float)getConfigData(CONFIGURATION, "IC2 to UE Conversion Ratio", (int)(0.0045f*100000))/(float)100000;
   	
   	//One MJ is 13 Watt Hours. MJ to Watt Hour
-  	public static final float BC3_RATIO = getConfigData(CONFIGURATION, "BC3 to UE Conversion Ratio", (int)(0.04f*100000))/100000;;
+  	public static final float BC3_RATIO = (float)getConfigData(CONFIGURATION, "BC3 to UE Conversion Ratio", (int)(0.04f*100000))/(float)100000;;
   	
   	public static final float Wh_IC2_RATIO = 1/IC2_RATIO;
   	

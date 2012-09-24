@@ -24,6 +24,7 @@ import buildcraft.api.liquids.LiquidData;
 import buildcraft.api.liquids.LiquidManager;
 import buildcraft.api.liquids.LiquidStack;
 import cpw.mods.fml.common.ICraftingHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -65,14 +66,22 @@ public class UELoader implements ICraftingHandler
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
    		MinecraftForge.EVENT_BUS.register(this);
    		
-   		if(UniversalElectricity.BC3_RATIO <= 0)
+   		if(UniversalElectricity.BC3_RATIO <= 0 || Loader.isModLoaded("Buildcraft"))
    		{
    			System.out.println("Disabled Buildcraft electricity conversion!");
    		}
+   		else
+   		{
+   			System.out.println("Buildcraft conversion ratio: "+UniversalElectricity.BC3_RATIO);
+   		}
    		
-   		if(UniversalElectricity.IC2_RATIO <= 0)
+   		if(UniversalElectricity.IC2_RATIO <= 0 || Loader.isModLoaded("IC2"))
    		{
    			System.out.println("Disabled Industrialcraft electricity conversion!");
+   		}
+   		else
+   		{
+   			System.out.println("IC2 conversion ratio: "+UniversalElectricity.IC2_RATIO);
    		}
    		
 		/**
