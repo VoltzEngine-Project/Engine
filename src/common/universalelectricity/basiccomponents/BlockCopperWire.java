@@ -1,9 +1,13 @@
 package universalelectricity.basiccomponents;
 
 import net.minecraft.src.CreativeTabs;
+import net.minecraft.src.DamageSource;
+import net.minecraft.src.Entity;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import universalelectricity.BasicComponents;
+import universalelectricity.implement.UEDamageSource;
 import universalelectricity.prefab.BlockConductor;
 
 public class BlockCopperWire extends BlockConductor
@@ -58,5 +62,11 @@ public class BlockCopperWire extends BlockConductor
     public String getTextureFile()
     {
         return BasicComponents.ITEM_TEXTURE_FILE;
+    }
+    
+    @Override
+    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
+    {
+        par5Entity.attackEntityFrom(UEDamageSource.electrocution, 1);
     }
 }

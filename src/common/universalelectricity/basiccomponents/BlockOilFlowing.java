@@ -12,6 +12,7 @@ import net.minecraft.src.Potion;
 import net.minecraft.src.PotionEffect;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.BasicComponents;
 import universalelectricity.prefab.Vector3;
 import buildcraft.api.liquids.ILiquid;
 /**

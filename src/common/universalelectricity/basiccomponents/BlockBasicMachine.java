@@ -17,11 +17,11 @@ import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.BasicComponents;
 import universalelectricity.UniversalElectricity;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.Vector3;
-import cpw.mods.fml.common.Loader;
 
 public class BlockBasicMachine extends BlockMachine
 {
@@ -305,17 +305,17 @@ public class BlockBasicMachine extends BlockMachine
         {
         	if(metadata >= ELECTRIC_FURNACE_METADATA)
             {
-            	par5EntityPlayer.openGui(BasicComponents.instance, 2, par1World, x, y, z);
+            	par5EntityPlayer.openGui(UELoader.instance, 2, par1World, x, y, z);
             	return true;
             }
         	else if(metadata >= BATTERY_BOX_METADATA)
             {
-            	par5EntityPlayer.openGui(BasicComponents.instance, 0, par1World, x, y, z);
+            	par5EntityPlayer.openGui(UELoader.instance, 0, par1World, x, y, z);
             	return true;
             }
         	else
             {
-            	par5EntityPlayer.openGui(BasicComponents.instance, 1, par1World, x, y, z);
+            	par5EntityPlayer.openGui(UELoader.instance, 1, par1World, x, y, z);
             	return true;
             }
         }

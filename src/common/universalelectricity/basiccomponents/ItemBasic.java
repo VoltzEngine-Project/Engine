@@ -1,5 +1,6 @@
 package universalelectricity.basiccomponents;
 
+import universalelectricity.BasicComponents;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
 import cpw.mods.fml.common.registry.LanguageRegistry;

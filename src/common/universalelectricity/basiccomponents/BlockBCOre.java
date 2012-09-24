@@ -2,6 +2,8 @@ package universalelectricity.basiccomponents;
 
 import java.util.List;
 
+import universalelectricity.BasicComponents;
+
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.ItemStack;

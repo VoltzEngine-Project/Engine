@@ -21,7 +21,7 @@ import cpw.mods.fml.common.TickType;
  */
 public class ElectricityManager
 {
-	public static ElectricityManager instance;
+	public static ElectricityManager instance = new ElectricityManager();
 	
     private List<IElectricityReceiver> electricUnits = new ArrayList<IElectricityReceiver>();
     private List<IConductor> electricConductors = new ArrayList<IConductor>();

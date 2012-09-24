@@ -4,6 +4,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import universalelectricity.BasicComponents;
 import universalelectricity.Ticker;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Side;
