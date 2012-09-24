@@ -65,25 +65,7 @@ public class UELoader implements ICraftingHandler
    		GameRegistry.registerWorldGenerator(new OreGenerator());
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
    		MinecraftForge.EVENT_BUS.register(this);
-   		
-   		if(UniversalElectricity.BC3_RATIO <= 0 || Loader.isModLoaded("Buildcraft"))
-   		{
-   			System.out.println("Disabled Buildcraft electricity conversion!");
-   		}
-   		else
-   		{
-   			System.out.println("Buildcraft conversion ratio: "+UniversalElectricity.BC3_RATIO);
-   		}
-   		
-   		if(UniversalElectricity.IC2_RATIO <= 0 || Loader.isModLoaded("IC2"))
-   		{
-   			System.out.println("Disabled Industrialcraft electricity conversion!");
-   		}
-   		else
-   		{
-   			System.out.println("IC2 conversion ratio: "+UniversalElectricity.IC2_RATIO);
-   		}
-   		
+
 		/**
 		 * Define the items and blocks.
 		 */
@@ -229,6 +211,24 @@ public class UELoader implements ICraftingHandler
     	//Register all the damage source.
 		UEDamageSource.registerDeathMesages();
 		
+		if(UniversalElectricity.BC3_RATIO <= 0 || Loader.isModLoaded("Buildcraft"))
+   		{
+   			System.out.println("Disabled Buildcraft electricity conversion!");
+   		}
+   		else
+   		{
+   			System.out.println("Buildcraft conversion ratio: "+UniversalElectricity.BC3_RATIO);
+   		}
+   		
+   		if(UniversalElectricity.IC2_RATIO <= 0 || Loader.isModLoaded("IC2"))
+   		{
+   			System.out.println("Disabled Industrialcraft electricity conversion!");
+   		}
+   		else
+   		{
+   			System.out.println("IC2 conversion ratio: "+UniversalElectricity.IC2_RATIO);
+   		}
+   		
 		System.out.println("Universal Electricity v"+UniversalElectricity.VERSION+" successfully loaded!");
 	}
     
