@@ -1,6 +1,5 @@
 package universalelectricity.basiccomponents;
 
-import universalelectricity.BasicComponents;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemBucket;
@@ -9,6 +8,7 @@ import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import universalelectricity.BasicComponents;
 
 public class ItemOilBucket extends ItemBucket
 {

@@ -4,7 +4,6 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import universalelectricity.ore.OreGenBase;
-import universalelectricity.ore.OreGenReplaceStone;
 import universalelectricity.prefab.ItemElectric;
 
 /**

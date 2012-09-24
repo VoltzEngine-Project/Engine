@@ -1,8 +1,8 @@
 package universalelectricity.basiccomponents;
 
-import universalelectricity.BasicComponents;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
+import universalelectricity.BasicComponents;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ItemBasic extends Item

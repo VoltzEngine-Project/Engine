@@ -1,7 +1,5 @@
 package universalelectricity.prefab;
 
-import com.google.common.io.ByteArrayDataInput;
-
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.NetworkManager;
@@ -14,6 +12,8 @@ import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IConnector;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
+
+import com.google.common.io.ByteArrayDataInput;
 
 /**
  * REQUIRED

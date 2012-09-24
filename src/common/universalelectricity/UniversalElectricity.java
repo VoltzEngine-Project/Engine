@@ -10,7 +10,7 @@ import cpw.mods.fml.common.Loader;
 
 public class UniversalElectricity
 {
-	public static final String VERSION = "0.8.4";
+	public static final String VERSION = "0.8.5";
 	
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
     

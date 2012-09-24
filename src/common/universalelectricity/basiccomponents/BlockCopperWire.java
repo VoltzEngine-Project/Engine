@@ -1,13 +1,10 @@
 package universalelectricity.basiccomponents;
 
 import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.DamageSource;
-import net.minecraft.src.Entity;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.BasicComponents;
-import universalelectricity.implement.UEDamageSource;
 import universalelectricity.prefab.BlockConductor;
 
 public class BlockCopperWire extends BlockConductor

@@ -2,11 +2,10 @@ package universalelectricity.basiccomponents;
 
 import java.util.List;
 
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricInfo.ElectricUnit;
-
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ItemStack;
+import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 
 
 public class ItemCopperWire extends ItemBlock

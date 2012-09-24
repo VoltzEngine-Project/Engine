@@ -2,12 +2,11 @@ package universalelectricity.basiccomponents;
 
 import java.util.List;
 
-import universalelectricity.BasicComponents;
-
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
+import universalelectricity.BasicComponents;
 
 public class BlockBCOre extends Block
 {
