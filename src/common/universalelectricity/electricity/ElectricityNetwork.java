@@ -100,4 +100,19 @@ public class ElectricityNetwork
 			conductors.get(i).onConductorMelt();
         }
 	}
+	
+	public double getLowestAmpConductor()
+	{
+		double lowestAmp = 0;
+		
+		for(IConductor conductor : conductors)
+		{
+			if(lowestAmp == 0 || conductor.getMaxAmps() < lowestAmp)
+			{
+				lowestAmp = conductor.getMaxAmps();
+			}
+		}
+		
+		return lowestAmp;
+	}
 }

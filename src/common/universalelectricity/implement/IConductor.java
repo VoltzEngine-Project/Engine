@@ -32,7 +32,8 @@ public interface IConductor extends IConnector
     public double getResistance();
     
     /**
-     * The maximum amount of amps this conductor can handle before melting down
+     * The maximum amount of amps this conductor can handle before melting down. This is calculating
+     * PER TICK!
      * @return The amount of amps in volts
      */
     public double getMaxAmps();

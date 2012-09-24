@@ -64,7 +64,17 @@ public class UELoader implements ICraftingHandler
    		GameRegistry.registerWorldGenerator(new OreGenerator());
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
    		MinecraftForge.EVENT_BUS.register(this);
-
+   		
+   		if(UniversalElectricity.BC3_RATIO <= 0)
+   		{
+   			System.out.println("Disabled Buildcraft electricity conversion!");
+   		}
+   		
+   		if(UniversalElectricity.IC2_RATIO <= 0)
+   		{
+   			System.out.println("Disabled Industrialcraft electricity conversion!");
+   		}
+   		
 		/**
 		 * Define the items and blocks.
 		 */
@@ -94,8 +104,8 @@ public class UELoader implements ICraftingHandler
 	    BasicComponents.batteryBox = ((BlockBasicMachine)BasicComponents.blockMachine).getBatteryBox();
 	    BasicComponents.electricFurnace = ((BlockBasicMachine)BasicComponents.blockMachine).getElectricFurnace();
 	    
-	    BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 0, 60, 50, 5);
-	    BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 0, 60, 40, 4);
+	    BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 0, 60, 50, 6);
+	    BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 0, 60, 45, 5);
 	    
 		/**
 		 * @author Cammygames
@@ -209,6 +219,8 @@ public class UELoader implements ICraftingHandler
     	
     	//Register all the damage source.
 		UEDamageSource.registerDeathMesages();
+		
+		System.out.println("Universal Electricity v"+UniversalElectricity.VERSION+" successfully loaded!");
 	}
     
     @ForgeSubscribe

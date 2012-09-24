@@ -8,14 +8,24 @@ public class ElectricityTransferData
 {
 	public TileEntity sender;
 	public IElectricityReceiver receiver;
+	public ElectricityNetwork network;
     public double amps;
     public double voltage;
     public ForgeDirection side;
 
-    public ElectricityTransferData(TileEntity sender, IElectricityReceiver receiver, ForgeDirection side, double amps, double voltage)
+    /**
+     * @param sender - Tile that's sending electricity.
+     * @param receiver - Receiver that's receiving electricity
+     * @param conductor - Conductor that is conducting the electricity
+     * @param side - 
+     * @param amps
+     * @param voltage
+     */
+    public ElectricityTransferData(TileEntity sender, IElectricityReceiver receiver, ElectricityNetwork network, ForgeDirection side, double amps, double voltage)
     {
     	this.sender = sender;
     	this.receiver = receiver;
+    	this.network = network;
         this.side = side;
         this.amps = amps;
         this.voltage = voltage;

@@ -96,7 +96,7 @@ public class ElectricityManager
      * @param conductorA - existing conductor
      * @param conductorB - broken/invalid conductor
      */
-    public void splitConnection(TileEntityConductor conductorA, TileEntityConductor conductorB)
+    public void splitConnection(IConductor conductorA, IConductor conductorB)
     {
         ElectricityNetwork connection = getConnectionByID(conductorA.getConnectionID());
         connection.cleanUpArray();
@@ -201,14 +201,8 @@ public class ElectricityManager
                                     double distance = Vector3.distance(Vector3.get(sender), Vector3.get((TileEntity)receiver));
                                     double ampsReceived = transferAmps - (transferAmps * transferAmps * targetConductor.getResistance() * distance)/voltage;
                                     double voltsReceived = voltage - (transferAmps * targetConductor.getResistance() * distance);
-                                    
-                                    if(ampsReceived > conductor.getMaxAmps())
-                                    {
-                                    	electricityNetwork.meltDown();
-                                    	return;
-                                    }
-                                    
-                                    this.electricityTransferQueue.add(new ElectricityTransferData(sender, receiver, ForgeDirection.getOrientation(i).getOpposite(), ampsReceived, voltsReceived));
+
+                                    this.electricityTransferQueue.add(new ElectricityTransferData(sender, receiver, electricityNetwork, ForgeDirection.getOrientation(i).getOpposite(), ampsReceived, voltsReceived));
                                 }
                             }
                         }
@@ -287,13 +281,31 @@ public class ElectricityManager
 	                break;
 	            }
 	            
+	            double totalAmpsReceived = 0;
+	            ElectricityNetwork electricityNetwork = null;
+	            
                 for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
                 {
                     if (electricityTransferQueue.get(ii).receiver == electricUnit)
                     {
+                    	totalAmpsReceived += electricityTransferQueue.get(ii).amps;
+                    	
+                    	if(electricityNetwork == null)
+                    	{
+                    		electricityNetwork = electricityTransferQueue.get(ii).network;
+                    	}
+                    	
                     	electricUnit.onReceive(electricityTransferQueue.get(ii).sender, electricityTransferQueue.get(ii).amps, electricityTransferQueue.get(ii).voltage, electricityTransferQueue.get(ii).side);
     	                electricityTransferQueue.remove(ii);
                     }              
+                }
+                
+                if(totalAmpsReceived > 0 || electricityNetwork != null)
+                {
+                	if(totalAmpsReceived > electricityNetwork.getLowestAmpConductor())
+                	{
+                		electricityNetwork.meltDown();
+                	}
                 }
 	        }
 		}

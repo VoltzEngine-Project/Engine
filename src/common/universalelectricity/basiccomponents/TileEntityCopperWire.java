@@ -1,13 +1,12 @@
 package universalelectricity.basiccomponents;
 
 import net.minecraft.src.Block;
-import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.TileEntityConductor;
 
 public class TileEntityCopperWire extends TileEntityConductor
 {
 	public static final double RESISTANCE = 0.03;
-	public static final double MAX_AMPS = 10000;
+	public static final double MAX_AMPS = 80;
 
     @Override
     public double getResistance()
@@ -24,9 +23,6 @@ public class TileEntityCopperWire extends TileEntityConductor
 	@Override
 	public void onConductorMelt()
 	{
-		/*
-		 * This part is slightly bugged and causes concurrent modification errors.
 		this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.fire.blockID);
-		*/
 	}
 }

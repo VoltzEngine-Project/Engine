@@ -37,8 +37,8 @@ public class ItemCopperWire extends ItemBlock
     @Override
     public void addInformation(ItemStack par1ItemStack, List par2List)
     {
-    	par2List.add("Resistance: "+"\u00a77"+ElectricInfo.getDisplay(TileEntityCopperWire.RESISTANCE, ElectricUnit.RESISTANCE));
-    	par2List.add("Max Amps: "+"\u00a77"+ElectricInfo.getDisplay(TileEntityCopperWire.MAX_AMPS, ElectricUnit.AMPERE));
+    	par2List.add("Resistance: "+ElectricInfo.getDisplay(TileEntityCopperWire.RESISTANCE, ElectricUnit.RESISTANCE));
+    	par2List.add("Max Amps: "+ElectricInfo.getDisplay(TileEntityCopperWire.MAX_AMPS, ElectricUnit.AMPERE));
     }
 
 }

@@ -64,7 +64,7 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         {
             this.connectedBlocks[side.ordinal()] = tileEntity;
 
-            if (tileEntity instanceof TileEntityConductor)
+            if (tileEntity instanceof IConductor)
             {
                 ElectricityManager.instance.mergeConnection(this.connectionID, ((TileEntityConductor)tileEntity).connectionID);
             }
@@ -73,9 +73,9 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         {
             if (this.connectedBlocks[side.ordinal()] != null)
             {
-                if (this.connectedBlocks[side.ordinal()] instanceof TileEntityConductor)
+                if (this.connectedBlocks[side.ordinal()] instanceof IConductor)
                 {
-                    ElectricityManager.instance.splitConnection(this, (TileEntityConductor)this.connectedBlocks[side.ordinal()]);
+                    ElectricityManager.instance.splitConnection(this, (IConductor)this.getConnectedBlocks()[side.ordinal()]);
                 }
             }
 
