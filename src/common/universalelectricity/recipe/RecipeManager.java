@@ -54,15 +54,20 @@ public class RecipeManager
     /**
      * Use this function if you want to check if the recipe is allowed in the configuration file.
      */
-    public static void addRecipe(ItemStack output, Object[] input, Configuration config, boolean defaultBoolean)
+    public static void addRecipe(ItemStack output, Object[] input, String name, Configuration config, boolean defaultBoolean)
     {
     	if(config != null)
     	{
-    		if(UniversalElectricity.getConfigData(config, "Allow "+output.getItemName()+" Crafting", defaultBoolean))
+    		if(UniversalElectricity.getConfigData(config, "Allow "+name+" Crafting", defaultBoolean))
     		{
     			addRecipe(output, input);
     		}
     	}
+    }
+    
+    public static void addRecipe(ItemStack output, Object[] input, Configuration config, boolean defaultBoolean)
+    {
+    	addRecipe(output, input, output.getItemName(), config, defaultBoolean);
     }
     
     public static List<CraftingRecipe> getRecipes() { return SHAPED_RECIPES; }
@@ -98,15 +103,19 @@ public class RecipeManager
     /**
      * Use this function if you want to check if the recipe is allowed in the configuration file.
      */
-    public static void addShapelessRecipe(ItemStack output, Object[] input, Configuration config, boolean defaultBoolean)
+    public static void addShapelessRecipe(ItemStack output, Object[] input, String name, Configuration config, boolean defaultBoolean)
     {
     	if(config != null)
     	{
-    		if(UniversalElectricity.getConfigData(config, "Allow "+output.getItemName()+" Crafting", defaultBoolean))
+    		if(UniversalElectricity.getConfigData(config, "Allow "+name+" Crafting", defaultBoolean))
     		{
     			addShapelessRecipe(output, input);
     		}
     	}
+    }
+    public static void addShapelessRecipe(ItemStack output, Object[] input, Configuration config, boolean defaultBoolean)
+    {
+    	addShapelessRecipe(output, input, output.getItemName(), config, defaultBoolean);
     }
     
     public static List<CraftingRecipe> getShapelessRecipes() { return SHAPELESS_RECIPES; }
@@ -142,16 +151,22 @@ public class RecipeManager
     /**
      * Use this function if you want to check if the recipe is allowed in the configuration file.
      */
-    public static void addSmelting(ItemStack input, ItemStack output, Configuration config, boolean defaultBoolean)
+    public static void addSmelting(ItemStack input, ItemStack output, String name, Configuration config, boolean defaultBoolean)
     {
     	if(config != null)
     	{
-    		if(UniversalElectricity.getConfigData(config, "Allow "+output.getItemName()+" Smelting", defaultBoolean))
+    		if(UniversalElectricity.getConfigData(config, "Allow "+name+" Smelting", defaultBoolean))
     		{
     			addSmelting(input, output);
     		}
     	}
     }
+    
+    public static void addSmelting(ItemStack input, ItemStack output, Configuration config, boolean defaultBoolean)
+    {
+    	addSmelting(input, output, output.getItemName(), config, defaultBoolean);
+    }
+  
     
     public static List<SmeltingRecipe> getSmeltingRecipes() { return SMELTING_RECIPES; }
     
