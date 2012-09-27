@@ -10,20 +10,31 @@ import universalelectricity.implement.IDisableable;
  */
 public abstract class TileEntityDisableable extends TileEntity implements IDisableable
 {
+	protected boolean initiateTick = true;
     protected int disabledTicks = 0;
 
     @Override
     public void updateEntity()
     {
-    	 if(this.disabledTicks > 0)
-         {
-             this.disabledTicks --;
-             this.whileDisable();
-             return;
-         }
+    	if(initiateTick = true)
+    	{
+    		this.initiate();
+    	}
+    	
+    	if(this.disabledTicks > 0)
+    	{
+			this.disabledTicks --;
+			this.whileDisable();
+			return;
+    	}
     }
     
-    /**
+    protected void initiate()
+    {
+    	
+	}
+
+	/**
      * Called every tick while this tile entity is disabled.
      */
     protected void whileDisable()

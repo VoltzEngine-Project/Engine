@@ -286,18 +286,21 @@ public class ElectricityManager
 	            
                 for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
                 {
-                    if (electricityTransferQueue.get(ii).receiver == electricUnit)
-                    {
-                    	totalAmpsReceived += electricityTransferQueue.get(ii).amps;
-                    	
-                    	if(electricityNetwork == null)
-                    	{
-                    		electricityNetwork = electricityTransferQueue.get(ii).network;
-                    	}
-                    	
-                    	electricUnit.onReceive(electricityTransferQueue.get(ii).sender, electricityTransferQueue.get(ii).amps, electricityTransferQueue.get(ii).voltage, electricityTransferQueue.get(ii).side);
-    	                electricityTransferQueue.remove(ii);
-                    }              
+                	if(electricityTransferQueue.get(ii).receiver != null)
+                	{
+	                    if (electricityTransferQueue.get(ii).receiver == electricUnit)
+	                    {
+	                    	totalAmpsReceived += electricityTransferQueue.get(ii).amps;
+	                    	
+	                    	if(electricityNetwork == null)
+	                    	{
+	                    		electricityNetwork = electricityTransferQueue.get(ii).network;
+	                    	}
+	                    	
+	                    	electricUnit.onReceive(electricityTransferQueue.get(ii).sender, electricityTransferQueue.get(ii).amps, electricityTransferQueue.get(ii).voltage, electricityTransferQueue.get(ii).side);
+	    	                electricityTransferQueue.remove(ii);
+	                    }   
+                	}
                 }
                 
                 if(totalAmpsReceived > 0 || electricityNetwork != null)

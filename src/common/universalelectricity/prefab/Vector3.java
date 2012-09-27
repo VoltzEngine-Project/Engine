@@ -106,6 +106,41 @@ public class Vector3 extends Vector2 implements Cloneable
     {
         return new Vector3(par1.posX, par1.posY, par1.posZ);
     }
+    
+    public int getBlockID(World world)
+    {
+    	return world.getBlockId(this.intX(), this.intY(), this.intZ());
+    }
+
+    public int getBlockMetadata(World world)
+    {
+    	return world.getBlockMetadata(this.intX(), this.intY(), this.intZ());
+    }
+    
+    public TileEntity getTileEntity(World world)
+    {
+    	return world.getBlockTileEntity(this.intX(), this.intY(), this.intZ());
+    }
+    
+    public void setBlock(World world, int id, int metadata)
+    {
+    	world.setBlockAndMetadata(this.intX(), this.intY(), this.intZ(), id, metadata);
+    }
+    
+    public void setBlock(World world, int id)
+    {
+    	world.setBlock(this.intX(), this.intY(), this.intZ(), id);
+    }
+    
+    public void setBlockWithNotify(World world, int id, int metadata)
+    {
+    	world.setBlockAndMetadataWithNotify(this.intX(), this.intY(), this.intZ(), id, metadata);
+    }
+    
+    public void setBlockWithNotify(World world, int id)
+    {
+    	world.setBlockWithNotify(this.intX(), this.intY(), this.intZ(), id);
+    }
 
     /**
      * Converts this Vector3 into a Vector2 by dropping the Y axis.
