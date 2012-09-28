@@ -43,7 +43,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
  * The main class that loads up Universal Electricity. It also loads up Basic Components and everything required
  * for Universal Electricity to run properly.
  */
-@Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.VERSION, dependencies = "before:*")
+@Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.VERSION)
 @NetworkMod(channels = "BasicComponents", clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 
 public class UELoader implements ICraftingHandler
