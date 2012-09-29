@@ -8,18 +8,14 @@ import universalelectricity.implement.IDisableable;
  * An easier way to implement the methods from IElectricityDisableable with default values set.
  * @author Calclavia
  */
-public abstract class TileEntityDisableable extends TileEntity implements IDisableable
+public abstract class TileEntityDisableable extends AdvancedTile implements IDisableable
 {
-	protected boolean initiateTick = true;
     protected int disabledTicks = 0;
 
     @Override
     public void updateEntity()
     {
-    	if(initiateTick = true)
-    	{
-    		this.initiate();
-    	}
+    	super.updateEntity();
     	
     	if(this.disabledTicks > 0)
     	{
@@ -28,11 +24,6 @@ public abstract class TileEntityDisableable extends TileEntity implements IDisab
 			return;
     	}
     }
-    
-    protected void initiate()
-    {
-    	
-	}
 
 	/**
      * Called every tick while this tile entity is disabled.
@@ -52,27 +43,5 @@ public abstract class TileEntityDisableable extends TileEntity implements IDisab
     public boolean isDisabled()
     {
         return this.disabledTicks > 0;
-    }
-    
-    @Override
-    public int getBlockMetadata()
-    {
-        if (this.blockMetadata == -1)
-        {
-            this.blockMetadata = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        }
-
-        return this.blockMetadata;
-    }
-    
-    @Override
-    public Block getBlockType()
-    {
-        if (this.blockType == null)
-        {
-            this.blockType = Block.blocksList[this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord)];
-        }
-
-        return this.blockType;
     }
 }

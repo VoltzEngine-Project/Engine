@@ -6,6 +6,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -14,17 +15,14 @@ import universalelectricity.Ticker;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityProducer;
-import universalelectricity.network.ConnectionHandler;
-import universalelectricity.network.ConnectionHandler.ConnectionType;
 import universalelectricity.network.IPacketReceiver;
-import universalelectricity.network.ISimpleConnectionHandler;
 import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityDisableable;
 import universalelectricity.prefab.Vector3;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityCoalGenerator extends TileEntityDisableable implements IElectricityProducer, IInventory, ISidedInventory, IPacketReceiver, ISimpleConnectionHandler
+public class TileEntityCoalGenerator extends TileEntityDisableable implements IElectricityProducer, IInventory, ISidedInventory, IPacketReceiver
 {
 	/**
 	 * Maximum amount of energy needed to generate electricity
@@ -55,17 +53,18 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 
 	private int playersUsing = 0;
 
-	private boolean sendUpdate = false;
-	
-    public TileEntityCoalGenerator()
-    {
-    	ConnectionHandler.registerConnectionHandler(this);
-    }
+	private boolean sendUpdate = true;
     
     @Override
     public boolean canConnect(ForgeDirection side)
     {
         return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2);
+    }
+    
+    @Override
+    public void initiate()
+    {
+    	this.sendUpdate = true;
     }
     
     @Override
@@ -133,20 +132,17 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
         {
 	        if(this.sendUpdate || Ticker.inGameTicks % 60 == 0 && this.playersUsing > 0)
 	        {
-	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
+	        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
 	        	this.sendUpdate = false;
 	        }
         }
     }
     
     @Override
-   	public void handelConnection(ConnectionType type, Object... data)
+    public Packet getDescriptionPacket()
     {
-       	if(type == ConnectionType.LOGIN_SERVER)
-       	{
-       		this.sendUpdate = true;
-       	}
-   	}
+        return PacketManager.getPacket("BasicComponents", this, this.generateWatts, this.disabledTicks);
+    }
     
     @Override
 	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
@@ -157,6 +153,8 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 			{
 	            this.generateWatts = dataStream.readDouble();
 	            this.disabledTicks = dataStream.readInt();
+				System.out.println("RECIEVED: "+generateWatts);
+
 			}
         }
         catch (Exception e)
@@ -170,7 +168,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
     {
     	if(!this.worldObj.isRemote)
         {
-    		PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.generateWatts, this.disabledTicks);
+    		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
         }
     	
     	this.playersUsing ++;

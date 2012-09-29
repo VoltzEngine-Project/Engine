@@ -88,53 +88,27 @@ public class UniversalElectricity
     	forgeLock(major, minor, revision, false);
     }
     
+    @Deprecated
     public static int getConfigData(Configuration configuration, String name, int defaultInt)
     {
-        configuration.load();
-        int returnInt = defaultInt;
-        returnInt = Integer.parseInt(configuration.getOrCreateIntProperty(name, Configuration.CATEGORY_GENERAL, defaultInt).value);
-        configuration.save();
-        return returnInt;
+       return UEConfig.getConfigData(configuration, name, defaultInt);
     }
     
+    @Deprecated
     public static boolean getConfigData(Configuration configuration, String name, boolean defaultBoolean)
     {
-        configuration.load();
-        boolean returnBoolean = defaultBoolean;
-        returnBoolean = Boolean.parseBoolean(configuration.getOrCreateBooleanProperty(name, Configuration.CATEGORY_GENERAL, defaultBoolean).value);
-        configuration.save();
-        return returnBoolean;
+    	return UEConfig.getConfigData(configuration, name, defaultBoolean);
     }
     
+    @Deprecated
     public static int getBlockConfigID(Configuration configuration, String name, int defaultID)
     {
-        configuration.load();
-        int id = defaultID;
-
-        id = Integer.parseInt(configuration.getOrCreateBlockIdProperty(name, defaultID).value);
-
-        if (id <= 136)
-        {
-            return defaultID;
-        }
-          
-        configuration.save();
-        return id;
+    	return UEConfig.getBlockConfigID(configuration, name, defaultID);
     }
     
+    @Deprecated
     public static int getItemConfigID(Configuration configuration, String name, int defaultID)
     {
-        configuration.load();
-        int id = defaultID;
-
-        id = Integer.parseInt(configuration.getOrCreateIntProperty(name, Configuration.CATEGORY_ITEM, defaultID).value);
-
-        if (id < 256)
-        {
-            return defaultID;
-        }
-
-        configuration.save();
-        return id;
+    	return UEConfig.getItemConfigID(configuration, name, defaultID);
     }
 }

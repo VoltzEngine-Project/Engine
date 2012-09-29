@@ -6,9 +6,11 @@ import java.io.IOException;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import universalelectricity.prefab.Vector3;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -44,6 +46,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 		}
 	}
 	
+	@Deprecated
 	public static void sendTileEntityPacket(TileEntity sender, String channelName, Object... sendData)
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -56,8 +59,15 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
             data.writeInt(sender.xCoord);
             data.writeInt(sender.yCoord);
             data.writeInt(sender.zCoord);
+            
+            data = encodeDataStream(data, sendData);
+            
+            Packet250CustomPayload packet = new Packet250CustomPayload();
+            packet.channel = channelName;
+            packet.data = bytes.toByteArray();
+            packet.length = packet.data.length;
 
-            sendPacketToClients(channelName, bytes, data, sendData);
+            sendPacketToClients(packet);
         }
         catch (IOException e)
         {
@@ -65,6 +75,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
         }
     }
 	
+	@Deprecated
 	public static void sendTileEntityPacketWithRange(TileEntity sender, String channelName, double range, Object... sendData)
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -93,6 +104,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
         }
     }
 	
+	@Deprecated
 	public static void sendTileEntityPacketToServer(TileEntity sender, String channelName, Object... sendData)
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -105,15 +117,22 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
             data.writeInt(sender.xCoord);
             data.writeInt(sender.yCoord);
             data.writeInt(sender.zCoord);
-
-            sendPacketToServer(channelName, bytes, data, sendData);
+            data = encodeDataStream(data, sendData);
+            
+            Packet250CustomPayload packet = new Packet250CustomPayload();
+            packet.channel = channelName;
+            packet.data = bytes.toByteArray();
+            packet.length = packet.data.length;
+            
+            sendPacketToServer(packet);
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
     }
-	
+
+	@Deprecated
 	public static void sendUnspecifiedPacket(String channelName, Object... sendData)
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -122,8 +141,13 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
         try
         {
             data.writeInt(PacketType.UNSPECIFIED.ordinal());
-
-            sendPacketToClients(channelName, bytes, data, sendData);
+            
+            Packet250CustomPayload packet = new Packet250CustomPayload();
+            packet.channel = channelName;
+            packet.data = bytes.toByteArray();
+            packet.length = packet.data.length;
+            
+            sendPacketToClients(packet);
         }
         catch (IOException e)
         {
@@ -131,6 +155,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
         }
     }
 	
+	@Deprecated
 	public static void sendUnspecifiedPacketToServer(String channelName, Object... sendData)
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -139,8 +164,13 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
         try
         {
             data.writeInt(PacketType.UNSPECIFIED.ordinal());
-
-            sendPacketToServer(channelName, bytes, data, sendData);
+            
+            Packet250CustomPayload packet = new Packet250CustomPayload();
+            packet.channel = channelName;
+            packet.data = bytes.toByteArray();
+            packet.length = packet.data.length;
+            
+            sendPacketToServer(packet);
         }
         catch (IOException e)
         {
@@ -148,17 +178,96 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
         }
     }
 	
-	public static void sendPacketToClients(String channelName, ByteArrayOutputStream bytes, DataOutputStream data, Object... sendData)
-	{
-		try
-		{
-			data = encodeDataStream(data, sendData);
+	public static Packet getPacket(String channelName, int id, Object... sendData)
+    {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream data = new DataOutputStream(bytes);
+
+        try
+        {
+            data.writeInt(id);
+        	
+            data = encodeDataStream(data, sendData);
 	        
 	        Packet250CustomPayload packet = new Packet250CustomPayload();
 	        packet.channel = channelName;
 	        packet.data = bytes.toByteArray();
 	        packet.length = packet.data.length;
 	        
+	        return packet;
+        }
+        catch (IOException e)
+        {
+        	System.out.println("Failed to create packet.");
+            e.printStackTrace();
+        }
+        
+		return null;
+    }
+	
+	public static Packet getPacket(String channelName, Object... sendData)
+    {
+		return getPacket(channelName, PacketType.UNSPECIFIED.ordinal(), sendData);
+    }
+	
+	/**
+	 * Gets a packet for the tile entity.
+	 * @return
+	 */
+	public static Packet getPacket(String channelName, TileEntity sender, Object... sendData)
+    {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream data = new DataOutputStream(bytes);
+
+        try
+        {
+            data.writeInt(PacketType.TILEENTITY.ordinal());
+        	
+            data.writeInt(sender.xCoord);
+            data.writeInt(sender.yCoord);
+            data.writeInt(sender.zCoord);
+            data = encodeDataStream(data, sendData);
+	        
+	        Packet250CustomPayload packet = new Packet250CustomPayload();
+	        packet.channel = channelName;
+	        packet.data = bytes.toByteArray();
+	        packet.length = packet.data.length;
+	        
+	        return packet;
+        }
+        catch (IOException e)
+        {
+        	System.out.println("Failed to create packet.");
+            e.printStackTrace();
+        }
+        
+		return null;
+    }
+	
+	/**
+	 * Sends packets to clients around a specific coordinate. A wrapper using Vector3.
+	 * See {@PacketDispatcher} for detailed information.
+	 */
+	public static void sendPacketToClients(Packet packet, World worldObj, Vector3 position, double range)
+	{
+		try
+		{
+	        PacketDispatcher.sendPacketToAllAround(position.x, position.y, position.z, range, worldObj.provider.dimensionId, packet);
+		}
+		catch (Exception e)
+        {
+			System.out.println("Sending packet to client failed.");
+            e.printStackTrace();
+        }
+	}
+	
+	/**
+	 * Sends a packet to all the clients on this server.
+	 */
+	public static void sendPacketToClients(Packet packet)
+	{
+		try
+		{
 	        if(FMLCommonHandler.instance().getMinecraftServerInstance() != null)
 	        {
 	        	FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendPacketToAllPlayers(packet);
@@ -171,16 +280,11 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
         }
 	}
 
-	public static void sendPacketToServer(String channelName, ByteArrayOutputStream bytes, DataOutputStream data, Object... sendData)
+	@Deprecated
+	public static void sendPacketToServer(Packet packet)
 	{
 		try
 		{
-			data = encodeDataStream(data, sendData);
-            
-            Packet250CustomPayload packet = new Packet250CustomPayload();
-            packet.channel = channelName;
-            packet.data = bytes.toByteArray();
-            packet.length = packet.data.length;
             PacketDispatcher.sendPacketToServer(packet);
 		}
 		catch(Exception e)
