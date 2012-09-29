@@ -66,7 +66,6 @@ public class UELoader implements ICraftingHandler
 		UniversalElectricity.forgeLock(4, 1, 4);
    		GameRegistry.registerWorldGenerator(new OreGenerator());
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
-   		MinecraftForge.EVENT_BUS.register(this);
 
 		/**
 		 * Define the items and blocks.
@@ -105,7 +104,8 @@ public class UELoader implements ICraftingHandler
 		 * Thanks to Cammygames for writing the Liquid Manager for UE oil.
 		 */
 		LiquidManager.liquids.add(new LiquidData(new LiquidStack(BasicComponents.oilStill, LiquidManager.BUCKET_VOLUME), new LiquidStack(BasicComponents.oilMoving, LiquidManager.BUCKET_VOLUME), new ItemStack(BasicComponents.itemOilBucket), new ItemStack(Item.bucketEmpty)));
-		MinecraftForge.EVENT_BUS.register(BasicComponents.itemOilBucket);	
+   		MinecraftForge.EVENT_BUS.register(this);
+   		MinecraftForge.EVENT_BUS.register(BasicComponents.itemOilBucket);	
 		MinecraftForge.EVENT_BUS.register(ChunkEventCaller.INSTANCE);	
 	    
     	//Register Blocks
@@ -243,12 +243,6 @@ public class UELoader implements ICraftingHandler
         	ElectricityManager.instance.timedConductorRefresh();
     	}
     }
-
-    @ForgeSubscribe
-	public void onWorldLoad(Load event)
-	{
-    	ElectricityManager.instance.timedConductorRefresh();
-	}
     
     @ForgeSubscribe
 	public void onWorldSave(Save event)

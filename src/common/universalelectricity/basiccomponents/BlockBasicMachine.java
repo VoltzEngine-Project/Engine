@@ -51,7 +51,6 @@ public class BlockBasicMachine extends BlockMachine
         if(tile instanceof TileEntityCoalGenerator)
         {
 	        TileEntityCoalGenerator tileEntity = (TileEntityCoalGenerator)tile;
-	
 	        if(tileEntity.generateWatts > 0)
 	        {
 	            int metadata = par1World.getBlockMetadata(x, y, z);

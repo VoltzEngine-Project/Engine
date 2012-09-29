@@ -34,7 +34,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
      */
     public static final int MIN_GENERATE_WATTS = 100;
 
-	private static final float BASE_ACCELERATION = 0.08f;
+	private static final float BASE_ACCELERATION = 0.1f;
 
     /**
      * Per second
@@ -101,7 +101,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 
                 if (this.connectedElectricUnit != null)
                 {
-                    this.generateWatts = (double)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.001 + BASE_ACCELERATION), 5), this.MAX_GENERATE_WATTS);
+                    this.generateWatts = (double)Math.min(this.generateWatts + Math.min((this.generateWatts * 0.005 + BASE_ACCELERATION), 5), this.MAX_GENERATE_WATTS);
                 }
             }
             
@@ -111,7 +111,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
                 {
                     if (this.itemCookTime <= 0)
                     {
-                        itemCookTime = 280;
+                        this.itemCookTime = 250;
                         this.decrStackSize(0, 1);
                     }
                 }
@@ -141,7 +141,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket("BasicComponents", this, this.generateWatts, this.disabledTicks);
+        return PacketManager.getPacket("BasicComponents", this, this.generateWatts, this.itemCookTime, this.disabledTicks);
     }
     
     @Override
@@ -152,9 +152,8 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 			if(this.worldObj.isRemote)
 			{
 	            this.generateWatts = dataStream.readDouble();
+	            this.itemCookTime = dataStream.readInt();
 	            this.disabledTicks = dataStream.readInt();
-				System.out.println("RECIEVED: "+generateWatts);
-
 			}
         }
         catch (Exception e)

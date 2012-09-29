@@ -264,6 +264,19 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	/**
 	 * Sends a packet to all the clients on this server.
 	 */
+	public static void sendPacketToClients(Packet packet, World worldObj)
+	{
+		try
+		{
+			PacketDispatcher.sendPacketToAllInDimension(packet, worldObj.provider.dimensionId);
+		}
+		catch (Exception e)
+        {
+			System.out.println("Sending packet to client failed.");
+            e.printStackTrace();
+        }
+	}
+	
 	public static void sendPacketToClients(Packet packet)
 	{
 		try

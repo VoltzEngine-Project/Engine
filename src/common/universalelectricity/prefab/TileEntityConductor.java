@@ -3,6 +3,7 @@ package universalelectricity.prefab;
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
@@ -84,7 +85,7 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         
         if(!this.worldObj.isRemote)
         {
-        	PacketManager.sendTileEntityPacket(this, "BasicComponents");
+        	PacketManager.sendPacketToClients(getDescriptionPacket());
         }
     }
 
@@ -107,8 +108,14 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         
         if(!this.worldObj.isRemote)
         {
-        	PacketManager.sendTileEntityPacket(this, "BasicComponents");
+        	PacketManager.sendPacketToClients(getDescriptionPacket());
         }
+    }
+    
+    @Override
+    public Packet getDescriptionPacket()
+    {
+        return PacketManager.getPacket("BasicComponents", this);
     }
     
     @Override

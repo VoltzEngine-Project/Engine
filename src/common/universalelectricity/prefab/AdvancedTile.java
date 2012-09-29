@@ -17,10 +17,7 @@ public abstract class AdvancedTile extends TileEntity
     	}
     }
 	
-	protected void initiate()
-    {
-    	
-	}
+	protected void initiate() { }
 	
 	@Override
 	public void invalidate()

@@ -14,6 +14,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -26,10 +27,7 @@ import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityStorage;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.network.ConnectionHandler;
-import universalelectricity.network.ConnectionHandler.ConnectionType;
 import universalelectricity.network.IPacketReceiver;
-import universalelectricity.network.ISimpleConnectionHandler;
 import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
@@ -44,7 +42,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, ISimpleConnectionHandler
+public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
 {	
 	private double wattHourStored = 0;
 
@@ -58,12 +56,11 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	
 	public boolean initialized = false;
 
-	private boolean sendUpdate = false;
+	private boolean sendUpdate = true;
 
     public TileEntityBatteryBox()
     {
     	super();
-    	ConnectionHandler.registerConnectionHandler(this);
     	this.setPowerProvider(null);
     }
     
@@ -228,20 +225,17 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
         {
 	        if(this.sendUpdate || (Ticker.inGameTicks % 40 == 0 && this.playersUsing > 0))
 	        {
-	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+	        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
 	        	this.sendUpdate = false;
 	        }
         }
     }
     
     @Override
-	public void handelConnection(ConnectionType type, Object... data)
+    public Packet getDescriptionPacket()
     {
-    	if(type == ConnectionType.LOGIN_SERVER)
-    	{
-    		this.sendUpdate  = true;
-    	}
-	}
+        return PacketManager.getPacket("BasicComponents", this, this.wattHourStored, this.disabledTicks);
+    }
     
     @Override
 	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
@@ -262,7 +256,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     {
     	if(!this.worldObj.isRemote)
         {
-    		PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+    		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
         }
     	
     	this.playersUsing  ++;
@@ -561,6 +555,11 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		
 		double rejectedElectricity = Math.max(this.wattHourStored - (this.wattHourStored - inputElectricity), 0);
 		this.setWattHours(wattHourStored + inputElectricity);
+		
+		if(Ticker.inGameTicks % 10 == 0 && this.playersUsing > 0)
+        {
+        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 10);
+        }
 		
 		return (int) rejectedElectricity;
 	}
