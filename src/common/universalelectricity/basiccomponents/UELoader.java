@@ -77,7 +77,7 @@ public class UELoader implements ICraftingHandler
 	    BasicComponents.blockMachine = new BlockBasicMachine(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Basic Machine", BasicComponents.BLOCK_ID_PREFIX + 4), 0);
 	    
 	    BasicComponents.itemBattery = new ItemBattery(UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Battery", BasicComponents.ITEM_ID_PREFIX+1), 0);
-	    BasicComponents.itemWrench = new ItemWrench(UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Wrench", BasicComponents.ITEM_ID_PREFIX+2), 20);
+	    BasicComponents.itemWrench = new ItemWrench(UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Universal Wrench", BasicComponents.ITEM_ID_PREFIX+2), 20);
 	    BasicComponents.itemCopperIngot = new ItemBasic("Copper Ingot", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Ingot", BasicComponents.ITEM_ID_PREFIX+3), 1);
 	    BasicComponents.itemTinIngot = new ItemBasic("Tin Ingot", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Ingot", BasicComponents.ITEM_ID_PREFIX+4), 2);
 	    BasicComponents.itemSteelIngot = new ItemBasic("Steel Ingot", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Ingot", BasicComponents.ITEM_ID_PREFIX+5), 3);
