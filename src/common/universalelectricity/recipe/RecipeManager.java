@@ -13,6 +13,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import universalelectricity.UEConfig;
 import universalelectricity.UniversalElectricity;
 
 /**
@@ -58,7 +59,7 @@ public class RecipeManager
     {
     	if(config != null)
     	{
-    		if(UniversalElectricity.getConfigData(config, "Allow "+name+" Crafting", defaultBoolean))
+    		if(UEConfig.getConfigData(config, "Allow "+name+" Crafting", defaultBoolean))
     		{
     			addRecipe(output, input);
     		}
@@ -107,7 +108,7 @@ public class RecipeManager
     {
     	if(config != null)
     	{
-    		if(UniversalElectricity.getConfigData(config, "Allow "+name+" Crafting", defaultBoolean))
+    		if(UEConfig.getConfigData(config, "Allow "+name+" Crafting", defaultBoolean))
     		{
     			addShapelessRecipe(output, input);
     		}
@@ -155,7 +156,7 @@ public class RecipeManager
     {
     	if(config != null)
     	{
-    		if(UniversalElectricity.getConfigData(config, "Allow "+name+" Smelting", defaultBoolean))
+    		if(UEConfig.getConfigData(config, "Allow "+name+" Smelting", defaultBoolean))
     		{
     			addSmelting(input, output);
     		}
