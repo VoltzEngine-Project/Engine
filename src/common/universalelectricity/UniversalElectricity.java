@@ -12,7 +12,7 @@ public class UniversalElectricity
 {
 	public static final int MAJOR_VERSION = 0;
 	public static final int MINOR_VERSION = 8;
-	public static final int REVISION_VERSION = 6;
+	public static final int REVISION_VERSION = 7;
 	
 	public static final String VERSION = MAJOR_VERSION+"."+MINOR_VERSION+"."+REVISION_VERSION;
 	
