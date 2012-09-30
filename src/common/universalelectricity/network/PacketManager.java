@@ -178,7 +178,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
         }
     }
 	
-	public static Packet getPacket(String channelName, int id, Object... sendData)
+	public static Packet getPacketWithID(String channelName, int id, Object... sendData)
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         DataOutputStream data = new DataOutputStream(bytes);
@@ -207,7 +207,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	
 	public static Packet getPacket(String channelName, Object... sendData)
     {
-		return getPacket(channelName, PacketType.UNSPECIFIED.ordinal(), sendData);
+		return getPacketWithID(channelName, PacketType.UNSPECIFIED.ordinal(), sendData);
     }
 	
 	/**
