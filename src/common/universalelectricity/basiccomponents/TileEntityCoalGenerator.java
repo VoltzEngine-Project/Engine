@@ -17,6 +17,7 @@ import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityProducer;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
+import universalelectricity.network.PacketManager.PacketType;
 import universalelectricity.prefab.TileEntityDisableable;
 import universalelectricity.prefab.Vector3;
 
@@ -145,7 +146,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
     }
     
     @Override
-	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	public void handlePacketData(NetworkManager network, PacketType type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
         {

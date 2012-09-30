@@ -384,14 +384,14 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 					{
 						if(tileEntity instanceof IPacketReceiver)
 						{
-							((IPacketReceiver)tileEntity).handlePacketData(network, packet, ((EntityPlayer)player), data);
+							((IPacketReceiver)tileEntity).handlePacketData(network, packetType, packet, ((EntityPlayer)player), data);
 						}
 					}
 				}
 			}
 			else
 			{
-				this.handlePacketData(network, packet, ((EntityPlayer)player), data);
+				this.handlePacketData(network, packetType, packet, ((EntityPlayer)player), data);
 			}
         }
         catch(Exception e)
@@ -401,7 +401,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	}
 
 	@Override
-	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+	public void handlePacketData(NetworkManager network, PacketType packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 
 	}

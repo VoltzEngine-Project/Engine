@@ -29,6 +29,7 @@ import universalelectricity.implement.IItemElectric;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
+import universalelectricity.network.PacketManager.PacketType;
 import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
 import universalelectricity.prefab.Vector3;
@@ -244,7 +245,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     }
     
     @Override
-	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	public void handlePacketData(NetworkManager network, PacketType type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
         {

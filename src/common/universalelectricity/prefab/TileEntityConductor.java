@@ -12,6 +12,7 @@ import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IConnector;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
+import universalelectricity.network.PacketManager.PacketType;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -112,7 +113,7 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
     }
     
     @Override
-    public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+    public void handlePacketData(NetworkManager network, PacketType type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
     	if(this.worldObj.isRemote)
     	{

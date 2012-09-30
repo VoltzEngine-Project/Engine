@@ -17,6 +17,7 @@ import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
+import universalelectricity.network.PacketManager.PacketType;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
 import universalelectricity.prefab.Vector3;
 
@@ -131,7 +132,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
     }
     
     @Override
-	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	public void handlePacketData(NetworkManager network, PacketType type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
         {
