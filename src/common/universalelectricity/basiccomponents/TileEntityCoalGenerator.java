@@ -17,7 +17,6 @@ import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityProducer;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
-import universalelectricity.network.PacketManager.PacketType;
 import universalelectricity.prefab.TileEntityDisableable;
 import universalelectricity.prefab.Vector3;
 
@@ -78,7 +77,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 
         if (tileEntity instanceof IConductor)
         {
-            if (ElectricityManager.instance.getElectricityRequired( ((IConductor)tileEntity).getConnectionID()) > 0)
+            if (ElectricityManager.instance.getElectricityRequired(((IConductor)tileEntity).getConnectionID()) > 0)
             {
                 this.connectedElectricUnit = (IConductor)tileEntity;
             }

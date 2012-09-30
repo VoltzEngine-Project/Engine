@@ -125,7 +125,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
         		double receivedElectricity = this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO;
         		this.setWattHours(this.wattHourStored + receivedElectricity);
         	
-        		if(Ticker.inGameTicks % 5 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
+        		if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
         		{
         			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
         		}
@@ -571,7 +571,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		
 			this.setWattHours(wattHourStored + inputElectricity);
 			
-			if(Ticker.inGameTicks % 5 == 0 && this.playersUsing > 0)
+			if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0)
 			{
 				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
