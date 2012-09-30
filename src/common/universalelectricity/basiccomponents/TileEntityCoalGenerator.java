@@ -34,7 +34,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
      */
     public static final int MIN_GENERATE_WATTS = 100;
 
-	private static final float BASE_ACCELERATION = 0.1f;
+	private static final float BASE_ACCELERATION = 0.15f;
 
     /**
      * Per second

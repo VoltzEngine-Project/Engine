@@ -23,6 +23,7 @@ LICENSE.txt
 !/src/common/buildcraft/
 !/src/common/ic2/
 !/src/common/railcraft/
+!/src/common/forestry/
 !/src/common/universalelectricity/
 !/src/common/mcmod.info
 !/resources/*
