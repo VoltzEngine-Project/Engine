@@ -1,7 +1,5 @@
 package universalelectricity.prefab;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.TileEntity;
 import universalelectricity.implement.IDisableable;
 
 /**
