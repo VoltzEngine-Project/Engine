@@ -1,5 +1,6 @@
 package universalelectricity.basiccomponents;
 
+import railcraft.common.api.core.items.ICrowbar;
 import ic2.api.IWrenchable;
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
@@ -10,7 +11,7 @@ import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.tools.IToolWrench;
 
-public class ItemWrench extends ItemBasic implements IToolWrench
+public class ItemWrench extends ItemBasic implements ICrowbar, IToolWrench
 {
     public ItemWrench(int par1, int par2)
     {

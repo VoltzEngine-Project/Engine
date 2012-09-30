@@ -22,6 +22,7 @@ LICENSE.txt
 !/src/minecraft/universalelectricity/
 !/src/common/buildcraft/
 !/src/common/ic2/
+!/src/common/railcraft/
 !/src/common/universalelectricity/
 !/src/common/mcmod.info
 !/resources/*
