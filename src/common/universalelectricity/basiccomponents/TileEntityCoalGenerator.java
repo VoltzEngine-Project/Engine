@@ -146,7 +146,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
     }
     
     @Override
-	public void handlePacketData(NetworkManager network, PacketType type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	public void handlePacketData(NetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
         {

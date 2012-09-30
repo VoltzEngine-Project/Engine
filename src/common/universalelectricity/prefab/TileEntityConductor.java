@@ -113,7 +113,7 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
     }
     
     @Override
-    public void handlePacketData(NetworkManager network, PacketType type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+    public void handlePacketData(NetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
     	if(this.worldObj.isRemote)
     	{

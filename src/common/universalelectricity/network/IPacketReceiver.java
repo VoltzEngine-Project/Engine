@@ -12,5 +12,5 @@ public interface IPacketReceiver
     /**
      * Sends some data to the tile entity.
      */
-    public void handlePacketData(NetworkManager network, PacketType packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream);
+    public void handlePacketData(NetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream);
 }

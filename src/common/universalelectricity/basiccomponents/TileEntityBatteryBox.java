@@ -245,7 +245,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     }
     
     @Override
-	public void handlePacketData(NetworkManager network, PacketType type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	public void handlePacketData(NetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
         {

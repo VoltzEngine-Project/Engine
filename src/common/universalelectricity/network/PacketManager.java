@@ -366,7 +366,9 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
         {
 			ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
 			
-			PacketType packetType = PacketType.get(data.readInt());
+			int packetTypeID = data.readInt();
+			
+			PacketType packetType = PacketType.get(packetTypeID);
 			
 			if(packetType == PacketType.TILEENTITY)
 			{
@@ -384,14 +386,14 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 					{
 						if(tileEntity instanceof IPacketReceiver)
 						{
-							((IPacketReceiver)tileEntity).handlePacketData(network, packetType, packet, ((EntityPlayer)player), data);
+							((IPacketReceiver)tileEntity).handlePacketData(network, packetTypeID, packet, ((EntityPlayer)player), data);
 						}
 					}
 				}
 			}
 			else
 			{
-				this.handlePacketData(network, packetType, packet, ((EntityPlayer)player), data);
+				this.handlePacketData(network, packetTypeID, packet, ((EntityPlayer)player), data);
 			}
         }
         catch(Exception e)
@@ -401,7 +403,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	}
 
 	@Override
-	public void handlePacketData(NetworkManager network, PacketType packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+	public void handlePacketData(NetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 
 	}
