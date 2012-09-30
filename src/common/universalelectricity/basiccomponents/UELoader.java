@@ -46,10 +46,12 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
  * for Universal Electricity to run properly.
  */
 @Mod(modid = "UniversalElectricity", name = "Universal Electricity", version = UniversalElectricity.VERSION)
-@NetworkMod(channels = "BasicComponents", clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
+@NetworkMod(channels = UELoader.CHANNEL, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 
 public class UELoader implements ICraftingHandler
 {
+	public static final String CHANNEL = "BasicComponents";
+	
     public static final String FILE_PATH = "/basiccomponents/textures/";
     public static final String BLOCK_TEXTURE_FILE = FILE_PATH + "blocks.png";
     public static final String ITEM_TEXTURE_FILE = FILE_PATH + "items.png";

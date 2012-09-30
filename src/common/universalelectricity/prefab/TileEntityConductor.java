@@ -8,6 +8,7 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.basiccomponents.UELoader;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IConnector;
@@ -85,7 +86,7 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         
         if(!this.worldObj.isRemote)
         {
-        	PacketManager.sendPacketToClients(getDescriptionPacket());
+        	PacketManager.sendPacketToClients(this.getDescriptionPacket());
         }
     }
 
@@ -108,14 +109,8 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         
         if(!this.worldObj.isRemote)
         {
-        	PacketManager.sendPacketToClients(getDescriptionPacket());
+        	PacketManager.sendPacketToClients(this.getDescriptionPacket());
         }
-    }
-    
-    @Override
-    public Packet getDescriptionPacket()
-    {
-        return PacketManager.getPacket("BasicComponents", this);
     }
     
     @Override

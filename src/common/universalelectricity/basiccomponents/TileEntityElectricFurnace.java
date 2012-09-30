@@ -7,6 +7,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -17,6 +18,7 @@ import universalelectricity.implement.IItemElectric;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
+import universalelectricity.prefab.Vector3;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -117,9 +119,15 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	    {
    	        if(Ticker.inGameTicks % 20 == 0 && this.playersUsing > 0)
 	        {
-	        	PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.smeltingTicks, this.disabledTicks);
+	        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
 	        }
         }
+    }
+    
+    @Override
+    public Packet getDescriptionPacket()
+    {
+        return PacketManager.getPacket(UELoader.CHANNEL, this, this.smeltingTicks, this.disabledTicks);
     }
     
     @Override
@@ -141,7 +149,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
     {
     	if(!this.worldObj.isRemote)
         {
-    		PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.smeltingTicks, this.disabledTicks);
+        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
         }
     	this.playersUsing  ++;
     }

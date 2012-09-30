@@ -141,7 +141,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket("BasicComponents", this, this.generateWatts, this.itemCookTime, this.disabledTicks);
+        return PacketManager.getPacket(UELoader.CHANNEL, this, this.generateWatts, this.itemCookTime, this.disabledTicks);
     }
     
     @Override

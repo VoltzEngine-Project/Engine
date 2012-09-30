@@ -234,7 +234,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket("BasicComponents", this, this.wattHourStored, this.disabledTicks);
+        return PacketManager.getPacket(UELoader.CHANNEL, this, this.wattHourStored, this.disabledTicks);
     }
     
     @Override

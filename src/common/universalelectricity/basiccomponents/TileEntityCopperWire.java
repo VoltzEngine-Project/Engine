@@ -1,6 +1,8 @@
 package universalelectricity.basiccomponents;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.Packet;
+import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityConductor;
 
 public class TileEntityCopperWire extends TileEntityConductor
@@ -25,4 +27,10 @@ public class TileEntityCopperWire extends TileEntityConductor
 	{
 		this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.fire.blockID);
 	}
+	
+	@Override
+    public Packet getDescriptionPacket()
+    {
+        return PacketManager.getPacket(UELoader.CHANNEL, this);
+    }
 }
