@@ -551,7 +551,12 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public boolean demandsEnergy()
 	{
-		return this.wattHourStored < getMaxWattHours();
+		if(!this.isDisabled())
+		{
+			return this.wattHourStored < getMaxWattHours();
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -559,14 +564,20 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	{
 		double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
 		
-		double rejectedElectricity = Math.max(this.wattHourStored - (this.wattHourStored - inputElectricity), 0);
-		this.setWattHours(wattHourStored + inputElectricity);
-		
-		if(Ticker.inGameTicks % 5 == 0 && this.playersUsing > 0)
+		if(!this.isDisabled())
 		{
-			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+			double rejectedElectricity = Math.max(this.wattHourStored - (this.wattHourStored - inputElectricity), 0);
+		
+			this.setWattHours(wattHourStored + inputElectricity);
+			
+			if(Ticker.inGameTicks % 5 == 0 && this.playersUsing > 0)
+			{
+				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+			}
+		
+			return (int) (rejectedElectricity*UniversalElectricity.Wh_IC2_RATIO);
 		}
 		
-		return (int) rejectedElectricity;
+		return euAmount;
 	}
 }
