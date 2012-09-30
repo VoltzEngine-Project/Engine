@@ -121,7 +121,13 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
         {
         	if(this.powerProvider != null)
         	{
-        		this.setWattHours(this.wattHourStored + this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO);
+        		double receivedElectricity = this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO;
+        		this.setWattHours(this.wattHourStored + receivedElectricity);
+        	
+        		if(this.playersUsing > 0 && receivedElectricity > 0)
+        		{
+        			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+        		}
         	}
         	
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
@@ -556,10 +562,10 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		double rejectedElectricity = Math.max(this.wattHourStored - (this.wattHourStored - inputElectricity), 0);
 		this.setWattHours(wattHourStored + inputElectricity);
 		
-		if(Ticker.inGameTicks % 10 == 0 && this.playersUsing > 0)
-        {
-        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 10);
-        }
+		if(this.playersUsing > 0)
+		{
+			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+		}
 		
 		return (int) rejectedElectricity;
 	}
