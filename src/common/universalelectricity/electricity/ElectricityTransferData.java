@@ -30,4 +30,13 @@ public class ElectricityTransferData
         this.amps = amps;
         this.voltage = voltage;
     }
+    
+    public boolean isValid()
+    {
+    	return this.sender != null &&
+    		this.receiver != null &&
+    		this.network != null &&
+    		this.amps > 0 &&
+    		this.voltage > 0;
+    }
 }

@@ -23,7 +23,7 @@ public class ElectricityManager
 {
 	public static ElectricityManager instance = new ElectricityManager();
 	
-    private List<IElectricityReceiver> electricUnits = new ArrayList<IElectricityReceiver>();
+    private List<IElectricityReceiver> electricityReceivers = new ArrayList<IElectricityReceiver>();
     private List<IConductor> electricConductors = new ArrayList<IConductor>();
 
     private List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
@@ -50,9 +50,9 @@ public class ElectricityManager
      */
     public void registerElectricUnit(IElectricityReceiver newUnit)
     {
-        if (!this.electricUnits.contains(newUnit))
+        if (!this.electricityReceivers.contains(newUnit))
         {
-        	this.electricUnits.add(newUnit);
+        	this.electricityReceivers.add(newUnit);
         }
     }
 
@@ -83,9 +83,17 @@ public class ElectricityManager
         {
             ElectricityNetwork connection1 = getConnectionByID(ID1);
             ElectricityNetwork connection2 = getConnectionByID(ID2);
-            connection1.conductors.addAll(connection2.conductors);
-            connection1.setID(ID1);
-            this.wireConnections.remove(connection2);
+            
+            if(connection1 != null && connection2 != null)
+            {
+	            connection1.conductors.addAll(connection2.conductors);
+	            connection1.setID(ID1);
+	            this.wireConnections.remove(connection2);
+            }
+            else
+            {
+            	System.err.println("Failed to merge Universal Electricity wire connections!");
+            }
         }
     }
 
@@ -255,51 +263,71 @@ public class ElectricityManager
     {
 		for(int j = 0; j < this.electricConductors.size(); j ++)
         {
-        	IConductor conductor  = this.electricConductors.get(j);
+        	IConductor conductor = this.electricConductors.get(j);
             conductor.refreshConnectedBlocks();
         }
-
+    }
+    
+    /**
+     * Clean up and remove useless connections
+     */
+    public void cleanUpElectricityReceivers()
+    {
+    	try
+    	{
+	        for (int i = 0; i < this.electricityReceivers.size(); i++)
+	        {
+	        	IElectricityReceiver electricUnit = electricityReceivers.get(i);
+	        	
+	            //Cleanup useless units
+	            if (electricUnit == null)
+	            {
+	                electricityReceivers.remove(electricUnit);
+	            }
+	            else if (((TileEntity)electricUnit).isInvalid())
+	            {
+	                electricityReceivers.remove(electricUnit);
+	            }
+	        }
+    	}
+    	catch(Exception e)
+		{
+    		System.err.println("Failed to clean up electricity receivers.");
+			e.printStackTrace();
+		}
     }
 
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
 		try
 		{
-	        for(int i = 0; i < electricUnits.size(); i++)
+			/*
+	        for(int i = 0; i < electricityReceivers.size(); i++)
 	        {
-	        	IElectricityReceiver electricUnit = electricUnits.get(i);
-	        	
-	            //Cleanup useless units
-	            if (electricUnit == null)
-	            {
-	                electricUnits.remove(electricUnit);
-	                break;
-	            }
-	            else if (((TileEntity)electricUnit).isInvalid())
-	            {
-	                electricUnits.remove(electricUnit);
-	                break;
-	            }
-	            
+	        	IElectricityReceiver electricUnit = electricityReceivers.get(i);
+
 	            double totalAmpsReceived = 0;
 	            ElectricityNetwork electricityNetwork = null;
 	            
                 for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
                 {
-                	if(electricityTransferQueue.get(ii).receiver != null)
+                	if(electricityTransferQueue.get(ii) != null)
                 	{
-	                    if (electricityTransferQueue.get(ii).receiver == electricUnit)
-	                    {
-	                    	totalAmpsReceived += electricityTransferQueue.get(ii).amps;
-	                    	
-	                    	if(electricityNetwork == null)
-	                    	{
-	                    		electricityNetwork = electricityTransferQueue.get(ii).network;
-	                    	}
-	                    	
-	                    	electricUnit.onReceive(electricityTransferQueue.get(ii).sender, electricityTransferQueue.get(ii).amps, electricityTransferQueue.get(ii).voltage, electricityTransferQueue.get(ii).side);
-	    	                electricityTransferQueue.remove(ii);
-	                    }   
+	                	if(electricityTransferQueue.get(ii).receiver != null)
+	                	{
+		                    if (electricityTransferQueue.get(ii).receiver == electricUnit)
+		                    {
+		                    	totalAmpsReceived += electricityTransferQueue.get(ii).amps;
+		                    	
+		                    	if(electricityNetwork == null)
+		                    	{
+		                    		electricityNetwork = electricityTransferQueue.get(ii).network;
+		                    	}
+		                    	
+		                    	electricUnit.onReceive(electricityTransferQueue.get(ii).sender, electricityTransferQueue.get(ii).amps, electricityTransferQueue.get(ii).voltage, electricityTransferQueue.get(ii).side);
+		    	                electricityTransferQueue.remove(ii);
+		                    }   
+	                	}
                 	}
                 }
                 
@@ -311,9 +339,24 @@ public class ElectricityManager
                 	}
                 }
 	        }
+		*/
+		
+			for (int i = 0; i < electricityTransferQueue.size(); i ++)
+	        {
+	        	if(electricityTransferQueue.get(i) != null)
+	        	{
+	            	if(electricityTransferQueue.get(i).isValid())
+	            	{
+	                	electricityTransferQueue.get(i).receiver.onReceive(electricityTransferQueue.get(i).sender, electricityTransferQueue.get(i).amps, electricityTransferQueue.get(i).voltage, electricityTransferQueue.get(i).side);
+	            	}
+	        	}
+	        	
+	        	electricityTransferQueue.remove(i);
+	        }
 		}
 		catch(Exception e)
 		{
+			System.err.println("Failed to transfer electricity to receivers.");
 			e.printStackTrace();
 		}
 	}

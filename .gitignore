@@ -13,6 +13,8 @@
 CHANGELOG
 LICENSE.txt
 7za.exe
+*.bat
+*.sh
 
 /src/minecraft/*
 /src/minecraft_server/*
@@ -27,8 +29,6 @@ LICENSE.txt
 !/src/common/universalelectricity/
 !/src/common/mcmod.info
 !/resources/*
+!Include Resources.bat
 !/modversion.txt
 !/README
-
-*.bat
-*.sh

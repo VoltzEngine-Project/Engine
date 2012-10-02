@@ -25,7 +25,10 @@ public class TileEntityCopperWire extends TileEntityConductor
 	@Override
 	public void onConductorMelt()
 	{
-		this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.fire.blockID);
+		if(!this.worldObj.isRemote)
+		{
+			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.fire.blockID);
+		}
 	}
 	
 	@Override
