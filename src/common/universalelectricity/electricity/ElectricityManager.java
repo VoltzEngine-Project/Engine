@@ -2,9 +2,11 @@ package universalelectricity.electricity;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.implement.IConductor;
@@ -302,47 +304,7 @@ public class ElectricityManager
 	{
 		try
 		{
-			/*
-	        for(int i = 0; i < electricityReceivers.size(); i++)
-	        {
-	        	IElectricityReceiver electricUnit = electricityReceivers.get(i);
-
-	            double totalAmpsReceived = 0;
-	            ElectricityNetwork electricityNetwork = null;
-	            
-                for (int ii = 0; ii < electricityTransferQueue.size(); ii ++)
-                {
-                	if(electricityTransferQueue.get(ii) != null)
-                	{
-	                	if(electricityTransferQueue.get(ii).receiver != null)
-	                	{
-		                    if (electricityTransferQueue.get(ii).receiver == electricUnit)
-		                    {
-		                    	totalAmpsReceived += electricityTransferQueue.get(ii).amps;
-		                    	
-		                    	if(electricityNetwork == null)
-		                    	{
-		                    		electricityNetwork = electricityTransferQueue.get(ii).network;
-		                    	}
-		                    	
-		                    	electricUnit.onReceive(electricityTransferQueue.get(ii).sender, electricityTransferQueue.get(ii).amps, electricityTransferQueue.get(ii).voltage, electricityTransferQueue.get(ii).side);
-		    	                electricityTransferQueue.remove(ii);
-		                    }   
-	                	}
-                	}
-                }
-                
-                if(totalAmpsReceived > 0 || electricityNetwork != null)
-                {
-                	if(totalAmpsReceived > electricityNetwork.getLowestAmpConductor())
-                	{
-                		electricityNetwork.meltDown();
-                	}
-                }
-	        }
-		*/
-		
-			
+			HashMap conductorAmpData = new HashMap<ElectricityNetwork, Double>();
 			
 			for (int i = 0; i < electricityTransferQueue.size(); i ++)
 	        {
@@ -350,12 +312,42 @@ public class ElectricityManager
 	        	{
 	            	if(electricityTransferQueue.get(i).isValid())
 	            	{
+	            		double amps = electricityTransferQueue.get(i).amps;
+	            		
+	            		if(conductorAmpData.containsKey(electricityTransferQueue.get(i).network))
+	            		{
+	            			amps += (Double)conductorAmpData.get(electricityTransferQueue.get(i).network);
+	            		}
+	            		
+	            		conductorAmpData.put(electricityTransferQueue.get(i).network, amps);
 	                	electricityTransferQueue.get(i).receiver.onReceive(electricityTransferQueue.get(i).sender, electricityTransferQueue.get(i).amps, electricityTransferQueue.get(i).voltage, electricityTransferQueue.get(i).side);
 	            	}
 	        	}
 	        	
 	        	electricityTransferQueue.remove(i);
 	        }
+			
+			Iterator it = conductorAmpData.entrySet().iterator();
+			
+		    while (it.hasNext())
+		    {
+		        Map.Entry pairs = (Map.Entry)it.next();
+		        
+		        if(pairs.getKey() != null && pairs.getValue() != null)
+		        {
+		        	if(pairs.getKey() instanceof ElectricityNetwork && pairs.getValue() instanceof Double)
+		        	{
+            			System.out.println((Double)pairs.getValue());
+
+		        		if(((Double)pairs.getValue()) > ((ElectricityNetwork)pairs.getKey()).getLowestAmpConductor())
+		        		{
+		        			((ElectricityNetwork)pairs.getKey()).meltDown();
+		        		}
+		        	}
+		        }
+		        
+		        it.remove();
+		    }		    
 		}
 		catch(Exception e)
 		{

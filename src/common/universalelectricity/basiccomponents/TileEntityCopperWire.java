@@ -8,7 +8,7 @@ import universalelectricity.prefab.TileEntityConductor;
 public class TileEntityCopperWire extends TileEntityConductor
 {
 	public static double RESISTANCE = 0.05;
-	public static double MAX_AMPS = 1000;
+	public static double MAX_AMPS = 500;
 
     @Override
     public double getResistance()
