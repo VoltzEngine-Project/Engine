@@ -337,8 +337,6 @@ public class ElectricityManager
 		        {
 		        	if(pairs.getKey() instanceof ElectricityNetwork && pairs.getValue() instanceof Double)
 		        	{
-            			System.out.println((Double)pairs.getValue());
-
 		        		if(((Double)pairs.getValue()) > ((ElectricityNetwork)pairs.getKey()).getLowestAmpConductor())
 		        		{
 		        			((ElectricityNetwork)pairs.getKey()).meltDown();
