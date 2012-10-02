@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.implement.IConductor;
@@ -341,6 +342,8 @@ public class ElectricityManager
 	        }
 		*/
 		
+			
+			
 			for (int i = 0; i < electricityTransferQueue.size(); i ++)
 	        {
 	        	if(electricityTransferQueue.get(i) != null)

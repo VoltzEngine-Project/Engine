@@ -58,7 +58,7 @@ public class UELoader implements ICraftingHandler
     @Instance("UniversalElectricity")
     public static UELoader instance;
     
-    @SidedProxy(clientSide = "universalelectricity.basiccomponents.BCClientProxy", serverSide = "universalelectricity.basiccomponents.BCCommonProxy")
+    @SidedProxy(clientSide = "universalelectricity.basiccomponents.UEClientProxy", serverSide = "universalelectricity.basiccomponents.UECommonProxy")
 	public static UECommonProxy proxy;
 
     @PreInit
