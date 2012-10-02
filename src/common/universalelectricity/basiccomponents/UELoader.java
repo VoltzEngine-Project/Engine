@@ -59,7 +59,7 @@ public class UELoader implements ICraftingHandler
     public static UELoader instance;
     
     @SidedProxy(clientSide = "universalelectricity.basiccomponents.BCClientProxy", serverSide = "universalelectricity.basiccomponents.BCCommonProxy")
-	public static BCCommonProxy proxy;
+	public static UECommonProxy proxy;
 
     @PreInit
 	public void preInit(FMLPreInitializationEvent event)

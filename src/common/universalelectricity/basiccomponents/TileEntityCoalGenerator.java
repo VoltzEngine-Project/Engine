@@ -27,7 +27,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 	/**
 	 * Maximum amount of energy needed to generate electricity
 	 */
-    public static final int MAX_GENERATE_WATTS = 10000;
+    public static final int MAX_GENERATE_WATTS = 8000;
     
     /**
      * Amount of heat the coal generator needs before generating electricity.
