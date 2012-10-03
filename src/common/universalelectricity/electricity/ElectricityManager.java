@@ -353,7 +353,7 @@ public class ElectricityManager
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
 		if(this.refreshConductors > 0)

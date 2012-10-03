@@ -97,8 +97,8 @@ public class UELoader implements ICraftingHandler
 	    BasicComponents.batteryBox = ((BlockBasicMachine)BasicComponents.blockMachine).getBatteryBox();
 	    BasicComponents.electricFurnace = ((BlockBasicMachine)BasicComponents.blockMachine).getElectricFurnace();
 	    
-	    BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 0, 60, 50, 6);
-	    BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 0, 60, 45, 5);
+	    BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 0, 50, 45, 5);
+	    BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 0, 50, 40, 4);
 	    
 		/**
 		 * @author Cammygames
@@ -169,7 +169,7 @@ public class UELoader implements ICraftingHandler
 		//Wrench
 		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemWrench), new Object [] {" S ", " SS", "S  ", 'S', "ingotSteel"});
 		//Battery Box
-		RecipeManager.addRecipe(BasicComponents.batteryBox, new Object [] {"?!?", "#?#", "?!?", '#', BasicComponents.blockCopperWire,'!', BasicComponents.itemSteelPlate, '?', BasicComponents.itemBattery.getUnchargedItemStack()});
+		RecipeManager.addRecipe(BasicComponents.batteryBox, new Object [] {"?!?", "###", "?!?", '#', BasicComponents.blockCopperWire,'!', BasicComponents.itemSteelPlate, '?', BasicComponents.itemBattery.getUnchargedItemStack()});
 		RecipeManager.addSmelting(BasicComponents.batteryBox, new ItemStack(BasicComponents.itemSteelDust, 6));
 		//Coal Generator
 		RecipeManager.addRecipe(BasicComponents.coalGenerator, new Object [] {"!@!", "$#$", "???", '?', "ingotBronze", '!', BasicComponents.itemSteelPlate, '@', BasicComponents.blockCopperWire, '#', BasicComponents.itemMotor, '$', Block.stoneOvenIdle});
