@@ -552,7 +552,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public boolean demandsEnergy()
 	{
-		if(!this.isDisabled())
+		if(!this.isDisabled() && UniversalElectricity.IC2_RATIO > 0)
 		{
 			return this.wattHourStored < getMaxWattHours();
 		}
@@ -563,11 +563,11 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public int injectEnergy(Direction directionFrom, int euAmount) 
 	{
-		double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
-		
 		if(!this.isDisabled())
 		{
-			double rejectedElectricity = Math.max(this.wattHourStored - (this.wattHourStored - inputElectricity), 0);
+			double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
+
+			double rejectedElectricity = Math.max(inputElectricity - (this.getMaxWattHours() - this.wattHourStored), 0);
 		
 			this.setWattHours(wattHourStored + inputElectricity);
 			

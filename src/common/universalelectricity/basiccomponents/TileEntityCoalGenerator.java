@@ -111,7 +111,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
                 {
                     if (this.itemCookTime <= 0)
                     {
-                        this.itemCookTime = 250;
+                        this.itemCookTime = 300;
                         this.decrStackSize(0, 1);
                     }
                 }
