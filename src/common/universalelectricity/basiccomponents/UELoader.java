@@ -19,7 +19,7 @@ import universalelectricity.network.ConnectionHandler;
 import universalelectricity.network.PacketManager;
 import universalelectricity.ore.OreGenReplaceStone;
 import universalelectricity.ore.OreGenerator;
-import universalelectricity.prefab.ChunkEventCaller;
+import universalelectricity.prefab.chunk.ChunkEventCaller;
 import universalelectricity.recipe.RecipeManager;
 import buildcraft.api.liquids.LiquidData;
 import buildcraft.api.liquids.LiquidManager;
