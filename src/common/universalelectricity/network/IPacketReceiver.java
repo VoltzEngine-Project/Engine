@@ -3,7 +3,6 @@ package universalelectricity.network;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
-import universalelectricity.network.PacketManager.PacketType;
 
 import com.google.common.io.ByteArrayDataInput;
 

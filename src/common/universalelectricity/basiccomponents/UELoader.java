@@ -180,7 +180,7 @@ public class UELoader implements ICraftingHandler
 		//Copper
 		RecipeManager.addSmelting(new ItemStack(BasicComponents.blockBasicOre, 1, 0), new ItemStack(BasicComponents.itemCopperIngot));
 		//Copper Wire
-		RecipeManager.addRecipe(new ItemStack(BasicComponents.blockCopperWire, 7), new Object [] {"!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper"});
+		RecipeManager.addRecipe(new ItemStack(BasicComponents.blockCopperWire, 6), new Object [] {"!!!", "@@@", "!!!", '!', Item.leather, '@', "ingotCopper"});
 		//Tin
 		RecipeManager.addSmelting(new ItemStack(BasicComponents.blockBasicOre, 1, 1), new ItemStack(BasicComponents.itemTinIngot));
 		//Battery
@@ -232,7 +232,7 @@ public class UELoader implements ICraftingHandler
    		{
    			System.out.println("IC2 conversion ratio: "+UniversalElectricity.IC2_RATIO);
    		}
-   		
+   		   		
 		System.out.println("Universal Electricity v"+UniversalElectricity.VERSION+" successfully loaded!");
 	}
     

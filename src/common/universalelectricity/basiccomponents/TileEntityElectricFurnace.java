@@ -17,7 +17,6 @@ import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
-import universalelectricity.network.PacketManager.PacketType;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
 import universalelectricity.prefab.Vector3;
 

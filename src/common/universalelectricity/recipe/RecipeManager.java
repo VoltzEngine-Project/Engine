@@ -14,7 +14,6 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import universalelectricity.UEConfig;
-import universalelectricity.UniversalElectricity;
 
 /**
  * Adds recipes with full Forge ore dictionary support and replaceable by add-ons.

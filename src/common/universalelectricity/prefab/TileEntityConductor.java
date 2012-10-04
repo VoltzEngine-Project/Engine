@@ -12,7 +12,6 @@ import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IConnector;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
-import universalelectricity.network.PacketManager.PacketType;
 
 import com.google.common.io.ByteArrayDataInput;
 

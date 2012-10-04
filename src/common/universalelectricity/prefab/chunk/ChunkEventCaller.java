@@ -3,13 +3,12 @@ package universalelectricity.prefab.chunk;
 import java.util.ArrayList;
 import java.util.List;
 
-import universalelectricity.prefab.Vector2;
-
 import net.minecraft.src.Chunk;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.ChunkEvent.Load;
 import net.minecraftforge.event.world.ChunkEvent.Unload;
+import universalelectricity.prefab.Vector2;
 
 public class ChunkEventCaller
 {
