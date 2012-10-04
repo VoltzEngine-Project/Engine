@@ -87,28 +87,4 @@ public class UniversalElectricity
     {
     	forgeLock(major, minor, revision, false);
     }
-    
-    @Deprecated
-    public static int getConfigData(Configuration configuration, String name, int defaultInt)
-    {
-       return UEConfig.getConfigData(configuration, name, defaultInt);
-    }
-    
-    @Deprecated
-    public static boolean getConfigData(Configuration configuration, String name, boolean defaultBoolean)
-    {
-    	return UEConfig.getConfigData(configuration, name, defaultBoolean);
-    }
-    
-    @Deprecated
-    public static int getBlockConfigID(Configuration configuration, String name, int defaultID)
-    {
-    	return UEConfig.getBlockConfigID(configuration, name, defaultID);
-    }
-    
-    @Deprecated
-    public static int getItemConfigID(Configuration configuration, String name, int defaultID)
-    {
-    	return UEConfig.getItemConfigID(configuration, name, defaultID);
-    }
 }
