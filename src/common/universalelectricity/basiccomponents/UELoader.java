@@ -5,6 +5,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.CommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -17,6 +18,7 @@ import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.UEDamageSource;
 import universalelectricity.network.ConnectionHandler;
 import universalelectricity.network.PacketManager;
+import universalelectricity.network.UECommandHandler;
 import universalelectricity.ore.OreGenReplaceStone;
 import universalelectricity.ore.OreGenerator;
 import universalelectricity.prefab.chunk.ChunkEventCaller;
@@ -31,10 +33,12 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -274,5 +278,10 @@ public class UELoader implements ICraftingHandler
 	public void onSmelting(EntityPlayer player, ItemStack item)
 	{
 
+	}
+@ServerStarting
+	public void serverStarting(FMLServerStartingEvent event) {
+		CommandHandler commandManager = (CommandHandler)event.getServer().getCommandManager();
+		commandManager.registerCommand(new UECommandHandler());
 	}
 }
