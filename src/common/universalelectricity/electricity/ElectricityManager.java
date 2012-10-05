@@ -327,25 +327,28 @@ public class ElectricityManager
 	        	electricityTransferQueue.remove(i);
 	        }
 			
-			Iterator it = conductorAmpData.entrySet().iterator();
-			
-		    while (it.hasNext())
-		    {
-		        Map.Entry pairs = (Map.Entry)it.next();
-		        
-		        if(pairs.getKey() != null && pairs.getValue() != null)
-		        {
-		        	if(pairs.getKey() instanceof ElectricityNetwork && pairs.getValue() instanceof Double)
-		        	{
-		        		if(((Double)pairs.getValue()) > ((ElectricityNetwork)pairs.getKey()).getLowestAmpConductor())
-		        		{
-		        			((ElectricityNetwork)pairs.getKey()).meltDown();
-		        		}
-		        	}
-		        }
-		        
-		        it.remove();
-		    }		    
+			if(this.refreshConductors <= 0)
+			{
+				Iterator it = conductorAmpData.entrySet().iterator();
+				
+			    while (it.hasNext())
+			    {
+			        Map.Entry pairs = (Map.Entry)it.next();
+			        
+			        if(pairs.getKey() != null && pairs.getValue() != null)
+			        {
+			        	if(pairs.getKey() instanceof ElectricityNetwork && pairs.getValue() instanceof Double)
+			        	{
+			        		if(((Double)pairs.getValue()) > ((ElectricityNetwork)pairs.getKey()).getLowestAmpConductor())
+			        		{
+			        			((ElectricityNetwork)pairs.getKey()).meltDown();
+			        		}
+			        	}
+			        }
+			        
+			        it.remove();
+			    }
+			}
 		}
 		catch(Exception e)
 		{
