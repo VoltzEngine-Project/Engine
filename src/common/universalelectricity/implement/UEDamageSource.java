@@ -27,7 +27,6 @@ public class UEDamageSource extends DamageSource
 	{
 		this(damageType);
 		this.setDeathMessage(deathMessage);
-		
 	}
 
 	public UEDamageSource setDeathMessage(String deathMessage)
@@ -43,6 +42,21 @@ public class UEDamageSource extends DamageSource
 			damageSource.registerDeathMessage();
 		}
 	}
+	
+	public DamageSource setDamageBypassesArmor()
+    {
+		return super.setDamageBypassesArmor();
+    }
+	
+	public DamageSource setDamageAllowedInCreativeMode()
+    {
+		return super.setDamageAllowedInCreativeMode();
+    }
+	
+	public DamageSource setFireDamage()
+    {
+		return super.setFireDamage();
+    }
 	
 	public void registerDeathMessage()
 	{
