@@ -16,12 +16,11 @@ import universalelectricity.network.PacketManager;
 import com.google.common.io.ByteArrayDataInput;
 
 /**
- * REQUIRED
- * This tile entity is for all conductors.
+ * This tile entity prefabricated for all conductors.
  * @author Calclavia
  *
  */
-public abstract class TileEntityConductor extends TileEntity implements IConductor, IPacketReceiver
+public abstract class TileEntityConductor extends AdvancedTile implements IConductor, IPacketReceiver
 {
     private int connectionID = 0;
 
@@ -52,15 +51,21 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
     {
     	return connectedBlocks;
     }
+    
+    @Override
+    public void initiate()
+    {
+    	this.refreshConnectedBlocks();
+    }
 
     /**
      * Adds a connection between this conductor and a UE unit
      * @param tileEntity - Must be either a producer, consumer or a conductor
      * @param side - side in which the connection is coming from
      */
-    public void updateConnection(TileEntity tileEntity, ForgeDirection side)
+    public void addConnection(TileEntity tileEntity, ForgeDirection side)
     {
-        if (tileEntity instanceof TileEntityConductor || tileEntity instanceof IConnector)
+        if (tileEntity instanceof IConnector)
         {
             this.connectedBlocks[side.ordinal()] = tileEntity;
 
@@ -84,14 +89,14 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         
         if(!this.worldObj.isRemote)
         {
-        	PacketManager.sendPacketToClients(this.getDescriptionPacket());
+        	//PacketManager.sendPacketToClients(this.getDescriptionPacket());
         }
     }
 
     @Override
-    public void updateConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
+    public void addConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
     {
-        if(tileEntity instanceof TileEntityConductor || tileEntity instanceof IConnector)
+        if(tileEntity instanceof IConnector)
         {
             this.connectedBlocks[side.ordinal()] = tileEntity;
 
@@ -107,7 +112,7 @@ public abstract class TileEntityConductor extends TileEntity implements IConduct
         
         if(!this.worldObj.isRemote)
         {
-        	PacketManager.sendPacketToClients(this.getDescriptionPacket());
+        	//PacketManager.sendPacketToClients(this.getDescriptionPacket());
         }
     }
     

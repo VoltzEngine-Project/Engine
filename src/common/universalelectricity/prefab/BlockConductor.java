@@ -21,7 +21,6 @@ public abstract class BlockConductor extends BlockContainer
     {
         super.onBlockAdded(world, x, y, z);
         this.updateConductorTileEntity(world, x, y, z);
-        world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
     }
 
     /**
@@ -36,17 +35,16 @@ public abstract class BlockConductor extends BlockContainer
 
     public static void updateConductorTileEntity(World world, int x, int y, int z)
     {
+        TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+
         for (byte i = 0; i < 6; i++)
         {
-            //Update the tile entity on neighboring blocks
-            TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-
             if (tileEntity != null)
             {
                 if (tileEntity instanceof TileEntityConductor)
                 {
                     TileEntityConductor conductorTileEntity = (TileEntityConductor)tileEntity;
-                    conductorTileEntity.updateConnection(Vector3.getConnectorFromSide(world, new Vector3(x, y, z), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+                    conductorTileEntity.addConnection(Vector3.getConnectorFromSide(world, new Vector3(x, y, z), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
                 }
             }
         }

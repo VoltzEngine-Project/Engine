@@ -24,13 +24,16 @@ import cpw.mods.fml.common.TickType;
  */
 public class ElectricityManager
 {
+	/**
+	 * ElectricityManager only exists server side.
+	 */
 	public static ElectricityManager instance = new ElectricityManager();
 	
     private List<IElectricityReceiver> electricityReceivers = new ArrayList<IElectricityReceiver>();
     private List<IConductor> electricConductors = new ArrayList<IConductor>();
 
     private List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
-    private List<ElectricityNetwork> wireConnections = new ArrayList<ElectricityNetwork>();
+    private List<ElectricityNetwork> electricityNetworks = new ArrayList<ElectricityNetwork>();
     private int maxConnectionID = 0;
 
     public int refreshConductors;
@@ -42,7 +45,7 @@ public class ElectricityManager
     
     public void timedConductorRefresh()
     {
-    	this.refreshConductors = 20*10;
+    	this.refreshConductors = 20*5;
     }
 
     /**
@@ -67,7 +70,7 @@ public class ElectricityManager
     public void registerConductor(TileEntityConductor newConductor)
     {
         cleanUpConnections();
-        this.wireConnections.add(new ElectricityNetwork(getMaxConnectionID(), newConductor));
+        this.electricityNetworks.add(new ElectricityNetwork(getMaxConnectionID(), newConductor));
 
         if (!this.electricConductors.contains(newConductor))
         {
@@ -91,7 +94,7 @@ public class ElectricityManager
             {
 	            connection1.conductors.addAll(connection2.conductors);
 	            connection1.setID(ID1);
-	            this.wireConnections.remove(connection2);
+	            this.electricityNetworks.remove(connection2);
             }
             else
             {
@@ -121,7 +124,7 @@ public class ElectricityManager
         {
             for (byte i = 0; i < 6; i++)
             {
-                conductor.updateConnectionWithoutSplit(Vector3.getConnectorFromSide(conductor.getWorld(), new Vector3(((TileEntity)conductor).xCoord, ((TileEntity)conductor).yCoord, ((TileEntity)conductor).zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+                conductor.addConnectionWithoutSplit(Vector3.getConnectorFromSide(conductor.getWorld(), new Vector3(((TileEntity)conductor).xCoord, ((TileEntity)conductor).yCoord, ((TileEntity)conductor).zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
             }
         }
     }
@@ -135,11 +138,11 @@ public class ElectricityManager
     {
         cleanUpConnections();
 
-        for (int i = 0; i < this.wireConnections.size(); i++)
+        for (int i = 0; i < this.electricityNetworks.size(); i++)
         {
-            if (this.wireConnections.get(i).getID() == ID)
+            if (this.electricityNetworks.get(i).getID() == ID)
             {
-                return this.wireConnections.get(i);
+                return this.electricityNetworks.get(i);
             }
         }
 
@@ -151,13 +154,13 @@ public class ElectricityManager
      */
     public void cleanUpConnections()
     {
-        for (int i = 0; i < this.wireConnections.size(); i++)
+        for (int i = 0; i < this.electricityNetworks.size(); i++)
         {
-        	this.wireConnections.get(i).cleanUpArray();
+        	this.electricityNetworks.get(i).cleanUpArray();
 
-            if (this.wireConnections.get(i).conductors.size() == 0)
+            if (this.electricityNetworks.get(i).conductors.size() == 0)
             {
-            	this.wireConnections.remove(i);
+            	this.electricityNetworks.remove(i);
             }
         }
     }

@@ -3,29 +3,36 @@ package universalelectricity.prefab;
 import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
 
+/**
+ * A TileEntity with some pre-added functionalities.
+ * @author Calclavia
+ *
+ */
 public abstract class AdvancedTile extends TileEntity
 {
-	protected boolean initiate = true;
+	protected long ticks = 0;
 	
 	@Override
     public void updateEntity()
     {
-    	if(this.initiate)
+    	if(this.ticks == 0)
     	{
     		this.initiate();
-    		this.initiate = false;
     	}
+    	
+    	if(this.ticks >= Long.MAX_VALUE)
+    	{
+    		this.ticks = 0;
+    	}
+    	
+    	this.ticks ++;
     }
 	
+	/**
+	 * Called on the TileEntity's first tick.
+	 */
 	protected void initiate() { }
-	
-	@Override
-	public void invalidate()
-    {
-		this.initiate = false;
-		super.invalidate();
-    }
-	
+
 	@Override
     public int getBlockMetadata()
     {

@@ -50,7 +50,7 @@ public interface IConductor extends IConnector
     
     public World getWorld();
 
-	public void updateConnectionWithoutSplit(TileEntity connectorFromSide, ForgeDirection orientation);
+	public void addConnectionWithoutSplit(TileEntity connectorFromSide, ForgeDirection orientation);
 
 	public void refreshConnectedBlocks();
 }
