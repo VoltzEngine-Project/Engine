@@ -236,6 +236,14 @@ public class UELoader implements ICraftingHandler
    		{
    			System.out.println("IC2 conversion ratio: "+UniversalElectricity.IC2_RATIO);
    		}
+   		
+   		if(Loader.isModLoaded("ComputerCraft"))
+   		{
+   			System.out.println("ComputerCraft found and integrated!");
+   		}else
+   		{
+   			System.out.println("Disabled ComputerCraft integration!");
+   		}
    		   		
 		System.out.println("Universal Electricity v"+UniversalElectricity.VERSION+" successfully loaded!");
 	}

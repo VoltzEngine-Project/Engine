@@ -41,8 +41,10 @@ import buildcraft.api.power.PowerProvider;
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
+import dan200.computer.api.IComputerAccess;
+import dan200.computer.api.IPeripheral;
 
-public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
+public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, IPeripheral
 {	
 	private double wattHourStored = 0;
 
@@ -57,6 +59,15 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	public boolean initialized = false;
 
 	private boolean sendUpdate = true;
+	
+	/**
+	 * The functions exposed to Lua in ComputerCraft
+	 */
+	private String[] functions = {
+    		"getVoltage",
+    		"getWattage",
+    		"isFull",
+    };
 
     public TileEntityBatteryBox()
     {
@@ -580,4 +591,44 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		
 		return euAmount;
 	}
+	
+	/**
+     * COMPUTERCRAFT FUNCTIONS
+     */
+	
+	@Override
+	public String getType() {
+		return "BatteryBox";
+	}
+
+	@Override
+	public String[] getMethodNames() {
+		return functions;
+	}
+
+	@Override
+	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception {
+		switch(method){
+			case 0: // getVoltage
+				return new Object[] { getVoltage() };
+			case 1: // getWattage
+				return new Object[] { ElectricInfo.getWatts(wattHourStored) };
+			case 2: // isFull
+				return new Object[] { isFull };
+			default:
+				throw new Exception("Function unimplemented");
+		}
+	}
+
+	@Override
+	public boolean canAttachToSide(int side) {
+		return true;
+	}
+
+	@Override
+	public void attach(IComputerAccess computer, String computerSide) {}
+
+	@Override
+	public void detach(IComputerAccess computer) {}
+	
 }
