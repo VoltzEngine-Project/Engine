@@ -240,7 +240,8 @@ public class UELoader implements ICraftingHandler
    		if(Loader.isModLoaded("ComputerCraft"))
    		{
    			System.out.println("ComputerCraft found and integrated!");
-   		}else
+   		}
+   		else
    		{
    			System.out.println("Disabled ComputerCraft integration!");
    		}
