@@ -18,7 +18,7 @@ import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.UEDamageSource;
 import universalelectricity.network.ConnectionHandler;
 import universalelectricity.network.PacketManager;
-import universalelectricity.network.UECommandHandler;
+import universalelectricity.network.UECommand;
 import universalelectricity.ore.OreGenReplaceStone;
 import universalelectricity.ore.OreGenerator;
 import universalelectricity.prefab.chunk.ChunkEventCaller;
@@ -279,9 +279,11 @@ public class UELoader implements ICraftingHandler
 	{
 
 	}
-@ServerStarting
-	public void serverStarting(FMLServerStartingEvent event) {
+	
+	@ServerStarting
+	public void serverStarting(FMLServerStartingEvent event)
+	{
 		CommandHandler commandManager = (CommandHandler)event.getServer().getCommandManager();
-		commandManager.registerCommand(new UECommandHandler());
+		commandManager.registerCommand(new UECommand());
 	}
 }
