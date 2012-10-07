@@ -57,15 +57,6 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 	private int playersUsing = 0;
 
 	private boolean sendUpdate = true;
-	
-	/**
-	 * The functions exposed to Lua in ComputerCraft
-	 */
-	private String[] functions = {
-    		"getCoalAmount",
-    		"getVoltage",
-    		"getWattage",
-    };
     
     @Override
     public boolean canConnect(ForgeDirection side)
@@ -355,19 +346,28 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 
 	@Override
 	public String[] getMethodNames() {
-		return functions;
+		return new String[] {
+	    		"getCoalAmount",
+	    		"getVoltage",
+	    		"getWattage",
+	    };
 	}
 
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception {
+		
+		final int getCoalAmount = 0;
+		final int getVoltage = 1;
+		final int getWattage = 2;
+		
 		switch(method){
-			case 0: // getCoalAmount
+			case getCoalAmount:
 				ItemStack s = getStackInSlot(0);
 				if(s == null) { return new Object[] { 0 }; }
 				return new Object[] { s.stackSize };
-			case 1: // getVoltage
+			case getVoltage:
 				return new Object[] { getVoltage() };
-			case 2: // getWattage
+			case getWattage:
 				return new Object[] { generateWatts };
 			default:
 				throw new Exception("Function unimplemented");

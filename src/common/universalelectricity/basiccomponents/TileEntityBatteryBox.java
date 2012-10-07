@@ -59,15 +59,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	public boolean initialized = false;
 
 	private boolean sendUpdate = true;
-	
-	/**
-	 * The functions exposed to Lua in ComputerCraft
-	 */
-	private String[] functions = {
-    		"getVoltage",
-    		"getWattage",
-    		"isFull",
-    };
 
     public TileEntityBatteryBox()
     {
@@ -603,17 +594,26 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
 	@Override
 	public String[] getMethodNames() {
-		return functions;
+		return new String[] {
+	    		"getVoltage",
+	    		"getWattage",
+	    		"isFull",
+	    };
 	}
-
+	
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception {
+		
+		final int getVoltage = 0;
+		final int getWattage = 1;
+		final int isFull = 2;
+		
 		switch(method){
-			case 0: // getVoltage
+			case getVoltage:
 				return new Object[] { getVoltage() };
-			case 1: // getWattage
+			case getWattage:
 				return new Object[] { ElectricInfo.getWatts(wattHourStored) };
-			case 2: // isFull
+			case isFull:
 				return new Object[] { isFull };
 			default:
 				throw new Exception("Function unimplemented");
