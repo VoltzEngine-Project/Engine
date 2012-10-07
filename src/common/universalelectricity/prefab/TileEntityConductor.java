@@ -63,57 +63,53 @@ public abstract class TileEntityConductor extends AdvancedTile implements ICondu
      * @param tileEntity - Must be either a producer, consumer or a conductor
      * @param side - side in which the connection is coming from
      */
-    public void addConnection(TileEntity tileEntity, ForgeDirection side)
-    {
-        if (tileEntity instanceof IConnector)
+    public void updateConnection(TileEntity tileEntity, ForgeDirection side)
+    {    	
+		if(tileEntity != null)
+		{
+	        if(tileEntity instanceof IConnector)
+	        {
+	            this.connectedBlocks[side.ordinal()] = tileEntity;
+	
+	            if (tileEntity.getClass() == this.getClass())
+	            {
+	                ElectricityManager.instance.mergeConnection(this.connectionID, ((TileEntityConductor)tileEntity).connectionID);
+	            }
+	            
+	            return;
+	        }
+		}
+		
+        if (this.connectedBlocks[side.ordinal()] != null)
         {
-            this.connectedBlocks[side.ordinal()] = tileEntity;
-
-            if (tileEntity instanceof IConductor)
+            if (this.connectedBlocks[side.ordinal()] instanceof IConductor)
             {
-                ElectricityManager.instance.mergeConnection(this.connectionID, ((TileEntityConductor)tileEntity).connectionID);
+                ElectricityManager.instance.splitConnection(this, (IConductor)this.getConnectedBlocks()[side.ordinal()]);
             }
         }
-        else
-        {
-            if (this.connectedBlocks[side.ordinal()] != null)
-            {
-                if (this.connectedBlocks[side.ordinal()] instanceof IConductor)
-                {
-                    ElectricityManager.instance.splitConnection(this, (IConductor)this.getConnectedBlocks()[side.ordinal()]);
-                }
-            }
 
-            this.connectedBlocks[side.ordinal()] = null;
-        }
-        
-        if(!this.worldObj.isRemote)
-        {
-        	//PacketManager.sendPacketToClients(this.getDescriptionPacket());
-        }
+        this.connectedBlocks[side.ordinal()] = null;
     }
 
     @Override
-    public void addConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
-    {
-        if(tileEntity instanceof IConnector)
-        {
-            this.connectedBlocks[side.ordinal()] = tileEntity;
-
-            if (tileEntity instanceof TileEntityConductor)
-            {
-                ElectricityManager.instance.mergeConnection(this.connectionID, ((TileEntityConductor)tileEntity).connectionID);
-            }
-        }
-        else
-        {
-            this.connectedBlocks[side.ordinal()] = null;
-        }
-        
-        if(!this.worldObj.isRemote)
-        {
-        	//PacketManager.sendPacketToClients(this.getDescriptionPacket());
-        }
+    public void updateConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
+    {    	
+    	if(tileEntity != null)
+		{
+	        if(tileEntity instanceof IConnector)
+	        {
+	            this.connectedBlocks[side.ordinal()] = tileEntity;
+	
+	            if (tileEntity.getClass() == this.getClass())
+	            {
+	                ElectricityManager.instance.mergeConnection(this.connectionID, ((TileEntityConductor)tileEntity).connectionID);
+	            }
+	            
+	            return;
+	        }
+    	}
+    	
+    	 this.connectedBlocks[side.ordinal()] = null;
     }
     
     @Override
@@ -139,7 +135,11 @@ public abstract class TileEntityConductor extends AdvancedTile implements ICondu
     public void reset()
     {
         this.connectionID = 0;
-        ElectricityManager.instance.registerConductor(this);
+        
+        if(ElectricityManager.instance != null)
+        {
+            ElectricityManager.instance.registerConductor(this);
+        }
     }
 
     @Override

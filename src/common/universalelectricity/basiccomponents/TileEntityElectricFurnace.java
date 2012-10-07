@@ -25,10 +25,10 @@ import com.google.common.io.ByteArrayDataInput;
 public class TileEntityElectricFurnace extends TileEntityElectricityReceiver implements IInventory, ISidedInventory,  IPacketReceiver
 {
 	//The amount of watts required by the electric furnace per tick
-    public final double WATTS_PER_TICK = 350;
+    public final double WATTS_PER_TICK = 500;
 
     //The amount of ticks required to smelt this item
-    public final int SMELTING_TIME_REQUIRED = 140;
+    public final int SMELTING_TIME_REQUIRED = 120;
 
     //How many ticks has this item been smelting for?
     public int smeltingTicks = 0;
@@ -117,7 +117,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 
 	    if(!this.worldObj.isRemote)
 	    {
-   	        if(Ticker.inGameTicks % 20 == 0 && this.playersUsing > 0)
+   	        if(this.ticks % 20 == 0 && this.playersUsing > 0)
 	        {
 	        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
 	        }

@@ -42,8 +42,6 @@ public class ConnectionHandler implements IConnectionHandler
 	@Override
 	public void clientLoggedIn(NetHandler clientHandler, NetworkManager manager, Packet1Login login)
 	{
-    	ElectricityManager.instance.timedConductorRefresh();
-
     	for(ISimpleConnectionHandler handler : simpleConnectionHandlers)
         {
 			handler.handelConnection(ConnectionType.LOGIN_CLIENT, clientHandler, manager, login);

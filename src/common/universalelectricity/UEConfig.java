@@ -8,7 +8,7 @@ public class UEConfig
     {
         configuration.load();
         int returnInt = defaultInt;
-        returnInt = Integer.parseInt(configuration.getOrCreateIntProperty(name, Configuration.CATEGORY_GENERAL, defaultInt).value);
+        returnInt = Integer.parseInt(configuration.get(name, Configuration.CATEGORY_GENERAL, defaultInt).value);
         configuration.save();
         return returnInt;
     }
@@ -17,7 +17,7 @@ public class UEConfig
     {
         configuration.load();
         boolean returnBoolean = defaultBoolean;
-        returnBoolean = Boolean.parseBoolean(configuration.getOrCreateBooleanProperty(name, Configuration.CATEGORY_GENERAL, defaultBoolean).value);
+        returnBoolean = Boolean.parseBoolean(configuration.get(name, Configuration.CATEGORY_GENERAL, defaultBoolean).value);
         configuration.save();
         return returnBoolean;
     }
@@ -27,7 +27,7 @@ public class UEConfig
         configuration.load();
         int id = defaultID;
 
-        id = Integer.parseInt(configuration.getOrCreateBlockIdProperty(name, defaultID).value);
+        id = Integer.parseInt(configuration.getBlock(name, defaultID).value);
 
         if (id <= 136)
         {
@@ -43,7 +43,7 @@ public class UEConfig
         configuration.load();
         int id = defaultID;
 
-        id = Integer.parseInt(configuration.getOrCreateIntProperty(name, Configuration.CATEGORY_ITEM, defaultID).value);
+        id = Integer.parseInt(configuration.getItem(name, Configuration.CATEGORY_ITEM, defaultID).value);
 
         if (id < 256)
         {

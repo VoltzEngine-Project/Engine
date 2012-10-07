@@ -31,31 +31,20 @@ public abstract class BlockConductor extends BlockContainer
     public void onNeighborBlockChange(World world, int x, int y, int z, int blockID)
     {
         this.updateConductorTileEntity(world, x, y, z);
+        world.markBlockNeedsUpdate(x, y, z);
     }
 
     public static void updateConductorTileEntity(World world, int x, int y, int z)
     {
         TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
-        for (byte i = 0; i < 6; i++)
+        if (tileEntity != null)
         {
-            if (tileEntity != null)
-            {
-                if (tileEntity instanceof TileEntityConductor)
-                {
-                    TileEntityConductor conductorTileEntity = (TileEntityConductor)tileEntity;
-                    conductorTileEntity.addConnection(Vector3.getConnectorFromSide(world, new Vector3(x, y, z), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
-                }
-            }
+	        for (byte i = 0; i < 6; i++)
+	        {
+	            TileEntityConductor conductorTileEntity = (TileEntityConductor)tileEntity;
+	            conductorTileEntity.updateConnection(Vector3.getConnectorFromSide(world, new Vector3(x, y, z), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+	        }
         }
-    }
-
-    /**
-     * In your BlockConductor class you must specify the TileEntityConductor class (or a instance of it).
-     */
-    @Override
-    public TileEntity createNewTileEntity(World var1)
-    {
-    	return null;
     }
 }

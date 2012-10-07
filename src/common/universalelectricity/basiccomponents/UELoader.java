@@ -1,17 +1,18 @@
 package universalelectricity.basiccomponents;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.CommandHandler;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.CommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.world.WorldEvent.Save;
+import net.minecraftforge.event.world.WorldEvent.Load;
+import net.minecraftforge.event.world.WorldEvent.Unload;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.BasicComponents;
+import universalelectricity.Ticker;
 import universalelectricity.UEConfig;
 import universalelectricity.UniversalElectricity;
 import universalelectricity.electricity.ElectricityManager;
@@ -71,6 +72,8 @@ public class UELoader implements ICraftingHandler
 		UniversalElectricity.forgeLock(4, 1, 4);
    		GameRegistry.registerWorldGenerator(new OreGenerator());
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
+		
+		ElectricityManager.instance = new ElectricityManager();
 
 		/**
 		 * Define the items and blocks.
@@ -171,15 +174,15 @@ public class UELoader implements ICraftingHandler
 		//Motor
 		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemMotor), new Object [] {"@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', BasicComponents.blockCopperWire});
 		//Wrench
-		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemWrench), new Object [] {" S ", " SS", "S  ", 'S', "ingotSteel"});
+		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemWrench), new Object [] {" S ", " DS", "S  ", 'S', "ingotSteel", 'D', Item.diamond});
 		//Battery Box
 		RecipeManager.addRecipe(BasicComponents.batteryBox, new Object [] {"?!?", "###", "?!?", '#', BasicComponents.blockCopperWire,'!', BasicComponents.itemSteelPlate, '?', BasicComponents.itemBattery.getUnchargedItemStack()});
 		RecipeManager.addSmelting(BasicComponents.batteryBox, new ItemStack(BasicComponents.itemSteelDust, 6));
 		//Coal Generator
-		RecipeManager.addRecipe(BasicComponents.coalGenerator, new Object [] {"!@!", "$#$", "???", '?', "ingotBronze", '!', BasicComponents.itemSteelPlate, '@', BasicComponents.blockCopperWire, '#', BasicComponents.itemMotor, '$', Block.stoneOvenIdle});
+		RecipeManager.addRecipe(BasicComponents.coalGenerator, new Object [] {"SCS", "FMF", "BBB", 'B', "ingotBronze", 'S', BasicComponents.itemSteelPlate, 'C', BasicComponents.blockCopperWire, 'M', BasicComponents.itemMotor, 'F', Block.stoneOvenIdle});
 		RecipeManager.addSmelting(BasicComponents.coalGenerator, new ItemStack(BasicComponents.itemSteelDust, 6));
 		//Electric Furnace
-		RecipeManager.addRecipe(BasicComponents.electricFurnace, new Object [] {"!!!", "!?!", "!#!", '!', "ingotSteel", '?', BasicComponents.itemCircuit, '#', BasicComponents.itemMotor});
+		RecipeManager.addRecipe(BasicComponents.electricFurnace, new Object [] {"SSS", "SCS", "SMS", 'S', "ingotSteel", 'C', BasicComponents.itemCircuit, 'M', BasicComponents.itemMotor});
 		RecipeManager.addSmelting(BasicComponents.electricFurnace, new ItemStack(BasicComponents.itemSteelDust, 6));
 		//Copper
 		RecipeManager.addSmelting(new ItemStack(BasicComponents.blockBasicOre, 1, 0), new ItemStack(BasicComponents.itemCopperIngot));
@@ -205,6 +208,7 @@ public class UELoader implements ICraftingHandler
 		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemBronzePlate), new Object [] {"!!", "!!", '!', "ingotBronze"});
 
 		//Circuit
+		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 0), new Object [] {"!#!", "#@#", "!#!", '@', BasicComponents.itemBronzePlate, '#', Item.redstone, '!', BasicComponents.blockCopperWire});
 		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 0), new Object [] {"!#!", "#@#", "!#!", '@', BasicComponents.itemSteelPlate, '#', Item.redstone, '!', BasicComponents.blockCopperWire});
 		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 1), new Object [] {"@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', BasicComponents.itemCircuit});
 		RecipeManager.addRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 2), new Object [] {"@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(BasicComponents.itemCircuit, 1, 1), '#', Block.blockLapis});
@@ -250,18 +254,15 @@ public class UELoader implements ICraftingHandler
 	}
     
     @ForgeSubscribe
-    public void onEntityDeath(LivingDeathEvent event)
-    {
-    	if(event.entity instanceof EntityPlayer)
-    	{
-        	ElectricityManager.instance.timedConductorRefresh();
-    	}
-    }
+	public void onWorldLoad(Load event)
+	{
+    	Ticker.inGameTicks = 0;
+	}
     
     @ForgeSubscribe
-	public void onWorldSave(Save event)
+	public void onWorldUnload(Unload event)
 	{
-    	ElectricityManager.instance.timedConductorRefresh();
+		ElectricityManager.instance = new ElectricityManager();
 	}
 
 	@Override
@@ -286,7 +287,7 @@ public class UELoader implements ICraftingHandler
 	@Override
 	public void onSmelting(EntityPlayer player, ItemStack item)
 	{
-
+		
 	}
 	
 	@ServerStarting

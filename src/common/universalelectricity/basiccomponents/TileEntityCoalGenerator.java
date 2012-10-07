@@ -30,7 +30,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 	/**
 	 * Maximum amount of energy needed to generate electricity
 	 */
-    public static final int MAX_GENERATE_WATTS = 8000;
+    public static final int MAX_GENERATE_WATTS = 15000;
     
     /**
      * Amount of heat the coal generator needs before generating electricity.
@@ -55,19 +55,11 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
     private ItemStack[] containingItems = new ItemStack[1];
     
 	private int playersUsing = 0;
-
-	private boolean sendUpdate = true;
     
     @Override
     public boolean canConnect(ForgeDirection side)
     {
         return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2);
-    }
-    
-    @Override
-    public void initiate()
-    {
-    	this.sendUpdate = true;
     }
     
     @Override
@@ -77,7 +69,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
     	
         //Check nearby blocks and see if the conductor is full. If so, then it is connected
         TileEntity tileEntity = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2));
-
+        
         if (tileEntity instanceof IConductor)
         {
             if (ElectricityManager.instance.getElectricityRequired(((IConductor)tileEntity).getConnectionID()) > 0)
@@ -133,10 +125,9 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
         
         if(!this.worldObj.isRemote)
         {
-	        if(this.sendUpdate || Ticker.inGameTicks % 60 == 0 && this.playersUsing > 0)
+	        if(this.ticks % 60 == 0 && this.playersUsing > 0)
 	        {
 	        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
-	        	this.sendUpdate = false;
 	        }
         }
     }
@@ -340,21 +331,20 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
      */
     
 	@Override
-	public String getType() {
+	public String getType()
+	{
 		return "CoalGenerator";
 	}
 
 	@Override
-	public String[] getMethodNames() {
-		return new String[] {
-	    		"getCoalAmount",
-	    		"getVoltage",
-	    		"getWattage",
-	    };
+	public String[] getMethodNames() 
+	{
+		return new String[] {"getCoalAmount", "getVoltage", "getWattage"};
 	}
 
 	@Override
-	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception {
+	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception
+	{
 		
 		final int getCoalAmount = 0;
 		final int getVoltage = 1;
@@ -375,7 +365,8 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 	}
 
 	@Override
-	public boolean canAttachToSide(int side) {
+	public boolean canAttachToSide(int side)
+	{
 		return true;
 	}
 

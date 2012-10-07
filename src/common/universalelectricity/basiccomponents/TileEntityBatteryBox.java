@@ -125,11 +125,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
         	{
         		double receivedElectricity = this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO;
         		this.setWattHours(this.wattHourStored + receivedElectricity);
-        	
-        		if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
-        		{
-        			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
-        		}
         	}
         	
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
@@ -207,7 +202,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	 	            {
 	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
-	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.wattHourStored), 54000), 0);
+	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.wattHourStored), 60000), 0);
 	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.Wh_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
 	 	            	this.setWattHours(this.wattHourStored - transferWattHours);
 	 	            }
@@ -221,7 +216,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                     if (connector instanceof TileEntityConductor)
                     {
                         double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
-                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 15), 0);                        
+                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 40), 0);                        
                         ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
                         this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
                     } 
@@ -231,9 +226,10 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
         
         if(!this.worldObj.isRemote)
         {
-	        if(this.sendUpdate || (Ticker.inGameTicks % 40 == 0 && this.playersUsing > 0))
+	        if(this.ticks % 2 == 0 && this.playersUsing > 0)
 	        {
-	        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+	        	//PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+	        	this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
 	        	this.sendUpdate = false;
 	        }
         }
@@ -262,11 +258,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     @Override
     public void openChest()
     {
-    	if(!this.worldObj.isRemote)
-        {
-    		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
-        }
-    	
     	this.playersUsing  ++;
     }
     
@@ -452,7 +443,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public double getMaxWattHours()
 	{
-		return 1000;
+		return 2000;
 	}
 	
 	/**
@@ -572,11 +563,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		
 			this.setWattHours(wattHourStored + inputElectricity);
 			
-			if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0)
-			{
-				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
-			}
-		
 			return (int) (rejectedElectricity*UniversalElectricity.Wh_IC2_RATIO);
 		}
 		
@@ -588,17 +574,15 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
      */
 	
 	@Override
-	public String getType() {
+	public String getType()
+	{
 		return "BatteryBox";
 	}
 
 	@Override
-	public String[] getMethodNames() {
-		return new String[] {
-	    		"getVoltage",
-	    		"getWattage",
-	    		"isFull",
-	    };
+	public String[] getMethodNames()
+	{
+		return new String[] {"getVoltage", "getWattage", "isFull"};
 	}
 	
 	@Override
@@ -621,7 +605,8 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	}
 
 	@Override
-	public boolean canAttachToSide(int side) {
+	public boolean canAttachToSide(int side)
+	{
 		return true;
 	}
 

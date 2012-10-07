@@ -9,6 +9,7 @@ import java.util.Map;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.Ticker;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityReceiver;
 import universalelectricity.prefab.TileEntityConductor;
@@ -25,9 +26,10 @@ import cpw.mods.fml.common.TickType;
 public class ElectricityManager
 {
 	/**
-	 * ElectricityManager only exists server side.
+	 * ElectricityManager exists on both client and server side.
+	 * Rely on the server side one as it is more accurate! Client side only simulates.
 	 */
-	public static ElectricityManager instance = new ElectricityManager();
+	public static ElectricityManager instance;
 	
     private List<IElectricityReceiver> electricityReceivers = new ArrayList<IElectricityReceiver>();
     private List<IConductor> electricConductors = new ArrayList<IConductor>();
@@ -35,19 +37,12 @@ public class ElectricityManager
     private List<ElectricityTransferData> electricityTransferQueue = new ArrayList<ElectricityTransferData>();
     private List<ElectricityNetwork> electricityNetworks = new ArrayList<ElectricityNetwork>();
     private int maxConnectionID = 0;
-
-    public int refreshConductors;
     
     public ElectricityManager()
     {
-    	this.timedConductorRefresh();
+    	System.out.println("Universal Electricity's Electricity Manager Initiated.");
     }
     
-    public void timedConductorRefresh()
-    {
-    	this.refreshConductors = 20*5;
-    }
-
     /**
      * Registers an electricity consumer for it to receive electricity.
      * Call it in your consumer's tile entity constructor like this:
@@ -119,12 +114,12 @@ public class ElectricityManager
         {
             conductor.reset();
         }
-
+        
         for(IConductor conductor : connection.conductors)
         {
             for (byte i = 0; i < 6; i++)
             {
-                conductor.addConnectionWithoutSplit(Vector3.getConnectorFromSide(conductor.getWorld(), new Vector3(((TileEntity)conductor).xCoord, ((TileEntity)conductor).yCoord, ((TileEntity)conductor).zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+                conductor.updateConnectionWithoutSplit(Vector3.getConnectorFromSide(conductor.getWorld(), new Vector3(((TileEntity)conductor).xCoord, ((TileEntity)conductor).yCoord, ((TileEntity)conductor).zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
             }
         }
     }
@@ -330,28 +325,25 @@ public class ElectricityManager
 	        	electricityTransferQueue.remove(i);
 	        }
 			
-			if(this.refreshConductors <= 0)
-			{
-				Iterator it = conductorAmpData.entrySet().iterator();
-				
-			    while (it.hasNext())
-			    {
-			        Map.Entry pairs = (Map.Entry)it.next();
-			        
-			        if(pairs.getKey() != null && pairs.getValue() != null)
-			        {
-			        	if(pairs.getKey() instanceof ElectricityNetwork && pairs.getValue() instanceof Double)
-			        	{
-			        		if(((Double)pairs.getValue()) > ((ElectricityNetwork)pairs.getKey()).getLowestAmpConductor())
-			        		{
-			        			((ElectricityNetwork)pairs.getKey()).meltDown();
-			        		}
-			        	}
-			        }
-			        
-			        it.remove();
-			    }
-			}
+			Iterator it = conductorAmpData.entrySet().iterator();
+			
+		    while (it.hasNext())
+		    {
+		        Map.Entry pairs = (Map.Entry)it.next();
+		        
+		        if(pairs.getKey() != null && pairs.getValue() != null)
+		        {
+		        	if(pairs.getKey() instanceof ElectricityNetwork && pairs.getValue() instanceof Double)
+		        	{
+		        		if(((Double)pairs.getValue()) > ((ElectricityNetwork)pairs.getKey()).getLowestAmpConductor())
+		        		{
+		        			((ElectricityNetwork)pairs.getKey()).meltDown();
+		        		}
+		        	}
+		        }
+		        
+		        it.remove();
+		    }
 		}
 		catch(Exception e)
 		{
@@ -362,10 +354,9 @@ public class ElectricityManager
 	
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		if(this.refreshConductors > 0)
+		if(Ticker.inGameTicks == 0)
 		{
 			this.refreshConductors();
-			this.refreshConductors --;
 		}
 	}
 }
