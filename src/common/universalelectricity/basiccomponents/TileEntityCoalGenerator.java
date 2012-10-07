@@ -22,7 +22,10 @@ import universalelectricity.prefab.Vector3;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityCoalGenerator extends TileEntityDisableable implements IElectricityProducer, IInventory, ISidedInventory, IPacketReceiver
+import dan200.computer.api.IComputerAccess;
+import dan200.computer.api.IPeripheral;
+
+public class TileEntityCoalGenerator extends TileEntityDisableable implements IElectricityProducer, IInventory, ISidedInventory, IPacketReceiver, IPeripheral
 {
 	/**
 	 * Maximum amount of energy needed to generate electricity
@@ -50,7 +53,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
     * The ItemStacks that hold the items currently being used in the battery box
     */
     private ItemStack[] containingItems = new ItemStack[1];
-
+    
 	private int playersUsing = 0;
 
 	private boolean sendUpdate = true;
@@ -331,4 +334,55 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
     {
         return 120;
     }
+    
+    /**
+     * COMPUTERCRAFT FUNCTIONS
+     */
+    
+	@Override
+	public String getType() {
+		return "CoalGenerator";
+	}
+
+	@Override
+	public String[] getMethodNames() {
+		return new String[] {
+	    		"getCoalAmount",
+	    		"getVoltage",
+	    		"getWattage",
+	    };
+	}
+
+	@Override
+	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception {
+		
+		final int getCoalAmount = 0;
+		final int getVoltage = 1;
+		final int getWattage = 2;
+		
+		switch(method){
+			case getCoalAmount:
+				ItemStack s = getStackInSlot(0);
+				if(s == null) { return new Object[] { 0 }; }
+				return new Object[] { s.stackSize };
+			case getVoltage:
+				return new Object[] { getVoltage() };
+			case getWattage:
+				return new Object[] { generateWatts };
+			default:
+				throw new Exception("Function unimplemented");
+		}
+	}
+
+	@Override
+	public boolean canAttachToSide(int side) {
+		return true;
+	}
+
+	@Override
+	public void attach(IComputerAccess computer, String computerSide) {}
+
+	@Override
+	public void detach(IComputerAccess computer) {}
+	
 }
