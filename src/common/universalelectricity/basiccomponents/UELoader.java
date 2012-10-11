@@ -223,7 +223,7 @@ public class UELoader implements ICraftingHandler
     	//Register all the damage source.
 		UEDamageSource.registerDeathMesages();
 		
-		if(UniversalElectricity.BC3_RATIO <= 0 || Loader.isModLoaded("Buildcraft"))
+		if(UniversalElectricity.BC3_RATIO <= 0 || !Loader.isModLoaded("BuildCraft|Core"))
    		{
    			System.out.println("Disabled Buildcraft electricity conversion!");
    		}
@@ -232,7 +232,7 @@ public class UELoader implements ICraftingHandler
    			System.out.println("Buildcraft conversion ratio: "+UniversalElectricity.BC3_RATIO);
    		}
    		
-   		if(UniversalElectricity.IC2_RATIO <= 0 || Loader.isModLoaded("IC2"))
+   		if(UniversalElectricity.IC2_RATIO <= 0 || !Loader.isModLoaded("IC2"))
    		{
    			System.out.println("Disabled Industrialcraft electricity conversion!");
    		}
