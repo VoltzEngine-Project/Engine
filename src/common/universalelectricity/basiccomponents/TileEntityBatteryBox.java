@@ -142,12 +142,13 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 if (this.containingItems[0].getItem() instanceof IItemElectric)
                 {
                     IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
-                    double rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-                    this.setJoules(this.joules - (electricItem.getTransferRate() - rejectedElectricity));
+                    double ampsToGive = Math.min(ElectricInfo.getAmps(electricItem.getMaxJoules()*0.005, this.getVoltage()), this.joules);
+                    double joules = electricItem.onReceive(ampsToGive, this.getVoltage(), this.containingItems[0]);
+                    this.setJoules(this.joules - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
                 }
                 else if(this.containingItems[0].getItem() instanceof IElectricItem)
                 {
-                	double sent = ElectricItem.charge(containingItems[0], (int) (joules*UniversalElectricity.Wh_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
+                	double sent = ElectricItem.charge(containingItems[0], (int) (joules*UniversalElectricity.TO_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
                 	this.setJoules(joules - sent);
                 }
             }
@@ -161,8 +162,8 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
                     if (electricItem.canProduceElectricity())
                     {
-                        double wattHourReceived = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
-                        this.setJoules(this.joules + wattHourReceived);
+                        double joulesReceived = electricItem.onUse(electricItem.getMaxJoules()*0.005, this.containingItems[1]);
+                        this.setJoules(this.joules + joulesReceived);
                     }
                 }
                 else if(containingItems[1].getItem() instanceof IElectricItem)
@@ -170,7 +171,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 	IElectricItem item = (IElectricItem)containingItems[1].getItem();
                 	if(item.canProvideEnergy())
                 	{
-                		double gain = ElectricItem.discharge(containingItems[1], (int) ((int)(getMaxJoules()-joules)*UniversalElectricity.Wh_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
+                		double gain = ElectricItem.discharge(containingItems[1], (int) ((int)(getMaxJoules()-joules)*UniversalElectricity.TO_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
                 		this.setJoules(joules + gain);
                 	}
                 }
@@ -198,7 +199,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 //Output IC2 energy
             	if(Loader.isModLoaded("IC2"))
             	{
-	 	            if(this.joules*UniversalElectricity.Wh_IC2_RATIO >= 32)
+	 	            if(this.joules*UniversalElectricity.TO_IC2_RATIO >= 32)
 	 	            {
 	 	            	this.setJoules(this.joules - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
 	 	            }
@@ -212,7 +213,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
 	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.joules), 60000), 0);
-	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.Wh_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
+	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
 	 	            	this.setJoules(this.joules - transferWattHours);
 	 	            }
             	}
@@ -571,7 +572,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		
 			this.setJoules(joules + inputElectricity);
 			
-			return (int) (rejectedElectricity*UniversalElectricity.Wh_IC2_RATIO);
+			return (int) (rejectedElectricity*UniversalElectricity.TO_IC2_RATIO);
 		}
 		
 		return euAmount;

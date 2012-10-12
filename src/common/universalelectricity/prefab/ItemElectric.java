@@ -15,8 +15,7 @@ import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 import universalelectricity.implement.IItemElectric;
 
 /**
- * REQUIRED
- * Extend from this class if your item requires electricity or to be charged.
+ * Extend from this class if your item requires electricity or to be charged. Optionally, you can implement IItemElectric instead.
  * @author Calclavia
  *
  */
@@ -44,13 +43,13 @@ public abstract class ItemElectric extends Item implements IItemElectric
     public void addInformation(ItemStack par1ItemStack, List par2List)
     {
         String color = "";
-        double watts = this.getJoules(par1ItemStack);
+        double joules = this.getJoules(par1ItemStack);
 
-        if (watts <= this.getMaxJoules() / 3)
+        if (joules <= this.getMaxJoules() / 3)
         {
             color = "\u00a74";
         }
-        else if (watts > this.getMaxJoules() * 2 / 3)
+        else if (joules > this.getMaxJoules() * 2 / 3)
         {
             color = "\u00a72";
         }
@@ -59,7 +58,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
             color = "\u00a76";
         }
 
-        par2List.add(color + ElectricInfo.getDisplay(ElectricInfo.getWattHours(watts), ElectricUnit.WATT_HOUR) + " - " + Math.round((watts / this.getMaxJoules()) * 100) + "%");
+        par2List.add(color + ElectricInfo.getDisplay(joules, ElectricUnit.JOULES) + " - " + Math.round((joules / this.getMaxJoules()) * 100) + "%");
     }
 
     /**
@@ -83,45 +82,27 @@ public abstract class ItemElectric extends Item implements IItemElectric
     	par1ItemStack = this.getUnchargedItemStack();
     }
 
-    /**
-     * Called when this item is being "recharged" or receiving electricity.
-     * @param wattHourReceive - The amount of watt hours this item is receiving.
-     * @param itemStack - The ItemStack of this item
-     * @return Return the rejected electricity from this item
-     */
-    public double onReceiveElectricity(double wattHourReceive, ItemStack itemStack)
+    @Override
+    public double onReceive(double amps, double voltage, ItemStack itemStack)
     {
-        double rejectedElectricity = Math.max((this.getJoules(itemStack) + wattHourReceive) - this.getMaxJoules(), 0);
-        this.setJoules(this.getJoules(itemStack) + wattHourReceive - rejectedElectricity, itemStack);
+        double rejectedElectricity = Math.max((this.getJoules(itemStack) + ElectricInfo.getJoules(amps, voltage, 1)) - this.getMaxJoules(), 0);
+        this.setJoules(this.getJoules(itemStack) + ElectricInfo.getJoules(amps, voltage, 1) - rejectedElectricity, itemStack);
         return rejectedElectricity;
     }
 
-    /**
-     * Called when this item's electricity is being used.
-     * @param wattHourRequest - The amount of electricity requested from this item
-     * @param itemStack - The ItemStack of this item
-     * @return The electricity that is given to the requester
-     */
-    public double onUseElectricity(double wattHourRequest, ItemStack itemStack)
+    @Override
+    public double onUse(double joulesNeeded, ItemStack itemStack)
     {
-        double electricityToUse = Math.min(this.getJoules(itemStack), wattHourRequest);
+        double electricityToUse = Math.min(this.getJoules(itemStack), joulesNeeded);
         this.setJoules(this.getJoules(itemStack) - electricityToUse, itemStack);
         return electricityToUse;
     }
 
-    /**
-     * @return Returns true or false if this consumer can receive electricity at this given tick or moment.
-     */
     public boolean canReceiveElectricity()
     {
         return true;
     }
 
-    /**
-     * Can this item give out electricity when placed in an tile entity? Electric items like batteries
-     * should be able to produce electricity (if they are rechargable).
-     * @return - True or False.
-     */
     public boolean canProduceElectricity()
     {
         return false;
@@ -178,18 +159,6 @@ public abstract class ItemElectric extends Item implements IItemElectric
     	
     	return -1;
     }
-
-    /**
-     * This function is called to get the maximum transfer rate this electric item can receive per tick
-     * @return - The amount of electricity maximum capacity
-     */
-    public abstract double getTransferRate();
-
-    /**
-     * Gets the voltage of this item
-     * @return The Voltage of this item
-     */
-    public abstract double getVoltage();
 
     /**
      * Returns an uncharged version of the electric item. Use this if you want

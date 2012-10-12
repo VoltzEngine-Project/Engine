@@ -6,20 +6,24 @@ public interface IItemElectric extends IJouleStorage, IVoltage
 {
 	/**
 	 * Called when this item receives electricity.
-	 * @param joulesReceived - Joules sent over to this item.
 	 */
-    public double onReceiveElectricity(double joulesReceived, ItemStack itemStack);
+    public double onReceive(double amps, double voltage, ItemStack itemStack);
     
     /**
-     * Called when something uses electricity from this item.
-     * @param joulesRequest - The amount of joules the consumer is requesting
-     * @return
+     * Called when something requests electricity from this item.
+     * @return - The amount of given joules 
      */
-    public double onUseElectricity(double joulesRequest, ItemStack itemStack);
+    public double onUse(double joulesNeeded, ItemStack itemStack);
     
+    /**
+     * @return Returns true or false if this consumer can receive electricity at this given tick or moment.
+     */
     public boolean canReceiveElectricity();
     
-    public boolean canProduceElectricity();
-    
-    public double getTransferRate();   
+    /**
+     * Can this item give out electricity when placed in an tile entity? Electric items like batteries
+     * should be able to produce electricity (if they are rechargeable).
+     * @return - True or False.
+     */
+    public boolean canProduceElectricity(); 
 }
