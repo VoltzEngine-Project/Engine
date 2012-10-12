@@ -25,8 +25,6 @@ public interface IElectricityReceiver extends IDisableable, IConnector, IVoltage
     /**
      * How many watts does this electrical unit need per tick?
      * Recommend for you to return the max electricity storage of this machine (if there is one).
-     *
-     * Set this to 0 if your electric unit can not receive electricity.
      */
     public double wattRequest();
 

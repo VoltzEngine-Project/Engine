@@ -29,7 +29,7 @@ public class ItemBattery extends ItemElectric
      * @return - The amount of electricity maximum capacity
      */
     @Override
-    public double getMaxWattHours()
+    public double getMaxJoules()
     {
         return 200;
     }

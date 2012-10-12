@@ -26,7 +26,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
     {
         super(id);
         this.setMaxStackSize(1);
-        this.setMaxDamage((int)this.getMaxWattHours());
+        this.setMaxDamage((int)this.getMaxJoules());
         this.setNoRepair();
         this.setCreativeTab(tabs);
     }
@@ -44,13 +44,13 @@ public abstract class ItemElectric extends Item implements IItemElectric
     public void addInformation(ItemStack par1ItemStack, List par2List)
     {
         String color = "";
-        double watts = this.getWattHours(par1ItemStack);
+        double watts = this.getJoules(par1ItemStack);
 
-        if (watts <= this.getMaxWattHours() / 3)
+        if (watts <= this.getMaxJoules() / 3)
         {
             color = "\u00a74";
         }
-        else if (watts > this.getMaxWattHours() * 2 / 3)
+        else if (watts > this.getMaxJoules() * 2 / 3)
         {
             color = "\u00a72";
         }
@@ -59,7 +59,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
             color = "\u00a76";
         }
 
-        par2List.add(color + ElectricInfo.getDisplay(ElectricInfo.getWattHours(watts), ElectricUnit.WATT_HOUR) + " - " + Math.round((watts / this.getMaxWattHours()) * 100) + "%");
+        par2List.add(color + ElectricInfo.getDisplay(ElectricInfo.getWattHours(watts), ElectricUnit.WATT_HOUR) + " - " + Math.round((watts / this.getMaxJoules()) * 100) + "%");
     }
 
     /**
@@ -70,7 +70,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
     {
     	//Makes sure the damage is set correctly for this electric item!
     	ItemElectric item = ((ItemElectric)par1ItemStack.getItem());
-    	item.setWattHours(item.getWattHours(par1ItemStack), par1ItemStack);
+    	item.setJoules(item.getJoules(par1ItemStack), par1ItemStack);
     }
     
     /**
@@ -91,8 +91,8 @@ public abstract class ItemElectric extends Item implements IItemElectric
      */
     public double onReceiveElectricity(double wattHourReceive, ItemStack itemStack)
     {
-        double rejectedElectricity = Math.max((this.getWattHours(itemStack) + wattHourReceive) - this.getMaxWattHours(), 0);
-        this.setWattHours(this.getWattHours(itemStack) + wattHourReceive - rejectedElectricity, itemStack);
+        double rejectedElectricity = Math.max((this.getJoules(itemStack) + wattHourReceive) - this.getMaxJoules(), 0);
+        this.setJoules(this.getJoules(itemStack) + wattHourReceive - rejectedElectricity, itemStack);
         return rejectedElectricity;
     }
 
@@ -104,8 +104,8 @@ public abstract class ItemElectric extends Item implements IItemElectric
      */
     public double onUseElectricity(double wattHourRequest, ItemStack itemStack)
     {
-        double electricityToUse = Math.min(this.getWattHours(itemStack), wattHourRequest);
-        this.setWattHours(this.getWattHours(itemStack) - electricityToUse, itemStack);
+        double electricityToUse = Math.min(this.getJoules(itemStack), wattHourRequest);
+        this.setJoules(this.getJoules(itemStack) - electricityToUse, itemStack);
         return electricityToUse;
     }
 
@@ -133,7 +133,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
      * @param wattHours - The amount of electricity in joules
      */
     @Override
-    public void setWattHours(double wattHours, Object... data)
+    public void setJoules(double wattHours, Object... data)
     {
     	if(data[0] instanceof ItemStack)
     	{
@@ -145,9 +145,9 @@ public abstract class ItemElectric extends Item implements IItemElectric
                 itemStack.setTagCompound(new NBTTagCompound());
             }
 
-            double electricityStored = Math.max(Math.min(wattHours, this.getMaxWattHours()), 0);
+            double electricityStored = Math.max(Math.min(wattHours, this.getMaxJoules()), 0);
             itemStack.stackTagCompound.setDouble("electricity", electricityStored);
-            itemStack.setItemDamage((int)(getMaxWattHours() - electricityStored));
+            itemStack.setItemDamage((int)(getMaxJoules() - electricityStored));
     	}
     }
 
@@ -156,7 +156,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
      * @return - The amount of electricity stored in watts
      */
     @Override
-    public double getWattHours(Object... data)
+    public double getJoules(Object... data)
     {
     	if(data[0] instanceof ItemStack)
     	{
@@ -172,7 +172,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
             }else{
                 electricityStored = itemStack.stackTagCompound.getDouble("electricity");
             }
-	        itemStack.setItemDamage((int)(getMaxWattHours() - electricityStored));
+	        itemStack.setItemDamage((int)(getMaxJoules() - electricityStored));
 	        return electricityStored;
     	}
     	
@@ -200,7 +200,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
     public ItemStack getUnchargedItemStack()
     {
         ItemStack chargedItem = new ItemStack(this);
-        chargedItem.setItemDamage((int) this.getMaxWattHours());
+        chargedItem.setItemDamage((int) this.getMaxJoules());
         return chargedItem;
     }
 
@@ -209,11 +209,11 @@ public abstract class ItemElectric extends Item implements IItemElectric
     {
     	//Add an uncharged version of the electric item
         ItemStack unchargedItem = new ItemStack(this, 1);
-        unchargedItem.setItemDamage((int) this.getMaxWattHours());
+        unchargedItem.setItemDamage((int) this.getMaxJoules());
         par3List.add(unchargedItem);
         //Add an electric item to the creative list that is fully charged
         ItemStack chargedItem = new ItemStack(this, 1);
-        this.setWattHours(((IItemElectric)chargedItem.getItem()).getMaxWattHours(), chargedItem);
+        this.setJoules(((IItemElectric)chargedItem.getItem()).getMaxJoules(), chargedItem);
         par3List.add(chargedItem);
     }
 }

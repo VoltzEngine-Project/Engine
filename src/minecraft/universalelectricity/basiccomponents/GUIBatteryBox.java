@@ -31,8 +31,8 @@ public class GUIBatteryBox extends GuiContainer
     protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString(this.tileEntity.getInvName(), 65, 6, 4210752);
-        String displayWattHours = ElectricInfo.getDisplay(tileEntity.getWattHours(), ElectricUnit.WATT_HOUR, 3, true);
-        String displayMaxWattHours = ElectricInfo.getDisplaySimple(tileEntity.getMaxWattHours(), ElectricUnit.WATT_HOUR, 0);
+        String displayWattHours = ElectricInfo.getDisplayShort(tileEntity.getJoules(), ElectricUnit.JOULES);
+        String displayMaxWattHours = ElectricInfo.getDisplay(tileEntity.getMaxJoules(), ElectricUnit.JOULES);
 
         if (this.tileEntity.isDisabled())
         {
@@ -58,7 +58,7 @@ public class GUIBatteryBox extends GuiContainer
         containerWidth = (this.width - this.xSize) / 2;
         containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
-        int scale = (int)(((double)this.tileEntity.getWattHours() / this.tileEntity.getMaxWattHours()) * 72);
+        int scale = (int)(((double)this.tileEntity.getJoules() / this.tileEntity.getMaxJoules()) * 72);
         this.drawTexturedModalRect(containerWidth + 87, containerHeight + 51, 176, 0, scale, 20);
     }
 }

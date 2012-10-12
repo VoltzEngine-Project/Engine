@@ -2,11 +2,20 @@ package universalelectricity.implement;
 
 import net.minecraft.src.ItemStack;
 
-public interface IItemElectric extends IElectricityStorage, IVoltage
+public interface IItemElectric extends IJouleStorage, IVoltage
 {
-    public double onReceiveElectricity(double wattHourReceive, ItemStack itemStack);
+	/**
+	 * Called when this item receives electricity.
+	 * @param joulesReceived - Joules sent over to this item.
+	 */
+    public double onReceiveElectricity(double joulesReceived, ItemStack itemStack);
     
-    public double onUseElectricity(double wattHourRequest, ItemStack itemStack);
+    /**
+     * Called when something uses electricity from this item.
+     * @param joulesRequest - The amount of joules the consumer is requesting
+     * @return
+     */
+    public double onUseElectricity(double joulesRequest, ItemStack itemStack);
     
     public boolean canReceiveElectricity();
     
