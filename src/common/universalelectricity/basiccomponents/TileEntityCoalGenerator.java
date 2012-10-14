@@ -11,7 +11,6 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.Ticker;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityProducer;
