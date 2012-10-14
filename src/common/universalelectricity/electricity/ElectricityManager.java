@@ -14,6 +14,7 @@ import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityReceiver;
 import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.Vector3;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.TickType;
 
 /**
@@ -167,6 +168,12 @@ public class ElectricityManager
     public int getMaxConnectionID()
     {
     	this.maxConnectionID ++;
+    	
+    	if(this.maxConnectionID >= Integer.MAX_VALUE)
+    	{
+    		this.maxConnectionID = 0;
+    	}
+    	
         return this.maxConnectionID;
     }
 
@@ -201,9 +208,9 @@ public class ElectricityManager
                             {
                                 IElectricityReceiver receiver = (IElectricityReceiver)tileEntity;
 
-                                if (Math.ceil(receiver.wattRequest()) > 0 && receiver.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
+                                if (this.getActualWattRequest(receiver) > 0 && receiver.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                                 {
-                                    double transferAmps = Math.max(0, Math.min(leftOverAmps, Math.min(amps / allElectricUnitsInLine.size(), ElectricInfo.getAmps(Math.ceil(receiver.wattRequest()), receiver.getVoltage()) )));
+                                    double transferAmps = Math.max(0, Math.min(leftOverAmps, Math.min(amps / allElectricUnitsInLine.size(), ElectricInfo.getAmps(this.getActualWattRequest(receiver), receiver.getVoltage()))));
                                     leftOverAmps -= transferAmps;
                                     
                                     //Calculate electricity loss
@@ -220,10 +227,42 @@ public class ElectricityManager
             }
         }
     }
+    
+    /**
+     * Gets the actual watt request of an electric receiver accounting all current electricity packets qued up for it.
+     * @return - The amount of watts requested.
+     */
+    public double getActualWattRequest(IElectricityReceiver receiver)
+    {
+    	double wattsRequest = receiver.wattRequest();
+    	
+    	try
+    	{
+	    	for (int i = 0; i < electricityTransferQueue.size(); i ++)
+	        {
+	        	if(electricityTransferQueue.get(i) != null)
+	        	{
+	            	if(electricityTransferQueue.get(i).isValid())
+	            	{
+	            		if(electricityTransferQueue.get(i).receiver == receiver)
+	            		{
+	            			wattsRequest -= electricityTransferQueue.get(i).amps*electricityTransferQueue.get(i).voltage;
+	            		}
+	            	}
+	        	}
+	        }
+    	}
+    	catch(Exception e)
+    	{
+    		FMLLog.severe("Failed to get watt request!");
+    	}
+    	
+		return Math.max(Math.min(wattsRequest, receiver.wattRequest()), 0);
+    }
 
     /**
      * Checks if the current connection line needs electricity
-     * @return - The amount of watts this connection line needs
+     * @return - The amount of joules this connection line needs
      */
     public double getElectricityRequired(int ID)
     {
@@ -246,7 +285,39 @@ public class ElectricityManager
 
                             if (electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
                             {
-                                need += Math.ceil(electricUnit.wattRequest());
+                                need += electricUnit.wattRequest();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return need;
+    }
+    
+    public double getActualElectricityRequired(int ID)
+    {
+    	ElectricityNetwork connection = this.getConnectionByID(ID);
+        double need = 0;
+
+        if (connection != null)
+        {
+            for (IConductor conductor : connection.conductors)
+            {
+                for (byte i = 0; i < conductor.getConnectedBlocks().length; i++)
+                {
+                    TileEntity tileEntity = conductor.getConnectedBlocks()[i];
+
+                    if (tileEntity != null)
+                    {
+                        if (tileEntity instanceof IElectricityReceiver)
+                        {
+                            IElectricityReceiver electricUnit = (IElectricityReceiver)tileEntity;
+
+                            if (electricUnit.canReceiveFromSide(ForgeDirection.getOrientation(i).getOpposite()))
+                            {
+                                need += this.getActualWattRequest(electricUnit);
                             }
                         }
                     }
@@ -298,62 +369,62 @@ public class ElectricityManager
 		}
     }
 
-	public void tickStart(EnumSet<TickType> type, Object... tickData)
+	public void onTick(EnumSet<TickType> type, Object... tickData)
 	{
-		try
+		if((type.contains(TickType.CLIENT) || type.contains(TickType.WORLD)) && !type.contains(TickType.WORLDLOAD))
 		{
-			HashMap conductorAmpData = new HashMap<ElectricityNetwork, Double>();
-			
-			for (int i = 0; i < electricityTransferQueue.size(); i ++)
-	        {
-	        	if(electricityTransferQueue.get(i) != null)
-	        	{
-	            	if(electricityTransferQueue.get(i).isValid())
-	            	{
-	            		double amps = electricityTransferQueue.get(i).amps;
-	            		
-	            		if(conductorAmpData.containsKey(electricityTransferQueue.get(i).network))
-	            		{
-	            			amps += (Double)conductorAmpData.get(electricityTransferQueue.get(i).network);
-	            		}
-	            		
-	            		conductorAmpData.put(electricityTransferQueue.get(i).network, amps);
-	                	electricityTransferQueue.get(i).receiver.onReceive(electricityTransferQueue.get(i).sender, electricityTransferQueue.get(i).amps, electricityTransferQueue.get(i).voltage, electricityTransferQueue.get(i).side);
-	            	}
-	        	}
-	        	
-	        	electricityTransferQueue.remove(i);
-	        }
-			
-			Iterator it = conductorAmpData.entrySet().iterator();
-			
-		    while (it.hasNext())
-		    {
-		        Map.Entry pairs = (Map.Entry)it.next();
-		        
-		        if(pairs.getKey() != null && pairs.getValue() != null)
+			try
+			{
+				HashMap conductorAmpData = new HashMap<ElectricityNetwork, Double>();
+				
+				for (int i = 0; i < electricityTransferQueue.size(); i ++)
 		        {
-		        	if(pairs.getKey() instanceof ElectricityNetwork && pairs.getValue() instanceof Double)
+		        	if(electricityTransferQueue.get(i) != null)
 		        	{
-		        		if(((Double)pairs.getValue()) > ((ElectricityNetwork)pairs.getKey()).getLowestAmpConductor())
-		        		{
-		        			((ElectricityNetwork)pairs.getKey()).meltDown();
-		        		}
+		            	if(electricityTransferQueue.get(i).isValid())
+		            	{
+		            		double amps = electricityTransferQueue.get(i).amps;
+		            		
+		            		if(conductorAmpData.containsKey(electricityTransferQueue.get(i).network))
+		            		{
+		            			amps += (Double)conductorAmpData.get(electricityTransferQueue.get(i).network);
+		            		}
+		            		
+		            		conductorAmpData.put(electricityTransferQueue.get(i).network, amps);
+		                	electricityTransferQueue.get(i).receiver.onReceive(electricityTransferQueue.get(i).sender, electricityTransferQueue.get(i).amps, electricityTransferQueue.get(i).voltage, electricityTransferQueue.get(i).side);
+		            	}
 		        	}
+		        	
+		        	electricityTransferQueue.remove(i);
 		        }
-		        
-		        it.remove();
-		    }
+				
+				Iterator it = conductorAmpData.entrySet().iterator();
+				
+			    while (it.hasNext())
+			    {
+			        Map.Entry pairs = (Map.Entry)it.next();
+			        
+			        if(pairs.getKey() != null && pairs.getValue() != null)
+			        {
+			        	if(pairs.getKey() instanceof ElectricityNetwork && pairs.getValue() instanceof Double)
+			        	{
+			        		if(((Double)pairs.getValue()) > ((ElectricityNetwork)pairs.getKey()).getLowestAmpConductor())
+			        		{
+			        			((ElectricityNetwork)pairs.getKey()).meltDown();
+			        		}
+			        	}
+			        }
+			        
+			        it.remove();
+			    }
+			}
+			catch(Exception e)
+			{
+				System.err.println("Failed to transfer electricity to receivers.");
+				e.printStackTrace();
+			}
 		}
-		catch(Exception e)
-		{
-			System.err.println("Failed to transfer electricity to receivers.");
-			e.printStackTrace();
-		}
-	}
-	
-	public void tickEnd(EnumSet<TickType> type, Object... tickData)
-	{
+		
 		if(Ticker.inGameTicks == 0)
 		{
 			this.refreshConductors();

@@ -96,7 +96,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
         
         if(!this.isDisabled())
         {
-        	this.setJoules(this.joules+ElectricInfo.getJoules(amps, voltage, 0.05));
+        	this.setJoules(this.joules+ElectricInfo.getJoules(amps, voltage));
         }
     }
     
@@ -225,10 +225,10 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 	//Output UE electricity
                     if (connector instanceof TileEntityConductor)
                     {
-                        double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
-                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.joules, this.getVoltage()) ), 40), 0);                        
+                        double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
+                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage()) ), 100), 0);
                         ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
-                        this.setJoules(this.joules - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
+                        this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
                     } 
                 }
             }
@@ -452,7 +452,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public double getMaxJoules()
 	{
-		return 100000;
+		return 3000000;
 	}
 	
 	/**

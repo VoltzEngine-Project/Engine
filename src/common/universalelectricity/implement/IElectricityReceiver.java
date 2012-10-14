@@ -23,7 +23,7 @@ public interface IElectricityReceiver extends IDisableable, IConnector, IVoltage
     public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side);
 
     /**
-     * How many watts does this electrical unit need PER TICK?
+     * How many watts does this electrical unit need this tick?
      * Recommended for you to return the max electricity storage of this machine (if there is one).
      */
     public double wattRequest();

@@ -25,15 +25,15 @@ import com.google.common.io.ByteArrayDataInput;
 public class TileEntityElectricFurnace extends TileEntityElectricityReceiver implements IInventory, ISidedInventory,  IPacketReceiver
 {
 	//The amount of watts required by the electric furnace per tick
-    public final double WATTS_PER_TICK = 500;
+    public static final double WATTS_PER_TICK = 400;
 
     //The amount of ticks required to smelt this item
-    public final int SMELTING_TIME_REQUIRED = 120;
+    public static final int SMELTING_TIME_REQUIRED = 150;
 
     //How many ticks has this item been smelting for?
     public int smeltingTicks = 0;
     
-    public double wattsReceived = 0;
+    public double joulesReceived = 0;
     
     /**
     * The ItemStacks that hold the items currently being used in the battery box
@@ -66,7 +66,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
             this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
         }
         
-        this.wattsReceived += ElectricInfo.getWatts(amps, voltage);
+        this.joulesReceived += ElectricInfo.getJoules(amps, voltage, 1);
     }
     
     @Override
@@ -82,12 +82,12 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
                 if (electricItem.canProduceElectricity())
                 {
                     double receivedWattHours = electricItem.onUse(Math.min(electricItem.getMaxJoules()*0.01, ElectricInfo.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
-                    this.wattsReceived += ElectricInfo.getWatts(receivedWattHours);
+                    this.joulesReceived += ElectricInfo.getWatts(receivedWattHours);
                 }
             }
         }
-        
-        if(this.wattsReceived >= this.WATTS_PER_TICK && !this.isDisabled())
+
+        if(this.joulesReceived >= this.WATTS_PER_TICK && !this.isDisabled())
         {
             //The left slot contains the item to be smelted
             if (this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
@@ -112,7 +112,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
                 this.smeltingTicks = 0;
             }
             
-            this.wattsReceived = 0;
+            this.joulesReceived -= this.WATTS_PER_TICK;
         }
 
 	    if(!this.worldObj.isRemote)

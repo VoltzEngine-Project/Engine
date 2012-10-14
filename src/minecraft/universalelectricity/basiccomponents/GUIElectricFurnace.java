@@ -68,7 +68,7 @@ public class GUIElectricFurnace extends GuiContainer
 
         if (this.tileEntity.smeltingTicks > 0)
         {
-            int scale = (int)(((double)this.tileEntity.smeltingTicks / this.tileEntity.SMELTING_TIME_REQUIRED) * 23);
+            int scale = (int)(((double)this.tileEntity.smeltingTicks / (double)this.tileEntity.SMELTING_TIME_REQUIRED) * 23);
             this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
         }
     }
