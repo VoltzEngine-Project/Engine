@@ -40,6 +40,7 @@ import buildcraft.api.power.PowerProvider;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
@@ -113,12 +114,12 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				}
 				else
 				{
-    				System.err.println("Failed to register battery box to IC2 energy net.");
+					FMLLog.severe("Failed to register battery box to IC2 energy net.");
 				}
 			}
 			catch(Exception e)
 			{
-				System.err.println("Failed to register battery box to IC2 energy net.");
+				FMLLog.severe("Failed to register battery box to IC2 energy net.");
 			}
 		}
     }
@@ -517,7 +518,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public boolean isAddedToEnergyNet()
 	{
-		return this.ticks == 0;
+		return this.ticks > 0;
 	}
 
 	@Override
