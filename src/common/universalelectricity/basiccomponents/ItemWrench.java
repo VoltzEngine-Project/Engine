@@ -13,11 +13,11 @@ import buildcraft.api.tools.IToolWrench;
 
 public class ItemWrench extends ItemBasic implements ICrowbar, IToolWrench
 {
-    public ItemWrench(int par1, int par2)
+    public ItemWrench(int id, int texture)
     {
-        super("Universal Wrench", par1, par2);
-        this.setIconIndex(par2);
+        super("Universal Wrench", id, texture);
         this.setMaxStackSize(1);
+        this.setMaxDamage(500);
         this.setCreativeTab(CreativeTabs.tabTools);
     }
     
@@ -40,6 +40,7 @@ public class ItemWrench extends ItemBasic implements ICrowbar, IToolWrench
 	    		if(wrenchableTile.wrenchCanSetFacing(entityPlayer, side)) 
 	    		{
 	    	        wrenchableTile.setFacing((short)side);	
+	    	        this.wrenchUsed(entityPlayer, x, y, z);
 	    	        return true;
 	    		}
 	    		
@@ -51,6 +52,9 @@ public class ItemWrench extends ItemBasic implements ICrowbar, IToolWrench
 	    			{
 	    				block.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
 	    			}
+	    			
+	    			this.wrenchUsed(entityPlayer, x, y, z);
+	    			return true;
 	    		}
 	    	}
     	}
@@ -59,14 +63,20 @@ public class ItemWrench extends ItemBasic implements ICrowbar, IToolWrench
     }
 
 	@Override
-	public boolean canWrench(EntityPlayer player, int x, int y, int z)
+	public boolean canWrench(EntityPlayer entityPlayer, int x, int y, int z)
 	{
 		return true;
 	}
 
 	@Override
-	public void wrenchUsed(EntityPlayer player, int x, int y, int z)
+	public void wrenchUsed(EntityPlayer entityPlayer, int x, int y, int z)
 	{
-		
+		if(entityPlayer.getCurrentEquippedItem() != null)
+		{
+			if(entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemWrench)
+			{
+				entityPlayer.getCurrentEquippedItem().damageItem(1, entityPlayer);
+			}
+		}
 	}
 }

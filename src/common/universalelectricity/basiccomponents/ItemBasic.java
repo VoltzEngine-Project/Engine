@@ -10,7 +10,7 @@ public class ItemBasic extends Item
     public ItemBasic(String name, int id, int texture, CreativeTabs creativeTab)
     {
         super(id);
-        this.iconIndex = texture;
+        this.setIconIndex(texture);
         this.setItemName(name);
         this.setCreativeTab(creativeTab);
         LanguageRegistry.addName(this, name);

@@ -19,10 +19,10 @@ public class UniversalElectricity
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
     
     //EU to Watts ratio
-  	public static final float IC2_RATIO = (float)UEConfig.getConfigData(CONFIGURATION, "IC2 to UE Conversion Ratio", 25);
+  	public static final float IC2_RATIO = (float)UEConfig.getConfigData(CONFIGURATION, "IndustrialCraft Conversion Ratio", 300);
   	
   	//MJ to Watts ratio.
-  	public static final float BC3_RATIO = (float)UEConfig.getConfigData(CONFIGURATION, "BC3 to UE Conversion Ratio", 500);;
+  	public static final float BC3_RATIO = (float)UEConfig.getConfigData(CONFIGURATION, "BuildCraft Conversion Ratio", 5000);;
   	
   	public static final float TO_IC2_RATIO = 1/IC2_RATIO;
   	

@@ -29,7 +29,6 @@ import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
-import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
 import universalelectricity.prefab.Vector3;
 import buildcraft.api.core.Orientations;
@@ -133,7 +132,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
         {
         	if(this.powerProvider != null)
         	{
-        		double receivedElectricity = this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO;
+        		double receivedElectricity = this.powerProvider.useEnergy(50, 50, true)*UniversalElectricity.BC3_RATIO;
         		this.setJoules(this.joules + receivedElectricity);
         	}
         	
@@ -212,10 +211,10 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	 	            if(this.isPoweredTile(tileEntity))
 	 	            {
 	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
-	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
-	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.joules), 60000), 0);
-	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
-	 	            	this.setJoules(this.joules - transferWattHours);
+	 	            	double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
+	 	            	float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joules), 60000), 0);
+	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferJoules*UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
+	 	            	this.setJoules(this.joules - transferJoules);
 	 	            }
             	}
             	
@@ -224,7 +223,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
                 if (connector != null)
                 {
                 	//Output UE electricity
-                    if (connector instanceof TileEntityConductor)
+                    if (connector instanceof IConductor)
                     {
                         double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
                         double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage()) ), 100), 0);
@@ -518,6 +517,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public boolean isAddedToEnergyNet()
 	{
+		System.out.println(this.ticks > 0);
 		return this.ticks > 0;
 	}
 
