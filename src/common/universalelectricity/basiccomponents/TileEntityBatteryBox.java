@@ -110,6 +110,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				if(Class.forName("ic2.common.EnergyNet").getMethod("getForWorld", World.class) != null)
 				{
 					EnergyNet.getForWorld(worldObj).addTileEntity(this);
+					FMLLog.fine("Added battery box to IC2 energy net.");
 				}
 				else
 				{
@@ -196,13 +197,21 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
             {
                 TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
             	
+                TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
+                
                 //Output IC2 energy
             	if(Loader.isModLoaded("IC2"))
             	{
-	 	            if(this.joules*UniversalElectricity.TO_IC2_RATIO >= 32)
-	 	            {
-	 	            	this.setJoules(this.joules - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
-	 	            }
+            		if(connector != null)
+            		{
+            			if(connector instanceof IConductor)
+            			{
+			 	            if(this.joules*UniversalElectricity.TO_IC2_RATIO >= 32)
+			 	            {
+			 	            	this.setJoules(this.joules - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
+			 	            }
+            			}
+            		}
             	}
             	
             	//Output BC energy
@@ -218,8 +227,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	 	            }
             	}
             	
-                TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
-                
                 if (connector != null)
                 {
                 	//Output UE electricity
