@@ -127,8 +127,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     @Override
     public void updateEntity() 
     {
-		System.out.println(this.ticks);
-
     	super.updateEntity();
     	
         if(!this.isDisabled())
@@ -198,15 +196,13 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
             if (this.joules > 0)
             {
                 TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
-            	
-                TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
-                
+            	                
                 //Output IC2 energy
             	if(Loader.isModLoaded("IC2"))
             	{
-            		if(connector != null)
+            		if(tileEntity != null)
             		{
-            			if(connector instanceof IConductor)
+            			if(tileEntity instanceof IConductor)
             			{
 			 	            if(this.joules*UniversalElectricity.TO_IC2_RATIO >= 32)
 			 	            {
@@ -223,11 +219,13 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	 	            {
 	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 	 	            	double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
-	 	            	float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joules), 60000), 0);
+	 	            	float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joules), 100000), 0);
 	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferJoules*UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
 	 	            	this.setJoules(this.joules - transferJoules);
 	 	            }
             	}
+            	
+                TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
             	
                 if (connector != null)
                 {
