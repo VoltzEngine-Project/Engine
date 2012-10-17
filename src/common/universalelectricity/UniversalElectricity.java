@@ -22,7 +22,7 @@ public class UniversalElectricity
   	public static final float IC2_RATIO = (float)UEConfig.getConfigData(CONFIGURATION, "IndustrialCraft Conversion Ratio", 3000);
   	
   	//MJ to Watts ratio.
-  	public static final float BC3_RATIO = (float)UEConfig.getConfigData(CONFIGURATION, "BuildCraft Conversion Ratio", 50000);;
+  	public static final float BC3_RATIO = (float)UEConfig.getConfigData(CONFIGURATION, "BuildCraft Conversion Ratio", 100000);;
   	
   	public static final float TO_IC2_RATIO = 1/IC2_RATIO;
   	

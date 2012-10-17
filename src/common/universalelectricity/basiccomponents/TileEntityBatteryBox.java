@@ -87,16 +87,16 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
     @Override
     public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
-    {        
-        if (voltage > this.getVoltage())
+    {   
+    	if(!this.isDisabled())
         {
-            this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
-            return;
-        }
-        
-        if(!this.isDisabled())
-        {
-        	this.setJoules(this.joules+ElectricInfo.getJoules(amps, voltage));
+	        if (voltage > this.getVoltage())
+	        {
+	            this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
+	            return;
+	        }
+	        
+        	this.setJoules(this.joules+ElectricInfo.getJoules(amps, voltage, 1));
         }
     }
     
@@ -524,7 +524,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public boolean isAddedToEnergyNet()
 	{
-		System.out.println(this.ticks > 0);
+		System.out.println(this.ticks);
 		return this.ticks > 0;
 	}
 
