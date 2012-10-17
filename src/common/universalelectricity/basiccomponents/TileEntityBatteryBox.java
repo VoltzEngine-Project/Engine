@@ -127,6 +127,8 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
     @Override
     public void updateEntity() 
     {
+		System.out.println(this.ticks);
+
     	super.updateEntity();
     	
         if(!this.isDisabled())
@@ -524,7 +526,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public boolean isAddedToEnergyNet()
 	{
-		System.out.println(this.ticks);
 		return this.ticks > 0;
 	}
 
