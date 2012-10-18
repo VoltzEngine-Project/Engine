@@ -12,15 +12,12 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.Ticker;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityReceiver;
-import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.Vector3;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.TickType;
 
 /**
  * This class is used to manage electricity transferring and flow. It is also used to call updates on UE tile entities.
- * 
- * Electricity Manager is made for each world so it doesn't conflict with electricity devices in different dimensions.
  * @author Calclavia
  *
  */
@@ -63,7 +60,7 @@ public class ElectricityManager
      * @param conductor - The conductor tile entity
      * @return - The ID of the connection line that is assigned to this conductor
      */
-    public void registerConductor(TileEntityConductor newConductor)
+    public void registerConductor(IConductor newConductor)
     {
         cleanUpConnections();
         this.electricityNetworks.add(new ElectricityNetwork(getMaxConnectionID(), newConductor));

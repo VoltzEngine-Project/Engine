@@ -12,17 +12,17 @@ public class UniversalElectricity
 {
 	public static final int MAJOR_VERSION = 0;
 	public static final int MINOR_VERSION = 9;
-	public static final int REVISION_VERSION = 2;
+	public static final int REVISION_VERSION = 3;
 	
 	public static final String VERSION = MAJOR_VERSION+"."+MINOR_VERSION+"."+REVISION_VERSION;
 	
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
     
     //EU to Watts ratio
-  	public static final float IC2_RATIO = (float)UEConfig.getConfigData(CONFIGURATION, "IndustrialCraft Conversion Ratio", 10);
+  	public static final float IC2_RATIO = (float)UEConfig.getConfigData(CONFIGURATION, "IndustrialCraft Conversion Ratio", 7);
   	
   	//MJ to Watts ratio.
-  	public static final float BC3_RATIO = (float)UEConfig.getConfigData(CONFIGURATION, "BuildCraft Conversion Ratio", 100);;
+  	public static final float BC3_RATIO = (float)UEConfig.getConfigData(CONFIGURATION, "BuildCraft Conversion Ratio", 85);;
   	
   	public static final float TO_IC2_RATIO = 1/IC2_RATIO;
   	
