@@ -15,6 +15,7 @@ import universalelectricity.BasicComponents;
 import universalelectricity.Ticker;
 import universalelectricity.UEConfig;
 import universalelectricity.UniversalElectricity;
+import universalelectricity.basiccomponents.multiblock.BlockMulti;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.UEDamageSource;
 import universalelectricity.network.ConnectionHandler;
@@ -83,6 +84,7 @@ public class UELoader implements ICraftingHandler
 	    BasicComponents.oilMoving = new BlockOilFlowing(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Flowing", BasicComponents.BLOCK_ID_PREFIX + 2));
 	    BasicComponents.oilStill = new BlockOilStill(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Still", BasicComponents.BLOCK_ID_PREFIX + 3));
 	    BasicComponents.blockMachine = new BlockBasicMachine(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Basic Machine", BasicComponents.BLOCK_ID_PREFIX + 4), 0);
+	    BasicComponents.blockMulti = new BlockMulti(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "MultiBlock", BasicComponents.BLOCK_ID_PREFIX + 5), 0);
 	    
 	    BasicComponents.itemBattery = new ItemBattery(UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Battery", BasicComponents.ITEM_ID_PREFIX+1), 0);
 	    BasicComponents.itemWrench = new ItemWrench(UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Universal Wrench", BasicComponents.ITEM_ID_PREFIX+2), 20);
@@ -122,6 +124,7 @@ public class UELoader implements ICraftingHandler
 		GameRegistry.registerBlock(BasicComponents.blockCopperWire, ItemCopperWire.class);
 		GameRegistry.registerBlock(BasicComponents.oilMoving);
 		GameRegistry.registerBlock(BasicComponents.oilStill);
+		GameRegistry.registerBlock(BasicComponents.blockMulti);
 		GameRegistry.registerCraftingHandler(this);
 		
 		OreDictionary.registerOre("ingotCopper", BasicComponents.itemCopperIngot);
