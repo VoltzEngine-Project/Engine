@@ -11,13 +11,14 @@ import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.BasicComponents;
+import universalelectricity.UniversalElectricity;
 import universalelectricity.prefab.Vector3;
 
 public class BlockMulti extends BlockContainer
 {
-    public BlockMulti(int par1, int par2)
+    public BlockMulti(int id, int par2)
     {
-        super(par1, Material.wood);
+        super(id, UniversalElectricity.machine);
         this.setHardness(0.8F);
         this.setBlockName("MultiBlock");
     }
@@ -25,13 +26,13 @@ public class BlockMulti extends BlockContainer
     public static void makeInvisibleBlock(World worldObj, Vector3 position, Vector3 mainBlock)
     {
 		worldObj.setBlockWithNotify(position.intX(), position.intY(), position.intZ(), BasicComponents.blockMulti.blockID);
-		((TileEntityMultiBlock)worldObj.getBlockTileEntity(position.intX(), position.intY(), position.intZ())).setMainBlock(mainBlock);
+		((TileEntityMulti)worldObj.getBlockTileEntity(position.intX(), position.intY(), position.intZ())).setMainBlock(mainBlock);
     }
 
     @Override
     public void breakBlock(World par1World, int x, int y, int z, int par5, int par6)
     {
-    	TileEntityMultiBlock tileEntity = (TileEntityMultiBlock)par1World.getBlockTileEntity(x, y, z);
+    	TileEntityMulti tileEntity = (TileEntityMulti)par1World.getBlockTileEntity(x, y, z);
     	tileEntity.onBlockRemoval();
     	super.breakBlock(par1World, x, y, z, par5, par6);
     }
@@ -44,7 +45,7 @@ public class BlockMulti extends BlockContainer
     @Override
 	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
     {
-    	TileEntityMultiBlock tileEntity = (TileEntityMultiBlock)par1World.getBlockTileEntity(x, y, z);
+    	TileEntityMulti tileEntity = (TileEntityMulti)par1World.getBlockTileEntity(x, y, z);
     	return tileEntity.onBlockActivated(par1World, x, y, z, par5EntityPlayer);
     }
     
@@ -78,14 +79,14 @@ public class BlockMulti extends BlockContainer
 	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
-    	return new TileEntityMultiBlock();
+    	return new TileEntityMulti();
 	}
 
 	@Override
     public ItemStack getPickBlock(MovingObjectPosition target, World par1World, int x, int y, int z)
     {
 		TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
-		Vector3 mainBlockPosition = ((TileEntityMultiBlock)tileEntity).mainBlockPosition;
+		Vector3 mainBlockPosition = ((TileEntityMulti)tileEntity).mainBlockPosition;
 
 		if(mainBlockPosition != null)
 		{

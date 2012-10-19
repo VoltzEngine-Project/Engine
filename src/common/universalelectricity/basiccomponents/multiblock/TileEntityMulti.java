@@ -15,22 +15,14 @@ import universalelectricity.prefab.Vector3;
 import com.google.common.io.ByteArrayDataInput;
 
 /**
- * This is an invisible block to be used for blocks that are bigger than one block.
+ * This is a multiblock to be used for blocks that are bigger than one block.
  * @author Calclavia
  *
  */
-public class TileEntityMultiBlock extends TileEntity implements IPacketReceiver
+public class TileEntityMulti extends TileEntity implements IPacketReceiver
 {
 	//The the position of the main block
 	public Vector3 mainBlockPosition;
-
-    public void updateEntity()
-    {
-		if(!this.worldObj.isRemote && mainBlockPosition != null)
-		{
-			PacketManager.sendPacketToClients(this.getDescriptionPacket());
-    	}
-    }
 
 	public void setMainBlock(Vector3 mainBlock)
 	{

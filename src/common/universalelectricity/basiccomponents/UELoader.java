@@ -16,6 +16,7 @@ import universalelectricity.Ticker;
 import universalelectricity.UEConfig;
 import universalelectricity.UniversalElectricity;
 import universalelectricity.basiccomponents.multiblock.BlockMulti;
+import universalelectricity.basiccomponents.multiblock.TileEntityMulti;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.UEDamageSource;
 import universalelectricity.network.ConnectionHandler;
@@ -161,9 +162,10 @@ public class UELoader implements ICraftingHandler
 		/**
 		 * Registering Tile Entities
 		 */
-		GameRegistry.registerTileEntity(TileEntityBatteryBox.class, "TileEntityBatteryBox");
-		GameRegistry.registerTileEntity(TileEntityCoalGenerator.class, "TileEntityCoalGenerator");
-		GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, "TileEntityElectricFurnace");	
+		GameRegistry.registerTileEntity(TileEntityBatteryBox.class, "UEBatteryBox");
+		GameRegistry.registerTileEntity(TileEntityCoalGenerator.class, "UECoalGenerator");
+		GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, "UEElectricFurnace");	
+		GameRegistry.registerTileEntity(TileEntityMulti.class, "UEMultiBlock");	
 		
 		BasicComponents.copperOreGeneration.enable();
 		BasicComponents.tinOreGeneration.enable();
