@@ -147,15 +147,22 @@ public class ElectricityManager
      */
     public void cleanUpConnections()
     {
-        for (int i = 0; i < this.electricityNetworks.size(); i++)
-        {
-        	this.electricityNetworks.get(i).cleanUpArray();
-
-            if (this.electricityNetworks.get(i).conductors.size() == 0)
+    	try
+    	{
+    		for (int i = 0; i < this.electricityNetworks.size(); i++)
             {
-            	this.electricityNetworks.remove(i);
+            	this.electricityNetworks.get(i).cleanUpArray();
+
+                if (this.electricityNetworks.get(i).conductors.size() == 0)
+                {
+                	this.electricityNetworks.remove(i);
+                }
             }
-        }
+    	}
+    	catch(Exception e)
+    	{
+    		FMLLog.severe("Failed to clean up wire connections!");
+    	}
     }
 
     /**
