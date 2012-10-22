@@ -106,19 +106,23 @@ public class ElectricityManager
     public void splitConnection(IConductor conductorA, IConductor conductorB)
     {
         ElectricityNetwork connection = getConnectionByID(conductorA.getConnectionID());
-        connection.cleanUpArray();
-
-        for(IConductor conductor : connection.conductors)
-        {
-            conductor.reset();
-        }
         
-        for(IConductor conductor : connection.conductors)
+        if(connection != null)
         {
-            for (byte i = 0; i < 6; i++)
-            {
-                conductor.updateConnectionWithoutSplit(Vector3.getConnectorFromSide(conductor.getWorld(), new Vector3(((TileEntity)conductor).xCoord, ((TileEntity)conductor).yCoord, ((TileEntity)conductor).zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
-            }
+	        connection.cleanUpArray();
+	
+	        for(IConductor conductor : connection.conductors)
+	        {
+	            conductor.reset();
+	        }
+	        
+	        for(IConductor conductor : connection.conductors)
+	        {
+	            for (byte i = 0; i < 6; i++)
+	            {
+	                conductor.updateConnectionWithoutSplit(Vector3.getConnectorFromSide(conductor.getWorld(), new Vector3(((TileEntity)conductor).xCoord, ((TileEntity)conductor).yCoord, ((TileEntity)conductor).zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+	            }
+	        }
         }
     }
 

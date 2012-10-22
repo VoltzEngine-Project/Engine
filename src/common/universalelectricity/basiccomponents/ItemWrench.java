@@ -17,7 +17,7 @@ public class ItemWrench extends ItemBasic implements ICrowbar, IToolWrench
     {
         super("Universal Wrench", id, texture);
         this.setMaxStackSize(1);
-        this.setMaxDamage(500);
+        this.setMaxDamage(2000);
         this.setCreativeTab(CreativeTabs.tabTools);
     }
     
