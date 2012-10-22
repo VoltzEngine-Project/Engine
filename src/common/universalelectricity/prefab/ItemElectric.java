@@ -40,7 +40,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
      * information to your item, you can super.addInformation() to keep the electiricty info in the item info bar.
      */
     @Override
-    public void addInformation(ItemStack par1ItemStack, List par2List)
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
     {
         String color = "";
         double joules = this.getJoules(par1ItemStack);
@@ -58,7 +58,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
             color = "\u00a76";
         }
 
-        par2List.add(color + ElectricInfo.getDisplay(joules, ElectricUnit.JOULES) + " - " + Math.round((joules / this.getMaxJoules()) * 100) + "%");
+        par3List.add(color + ElectricInfo.getDisplay(joules, ElectricUnit.JOULES) + " - " + Math.round((joules / this.getMaxJoules()) * 100) + "%");
     }
 
     /**

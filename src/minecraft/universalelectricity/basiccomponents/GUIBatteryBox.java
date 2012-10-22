@@ -28,7 +28,7 @@ public class GUIBatteryBox extends GuiContainer
      * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */
     @Override
-    protected void drawGuiContainerForegroundLayer()
+    protected void drawGuiContainerForegroundLayer(int par1, int par2)
     {
         this.fontRenderer.drawString(this.tileEntity.getInvName(), 65, 6, 4210752);
         String displayWattHours = ElectricInfo.getDisplayShort(tileEntity.getJoules(), ElectricUnit.JOULES);

@@ -53,7 +53,7 @@ public class ContainerElectricFurnace extends Container
      * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
     @Override
-    public ItemStack transferStackInSlot(int par1)
+    public ItemStack func_82846_b(EntityPlayer par1EntityPlayer, int par1)
     {
         ItemStack var2 = null;
         Slot var3 = (Slot)this.inventorySlots.get(par1);
@@ -119,7 +119,7 @@ public class ContainerElectricFurnace extends Container
                 return null;
             }
 
-            var3.onPickupFromSlot(var4);
+            var3.func_82870_a(par1EntityPlayer, var4);
         }
 
         return var2;

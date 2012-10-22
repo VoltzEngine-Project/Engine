@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.NetworkManager;
+import net.minecraft.src.INetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
@@ -214,7 +214,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	}
 	
 	@Override
-	public void onPacketData(NetworkManager network, Packet250CustomPayload packet, Player player)
+	public void onPacketData(INetworkManager network, Packet250CustomPayload packet, Player player)
 	{
 		try
         {
@@ -257,7 +257,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	}
 
 	@Override
-	public void handlePacketData(NetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 
 	}

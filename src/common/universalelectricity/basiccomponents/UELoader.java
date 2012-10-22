@@ -71,7 +71,7 @@ public class UELoader implements ICraftingHandler
     @PreInit
 	public void preInit(FMLPreInitializationEvent event)
     {	
-		UniversalElectricity.forgeLock(4, 1, 4);
+		UniversalElectricity.forgeLock(5, 0, 0);
    		GameRegistry.registerWorldGenerator(new OreGenerator());
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 		
