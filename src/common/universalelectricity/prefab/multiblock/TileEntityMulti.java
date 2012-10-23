@@ -10,7 +10,6 @@ import net.minecraft.src.World;
 import universalelectricity.core.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import basiccomponents.BCLoader;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -38,7 +37,7 @@ public class TileEntityMulti extends TileEntity implements IPacketReceiver
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(BCLoader.CHANNEL, this, this.mainBlockPosition.x, this.mainBlockPosition.y, this.mainBlockPosition.z);
+		return PacketManager.getPacket("BasicComponents", this, this.mainBlockPosition.x, this.mainBlockPosition.y, this.mainBlockPosition.z);
 	}
 
 	public void onBlockRemoval()
