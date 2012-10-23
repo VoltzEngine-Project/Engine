@@ -9,8 +9,8 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import universalelectricity.UniversalElectricity;
-import universalelectricity.Vector3;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.Vector3;
 
 public class BlockMulti extends BlockContainer
 {

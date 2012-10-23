@@ -8,8 +8,8 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-import universalelectricity.UEConfig;
-import universalelectricity.UniversalElectricity;
+import universalelectricity.core.UEConfig;
+import universalelectricity.core.UniversalElectricity;
 
 /**
  * This class is used for storing ore generation data. If you are too lazy to

@@ -8,7 +8,7 @@ import universalelectricity.implement.IDisableable;
  * 
  * @author Calclavia
  */
-public abstract class TileEntityDisableable extends AdvancedTile implements IDisableable
+public abstract class TileEntityDisableable extends TileEntityAdvanced implements IDisableable
 {
 	protected int disabledTicks = 0;
 

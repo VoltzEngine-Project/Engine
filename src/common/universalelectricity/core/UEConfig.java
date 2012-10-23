@@ -1,4 +1,4 @@
-package universalelectricity;
+package universalelectricity.core;
 
 import net.minecraftforge.common.Configuration;
 

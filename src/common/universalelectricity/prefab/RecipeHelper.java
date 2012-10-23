@@ -7,7 +7,7 @@ import net.minecraft.src.CraftingManager;
 import net.minecraft.src.IRecipe;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.Configuration;
-import universalelectricity.UEConfig;
+import universalelectricity.core.UEConfig;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /**

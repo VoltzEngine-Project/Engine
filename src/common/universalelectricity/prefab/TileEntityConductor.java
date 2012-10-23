@@ -6,7 +6,7 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.Vector3;
+import universalelectricity.core.Vector3;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.electricity.ElectricityNetwork;
 import universalelectricity.implement.IConductor;
@@ -22,7 +22,7 @@ import com.google.common.io.ByteArrayDataInput;
  * @author Calclavia
  * 
  */
-public abstract class TileEntityConductor extends AdvancedTile implements IConductor, IPacketReceiver
+public abstract class TileEntityConductor extends TileEntityAdvanced implements IConductor, IPacketReceiver
 {
 	private ElectricityNetwork network;
 
