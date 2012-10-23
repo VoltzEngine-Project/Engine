@@ -339,7 +339,7 @@ public class ElectricityManager
 		}
 		catch (Exception e)
 		{
-			FMLLog.severe("Failed to refresh conductors.");
+			FMLLog.fine("Failed to refresh conductors.");
 		}
 	}
 
