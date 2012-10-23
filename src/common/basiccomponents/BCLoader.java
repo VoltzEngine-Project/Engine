@@ -128,6 +128,7 @@ public class BCLoader implements ICraftingHandler
 	     */
 	    OreDictionary.registerOre("oreCopper", new ItemStack(BasicComponents.blockBasicOre, 0));
 	    OreDictionary.registerOre("oreTin", new ItemStack(BasicComponents.blockBasicOre, 0));
+		OreDictionary.registerOre("copperWire", BasicComponents.blockCopperWire);
 	    
 		OreDictionary.registerOre("coalGenerator", BasicComponents.coalGenerator);
 		OreDictionary.registerOre("batteryBox", BasicComponents.batteryBox);
@@ -135,12 +136,15 @@ public class BCLoader implements ICraftingHandler
 
 		OreDictionary.registerOre("battery", BasicComponents.itemBattery);
 		OreDictionary.registerOre("wrench", BasicComponents.itemWrench);
+		OreDictionary.registerOre("motor", BasicComponents.itemMotor);
+		
 		OreDictionary.registerOre("basicCircuit", new ItemStack(BasicComponents.itemCircuit, 1, 0));
 		OreDictionary.registerOre("advancedCircuit", new ItemStack(BasicComponents.itemCircuit, 1, 1));
 		OreDictionary.registerOre("eliteCircuit", new ItemStack(BasicComponents.itemCircuit, 1, 2));
 		
 		OreDictionary.registerOre("oilMoving", BasicComponents.oilMoving);
 		OreDictionary.registerOre("oilStill", BasicComponents.oilStill);
+		OreDictionary.registerOre("oilBucket", BasicComponents.itemOilBucket);
 
 		OreDictionary.registerOre("ingotCopper", BasicComponents.itemCopperIngot);
 		OreDictionary.registerOre("ingotTin", BasicComponents.itemTinIngot);
