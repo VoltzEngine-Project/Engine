@@ -14,7 +14,7 @@ import universalelectricity.core.Vector3;
 
 public class BlockMulti extends BlockContainer
 {
-	public BlockMulti(int id, int par2)
+	public BlockMulti(int id)
 	{
 		super(id, UniversalElectricity.machine);
 		this.setHardness(0.8F);
