@@ -6,6 +6,7 @@ import net.minecraft.src.ItemBucket;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.World;
+import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import basiccomponents.BasicComponents;
@@ -42,7 +43,7 @@ public class ItemOilBucket extends ItemBucket
 				worldObj.setBlockWithNotify(position.blockX, position.blockY, position.blockZ, 0);
 				event.result = new ItemStack(BasicComponents.itemOilBucket);
 				event.current.stackSize --;
-				event.setHandeled();
+				event.setResult(Result.ALLOW);
 			}
     	}
     }

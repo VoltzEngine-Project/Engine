@@ -68,7 +68,6 @@ public class BCLoader implements ICraftingHandler
     @PreInit
 	public void preInit(FMLPreInitializationEvent event)
     {
-		UniversalElectricity.forgeLock(5, 0, 0);
 		UniversalElectricity.register(this, 1, 0, 0, false);
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 		
