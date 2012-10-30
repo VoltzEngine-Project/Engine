@@ -21,5 +21,5 @@ public interface IJouleStorage
 	/**
 	 * Gets the maximum amount of joules this unit can store.
 	 */
-	public double getMaxJoules();
+	public double getMaxJoules(Object... data);
 }
