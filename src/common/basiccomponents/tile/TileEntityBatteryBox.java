@@ -465,7 +465,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	}
 
 	@Override
-	public double getMaxJoules()
+	public double getMaxJoules(Object... data)
 	{
 		return 3000000;
 	}
