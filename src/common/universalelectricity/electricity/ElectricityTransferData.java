@@ -15,11 +15,14 @@ public class ElectricityTransferData
 
 	/**
 	 * @param sender
-	 *            - Tile that's sending electricity.
+	 *            - Tile that's sending
+	 *            electricity.
 	 * @param receiver
-	 *            - Receiver that's receiving electricity
+	 *            - Receiver that's receiving
+	 *            electricity
 	 * @param conductor
-	 *            - Conductor that is conducting the electricity
+	 *            - Conductor that is conducting
+	 *            the electricity
 	 * @param side
 	 *            -
 	 * @param amps

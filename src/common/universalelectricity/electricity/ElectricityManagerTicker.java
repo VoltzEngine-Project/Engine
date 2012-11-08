@@ -28,7 +28,7 @@ public class ElectricityManagerTicker implements ITickHandler
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		
+
 	}
 
 	@Override

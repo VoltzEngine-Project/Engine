@@ -9,9 +9,11 @@ public abstract class CustomPotion extends Potion
 	 * Creates a new type of potion
 	 * 
 	 * @param id
-	 *            - The ID of this potion. Make it greater than 20.
+	 *            - The ID of this potion. Make it
+	 *            greater than 20.
 	 * @param isBadEffect
-	 *            - Is this potion a good potion or a bad one?
+	 *            - Is this potion a good potion
+	 *            or a bad one?
 	 * @param color
 	 *            - The color of this potion.
 	 * @param name
@@ -32,7 +34,8 @@ public abstract class CustomPotion extends Potion
 	}
 
 	/**
-	 * You must register all your potion effects during mod initialization!
+	 * You must register all your potion effects
+	 * during mod initialization!
 	 */
 	public void register()
 	{

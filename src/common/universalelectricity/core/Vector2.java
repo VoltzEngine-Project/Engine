@@ -3,10 +3,11 @@ package universalelectricity.core;
 import net.minecraft.src.MathHelper;
 
 /**
- * Vector2 Class is used for defining objects in a 2D space. Vector2 makes it
- * easier to handle the coordinates of objects. Instead of fumbling with x and y
- * variables, all x and y variables are stored in one class. Vector3.x,
- * Vector3.y.
+ * Vector2 Class is used for defining objects in a
+ * 2D space. Vector2 makes it easier to handle the
+ * coordinates of objects. Instead of fumbling
+ * with x and y variables, all x and y variables
+ * are stored in one class. Vector3.x, Vector3.y.
  * 
  * @author Calclavia
  */
@@ -45,7 +46,8 @@ public class Vector2 implements Cloneable
 	}
 
 	/**
-	 * Makes a new copy of this Vector. Prevents variable referencing problems.
+	 * Makes a new copy of this Vector. Prevents
+	 * variable referencing problems.
 	 */
 	@Override
 	public Vector2 clone()

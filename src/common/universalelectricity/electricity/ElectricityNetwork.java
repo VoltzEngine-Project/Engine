@@ -29,8 +29,8 @@ public class ElectricityNetwork
 	}
 
 	/**
-	 * Get only the electric units that can receive electricity from the given
-	 * side.
+	 * Get only the electric units that can
+	 * receive electricity from the given side.
 	 */
 	public List<IElectricityReceiver> getConnectedReceivers()
 	{
@@ -108,9 +108,10 @@ public class ElectricityNetwork
 
 		return lowestAmp;
 	}
-	
+
 	/**
-	 * This function is called to refresh all conductors in this network
+	 * This function is called to refresh all
+	 * conductors in this network
 	 */
 	public void refreshConductors()
 	{

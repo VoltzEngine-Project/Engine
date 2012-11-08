@@ -12,10 +12,11 @@ import universalelectricity.core.UEConfig;
 import universalelectricity.core.UniversalElectricity;
 
 /**
- * This class is used for storing ore generation data. If you are too lazy to
- * generate your own ores, you can do
- * {@link #OreGenerator.ORES_TO_GENERATE.add()} to add your ore to the list of
- * ores to generate.
+ * This class is used for storing ore generation
+ * data. If you are too lazy to generate your own
+ * ores, you can do
+ * {@link #OreGenerator.ORES_TO_GENERATE.add()} to
+ * add your ore to the list of ores to generate.
  * 
  * @author Calclavia
  * 
@@ -37,31 +38,39 @@ public abstract class OreGenBase
 	public int oreMeta;
 
 	/**
-	 * What harvest level does this machine need to be acquired?
+	 * What harvest level does this machine need
+	 * to be acquired?
 	 */
 	public int harvestLevel;
 
 	/**
-	 * The predefined tool classes are "pickaxe", "shovel", "axe". You can add
-	 * others for custom tools.
+	 * The predefined tool classes are "pickaxe",
+	 * "shovel", "axe". You can add others for
+	 * custom tools.
 	 */
 	public String harvestTool;
 
 	/**
 	 * @param name
-	 *            - The name of the ore for display
+	 *            - The name of the ore for
+	 *            display
 	 * @param textureFile
-	 *            - The 16x16 png texture of your ore to override
+	 *            - The 16x16 png texture of your
+	 *            ore to override
 	 * @param minGenerateLevel
-	 *            - The highest generation level of your ore
+	 *            - The highest generation level
+	 *            of your ore
 	 * @param maxGenerateLevel
-	 *            - The lowest generation level of your ore
+	 *            - The lowest generation level of
+	 *            your ore
 	 * @param amountPerChunk
-	 *            - The amount of ores to generate per chunk
+	 *            - The amount of ores to generate
+	 *            per chunk
 	 * @param amountPerBranch
-	 *            - The amount of ores to generate in a clutter. E.g coal
-	 *            generates with a lot of other coal next to it. How much do you
-	 *            want?
+	 *            - The amount of ores to generate
+	 *            in a clutter. E.g coal generates
+	 *            with a lot of other coal next to
+	 *            it. How much do you want?
 	 */
 	public OreGenBase(String name, String oreDiectionaryName, ItemStack stack, String harvestTool, int harvestLevel)
 	{
@@ -84,14 +93,16 @@ public abstract class OreGenBase
 		return this;
 	}
 
-	// You may inherit from this class and change this function if you want a
+	// You may inherit from this class and change
+	// this function if you want a
 	// custom texture render for your ore.
 	public int getBlockTextureFromSide(int side)
 	{
 		return this.blockIndexTexture;
 	}
 
-	// Checks the config file and see if Universal Electricity should generate
+	// Checks the config file and see if Universal
+	// Electricity should generate
 	// this ore
 	private static boolean shouldGenerateOre(String oreName)
 	{

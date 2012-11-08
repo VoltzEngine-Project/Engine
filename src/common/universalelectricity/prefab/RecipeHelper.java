@@ -11,9 +11,11 @@ import universalelectricity.core.UEConfig;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
- * This class is used to replace recipes that are already added in the existing
- * recipe pool for crafting and smelting. All recipe functions take account of
- * the Forge Ore Dictionary. It also includes some recipe helper functions to
+ * This class is used to replace recipes that are
+ * already added in the existing recipe pool for
+ * crafting and smelting. All recipe functions
+ * take account of the Forge Ore Dictionary. It
+ * also includes some recipe helper functions to
  * shorten some of your function calls.
  * 
  * @author Calclavia
@@ -24,21 +26,21 @@ public class RecipeHelper
 	public static List<IRecipe> getRecipesByOutput(ItemStack output)
 	{
 		List<IRecipe> list = new ArrayList<IRecipe>();
-		
+
 		for (Object obj : CraftingManager.getInstance().getRecipeList())
 		{
 			if (obj instanceof IRecipe)
 			{
 				if (((IRecipe) obj).getRecipeOutput() == output)
 				{
-					list.add((IRecipe)obj);
+					list.add((IRecipe) obj);
 				}
 			}
 		}
 
 		return list;
 	}
-	
+
 	public static boolean replaceRecipe(IRecipe recipe, IRecipe newRecipe)
 	{
 		for (Object obj : CraftingManager.getInstance().getRecipeList())
@@ -75,8 +77,9 @@ public class RecipeHelper
 	}
 
 	/**
-	 * Use this function if you want to check if the recipe is allowed in the
-	 * configuration file.
+	 * Use this function if you want to check if
+	 * the recipe is allowed in the configuration
+	 * file.
 	 */
 	public static void addRecipe(IRecipe recipe, String name, Configuration config, boolean defaultBoolean)
 	{

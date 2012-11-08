@@ -1,7 +1,8 @@
 package universalelectricity.implement;
 
 /**
- * This should be applied on tile entities that can provide redstone power
+ * This should be applied on tile entities that
+ * can provide redstone power
  * 
  * @author Henry
  * 

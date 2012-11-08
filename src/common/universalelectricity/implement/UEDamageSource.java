@@ -11,7 +11,8 @@ public class UEDamageSource extends DamageSource
 	public static final List<UEDamageSource> damageSources = new ArrayList<UEDamageSource>();
 
 	/**
-	 * Use this damage source for all types of electrical attacks.
+	 * Use this damage source for all types of
+	 * electrical attacks.
 	 */
 	public static final UEDamageSource electrocution = (UEDamageSource) new UEDamageSource("electrocution", "%1$s got electrocuted!").setDamageBypassesArmor();
 
