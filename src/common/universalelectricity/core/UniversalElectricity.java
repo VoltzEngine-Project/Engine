@@ -38,7 +38,7 @@ public class UniversalElectricity
 	 */
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 0;
-	public static final int REVISION_VERSION = 0;
+	public static final int REVISION_VERSION = 1;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	/**
@@ -63,9 +63,9 @@ public class UniversalElectricity
 	 * blocks. It can be breakable by hand.
 	 */
 	public static final Material machine = new Material(MapColor.ironColor);
-
+	
 	public static final List<Object> mods = new ArrayList<Object>();
-
+	
 	/**
 	 * You must register your mod with Universal
 	 * Electricity. Call this in your mod's
