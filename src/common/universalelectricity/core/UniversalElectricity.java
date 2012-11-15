@@ -37,8 +37,8 @@ public class UniversalElectricity
 	 * API.
 	 */
 	public static final int MAJOR_VERSION = 1;
-	public static final int MINOR_VERSION = 0;
-	public static final int REVISION_VERSION = 1;
+	public static final int MINOR_VERSION = 1;
+	public static final int REVISION_VERSION = 0;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	/**

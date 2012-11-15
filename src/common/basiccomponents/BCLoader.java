@@ -68,7 +68,7 @@ public class BCLoader implements ICraftingHandler
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		UniversalElectricity.register(this, 1, 0, 0, false);
+		UniversalElectricity.register(this, UniversalElectricity.MAJOR_VERSION, UniversalElectricity.MINOR_VERSION, UniversalElectricity.REVISION_VERSION, false);
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
 		/**
@@ -183,6 +183,7 @@ public class BCLoader implements ICraftingHandler
 		LanguageRegistry.addName(new ItemStack(BasicComponents.itemCircuit, 1, 1), "Advanced Circuit");
 		LanguageRegistry.addName(new ItemStack(BasicComponents.itemCircuit, 1, 2), "Elite Circuit");
 		LanguageRegistry.addName(BasicComponents.itemOilBucket, "Oil Bucket");
+		LanguageRegistry.addName(BasicComponents.itemWrench, "Universal Wrench");
 
 		LanguageRegistry.addName(BasicComponents.coalGenerator, "Coal Generator");
 		LanguageRegistry.addName(BasicComponents.batteryBox, "Battery Box");
