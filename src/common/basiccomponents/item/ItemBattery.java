@@ -1,6 +1,7 @@
 package basiccomponents.item;
 
 import universalelectricity.prefab.ItemElectric;
+import universalelectricity.prefab.UETab;
 import basiccomponents.BasicComponents;
 
 public class ItemBattery extends ItemElectric
@@ -10,6 +11,7 @@ public class ItemBattery extends ItemElectric
         super(par1);
         this.iconIndex = par2;
         this.setItemName("Battery");
+        this.setCreativeTab(UETab.INSTANCE);
     }
 
     @Override

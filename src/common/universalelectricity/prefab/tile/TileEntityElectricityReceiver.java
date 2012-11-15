@@ -1,4 +1,4 @@
-package universalelectricity.prefab;
+package universalelectricity.prefab.tile;
 
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.implement.IElectricityReceiver;

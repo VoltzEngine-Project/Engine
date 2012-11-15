@@ -1,4 +1,4 @@
-package universalelectricity.prefab;
+package universalelectricity.prefab.tile;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.INetworkManager;

@@ -15,9 +15,9 @@ import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.implement.IItemElectric;
-import universalelectricity.prefab.TileEntityElectricityReceiver;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import basiccomponents.BCLoader;
 import basiccomponents.block.BlockBasicMachine;
 

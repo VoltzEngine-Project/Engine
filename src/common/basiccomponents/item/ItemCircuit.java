@@ -3,18 +3,24 @@ package basiccomponents.item;
 import java.util.List;
 
 import net.minecraft.src.CreativeTabs;
+import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import universalelectricity.prefab.UETab;
+import basiccomponents.BasicComponents;
 
-public class ItemCircuit extends ItemBasic
+public class ItemCircuit extends Item
 {
     private String[] names = new String[] {"Basic Circuit", "Adavanced Circuit", "Elite Circuit"};
 
     public ItemCircuit(int id, int texture)
     {
-        super("Circuit", id, texture);
+        super(id);
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
-        this.setCreativeTab(CreativeTabs.tabMaterials);
+        this.setCreativeTab(UETab.INSTANCE);
+        this.setItemName("Circuit");
+        this.setIconIndex(texture);
+        this.setTextureFile(BasicComponents.ITEM_TEXTURE_FILE);
     }
 
     @Override

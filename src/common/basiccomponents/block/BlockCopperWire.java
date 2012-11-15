@@ -1,10 +1,10 @@
 package basiccomponents.block;
 
-import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.prefab.BlockConductor;
+import universalelectricity.prefab.UETab;
 import basiccomponents.BasicComponents;
 import basiccomponents.tile.TileEntityCopperWire;
 
@@ -19,7 +19,7 @@ public class BlockCopperWire extends BlockConductor
         this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
         this.setRequiresSelfNotify();
         this.blockIndexInTexture = 19;
-        this.setCreativeTab(CreativeTabs.tabRedstone);
+        this.setCreativeTab(UETab.INSTANCE);
     }
 
     /**

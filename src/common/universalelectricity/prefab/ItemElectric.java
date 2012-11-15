@@ -24,18 +24,12 @@ import universalelectricity.implement.IItemElectric;
  */
 public abstract class ItemElectric extends Item implements IItemElectric
 {
-	public ItemElectric(int id, CreativeTabs tabs)
+	public ItemElectric(int id)
 	{
 		super(id);
 		this.setMaxStackSize(1);
 		this.setMaxDamage((int) this.getMaxJoules());
 		this.setNoRepair();
-		this.setCreativeTab(tabs);
-	}
-
-	public ItemElectric(int id)
-	{
-		this(id, CreativeTabs.tabTools);
 	}
 
 	/**

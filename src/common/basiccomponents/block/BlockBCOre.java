@@ -6,6 +6,7 @@ import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
+import universalelectricity.prefab.UETab;
 import basiccomponents.BasicComponents;
 
 public class BlockBCOre extends Block
@@ -13,7 +14,7 @@ public class BlockBCOre extends Block
 	public BlockBCOre(int id)
 	{
 		super(id, 14, Material.rock);
-        this.setCreativeTab(CreativeTabs.tabBlock);
+        this.setCreativeTab(UETab.INSTANCE);
         this.setBlockName("BCOre");
         this.setHardness(2f);
 	}

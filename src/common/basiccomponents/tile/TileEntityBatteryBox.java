@@ -28,9 +28,9 @@ import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.prefab.TileEntityElectricityReceiver;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import basiccomponents.BCLoader;
 import basiccomponents.block.BlockBasicMachine;
 import buildcraft.api.power.IPowerProvider;
@@ -247,7 +247,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 			}
 		}
 
-		this.setJoules(this.joules - 0.1);
+		this.setJoules(this.joules - 0.00000000000001);
 		
 		if (!this.worldObj.isRemote)
 		{

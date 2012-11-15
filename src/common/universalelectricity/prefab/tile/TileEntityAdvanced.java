@@ -1,4 +1,4 @@
-package universalelectricity.prefab;
+package universalelectricity.prefab.tile;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;

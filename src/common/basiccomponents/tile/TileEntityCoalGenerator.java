@@ -15,9 +15,9 @@ import universalelectricity.core.electricity.ElectricityManager;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityProducer;
-import universalelectricity.prefab.TileEntityDisableable;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.tile.TileEntityDisableable;
 import basiccomponents.BCLoader;
 import basiccomponents.block.BlockBasicMachine;
 

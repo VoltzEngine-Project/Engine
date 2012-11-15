@@ -17,6 +17,7 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.BlockMachine;
+import universalelectricity.prefab.UETab;
 import basiccomponents.BCLoader;
 import basiccomponents.BasicComponents;
 import basiccomponents.tile.TileEntityBatteryBox;
@@ -31,7 +32,7 @@ public class BlockBasicMachine extends BlockMachine
 	
     public BlockBasicMachine(int id, int textureIndex)
     {
-        super("Basic Machine", id, UniversalElectricity.machine, CreativeTabs.tabDecorations);
+        super("Basic Machine", id, UniversalElectricity.machine, UETab.INSTANCE);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();

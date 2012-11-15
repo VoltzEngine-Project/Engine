@@ -10,9 +10,9 @@ import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 import basiccomponents.tile.TileEntityCopperWire;
 
 
-public class ItemCopperWire extends ItemBlock
+public class ItemBlockCopperWire extends ItemBlock
 {
-	public ItemCopperWire(int id)
+	public ItemBlockCopperWire(int id)
     {
         super(id);
         this.setMaxDamage(0);

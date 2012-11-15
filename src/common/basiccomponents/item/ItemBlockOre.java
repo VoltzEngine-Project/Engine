@@ -3,11 +3,11 @@ package basiccomponents.item;
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ItemStack;
 
-public class ItemOre extends ItemBlock
+public class ItemBlockOre extends ItemBlock
 {
     private String[] ores = {"Copper Ore", "Tin Ore"};
 
-	public ItemOre(int id)
+	public ItemBlockOre(int id)
     {
         super(id);
         this.setMaxDamage(0);
