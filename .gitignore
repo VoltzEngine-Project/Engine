@@ -30,6 +30,7 @@ LICENSE.txt
 !/src/common/universalelectricity/
 !/src/common/mcmod.info
 !/resources/*
+!publish.bat
 !Include Resources.bat
 !/modversion.txt
 !/README
