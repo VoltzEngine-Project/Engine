@@ -63,9 +63,9 @@ public class UniversalElectricity
 	 * blocks. It can be breakable by hand.
 	 */
 	public static final Material machine = new Material(MapColor.ironColor);
-	
+
 	public static final List<Object> mods = new ArrayList<Object>();
-	
+
 	/**
 	 * You must register your mod with Universal
 	 * Electricity. Call this in your mod's

@@ -8,9 +8,9 @@ import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityManager;
 import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.implement.IConnector;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IConnector;
 import universalelectricity.prefab.network.IPacketReceiver;
 
 import com.google.common.io.ByteArrayDataInput;

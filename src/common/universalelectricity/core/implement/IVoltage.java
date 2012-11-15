@@ -1,4 +1,4 @@
-package universalelectricity.implement;
+package universalelectricity.core.implement;
 
 /**
  * Applies to all objects that has a voltage.

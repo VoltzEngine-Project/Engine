@@ -12,7 +12,7 @@ import net.minecraft.src.NBTTagFloat;
 import net.minecraft.src.World;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
-import universalelectricity.implement.IItemElectric;
+import universalelectricity.core.implement.IItemElectric;
 
 /**
  * Extend from this class if your item requires

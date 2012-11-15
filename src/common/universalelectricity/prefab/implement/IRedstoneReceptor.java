@@ -1,10 +1,9 @@
-package universalelectricity.implement;
+package universalelectricity.prefab.implement;
 
 /**
- * This interface should be applied onto
- * all tile entities that needs to receive
- * redstone power. Look at TileEntityBatteryBox
- * for reference.
+ * This interface should be applied onto all tile
+ * entities that needs to receive redstone power.
+ * Look at TileEntityBatteryBox for reference.
  * 
  * @author Calclavia
  * 

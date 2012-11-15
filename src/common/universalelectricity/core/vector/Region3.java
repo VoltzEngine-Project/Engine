@@ -37,7 +37,7 @@ public class Region3
 	{
 		return AxisAlignedBB.getBoundingBox(this.min.x, this.min.y, this.min.z, this.max.x, this.max.y, this.max.z);
 	}
-	
+
 	public Region2 toRegion2()
 	{
 		return new Region2(this.min.toVector2(), this.max.toVector2());
@@ -110,7 +110,7 @@ public class Region3
 
 		return vectors;
 	}
-	
+
 	/**
 	 * Returns all entities in this region.
 	 */
@@ -118,12 +118,12 @@ public class Region3
 	{
 		return world.getEntitiesWithinAABB(entityClass, this.toAABB());
 	}
-	
+
 	public List<Entity> getEntitiesExlude(World world, Entity entity)
 	{
 		return world.getEntitiesWithinAABBExcludingEntity(entity, this.toAABB());
 	}
-	
+
 	public List<Entity> getEntities(World world)
 	{
 		return this.getEntities(world, Entity.class);

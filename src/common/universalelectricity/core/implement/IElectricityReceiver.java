@@ -1,4 +1,4 @@
-package universalelectricity.implement;
+package universalelectricity.core.implement;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -6,7 +6,7 @@ import net.minecraftforge.common.ForgeDirection;
 /**
  * The IElectricityReceiver interface is an
  * interface that must be applied to all tile
- * entities that can input or output electricity.
+ * entities that can receive electricity.
  * 
  * @author Calclavia
  * 

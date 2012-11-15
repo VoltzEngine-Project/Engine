@@ -2,7 +2,7 @@ package universalelectricity.core.electricity;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.implement.IElectricityReceiver;
+import universalelectricity.core.implement.IElectricityReceiver;
 
 public class ElectricityTransferData
 {

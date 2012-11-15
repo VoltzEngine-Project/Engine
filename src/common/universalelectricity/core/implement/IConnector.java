@@ -1,9 +1,9 @@
-package universalelectricity.implement;
+package universalelectricity.core.implement;
 
 import net.minecraftforge.common.ForgeDirection;
 
 /**
- * Applied to TileEntities that can connect to UE
+ * Applied to a TileEntity that can connect to UE
  * wires.
  * 
  * @author Calclavia
@@ -12,7 +12,7 @@ import net.minecraftforge.common.ForgeDirection;
 public interface IConnector
 {
 	/**
-	 * Can this tile entity visually connect to a
+	 * Can this TileEntity visually connect to a
 	 * wire on this specific side?
 	 * 
 	 * @param side

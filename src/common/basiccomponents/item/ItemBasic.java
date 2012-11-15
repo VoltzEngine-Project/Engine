@@ -7,18 +7,18 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ItemBasic extends Item
 {
-    public ItemBasic(String name, int id, int texture)
-    {
-        super(id);
-        this.setIconIndex(texture);
-        this.setItemName(name);
-        this.setCreativeTab(UETab.INSTANCE);
-        LanguageRegistry.addName(this, name);
-    }
-    
-    @Override
-    public String getTextureFile()
-    {
-        return BasicComponents.ITEM_TEXTURE_FILE;
-    }
+	public ItemBasic(String name, int id, int texture)
+	{
+		super(id);
+		this.setIconIndex(texture);
+		this.setItemName(name);
+		this.setCreativeTab(UETab.INSTANCE);
+		LanguageRegistry.addName(this, name);
+	}
+
+	@Override
+	public String getTextureFile()
+	{
+		return BasicComponents.ITEM_TEXTURE_FILE;
+	}
 }

@@ -10,7 +10,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.implement.IConnector;
+import universalelectricity.core.implement.IConnector;
 
 /**
  * Vector3 Class is used for defining objects in a
@@ -77,12 +77,12 @@ public class Vector3 extends Vector2 implements Cloneable
 	/**
 	 * Vector3 Shortcut Functions
 	 */
-	
+
 	public static Vector3 get(Entity par1)
 	{
 		return new Vector3(par1.posX, par1.posY, par1.posZ);
 	}
-	
+
 	public static Vector3 get(TileEntity par1)
 	{
 		return new Vector3(par1.xCoord, par1.yCoord, par1.zCoord);
@@ -155,7 +155,7 @@ public class Vector3 extends Vector2 implements Cloneable
 	{
 		return Vec3.createVectorHelper(this.x, this.y, this.z);
 	}
-	
+
 	/**
 	 * Compares two vectors and see if they are
 	 * equal. True if so.
@@ -215,7 +215,7 @@ public class Vector3 extends Vector2 implements Cloneable
 		this.y += par1;
 		this.z += par1;
 	}
-	
+
 	public void subtract(Vector3 amount)
 	{
 		this.x -= amount.x;

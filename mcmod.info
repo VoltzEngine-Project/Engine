@@ -2,8 +2,8 @@
 {
   "modid": "BasicComponents",
   "name": "Basic Components",
-  "description": "Basic Components is a mod that adds some basic items and blocks to serve as a entry mod for the Universal Electricity mods.",
-  "version": "1.0.1",
+  "description": "Basic Components is a mod that adds some basic items and blocks to serve as an entry mod for the Universal Electricity mods.",
+  "version": "1.1.0",
   "mcversion": "1.4.2",
   "url": "http://calclavia.com/universalelectricity",
   "updateUrl": "http://calclavia.com/universalelectricity",

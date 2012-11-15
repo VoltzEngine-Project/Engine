@@ -1,6 +1,6 @@
 package universalelectricity.prefab.tile;
 
-import universalelectricity.implement.IDisableable;
+import universalelectricity.core.implement.IDisableable;
 
 /**
  * An easier way to implement the methods from

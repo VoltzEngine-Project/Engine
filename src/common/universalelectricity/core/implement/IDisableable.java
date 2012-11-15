@@ -1,4 +1,4 @@
-package universalelectricity.implement;
+package universalelectricity.core.implement;
 
 /**
  * This class should be applied to all tile

@@ -1,4 +1,4 @@
-package universalelectricity.implement;
+package universalelectricity.prefab.implement;
 
 /**
  * This interface should be applied to all things

@@ -1,4 +1,4 @@
-package universalelectricity.implement;
+package universalelectricity.prefab;
 
 import java.util.ArrayList;
 import java.util.List;

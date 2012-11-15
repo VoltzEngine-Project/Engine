@@ -1,7 +1,7 @@
 package universalelectricity.prefab.tile;
 
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.implement.IElectricityReceiver;
+import universalelectricity.core.implement.IElectricityReceiver;
 
 /**
  * An easier way to implement the methods from

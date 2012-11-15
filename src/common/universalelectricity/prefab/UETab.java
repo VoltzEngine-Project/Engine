@@ -3,7 +3,6 @@ package universalelectricity.prefab;
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.ItemStack;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class UETab extends CreativeTabs
@@ -28,10 +27,7 @@ public class UETab extends CreativeTabs
 	@Override
 	public ItemStack getIconItemStack()
 	{
-		if (itemStack == null)
-		{
-			return new ItemStack(Block.blocksList[this.getTabIconItemIndex()]);
-		}
+		if (itemStack == null) { return new ItemStack(Block.blocksList[this.getTabIconItemIndex()]); }
 
 		return itemStack;
 	}

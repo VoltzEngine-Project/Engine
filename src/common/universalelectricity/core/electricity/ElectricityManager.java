@@ -9,9 +9,9 @@ import java.util.Map;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.implement.IElectricityReceiver;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IElectricityReceiver;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.TickType;
 

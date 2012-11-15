@@ -5,8 +5,8 @@ import java.util.List;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IElectricityReceiver;
+import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.implement.IElectricityReceiver;
 
 public class ElectricityNetwork
 {

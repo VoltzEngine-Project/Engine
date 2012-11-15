@@ -3,7 +3,7 @@ package universalelectricity.prefab;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import universalelectricity.implement.IItemElectric;
+import universalelectricity.core.implement.IItemElectric;
 
 /**
  * This slot should be used by any container that

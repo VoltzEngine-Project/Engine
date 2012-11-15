@@ -12,13 +12,15 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BCCommonProxy implements IGuiHandler
 {
-	public void preInit() {}
-	
+	public void preInit()
+	{
+	}
+
 	public void init()
 	{
 		GameRegistry.registerTileEntity(TileEntityCopperWire.class, "TileEntityCopperWire");
 	}
-	
+
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
@@ -26,20 +28,23 @@ public class BCCommonProxy implements IGuiHandler
 	}
 
 	@Override
-	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) 
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		
+
 		if (tileEntity != null)
-        {
-			switch(ID)
+		{
+			switch (ID)
 			{
-				case 0: return new ContainerBatteryBox(player.inventory, ((TileEntityBatteryBox)tileEntity));
-				case 1: return new ContainerCoalGenerator(player.inventory, ((TileEntityCoalGenerator)tileEntity));
-				case 2: return new ContainerElectricFurnace(player.inventory, ((TileEntityElectricFurnace)tileEntity));
+				case 0:
+					return new ContainerBatteryBox(player.inventory, ((TileEntityBatteryBox) tileEntity));
+				case 1:
+					return new ContainerCoalGenerator(player.inventory, ((TileEntityCoalGenerator) tileEntity));
+				case 2:
+					return new ContainerElectricFurnace(player.inventory, ((TileEntityElectricFurnace) tileEntity));
 			}
-        }
-		
+		}
+
 		return null;
 	}
 }

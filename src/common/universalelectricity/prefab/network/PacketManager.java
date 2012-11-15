@@ -62,7 +62,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 			data.writeInt(id);
 
 			data = encodeDataStream(data, sendData);
-			
+
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = channelName;
 			packet.data = bytes.toByteArray();
