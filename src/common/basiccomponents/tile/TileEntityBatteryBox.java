@@ -237,17 +237,19 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 					{
 						double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor) connector).getNetwork());
 						double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
+						
 						if (!this.worldObj.isRemote)
 						{
 							ElectricityManager.instance.produceElectricity(this, (IConductor) connector, transferAmps, this.getVoltage());
 						}
+						
 						this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
 					}
 				}
 			}
 		}
 
-		this.setJoules(this.joules - 0.00000000000001);
+		this.setJoules(this.joules - 0.0000000001);
 		
 		if (!this.worldObj.isRemote)
 		{
