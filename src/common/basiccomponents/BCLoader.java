@@ -7,6 +7,9 @@ import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.liquids.LiquidContainerData;
+import net.minecraftforge.liquids.LiquidItemRegistry;
+import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import universalelectricity.core.UEConfig;
@@ -32,9 +35,6 @@ import basiccomponents.item.ItemWrench;
 import basiccomponents.tile.TileEntityBatteryBox;
 import basiccomponents.tile.TileEntityCoalGenerator;
 import basiccomponents.tile.TileEntityElectricFurnace;
-import buildcraft.api.liquids.LiquidData;
-import buildcraft.api.liquids.LiquidManager;
-import buildcraft.api.liquids.LiquidStack;
 import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -111,7 +111,7 @@ public class BCLoader implements ICraftingHandler
 		/**
 		 * @author Cammygames
 		 */
-		LiquidManager.liquids.add(new LiquidData(new LiquidStack(BasicComponents.oilStill, LiquidManager.BUCKET_VOLUME), new LiquidStack(BasicComponents.oilMoving, LiquidManager.BUCKET_VOLUME), new ItemStack(BasicComponents.itemOilBucket), new ItemStack(Item.bucketEmpty)));
+	    LiquidItemRegistry.registerLiquid(new LiquidContainerData(new LiquidStack(BasicComponents.oilStill, LiquidItemRegistry.BUCKET_VOLUME), new ItemStack(BasicComponents.itemOilBucket), new ItemStack(Item.bucketEmpty)));
    		MinecraftForge.EVENT_BUS.register(BasicComponents.itemOilBucket);	
 	    
     	//Register Blocks

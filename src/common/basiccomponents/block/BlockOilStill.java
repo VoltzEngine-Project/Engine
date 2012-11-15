@@ -10,8 +10,8 @@ import net.minecraft.src.Potion;
 import net.minecraft.src.PotionEffect;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.Vector3;
-import buildcraft.api.liquids.ILiquid;
+import net.minecraftforge.liquids.ILiquid;
+import universalelectricity.core.vector.Vector3;
 /**
  * 
  * @author Cammygames

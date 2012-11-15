@@ -5,8 +5,8 @@ import java.util.List;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ItemStack;
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricInfo.ElectricUnit;
+import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 import basiccomponents.tile.TileEntityCopperWire;
 
 

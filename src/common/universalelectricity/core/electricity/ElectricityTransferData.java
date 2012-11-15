@@ -1,4 +1,4 @@
-package universalelectricity.electricity;
+package universalelectricity.core.electricity;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;

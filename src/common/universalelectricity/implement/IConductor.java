@@ -3,7 +3,7 @@ package universalelectricity.implement;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.ElectricityNetwork;
 
 /**
  * Must be applied to all tile entities that are

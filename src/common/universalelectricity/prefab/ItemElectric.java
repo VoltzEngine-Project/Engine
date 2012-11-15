@@ -10,8 +10,8 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagFloat;
 import net.minecraft.src.World;
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricInfo.ElectricUnit;
+import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 import universalelectricity.implement.IItemElectric;
 
 /**

@@ -1,4 +1,4 @@
-package universalelectricity.electricity;
+package universalelectricity.core.electricity;
 
 import java.util.EnumSet;
 

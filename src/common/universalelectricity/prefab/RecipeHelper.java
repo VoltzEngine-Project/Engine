@@ -41,6 +41,11 @@ public class RecipeHelper
 		return list;
 	}
 
+	/**
+	 * Replaces a recipe with a new IRecipe.
+	 * 
+	 * @return True if successful
+	 */
 	public static boolean replaceRecipe(IRecipe recipe, IRecipe newRecipe)
 	{
 		for (Object obj : CraftingManager.getInstance().getRecipeList())
@@ -59,6 +64,28 @@ public class RecipeHelper
 		return false;
 	}
 
+	/**
+	 * Replaces a recipe with the resulting
+	 * ItemStack with a new IRecipe.
+	 * 
+	 * @return True if successful
+	 */
+	public static boolean replaceRecipe(ItemStack recipe, IRecipe newRecipe)
+	{
+		if (removeRecipe(recipe))
+		{
+			CraftingManager.getInstance().getRecipeList().add(newRecipe);
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Removes a recipe by its IRecipe class.
+	 * 
+	 * @return True if successful
+	 */
 	public static boolean removeRecipe(IRecipe recipe)
 	{
 		for (Object obj : CraftingManager.getInstance().getRecipeList())
@@ -66,6 +93,28 @@ public class RecipeHelper
 			if (obj instanceof IRecipe)
 			{
 				if (((IRecipe) obj).equals(recipe) || obj == recipe)
+				{
+					CraftingManager.getInstance().getRecipeList().remove(obj);
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Removes a recipe by its output
+	 * 
+	 * @return True if successful
+	 */
+	public static boolean removeRecipe(ItemStack stack)
+	{
+		for (Object obj : CraftingManager.getInstance().getRecipeList())
+		{
+			if (obj instanceof IRecipe)
+			{
+				if (((IRecipe) obj).getRecipeOutput().equals(stack))
 				{
 					CraftingManager.getInstance().getRecipeList().remove(obj);
 					return true;

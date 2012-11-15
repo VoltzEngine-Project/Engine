@@ -332,7 +332,7 @@ public class BlockBasicMachine extends BlockMachine
         
         if(tileEntity instanceof IRedstoneProvider)
         {
-        	 return ((IRedstoneProvider)tileEntity).isPoweringTo((byte)side);
+        	 return ((IRedstoneProvider)tileEntity).isPoweringTo(ForgeDirection.getOrientation(side));
         }
         
        return false;
@@ -348,7 +348,7 @@ public class BlockBasicMachine extends BlockMachine
         
         if(tileEntity instanceof IRedstoneProvider)
         {
-        	 return ((IRedstoneProvider)tileEntity).isIndirectlyPoweringTo((byte)side);
+        	 return ((IRedstoneProvider)tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side));
         }
         
        return false;

@@ -1,7 +1,8 @@
-package universalelectricity.core;
+package universalelectricity.core.vector;
 
 import net.minecraft.src.ChunkCoordinates;
 import net.minecraft.src.Entity;
+import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.NBTTagCompound;
@@ -74,57 +75,45 @@ public class Vector3 extends Vector2 implements Cloneable
 	}
 
 	/**
-	 * Converts a TileEntity's position into
-	 * Vector3
+	 * Vector3 Shortcut Functions
 	 */
+	
 	public static Vector3 get(Entity par1)
 	{
 		return new Vector3(par1.posX, par1.posY, par1.posZ);
 	}
-
-	/**
-	 * Converts an entity's position into Vector3
-	 */
+	
 	public static Vector3 get(TileEntity par1)
 	{
 		return new Vector3(par1.xCoord, par1.yCoord, par1.zCoord);
 	}
 
-	/**
-	 * Converts from Vec3 into a Vector3
-	 */
 	public static Vector3 get(Vec3 par1)
 	{
 		return new Vector3(par1.xCoord, par1.yCoord, par1.zCoord);
 	}
 
-	/**
-	 * Converts a MovingObjectPosition to Vector3
-	 */
 	public static Vector3 get(MovingObjectPosition par1)
 	{
 		return new Vector3(par1.blockX, par1.blockY, par1.blockZ);
 	}
 
-	/**
-	 * Converts a MovingObjectPosition to Vector3
-	 */
 	public static Vector3 get(ChunkCoordinates par1)
 	{
 		return new Vector3(par1.posX, par1.posY, par1.posZ);
 	}
 
-	public int getBlockID(World world)
+	public int getBlockID(IBlockAccess world)
 	{
 		return world.getBlockId(this.intX(), this.intY(), this.intZ());
 	}
 
-	public int getBlockMetadata(World world)
+	public int getBlockMetadata(IBlockAccess world)
 	{
 		return world.getBlockMetadata(this.intX(), this.intY(), this.intZ());
 	}
 
-	public TileEntity getTileEntity(World world)
+	public TileEntity getTileEntity(IBlockAccess world)
 	{
 		return world.getBlockTileEntity(this.intX(), this.intY(), this.intZ());
 	}
@@ -166,16 +155,7 @@ public class Vector3 extends Vector2 implements Cloneable
 	{
 		return Vec3.createVectorHelper(this.x, this.y, this.z);
 	}
-
-	/**
-	 * Checks if a Vector3 point is located inside
-	 * a region
-	 */
-	public static boolean isPointInRegion(Vector3 point, Vector3 minPoint, Vector3 maxPoint)
-	{
-		return (point.x > minPoint.x && point.x < maxPoint.x) && (point.y > minPoint.y && point.y < maxPoint.y) && (point.z > minPoint.z && point.z < maxPoint.z);
-	}
-
+	
 	/**
 	 * Compares two vectors and see if they are
 	 * equal. True if so.
@@ -234,6 +214,13 @@ public class Vector3 extends Vector2 implements Cloneable
 		this.x += par1;
 		this.y += par1;
 		this.z += par1;
+	}
+	
+	public void subtract(Vector3 amount)
+	{
+		this.x -= amount.x;
+		this.y -= amount.y;
+		this.z -= amount.z;
 	}
 
 	public static Vector3 multiply(Vector3 par1, Vector3 par2)

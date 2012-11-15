@@ -10,7 +10,7 @@ import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import universalelectricity.core.Vector3;
+import universalelectricity.core.vector.Vector3;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -51,6 +51,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 		}
 	}
 
+	@SuppressWarnings("resource")
 	public static Packet getPacketWithID(String channelName, int id, Object... sendData)
 	{
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -61,7 +62,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 			data.writeInt(id);
 
 			data = encodeDataStream(data, sendData);
-
+			
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = channelName;
 			packet.data = bytes.toByteArray();
@@ -88,6 +89,7 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("resource")
 	public static Packet getPacket(String channelName, TileEntity sender, Object... sendData)
 	{
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();

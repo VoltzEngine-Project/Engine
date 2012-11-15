@@ -21,9 +21,9 @@ import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.Vector3;
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricityManager;
+import universalelectricity.core.vector.Vector3;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.implement.IJouleStorage;
@@ -33,7 +33,6 @@ import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import basiccomponents.BCLoader;
 import basiccomponents.block.BlockBasicMachine;
-import buildcraft.api.core.Orientations;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
@@ -135,7 +134,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				double receivedElectricity = this.powerProvider.useEnergy(50, 50, true) * UniversalElectricity.BC3_RATIO;
 				this.setJoules(this.joules + receivedElectricity);
 			}
-
+			
 			// The top slot is for recharging
 			// items. Check if the item is a
 			// electric item. If so, recharge it.
@@ -224,7 +223,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 						IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 						double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
 						float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joules), 80000), 0);
-						receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
+						receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite());
 						this.setJoules(this.joules - transferJoules);
 					}
 				}
@@ -248,6 +247,8 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 			}
 		}
 
+		this.setJoules(this.joules - 0.1);
+		
 		if (!this.worldObj.isRemote)
 		{
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
@@ -441,13 +442,13 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	}
 
 	@Override
-	public boolean isPoweringTo(byte side)
+	public boolean isPoweringTo(ForgeDirection side)
 	{
 		return this.isFull;
 	}
 
 	@Override
-	public boolean isIndirectlyPoweringTo(byte side)
+	public boolean isIndirectlyPoweringTo(ForgeDirection side)
 	{
 		return isPoweringTo(side);
 	}

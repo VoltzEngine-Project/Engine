@@ -1,7 +1,7 @@
 package universalelectricity.prefab.multiblock;
 
 import net.minecraft.src.TileEntity;
-import universalelectricity.core.Vector3;
+import universalelectricity.core.vector.Vector3;
 
 /**
  * Interface to be applied to tile entity blocks

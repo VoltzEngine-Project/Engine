@@ -1,4 +1,4 @@
-package universalelectricity.core;
+package universalelectricity.core.vector;
 
 import net.minecraft.src.MathHelper;
 

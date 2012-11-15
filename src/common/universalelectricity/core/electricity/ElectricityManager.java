@@ -1,4 +1,4 @@
-package universalelectricity.electricity;
+package universalelectricity.core.electricity;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.Vector3;
+import universalelectricity.core.vector.Vector3;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityReceiver;
 import cpw.mods.fml.common.FMLLog;

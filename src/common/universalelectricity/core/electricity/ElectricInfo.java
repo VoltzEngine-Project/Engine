@@ -1,4 +1,4 @@
-package universalelectricity.electricity;
+package universalelectricity.core.electricity;
 
 /**
  * An easy way to display information on
