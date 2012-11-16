@@ -8,7 +8,7 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.liquids.LiquidContainerData;
-import net.minecraftforge.liquids.LiquidItemRegistry;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -111,7 +111,7 @@ public class BCLoader implements ICraftingHandler
 		/**
 		 * @author Cammygames
 		 */
-		LiquidItemRegistry.registerLiquid(new LiquidContainerData(new LiquidStack(BasicComponents.oilStill, LiquidItemRegistry.BUCKET_VOLUME), new ItemStack(BasicComponents.itemOilBucket), new ItemStack(Item.bucketEmpty)));
+		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(new LiquidStack(BasicComponents.oilStill, LiquidContainerRegistry.BUCKET_VOLUME), new ItemStack(BasicComponents.itemOilBucket), new ItemStack(Item.bucketEmpty)));
 		MinecraftForge.EVENT_BUS.register(BasicComponents.itemOilBucket);
 
 		// Register Blocks

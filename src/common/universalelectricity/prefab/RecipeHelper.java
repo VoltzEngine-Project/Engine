@@ -1,6 +1,7 @@
 package universalelectricity.prefab;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.src.CraftingManager;
@@ -90,12 +91,15 @@ public class RecipeHelper
 	{
 		for (Object obj : CraftingManager.getInstance().getRecipeList())
 		{
-			if (obj instanceof IRecipe)
+			if (obj != null)
 			{
-				if (((IRecipe) obj).equals(recipe) || obj == recipe)
+				if (obj instanceof IRecipe)
 				{
-					CraftingManager.getInstance().getRecipeList().remove(obj);
-					return true;
+					if (((IRecipe) obj).equals(recipe) || obj == recipe)
+					{
+						CraftingManager.getInstance().getRecipeList().remove(obj);
+						return true;
+					}
 				}
 			}
 		}
@@ -104,7 +108,8 @@ public class RecipeHelper
 	}
 
 	/**
-	 * Removes a recipe by its output
+	 * Removes the first recipe found by its
+	 * output.
 	 * 
 	 * @return True if successful
 	 */
@@ -112,17 +117,60 @@ public class RecipeHelper
 	{
 		for (Object obj : CraftingManager.getInstance().getRecipeList())
 		{
-			if (obj instanceof IRecipe)
+			if (obj != null)
 			{
-				if (((IRecipe) obj).getRecipeOutput().equals(stack))
+				if (obj instanceof IRecipe)
 				{
-					CraftingManager.getInstance().getRecipeList().remove(obj);
-					return true;
+					if (((IRecipe) obj).getRecipeOutput() != null)
+					{
+						if (((IRecipe) obj).getRecipeOutput().isItemEqual(stack))
+						{
+							CraftingManager.getInstance().getRecipeList().remove(obj);
+							return true;
+						}
+					}
 				}
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Removes all recipes found that has this
+	 * output.
+	 * 
+	 * @return True if successful
+	 */
+	public static boolean removeRecipes(ItemStack... itemStacks)
+	{
+		boolean didRemove = false;
+
+		for (Iterator itr = CraftingManager.getInstance().getRecipeList().iterator(); itr.hasNext();)
+		{
+			Object obj = itr.next();
+
+			if (obj != null)
+			{
+				if (obj instanceof IRecipe)
+				{
+					if (((IRecipe) obj).getRecipeOutput() != null)
+					{
+						for (ItemStack itemStack : itemStacks)
+						{
+							if (((IRecipe) obj).getRecipeOutput().isItemEqual(itemStack))
+							{
+								itr.remove();
+								didRemove = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return didRemove;
 	}
 
 	/**
