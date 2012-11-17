@@ -55,11 +55,6 @@ public class Vector2 implements Cloneable
 		return new Vector2(this.x, this.y);
 	}
 
-	public static boolean isPointInRegion(Vector2 point, Vector2 minPoint, Vector2 maxPoint)
-	{
-		return (point.x > minPoint.x && point.x < maxPoint.x) && (point.y > minPoint.y && point.y < maxPoint.y);
-	}
-
 	public static double distance(Vector2 par1, Vector2 par2)
 	{
 		double var2 = par1.x - par2.x;
@@ -85,6 +80,18 @@ public class Vector2 implements Cloneable
 		this.x += par1;
 		this.y += par1;
 	}
+	
+	public void substract(Vector2 par1)
+	{
+		this.x -= par1.x;
+		this.y -= par1.y;
+	}
+
+	public void substract(double par1)
+	{
+		this.x -= par1;
+		this.y -= par1;
+	}
 
 	public Vector2 round()
 	{
@@ -96,13 +103,9 @@ public class Vector2 implements Cloneable
 		return new Vector2(Math.floor(this.x), Math.floor(this.y));
 	}
 
-	public String output()
+	@Override
+	public String toString()
 	{
 		return "Vector2: " + this.x + "," + this.y;
-	}
-
-	public void printVector()
-	{
-		System.out.println(output());
 	}
 }

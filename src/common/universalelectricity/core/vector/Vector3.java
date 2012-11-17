@@ -270,12 +270,7 @@ public class Vector3 extends Vector2 implements Cloneable
 	{
 		return new Vector3(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z));
 	}
-
-	@Override
-	public String output()
-	{
-		return "Vector3: " + this.x + "," + this.y + "," + this.z;
-	}
+	
 
 	/**
 	 * Gets a position relative to another
@@ -451,5 +446,11 @@ public class Vector3 extends Vector2 implements Cloneable
 		}
 
 		return ForgeDirection.UNKNOWN;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "Vector3: " + this.x + "," + this.y + "," + this.z;
 	}
 }
