@@ -55,10 +55,8 @@ public class BlockOilStill extends BlockStationary implements ILiquid
 	}
 
 	/**
-	 * Lets the block know when one of its
-	 * neighbor changes. Doesn't know which
-	 * neighbor changed (coordinates passed are
-	 * their own) Args: x, y, z, neighbor blockID
+	 * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed
+	 * (coordinates passed are their own) Args: x, y, z, neighbor blockID
 	 */
 	@Override
 	public void onNeighborBlockChange(World par1World, int x, int y, int z, int neighborBlockID)
@@ -78,15 +76,14 @@ public class BlockOilStill extends BlockStationary implements ILiquid
 	}
 
 	/**
-	 * Changes the block ID to that of an updating
-	 * fluid.
+	 * Changes the block ID to that of an updating fluid.
 	 */
 	private void setNotStationary(World par1World, int par2, int par3, int par4)
 	{
 		int var5 = par1World.getBlockMetadata(par2, par3, par4);
 		par1World.editingBlocks = true;
 		par1World.setBlockAndMetadata(par2, par3, par4, this.blockID - 1, var5);
-		par1World.markBlocksDirty(par2, par3, par4, par2, par3, par4);
+		par1World.markBlockRangeForRenderUpdate(par2, par3, par4, par2, par3, par4);
 		par1World.scheduleBlockUpdate(par2, par3, par4, this.blockID - 1, this.tickRate());
 		par1World.editingBlocks = false;
 	}
@@ -132,9 +129,8 @@ public class BlockOilStill extends BlockStationary implements ILiquid
 	}
 
 	/**
-	 * Triggered whenever an entity collides with
-	 * this block (enters into the block). Args:
-	 * world, x, y, z, entity
+	 * Triggered whenever an entity collides with this block (enters into the block). Args: world,
+	 * x, y, z, entity
 	 */
 	@Override
 	public void onEntityCollidedWithBlock(World par1World, int x, int y, int z, Entity par5Entity)

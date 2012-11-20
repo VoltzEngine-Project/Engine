@@ -30,14 +30,12 @@ import dan200.computer.api.IPeripheral;
 public class TileEntityCoalGenerator extends TileEntityDisableable implements IElectricityProducer, IInventory, ISidedInventory, IPacketReceiver, IPeripheral
 {
 	/**
-	 * Maximum amount of energy needed to generate
-	 * electricity
+	 * Maximum amount of energy needed to generate electricity
 	 */
 	public static final int MAX_GENERATE_WATTS = 10000;
 
 	/**
-	 * Amount of heat the coal generator needs
-	 * before generating electricity.
+	 * Amount of heat the coal generator needs before generating electricity.
 	 */
 	public static final int MIN_GENERATE_WATTS = 100;
 
@@ -50,14 +48,12 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 
 	public IConductor connectedElectricUnit = null;
 	/**
-	 * The number of ticks that a fresh copy of
-	 * the currently-burning item would keep the
-	 * furnace burning for
+	 * The number of ticks that a fresh copy of the currently-burning item would keep the furnace
+	 * burning for
 	 */
 	public int itemCookTime = 0;
 	/**
-	 * The ItemStacks that hold the items
-	 * currently being used in the battery box
+	 * The ItemStacks that hold the items currently being used in the battery box
 	 */
 	private ItemStack[] containingItems = new ItemStack[1];
 

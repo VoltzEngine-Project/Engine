@@ -105,8 +105,8 @@ public class BCLoader implements ICraftingHandler
 		BasicComponents.batteryBox = ((BlockBasicMachine) BasicComponents.blockMachine).getBatteryBox();
 		BasicComponents.electricFurnace = ((BlockBasicMachine) BasicComponents.blockMachine).getElectricFurnace();
 
-		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 0, 50, 45, 5).enable();
-		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 0, 50, 40, 4).enable();
+		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 0, 50, 33, 4).enable();
+		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 0, 50, 28, 3).enable();
 
 		/**
 		 * @author Cammygames
@@ -123,8 +123,7 @@ public class BCLoader implements ICraftingHandler
 		GameRegistry.registerCraftingHandler(this);
 
 		/**
-		 * Registering all Basic Component items
-		 * into the Forge Ore Dictionary.
+		 * Registering all Basic Component items into the Forge Ore Dictionary.
 		 */
 		OreDictionary.registerOre("oreCopper", new ItemStack(BasicComponents.blockBasicOre, 0));
 		OreDictionary.registerOre("oreTin", new ItemStack(BasicComponents.blockBasicOre, 0));
@@ -158,6 +157,8 @@ public class BCLoader implements ICraftingHandler
 		OreDictionary.registerOre("plateTin", BasicComponents.itemTinPlate);
 		OreDictionary.registerOre("plateBronze", BasicComponents.itemBronzePlate);
 		OreDictionary.registerOre("plateSteel", BasicComponents.itemSteelPlate);
+		
+		UETab.setItemStack(BasicComponents.batteryBox);
 
 		proxy.preInit();
 	}
@@ -166,8 +167,6 @@ public class BCLoader implements ICraftingHandler
 	public void load(FMLInitializationEvent evt)
 	{
 		proxy.init();
-
-		UETab.setItemStack(BasicComponents.batteryBox);
 
 		/**
 		 * Adding names

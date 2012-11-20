@@ -249,7 +249,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 			}
 		}
 
-		this.setJoules(this.joules - 0.0000000001);
+		this.setJoules(this.joules - 0.00005);
 
 		if (!this.worldObj.isRemote)
 		{

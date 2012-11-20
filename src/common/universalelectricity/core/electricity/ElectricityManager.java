@@ -16,9 +16,8 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.TickType;
 
 /**
- * This class is used to manage electricity
- * transferring and flow. It is also used to call
- * updates on UE tile entities.
+ * This class is used to manage electricity transferring and flow. It is also used to call updates
+ * on UE tile entities.
  * 
  * @author Calclavia
  * 
@@ -26,10 +25,8 @@ import cpw.mods.fml.common.TickType;
 public class ElectricityManager
 {
 	/**
-	 * ElectricityManager exists on both client
-	 * and server side. Rely on the server side
-	 * one as it is more accurate! Client side
-	 * only simulates.
+	 * ElectricityManager exists on both client and server side. Rely on the server side one as it
+	 * is more accurate! Client side only simulates.
 	 */
 	public static ElectricityManager instance;
 
@@ -42,8 +39,7 @@ public class ElectricityManager
 	}
 
 	/**
-	 * Registers a the conductor into the UE
-	 * electricity net.
+	 * Registers a the conductor into the UE electricity net.
 	 * 
 	 * @param conductor
 	 *            - The IConductor tile entity.
@@ -55,15 +51,12 @@ public class ElectricityManager
 	}
 
 	/**
-	 * Merges two connection lines together into
-	 * one.
+	 * Merges two connection lines together into one.
 	 * 
 	 * @param networkA
-	 *            - The network to be merged into.
-	 *            This network will be kept.
+	 *            - The network to be merged into. This network will be kept.
 	 * @param networkB
-	 *            - The network to be merged. This
-	 *            network will be deleted.
+	 *            - The network to be merged. This network will be deleted.
 	 */
 	public void mergeConnection(ElectricityNetwork networkA, ElectricityNetwork networkB)
 	{
@@ -84,11 +77,8 @@ public class ElectricityManager
 	}
 
 	/**
-	 * Separate one connection line into two
-	 * different ones between two conductors. This
-	 * function does this by resetting all wires
-	 * in the connection line and making them each
-	 * reconnect.
+	 * Separate one connection line into two different ones between two conductors. This function
+	 * does this by resetting all wires in the connection line and making them each reconnect.
 	 * 
 	 * @param conductorA
 	 *            - existing conductor
@@ -123,8 +113,7 @@ public class ElectricityManager
 	}
 
 	/**
-	 * Clean up and remove all useless and invalid
-	 * connections.
+	 * Clean up and remove all useless and invalid connections.
 	 */
 	public void cleanUpConnections()
 	{
@@ -147,23 +136,17 @@ public class ElectricityManager
 	}
 
 	/**
-	 * Produces electricity into a specific wire
-	 * which will be distributed across the
-	 * electricity network.
+	 * Produces electricity into a specific wire which will be distributed across the electricity
+	 * network.
 	 * 
 	 * @param sender
-	 *            The machine sending the
-	 *            electricity.
+	 *            The machine sending the electricity.
 	 * @param targetConductor
-	 *            The conductor receiving the
-	 *            electricity (or connected to the
-	 *            machine).
+	 *            The conductor receiving the electricity (or connected to the machine).
 	 * @param amps
-	 *            The amount of amps this machine
-	 *            is sending.
+	 *            The amount of amps this machine is sending.
 	 * @param voltage
-	 *            The amount of volts this machine
-	 *            is sending.
+	 *            The amount of volts this machine is sending.
 	 */
 	public void produceElectricity(TileEntity sender, IConductor targetConductor, double amps, double voltage)
 	{
@@ -219,8 +202,7 @@ public class ElectricityManager
 	}
 
 	/**
-	 * Gets the actual watt request of an electric
-	 * receiver accounting all current electricity
+	 * Gets the actual watt request of an electric receiver accounting all current electricity
 	 * packets qued up for it.
 	 * 
 	 * @return - The amount of watts requested.
@@ -254,11 +236,9 @@ public class ElectricityManager
 	}
 
 	/**
-	 * Checks if the current connection line needs
-	 * electricity
+	 * Checks if the current connection line needs electricity
 	 * 
-	 * @return - The amount of joules this
-	 *         connection line needs
+	 * @return - The amount of joules this connection line needs
 	 */
 	public double getElectricityRequired(ElectricityNetwork network)
 	{
@@ -323,8 +303,7 @@ public class ElectricityManager
 	}
 
 	/**
-	 * This function is called to refresh all
-	 * conductors in the world.
+	 * This function is called to refresh all conductors in the world.
 	 */
 	public void refreshConductors()
 	{

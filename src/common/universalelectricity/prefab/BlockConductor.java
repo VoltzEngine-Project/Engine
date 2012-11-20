@@ -14,8 +14,7 @@ public abstract class BlockConductor extends BlockContainer
 	}
 
 	/**
-	 * Called whenever the block is added into the
-	 * world. Args: world, x, y, z
+	 * Called whenever the block is added into the world. Args: world, x, y, z
 	 */
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z)
@@ -34,10 +33,8 @@ public abstract class BlockConductor extends BlockContainer
 	}
 
 	/**
-	 * Lets the block know when one of its
-	 * neighbor changes. Doesn't know which
-	 * neighbor changed (coordinates passed are
-	 * their own) Args: x, y, z, neighbor blockID
+	 * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed
+	 * (coordinates passed are their own) Args: x, y, z, neighbor blockID
 	 */
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockID)
@@ -52,6 +49,6 @@ public abstract class BlockConductor extends BlockContainer
 			}
 		}
 
-		world.markBlockNeedsUpdate(x, y, z);
+		world.markBlockForUpdate(x, y, z);
 	}
 }

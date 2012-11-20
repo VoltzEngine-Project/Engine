@@ -17,8 +17,7 @@ public class Region2
 	}
 
 	/**
-	 * Checks if a point is located inside a
-	 * region
+	 * Checks if a point is located inside a region
 	 */
 	public boolean isIn(Vector2 point)
 	{
@@ -26,8 +25,7 @@ public class Region2
 	}
 
 	/**
-	 * Returns whether the given region intersects
-	 * with this one.
+	 * Returns whether the given region intersects with this one.
 	 */
 	public boolean isIn(Region2 region)
 	{

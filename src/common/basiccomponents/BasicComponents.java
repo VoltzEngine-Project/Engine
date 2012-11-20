@@ -7,9 +7,8 @@ import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.ore.OreGenBase;
 
 /**
- * The main class for managing Basic Component
- * items and blocks. Reference objects from this
- * class to add them to your recipes and such.
+ * The main class for managing Basic Component items and blocks. Reference objects from this class
+ * to add them to your recipes and such.
  * 
  * @author Calclavia
  */
@@ -21,8 +20,7 @@ public class BasicComponents
 	public static final String ITEM_TEXTURE_FILE = FILE_PATH + "items.png";
 
 	/**
-	 * Try not reference to these variable in
-	 * pre-initialization as they might be null!
+	 * Try not reference to these variable in pre-initialization as they might be null!
 	 */
 	public static int BLOCK_ID_PREFIX = 3970;
 

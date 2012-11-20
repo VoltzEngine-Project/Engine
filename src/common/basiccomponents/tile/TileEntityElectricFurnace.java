@@ -41,8 +41,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	public double joulesReceived = 0;
 
 	/**
-	 * The ItemStacks that hold the items
-	 * currently being used in the battery box
+	 * The ItemStacks that hold the items currently being used in the battery box
 	 */
 	private ItemStack[] containingItems = new ItemStack[3];
 
@@ -188,9 +187,8 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	}
 
 	/**
-	 * Turn one item from the furnace source stack
-	 * into the appropriate smelted item in the
-	 * furnace result stack
+	 * Turn one item from the furnace source stack into the appropriate smelted item in the furnace
+	 * result stack
 	 */
 	public void smeltItem()
 	{

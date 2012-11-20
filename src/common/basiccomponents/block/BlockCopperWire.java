@@ -23,12 +23,9 @@ public class BlockCopperWire extends BlockConductor
 	}
 
 	/**
-	 * Is this block (a) opaque and (b) a full 1m
-	 * cube? This determines whether or not to
-	 * render the shared face of two adjacent
-	 * blocks and also whether the player can
-	 * attach torches, redstone wire, etc to this
-	 * block.
+	 * Is this block (a) opaque and (b) a full 1m cube? This determines whether or not to render the
+	 * shared face of two adjacent blocks and also whether the player can attach torches, redstone
+	 * wire, etc to this block.
 	 */
 	@Override
 	public boolean isOpaqueCube()
@@ -37,9 +34,8 @@ public class BlockCopperWire extends BlockConductor
 	}
 
 	/**
-	 * If this block doesn't render as an ordinary
-	 * block it will return False (examples:
-	 * signs, buttons, stairs, etc)
+	 * If this block doesn't render as an ordinary block it will return False (examples: signs,
+	 * buttons, stairs, etc)
 	 */
 	@Override
 	public boolean renderAsNormalBlock()
@@ -48,8 +44,7 @@ public class BlockCopperWire extends BlockConductor
 	}
 
 	/**
-	 * The type of render function that is called
-	 * for this block
+	 * The type of render function that is called for this block
 	 */
 	@Override
 	public int getRenderType()

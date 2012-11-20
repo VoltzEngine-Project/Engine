@@ -15,9 +15,8 @@ import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 import universalelectricity.core.implement.IItemElectric;
 
 /**
- * Extend from this class if your item requires
- * electricity or to be charged. Optionally, you
- * can implement IItemElectric instead.
+ * Extend from this class if your item requires electricity or to be charged. Optionally, you can
+ * implement IItemElectric instead.
  * 
  * @author Calclavia
  * 
@@ -33,12 +32,9 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	}
 
 	/**
-	 * Allows items to add custom lines of
-	 * information to the mouseover description.
-	 * If you want to add more information to your
-	 * item, you can super.addInformation() to
-	 * keep the electiricty info in the item info
-	 * bar.
+	 * Allows items to add custom lines of information to the mouseover description. If you want to
+	 * add more information to your item, you can super.addInformation() to keep the electiricty
+	 * info in the item info bar.
 	 */
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
@@ -75,9 +71,8 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	}
 
 	/**
-	 * Makes sure the item is uncharged when it is
-	 * crafted and not charged. Change this if you
-	 * do not want this to happen!
+	 * Makes sure the item is uncharged when it is crafted and not charged. Change this if you do
+	 * not want this to happen!
 	 */
 	@Override
 	public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
@@ -112,14 +107,11 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	}
 
 	/**
-	 * This function sets the electriicty. Do not
-	 * directly call this function. Try to use
-	 * onReceiveElectricity or onUseElectricity
-	 * instead.
+	 * This function sets the electriicty. Do not directly call this function. Try to use
+	 * onReceiveElectricity or onUseElectricity instead.
 	 * 
 	 * @param wattHours
-	 *            - The amount of electricity in
-	 *            joules
+	 *            - The amount of electricity in joules
 	 */
 	@Override
 	public void setJoules(double wattHours, Object... data)
@@ -142,11 +134,9 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	}
 
 	/**
-	 * This function is called to get the
-	 * electricity stored in this item
+	 * This function is called to get the electricity stored in this item
 	 * 
-	 * @return - The amount of electricity stored
-	 *         in watts
+	 * @return - The amount of electricity stored in watts
 	 */
 	@Override
 	public double getJoules(Object... data)
@@ -173,14 +163,11 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	}
 
 	/**
-	 * Returns an uncharged version of the
-	 * electric item. Use this if you want the
-	 * crafting recipe to use a charged version of
-	 * the electric item instead of an empty
-	 * version of the electric item
+	 * Returns an uncharged version of the electric item. Use this if you want the crafting recipe
+	 * to use a charged version of the electric item instead of an empty version of the electric
+	 * item
 	 * 
-	 * @return The ItemStack of a fully charged
-	 *         electric item
+	 * @return The ItemStack of a fully charged electric item
 	 */
 	public ItemStack getUncharged()
 	{

@@ -17,33 +17,27 @@ import universalelectricity.core.vector.Vector3;
 import basiccomponents.BasicComponents;
 
 /**
- * @author Cammygames This class contains the
- *         block for oil
+ * @author Cammygames This class contains the block for oil
  * 
  */
 public class BlockOilFlowing extends BlockFluid implements ILiquid
 {
 
 	/**
-	 * Number of horizontally adjacent liquid
-	 * source blocks. Diagonal doesn't count. Only
-	 * source blocks of the same liquid as the
-	 * block using the field are counted.
+	 * Number of horizontally adjacent liquid source blocks. Diagonal doesn't count. Only source
+	 * blocks of the same liquid as the block using the field are counted.
 	 */
 	int numAdjacentSources = 0;
 
 	/**
-	 * Indicates whether the flow direction is
-	 * optimal. Each array index corresponds to
-	 * one of the four cardinal directions.
+	 * Indicates whether the flow direction is optimal. Each array index corresponds to one of the
+	 * four cardinal directions.
 	 */
 	boolean[] isOptimalFlowDirection = new boolean[4];
 
 	/**
-	 * The estimated cost to flow in a given
-	 * direction from the current point. Each
-	 * array index corresponds to one of the four
-	 * cardinal directions.
+	 * The estimated cost to flow in a given direction from the current point. Each array index
+	 * corresponds to one of the four cardinal directions.
 	 */
 	int[] flowCost = new int[4];
 
@@ -98,14 +92,13 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 	}
 
 	/**
-	 * Updates the flow for the BlockFlowing
-	 * object.
+	 * Updates the flow for the BlockFlowing object.
 	 */
 	private void updateFlow(World par1World, int par2, int par3, int par4)
 	{
 		int var5 = par1World.getBlockMetadata(par2, par3, par4);
 		par1World.setBlockAndMetadata(par2, par3, par4, this.blockID + 1, var5);
-		par1World.markBlocksDirty(par2, par3, par4, par2, par3, par4);
+		par1World.markBlockRangeForRenderUpdate(par2, par3, par4, par2, par3, par4);
 	}
 
 	/**
@@ -160,16 +153,10 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 			// two solid sources into a solid
 			// source
 			/**
-			 * if (this.numAdjacentSources >= 2 &&
-			 * this.blockMaterial ==
-			 * Material.water) { if
-			 * (par1World.getBlockMaterial(x, y -
-			 * 1, z).isSolid()) { var10 = 0; }
-			 * else if
-			 * (par1World.getBlockMaterial(x, y -
-			 * 1, z) == this.blockMaterial &&
-			 * par1World.getBlockMetadata(x, y, z)
-			 * == 0) { var10 = 0; } }
+			 * if (this.numAdjacentSources >= 2 && this.blockMaterial == Material.water) { if
+			 * (par1World.getBlockMaterial(x, y - 1, z).isSolid()) { var10 = 0; } else if
+			 * (par1World.getBlockMaterial(x, y - 1, z) == this.blockMaterial &&
+			 * par1World.getBlockMetadata(x, y, z) == 0) { var10 = 0; } }
 			 **/
 			if (var10 == var6)
 			{
@@ -246,10 +233,8 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 	}
 
 	/**
-	 * flowIntoBlock(World world, int x, int y,
-	 * int z, int newFlowDecay) - Flows into the
-	 * block at the coordinates and changes the
-	 * block type to the liquid.
+	 * flowIntoBlock(World world, int x, int y, int z, int newFlowDecay) - Flows into the block at
+	 * the coordinates and changes the block type to the liquid.
 	 */
 	private void flowIntoBlock(World par1World, int par2, int par3, int par4, int par5)
 	{
@@ -274,14 +259,10 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 	}
 
 	/**
-	 * calculateFlowCost(World world, int x, int
-	 * y, int z, int accumulatedCost, int
-	 * previousDirectionOfFlow) - Used to
-	 * determine the path of least resistance,
-	 * this method returns the lowest possible
-	 * flow cost for the direction of flow
-	 * indicated. Each necessary horizontal flow
-	 * adds to the flow cost.
+	 * calculateFlowCost(World world, int x, int y, int z, int accumulatedCost, int
+	 * previousDirectionOfFlow) - Used to determine the path of least resistance, this method
+	 * returns the lowest possible flow cost for the direction of flow indicated. Each necessary
+	 * horizontal flow adds to the flow cost.
 	 */
 	private int calculateFlowCost(World par1World, int par2, int par3, int par4, int par5, int par6)
 	{
@@ -335,12 +316,9 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 	}
 
 	/**
-	 * Returns a boolean array indicating which
-	 * flow directions are optimal based on each
-	 * direction's calculated flow cost. Each
-	 * array index corresponds to one of the four
-	 * cardinal directions. A value of true
-	 * indicates the direction is optimal.
+	 * Returns a boolean array indicating which flow directions are optimal based on each
+	 * direction's calculated flow cost. Each array index corresponds to one of the four cardinal
+	 * directions. A value of true indicates the direction is optimal.
 	 */
 	private boolean[] getOptimalFlowDirections(World par1World, int par2, int par3, int par4)
 	{
@@ -411,8 +389,7 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 	}
 
 	/**
-	 * Returns true if block at coords blocks
-	 * fluids
+	 * Returns true if block at coords blocks fluids
 	 */
 	private boolean blockBlocksFlow(World par1World, int par2, int par3, int par4)
 	{
@@ -437,16 +414,11 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 	}
 
 	/**
-	 * getSmallestFlowDecay(World world, intx, int
-	 * y, int z, int currentSmallestFlowDecay) -
-	 * Looks up the flow decay at the coordinates
-	 * given and returns the smaller of this value
-	 * or the provided currentSmallestFlowDecay.
-	 * If one value is valid and the other isn't,
-	 * the valid value will be returned. Valid
-	 * values are >= 0. Flow decay is the amount
-	 * that a liquid has dissipated. 0 indicates a
-	 * source block.
+	 * getSmallestFlowDecay(World world, intx, int y, int z, int currentSmallestFlowDecay) - Looks
+	 * up the flow decay at the coordinates given and returns the smaller of this value or the
+	 * provided currentSmallestFlowDecay. If one value is valid and the other isn't, the valid value
+	 * will be returned. Valid values are >= 0. Flow decay is the amount that a liquid has
+	 * dissipated. 0 indicates a source block.
 	 */
 	protected int getSmallestFlowDecay(World par1World, int par2, int par3, int par4, int par5)
 	{
@@ -473,8 +445,7 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 	}
 
 	/**
-	 * Returns true if the block at the
-	 * coordinates can be displaced by the liquid.
+	 * Returns true if the block at the coordinates can be displaced by the liquid.
 	 */
 	private boolean liquidCanDisplaceBlock(World par1World, int par2, int par3, int par4)
 	{
@@ -507,9 +478,8 @@ public class BlockOilFlowing extends BlockFluid implements ILiquid
 	}
 
 	/**
-	 * Triggered whenever an entity collides with
-	 * this block (enters into the block). Args:
-	 * world, x, y, z, entity
+	 * Triggered whenever an entity collides with this block (enters into the block). Args: world,
+	 * x, y, z, entity
 	 */
 	@Override
 	public void onEntityCollidedWithBlock(World par1World, int x, int y, int z, Entity par5Entity)

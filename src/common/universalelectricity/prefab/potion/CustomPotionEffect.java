@@ -20,12 +20,10 @@ public class CustomPotionEffect extends PotionEffect
 	}
 
 	/**
-	 * Creates a potion effect with custom curable
-	 * items.
+	 * Creates a potion effect with custom curable items.
 	 * 
 	 * @param curativeItems
-	 *            - ItemStacks that can cure this
-	 *            potion effect
+	 *            - ItemStacks that can cure this potion effect
 	 */
 	public CustomPotionEffect(int potionID, int duration, int amplifier, List<ItemStack> curativeItems)
 	{

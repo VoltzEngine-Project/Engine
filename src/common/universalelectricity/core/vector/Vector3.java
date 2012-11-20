@@ -13,12 +13,9 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.implement.IConnector;
 
 /**
- * Vector3 Class is used for defining objects in a
- * 3D space. Vector3 makes it easier to handle the
- * coordinates of objects. Instead of fumbling
- * with x, y and z variables, all x, y and z
- * variables are stored in one class. Vector3.x,
- * Vector3.y, Vector3.z.
+ * Vector3 Class is used for defining objects in a 3D space. Vector3 makes it easier to handle the
+ * coordinates of objects. Instead of fumbling with x, y and z variables, all x, y and z variables
+ * are stored in one class. Vector3.x, Vector3.y, Vector3.z.
  * 
  * @author Calclavia
  */
@@ -65,8 +62,7 @@ public class Vector3 extends Vector2 implements Cloneable
 	}
 
 	/**
-	 * Makes a new copy of this Vector. Prevents
-	 * variable referencing problems.
+	 * Makes a new copy of this Vector. Prevents variable referencing problems.
 	 */
 	@Override
 	public Vector3 clone()
@@ -139,8 +135,7 @@ public class Vector3 extends Vector2 implements Cloneable
 	}
 
 	/**
-	 * Converts this Vector3 into a Vector2 by
-	 * dropping the Y axis.
+	 * Converts this Vector3 into a Vector2 by dropping the Y axis.
 	 */
 	public Vector2 toVector2()
 	{
@@ -148,8 +143,7 @@ public class Vector3 extends Vector2 implements Cloneable
 	}
 
 	/**
-	 * Converts this vector three into a Minecraft
-	 * Vec3 object
+	 * Converts this vector three into a Minecraft Vec3 object
 	 */
 	public Vec3 toVec3()
 	{
@@ -157,8 +151,7 @@ public class Vector3 extends Vector2 implements Cloneable
 	}
 
 	/**
-	 * Compares two vectors and see if they are
-	 * equal. True if so.
+	 * Compares two vectors and see if they are equal. True if so.
 	 */
 	public boolean isEqual(Vector3 vector3)
 	{
@@ -246,11 +239,9 @@ public class Vector3 extends Vector2 implements Cloneable
 	 * Saves this Vector3 to disk
 	 * 
 	 * @param prefix
-	 *            - The prefix of this save. Use
-	 *            some unique string.
+	 *            - The prefix of this save. Use some unique string.
 	 * @param par1NBTTagCompound
-	 *            - The NBT compound object to
-	 *            save the data in
+	 *            - The NBT compound object to save the data in
 	 */
 	public void writeToNBT(String prefix, NBTTagCompound par1NBTTagCompound)
 	{
@@ -270,18 +261,15 @@ public class Vector3 extends Vector2 implements Cloneable
 	{
 		return new Vector3(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z));
 	}
-	
 
 	/**
-	 * Gets a position relative to another
-	 * position's side
+	 * Gets a position relative to another position's side
 	 * 
 	 * @param position
 	 *            - The position
 	 * @param side
 	 *            - The side. 0-5
-	 * @return The position relative to the
-	 *         original position's side
+	 * @return The position relative to the original position's side
 	 */
 	public void modifyPositionFromSide(ForgeDirection side)
 	{
@@ -315,8 +303,7 @@ public class Vector3 extends Vector2 implements Cloneable
 	}
 
 	/**
-	 * Gets a connector unit based on the given
-	 * side.
+	 * Gets a connector unit based on the given side.
 	 */
 	public static TileEntity getConnectorFromSide(World world, Vector3 position, ForgeDirection side)
 	{
@@ -331,25 +318,17 @@ public class Vector3 extends Vector2 implements Cloneable
 	}
 
 	/**
-	 * Finds the side of a block depending on it's
-	 * facing direction from the given side. The
-	 * side numbers are compatible with the
-	 * function
-	 * "getBlockTextureFromSideAndMetadata".
+	 * Finds the side of a block depending on it's facing direction from the given side. The side
+	 * numbers are compatible with the function "getBlockTextureFromSideAndMetadata".
 	 * 
-	 * Bottom: 0; Top: 1; Back: 2; Front: 3; Left:
-	 * 4; Right: 5;
+	 * Bottom: 0; Top: 1; Back: 2; Front: 3; Left: 4; Right: 5;
 	 * 
 	 * @param front
-	 *            - The direction in which this
-	 *            block is facing/front. Use a
-	 *            number between 0 and 5. Default
-	 *            is 3.
+	 *            - The direction in which this block is facing/front. Use a number between 0 and 5.
+	 *            Default is 3.
 	 * @param side
-	 *            - The side you are trying to
-	 *            find. A number between 0 and 5.
-	 * @return The side relative to the facing
-	 *         direction.
+	 *            - The side you are trying to find. A number between 0 and 5.
+	 * @return The side relative to the facing direction.
 	 */
 
 	public static ForgeDirection getOrientationFromSide(ForgeDirection front, ForgeDirection side)
@@ -447,7 +426,7 @@ public class Vector3 extends Vector2 implements Cloneable
 
 		return ForgeDirection.UNKNOWN;
 	}
-	
+
 	@Override
 	public String toString()
 	{
