@@ -15,7 +15,7 @@ public interface IJouleStorage
 	/**
 	 * Sets the amount of joules this unit has stored.
 	 */
-	public void setJoules(double wattHours, Object... data);
+	public void setJoules(double joules, Object... data);
 
 	/**
 	 * Gets the maximum amount of joules this unit can store.
