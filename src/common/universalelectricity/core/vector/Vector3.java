@@ -285,31 +285,36 @@ public class Vector3 extends Vector2 implements Cloneable
 	 *            - The side. 0-5
 	 * @return The position relative to the original position's side
 	 */
-	public void modifyPositionFromSide(ForgeDirection side)
+	public void modifyPositionFromSide(ForgeDirection side, double amount)
 	{
 		switch (side.ordinal())
 		{
 			case 0:
-				this.y -= 1;
+				this.y -= amount;
 				break;
 			case 1:
-				this.y += 1;
+				this.y += amount;
 				break;
 			case 2:
-				this.z -= 1;
+				this.z -= amount;
 				break;
 			case 3:
-				this.z += 1;
+				this.z += amount;
 				break;
 			case 4:
-				this.x -= 1;
+				this.x -= amount;
 				break;
 			case 5:
-				this.x += 1;
+				this.x += amount;
 				break;
 		}
 	}
 
+	public void modifyPositionFromSide(ForgeDirection side)
+	{
+		this.modifyPositionFromSide(side, 1);
+	}
+	
 	public static TileEntity getTileEntityFromSide(World world, Vector3 position, ForgeDirection side)
 	{
 		position.modifyPositionFromSide(side);
