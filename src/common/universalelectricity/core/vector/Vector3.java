@@ -216,14 +216,28 @@ public class Vector3 extends Vector2 implements Cloneable
 		this.z -= amount.z;
 	}
 
-	public static Vector3 multiply(Vector3 par1, Vector3 par2)
+	public void multiply(int amount)
 	{
-		return new Vector3(par1.x * par2.x, par1.y * par2.y, par1.z * par2.z);
+		this.x *= amount;
+		this.y *= amount;
+		this.z *= amount;
 	}
 
-	public static Vector3 multiply(Vector3 par1, double par2)
+	public void multiply(Vector3 vec)
 	{
-		return new Vector3(par1.x * par2, par1.y * par2, par1.z * par2);
+		this.x *= vec.x;
+		this.y *= vec.y;
+		this.z *= vec.z;
+	}
+
+	public static Vector3 multiply(Vector3 vec1, Vector3 vec2)
+	{
+		return new Vector3(vec1.x * vec2.x, vec1.y * vec2.y, vec1.z * vec2.z);
+	}
+
+	public static Vector3 multiply(Vector3 vec1, double vec2)
+	{
+		return new Vector3(vec1.x * vec2, vec1.y * vec2, vec1.z * vec2);
 	}
 
 	public static Vector3 readFromNBT(String prefix, NBTTagCompound par1NBTTagCompound)
@@ -430,6 +444,6 @@ public class Vector3 extends Vector2 implements Cloneable
 	@Override
 	public String toString()
 	{
-		return "Vector3: " + this.x + "," + this.y + "," + this.z;
+		return "Vector3 [" + this.x + "," + this.y + "," + this.z + "]";
 	}
 }

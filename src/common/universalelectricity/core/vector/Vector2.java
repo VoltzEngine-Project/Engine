@@ -103,6 +103,6 @@ public class Vector2 implements Cloneable
 	@Override
 	public String toString()
 	{
-		return "Vector2: " + this.x + "," + this.y;
+		return "Vector2 [" + this.x + "," + this.y + "]";
 	}
 }

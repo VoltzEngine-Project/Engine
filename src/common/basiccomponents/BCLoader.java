@@ -157,7 +157,7 @@ public class BCLoader implements ICraftingHandler
 		OreDictionary.registerOre("plateTin", BasicComponents.itemTinPlate);
 		OreDictionary.registerOre("plateBronze", BasicComponents.itemBronzePlate);
 		OreDictionary.registerOre("plateSteel", BasicComponents.itemSteelPlate);
-		
+
 		UETab.setItemStack(BasicComponents.batteryBox);
 
 		proxy.preInit();
