@@ -324,12 +324,13 @@ public class ElectricityManager
 
 	public void onTick(EnumSet<TickType> type, Object... tickData)
 	{
+		if (ElectricityManagerTicker.inGameTicks % 40 == 0)
+		{
+			this.refreshConductors();
+		}
+		
 		if (type.contains(TickType.WORLD) && !type.contains(TickType.WORLDLOAD))
 		{
-			if (ElectricityManagerTicker.inGameTicks % 40 == 0)
-			{
-				this.refreshConductors();
-			}
 
 			try
 			{
