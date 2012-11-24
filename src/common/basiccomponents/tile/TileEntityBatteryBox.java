@@ -88,12 +88,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	{
 		if (!this.isDisabled())
 		{
-			if (voltage > this.getVoltage())
-			{
-				this.worldObj.createExplosion((Entity) null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
-				return;
-			}
-
 			this.setJoules(this.joules + ElectricInfo.getJoules(amps, voltage, 1));
 		}
 	}
