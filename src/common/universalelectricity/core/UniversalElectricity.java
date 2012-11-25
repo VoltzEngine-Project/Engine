@@ -17,10 +17,10 @@ import cpw.mods.fml.common.Loader;
  * The less you include of the API, the more compatible your mod will be for future releases of
  * Universal Electricity.
  * 
- * REQUIRED PACKAGES: "universalelectricity" "universalelectricity.electricity"
- * "universalelectricity.implements" - Some interfaces can be removed if not needed.
+ * REQUIRED PACKAGE: "universalelectricity.core"
+ * OPTIONAL PACKAGE: "universalelectricity.prefab"
  * 
- * The rest of the classes should be removed if you are not going to use them.
+ * All classes should be removed if you are not going to use them.
  * 
  * @author Calclavia
  * 
