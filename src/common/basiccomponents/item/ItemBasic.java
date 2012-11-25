@@ -3,7 +3,6 @@ package basiccomponents.item;
 import net.minecraft.src.Item;
 import universalelectricity.prefab.UETab;
 import basiccomponents.BasicComponents;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ItemBasic extends Item
 {

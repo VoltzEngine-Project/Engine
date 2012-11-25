@@ -314,7 +314,7 @@ public class Vector3 extends Vector2 implements Cloneable
 	{
 		this.modifyPositionFromSide(side, 1);
 	}
-	
+
 	public static TileEntity getTileEntityFromSide(World world, Vector3 position, ForgeDirection side)
 	{
 		position.modifyPositionFromSide(side);

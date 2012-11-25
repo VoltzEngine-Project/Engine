@@ -1,6 +1,5 @@
 package universalelectricity.core.implement;
 
-import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
 /**

@@ -7,7 +7,7 @@ import net.minecraft.src.EntityPlayer;
  * 
  * @author Buildcraft Team
  */
-public interface IToolWrench
+public interface IWrench
 {
 
 	/***

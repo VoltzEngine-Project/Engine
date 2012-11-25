@@ -3,7 +3,6 @@ package universalelectricity.prefab.modifier;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import universalelectricity.core.implement.IItemElectric;
 
 /**
  * This slot should be used by any container that contains an item that is a modifier. An example of

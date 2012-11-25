@@ -328,7 +328,7 @@ public class ElectricityManager
 		{
 			this.refreshConductors();
 		}
-		
+
 		if (type.contains(TickType.WORLD) && !type.contains(TickType.WORLDLOAD))
 		{
 
