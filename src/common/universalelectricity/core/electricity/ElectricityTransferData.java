@@ -1,12 +1,11 @@
 package universalelectricity.core.electricity;
 
-import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.implement.IElectricityReceiver;
 
 public class ElectricityTransferData
 {
-	public TileEntity sender;
+	public Object sender;
 	public IElectricityReceiver receiver;
 	public ElectricityNetwork network;
 	public double amps;
@@ -25,7 +24,7 @@ public class ElectricityTransferData
 	 * @param amps
 	 * @param voltage
 	 */
-	public ElectricityTransferData(TileEntity sender, IElectricityReceiver receiver, ElectricityNetwork network, ForgeDirection side, double amps, double voltage)
+	public ElectricityTransferData(Object sender, IElectricityReceiver receiver, ElectricityNetwork network, ForgeDirection side, double amps, double voltage)
 	{
 		this.sender = sender;
 		this.receiver = receiver;

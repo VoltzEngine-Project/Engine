@@ -17,8 +17,7 @@ import cpw.mods.fml.common.Loader;
  * The less you include of the API, the more compatible your mod will be for future releases of
  * Universal Electricity.
  * 
- * REQUIRED PACKAGE: "universalelectricity.core"
- * OPTIONAL PACKAGE: "universalelectricity.prefab"
+ * REQUIRED PACKAGE: "universalelectricity.core" OPTIONAL PACKAGE: "universalelectricity.prefab"
  * 
  * All classes should be removed if you are not going to use them.
  * 

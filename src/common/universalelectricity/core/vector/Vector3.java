@@ -1,5 +1,8 @@
 package universalelectricity.core.vector;
 
+import java.util.List;
+
+import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.ChunkCoordinates;
 import net.minecraft.src.Entity;
 import net.minecraft.src.IBlockAccess;
@@ -274,6 +277,14 @@ public class Vector3 extends Vector2 implements Cloneable
 	public Vector3 floor()
 	{
 		return new Vector3(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z));
+	}
+
+	/**
+	 * Gets all entities inside of this position in block space.
+	 */
+	public List<Entity> getEntitiesWithin(World worldObj, Class<? extends Entity> par1Class)
+	{
+		return (List<Entity>) worldObj.getEntitiesWithinAABB(par1Class, AxisAlignedBB.getBoundingBox(this.intX(), this.intY(), this.intZ(), this.intX() + 1, this.intY() + 1, this.intZ() + 1));
 	}
 
 	/**

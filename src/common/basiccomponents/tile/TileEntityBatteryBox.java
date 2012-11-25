@@ -7,6 +7,10 @@ import ic2.api.IElectricItem;
 import ic2.api.IEnergySink;
 import ic2.api.IEnergySource;
 import ic2.api.IEnergyStorage;
+
+import java.util.List;
+
+import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.INetworkManager;
@@ -23,6 +27,7 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityManager;
 import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.implement.IElectricityReceiver;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
@@ -123,15 +128,19 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
 		if (!this.isDisabled())
 		{
+			/**
+			 * Receive Electricity
+			 */
 			if (this.powerProvider != null)
 			{
 				double receivedElectricity = this.powerProvider.useEnergy(50, 50, true) * UniversalElectricity.BC3_RATIO;
 				this.setJoules(this.joules + receivedElectricity);
 			}
 
-			// The top slot is for recharging
-			// items. Check if the item is a
-			// electric item. If so, recharge it.
+			/*
+			 * The top slot is for recharging items. Check if the item is a electric item. If so,
+			 * recharge it.
+			 */
 			if (this.containingItems[0] != null && this.joules > 0)
 			{
 				if (this.containingItems[0].getItem() instanceof IItemElectric)
@@ -148,9 +157,28 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				}
 			}
 
-			// The bottom slot is for decharging.
-			// Check if the item is a electric
-			// item. If so, decharge it.
+			// Power redstone if the battery box is full
+			boolean isFullThisCheck = false;
+
+			if (this.joules >= this.getMaxJoules())
+			{
+				isFullThisCheck = true;
+			}
+
+			if (this.isFull != isFullThisCheck)
+			{
+				this.isFull = isFullThisCheck;
+				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
+			}
+
+			/**
+			 * Output Electricity
+			 */
+
+			/**
+			 * The bottom slot is for decharging. Check if the item is a electric item. If so,
+			 * decharge it.
+			 */
 			if (this.containingItems[1] != null && this.joules < this.getMaxJoules())
 			{
 				if (this.containingItems[1].getItem() instanceof IItemElectric)
@@ -174,58 +202,15 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				}
 			}
 
-			// Power redstone if the battery box
-			// is full
-			boolean isFullThisCheck = false;
-
-			if (this.joules >= this.getMaxJoules())
-			{
-				isFullThisCheck = true;
-			}
-
-			if (this.isFull != isFullThisCheck)
-			{
-				this.isFull = isFullThisCheck;
-				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
-			}
-
-			// Output electricity
 			if (this.joules > 0)
 			{
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
+				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
+				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
 
-				// Output IC2 energy
-				if (Loader.isModLoaded("IC2"))
+				if (tileEntity != null)
 				{
-					if (tileEntity != null)
-					{
-						if (tileEntity instanceof IConductor)
-						{
-							if (this.joules * UniversalElectricity.TO_IC2_RATIO >= 32)
-							{
-								this.setJoules(this.joules - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32)) * UniversalElectricity.IC2_RATIO);
-							}
-						}
-					}
-				}
+					TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), outputDirection);
 
-				// Output BC energy
-				if (Loader.isModLoaded("BuildCraft|Transport"))
-				{
-					if (this.isPoweredTile(tileEntity))
-					{
-						IPowerReceptor receptor = (IPowerReceptor) tileEntity;
-						double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
-						float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joules), 80000), 0);
-						receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite());
-						this.setJoules(this.joules - transferJoules);
-					}
-				}
-
-				TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
-
-				if (connector != null)
-				{
 					// Output UE electricity
 					if (connector instanceof IConductor)
 					{
@@ -238,6 +223,45 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 						}
 
 						this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
+					}
+					else
+					{
+						// Output IC2/Buildcraft energy
+						if (tileEntity instanceof IConductor)
+						{
+							if (this.joules * UniversalElectricity.TO_IC2_RATIO >= 32)
+							{
+								this.setJoules(this.joules - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32)) * UniversalElectricity.IC2_RATIO);
+							}
+						}
+						else if (this.isPoweredTile(tileEntity))
+						{
+							IPowerReceptor receptor = (IPowerReceptor) tileEntity;
+							double BCjoulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
+							float transferJoules = (float) Math.max(Math.min(Math.min(BCjoulesNeeded, this.joules), 80000), 0);
+							receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite());
+							this.setJoules(this.joules - transferJoules);
+						}
+					}
+				}
+				else
+				{
+					Vector3 outputPosition = Vector3.get(this);
+					outputPosition.modifyPositionFromSide(outputDirection);
+
+					List<Entity> entities = outputPosition.getEntitiesWithin(worldObj, Entity.class);
+
+					for (Entity entity : entities)
+					{
+						if (entity instanceof IElectricityReceiver)
+						{
+							IElectricityReceiver electricEntity = ((IElectricityReceiver) entity);
+							double joulesNeeded = electricEntity.wattRequest();
+							double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
+							ElectricityManager.instance.produceElectricity(this, entity, transferAmps, this.getVoltage(), outputDirection);
+							this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
+							break;
+						}
 					}
 				}
 			}

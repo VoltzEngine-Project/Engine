@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.src.Entity;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.implement.IConductor;
@@ -148,7 +149,7 @@ public class ElectricityManager
 	 * @param voltage
 	 *            The amount of volts this machine is sending.
 	 */
-	public void produceElectricity(TileEntity sender, IConductor targetConductor, double amps, double voltage)
+	public void produceElectricity(Object sender, IConductor targetConductor, double amps, double voltage)
 	{
 		if (targetConductor != null && amps > 0 && voltage > 0)
 		{
@@ -180,12 +181,16 @@ public class ElectricityManager
 									double transferAmps = Math.max(0, Math.min(leftOverAmps, Math.min(amps / allElectricUnitsInLine.size(), ElectricInfo.getAmps(this.getActualWattRequest(receiver), receiver.getVoltage()))));
 									leftOverAmps -= transferAmps;
 
-									// Calculate
-									// electricity
-									// loss
-									double distance = Vector3.distance(Vector3.get(sender), Vector3.get((TileEntity) receiver));
-									double ampsReceived = transferAmps - (transferAmps * transferAmps * targetConductor.getResistance() * distance) / voltage;
-									double voltsReceived = voltage - (transferAmps * targetConductor.getResistance() * distance);
+									double ampsReceived = transferAmps;
+									double voltsReceived = voltage;
+
+									if (sender instanceof TileEntity)
+									{
+										// Calculate electricity loss
+										double distance = Vector3.distance(Vector3.get((TileEntity) sender), Vector3.get((TileEntity) receiver));
+										ampsReceived = transferAmps - (transferAmps * transferAmps * targetConductor.getResistance() * distance) / voltage;
+										voltsReceived = voltage - (transferAmps * targetConductor.getResistance() * distance);
+									}
 
 									this.electricityTransferQueue.add(new ElectricityTransferData(sender, receiver, electricityNetwork, ForgeDirection.getOrientation(i).getOpposite(), ampsReceived, voltsReceived));
 								}
@@ -197,6 +202,22 @@ public class ElectricityManager
 			else
 			{
 				FMLLog.severe("Conductor not registered to a network!");
+			}
+		}
+	}
+
+	public void produceElectricity(Object sender, Entity entity, double amps, double voltage, ForgeDirection outputDirection)
+	{
+		if (entity instanceof IElectricityReceiver)
+		{
+			IElectricityReceiver electricEntity = ((IElectricityReceiver) entity);
+
+			if (electricEntity.wattRequest() > 0)
+			{
+				if (electricEntity.canReceiveFromSide(outputDirection.getOpposite()))
+				{
+					electricEntity.onReceive(this, amps, voltage, outputDirection.getOpposite());
+				}
 			}
 		}
 	}
