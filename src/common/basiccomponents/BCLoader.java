@@ -220,12 +220,12 @@ public class BCLoader implements ICraftingHandler
 		{ "SSS", "SCS", "SMS", 'S', "ingotSteel", 'C', BasicComponents.itemCircuit, 'M', BasicComponents.itemMotor }));
 		GameRegistry.addSmelting(BasicComponents.electricFurnace.itemID, new ItemStack(BasicComponents.itemSteelDust, 6), 0f);
 		// Copper
-		FurnaceRecipes.smelting().addSmelting(BasicComponents.blockBasicOre.blockID, 0, new ItemStack(BasicComponents.itemCopperIngot));
+		FurnaceRecipes.smelting().addSmelting(BasicComponents.blockBasicOre.blockID, 0, new ItemStack(BasicComponents.itemCopperIngot), 0.7f);
 		// Copper Wire
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.blockCopperWire, 6), new Object[]
 		{ "!!!", "@@@", "!!!", '!', Item.leather, '@', "ingotCopper" }));
 		// Tin
-		FurnaceRecipes.smelting().addSmelting(BasicComponents.blockBasicOre.blockID, 1, new ItemStack(BasicComponents.itemTinIngot));
+		FurnaceRecipes.smelting().addSmelting(BasicComponents.blockBasicOre.blockID, 1, new ItemStack(BasicComponents.itemTinIngot), 0.7f);
 		// Battery
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBattery), new Object[]
 		{ " T ", "TRT", "TCT", 'T', "ingotTin", 'R', Item.redstone, 'C', Item.coal }));
