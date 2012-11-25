@@ -13,7 +13,7 @@ import basiccomponents.BasicComponents;
 
 public class ItemOilBucket extends ItemBucket
 {
-	public ItemOilBucket(String name, int id, int texture)
+	public ItemOilBucket(int id, int texture)
 	{
 		super(id, BasicComponents.oilMoving.blockID);
 		this.setIconIndex(texture);
