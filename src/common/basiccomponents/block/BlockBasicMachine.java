@@ -32,7 +32,7 @@ public class BlockBasicMachine extends BlockMachine
 
 	public BlockBasicMachine(int id, int textureIndex)
 	{
-		super("Basic Machine", id, UniversalElectricity.machine, UETab.INSTANCE);
+		super("bcMachine", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
 		this.setStepSound(soundMetalFootstep);
 		this.setRequiresSelfNotify();

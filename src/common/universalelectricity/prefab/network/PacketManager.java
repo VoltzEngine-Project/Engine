@@ -53,7 +53,6 @@ public class PacketManager implements IPacketHandler, IPacketReceiver
 		try
 		{
 			data.writeInt(id);
-
 			data = encodeDataStream(data, sendData);
 
 			Packet250CustomPayload packet = new Packet250CustomPayload();

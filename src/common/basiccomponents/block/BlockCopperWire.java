@@ -13,7 +13,7 @@ public class BlockCopperWire extends BlockConductor
 	public BlockCopperWire(int id)
 	{
 		super(id, Material.cloth);
-		this.setBlockName("Copper Wire");
+		this.setBlockName("copperWire");
 		this.setStepSound(soundClothFootstep);
 		this.setResistance(0.2F);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);

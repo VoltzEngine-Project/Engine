@@ -21,7 +21,7 @@ public class ItemWrench extends Item implements ICrowbar, IToolWrench
 		this.setMaxStackSize(1);
 		this.setMaxDamage(2000);
 		this.setCreativeTab(UETab.INSTANCE);
-		this.setItemName("Universal Wrench");
+		this.setItemName("wrench");
 		this.setIconIndex(texture);
 		this.setTextureFile(BasicComponents.ITEM_TEXTURE_FILE);
 	}

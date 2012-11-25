@@ -10,16 +10,13 @@ import basiccomponents.BasicComponents;
 
 public class ItemCircuit extends Item
 {
-	private String[] names = new String[]
-	{ "Basic Circuit", "Adavanced Circuit", "Elite Circuit" };
-
 	public ItemCircuit(int id, int texture)
 	{
 		super(id);
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
 		this.setCreativeTab(UETab.INSTANCE);
-		this.setItemName("Circuit");
+		this.setItemName("circuit");
 		this.setIconIndex(texture);
 		this.setTextureFile(BasicComponents.ITEM_TEXTURE_FILE);
 	}
@@ -33,7 +30,7 @@ public class ItemCircuit extends Item
 	@Override
 	public String getItemNameIS(ItemStack itemstack)
 	{
-		return names[itemstack.getItemDamage()];
+		return this.getItemName() + "." + itemstack.getItemDamage();
 	}
 
 	@Override
@@ -45,7 +42,7 @@ public class ItemCircuit extends Item
 	@Override
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
-		for (int i = 0; i < names.length; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			par3List.add(new ItemStack(this, 1, i));
 		}

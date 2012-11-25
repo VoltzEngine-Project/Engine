@@ -1,15 +1,13 @@
 package basiccomponents.item;
 
+import net.minecraft.src.Block;
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ItemStack;
 import basiccomponents.block.BlockBasicMachine;
 
-public class ItemBasicMachine extends ItemBlock
+public class ItemBlockBasicMachine extends ItemBlock
 {
-	private String[] names =
-	{ "Coal Generator", "Battery Box", "Electric Furnace" };
-
-	public ItemBasicMachine(int id)
+	public ItemBlockBasicMachine(int id)
 	{
 		super(id);
 		this.setMaxDamage(0);
@@ -36,6 +34,12 @@ public class ItemBasicMachine extends ItemBlock
 			metadata = 1;
 		}
 
-		return (new StringBuilder()).append(super.getItemName()).append(".").append(this.names[metadata]).toString();
+		return Block.blocksList[this.getBlockID()].getBlockName() + "." + metadata;
+	}
+
+	@Override
+	public String getItemName()
+	{
+		return Block.blocksList[this.getBlockID()].getBlockName() + ".0";
 	}
 }

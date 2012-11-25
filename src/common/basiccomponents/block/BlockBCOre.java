@@ -15,7 +15,7 @@ public class BlockBCOre extends Block
 	{
 		super(id, 14, Material.rock);
 		this.setCreativeTab(UETab.INSTANCE);
-		this.setBlockName("BCOre");
+		this.setBlockName("bcOre");
 		this.setHardness(2f);
 	}
 

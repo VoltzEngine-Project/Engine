@@ -26,10 +26,10 @@ import basiccomponents.block.BlockCopperWire;
 import basiccomponents.block.BlockOilFlowing;
 import basiccomponents.block.BlockOilStill;
 import basiccomponents.item.ItemBasic;
-import basiccomponents.item.ItemBasicMachine;
+import basiccomponents.item.ItemBlockBasicMachine;
 import basiccomponents.item.ItemBattery;
 import basiccomponents.item.ItemBlockCopperWire;
-import basiccomponents.item.ItemBlockOre;
+import basiccomponents.item.ItemBlockBCOre;
 import basiccomponents.item.ItemCircuit;
 import basiccomponents.item.ItemOilBucket;
 import basiccomponents.item.ItemWrench;
@@ -55,9 +55,11 @@ public class BCLoader implements ICraftingHandler
 {
 	public static final String CHANNEL = "BasicComponents";
 
-	public static final String FILE_PATH = "/basiccomponents/textures/";
-	public static final String BLOCK_TEXTURE_FILE = FILE_PATH + "blocks.png";
-	public static final String ITEM_TEXTURE_FILE = FILE_PATH + "items.png";
+	public static final String FILE_PATH = "/basiccomponents/";
+	public static final String LANGUAGE_PATH = FILE_PATH + "language/";
+	public static final String TEXTURE_PATH = FILE_PATH + "textures/";
+	public static final String BLOCK_TEXTURE_FILE = TEXTURE_PATH + "blocks.png";
+	public static final String ITEM_TEXTURE_FILE = TEXTURE_PATH + "items.png";
 
 	@Instance("BasicComponents")
 	public static BCLoader instance;
@@ -74,7 +76,7 @@ public class BCLoader implements ICraftingHandler
 		/**
 		 * Define the items and blocks.
 		 */
-		BasicComponents.blockBasicOre = new BlockBCOre(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper and Tin Ores", BasicComponents.BLOCK_ID_PREFIX));
+		BasicComponents.blockBasicOre = new BlockBCOre(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper and Tin Ores", BasicComponents.BLOCK_ID_PREFIX + 0));
 		BasicComponents.blockCopperWire = new BlockCopperWire(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper_Wire", BasicComponents.BLOCK_ID_PREFIX + 1));
 		BasicComponents.oilMoving = new BlockOilFlowing(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Flowing", BasicComponents.BLOCK_ID_PREFIX + 2));
 		BasicComponents.oilStill = new BlockOilStill(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Still", BasicComponents.BLOCK_ID_PREFIX + 3));
@@ -84,22 +86,22 @@ public class BCLoader implements ICraftingHandler
 		BasicComponents.itemWrench = new ItemWrench(UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Universal Wrench", BasicComponents.ITEM_ID_PREFIX + 2), 20);
 		BasicComponents.itemCircuit = new ItemCircuit(UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Circuit", BasicComponents.ITEM_ID_PREFIX + 7), 16);
 
-		BasicComponents.itemTinIngot = new ItemBasic("Tin Ingot", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Ingot", BasicComponents.ITEM_ID_PREFIX + 4), 2);
-		BasicComponents.itemCopperIngot = new ItemBasic("Copper Ingot", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Ingot", BasicComponents.ITEM_ID_PREFIX + 3), 1);
-		BasicComponents.itemSteelIngot = new ItemBasic("Steel Ingot", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Ingot", BasicComponents.ITEM_ID_PREFIX + 5), 3);
-		BasicComponents.itemBronzeIngot = new ItemBasic("Bronze Ingot", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Ingot", BasicComponents.ITEM_ID_PREFIX + 8), 7);
+		BasicComponents.itemTinIngot = new ItemBasic("ingotTin", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Ingot", BasicComponents.ITEM_ID_PREFIX + 4), 2);
+		BasicComponents.itemCopperIngot = new ItemBasic("ingotCopper", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Ingot", BasicComponents.ITEM_ID_PREFIX + 3), 1);
+		BasicComponents.itemSteelIngot = new ItemBasic("ingotSteel", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Ingot", BasicComponents.ITEM_ID_PREFIX + 5), 3);
+		BasicComponents.itemBronzeIngot = new ItemBasic("ingotBronze", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Ingot", BasicComponents.ITEM_ID_PREFIX + 8), 7);
 
-		BasicComponents.itemBronzeDust = new ItemBasic("Bronze Dust", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Dust", BasicComponents.ITEM_ID_PREFIX + 9), 6);
-		BasicComponents.itemSteelDust = new ItemBasic("Steel Dust", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Dust", BasicComponents.ITEM_ID_PREFIX + 6), 5);
+		BasicComponents.itemBronzeDust = new ItemBasic("dustBronze", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Dust", BasicComponents.ITEM_ID_PREFIX + 9), 6);
+		BasicComponents.itemSteelDust = new ItemBasic("dustSteel", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Dust", BasicComponents.ITEM_ID_PREFIX + 6), 5);
 
-		BasicComponents.itemMotor = new ItemBasic("Motor", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", BasicComponents.ITEM_ID_PREFIX + 12), 12);
+		BasicComponents.itemMotor = new ItemBasic("motor", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", BasicComponents.ITEM_ID_PREFIX + 12), 12);
 
 		BasicComponents.itemOilBucket = new ItemOilBucket("Oil Bucket", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Oil Bucket", BasicComponents.ITEM_ID_PREFIX + 13), 4);
 
-		BasicComponents.itemCopperPlate = new ItemBasic("Copper Plate", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Plate", BasicComponents.ITEM_ID_PREFIX + 14), 10);
-		BasicComponents.itemSteelPlate = new ItemBasic("Steel Plate", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", BasicComponents.ITEM_ID_PREFIX + 10), 9);
-		BasicComponents.itemBronzePlate = new ItemBasic("Bronze Plate", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Plate", BasicComponents.ITEM_ID_PREFIX + 11), 8);
-		BasicComponents.itemTinPlate = new ItemBasic("Tin Plate", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Plate", BasicComponents.ITEM_ID_PREFIX + 15), 11);
+		BasicComponents.itemCopperPlate = new ItemBasic("plateCopper", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Plate", BasicComponents.ITEM_ID_PREFIX + 14), 10);
+		BasicComponents.itemSteelPlate = new ItemBasic("plateSteel", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", BasicComponents.ITEM_ID_PREFIX + 10), 9);
+		BasicComponents.itemBronzePlate = new ItemBasic("plateBronze", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Plate", BasicComponents.ITEM_ID_PREFIX + 11), 8);
+		BasicComponents.itemTinPlate = new ItemBasic("plateTin", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Plate", BasicComponents.ITEM_ID_PREFIX + 15), 11);
 
 		BasicComponents.coalGenerator = ((BlockBasicMachine) BasicComponents.blockMachine).getCoalGenerator();
 		BasicComponents.batteryBox = ((BlockBasicMachine) BasicComponents.blockMachine).getBatteryBox();
@@ -115,8 +117,8 @@ public class BCLoader implements ICraftingHandler
 		MinecraftForge.EVENT_BUS.register(BasicComponents.itemOilBucket);
 
 		// Register Blocks
-		GameRegistry.registerBlock(BasicComponents.blockBasicOre, ItemBlockOre.class);
-		GameRegistry.registerBlock(BasicComponents.blockMachine, ItemBasicMachine.class);
+		GameRegistry.registerBlock(BasicComponents.blockBasicOre, ItemBlockBCOre.class);
+		GameRegistry.registerBlock(BasicComponents.blockMachine, ItemBlockBasicMachine.class);
 		GameRegistry.registerBlock(BasicComponents.blockCopperWire, ItemBlockCopperWire.class);
 		GameRegistry.registerBlock(BasicComponents.oilMoving);
 		GameRegistry.registerBlock(BasicComponents.oilStill);
@@ -167,26 +169,15 @@ public class BCLoader implements ICraftingHandler
 	public void load(FMLInitializationEvent evt)
 	{
 		proxy.init();
-
+		
 		/**
-		 * Adding names
+		 * Load all languages.
 		 */
-		LanguageRegistry.addName(new ItemStack(BasicComponents.blockBasicOre, 1, 0), "Copper Ore");
-		LanguageRegistry.addName(new ItemStack(BasicComponents.blockBasicOre, 1, 1), "Tin Ore");
+		for(String language : new String[]{"en_US", "zh_CN"})
+		{
+			LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", language, false);
+		}
 
-		LanguageRegistry.addName(BasicComponents.oilMoving, "Oil Moving");
-		LanguageRegistry.addName(BasicComponents.oilStill, "Oil Still");
-		LanguageRegistry.addName(BasicComponents.itemBattery, "Basic Battery");
-		LanguageRegistry.addName(new ItemStack(BasicComponents.blockCopperWire, 1, 0), "Copper Wire");
-		LanguageRegistry.addName(new ItemStack(BasicComponents.itemCircuit, 1, 0), "Basic Circuit");
-		LanguageRegistry.addName(new ItemStack(BasicComponents.itemCircuit, 1, 1), "Advanced Circuit");
-		LanguageRegistry.addName(new ItemStack(BasicComponents.itemCircuit, 1, 2), "Elite Circuit");
-		LanguageRegistry.addName(BasicComponents.itemOilBucket, "Oil Bucket");
-		LanguageRegistry.addName(BasicComponents.itemWrench, "Universal Wrench");
-
-		LanguageRegistry.addName(BasicComponents.coalGenerator, "Coal Generator");
-		LanguageRegistry.addName(BasicComponents.batteryBox, "Battery Box");
-		LanguageRegistry.addName(BasicComponents.electricFurnace, "Electric Furnace");
 		/**
 		 * Registering Tile Entities
 		 */

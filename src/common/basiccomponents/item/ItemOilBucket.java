@@ -19,7 +19,7 @@ public class ItemOilBucket extends ItemBucket
 		this.setIconIndex(texture);
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setContainerItem(Item.bucketEmpty);
-		this.setItemName("Oil Bucket");
+		this.setItemName("bucketOil");
 	}
 
 	@Override

@@ -25,12 +25,6 @@ public class ItemBlockCopperWire extends ItemBlock
 	}
 
 	@Override
-	public String getItemNameIS(ItemStack itemstack)
-	{
-		return (new StringBuilder()).append(super.getItemName()).append(".").append("Copper Wire").toString();
-	}
-
-	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
 		par3List.add("Resistance: " + ElectricInfo.getDisplay(TileEntityCopperWire.RESISTANCE, ElectricUnit.RESISTANCE));

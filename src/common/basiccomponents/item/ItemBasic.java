@@ -13,7 +13,6 @@ public class ItemBasic extends Item
 		this.setIconIndex(texture);
 		this.setItemName(name);
 		this.setCreativeTab(UETab.INSTANCE);
-		LanguageRegistry.addName(this, name);
 	}
 
 	@Override
