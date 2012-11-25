@@ -2,15 +2,17 @@ package universalelectricity.prefab.implement;
 
 import net.minecraft.src.EntityPlayer;
 
-/***
- * Implement this interface on subclasses of Item to have that item work as a
- * wrench for buildcraft
+/**
+ * Code written by Buildcraft.
+ * 
+ * @author Buildcraft Team
  */
-public interface IToolWrench {
+public interface IToolWrench
+{
 
 	/***
-	 * Called to ensure that the wrench can be used. To get the ItemStack that
-	 * is used, check player.inventory.getCurrentItem()
+	 * Called to ensure that the wrench can be used. To get the ItemStack that is used, check
+	 * player.inventory.getCurrentItem()
 	 * 
 	 * @param player
 	 *            - The player doing the wrenching
@@ -22,9 +24,8 @@ public interface IToolWrench {
 	public boolean canWrench(EntityPlayer player, int x, int y, int z);
 
 	/***
-	 * Callback after the wrench has been used. This can be used to decrease
-	 * durability or for other purposes. To get the ItemStack that was used,
-	 * check player.inventory.getCurrentItem()
+	 * Callback after the wrench has been used. This can be used to decrease durability or for other
+	 * purposes. To get the ItemStack that was used, check player.inventory.getCurrentItem()
 	 * 
 	 * @param player
 	 *            - The player doing the wrenching

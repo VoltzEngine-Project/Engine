@@ -8,7 +8,7 @@ import java.util.Properties;
 import net.minecraft.src.StringTranslate;
 
 /**
- * Simple mod localization class. Thanks to Buildcraft for providing their source code.
+ * Simple mod localization class. Code written by Buildcraft.
  * 
  * @author Jimeo Wan
  * @license Public domain

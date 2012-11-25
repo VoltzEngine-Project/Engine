@@ -61,7 +61,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	}
 
 	@Override
-	public void onReceive(TileEntity entity, double amps, double voltage, ForgeDirection side)
+	public void onReceive(Object entity, double amps, double voltage, ForgeDirection side)
 	{
 		if (voltage > this.getVoltage())
 		{
