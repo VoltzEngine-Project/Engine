@@ -24,6 +24,8 @@ import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.common.registry.LanguageRegistry;
+
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 
@@ -316,7 +318,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 	@Override
 	public String getInvName()
 	{
-		return "Coal Generator";
+		return LanguageRegistry.instance().getStringLocalization("tile.bcMachine.0.name");
 	}
 
 	@Override

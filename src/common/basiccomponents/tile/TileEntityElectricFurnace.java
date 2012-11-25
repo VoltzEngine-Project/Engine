@@ -24,6 +24,8 @@ import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.common.registry.LanguageRegistry;
+
 public class TileEntityElectricFurnace extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver
 {
 	// The amount of watts required by the
@@ -347,7 +349,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	@Override
 	public String getInvName()
 	{
-		return "Electric Furnace";
+		return LanguageRegistry.instance().getStringLocalization("tile.bcMachine.2.name");
 	}
 
 	@Override

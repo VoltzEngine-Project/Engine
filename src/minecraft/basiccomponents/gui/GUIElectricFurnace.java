@@ -31,7 +31,7 @@ public class GUIElectricFurnace extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		this.fontRenderer.drawString("Electric Furnace", 60, 6, 4210752);
+		this.fontRenderer.drawString(this.tileEntity.getInvName(), 60, 6, 4210752);
 		this.fontRenderer.drawString("Smelting:", 10, 28, 4210752);
 		this.fontRenderer.drawString("Battery:", 10, 53, 4210752);
 		String displayText = "";

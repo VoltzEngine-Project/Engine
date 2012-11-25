@@ -31,7 +31,7 @@ public class GuiCoalGenerator extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		this.fontRenderer.drawString("Coal Generator", 55, 6, 4210752);
+		this.fontRenderer.drawString(this.tileEntity.getInvName(), 55, 6, 4210752);
 		this.fontRenderer.drawString("Generating", 90, 33, 4210752);
 		String displayText = "";
 
