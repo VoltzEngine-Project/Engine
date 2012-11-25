@@ -35,7 +35,6 @@ cd resources\
 cd ..\
 cd src\
 "..\..\7za.exe" a "..\builds\%API_NAME%" "*\universalelectricity\"
-"..\..\7za.exe" a "..\builds\%API_NAME%" "*\buildcraft\api\tools\"
 
 "..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\universalelectricity\"
 "..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\basiccomponents\"

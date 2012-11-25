@@ -10,8 +10,8 @@ import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import railcraft.common.api.core.items.ICrowbar;
 import universalelectricity.prefab.UETab;
+import universalelectricity.prefab.implement.IToolWrench;
 import basiccomponents.BasicComponents;
-import buildcraft.api.tools.IToolWrench;
 
 public class ItemWrench extends Item implements ICrowbar, IToolWrench
 {

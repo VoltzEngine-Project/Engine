@@ -13,7 +13,7 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.core.implement.IItemElectric;
-import buildcraft.api.tools.IToolWrench;
+import universalelectricity.prefab.implement.IToolWrench;
 
 /**
  * A block you may extend from to create your machine blocks! You do not have to extend from this
