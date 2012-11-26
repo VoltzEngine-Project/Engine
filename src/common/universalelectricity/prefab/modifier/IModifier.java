@@ -1,5 +1,7 @@
 package universalelectricity.prefab.modifier;
 
+import net.minecraft.src.ItemStack;
+
 /**
  * This must be applied to an item that acts as a modifier or an upgrade.
  * 
@@ -11,10 +13,10 @@ public interface IModifier
 	/**
 	 * @return - The name of the modifier.
 	 */
-	public String getName();
+	public String getName(ItemStack itemstack);
 
 	/**
 	 * @return - How much effect does this modifier have?
 	 */
-	public int getEffectiveness();
+	public int getEffectiveness(ItemStack itemstack);
 }
