@@ -1,5 +1,7 @@
 package universalelectricity.prefab.modifier;
 
+import net.minecraft.src.ItemStack;
+
 /**
  * This must be applied to an item that acts as a modifier or an upgrade.
  * 
