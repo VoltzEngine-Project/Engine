@@ -1,4 +1,6 @@
-package universalelectricity.core.vector;
+package universalelectricity.prefab.vector;
+
+import universalelectricity.core.vector.Vector2;
 
 public class Region2
 {

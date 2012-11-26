@@ -1,4 +1,4 @@
-package universalelectricity.core.vector;
+package universalelectricity.prefab.vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.Entity;
 import net.minecraft.src.World;
+import universalelectricity.core.vector.Vector3;
 
 /**
  * A cubical region class.
