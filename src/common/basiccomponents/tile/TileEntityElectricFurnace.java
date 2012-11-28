@@ -86,7 +86,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 
 				if (electricItem.canProduceElectricity())
 				{
-					double receivedWattHours = electricItem.onUse(Math.min(electricItem.getMaxJoules() * 0.01, ElectricInfo.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
+					double receivedWattHours = electricItem.onUse(Math.min(electricItem.getMaxJoules(this.containingItems[0]) * 0.01, ElectricInfo.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
 					this.joulesReceived += ElectricInfo.getWatts(receivedWattHours);
 				}
 			}
