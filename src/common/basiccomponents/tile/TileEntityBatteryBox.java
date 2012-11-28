@@ -146,7 +146,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				if (this.containingItems[0].getItem() instanceof IItemElectric)
 				{
 					IItemElectric electricItem = (IItemElectric) this.containingItems[0].getItem();
-					double ampsToGive = Math.min(ElectricInfo.getAmps(electricItem.getMaxJoules() * 0.005, this.getVoltage()), this.joules);
+					double ampsToGive = Math.min(ElectricInfo.getAmps(electricItem.getMaxJoules(this.containingItems[0]) * 0.005, this.getVoltage()), this.joules);
 					double joules = electricItem.onReceive(ampsToGive, this.getVoltage(), this.containingItems[0]);
 					this.setJoules(this.joules - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
 				}
@@ -187,7 +187,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
 					if (electricItem.canProduceElectricity())
 					{
-						double joulesReceived = electricItem.onUse(electricItem.getMaxJoules() * 0.005, this.containingItems[1]);
+						double joulesReceived = electricItem.onUse(electricItem.getMaxJoules(this.containingItems[1]) * 0.005, this.containingItems[1]);
 						this.setJoules(this.joules + joulesReceived);
 					}
 				}
