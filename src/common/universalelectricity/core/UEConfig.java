@@ -8,7 +8,7 @@ public class UEConfig
 	{
 		configuration.load();
 		int returnInt = defaultInt;
-		returnInt = Integer.parseInt(configuration.get(name, Configuration.CATEGORY_GENERAL, defaultInt).value);
+		returnInt = Integer.parseInt(configuration.get(Configuration.CATEGORY_GENERAL, name, defaultInt).value);
 		configuration.save();
 		return returnInt;
 	}
@@ -17,7 +17,7 @@ public class UEConfig
 	{
 		configuration.load();
 		boolean returnBoolean = defaultBoolean;
-		returnBoolean = Boolean.parseBoolean(configuration.get(name, Configuration.CATEGORY_GENERAL, defaultBoolean).value);
+		returnBoolean = Boolean.parseBoolean(configuration.get(Configuration.CATEGORY_GENERAL, name, defaultBoolean).value);
 		configuration.save();
 		return returnBoolean;
 	}
@@ -40,7 +40,7 @@ public class UEConfig
 		configuration.load();
 		int id = defaultID;
 
-		id = Integer.parseInt(configuration.getItem(name, Configuration.CATEGORY_ITEM, defaultID).value);
+		id = Integer.parseInt(configuration.getItem(Configuration.CATEGORY_ITEM, name, defaultID).value);
 
 		if (id < 256) { return defaultID; }
 
