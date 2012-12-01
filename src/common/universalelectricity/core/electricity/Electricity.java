@@ -23,23 +23,7 @@ public class Electricity
 {
 	public static Electricity instance = new Electricity();
 
-	private List<TileEntity> producers = new ArrayList<TileEntity>();
-	private List<TileEntity> receivers = new ArrayList<TileEntity>();
-
 	private List<ElectricityNetwork> electricityNetworks = new ArrayList<ElectricityNetwork>();
-
-	public void registerProducer(TileEntity tileEntity)
-	{
-		if (!producers.contains(tileEntity))
-			producers.add(tileEntity);
-	}
-	
-
-	public void registerReceiver(TileEntity tileEntity)
-	{
-		if (!receivers.contains(tileEntity))
-			receivers.add(tileEntity);
-	}
 
 	/**
 	 * Registers a conductor into the UE electricity net.
@@ -52,23 +36,11 @@ public class Electricity
 	
 	public void unregister(TileEntity tileEntity)
 	{
-		if (producers.contains(tileEntity))
-		{
-			producers.remove(tileEntity);
-		}
-		
-		if (receivers.contains(tileEntity))
-		{
-			receivers.remove(tileEntity);
-		}
-		
 		for(ElectricityNetwork network : this.electricityNetworks)
 		{
 			network.stopProducing(tileEntity);
 			network.stopRequesting(tileEntity);
 		}
-		
-		System.out.println("UNREGISTERED");
 	}
 
 	/**

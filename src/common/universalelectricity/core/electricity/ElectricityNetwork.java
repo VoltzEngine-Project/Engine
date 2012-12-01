@@ -47,7 +47,7 @@ public class ElectricityNetwork
 	{
 		this.currentlyProducing.remove(tileEntity);
 	}
-	
+
 	/**
 	 * Sets this tile entity to start producing energy in this network.
 	 */
@@ -74,7 +74,7 @@ public class ElectricityNetwork
 	{
 		this.requests.remove(tileEntity);
 	}
-	
+
 	/**
 	 * @return The electricity produced in this electricity network
 	 */
@@ -83,25 +83,32 @@ public class ElectricityNetwork
 		ElectricityPack totalElectricity = new ElectricityPack(0, 0);
 
 		Iterator it = this.currentlyProducing.entrySet().iterator();
-		System.out.println(this.currentlyProducing.size());
+
 		while (it.hasNext())
 		{
 			Map.Entry pairs = (Map.Entry) it.next();
 
 			if (pairs != null)
 			{
-				if (pairs.getKey() == null)
+				TileEntity tileEntity = (TileEntity) pairs.getKey();
+
+				if (tileEntity == null)
 				{
 					it.remove();
 					continue;
 				}
 
-				if (((TileEntity) pairs.getKey()).isInvalid())
+				if (tileEntity.isInvalid())
 				{
 					it.remove();
 					continue;
 				}
-				System.out.println(((TileEntity) pairs.getKey()).isInvalid() + "vs" + this.currentlyProducing.size());
+
+				if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) != tileEntity)
+				{
+					it.remove();
+					continue;
+				}
 
 				ElectricityPack pack = (ElectricityPack) pairs.getValue();
 
@@ -131,13 +138,21 @@ public class ElectricityNetwork
 
 			if (pairs != null)
 			{
-				if (pairs.getKey() == null)
+				TileEntity tileEntity = (TileEntity) pairs.getKey();
+
+				if (tileEntity == null)
 				{
 					it.remove();
 					continue;
 				}
 
-				if (((TileEntity) pairs.getKey()).isInvalid())
+				if (tileEntity.isInvalid())
+				{
+					it.remove();
+					continue;
+				}
+
+				if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) != tileEntity)
 				{
 					it.remove();
 					continue;
@@ -153,6 +168,8 @@ public class ElectricityNetwork
 			}
 		}
 
+		totalElectricity.amperes = Math.max(totalElectricity.amperes - this.getProduced().amperes, 0);
+
 		return totalElectricity;
 	}
 
@@ -163,20 +180,26 @@ public class ElectricityNetwork
 	public ElectricityPack requestElectricity(TileEntity tileEntity)
 	{
 		ElectricityPack totalElectricity = new ElectricityPack(0, 0);
-
-		if (this.requests.containsKey(tileEntity))
+		
+		try
 		{
-			// Calculate the electricity this tile entity is receiving in percentage.
-			totalElectricity = this.getProduced();
-
-			if (totalElectricity.getWatts() > 0)
+			if (this.requests.containsKey(tileEntity))
 			{
-				ElectricityPack totalRequest = this.getRequest();
-				ElectricityPack tileRequest = this.requests.get(tileEntity);
-				totalElectricity.amperes *= tileRequest.amperes / totalRequest.amperes;
+				// Calculate the electricity this tile entity is receiving in percentage.
+				totalElectricity = this.getProduced();
 
-				return totalElectricity;
+				if (totalElectricity.getWatts() > 0)
+				{
+					ElectricityPack totalRequest = this.getRequest();
+					ElectricityPack tileRequest = this.requests.get(tileEntity);
+					totalElectricity.amperes *= (tileRequest.amperes / totalRequest.amperes);
+					return totalElectricity;
+				}
 			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 
 		return totalElectricity;

@@ -108,8 +108,15 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				{
 					if (inputTile instanceof IConductor)
 					{
-						((IConductor) inputTile).getNetwork().startRequesting(this, 500, this.getVoltage());
-						this.setJoules(this.joules + ((IConductor) inputTile).getNetwork().requestElectricity(this).getWatts());
+						if (this.joules >= this.getMaxJoules())
+						{
+							((IConductor) inputTile).getNetwork().stopRequesting(this);
+						}
+						else
+						{
+							((IConductor) inputTile).getNetwork().startRequesting(this, this.getMaxJoules() - this.getJoules(), this.getVoltage());
+							this.setJoules(this.joules + ((IConductor) inputTile).getNetwork().requestElectricity(this).getWatts());
+						}
 					}
 				}
 			}
@@ -203,7 +210,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 						double joulesNeeded = ((IConductor) connector).getNetwork().getRequest().getWatts();
 						double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
 
-						if (!this.worldObj.isRemote)
+						if (!this.worldObj.isRemote && transferAmps > 0)
 						{
 							((IConductor) connector).getNetwork().startProducing(this, transferAmps, this.getVoltage());
 						}
@@ -247,7 +254,8 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				 */
 			}
 		}
-
+		
+		//Energy Loss
 		this.setJoules(this.joules - 0.00005);
 
 		if (!this.worldObj.isRemote)

@@ -51,20 +51,36 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	private int playersUsing = 0;
 
 	@Override
+	public boolean canConnect(ForgeDirection side)
+	{
+		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2);
+	}
+
+	@Override
 	public void updateEntity()
 	{
-		ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
-		TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
-
-		if (inputTile != null)
+		if (!this.worldObj.isRemote)
 		{
-			if (inputTile instanceof IConductor)
+			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2);
+			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
+
+			if (inputTile != null)
 			{
-				((IConductor) inputTile).getNetwork().startRequesting(this, WATTS_PER_TICK/this.getVoltage(), this.getVoltage());
-				this.joulesReceived += ((IConductor) inputTile).getNetwork().requestElectricity(this).getWatts();
+				if (inputTile instanceof IConductor)
+				{
+					if (this.canSmelt())
+					{
+						((IConductor) inputTile).getNetwork().startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
+						this.joulesReceived = Math.min(this.joulesReceived + ((IConductor) inputTile).getNetwork().requestElectricity(this).getWatts(), WATTS_PER_TICK);
+					}
+					else
+					{
+						((IConductor) inputTile).getNetwork().stopRequesting(this);
+					}
+				}
 			}
 		}
-		
+
 		// The bottom slot is for portable
 		// batteries
 		if (this.containingItems[0] != null)
