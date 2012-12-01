@@ -14,6 +14,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
@@ -50,32 +51,20 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	private int playersUsing = 0;
 
 	@Override
-	public double wattRequest()
-	{
-		if (!this.isDisabled() && this.canSmelt()) { return this.WATTS_PER_TICK; }
-
-		return 0;
-	}
-
-	public boolean canReceiveFromSide(ForgeDirection side)
-	{
-		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2);
-	}
-
-	@Override
-	public void onReceive(Object entity, double amps, double voltage, ForgeDirection side)
-	{
-		if (voltage > this.getVoltage())
-		{
-			this.worldObj.createExplosion((Entity) null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
-		}
-
-		this.joulesReceived += ElectricInfo.getJoules(amps, voltage, 1);
-	}
-
-	@Override
 	public void updateEntity()
 	{
+		ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
+		TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
+
+		if (inputTile != null)
+		{
+			if (inputTile instanceof IConductor)
+			{
+				((IConductor) inputTile).getNetwork().startRequesting(this, WATTS_PER_TICK/this.getVoltage(), this.getVoltage());
+				this.joulesReceived += ((IConductor) inputTile).getNetwork().requestElectricity(this).getWatts();
+			}
+		}
+		
 		// The bottom slot is for portable
 		// batteries
 		if (this.containingItems[0] != null)

@@ -12,24 +12,21 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.core.electricity.ElectricityManager;
 import universalelectricity.core.implement.IConductor;
-import universalelectricity.core.implement.IElectricityProducer;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.tile.TileEntityDisableable;
+import universalelectricity.prefab.tile.TileEntityElectricityProducer;
 import basiccomponents.BCLoader;
 import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
-
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 
-public class TileEntityCoalGenerator extends TileEntityDisableable implements IElectricityProducer, IInventory, ISidedInventory, IPacketReceiver, IPeripheral
+public class TileEntityCoalGenerator extends TileEntityElectricityProducer implements IInventory, ISidedInventory, IPacketReceiver, IPeripheral
 {
 	/**
 	 * Maximum amount of energy needed to generate electricity
@@ -83,7 +80,7 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 
 			if (tileEntity instanceof IConductor)
 			{
-				if (ElectricityManager.instance.getElectricityRequired(((IConductor) tileEntity).getNetwork()) > 0)
+				if (((IConductor) tileEntity).getNetwork().getRequest().getWatts() > 0)
 				{
 					this.connectedElectricUnit = (IConductor) tileEntity;
 				}
@@ -128,7 +125,10 @@ public class TileEntityCoalGenerator extends TileEntityDisableable implements IE
 
 				if (this.generateWatts > MIN_GENERATE_WATTS && this.connectedElectricUnit != null)
 				{
-					ElectricityManager.instance.produceElectricity(this, this.connectedElectricUnit, (this.generateWatts / this.getVoltage()) / 20, this.getVoltage());
+					this.connectedElectricUnit.getNetwork().startProducing(this, (this.generateWatts / this.getVoltage()) / 20, this.getVoltage());
+					// ElectricityManager.instance.produceElectricity(this,
+					// this.connectedElectricUnit, (this.generateWatts / this.getVoltage()) / 20,
+					// this.getVoltage());
 				}
 			}
 

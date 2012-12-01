@@ -10,9 +10,9 @@ import universalelectricity.core.implement.IVoltage;
  * 
  * @author Calclavia
  */
-public abstract class TileEntityElectricityReceiver extends TileEntityDisableable implements IConnector, IVoltage
+public abstract class TileEntityElectricityProducer extends TileEntityDisableable implements IConnector, IVoltage
 {
-	public TileEntityElectricityReceiver()
+	public TileEntityElectricityProducer()
 	{
 		super();
 	}
@@ -34,10 +34,10 @@ public abstract class TileEntityElectricityReceiver extends TileEntityDisableabl
 	{
 		return 120;
 	}
-
+	
 	@Override
 	public void invalidate()
-	{
+    {
 		Electricity.instance.unregister(this);
-	}
+    }
 }

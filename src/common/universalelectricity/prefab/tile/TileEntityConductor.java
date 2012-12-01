@@ -6,7 +6,7 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityManager;
+import universalelectricity.core.electricity.Electricity;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IConnector;
@@ -71,7 +71,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 
 				if (tileEntity.getClass() == this.getClass())
 				{
-					ElectricityManager.instance.mergeConnection(this.getNetwork(), ((TileEntityConductor) tileEntity).getNetwork());
+					Electricity.instance.mergeConnection(this.getNetwork(), ((TileEntityConductor) tileEntity).getNetwork());
 				}
 
 				return;
@@ -82,7 +82,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 		{
 			if (this.connectedBlocks[side.ordinal()] instanceof IConductor)
 			{
-				ElectricityManager.instance.splitConnection(this, (IConductor) this.getConnectedBlocks()[side.ordinal()]);
+				Electricity.instance.splitConnection(this, (IConductor) this.getConnectedBlocks()[side.ordinal()]);
 			}
 		}
 
@@ -100,7 +100,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 
 				if (tileEntity.getClass() == this.getClass())
 				{
-					ElectricityManager.instance.mergeConnection(this.getNetwork(), ((TileEntityConductor) tileEntity).getNetwork());
+					Electricity.instance.mergeConnection(this.getNetwork(), ((TileEntityConductor) tileEntity).getNetwork());
 				}
 
 				return;
@@ -135,9 +135,9 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		this.network = null;
 
-		if (ElectricityManager.instance != null)
+		if (Electricity.instance != null)
 		{
-			ElectricityManager.instance.registerConductor(this);
+			Electricity.instance.registerConductor(this);
 		}
 	}
 

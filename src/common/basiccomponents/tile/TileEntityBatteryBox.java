@@ -7,10 +7,6 @@ import ic2.api.IElectricItem;
 import ic2.api.IEnergySink;
 import ic2.api.IEnergySource;
 import ic2.api.IEnergyStorage;
-
-import java.util.List;
-
-import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.INetworkManager;
@@ -25,9 +21,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricInfo;
-import universalelectricity.core.electricity.ElectricityManager;
 import universalelectricity.core.implement.IConductor;
-import universalelectricity.core.implement.IElectricityReceiver;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
@@ -69,32 +63,9 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	}
 
 	@Override
-	public double wattRequest()
-	{
-		if (!this.isDisabled()) { return ElectricInfo.getWatts(this.getMaxJoules()) - ElectricInfo.getWatts(this.joules); }
-
-		return 0;
-	}
-
-	@Override
-	public boolean canReceiveFromSide(ForgeDirection side)
-	{
-		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
-	}
-
-	@Override
 	public boolean canConnect(ForgeDirection side)
 	{
-		return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
-	}
-
-	@Override
-	public void onReceive(Object sender, double amps, double voltage, ForgeDirection side)
-	{
-		if (!this.isDisabled())
-		{
-			this.setJoules(this.joules + ElectricInfo.getJoules(amps, voltage, 1));
-		}
+		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
 	}
 
 	@Override
@@ -128,6 +99,21 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
 		if (!this.isDisabled())
 		{
+			if (!this.worldObj.isRemote)
+			{
+				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
+				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
+
+				if (inputTile != null)
+				{
+					if (inputTile instanceof IConductor)
+					{
+						((IConductor) inputTile).getNetwork().startRequesting(this, 500, this.getVoltage());
+						this.setJoules(this.joules + ((IConductor) inputTile).getNetwork().requestElectricity(this).getWatts());
+					}
+				}
+			}
+
 			/**
 			 * Receive Electricity
 			 */
@@ -214,12 +200,12 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 					// Output UE electricity
 					if (connector instanceof IConductor)
 					{
-						double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor) connector).getNetwork());
+						double joulesNeeded = ((IConductor) connector).getNetwork().getRequest().getWatts();
 						double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
 
 						if (!this.worldObj.isRemote)
 						{
-							ElectricityManager.instance.produceElectricity(this, (IConductor) connector, transferAmps, this.getVoltage());
+							((IConductor) connector).getNetwork().startProducing(this, transferAmps, this.getVoltage());
 						}
 
 						this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
@@ -244,26 +230,21 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 						}
 					}
 				}
-				else
-				{
-					Vector3 outputPosition = Vector3.get(this);
-					outputPosition.modifyPositionFromSide(outputDirection);
-
-					List<Entity> entities = outputPosition.getEntitiesWithin(worldObj, Entity.class);
-
-					for (Entity entity : entities)
-					{
-						if (entity instanceof IElectricityReceiver)
-						{
-							IElectricityReceiver electricEntity = ((IElectricityReceiver) entity);
-							double joulesNeeded = electricEntity.wattRequest();
-							double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
-							ElectricityManager.instance.produceElectricity(this, entity, transferAmps, this.getVoltage(), outputDirection);
-							this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
-							break;
-						}
-					}
-				}
+				/*
+				 * else { Vector3 outputPosition = Vector3.get(this);
+				 * outputPosition.modifyPositionFromSide(outputDirection);
+				 * 
+				 * List<Entity> entities = outputPosition.getEntitiesWithin(worldObj, Entity.class);
+				 * 
+				 * for (Entity entity : entities) { if (entity instanceof IElectricityReceiver) {
+				 * IElectricityReceiver electricEntity = ((IElectricityReceiver) entity); double
+				 * joulesNeeded = electricEntity.wattRequest(); double transferAmps =
+				 * Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()),
+				 * ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
+				 * ElectricityManager.instance.produceElectricity(this, entity, transferAmps,
+				 * this.getVoltage(), outputDirection); this.setJoules(this.joules -
+				 * ElectricInfo.getJoules(transferAmps, this.getVoltage())); break; } } }
+				 */
 			}
 		}
 
@@ -561,7 +542,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
 	{
-		return canReceiveFromSide(direction.toForgeDirection());
+		return direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
 	}
 
 	@Override
