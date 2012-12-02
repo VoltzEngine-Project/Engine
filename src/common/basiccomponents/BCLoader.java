@@ -12,10 +12,10 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import universalelectricity.core.UEConfig;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.RecipeHelper;
 import universalelectricity.prefab.UETab;
+import universalelectricity.prefab.manual.ItemEngineerBooklet;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.ore.OreGenReplaceStone;
@@ -79,32 +79,35 @@ public class BCLoader implements ICraftingHandler
 		/**
 		 * Define the items and blocks.
 		 */
-		BasicComponents.blockBasicOre = new BlockBCOre(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper and Tin Ores", BasicComponents.BLOCK_ID_PREFIX + 0));
-		BasicComponents.blockCopperWire = new BlockCopperWire(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Copper_Wire", BasicComponents.BLOCK_ID_PREFIX + 1));
-		BasicComponents.oilMoving = new BlockOilFlowing(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Flowing", BasicComponents.BLOCK_ID_PREFIX + 2));
-		BasicComponents.oilStill = new BlockOilStill(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Oil_Still", BasicComponents.BLOCK_ID_PREFIX + 3));
-		BasicComponents.blockMachine = new BlockBasicMachine(UEConfig.getBlockConfigID(UniversalElectricity.CONFIGURATION, "Basic Machine", BasicComponents.BLOCK_ID_PREFIX + 4), 0);
+		UniversalElectricity.CONFIGURATION.load();
+		BasicComponents.blockBasicOre = new BlockBCOre(UniversalElectricity.CONFIGURATION.getBlock("Copper and Tin Ores", BasicComponents.BLOCK_ID_PREFIX + 0).getInt());
+		BasicComponents.blockCopperWire = new BlockCopperWire(UniversalElectricity.CONFIGURATION.getBlock("Copper_Wire", BasicComponents.BLOCK_ID_PREFIX + 1).getInt());
+		BasicComponents.oilMoving = new BlockOilFlowing(UniversalElectricity.CONFIGURATION.getBlock("Oil_Flowing", BasicComponents.BLOCK_ID_PREFIX + 2).getInt());
+		BasicComponents.oilStill = new BlockOilStill(UniversalElectricity.CONFIGURATION.getBlock("Oil_Still", BasicComponents.BLOCK_ID_PREFIX + 3).getInt());
+		BasicComponents.blockMachine = new BlockBasicMachine(UniversalElectricity.CONFIGURATION.getBlock("Basic Machine", BasicComponents.BLOCK_ID_PREFIX + 4).getInt(), 0);
 
-		BasicComponents.itemBattery = new ItemBattery(UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Battery", BasicComponents.ITEM_ID_PREFIX + 1), 0);
-		BasicComponents.itemWrench = new ItemWrench(UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Universal Wrench", BasicComponents.ITEM_ID_PREFIX + 2), 20);
-		BasicComponents.itemCircuit = new ItemCircuit(UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Circuit", BasicComponents.ITEM_ID_PREFIX + 3), 16);
+		BasicComponents.itemBattery = new ItemBattery(UniversalElectricity.CONFIGURATION.getItem("Battery", BasicComponents.ITEM_ID_PREFIX + 1).getInt(), 0);
+		BasicComponents.itemWrench = new ItemWrench(UniversalElectricity.CONFIGURATION.getItem("Universal Wrench", BasicComponents.ITEM_ID_PREFIX + 2).getInt(), 20);
+		BasicComponents.itemCircuit = new ItemCircuit(UniversalElectricity.CONFIGURATION.getItem("Circuit", BasicComponents.ITEM_ID_PREFIX + 3).getInt(), 16);
 
-		BasicComponents.itemCopperIngot = new ItemBasic("ingotCopper", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Ingot", BasicComponents.ITEM_ID_PREFIX + 4), 1);
-		BasicComponents.itemTinIngot = new ItemBasic("ingotTin", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Ingot", BasicComponents.ITEM_ID_PREFIX + 5), 2);
-		BasicComponents.itemBronzeIngot = new ItemBasic("ingotBronze", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Ingot", BasicComponents.ITEM_ID_PREFIX + 6), 7);
-		BasicComponents.itemSteelIngot = new ItemBasic("ingotSteel", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Ingot", BasicComponents.ITEM_ID_PREFIX + 7), 3);
+		BasicComponents.itemCopperIngot = new ItemBasic("ingotCopper", UniversalElectricity.CONFIGURATION.getItem("Copper Ingot", BasicComponents.ITEM_ID_PREFIX + 4).getInt(), 1);
+		BasicComponents.itemTinIngot = new ItemBasic("ingotTin", UniversalElectricity.CONFIGURATION.getItem("Tin Ingot", BasicComponents.ITEM_ID_PREFIX + 5).getInt(), 2);
+		BasicComponents.itemBronzeIngot = new ItemBasic("ingotBronze", UniversalElectricity.CONFIGURATION.getItem("Bronze Ingot", BasicComponents.ITEM_ID_PREFIX + 6).getInt(), 7);
+		BasicComponents.itemSteelIngot = new ItemBasic("ingotSteel", UniversalElectricity.CONFIGURATION.getItem("Steel Ingot", BasicComponents.ITEM_ID_PREFIX + 7).getInt(), 3);
 
-		BasicComponents.itemBronzeDust = new ItemBasic("dustBronze", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Dust", BasicComponents.ITEM_ID_PREFIX + 8), 6);
-		BasicComponents.itemSteelDust = new ItemBasic("dustSteel", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Dust", BasicComponents.ITEM_ID_PREFIX + 9), 5);
+		BasicComponents.itemBronzeDust = new ItemBasic("dustBronze", UniversalElectricity.CONFIGURATION.getItem("Bronze Dust", BasicComponents.ITEM_ID_PREFIX + 8).getInt(), 6);
+		BasicComponents.itemSteelDust = new ItemBasic("dustSteel", UniversalElectricity.CONFIGURATION.getItem("Steel Dust", BasicComponents.ITEM_ID_PREFIX + 9).getInt(), 5);
 
-		BasicComponents.itemCopperPlate = new ItemBasic("plateCopper", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Copper Plate", BasicComponents.ITEM_ID_PREFIX + 10), 10);
-		BasicComponents.itemTinPlate = new ItemBasic("plateTin", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Tin Plate", BasicComponents.ITEM_ID_PREFIX + 11), 11);
-		BasicComponents.itemBronzePlate = new ItemBasic("plateBronze", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Bronze Plate", BasicComponents.ITEM_ID_PREFIX + 12), 8);
-		BasicComponents.itemSteelPlate = new ItemBasic("plateSteel", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Steel Plate", BasicComponents.ITEM_ID_PREFIX + 13), 9);
+		BasicComponents.itemCopperPlate = new ItemBasic("plateCopper", UniversalElectricity.CONFIGURATION.getItem("Copper Plate", BasicComponents.ITEM_ID_PREFIX + 10).getInt(), 10);
+		BasicComponents.itemTinPlate = new ItemBasic("plateTin", UniversalElectricity.CONFIGURATION.getItem("Tin Plate", BasicComponents.ITEM_ID_PREFIX + 11).getInt(), 11);
+		BasicComponents.itemBronzePlate = new ItemBasic("plateBronze", UniversalElectricity.CONFIGURATION.getItem("Bronze Plate", BasicComponents.ITEM_ID_PREFIX + 12).getInt(), 8);
+		BasicComponents.itemSteelPlate = new ItemBasic("plateSteel", UniversalElectricity.CONFIGURATION.getItem("Steel Plate", BasicComponents.ITEM_ID_PREFIX + 13).getInt(), 9);
 
-		BasicComponents.itemMotor = new ItemBasic("motor", UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Motor", BasicComponents.ITEM_ID_PREFIX + 14), 12);
+		BasicComponents.itemMotor = new ItemBasic("motor", UniversalElectricity.CONFIGURATION.getItem("Motor", BasicComponents.ITEM_ID_PREFIX + 14).getInt(), 12);
 
-		BasicComponents.itemOilBucket = new ItemOilBucket(UEConfig.getItemConfigID(UniversalElectricity.CONFIGURATION, "Oil Bucket", BasicComponents.ITEM_ID_PREFIX + 15), 4);
+		BasicComponents.itemOilBucket = new ItemOilBucket(UniversalElectricity.CONFIGURATION.getItem("Oil Bucket", BasicComponents.ITEM_ID_PREFIX + 15).getInt(), 4);
+		
+		BasicComponents.engineerBooklet = new ItemEngineerBooklet(UniversalElectricity.CONFIGURATION.getItem("Engineer's Booklet", BasicComponents.ITEM_ID_PREFIX + 16).getInt());
 
 		BasicComponents.coalGenerator = ((BlockBasicMachine) BasicComponents.blockMachine).getCoalGenerator();
 		BasicComponents.batteryBox = ((BlockBasicMachine) BasicComponents.blockMachine).getBatteryBox();
@@ -112,6 +115,8 @@ public class BCLoader implements ICraftingHandler
 
 		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 0, 50, 40, 4).enable();
 		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 0, 50, 35, 3).enable();
+		
+		UniversalElectricity.CONFIGURATION.save();
 
 		/**
 		 * @author Cammygames

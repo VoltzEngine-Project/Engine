@@ -6,9 +6,9 @@ import net.minecraft.src.Block;
 import net.minecraft.src.IChunkProvider;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-import universalelectricity.core.UEConfig;
 import universalelectricity.core.UniversalElectricity;
 
 /**
@@ -82,20 +82,20 @@ public abstract class OreGenBase
 		return this;
 	}
 
-	// You may inherit from this class and change
-	// this function if you want a
-	// custom texture render for your ore.
-	public int getBlockTextureFromSide(int side)
+	/**
+	 * Checks the config file and see if Universal Electricity should generate this ore
+	 */
+	private static boolean shouldGenerateOre(Configuration configuration, String oreName)
 	{
-		return this.blockIndexTexture;
+		configuration.load();
+		boolean shouldGenerate = configuration.get("Ore Generation", "Generate " + oreName, true).getBoolean(true);
+		configuration.save();
+		return shouldGenerate;
 	}
 
-	// Checks the config file and see if Universal
-	// Electricity should generate
-	// this ore
 	private static boolean shouldGenerateOre(String oreName)
 	{
-		return UEConfig.getConfigData(UniversalElectricity.CONFIGURATION, "Generate " + oreName, true);
+		return shouldGenerateOre(UniversalElectricity.CONFIGURATION, oreName);
 	}
 
 	public abstract void generate(World world, Random random, int varX, int varZ);

@@ -43,11 +43,11 @@ public class UniversalElectricity
 	 * Conversion ratios between Buildcraft and Industrialcraft energy.
 	 */
 	// EU to Watts ratio
-	public static final float IC2_RATIO = (float) UEConfig.getConfigData(CONFIGURATION, "IndustrialCraft Conversion Ratio", 7);
+	public static int IC2_RATIO = 7;
 	// MJ to Watts ratio.
-	public static final float BC3_RATIO = (float) UEConfig.getConfigData(CONFIGURATION, "BuildCraft Conversion Ratio", 85);;
-	public static final float TO_IC2_RATIO = 1 / IC2_RATIO;
-	public static final float TO_BC_RATIO = 1 / BC3_RATIO;
+	public static int BC3_RATIO = 85;
+	public static int TO_IC2_RATIO = 1 / IC2_RATIO;
+	public static int TO_BC_RATIO = 1 / BC3_RATIO;
 
 	/**
 	 * Use this material for all your machine blocks. It can be breakable by hand.

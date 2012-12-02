@@ -46,6 +46,8 @@ public class BasicComponents
 	public static Item itemOilBucket;
 	public static Item itemCopperPlate;
 	public static Item itemTinPlate;
+	public static Item engineerBooklet;
+
 
 	public static ItemStack coalGenerator;
 	public static ItemStack batteryBox;

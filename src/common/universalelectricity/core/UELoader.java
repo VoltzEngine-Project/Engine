@@ -47,6 +47,11 @@ public class UELoader
 
 			FMLLog.finest("Universal Electricity v" + UniversalElectricity.VERSION + " successfully loaded!");
 
+			UniversalElectricity.IC2_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", UniversalElectricity.IC2_RATIO).getInt();
+			UniversalElectricity.BC3_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", UniversalElectricity.BC3_RATIO).getInt();
+			UniversalElectricity.TO_IC2_RATIO = 1 / UniversalElectricity.IC2_RATIO;
+			UniversalElectricity.TO_BC_RATIO = 1 / UniversalElectricity.BC3_RATIO;
+
 			isInitialized = true;
 		}
 	}
