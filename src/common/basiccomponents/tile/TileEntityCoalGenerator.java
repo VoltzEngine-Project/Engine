@@ -73,9 +73,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 		{
 			this.prevGenerateWatts = this.generateWatts;
 
-			// Check nearby blocks and see if the
-			// conductor is full. If so, then it
-			// is connected
+			// Check nearby blocks and see if the conductor is full. If so, then it is connected
 			TileEntity tileEntity = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2));
 
 			if (tileEntity instanceof IConductor)
@@ -143,6 +141,8 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 			}
 		}
 	}
+	
+	
 
 	@Override
 	public Packet getDescriptionPacket()

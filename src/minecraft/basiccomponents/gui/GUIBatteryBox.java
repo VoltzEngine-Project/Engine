@@ -12,14 +12,14 @@ import basiccomponents.BasicComponents;
 import basiccomponents.ContainerBatteryBox;
 import basiccomponents.tile.TileEntityBatteryBox;
 
-public class GUIBatteryBox extends GuiContainer
+public class GuiBatteryBox extends GuiContainer
 {
 	private TileEntityBatteryBox tileEntity;
 
 	private int containerWidth;
 	private int containerHeight;
 
-	public GUIBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBatteryBox batteryBox)
+	public GuiBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBatteryBox batteryBox)
 	{
 		super(new ContainerBatteryBox(par1InventoryPlayer, batteryBox));
 		this.tileEntity = batteryBox;
@@ -41,7 +41,7 @@ public class GUIBatteryBox extends GuiContainer
 		}
 
 		this.fontRenderer.drawString(displayWattHours + " of", 98 - displayWattHours.length(), 30, 4210752);
-		this.fontRenderer.drawString(displayMaxWattHours, 83, 40, 4210752);
+		this.fontRenderer.drawString(displayMaxWattHours, 78, 40, 4210752);
 		this.fontRenderer.drawString("Voltage: " + (int) this.tileEntity.getVoltage(), 90, 60, 4210752);
 		this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}

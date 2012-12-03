@@ -12,6 +12,8 @@ import net.minecraftforge.event.world.WorldEvent.Unload;
 import universalelectricity.core.electricity.Electricity;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 /**
  * A class used to load Universal Electricity and make it work.
@@ -80,16 +82,6 @@ public class UELoader
 		}
 
 		return "";
-	}
-
-	@ForgeSubscribe
-	public void onWorldLoad(Load event)
-	{
-		if (event.world.isRemote)
-		{
-			String msg = "All your mods are up to date.";
-			Minecraft.getMinecraft().thePlayer.sendChatMessage(msg);
-		}
 	}
 
 	@ForgeSubscribe

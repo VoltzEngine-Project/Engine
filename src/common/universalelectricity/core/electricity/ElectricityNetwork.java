@@ -6,13 +6,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cpw.mods.fml.common.FMLLog;
+
 import net.minecraft.src.TileEntity;
 import universalelectricity.core.implement.IConductor;
 
 public class ElectricityNetwork
 {
-	private final HashMap<TileEntity, ElectricityPack> currentlyProducing = new HashMap<TileEntity, ElectricityPack>();
-	private final HashMap<TileEntity, ElectricityPack> requests = new HashMap<TileEntity, ElectricityPack>();
+	private final HashMap<TileEntity, ElectricityPack> producers = new HashMap<TileEntity, ElectricityPack>();
+	private final HashMap<TileEntity, ElectricityPack> consumers = new HashMap<TileEntity, ElectricityPack>();
 
 	public final List<IConductor> conductors = new ArrayList<IConductor>();
 
@@ -28,16 +30,13 @@ public class ElectricityNetwork
 	{
 		if (tileEntity != null && amperes > 0 && voltage > 0)
 		{
-			if (this.currentlyProducing.containsKey(tileEntity))
-			{
-				this.currentlyProducing.get(tileEntity).amperes = amperes;
-				this.currentlyProducing.get(tileEntity).voltage = voltage;
-			}
-			else
-			{
-				this.currentlyProducing.put(tileEntity, new ElectricityPack(amperes, voltage));
-			}
+			this.producers.put(tileEntity, new ElectricityPack(amperes, voltage));
 		}
+	}
+
+	public boolean isProducing(TileEntity tileEntity)
+	{
+		return this.producers.containsKey(tileEntity);
 	}
 
 	/**
@@ -45,7 +44,7 @@ public class ElectricityNetwork
 	 */
 	public void stopProducing(TileEntity tileEntity)
 	{
-		this.currentlyProducing.remove(tileEntity);
+		this.producers.remove(tileEntity);
 	}
 
 	/**
@@ -55,16 +54,13 @@ public class ElectricityNetwork
 	{
 		if (tileEntity != null && amperes > 0 && voltage > 0)
 		{
-			if (this.requests.containsKey(tileEntity))
-			{
-				this.requests.get(tileEntity).amperes = amperes;
-				this.requests.get(tileEntity).voltage = voltage;
-			}
-			else
-			{
-				this.requests.put(tileEntity, new ElectricityPack(amperes, voltage));
-			}
+			this.consumers.put(tileEntity, new ElectricityPack(amperes, voltage));
 		}
+	}
+
+	public boolean isRequesting(TileEntity tileEntity)
+	{
+		return this.consumers.containsKey(tileEntity);
 	}
 
 	/**
@@ -72,7 +68,7 @@ public class ElectricityNetwork
 	 */
 	public void stopRequesting(TileEntity tileEntity)
 	{
-		this.requests.remove(tileEntity);
+		this.consumers.remove(tileEntity);
 	}
 
 	/**
@@ -82,7 +78,7 @@ public class ElectricityNetwork
 	{
 		ElectricityPack totalElectricity = new ElectricityPack(0, 0);
 
-		Iterator it = this.currentlyProducing.entrySet().iterator();
+		Iterator it = this.producers.entrySet().iterator();
 
 		while (it.hasNext())
 		{
@@ -112,7 +108,7 @@ public class ElectricityNetwork
 
 				ElectricityPack pack = (ElectricityPack) pairs.getValue();
 
-				if (pairs.getKey() != null && pairs.getValue() != null)
+				if (pairs.getKey() != null && pairs.getValue() != null && pack != null)
 				{
 					totalElectricity.amperes += pack.amperes;
 					totalElectricity.voltage = Math.max(totalElectricity.voltage, pack.voltage);
@@ -128,9 +124,17 @@ public class ElectricityNetwork
 	 */
 	public ElectricityPack getRequest()
 	{
+		ElectricityPack totalElectricity = this.getRequestWithoutReduction();
+		totalElectricity.amperes = Math.max(totalElectricity.amperes - this.getProduced().amperes, 0);
+		
+		return totalElectricity;
+	}
+	
+	public ElectricityPack getRequestWithoutReduction()
+	{
 		ElectricityPack totalElectricity = new ElectricityPack(0, 0);
 
-		Iterator it = this.requests.entrySet().iterator();
+		Iterator it = this.consumers.entrySet().iterator();
 
 		while (it.hasNext())
 		{
@@ -160,15 +164,13 @@ public class ElectricityNetwork
 
 				ElectricityPack pack = (ElectricityPack) pairs.getValue();
 
-				if (pairs.getKey() != null && pairs.getValue() != null)
+				if (pack != null)
 				{
 					totalElectricity.amperes += pack.amperes;
 					totalElectricity.voltage = Math.max(totalElectricity.voltage, pack.voltage);
 				}
 			}
 		}
-
-		totalElectricity.amperes = Math.max(totalElectricity.amperes - this.getProduced().amperes, 0);
 
 		return totalElectricity;
 	}
@@ -177,28 +179,38 @@ public class ElectricityNetwork
 	 * @param tileEntity
 	 * @return The electricity being input into this tile entity.
 	 */
-	public ElectricityPack requestElectricity(TileEntity tileEntity)
+	public ElectricityPack consumeElectricity(TileEntity tileEntity)
 	{
 		ElectricityPack totalElectricity = new ElectricityPack(0, 0);
-		
+
 		try
 		{
-			if (this.requests.containsKey(tileEntity))
+			ElectricityPack tileRequest = this.consumers.get(tileEntity);
+
+			if (this.consumers.containsKey(tileEntity) && tileRequest != null)
 			{
 				// Calculate the electricity this tile entity is receiving in percentage.
 				totalElectricity = this.getProduced();
 
 				if (totalElectricity.getWatts() > 0)
 				{
-					ElectricityPack totalRequest = this.getRequest();
-					ElectricityPack tileRequest = this.requests.get(tileEntity);
+					ElectricityPack totalRequest = this.getRequestWithoutReduction();
 					totalElectricity.amperes *= (tileRequest.amperes / totalRequest.amperes);
+
+					int distance = this.conductors.size();
+					double ampsReceived = totalElectricity.amperes - (totalElectricity.amperes * totalElectricity.amperes * this.getResistance() * distance) / totalElectricity.voltage;
+					double voltsReceived = totalElectricity.voltage - (totalElectricity.amperes * this.getResistance() * distance);
+
+					totalElectricity.amperes = ampsReceived;
+					totalElectricity.voltage = voltsReceived;
+
 					return totalElectricity;
 				}
 			}
 		}
 		catch (Exception e)
 		{
+			FMLLog.severe("Failed to consume electricity!");
 			e.printStackTrace();
 		}
 
@@ -223,7 +235,7 @@ public class ElectricityNetwork
 	{
 		List<TileEntity> receivers = new ArrayList<TileEntity>();
 
-		Iterator it = this.requests.entrySet().iterator();
+		Iterator it = this.consumers.entrySet().iterator();
 
 		while (it.hasNext())
 		{
@@ -253,6 +265,14 @@ public class ElectricityNetwork
 		}
 	}
 
+	public void resetConductors()
+	{
+		for (int i = 0; i < conductors.size(); i++)
+		{
+			conductors.get(i).reset();
+		}
+	}
+
 	public void setNetwork()
 	{
 		this.cleanConductors();
@@ -271,6 +291,21 @@ public class ElectricityNetwork
 		{
 			conductors.get(i).onOverCharge();
 		}
+	}
+
+	/**
+	 * Gets the resistance of this electrical network.
+	 */
+	public double getResistance()
+	{
+		double resistance = 0;
+
+		for (int i = 0; i < conductors.size(); i++)
+		{
+			resistance = Math.max(resistance, conductors.get(i).getResistance());
+		}
+
+		return resistance;
 	}
 
 	public double getLowestAmpTolerance()

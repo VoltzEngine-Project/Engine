@@ -53,7 +53,7 @@ public interface IConductor extends IConnector
 	 */
 	public void reset();
 
-	public World getWorld();
+	public void refreshConnectedBlocks();
 
 	/**
 	 * Adds a connection between this conductor and a UE unit
@@ -67,5 +67,4 @@ public interface IConductor extends IConnector
 
 	public void updateConnectionWithoutSplit(TileEntity connectorFromSide, ForgeDirection orientation);
 
-	public void refreshConnectedBlocks();
 }

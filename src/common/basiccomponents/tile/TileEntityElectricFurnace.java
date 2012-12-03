@@ -31,11 +31,11 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 {
 	// The amount of watts required by the
 	// electric furnace per tick
-	public static final double WATTS_PER_TICK = 400;
+	public static final double WATTS_PER_TICK = 500;
 
 	// The amount of ticks required to smelt this
 	// item
-	public static final int SMELTING_TIME_REQUIRED = 150;
+	public static final int SMELTING_TIME_REQUIRED = 140;
 
 	// How many ticks has this item been smelting
 	// for?
@@ -71,7 +71,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 					if (this.canSmelt())
 					{
 						((IConductor) inputTile).getNetwork().startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
-						this.joulesReceived = Math.min(this.joulesReceived + ((IConductor) inputTile).getNetwork().requestElectricity(this).getWatts(), WATTS_PER_TICK);
+						this.joulesReceived = Math.max(Math.min(this.joulesReceived + ((IConductor) inputTile).getNetwork().consumeElectricity(this).getWatts(), WATTS_PER_TICK), 0);
 					}
 					else
 					{
@@ -97,7 +97,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 			}
 		}
 
-		if (this.joulesReceived >= this.WATTS_PER_TICK && !this.isDisabled())
+		if (this.joulesReceived >= this.WATTS_PER_TICK-50 && !this.isDisabled())
 		{
 			// The left slot contains the item to
 			// be smelted

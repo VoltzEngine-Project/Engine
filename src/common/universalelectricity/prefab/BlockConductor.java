@@ -1,5 +1,7 @@
 package universalelectricity.prefab;
 
+import java.util.Random;
+
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
@@ -30,6 +32,8 @@ public abstract class BlockConductor extends BlockContainer
 				((IConductor) tileEntity).refreshConnectedBlocks();
 			}
 		}
+
+		world.scheduleBlockUpdate(x, y, z, this.blockID, this.tickRate());
 	}
 
 	/**

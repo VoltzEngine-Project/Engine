@@ -12,14 +12,14 @@ import basiccomponents.BasicComponents;
 import basiccomponents.ContainerElectricFurnace;
 import basiccomponents.tile.TileEntityElectricFurnace;
 
-public class GUIElectricFurnace extends GuiContainer
+public class GuiElectricFurnace extends GuiContainer
 {
 	private TileEntityElectricFurnace tileEntity;
 
 	private int containerWidth;
 	private int containerHeight;
 
-	public GUIElectricFurnace(InventoryPlayer par1InventoryPlayer, TileEntityElectricFurnace tileEntity)
+	public GuiElectricFurnace(InventoryPlayer par1InventoryPlayer, TileEntityElectricFurnace tileEntity)
 	{
 		super(new ContainerElectricFurnace(par1InventoryPlayer, tileEntity));
 		this.tileEntity = tileEntity;

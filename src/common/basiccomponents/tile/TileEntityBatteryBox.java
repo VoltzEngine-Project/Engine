@@ -115,7 +115,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 						else
 						{
 							((IConductor) inputTile).getNetwork().startRequesting(this, this.getMaxJoules() - this.getJoules(), this.getVoltage());
-							this.setJoules(this.joules + ((IConductor) inputTile).getNetwork().requestElectricity(this).getWatts());
+							this.setJoules(this.joules + ((IConductor) inputTile).getNetwork().consumeElectricity(this).getWatts());
 						}
 					}
 				}
@@ -213,9 +213,14 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 						if (!this.worldObj.isRemote && transferAmps > 0)
 						{
 							((IConductor) connector).getNetwork().startProducing(this, transferAmps, this.getVoltage());
+							this.setJoules(this.joules - ElectricInfo.getWatts(transferAmps, this.getVoltage()));
+							System.out.println("PROD");
+						}
+						else
+						{
+							((IConductor) connector).getNetwork().stopProducing(this);
 						}
 
-						this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
 					}
 					else
 					{
@@ -237,25 +242,10 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 						}
 					}
 				}
-				/*
-				 * else { Vector3 outputPosition = Vector3.get(this);
-				 * outputPosition.modifyPositionFromSide(outputDirection);
-				 * 
-				 * List<Entity> entities = outputPosition.getEntitiesWithin(worldObj, Entity.class);
-				 * 
-				 * for (Entity entity : entities) { if (entity instanceof IElectricityReceiver) {
-				 * IElectricityReceiver electricEntity = ((IElectricityReceiver) entity); double
-				 * joulesNeeded = electricEntity.wattRequest(); double transferAmps =
-				 * Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()),
-				 * ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
-				 * ElectricityManager.instance.produceElectricity(this, entity, transferAmps,
-				 * this.getVoltage(), outputDirection); this.setJoules(this.joules -
-				 * ElectricInfo.getJoules(transferAmps, this.getVoltage())); break; } } }
-				 */
 			}
 		}
-		
-		//Energy Loss
+
+		// Energy Loss
 		this.setJoules(this.joules - 0.00005);
 
 		if (!this.worldObj.isRemote)
@@ -477,7 +467,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public double getMaxJoules(Object... data)
 	{
-		return 3000000;
+		return 4000000;
 	}
 
 	/**

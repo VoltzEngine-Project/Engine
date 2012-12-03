@@ -1,15 +1,17 @@
 package universalelectricity.core.electricity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
-
-import universalelectricity.core.implement.IConductor;
-import universalelectricity.core.vector.Vector3;
-import cpw.mods.fml.common.FMLLog;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.vector.Vector3;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.IScheduledTickHandler;
+import cpw.mods.fml.common.TickType;
 
 /**
  * THIS IS THE NEW ELECTRICITY MANAGER. THIS IS ONLY A DRAFT!
@@ -30,13 +32,14 @@ public class Electricity
 	 */
 	public void registerConductor(IConductor newConductor)
 	{
-		cleanUpConnections();
-		this.electricityNetworks.add(new ElectricityNetwork(newConductor));
+		this.cleanUpNetworks();
+		ElectricityNetwork newNetwork = new ElectricityNetwork(newConductor);
+		this.electricityNetworks.add(newNetwork);
 	}
-	
+
 	public void unregister(TileEntity tileEntity)
 	{
-		for(ElectricityNetwork network : this.electricityNetworks)
+		for (ElectricityNetwork network : this.electricityNetworks)
 		{
 			network.stopProducing(tileEntity);
 			network.stopRequesting(tileEntity);
@@ -61,6 +64,8 @@ public class Electricity
 				networkA.setNetwork();
 				this.electricityNetworks.remove(networkB);
 				networkB = null;
+
+				networkA.cleanConductors();
 			}
 			else
 			{
@@ -80,24 +85,21 @@ public class Electricity
 	 */
 	public void splitConnection(IConductor conductorA, IConductor conductorB)
 	{
-		ElectricityNetwork connection = conductorA.getNetwork();
+		ElectricityNetwork network = conductorA.getNetwork();
 
-		if (connection != null)
+		if (network != null)
 		{
-			connection.cleanConductors();
+			network.cleanConductors();
+			network.resetConductors();
 
-			for (IConductor conductor : connection.conductors)
-			{
-				conductor.reset();
-			}
-
-			for (IConductor conductor : connection.conductors)
+			for (IConductor conductor : network.conductors)
 			{
 				for (byte i = 0; i < 6; i++)
 				{
-					conductor.updateConnectionWithoutSplit(Vector3.getConnectorFromSide(conductor.getWorld(), new Vector3(((TileEntity) conductor).xCoord, ((TileEntity) conductor).yCoord, ((TileEntity) conductor).zCoord), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+					conductor.updateConnectionWithoutSplit(Vector3.getConnectorFromSide(((TileEntity) conductor).worldObj, Vector3.get((TileEntity) conductor), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
 				}
 			}
+
 		}
 		else
 		{
@@ -108,23 +110,40 @@ public class Electricity
 	/**
 	 * Clean up and remove all useless and invalid connections.
 	 */
-	public void cleanUpConnections()
+	public void cleanUpNetworks()
 	{
 		try
 		{
-			for (int i = 0; i < this.electricityNetworks.size(); i++)
-			{
-				this.electricityNetworks.get(i).cleanConductors();
+			Iterator it = electricityNetworks.iterator();
 
-				if (this.electricityNetworks.get(i).conductors.size() == 0)
+			while (it.hasNext())
+			{
+				ElectricityNetwork network = ((ElectricityNetwork) it.next());
+				network.cleanConductors();
+
+				if (network.conductors.size() == 0)
 				{
-					this.electricityNetworks.remove(i);
+					it.remove();
 				}
 			}
 		}
 		catch (Exception e)
 		{
 			FMLLog.severe("Failed to clean up wire connections!");
+			e.printStackTrace();
 		}
+	}
+
+	public void resetConductors()
+	{
+		Iterator it = electricityNetworks.iterator();
+
+		while (it.hasNext())
+		{
+			ElectricityNetwork network = ((ElectricityNetwork) it.next());
+			network.resetConductors();
+		}
+
+		System.out.println(electricityNetworks.size());
 	}
 }

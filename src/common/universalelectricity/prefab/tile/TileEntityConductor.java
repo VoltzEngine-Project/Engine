@@ -51,13 +51,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	@Override
 	public TileEntity[] getConnectedBlocks()
 	{
-		return connectedBlocks;
-	}
-
-	@Override
-	public void initiate()
-	{
-		this.refreshConnectedBlocks();
+		return this.connectedBlocks;
 	}
 
 	@Override
@@ -119,15 +113,10 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 		}
 	}
 
-	/**
-	 * Determines if this TileEntity requires update calls.
-	 * 
-	 * @return True if you want updateEntity() to be called, false if not
-	 */
 	@Override
-	public boolean canUpdate()
+	public void initiate()
 	{
-		return false;
+		this.refreshConnectedBlocks();
 	}
 
 	@Override
@@ -151,12 +140,6 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 				this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
 			}
 		}
-	}
-
-	@Override
-	public World getWorld()
-	{
-		return this.worldObj;
 	}
 
 	@Override

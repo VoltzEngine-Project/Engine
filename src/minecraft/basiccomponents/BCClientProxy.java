@@ -4,8 +4,8 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.client.MinecraftForgeClient;
-import basiccomponents.gui.GUIBatteryBox;
-import basiccomponents.gui.GUIElectricFurnace;
+import basiccomponents.gui.GuiBatteryBox;
+import basiccomponents.gui.GuiElectricFurnace;
 import basiccomponents.gui.GuiCoalGenerator;
 import basiccomponents.tile.TileEntityBatteryBox;
 import basiccomponents.tile.TileEntityCoalGenerator;
@@ -39,11 +39,11 @@ public class BCClientProxy extends BCCommonProxy
 			switch (ID)
 			{
 				case 0:
-					return new GUIBatteryBox(player.inventory, ((TileEntityBatteryBox) tileEntity));
+					return new GuiBatteryBox(player.inventory, ((TileEntityBatteryBox) tileEntity));
 				case 1:
 					return new GuiCoalGenerator(player.inventory, ((TileEntityCoalGenerator) tileEntity));
 				case 2:
-					return new GUIElectricFurnace(player.inventory, ((TileEntityElectricFurnace) tileEntity));
+					return new GuiElectricFurnace(player.inventory, ((TileEntityElectricFurnace) tileEntity));
 			}
 		}
 
