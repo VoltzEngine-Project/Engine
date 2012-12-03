@@ -76,9 +76,15 @@ public abstract class OreGenBase
 		MinecraftForge.setBlockHarvestLevel(Block.blocksList[stack.itemID], stack.getItemDamage(), harvestTool, harvestLevel);
 	}
 
+	public OreGenBase enable(Configuration config)
+	{
+		this.shouldGenerate = shouldGenerateOre(config, this.name);
+		return this;
+	}
+
 	public OreGenBase enable()
 	{
-		this.shouldGenerate = shouldGenerateOre(name);
+		this.enable(UniversalElectricity.CONFIGURATION);
 		return this;
 	}
 
@@ -91,11 +97,6 @@ public abstract class OreGenBase
 		boolean shouldGenerate = configuration.get("Ore Generation", "Generate " + oreName, true).getBoolean(true);
 		configuration.save();
 		return shouldGenerate;
-	}
-
-	private static boolean shouldGenerateOre(String oreName)
-	{
-		return shouldGenerateOre(UniversalElectricity.CONFIGURATION, oreName);
 	}
 
 	public abstract void generate(World world, Random random, int varX, int varZ);
