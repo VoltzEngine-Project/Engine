@@ -18,7 +18,13 @@ public class BCCommonProxy implements IGuiHandler
 
 	public void init()
 	{
-		GameRegistry.registerTileEntity(TileEntityCopperWire.class, "TileEntityCopperWire");
+		/**
+		 * Registering Tile Entities
+		 */
+		GameRegistry.registerTileEntity(TileEntityBatteryBox.class, "UEBatteryBox");
+		GameRegistry.registerTileEntity(TileEntityCoalGenerator.class, "UECoalGenerator");
+		GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, "UEElectricFurnace");
+		GameRegistry.registerTileEntity(TileEntityCopperWire.class, "UECopperWire");
 	}
 
 	@Override

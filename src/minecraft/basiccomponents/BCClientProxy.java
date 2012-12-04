@@ -5,8 +5,8 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import basiccomponents.gui.GuiBatteryBox;
-import basiccomponents.gui.GuiElectricFurnace;
 import basiccomponents.gui.GuiCoalGenerator;
+import basiccomponents.gui.GuiElectricFurnace;
 import basiccomponents.tile.TileEntityBatteryBox;
 import basiccomponents.tile.TileEntityCoalGenerator;
 import basiccomponents.tile.TileEntityCopperWire;
@@ -26,7 +26,8 @@ public class BCClientProxy extends BCCommonProxy
 	@Override
 	public void init()
 	{
-		ClientRegistry.registerTileEntity(TileEntityCopperWire.class, "TileEntityCopperWire", new RenderCopperWire());
+		super.init();
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCopperWire.class, new RenderCopperWire());
 	}
 
 	@Override

@@ -6,10 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cpw.mods.fml.common.FMLLog;
-
 import net.minecraft.src.TileEntity;
 import universalelectricity.core.implement.IConductor;
+import cpw.mods.fml.common.FMLLog;
 
 public class ElectricityNetwork
 {
@@ -126,10 +125,10 @@ public class ElectricityNetwork
 	{
 		ElectricityPack totalElectricity = this.getRequestWithoutReduction();
 		totalElectricity.amperes = Math.max(totalElectricity.amperes - this.getProduced().amperes, 0);
-		
+
 		return totalElectricity;
 	}
-	
+
 	public ElectricityPack getRequestWithoutReduction()
 	{
 		ElectricityPack totalElectricity = new ElectricityPack(0, 0);

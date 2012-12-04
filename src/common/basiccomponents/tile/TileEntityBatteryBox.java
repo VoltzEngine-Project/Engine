@@ -214,7 +214,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 						{
 							((IConductor) connector).getNetwork().startProducing(this, transferAmps, this.getVoltage());
 							this.setJoules(this.joules - ElectricInfo.getWatts(transferAmps, this.getVoltage()));
-							System.out.println("PROD");
 						}
 						else
 						{

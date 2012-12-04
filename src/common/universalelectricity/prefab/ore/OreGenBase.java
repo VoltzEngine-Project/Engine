@@ -47,19 +47,13 @@ public abstract class OreGenBase
 	public String harvestTool;
 
 	/**
-	 * @param name
-	 *            - The name of the ore for display
-	 * @param textureFile
-	 *            - The 16x16 png texture of your ore to override
-	 * @param minGenerateLevel
-	 *            - The highest generation level of your ore
-	 * @param maxGenerateLevel
-	 *            - The lowest generation level of your ore
-	 * @param amountPerChunk
-	 *            - The amount of ores to generate per chunk
-	 * @param amountPerBranch
-	 *            - The amount of ores to generate in a clutter. E.g coal generates with a lot of
-	 *            other coal next to it. How much do you want?
+	 * @param name - The name of the ore for display
+	 * @param textureFile - The 16x16 png texture of your ore to override
+	 * @param minGenerateLevel - The highest generation level of your ore
+	 * @param maxGenerateLevel - The lowest generation level of your ore
+	 * @param amountPerChunk - The amount of ores to generate per chunk
+	 * @param amountPerBranch - The amount of ores to generate in a clutter. E.g coal generates with
+	 * a lot of other coal next to it. How much do you want?
 	 */
 	public OreGenBase(String name, String oreDiectionaryName, ItemStack stack, String harvestTool, int harvestLevel)
 	{

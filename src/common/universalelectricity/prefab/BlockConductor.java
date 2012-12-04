@@ -1,7 +1,5 @@
 package universalelectricity.prefab;
 
-import java.util.Random;
-
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;

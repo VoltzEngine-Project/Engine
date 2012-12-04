@@ -1,6 +1,5 @@
 package basiccomponents.tile;
 
-import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.IInventory;
@@ -97,7 +96,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 			}
 		}
 
-		if (this.joulesReceived >= this.WATTS_PER_TICK-50 && !this.isDisabled())
+		if (this.joulesReceived >= this.WATTS_PER_TICK - 50 && !this.isDisabled())
 		{
 			// The left slot contains the item to
 			// be smelted

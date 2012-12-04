@@ -15,7 +15,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.RecipeHelper;
 import universalelectricity.prefab.UETab;
-import universalelectricity.prefab.manual.ItemEngineerBooklet;
+import universalelectricity.prefab.UpdateNotifier;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.ore.OreGenReplaceStone;
@@ -33,9 +33,6 @@ import basiccomponents.item.ItemBlockCopperWire;
 import basiccomponents.item.ItemCircuit;
 import basiccomponents.item.ItemOilBucket;
 import basiccomponents.item.ItemWrench;
-import basiccomponents.tile.TileEntityBatteryBox;
-import basiccomponents.tile.TileEntityCoalGenerator;
-import basiccomponents.tile.TileEntityElectricFurnace;
 import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -49,10 +46,11 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "BasicComponents", name = "Basic Components", version = UniversalElectricity.VERSION)
+@Mod(modid = BCLoader.CHANNEL, name = BCLoader.NAME, version = UniversalElectricity.VERSION)
 @NetworkMod(channels = BCLoader.CHANNEL, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class BCLoader implements ICraftingHandler
 {
+	public static final String NAME = "Basic Components";
 	public static final String CHANNEL = "BasicComponents";
 
 	public static final String FILE_PATH = "/basiccomponents/";
@@ -106,8 +104,6 @@ public class BCLoader implements ICraftingHandler
 		BasicComponents.itemMotor = new ItemBasic("motor", UniversalElectricity.CONFIGURATION.getItem("Motor", BasicComponents.ITEM_ID_PREFIX + 14).getInt(), 12);
 
 		BasicComponents.itemOilBucket = new ItemOilBucket(UniversalElectricity.CONFIGURATION.getItem("Oil Bucket", BasicComponents.ITEM_ID_PREFIX + 15).getInt(), 4);
-		
-		BasicComponents.engineerBooklet = new ItemEngineerBooklet(UniversalElectricity.CONFIGURATION.getItem("Engineer's Booklet", BasicComponents.ITEM_ID_PREFIX + 16).getInt());
 
 		BasicComponents.coalGenerator = ((BlockBasicMachine) BasicComponents.blockMachine).getCoalGenerator();
 		BasicComponents.batteryBox = ((BlockBasicMachine) BasicComponents.blockMachine).getBatteryBox();
@@ -115,7 +111,7 @@ public class BCLoader implements ICraftingHandler
 
 		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 0, 50, 40, 4).enable();
 		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 0, 50, 35, 3).enable();
-		
+
 		UniversalElectricity.CONFIGURATION.save();
 
 		/**
@@ -170,6 +166,8 @@ public class BCLoader implements ICraftingHandler
 
 		UETab.setItemStack(BasicComponents.batteryBox);
 
+		UpdateNotifier.INSTANCE.checkUpdate(NAME, UniversalElectricity.VERSION, "http://www.calclavia.com/downloads/ue/modversion.txt");
+
 		proxy.preInit();
 	}
 
@@ -185,13 +183,6 @@ public class BCLoader implements ICraftingHandler
 		{
 			LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", language, false);
 		}
-
-		/**
-		 * Registering Tile Entities
-		 */
-		GameRegistry.registerTileEntity(TileEntityBatteryBox.class, "UEBatteryBox");
-		GameRegistry.registerTileEntity(TileEntityCoalGenerator.class, "UECoalGenerator");
-		GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, "UEElectricFurnace");
 
 		OreGenerator.addOre(BasicComponents.copperOreGeneration);
 		OreGenerator.addOre(BasicComponents.tinOreGeneration);
@@ -286,4 +277,5 @@ public class BCLoader implements ICraftingHandler
 	{
 
 	}
+
 }

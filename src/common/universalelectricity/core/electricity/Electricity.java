@@ -1,7 +1,6 @@
 package universalelectricity.core.electricity;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,8 +9,6 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.IScheduledTickHandler;
-import cpw.mods.fml.common.TickType;
 
 /**
  * THIS IS THE NEW ELECTRICITY MANAGER. THIS IS ONLY A DRAFT!
@@ -49,10 +46,8 @@ public class Electricity
 	/**
 	 * Merges two connection lines together into one.
 	 * 
-	 * @param networkA
-	 *            - The network to be merged into. This network will be kept.
-	 * @param networkB
-	 *            - The network to be merged. This network will be deleted.
+	 * @param networkA - The network to be merged into. This network will be kept.
+	 * @param networkB - The network to be merged. This network will be deleted.
 	 */
 	public void mergeConnection(ElectricityNetwork networkA, ElectricityNetwork networkB)
 	{
@@ -78,10 +73,8 @@ public class Electricity
 	 * Separate one connection line into two different ones between two conductors. This function
 	 * does this by resetting all wires in the connection line and making them each reconnect.
 	 * 
-	 * @param conductorA
-	 *            - existing conductor
-	 * @param conductorB
-	 *            - broken/invalid conductor
+	 * @param conductorA - existing conductor
+	 * @param conductorB - broken/invalid conductor
 	 */
 	public void splitConnection(IConductor conductorA, IConductor conductorB)
 	{

@@ -34,10 +34,10 @@ public abstract class TileEntityElectricityProducer extends TileEntityDisableabl
 	{
 		return 120;
 	}
-	
+
 	@Override
 	public void invalidate()
-    {
+	{
 		Electricity.instance.unregister(this);
-    }
+	}
 }

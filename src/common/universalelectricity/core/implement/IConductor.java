@@ -1,7 +1,6 @@
 package universalelectricity.core.implement;
 
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityNetwork;
 
@@ -58,10 +57,8 @@ public interface IConductor extends IConnector
 	/**
 	 * Adds a connection between this conductor and a UE unit
 	 * 
-	 * @param tileEntity
-	 *            - Must be either a producer, consumer or a conductor
-	 * @param side
-	 *            - side in which the connection is coming from
+	 * @param tileEntity - Must be either a producer, consumer or a conductor
+	 * @param side - side in which the connection is coming from
 	 */
 	public void updateConnection(TileEntity tileEntity, ForgeDirection side);
 

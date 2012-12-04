@@ -52,6 +52,7 @@ echo open %SERVER%>ftpscript.txt
 echo %USERNAME%>>ftpscript.txt
 echo %PASSWORD%>>ftpscript.txt
 echo binary>>ftpscript.txt
+echo put "modversion.txt">>ftpscript.txt
 echo put "builds\%FILE_NAME%">>ftpscript.txt
 echo put "builds\%API_NAME%">>ftpscript.txt
 echo put info.txt>>ftpscript.txt

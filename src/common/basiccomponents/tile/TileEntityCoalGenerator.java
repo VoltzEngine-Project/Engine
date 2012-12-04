@@ -141,8 +141,6 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 			}
 		}
 	}
-	
-	
 
 	@Override
 	public Packet getDescriptionPacket()

@@ -8,14 +8,10 @@ public abstract class CustomPotion extends Potion
 	/**
 	 * Creates a new type of potion
 	 * 
-	 * @param id
-	 *            - The ID of this potion. Make it greater than 20.
-	 * @param isBadEffect
-	 *            - Is this potion a good potion or a bad one?
-	 * @param color
-	 *            - The color of this potion.
-	 * @param name
-	 *            - The name of this potion.
+	 * @param id - The ID of this potion. Make it greater than 20.
+	 * @param isBadEffect - Is this potion a good potion or a bad one?
+	 * @param color - The color of this potion.
+	 * @param name - The name of this potion.
 	 */
 	public CustomPotion(int id, boolean isBadEffect, int color, String name)
 	{

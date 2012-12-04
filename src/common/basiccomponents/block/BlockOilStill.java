@@ -17,7 +17,7 @@ import universalelectricity.core.vector.Vector3;
  * 
  * @author Cammygames
  * 
- *         Oil Still
+ * Oil Still
  * 
  */
 public class BlockOilStill extends BlockStationary implements ILiquid

@@ -255,10 +255,8 @@ public class Vector3 extends Vector2 implements Cloneable
 	/**
 	 * Saves this Vector3 to disk
 	 * 
-	 * @param prefix
-	 *            - The prefix of this save. Use some unique string.
-	 * @param par1NBTTagCompound
-	 *            - The NBT compound object to save the data in
+	 * @param prefix - The prefix of this save. Use some unique string.
+	 * @param par1NBTTagCompound - The NBT compound object to save the data in
 	 */
 	public void writeToNBT(String prefix, NBTTagCompound par1NBTTagCompound)
 	{
@@ -290,10 +288,8 @@ public class Vector3 extends Vector2 implements Cloneable
 	/**
 	 * Gets a position relative to another position's side
 	 * 
-	 * @param position
-	 *            - The position
-	 * @param side
-	 *            - The side. 0-5
+	 * @param position - The position
+	 * @param side - The side. 0-5
 	 * @return The position relative to the original position's side
 	 */
 	public void modifyPositionFromSide(ForgeDirection side, double amount)
@@ -353,11 +349,9 @@ public class Vector3 extends Vector2 implements Cloneable
 	 * 
 	 * Bottom: 0; Top: 1; Back: 2; Front: 3; Left: 4; Right: 5;
 	 * 
-	 * @param front
-	 *            - The direction in which this block is facing/front. Use a number between 0 and 5.
-	 *            Default is 3.
-	 * @param side
-	 *            - The side you are trying to find. A number between 0 and 5.
+	 * @param front - The direction in which this block is facing/front. Use a number between 0 and
+	 * 5. Default is 3.
+	 * @param side - The side you are trying to find. A number between 0 and 5.
 	 * @return The side relative to the facing direction.
 	 */
 
