@@ -131,7 +131,8 @@ public class RecipeHelper
 	}
 
 	/**
-	 * Removes all recipes found that has this output.
+	 * Removes all recipes found that has this output. You may use this with Forge Ore Dictionary to
+	 * remove all recipes with the FoD ID.
 	 * 
 	 * @return True if successful
 	 */

@@ -216,6 +216,22 @@ public class ElectricityNetwork
 		return totalElectricity;
 	}
 
+	/**
+	 * @return Returns all producers in this electricity network.
+	 */
+	public HashMap<TileEntity, ElectricityPack> getProducers()
+	{
+		return this.producers;
+	}
+
+	/**
+	 * @return Returns all consumers in this electricity network.
+	 */
+	public HashMap<TileEntity, ElectricityPack> getConsumers()
+	{
+		return this.consumers;
+	}
+
 	public void addConductor(IConductor newConductor)
 	{
 		this.cleanConductors();
