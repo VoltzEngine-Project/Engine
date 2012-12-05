@@ -62,12 +62,17 @@ public abstract class BlockMachine extends BlockContainer
 	/**
 	 * DO NOT OVERRIDE THIS FUNCTION! Called when the block is right clicked by the player. This
 	 * modified version detects electric items and wrench actions on your machine block. Do not
-	 * override this function. Use machineActivated instead! (It does the same thing)
+	 * override this function. Use onMachineActivated instead! (It does the same thing)
+	 * 
+	 * @param world The World Object.
+	 * @param x, y, z The coordinate of the block.
+	 * @param side The side the player clicked on.
+	 * @param hitX, hitY, hitZ The position the player clicked on relative to the block.
 	 */
 	@Override
-	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
-		int metadata = par1World.getBlockMetadata(x, y, z);
+		int metadata = world.getBlockMetadata(x, y, z);
 
 		/**
 		 * Check if the player is holding a wrench or an electric item. If so, do not open the GUI.
@@ -76,31 +81,31 @@ public abstract class BlockMachine extends BlockContainer
 		{
 			if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IWrench)
 			{
-				par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+				world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 				((IWrench) par5EntityPlayer.inventory.getCurrentItem().getItem()).wrenchUsed(par5EntityPlayer, x, y, z);
 
 				if (par5EntityPlayer.isSneaking())
 				{
-					return this.onSneakUseWrench(par1World, x, y, z, par5EntityPlayer);
+					return this.onSneakUseWrench(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
 				}
 				else
 				{
-					return this.onUseWrench(par1World, x, y, z, par5EntityPlayer);
+					return this.onUseWrench(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
 				}
 			}
 			else if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IItemElectric)
 			{
-				if (this.onUseElectricItem(par1World, x, y, z, par5EntityPlayer)) { return true; }
+				if (this.onUseElectricItem(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ)) { return true; }
 			}
 		}
 
 		if (par5EntityPlayer.isSneaking())
 		{
-			return this.onSneakMachineActivated(par1World, x, y, z, par5EntityPlayer);
+			return this.onSneakMachineActivated(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
 		}
 		else
 		{
-			return this.onMachineActivated(par1World, x, y, z, par5EntityPlayer);
+			return this.onMachineActivated(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
 		}
 	}
 
@@ -109,7 +114,7 @@ public abstract class BlockMachine extends BlockContainer
 	 * 
 	 * @return True if something happens
 	 */
-	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		return false;
 	}
@@ -119,7 +124,7 @@ public abstract class BlockMachine extends BlockContainer
 	 * 
 	 * @return True if something happens
 	 */
-	public boolean onSneakMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+	public boolean onSneakMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		return false;
 	}
@@ -129,7 +134,7 @@ public abstract class BlockMachine extends BlockContainer
 	 * 
 	 * @return True if some happens
 	 */
-	public boolean onUseElectricItem(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+	public boolean onUseElectricItem(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		return false;
 	}
@@ -139,7 +144,7 @@ public abstract class BlockMachine extends BlockContainer
 	 * 
 	 * @return True if some happens
 	 */
-	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		return false;
 	}
@@ -149,9 +154,9 @@ public abstract class BlockMachine extends BlockContainer
 	 * 
 	 * @return True if some happens
 	 */
-	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
-		return this.onUseWrench(par1World, x, y, z, par5EntityPlayer);
+		return this.onUseWrench(par1World, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
 	}
 
 	/**

@@ -9,10 +9,10 @@
 
 package buildcraft.api.power;
 
-import net.minecraftforge.common.ForgeDirection;
-import buildcraft.api.core.SafeTimeTracker;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
+import buildcraft.api.core.SafeTimeTracker;
 
 public abstract class PowerProvider implements IPowerProvider {
 

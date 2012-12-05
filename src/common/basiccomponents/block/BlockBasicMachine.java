@@ -195,52 +195,10 @@ public class BlockBasicMachine extends BlockMachine
 					break;
 			}
 		}
-
-		// this.checkForConductors(par1World, x,
-		// y, z);
 	}
 
-	/*
-	 * @Override public void onNeighborBlockChange(World par1World, int x, int y, int z, int par4) {
-	 * this.checkForConductors(par1World, x, y, z); }
-	 * 
-	 * public void checkForConductors(World par1World, int x, int y, int z) { //This makes sure
-	 * battery boxes can only have wires on it's correct side placed. int metadata =
-	 * par1World.getBlockMetadata(x, y, z);
-	 * 
-	 * if(metadata >= BATTERY_BOX_METADATA && metadata < ELECTRIC_FURNACE_METADATA) {
-	 * TileEntityBatteryBox tileEntity = (TileEntityBatteryBox )par1World.getBlockTileEntity(x, y,
-	 * z);
-	 * 
-	 * for (byte i = 0; i < 6; i++) { Vector3 position = new Vector3(x, y, z);
-	 * position.modifyPositionFromSide (ForgeDirection.getOrientation(i));
-	 * 
-	 * if(!tileEntity.canConnect(ForgeDirection. getOrientation(i).getOpposite())) { TileEntity
-	 * neighborTile = par1World.getBlockTileEntity (position.intX(), position.intY(),
-	 * position.intZ());
-	 * 
-	 * if(neighborTile != null) { boolean tossPipe = false;
-	 * 
-	 * if(Loader.isModLoaded("BuildCraft|Transport" )) { try { if(neighborTile.getClass() == Class
-	 * .forName("buildcraft.transport.TileGenericPipe" )) { tossPipe = true; } } catch (Exception e)
-	 * { System.out.println(
-	 * "Failed to identify Buildcraft class. Contact UE developers to update their API!" ); } }
-	 * 
-	 * //IEnergyConductor if(neighborTile instanceof IEnergyConductor || tossPipe) {
-	 * this.breakConductor(par1World, position); } } } } } }
-	 * 
-	 * public void breakConductor(World par1World, Vector3 position) { int neighborBlockID =
-	 * par1World.getBlockId(position.intX(), position.intY(), position.intZ());
-	 * 
-	 * if(Block.blocksList[neighborBlockID] != null) { Block.blocksList[neighborBlockID].
-	 * dropBlockAsItem(par1World, position.intX(), position.intY(), position.intZ(),
-	 * par1World.getBlockMetadata(position.intX(), position.intY(), position.intZ()), 0); }
-	 * 
-	 * par1World.setBlockWithNotify(position.intX() , position.intY(), position.intZ(), 0); }
-	 */
-
 	@Override
-	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
 		int original = metadata;
@@ -256,7 +214,7 @@ public class BlockBasicMachine extends BlockMachine
 			original -= BATTERY_BOX_METADATA;
 		}
 
-		// Reorient the block
+		// Re-orient the block
 		switch (original)
 		{
 			case 0:
@@ -291,7 +249,7 @@ public class BlockBasicMachine extends BlockMachine
 	 * Called when the block is right clicked by the player
 	 */
 	@Override
-	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
 

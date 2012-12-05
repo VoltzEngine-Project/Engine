@@ -121,12 +121,16 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 					this.generateWatts = (double) Math.max(this.generateWatts - 8, 0);
 				}
 
-				if (this.generateWatts > MIN_GENERATE_WATTS && this.connectedElectricUnit != null)
+				if (this.connectedElectricUnit != null)
 				{
-					this.connectedElectricUnit.getNetwork().startProducing(this, (this.generateWatts / this.getVoltage()) / 20, this.getVoltage());
-					// ElectricityManager.instance.produceElectricity(this,
-					// this.connectedElectricUnit, (this.generateWatts / this.getVoltage()) / 20,
-					// this.getVoltage());
+					if (this.generateWatts > MIN_GENERATE_WATTS)
+					{
+						this.connectedElectricUnit.getNetwork().startProducing(this, (this.generateWatts / this.getVoltage()) / 20, this.getVoltage());
+					}
+					else
+					{
+						this.connectedElectricUnit.getNetwork().stopProducing(this);
+					}
 				}
 			}
 
