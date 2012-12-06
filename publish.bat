@@ -38,7 +38,6 @@ cd src\
 
 "..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\universalelectricity\"
 "..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\basiccomponents\"
-"..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\ic2\"
 "..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\buildcraft\"
 "..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\railcraft\"
 "..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\dan200\"
