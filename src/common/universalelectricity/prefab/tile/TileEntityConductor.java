@@ -1,14 +1,16 @@
 package universalelectricity.prefab.tile;
 
+import java.util.EnumSet;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.INetworkManager;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.Electricity;
+import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.implement.IConductor;
-import universalelectricity.core.implement.IConnector;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 
@@ -32,6 +34,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 
 	public TileEntityConductor()
 	{
+		ElectricityConnections.registerConnector(this, EnumSet.range(ForgeDirection.DOWN, ForgeDirection.EAST));
 		this.reset();
 	}
 
@@ -58,7 +61,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		if (tileEntity != null)
 		{
-			if (tileEntity instanceof IConnector)
+			if (ElectricityConnections.isConnector(tileEntity))
 			{
 				this.connectedBlocks[side.ordinal()] = tileEntity;
 
@@ -87,7 +90,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		if (tileEntity != null)
 		{
-			if (tileEntity instanceof IConnector)
+			if (ElectricityConnections.isConnector(tileEntity))
 			{
 				this.connectedBlocks[side.ordinal()] = tileEntity;
 
@@ -139,11 +142,5 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 				this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
 			}
 		}
-	}
-
-	@Override
-	public boolean canConnect(ForgeDirection side)
-	{
-		return true;
 	}
 }

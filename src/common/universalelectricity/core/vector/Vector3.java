@@ -13,7 +13,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.implement.IConnector;
+import universalelectricity.core.electricity.ElectricityConnections;
 
 /**
  * Vector3 Class is used for defining objects in a 3D space. Vector3 makes it easier to handle the
@@ -219,7 +219,7 @@ public class Vector3 extends Vector2 implements Cloneable
 		this.z -= amount.z;
 	}
 
-	public void multiply(int amount)
+	public void multiply(double amount)
 	{
 		this.x *= amount;
 		this.y *= amount;
@@ -335,9 +335,9 @@ public class Vector3 extends Vector2 implements Cloneable
 	{
 		TileEntity tileEntity = getTileEntityFromSide(world, position, side);
 
-		if (tileEntity instanceof IConnector)
+		if (ElectricityConnections.isConnector(tileEntity))
 		{
-			if (((IConnector) tileEntity).canConnect(getOrientationFromSide(side, ForgeDirection.NORTH))) { return tileEntity; }
+			if (ElectricityConnections.canConnect(tileEntity, getOrientationFromSide(side, ForgeDirection.NORTH))) { return tileEntity; }
 		}
 
 		return null;

@@ -7,6 +7,9 @@ import ic2.api.IElectricItem;
 import ic2.api.IEnergySink;
 import ic2.api.IEnergySource;
 import ic2.api.IEnergyStorage;
+
+import java.util.EnumSet;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.INetworkManager;
@@ -21,6 +24,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.implement.IJouleStorage;
@@ -63,14 +67,10 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	}
 
 	@Override
-	public boolean canConnect(ForgeDirection side)
-	{
-		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
-	}
-
-	@Override
 	public void initiate()
 	{
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite()));
+
 		if (Loader.isModLoaded("IC2"))
 		{
 			try

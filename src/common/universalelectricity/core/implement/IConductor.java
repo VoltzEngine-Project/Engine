@@ -10,7 +10,7 @@ import universalelectricity.core.electricity.ElectricityNetwork;
  * @author Calclavia
  * 
  */
-public interface IConductor extends IConnector
+public interface IConductor
 {
 	/**
 	 * The electrical network this conductor is on.

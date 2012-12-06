@@ -1,8 +1,10 @@
 package universalelectricity.prefab.tile;
 
+import java.util.EnumSet;
+
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.Electricity;
-import universalelectricity.core.implement.IConnector;
+import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.implement.IVoltage;
 
 /**
@@ -10,23 +12,18 @@ import universalelectricity.core.implement.IVoltage;
  * 
  * @author Calclavia
  */
-public abstract class TileEntityElectricityProducer extends TileEntityDisableable implements IConnector, IVoltage
+public abstract class TileEntityElectricityProducer extends TileEntityDisableable implements IVoltage
 {
 	public TileEntityElectricityProducer()
 	{
 		super();
+		ElectricityConnections.registerConnector(this, EnumSet.range(ForgeDirection.DOWN, ForgeDirection.EAST));
 	}
 
 	@Override
 	public void updateEntity()
 	{
 		super.updateEntity();
-	}
-
-	@Override
-	public boolean canConnect(ForgeDirection side)
-	{
-		return true;
 	}
 
 	@Override

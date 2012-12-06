@@ -1,5 +1,7 @@
 package basiccomponents.tile;
 
+import java.util.EnumSet;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.IInventory;
@@ -13,6 +15,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.vector.Vector3;
@@ -48,13 +51,13 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	private ItemStack[] containingItems = new ItemStack[3];
 
 	private int playersUsing = 0;
-
+	
 	@Override
-	public boolean canConnect(ForgeDirection side)
+	public void initiate()
 	{
-		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2);
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2)));
 	}
-
+	
 	@Override
 	public void updateEntity()
 	{
