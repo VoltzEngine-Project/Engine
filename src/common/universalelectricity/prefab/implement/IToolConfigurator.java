@@ -3,11 +3,12 @@ package universalelectricity.prefab.implement;
 import net.minecraft.src.EntityPlayer;
 
 /**
- * Code written by Buildcraft.
+ * Code written by Buildcraft. Applied to items that acts as a block configurator such as wrenches,
+ * screw drivers and such.
  * 
  * @author Buildcraft Team
  */
-public interface IWrench
+public interface IToolConfigurator
 {
 
 	/***

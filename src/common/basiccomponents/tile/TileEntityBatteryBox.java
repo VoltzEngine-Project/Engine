@@ -1,13 +1,5 @@
 package basiccomponents.tile;
 
-import ic2.api.Direction;
-import ic2.api.ElectricItem;
-import ic2.api.EnergyNet;
-import ic2.api.IElectricItem;
-import ic2.api.IEnergySink;
-import ic2.api.IEnergySource;
-import ic2.api.IEnergyStorage;
-
 import java.util.EnumSet;
 
 import net.minecraft.src.EntityPlayer;
@@ -19,10 +11,8 @@ import net.minecraft.src.NBTTagList;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.implement.IConductor;
@@ -35,20 +25,14 @@ import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import basiccomponents.BCLoader;
 import basiccomponents.block.BlockBasicMachine;
-import buildcraft.api.power.IPowerProvider;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerFramework;
-import buildcraft.api.power.PowerProvider;
 
 import com.google.common.io.ByteArrayDataInput;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 
-public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IJouleStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, IPeripheral
+public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, IPeripheral
 {
 	private double joules = 0;
 
@@ -58,38 +42,10 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
 	private int playersUsing = 0;
 
-	public IPowerProvider powerProvider;
-
-	public TileEntityBatteryBox()
-	{
-		super();
-		this.setPowerProvider(null);
-	}
-
 	@Override
 	public void initiate()
 	{
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite()));
-
-		if (Loader.isModLoaded("IC2"))
-		{
-			try
-			{
-				if (Class.forName("ic2.common.EnergyNet").getMethod("getForWorld", World.class) != null)
-				{
-					EnergyNet.getForWorld(worldObj).addTileEntity(this);
-					FMLLog.fine("Added battery box to IC2 energy net.");
-				}
-				else
-				{
-					FMLLog.severe("Failed to register battery box to IC2 energy net.");
-				}
-			}
-			catch (Exception e)
-			{
-				FMLLog.severe("Failed to register battery box to IC2 energy net.");
-			}
-		}
 	}
 
 	@Override
@@ -121,15 +77,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				}
 			}
 
-			/**
-			 * Receive Electricity
-			 */
-			if (this.powerProvider != null)
-			{
-				double receivedElectricity = this.powerProvider.useEnergy(50, 50, true) * UniversalElectricity.BC3_RATIO;
-				this.setJoules(this.joules + receivedElectricity);
-			}
-
 			/*
 			 * The top slot is for recharging items. Check if the item is a electric item. If so,
 			 * recharge it.
@@ -142,11 +89,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 					double ampsToGive = Math.min(ElectricInfo.getAmps(electricItem.getMaxJoules(this.containingItems[0]) * 0.005, this.getVoltage()), this.joules);
 					double joules = electricItem.onReceive(ampsToGive, this.getVoltage(), this.containingItems[0]);
 					this.setJoules(this.joules - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
-				}
-				else if (this.containingItems[0].getItem() instanceof IElectricItem)
-				{
-					double sent = ElectricItem.charge(containingItems[0], (int) (joules * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
-					this.setJoules(joules - sent);
 				}
 			}
 
@@ -184,15 +126,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 						this.setJoules(this.joules + joulesReceived);
 					}
 				}
-				else if (containingItems[1].getItem() instanceof IElectricItem)
-				{
-					IElectricItem item = (IElectricItem) containingItems[1].getItem();
-					if (item.canProvideEnergy())
-					{
-						double gain = ElectricItem.discharge(containingItems[1], (int) ((int) (getMaxJoules() - joules) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
-						this.setJoules(joules + gain);
-					}
-				}
 			}
 
 			if (this.joules > 0)
@@ -220,25 +153,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 							((IConductor) connector).getNetwork().stopProducing(this);
 						}
 
-					}
-					else
-					{
-						// Output IC2/Buildcraft energy
-						if (tileEntity instanceof IConductor)
-						{
-							if (this.joules * UniversalElectricity.TO_IC2_RATIO >= 32)
-							{
-								this.setJoules(this.joules - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32)) * UniversalElectricity.IC2_RATIO);
-							}
-						}
-						else if (this.isPoweredTile(tileEntity))
-						{
-							IPowerReceptor receptor = (IPowerReceptor) tileEntity;
-							double BCjoulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
-							float transferJoules = (float) Math.max(Math.min(Math.min(BCjoulesNeeded, this.joules), 80000), 0);
-							receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite());
-							this.setJoules(this.joules - transferJoules);
-						}
 					}
 				}
 			}
@@ -467,128 +381,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	public double getMaxJoules(Object... data)
 	{
 		return 4000000;
-	}
-
-	/**
-	 * BUILDCRAFT FUNCTIONS
-	 */
-
-	/**
-	 * Is this tile entity a BC tile?
-	 */
-	public boolean isPoweredTile(TileEntity tileEntity)
-	{
-		if (tileEntity instanceof IPowerReceptor)
-		{
-			IPowerReceptor receptor = (IPowerReceptor) tileEntity;
-			IPowerProvider provider = receptor.getPowerProvider();
-			return provider != null && provider.getClass().getSuperclass().equals(PowerProvider.class);
-		}
-
-		return false;
-	}
-
-	@Override
-	public void setPowerProvider(IPowerProvider provider)
-	{
-		if (provider == null)
-		{
-			if (PowerFramework.currentFramework != null)
-			{
-				powerProvider = PowerFramework.currentFramework.createPowerProvider();
-				powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxJoules() * UniversalElectricity.BC3_RATIO));
-			}
-		}
-		else
-		{
-			this.powerProvider = provider;
-		}
-	}
-
-	@Override
-	public IPowerProvider getPowerProvider()
-	{
-		return this.powerProvider;
-	}
-
-	@Override
-	public void doWork()
-	{
-	}
-
-	@Override
-	public int powerRequest()
-	{
-		return (int) Math.ceil((this.getMaxJoules() - this.joules) * UniversalElectricity.BC3_RATIO);
-	}
-
-	/**
-	 * INDUSTRIALCRAFT FUNCTIONS
-	 */
-	public int getStored()
-	{
-		return (int) (this.joules * UniversalElectricity.IC2_RATIO);
-	}
-
-	@Override
-	public boolean isAddedToEnergyNet()
-	{
-		return this.ticks > 0;
-	}
-
-	@Override
-	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
-	{
-		return direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
-	}
-
-	@Override
-	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
-	{
-		return direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
-	}
-
-	@Override
-	public int getCapacity()
-	{
-		return (int) (this.getMaxJoules() / UniversalElectricity.IC2_RATIO);
-	}
-
-	@Override
-	public int getOutput()
-	{
-		return 32;
-	}
-
-	@Override
-	public int getMaxEnergyOutput()
-	{
-		return 32;
-	}
-
-	@Override
-	public boolean demandsEnergy()
-	{
-		if (!this.isDisabled() && UniversalElectricity.IC2_RATIO > 0) { return this.joules < getMaxJoules(); }
-
-		return false;
-	}
-
-	@Override
-	public int injectEnergy(Direction directionFrom, int euAmount)
-	{
-		if (!this.isDisabled())
-		{
-			double inputElectricity = euAmount * UniversalElectricity.IC2_RATIO;
-
-			double rejectedElectricity = Math.max(inputElectricity - (this.getMaxJoules() - this.joules), 0);
-
-			this.setJoules(joules + inputElectricity);
-
-			return (int) (rejectedElectricity * UniversalElectricity.TO_IC2_RATIO);
-		}
-
-		return euAmount;
 	}
 
 	/**

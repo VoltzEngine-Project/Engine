@@ -13,7 +13,7 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.core.implement.IItemElectric;
-import universalelectricity.prefab.implement.IWrench;
+import universalelectricity.prefab.implement.IToolConfigurator;
 
 /**
  * A block you may extend from to create your machine blocks! You do not have to extend from this
@@ -79,10 +79,10 @@ public abstract class BlockMachine extends BlockContainer
 		 */
 		if (par5EntityPlayer.inventory.getCurrentItem() != null)
 		{
-			if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IWrench)
+			if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IToolConfigurator)
 			{
 				world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
-				((IWrench) par5EntityPlayer.inventory.getCurrentItem().getItem()).wrenchUsed(par5EntityPlayer, x, y, z);
+				((IToolConfigurator) par5EntityPlayer.inventory.getCurrentItem().getItem()).wrenchUsed(par5EntityPlayer, x, y, z);
 
 				if (par5EntityPlayer.isSneaking())
 				{

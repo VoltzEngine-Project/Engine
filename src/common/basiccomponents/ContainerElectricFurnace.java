@@ -8,6 +8,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import net.minecraft.src.SlotFurnace;
 import universalelectricity.core.implement.IItemElectric;
+import universalelectricity.prefab.SlotElectricItem;
 import basiccomponents.tile.TileEntityElectricFurnace;
 
 public class ContainerElectricFurnace extends Container
@@ -17,14 +18,15 @@ public class ContainerElectricFurnace extends Container
 	public ContainerElectricFurnace(InventoryPlayer par1InventoryPlayer, TileEntityElectricFurnace tileEntity)
 	{
 		this.tileEntity = tileEntity;
-		this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0, 55, 49)); // Electric
-																						// Input
-																						// Slot
-		this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); // To
-																	// be
-																	// smelted
-		this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25)); // Smelting
-																										// result
+
+		// Electric Input Slot
+		this.addSlotToContainer(new SlotElectricItem(tileEntity, 0, 55, 49));
+
+		// To be smelted
+		this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25));
+
+		// Smelting result
+		this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25));
 		int var3;
 
 		for (var3 = 0; var3 < 3; ++var3)

@@ -1,12 +1,12 @@
 package basiccomponents;
 
-import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import universalelectricity.core.implement.IItemElectric;
+import universalelectricity.prefab.SlotElectricItem;
 import basiccomponents.tile.TileEntityBatteryBox;
 
 public class ContainerBatteryBox extends Container
@@ -16,10 +16,10 @@ public class ContainerBatteryBox extends Container
 	public ContainerBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBatteryBox batteryBox)
 	{
 		this.tileEntity = batteryBox;
-		this.addSlotToContainer(new SlotUniversalElectricItem(batteryBox, 0, 33, 24)); // Top
-																						// slot
-		this.addSlotToContainer(new SlotUniversalElectricItem(batteryBox, 1, 33, 48)); // Bottom
-																						// slot
+		// Top slot for battery output
+		this.addSlotToContainer(new SlotElectricItem(batteryBox, 0, 33, 24));
+		// Bottom slot for batter input
+		this.addSlotToContainer(new SlotElectricItem(batteryBox, 1, 33, 48));
 		int var3;
 
 		for (var3 = 0; var3 < 3; ++var3)
@@ -77,17 +77,7 @@ public class ContainerBatteryBox extends Container
 						if (!this.mergeItemStack(var4, 0, 1, false)) { return null; }
 					}
 				}
-				else if (var4.getItem() instanceof IElectricItem)
-				{
-					if (((IElectricItem) var4.getItem()).canProvideEnergy())
-					{
-						if (!mergeItemStack(var4, 1, 2, false)) { return null; }
-					}
-					else
-					{
-						if (!mergeItemStack(var4, 0, 1, false)) { return null; }
-					}
-				}
+
 				else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false)) { return null; }
 			}
 			else if (!this.mergeItemStack(var4, 3, 38, false)) { return null; }
