@@ -31,16 +31,13 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class TileEntityElectricFurnace extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver
 {
-	// The amount of watts required by the
-	// electric furnace per tick
+	// The amount of watts required by the electric furnace per tick
 	public static final double WATTS_PER_TICK = 500;
 
-	// The amount of ticks required to smelt this
-	// item
+	// The amount of ticks required to smelt this item
 	public static final int SMELTING_TIME_REQUIRED = 140;
 
-	// How many ticks has this item been smelting
-	// for?
+	// How many ticks has this item been smelting for?
 	public int smeltingTicks = 0;
 
 	public double joulesReceived = 0;
@@ -51,16 +48,18 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	private ItemStack[] containingItems = new ItemStack[3];
 
 	private int playersUsing = 0;
-	
+
 	@Override
 	public void initiate()
 	{
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2)));
 	}
-	
+
 	@Override
 	public void updateEntity()
 	{
+		super.updateEntity();
+
 		if (!this.worldObj.isRemote)
 		{
 			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2);

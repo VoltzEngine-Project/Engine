@@ -70,7 +70,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 						}
 						else
 						{
-							((IConductor) inputTile).getNetwork().startRequesting(this, this.getMaxJoules() - this.getJoules(), this.getVoltage());
+							((IConductor) inputTile).getNetwork().startRequesting(this, (this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
 							this.setJoules(this.joules + ((IConductor) inputTile).getNetwork().consumeElectricity(this).getWatts());
 						}
 					}
