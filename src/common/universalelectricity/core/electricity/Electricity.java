@@ -89,7 +89,7 @@ public class Electricity
 			{
 				for (byte i = 0; i < 6; i++)
 				{
-					conductor.updateConnectionWithoutSplit(Vector3.getConnectorFromSide(((TileEntity) conductor).worldObj, Vector3.get((TileEntity) conductor), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+					conductor.updateConnectionWithoutSplit(Vector3.getConnectorFromSide(((TileEntity) conductor).worldObj, new Vector3((TileEntity) conductor), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
 				}
 			}
 

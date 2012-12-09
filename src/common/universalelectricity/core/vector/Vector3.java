@@ -46,6 +46,41 @@ public class Vector3 extends Vector2 implements Cloneable
 		this.z = z;
 	}
 
+	public Vector3(Entity par1)
+	{
+		this.x = par1.posX;
+		this.y = par1.posY;
+		this.z = par1.posZ;
+	}
+
+	public Vector3(TileEntity par1)
+	{
+		this.x = par1.xCoord;
+		this.y = par1.yCoord;
+		this.z = par1.zCoord;
+	}
+
+	public Vector3(Vec3 par1)
+	{
+		this.x = par1.xCoord;
+		this.y = par1.yCoord;
+		this.z = par1.zCoord;
+	}
+
+	public Vector3(MovingObjectPosition par1)
+	{
+		this.x = par1.blockX;
+		this.y = par1.blockY;
+		this.z = par1.blockZ;
+	}
+
+	public Vector3(ChunkCoordinates par1)
+	{
+		this.x = par1.posX;
+		this.y = par1.posY;
+		this.z = par1.posZ;
+	}
+
 	/**
 	 * Returns the coordinates as integers
 	 */
@@ -64,6 +99,11 @@ public class Vector3 extends Vector2 implements Cloneable
 		return (int) Math.floor(this.z);
 	}
 
+	public boolean isEquals(Vector3 vector)
+	{
+		return this.x == vector.x && this.y == vector.y && this.z == vector.z;
+	}
+
 	/**
 	 * Makes a new copy of this Vector. Prevents variable referencing problems.
 	 */
@@ -73,33 +113,34 @@ public class Vector3 extends Vector2 implements Cloneable
 		return new Vector3(this.x, this.y, this.z);
 	}
 
-	/**
-	 * Vector3 Shortcut Functions
-	 */
-
+	@Deprecated
 	public static Vector3 get(Entity par1)
 	{
-		return new Vector3(par1.posX, par1.posY, par1.posZ);
+		return new Vector3(par1);
 	}
 
+	@Deprecated
 	public static Vector3 get(TileEntity par1)
 	{
-		return new Vector3(par1.xCoord, par1.yCoord, par1.zCoord);
+		return new Vector3(par1);
 	}
 
+	@Deprecated
 	public static Vector3 get(Vec3 par1)
 	{
-		return new Vector3(par1.xCoord, par1.yCoord, par1.zCoord);
+		return new Vector3(par1);
 	}
 
+	@Deprecated
 	public static Vector3 get(MovingObjectPosition par1)
 	{
-		return new Vector3(par1.blockX, par1.blockY, par1.blockZ);
+		return new Vector3(par1);
 	}
 
+	@Deprecated
 	public static Vector3 get(ChunkCoordinates par1)
 	{
-		return new Vector3(par1.posX, par1.posY, par1.posZ);
+		return new Vector3(par1);
 	}
 
 	public int getBlockID(IBlockAccess world)

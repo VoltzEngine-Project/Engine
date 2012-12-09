@@ -100,6 +100,11 @@ public class Vector2 implements Cloneable
 		return new Vector2(Math.floor(this.x), Math.floor(this.y));
 	}
 
+	public boolean isEquals(Vector2 vector)
+	{
+		return this.x == vector.x && this.y == vector.y;
+	}
+
 	@Override
 	public String toString()
 	{

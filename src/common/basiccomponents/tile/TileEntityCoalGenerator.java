@@ -139,7 +139,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 12);
+				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 
 			if (this.prevGenerateWatts <= 0 && this.generateWatts > 0 || this.prevGenerateWatts > 0 && this.generateWatts <= 0)
@@ -178,7 +178,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 	{
 		if (!this.worldObj.isRemote)
 		{
-			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 15);
 		}
 
 		this.playersUsing++;

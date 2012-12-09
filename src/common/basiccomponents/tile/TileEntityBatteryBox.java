@@ -58,7 +58,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 			if (!this.worldObj.isRemote)
 			{
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
-				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
+				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
 				if (inputTile != null)
 				{
@@ -131,11 +131,11 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 			if (this.joules > 0)
 			{
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
+				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
 				if (tileEntity != null)
 				{
-					TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), outputDirection);
+					TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), outputDirection);
 
 					// Output UE electricity
 					if (connector instanceof IConductor)
@@ -165,7 +165,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		{
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 12);
+				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 		}
 	}

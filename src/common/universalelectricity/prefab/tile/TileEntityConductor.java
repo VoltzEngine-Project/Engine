@@ -139,7 +139,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 		{
 			for (byte i = 0; i < 6; i++)
 			{
-				this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+				this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
 			}
 		}
 	}

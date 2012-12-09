@@ -25,7 +25,7 @@ public abstract class TileEntityElectricityReceiver extends TileEntityDisableabl
 	{
 		super.updateEntity();
 	}
-	
+
 	@Override
 	public double getVoltage()
 	{

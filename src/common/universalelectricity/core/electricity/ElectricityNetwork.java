@@ -25,12 +25,17 @@ public class ElectricityNetwork
 	/**
 	 * Sets this tile entity to start producing energy in this network.
 	 */
+	public void startProducing(TileEntity tileEntity, ElectricityPack electricityPack)
+	{
+		if (tileEntity != null && electricityPack.getWatts() > 0)
+		{
+			this.producers.put(tileEntity, electricityPack);
+		}
+	}
+
 	public void startProducing(TileEntity tileEntity, double amperes, double voltage)
 	{
-		if (tileEntity != null && amperes > 0 && voltage > 0)
-		{
-			this.producers.put(tileEntity, new ElectricityPack(amperes, voltage));
-		}
+		this.startProducing(tileEntity, new ElectricityPack(amperes, voltage));
 	}
 
 	public boolean isProducing(TileEntity tileEntity)
@@ -49,12 +54,17 @@ public class ElectricityNetwork
 	/**
 	 * Sets this tile entity to start producing energy in this network.
 	 */
+	public void startRequesting(TileEntity tileEntity, ElectricityPack electricityPack)
+	{
+		if (tileEntity != null && electricityPack.getWatts() > 0)
+		{
+			this.consumers.put(tileEntity, electricityPack);
+		}
+	}
+
 	public void startRequesting(TileEntity tileEntity, double amperes, double voltage)
 	{
-		if (tileEntity != null && amperes > 0 && voltage > 0)
-		{
-			this.consumers.put(tileEntity, new ElectricityPack(amperes, voltage));
-		}
+		this.startRequesting(tileEntity, new ElectricityPack(amperes, voltage));
 	}
 
 	public boolean isRequesting(TileEntity tileEntity)
