@@ -1,8 +1,6 @@
 package basiccomponents.tile;
 
 import net.minecraft.src.Block;
-import net.minecraft.src.Packet;
-import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityConductor;
 import basiccomponents.BCLoader;
 
@@ -10,6 +8,11 @@ public class TileEntityCopperWire extends TileEntityConductor
 {
 	public static double RESISTANCE = 0.05;
 	public static double MAX_AMPS = 1000;
+
+	public TileEntityCopperWire()
+	{
+		this.channel = BCLoader.CHANNEL;
+	}
 
 	@Override
 	public double getResistance()
@@ -30,11 +33,5 @@ public class TileEntityCopperWire extends TileEntityConductor
 		{
 			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.fire.blockID);
 		}
-	}
-
-	@Override
-	public Packet getDescriptionPacket()
-	{
-		return PacketManager.getPacket(BCLoader.CHANNEL, this);
 	}
 }

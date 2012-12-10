@@ -4,6 +4,7 @@ import java.util.EnumSet;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.INetworkManager;
+import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -13,6 +14,9 @@ import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.network.PacketManager;
+
+import basiccomponents.BCLoader;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -27,9 +31,16 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	private ElectricityNetwork network;
 
 	/**
-	 * Stores information on the blocks that this conductor is connected to
+	 * Used client side to render.
+	 */
+	public boolean[] visuallyConnected = { false, false, false, false, false, false };
+
+	/**
+	 * Stores information on the blocks that this conductor is connected to.
 	 */
 	public TileEntity[] connectedBlocks = { null, null, null, null, null, null };
+
+	protected String channel = "";
 
 	public TileEntityConductor()
 	{
@@ -63,6 +74,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 			if (ElectricityConnections.isConnector(tileEntity))
 			{
 				this.connectedBlocks[side.ordinal()] = tileEntity;
+				this.visuallyConnected[side.ordinal()] = true;
 
 				if (tileEntity.getClass() == this.getClass())
 				{
@@ -82,6 +94,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 		}
 
 		this.connectedBlocks[side.ordinal()] = null;
+		this.visuallyConnected[side.ordinal()] = false;
 	}
 
 	@Override
@@ -92,6 +105,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 			if (ElectricityConnections.isConnector(tileEntity))
 			{
 				this.connectedBlocks[side.ordinal()] = tileEntity;
+				this.visuallyConnected[side.ordinal()] = true;
 
 				if (tileEntity.getClass() == this.getClass())
 				{
@@ -103,6 +117,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 		}
 
 		this.connectedBlocks[side.ordinal()] = null;
+		this.visuallyConnected[side.ordinal()] = false;
 	}
 
 	@Override
@@ -110,6 +125,12 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		if (this.worldObj.isRemote)
 		{
+			this.visuallyConnected[0] = dataStream.readBoolean();
+			this.visuallyConnected[1] = dataStream.readBoolean();
+			this.visuallyConnected[2] = dataStream.readBoolean();
+			this.visuallyConnected[3] = dataStream.readBoolean();
+			this.visuallyConnected[4] = dataStream.readBoolean();
+			this.visuallyConnected[5] = dataStream.readBoolean();
 			this.refreshConnectedBlocks();
 		}
 	}
@@ -141,5 +162,11 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 				this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
 			}
 		}
+	}
+	
+	@Override
+	public Packet getDescriptionPacket()
+	{
+		return PacketManager.getPacket(this.channel , this, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5]);
 	}
 }
