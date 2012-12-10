@@ -16,8 +16,6 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 
-import basiccomponents.BCLoader;
-
 import com.google.common.io.ByteArrayDataInput;
 
 /**
