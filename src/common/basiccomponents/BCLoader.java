@@ -59,8 +59,7 @@ public class BCLoader implements ICraftingHandler
 	public static final String BLOCK_TEXTURE_FILE = TEXTURE_PATH + "blocks.png";
 	public static final String ITEM_TEXTURE_FILE = TEXTURE_PATH + "items.png";
 
-	private static final String[] LANGUAGES_SUPPORTED = new String[]
-	{ "en_US", "zh_CN", "es_ES" };
+	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES" };
 
 	@Instance("BasicComponents")
 	public static BCLoader instance;
@@ -216,68 +215,49 @@ public class BCLoader implements ICraftingHandler
 
 		// Recipes
 		// Oil Bucket
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemOilBucket), new Object[]
-		{ "CCC", "CBC", "CCC", 'B', Item.bucketWater, 'C', Item.coal }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemOilBucket), new Object[] { "CCC", "CBC", "CCC", 'B', Item.bucketWater, 'C', Item.coal }));
 		// Motor
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemMotor), new Object[]
-		{ "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', BasicComponents.blockCopperWire }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemMotor), new Object[] { "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', BasicComponents.blockCopperWire }));
 		// Wrench
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemWrench), new Object[]
-		{ " S ", " DS", "S  ", 'S', "ingotSteel", 'D', Item.diamond }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemWrench), new Object[] { " S ", " DS", "S  ", 'S', "ingotSteel", 'D', Item.diamond }));
 		// Battery Box
-		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.batteryBox, new Object[]
-		{ "?!?", "###", "?!?", '#', BasicComponents.blockCopperWire, '!', BasicComponents.itemSteelPlate, '?', BasicComponents.itemBattery.getUncharged() }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.batteryBox, new Object[] { "?!?", "###", "?!?", '#', BasicComponents.blockCopperWire, '!', BasicComponents.itemSteelPlate, '?', BasicComponents.itemBattery.getUncharged() }));
 		GameRegistry.addSmelting(BasicComponents.batteryBox.itemID, new ItemStack(BasicComponents.itemSteelDust, 6), 0f);
 		// Coal Generator
-		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.coalGenerator, new Object[]
-		{ "SCS", "FMF", "BBB", 'B', "ingotBronze", 'S', BasicComponents.itemSteelPlate, 'C', BasicComponents.blockCopperWire, 'M', BasicComponents.itemMotor, 'F', Block.stoneOvenIdle }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.coalGenerator, new Object[] { "SCS", "FMF", "BBB", 'B', "ingotBronze", 'S', BasicComponents.itemSteelPlate, 'C', BasicComponents.blockCopperWire, 'M', BasicComponents.itemMotor, 'F', Block.stoneOvenIdle }));
 		GameRegistry.addSmelting(BasicComponents.coalGenerator.itemID, new ItemStack(BasicComponents.itemSteelDust, 6), 0f);
 		// Electric Furnace
-		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.electricFurnace, new Object[]
-		{ "SSS", "SCS", "SMS", 'S', "ingotSteel", 'C', BasicComponents.itemCircuit, 'M', BasicComponents.itemMotor }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.electricFurnace, new Object[] { "SSS", "SCS", "SMS", 'S', "ingotSteel", 'C', BasicComponents.itemCircuit, 'M', BasicComponents.itemMotor }));
 		GameRegistry.addSmelting(BasicComponents.electricFurnace.itemID, new ItemStack(BasicComponents.itemSteelDust, 6), 0f);
 		// Copper
 		FurnaceRecipes.smelting().addSmelting(BasicComponents.blockBasicOre.blockID, 0, new ItemStack(BasicComponents.itemCopperIngot), 0.7f);
 		// Copper Wire
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.blockCopperWire, 6), new Object[]
-		{ "!!!", "@@@", "!!!", '!', Item.leather, '@', "ingotCopper" }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.blockCopperWire, 6), new Object[] { "!!!", "@@@", "!!!", '!', Item.leather, '@', "ingotCopper" }));
 		// Tin
 		FurnaceRecipes.smelting().addSmelting(BasicComponents.blockBasicOre.blockID, 1, new ItemStack(BasicComponents.itemTinIngot), 0.7f);
 		// Battery
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBattery), new Object[]
-		{ " T ", "TRT", "TCT", 'T', "ingotTin", 'R', Item.redstone, 'C', Item.coal }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBattery), new Object[] { " T ", "TRT", "TCT", 'T', "ingotTin", 'R', Item.redstone, 'C', Item.coal }));
 		// Steel
-		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[]
-		{ " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 1), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
-		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[]
-		{ " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 0), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
+		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 1), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
+		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 0), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
 		GameRegistry.addSmelting(BasicComponents.itemSteelDust.shiftedIndex, new ItemStack(BasicComponents.itemSteelIngot), 0.8f);
 		GameRegistry.addSmelting(BasicComponents.itemSteelPlate.shiftedIndex, new ItemStack(BasicComponents.itemSteelDust, 3), 0f);
 		// Bronze
-		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBronzeDust), new Object[]
-		{ "!#!", '!', "ingotCopper", '#', "ingotTin" }), "Bronze Dust", UniversalElectricity.CONFIGURATION, true);
+		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBronzeDust), new Object[] { "!#!", '!', "ingotCopper", '#', "ingotTin" }), "Bronze Dust", UniversalElectricity.CONFIGURATION, true);
 		GameRegistry.addSmelting(BasicComponents.itemBronzeDust.shiftedIndex, new ItemStack(BasicComponents.itemBronzeIngot), 0.6f);
 		GameRegistry.addSmelting(BasicComponents.itemBronzePlate.shiftedIndex, new ItemStack(BasicComponents.itemBronzeDust, 3), 0f);
 
 		// Plates
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCopperPlate), new Object[]
-		{ "!!", "!!", '!', "ingotCopper" }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemTinPlate), new Object[]
-		{ "!!", "!!", '!', "ingotTin" }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelPlate), new Object[]
-		{ "!!", "!!", '!', "ingotSteel" }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBronzePlate), new Object[]
-		{ "!!", "!!", '!', "ingotBronze" }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCopperPlate), new Object[] { "!!", "!!", '!', "ingotCopper" }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemTinPlate), new Object[] { "!!", "!!", '!', "ingotTin" }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelPlate), new Object[] { "!!", "!!", '!', "ingotSteel" }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBronzePlate), new Object[] { "!!", "!!", '!', "ingotBronze" }));
 
 		// Circuit
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 0), new Object[]
-		{ "!#!", "#@#", "!#!", '@', BasicComponents.itemBronzePlate, '#', Item.redstone, '!', BasicComponents.blockCopperWire }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 0), new Object[]
-		{ "!#!", "#@#", "!#!", '@', BasicComponents.itemSteelPlate, '#', Item.redstone, '!', BasicComponents.blockCopperWire }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 1), new Object[]
-		{ "@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', BasicComponents.itemCircuit }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 2), new Object[]
-		{ "@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(BasicComponents.itemCircuit, 1, 1), '#', Block.blockLapis }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 0), new Object[] { "!#!", "#@#", "!#!", '@', BasicComponents.itemBronzePlate, '#', Item.redstone, '!', BasicComponents.blockCopperWire }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 0), new Object[] { "!#!", "#@#", "!#!", '@', BasicComponents.itemSteelPlate, '#', Item.redstone, '!', BasicComponents.blockCopperWire }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 1), new Object[] { "@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', BasicComponents.itemCircuit }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 2), new Object[] { "@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(BasicComponents.itemCircuit, 1, 1), '#', Block.blockLapis }));
 	}
 
 	@Override

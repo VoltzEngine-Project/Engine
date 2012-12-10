@@ -27,7 +27,7 @@ LICENSE.txt
 !/src/common/railcraft/
 !/src/common/forestry/
 !/src/common/dan200/
-!/src/common/universalelectricity/
+!/src/*/universalelectricity/
 !/src/common/mcmod.info
 !/resources/*
 !publish.bat

@@ -357,8 +357,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 	@Override
 	public String[] getMethodNames()
 	{
-		return new String[]
-		{ "getCoalAmount", "getVoltage", "getWattage" };
+		return new String[] { "getCoalAmount", "getVoltage", "getWattage" };
 	}
 
 	@Override
@@ -373,16 +372,12 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 		{
 			case getCoalAmount:
 				ItemStack s = getStackInSlot(0);
-				if (s == null) { return new Object[]
-				{ 0 }; }
-				return new Object[]
-				{ s.stackSize };
+				if (s == null) { return new Object[] { 0 }; }
+				return new Object[] { s.stackSize };
 			case getVoltage:
-				return new Object[]
-				{ getVoltage() };
+				return new Object[] { getVoltage() };
 			case getWattage:
-				return new Object[]
-				{ generateWatts };
+				return new Object[] { generateWatts };
 			default:
 				throw new Exception("Function unimplemented");
 		}

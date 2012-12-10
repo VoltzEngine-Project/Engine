@@ -26,8 +26,8 @@ public class UELoader
 			Electricity.instance = new Electricity();
 			MinecraftForge.EVENT_BUS.register(this);
 
-			UniversalElectricity.IC2_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", (int) (UniversalElectricity.IC2_RATIO * 1000)).getInt((int) UniversalElectricity.IC2_RATIO * 1000) / 1000;
-			UniversalElectricity.BC3_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", (int) (UniversalElectricity.BC3_RATIO * 1000)).getInt((int) UniversalElectricity.BC3_RATIO * 1000) / 1000;
+			UniversalElectricity.IC2_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", UniversalElectricity.IC2_RATIO).getDouble(UniversalElectricity.IC2_RATIO);
+			UniversalElectricity.BC3_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", UniversalElectricity.BC3_RATIO).getDouble(UniversalElectricity.BC3_RATIO);
 			UniversalElectricity.TO_IC2_RATIO = 1 / UniversalElectricity.IC2_RATIO;
 			UniversalElectricity.TO_BC_RATIO = 1 / UniversalElectricity.BC3_RATIO;
 

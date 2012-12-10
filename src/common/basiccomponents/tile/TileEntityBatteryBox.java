@@ -396,8 +396,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public String[] getMethodNames()
 	{
-		return new String[]
-		{ "getVoltage", "getWattage", "isFull" };
+		return new String[] { "getVoltage", "getWattage", "isFull" };
 	}
 
 	@Override
@@ -411,14 +410,11 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		switch (method)
 		{
 			case getVoltage:
-				return new Object[]
-				{ getVoltage() };
+				return new Object[] { getVoltage() };
 			case getWattage:
-				return new Object[]
-				{ ElectricInfo.getWatts(joules) };
+				return new Object[] { ElectricInfo.getWatts(joules) };
 			case isFull:
-				return new Object[]
-				{ isFull };
+				return new Object[] { isFull };
 			default:
 				throw new Exception("Function unimplemented");
 		}

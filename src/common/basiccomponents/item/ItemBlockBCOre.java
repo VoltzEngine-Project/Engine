@@ -6,8 +6,7 @@ import net.minecraft.src.ItemStack;
 
 public class ItemBlockBCOre extends ItemBlock
 {
-	private String[] ores =
-	{ "Copper Ore", "Tin Ore" };
+	private String[] ores = { "Copper Ore", "Tin Ore" };
 
 	public ItemBlockBCOre(int id)
 	{

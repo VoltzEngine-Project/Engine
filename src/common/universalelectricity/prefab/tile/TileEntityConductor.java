@@ -29,8 +29,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	/**
 	 * Stores information on the blocks that this conductor is connected to
 	 */
-	public TileEntity[] connectedBlocks =
-	{ null, null, null, null, null, null };
+	public TileEntity[] connectedBlocks = { null, null, null, null, null, null };
 
 	public TileEntityConductor()
 	{
