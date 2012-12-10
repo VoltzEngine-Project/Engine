@@ -59,8 +59,8 @@ public class BCLoader implements ICraftingHandler
 	public static final String BLOCK_TEXTURE_FILE = TEXTURE_PATH + "blocks.png";
 	public static final String ITEM_TEXTURE_FILE = TEXTURE_PATH + "items.png";
 
-	private static final String[] LANGUAGE_SUPPORTED = new String[]
-	{ "en_US", "zh_CN", "es_ES", "es_AR", "es_MX", "es_UY", "es_VE" };
+	private static final String[] LANGUAGES_SUPPORTED = new String[]
+	{ "en_US", "zh_CN", "es_ES" };
 
 	@Instance("BasicComponents")
 	public static BCLoader instance;
@@ -176,13 +176,40 @@ public class BCLoader implements ICraftingHandler
 	{
 		proxy.init();
 
+		int languages = 0;
+
 		/**
 		 * Load all languages.
 		 */
-		for (String language : LANGUAGE_SUPPORTED)
+		for (String language : LANGUAGES_SUPPORTED)
 		{
 			LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", language, false);
+
+			if (LanguageRegistry.instance().getStringLocalization("children", language) != "")
+			{
+				try
+				{
+					String[] children = LanguageRegistry.instance().getStringLocalization("children", language).split(",");
+
+					for (String child : children)
+					{
+						if (child != "" || child != null)
+						{
+							LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", child, false);
+							languages++;
+						}
+					}
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+
+			languages++;
 		}
+
+		System.out.println("Basic Components: Loaded " + languages + " languages.");
 
 		OreGenerator.addOre(BasicComponents.copperOreGeneration);
 		OreGenerator.addOre(BasicComponents.tinOreGeneration);

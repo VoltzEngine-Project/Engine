@@ -28,6 +28,11 @@ public class ElectricityConnections
 		connectors.put(tileEntity, connectableDirections);
 	}
 
+	public static void unregisterConnector(TileEntity tileEntity)
+	{
+		connectors.remove(tileEntity);
+	}
+
 	public static boolean isConnector(TileEntity tileEntity)
 	{
 		return connectors.containsKey(tileEntity);

@@ -26,30 +26,30 @@ public class UELoader
 			Electricity.instance = new Electricity();
 			MinecraftForge.EVENT_BUS.register(this);
 
+			UniversalElectricity.IC2_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", (int) (UniversalElectricity.IC2_RATIO * 1000)).getInt((int) UniversalElectricity.IC2_RATIO * 1000) / 1000;
+			UniversalElectricity.BC3_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", (int) (UniversalElectricity.BC3_RATIO * 1000)).getInt((int) UniversalElectricity.BC3_RATIO * 1000) / 1000;
+			UniversalElectricity.TO_IC2_RATIO = 1 / UniversalElectricity.IC2_RATIO;
+			UniversalElectricity.TO_BC_RATIO = 1 / UniversalElectricity.BC3_RATIO;
+
 			if (UniversalElectricity.BC3_RATIO <= 0 || !Loader.isModLoaded("BuildCraft|Core"))
 			{
-				FMLLog.fine("Disabled Buildcraft electricity conversion!");
+				System.out.println("Disabled Buildcraft electricity conversion!");
 			}
 			else
 			{
-				FMLLog.fine("Buildcraft conversion ratio: " + UniversalElectricity.BC3_RATIO);
+				System.out.println("Buildcraft conversion ratio: " + UniversalElectricity.BC3_RATIO);
 			}
 
 			if (UniversalElectricity.IC2_RATIO <= 0 || !Loader.isModLoaded("IC2"))
 			{
-				FMLLog.fine("Disabled Industrialcraft electricity conversion!");
+				System.out.println("Disabled Industrialcraft electricity conversion!");
 			}
 			else
 			{
-				FMLLog.fine("IC2 conversion ratio: " + UniversalElectricity.IC2_RATIO);
+				System.out.println("IC2 conversion ratio: " + UniversalElectricity.IC2_RATIO);
 			}
 
 			FMLLog.finest("Universal Electricity v" + UniversalElectricity.VERSION + " successfully loaded!");
-
-			UniversalElectricity.IC2_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", UniversalElectricity.IC2_RATIO).getInt();
-			UniversalElectricity.BC3_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", UniversalElectricity.BC3_RATIO).getInt();
-			UniversalElectricity.TO_IC2_RATIO = 1 / UniversalElectricity.IC2_RATIO;
-			UniversalElectricity.TO_BC_RATIO = 1 / UniversalElectricity.BC3_RATIO;
 
 			isInitialized = true;
 		}

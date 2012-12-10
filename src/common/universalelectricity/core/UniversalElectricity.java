@@ -43,11 +43,11 @@ public class UniversalElectricity
 	 * Conversion ratios between Buildcraft and Industrialcraft energy.
 	 */
 	// EU to Watts ratio
-	public static int IC2_RATIO = 7;
+	public static double IC2_RATIO = 7;
 	// MJ to Watts ratio.
-	public static int BC3_RATIO = 85;
-	public static int TO_IC2_RATIO = 1 / IC2_RATIO;
-	public static int TO_BC_RATIO = 1 / BC3_RATIO;
+	public static double BC3_RATIO = 85;
+	public static double TO_IC2_RATIO = 1 / IC2_RATIO;
+	public static double TO_BC_RATIO = 1 / BC3_RATIO;
 
 	/**
 	 * Use this material for all your machine blocks. It can be breakable by hand.
