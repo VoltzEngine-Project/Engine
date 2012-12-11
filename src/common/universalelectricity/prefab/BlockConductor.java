@@ -48,7 +48,5 @@ public abstract class BlockConductor extends BlockContainer
 				((IConductor) tileEntity).refreshConnectedBlocks();
 			}
 		}
-
-		world.markBlockForUpdate(x, y, z);
 	}
 }

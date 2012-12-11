@@ -24,6 +24,7 @@ import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import basiccomponents.BCLoader;
+import basiccomponents.BasicComponents;
 import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -103,7 +104,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 			if (this.isFull != isFullThisCheck)
 			{
 				this.isFull = isFullThisCheck;
-				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
+				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, BasicComponents.blockMachine.blockID);
 			}
 
 			/**

@@ -67,55 +67,61 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	@Override
 	public void updateConnection(TileEntity tileEntity, ForgeDirection side)
 	{
-		if (tileEntity != null)
+		if (!this.worldObj.isRemote)
 		{
-			if (ElectricityConnections.isConnector(tileEntity))
+			if (tileEntity != null)
 			{
-				this.connectedBlocks[side.ordinal()] = tileEntity;
-				this.visuallyConnected[side.ordinal()] = true;
-
-				if (tileEntity.getClass() == this.getClass())
+				if (ElectricityConnections.isConnector(tileEntity))
 				{
-					Electricity.instance.mergeConnection(this.getNetwork(), ((TileEntityConductor) tileEntity).getNetwork());
+					this.connectedBlocks[side.ordinal()] = tileEntity;
+					this.visuallyConnected[side.ordinal()] = true;
+
+					if (tileEntity.getClass() == this.getClass())
+					{
+						Electricity.instance.mergeConnection(this.getNetwork(), ((TileEntityConductor) tileEntity).getNetwork());
+					}
+
+					return;
 				}
-
-				return;
 			}
-		}
 
-		if (this.connectedBlocks[side.ordinal()] != null)
-		{
-			if (this.connectedBlocks[side.ordinal()] instanceof IConductor)
+			if (this.connectedBlocks[side.ordinal()] != null)
 			{
-				Electricity.instance.splitConnection(this, (IConductor) this.getConnectedBlocks()[side.ordinal()]);
+				if (this.connectedBlocks[side.ordinal()] instanceof IConductor)
+				{
+					Electricity.instance.splitConnection(this, (IConductor) this.getConnectedBlocks()[side.ordinal()]);
+				}
 			}
-		}
 
-		this.connectedBlocks[side.ordinal()] = null;
-		this.visuallyConnected[side.ordinal()] = false;
+			this.connectedBlocks[side.ordinal()] = null;
+			this.visuallyConnected[side.ordinal()] = false;
+		}
 	}
 
 	@Override
 	public void updateConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
 	{
-		if (tileEntity != null)
+		if (!this.worldObj.isRemote)
 		{
-			if (ElectricityConnections.isConnector(tileEntity))
+			if (tileEntity != null)
 			{
-				this.connectedBlocks[side.ordinal()] = tileEntity;
-				this.visuallyConnected[side.ordinal()] = true;
-
-				if (tileEntity.getClass() == this.getClass())
+				if (ElectricityConnections.isConnector(tileEntity))
 				{
-					Electricity.instance.mergeConnection(this.getNetwork(), ((TileEntityConductor) tileEntity).getNetwork());
+					this.connectedBlocks[side.ordinal()] = tileEntity;
+					this.visuallyConnected[side.ordinal()] = true;
+
+					if (tileEntity.getClass() == this.getClass())
+					{
+						Electricity.instance.mergeConnection(this.getNetwork(), ((TileEntityConductor) tileEntity).getNetwork());
+					}
+
+					return;
 				}
-
-				return;
 			}
-		}
 
-		this.connectedBlocks[side.ordinal()] = null;
-		this.visuallyConnected[side.ordinal()] = false;
+			this.connectedBlocks[side.ordinal()] = null;
+			this.visuallyConnected[side.ordinal()] = false;
+		}
 	}
 
 	@Override
@@ -154,12 +160,16 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		if (this.worldObj != null)
 		{
-			for (byte i = 0; i < 6; i++)
+			if (!this.worldObj.isRemote)
 			{
-				this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+				for (byte i = 0; i < 6; i++)
+				{
+					this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+				}
+
+				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
 
-			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 		}
 	}
 
