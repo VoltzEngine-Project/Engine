@@ -129,7 +129,6 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 			this.visuallyConnected[3] = dataStream.readBoolean();
 			this.visuallyConnected[4] = dataStream.readBoolean();
 			this.visuallyConnected[5] = dataStream.readBoolean();
-			this.refreshConnectedBlocks();
 		}
 	}
 
@@ -159,12 +158,14 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 			{
 				this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
 			}
+
+			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 		}
 	}
-	
+
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(this.channel , this, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5]);
+		return PacketManager.getPacket(this.channel, this, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5]);
 	}
 }

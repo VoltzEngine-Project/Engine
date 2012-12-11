@@ -140,13 +140,12 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 					// Output UE electricity
 					if (connector instanceof IConductor)
 					{
-						double joulesNeeded = ((IConductor) connector).getNetwork().getRequest().getWatts();
-						double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
+						double outputWatts = Math.min(((IConductor) connector).getNetwork().getRequest().getWatts(), Math.min(this.getJoules(), 50000));
 
-						if (!this.worldObj.isRemote && transferAmps > 0)
+						if (!this.worldObj.isRemote && outputWatts > 0)
 						{
-							((IConductor) connector).getNetwork().startProducing(this, transferAmps, this.getVoltage());
-							this.setJoules(this.joules - ElectricInfo.getWatts(transferAmps, this.getVoltage()));
+							((IConductor) connector).getNetwork().startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
+							this.setJoules(this.joules - outputWatts);
 						}
 						else
 						{
@@ -159,7 +158,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		}
 
 		// Energy Loss
-		this.setJoules(this.joules - 0.00005);
+		this.setJoules(this.joules - 0.0002);
 
 		if (!this.worldObj.isRemote)
 		{
@@ -396,25 +395,20 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public String[] getMethodNames()
 	{
-		return new String[] { "getVoltage", "getWattage", "isFull" };
+		return new String[] { "getVoltage", "getJoules", "isFull" };
 	}
 
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception
 	{
-
-		final int getVoltage = 0;
-		final int getWattage = 1;
-		final int isFull = 2;
-
 		switch (method)
 		{
-			case getVoltage:
-				return new Object[] { getVoltage() };
-			case getWattage:
-				return new Object[] { ElectricInfo.getWatts(joules) };
-			case isFull:
-				return new Object[] { isFull };
+			case 0:
+				return new Object[] { this.getVoltage() };
+			case 1:
+				return new Object[] { this.getJoules() };
+			case 2:
+				return new Object[] { this.isFull };
 			default:
 				throw new Exception("Function unimplemented");
 		}

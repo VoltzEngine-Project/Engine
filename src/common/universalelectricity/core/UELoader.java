@@ -4,6 +4,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import universalelectricity.core.electricity.Electricity;
+import universalelectricity.core.electricity.ElectricityConnections;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 
@@ -59,5 +60,6 @@ public class UELoader
 	public void onWorldUnload(Unload event)
 	{
 		Electricity.instance = new Electricity();
+		ElectricityConnections.clearAll();
 	}
 }

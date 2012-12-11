@@ -54,4 +54,9 @@ public class ElectricityConnections
 	{
 		return connectors.get(tileEntity);
 	}
+	
+	public static void clearAll()
+	{
+		connectors.clear();
+	}
 }

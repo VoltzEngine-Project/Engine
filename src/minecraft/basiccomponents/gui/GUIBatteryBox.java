@@ -24,6 +24,7 @@ public class GuiBatteryBox extends GuiContainer
 		super(new ContainerBatteryBox(par1InventoryPlayer, batteryBox));
 		this.tileEntity = batteryBox;
 	}
+	
 
 	/**
 	 * Draw the foreground layer for the GuiContainer (everything in front of the items)

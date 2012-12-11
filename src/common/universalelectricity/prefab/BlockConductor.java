@@ -30,8 +30,6 @@ public abstract class BlockConductor extends BlockContainer
 				((IConductor) tileEntity).refreshConnectedBlocks();
 			}
 		}
-
-		world.scheduleBlockUpdate(x, y, z, this.blockID, this.tickRate());
 	}
 
 	/**

@@ -43,7 +43,7 @@ public class UniversalElectricity
 	 * Conversion ratios between Buildcraft and Industrialcraft energy.
 	 */
 	// EU to Watts ratio
-	public static double IC2_RATIO = 7;
+	public static double IC2_RATIO = 10;
 	// MJ to Watts ratio.
 	public static double BC3_RATIO = 85;
 	public static double TO_IC2_RATIO = 1 / IC2_RATIO;
