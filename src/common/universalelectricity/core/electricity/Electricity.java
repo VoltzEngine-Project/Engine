@@ -136,7 +136,5 @@ public class Electricity
 			ElectricityNetwork network = ((ElectricityNetwork) it.next());
 			network.resetConductors();
 		}
-
-		System.out.println(electricityNetworks.size());
 	}
 }
