@@ -1,5 +1,6 @@
 package basiccomponents.block;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
@@ -15,9 +16,11 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
 import basiccomponents.BCLoader;
 import basiccomponents.BasicComponents;
 import basiccomponents.tile.TileEntityBatteryBox;
@@ -146,16 +149,16 @@ public class BlockBasicMachine extends BlockMachine
 			switch (angle)
 			{
 				case 0:
-					par1World.setBlockMetadataWithNotify(x, y, z, ELECTRIC_FURNACE_METADATA + 1);
+					par1World.setBlockMetadata(x, y, z, ELECTRIC_FURNACE_METADATA + 1);
 					break;
 				case 1:
-					par1World.setBlockMetadataWithNotify(x, y, z, ELECTRIC_FURNACE_METADATA + 2);
+					par1World.setBlockMetadata(x, y, z, ELECTRIC_FURNACE_METADATA + 2);
 					break;
 				case 2:
-					par1World.setBlockMetadataWithNotify(x, y, z, ELECTRIC_FURNACE_METADATA + 0);
+					par1World.setBlockMetadata(x, y, z, ELECTRIC_FURNACE_METADATA + 0);
 					break;
 				case 3:
-					par1World.setBlockMetadataWithNotify(x, y, z, ELECTRIC_FURNACE_METADATA + 3);
+					par1World.setBlockMetadata(x, y, z, ELECTRIC_FURNACE_METADATA + 3);
 					break;
 			}
 		}
@@ -164,16 +167,16 @@ public class BlockBasicMachine extends BlockMachine
 			switch (angle)
 			{
 				case 0:
-					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 3);
+					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 3);
 					break;
 				case 1:
-					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 1);
+					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 1);
 					break;
 				case 2:
-					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 2);
+					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 2);
 					break;
 				case 3:
-					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 0);
+					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 0);
 					break;
 			}
 		}
@@ -182,19 +185,22 @@ public class BlockBasicMachine extends BlockMachine
 			switch (angle)
 			{
 				case 0:
-					par1World.setBlockMetadataWithNotify(x, y, z, COAL_GENERATOR_METADATA + 1);
+					par1World.setBlockMetadata(x, y, z, COAL_GENERATOR_METADATA + 1);
 					break;
 				case 1:
-					par1World.setBlockMetadataWithNotify(x, y, z, COAL_GENERATOR_METADATA + 2);
+					par1World.setBlockMetadata(x, y, z, COAL_GENERATOR_METADATA + 2);
 					break;
 				case 2:
-					par1World.setBlockMetadataWithNotify(x, y, z, COAL_GENERATOR_METADATA + 0);
+					par1World.setBlockMetadata(x, y, z, COAL_GENERATOR_METADATA + 0);
 					break;
 				case 3:
-					par1World.setBlockMetadataWithNotify(x, y, z, COAL_GENERATOR_METADATA + 3);
+					par1World.setBlockMetadata(x, y, z, COAL_GENERATOR_METADATA + 3);
 					break;
 			}
 		}
+
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
+		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
 
 	@Override
@@ -240,7 +246,9 @@ public class BlockBasicMachine extends BlockMachine
 			change += BATTERY_BOX_METADATA;
 		}
 
-		par1World.setBlockMetadataWithNotify(x, y, z, change);
+		par1World.setBlockMetadata(x, y, z, change);
+
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 
 		return true;
 	}

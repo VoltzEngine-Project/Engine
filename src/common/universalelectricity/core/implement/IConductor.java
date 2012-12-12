@@ -52,6 +52,9 @@ public interface IConductor
 	 */
 	public void reset();
 
+	/**
+	 * Instantly refreshes all connected blocks
+	 */
 	public void refreshConnectedBlocks();
 
 	/**
@@ -63,5 +66,4 @@ public interface IConductor
 	public void updateConnection(TileEntity tileEntity, ForgeDirection side);
 
 	public void updateConnectionWithoutSplit(TileEntity connectorFromSide, ForgeDirection orientation);
-
 }

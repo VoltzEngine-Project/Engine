@@ -71,14 +71,14 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 		{
 			if (tileEntity != null)
 			{
-				if (ElectricityConnections.isConnector(tileEntity))
+				if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
 				{
 					this.connectedBlocks[side.ordinal()] = tileEntity;
 					this.visuallyConnected[side.ordinal()] = true;
 
 					if (tileEntity.getClass() == this.getClass())
 					{
-						Electricity.instance.mergeConnection(this.getNetwork(), ((TileEntityConductor) tileEntity).getNetwork());
+						Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
 					}
 
 					return;
@@ -105,14 +105,14 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 		{
 			if (tileEntity != null)
 			{
-				if (ElectricityConnections.isConnector(tileEntity))
+				if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
 				{
 					this.connectedBlocks[side.ordinal()] = tileEntity;
 					this.visuallyConnected[side.ordinal()] = true;
 
 					if (tileEntity.getClass() == this.getClass())
 					{
-						Electricity.instance.mergeConnection(this.getNetwork(), ((TileEntityConductor) tileEntity).getNetwork());
+						Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
 					}
 
 					return;

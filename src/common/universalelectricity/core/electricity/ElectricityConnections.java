@@ -40,10 +40,13 @@ public class ElectricityConnections
 
 	public static boolean canConnect(TileEntity tileEntity, ForgeDirection side)
 	{
-		EnumSet<ForgeDirection> enumSet = connectors.get(tileEntity);
+		if (isConnector(tileEntity))
+		{
+			EnumSet<ForgeDirection> enumSet = connectors.get(tileEntity);
 
-		if (enumSet != null) { return enumSet.contains(side); }
-
+			if (enumSet != null) { return enumSet.contains(side); }
+		}
+		
 		return false;
 	}
 
@@ -54,7 +57,7 @@ public class ElectricityConnections
 	{
 		return connectors.get(tileEntity);
 	}
-	
+
 	public static void clearAll()
 	{
 		connectors.clear();

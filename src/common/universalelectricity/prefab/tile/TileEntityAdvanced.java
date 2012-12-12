@@ -32,7 +32,7 @@ public abstract class TileEntityAdvanced extends TileEntity
 	/**
 	 * Called on the TileEntity's first tick.
 	 */
-	protected void initiate()
+	public void initiate()
 	{
 	}
 
