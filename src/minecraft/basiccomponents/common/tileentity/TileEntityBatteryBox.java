@@ -130,7 +130,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				}
 			}
 
-			if (this.joules > 0)
+			if (!this.worldObj.isRemote)
 			{
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
 				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
@@ -144,7 +144,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 					{
 						double outputWatts = Math.min(((IConductor) connector).getNetwork().getRequest().getWatts(), Math.min(this.getJoules(), 50000));
 
-						if (!this.worldObj.isRemote && outputWatts > 0)
+						if (this.getJoules() > 0 && outputWatts > 0)
 						{
 							((IConductor) connector).getNetwork().startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
 							this.setJoules(this.joules - outputWatts);
@@ -160,7 +160,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		}
 
 		// Energy Loss
-		this.setJoules(this.joules - 0.0002);
+		this.setJoules(this.joules - 0.0005);
 
 		if (!this.worldObj.isRemote)
 		{

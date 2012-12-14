@@ -1,20 +1,4 @@
-/bin/*
-/conf/*
-/docs/*
-/eclipse/*
-/forge/*
-/jars/*
-/lib/*
-/logs/*
-/modsrc/*
-/reobf/*
-/runtime/*
-/temp/*
-CHANGELOG
-LICENSE.txt
-7za.exe
-*.bat
-*.sh
+*
 
 /src/minecraft/*
 /src/minecraft_server/*

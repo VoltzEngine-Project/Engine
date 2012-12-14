@@ -108,8 +108,8 @@ public class BCLoader implements ICraftingHandler
 		BasicComponents.batteryBox = ((BlockBasicMachine) BasicComponents.blockMachine).getBatteryBox();
 		BasicComponents.electricFurnace = ((BlockBasicMachine) BasicComponents.blockMachine).getElectricFurnace();
 
-		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 0, 50, 45, 4).enable();
-		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 0, 50, 42, 3).enable();
+		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 0, 50, 40, 4).enable();
+		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 0, 50, 38, 3).enable();
 
 		UniversalElectricity.CONFIGURATION.save();
 
@@ -165,7 +165,7 @@ public class BCLoader implements ICraftingHandler
 
 		UETab.setItemStack(BasicComponents.batteryBox);
 
-		UpdateNotifier.INSTANCE.checkUpdate(NAME, UniversalElectricity.VERSION, "http://www.calclavia.com/downloads/ue/modversion.txt");
+		UpdateNotifier.INSTANCE.checkUpdate(NAME, UniversalElectricity.VERSION, "http://www.calclavia.com/downloads/ue/recommendedversion.txt");
 
 		proxy.preInit();
 	}
