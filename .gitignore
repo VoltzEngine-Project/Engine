@@ -18,17 +18,15 @@ LICENSE.txt
 
 /src/minecraft/*
 /src/minecraft_server/*
-/src/common/*
 /builds
 /backup
 
 !/src/minecraft/basiccomponents/
-!/src/common/basiccomponents/
-!/src/common/universalelectricity/
-!/src/common/buildcraft/
-!/src/common/railcraft/
-!/src/common/dan200/
-!/src/common/mcmod.info
+!/src/minecraft/basiccomponents/
+!/src/minecraft/universalelectricity/
+!/src/minecraft/buildcraft/
+!/src/minecraft/railcraft/
+!/src/minecraft/dan200/
 !/resources/*
 !publish.bat
 !Include Resources.bat
