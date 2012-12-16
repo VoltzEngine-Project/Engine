@@ -73,7 +73,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 					}
 					else
 					{
-						network.startRequesting(this, (this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
+						network.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), 2500) / this.getVoltage(), this.getVoltage());
 						this.setJoules(this.joules + network.consumeElectricity(this).getWatts());
 					}
 				}
@@ -139,7 +139,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
 				if (network != null)
 				{
-					double outputWatts = Math.min(network.getRequest().getWatts(), Math.min(this.getJoules(), 50000));
+					double outputWatts = Math.min(network.getRequest().getWatts(), Math.min(this.getJoules(), 2500));
 
 					if (this.getJoules() > 0 && outputWatts > 0)
 					{
