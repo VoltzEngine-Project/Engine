@@ -16,6 +16,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.vector.Vector3;
@@ -64,22 +65,22 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 
 		if (!this.worldObj.isRemote)
 		{
+			
 			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2);
 			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
-
-			if (inputTile != null)
+			
+			ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+			
+			if (network != null)
 			{
-				if (inputTile instanceof IConductor)
+				if (this.canSmelt())
 				{
-					if (this.canSmelt())
-					{
-						((IConductor) inputTile).getNetwork().startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
-						this.joulesReceived = Math.max(Math.min(this.joulesReceived + ((IConductor) inputTile).getNetwork().consumeElectricity(this).getWatts(), WATTS_PER_TICK), 0);
-					}
-					else
-					{
-						((IConductor) inputTile).getNetwork().stopRequesting(this);
-					}
+					network.startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
+					this.joulesReceived = Math.max(Math.min(this.joulesReceived + network.consumeElectricity(this).getWatts(), WATTS_PER_TICK), 0);
+				}
+				else
+				{
+					network.stopRequesting(this);
 				}
 			}
 		}

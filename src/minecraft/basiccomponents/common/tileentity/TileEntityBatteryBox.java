@@ -15,6 +15,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.implement.IJouleStorage;
@@ -62,19 +63,18 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
-				if (inputTile != null)
+				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+
+				if (network != null)
 				{
-					if (inputTile instanceof IConductor)
+					if (this.joules >= this.getMaxJoules())
 					{
-						if (this.joules >= this.getMaxJoules())
-						{
-							((IConductor) inputTile).getNetwork().stopRequesting(this);
-						}
-						else
-						{
-							((IConductor) inputTile).getNetwork().startRequesting(this, (this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
-							this.setJoules(this.joules + ((IConductor) inputTile).getNetwork().consumeElectricity(this).getWatts());
-						}
+						network.stopRequesting(this);
+					}
+					else
+					{
+						network.startRequesting(this, (this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
+						this.setJoules(this.joules + network.consumeElectricity(this).getWatts());
 					}
 				}
 			}
@@ -133,27 +133,22 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 			if (!this.worldObj.isRemote)
 			{
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
+				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
-				if (tileEntity != null)
+				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
+
+				if (network != null)
 				{
-					TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), outputDirection);
+					double outputWatts = Math.min(network.getRequest().getWatts(), Math.min(this.getJoules(), 50000));
 
-					// Output UE electricity
-					if (connector instanceof IConductor)
+					if (this.getJoules() > 0 && outputWatts > 0)
 					{
-						double outputWatts = Math.min(((IConductor) connector).getNetwork().getRequest().getWatts(), Math.min(this.getJoules(), 50000));
-
-						if (this.getJoules() > 0 && outputWatts > 0)
-						{
-							((IConductor) connector).getNetwork().startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
-							this.setJoules(this.joules - outputWatts);
-						}
-						else
-						{
-							((IConductor) connector).getNetwork().stopProducing(this);
-						}
-
+						network.startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
+						this.setJoules(this.joules - outputWatts);
+					}
+					else
+					{
+						network.stopProducing(this);
 					}
 				}
 			}

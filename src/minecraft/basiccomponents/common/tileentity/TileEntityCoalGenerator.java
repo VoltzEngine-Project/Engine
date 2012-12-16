@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
@@ -79,13 +80,16 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 			this.prevGenerateWatts = this.generateWatts;
 
 			// Check nearby blocks and see if the conductor is full. If so, then it is connected
-			TileEntity tileEntity = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2));
+			ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2);
+			TileEntity outputTile = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), outputDirection);
 
-			if (tileEntity instanceof IConductor)
+			ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
+
+			if (network != null)
 			{
-				if (((IConductor) tileEntity).getNetwork().getRequest().getWatts() > 0)
+				if (network.getRequest().getWatts() > 0)
 				{
-					this.connectedElectricUnit = (IConductor) tileEntity;
+					this.connectedElectricUnit = (IConductor) outputTile;
 				}
 				else
 				{
