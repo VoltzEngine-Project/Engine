@@ -59,7 +59,7 @@ public class BCLoader implements ICraftingHandler
 	public static final String BLOCK_TEXTURE_FILE = TEXTURE_PATH + "blocks.png";
 	public static final String ITEM_TEXTURE_FILE = TEXTURE_PATH + "items.png";
 
-	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES"/*, "it_IT"*/ };
+	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT"};
 
 	@Instance("BasicComponents")
 	public static BCLoader instance;
