@@ -59,7 +59,7 @@ public class BCLoader implements ICraftingHandler
 	public static final String BLOCK_TEXTURE_FILE = TEXTURE_PATH + "blocks.png";
 	public static final String ITEM_TEXTURE_FILE = TEXTURE_PATH + "items.png";
 
-	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT"};
+	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT" };
 
 	@Instance("BasicComponents")
 	public static BCLoader instance;
@@ -120,11 +120,11 @@ public class BCLoader implements ICraftingHandler
 		MinecraftForge.EVENT_BUS.register(BasicComponents.itemOilBucket);
 
 		// Register Blocks
-		GameRegistry.registerBlock(BasicComponents.blockBasicOre, ItemBlockBCOre.class);
-		GameRegistry.registerBlock(BasicComponents.blockMachine, ItemBlockBasicMachine.class);
-		GameRegistry.registerBlock(BasicComponents.blockCopperWire, ItemBlockCopperWire.class);
-		GameRegistry.registerBlock(BasicComponents.oilMoving);
-		GameRegistry.registerBlock(BasicComponents.oilStill);
+		GameRegistry.registerBlock(BasicComponents.blockBasicOre, ItemBlockBCOre.class, "Ore");
+		GameRegistry.registerBlock(BasicComponents.blockMachine, ItemBlockBasicMachine.class, "Basic Machine");
+		GameRegistry.registerBlock(BasicComponents.blockCopperWire, ItemBlockCopperWire.class, "Copper Wire");
+		GameRegistry.registerBlock(BasicComponents.oilMoving, "Oil Moving");
+		GameRegistry.registerBlock(BasicComponents.oilStill, "OilS till");
 		GameRegistry.registerCraftingHandler(this);
 
 		/**

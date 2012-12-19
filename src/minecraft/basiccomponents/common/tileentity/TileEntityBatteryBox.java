@@ -57,23 +57,22 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
 		if (!this.isDisabled())
 		{
+			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
+			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+			ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+
 			if (!this.worldObj.isRemote)
 			{
-				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
-				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
-
-				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
-
-				if (network != null)
+				if (inputNetwork != null)
 				{
 					if (this.joules >= this.getMaxJoules())
 					{
-						network.stopRequesting(this);
+						inputNetwork.stopRequesting(this);
 					}
 					else
 					{
-						network.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), 2500) / this.getVoltage(), this.getVoltage());
-						this.setJoules(this.joules + network.consumeElectricity(this).getWatts());
+						inputNetwork.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), 2500) / this.getVoltage(), this.getVoltage());
+						this.setJoules(this.joules + inputNetwork.consumeElectricity(this).getWatts());
 					}
 				}
 			}
@@ -134,20 +133,20 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
 				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
-				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
+				ElectricityNetwork outputNetwork = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
 
-				if (network != null)
+				if (outputNetwork != null && inputNetwork != outputNetwork)
 				{
-					double outputWatts = Math.min(network.getRequest().getWatts(), Math.min(this.getJoules(), 2500));
+					double outputWatts = Math.min(outputNetwork.getRequest().getWatts(), Math.min(this.getJoules(), 2500));
 
 					if (this.getJoules() > 0 && outputWatts > 0)
 					{
-						network.startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
+						outputNetwork.startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
 						this.setJoules(this.joules - outputWatts);
 					}
 					else
 					{
-						network.stopProducing(this);
+						outputNetwork.stopProducing(this);
 					}
 				}
 			}
