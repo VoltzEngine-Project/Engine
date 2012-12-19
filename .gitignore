@@ -3,7 +3,6 @@
 /src/minecraft/*
 /src/minecraft_server/*
 /builds
-/backup
 
 !/src/minecraft/basiccomponents/
 !/src/minecraft/basiccomponents/
@@ -13,6 +12,6 @@
 !/src/minecraft/dan200/
 !/resources/*
 !publish.bat
-!Include Resources.bat
+!include.bat
 !/modversion.txt
 !/README

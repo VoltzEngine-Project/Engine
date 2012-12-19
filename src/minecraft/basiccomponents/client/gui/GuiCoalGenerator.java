@@ -11,8 +11,8 @@ import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 import basiccomponents.common.BasicComponents;
 import basiccomponents.common.container.ContainerCoalGenerator;
 import basiccomponents.common.tileentity.TileEntityCoalGenerator;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiCoalGenerator extends GuiContainer

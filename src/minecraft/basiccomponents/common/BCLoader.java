@@ -72,7 +72,7 @@ public class BCLoader implements ICraftingHandler
 	{
 		UniversalElectricity.register(this, UniversalElectricity.MAJOR_VERSION, UniversalElectricity.MINOR_VERSION, UniversalElectricity.REVISION_VERSION, false);
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
-		
+
 		/**
 		 * Define the items and blocks.
 		 */
