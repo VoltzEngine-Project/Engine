@@ -130,8 +130,6 @@ public class BCLoader implements ICraftingHandler
 		/**
 		 * Registering all Basic Component items into the Forge Ore Dictionary.
 		 */
-		OreDictionary.registerOre("oreCopper", new ItemStack(BasicComponents.blockBasicOre, 0));
-		OreDictionary.registerOre("oreTin", new ItemStack(BasicComponents.blockBasicOre, 0));
 		OreDictionary.registerOre("copperWire", BasicComponents.blockCopperWire);
 
 		OreDictionary.registerOre("coalGenerator", BasicComponents.coalGenerator);
