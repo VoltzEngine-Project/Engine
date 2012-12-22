@@ -61,9 +61,9 @@ public class GuiBatteryBox extends GuiContainer
 
 		containerWidth = (this.width - this.xSize) / 2;
 		containerHeight = (this.height - this.ySize) / 2;
-		//Background energy bar
+		// Background energy bar
 		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
-		//Foreground energy bar
+		// Foreground energy bar
 		int scale = (int) (((double) this.tileEntity.getJoules() / this.tileEntity.getMaxJoules()) * 72);
 		this.drawTexturedModalRect(containerWidth + 87, containerHeight + 52, 176, 0, scale, 20);
 	}

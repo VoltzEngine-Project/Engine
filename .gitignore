@@ -1,16 +1,18 @@
-*
+*.bat
+*.sh
+/*/
+LICENSE.txt
+CHANGELOG
 
+!/src/
 /src/minecraft/*
-/src/minecraft_server/*
-/builds
 
-!/src/minecraft/basiccomponents/
 !/src/minecraft/basiccomponents/
 !/src/minecraft/universalelectricity/
 !/src/minecraft/buildcraft/
 !/src/minecraft/railcraft/
 !/src/minecraft/dan200/
-!/resources/*
+!/resources/
 !publish.bat
 !include.bat
 !/modversion.txt
