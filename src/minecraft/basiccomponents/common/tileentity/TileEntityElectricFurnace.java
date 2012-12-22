@@ -14,9 +14,11 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
@@ -68,18 +70,27 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2);
 			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
-			ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+			ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
 
-			if (network != null)
+			if (inputNetwork != null)
 			{
 				if (this.canSmelt())
 				{
-					network.startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
-					this.joulesReceived = Math.max(Math.min(this.joulesReceived + network.consumeElectricity(this).getWatts(), WATTS_PER_TICK), 0);
+					inputNetwork.startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
+					ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
+					this.joulesReceived = Math.max(Math.min(this.joulesReceived + electricityPack.getWatts(), WATTS_PER_TICK), 0);
+
+					if (UniversalElectricity.isVoltageSensitive)
+					{
+						if (electricityPack.voltage > this.getVoltage())
+						{
+							this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2f, true);
+						}
+					}
 				}
 				else
 				{
-					network.stopRequesting(this);
+					inputNetwork.stopRequesting(this);
 				}
 			}
 		}
