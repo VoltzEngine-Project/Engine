@@ -396,7 +396,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 	}
 
 	@Override
-	public void attach(IComputerAccess computer, String computerSide)
+	public void attach(IComputerAccess computer)
 	{
 	}
 
