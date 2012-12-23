@@ -92,4 +92,5 @@ x BasicComponents_v1.2.1.305.jar UniversalElectricity_v1.2.1.305_api.zip
 @ BasicComponents_v1.2.1.308.jar UniversalElectricity_v1.2.1.308_api.zip
 @ BasicComponents_v1.2.1.309.jar UniversalElectricity_v1.2.1.309_api.zip
 @ BasicComponents_v1.2.1.313.jar UniversalElectricity_v1.2.1.313_api.zip
-* BasicComponents_v1.2.1.314.jar UniversalElectricity_v1.2.1.314_api.zip
+@ BasicComponents_v1.2.1.314.jar UniversalElectricity_v1.2.1.314_api.zip
+* BasicComponents_v1.2.1.315.jar UniversalElectricity_v1.2.1.315_api.zip

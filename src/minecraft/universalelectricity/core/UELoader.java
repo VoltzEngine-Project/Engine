@@ -27,7 +27,7 @@ public class UELoader
 			Electricity.instance = new Electricity();
 			MinecraftForge.EVENT_BUS.register(this);
 
-			UniversalElectricity.isVoltageSensitive = UniversalElectricity.CONFIGURATION.get("Compatiblity", "Is Voltage Sensitive", false).getBoolean(false);
+			UniversalElectricity.isVoltageSensitive = UniversalElectricity.CONFIGURATION.get("Compatiblity", "Is Voltage Sensitive", UniversalElectricity.isVoltageSensitive).getBoolean(UniversalElectricity.isVoltageSensitive);
 
 			UniversalElectricity.IC2_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", UniversalElectricity.IC2_RATIO).getDouble(UniversalElectricity.IC2_RATIO);
 			UniversalElectricity.BC3_RATIO = UniversalElectricity.CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", UniversalElectricity.BC3_RATIO).getDouble(UniversalElectricity.BC3_RATIO);

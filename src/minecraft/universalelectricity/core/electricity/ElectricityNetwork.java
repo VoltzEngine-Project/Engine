@@ -120,8 +120,11 @@ public class ElectricityNetwork
 
 				if (pairs.getKey() != null && pairs.getValue() != null && pack != null)
 				{
-					totalElectricity.amperes += pack.amperes;
-					totalElectricity.voltage = Math.max(totalElectricity.voltage, pack.voltage);
+					double newWatts = totalElectricity.getWatts() + pack.getWatts();
+					double newVoltage = Math.max(totalElectricity.voltage, pack.voltage);
+
+					totalElectricity.amperes = newWatts / newVoltage;
+					totalElectricity.voltage = newVoltage;
 				}
 			}
 		}
