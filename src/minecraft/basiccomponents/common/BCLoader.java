@@ -14,6 +14,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.RecipeHelper;
+import universalelectricity.prefab.TranslationHelper;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.UpdateNotifier;
 import universalelectricity.prefab.network.ConnectionHandler;
@@ -59,7 +60,7 @@ public class BCLoader
 	public static final String BLOCK_TEXTURE_FILE = TEXTURE_PATH + "blocks.png";
 	public static final String ITEM_TEXTURE_FILE = TEXTURE_PATH + "items.png";
 
-	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT" };
+	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL" };
 
 	@Instance("BasicComponents")
 	public static BCLoader instance;
@@ -200,40 +201,7 @@ public class BCLoader
 	{
 		proxy.init();
 
-		int languages = 0;
-
-		/**
-		 * Load all languages.
-		 */
-		for (String language : LANGUAGES_SUPPORTED)
-		{
-			LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", language, false);
-
-			if (LanguageRegistry.instance().getStringLocalization("children", language) != "")
-			{
-				try
-				{
-					String[] children = LanguageRegistry.instance().getStringLocalization("children", language).split(",");
-
-					for (String child : children)
-					{
-						if (child != "" || child != null)
-						{
-							LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", child, false);
-							languages++;
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-
-			languages++;
-		}
-
-		System.out.println("Basic Components: Loaded " + languages + " languages.");
+		System.out.println("Basic Components Loaded: " + TranslationHelper.loadLanguages(LANGUAGE_PATH, LANGUAGES_SUPPORTED) + " Languages.");
 
 		OreGenerator.addOre(BasicComponents.copperOreGeneration);
 		OreGenerator.addOre(BasicComponents.tinOreGeneration);
