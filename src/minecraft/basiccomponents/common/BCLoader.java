@@ -48,7 +48,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid = BCLoader.CHANNEL, name = BCLoader.NAME, version = UniversalElectricity.VERSION)
 @NetworkMod(channels = BCLoader.CHANNEL, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
-public class BCLoader implements ICraftingHandler
+public class BCLoader
 {
 	public static final String NAME = "Basic Components";
 	public static final String CHANNEL = "BasicComponents";
@@ -125,7 +125,34 @@ public class BCLoader implements ICraftingHandler
 		GameRegistry.registerBlock(BasicComponents.blockCopperWire, ItemBlockCopperWire.class, "Copper Wire");
 		GameRegistry.registerBlock(BasicComponents.oilMoving, "Oil Moving");
 		GameRegistry.registerBlock(BasicComponents.oilStill, "OilS till");
-		GameRegistry.registerCraftingHandler(this);
+
+		GameRegistry.registerCraftingHandler(new ICraftingHandler()
+		{
+			@Override
+			public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix)
+			{
+				if (item.itemID == BasicComponents.itemOilBucket.shiftedIndex)
+				{
+					for (int i = 0; i < craftMatrix.getSizeInventory(); i++)
+					{
+						if (craftMatrix.getStackInSlot(i) != null)
+						{
+							if (craftMatrix.getStackInSlot(i).itemID == Item.bucketWater.shiftedIndex)
+							{
+								craftMatrix.setInventorySlotContents(i, null);
+								return;
+							}
+						}
+					}
+				}
+			}
+
+			@Override
+			public void onSmelting(EntityPlayer player, ItemStack item)
+			{
+
+			}
+		});
 
 		/**
 		 * Registering all Basic Component items into the Forge Ore Dictionary.
@@ -236,8 +263,8 @@ public class BCLoader implements ICraftingHandler
 		// Battery
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBattery), new Object[] { " T ", "TRT", "TCT", 'T', "ingotTin", 'R', Item.redstone, 'C', Item.coal }));
 		// Steel
-		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { "C C", " I ", "C C", 'C', new ItemStack(Item.coal, 1, 1), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
-		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { "C C", " I ", "C C", 'C', new ItemStack(Item.coal, 1, 0), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
+		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 1), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
+		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 0), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
 		GameRegistry.addSmelting(BasicComponents.itemSteelDust.shiftedIndex, new ItemStack(BasicComponents.itemSteelIngot), 0.8f);
 		GameRegistry.addSmelting(BasicComponents.itemSteelPlate.shiftedIndex, new ItemStack(BasicComponents.itemSteelDust, 3), 0f);
 		// Bronze
@@ -257,30 +284,4 @@ public class BCLoader implements ICraftingHandler
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 1), new Object[] { "@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', BasicComponents.itemCircuit }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 2), new Object[] { "@@@", "?#?", "@@@", '@', Item.ingotGold, '?', new ItemStack(BasicComponents.itemCircuit, 1, 1), '#', Block.blockLapis }));
 	}
-
-	@Override
-	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix)
-	{
-		if (item.itemID == BasicComponents.itemOilBucket.shiftedIndex)
-		{
-			for (int i = 0; i < craftMatrix.getSizeInventory(); i++)
-			{
-				if (craftMatrix.getStackInSlot(i) != null)
-				{
-					if (craftMatrix.getStackInSlot(i).itemID == Item.bucketWater.shiftedIndex)
-					{
-						craftMatrix.setInventorySlotContents(i, null);
-						return;
-					}
-				}
-			}
-		}
-	}
-
-	@Override
-	public void onSmelting(EntityPlayer player, ItemStack item)
-	{
-
-	}
-
 }

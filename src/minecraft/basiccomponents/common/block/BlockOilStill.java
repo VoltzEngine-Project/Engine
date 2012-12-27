@@ -87,14 +87,6 @@ public class BlockOilStill extends BlockStationary implements ILiquid
 		par1World.editingBlocks = false;
 	}
 
-	/**
-	 * Checks to see if the block is flammable.
-	 */
-	private boolean isFlammable(World par1World, int par2, int par3, int par4)
-	{
-		return par1World.getBlockMaterial(par2, par3, par4).getCanBurn();
-	}
-
 	@Override
 	public int stillLiquidId()
 	{
@@ -122,9 +114,7 @@ public class BlockOilStill extends BlockStationary implements ILiquid
 	@Override
 	public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
 	{
-		// TODO fix this so your oil is not so
-		// dark
-		return 0x11111110;
+		return 0;
 	}
 
 	/**

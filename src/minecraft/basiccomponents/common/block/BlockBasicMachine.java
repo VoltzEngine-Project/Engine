@@ -36,7 +36,6 @@ public class BlockBasicMachine extends BlockMachine
 		super("bcMachine", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
 		this.setStepSound(soundMetalFootstep);
-		this.setRequiresSelfNotify();
 	}
 
 	@Override
