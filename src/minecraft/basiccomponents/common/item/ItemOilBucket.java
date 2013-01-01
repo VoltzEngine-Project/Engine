@@ -31,7 +31,7 @@ public class ItemOilBucket extends ItemBucket
 	@ForgeSubscribe
 	public void onBucketFill(FillBucketEvent event)
 	{
-		if (event.current.itemID == Item.bucketEmpty.shiftedIndex)
+		if (event.current.itemID == Item.bucketEmpty.itemID)
 		{
 			World worldObj = event.world;
 			MovingObjectPosition position = event.target;

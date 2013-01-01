@@ -62,7 +62,7 @@ public class ContainerCoalGenerator extends Container
 
 			if (par1 != 0)
 			{
-				if (var4.itemID == Item.coal.shiftedIndex)
+				if (var4.itemID == Item.coal.itemID)
 				{
 					if (!this.mergeItemStack(var4, 0, 1, false)) { return null; }
 				}

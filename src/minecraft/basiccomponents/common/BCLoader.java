@@ -45,9 +45,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = BCLoader.CHANNEL, name = BCLoader.NAME, version = UniversalElectricity.VERSION)
+@Mod(modid = BCLoader.CHANNEL, name = BCLoader.NAME, version = UniversalElectricity.VERSION, certificateFingerprint = "2fda1b418db921bbf2d0deec1ab7cdc052fc0c27")
 @NetworkMod(channels = BCLoader.CHANNEL, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class BCLoader
 {
@@ -71,7 +70,7 @@ public class BCLoader
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		UniversalElectricity.register(this, UniversalElectricity.MAJOR_VERSION, UniversalElectricity.MINOR_VERSION, UniversalElectricity.REVISION_VERSION, false);
+		UniversalElectricity.register(this, UniversalElectricity.MAJOR_VERSION, UniversalElectricity.MINOR_VERSION, UniversalElectricity.REVISION_VERSION, true);
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
 		/**
@@ -132,13 +131,13 @@ public class BCLoader
 			@Override
 			public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix)
 			{
-				if (item.itemID == BasicComponents.itemOilBucket.shiftedIndex)
+				if (item.itemID == BasicComponents.itemOilBucket.itemID)
 				{
 					for (int i = 0; i < craftMatrix.getSizeInventory(); i++)
 					{
 						if (craftMatrix.getStackInSlot(i) != null)
 						{
-							if (craftMatrix.getStackInSlot(i).itemID == Item.bucketWater.shiftedIndex)
+							if (craftMatrix.getStackInSlot(i).itemID == Item.bucketWater.itemID)
 							{
 								craftMatrix.setInventorySlotContents(i, null);
 								return;
@@ -233,12 +232,12 @@ public class BCLoader
 		// Steel
 		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 1), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
 		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 0), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
-		GameRegistry.addSmelting(BasicComponents.itemSteelDust.shiftedIndex, new ItemStack(BasicComponents.itemSteelIngot), 0.8f);
-		GameRegistry.addSmelting(BasicComponents.itemSteelPlate.shiftedIndex, new ItemStack(BasicComponents.itemSteelDust, 3), 0f);
+		GameRegistry.addSmelting(BasicComponents.itemSteelDust.itemID, new ItemStack(BasicComponents.itemSteelIngot), 0.8f);
+		GameRegistry.addSmelting(BasicComponents.itemSteelPlate.itemID, new ItemStack(BasicComponents.itemSteelDust, 3), 0f);
 		// Bronze
 		RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBronzeDust), new Object[] { "!#!", '!', "ingotCopper", '#', "ingotTin" }), "Bronze Dust", UniversalElectricity.CONFIGURATION, true);
-		GameRegistry.addSmelting(BasicComponents.itemBronzeDust.shiftedIndex, new ItemStack(BasicComponents.itemBronzeIngot), 0.6f);
-		GameRegistry.addSmelting(BasicComponents.itemBronzePlate.shiftedIndex, new ItemStack(BasicComponents.itemBronzeDust, 3), 0f);
+		GameRegistry.addSmelting(BasicComponents.itemBronzeDust.itemID, new ItemStack(BasicComponents.itemBronzeIngot), 0.6f);
+		GameRegistry.addSmelting(BasicComponents.itemBronzePlate.itemID, new ItemStack(BasicComponents.itemBronzeDust, 3), 0f);
 
 		// Plates
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCopperPlate), new Object[] { "!!", "!!", '!', "ingotCopper" }));

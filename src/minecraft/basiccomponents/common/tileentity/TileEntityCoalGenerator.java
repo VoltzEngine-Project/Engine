@@ -115,7 +115,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 
 				if (this.containingItems[0] != null && this.connectedElectricUnit != null)
 				{
-					if (this.containingItems[0].getItem().shiftedIndex == Item.coal.shiftedIndex)
+					if (this.containingItems[0].getItem().itemID == Item.coal.itemID)
 					{
 						if (this.itemCookTime <= 0)
 						{

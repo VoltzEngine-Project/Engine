@@ -2,8 +2,6 @@ package universalelectricity.prefab.ore;
 
 import java.util.Random;
 
-import cpw.mods.fml.common.FMLLog;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -12,6 +10,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.core.UniversalElectricity;
+import cpw.mods.fml.common.FMLLog;
 
 /**
  * This class is used for storing ore generation data. If you are too lazy to generate your own
