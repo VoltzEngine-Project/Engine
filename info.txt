@@ -102,4 +102,5 @@ x BasicComponents_v1.2.1.317.jar UniversalElectricity_v1.2.1.317_api.zip
 Minecraft 1.4.6
 x BasicComponents_v1.2.2.321.jar UniversalElectricity_v1.2.2.321_api.zip
 @ BasicComponents_v1.2.2.324.jar UniversalElectricity_v1.2.2.324_api.zip
-* BasicComponents_v1.2.2.325.jar UniversalElectricity_v1.2.2.325_api.zip
+@ BasicComponents_v1.2.2.325.jar UniversalElectricity_v1.2.2.325_api.zip
+* BasicComponents_v1.2.2.326.jar UniversalElectricity_v1.2.2.326_api.zip
