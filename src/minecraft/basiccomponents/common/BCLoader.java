@@ -1,15 +1,9 @@
 package basiccomponents.common;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.liquids.LiquidContainerData;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import universalelectricity.core.UniversalElectricity;
@@ -24,17 +18,13 @@ import universalelectricity.prefab.ore.OreGenerator;
 import basiccomponents.common.block.BlockBCOre;
 import basiccomponents.common.block.BlockBasicMachine;
 import basiccomponents.common.block.BlockCopperWire;
-import basiccomponents.common.block.BlockOilFlowing;
-import basiccomponents.common.block.BlockOilStill;
 import basiccomponents.common.item.ItemBasic;
 import basiccomponents.common.item.ItemBattery;
 import basiccomponents.common.item.ItemBlockBCOre;
 import basiccomponents.common.item.ItemBlockBasicMachine;
 import basiccomponents.common.item.ItemBlockCopperWire;
 import basiccomponents.common.item.ItemCircuit;
-import basiccomponents.common.item.ItemOilBucket;
 import basiccomponents.common.item.ItemWrench;
-import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -79,8 +69,6 @@ public class BCLoader
 		UniversalElectricity.CONFIGURATION.load();
 		BasicComponents.blockBasicOre = new BlockBCOre(UniversalElectricity.CONFIGURATION.getBlock("Copper and Tin Ores", BasicComponents.BLOCK_ID_PREFIX + 0).getInt());
 		BasicComponents.blockCopperWire = new BlockCopperWire(UniversalElectricity.CONFIGURATION.getBlock("Copper_Wire", BasicComponents.BLOCK_ID_PREFIX + 1).getInt());
-		BasicComponents.oilMoving = new BlockOilFlowing(UniversalElectricity.CONFIGURATION.getBlock("Oil_Flowing", BasicComponents.BLOCK_ID_PREFIX + 2).getInt());
-		BasicComponents.oilStill = new BlockOilStill(UniversalElectricity.CONFIGURATION.getBlock("Oil_Still", BasicComponents.BLOCK_ID_PREFIX + 3).getInt());
 		BasicComponents.blockMachine = new BlockBasicMachine(UniversalElectricity.CONFIGURATION.getBlock("Basic Machine", BasicComponents.BLOCK_ID_PREFIX + 4).getInt(), 0);
 
 		BasicComponents.itemBattery = new ItemBattery(UniversalElectricity.CONFIGURATION.getItem("Battery", BasicComponents.ITEM_ID_PREFIX + 1).getInt(), 0);
@@ -102,8 +90,6 @@ public class BCLoader
 
 		BasicComponents.itemMotor = new ItemBasic("motor", UniversalElectricity.CONFIGURATION.getItem("Motor", BasicComponents.ITEM_ID_PREFIX + 14).getInt(), 12);
 
-		BasicComponents.itemOilBucket = new ItemOilBucket(UniversalElectricity.CONFIGURATION.getItem("Oil Bucket", BasicComponents.ITEM_ID_PREFIX + 15).getInt(), 4);
-
 		BasicComponents.coalGenerator = ((BlockBasicMachine) BasicComponents.blockMachine).getCoalGenerator();
 		BasicComponents.batteryBox = ((BlockBasicMachine) BasicComponents.blockMachine).getBatteryBox();
 		BasicComponents.electricFurnace = ((BlockBasicMachine) BasicComponents.blockMachine).getElectricFurnace();
@@ -113,46 +99,10 @@ public class BCLoader
 
 		UniversalElectricity.CONFIGURATION.save();
 
-		/**
-		 * @author Cammygames
-		 */
-		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(new LiquidStack(BasicComponents.oilStill, LiquidContainerRegistry.BUCKET_VOLUME), new ItemStack(BasicComponents.itemOilBucket), new ItemStack(Item.bucketEmpty)));
-		MinecraftForge.EVENT_BUS.register(BasicComponents.itemOilBucket);
-
 		// Register Blocks
 		GameRegistry.registerBlock(BasicComponents.blockBasicOre, ItemBlockBCOre.class, "Ore");
 		GameRegistry.registerBlock(BasicComponents.blockMachine, ItemBlockBasicMachine.class, "Basic Machine");
 		GameRegistry.registerBlock(BasicComponents.blockCopperWire, ItemBlockCopperWire.class, "Copper Wire");
-		GameRegistry.registerBlock(BasicComponents.oilMoving, "Oil Moving");
-		GameRegistry.registerBlock(BasicComponents.oilStill, "OilS till");
-
-		GameRegistry.registerCraftingHandler(new ICraftingHandler()
-		{
-			@Override
-			public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix)
-			{
-				if (item.itemID == BasicComponents.itemOilBucket.itemID)
-				{
-					for (int i = 0; i < craftMatrix.getSizeInventory(); i++)
-					{
-						if (craftMatrix.getStackInSlot(i) != null)
-						{
-							if (craftMatrix.getStackInSlot(i).itemID == Item.bucketWater.itemID)
-							{
-								craftMatrix.setInventorySlotContents(i, null);
-								return;
-							}
-						}
-					}
-				}
-			}
-
-			@Override
-			public void onSmelting(EntityPlayer player, ItemStack item)
-			{
-
-			}
-		});
 
 		/**
 		 * Registering all Basic Component items into the Forge Ore Dictionary.
@@ -170,10 +120,6 @@ public class BCLoader
 		OreDictionary.registerOre("basicCircuit", new ItemStack(BasicComponents.itemCircuit, 1, 0));
 		OreDictionary.registerOre("advancedCircuit", new ItemStack(BasicComponents.itemCircuit, 1, 1));
 		OreDictionary.registerOre("eliteCircuit", new ItemStack(BasicComponents.itemCircuit, 1, 2));
-
-		OreDictionary.registerOre("oilMoving", BasicComponents.oilMoving);
-		OreDictionary.registerOre("oilStill", BasicComponents.oilStill);
-		OreDictionary.registerOre("oilBucket", BasicComponents.itemOilBucket);
 
 		OreDictionary.registerOre("ingotCopper", BasicComponents.itemCopperIngot);
 		OreDictionary.registerOre("ingotTin", BasicComponents.itemTinIngot);
@@ -205,9 +151,7 @@ public class BCLoader
 		OreGenerator.addOre(BasicComponents.copperOreGeneration);
 		OreGenerator.addOre(BasicComponents.tinOreGeneration);
 
-		// Recipes
-		// Oil Bucket
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemOilBucket), new Object[] { "CCC", "CBC", "CCC", 'B', Item.bucketWater, 'C', Item.coal }));
+		// Recipe Registry
 		// Motor
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemMotor), new Object[] { "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', BasicComponents.blockCopperWire }));
 		// Wrench
@@ -224,7 +168,7 @@ public class BCLoader
 		// Copper
 		FurnaceRecipes.smelting().addSmelting(BasicComponents.blockBasicOre.blockID, 0, new ItemStack(BasicComponents.itemCopperIngot), 0.7f);
 		// Copper Wire
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.blockCopperWire, 6), new Object[] { "!!!", "@@@", "!!!", '!', Item.leather, '@', "ingotCopper" }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.blockCopperWire, 9), new Object[] { "!!!", "@@@", "!!!", '!', Item.leather, '@', "ingotCopper" }));
 		// Tin
 		FurnaceRecipes.smelting().addSmelting(BasicComponents.blockBasicOre.blockID, 1, new ItemStack(BasicComponents.itemTinIngot), 0.7f);
 		// Battery

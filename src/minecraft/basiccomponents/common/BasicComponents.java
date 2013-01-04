@@ -19,15 +19,10 @@ public class BasicComponents
 	public static final String BLOCK_TEXTURE_FILE = FILE_PATH + "blocks.png";
 	public static final String ITEM_TEXTURE_FILE = FILE_PATH + "items.png";
 
-	/**
-	 * Try not reference to these variable in pre-initialization as they might be null!
-	 */
 	public static int BLOCK_ID_PREFIX = 3970;
 
 	public static Block blockBasicOre;
 	public static Block blockCopperWire;
-	public static Block oilMoving;
-	public static Block oilStill;
 	public static Block blockMachine;
 
 	public static final int ITEM_ID_PREFIX = 13970;
@@ -43,7 +38,6 @@ public class BasicComponents
 	public static Item itemSteelPlate;
 	public static Item itemBronzePlate;
 	public static Item itemMotor;
-	public static Item itemOilBucket;
 	public static Item itemCopperPlate;
 	public static Item itemTinPlate;
 
