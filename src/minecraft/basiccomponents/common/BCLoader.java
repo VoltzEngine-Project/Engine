@@ -137,6 +137,7 @@ public class BCLoader
 		UETab.setItemStack(BasicComponents.batteryBox);
 
 		UpdateNotifier.INSTANCE.checkUpdate(NAME, UniversalElectricity.VERSION, "http://www.calclavia.com/downloads/ue/recommendedversion.txt");
+		UpdateNotifier.NOTIFICATIONS.add("Visit www.universalelectricity.com for more information on Universal Electricity!");
 
 		proxy.preInit();
 	}
