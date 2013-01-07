@@ -382,10 +382,4 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	{
 		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
-
-	@Override
-	public double getVoltage()
-	{
-		return 120;
-	}
 }
