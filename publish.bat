@@ -9,8 +9,6 @@ echo FTP Username?
 set /p USERNAME=
 echo FTP Password?
 set /p PASSWORD=
-echo Signing Password?
-set /p SIGNPASSWORD=
 
 set /p MODVERSION=<modversion.txt
 set /p CurrentBuild=<buildnumber.txt
@@ -48,8 +46,6 @@ cd src\
 "..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\railcraft\"
 "..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\dan200\"
 cd ..\
-
-jarsigner -keystore UniversalElectricity -storepass %SIGNPASSWORD% -keypass %SIGNPASSWORD% "builds\%FILE_NAME%" UniversalElectricity
 
 ::UPDATE INFO FILE
 echo %PROMOTION% %FILE_NAME% %API_NAME%>>info.txt

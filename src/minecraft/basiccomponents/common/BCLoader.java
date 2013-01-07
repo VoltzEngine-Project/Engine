@@ -36,7 +36,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid = BCLoader.CHANNEL, name = BCLoader.NAME, version = UniversalElectricity.VERSION, certificateFingerprint = "2fda1b418db921bbf2d0deec1ab7cdc052fc0c27")
+@Mod(modid = BCLoader.CHANNEL, name = BCLoader.NAME, version = UniversalElectricity.VERSION)
 @NetworkMod(channels = BCLoader.CHANNEL, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class BCLoader
 {
