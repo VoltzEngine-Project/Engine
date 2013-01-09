@@ -2,15 +2,15 @@
 {
   "modid" : "BasicComponents",
   "name" : "Basic Components",
-  "version" : "1.2.2",
-  "url" : "http://calclavia.com/universalelectricity",
+  "version" : "1.2.3",
+  "url" : "http://universalelectricity.com",
   "credits" : "",
   "authors": [
     "Calclavia"
   ],
   "description": "Basic Components is a mod that adds some basic items and blocks to serve as an entry mod for the Universal Electricity mod series.",
   "logoFile" : "/ue_logo.png",
-  "updateUrl" : "http://calclavia.com/universalelectricity",
+  "updateUrl" : "http://universalelectricity.com",
   "parent" : "",
   "screenshots": [
   ]
