@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import cpw.mods.fml.common.FMLLog;
@@ -435,6 +433,8 @@ public class ElectricityNetwork
 	 */
 	public static ElectricityPack consumeFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection, ElectricityPack requestPack)
 	{
+		ElectricityPack consumedPack = new ElectricityPack();
+
 		if (tileEntity != null && approachingDirection != null)
 		{
 			final List<ElectricityNetwork> connectedNetworks = getNetworksFromMultipleSides(tileEntity, approachingDirection);
@@ -452,7 +452,9 @@ public class ElectricityNetwork
 					if (wattsPerSide > 0 && requestPack.getWatts() > 0)
 					{
 						network.startRequesting(tileEntity, wattsPerSide / voltage, voltage);
-						return network.consumeElectricity(tileEntity);
+						ElectricityPack receivedPack = network.consumeElectricity(tileEntity);
+						consumedPack.amperes += receivedPack.amperes;
+						consumedPack.voltage = Math.max(consumedPack.voltage, receivedPack.voltage);
 					}
 					else
 					{
@@ -462,7 +464,7 @@ public class ElectricityNetwork
 			}
 		}
 
-		return null;
+		return consumedPack;
 	}
 
 	public static ElectricityPack consumeFromMultipleSides(TileEntity tileEntity, ElectricityPack electricityPack)
