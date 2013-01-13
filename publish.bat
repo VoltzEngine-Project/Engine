@@ -31,20 +31,20 @@ runtime\bin\python\python_mcp runtime\reobfuscate.py %*
 
 ::ZIP-UP
 cd reobf\minecraft\
-"..\..\..\7za.exe" a "..\..\builds\%FILE_NAME%" "*"
+7z a "..\..\builds\%FILE_NAME%" "*"
 cd ..\..\
 cd resources\
-"..\..\7za.exe" a "..\builds\%FILE_NAME%" "*"
-"..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*"
+7z a "..\builds\%FILE_NAME%" "*"
+7z a "..\builds\%BACKUP_NAME%" "*"
 cd ..\
 cd src\
-"..\..\7za.exe" a "..\builds\%API_NAME%" "*\universalelectricity\"
+7z a "..\builds\%API_NAME%" "*\universalelectricity\"
 
-"..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\universalelectricity\"
-"..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\basiccomponents\"
-"..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\buildcraft\"
-"..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\railcraft\"
-"..\..\7za.exe" a "..\builds\%BACKUP_NAME%" "*\dan200\"
+7z a "..\builds\%BACKUP_NAME%" "*\universalelectricity\"
+7z a "..\builds\%BACKUP_NAME%" "*\basiccomponents\"
+7z a "..\builds\%BACKUP_NAME%" "*\buildcraft\"
+7z a "..\builds\%BACKUP_NAME%" "*\railcraft\"
+7z a "..\builds\%BACKUP_NAME%" "*\dan200\"
 cd ..\
 
 ::UPDATE INFO FILE
