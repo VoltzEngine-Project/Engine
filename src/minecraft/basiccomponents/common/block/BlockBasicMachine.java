@@ -11,13 +11,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
-import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import basiccomponents.common.BCLoader;
 import basiccomponents.common.BasicComponents;
@@ -280,32 +278,6 @@ public class BlockBasicMachine extends BlockMachine
 		return true;
 	}
 
-	/**
-	 * Is this block powering the block on the specified side
-	 */
-	@Override
-	public boolean isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-	{
-		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-
-		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)); }
-
-		return false;
-	}
-
-	/**
-	 * Is this block indirectly powering the block on the specified side
-	 */
-	@Override
-	public boolean isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-	{
-		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-
-		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)); }
-
-		return false;
-	}
-
 	@Override
 	public boolean isOpaqueCube()
 	{
@@ -316,12 +288,6 @@ public class BlockBasicMachine extends BlockMachine
 	public boolean renderAsNormalBlock()
 	{
 		return false;
-	}
-
-	@Override
-	public boolean canProvidePower()
-	{
-		return true;
 	}
 
 	@Override

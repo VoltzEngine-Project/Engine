@@ -43,9 +43,9 @@ public class UniversalElectricity
 	 * Conversion ratios between Buildcraft and Industrialcraft energy.
 	 */
 	// The amount of UE Joules equivalent to IC2 EU
-	public static double IC2_RATIO = 50;
+	public static double IC2_RATIO = 40;
 	// The amount of UE Joules equivalent to BC Minecraft Joules
-	public static double BC3_RATIO = 500;
+	public static double BC3_RATIO = 400;
 	public static double TO_IC2_RATIO = 1 / IC2_RATIO;
 	public static double TO_BC_RATIO = 1 / BC3_RATIO;
 

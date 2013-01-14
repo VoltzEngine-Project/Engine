@@ -3,7 +3,6 @@ package basiccomponents.common.tileentity;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -21,7 +20,6 @@ import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
@@ -35,7 +33,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 
-public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, IPeripheral
+public class TileEntityBatteryBox extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver, ISidedInventory, IPeripheral
 {
 	private double joules = 0;
 
@@ -356,18 +354,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
 	{
 		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
-	}
-
-	@Override
-	public boolean isPoweringTo(ForgeDirection side)
-	{
-		return this.isFull;
-	}
-
-	@Override
-	public boolean isIndirectlyPoweringTo(ForgeDirection side)
-	{
-		return isPoweringTo(side);
 	}
 
 	@Override
