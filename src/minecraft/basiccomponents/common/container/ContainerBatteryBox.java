@@ -66,7 +66,7 @@ public class ContainerBatteryBox extends Container
 
 			if (par1 != 0 && par1 != 1)
 			{
-				if (var4.getItem() instanceof IItemElectric)
+				if (this.getSlot(0).isItemValid(var4))
 				{
 					if (((IItemElectric) var4.getItem()).canProduceElectricity())
 					{
