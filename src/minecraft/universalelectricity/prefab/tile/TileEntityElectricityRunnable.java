@@ -1,6 +1,10 @@
 package universalelectricity.prefab.tile;
 
+import java.util.EnumSet;
+
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityPack;
 
@@ -35,7 +39,7 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectricit
 			 */
 			if (!this.isDisabled())
 			{
-				ElectricityPack electricityPack = ElectricityNetwork.consumeFromMultipleSides(this, this.getRequest());
+				ElectricityPack electricityPack = ElectricityNetwork.consumeFromMultipleSides(this, this.getConsumingSides(), this.getRequest());
 				this.onReceive(electricityPack);
 			}
 			else
@@ -43,6 +47,23 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectricit
 				ElectricityNetwork.consumeFromMultipleSides(this, new ElectricityPack());
 			}
 		}
+	}
+
+	/**
+	 * Returns the amount of energy being requested this tick. Return an empty ElectricityPack if no
+	 * electricity is desired.
+	 */
+	public ElectricityPack getRequest()
+	{
+		return new ElectricityPack();
+	}
+
+	/**
+	 * The sides in which this machine can consume electricity from.
+	 */
+	protected EnumSet<ForgeDirection> getConsumingSides()
+	{
+		return ElectricityConnections.getDirections(this);
 	}
 
 	/**
@@ -66,15 +87,6 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectricit
 		}
 
 		this.wattsReceived = Math.min(this.wattsReceived + electricityPack.getWatts(), this.getWattBuffer());
-	}
-
-	/**
-	 * Returns the amount of energy being requested this tick. Return an empty ElectricityPack if no
-	 * electricity is desired.
-	 */
-	public ElectricityPack getRequest()
-	{
-		return new ElectricityPack();
 	}
 
 	/**

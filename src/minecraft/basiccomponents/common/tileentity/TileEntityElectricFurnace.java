@@ -42,7 +42,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	/**
 	 * The amount of processing time required.
 	 */
-	public static final int PROCESS_TIME_REQUIRED = 120;
+	public static final int PROCESS_TIME_REQUIRED = 140;
 
 	/**
 	 * The amount of ticks this machine has been processing.
