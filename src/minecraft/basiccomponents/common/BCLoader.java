@@ -94,8 +94,8 @@ public class BCLoader
 		BasicComponents.batteryBox = ((BlockBasicMachine) BasicComponents.blockMachine).getBatteryBox();
 		BasicComponents.electricFurnace = ((BlockBasicMachine) BasicComponents.blockMachine).getElectricFurnace();
 
-		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 50, 33, 4).enable(UniversalElectricity.CONFIGURATION);
-		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 50, 30, 3).enable(UniversalElectricity.CONFIGURATION);
+		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 70, 32, 4).enable(UniversalElectricity.CONFIGURATION);
+		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 70, 30, 4).enable(UniversalElectricity.CONFIGURATION);
 
 		UniversalElectricity.CONFIGURATION.save();
 
