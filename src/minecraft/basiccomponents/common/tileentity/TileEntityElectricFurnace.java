@@ -23,7 +23,7 @@ import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
+import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
 import basiccomponents.common.BCLoader;
 import basiccomponents.common.BasicComponents;
 import basiccomponents.common.block.BlockBasicMachine;
@@ -32,24 +32,31 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class TileEntityElectricFurnace extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver
+public class TileEntityElectricFurnace extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver
 {
-	// The amount of watts required by the electric furnace per tick
+	/**
+	 * The amount of watts required every TICK.
+	 */
 	public static final double WATTS_PER_TICK = 500;
 
-	// The amount of ticks required to smelt this item
-	public static final int SMELTING_TIME_REQUIRED = 140;
+	/**
+	 * The amount of processing time required.
+	 */
+	public static final int PROCESS_TIME_REQUIRED = 140;
 
-	// How many ticks has this item been smelting for?
-	public int smeltingTicks = 0;
-
-	public double joulesReceived = 0;
+	/**
+	 * The amount of ticks this machine has been processing.
+	 */
+	public int processTicks = 0;
 
 	/**
 	 * The ItemStacks that hold the items currently being used in the battery box
 	 */
 	private ItemStack[] containingItems = new ItemStack[3];
 
+	/**
+	 * The amount of players using the electric furnace.
+	 */
 	private int playersUsing = 0;
 
 	@Override
@@ -64,37 +71,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	{
 		super.updateEntity();
 
-		if (!this.worldObj.isRemote)
-		{
-
-			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2);
-			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
-
-			ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
-
-			if (inputNetwork != null)
-			{
-				if (this.canSmelt())
-				{
-					inputNetwork.startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
-					ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
-					this.joulesReceived = Math.max(Math.min(this.joulesReceived + electricityPack.getWatts(), WATTS_PER_TICK), 0);
-
-					if (UniversalElectricity.isVoltageSensitive)
-					{
-						if (electricityPack.voltage > this.getVoltage())
-						{
-							this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2f, true);
-						}
-					}
-				}
-				else
-				{
-					inputNetwork.stopRequesting(this);
-				}
-			}
-		}
-
 		// The bottom slot is for portable
 		// batteries
 		if (this.containingItems[0] != null)
@@ -106,42 +82,42 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 				if (electricItem.canProduceElectricity())
 				{
 					double receivedWattHours = electricItem.onUse(Math.min(electricItem.getMaxJoules(this.containingItems[0]) * 0.01, ElectricInfo.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
-					this.joulesReceived += ElectricInfo.getWatts(receivedWattHours);
+					this.wattsReceived += ElectricInfo.getWatts(receivedWattHours);
 				}
 			}
 		}
 
-		if (this.joulesReceived >= this.WATTS_PER_TICK - 50 && !this.isDisabled())
+		if (this.wattsReceived >= this.WATTS_PER_TICK - 50 && !this.isDisabled())
 		{
 			// The left slot contains the item to
 			// be smelted
-			if (this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
+			if (this.containingItems[1] != null && this.canSmelt() && this.processTicks == 0)
 			{
-				this.smeltingTicks = this.SMELTING_TIME_REQUIRED;
+				this.processTicks = this.PROCESS_TIME_REQUIRED;
 			}
 
 			// Checks if the item can be smelted
 			// and if the smelting time left is
 			// greater than 0, if so, then smelt
 			// the item.
-			if (this.canSmelt() && this.smeltingTicks > 0)
+			if (this.canSmelt() && this.processTicks > 0)
 			{
-				this.smeltingTicks--;
+				this.processTicks--;
 
 				// When the item is finished
 				// smelting
-				if (this.smeltingTicks < 1)
+				if (this.processTicks < 1)
 				{
 					this.smeltItem();
-					this.smeltingTicks = 0;
+					this.processTicks = 0;
 				}
 			}
 			else
 			{
-				this.smeltingTicks = 0;
+				this.processTicks = 0;
 			}
 
-			this.joulesReceived -= this.WATTS_PER_TICK;
+			this.wattsReceived -= this.WATTS_PER_TICK;
 		}
 
 		if (!this.worldObj.isRemote)
@@ -156,7 +132,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(BCLoader.CHANNEL, this, this.smeltingTicks, this.disabledTicks);
+		return PacketManager.getPacket(BCLoader.CHANNEL, this, this.processTicks, this.disabledTicks);
 	}
 
 	@Override
@@ -164,7 +140,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	{
 		try
 		{
-			this.smeltingTicks = dataStream.readInt();
+			this.processTicks = dataStream.readInt();
 			this.disabledTicks = dataStream.readInt();
 		}
 		catch (Exception e)
@@ -242,7 +218,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readFromNBT(par1NBTTagCompound);
-		this.smeltingTicks = par1NBTTagCompound.getInteger("smeltingTicks");
+		this.processTicks = par1NBTTagCompound.getInteger("smeltingTicks");
 		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
 		this.containingItems = new ItemStack[this.getSizeInventory()];
 
@@ -265,7 +241,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityReceiver imp
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.writeToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setInteger("smeltingTicks", this.smeltingTicks);
+		par1NBTTagCompound.setInteger("smeltingTicks", this.processTicks);
 		NBTTagList var2 = new NBTTagList();
 
 		for (int var3 = 0; var3 < this.containingItems.length; ++var3)

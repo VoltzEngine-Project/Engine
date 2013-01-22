@@ -162,7 +162,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 		}
 
 		// Energy Loss
-		this.setJoules(this.joules - 0.0005);
+		this.setJoules(this.joules - 0.0001);
 
 		if (!this.worldObj.isRemote)
 		{

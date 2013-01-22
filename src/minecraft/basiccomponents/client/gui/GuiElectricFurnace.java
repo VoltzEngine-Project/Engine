@@ -43,7 +43,7 @@ public class GuiElectricFurnace extends GuiContainer
 		{
 			displayText = "Disabled!";
 		}
-		else if (this.tileEntity.smeltingTicks > 0)
+		else if (this.tileEntity.processTicks > 0)
 		{
 			displayText = "Smelting";
 		}
@@ -71,9 +71,9 @@ public class GuiElectricFurnace extends GuiContainer
 		containerHeight = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
 
-		if (this.tileEntity.smeltingTicks > 0)
+		if (this.tileEntity.processTicks > 0)
 		{
-			int scale = (int) (((double) this.tileEntity.smeltingTicks / (double) this.tileEntity.SMELTING_TIME_REQUIRED) * 23);
+			int scale = (int) (((double) this.tileEntity.processTicks / (double) this.tileEntity.PROCESS_TIME_REQUIRED) * 23);
 			this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
 		}
 	}
