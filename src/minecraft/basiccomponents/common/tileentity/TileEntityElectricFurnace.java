@@ -42,7 +42,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	/**
 	 * The amount of processing time required.
 	 */
-	public static final int PROCESS_TIME_REQUIRED = 140;
+	public static final int PROCESS_TIME_REQUIRED = 120;
 
 	/**
 	 * The amount of ticks this machine has been processing.
@@ -71,8 +71,9 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	{
 		super.updateEntity();
 
-		// The bottom slot is for portable
-		// batteries
+		/**
+		 * Attempts to charge using batteries.
+		 */
 		if (this.containingItems[0] != null)
 		{
 			if (this.containingItems[0].getItem() instanceof IItemElectric)
@@ -87,28 +88,32 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 			}
 		}
 
-		if (this.wattsReceived >= this.WATTS_PER_TICK - 50 && !this.isDisabled())
+		/**
+		 * Attempts to smelt an item.
+		 */
+		if (this.wattsReceived >= this.WATTS_PER_TICK)
 		{
-			// The left slot contains the item to
-			// be smelted
-			if (this.containingItems[1] != null && this.canSmelt() && this.processTicks == 0)
+			if (this.canProcess())
 			{
-				this.processTicks = this.PROCESS_TIME_REQUIRED;
-			}
-
-			// Checks if the item can be smelted
-			// and if the smelting time left is
-			// greater than 0, if so, then smelt
-			// the item.
-			if (this.canSmelt() && this.processTicks > 0)
-			{
-				this.processTicks--;
-
-				// When the item is finished
-				// smelting
-				if (this.processTicks < 1)
+				if (this.processTicks == 0)
 				{
-					this.smeltItem();
+					this.processTicks = this.PROCESS_TIME_REQUIRED;
+				}
+				else if (this.processTicks > 0)
+				{
+					this.processTicks--;
+
+					/**
+					 * Process the item when the process timer is done.
+					 */
+					if (this.processTicks < 1)
+					{
+						this.smeltItem();
+						this.processTicks = 0;
+					}
+				}
+				else
+				{
 					this.processTicks = 0;
 				}
 			}
@@ -117,7 +122,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 				this.processTicks = 0;
 			}
 
-			this.wattsReceived -= this.WATTS_PER_TICK;
+			this.wattsReceived = Math.max(this.wattsReceived - WATTS_PER_TICK / 4, 0);
 		}
 
 		if (!this.worldObj.isRemote)
@@ -127,6 +132,12 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 		}
+	}
+
+	@Override
+	public ElectricityPack getRequest()
+	{
+		return new ElectricityPack(WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
 	}
 
 	@Override
@@ -165,9 +176,10 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 		this.playersUsing--;
 	}
 
-	// Check all conditions and see if we can
-	// start smelting
-	public boolean canSmelt()
+	/**
+	 * @return Is this machine able to process its specific task?
+	 */
+	public boolean canProcess()
 	{
 		if (FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]) == null) { return false; }
 
@@ -189,7 +201,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	 */
 	public void smeltItem()
 	{
-		if (this.canSmelt())
+		if (this.canProcess())
 		{
 			ItemStack resultItemStack = FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]);
 

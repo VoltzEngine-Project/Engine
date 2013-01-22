@@ -36,10 +36,7 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectricit
 			if (!this.isDisabled())
 			{
 				ElectricityPack electricityPack = ElectricityNetwork.consumeFromMultipleSides(this, this.getRequest());
-
-				electricityPack = this.onReceive(electricityPack);
-
-				this.wattsReceived = this.wattsReceived + electricityPack.getWatts();
+				this.onReceive(electricityPack);
 			}
 			else
 			{
@@ -54,7 +51,7 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectricit
 	 * 
 	 * @param electricityPack
 	 */
-	public ElectricityPack onReceive(ElectricityPack electricityPack)
+	public void onReceive(ElectricityPack electricityPack)
 	{
 		/**
 		 * Creates an explosion if the voltage is too high.
@@ -63,11 +60,12 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectricit
 		{
 			if (electricityPack.voltage > this.getVoltage())
 			{
-				this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2f, true);
+				this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 1.5f, true);
+				return;
 			}
 		}
 
-		return electricityPack;
+		this.wattsReceived = Math.min(this.wattsReceived + electricityPack.getWatts(), this.getWattBuffer());
 	}
 
 	/**
@@ -77,5 +75,14 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectricit
 	public ElectricityPack getRequest()
 	{
 		return new ElectricityPack();
+	}
+
+	/**
+	 * @return The amount of internal buffer that may be stored within this machine. This will make
+	 * the machine run smoother as electricity might not always be consistent.
+	 */
+	public double getWattBuffer()
+	{
+		return this.getRequest().getWatts() * 2;
 	}
 }
