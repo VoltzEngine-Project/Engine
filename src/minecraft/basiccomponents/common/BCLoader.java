@@ -157,14 +157,12 @@ public class BCLoader
 		// Wrench
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemWrench), new Object[] { " S ", " DS", "S  ", 'S', "ingotSteel", 'D', Item.diamond }));
 		// Battery Box
-		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.batteryBox, new Object[] { "?!?", "###", "?!?", '#', BasicComponents.blockCopperWire, '!', BasicComponents.itemSteelPlate, '?', BasicComponents.itemBattery.getUncharged() }));
-		GameRegistry.addSmelting(BasicComponents.batteryBox.itemID, new ItemStack(BasicComponents.itemSteelDust, 6), 0f);
+		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.batteryBox, new Object[] { "SSS", "BBB", "SSS", 'B', BasicComponents.itemBattery.getUncharged(), 'S', "ingotSteel" }));
 		// Coal Generator
-		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.coalGenerator, new Object[] { "SCS", "FMF", "BBB", 'B', "ingotBronze", 'S', BasicComponents.itemSteelPlate, 'C', BasicComponents.blockCopperWire, 'M', BasicComponents.itemMotor, 'F', Block.stoneOvenIdle }));
-		GameRegistry.addSmelting(BasicComponents.coalGenerator.itemID, new ItemStack(BasicComponents.itemSteelDust, 6), 0f);
+		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.coalGenerator, new Object[] { "MMM", "MOM", "MCM", 'M', "ingotSteel", 'C', BasicComponents.itemMotor, 'O', Block.stoneOvenIdle }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.coalGenerator, new Object[] { "MMM", "MOM", "MCM", 'M', "ingotBronze", 'C', BasicComponents.itemMotor, 'O', Block.stoneOvenIdle }));
 		// Electric Furnace
 		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.electricFurnace, new Object[] { "SSS", "SCS", "SMS", 'S', "ingotSteel", 'C', BasicComponents.itemCircuit, 'M', BasicComponents.itemMotor }));
-		GameRegistry.addSmelting(BasicComponents.electricFurnace.itemID, new ItemStack(BasicComponents.itemSteelDust, 6), 0f);
 		// Copper
 		FurnaceRecipes.smelting().addSmelting(BasicComponents.blockBasicOre.blockID, 0, new ItemStack(BasicComponents.itemCopperIngot), 0.7f);
 		// Copper Wire
