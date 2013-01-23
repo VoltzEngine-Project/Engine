@@ -134,7 +134,14 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	@Override
 	public ElectricityPack getRequest()
 	{
-		return new ElectricityPack(WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
+		if (this.canProcess())
+		{
+			return new ElectricityPack(WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
+		}
+		else
+		{
+			return new ElectricityPack();
+		}
 	}
 
 	@Override
