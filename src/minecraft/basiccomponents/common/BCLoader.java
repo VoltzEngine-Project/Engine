@@ -94,15 +94,15 @@ public class BCLoader
 		BasicComponents.batteryBox = ((BlockBasicMachine) BasicComponents.blockMachine).getBatteryBox();
 		BasicComponents.electricFurnace = ((BlockBasicMachine) BasicComponents.blockMachine).getElectricFurnace();
 
-		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 70, 33, 4).enable(UniversalElectricity.CONFIGURATION);
-		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 70, 30, 4).enable(UniversalElectricity.CONFIGURATION);
-
-		UniversalElectricity.CONFIGURATION.save();
-
 		// Register Blocks
 		GameRegistry.registerBlock(BasicComponents.blockBasicOre, ItemBlockBCOre.class, "Ore");
 		GameRegistry.registerBlock(BasicComponents.blockMachine, ItemBlockBasicMachine.class, "Basic Machine");
 		GameRegistry.registerBlock(BasicComponents.blockCopperWire, ItemBlockCopperWire.class, "Copper Wire");
+
+		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 70, 33, 4).enable(UniversalElectricity.CONFIGURATION);
+		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 70, 30, 4).enable(UniversalElectricity.CONFIGURATION);
+
+		UniversalElectricity.CONFIGURATION.save();
 
 		/**
 		 * Registering all Basic Component items into the Forge Ore Dictionary.
