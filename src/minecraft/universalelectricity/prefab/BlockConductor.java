@@ -1,13 +1,7 @@
 package universalelectricity.prefab;
 
-import static net.minecraftforge.common.ForgeDirection.EAST;
-import static net.minecraftforge.common.ForgeDirection.NORTH;
-import static net.minecraftforge.common.ForgeDirection.SOUTH;
-import static net.minecraftforge.common.ForgeDirection.WEST;
-
 import java.util.List;
 
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -16,27 +10,15 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.implement.IConductor;
+import universalelectricity.prefab.microblock.BlockMicroblock;
 
-public abstract class BlockConductor extends BlockContainer
+public abstract class BlockConductor extends BlockMicroblock
 {
 	public float wireWidth = 0.2f;
 
 	public BlockConductor(int id, Material material)
 	{
 		super(id, material);
-	}
-
-	@Override
-	public int onBlockPlaced(World par1World, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
-	{
-		/**
-		 * Changes the metadata based on where the block is on.
-		 */
-		return ForgeDirection.getOrientation(side).getOpposite().ordinal();
-	}
-
-	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
-	{
 	}
 
 	@Override
