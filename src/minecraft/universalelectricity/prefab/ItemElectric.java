@@ -27,7 +27,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	{
 		super(id);
 		this.setMaxStackSize(1);
-		this.setMaxDamage((int) this.getMaxJoules());
+		this.setMaxDamage((int) this.getMaxJoules(null));
 		this.setNoRepair();
 	}
 
@@ -116,23 +116,17 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	 * @param wattHours - The amount of electricity in joules
 	 */
 	@Override
-	public void setJoules(double wattHours, Object... data)
+	public void setJoules(double wattHours, ItemStack itemStack)
 	{
-		if (data[0] instanceof ItemStack)
+		// Saves the joules in the itemstack
+		if (itemStack.stackTagCompound == null)
 		{
-			ItemStack itemStack = (ItemStack) data[0];
-
-			// Saves the frequency in the
-			// itemstack
-			if (itemStack.stackTagCompound == null)
-			{
-				itemStack.setTagCompound(new NBTTagCompound());
-			}
-
-			double electricityStored = Math.max(Math.min(wattHours, this.getMaxJoules(itemStack)), 0);
-			itemStack.stackTagCompound.setDouble("electricity", electricityStored);
-			itemStack.setItemDamage((int) (getMaxJoules() - electricityStored));
+			itemStack.setTagCompound(new NBTTagCompound());
 		}
+
+		double electricityStored = Math.max(Math.min(wattHours, this.getMaxJoules(itemStack)), 0);
+		itemStack.stackTagCompound.setDouble("electricity", electricityStored);
+		itemStack.setItemDamage((int) (this.getMaxJoules(itemStack) - electricityStored));
 	}
 
 	/**
@@ -141,27 +135,22 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	 * @return - The amount of electricity stored in watts
 	 */
 	@Override
-	public double getJoules(Object... data)
+	public double getJoules(ItemStack itemStack)
 	{
-		if (data[0] instanceof ItemStack)
+		if (itemStack.stackTagCompound == null) { return 0; }
+		double electricityStored = 0;
+		if (itemStack.stackTagCompound.getTag("electricity") instanceof NBTTagFloat)
 		{
-			ItemStack itemStack = (ItemStack) data[0];
-
-			if (itemStack.stackTagCompound == null) { return 0; }
-			double electricityStored = 0;
-			if (itemStack.stackTagCompound.getTag("electricity") instanceof NBTTagFloat)
-			{
-				electricityStored = itemStack.stackTagCompound.getFloat("electricity");
-			}
-			else
-			{
-				electricityStored = itemStack.stackTagCompound.getDouble("electricity");
-			}
-			itemStack.setItemDamage((int) (getMaxJoules(itemStack) - electricityStored));
-			return electricityStored;
+			electricityStored = itemStack.stackTagCompound.getFloat("electricity");
+		}
+		else
+		{
+			electricityStored = itemStack.stackTagCompound.getDouble("electricity");
 		}
 
-		return -1;
+		itemStack.setItemDamage((int) (getMaxJoules(itemStack) - electricityStored));
+
+		return electricityStored;
 	}
 
 	/**

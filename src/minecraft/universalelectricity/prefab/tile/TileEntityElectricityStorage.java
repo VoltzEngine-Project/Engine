@@ -101,13 +101,13 @@ public abstract class TileEntityElectricityStorage extends TileEntityElectricity
 	}
 
 	@Override
-	public double getJoules(Object... data)
+	public double getJoules()
 	{
 		return this.joules;
 	}
 
 	@Override
-	public void setJoules(double joules, Object... data)
+	public void setJoules(double joules)
 	{
 		this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);
 	}

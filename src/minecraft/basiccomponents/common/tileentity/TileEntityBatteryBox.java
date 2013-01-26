@@ -316,7 +316,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 	}
 
 	@Override
-	public double getMaxJoules(Object... data)
+	public double getMaxJoules()
 	{
 		return 4000000;
 	}

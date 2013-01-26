@@ -1,5 +1,6 @@
 package basiccomponents.common.item;
 
+import net.minecraft.item.ItemStack;
 import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
 import basiccomponents.common.BasicComponents;
@@ -15,7 +16,7 @@ public class ItemBattery extends ItemElectric
 	}
 
 	@Override
-	public double getMaxJoules(Object... data)
+	public double getMaxJoules(ItemStack itemStack)
 	{
 		return 1000000;
 	}
@@ -33,7 +34,7 @@ public class ItemBattery extends ItemElectric
 	}
 
 	@Override
-	public double getVoltage(Object... data)
+	public double getVoltage(ItemStack itemStack)
 	{
 		return 25;
 	}

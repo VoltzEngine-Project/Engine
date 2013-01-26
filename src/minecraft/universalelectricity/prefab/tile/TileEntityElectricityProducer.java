@@ -27,7 +27,7 @@ public abstract class TileEntityElectricityProducer extends TileEntityDisableabl
 	}
 
 	@Override
-	public double getVoltage(Object... data)
+	public double getVoltage()
 	{
 		return 120;
 	}
