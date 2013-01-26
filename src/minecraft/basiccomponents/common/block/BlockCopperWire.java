@@ -1,7 +1,11 @@
 package basiccomponents.common.block;
 
+import java.util.List;
+
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.UETab;
@@ -18,9 +22,10 @@ public class BlockCopperWire extends BlockConductor
 		this.setResistance(0.2F);
 		this.setHardness(0.1f);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
-		this.blockIndexInTexture = 19;
+		this.blockIndexInTexture = 7;
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setBurnProperties(this.blockID, 30, 60);
+		this.setTextureFile(BasicComponents.BLOCK_TEXTURE_FILE);
 	}
 
 	/**
@@ -44,24 +49,9 @@ public class BlockCopperWire extends BlockConductor
 		return false;
 	}
 
-	/**
-	 * The type of render function that is called for this block
-	 */
-	@Override
-	public int getRenderType()
-	{
-		return -1;
-	}
-
 	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
 		return new TileEntityCopperWire();
-	}
-
-	@Override
-	public String getTextureFile()
-	{
-		return BasicComponents.ITEM_TEXTURE_FILE;
 	}
 }
