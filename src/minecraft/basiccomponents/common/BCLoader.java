@@ -54,7 +54,7 @@ public class BCLoader
 	@Instance("BasicComponents")
 	public static BCLoader instance;
 
-	@SidedProxy(clientSide = "universalelectricity.prefab.components.client.ClientProxy", serverSide = "universalelectricity.prefab.components.common.CommonProxy")
+	@SidedProxy(clientSide = "basiccomponents.client.ClientProxy", serverSide = "basiccomponents.common.CommonProxy")
 	public static CommonProxy proxy;
 
 	@PreInit

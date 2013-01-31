@@ -1,17 +1,12 @@
 package basiccomponents.common.block;
 
-import java.util.List;
-
-import basiccomponents.common.BasicComponents;
-import basiccomponents.common.tileentity.TileEntityCopperWire;
-
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.UETab;
+import basiccomponents.common.BasicComponents;
+import basiccomponents.common.tileentity.TileEntityCopperWire;
 
 public class BlockCopperWire extends BlockConductor
 {
@@ -22,7 +17,7 @@ public class BlockCopperWire extends BlockConductor
 		this.setStepSound(soundClothFootstep);
 		this.setResistance(0.2F);
 		this.setHardness(0.1f);
-		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
+		this.setBlockBounds(0.30F, 0.0F, 0.30F, 0.70F, 0.20F, 0.70F);
 		this.blockIndexInTexture = 7;
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setBurnProperties(this.blockID, 30, 60);
