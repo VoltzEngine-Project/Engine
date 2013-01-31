@@ -49,7 +49,7 @@ public class BCLoader
 	public static final String BLOCK_TEXTURE_FILE = TEXTURE_PATH + "blocks.png";
 	public static final String ITEM_TEXTURE_FILE = TEXTURE_PATH + "items.png";
 
-	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL", "de_DE" };
+	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL", "de_DE", "pl_PL" };
 
 	@Instance("BasicComponents")
 	public static BCLoader instance;
