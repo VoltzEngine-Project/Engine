@@ -71,19 +71,19 @@ public class UniversalElectricity
 	 */
 	public static void register(Object mod, int major, int minor, int revision, boolean strict)
 	{
-		if (MAJOR_VERSION != major) { throw new RuntimeException("A Universal Electricity mod is way too old! Make sure it is update to v" + major + "." + minor + "." + revision); }
+		if (MAJOR_VERSION != major) { throw new RuntimeException("A Universal Electricity mod " + mod.getClass().getSimpleName() + " is way too old! Make sure it is update to v" + major + "." + minor + "." + revision); }
 
-		if (MINOR_VERSION < minor) { throw new RuntimeException("A Universal Electricity mod is too old! Make sure it is update to v" + major + "." + minor + "." + revision); }
+		if (MINOR_VERSION < minor) { throw new RuntimeException("A Universal Electricity mod " + mod.getClass().getSimpleName() + " is too old! Make sure it is update to v" + major + "." + minor + "." + revision); }
 
 		if (REVISION_VERSION < revision)
 		{
 			if (strict)
 			{
-				throw new RuntimeException("A Universal Electricity mod is too old! Require v" + major + "." + minor + "." + revision);
+				throw new RuntimeException("A Universal Electricity mod " + mod.getClass().getSimpleName() + " is too old! Require v" + major + "." + minor + "." + revision);
 			}
 			else
 			{
-				FMLLog.warning("The version of Universal Electricity detected is not the recommended version by the mod. Odd things might happen. Recommended to try v" + major + "." + minor + "." + revision);
+				FMLLog.warning("The version of Universal Electricity detected is not the recommended version by the mod " + mod.getClass().getSimpleName() + ". Odd things might happen. Recommended to try v" + major + "." + minor + "." + revision);
 			}
 		}
 
