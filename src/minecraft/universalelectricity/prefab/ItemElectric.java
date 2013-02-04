@@ -137,7 +137,10 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	@Override
 	public double getJoules(ItemStack itemStack)
 	{
-		if (itemStack.stackTagCompound == null) { return 0; }
+		if (itemStack.stackTagCompound == null)
+		{
+			return 0;
+		}
 		double electricityStored = 0;
 		if (itemStack.stackTagCompound.getTag("electricity") instanceof NBTTagFloat)
 		{

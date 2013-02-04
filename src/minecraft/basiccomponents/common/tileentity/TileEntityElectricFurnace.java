@@ -21,7 +21,6 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
-
 import basiccomponents.common.BCLoader;
 import basiccomponents.common.BasicComponents;
 import basiccomponents.common.block.BlockBasicMachine;
@@ -186,15 +185,27 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	 */
 	public boolean canProcess()
 	{
-		if (FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]) == null) { return false; }
+		if (FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]) == null)
+		{
+			return false;
+		}
 
-		if (this.containingItems[1] == null) { return false; }
+		if (this.containingItems[1] == null)
+		{
+			return false;
+		}
 
 		if (this.containingItems[2] != null)
 		{
-			if (!this.containingItems[2].isItemEqual(FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1]))) { return false; }
+			if (!this.containingItems[2].isItemEqual(FurnaceRecipes.smelting().getSmeltingResult(this.containingItems[1])))
+			{
+				return false;
+			}
 
-			if (this.containingItems[2].stackSize + 1 > 64) { return false; }
+			if (this.containingItems[2].stackSize + 1 > 64)
+			{
+				return false;
+			}
 		}
 
 		return true;
@@ -278,7 +289,10 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	@Override
 	public int getStartInventorySide(ForgeDirection side)
 	{
-		if (side == side.DOWN || side == side.UP) { return side.ordinal(); }
+		if (side == side.DOWN || side == side.UP)
+		{
+			return side.ordinal();
+		}
 
 		return 2;
 	}

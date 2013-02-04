@@ -21,7 +21,6 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityStorage;
-
 import basiccomponents.common.BCLoader;
 import basiccomponents.common.BasicComponents;
 import basiccomponents.common.block.BlockBasicMachine;
@@ -216,9 +215,15 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 	@Override
 	public int getStartInventorySide(ForgeDirection side)
 	{
-		if (side == side.DOWN) { return 1; }
+		if (side == side.DOWN)
+		{
+			return 1;
+		}
 
-		if (side == side.UP) { return 1; }
+		if (side == side.UP)
+		{
+			return 1;
+		}
 
 		return 0;
 	}

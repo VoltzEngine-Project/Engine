@@ -71,9 +71,15 @@ public class UniversalElectricity
 	 */
 	public static void register(Object mod, int major, int minor, int revision, boolean strict)
 	{
-		if (MAJOR_VERSION != major) { throw new RuntimeException("A Universal Electricity mod " + mod.getClass().getSimpleName() + " is way too old! Make sure it is update to v" + major + "." + minor + "." + revision); }
+		if (MAJOR_VERSION != major)
+		{
+			throw new RuntimeException("A Universal Electricity mod " + mod.getClass().getSimpleName() + " is way too old! Make sure it is update to v" + major + "." + minor + "." + revision);
+		}
 
-		if (MINOR_VERSION < minor) { throw new RuntimeException("A Universal Electricity mod " + mod.getClass().getSimpleName() + " is too old! Make sure it is update to v" + major + "." + minor + "." + revision); }
+		if (MINOR_VERSION < minor)
+		{
+			throw new RuntimeException("A Universal Electricity mod " + mod.getClass().getSimpleName() + " is too old! Make sure it is update to v" + major + "." + minor + "." + revision);
+		}
 
 		if (REVISION_VERSION < revision)
 		{
@@ -99,9 +105,15 @@ public class UniversalElectricity
 	 */
 	public static void forgeLock(int major, int minor, int revision, boolean strict)
 	{
-		if (ForgeVersion.getMajorVersion() != major) { throw new RuntimeException("Universal Electricity: Wrong Minecraft Forge version! Require " + major + "." + minor + "." + revision); }
+		if (ForgeVersion.getMajorVersion() != major)
+		{
+			throw new RuntimeException("Universal Electricity: Wrong Minecraft Forge version! Require " + major + "." + minor + "." + revision);
+		}
 
-		if (ForgeVersion.getMinorVersion() < minor) { throw new RuntimeException("Universal Electricity: Minecraft Forge minor version is too old! Require " + major + "." + minor + "." + revision); }
+		if (ForgeVersion.getMinorVersion() < minor)
+		{
+			throw new RuntimeException("Universal Electricity: Minecraft Forge minor version is too old! Require " + major + "." + minor + "." + revision);
+		}
 
 		if (ForgeVersion.getRevisionVersion() < revision)
 		{

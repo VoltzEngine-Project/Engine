@@ -3,12 +3,6 @@ package basiccomponents.common.block;
 import java.util.List;
 import java.util.Random;
 
-import basiccomponents.common.BCLoader;
-import basiccomponents.common.BasicComponents;
-import basiccomponents.common.tileentity.TileEntityBatteryBox;
-import basiccomponents.common.tileentity.TileEntityCoalGenerator;
-import basiccomponents.common.tileentity.TileEntityElectricFurnace;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +17,11 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
+import basiccomponents.common.BCLoader;
+import basiccomponents.common.BasicComponents;
+import basiccomponents.common.tileentity.TileEntityBatteryBox;
+import basiccomponents.common.tileentity.TileEntityCoalGenerator;
+import basiccomponents.common.tileentity.TileEntityElectricFurnace;
 
 public class BlockBasicMachine extends BlockMachine
 {
@@ -32,8 +31,9 @@ public class BlockBasicMachine extends BlockMachine
 
 	public BlockBasicMachine(int id, int textureIndex)
 	{
-		super("bcMachine", id, UniversalElectricity.machine, UETab.INSTANCE);
-		this.blockIndexInTexture = textureIndex;
+		super(id, textureIndex, UniversalElectricity.machine);
+		this.setBlockName("bcMachine");
+		this.setCreativeTab(UETab.INSTANCE);
 		this.setStepSound(soundMetalFootstep);
 	}
 
@@ -87,7 +87,10 @@ public class BlockBasicMachine extends BlockMachine
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
-		if (side == 0 || side == 1) { return this.blockIndexInTexture; }
+		if (side == 0 || side == 1)
+		{
+			return this.blockIndexInTexture;
+		}
 
 		if (metadata >= ELECTRIC_FURNACE_METADATA)
 		{
@@ -99,7 +102,10 @@ public class BlockBasicMachine extends BlockMachine
 				return this.blockIndexInTexture + 2;
 			}
 			// If it is the back side
-			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 6; }
+			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
+			{
+				return this.blockIndexInTexture + 6;
+			}
 		}
 		else if (metadata >= BATTERY_BOX_METADATA)
 		{
@@ -111,7 +117,10 @@ public class BlockBasicMachine extends BlockMachine
 				return this.blockIndexInTexture + 3;
 			}
 			// If it is the back side
-			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 2; }
+			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
+			{
+				return this.blockIndexInTexture + 2;
+			}
 
 			return this.blockIndexInTexture + 4;
 		}
@@ -123,7 +132,10 @@ public class BlockBasicMachine extends BlockMachine
 				return this.blockIndexInTexture + 3;
 			}
 			// If it is the back side
-			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 5; }
+			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
+			{
+				return this.blockIndexInTexture + 5;
+			}
 		}
 
 		return this.blockIndexInTexture + 1;
@@ -325,6 +337,20 @@ public class BlockBasicMachine extends BlockMachine
 	}
 
 	@Override
+	public int damageDropped(int metadata)
+	{
+		if (metadata > ELECTRIC_FURNACE_METADATA)
+		{
+			return ELECTRIC_FURNACE_METADATA;
+		}
+		else if (metadata > BATTERY_BOX_METADATA)
+		{
+			return BATTERY_BOX_METADATA;
+		}
+		return COAL_GENERATOR_METADATA;
+	}
+
+	@Override
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		par3List.add(this.getCoalGenerator());
@@ -337,10 +363,16 @@ public class BlockBasicMachine extends BlockMachine
 	{
 		int id = idPicked(world, x, y, z);
 
-		if (id == 0) { return null; }
+		if (id == 0)
+		{
+			return null;
+		}
 
 		Item item = Item.itemsList[id];
-		if (item == null) { return null; }
+		if (item == null)
+		{
+			return null;
+		}
 
 		int metadata = getDamageValue(world, x, y, z);
 

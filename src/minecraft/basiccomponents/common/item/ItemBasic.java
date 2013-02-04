@@ -1,8 +1,8 @@
 package basiccomponents.common.item;
 
-import basiccomponents.common.BasicComponents;
 import net.minecraft.item.Item;
 import universalelectricity.prefab.UETab;
+import basiccomponents.common.BasicComponents;
 
 public class ItemBasic extends Item
 {

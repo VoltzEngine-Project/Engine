@@ -8,5 +8,5 @@ package universalelectricity.prefab.microblock;
  */
 public interface IMicroComponent
 {
-	
+
 }

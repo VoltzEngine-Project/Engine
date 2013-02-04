@@ -21,7 +21,6 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityProducer;
-
 import basiccomponents.common.BCLoader;
 import basiccomponents.common.BasicComponents;
 import basiccomponents.common.block.BlockBasicMachine;
@@ -373,7 +372,10 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 		{
 			case getCoalAmount:
 				ItemStack s = getStackInSlot(0);
-				if (s == null) { return new Object[] { 0 }; }
+				if (s == null)
+				{
+					return new Object[] { 0 };
+				}
 				return new Object[] { s.stackSize };
 			case getVoltage:
 				return new Object[] { getVoltage() };

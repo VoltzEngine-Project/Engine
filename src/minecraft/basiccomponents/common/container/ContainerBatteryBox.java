@@ -1,6 +1,5 @@
 package basiccomponents.common.container;
 
-import basiccomponents.common.tileentity.TileEntityBatteryBox;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -8,6 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.prefab.SlotElectricItem;
+import basiccomponents.common.tileentity.TileEntityBatteryBox;
 
 public class ContainerBatteryBox extends Container
 {
@@ -70,17 +70,29 @@ public class ContainerBatteryBox extends Container
 				{
 					if (((IItemElectric) var4.getItem()).canProduceElectricity())
 					{
-						if (!this.mergeItemStack(var4, 1, 2, false)) { return null; }
+						if (!this.mergeItemStack(var4, 1, 2, false))
+						{
+							return null;
+						}
 					}
 					else
 					{
-						if (!this.mergeItemStack(var4, 0, 1, false)) { return null; }
+						if (!this.mergeItemStack(var4, 0, 1, false))
+						{
+							return null;
+						}
 					}
 				}
 
-				else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false)) { return null; }
+				else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
+				{
+					return null;
+				}
 			}
-			else if (!this.mergeItemStack(var4, 3, 38, false)) { return null; }
+			else if (!this.mergeItemStack(var4, 3, 38, false))
+			{
+				return null;
+			}
 
 			if (var4.stackSize == 0)
 			{
@@ -91,7 +103,10 @@ public class ContainerBatteryBox extends Container
 				var3.onSlotChanged();
 			}
 
-			if (var4.stackSize == var2.stackSize) { return null; }
+			if (var4.stackSize == var2.stackSize)
+			{
+				return null;
+			}
 
 			var3.onPickupFromSlot(par1EntityPlayer, var4);
 		}

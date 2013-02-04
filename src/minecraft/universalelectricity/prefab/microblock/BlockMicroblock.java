@@ -1,17 +1,11 @@
 package universalelectricity.prefab.microblock;
 
-import java.util.List;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.implement.IConductor;
 
 public abstract class BlockMicroblock extends BlockContainer
 {
@@ -26,7 +20,10 @@ public abstract class BlockMicroblock extends BlockContainer
 		/**
 		 * Changes the metadata based on where the block is on.
 		 */
-		if (this.canPlaceMicroblock(world, x, y, z, side, hitX, hitY, hitZ)) { return ForgeDirection.getOrientation(side).getOpposite().ordinal(); }
+		if (this.canPlaceMicroblock(world, x, y, z, side, hitX, hitY, hitZ))
+		{
+			return ForgeDirection.getOrientation(side).getOpposite().ordinal();
+		}
 
 		return metadata;
 	}

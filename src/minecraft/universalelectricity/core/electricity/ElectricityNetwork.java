@@ -384,7 +384,10 @@ public class ElectricityNetwork
 			{
 				if (ElectricityConnections.isConnector(tileEntity))
 				{
-					if (ElectricityConnections.canConnect(tileEntity, approachDirection.getOpposite())) { return ((IConductor) tileEntity).getNetwork(); }
+					if (ElectricityConnections.canConnect(tileEntity, approachDirection.getOpposite()))
+					{
+						return ((IConductor) tileEntity).getNetwork();
+					}
 				}
 			}
 		}

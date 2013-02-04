@@ -1,9 +1,9 @@
 package basiccomponents.common.item;
 
-import basiccomponents.common.block.BlockBasicMachine;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import basiccomponents.common.block.BlockBasicMachine;
 
 public class ItemBlockBasicMachine extends ItemBlock
 {

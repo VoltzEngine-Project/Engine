@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -23,46 +22,15 @@ import universalelectricity.prefab.implement.IToolConfigurator;
  */
 public abstract class BlockMachine extends BlockContainer implements ISneakUseWrench
 {
-	public BlockMachine(int id, Material material)
+
+	public BlockMachine(int par1, Material par3Material)
 	{
-		super(id, material);
-		this.setHardness(0.5f);
+		super(par1, par3Material);
 	}
 
-	public BlockMachine(String name, int id, Material material)
+	public BlockMachine(int par1, int par2, Material par3Material)
 	{
-		this(id, material);
-		this.setBlockName(name);
-	}
-
-	public BlockMachine(String name, int id, Material material, CreativeTabs creativeTab)
-	{
-		this(name, id, material);
-		this.setCreativeTab(creativeTab);
-	}
-
-	@Override
-	public int damageDropped(int metadata)
-	{
-		return metadata;
-	}
-
-	/**
-	 * Returns the quantity of items to drop on block destruction.
-	 */
-	@Override
-	public int quantityDropped(Random par1Random)
-	{
-		return 1;
-	}
-
-	/**
-	 * Returns the ID of the items to drop on destruction.
-	 */
-	@Override
-	public int idDropped(int par1, Random par2Random, int par3)
-	{
-		return this.blockID;
+		super(par1, par2, par3Material);
 	}
 
 	/**
@@ -94,7 +62,10 @@ public abstract class BlockMachine extends BlockContainer implements ISneakUseWr
 			}
 			else if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IItemElectric)
 			{
-				if (this.onUseElectricItem(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ)) { return true; }
+				if (this.onUseElectricItem(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ))
+				{
+					return true;
+				}
 			}
 		}
 
@@ -118,7 +89,12 @@ public abstract class BlockMachine extends BlockContainer implements ISneakUseWr
 		return false;
 	}
 
-	@Deprecated
+	/**
+	 * Called when the machine is being wrenched by a player while sneaking. Only works with the UE
+	 * wrench.
+	 * 
+	 * @return True if something happens
+	 */
 	public boolean onSneakMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		return false;

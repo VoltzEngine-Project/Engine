@@ -1,6 +1,5 @@
 package basiccomponents.common.container;
 
-import basiccomponents.common.tileentity.TileEntityElectricFurnace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.prefab.SlotElectricItem;
+import basiccomponents.common.tileentity.TileEntityElectricFurnace;
 
 public class ContainerElectricFurnace extends Container
 {
@@ -73,7 +73,10 @@ public class ContainerElectricFurnace extends Container
 
 			if (par1 == 2)
 			{
-				if (!this.mergeItemStack(var4, 3, 39, true)) { return null; }
+				if (!this.mergeItemStack(var4, 3, 39, true))
+				{
+					return null;
+				}
 
 				var3.onSlotChange(var4, var2);
 			}
@@ -81,19 +84,34 @@ public class ContainerElectricFurnace extends Container
 			{
 				if (var4.getItem() instanceof IItemElectric)
 				{
-					if (!this.mergeItemStack(var4, 0, 1, false)) { return null; }
+					if (!this.mergeItemStack(var4, 0, 1, false))
+					{
+						return null;
+					}
 				}
 				else if (FurnaceRecipes.smelting().getSmeltingResult(var4) != null)
 				{
-					if (!this.mergeItemStack(var4, 1, 2, false)) { return null; }
+					if (!this.mergeItemStack(var4, 1, 2, false))
+					{
+						return null;
+					}
 				}
 				else if (par1 >= 3 && par1 < 30)
 				{
-					if (!this.mergeItemStack(var4, 30, 39, false)) { return null; }
+					if (!this.mergeItemStack(var4, 30, 39, false))
+					{
+						return null;
+					}
 				}
-				else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 3, 30, false)) { return null; }
+				else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 3, 30, false))
+				{
+					return null;
+				}
 			}
-			else if (!this.mergeItemStack(var4, 3, 39, false)) { return null; }
+			else if (!this.mergeItemStack(var4, 3, 39, false))
+			{
+				return null;
+			}
 
 			if (var4.stackSize == 0)
 			{
@@ -104,7 +122,10 @@ public class ContainerElectricFurnace extends Container
 				var3.onSlotChanged();
 			}
 
-			if (var4.stackSize == var2.stackSize) { return null; }
+			if (var4.stackSize == var2.stackSize)
+			{
+				return null;
+			}
 
 			var3.onPickupFromSlot(par1EntityPlayer, var4);
 		}

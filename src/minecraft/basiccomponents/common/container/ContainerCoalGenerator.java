@@ -1,12 +1,12 @@
 package basiccomponents.common.container;
 
-import basiccomponents.common.tileentity.TileEntityCoalGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import basiccomponents.common.tileentity.TileEntityCoalGenerator;
 
 public class ContainerCoalGenerator extends Container
 {
@@ -64,11 +64,20 @@ public class ContainerCoalGenerator extends Container
 			{
 				if (var4.itemID == Item.coal.itemID)
 				{
-					if (!this.mergeItemStack(var4, 0, 1, false)) { return null; }
+					if (!this.mergeItemStack(var4, 0, 1, false))
+					{
+						return null;
+					}
 				}
-				else if (par1 >= 30 && par1 < 37 && !this.mergeItemStack(var4, 3, 30, false)) { return null; }
+				else if (par1 >= 30 && par1 < 37 && !this.mergeItemStack(var4, 3, 30, false))
+				{
+					return null;
+				}
 			}
-			else if (!this.mergeItemStack(var4, 3, 37, false)) { return null; }
+			else if (!this.mergeItemStack(var4, 3, 37, false))
+			{
+				return null;
+			}
 
 			if (var4.stackSize == 0)
 			{
@@ -79,7 +88,10 @@ public class ContainerCoalGenerator extends Container
 				var3.onSlotChanged();
 			}
 
-			if (var4.stackSize == var2.stackSize) { return null; }
+			if (var4.stackSize == var2.stackSize)
+			{
+				return null;
+			}
 
 			var3.onPickupFromSlot(par1EntityPlayer, var4);
 		}

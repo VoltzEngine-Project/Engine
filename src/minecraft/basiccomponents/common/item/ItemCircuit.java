@@ -2,12 +2,11 @@ package basiccomponents.common.item;
 
 import java.util.List;
 
-import basiccomponents.common.BasicComponents;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import universalelectricity.prefab.UETab;
+import basiccomponents.common.BasicComponents;
 
 public class ItemCircuit extends Item
 {

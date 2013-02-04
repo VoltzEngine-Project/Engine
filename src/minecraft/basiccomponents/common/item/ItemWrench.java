@@ -1,6 +1,5 @@
 package basiccomponents.common.item;
 
-import basiccomponents.common.BasicComponents;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -10,6 +9,7 @@ import railcraft.common.api.core.items.ICrowbar;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.ISneakUseWrench;
 import universalelectricity.prefab.implement.IToolConfigurator;
+import basiccomponents.common.BasicComponents;
 
 public class ItemWrench extends Item implements ICrowbar, IToolConfigurator
 {

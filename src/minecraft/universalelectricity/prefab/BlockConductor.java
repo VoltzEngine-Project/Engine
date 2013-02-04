@@ -36,7 +36,10 @@ public abstract class BlockConductor extends BlockMicroblock
 		{
 			return AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(x + 0.5f - wireWidth, y + 1 - wireWidth, z + 0.5f - wireWidth, x + 0.5f + wireWidth, y + 1, z + 0.5f + wireWidth);
 		}
-		else if (direction == ForgeDirection.DOWN) { return AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(x + 0.5f - wireWidth, y, z + 0.5f - wireWidth, x + 0.5f + wireWidth, y + wireWidth, z + 0.5f + wireWidth); }
+		else if (direction == ForgeDirection.DOWN)
+		{
+			return AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(x + 0.5f - wireWidth, y, z + 0.5f - wireWidth, x + 0.5f + wireWidth, y + wireWidth, z + 0.5f + wireWidth);
+		}
 
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
