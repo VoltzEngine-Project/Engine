@@ -1,4 +1,4 @@
-package universalelectricity.prefab;
+package universalelectricity.prefab.conductor;
 
 import java.util.List;
 

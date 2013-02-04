@@ -1,4 +1,4 @@
-package universalelectricity.prefab.tile;
+package universalelectricity.prefab.conductor;
 
 import java.util.EnumSet;
 
@@ -18,6 +18,7 @@ import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
 
 import com.google.common.io.ByteArrayDataInput;
 

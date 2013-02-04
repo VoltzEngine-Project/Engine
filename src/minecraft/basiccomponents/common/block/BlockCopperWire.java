@@ -3,8 +3,8 @@ package basiccomponents.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.UETab;
+import universalelectricity.prefab.conductor.BlockConductor;
 import basiccomponents.common.BasicComponents;
 import basiccomponents.common.tileentity.TileEntityCopperWire;
 
