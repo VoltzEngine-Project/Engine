@@ -38,4 +38,10 @@ public class ItemBattery extends ItemElectric
 	{
 		return 25;
 	}
+
+	@Override
+	public double getTransferRate()
+	{
+		return 25;
+	}
 }

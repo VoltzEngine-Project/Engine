@@ -141,12 +141,18 @@ public abstract class BlockMachine extends BlockContainer implements ISneakUseWr
 		return null;
 	}
 
-	/**
-	 * Override this if you don't need it. This will eject all items out of this machine if it has
-	 * an inventory
-	 */
 	@Override
 	public void breakBlock(World par1World, int x, int y, int z, int par5, int par6)
+	{
+		this.dropEntireInventory(par1World, x, y, z, par5, par6);
+		super.breakBlock(par1World, x, y, z, par5, par6);
+	}
+
+	/**
+	 * Override this if you don't need it. This will eject all items out of this machine if it has
+	 * an inventory.
+	 */
+	public void dropEntireInventory(World par1World, int x, int y, int z, int par5, int par6)
 	{
 		TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
 
@@ -194,7 +200,5 @@ public abstract class BlockMachine extends BlockContainer implements ISneakUseWr
 				}
 			}
 		}
-
-		super.breakBlock(par1World, x, y, z, par5, par6);
 	}
 }

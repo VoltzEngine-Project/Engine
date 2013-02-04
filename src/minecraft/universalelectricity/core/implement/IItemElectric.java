@@ -29,6 +29,12 @@ public interface IItemElectric
 	 * @return - True or False.
 	 */
 	public boolean canProduceElectricity();
+	
+	/**
+	 * 
+	 * @return The rate in which this electric item transfers its electricity in joules.
+	 */
+	public double getTransferRate();
 
 	/**
 	 * Returns the amount of joules this unit has stored.
