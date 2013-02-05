@@ -86,7 +86,7 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectricit
 			}
 		}
 
-		this.wattsReceived = Math.min(this.wattsReceived + electricityPack.getWatts(), this.getWattBuffer());
+		this.wattsReceived = Math.max(Math.min(this.wattsReceived + electricityPack.getWatts(), this.getWattBuffer()), 0);
 	}
 
 	/**

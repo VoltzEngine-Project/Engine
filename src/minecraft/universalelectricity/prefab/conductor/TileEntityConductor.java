@@ -16,9 +16,9 @@ import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.microblock.TileEntityMicroblock;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.tile.TileEntityAdvanced;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -28,7 +28,7 @@ import com.google.common.io.ByteArrayDataInput;
  * @author Calclavia
  * 
  */
-public abstract class TileEntityConductor extends TileEntityAdvanced implements IConductor, IPacketReceiver
+public abstract class TileEntityConductor extends TileEntityMicroblock implements IConductor, IPacketReceiver
 {
 	private ElectricityNetwork network;
 
@@ -160,6 +160,17 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 		{
 			this.refreshConnectedBlocks();
 		}
+
+		for (int i = 0; i < 6; i++)
+		{
+			if (this.isOccupied[i])
+			{
+				Vector3 position = new Vector3(this);
+				position.add(0.5);
+				position.modifyPositionFromSide(ForgeDirection.getOrientation(i), 0.3);
+				this.worldObj.spawnParticle("smoke", position.x, position.y, position.z, 0, 0, 0);
+			}
+		}
 	}
 
 	@Override
@@ -184,7 +195,10 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 
 				for (byte i = 0; i < 6; i++)
 				{
-					this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+					Vector3 position = new Vector3(this);
+
+					ForgeDirection direction = ForgeDirection.getOrientation(i);
+					this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, position, direction), direction);
 				}
 
 				/**

@@ -131,7 +131,7 @@ public abstract class BlockConductor extends BlockMicroblock
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side)
 	{
 		Vector3 position = new Vector3(x, y, z);
-		position.modifyPositionFromSide(ForgeDirection.getOrientation(side));
-		return world.isBlockSolidOnSide(position.intX(), position.intY(), position.intZ(), ForgeDirection.getOrientation(side).getOpposite());
+		position.modifyPositionFromSide(ForgeDirection.getOrientation(side).getOpposite());
+		return world.isBlockNormalCube(position.intX(), position.intY(), position.intZ());
 	}
 }

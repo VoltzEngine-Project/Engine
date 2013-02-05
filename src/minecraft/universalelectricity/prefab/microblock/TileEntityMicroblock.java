@@ -2,10 +2,11 @@ package universalelectricity.prefab.microblock;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
 
-public class TileEntityMicroblock extends TileEntity implements IMicroblock
+public class TileEntityMicroblock extends TileEntityAdvanced implements IMicroblock
 {
+	public boolean[] isOccupied = new boolean[6];
 	private IMicroComponent[] microSides = new IMicroComponent[6];
 
 	@Override

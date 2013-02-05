@@ -99,7 +99,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 
 				if (outputNetwork != null && inputNetwork != outputNetwork)
 				{
-					double outputWatts = Math.min(outputNetwork.getRequest().getWatts(), Math.min(this.getJoules(), 10000));
+					double outputWatts = Math.min(outputNetwork.getRequest(this).getWatts(), Math.min(this.getJoules(), 10000));
 
 					if (this.getJoules() > 0 && outputWatts > 0)
 					{

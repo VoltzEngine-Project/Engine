@@ -119,7 +119,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 				this.processTicks = 0;
 			}
 
-			this.wattsReceived = Math.max(this.wattsReceived - WATTS_PER_TICK / 4, 0);
+			this.wattsReceived -= WATTS_PER_TICK;
 		}
 
 		if (!this.worldObj.isRemote)
