@@ -40,12 +40,13 @@ public class UniversalElectricity
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
 
 	/**
-	 * Conversion ratios between Buildcraft and Industrialcraft energy.
+	 * Conversion ratios between Buildcraft and Industrialcraft energy. 1 IC2 coal = 4000 EU, 1 BC
+	 * coal = 1600MJ, 1 UE coal = 160,000 Joules
 	 */
 	// The amount of UE Joules equivalent to IC2 EU
 	public static double IC2_RATIO = 40;
 	// The amount of UE Joules equivalent to BC Minecraft Joules
-	public static double BC3_RATIO = 400;
+	public static double BC3_RATIO = 100;
 	public static double TO_IC2_RATIO = 1 / IC2_RATIO;
 	public static double TO_BC_RATIO = 1 / BC3_RATIO;
 

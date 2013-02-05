@@ -2,6 +2,7 @@ package universalelectricity.prefab.conductor;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
@@ -10,6 +11,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.microblock.BlockMicroblock;
 
 public abstract class BlockConductor extends BlockMicroblock
@@ -123,5 +125,13 @@ public abstract class BlockConductor extends BlockMicroblock
 				world.markBlockForUpdate(x, y, z);
 			}
 		}
+	}
+
+	@Override
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side)
+	{
+		Vector3 position = new Vector3(x, y, z);
+		position.modifyPositionFromSide(ForgeDirection.getOrientation(side));
+		return world.isBlockSolidOnSide(position.intX(), position.intY(), position.intZ(), ForgeDirection.getOrientation(side).getOpposite());
 	}
 }
