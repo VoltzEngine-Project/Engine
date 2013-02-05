@@ -35,8 +35,6 @@ public class RenderCopperWire extends TileEntitySpecialRenderer
 			{
 				ForgeDirection direction = ForgeDirection.getOrientation(i);
 
-				GL11.glRotatef(0, 0, 0, 0);
-
 				if (tileEntity.visuallyConnected[0])
 				{
 					model.renderBottom();
