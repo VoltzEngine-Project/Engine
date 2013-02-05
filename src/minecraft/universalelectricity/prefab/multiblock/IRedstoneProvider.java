@@ -1,4 +1,4 @@
-package universalelectricity.prefab.implement;
+package universalelectricity.prefab.multiblock;
 
 import net.minecraftforge.common.ForgeDirection;
 

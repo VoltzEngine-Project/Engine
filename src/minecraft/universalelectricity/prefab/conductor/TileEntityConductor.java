@@ -148,6 +148,8 @@ public abstract class TileEntityConductor extends TileEntityMicroblock implement
 	@Override
 	public void initiate()
 	{
+		//TODO: REMOVE THIS
+		this.isOccupied[0] = true;
 		this.refreshConnectedBlocks();
 	}
 
@@ -161,6 +163,7 @@ public abstract class TileEntityConductor extends TileEntityMicroblock implement
 			this.refreshConnectedBlocks();
 		}
 
+		//TODO: REMOVE THIS
 		for (int i = 0; i < 6; i++)
 		{
 			if (this.isOccupied[i])
@@ -193,12 +196,21 @@ public abstract class TileEntityConductor extends TileEntityMicroblock implement
 			{
 				boolean[] previousConnections = this.visuallyConnected.clone();
 
-				for (byte i = 0; i < 6; i++)
+				for (int side = 0; side < 6; side++)
 				{
-					Vector3 position = new Vector3(this);
+					if (this.isOccupied[side])
+					{
+						for (byte i = 0; i < 6; i++)
+						{
+							Vector3 position = new Vector3(this);
+							ForgeDirection direction = ForgeDirection.getOrientation(i);
+							this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), direction), direction);
 
-					ForgeDirection direction = ForgeDirection.getOrientation(i);
-					this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, position, direction), direction);
+							//position.modifyPositionFromSide(direction);
+							//this.updateConnection(Vector3.getConnectorFromSide(this.worldObj, position, direction), direction);
+
+						}
+					}
 				}
 
 				/**

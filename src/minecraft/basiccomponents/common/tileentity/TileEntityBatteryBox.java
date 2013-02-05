@@ -64,7 +64,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 
 					if (electricItem.canProduceElectricity())
 					{
-						double ampsToGive = Math.min(ElectricInfo.getAmps(Math.min(electricItem.getMaxJoules(this.containingItems[0]) * 0.005, this.getJoules()), this.getVoltage()), this.getJoules());
+						double ampsToGive = electricItem.getTransferRate() / electricItem.getVoltage(this.containingItems[0]);
 						double joules = electricItem.onReceive(ampsToGive, this.getVoltage(), this.containingItems[0]);
 						this.setJoules(this.getJoules() - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
 					}
@@ -82,7 +82,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 
 					if (electricItem.canProduceElectricity())
 					{
-						double joulesReceived = electricItem.onUse(electricItem.getMaxJoules(this.containingItems[1]) * 0.005, this.containingItems[1]);
+						double joulesReceived = electricItem.onUse(electricItem.getTransferRate(), this.containingItems[1]);
 						this.setJoules(this.getJoules() + joulesReceived);
 					}
 				}

@@ -1,4 +1,4 @@
-package universalelectricity.prefab.implement;
+package universalelectricity.prefab.multiblock;
 
 /**
  * This interface should be applied onto all tile entities that needs to receive redstone power.

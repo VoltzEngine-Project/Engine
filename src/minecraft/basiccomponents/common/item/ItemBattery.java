@@ -42,6 +42,6 @@ public class ItemBattery extends ItemElectric
 	@Override
 	public double getTransferRate()
 	{
-		return 25;
+		return 1000;
 	}
 }

@@ -49,7 +49,6 @@ public abstract class BlockConductor extends BlockMicroblock
 	@Override
 	public void addCollidingBlockToList(World world, int x, int y, int z, AxisAlignedBB axisAlignedBB, List par6List, Entity entity)
 	{
-
 		ForgeDirection direction = ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z));
 		AxisAlignedBB aabb = null;
 
