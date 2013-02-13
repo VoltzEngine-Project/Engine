@@ -87,7 +87,7 @@ public abstract class ItemBlockConductor extends ItemBlock
 			{
 				itemStack.stackSize--;
 			}
-			
+
 			return true;
 		}
 

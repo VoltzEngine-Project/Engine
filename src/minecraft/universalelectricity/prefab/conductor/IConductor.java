@@ -1,6 +1,5 @@
 package universalelectricity.prefab.conductor;
 
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.implement.INetworkProvider;

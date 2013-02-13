@@ -120,7 +120,7 @@ public class ElectricityNetwork
 					it.remove();
 					continue;
 				}
-				
+
 				if (ignoreTiles != null)
 				{
 					for (TileEntity ignoreTile : ignoreTiles)
@@ -131,7 +131,7 @@ public class ElectricityNetwork
 						}
 					}
 				}
-				
+
 				ElectricityPack pack = (ElectricityPack) pairs.getValue();
 
 				if (pairs.getKey() != null && pairs.getValue() != null && pack != null)
