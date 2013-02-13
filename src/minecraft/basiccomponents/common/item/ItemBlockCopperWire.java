@@ -1,5 +1,6 @@
 package basiccomponents.common.item;
 
+import basiccomponents.common.BasicComponents;
 import universalelectricity.prefab.conductor.ItemBlockConductor;
 
 public class ItemBlockCopperWire extends ItemBlockConductor

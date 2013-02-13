@@ -1,49 +1,33 @@
 package universalelectricity.core.implement;
 
 import net.minecraft.item.ItemStack;
+import universalelectricity.core.electricity.ElectricityPack;
 
 public interface IItemElectric
 {
 	/**
 	 * Called when this item receives electricity.
+	 * 
+	 * @inputRequest The amount of electricity being input.
+	 * @return The amount of electricity being rejected.
 	 */
-	public double onReceive(double amps, double voltage, ItemStack itemStack);
+	public ElectricityPack onReceive(ElectricityPack inputRequest, ItemStack itemStack);
 
 	/**
 	 * Called when something requests electricity from this item.
 	 * 
-	 * @return - The amount of given joules
+	 * @return - The amount of electricity given out.
 	 */
-	public double onUse(double joulesNeeded, ItemStack itemStack);
+	public ElectricityPack onRequest(ElectricityPack outputRequest, ItemStack itemStack);
 
 	/**
-	 * @return Returns true or false if this consumer can receive electricity at this given tick or
-	 * moment.
-	 */
-	public boolean canReceiveElectricity();
-
-	/**
-	 * Can this item give out electricity when placed in an tile entity? Electric items like
-	 * batteries should be able to produce electricity (if they are rechargeable).
-	 * 
-	 * @return - True or False.
-	 */
-	public boolean canProduceElectricity();
-
-	/**
-	 * 
-	 * @return The rate in which this electric item transfers its electricity in joules. The rate is
-	 * in ticks.
-	 */
-	public double getTransferRate();
-
-	/**
-	 * Returns the amount of joules this unit has stored.
+	 * Returns the amount of joules this electric item stored.
 	 */
 	public double getJoules(ItemStack itemStack);
 
 	/**
-	 * Sets the amount of joules this unit has stored.
+	 * Sets the amount of joules this electric item stored. Mods should called onReceive and onUse
+	 * instead of this in most cases.
 	 */
 	public void setJoules(double joules, ItemStack itemStack);
 
@@ -59,4 +43,11 @@ public interface IItemElectric
 	 * @return The amount of volts. E.g 120v or 240v
 	 */
 	public double getVoltage(ItemStack itemStack);
+
+	/**
+	 * Gets the transfer rate of this electric item. Used for recharging the item in battery
+	 * components.
+	 * 
+	 */
+	public ElectricityPack getTransferRate(ItemStack itemStack);
 }

@@ -61,40 +61,40 @@ public class ContainerBatteryBox extends Container
 
 		if (var3 != null && var3.getHasStack())
 		{
-			ItemStack var4 = var3.getStack();
-			var2 = var4.copy();
+			ItemStack itemStack = var3.getStack();
+			var2 = itemStack.copy();
 
 			if (par1 != 0 && par1 != 1)
 			{
-				if (this.getSlot(0).isItemValid(var4))
+				if (this.getSlot(0).isItemValid(itemStack))
 				{
-					if (((IItemElectric) var4.getItem()).canProduceElectricity())
+					if (((IItemElectric) itemStack.getItem()).getJoules(itemStack) < ((IItemElectric) itemStack.getItem()).getMaxJoules(itemStack))
 					{
-						if (!this.mergeItemStack(var4, 1, 2, false))
+						if (!this.mergeItemStack(itemStack, 1, 2, false))
 						{
 							return null;
 						}
 					}
 					else
 					{
-						if (!this.mergeItemStack(var4, 0, 1, false))
+						if (!this.mergeItemStack(itemStack, 0, 1, false))
 						{
 							return null;
 						}
 					}
 				}
 
-				else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
+				else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(itemStack, 3, 30, false))
 				{
 					return null;
 				}
 			}
-			else if (!this.mergeItemStack(var4, 3, 38, false))
+			else if (!this.mergeItemStack(itemStack, 3, 38, false))
 			{
 				return null;
 			}
 
-			if (var4.stackSize == 0)
+			if (itemStack.stackSize == 0)
 			{
 				var3.putStack((ItemStack) null);
 			}
@@ -103,12 +103,12 @@ public class ContainerBatteryBox extends Container
 				var3.onSlotChanged();
 			}
 
-			if (var4.stackSize == var2.stackSize)
+			if (itemStack.stackSize == var2.stackSize)
 			{
 				return null;
 			}
 
-			var3.onPickupFromSlot(par1EntityPlayer, var4);
+			var3.onPickupFromSlot(par1EntityPlayer, itemStack);
 		}
 
 		return var2;

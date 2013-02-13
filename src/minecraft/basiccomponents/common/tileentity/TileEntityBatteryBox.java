@@ -15,6 +15,7 @@ import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
@@ -62,12 +63,10 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 				{
 					IItemElectric electricItem = (IItemElectric) this.containingItems[0].getItem();
 
-					if (electricItem.canProduceElectricity())
-					{
-						double ampsToGive = electricItem.getTransferRate() / electricItem.getVoltage(this.containingItems[0]);
-						double joules = electricItem.onReceive(ampsToGive, this.getVoltage(), this.containingItems[0]);
-						this.setJoules(this.getJoules() - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
-					}
+					double joulesToGive = Math.min(electricItem.getTransferRate(this.containingItems[0]).getWatts(), this.getJoules());
+					ElectricityPack sendPack = new ElectricityPack(joulesToGive / electricItem.getVoltage(this.containingItems[0]), electricItem.getVoltage(this.containingItems[0]));
+					ElectricityPack rejectPack = electricItem.onReceive(sendPack, this.containingItems[0]);
+					this.setJoules(this.getJoules() - (sendPack.getWatts() - rejectPack.getWatts()));
 				}
 			}
 
@@ -79,12 +78,9 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 				if (this.containingItems[1].getItem() instanceof IItemElectric)
 				{
 					IItemElectric electricItem = (IItemElectric) this.containingItems[1].getItem();
-
-					if (electricItem.canReceiveElectricity())
-					{
-						double joulesReceived = electricItem.onUse(electricItem.getTransferRate(), this.containingItems[1]);
-						this.setJoules(this.getJoules() + joulesReceived);
-					}
+					double wattRequest = Math.min(electricItem.getTransferRate(this.containingItems[1]).getWatts(), this.getRequest().getWatts());
+					ElectricityPack receivedPack = electricItem.onRequest(new ElectricityPack(wattRequest / electricItem.getVoltage(this.containingItems[0]), electricItem.getVoltage(this.containingItems[0])), this.containingItems[1]);
+					this.setJoules(this.getJoules() + receivedPack.getWatts());
 				}
 			}
 
