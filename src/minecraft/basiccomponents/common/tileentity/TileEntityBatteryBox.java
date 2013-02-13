@@ -80,7 +80,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 				{
 					IItemElectric electricItem = (IItemElectric) this.containingItems[1].getItem();
 
-					if (electricItem.canProduceElectricity())
+					if (electricItem.canReceiveElectricity())
 					{
 						double joulesReceived = electricItem.onUse(electricItem.getTransferRate(), this.containingItems[1]);
 						this.setJoules(this.getJoules() + joulesReceived);
