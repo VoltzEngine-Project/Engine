@@ -16,70 +16,66 @@ import universalelectricity.prefab.implement.ISneakUseWrench;
 import universalelectricity.prefab.implement.IToolConfigurator;
 
 /**
- * A block you may extend from to create your machine blocks! You do not have to
- * extend from this block if you do not want to. It's optional but it comes with
- * some useful functions that will make coding easier for you.
+ * A block you may extend from to create your machine blocks! You do not have to extend from this
+ * block if you do not want to. It's optional but it comes with some useful functions that will make
+ * coding easier for you.
  */
-public abstract class BlockMachine extends BlockContainer implements
-		ISneakUseWrench {
+public abstract class BlockMachine extends BlockContainer implements ISneakUseWrench
+{
 
-	public BlockMachine(int par1, Material par3Material) {
+	public BlockMachine(int par1, Material par3Material)
+	{
 		super(par1, par3Material);
 	}
 
-	public BlockMachine(int par1, int par2, Material par3Material) {
+	public BlockMachine(int par1, int par2, Material par3Material)
+	{
 		super(par1, par2, par3Material);
 	}
 
 	/**
-	 * DO NOT OVERRIDE THIS FUNCTION! Called when the block is right clicked by
-	 * the player. This modified version detects electric items and wrench
-	 * actions on your machine block. Do not override this function. Use
-	 * onMachineActivated instead! (It does the same thing)
+	 * DO NOT OVERRIDE THIS FUNCTION! Called when the block is right clicked by the player. This
+	 * modified version detects electric items and wrench actions on your machine block. Do not
+	 * override this function. Use onMachineActivated instead! (It does the same thing)
 	 * 
-	 * @param world
-	 *            The World Object.
-	 * @param x
-	 *            , y, z The coordinate of the block.
-	 * @param side
-	 *            The side the player clicked on.
-	 * @param hitX
-	 *            , hitY, hitZ The position the player clicked on relative to
-	 *            the block.
+	 * @param world The World Object.
+	 * @param x , y, z The coordinate of the block.
+	 * @param side The side the player clicked on.
+	 * @param hitX , hitY, hitZ The position the player clicked on relative to the block.
 	 */
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z,
-			EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-			float hitZ) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
 		int metadata = world.getBlockMetadata(x, y, z);
 
 		/**
-		 * Check if the player is holding a wrench or an electric item. If so,
-		 * do not open the GUI.
+		 * Check if the player is holding a wrench or an electric item. If so, do not open the GUI.
 		 */
-		if (par5EntityPlayer.inventory.getCurrentItem() != null) {
-			if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IToolConfigurator) {
+		if (par5EntityPlayer.inventory.getCurrentItem() != null)
+		{
+			if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IToolConfigurator)
+			{
 				world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
-				((IToolConfigurator) par5EntityPlayer.inventory
-						.getCurrentItem().getItem()).wrenchUsed(
-						par5EntityPlayer, x, y, z);
+				((IToolConfigurator) par5EntityPlayer.inventory.getCurrentItem().getItem()).wrenchUsed(par5EntityPlayer, x, y, z);
 
-				return this.onUseWrench(world, x, y, z, par5EntityPlayer, side,
-						hitX, hitY, hitZ);
-			} else if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IItemElectric) {
-				if (this.onUseElectricItem(world, x, y, z, par5EntityPlayer,
-						side, hitX, hitY, hitZ)) {
+				return this.onUseWrench(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
+			}
+			else if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IItemElectric)
+			{
+				if (this.onUseElectricItem(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ))
+				{
 					return true;
 				}
 			}
 		}
 
-		if (par5EntityPlayer.isSneaking()) {
-			return this.onSneakMachineActivated(world, x, y, z,
-					par5EntityPlayer, side, hitX, hitY, hitZ);
-		} else {
-			return this.onMachineActivated(world, x, y, z, par5EntityPlayer,
-					side, hitX, hitY, hitZ);
+		if (par5EntityPlayer.isSneaking())
+		{
+			return this.onSneakMachineActivated(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
+		}
+		else
+		{
+			return this.onMachineActivated(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
 		}
 	}
 
@@ -88,21 +84,19 @@ public abstract class BlockMachine extends BlockContainer implements
 	 * 
 	 * @return True if something happens
 	 */
-	public boolean onMachineActivated(World par1World, int x, int y, int z,
-			EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-			float hitZ) {
+	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
 		return false;
 	}
 
 	/**
-	 * Called when the machine is being wrenched by a player while sneaking.
-	 * Only works with the UE wrench.
+	 * Called when the machine is being wrenched by a player while sneaking. Only works with the UE
+	 * wrench.
 	 * 
 	 * @return True if something happens
 	 */
-	public boolean onSneakMachineActivated(World par1World, int x, int y,
-			int z, EntityPlayer par5EntityPlayer, int side, float hitX,
-			float hitY, float hitZ) {
+	public boolean onSneakMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
 		return false;
 	}
 
@@ -111,9 +105,8 @@ public abstract class BlockMachine extends BlockContainer implements
 	 * 
 	 * @return True if some happens
 	 */
-	public boolean onUseElectricItem(World par1World, int x, int y, int z,
-			EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-			float hitZ) {
+	public boolean onUseElectricItem(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
 		return false;
 	}
 
@@ -122,9 +115,8 @@ public abstract class BlockMachine extends BlockContainer implements
 	 * 
 	 * @return True if some happens
 	 */
-	public boolean onUseWrench(World par1World, int x, int y, int z,
-			EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-			float hitZ) {
+	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
 		return false;
 	}
 
@@ -134,73 +126,73 @@ public abstract class BlockMachine extends BlockContainer implements
 	 * @return True if some happens
 	 */
 	@Override
-	public boolean onSneakUseWrench(World par1World, int x, int y, int z,
-			EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-			float hitZ) {
-		return this.onUseWrench(par1World, x, y, z, par5EntityPlayer, side,
-				hitX, hitY, hitZ);
+	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
+		return this.onUseWrench(par1World, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
 	}
 
 	/**
-	 * Returns the TileEntity used by this block. You should use the metadata
-	 * sensitive version of this to get the maximum optimization!
+	 * Returns the TileEntity used by this block. You should use the metadata sensitive version of
+	 * this to get the maximum optimization!
 	 */
 	@Override
-	public TileEntity createNewTileEntity(World var1) {
+	public TileEntity createNewTileEntity(World var1)
+	{
 		return null;
 	}
 
 	@Override
-	public void breakBlock(World par1World, int x, int y, int z, int par5,
-			int par6) {
+	public void breakBlock(World par1World, int x, int y, int z, int par5, int par6)
+	{
 		this.dropEntireInventory(par1World, x, y, z, par5, par6);
 		super.breakBlock(par1World, x, y, z, par5, par6);
 	}
 
 	/**
-	 * Override this if you don't need it. This will eject all items out of this
-	 * machine if it has an inventory.
+	 * Override this if you don't need it. This will eject all items out of this machine if it has
+	 * an inventory.
 	 */
-	public void dropEntireInventory(World par1World, int x, int y, int z,
-			int par5, int par6) {
+	public void dropEntireInventory(World par1World, int x, int y, int z, int par5, int par6)
+	{
 		TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
 
-		if (tileEntity != null) {
-			if (tileEntity instanceof IInventory) {
+		if (tileEntity != null)
+		{
+			if (tileEntity instanceof IInventory)
+			{
 				IInventory inventory = (IInventory) tileEntity;
 
-				for (int var6 = 0; var6 < inventory.getSizeInventory(); ++var6) {
+				for (int var6 = 0; var6 < inventory.getSizeInventory(); ++var6)
+				{
 					ItemStack var7 = inventory.getStackInSlot(var6);
 
-					if (var7 != null) {
+					if (var7 != null)
+					{
 						Random random = new Random();
 						float var8 = random.nextFloat() * 0.8F + 0.1F;
 						float var9 = random.nextFloat() * 0.8F + 0.1F;
 						float var10 = random.nextFloat() * 0.8F + 0.1F;
 
-						while (var7.stackSize > 0) {
+						while (var7.stackSize > 0)
+						{
 							int var11 = random.nextInt(21) + 10;
 
-							if (var11 > var7.stackSize) {
+							if (var11 > var7.stackSize)
+							{
 								var11 = var7.stackSize;
 							}
 
 							var7.stackSize -= var11;
-							EntityItem var12 = new EntityItem(par1World,
-									(x + var8), (y + var9), (z + var10),
-									new ItemStack(var7.itemID, var11,
-											var7.getItemDamage()));
+							EntityItem var12 = new EntityItem(par1World, (x + var8), (y + var9), (z + var10), new ItemStack(var7.itemID, var11, var7.getItemDamage()));
 
-							if (var7.hasTagCompound()) {
-								var12.getEntityItem().setTagCompound(
-										(NBTTagCompound) var7.getTagCompound()
-												.copy());
+							if (var7.hasTagCompound())
+							{
+								var12.getEntityItem().setTagCompound((NBTTagCompound) var7.getTagCompound().copy());
 							}
 
 							float var13 = 0.05F;
 							var12.motionX = ((float) random.nextGaussian() * var13);
-							var12.motionY = ((float) random.nextGaussian()
-									* var13 + 0.2F);
+							var12.motionY = ((float) random.nextGaussian() * var13 + 0.2F);
 							var12.motionZ = ((float) random.nextGaussian() * var13);
 							par1World.spawnEntityInWorld(var12);
 						}
