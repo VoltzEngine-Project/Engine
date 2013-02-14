@@ -26,7 +26,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	{
 		super(id);
 		this.setMaxStackSize(1);
-		this.setMaxDamage((int) this.getMaxJoules(null));
+		this.setMaxDamage(100);
 		this.setNoRepair();
 	}
 
@@ -55,23 +55,6 @@ public abstract class ItemElectric extends Item implements IItemElectric
 		}
 
 		par3List.add(color + ElectricInfo.getDisplay(joules, ElectricUnit.JOULES) + " - " + Math.round((joules / this.getMaxJoules(par1ItemStack)) * 100) + "%");
-	}
-
-	/**
-	 * Make sure you super this method!
-	 */
-	@Override
-	public void onUpdate(ItemStack itemStack, World world, Entity entity, int par4, boolean par5)
-	{
-		if (!world.isRemote)
-		{
-			// Makes sure the damage is set correctly for this electric item!
-			ItemElectric item = ((ItemElectric) itemStack.getItem());
-			item.setJoules(item.getJoules(itemStack), itemStack);
-
-			// For items that can change electricity capacity
-			this.setMaxDamage((int) this.getMaxJoules(itemStack));
-		}
 	}
 
 	/**
@@ -110,7 +93,8 @@ public abstract class ItemElectric extends Item implements IItemElectric
 
 		joules = Math.max(Math.min(joules, this.getMaxJoules(itemStack)), 0);
 		itemStack.getTagCompound().setDouble("joules", joules);
-		itemStack.setItemDamage((int) (this.getMaxJoules(itemStack) - joules));
+
+		itemStack.setItemDamage((int) (100 - (this.getJoules(itemStack) / this.getMaxJoules(itemStack) * 100)));
 	}
 
 	@Override
@@ -123,49 +107,9 @@ public abstract class ItemElectric extends Item implements IItemElectric
 		}
 
 		double joules = Math.max(Math.min(itemStack.getTagCompound().getDouble("joules"), this.getMaxJoules(itemStack)), 0);
-		itemStack.setItemDamage((int) (getMaxJoules(itemStack) - joules));
+		itemStack.setItemDamage((int) (100 - (this.getJoules(itemStack) / this.getMaxJoules(itemStack) * 100)));
 
 		return joules;
-	}
-
-	/**
-	 * Returns an uncharged version of the electric item. Use this if you want the crafting recipe
-	 * to use a charged version of the electric item instead of an empty version of the electric
-	 * item
-	 * 
-	 * @return The ItemStack of a fully charged electric item
-	 */
-	public ItemStack getUncharged()
-	{
-		ItemStack chargedItem = new ItemStack(this);
-		chargedItem.setItemDamage((int) this.getMaxJoules(chargedItem));
-		return chargedItem;
-	}
-
-	public static ItemStack getUncharged(ItemStack itemStack)
-	{
-		if (itemStack.getItem() instanceof IItemElectric)
-		{
-			ItemStack chargedItem = itemStack.copy();
-			chargedItem.setItemDamage((int) ((IItemElectric) itemStack.getItem()).getMaxJoules(chargedItem));
-			return chargedItem;
-		}
-
-		return null;
-	}
-
-	@Override
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
-	{
-		// Add an uncharged version of the electric item
-		ItemStack unchargedItem = new ItemStack(this, 1);
-		unchargedItem.setItemDamage((int) this.getMaxJoules(unchargedItem));
-		par3List.add(unchargedItem);
-
-		// Add an electric item to the creative list that is fully charged
-		ItemStack chargedItem = new ItemStack(this, 1);
-		this.setJoules(((IItemElectric) chargedItem.getItem()).getMaxJoules(chargedItem), chargedItem);
-		par3List.add(chargedItem);
 	}
 
 	@Override
@@ -178,5 +122,51 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	public ElectricityPack getTransferRate(ItemStack itemStack)
 	{
 		return new ElectricityPack((this.getMaxJoules(itemStack) * 0.005) / this.getVoltage(itemStack), this.getVoltage(itemStack));
+	}
+
+	/**
+	 * Returns an uncharged version of the electric item. Use this if you want the crafting recipe
+	 * to use a charged version of the electric item instead of an empty version of the electric
+	 * item
+	 * 
+	 * @return The ItemStack of a fully charged electric item
+	 */
+	public ItemStack getUncharged()
+	{
+		return this.getWithCharge(0);
+	}
+
+	public ItemStack getWithCharge(double joules)
+	{
+		ItemStack chargedItem = new ItemStack(this);
+		((IItemElectric) chargedItem.getItem()).setJoules(joules, chargedItem);
+		return chargedItem;
+	}
+
+	public static ItemStack getWithCharge(ItemStack itemStack, double joules)
+	{
+		if (itemStack.getItem() instanceof IItemElectric)
+		{
+			ItemStack chargedItem = itemStack.copy();
+			((IItemElectric) chargedItem.getItem()).setJoules(joules, chargedItem);
+			return chargedItem;
+		}
+
+		return null;
+	}
+
+	public static ItemStack getUncharged(ItemStack itemStack)
+	{
+		return getWithCharge(itemStack, 0);
+	}
+
+	@Override
+	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
+	{
+		// Add an uncharged version of the electric item
+		par3List.add(this.getUncharged());
+		// Add an electric item to the creative list that is fully charged
+		ItemStack chargedItem = new ItemStack(this);
+		par3List.add(this.getWithCharge(this.getMaxJoules(chargedItem)));
 	}
 }

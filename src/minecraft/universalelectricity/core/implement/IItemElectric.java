@@ -32,8 +32,7 @@ public interface IItemElectric
 	public void setJoules(double joules, ItemStack itemStack);
 
 	/**
-	 * Gets the maximum amount of joules this unit can store. This may possibly have an argument of
-	 * null when the item is initiated so watch out!
+	 * Gets the maximum amount of joules this unit can store.
 	 */
 	public double getMaxJoules(ItemStack itemStack);
 
