@@ -3,8 +3,8 @@ package basiccomponents.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.UETab;
-import universalelectricity.prefab.conductor.BlockConductor;
 import basiccomponents.common.BasicComponents;
 import basiccomponents.common.tileentity.TileEntityCopperWire;
 
@@ -17,11 +17,10 @@ public class BlockCopperWire extends BlockConductor
 		this.setStepSound(soundClothFootstep);
 		this.setResistance(0.2F);
 		this.setHardness(0.1f);
-		this.setBlockBounds(0.30F, 0.0F, 0.30F, 0.70F, 0.20F, 0.70F);
+		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
 		this.blockIndexInTexture = 19;
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setBurnProperties(this.blockID, 30, 60);
-		this.setTextureFile(BasicComponents.ITEM_TEXTURE_FILE);
 	}
 
 	/**
@@ -45,9 +44,24 @@ public class BlockCopperWire extends BlockConductor
 		return false;
 	}
 
+	/**
+	 * The type of render function that is called for this block
+	 */
+	@Override
+	public int getRenderType()
+	{
+		return -1;
+	}
+
 	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
 		return new TileEntityCopperWire();
+	}
+
+	@Override
+	public String getTextureFile()
+	{
+		return BasicComponents.ITEM_TEXTURE_FILE;
 	}
 }

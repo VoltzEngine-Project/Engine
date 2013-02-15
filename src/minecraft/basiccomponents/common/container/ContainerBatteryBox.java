@@ -6,7 +6,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import universalelectricity.core.implement.IItemElectric;
-import universalelectricity.prefab.SlotElectricItem;
+import universalelectricity.prefab.SlotSpecific;
 import basiccomponents.common.tileentity.TileEntityBatteryBox;
 
 public class ContainerBatteryBox extends Container
@@ -17,9 +17,9 @@ public class ContainerBatteryBox extends Container
 	{
 		this.tileEntity = batteryBox;
 		// Top slot for battery output
-		this.addSlotToContainer(new SlotElectricItem(batteryBox, 0, 33, 24));
+		this.addSlotToContainer(new SlotSpecific(batteryBox, 0, 33, 24, IItemElectric.class));
 		// Bottom slot for batter input
-		this.addSlotToContainer(new SlotElectricItem(batteryBox, 1, 33, 48));
+		this.addSlotToContainer(new SlotSpecific(batteryBox, 1, 33, 48, IItemElectric.class));
 		int var3;
 
 		for (var3 = 0; var3 < 3; ++var3)
@@ -61,40 +61,40 @@ public class ContainerBatteryBox extends Container
 
 		if (var3 != null && var3.getHasStack())
 		{
-			ItemStack itemStack = var3.getStack();
-			var2 = itemStack.copy();
+			ItemStack var4 = var3.getStack();
+			var2 = var4.copy();
 
 			if (par1 != 0 && par1 != 1)
 			{
-				if (this.getSlot(0).isItemValid(itemStack))
+				if (this.getSlot(0).isItemValid(var4))
 				{
-					if (((IItemElectric) itemStack.getItem()).getJoules(itemStack) < ((IItemElectric) itemStack.getItem()).getMaxJoules(itemStack))
+					if (((IItemElectric) var4.getItem()).canProduceElectricity())
 					{
-						if (!this.mergeItemStack(itemStack, 1, 2, false))
+						if (!this.mergeItemStack(var4, 1, 2, false))
 						{
 							return null;
 						}
 					}
 					else
 					{
-						if (!this.mergeItemStack(itemStack, 0, 1, false))
+						if (!this.mergeItemStack(var4, 0, 1, false))
 						{
 							return null;
 						}
 					}
 				}
 
-				else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(itemStack, 3, 30, false))
+				else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
 				{
 					return null;
 				}
 			}
-			else if (!this.mergeItemStack(itemStack, 3, 38, false))
+			else if (!this.mergeItemStack(var4, 3, 38, false))
 			{
 				return null;
 			}
 
-			if (itemStack.stackSize == 0)
+			if (var4.stackSize == 0)
 			{
 				var3.putStack((ItemStack) null);
 			}
@@ -103,12 +103,12 @@ public class ContainerBatteryBox extends Container
 				var3.onSlotChanged();
 			}
 
-			if (itemStack.stackSize == var2.stackSize)
+			if (var4.stackSize == var2.stackSize)
 			{
 				return null;
 			}
 
-			var3.onPickupFromSlot(par1EntityPlayer, itemStack);
+			var3.onPickupFromSlot(par1EntityPlayer, var4);
 		}
 
 		return var2;

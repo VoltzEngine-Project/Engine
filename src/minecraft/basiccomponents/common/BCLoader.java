@@ -6,11 +6,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.RecipeHelper;
 import universalelectricity.prefab.TranslationHelper;
 import universalelectricity.prefab.UETab;
+import universalelectricity.prefab.UpdateNotifier;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.ore.OreGenReplaceStone;
@@ -49,7 +49,7 @@ public class BCLoader
 	public static final String BLOCK_TEXTURE_FILE = TEXTURE_PATH + "blocks.png";
 	public static final String ITEM_TEXTURE_FILE = TEXTURE_PATH + "items.png";
 
-	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL", "de_DE", "pl_PL" };
+	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL", "de_DE" };
 
 	@Instance("BasicComponents")
 	public static BCLoader instance;
@@ -99,8 +99,8 @@ public class BCLoader
 		GameRegistry.registerBlock(BasicComponents.blockMachine, ItemBlockBasicMachine.class, "Basic Machine");
 		GameRegistry.registerBlock(BasicComponents.blockCopperWire, ItemBlockCopperWire.class, "Copper Wire");
 
-		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 70, 29, 4).enable(UniversalElectricity.CONFIGURATION);
-		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 70, 27, 4).enable(UniversalElectricity.CONFIGURATION);
+		BasicComponents.copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 60, 27, 4).enable(UniversalElectricity.CONFIGURATION);
+		BasicComponents.tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 60, 25, 4).enable(UniversalElectricity.CONFIGURATION);
 
 		UniversalElectricity.CONFIGURATION.save();
 
@@ -136,8 +136,7 @@ public class BCLoader
 
 		UETab.setItemStack(BasicComponents.batteryBox);
 
-		// UpdateNotifier.INSTANCE.checkUpdate(NAME, UniversalElectricity.VERSION,
-		// "http://www.calclavia.com/downloads/ue/recommendedversion.txt");
+		UpdateNotifier.INSTANCE.checkUpdate(NAME, UniversalElectricity.VERSION, "http://www.calclavia.com/downloads/ue/recommendedversion.txt");
 
 		proxy.preInit();
 	}
@@ -187,11 +186,6 @@ public class BCLoader
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemTinPlate), new Object[] { "!!", "!!", '!', "ingotTin" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelPlate), new Object[] { "!!", "!!", '!', "ingotSteel" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBronzePlate), new Object[] { "!!", "!!", '!', "ingotBronze" }));
-
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BasicComponents.itemCopperIngot, 4), new Object[] { BasicComponents.itemCopperPlate }));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BasicComponents.itemTinIngot, 4), new Object[] { BasicComponents.itemTinPlate }));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BasicComponents.itemSteelIngot, 4), new Object[] { BasicComponents.itemSteelPlate }));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BasicComponents.itemBronzeIngot, 4), new Object[] { BasicComponents.itemBronzePlate }));
 
 		// Circuit
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemCircuit, 1, 0), new Object[] { "!#!", "#@#", "!#!", '@', BasicComponents.itemBronzePlate, '#', Item.redstone, '!', "copperWire" }));

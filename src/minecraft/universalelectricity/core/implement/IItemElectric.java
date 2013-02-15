@@ -1,52 +1,32 @@
 package universalelectricity.core.implement;
 
 import net.minecraft.item.ItemStack;
-import universalelectricity.core.electricity.ElectricityPack;
 
-public interface IItemElectric
+public interface IItemElectric extends IJouleStorage, IVoltage
 {
 	/**
 	 * Called when this item receives electricity.
-	 * 
-	 * @inputRequest The amount of electricity being input.
-	 * @return The amount of electricity being rejected.
 	 */
-	public ElectricityPack onReceive(ElectricityPack inputRequest, ItemStack itemStack);
+	public double onReceive(double amps, double voltage, ItemStack itemStack);
 
 	/**
 	 * Called when something requests electricity from this item.
 	 * 
-	 * @return - The amount of electricity given out.
+	 * @return - The amount of given joules
 	 */
-	public ElectricityPack onRequest(ElectricityPack outputRequest, ItemStack itemStack);
+	public double onUse(double joulesNeeded, ItemStack itemStack);
 
 	/**
-	 * Returns the amount of joules this electric item stored.
+	 * @return Returns true or false if this consumer can receive electricity at this given tick or
+	 * moment.
 	 */
-	public double getJoules(ItemStack itemStack);
+	public boolean canReceiveElectricity();
 
 	/**
-	 * Sets the amount of joules this electric item stored. Mods should called onReceive and onUse
-	 * instead of this in most cases.
-	 */
-	public void setJoules(double joules, ItemStack itemStack);
-
-	/**
-	 * Gets the maximum amount of joules this unit can store.
-	 */
-	public double getMaxJoules(ItemStack itemStack);
-
-	/**
-	 * Gets the voltage of this object.
+	 * Can this item give out electricity when placed in an tile entity? Electric items like
+	 * batteries should be able to produce electricity (if they are rechargeable).
 	 * 
-	 * @return The amount of volts. E.g 120v or 240v
+	 * @return - True or False.
 	 */
-	public double getVoltage(ItemStack itemStack);
-
-	/**
-	 * Gets the transfer rate of this electric item. Used for recharging the item in battery
-	 * components.
-	 * 
-	 */
-	public ElectricityPack getTransferRate(ItemStack itemStack);
+	public boolean canProduceElectricity();
 }

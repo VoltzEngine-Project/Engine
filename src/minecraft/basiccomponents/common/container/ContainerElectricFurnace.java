@@ -8,7 +8,7 @@ import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import universalelectricity.core.implement.IItemElectric;
-import universalelectricity.prefab.SlotElectricItem;
+import universalelectricity.prefab.SlotSpecific;
 import basiccomponents.common.tileentity.TileEntityElectricFurnace;
 
 public class ContainerElectricFurnace extends Container
@@ -20,7 +20,7 @@ public class ContainerElectricFurnace extends Container
 		this.tileEntity = tileEntity;
 
 		// Electric Input Slot
-		this.addSlotToContainer(new SlotElectricItem(tileEntity, 0, 55, 49));
+		this.addSlotToContainer(new SlotSpecific(tileEntity, 0, 55, 49, IItemElectric.class));
 
 		// To be smelted
 		this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25));

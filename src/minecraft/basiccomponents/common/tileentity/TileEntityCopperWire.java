@@ -1,7 +1,7 @@
 package basiccomponents.common.tileentity;
 
 import net.minecraft.block.Block;
-import universalelectricity.prefab.conductor.TileEntityConductor;
+import universalelectricity.prefab.tile.TileEntityConductor;
 import basiccomponents.common.BCLoader;
 
 public class TileEntityCopperWire extends TileEntityConductor

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -22,15 +23,22 @@ import universalelectricity.prefab.implement.IToolConfigurator;
  */
 public abstract class BlockMachine extends BlockContainer implements ISneakUseWrench
 {
-
-	public BlockMachine(int par1, Material par3Material)
+	public BlockMachine(int id, Material material)
 	{
-		super(par1, par3Material);
+		super(id, material);
 	}
 
-	public BlockMachine(int par1, int par2, Material par3Material)
+	public BlockMachine(int id, int textureIndex, Material material)
 	{
-		super(par1, par2, par3Material);
+		super(id, textureIndex, material);
+	}
+
+	@Deprecated
+	public BlockMachine(String string, int id, Material material, CreativeTabs creativeTab)
+	{
+		super(id, material);
+		this.setBlockName(string);
+		this.setCreativeTab(creativeTab);
 	}
 
 	/**
@@ -71,12 +79,13 @@ public abstract class BlockMachine extends BlockContainer implements ISneakUseWr
 
 		if (par5EntityPlayer.isSneaking())
 		{
-			return this.onSneakMachineActivated(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
+			if (this.onSneakMachineActivated(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ))
+			{
+				return true;
+			}
 		}
-		else
-		{
-			return this.onMachineActivated(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
-		}
+
+		return this.onMachineActivated(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
 	}
 
 	/**

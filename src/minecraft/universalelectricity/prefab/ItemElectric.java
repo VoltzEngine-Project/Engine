@@ -3,7 +3,6 @@ package universalelectricity.prefab;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,11 +10,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
-import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IItemElectric;
 
 /**
- * ItemElectric is a base class for electrical items.
+ * Extend from this class if your item requires electricity or to be charged. Optionally, you can
+ * implement IItemElectric instead.
  * 
  * @author Calclavia
  * 
@@ -58,7 +57,8 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	}
 
 	/**
-	 * Makes sure the item is uncharged when it is crafted and not charged.
+	 * Makes sure the item is uncharged when it is crafted and not charged. Change this if you do
+	 * not want this to happen!
 	 */
 	@Override
 	public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
@@ -67,61 +67,89 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	}
 
 	@Override
-	public ElectricityPack onReceive(ElectricityPack electricityPack, ItemStack itemStack)
+	public double onReceive(double amps, double voltage, ItemStack itemStack)
 	{
-		double totalJoules = this.getJoules(itemStack) + electricityPack.getWatts();
-		double rejectedJoules = Math.max(totalJoules - this.getMaxJoules(itemStack), 0);
-		this.setJoules(totalJoules - rejectedJoules, itemStack);
-		return new ElectricityPack(rejectedJoules / this.getJoules(itemStack), this.getJoules(itemStack));
+		double rejectedElectricity = Math.max((this.getJoules(itemStack) + ElectricInfo.getJoules(amps, voltage, 1)) - this.getMaxJoules(itemStack), 0);
+		this.setJoules(this.getJoules(itemStack) + ElectricInfo.getJoules(amps, voltage, 1) - rejectedElectricity, itemStack);
+		return rejectedElectricity;
 	}
 
 	@Override
-	public ElectricityPack onRequest(ElectricityPack electricityPack, ItemStack itemStack)
+	public double onUse(double joulesNeeded, ItemStack itemStack)
 	{
-		double joulesToGive = Math.min(this.getJoules(itemStack), electricityPack.getWatts());
-		this.setJoules(this.getJoules(itemStack) - joulesToGive, itemStack);
-		return new ElectricityPack(joulesToGive / this.getVoltage(itemStack), this.getVoltage(itemStack));
+		double electricityToUse = Math.min(this.getJoules(itemStack), joulesNeeded);
+		this.setJoules(this.getJoules(itemStack) - electricityToUse, itemStack);
+		return electricityToUse;
 	}
 
 	@Override
-	public void setJoules(double joules, ItemStack itemStack)
+	public boolean canReceiveElectricity()
 	{
-		if (itemStack.getTagCompound() == null)
+		return true;
+	}
+
+	@Override
+	public boolean canProduceElectricity()
+	{
+		return false;
+	}
+
+	/**
+	 * This function sets the electriicty. Do not directly call this function. Try to use
+	 * onReceiveElectricity or onUseElectricity instead.
+	 * 
+	 * @param wattHours - The amount of electricity in joules
+	 */
+	@Override
+	public void setJoules(double wattHours, Object... data)
+	{
+		if (data[0] instanceof ItemStack)
 		{
-			itemStack.setTagCompound(new NBTTagCompound());
+			ItemStack itemStack = (ItemStack) data[0];
+
+			// Saves the frequency in the ItemStack
+			if (itemStack.getTagCompound() == null)
+			{
+				itemStack.setTagCompound(new NBTTagCompound());
+			}
+
+			double electricityStored = Math.max(Math.min(wattHours, this.getMaxJoules(itemStack)), 0);
+			itemStack.getTagCompound().setDouble("electricity", electricityStored);
+
+			/**
+			 * Sets the damage as a percentage to render the bar properly.
+			 */
+			itemStack.setItemDamage((int) (100 - (electricityStored / getMaxJoules()) * 100));
+		}
+	}
+
+	/**
+	 * This function is called to get the electricity stored in this item
+	 * 
+	 * @return - The amount of electricity stored in watts
+	 */
+	@Override
+	public double getJoules(Object... data)
+	{
+		if (data[0] instanceof ItemStack)
+		{
+			ItemStack itemStack = (ItemStack) data[0];
+
+			if (itemStack.getTagCompound() == null)
+			{
+				return 0;
+			}
+
+			double electricityStored = itemStack.getTagCompound().getDouble("electricity");
+
+			/**
+			 * Sets the damage as a percentage to render the bar properly.
+			 */
+			itemStack.setItemDamage((int) (100 - (electricityStored / getMaxJoules()) * 100));
+			return electricityStored;
 		}
 
-		joules = Math.max(Math.min(joules, this.getMaxJoules(itemStack)), 0);
-		itemStack.getTagCompound().setDouble("joules", joules);
-
-		itemStack.setItemDamage((int) (100 - (this.getJoules(itemStack) / this.getMaxJoules(itemStack) * 100)));
-	}
-
-	@Override
-	public double getJoules(ItemStack itemStack)
-	{
-		if (itemStack.getTagCompound() == null)
-		{
-			itemStack.setTagCompound(new NBTTagCompound());
-			return 0;
-		}
-
-		double joules = Math.max(Math.min(itemStack.getTagCompound().getDouble("joules"), this.getMaxJoules(itemStack)), 0);
-		itemStack.setItemDamage((int) (100 - (this.getJoules(itemStack) / this.getMaxJoules(itemStack) * 100)));
-
-		return joules;
-	}
-
-	@Override
-	public double getVoltage(ItemStack itemStack)
-	{
-		return 30;
-	}
-
-	@Override
-	public ElectricityPack getTransferRate(ItemStack itemStack)
-	{
-		return new ElectricityPack((this.getMaxJoules(itemStack) * 0.005) / this.getVoltage(itemStack), this.getVoltage(itemStack));
+		return -1;
 	}
 
 	/**

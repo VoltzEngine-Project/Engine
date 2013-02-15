@@ -2,6 +2,7 @@ package universalelectricity.core.implement;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.electricity.ElectricityNetwork;
 
 /**
  * Must be applied to all tile entities that are conductors.
@@ -9,8 +10,15 @@ import net.minecraftforge.common.ForgeDirection;
  * @author Calclavia
  * 
  */
-public interface IConductor extends INetworkProvider
+public interface IConductor
 {
+	/**
+	 * The electrical network this conductor is on.
+	 */
+	public ElectricityNetwork getNetwork();
+
+	public void setNetwork(ElectricityNetwork network);
+
 	/**
 	 * The UE tile entities that this conductor is connected to.
 	 * 

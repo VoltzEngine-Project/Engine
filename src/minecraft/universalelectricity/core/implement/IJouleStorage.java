@@ -10,15 +10,15 @@ public interface IJouleStorage
 	/**
 	 * Returns the amount of joules this unit has stored.
 	 */
-	public double getJoules();
+	public double getJoules(Object... data);
 
 	/**
 	 * Sets the amount of joules this unit has stored.
 	 */
-	public void setJoules(double joules);
+	public void setJoules(double joules, Object... data);
 
 	/**
 	 * Gets the maximum amount of joules this unit can store.
 	 */
-	public double getMaxJoules();
+	public double getMaxJoules(Object... data);
 }

@@ -1,7 +1,5 @@
 package basiccomponents.common.item;
 
-import net.minecraft.item.ItemStack;
-import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
 import basiccomponents.common.BasicComponents;
@@ -14,12 +12,29 @@ public class ItemBattery extends ItemElectric
 		this.iconIndex = par2;
 		this.setItemName("battery");
 		this.setCreativeTab(UETab.INSTANCE);
-		this.setTextureFile(BasicComponents.ITEM_TEXTURE_FILE);
 	}
 
 	@Override
-	public double getMaxJoules(ItemStack itemStack)
+	public double getMaxJoules(Object... data)
 	{
 		return 1000000;
+	}
+
+	@Override
+	public boolean canProduceElectricity()
+	{
+		return true;
+	}
+
+	@Override
+	public String getTextureFile()
+	{
+		return BasicComponents.ITEM_TEXTURE_FILE;
+	}
+
+	@Override
+	public double getVoltage(Object... data)
+	{
+		return 25;
 	}
 }
