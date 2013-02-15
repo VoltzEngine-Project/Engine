@@ -31,15 +31,11 @@ public class BlockBasicMachine extends BlockMachine
 
 	public BlockBasicMachine(int id, int textureIndex)
 	{
-		super("bcMachine", id, UniversalElectricity.machine, UETab.INSTANCE);
-		this.blockIndexInTexture = textureIndex;
+		super(id, textureIndex, UniversalElectricity.machine);
+		this.setBlockName("bcMachine");
+		this.setCreativeTab(UETab.INSTANCE);
 		this.setStepSound(soundMetalFootstep);
-	}
-
-	@Override
-	public String getTextureFile()
-	{
-		return BasicComponents.BLOCK_TEXTURE_FILE;
+		this.setTextureFile(BasicComponents.BLOCK_TEXTURE_FILE);
 	}
 
 	@Override
@@ -344,6 +340,23 @@ public class BlockBasicMachine extends BlockMachine
 	}
 
 	@Override
+	public int damageDropped(int metadata)
+	{
+		if (metadata >= ELECTRIC_FURNACE_METADATA)
+		{
+			return ELECTRIC_FURNACE_METADATA;
+		}
+		else if (metadata >= BATTERY_BOX_METADATA)
+		{
+			return BATTERY_BOX_METADATA;
+		}
+		else
+		{
+			return COAL_GENERATOR_METADATA;
+		}
+	}
+
+	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
 		int id = idPicked(world, x, y, z);
@@ -354,25 +367,13 @@ public class BlockBasicMachine extends BlockMachine
 		}
 
 		Item item = Item.itemsList[id];
+
 		if (item == null)
 		{
 			return null;
 		}
 
 		int metadata = getDamageValue(world, x, y, z);
-
-		if (metadata >= ELECTRIC_FURNACE_METADATA)
-		{
-			metadata = ELECTRIC_FURNACE_METADATA;
-		}
-		else if (metadata >= BATTERY_BOX_METADATA)
-		{
-			metadata = BATTERY_BOX_METADATA;
-		}
-		else
-		{
-			metadata = COAL_GENERATOR_METADATA;
-		}
 
 		return new ItemStack(id, 1, metadata);
 	}

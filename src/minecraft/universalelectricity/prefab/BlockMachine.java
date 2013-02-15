@@ -26,18 +26,26 @@ public abstract class BlockMachine extends BlockContainer implements ISneakUseWr
 	public BlockMachine(int id, Material material)
 	{
 		super(id, material);
+		this.setHardness(0.6f);
 	}
 
 	public BlockMachine(int id, int textureIndex, Material material)
 	{
 		super(id, textureIndex, material);
+		this.setHardness(0.6f);
+	}
+
+	@Deprecated
+	public BlockMachine(String string, int id, Material material)
+	{
+		this(id, material);
+		this.setBlockName(string);
 	}
 
 	@Deprecated
 	public BlockMachine(String string, int id, Material material, CreativeTabs creativeTab)
 	{
-		super(id, material);
-		this.setBlockName(string);
+		this(string, id, material);
 		this.setCreativeTab(creativeTab);
 	}
 
@@ -99,8 +107,7 @@ public abstract class BlockMachine extends BlockContainer implements ISneakUseWr
 	}
 
 	/**
-	 * Called when the machine is being wrenched by a player while sneaking. Only works with the UE
-	 * wrench.
+	 * Called when the machine is being wrenched by a player while sneaking.
 	 * 
 	 * @return True if something happens
 	 */
@@ -130,7 +137,8 @@ public abstract class BlockMachine extends BlockContainer implements ISneakUseWr
 	}
 
 	/**
-	 * Called when a player uses a wrench on the machine while sneaking
+	 * Called when a player uses a wrench on the machine while sneaking. Only works with the UE
+	 * wrench.
 	 * 
 	 * @return True if some happens
 	 */

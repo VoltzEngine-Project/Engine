@@ -1,8 +1,6 @@
 package universalelectricity.prefab;
 
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import universalelectricity.core.implement.IItemElectric;
 
 /**

@@ -35,8 +35,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 {
 	private ItemStack[] containingItems = new ItemStack[2];
 
-	private boolean isFull = false;
-
 	private int playersUsing = 0;
 
 	@Override
@@ -324,13 +322,12 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 	@Override
 	public double getMaxJoules(Object... data)
 	{
-		return 4000000;
+		return 5000000;
 	}
 
 	/**
 	 * COMPUTERCRAFT FUNCTIONS
 	 */
-
 	@Override
 	public String getType()
 	{
@@ -353,7 +350,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 			case 1:
 				return new Object[] { this.getJoules() };
 			case 2:
-				return new Object[] { this.isFull };
+				return new Object[] { this.getJoules() >= this.getMaxJoules() };
 			default:
 				throw new Exception("Function unimplemented");
 		}
