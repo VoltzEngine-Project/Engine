@@ -25,14 +25,16 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 	private final List<IConductor> conductors = new ArrayList<IConductor>();
 
-	public ElectricityNetwork(IConductor... conductor)
+	public ElectricityNetwork(IConductor... conductors)
 	{
-		this.conductors.addAll(Arrays.asList(conductor));
+		this.conductors.addAll(Arrays.asList(conductors));
+
+		for (IConductor conductor : conductors)
+		{
+			ConductorRegistry.INSTANCE.register(conductor);
+		}
 	}
 
-	/**
-	 * Sets this tile entity to start producing energy in this network.
-	 */
 	@Override
 	public void startProducing(TileEntity tileEntity, ElectricityPack electricityPack)
 	{
@@ -302,7 +304,8 @@ public class ElectricityNetwork implements IElectricityNetwork
 		return receivers;
 	}
 
-	public void addConductor(IConductor newConductor)
+	@Override
+	public void registerConductor(IConductor newConductor)
 	{
 		this.cleanConductors();
 
@@ -311,19 +314,33 @@ public class ElectricityNetwork implements IElectricityNetwork
 			this.conductors.add(newConductor);
 			newConductor.setNetwork(this);
 		}
+
+		if (!ConductorRegistry.conductors.contains(newConductor))
+		{
+			ConductorRegistry.conductors.add(newConductor);
+		}
 	}
 
+	@Override
 	public void cleanConductors()
 	{
-		for (int i = 0; i < this.conductors.size(); i++)
+		Iterator it = this.conductors.iterator();
+
+		while (it.hasNext())
 		{
-			if (this.conductors.get(i) == null)
+			IConductor conductor = (IConductor) it.next();
+
+			if (conductor == null)
 			{
-				this.conductors.remove(i);
+				it.remove();
 			}
-			else if (((TileEntity) this.conductors.get(i)).isInvalid())
+			else if (((TileEntity) conductor).isInvalid())
 			{
-				this.conductors.remove(i);
+				it.remove();
+			}
+			else
+			{
+				conductor.setNetwork(this);
 			}
 		}
 	}
@@ -334,22 +351,36 @@ public class ElectricityNetwork implements IElectricityNetwork
 	@Override
 	public void refreshConductors(boolean doSplit)
 	{
-		Iterator it = this.conductors.iterator();
+		this.cleanConductors();
 
-		while (it.hasNext())
+		try
 		{
-			IConductor conductor = (IConductor) it.next();
-			conductor.refreshConnectedBlocks(doSplit);
+			Iterator<IConductor> it = this.conductors.iterator();
+
+			while (it.hasNext())
+			{
+				IConductor conductor = it.next();
+				conductor.refreshConnectedBlocks(doSplit);
+			}
+		}
+		catch (Exception e)
+		{
+			FMLLog.severe("Universal Electricity: Failed to refresh conductor.");
+			e.printStackTrace();
 		}
 	}
 
-	public void setNetwork()
+	@Override
+	public void resetConductors()
 	{
 		this.cleanConductors();
 
-		for (IConductor conductor : this.conductors)
+		Iterator<IConductor> it = this.conductors.iterator();
+
+		while (it.hasNext())
 		{
-			conductor.setNetwork(this);
+			IConductor conductor = it.next();
+			conductor.setNetwork(new ElectricityNetwork(conductor));
 		}
 	}
 
@@ -358,9 +389,9 @@ public class ElectricityNetwork implements IElectricityNetwork
 	{
 		double resistance = 0;
 
-		for (int i = 0; i < conductors.size(); i++)
+		for (IConductor conductor : this.conductors)
 		{
-			resistance += conductors.get(i).getResistance();
+			resistance += conductor.getResistance();
 		}
 
 		return resistance;
@@ -371,7 +402,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	{
 		double lowestAmp = 0;
 
-		for (IConductor conductor : conductors)
+		for (IConductor conductor : this.conductors)
 		{
 			if (lowestAmp == 0 || conductor.getCurrentCapcity() < lowestAmp)
 			{
@@ -394,7 +425,6 @@ public class ElectricityNetwork implements IElectricityNetwork
 		if (network != null && network != this)
 		{
 			this.conductors.addAll(network.getConductors());
-			this.setNetwork();
 			network = null;
 			this.cleanConductors();
 		}

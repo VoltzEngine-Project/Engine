@@ -152,16 +152,16 @@ public class BlockBasicMachine extends BlockAdvanced
 			switch (angle)
 			{
 				case 0:
-					par1World.setBlockMetadata(x, y, z, ELECTRIC_FURNACE_METADATA + 1);
+					par1World.setBlockMetadataWithNotify(x, y, z, ELECTRIC_FURNACE_METADATA + 1);
 					break;
 				case 1:
-					par1World.setBlockMetadata(x, y, z, ELECTRIC_FURNACE_METADATA + 2);
+					par1World.setBlockMetadataWithNotify(x, y, z, ELECTRIC_FURNACE_METADATA + 2);
 					break;
 				case 2:
-					par1World.setBlockMetadata(x, y, z, ELECTRIC_FURNACE_METADATA + 0);
+					par1World.setBlockMetadataWithNotify(x, y, z, ELECTRIC_FURNACE_METADATA + 0);
 					break;
 				case 3:
-					par1World.setBlockMetadata(x, y, z, ELECTRIC_FURNACE_METADATA + 3);
+					par1World.setBlockMetadataWithNotify(x, y, z, ELECTRIC_FURNACE_METADATA + 3);
 					break;
 			}
 		}
@@ -170,16 +170,16 @@ public class BlockBasicMachine extends BlockAdvanced
 			switch (angle)
 			{
 				case 0:
-					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 3);
+					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 3);
 					break;
 				case 1:
-					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 1);
+					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 1);
 					break;
 				case 2:
-					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 2);
+					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 2);
 					break;
 				case 3:
-					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 0);
+					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 0);
 					break;
 			}
 		}
@@ -188,21 +188,19 @@ public class BlockBasicMachine extends BlockAdvanced
 			switch (angle)
 			{
 				case 0:
-					par1World.setBlockMetadata(x, y, z, COAL_GENERATOR_METADATA + 1);
+					par1World.setBlockMetadataWithNotify(x, y, z, COAL_GENERATOR_METADATA + 1);
 					break;
 				case 1:
-					par1World.setBlockMetadata(x, y, z, COAL_GENERATOR_METADATA + 2);
+					par1World.setBlockMetadataWithNotify(x, y, z, COAL_GENERATOR_METADATA + 2);
 					break;
 				case 2:
-					par1World.setBlockMetadata(x, y, z, COAL_GENERATOR_METADATA + 0);
+					par1World.setBlockMetadataWithNotify(x, y, z, COAL_GENERATOR_METADATA + 0);
 					break;
 				case 3:
-					par1World.setBlockMetadata(x, y, z, COAL_GENERATOR_METADATA + 3);
+					par1World.setBlockMetadataWithNotify(x, y, z, COAL_GENERATOR_METADATA + 3);
 					break;
 			}
 		}
-
-		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
 
 	@Override
@@ -248,7 +246,7 @@ public class BlockBasicMachine extends BlockAdvanced
 			change += BATTERY_BOX_METADATA;
 		}
 
-		par1World.setBlockMetadata(x, y, z, change);
+		par1World.setBlockMetadataWithNotify(x, y, z, change);
 		return true;
 	}
 

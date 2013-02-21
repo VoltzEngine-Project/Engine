@@ -64,24 +64,31 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 		/**
 		 * Attempts to smelt an item.
 		 */
-		if (this.wattsReceived >= this.WATTS_PER_TICK)
+		if (!this.worldObj.isRemote)
 		{
 			if (this.canProcess())
 			{
-				if (this.processTicks == 0)
+				if (this.wattsReceived >= this.WATTS_PER_TICK)
 				{
-					this.processTicks = this.PROCESS_TIME_REQUIRED;
-				}
-				else if (this.processTicks > 0)
-				{
-					this.processTicks--;
-
-					/**
-					 * Process the item when the process timer is done.
-					 */
-					if (this.processTicks < 1)
+					if (this.processTicks == 0)
 					{
-						this.smeltItem();
+						this.processTicks = this.PROCESS_TIME_REQUIRED;
+					}
+					else if (this.processTicks > 0)
+					{
+						this.processTicks--;
+
+						/**
+						 * Process the item when the process timer is done.
+						 */
+						if (this.processTicks < 1)
+						{
+							this.smeltItem();
+							this.processTicks = 0;
+						}
+					}
+					else
+					{
 						this.processTicks = 0;
 					}
 				}
@@ -89,17 +96,14 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 				{
 					this.processTicks = 0;
 				}
+
+				this.wattsReceived = Math.max(this.wattsReceived - WATTS_PER_TICK / 4, 0);
 			}
 			else
 			{
 				this.processTicks = 0;
 			}
 
-			this.wattsReceived = Math.max(this.wattsReceived - WATTS_PER_TICK / 4, 0);
-		}
-
-		if (!this.worldObj.isRemote)
-		{
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);

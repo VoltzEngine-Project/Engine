@@ -12,6 +12,8 @@ import org.bouncycastle.util.Arrays;
 
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnector;
+import universalelectricity.core.block.INetworkProvider;
+import universalelectricity.core.electricity.ConductorRegistry;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
@@ -57,22 +59,25 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 					this.connectedBlocks[side.ordinal()] = tileEntity;
 					this.visuallyConnected[side.ordinal()] = true;
 
-					if (tileEntity.getClass() == this.getClass())
+					if (tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider)
 					{
-						this.getNetwork().mergeConnection(((IConductor) tileEntity).getNetwork());
+						this.getNetwork().mergeConnection(((INetworkProvider) tileEntity).getNetwork());
 					}
 
 					return;
 				}
 			}
 
+			/**
+			 * Try to split the wire connection, since no wire was found at that position.
+			 */
 			if (doSplit)
 			{
 				if (this.connectedBlocks[side.ordinal()] != null)
 				{
-					if (this.connectedBlocks[side.ordinal()] instanceof IConductor)
+					if (this.connectedBlocks[side.ordinal()] instanceof INetworkProvider)
 					{
-						this.getNetwork().refreshConductors(false);
+						ConductorRegistry.INSTANCE.resetAllConnections();
 					}
 
 					this.getNetwork().stopProducing(this.connectedBlocks[side.ordinal()]);
@@ -110,9 +115,12 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		super.updateEntity();
 
-		if (this.ticks % 300 == 0)
+		if (!this.worldObj.isRemote)
 		{
-			this.refreshConnectedBlocks(true);
+			if (this.ticks % 300 == 0)
+			{
+				this.refreshConnectedBlocks(true);
+			}
 		}
 	}
 
