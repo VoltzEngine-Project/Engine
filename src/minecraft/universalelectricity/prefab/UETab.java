@@ -5,6 +5,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
+@Deprecated
 public class UETab extends CreativeTabs
 {
 	public static final UETab INSTANCE = new UETab("UniversalElectricity");

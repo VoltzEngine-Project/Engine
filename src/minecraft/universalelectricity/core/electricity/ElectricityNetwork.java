@@ -1,7 +1,7 @@
 package universalelectricity.core.electricity;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +10,6 @@ import java.util.Map;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
-import universalelectricity.core.block.IConnector;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import cpw.mods.fml.common.FMLLog;
@@ -29,14 +28,9 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 	private final List<IConductor> conductors = new ArrayList<IConductor>();
 
-	public ElectricityNetwork()
+	public ElectricityNetwork(IConductor... conductor)
 	{
-
-	}
-
-	public ElectricityNetwork(IConductor conductor)
-	{
-		this.addConductor(conductor);
+		this.conductors.addAll(Arrays.asList(conductor));
 	}
 
 	/**
@@ -243,8 +237,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 			if (this.consumers.containsKey(tileEntity) && tileRequest != null)
 			{
-				// Calculate the electricity this tile entity is receiving in
-				// percentage.
+				// Calculate the electricity this TileEntity is receiving in percentage.
 				totalElectricity = this.getProduced();
 
 				if (totalElectricity.getWatts() > 0)
@@ -316,24 +309,24 @@ public class ElectricityNetwork implements IElectricityNetwork
 	{
 		this.cleanConductors();
 
-		if (!conductors.contains(newConductor))
+		if (!this.conductors.contains(newConductor))
 		{
-			conductors.add(newConductor);
+			this.conductors.add(newConductor);
 			newConductor.setNetwork(this);
 		}
 	}
 
 	public void cleanConductors()
 	{
-		for (int i = 0; i < conductors.size(); i++)
+		for (int i = 0; i < this.conductors.size(); i++)
 		{
-			if (conductors.get(i) == null)
+			if (this.conductors.get(i) == null)
 			{
-				conductors.remove(i);
+				this.conductors.remove(i);
 			}
-			else if (((TileEntity) conductors.get(i)).isInvalid())
+			else if (((TileEntity) this.conductors.get(i)).isInvalid())
 			{
-				conductors.remove(i);
+				this.conductors.remove(i);
 			}
 		}
 	}
@@ -419,178 +412,5 @@ public class ElectricityNetwork implements IElectricityNetwork
 			network = null;
 			this.cleanConductors();
 		}
-	}
-
-	/**
-	 * Tries to find the electricity network based in a tile entity and checks to see if it is a
-	 * conductor. All machines should use this function to search for a connecting conductor around
-	 * it.
-	 * 
-	 * @param conductor - The TileEntity conductor
-	 * @param approachDirection - The direction you are approaching this wire from.
-	 * @return The ElectricityNetwork or null if not found.
-	 */
-	public static IElectricityNetwork getNetworkFromTileEntity(TileEntity tileEntity, ForgeDirection approachDirection)
-	{
-		if (tileEntity != null)
-		{
-			if (tileEntity instanceof IConnector)
-			{
-				if (((IConnector) tileEntity).canConnect(approachDirection.getOpposite()))
-				{
-					return ((IConductor) tileEntity).getNetwork();
-				}
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * @param tileEntity - The TileEntity's sides.
-	 * @param approachingDirection - The directions that can be connected.
-	 * @return A list of networks from all specified sides. There will be no repeated
-	 * ElectricityNetworks and it will never return null.
-	 */
-	public static List<IElectricityNetwork> getNetworksFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection)
-	{
-		final List<IElectricityNetwork> connectedNetworks = new ArrayList<IElectricityNetwork>();
-
-		for (int i = 0; i < 6; i++)
-		{
-			ForgeDirection direction = ForgeDirection.getOrientation(i);
-
-			if (approachingDirection.contains(direction))
-			{
-				Vector3 position = new Vector3(tileEntity);
-				position.modifyPositionFromSide(direction);
-				TileEntity outputConductor = position.getTileEntity(tileEntity.worldObj);
-				IElectricityNetwork electricityNetwork = getNetworkFromTileEntity(outputConductor, direction);
-
-				if (electricityNetwork != null && !connectedNetworks.contains(connectedNetworks))
-				{
-					connectedNetworks.add(electricityNetwork);
-				}
-			}
-		}
-
-		return connectedNetworks;
-	}
-
-	/**
-	 * Requests and attempts to consume electricity from all specified sides. Use this as a simple
-	 * helper function.
-	 * 
-	 * @param tileEntity- The TileEntity consuming the electricity.
-	 * @param approachDirection - The sides in which you can connect.
-	 * @param requestPack - The amount of electricity to be requested.
-	 * @return The consumed ElectricityPack.
-	 */
-	public static ElectricityPack consumeFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection, ElectricityPack requestPack)
-	{
-		ElectricityPack consumedPack = new ElectricityPack();
-
-		if (tileEntity != null && approachingDirection != null)
-		{
-			final List<IElectricityNetwork> connectedNetworks = getNetworksFromMultipleSides(tileEntity, approachingDirection);
-
-			if (connectedNetworks.size() > 0)
-			{
-				/**
-				 * Requests an even amount of electricity from all sides.
-				 */
-				double wattsPerSide = (requestPack.getWatts() / connectedNetworks.size());
-				double voltage = requestPack.voltage;
-
-				for (IElectricityNetwork network : connectedNetworks)
-				{
-					if (wattsPerSide > 0 && requestPack.getWatts() > 0)
-					{
-						network.startRequesting(tileEntity, wattsPerSide / voltage, voltage);
-						ElectricityPack receivedPack = network.consumeElectricity(tileEntity);
-						consumedPack.amperes += receivedPack.amperes;
-						consumedPack.voltage = Math.max(consumedPack.voltage, receivedPack.voltage);
-					}
-					else
-					{
-						network.stopRequesting(tileEntity);
-					}
-				}
-			}
-		}
-
-		return consumedPack;
-	}
-
-	public static ElectricityPack consumeFromMultipleSides(TileEntity tileEntity, ElectricityPack electricityPack)
-	{
-		return consumeFromMultipleSides(tileEntity, getDirections(tileEntity), electricityPack);
-	}
-
-	/**
-	 * Produces electricity from all specified sides. Use this as a simple helper function.
-	 * 
-	 * @param tileEntity- The TileEntity consuming the electricity.
-	 * @param approachDirection - The sides in which you can connect to.
-	 * @param producePack - The amount of electricity to be produced.
-	 * @return What remained in the electricity pack.
-	 */
-	public static ElectricityPack produceFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection, ElectricityPack producingPack)
-	{
-		ElectricityPack remainingElectricity = producingPack.clone();
-
-		if (tileEntity != null && approachingDirection != null)
-		{
-			final List<IElectricityNetwork> connectedNetworks = getNetworksFromMultipleSides(tileEntity, approachingDirection);
-
-			if (connectedNetworks.size() > 0)
-			{
-				/**
-				 * Requests an even amount of electricity from all sides.
-				 */
-				double wattsPerSide = (producingPack.getWatts() / connectedNetworks.size());
-				double voltage = producingPack.voltage;
-
-				for (IElectricityNetwork network : connectedNetworks)
-				{
-					if (wattsPerSide > 0 && producingPack.getWatts() > 0)
-					{
-						double amperes = wattsPerSide / voltage;
-						network.startProducing(tileEntity, amperes, voltage);
-						remainingElectricity.amperes -= amperes;
-					}
-					else
-					{
-						network.stopProducing(tileEntity);
-					}
-				}
-			}
-		}
-
-		return remainingElectricity;
-	}
-
-	public static ElectricityPack produceFromMultipleSides(TileEntity tileEntity, ElectricityPack electricityPack)
-	{
-		return produceFromMultipleSides(tileEntity, getDirections(tileEntity), electricityPack);
-	}
-
-	public static EnumSet<ForgeDirection> getDirections(TileEntity tileEntity)
-	{
-		EnumSet<ForgeDirection> possibleSides = EnumSet.noneOf(ForgeDirection.class);
-
-		if (tileEntity instanceof IConnector)
-		{
-			for (int i = 0; i < 6; i++)
-			{
-				ForgeDirection direction = ForgeDirection.getOrientation(i);
-				if (((IConnector) tileEntity).canConnect(direction))
-				{
-					possibleSides.add(direction);
-				}
-			}
-		}
-
-		return possibleSides;
 	}
 }

@@ -38,7 +38,7 @@ public class VectorHelper
 	 */
 	public static TileEntity getConnectorFromSide(World world, Vector3 position, ForgeDirection side)
 	{
-		TileEntity tileEntity = Vector3.getTileEntityFromSide(world, position, side);
+		TileEntity tileEntity = VectorHelper.getTileEntityFromSide(world, position, side);
 
 		if (tileEntity instanceof IConnector)
 		{
@@ -49,6 +49,11 @@ public class VectorHelper
 		}
 
 		return null;
+	}
+
+	public static TileEntity getTileEntityFromSide(World world, Vector3 position, ForgeDirection side)
+	{
+		return position.clone().modifyPositionFromSide(side).getTileEntity(world);
 	}
 
 }

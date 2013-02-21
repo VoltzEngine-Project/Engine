@@ -9,7 +9,7 @@ import net.minecraftforge.common.ForgeDirection;
  * @author Calclavia
  * 
  */
-public interface IConductor extends INetworkProvider
+public interface IConductor extends INetworkProvider, IConnector
 {
 	/**
 	 * The UE tile entities that this conductor is connected to.

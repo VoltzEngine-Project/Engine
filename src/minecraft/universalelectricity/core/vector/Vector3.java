@@ -317,11 +317,6 @@ public class Vector3 implements Cloneable
 		return this;
 	}
 
-	public static TileEntity getTileEntityFromSide(World world, Vector3 position, ForgeDirection side)
-	{
-		return position.clone().modifyPositionFromSide(side).getTileEntity(world);
-	}
-
 	/**
 	 * Loads a Vector3 from an NBT compound.
 	 */
