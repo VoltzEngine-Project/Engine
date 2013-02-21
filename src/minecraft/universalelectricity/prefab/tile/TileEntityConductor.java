@@ -141,11 +141,6 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		super.updateEntity();
 
-		if (this.getNetwork() == null)
-		{
-			this.setNetwork(new ElectricityNetwork(this));
-		}
-
 		if (this.ticks % 300 == 0)
 		{
 			this.refreshConnectedBlocks();
@@ -187,6 +182,11 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	@Override
 	public IElectricityNetwork getNetwork()
 	{
+		if (this.network == null)
+		{
+			this.setNetwork(new ElectricityNetwork(this));
+		}
+
 		return this.network;
 	}
 

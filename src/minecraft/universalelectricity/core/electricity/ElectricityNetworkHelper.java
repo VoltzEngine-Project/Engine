@@ -206,11 +206,18 @@ public class ElectricityNetworkHelper
 	{
 		if (tileEntity != null)
 		{
-			if (tileEntity instanceof IConnector)
+			if (tileEntity instanceof INetworkProvider)
 			{
-				if (((IConnector) tileEntity).canConnect(approachDirection.getOpposite()))
+				if (tileEntity instanceof IConnector)
 				{
-					return ((IConductor) tileEntity).getNetwork();
+					if (((IConnector) tileEntity).canConnect(approachDirection.getOpposite()))
+					{
+						return ((INetworkProvider) tileEntity).getNetwork();
+					}
+				}
+				else
+				{
+					return ((INetworkProvider) tileEntity).getNetwork();
 				}
 			}
 		}

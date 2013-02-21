@@ -16,7 +16,7 @@ public class ElectricItemHelper
 	 * 
 	 * @param joules - The joules being provided to the electric item
 	 * @param voltage - The voltage in which is used to charge the electric item
-	 * @return The total amount of joules left after charging.
+	 * @return The total amount of joules provided by the provider.
 	 */
 	public static double chargeItem(ItemStack itemStack, double joules, double voltage)
 	{
@@ -29,13 +29,13 @@ public class ElectricItemHelper
 
 				if (providingWatts > 0)
 				{
-					ElectricityPack rejectedElectricity = electricItem.onReceive(ElectricityPack.getFromWatts(providingWatts, voltage), itemStack);
-					return joules - Math.max(providingWatts - rejectedElectricity.getWatts(), 0);
+					ElectricityPack providedElectricity = electricItem.onReceive(ElectricityPack.getFromWatts(providingWatts, voltage), itemStack);
+					return providedElectricity.getWatts();
 				}
 			}
 		}
 
-		return joules;
+		return 0;
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class ElectricItemHelper
 	 * 
 	 * @param joules - The joules being withdrawn from the electric item
 	 * @param voltage - The voltage in which is used to decharge the electric item
-	 * @return The total amount of joules left after decharging.
+	 * @return The total amount of joules the provider received.
 	 */
 	public static double dechargeItem(ItemStack itemStack, double joules, double voltage)
 	{
@@ -57,12 +57,12 @@ public class ElectricItemHelper
 				if (requestingWatts > 0)
 				{
 					ElectricityPack receivedElectricity = electricItem.onProvide(ElectricityPack.getFromWatts(requestingWatts, voltage), itemStack);
-					return joules + requestingWatts;
+					return receivedElectricity.getWatts();
 				}
 			}
 		}
 
-		return joules;
+		return 0;
 	}
 
 	/**

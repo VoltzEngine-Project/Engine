@@ -12,7 +12,7 @@ import net.minecraftforge.common.ForgeDirection;
 public interface IConductor extends INetworkProvider, IConnector
 {
 	/**
-	 * The UE tile entities that this conductor is connected to.
+	 * Gets a list of blocks this conductor is connected to.
 	 * 
 	 * @return
 	 */

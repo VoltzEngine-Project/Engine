@@ -43,21 +43,21 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 
 		if (!this.isDisabled())
 		{
-			/**
-			 * Recharges electric item.
-			 */
-			this.setJoules(ElectricItemHelper.chargeItem(this.containingItems[0], this.getJoules(), this.getVoltage()));
-
-			/**
-			 * Decharge electric item.
-			 */
-			this.setJoules(ElectricItemHelper.chargeItem(this.containingItems[1], this.getJoules(), this.getVoltage()));
-
 			if (!this.worldObj.isRemote)
 			{
+				/**
+				 * Recharges electric item.
+				 */
+				this.setJoules(this.getJoules() - ElectricItemHelper.chargeItem(this.containingItems[0], this.getJoules(), this.getVoltage()));
+
+				/**
+				 * Decharge electric item.
+				 */
+				this.setJoules(this.getJoules() + ElectricItemHelper.dechargeItem(this.containingItems[1], this.getMaxJoules() - this.getJoules(), this.getVoltage()));
+
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
-				TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection.getOpposite());
-				TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
+				TileEntity inputTile = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), outputDirection.getOpposite());
+				TileEntity outputTile = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), outputDirection);
 
 				IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
 				IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);

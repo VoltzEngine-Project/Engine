@@ -14,14 +14,14 @@ public interface IItemElectric extends IItemElectricityStorage, IItemVoltage
 	/**
 	 * Called when this item receives electricity; being charged.
 	 * 
-	 * @return Returns the electricity rejected.
+	 * @return The amount of electricity that was added to the electric item.
 	 */
 	public ElectricityPack onReceive(ElectricityPack electricityPack, ItemStack itemStack);
 
 	/**
 	 * Called when something requests electricity from this item; being decharged.
 	 * 
-	 * @return - The amount of electricity given.
+	 * @return - The amount of electricity that was removed from the electric item.
 	 */
 	public ElectricityPack onProvide(ElectricityPack electricityPack, ItemStack itemStack);
 

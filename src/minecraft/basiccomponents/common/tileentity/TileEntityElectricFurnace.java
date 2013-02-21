@@ -59,7 +59,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 		/**
 		 * Attempts to charge using batteries.
 		 */
-		this.wattsReceived += ElectricItemHelper.chargeItem(this.containingItems[0], WATTS_PER_TICK, this.getVoltage());
+		this.wattsReceived += ElectricItemHelper.dechargeItem(this.containingItems[0], WATTS_PER_TICK, this.getVoltage());
 
 		/**
 		 * Attempts to smelt an item.

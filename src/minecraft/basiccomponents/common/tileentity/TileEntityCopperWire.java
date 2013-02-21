@@ -37,7 +37,7 @@ public class TileEntityCopperWire extends TileEntityConductor
 
 		if (this.getNetwork() != null && this.ticks % 20 == 0)
 		{
-			if (this.getNetwork().getProduced().getWatts() > this.getCurrentCapcity())
+			if (this.getNetwork().getProduced().amperes > this.getCurrentCapcity())
 			{
 				if (!this.worldObj.isRemote)
 				{

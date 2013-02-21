@@ -31,22 +31,17 @@ public abstract class ItemElectric extends Item implements IItemElectric
 		this.setNoRepair();
 	}
 
-	/**
-	 * Allows items to add custom lines of information to the mouseover description. If you want to
-	 * add more information to your item, you can super.addInformation() to keep the electiricty
-	 * info in the item info bar.
-	 */
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4)
 	{
 		String color = "";
-		double joules = this.getJoules(par1ItemStack);
+		double joules = this.getJoules(itemStack);
 
-		if (joules <= this.getMaxJoules(par1ItemStack) / 3)
+		if (joules <= this.getMaxJoules(itemStack) / 3)
 		{
 			color = "\u00a74";
 		}
-		else if (joules > this.getMaxJoules(par1ItemStack) * 2 / 3)
+		else if (joules > this.getMaxJoules(itemStack) * 2 / 3)
 		{
 			color = "\u00a72";
 		}
@@ -55,7 +50,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 			color = "\u00a76";
 		}
 
-		par3List.add(color + ElectricityDisplay.getDisplay(joules, ElectricUnit.JOULES) + " - " + Math.round((joules / this.getMaxJoules(par1ItemStack)) * 100) + "%");
+		list.add(color + ElectricityDisplay.getDisplay(joules, ElectricUnit.JOULES) + "/" + ElectricityDisplay.getDisplay(this.getMaxJoules(itemStack), ElectricUnit.JOULES));
 	}
 
 	/**
@@ -72,8 +67,9 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	public ElectricityPack onReceive(ElectricityPack electricityPack, ItemStack itemStack)
 	{
 		double rejectedElectricity = Math.max((this.getJoules(itemStack) + electricityPack.getWatts()) - this.getMaxJoules(itemStack), 0);
-		this.setJoules(this.getJoules(itemStack) + electricityPack.getWatts() - rejectedElectricity, itemStack);
-		return ElectricityPack.getFromWatts(this.getJoules(itemStack), this.getVoltage(itemStack));
+		double joulesToStore = electricityPack.getWatts() - rejectedElectricity;
+		this.setJoules(this.getJoules(itemStack) + joulesToStore, itemStack);
+		return ElectricityPack.getFromWatts(joulesToStore, this.getVoltage(itemStack));
 	}
 
 	@Override
@@ -81,7 +77,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	{
 		double electricityToUse = Math.min(this.getJoules(itemStack), electricityPack.getWatts());
 		this.setJoules(this.getJoules(itemStack) - electricityToUse, itemStack);
-		return ElectricityPack.getFromWatts(this.getJoules(itemStack), this.getVoltage(itemStack));
+		return ElectricityPack.getFromWatts(electricityToUse, this.getVoltage(itemStack));
 	}
 
 	@Override
