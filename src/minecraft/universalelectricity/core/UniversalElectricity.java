@@ -12,14 +12,7 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 
 /**
- * Instructions for using the Universal Electricity API.
- * 
- * The less you include of the API, the more compatible your mod will be for future releases of
- * Universal Electricity.
- * 
- * REQUIRED PACKAGE: "universalelectricity.core" OPTIONAL PACKAGE: "universalelectricity.prefab"
- * 
- * All classes should be removed if you are not going to use them.
+ * General Universal Electricity class.
  * 
  * @author Calclavia
  * 
@@ -40,12 +33,14 @@ public class UniversalElectricity
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
 
 	/**
-	 * Conversion ratios between Buildcraft and Industrialcraft energy.
+	 * Multiply this to convert foreign energy into UE Joules.
 	 */
-	// The amount of UE Joules equivalent to IC2 EU
 	public static double IC2_RATIO = 40;
-	// The amount of UE Joules equivalent to BC Minecraft Joules
 	public static double BC3_RATIO = 100;
+
+	/**
+	 * Multiply this to convert UE Joules into foreign energy.
+	 */
 	public static double TO_IC2_RATIO = 1 / IC2_RATIO;
 	public static double TO_BC_RATIO = 1 / BC3_RATIO;
 
@@ -56,47 +51,22 @@ public class UniversalElectricity
 	public static boolean isVoltageSensitive = false;
 
 	/**
-	 * Use this material for all your machine blocks. It can be breakable by hand.
+	 * A general material that can be used by machines. Breakable by hand, suitable for machines.
 	 */
 	public static final Material machine = new Material(MapColor.ironColor);
 
-	/**
-	 * A list of all mods Universal Electricity has loaded.
-	 */
-	public static final List<Object> mods = new ArrayList<Object>();
-
-	/**
-	 * You must register your mod with Universal Electricity. Call this in your mod's
-	 * pre-initialization stage.
-	 */
-	public static void register(Object mod, int major, int minor, int revision, boolean strict)
+	static
 	{
-		if (MAJOR_VERSION != major)
-		{
-			throw new RuntimeException("A Universal Electricity mod " + mod.getClass().getSimpleName() + " is way too old! Make sure it is update to v" + major + "." + minor + "." + revision);
-		}
+		/**
+		 * Loads the configuration and sets all the values.
+		 */
+		CONFIGURATION.load();
+		IC2_RATIO = CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", IC2_RATIO).getDouble(IC2_RATIO);
+		BC3_RATIO = CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", BC3_RATIO).getDouble(BC3_RATIO);
+		TO_IC2_RATIO = 1 / IC2_RATIO;
+		TO_BC_RATIO = 1 / BC3_RATIO;
 
-		if (MINOR_VERSION < minor)
-		{
-			throw new RuntimeException("A Universal Electricity mod " + mod.getClass().getSimpleName() + " is too old! Make sure it is update to v" + major + "." + minor + "." + revision);
-		}
-
-		if (REVISION_VERSION < revision)
-		{
-			if (strict)
-			{
-				throw new RuntimeException("A Universal Electricity mod " + mod.getClass().getSimpleName() + " is too old! Require v" + major + "." + minor + "." + revision);
-			}
-			else
-			{
-				FMLLog.warning("The version of Universal Electricity detected is not the recommended version by the mod " + mod.getClass().getSimpleName() + ". Odd things might happen. Recommended to try v" + major + "." + minor + "." + revision);
-			}
-		}
-
-		mods.add(mod);
-
-		FMLLog.fine(mod.getClass().getSimpleName() + " has been registered to Universal Electricity.");
-
-		UELoader.INSTANCE.initiate();
+		isVoltageSensitive = CONFIGURATION.get("Compatiblity", "Is Voltage Sensitive", isVoltageSensitive).getBoolean(isVoltageSensitive);
+		CONFIGURATION.save();
 	}
 }
