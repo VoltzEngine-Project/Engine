@@ -21,7 +21,7 @@ public class TileEntityCopperWire extends TileEntityConductor
 	}
 
 	@Override
-	public double getMaxAmps()
+	public double getCurrentCapcity()
 	{
 		return MAX_AMPS;
 	}

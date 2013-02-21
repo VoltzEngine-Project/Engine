@@ -1,6 +1,6 @@
 package universalelectricity.core.block;
 
-import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.IElectricityNetwork;
 
 /**
  * Applied to TileEntities that has an instance of an electricity network.
@@ -10,7 +10,7 @@ import universalelectricity.core.electricity.ElectricityNetwork;
  */
 public interface INetworkProvider
 {
-	public ElectricityNetwork getNetwork();
+	public IElectricityNetwork getNetwork();
 
-	public void setNetwork(ElectricityNetwork network);
+	public void setNetwork(IElectricityNetwork network);
 }

@@ -12,6 +12,7 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.vector.VectorHelper;
 import cpw.mods.fml.common.FMLLog;
 
 /**
@@ -26,7 +27,12 @@ public class ElectricityNetwork implements IElectricityNetwork
 	private final HashMap<TileEntity, ElectricityPack> producers = new HashMap<TileEntity, ElectricityPack>();
 	private final HashMap<TileEntity, ElectricityPack> consumers = new HashMap<TileEntity, ElectricityPack>();
 
-	public final List<IConductor> conductors = new ArrayList<IConductor>();
+	private final List<IConductor> conductors = new ArrayList<IConductor>();
+
+	public ElectricityNetwork()
+	{
+
+	}
 
 	public ElectricityNetwork(IConductor conductor)
 	{
@@ -332,11 +338,29 @@ public class ElectricityNetwork implements IElectricityNetwork
 		}
 	}
 
-	public void resetConductors()
+	/**
+	 * This function is called to refresh all conductors in this network
+	 */
+	@Override
+	public void refreshConductors(boolean doSplit)
 	{
-		for (int i = 0; i < conductors.size(); i++)
+		Iterator it = this.conductors.iterator();
+
+		while (it.hasNext())
 		{
-			conductors.get(i).reset();
+			IConductor conductor = (IConductor) it.next();
+
+			if (doSplit)
+			{
+				conductor.refreshConnectedBlocks();
+			}
+			else
+			{
+				for (byte i = 0; i < 6; i++)
+				{
+					conductor.updateConnectionWithoutSplit(VectorHelper.getConnectorFromSide(((TileEntity) conductor).worldObj, new Vector3((TileEntity) conductor), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+				}
+			}
 		}
 	}
 
@@ -350,19 +374,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 		}
 	}
 
-	public void onOverCharge()
-	{
-		this.cleanConductors();
-
-		for (int i = 0; i < conductors.size(); i++)
-		{
-			conductors.get(i).onOverCharge();
-		}
-	}
-
-	/**
-	 * Gets the total amount of resistance of this electrical network. In Ohms.
-	 */
+	@Override
 	public double getTotalResistance()
 	{
 		double resistance = 0;
@@ -375,30 +387,37 @@ public class ElectricityNetwork implements IElectricityNetwork
 		return resistance;
 	}
 
-	public double getLowestAmpTolerance()
+	@Override
+	public double getLowestCurrentCapacity()
 	{
 		double lowestAmp = 0;
 
 		for (IConductor conductor : conductors)
 		{
-			if (lowestAmp == 0 || conductor.getMaxAmps() < lowestAmp)
+			if (lowestAmp == 0 || conductor.getCurrentCapcity() < lowestAmp)
 			{
-				lowestAmp = conductor.getMaxAmps();
+				lowestAmp = conductor.getCurrentCapcity();
 			}
 		}
 
 		return lowestAmp;
 	}
 
-	/**
-	 * This function is called to refresh all conductors in this network
-	 */
-	public void refreshConductors()
+	@Override
+	public List<IConductor> getConductors()
 	{
-		for (int j = 0; j < this.conductors.size(); j++)
+		return this.conductors;
+	}
+
+	@Override
+	public void mergeConnection(IElectricityNetwork network)
+	{
+		if (network != null && network != this)
 		{
-			IConductor conductor = this.conductors.get(j);
-			conductor.refreshConnectedBlocks();
+			this.conductors.addAll(network.getConductors());
+			this.setNetwork();
+			network = null;
+			this.cleanConductors();
 		}
 	}
 
@@ -411,7 +430,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	 * @param approachDirection - The direction you are approaching this wire from.
 	 * @return The ElectricityNetwork or null if not found.
 	 */
-	public static ElectricityNetwork getNetworkFromTileEntity(TileEntity tileEntity, ForgeDirection approachDirection)
+	public static IElectricityNetwork getNetworkFromTileEntity(TileEntity tileEntity, ForgeDirection approachDirection)
 	{
 		if (tileEntity != null)
 		{
@@ -433,9 +452,9 @@ public class ElectricityNetwork implements IElectricityNetwork
 	 * @return A list of networks from all specified sides. There will be no repeated
 	 * ElectricityNetworks and it will never return null.
 	 */
-	public static List<ElectricityNetwork> getNetworksFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection)
+	public static List<IElectricityNetwork> getNetworksFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection)
 	{
-		final List<ElectricityNetwork> connectedNetworks = new ArrayList<ElectricityNetwork>();
+		final List<IElectricityNetwork> connectedNetworks = new ArrayList<IElectricityNetwork>();
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -446,7 +465,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 				Vector3 position = new Vector3(tileEntity);
 				position.modifyPositionFromSide(direction);
 				TileEntity outputConductor = position.getTileEntity(tileEntity.worldObj);
-				ElectricityNetwork electricityNetwork = getNetworkFromTileEntity(outputConductor, direction);
+				IElectricityNetwork electricityNetwork = getNetworkFromTileEntity(outputConductor, direction);
 
 				if (electricityNetwork != null && !connectedNetworks.contains(connectedNetworks))
 				{
@@ -473,7 +492,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 		if (tileEntity != null && approachingDirection != null)
 		{
-			final List<ElectricityNetwork> connectedNetworks = getNetworksFromMultipleSides(tileEntity, approachingDirection);
+			final List<IElectricityNetwork> connectedNetworks = getNetworksFromMultipleSides(tileEntity, approachingDirection);
 
 			if (connectedNetworks.size() > 0)
 			{
@@ -483,7 +502,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 				double wattsPerSide = (requestPack.getWatts() / connectedNetworks.size());
 				double voltage = requestPack.voltage;
 
-				for (ElectricityNetwork network : connectedNetworks)
+				for (IElectricityNetwork network : connectedNetworks)
 				{
 					if (wattsPerSide > 0 && requestPack.getWatts() > 0)
 					{
@@ -522,7 +541,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 		if (tileEntity != null && approachingDirection != null)
 		{
-			final List<ElectricityNetwork> connectedNetworks = getNetworksFromMultipleSides(tileEntity, approachingDirection);
+			final List<IElectricityNetwork> connectedNetworks = getNetworksFromMultipleSides(tileEntity, approachingDirection);
 
 			if (connectedNetworks.size() > 0)
 			{
@@ -532,7 +551,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 				double wattsPerSide = (producingPack.getWatts() / connectedNetworks.size());
 				double voltage = producingPack.voltage;
 
-				for (ElectricityNetwork network : connectedNetworks)
+				for (IElectricityNetwork network : connectedNetworks)
 				{
 					if (wattsPerSide > 0 && producingPack.getWatts() > 0)
 					{

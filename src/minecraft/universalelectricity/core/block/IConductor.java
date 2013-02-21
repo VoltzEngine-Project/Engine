@@ -2,7 +2,6 @@ package universalelectricity.core.block;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityNetwork;
 
 /**
  * Must be applied to all tile entities that are conductors.
@@ -28,22 +27,9 @@ public interface IConductor extends INetworkProvider
 	public double getResistance();
 
 	/**
-	 * The maximum amount of amps this conductor can handle before melting down. This is calculating
-	 * PER TICK!
-	 * 
-	 * @return The amount of amps in volts
+	 * @return The maximum amount of amps this conductor can handle before melting down.
 	 */
-	public double getMaxAmps();
-
-	/**
-	 * Called when the electricity passing through exceeds the maximum voltage.
-	 */
-	public void onOverCharge();
-
-	/**
-	 * Resets the conductor and recalculate connection IDs again
-	 */
-	public void reset();
+	public double getCurrentCapcity();
 
 	/**
 	 * Instantly refreshes all connected blocks

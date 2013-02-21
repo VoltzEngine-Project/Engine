@@ -1,7 +1,5 @@
 package universalelectricity.prefab.tile;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -13,9 +11,9 @@ import net.minecraftforge.common.ForgeDirection;
 import org.bouncycastle.util.Arrays;
 
 import universalelectricity.core.block.IConductor;
-import universalelectricity.core.electricity.Electricity;
-import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.block.IConnector;
 import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
@@ -34,7 +32,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public abstract class TileEntityConductor extends TileEntityAdvanced implements IConductor, IPacketReceiver
 {
-	private ElectricityNetwork network;
+	private IElectricityNetwork network;
 
 	/**
 	 * Used client side to render.
@@ -48,24 +46,6 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 
 	protected String channel = "";
 
-	public TileEntityConductor()
-	{
-		ElectricityConnections.registerConnector(this, EnumSet.range(ForgeDirection.DOWN, ForgeDirection.EAST));
-		this.reset();
-	}
-
-	@Override
-	public ElectricityNetwork getNetwork()
-	{
-		return this.network;
-	}
-
-	@Override
-	public void setNetwork(ElectricityNetwork network)
-	{
-		this.network = network;
-	}
-
 	@Override
 	public TileEntity[] getConnectedBlocks()
 	{
@@ -77,16 +57,16 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		if (!this.worldObj.isRemote)
 		{
-			if (tileEntity != null)
+			if (tileEntity instanceof IConnector)
 			{
-				if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
+				if (((IConnector) tileEntity).canConnect(side.getOpposite()))
 				{
 					this.connectedBlocks[side.ordinal()] = tileEntity;
 					this.visuallyConnected[side.ordinal()] = true;
 
 					if (tileEntity.getClass() == this.getClass())
 					{
-						Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
+						this.getNetwork().mergeConnection(((IConductor) tileEntity).getNetwork());
 					}
 
 					return;
@@ -97,7 +77,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 			{
 				if (this.connectedBlocks[side.ordinal()] instanceof IConductor)
 				{
-					Electricity.instance.splitConnection(this, (IConductor) this.getConnectedBlocks()[side.ordinal()]);
+					this.getNetwork().refreshConductors(false);
 				}
 
 				this.getNetwork().stopProducing(this.connectedBlocks[side.ordinal()]);
@@ -114,16 +94,16 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		if (!this.worldObj.isRemote)
 		{
-			if (tileEntity != null)
+			if (tileEntity instanceof IConnector)
 			{
-				if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
+				if (((IConnector) tileEntity).canConnect(side.getOpposite()))
 				{
 					this.connectedBlocks[side.ordinal()] = tileEntity;
 					this.visuallyConnected[side.ordinal()] = true;
 
 					if (tileEntity.getClass() == this.getClass())
 					{
-						Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
+						this.getNetwork().mergeConnection(((IConductor) tileEntity).getNetwork());
 					}
 
 					return;
@@ -160,20 +140,14 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		super.updateEntity();
 
+		if (this.getNetwork() == null)
+		{
+			this.setNetwork(new ElectricityNetwork(this));
+		}
+
 		if (this.ticks % 300 == 0)
 		{
 			this.refreshConnectedBlocks();
-		}
-	}
-
-	@Override
-	public void reset()
-	{
-		this.network = null;
-
-		if (Electricity.instance != null)
-		{
-			Electricity.instance.registerConductor(this);
 		}
 	}
 
@@ -209,6 +183,19 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 		return PacketManager.getPacket(this.channel, this, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5]);
 	}
 
+	@Override
+	public IElectricityNetwork getNetwork()
+	{
+		return this.network;
+	}
+
+	@Override
+	public void setNetwork(IElectricityNetwork network)
+	{
+		this.network = network;
+	}
+
+	// TODO: FIX THIS.
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox()
 	{

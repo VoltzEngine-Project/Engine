@@ -3,6 +3,8 @@ package universalelectricity.core.electricity;
 import java.util.HashMap;
 import java.util.List;
 
+import universalelectricity.core.block.IConductor;
+
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -44,5 +46,34 @@ public interface IElectricityNetwork
 	public List<TileEntity> getProviders();
 
 	public List<TileEntity> getReceivers();
+
+	/**
+	 * @return A list of all conductors in this electrical network.
+	 */
+	public List<IConductor> getConductors();
+
+	/**
+	 * @return The total amount of resistance of this electrical network. In Ohms.
+	 */
+	public double getTotalResistance();
+
+	/**
+	 * @return The lowest amount of current (amperage) that this electrical network can tolerate.
+	 */
+	public double getLowestCurrentCapacity();
+
+	/**
+	 * Merges another electrical network into this one, setting the other network into null.
+	 * 
+	 * @param network
+	 */
+	public void mergeConnection(IElectricityNetwork network);
+
+	/**
+	 * Refreshes and recalculates wire connections in this electrical network.
+	 * 
+	 * @param doSplit - True if check for connection splits.
+	 */
+	public void refreshConductors(boolean doSplit);
 
 }
