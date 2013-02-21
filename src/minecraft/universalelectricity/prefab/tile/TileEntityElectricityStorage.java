@@ -5,12 +5,12 @@ import java.util.EnumSet;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.implement.IJouleStorage;
 
-public abstract class TileEntityElectricityStorage extends TileEntityElectricityReceiver implements IJouleStorage
+public abstract class TileEntityElectricityStorage extends TileEntityElectricityReceiver implements IElectricityStorage
 {
 	/**
 	 * The amount of joules stored within this machine. Use get and set functions instead of

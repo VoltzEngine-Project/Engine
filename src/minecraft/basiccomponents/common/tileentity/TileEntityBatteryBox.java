@@ -12,11 +12,11 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
-import universalelectricity.core.implement.IItemElectric;
-import universalelectricity.core.implement.IJouleStorage;
+import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
@@ -31,7 +31,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 
-public class TileEntityBatteryBox extends TileEntityElectricityStorage implements IJouleStorage, IPacketReceiver, ISidedInventory, IPeripheral
+public class TileEntityBatteryBox extends TileEntityElectricityStorage implements IElectricityStorage, IPacketReceiver, ISidedInventory, IPeripheral
 {
 	private ItemStack[] containingItems = new ItemStack[2];
 

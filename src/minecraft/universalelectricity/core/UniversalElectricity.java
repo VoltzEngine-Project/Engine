@@ -99,37 +99,4 @@ public class UniversalElectricity
 
 		UELoader.INSTANCE.initiate();
 	}
-
-	/**
-	 * A function that allows you to lock your mod to a specific version of Forge.
-	 */
-	public static void forgeLock(int major, int minor, int revision, boolean strict)
-	{
-		if (ForgeVersion.getMajorVersion() != major)
-		{
-			throw new RuntimeException("Universal Electricity: Wrong Minecraft Forge version! Require " + major + "." + minor + "." + revision);
-		}
-
-		if (ForgeVersion.getMinorVersion() < minor)
-		{
-			throw new RuntimeException("Universal Electricity: Minecraft Forge minor version is too old! Require " + major + "." + minor + "." + revision);
-		}
-
-		if (ForgeVersion.getRevisionVersion() < revision)
-		{
-			if (strict)
-			{
-				throw new RuntimeException("Universal Electricity: Minecraft Forge revision version is too old! Require " + major + "." + minor + "." + revision);
-			}
-			else
-			{
-				System.out.println("Universal Electricity Warning: Minecraft Forge is not the specified version. Odd things might happen. Require " + major + "." + minor + "." + revision);
-			}
-		}
-	}
-
-	public static void forgeLock(int major, int minor, int revision)
-	{
-		forgeLock(major, minor, revision, false);
-	}
 }

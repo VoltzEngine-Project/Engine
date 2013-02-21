@@ -12,10 +12,10 @@ import net.minecraftforge.common.ForgeDirection;
 
 import org.bouncycastle.util.Arrays;
 
+import universalelectricity.core.block.IConductor;
 import universalelectricity.core.electricity.Electricity;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
-import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;

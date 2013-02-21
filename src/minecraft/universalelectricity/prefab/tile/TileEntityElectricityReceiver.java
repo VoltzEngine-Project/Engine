@@ -5,7 +5,7 @@ import java.util.EnumSet;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.Electricity;
 import universalelectricity.core.electricity.ElectricityConnections;
-import universalelectricity.core.implement.IVoltage;
+import universalelectricity.core.item.IVoltage;
 
 /**
  * An easier way to implement the methods from IElectricityReceiver with default values set.

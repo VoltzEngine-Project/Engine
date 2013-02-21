@@ -49,7 +49,7 @@ public class ElectricityPack implements Cloneable
 		return new ElectricityPack(this.amperes, this.voltage);
 	}
 
-	public boolean isEquals(ElectricityPack electricityPack)
+	public boolean isEqual(ElectricityPack electricityPack)
 	{
 		return this.amperes == electricityPack.amperes && this.voltage == electricityPack.voltage;
 	}

@@ -1,8 +1,14 @@
-package universalelectricity.core.implement;
+package universalelectricity.core.item;
 
 import net.minecraft.item.ItemStack;
 
-public interface IItemElectric extends IJouleStorage, IVoltage
+/**
+ * An interface applied to all electrical items. Should be applied to the Item class.
+ * 
+ * @author Calclavia
+ * 
+ */
+public interface IItemElectric extends IItemElectricityStorage, IItemVoltage
 {
 	/**
 	 * Called when this item receives electricity.

@@ -9,11 +9,19 @@ import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.block.IConductor;
+import universalelectricity.core.block.IConnector;
 import universalelectricity.core.vector.Vector3;
 import cpw.mods.fml.common.FMLLog;
 
-public class ElectricityNetwork
+/**
+ * An Electrical Network specifies a wire connection. Each wire connection line will have its own
+ * electrical network.
+ * 
+ * @author Calclavia
+ * 
+ */
+public class ElectricityNetwork implements IElectricityNetwork
 {
 	private final HashMap<TileEntity, ElectricityPack> producers = new HashMap<TileEntity, ElectricityPack>();
 	private final HashMap<TileEntity, ElectricityPack> consumers = new HashMap<TileEntity, ElectricityPack>();
@@ -28,6 +36,7 @@ public class ElectricityNetwork
 	/**
 	 * Sets this tile entity to start producing energy in this network.
 	 */
+	@Override
 	public void startProducing(TileEntity tileEntity, ElectricityPack electricityPack)
 	{
 		if (tileEntity != null && electricityPack.getWatts() > 0)
@@ -36,11 +45,13 @@ public class ElectricityNetwork
 		}
 	}
 
+	@Override
 	public void startProducing(TileEntity tileEntity, double amperes, double voltage)
 	{
 		this.startProducing(tileEntity, new ElectricityPack(amperes, voltage));
 	}
 
+	@Override
 	public boolean isProducing(TileEntity tileEntity)
 	{
 		return this.producers.containsKey(tileEntity);
@@ -49,6 +60,7 @@ public class ElectricityNetwork
 	/**
 	 * Sets this tile entity to stop producing energy in this network.
 	 */
+	@Override
 	public void stopProducing(TileEntity tileEntity)
 	{
 		this.producers.remove(tileEntity);
@@ -57,6 +69,7 @@ public class ElectricityNetwork
 	/**
 	 * Sets this tile entity to start producing energy in this network.
 	 */
+	@Override
 	public void startRequesting(TileEntity tileEntity, ElectricityPack electricityPack)
 	{
 		if (tileEntity != null && electricityPack.getWatts() > 0)
@@ -65,11 +78,13 @@ public class ElectricityNetwork
 		}
 	}
 
+	@Override
 	public void startRequesting(TileEntity tileEntity, double amperes, double voltage)
 	{
 		this.startRequesting(tileEntity, new ElectricityPack(amperes, voltage));
 	}
 
+	@Override
 	public boolean isRequesting(TileEntity tileEntity)
 	{
 		return this.consumers.containsKey(tileEntity);
@@ -78,6 +93,7 @@ public class ElectricityNetwork
 	/**
 	 * Sets this tile entity to stop producing energy in this network.
 	 */
+	@Override
 	public void stopRequesting(TileEntity tileEntity)
 	{
 		this.consumers.remove(tileEntity);
@@ -88,6 +104,7 @@ public class ElectricityNetwork
 	 * ignore any.
 	 * @return The electricity produced in this electricity network
 	 */
+	@Override
 	public ElectricityPack getProduced(TileEntity... ignoreTiles)
 	{
 		ElectricityPack totalElectricity = new ElectricityPack(0, 0);
@@ -151,6 +168,7 @@ public class ElectricityNetwork
 	/**
 	 * @return How much electricity this network needs.
 	 */
+	@Override
 	public ElectricityPack getRequest(TileEntity... ignoreTiles)
 	{
 		ElectricityPack totalElectricity = this.getRequestWithoutReduction();
@@ -158,6 +176,7 @@ public class ElectricityNetwork
 		return totalElectricity;
 	}
 
+	@Override
 	public ElectricityPack getRequestWithoutReduction()
 	{
 		ElectricityPack totalElectricity = new ElectricityPack(0, 0);
@@ -207,6 +226,7 @@ public class ElectricityNetwork
 	 * @param tileEntity
 	 * @return The electricity being input into this tile entity.
 	 */
+	@Override
 	public ElectricityPack consumeElectricity(TileEntity tileEntity)
 	{
 		ElectricityPack totalElectricity = new ElectricityPack(0, 0);
@@ -249,17 +269,41 @@ public class ElectricityNetwork
 	/**
 	 * @return Returns all producers in this electricity network.
 	 */
+	@Override
 	public HashMap<TileEntity, ElectricityPack> getProducers()
 	{
 		return this.producers;
 	}
 
 	/**
+	 * Gets all the electricity receivers.
+	 */
+	@Override
+	public List<TileEntity> getProviders()
+	{
+		List<TileEntity> providers = new ArrayList<TileEntity>();
+		providers.addAll(this.producers.keySet());
+		return providers;
+	}
+
+	/**
 	 * @return Returns all consumers in this electricity network.
 	 */
+	@Override
 	public HashMap<TileEntity, ElectricityPack> getConsumers()
 	{
 		return this.consumers;
+	}
+
+	/**
+	 * Gets all the electricity receivers.
+	 */
+	@Override
+	public List<TileEntity> getReceivers()
+	{
+		List<TileEntity> receivers = new ArrayList<TileEntity>();
+		receivers.addAll(this.consumers.keySet());
+		return receivers;
 	}
 
 	public void addConductor(IConductor newConductor)
@@ -271,28 +315,6 @@ public class ElectricityNetwork
 			conductors.add(newConductor);
 			newConductor.setNetwork(this);
 		}
-	}
-
-	/**
-	 * Get only the electric units that can receive electricity from the given side.
-	 */
-	public List<TileEntity> getReceivers()
-	{
-		List<TileEntity> receivers = new ArrayList<TileEntity>();
-
-		Iterator it = this.consumers.entrySet().iterator();
-
-		while (it.hasNext())
-		{
-			Map.Entry pairs = (Map.Entry) it.next();
-
-			if (pairs != null)
-			{
-				receivers.add((TileEntity) pairs.getKey());
-			}
-		}
-
-		return receivers;
 	}
 
 	public void cleanConductors()
@@ -393,14 +415,11 @@ public class ElectricityNetwork
 	{
 		if (tileEntity != null)
 		{
-			if (tileEntity instanceof IConductor)
+			if (tileEntity instanceof IConnector)
 			{
-				if (ElectricityConnections.isConnector(tileEntity))
+				if (((IConnector) tileEntity).canConnect(approachDirection.getOpposite()))
 				{
-					if (ElectricityConnections.canConnect(tileEntity, approachDirection.getOpposite()))
-					{
-						return ((IConductor) tileEntity).getNetwork();
-					}
+					return ((IConductor) tileEntity).getNetwork();
 				}
 			}
 		}
@@ -486,7 +505,7 @@ public class ElectricityNetwork
 
 	public static ElectricityPack consumeFromMultipleSides(TileEntity tileEntity, ElectricityPack electricityPack)
 	{
-		return consumeFromMultipleSides(tileEntity, ElectricityConnections.getDirections(tileEntity), electricityPack);
+		return consumeFromMultipleSides(tileEntity, getDirections(tileEntity), electricityPack);
 	}
 
 	/**
@@ -534,6 +553,25 @@ public class ElectricityNetwork
 
 	public static ElectricityPack produceFromMultipleSides(TileEntity tileEntity, ElectricityPack electricityPack)
 	{
-		return produceFromMultipleSides(tileEntity, ElectricityConnections.getDirections(tileEntity), electricityPack);
+		return produceFromMultipleSides(tileEntity, getDirections(tileEntity), electricityPack);
+	}
+
+	public static EnumSet<ForgeDirection> getDirections(TileEntity tileEntity)
+	{
+		EnumSet<ForgeDirection> possibleSides = EnumSet.noneOf(ForgeDirection.class);
+
+		if (tileEntity instanceof IConnector)
+		{
+			for (int i = 0; i < 6; i++)
+			{
+				ForgeDirection direction = ForgeDirection.getOrientation(i);
+				if (((IConnector) tileEntity).canConnect(direction))
+				{
+					possibleSides.add(direction);
+				}
+			}
+		}
+
+		return possibleSides;
 	}
 }

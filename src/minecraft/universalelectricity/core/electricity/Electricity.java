@@ -6,7 +6,7 @@ import java.util.List;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.block.IConductor;
 import universalelectricity.core.vector.Vector3;
 import cpw.mods.fml.common.FMLLog;
 
