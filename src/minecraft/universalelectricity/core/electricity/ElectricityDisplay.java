@@ -1,12 +1,12 @@
 package universalelectricity.core.electricity;
 
 /**
- * An easy way to display information on electricity.
+ * An easy way to display information on electricity for the client.
  * 
  * @author Calclavia
  */
 
-public class ElectricInfo
+public class ElectricityDisplay
 {
 	public static enum ElectricUnit
 	{
@@ -58,76 +58,6 @@ public class ElectricInfo
 		{
 			return value / this.value;
 		}
-	}
-
-	public static double getJoules(double watts, double seconds)
-	{
-		return watts * seconds;
-	}
-
-	public static double getJoules(double amps, double voltage, double seconds)
-	{
-		return amps * voltage * seconds;
-	}
-
-	public static double getWattsFromJoules(double joules, double seconds)
-	{
-		return joules / seconds;
-	}
-
-	public static double getAmps(double watts, double voltage)
-	{
-		return watts / voltage;
-	}
-
-	public static double getAmps(double ampHours)
-	{
-		return ampHours * 3600;
-	}
-
-	public static double getAmpsFromWattHours(double wattHours, double voltage)
-	{
-		return getWatts(wattHours) / voltage;
-	}
-
-	public static double getWattHoursFromAmpHours(double ampHours, double voltage)
-	{
-		return ampHours * voltage;
-	}
-
-	public static double getAmpHours(double amps)
-	{
-		return amps / 3600;
-	}
-
-	public static double getWatts(double amps, double voltage)
-	{
-		return amps * voltage;
-	}
-
-	public static double getWatts(double wattHours)
-	{
-		return wattHours * 3600;
-	}
-
-	public static double getWattHours(double watts)
-	{
-		return watts / 3600;
-	}
-
-	public static double getWattHours(double amps, double voltage)
-	{
-		return getWattHours(getWatts(amps, voltage));
-	}
-
-	public static double getResistance(double amps, double voltage)
-	{
-		return voltage / amps;
-	}
-
-	public static double getConductance(double amps, double voltage)
-	{
-		return amps / voltage;
 	}
 
 	/**

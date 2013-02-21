@@ -1,5 +1,7 @@
 package universalelectricity.core.item;
 
+import net.minecraft.item.ItemStack;
+
 /**
  * Applies to items that has a voltage.
  * 
@@ -10,9 +12,7 @@ public interface IItemVoltage
 {
 
 	/**
-	 * Gets the voltage of this object.
-	 * 
-	 * @return The amount of volts. E.g 120v or 240v
+	 * @return The voltage in which this item runs on.
 	 */
-	public double getVoltage();
+	public double getVoltage(ItemStack itemStack);
 }

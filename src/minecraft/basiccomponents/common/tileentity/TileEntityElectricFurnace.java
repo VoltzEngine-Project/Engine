@@ -13,7 +13,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.IItemElectric;
@@ -77,10 +77,10 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 			{
 				IItemElectric electricItem = (IItemElectric) this.containingItems[0].getItem();
 
-				if (electricItem.canProduceElectricity())
+				if (electricItem.getProvideRequest())
 				{
-					double receivedWattHours = electricItem.onProvide(Math.min(electricItem.getMaxJoules(this.containingItems[0]) * 0.01, ElectricInfo.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
-					this.wattsReceived += ElectricInfo.getWatts(receivedWattHours);
+					double receivedWattHours = electricItem.onProvide(Math.min(electricItem.getMaxJoules(this.containingItems[0]) * 0.01, ElectricityDisplay.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
+					this.wattsReceived += ElectricityDisplay.getWatts(receivedWattHours);
 				}
 			}
 		}

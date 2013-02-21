@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.block.IElectricityStorage;
-import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.item.IItemElectric;
@@ -60,11 +60,11 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 				{
 					IItemElectric electricItem = (IItemElectric) this.containingItems[0].getItem();
 
-					if (electricItem.canReceiveElectricity())
+					if (electricItem.getReceiveRequest())
 					{
-						double ampsToGive = Math.min(ElectricInfo.getAmps(Math.min(electricItem.getMaxJoules(this.containingItems[0]) * 0.005, this.getJoules()), this.getVoltage()), this.getJoules());
+						double ampsToGive = Math.min(ElectricityDisplay.getAmps(Math.min(electricItem.getMaxJoules(this.containingItems[0]) * 0.005, this.getJoules()), this.getVoltage()), this.getJoules());
 						double joules = electricItem.onReceive(ampsToGive, this.getVoltage(), this.containingItems[0]);
-						this.setJoules(this.getJoules() - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
+						this.setJoules(this.getJoules() - (ElectricityDisplay.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
 					}
 				}
 			}
@@ -78,7 +78,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 				{
 					IItemElectric electricItem = (IItemElectric) this.containingItems[1].getItem();
 
-					if (electricItem.canProduceElectricity())
+					if (electricItem.getProvideRequest())
 					{
 						double joulesReceived = electricItem.onProvide(electricItem.getMaxJoules(this.containingItems[1]) * 0.005, this.containingItems[1]);
 						this.setJoules(this.getJoules() + joulesReceived);

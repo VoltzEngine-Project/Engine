@@ -6,8 +6,8 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.core.electricity.ElectricInfo;
-import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
+import universalelectricity.core.electricity.ElectricityDisplay;
+import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import basiccomponents.common.BasicComponents;
 import basiccomponents.common.container.ContainerCoalGenerator;
 import basiccomponents.common.tileentity.TileEntityCoalGenerator;
@@ -52,7 +52,7 @@ public class GuiCoalGenerator extends GuiContainer
 		}
 		else
 		{
-			displayText = ElectricInfo.getDisplay(tileEntity.generateWatts, ElectricUnit.WATT);
+			displayText = ElectricityDisplay.getDisplay(tileEntity.generateWatts, ElectricUnit.WATT);
 		}
 
 		this.fontRenderer.drawString(displayText, (int) (100 - displayText.length() * 1.25), 45, 4210752);

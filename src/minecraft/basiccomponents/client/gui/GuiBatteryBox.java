@@ -6,8 +6,8 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.core.electricity.ElectricInfo;
-import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
+import universalelectricity.core.electricity.ElectricityDisplay;
+import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import basiccomponents.common.BasicComponents;
 import basiccomponents.common.container.ContainerBatteryBox;
 import basiccomponents.common.tileentity.TileEntityBatteryBox;
@@ -35,8 +35,8 @@ public class GuiBatteryBox extends GuiContainer
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
 		this.fontRenderer.drawString(this.tileEntity.getInvName(), 65, 6, 4210752);
-		String displayJoules = ElectricInfo.getDisplayShort(tileEntity.getJoules(), ElectricUnit.JOULES);
-		String displayMaxJoules = ElectricInfo.getDisplay(tileEntity.getMaxJoules(), ElectricUnit.JOULES);
+		String displayJoules = ElectricityDisplay.getDisplayShort(tileEntity.getJoules(), ElectricUnit.JOULES);
+		String displayMaxJoules = ElectricityDisplay.getDisplay(tileEntity.getMaxJoules(), ElectricUnit.JOULES);
 
 		if (this.tileEntity.isDisabled())
 		{

@@ -340,12 +340,12 @@ public class Vector3 implements Cloneable
 	 * @param prefix - The prefix of this save. Use some unique string.
 	 * @param par1NBTTagCompound - The NBT compound object to save the data in
 	 */
-	public Vector3 writeToNBT(NBTTagCompound par1NBTTagCompound)
+	public NBTTagCompound writeToNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		par1NBTTagCompound.setDouble("x", this.x);
 		par1NBTTagCompound.setDouble("y", this.y);
 		par1NBTTagCompound.setDouble("z", this.z);
-		return this;
+		return par1NBTTagCompound;
 	}
 
 	@Override

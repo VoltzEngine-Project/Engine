@@ -12,7 +12,7 @@ public interface IItemElectricityStorage
 	/**
 	 * Sets the amount of joules this unit has stored.
 	 */
-	public void setJoules(ItemStack itemStack, double joules);
+	public void setJoules(double joules, ItemStack itemStack);
 
 	/**
 	 * Gets the maximum amount of joules this unit can store.

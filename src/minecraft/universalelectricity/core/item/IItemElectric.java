@@ -1,6 +1,7 @@
 package universalelectricity.core.item;
 
 import net.minecraft.item.ItemStack;
+import universalelectricity.core.electricity.ElectricityPack;
 
 /**
  * An interface applied to all electrical items. Should be applied to the Item class.
@@ -11,28 +12,29 @@ import net.minecraft.item.ItemStack;
 public interface IItemElectric extends IItemElectricityStorage, IItemVoltage
 {
 	/**
-	 * Called when this item receives electricity.
-	 */
-	public double onReceive(double amps, double voltage, ItemStack itemStack);
-
-	/**
-	 * Called when something requests electricity from this item.
+	 * Called when this item receives electricity; being charged.
 	 * 
-	 * @return - The amount of given joules
+	 * @return Returns the electricity rejected.
 	 */
-	public double onUse(double joulesNeeded, ItemStack itemStack);
+	public ElectricityPack onReceive(ElectricityPack electricityPack, ItemStack itemStack);
 
 	/**
-	 * @return Returns true or false if this consumer can receive electricity at this given tick or
-	 * moment.
-	 */
-	public boolean canReceiveElectricity();
-
-	/**
-	 * Can this item give out electricity when placed in an tile entity? Electric items like
-	 * batteries should be able to produce electricity (if they are rechargeable).
+	 * Called when something requests electricity from this item; being decharged.
 	 * 
-	 * @return - True or False.
+	 * @return - The amount of electricity given.
 	 */
-	public boolean canProduceElectricity();
+	public ElectricityPack onProvide(ElectricityPack electricityPack, ItemStack itemStack);
+
+	/**
+	 * @return How much electricity does this item want to receive/take? This will affect the speed
+	 * in which items get charged per tick.
+	 */
+	public ElectricityPack getReceiveRequest(ItemStack itemStack);
+
+	/**
+	 * 
+	 * @return How much electricity does this item want to provide/give out? This will affect the
+	 * speed in which items get decharged per tick.
+	 */
+	public ElectricityPack getProvideRequest(ItemStack itemStack);
 }
