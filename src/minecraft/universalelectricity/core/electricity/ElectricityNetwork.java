@@ -8,10 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
-import universalelectricity.core.vector.Vector3;
-import universalelectricity.core.vector.VectorHelper;
 import cpw.mods.fml.common.FMLLog;
 
 /**
@@ -342,18 +339,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 		while (it.hasNext())
 		{
 			IConductor conductor = (IConductor) it.next();
-
-			if (doSplit)
-			{
-				conductor.refreshConnectedBlocks();
-			}
-			else
-			{
-				for (byte i = 0; i < 6; i++)
-				{
-					conductor.updateConnectionWithoutSplit(VectorHelper.getConnectorFromSide(((TileEntity) conductor).worldObj, new Vector3((TileEntity) conductor), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
-				}
-			}
+			conductor.refreshConnectedBlocks(doSplit);
 		}
 	}
 

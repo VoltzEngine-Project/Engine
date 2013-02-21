@@ -23,13 +23,10 @@ public abstract class BlockConductor extends BlockContainer
 
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
-		if (tileEntity != null)
+		if (tileEntity instanceof IConductor)
 		{
-			if (tileEntity instanceof IConductor)
-			{
-				((IConductor) tileEntity).refreshConnectedBlocks();
-				world.markBlockForUpdate(x, y, z);
-			}
+			((IConductor) tileEntity).refreshConnectedBlocks(true);
+			world.markBlockForUpdate(x, y, z);
 		}
 	}
 
@@ -42,13 +39,10 @@ public abstract class BlockConductor extends BlockContainer
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
-		if (tileEntity != null)
+		if (tileEntity instanceof IConductor)
 		{
-			if (tileEntity instanceof IConductor)
-			{
-				((IConductor) tileEntity).refreshConnectedBlocks();
-				world.markBlockForUpdate(x, y, z);
-			}
+			((IConductor) tileEntity).refreshConnectedBlocks(true);
+			world.markBlockForUpdate(x, y, z);
 		}
 	}
 }

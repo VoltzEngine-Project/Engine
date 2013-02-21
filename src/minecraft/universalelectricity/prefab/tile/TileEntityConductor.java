@@ -1,6 +1,5 @@
 package universalelectricity.prefab.tile;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -47,14 +46,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 
 	protected String channel = "";
 
-	@Override
-	public TileEntity[] getConnectedBlocks()
-	{
-		return this.connectedBlocks;
-	}
-
-	@Override
-	public void updateConnection(TileEntity tileEntity, ForgeDirection side)
+	public void updateConnection(TileEntity tileEntity, ForgeDirection side, boolean doSplit)
 	{
 		if (!this.worldObj.isRemote)
 		{
@@ -74,40 +66,17 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 				}
 			}
 
-			if (this.connectedBlocks[side.ordinal()] != null)
+			if (doSplit)
 			{
-				if (this.connectedBlocks[side.ordinal()] instanceof IConductor)
+				if (this.connectedBlocks[side.ordinal()] != null)
 				{
-					this.getNetwork().refreshConductors(false);
-				}
-
-				this.getNetwork().stopProducing(this.connectedBlocks[side.ordinal()]);
-				this.getNetwork().stopRequesting(this.connectedBlocks[side.ordinal()]);
-			}
-
-			this.connectedBlocks[side.ordinal()] = null;
-			this.visuallyConnected[side.ordinal()] = false;
-		}
-	}
-
-	@Override
-	public void updateConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
-	{
-		if (!this.worldObj.isRemote)
-		{
-			if (tileEntity instanceof IConnector)
-			{
-				if (((IConnector) tileEntity).canConnect(side.getOpposite()))
-				{
-					this.connectedBlocks[side.ordinal()] = tileEntity;
-					this.visuallyConnected[side.ordinal()] = true;
-
-					if (tileEntity.getClass() == this.getClass())
+					if (this.connectedBlocks[side.ordinal()] instanceof IConductor)
 					{
-						this.getNetwork().mergeConnection(((IConductor) tileEntity).getNetwork());
+						this.getNetwork().refreshConductors(false);
 					}
 
-					return;
+					this.getNetwork().stopProducing(this.connectedBlocks[side.ordinal()]);
+					this.getNetwork().stopRequesting(this.connectedBlocks[side.ordinal()]);
 				}
 			}
 
@@ -133,7 +102,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	@Override
 	public void initiate()
 	{
-		this.refreshConnectedBlocks();
+		this.refreshConnectedBlocks(true);
 	}
 
 	@Override
@@ -143,12 +112,12 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 
 		if (this.ticks % 300 == 0)
 		{
-			this.refreshConnectedBlocks();
+			this.refreshConnectedBlocks(true);
 		}
 	}
 
 	@Override
-	public void refreshConnectedBlocks()
+	public void refreshConnectedBlocks(boolean doSplit)
 	{
 		if (this.worldObj != null)
 		{
@@ -158,7 +127,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 
 				for (byte i = 0; i < 6; i++)
 				{
-					this.updateConnection(VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+					this.updateConnection(VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i), doSplit);
 				}
 
 				/**

@@ -12,13 +12,6 @@ import net.minecraftforge.common.ForgeDirection;
 public interface IConductor extends INetworkProvider, IConnector
 {
 	/**
-	 * Gets a list of blocks this conductor is connected to.
-	 * 
-	 * @return
-	 */
-	public TileEntity[] getConnectedBlocks();
-
-	/**
 	 * Gets the resistance of the conductor. Used to calculate energy loss. A higher resistance
 	 * means a higher energy loss.
 	 * 
@@ -32,17 +25,7 @@ public interface IConductor extends INetworkProvider, IConnector
 	public double getCurrentCapcity();
 
 	/**
-	 * Instantly refreshes all connected blocks
+	 * Instantly refreshes all connected blocks around the conductor, recalculating everything.
 	 */
-	public void refreshConnectedBlocks();
-
-	/**
-	 * Adds a connection between this conductor and a UE unit
-	 * 
-	 * @param tileEntity - Must be either a producer, consumer or a conductor
-	 * @param side - side in which the connection is coming from
-	 */
-	public void updateConnection(TileEntity tileEntity, ForgeDirection side);
-
-	public void updateConnectionWithoutSplit(TileEntity connectorFromSide, ForgeDirection orientation);
+	public void refreshConnectedBlocks(boolean doSplit);
 }
