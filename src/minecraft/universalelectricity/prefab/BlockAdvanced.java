@@ -17,36 +17,20 @@ import universalelectricity.prefab.implement.ISneakUseWrench;
 import universalelectricity.prefab.implement.IToolConfigurator;
 
 /**
- * A block you may extend from to create your machine blocks! You do not have to extend from this
- * block if you do not want to. It's optional but it comes with some useful functions that will make
- * coding easier for you.
+ * An advanced block class that is to be extended for wrenching capabilities.
  */
-public abstract class BlockMachine extends BlockContainer implements ISneakUseWrench
+public abstract class BlockAdvanced extends BlockContainer implements ISneakUseWrench
 {
-	public BlockMachine(int id, Material material)
+	public BlockAdvanced(int id, Material material)
 	{
 		super(id, material);
 		this.setHardness(0.6f);
 	}
 
-	public BlockMachine(int id, int textureIndex, Material material)
+	public BlockAdvanced(int id, int textureIndex, Material material)
 	{
 		super(id, textureIndex, material);
 		this.setHardness(0.6f);
-	}
-
-	@Deprecated
-	public BlockMachine(String string, int id, Material material)
-	{
-		this(id, material);
-		this.setBlockName(string);
-	}
-
-	@Deprecated
-	public BlockMachine(String string, int id, Material material, CreativeTabs creativeTab)
-	{
-		this(string, id, material);
-		this.setCreativeTab(creativeTab);
 	}
 
 	/**

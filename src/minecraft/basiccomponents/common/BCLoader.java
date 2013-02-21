@@ -7,10 +7,10 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.prefab.RecipeHelper;
 import universalelectricity.prefab.TranslationHelper;
 import universalelectricity.prefab.UETab;
-import universalelectricity.prefab.UpdateNotifier;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.ore.OreGenReplaceStone;
@@ -60,7 +60,6 @@ public class BCLoader
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		UniversalElectricity.register(this, UniversalElectricity.MAJOR_VERSION, UniversalElectricity.MINOR_VERSION, UniversalElectricity.REVISION_VERSION, true);
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
 		/**
@@ -136,8 +135,6 @@ public class BCLoader
 
 		UETab.setItemStack(BasicComponents.batteryBox);
 
-		UpdateNotifier.INSTANCE.checkUpdate(NAME, UniversalElectricity.VERSION, "http://www.calclavia.com/downloads/ue/recommendedversion.txt");
-
 		proxy.preInit();
 	}
 
@@ -157,7 +154,7 @@ public class BCLoader
 		// Wrench
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemWrench), new Object[] { " S ", " DS", "S  ", 'S', "ingotSteel", 'D', Item.diamond }));
 		// Battery Box
-		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.batteryBox, new Object[] { "SSS", "BBB", "SSS", 'B', BasicComponents.itemBattery.getUncharged(), 'S', "ingotSteel" }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.batteryBox, new Object[] { "SSS", "BBB", "SSS", 'B', ElectricItemHelper.getUncharged(new ItemStack(BasicComponents.itemBattery)), 'S', "ingotSteel" }));
 		// Coal Generator
 		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.coalGenerator, new Object[] { "MMM", "MOM", "MCM", 'M', "ingotSteel", 'C', BasicComponents.itemMotor, 'O', Block.stoneOvenIdle }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(BasicComponents.coalGenerator, new Object[] { "MMM", "MOM", "MCM", 'M', "ingotBronze", 'C', BasicComponents.itemMotor, 'O', Block.stoneOvenIdle }));

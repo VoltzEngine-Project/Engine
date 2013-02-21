@@ -1,7 +1,5 @@
 package basiccomponents.common.tileentity;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -15,16 +13,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.block.IConductor;
-import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
-import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.tile.TileEntityElectricityProducer;
+import universalelectricity.prefab.tile.TileEntityElectrical;
 import basiccomponents.common.BCLoader;
-import basiccomponents.common.BasicComponents;
 import basiccomponents.common.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -33,7 +29,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 
-public class TileEntityCoalGenerator extends TileEntityElectricityProducer implements IInventory, ISidedInventory, IPacketReceiver, IPeripheral
+public class TileEntityCoalGenerator extends TileEntityElectrical implements IInventory, ISidedInventory, IPacketReceiver, IPeripheral
 {
 	/**
 	 * Maximum amount of energy needed to generate electricity
@@ -66,10 +62,9 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 	private int playersUsing = 0;
 
 	@Override
-	public void initiate()
+	public boolean canConnect(ForgeDirection direction)
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2)));
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, BasicComponents.blockMachine.blockID);
+		return direction == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2);
 	}
 
 	@Override
@@ -85,7 +80,7 @@ public class TileEntityCoalGenerator extends TileEntityElectricityProducer imple
 			ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.COAL_GENERATOR_METADATA + 2);
 			TileEntity outputTile = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), outputDirection);
 
-			ElectricityNetwork network = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
+			IElectricityNetwork network = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
 
 			if (network != null)
 			{

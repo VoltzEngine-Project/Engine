@@ -1,11 +1,15 @@
 package basiccomponents.common.tileentity;
 
 import net.minecraft.block.Block;
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.tile.TileEntityConductor;
 import basiccomponents.common.BCLoader;
 
 public class TileEntityCopperWire extends TileEntityConductor
 {
+	/**
+	 * Changed this if your mod wants to nerf Basic Component's copper wire.
+	 */
 	public static double RESISTANCE = 0.05;
 	public static double MAX_AMPS = 200;
 
@@ -27,11 +31,19 @@ public class TileEntityCopperWire extends TileEntityConductor
 	}
 
 	@Override
-	public void onOverCharge()
+	public void updateEntity()
 	{
-		if (!this.worldObj.isRemote)
+		super.updateEntity();
+
+		if (this.getNetwork() != null && this.ticks % 20 == 0)
 		{
-			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.fire.blockID);
+			if (this.getNetwork().getProduced().getWatts() > this.getCurrentCapcity())
+			{
+				if (!this.worldObj.isRemote)
+				{
+					this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.fire.blockID);
+				}
+			}
 		}
 	}
 }

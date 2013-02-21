@@ -1,5 +1,8 @@
 package universalelectricity.prefab.tile;
 
+import java.util.EnumSet;
+
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
@@ -35,7 +38,7 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectrical
 			 */
 			if (!this.isDisabled())
 			{
-				ElectricityPack electricityPack = ElectricityNetworkHelper.consumeFromMultipleSides(this, ElectricityNetworkHelper.getDirections(this), this.getRequest());
+				ElectricityPack electricityPack = ElectricityNetworkHelper.consumeFromMultipleSides(this, this.getConsumingSides(), this.getRequest());
 				this.onReceive(electricityPack);
 			}
 			else
@@ -43,6 +46,11 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectrical
 				ElectricityNetworkHelper.consumeFromMultipleSides(this, new ElectricityPack());
 			}
 		}
+	}
+
+	protected EnumSet<ForgeDirection> getConsumingSides()
+	{
+		return ElectricityNetworkHelper.getDirections(this);
 	}
 
 	/**

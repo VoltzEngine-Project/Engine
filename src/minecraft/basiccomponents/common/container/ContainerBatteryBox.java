@@ -54,63 +54,63 @@ public class ContainerBatteryBox extends Container
 	 * Called to transfer a stack from one inventory to the other eg. when shift clicking.
 	 */
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1)
+	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotID)
 	{
-		ItemStack var2 = null;
-		Slot var3 = (Slot) this.inventorySlots.get(par1);
+		ItemStack returnStack = null;
+		Slot slot = (Slot) this.inventorySlots.get(slotID);
 
-		if (var3 != null && var3.getHasStack())
+		if (slot != null && slot.getHasStack())
 		{
-			ItemStack var4 = var3.getStack();
-			var2 = var4.copy();
+			ItemStack itemStack = slot.getStack();
+			returnStack = itemStack.copy();
 
-			if (par1 != 0 && par1 != 1)
+			if (slotID != 0 && slotID != 1)
 			{
-				if (this.getSlot(0).isItemValid(var4))
+				if (this.getSlot(0).isItemValid(itemStack))
 				{
-					if (((IItemElectric) var4.getItem()).getProvideRequest())
+					if (((IItemElectric) itemStack.getItem()).getProvideRequest(itemStack).getWatts() > 0)
 					{
-						if (!this.mergeItemStack(var4, 1, 2, false))
+						if (!this.mergeItemStack(itemStack, 1, 2, false))
 						{
 							return null;
 						}
 					}
 					else
 					{
-						if (!this.mergeItemStack(var4, 0, 1, false))
+						if (!this.mergeItemStack(itemStack, 0, 1, false))
 						{
 							return null;
 						}
 					}
 				}
 
-				else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
+				else if (slotID >= 30 && slotID < 38 && !this.mergeItemStack(itemStack, 3, 30, false))
 				{
 					return null;
 				}
 			}
-			else if (!this.mergeItemStack(var4, 3, 38, false))
+			else if (!this.mergeItemStack(itemStack, 3, 38, false))
 			{
 				return null;
 			}
 
-			if (var4.stackSize == 0)
+			if (itemStack.stackSize == 0)
 			{
-				var3.putStack((ItemStack) null);
+				slot.putStack((ItemStack) null);
 			}
 			else
 			{
-				var3.onSlotChanged();
+				slot.onSlotChanged();
 			}
 
-			if (var4.stackSize == var2.stackSize)
+			if (itemStack.stackSize == returnStack.stackSize)
 			{
 				return null;
 			}
 
-			var3.onPickupFromSlot(par1EntityPlayer, var4);
+			slot.onPickupFromSlot(par1EntityPlayer, itemStack);
 		}
 
-		return var2;
+		return returnStack;
 	}
 }

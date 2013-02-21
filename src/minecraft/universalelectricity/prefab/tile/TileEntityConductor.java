@@ -1,5 +1,6 @@
 package universalelectricity.prefab.tile;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -195,10 +196,15 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 		this.network = network;
 	}
 
-	// TODO: FIX THIS.
+	@Override
+	public boolean canConnect(ForgeDirection direction)
+	{
+		return true;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox()
 	{
-		return INFINITE_EXTENT_AABB;
+		return AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.xCoord, this.yCoord, this.zCoord, this.xCoord + 1, this.yCoord + 1, this.zCoord + 1);
 	}
 }

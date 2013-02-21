@@ -14,7 +14,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.prefab.BlockMachine;
+import universalelectricity.prefab.BlockAdvanced;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import basiccomponents.common.BCLoader;
@@ -23,7 +23,7 @@ import basiccomponents.common.tileentity.TileEntityBatteryBox;
 import basiccomponents.common.tileentity.TileEntityCoalGenerator;
 import basiccomponents.common.tileentity.TileEntityElectricFurnace;
 
-public class BlockBasicMachine extends BlockMachine
+public class BlockBasicMachine extends BlockAdvanced
 {
 	public static final int COAL_GENERATOR_METADATA = 0;
 	public static final int BATTERY_BOX_METADATA = 4;
@@ -202,7 +202,6 @@ public class BlockBasicMachine extends BlockMachine
 			}
 		}
 
-		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
 
@@ -250,9 +249,6 @@ public class BlockBasicMachine extends BlockMachine
 		}
 
 		par1World.setBlockMetadata(x, y, z, change);
-
-		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
-
 		return true;
 	}
 

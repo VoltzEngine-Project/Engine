@@ -1,7 +1,5 @@
 package basiccomponents.common.tileentity;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -13,16 +11,13 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.core.electricity.ElectricityDisplay;
-import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.item.IItemElectric;
+import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
 import basiccomponents.common.BCLoader;
-import basiccomponents.common.BasicComponents;
 import basiccomponents.common.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -57,13 +52,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	private int playersUsing = 0;
 
 	@Override
-	public void initiate()
-	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2)));
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, BasicComponents.blockMachine.blockID);
-	}
-
-	@Override
 	public void updateEntity()
 	{
 		super.updateEntity();
@@ -71,19 +59,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 		/**
 		 * Attempts to charge using batteries.
 		 */
-		if (this.containingItems[0] != null)
-		{
-			if (this.containingItems[0].getItem() instanceof IItemElectric)
-			{
-				IItemElectric electricItem = (IItemElectric) this.containingItems[0].getItem();
-
-				if (electricItem.getProvideRequest())
-				{
-					double receivedWattHours = electricItem.onProvide(Math.min(electricItem.getMaxJoules(this.containingItems[0]) * 0.01, ElectricityDisplay.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
-					this.wattsReceived += ElectricityDisplay.getWatts(receivedWattHours);
-				}
-			}
-		}
+		this.wattsReceived += ElectricItemHelper.chargeItem(this.containingItems[0], WATTS_PER_TICK, this.getVoltage());
 
 		/**
 		 * Attempts to smelt an item.
@@ -129,6 +105,12 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 		}
+	}
+
+	@Override
+	public boolean canConnect(ForgeDirection direction)
+	{
+		return direction == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.ELECTRIC_FURNACE_METADATA + 2);
 	}
 
 	@Override
