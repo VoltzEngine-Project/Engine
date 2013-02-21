@@ -10,7 +10,9 @@ public class ElectricityDisplay
 {
 	public static enum ElectricUnit
 	{
-		AMPERE("Amp", "I"), AMP_HOUR("Amp Hour", "Ah"), VOLTAGE("Volt", "V"), WATT("Watt", "W"), WATT_HOUR("Watt Hour", "Wh"), RESISTANCE("Ohm", "R"), CONDUCTANCE("Siemen", "S"), JOULES("Joule", "J");
+		AMPERE("Amp", "I"), AMP_HOUR("Amp Hour", "Ah"), VOLTAGE("Volt", "V"), WATT("Watt", "W"),
+		WATT_HOUR("Watt Hour", "Wh"), RESISTANCE("Ohm", "R"), CONDUCTANCE("Siemen", "S"),
+		JOULES("Joule", "J");
 
 		public String name;
 		public String symbol;
@@ -29,7 +31,8 @@ public class ElectricityDisplay
 
 	public static enum MeasurementUnit
 	{
-		MICRO("Micro", "mi", 0.000001), MILLI("Milli", "m", 0.001), KILO("Kilo", "k", 1000), MEGA("Mega", "M", 1000000);
+		MICRO("Micro", "mi", 0.000001), MILLI("Milli", "m", 0.001), KILO("Kilo", "k", 1000),
+		MEGA("Mega", "M", 1000000);
 
 		public String name;
 		public String symbol;

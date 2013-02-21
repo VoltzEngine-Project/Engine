@@ -1,8 +1,5 @@
 package universalelectricity.core.block;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
-
 /**
  * Must be applied to all tile entities that are conductors.
  * 

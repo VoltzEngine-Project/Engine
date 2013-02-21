@@ -2,7 +2,6 @@ package universalelectricity.prefab.tile;
 
 import java.util.EnumSet;
 
-import basiccomponents.common.block.BlockBasicMachine;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
@@ -41,7 +40,7 @@ public abstract class TileEntityElectricityStorage extends TileEntityElectrical 
 		}
 
 	}
-	
+
 	protected EnumSet<ForgeDirection> getConsumingSides()
 	{
 		return ElectricityNetworkHelper.getDirections(this);
