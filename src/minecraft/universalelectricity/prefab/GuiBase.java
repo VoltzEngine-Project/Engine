@@ -1,7 +1,5 @@
 package universalelectricity.prefab;
 
-import java.util.List;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -176,7 +174,7 @@ public abstract class GuiBase extends GuiScreen
 
 			for (int var13 = 0; var13 < toolTips.length; ++var13)
 			{
-				String var14 = "\u00a77" + toolTips[var13];
+				String var14 = toolTips[var13];
 
 				this.fontRenderer.drawStringWithShadow(var14, var6, var7, -1);
 
@@ -190,5 +188,10 @@ public abstract class GuiBase extends GuiScreen
 
 			this.zLevel = 0.0F;
 		}
+
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		RenderHelper.enableGUIStandardItemLighting();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 }
