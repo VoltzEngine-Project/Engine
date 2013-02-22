@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
+import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.block.IConductor;
 
 public class ConductorRegistry implements IConductorRegistry
@@ -18,6 +19,7 @@ public class ConductorRegistry implements IConductorRegistry
 
 	static
 	{
+		UniversalElectricity.CONDUCTOR_REGISTRY = INSTANCE;
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 	}
 
