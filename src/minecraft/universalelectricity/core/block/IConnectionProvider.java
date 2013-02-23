@@ -2,6 +2,12 @@ package universalelectricity.core.block;
 
 import net.minecraft.tileentity.TileEntity;
 
+/**
+ * Applied to TileEntities.
+ * 
+ * @author Calclavia
+ * 
+ */
 public interface IConnectionProvider
 {
 
@@ -11,5 +17,5 @@ public interface IConnectionProvider
 	 * 
 	 * @return
 	 */
-	public TileEntity[] getConnectedBlocks();
+	public TileEntity[] getAdjacentConnections();
 }

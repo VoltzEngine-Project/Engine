@@ -1,4 +1,4 @@
-package universalelectricity.core.electricity;
+package universalelectricity.core.path;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -6,19 +6,19 @@ import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnectionProvider;
 
 /**
- * A path finding class to look for all conductors.
+ * Check if a conductor connects with another.
  * 
  * @author Calclavia
  * 
  */
-public class PathfinderConductor extends Pathfinder
+public class PathfinderConductorChecker extends Pathfinder
 {
-	public PathfinderConductor()
+	public PathfinderConductorChecker()
 	{
 		super(new IPathCallBack()
 		{
 			@Override
-			public boolean isValidNode(Pathfinder finder, ForgeDirection direction, IConnectionProvider provider, TileEntity connectedBlock, TileEntity[] connectedBlocks)
+			public boolean isValidNode(Pathfinder finder, ForgeDirection direction, IConnectionProvider provider, IConnectionProvider connectedBlock)
 			{
 				if (connectedBlock instanceof IConductor)
 				{
@@ -27,6 +27,12 @@ public class PathfinderConductor extends Pathfinder
 						return true;
 					}
 				}
+				return false;
+			}
+
+			@Override
+			public boolean onSearch(Pathfinder finder, IConnectionProvider provider)
+			{
 				return false;
 			}
 		});

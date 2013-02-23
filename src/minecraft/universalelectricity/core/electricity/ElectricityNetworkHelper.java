@@ -6,8 +6,12 @@ import java.util.List;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.block.IConductor;
+import universalelectricity.core.block.IConnectionProvider;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
+import universalelectricity.core.path.Pathfinder;
+import universalelectricity.core.path.PathfinderConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 
@@ -21,8 +25,8 @@ public class ElectricityNetworkHelper
 {
 
 	/**
-	 * Invalidates a TileEntity, thereby removing it from all electricity network that are adjacent
-	 * to it.
+	 * Invalidates a TileEntity from the electrical network, thereby removing it from all
+	 * electricity network that are adjacent to it.
 	 */
 	public static void invalidate(TileEntity tileEntity)
 	{
@@ -224,4 +228,34 @@ public class ElectricityNetworkHelper
 		return null;
 	}
 
+	public static void splitNetwork(IConnectionProvider splitPoint, IElectricityNetwork network)
+	{
+		if (splitPoint instanceof TileEntity && network != null)
+		{
+			TileEntity[] connectedBlocks = splitPoint.getConnectedBlocks();
+			
+			for(int i = 0; i < connectedBlocks.length; i ++ )
+			{
+				TileEntity connectedBlock = connectedBlocks[i];
+				
+				if(connectedBlock != null)
+				{
+					
+				}
+			}
+			
+			Pathfinder finder = new PathfinderConductor();
+			
+			finder.nodesInPath
+
+			List<IConductor> conductors = network.getConductors();
+
+			ElectricityNetwork newNetwork = new ElectricityNetwork();
+
+			for (IConductor conductor : conductors)
+			{
+				conductor.setNetwork(newNetwork);
+			}
+		}
+	}
 }

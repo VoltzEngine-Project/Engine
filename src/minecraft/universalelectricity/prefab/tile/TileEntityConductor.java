@@ -174,7 +174,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	}
 
 	@Override
-	public TileEntity[] getConnectedBlocks()
+	public TileEntity[] getAdjacentConnections()
 	{
 		return this.connectedBlocks;
 	}
