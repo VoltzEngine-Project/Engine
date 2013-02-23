@@ -174,6 +174,12 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	}
 
 	@Override
+	public TileEntity[] getConnectedBlocks()
+	{
+		return this.connectedBlocks;
+	}
+
+	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
 		return true;

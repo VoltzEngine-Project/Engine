@@ -1,13 +1,16 @@
 package universalelectricity.core.block;
 
+import net.minecraft.tileentity.TileEntity;
+
 /**
  * Must be applied to all tile entities that are conductors.
  * 
  * @author Calclavia
  * 
  */
-public interface IConductor extends INetworkProvider, IConnector
+public interface IConductor extends INetworkProvider, IConnector, IConnectionProvider
 {
+
 	/**
 	 * Gets the resistance of the conductor. Used to calculate energy loss. A higher resistance
 	 * means a higher energy loss.
