@@ -2,6 +2,7 @@ package universalelectricity.core.electricity;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
 import universalelectricity.core.block.IConductor;
@@ -96,7 +97,7 @@ public interface IElectricityNetwork
 	/**
 	 * @return A list of all conductors in this electrical network.
 	 */
-	public List<IConductor> getConductors();
+	public Set<IConductor> getConductors();
 
 	/**
 	 * @return The total amount of resistance of this electrical network. In Ohms.

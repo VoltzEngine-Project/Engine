@@ -3,9 +3,11 @@ package universalelectricity.core.electricity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
 import universalelectricity.core.block.IConductor;
@@ -27,7 +29,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	private final HashMap<TileEntity, ElectricityPack> producers = new HashMap<TileEntity, ElectricityPack>();
 	private final HashMap<TileEntity, ElectricityPack> consumers = new HashMap<TileEntity, ElectricityPack>();
 
-	private final List<IConductor> conductors = new ArrayList<IConductor>();
+	private final Set<IConductor> conductors = new HashSet<IConductor>();
 
 	public ElectricityNetwork()
 	{
@@ -387,7 +389,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	}
 
 	@Override
-	public List<IConductor> getConductors()
+	public Set<IConductor> getConductors()
 	{
 		return this.conductors;
 	}
