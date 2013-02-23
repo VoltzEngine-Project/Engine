@@ -13,13 +13,6 @@ public abstract class BlockConductor extends BlockContainer
 		super(id, material);
 	}
 
-	/*
-	 * @Override public void addCollidingBlockToList(World par1World, int par2, int par3, int par4,
-	 * AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity) {
-	 * 
-	 * }
-	 */
-
 	/**
 	 * Called whenever the block is added into the world. Args: world, x, y, z
 	 */

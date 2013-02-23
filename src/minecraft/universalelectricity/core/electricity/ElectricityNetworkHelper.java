@@ -6,12 +6,8 @@ import java.util.List;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.block.IConductor;
-import universalelectricity.core.block.IConnectionProvider;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
-import universalelectricity.core.path.Pathfinder;
-import universalelectricity.core.path.PathfinderChecker;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 
@@ -226,84 +222,5 @@ public class ElectricityNetworkHelper
 		}
 
 		return null;
-	}
-
-	/**
-	 * Called usually when a wire is broken to split the electrical network.
-	 * 
-	 * @param splitPoint
-	 * @param network
-	 */
-	public static void splitNetwork(IConnectionProvider splitPoint, IElectricityNetwork network)
-	{
-		if (splitPoint instanceof TileEntity && network != null)
-		{
-			network.getConductors().remove(splitPoint);
-
-			/**
-			 * Loop through the connected blocks and attempt to see if there are connections between
-			 * the two points elsewhere.
-			 */
-			TileEntity[] connectedBlocks = splitPoint.getAdjacentConnections();
-
-			for (int i = 0; i < connectedBlocks.length; i++)
-			{
-				TileEntity connectedBlockA = connectedBlocks[i];
-
-				if (connectedBlockA instanceof IConnectionProvider)
-				{
-					for (int ii = 0; ii < connectedBlocks.length; ii++)
-					{
-						final TileEntity connectedBlockB = connectedBlocks[ii];
-
-						if (connectedBlockA != connectedBlockB && connectedBlockB instanceof IConnectionProvider)
-						{
-							Pathfinder finder = new PathfinderChecker((IConnectionProvider) connectedBlockB, splitPoint);
-							finder.init((IConnectionProvider) connectedBlockA);
-
-							if (finder.results.size() > 0)
-							{
-								/**
-								 * The connections A and B are still intact elsewhere. Set all
-								 * references of wire connection into one network.
-								 */
-
-								for (IConnectionProvider node : finder.iteratedNodes)
-								{
-									if (node instanceof INetworkProvider)
-									{
-										if (node != splitPoint)
-										{
-											((INetworkProvider) node).setNetwork(network);
-										}
-									}
-								}
-							}
-							else
-							{
-								/**
-								 * The connections A and B are not connected anymore. Give both of
-								 * them a new network.
-								 */
-								IElectricityNetwork newNetwork = new ElectricityNetwork();
-
-								for (IConnectionProvider node : finder.iteratedNodes)
-								{
-									if (node instanceof IConductor)
-									{
-										if (node != splitPoint)
-										{
-											newNetwork.getConductors().add((IConductor) node);
-										}
-									}
-								}
-
-								newNetwork.cleanConductors();
-							}
-						}
-					}
-				}
-			}
-		}
 	}
 }

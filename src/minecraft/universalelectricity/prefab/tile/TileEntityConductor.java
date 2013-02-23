@@ -14,7 +14,6 @@ import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.electricity.ElectricityNetwork;
-import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
@@ -104,8 +103,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		if (!this.worldObj.isRemote)
 		{
-			// TODO:this.worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, 0);
-			ElectricityNetworkHelper.splitNetwork(this, this.getNetwork());
+			this.getNetwork().splitNetwork(this);
 		}
 
 		super.invalidate();

@@ -9,6 +9,10 @@ import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
 import universalelectricity.core.block.IConductor;
+import universalelectricity.core.block.IConnectionProvider;
+import universalelectricity.core.block.INetworkProvider;
+import universalelectricity.core.path.Pathfinder;
+import universalelectricity.core.path.PathfinderChecker;
 import cpw.mods.fml.common.FMLLog;
 
 /**
@@ -305,19 +309,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	}
 
 	@Override
-	public void registerConductor(IConductor newConductor)
-	{
-		this.cleanConductors();
-
-		if (!this.conductors.contains(newConductor))
-		{
-			this.conductors.add(newConductor);
-			newConductor.setNetwork(this);
-		}
-	}
-
-	@Override
-	public void cleanConductors()
+	public void cleanUpConductors()
 	{
 		Iterator it = this.conductors.iterator();
 
@@ -346,7 +338,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	@Override
 	public void refreshConductors()
 	{
-		this.cleanConductors();
+		this.cleanUpConductors();
 
 		try
 		{
@@ -362,20 +354,6 @@ public class ElectricityNetwork implements IElectricityNetwork
 		{
 			FMLLog.severe("Universal Electricity: Failed to refresh conductor.");
 			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void resetConductors()
-	{
-		this.cleanConductors();
-
-		Iterator<IConductor> it = this.conductors.iterator();
-
-		while (it.hasNext())
-		{
-			IConductor conductor = it.next();
-			conductor.setNetwork(new ElectricityNetwork(conductor));
 		}
 	}
 
@@ -422,7 +400,81 @@ public class ElectricityNetwork implements IElectricityNetwork
 			ElectricityNetwork newNetwork = new ElectricityNetwork();
 			newNetwork.getConductors().addAll(this.getConductors());
 			newNetwork.getConductors().addAll(network.getConductors());
-			newNetwork.cleanConductors();
+			newNetwork.cleanUpConductors();
+		}
+	}
+
+	@Override
+	public void splitNetwork(IConnectionProvider splitPoint)
+	{
+		if (splitPoint instanceof TileEntity)
+		{
+			this.getConductors().remove(splitPoint);
+
+			/**
+			 * Loop through the connected blocks and attempt to see if there are connections between
+			 * the two points elsewhere.
+			 */
+			TileEntity[] connectedBlocks = splitPoint.getAdjacentConnections();
+
+			for (int i = 0; i < connectedBlocks.length; i++)
+			{
+				TileEntity connectedBlockA = connectedBlocks[i];
+
+				if (connectedBlockA instanceof IConnectionProvider)
+				{
+					for (int ii = 0; ii < connectedBlocks.length; ii++)
+					{
+						final TileEntity connectedBlockB = connectedBlocks[ii];
+
+						if (connectedBlockA != connectedBlockB && connectedBlockB instanceof IConnectionProvider)
+						{
+							Pathfinder finder = new PathfinderChecker((IConnectionProvider) connectedBlockB, splitPoint);
+							finder.init((IConnectionProvider) connectedBlockA);
+
+							if (finder.results.size() > 0)
+							{
+								/**
+								 * The connections A and B are still intact elsewhere. Set all
+								 * references of wire connection into one network.
+								 */
+
+								for (IConnectionProvider node : finder.iteratedNodes)
+								{
+									if (node instanceof INetworkProvider)
+									{
+										if (node != splitPoint)
+										{
+											((INetworkProvider) node).setNetwork(this);
+										}
+									}
+								}
+							}
+							else
+							{
+								/**
+								 * The connections A and B are not connected anymore. Give both of
+								 * them a new network.
+								 */
+								IElectricityNetwork newNetwork = new ElectricityNetwork();
+
+								for (IConnectionProvider node : finder.iteratedNodes)
+								{
+									if (node instanceof IConductor)
+									{
+										if (node != splitPoint)
+										{
+											newNetwork.getConductors().add((IConductor) node);
+										}
+									}
+								}
+
+								newNetwork.cleanUpConductors();
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -431,4 +483,5 @@ public class ElectricityNetwork implements IElectricityNetwork
 	{
 		return "ElectricityNetwork[" + this.hashCode() + "|Wires:" + this.conductors.size() + "]";
 	}
+
 }

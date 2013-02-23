@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.tileentity.TileEntity;
 import universalelectricity.core.block.IConductor;
+import universalelectricity.core.block.IConnectionProvider;
 
 /**
  * The Electrical Network in interface form.
@@ -108,11 +109,9 @@ public interface IElectricityNetwork
 	public double getLowestCurrentCapacity();
 
 	/**
-	 * Merges another electrical network into this one, setting the other network into null.
-	 * 
-	 * @param network
+	 * Cleans up and updates the list of conductors in the electricity network, removing dead ones.
 	 */
-	public void mergeConnection(IElectricityNetwork network);
+	public void cleanUpConductors();
 
 	/**
 	 * Refreshes and recalculates wire connections in this electrical network.
@@ -121,18 +120,18 @@ public interface IElectricityNetwork
 	public void refreshConductors();
 
 	/**
-	 * Registers a conductor to the electricity network.
+	 * Merges another electrical network into this one, destroying the other network's existence.
+	 * 
+	 * @param network
 	 */
-	public void registerConductor(IConductor newConductor);
+	public void mergeConnection(IElectricityNetwork network);
 
 	/**
-	 * Cleans up and updates the list of conductors in the electricity network.
+	 * Splits the electricity network at a given TileEntity position. Called usually when a wire is
+	 * broken to split the electrical network.
+	 * 
+	 * @param splitPoint - The TileEntity that is being split.
 	 */
-	public void cleanConductors();
-
-	/**
-	 * Resets all conductors in this electricity network and recalculate all connections.
-	 */
-	public void resetConductors();
+	public void splitNetwork(IConnectionProvider splitPoint);
 
 }
