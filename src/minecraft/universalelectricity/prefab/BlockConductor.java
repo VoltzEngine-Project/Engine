@@ -3,7 +3,6 @@ package universalelectricity.prefab;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import universalelectricity.core.block.IConductor;
 
@@ -13,12 +12,13 @@ public abstract class BlockConductor extends BlockContainer
 	{
 		super(id, material);
 	}
-/*
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
-	{
-		
-	}*/
+
+	/*
+	 * @Override public void addCollidingBlockToList(World par1World, int par2, int par3, int par4,
+	 * AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity) {
+	 * 
+	 * }
+	 */
 
 	/**
 	 * Called whenever the block is added into the world. Args: world, x, y, z
@@ -32,8 +32,7 @@ public abstract class BlockConductor extends BlockContainer
 
 		if (tileEntity instanceof IConductor)
 		{
-			((IConductor) tileEntity).refreshConnectedBlocks(true);
-			world.markBlockForUpdate(x, y, z);
+			((IConductor) tileEntity).updateAdjacentConnections();
 		}
 	}
 
@@ -48,8 +47,7 @@ public abstract class BlockConductor extends BlockContainer
 
 		if (tileEntity instanceof IConductor)
 		{
-			((IConductor) tileEntity).refreshConnectedBlocks(true);
-			world.markBlockForUpdate(x, y, z);
+			((IConductor) tileEntity).updateAdjacentConnections();
 		}
 	}
 }

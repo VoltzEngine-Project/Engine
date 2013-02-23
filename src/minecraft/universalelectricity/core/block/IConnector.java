@@ -10,6 +10,7 @@ import net.minecraftforge.common.ForgeDirection;
  */
 public interface IConnector
 {
+
 	/**
 	 * @return If the connection is possible.
 	 */

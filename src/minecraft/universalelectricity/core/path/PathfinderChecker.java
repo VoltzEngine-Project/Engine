@@ -1,6 +1,7 @@
 package universalelectricity.core.path;
 
-import net.minecraft.tileentity.TileEntity;
+import java.util.Arrays;
+
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnectionProvider;
@@ -11,16 +12,16 @@ import universalelectricity.core.block.IConnectionProvider;
  * @author Calclavia
  * 
  */
-public class PathfinderConductorChecker extends Pathfinder
+public class PathfinderChecker extends Pathfinder
 {
-	public PathfinderConductorChecker()
+	public PathfinderChecker(final IConnectionProvider targetConnector, final IConnectionProvider... ignoreConnector)
 	{
 		super(new IPathCallBack()
 		{
 			@Override
 			public boolean isValidNode(Pathfinder finder, ForgeDirection direction, IConnectionProvider provider, IConnectionProvider connectedBlock)
 			{
-				if (connectedBlock instanceof IConductor)
+				if (connectedBlock instanceof IConductor && !Arrays.asList(ignoreConnector).contains(connectedBlock))
 				{
 					if (((IConductor) connectedBlock).canConnect(direction.getOpposite()))
 					{
@@ -33,6 +34,12 @@ public class PathfinderConductorChecker extends Pathfinder
 			@Override
 			public boolean onSearch(Pathfinder finder, IConnectionProvider provider)
 			{
+				if (provider == targetConnector)
+				{
+					finder.results.add(provider);
+					return true;
+				}
+
 				return false;
 			}
 		});

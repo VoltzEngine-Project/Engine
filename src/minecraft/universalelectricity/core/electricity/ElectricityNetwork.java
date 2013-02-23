@@ -25,14 +25,14 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 	private final List<IConductor> conductors = new ArrayList<IConductor>();
 
+	public ElectricityNetwork()
+	{
+
+	}
+
 	public ElectricityNetwork(IConductor... conductors)
 	{
 		this.conductors.addAll(Arrays.asList(conductors));
-
-		for (IConductor conductor : conductors)
-		{
-			ConductorRegistry.INSTANCE.register(conductor);
-		}
 	}
 
 	@Override
@@ -314,11 +314,6 @@ public class ElectricityNetwork implements IElectricityNetwork
 			this.conductors.add(newConductor);
 			newConductor.setNetwork(this);
 		}
-
-		if (!ConductorRegistry.conductors.contains(newConductor))
-		{
-			ConductorRegistry.conductors.add(newConductor);
-		}
 	}
 
 	@Override
@@ -349,7 +344,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	 * This function is called to refresh all conductors in this network
 	 */
 	@Override
-	public void refreshConductors(boolean doSplit)
+	public void refreshConductors()
 	{
 		this.cleanConductors();
 
@@ -360,7 +355,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 			while (it.hasNext())
 			{
 				IConductor conductor = it.next();
-				conductor.refreshConnectedBlocks(doSplit);
+				conductor.updateAdjacentConnections();
 			}
 		}
 		catch (Exception e)
@@ -424,9 +419,16 @@ public class ElectricityNetwork implements IElectricityNetwork
 	{
 		if (network != null && network != this)
 		{
-			this.conductors.addAll(network.getConductors());
-			network = null;
-			this.cleanConductors();
+			ElectricityNetwork newNetwork = new ElectricityNetwork();
+			newNetwork.getConductors().addAll(this.getConductors());
+			newNetwork.getConductors().addAll(network.getConductors());
+			newNetwork.cleanConductors();
 		}
+	}
+
+	@Override
+	public String toString()
+	{
+		return "ElectricityNetwork[" + this.hashCode() + "|Wires:" + this.conductors.size() + "]";
 	}
 }

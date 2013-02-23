@@ -111,7 +111,7 @@ public class BCLoader
 
 		BasicComponents.requestIngots(0);
 		BasicComponents.requestPlates(0);
-		
+
 		UETab.setItemStack(OreDictionary.getOres("batteryBox").get(0));
 
 		proxy.preInit();

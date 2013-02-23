@@ -34,10 +34,20 @@ public class Pathfinder
 		public boolean onSearch(Pathfinder finder, IConnectionProvider provider);
 	}
 
+	/**
+	 * A pathfinding call back interface used to call back on paths.
+	 */
 	public IPathCallBack callBackCheck;
-	public List<IConnectionProvider> nodesInPath;
+
+	/**
+	 * A list of nodes that the pathfinder went through.
+	 */
 	public List<IConnectionProvider> iteratedNodes;
-	public List<IConnectionProvider> findings;
+
+	/**
+	 * The results and findings found by the pathfinder.
+	 */
+	public List results;
 
 	public Pathfinder(IPathCallBack callBack)
 	{
@@ -79,6 +89,9 @@ public class Pathfinder
 		return true;
 	}
 
+	/**
+	 * Called to execute the pathfinding operation.
+	 */
 	public Pathfinder init(IConnectionProvider provider)
 	{
 		this.findNodes(provider);
@@ -87,9 +100,8 @@ public class Pathfinder
 
 	public Pathfinder clear()
 	{
-		this.nodesInPath = new ArrayList<IConnectionProvider>();
 		this.iteratedNodes = new ArrayList<IConnectionProvider>();
-		this.findings = new ArrayList<IConnectionProvider>();
+		this.results = new ArrayList();
 		return this;
 	}
 }

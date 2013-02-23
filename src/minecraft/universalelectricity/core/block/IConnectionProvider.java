@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
  * @author Calclavia
  * 
  */
-public interface IConnectionProvider
+public interface IConnectionProvider extends IConnector
 {
 
 	/**
@@ -18,4 +18,10 @@ public interface IConnectionProvider
 	 * @return
 	 */
 	public TileEntity[] getAdjacentConnections();
+
+	/**
+	 * Instantly refreshes all connected blocks around the conductor, recalculating the connected
+	 * blocks.
+	 */
+	public void updateAdjacentConnections();
 }

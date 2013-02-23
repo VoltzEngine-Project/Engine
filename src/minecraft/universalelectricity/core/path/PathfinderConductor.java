@@ -1,6 +1,5 @@
 package universalelectricity.core.path;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnectionProvider;

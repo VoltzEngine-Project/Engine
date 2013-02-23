@@ -29,11 +29,6 @@ public class UniversalElectricity
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
 
 	/**
-	 * Can be cased into IConductorRegistry. Use this for maximum compatiblity.
-	 */
-	public static Object CONDUCTOR_REGISTRY;
-
-	/**
 	 * Multiply this to convert foreign energy into UE Joules.
 	 */
 	public static double IC2_RATIO = 40;

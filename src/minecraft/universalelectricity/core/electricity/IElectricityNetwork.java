@@ -117,9 +117,8 @@ public interface IElectricityNetwork
 	/**
 	 * Refreshes and recalculates wire connections in this electrical network.
 	 * 
-	 * @param doSplit - True if check for connection splits.
 	 */
-	public void refreshConductors(boolean doSplit);
+	public void refreshConductors();
 
 	/**
 	 * Registers a conductor to the electricity network.
