@@ -12,13 +12,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.core.item.IItemElectric;
-import universalelectricity.prefab.implement.ISneakUseWrench;
 import universalelectricity.prefab.implement.IToolConfigurator;
 
 /**
  * An advanced block class that is to be extended for wrenching capabilities.
  */
-public abstract class BlockAdvanced extends BlockContainer implements ISneakUseWrench
+public abstract class BlockAdvanced extends BlockContainer
 {
 	public BlockAdvanced(int id, Material material)
 	{
@@ -57,7 +56,16 @@ public abstract class BlockAdvanced extends BlockContainer implements ISneakUseW
 				world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 				((IToolConfigurator) par5EntityPlayer.inventory.getCurrentItem().getItem()).wrenchUsed(par5EntityPlayer, x, y, z);
 
+				if (par5EntityPlayer.isSneaking())
+				{
+					if (this.onSneakUseWrench(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ))
+					{
+						return true;
+					}
+				}
+
 				return this.onUseWrench(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
+
 			}
 			else if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof IItemElectric)
 			{
@@ -125,7 +133,6 @@ public abstract class BlockAdvanced extends BlockContainer implements ISneakUseW
 	 * 
 	 * @return True if some happens
 	 */
-	@Override
 	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		return this.onUseWrench(par1World, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
