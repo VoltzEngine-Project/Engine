@@ -21,6 +21,7 @@ if %PROMOTION%==* (
 
 set API_NAME=UniversalElectricity_v%MODVERSION%.%BUILD_NUMBER%.zip
 set FILE_NAME=BasicComponents_v%MODVERSION%.%BUILD_NUMBER%.jar
+set DEV_NAME=BCDev_v%MODVERSION%.%BUILD_NUMBER%.jar
 set BACKUP_NAME=UniversalElectricity_v%MODVERSION%.%BUILD_NUMBER%_backup.zip
 
 echo Starting to build %FILE_NAME%
@@ -33,22 +34,24 @@ runtime\bin\python\python_mcp runtime\reobfuscate.py %*
 cd reobf\minecraft\
 7z a "..\..\builds\%FILE_NAME%" "*"
 cd ..\..\
+
+cd eclipse\Minecraft\bin\
+7z a "..\..\..\builds\%DEV_NAME%" "universalelectricity"
+cd ..\..\..\
+
 cd resources\
 7z a "..\builds\%FILE_NAME%" "*"
+7z a "..\builds\%DEV_NAME%" "*"
 7z a "..\builds\%BACKUP_NAME%" "*"
 cd ..\
 cd src\
 7z a "..\builds\%API_NAME%" "*\universalelectricity\"
 
 7z a "..\builds\%BACKUP_NAME%" "*\universalelectricity\"
-7z a "..\builds\%BACKUP_NAME%" "*\basiccomponents\"
-7z a "..\builds\%BACKUP_NAME%" "*\buildcraft\"
-7z a "..\builds\%BACKUP_NAME%" "*\railcraft\"
-7z a "..\builds\%BACKUP_NAME%" "*\dan200\"
 cd ..\
 
 ::UPDATE INFO FILE
-echo %PROMOTION% %API_NAME% %FILE_NAME%>>info.txt
+echo %PROMOTION% %API_NAME% %FILE_NAME% %DEV_NAME%>>info.txt
 
 ::GENERATE FTP Script
 echo open %SERVER%>ftpscript.txt
@@ -57,6 +60,7 @@ echo %PASSWORD%>>ftpscript.txt
 echo binary>>ftpscript.txt
 echo put "recommendedversion.txt">>ftpscript.txt
 echo put "builds\%FILE_NAME%">>ftpscript.txt
+echo put "builds\%DEV_NAME%">>ftpscript.txt
 echo put "builds\%API_NAME%">>ftpscript.txt
 echo put info.txt>>ftpscript.txt
 echo quit>>ftpscript.txt
