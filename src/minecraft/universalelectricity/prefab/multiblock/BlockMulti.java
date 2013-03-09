@@ -18,7 +18,7 @@ public class BlockMulti extends BlockContainer
 	{
 		super(id, UniversalElectricity.machine);
 		this.setHardness(0.8F);
-		this.setBlockName("MultiBlock");
+		this.setUnlocalizedName("MultiBlock");
 	}
 
 	public void makeFakeBlock(World worldObj, Vector3 position, Vector3 mainBlock)

@@ -13,7 +13,7 @@ public class BlockCopperWire extends BlockConductor
 	public BlockCopperWire(int id)
 	{
 		super(id, Material.cloth);
-		this.setBlockName("copperWire");
+		this.setUnlocalizedName("copperWire");
 		this.setStepSound(soundClothFootstep);
 		this.setResistance(0.2F);
 		this.setHardness(0.1f);
@@ -62,6 +62,6 @@ public class BlockCopperWire extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return BasicComponents.ITEM_TEXTURE_FILE;
+		return BasicComponents.ITEM_TEXTURE_DIRECTORY;
 	}
 }

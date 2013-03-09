@@ -11,9 +11,9 @@ public class ItemBattery extends ItemElectric
 	{
 		super(id);
 		this.setIconIndex(texture);
-		this.setItemName("battery");
+		this.setUnlocalizedName("battery");
 		this.setCreativeTab(UETab.INSTANCE);
-		this.setTextureFile(BasicComponents.ITEM_TEXTURE_FILE);
+		this.setTextureFile(BasicComponents.ITEM_TEXTURE_DIRECTORY);
 	}
 
 	@Override

@@ -10,8 +10,8 @@ public class ItemBasic extends Item
 	{
 		super(id);
 		this.setIconIndex(texture);
-		this.setItemName(name);
+		this.setUnlocalizedName(name);
 		this.setCreativeTab(UETab.INSTANCE);
-		this.setTextureFile(BasicComponents.ITEM_TEXTURE_FILE);
+		this.setTextureFile(BasicComponents.ITEM_TEXTURE_DIRECTORY);
 	}
 }

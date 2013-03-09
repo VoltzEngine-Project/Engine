@@ -22,9 +22,9 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BasicComponents
 {
-	public static final String FILE_PATH = "/basiccomponents/textures/";
-	public static final String BLOCK_TEXTURE_FILE = FILE_PATH + "blocks.png";
-	public static final String ITEM_TEXTURE_FILE = FILE_PATH + "items.png";
+	public static final String TEXTURE_DIRECTORY = "/basiccomponents/textures/";
+	public static final String BLOCK_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "blocks.png";
+	public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items.png";
 
 	public static int BLOCK_ID_PREFIX = 3970;
 

@@ -31,10 +31,10 @@ public class BlockBasicMachine extends BlockAdvanced
 	public BlockBasicMachine(int id, int textureIndex)
 	{
 		super(id, textureIndex, UniversalElectricity.machine);
-		this.setBlockName("bcMachine");
+		this.setUnlocalizedName("bcMachine");
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setStepSound(soundMetalFootstep);
-		this.setTextureFile(BasicComponents.BLOCK_TEXTURE_FILE);
+		this.setTextureFile(BasicComponents.BLOCK_TEXTURE_DIRECTORY);
 	}
 
 	@Override

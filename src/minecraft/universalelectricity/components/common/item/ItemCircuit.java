@@ -16,9 +16,9 @@ public class ItemCircuit extends Item
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
 		this.setCreativeTab(UETab.INSTANCE);
-		this.setItemName("circuit");
+		this.setUnlocalizedName("circuit");
 		this.setIconIndex(texture);
-		this.setTextureFile(BasicComponents.ITEM_TEXTURE_FILE);
+		this.setTextureFile(BasicComponents.ITEM_TEXTURE_DIRECTORY);
 	}
 
 	@Override

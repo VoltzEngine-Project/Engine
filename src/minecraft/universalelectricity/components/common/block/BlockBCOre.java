@@ -4,25 +4,42 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import universalelectricity.components.common.BasicComponents;
 import universalelectricity.prefab.UETab;
 
 public class BlockBCOre extends Block
 {
+	private Icon textureCopper;
+	private Icon textureTin;
+
 	public BlockBCOre(int id)
 	{
-		super(id, 14, Material.rock);
+		super(id, Material.rock);
 		this.setCreativeTab(UETab.INSTANCE);
-		this.setBlockName("bcOre");
+		this.setUnlocalizedName("bcOre");
 		this.setHardness(2f);
 	}
 
 	@Override
-	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
+	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
-		return this.blockIndexInTexture + metadata;
+		if (metadata == 1)
+		{
+			return this.textureTin;
+		}
+
+		return this.textureCopper;
+	}
+
+	@Override
+	public void func_94332_a(IconRegister par1IconRegister)
+	{
+		this.textureCopper = par1IconRegister.func_94245_a("copper");
+		this.textureTin = par1IconRegister.func_94245_a("tin");
 	}
 
 	@Override
@@ -34,7 +51,7 @@ public class BlockBCOre extends Block
 	@Override
 	public String getTextureFile()
 	{
-		return BasicComponents.BLOCK_TEXTURE_FILE;
+		return BasicComponents.BLOCK_TEXTURE_DIRECTORY;
 	}
 
 	@Override
