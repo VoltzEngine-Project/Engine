@@ -1,7 +1,7 @@
 package universalelectricity.prefab;
 
 import net.minecraft.inventory.IInventory;
-import universalelectricity.core.implement.IItemElectric;
+import universalelectricity.core.item.IItemElectric;
 
 /**
  * This slot should be used by any container that needs the slot for an electric items only.
