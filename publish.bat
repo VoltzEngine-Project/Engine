@@ -19,7 +19,7 @@ if %PROMOTION%==* (
 	echo %MODVERSION% >recommendedversion.txt
 )
 
-set API_NAME=UniversalElectricity_v%MODVERSION%.%BUILD_NUMBER%_api.zip
+set API_NAME=UniversalElectricity_v%MODVERSION%.%BUILD_NUMBER%.zip
 set FILE_NAME=BasicComponents_v%MODVERSION%.%BUILD_NUMBER%.jar
 set BACKUP_NAME=UniversalElectricity_v%MODVERSION%.%BUILD_NUMBER%_backup.zip
 

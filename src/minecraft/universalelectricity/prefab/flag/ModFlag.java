@@ -73,23 +73,29 @@ public class ModFlag extends FlagBase
 	public FlagWorld getFlagWorld(World world)
 	{
 		FlagWorld worldData = null;
-
-		for (FlagWorld data : this.flagWorlds)
+		
+		if (world != null)
 		{
-			if (data.world.provider.dimensionId == world.provider.dimensionId)
+			for (FlagWorld data : this.flagWorlds)
 			{
-				worldData = data;
-				break;
+				if (data.world != null && data.world.provider != null)
+				{
+					if (data.world.provider.dimensionId == world.provider.dimensionId)
+					{
+						worldData = data;
+						break;
+					}
+				}
+			}
+
+			// If data is null, create it.
+			if (worldData == null)
+			{
+				worldData = new FlagWorld(world);
+				this.flagWorlds.add(worldData);
 			}
 		}
-
-		// If data is null, create it.
-		if (worldData == null)
-		{
-			worldData = new FlagWorld(world);
-			this.flagWorlds.add(worldData);
-		}
-
+		
 		return worldData;
 	}
 
