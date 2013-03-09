@@ -18,7 +18,6 @@ public class BlockCopperWire extends BlockConductor
 		this.setResistance(0.2F);
 		this.setHardness(0.1f);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
-		this.blockIndexInTexture = 19;
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setBurnProperties(this.blockID, 30, 60);
 	}

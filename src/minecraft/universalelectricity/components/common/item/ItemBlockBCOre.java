@@ -22,14 +22,14 @@ public class ItemBlockBCOre extends ItemBlock
 	}
 
 	@Override
-	public String getItemNameIS(ItemStack par1ItemStack)
+	public String getUnlocalizedName(ItemStack par1ItemStack)
 	{
-		return Block.blocksList[this.getBlockID()].getBlockName() + "." + (par1ItemStack.getItemDamage());
+		return Block.blocksList[this.getBlockID()].getUnlocalizedName() + "." + (par1ItemStack.getItemDamage());
 	}
 
 	@Override
-	public String getItemName()
+	public String getUnlocalizedName()
 	{
-		return Block.blocksList[this.getBlockID()].getBlockName() + ".0";
+		return Block.blocksList[this.getBlockID()].getUnlocalizedName() + ".0";
 	}
 }

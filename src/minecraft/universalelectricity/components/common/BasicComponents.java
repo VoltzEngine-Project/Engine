@@ -9,7 +9,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import universalelectricity.components.common.item.ItemIngot;
 import universalelectricity.components.common.item.ItemPlate;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.prefab.ItemElectric;
+import universalelectricity.core.item.ItemElectric;
 import universalelectricity.prefab.ore.OreGenBase;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -23,6 +23,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class BasicComponents
 {
 	public static final String TEXTURE_DIRECTORY = "/basiccomponents/textures/";
+	public static final String GUI_DIRECTORY = TEXTURE_DIRECTORY + "gui/";
 	public static final String BLOCK_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "blocks.png";
 	public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items.png";
 

@@ -21,7 +21,7 @@ public class ItemBlockBasicMachine extends ItemBlock
 	}
 
 	@Override
-	public String getItemNameIS(ItemStack itemstack)
+	public String getUnlocalizedName(ItemStack itemstack)
 	{
 		int metadata = 0;
 
@@ -34,12 +34,12 @@ public class ItemBlockBasicMachine extends ItemBlock
 			metadata = 1;
 		}
 
-		return Block.blocksList[this.getBlockID()].getBlockName() + "." + metadata;
+		return Block.blocksList[this.getBlockID()].getUnlocalizedName() + "." + metadata;
 	}
 
 	@Override
-	public String getItemName()
+	public String getUnlocalizedName()
 	{
-		return Block.blocksList[this.getBlockID()].getBlockName() + ".0";
+		return Block.blocksList[this.getBlockID()].getUnlocalizedName() + ".0";
 	}
 }

@@ -1,19 +1,16 @@
 package universalelectricity.components.common.item;
 
 import net.minecraft.item.ItemStack;
-import universalelectricity.components.common.BasicComponents;
-import universalelectricity.prefab.ItemElectric;
+import universalelectricity.core.item.ItemElectric;
 import universalelectricity.prefab.UETab;
 
 public class ItemBattery extends ItemElectric
 {
-	public ItemBattery(int id, int texture)
+	public ItemBattery(int id)
 	{
 		super(id);
-		this.setIconIndex(texture);
 		this.setUnlocalizedName("battery");
 		this.setCreativeTab(UETab.INSTANCE);
-		this.setTextureFile(BasicComponents.ITEM_TEXTURE_DIRECTORY);
 	}
 
 	@Override

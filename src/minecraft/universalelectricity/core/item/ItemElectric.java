@@ -1,4 +1,4 @@
-package universalelectricity.prefab;
+package universalelectricity.core.item;
 
 import java.util.List;
 
@@ -11,8 +11,6 @@ import net.minecraft.world.World;
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.item.ElectricItemHelper;
-import universalelectricity.core.item.IItemElectric;
 
 /**
  * Extend from this class if your item requires electricity or to be charged. Optionally, you can

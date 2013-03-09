@@ -17,8 +17,6 @@ public class ItemWrench extends Item implements IToolConfigurator
 		this.setMaxDamage(3000);
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setUnlocalizedName("wrench");
-		this.setIconIndex(texture);
-		this.setTextureFile(BasicComponents.ITEM_TEXTURE_DIRECTORY);
 	}
 
 	@Override

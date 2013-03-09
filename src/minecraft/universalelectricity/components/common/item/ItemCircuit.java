@@ -17,8 +17,6 @@ public class ItemCircuit extends Item
 		this.setHasSubtypes(true);
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setUnlocalizedName("circuit");
-		this.setIconIndex(texture);
-		this.setTextureFile(BasicComponents.ITEM_TEXTURE_DIRECTORY);
 	}
 
 	@Override
@@ -28,15 +26,9 @@ public class ItemCircuit extends Item
 	}
 
 	@Override
-	public String getItemNameIS(ItemStack itemstack)
+	public String getUnlocalizedName(ItemStack itemstack)
 	{
-		return this.getItemName() + "." + itemstack.getItemDamage();
-	}
-
-	@Override
-	public int getIconFromDamage(int i)
-	{
-		return this.iconIndex + i;
+		return this.getUnlocalizedName() + "." + itemstack.getItemDamage();
 	}
 
 	@Override

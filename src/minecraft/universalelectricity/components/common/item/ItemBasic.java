@@ -6,12 +6,10 @@ import universalelectricity.prefab.UETab;
 
 public class ItemBasic extends Item
 {
-	public ItemBasic(String name, int id, int texture)
+	public ItemBasic(String name, int id)
 	{
 		super(id);
-		this.setIconIndex(texture);
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(UETab.INSTANCE);
-		this.setTextureFile(BasicComponents.ITEM_TEXTURE_DIRECTORY);
 	}
 }

@@ -11,19 +11,15 @@ public class ItemIngot extends ItemBasic
 
 	public ItemIngot(int id)
 	{
-		super("ingot", id, 2);
+		super("ingot", id);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 	}
 
-	public String getItemNameIS(ItemStack itemStack)
+	@Override
+	public String getUnlocalizedName(ItemStack itemStack)
 	{
 		return "item." + INGOTS[itemStack.getItemDamage()];
-	}
-
-	public int getIconFromDamage(int metadata)
-	{
-		return this.iconIndex + metadata;
 	}
 
 	@Override

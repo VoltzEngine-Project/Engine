@@ -11,19 +11,15 @@ public class ItemPlate extends ItemBasic
 
 	public ItemPlate(int id)
 	{
-		super("plate", id, 32);
+		super("plate", id);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 	}
 
-	public String getItemNameIS(ItemStack itemStack)
+	@Override
+	public String getUnlocalizedName(ItemStack itemStack)
 	{
 		return "item." + PLATES[itemStack.getItemDamage()];
-	}
-
-	public int getIconFromDamage(int metadata)
-	{
-		return this.iconIndex + metadata;
 	}
 
 	@Override

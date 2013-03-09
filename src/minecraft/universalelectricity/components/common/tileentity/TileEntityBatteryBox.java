@@ -295,4 +295,16 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 	{
 		return 5000000;
 	}
+
+	@Override
+	public boolean func_94042_c()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean func_94041_b(int i, ItemStack itemstack)
+	{
+		return false;
+	}
 }

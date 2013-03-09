@@ -40,7 +40,7 @@ public class TileEntityCopperWire extends TileEntityConductor
 			{
 				if (!this.worldObj.isRemote)
 				{
-					this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.fire.blockID);
+					this.worldObj.setBlockAndMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.fire.blockID, 0, 2);
 				}
 			}
 		}

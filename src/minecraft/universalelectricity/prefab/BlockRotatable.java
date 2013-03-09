@@ -3,6 +3,7 @@ package universalelectricity.prefab;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -21,15 +22,10 @@ public abstract class BlockRotatable extends BlockAdvanced implements IRotatable
 		super(id, material);
 	}
 
-	public BlockRotatable(int id, int textureIndex, Material material)
-	{
-		super(id, textureIndex, material);
-	}
-
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving par5EntityLiving)
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityLiving, ItemStack itemStack)
 	{
-		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int angle = MathHelper.floor_double((entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 3;
 
 		switch (angle)
@@ -70,6 +66,6 @@ public abstract class BlockRotatable extends BlockAdvanced implements IRotatable
 	@Override
 	public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
 	{
-		world.setBlockMetadata(x, y, z, facingDirection.ordinal());
+		world.setBlockMetadataWithNotify(x, y, z, facingDirection.ordinal(), 2);
 	}
 }

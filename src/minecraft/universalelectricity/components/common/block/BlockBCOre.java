@@ -13,8 +13,8 @@ import universalelectricity.prefab.UETab;
 
 public class BlockBCOre extends Block
 {
-	private Icon textureCopper;
-	private Icon textureTin;
+	private Icon iconCopper;
+	private Icon iconTin;
 
 	public BlockBCOre(int id)
 	{
@@ -29,17 +29,17 @@ public class BlockBCOre extends Block
 	{
 		if (metadata == 1)
 		{
-			return this.textureTin;
+			return this.iconTin;
 		}
 
-		return this.textureCopper;
+		return this.iconCopper;
 	}
 
 	@Override
 	public void func_94332_a(IconRegister par1IconRegister)
 	{
-		this.textureCopper = par1IconRegister.func_94245_a("copper");
-		this.textureTin = par1IconRegister.func_94245_a("tin");
+		this.iconCopper = par1IconRegister.func_94245_a("oreCopper");
+		this.iconTin = par1IconRegister.func_94245_a("oreTin");
 	}
 
 	@Override
