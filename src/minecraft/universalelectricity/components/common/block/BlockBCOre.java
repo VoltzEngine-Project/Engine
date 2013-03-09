@@ -38,8 +38,8 @@ public class BlockBCOre extends Block
 	@Override
 	public void func_94332_a(IconRegister par1IconRegister)
 	{
-		this.iconCopper = par1IconRegister.func_94245_a("oreCopper");
-		this.iconTin = par1IconRegister.func_94245_a("oreTin");
+		this.iconCopper = par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + "oreCopper");
+		this.iconTin = par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + "oreTin");
 	}
 
 	@Override

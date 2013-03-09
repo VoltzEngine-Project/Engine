@@ -8,15 +8,15 @@ import net.minecraft.item.ItemStack;
 import universalelectricity.components.common.BasicComponents;
 import universalelectricity.prefab.UETab;
 
-public class ItemCircuit extends Item
+public class ItemCircuit extends ItemBasic
 {
+	public static final String[] TYPES = { "circuitBasic", "circuitAdvanced", "circuitElite" };
+
 	public ItemCircuit(int id, int texture)
 	{
-		super(id);
+		super("circuit", id);
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
-		this.setCreativeTab(UETab.INSTANCE);
-		this.setUnlocalizedName("circuit");
 	}
 
 	@Override
@@ -26,17 +26,17 @@ public class ItemCircuit extends Item
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack itemstack)
+	public String getUnlocalizedName(ItemStack itemStack)
 	{
-		return this.getUnlocalizedName() + "." + itemstack.getItemDamage();
+		return "item." + TYPES[itemStack.getItemDamage()];
 	}
 
 	@Override
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
+	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List list)
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < TYPES.length; i++)
 		{
-			par3List.add(new ItemStack(this, 1, i));
+			list.add(new ItemStack(this, 1, i));
 		}
 	}
 }

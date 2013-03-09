@@ -1,7 +1,7 @@
 package universalelectricity.components.common.tileentity;
 
 import net.minecraft.block.Block;
-import universalelectricity.components.common.BCLoader;
+import universalelectricity.components.common.BasicComponents;
 import universalelectricity.prefab.tile.TileEntityConductor;
 
 public class TileEntityCopperWire extends TileEntityConductor
@@ -14,7 +14,7 @@ public class TileEntityCopperWire extends TileEntityConductor
 
 	public TileEntityCopperWire()
 	{
-		this.channel = BCLoader.CHANNEL;
+		this.channel = BasicComponents.CHANNEL;
 	}
 
 	@Override

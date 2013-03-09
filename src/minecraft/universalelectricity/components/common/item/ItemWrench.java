@@ -8,15 +8,13 @@ import universalelectricity.components.common.BasicComponents;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IToolConfigurator;
 
-public class ItemWrench extends Item implements IToolConfigurator
+public class ItemWrench extends ItemBasic implements IToolConfigurator
 {
 	public ItemWrench(int id, int texture)
 	{
-		super(id);
+		super("wrench", id);
 		this.setMaxStackSize(1);
-		this.setMaxDamage(3000);
-		this.setCreativeTab(UETab.INSTANCE);
-		this.setUnlocalizedName("wrench");
+		this.setMaxDamage(5000);
 	}
 
 	@Override

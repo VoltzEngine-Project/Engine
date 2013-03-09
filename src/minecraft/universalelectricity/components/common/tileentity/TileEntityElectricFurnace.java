@@ -11,7 +11,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.components.common.BCLoader;
+import universalelectricity.components.common.BasicComponents;
 import universalelectricity.components.common.block.BlockBasicMachine;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ElectricItemHelper;
@@ -133,7 +133,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(BCLoader.CHANNEL, this, this.processTicks, this.disabledTicks);
+		return PacketManager.getPacket(BasicComponents.CHANNEL, this, this.processTicks, this.disabledTicks);
 	}
 
 	@Override

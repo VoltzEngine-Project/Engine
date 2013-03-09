@@ -2,9 +2,14 @@ package universalelectricity.components.common.item;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import universalelectricity.components.common.BasicComponents;
 import universalelectricity.components.common.tileentity.TileEntityCopperWire;
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
@@ -30,5 +35,4 @@ public class ItemBlockCopperWire extends ItemBlock
 		par3List.add("Resistance: " + ElectricityDisplay.getDisplay(TileEntityCopperWire.RESISTANCE, ElectricUnit.RESISTANCE));
 		par3List.add("Max Amps: " + ElectricityDisplay.getDisplay(TileEntityCopperWire.MAX_AMPS, ElectricUnit.AMPERE));
 	}
-
 }

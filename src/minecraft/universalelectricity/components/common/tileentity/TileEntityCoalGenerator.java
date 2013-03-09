@@ -12,7 +12,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.components.common.BCLoader;
+import universalelectricity.components.common.BasicComponents;
 import universalelectricity.components.common.block.BlockBasicMachine;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
@@ -153,7 +153,7 @@ public class TileEntityCoalGenerator extends TileEntityElectrical implements IIn
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(BCLoader.CHANNEL, this, this.generateWatts, this.itemCookTime, this.disabledTicks);
+		return PacketManager.getPacket(BasicComponents.CHANNEL, this, this.generateWatts, this.itemCookTime, this.disabledTicks);
 	}
 
 	@Override

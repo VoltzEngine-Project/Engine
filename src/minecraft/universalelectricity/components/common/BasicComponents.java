@@ -22,10 +22,20 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BasicComponents
 {
-	public static final String TEXTURE_DIRECTORY = "/basiccomponents/textures/";
+	public static final String NAME = "Basic Components";
+	public static final String CHANNEL = "BasicComponents";
+
+	public static final String RESOURCE_PATH = "/mods/basiccomponents/";
+
+	public static final String TEXTURE_DIRECTORY = RESOURCE_PATH + "textures/";
 	public static final String GUI_DIRECTORY = TEXTURE_DIRECTORY + "gui/";
-	public static final String BLOCK_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "blocks.png";
-	public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items.png";
+	public static final String BLOCK_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "blocks/";
+	public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items/";
+	public static final String MODEL_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "models/";
+
+	public static final String TEXTURE_NAME_PREFIX = "basiccomponents:";
+
+	public static final String LANGUAGE_PATH = RESOURCE_PATH + "languages/";
 
 	public static int BLOCK_ID_PREFIX = 3970;
 
@@ -60,9 +70,9 @@ public class BasicComponents
 			OreDictionary.registerOre("ingotIron", Item.ingotIron);
 			OreDictionary.registerOre("ingotGold", Item.ingotGold);
 
-			for (int i = 0; i < ItemPlate.PLATES.length; i++)
+			for (int i = 0; i < ItemPlate.TYPES.length; i++)
 			{
-				String plateName = ItemPlate.PLATES[i];
+				String plateName = ItemPlate.TYPES[i];
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemPlate, 1, i), new Object[] { "!!", "!!", '!', plateName.replaceAll("plate", "ingot") }));
 
 				if (plateName.equals("ingotIron"))
@@ -88,9 +98,9 @@ public class BasicComponents
 			UniversalElectricity.CONFIGURATION.load();
 			BasicComponents.itemIngot = new ItemIngot(UniversalElectricity.CONFIGURATION.getItem("Ingots", BasicComponents.ITEM_ID_PREFIX + 4).getInt());
 
-			for (int i = 0; i < ItemIngot.INGOTS.length; i++)
+			for (int i = 0; i < ItemIngot.TYPES.length; i++)
 			{
-				String itemName = ItemIngot.INGOTS[i];
+				String itemName = ItemIngot.TYPES[i];
 				GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemIngot, 1, i), new Object[] { itemName.replaceAll("ingot", "plate") }));
 				OreDictionary.registerOre(itemName, new ItemStack(itemIngot, 1, i));
 			}

@@ -1,6 +1,7 @@
 package universalelectricity.components.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.components.common.BasicComponents;
@@ -20,6 +21,12 @@ public class BlockCopperWire extends BlockConductor
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setBurnProperties(this.blockID, 30, 60);
+	}
+	
+	@Override
+	public void func_94332_a(IconRegister par1IconRegister)
+	{
+		this.field_94336_cN =  par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + this.func_94330_A());
 	}
 
 	/**

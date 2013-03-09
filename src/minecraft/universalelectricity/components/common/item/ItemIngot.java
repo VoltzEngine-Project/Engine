@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 
 public class ItemIngot extends ItemBasic
 {
-	public static final String[] INGOTS = { "ingotCopper", "ingotTin", "ingotBronze", "ingotSteel" };
+	public static final String[] TYPES = { "ingotCopper", "ingotTin", "ingotBronze", "ingotSteel" };
 
 	public ItemIngot(int id)
 	{
@@ -17,15 +17,21 @@ public class ItemIngot extends ItemBasic
 	}
 
 	@Override
+	public int getMetadata(int damage)
+	{
+		return damage;
+	}
+	
+	@Override
 	public String getUnlocalizedName(ItemStack itemStack)
 	{
-		return "item." + INGOTS[itemStack.getItemDamage()];
+		return "item." + TYPES[itemStack.getItemDamage()];
 	}
 
 	@Override
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List list)
+	public void getSubItems(int par1, CreativeTabs creativeTabs, List list)
 	{
-		for (int i = 0; i < INGOTS.length; i++)
+		for (int i = 0; i < TYPES.length; i++)
 		{
 			list.add(new ItemStack(this, 1, i));
 		}

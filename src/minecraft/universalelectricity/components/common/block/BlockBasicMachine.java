@@ -29,9 +29,11 @@ public class BlockBasicMachine extends BlockAdvanced
 	public static final int COAL_GENERATOR_METADATA = 0;
 	public static final int BATTERY_BOX_METADATA = 4;
 	public static final int ELECTRIC_FURNACE_METADATA = 8;
-	
-	private Icon iconMachine;
+
 	private Icon iconMachineSide;
+	private Icon iconInput;
+	private Icon iconOutput;
+
 	private Icon iconCoalGenerator;
 	private Icon iconBatteryBox;
 	private Icon iconElectricFurnace;
@@ -44,11 +46,18 @@ public class BlockBasicMachine extends BlockAdvanced
 		this.setStepSound(soundMetalFootstep);
 		this.setTextureFile(BasicComponents.BLOCK_TEXTURE_DIRECTORY);
 	}
-	
+
 	@Override
 	public void func_94332_a(IconRegister par1IconRegister)
 	{
-		this.iconMachine = par1IconRegister.func_94245_a("machine");
+		this.field_94336_cN = par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + "machine");
+		this.iconInput = par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + "machine_input");
+		this.iconOutput = par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + "machine_output");
+
+		this.iconMachineSide = par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + "machine_side");
+		this.iconCoalGenerator = par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + "coalGenerator");
+		this.iconBatteryBox = par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + "batteryBox");
+		this.iconElectricFurnace = par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + "electricFurnace");
 	}
 
 	@Override
@@ -95,11 +104,10 @@ public class BlockBasicMachine extends BlockAdvanced
 	@Override
 	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
-		return this.iconMachine;
-		/*
+
 		if (side == 0 || side == 1)
 		{
-			return this.blockIndexInTexture;
+			return this.field_94336_cN;
 		}
 
 		if (metadata >= ELECTRIC_FURNACE_METADATA)
@@ -109,12 +117,12 @@ public class BlockBasicMachine extends BlockAdvanced
 			// If it is the front side
 			if (side == metadata + 2)
 			{
-				return this.blockIndexInTexture + 2;
+				return this.iconInput;
 			}
 			// If it is the back side
 			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
 			{
-				return this.blockIndexInTexture + 6;
+				return this.iconElectricFurnace;
 			}
 		}
 		else if (metadata >= BATTERY_BOX_METADATA)
@@ -124,44 +132,44 @@ public class BlockBasicMachine extends BlockAdvanced
 			// If it is the front side
 			if (side == metadata + 2)
 			{
-				return this.blockIndexInTexture + 3;
+				return this.iconOutput;
 			}
 			// If it is the back side
 			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
 			{
-				return this.blockIndexInTexture + 2;
+				return this.iconInput;
 			}
 
-			return this.blockIndexInTexture + 4;
+			return this.iconBatteryBox;
 		}
 		else
 		{
 			// If it is the front side
 			if (side == metadata + 2)
 			{
-				return this.blockIndexInTexture + 3;
+				return this.iconOutput;
 			}
 			// If it is the back side
 			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
 			{
-				return this.blockIndexInTexture + 5;
+				return this.iconCoalGenerator;
 			}
 		}
 
-		return this.blockIndexInTexture + 1;*/
+		return this.iconMachineSide;
 	}
 
 	/**
 	 * Called when the block is placed in the world.
 	 */
 	@Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityLiving, ItemStack itemStack)
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityLiving, ItemStack itemStack)
 	{
 		int metadata = world.getBlockMetadata(x, y, z);
 
 		int angle = MathHelper.floor_double((entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 0;
-		
+
 		switch (angle)
 		{
 			case 0:
@@ -190,7 +198,7 @@ public class BlockBasicMachine extends BlockAdvanced
 					change = 3;
 					break;
 				case 1:
-					change =1;
+					change = 1;
 					break;
 				case 2:
 					change = 2;
@@ -199,7 +207,7 @@ public class BlockBasicMachine extends BlockAdvanced
 					change = 0;
 					break;
 			}
-			
+
 			world.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + change, 2);
 		}
 		else
@@ -298,7 +306,7 @@ public class BlockBasicMachine extends BlockAdvanced
 	}
 
 	@Override
-    public TileEntity createTileEntity(World world, int metadata)
+	public TileEntity createTileEntity(World world, int metadata)
 	{
 		if (metadata >= ELECTRIC_FURNACE_METADATA)
 		{

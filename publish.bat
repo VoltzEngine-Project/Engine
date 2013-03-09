@@ -19,9 +19,9 @@ if %PROMOTION%==* (
 	echo %MODVERSION% >recommendedversion.txt
 )
 
+set API_NAME=UniversalElectricity_v%MODVERSION%.%BUILD_NUMBER%_api.zip
 set FILE_NAME=BasicComponents_v%MODVERSION%.%BUILD_NUMBER%.jar
 set BACKUP_NAME=UniversalElectricity_v%MODVERSION%.%BUILD_NUMBER%_backup.zip
-set API_NAME=UniversalElectricity_v%MODVERSION%.%BUILD_NUMBER%_api.zip
 
 echo Starting to build %FILE_NAME%
 
@@ -48,7 +48,7 @@ cd src\
 cd ..\
 
 ::UPDATE INFO FILE
-echo %PROMOTION% %FILE_NAME% %API_NAME%>>info.txt
+echo %PROMOTION% %API_NAME% %FILE_NAME%>>info.txt
 
 ::GENERATE FTP Script
 echo open %SERVER%>ftpscript.txt

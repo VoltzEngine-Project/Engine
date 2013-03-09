@@ -36,19 +36,10 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid = BCLoader.CHANNEL, name = BCLoader.NAME, version = UniversalElectricity.VERSION)
-@NetworkMod(channels = BCLoader.CHANNEL, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
+@Mod(modid = BasicComponents.CHANNEL, name = BasicComponents.NAME, version = UniversalElectricity.VERSION)
+@NetworkMod(channels = BasicComponents.CHANNEL, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class BCLoader
 {
-	public static final String NAME = "Basic Components";
-	public static final String CHANNEL = "BasicComponents";
-
-	public static final String FILE_PATH = "/basiccomponents/";
-	public static final String LANGUAGE_PATH = FILE_PATH + "language/";
-	public static final String TEXTURE_PATH = FILE_PATH + "textures/";
-	public static final String BLOCK_TEXTURE_FILE = TEXTURE_PATH + "blocks.png";
-	public static final String ITEM_TEXTURE_FILE = TEXTURE_PATH + "items.png";
-
 	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL", "de_DE" };
 
 	@Instance("BasicComponents")
@@ -122,7 +113,7 @@ public class BCLoader
 	{
 		proxy.init();
 
-		System.out.println("Basic Components Loaded: " + TranslationHelper.loadLanguages(LANGUAGE_PATH, LANGUAGES_SUPPORTED) + " Languages.");
+		System.out.println("Basic Components Loaded: " + TranslationHelper.loadLanguages(BasicComponents.LANGUAGE_PATH, LANGUAGES_SUPPORTED) + " Languages.");
 
 		OreGenerator.addOre(BasicComponents.copperOreGeneration);
 		OreGenerator.addOre(BasicComponents.tinOreGeneration);
