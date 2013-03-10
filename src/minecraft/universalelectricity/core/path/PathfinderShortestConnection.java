@@ -43,7 +43,7 @@ public class PathfinderShortestConnection extends Pathfinder
 			}
 		});
 	}
-	
+
 	@Override
 	public Pathfinder clear()
 	{

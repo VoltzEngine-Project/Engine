@@ -21,7 +21,7 @@ import universalelectricity.components.common.tileentity.TileEntityBatteryBox;
 import universalelectricity.components.common.tileentity.TileEntityCoalGenerator;
 import universalelectricity.components.common.tileentity.TileEntityElectricFurnace;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.prefab.BlockAdvanced;
+import universalelectricity.prefab.block.BlockAdvanced;
 
 public class BlockBasicMachine extends BlockAdvanced
 {

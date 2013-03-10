@@ -1,4 +1,4 @@
-package universalelectricity.prefab;
+package universalelectricity.prefab.block;
 
 import java.util.Random;
 

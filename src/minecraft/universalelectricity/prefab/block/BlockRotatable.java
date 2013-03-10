@@ -1,4 +1,4 @@
-package universalelectricity.prefab;
+package universalelectricity.prefab.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;

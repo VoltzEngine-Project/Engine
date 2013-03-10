@@ -73,7 +73,7 @@ public class ModFlag extends FlagBase
 	public FlagWorld getFlagWorld(World world)
 	{
 		FlagWorld worldData = null;
-		
+
 		if (world != null)
 		{
 			for (FlagWorld data : this.flagWorlds)
@@ -95,7 +95,7 @@ public class ModFlag extends FlagBase
 				this.flagWorlds.add(worldData);
 			}
 		}
-		
+
 		return worldData;
 	}
 

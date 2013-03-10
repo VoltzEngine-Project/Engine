@@ -21,7 +21,7 @@ public class ItemIngot extends ItemBasic
 	{
 		return damage;
 	}
-	
+
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack)
 	{

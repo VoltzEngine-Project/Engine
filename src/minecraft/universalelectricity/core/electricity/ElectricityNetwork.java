@@ -19,7 +19,8 @@ import cpw.mods.fml.common.FMLLog;
 
 /**
  * An Electrical Network specifies a wire connection. Each wire connection line will have its own
- * electrical network.
+ * electrical network. Do not include this class if you do not intend to have custom wires in your
+ * mod. This will increase future compatibility.
  * 
  * @author Calclavia
  * 

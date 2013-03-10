@@ -15,7 +15,6 @@ public class ItemPlate extends ItemBasic
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 	}
-	
 
 	@Override
 	public int getMetadata(int damage)

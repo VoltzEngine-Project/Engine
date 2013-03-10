@@ -86,7 +86,7 @@ public class ElectricItemHelper
 
 		return itemStack;
 	}
-	
+
 	public static ItemStack getWithCharge(Item item, double joules)
 	{
 		return getWithCharge(new ItemStack(item), joules);

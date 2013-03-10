@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.components.common.BasicComponents;
 import universalelectricity.components.common.tileentity.TileEntityCopperWire;
-import universalelectricity.prefab.BlockConductor;
+import universalelectricity.prefab.block.BlockConductor;
 
 public class BlockCopperWire extends BlockConductor
 {
@@ -21,11 +21,11 @@ public class BlockCopperWire extends BlockConductor
 		this.setCreativeTab(BasicComponents.TAB);
 		this.setBurnProperties(this.blockID, 30, 60);
 	}
-	
+
 	@Override
 	public void func_94332_a(IconRegister par1IconRegister)
 	{
-		this.field_94336_cN =  par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + this.func_94330_A());
+		this.field_94336_cN = par1IconRegister.func_94245_a(BasicComponents.TEXTURE_NAME_PREFIX + this.func_94330_A());
 	}
 
 	/**
