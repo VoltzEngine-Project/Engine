@@ -45,6 +45,7 @@ public class BasicComponents
 
 	public static final int ITEM_ID_PREFIX = 13970;
 	public static ItemElectric itemBattery;
+	public static Item itemInfiniteBattery;
 	public static Item itemWrench;
 	public static Item itemCircuit;
 	public static Item itemBronzeDust;

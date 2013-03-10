@@ -1,5 +1,6 @@
 package universalelectricity.core.item;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import universalelectricity.core.electricity.ElectricityPack;
 
@@ -85,6 +86,11 @@ public class ElectricItemHelper
 
 		return itemStack;
 	}
+	
+	public static ItemStack getWithCharge(Item item, double joules)
+	{
+		return getWithCharge(new ItemStack(item), joules);
+	}
 
 	public static ItemStack getCloneWithCharge(ItemStack itemStack, double joules)
 	{
@@ -94,5 +100,10 @@ public class ElectricItemHelper
 	public static ItemStack getUncharged(ItemStack itemStack)
 	{
 		return getWithCharge(itemStack, 0);
+	}
+
+	public static ItemStack getUncharged(Item item)
+	{
+		return getUncharged(new ItemStack(item));
 	}
 }
