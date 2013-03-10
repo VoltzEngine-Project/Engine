@@ -7,7 +7,6 @@ import net.minecraft.world.World;
 import universalelectricity.components.common.BasicComponents;
 import universalelectricity.components.common.tileentity.TileEntityCopperWire;
 import universalelectricity.prefab.BlockConductor;
-import universalelectricity.prefab.UETab;
 
 public class BlockCopperWire extends BlockConductor
 {
@@ -19,7 +18,7 @@ public class BlockCopperWire extends BlockConductor
 		this.setResistance(0.2F);
 		this.setHardness(0.1f);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
-		this.setCreativeTab(UETab.INSTANCE);
+		this.setCreativeTab(BasicComponents.TAB);
 		this.setBurnProperties(this.blockID, 30, 60);
 	}
 	

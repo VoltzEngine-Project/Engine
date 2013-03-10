@@ -1,6 +1,7 @@
 package universalelectricity.components.common;
 
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -26,6 +27,8 @@ public class BasicComponents
 	public static final String CHANNEL = "BasicComponents";
 
 	public static final String RESOURCE_PATH = "/mods/basiccomponents/";
+
+	public static final CreativeTabs TAB = new TabBC(CreativeTabs.getNextID(), CHANNEL);
 
 	public static final String TEXTURE_DIRECTORY = RESOURCE_PATH + "textures/";
 	public static final String GUI_DIRECTORY = TEXTURE_DIRECTORY + "gui/";

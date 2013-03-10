@@ -3,11 +3,10 @@ package universalelectricity.components.common.item;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import universalelectricity.components.common.BasicComponents;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.IItemElectric;
-import universalelectricity.prefab.UETab;
 
 /**
  * An infinite battery used for players and modders to test things.
@@ -22,7 +21,7 @@ public class ItemInfiniteBattery extends ItemBasic implements IItemElectric
 		super("infiniteBattery", id);
 		this.setMaxStackSize(1);
 		this.setNoRepair();
-		this.setCreativeTab(UETab.INSTANCE);
+		this.setCreativeTab(BasicComponents.TAB);
 	}
 
 	@Override

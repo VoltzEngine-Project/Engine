@@ -22,7 +22,6 @@ import universalelectricity.components.common.tileentity.TileEntityCoalGenerator
 import universalelectricity.components.common.tileentity.TileEntityElectricFurnace;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockAdvanced;
-import universalelectricity.prefab.UETab;
 
 public class BlockBasicMachine extends BlockAdvanced
 {
@@ -42,7 +41,7 @@ public class BlockBasicMachine extends BlockAdvanced
 	{
 		super(id, UniversalElectricity.machine);
 		this.setUnlocalizedName("bcMachine");
-		this.setCreativeTab(UETab.INSTANCE);
+		this.setCreativeTab(BasicComponents.TAB);
 		this.setStepSound(soundMetalFootstep);
 		this.setTextureFile(BasicComponents.BLOCK_TEXTURE_DIRECTORY);
 	}

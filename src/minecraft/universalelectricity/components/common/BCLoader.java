@@ -21,7 +21,6 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.prefab.RecipeHelper;
 import universalelectricity.prefab.TranslationHelper;
-import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.ore.OreGenReplaceStone;
@@ -104,8 +103,6 @@ public class BCLoader
 
 		BasicComponents.requestIngots(0);
 		BasicComponents.requestPlates(0);
-
-		UETab.setItemStack(OreDictionary.getOres("batteryBox").get(0));
 
 		proxy.preInit();
 	}

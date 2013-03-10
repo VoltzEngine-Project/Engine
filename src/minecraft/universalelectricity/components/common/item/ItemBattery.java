@@ -1,15 +1,11 @@
 package universalelectricity.components.common.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
 import universalelectricity.components.common.BasicComponents;
 import universalelectricity.core.item.ItemElectric;
-import universalelectricity.prefab.UETab;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBattery extends ItemElectric
 {
@@ -17,7 +13,7 @@ public class ItemBattery extends ItemElectric
 	{
 		super(id);
 		this.setUnlocalizedName("battery");
-		this.setCreativeTab(UETab.INSTANCE);
+		this.setCreativeTab(BasicComponents.TAB);
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -1,11 +1,8 @@
 package universalelectricity.components.common.item;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import universalelectricity.components.common.BasicComponents;
-import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IToolConfigurator;
 
 public class ItemWrench extends ItemBasic implements IToolConfigurator
