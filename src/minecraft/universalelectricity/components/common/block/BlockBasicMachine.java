@@ -187,7 +187,7 @@ public class BlockBasicMachine extends BlockAdvanced
 
 		if (metadata >= ELECTRIC_FURNACE_METADATA)
 		{
-			world.setBlockMetadataWithNotify(x, y, z, ELECTRIC_FURNACE_METADATA + change, 2);
+			world.setBlockMetadataWithNotify(x, y, z, ELECTRIC_FURNACE_METADATA + change, 3);
 		}
 		else if (metadata >= BATTERY_BOX_METADATA)
 		{
@@ -207,11 +207,11 @@ public class BlockBasicMachine extends BlockAdvanced
 					break;
 			}
 
-			world.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + change, 2);
+			world.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + change, 3);
 		}
 		else
 		{
-			world.setBlockMetadataWithNotify(x, y, z, COAL_GENERATOR_METADATA + change, 2);
+			world.setBlockMetadataWithNotify(x, y, z, COAL_GENERATOR_METADATA + change, 3);
 		}
 	}
 
@@ -258,7 +258,7 @@ public class BlockBasicMachine extends BlockAdvanced
 			change += BATTERY_BOX_METADATA;
 		}
 
-		par1World.setBlockMetadataWithNotify(x, y, z, change, 2);
+		par1World.setBlockMetadataWithNotify(x, y, z, change, 3);
 		return true;
 	}
 

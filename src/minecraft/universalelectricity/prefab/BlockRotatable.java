@@ -53,6 +53,10 @@ public abstract class BlockRotatable extends BlockAdvanced implements IRotatable
 	@Override
 	public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
+		/**
+		 * NOTE! This will rotate the block only in all 4 horizontal directions. If your block
+		 * rotates up or down, you should override this.
+		 */
 		this.setDirection(world, x, y, z, ForgeDirection.getOrientation(ForgeDirection.ROTATION_MATRIX[0][this.getDirection(world, x, y, z).ordinal()]));
 		return true;
 	}
@@ -66,6 +70,6 @@ public abstract class BlockRotatable extends BlockAdvanced implements IRotatable
 	@Override
 	public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
 	{
-		world.setBlockMetadataWithNotify(x, y, z, facingDirection.ordinal(), 2);
+		world.setBlockMetadataWithNotify(x, y, z, facingDirection.ordinal(), 3);
 	}
 }
