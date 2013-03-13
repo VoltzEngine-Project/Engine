@@ -43,7 +43,6 @@ public class BlockBasicMachine extends BlockAdvanced
 		this.setUnlocalizedName("bcMachine");
 		this.setCreativeTab(BasicComponents.TAB);
 		this.setStepSound(soundMetalFootstep);
-		this.setTextureFile(BasicComponents.BLOCK_TEXTURE_DIRECTORY);
 	}
 
 	@Override

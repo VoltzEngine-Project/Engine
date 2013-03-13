@@ -48,12 +48,6 @@ public class BlockBCOre extends Block
 	}
 
 	@Override
-	public String getTextureFile()
-	{
-		return BasicComponents.BLOCK_TEXTURE_DIRECTORY;
-	}
-
-	@Override
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		par3List.add(new ItemStack(par1, 1, 0));

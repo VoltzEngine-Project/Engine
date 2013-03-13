@@ -63,10 +63,4 @@ public class BlockCopperWire extends BlockConductor
 	{
 		return new TileEntityCopperWire();
 	}
-
-	@Override
-	public String getTextureFile()
-	{
-		return BasicComponents.ITEM_TEXTURE_DIRECTORY;
-	}
 }
