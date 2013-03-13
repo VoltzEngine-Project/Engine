@@ -41,6 +41,7 @@ cd ..\..\..\
 
 cd resources\
 7z a "..\builds\%FILE_NAME%" "*"
+7z a "..\builds\%API_NAME%" "*"
 7z a "..\builds\%DEV_NAME%" "*"
 7z a "..\builds\%BACKUP_NAME%" "*"
 cd ..\

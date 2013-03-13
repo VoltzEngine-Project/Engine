@@ -1,5 +1,6 @@
 package universalelectricity.components.common;
 
+import universalelectricity.components.common.block.BlockBasicMachine;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
@@ -12,6 +13,6 @@ public class TabBC extends CreativeTabs
 
 	public ItemStack getIconItemStack()
 	{
-		return new ItemStack(BasicComponents.blockMachine, 1, 2);
+		return new ItemStack(BasicComponents.blockMachine, 1, BlockBasicMachine.BATTERY_BOX_METADATA);
 	}
 }
