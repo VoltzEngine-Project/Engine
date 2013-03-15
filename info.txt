@@ -124,3 +124,5 @@ x UniversalElectricity_v1.3.0.345.zip BasicComponents_v1.3.0.345.jar BCDev_v1.3.
 x UniversalElectricity_v1.3.0.346.zip BasicComponents_v1.3.0.346.jar BCDev_v1.3.0.346.jar
 @ UniversalElectricity_v1.3.0.347.zip BasicComponents_v1.3.0.347.jar BCDev_v1.3.0.347.jar
 @ UniversalElectricity_v1.3.0.348.zip BasicComponents_v1.3.0.348.jar BCDev_v1.3.0.348.jar
+@ UniversalElectricity_v1.3.0.349.zip BasicComponents_v1.3.0.349.jar BCDev_v1.3.0.349.jar
+@ UniversalElectricity_v1.3.0.350.zip BasicComponents_v1.3.0.350.jar BCDev_v1.3.0.350.jar

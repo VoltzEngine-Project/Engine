@@ -32,7 +32,7 @@ runtime\bin\python\python_mcp runtime\reobfuscate.py %*
 
 ::ZIP-UP
 cd reobf\minecraft\
-7z a "..\..\builds\%FILE_NAME%" "*"
+7z a "..\..\builds\%FILE_NAME%" "universalelectricity\"
 cd ..\..\
 
 cd eclipse\Minecraft\bin\
