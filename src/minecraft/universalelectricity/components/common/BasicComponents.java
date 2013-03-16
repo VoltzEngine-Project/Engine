@@ -7,10 +7,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import universalelectricity.components.common.item.ItemBasic;
 import universalelectricity.components.common.item.ItemIngot;
 import universalelectricity.components.common.item.ItemPlate;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.item.ItemElectric;
+import universalelectricity.prefab.RecipeHelper;
 import universalelectricity.prefab.ore.OreGenBase;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -65,7 +67,7 @@ public class BasicComponents
 	 * @param itemName: Steel, Bronze Copper, Tin
 	 * @return
 	 */
-	public static void requestPlates(int id)
+	public static void registerPlates(int id)
 	{
 		if (BasicComponents.itemPlate == null)
 		{
@@ -95,7 +97,7 @@ public class BasicComponents
 		}
 	}
 
-	public static void requestIngots(int id)
+	public static ItemStack registerIngots(int id, boolean require)
 	{
 		if (BasicComponents.itemIngot == null)
 		{
@@ -105,12 +107,71 @@ public class BasicComponents
 			for (int i = 0; i < ItemIngot.TYPES.length; i++)
 			{
 				String itemName = ItemIngot.TYPES[i];
-				GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemIngot, 1, i), new Object[] { itemName.replaceAll("ingot", "plate") }));
-				OreDictionary.registerOre(itemName, new ItemStack(itemIngot, 1, i));
+				
+				if(OreDictionary.getOres("itemName").size() <= 0 || require)
+				{
+					GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemIngot, 1, i), new Object[] { itemName.replaceAll("ingot", "plate") }));
+					OreDictionary.registerOre(itemName, new ItemStack(itemIngot, 1, i));
+				}
 			}
 
 			UniversalElectricity.CONFIGURATION.save();
+		}
+		
+		return new ItemStack(itemBronzeDust);
+	}
+	
+	/**
+	 * Call this after the corresponding ingot is registered.
+	 * @return
+	 */
+	public static ItemStack registerBronzeDust(int id)
+	{
+		if (itemBronzeDust== null)
+		{
+			UniversalElectricity.CONFIGURATION.load();
+			itemBronzeDust = new ItemBasic("dustBronze", UniversalElectricity.CONFIGURATION.getItem("Bronze Dust", BasicComponents.ITEM_ID_PREFIX + 8).getInt());
+			OreDictionary.registerOre("dustBronze", itemBronzeDust);
+			
+			RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBronzeDust), new Object[] { "!#!", '!', "ingotCopper", '#', "ingotTin" }), "Bronze Dust", UniversalElectricity.CONFIGURATION, true);
+
+			if(OreDictionary.getOres("ingotBronze").size() > 0)
+			{
+				// Bronze
+				GameRegistry.addSmelting(BasicComponents.itemBronzeDust.itemID, OreDictionary.getOres("ingotBronze").get(0), 0.6f);
+			}
+			
+			UniversalElectricity.CONFIGURATION.save();
 
 		}
+		
+		return new ItemStack(itemBronzeDust);
+	}
+	
+	/**
+	 * Call this after the corresponding ingot is registered.
+	 * @return
+	 */
+	public static ItemStack registerSteelDust(int id)
+	{
+		if (itemSteelDust== null)
+		{
+			UniversalElectricity.CONFIGURATION.load();
+			itemSteelDust = new ItemBasic("dustSteel", UniversalElectricity.CONFIGURATION.getItem("Steel Dust", BasicComponents.ITEM_ID_PREFIX + 9).getInt());
+			OreDictionary.registerOre("dustSteel", itemSteelDust);
+			
+			RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 1), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
+			RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 0), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
+
+			if(OreDictionary.getOres("ingotSteel").size() > 0)
+			{
+				GameRegistry.addSmelting(BasicComponents.itemSteelDust.itemID, OreDictionary.getOres("ingotSteel").get(0), 0.8f);
+			}
+			
+			UniversalElectricity.CONFIGURATION.save();
+
+		}
+		
+		return new ItemStack(itemBronzeDust);
 	}
 }
