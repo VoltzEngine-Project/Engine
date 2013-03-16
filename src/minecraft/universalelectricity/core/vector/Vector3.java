@@ -168,7 +168,7 @@ public class Vector3 implements Cloneable
 	public Vector3 normalize()
 	{
 		double d = getMagnitude();
-		
+
 		if (d != 0)
 		{
 			multiply(1 / d);

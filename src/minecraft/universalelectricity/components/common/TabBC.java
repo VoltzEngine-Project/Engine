@@ -1,8 +1,8 @@
 package universalelectricity.components.common;
 
-import universalelectricity.components.common.block.BlockBasicMachine;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import universalelectricity.components.common.block.BlockBasicMachine;
 
 public class TabBC extends CreativeTabs
 {
