@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 import universalelectricity.components.client.gui.GuiBatteryBox;
 import universalelectricity.components.client.gui.GuiCoalGenerator;
 import universalelectricity.components.client.gui.GuiElectricFurnace;
+import universalelectricity.components.common.BasicComponents;
 import universalelectricity.components.common.CommonProxy;
 import universalelectricity.components.common.tileentity.TileEntityBatteryBox;
 import universalelectricity.components.common.tileentity.TileEntityCoalGenerator;
@@ -28,6 +29,6 @@ public class ClientProxy extends CommonProxy
 	public void init()
 	{
 		super.init();
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCopperWire.class, new RenderCopperWire());
+		BasicComponents.registerTileEntityRenderers();
 	}
 }

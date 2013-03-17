@@ -21,12 +21,6 @@ public class CommonProxy
 
 	public void init()
 	{
-		/**
-		 * Registering Tile Entities
-		 */
-		GameRegistry.registerTileEntity(TileEntityBatteryBox.class, "UEBatteryBox");
-		GameRegistry.registerTileEntity(TileEntityCoalGenerator.class, "UECoalGenerator");
-		GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, "UEElectricFurnace");
-		GameRegistry.registerTileEntity(TileEntityCopperWire.class, "UECopperWire");
+		BasicComponents.registerTileEntities();
 	}
 }
