@@ -49,7 +49,6 @@ public class BCLoader
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 		BasicComponents.registerOres(0, true);
 		BasicComponents.registerIngots(0, true);
 		BasicComponents.registerPlates(0, true);
@@ -69,6 +68,6 @@ public class BCLoader
 	public void load(FMLInitializationEvent evt)
 	{
 		proxy.init();
-		BasicComponents.register();
+		BasicComponents.register(this);
 	}
 }

@@ -1,5 +1,7 @@
 package universalelectricity.components.common;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -79,12 +81,16 @@ public class BasicComponents
 	public static OreGenBase tinOreGeneration;
 
 	public static boolean INITIALIZED = false;
+	
+	public static ArrayList bcDependants = new ArrayList();
 
 	/**
 	 * Call this function in your mod init stage.
 	 */
-	public static void register()
+	public static void register(Object modInstance)
 	{
+		bcDependants.add(modInstance);
+		
 		if (!INITIALIZED)
 		{
 			System.out.println("Basic Components Loaded: " + TranslationHelper.loadLanguages(BasicComponents.LANGUAGE_PATH, LANGUAGES_SUPPORTED) + " Languages.");
@@ -391,5 +397,15 @@ public class BasicComponents
 		}
 
 		return new ItemStack(itemBronzeDust);
+	}
+	
+	public static Object getFirstDependant()
+	{
+		if (bcDependants.size() > 0)
+		{
+			return bcDependants.get(0);
+		}
+		
+		return null;
 	}
 }

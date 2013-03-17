@@ -30,25 +30,4 @@ public class ClientProxy extends CommonProxy
 		super.init();
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCopperWire.class, new RenderCopperWire());
 	}
-
-	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-	{
-		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-
-		if (tileEntity != null)
-		{
-			switch (ID)
-			{
-				case 0:
-					return new GuiBatteryBox(player.inventory, ((TileEntityBatteryBox) tileEntity));
-				case 1:
-					return new GuiCoalGenerator(player.inventory, ((TileEntityCoalGenerator) tileEntity));
-				case 2:
-					return new GuiElectricFurnace(player.inventory, ((TileEntityElectricFurnace) tileEntity));
-			}
-		}
-
-		return null;
-	}
 }
