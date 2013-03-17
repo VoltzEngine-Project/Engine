@@ -10,6 +10,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import universalelectricity.components.client.RenderCopperWire;
 import universalelectricity.components.common.block.BlockBCOre;
 import universalelectricity.components.common.block.BlockBasicMachine;
 import universalelectricity.components.common.block.BlockCopperWire;
@@ -23,6 +24,10 @@ import universalelectricity.components.common.item.ItemInfiniteBattery;
 import universalelectricity.components.common.item.ItemIngot;
 import universalelectricity.components.common.item.ItemPlate;
 import universalelectricity.components.common.item.ItemWrench;
+import universalelectricity.components.common.tileentity.TileEntityBatteryBox;
+import universalelectricity.components.common.tileentity.TileEntityCoalGenerator;
+import universalelectricity.components.common.tileentity.TileEntityCopperWire;
+import universalelectricity.components.common.tileentity.TileEntityElectricFurnace;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.item.ItemElectric;
@@ -31,7 +36,10 @@ import universalelectricity.prefab.TranslationHelper;
 import universalelectricity.prefab.ore.OreGenBase;
 import universalelectricity.prefab.ore.OreGenReplaceStone;
 import universalelectricity.prefab.ore.OreGenerator;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * The main class for managing Basic Component items and blocks. Reference objects from this class
@@ -81,6 +89,9 @@ public class BasicComponents
 	public static OreGenBase tinOreGeneration;
 
 	public static boolean INITIALIZED = false;
+	
+	private static boolean registeredTileEntities = false;
+	private static boolean registeredTileEntityRenderers = false;
 	
 	public static ArrayList bcDependants = new ArrayList();
 
@@ -397,6 +408,40 @@ public class BasicComponents
 		}
 
 		return new ItemStack(itemBronzeDust);
+	}
+
+	/**
+	 * Call this to register Tile Entities
+	 * 
+	 * @return
+	 */
+	public static void registerTileEntities()
+	{
+		if (!registeredTileEntities)
+		{
+			GameRegistry.registerTileEntity(TileEntityBatteryBox.class, "UEBatteryBox");
+			GameRegistry.registerTileEntity(TileEntityCoalGenerator.class, "UECoalGenerator");
+			GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, "UEElectricFurnace");
+			GameRegistry.registerTileEntity(TileEntityCopperWire.class, "UECopperWire");
+			
+			registeredTileEntities = true;
+		}
+	}
+
+	/**
+	 * Call this in your client proxy to bind copper wire renderer
+	 * 
+	 * @return
+	 */
+	@SideOnly(Side.CLIENT)
+	public static void registerTileEntityRenderers()
+	{
+		if (!registeredTileEntityRenderers)
+		{
+			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCopperWire.class, new RenderCopperWire());
+			
+			registeredTileEntityRenderers = true;
+		}
 	}
 	
 	public static Object getFirstDependant()
