@@ -273,17 +273,17 @@ public class BlockBasicMachine extends BlockAdvanced
 		{
 			if (metadata >= ELECTRIC_FURNACE_METADATA)
 			{
-				par5EntityPlayer.openGui(BCLoader.instance, 2, par1World, x, y, z);
+				par5EntityPlayer.openGui(BasicComponents.getFirstDependant(), 2, par1World, x, y, z);
 				return true;
 			}
 			else if (metadata >= BATTERY_BOX_METADATA)
 			{
-				par5EntityPlayer.openGui(BCLoader.instance, 0, par1World, x, y, z);
+				par5EntityPlayer.openGui(BasicComponents.getFirstDependant(), 0, par1World, x, y, z);
 				return true;
 			}
 			else
 			{
-				par5EntityPlayer.openGui(BCLoader.instance, 1, par1World, x, y, z);
+				par5EntityPlayer.openGui(BasicComponents.getFirstDependant(), 1, par1World, x, y, z);
 				return true;
 			}
 		}
