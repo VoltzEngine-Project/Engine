@@ -15,7 +15,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.components.common.BCLoader;
 import universalelectricity.components.common.BasicComponents;
 import universalelectricity.components.common.tileentity.TileEntityBatteryBox;
 import universalelectricity.components.common.tileentity.TileEntityCoalGenerator;
