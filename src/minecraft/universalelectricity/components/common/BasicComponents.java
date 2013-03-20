@@ -90,11 +90,11 @@ public class BasicComponents
 	public static OreGenBase tinOreGeneration;
 
 	public static boolean INITIALIZED = false;
-	
+
 	private static boolean registeredTileEntities = false;
 	private static boolean registeredTileEntityRenderers = false;
-	
-	public static ArrayList bcDependants = new ArrayList();
+
+	public static final ArrayList bcDependants = new ArrayList();
 
 	/**
 	 * Call this function in your mod init stage.
@@ -102,7 +102,7 @@ public class BasicComponents
 	public static void register(Object modInstance)
 	{
 		bcDependants.add(modInstance);
-		
+
 		if (!INITIALIZED)
 		{
 			System.out.println("Basic Components Loaded: " + TranslationHelper.loadLanguages(BasicComponents.LANGUAGE_PATH, LANGUAGES_SUPPORTED) + " Languages.");
@@ -119,7 +119,7 @@ public class BasicComponents
 			// Wrench
 			if (itemWrench != null)
 			{
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemWrench), new Object[] { " S ", " DS", "S  ", 'S', "ingotSteel", 'D', Item.diamond }));
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemWrench), new Object[] { " S ", " SS", "S  ", 'S', "ingotSteel" }));
 			}
 			// Battery Box
 			GameRegistry.addRecipe(new ShapedOreRecipe(OreDictionary.getOres("batteryBox").get(0), new Object[] { "SSS", "BBB", "SSS", 'B', ElectricItemHelper.getUncharged(BasicComponents.itemBattery), 'S', "ingotSteel" }));
@@ -128,7 +128,7 @@ public class BasicComponents
 			GameRegistry.addRecipe(new ShapedOreRecipe(OreDictionary.getOres("coalGenerator").get(0), new Object[] { "MMM", "MOM", "MCM", 'M', "ingotBronze", 'C', BasicComponents.itemMotor, 'O', Block.furnaceIdle }));
 			// Electric Furnace
 			GameRegistry.addRecipe(new ShapedOreRecipe(OreDictionary.getOres("electricFurnace").get(0), new Object[] { "SSS", "SCS", "SMS", 'S', "ingotSteel", 'C', BasicComponents.itemCircuit, 'M', BasicComponents.itemMotor }));
-			
+
 			// Copper
 			if (blockBasicOre != null)
 			{
@@ -140,9 +140,9 @@ public class BasicComponents
 			{
 				FurnaceRecipes.smelting().addSmelting(BasicComponents.blockBasicOre.blockID, 1, OreDictionary.getOres("ingotTin").get(0), 0.7f);
 			}
+
 			// Copper Wire
-        	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.blockCopperWire, 6), new Object[] { "!!!", "@@@", "!!!", '!', new ItemStack(Block.cloth, 1, 0), '@', "ingotCopper" }));
-	        
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.blockCopperWire, 6), new Object[] { "!!!", "@@@", "!!!", '!', new ItemStack(Block.cloth), '@', "ingotCopper" }));
 			// Battery
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBattery), new Object[] { " T ", "TRT", "TCT", 'T', "ingotTin", 'R', Item.redstone, 'C', Item.coal }));
 			// Circuit
@@ -424,7 +424,7 @@ public class BasicComponents
 			GameRegistry.registerTileEntity(TileEntityCoalGenerator.class, "UECoalGenerator");
 			GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, "UEElectricFurnace");
 			GameRegistry.registerTileEntity(TileEntityCopperWire.class, "UECopperWire");
-			
+
 			registeredTileEntities = true;
 		}
 	}
@@ -440,18 +440,18 @@ public class BasicComponents
 		if (!registeredTileEntityRenderers)
 		{
 			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCopperWire.class, new RenderCopperWire());
-			
+
 			registeredTileEntityRenderers = true;
 		}
 	}
-	
+
 	public static Object getFirstDependant()
 	{
 		if (bcDependants.size() > 0)
 		{
 			return bcDependants.get(0);
 		}
-		
+
 		return null;
 	}
 }
