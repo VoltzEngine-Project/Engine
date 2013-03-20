@@ -62,7 +62,7 @@ public abstract class BlockRotatable extends BlockAdvanced implements IRotatable
 	}
 
 	@Override
-	public ForgeDirection getDirection(World world, int x, int y, int z)
+	public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
 	{
 		return ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z));
 	}
