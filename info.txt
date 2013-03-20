@@ -128,3 +128,4 @@ x UniversalElectricity_v1.3.0.346.zip BasicComponents_v1.3.0.346.jar BCDev_v1.3.
 @ UniversalElectricity_v1.3.0.350.zip BasicComponents_v1.3.0.350.jar BCDev_v1.3.0.350.jar
 @ UniversalElectricity_v1.3.0.351.zip BasicComponents_v1.3.0.351.jar BCDev_v1.3.0.351.jar
 * UniversalElectricity_v1.3.0.352.zip BasicComponents_v1.3.0.352.jar BCDev_v1.3.0.352.jar
+Minecraft 1.5
