@@ -101,7 +101,6 @@ public class BlockBasicMachine extends BlockAdvanced
 	@Override
 	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
-
 		if (side == 0 || side == 1)
 		{
 			return this.field_94336_cN;
