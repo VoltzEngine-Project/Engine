@@ -95,8 +95,6 @@ public class BasicComponents
 
 	public static final ArrayList bcDependants = new ArrayList();
 
-	
-	
 	/**
 	 * Call this function in your mod init stage.
 	 */
@@ -106,8 +104,8 @@ public class BasicComponents
 
 		if (!INITIALIZED)
 		{
-			System.out.println("Basic Components Loaded: " + TranslationHelper.loadLanguages(BasicComponents.LANGUAGE_PATH, LANGUAGES_SUPPORTED) + " Languages.");			
-			
+			System.out.println("Basic Components Loaded: " + TranslationHelper.loadLanguages(BasicComponents.LANGUAGE_PATH, LANGUAGES_SUPPORTED) + " Languages.");
+
 			/**
 			 * Register Recipes
 			 */
