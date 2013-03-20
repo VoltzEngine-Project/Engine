@@ -15,9 +15,9 @@ import universalelectricity.components.common.tileentity.TileEntityElectricFurna
 import cpw.mods.fml.common.network.IGuiHandler;
 
 /**
- *  Extend this class in your GuiHandler
- *  
- *  Be sure to call super.getClientGuiElement and super.getServerGuiElement
+ * Extend this class in your GuiHandler
+ * 
+ * Be sure to call super.getClientGuiElement and super.getServerGuiElement
  */
 public class BCGuiHandler implements IGuiHandler
 {

@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBasic extends Item
 {
-	protected List<Icon> icons = new ArrayList<Icon>();
+	protected final List<Icon> icons = new ArrayList<Icon>();
 
 	public ItemBasic(String name, int id)
 	{
@@ -28,7 +28,7 @@ public class ItemBasic extends Item
 		List<ItemStack> list = new ArrayList<ItemStack>();
 		this.getSubItems(this.itemID, this.getCreativeTab(), list);
 
-		if (list.size() > 0)
+		if (list.size() > 1)
 		{
 			for (ItemStack itemStack : list)
 			{
@@ -41,10 +41,11 @@ public class ItemBasic extends Item
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public Icon getIconFromDamage(int damage)
 	{
-		if (this.icons.size() > damage)
+		if (this.icons.size() > damage && !this.isDamageable())
 		{
 			return icons.get(damage);
 		}
