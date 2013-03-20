@@ -73,6 +73,13 @@ public class Vector3 implements Cloneable
 		this.z = par1.posZ;
 	}
 
+	public Vector3(ForgeDirection direction)
+	{
+		this.x = direction.offsetX;
+		this.y = direction.offsetY;
+		this.z = direction.offsetZ;
+	}
+
 	/**
 	 * Returns the coordinates as integers, ideal for block placement.
 	 */
