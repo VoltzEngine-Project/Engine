@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBasic extends Item
 {
-	protected final List<Icon> icons = new ArrayList<Icon>();
+	protected Icon[] icons = new Icon[256];
 
 	public ItemBasic(String name, int id)
 	{
@@ -28,16 +28,9 @@ public class ItemBasic extends Item
 		List<ItemStack> list = new ArrayList<ItemStack>();
 		this.getSubItems(this.itemID, this.getCreativeTab(), list);
 
-		if (list.size() > 1)
+		for (ItemStack itemStack : list)
 		{
-			for (ItemStack itemStack : list)
-			{
-				this.icons.add(iconRegister.func_94245_a(this.getUnlocalizedName(itemStack).replace("item.", BasicComponents.TEXTURE_NAME_PREFIX)));
-			}
-		}
-		else
-		{
-			this.iconIndex = iconRegister.func_94245_a(this.getUnlocalizedName().replace("item.", BasicComponents.TEXTURE_NAME_PREFIX));
+			icons[list.indexOf(itemStack)] = iconRegister.func_94245_a(this.getUnlocalizedName(itemStack).replace("item.", BasicComponents.TEXTURE_NAME_PREFIX));
 		}
 	}
 
@@ -45,11 +38,11 @@ public class ItemBasic extends Item
 	@Override
 	public Icon getIconFromDamage(int damage)
 	{
-		if (this.icons.size() > damage && !this.isDamageable())
+		if (this.icons.length > damage && !this.isDamageable())
 		{
-			return icons.get(damage);
+			return icons[damage];
 		}
 
-		return super.getIconFromDamage(damage);
+		return icons[0];
 	}
 }
