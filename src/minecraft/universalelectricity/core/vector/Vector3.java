@@ -129,14 +129,19 @@ public class Vector3 implements Cloneable
 		return world.getBlockTileEntity(this.intX(), this.intY(), this.intZ());
 	}
 
+	public boolean setBlock(World world, int id, int metadata, int notify)
+	{
+		return world.setBlockAndMetadataWithNotify(this.intX(), this.intY(), this.intZ(), id, metadata, notify);
+	}
+
 	public boolean setBlock(World world, int id, int metadata)
 	{
-		return world.setBlockAndMetadataWithNotify(this.intX(), this.intY(), this.intZ(), id, metadata, 2);
+		return this.setBlock(world, id, metadata, 3);
 	}
 
 	public boolean setBlock(World world, int id)
 	{
-		return world.setBlockAndMetadataWithNotify(this.intX(), this.intY(), this.intZ(), id, 0, 2);
+		return this.setBlock(world, id, 0);
 	}
 
 	/**
