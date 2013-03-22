@@ -3,6 +3,7 @@ package universalelectricity.components.common.tileentity;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -11,13 +12,13 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.components.common.BasicComponents;
 import universalelectricity.components.common.block.BlockBasicMachine;
 import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.item.ElectricItemHelper;
+import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
@@ -182,28 +183,6 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 	}
 
 	@Override
-	public int getStartInventorySide(ForgeDirection side)
-	{
-		if (side == side.DOWN)
-		{
-			return 1;
-		}
-
-		if (side == side.UP)
-		{
-			return 1;
-		}
-
-		return 0;
-	}
-
-	@Override
-	public int getSizeInventorySide(ForgeDirection side)
-	{
-		return 1;
-	}
-
-	@Override
 	public int getSizeInventory()
 	{
 		return this.containingItems.length;
@@ -297,14 +276,56 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 	}
 
 	@Override
-	public boolean func_94042_c()
+	public boolean isInvNameLocalized()
 	{
+		return true;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int slotID, ItemStack itemstack)
+	{
+		return itemstack.getItem() instanceof IItemElectric;
+	}
+
+	@Override
+	public int[] getSizeInventorySide(int slotID)
+	{
+		return new int[] { 0, 1 };
+	}
+
+	@Override
+	public boolean func_102007_a(int slotID, ItemStack itemstack, int side)
+	{
+		if (this.isStackValidForSlot(slotID, itemstack))
+		{
+			if (slotID == 0)
+			{
+				return ((IItemElectric) itemstack.getItem()).getReceiveRequest(itemstack).getWatts() > 0;
+			}
+			else if (slotID == 1)
+			{
+				return ((IItemElectric) itemstack.getItem()).getProvideRequest(itemstack).getWatts() > 0;
+			}
+		}
 		return false;
 	}
 
 	@Override
-	public boolean func_94041_b(int i, ItemStack itemstack)
+	public boolean func_102008_b(int slotID, ItemStack itemstack, int side)
 	{
+		if (this.isStackValidForSlot(slotID, itemstack))
+		{
+			if (slotID == 0)
+			{
+				return ((IItemElectric) itemstack.getItem()).getReceiveRequest(itemstack).getWatts() <= 0;
+			}
+			else if (slotID == 1)
+			{
+				return ((IItemElectric) itemstack.getItem()).getProvideRequest(itemstack).getWatts() <= 0;
+			}
+		}
+
 		return false;
+
 	}
 }

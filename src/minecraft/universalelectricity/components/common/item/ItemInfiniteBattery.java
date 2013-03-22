@@ -14,7 +14,7 @@ import universalelectricity.core.item.IItemElectric;
  * @author Calclavia
  * 
  */
-public class ItemInfiniteBattery extends ItemBasic implements IItemElectric
+public class ItemInfiniteBattery extends ItemBC implements IItemElectric
 {
 	public ItemInfiniteBattery(int id)
 	{
@@ -27,7 +27,7 @@ public class ItemInfiniteBattery extends ItemBasic implements IItemElectric
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
-		par3List.add("\u00a72 Infinite");
+		par3List.add("\u00a72Infinite");
 	}
 
 	@Override

@@ -138,7 +138,7 @@ public class Vector3 implements Cloneable
 
 	public boolean setBlock(World world, int id, int metadata, int notify)
 	{
-		return world.setBlockAndMetadataWithNotify(this.intX(), this.intY(), this.intZ(), id, metadata, notify);
+		return world.setBlock(this.intX(), this.intY(), this.intZ(), id, metadata, notify);
 	}
 
 	public boolean setBlock(World world, int id, int metadata)

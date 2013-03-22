@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
-public class ItemPlate extends ItemBasic
+public class ItemPlate extends ItemBC
 {
 	public static final String[] TYPES = { "plateCopper", "plateTin", "plateBronze", "plateSteel", "plateIron", "plateGold" };
 

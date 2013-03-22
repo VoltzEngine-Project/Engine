@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.implement.IToolConfigurator;
 
-public class ItemWrench extends ItemBasic implements IToolConfigurator
+public class ItemWrench extends ItemBC implements IToolConfigurator
 {
 	public ItemWrench(int id, int texture)
 	{
@@ -39,7 +39,7 @@ public class ItemWrench extends ItemBasic implements IToolConfigurator
 	{
 		int blockID = world.getBlockId(x, y, z);
 
-		if (blockID == Block.furnaceIdle.blockID || blockID == Block.furnaceBurning.blockID || blockID == Block.field_94340_cs.blockID || blockID == Block.field_96469_cy.blockID || blockID == Block.dispenser.blockID || blockID == Block.pistonBase.blockID || blockID == Block.pistonStickyBase.blockID)
+		if (blockID == Block.furnaceIdle.blockID || blockID == Block.furnaceBurning.blockID || blockID == Block.dropper.blockID || blockID == Block.hopperBlock.blockID || blockID == Block.dispenser.blockID || blockID == Block.pistonBase.blockID || blockID == Block.pistonStickyBase.blockID)
 		{
 			int metadata = world.getBlockMetadata(x, y, z);
 

@@ -34,7 +34,7 @@ public class GuiElectricFurnace extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		this.fontRenderer.drawString(this.tileEntity.getInvName(), 60, 6, 4210752);
+		this.fontRenderer.drawString(this.tileEntity.getInvName(), 45, 6, 4210752);
 		this.fontRenderer.drawString("Smelting:", 10, 28, 4210752);
 		this.fontRenderer.drawString("Battery:", 10, 53, 4210752);
 		String displayText = "";
@@ -64,7 +64,7 @@ public class GuiElectricFurnace extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		this.mc.renderEngine.func_98187_b(BasicComponents.GUI_DIRECTORY + "electric_furnace.png");
+		this.mc.renderEngine.bindTexture(BasicComponents.GUI_DIRECTORY + "electric_furnace.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		containerWidth = (this.width - this.xSize) / 2;

@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
-public class ItemIngot extends ItemBasic
+public class ItemIngot extends ItemBC
 {
 	public static final String[] TYPES = { "ingotCopper", "ingotTin", "ingotBronze", "ingotSteel" };
 

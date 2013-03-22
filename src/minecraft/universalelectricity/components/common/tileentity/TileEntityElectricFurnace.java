@@ -2,6 +2,7 @@ package universalelectricity.components.common.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,11 +11,11 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.components.common.BasicComponents;
 import universalelectricity.components.common.block.BlockBasicMachine;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ElectricItemHelper;
+import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
@@ -273,23 +274,6 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	}
 
 	@Override
-	public int getStartInventorySide(ForgeDirection side)
-	{
-		if (side == side.DOWN || side == side.UP)
-		{
-			return side.ordinal();
-		}
-
-		return 2;
-	}
-
-	@Override
-	public int getSizeInventorySide(ForgeDirection side)
-	{
-		return 1;
-	}
-
-	@Override
 	public int getSizeInventory()
 	{
 		return this.containingItems.length;
@@ -377,16 +361,39 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	}
 
 	@Override
-	public boolean func_94042_c()
+	public boolean isInvNameLocalized()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return true;
+	}
+
+	/**
+	 * Returns true if automation is allowed to insert the given stack (ignoring stack size) into
+	 * the given slot.
+	 */
+	@Override
+	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
+	{
+		return slotID == 1 ? FurnaceRecipes.smelting().getSmeltingResult(itemStack) != null : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric : false);
+	}
+
+	/**
+	 * Get the size of the side inventory.
+	 */
+	@Override
+	public int[] getSizeInventorySide(int side)
+	{
+		return side == 0 ? new int[] { 2 } : (side == 1 ? new int[] { 0, 1 } : new int[] { 0 });
 	}
 
 	@Override
-	public boolean func_94041_b(int i, ItemStack itemstack)
+	public boolean func_102007_a(int slotID, ItemStack par2ItemStack, int par3)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return this.isStackValidForSlot(slotID, par2ItemStack);
+	}
+
+	@Override
+	public boolean func_102008_b(int slotID, ItemStack par2ItemStack, int par3)
+	{
+		return slotID == 2;
 	}
 }

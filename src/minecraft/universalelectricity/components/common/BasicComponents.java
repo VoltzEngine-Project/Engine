@@ -14,7 +14,7 @@ import universalelectricity.components.client.RenderCopperWire;
 import universalelectricity.components.common.block.BlockBCOre;
 import universalelectricity.components.common.block.BlockBasicMachine;
 import universalelectricity.components.common.block.BlockCopperWire;
-import universalelectricity.components.common.item.ItemBasic;
+import universalelectricity.components.common.item.ItemBC;
 import universalelectricity.components.common.item.ItemBattery;
 import universalelectricity.components.common.item.ItemBlockBCOre;
 import universalelectricity.components.common.item.ItemBlockBasicMachine;
@@ -285,7 +285,7 @@ public class BasicComponents
 		if (itemMotor == null)
 		{
 			UniversalElectricity.CONFIGURATION.load();
-			itemMotor = new ItemBasic("motor", UniversalElectricity.CONFIGURATION.getItem("Motor", BasicComponents.ITEM_ID_PREFIX + 14).getInt());
+			itemMotor = new ItemBC("motor", UniversalElectricity.CONFIGURATION.getItem("Motor", BasicComponents.ITEM_ID_PREFIX + 14).getInt());
 			OreDictionary.registerOre("motor", itemMotor);
 			UniversalElectricity.CONFIGURATION.save();
 		}
@@ -372,7 +372,7 @@ public class BasicComponents
 			if (OreDictionary.getOres(itemName).size() <= 0 || require)
 			{
 				UniversalElectricity.CONFIGURATION.load();
-				itemBronzeDust = new ItemBasic(itemName, UniversalElectricity.CONFIGURATION.getItem("Bronze Dust", BasicComponents.ITEM_ID_PREFIX + 8).getInt());
+				itemBronzeDust = new ItemBC(itemName, UniversalElectricity.CONFIGURATION.getItem("Bronze Dust", BasicComponents.ITEM_ID_PREFIX + 8).getInt());
 				OreDictionary.registerOre(itemName, itemBronzeDust);
 
 				RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemBronzeDust), new Object[] { "!#!", '!', "ingotCopper", '#', "ingotTin" }), "Bronze Dust", UniversalElectricity.CONFIGURATION, true);
@@ -406,7 +406,7 @@ public class BasicComponents
 			{
 				UniversalElectricity.CONFIGURATION.load();
 
-				itemSteelDust = new ItemBasic(itemName, UniversalElectricity.CONFIGURATION.getItem("Steel Dust", BasicComponents.ITEM_ID_PREFIX + 9).getInt());
+				itemSteelDust = new ItemBC(itemName, UniversalElectricity.CONFIGURATION.getItem("Steel Dust", BasicComponents.ITEM_ID_PREFIX + 9).getInt());
 				OreDictionary.registerOre(itemName, itemSteelDust);
 				RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 1), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);
 				RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemSteelDust), new Object[] { " C ", "CIC", " C ", 'C', new ItemStack(Item.coal, 1, 0), 'I', Item.ingotIron }), "Steel Dust", UniversalElectricity.CONFIGURATION, true);

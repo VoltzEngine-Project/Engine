@@ -2,6 +2,7 @@ package universalelectricity.components.common.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,7 +12,6 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.components.common.BasicComponents;
 import universalelectricity.components.common.block.BlockBasicMachine;
 import universalelectricity.core.block.IConductor;
@@ -241,18 +241,6 @@ public class TileEntityCoalGenerator extends TileEntityElectrical implements IIn
 	}
 
 	@Override
-	public int getStartInventorySide(ForgeDirection side)
-	{
-		return 0;
-	}
-
-	@Override
-	public int getSizeInventorySide(ForgeDirection side)
-	{
-		return 1;
-	}
-
-	@Override
 	public int getSizeInventory()
 	{
 		return this.containingItems.length;
@@ -340,16 +328,33 @@ public class TileEntityCoalGenerator extends TileEntityElectrical implements IIn
 	}
 
 	@Override
-	public boolean func_94042_c()
+	public boolean isInvNameLocalized()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public boolean func_94041_b(int i, ItemStack itemstack)
+	public boolean isStackValidForSlot(int slotID, ItemStack itemstack)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return itemstack.itemID == Item.coal.itemID;
+	}
+
+	@Override
+	public int[] getSizeInventorySide(int slotID)
+	{
+		return new int[] { 0 };
+	}
+
+	@Override
+	public boolean func_102007_a(int slotID, ItemStack itemstack, int side)
+	{
+		return this.isStackValidForSlot(slotID, itemstack);
+	}
+
+	@Override
+	public boolean func_102008_b(int slotID, ItemStack itemstack, int side)
+	{
+		return slotID == 0;
+
 	}
 }

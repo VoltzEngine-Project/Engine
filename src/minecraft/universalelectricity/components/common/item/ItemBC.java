@@ -11,11 +11,17 @@ import universalelectricity.components.common.BasicComponents;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemBasic extends Item
+/**
+ * An Base Item Class for Basic Components. Do not use this! Make your own!
+ * 
+ * @author Calclavia
+ * 
+ */
+public class ItemBC extends Item
 {
-	protected Icon[] icons = new Icon[256];
+	protected final Icon[] icons = new Icon[256];
 
-	public ItemBasic(String name, int id)
+	public ItemBC(String name, int id)
 	{
 		super(id);
 		this.setUnlocalizedName(name);
@@ -23,14 +29,18 @@ public class ItemBasic extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void func_94581_a(IconRegister iconRegister)
+	@Override
+	public void updateIcons(IconRegister iconRegister)
 	{
 		List<ItemStack> list = new ArrayList<ItemStack>();
 		this.getSubItems(this.itemID, this.getCreativeTab(), list);
 
-		for (ItemStack itemStack : list)
+		if (list.size() < this.icons.length)
 		{
-			icons[list.indexOf(itemStack)] = iconRegister.func_94245_a(this.getUnlocalizedName(itemStack).replace("item.", BasicComponents.TEXTURE_NAME_PREFIX));
+			for (ItemStack itemStack : list)
+			{
+				this.icons[list.indexOf(itemStack)] = iconRegister.registerIcon(this.getUnlocalizedName(itemStack).replace("item.", BasicComponents.TEXTURE_NAME_PREFIX));
+			}
 		}
 	}
 
@@ -40,7 +50,7 @@ public class ItemBasic extends Item
 	{
 		if (this.icons.length > damage && !this.isDamageable())
 		{
-			return icons[damage];
+			return this.icons[damage];
 		}
 
 		return icons[0];
