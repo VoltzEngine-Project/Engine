@@ -96,7 +96,7 @@ public class BasicComponents
 	public static final ArrayList bcDependants = new ArrayList();
 
 	/**
-	 * Call this function in your mod init stage.
+	 * Call this function in your mod init stage, after all the appropriate blocks are registered.
 	 */
 	public static void register(Object modInstance)
 	{
@@ -115,6 +115,7 @@ public class BasicComponents
 			{
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BasicComponents.itemMotor), new Object[] { "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', "copperWire" }));
 			}
+
 			// Wrench
 			if (itemWrench != null)
 			{
@@ -146,6 +147,8 @@ public class BasicComponents
 
 			if (blockCopperWire != null)
 			{
+				// Sets the network status as active.
+				UniversalElectricity.isNetworkActive = true;
 				// Copper Wire
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockCopperWire, 6), new Object[] { "!!!", "@@@", "!!!", '!', new ItemStack(Block.cloth), '@', "ingotCopper" }));
 			}

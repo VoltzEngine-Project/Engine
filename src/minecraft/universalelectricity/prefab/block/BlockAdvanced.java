@@ -1,5 +1,6 @@
 package universalelectricity.prefab.block;
 
+import java.lang.reflect.Method;
 import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
@@ -12,7 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.core.item.IItemElectric;
-import universalelectricity.prefab.implement.IToolConfigurator;
 
 /**
  * An advanced block class that is to be extended for wrenching capabilities.
@@ -45,11 +45,9 @@ public abstract class BlockAdvanced extends BlockContainer
 		 */
 		if (entityPlayer.inventory.getCurrentItem() != null)
 		{
-			if (entityPlayer.inventory.getCurrentItem().getItem() instanceof IToolConfigurator)
+			if (this.isUsableWrench(entityPlayer, entityPlayer.inventory.getCurrentItem(), x, y, z))
 			{
-				world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
-
-				((IToolConfigurator) entityPlayer.inventory.getCurrentItem().getItem()).wrenchUsed(entityPlayer, x, y, z);
+				// world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 
 				if (entityPlayer.isSneaking())
 				{
@@ -60,7 +58,6 @@ public abstract class BlockAdvanced extends BlockContainer
 				}
 
 				return this.onUseWrench(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ);
-
 			}
 			else if (entityPlayer.inventory.getCurrentItem().getItem() instanceof IItemElectric)
 			{
@@ -80,6 +77,60 @@ public abstract class BlockAdvanced extends BlockContainer
 		}
 
 		return this.onMachineActivated(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ);
+	}
+
+	/**
+	 * A function that denotes if an itemStack is a wrench that can be used and damages the wrench.
+	 * Override this for more wrench compatibility. Compatible with Buildcraft and IC2 wrench API
+	 * via reflection.
+	 * 
+	 * @return
+	 */
+	public boolean isUsableWrench(EntityPlayer entityPlayer, ItemStack itemStack, int x, int y, int z)
+	{
+		if (entityPlayer != null && itemStack != null)
+		{
+			Class wrenchClass = itemStack.getItem().getClass();
+
+			/**
+			 * UE and Buildcraft
+			 */
+			try
+			{
+				Method methodCanWrench = wrenchClass.getMethod("canWrench", EntityPlayer.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
+				boolean canUse = (Boolean) methodCanWrench.invoke(itemStack.getItem(), entityPlayer, x, y, z);
+
+				if (canUse)
+				{
+					Method methodWrenchUsed = wrenchClass.getMethod("wrenchUsed", EntityPlayer.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
+					methodWrenchUsed.invoke(itemStack.getItem(), entityPlayer, x, y, z);
+				}
+
+				return canUse;
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
+			/**
+			 * Industrialcraft
+			 */
+			try
+			{
+				if (wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench"))
+				{
+					Method methodWrenchUsed = wrenchClass.getMethod("damage", ItemStack.class, Integer.TYPE, EntityPlayer.class);
+					methodWrenchUsed.invoke(itemStack.getItem(), itemStack, 10, entityPlayer);
+					return true;
+				}
+			}
+			catch (Exception e)
+			{
+			}
+		}
+
+		return false;
 	}
 
 	/**
