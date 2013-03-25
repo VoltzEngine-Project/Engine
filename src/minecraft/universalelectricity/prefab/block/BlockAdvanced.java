@@ -45,6 +45,8 @@ public abstract class BlockAdvanced extends BlockContainer
 		 */
 		if (this.isUsableWrench(entityPlayer, entityPlayer.inventory.getCurrentItem(), x, y, z))
 		{
+			this.damageWrench(entityPlayer, entityPlayer.inventory.getCurrentItem(), x, y, z);
+
 			if (entityPlayer.isSneaking())
 			{
 				if (this.onSneakUseWrench(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ))
@@ -99,7 +101,7 @@ public abstract class BlockAdvanced extends BlockContainer
 			 */
 			try
 			{
-				return wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench");
+				return wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench") || wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrenchElectric");
 			}
 			catch (Exception e)
 			{
@@ -138,10 +140,10 @@ public abstract class BlockAdvanced extends BlockContainer
 			 */
 			try
 			{
-				if (wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench"))
+				if (wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench") || wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrenchElectric"))
 				{
-					Method methodWrenchUsed = wrenchClass.getMethod("damage", ItemStack.class, Integer.TYPE, EntityPlayer.class);
-					methodWrenchUsed.invoke(itemStack.getItem(), itemStack, 10, entityPlayer);
+					Method methodWrenchDamage = wrenchClass.getMethod("damage", ItemStack.class, Integer.TYPE, EntityPlayer.class);
+					methodWrenchDamage.invoke(itemStack.getItem(), itemStack, 10, entityPlayer);
 					return true;
 				}
 			}
