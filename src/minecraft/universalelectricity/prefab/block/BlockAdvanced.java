@@ -101,7 +101,10 @@ public abstract class BlockAdvanced extends BlockContainer
 			 */
 			try
 			{
-				return wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench") || wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrenchElectric");
+				if (wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench") || wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrenchElectric"))
+				{
+					return itemStack.getItemDamage() <= itemStack.getMaxDamage();
+				}
 			}
 			catch (Exception e)
 			{
@@ -143,7 +146,7 @@ public abstract class BlockAdvanced extends BlockContainer
 				if (wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench") || wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrenchElectric"))
 				{
 					Method methodWrenchDamage = wrenchClass.getMethod("damage", ItemStack.class, Integer.TYPE, EntityPlayer.class);
-					methodWrenchDamage.invoke(itemStack.getItem(), itemStack, 10, entityPlayer);
+					methodWrenchDamage.invoke(itemStack.getItem(), itemStack, 1, entityPlayer);
 					return true;
 				}
 			}
