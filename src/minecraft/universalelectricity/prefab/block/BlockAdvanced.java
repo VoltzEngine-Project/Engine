@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import universalelectricity.core.item.IItemElectric;
 
 /**
  * An advanced block class that is to be extended for wrenching capabilities.
@@ -41,30 +40,22 @@ public abstract class BlockAdvanced extends BlockContainer
 		int metadata = world.getBlockMetadata(x, y, z);
 
 		/**
-		 * Check if the player is holding a wrench or an electric item. If so, do not open the GUI.
+		 * Check if the player is holding a wrench or an electric item. If so, call the wrench
+		 * event.
 		 */
-		if (entityPlayer.inventory.getCurrentItem() != null)
+		if (this.isUsableWrench(entityPlayer, entityPlayer.inventory.getCurrentItem(), x, y, z))
 		{
-			if (this.isUsableWrench(entityPlayer, entityPlayer.inventory.getCurrentItem(), x, y, z))
+			if (entityPlayer.isSneaking())
 			{
-				// world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
-
-				if (entityPlayer.isSneaking())
-				{
-					if (this.onSneakUseWrench(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ))
-					{
-						return true;
-					}
-				}
-
-				return this.onUseWrench(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ);
-			}
-			else if (entityPlayer.inventory.getCurrentItem().getItem() instanceof IItemElectric)
-			{
-				if (this.onUseElectricItem(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ))
+				if (this.onSneakUseWrench(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ))
 				{
 					return true;
 				}
+			}
+
+			if (this.onUseWrench(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ))
+			{
+				return true;
 			}
 		}
 
@@ -80,11 +71,10 @@ public abstract class BlockAdvanced extends BlockContainer
 	}
 
 	/**
-	 * A function that denotes if an itemStack is a wrench that can be used and damages the wrench.
-	 * Override this for more wrench compatibility. Compatible with Buildcraft and IC2 wrench API
-	 * via reflection.
+	 * A function that denotes if an itemStack is a wrench that can be used. Override this for more
+	 * wrench compatibility. Compatible with Buildcraft and IC2 wrench API via reflection.
 	 * 
-	 * @return
+	 * @return True if it is a wrench.
 	 */
 	public boolean isUsableWrench(EntityPlayer entityPlayer, ItemStack itemStack, int x, int y, int z)
 	{
@@ -98,19 +88,49 @@ public abstract class BlockAdvanced extends BlockContainer
 			try
 			{
 				Method methodCanWrench = wrenchClass.getMethod("canWrench", EntityPlayer.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
-				boolean canUse = (Boolean) methodCanWrench.invoke(itemStack.getItem(), entityPlayer, x, y, z);
-
-				if (canUse)
-				{
-					Method methodWrenchUsed = wrenchClass.getMethod("wrenchUsed", EntityPlayer.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
-					methodWrenchUsed.invoke(itemStack.getItem(), entityPlayer, x, y, z);
-				}
-
-				return canUse;
+				return (Boolean) methodCanWrench.invoke(itemStack.getItem(), entityPlayer, x, y, z);
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+			}
+
+			/**
+			 * Industrialcraft
+			 */
+			try
+			{
+				return wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench");
+			}
+			catch (Exception e)
+			{
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * This function damages a wrench. Works with Buildcraft and Industrialcraft wrenches.
+	 * 
+	 * @return True if damage was successfull.
+	 */
+	public boolean damageWrench(EntityPlayer entityPlayer, ItemStack itemStack, int x, int y, int z)
+	{
+		if (this.isUsableWrench(entityPlayer, itemStack, x, y, z))
+		{
+			Class wrenchClass = itemStack.getItem().getClass();
+
+			/**
+			 * UE and Buildcraft
+			 */
+			try
+			{
+				Method methodWrenchUsed = wrenchClass.getMethod("wrenchUsed", EntityPlayer.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
+				methodWrenchUsed.invoke(itemStack.getItem(), entityPlayer, x, y, z);
+				return true;
+			}
+			catch (Exception e)
+			{
 			}
 
 			/**
@@ -149,16 +169,6 @@ public abstract class BlockAdvanced extends BlockContainer
 	 * @return True if something happens
 	 */
 	public boolean onSneakMachineActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ)
-	{
-		return false;
-	}
-
-	/**
-	 * Called when a player uses an electric item on the machine
-	 * 
-	 * @return True if some happens
-	 */
-	public boolean onUseElectricItem(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		return false;
 	}
