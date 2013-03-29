@@ -1,5 +1,8 @@
 package universalelectricity.components.common.tileentity;
 
+import java.util.Set;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -17,6 +20,7 @@ import universalelectricity.components.common.block.BlockBasicMachine;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.IElectricityNetwork;
+import universalelectricity.core.path.PathfinderAStar;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;

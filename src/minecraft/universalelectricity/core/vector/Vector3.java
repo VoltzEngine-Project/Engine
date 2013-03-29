@@ -99,14 +99,6 @@ public class Vector3 implements Cloneable
 	}
 
 	/**
-	 * Compares two vectors and see if they are equal. True if so.
-	 */
-	public boolean isEqual(Vector3 vector3)
-	{
-		return (this.x == vector3.x && this.y == vector3.y && this.z == vector3.z);
-	}
-
-	/**
 	 * Makes a new copy of this Vector. Prevents variable referencing problems.
 	 */
 	@Override
@@ -370,6 +362,18 @@ public class Vector3 implements Cloneable
 	public int hashCode()
 	{
 		return ("X:" + this.x + "Y:" + this.y + "Z:" + this.z).hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o instanceof Vector3)
+		{
+			Vector3 vector3 = (Vector3) o;
+			return this.x == vector3.x && this.y == vector3.y && this.z == vector3.z;
+		}
+
+		return false;
 	}
 
 	@Override
