@@ -53,7 +53,7 @@ public class GuiElectricFurnace extends GuiContainer
 		}
 
 		this.fontRenderer.drawString("Status: " + displayText, 82, 45, 4210752);
-		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileEntity.WATTS_PER_TICK * 20, ElectricUnit.WATT), 82, 56, 4210752);
+		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(TileEntityElectricFurnace.WATTS_PER_TICK * 20, ElectricUnit.WATT), 82, 56, 4210752);
 		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE), 82, 68, 4210752);
 		this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
@@ -73,7 +73,7 @@ public class GuiElectricFurnace extends GuiContainer
 
 		if (this.tileEntity.processTicks > 0)
 		{
-			int scale = (int) (((double) this.tileEntity.processTicks / (double) this.tileEntity.PROCESS_TIME_REQUIRED) * 23);
+			int scale = (int) (((double) this.tileEntity.processTicks / (double) TileEntityElectricFurnace.PROCESS_TIME_REQUIRED) * 23);
 			this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
 		}
 	}

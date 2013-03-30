@@ -69,11 +69,11 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 		{
 			if (this.canProcess())
 			{
-				if (this.wattsReceived >= this.WATTS_PER_TICK)
+				if (this.wattsReceived >= TileEntityElectricFurnace.WATTS_PER_TICK)
 				{
 					if (this.processTicks == 0)
 					{
-						this.processTicks = this.PROCESS_TIME_REQUIRED;
+						this.processTicks = TileEntityElectricFurnace.PROCESS_TIME_REQUIRED;
 					}
 					else if (this.processTicks > 0)
 					{

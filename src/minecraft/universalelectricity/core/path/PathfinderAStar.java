@@ -93,20 +93,20 @@ public class PathfinderAStar extends Pathfinder
 
 			for (Vector3 neighbor : getNeighborNodes(currentNode))
 			{
-				double tentative_g_score = this.gScore.get(currentNode) + currentNode.distanceTo(neighbor);
+				double tentativeGScore = this.gScore.get(currentNode) + currentNode.distanceTo(neighbor);
 
 				if (this.closedSet.contains(neighbor))
 				{
-					if (tentative_g_score >= this.gScore.get(neighbor))
+					if (tentativeGScore >= this.gScore.get(neighbor))
 					{
 						continue;
 					}
 				}
 
-				if (!this.openSet.contains(neighbor) || tentative_g_score < this.gScore.get(neighbor))
+				if (!this.openSet.contains(neighbor) || tentativeGScore < this.gScore.get(neighbor))
 				{
 					this.navigationMap.put(neighbor, currentNode);
-					this.gScore.put(neighbor, tentative_g_score);
+					this.gScore.put(neighbor, tentativeGScore);
 					this.fScore.put(neighbor, gScore.get(neighbor) + getHeuristicEstimatedCost(neighbor, goal));
 					this.openSet.add(neighbor);
 				}

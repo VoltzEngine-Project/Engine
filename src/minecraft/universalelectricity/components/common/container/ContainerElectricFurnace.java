@@ -45,6 +45,7 @@ public class ContainerElectricFurnace extends Container
 		tileEntity.openChest();
 	}
 
+	@Override
 	public void onCraftGuiClosed(EntityPlayer entityplayer)
 	{
 		super.onCraftGuiClosed(entityplayer);

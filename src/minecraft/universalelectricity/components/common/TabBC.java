@@ -11,6 +11,7 @@ public class TabBC extends CreativeTabs
 		super(par1, par2Str);
 	}
 
+	@Override
 	public ItemStack getIconItemStack()
 	{
 		return new ItemStack(BasicComponents.blockMachine, 1, BlockBasicMachine.BATTERY_BOX_METADATA);

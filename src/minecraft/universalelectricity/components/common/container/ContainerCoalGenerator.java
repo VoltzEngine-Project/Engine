@@ -34,6 +34,7 @@ public class ContainerCoalGenerator extends Container
 		tileEntity.openChest();
 	}
 
+	@Override
 	public void onCraftGuiClosed(EntityPlayer entityplayer)
 	{
 		super.onCraftGuiClosed(entityplayer);

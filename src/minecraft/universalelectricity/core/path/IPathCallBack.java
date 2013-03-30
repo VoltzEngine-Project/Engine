@@ -2,8 +2,6 @@ package universalelectricity.core.path;
 
 import java.util.Set;
 
-import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.block.IConnectionProvider;
 import universalelectricity.core.vector.Vector3;
 
 public interface IPathCallBack

@@ -46,9 +46,9 @@ public class GuiCoalGenerator extends GuiContainer
 		{
 			displayText = "Not Generating";
 		}
-		else if (this.tileEntity.generateWatts < this.tileEntity.MIN_GENERATE_WATTS)
+		else if (this.tileEntity.generateWatts < TileEntityCoalGenerator.MIN_GENERATE_WATTS)
 		{
-			displayText = "Hull Heat: " + (int) (this.tileEntity.generateWatts / this.tileEntity.MIN_GENERATE_WATTS * 100) + "%";
+			displayText = "Hull Heat: " + (int) (this.tileEntity.generateWatts / TileEntityCoalGenerator.MIN_GENERATE_WATTS * 100) + "%";
 		}
 		else
 		{
