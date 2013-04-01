@@ -134,3 +134,4 @@ Minecraft 1.5
 x UniversalElectricity_v1.3.1.356.zip BasicComponents_v1.3.1.356.jar BCDev_v1.3.1.356.jar
 @ UniversalElectricity_v1.3.1.357.zip BasicComponents_v1.3.1.357.jar BCDev_v1.3.1.357.jar
 @ UniversalElectricity_v1.3.1.358.zip BasicComponents_v1.3.1.358.jar BCDev_v1.3.1.358.jar
+* UniversalElectricity_v1.3.1.359.zip BasicComponents_v1.3.1.359.jar BCDev_v1.3.1.359.jar

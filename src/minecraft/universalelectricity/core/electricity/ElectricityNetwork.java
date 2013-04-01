@@ -472,7 +472,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 									{
 										if (nodeTile != splitPoint)
 										{
-											newNetwork.getConductors().add((IConductor) node);
+											newNetwork.getConductors().add((IConductor) nodeTile);
 										}
 									}
 								}
