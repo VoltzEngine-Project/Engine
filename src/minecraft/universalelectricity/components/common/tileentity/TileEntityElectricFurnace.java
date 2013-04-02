@@ -1,5 +1,8 @@
 package universalelectricity.components.common.tileentity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -16,13 +19,14 @@ import universalelectricity.components.common.block.BlockBasicMachine;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.item.IItemElectric;
-import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class TileEntityElectricFurnace extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver
@@ -50,7 +54,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	/**
 	 * The amount of players using the electric furnace.
 	 */
-	private int playersUsing = 0;
+	public final Set<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
 
 	@Override
 	public void updateEntity()
@@ -105,9 +109,12 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 				this.processTicks = 0;
 			}
 
-			if (this.ticks % 3 == 0 && this.playersUsing > 0)
+			if (this.ticks % 3 == 0)
 			{
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+				for (EntityPlayer player : this.playersUsing)
+				{
+					PacketDispatcher.sendPacketToPlayer(getDescriptionPacket(), (Player) player);
+				}
 			}
 		}
 	}
@@ -154,17 +161,11 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
 	@Override
 	public void openChest()
 	{
-		if (!this.worldObj.isRemote)
-		{
-			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 15);
-		}
-		this.playersUsing++;
 	}
 
 	@Override
 	public void closeChest()
 	{
-		this.playersUsing--;
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package universalelectricity.components.common.tileentity;
 
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -27,13 +29,15 @@ import universalelectricity.prefab.tile.TileEntityElectricityStorage;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class TileEntityBatteryBox extends TileEntityElectricityStorage implements IElectricityStorage, IPacketReceiver, ISidedInventory
 {
 	private ItemStack[] containingItems = new ItemStack[2];
 
-	private int playersUsing = 0;
+	public final Set<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
 
 	@Override
 	public void updateEntity()
@@ -85,9 +89,12 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 
 		if (!this.worldObj.isRemote)
 		{
-			if (this.ticks % 3 == 0 && this.playersUsing > 0)
+			if (this.ticks % 3 == 0)
 			{
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+				for (EntityPlayer player : this.playersUsing)
+				{
+					PacketDispatcher.sendPacketToPlayer(getDescriptionPacket(), (Player) player);
+				}
 			}
 		}
 	}
@@ -127,13 +134,11 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 	@Override
 	public void openChest()
 	{
-		this.playersUsing++;
 	}
 
 	@Override
 	public void closeChest()
 	{
-		this.playersUsing--;
 	}
 
 	/**

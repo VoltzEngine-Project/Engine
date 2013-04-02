@@ -1,5 +1,8 @@
 package universalelectricity.components.common.tileentity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -25,6 +28,8 @@ import universalelectricity.prefab.tile.TileEntityElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class TileEntityCoalGenerator extends TileEntityElectrical implements IInventory, ISidedInventory, IPacketReceiver
@@ -57,7 +62,7 @@ public class TileEntityCoalGenerator extends TileEntityElectrical implements IIn
 	 */
 	private ItemStack[] containingItems = new ItemStack[1];
 
-	private int playersUsing = 0;
+	public final Set<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
 
 	@Override
 	public boolean canConnect(ForgeDirection direction)
@@ -138,9 +143,12 @@ public class TileEntityCoalGenerator extends TileEntityElectrical implements IIn
 				}
 			}
 
-			if (this.ticks % 3 == 0 && this.playersUsing > 0)
+			if (this.ticks % 3 == 0)
 			{
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+				for (EntityPlayer player : this.playersUsing)
+				{
+					PacketDispatcher.sendPacketToPlayer(getDescriptionPacket(), (Player) player);
+				}
 			}
 
 			if (this.prevGenerateWatts <= 0 && this.generateWatts > 0 || this.prevGenerateWatts > 0 && this.generateWatts <= 0)
@@ -177,18 +185,11 @@ public class TileEntityCoalGenerator extends TileEntityElectrical implements IIn
 	@Override
 	public void openChest()
 	{
-		if (!this.worldObj.isRemote)
-		{
-			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 15);
-		}
-
-		this.playersUsing++;
 	}
 
 	@Override
 	public void closeChest()
 	{
-		this.playersUsing--;
 	}
 
 	/**
