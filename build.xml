@@ -13,7 +13,7 @@
 		<delete dir="DevContents" />
 		<delete dir="UeContents" />
 		<delete dir="BcContents" />
-		<delete dir="build" />
+		<delete dir="output" />
 		<delete dir="${dir.development}/forge" />
 		
 		<copy todir="${dir.development}">
@@ -32,7 +32,7 @@
 		<mkdir dir="DevContents" />
 		<mkdir dir="UeContents" />
 		<mkdir dir="BcContents" />
-		<mkdir dir="build" />
+		<mkdir dir="output" />
 		
 		<replace dir="${dir.mcp}/src/minecraft" token="@MAJOR@" value="${version.mod.major}" />
 		<replace dir="${dir.mcp}/src/minecraft" token="@MINOR@" value="${version.mod.minor}" />
@@ -84,21 +84,21 @@
 			</fileset>
 		</copy>
 
-		<jar destfile="build/${file.BcDevJar}">
+		<jar destfile="output/${file.BcDevJar}">
 			<fileset dir="DevContents" />
 		</jar>
 		
-		<jar destfile="build/${file.UeJar}">
+		<jar destfile="output/${file.UeJar}">
 			<fileset dir="UeContents" />
 		</jar>
 		
-		<jar destfile="build/${file.BcJar}">
+		<jar destfile="output/${file.BcJar}">
 			<fileset dir="BcContents" />
 		</jar>
 		
 		<echo file="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}/info.txt" append="true" >
 		@ ${env.BUILD_NUMBER} ${version.minecraft} ${file.UeJar} ${file.BcJar} ${file.BcDevJar}</echo>
 		
-		<copy todir="build" file="build.properties" />
+		<copy todir="output" file="build.properties" />
 	</target>
 </project>
