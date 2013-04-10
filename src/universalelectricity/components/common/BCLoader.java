@@ -58,7 +58,7 @@ public class BCLoader
         		"allows the use of electricity in Minecraft. Mods which uses the Universal " +
         		"Electricity API have the ability to communicate and be compatible with each other. ";
         
-        metadata.url = "http://http://www.universalelectricity.com/";
+        metadata.url = "http://www.universalelectricity.com/";
         
         metadata.logoFile = "/universal_electricity.png";
         metadata.version = UniversalElectricity.VERSION + "." + UniversalElectricity.BUILD_VERSION;
