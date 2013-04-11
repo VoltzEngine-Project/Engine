@@ -5,8 +5,8 @@ Universal Electricity is a modular electricity API for modders to create to add 
 
 Universal Electricity's website can be found at www.universalelectricity.com.
 
-## Developer
-Calclavia
+#### Developer
+** Project Leader ** - Calclavia
 
 ### License
 Universal Electricity is licensed under the Lesser General Public License (LGPL) version 3.0. The license can be found here:
