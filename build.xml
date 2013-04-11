@@ -88,12 +88,10 @@
 			<fileset dir="DevContents" />
 		</jar>
 		
-<<<<<<< HEAD
 		<jar destfile="output/${file.UeJar}">
-=======
 		<zip destfile="build/${file.UeJar}">
->>>>>>> Changed UE build file to be a zip
-			<fileset dir="UeContents" />
+
+		<fileset dir="UeContents" />
 		</zip>
 		
 		<jar destfile="output/${file.BcJar}">
