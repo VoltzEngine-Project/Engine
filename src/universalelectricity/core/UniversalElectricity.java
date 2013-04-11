@@ -27,7 +27,7 @@ public class UniversalElectricity
 	/**
 	 * The Universal Electricity configuration file.
 	 */
-	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/UniversalElectricity.cfg"));
+	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
 
 	/**
 	 * Multiply this to convert foreign energy into UE Joules.
@@ -71,6 +71,7 @@ public class UniversalElectricity
 		TO_BC_RATIO = 1 / BC3_RATIO;
 
 		isVoltageSensitive = CONFIGURATION.get("Compatiblity", "Is Voltage Sensitive", isVoltageSensitive).getBoolean(isVoltageSensitive);
+		isNetworkActive = CONFIGURATION.get("Compatiblity", "Is Network Active", isNetworkActive).getBoolean(isNetworkActive);
 		CONFIGURATION.save();
 	}
 }
