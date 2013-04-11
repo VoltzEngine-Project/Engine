@@ -4,7 +4,7 @@
 
 	<property file="build.properties" />
 	<property environment="env" />
-	<property name="file.UeJar" 	value="UniversalElectricity_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.jar" />
+	<property name="file.UeJar" 	value="UniversalElectricity_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.zip" />
 	<property name="file.BcJar" 	value="BasicComponents_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.jar" />
 	<property name="file.BcDevJar" 	value="BCDev_${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.jar" />
 
@@ -88,9 +88,13 @@
 			<fileset dir="DevContents" />
 		</jar>
 		
+<<<<<<< HEAD
 		<jar destfile="output/${file.UeJar}">
+=======
+		<zip destfile="build/${file.UeJar}">
+>>>>>>> Changed UE build file to be a zip
 			<fileset dir="UeContents" />
-		</jar>
+		</zip>
 		
 		<jar destfile="output/${file.BcJar}">
 			<fileset dir="BcContents" />
