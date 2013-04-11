@@ -88,10 +88,8 @@
 			<fileset dir="DevContents" />
 		</jar>
 		
-		<jar destfile="output/${file.UeJar}">
-		<zip destfile="build/${file.UeJar}">
-
-		<fileset dir="UeContents" />
+		<zip destfile="output/${file.UeJar}">
+			<fileset dir="UeContents" />
 		</zip>
 		
 		<jar destfile="output/${file.BcJar}">
