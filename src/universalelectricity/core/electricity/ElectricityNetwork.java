@@ -414,6 +414,11 @@ public class ElectricityNetwork implements IElectricityNetwork
 		if (splitPoint instanceof TileEntity)
 		{
 			this.getConductors().remove(splitPoint);
+			
+			for (TileEntity tile : this.getProducers().keySet())
+			{
+				this.stopProducing(tile);
+			}
 
 			/**
 			 * Loop through the connected blocks and attempt to see if there are connections between
