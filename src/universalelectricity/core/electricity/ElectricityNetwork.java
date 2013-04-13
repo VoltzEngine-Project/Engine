@@ -414,6 +414,20 @@ public class ElectricityNetwork implements IElectricityNetwork
 		if (splitPoint instanceof TileEntity)
 		{
 			this.getConductors().remove(splitPoint);
+			
+			for (ForgeDirection dir : ForgeDirection.values())
+			{
+				if (dir != ForgeDirection.UNKNOWN)
+				{
+					Vector3 splitVec = new Vector3((TileEntity) splitPoint);
+					TileEntity tileAroundSplit = VectorHelper.getTileEntityFromSide(((TileEntity) splitPoint).worldObj, splitVec, dir);
+					
+					if (this.producers.containsKey(tileAroundSplit))
+					{
+						this.stopProducing(tileAroundSplit);
+					}
+				}
+			}
 
 			/**
 			 * Loop through the connected blocks and attempt to see if there are connections between
