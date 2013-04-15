@@ -427,6 +427,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 					if (this.producers.containsKey(tileAroundSplit))
 					{
 						this.stopProducing(tileAroundSplit);
+						this.stopRequesting(tileAroundSplit);
 					}
 				}
 			}
