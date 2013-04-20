@@ -10,8 +10,11 @@ public class CalculationHelper
 	public static void rotateXZByAngle(Vector3 vector, double angle)
 	{
 		double angleRadians = Math.toRadians(angle);
-		vector.x = vector.x * Math.cos(angleRadians) - vector.z * Math.sin(angleRadians);
-		vector.z = vector.x * Math.sin(angleRadians) + vector.z * Math.cos(angleRadians);
+
+		double originalX = vector.x;
+		double originalZ = vector.z;
+		vector.x = originalX * Math.cos(angleRadians) - originalZ * Math.sin(angleRadians);
+		vector.z = originalX * Math.sin(angleRadians) + originalZ * Math.cos(angleRadians);
 	}
 
 	/**
@@ -21,7 +24,5 @@ public class CalculationHelper
 	{
 		double angleRadians = Math.toRadians(angle);
 		vector.y = Math.cos(angleRadians) * vector.y;
-		// vector.x = vector.x * Math.cos(angleRadians) - vector.y * Math.sin(angleRadians);
-		// vector.y = vector.x * Math.sin(angleRadians) + vector.y * Math.cos(angleRadians);
 	}
 }
