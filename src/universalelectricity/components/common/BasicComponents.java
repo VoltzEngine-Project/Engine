@@ -183,13 +183,13 @@ public class BasicComponents
 
 		if (copperOreGeneration == null)
 		{
-			copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 60, 26, 4).enable(UniversalElectricity.CONFIGURATION);
+			copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(BasicComponents.blockBasicOre, 1, 0), 60, 23, 4).enable(UniversalElectricity.CONFIGURATION);
 			OreGenerator.addOre(BasicComponents.copperOreGeneration);
 		}
 
 		if (tinOreGeneration == null)
 		{
-			tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 60, 23, 4).enable(UniversalElectricity.CONFIGURATION);
+			tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(BasicComponents.blockBasicOre, 1, 1), 60, 19, 4).enable(UniversalElectricity.CONFIGURATION);
 			OreGenerator.addOre(BasicComponents.tinOreGeneration);
 		}
 
