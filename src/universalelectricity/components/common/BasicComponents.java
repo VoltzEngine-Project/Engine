@@ -150,7 +150,7 @@ public class BasicComponents
 				// Sets the network status as active.
 				UniversalElectricity.isNetworkActive = true;
 				// Copper Wire
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockCopperWire, 6), new Object[] { "!!!", "@@@", "!!!", '!', new ItemStack(Block.cloth), '@', "ingotCopper" }));
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockCopperWire, 6), new Object[] { "!!!", "@@@", "!!!", '!', Block.cloth, '@', "ingotCopper" }));
 			}
 			if (itemBattery != null)
 			{
