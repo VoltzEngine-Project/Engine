@@ -1,6 +1,7 @@
 package calclavia.lib;
 
 import ic2.api.Direction;
+import ic2.api.IEnergyStorage;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import net.minecraft.tileentity.TileEntity;
@@ -11,15 +12,15 @@ import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.prefab.implement.IRotatable;
-import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
+import universalelectricity.prefab.tile.TileEntityElectricityStorage;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.PowerFramework;
 
-public abstract class TileEntityUniversalRunnable extends TileEntityElectricityRunnable implements IUniversalEnergyTile
+public abstract class TileEntityUniversalStorable extends TileEntityElectricityStorage implements IUniversalEnergyTile, IEnergyStorage
 {
 	private IPowerProvider powerProvider;
 
-	public TileEntityUniversalRunnable()
+	public TileEntityUniversalStorable()
 	{
 		if (PowerFramework.currentFramework != null)
 		{
@@ -104,7 +105,7 @@ public abstract class TileEntityUniversalRunnable extends TileEntityElectricityR
 	@Override
 	public int demandsEnergy()
 	{
-		return (int) Math.ceil(this.getRequest().getWatts() * UniversalElectricity.TO_IC2_RATIO);
+		return (int) (this.getRequest().getWatts() * UniversalElectricity.TO_IC2_RATIO);
 	}
 
 	@Override
@@ -113,7 +114,7 @@ public abstract class TileEntityUniversalRunnable extends TileEntityElectricityR
 		double givenElectricity = i * UniversalElectricity.IC2_RATIO;
 		double rejects = 0;
 
-		if (givenElectricity > this.getWattBuffer())
+		if (givenElectricity > this.getMaxJoules())
 		{
 			rejects = givenElectricity - this.getRequest().getWatts();
 		}
@@ -127,6 +128,43 @@ public abstract class TileEntityUniversalRunnable extends TileEntityElectricityR
 	public int getMaxSafeInput()
 	{
 		return 2048;
+	}
+
+	@Override
+	public int getStored()
+	{
+		return (int) (this.getJoules() * UniversalElectricity.TO_IC2_RATIO);
+	}
+
+	@Override
+	public void setStored(int energy)
+	{
+		this.setJoules(energy * UniversalElectricity.IC2_RATIO);
+	}
+
+	@Override
+	public int addEnergy(int amount)
+	{
+		this.setJoules(this.getJoules() + (amount * UniversalElectricity.IC2_RATIO));
+		return this.getStored();
+	}
+
+	@Override
+	public int getCapacity()
+	{
+		return (int) (this.getMaxJoules() * UniversalElectricity.TO_IC2_RATIO);
+	}
+
+	@Override
+	public int getOutput()
+	{
+		return this.getMaxSafeInput();
+	}
+
+	@Override
+	public boolean isTeleporterCompatible(Direction side)
+	{
+		return false;
 	}
 
 	/**
