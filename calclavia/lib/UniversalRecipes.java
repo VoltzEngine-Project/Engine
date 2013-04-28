@@ -1,6 +1,6 @@
 package calclavia.lib;
 
-import ic2.api.Items;
+import ic2.api.item.Items;
 
 import java.util.Arrays;
 import java.util.List;

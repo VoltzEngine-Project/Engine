@@ -1,9 +1,9 @@
 package calclavia.lib;
 
 import ic2.api.Direction;
-import ic2.api.IEnergyStorage;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.tile.IEnergyStorage;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
