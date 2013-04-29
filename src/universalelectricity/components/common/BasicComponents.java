@@ -55,7 +55,7 @@ public class BasicComponents
 
 	public static final String RESOURCE_PATH = "/mods/basiccomponents/";
 
-	public static final CreativeTabs TAB;
+	public static CreativeTabs TAB;
 
 	public static final String TEXTURE_DIRECTORY = RESOURCE_PATH + "textures/";
 	public static final String GUI_DIRECTORY = TEXTURE_DIRECTORY + "gui/";
