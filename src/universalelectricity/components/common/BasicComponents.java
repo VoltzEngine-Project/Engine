@@ -55,7 +55,7 @@ public class BasicComponents
 
 	public static final String RESOURCE_PATH = "/mods/basiccomponents/";
 
-	public static final CreativeTabs TAB = new TabBC(CreativeTabs.getNextID(), CHANNEL);
+	public static final CreativeTabs TAB;
 
 	public static final String TEXTURE_DIRECTORY = RESOURCE_PATH + "textures/";
 	public static final String GUI_DIRECTORY = TEXTURE_DIRECTORY + "gui/";
@@ -105,6 +105,8 @@ public class BasicComponents
 		if (!INITIALIZED)
 		{
 			System.out.println("Basic Components Loaded: " + TranslationHelper.loadLanguages(BasicComponents.LANGUAGE_PATH, LANGUAGES_SUPPORTED) + " Languages.");
+			
+			TAB = new TabBC(CreativeTabs.getNextID(), CHANNEL);
 
 			/**
 			 * Register Recipes
