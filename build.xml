@@ -50,36 +50,9 @@
 		<exec dir="${dir.mcp}" executable="bash" osfamily="unix">
 			<arg line="reobfuscate_srg.sh" />
 		</exec>
-
-		<copy todir="DevContents">
-			<fileset dir="${dir.mcp}/bin/minecraft">
-				<include name="**/universalelectricity/**" />
-			</fileset>
-		
-			<fileset dir="${dir.development}resources">
-				<exclude name=".git/**" />
-				<exclude name="**/*.java" />
-				<exclude name="**/*.xml" />
-			</fileset>
-		</copy>
 		
 		<copy todir="UeContents">
 			<fileset dir="${dir.development}src" excludes=".git/**" />
-		
-			<fileset dir="${dir.development}resources">
-				<exclude name=".git/**"/>
-				<exclude name="**/*.xml"/>
-			</fileset>
-		</copy>
-		
-		<copy todir="BcContents">
-			<fileset dir="${dir.mcp}/reobf/minecraft" excludes=".git/**" />
-		
-			<fileset dir="${dir.development}resources">
-				<exclude name=".git/**"/>
-				<exclude name="**/*.java"/>
-				<exclude name="**/*.xml"/>
-			</fileset>
 		</copy>
 		
 		<zip destfile="output/${file.UeJar}">
