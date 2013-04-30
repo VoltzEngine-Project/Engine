@@ -5,8 +5,6 @@
 	<property file="build.properties" />
 	<property environment="env" />
 	<property name="file.UeJar" 	value="UniversalElectricity_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.zip" />
-	<property name="file.BcJar" 	value="BasicComponents_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.jar" />
-	<property name="file.BcDevJar" 	value="BCDev_${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.jar" />
 
 	<target name="build">
 
@@ -71,7 +69,7 @@
 			<fileset dir="${dir.development}resources">
 				<exclude name=".git/**"/>
 				<exclude name="**/*.xml"/>
-			</fileset>		
+			</fileset>
 		</copy>
 		
 		<copy todir="BcContents">
@@ -83,22 +81,11 @@
 				<exclude name="**/*.xml"/>
 			</fileset>
 		</copy>
-
-		<jar destfile="output/${file.BcDevJar}">
-			<fileset dir="DevContents" />
-		</jar>
 		
 		<zip destfile="output/${file.UeJar}">
 			<fileset dir="UeContents" />
 		</zip>
-		
-		<jar destfile="output/${file.BcJar}">
-			<fileset dir="BcContents" />
-		</jar>
-		
-		<echo file="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}/info.txt" append="true" >
-		@ ${env.BUILD_NUMBER} ${version.minecraft} ${file.UeJar} ${file.BcJar} ${file.BcDevJar}</echo>
-		
+
 		<copy todir="output" file="build.properties" />
 	</target>
 </project>
