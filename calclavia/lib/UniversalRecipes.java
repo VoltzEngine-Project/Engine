@@ -113,14 +113,17 @@ public class UniversalRecipes
 	{
 		boolean returnValue = false;
 
-		if (itemStacks.size() > 0)
+		if (itemStacks != null)
 		{
-			for (ItemStack stack : itemStacks)
+			if (itemStacks.size() > 0)
 			{
-				if (stack != null)
+				for (ItemStack stack : itemStacks)
 				{
-					OreDictionary.registerOre(name, stack);
-					returnValue = true;
+					if (stack != null)
+					{
+						OreDictionary.registerOre(name, stack);
+						returnValue = true;
+					}
 				}
 			}
 		}
