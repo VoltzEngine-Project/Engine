@@ -51,6 +51,7 @@ public class UniversalRecipes
 	 */
 	public static final String WRENCH = PREFIX + "WRENCH";
 	public static final String WIRE = PREFIX + "WIRE";
+	public static final String MOTOR = PREFIX + "MOTOR";
 
 	public static boolean isInit = false;
 
@@ -65,9 +66,9 @@ public class UniversalRecipes
 			register(SECONDARY_PLATE, "plateBronze", Items.getItem("carbonPlate"), new ItemStack(Block.brick));
 
 			// Miscs
-			register(CIRCUIT_T1, "basicCircuit", Items.getItem("electronicCircuit"), new ItemStack(Block.torchRedstoneIdle));
-			register(CIRCUIT_T2, "advancedCircuit", Items.getItem("advancedCircuit"), new ItemStack(Item.redstoneRepeater));
-			register(CIRCUIT_T3, "eliteCircuit", Items.getItem("iridiumPlate"), new ItemStack(Block.redstoneComparatorIdle));
+			register(CIRCUIT_T1, "circuitBasic", Items.getItem("electronicCircuit"), new ItemStack(Block.torchRedstoneIdle));
+			register(CIRCUIT_T2, "circuitAdvanced", Items.getItem("advancedCircuit"), new ItemStack(Item.redstoneRepeater));
+			register(CIRCUIT_T3, "circuitElite", Items.getItem("iridiumPlate"), new ItemStack(Block.redstoneComparatorIdle));
 
 			register(ADVANCED_BATTERY, "advancedBattery", Items.getItem("energyCrystal"), "battery", new ItemStack(Item.redstoneRepeater));
 			register(BATTERY, "battery", Items.getItem("reBattery"), new ItemStack(Item.redstoneRepeater));
@@ -75,6 +76,8 @@ public class UniversalRecipes
 
 			register(WRENCH, "wrench", Items.getItem("wrench"), new ItemStack(Item.axeIron));
 			register(WIRE, "copperWire", "copperCableBlock", new ItemStack(Item.redstone));
+
+			register(MOTOR, "motor", Items.getItem("generator"), new ItemStack(Block.pistonBase));
 
 			isInit = true;
 		}
