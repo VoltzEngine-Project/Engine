@@ -1,12 +1,23 @@
 package calclavia.lib;
 
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_FLAT;
+import static org.lwjgl.opengl.GL11.GL_LINE_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_POLYGON_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glShadeModel;
+import static org.lwjgl.opengl.GL11.glTranslatef;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-
-import org.lwjgl.opengl.GL11;
 
 public class CalclaviaRenderHelper
 {
@@ -15,9 +26,9 @@ public class CalclaviaRenderHelper
 	 */
 	public static void enableBlending()
 	{
-		GL11.glShadeModel(GL11.GL_SMOOTH);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		glShadeModel(GL_SMOOTH);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	/**
@@ -25,10 +36,10 @@ public class CalclaviaRenderHelper
 	 */
 	public static void disableBlending()
 	{
-		GL11.glShadeModel(GL11.GL_FLAT);
-		GL11.glDisable(GL11.GL_LINE_SMOOTH);
-		GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
-		GL11.glDisable(GL11.GL_BLEND);
+		glShadeModel(GL_FLAT);
+		glDisable(GL_LINE_SMOOTH);
+		glDisable(GL_POLYGON_SMOOTH);
+		glDisable(GL_BLEND);
 	}
 
 	public static void enableLighting()
@@ -51,8 +62,8 @@ public class CalclaviaRenderHelper
 
 		block.setBlockBoundsForItemRender();
 		renderer.setRenderBoundsFromBlock(block);
-		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+		glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+		glTranslatef(-0.5F, -0.5F, -0.5F);
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0.0F, -1.0F, 0.0F);
 		renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
@@ -79,6 +90,6 @@ public class CalclaviaRenderHelper
 		tessellator.setNormal(1.0F, 0.0F, 0.0F);
 		renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
 		tessellator.draw();
-		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		glTranslatef(0.5F, 0.5F, 0.5F);
 	}
 }
