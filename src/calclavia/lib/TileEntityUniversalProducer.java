@@ -8,6 +8,8 @@ import ic2.api.energy.tile.IEnergySource;
 
 import java.util.EnumSet;
 
+import cpw.mods.fml.common.Loader;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
@@ -60,7 +62,7 @@ public class TileEntityUniversalProducer extends TileEntityElectrical implements
 			}
 		}
 
-		if (remaining.getWatts() > 0)
+		if (Loader.isModLoaded("IC2") && remaining.getWatts() > 0)
 		{
 			EnergyTileSourceEvent evt = new EnergyTileSourceEvent(this, (int) (remaining.getWatts() * UniversalElectricity.TO_IC2_RATIO));
 			MinecraftForge.EVENT_BUS.post(evt);

@@ -1,5 +1,8 @@
 package calclavia.lib;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import universalelectricity.core.vector.Vector3;
 
 /**
@@ -46,4 +49,5 @@ public class CalculationHelper
 		vector.z = x * Math.sin(yawRadians) * Math.cos(pitchRadians) + z * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.sin(rollRadians) + Math.cos(yawRadians) * Math.cos(rollRadians)) + y * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.cos(rollRadians) - Math.cos(yawRadians) * Math.sin(rollRadians));
 		vector.y = -x * Math.sin(pitchRadians) + z * Math.cos(pitchRadians) * Math.sin(rollRadians) + y * Math.cos(pitchRadians) * Math.cos(rollRadians);
 	}
+
 }
