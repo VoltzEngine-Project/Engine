@@ -8,8 +8,6 @@ import ic2.api.energy.tile.IEnergySource;
 
 import java.util.EnumSet;
 
-import cpw.mods.fml.common.Loader;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,9 +20,25 @@ import universalelectricity.prefab.implement.IRotatable;
 import universalelectricity.prefab.tile.TileEntityElectrical;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
+import cpw.mods.fml.common.Loader;
 
-public class TileEntityUniversalProducer extends TileEntityElectrical implements IEnergySource
+public class TileEntityUniversalProducer extends TileEntityElectrical implements IEnergySource, IPowerReceptor
 {
+	private IPowerProvider powerProvider;
+
+	public TileEntityUniversalProducer()
+	{
+		if (PowerFramework.currentFramework != null)
+		{
+			if (this.powerProvider == null)
+			{
+				this.powerProvider = PowerFramework.currentFramework.createPowerProvider();
+				this.powerProvider.configure(0, 0, 0, 0, Integer.MAX_VALUE);
+			}
+		}
+	}
+
 	@Override
 	public void initiate()
 	{
@@ -109,5 +123,32 @@ public class TileEntityUniversalProducer extends TileEntityElectrical implements
 	public int getMaxEnergyOutput()
 	{
 		return 2048;
+	}
+
+	/**
+	 * Buildcraft
+	 */
+	@Override
+	public void setPowerProvider(IPowerProvider provider)
+	{
+		this.powerProvider = provider;
+	}
+
+	@Override
+	public IPowerProvider getPowerProvider()
+	{
+		return this.powerProvider;
+	}
+
+	@Override
+	public void doWork()
+	{
+
+	}
+
+	@Override
+	public int powerRequest(ForgeDirection from)
+	{
+		return 0;
 	}
 }
