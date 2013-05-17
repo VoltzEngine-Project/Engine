@@ -86,7 +86,7 @@ public class GuiContainerBase extends GuiContainer
 		this.containerWidth = (this.width - this.xSize) / 2;
 		this.containerHeight = (this.height - this.ySize) / 2;
 
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_DIRECTORY);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
@@ -94,7 +94,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawBulb(int x, int y, boolean isOn)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_DIRECTORY);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		if (isOn)
@@ -110,7 +110,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawSlot(int x, int y, ItemStack itemStack)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_DIRECTORY);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
@@ -160,7 +160,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawSlot(int x, int y, GuiSlotType type, float r, float g, float b)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_DIRECTORY);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
 		GL11.glColor4f(r, g, b, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
@@ -183,7 +183,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawBar(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_DIRECTORY);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -202,7 +202,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawForce(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_DIRECTORY);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -221,7 +221,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawElectricity(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_DIRECTORY);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -240,7 +240,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawMeter(int x, int y, float scale, LiquidStack liquidStack)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_DIRECTORY);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -256,7 +256,7 @@ public class GuiContainerBase extends GuiContainer
 		/**
 		 * Draw measurement lines
 		 */
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_DIRECTORY);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, METER_WIDTH, METER_HEIGHT);
 	}
 
