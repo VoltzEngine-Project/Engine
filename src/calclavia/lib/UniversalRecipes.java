@@ -62,11 +62,12 @@ public class UniversalRecipes
 		if (!isInit)
 		{
 			// Metals
+			/*
 			register(PRIMARY_METAL, "ingotSteel", "ingotRefinedIron", new ItemStack(Item.ingotIron));
 			register(PRIMARY_PLATE, "plateSteel", Items.getItem("advancedAlloy"), new ItemStack(Block.blockIron));
 			register(SECONDARY_METAL, "ingotBronze", new ItemStack(Item.brick));
 			register(SECONDARY_PLATE, "plateBronze", Items.getItem("carbonPlate"), new ItemStack(Block.brick));
-
+			 */
 			// Miscs
 			register(CIRCUIT_T1, "circuitBasic", Items.getItem("electronicCircuit"), new ItemStack(Block.torchRedstoneIdle));
 			register(CIRCUIT_T2, "circuitAdvanced", Items.getItem("advancedCircuit"), new ItemStack(Item.redstoneRepeater));
