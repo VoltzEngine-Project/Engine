@@ -8,7 +8,9 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 import cpw.mods.fml.common.FMLLog;
 
 /**
@@ -23,14 +25,14 @@ public class UniversalRecipes
 	/**
 	 * Primary Metal: Steel
 	 */
-	public static final String PRIMARY_METAL = PREFIX + "PRIMARY_METAL";
-	public static final String PRIMARY_PLATE = PREFIX + "PRIMARY_PLATE";
+	public static final String PRIMARY_METAL = "ingotSteel";
+	public static final String PRIMARY_PLATE = "plateSteel";
 
 	/**
 	 * Secondary Metal: Bronze
 	 */
-	public static final String SECONDARY_METAL = PREFIX + "SECONDARY_METAL";
-	public static final String SECONDARY_PLATE = PREFIX + "SECONDARY_PLAET";
+	public static final String SECONDARY_METAL = "ingotBronze";
+	public static final String SECONDARY_PLATE = "plateBronze";
 
 	/**
 	 * Circuits
