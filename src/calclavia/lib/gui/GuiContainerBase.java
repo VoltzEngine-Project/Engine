@@ -160,7 +160,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawSlot(int x, int y, GuiSlotType type, float r, float g, float b)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 		GL11.glColor4f(r, g, b, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
@@ -183,7 +183,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawBar(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -202,7 +202,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawForce(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -221,7 +221,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawElectricity(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_BASE_FILE);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**

@@ -8,6 +8,7 @@ public class Calclavia
 	public static final String RESOURCE_DIRECTORY = "/mods/calclavia/";
 	public static final String TEXTURE_DIRECTORY = RESOURCE_DIRECTORY + "textures/";
 	public static final String GUI_DIRECTORY = TEXTURE_DIRECTORY + "gui/";
+	public static final String GUI_COMPONENTS = GUI_DIRECTORY + "gui_components.png";
 	public static final String GUI_BASE_FILE = GUI_DIRECTORY + "gui_base.png";
 	public static final String GUI_EMPTY_FILE = GUI_DIRECTORY + "gui_empty.png";
 
