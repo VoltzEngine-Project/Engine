@@ -53,7 +53,7 @@ public abstract class TileEntityUniversalRunnable extends TileEntityElectricityR
 		if (this.powerProvider != null)
 		{
 			int requiredEnergy = (int) (this.getRequest().getWatts() * UniversalElectricity.TO_BC_RATIO);
-			float energyReceived = this.powerProvider.useEnergy(requiredEnergy, requiredEnergy, true);
+			float energyReceived = this.powerProvider.useEnergy(0, requiredEnergy, true);
 			this.onReceive(ElectricityPack.getFromWatts(UniversalElectricity.BC3_RATIO * energyReceived, this.getVoltage()));
 		}
 	}
@@ -155,7 +155,7 @@ public abstract class TileEntityUniversalRunnable extends TileEntityElectricityR
 	{
 		if (this.canConnect(from))
 		{
-			return (int) (this.getRequest().getWatts() * UniversalElectricity.TO_BC_RATIO);
+			return (int) Math.ceil(this.getRequest().getWatts() * UniversalElectricity.TO_BC_RATIO);
 		}
 
 		return 0;
