@@ -50,9 +50,9 @@ public abstract class TileEntityUniversalRunnable extends TileEntityElectricityR
 	{
 		super.updateEntity();
 
-		if (this.powerProvider != null)
+		if (this.powerProvider != null && !this.worldObj.isRemote)
 		{
-			int requiredEnergy = (int) (this.getRequest().getWatts() * UniversalElectricity.TO_BC_RATIO);
+			float requiredEnergy = (float) (this.getRequest().getWatts() * UniversalElectricity.TO_BC_RATIO);
 			float energyReceived = this.powerProvider.useEnergy(0, requiredEnergy, true);
 			this.onReceive(ElectricityPack.getFromWatts(UniversalElectricity.BC3_RATIO * energyReceived, this.getVoltage()));
 		}
