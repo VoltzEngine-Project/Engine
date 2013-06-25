@@ -8,10 +8,10 @@ package universalelectricity.core.electricity;
  */
 public class ElectricityPack implements Cloneable
 {
-	public double amperes;
-	public double voltage;
+	public float amperes;
+	public float voltage;
 
-	public ElectricityPack(double amperes, double voltage)
+	public ElectricityPack(float amperes, float voltage)
 	{
 		this.amperes = amperes;
 		this.voltage = voltage;
@@ -22,92 +22,92 @@ public class ElectricityPack implements Cloneable
 		this(0, 0);
 	}
 
-	public static ElectricityPack getFromWatts(double watts, double voltage)
+	public static ElectricityPack getFromWatts(float watts, float voltage)
 	{
 		return new ElectricityPack(watts / voltage, voltage);
 	}
 
-	public double getWatts()
+	public float getWatts()
 	{
 		return getWatts(amperes, voltage);
 	}
 
-	public double getConductance()
+	public float getConductance()
 	{
 		return getConductance(amperes, voltage);
 	}
 
-	public double getResistance()
+	public float getResistance()
 	{
 		return getResistance(amperes, voltage);
 	}
 
-	public static double getJoules(double watts, double seconds)
+	public static float getJoules(float watts, float seconds)
 	{
 		return watts * seconds;
 	}
 
-	public static double getJoules(double amps, double voltage, double seconds)
+	public static float getJoules(float amps, float voltage, float seconds)
 	{
 		return amps * voltage * seconds;
 	}
 
-	public static double getWattsFromJoules(double joules, double seconds)
+	public static float getWattsFromJoules(float joules, float seconds)
 	{
 		return joules / seconds;
 	}
 
-	public static double getAmps(double watts, double voltage)
+	public static float getAmps(float watts, float voltage)
 	{
 		return watts / voltage;
 	}
 
-	public static double getAmps(double ampHours)
+	public static float getAmps(float ampHours)
 	{
 		return ampHours * 3600;
 	}
 
-	public static double getAmpsFromWattHours(double wattHours, double voltage)
+	public static float getAmpsFromWattHours(float wattHours, float voltage)
 	{
 		return getWatts(wattHours) / voltage;
 	}
 
-	public static double getWattHoursFromAmpHours(double ampHours, double voltage)
+	public static float getWattHoursFromAmpHours(float ampHours, float voltage)
 	{
 		return ampHours * voltage;
 	}
 
-	public static double getAmpHours(double amps)
+	public static float getAmpHours(float amps)
 	{
 		return amps / 3600;
 	}
 
-	public static double getWatts(double amps, double voltage)
+	public static float getWatts(float amps, float voltage)
 	{
 		return amps * voltage;
 	}
 
-	public static double getWatts(double wattHours)
+	public static float getWatts(float wattHours)
 	{
 		return wattHours * 3600;
 	}
 
-	public static double getWattHours(double watts)
+	public static float getWattHours(float watts)
 	{
 		return watts / 3600;
 	}
 
-	public static double getWattHours(double amps, double voltage)
+	public static float getWattHours(float amps, float voltage)
 	{
 		return getWattHours(getWatts(amps, voltage));
 	}
 
-	public static double getResistance(double amps, double voltage)
+	public static float getResistance(float amps, float voltage)
 	{
 		return voltage / amps;
 	}
 
-	public static double getConductance(double amps, double voltage)
+	public static float getConductance(float amps, float voltage)
 	{
 		return amps / voltage;
 	}

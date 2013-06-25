@@ -1,8 +1,6 @@
 package universalelectricity.core.block;
 
-import buildcraft.api.power.IPowerReceptor;
-
-public interface IConductor extends INetworkProvider, IConnectionProvider, IPowerReceptor
+public interface IConductor extends INetworkProvider, IConnectionProvider
 {
 	/**
 	 * Gets the resistance of the conductor. Used to calculate energy loss. A higher resistance

@@ -4,6 +4,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IOldConductor;
 
 public abstract class BlockConductor extends BlockContainer
@@ -23,9 +24,9 @@ public abstract class BlockConductor extends BlockContainer
 
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
-		if (tileEntity instanceof IOldConductor)
+		if (tileEntity instanceof IConductor)
 		{
-			((IOldConductor) tileEntity).updateAdjacentConnections();
+			((IConductor) tileEntity).refresh();
 		}
 	}
 
@@ -38,9 +39,9 @@ public abstract class BlockConductor extends BlockContainer
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
-		if (tileEntity instanceof IOldConductor)
+		if (tileEntity instanceof IConductor)
 		{
-			((IOldConductor) tileEntity).updateAdjacentConnections();
+			((IOldConductor) tileEntity).refresh();
 		}
 	}
 }

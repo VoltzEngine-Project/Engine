@@ -2,7 +2,6 @@ package universalelectricity.prefab.tile;
 
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.IVoltage;
-import universalelectricity.core.electricity.ElectricityNetworkHelper;
 
 /**
  * Extend this if your TileEntity is electrical.
@@ -28,11 +27,4 @@ public abstract class TileEntityElectrical extends TileEntityDisableable impleme
 		return 120;
 	}
 
-	@Override
-	public void invalidate()
-	{
-		ElectricityNetworkHelper.invalidate(this);
-		super.invalidate();
-
-	}
 }

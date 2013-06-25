@@ -20,8 +20,7 @@ public interface IConnectionProvider extends IConnector
 	public TileEntity[] getAdjacentConnections();
 
 	/**
-	 * Instantly refreshes all connected blocks around the conductor, recalculating the connected
-	 * blocks.
+	 * Refreshes the conductor
 	 */
-	public void updateAdjacentConnections();
+	public void refresh();
 }

@@ -9,7 +9,6 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.core.vector.VectorHelper;
 
 /**
  * A helper class that provides additional useful functions to interact with the ElectricityNetwork
@@ -19,30 +18,6 @@ import universalelectricity.core.vector.VectorHelper;
  */
 public class ElectricityNetworkHelper
 {
-
-	/**
-	 * Invalidates a TileEntity from the electrical network, thereby removing it from all
-	 * electricity network that are adjacent to it.
-	 */
-	public static void invalidate(TileEntity tileEntity)
-	{
-		for (int i = 0; i < 6; i++)
-		{
-			ForgeDirection direction = ForgeDirection.getOrientation(i);
-			TileEntity checkTile = VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction);
-
-			if (checkTile instanceof INetworkProvider)
-			{
-				IElectricityNetwork network = ((INetworkProvider) checkTile).getNetwork();
-
-				if (network != null)
-				{
-					network.stopRequesting(tileEntity);
-					network.stopProducing(tileEntity);
-				}
-			}
-		}
-	}
 
 	public static EnumSet<ForgeDirection> getDirections(TileEntity tileEntity)
 	{
@@ -89,80 +64,26 @@ public class ElectricityNetworkHelper
 				/**
 				 * Requests an even amount of electricity from all sides.
 				 */
-				double wattsPerSide = (producingPack.getWatts() / connectedNetworks.size());
-				double voltage = producingPack.voltage;
+				float wattsPerSide = (producingPack.getWatts() / connectedNetworks.size());
+				float voltage = producingPack.voltage;
 
 				for (IElectricityNetwork network : connectedNetworks)
 				{
 					if (wattsPerSide > 0 && producingPack.getWatts() > 0)
 					{
-						double amperes = Math.min(wattsPerSide / voltage, network.getRequest(tileEntity).amperes);
+						float amperes = Math.min(wattsPerSide / voltage, network.getRequest(tileEntity) / voltage);
 
 						if (amperes > 0)
 						{
-							network.startProducing(tileEntity, amperes, voltage);
+							network.produce(new ElectricityPack(amperes, voltage));
 							remainingElectricity.amperes -= amperes;
 						}
-					}
-					else
-					{
-						network.stopProducing(tileEntity);
 					}
 				}
 			}
 		}
 
 		return remainingElectricity;
-	}
-
-	public static ElectricityPack consumeFromMultipleSides(TileEntity tileEntity, ElectricityPack electricityPack)
-	{
-		return ElectricityNetworkHelper.consumeFromMultipleSides(tileEntity, getDirections(tileEntity), electricityPack);
-	}
-
-	/**
-	 * Requests and attempts to consume electricity from all specified sides. Use this as a simple
-	 * helper function.
-	 * 
-	 * @param tileEntity- The TileEntity consuming the electricity.
-	 * @param approachDirection - The sides in which you can connect.
-	 * @param requestPack - The amount of electricity to be requested.
-	 * @return The consumed ElectricityPack.
-	 */
-	public static ElectricityPack consumeFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection, ElectricityPack requestPack)
-	{
-		ElectricityPack consumedPack = new ElectricityPack();
-
-		if (tileEntity != null && approachingDirection != null)
-		{
-			final List<IElectricityNetwork> connectedNetworks = ElectricityNetworkHelper.getNetworksFromMultipleSides(tileEntity, approachingDirection);
-
-			if (connectedNetworks.size() > 0)
-			{
-				/**
-				 * Requests an even amount of electricity from all sides.
-				 */
-				double wattsPerSide = (requestPack.getWatts() / connectedNetworks.size());
-				double voltage = requestPack.voltage;
-
-				for (IElectricityNetwork network : connectedNetworks)
-				{
-					if (wattsPerSide > 0 && requestPack.getWatts() > 0)
-					{
-						network.startRequesting(tileEntity, wattsPerSide / voltage, voltage);
-						ElectricityPack receivedPack = network.consumeElectricity(tileEntity);
-						consumedPack.amperes += receivedPack.amperes;
-						consumedPack.voltage = Math.max(consumedPack.voltage, receivedPack.voltage);
-					}
-					else
-					{
-						network.stopRequesting(tileEntity);
-					}
-				}
-			}
-		}
-
-		return consumedPack;
 	}
 
 	/**

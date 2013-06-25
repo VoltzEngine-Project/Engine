@@ -75,7 +75,7 @@ public class NetworkLoader
 
 					if (tileEntity instanceof IConductor)
 					{
-						((IConductor) tileEntity).updateAdjacentConnections();
+						((IConductor) tileEntity).refresh();
 					}
 				}
 			}

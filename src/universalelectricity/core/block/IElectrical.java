@@ -18,7 +18,7 @@ public interface IElectrical extends IVoltage, IConnector
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the block.
 	 */
-	public ElectricityPack receiveEnergy(ElectricityPack electricityPack, boolean doReceive);
+	public float receiveEnergy(ElectricityPack electricityPack, boolean doReceive);
 
 	/**
 	 * Removes energy from an block. Returns the quantity of energy that was removed. This should
@@ -28,7 +28,7 @@ public interface IElectrical extends IVoltage, IConnector
 	 * @param doTransfer If false, the discharge will only be simulated.
 	 * @return Amount of energy that was removed from the block.
 	 */
-	public ElectricityPack provideEnergy(ElectricityPack electricityPack, boolean doTransfer);
+	public ElectricityPack provideEnergy(float energy, boolean doTransfer);
 
 	/**
 	 * @return How much energy does this TileEntity want?

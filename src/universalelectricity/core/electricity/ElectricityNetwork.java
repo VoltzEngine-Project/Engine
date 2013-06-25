@@ -9,14 +9,15 @@ import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnectionProvider;
 import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.block.INetworkProvider;
+import universalelectricity.core.electricity.ElectricalEvent.ElectricProductionEvent;
 import universalelectricity.core.path.Pathfinder;
 import universalelectricity.core.path.PathfinderChecker;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.core.vector.VectorHelper;
 import cpw.mods.fml.common.FMLLog;
 
 /**
@@ -47,61 +48,63 @@ public class ElectricityNetwork implements IElectricityNetwork
 	}
 
 	@Override
-	public float produce(float energy, float voltage, TileEntity... ignoreTiles)
+	public float produce(ElectricityPack electricity, TileEntity... ignoreTiles)
 	{
-		double prevSending = energy;
+		ElectricProductionEvent evt = new ElectricProductionEvent(electricity, ignoreTiles);
+		MinecraftForge.EVENT_BUS.post(evt);
 
-		Set<TileEntity> avaliableEnergyTiles = this.getElectrical();
+		float energy = electricity.getWatts();
+		float voltage = electricity.voltage;
 
-		if (!avaliableEnergyTiles.isEmpty())
+		if (!evt.isCanceled())
 		{
-			int divider = avaliableEnergyTiles.size();
-			double remaining = energy % divider;
-			double sending = (energy - remaining) / divider;
+			Set<TileEntity> avaliableEnergyTiles = this.getElectrical();
 
-			for (TileEntity acceptor : avaliableEnergyTiles)
+			if (!avaliableEnergyTiles.isEmpty())
 			{
-				double currentSending = sending + remaining;
+				final float totalEnergyRequest = this.getRequest(ignoreTiles);
 
-				remaining = 0;
-
-				if (acceptor instanceof IElectrical)
+				loop:
+				for (TileEntity tileEntity : avaliableEnergyTiles)
 				{
-					energy -= (currentSending - ((IStrictEnergyAcceptor) acceptor).transferEnergyToAcceptor(currentSending));
-				}
-			}
-
-			try
-			{
-				ElectricityPack tileRequest = this.consumers.get(tileEntity);
-
-				if (this.consumers.containsKey(tileEntity) && tileRequest != null)
-				{
-					// Calculate the electricity this TileEntity is receiving in percentage.
-					totalElectricity = this.getProduced();
-
-					if (totalElectricity.getWatts() > 0)
+					if (ignoreTiles != null)
 					{
-						ElectricityPack totalRequest = this.getRequestWithoutReduction();
-						totalElectricity.amperes *= (tileRequest.amperes / totalRequest.amperes);
+						for (TileEntity ignoreTile : ignoreTiles)
+						{
+							if (tileEntity == ignoreTile)
+							{
+								continue loop;
+							}
+						}
+					}
 
-						int distance = this.getConductors().size();
-						double ampsReceived = totalElectricity.amperes - (totalElectricity.amperes * totalElectricity.amperes * this.getTotalResistance()) / totalElectricity.voltage;
-						double voltsReceived = totalElectricity.voltage - (totalElectricity.amperes * this.getTotalResistance());
+					if (tileEntity instanceof IElectrical)
+					{
+						IElectrical electricalTile = (IElectrical) tileEntity;
+						float energyToSend = energy * (electricalTile.getRequest() / totalEnergyRequest);
+						ElectricityPack electricityToSend = ElectricityPack.getFromWatts(energyToSend, voltage);
 
-						totalElectricity.amperes = ampsReceived;
-						totalElectricity.voltage = voltsReceived;
+						// Calculate energy loss caused by resistance.
+						float ampsReceived = electricityToSend.amperes - (electricityToSend.amperes * electricityToSend.amperes * this.getTotalResistance()) / electricityToSend.voltage;
+						float voltsReceived = electricityToSend.voltage - (electricityToSend.amperes * this.getTotalResistance());
 
-						return totalElectricity;
+						electricityToSend = new ElectricityPack(ampsReceived, voltsReceived);
+
+						energy -= (electricityToSend.getWatts() - ((IElectrical) tileEntity).receiveEnergy(electricityToSend, true));
 					}
 				}
-			}
-			catch (Exception e)
-			{
-				FMLLog.severe("Universal Electricity: Failed to produce electricity!");
-				e.printStackTrace();
-			}
 
+				try
+				{
+
+				}
+				catch (Exception e)
+				{
+					FMLLog.severe("Universal Electricity: Failed to produce electricity!");
+					e.printStackTrace();
+				}
+
+			}
 		}
 
 		return energy;
@@ -164,11 +167,11 @@ public class ElectricityNetwork implements IElectricityNetwork
 	@Override
 	public void cleanUpConductors()
 	{
-		Iterator it = this.conductors.iterator();
+		Iterator<IConductor> it = this.conductors.iterator();
 
 		while (it.hasNext())
 		{
-			IConductor conductor = (IConductor) it.next();
+			IConductor conductor = it.next();
 
 			if (conductor == null)
 			{
@@ -202,7 +205,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 			while (it.hasNext())
 			{
 				IConductor conductor = it.next();
-				conductor.updateAdjacentConnections();
+				conductor.refresh();
 
 				for (TileEntity acceptor : conductor.getAdjacentConnections())
 				{
@@ -272,14 +275,11 @@ public class ElectricityNetwork implements IElectricityNetwork
 			this.getConductors().remove(splitPoint);
 
 			/*
-			for (ForgeDirection dir : ForgeDirection.values())
-			{
-				if (dir != ForgeDirection.UNKNOWN)
-				{
-					Vector3 splitVec = new Vector3((TileEntity) splitPoint);
-					TileEntity tileAroundSplit = VectorHelper.getTileEntityFromSide(((TileEntity) splitPoint).worldObj, splitVec, dir);
-				}
-			}*/
+			 * for (ForgeDirection dir : ForgeDirection.values()) { if (dir !=
+			 * ForgeDirection.UNKNOWN) { Vector3 splitVec = new Vector3((TileEntity) splitPoint);
+			 * TileEntity tileAroundSplit = VectorHelper.getTileEntityFromSide(((TileEntity)
+			 * splitPoint).worldObj, splitVec, dir); } }
+			 */
 
 			/**
 			 * Loop through the connected blocks and attempt to see if there are connections between

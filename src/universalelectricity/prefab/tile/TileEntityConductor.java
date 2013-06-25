@@ -1,15 +1,11 @@
 package universalelectricity.prefab.tile;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
-
-import org.bouncycastle.util.Arrays;
-
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
@@ -18,12 +14,6 @@ import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
-import universalelectricity.prefab.network.PacketManager;
-
-import buildcraft.api.power.PowerProvider;
-
-import com.google.common.io.ByteArrayDataInput;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -36,63 +26,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public abstract class TileEntityConductor extends TileEntityAdvanced implements IConductor, IPacketReceiver
 {
 	private IElectricityNetwork network;
-
-	/**
-	 * Used client side to render.
-	 */
-	public boolean[] visuallyConnected = { false, false, false, false, false, false };
-
-	/**
-	 * Stores information on the blocks that this conductor is connected to.
-	 */
-	public TileEntity[] connectedBlocks = { null, null, null, null, null, null };
-
-	protected String channel = "";
-
-	public void updateConnection(TileEntity tileEntity, ForgeDirection side)
-	{
-		if (!this.worldObj.isRemote)
-		{
-			if (tileEntity instanceof IConnector)
-			{
-				if (((IConnector) tileEntity).canConnect(side.getOpposite()))
-				{
-					this.connectedBlocks[side.ordinal()] = tileEntity;
-					this.visuallyConnected[side.ordinal()] = true;
-
-					if (tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider)
-					{
-						this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
-					}
-
-					return;
-				}
-			}
-
-			if (this.connectedBlocks[side.ordinal()] != null)
-			{
-				this.getNetwork().stopProducing(this.connectedBlocks[side.ordinal()]);
-				this.getNetwork().stopRequesting(this.connectedBlocks[side.ordinal()]);
-			}
-
-			this.connectedBlocks[side.ordinal()] = null;
-			this.visuallyConnected[side.ordinal()] = false;
-		}
-	}
-
-	@Override
-	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
-	{
-		if (this.worldObj.isRemote)
-		{
-			this.visuallyConnected[0] = dataStream.readBoolean();
-			this.visuallyConnected[1] = dataStream.readBoolean();
-			this.visuallyConnected[2] = dataStream.readBoolean();
-			this.visuallyConnected[3] = dataStream.readBoolean();
-			this.visuallyConnected[4] = dataStream.readBoolean();
-			this.visuallyConnected[5] = dataStream.readBoolean();
-		}
-	}
 
 	@Override
 	public void invalidate()
@@ -109,38 +42,6 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	public boolean canUpdate()
 	{
 		return false;
-	}
-
-	@Override
-	public void updateAdjacentConnections()
-	{
-		if (this.worldObj != null)
-		{
-			if (!this.worldObj.isRemote)
-			{
-				boolean[] previousConnections = this.visuallyConnected.clone();
-
-				for (byte i = 0; i < 6; i++)
-				{
-					this.updateConnection(VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
-				}
-
-				/**
-				 * Only send packet updates if visuallyConnected changed.
-				 */
-				if (!Arrays.areEqual(previousConnections, this.visuallyConnected))
-				{
-					this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
-				}
-			}
-
-		}
-	}
-
-	@Override
-	public Packet getDescriptionPacket()
-	{
-		return PacketManager.getPacket(this.channel, this, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5]);
 	}
 
 	@Override
@@ -161,20 +62,44 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	}
 
 	@Override
-	public PowerProvider getPowerProvider(ForgeDirection side)
+	public void refresh()
 	{
-		return null;
-	}
+		if (!this.worldObj.isRemote)
+		{
+			for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS)
+			{
+				TileEntity tileEntity = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), side);
 
-	@Override
-	public void doWork(PowerProvider workProvider)
-	{
+				if (tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider)
+				{
+					this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
+				}
+			}
+
+			this.getNetwork().refresh();
+		}
 	}
 
 	@Override
 	public TileEntity[] getAdjacentConnections()
 	{
-		return this.connectedBlocks;
+		List<TileEntity> adjecentConnections = new ArrayList<TileEntity>();
+
+		for (byte i = 0; i < 6; i++)
+		{
+			ForgeDirection side = ForgeDirection.getOrientation(i);
+			TileEntity tileEntity = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), side);
+
+			if (tileEntity instanceof IConnector)
+			{
+				if (((IConnector) tileEntity).canConnect(side.getOpposite()))
+				{
+					adjecentConnections.add(tileEntity);
+				}
+			}
+		}
+
+		return adjecentConnections.toArray(new TileEntity[0]);
 	}
 
 	@Override

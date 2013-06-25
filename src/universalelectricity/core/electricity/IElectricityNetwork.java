@@ -5,7 +5,6 @@ import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnectionProvider;
-import universalelectricity.core.block.IElectrical;
 
 /**
  * The Electrical Network in interface form.
@@ -18,7 +17,7 @@ public interface IElectricityNetwork
 	/**
 	 * Produces electricity in this electrical network.
 	 */
-	public float produce(float energy, float voltage, TileEntity... ignoreTiles);
+	public float produce(ElectricityPack electricityPack, TileEntity... ignoreTiles);
 
 	/**
 	 * Gets the total amount of electricity requested/needed in the electricity network.
@@ -26,7 +25,6 @@ public interface IElectricityNetwork
 	 * @param ignoreTiles The TileEntities to ignore during this calculation (optional).
 	 */
 	public float getRequest(TileEntity... ignoreTiles);
-
 
 	/**
 	 * @return Gets a list of TileEntities that implements IElectrical (machines).
