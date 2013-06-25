@@ -2,7 +2,6 @@ package universalelectricity.core.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import universalelectricity.core.electricity.ElectricityPack;
 
 /**
  * Some helper functions for electric items.
@@ -19,20 +18,13 @@ public class ElectricItemHelper
 	 * @param voltage - The voltage in which is used to charge the electric item
 	 * @return The total amount of joules provided by the provider.
 	 */
-	public static double chargeItem(ItemStack itemStack, double joules, double voltage)
+	public static float chargeItem(ItemStack itemStack, float joules, float voltage)
 	{
 		if (itemStack != null)
 		{
 			if (itemStack.getItem() instanceof IItemElectric)
 			{
-				IItemElectric electricItem = (IItemElectric) itemStack.getItem();
-				double providingWatts = Math.min(joules, electricItem.getReceiveRequest(itemStack).getWatts());
-
-				if (providingWatts > 0)
-				{
-					ElectricityPack providedElectricity = electricItem.onReceive(ElectricityPack.getFromWatts(providingWatts, voltage), itemStack);
-					return providedElectricity.getWatts();
-				}
+				return ((IItemElectric) itemStack.getItem()).receiveEnergy(itemStack, joules, true);
 			}
 		}
 
@@ -46,20 +38,13 @@ public class ElectricItemHelper
 	 * @param voltage - The voltage in which is used to decharge the electric item
 	 * @return The total amount of joules the provider received.
 	 */
-	public static double dechargeItem(ItemStack itemStack, double joules, double voltage)
+	public static double dechargeItem(ItemStack itemStack, float joules, float voltage)
 	{
 		if (itemStack != null)
 		{
 			if (itemStack.getItem() instanceof IItemElectric)
 			{
-				IItemElectric electricItem = (IItemElectric) itemStack.getItem();
-				double requestingWatts = Math.min(joules, electricItem.getProvideRequest(itemStack).getWatts());
-
-				if (requestingWatts > 0)
-				{
-					ElectricityPack receivedElectricity = electricItem.onProvide(ElectricityPack.getFromWatts(requestingWatts, voltage), itemStack);
-					return receivedElectricity.getWatts();
-				}
+				return ((IItemElectric) itemStack.getItem()).transferEnergy(itemStack, joules, true);
 			}
 		}
 
@@ -73,13 +58,13 @@ public class ElectricItemHelper
 	 * 
 	 * @return An electrical ItemStack with a specific charge.
 	 */
-	public static ItemStack getWithCharge(ItemStack itemStack, double joules)
+	public static ItemStack getWithCharge(ItemStack itemStack, float joules)
 	{
 		if (itemStack != null)
 		{
 			if (itemStack.getItem() instanceof IItemElectric)
 			{
-				((IItemElectric) itemStack.getItem()).setJoules(joules, itemStack);
+				((IItemElectric) itemStack.getItem()).setEnergy(itemStack, joules);
 				return itemStack;
 			}
 		}
@@ -87,12 +72,12 @@ public class ElectricItemHelper
 		return itemStack;
 	}
 
-	public static ItemStack getWithCharge(Item item, double joules)
+	public static ItemStack getWithCharge(Item item, float joules)
 	{
 		return getWithCharge(new ItemStack(item), joules);
 	}
 
-	public static ItemStack getCloneWithCharge(ItemStack itemStack, double joules)
+	public static ItemStack getCloneWithCharge(ItemStack itemStack, float joules)
 	{
 		return getWithCharge(itemStack.copy(), joules);
 	}
