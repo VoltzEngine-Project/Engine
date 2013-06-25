@@ -10,9 +10,8 @@ import net.minecraft.item.ItemStack;
  */
 public interface IItemVoltage
 {
-
 	/**
 	 * @return The voltage in which this item runs on.
 	 */
-	public double getVoltage(ItemStack itemStack);
+	public float getVoltage(ItemStack itemStack);
 }

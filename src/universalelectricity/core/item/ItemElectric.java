@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
-import universalelectricity.core.electricity.ElectricityPack;
 
 /**
  * Extend from this class if your item requires electricity or to be charged. Optionally, you can
@@ -33,13 +32,13 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4)
 	{
 		String color = "";
-		double joules = this.getJoules(itemStack);
+		double joules = this.getEnergyStored(itemStack);
 
-		if (joules <= this.getMaxJoules(itemStack) / 3)
+		if (joules <= this.getMaxEnergyStored(itemStack) / 3)
 		{
 			color = "\u00a74";
 		}
-		else if (joules > this.getMaxJoules(itemStack) * 2 / 3)
+		else if (joules > this.getMaxEnergyStored(itemStack) * 2 / 3)
 		{
 			color = "\u00a72";
 		}
@@ -48,7 +47,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 			color = "\u00a76";
 		}
 
-		list.add(color + ElectricityDisplay.getDisplay(joules, ElectricUnit.JOULES) + "/" + ElectricityDisplay.getDisplay(this.getMaxJoules(itemStack), ElectricUnit.JOULES));
+		list.add(color + ElectricityDisplay.getDisplay(joules, ElectricUnit.JOULES) + "/" + ElectricityDisplay.getDisplay(this.getMaxEnergyStored(itemStack), ElectricUnit.JOULES));
 	}
 
 	/**
@@ -62,37 +61,36 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	}
 
 	@Override
-	public ElectricityPack onReceive(ElectricityPack electricityPack, ItemStack itemStack)
+	public float receiveEnergy(ItemStack itemStack, float energy, boolean doReceive)
 	{
-		double rejectedElectricity = Math.max((this.getJoules(itemStack) + electricityPack.getWatts()) - this.getMaxJoules(itemStack), 0);
-		double joulesToStore = electricityPack.getWatts() - rejectedElectricity;
-		this.setJoules(this.getJoules(itemStack) + joulesToStore, itemStack);
-		return ElectricityPack.getFromWatts(joulesToStore, this.getVoltage(itemStack));
+		float rejectedElectricity = (float) Math.max((this.getEnergyStored(itemStack) + energy) - this.getMaxEnergyStored(itemStack), 0);
+		float energyToReceive = energy - rejectedElectricity;
+
+		if (doReceive)
+		{
+			this.setJoules(this.getEnergyStored(itemStack) + energyToReceive, itemStack);
+		}
+
+		return energyToReceive;
 	}
 
 	@Override
-	public ElectricityPack onProvide(ElectricityPack electricityPack, ItemStack itemStack)
+	public float transferEnergy(ItemStack itemStack, float energy, boolean doTransfer)
 	{
-		double electricityToUse = Math.min(this.getJoules(itemStack), electricityPack.getWatts());
-		this.setJoules(this.getJoules(itemStack) - electricityToUse, itemStack);
-		return ElectricityPack.getFromWatts(electricityToUse, this.getVoltage(itemStack));
+		float energyToTransfer = (float) Math.min(this.getEnergyStored(itemStack), energy);
+
+		if (doTransfer)
+		{
+			this.setJoules(this.getEnergyStored(itemStack) - energyToTransfer, itemStack);
+		}
+
+		return energyToTransfer;
 	}
 
 	@Override
-	public ElectricityPack getReceiveRequest(ItemStack itemStack)
+	public float getVoltage(ItemStack itemStack)
 	{
-		return ElectricityPack.getFromWatts(Math.min(this.getMaxJoules(itemStack) - this.getJoules(itemStack), this.getTransferRate(itemStack)), this.getVoltage(itemStack));
-	}
-
-	@Override
-	public ElectricityPack getProvideRequest(ItemStack itemStack)
-	{
-		return ElectricityPack.getFromWatts(Math.min(this.getJoules(itemStack), this.getTransferRate(itemStack)), this.getVoltage(itemStack));
-	}
-
-	public double getTransferRate(ItemStack itemStack)
-	{
-		return this.getMaxJoules(itemStack) * 0.01;
+		return 120;
 	}
 
 	/**
@@ -101,7 +99,6 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	 * 
 	 * @param joules - The amount of electricity in joules
 	 */
-	@Override
 	public void setJoules(double joules, ItemStack itemStack)
 	{
 		// Saves the frequency in the ItemStack
@@ -110,13 +107,13 @@ public abstract class ItemElectric extends Item implements IItemElectric
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
 
-		double electricityStored = Math.max(Math.min(joules, this.getMaxJoules(itemStack)), 0);
+		double electricityStored = Math.max(Math.min(joules, this.getMaxEnergyStored(itemStack)), 0);
 		itemStack.getTagCompound().setDouble("electricity", electricityStored);
 
 		/**
 		 * Sets the damage as a percentage to render the bar properly.
 		 */
-		itemStack.setItemDamage((int) (100 - (electricityStored / getMaxJoules(itemStack)) * 100));
+		itemStack.setItemDamage((int) (100 - (electricityStored / getMaxEnergyStored(itemStack)) * 100));
 	}
 
 	/**
@@ -125,19 +122,19 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	 * @return - The amount of electricity stored in watts
 	 */
 	@Override
-	public double getJoules(ItemStack itemStack)
+	public float getEnergyStored(ItemStack itemStack)
 	{
 		if (itemStack.getTagCompound() == null)
 		{
 			return 0;
 		}
 
-		double electricityStored = itemStack.getTagCompound().getDouble("electricity");
+		float electricityStored = itemStack.getTagCompound().getFloat("electricity");
 
 		/**
 		 * Sets the damage as a percentage to render the bar properly.
 		 */
-		itemStack.setItemDamage((int) (100 - (electricityStored / getMaxJoules(itemStack)) * 100));
+		itemStack.setItemDamage((int) (100 - (electricityStored / getMaxEnergyStored(itemStack)) * 100));
 		return electricityStored;
 	}
 
@@ -148,6 +145,6 @@ public abstract class ItemElectric extends Item implements IItemElectric
 		par3List.add(ElectricItemHelper.getUncharged(new ItemStack(this)));
 		// Add an electric item to the creative list that is fully charged
 		ItemStack chargedItem = new ItemStack(this);
-		par3List.add(ElectricItemHelper.getWithCharge(chargedItem, this.getMaxJoules(chargedItem)));
+		par3List.add(ElectricItemHelper.getWithCharge(chargedItem, this.getMaxEnergyStored(chargedItem)));
 	}
 }

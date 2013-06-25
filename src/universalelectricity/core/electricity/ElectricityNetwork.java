@@ -14,6 +14,7 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnectionProvider;
 import universalelectricity.core.block.INetworkProvider;
+import universalelectricity.core.block.IConductor;
 import universalelectricity.core.path.Pathfinder;
 import universalelectricity.core.path.PathfinderChecker;
 import universalelectricity.core.vector.Vector3;

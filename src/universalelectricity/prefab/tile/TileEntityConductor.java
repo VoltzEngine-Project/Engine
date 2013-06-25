@@ -20,6 +20,8 @@ import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 
+import buildcraft.api.power.PowerProvider;
+
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.relauncher.Side;
@@ -93,13 +95,6 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	}
 
 	@Override
-	public void validate()
-	{
-		this.updateAdjacentConnections();
-		super.validate();
-	}
-
-	@Override
 	public void invalidate()
 	{
 		if (!this.worldObj.isRemote)
@@ -163,6 +158,17 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	public void setNetwork(IElectricityNetwork network)
 	{
 		this.network = network;
+	}
+
+	@Override
+	public PowerProvider getPowerProvider(ForgeDirection side)
+	{
+		return null;
+	}
+
+	@Override
+	public void doWork(PowerProvider workProvider)
+	{
 	}
 
 	@Override
