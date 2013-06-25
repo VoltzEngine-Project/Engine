@@ -290,6 +290,30 @@ public class Vector3 implements Cloneable
 		return new Vector3(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z));
 	}
 
+	public Vector3 toRound()
+	{
+		this.x = Math.round(this.x);
+		this.y = Math.round(this.y);
+		this.z = Math.round(this.z);
+		return this;
+	}
+
+	public Vector3 toCeil()
+	{
+		this.x = Math.ceil(this.x);
+		this.y = Math.ceil(this.y);
+		this.z = Math.ceil(this.z);
+		return this;
+	}
+
+	public Vector3 toFloor()
+	{
+		this.x = Math.floor(this.x);
+		this.y = Math.floor(this.y);
+		this.z = Math.floor(this.z);
+		return this;
+	}
+
 	/**
 	 * Gets all entities inside of this position in block space.
 	 */

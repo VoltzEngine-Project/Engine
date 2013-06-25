@@ -10,10 +10,10 @@ public interface IConductor extends INetworkProvider, IConnectionProvider, IPowe
 	 * 
 	 * @return The amount of resistance in Ohms.
 	 */
-	public double getResistance();
+	public float getResistance();
 
 	/**
 	 * @return The maximum amount of amps this conductor can handle before melting down.
 	 */
-	public double getCurrentCapcity();
+	public float getCurrentCapcity();
 }

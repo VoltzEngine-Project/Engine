@@ -1,5 +1,7 @@
 package universalelectricity.core.block;
 
+import universalelectricity.core.electricity.ElectricityPack;
+
 /**
  * Applied to all TileEntities that can interact with electricity.
  * 
@@ -16,7 +18,7 @@ public interface IElectrical extends IVoltage, IConnector
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the block.
 	 */
-	public float receiveEnergy(float energy, boolean doReceive);
+	public ElectricityPack receiveEnergy(ElectricityPack electricityPack, boolean doReceive);
 
 	/**
 	 * Removes energy from an block. Returns the quantity of energy that was removed. This should
@@ -26,7 +28,12 @@ public interface IElectrical extends IVoltage, IConnector
 	 * @param doTransfer If false, the discharge will only be simulated.
 	 * @return Amount of energy that was removed from the block.
 	 */
-	public float transferEnergy(float energy, boolean doTransfer);
+	public ElectricityPack provideEnergy(ElectricityPack electricityPack, boolean doTransfer);
+
+	/**
+	 * @return How much energy does this TileEntity want?
+	 */
+	public float getRequest();
 
 	/**
 	 * @return Get the amount of energy currently stored in the block.

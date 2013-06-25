@@ -62,7 +62,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 
 					if (tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider)
 					{
-						this.getNetwork().mergeConnection(((INetworkProvider) tileEntity).getNetwork());
+						this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
 					}
 
 					return;
@@ -99,7 +99,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		if (!this.worldObj.isRemote)
 		{
-			this.getNetwork().splitNetwork(this);
+			this.getNetwork().split(this);
 		}
 
 		super.invalidate();

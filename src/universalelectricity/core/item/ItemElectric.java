@@ -57,7 +57,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	@Override
 	public void onCreated(ItemStack itemStack, World par2World, EntityPlayer par3EntityPlayer)
 	{
-		this.setJoules(0, itemStack);
+		this.setEnergy(itemStack, 0);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 
 		if (doReceive)
 		{
-			this.setJoules(this.getEnergyStored(itemStack) + energyToReceive, itemStack);
+			this.setEnergy(itemStack, this.getEnergyStored(itemStack) + energyToReceive);
 		}
 
 		return energyToReceive;
@@ -81,7 +81,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 
 		if (doTransfer)
 		{
-			this.setJoules(this.getEnergyStored(itemStack) - energyToTransfer, itemStack);
+			this.setEnergy(itemStack, this.getEnergyStored(itemStack) - energyToTransfer);
 		}
 
 		return energyToTransfer;
@@ -93,13 +93,8 @@ public abstract class ItemElectric extends Item implements IItemElectric
 		return 120;
 	}
 
-	/**
-	 * This function sets the electriicty. Do not directly call this function. Try to use
-	 * onReceiveElectricity or onUseElectricity instead.
-	 * 
-	 * @param joules - The amount of electricity in joules
-	 */
-	public void setJoules(double joules, ItemStack itemStack)
+	@Override
+	public void setEnergy(ItemStack itemStack, float joules)
 	{
 		// Saves the frequency in the ItemStack
 		if (itemStack.getTagCompound() == null)
