@@ -90,7 +90,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 						electricityToSend = new ElectricityPack(ampsReceived, voltsReceived);
 
-						energy -= (electricityToSend.getWatts() - ((IElectrical) tileEntity).receiveEnergy(electricityToSend, true));
+						energy -= (electricityToSend.getWatts() - ((IElectrical) tileEntity).receiveElectricity(electricityToSend, true));
 					}
 				}
 

@@ -5,7 +5,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.core.block.IConductor;
-import universalelectricity.core.block.IOldConductor;
 
 public abstract class BlockConductor extends BlockContainer
 {
@@ -41,7 +40,7 @@ public abstract class BlockConductor extends BlockContainer
 
 		if (tileEntity instanceof IConductor)
 		{
-			((IOldConductor) tileEntity).refresh();
+			((IConductor) tileEntity).refresh();
 		}
 	}
 }

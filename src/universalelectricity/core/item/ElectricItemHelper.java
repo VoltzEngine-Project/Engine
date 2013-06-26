@@ -38,7 +38,7 @@ public class ElectricItemHelper
 	 * @param voltage - The voltage in which is used to decharge the electric item
 	 * @return The total amount of joules the provider received.
 	 */
-	public static double dechargeItem(ItemStack itemStack, float joules, float voltage)
+	public static float dechargeItem(ItemStack itemStack, float joules, float voltage)
 	{
 		if (itemStack != null)
 		{

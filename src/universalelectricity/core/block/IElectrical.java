@@ -8,7 +8,7 @@ import universalelectricity.core.electricity.ElectricityPack;
  * @author Calclavia, King_Lemming
  * 
  */
-public interface IElectrical extends IVoltage, IConnector
+public interface IElectrical extends IConnector
 {
 	/**
 	 * Adds energy to an block. Returns the quantity of energy that was accepted. This should always
@@ -18,17 +18,7 @@ public interface IElectrical extends IVoltage, IConnector
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the block.
 	 */
-	public float receiveEnergy(ElectricityPack electricityPack, boolean doReceive);
-
-	/**
-	 * Removes energy from an block. Returns the quantity of energy that was removed. This should
-	 * always return 0 if the block cannot be externally discharged.
-	 * 
-	 * @param energy Maximum amount of energy to be removed from the block.
-	 * @param doTransfer If false, the discharge will only be simulated.
-	 * @return Amount of energy that was removed from the block.
-	 */
-	public ElectricityPack provideEnergy(float energy, boolean doTransfer);
+	public float receiveElectricity(ElectricityPack electricityPack, boolean doReceive);
 
 	/**
 	 * @return How much energy does this TileEntity want?
@@ -36,12 +26,10 @@ public interface IElectrical extends IVoltage, IConnector
 	public float getRequest();
 
 	/**
-	 * @return Get the amount of energy currently stored in the block.
+	 * Gets the voltage of this object.
+	 * 
+	 * @return The amount of volts. E.g 120v or 240v
 	 */
-	public float getEnergyStored();
+	public float getVoltage();
 
-	/**
-	 * @return Get the max amount of energy that can be stored in the block.
-	 */
-	public float getMaxEnergyStored();
 }
