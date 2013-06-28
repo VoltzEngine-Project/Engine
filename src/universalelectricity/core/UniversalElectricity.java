@@ -5,6 +5,8 @@ import java.io.File;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
+import universalelectricity.core.electricity.NetworkLoader;
 import cpw.mods.fml.common.Loader;
 
 /**
@@ -58,6 +60,20 @@ public class UniversalElectricity
 	 * A general material that can be used by machines. Breakable by hand, suitable for machines.
 	 */
 	public static final Material machine = new Material(MapColor.ironColor);
+	
+	private static boolean networkLoader_Loaded = false;
+	
+	/**
+	 * Registers and initiates Universal Electricity's network loader.
+	 */
+	public static void register()
+	{
+		if(!networkLoader_Loaded)
+		{
+			networkLoader_Loaded = true;
+			MinecraftForge.EVENT_BUS.register(new NetworkLoader());
+		}
+	}
 
 	static
 	{

@@ -79,6 +79,8 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 			}
 
 			this.getNetwork().refresh();
+			
+			System.out.println(getNetwork());
 		}
 	}
 

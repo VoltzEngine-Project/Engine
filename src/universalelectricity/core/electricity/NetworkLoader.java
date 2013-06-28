@@ -22,7 +22,6 @@ public class NetworkLoader
 	static
 	{
 		setNetworkClass("universalelectricity.core.electricity.ElectricityNetwork");
-		MinecraftForge.EVENT_BUS.register(new NetworkLoader());
 	}
 
 	public static void setNetworkClass(Class<? extends IElectricityNetwork> networkClass)
