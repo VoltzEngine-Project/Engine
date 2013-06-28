@@ -1,12 +1,14 @@
 ## Universal Electricity
-Universal Electricity is a modular electricity API for modders to create to add electricity to Minecraft. The mod alone does not add many things to the game. It requires addons in order to work. Universal Electricity is basically a structure that integrates a universal electricity system in which all mods can use.
+Universal Electricity is a modular coding framework that allows the use of electricity in Minecraft. Mods which uses the Universal Electricity API have the ability to communicate and be compatible with each other. Above on the navigation bar are some Minecraft mods that uses the Universal Electricity API. If you are a modder and looking for a simple and modular API to use to allow your mod to be powered by a universal power source, then you have came to the right place! If you are just an average player, well we've got mods for you to play with!
 
-Copyright (c) Calclavia
+Copyright (c) 2011-2013 Calclavia
 
 Universal Electricity's website can be found at www.universalelectricity.com. All downloads of the API is there.
 
-#### Developer
-** Project Leader ** - Calclavia
+#### Developers
+Calclavia
+
+Aidancbrady
 
 ### Contact
 Join *#universalelectricity* on EsperNet (irc.esper.net:5555). Remember to follow the rules and respect others as with any other channel.
