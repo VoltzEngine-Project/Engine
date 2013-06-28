@@ -12,7 +12,7 @@ public interface IItemElectric extends IChargeableItem
 	 * @param joules - Amount of energy.
 	 */
 	public void setEnergy(ItemStack itemStack, float joules);
-	
+
 	/**
 	 * @return the energy request this ItemStack demands.
 	 */

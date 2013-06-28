@@ -16,6 +16,8 @@ public interface IElectricityNetwork
 {
 	/**
 	 * Produces electricity in this electrical network.
+	 * 
+	 * @return Rejected energy in Joules.
 	 */
 	public float produce(ElectricityPack electricityPack, TileEntity... ignoreTiles);
 

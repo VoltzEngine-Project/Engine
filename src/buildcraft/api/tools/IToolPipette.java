@@ -3,11 +3,11 @@ package buildcraft.api.tools;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.liquids.LiquidStack;
 
-public interface IToolPipette {
+public interface IToolPipette
+{
 
 	/**
-	 * @param pipette
-	 *            ItemStack of the pipette.
+	 * @param pipette ItemStack of the pipette.
 	 * @return Capacity of the pipette.
 	 */
 	int getCapacity(ItemStack pipette);

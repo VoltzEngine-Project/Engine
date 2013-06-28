@@ -6,11 +6,6 @@ import net.minecraftforge.event.Event;
 
 public class ElectricalEvent extends Event
 {
-	public ElectricalEvent()
-	{
-		super();
-	}
-
 	@Cancelable
 	public static class ElectricProductionEvent extends ElectricalEvent
 	{

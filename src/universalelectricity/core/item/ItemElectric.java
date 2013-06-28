@@ -63,7 +63,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	@Override
 	public float receiveEnergy(ItemStack itemStack, float energy, boolean doReceive)
 	{
-		float rejectedElectricity = (float) Math.max((this.getEnergyStored(itemStack) + energy) - this.getMaxEnergyStored(itemStack), 0);
+		float rejectedElectricity = Math.max((this.getEnergyStored(itemStack) + energy) - this.getMaxEnergyStored(itemStack), 0);
 		float energyToReceive = energy - rejectedElectricity;
 
 		if (doReceive)
@@ -77,7 +77,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	@Override
 	public float transferEnergy(ItemStack itemStack, float energy, boolean doTransfer)
 	{
-		float energyToTransfer = (float) Math.min(this.getEnergyStored(itemStack), energy);
+		float energyToTransfer = Math.min(this.getEnergyStored(itemStack), energy);
 
 		if (doTransfer)
 		{
@@ -110,11 +110,11 @@ public abstract class ItemElectric extends Item implements IItemElectric
 		 */
 		itemStack.setItemDamage((int) (100 - (electricityStored / getMaxEnergyStored(itemStack)) * 100));
 	}
-	
+
 	@Override
 	public float getTransfer(ItemStack itemStack)
 	{
-		return getMaxEnergyStored(itemStack)*0.005F;
+		return getMaxEnergyStored(itemStack) * 0.005F;
 	}
 
 	/**

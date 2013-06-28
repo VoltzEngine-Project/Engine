@@ -2,7 +2,6 @@ package universalelectricity.core.electricity;
 
 import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
@@ -103,7 +102,7 @@ public class ElectricityNetworkHelper
 			{
 				Vector3 position = new Vector3(tileEntity);
 				position.modifyPositionFromSide(side);
-				
+
 				TileEntity outputConductor = position.getTileEntity(tileEntity.worldObj);
 				IElectricityNetwork electricityNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputConductor, side);
 

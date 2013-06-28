@@ -1,5 +1,6 @@
 package universalelectricity.core.block;
 
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityPack;
 
 /**
@@ -23,7 +24,7 @@ public interface IElectrical extends IConnector
 	/**
 	 * @return How much energy does this TileEntity want?
 	 */
-	public float getRequest();
+	public float getRequest(ForgeDirection direction);
 
 	/**
 	 * Gets the voltage of this object.

@@ -13,7 +13,6 @@ import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
-import universalelectricity.prefab.network.IPacketReceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -80,8 +79,6 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 			}
 
 			this.getNetwork().refresh();
-			
-			System.out.println(getNetwork());
 		}
 	}
 

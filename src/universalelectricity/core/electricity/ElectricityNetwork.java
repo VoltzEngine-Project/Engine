@@ -59,21 +59,29 @@ public class ElectricityNetwork implements IElectricityNetwork
 			{
 				final float totalEnergyRequest = this.getRequest(ignoreTiles);
 
-				for (TileEntity tileEntity : avaliableEnergyTiles)
+				if (totalEnergyRequest > 0)
 				{
-					if (tileEntity instanceof IElectrical && !Arrays.asList(ignoreTiles).contains(tileEntity))
+					for (TileEntity tileEntity : avaliableEnergyTiles)
 					{
-						IElectrical electricalTile = (IElectrical) tileEntity;
-						float energyToSend = energy * (electricalTile.getRequest() / totalEnergyRequest);
-						ElectricityPack electricityToSend = ElectricityPack.getFromWatts(energyToSend, voltage);
+						if (tileEntity instanceof IElectrical && !Arrays.asList(ignoreTiles).contains(tileEntity))
+						{
+							IElectrical electricalTile = (IElectrical) tileEntity;
+							// TODO: Fix Direction
+							float energyToSend = energy * (electricalTile.getRequest(ForgeDirection.UNKNOWN) / totalEnergyRequest);
 
-						// Calculate energy loss caused by resistance.
-						float ampsReceived = electricityToSend.amperes - (electricityToSend.amperes * electricityToSend.amperes * this.getTotalResistance()) / electricityToSend.voltage;
-						float voltsReceived = electricityToSend.voltage - (electricityToSend.amperes * this.getTotalResistance());
+							if (energyToSend > 0)
+							{
+								ElectricityPack electricityToSend = ElectricityPack.getFromWatts(energyToSend, voltage);
 
-						electricityToSend = new ElectricityPack(ampsReceived, voltsReceived);
+								// Calculate energy loss caused by resistance.
+								float ampsReceived = electricityToSend.amperes - (electricityToSend.amperes * electricityToSend.amperes * this.getTotalResistance()) / electricityToSend.voltage;
+								float voltsReceived = electricityToSend.voltage - (electricityToSend.amperes * this.getTotalResistance());
 
-						energy -= (electricityToSend.getWatts() - ((IElectrical) tileEntity).receiveElectricity(electricityToSend, true));
+								electricityToSend = new ElectricityPack(ampsReceived, voltsReceived);
+
+								energy -= ((IElectrical) tileEntity).receiveElectricity(electricityToSend, true);
+							}
+						}
 					}
 				}
 			}
@@ -95,8 +103,8 @@ public class ElectricityNetwork implements IElectricityNetwork
 		while (it.hasNext())
 		{
 			TileEntity tileEntity = it.next();
-			
-			if(Arrays.asList(ignoreTiles).contains(tileEntity))
+
+			if (Arrays.asList(ignoreTiles).contains(tileEntity))
 			{
 				continue;
 			}
@@ -107,7 +115,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 				{
 					if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
 					{
-						requiredElectricity += ((IElectrical) tileEntity).getRequest();
+						requiredElectricity += ((IElectrical) tileEntity).getRequest(ForgeDirection.UNKNOWN);
 						continue;
 					}
 				}
@@ -173,7 +181,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 				for (TileEntity acceptor : conductor.getAdjacentConnections())
 				{
-					if(!(acceptor instanceof IConductor))
+					if (!(acceptor instanceof IConductor))
 					{
 						this.electricalTiles.add(acceptor);
 					}
