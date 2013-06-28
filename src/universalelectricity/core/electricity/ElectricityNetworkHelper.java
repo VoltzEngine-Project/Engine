@@ -1,8 +1,9 @@
 package universalelectricity.core.electricity;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -57,7 +58,7 @@ public class ElectricityNetworkHelper
 
 		if (tileEntity != null && approachingDirection != null)
 		{
-			final List<IElectricityNetwork> connectedNetworks = ElectricityNetworkHelper.getNetworksFromMultipleSides(tileEntity, approachingDirection);
+			final Set<IElectricityNetwork> connectedNetworks = ElectricityNetworkHelper.getNetworksFromMultipleSides(tileEntity, approachingDirection);
 
 			if (connectedNetworks.size() > 0)
 			{
@@ -92,22 +93,21 @@ public class ElectricityNetworkHelper
 	 * @return A list of networks from all specified sides. There will be no repeated
 	 * ElectricityNetworks and it will never return null.
 	 */
-	public static List<IElectricityNetwork> getNetworksFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection)
+	public static Set<IElectricityNetwork> getNetworksFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection)
 	{
-		final List<IElectricityNetwork> connectedNetworks = new ArrayList<IElectricityNetwork>();
+		final Set<IElectricityNetwork> connectedNetworks = new HashSet<IElectricityNetwork>();
 
-		for (int i = 0; i < 6; i++)
+		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS)
 		{
-			ForgeDirection direction = ForgeDirection.getOrientation(i);
-
-			if (approachingDirection.contains(direction))
+			if (approachingDirection.contains(side))
 			{
 				Vector3 position = new Vector3(tileEntity);
-				position.modifyPositionFromSide(direction);
+				position.modifyPositionFromSide(side);
+				
 				TileEntity outputConductor = position.getTileEntity(tileEntity.worldObj);
-				IElectricityNetwork electricityNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputConductor, direction);
+				IElectricityNetwork electricityNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputConductor, side);
 
-				if (electricityNetwork != null && !connectedNetworks.contains(connectedNetworks))
+				if (electricityNetwork != null)
 				{
 					connectedNetworks.add(electricityNetwork);
 				}

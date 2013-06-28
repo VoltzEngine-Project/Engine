@@ -13,5 +13,5 @@ public interface IConductor extends INetworkProvider, IConnectionProvider
 	/**
 	 * @return The maximum amount of amps this conductor can handle before melting down.
 	 */
-	public float getCurrentCapcity();
+	public float getCurrentCapacity();
 }

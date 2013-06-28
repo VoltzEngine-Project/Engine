@@ -37,11 +37,6 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 	private final Set<IConductor> conductors = new HashSet<IConductor>();
 
-	public ElectricityNetwork()
-	{
-
-	}
-
 	public ElectricityNetwork(IConductor... conductors)
 	{
 		this.conductors.addAll(Arrays.asList(conductors));
@@ -64,21 +59,9 @@ public class ElectricityNetwork implements IElectricityNetwork
 			{
 				final float totalEnergyRequest = this.getRequest(ignoreTiles);
 
-				loop:
 				for (TileEntity tileEntity : avaliableEnergyTiles)
 				{
-					if (ignoreTiles != null)
-					{
-						for (TileEntity ignoreTile : ignoreTiles)
-						{
-							if (tileEntity == ignoreTile)
-							{
-								continue loop;
-							}
-						}
-					}
-
-					if (tileEntity instanceof IElectrical)
+					if (tileEntity instanceof IElectrical && !Arrays.asList(ignoreTiles).contains(tileEntity))
 					{
 						IElectrical electricalTile = (IElectrical) tileEntity;
 						float energyToSend = energy * (electricalTile.getRequest() / totalEnergyRequest);
@@ -93,17 +76,6 @@ public class ElectricityNetwork implements IElectricityNetwork
 						energy -= (electricityToSend.getWatts() - ((IElectrical) tileEntity).receiveElectricity(electricityToSend, true));
 					}
 				}
-
-				try
-				{
-
-				}
-				catch (Exception e)
-				{
-					FMLLog.severe("Universal Electricity: Failed to produce electricity!");
-					e.printStackTrace();
-				}
-
 			}
 		}
 
@@ -120,20 +92,13 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 		Iterator<TileEntity> it = this.getElectrical().iterator();
 
-		loop:
 		while (it.hasNext())
 		{
 			TileEntity tileEntity = it.next();
-
-			if (ignoreTiles != null)
+			
+			if(Arrays.asList(ignoreTiles).contains(tileEntity))
 			{
-				for (TileEntity ignoreTile : ignoreTiles)
-				{
-					if (tileEntity == ignoreTile)
-					{
-						continue loop;
-					}
-				}
+				continue;
 			}
 
 			if (tileEntity instanceof IElectrical)
@@ -205,11 +170,13 @@ public class ElectricityNetwork implements IElectricityNetwork
 			while (it.hasNext())
 			{
 				IConductor conductor = it.next();
-				conductor.refresh();
 
 				for (TileEntity acceptor : conductor.getAdjacentConnections())
 				{
-					this.electricalTiles.add(acceptor);
+					if(!(acceptor instanceof IConductor))
+					{
+						this.electricalTiles.add(acceptor);
+					}
 				}
 			}
 		}
@@ -240,9 +207,9 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 		for (IConductor conductor : this.conductors)
 		{
-			if (lowestAmperage == 0 || conductor.getCurrentCapcity() < lowestAmperage)
+			if (lowestAmperage == 0 || conductor.getCurrentCapacity() < lowestAmperage)
 			{
-				lowestAmperage = conductor.getCurrentCapcity();
+				lowestAmperage = conductor.getCurrentCapacity();
 			}
 		}
 
@@ -273,13 +240,6 @@ public class ElectricityNetwork implements IElectricityNetwork
 		if (splitPoint instanceof TileEntity)
 		{
 			this.getConductors().remove(splitPoint);
-
-			/*
-			 * for (ForgeDirection dir : ForgeDirection.values()) { if (dir !=
-			 * ForgeDirection.UNKNOWN) { Vector3 splitVec = new Vector3((TileEntity) splitPoint);
-			 * TileEntity tileAroundSplit = VectorHelper.getTileEntityFromSide(((TileEntity)
-			 * splitPoint).worldObj, splitVec, dir); } }
-			 */
 
 			/**
 			 * Loop through the connected blocks and attempt to see if there are connections between
@@ -355,7 +315,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	@Override
 	public String toString()
 	{
-		return "ElectricityNetwork[" + this.hashCode() + "|Wires:" + this.conductors.size() + "]";
+		return "ElectricityNetwork[" + this.hashCode() + "|Wires:" + this.conductors.size() + "|Acceptors:" + this.electricalTiles.size() + "]";
 	}
 
 }

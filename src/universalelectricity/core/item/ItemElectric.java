@@ -32,7 +32,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4)
 	{
 		String color = "";
-		double joules = this.getEnergyStored(itemStack);
+		float joules = this.getEnergyStored(itemStack);
 
 		if (joules <= this.getMaxEnergyStored(itemStack) / 3)
 		{
@@ -102,13 +102,19 @@ public abstract class ItemElectric extends Item implements IItemElectric
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
 
-		double electricityStored = Math.max(Math.min(joules, this.getMaxEnergyStored(itemStack)), 0);
-		itemStack.getTagCompound().setDouble("electricity", electricityStored);
+		float electricityStored = Math.max(Math.min(joules, this.getMaxEnergyStored(itemStack)), 0);
+		itemStack.getTagCompound().setFloat("electricity", electricityStored);
 
 		/**
 		 * Sets the damage as a percentage to render the bar properly.
 		 */
 		itemStack.setItemDamage((int) (100 - (electricityStored / getMaxEnergyStored(itemStack)) * 100));
+	}
+	
+	@Override
+	public float getTransfer(ItemStack itemStack)
+	{
+		return getMaxEnergyStored(itemStack)*0.005F;
 	}
 
 	/**

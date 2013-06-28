@@ -9,7 +9,7 @@ public abstract class TileEntityElectricalStorage extends TileEntityDisableable 
 	@Override
 	public void setEnergyStored(float energy)
 	{
-		this.energy = Math.max(Math.min(energy, this.getEnergyStored()), 0);
+		this.energy = Math.max(Math.min(energy, this.getMaxEnergyStored()), 0);
 	}
 
 	@Override

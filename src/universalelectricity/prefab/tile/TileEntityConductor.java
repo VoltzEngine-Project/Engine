@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author Calclavia
  * 
  */
-public abstract class TileEntityConductor extends TileEntityAdvanced implements IConductor, IPacketReceiver
+public abstract class TileEntityConductor extends TileEntityAdvanced implements IConductor
 {
 	private IElectricityNetwork network;
 
@@ -70,13 +70,18 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 			{
 				TileEntity tileEntity = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), side);
 
-				if (tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider)
+				if (tileEntity != null)
 				{
-					this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
+					if (tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider)
+					{
+						this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
+					}
 				}
 			}
 
 			this.getNetwork().refresh();
+			
+			System.out.println(getNetwork());
 		}
 	}
 
