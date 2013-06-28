@@ -37,11 +37,6 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 	private final Set<IConductor> conductors = new HashSet<IConductor>();
 
-	public ElectricityNetwork(IConductor... conductors)
-	{
-		this.conductors.addAll(Arrays.asList(conductors));
-	}
-
 	@Override
 	public float produce(ElectricityPack electricity, TileEntity... ignoreTiles)
 	{

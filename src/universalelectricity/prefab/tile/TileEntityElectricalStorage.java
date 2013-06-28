@@ -1,8 +1,6 @@
 package universalelectricity.prefab.tile;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import universalelectricity.core.block.IEnergyStorage;
 
 public abstract class TileEntityElectricalStorage extends TileEntityDisableable implements IEnergyStorage
@@ -20,7 +18,7 @@ public abstract class TileEntityElectricalStorage extends TileEntityDisableable 
 	{
 		return this.storedEnergy;
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{

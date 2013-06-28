@@ -9,8 +9,8 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
-import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.IElectricityNetwork;
+import universalelectricity.core.electricity.NetworkLoader;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -48,7 +48,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		if (this.network == null)
 		{
-			this.setNetwork(new ElectricityNetwork(this));
+			this.setNetwork(NetworkLoader.getNewNetwork(this));
 		}
 
 		return this.network;
@@ -79,8 +79,6 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 			}
 
 			this.getNetwork().refresh();
-			
-			System.out.println(getNetwork());
 		}
 	}
 

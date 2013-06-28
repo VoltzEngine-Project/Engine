@@ -1,12 +1,9 @@
 package universalelectricity.core.electricity;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.world.ChunkEvent;
 import universalelectricity.core.block.IConductor;
 import cpw.mods.fml.common.FMLLog;
 
@@ -34,7 +31,7 @@ public class NetworkLoader
 	{
 		try
 		{
-			NETWORK_CLASS = (Class<? extends IElectricityNetwork>) Class.forName(className);
+			setNetworkClass((Class<? extends IElectricityNetwork>) Class.forName(className));
 		}
 		catch (Exception e)
 		{
@@ -43,11 +40,13 @@ public class NetworkLoader
 		}
 	}
 
-	public static IElectricityNetwork getNewNetwork()
+	public static IElectricityNetwork getNewNetwork(IConductor... conductors)
 	{
 		try
 		{
-			return NETWORK_CLASS.newInstance();
+			IElectricityNetwork network = NETWORK_CLASS.newInstance();
+			network.getConductors().addAll(Arrays.asList(conductors));
+			return network;
 		}
 		catch (InstantiationException e)
 		{
@@ -61,23 +60,4 @@ public class NetworkLoader
 		return null;
 	}
 
-	@ForgeSubscribe
-	public void onChunkLoad(ChunkEvent.Load event)
-	{
-		if (event.getChunk() != null)
-		{
-			for (Object obj : event.getChunk().chunkTileEntityMap.values())
-			{
-				if (obj instanceof TileEntity)
-				{
-					TileEntity tileEntity = (TileEntity) obj;
-
-					if (tileEntity instanceof IConductor)
-					{
-						((IConductor) tileEntity).refresh();
-					}
-				}
-			}
-		}
-	}
 }
