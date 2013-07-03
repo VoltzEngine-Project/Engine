@@ -4,7 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.ChunkEvent;
-import universalelectricity.core.block.IConductor;
+import universalelectricity.core.block.INetworkConnection;
 
 /**
  * A helper class to register chunk loading for your wires if you need them to be refreshed upon
@@ -47,9 +47,9 @@ public class ConductorChunkInitiate
 				{
 					TileEntity tileEntity = (TileEntity) obj;
 
-					if (tileEntity instanceof IConductor)
+					if (tileEntity instanceof INetworkConnection)
 					{
-						((IConductor) tileEntity).refresh();
+						((INetworkConnection) tileEntity).refresh();
 					}
 				}
 			}
