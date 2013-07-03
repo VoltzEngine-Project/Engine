@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
  * @author Calclavia
  * 
  */
-public interface IConnectionProvider extends IConnector
+public interface INetworkConnection extends IConnector
 {
 
 	/**

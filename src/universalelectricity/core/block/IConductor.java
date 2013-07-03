@@ -1,6 +1,6 @@
 package universalelectricity.core.block;
 
-public interface IConductor extends INetworkProvider, IConnectionProvider
+public interface IConductor extends INetworkProvider, INetworkConnection
 {
 	/**
 	 * Gets the resistance of the conductor. Used to calculate energy loss. A higher resistance

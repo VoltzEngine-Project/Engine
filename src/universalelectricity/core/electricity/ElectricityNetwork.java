@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.block.IConductor;
-import universalelectricity.core.block.IConnectionProvider;
+import universalelectricity.core.block.INetworkConnection;
 import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.electricity.ElectricalEvent.ElectricProductionEvent;
@@ -48,7 +48,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 		if (!evt.isCanceled())
 		{
-			Set<TileEntity> avaliableEnergyTiles = this.getElectrical();
+			Set<TileEntity> avaliableEnergyTiles = this.getAcceptors();
 
 			if (!avaliableEnergyTiles.isEmpty())
 			{
@@ -93,7 +93,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	{
 		float requiredElectricity = 0;
 
-		Iterator<TileEntity> it = this.getElectrical().iterator();
+		Iterator<TileEntity> it = this.getAcceptors().iterator();
 
 		while (it.hasNext())
 		{
@@ -127,33 +127,9 @@ public class ElectricityNetwork implements IElectricityNetwork
 	 * @return Returns all producers in this electricity network.
 	 */
 	@Override
-	public Set<TileEntity> getElectrical()
+	public Set<TileEntity> getAcceptors()
 	{
 		return this.electricalTiles;
-	}
-
-	@Override
-	public void cleanUpConductors()
-	{
-		Iterator<IConductor> it = this.conductors.iterator();
-
-		while (it.hasNext())
-		{
-			IConductor conductor = it.next();
-
-			if (conductor == null)
-			{
-				it.remove();
-			}
-			else if (((TileEntity) conductor).isInvalid())
-			{
-				it.remove();
-			}
-			else
-			{
-				conductor.setNetwork(this);
-			}
-		}
 	}
 
 	/**
@@ -162,8 +138,6 @@ public class ElectricityNetwork implements IElectricityNetwork
 	@Override
 	public void refresh()
 	{
-		this.cleanUpConductors();
-
 		this.electricalTiles.clear();
 
 		try
@@ -173,6 +147,19 @@ public class ElectricityNetwork implements IElectricityNetwork
 			while (it.hasNext())
 			{
 				IConductor conductor = it.next();
+				
+				if (conductor == null)
+				{
+					it.remove();
+				}
+				else if (((TileEntity) conductor).isInvalid())
+				{
+					it.remove();
+				}
+				else
+				{
+					conductor.setNetwork(this);
+				}
 
 				for (TileEntity acceptor : conductor.getAdjacentConnections())
 				{
@@ -233,12 +220,12 @@ public class ElectricityNetwork implements IElectricityNetwork
 			ElectricityNetwork newNetwork = new ElectricityNetwork();
 			newNetwork.getConductors().addAll(this.getConductors());
 			newNetwork.getConductors().addAll(network.getConductors());
-			newNetwork.cleanUpConductors();
+			newNetwork.refresh();
 		}
 	}
 
 	@Override
-	public void split(IConnectionProvider splitPoint)
+	public void split(IConductor splitPoint)
 	{
 		if (splitPoint instanceof TileEntity)
 		{
@@ -254,15 +241,15 @@ public class ElectricityNetwork implements IElectricityNetwork
 			{
 				TileEntity connectedBlockA = connectedBlocks[i];
 
-				if (connectedBlockA instanceof IConnectionProvider)
+				if (connectedBlockA instanceof INetworkConnection)
 				{
 					for (int ii = 0; ii < connectedBlocks.length; ii++)
 					{
 						final TileEntity connectedBlockB = connectedBlocks[ii];
 
-						if (connectedBlockA != connectedBlockB && connectedBlockB instanceof IConnectionProvider)
+						if (connectedBlockA != connectedBlockB && connectedBlockB instanceof INetworkConnection)
 						{
-							Pathfinder finder = new PathfinderChecker(((TileEntity) splitPoint).worldObj, (IConnectionProvider) connectedBlockB, splitPoint);
+							Pathfinder finder = new PathfinderChecker(((TileEntity) splitPoint).worldObj, (INetworkConnection) connectedBlockB, splitPoint);
 							finder.init(new Vector3(connectedBlockA));
 
 							if (finder.results.size() > 0)
@@ -306,7 +293,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 									}
 								}
 
-								newNetwork.cleanUpConductors();
+								newNetwork.refresh();
 							}
 						}
 					}
