@@ -26,7 +26,7 @@ public abstract class TileEntityUniversalRunnable extends TileEntityElectricityR
 			if (this.powerProvider == null)
 			{
 				this.powerProvider = PowerFramework.currentFramework.createPowerProvider();
-				this.powerProvider.configure(0, 0, Integer.MAX_VALUE, 0, (int) Math.ceil(this.getWattBuffer() * UniversalElectricity.TO_BC_RATIO));
+				this.powerProvider.configure(0, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE);
 			}
 		}
 	}
