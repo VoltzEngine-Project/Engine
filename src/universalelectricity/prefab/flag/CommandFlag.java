@@ -7,6 +7,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatMessageComponent;
 import universalelectricity.core.vector.Vector3;
 
 /**
@@ -99,7 +100,7 @@ public class CommandFlag extends CommandBase
 							msg = "No regions in this world.";
 						}
 
-						sender.sendChatToPlayer(msg);
+						sender.sendChatToPlayer(ChatMessageComponent.func_111066_d(msg));
 					}
 					else if (flagWorld.getRegion(regionName) != null)
 					{
@@ -122,7 +123,7 @@ public class CommandFlag extends CommandBase
 							msg = "No flags in this region.";
 						}
 
-						sender.sendChatToPlayer(msg);
+						sender.sendChatToPlayer(ChatMessageComponent.func_111066_d(msg));
 					}
 					else
 					{
@@ -136,7 +137,7 @@ public class CommandFlag extends CommandBase
 							msg = msg + " " + flag.name + "=>" + flag.value + ",";
 						}
 
-						sender.sendChatToPlayer(msg);
+						sender.sendChatToPlayer(ChatMessageComponent.func_111066_d(msg));
 					}
 
 				}
@@ -160,7 +161,7 @@ public class CommandFlag extends CommandBase
 						msg = "No regions in this dimension.";
 					}
 
-					sender.sendChatToPlayer(msg);
+					sender.sendChatToPlayer(ChatMessageComponent.func_111066_d(msg));
 				}
 
 				return;
@@ -175,7 +176,7 @@ public class CommandFlag extends CommandBase
 					{
 						if (flagWorld.addRegion(regionName, new Vector3(entityPlayer), 1))
 						{
-							sender.sendChatToPlayer("Created global dimension region setting.");
+							sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("Created global dimension region setting."));
 							return;
 						}
 					}
@@ -199,13 +200,13 @@ public class CommandFlag extends CommandBase
 							{
 								if (flagWorld.addRegion(regionName, new Vector3(entityPlayer), radius))
 								{
-									sender.sendChatToPlayer("Region " + regionName + " added.");
+									sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("Region " + regionName + " added."));
 								}
 							}
 							else
 							{
 								region.edit(new Vector3(entityPlayer), radius);
-								sender.sendChatToPlayer("Region " + regionName + " already exists. Modified region to have a radius of: " + radius);
+								sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("Region " + regionName + " already exists. Modified region to have a radius of: " + radius));
 							}
 						}
 						else
@@ -235,7 +236,7 @@ public class CommandFlag extends CommandBase
 
 					if (flagWorld.removeRegion(regionName))
 					{
-						sender.sendChatToPlayer("Region with name " + regionName + " is removed.");
+						sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("Region with name " + regionName + " is removed."));
 					}
 					else
 					{
@@ -266,12 +267,12 @@ public class CommandFlag extends CommandBase
 								String flagValue = args[3];
 
 								flagRegion.setFlag(flagName, flagValue);
-								sender.sendChatToPlayer("Flag '" + flagName + "' has been set to '" + flagValue + "' in " + regionName + ".");
+								sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("Flag '" + flagName + "' has been set to '" + flagValue + "' in " + regionName + "."));
 							}
 							else
 							{
 								flagRegion.removeFlag(flagName);
-								sender.sendChatToPlayer("Removed flag '" + flagName + "'.");
+								sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("Removed flag '" + flagName + "'."));
 							}
 						}
 						else
