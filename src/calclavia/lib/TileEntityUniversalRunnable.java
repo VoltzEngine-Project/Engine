@@ -26,7 +26,7 @@ public abstract class TileEntityUniversalRunnable extends TileEntityElectricityR
 			if (this.powerProvider == null)
 			{
 				this.powerProvider = PowerFramework.currentFramework.createPowerProvider();
-				this.powerProvider.configure(0, 0, Integer.MAX_VALUE, 0, (int) (this.getWattBuffer() * UniversalElectricity.TO_BC_RATIO));
+				this.powerProvider.configure(0, 0, Integer.MAX_VALUE, 0, (int) Math.ceil(this.getWattBuffer() * UniversalElectricity.TO_BC_RATIO));
 			}
 		}
 	}
@@ -52,7 +52,7 @@ public abstract class TileEntityUniversalRunnable extends TileEntityElectricityR
 
 		if (this.powerProvider != null && !this.worldObj.isRemote)
 		{
-			this.powerProvider.configure(0, 0, Integer.MAX_VALUE, 0, (int) (this.getWattBuffer() * UniversalElectricity.TO_BC_RATIO));
+			this.powerProvider.configure(0, 0, Integer.MAX_VALUE, 0, (int) Math.ceil(this.getWattBuffer() * UniversalElectricity.TO_BC_RATIO));
 			float requiredEnergy = (float) (this.getRequest().getWatts() * UniversalElectricity.TO_BC_RATIO);
 			float energyReceived = this.powerProvider.useEnergy(0, requiredEnergy, true);
 			this.onReceive(ElectricityPack.getFromWatts(UniversalElectricity.BC3_RATIO * energyReceived, this.getVoltage()));
