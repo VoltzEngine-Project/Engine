@@ -103,7 +103,7 @@ public class NBTFileLoader
 		if (FMLCommonHandler.instance().getSide().isClient())
 		{
 			FMLClientHandler.instance().getClient();
-			return Minecraft.getMinecraftDir();
+			return FMLClientHandler.instance().getClient().mcDataDir;
 		}
 		else
 		{
