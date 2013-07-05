@@ -19,7 +19,7 @@ public class NetworkLoader
 
 	static
 	{
-		setNetworkClass("universalelectricity.core.electricity.ElectricityNetwork");
+		setNetworkClass("universalelectricity.core.grid.ElectricityNetwork");
 	}
 
 	public static void setNetworkClass(Class<? extends IElectricityNetwork> networkClass)
