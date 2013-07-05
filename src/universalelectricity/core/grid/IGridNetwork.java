@@ -1,4 +1,4 @@
-package universalelectricity.core;
+package universalelectricity.core.grid;
 
 import java.util.Set;
 

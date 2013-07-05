@@ -1,4 +1,4 @@
-package universalelectricity.core.electricity;
+package universalelectricity.core.grid;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,10 +11,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.block.IConductor;
-import universalelectricity.core.block.INetworkConnection;
 import universalelectricity.core.block.IElectrical;
+import universalelectricity.core.block.INetworkConnection;
 import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.electricity.ElectricalEvent.ElectricProductionEvent;
+import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.path.Pathfinder;
 import universalelectricity.core.path.PathfinderChecker;
 import universalelectricity.core.vector.Vector3;
@@ -147,7 +148,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 			while (it.hasNext())
 			{
 				IConductor conductor = it.next();
-				
+
 				if (conductor == null)
 				{
 					it.remove();

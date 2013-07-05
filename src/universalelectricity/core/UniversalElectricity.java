@@ -2,6 +2,8 @@ package universalelectricity.core;
 
 import java.io.File;
 
+import universalelectricity.compatiblity.Compatiblity;
+
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.Configuration;
@@ -30,18 +32,6 @@ public class UniversalElectricity
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
 
 	/**
-	 * Multiply this to convert foreign energy into UE Joules.
-	 */
-	public static double IC2_RATIO = 50;
-	public static double BC3_RATIO = 125;
-
-	/**
-	 * Multiply this to convert UE Joules into foreign energy.
-	 */
-	public static double TO_IC2_RATIO = 1 / IC2_RATIO;
-	public static double TO_BC_RATIO = 1 / BC3_RATIO;
-
-	/**
 	 * Is Universal Electricity currently being voltage sensitive? If so, all machines should
 	 * explode under high voltage and react to different amounts of voltage differently.
 	 */
@@ -65,10 +55,10 @@ public class UniversalElectricity
 		 * Loads the configuration and sets all the values.
 		 */
 		CONFIGURATION.load();
-		IC2_RATIO = CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", IC2_RATIO).getDouble(IC2_RATIO);
-		BC3_RATIO = CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", BC3_RATIO).getDouble(BC3_RATIO);
-		TO_IC2_RATIO = 1 / IC2_RATIO;
-		TO_BC_RATIO = 1 / BC3_RATIO;
+		Compatiblity.IC2_RATIO = CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", Compatiblity.IC2_RATIO).getDouble(Compatiblity.IC2_RATIO);
+		Compatiblity.BC3_RATIO = CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", Compatiblity.BC3_RATIO).getDouble(Compatiblity.BC3_RATIO);
+		Compatiblity.TO_IC2_RATIO = 1 / Compatiblity.IC2_RATIO;
+		Compatiblity.TO_BC_RATIO = 1 / Compatiblity.BC3_RATIO;
 
 		isVoltageSensitive = CONFIGURATION.get("Compatiblity", "Is Voltage Sensitive", isVoltageSensitive).getBoolean(isVoltageSensitive);
 		isNetworkActive = CONFIGURATION.get("Compatiblity", "Is Network Active", isNetworkActive).getBoolean(isNetworkActive);

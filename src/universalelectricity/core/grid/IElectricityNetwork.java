@@ -1,8 +1,8 @@
-package universalelectricity.core.electricity;
+package universalelectricity.core.grid;
 
 import net.minecraft.tileentity.TileEntity;
-import universalelectricity.core.IGridNetwork;
 import universalelectricity.core.block.IConductor;
+import universalelectricity.core.electricity.ElectricityPack;
 
 /**
  * The Electrical Network in interface form.
