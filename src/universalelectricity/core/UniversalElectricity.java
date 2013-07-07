@@ -2,8 +2,6 @@ package universalelectricity.core;
 
 import java.io.File;
 
-import universalelectricity.compatiblity.Compatiblity;
-
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.Configuration;
@@ -42,6 +40,7 @@ public class UniversalElectricity
 	 * the ElectricityNetwork. Examples would be a mod that adds any sort of wire. This value will
 	 * be true as long as there is a way to conduct electricity.
 	 */
+	@Deprecated
 	public static boolean isNetworkActive = false;
 
 	/**
@@ -55,11 +54,6 @@ public class UniversalElectricity
 		 * Loads the configuration and sets all the values.
 		 */
 		CONFIGURATION.load();
-		Compatiblity.IC2_RATIO = CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", Compatiblity.IC2_RATIO).getDouble(Compatiblity.IC2_RATIO);
-		Compatiblity.BC3_RATIO = CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", Compatiblity.BC3_RATIO).getDouble(Compatiblity.BC3_RATIO);
-		Compatiblity.TO_IC2_RATIO = 1 / Compatiblity.IC2_RATIO;
-		Compatiblity.TO_BC_RATIO = 1 / Compatiblity.BC3_RATIO;
-
 		isVoltageSensitive = CONFIGURATION.get("Compatiblity", "Is Voltage Sensitive", isVoltageSensitive).getBoolean(isVoltageSensitive);
 		isNetworkActive = CONFIGURATION.get("Compatiblity", "Is Network Active", isNetworkActive).getBoolean(isNetworkActive);
 		CONFIGURATION.save();
