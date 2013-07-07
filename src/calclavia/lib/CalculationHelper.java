@@ -54,6 +54,13 @@ public class CalculationHelper
 		vector.y = -x * Math.sin(pitchRadians) + z * Math.cos(pitchRadians) * Math.sin(rollRadians) + y * Math.cos(pitchRadians) * Math.cos(rollRadians);
 	}
 
+	/**
+	 * Gets the delta look position based on the rotation yaw and pitch. Minecraft coordinates are
+	 * messed up. Y and Z are flipped. Yaw is displaced by 90 degrees. Pitch is inversed.
+	 * 
+	 * @param rotationYaw
+	 * @param rotationPitch
+	 */
 	public static Vector3 getDeltaPositionFromRotation(float rotationYaw, float rotationPitch)
 	{
 		rotationYaw = rotationYaw + 90;
@@ -125,8 +132,8 @@ public class CalculationHelper
 
 	public static MovingObjectPosition raytraceBlocks(World world, Vector3 startPosition, float rotationYaw, float rotationPitch, boolean collisionFlag, double reachDistance)
 	{
-		Vector3 lookDistance = getDeltaPositionFromRotation(rotationYaw, rotationPitch);
-		Vector3 reachPoint = Vector3.add(startPosition, Vector3.multiply(lookDistance, reachDistance));
+		Vector3 lookVector = getDeltaPositionFromRotation(rotationYaw, rotationPitch);
+		Vector3 reachPoint = Vector3.add(startPosition, Vector3.multiply(lookVector, reachDistance));
 		return world.rayTraceBlocks_do_do(startPosition.toVec3(), reachPoint.toVec3(), collisionFlag, !collisionFlag);
 	}
 
