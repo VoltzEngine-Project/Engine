@@ -51,15 +51,12 @@ public abstract class TileEntityUniversalStorable extends TileEntityElectricityS
 	{
 		super.updateEntity();
 
-		if (this.powerProvider != null)
+		if (this.powerProvider != null && !this.worldObj.isRemote)
 		{
-			int requiredEnergy = (int) (this.getRequest().getWatts() * UniversalElectricity.TO_BC_RATIO);
+			this.powerProvider.configure(0, 0, Integer.MAX_VALUE, 0, (int) Math.ceil(this.getMaxJoules() * UniversalElectricity.TO_BC_RATIO));
+			float requiredEnergy = (float) (this.getRequest().getWatts() * UniversalElectricity.TO_BC_RATIO);
 			float energyReceived = this.powerProvider.useEnergy(0, requiredEnergy, true);
-
-			if (energyReceived > 0)
-			{
-				this.onReceive(ElectricityPack.getFromWatts((UniversalElectricity.BC3_RATIO * energyReceived) / this.getVoltage(), this.getVoltage()));
-			}
+			this.onReceive(ElectricityPack.getFromWatts(UniversalElectricity.BC3_RATIO * energyReceived, this.getVoltage()));
 		}
 	}
 
