@@ -7,8 +7,10 @@ import java.util.Map.Entry;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.ResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.liquids.LiquidStack;
 
 import org.lwjgl.opengl.GL11;
@@ -69,7 +71,7 @@ public class GuiScreenBase extends GuiBase
 		this.containerWidth = (this.width - this.xSize) / 2;
 		this.containerHeight = (this.height - this.ySize) / 2;
 
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_EMPTY_FILE);
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_EMPTY_FILE);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
@@ -77,7 +79,7 @@ public class GuiScreenBase extends GuiBase
 
 	protected void drawBulb(int x, int y, boolean isOn)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_EMPTY_FILE);
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_EMPTY_FILE);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		if (isOn)
@@ -129,7 +131,7 @@ public class GuiScreenBase extends GuiBase
 
 	protected void drawSlot(int x, int y, GuiSlotType type, float r, float g, float b)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_EMPTY_FILE);
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_EMPTY_FILE);
 		GL11.glColor4f(r, g, b, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
@@ -152,7 +154,7 @@ public class GuiScreenBase extends GuiBase
 
 	protected void drawBar(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_EMPTY_FILE);
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_EMPTY_FILE);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -171,7 +173,7 @@ public class GuiScreenBase extends GuiBase
 
 	protected void drawForce(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_EMPTY_FILE);
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_EMPTY_FILE);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -190,7 +192,7 @@ public class GuiScreenBase extends GuiBase
 
 	protected void drawElectricity(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_EMPTY_FILE);
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_EMPTY_FILE);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -207,9 +209,9 @@ public class GuiScreenBase extends GuiBase
 		}
 	}
 
-	protected void drawMeter(int x, int y, float scale, LiquidStack liquidStack)
+	protected void drawMeter(int x, int y, float scale, FluidStack fluidStack)
 	{
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_EMPTY_FILE);
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_EMPTY_FILE);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -221,11 +223,11 @@ public class GuiScreenBase extends GuiBase
 		/**
 		 * Draw liquid/gas inside
 		 */
-		this.displayGauge(this.containerWidth + x, this.containerHeight + y, 0, 0, (int) ((METER_HEIGHT - 1) * scale), liquidStack);
+		this.displayGauge(this.containerWidth + x, this.containerHeight + y, 0, 0, (int) ((METER_HEIGHT - 1) * scale), fluidStack);
 		/**
 		 * Draw measurement lines
 		 */
-		this.mc.renderEngine.bindTexture(Calclavia.GUI_EMPTY_FILE);
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_EMPTY_FILE);
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, METER_WIDTH, METER_HEIGHT);
 	}
 
@@ -304,36 +306,44 @@ public class GuiScreenBase extends GuiBase
 	/**
 	 * Based on BuildCraft
 	 */
-	protected void displayGauge(int j, int k, int line, int col, int squaled, LiquidStack liquid)
+	protected void displayGauge(int j, int k, int line, int col, int squaled, FluidStack fluid)
 	{
-		if (liquid == null)
+		if (fluid == null)
 		{
 			return;
 		}
 		int start = 0;
 
 		Icon liquidIcon;
-		String textureSheet;
-		if (liquid.canonical().getRenderingIcon() != null)
+		ResourceLocation textureSheet;
+
+		if (fluid.getFluid().getIcon() != null)
 		{
-			textureSheet = liquid.canonical().getTextureSheet();
-			liquidIcon = liquid.canonical().getRenderingIcon();
-		}
-		else
-		{
-			if (liquid.itemID < Block.blocksList.length && Block.blocksList[liquid.itemID].blockID > 0)
+			if (fluid.getFluid().canBePlacedInWorld())
 			{
-				liquidIcon = Block.blocksList[liquid.itemID].getBlockTextureFromSide(0);
-				textureSheet = "/terrain.png";
+				textureSheet = new ResourceLocation("/terrain.png");
 			}
 			else
 			{
-				liquidIcon = Item.itemsList[liquid.itemID].getIconFromDamage(liquid.itemMeta);
-				textureSheet = "/gui/items.png";
+				textureSheet = new ResourceLocation("/terrain.png");
+			}
+			liquidIcon = fluid.getFluid().getIcon();
+		}
+		else
+		{
+			if (fluid.fluidID < Block.blocksList.length && Block.blocksList[fluid.fluidID].blockID > 0)
+			{
+				liquidIcon = Block.blocksList[fluid.fluidID].getIcon(0, 0);
+				textureSheet = new ResourceLocation("/terrain.png");
+			}
+			else
+			{
+				liquidIcon = Item.itemsList[fluid.fluidID].getIconFromDamage(0);
+				textureSheet = new ResourceLocation("/gui/items.png");
 			}
 		}
 
-		this.mc.renderEngine.bindTexture(textureSheet);
+		this.mc.renderEngine.func_110577_a(textureSheet);
 
 		while (true)
 		{
@@ -359,5 +369,4 @@ public class GuiScreenBase extends GuiBase
 			}
 		}
 	}
-
 }

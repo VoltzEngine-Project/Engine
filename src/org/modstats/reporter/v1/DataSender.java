@@ -92,7 +92,7 @@ class DataSender extends Thread
     
     private String getPlayerId() throws IOException
     {
-        File statDir =  new File(Minecraft.getMinecraftDir(), "stats");
+        File statDir =  new File(FMLClientHandler.instance().getClient().mcDataDir, "stats");
         if(!statDir.exists())
         {
             statDir.mkdirs();

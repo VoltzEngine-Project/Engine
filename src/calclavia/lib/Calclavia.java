@@ -3,14 +3,25 @@ package calclavia.lib;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.resources.ResourceLocation;
+
 public class Calclavia
 {
-	public static final String RESOURCE_DIRECTORY = "/mods/calclavia/";
-	public static final String TEXTURE_DIRECTORY = RESOURCE_DIRECTORY + "textures/";
+	public static final String DOMAIN = "calclavia";
+	public static final String TEXTURE_NAME_PREFIX = DOMAIN + ":";
+
+	public static final String RESOURCE_DIRECTORY = "/assets/calclavia/";
+
+	public static final String TEXTURE_DIRECTORY = "textures/";
 	public static final String GUI_DIRECTORY = TEXTURE_DIRECTORY + "gui/";
-	public static final String GUI_COMPONENTS = GUI_DIRECTORY + "gui_components.png";
-	public static final String GUI_BASE_FILE = GUI_DIRECTORY + "gui_base.png";
-	public static final String GUI_EMPTY_FILE = GUI_DIRECTORY + "gui_empty.png";
+
+	public static final ResourceLocation GUI_EMPTY_FILE = new ResourceLocation(Calclavia.DOMAIN, GUI_DIRECTORY + "gui_empty.png");
+	public static final ResourceLocation GUI_COMPONENTS = new ResourceLocation(Calclavia.DOMAIN, GUI_DIRECTORY + "gui_components.png");
+	public static final ResourceLocation GUI_BASE = new ResourceLocation(Calclavia.DOMAIN, GUI_DIRECTORY + "gui_base.png");
+
+	public static final ResourceLocation ITEM_RESOURCE = new ResourceLocation("/gui/items.png");
+	public static final ResourceLocation TERRAIN_RESOURCE = new ResourceLocation("terrain.png");
+	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
 
 	public static List<String> splitStringPerWord(String string, int wordsPerLine)
 	{
@@ -31,4 +42,5 @@ public class Calclavia
 
 		return lines;
 	}
+
 }
