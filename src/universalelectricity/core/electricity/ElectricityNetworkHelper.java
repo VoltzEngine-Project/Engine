@@ -19,7 +19,6 @@ import universalelectricity.core.vector.Vector3;
  */
 public class ElectricityNetworkHelper
 {
-
 	public static EnumSet<ForgeDirection> getDirections(TileEntity tileEntity)
 	{
 		EnumSet<ForgeDirection> possibleSides = EnumSet.noneOf(ForgeDirection.class);
@@ -39,6 +38,7 @@ public class ElectricityNetworkHelper
 		return possibleSides;
 	}
 
+	@Deprecated
 	public static ElectricityPack produceFromMultipleSides(TileEntity tileEntity, ElectricityPack electricityPack)
 	{
 		return ElectricityNetworkHelper.produceFromMultipleSides(tileEntity, getDirections(tileEntity), electricityPack);
@@ -52,6 +52,7 @@ public class ElectricityNetworkHelper
 	 * @param producePack - The amount of electricity to be produced.
 	 * @return What remained in the electricity pack.
 	 */
+	@Deprecated
 	public static ElectricityPack produceFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection, ElectricityPack producingPack)
 	{
 		ElectricityPack remainingElectricity = producingPack.clone();

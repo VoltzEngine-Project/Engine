@@ -40,7 +40,7 @@ public interface IItemElectric
 	 * Sets the amount of energy in the ItemStack.
 	 * 
 	 * @param itemStack - the ItemStack.
-	 * @param joules - Amount of energy.
+	 * @param joules - Amount of electrical energy.
 	 */
 	public void setElectricity(ItemStack itemStack, float joules);
 

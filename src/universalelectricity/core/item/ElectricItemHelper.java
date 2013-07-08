@@ -15,10 +15,9 @@ public class ElectricItemHelper
 	 * Recharges an electric item.
 	 * 
 	 * @param joules - The joules being provided to the electric item
-	 * @param voltage - The voltage in which is used to charge the electric item
 	 * @return The total amount of joules provided by the provider.
 	 */
-	public static float chargeItem(ItemStack itemStack, float joules, float voltage)
+	public static float chargeItem(ItemStack itemStack, float joules)
 	{
 		if (itemStack != null)
 		{
@@ -35,10 +34,9 @@ public class ElectricItemHelper
 	 * Decharges an electric item.
 	 * 
 	 * @param joules - The joules being withdrawn from the electric item
-	 * @param voltage - The voltage in which is used to decharge the electric item
 	 * @return The total amount of joules the provider received.
 	 */
-	public static float dechargeItem(ItemStack itemStack, float joules, float voltage)
+	public static float dischargeItem(ItemStack itemStack, float joules)
 	{
 		if (itemStack != null)
 		{

@@ -1,10 +1,7 @@
 package universalelectricity.prefab.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.FluidEvent;
-import net.minecraftforge.fluids.FluidStack;
 import universalelectricity.core.block.IElectrical;
-import universalelectricity.core.block.IElectricalStorage;
 import universalelectricity.core.electricity.ElectricityPack;
 
 /**
@@ -13,16 +10,28 @@ import universalelectricity.core.electricity.ElectricityPack;
  * @author Calclavia
  * 
  */
-public class ElectricityHandler implements IElectricalStorage
+public class ElectricityHandler
 {
 	public IElectrical tileEntity;
 	public float energyStored = 0;
 	public float maxEnergyStored = 0;
 
-	public ElectricityHandler(IElectrical tileEntity, float maxEnergyStored)
+	public ElectricityHandler(IElectrical tileEntity)
 	{
 		this.tileEntity = tileEntity;
-		this.maxEnergyStored = maxEnergyStored;
+	}
+
+	public ElectricityHandler(IElectrical tileEntity, float maxEnergyStored)
+	{
+		this(tileEntity);
+		this.setMaxEnergyStored(maxEnergyStored);
+	}
+
+	public ElectricityHandler(IElectrical tileEntity, float energyStored, float maxEnergyStored)
+	{
+		this(tileEntity);
+		this.setEnergyStored(energyStored);
+		this.setMaxEnergyStored(maxEnergyStored);
 	}
 
 	public float receiveElectricity(ElectricityPack receive, boolean doReceive)
@@ -59,19 +68,23 @@ public class ElectricityHandler implements IElectricalStorage
 		return new ElectricityPack();
 	}
 
-	@Override
-	public void setEnergyStored(float energy)
+	public ElectricityHandler setEnergyStored(float energy)
 	{
 		this.energyStored = Math.max(Math.min(energy, this.getMaxEnergyStored()), 0);
+		return this;
 	}
 
-	@Override
 	public float getEnergyStored()
 	{
 		return this.energyStored;
 	}
 
-	@Override
+	public ElectricityHandler setMaxEnergyStored(float maxEnergyStored)
+	{
+		this.maxEnergyStored = maxEnergyStored;
+		return this;
+	}
+
 	public float getMaxEnergyStored()
 	{
 		return this.maxEnergyStored;
