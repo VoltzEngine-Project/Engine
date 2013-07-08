@@ -20,11 +20,32 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.resources.ResourceLocation;
+import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class CalclaviaRenderHelper
 {
+	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
+
+	public static void setTerrainTexture()
+	{
+		setSpriteTexture(0);
+	}
+
+	public static void setSpriteTexture(ItemStack itemStack)
+	{
+		setSpriteTexture(itemStack.getItemSpriteNumber());
+	}
+
+	public static void setSpriteTexture(int sprite)
+	{
+		FMLClientHandler.instance().getClient().renderEngine.func_110577_a(FMLClientHandler.instance().getClient().renderEngine.func_130087_a(sprite));
+	}
+
 	/**
 	 * Enables blending.
 	 */
@@ -148,4 +169,5 @@ public class CalclaviaRenderHelper
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glPopMatrix();
 	}
+
 }
