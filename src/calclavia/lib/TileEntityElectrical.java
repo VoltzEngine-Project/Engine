@@ -54,7 +54,7 @@ public class TileEntityElectrical extends TileEntityAdvanced implements IEnergyS
 
 		if (!this.worldObj.isRemote && this.powerHandler != null)
 		{
-			float requiredEnergy = (float) (this.getRequest(null) * Compatiblity.TO_BC_RATIO);
+			float requiredEnergy = this.getRequest(null) * Compatiblity.TO_BC_RATIO;
 			float energyReceived = this.powerHandler.useEnergy(0, requiredEnergy, true);
 			this.receiveElectricity(ElectricityPack.getFromWatts(Compatiblity.BC3_RATIO * energyReceived, this.getVoltage()), true);
 		}

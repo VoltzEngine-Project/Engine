@@ -91,12 +91,12 @@ public class CalculationHelper
 		{
 			return null;
 		}
-		for (Entity entityHit : (Iterable<Entity>) entitiesHit)
+		for (Entity entityHit : entitiesHit)
 		{
 			if (entityHit != null && entityHit.canBeCollidedWith() && entityHit.boundingBox != null)
 			{
 				float border = entityHit.getCollisionBorderSize();
-				AxisAlignedBB aabb = entityHit.boundingBox.expand((double) border, (double) border, (double) border);
+				AxisAlignedBB aabb = entityHit.boundingBox.expand(border, border, border);
 				MovingObjectPosition hitMOP = aabb.calculateIntercept(startingPosition, reachPoint);
 
 				if (hitMOP != null)

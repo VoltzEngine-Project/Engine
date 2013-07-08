@@ -26,10 +26,10 @@ import calclavia.lib.Calclavia;
 
 public class GuiContainerBase extends GuiContainer
 {
-	private static final int METER_X = 54;
-	public static final int METER_HEIGHT = 49;
-	public static final int METER_WIDTH = 14;
-	public static final int METER_END = METER_X + METER_WIDTH;
+	protected int meterX = 54;
+	protected int meterHeight = 49;
+	protected int meterWidth = 14;
+	protected int meterEnd = meterX + meterWidth;
 
 	public String tooltip = "";
 	protected HashMap<Region2, String> tooltips = new HashMap<Region2, String>();
@@ -216,7 +216,7 @@ public class GuiContainerBase extends GuiContainer
 			/**
 			 * Draw white color actual progress.
 			 */
-			this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, METER_X, 11, (int) (scale * 107), 11);
+			this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, meterX, 11, (int) (scale * 107), 11);
 		}
 	}
 
@@ -248,17 +248,17 @@ public class GuiContainerBase extends GuiContainer
 		/**
 		 * Draw the background meter.
 		 */
-		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 0, METER_WIDTH, METER_HEIGHT);
+		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 0, meterWidth, meterHeight);
 
 		/**
 		 * Draw liquid/gas inside
 		 */
-		this.displayGauge(this.containerWidth + x, this.containerHeight + y, 0, 0, (int) ((METER_HEIGHT - 1) * scale), liquidStack);
+		this.displayGauge(this.containerWidth + x, this.containerHeight + y, 0, 0, (int) ((meterHeight - 1) * scale), liquidStack);
 		/**
 		 * Draw measurement lines
 		 */
 		this.mc.renderEngine.func_110577_a(Calclavia.GUI_BASE);
-		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, METER_WIDTH, METER_HEIGHT);
+		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, meterWidth, meterHeight);
 	}
 
 	public void drawTooltip(int x, int y, String... toolTips)
@@ -363,7 +363,7 @@ public class GuiContainerBase extends GuiContainer
 		{
 			if (fluid.fluidID < Block.blocksList.length && Block.blocksList[fluid.fluidID].blockID > 0)
 			{
-				liquidIcon = Block.blocksList[fluid.fluidID].getIcon(0,0);
+				liquidIcon = Block.blocksList[fluid.fluidID].getIcon(0, 0);
 				textureSheet = new ResourceLocation("/terrain.png");
 			}
 			else

@@ -19,11 +19,13 @@ public class ContainerBase extends Container
 	}
 
 	@Override
-	public void onCraftGuiClosed(EntityPlayer player)
+	public void onContainerClosed(EntityPlayer entityplayer)
 	{
+		super.onContainerClosed(entityplayer);
+
 		if (this.inventory instanceof IPlayerUsing)
 		{
-			((IPlayerUsing) this.inventory).getPlayersUsing().remove(player);
+			((IPlayerUsing) this.inventory).getPlayersUsing().remove(entityplayer);
 		}
 	}
 

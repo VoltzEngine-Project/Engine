@@ -6,8 +6,8 @@ import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -26,7 +26,7 @@ public abstract class RenderTaggedTile extends TileEntitySpecialRenderer
 	{
 		if (t != null)
 		{
-			if (t instanceof ITagRender && this.getPlayer().getDistance(t.xCoord, t.yCoord, t.zCoord) <= RenderPlayer.NAME_TAG_RANGE)
+			if (t instanceof ITagRender && this.getPlayer().getDistance(t.xCoord, t.yCoord, t.zCoord) <= RendererLivingEntity.NAME_TAG_RANGE)
 			{
 				HashMap<String, Integer> tags = new HashMap<String, Integer>();
 				float height = ((ITagRender) t).addInformation(tags, this.getPlayer());

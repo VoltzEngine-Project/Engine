@@ -11,20 +11,17 @@ import net.minecraft.client.resources.ResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.liquids.LiquidStack;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import universalelectricity.core.vector.Vector2;
-import universalelectricity.prefab.GuiBase;
 import universalelectricity.prefab.TranslationHelper;
 import universalelectricity.prefab.vector.Region2;
 import calclavia.lib.Calclavia;
 
 public class GuiScreenBase extends GuiBase
 {
-
 	private static final int METER_X = 54;
 	public static final int METER_HEIGHT = 49;
 	public static final int METER_WIDTH = 14;
@@ -231,6 +228,7 @@ public class GuiScreenBase extends GuiBase
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, METER_WIDTH, METER_HEIGHT);
 	}
 
+	@Override
 	public void drawTooltip(int x, int y, String... toolTips)
 	{
 		if (!GuiScreen.isShiftKeyDown())

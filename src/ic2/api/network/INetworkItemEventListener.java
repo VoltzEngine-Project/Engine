@@ -5,7 +5,8 @@ import net.minecraft.entity.player.EntityPlayer;
 /**
  * Allows an item to receive network events received from the server.
  */
-public interface INetworkItemEventListener {
+public interface INetworkItemEventListener
+{
 	/**
 	 * Called when a network event is received.
 	 * 
@@ -15,4 +16,3 @@ public interface INetworkItemEventListener {
 	 */
 	void onNetworkEvent(int metaData, EntityPlayer player, int event);
 }
-

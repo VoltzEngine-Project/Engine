@@ -9,7 +9,8 @@ import net.minecraft.item.ItemStack;
  * 
  * @author Richard
  */
-public interface IMachineRecipeManager<V> {
+public interface IMachineRecipeManager<V>
+{
 	/**
 	 * Adds a recipe to the machine.
 	 * 
@@ -17,7 +18,7 @@ public interface IMachineRecipeManager<V> {
 	 * @param output Recipe output
 	 */
 	public void addRecipe(ItemStack input, V output);
-	
+
 	/**
 	 * Gets the recipe output for the given input.
 	 * 
@@ -25,7 +26,7 @@ public interface IMachineRecipeManager<V> {
 	 * @return Recipe output, or null if none
 	 */
 	public V getOutputFor(ItemStack input, boolean adjustInput);
-	
+
 	/**
 	 * Gets a list of recipes.
 	 * 
