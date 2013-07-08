@@ -5,10 +5,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.prefab.implement.IRotatable;
 
 /**
  * A block that can rotate based on placed position and wrenching.
@@ -16,7 +14,7 @@ import universalelectricity.prefab.implement.IRotatable;
  * @author Calclavia
  * 
  */
-public abstract class BlockRotatable extends BlockTile implements IRotatable
+public abstract class BlockRotatable extends BlockTile
 {
 	public BlockRotatable(int id, Material material)
 	{
@@ -48,7 +46,7 @@ public abstract class BlockRotatable extends BlockTile implements IRotatable
 				break;
 		}
 
-		this.setDirection(world, x, y, z, ForgeDirection.getOrientation(change));
+		world.setBlockMetadataWithNotify(x, y, z, change, 3);
 	}
 
 	@Override
@@ -66,17 +64,5 @@ public abstract class BlockRotatable extends BlockTile implements IRotatable
 		ForgeDirection rotated = orientation.getRotation(axis);
 		worldObj.setBlockMetadataWithNotify(x, y, z, rotated.ordinal() & mask | masked, 3);
 		return true;
-	}
-
-	@Override
-	public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
-	{
-		return ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z));
-	}
-
-	@Override
-	public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
-	{
-		world.setBlockMetadataWithNotify(x, y, z, facingDirection.ordinal(), 3);
 	}
 }

@@ -1,4 +1,4 @@
-package universalelectricity.prefab.flag;
+package calclavia.lib.flag;
 
 import java.util.ArrayList;
 import java.util.HashMap;

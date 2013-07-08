@@ -25,6 +25,7 @@ public abstract class BlockTile extends BlockAdvanced implements ITileEntityProv
 	/**
 	 * Called whenever the block is added into the world. Args: world, x, y, z
 	 */
+	@Override
 	public void onBlockAdded(World par1World, int par2, int par3, int par4)
 	{
 		super.onBlockAdded(par1World, par2, par3, par4);
@@ -46,6 +47,7 @@ public abstract class BlockTile extends BlockAdvanced implements ITileEntityProv
 	 * on to the tile entity at this location. Args: world, x, y, z, blockID, EventID, event
 	 * parameter
 	 */
+	@Override
 	public boolean onBlockEventReceived(World par1World, int par2, int par3, int par4, int par5, int par6)
 	{
 		super.onBlockEventReceived(par1World, par2, par3, par4, par5, par6);

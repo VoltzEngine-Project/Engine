@@ -1,4 +1,4 @@
-package universalelectricity.prefab.multiblock;
+package calclavia.lib.multiblock;
 
 import net.minecraft.tileentity.TileEntity;
 import universalelectricity.core.vector.Vector3;

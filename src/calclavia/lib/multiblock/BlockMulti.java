@@ -1,4 +1,4 @@
-package universalelectricity.prefab.multiblock;
+package calclavia.lib.multiblock;
 
 import java.util.Random;
 

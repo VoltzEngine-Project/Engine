@@ -13,23 +13,20 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.compatiblity.Compatiblity;
-import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
-import universalelectricity.prefab.implement.IRotatable;
-import universalelectricity.prefab.tile.TileEntityAdvanced;
+import universalelectricity.prefab.tile.IRotatable;
+import universalelectricity.prefab.tile.TileEntityElectrical;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.power.PowerHandler.Type;
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityUniversalElectric extends TileEntityAdvanced implements IEnergySource, IPowerReceptor, IEnergySink, IElectrical
+public abstract class TileEntityUniversalElectrical extends TileEntityElectrical implements IEnergySource, IPowerReceptor, IEnergySink
 {
-	public float storedEnergy;
-
 	private PowerHandler powerHandler = new PowerHandler(this, Type.MACHINE);
 
 	@Override
@@ -56,7 +53,7 @@ public class TileEntityUniversalElectric extends TileEntityAdvanced implements I
 		{
 			float requiredEnergy = this.getRequest(null) * Compatiblity.TO_BC_RATIO;
 			float energyReceived = this.powerHandler.useEnergy(0, requiredEnergy, true);
-			this.receiveElectricity(ElectricityPack.getFromWatts(Compatiblity.BC3_RATIO * energyReceived, this.getVoltage()), true);
+			this.electricityHandler.receiveElectricity(ElectricityPack.getFromWatts(Compatiblity.BC3_RATIO * energyReceived, this.getVoltage()), true);
 		}
 	}
 
@@ -99,47 +96,26 @@ public class TileEntityUniversalElectric extends TileEntityAdvanced implements I
 	}
 
 	@Override
+	public float getProvide(ForgeDirection direction)
+	{
+		return 0;
+	}
+
+	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
 		if (this instanceof IRotatable)
 		{
-			return direction.ordinal() == this.getBlockMetadata();
+			return direction == ((IRotatable) this).getDirection();
 		}
 
 		return true;
 	}
 
 	@Override
-	public float receiveElectricity(ElectricityPack electricityPack, boolean doReceive)
-	{
-		return 0;
-	}
-
-	@Override
-	public float getRequest(ForgeDirection direction)
-	{
-		return 0;
-	}
-
-	@Override
 	public float getVoltage()
 	{
 		return 120;
-	}
-
-	public void setEnergyStored(float energy)
-	{
-		this.storedEnergy = Math.max(Math.min(energy, this.getMaxEnergyStored()), 0);
-	}
-
-	public float getEnergyStored()
-	{
-		return this.storedEnergy;
-	}
-
-	public float getMaxEnergyStored()
-	{
-		return this.getRequest(ForgeDirection.UNKNOWN) * 2;
 	}
 
 	/**
@@ -188,14 +164,8 @@ public class TileEntityUniversalElectric extends TileEntityAdvanced implements I
 	public int injectEnergy(Direction direction, int i)
 	{
 		float givenElectricity = i * Compatiblity.IC2_RATIO;
-		float rejects = 0;
-
-		if (givenElectricity > this.getMaxEnergyStored())
-		{
-			rejects = givenElectricity - this.getMaxEnergyStored();
-		}
-
-		this.receiveElectricity(ElectricityPack.getFromWatts(givenElectricity, this.getVoltage()), true);
+		float consumed = this.receiveElectricity(direction.toForgeDirection(), ElectricityPack.getFromWatts(givenElectricity, this.getVoltage()), true);
+		float rejects = givenElectricity - consumed;
 
 		return (int) (rejects * Compatiblity.TO_IC2_RATIO);
 	}
