@@ -51,6 +51,11 @@ public class ElectricityHandler
 		return 0;
 	}
 
+	public float receiveElectricity(float energy, boolean doReceive)
+	{
+		return this.receiveElectricity(ElectricityPack.getFromWatts(energy, this.tileEntity.getVoltage()), doReceive);
+	}
+
 	public ElectricityPack provideElectricity(ElectricityPack request, boolean doProvide)
 	{
 		if (request != null)
