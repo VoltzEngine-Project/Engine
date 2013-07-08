@@ -68,6 +68,11 @@ public class ElectricityHandler
 		return new ElectricityPack();
 	}
 
+	public ElectricityPack provideElectricity(float energy, boolean doProvide)
+	{
+		return this.provideElectricity(ElectricityPack.getFromWatts(energy, this.tileEntity.getVoltage()), doProvide);
+	}
+
 	public ElectricityHandler setEnergyStored(float energy)
 	{
 		this.energyStored = Math.max(Math.min(energy, this.getMaxEnergyStored()), 0);
