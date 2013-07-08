@@ -29,7 +29,7 @@ public interface IElectrical extends IConnector
 	 * @param from Orientation the electricity is requested from.
 	 * @param energy Maximum amount of energy to be sent into the block.
 	 * @param doReceive If false, the charge will only be simulated.
-	 * @return Amount of energy that was accepted by the block.
+	 * @return Amount of energy that was given out by the block.
 	 */
 	public ElectricityPack provideElectricity(ForgeDirection from, ElectricityPack request, boolean doProvide);
 
@@ -48,6 +48,6 @@ public interface IElectrical extends IConnector
 	 * 
 	 * @return The amount of volts. E.g 120v or 240v
 	 */
-	public float getVoltage(ForgeDirection direction);
+	public float getVoltage();
 
 }

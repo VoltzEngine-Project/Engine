@@ -27,6 +27,23 @@ public class ElectricityPack implements Cloneable
 		return new ElectricityPack(watts / voltage, voltage);
 	}
 
+	/**
+	 * Merges multiple ElectricityPacks together to form one with an average voltage.
+	 */
+	public static ElectricityPack merge(ElectricityPack... packs)
+	{
+		float totalEnergy = 0;
+		float totalVoltage = 0;
+
+		for (ElectricityPack pack : packs)
+		{
+			totalEnergy += pack.getWatts();
+			totalVoltage += pack.voltage;
+		}
+
+		return ElectricityPack.getFromWatts(totalEnergy, totalVoltage / packs.length);
+	}
+
 	public float getWatts()
 	{
 		return getWatts(amperes, voltage);

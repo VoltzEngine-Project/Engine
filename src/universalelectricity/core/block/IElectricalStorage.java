@@ -5,7 +5,7 @@ package universalelectricity.core.block;
  * 
  * @author Calclavia
  */
-public interface IEnergyStorage
+public interface IElectricalStorage
 {
 	/**
 	 * Sets the amount of joules this unit has stored.
