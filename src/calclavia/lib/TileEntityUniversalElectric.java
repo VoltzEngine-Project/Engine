@@ -26,7 +26,7 @@ import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.power.PowerHandler.Type;
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityElectrical extends TileEntityAdvanced implements IEnergySource, IPowerReceptor, IEnergySink, IElectrical
+public class TileEntityUniversalElectric extends TileEntityAdvanced implements IEnergySource, IPowerReceptor, IEnergySink, IElectrical
 {
 	public float storedEnergy;
 
