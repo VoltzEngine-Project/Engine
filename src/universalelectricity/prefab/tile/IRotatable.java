@@ -19,5 +19,5 @@ public interface IRotatable
 	/**
 	 * @param Sets the facing direction.
 	 */
-	public void setDirection();
+	public void setDirection(ForgeDirection direection);
 }

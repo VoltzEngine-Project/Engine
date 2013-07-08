@@ -17,7 +17,6 @@ import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
-import universalelectricity.prefab.tile.IRotatable;
 import universalelectricity.prefab.tile.TileEntityElectrical;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
@@ -96,6 +95,12 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	}
 
 	@Override
+	public float getRequest(ForgeDirection direction)
+	{
+		return 0;
+	}
+
+	@Override
 	public float getProvide(ForgeDirection direction)
 	{
 		return 0;
@@ -104,11 +109,6 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
-		if (this instanceof IRotatable)
-		{
-			return direction == ((IRotatable) this).getDirection();
-		}
-
 		return true;
 	}
 
@@ -116,6 +116,16 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	public float getVoltage()
 	{
 		return 120;
+	}
+
+	public ForgeDirection getDirection()
+	{
+		return ForgeDirection.getOrientation(this.getBlockMetadata());
+	}
+
+	public void setDirection(ForgeDirection direction)
+	{
+		this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, direction.ordinal(), 3);
 	}
 
 	/**
