@@ -24,7 +24,7 @@ public class ElectricItemHelper
 		{
 			if (itemStack.getItem() instanceof IItemElectric)
 			{
-				return ((IItemElectric) itemStack.getItem()).receiveEnergy(itemStack, Math.min(((IItemElectric) itemStack.getItem()).getTransfer(itemStack), joules), true);
+				return ((IItemElectric) itemStack.getItem()).recharge(itemStack, Math.min(((IItemElectric) itemStack.getItem()).getTransfer(itemStack), joules), true);
 			}
 		}
 
@@ -44,7 +44,7 @@ public class ElectricItemHelper
 		{
 			if (itemStack.getItem() instanceof IItemElectric)
 			{
-				return ((IItemElectric) itemStack.getItem()).transferEnergy(itemStack, Math.min(((IItemElectric) itemStack.getItem()).getTransfer(itemStack), joules), true);
+				return ((IItemElectric) itemStack.getItem()).discharge(itemStack, Math.min(((IItemElectric) itemStack.getItem()).getTransfer(itemStack), joules), true);
 			}
 		}
 
@@ -64,7 +64,7 @@ public class ElectricItemHelper
 		{
 			if (itemStack.getItem() instanceof IItemElectric)
 			{
-				((IItemElectric) itemStack.getItem()).setEnergy(itemStack, joules);
+				((IItemElectric) itemStack.getItem()).setElectricity(itemStack, joules);
 				return itemStack;
 			}
 		}

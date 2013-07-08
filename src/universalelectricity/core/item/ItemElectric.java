@@ -32,13 +32,13 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4)
 	{
 		String color = "";
-		float joules = this.getEnergyStored(itemStack);
+		float joules = this.getElectricityStored(itemStack);
 
-		if (joules <= this.getMaxEnergyStored(itemStack) / 3)
+		if (joules <= this.getMaxElectricityStored(itemStack) / 3)
 		{
 			color = "\u00a74";
 		}
-		else if (joules > this.getMaxEnergyStored(itemStack) * 2 / 3)
+		else if (joules > this.getMaxElectricityStored(itemStack) * 2 / 3)
 		{
 			color = "\u00a72";
 		}
@@ -47,7 +47,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 			color = "\u00a76";
 		}
 
-		list.add(color + ElectricityDisplay.getDisplay(joules, ElectricUnit.JOULES) + "/" + ElectricityDisplay.getDisplay(this.getMaxEnergyStored(itemStack), ElectricUnit.JOULES));
+		list.add(color + ElectricityDisplay.getDisplay(joules, ElectricUnit.JOULES) + "/" + ElectricityDisplay.getDisplay(this.getMaxElectricityStored(itemStack), ElectricUnit.JOULES));
 	}
 
 	/**
@@ -57,31 +57,31 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	@Override
 	public void onCreated(ItemStack itemStack, World par2World, EntityPlayer par3EntityPlayer)
 	{
-		this.setEnergy(itemStack, 0);
+		this.setElectricity(itemStack, 0);
 	}
 
 	@Override
-	public float receiveEnergy(ItemStack itemStack, float energy, boolean doReceive)
+	public float recharge(ItemStack itemStack, float energy, boolean doReceive)
 	{
-		float rejectedElectricity = Math.max((this.getEnergyStored(itemStack) + energy) - this.getMaxEnergyStored(itemStack), 0);
+		float rejectedElectricity = Math.max((this.getElectricityStored(itemStack) + energy) - this.getMaxElectricityStored(itemStack), 0);
 		float energyToReceive = energy - rejectedElectricity;
 
 		if (doReceive)
 		{
-			this.setEnergy(itemStack, this.getEnergyStored(itemStack) + energyToReceive);
+			this.setElectricity(itemStack, this.getElectricityStored(itemStack) + energyToReceive);
 		}
 
 		return energyToReceive;
 	}
 
 	@Override
-	public float transferEnergy(ItemStack itemStack, float energy, boolean doTransfer)
+	public float discharge(ItemStack itemStack, float energy, boolean doTransfer)
 	{
-		float energyToTransfer = Math.min(this.getEnergyStored(itemStack), energy);
+		float energyToTransfer = Math.min(this.getElectricityStored(itemStack), energy);
 
 		if (doTransfer)
 		{
-			this.setEnergy(itemStack, this.getEnergyStored(itemStack) - energyToTransfer);
+			this.setElectricity(itemStack, this.getElectricityStored(itemStack) - energyToTransfer);
 		}
 
 		return energyToTransfer;
@@ -94,7 +94,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	}
 
 	@Override
-	public void setEnergy(ItemStack itemStack, float joules)
+	public void setElectricity(ItemStack itemStack, float joules)
 	{
 		// Saves the frequency in the ItemStack
 		if (itemStack.getTagCompound() == null)
@@ -102,19 +102,19 @@ public abstract class ItemElectric extends Item implements IItemElectric
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
 
-		float electricityStored = Math.max(Math.min(joules, this.getMaxEnergyStored(itemStack)), 0);
+		float electricityStored = Math.max(Math.min(joules, this.getMaxElectricityStored(itemStack)), 0);
 		itemStack.getTagCompound().setFloat("electricity", electricityStored);
 
 		/**
 		 * Sets the damage as a percentage to render the bar properly.
 		 */
-		itemStack.setItemDamage((int) (100 - (electricityStored / getMaxEnergyStored(itemStack)) * 100));
+		itemStack.setItemDamage((int) (100 - (electricityStored / getMaxElectricityStored(itemStack)) * 100));
 	}
 
 	@Override
 	public float getTransfer(ItemStack itemStack)
 	{
-		return getMaxEnergyStored(itemStack) * 0.005F;
+		return getMaxElectricityStored(itemStack) * 0.005F;
 	}
 
 	/**
@@ -123,7 +123,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	 * @return - The amount of electricity stored in watts
 	 */
 	@Override
-	public float getEnergyStored(ItemStack itemStack)
+	public float getElectricityStored(ItemStack itemStack)
 	{
 		if (itemStack.getTagCompound() == null)
 		{
@@ -135,7 +135,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 		/**
 		 * Sets the damage as a percentage to render the bar properly.
 		 */
-		itemStack.setItemDamage((int) (100 - (electricityStored / getMaxEnergyStored(itemStack)) * 100));
+		itemStack.setItemDamage((int) (100 - (electricityStored / getMaxElectricityStored(itemStack)) * 100));
 		return electricityStored;
 	}
 
@@ -146,6 +146,6 @@ public abstract class ItemElectric extends Item implements IItemElectric
 		par3List.add(ElectricItemHelper.getUncharged(new ItemStack(this)));
 		// Add an electric item to the creative list that is fully charged
 		ItemStack chargedItem = new ItemStack(this);
-		par3List.add(ElectricItemHelper.getWithCharge(chargedItem, this.getMaxEnergyStored(chargedItem)));
+		par3List.add(ElectricItemHelper.getWithCharge(chargedItem, this.getMaxElectricityStored(chargedItem)));
 	}
 }

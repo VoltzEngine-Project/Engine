@@ -16,7 +16,7 @@ import universalelectricity.prefab.implement.IRotatable;
  * @author Calclavia
  * 
  */
-public abstract class BlockRotatable extends BlockAdvanced implements IRotatable
+public abstract class BlockRotatable extends BlockTile implements IRotatable
 {
 	public BlockRotatable(int id, Material material)
 	{
@@ -58,16 +58,16 @@ public abstract class BlockRotatable extends BlockAdvanced implements IRotatable
 		return true;
 	}
 
-    public static boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis, int mask)
-    {
-        int rotMeta = worldObj.getBlockMetadata(x, y, z);
-        int masked = rotMeta & ~mask;
-        ForgeDirection orientation = ForgeDirection.getOrientation(rotMeta & mask);
-        ForgeDirection rotated = orientation.getRotation(axis);
-        worldObj.setBlockMetadataWithNotify(x,y,z,rotated.ordinal() & mask | masked,3);
-        return true;
-    }
-    
+	public static boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis, int mask)
+	{
+		int rotMeta = worldObj.getBlockMetadata(x, y, z);
+		int masked = rotMeta & ~mask;
+		ForgeDirection orientation = ForgeDirection.getOrientation(rotMeta & mask);
+		ForgeDirection rotated = orientation.getRotation(axis);
+		worldObj.setBlockMetadataWithNotify(x, y, z, rotated.ordinal() & mask | masked, 3);
+		return true;
+	}
+
 	@Override
 	public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
 	{
