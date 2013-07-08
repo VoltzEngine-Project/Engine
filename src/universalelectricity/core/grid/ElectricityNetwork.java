@@ -75,7 +75,8 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 								electricityToSend = new ElectricityPack(ampsReceived, voltsReceived);
 
-								energy -= ((IElectrical) tileEntity).receiveElectricity(electricityToSend, true);
+								// TODO: Fix unknown direction!
+								energy -= ((IElectrical) tileEntity).receiveElectricity(ForgeDirection.UNKNOWN, electricityToSend, true);
 							}
 						}
 					}
