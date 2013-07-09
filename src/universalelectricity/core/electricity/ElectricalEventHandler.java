@@ -1,15 +1,22 @@
 package universalelectricity.core.electricity;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.event.ForgeSubscribe;
 import universalelectricity.core.block.IConnector;
+import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.block.INetworkProvider;
+import universalelectricity.core.electricity.ElectricalEvent.ElectricityProduceEvent;
 import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.vector.VectorHelper;
 
 /**
  * A helper class that provides additional useful functions to interact with the ElectricityNetwork
@@ -17,8 +24,69 @@ import universalelectricity.core.vector.Vector3;
  * @author Calclavia
  * 
  */
-public class ElectricityNetworkHelper
+public class ElectricalEventHandler
 {
+	@ForgeSubscribe
+	public void onProduce(ElectricityProduceEvent evt)
+	{
+		// Needs work with shuffling to be able to evenly distribute to all connected networks
+		// instead of just defaulting to one of them.
+		Vector3 position = new Vector3((TileEntity) evt.tileEntity);
+		HashMap<IElectricityNetwork, ForgeDirection> networks = new HashMap<IElectricityNetwork, ForgeDirection>();
+
+		for (ForgeDirection direction : getDirections((TileEntity) evt.tileEntity))
+		{
+			IElectricityNetwork network = getNetworkFromTileEntity(VectorHelper.getTileEntityFromSide(evt.world, position, direction), direction.getOpposite());
+
+			if (network != null)
+			{
+				networks.put(network, direction);
+				ElectricityPack provided = evt.tileEntity.provideElectricity(direction, network.getRequest((TileEntity) evt.tileEntity), true);
+
+				if (provided != null && provided.getWatts() > 0)
+				{
+					network.produce(provided, (TileEntity) evt.tileEntity);
+				}
+			}
+		}
+
+		/*
+		ElectricityPack request = this.getNetwork().getRequest(this);
+
+		if (request.getWatts() > 0)
+		{
+			List<ElectricityPack> providedPacks = new ArrayList<ElectricityPack>();
+			List<TileEntity> tileEntities = new ArrayList<TileEntity>();
+
+			for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+			{
+				Vector3 position = new Vector3(this).modifyPositionFromSide(direction);
+				TileEntity tileEntity = position.getTileEntity(this.worldObj);
+
+				if (tileEntity instanceof IElectrical)
+				{
+					tileEntities.add(tileEntity);
+					IElectrical electrical = (IElectrical) tileEntity;
+
+					if (electrical.canConnect(direction.getOpposite()))
+					{
+						if (electrical.getProvide(direction.getOpposite()) > 0)
+						{
+							providedPacks.add(electrical.provideElectricity(direction.getOpposite(), request, true));
+						}
+					}
+				}
+			}
+
+			ElectricityPack mergedPack = ElectricityPack.merge(providedPacks);
+
+			if (mergedPack.getWatts() > 0)
+			{
+				this.getNetwork().produce(mergedPack, tileEntities.toArray(new TileEntity[0]));
+			}
+		}*/
+	}
+
 	public static EnumSet<ForgeDirection> getDirections(TileEntity tileEntity)
 	{
 		EnumSet<ForgeDirection> possibleSides = EnumSet.noneOf(ForgeDirection.class);
@@ -41,7 +109,7 @@ public class ElectricityNetworkHelper
 	@Deprecated
 	public static ElectricityPack produceFromMultipleSides(TileEntity tileEntity, ElectricityPack electricityPack)
 	{
-		return ElectricityNetworkHelper.produceFromMultipleSides(tileEntity, getDirections(tileEntity), electricityPack);
+		return ElectricalEventHandler.produceFromMultipleSides(tileEntity, getDirections(tileEntity), electricityPack);
 	}
 
 	/**
@@ -59,7 +127,7 @@ public class ElectricityNetworkHelper
 
 		if (tileEntity != null && approachingDirection != null)
 		{
-			final Set<IElectricityNetwork> connectedNetworks = ElectricityNetworkHelper.getNetworksFromMultipleSides(tileEntity, approachingDirection);
+			final Set<IElectricityNetwork> connectedNetworks = ElectricalEventHandler.getNetworksFromMultipleSides(tileEntity, approachingDirection);
 
 			if (connectedNetworks.size() > 0)
 			{
@@ -73,7 +141,7 @@ public class ElectricityNetworkHelper
 				{
 					if (wattsPerSide > 0 && producingPack.getWatts() > 0)
 					{
-						float amperes = Math.min(wattsPerSide / voltage, network.getRequest(tileEntity) / voltage);
+						float amperes = Math.min(wattsPerSide / voltage, network.getRequest(tileEntity).getWatts() / voltage);
 
 						if (amperes > 0)
 						{
@@ -106,7 +174,7 @@ public class ElectricityNetworkHelper
 				position.modifyPositionFromSide(side);
 
 				TileEntity outputConductor = position.getTileEntity(tileEntity.worldObj);
-				IElectricityNetwork electricityNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputConductor, side);
+				IElectricityNetwork electricityNetwork = ElectricalEventHandler.getNetworkFromTileEntity(outputConductor, side);
 
 				if (electricityNetwork != null)
 				{

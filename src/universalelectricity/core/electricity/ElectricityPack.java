@@ -1,5 +1,7 @@
 package universalelectricity.core.electricity;
 
+import java.util.List;
+
 /**
  * A simple way to store electrical data.
  * 
@@ -41,7 +43,53 @@ public class ElectricityPack implements Cloneable
 			totalVoltage += pack.voltage;
 		}
 
+		if (totalEnergy <= 0 || totalVoltage <= 0)
+		{
+			return new ElectricityPack();
+		}
+
 		return ElectricityPack.getFromWatts(totalEnergy, totalVoltage / packs.length);
+	}
+
+	public static ElectricityPack merge(List<ElectricityPack> providedPacks)
+	{
+		return merge(providedPacks.toArray(new ElectricityPack[0]));
+	}
+
+	/**
+	 * @return Returns the ElectricityPack with the largest amount of energy.
+	 */
+	public static ElectricityPack max(ElectricityPack... packs)
+	{
+		ElectricityPack optimalPack = null;
+
+		for (ElectricityPack pack : packs)
+		{
+			if (optimalPack == null || (optimalPack != null && pack.getWatts() > optimalPack.getWatts()))
+			{
+				optimalPack = pack;
+			}
+		}
+
+		return optimalPack;
+	}
+
+	/**
+	 * @return Returns the ElectricityPack with the smallest amount of energy.
+	 */
+	public static ElectricityPack min(ElectricityPack... packs)
+	{
+		ElectricityPack optimalPack = null;
+
+		for (ElectricityPack pack : packs)
+		{
+			if (optimalPack == null || (optimalPack != null && pack.getWatts() < optimalPack.getWatts()))
+			{
+				optimalPack = pack;
+			}
+		}
+
+		return optimalPack;
 	}
 
 	public float getWatts()

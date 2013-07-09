@@ -1,6 +1,7 @@
 package universalelectricity.compatiblity;
 
 import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.electricity.NetworkLoader;
 
 public class Compatiblity
 {
@@ -16,7 +17,7 @@ public class Compatiblity
 	public static float TO_IC2_RATIO = 1 / IC2_RATIO;
 	public static float TO_BC_RATIO = 1 / BC3_RATIO;
 
-	static
+	public static void initiate()
 	{
 		/**
 		 * Loads the configuration and sets all the values.
@@ -27,5 +28,7 @@ public class Compatiblity
 		TO_IC2_RATIO = 1 / IC2_RATIO;
 		TO_BC_RATIO = 1 / BC3_RATIO;
 		UniversalElectricity.CONFIGURATION.save();
+
+		NetworkLoader.setNetworkClass(UniversalNetwork.class);
 	}
 }

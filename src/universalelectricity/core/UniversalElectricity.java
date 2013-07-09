@@ -5,6 +5,7 @@ import java.io.File;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Loader;
 
 /**
@@ -48,14 +49,35 @@ public class UniversalElectricity
 	 */
 	public static final Material machine = new Material(MapColor.ironColor);
 
+	private static boolean INIT = false;
+
 	static
 	{
-		/**
-		 * Loads the configuration and sets all the values.
-		 */
-		CONFIGURATION.load();
-		isVoltageSensitive = CONFIGURATION.get("Compatiblity", "Is Voltage Sensitive", isVoltageSensitive).getBoolean(isVoltageSensitive);
-		isNetworkActive = CONFIGURATION.get("Compatiblity", "Is Network Active", isNetworkActive).getBoolean(isNetworkActive);
-		CONFIGURATION.save();
+		initiate();
+	}
+
+	public static void initiate()
+	{
+		if (!INIT)
+		{
+			/**
+			 * Loads the configuration and sets all the values.
+			 */
+			CONFIGURATION.load();
+			isVoltageSensitive = CONFIGURATION.get("Compatiblity", "Is Voltage Sensitive", isVoltageSensitive).getBoolean(isVoltageSensitive);
+			isNetworkActive = CONFIGURATION.get("Compatiblity", "Is Network Active", isNetworkActive).getBoolean(isNetworkActive);
+			CONFIGURATION.save();
+
+			try
+			{
+				MinecraftForge.EVENT_BUS.register(Class.forName("universalelectricity.core.electricity.ElectricalEventHandler").newInstance());
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		INIT = true;
 	}
 }
