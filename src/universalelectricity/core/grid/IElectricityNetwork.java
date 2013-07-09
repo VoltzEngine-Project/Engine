@@ -24,7 +24,7 @@ public interface IElectricityNetwork extends IGridNetwork<IElectricityNetwork, I
 	 * 
 	 * @param ignoreTiles The TileEntities to ignore during this calculation (optional).
 	 */
-	public float getRequest(TileEntity... ignoreTiles);
+	public ElectricityPack getRequest(TileEntity... ignoreTiles);
 
 	/**
 	 * @return The total amount of resistance of this electrical network. In Ohms.

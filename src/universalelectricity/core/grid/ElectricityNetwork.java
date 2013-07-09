@@ -1,9 +1,11 @@
 package universalelectricity.core.grid;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,7 +16,8 @@ import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.block.INetworkConnection;
 import universalelectricity.core.block.INetworkProvider;
-import universalelectricity.core.electricity.ElectricalEvent.ElectricProductionEvent;
+import universalelectricity.core.electricity.ElectricalEvent.ElectricityProductionEvent;
+import universalelectricity.core.electricity.ElectricalEvent.ElectricityRequestEvent;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.path.Pathfinder;
 import universalelectricity.core.path.PathfinderChecker;
@@ -41,7 +44,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	@Override
 	public float produce(ElectricityPack electricity, TileEntity... ignoreTiles)
 	{
-		ElectricProductionEvent evt = new ElectricProductionEvent(electricity, ignoreTiles);
+		ElectricityProductionEvent evt = new ElectricityProductionEvent(electricity, ignoreTiles);
 		MinecraftForge.EVENT_BUS.post(evt);
 
 		float energy = electricity.getWatts();
@@ -53,7 +56,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 			if (!avaliableEnergyTiles.isEmpty())
 			{
-				final float totalEnergyRequest = this.getRequest(ignoreTiles);
+				final float totalEnergyRequest = this.getRequest(ignoreTiles).getWatts();
 
 				if (totalEnergyRequest > 0)
 				{
@@ -91,9 +94,9 @@ public class ElectricityNetwork implements IElectricityNetwork
 	 * @return How much electricity this network needs.
 	 */
 	@Override
-	public float getRequest(TileEntity... ignoreTiles)
+	public ElectricityPack getRequest(TileEntity... ignoreTiles)
 	{
-		float requiredElectricity = 0;
+		List<ElectricityPack> requests = new ArrayList<ElectricityPack>();
 
 		Iterator<TileEntity> it = this.getAcceptors().iterator();
 
@@ -112,7 +115,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 				{
 					if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
 					{
-						requiredElectricity += ((IElectrical) tileEntity).getRequest(ForgeDirection.UNKNOWN);
+						requests.add(ElectricityPack.getFromWatts(((IElectrical) tileEntity).getRequest(ForgeDirection.UNKNOWN), ((IElectrical) tileEntity).getVoltage()));
 						continue;
 					}
 				}
@@ -122,7 +125,10 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 		}
 
-		return requiredElectricity;
+		ElectricityPack mergedPack = ElectricityPack.merge(requests);
+		ElectricityRequestEvent evt = new ElectricityRequestEvent(mergedPack, ignoreTiles);
+		MinecraftForge.EVENT_BUS.post(evt);
+		return mergedPack;
 	}
 
 	/**
