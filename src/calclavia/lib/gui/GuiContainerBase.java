@@ -4,13 +4,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.ResourceLocation;
 import net.minecraft.inventory.Container;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.fluids.FluidStack;
@@ -23,9 +20,16 @@ import universalelectricity.core.vector.Vector2;
 import universalelectricity.prefab.TranslationHelper;
 import universalelectricity.prefab.vector.Region2;
 import calclavia.lib.Calclavia;
+import calclavia.lib.render.CalclaviaRenderHelper;
 
 public class GuiContainerBase extends GuiContainer
 {
+	public enum SlotType
+	{
+		NONE, BATTERY, LIQUID, GAS, ARR_UP, ARR_DOWN, ARR_LEFT, ARR_RIGHT, ARR_UP_RIGHT,
+		ARR_UP_LEFT, ARR_DOWN_LEFT, ARR_DOWN_RIGHT
+	}
+
 	protected int meterX = 54;
 	protected int meterHeight = 49;
 	protected int meterWidth = 14;
@@ -239,6 +243,29 @@ public class GuiContainerBase extends GuiContainer
 		}
 	}
 
+	protected void drawMeter(int x, int y, float scale, float r, float g, float b)
+	{
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_BASE);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		/**
+		 * Draw the background meter.
+		 */
+		this.drawTexturedModalRect(this.width + x, this.height + y, 40, 0, this.meterWidth, this.meterHeight);
+
+		/**
+		 * Draw liquid/gas inside
+		 */
+		GL11.glColor4f(r, g, b, 1.0F);
+		int actualScale = (int) ((this.meterHeight - 1) * scale);
+		this.drawTexturedModalRect(this.width + x, this.height + y + (this.meterHeight - 1 - actualScale), 40, 49, this.meterHeight - 1, actualScale);
+
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		/**
+		 * Draw measurement lines
+		 */
+		this.drawTexturedModalRect(this.height + x, this.meterHeight + y, 40, 49 * 2, this.meterWidth, this.meterHeight);
+	}
+
 	protected void drawMeter(int x, int y, float scale, FluidStack liquidStack)
 	{
 		this.mc.renderEngine.func_110577_a(Calclavia.GUI_BASE);
@@ -259,6 +286,24 @@ public class GuiContainerBase extends GuiContainer
 		 */
 		this.mc.renderEngine.func_110577_a(Calclavia.GUI_BASE);
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, meterWidth, meterHeight);
+	}
+
+	protected void drawSlot(int x, int y, SlotType type, float r, float g, float b)
+	{
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
+		GL11.glColor4f(r, g, b, 1.0F);
+
+		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
+
+		if (type != SlotType.NONE)
+		{
+			this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 18 * type.ordinal(), 18, 18);
+		}
+	}
+
+	protected void drawSlot(int x, int y, SlotType type)
+	{
+		this.drawSlot(x, y, type, 1, 1, 1);
 	}
 
 	public void drawTooltip(int x, int y, String... toolTips)
@@ -344,36 +389,16 @@ public class GuiContainerBase extends GuiContainer
 		}
 		int start = 0;
 
-		Icon liquidIcon;
-		ResourceLocation textureSheet;
+		Icon liquidIcon = fluid.getFluid().getIcon();
 
-		if (fluid.getFluid().getIcon() != null)
+		if (fluid.getFluid().canBePlacedInWorld())
 		{
-			if (fluid.getFluid().canBePlacedInWorld())
-			{
-				textureSheet = new ResourceLocation("/terrain.png");
-			}
-			else
-			{
-				textureSheet = new ResourceLocation("/terrain.png");
-			}
-			liquidIcon = fluid.getFluid().getIcon();
+			CalclaviaRenderHelper.setTerrainTexture();
 		}
 		else
 		{
-			if (fluid.fluidID < Block.blocksList.length && Block.blocksList[fluid.fluidID].blockID > 0)
-			{
-				liquidIcon = Block.blocksList[fluid.fluidID].getIcon(0, 0);
-				textureSheet = new ResourceLocation("/terrain.png");
-			}
-			else
-			{
-				liquidIcon = Item.itemsList[fluid.fluidID].getIconFromDamage(0);
-				textureSheet = new ResourceLocation("/gui/items.png");
-			}
+			CalclaviaRenderHelper.setSpriteTexture(1);
 		}
-
-		this.mc.renderEngine.func_110577_a(textureSheet);
 
 		while (true)
 		{
