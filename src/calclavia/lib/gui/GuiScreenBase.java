@@ -7,9 +7,9 @@ import java.util.Map.Entry;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.ResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;

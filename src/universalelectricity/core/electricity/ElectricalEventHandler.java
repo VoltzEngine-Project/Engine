@@ -1,17 +1,14 @@
 package universalelectricity.core.electricity;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.event.ForgeSubscribe;
 import universalelectricity.core.block.IConnector;
-import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.electricity.ElectricalEvent.ElectricityProduceEvent;
 import universalelectricity.core.grid.IElectricityNetwork;
@@ -51,40 +48,29 @@ public class ElectricalEventHandler
 		}
 
 		/*
-		ElectricityPack request = this.getNetwork().getRequest(this);
-
-		if (request.getWatts() > 0)
-		{
-			List<ElectricityPack> providedPacks = new ArrayList<ElectricityPack>();
-			List<TileEntity> tileEntities = new ArrayList<TileEntity>();
-
-			for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
-			{
-				Vector3 position = new Vector3(this).modifyPositionFromSide(direction);
-				TileEntity tileEntity = position.getTileEntity(this.worldObj);
-
-				if (tileEntity instanceof IElectrical)
-				{
-					tileEntities.add(tileEntity);
-					IElectrical electrical = (IElectrical) tileEntity;
-
-					if (electrical.canConnect(direction.getOpposite()))
-					{
-						if (electrical.getProvide(direction.getOpposite()) > 0)
-						{
-							providedPacks.add(electrical.provideElectricity(direction.getOpposite(), request, true));
-						}
-					}
-				}
-			}
-
-			ElectricityPack mergedPack = ElectricityPack.merge(providedPacks);
-
-			if (mergedPack.getWatts() > 0)
-			{
-				this.getNetwork().produce(mergedPack, tileEntities.toArray(new TileEntity[0]));
-			}
-		}*/
+		 * ElectricityPack request = this.getNetwork().getRequest(this);
+		 * 
+		 * if (request.getWatts() > 0) { List<ElectricityPack> providedPacks = new
+		 * ArrayList<ElectricityPack>(); List<TileEntity> tileEntities = new
+		 * ArrayList<TileEntity>();
+		 * 
+		 * for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) { Vector3 position = new
+		 * Vector3(this).modifyPositionFromSide(direction); TileEntity tileEntity =
+		 * position.getTileEntity(this.worldObj);
+		 * 
+		 * if (tileEntity instanceof IElectrical) { tileEntities.add(tileEntity); IElectrical
+		 * electrical = (IElectrical) tileEntity;
+		 * 
+		 * if (electrical.canConnect(direction.getOpposite())) { if
+		 * (electrical.getProvide(direction.getOpposite()) > 0) {
+		 * providedPacks.add(electrical.provideElectricity(direction.getOpposite(), request, true));
+		 * } } } }
+		 * 
+		 * ElectricityPack mergedPack = ElectricityPack.merge(providedPacks);
+		 * 
+		 * if (mergedPack.getWatts() > 0) { this.getNetwork().produce(mergedPack,
+		 * tileEntities.toArray(new TileEntity[0])); } }
+		 */
 	}
 
 	public static EnumSet<ForgeDirection> getDirections(TileEntity tileEntity)

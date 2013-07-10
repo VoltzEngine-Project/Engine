@@ -3,7 +3,7 @@ package calclavia.lib;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.resources.ResourceLocation;
+import net.minecraft.util.ResourceLocation;
 
 public class Calclavia
 {

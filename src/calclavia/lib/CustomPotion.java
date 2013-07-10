@@ -1,4 +1,4 @@
-package universalelectricity.prefab.potion;
+package calclavia.lib;
 
 import net.minecraft.potion.Potion;
 
