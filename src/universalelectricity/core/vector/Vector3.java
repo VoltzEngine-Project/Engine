@@ -7,7 +7,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
@@ -190,7 +189,7 @@ public class Vector3 implements Cloneable
 		double var2 = par1.x - par2.x;
 		double var4 = par1.y - par2.y;
 		double var6 = par1.z - par2.z;
-		return MathHelper.sqrt_double(var2 * var2 + var4 * var4 + var6 * var6);
+		return Math.sqrt(var2 * var2 + var4 * var4 + var6 * var6);
 	}
 
 	public double distanceTo(Vector3 vector3)
@@ -198,7 +197,7 @@ public class Vector3 implements Cloneable
 		double var2 = vector3.x - this.x;
 		double var4 = vector3.y - this.y;
 		double var6 = vector3.z - this.z;
-		return MathHelper.sqrt_double(var2 * var2 + var4 * var4 + var6 * var6);
+		return Math.sqrt(var2 * var2 + var4 * var4 + var6 * var6);
 	}
 
 	public Vector3 add(Vector3 par1)
