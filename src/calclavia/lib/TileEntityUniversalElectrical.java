@@ -10,6 +10,7 @@ import ic2.api.energy.tile.IEnergySource;
 import java.util.EnumSet;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.compatiblity.Compatiblity;
@@ -191,5 +192,11 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	public int getMaxEnergyOutput()
 	{
 		return Integer.MAX_VALUE;
+	}
+
+	@Override
+	public World getWorldObj()
+	{
+		return this.worldObj;
 	}
 }
