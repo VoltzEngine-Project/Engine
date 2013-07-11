@@ -42,7 +42,7 @@ public class BlockMulti extends BlockContainer
 	public void makeFakeBlock(World worldObj, Vector3 position, Vector3 mainBlock)
 	{
 		worldObj.setBlock(position.intX(), position.intY(), position.intZ(), this.blockID);
-		((TileEntityMulti) worldObj.getBlockTileEntity(position.intX(), position.intY(), position.intZ())).setMainBlock(mainBlock);
+		((TileEntityMultiBlockPart) worldObj.getBlockTileEntity(position.intX(), position.intY(), position.intZ())).setMainBlock(mainBlock);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -64,9 +64,9 @@ public class BlockMulti extends BlockContainer
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
-		if (tileEntity instanceof TileEntityMulti)
+		if (tileEntity instanceof TileEntityMultiBlockPart)
 		{
-			((TileEntityMulti) tileEntity).onBlockRemoval();
+			((TileEntityMultiBlockPart) tileEntity).onBlockRemoval();
 		}
 
 		super.breakBlock(world, x, y, z, par5, par6);
@@ -80,7 +80,7 @@ public class BlockMulti extends BlockContainer
 	@Override
 	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
-		TileEntityMulti tileEntity = (TileEntityMulti) par1World.getBlockTileEntity(x, y, z);
+		TileEntityMultiBlockPart tileEntity = (TileEntityMultiBlockPart) par1World.getBlockTileEntity(x, y, z);
 		return tileEntity.onBlockActivated(par1World, x, y, z, par5EntityPlayer);
 	}
 
@@ -114,14 +114,14 @@ public class BlockMulti extends BlockContainer
 	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
-		return new TileEntityMulti(this.channel);
+		return new TileEntityMultiBlockPart(this.channel);
 	}
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World par1World, int x, int y, int z)
 	{
 		TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
-		Vector3 mainBlockPosition = ((TileEntityMulti) tileEntity).mainBlockPosition;
+		Vector3 mainBlockPosition = ((TileEntityMultiBlockPart) tileEntity).getMainBlock();
 
 		if (mainBlockPosition != null)
 		{
