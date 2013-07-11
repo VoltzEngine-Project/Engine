@@ -8,6 +8,7 @@
 package buildcraft.api.power;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.SafeTimeTracker;
 
@@ -209,7 +210,7 @@ public final class PowerHandler
 
 	private void applyPerdition()
 	{
-		if (perditionTracker.markTimeIfDelay(receptor.getWorldObj(), 1) && energyStored > 0)
+		if (perditionTracker.markTimeIfDelay(((TileEntity) receptor).getWorldObj(), 1) && energyStored > 0)
 		{
 			float newEnergy = getPerdition().applyPerdition(this, energyStored, perditionTracker.durationOfLastDelay());
 			if (newEnergy == 0 || newEnergy < energyStored)
@@ -228,7 +229,7 @@ public final class PowerHandler
 	{
 		if (energyStored >= activationEnergy)
 		{
-			if (doWorkTracker.markTimeIfDelay(receptor.getWorldObj(), 1))
+			if (doWorkTracker.markTimeIfDelay(((TileEntity) receptor).getWorldObj(), 1))
 			{
 				receptor.doWork(this);
 			}
@@ -237,7 +238,7 @@ public final class PowerHandler
 
 	private void updateSources(ForgeDirection source)
 	{
-		if (sourcesTracker.markTimeIfDelay(receptor.getWorldObj(), 1))
+		if (sourcesTracker.markTimeIfDelay(((TileEntity) receptor).getWorldObj(), 1))
 		{
 			for (int i = 0; i < 6; ++i)
 			{
