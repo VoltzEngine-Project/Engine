@@ -193,10 +193,4 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	{
 		return Integer.MAX_VALUE;
 	}
-
-	@Override
-	public World getWorldObj()
-	{
-		return this.worldObj;
-	}
 }
