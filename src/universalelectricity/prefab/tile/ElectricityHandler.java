@@ -38,6 +38,7 @@ public class ElectricityHandler
 	{
 		if (receive != null)
 		{
+		    float prevEnergyStored = this.getEnergyStored();
 			float newStoredEnergy = Math.min(this.getEnergyStored() + receive.getWatts(), this.getMaxEnergyStored());
 
 			if (doReceive)
@@ -45,7 +46,7 @@ public class ElectricityHandler
 				this.setEnergyStored(newStoredEnergy);
 			}
 
-			return Math.max(receive.getWatts() - newStoredEnergy, 0);
+			return Math.max(newStoredEnergy - prevEnergyStored, 0);
 		}
 
 		return 0;
