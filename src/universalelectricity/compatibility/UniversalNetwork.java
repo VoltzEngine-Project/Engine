@@ -1,4 +1,4 @@
-package universalelectricity.compatiblity;
+package universalelectricity.compatibility;
 
 import universalelectricity.core.grid.ElectricityNetwork;
 

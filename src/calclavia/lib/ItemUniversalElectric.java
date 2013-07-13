@@ -4,7 +4,7 @@ import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
 import net.minecraft.item.ItemStack;
 import thermalexpansion.api.item.IChargeableItem;
-import universalelectricity.compatiblity.Compatiblity;
+import universalelectricity.compatibility.Compatiblity;
 import universalelectricity.core.item.ItemElectric;
 
 public abstract class ItemUniversalElectric extends ItemElectric implements ISpecialElectricItem, IChargeableItem

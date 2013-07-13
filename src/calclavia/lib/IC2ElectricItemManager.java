@@ -3,7 +3,7 @@ package calclavia.lib;
 import ic2.api.item.IElectricItemManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import universalelectricity.compatiblity.Compatiblity;
+import universalelectricity.compatibility.Compatiblity;
 import universalelectricity.core.item.IItemElectric;
 
 public class IC2ElectricItemManager implements IElectricItemManager

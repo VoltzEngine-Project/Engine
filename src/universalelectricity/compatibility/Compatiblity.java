@@ -1,5 +1,6 @@
-package universalelectricity.compatiblity;
+package universalelectricity.compatibility;
 
+import universalelectricity.compatiblity.UniversalNetwork;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.NetworkLoader;
 
