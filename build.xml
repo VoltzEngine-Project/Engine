@@ -62,12 +62,16 @@
 			</fileset>
 		</copy>
 		<copy todir="ue_prefab">
-			<exlude name="**/*"/>
-			<include name="prefab/"/>
+			<fileset dir="${dir.development}src">
+				<exlude name="**/*"/>
+				<include name="prefab/"/>
+			</fileset>
 		</copy>
 		<copy todir="ue_compatiblity">
-			<exlude name="**/*"/>
-			<include name="compatiblity/"/>
+			<fileset dir="${dir.development}src">
+				<exlude name="**/*"/>
+				<include name="compatiblity/"/>
+			</fileset>
 		</copy>
 		
 		<zip destfile="output/${file.ue_core}">
