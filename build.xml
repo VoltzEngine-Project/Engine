@@ -56,19 +56,13 @@
 		
 		<!-- Copy compiled files into folders to be zipped -->
 		<copy todir="ue_core">
-			<fileset dir="${dir.development}src">
-				<include name="core/"/>
-			</fileset>
+			<fileset dir="${dir.development}src" includes="core/" />
 		</copy>
 		<copy todir="ue_prefab">
-			<fileset dir="${dir.development}src">
-				<include name="prefab/"/>
-			</fileset>
+			<fileset dir="${dir.development}src" includes="prefab/" />
 		</copy>
 		<copy todir="ue_compatiblity">
-			<fileset dir="${dir.development}src">
-				<include name="compatiblity/"/>
-			</fileset>
+			<fileset dir="${dir.development}src" includes="compatiblity/" />
 		</copy>
 		
 		<zip destfile="output/${file.ue_core}">
