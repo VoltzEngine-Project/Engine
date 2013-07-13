@@ -4,18 +4,17 @@
 
 	<property file="build.properties" />
 	<property environment="env" />
-	<property name="file.UeJar" 	value="UniversalElectricity_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.zip" />
+	<property name="file.ue_core" value="UniversalElectricity_Core_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.zip" />
+	<property name="file.ue_prefab" value="UniversalElectricity_Prefab_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.zip" />
+	<property name="file.ue_compatiblity" value="UniversalElectricity_Compatibility_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.zip" />
 
 	<target name="build">
 
-		<delete dir="DevContents" />
-		<delete dir="UeContents" />
-		<delete dir="BcContents" />
 		<delete dir="output" />
 		<delete dir="${dir.development}/forge" />
 		
 		<copy todir="${dir.development}">
-			<fileset dir="../Minecraft Forge/" />
+			<fileset dir="../Minecraft Forge Latest/" />
 		</copy>
 
 		<copy todir="${dir.mcp}/src/minecraft">
@@ -27,11 +26,15 @@
 			
 		</copy>
 		
-		<mkdir dir="DevContents" />
-		<mkdir dir="UeContents" />
-		<mkdir dir="BcContents" />
+		<!-- Make all directories -->
+		<mkdir dir="ue_core" />
+		<mkdir dir="ue_prefab" />
+		<mkdir dir="ue_compatiblity" />
+		<mkdir dir="bc_jar" />
+		
 		<mkdir dir="output" />
 		
+		<!-- Replace version numbers -->
 		<replace dir="${dir.mcp}/src/minecraft" token="@MAJOR@" value="${version.mod.major}" />
 		<replace dir="${dir.mcp}/src/minecraft" token="@MINOR@" value="${version.mod.minor}" />
 		<replace dir="${dir.mcp}/src/minecraft" token="@REVIS@" value="${version.mod.revis}" />
@@ -51,12 +54,27 @@
 			<arg line="reobfuscate_srg.sh" />
 		</exec>
 		
-		<copy todir="UeContents">
-			<fileset dir="${dir.development}src" excludes=".git/**" />
+		<!-- Copy compiled files into folders to be zipped -->
+		<copy todir="ue_core">
+			<fileset dir="${dir.development}src">
+				<include name="core/"/>
+			</fileset>
+		</copy>
+		<copy todir="ue_prefab">
+			<include name="prefab/"/>
+		</copy>
+		<copy todir="ue_compatiblity">
+			<include name="compatiblity/"/>
 		</copy>
 		
-		<zip destfile="output/${file.UeJar}">
-			<fileset dir="UeContents" />
+		<zip destfile="output/${file.ue_core}">
+			<fileset dir="ue_core" />
+		</zip>
+		<zip destfile="output/${file.ue_prefab}">
+			<fileset dir="ue_prefab" />
+		</zip>
+		<zip destfile="output/${file.ue_compatiblity}">
+			<fileset dir="ue_compatiblity" />
 		</zip>
 
 		<copy todir="output" file="build.properties" />
