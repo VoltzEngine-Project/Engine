@@ -8,8 +8,7 @@ import universalelectricity.core.grid.IElectricityNetwork;
  * @author Calclavia
  * 
  */
-public interface INetworkProvider
-{
+public interface INetworkProvider {
 	public IElectricityNetwork getNetwork();
 
 	public void setNetwork(IElectricityNetwork network);

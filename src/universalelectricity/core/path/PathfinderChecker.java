@@ -17,27 +17,27 @@ import universalelectricity.core.vector.Vector3;
  * @author Calclavia
  * 
  */
-public class PathfinderChecker extends Pathfinder
-{
-	public PathfinderChecker(final World world, final INetworkConnection targetConnector, final INetworkConnection... ignoreConnector)
-	{
-		super(new IPathCallBack()
-		{
+public class PathfinderChecker extends Pathfinder {
+	public PathfinderChecker(final World world,
+			final INetworkConnection targetConnector,
+			final INetworkConnection... ignoreConnector) {
+		super(new IPathCallBack() {
 			@Override
-			public Set<Vector3> getConnectedNodes(Pathfinder finder, Vector3 currentNode)
-			{
+			public Set<Vector3> getConnectedNodes(Pathfinder finder,
+					Vector3 currentNode) {
 				Set<Vector3> neighbors = new HashSet<Vector3>();
 
-				for (int i = 0; i < 6; i++)
-				{
+				for (int i = 0; i < 6; i++) {
 					ForgeDirection direction = ForgeDirection.getOrientation(i);
-					Vector3 position = currentNode.clone().modifyPositionFromSide(direction);
+					Vector3 position = currentNode.clone()
+							.modifyPositionFromSide(direction);
 					TileEntity connectedBlock = position.getTileEntity(world);
 
-					if (connectedBlock instanceof IConductor && !Arrays.asList(ignoreConnector).contains(connectedBlock))
-					{
-						if (((IConductor) connectedBlock).canConnect(direction.getOpposite()))
-						{
+					if (connectedBlock instanceof IConductor
+							&& !Arrays.asList(ignoreConnector).contains(
+									connectedBlock)) {
+						if (((IConductor) connectedBlock).canConnect(direction
+								.getOpposite())) {
 							neighbors.add(position);
 						}
 					}
@@ -47,10 +47,8 @@ public class PathfinderChecker extends Pathfinder
 			}
 
 			@Override
-			public boolean onSearch(Pathfinder finder, Vector3 node)
-			{
-				if (node.getTileEntity(world) == targetConnector)
-				{
+			public boolean onSearch(Pathfinder finder, Vector3 node) {
+				if (node.getTileEntity(world) == targetConnector) {
 					finder.results.add(node);
 					return true;
 				}
