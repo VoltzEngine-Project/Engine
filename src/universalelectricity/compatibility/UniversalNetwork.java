@@ -8,6 +8,7 @@ import universalelectricity.core.grid.ElectricityNetwork;
  * @author Calclavia, Aidancbrady
  * 
  */
-public class UniversalNetwork extends ElectricityNetwork {
+public class UniversalNetwork extends ElectricityNetwork
+{
 
 }

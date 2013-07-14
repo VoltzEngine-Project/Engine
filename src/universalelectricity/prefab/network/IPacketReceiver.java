@@ -6,11 +6,10 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public interface IPacketReceiver {
+public interface IPacketReceiver
+{
 	/**
 	 * Sends some data to the tile entity.
 	 */
-	public void handlePacketData(INetworkManager network, int packetType,
-			Packet250CustomPayload packet, EntityPlayer player,
-			ByteArrayDataInput dataStream);
+	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream);
 }

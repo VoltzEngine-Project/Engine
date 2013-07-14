@@ -9,16 +9,20 @@ import net.minecraft.tileentity.TileEntity;
  * @author Calclavia
  * 
  */
-public abstract class TileEntityAdvanced extends TileEntity {
+public abstract class TileEntityAdvanced extends TileEntity
+{
 	protected long ticks = 0;
 
 	@Override
-	public void updateEntity() {
-		if (this.ticks == 0) {
+	public void updateEntity()
+	{
+		if (this.ticks == 0)
+		{
 			this.initiate();
 		}
 
-		if (this.ticks >= Long.MAX_VALUE) {
+		if (this.ticks >= Long.MAX_VALUE)
+		{
 			this.ticks = 1;
 		}
 
@@ -28,24 +32,27 @@ public abstract class TileEntityAdvanced extends TileEntity {
 	/**
 	 * Called on the TileEntity's first tick.
 	 */
-	public void initiate() {
+	public void initiate()
+	{
 	}
 
 	@Override
-	public int getBlockMetadata() {
-		if (this.blockMetadata == -1) {
-			this.blockMetadata = this.worldObj.getBlockMetadata(this.xCoord,
-					this.yCoord, this.zCoord);
+	public int getBlockMetadata()
+	{
+		if (this.blockMetadata == -1)
+		{
+			this.blockMetadata = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
 		}
 
 		return this.blockMetadata;
 	}
 
 	@Override
-	public Block getBlockType() {
-		if (this.blockType == null) {
-			this.blockType = Block.blocksList[this.worldObj.getBlockId(
-					this.xCoord, this.yCoord, this.zCoord)];
+	public Block getBlockType()
+	{
+		if (this.blockType == null)
+		{
+			this.blockType = Block.blocksList[this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord)];
 		}
 
 		return this.blockType;

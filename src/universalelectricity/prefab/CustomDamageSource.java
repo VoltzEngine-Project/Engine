@@ -3,37 +3,40 @@ package universalelectricity.prefab;
 import net.minecraft.util.DamageSource;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class CustomDamageSource extends DamageSource {
+public class CustomDamageSource extends DamageSource
+{
 	/**
 	 * Use this damage source for all types of electrical attacks.
 	 */
-	public static final CustomDamageSource electrocution = ((CustomDamageSource) new CustomDamageSource(
-			"electrocution").setDamageBypassesArmor())
-			.setDeathMessage("%1$s got electrocuted!");
+	public static final CustomDamageSource electrocution = ((CustomDamageSource) new CustomDamageSource("electrocution").setDamageBypassesArmor()).setDeathMessage("%1$s got electrocuted!");
 
-	public CustomDamageSource(String damageType) {
+	public CustomDamageSource(String damageType)
+	{
 		super(damageType);
 	}
 
 	@Deprecated
-	public CustomDamageSource setDeathMessage(String deathMessage) {
-		LanguageRegistry.instance().addStringLocalization(
-				"death.attack." + this.damageType, deathMessage);
+	public CustomDamageSource setDeathMessage(String deathMessage)
+	{
+		LanguageRegistry.instance().addStringLocalization("death.attack." + this.damageType, deathMessage);
 		return this;
 	}
 
 	@Override
-	public DamageSource setDamageBypassesArmor() {
+	public DamageSource setDamageBypassesArmor()
+	{
 		return super.setDamageBypassesArmor();
 	}
 
 	@Override
-	public DamageSource setDamageAllowedInCreativeMode() {
+	public DamageSource setDamageAllowedInCreativeMode()
+	{
 		return super.setDamageAllowedInCreativeMode();
 	}
 
 	@Override
-	public DamageSource setFireDamage() {
+	public DamageSource setFireDamage()
+	{
 		return super.setFireDamage();
 	}
 }
