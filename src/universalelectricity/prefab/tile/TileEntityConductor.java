@@ -22,13 +22,15 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author Calclavia
  * 
  */
-public abstract class TileEntityConductor extends TileEntityAdvanced implements
-		IConductor {
+public abstract class TileEntityConductor extends TileEntityAdvanced implements IConductor
+{
 	private IElectricityNetwork network;
 
 	@Override
-	public void invalidate() {
-		if (!this.worldObj.isRemote) {
+	public void invalidate()
+	{
+		if (!this.worldObj.isRemote)
+		{
 			this.getNetwork().split(this);
 		}
 
@@ -36,13 +38,16 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements
 	}
 
 	@Override
-	public boolean canUpdate() {
+	public boolean canUpdate()
+	{
 		return false;
 	}
 
 	@Override
-	public IElectricityNetwork getNetwork() {
-		if (this.network == null) {
+	public IElectricityNetwork getNetwork()
+	{
+		if (this.network == null)
+		{
 			this.setNetwork(NetworkLoader.getNewNetwork(this));
 		}
 
@@ -50,22 +55,25 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements
 	}
 
 	@Override
-	public void setNetwork(IElectricityNetwork network) {
+	public void setNetwork(IElectricityNetwork network)
+	{
 		this.network = network;
 	}
 
 	@Override
-	public void refresh() {
-		if (!this.worldObj.isRemote) {
-			for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-				TileEntity tileEntity = VectorHelper.getConnectorFromSide(
-						this.worldObj, new Vector3(this), side);
+	public void refresh()
+	{
+		if (!this.worldObj.isRemote)
+		{
+			for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS)
+			{
+				TileEntity tileEntity = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), side);
 
-				if (tileEntity != null) {
-					if (tileEntity.getClass() == this.getClass()
-							&& tileEntity instanceof INetworkProvider) {
-						this.getNetwork().merge(
-								((INetworkProvider) tileEntity).getNetwork());
+				if (tileEntity != null)
+				{
+					if (tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider)
+					{
+						this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
 					}
 				}
 			}
@@ -75,16 +83,19 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements
 	}
 
 	@Override
-	public TileEntity[] getAdjacentConnections() {
+	public TileEntity[] getAdjacentConnections()
+	{
 		List<TileEntity> adjecentConnections = new ArrayList<TileEntity>();
 
-		for (byte i = 0; i < 6; i++) {
+		for (byte i = 0; i < 6; i++)
+		{
 			ForgeDirection side = ForgeDirection.getOrientation(i);
-			TileEntity tileEntity = VectorHelper.getConnectorFromSide(
-					this.worldObj, new Vector3(this), side);
+			TileEntity tileEntity = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), side);
 
-			if (tileEntity instanceof IConnector) {
-				if (((IConnector) tileEntity).canConnect(side.getOpposite())) {
+			if (tileEntity instanceof IConnector)
+			{
+				if (((IConnector) tileEntity).canConnect(side.getOpposite()))
+				{
 					adjecentConnections.add(tileEntity);
 				}
 			}
@@ -94,14 +105,15 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements
 	}
 
 	@Override
-	public boolean canConnect(ForgeDirection direction) {
+	public boolean canConnect(ForgeDirection direction)
+	{
 		return true;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getRenderBoundingBox() {
-		return AxisAlignedBB.getAABBPool().getAABB(this.xCoord, this.yCoord,
-				this.zCoord, this.xCoord + 1, this.yCoord + 1, this.zCoord + 1);
+	public AxisAlignedBB getRenderBoundingBox()
+	{
+		return AxisAlignedBB.getAABBPool().getAABB(this.xCoord, this.yCoord, this.zCoord, this.xCoord + 1, this.yCoord + 1, this.zCoord + 1);
 	}
 }

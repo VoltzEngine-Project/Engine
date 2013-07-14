@@ -8,7 +8,8 @@ import net.minecraftforge.common.ForgeDirection;
  * @author Calclavia
  * 
  */
-public interface IConnector {
+public interface IConnector
+{
 
 	/**
 	 * @return If the connection is possible.

@@ -9,16 +9,15 @@ import net.minecraftforge.common.ForgeDirection;
  * 
  */
 
-public interface IRotatable {
+public interface IRotatable
+{
 	/**
-	 * @return Gets the facing direction. Always returns the front side of the
-	 *         block.
+	 * @return Gets the facing direction. Always returns the front side of the block.
 	 */
 	public ForgeDirection getDirection();
 
 	/**
-	 * @param Sets
-	 *            the facing direction.
+	 * @param Sets the facing direction.
 	 */
 	public void setDirection(ForgeDirection direection);
 }
