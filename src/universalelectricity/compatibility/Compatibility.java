@@ -2,10 +2,10 @@ package universalelectricity.compatibility;
 
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.NetworkLoader;
+import cpw.mods.fml.common.Loader;
 
-public class Compatiblity
+public class Compatibility
 {
-
 	/**
 	 * Multiply this to convert foreign energy into UE Joules.
 	 */
@@ -31,4 +31,14 @@ public class Compatiblity
 
 		NetworkLoader.setNetworkClass(UniversalNetwork.class);
 	}
+	
+	public static boolean isIndustrialCraft2Loaded()
+	{
+	    return Loader.isModLoaded("IC2");
+	}
+    
+    public static boolean isBuildcraftLoaded()
+    {
+        return Loader.isModLoaded("BuildCraft|Energy");
+    }
 }
