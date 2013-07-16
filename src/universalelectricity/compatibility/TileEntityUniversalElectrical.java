@@ -85,11 +85,14 @@ public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced i
             }
             else if (Compatibility.isIndustrialCraft2Loaded())
             {
+                int ic2Provide = (int) Math.floor(provide * Compatibility.TO_IC2_RATIO);
+                
                 if (this.getEnergyStored() >= provide)
                 {
-                    EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, (int) Math.floor(provide * Compatibility.TO_IC2_RATIO));
+                    EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, ic2Provide);
                     MinecraftForge.EVENT_BUS.post(event);
-                    this.setEnergyStored(this.getEnergyStored() - (((int) Math.floor(provide * Compatibility.TO_IC2_RATIO) - event.amount) * Compatibility.IC2_RATIO));
+                    
+                    this.setEnergyStored(this.getEnergyStored() - ((ic2Provide * Compatibility.IC2_RATIO) - (event.amount * Compatibility.IC2_RATIO)));
                 }
             }
         }
@@ -199,13 +202,17 @@ public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced i
     {
         if (!directionFrom.toForgeDirection().equals(this.getInputDirection()))
         {
-            return 0;
+            return amount;
         }
         
-        ElectricityPack toSend = ElectricityPack.getFromWatts(amount * Compatibility.IC2_RATIO, this.getVoltage());
+        float convertedEnergy = amount * Compatibility.IC2_RATIO;
+        
+        ElectricityPack toSend = ElectricityPack.getFromWatts(convertedEnergy, this.getVoltage());
+        
+        int receive = (int) Math.floor(this.receiveElectricity(directionFrom.toForgeDirection(), toSend, true));
         
         // Return the difference, since injectEnergy returns leftover energy, and receiveElectricity returns energy used.
-        return (int) Math.floor((toSend.getWatts() - this.receiveElectricity(directionFrom.toForgeDirection(), toSend, true)) * Compatibility.TO_IC2_RATIO);
+        return (int) Math.floor(amount - receive * Compatibility.TO_IC2_RATIO);
     }
 
     @Override
@@ -217,7 +224,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced i
     @Override
     public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
     {
-        return receiver instanceof IEnergyTile;
+        return receiver instanceof IEnergyTile && direction.toForgeDirection().equals(this.getOutputDirection());
     }
 
     @Override

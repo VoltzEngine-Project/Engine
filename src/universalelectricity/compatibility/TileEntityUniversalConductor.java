@@ -4,7 +4,6 @@ import ic2.api.Direction;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyAcceptor;
-import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergyTile;
 import java.util.ArrayList;
@@ -182,7 +181,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
         {
             ForgeDirection side = ForgeDirection.getOrientation(i);
             TileEntity tileEntity = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), side);
-
+            
             if (tileEntity instanceof IConnector)
             {
                 if (((IConnector) tileEntity).canConnect(side.getOpposite()))
@@ -190,16 +189,19 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
                     adjecentConnections.add(tileEntity);
                 }
             }
-            else if (Compatibility.isIndustrialCraft2Loaded() && tileEntity instanceof IEnergyAcceptor)
+            else if (Compatibility.isIndustrialCraft2Loaded() && tileEntity instanceof IEnergyTile)
             {
-                if (((IEnergyAcceptor) tileEntity).acceptsEnergyFrom(this, Direction.values()[(i + 2) % 6]))
+                if (tileEntity instanceof IEnergyAcceptor)
+                {
+                    if (((IEnergyAcceptor) tileEntity).acceptsEnergyFrom(this, Direction.values()[(i + 2) % 6].getInverse()))
+                    {
+                        adjecentConnections.add(tileEntity);
+                    }
+                }
+                else
                 {
                     adjecentConnections.add(tileEntity);
                 }
-            }
-            else if (Compatibility.isIndustrialCraft2Loaded() && tileEntity instanceof IEnergyEmitter)
-            {
-                adjecentConnections.add(tileEntity);
             }
             else if (Compatibility.isBuildcraftLoaded() && tileEntity instanceof IPowerReceptor)
             {
