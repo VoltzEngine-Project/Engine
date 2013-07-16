@@ -2,7 +2,9 @@ package universalelectricity.prefab.compatibility;
 
 import ic2.api.Direction;
 import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
+import ic2.api.network.INetworkTileEntityEventListener;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
@@ -24,7 +26,7 @@ import buildcraft.api.power.PowerProvider;
  * @author micdoodle8
  * 
  */
-public abstract class TileEntityUniversalConductor extends TileEntityConductor implements IEnergySink, IPowerReceptor
+public abstract class TileEntityUniversalConductor extends TileEntityConductor implements IEnergySink, IPowerReceptor, INetworkTileEntityEventListener
 {
     protected boolean addedToIC2Network = false;
     private DummyPowerProvider powerProvider;
@@ -40,6 +42,33 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
     {
         super.setNetwork(network);
         this.powerProvider.network = network;
+    }
+
+    @Override
+    public void invalidate()
+    {
+        this.unloadTileIC2();
+        super.invalidate();
+    }
+
+    @Override
+    public void onChunkUnload()
+    {
+        this.unloadTileIC2();
+        super.onChunkUnload();
+    }
+
+    private void unloadTileIC2()
+    {
+        if (this.addedToIC2Network && this.worldObj != null)
+        {
+            if (Compatibility.isIndustrialCraft2Loaded())
+            {
+                MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+            }
+
+            this.addedToIC2Network = false;
+        }
     }
 
     @Override
@@ -67,7 +96,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
     @Override
     public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
     {
-        return false;
+        return emitter instanceof IEnergySink;
     }
 
     @Override
@@ -116,7 +145,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
             return 0;
         }
         
-        return (int)Math.floor(Math.min(this.getNetwork().getRequest(this).getWatts() * Compatibility.BC3_RATIO, 100));
+        return (int) Math.floor(Math.min(this.getNetwork().getRequest(this).getWatts() * Compatibility.BC3_RATIO, 100));
     }
 
     @Override
@@ -150,7 +179,10 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
         @Override
         public void receiveEnergy(float quantity, ForgeDirection from)
         {
-            this.network.produce(ElectricityPack.getFromWatts(this.getEnergyStored(), 120), VectorHelper.getTileEntityFromSide(this.conductor.worldObj, new Vector3(this.conductor), from));
+            if (this.network != null)
+            {
+                this.network.produce(ElectricityPack.getFromWatts(this.getEnergyStored(), 120), VectorHelper.getTileEntityFromSide(this.conductor.worldObj, new Vector3(this.conductor), from));
+            }
         }
     }
 }

@@ -1,14 +1,18 @@
 package universalelectricity.prefab.compatibility;
 
 import ic2.api.Direction;
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.compatibility.Compatibility;
 import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.block.IElectricalStorage;
 import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerProvider;
@@ -21,7 +25,7 @@ import buildcraft.api.power.PowerProvider;
  * @author micdoodle8
  * 
  */
-public abstract class TileEntityUniversalElectrical extends TileEntity implements IElectrical, IEnergySink, IPowerReceptor, IElectricalStorage
+public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced implements IElectrical, IEnergySink, IPowerReceptor, IElectricalStorage
 {
     protected boolean addedToEnergyNet;
     public IPowerProvider bcPowerProvider;
@@ -39,6 +43,21 @@ public abstract class TileEntityUniversalElectrical extends TileEntity implement
         this.maxEnergyStored = maxEnergy;
         this.bcPowerProvider = new PowerProviderCompat(this);
         this.bcPowerProvider.configure(0, 0, 100, 0, (int)Math.floor(maxEnergy * Compatibility.BC3_RATIO));
+    }
+    
+    public void updateEntity() 
+    {
+        super.updateEntity();
+        
+        if (!this.addedToEnergyNet && this.worldObj != null)
+        {
+            if (Compatibility.isIndustrialCraft2Loaded())
+            {
+                MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+            }
+
+            this.addedToEnergyNet = true;
+        }
     }
     
     /**
@@ -71,6 +90,33 @@ public abstract class TileEntityUniversalElectrical extends TileEntity implement
     public boolean isAddedToEnergyNet()
     {
         return this.addedToEnergyNet;
+    }
+
+    @Override
+    public void invalidate()
+    {
+        this.unloadTileIC2();
+        super.invalidate();
+    }
+
+    @Override
+    public void onChunkUnload()
+    {
+        this.unloadTileIC2();
+        super.onChunkUnload();
+    }
+
+    private void unloadTileIC2()
+    {
+        if (this.addedToEnergyNet && this.worldObj != null)
+        {
+            if (Compatibility.isIndustrialCraft2Loaded())
+            {
+                MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+            }
+
+            this.addedToEnergyNet = false;
+        }
     }
 
     @Override
@@ -173,18 +219,6 @@ public abstract class TileEntityUniversalElectrical extends TileEntity implement
         }
 
         return new ElectricityPack();
-    }
-
-    @Override
-    public float getRequest(ForgeDirection direction)
-    {
-        return 0;
-    }
-
-    @Override
-    public float getProvide(ForgeDirection direction)
-    {
-        return 0;
     }
 
     @Override
