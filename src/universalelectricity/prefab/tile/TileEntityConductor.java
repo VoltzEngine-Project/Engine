@@ -2,7 +2,6 @@ package universalelectricity.prefab.tile;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;

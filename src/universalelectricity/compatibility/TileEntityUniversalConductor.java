@@ -1,14 +1,18 @@
-package universalelectricity.prefab.compatibility;
+package universalelectricity.compatibility;
 
 import ic2.api.Direction;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergyAcceptor;
+import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
-import ic2.api.network.INetworkTileEntityEventListener;
+import ic2.api.energy.tile.IEnergyTile;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import universalelectricity.compatibility.Compatibility;
+import universalelectricity.core.block.IConnector;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
@@ -26,7 +30,7 @@ import buildcraft.api.power.PowerProvider;
  * @author micdoodle8
  * 
  */
-public abstract class TileEntityUniversalConductor extends TileEntityConductor implements IEnergySink, IPowerReceptor, INetworkTileEntityEventListener
+public abstract class TileEntityUniversalConductor extends TileEntityConductor implements IEnergySink, IPowerReceptor
 {
     protected boolean addedToIC2Network = false;
     private DummyPowerProvider powerProvider;
@@ -41,7 +45,11 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
     public void setNetwork(IElectricityNetwork network)
     {
         super.setNetwork(network);
-        this.powerProvider.network = network;
+        
+        if (this.powerProvider != null)
+        {
+            this.powerProvider.network = network;
+        }
     }
 
     @Override
@@ -74,7 +82,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
     @Override
     public boolean canUpdate()
     {
-        return !this.addedToIC2Network;
+        return true;
     }
     
     @Override
@@ -96,7 +104,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
     @Override
     public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
     {
-        return emitter instanceof IEnergySink;
+        return emitter instanceof IEnergyTile;
     }
 
     @Override
@@ -134,7 +142,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
             return 0;
         }
         
-        return (int)Math.floor(Math.min(this.getNetwork().getRequest(VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), from)).getWatts() * Compatibility.BC3_RATIO, 100));
+        return (int)Math.floor(Math.min(this.getNetwork().getRequest(VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), from)).getWatts() * Compatibility.TO_BC_RATIO, 100));
     }
 
     @Override
@@ -145,7 +153,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
             return 0;
         }
         
-        return (int) Math.floor(Math.min(this.getNetwork().getRequest(this).getWatts() * Compatibility.BC3_RATIO, 100));
+        return (int) Math.floor(Math.min(this.getNetwork().getRequest(this).getWatts() * Compatibility.TO_IC2_RATIO, 100));
     }
 
     @Override
@@ -163,6 +171,43 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
     public int getMaxSafeInput()
     {
         return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public TileEntity[] getAdjacentConnections()
+    {
+        List<TileEntity> adjecentConnections = new ArrayList<TileEntity>();
+
+        for (byte i = 0; i < 6; i++)
+        {
+            ForgeDirection side = ForgeDirection.getOrientation(i);
+            TileEntity tileEntity = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), side);
+
+            if (tileEntity instanceof IConnector)
+            {
+                if (((IConnector) tileEntity).canConnect(side.getOpposite()))
+                {
+                    adjecentConnections.add(tileEntity);
+                }
+            }
+            else if (Compatibility.isIndustrialCraft2Loaded() && tileEntity instanceof IEnergyAcceptor)
+            {
+                if (((IEnergyAcceptor) tileEntity).acceptsEnergyFrom(this, Direction.values()[(i + 2) % 6]))
+                {
+                    adjecentConnections.add(tileEntity);
+                }
+            }
+            else if (Compatibility.isIndustrialCraft2Loaded() && tileEntity instanceof IEnergyEmitter)
+            {
+                adjecentConnections.add(tileEntity);
+            }
+            else if (Compatibility.isBuildcraftLoaded() && tileEntity instanceof IPowerReceptor)
+            {
+                adjecentConnections.add(tileEntity);
+            }
+        }
+
+        return adjecentConnections.toArray(new TileEntity[0]);
     }
     
     private class DummyPowerProvider extends PowerProvider

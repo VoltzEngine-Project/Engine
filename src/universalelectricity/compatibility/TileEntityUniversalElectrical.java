@@ -1,17 +1,23 @@
-package universalelectricity.prefab.compatibility;
+package universalelectricity.compatibility;
 
 import ic2.api.Direction;
 import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileSourceEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
+import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import universalelectricity.compatibility.Compatibility;
 import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.block.IElectricalStorage;
+import universalelectricity.core.electricity.ElectricalEventHandler;
 import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.grid.IElectricityNetwork;
+import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
@@ -25,7 +31,7 @@ import buildcraft.api.power.PowerProvider;
  * @author micdoodle8
  * 
  */
-public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced implements IElectrical, IEnergySink, IPowerReceptor, IElectricalStorage
+public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced implements IElectrical, IEnergySink, IEnergySource, IPowerReceptor, IElectricalStorage
 {
     protected boolean addedToEnergyNet;
     public IPowerProvider bcPowerProvider;
@@ -49,7 +55,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced i
     {
         super.updateEntity();
         
-        if (!this.addedToEnergyNet && this.worldObj != null)
+        if (!this.worldObj.isRemote && !this.addedToEnergyNet)
         {
             if (Compatibility.isIndustrialCraft2Loaded())
             {
@@ -57,6 +63,35 @@ public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced i
             }
 
             this.addedToEnergyNet = true;
+        }
+        
+        float provide = this.getProvide(this.getOutputDirection());
+        
+        if (!this.worldObj.isRemote && provide > 0)
+        {
+            TileEntity outputTile = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), this.getOutputDirection());
+            IElectricityNetwork outputNetwork = ElectricalEventHandler.getNetworkFromTileEntity(outputTile, this.getOutputDirection());
+
+            if (outputNetwork != null)
+            {
+                ElectricityPack powerRequest = outputNetwork.getRequest(this);
+
+                if (powerRequest.getWatts() > 0)
+                {
+                    ElectricityPack sendPack = ElectricityPack.min(ElectricityPack.getFromWatts(this.getEnergyStored(), this.getVoltage()), ElectricityPack.getFromWatts(provide, this.getVoltage()));
+                    float rejectedPower = outputNetwork.produce(sendPack, this);
+                    this.setEnergyStored(this.getEnergyStored() - (sendPack.getWatts() - rejectedPower));
+                }
+            }
+            else if (Compatibility.isIndustrialCraft2Loaded())
+            {
+                if (this.getEnergyStored() >= provide)
+                {
+                    EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, (int) Math.floor(provide * Compatibility.TO_IC2_RATIO));
+                    MinecraftForge.EVENT_BUS.post(event);
+                    this.setEnergyStored(this.getEnergyStored() - (((int) Math.floor(provide * Compatibility.TO_IC2_RATIO) - event.amount) * Compatibility.IC2_RATIO));
+                }
+            }
         }
     }
     
@@ -77,13 +112,18 @@ public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced i
     @Override
     public boolean canConnect(ForgeDirection direction)
     {
+        if (direction == null || direction.equals(ForgeDirection.UNKNOWN))
+        {
+            return false;
+        }
+        
         return direction.equals(this.getInputDirection()) || direction.equals(this.getOutputDirection());
     }
 
     @Override
     public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
     {
-        return direction.toForgeDirection().equals(this.getInputDirection());
+        return this.canConnect(direction.toForgeDirection());
     }
 
     @Override
@@ -169,6 +209,18 @@ public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced i
     }
 
     @Override
+    public int getMaxEnergyOutput()
+    {
+        return (int) Math.floor(this.getProvide(this.getOutputDirection()));
+    }
+
+    @Override
+    public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
+    {
+        return receiver instanceof IEnergyTile;
+    }
+
+    @Override
     public int getMaxSafeInput()
     {
         return Integer.MAX_VALUE;
@@ -230,7 +282,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced i
     @Override
     public void setEnergyStored(float energy)
     {
-        this.energyStored = energy;
+        this.energyStored = Math.max(0, Math.min(this.getMaxEnergyStored(), energy));
     }
 
     @Override
@@ -248,6 +300,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced i
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
+        super.readFromNBT(nbt);
         this.energyStored = nbt.getFloat("energyStored");
         this.maxEnergyStored = nbt.getFloat("maxEnergyStored");
     }
@@ -255,6 +308,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityAdvanced i
     @Override
     public void writeToNBT(NBTTagCompound nbt)
     {
+        super.writeToNBT(nbt);
         nbt.setFloat("energyStored", this.energyStored);
         nbt.setFloat("maxEnergyStored", this.maxEnergyStored);
     }

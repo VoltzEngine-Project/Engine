@@ -1,6 +1,7 @@
 package universalelectricity.compatibility;
 
 import ic2.api.Direction;
+import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergySink;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +33,11 @@ import cpw.mods.fml.common.FMLLog;
  */
 public class UniversalNetwork extends ElectricityNetwork
 {
+    public UniversalNetwork()
+    {
+        ;
+    }
+    
     @Override
     public ElectricityPack getRequest(TileEntity... ignoreTiles)
     {
@@ -59,9 +65,9 @@ public class UniversalNetwork extends ElectricityNetwork
                             if (((IElectrical) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
                             {
                                 requests.add(ElectricityPack.getFromWatts(((IElectrical) tileEntity).getRequest(direction), ((IElectrical) tileEntity).getVoltage()));
-                                continue;
                             }
                         }
+                        continue;
                     }
                 }
             }
@@ -74,12 +80,11 @@ public class UniversalNetwork extends ElectricityNetwork
                     {
                         for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
                         {
-                            if (((IElectrical) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
+                            if (((IEnergySink) tileEntity).acceptsEnergyFrom(VectorHelper.getTileEntityFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction), Direction.values()[(direction.ordinal() + 2) % 6]) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
                             {
-                                
+                                requests.add(ElectricityPack.getFromWatts(Math.min(((IEnergySink)tileEntity).demandsEnergy(), ((IEnergySink)tileEntity).getMaxSafeInput()) * Compatibility.IC2_RATIO, 120));
                             }
                         }
-                        requests.add(ElectricityPack.getFromWatts(Math.min(((IEnergySink)tileEntity).demandsEnergy(), ((IEnergySink)tileEntity).getMaxSafeInput()) * Compatibility.IC2_RATIO, 120));
                         continue;
                     }
                 }
@@ -98,7 +103,6 @@ public class UniversalNetwork extends ElectricityNetwork
             }
 
             it.remove();
-
         }
 
         ElectricityPack mergedPack = ElectricityPack.merge(requests);
@@ -161,7 +165,7 @@ public class UniversalNetwork extends ElectricityNetwork
                             continue;
                         }
 
-                        if (Compatibility.isIndustrialCraft2Loaded() && acceptor instanceof IEnergySink)
+                        if (Compatibility.isIndustrialCraft2Loaded() && acceptor instanceof IEnergyAcceptor)
                         {
                             ArrayList<ForgeDirection> possibleDirections = null;
                             
@@ -174,7 +178,7 @@ public class UniversalNetwork extends ElectricityNetwork
                                 possibleDirections = new ArrayList<ForgeDirection>();
                             }
                             
-                            if (((IEnergySink) acceptor).acceptsEnergyFrom(VectorHelper.getTileEntityFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i)), Direction.values()[i - 4 % 6]) && this.getConductors().contains(VectorHelper.getConnectorFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i))))
+                            if (((IEnergyAcceptor) acceptor).acceptsEnergyFrom(VectorHelper.getTileEntityFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i)), Direction.values()[(i + 2) % 6]) && this.getConductors().contains(VectorHelper.getConnectorFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i))))
                             {
                                 possibleDirections.add(ForgeDirection.getOrientation(i));
                             }
@@ -212,6 +216,18 @@ public class UniversalNetwork extends ElectricityNetwork
         {
             FMLLog.severe("Universal Electricity: Failed to refresh conductor.");
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void merge(IElectricityNetwork network)
+    {
+        if (network != null && network != this)
+        {
+            UniversalNetwork newNetwork = new UniversalNetwork();
+            newNetwork.getConductors().addAll(this.getConductors());
+            newNetwork.getConductors().addAll(network.getConductors());
+            newNetwork.refresh();
         }
     }
 
@@ -291,5 +307,11 @@ public class UniversalNetwork extends ElectricityNetwork
                 }
             }
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return "UniversalNetwork[" + this.hashCode() + "|Wires:" + this.getConductors().size() + "|Acceptors:" + this.electricalTiles.size() + "]";
     }
 }
