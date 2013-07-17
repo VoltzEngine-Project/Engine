@@ -101,18 +101,6 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 		}
 	}
 
-	@Override
-	public float getRequest(ForgeDirection direction)
-	{
-		return 0;
-	}
-
-	@Override
-	public float getProvide(ForgeDirection direction)
-	{
-		return 0;
-	}
-
 	/**
 	 * The electrical input direction.
 	 * 
