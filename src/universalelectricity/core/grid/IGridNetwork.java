@@ -2,6 +2,7 @@ package universalelectricity.core.grid;
 
 import java.util.ArrayList;
 import java.util.Set;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -39,13 +40,13 @@ public interface IGridNetwork<N, C, A>
 	public Set<A> getAcceptors();
 
 	/**
-	 * Gets the list of possible connection directions for the provided TileEntity. Tile must be in 
+	 * Gets the list of possible connection directions for the provided TileEntity. Tile must be in
 	 * this network.
 	 * 
 	 * @param tile The tile to get connections for
 	 * @return The list of directions that can be connected to for the provided tile
 	 */
-    public ArrayList<ForgeDirection> getPossibleDirections(TileEntity tile);
+	public ArrayList<ForgeDirection> getPossibleDirections(TileEntity tile);
 
 	/**
 	 * Creates a new network that makes up the current network and the network defined in the

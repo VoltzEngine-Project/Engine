@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
@@ -65,26 +66,26 @@ public class ElectricityNetwork implements IElectricityNetwork
 						if (tileEntity instanceof IElectrical && !Arrays.asList(ignoreTiles).contains(tileEntity))
 						{
 							IElectrical electricalTile = (IElectrical) tileEntity;
-							
+
 							for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
 							{
-							    if (electricalTile.canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
-							    {
-	                                float energyToSend = energy * (electricalTile.getRequest(direction) / totalEnergyRequest);
+								if (electricalTile.canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
+								{
+									float energyToSend = energy * (electricalTile.getRequest(direction) / totalEnergyRequest);
 
-	                                if (energyToSend > 0)
-	                                {
-	                                    ElectricityPack electricityToSend = ElectricityPack.getFromWatts(energyToSend, voltage);
+									if (energyToSend > 0)
+									{
+										ElectricityPack electricityToSend = ElectricityPack.getFromWatts(energyToSend, voltage);
 
-	                                    // Calculate energy loss caused by resistance.
-	                                    float ampsReceived = electricityToSend.amperes - (electricityToSend.amperes * electricityToSend.amperes * this.getTotalResistance()) / electricityToSend.voltage;
-	                                    float voltsReceived = electricityToSend.voltage - (electricityToSend.amperes * this.getTotalResistance());
+										// Calculate energy loss caused by resistance.
+										float ampsReceived = electricityToSend.amperes - (electricityToSend.amperes * electricityToSend.amperes * this.getTotalResistance()) / electricityToSend.voltage;
+										float voltsReceived = electricityToSend.voltage - (electricityToSend.amperes * this.getTotalResistance());
 
-	                                    electricityToSend = new ElectricityPack(ampsReceived, voltsReceived);
+										electricityToSend = new ElectricityPack(ampsReceived, voltsReceived);
 
-	                                    energy -= ((IElectrical) tileEntity).receiveElectricity(direction, electricityToSend, true);
-	                                }
-							    }
+										energy -= ((IElectrical) tileEntity).receiveElectricity(direction, electricityToSend, true);
+									}
+								}
 							}
 						}
 					}
@@ -120,14 +121,14 @@ public class ElectricityNetwork implements IElectricityNetwork
 				{
 					if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
 					{
-                        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
-                        {
-                            if (((IElectrical) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
-                            {
-                                requests.add(ElectricityPack.getFromWatts(((IElectrical) tileEntity).getRequest(direction), ((IElectrical) tileEntity).getVoltage()));
-                                continue;
-                            }
-                        }
+						for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+						{
+							if (((IElectrical) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
+							{
+								requests.add(ElectricityPack.getFromWatts(((IElectrical) tileEntity).getRequest(direction), ((IElectrical) tileEntity).getVoltage()));
+								continue;
+							}
+						}
 					}
 				}
 			}
@@ -151,15 +152,15 @@ public class ElectricityNetwork implements IElectricityNetwork
 		return this.electricalTiles.keySet();
 	}
 
-    /**
-     * @param tile The tile to get connections for
-     * @return The list of directions that can be connected to for the provided tile
-     */
-    @Override
-    public ArrayList<ForgeDirection> getPossibleDirections(TileEntity tile)
-    {
-        return this.electricalTiles.containsKey(tile) ? this.electricalTiles.get(tile) : null;
-    }
+	/**
+	 * @param tile The tile to get connections for
+	 * @return The list of directions that can be connected to for the provided tile
+	 */
+	@Override
+	public ArrayList<ForgeDirection> getPossibleDirections(TileEntity tile)
+	{
+		return this.electricalTiles.containsKey(tile) ? this.electricalTiles.get(tile) : null;
+	}
 
 	/**
 	 * This function is called to refresh all conductors in this network
@@ -189,28 +190,28 @@ public class ElectricityNetwork implements IElectricityNetwork
 				{
 					conductor.setNetwork(this);
 				}
-				
+
 				for (int i = 0; i < conductor.getAdjacentConnections().length; i++)
 				{
-				    TileEntity acceptor = conductor.getAdjacentConnections()[i];
+					TileEntity acceptor = conductor.getAdjacentConnections()[i];
 
-                    if (!(acceptor instanceof IConductor) && acceptor instanceof IConnector)
-                    {
-                        ArrayList<ForgeDirection> possibleDirections = null;
-                        
-                        if (this.electricalTiles.containsKey(acceptor))
-                        {
-                            possibleDirections = this.electricalTiles.get(acceptor);
-                        }
-                        else
-                        {
-                            possibleDirections = new ArrayList<ForgeDirection>();
-                        }
-                        
-                        possibleDirections.add(ForgeDirection.getOrientation(i));
-                        
-                        this.electricalTiles.put(acceptor, possibleDirections);
-                    }
+					if (!(acceptor instanceof IConductor) && acceptor instanceof IConnector)
+					{
+						ArrayList<ForgeDirection> possibleDirections = null;
+
+						if (this.electricalTiles.containsKey(acceptor))
+						{
+							possibleDirections = this.electricalTiles.get(acceptor);
+						}
+						else
+						{
+							possibleDirections = new ArrayList<ForgeDirection>();
+						}
+
+						possibleDirections.add(ForgeDirection.getOrientation(i));
+
+						this.electricalTiles.put(acceptor, possibleDirections);
+					}
 				}
 			}
 		}

@@ -1,16 +1,16 @@
 package ic2.api.energy.tile;
 
-import net.minecraft.tileentity.TileEntity;
-
 import ic2.api.Direction;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * For internal usage only.
- *
+ * 
  * @see IEnergySource
  * @see IEnergyConductor
  */
-public interface IEnergyEmitter extends IEnergyTile {
+public interface IEnergyEmitter extends IEnergyTile
+{
 	/**
 	 * Determine if this emitter can emit energy to an adjacent receiver.
 	 * 
@@ -20,4 +20,3 @@ public interface IEnergyEmitter extends IEnergyTile {
 	 */
 	boolean emitsEnergyTo(TileEntity receiver, Direction direction);
 }
-

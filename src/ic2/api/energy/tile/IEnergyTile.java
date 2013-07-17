@@ -2,12 +2,13 @@ package ic2.api.energy.tile;
 
 /**
  * For internal usage only.
- *
+ * 
  * @see IEnergySink
  * @see IEnergySource
  * @see IEnergyConductor
  */
-public interface IEnergyTile {
+public interface IEnergyTile
+{
 	/**
 	 * Determine if this tile entity has been added to the energy network
 	 * 
@@ -15,4 +16,3 @@ public interface IEnergyTile {
 	 */
 	boolean isAddedToEnergyNet();
 }
-

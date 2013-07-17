@@ -3,10 +3,12 @@ package universalelectricity.compatibility;
 import ic2.api.Direction;
 import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergySink;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,285 +35,286 @@ import cpw.mods.fml.common.FMLLog;
  */
 public class UniversalNetwork extends ElectricityNetwork
 {
-    public UniversalNetwork()
-    {
-        ;
-    }
-    
-    @Override
-    public ElectricityPack getRequest(TileEntity... ignoreTiles)
-    {
-        List<ElectricityPack> requests = new ArrayList<ElectricityPack>();
+	@Override
+	public ElectricityPack getRequest(TileEntity... ignoreTiles)
+	{
+		List<ElectricityPack> requests = new ArrayList<ElectricityPack>();
 
-        Iterator<TileEntity> it = this.getAcceptors().iterator();
+		Iterator<TileEntity> it = this.getAcceptors().iterator();
 
-        while (it.hasNext())
-        {
-            TileEntity tileEntity = it.next();
+		while (it.hasNext())
+		{
+			TileEntity tileEntity = it.next();
 
-            if (Arrays.asList(ignoreTiles).contains(tileEntity))
-            {
-                continue;
-            }
+			if (Arrays.asList(ignoreTiles).contains(tileEntity))
+			{
+				continue;
+			}
 
-            if (tileEntity instanceof IElectrical)
-            {
-                if (!tileEntity.isInvalid())
-                {
-                    if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
-                    {
-                        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
-                        {
-                            if (((IElectrical) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
-                            {
-                                requests.add(ElectricityPack.getFromWatts(((IElectrical) tileEntity).getRequest(direction), ((IElectrical) tileEntity).getVoltage()));
-                            }
-                        }
-                        continue;
-                    }
-                }
-            }
+			if (tileEntity instanceof IElectrical)
+			{
+				if (!tileEntity.isInvalid())
+				{
+					if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
+					{
+						for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+						{
+							if (((IElectrical) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
+							{
+								requests.add(ElectricityPack.getFromWatts(((IElectrical) tileEntity).getRequest(direction), ((IElectrical) tileEntity).getVoltage()));
+							}
+						}
+						continue;
+					}
+				}
+			}
 
-            if (Compatibility.isIndustrialCraft2Loaded() && tileEntity instanceof IEnergySink)
-            {
-                if (!tileEntity.isInvalid())
-                {
-                    if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
-                    {
-                        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
-                        {
-                            if (((IEnergySink) tileEntity).acceptsEnergyFrom(VectorHelper.getTileEntityFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction), Direction.values()[(direction.ordinal() + 2) % 6]) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
-                            {
-                                requests.add(ElectricityPack.getFromWatts(Math.min(((IEnergySink)tileEntity).demandsEnergy(), ((IEnergySink)tileEntity).getMaxSafeInput()) * Compatibility.IC2_RATIO, 120));
-                            }
-                        }
-                        continue;
-                    }
-                }
-            }
+			if (Compatibility.isIndustrialCraft2Loaded() && tileEntity instanceof IEnergySink)
+			{
+				if (!tileEntity.isInvalid())
+				{
+					if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
+					{
+						for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+						{
+							if (((IEnergySink) tileEntity).acceptsEnergyFrom(VectorHelper.getTileEntityFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction), Direction.values()[(direction.ordinal() + 2) % 6]) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
+							{
+								requests.add(ElectricityPack.getFromWatts(Math.min(((IEnergySink) tileEntity).demandsEnergy(), ((IEnergySink) tileEntity).getMaxSafeInput()) * Compatibility.IC2_RATIO, 120));
+							}
+						}
+						continue;
+					}
+				}
+			}
 
-            if (Compatibility.isBuildcraftLoaded() && tileEntity instanceof IPowerReceptor)
-            {
-                if (!tileEntity.isInvalid())
-                {
-                    if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
-                    {
-                        requests.add(ElectricityPack.getFromWatts(((IPowerReceptor) tileEntity).powerRequest(/* TODO: Fix unkown direction */ForgeDirection.UNKNOWN) * Compatibility.BC3_RATIO, 120));
-                        continue;
-                    }
-                }
-            }
+			if (Compatibility.isBuildcraftLoaded() && tileEntity instanceof IPowerReceptor)
+			{
+				if (!tileEntity.isInvalid())
+				{
+					if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
+					{
+						requests.add(ElectricityPack.getFromWatts(((IPowerReceptor) tileEntity).powerRequest(/*
+																											 * TODO
+																											 * :
+																											 * Fix
+																											 * unkown
+																											 * direction
+																											 */ForgeDirection.UNKNOWN) * Compatibility.BC3_RATIO, 120));
+						continue;
+					}
+				}
+			}
 
-            it.remove();
-        }
+			it.remove();
+		}
 
-        ElectricityPack mergedPack = ElectricityPack.merge(requests);
-        ElectricityRequestEvent evt = new ElectricityRequestEvent(mergedPack, ignoreTiles);
-        MinecraftForge.EVENT_BUS.post(evt);
-        return mergedPack;
-    }
-    
-    @Override
-    public void refresh()
-    {
-        this.electricalTiles.clear();
+		ElectricityPack mergedPack = ElectricityPack.merge(requests);
+		ElectricityRequestEvent evt = new ElectricityRequestEvent(mergedPack, ignoreTiles);
+		MinecraftForge.EVENT_BUS.post(evt);
+		return mergedPack;
+	}
 
-        try
-        {
-            Iterator<IConductor> it = this.getConductors().iterator();
+	@Override
+	public void refresh()
+	{
+		this.electricalTiles.clear();
 
-            while (it.hasNext())
-            {
-                IConductor conductor = it.next();
+		try
+		{
+			Iterator<IConductor> it = this.getConductors().iterator();
 
-                if (conductor == null)
-                {
-                    it.remove();
-                }
-                else if (((TileEntity) conductor).isInvalid())
-                {
-                    it.remove();
-                }
-                else
-                {
-                    conductor.setNetwork(this);
-                }
+			while (it.hasNext())
+			{
+				IConductor conductor = it.next();
 
-                for (int i = 0; i < conductor.getAdjacentConnections().length; i++)
-                {
-                    TileEntity acceptor = conductor.getAdjacentConnections()[i];
+				if (conductor == null)
+				{
+					it.remove();
+				}
+				else if (((TileEntity) conductor).isInvalid())
+				{
+					it.remove();
+				}
+				else
+				{
+					conductor.setNetwork(this);
+				}
 
-                    if (!(acceptor instanceof IConductor))
-                    {
-                        if (acceptor instanceof IElectrical)
-                        {
-                            ArrayList<ForgeDirection> possibleDirections = null;
-                            
-                            if (this.electricalTiles.containsKey(acceptor))
-                            {
-                                possibleDirections = this.electricalTiles.get(acceptor);
-                            }
-                            else
-                            {
-                                possibleDirections = new ArrayList<ForgeDirection>();
-                            }
-                            
-                            if (((IElectrical) acceptor).canConnect(ForgeDirection.getOrientation(i)) && this.getConductors().contains(VectorHelper.getConnectorFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i))))
-                            {
-                                possibleDirections.add(ForgeDirection.getOrientation(i));
-                            }
-                            
-                            this.electricalTiles.put(acceptor, possibleDirections);
-                            continue;
-                        }
+				for (int i = 0; i < conductor.getAdjacentConnections().length; i++)
+				{
+					TileEntity acceptor = conductor.getAdjacentConnections()[i];
 
-                        if (Compatibility.isIndustrialCraft2Loaded() && acceptor instanceof IEnergyAcceptor)
-                        {
-                            ArrayList<ForgeDirection> possibleDirections = null;
-                            
-                            if (this.electricalTiles.containsKey(acceptor))
-                            {
-                                possibleDirections = this.electricalTiles.get(acceptor);
-                            }
-                            else
-                            {
-                                possibleDirections = new ArrayList<ForgeDirection>();
-                            }
-                            
-                            if (((IEnergyAcceptor) acceptor).acceptsEnergyFrom(VectorHelper.getTileEntityFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i)), Direction.values()[(i + 2) % 6]) && this.getConductors().contains(VectorHelper.getConnectorFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i))))
-                            {
-                                possibleDirections.add(ForgeDirection.getOrientation(i));
-                            }
-                            
-                            this.electricalTiles.put(acceptor, possibleDirections);
-                            continue;
-                        }
+					if (!(acceptor instanceof IConductor))
+					{
+						if (acceptor instanceof IElectrical)
+						{
+							ArrayList<ForgeDirection> possibleDirections = null;
 
-                        if (Compatibility.isBuildcraftLoaded() && acceptor instanceof IPowerReceptor)
-                        {
-                            ArrayList<ForgeDirection> possibleDirections = null;
-                            
-                            if (this.electricalTiles.containsKey(acceptor))
-                            {
-                                possibleDirections = this.electricalTiles.get(acceptor);
-                            }
-                            else
-                            {
-                                possibleDirections = new ArrayList<ForgeDirection>();
-                            }
-                            
-                            if (this.getConductors().contains(VectorHelper.getConnectorFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i))))
-                            {
-                                possibleDirections.add(ForgeDirection.getOrientation(i));
-                            }
-                            
-                            this.electricalTiles.put(acceptor, possibleDirections);
-                            continue;
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            FMLLog.severe("Universal Electricity: Failed to refresh conductor.");
-            e.printStackTrace();
-        }
-    }
+							if (this.electricalTiles.containsKey(acceptor))
+							{
+								possibleDirections = this.electricalTiles.get(acceptor);
+							}
+							else
+							{
+								possibleDirections = new ArrayList<ForgeDirection>();
+							}
 
-    @Override
-    public void merge(IElectricityNetwork network)
-    {
-        if (network != null && network != this)
-        {
-            UniversalNetwork newNetwork = new UniversalNetwork();
-            newNetwork.getConductors().addAll(this.getConductors());
-            newNetwork.getConductors().addAll(network.getConductors());
-            newNetwork.refresh();
-        }
-    }
+							if (((IElectrical) acceptor).canConnect(ForgeDirection.getOrientation(i)) && this.getConductors().contains(VectorHelper.getConnectorFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i))))
+							{
+								possibleDirections.add(ForgeDirection.getOrientation(i));
+							}
 
-    @Override
-    public void split(IConductor splitPoint)
-    {
-        if (splitPoint instanceof TileEntity)
-        {
-            this.getConductors().remove(splitPoint);
+							this.electricalTiles.put(acceptor, possibleDirections);
+							continue;
+						}
 
-            /**
-             * Loop through the connected blocks and attempt to see if there are connections between
-             * the two points elsewhere.
-             */
-            TileEntity[] connectedBlocks = splitPoint.getAdjacentConnections();
+						if (Compatibility.isIndustrialCraft2Loaded() && acceptor instanceof IEnergyAcceptor)
+						{
+							ArrayList<ForgeDirection> possibleDirections = null;
 
-            for (int i = 0; i < connectedBlocks.length; i++)
-            {
-                TileEntity connectedBlockA = connectedBlocks[i];
+							if (this.electricalTiles.containsKey(acceptor))
+							{
+								possibleDirections = this.electricalTiles.get(acceptor);
+							}
+							else
+							{
+								possibleDirections = new ArrayList<ForgeDirection>();
+							}
 
-                if (connectedBlockA instanceof INetworkConnection)
-                {
-                    for (int ii = 0; ii < connectedBlocks.length; ii++)
-                    {
-                        final TileEntity connectedBlockB = connectedBlocks[ii];
+							if (((IEnergyAcceptor) acceptor).acceptsEnergyFrom(VectorHelper.getTileEntityFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i)), Direction.values()[(i + 2) % 6]) && this.getConductors().contains(VectorHelper.getConnectorFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i))))
+							{
+								possibleDirections.add(ForgeDirection.getOrientation(i));
+							}
 
-                        if (connectedBlockA != connectedBlockB && connectedBlockB instanceof INetworkConnection)
-                        {
-                            Pathfinder finder = new PathfinderChecker(((TileEntity) splitPoint).worldObj, (INetworkConnection) connectedBlockB, splitPoint);
-                            finder.init(new Vector3(connectedBlockA));
+							this.electricalTiles.put(acceptor, possibleDirections);
+							continue;
+						}
 
-                            if (finder.results.size() > 0)
-                            {
-                                /**
-                                 * The connections A and B are still intact elsewhere. Set all
-                                 * references of wire connection into one network.
-                                 */
+						if (Compatibility.isBuildcraftLoaded() && acceptor instanceof IPowerReceptor)
+						{
+							ArrayList<ForgeDirection> possibleDirections = null;
 
-                                for (Vector3 node : finder.closedSet)
-                                {
-                                    TileEntity nodeTile = node.getTileEntity(((TileEntity) splitPoint).worldObj);
+							if (this.electricalTiles.containsKey(acceptor))
+							{
+								possibleDirections = this.electricalTiles.get(acceptor);
+							}
+							else
+							{
+								possibleDirections = new ArrayList<ForgeDirection>();
+							}
 
-                                    if (nodeTile instanceof INetworkProvider)
-                                    {
-                                        if (nodeTile != splitPoint)
-                                        {
-                                            ((INetworkProvider) nodeTile).setNetwork(this);
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                /**
-                                 * The connections A and B are not connected anymore. Give both of
-                                 * them a new network.
-                                 */
-                                IElectricityNetwork newNetwork = new UniversalNetwork();
+							if (this.getConductors().contains(VectorHelper.getConnectorFromSide(acceptor.worldObj, new Vector3(acceptor), ForgeDirection.getOrientation(i))))
+							{
+								possibleDirections.add(ForgeDirection.getOrientation(i));
+							}
 
-                                for (Vector3 node : finder.closedSet)
-                                {
-                                    TileEntity nodeTile = node.getTileEntity(((TileEntity) splitPoint).worldObj);
+							this.electricalTiles.put(acceptor, possibleDirections);
+							continue;
+						}
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			FMLLog.severe("Universal Electricity: Failed to refresh conductor.");
+			e.printStackTrace();
+		}
+	}
 
-                                    if (nodeTile instanceof INetworkProvider)
-                                    {
-                                        if (nodeTile != splitPoint)
-                                        {
-                                            newNetwork.getConductors().add((IConductor) nodeTile);
-                                        }
-                                    }
-                                }
+	@Override
+	public void merge(IElectricityNetwork network)
+	{
+		if (network != null && network != this)
+		{
+			UniversalNetwork newNetwork = new UniversalNetwork();
+			newNetwork.getConductors().addAll(this.getConductors());
+			newNetwork.getConductors().addAll(network.getConductors());
+			newNetwork.refresh();
+		}
+	}
 
-                                newNetwork.refresh();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+	@Override
+	public void split(IConductor splitPoint)
+	{
+		if (splitPoint instanceof TileEntity)
+		{
+			this.getConductors().remove(splitPoint);
 
-    @Override
-    public String toString()
-    {
-        return "UniversalNetwork[" + this.hashCode() + "|Wires:" + this.getConductors().size() + "|Acceptors:" + this.electricalTiles.size() + "]";
-    }
+			/**
+			 * Loop through the connected blocks and attempt to see if there are connections between
+			 * the two points elsewhere.
+			 */
+			TileEntity[] connectedBlocks = splitPoint.getAdjacentConnections();
+
+			for (int i = 0; i < connectedBlocks.length; i++)
+			{
+				TileEntity connectedBlockA = connectedBlocks[i];
+
+				if (connectedBlockA instanceof INetworkConnection)
+				{
+					for (int ii = 0; ii < connectedBlocks.length; ii++)
+					{
+						final TileEntity connectedBlockB = connectedBlocks[ii];
+
+						if (connectedBlockA != connectedBlockB && connectedBlockB instanceof INetworkConnection)
+						{
+							Pathfinder finder = new PathfinderChecker(((TileEntity) splitPoint).worldObj, (INetworkConnection) connectedBlockB, splitPoint);
+							finder.init(new Vector3(connectedBlockA));
+
+							if (finder.results.size() > 0)
+							{
+								/**
+								 * The connections A and B are still intact elsewhere. Set all
+								 * references of wire connection into one network.
+								 */
+
+								for (Vector3 node : finder.closedSet)
+								{
+									TileEntity nodeTile = node.getTileEntity(((TileEntity) splitPoint).worldObj);
+
+									if (nodeTile instanceof INetworkProvider)
+									{
+										if (nodeTile != splitPoint)
+										{
+											((INetworkProvider) nodeTile).setNetwork(this);
+										}
+									}
+								}
+							}
+							else
+							{
+								/**
+								 * The connections A and B are not connected anymore. Give both of
+								 * them a new network.
+								 */
+								IElectricityNetwork newNetwork = new UniversalNetwork();
+
+								for (Vector3 node : finder.closedSet)
+								{
+									TileEntity nodeTile = node.getTileEntity(((TileEntity) splitPoint).worldObj);
+
+									if (nodeTile instanceof INetworkProvider)
+									{
+										if (nodeTile != splitPoint)
+										{
+											newNetwork.getConductors().add((IConductor) nodeTile);
+										}
+									}
+								}
+
+								newNetwork.refresh();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public String toString()
+	{
+		return "UniversalNetwork[" + this.hashCode() + "|Wires:" + this.getConductors().size() + "|Acceptors:" + this.electricalTiles.size() + "]";
+	}
 }

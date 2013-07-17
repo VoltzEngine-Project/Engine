@@ -10,6 +10,7 @@ import universalelectricity.core.electricity.ElectricityPack;
  * @author Calclavia
  * 
  */
+@Deprecated
 public class ElectricityHandler
 {
 	public IElectrical tileEntity;

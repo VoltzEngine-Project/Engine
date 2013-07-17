@@ -31,14 +31,14 @@ public class Compatibility
 
 		NetworkLoader.setNetworkClass(UniversalNetwork.class);
 	}
-	
+
 	public static boolean isIndustrialCraft2Loaded()
 	{
-	    return Loader.isModLoaded("IC2");
+		return Loader.isModLoaded("IC2");
 	}
-    
-    public static boolean isBuildcraftLoaded()
-    {
-        return Loader.isModLoaded("BuildCraft|Energy");
-    }
+
+	public static boolean isBuildcraftLoaded()
+	{
+		return Loader.isModLoaded("BuildCraft|Energy");
+	}
 }

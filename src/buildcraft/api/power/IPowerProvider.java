@@ -4,7 +4,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.SafeTimeTracker;
 
-public interface IPowerProvider {
+public interface IPowerProvider
+{
 
 	int getLatency();
 
