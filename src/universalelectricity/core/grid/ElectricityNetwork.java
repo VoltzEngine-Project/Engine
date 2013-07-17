@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,6 +48,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 		MinecraftForge.EVENT_BUS.post(evt);
 
 		float energy = electricity.getWatts();
+		float totalEnergy = energy;
 		float voltage = electricity.voltage;
 
 		if (!evt.isCanceled())
@@ -71,7 +71,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 							{
 								if (electricalTile.canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
 								{
-									float energyToSend = energy * (electricalTile.getRequest(direction) / totalEnergyRequest);
+									float energyToSend = totalEnergy * (electricalTile.getRequest(direction) / totalEnergyRequest);
 
 									if (energyToSend > 0)
 									{
