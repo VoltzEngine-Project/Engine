@@ -42,7 +42,7 @@ public class ElectricItemHelper
 		{
 			if (itemStack.getItem() instanceof IItemElectric)
 			{
-				return ((IItemElectric) itemStack.getItem()).discharge(itemStack, Math.min(((IItemElectric) itemStack.getItem()).getTransfer(itemStack), joules), true);
+				return ((IItemElectric) itemStack.getItem()).discharge(itemStack, Math.min(((IItemElectric) itemStack.getItem()).getMaxElectricityStored(itemStack), joules), true);
 			}
 		}
 

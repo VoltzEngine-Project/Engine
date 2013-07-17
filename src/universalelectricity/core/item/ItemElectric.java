@@ -114,7 +114,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
 	@Override
 	public float getTransfer(ItemStack itemStack)
 	{
-		return getMaxElectricityStored(itemStack) * 0.005F;
+		return this.getMaxElectricityStored(itemStack) - this.getElectricityStored(itemStack);
 	}
 
 	/**
