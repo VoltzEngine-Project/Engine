@@ -93,13 +93,11 @@ public class UniversalNetwork extends ElectricityNetwork
 				{
 					if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
 					{
-						requests.add(ElectricityPack.getFromWatts(((IPowerReceptor) tileEntity).powerRequest(/*
-																											 * TODO
-																											 * :
-																											 * Fix
-																											 * unkown
-																											 * direction
-																											 */ForgeDirection.UNKNOWN) * Compatibility.BC3_RATIO, 120));
+						/*
+						 * TODO : Fix unkown direction
+						 * TODO: Fix inaccurate BuildCraft request calculation.
+						 */
+						requests.add(ElectricityPack.getFromWatts(((IPowerReceptor) tileEntity).getPowerReceiver(ForgeDirection.UNKNOWN).getActivationEnergy() * Compatibility.BC3_RATIO, 120));
 						continue;
 					}
 				}

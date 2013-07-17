@@ -9,19 +9,19 @@ import ic2.api.energy.tile.IEnergySource;
 import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import universalelectricity.core.block.IElectrical;
-import universalelectricity.core.block.IElectricalStorage;
 import universalelectricity.core.electricity.ElectricalEventHandler;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.tile.TileEntityElectrical;
-import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerProvider;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
+import buildcraft.api.power.PowerHandler.Type;
 
 /**
  * A universal electricity tile used for tiles that consume or produce electricity.
@@ -35,7 +35,7 @@ import buildcraft.api.power.PowerProvider;
 public abstract class TileEntityUniversalElectrical extends TileEntityElectrical implements IEnergySink, IEnergySource, IPowerReceptor
 {
 	protected boolean addedToEnergyNet;
-	public IPowerProvider bcPowerProvider;
+	public PowerHandler bcPowerHandler;
 
 	public float energyStored = 0;
 	public float maxEnergyStored = 0;
@@ -49,8 +49,8 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	{
 		this.energyStored = initialEnergy;
 		this.maxEnergyStored = maxEnergy;
-		this.bcPowerProvider = new PowerProviderCompat(this);
-		this.bcPowerProvider.configure(0, 0, 100, 0, (int) Math.floor(maxEnergy * Compatibility.BC3_RATIO));
+		this.bcPowerHandler = new PowerHandler(this, Type.MACHINE);
+		this.bcPowerHandler.configure(0, 100, 0, (int) Math.ceil(maxEnergy * Compatibility.BC3_RATIO));
 	}
 
 	@Override
@@ -99,6 +99,18 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 				}
 			}
 		}
+	}
+
+	@Override
+	public float getRequest(ForgeDirection direction)
+	{
+		return 0;
+	}
+
+	@Override
+	public float getProvide(ForgeDirection direction)
+	{
+		return 0;
 	}
 
 	/**
@@ -166,35 +178,6 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 
 			this.addedToEnergyNet = false;
 		}
-	}
-
-	@Override
-	public void setPowerProvider(IPowerProvider provider)
-	{
-		this.bcPowerProvider = provider;
-	}
-
-	@Override
-	public IPowerProvider getPowerProvider()
-	{
-		return this.bcPowerProvider;
-	}
-
-	@Override
-	public void doWork()
-	{
-
-	}
-
-	@Override
-	public int powerRequest(ForgeDirection from)
-	{
-		if (!from.equals(this.getInputDirection()))
-		{
-			return 0;
-		}
-
-		return (int) Math.floor(this.getRequest(this.getInputDirection()) * Compatibility.TO_BC_RATIO);
 	}
 
 	@Override
@@ -327,55 +310,50 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 		nbt.setFloat("maxEnergyStored", this.maxEnergyStored);
 	}
 
-	public class PowerProviderCompat extends PowerProvider
+	/*
+	 * public class PowerHandlerCompat extends PowerHandler { public IElectrical theTile;
+	 * 
+	 * public PowerHandlerCompat(IPowerReceptor receptor, Type type) { super(receptor, type);
+	 * 
+	 * this.theTile = (IElectrical) receptor; }
+	 * 
+	 * @Override public float useEnergy(float min, float max, boolean doUse) { float result = 0;
+	 * 
+	 * if (this.theTile.getEnergyStored() * Compatibility.TO_BC_RATIO >= min) { if
+	 * (this.theTile.getEnergyStored() * Compatibility.TO_BC_RATIO <= max) { result =
+	 * this.theTile.getEnergyStored() * Compatibility.TO_BC_RATIO;
+	 * 
+	 * if (doUse) { this.theTile.setEnergyStored(0.0F); } } else { result = max;
+	 * 
+	 * if (doUse) { this.theTile.setEnergyStored(this.theTile.getEnergyStored() - max *
+	 * Compatibility.BC3_RATIO); } } }
+	 * 
+	 * return result; }
+	 * 
+	 * @Override public void receiveEnergy(float quantity, ForgeDirection from) {
+	 * this.theTile.receiveElectricity(from, quantity * Compatibility.BC3_RATIO, true); }
+	 * 
+	 * @Override public boolean update(IPowerReceptor receptor) { return true; } }
+	 */
+
+	/**
+	 * BuildCraft power support
+	 */
+	@Override
+	public PowerReceiver getPowerReceiver(ForgeDirection side)
 	{
-		public TileEntityUniversalElectrical theTile;
+		return null;
+	}
 
-		public PowerProviderCompat(TileEntityUniversalElectrical theTile)
-		{
-			this.theTile = theTile;
-		}
+	@Override
+	public void doWork(PowerHandler workProvider)
+	{
 
-		@Override
-		public float useEnergy(float min, float max, boolean doUse)
-		{
-			float result = 0;
+	}
 
-			if (this.theTile.getEnergyStored() * Compatibility.TO_BC_RATIO >= min)
-			{
-				if (this.theTile.getEnergyStored() * Compatibility.TO_BC_RATIO <= max)
-				{
-					result = this.theTile.getEnergyStored() * Compatibility.TO_BC_RATIO;
-
-					if (doUse)
-					{
-						this.theTile.setEnergyStored(0.0F);
-					}
-				}
-				else
-				{
-					result = max;
-
-					if (doUse)
-					{
-						this.theTile.setEnergyStored(this.theTile.getEnergyStored() - max * Compatibility.BC3_RATIO);
-					}
-				}
-			}
-
-			return result;
-		}
-
-		@Override
-		public void receiveEnergy(float quantity, ForgeDirection from)
-		{
-			this.theTile.setEnergyStored(this.theTile.getEnergyStored() + (quantity * Compatibility.BC3_RATIO));
-		}
-
-		@Override
-		public boolean update(IPowerReceptor receptor)
-		{
-			return true;
-		}
+	@Override
+	public World getWorld()
+	{
+		return this.getWorldObj();
 	}
 }
