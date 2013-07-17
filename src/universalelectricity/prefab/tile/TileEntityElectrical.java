@@ -59,14 +59,22 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
-		this.electricityHandler.readFromNBT(nbt);
+		
+        if (this.electricityHandler != null)
+        {
+            this.electricityHandler.readFromNBT(nbt);
+        }
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
-		this.electricityHandler.writeToNBT(nbt);
+		
+		if (this.electricityHandler != null)
+		{
+	        this.electricityHandler.writeToNBT(nbt);
+		}
 	}
 
 }
