@@ -6,6 +6,8 @@
 
 package dan200.computer.api;
 
+import net.minecraft.world.World;
+
 /**
  * The interface passed to peripherals by computers or turtles, providing methods that they can
  * call. This should not be implemented by your classes. Do not interact with computers except via

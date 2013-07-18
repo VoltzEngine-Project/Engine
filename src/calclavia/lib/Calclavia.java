@@ -7,6 +7,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class Calclavia
 {
+	public static final String NAME = "Calclavia";
+
 	public static final String DOMAIN = "calclavia";
 	public static final String TEXTURE_NAME_PREFIX = DOMAIN + ":";
 

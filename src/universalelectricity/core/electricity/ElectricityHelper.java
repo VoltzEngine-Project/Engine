@@ -21,7 +21,7 @@ import universalelectricity.core.vector.VectorHelper;
  * @author Calclavia
  * 
  */
-public class ElectricalEventHandler
+public class ElectricityHelper
 {
 	@ForgeSubscribe
 	public void onProduce(ElectricityProduceEvent evt)
@@ -95,7 +95,7 @@ public class ElectricalEventHandler
 	@Deprecated
 	public static ElectricityPack produceFromMultipleSides(TileEntity tileEntity, ElectricityPack electricityPack)
 	{
-		return ElectricalEventHandler.produceFromMultipleSides(tileEntity, getDirections(tileEntity), electricityPack);
+		return ElectricityHelper.produceFromMultipleSides(tileEntity, getDirections(tileEntity), electricityPack);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class ElectricalEventHandler
 
 		if (tileEntity != null && approachingDirection != null)
 		{
-			final Set<IElectricityNetwork> connectedNetworks = ElectricalEventHandler.getNetworksFromMultipleSides(tileEntity, approachingDirection);
+			final Set<IElectricityNetwork> connectedNetworks = ElectricityHelper.getNetworksFromMultipleSides(tileEntity, approachingDirection);
 
 			if (connectedNetworks.size() > 0)
 			{
@@ -160,7 +160,7 @@ public class ElectricalEventHandler
 				position.modifyPositionFromSide(side);
 
 				TileEntity outputConductor = position.getTileEntity(tileEntity.worldObj);
-				IElectricityNetwork electricityNetwork = ElectricalEventHandler.getNetworkFromTileEntity(outputConductor, side);
+				IElectricityNetwork electricityNetwork = ElectricityHelper.getNetworkFromTileEntity(outputConductor, side);
 
 				if (electricityNetwork != null)
 				{
