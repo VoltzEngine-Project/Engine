@@ -36,23 +36,21 @@ import buildcraft.api.power.PowerHandler.PowerReceiver;
 public abstract class TileEntityUniversalConductor extends TileEntityConductor implements IEnergySink, IPowerReceptor
 {
 	protected boolean addedToIC2Network = false;
-	/*private DummyPowerProvider powerProvider;
 
-	public TileEntityUniversalConductor()
-	{
-		this.powerProvider = new DummyPowerProvider(this.getNetwork(), this);
-		this.powerProvider.configure(0, 0, 100, 0, 100);
-	}
-*/
+	/*
+	 * private DummyPowerProvider powerProvider;
+	 * 
+	 * public TileEntityUniversalConductor() { this.powerProvider = new
+	 * DummyPowerProvider(this.getNetwork(), this); this.powerProvider.configure(0, 0, 100, 0, 100);
+	 * }
+	 */
 	@Override
 	public void setNetwork(IElectricityNetwork network)
 	{
 		super.setNetwork(network);
-/*
-		if (this.powerProvider != null)
-		{
-			this.powerProvider.network = network;
-		}*/
+		/*
+		 * if (this.powerProvider != null) { this.powerProvider.network = network; }
+		 */
 	}
 
 	@Override
@@ -103,7 +101,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 			this.addedToIC2Network = true;
 		}
 	}
-	
+
 	/**
 	 * IC2 Methods
 	 */
@@ -186,7 +184,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 
 		return adjecentConnections.toArray(new TileEntity[0]);
 	}
-	
+
 	/**
 	 * BuildCraft Methods
 	 */
@@ -199,7 +197,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 	@Override
 	public void doWork(PowerHandler workProvider)
 	{
-		
+
 	}
 
 	@Override
@@ -207,37 +205,24 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 	{
 		return this.getWorldObj();
 	}
-/*
-	@Override
-	public int powerRequest(ForgeDirection from)
-	{
-		if (this.getNetwork() == null)
-		{
-			return 0;
-		}
-
-		return (int) Math.floor(Math.min(this.getNetwork().getRequest(VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), from)).getWatts() * Compatibility.TO_BC_RATIO, 100));
-	}
-*/
-/*
-	private class DummyPowerProvider extends PowerProvider
-	{
-		public IElectricityNetwork network;
-		private final TileEntityUniversalConductor conductor;
-
-		public DummyPowerProvider(IElectricityNetwork network, TileEntityUniversalConductor conductor)
-		{
-			this.network = network;
-			this.conductor = conductor;
-		}
-
-		@Override
-		public void receiveEnergy(float quantity, ForgeDirection from)
-		{
-			if (this.network != null)
-			{
-				this.network.produce(ElectricityPack.getFromWatts(this.getEnergyStored(), 120), VectorHelper.getTileEntityFromSide(this.conductor.worldObj, new Vector3(this.conductor), from));
-			}
-		}
-	}*/
+	/*
+	 * @Override public int powerRequest(ForgeDirection from) { if (this.getNetwork() == null) {
+	 * return 0; }
+	 * 
+	 * return (int)
+	 * Math.floor(Math.min(this.getNetwork().getRequest(VectorHelper.getTileEntityFromSide
+	 * (this.worldObj, new Vector3(this), from)).getWatts() * Compatibility.TO_BC_RATIO, 100)); }
+	 */
+	/*
+	 * private class DummyPowerProvider extends PowerProvider { public IElectricityNetwork network;
+	 * private final TileEntityUniversalConductor conductor;
+	 * 
+	 * public DummyPowerProvider(IElectricityNetwork network, TileEntityUniversalConductor
+	 * conductor) { this.network = network; this.conductor = conductor; }
+	 * 
+	 * @Override public void receiveEnergy(float quantity, ForgeDirection from) { if (this.network
+	 * != null) { this.network.produce(ElectricityPack.getFromWatts(this.getEnergyStored(), 120),
+	 * VectorHelper.getTileEntityFromSide(this.conductor.worldObj, new Vector3(this.conductor),
+	 * from)); } } }
+	 */
 }

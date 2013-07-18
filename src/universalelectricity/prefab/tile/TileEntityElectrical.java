@@ -2,6 +2,7 @@ package universalelectricity.prefab.tile;
 
 import java.util.EnumSet;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -10,6 +11,7 @@ import universalelectricity.core.block.IElectricalStorage;
 import universalelectricity.core.electricity.ElectricityHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.grid.IElectricityNetwork;
+import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 
@@ -32,6 +34,22 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 	public TileEntityElectrical()
 	{
 		this(0);
+	}
+
+	/**
+	 * Recharges electric item.
+	 */
+	public void recharge(ItemStack itemStack)
+	{
+		this.setEnergyStored(this.getEnergyStored() - ElectricItemHelper.chargeItem(itemStack, this.getProvide(ForgeDirection.UNKNOWN)));
+	}
+
+	/**
+	 * Discharges electric item.
+	 */
+	public void discharge(ItemStack itemStack)
+	{
+		this.setEnergyStored(this.getEnergyStored() + ElectricItemHelper.dischargeItem(itemStack, this.getProvide(ForgeDirection.UNKNOWN)));
 	}
 
 	/**
@@ -169,11 +187,13 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 		return this.provideElectricity(ElectricityPack.getFromWatts(energy, this.getVoltage()), doProvide);
 	}
 
+	@Override
 	public void setEnergyStored(float energy)
 	{
 		this.energyStored = Math.max(Math.min(energy, this.getMaxEnergyStored()), 0);
 	}
 
+	@Override
 	public float getEnergyStored()
 	{
 		return this.energyStored;
