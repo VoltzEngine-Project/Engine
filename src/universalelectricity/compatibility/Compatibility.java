@@ -4,19 +4,30 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.NetworkLoader;
 import cpw.mods.fml.common.Loader;
 
+/**
+ * The Universal Electricity compatiblity module allows your mod to be compatible with most major
+ * power systems in Minecraft.
+ * 
+ * @author Calclavia, Micdoodle
+ * 
+ */
 public class Compatibility
 {
 	/**
 	 * Multiply this to convert foreign energy into UE Joules.
 	 */
-	public static float IC2_RATIO = 50;
-	public static float BC3_RATIO = 125;
+	public static float BC3_RATIO = 0.125f;
+	public static float IC2_RATIO = 0.05f;
+
 	/**
-	 * Multiply this to convert UE Joules into foreign energy.
+	 * Multiply this to convert UE Joules into foreign energy. The reciprocal conversion ratio.
 	 */
 	public static float TO_IC2_RATIO = 1 / IC2_RATIO;
 	public static float TO_BC_RATIO = 1 / BC3_RATIO;
 
+	/**
+	 * You must call this function to enable the Universal Network module.
+	 */
 	public static void initiate()
 	{
 		/**
@@ -28,7 +39,6 @@ public class Compatibility
 		TO_IC2_RATIO = 1 / IC2_RATIO;
 		TO_BC_RATIO = 1 / BC3_RATIO;
 		UniversalElectricity.CONFIGURATION.save();
-
 		NetworkLoader.setNetworkClass(UniversalNetwork.class);
 	}
 

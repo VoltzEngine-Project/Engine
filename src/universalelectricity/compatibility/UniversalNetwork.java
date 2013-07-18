@@ -82,6 +82,7 @@ public class UniversalNetwork extends ElectricityNetwork
 								requests.add(ElectricityPack.getFromWatts(Math.min(((IEnergySink) tileEntity).demandsEnergy(), ((IEnergySink) tileEntity).getMaxSafeInput()) * Compatibility.IC2_RATIO, 120));
 							}
 						}
+
 						continue;
 					}
 				}
@@ -94,7 +95,8 @@ public class UniversalNetwork extends ElectricityNetwork
 					if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
 					{
 						/*
-						 * TODO : Fix unkown direction
+						 * TODO: Fix unkown direction
+						 * 
 						 * TODO: Fix inaccurate BuildCraft request calculation.
 						 */
 						requests.add(ElectricityPack.getFromWatts(((IPowerReceptor) tileEntity).getPowerReceiver(ForgeDirection.UNKNOWN).getActivationEnergy() * Compatibility.BC3_RATIO, 120));

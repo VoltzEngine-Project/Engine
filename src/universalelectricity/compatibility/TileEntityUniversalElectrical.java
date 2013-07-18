@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import universalelectricity.core.electricity.ElectricalEventHandler;
+import universalelectricity.core.electricity.ElectricityHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
@@ -73,7 +73,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 		if (!this.worldObj.isRemote && provide > 0)
 		{
 			TileEntity outputTile = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), this.getOutputDirection());
-			IElectricityNetwork outputNetwork = ElectricalEventHandler.getNetworkFromTileEntity(outputTile, this.getOutputDirection());
+			IElectricityNetwork outputNetwork = ElectricityHelper.getNetworkFromTileEntity(outputTile, this.getOutputDirection());
 
 			if (outputNetwork != null)
 			{
