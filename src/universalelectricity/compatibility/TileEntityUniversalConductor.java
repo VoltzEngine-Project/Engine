@@ -6,10 +6,6 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergyTile;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -148,7 +144,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 	@Override
 	public TileEntity[] getAdjacentConnections()
 	{
-		List<TileEntity> adjecentConnections = new ArrayList<TileEntity>();
+		TileEntity[] adjecentConnections = new TileEntity[6];
 
 		for (byte i = 0; i < 6; i++)
 		{
@@ -159,7 +155,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 			{
 				if (((IConnector) tileEntity).canConnect(side.getOpposite()))
 				{
-					adjecentConnections.add(tileEntity);
+					adjecentConnections[i] = tileEntity;
 				}
 			}
 			else if (Compatibility.isIndustrialCraft2Loaded() && tileEntity instanceof IEnergyTile)
@@ -168,21 +164,21 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 				{
 					if (((IEnergyAcceptor) tileEntity).acceptsEnergyFrom(this, Direction.values()[(i + 2) % 6].getInverse()))
 					{
-						adjecentConnections.add(tileEntity);
+						adjecentConnections[i] = tileEntity;
 					}
 				}
 				else
 				{
-					adjecentConnections.add(tileEntity);
+					adjecentConnections[i] = tileEntity;
 				}
 			}
 			else if (Compatibility.isBuildcraftLoaded() && tileEntity instanceof IPowerReceptor)
 			{
-				adjecentConnections.add(tileEntity);
+				adjecentConnections[i] = tileEntity;
 			}
 		}
 
-		return adjecentConnections.toArray(new TileEntity[0]);
+		return adjecentConnections;
 	}
 
 	/**
