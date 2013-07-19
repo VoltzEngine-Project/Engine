@@ -85,7 +85,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	@Override
 	public TileEntity[] getAdjacentConnections()
 	{
-		List<TileEntity> adjecentConnections = new ArrayList<TileEntity>();
+		TileEntity[] adjecentConnections = new TileEntity[6];
 
 		for (byte i = 0; i < 6; i++)
 		{
@@ -96,12 +96,12 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 			{
 				if (((IConnector) tileEntity).canConnect(side.getOpposite()))
 				{
-					adjecentConnections.add(tileEntity);
+					adjecentConnections[i] = tileEntity;
 				}
 			}
 		}
 
-		return adjecentConnections.toArray(new TileEntity[0]);
+		return adjecentConnections;
 	}
 
 	@Override
