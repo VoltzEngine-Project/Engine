@@ -20,22 +20,6 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 	public float energyStored = 0;
 	public float maxEnergyStored = 0;
 
-	public TileEntityElectrical(float energyStored, float maxEnergyStored)
-	{
-		this.setEnergyStored(energyStored);
-		this.setMaxEnergyStored(maxEnergyStored);
-	}
-
-	public TileEntityElectrical(float maxEnergyStored)
-	{
-		this(0, maxEnergyStored);
-	}
-
-	public TileEntityElectrical()
-	{
-		this(0);
-	}
-
 	/**
 	 * Recharges electric item.
 	 */

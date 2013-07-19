@@ -35,11 +35,6 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	public PowerHandler bcPowerHandler;
 	public Type bcBlockType = Type.MACHINE;
 
-	public TileEntityUniversalElectrical(float maxEnergy)
-	{
-		this(0, maxEnergy);
-	}
-
 	public TileEntityUniversalElectrical(float initialEnergy, float maxEnergy)
 	{
 		this.energyStored = initialEnergy;
