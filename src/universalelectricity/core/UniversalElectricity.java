@@ -70,7 +70,7 @@ public class UniversalElectricity
 
 			try
 			{
-				MinecraftForge.EVENT_BUS.register(Class.forName("universalelectricity.core.electricity.ElectricalEventHandler").newInstance());
+				MinecraftForge.EVENT_BUS.register(Class.forName("universalelectricity.core.electricity.ElectricityHelper").newInstance());
 			}
 			catch (Exception e)
 			{

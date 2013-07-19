@@ -43,6 +43,11 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 		this.bcPowerHandler.configure(0, 100, 0, (int) Math.ceil(maxEnergy * Compatibility.BC3_RATIO));
 	}
 
+	public TileEntityUniversalElectrical(float maxEnergy)
+	{
+		this(0, maxEnergy);
+	}
+
 	@Override
 	public void updateEntity()
 	{
