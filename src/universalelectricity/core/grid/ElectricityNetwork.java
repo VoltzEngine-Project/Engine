@@ -133,9 +133,6 @@ public class ElectricityNetwork implements IElectricityNetwork
 					}
 				}
 			}
-
-			it.remove();
-
 		}
 
 		ElectricityPack mergedPack = ElectricityPack.merge(requests);

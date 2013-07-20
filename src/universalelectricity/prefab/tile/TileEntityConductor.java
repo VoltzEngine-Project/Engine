@@ -26,6 +26,8 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 {
 	private IElectricityNetwork network;
 
+	public TileEntity[] adjacentConnections = null;
+
 	@Override
 	public void invalidate()
 	{
@@ -65,6 +67,8 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	{
 		if (!this.worldObj.isRemote)
 		{
+			this.adjacentConnections = null;
+
 			for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS)
 			{
 				TileEntity tileEntity = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), side);
@@ -85,23 +89,29 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	@Override
 	public TileEntity[] getAdjacentConnections()
 	{
-		TileEntity[] adjecentConnections = new TileEntity[6];
-
-		for (byte i = 0; i < 6; i++)
+		/**
+		 * Cache the adjacentConnections.
+		 */
+		if (this.adjacentConnections == null)
 		{
-			ForgeDirection side = ForgeDirection.getOrientation(i);
-			TileEntity tileEntity = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), side);
+			this.adjacentConnections = new TileEntity[6];
 
-			if (tileEntity instanceof IConnector)
+			for (byte i = 0; i < 6; i++)
 			{
-				if (((IConnector) tileEntity).canConnect(side.getOpposite()))
+				ForgeDirection side = ForgeDirection.getOrientation(i);
+				TileEntity tileEntity = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), side);
+
+				if (tileEntity instanceof IConnector)
 				{
-					adjecentConnections[i] = tileEntity;
+					if (((IConnector) tileEntity).canConnect(side.getOpposite()))
+					{
+						this.adjacentConnections[i] = tileEntity;
+					}
 				}
 			}
 		}
 
-		return adjecentConnections;
+		return this.adjacentConnections;
 	}
 
 	@Override
