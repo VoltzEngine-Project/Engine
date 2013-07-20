@@ -1,5 +1,6 @@
 package universalelectricity.core.electricity;
 
+
 /**
  * An easy way to display information on electricity for the client.
  * 
@@ -73,7 +74,7 @@ public class ElectricityDisplay
 	 */
 	public static String getDisplay(float value, ElectricUnit unit, int decimalPlaces, boolean isShort)
 	{
-		return getDisplay(value, unit, decimalPlaces, isShort, 1 / 1000);
+		return getDisplay(value, unit, decimalPlaces, isShort, 1 / 1000.0F);
 	}
 
 	/**
