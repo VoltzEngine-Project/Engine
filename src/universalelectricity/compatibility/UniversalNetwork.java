@@ -50,7 +50,7 @@ public class UniversalNetwork extends ElectricityNetwork
 			{
 				continue;
 			}
-
+			
 			if (tileEntity instanceof IElectrical)
 			{
 				if (!tileEntity.isInvalid())
@@ -104,8 +104,6 @@ public class UniversalNetwork extends ElectricityNetwork
 					}
 				}
 			}
-
-			it.remove();
 		}
 
 		ElectricityPack mergedPack = ElectricityPack.merge(requests);
