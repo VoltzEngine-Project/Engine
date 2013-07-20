@@ -73,7 +73,7 @@ public class ElectricityDisplay
 	 */
 	public static String getDisplay(float value, ElectricUnit unit, int decimalPlaces, boolean isShort)
 	{
-		return getDisplay(value, unit, decimalPlaces, isShort, 1 / 1000);
+		return getDisplay(value, unit, decimalPlaces, isShort, 1000);
 	}
 
 	/**
