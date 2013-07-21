@@ -14,10 +14,12 @@ import cpw.mods.fml.common.Loader;
 public class Compatibility
 {
 	/**
+	 * Universal Electricity measures in Kilowatts.
+	 * 
 	 * Multiply this to convert foreign energy into UE Joules.
 	 */
-	public static float BC3_RATIO = 1000;
-	public static float IC2_RATIO = 400;
+	public static float BC3_RATIO = 1;
+	public static float IC2_RATIO = 0.4f;
 
 	/**
 	 * Multiply this to convert UE Joules into foreign energy. The reciprocal conversion ratio.
