@@ -34,8 +34,9 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	public PowerHandler bcPowerHandler;
 	public Type bcBlockType = Type.MACHINE;
 
-	public TileEntityUniversalElectrical()
+	public void initiate()
 	{
+		super.initiate();
 		this.bcPowerHandler = new PowerHandler(this, this.bcBlockType);
 		this.bcPowerHandler.configure(0, 100, 0, (int) Math.ceil(this.getMaxEnergyStored() * Compatibility.BC3_RATIO));
 	}
