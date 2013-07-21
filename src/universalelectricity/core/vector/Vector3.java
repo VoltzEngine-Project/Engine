@@ -21,6 +21,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class Vector3 implements Cloneable
 {
+
 	public double x;
 	public double y;
 	public double z;
@@ -384,6 +385,36 @@ public class Vector3 implements Cloneable
 		par1NBTTagCompound.setDouble("y", this.y);
 		par1NBTTagCompound.setDouble("z", this.z);
 		return par1NBTTagCompound;
+	}
+
+	public static Vector3 UP()
+	{
+		return new Vector3(0, 1, 0);
+	}
+
+	public static Vector3 DOWN()
+	{
+		return new Vector3(0, -1, 0);
+	}
+
+	public static Vector3 NORTH()
+	{
+		return new Vector3(0, 0, -1);
+	}
+
+	public static Vector3 SOUTH()
+	{
+		return new Vector3(0, 0, 1);
+	}
+
+	public static Vector3 WEST()
+	{
+		return new Vector3(-1, 0, 0);
+	}
+
+	public static Vector3 EAST()
+	{
+		return new Vector3(1, 0, 0);
 	}
 
 	@Override
