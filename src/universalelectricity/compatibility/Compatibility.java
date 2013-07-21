@@ -16,8 +16,8 @@ public class Compatibility
 	/**
 	 * Multiply this to convert foreign energy into UE Joules.
 	 */
-	public static float BC3_RATIO = 0.125f;
-	public static float IC2_RATIO = 0.05f;
+	public static float BC3_RATIO = 1000;
+	public static float IC2_RATIO = 400;
 
 	/**
 	 * Multiply this to convert UE Joules into foreign energy. The reciprocal conversion ratio.
