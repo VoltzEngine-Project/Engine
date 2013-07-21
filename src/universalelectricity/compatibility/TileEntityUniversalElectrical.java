@@ -7,7 +7,6 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.energy.tile.IEnergyTile;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -35,17 +34,10 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	public PowerHandler bcPowerHandler;
 	public Type bcBlockType = Type.MACHINE;
 
-	public TileEntityUniversalElectrical(float initialEnergy, float maxEnergy)
+	public TileEntityUniversalElectrical()
 	{
-		this.energyStored = initialEnergy;
-		this.maxEnergyStored = maxEnergy;
 		this.bcPowerHandler = new PowerHandler(this, this.bcBlockType);
-		this.bcPowerHandler.configure(0, 100, 0, (int) Math.ceil(maxEnergy * Compatibility.BC3_RATIO));
-	}
-
-	public TileEntityUniversalElectrical(float maxEnergy)
-	{
-		this(0, maxEnergy);
+		this.bcPowerHandler.configure(0, 100, 0, (int) Math.ceil(this.getMaxEnergyStored() * Compatibility.BC3_RATIO));
 	}
 
 	@Override
@@ -139,22 +131,6 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 		}
 	}
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbt)
-	{
-		super.readFromNBT(nbt);
-		this.energyStored = nbt.getFloat("energyStored");
-		this.maxEnergyStored = nbt.getFloat("maxEnergyStored");
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		super.writeToNBT(nbt);
-		nbt.setFloat("energyStored", this.energyStored);
-		nbt.setFloat("maxEnergyStored", this.maxEnergyStored);
-	}
-
 	/**
 	 * IC2 Methods
 	 */
@@ -238,30 +214,6 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	public int getMaxSafeInput()
 	{
 		return Integer.MAX_VALUE;
-	}
-
-	@Override
-	public float getVoltage()
-	{
-		return 120;
-	}
-
-	@Override
-	public void setEnergyStored(float energy)
-	{
-		this.energyStored = Math.max(0, Math.min(this.getMaxEnergyStored(), energy));
-	}
-
-	@Override
-	public float getEnergyStored()
-	{
-		return this.energyStored;
-	}
-
-	@Override
-	public float getMaxEnergyStored()
-	{
-		return this.maxEnergyStored;
 	}
 
 	/**

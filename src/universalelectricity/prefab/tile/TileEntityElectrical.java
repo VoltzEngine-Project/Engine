@@ -18,7 +18,6 @@ import universalelectricity.core.vector.VectorHelper;
 public abstract class TileEntityElectrical extends TileEntityAdvanced implements IElectrical, IElectricalStorage
 {
 	public float energyStored = 0;
-	public float maxEnergyStored = 0;
 
 	/**
 	 * Recharges electric item.
@@ -50,6 +49,11 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 		}
 	}
 
+	/**
+	 * Produces UE power towards a specific direction.
+	 * 
+	 * @param outputDirection - The output direction.
+	 */
 	public void produceUE(ForgeDirection outputDirection)
 	{
 		if (!this.worldObj.isRemote)
@@ -183,33 +187,6 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 		return this.energyStored;
 	}
 
-	public void setMaxEnergyStored(float maxEnergyStored)
-	{
-		this.maxEnergyStored = maxEnergyStored;
-	}
-
-	@Override
-	public float getMaxEnergyStored()
-	{
-		return this.maxEnergyStored;
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbt)
-	{
-		super.readFromNBT(nbt);
-		this.energyStored = nbt.getFloat("energyStored");
-		this.maxEnergyStored = nbt.getFloat("maxEnergyStored");
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		super.writeToNBT(nbt);
-		nbt.setFloat("energyStored", this.energyStored);
-		nbt.setFloat("maxEnergyStored", this.maxEnergyStored);
-	}
-
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
@@ -227,4 +204,17 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 		return 120;
 	}
 
+	@Override
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		super.readFromNBT(nbt);
+		this.energyStored = nbt.getFloat("energyStored");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		super.writeToNBT(nbt);
+		nbt.setFloat("energyStored", this.energyStored);
+	}
 }
