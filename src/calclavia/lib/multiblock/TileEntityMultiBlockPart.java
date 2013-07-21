@@ -25,6 +25,11 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 	private Vector3 mainBlockPosition;
 	public String channel;
 
+	public TileEntityMultiBlockPart()
+	{
+
+	}
+
 	public TileEntityMultiBlockPart(String channel)
 	{
 		this.channel = channel;
@@ -121,6 +126,8 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 	{
 		super.readFromNBT(nbt);
 		this.mainBlockPosition = Vector3.readFromNBT(nbt.getCompoundTag("mainBlockPosition"));
+		this.channel = nbt.getString("channel");
+
 	}
 
 	/**
@@ -135,6 +142,7 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 		{
 			nbt.setCompoundTag("mainBlockPosition", this.mainBlockPosition.writeToNBT(new NBTTagCompound()));
 		}
+		nbt.setString("channel", this.channel);
 	}
 
 	/**
