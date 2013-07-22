@@ -64,6 +64,15 @@
 		<copy todir="ue_compatiblity">
 			<fileset dir="${dir.development}src" includes="universalelectricity/compatibility/" />
 		</copy>
+		<copy todir="ue_compatiblity">
+			<fileset dir="${dir.development}src" includes="buildcraft/" />
+		</copy>
+		<copy todir="ue_compatiblity">
+			<fileset dir="${dir.development}src" includes="ic2/" />
+		</copy>
+		<copy todir="ue_compatiblity">
+			<fileset dir="${dir.development}src" includes="thermalexpansion/" />
+		</copy>
 		
 		<zip destfile="output/${file.ue_core}">
 			<fileset dir="ue_core" />
