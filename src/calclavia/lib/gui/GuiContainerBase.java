@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.input.Keyboard;
@@ -24,6 +25,8 @@ import calclavia.lib.render.CalclaviaRenderHelper;
 
 public class GuiContainerBase extends GuiContainer
 {
+	public ResourceLocation baseTexture;
+
 	public enum SlotType
 	{
 		NONE, BATTERY, LIQUID, GAS, ARR_UP, ARR_DOWN, ARR_LEFT, ARR_RIGHT, ARR_UP_RIGHT,
@@ -45,6 +48,7 @@ public class GuiContainerBase extends GuiContainer
 	{
 		super(container);
 		this.ySize = 217;
+		this.baseTexture = Calclavia.GUI_BASE;
 	}
 
 	@Override
@@ -91,7 +95,7 @@ public class GuiContainerBase extends GuiContainer
 		this.containerWidth = (this.width - this.xSize) / 2;
 		this.containerHeight = (this.height - this.ySize) / 2;
 
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_BASE);
+		this.mc.renderEngine.func_110577_a(this.baseTexture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
@@ -99,7 +103,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawBulb(int x, int y, boolean isOn)
 	{
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_BASE);
+		this.mc.renderEngine.func_110577_a(this.baseTexture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		if (isOn)
@@ -115,7 +119,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawSlot(int x, int y, ItemStack itemStack)
 	{
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_BASE);
+		this.mc.renderEngine.func_110577_a(this.baseTexture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
@@ -245,7 +249,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawMeter(int x, int y, float scale, float r, float g, float b)
 	{
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_BASE);
+		this.mc.renderEngine.func_110577_a(this.baseTexture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		/**
 		 * Draw the background meter.
@@ -268,7 +272,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawMeter(int x, int y, float scale, FluidStack liquidStack)
 	{
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_BASE);
+		this.mc.renderEngine.func_110577_a(this.baseTexture);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -284,7 +288,7 @@ public class GuiContainerBase extends GuiContainer
 		/**
 		 * Draw measurement lines
 		 */
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_BASE);
+		this.mc.renderEngine.func_110577_a(this.baseTexture);
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, meterWidth, meterHeight);
 	}
 

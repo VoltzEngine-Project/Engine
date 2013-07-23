@@ -10,6 +10,9 @@ import calclavia.lib.IPlayerUsing;
 public class ContainerBase extends Container
 {
 	protected int slotCount = 0;
+	protected int xInventoryDisplacement = 8;
+	protected int yInventoryDisplacement = 135;
+	protected int yHotBarDisplacement = 193;
 	private IInventory inventory;
 
 	public ContainerBase(IInventory inventory)
@@ -36,18 +39,18 @@ public class ContainerBase extends Container
 			((IPlayerUsing) this.inventory).getPlayersUsing().add(player);
 		}
 
-		for (int var3 = 0; var3 < 3; var3++)
+		for (int y = 0; y < 3; y++)
 		{
-			for (int var4 = 0; var4 < 9; var4++)
+			for (int x = 0; x < 9; x++)
 			{
-				this.addSlotToContainer(new Slot(player.inventory, var4 + var3 * 9 + 9, 8 + var4 * 18, 135 + var3 * 18));
+				this.addSlotToContainer(new Slot(player.inventory, x + y * 9 + 9, this.xInventoryDisplacement + x * 18, this.yInventoryDisplacement + y * 18));
 			}
 
 		}
 
-		for (int var3 = 0; var3 < 9; var3++)
+		for (int x = 0; x < 9; x++)
 		{
-			this.addSlotToContainer(new Slot(player.inventory, var3, 8 + var3 * 18, 193));
+			this.addSlotToContainer(new Slot(player.inventory, x, this.xInventoryDisplacement + x * 18, this.yHotBarDisplacement));
 		}
 	}
 
