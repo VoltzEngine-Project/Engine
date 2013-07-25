@@ -81,6 +81,17 @@ public class Vector3 implements Cloneable
 	}
 
 	/**
+	 * Loads a Vector3 from an NBT compound.
+	 */
+	public Vector3(NBTTagCompound nbt)
+	{
+		Vector3 tempVector = new Vector3();
+		tempVector.x = nbt.getDouble("x");
+		tempVector.y = nbt.getDouble("y");
+		tempVector.z = nbt.getDouble("z");
+	}
+
+	/**
 	 * Returns the coordinates as integers, ideal for block placement.
 	 */
 	public int intX()
@@ -175,7 +186,7 @@ public class Vector3 implements Cloneable
 
 		if (d != 0)
 		{
-			multiply(1 / d);
+			scale(1 / d);
 		}
 		return this;
 	}
@@ -201,7 +212,16 @@ public class Vector3 implements Cloneable
 		return Math.sqrt(var2 * var2 + var4 * var4 + var6 * var6);
 	}
 
-	public Vector3 add(Vector3 par1)
+	/**
+	 * Multiplies the vector by negative one.
+	 */
+	public Vector3 invert()
+	{
+		this.scale(-1);
+		return this;
+	}
+
+	public Vector3 translate(Vector3 par1)
 	{
 		this.x += par1.x;
 		this.y += par1.y;
@@ -209,7 +229,7 @@ public class Vector3 implements Cloneable
 		return this;
 	}
 
-	public Vector3 add(double par1)
+	public Vector3 translate(double par1)
 	{
 		this.x += par1;
 		this.y += par1;
@@ -217,24 +237,45 @@ public class Vector3 implements Cloneable
 		return this;
 	}
 
+	public static Vector3 translate(Vector3 translate, Vector3 par1)
+	{
+		translate.x += par1.x;
+		translate.y += par1.y;
+		translate.z += par1.z;
+		return translate;
+	}
+
+	public static Vector3 translate(Vector3 translate, double par1)
+	{
+		translate.x += par1;
+		translate.y += par1;
+		translate.z += par1;
+		return translate;
+	}
+
+	@Deprecated
+	public Vector3 add(Vector3 amount)
+	{
+		return translate(amount);
+	}
+
+	@Deprecated
+	public Vector3 add(double amount)
+	{
+		return translate(amount);
+	}
+
 	public Vector3 subtract(Vector3 amount)
 	{
-		this.x -= amount.x;
-		this.y -= amount.y;
-		this.z -= amount.z;
-		return this;
+		return this.translate(amount.clone().invert());
 	}
 
-	/**
-	 * Multiplies the vector by negative one.
-	 */
-	public Vector3 invert()
+	public Vector3 subtract(double amount)
 	{
-		this.multiply(-1);
-		return this;
+		return this.translate(-amount);
 	}
 
-	public Vector3 multiply(double amount)
+	public Vector3 scale(double amount)
 	{
 		this.x *= amount;
 		this.y *= amount;
@@ -242,34 +283,64 @@ public class Vector3 implements Cloneable
 		return this;
 	}
 
-	public Vector3 multiply(Vector3 vec)
+	public Vector3 scale(Vector3 amount)
 	{
-		this.x *= vec.x;
-		this.y *= vec.y;
-		this.z *= vec.z;
+		this.x *= amount.x;
+		this.y *= amount.y;
+		this.z *= amount.z;
 		return this;
 	}
 
+	public static Vector3 scale(Vector3 vec, double amount)
+	{
+		return vec.scale(amount);
+	}
+
+	public static Vector3 scale(Vector3 vec, Vector3 amount)
+	{
+		return vec.scale(amount);
+	}
+
+	@Deprecated
+	public Vector3 multiply(double amount)
+	{
+		return this.scale(amount);
+	}
+
+	@Deprecated
+	public Vector3 multiply(Vector3 amount)
+	{
+		return this.scale(amount);
+	}
+
+	/**
+	 * Static versions of a lot of functions
+	 */
+	@Deprecated
 	public static Vector3 subtract(Vector3 par1, Vector3 par2)
 	{
 		return new Vector3(par1.x - par2.x, par1.y - par2.y, par1.z - par2.z);
 	}
 
+	@Deprecated
 	public static Vector3 add(Vector3 par1, Vector3 par2)
 	{
 		return new Vector3(par1.x + par2.x, par1.y + par2.y, par1.z + par2.z);
 	}
 
+	@Deprecated
 	public static Vector3 add(Vector3 par1, double par2)
 	{
 		return new Vector3(par1.x + par2, par1.y + par2, par1.z + par2);
 	}
 
+	@Deprecated
 	public static Vector3 multiply(Vector3 vec1, Vector3 vec2)
 	{
 		return new Vector3(vec1.x * vec2.x, vec1.y * vec2.y, vec1.z * vec2.z);
 	}
 
+	@Deprecated
 	public static Vector3 multiply(Vector3 vec1, double vec2)
 	{
 		return new Vector3(vec1.x * vec2, vec1.y * vec2, vec1.z * vec2);
@@ -362,29 +433,201 @@ public class Vector3 implements Cloneable
 	}
 
 	/**
+	 * Cross product functions
+	 * 
+	 * @return The cross product between this vector and another.
+	 */
+	public Vector3 crossProduct(Vector3 vec2)
+	{
+		return new Vector3(this.y * vec2.z - this.z * vec2.y, this.z * vec2.x - this.x * vec2.z, this.x * vec2.y - this.y * vec2.x);
+	}
+
+	public Vector3 xCrossProduct()
+	{
+		return new Vector3(0.0D, this.z, -this.y);
+	}
+
+	public Vector3 zCrossProduct()
+	{
+		return new Vector3(-this.y, this.x, 0.0D);
+	}
+
+	public double dotProduct(Vector3 vec2)
+	{
+		return this.x * vec2.x + this.y * vec2.y + this.z * vec2.z;
+	}
+
+	/**
+	 * @return The perpendicular vector.
+	 */
+	public Vector3 getPerpendicular()
+	{
+		if (this.z == 0.0F)
+		{
+			return this.zCrossProduct();
+		}
+
+		return this.xCrossProduct();
+	}
+
+	/**
+	 * @return True if this Vector3 is zero.
+	 */
+	public boolean isZero()
+	{
+		return (this.x == 0.0F) && (this.y == 0.0F) && (this.z == 0.0F);
+	}
+
+	/**
+	 * Rotate by a this vector around an axis.
+	 * 
+	 * @return The new Vector3 rotation.
+	 */
+	public Vector3 rotate(float angle, Vector3 axis)
+	{
+		return translateMatrix(getRotationMatrix(angle, axis), this.clone());
+	}
+
+	public double[] getRotationMatrix(float angle)
+	{
+		double[] matrix = new double[16];
+		Vector3 axis = this.clone().normalize();
+		double x = axis.x;
+		double y = axis.y;
+		double z = axis.z;
+		angle *= 0.0174532925D;
+		float cos = (float) Math.cos(angle);
+		float ocos = 1.0F - cos;
+		float sin = (float) Math.sin(angle);
+		matrix[0] = (x * x * ocos + cos);
+		matrix[1] = (y * x * ocos + z * sin);
+		matrix[2] = (x * z * ocos - y * sin);
+		matrix[4] = (x * y * ocos - z * sin);
+		matrix[5] = (y * y * ocos + cos);
+		matrix[6] = (y * z * ocos + x * sin);
+		matrix[8] = (x * z * ocos + y * sin);
+		matrix[9] = (y * z * ocos - x * sin);
+		matrix[10] = (z * z * ocos + cos);
+		matrix[15] = 1.0F;
+		return matrix;
+	}
+
+	public static Vector3 translateMatrix(double[] matrix, Vector3 translation)
+	{
+		double x = translation.x * matrix[0] + translation.y * matrix[1] + translation.z * matrix[2] + matrix[3];
+		double y = translation.x * matrix[4] + translation.y * matrix[5] + translation.z * matrix[6] + matrix[7];
+		double z = translation.x * matrix[8] + translation.y * matrix[9] + translation.z * matrix[10] + matrix[11];
+		translation.x = x;
+		translation.y = y;
+		translation.z = z;
+		return translation;
+	}
+
+	public static double[] getRotationMatrix(float angle, Vector3 axis)
+	{
+		return axis.getRotationMatrix(angle);
+	}
+
+	/**
+	 * Rotates this Vector by a yaw, pitch and roll value.
+	 */
+	public void rotate(double yaw, double pitch, double roll)
+	{
+		double yawRadians = Math.toRadians(yaw);
+		double pitchRadians = Math.toRadians(pitch);
+		double rollRadians = Math.toRadians(roll);
+
+		double x = this.x;
+		double y = this.y;
+		double z = this.z;
+
+		this.x = x * Math.cos(yawRadians) * Math.cos(pitchRadians) + z * (Math.cos(yawRadians) * Math.sin(pitchRadians) * Math.sin(rollRadians) - Math.sin(yawRadians) * Math.cos(rollRadians)) + y * (Math.cos(yawRadians) * Math.sin(pitchRadians) * Math.cos(rollRadians) + Math.sin(yawRadians) * Math.sin(rollRadians));
+		this.z = x * Math.sin(yawRadians) * Math.cos(pitchRadians) + z * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.sin(rollRadians) + Math.cos(yawRadians) * Math.cos(rollRadians)) + y * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.cos(rollRadians) - Math.cos(yawRadians) * Math.sin(rollRadians));
+		this.y = -x * Math.sin(pitchRadians) + z * Math.cos(pitchRadians) * Math.sin(rollRadians) + y * Math.cos(pitchRadians) * Math.cos(rollRadians);
+	}
+
+	/**
+	 * Rotates a point by a yaw and pitch around the anchor 0,0 by a specific angle.
+	 */
+	public void rotate(double yaw, double pitch)
+	{
+		this.rotate(yaw, pitch, 0);
+	}
+
+	public void rotate(double yaw)
+	{
+		double yawRadians = Math.toRadians(yaw);
+
+		double x = this.x;
+		double z = this.z;
+
+		if (yaw != 0)
+		{
+			this.x = x * Math.cos(yawRadians) - z * Math.sin(yawRadians);
+			this.z = x * Math.sin(yawRadians) + z * Math.cos(yawRadians);
+		}
+	}
+
+	/**
+	 * Gets the delta look position based on the rotation yaw and pitch. Minecraft coordinates are
+	 * messed up. Y and Z are flipped. Yaw is displaced by 90 degrees. Pitch is inversed.
+	 * 
+	 * @param rotationYaw
+	 * @param rotationPitch
+	 */
+	public static Vector3 getDeltaPositionFromRotation(float rotationYaw, float rotationPitch)
+	{
+		rotationYaw = rotationYaw + 90;
+		rotationPitch = -rotationPitch;
+		return new Vector3(Math.cos(Math.toRadians(rotationYaw)), Math.sin(Math.toRadians(rotationPitch)), Math.sin(Math.toRadians(rotationYaw)));
+	}
+
+	/**
+	 * Gets the angle between this vector and another vector.
+	 * 
+	 * @return Angle in degrees
+	 */
+	public double getAngle(Vector3 vec2)
+	{
+		return anglePreNorm(this.clone().normalize(), vec2.clone().normalize());
+	}
+
+	public static double getAngle(Vector3 vec1, Vector3 vec2)
+	{
+		return vec1.getAngle(vec2);
+	}
+
+	public double anglePreNorm(Vector3 vec2)
+	{
+		return Math.acos(this.dotProduct(vec2));
+	}
+
+	public static double anglePreNorm(Vector3 vec1, Vector3 vec2)
+	{
+		return Math.acos(vec1.clone().dotProduct(vec2));
+	}
+
+	/**
 	 * Loads a Vector3 from an NBT compound.
 	 */
-	public static Vector3 readFromNBT(NBTTagCompound nbtCompound)
+	@Deprecated
+	public static Vector3 readFromNBT(NBTTagCompound nbt)
 	{
-		Vector3 tempVector = new Vector3();
-		tempVector.x = nbtCompound.getDouble("x");
-		tempVector.y = nbtCompound.getDouble("y");
-		tempVector.z = nbtCompound.getDouble("z");
-		return tempVector;
+		return new Vector3(nbt);
 	}
 
 	/**
 	 * Saves this Vector3 to disk
 	 * 
 	 * @param prefix - The prefix of this save. Use some unique string.
-	 * @param par1NBTTagCompound - The NBT compound object to save the data in
+	 * @param nbt - The NBT compound object to save the data in
 	 */
-	public NBTTagCompound writeToNBT(NBTTagCompound par1NBTTagCompound)
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		par1NBTTagCompound.setDouble("x", this.x);
-		par1NBTTagCompound.setDouble("y", this.y);
-		par1NBTTagCompound.setDouble("z", this.z);
-		return par1NBTTagCompound;
+		nbt.setDouble("x", this.x);
+		nbt.setDouble("y", this.y);
+		nbt.setDouble("z", this.z);
+		return nbt;
 	}
 
 	public static Vector3 UP()
@@ -440,4 +683,5 @@ public class Vector3 implements Cloneable
 	{
 		return "Vector3 [" + this.x + "," + this.y + "," + this.z + "]";
 	}
+
 }
