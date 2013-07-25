@@ -56,7 +56,7 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 	 */
 	public void produceUE(ForgeDirection outputDirection)
 	{
-		if (!this.worldObj.isRemote)
+		if (!this.worldObj.isRemote && outputDirection != null && outputDirection != ForgeDirection.UNKNOWN)
 		{
 			float provide = this.getProvide(outputDirection);
 
