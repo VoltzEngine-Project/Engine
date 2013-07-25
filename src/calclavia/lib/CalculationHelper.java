@@ -17,57 +17,6 @@ import universalelectricity.core.vector.Vector3;
  */
 public class CalculationHelper
 {
-	public static void rotateByAngle(Vector3 vector, double yaw)
-	{
-		double yawRadians = Math.toRadians(yaw);
-
-		double x = vector.x;
-		double z = vector.z;
-
-		if (yaw != 0)
-		{
-			vector.x = x * Math.cos(yawRadians) - z * Math.sin(yawRadians);
-			vector.z = x * Math.sin(yawRadians) + z * Math.cos(yawRadians);
-		}
-	}
-
-	/**
-	 * Rotates a point by a yaw and pitch around the anchor 0,0 by a specific angle.
-	 */
-	public static void rotateByAngle(Vector3 vector, double yaw, double pitch)
-	{
-		rotateByAngle(vector, yaw, pitch, 0);
-	}
-
-	public static void rotateByAngle(Vector3 vector, double yaw, double pitch, double roll)
-	{
-		double yawRadians = Math.toRadians(yaw);
-		double pitchRadians = Math.toRadians(pitch);
-		double rollRadians = Math.toRadians(roll);
-
-		double x = vector.x;
-		double y = vector.y;
-		double z = vector.z;
-
-		vector.x = x * Math.cos(yawRadians) * Math.cos(pitchRadians) + z * (Math.cos(yawRadians) * Math.sin(pitchRadians) * Math.sin(rollRadians) - Math.sin(yawRadians) * Math.cos(rollRadians)) + y * (Math.cos(yawRadians) * Math.sin(pitchRadians) * Math.cos(rollRadians) + Math.sin(yawRadians) * Math.sin(rollRadians));
-		vector.z = x * Math.sin(yawRadians) * Math.cos(pitchRadians) + z * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.sin(rollRadians) + Math.cos(yawRadians) * Math.cos(rollRadians)) + y * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.cos(rollRadians) - Math.cos(yawRadians) * Math.sin(rollRadians));
-		vector.y = -x * Math.sin(pitchRadians) + z * Math.cos(pitchRadians) * Math.sin(rollRadians) + y * Math.cos(pitchRadians) * Math.cos(rollRadians);
-	}
-
-	/**
-	 * Gets the delta look position based on the rotation yaw and pitch. Minecraft coordinates are
-	 * messed up. Y and Z are flipped. Yaw is displaced by 90 degrees. Pitch is inversed.
-	 * 
-	 * @param rotationYaw
-	 * @param rotationPitch
-	 */
-	public static Vector3 getDeltaPositionFromRotation(float rotationYaw, float rotationPitch)
-	{
-		rotationYaw = rotationYaw + 90;
-		rotationPitch = -rotationPitch;
-		return new Vector3(Math.cos(Math.toRadians(rotationYaw)), Math.sin(Math.toRadians(rotationPitch)), Math.sin(Math.toRadians(rotationYaw)));
-	}
-
 	/**
 	 * RayTrace Codde
 	 * 
@@ -77,7 +26,7 @@ public class CalculationHelper
 	{
 		MovingObjectPosition pickedEntity = null;
 		Vec3 startingPosition = startPosition.toVec3();
-		Vec3 look = getDeltaPositionFromRotation(rotationYaw, rotationPitch).toVec3();
+		Vec3 look = Vector3.getDeltaPositionFromRotation(rotationYaw, rotationPitch).toVec3();
 		Vec3 reachPoint = Vec3.createVectorHelper(startingPosition.xCoord + look.xCoord * reachDistance, startingPosition.yCoord + look.yCoord * reachDistance, startingPosition.zCoord + look.zCoord * reachDistance);
 
 		double playerBorder = 1.1 * reachDistance;
@@ -132,7 +81,7 @@ public class CalculationHelper
 
 	public static MovingObjectPosition raytraceBlocks(World world, Vector3 startPosition, float rotationYaw, float rotationPitch, boolean collisionFlag, double reachDistance)
 	{
-		Vector3 lookVector = getDeltaPositionFromRotation(rotationYaw, rotationPitch);
+		Vector3 lookVector = Vector3.getDeltaPositionFromRotation(rotationYaw, rotationPitch);
 		Vector3 reachPoint = Vector3.add(startPosition, Vector3.multiply(lookVector, reachDistance));
 		return world.rayTraceBlocks_do_do(startPosition.toVec3(), reachPoint.toVec3(), collisionFlag, !collisionFlag);
 	}
