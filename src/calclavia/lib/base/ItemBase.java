@@ -8,7 +8,7 @@ public class ItemBase extends Item
 {
 	public ItemBase(int id, String name, Configuration config, String prefix, CreativeTabs tab)
 	{
-		super(config.getItem(name, id).getInt() );
+		super(config.getItem(name, id).getInt());
 		this.setUnlocalizedName(prefix + name);
 		this.setCreativeTab(tab);
 		this.func_111206_d(prefix + name);
