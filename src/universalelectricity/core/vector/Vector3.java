@@ -85,10 +85,9 @@ public class Vector3 implements Cloneable
 	 */
 	public Vector3(NBTTagCompound nbt)
 	{
-		Vector3 tempVector = new Vector3();
-		tempVector.x = nbt.getDouble("x");
-		tempVector.y = nbt.getDouble("y");
-		tempVector.z = nbt.getDouble("z");
+		this.x = nbt.getDouble("x");
+		this.y = nbt.getDouble("y");
+		this.z = nbt.getDouble("z");
 	}
 
 	/**

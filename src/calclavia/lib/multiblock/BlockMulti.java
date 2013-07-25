@@ -39,8 +39,33 @@ public class BlockMulti extends BlockContainer
 		return this;
 	}
 
+	public void createMultiBlockStructure(IMultiBlock tile)
+	{
+		TileEntity tileEntity = (TileEntity) tile;
+		Vector3[] positions = tile.getMultiBlockVectors();
+
+		for (Vector3 position : positions)
+		{
+			makeFakeBlock(tileEntity.worldObj, new Vector3(tileEntity).translate(position), new Vector3(tileEntity));
+		}
+	}
+
+	public void destroyMultiBlockStructure(IMultiBlock tile)
+	{
+		TileEntity tileEntity = (TileEntity) tile;
+		Vector3[] positions = tile.getMultiBlockVectors();
+
+		for (Vector3 position : positions)
+		{
+			new Vector3(tileEntity).translate(position).setBlock(tileEntity.worldObj, 0);
+		}
+
+		new Vector3(tileEntity).setBlock(tileEntity.worldObj, 0);
+	}
+
 	public void makeFakeBlock(World worldObj, Vector3 position, Vector3 mainBlock)
 	{
+		// Creates a fake block, then sets the relative main block position.
 		worldObj.setBlock(position.intX(), position.intY(), position.intZ(), this.blockID);
 		((TileEntityMultiBlockPart) worldObj.getBlockTileEntity(position.intX(), position.intY(), position.intZ())).setMainBlock(mainBlock);
 	}
@@ -66,7 +91,7 @@ public class BlockMulti extends BlockContainer
 
 		if (tileEntity instanceof TileEntityMultiBlockPart)
 		{
-			((TileEntityMultiBlockPart) tileEntity).onBlockRemoval();
+			((TileEntityMultiBlockPart) tileEntity).onBlockRemoval(this);
 		}
 
 		super.breakBlock(world, x, y, z, par5, par6);

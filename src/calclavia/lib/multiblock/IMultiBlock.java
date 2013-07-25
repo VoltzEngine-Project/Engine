@@ -1,6 +1,5 @@
 package calclavia.lib.multiblock;
 
-import net.minecraft.tileentity.TileEntity;
 import universalelectricity.core.vector.Vector3;
 
 /**
@@ -10,19 +9,10 @@ import universalelectricity.core.vector.Vector3;
  * @author Calclavia
  * 
  */
-public interface IMultiBlock extends IBlockActivate
+public interface IMultiBlock
 {
 	/**
-	 * Called when this multiblock is created
-	 * 
-	 * @param placedPosition - The position the block was placed at
+	 * @return An array of Vector3 containing the multiblock relative coordinates to be constructed.
 	 */
-	public void onCreate(Vector3 placedPosition);
-
-	/**
-	 * Called when one of the multiblocks of this block is destroyed
-	 * 
-	 * @param callingBlock - The tile entity who called the onDestroy function
-	 */
-	public void onDestroy(TileEntity callingBlock);
+	public Vector3[] getMultiBlockVectors();
 }

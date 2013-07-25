@@ -39,7 +39,7 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 	{
 		if (this.mainBlockPosition != null)
 		{
-			return new Vector3(this).add(this.mainBlockPosition);
+			return new Vector3(this).translate(this.mainBlockPosition);
 		}
 
 		return null;
@@ -47,7 +47,7 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 
 	public void setMainBlock(Vector3 mainBlock)
 	{
-		this.mainBlockPosition = Vector3.subtract(mainBlock, new Vector3(this));
+		this.mainBlockPosition = mainBlock.clone().translate(new Vector3(this).invert());
 
 		if (!this.worldObj.isRemote)
 		{
@@ -66,7 +66,6 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 			}
 
 			return PacketManager.getPacket(this.channel, this, this.mainBlockPosition.intX(), this.mainBlockPosition.intY(), this.mainBlockPosition.intZ());
-
 		}
 
 		return null;
@@ -85,7 +84,7 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 		}
 	}
 
-	public void onBlockRemoval()
+	public void onBlockRemoval(BlockMulti block)
 	{
 		if (this.getMainBlock() != null)
 		{
@@ -93,12 +92,7 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 
 			if (tileEntity instanceof IMultiBlock)
 			{
-				IMultiBlock mainBlock = (IMultiBlock) tileEntity;
-
-				if (mainBlock != null)
-				{
-					mainBlock.onDestroy(this);
-				}
+				block.destroyMultiBlockStructure((IMultiBlock) tileEntity);
 			}
 		}
 	}
@@ -109,9 +103,9 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 		{
 			TileEntity tileEntity = this.getMainBlock().getTileEntity(this.worldObj);
 
-			if (tileEntity instanceof IMultiBlock)
+			if (tileEntity instanceof IBlockActivate)
 			{
-				return ((IMultiBlock) tileEntity).onActivated(entityPlayer);
+				return ((IBlockActivate) tileEntity).onActivated(entityPlayer);
 			}
 		}
 
@@ -125,7 +119,12 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
-		this.mainBlockPosition = Vector3.readFromNBT(nbt.getCompoundTag("mainBlockPosition"));
+
+		if (nbt.hasKey("mainBlockPosition"))
+		{
+			this.mainBlockPosition = new Vector3(nbt.getCompoundTag("mainBlockPosition"));
+		}
+
 		this.channel = nbt.getString("channel");
 
 	}
@@ -142,6 +141,7 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 		{
 			nbt.setCompoundTag("mainBlockPosition", this.mainBlockPosition.writeToNBT(new NBTTagCompound()));
 		}
+
 		nbt.setString("channel", this.channel);
 	}
 
