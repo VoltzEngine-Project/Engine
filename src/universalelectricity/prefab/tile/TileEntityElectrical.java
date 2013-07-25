@@ -201,7 +201,7 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 	@Override
 	public float getVoltage()
 	{
-		return 120;
+		return 0.120F;
 	}
 
 	@Override
