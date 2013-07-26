@@ -86,7 +86,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 
 	public void produceIC2(ForgeDirection outputDirection)
 	{
-		if (!this.worldObj.isRemote)
+		if (!this.worldObj.isRemote && outputDirection != null && outputDirection != ForgeDirection.UNKNOWN)
 		{
 			float provide = this.getProvide(outputDirection);
 
@@ -107,7 +107,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 
 	public void produceBuildCraft(ForgeDirection outputDirection)
 	{
-		if (!this.worldObj.isRemote)
+		if (!this.worldObj.isRemote && outputDirection != null && outputDirection != ForgeDirection.UNKNOWN)
 		{
 			float provide = this.getProvide(outputDirection);
 

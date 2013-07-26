@@ -61,74 +61,69 @@ public class ContainerBase extends Container
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotID)
 	{
 		ItemStack var2 = null;
-		// try
+
+		Slot var3 = (Slot) this.inventorySlots.get(slotID);
+
+		if (var3 != null && var3.getHasStack())
 		{
-			Slot var3 = (Slot) this.inventorySlots.get(slotID);
+			ItemStack itemStack = var3.getStack();
+			var2 = itemStack.copy();
 
-			if (var3 != null && var3.getHasStack())
+			// A slot ID greater than the slot count means it is inside the TileEntity GUI.
+			if (slotID >= this.slotCount)
 			{
-				ItemStack itemStack = var3.getStack();
-				var2 = itemStack.copy();
+				// Player Inventory, Try to place into slot.
+				boolean didTry = false;
 
-				// A slot ID greater than the slot count means it is inside the TileEntity GUI.
-				if (slotID >= this.slotCount)
+				for (int i = 0; i < this.slotCount; i++)
 				{
-					// Player Inventory, Try to place into slot.
-					boolean didTry = false;
-
-					for (int i = 0; i < this.slotCount; i++)
+					if (this.getSlot(i).isItemValid(itemStack))
 					{
-						if (this.getSlot(i).isItemValid(itemStack))
-						{
-							didTry = true;
+						didTry = true;
 
-							if (this.mergeItemStack(itemStack, i, i + 1, false))
-							{
-								break;
-							}
+						if (this.mergeItemStack(itemStack, i, i + 1, false))
+						{
+							break;
 						}
 					}
+				}
 
-					if (!didTry)
+				if (!didTry)
+				{
+					if (slotID < 27 + this.slotCount)
 					{
-						if (slotID < 27 + this.slotCount)
-						{
-							if (!this.mergeItemStack(itemStack, 27 + this.slotCount, 36 + this.slotCount, false))
-							{
-								return null;
-							}
-						}
-						else if (slotID >= 27 + this.slotCount && slotID < 36 + this.slotCount && !this.mergeItemStack(itemStack, slotCount, 27 + slotCount, false))
+						if (!this.mergeItemStack(itemStack, 27 + this.slotCount, 36 + this.slotCount, false))
 						{
 							return null;
 						}
 					}
+					else if (slotID >= 27 + this.slotCount && slotID < 36 + this.slotCount && !this.mergeItemStack(itemStack, slotCount, 27 + slotCount, false))
+					{
+						return null;
+					}
 				}
-				else if (!this.mergeItemStack(itemStack, this.slotCount, 36 + this.slotCount, false))
-				{
-					return null;
-				}
-
-				if (itemStack.stackSize == 0)
-				{
-					var3.putStack((ItemStack) null);
-				}
-				else
-				{
-					var3.onSlotChanged();
-				}
-
-				if (itemStack.stackSize == var2.stackSize)
-				{
-					return null;
-				}
-
-				var3.onPickupFromSlot(par1EntityPlayer, itemStack);
 			}
+			else if (!this.mergeItemStack(itemStack, this.slotCount, 36 + this.slotCount, false))
+			{
+				return null;
+			}
+
+			if (itemStack.stackSize == 0)
+			{
+				var3.putStack((ItemStack) null);
+			}
+			else
+			{
+				var3.onSlotChanged();
+			}
+
+			if (itemStack.stackSize == var2.stackSize)
+			{
+				return null;
+			}
+
+			var3.onPickupFromSlot(par1EntityPlayer, itemStack);
 		}
-		/*
-		 * catch (Exception e) { e.printStackTrace(); }
-		 */
 
 		return var2;
 	}

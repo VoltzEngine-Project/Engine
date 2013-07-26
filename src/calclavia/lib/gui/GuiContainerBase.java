@@ -7,16 +7,22 @@ import java.util.Map.Entry;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import universalelectricity.compatibility.Compatibility;
+import universalelectricity.core.electricity.ElectricityDisplay;
+import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import universalelectricity.core.vector.Vector2;
 import universalelectricity.prefab.TranslationHelper;
 import universalelectricity.prefab.vector.Region2;
@@ -25,6 +31,7 @@ import calclavia.lib.render.CalclaviaRenderHelper;
 
 public class GuiContainerBase extends GuiContainer
 {
+	public static final ResourceLocation BLOCK_TEXTURE = TextureMap.field_110575_b;
 	public ResourceLocation baseTexture;
 
 	public enum SlotType
@@ -37,6 +44,8 @@ public class GuiContainerBase extends GuiContainer
 	protected int meterHeight = 49;
 	protected int meterWidth = 14;
 	protected int meterEnd = meterX + meterWidth;
+
+	protected int energyMode = 0;
 
 	public String tooltip = "";
 	protected HashMap<Region2, String> tooltips = new HashMap<Region2, String>();
@@ -249,30 +258,31 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawMeter(int x, int y, float scale, float r, float g, float b)
 	{
-		this.mc.renderEngine.func_110577_a(this.baseTexture);
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
 		/**
 		 * Draw the background meter.
 		 */
-		this.drawTexturedModalRect(this.width + x, this.height + y, 40, 0, this.meterWidth, this.meterHeight);
+		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 0, this.meterWidth, this.meterHeight);
 
 		/**
 		 * Draw liquid/gas inside
 		 */
 		GL11.glColor4f(r, g, b, 1.0F);
 		int actualScale = (int) ((this.meterHeight - 1) * scale);
-		this.drawTexturedModalRect(this.width + x, this.height + y + (this.meterHeight - 1 - actualScale), 40, 49, this.meterHeight - 1, actualScale);
+		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y + (this.meterHeight - 1 - actualScale), 40, 49, this.meterHeight - 1, actualScale);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		/**
 		 * Draw measurement lines
 		 */
-		this.drawTexturedModalRect(this.height + x, this.meterHeight + y, 40, 49 * 2, this.meterWidth, this.meterHeight);
+		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, this.meterWidth, this.meterHeight);
 	}
 
 	protected void drawMeter(int x, int y, float scale, FluidStack liquidStack)
 	{
-		this.mc.renderEngine.func_110577_a(this.baseTexture);
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -284,11 +294,12 @@ public class GuiContainerBase extends GuiContainer
 		/**
 		 * Draw liquid/gas inside
 		 */
-		this.displayGauge(this.containerWidth + x, this.containerHeight + y, 0, 0, (int) ((meterHeight - 1) * scale), liquidStack);
+		this.displayGauge(this.containerWidth + x, this.containerHeight + y, -10, 1, 12, (int) ((meterHeight - 1) * scale), liquidStack);
+
 		/**
 		 * Draw measurement lines
 		 */
-		this.mc.renderEngine.func_110577_a(this.baseTexture);
+		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, meterWidth, meterHeight);
 	}
 
@@ -308,6 +319,31 @@ public class GuiContainerBase extends GuiContainer
 	protected void drawSlot(int x, int y, SlotType type)
 	{
 		this.drawSlot(x, y, type, 1, 1, 1);
+	}
+
+	public void renderUniversalDisplay(int x, int y, float energy, int mouseX, int mouseY)
+	{
+		String display;
+		switch (this.energyMode)
+		{
+			default:
+				display = ElectricityDisplay.getDisplay(energy, ElectricUnit.WATT);
+				break;
+			case 1:
+				display = ElectricityDisplay.roundDecimals(energy * Compatibility.TO_BC_RATIO) + " MJ";
+				break;
+			case 2:
+				display = ElectricityDisplay.roundDecimals(energy * Compatibility.TO_IC2_RATIO) + " EU";
+				break;
+		}
+
+		if (Mouse.isButtonDown(0) && this.isPointInRegion(x, y, display.length() * 5, 9, mouseX, mouseY))
+		{
+			this.energyMode = (this.energyMode + 1) % 3;
+		}
+
+		this.fontRenderer.drawString(display, x, y, 4210752);
+
 	}
 
 	public void drawTooltip(int x, int y, String... toolTips)
@@ -385,46 +421,51 @@ public class GuiContainerBase extends GuiContainer
 	/**
 	 * Based on BuildCraft
 	 */
-	protected void displayGauge(int j, int k, int line, int col, int squaled, FluidStack fluid)
+	protected void displayGauge(int j, int k, int line, int col, int width, int squaled, FluidStack liquid)
 	{
-		if (fluid == null)
+		squaled -= 1;
+
+		if (liquid == null)
 		{
 			return;
 		}
+
 		int start = 0;
 
-		Icon liquidIcon = fluid.getFluid().getIcon();
+		Icon liquidIcon = null;
+		Fluid fluid = liquid.getFluid();
 
-		if (fluid.getFluid().canBePlacedInWorld())
+		if (fluid != null && fluid.getStillIcon() != null)
 		{
-			CalclaviaRenderHelper.setTerrainTexture();
-		}
-		else
-		{
-			CalclaviaRenderHelper.setSpriteTexture(1);
+			liquidIcon = fluid.getStillIcon();
 		}
 
-		while (true)
+		CalclaviaRenderHelper.setSpriteTexture(fluid.getSpriteNumber());
+
+		if (liquidIcon != null)
 		{
-			int x = 0;
-
-			if (squaled > 16)
+			while (true)
 			{
-				x = 16;
-				squaled -= 16;
-			}
-			else
-			{
-				x = squaled;
-				squaled = 0;
-			}
+				int x;
 
-			drawTexturedModelRectFromIcon(j + col, k + line + 58 - x - start, liquidIcon, 16, 16 - (16 - x));
-			start = start + 16;
+				if (squaled > 16)
+				{
+					x = 16;
+					squaled -= 16;
+				}
+				else
+				{
+					x = squaled;
+					squaled = 0;
+				}
 
-			if (x == 0 || squaled == 0)
-			{
-				break;
+				this.drawTexturedModelRectFromIcon(j + col, k + line + 58 - x - start, liquidIcon, width, 16 - (16 - x));
+				start = start + 16;
+
+				if (x == 0 || squaled == 0)
+				{
+					break;
+				}
 			}
 		}
 	}
