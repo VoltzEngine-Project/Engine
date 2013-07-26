@@ -31,7 +31,6 @@ import calclavia.lib.render.CalclaviaRenderHelper;
 
 public class GuiContainerBase extends GuiContainer
 {
-	public static final ResourceLocation BLOCK_TEXTURE = TextureMap.field_110575_b;
 	public ResourceLocation baseTexture;
 
 	public enum SlotType
