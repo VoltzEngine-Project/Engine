@@ -659,6 +659,105 @@ public class Vector3 implements Cloneable
 		return new Vector3(1, 0, 0);
 	}
 
+	/**
+	 * RayTrace Code, retrieved from MachineMuse.
+	 * 
+	 * @author MachineMuse
+	 */
+	public MovingObjectPosition rayTrace(World world, float rotationYaw, float rotationPitch, boolean collisionFlag, double reachDistance)
+	{
+		// Somehow this destroys the playerPosition vector -.-
+		MovingObjectPosition pickedBlock = this.rayTraceBlocks(world, rotationYaw, rotationPitch, collisionFlag, reachDistance);
+		MovingObjectPosition pickedEntity = this.rayTraceEntities(world, rotationYaw, rotationPitch, collisionFlag, reachDistance);
+
+		if (pickedBlock == null)
+		{
+			return pickedEntity;
+		}
+		else if (pickedEntity == null)
+		{
+			return pickedBlock;
+		}
+		else
+		{
+			double dBlock = this.distanceTo(new Vector3(pickedBlock.hitVec));
+			double dEntity = this.distanceTo(new Vector3(pickedEntity.hitVec));
+
+			if (dEntity < dBlock)
+			{
+				return pickedEntity;
+			}
+			else
+			{
+				return pickedBlock;
+			}
+		}
+	}
+
+	public MovingObjectPosition rayTraceBlocks(World world, float rotationYaw, float rotationPitch, boolean collisionFlag, double reachDistance)
+	{
+		Vector3 lookVector = getDeltaPositionFromRotation(rotationYaw, rotationPitch);
+		Vector3 reachPoint = translate(this, this.scale(lookVector, reachDistance));
+		return world.rayTraceBlocks_do_do(this.toVec3(), reachPoint.toVec3(), collisionFlag, !collisionFlag);
+	}
+
+	public MovingObjectPosition rayTraceEntities(World world, float rotationYaw, float rotationPitch, boolean collisionFlag, double reachDistance)
+	{
+		MovingObjectPosition pickedEntity = null;
+		Vec3 startingPosition = this.toVec3();
+		Vec3 look = getDeltaPositionFromRotation(rotationYaw, rotationPitch).toVec3();
+		Vec3 reachPoint = Vec3.createVectorHelper(startingPosition.xCoord + look.xCoord * reachDistance, startingPosition.yCoord + look.yCoord * reachDistance, startingPosition.zCoord + look.zCoord * reachDistance);
+
+		double playerBorder = 1.1 * reachDistance;
+		AxisAlignedBB boxToScan = AxisAlignedBB.getAABBPool().getAABB(-playerBorder, -playerBorder, -playerBorder, playerBorder, playerBorder, playerBorder);
+
+		@SuppressWarnings("unchecked")
+		List<Entity> entitiesHit = world.getEntitiesWithinAABBExcludingEntity(null, boxToScan);
+		double closestEntity = reachDistance;
+
+		if (entitiesHit == null || entitiesHit.isEmpty())
+		{
+			return null;
+		}
+		for (Entity entityHit : entitiesHit)
+		{
+			if (entityHit != null && entityHit.canBeCollidedWith() && entityHit.boundingBox != null)
+			{
+				float border = entityHit.getCollisionBorderSize();
+				AxisAlignedBB aabb = entityHit.boundingBox.expand(border, border, border);
+				MovingObjectPosition hitMOP = aabb.calculateIntercept(startingPosition, reachPoint);
+
+				if (hitMOP != null)
+				{
+					if (aabb.isVecInside(startingPosition))
+					{
+						if (0.0D < closestEntity || closestEntity == 0.0D)
+						{
+							pickedEntity = new MovingObjectPosition(entityHit);
+							if (pickedEntity != null)
+							{
+								pickedEntity.hitVec = hitMOP.hitVec;
+								closestEntity = 0.0D;
+							}
+						}
+					}
+					else
+					{
+						double distance = startingPosition.distanceTo(hitMOP.hitVec);
+
+						if (distance < closestEntity || closestEntity == 0.0D)
+						{
+							pickedEntity = new MovingObjectPosition(entityHit);
+							pickedEntity.hitVec = hitMOP.hitVec;
+							closestEntity = distance;
+						}
+					}
+				}
+			}
+		}
+		return pickedEntity;
+	}
+
 	@Override
 	public int hashCode()
 	{
