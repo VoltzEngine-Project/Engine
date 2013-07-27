@@ -38,15 +38,13 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	public void initiate()
 	{
 		super.initiate();
-		this.bcPowerHandler = new PowerHandler(this, this.bcBlockType);
-		this.bcPowerHandler.configure(0, 100, 0, (int) Math.ceil(this.getMaxEnergyStored() * Compatibility.BC3_RATIO));
+		this.initBuildCraft();
 	}
 
 	@Override
 	public void updateEntity()
 	{
 		super.updateEntity();
-
 		// Register to the IC2 Network
 		if (!this.worldObj.isRemote && !this.isAddedToEnergyNet)
 		{
@@ -219,9 +217,19 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	/**
 	 * BuildCraft power support
 	 */
+	public void initBuildCraft()
+	{
+		if (this.bcPowerHandler == null)
+		{
+			this.bcPowerHandler = new PowerHandler(this, this.bcBlockType);
+			this.bcPowerHandler.configure(0, 100, 0, (int) Math.ceil(this.getMaxEnergyStored() * Compatibility.BC3_RATIO));
+		}
+	}
+
 	@Override
 	public PowerReceiver getPowerReceiver(ForgeDirection side)
 	{
+		this.initBuildCraft();
 		return this.bcPowerHandler.getPowerReceiver();
 	}
 
