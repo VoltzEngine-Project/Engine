@@ -32,7 +32,7 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 	 */
 	public void discharge(ItemStack itemStack)
 	{
-		this.setEnergyStored(this.getEnergyStored() + ElectricItemHelper.dischargeItem(itemStack, this.getProvide(ForgeDirection.UNKNOWN)));
+		this.setEnergyStored(this.getEnergyStored() + ElectricItemHelper.dischargeItem(itemStack, this.getRequest(ForgeDirection.UNKNOWN)));
 	}
 
 	/**
