@@ -7,11 +7,16 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.energy.tile.IEnergyTile;
+import ic2.api.item.IElectricItemManager;
+import ic2.api.item.ISpecialElectricItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import thermalexpansion.api.item.IChargeableItem;
 import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.tile.TileEntityElectrical;
 import buildcraft.api.power.IPowerReceptor;
@@ -33,6 +38,66 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	protected boolean isAddedToEnergyNet;
 	public PowerHandler bcPowerHandler;
 	public Type bcBlockType = Type.MACHINE;
+
+	/**
+	 * Recharges electric item.
+	 */
+	@Override
+	public void recharge(ItemStack itemStack)
+	{
+		if (itemStack != null)
+		{
+			if (itemStack.getItem() instanceof IItemElectric)
+			{
+				super.recharge(itemStack);
+			}
+			else if (itemStack.getItem() instanceof ISpecialElectricItem)
+			{
+				ISpecialElectricItem electricItem = (ISpecialElectricItem) itemStack.getItem();
+				IElectricItemManager manager = electricItem.getManager(itemStack);
+				float energy = Math.max(this.getProvide(ForgeDirection.UNKNOWN) * Compatibility.IC2_RATIO, 0);
+				energy = manager.charge(itemStack, (int) (energy * Compatibility.TO_IC2_RATIO), 0, false, false) * Compatibility.IC2_RATIO;
+				this.provideElectricity(energy, true);
+			}
+			else if (itemStack.getItem() instanceof IChargeableItem)
+			{
+				float accepted = ((IChargeableItem) itemStack.getItem()).receiveEnergy(itemStack, this.getProvide(ForgeDirection.UNKNOWN) * Compatibility.BC3_RATIO, true);
+				this.provideElectricity(accepted, true);
+			}
+		}
+	}
+
+	/**
+	 * Discharges electric item.
+	 */
+	@Override
+	public void discharge(ItemStack itemStack)
+	{
+		if (itemStack != null)
+		{
+			if (itemStack.getItem() instanceof IItemElectric)
+			{
+				super.discharge(itemStack);
+			}
+			else if (itemStack.getItem() instanceof ISpecialElectricItem)
+			{
+				ISpecialElectricItem electricItem = (ISpecialElectricItem) itemStack.getItem();
+
+				if (electricItem.canProvideEnergy(itemStack))
+				{
+					IElectricItemManager manager = electricItem.getManager(itemStack);
+					float energy = Math.max(this.getRequest(ForgeDirection.UNKNOWN) * Compatibility.IC2_RATIO, 0);
+					energy = manager.discharge(itemStack, (int) (energy * Compatibility.TO_IC2_RATIO), 0, false, false);
+					this.receiveElectricity(energy, true);
+				}
+			}
+			else if (itemStack.getItem() instanceof IChargeableItem)
+			{
+				float given = ((IChargeableItem) itemStack.getItem()).transferEnergy(itemStack, this.getRequest(ForgeDirection.UNKNOWN) * Compatibility.BC3_RATIO, true);
+				this.receiveElectricity(given, true);
+			}
+		}
+	}
 
 	@Override
 	public void initiate()

@@ -1,6 +1,7 @@
 package universalelectricity.prefab.tile;
 
 import java.util.EnumSet;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
