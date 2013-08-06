@@ -481,7 +481,7 @@ public class Vector3 implements Cloneable
 
 	public Vector3 crossProduct(Vector3 vec2)
 	{
-		return this.clone().crossProduct(vec2);
+		return this.clone().toCrossProduct(vec2);
 	}
 
 	public Vector3 xCrossProduct()
