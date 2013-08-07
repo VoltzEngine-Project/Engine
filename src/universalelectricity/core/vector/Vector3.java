@@ -251,7 +251,7 @@ public class Vector3 implements Cloneable
 
 	public double distance(Vector3 compare)
 	{
-		Vector3 difference = this.difference(compare);
+		Vector3 difference = this.clone().difference(compare);
 		return difference.getMagnitude();
 	}
 
@@ -721,8 +721,8 @@ public class Vector3 implements Cloneable
 		}
 		else
 		{
-			double dBlock = this.distanceTo(new Vector3(pickedBlock.hitVec));
-			double dEntity = this.distanceTo(new Vector3(pickedEntity.hitVec));
+			double dBlock = this.distance(new Vector3(pickedBlock.hitVec));
+			double dEntity = this.distance(new Vector3(pickedEntity.hitVec));
 
 			if (dEntity < dBlock)
 			{
@@ -758,7 +758,7 @@ public class Vector3 implements Cloneable
 		MovingObjectPosition pickedEntity = null;
 		Vec3 startingPosition = this.toVec3();
 		Vec3 look = target.clone().difference(this).normalize().toVec3();
-		double reachDistance = this.distanceTo(target);
+		double reachDistance = this.distance(target);
 		Vec3 reachPoint = Vec3.createVectorHelper(startingPosition.xCoord + look.xCoord * reachDistance, startingPosition.yCoord + look.yCoord * reachDistance, startingPosition.zCoord + look.zCoord * reachDistance);
 
 		double checkBorder = 1.1 * reachDistance;
