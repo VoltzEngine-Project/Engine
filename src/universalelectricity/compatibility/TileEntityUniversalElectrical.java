@@ -158,11 +158,9 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 				if (Compatibility.isIndustrialCraft2Loaded())
 				{
 					int ic2Provide = (int) Math.ceil(provide * Compatibility.TO_IC2_RATIO);
-
 					EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, ic2Provide);
 					MinecraftForge.EVENT_BUS.post(event);
-					this.setEnergyStored(this.getEnergyStored() - ((ic2Provide * Compatibility.IC2_RATIO) - (event.amount * Compatibility.IC2_RATIO)));
-
+					this.provideElectricity((ic2Provide * Compatibility.IC2_RATIO) - (event.amount * Compatibility.IC2_RATIO), true);
 				}
 			}
 		}
@@ -188,7 +186,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 						{
 							float bc3Provide = provide * Compatibility.TO_BC_RATIO;
 							float energyUsed = Math.min(receiver.receiveEnergy(this.bcBlockType, bc3Provide, outputDirection.getOpposite()), bc3Provide);
-							this.setEnergyStored(this.getEnergyStored() - (bc3Provide - (energyUsed * Compatibility.TO_BC_RATIO)));
+							this.provideElectricity((bc3Provide - (energyUsed * Compatibility.TO_BC_RATIO)), true);
 						}
 					}
 				}
