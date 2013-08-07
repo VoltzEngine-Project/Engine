@@ -73,7 +73,7 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 					{
 						ElectricityPack sendPack = ElectricityPack.min(ElectricityPack.getFromWatts(this.getEnergyStored(), this.getVoltage()), ElectricityPack.getFromWatts(provide, this.getVoltage()));
 						float rejectedPower = outputNetwork.produce(sendPack, this);
-						this.setEnergyStored(this.getEnergyStored() - (sendPack.getWatts() - rejectedPower));
+						this.provideElectricity(sendPack.getWatts() - rejectedPower, true);
 					}
 				}
 			}
