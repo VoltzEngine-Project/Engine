@@ -110,18 +110,29 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	public void updateEntity()
 	{
 		super.updateEntity();
+
 		// Register to the IC2 Network
-		if (!this.worldObj.isRemote && !this.isAddedToEnergyNet)
+		if (!this.worldObj.isRemote)
 		{
-			if (Compatibility.isIndustrialCraft2Loaded())
+			if (!this.isAddedToEnergyNet)
 			{
-				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+				this.initIC();
 			}
 
-			this.isAddedToEnergyNet = true;
+			if (this.bcPowerHandler == null)
+			{
+				this.initBuildCraft();
+			}
+			
+			if (Compatibility.isBuildcraftLoaded())
+			{
+				/**
+				 * Cheat BuildCraft powerHandler and always empty energy inside of it.
+				 */
+				this.receiveElectricity(this.bcPowerHandler.getEnergyStored(), true);
+				this.bcPowerHandler.setEnergy(0);
+			}
 		}
-
-		this.produce();
 	}
 
 	@Override
@@ -135,15 +146,6 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 				this.produceIC2(outputDirection);
 				this.produceBuildCraft(outputDirection);
 			}
-		}
-
-		if (Compatibility.isBuildcraftLoaded())
-		{
-			/**
-			 * Cheat BuildCraft powerHandler and always empty energy inside of it.
-			 */
-			this.receiveElectricity(this.bcPowerHandler.getEnergyStored(), true);
-			this.bcPowerHandler.setEnergy(0);
 		}
 	}
 
@@ -221,6 +223,16 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	{
 		this.unloadTileIC2();
 		super.onChunkUnload();
+	}
+
+	protected void initIC()
+	{
+		if (Compatibility.isIndustrialCraft2Loaded())
+		{
+			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+		}
+
+		this.isAddedToEnergyNet = true;
 	}
 
 	private void unloadTileIC2()
