@@ -4,7 +4,7 @@
 
 	<property file="build.properties" />
 	<property environment="env" />
-	<property name="file.ue_core" value="UniversalElectricity_Core_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.zip" />
+	<property name="file.ue_core" value="UniversalElectricity_Core_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.jar" />
 	<property name="file.ue_api" value="UniversalElectricity_API_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.zip" />
 
 	<target name="build">
