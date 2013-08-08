@@ -38,6 +38,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	protected boolean isAddedToEnergyNet;
 	public PowerHandler bcPowerHandler;
 	public Type bcBlockType = Type.MACHINE;
+	public float maxInputEnergy = 100;
 
 	/**
 	 * Recharges electric item.
@@ -123,14 +124,17 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 			{
 				this.initBuildCraft();
 			}
-			
+
 			if (Compatibility.isBuildcraftLoaded())
 			{
-				/**
-				 * Cheat BuildCraft powerHandler and always empty energy inside of it.
-				 */
-				this.receiveElectricity(this.bcPowerHandler.getEnergyStored(), true);
-				this.bcPowerHandler.setEnergy(0);
+				if (this.bcPowerHandler.getEnergyStored() > 0)
+				{
+					/**
+					 * Cheat BuildCraft powerHandler and always empty energy inside of it.
+					 */
+					this.receiveElectricity(this.bcPowerHandler.getEnergyStored() * Compatibility.BC3_RATIO, true);
+					this.bcPowerHandler.setEnergy(0);
+				}
 			}
 		}
 	}
@@ -297,8 +301,8 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 		if (this.bcPowerHandler == null)
 		{
 			this.bcPowerHandler = new PowerHandler(this, this.bcBlockType);
-			this.bcPowerHandler.configure(0, 100, 0, (int) Math.ceil(this.getMaxEnergyStored() * Compatibility.BC3_RATIO));
 		}
+		this.bcPowerHandler.configure(0, this.maxInputEnergy, 0, (int) Math.ceil(this.getMaxEnergyStored() * Compatibility.BC3_RATIO));
 	}
 
 	@Override
