@@ -471,17 +471,20 @@ public class Vector3 implements Cloneable
 	 * 
 	 * @return The cross product between this vector and another.
 	 */
-	public Vector3 toCrossProduct(Vector3 vec2)
+	public Vector3 toCrossProduct(Vector3 compare)
 	{
-		this.x = this.y * vec2.z - this.z * vec2.y;
-		this.y = this.z * vec2.x - this.x * vec2.z;
-		this.z = this.x * vec2.y - this.y * vec2.x;
+		double newX = this.y * compare.z - this.z * compare.y;
+		double newY = this.z * compare.x - this.x * compare.z;
+		double newZ = this.x * compare.y - this.y * compare.x;
+		this.x = newX;
+		this.y = newY;
+		this.z = newZ;
 		return this;
 	}
 
-	public Vector3 crossProduct(Vector3 vec2)
+	public Vector3 crossProduct(Vector3 compare)
 	{
-		return this.clone().toCrossProduct(vec2);
+		return this.clone().toCrossProduct(compare);
 	}
 
 	public Vector3 xCrossProduct()
