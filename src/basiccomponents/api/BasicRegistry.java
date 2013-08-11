@@ -3,11 +3,9 @@ package basiccomponents.api;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraftforge.common.Configuration;
-
 /**
- * The main class for managing Basic Component items and blocks. Reference objects from this class
- * to add them to your recipes and such.
+ * This should be the only class you include in your mod. If your mod is a coremod, feel free to
+ * download Basic Components Core directly during run-time.
  * 
  * @author Calclavia
  */
@@ -16,6 +14,10 @@ public class BasicRegistry
 {
 	public static final Set<String> requests = new HashSet<String>();
 
+	/**
+	 * @param request - Name of the item/block to register. Use the EXACT FIELD NAME of the
+	 * BasicComponents.java field.
+	 */
 	public static void register(String request)
 	{
 		requests.add(request);
