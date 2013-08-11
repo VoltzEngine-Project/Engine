@@ -9,9 +9,6 @@
 
 	<target name="build">
 
-		<delete dir="output" />
-		<delete dir="${dir.development}/forge" />
-		
 		<copy todir="${dir.development}">
 			<fileset dir="../Minecraft Forge Latest/" />
 		</copy>
