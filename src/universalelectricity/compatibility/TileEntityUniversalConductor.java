@@ -46,7 +46,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 			{
 				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 			}
-			
+
 			this.addedToIC2Network = true;
 		}
 	}
@@ -124,41 +124,44 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 	@Override
 	public TileEntity[] getAdjacentConnections()
 	{
-		TileEntity[] adjecentConnections = new TileEntity[6];
-
-		for (byte i = 0; i < 6; i++)
+		if (this.adjacentConnections == null)
 		{
-			ForgeDirection side = ForgeDirection.getOrientation(i);
-			TileEntity tileEntity = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), side);
+			this.adjacentConnections = new TileEntity[6];
 
-			if (tileEntity instanceof IConnector)
+			for (byte i = 0; i < 6; i++)
 			{
-				if (((IConnector) tileEntity).canConnect(side.getOpposite()))
+				ForgeDirection side = ForgeDirection.getOrientation(i);
+				TileEntity tileEntity = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), side);
+
+				if (tileEntity instanceof IConnector)
 				{
-					adjecentConnections[i] = tileEntity;
-				}
-			}
-			else if (Compatibility.isIndustrialCraft2Loaded() && tileEntity instanceof IEnergyTile)
-			{
-				if (tileEntity instanceof IEnergyAcceptor)
-				{
-					if (((IEnergyAcceptor) tileEntity).acceptsEnergyFrom(this, Direction.values()[(i + 2) % 6].getInverse()))
+					if (((IConnector) tileEntity).canConnect(side.getOpposite()))
 					{
-						adjecentConnections[i] = tileEntity;
+						this.adjacentConnections[i] = tileEntity;
 					}
 				}
-				else
+				else if (Compatibility.isIndustrialCraft2Loaded() && tileEntity instanceof IEnergyTile)
 				{
-					adjecentConnections[i] = tileEntity;
+					if (tileEntity instanceof IEnergyAcceptor)
+					{
+						if (((IEnergyAcceptor) tileEntity).acceptsEnergyFrom(this, Direction.values()[(i + 2) % 6].getInverse()))
+						{
+							this.adjacentConnections[i] = tileEntity;
+						}
+					}
+					else
+					{
+						this.adjacentConnections[i] = tileEntity;
+					}
 				}
-			}
-			else if (Compatibility.isBuildcraftLoaded() && tileEntity instanceof IPowerReceptor)
-			{
-				adjecentConnections[i] = tileEntity;
+				else if (Compatibility.isBuildcraftLoaded() && tileEntity instanceof IPowerReceptor)
+				{
+					this.adjacentConnections[i] = tileEntity;
+				}
 			}
 		}
 
-		return adjecentConnections;
+		return this.adjacentConnections;
 	}
 
 	/**
