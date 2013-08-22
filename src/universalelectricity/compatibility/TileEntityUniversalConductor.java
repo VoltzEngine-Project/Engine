@@ -4,7 +4,6 @@ import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.electricity.ElectricityPack;
@@ -12,8 +11,6 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.tile.TileEntityConductor;
 import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
 
 /**
  * A universal conductor class.
@@ -73,24 +70,18 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor
 	}
 
 	/**
-	 * Compatibility Methods
-	 */
-	/**
 	 * Takes power from nearby IC2 blocks and inject it into the network.
 	 */
-	public void withdrawPower()
+	@Override
+	public void doWithdraw(ForgeDirection direction, TileEntity tileEntity)
 	{
-		for (int i = 0; i < 6; i++)
-		{
-			ForgeDirection direction = ForgeDirection.getOrientation(i);
-			TileEntity tileEntity = new Vector3(this).modifyPositionFromSide(direction).getTileEntity(this.worldObj);
+		super.doWithdraw(direction, tileEntity);
 
-			if (tileEntity instanceof IEnergySource)
-			{
-				float injection = (float) ((IEnergySource) tileEntity).getOfferedEnergy();
-				((IEnergySource) tileEntity).drawEnergy(injection);
-				this.getNetwork().produce(ElectricityPack.getFromWatts(injection * Compatibility.IC2_RATIO, 120), tileEntity);
-			}
+		if (tileEntity instanceof IEnergySource)
+		{
+			float injection = (float) ((IEnergySource) tileEntity).getOfferedEnergy();
+			((IEnergySource) tileEntity).drawEnergy(injection);
+			this.getNetwork().produce(ElectricityPack.getFromWatts(injection * Compatibility.IC2_RATIO, 120), tileEntity);
 		}
 	}
 }
