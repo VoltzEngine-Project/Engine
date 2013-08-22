@@ -1,13 +1,13 @@
 package ic2.api;
 
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.common.ForgeDirection;
 
 /**
  * Represents the 6 possible directions along the axis of a block.
  */
-public enum Direction
-{
+public enum Direction {
 	/**
 	 * -X
 	 */
@@ -20,7 +20,7 @@ public enum Direction
 	/**
 	 * -Y
 	 */
-	YN(2), // MC-Code starts with 0 here
+	YN(2), //MC-Code starts with 0 here
 	/**
 	 * +Y
 	 */
@@ -35,38 +35,32 @@ public enum Direction
 	 */
 	ZP(5);
 
-	Direction(int dir)
-	{
+	Direction(int dir) {
 		this.dir = dir;
 	}
 
-	/*
-	 * public CoordinateTuple ApplyToCoordinates(CoordinateTuple coordinates) { CoordinateTuple ret
-	 * = new CoordinateTuple(coordinates);
-	 * 
-	 * ret.coords[dir/2] += GetSign();
-	 * 
-	 * return ret; }
-	 */
+	/*public CoordinateTuple ApplyToCoordinates(CoordinateTuple coordinates) {
+		CoordinateTuple ret = new CoordinateTuple(coordinates);
+
+		ret.coords[dir/2] += GetSign();
+
+		return ret;
+	}*/
 
 	/**
 	 * Get the tile entity next to a tile entity following this direction.
-	 * 
+	 *
 	 * @param tileEntity tile entity to check
 	 * @return Adjacent tile entity or null if none exists
 	 */
-	public TileEntity applyToTileEntity(TileEntity tileEntity)
-	{
+	public TileEntity applyToTileEntity(TileEntity tileEntity) {
 		int coords[] = { tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord };
 
-		coords[dir / 2] += getSign();
+		coords[dir/2] += getSign();
 
-		if (tileEntity.worldObj != null && tileEntity.worldObj.blockExists(coords[0], coords[1], coords[2]))
-		{
+		if (tileEntity.worldObj != null && tileEntity.worldObj.blockExists(coords[0], coords[1], coords[2])) {
 			return tileEntity.worldObj.getBlockTileEntity(coords[0], coords[1], coords[2]);
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}
@@ -76,14 +70,11 @@ public enum Direction
 	 * 
 	 * @return Inverse direction
 	 */
-	public Direction getInverse()
-	{
+	public Direction getInverse() {
 		int inverseDir = dir - getSign();
 
-		for (Direction direction : directions)
-		{
-			if (direction.dir == inverseDir)
-				return direction;
+		for (Direction direction : directions) {
+			if (direction.dir == inverseDir) return direction;
 		}
 
 		return this;
@@ -94,26 +85,24 @@ public enum Direction
 	 * 
 	 * @return Minecraft side value
 	 */
-	public int toSideValue()
-	{
+	public int toSideValue() {
 		return (dir + 4) % 6;
 	}
 
 	/**
 	 * Determine direction sign (N for negative or P for positive).
-	 * 
+	 *
 	 * @return -1 if the direction is negative, +1 if the direction is positive
 	 */
-	private int getSign()
-	{
+	private int getSign() {
 		return (dir % 2) * 2 - 1;
 	}
 
-	public ForgeDirection toForgeDirection()
-	{
+	public ForgeDirection toForgeDirection() {
 		return ForgeDirection.getOrientation(toSideValue());
 	}
 
 	private int dir;
 	public static final Direction[] directions = Direction.values();
 }
+

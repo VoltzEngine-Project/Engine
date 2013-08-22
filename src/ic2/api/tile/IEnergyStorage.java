@@ -1,12 +1,11 @@
 package ic2.api.tile;
 
-import ic2.api.Direction;
+import net.minecraftforge.common.ForgeDirection;
 
 /**
  * Interface implemented by the tile entity of energy storage blocks.
  */
-public interface IEnergyStorage
-{
+public interface IEnergyStorage {
 	/**
 	 * Get the amount of energy currently stored in the block.
 	 * 
@@ -46,10 +45,17 @@ public interface IEnergyStorage
 	public int getOutput();
 
 	/**
+	 * Get the block's energy output.
+	 * 
+	 * @return Energy output in EU/t
+	 */
+	public double getOutputEnergyUnitsPerTick();
+
+	/**
 	 * Get whether this block can have its energy used by an adjacent teleporter.
 	 * 
 	 * @param side side the teleporter is draining energy from
 	 * @return Whether the block is teleporter compatible
 	 */
-	public boolean isTeleporterCompatible(Direction side);
+	public boolean isTeleporterCompatible(ForgeDirection side);
 }

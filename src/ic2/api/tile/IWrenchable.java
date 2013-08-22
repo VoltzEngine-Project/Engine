@@ -6,11 +6,10 @@ import net.minecraft.item.ItemStack;
 /**
  * Allows a tile entity to make use of the wrench's removal and rotation functions.
  */
-public interface IWrenchable
-{
+public interface IWrenchable {
 	/**
-	 * Determine if the wrench can be used to set the block's facing. Called before
-	 * wrenchCanRemove().
+	 * Determine if the wrench can be used to set the block's facing.
+	 * Called before wrenchCanRemove().
 	 * 
 	 * @param entityPlayer player using the wrench, may be null
 	 * @param side block's side the wrench was clicked on
@@ -33,16 +32,17 @@ public interface IWrenchable
 	void setFacing(short facing);
 
 	/**
-	 * Determine if the wrench can be used to remove the block. Called if wrenchSetFacing fails.
-	 * 
+	 * Determine if the wrench can be used to remove the block.
+	 * Called if wrenchSetFacing fails.
+	 *
 	 * @param entityPlayer player using the wrench, may be null
 	 * @return Whether the wrenching was done and the wrench should be damaged
 	 */
 	boolean wrenchCanRemove(EntityPlayer entityPlayer);
 
 	/**
-	 * Determine the probability to drop the block as it is. The first entry in getBlockDropped will
-	 * be replaced by blockid:meta if the drop is successful.
+	 * Determine the probability to drop the block as it is.
+	 * The first entry in getBlockDropped will be replaced by blockid:meta if the drop is successful.
 	 * 
 	 * @return Probability from 0 to 1
 	 */
@@ -56,3 +56,4 @@ public interface IWrenchable
 	 */
 	ItemStack getWrenchDrop(EntityPlayer entityPlayer);
 }
+
