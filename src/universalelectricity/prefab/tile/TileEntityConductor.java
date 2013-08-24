@@ -5,9 +5,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnector;
-import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.block.INetworkProvider;
-import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.electricity.NetworkLoader;
 import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
@@ -117,29 +115,6 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 	public boolean canConnect(ForgeDirection direction)
 	{
 		return true;
-	}
-
-	/**
-	 * Withdraws electricity from nearby producers.
-	 */
-	public void widthdraw()
-	{
-		for (int i = 0; i < 6; i++)
-		{
-			ForgeDirection direction = ForgeDirection.getOrientation(i);
-			TileEntity tileEntity = new Vector3(this).modifyPositionFromSide(direction).getTileEntity(this.worldObj);
-			this.doWithdraw(direction, tileEntity);
-		}
-	}
-
-	public void doWithdraw(ForgeDirection direction, TileEntity tileEntity)
-	{
-		if (tileEntity instanceof IElectrical)
-		{
-			float injection = ((IElectrical) tileEntity).getProvide(direction);
-			ElectricityPack sendPack = ((IElectrical) tileEntity).provideElectricity(direction, ElectricityPack.getFromWatts(injection, ((IElectrical) tileEntity).getVoltage()), true);
-			this.getNetwork().produce(sendPack, tileEntity);
-		}
 	}
 
 	@Override
