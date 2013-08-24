@@ -41,13 +41,13 @@ public class ElectricityNetwork implements IElectricityNetwork
 	public Map<TileEntity, ArrayList<ForgeDirection>> electricalTiles = new HashMap<TileEntity, ArrayList<ForgeDirection>>();
 
 	private final Set<IConductor> conductors = new HashSet<IConductor>();
-	
+
 	public float acceptorResistance = 500;
 
 	@Override
 	public float produce(ElectricityPack electricity, TileEntity... ignoreTiles)
 	{
-		ElectricityProductionEvent evt = new ElectricityProductionEvent(electricity, ignoreTiles);
+		ElectricityProductionEvent evt = new ElectricityProductionEvent(this, electricity, ignoreTiles);
 		MinecraftForge.EVENT_BUS.post(evt);
 
 		float totalEnergy = electricity.getWatts();
@@ -136,7 +136,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 		}
 
 		ElectricityPack mergedPack = ElectricityPack.merge(requests);
-		ElectricityRequestEvent evt = new ElectricityRequestEvent(mergedPack, ignoreTiles);
+		ElectricityRequestEvent evt = new ElectricityRequestEvent(this, mergedPack, ignoreTiles);
 		MinecraftForge.EVENT_BUS.post(evt);
 		return mergedPack;
 	}
