@@ -106,7 +106,7 @@ public class UniversalNetwork extends ElectricityNetwork
 		}
 
 		ElectricityPack mergedPack = ElectricityPack.merge(requests);
-		ElectricityRequestEvent evt = new ElectricityRequestEvent(mergedPack, ignoreTiles);
+		ElectricityRequestEvent evt = new ElectricityRequestEvent(this, mergedPack, ignoreTiles);
 		MinecraftForge.EVENT_BUS.post(evt);
 		return mergedPack;
 	}
