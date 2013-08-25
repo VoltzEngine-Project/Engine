@@ -184,7 +184,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction)
 	{
-		return this.canConnect(direction);
+		return this.getInputDirections().contains(direction);
 	}
 
 	@Override
@@ -262,7 +262,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	@Override
 	public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction)
 	{
-		return receiver instanceof IEnergyTile && direction.equals(this.getOutputDirections());
+		return receiver instanceof IEnergyTile && this.getOutputDirections().contains(direction);
 	}
 
 	@Override
