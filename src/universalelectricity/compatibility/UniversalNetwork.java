@@ -26,6 +26,8 @@ import universalelectricity.core.path.PathfinderChecker;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
+import buildcraft.api.power.PowerHandler.Type;
 import cpw.mods.fml.common.FMLLog;
 
 /**
@@ -99,6 +101,26 @@ public class UniversalNetwork extends ElectricityNetwork
 											if (energyToSend > 0)
 											{
 												remainingUsableEnergy -= electricalTile.injectEnergyUnits(direction, energyToSend * Compatibility.TO_IC2_RATIO);
+											}
+										}
+									}
+								}
+								else if (Compatibility.isBuildcraftLoaded() && tileEntity instanceof IPowerReceptor)
+								{
+									IPowerReceptor electricalTile = (IPowerReceptor) tileEntity;
+
+									for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+									{
+										TileEntity conductor = VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction);
+										PowerReceiver receiver = electricalTile.getPowerReceiver(direction);
+
+										if (this.getConductors().contains(conductor))
+										{
+											float energyToSend = totalUsableEnergy * ((receiver.powerRequest() * Compatibility.TO_BC_RATIO) / totalEnergyRequest);
+
+											if (energyToSend > 0)
+											{
+												remainingUsableEnergy -= receiver.receiveEnergy(Type.PIPE, energyToSend * Compatibility.TO_BC_RATIO, direction);
 											}
 										}
 									}
