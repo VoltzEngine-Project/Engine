@@ -6,6 +6,8 @@
 	<property environment="env" />
 	<property name="file.ue_core" value="UniversalElectricity_Core_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.jar" />
 	<property name="file.ue_api" value="UniversalElectricity_API_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.zip" />
+	<property name="file.ue_core_latest" value="UniversalElectricity_Core.jar" />
+	<property name="file.ue_api_latest" value="UniversalElectricity_API.zip" />
 
 	<target name="build">
 
@@ -64,6 +66,14 @@
 		</zip>
 		<zip destfile="output/${file.ue_api}">
 			<fileset dir="ue_api" />
+		</zip>
+		
+		<!-- OUTPUT LATEST JAR AND ZIP FILES -->
+		<jar destfile="${file.ue_core_latest}">
+			<fileset dir="JarContents" />
+		</jar>
+		<zip destfile="${file.ue_api_latest}">
+			<fileset dir="APIContents" />
 		</zip>
 		
 		<copy todir="output" file="build.properties" />
