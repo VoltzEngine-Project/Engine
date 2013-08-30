@@ -70,10 +70,10 @@
 		
 		<!-- OUTPUT LATEST JAR AND ZIP FILES -->
 		<jar destfile="${file.ue_core_latest}">
-			<fileset dir="JarContents" />
+			<fileset dir="ue_core" />
 		</jar>
 		<zip destfile="${file.ue_api_latest}">
-			<fileset dir="APIContents" />
+			<fileset dir="ue_api" />
 		</zip>
 		
 		<copy todir="output" file="build.properties" />
