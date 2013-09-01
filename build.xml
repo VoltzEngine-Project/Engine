@@ -32,6 +32,9 @@
 		<replace dir="${dir.mcp}/src/minecraft" token="@MINOR@" value="${version.mod.minor}" />
 		<replace dir="${dir.mcp}/src/minecraft" token="@REVIS@" value="${version.mod.revis}" />
 		<replace dir="${dir.mcp}/src/minecraft" token="@BUILD@" value="${env.BUILD_NUMBER}" />
+        <replace dir="${dir.mcp}/src/minecraft" token="@BCxVersion@" value="${version.bc}"  />
+        <replace dir="${dir.mcp}/src/minecraft" token="@ICxVersion@" value="${version.ic}" />
+        <replace dir="${dir.mcp}/src/minecraft" token="@TExVersion@" value="${version.te}" />        
 
 		<exec dir="${dir.mcp}" executable="cmd" osfamily="windows">
 			<arg line="recompile.bat" />
