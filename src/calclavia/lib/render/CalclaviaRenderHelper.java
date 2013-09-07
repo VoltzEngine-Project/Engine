@@ -43,7 +43,7 @@ public class CalclaviaRenderHelper
 
 	public static void setSpriteTexture(int sprite)
 	{
-		FMLClientHandler.instance().getClient().renderEngine.func_110577_a(FMLClientHandler.instance().getClient().renderEngine.func_130087_a(sprite));
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(FMLClientHandler.instance().getClient().renderEngine.getResourceLocation(sprite));
 	}
 
 	/**

@@ -11,6 +11,6 @@ public class ItemBase extends Item
 		super(config.getItem(name, id).getInt());
 		this.setUnlocalizedName(prefix + name);
 		this.setCreativeTab(tab);
-		this.func_111206_d(prefix + name);
+		this.setTextureName(prefix + name);
 	}
 }

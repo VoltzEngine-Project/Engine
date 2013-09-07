@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
@@ -103,7 +102,7 @@ public class GuiContainerBase extends GuiContainer
 		this.containerWidth = (this.width - this.xSize) / 2;
 		this.containerHeight = (this.height - this.ySize) / 2;
 
-		this.mc.renderEngine.func_110577_a(this.baseTexture);
+		this.mc.renderEngine.bindTexture(this.baseTexture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
@@ -111,7 +110,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawBulb(int x, int y, boolean isOn)
 	{
-		this.mc.renderEngine.func_110577_a(this.baseTexture);
+		this.mc.renderEngine.bindTexture(this.baseTexture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		if (isOn)
@@ -127,7 +126,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawSlot(int x, int y, ItemStack itemStack)
 	{
-		this.mc.renderEngine.func_110577_a(this.baseTexture);
+		this.mc.renderEngine.bindTexture(this.baseTexture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
@@ -177,7 +176,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawSlot(int x, int y, GuiSlotType type, float r, float g, float b)
 	{
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 		GL11.glColor4f(r, g, b, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
@@ -200,7 +199,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawBar(int x, int y, float scale)
 	{
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -219,7 +218,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawForce(int x, int y, float scale)
 	{
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -238,7 +237,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawElectricity(int x, int y, float scale)
 	{
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -257,7 +256,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawMeter(int x, int y, float scale, float r, float g, float b)
 	{
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/**
@@ -281,7 +280,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawMeter(int x, int y, float scale, FluidStack liquidStack)
 	{
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -298,13 +297,13 @@ public class GuiContainerBase extends GuiContainer
 		/**
 		 * Draw measurement lines
 		 */
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, meterWidth, meterHeight);
 	}
 
 	protected void drawSlot(int x, int y, SlotType type, float r, float g, float b)
 	{
-		this.mc.renderEngine.func_110577_a(Calclavia.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Calclavia.GUI_COMPONENTS);
 		GL11.glColor4f(r, g, b, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
