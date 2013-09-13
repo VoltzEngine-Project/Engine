@@ -54,7 +54,7 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 	 * 
 	 * @param outputDirection - The output direction.
 	 */
-	public void produceUE(ForgeDirection outputDirection)
+	public boolean produceUE(ForgeDirection outputDirection)
 	{
 		if (!this.worldObj.isRemote && outputDirection != null && outputDirection != ForgeDirection.UNKNOWN)
 		{
@@ -75,9 +75,13 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 						float rejectedPower = outputNetwork.produce(sendPack, this);
 						this.provideElectricity(sendPack.getWatts() - rejectedPower, true);
 					}
+					
+					return true;
 				}
 			}
 		}
+
+		return false;
 	}
 
 	/**

@@ -144,13 +144,19 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 		{
 			for (ForgeDirection outputDirection : this.getOutputDirections())
 			{
-				this.produceUE(outputDirection);
-				this.produceBuildCraft(outputDirection);
+				if (outputDirection != ForgeDirection.UNKNOWN)
+				{
+					if (!this.produceUE(outputDirection))
+					{
+						this.produceBuildCraft(outputDirection);
+					}
+
+				}
 			}
 		}
 	}
 
-	public void produceBuildCraft(ForgeDirection outputDirection)
+	public boolean produceBuildCraft(ForgeDirection outputDirection)
 	{
 		if (!this.worldObj.isRemote && outputDirection != null && outputDirection != ForgeDirection.UNKNOWN)
 		{
@@ -172,10 +178,14 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 							float energyUsed = Math.min(receiver.receiveEnergy(this.bcBlockType, bc3Provide, outputDirection.getOpposite()), bc3Provide);
 							this.provideElectricity((bc3Provide - (energyUsed * Compatibility.TO_BC_RATIO)), true);
 						}
+
+						return true;
 					}
 				}
 			}
 		}
+
+		return false;
 	}
 
 	/**
