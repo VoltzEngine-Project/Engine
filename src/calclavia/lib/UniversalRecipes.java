@@ -71,7 +71,7 @@ public class UniversalRecipes
 			// Miscs
 			register(CIRCUIT_T1, "circuitBasic", Items.getItem("electronicCircuit"), new ItemStack(Block.torchRedstoneIdle));
 			register(CIRCUIT_T2, "circuitAdvanced", Items.getItem("advancedCircuit"), new ItemStack(Item.redstoneRepeater));
-			register(CIRCUIT_T3, "circuitElite", Items.getItem("iridiumPlate"), new ItemStack(Block.redstoneComparatorIdle));
+			register(CIRCUIT_T3, "circuitElite", Items.getItem("iridiumPlate"), new ItemStack(Item.comparator));
 
 			register(ADVANCED_BATTERY, "advancedBattery", Items.getItem("energyCrystal"), "battery", new ItemStack(Item.redstoneRepeater));
 			register(BATTERY, "battery", Items.getItem("reBattery"), new ItemStack(Item.redstoneRepeater));
