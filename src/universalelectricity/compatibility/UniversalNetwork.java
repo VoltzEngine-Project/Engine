@@ -114,13 +114,16 @@ public class UniversalNetwork extends ElectricityNetwork
 										TileEntity conductor = VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction);
 										PowerReceiver receiver = electricalTile.getPowerReceiver(direction);
 
-										if (this.getConductors().contains(conductor))
+										if (receiver != null)
 										{
-											float energyToSend = totalUsableEnergy * ((receiver.powerRequest() * Compatibility.TO_BC_RATIO) / totalEnergyRequest);
-
-											if (energyToSend > 0)
+											if (this.getConductors().contains(conductor))
 											{
-												remainingUsableEnergy -= receiver.receiveEnergy(Type.PIPE, energyToSend * Compatibility.TO_BC_RATIO, direction);
+												float energyToSend = totalUsableEnergy * ((receiver.powerRequest() * Compatibility.TO_BC_RATIO) / totalEnergyRequest);
+
+												if (energyToSend > 0)
+												{
+													remainingUsableEnergy -= receiver.receiveEnergy(Type.PIPE, energyToSend * Compatibility.TO_BC_RATIO, direction);
+												}
 											}
 										}
 									}
