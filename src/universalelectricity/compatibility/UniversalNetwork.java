@@ -181,7 +181,12 @@ public class UniversalNetwork extends ElectricityNetwork
 						{
 							if (((IEnergySink) tileEntity).acceptsEnergyFrom(VectorHelper.getTileEntityFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction), direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
 							{
-								requests.add(ElectricityPack.getFromWatts((float) (Math.min(((IEnergySink) tileEntity).demandedEnergyUnits(), ((IEnergySink) tileEntity).getMaxSafeInput()) * Compatibility.IC2_RATIO), 120));
+								ElectricityPack pack = ElectricityPack.getFromWatts((float) (Math.min(((IEnergySink) tileEntity).demandedEnergyUnits(), ((IEnergySink) tileEntity).getMaxSafeInput()) * Compatibility.IC2_RATIO), 1);
+								
+								if (pack.getWatts() > 0)
+								{
+									requests.add(pack);
+								}
 							}
 						}
 
@@ -194,7 +199,7 @@ public class UniversalNetwork extends ElectricityNetwork
 						{
 							if (((IPowerReceptor) tileEntity).getPowerReceiver(direction) != null)
 							{
-								ElectricityPack pack = ElectricityPack.getFromWatts(((IPowerReceptor) tileEntity).getPowerReceiver(direction).powerRequest() * Compatibility.BC3_RATIO, 120);
+								ElectricityPack pack = ElectricityPack.getFromWatts(((IPowerReceptor) tileEntity).getPowerReceiver(direction).powerRequest() * Compatibility.BC3_RATIO, 1);
 
 								if (pack.getWatts() > 0)
 								{
