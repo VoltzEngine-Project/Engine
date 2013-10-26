@@ -252,7 +252,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	@Override
 	public double demandedEnergyUnits()
 	{
-		return Math.ceil(this.getRequest(ForgeDirection.UNKNOWN) * Compatibility.TO_IC2_RATIO);
+		return this.getRequest(ForgeDirection.UNKNOWN) * Compatibility.TO_IC2_RATIO;
 	}
 
 	@Override
