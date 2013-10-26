@@ -209,7 +209,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 	@Override
 	public void drawEnergy(double amount)
 	{
-		this.provideElectricity((float) amount * Compatibility.IC2_RATIO, true);
+		this.provideElectricity((float) amount * Compatibility.TO_IC2_RATIO, true);
 	}
 
 	@Override

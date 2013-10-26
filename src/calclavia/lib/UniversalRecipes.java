@@ -9,6 +9,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import com.google.common.collect.Lists;
+
 import cpw.mods.fml.common.FMLLog;
 
 /**
@@ -65,7 +68,7 @@ public class UniversalRecipes
 			 * ItemStack(Item.ingotIron)); register(SECONDARY_METAL, "ingotBronze", new
 			 * ItemStack(Item.brick));
 			 */
-			//Plates
+			// Plates
 			register(PRIMARY_PLATE, "plateSteel", Items.getItem("advancedAlloy"), new ItemStack(Block.blockIron));
 			register(SECONDARY_PLATE, "plateBronze", Items.getItem("carbonPlate"), new ItemStack(Block.brick));
 			// Miscs
@@ -123,7 +126,7 @@ public class UniversalRecipes
 		{
 			if (itemStacks.size() > 0)
 			{
-				for (ItemStack stack : itemStacks)
+				for (ItemStack stack : itemStacks.toArray(new ItemStack[0]))
 				{
 					if (stack != null)
 					{
