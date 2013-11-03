@@ -68,11 +68,12 @@ public class UniversalRecipes
 			 * ItemStack(Item.ingotIron)); register(SECONDARY_METAL, "ingotBronze", new
 			 * ItemStack(Item.brick));
 			 */
+			
 			// Plates
 			register(PRIMARY_PLATE, "plateSteel", Items.getItem("advancedAlloy"), new ItemStack(Block.blockIron));
 			register(SECONDARY_PLATE, "plateBronze", Items.getItem("carbonPlate"), new ItemStack(Block.brick));
 			// Miscs
-			register(CIRCUIT_T1, "circuitBasic", Items.getItem("electronicCircuit"), new ItemStack(Block.torchRedstoneIdle));
+			register(CIRCUIT_T1, "circuitBasic", Items.getItem("electronicCircuit"), new ItemStack(Block.torchRedstoneActive));
 			register(CIRCUIT_T2, "circuitAdvanced", Items.getItem("advancedCircuit"), new ItemStack(Item.redstoneRepeater));
 			register(CIRCUIT_T3, "circuitElite", Items.getItem("iridiumPlate"), new ItemStack(Item.comparator));
 
