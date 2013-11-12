@@ -23,12 +23,12 @@ public class Compatibility
 	public static boolean INIT = false;
 
 	/** Ratio of Build craft(MJ) power to UE power(KW). Multiply BC3 power by this to convert to UE */
-	public static float BC3_RATIO = 1;
+	public static float BC3_RATIO = 2.814f;
 	/**
 	 * Ratio of Industrial craft(EU) power to UE power(KW). Multiply IC2 power by this to convert to
 	 * UE
 	 */
-	public static float IC2_RATIO = 0.04f;
+	public static float IC2_RATIO = 0.11256f;
 
 	/**
 	 * Ratio of UE power(KW) to Industrial craft(EU) power. Multiply UE power by this to convert it
