@@ -1,5 +1,5 @@
 ## Universal Electricity
-Universal Electricity is a Minecraft mod library to provide a compatibility bridge between various energy systems in Minecraft. The library aims at providing easy conversions and the ability to work with multiple systems as well as to provide a standalone electricity network for mods to use. All mods that implement Universal Electricity are fully independent.
+Universal Electricity is a Minecraft mod library to provide a compatibility bridge between various energy systems in Minecraft. The library aims to provide the ability to work with multiple energy systems with ease as well as to provide a standalone electricity network for mods to use. All mods that implement Universal Electricity are fully independent.
 
 Copyright (c) 2011-2013 Calclavia
 
