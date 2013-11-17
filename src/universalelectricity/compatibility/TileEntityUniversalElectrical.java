@@ -12,7 +12,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import thermalexpansion.api.item.IChargeableItem;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
@@ -21,6 +20,7 @@ import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.power.PowerHandler.Type;
+import cofh.api.energy.IEnergyContainerItem;
 
 /**
  * A universal electricity tile used for tiles that consume or produce electricity.
@@ -58,9 +58,9 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 				energy = manager.charge(itemStack, (int) (energy * Compatibility.TO_IC2_RATIO), 0, false, false) * Compatibility.IC2_RATIO;
 				this.provideElectricity(energy, true);
 			}
-			else if (itemStack.getItem() instanceof IChargeableItem)
+			else if (itemStack.getItem() instanceof IEnergyContainerItem)
 			{
-				float accepted = ((IChargeableItem) itemStack.getItem()).receiveEnergy(itemStack, this.getProvide(ForgeDirection.UNKNOWN) * Compatibility.BC3_RATIO, true);
+				float accepted = ((IEnergyContainerItem) itemStack.getItem()).receiveEnergy(itemStack, (int) (this.getProvide(ForgeDirection.UNKNOWN) * Compatibility.BC3_RATIO), true);
 				this.provideElectricity(accepted, true);
 			}
 		}
@@ -90,9 +90,9 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 					this.receiveElectricity(energy, true);
 				}
 			}
-			else if (itemStack.getItem() instanceof IChargeableItem)
+			else if (itemStack.getItem() instanceof IEnergyContainerItem)
 			{
-				float given = ((IChargeableItem) itemStack.getItem()).transferEnergy(itemStack, this.getRequest(ForgeDirection.UNKNOWN) * Compatibility.BC3_RATIO, true);
+				float given = ((IEnergyContainerItem) itemStack.getItem()).extractEnergy(itemStack, (int) (this.getRequest(ForgeDirection.UNKNOWN) * Compatibility.BC3_RATIO), true);
 				this.receiveElectricity(given, true);
 			}
 		}

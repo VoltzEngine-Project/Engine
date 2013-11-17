@@ -12,11 +12,11 @@ import cpw.mods.fml.common.Loader;
  */
 public class Compatibility
 {
-	/** Version of build craft api compiled with */
+	/** Version of BuildCraft api compiled with */
 	public static String BCx_VERSION = "@BCxVersion@";
-	/** Version of industrial craft api compiled with */
+	/** Version of Industrial Craft api compiled with */
 	public static String ICx_VERSION = "@ICxVersion@";
-	/** Version of thermal expansion api compiled with */
+	/** Version of Thermal Expansion api compiled with */
 	public static String TEx_VERSION = "@TExVersion@";
 
 	/** Has the initiate method been called */
