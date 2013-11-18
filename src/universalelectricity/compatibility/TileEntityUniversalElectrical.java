@@ -21,6 +21,7 @@ import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.power.PowerHandler.Type;
 import cofh.api.energy.IEnergyContainerItem;
+import cofh.api.energy.IEnergyHandler;
 
 /**
  * A universal electricity tile used for tiles that consume or produce electricity.
@@ -31,7 +32,7 @@ import cofh.api.energy.IEnergyContainerItem;
  * @author micdoodle8, Calclavia
  * 
  */
-public abstract class TileEntityUniversalElectrical extends TileEntityElectrical implements IEnergySink, IEnergySource, IPowerReceptor
+public abstract class TileEntityUniversalElectrical extends TileEntityElectrical implements IEnergySink, IEnergySource, IPowerReceptor, IEnergyHandler
 {
 	protected boolean isAddedToEnergyNet;
 	public PowerHandler bcPowerHandler;
@@ -189,6 +190,40 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 		}
 
 		return false;
+	}
+
+	/**
+	 * TE Methods
+	 */
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
+	{
+		return (int) (this.receiveElectricity(from, ElectricityPack.getFromWatts(maxReceive * Compatibility.TE_RATIO, this.getVoltage()), !simulate) * Compatibility.TO_TE_RATIO);
+	}
+
+	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
+	{
+		return (int) (this.provideElectricity(from, ElectricityPack.getFromWatts(maxExtract * Compatibility.TE_RATIO, this.getVoltage()), !simulate).getWatts() * Compatibility.TO_TE_RATIO);
+	}
+
+	public boolean canInterface(ForgeDirection from)
+	{
+		return this.canConnect(from);
+	}
+
+	/**
+	 * Returns the amount of energy currently stored.
+	 */
+	public int getEnergyStored(ForgeDirection from)
+	{
+		return (int) (this.getEnergyStored() * Compatibility.TO_TE_RATIO);
+	}
+
+	/**
+	 * Returns the maximum amount of energy that can be stored.
+	 */
+	public int getMaxEnergyStored(ForgeDirection from)
+	{
+		return (int) (this.getMaxEnergyStored() * Compatibility.TO_TE_RATIO);
 	}
 
 	/**
