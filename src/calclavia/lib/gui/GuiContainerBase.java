@@ -334,13 +334,16 @@ public class GuiContainerBase extends GuiContainer
 			case 2:
 				display = ElectricityDisplay.roundDecimals(energy * Compatibility.TO_IC2_RATIO) + " EU";
 				break;
+			case 3:
+				display = ElectricityDisplay.roundDecimals(energy * Compatibility.TO_TE_RATIO) + " RF";
+				break;
 		}
 
 		if (this.isPointInRegion(x, y, display.length() * 5, 9, mouseX, mouseY))
 		{
 			if (Mouse.isButtonDown(0) && this.lastChangeFrameTime <= 0)
 			{
-				this.energyMode = (this.energyMode + 1) % 3;
+				this.energyMode = (this.energyMode + 1) % 4;
 				this.lastChangeFrameTime = 30;
 			}
 			else

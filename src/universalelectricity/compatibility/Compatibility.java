@@ -26,7 +26,7 @@ public class Compatibility
 	public static float BC3_RATIO = 2.814f;
 
 	/** Ratio of Redstone Flux power to UE power(Kw). Multiply TE power by this to convert to UE */
-	public static float TE_RATIO = 10 * BC3_RATIO;
+	public static float TE_RATIO = BC3_RATIO / 10;
 
 	/**
 	 * Ratio of Industrial craft(EU) power to UE power(Kw). Multiply IC2 power by this to convert to
