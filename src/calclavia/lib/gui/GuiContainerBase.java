@@ -50,6 +50,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected int containerWidth;
 	protected int containerHeight;
+	private float lastChangeFrameTime;
 
 	public GuiContainerBase(Container container)
 	{
@@ -335,13 +336,22 @@ public class GuiContainerBase extends GuiContainer
 				break;
 		}
 
-		if (Mouse.isButtonDown(0) && this.isPointInRegion(x, y, display.length() * 5, 9, mouseX, mouseY))
+		if (this.isPointInRegion(x, y, display.length() * 5, 9, mouseX, mouseY))
 		{
-			this.energyMode = (this.energyMode + 1) % 3;
+			if (Mouse.isButtonDown(0) && this.lastChangeFrameTime <= 0)
+			{
+				this.energyMode = (this.energyMode + 1) % 3;
+				this.lastChangeFrameTime = 30;
+			}
+			else
+			{
+				this.drawTooltip(mouseX - this.guiLeft, mouseY - this.guiTop + 10, "Click to change unit.");
+			}
 		}
 
-		this.fontRenderer.drawString(display, x, y, 4210752);
+		this.lastChangeFrameTime--;
 
+		this.fontRenderer.drawString(display, x, y, 4210752);
 	}
 
 	public void drawTooltip(int x, int y, String... toolTips)
@@ -384,7 +394,7 @@ public class GuiContainerBase extends GuiContainer
 					var7 = this.height - var9 - this.guiTop - 6;
 				}
 
-				this.zLevel = 300.0F;
+				this.zLevel = 300;
 				int var10 = -267386864;
 				this.drawGradientRect(var6 - 3, var7 - 4, var6 + var5 + 3, var7 - 3, var10, var10);
 				this.drawGradientRect(var6 - 3, var7 + var9 + 3, var6 + var5 + 3, var7 + var9 + 4, var10, var10);
@@ -406,7 +416,7 @@ public class GuiContainerBase extends GuiContainer
 					var7 += 10;
 				}
 
-				this.zLevel = 0.0F;
+				this.zLevel = 0;
 
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
 				GL11.glEnable(GL11.GL_LIGHTING);
