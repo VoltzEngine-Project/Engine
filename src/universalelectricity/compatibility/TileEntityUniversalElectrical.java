@@ -149,12 +149,46 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 				{
 					if (!this.produceUE(outputDirection))
 					{
-						this.produceBuildCraft(outputDirection);
+						if (!this.produceThermalExpansion(outputDirection))
+						{
+							this.produceBuildCraft(outputDirection);
+						}
 					}
 
 				}
 			}
 		}
+	}
+
+	public boolean produceThermalExpansion(ForgeDirection outputDirection)
+	{
+		if (!this.worldObj.isRemote && outputDirection != null && outputDirection != ForgeDirection.UNKNOWN)
+		{
+			float provide = this.getProvide(outputDirection);
+
+			if (this.getEnergyStored() >= provide && provide > 0)
+			{
+				if (Compatibility.isThermalExpansionLoaded())
+				{
+					TileEntity tileEntity = new Vector3(this).modifyPositionFromSide(outputDirection).getTileEntity(this.worldObj);
+
+					if (tileEntity instanceof IEnergyHandler)
+					{
+						IEnergyHandler receiver = (IEnergyHandler) tileEntity;
+						int convertedProvide = (int) (provide * Compatibility.TO_TE_RATIO);
+
+						if (receiver.canInterface(outputDirection.getOpposite()) && receiver.receiveEnergy(outputDirection.getOpposite(), convertedProvide, true) > 0)
+						{
+							float forgienEnergyUsed = receiver.receiveEnergy(outputDirection.getOpposite(), convertedProvide, false);
+							this.provideElectricity(forgienEnergyUsed * Compatibility.TE_RATIO, true);
+							return true;
+						}
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public boolean produceBuildCraft(ForgeDirection outputDirection)
@@ -177,13 +211,12 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 						{
 							if (receiver.powerRequest() > 0)
 							{
-								float bc3Provide = provide * Compatibility.TO_BC_RATIO;
-								float energyUsed = Math.min(receiver.receiveEnergy(this.bcBlockType, bc3Provide, outputDirection.getOpposite()), bc3Provide);
-								this.provideElectricity(energyUsed * Compatibility.TO_BC_RATIO, true);
+								float convertedProvide = provide * Compatibility.TO_BC_RATIO;
+								float forgienEnergyUsed = receiver.receiveEnergy(this.bcBlockType, convertedProvide, outputDirection.getOpposite());
+								this.provideElectricity(forgienEnergyUsed * Compatibility.BC3_RATIO, true);
+								return true;
 							}
 						}
-
-						return true;
 					}
 				}
 			}
