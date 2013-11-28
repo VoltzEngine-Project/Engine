@@ -121,6 +121,11 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 	{
 		if (this.getInputDirections().contains(from))
 		{
+			if (!doReceive)
+			{
+				return this.getRequest(from);
+			}
+
 			return this.receiveElectricity(receive, doReceive);
 		}
 
@@ -132,6 +137,11 @@ public abstract class TileEntityElectrical extends TileEntityAdvanced implements
 	{
 		if (this.getOutputDirections().contains(from))
 		{
+			if (!doProvide)
+			{
+				return ElectricityPack.getFromWatts(this.getProvide(from), this.getVoltage());
+			}
+
 			return this.provideElectricity(request, doProvide);
 		}
 
