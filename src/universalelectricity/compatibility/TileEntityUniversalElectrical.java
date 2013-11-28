@@ -179,7 +179,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 
 						if (receiver.canInterface(outputDirection.getOpposite()) && receiver.receiveEnergy(outputDirection.getOpposite(), convertedProvide, true) > 0)
 						{
-							float forgienEnergyUsed = receiver.receiveEnergy(outputDirection.getOpposite(), convertedProvide, false);
+							int forgienEnergyUsed = receiver.receiveEnergy(outputDirection.getOpposite(), convertedProvide, false);
 							this.provideElectricity(forgienEnergyUsed * Compatibility.TE_RATIO, true);
 							return true;
 						}
