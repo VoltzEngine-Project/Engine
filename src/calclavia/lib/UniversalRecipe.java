@@ -143,7 +143,7 @@ public class UniversalRecipe
 		{
 			for (ItemStack stack : itemStacks)
 			{
-				if (stack != null)
+				if (stack == null)
 				{
 					return false;
 				}
