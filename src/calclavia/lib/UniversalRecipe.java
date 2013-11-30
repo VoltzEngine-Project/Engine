@@ -134,7 +134,7 @@ public class UniversalRecipe
 			return this.alternatives.get(0);
 		}
 
-		return this.defaultRecipe;
+		return recipeExists(this.defaultRecipe) ? this.defaultRecipe : this.alternatives.get(this.alternatives.size() - 1);
 	}
 
 	public static boolean recipeExists(List<ItemStack> itemStacks)
