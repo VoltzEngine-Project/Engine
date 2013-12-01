@@ -10,7 +10,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import cpw.mods.fml.common.FMLLog;
 
 /**
  * Allows recipes that are compatible in priority of: UE -> IC2 -> Buildcraft.
@@ -57,6 +56,9 @@ public class UniversalRecipe
 
 	public static boolean MARK_ALLOW_ALTERNATIVES = true;
 
+	/**
+	 * Load before adding recipes but after OreDict registrations.
+	 */
 	public static void init()
 	{
 		if (!isInit)
@@ -106,8 +108,6 @@ public class UniversalRecipe
 				{
 					this.alternatives.add(alternative);
 				}
-
-				continue;
 			}
 			else if (alternative instanceof String)
 			{
@@ -115,8 +115,6 @@ public class UniversalRecipe
 				{
 					this.alternatives.add(alternative);
 				}
-
-				continue;
 			}
 		}
 
@@ -137,9 +135,14 @@ public class UniversalRecipe
 		return recipeExists(this.defaultRecipe) ? this.defaultRecipe : this.alternatives.get(this.alternatives.size() - 1);
 	}
 
+	/**
+	 * 
+	 * @param itemStacks
+	 * @return
+	 */
 	public static boolean recipeExists(List<ItemStack> itemStacks)
 	{
-		if (itemStacks != null)
+		if (itemStacks != null && itemStacks.size() > 0)
 		{
 			for (ItemStack stack : itemStacks)
 			{
