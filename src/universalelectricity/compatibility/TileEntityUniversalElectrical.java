@@ -61,8 +61,8 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 			}
 			else if (itemStack.getItem() instanceof IEnergyContainerItem)
 			{
-				float accepted = ((IEnergyContainerItem) itemStack.getItem()).receiveEnergy(itemStack, (int) (this.getProvide(ForgeDirection.UNKNOWN) * Compatibility.TO_TE_RATIO), true);
-				this.provideElectricity(accepted, true);
+				float forgienEnergyAccepted = ((IEnergyContainerItem) itemStack.getItem()).receiveEnergy(itemStack, (int) (this.getProvide(ForgeDirection.UNKNOWN) * Compatibility.TO_TE_RATIO), false);
+				this.provideElectricity(forgienEnergyAccepted * Compatibility.TE_RATIO, true);
 			}
 		}
 	}
@@ -93,8 +93,8 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 			}
 			else if (itemStack.getItem() instanceof IEnergyContainerItem)
 			{
-				float given = ((IEnergyContainerItem) itemStack.getItem()).extractEnergy(itemStack, (int) (this.getRequest(ForgeDirection.UNKNOWN) * Compatibility.TE_RATIO), true);
-				this.receiveElectricity(given, true);
+				float forgienEnergy = ((IEnergyContainerItem) itemStack.getItem()).extractEnergy(itemStack, (int) (this.getRequest(ForgeDirection.UNKNOWN) * Compatibility.TO_TE_RATIO), false);
+				this.receiveElectricity(forgienEnergy * Compatibility.TE_RATIO, true);
 			}
 		}
 	}

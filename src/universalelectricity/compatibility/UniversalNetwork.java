@@ -173,7 +173,7 @@ public class UniversalNetwork extends ElectricityNetwork
 	}
 
 	@Override
-	public ElectricityPack getRequest(TileEntity... ignoreTiles)
+	public synchronized ElectricityPack getRequest(TileEntity... ignoreTiles)
 	{
 		List<ElectricityPack> requests = new ArrayList<ElectricityPack>();
 
