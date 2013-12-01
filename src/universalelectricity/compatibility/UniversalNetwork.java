@@ -5,6 +5,7 @@ import ic2.api.energy.tile.IEnergySink;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -173,11 +174,11 @@ public class UniversalNetwork extends ElectricityNetwork
 	}
 
 	@Override
-	public synchronized ElectricityPack getRequest(TileEntity... ignoreTiles)
+	public ElectricityPack getRequest(TileEntity... ignoreTiles)
 	{
 		List<ElectricityPack> requests = new ArrayList<ElectricityPack>();
 
-		Iterator<TileEntity> it = this.getAcceptors().iterator();
+		Iterator<TileEntity> it = new HashSet(this.getAcceptors()).iterator();
 
 		while (it.hasNext())
 		{
