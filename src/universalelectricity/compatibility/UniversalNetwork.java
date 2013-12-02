@@ -205,6 +205,29 @@ public class UniversalNetwork extends ElectricityNetwork
 						continue;
 					}
 
+					if (tileEntity instanceof IEnergyHandler)
+					{
+						IEnergyHandler receiver = (IEnergyHandler) tileEntity;
+
+						for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+						{
+							TileEntity conductor = VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction);
+
+							if (receiver.canInterface(direction) && this.getConductors().contains(conductor))
+							{
+								ElectricityPack pack = ElectricityPack.getFromWatts(receiver.receiveEnergy(direction, (int) Integer.MAX_VALUE, true) * Compatibility.TE_RATIO, 1);
+
+								if (pack.getWatts() > 0)
+								{
+									requests.add(pack);
+									break;
+								}
+							}
+						}
+
+						continue;
+					}
+
 					if (tileEntity instanceof IEnergySink)
 					{
 						for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
@@ -230,29 +253,6 @@ public class UniversalNetwork extends ElectricityNetwork
 							if (((IPowerReceptor) tileEntity).getPowerReceiver(direction) != null)
 							{
 								ElectricityPack pack = ElectricityPack.getFromWatts(((IPowerReceptor) tileEntity).getPowerReceiver(direction).powerRequest() * Compatibility.BC3_RATIO, 1);
-
-								if (pack.getWatts() > 0)
-								{
-									requests.add(pack);
-									break;
-								}
-							}
-						}
-
-						continue;
-					}
-
-					if (tileEntity instanceof IEnergyHandler)
-					{
-						IEnergyHandler receiver = (IEnergyHandler) tileEntity;
-
-						for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
-						{
-							TileEntity conductor = VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction);
-
-							if (receiver.canInterface(direction))
-							{
-								ElectricityPack pack = ElectricityPack.getFromWatts(receiver.receiveEnergy(direction, (int) Integer.MAX_VALUE, true) * Compatibility.TE_RATIO, 1);
 
 								if (pack.getWatts() > 0)
 								{
@@ -310,7 +310,7 @@ public class UniversalNetwork extends ElectricityNetwork
 				for (int i = 0; i < conductor.getAdjacentConnections().length; i++)
 				{
 					TileEntity acceptor = conductor.getAdjacentConnections()[i];
-					// The direction is from the persepctive of the conductor.
+					// The direction is from the perspective of the conductor.
 					ForgeDirection direction = ForgeDirection.getOrientation(i);
 
 					if (!(acceptor instanceof IConductor))
@@ -361,7 +361,6 @@ public class UniversalNetwork extends ElectricityNetwork
 			FMLLog.severe("Universal Electricity: Failed to refresh conductor.");
 			e.printStackTrace();
 		}
-		System.out.println(this.getConductors().size());
 	}
 
 	@Override

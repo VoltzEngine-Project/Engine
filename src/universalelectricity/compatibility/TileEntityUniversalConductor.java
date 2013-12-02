@@ -170,7 +170,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 	public double injectEnergyUnits(ForgeDirection directionFrom, double amount)
 	{
 		TileEntity tile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), directionFrom);
-		ElectricityPack pack = ElectricityPack.getFromWatts((float) (amount * Compatibility.IC2_RATIO), 120);
+		ElectricityPack pack = ElectricityPack.getFromWatts((float) (amount * Compatibility.IC2_RATIO), 1);
 		return this.getNetwork().produce(pack, this, tile) * Compatibility.TO_IC2_RATIO;
 	}
 
@@ -207,7 +207,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 			ignoreTiles.add(tile);
 		}
 
-		ElectricityPack pack = ElectricityPack.getFromWatts(workProvider.useEnergy(0, this.getNetwork().getRequest(this).getWatts() * Compatibility.TO_BC_RATIO, true) * Compatibility.BC3_RATIO, 120);
+		ElectricityPack pack = ElectricityPack.getFromWatts(workProvider.useEnergy(0, this.getNetwork().getRequest(this).getWatts() * Compatibility.TO_BC_RATIO, true) * Compatibility.BC3_RATIO, 1);
 		this.getNetwork().produce(pack, ignoreTiles.toArray(new TileEntity[0]));
 	}
 
