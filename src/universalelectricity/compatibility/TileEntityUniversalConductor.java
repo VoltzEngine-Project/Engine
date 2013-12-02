@@ -109,7 +109,7 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 	}
 
 	@Override
-	public void updateEntity()
+	public void validate()
 	{
 		if (!this.worldObj.isRemote)
 		{
@@ -136,15 +136,11 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 
 	protected void initIC()
 	{
-		if (Compatibility.isIndustrialCraft2Loaded())
-		{
-			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-		}
-
+		MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 		this.isAddedToEnergyNet = true;
 	}
 
-	private void unloadTileIC2()
+	protected void unloadTileIC2()
 	{
 		if (this.isAddedToEnergyNet && this.worldObj != null)
 		{
@@ -233,7 +229,8 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 		{
 			if (request > 0)
 			{
-				return (int) (maxReceive - (this.getNetwork().produce(pack, new Vector3(this).modifyPositionFromSide(from).getTileEntity(this.worldObj)) * Compatibility.TO_TE_RATIO));
+				float reject = this.getNetwork().produce(pack, new Vector3(this).modifyPositionFromSide(from).getTileEntity(this.worldObj));
+				return (int) (maxReceive - (reject * Compatibility.TO_TE_RATIO));
 			}
 
 			return 0;
