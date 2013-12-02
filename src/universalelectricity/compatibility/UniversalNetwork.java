@@ -281,7 +281,7 @@ public class UniversalNetwork extends ElectricityNetwork
 
 		try
 		{
-			Iterator<IConductor> it = this.getConductors().iterator();
+			Iterator<IConductor> it = new HashSet<IConductor>(this.getConductors()).iterator();
 
 			while (it.hasNext())
 			{
@@ -290,10 +290,12 @@ public class UniversalNetwork extends ElectricityNetwork
 				if (conductor == null)
 				{
 					it.remove();
+					continue;
 				}
 				else if (((TileEntity) conductor).isInvalid())
 				{
 					it.remove();
+					continue;
 				}
 				else
 				{
@@ -364,6 +366,7 @@ public class UniversalNetwork extends ElectricityNetwork
 			UniversalNetwork newNetwork = new UniversalNetwork();
 			newNetwork.getConductors().addAll(this.getConductors());
 			newNetwork.getConductors().addAll(network.getConductors());
+			System.out.println(newNetwork.getConductors()+" merging: " + this + " with "+network);
 			newNetwork.refresh();
 		}
 	}

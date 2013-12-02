@@ -111,6 +111,8 @@ public abstract class TileEntityUniversalConductor extends TileEntityConductor i
 	@Override
 	public void validate()
 	{
+		super.validate();
+
 		if (!this.worldObj.isRemote)
 		{
 			if (!this.isAddedToEnergyNet)
