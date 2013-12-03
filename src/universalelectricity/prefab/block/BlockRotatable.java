@@ -15,7 +15,7 @@ import net.minecraftforge.common.ForgeDirection;
  */
 public abstract class BlockRotatable extends BlockTile implements IRotatableBlock
 {
-	protected byte rotationMask = 0b111100;
+	protected byte rotationMask = 60;
 
 	public BlockRotatable(int id, Material material)
 	{
