@@ -31,12 +31,18 @@ public class UniversalTransformer implements IClassTransformer
 		ClassReader classReader = new ClassReader(bytes);
 		classReader.accept(classNode, 0);
 
-		for (AnnotationNode nodes : classNode.visibleAnnotations)
+		if (classNode != null && classNode.visibleAnnotations != null)
 		{
-			if (nodes.desc.equals("Luniversalelectricity/api/UniversalClass;"))
+			System.out.println("CLASS:" + classNode.name);
+
+			for (AnnotationNode nodes : classNode.visibleAnnotations)
 			{
-				System.out.println("ANNOTATION IS WORKING");
-				injectCompatibilityModules(classNode);
+				if (nodes.desc.equals("Luniversalelectricity/api/UniversalClass;"))
+				{
+					System.out.println("WORKING:" + nodes);
+					// injectCompatibilityModules(classNode);
+				}
+
 			}
 		}
 

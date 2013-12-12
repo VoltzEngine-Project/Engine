@@ -2,18 +2,26 @@ package universalelectricity.core;
 
 import java.util.Map;
 
+import universalelectricity.api.Test;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 @Mod(modid = "UniversalElectricity", version = UniversalElectricity.VERSION, name = "Universal Electricity")
-@IFMLLoadingPlugin.TransformerExclusions({ "universalelectricity.core", "universalelectricity.core.asm" })
+@TransformerExclusions({ "universalelectricity.core", "universalelectricity.core.asm" })
 public class UELoader implements IFMLLoadingPlugin
 {
+	public UELoader()
+	{
+		new Test();
+	}
+
 	/**
 	 * Return a list of classes that implement the ILibrarySet interface
 	 * 
 	 * @return a list of classes that implement the ILibrarySet interface
 	 */
+	@Deprecated
 	@Override
 	public String[] getLibraryRequestClass()
 	{
