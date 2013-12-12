@@ -1,7 +1,7 @@
 /**
  * 
  */
-package universalelectricity.core;
+package universalelectricity.core.asm;
 
 import java.lang.reflect.Method;
 

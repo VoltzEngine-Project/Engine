@@ -2,16 +2,19 @@ package universalelectricity.core;
 
 import java.util.Map;
 
-import universalelectricity.api.Test;
+import universalelectricity.core.asm.UniversalTransformer;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 @Mod(modid = "UniversalElectricity", version = UniversalElectricity.VERSION, name = "Universal Electricity")
-@TransformerExclusions({ "universalelectricity.core", "universalelectricity.core.asm" })
+@TransformerExclusions({ "universalelectricity.core.asm" })
 public class UELoader implements IFMLLoadingPlugin
 {
-	public UELoader()
+	@EventHandler
+	public void init(FMLPreInitializationEvent evt)
 	{
 		new Test();
 	}

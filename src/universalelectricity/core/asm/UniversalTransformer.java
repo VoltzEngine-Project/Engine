@@ -1,7 +1,7 @@
 /**
  * 
  */
-package universalelectricity.core;
+package universalelectricity.core.asm;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -33,14 +33,12 @@ public class UniversalTransformer implements IClassTransformer
 
 		if (classNode != null && classNode.visibleAnnotations != null)
 		{
-			System.out.println("CLASS:" + classNode.name);
-
 			for (AnnotationNode nodes : classNode.visibleAnnotations)
 			{
 				if (nodes.desc.equals("Luniversalelectricity/api/UniversalClass;"))
 				{
 					System.out.println("WORKING:" + nodes);
-					// injectCompatibilityModules(classNode);
+					injectCompatibilityModules(classNode);
 				}
 
 			}
