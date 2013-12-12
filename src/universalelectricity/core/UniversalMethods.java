@@ -22,7 +22,7 @@ public class UniversalMethods
 		try
 		{
 			Method m = clazz.getMethod("receiveElectricity", ForgeDirection.class, Float.TYPE, Boolean.TYPE);
-			return (int) ((float) (m.invoke(maxReceive * Compatibility.TE_RATIO, !simulate)) * Compatibility.TO_TE_RATIO);
+			return (int) ((Float) (m.invoke(maxReceive * Compatibility.TE_RATIO, !simulate)) * Compatibility.TO_TE_RATIO);
 		}
 		catch (Exception e)
 		{
@@ -37,7 +37,7 @@ public class UniversalMethods
 		try
 		{
 			Method m = clazz.getMethod("provideElectricity", ForgeDirection.class, Float.TYPE, Boolean.TYPE);
-			return (int) ((float) (m.invoke(maxExtract * Compatibility.TE_RATIO, !simulate)) * Compatibility.TO_TE_RATIO);
+			return (int) ((Float) (m.invoke(maxExtract * Compatibility.TE_RATIO, !simulate)) * Compatibility.TO_TE_RATIO);
 		}
 		catch (Exception e)
 		{
@@ -52,7 +52,7 @@ public class UniversalMethods
 		try
 		{
 			Method m = clazz.getMethod("canConnect", ForgeDirection.class);
-			return (boolean) (m.invoke(from));
+			return (Boolean) (m.invoke(from));
 		}
 		catch (Exception e)
 		{
@@ -69,7 +69,7 @@ public class UniversalMethods
 		try
 		{
 			Method m = clazz.getMethod("getEnergyStored", ForgeDirection.class);
-			return (int) ((float) (m.invoke(from)) * Compatibility.TO_TE_RATIO);
+			return (int) ((Float) (m.invoke(from)) * Compatibility.TO_TE_RATIO);
 		}
 		catch (Exception e)
 		{
@@ -87,7 +87,7 @@ public class UniversalMethods
 		try
 		{
 			Method m = clazz.getMethod("getMaxEnergyStored", ForgeDirection.class);
-			return (int) ((float) (m.invoke(from)) * Compatibility.TO_TE_RATIO);
+			return (int) ((Float) (m.invoke(from)) * Compatibility.TO_TE_RATIO);
 		}
 		catch (Exception e)
 		{

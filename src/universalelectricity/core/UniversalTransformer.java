@@ -51,10 +51,10 @@ public class UniversalTransformer implements IClassTransformer
 		classNode.interfaces.add(IEnergyHandler.class.getName().replace(".", "/"));
 
 		// receiveEnergy()
-		MethodNode methodNode = new MethodNode(Opcodes.ACC_PUBLIC, "receiveEnergy", "()I", "receiveEnergy(Lnet/minecraftforge/common/ForgeDirection;IZ)I", null);
+		MethodNode methodNode = new MethodNode(Opcodes.ACC_PUBLIC, "receiveEnergy", "receiveEnergy(Lnet/minecraftforge/common/ForgeDirection;IZ)I", null, null);
 		InsnList il = methodNode.instructions;
 		il.add(new VarInsnNode(Opcodes.ALOAD, 0));
-		il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, convertToSignature(), "receiveEnergy", "()I"));
+		il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, convertToSignature(), "receiveEnergy", "receiveEnergy(Lnet/minecraftforge/common/ForgeDirection;IZ)I"));
 		il.add(new InsnNode(Opcodes.IRETURN));
 
 		classNode.methods.add(methodNode);
