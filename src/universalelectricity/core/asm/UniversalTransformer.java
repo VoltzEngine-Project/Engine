@@ -37,8 +37,7 @@ public class UniversalTransformer implements IClassTransformer
 			{
 				if (nodes.desc.equals("Luniversalelectricity/api/UniversalClass;"))
 				{
-					System.out.println("WORKING:" + nodes);
-					injectCompatibilityModules(classNode);
+					injectThermalExpansion(classNode);
 				}
 
 			}
@@ -49,24 +48,27 @@ public class UniversalTransformer implements IClassTransformer
 		return writer.toByteArray();
 	}
 
-	public void injectCompatibilityModules(ClassNode classNode)
+	/**
+	 * Injects Thermal Expansion support.
+	 * 
+	 * @param classNode - The ClassNode being injected.
+	 */
+	public void injectThermalExpansion(ClassNode classNode)
 	{
-		// Add Thermal Expansion support
 		classNode.interfaces.add(IEnergyHandler.class.getName().replace(".", "/"));
 
 		// receiveEnergy()
-		MethodNode methodNode = new MethodNode(Opcodes.ACC_PUBLIC, "receiveEnergy", "receiveEnergy(Lnet/minecraftforge/common/ForgeDirection;IZ)I", null, null);
+		MethodNode methodNode = new MethodNode(Opcodes.ACC_PUBLIC, "receiveEnergy", "(Lnet/minecraftforge/common/ForgeDirection;IZ)I", null, null);
 		InsnList il = methodNode.instructions;
 		il.add(new VarInsnNode(Opcodes.ALOAD, 0));
-		il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, convertToSignature(), "receiveEnergy", "receiveEnergy(Lnet/minecraftforge/common/ForgeDirection;IZ)I"));
+		il.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;"));
+		il.add(new VarInsnNode(Opcodes.ALOAD, 1));
+		il.add(new VarInsnNode(Opcodes.ALOAD, 2));
+		il.add(new VarInsnNode(Opcodes.ALOAD, 3));
+		il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, convertToSignature(), "receiveEnergy", "(Ljava/lang/Class;Lnet/minecraftforge/common/ForgeDirection;IZ)I"));
 		il.add(new InsnNode(Opcodes.IRETURN));
 
 		classNode.methods.add(methodNode);
-
-		// Add BuildCraft support
-
-		// Add IndustrialCraft
-
 	}
 
 	public String convertToSignature()
