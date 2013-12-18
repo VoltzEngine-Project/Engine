@@ -61,7 +61,7 @@
 			<fileset dir="${dir.development}src" includes="universalelectricity/compatibility/" />
 			<fileset dir="${dir.development}src" includes="buildcraft/" />
 			<fileset dir="${dir.development}src" includes="ic2/" />
-			<fileset dir="${dir.development}src" includes="thermalexpansion/" />
+			<fileset dir="${dir.development}src" includes="cofh/" />
 		</copy>
 		
 		<zip destfile="output/${file.ue_core}">
