@@ -6,8 +6,8 @@ import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.block.IConnector;
-import universalelectricity.core.block.INetworkProvider;
+import universalelectricity.api.IConnector;
+import universalelectricity.api.INetworkProvider;
 import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 

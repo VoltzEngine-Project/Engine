@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import universalelectricity.core.block.IConductor;
+import universalelectricity.api.IConductor;
 import universalelectricity.core.grid.IElectricityNetwork;
 import cpw.mods.fml.common.FMLLog;
 

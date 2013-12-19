@@ -1,7 +1,7 @@
 package universalelectricity.core.grid;
 
 import net.minecraft.tileentity.TileEntity;
-import universalelectricity.core.block.IConductor;
+import universalelectricity.api.IConductor;
 import universalelectricity.core.electricity.ElectricityPack;
 
 /**

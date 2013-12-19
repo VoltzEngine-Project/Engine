@@ -1,4 +1,4 @@
-package universalelectricity.core.block;
+package universalelectricity.api;
 
 import net.minecraftforge.common.ForgeDirection;
 

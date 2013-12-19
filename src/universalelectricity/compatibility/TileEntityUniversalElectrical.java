@@ -235,7 +235,7 @@ public abstract class TileEntityUniversalElectrical extends TileEntityElectrical
 
 	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
 	{
-		return (int) (this.provideElectricity(from, ElectricityPack.getFromWatts(maxExtract * Compatibility.TE_RATIO, this.getVoltage()), !simulate).getWatts() * Compatibility.TO_TE_RATIO);
+		return (int) (this.extractElectricity(from, ElectricityPack.getFromWatts(maxExtract * Compatibility.TE_RATIO, this.getVoltage()), !simulate).getWatts() * Compatibility.TO_TE_RATIO);
 	}
 
 	public boolean canInterface(ForgeDirection from)

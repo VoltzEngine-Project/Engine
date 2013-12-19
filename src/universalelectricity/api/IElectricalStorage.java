@@ -1,4 +1,6 @@
-package universalelectricity.core.block;
+package universalelectricity.api;
+
+import net.minecraftforge.common.ForgeDirection;
 
 /**
  * This interface is to be applied to all TileEntities which stores electricity within them.
@@ -15,10 +17,10 @@ public interface IElectricalStorage
 	/**
 	 * * @return Get the amount of energy currently stored in the block.
 	 */
-	public float getEnergyStored();
+	public float getEnergyStored(ForgeDirection from);
 
 	/**
 	 * @return Get the max amount of energy that can be stored in the block.
 	 */
-	public float getMaxEnergyStored();
+	public float getMaxEnergyStored(ForgeDirection from);
 }

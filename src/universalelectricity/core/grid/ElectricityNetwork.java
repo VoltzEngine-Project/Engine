@@ -12,11 +12,11 @@ import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import universalelectricity.core.block.IConductor;
-import universalelectricity.core.block.IConnector;
-import universalelectricity.core.block.IElectrical;
-import universalelectricity.core.block.INetworkConnection;
-import universalelectricity.core.block.INetworkProvider;
+import universalelectricity.api.IConductor;
+import universalelectricity.api.IConnector;
+import universalelectricity.api.IElectricityHandler;
+import universalelectricity.api.INetworkConnection;
+import universalelectricity.api.INetworkProvider;
 import universalelectricity.core.electricity.ElectricalEvent.ElectricityProductionEvent;
 import universalelectricity.core.electricity.ElectricalEvent.ElectricityRequestEvent;
 import universalelectricity.core.electricity.ElectricityPack;
@@ -72,9 +72,9 @@ public class ElectricityNetwork implements IElectricityNetwork
 					{
 						if (!Arrays.asList(ignoreTiles).contains(tileEntity))
 						{
-							if (tileEntity instanceof IElectrical)
+							if (tileEntity instanceof IElectricityHandler)
 							{
-								IElectrical electricalTile = (IElectrical) tileEntity;
+								IElectricityHandler electricalTile = (IElectricityHandler) tileEntity;
 
 								for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
 								{
@@ -86,7 +86,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 										{
 											ElectricityPack electricityToSend = ElectricityPack.getFromWatts(energyToSend, voltage);
 
-											remainingUsableEnergy -= ((IElectrical) tileEntity).receiveElectricity(direction, electricityToSend, true);
+											remainingUsableEnergy -= ((IElectricityHandler) tileEntity).receiveElectricity(direction, electricityToSend, true);
 										}
 									}
 								}
@@ -119,7 +119,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 				continue;
 			}
 
-			if (tileEntity instanceof IElectrical)
+			if (tileEntity instanceof IElectricityHandler)
 			{
 				if (!tileEntity.isInvalid())
 				{
@@ -127,9 +127,9 @@ public class ElectricityNetwork implements IElectricityNetwork
 					{
 						for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
 						{
-							if (((IElectrical) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
+							if (((IElectricityHandler) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
 							{
-								requests.add(ElectricityPack.getFromWatts(((IElectrical) tileEntity).getRequest(direction), ((IElectrical) tileEntity).getVoltage()));
+								requests.add(ElectricityPack.getFromWatts(((IElectricityHandler) tileEntity).getRequest(direction), ((IElectricityHandler) tileEntity).getVoltage()));
 								continue;
 							}
 						}

@@ -12,6 +12,18 @@ import cpw.mods.fml.common.Loader;
  */
 public class Compatibility
 {
+	public static enum CompatibilityType
+	{
+		THERMAL_EXPANSION(281.4f), INDUSTRIALCRAFT(112.56f);
+
+		public final float ratio;
+
+		CompatibilityType(float ratio)
+		{
+			this.ratio = ratio;
+		}
+	}
+
 	/** Version of BuildCraft api compiled with */
 	public static String BCx_VERSION = "@BCxVersion@";
 	/** Version of Industrial Craft api compiled with */

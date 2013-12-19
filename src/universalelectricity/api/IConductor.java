@@ -1,4 +1,5 @@
-package universalelectricity.core.block;
+package universalelectricity.api;
+
 
 public interface IConductor extends INetworkProvider, INetworkConnection
 {
