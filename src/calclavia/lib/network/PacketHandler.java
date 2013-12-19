@@ -2,6 +2,7 @@ package calclavia.lib.network;
 
 import java.io.DataInput;
 import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ import cpw.mods.fml.common.network.Player;
  * @author Calclavia
  */
 public class PacketHandler implements IPacketHandler
-{	
+{
 	public static final ArrayList<PacketType> registeredPackets = new ArrayList<PacketType>();
 
 	@Override
@@ -36,14 +37,69 @@ public class PacketHandler implements IPacketHandler
 		try
 		{
 			ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
-
-			int packetID = data.readInt();
+			int packetID = data.readByte();
 			EntityPlayer entityPlayer = (EntityPlayer) player;
-
 			registeredPackets.get(packetID).receivePacket(data, entityPlayer);
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
+		}
+	}
+
+	public static void writeData(DataOutputStream data, Object... sendData)
+	{
+		try
+		{
+			for (Object dataValue : sendData)
+			{
+				if (dataValue instanceof Integer)
+				{
+					data.writeInt((Integer) dataValue);
+				}
+				else if (dataValue instanceof Float)
+				{
+					data.writeFloat((Float) dataValue);
+				}
+				else if (dataValue instanceof Double)
+				{
+					data.writeDouble((Double) dataValue);
+				}
+				else if (dataValue instanceof Byte)
+				{
+					data.writeByte((Byte) dataValue);
+				}
+				else if (dataValue instanceof Boolean)
+				{
+					data.writeBoolean((Boolean) dataValue);
+				}
+				else if (dataValue instanceof String)
+				{
+					data.writeUTF((String) dataValue);
+				}
+				else if (dataValue instanceof Short)
+				{
+					data.writeShort((Short) dataValue);
+				}
+				else if (dataValue instanceof Long)
+				{
+					data.writeLong((Long) dataValue);
+				}
+				else if (dataValue instanceof Vector3)
+				{
+					data.writeDouble(((Vector3) dataValue).x);
+					data.writeDouble(((Vector3) dataValue).y);
+					data.writeDouble(((Vector3) dataValue).z);
+				}
+				else if (dataValue instanceof NBTTagCompound)
+				{
+					writeNBTTagCompound((NBTTagCompound) dataValue, data);
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			System.out.println("Packet data encoding failed.");
 			e.printStackTrace();
 		}
 	}
