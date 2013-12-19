@@ -27,7 +27,7 @@ import cpw.mods.fml.common.network.Player;
  * @author Calclavia
  */
 public class PacketHandler implements IPacketHandler
-{
+{	
 	public static final ArrayList<PacketType> registeredPackets = new ArrayList<PacketType>();
 
 	@Override
