@@ -2,13 +2,14 @@ package universalelectricity.core.asm.template;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.Compatibility;
+import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
 import cofh.api.energy.IEnergyHandler;
 
 /**
- * An ASM template used to transform other @UniversalClass classes to have specific compatibility.
+ * An ASM template used to transform other @UniversalClass classes to have specific
+ * CompatibilityType.
  * 
  * @author Calclavia
  * 
@@ -18,13 +19,13 @@ public abstract class ThermalExpansionTemplate extends TileEntity implements IEn
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
 	{
-		return (int) (StaticForwarder.onReceiveEnergy(this, from, (int) (maxReceive * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
+		return (int) (StaticForwarder.onReceiveEnergy(this, from, (int) (maxReceive * CompatibilityType.THERMAL_EXPANSION.ratio), !simulate) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
 	}
 
 	@Override
 	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
 	{
-		return (int) (StaticForwarder.onExtractEnergy(this, from, (int) (maxExtract * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
+		return (int) (StaticForwarder.onExtractEnergy(this, from, (int) (maxExtract * CompatibilityType.THERMAL_EXPANSION.ratio), !simulate) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
 	}
 
 	@Override
@@ -41,7 +42,7 @@ public abstract class ThermalExpansionTemplate extends TileEntity implements IEn
 	{
 		if (this instanceof IEnergyContainer)
 		{
-			return (int) (StaticForwarder.getElectricityStored((IEnergyContainer) this, from) * Compatibility.TO_TE_RATIO);
+			return (int) (StaticForwarder.getElectricityStored((IEnergyContainer) this, from) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
 		}
 
 		return 0;
@@ -55,7 +56,7 @@ public abstract class ThermalExpansionTemplate extends TileEntity implements IEn
 	{
 		if (this instanceof IEnergyContainer)
 		{
-			return (int) (StaticForwarder.getMaxElectricity((IEnergyContainer) this, from) * Compatibility.TO_TE_RATIO);
+			return (int) (StaticForwarder.getMaxElectricity((IEnergyContainer) this, from) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
 		}
 
 		return 0;

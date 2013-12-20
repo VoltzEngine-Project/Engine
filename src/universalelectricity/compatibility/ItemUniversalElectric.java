@@ -4,7 +4,7 @@ import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import universalelectricity.api.Compatibility;
+import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.item.ItemElectric;
 import cofh.api.energy.IEnergyContainerItem;
@@ -36,7 +36,7 @@ public abstract class ItemUniversalElectric extends ItemElectric implements ISpe
 	@Override
 	public int getMaxCharge(ItemStack itemStack)
 	{
-		return (int) (this.getMaxElectricityStored(itemStack) * Compatibility.TO_IC2_RATIO);
+		return (int) (this.getMaxElectricityStored(itemStack) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public abstract class ItemUniversalElectric extends ItemElectric implements ISpe
 	@Override
 	public int getTransferLimit(ItemStack itemStack)
 	{
-		return (int) ((this.getMaxElectricityStored(itemStack) * CHARGE_RATE) * Compatibility.TO_IC2_RATIO);
+		return (int) ((this.getMaxElectricityStored(itemStack) * CHARGE_RATE) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 	}
 
 	@Override
@@ -69,25 +69,25 @@ public abstract class ItemUniversalElectric extends ItemElectric implements ISpe
 	@Override
 	public int receiveEnergy(ItemStack theItem, int energy, boolean doReceive)
 	{
-		return (int) (this.recharge(theItem, energy * Compatibility.BC3_RATIO, doReceive) * Compatibility.TO_BC_RATIO);
+		return (int) (this.recharge(theItem, energy * CompatibilityType.THERMAL_EXPANSION.ratio, doReceive) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
 	}
 
 	@Override
 	public int extractEnergy(ItemStack theItem, int energy, boolean doTransfer)
 	{
-		return (int) (this.discharge(theItem, energy * Compatibility.BC3_RATIO, doTransfer) * Compatibility.TO_BC_RATIO);
+		return (int) (this.discharge(theItem, energy * CompatibilityType.THERMAL_EXPANSION.ratio, doTransfer) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
 	}
 
 	@Override
 	public int getEnergyStored(ItemStack theItem)
 	{
-		return (int) (this.getElectricityStored(theItem) * Compatibility.TO_BC_RATIO);
+		return (int) (this.getElectricityStored(theItem) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
 	}
 
 	@Override
 	public int getMaxEnergyStored(ItemStack theItem)
 	{
-		return (int) (this.getMaxElectricityStored(theItem) * Compatibility.TO_BC_RATIO);
+		return (int) (this.getMaxElectricityStored(theItem) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
 	}
 
 	public static class IC2ElectricItemManager implements IElectricItemManager
@@ -106,15 +106,15 @@ public abstract class ItemUniversalElectric extends ItemElectric implements ISpe
 		@Override
 		public int charge(ItemStack itemStack, int amount, int tier, boolean ignoreTransferLimit, boolean simulate)
 		{
-			float inputElectricity = amount * Compatibility.IC2_RATIO;
-			return (int) (getElectricItem(itemStack).recharge(itemStack, inputElectricity, !simulate) * Compatibility.TO_IC2_RATIO);
+			float inputElectricity = amount * CompatibilityType.INDUSTRIALCRAFT.ratio;
+			return (int) (getElectricItem(itemStack).recharge(itemStack, inputElectricity, !simulate) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 		}
 
 		@Override
 		public int discharge(ItemStack itemStack, int amount, int tier, boolean ignoreTransferLimit, boolean simulate)
 		{
-			float outputElectricity = amount * Compatibility.IC2_RATIO;
-			return (int) (getElectricItem(itemStack).discharge(itemStack, outputElectricity, !simulate) * Compatibility.TO_IC2_RATIO);
+			float outputElectricity = amount * CompatibilityType.INDUSTRIALCRAFT.ratio;
+			return (int) (getElectricItem(itemStack).discharge(itemStack, outputElectricity, !simulate) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 		}
 
 		@Override
