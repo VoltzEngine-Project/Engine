@@ -1,13 +1,10 @@
 package universalelectricity.core.asm.template;
 
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.energy.IEnergyInterface;
 
@@ -27,7 +24,7 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction)
 	{
-		return this.canConnect(direction);
+		return StaticForwarder.canConnect(this, direction);
 	}
 
 	@Override
@@ -39,53 +36,27 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	@Override
 	public void drawEnergy(double amount)
 	{
-		this.onExtractEnergy(ForgeDirection.UNKNOWN, (int) (amount * CompatibilityType.INDUSTRIALCRAFT.ratio), true);
+		StaticForwarder.onExtractEnergy(this, ForgeDirection.UNKNOWN, (int) (amount * CompatibilityType.INDUSTRIALCRAFT.ratio), true);
 	}
 
 	@Override
 	public void validate()
 	{
-		this.initIC();
+		StaticForwarder.loadIC(this);
 	}
 
 	@Override
 	public void invalidate()
 	{
-		this.unloadTileIC2();
+		StaticForwarder.unloadIC(this);
 		super.invalidate();
 	}
 
 	@Override
 	public void onChunkUnload()
 	{
-		this.unloadTileIC2();
+		StaticForwarder.unloadIC(this);
 		super.onChunkUnload();
-	}
-
-	protected void initIC()
-	{
-		if (!this.isAddedToEnergyNet)
-		{
-			if (CompatibilityType.INDUSTRIALCRAFT.isLoaded())
-			{
-				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-			}
-
-			this.isAddedToEnergyNet = true;
-		}
-	}
-
-	private void unloadTileIC2()
-	{
-		if (this.isAddedToEnergyNet && this.worldObj != null)
-		{
-			if (CompatibilityType.INDUSTRIALCRAFT.isLoaded())
-			{
-				MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-			}
-
-			this.isAddedToEnergyNet = false;
-		}
 	}
 
 	@Override
@@ -99,7 +70,7 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	{
 		int toSend = (int) (amount * CompatibilityType.INDUSTRIALCRAFT.ratio);
 
-		if (this.onReceiveEnergy(direction, toSend, false) > 0)
+		if (StaticForwarder.onReceiveEnergy(this, direction, toSend, false) > 0)
 		{
 			int receive = StaticForwarder.onReceiveEnergy(this, direction, toSend, true);
 

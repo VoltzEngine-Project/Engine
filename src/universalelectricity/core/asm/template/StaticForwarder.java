@@ -1,6 +1,15 @@
 package universalelectricity.core.asm.template;
 
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergyTile;
+
+import java.util.HashSet;
+
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.MinecraftForge;
+import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.electricity.IVoltage;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
@@ -11,6 +20,29 @@ import universalelectricity.api.energy.IEnergyInterface;
  */
 public class StaticForwarder
 {
+	/**
+	 * IC2 Functions
+	 */
+	private static final HashSet<IEnergyTile> loadedIC2Tiles = new HashSet<IEnergyTile>();
+
+	public static void loadIC(IEnergyTile tile)
+	{
+		if (CompatibilityType.INDUSTRIALCRAFT.isLoaded() && !loadedIC2Tiles.contains(tile) && !((TileEntity) tile).worldObj.isRemote)
+		{
+			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(tile));
+			loadedIC2Tiles.add(tile);
+		}
+	}
+
+	public static void unloadIC(IEnergyTile tile)
+	{
+		if (CompatibilityType.INDUSTRIALCRAFT.isLoaded() && loadedIC2Tiles.contains(tile) && !((TileEntity) tile).worldObj.isRemote)
+		{
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(tile));
+			loadedIC2Tiles.remove(tile);
+		}
+	}
+
 	/**
 	 * Adds electricity to an block. Returns the quantity of electricity that was accepted. This
 	 * should always return 0 if the block cannot be externally charged.
