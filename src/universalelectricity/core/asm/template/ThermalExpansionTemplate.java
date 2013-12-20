@@ -15,16 +15,19 @@ import cofh.api.energy.IEnergyHandler;
  */
 public abstract class ThermalExpansionTemplate extends TileEntity implements IEnergyHandler, IElectricityHandler
 {
+	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
 	{
 		return (int) (this.receiveElectricity(from, (int) (maxReceive * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
 	}
 
+	@Override
 	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
 	{
 		return (int) (this.extractElectricity(from, (int) (maxExtract * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
 	}
 
+	@Override
 	public boolean canInterface(ForgeDirection from)
 	{
 		return this.canConnect(from);
@@ -33,6 +36,7 @@ public abstract class ThermalExpansionTemplate extends TileEntity implements IEn
 	/**
 	 * Returns the amount of energy currently stored.
 	 */
+	@Override
 	public int getEnergyStored(ForgeDirection from)
 	{
 		if (this instanceof IElectricalStorage)
@@ -46,6 +50,7 @@ public abstract class ThermalExpansionTemplate extends TileEntity implements IEn
 	/**
 	 * Returns the maximum amount of energy that can be stored.
 	 */
+	@Override
 	public int getMaxEnergyStored(ForgeDirection from)
 	{
 		if (this instanceof IElectricalStorage)

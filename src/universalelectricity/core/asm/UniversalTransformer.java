@@ -16,6 +16,8 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
+import universalelectricity.core.asm.TemplateInjectionManager.InjectionTemplate;
+import universalelectricity.core.asm.template.ThermalExpansionTemplate;
 import cofh.api.energy.IEnergyHandler;
 
 /**
@@ -27,52 +29,36 @@ public class UniversalTransformer implements IClassTransformer
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes)
 	{
-		ClassNode classNode = new ClassNode();
-		ClassReader classReader = new ClassReader(bytes);
-		classReader.accept(classNode, 0);
-
-		if (classNode != null && classNode.visibleAnnotations != null)
+		if (transformedName.startsWith("net.minecraft") || TemplateInjectionManager.injectionTemplates.isEmpty())
 		{
-			for (AnnotationNode nodes : classNode.visibleAnnotations)
+			return bytes;
+		}
+
+		boolean changed = false;
+
+		ClassNode cnode = ASMHelper.createClassNode(bytes);
+
+		if (cnode != null && cnode.visibleAnnotations != null)
+		{
+			for (AnnotationNode nodes : cnode.visibleAnnotations)
 			{
 				if (nodes.desc.equals("Luniversalelectricity/api/UniversalClass;"))
 				{
-					injectThermalExpansion(classNode);
+					/**
+					 * Patch Thermal Expansion
+					 */
+					InjectionTemplate impl = TemplateInjectionManager.injectionTemplates.get(ThermalExpansionTemplate.class);
+
+					if (impl != null)
+					{
+						changed |= impl.patch(cnode);
+						System.out.println("Injected Thermal Expansion API into: " + cnode.name);
+					}
 				}
 
 			}
 		}
 
-		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		classNode.accept(writer);
-		return writer.toByteArray();
-	}
-
-	/**
-	 * Injects Thermal Expansion support.
-	 * 
-	 * @param classNode - The ClassNode being injected.
-	 */
-	public void injectThermalExpansion(ClassNode classNode)
-	{
-		classNode.interfaces.add(IEnergyHandler.class.getName().replace(".", "/"));
-
-		// receiveEnergy()
-		MethodNode methodNode = new MethodNode(Opcodes.ACC_PUBLIC, "receiveEnergy", "(Lnet/minecraftforge/common/ForgeDirection;IZ)I", null, null);
-		InsnList il = methodNode.instructions;
-		il.add(new VarInsnNode(Opcodes.ALOAD, 0));
-		il.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;"));
-		il.add(new VarInsnNode(Opcodes.ALOAD, 1));
-		il.add(new VarInsnNode(Opcodes.ALOAD, 2));
-		il.add(new VarInsnNode(Opcodes.ALOAD, 3));
-		il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, convertToSignature(), "receiveEnergy", "(Ljava/lang/Class;Lnet/minecraftforge/common/ForgeDirection;IZ)I"));
-		il.add(new InsnNode(Opcodes.IRETURN));
-
-		classNode.methods.add(methodNode);
-	}
-
-	public String convertToSignature()
-	{
-		return UniversalMethods.class.getName().replace(".", "/");
+		return changed ? ASMHelper.createBytes(cnode, ClassWriter.COMPUTE_FRAMES) : bytes;
 	}
 }

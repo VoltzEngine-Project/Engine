@@ -2,8 +2,9 @@ package universalelectricity.core;
 
 import java.util.Map;
 
-import universalelectricity.core.asm.DefaultImplementationTransformer;
+import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
+import universalelectricity.core.asm.template.ThermalExpansionTemplate;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -14,6 +15,11 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 @TransformerExclusions({ "universalelectricity.core.asm" })
 public class UELoader implements IFMLLoadingPlugin
 {	
+	static
+	{
+		TemplateInjectionManager.registerDefaultImpl(ThermalExpansionTemplate.class);
+	}
+	
 	@EventHandler
 	public void init(FMLPreInitializationEvent evt)
 	{

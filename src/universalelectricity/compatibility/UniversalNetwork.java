@@ -80,12 +80,11 @@ public class UniversalNetwork extends ElectricityNetwork
 									{
 										if (electricalTile.canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
 										{
-											float energyToSend = totalUsableEnergy * (Math.min(electricalTile.getRequest(direction), totalEnergyRequest) / totalEnergyRequest);
+											int energyToSend = (int) (totalUsableEnergy * (Math.min(electricalTile.getRequest(direction), totalEnergyRequest) / totalEnergyRequest));
 
 											if (energyToSend > 0)
 											{
-												ElectricityPack electricityToSend = ElectricityPack.getFromWatts(energyToSend, voltage);
-												remainingUsableEnergy -= electricalTile.receiveElectricity(direction, electricityToSend, true);
+												remainingUsableEnergy -= electricalTile.receiveElectricity(direction, energyToSend, true);
 											}
 										}
 									}
@@ -199,7 +198,7 @@ public class UniversalNetwork extends ElectricityNetwork
 						{
 							if (((IElectricityHandler) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
 							{
-								requests.add(ElectricityPack.getFromWatts(((IElectricityHandler) tileEntity).getRequest(direction), ((IElectricityHandler) tileEntity).getVoltage()));
+								requests.add(ElectricityPack.getFromWatts(((IElectricityHandler) tileEntity).getRequest(direction), ((IElectricityHandler) tileEntity).getVoltage(direction)));
 							}
 						}
 						continue;
