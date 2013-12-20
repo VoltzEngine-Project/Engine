@@ -39,11 +39,12 @@ public class UELoader implements IFMLLoadingPlugin
 	/**
 	 * The Universal Electricity configuration file.
 	 */
-	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
+	public static Configuration CONFIGURATION;
 
 	@EventHandler
 	public void init(FMLInitializationEvent evt)
 	{
+		CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
 		/** Loads the configuration and sets all the values. */
 		CONFIGURATION.load();
 		CompatibilityType.THERMAL_EXPANSION.ratio = (float) CONFIGURATION.get("Compatiblity", "Thermal Expansion Conversion Ratio", CompatibilityType.THERMAL_EXPANSION.ratio).getDouble(CompatibilityType.THERMAL_EXPANSION.ratio);

@@ -42,9 +42,14 @@ public class UniversalTransformer implements IClassTransformer
 					 * The 2nd value in UniversalClass is the annotation we're looking for to filter
 					 * out which mod to deal with.
 					 */
-					String flags = (String) nodes.values.get(1);
+					String flags = null;
 
-					if (flags.equals("") || flags == null)
+					if (nodes.values != null && nodes.values.size() >= 2)
+					{
+						flags = (String) nodes.values.get(1);
+					}
+
+					if (flags == null || flags.equals(""))
 					{
 						for (InjectionTemplate template : TemplateInjectionManager.injectionTemplates.values())
 						{
