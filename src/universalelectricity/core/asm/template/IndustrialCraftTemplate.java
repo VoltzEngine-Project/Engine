@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import universalelectricity.api.IEnergyInterfacer;
+import universalelectricity.api.IEnergyInterface;
 import universalelectricity.compatibility.Compatibility;
 import universalelectricity.core.electricity.ElectricityPack;
 import buildcraft.api.power.PowerHandler;
@@ -21,7 +21,7 @@ import buildcraft.api.power.PowerHandler.PowerReceiver;
  * @author Calclavia
  * 
  */
-public abstract class IndustrialCraftTemplate extends TileEntity implements IEnergySink, IEnergySource, IEnergyInterfacer
+public abstract class IndustrialCraftTemplate extends TileEntity implements IEnergySink, IEnergySource, IEnergyInterface
 {
 	protected boolean isAddedToEnergyNet;
 

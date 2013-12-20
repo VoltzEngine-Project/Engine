@@ -2,7 +2,7 @@ package universalelectricity.core.asm.template;
 
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.IEnergyContainer;
-import universalelectricity.api.IEnergyInterfacer;
+import universalelectricity.api.IEnergyInterface;
 
 /**
  * @author Calclavia
@@ -19,7 +19,7 @@ public class StaticForwarder
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the block.
 	 */
-	public static int receiveElectricity(IEnergyInterfacer handler, ForgeDirection from, int receive, boolean doReceive)
+	public static int receiveElectricity(IEnergyInterface handler, ForgeDirection from, int receive, boolean doReceive)
 	{
 		return handler.onReceiveEnergy(from, receive, doReceive);
 	}
@@ -33,7 +33,7 @@ public class StaticForwarder
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was given out by the block.
 	 */
-	public static int extractElectricity(IEnergyInterfacer handler, ForgeDirection from, int request, boolean doProvide)
+	public static int extractElectricity(IEnergyInterface handler, ForgeDirection from, int request, boolean doProvide)
 	{
 		return handler.onExtractEnergy(from, request, doProvide);
 	}
@@ -43,7 +43,7 @@ public class StaticForwarder
 	 * 
 	 * @return The amount of volts. E.g 120v or 240v
 	 */
-	public static int getVoltage(IEnergyInterfacer handler, ForgeDirection direction)
+	public static int getVoltage(IEnergyInterface handler, ForgeDirection direction)
 	{
 		return handler.getVoltage(direction);
 	}
@@ -58,7 +58,7 @@ public class StaticForwarder
 		return handler.getEnergyCapacity(from);
 	}
 
-	public static boolean canConnect(IEnergyInterfacer handler, ForgeDirection from)
+	public static boolean canConnect(IEnergyInterface handler, ForgeDirection from)
 	{
 		return handler.canConnect(from);
 	}

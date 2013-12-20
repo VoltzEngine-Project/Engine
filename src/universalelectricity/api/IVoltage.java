@@ -3,6 +3,8 @@ package universalelectricity.api;
 import net.minecraftforge.common.ForgeDirection;
 
 /**
+ * Implement this on your TileEntity if it has a voltage.
+ * 
  * @author Calclavia
  * 
  */

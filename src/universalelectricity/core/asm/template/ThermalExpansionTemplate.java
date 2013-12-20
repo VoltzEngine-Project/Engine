@@ -3,7 +3,7 @@ package universalelectricity.core.asm.template;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.IEnergyContainer;
-import universalelectricity.api.IEnergyInterfacer;
+import universalelectricity.api.IEnergyInterface;
 import universalelectricity.compatibility.Compatibility;
 import cofh.api.energy.IEnergyHandler;
 
@@ -13,7 +13,7 @@ import cofh.api.energy.IEnergyHandler;
  * @author Calclavia
  * 
  */
-public abstract class ThermalExpansionTemplate extends TileEntity implements IEnergyHandler, IEnergyInterfacer
+public abstract class ThermalExpansionTemplate extends TileEntity implements IEnergyHandler, IEnergyInterface
 {
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
