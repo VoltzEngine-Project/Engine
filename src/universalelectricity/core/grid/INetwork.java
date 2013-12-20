@@ -29,30 +29,10 @@ public interface INetwork<N, C, A>
 	 */
 	public Set<C> getConnectors();
 
-	/** 
-	 * @return The node set.
-	 */
-	public Set<A> getNodes();
-
 	/**
 	 * Updates the network. Called by the {NetworkTickHandler}.
 	 */
 	public void update();
-
-	/**
-	 * Refreshes and cleans up conductor references of this network, as well as updating the
-	 * acceptor set.
-	 */
-	public void refresh();
-
-	/**
-	 * Gets the list of possible connection directions for the provided TileEntity. Tile must be in
-	 * this network.
-	 * 
-	 * @param tile The tile to get connections for
-	 * @return The list of directions that can be connected to for the provided tile
-	 */
-	public ArrayList<ForgeDirection> getPossibleDirections(TileEntity tile);
 
 	/**
 	 * Creates a new network that makes up the current network and the network defined in the

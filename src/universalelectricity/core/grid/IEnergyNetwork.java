@@ -1,7 +1,7 @@
 package universalelectricity.core.grid;
 
 import net.minecraft.tileentity.TileEntity;
-import universalelectricity.api.energy.IEnergyConductor;
+import universalelectricity.api.energy.IConductor;
 import universalelectricity.core.electricity.ElectricityPack;
 
 /**
@@ -10,29 +10,24 @@ import universalelectricity.core.electricity.ElectricityPack;
  * @author Calclavia
  * 
  */
-public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IEnergyConductor, TileEntity>
+public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, TileEntity>
 {
 	/**
-	 * Produces electricity in this electrical network.
+	 * Gets the amount of distributed energy per conductor.
 	 * 
-	 * @return Rejected energy in Joules.
+	 * @return
 	 */
-	public float produce(ElectricityPack electricityPack, TileEntity... ignoreTiles);
+	public int getDistribution();
 
 	/**
-	 * Gets the total amount of electricity requested/needed in the electricity network.
+	 * Gets the amount of distributed energy per side.
 	 * 
-	 * @param ignoreTiles The TileEntities to ignore during this calculation (optional).
+	 * @return
 	 */
-	public ElectricityPack getRequest(TileEntity... ignoreTiles);
+	public int getDistributionSide();
 
 	/**
 	 * @return The total amount of resistance of this electrical network. In Ohms.
 	 */
-	public float getTotalEnergyLoss();
-
-	/**
-	 * @return The lowest amount of current (amperage) that this electrical network can tolerate.
-	 */
-	public float getLowestCurrentCapacity();
+	public int getTotalEnergyLoss();
 }

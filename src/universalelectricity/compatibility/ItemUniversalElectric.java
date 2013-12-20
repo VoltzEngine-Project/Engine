@@ -4,6 +4,7 @@ import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import universalelectricity.api.Compatibility;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.item.ItemElectric;
 import cofh.api.energy.IEnergyContainerItem;

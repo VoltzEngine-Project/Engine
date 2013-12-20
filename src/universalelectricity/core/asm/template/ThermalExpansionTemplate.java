@@ -2,9 +2,9 @@ package universalelectricity.core.asm.template;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.api.Compatibility;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
-import universalelectricity.compatibility.Compatibility;
 import cofh.api.energy.IEnergyHandler;
 
 /**

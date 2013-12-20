@@ -4,12 +4,18 @@ import java.io.File;
 import java.util.Map;
 
 import net.minecraftforge.common.Configuration;
-import cofh.api.energy.IEnergyHandler;
+import universalelectricity.api.Compatibility;
+import universalelectricity.api.UniversalElectricity;
 import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
 import universalelectricity.core.asm.template.ThermalExpansionTemplate;
+import universalelectricity.core.grid.EnergyNetwork;
+import universalelectricity.core.grid.EnergyNetworkLoader;
+import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
@@ -26,6 +32,20 @@ public class UELoader implements IFMLLoadingPlugin
 	 * The Universal Electricity configuration file.
 	 */
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
+
+	@EventHandler
+	public void init(FMLInitializationEvent evt)
+	{
+		/** Loads the configuration and sets all the values. */
+		CONFIGURATION.load();
+		Compatibility.IC2_RATIO = (float) CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", Compatibility.IC2_RATIO).getDouble(Compatibility.IC2_RATIO);
+		Compatibility.TE_RATIO = (float) CONFIGURATION.get("Compatiblity", "Thermal Expansion Conversion Ratio", Compatibility.TE_RATIO).getDouble(Compatibility.TE_RATIO);
+		Compatibility.BC3_RATIO = (float) CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", Compatibility.BC3_RATIO).getDouble(Compatibility.BC3_RATIO);
+		Compatibility.TO_IC2_RATIO = 1 / Compatibility.IC2_RATIO;
+		Compatibility.TO_BC_RATIO = 1 / Compatibility.BC3_RATIO;
+		CONFIGURATION.save();
+		EnergyNetworkLoader.setNetworkClass(EnergyNetwork.class);
+	}
 
 	/**
 	 * Return a list of classes that implement the ILibrarySet interface

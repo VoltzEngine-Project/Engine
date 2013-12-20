@@ -7,8 +7,8 @@ import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.INetworkConnection;
-import universalelectricity.api.energy.IEnergyConductor;
+import universalelectricity.api.IConnector;
+import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.vector.Vector3;
 
 /**
@@ -17,9 +17,9 @@ import universalelectricity.api.vector.Vector3;
  * @author Calclavia
  * 
  */
-public class PathfinderChecker extends Pathfinder
+public class ConnectionPathfinder extends Pathfinder
 {
-	public PathfinderChecker(final World world, final INetworkConnection targetConnector, final INetworkConnection... ignoreConnector)
+	public ConnectionPathfinder(final World world, final IConnector targetConnector, final IConnector... ignoreConnector)
 	{
 		super(new IPathCallBack()
 		{
@@ -34,9 +34,9 @@ public class PathfinderChecker extends Pathfinder
 					Vector3 position = currentNode.clone().modifyPositionFromSide(direction);
 					TileEntity connectedBlock = position.getTileEntity(world);
 
-					if (connectedBlock instanceof IEnergyConductor && !Arrays.asList(ignoreConnector).contains(connectedBlock))
+					if (connectedBlock instanceof IConductor && !Arrays.asList(ignoreConnector).contains(connectedBlock))
 					{
-						if (((IEnergyConductor) connectedBlock).canConnect(direction.getOpposite()))
+						if (((IConductor) connectedBlock).canConnect(direction.getOpposite()))
 						{
 							neighbors.add(position);
 						}

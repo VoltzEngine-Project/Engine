@@ -9,15 +9,16 @@ import universalelectricity.core.grid.IEnergyNetwork;
  * @author Calclavia
  * 
  */
-public interface IEnergyConductor extends IConnector<IEnergyNetwork>, IEnergyInterface
+public interface IConductor extends IConnector<IEnergyNetwork>, IEnergyInterface
 {
 	/**
-	 * Refreshes the conductor
+	 * Called for the conductor to distribute energy. The conductor should distribute its internal
+	 * buffer to all {IEnergyInterface} connected to it.
 	 */
-	public void refresh();
+	public void distribute();
 
 	/**
-	 * Gets the amount of energy loss through conducting pass this wire.
+	 * Gets the amount of energy loss through conducting pass this conductor.
 	 * 
 	 * @return The amount of loss in joules.
 	 */
@@ -30,4 +31,5 @@ public interface IEnergyConductor extends IConnector<IEnergyNetwork>, IEnergyInt
 	 * @return The amount of energy in joules.
 	 */
 	public int getEnergyCapacitance();
+
 }

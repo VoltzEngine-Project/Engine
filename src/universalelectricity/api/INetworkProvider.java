@@ -6,7 +6,7 @@ package universalelectricity.api;
  * @author Calclavia
  * 
  */
-public interface IGridProvider<N>
+public interface INetworkProvider<N>
 {
 	public N getNetwork();
 

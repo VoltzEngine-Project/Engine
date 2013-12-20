@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.EnumSet;
 
-import universalelectricity.compatibility.Compatibility.CompatibilityType;
+import universalelectricity.api.Compatibility.CompatibilityType;
 
 /**
  * @author Calclavia

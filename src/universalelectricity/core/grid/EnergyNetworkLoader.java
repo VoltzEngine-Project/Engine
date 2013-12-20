@@ -4,14 +4,20 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import universalelectricity.api.energy.IEnergyConductor;
+import universalelectricity.api.energy.IConductor;
 import cpw.mods.fml.common.FMLLog;
 
-@SuppressWarnings("unchecked")
-public class NetworkLoader
+/**
+ * A dynamic network loader for injecting energy networks (NOT for other networks such as fuild networks).
+ * Example usage would be that ElectricityNetwork replaces EnergyNetwork.
+ * 
+ * @author Calclavia
+ * 
+ */
+public class EnergyNetworkLoader
 {
 	/**
-	 * The default IElectricityNetwork used for primary electrical networks.
+	 * The default IElectricityNetwork used for primary energy networks.
 	 */
 	public static Class<? extends IEnergyNetwork> NETWORK_CLASS;
 	public static final Set<Class<? extends IEnergyNetwork>> NETWORK_CLASS_REGISTRY = new HashSet<Class<? extends IEnergyNetwork>>();
@@ -40,7 +46,7 @@ public class NetworkLoader
 		}
 	}
 
-	public static IEnergyNetwork getNewNetwork(IEnergyConductor... conductors)
+	public static IEnergyNetwork getNewNetwork(IConductor... conductors)
 	{
 		try
 		{

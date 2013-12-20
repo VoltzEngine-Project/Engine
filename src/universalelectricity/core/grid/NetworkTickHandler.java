@@ -15,6 +15,7 @@ public class NetworkTickHandler implements ITickHandler
 {
 	public static final NetworkTickHandler INSTANCE = new NetworkTickHandler();
 
+	public static final LinkedHashSet<INetwork> toAddNetworks = new LinkedHashSet<INetwork>();
 	public static final LinkedHashSet<INetwork> networks = new LinkedHashSet<INetwork>();
 
 	@Override
@@ -26,8 +27,10 @@ public class NetworkTickHandler implements ITickHandler
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		Iterator<INetwork> it = networks.iterator();
-		
+		this.networks.addAll(this.toAddNetworks);
+
+		Iterator<INetwork> it = this.networks.iterator();
+
 		while (it.hasNext())
 		{
 			INetwork network = it.next();
