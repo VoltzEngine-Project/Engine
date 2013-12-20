@@ -36,7 +36,7 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	@Override
 	public void drawEnergy(double amount)
 	{
-		StaticForwarder.onExtractEnergy(this, ForgeDirection.UNKNOWN, (int) (amount * CompatibilityType.INDUSTRIALCRAFT.ratio), true);
+		StaticForwarder.onExtractEnergy(this, ForgeDirection.UNKNOWN, (int) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), true);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	@Override
 	public double injectEnergyUnits(ForgeDirection direction, double amount)
 	{
-		int toSend = (int) (amount * CompatibilityType.INDUSTRIALCRAFT.ratio);
+		int toSend = (int) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 
 		if (StaticForwarder.onReceiveEnergy(this, direction, toSend, false) > 0)
 		{
@@ -78,7 +78,7 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 			 * Return the difference, since injectEnergy returns left over energy, and
 			 * receiveElectricity returns energy used.
 			 */
-			return Math.round(amount - (receive * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio));
+			return Math.round(amount - (receive * CompatibilityType.INDUSTRIALCRAFT.ratio));
 		}
 
 		return amount;

@@ -10,6 +10,8 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 
+import universalelectricity.api.energy.IConductor;
+import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.core.asm.TemplateInjectionManager.InjectionTemplate;
 
 /**
@@ -49,31 +51,39 @@ public class UniversalTransformer implements IClassTransformer
 						flags = (String) nodes.values.get(1);
 					}
 
-					if (flags == null || flags.equals(""))
+					// TODO: Check hiearchy.
+					if (cnode.interfaces.contains(IEnergyInterface.class.getName().replace(".", "/")) || cnode.interfaces.contains(IConductor.class.getName().replace(".", "/")))
 					{
-						for (InjectionTemplate template : TemplateInjectionManager.injectionTemplates.values())
+						if (flags == null || flags.equals(""))
 						{
-							if (template != null)
+							for (InjectionTemplate template : TemplateInjectionManager.injectionTemplates.values())
 							{
-								changed |= template.patch(cnode);
-								System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
+								if (template != null)
+								{
+									changed |= template.patch(cnode);
+									System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
+								}
+							}
+						}
+						else
+						{
+							String[] separatedFlags = flags.split(";");
+
+							for (String separated : separatedFlags)
+							{
+								InjectionTemplate template = TemplateInjectionManager.injectionTemplates.get(separated);
+
+								if (template != null)
+								{
+									changed |= template.patch(cnode);
+									System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
+								}
 							}
 						}
 					}
 					else
 					{
-						String[] separatedFlags = flags.split(";");
-
-						for (String separated : separatedFlags)
-						{
-							InjectionTemplate template = TemplateInjectionManager.injectionTemplates.get(separated);
-
-							if (template != null)
-							{
-								changed |= template.patch(cnode);
-								System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
-							}
-						}
+						System.out.println("[Universal Electricity] Failed to inject class " + cnode.name + " due to missing required interfaces.");
 					}
 
 					break;
