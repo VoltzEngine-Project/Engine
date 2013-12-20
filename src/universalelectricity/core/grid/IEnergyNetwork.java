@@ -17,14 +17,14 @@ public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Til
 	 * 
 	 * @return
 	 */
-	public int getDistribution();
+	public int getDistribution(IConductor conductor);
 
 	/**
 	 * Gets the amount of distributed energy per side.
 	 * 
 	 * @return
 	 */
-	public int getDistributionSide();
+	public int getDistributionSide(IConductor conductor);
 
 	/**
 	 * @return The total amount of resistance of this electrical network. In Ohms.

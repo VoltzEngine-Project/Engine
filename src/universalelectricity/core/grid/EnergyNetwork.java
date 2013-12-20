@@ -4,9 +4,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.api.IConnector;
+import universalelectricity.api.electricity.ElectricalEvent.EnergyUpdateEvent;
 import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.vector.Vector3;
-import universalelectricity.core.electricity.ElectricalEvent.EnergyUpdateEvent;
 import universalelectricity.core.path.ConnectionPathfinder;
 import universalelectricity.core.path.Pathfinder;
 
@@ -23,6 +23,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 	 */
 	private int energyDistribution;
 	private int energyDistributionPerSide;
+
+	private int energyRemainderDistribution;
+	private int energyRemainderDistributionPerSide;
 
 	@Override
 	public void addConnector(IConductor connector)
@@ -52,6 +55,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 
 			this.energyDistribution = (totalUsableEnergy / this.connectorSet.size());
 			this.energyDistributionPerSide = (this.energyDistribution / 6);
+			this.energyRemainderDistribution = (this.energyDistribution + totalUsableEnergy % this.connectorSet.size());
+			this.energyRemainderDistributionPerSide = (this.energyRemainderDistribution / 6);
 
 			for (IConductor conductor : this.connectorSet)
 			{
@@ -160,15 +165,15 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 	}
 
 	@Override
-	public int getDistribution()
+	public int getDistribution(IConductor conductor)
 	{
-		return this.energyDistribution;
+		return this.isFirstConnector(conductor) ? this.energyRemainderDistribution : this.energyDistribution;
 	}
 
 	@Override
-	public int getDistributionSide()
+	public int getDistributionSide(IConductor conductor)
 	{
-		return this.energyDistributionPerSide;
+		return this.isFirstConnector(conductor) ? this.energyRemainderDistributionPerSide : this.energyDistributionPerSide;
 	}
 
 	@Override

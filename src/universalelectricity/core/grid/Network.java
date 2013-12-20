@@ -3,16 +3,10 @@ package universalelectricity.core.grid;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import universalelectricity.api.IConnector;
-import universalelectricity.api.energy.IConductor;
-import universalelectricity.api.vector.Vector3;
-import universalelectricity.core.path.ConnectionPathfinder;
-import universalelectricity.core.path.Pathfinder;
-
 /**
  * An grid-like, world cable-based network.
+ * 
+ * Inspired by Thermal Expansion.
  * 
  * @author Calclavia
  * 
@@ -53,4 +47,13 @@ public abstract class Network<N, C, A> implements INetwork<N, C, A>
 		return this.getClass().getSimpleName() + "[" + this.hashCode() + "|Connectors:" + this.connectorSet.size() + "]";
 	}
 
+	public boolean isFirstConnector(C connector)
+	{
+		if (connector == null)
+		{
+			return false;
+		}
+
+		return this.connectorSet.iterator().next().equals(connector);
+	}
 }
