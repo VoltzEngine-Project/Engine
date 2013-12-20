@@ -1,4 +1,4 @@
-package universalelectricity.prefab.network;
+package calclavia.lib.prefab.network;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;

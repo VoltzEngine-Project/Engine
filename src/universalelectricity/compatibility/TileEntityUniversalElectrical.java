@@ -1,5 +1,6 @@
 package universalelectricity.compatibility;
 
+import calclavia.lib.prefab.tile.TileEntityElectrical;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
@@ -15,7 +16,6 @@ import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.prefab.tile.TileEntityElectrical;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;

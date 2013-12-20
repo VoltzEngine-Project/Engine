@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import calclavia.lib.prefab.vector.Region3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.prefab.vector.Region3;
 
 /**
  * Data structure for world protection.

@@ -23,9 +23,9 @@ import universalelectricity.compatibility.Compatibility;
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import universalelectricity.core.vector.Vector2;
-import universalelectricity.prefab.TranslationHelper;
-import universalelectricity.prefab.vector.Region2;
 import calclavia.lib.Calclavia;
+import calclavia.lib.prefab.TranslationHelper;
+import calclavia.lib.prefab.vector.Region2;
 import calclavia.lib.render.CalclaviaRenderHelper;
 
 public class GuiContainerBase extends GuiContainer

@@ -1,7 +1,8 @@
-package universalelectricity.prefab.block;
+package calclavia.lib.prefab.block;
 
 import java.util.List;
 
+import calclavia.lib.prefab.tile.TileEntityConductor;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -11,7 +12,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.prefab.tile.TileEntityConductor;
 
 public abstract class BlockConductor extends BlockContainer
 {

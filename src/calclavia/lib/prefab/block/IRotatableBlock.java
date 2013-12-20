@@ -1,4 +1,4 @@
-package universalelectricity.prefab.block;
+package calclavia.lib.prefab.block;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;

@@ -1,4 +1,4 @@
-package universalelectricity.prefab;
+package calclavia.lib.prefab;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;

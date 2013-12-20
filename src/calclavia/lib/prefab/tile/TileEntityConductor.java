@@ -1,4 +1,4 @@
-package universalelectricity.prefab.tile;
+package calclavia.lib.prefab.tile;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;

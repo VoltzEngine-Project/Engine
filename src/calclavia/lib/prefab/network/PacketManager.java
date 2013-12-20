@@ -1,4 +1,4 @@
-package universalelectricity.prefab.network;
+package calclavia.lib.prefab.network;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;

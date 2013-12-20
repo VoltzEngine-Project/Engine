@@ -1,4 +1,4 @@
-package universalelectricity.prefab.ore;
+package calclavia.lib.prefab.ore;
 
 import net.minecraft.item.ItemStack;
 

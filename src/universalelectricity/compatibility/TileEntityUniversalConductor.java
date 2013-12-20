@@ -10,6 +10,7 @@ import ic2.api.energy.tile.IEnergyTile;
 import java.util.HashSet;
 import java.util.Set;
 
+import calclavia.lib.prefab.tile.TileEntityConductor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -18,7 +19,6 @@ import universalelectricity.core.block.IConnector;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
-import universalelectricity.prefab.tile.TileEntityConductor;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;

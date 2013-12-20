@@ -1,4 +1,4 @@
-package universalelectricity.prefab;
+package calclavia.lib.prefab;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

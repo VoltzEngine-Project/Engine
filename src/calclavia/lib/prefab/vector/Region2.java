@@ -1,4 +1,4 @@
-package universalelectricity.prefab.vector;
+package calclavia.lib.prefab.vector;
 
 import universalelectricity.core.vector.Vector2;
 

@@ -1,4 +1,4 @@
-package universalelectricity.prefab;
+package calclavia.lib.prefab;
 
 import net.minecraft.util.DamageSource;
 import cpw.mods.fml.common.registry.LanguageRegistry;
