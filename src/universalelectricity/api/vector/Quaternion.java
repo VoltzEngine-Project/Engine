@@ -1,4 +1,7 @@
-package universalelectricity.core.vector;
+package universalelectricity.api.vector;
+
+import universalelectricity.core.vector.Quaternion;
+import universalelectricity.core.vector.Vector3;
 
 /**
  * Quaternion class designed to be used for the rotation of objects.

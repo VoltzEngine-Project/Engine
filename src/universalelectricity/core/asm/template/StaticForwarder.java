@@ -1,8 +1,9 @@
 package universalelectricity.core.asm.template;
 
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.IEnergyContainer;
-import universalelectricity.api.IEnergyInterface;
+import universalelectricity.api.electricity.IVoltage;
+import universalelectricity.api.energy.IEnergyContainer;
+import universalelectricity.api.energy.IEnergyInterface;
 
 /**
  * @author Calclavia
@@ -37,13 +38,13 @@ public class StaticForwarder
 	{
 		return handler.onExtractEnergy(from, request, doProvide);
 	}
-	
+
 	/**
 	 * Gets the voltage of this TileEntity.
 	 * 
 	 * @return The amount of volts. E.g 120v or 240v
 	 */
-	public static int getVoltage(IEnergyInterface handler, ForgeDirection direction)
+	public static int getVoltage(IVoltage handler, ForgeDirection direction)
 	{
 		return handler.getVoltage(direction);
 	}

@@ -1,11 +1,14 @@
 package universalelectricity.core;
 
+import java.io.File;
 import java.util.Map;
 
+import net.minecraftforge.common.Configuration;
 import cofh.api.energy.IEnergyHandler;
 import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
 import universalelectricity.core.asm.template.ThermalExpansionTemplate;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
@@ -18,6 +21,11 @@ public class UELoader implements IFMLLoadingPlugin
 	{
 		TemplateInjectionManager.registerDefaultImpl(ThermalExpansionTemplate.class, IEnergyHandler.class);
 	}
+
+	/**
+	 * The Universal Electricity configuration file.
+	 */
+	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
 
 	/**
 	 * Return a list of classes that implement the ILibrarySet interface

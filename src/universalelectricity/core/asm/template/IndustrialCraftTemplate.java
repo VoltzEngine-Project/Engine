@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import universalelectricity.api.IEnergyInterface;
+import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.compatibility.Compatibility;
 import universalelectricity.core.electricity.ElectricityPack;
 import buildcraft.api.power.PowerHandler;

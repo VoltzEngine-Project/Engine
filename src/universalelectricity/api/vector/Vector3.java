@@ -1,4 +1,4 @@
-package universalelectricity.core.vector;
+package universalelectricity.api.vector;
 
 import java.util.List;
 
@@ -194,6 +194,21 @@ public class Vector3 implements Cloneable
 	{
 		return Vec3.createVectorHelper(this.x, this.y, this.z);
 	}
+	
+
+	/**
+	 * Saves this Vector3 to disk
+	 * 
+	 * @param prefix - The prefix of this save. Use some unique string.
+	 * @param nbt - The NBT compound object to save the data in
+	 */
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
+	{
+		nbt.setDouble("x", this.x);
+		nbt.setDouble("y", this.y);
+		nbt.setDouble("z", this.z);
+		return nbt;
+	}
 
 	/**
 	 * Converts Vector3 into a ForgeDirection.
@@ -210,7 +225,10 @@ public class Vector3 implements Cloneable
 
 		return ForgeDirection.UNKNOWN;
 	}
-
+	
+	/**
+	 * ---------------------- MAGNITUDE FUNCTIONS ----------------------------
+	 */
 	public double getMagnitude()
 	{
 		return Math.sqrt(this.getMagnitudeSquared());
@@ -241,12 +259,6 @@ public class Vector3 implements Cloneable
 	public static double distance(Vector3 vec1, Vector3 vec2)
 	{
 		return vec1.distance(vec2);
-	}
-
-	@Deprecated
-	public double distanceTo(Vector3 vector3)
-	{
-		return this.distance(vector3);
 	}
 
 	public double distance(Vector3 compare)
@@ -296,25 +308,21 @@ public class Vector3 implements Cloneable
 		return translate;
 	}
 
-	@Deprecated
 	public Vector3 add(Vector3 amount)
 	{
 		return translate(amount);
 	}
 
-	@Deprecated
 	public Vector3 add(double amount)
 	{
 		return translate(amount);
 	}
 
-	@Deprecated
 	public Vector3 subtract(Vector3 amount)
 	{
 		return this.translate(amount.clone().invert());
 	}
 
-	@Deprecated
 	public Vector3 subtract(double amount)
 	{
 		return this.translate(-amount);
@@ -354,51 +362,6 @@ public class Vector3 implements Cloneable
 	public static Vector3 scale(Vector3 vec, Vector3 amount)
 	{
 		return vec.scale(amount);
-	}
-
-	@Deprecated
-	public Vector3 multiply(double amount)
-	{
-		return this.scale(amount);
-	}
-
-	@Deprecated
-	public Vector3 multiply(Vector3 amount)
-	{
-		return this.scale(amount);
-	}
-
-	/**
-	 * Static versions of a lot of functions
-	 */
-	@Deprecated
-	public static Vector3 subtract(Vector3 par1, Vector3 par2)
-	{
-		return new Vector3(par1.x - par2.x, par1.y - par2.y, par1.z - par2.z);
-	}
-
-	@Deprecated
-	public static Vector3 add(Vector3 par1, Vector3 par2)
-	{
-		return new Vector3(par1.x + par2.x, par1.y + par2.y, par1.z + par2.z);
-	}
-
-	@Deprecated
-	public static Vector3 add(Vector3 par1, double par2)
-	{
-		return new Vector3(par1.x + par2, par1.y + par2, par1.z + par2);
-	}
-
-	@Deprecated
-	public static Vector3 multiply(Vector3 vec1, Vector3 vec2)
-	{
-		return new Vector3(vec1.x * vec2.x, vec1.y * vec2.y, vec1.z * vec2.z);
-	}
-
-	@Deprecated
-	public static Vector3 multiply(Vector3 vec1, double vec2)
-	{
-		return new Vector3(vec1.x * vec2, vec1.y * vec2, vec1.z * vec2);
 	}
 
 	public Vector3 round()
@@ -650,28 +613,6 @@ public class Vector3 implements Cloneable
 		return Math.acos(vec1.clone().dotProduct(vec2));
 	}
 
-	/**
-	 * Loads a Vector3 from an NBT compound.
-	 */
-	@Deprecated
-	public static Vector3 readFromNBT(NBTTagCompound nbt)
-	{
-		return new Vector3(nbt);
-	}
-
-	/**
-	 * Saves this Vector3 to disk
-	 * 
-	 * @param prefix - The prefix of this save. Use some unique string.
-	 * @param nbt - The NBT compound object to save the data in
-	 */
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
-	{
-		nbt.setDouble("x", this.x);
-		nbt.setDouble("y", this.y);
-		nbt.setDouble("z", this.z);
-		return nbt;
-	}
 
 	public static Vector3 UP()
 	{

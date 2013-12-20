@@ -4,8 +4,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.Cancelable;
 import net.minecraftforge.event.Event;
-import universalelectricity.api.IEnergyInterface;
-import universalelectricity.core.grid.IElectricityNetwork;
+import universalelectricity.api.energy.IEnergyInterface;
+import universalelectricity.core.grid.IEnergyNetwork;
 
 public class ElectricalEvent extends Event
 {
@@ -30,11 +30,11 @@ public class ElectricalEvent extends Event
 
 	public static class NetworkEvent extends ElectricalEvent
 	{
-		public final IElectricityNetwork network;
+		public final IEnergyNetwork network;
 		public ElectricityPack electricityPack;
 		public TileEntity[] ignoreTiles;
 
-		public NetworkEvent(IElectricityNetwork network, ElectricityPack electricityPack, TileEntity... ignoreTiles)
+		public NetworkEvent(IEnergyNetwork network, ElectricityPack electricityPack, TileEntity... ignoreTiles)
 		{
 			this.network = network;
 			this.electricityPack = electricityPack;
@@ -49,17 +49,19 @@ public class ElectricalEvent extends Event
 	 * 
 	 */
 	@Cancelable
-	public static class ElectricityProductionEvent extends NetworkEvent
+	public static class EnergyUpdateEvent extends Event
 	{
-		public ElectricityProductionEvent(IElectricityNetwork network, ElectricityPack electricityPack, TileEntity... ignoreTiles)
+		public final IEnergyNetwork network;
+
+		public EnergyUpdateEvent(IEnergyNetwork network)
 		{
-			super(network, electricityPack, ignoreTiles);
+			this.network = network;
 		}
 	}
 
 	public static class ElectricityRequestEvent extends NetworkEvent
 	{
-		public ElectricityRequestEvent(IElectricityNetwork network, ElectricityPack electricityPack, TileEntity... ignoreTiles)
+		public ElectricityRequestEvent(IEnergyNetwork network, ElectricityPack electricityPack, TileEntity... ignoreTiles)
 		{
 			super(network, electricityPack, ignoreTiles);
 		}

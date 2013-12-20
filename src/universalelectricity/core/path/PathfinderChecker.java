@@ -7,9 +7,9 @@ import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.IConductor;
 import universalelectricity.api.INetworkConnection;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.api.energy.IEnergyConductor;
+import universalelectricity.api.vector.Vector3;
 
 /**
  * Check if a conductor connects with another.
@@ -34,9 +34,9 @@ public class PathfinderChecker extends Pathfinder
 					Vector3 position = currentNode.clone().modifyPositionFromSide(direction);
 					TileEntity connectedBlock = position.getTileEntity(world);
 
-					if (connectedBlock instanceof IConductor && !Arrays.asList(ignoreConnector).contains(connectedBlock))
+					if (connectedBlock instanceof IEnergyConductor && !Arrays.asList(ignoreConnector).contains(connectedBlock))
 					{
-						if (((IConductor) connectedBlock).canConnect(direction.getOpposite()))
+						if (((IEnergyConductor) connectedBlock).canConnect(direction.getOpposite()))
 						{
 							neighbors.add(position);
 						}

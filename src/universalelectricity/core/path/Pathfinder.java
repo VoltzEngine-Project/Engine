@@ -3,7 +3,7 @@ package universalelectricity.core.path;
 import java.util.HashSet;
 import java.util.Set;
 
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.api.vector.Vector3;
 
 /**
  * A class that allows flexible pathfinding for different positions. Compared to AStar pathfinding,

@@ -1,7 +1,7 @@
 package universalelectricity.compatibility;
 
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.electricity.NetworkLoader;
+import universalelectricity.core.grid.NetworkLoader;
 import cpw.mods.fml.common.Loader;
 
 /**

@@ -7,9 +7,9 @@ import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.IConnector;
-import universalelectricity.api.INetworkProvider;
-import universalelectricity.core.grid.IElectricityNetwork;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.api.IConnector;
+import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.grid.IEnergyNetwork;
 
 /**
  * A helper class that provides additional useful functions to interact with the ElectricityNetwork
@@ -59,7 +59,7 @@ public class ElectricityHelper
 
 		if (tileEntity != null && approachingDirection != null)
 		{
-			final Set<IElectricityNetwork> connectedNetworks = ElectricityHelper.getNetworksFromMultipleSides(tileEntity, approachingDirection);
+			final Set<IEnergyNetwork> connectedNetworks = ElectricityHelper.getNetworksFromMultipleSides(tileEntity, approachingDirection);
 
 			if (connectedNetworks.size() > 0)
 			{
@@ -69,7 +69,7 @@ public class ElectricityHelper
 				float wattsPerSide = (producingPack.getWatts() / connectedNetworks.size());
 				float voltage = producingPack.voltage;
 
-				for (IElectricityNetwork network : connectedNetworks)
+				for (IEnergyNetwork network : connectedNetworks)
 				{
 					if (wattsPerSide > 0 && producingPack.getWatts() > 0)
 					{
@@ -94,9 +94,9 @@ public class ElectricityHelper
 	 * @return A list of networks from all specified sides. There will be no repeated
 	 * ElectricityNetworks and it will never return null.
 	 */
-	public static Set<IElectricityNetwork> getNetworksFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection)
+	public static Set<IEnergyNetwork> getNetworksFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection)
 	{
-		final Set<IElectricityNetwork> connectedNetworks = new HashSet<IElectricityNetwork>();
+		final Set<IEnergyNetwork> connectedNetworks = new HashSet<IEnergyNetwork>();
 
 		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS)
 		{
@@ -106,7 +106,7 @@ public class ElectricityHelper
 				position.modifyPositionFromSide(side);
 
 				TileEntity outputConductor = position.getTileEntity(tileEntity.worldObj);
-				IElectricityNetwork electricityNetwork = ElectricityHelper.getNetworkFromTileEntity(outputConductor, side);
+				IEnergyNetwork electricityNetwork = ElectricityHelper.getNetworkFromTileEntity(outputConductor, side);
 
 				if (electricityNetwork != null)
 				{
@@ -127,22 +127,22 @@ public class ElectricityHelper
 	 * @param approachDirection - The direction you are approaching this wire from.
 	 * @return The ElectricityNetwork or null if not found.
 	 */
-	public static IElectricityNetwork getNetworkFromTileEntity(TileEntity tileEntity, ForgeDirection approachDirection)
+	public static IEnergyNetwork getNetworkFromTileEntity(TileEntity tileEntity, ForgeDirection approachDirection)
 	{
 		if (tileEntity != null)
 		{
-			if (tileEntity instanceof INetworkProvider)
+			if (tileEntity instanceof IConnector)
 			{
 				if (tileEntity instanceof IConnector)
 				{
 					if (((IConnector) tileEntity).canConnect(approachDirection.getOpposite()))
 					{
-						return ((INetworkProvider) tileEntity).getNetwork();
+						return ((IConnector) tileEntity).getNetwork();
 					}
 				}
 				else
 				{
-					return ((INetworkProvider) tileEntity).getNetwork();
+					return ((IConnector) tileEntity).getNetwork();
 				}
 			}
 		}

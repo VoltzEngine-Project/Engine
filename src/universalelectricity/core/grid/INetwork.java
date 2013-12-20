@@ -13,31 +13,37 @@ import net.minecraftforge.common.ForgeDirection;
  * @author aidancbrady
  * 
  * @param <N> - the class/interface Type value in which you implement this
- * @param <C> - the class/interface Type which makes up the network's conductor Set
- * @param <A> - the class/interface Type which makes up the network's acceptor Set
+ * @param <C> - the class/interface Type which makes up the network's connector set
+ * @param <A> - the class/interface Type which makes up the network's node set
  */
-public interface IGridNetwork<N, C, A>
+public interface INetwork<N, C, A>
 {
+	public void addConnector(C connector);
+
+	public void removeConnector(C connector);
+
+	/**
+	 * Gets the set of conductors that make up this network.
+	 * 
+	 * @return conductor set
+	 */
+	public Set<C> getConnectors();
+
+	/** 
+	 * @return The node set.
+	 */
+	public Set<A> getNodes();
+
+	/**
+	 * Updates the network. Called by the {NetworkTickHandler}.
+	 */
+	public void update();
+
 	/**
 	 * Refreshes and cleans up conductor references of this network, as well as updating the
 	 * acceptor set.
 	 */
 	public void refresh();
-
-	/**
-	 * Gets the Set of conductors that make up this network.
-	 * 
-	 * @return conductor set
-	 */
-	public Set<C> getConductors();
-
-	/**
-	 * Gets the Set of AVAILABLE acceptors in this network. Make sure this doesn't include any stray
-	 * acceptors which cannot accept resources.
-	 * 
-	 * @return available acceptor set
-	 */
-	public Set<A> getAcceptors();
 
 	/**
 	 * Gets the list of possible connection directions for the provided TileEntity. Tile must be in
@@ -63,4 +69,5 @@ public interface IGridNetwork<N, C, A>
 	 * @param connection
 	 */
 	public void split(C connection);
+
 }

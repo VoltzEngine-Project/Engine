@@ -2,7 +2,7 @@ package universalelectricity.core.path;
 
 import java.util.Set;
 
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.api.vector.Vector3;
 
 public interface IPathCallBack
 {

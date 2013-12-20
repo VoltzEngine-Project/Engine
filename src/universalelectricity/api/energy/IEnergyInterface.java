@@ -1,4 +1,4 @@
-package universalelectricity.api;
+package universalelectricity.api.energy;
 
 import net.minecraftforge.common.ForgeDirection;
 

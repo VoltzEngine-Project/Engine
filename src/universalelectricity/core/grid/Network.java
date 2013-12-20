@@ -3,8 +3,8 @@ package universalelectricity.core.grid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,92 +12,55 @@ import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import universalelectricity.api.IConductor;
 import universalelectricity.api.IConnector;
-import universalelectricity.api.IEnergyInterface;
-import universalelectricity.api.INetworkConnection;
-import universalelectricity.api.INetworkProvider;
-import universalelectricity.core.electricity.ElectricalEvent.ElectricityProductionEvent;
+import universalelectricity.api.energy.IEnergyConductor;
+import universalelectricity.api.energy.IEnergyInterface;
+import universalelectricity.api.vector.Vector3;
+import universalelectricity.api.vector.VectorHelper;
+import universalelectricity.core.electricity.ElectricalEvent.EnergyUpdateEvent;
 import universalelectricity.core.electricity.ElectricalEvent.ElectricityRequestEvent;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.path.Pathfinder;
 import universalelectricity.core.path.PathfinderChecker;
-import universalelectricity.core.vector.Vector3;
-import universalelectricity.core.vector.VectorHelper;
 import cpw.mods.fml.common.FMLLog;
 
 /**
- * An Electrical Network specifies a wire connection. Each wire connection line will have its own
- * electrical network.
- * 
- * !! Do not include this class if you do not intend to have custom wires in your mod. This will
- * increase future compatibility. !!
+ * An grid-like, world cable-based network.
  * 
  * @author Calclavia
  * 
  */
-public class ElectricityNetwork implements IElectricityNetwork
+public abstract class Network<N, C, A> implements INetwork<N, C, A>
 {
-	public Map<TileEntity, ArrayList<ForgeDirection>> electricalTiles = new HashMap<TileEntity, ArrayList<ForgeDirection>>();
+	/**
+	 * A set of nodes (e.g receivers).
+	 */
+	private final Set<A> nodeSet = new LinkedHashSet<A>();
 
-	private final Set<IConductor> conductors = new HashSet<IConductor>();
-
-	public float acceptorResistance = 500;
+	/**
+	 * A set of connectors (e.g conductors).
+	 */
+	private final Set<C> connectorSet = new LinkedHashSet<C>();
 
 	@Override
-	public float produce(ElectricityPack electricity, TileEntity... ignoreTiles)
+	public void addConnector(C connector)
 	{
-		ElectricityProductionEvent evt = new ElectricityProductionEvent(this, electricity, ignoreTiles);
-		MinecraftForge.EVENT_BUS.post(evt);
-
-		float totalEnergy = electricity.getWatts();
-		float networkResistance = getTotalResistance();
-		float proportionWasted = getTotalResistance() / (getTotalResistance() + acceptorResistance);
-		float energyWasted = totalEnergy * proportionWasted;
-		float totalUsableEnergy = totalEnergy - energyWasted;
-		float remainingUsableEnergy = totalUsableEnergy;
-		float voltage = electricity.voltage;
-
-		if (!evt.isCanceled())
-		{
-			Set<TileEntity> avaliableEnergyTiles = this.getAcceptors();
-
-			if (!avaliableEnergyTiles.isEmpty())
-			{
-				final float totalEnergyRequest = this.getRequest(ignoreTiles).getWatts();
-
-				if (totalEnergyRequest > 0)
-				{
-					for (TileEntity tileEntity : avaliableEnergyTiles)
-					{
-						if (!Arrays.asList(ignoreTiles).contains(tileEntity))
-						{
-							if (tileEntity instanceof IEnergyInterface)
-							{
-								IEnergyInterface electricalTile = (IEnergyInterface) tileEntity;
-
-								for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
-								{
-									if (electricalTile.canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
-									{
-										int energyToSend = (int) (totalUsableEnergy * (electricalTile.getRequest(direction) / totalEnergyRequest));
-
-										if (energyToSend > 0)
-										{
-											remainingUsableEnergy -= ((IEnergyInterface) tileEntity).onReceiveEnergy(direction, energyToSend, true);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return remainingUsableEnergy;
+		this.connectorSet.add(connector);
 	}
 
+	@Override
+	public void removeConnector(C connector)
+	{
+		this.connectorSet.add(connector);
+	}
+
+	@Override
+	public Set<C> getConnectors()
+	{
+		return this.connectorSet;
+	}
+
+	
 	/**
 	 * @return How much electricity this network needs.
 	 */
@@ -106,7 +69,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	{
 		List<ElectricityPack> requests = new ArrayList<ElectricityPack>();
 
-		Iterator<TileEntity> it = this.getAcceptors().iterator();
+		Iterator<TileEntity> it = this.getNodes().iterator();
 
 		while (it.hasNext())
 		{
@@ -125,7 +88,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 					{
 						for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
 						{
-							if (((IEnergyInterface) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
+							if (((IEnergyInterface) tileEntity).canConnect(direction) && this.getConnectors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
 							{
 								requests.add(ElectricityPack.getFromWatts(((IEnergyInterface) tileEntity).getRequest(direction), ((IEnergyInterface) tileEntity).getVoltage(direction)));
 								continue;
@@ -146,9 +109,9 @@ public class ElectricityNetwork implements IElectricityNetwork
 	 * @return Returns all producers in this electricity network.
 	 */
 	@Override
-	public Set<TileEntity> getAcceptors()
+	public Set<TileEntity> getNodes()
 	{
-		return this.electricalTiles.keySet();
+		return this.nodes.keySet();
 	}
 
 	/**
@@ -158,7 +121,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 	@Override
 	public ArrayList<ForgeDirection> getPossibleDirections(TileEntity tile)
 	{
-		return this.electricalTiles.containsKey(tile) ? this.electricalTiles.get(tile) : null;
+		return this.nodes.containsKey(tile) ? this.nodes.get(tile) : null;
 	}
 
 	/**
@@ -167,15 +130,15 @@ public class ElectricityNetwork implements IElectricityNetwork
 	@Override
 	public void refresh()
 	{
-		this.electricalTiles.clear();
+		this.nodes.clear();
 
 		try
 		{
-			Iterator<IConductor> it = this.conductors.iterator();
+			Iterator<IEnergyConductor> it = this.connectorSet.iterator();
 
 			while (it.hasNext())
 			{
-				IConductor conductor = it.next();
+				IEnergyConductor conductor = it.next();
 
 				if (conductor == null)
 				{
@@ -194,13 +157,13 @@ public class ElectricityNetwork implements IElectricityNetwork
 				{
 					TileEntity acceptor = conductor.getAdjacentConnections()[i];
 
-					if (!(acceptor instanceof IConductor) && acceptor instanceof IConnector)
+					if (!(acceptor instanceof IEnergyConductor) && acceptor instanceof IConnector)
 					{
 						ArrayList<ForgeDirection> possibleDirections = null;
 
-						if (this.electricalTiles.containsKey(acceptor))
+						if (this.nodes.containsKey(acceptor))
 						{
-							possibleDirections = this.electricalTiles.get(acceptor);
+							possibleDirections = this.nodes.get(acceptor);
 						}
 						else
 						{
@@ -209,7 +172,7 @@ public class ElectricityNetwork implements IElectricityNetwork
 
 						possibleDirections.add(ForgeDirection.getOrientation(i));
 
-						this.electricalTiles.put(acceptor, possibleDirections);
+						this.nodes.put(acceptor, possibleDirections);
 					}
 				}
 			}
@@ -221,29 +184,17 @@ public class ElectricityNetwork implements IElectricityNetwork
 		}
 	}
 
-	@Override
-	public float getTotalResistance()
-	{
-		float resistance = 0;
-
-		for (IConductor conductor : this.conductors)
-		{
-			resistance += conductor.getResistance();
-		}
-
-		return resistance;
-	}
 
 	@Override
 	public float getLowestCurrentCapacity()
 	{
 		float lowestAmperage = 0;
 
-		for (IConductor conductor : this.conductors)
+		for (IEnergyConductor conductor : this.connectorSet)
 		{
-			if (lowestAmperage == 0 || conductor.getCurrentCapacity() < lowestAmperage)
+			if (lowestAmperage == 0 || conductor.getEnergyCapacitance() < lowestAmperage)
 			{
-				lowestAmperage = conductor.getCurrentCapacity();
+				lowestAmperage = conductor.getEnergyCapacitance();
 			}
 		}
 
@@ -251,29 +202,23 @@ public class ElectricityNetwork implements IElectricityNetwork
 	}
 
 	@Override
-	public Set<IConductor> getConductors()
-	{
-		return this.conductors;
-	}
-
-	@Override
-	public void merge(IElectricityNetwork network)
+	public void merge(IEnergyNetwork network)
 	{
 		if (network != null && network != this)
 		{
-			ElectricityNetwork newNetwork = new ElectricityNetwork();
-			newNetwork.getConductors().addAll(this.getConductors());
-			newNetwork.getConductors().addAll(network.getConductors());
+			Network newNetwork = new Network();
+			newNetwork.getConnectors().addAll(this.getConnectors());
+			newNetwork.getConnectors().addAll(network.getConnectors());
 			newNetwork.refresh();
 		}
 	}
 
 	@Override
-	public void split(IConductor splitPoint)
+	public void split(IEnergyConductor splitPoint)
 	{
 		if (splitPoint instanceof TileEntity)
 		{
-			this.getConductors().remove(splitPoint);
+			this.getConnectors().remove(splitPoint);
 
 			/**
 			 * Loop through the connected blocks and attempt to see if there are connections between
@@ -307,11 +252,11 @@ public class ElectricityNetwork implements IElectricityNetwork
 								{
 									TileEntity nodeTile = node.getTileEntity(((TileEntity) splitPoint).worldObj);
 
-									if (nodeTile instanceof INetworkProvider)
+									if (nodeTile instanceof IConnector)
 									{
 										if (nodeTile != splitPoint)
 										{
-											((INetworkProvider) nodeTile).setNetwork(this);
+											((IConnector) nodeTile).setNetwork(this);
 										}
 									}
 								}
@@ -322,17 +267,17 @@ public class ElectricityNetwork implements IElectricityNetwork
 								 * The connections A and B are not connected anymore. Give both of
 								 * them a new network.
 								 */
-								IElectricityNetwork newNetwork = new ElectricityNetwork();
+								IEnergyNetwork newNetwork = new Network();
 
 								for (Vector3 node : finder.closedSet)
 								{
 									TileEntity nodeTile = node.getTileEntity(((TileEntity) splitPoint).worldObj);
 
-									if (nodeTile instanceof INetworkProvider)
+									if (nodeTile instanceof IConnector)
 									{
 										if (nodeTile != splitPoint)
 										{
-											newNetwork.getConductors().add((IConductor) nodeTile);
+											newNetwork.getConnectors().add((IEnergyConductor) nodeTile);
 										}
 									}
 								}
@@ -349,6 +294,6 @@ public class ElectricityNetwork implements IElectricityNetwork
 	@Override
 	public String toString()
 	{
-		return "ElectricityNetwork[" + this.hashCode() + "|Wires:" + this.conductors.size() + "|Acceptors:" + this.electricalTiles.size() + "]";
+		return this.getClass().getSimpleName() + "[" + this.hashCode() + "|Connectors:" + this.connectorSet.size() + "|Acceptors:" + this.nodes.size() + "]";
 	}
 }

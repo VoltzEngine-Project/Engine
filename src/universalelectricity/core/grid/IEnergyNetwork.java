@@ -1,7 +1,7 @@
 package universalelectricity.core.grid;
 
 import net.minecraft.tileentity.TileEntity;
-import universalelectricity.api.IConductor;
+import universalelectricity.api.energy.IEnergyConductor;
 import universalelectricity.core.electricity.ElectricityPack;
 
 /**
@@ -10,7 +10,7 @@ import universalelectricity.core.electricity.ElectricityPack;
  * @author Calclavia
  * 
  */
-public interface IElectricityNetwork extends IGridNetwork<IElectricityNetwork, IConductor, TileEntity>
+public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IEnergyConductor, TileEntity>
 {
 	/**
 	 * Produces electricity in this electrical network.
@@ -29,7 +29,7 @@ public interface IElectricityNetwork extends IGridNetwork<IElectricityNetwork, I
 	/**
 	 * @return The total amount of resistance of this electrical network. In Ohms.
 	 */
-	public float getTotalResistance();
+	public float getTotalEnergyLoss();
 
 	/**
 	 * @return The lowest amount of current (amperage) that this electrical network can tolerate.

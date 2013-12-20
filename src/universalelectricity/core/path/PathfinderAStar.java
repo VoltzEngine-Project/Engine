@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.api.vector.Vector3;
 
 /**
  * An advanced version of pathfinding to find the shortest path between two points. Uses the A*
@@ -148,7 +148,7 @@ public class PathfinderAStar extends Pathfinder
 	 */
 	public double getHeuristicEstimatedCost(Vector3 start, Vector3 goal)
 	{
-		return start.distanceTo(goal);
+		return start.distance(goal);
 	}
 
 	/**
