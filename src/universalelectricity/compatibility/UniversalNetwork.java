@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.api.IConductor;
-import universalelectricity.api.IElectricityHandler;
+import universalelectricity.api.IEnergyInterfacer;
 import universalelectricity.api.INetworkConnection;
 import universalelectricity.api.INetworkProvider;
 import universalelectricity.core.electricity.ElectricalEvent.ElectricityProductionEvent;
@@ -72,9 +72,9 @@ public class UniversalNetwork extends ElectricityNetwork
 						{
 							if (remainingUsableEnergy > 0 && !Arrays.asList(ignoreTiles).contains(tileEntity))
 							{
-								if (tileEntity instanceof IElectricityHandler)
+								if (tileEntity instanceof IEnergyInterfacer)
 								{
-									IElectricityHandler electricalTile = (IElectricityHandler) tileEntity;
+									IEnergyInterfacer electricalTile = (IEnergyInterfacer) tileEntity;
 
 									for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
 									{
@@ -84,7 +84,7 @@ public class UniversalNetwork extends ElectricityNetwork
 
 											if (energyToSend > 0)
 											{
-												remainingUsableEnergy -= electricalTile.receiveElectricity(direction, energyToSend, true);
+												remainingUsableEnergy -= electricalTile.onReceiveEnergy(direction, energyToSend, true);
 											}
 										}
 									}
@@ -192,13 +192,13 @@ public class UniversalNetwork extends ElectricityNetwork
 			{
 				if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity)
 				{
-					if (tileEntity instanceof IElectricityHandler)
+					if (tileEntity instanceof IEnergyInterfacer)
 					{
 						for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
 						{
-							if (((IElectricityHandler) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
+							if (((IEnergyInterfacer) tileEntity).canConnect(direction) && this.getConductors().contains(VectorHelper.getConnectorFromSide(tileEntity.worldObj, new Vector3(tileEntity), direction)))
 							{
-								requests.add(ElectricityPack.getFromWatts(((IElectricityHandler) tileEntity).getRequest(direction), ((IElectricityHandler) tileEntity).getVoltage(direction)));
+								requests.add(ElectricityPack.getFromWatts(((IEnergyInterfacer) tileEntity).getRequest(direction), ((IEnergyInterfacer) tileEntity).getVoltage(direction)));
 							}
 						}
 						continue;
@@ -314,7 +314,7 @@ public class UniversalNetwork extends ElectricityNetwork
 
 					if (!(acceptor instanceof IConductor))
 					{
-						if (acceptor instanceof IElectricityHandler || acceptor instanceof IEnergyHandler || acceptor instanceof IEnergyAcceptor || acceptor instanceof IPowerReceptor)
+						if (acceptor instanceof IEnergyInterfacer || acceptor instanceof IEnergyHandler || acceptor instanceof IEnergyAcceptor || acceptor instanceof IPowerReceptor)
 						{
 							ArrayList<ForgeDirection> possibleDirections = null;
 
@@ -327,7 +327,7 @@ public class UniversalNetwork extends ElectricityNetwork
 								possibleDirections = new ArrayList<ForgeDirection>();
 							}
 
-							if (acceptor instanceof IElectricityHandler && ((IElectricityHandler) acceptor).canConnect(direction))
+							if (acceptor instanceof IEnergyInterfacer && ((IEnergyInterfacer) acceptor).canConnect(direction))
 							{
 								possibleDirections.add(direction);
 							}

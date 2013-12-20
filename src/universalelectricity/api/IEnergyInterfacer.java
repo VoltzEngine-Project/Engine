@@ -4,12 +4,12 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityPack;
 
 /**
- * Applied to all TileEntities that can interact with electricity.
+ * Applied to all TileEntities that can interact with energy.
  * 
- * @author Calclavia, King_Lemming
+ * @author Calclavia, Inspired by King_Lemming
  * 
  */
-public interface IElectricityHandler extends IConnector
+public interface IEnergyInterfacer extends IConnector
 {
 	/**
 	 * Adds electricity to an block. Returns the quantity of electricity that was accepted. This
@@ -20,7 +20,7 @@ public interface IElectricityHandler extends IConnector
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the block.
 	 */
-	public int receiveElectricity(ForgeDirection from, int receive, boolean doReceive);
+	public int onReceiveEnergy(ForgeDirection from, int receive, boolean doReceive);
 
 	/**
 	 * Adds electricity to an block. Returns the ElectricityPack, the electricity provided. This
@@ -31,17 +31,7 @@ public interface IElectricityHandler extends IConnector
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was given out by the block.
 	 */
-	public int extractElectricity(ForgeDirection from, int request, boolean doProvide);
-
-	/**
-	 * @return How much energy does this TileEntity want?
-	 */
-	public int getRequest(ForgeDirection direction);
-
-	/**
-	 * @return How much energy does this TileEntity want to provide?
-	 */
-	public int getProvide(ForgeDirection direction);
+	public int onExtractEnergy(ForgeDirection from, int request, boolean doProvide);
 
 	/**
 	 * Gets the voltage of this TileEntity.

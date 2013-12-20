@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import universalelectricity.api.IElectricityHandler;
+import universalelectricity.api.IEnergyInterfacer;
 import universalelectricity.compatibility.Compatibility;
 import universalelectricity.core.electricity.ElectricityPack;
 import buildcraft.api.power.PowerHandler;
@@ -21,7 +21,7 @@ import buildcraft.api.power.PowerHandler.PowerReceiver;
  * @author Calclavia
  * 
  */
-public abstract class IndustrialCraftTemplate extends TileEntity implements IEnergySink, IEnergySource, IElectricityHandler
+public abstract class IndustrialCraftTemplate extends TileEntity implements IEnergySink, IEnergySource, IEnergyInterfacer
 {
 	protected boolean isAddedToEnergyNet;
 
@@ -43,7 +43,7 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	@Override
 	public void drawEnergy(double amount)
 	{
-		this.extractElectricity(ForgeDirection.UNKNOWN, (int) (amount * Compatibility.IC2_RATIO), true);
+		this.onExtractEnergy(ForgeDirection.UNKNOWN, (int) (amount * Compatibility.IC2_RATIO), true);
 	}
 
 	@Override
@@ -103,9 +103,9 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	{
 		int toSend = (int) (amount * Compatibility.IC2_RATIO);
 
-		if (this.receiveElectricity(direction, toSend, false) > 0)
+		if (this.onReceiveEnergy(direction, toSend, false) > 0)
 		{
-			float receive = this.receiveElectricity(direction, toSend, true);
+			float receive = this.onReceiveEnergy(direction, toSend, true);
 
 			/*
 			 * Return the difference, since injectEnergy returns left over energy, and
@@ -120,7 +120,7 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	@Override
 	public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction)
 	{
-		return receiver instanceof IEnergyTile && this.extractElectricity(direction, 1, false) > 0;
+		return receiver instanceof IEnergyTile && this.onExtractEnergy(direction, 1, false) > 0;
 	}
 
 	@Override

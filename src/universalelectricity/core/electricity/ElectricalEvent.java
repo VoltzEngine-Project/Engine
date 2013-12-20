@@ -4,7 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.Cancelable;
 import net.minecraftforge.event.Event;
-import universalelectricity.api.IElectricityHandler;
+import universalelectricity.api.IEnergyInterfacer;
 import universalelectricity.core.grid.IElectricityNetwork;
 
 public class ElectricalEvent extends Event
@@ -19,9 +19,9 @@ public class ElectricalEvent extends Event
 	public static class ElectricityProduceEvent extends ElectricalEvent
 	{
 		public World world;
-		public IElectricityHandler tileEntity;
+		public IEnergyInterfacer tileEntity;
 
-		public ElectricityProduceEvent(IElectricityHandler tileEntity)
+		public ElectricityProduceEvent(IEnergyInterfacer tileEntity)
 		{
 			this.tileEntity = tileEntity;
 			this.world = ((TileEntity) this.tileEntity).worldObj;

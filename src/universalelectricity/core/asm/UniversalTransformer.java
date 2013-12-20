@@ -4,6 +4,7 @@
 package universalelectricity.core.asm;
 
 import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -26,6 +27,8 @@ import cofh.api.energy.IEnergyHandler;
  */
 public class UniversalTransformer implements IClassTransformer
 {
+	static LaunchClassLoader cl = (LaunchClassLoader) UniversalTransformer.class.getClassLoader();
+
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes)
 	{
@@ -52,7 +55,7 @@ public class UniversalTransformer implements IClassTransformer
 					if (impl != null)
 					{
 						changed |= impl.patch(cnode);
-						System.out.println("Injected Thermal Expansion API into: " + cnode.name);
+						System.out.println("[UniversalElectricity] Injected Thermal Expansion API into: " + cnode.name);
 					}
 				}
 

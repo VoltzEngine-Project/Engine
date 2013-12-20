@@ -2,8 +2,8 @@ package universalelectricity.core.asm.template;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.IElectricalStorage;
-import universalelectricity.api.IElectricityHandler;
+import universalelectricity.api.IEnergyContainer;
+import universalelectricity.api.IEnergyInterfacer;
 import universalelectricity.compatibility.Compatibility;
 import cofh.api.energy.IEnergyHandler;
 
@@ -13,24 +13,24 @@ import cofh.api.energy.IEnergyHandler;
  * @author Calclavia
  * 
  */
-public abstract class ThermalExpansionTemplate extends TileEntity implements IEnergyHandler, IElectricityHandler
+public abstract class ThermalExpansionTemplate extends TileEntity implements IEnergyHandler, IEnergyInterfacer
 {
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
 	{
-		return (int) (this.receiveElectricity(from, (int) (maxReceive * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
+		return (int) (StaticForwarder.receiveElectricity(this, from, (int) (maxReceive * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
 	}
 
 	@Override
 	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
 	{
-		return (int) (this.extractElectricity(from, (int) (maxExtract * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
+		return (int) (StaticForwarder.extractElectricity(this, from, (int) (maxExtract * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
 	}
 
 	@Override
 	public boolean canInterface(ForgeDirection from)
 	{
-		return this.canConnect(from);
+		return StaticForwarder.canConnect(this, from);
 	}
 
 	/**
@@ -39,9 +39,9 @@ public abstract class ThermalExpansionTemplate extends TileEntity implements IEn
 	@Override
 	public int getEnergyStored(ForgeDirection from)
 	{
-		if (this instanceof IElectricalStorage)
+		if (this instanceof IEnergyContainer)
 		{
-			return (int) (((IElectricalStorage) this).getEnergyStored(from) * Compatibility.TO_TE_RATIO);
+			return (int) (StaticForwarder.getElectricityStored((IEnergyContainer) this, from) * Compatibility.TO_TE_RATIO);
 		}
 
 		return 0;
@@ -53,9 +53,9 @@ public abstract class ThermalExpansionTemplate extends TileEntity implements IEn
 	@Override
 	public int getMaxEnergyStored(ForgeDirection from)
 	{
-		if (this instanceof IElectricalStorage)
+		if (this instanceof IEnergyContainer)
 		{
-			return (int) (((IElectricalStorage) this).getMaxEnergyStored(from) * Compatibility.TO_TE_RATIO);
+			return (int) (StaticForwarder.getMaxElectricity((IEnergyContainer) this, from) * Compatibility.TO_TE_RATIO);
 		}
 
 		return 0;

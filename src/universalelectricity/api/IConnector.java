@@ -3,7 +3,7 @@ package universalelectricity.api;
 import net.minecraftforge.common.ForgeDirection;
 
 /**
- * Applied to TileEntities that can connect to an electrical network.
+ * Applied to TileEntities that can connect to the network.
  * 
  * @author Calclavia
  * 
