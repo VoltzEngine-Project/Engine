@@ -6,20 +6,11 @@ package universalelectricity.core.asm;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
-import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
 
 import universalelectricity.core.asm.TemplateInjectionManager.InjectionTemplate;
-import universalelectricity.core.asm.template.ThermalExpansionTemplate;
-import cofh.api.energy.IEnergyHandler;
 
 /**
  * @author Calclavia
@@ -47,16 +38,40 @@ public class UniversalTransformer implements IClassTransformer
 			{
 				if (nodes.desc.equals("Luniversalelectricity/api/UniversalClass;"))
 				{
-					/**
-					 * Patch Thermal Expansion
+					/*
+					 * The 2nd value in UniversalClass is the annotation we're looking for to filter
+					 * out which mod to deal with.
 					 */
-					InjectionTemplate impl = TemplateInjectionManager.injectionTemplates.get(ThermalExpansionTemplate.class);
+					String flags = (String) nodes.values.get(1);
 
-					if (impl != null)
+					if (flags.equals("") || flags == null)
 					{
-						changed |= impl.patch(cnode);
-						System.out.println("[UniversalElectricity] Injected Thermal Expansion API into: " + cnode.name);
+						for (InjectionTemplate template : TemplateInjectionManager.injectionTemplates.values())
+						{
+							if (template != null)
+							{
+								changed |= template.patch(cnode);
+								System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
+							}
+						}
 					}
+					else
+					{
+						String[] separatedFlags = flags.split(";");
+
+						for (String separated : separatedFlags)
+						{
+							InjectionTemplate template = TemplateInjectionManager.injectionTemplates.get(separated);
+
+							if (template != null)
+							{
+								changed |= template.patch(cnode);
+								System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
+							}
+						}
+					}
+
+					break;
 				}
 
 			}

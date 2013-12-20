@@ -1,7 +1,5 @@
 package universalelectricity.api.vector;
 
-import universalelectricity.core.vector.Vector2;
-
 /**
  * Vector2 Class is used for defining objects in a 2D space.
  * 

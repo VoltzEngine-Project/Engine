@@ -20,7 +20,7 @@ public class StaticForwarder
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the block.
 	 */
-	public static int receiveElectricity(IEnergyInterface handler, ForgeDirection from, int receive, boolean doReceive)
+	public static int onReceiveEnergy(IEnergyInterface handler, ForgeDirection from, int receive, boolean doReceive)
 	{
 		return handler.onReceiveEnergy(from, receive, doReceive);
 	}
@@ -34,7 +34,7 @@ public class StaticForwarder
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was given out by the block.
 	 */
-	public static int extractElectricity(IEnergyInterface handler, ForgeDirection from, int request, boolean doProvide)
+	public static int onExtractEnergy(IEnergyInterface handler, ForgeDirection from, int request, boolean doProvide)
 	{
 		return handler.onExtractEnergy(from, request, doProvide);
 	}

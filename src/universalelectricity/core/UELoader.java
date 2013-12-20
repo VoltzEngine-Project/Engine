@@ -1,23 +1,30 @@
 package universalelectricity.core;
 
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
+
 import java.io.File;
 import java.util.Map;
 
 import net.minecraftforge.common.Configuration;
-import universalelectricity.api.Compatibility;
+import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
+import universalelectricity.core.asm.template.IndustrialCraftTemplate;
 import universalelectricity.core.asm.template.ThermalExpansionTemplate;
 import universalelectricity.core.grid.EnergyNetwork;
 import universalelectricity.core.grid.EnergyNetworkLoader;
+import universalelectricity.core.grid.NetworkTickHandler;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "UniversalElectricity", version = UniversalElectricity.VERSION, name = "Universal Electricity")
 @TransformerExclusions({ "universalelectricity.core.asm" })
@@ -25,7 +32,8 @@ public class UELoader implements IFMLLoadingPlugin
 {
 	static
 	{
-		TemplateInjectionManager.registerDefaultImpl(ThermalExpansionTemplate.class, IEnergyHandler.class);
+		TemplateInjectionManager.registerDefaultImpl(CompatibilityType.THERMAL_EXPANSION.name(), ThermalExpansionTemplate.class, IEnergyHandler.class);
+		TemplateInjectionManager.registerDefaultImpl(CompatibilityType.INDUSTRIALCRAFT.name(), IndustrialCraftTemplate.class, IEnergySink.class, IEnergySource.class);
 	}
 
 	/**
@@ -38,12 +46,18 @@ public class UELoader implements IFMLLoadingPlugin
 	{
 		/** Loads the configuration and sets all the values. */
 		CONFIGURATION.load();
-		Compatibility.IC2_RATIO = (float) CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", Compatibility.IC2_RATIO).getDouble(Compatibility.IC2_RATIO);
-		Compatibility.TE_RATIO = (float) CONFIGURATION.get("Compatiblity", "Thermal Expansion Conversion Ratio", Compatibility.TE_RATIO).getDouble(Compatibility.TE_RATIO);
-		Compatibility.BC3_RATIO = (float) CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", Compatibility.BC3_RATIO).getDouble(Compatibility.BC3_RATIO);
-		Compatibility.TO_IC2_RATIO = 1 / Compatibility.IC2_RATIO;
-		Compatibility.TO_BC_RATIO = 1 / Compatibility.BC3_RATIO;
+		CompatibilityType.THERMAL_EXPANSION.ratio = (float) CONFIGURATION.get("Compatiblity", "Thermal Expansion Conversion Ratio", CompatibilityType.THERMAL_EXPANSION.ratio).getDouble(CompatibilityType.THERMAL_EXPANSION.ratio);
+		CompatibilityType.INDUSTRIALCRAFT.ratio = (float) CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", CompatibilityType.INDUSTRIALCRAFT.ratio).getDouble(CompatibilityType.INDUSTRIALCRAFT.ratio);
+		CompatibilityType.BUILDCRAFT.ratio = (float) CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", CompatibilityType.BUILDCRAFT.ratio).getDouble(CompatibilityType.BUILDCRAFT.ratio);
+
+		CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio = 1 / CompatibilityType.THERMAL_EXPANSION.ratio;
+		CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio = 1 / CompatibilityType.INDUSTRIALCRAFT.ratio;
+		CompatibilityType.BUILDCRAFT.reciprocal_ratio = 1 / CompatibilityType.BUILDCRAFT.ratio;
+
 		CONFIGURATION.save();
+
+		TickRegistry.registerTickHandler(NetworkTickHandler.INSTANCE, Side.SERVER);
+
 		EnergyNetworkLoader.setNetworkClass(EnergyNetwork.class);
 	}
 

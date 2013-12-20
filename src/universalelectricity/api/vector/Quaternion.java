@@ -1,18 +1,12 @@
 package universalelectricity.api.vector;
 
-import universalelectricity.core.vector.Quaternion;
-import universalelectricity.core.vector.Vector3;
-
 /**
- * Quaternion class designed to be used for the rotation of objects.
- * 
- * Do not use in MC 1.6.4, subject to change!
+ * Quaternion class designed to be used for the rotation of objects. *
  * 
  * @author DarkGuardsman, Calclavia
  */
 public class Quaternion implements Cloneable
 {
-	public static final float TOLERANCE = 0.00001f;
 	public double x, y, z, w;
 
 	public Quaternion()
@@ -23,6 +17,11 @@ public class Quaternion implements Cloneable
 	public Quaternion(Quaternion copy)
 	{
 		this(copy.x, copy.y, copy.z, copy.w);
+	}
+
+	public Quaternion(Vector3 vector, double w)
+	{
+		this(vector.x, vector.y, vector.z, w);
 	}
 
 	public Quaternion(double x, double y, double z, double w)
@@ -56,11 +55,6 @@ public class Quaternion implements Cloneable
 		this.w = cosr * cosp * cosy + sinr * sinp * siny;
 
 		this.normalize();
-	}
-
-	public Quaternion(Vector3 vector, double w)
-	{
-		this(vector.x, vector.y, vector.z, w);
 	}
 
 	public static Quaternion IDENTITY()
@@ -173,19 +167,6 @@ public class Quaternion implements Cloneable
 		float sinAngle = (float) Math.sin(angle);
 		return new Quaternion(vn.x * sinAngle, vn.y * sinAngle, vn.z * sinAngle, Math.cos(angle));
 	}
-
-	/*
-	 * Convert to Matrix public Matrix4 getMatrix() { float x2 = (float) (x * x); float y2 = (float)
-	 * (y * y); float z2 = (float) (z * z); float xy = (float) (x * y); float xz = (float) (x * z);
-	 * float yz = (float) (y * z); float wx = (float) (w * x); float wy = (float) (w * y); float wz
-	 * = (float) (w * z);
-	 * 
-	 * // This calculation would be a lot more complicated for non-unit length quaternions // Note:
-	 * The constructor of Matrix4 expects the Matrix in column-major format like expected // by //
-	 * OpenGL return new Matrix4(1.0f - 2.0f * (y2 + z2), 2.0f * (xy - wz), 2.0f * (xz + wy), 0.0f,
-	 * 2.0f * (xy + wz), 1.0f - 2.0f * (x2 + z2), 2.0f * (yz - wx), 0.0f, 2.0f * (xz - wy), 2.0f *
-	 * (yz + wx), 1.0f - 2.0f * (x2 + y2), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f); }
-	 */
 
 	/**
 	 * Convert to Axis/Angles

@@ -18,13 +18,13 @@ public abstract class ThermalExpansionTemplate extends TileEntity implements IEn
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
 	{
-		return (int) (StaticForwarder.receiveElectricity(this, from, (int) (maxReceive * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
+		return (int) (StaticForwarder.onReceiveEnergy(this, from, (int) (maxReceive * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
 	}
 
 	@Override
 	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
 	{
-		return (int) (StaticForwarder.extractElectricity(this, from, (int) (maxExtract * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
+		return (int) (StaticForwarder.onExtractEnergy(this, from, (int) (maxExtract * Compatibility.TE_RATIO), !simulate) * Compatibility.TO_TE_RATIO);
 	}
 
 	@Override

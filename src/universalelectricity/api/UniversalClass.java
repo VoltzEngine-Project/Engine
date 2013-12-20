@@ -18,6 +18,16 @@ import universalelectricity.api.Compatibility.CompatibilityType;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface UniversalClass
-{	
-	public String integration() default "all";
+{
+	/**
+	 * The mods to integrate with.
+	 * 
+	 * e.g: "INDUSTRIALCRAFT;THERMAL_EXPANSION" <- Enable IC and TE compatibility.
+	 * e.g: "" <- Enable all mod compatibility
+	 * 
+	 * @return Return an empty string to be compatible with all available mods, or each
+	 * CompatibilityType's enum.name separated by semi-columns.
+	 * 
+	 */
+	public String integration() default "";
 }

@@ -1,4 +1,4 @@
-package universalelectricity.core.electricity;
+package universalelectricity.api.electricity;
 
 /**
  * An easy way to display information on electricity for the client.
@@ -86,10 +86,9 @@ public class ElectricityDisplay
 		}
 	}
 
-	/** By default, mods should store energy in Kilo-Joules, hence a multiplier of 1/1000. */
 	public static String getDisplay(float value, ElectricUnit unit, int decimalPlaces, boolean isShort)
 	{
-		return getDisplay(value, unit, decimalPlaces, isShort, 1000);
+		return getDisplay(value, unit, decimalPlaces, isShort, 1);
 	}
 
 	/**
