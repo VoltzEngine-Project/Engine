@@ -26,13 +26,26 @@ public abstract class CompatibilityModule
 	}
 
 	/**
+	 * Can the handler connect to this specific direction?
+	 */
+	public static boolean canConnect(Object handler, ForgeDirection direction)
+	{
+		if (isHandler(handler))
+		{
+			return energyHandlerCache.get(handler.getClass()).canConnect(handler, direction);
+		}
+
+		return false;
+	}
+
+	/**
 	 * Make the handler receive energy.
 	 * 
 	 * @return The actual energy that was used.
 	 */
 	public static long receiveEnergy(Object handler, ForgeDirection direction, long energy, boolean doReceive)
 	{
-		if (isEnergyHandler(handler))
+		if (isHandler(handler))
 		{
 			return energyHandlerCache.get(handler.getClass()).doReceiveEnergy(handler, direction, energy, doReceive);
 		}
@@ -45,7 +58,7 @@ public abstract class CompatibilityModule
 	 * 
 	 * @param handler
 	 */
-	public static boolean isEnergyHandler(Object handler)
+	public static boolean isHandler(Object handler)
 	{
 		Class clazz = handler.getClass();
 
@@ -56,7 +69,7 @@ public abstract class CompatibilityModule
 
 		for (CompatibilityModule module : CompatibilityModule.loadedModules)
 		{
-			if (module.isHandler(handler))
+			if (module.doIsHandler(handler))
 			{
 				energyHandlerCache.put(clazz, module);
 				return true;
@@ -68,6 +81,8 @@ public abstract class CompatibilityModule
 
 	public abstract long doReceiveEnergy(Object obj, ForgeDirection direction, long energy, boolean doReceive);
 
-	public abstract boolean isHandler(Object obj);
+	public abstract boolean doIsHandler(Object obj);
+
+	public abstract boolean doCanConnect(Object obj, ForgeDirection direction);
 
 }

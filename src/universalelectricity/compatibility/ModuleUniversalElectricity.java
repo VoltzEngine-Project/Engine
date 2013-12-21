@@ -17,8 +17,14 @@ public class ModuleUniversalElectricity extends CompatibilityModule
 	}
 
 	@Override
-	public boolean isHandler(Object obj)
+	public boolean doIsHandler(Object obj)
 	{
 		return obj instanceof IEnergyInterface;
+	}
+
+	@Override
+	public boolean doCanConnect(Object obj, ForgeDirection direction)
+	{
+		return ((IEnergyInterface) obj).canConnect(direction);
 	}
 }

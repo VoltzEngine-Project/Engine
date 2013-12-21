@@ -28,8 +28,14 @@ public class ModuleBuildCraft extends CompatibilityModule
 	}
 
 	@Override
-	public boolean isHandler(Object obj)
+	public boolean doIsHandler(Object obj)
 	{
 		return obj instanceof IPowerReceptor;
+	}
+
+	@Override
+	public boolean doCanConnect(Object obj, ForgeDirection direction)
+	{
+		return ((IPowerReceptor) obj).getPowerReceiver(direction) != null;
 	}
 }

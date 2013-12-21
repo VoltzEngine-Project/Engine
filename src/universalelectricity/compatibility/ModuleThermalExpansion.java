@@ -19,8 +19,14 @@ public class ModuleThermalExpansion extends CompatibilityModule
 	}
 
 	@Override
-	public boolean isHandler(Object obj)
+	public boolean doIsHandler(Object obj)
 	{
 		return obj instanceof IEnergyHandler;
+	}
+
+	@Override
+	public boolean doCanConnect(Object obj, ForgeDirection direction)
+	{
+		return ((IEnergyHandler) obj).canInterface(direction);
 	}
 }

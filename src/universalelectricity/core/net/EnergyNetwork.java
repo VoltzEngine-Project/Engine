@@ -100,7 +100,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 
 				if (obj != null)
 				{
-					if (CompatibilityModule.isEnergyHandler(obj))
+					if (CompatibilityModule.isHandler(obj))
 					{
 						this.handlerSet.add(obj);
 						this.handlerDirectionMap.put(obj, ForgeDirection.getOrientation(i).getOpposite());
