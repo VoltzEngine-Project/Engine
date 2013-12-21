@@ -24,7 +24,7 @@ public class EnergyNetworkLoader
 
 	static
 	{
-		setNetworkClass("universalelectricity.core.grid.EnergyNetwork");
+		setNetworkClass("universalelectricity.core.net.EnergyNetwork");
 	}
 
 	public static void setNetworkClass(Class<? extends IEnergyNetwork> networkClass)
