@@ -1,4 +1,4 @@
-package universalelectricity.core.item;
+package universalelectricity.api.item;
 
 import java.util.List;
 

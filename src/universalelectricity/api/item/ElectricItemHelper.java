@@ -1,4 +1,4 @@
-package universalelectricity.core.item;
+package universalelectricity.api.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
