@@ -14,14 +14,13 @@ public class Compatibility
 {
 	public static enum CompatibilityType
 	{
-		THERMAL_EXPANSION("ThermalExpansion", "Redstone Flux", "RF", 281.4f),
-		INDUSTRIALCRAFT("IC2", "Electrical Unit", "EU", 112.56f),
-		BUILDCRAFT("BuildCraft|Energy", "Minecraft Joule", "MJ", 28.14f);
+		THERMAL_EXPANSION("ThermalExpansion", "ThermalExpansion", "Redstone Flux", "RF", 281.4f),
+		INDUSTRIALCRAFT("IC2", "IndustrialCraft", "Electrical Unit", "EU", 112.56f),
+		BUILDCRAFT("BuildCraft|Energy", "BuildCraft", "Minecraft Joule", "MJ", 28.14f);
 
 		public final String modID;
-
+		public final String moduleName;
 		public final String fullUnit;
-
 		public final String unit;
 
 		/**
@@ -34,9 +33,16 @@ public class Compatibility
 		 */
 		public float reciprocal_ratio;
 
-		CompatibilityType(String modID, String fullUnit, String unit, float ratio)
+		/**
+		 * The Universal Electricity Loader will change this value to indicate if the module is
+		 * loaded or not.
+		 */
+		public boolean isModuleEnabled;
+
+		CompatibilityType(String modID, String moduleName, String fullUnit, String unit, float ratio)
 		{
 			this.modID = modID;
+			this.moduleName = moduleName;
 			this.fullUnit = fullUnit;
 			this.unit = unit;
 			this.ratio = ratio;
@@ -46,6 +52,19 @@ public class Compatibility
 		public boolean isLoaded()
 		{
 			return Loader.isModLoaded(this.modID);
+		}
+
+		public static CompatibilityType get(String moduleName)
+		{
+			for (CompatibilityType type : values())
+			{
+				if (moduleName.equals(type.moduleName))
+				{
+					return type;
+				}
+			}
+
+			return null;
 		}
 	}
 

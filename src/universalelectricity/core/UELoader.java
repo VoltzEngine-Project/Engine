@@ -32,8 +32,8 @@ public class UELoader implements IFMLLoadingPlugin
 {
 	static
 	{
-		TemplateInjectionManager.registerDefaultImpl(CompatibilityType.THERMAL_EXPANSION.name(), ThermalExpansionTemplate.class, IEnergyHandler.class);
-		TemplateInjectionManager.registerDefaultImpl(CompatibilityType.INDUSTRIALCRAFT.name(), IndustrialCraftTemplate.class, IEnergySink.class, IEnergySource.class);
+		TemplateInjectionManager.registerDefaultImpl(CompatibilityType.THERMAL_EXPANSION.moduleName, ThermalExpansionTemplate.class, IEnergyHandler.class);
+		TemplateInjectionManager.registerDefaultImpl(CompatibilityType.INDUSTRIALCRAFT.moduleName, IndustrialCraftTemplate.class, IEnergySink.class, IEnergySource.class);
 	}
 
 	/**
@@ -55,10 +55,14 @@ public class UELoader implements IFMLLoadingPlugin
 		CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio = 1 / CompatibilityType.INDUSTRIALCRAFT.ratio;
 		CompatibilityType.BUILDCRAFT.reciprocal_ratio = 1 / CompatibilityType.BUILDCRAFT.ratio;
 
+		for (CompatibilityType compatibility : CompatibilityType.values())
+		{
+			compatibility.isModuleEnabled = CONFIGURATION.get("Compatiblity", "Load " + compatibility.moduleName + " Module", true).getBoolean(true);
+		}
+
 		CONFIGURATION.save();
 
 		TickRegistry.registerTickHandler(NetworkTickHandler.INSTANCE, Side.SERVER);
-
 		EnergyNetworkLoader.setNetworkClass(EnergyNetwork.class);
 	}
 

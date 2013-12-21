@@ -1,5 +1,7 @@
 package universalelectricity.core.net;
 
+import java.util.Iterator;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -9,6 +11,7 @@ import universalelectricity.api.energy.IEnergyNetwork;
 import universalelectricity.api.net.IConnector;
 import universalelectricity.api.net.INetwork;
 import universalelectricity.api.vector.Vector3;
+import universalelectricity.compatibility.CompatibilityModule;
 import universalelectricity.core.path.ConnectionPathfinder;
 import universalelectricity.core.path.Pathfinder;
 
@@ -64,6 +67,22 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 			{
 				conductor.distribute();
 			}
+			/*
+			 * Object[] receivers = this.getConnections();
+			 * int energyUsed = 0;
+			 * for (int i = 0; i < receivers.length; i++)
+			 * {
+			 * ForgeDirection direction = ForgeDirection.getOrientation(i);
+			 * Object receiver = receivers[i];
+			 * if (receiver instanceof IEnergyInterface && !(receiver instanceof
+			 * IAdvancedConductor))
+			 * {
+			 * energyUsed += ((IEnergyInterface) receiver).onReceiveEnergy(direction.getOpposite(),
+			 * this.getNetwork().getDistribution(this), true);
+			 * }
+			 * }
+			 * this.buffer.extractEnergy(energyUsed, true);
+			 */
 		}
 	}
 
@@ -164,6 +183,41 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 				}
 			}
 		}
+	}
+
+	public void refresh()
+	{
+		this.handlerSet.clear();
+		Iterator<IConductor> it = this.connectorSet.iterator();
+
+		while (it.hasNext())
+		{
+			IConductor conductor = it.next();
+
+			for (TileEntity obj : conductor.getConnections())
+			{
+				if (obj != null)
+				{
+					if (this.isHandler(obj))
+					{
+						this.handlerSet.add(obj);
+					}
+				}
+			}
+		}
+	}
+
+	protected boolean isHandler(Object obj)
+	{
+		for (CompatibilityModule module : CompatibilityModule.loadedModules)
+		{
+			if (module.isHandler(obj))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
