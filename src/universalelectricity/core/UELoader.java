@@ -8,8 +8,10 @@ import java.util.Map;
 
 import net.minecraftforge.common.Configuration;
 import universalelectricity.api.Compatibility.CompatibilityType;
-import universalelectricity.api.energy.EnergyNetworkLoader;
+import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.UniversalElectricity;
+import universalelectricity.api.energy.EnergyNetworkLoader;
+import universalelectricity.compatibility.ModuleUniversalElectricity;
 import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
 import universalelectricity.core.asm.template.IndustrialCraftTemplate;
@@ -55,9 +57,24 @@ public class UELoader implements IFMLLoadingPlugin
 		CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio = 1 / CompatibilityType.INDUSTRIALCRAFT.ratio;
 		CompatibilityType.BUILDCRAFT.reciprocal_ratio = 1 / CompatibilityType.BUILDCRAFT.ratio;
 
+		CompatibilityModule.register(new ModuleUniversalElectricity());
+
 		for (CompatibilityType compatibility : CompatibilityType.values())
 		{
 			compatibility.isModuleEnabled = CONFIGURATION.get("Compatiblity", "Load " + compatibility.moduleName + " Module", true).getBoolean(true);
+
+			if (compatibility.isModuleEnabled)
+			{
+				try
+				{
+					CompatibilityModule.register((CompatibilityModule) Class.forName("universalelectricity.compatibility.Module" + compatibility.moduleName).newInstance());
+				}
+				catch (Exception e)
+				{
+					System.out.println("[Universal Electricity] Failed to load module: " + compatibility.moduleName);
+					e.printStackTrace();
+				}
+			}
 		}
 
 		CONFIGURATION.save();

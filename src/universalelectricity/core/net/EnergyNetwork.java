@@ -1,17 +1,19 @@
 package universalelectricity.core.net;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.electricity.ElectricalEvent.EnergyUpdateEvent;
 import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyNetwork;
 import universalelectricity.api.net.IConnector;
 import universalelectricity.api.net.INetwork;
 import universalelectricity.api.vector.Vector3;
-import universalelectricity.compatibility.CompatibilityModule;
 import universalelectricity.core.path.ConnectionPathfinder;
 import universalelectricity.core.path.Pathfinder;
 
@@ -21,16 +23,26 @@ import universalelectricity.core.path.Pathfinder;
  */
 public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntity> implements IEnergyNetwork
 {
-	private long cachedEnergyLoss = -1;
+	/**
+	 * The energy to be distributed on the next update.
+	 */
+	private long networkEnergyBuffer;
 
 	/**
-	 * The amount of energy set to be distributed per conductor.
+	 * The maximum buffer that the network can take. It is the average of all energy capacitance of
+	 * the conductors.
 	 */
-	private long energyDistribution;
-	private long energyDistributionPerSide;
+	private long networkBufferCapacity;
 
-	private long energyRemainderDistribution;
-	private long energyRemainderDistributionPerSide;
+	/**
+	 * The total energy loss of this network. The loss is based on the loss in each conductor.
+	 */
+	private long networkEnergyLoss;
+
+	/**
+	 * The direction in which a conductor is placed relative to a specific conductor.
+	 */
+	private HashMap<Object, ForgeDirection> handlerDirectionMap = new HashMap<Object, ForgeDirection>();
 
 	@Override
 	public void addConnector(IConductor connector)
@@ -47,42 +59,20 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 
 		if (!evt.isCanceled())
 		{
-			int totalEnergy = 0;
-
-			for (IConductor conductor : this.connectorSet)
-			{
-				totalEnergy += conductor.onExtractEnergy(null, conductor.getEnergyCapacitance(), true);
-			}
-
-			long energyLoss = getTotalEnergyLoss();
+			long totalEnergy = this.networkEnergyBuffer;
+			long energyLoss = this.networkEnergyLoss;
 			long totalUsableEnergy = totalEnergy - energyLoss;
 			long remainingUsableEnergy = totalUsableEnergy;
 
-			this.energyDistribution = (totalUsableEnergy / this.connectorSet.size());
-			this.energyDistributionPerSide = (this.energyDistribution / 6);
-			this.energyRemainderDistribution = (this.energyDistribution + totalUsableEnergy % this.connectorSet.size());
-			this.energyRemainderDistributionPerSide = (this.energyRemainderDistribution / 6);
-
-			for (IConductor conductor : this.connectorSet)
+			for (Object handler : this.handlerSet)
 			{
-				conductor.distribute();
+				if (remainingUsableEnergy >= 0)
+				{
+					remainingUsableEnergy -= CompatibilityModule.receiveEnergy(handler, handlerDirectionMap.get(handler), remainingUsableEnergy);
+				}
 			}
-			/*
-			 * Object[] receivers = this.getConnections();
-			 * int energyUsed = 0;
-			 * for (int i = 0; i < receivers.length; i++)
-			 * {
-			 * ForgeDirection direction = ForgeDirection.getOrientation(i);
-			 * Object receiver = receivers[i];
-			 * if (receiver instanceof IEnergyInterface && !(receiver instanceof
-			 * IAdvancedConductor))
-			 * {
-			 * energyUsed += ((IEnergyInterface) receiver).onReceiveEnergy(direction.getOpposite(),
-			 * this.getNetwork().getDistribution(this), true);
-			 * }
-			 * }
-			 * this.buffer.extractEnergy(energyUsed, true);
-			 */
+
+			this.networkEnergyBuffer = Math.max(remainingUsableEnergy, 0);
 		}
 	}
 
@@ -185,67 +175,38 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 		}
 	}
 
-	public void refresh()
+	/**
+	 * Clears all cache and reconstruct the network.
+	 */
+	public void reconstruct()
 	{
 		this.handlerSet.clear();
+		this.handlerDirectionMap.clear();
 		Iterator<IConductor> it = this.connectorSet.iterator();
 
 		while (it.hasNext())
 		{
 			IConductor conductor = it.next();
 
-			for (TileEntity obj : conductor.getConnections())
+			for (int i = 0; i < conductor.getConnections().length; i++)
 			{
+				TileEntity obj = conductor.getConnections()[i];
+
 				if (obj != null)
 				{
-					if (this.isHandler(obj))
+					if (CompatibilityModule.isEnergyHandler(obj))
 					{
 						this.handlerSet.add(obj);
+						this.handlerDirectionMap.put(obj, ForgeDirection.getOrientation(i).getOpposite());
 					}
 				}
 			}
-		}
-	}
 
-	protected boolean isHandler(Object obj)
-	{
-		for (CompatibilityModule module : CompatibilityModule.loadedModules)
-		{
-			if (module.isHandler(obj))
-			{
-				return true;
-			}
+			this.networkBufferCapacity += conductor.getEnergyCapacitance();
+			this.networkEnergyLoss += conductor.getEnergyLoss();
 		}
 
-		return false;
-	}
-
-	@Override
-	public long getDistribution(IConductor conductor)
-	{
-		return this.isFirstConnector(conductor) ? this.energyRemainderDistribution : this.energyDistribution;
-	}
-
-	@Override
-	public long getDistributionSide(IConductor conductor)
-	{
-		return this.isFirstConnector(conductor) ? this.energyRemainderDistributionPerSide : this.energyDistributionPerSide;
-	}
-
-	@Override
-	public long getTotalEnergyLoss()
-	{
-		if (this.cachedEnergyLoss == -1)
-		{
-			this.cachedEnergyLoss = 0;
-
-			for (IConductor conductor : this.getConnectors())
-			{
-				this.cachedEnergyLoss += conductor.getEnergyLoss();
-			}
-		}
-
-		return this.cachedEnergyLoss;
+		this.networkBufferCapacity /= this.connectorSet.size();
 	}
 
 }

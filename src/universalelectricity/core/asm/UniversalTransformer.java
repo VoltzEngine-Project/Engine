@@ -13,7 +13,6 @@ import org.objectweb.asm.tree.ClassNode;
 import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyInterface;
-import universalelectricity.compatibility.CompatibilityModule;
 import universalelectricity.core.asm.TemplateInjectionManager.InjectionTemplate;
 
 /**

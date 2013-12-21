@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.world.World;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.energy.UnitDisplay;
