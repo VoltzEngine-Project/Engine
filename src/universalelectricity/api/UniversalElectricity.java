@@ -20,7 +20,7 @@ public class UniversalElectricity
 	public static final String BUILD_VERSION = "@BUILD@";
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
-	public static float DEFAULT_VOLTAGE = 1000;
+	public static long DEFAULT_VOLTAGE = 1000;
 
 	/**
 	 * A general material that can be used by machines. Breakable by hand, suitable for machines.

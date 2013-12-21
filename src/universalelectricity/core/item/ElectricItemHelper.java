@@ -17,13 +17,13 @@ public class ElectricItemHelper
 	 * @param joules - The joules being provided to the electric item
 	 * @return The total amount of joules provided by the provider.
 	 */
-	public static float chargeItem(ItemStack itemStack, float joules)
+	public static long chargeItem(ItemStack itemStack, long joules)
 	{
 		if (itemStack != null)
 		{
-			if (itemStack.getItem() instanceof IItemElectric)
+			if (itemStack.getItem() instanceof IElectricalItem)
 			{
-				return ((IItemElectric) itemStack.getItem()).recharge(itemStack, Math.min(((IItemElectric) itemStack.getItem()).getTransfer(itemStack), joules), true);
+				return ((IElectricalItem) itemStack.getItem()).recharge(itemStack, joules, true);
 			}
 		}
 
@@ -36,13 +36,13 @@ public class ElectricItemHelper
 	 * @param joules - The joules being withdrawn from the electric item
 	 * @return The total amount of joules the provider received.
 	 */
-	public static float dischargeItem(ItemStack itemStack, float joules)
+	public static long dischargeItem(ItemStack itemStack, long joules)
 	{
 		if (itemStack != null)
 		{
-			if (itemStack.getItem() instanceof IItemElectric)
+			if (itemStack.getItem() instanceof IElectricalItem)
 			{
-				return ((IItemElectric) itemStack.getItem()).discharge(itemStack, Math.min(((IItemElectric) itemStack.getItem()).getMaxElectricityStored(itemStack), joules), true);
+				return ((IElectricalItem) itemStack.getItem()).discharge(itemStack, Math.min(((IElectricalItem) itemStack.getItem()).getElectricityCapacity(itemStack), joules), true);
 			}
 		}
 
@@ -56,13 +56,13 @@ public class ElectricItemHelper
 	 * 
 	 * @return An electrical ItemStack with a specific charge.
 	 */
-	public static ItemStack getWithCharge(ItemStack itemStack, float joules)
+	public static ItemStack getWithCharge(ItemStack itemStack, long joules)
 	{
 		if (itemStack != null)
 		{
-			if (itemStack.getItem() instanceof IItemElectric)
+			if (itemStack.getItem() instanceof IElectricalItem)
 			{
-				((IItemElectric) itemStack.getItem()).setElectricity(itemStack, joules);
+				((IElectricalItem) itemStack.getItem()).setElectricity(itemStack, joules);
 				return itemStack;
 			}
 		}
@@ -70,12 +70,12 @@ public class ElectricItemHelper
 		return itemStack;
 	}
 
-	public static ItemStack getWithCharge(Item item, float joules)
+	public static ItemStack getWithCharge(Item item, long joules)
 	{
 		return getWithCharge(new ItemStack(item), joules);
 	}
 
-	public static ItemStack getCloneWithCharge(ItemStack itemStack, float joules)
+	public static ItemStack getCloneWithCharge(ItemStack itemStack, long joules)
 	{
 		return getWithCharge(itemStack.copy(), joules);
 	}

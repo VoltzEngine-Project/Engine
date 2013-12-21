@@ -2,7 +2,7 @@ package universalelectricity.core.item;
 
 import net.minecraft.item.ItemStack;
 
-public interface IItemElectric
+public interface IElectricalItem
 {
 	/**
 	 * Adds energy to an item. Returns the quantity of energy that was accepted. This should always
@@ -13,7 +13,7 @@ public interface IItemElectric
 	 * @param doRecharge If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the item.
 	 */
-	public float recharge(ItemStack itemStack, float energy, boolean doRecharge);
+	public long recharge(ItemStack itemStack, long energy, boolean doRecharge);
 
 	/**
 	 * Removes energy from an item. Returns the quantity of energy that was removed. This should
@@ -24,33 +24,24 @@ public interface IItemElectric
 	 * @param doDischarge If false, the discharge will only be simulated.
 	 * @return Amount of energy that was removed from the item.
 	 */
-	public float discharge(ItemStack itemStack, float energy, boolean doDischarge);
+	public long discharge(ItemStack itemStack, long energy, boolean doDischarge);
 
 	/**
 	 * Get the amount of energy currently stored in the item.
 	 */
-	public float getElectricityStored(ItemStack theItem);
+	public long getElectricityStored(ItemStack theItem);
 
 	/**
 	 * Get the max amount of energy that can be stored in the item.
 	 */
-	public float getMaxElectricityStored(ItemStack theItem);
+	public long getElectricityCapacity(ItemStack theItem);
 
 	/**
-	 * Sets the amount of energy in the ItemStack.
+	 * Sets the amount of energy in the ItemStack. Use recharge or discharge instead of calling this
+	 * to be safer!
 	 * 
 	 * @param itemStack - the ItemStack.
-	 * @param joules - Amount of electrical energy.
+	 * @param energy - Amount of electrical energy.
 	 */
-	public void setElectricity(ItemStack itemStack, float joules);
-
-	/**
-	 * @return the energy request this ItemStack demands.
-	 */
-	public float getTransfer(ItemStack itemStack);
-
-	/**
-	 * @return The voltage in which this item runs on.
-	 */
-	public float getVoltage(ItemStack itemStack);
+	public void setElectricity(ItemStack itemStack, long energy);
 }
