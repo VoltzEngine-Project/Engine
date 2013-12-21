@@ -16,5 +16,5 @@ public interface IVoltage
 	 * 
 	 * @return The amount of volts. E.g 120v or 240v
 	 */
-	public int getVoltage(ForgeDirection direction);
+	public long getVoltage(ForgeDirection direction);
 }

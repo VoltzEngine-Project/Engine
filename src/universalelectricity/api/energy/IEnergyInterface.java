@@ -19,7 +19,7 @@ public interface IEnergyInterface
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the block.
 	 */
-	public int onReceiveEnergy(ForgeDirection from, int receive, boolean doReceive);
+	public long onReceiveEnergy(ForgeDirection from, long receive, boolean doReceive);
 
 	/**
 	 * Adds energy to an block. Returns the energyPack, the energy provided. This
@@ -30,7 +30,7 @@ public interface IEnergyInterface
 	 * @param doExtract If false, the charge will only be simulated.
 	 * @return Amount of energy that was given out by the block.
 	 */
-	public int onExtractEnergy(ForgeDirection from, int request, boolean doExtract);
+	public long onExtractEnergy(ForgeDirection from, long request, boolean doExtract);
 
 	/**
 	 * Can this TileEntity connect with another?

@@ -52,7 +52,7 @@ public class StaticForwarder
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the block.
 	 */
-	public static int onReceiveEnergy(IEnergyInterface handler, ForgeDirection from, int receive, boolean doReceive)
+	public static long onReceiveEnergy(IEnergyInterface handler, ForgeDirection from, long receive, boolean doReceive)
 	{
 		return handler.onReceiveEnergy(from, receive, doReceive);
 	}
@@ -66,7 +66,7 @@ public class StaticForwarder
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was given out by the block.
 	 */
-	public static int onExtractEnergy(IEnergyInterface handler, ForgeDirection from, int request, boolean doProvide)
+	public static long onExtractEnergy(IEnergyInterface handler, ForgeDirection from, long request, boolean doProvide)
 	{
 		return handler.onExtractEnergy(from, request, doProvide);
 	}
@@ -76,17 +76,17 @@ public class StaticForwarder
 	 * 
 	 * @return The amount of volts. E.g 120v or 240v
 	 */
-	public static int getVoltage(IVoltage handler, ForgeDirection direction)
+	public static long getVoltage(IVoltage handler, ForgeDirection direction)
 	{
 		return handler.getVoltage(direction);
 	}
 
-	public static int getElectricityStored(IEnergyContainer handler, ForgeDirection from)
+	public static long getElectricityStored(IEnergyContainer handler, ForgeDirection from)
 	{
 		return handler.getEnergy(from);
 	}
 
-	public static float getMaxElectricity(IEnergyContainer handler, ForgeDirection from)
+	public static long getMaxElectricity(IEnergyContainer handler, ForgeDirection from)
 	{
 		return handler.getEnergyCapacity(from);
 	}

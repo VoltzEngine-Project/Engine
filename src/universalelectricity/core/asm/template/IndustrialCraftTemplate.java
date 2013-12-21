@@ -72,7 +72,7 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 
 		if (StaticForwarder.onReceiveEnergy(this, direction, toSend, false) > 0)
 		{
-			int receive = StaticForwarder.onReceiveEnergy(this, direction, toSend, true);
+			long receive = StaticForwarder.onReceiveEnergy(this, direction, toSend, true);
 
 			/*
 			 * Return the difference, since injectEnergy returns left over energy, and

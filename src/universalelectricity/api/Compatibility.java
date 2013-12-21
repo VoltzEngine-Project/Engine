@@ -3,6 +3,11 @@ package universalelectricity.api;
 import cpw.mods.fml.common.Loader;
 
 /**
+ * ORDER OF MAGNITUDE:
+ * A coal in Universal Electricity (based on an estimate in real life) is worth 4MJ.
+ * A fission reactor should make around 4-9GW.
+ * A fusion reactor would go into the tera-watts.
+ * 
  * @author Calclavia
  */
 public class Compatibility
