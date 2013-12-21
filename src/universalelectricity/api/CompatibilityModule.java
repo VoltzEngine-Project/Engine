@@ -32,7 +32,7 @@ public abstract class CompatibilityModule
 	{
 		if (isHandler(handler))
 		{
-			return energyHandlerCache.get(handler.getClass()).canConnect(handler, direction);
+			return energyHandlerCache.get(handler.getClass()).doCanConnect(handler, direction);
 		}
 
 		return false;
@@ -60,19 +60,22 @@ public abstract class CompatibilityModule
 	 */
 	public static boolean isHandler(Object handler)
 	{
-		Class clazz = handler.getClass();
-
-		if (energyHandlerCache.containsKey(clazz))
+		if (handler != null)
 		{
-			return true;
-		}
+			Class clazz = handler.getClass();
 
-		for (CompatibilityModule module : CompatibilityModule.loadedModules)
-		{
-			if (module.doIsHandler(handler))
+			if (energyHandlerCache.containsKey(clazz))
 			{
-				energyHandlerCache.put(clazz, module);
 				return true;
+			}
+
+			for (CompatibilityModule module : CompatibilityModule.loadedModules)
+			{
+				if (module.doIsHandler(handler))
+				{
+					energyHandlerCache.put(clazz, module);
+					return true;
+				}
 			}
 		}
 
