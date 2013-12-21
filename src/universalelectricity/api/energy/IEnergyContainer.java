@@ -14,7 +14,7 @@ public interface IEnergyContainer
 	 * 
 	 * This function is NOT recommended for calling.
 	 */
-	public void setEnergy(long energy);
+	public void setEnergy(ForgeDirection from, long energy);
 
 	/**
 	 * * @return Get the amount of energy currently stored in the block.
