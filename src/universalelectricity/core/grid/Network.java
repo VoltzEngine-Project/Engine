@@ -3,6 +3,8 @@ package universalelectricity.core.grid;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import universalelectricity.api.INetwork;
+
 /**
  * An grid-like, world cable-based network.
  * 

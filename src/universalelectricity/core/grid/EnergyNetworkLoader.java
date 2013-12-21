@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import universalelectricity.api.energy.IConductor;
+import universalelectricity.api.energy.IEnergyNetwork;
 import cpw.mods.fml.common.FMLLog;
 
 /**

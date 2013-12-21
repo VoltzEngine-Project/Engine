@@ -1,7 +1,6 @@
 package universalelectricity.api.energy;
 
 import universalelectricity.api.IConnector;
-import universalelectricity.core.grid.IEnergyNetwork;
 
 /**
  * A connector for {EnergyNetwork}.

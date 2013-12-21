@@ -17,10 +17,7 @@ import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 
-import codechicken.lib.asm.CC_ClassWriter;
-import codechicken.lib.asm.InsnListPrinter;
-import codechicken.lib.asm.InstructionComparator;
-import codechicken.lib.asm.InstructionComparator.InsnListSection;
+import universalelectricity.core.asm.InstructionComparator.InsnListSection;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;

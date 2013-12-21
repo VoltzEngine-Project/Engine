@@ -1,7 +1,7 @@
-package universalelectricity.core.grid;
+package universalelectricity.api.energy;
 
 import net.minecraft.tileentity.TileEntity;
-import universalelectricity.api.energy.IConductor;
+import universalelectricity.api.INetwork;
 import universalelectricity.core.electricity.ElectricityPack;
 
 /**
