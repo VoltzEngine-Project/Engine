@@ -68,25 +68,25 @@ public class UnitDisplay
 		}
 
 		/** Divides the value by the unit value start */
-		public double process(long value)
+		public double process(double value)
 		{
 			return value / this.value;
 		}
 
 		/** Checks if a value is above the unit value start */
-		public boolean isAbove(long value)
+		public boolean isAbove(double value)
 		{
 			return value > this.value;
 		}
 
 		/** Checks if a value is lower than the unit value start */
-		public boolean isBellow(long value)
+		public boolean isBellow(double value)
 		{
 			return value < this.value;
 		}
 	}
 
-	public static String getDisplay(long value, Unit unit, int decimalPlaces, boolean isShort)
+	public static String getDisplay(double value, Unit unit, int decimalPlaces, boolean isShort)
 	{
 		return getDisplay(value, unit, decimalPlaces, isShort, 1);
 	}
@@ -96,7 +96,7 @@ public class UnitDisplay
 	 * front of the output string showing this. Use string.replace to remove the negative sign if
 	 * unwanted
 	 */
-	public static String getDisplay(long value, Unit unit, int decimalPlaces, boolean isShort, long multiplier)
+	public static String getDisplay(double value, Unit unit, int decimalPlaces, boolean isShort, long multiplier)
 	{
 		String unitName = unit.name;
 		String prefix = "";
@@ -125,6 +125,7 @@ public class UnitDisplay
 			for (int i = 0; i < UnitPrefix.values().length; i++)
 			{
 				UnitPrefix lowerMeasure = UnitPrefix.values()[i];
+				
 				if (lowerMeasure.isBellow(value) && lowerMeasure.ordinal() == 0)
 				{
 					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(isShort) + unitName;
@@ -133,7 +134,9 @@ public class UnitDisplay
 				{
 					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(isShort) + unitName;
 				}
+				
 				UnitPrefix upperMeasure = UnitPrefix.values()[i + 1];
+				
 				if ((lowerMeasure.isAbove(value) && upperMeasure.isBellow(value)) || lowerMeasure.value == value)
 				{
 					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(isShort) + unitName;
@@ -144,22 +147,22 @@ public class UnitDisplay
 		return prefix + roundDecimals(value, decimalPlaces) + " " + unitName;
 	}
 
-	public static String getDisplay(long value, Unit unit)
+	public static String getDisplay(double value, Unit unit)
 	{
 		return getDisplay(value, unit, 2, false);
 	}
 
-	public static String getDisplayShort(long value, Unit unit)
+	public static String getDisplayShort(double value, Unit unit)
 	{
 		return getDisplay(value, unit, 2, true);
 	}
 
-	public static String getDisplayShort(long value, Unit unit, int decimalPlaces)
+	public static String getDisplayShort(double value, Unit unit, int decimalPlaces)
 	{
 		return getDisplay(value, unit, decimalPlaces, true);
 	}
 
-	public static String getDisplaySimple(long value, Unit unit, int decimalPlaces)
+	public static String getDisplaySimple(double value, Unit unit, int decimalPlaces)
 	{
 		if (value > 1)
 		{
