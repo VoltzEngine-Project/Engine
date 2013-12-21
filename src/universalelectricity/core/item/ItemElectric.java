@@ -11,8 +11,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.world.World;
-import universalelectricity.api.electricity.ElectricityDisplay;
-import universalelectricity.api.electricity.ElectricityDisplay.ElectricUnit;
+import universalelectricity.api.energy.UnitDisplay;
+import universalelectricity.api.energy.UnitDisplay.Unit;
 
 /** Extend from this class if your item requires electricity or to be charged. Optionally, you can
  * implement IItemElectric instead.
@@ -47,7 +47,7 @@ public abstract class ItemElectric extends Item implements IItemElectric
             color = "\u00a76";
         }
 
-        list.add(color + ElectricityDisplay.getDisplayShort(joules, ElectricUnit.JOULES) + "/" + ElectricityDisplay.getDisplayShort(this.getMaxElectricityStored(itemStack), ElectricUnit.JOULES));
+        list.add(color + UnitDisplay.getDisplayShort(joules, Unit.JOULES) + "/" + UnitDisplay.getDisplayShort(this.getMaxElectricityStored(itemStack), Unit.JOULES));
     }
 
     /** Makes sure the item is uncharged when it is crafted and not charged. Change this if you do

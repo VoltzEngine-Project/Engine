@@ -60,7 +60,7 @@ public class Vector2 implements Cloneable
 		return yDiference / xDifference;
 	}
 
-	public double distanceTo(Vector2 target)
+	public double distance(Vector2 target)
 	{
 		double xDifference = this.x - target.x;
 		double yDifference = this.y - target.y;
