@@ -9,6 +9,9 @@ import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
 /**
+ * A ticker to update all networks. Register your custom network here to have it ticked by Universal
+ * Electricity.
+ * 
  * @author Calclavia
  * 
  */
@@ -16,8 +19,16 @@ public class NetworkTickHandler implements ITickHandler
 {
 	public static final NetworkTickHandler INSTANCE = new NetworkTickHandler();
 
-	public static final LinkedHashSet<INetwork> toAddNetworks = new LinkedHashSet<INetwork>();
-	public static final LinkedHashSet<INetwork> networks = new LinkedHashSet<INetwork>();
+	private final LinkedHashSet<INetwork> toAddNetworks = new LinkedHashSet<INetwork>();
+	private final LinkedHashSet<INetwork> networks = new LinkedHashSet<INetwork>();
+
+	public static void addNetwork(INetwork network)
+	{
+		if (!INSTANCE.networks.contains(network))
+		{
+			INSTANCE.toAddNetworks.add(network);
+		}
+	}
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
@@ -36,11 +47,12 @@ public class NetworkTickHandler implements ITickHandler
 		{
 			INetwork network = it.next();
 
-			if (network.getConnectors().size() > 0)
+			if (network.canUpdate())
 			{
 				network.update();
 			}
-			else
+
+			if (!network.continueUpdate())
 			{
 				it.remove();
 			}

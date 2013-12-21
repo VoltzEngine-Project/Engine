@@ -32,13 +32,16 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 	 * The maximum buffer that the network can take. It is the average of all energy capacitance of
 	 * the conductors.
 	 */
-	private long networkBufferCapacity;
+	private long energyBufferCapacity;
 
 	/**
 	 * The total energy loss of this network. The loss is based on the loss in each conductor.
 	 */
 	private long networkEnergyLoss;
 
+	/**
+	 * The total energy buffer in the last tick.
+	 */
 	private long lastEnergyBuffer;
 
 	/**
@@ -63,29 +66,38 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 		{
 			int handlerSize = this.handlerSet.size();
 
-			if (handlerSize > 0)
+			this.lastEnergyBuffer = this.energyBuffer;
+			long totalUsableEnergy = this.energyBuffer - this.networkEnergyLoss;
+			long energyPerHandler = totalUsableEnergy / handlerSize;
+			long energyRemainderHandler = (energyPerHandler + totalUsableEnergy % handlerSize);
+			long remainingUsableEnergy = totalUsableEnergy;
+
+			boolean isFirst = true;
+
+			for (Object handler : this.handlerSet)
 			{
-				this.lastEnergyBuffer = this.energyBuffer;
-				long totalUsableEnergy = this.energyBuffer - this.networkEnergyLoss;
-				long energyPerHandler = totalUsableEnergy / handlerSize;
-				long energyRemainderHandler = (energyPerHandler + totalUsableEnergy % handlerSize);
-				long remainingUsableEnergy = totalUsableEnergy;
-
-				boolean isFirst = true;
-
-				for (Object handler : this.handlerSet)
+				if (remainingUsableEnergy >= 0)
 				{
-					if (remainingUsableEnergy >= 0)
-					{
-						remainingUsableEnergy -= CompatibilityModule.receiveEnergy(handler, this.handlerDirectionMap.get(handler), isFirst ? energyRemainderHandler : energyPerHandler, true);
-					}
-
-					isFirst = false;
+					remainingUsableEnergy -= CompatibilityModule.receiveEnergy(handler, this.handlerDirectionMap.get(handler), isFirst ? energyRemainderHandler : energyPerHandler, true);
 				}
 
-				this.energyBuffer = Math.max(remainingUsableEnergy, 0);
+				isFirst = false;
 			}
+
+			this.energyBuffer = Math.max(remainingUsableEnergy, 0);
 		}
+	}
+
+	@Override
+	public boolean canUpdate()
+	{
+		return this.getConnectors().size() > 0 && this.getNodes().size() > 0 && this.energyBuffer > 0 && this.energyBufferCapacity > 0;
+	}
+
+	@Override
+	public boolean continueUpdate()
+	{
+		return this.canUpdate();
 	}
 
 	/**
@@ -94,33 +106,41 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 	@Override
 	public void reconstruct()
 	{
-		this.handlerSet.clear();
-		this.handlerDirectionMap.clear();
-		Iterator<IConductor> it = this.connectorSet.iterator();
-
-		while (it.hasNext())
+		if (this.connectorSet.size() > 0)
 		{
-			IConductor conductor = it.next();
+			this.handlerSet.clear();
+			this.handlerDirectionMap.clear();
+			Iterator<IConductor> it = this.connectorSet.iterator();
 
-			for (int i = 0; i < conductor.getConnections().length; i++)
+			while (it.hasNext())
 			{
-				TileEntity obj = conductor.getConnections()[i];
+				IConductor conductor = it.next();
 
-				if (obj != null)
+				for (int i = 0; i < conductor.getConnections().length; i++)
 				{
-					if (CompatibilityModule.isHandler(obj))
+					TileEntity obj = conductor.getConnections()[i];
+
+					if (obj != null)
 					{
-						this.handlerSet.add(obj);
-						this.handlerDirectionMap.put(obj, ForgeDirection.getOrientation(i).getOpposite());
+						if (CompatibilityModule.isHandler(obj))
+						{
+							this.handlerSet.add(obj);
+							this.handlerDirectionMap.put(obj, ForgeDirection.getOrientation(i).getOpposite());
+						}
 					}
 				}
+
+				this.energyBufferCapacity += conductor.getEnergyCapacitance();
+				this.networkEnergyLoss += conductor.getEnergyLoss();
 			}
 
-			this.networkBufferCapacity += conductor.getEnergyCapacitance();
-			this.networkEnergyLoss += conductor.getEnergyLoss();
-		}
+			this.energyBufferCapacity /= this.connectorSet.size();
 
-		this.networkBufferCapacity /= this.connectorSet.size();
+			if (this.handlerSet.size() > 0)
+			{
+				NetworkTickHandler.addNetwork(this);
+			}
+		}
 	}
 
 	@Override
@@ -225,8 +245,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 	@Override
 	public long produce(long amount)
 	{
-		long receive = Math.min(this.networkBufferCapacity - amount, amount);
+		long receive = Math.min(this.energyBufferCapacity - amount, amount);
 		this.energyBuffer += receive;
+		NetworkTickHandler.addNetwork(this);
 		return receive;
 	}
 
@@ -235,5 +256,4 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 	{
 		return this.lastEnergyBuffer;
 	}
-
 }

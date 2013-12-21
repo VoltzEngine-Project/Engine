@@ -1,8 +1,10 @@
 package universalelectricity.core.net;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import net.minecraft.tileentity.TileEntity;
 import universalelectricity.api.net.INetwork;
 
 /**
@@ -29,11 +31,6 @@ public abstract class Network<N, C, A> implements INetwork<N, C, A>
 	public void addConnector(C connector)
 	{
 		this.connectorSet.add(connector);
-
-		if (!NetworkTickHandler.INSTANCE.networks.contains(this))
-		{
-			NetworkTickHandler.INSTANCE.toAddNetworks.add(this);
-		}
 	}
 
 	@Override
@@ -46,6 +43,12 @@ public abstract class Network<N, C, A> implements INetwork<N, C, A>
 	public Set<C> getConnectors()
 	{
 		return this.connectorSet;
+	}
+
+	@Override
+	public Set<A> getNodes()
+	{
+		return this.handlerSet;
 	}
 
 	@Override

@@ -1,12 +1,13 @@
 package universalelectricity.api.net;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Implement this in your network class/interface if you plan to have your own network defined by
  * specific conductors and acceptors.
  * 
- * @author aidancbrady
+ * @author Calclavia, Aidancbrady
  * 
  * @param <N> - the class/interface Type value in which you implement this
  * @param <C> - the class/interface Type which makes up the network's connector set
@@ -24,6 +25,24 @@ public interface INetwork<N, C, A>
 	 * @return conductor set
 	 */
 	public Set<C> getConnectors();
+
+	/**
+	 * * @return The list of nodes in the network.
+	 */
+	public Set<A> getNodes();
+
+	/**
+	 * Can the network update?
+	 * 
+	 * @return True if the network can update, otherwise the network tick handler will remove the
+	 * network from the tick list.
+	 */
+	public boolean canUpdate();
+
+	/**
+	 * @return True to leave the network in the ticker. False to remove the network from the ticker.
+	 */
+	public boolean continueUpdate();
 
 	/**
 	 * Updates the network. Called by the {NetworkTickHandler}.
