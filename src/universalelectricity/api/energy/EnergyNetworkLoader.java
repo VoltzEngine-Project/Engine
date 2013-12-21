@@ -1,15 +1,14 @@
-package universalelectricity.core.grid;
+package universalelectricity.api.energy;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import universalelectricity.api.energy.IConductor;
-import universalelectricity.api.energy.IEnergyNetwork;
 import cpw.mods.fml.common.FMLLog;
 
 /**
- * A dynamic network loader for injecting energy networks (NOT for other networks such as fuild networks).
+ * A dynamic network loader for injecting energy networks (NOT for other networks such as fuild
+ * networks).
  * Example usage would be that ElectricityNetwork replaces EnergyNetwork.
  * 
  * @author Calclavia
@@ -25,7 +24,7 @@ public class EnergyNetworkLoader
 
 	static
 	{
-		setNetworkClass("universalelectricity.core.grid.ElectricityNetwork");
+		setNetworkClass("universalelectricity.core.grid.EnergyNetwork");
 	}
 
 	public static void setNetworkClass(Class<? extends IEnergyNetwork> networkClass)

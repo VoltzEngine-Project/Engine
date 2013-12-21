@@ -8,13 +8,13 @@ import java.util.Map;
 
 import net.minecraftforge.common.Configuration;
 import universalelectricity.api.Compatibility.CompatibilityType;
+import universalelectricity.api.energy.EnergyNetworkLoader;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
 import universalelectricity.core.asm.template.IndustrialCraftTemplate;
 import universalelectricity.core.asm.template.ThermalExpansionTemplate;
 import universalelectricity.core.grid.EnergyNetwork;
-import universalelectricity.core.grid.EnergyNetworkLoader;
 import universalelectricity.core.grid.NetworkTickHandler;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Loader;

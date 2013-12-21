@@ -30,7 +30,7 @@ public interface IEnergyInterface
 	 * @param doExtract If false, the charge will only be simulated.
 	 * @return Amount of energy that was given out by the block.
 	 */
-	public long onExtractEnergy(ForgeDirection from, long request, boolean doExtract);
+	public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract);
 
 	/**
 	 * Can this TileEntity connect with another?
