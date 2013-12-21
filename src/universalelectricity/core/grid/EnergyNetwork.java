@@ -16,16 +16,16 @@ import universalelectricity.core.path.Pathfinder;
  */
 public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntity> implements IEnergyNetwork
 {
-	private int cachedEnergyLoss = -1;
+	private long cachedEnergyLoss = -1;
 
 	/**
 	 * The amount of energy set to be distributed per conductor.
 	 */
-	private int energyDistribution;
-	private int energyDistributionPerSide;
+	private long energyDistribution;
+	private long energyDistributionPerSide;
 
-	private int energyRemainderDistribution;
-	private int energyRemainderDistributionPerSide;
+	private long energyRemainderDistribution;
+	private long energyRemainderDistributionPerSide;
 
 	@Override
 	public void addConnector(IConductor connector)
@@ -49,9 +49,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 				totalEnergy += conductor.onExtractEnergy(null, conductor.getEnergyCapacitance(), true);
 			}
 
-			int energyLoss = getTotalEnergyLoss();
-			int totalUsableEnergy = totalEnergy - energyLoss;
-			int remainingUsableEnergy = totalUsableEnergy;
+			long energyLoss = getTotalEnergyLoss();
+			long totalUsableEnergy = totalEnergy - energyLoss;
+			long remainingUsableEnergy = totalUsableEnergy;
 
 			this.energyDistribution = (totalUsableEnergy / this.connectorSet.size());
 			this.energyDistributionPerSide = (this.energyDistribution / 6);
@@ -165,19 +165,19 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 	}
 
 	@Override
-	public int getDistribution(IConductor conductor)
+	public long getDistribution(IConductor conductor)
 	{
 		return this.isFirstConnector(conductor) ? this.energyRemainderDistribution : this.energyDistribution;
 	}
 
 	@Override
-	public int getDistributionSide(IConductor conductor)
+	public long getDistributionSide(IConductor conductor)
 	{
 		return this.isFirstConnector(conductor) ? this.energyRemainderDistributionPerSide : this.energyDistributionPerSide;
 	}
 
 	@Override
-	public int getTotalEnergyLoss()
+	public long getTotalEnergyLoss()
 	{
 		if (this.cachedEnergyLoss == -1)
 		{
