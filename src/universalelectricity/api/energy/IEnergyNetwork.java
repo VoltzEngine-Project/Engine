@@ -15,4 +15,17 @@ public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Til
 	 * Reconstructs the energy network.
 	 */
 	public void reconstruct();
+
+	/**
+	 * Produces power to the energy network.
+	 * 
+	 * @param receive - The amount that is produced.
+	 * @return - The amount that was accepted by the network.
+	 */
+	public long produce(long receive);
+
+	/**
+	 * @return The last buffer in the network that was sent to all energy handlers.
+	 */
+	public long getLastBuffer();
 }

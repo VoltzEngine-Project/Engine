@@ -1,7 +1,6 @@
 package universalelectricity.compatibility;
 
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.Compatibility;
 import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.CompatibilityModule;
 import cofh.api.energy.IEnergyHandler;

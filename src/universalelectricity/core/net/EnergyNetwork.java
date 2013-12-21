@@ -26,7 +26,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 	/**
 	 * The energy to be distributed on the next update.
 	 */
-	private long networkEnergyBuffer;
+	private long energyBuffer;
 
 	/**
 	 * The maximum buffer that the network can take. It is the average of all energy capacitance of
@@ -38,6 +38,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 	 * The total energy loss of this network. The loss is based on the loss in each conductor.
 	 */
 	private long networkEnergyLoss;
+
+	private long lastEnergyBuffer;
 
 	/**
 	 * The direction in which a conductor is placed relative to a specific conductor.
@@ -59,7 +61,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 
 		if (!evt.isCanceled())
 		{
-			long totalUsableEnergy = this.networkEnergyBuffer - this.networkEnergyLoss;
+			this.lastEnergyBuffer = this.energyBuffer;
+			long totalUsableEnergy = this.energyBuffer - this.networkEnergyLoss;
 			long energyPerHandler = totalUsableEnergy / this.handlerSet.size();
 			long energyRemainderHandler = (energyPerHandler + totalUsableEnergy % this.handlerSet.size());
 			long remainingUsableEnergy = totalUsableEnergy;
@@ -70,13 +73,13 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 			{
 				if (remainingUsableEnergy >= 0)
 				{
-					remainingUsableEnergy -= CompatibilityModule.receiveEnergy(handler, handlerDirectionMap.get(handler), isFirst ? energyRemainderHandler : energyPerHandler, true);
+					remainingUsableEnergy -= CompatibilityModule.receiveEnergy(handler, this.handlerDirectionMap.get(handler), isFirst ? energyRemainderHandler : energyPerHandler, true);
 				}
 
 				isFirst = false;
 			}
 
-			this.networkEnergyBuffer = Math.max(remainingUsableEnergy, 0);
+			this.energyBuffer = Math.max(remainingUsableEnergy, 0);
 		}
 	}
 
@@ -212,6 +215,20 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 				}
 			}
 		}
+	}
+
+	@Override
+	public long produce(long amount)
+	{
+		long receive = Math.min(this.networkBufferCapacity - amount, amount);
+		this.energyBuffer += receive;
+		return receive;
+	}
+
+	@Override
+	public long getLastBuffer()
+	{
+		return this.lastEnergyBuffer;
 	}
 
 }
