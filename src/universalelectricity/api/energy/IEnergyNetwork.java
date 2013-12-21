@@ -11,5 +11,8 @@ import universalelectricity.api.net.INetwork;
  */
 public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, TileEntity>
 {
-
+	/**
+	 * Reconstructs the energy network.
+	 */
+	public void reconstruct();
 }

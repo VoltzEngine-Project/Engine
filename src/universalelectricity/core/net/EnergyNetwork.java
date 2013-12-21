@@ -80,6 +80,41 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 		}
 	}
 
+	/**
+	 * Clears all cache and reconstruct the network.
+	 */
+	@Override
+	public void reconstruct()
+	{
+		this.handlerSet.clear();
+		this.handlerDirectionMap.clear();
+		Iterator<IConductor> it = this.connectorSet.iterator();
+
+		while (it.hasNext())
+		{
+			IConductor conductor = it.next();
+
+			for (int i = 0; i < conductor.getConnections().length; i++)
+			{
+				TileEntity obj = conductor.getConnections()[i];
+
+				if (obj != null)
+				{
+					if (CompatibilityModule.isEnergyHandler(obj))
+					{
+						this.handlerSet.add(obj);
+						this.handlerDirectionMap.put(obj, ForgeDirection.getOrientation(i).getOpposite());
+					}
+				}
+			}
+
+			this.networkBufferCapacity += conductor.getEnergyCapacitance();
+			this.networkEnergyLoss += conductor.getEnergyLoss();
+		}
+
+		this.networkBufferCapacity /= this.connectorSet.size();
+	}
+
 	@Override
 	public void merge(IEnergyNetwork network)
 	{
@@ -177,40 +212,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 				}
 			}
 		}
-	}
-
-	/**
-	 * Clears all cache and reconstruct the network.
-	 */
-	public void reconstruct()
-	{
-		this.handlerSet.clear();
-		this.handlerDirectionMap.clear();
-		Iterator<IConductor> it = this.connectorSet.iterator();
-
-		while (it.hasNext())
-		{
-			IConductor conductor = it.next();
-
-			for (int i = 0; i < conductor.getConnections().length; i++)
-			{
-				TileEntity obj = conductor.getConnections()[i];
-
-				if (obj != null)
-				{
-					if (CompatibilityModule.isEnergyHandler(obj))
-					{
-						this.handlerSet.add(obj);
-						this.handlerDirectionMap.put(obj, ForgeDirection.getOrientation(i).getOpposite());
-					}
-				}
-			}
-
-			this.networkBufferCapacity += conductor.getEnergyCapacitance();
-			this.networkEnergyLoss += conductor.getEnergyLoss();
-		}
-
-		this.networkBufferCapacity /= this.connectorSet.size();
 	}
 
 }
