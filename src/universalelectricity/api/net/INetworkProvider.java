@@ -1,4 +1,4 @@
-package universalelectricity.api;
+package universalelectricity.api.net;
 
 /**
  * Applied to TileEntities that has an instance of an electricity network.

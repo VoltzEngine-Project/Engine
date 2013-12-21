@@ -1,6 +1,7 @@
 package universalelectricity.api.energy;
 
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.api.net.IConnectable;
 
 /**
  * Applied to all TileEntities that can interact with energy.
@@ -8,7 +9,7 @@ import net.minecraftforge.common.ForgeDirection;
  * @author Calclavia, Inspired by King_Lemming
  * 
  */
-public interface IEnergyInterface
+public interface IEnergyInterface extends IConnectable
 {
 	/**
 	 * Adds energy to an block. Returns the quantity of energy that was accepted. This
@@ -31,12 +32,5 @@ public interface IEnergyInterface
 	 * @return Amount of energy that was given out by the block.
 	 */
 	public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract);
-
-	/**
-	 * Can this TileEntity connect with another?
-	 * 
-	 * @return Return true, if the connection is possible.
-	 */
-	public boolean canConnect(ForgeDirection direction);
 
 }

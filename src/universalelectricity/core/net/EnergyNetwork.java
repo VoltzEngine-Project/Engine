@@ -1,13 +1,13 @@
-package universalelectricity.core.grid;
+package universalelectricity.core.net;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import universalelectricity.api.IConnector;
-import universalelectricity.api.INetwork;
 import universalelectricity.api.electricity.ElectricalEvent.EnergyUpdateEvent;
 import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyNetwork;
+import universalelectricity.api.net.IConnector;
+import universalelectricity.api.net.INetwork;
 import universalelectricity.api.vector.Vector3;
 import universalelectricity.core.path.ConnectionPathfinder;
 import universalelectricity.core.path.Pathfinder;

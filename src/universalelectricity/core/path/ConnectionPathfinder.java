@@ -7,8 +7,8 @@ import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.IConnector;
 import universalelectricity.api.energy.IConductor;
+import universalelectricity.api.net.IConnector;
 import universalelectricity.api.vector.Vector3;
 
 /**

@@ -1,4 +1,4 @@
-package universalelectricity.api;
+package universalelectricity.api.net;
 
 import java.util.Set;
 

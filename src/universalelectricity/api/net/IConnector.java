@@ -1,7 +1,6 @@
-package universalelectricity.api;
+package universalelectricity.api.net;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
 
 /**
  * Applied to TileEntities that has an instance of an electricity network.
@@ -9,7 +8,7 @@ import net.minecraftforge.common.ForgeDirection;
  * @author Calclavia
  * 
  */
-public interface IConnector<N> extends INetworkProvider<N>
+public interface IConnector<N> extends INetworkProvider<N>, IConnectable
 {
 	/**
 	 * Gets an array of all the connected TileEntity that this conductor is connected to.
@@ -17,11 +16,4 @@ public interface IConnector<N> extends INetworkProvider<N>
 	 * @return An array of length "6".
 	 */
 	public TileEntity[] getConnections();
-
-	/**
-	 * Can this TileEntity connect with another?
-	 * 
-	 * @return Return true, if the connection is possible.
-	 */
-	public boolean canConnect(ForgeDirection direction);
 }

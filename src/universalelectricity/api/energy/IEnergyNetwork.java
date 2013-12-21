@@ -1,7 +1,7 @@
 package universalelectricity.api.energy;
 
 import net.minecraft.tileentity.TileEntity;
-import universalelectricity.api.INetwork;
+import universalelectricity.api.net.INetwork;
 
 /**
  * The Electrical Network in interface form.

@@ -1,9 +1,9 @@
-package universalelectricity.core.grid;
+package universalelectricity.core.net;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import universalelectricity.api.INetwork;
+import universalelectricity.api.net.INetwork;
 
 /**
  * An grid-like, world cable-based network.

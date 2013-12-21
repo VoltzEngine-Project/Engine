@@ -1,10 +1,10 @@
-package universalelectricity.core.grid;
+package universalelectricity.core.net;
 
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
-import universalelectricity.api.INetwork;
+import universalelectricity.api.net.INetwork;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
