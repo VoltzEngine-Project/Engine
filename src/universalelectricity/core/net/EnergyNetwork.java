@@ -61,25 +61,30 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 
 		if (!evt.isCanceled())
 		{
-			this.lastEnergyBuffer = this.energyBuffer;
-			long totalUsableEnergy = this.energyBuffer - this.networkEnergyLoss;
-			long energyPerHandler = totalUsableEnergy / this.handlerSet.size();
-			long energyRemainderHandler = (energyPerHandler + totalUsableEnergy % this.handlerSet.size());
-			long remainingUsableEnergy = totalUsableEnergy;
+			int handlerSize = this.handlerSet.size();
 
-			boolean isFirst = true;
-
-			for (Object handler : this.handlerSet)
+			if (handlerSize > 0)
 			{
-				if (remainingUsableEnergy >= 0)
+				this.lastEnergyBuffer = this.energyBuffer;
+				long totalUsableEnergy = this.energyBuffer - this.networkEnergyLoss;
+				long energyPerHandler = totalUsableEnergy / handlerSize;
+				long energyRemainderHandler = (energyPerHandler + totalUsableEnergy % handlerSize);
+				long remainingUsableEnergy = totalUsableEnergy;
+
+				boolean isFirst = true;
+
+				for (Object handler : this.handlerSet)
 				{
-					remainingUsableEnergy -= CompatibilityModule.receiveEnergy(handler, this.handlerDirectionMap.get(handler), isFirst ? energyRemainderHandler : energyPerHandler, true);
+					if (remainingUsableEnergy >= 0)
+					{
+						remainingUsableEnergy -= CompatibilityModule.receiveEnergy(handler, this.handlerDirectionMap.get(handler), isFirst ? energyRemainderHandler : energyPerHandler, true);
+					}
+
+					isFirst = false;
 				}
 
-				isFirst = false;
+				this.energyBuffer = Math.max(remainingUsableEnergy, 0);
 			}
-
-			this.energyBuffer = Math.max(remainingUsableEnergy, 0);
 		}
 	}
 
