@@ -35,20 +35,20 @@ public class UnitDisplay
 	/** Metric system of measurement. */
 	public static enum UnitPrefix
 	{
-		MICRO("Micro", "u", 0.000001f), MILLI("Milli", "m", 0.001f), BASE("", "", 1),
-		KILO("Kilo", "k", 1000f), MEGA("Mega", "M", 1000000f), GIGA("Giga", "G", 1000000000f),
-		TERA("Tera", "T", 1000000000000f), PETA("Peta", "P", 1000000000000000f),
-		EXA("Exa", "E", 1000000000000000000f), ZETTA("Zetta", "Z", 1000000000000000000000f),
-		YOTTA("Yotta", "Y", 1000000000000000000000000f);
+		MICRO("Micro", "u", 0.000001), MILLI("Milli", "m", 0.001), BASE("", "", 1),
+		KILO("Kilo", "k", 1000), MEGA("Mega", "M", 1000000), GIGA("Giga", "G", 1000000000),
+		TERA("Tera", "T", 1000000000000d), PETA("Peta", "P", 1000000000000000d),
+		EXA("Exa", "E", 1000000000000000000d), ZETTA("Zetta", "Z", 1000000000000000000000d),
+		YOTTA("Yotta", "Y", 1000000000000000000000000d);
 
 		/** long name for the unit */
 		public String name;
 		/** short unit version of the unit */
 		public String symbol;
 		/** Point by which a number is consider to be of this unit */
-		public float value;
+		public double value;
 
-		private UnitPrefix(String name, String symbol, float value)
+		private UnitPrefix(String name, String symbol, double value)
 		{
 			this.name = name;
 			this.symbol = symbol;
@@ -68,25 +68,25 @@ public class UnitDisplay
 		}
 
 		/** Divides the value by the unit value start */
-		public double process(double value)
+		public double process(long value)
 		{
 			return value / this.value;
 		}
 
 		/** Checks if a value is above the unit value start */
-		public boolean isAbove(float value)
+		public boolean isAbove(long value)
 		{
 			return value > this.value;
 		}
 
 		/** Checks if a value is lower than the unit value start */
-		public boolean isBellow(float value)
+		public boolean isBellow(long value)
 		{
 			return value < this.value;
 		}
 	}
 
-	public static String getDisplay(float value, Unit unit, int decimalPlaces, boolean isShort)
+	public static String getDisplay(long value, Unit unit, int decimalPlaces, boolean isShort)
 	{
 		return getDisplay(value, unit, decimalPlaces, isShort, 1);
 	}
@@ -96,7 +96,7 @@ public class UnitDisplay
 	 * front of the output string showing this. Use string.replace to remove the negative sign if
 	 * unwanted
 	 */
-	public static String getDisplay(float value, Unit unit, int decimalPlaces, boolean isShort, float multiplier)
+	public static String getDisplay(long value, Unit unit, int decimalPlaces, boolean isShort, long multiplier)
 	{
 		String unitName = unit.name;
 		String prefix = "";
@@ -144,22 +144,22 @@ public class UnitDisplay
 		return prefix + roundDecimals(value, decimalPlaces) + " " + unitName;
 	}
 
-	public static String getDisplay(float value, Unit unit)
+	public static String getDisplay(long value, Unit unit)
 	{
 		return getDisplay(value, unit, 2, false);
 	}
 
-	public static String getDisplayShort(float value, Unit unit)
+	public static String getDisplayShort(long value, Unit unit)
 	{
 		return getDisplay(value, unit, 2, true);
 	}
 
-	public static String getDisplayShort(float value, Unit unit, int decimalPlaces)
+	public static String getDisplayShort(long value, Unit unit, int decimalPlaces)
 	{
 		return getDisplay(value, unit, decimalPlaces, true);
 	}
 
-	public static String getDisplaySimple(float value, Unit unit, int decimalPlaces)
+	public static String getDisplaySimple(long value, Unit unit, int decimalPlaces)
 	{
 		if (value > 1)
 		{
