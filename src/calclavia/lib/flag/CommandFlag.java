@@ -8,7 +8,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatMessageComponent;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.api.vector.Vector3;
 
 /**
  * Commands used for flags and regions. This can be used for protection for specific mod components

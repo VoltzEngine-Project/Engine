@@ -7,7 +7,7 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.api.vector.Vector3;
 
 public class ModFlag extends FlagBase
 {

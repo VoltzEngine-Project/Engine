@@ -1,4 +1,4 @@
-package calclavia.lib.prefab.block;
+package calclavia.lib.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -37,14 +37,12 @@ public class EnergyStorage
 
 	public EnergyStorage readFromNBT(NBTTagCompound nbt)
 	{
-
 		this.energy = nbt.getLong("energy");
 		return this;
 	}
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-
 		nbt.setLong("energy", energy);
 		return nbt;
 	}
@@ -98,7 +96,7 @@ public class EnergyStorage
 	 * 
 	 * @param energy
 	 */
-	public void setEnergyStored(long energy)
+	public void setEnergy(long energy)
 	{
 
 		this.energy = energy;
@@ -170,15 +168,23 @@ public class EnergyStorage
 
 	public boolean isFull()
 	{
-		return this.getEnergyStored() >= this.getMaxEnergyStored();
+		return this.getEnergy() >= this.getEnergyCapacity();
 	}
 
-	public long getEnergyStored()
+	/**
+	 * Returns the amount of energy this storage can further store.
+	 */
+	public long getEmptySpace()
+	{
+		return this.getEnergyCapacity() - this.getEnergy();
+	}
+
+	public long getEnergy()
 	{
 		return energy;
 	}
 
-	public long getMaxEnergyStored()
+	public long getEnergyCapacity()
 	{
 		return capacity;
 	}

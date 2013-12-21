@@ -1,6 +1,6 @@
 package calclavia.lib.prefab.vector;
 
-import universalelectricity.core.vector.Vector2;
+import universalelectricity.api.vector.Vector2;
 
 public class Region2
 {

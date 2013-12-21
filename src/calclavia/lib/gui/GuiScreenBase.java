@@ -15,7 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import universalelectricity.core.vector.Vector2;
+import universalelectricity.api.vector.Vector2;
 import calclavia.lib.Calclavia;
 import calclavia.lib.prefab.TranslationHelper;
 import calclavia.lib.prefab.vector.Region2;

@@ -7,7 +7,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.api.vector.Vector3;
 import calclavia.lib.prefab.network.IPacketReceiver;
 import calclavia.lib.prefab.network.PacketManager;
 

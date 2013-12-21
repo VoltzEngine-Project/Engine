@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.api.vector.Vector3;
 
 /**
  * A cubical region class.
@@ -100,7 +100,7 @@ public class Region3
 				{
 					Vector3 vector3 = new Vector3(x, y, z);
 
-					if (center.distanceTo(vector3) <= radius)
+					if (center.distance(vector3) <= radius)
 					{
 						vectors.add(vector3);
 					}

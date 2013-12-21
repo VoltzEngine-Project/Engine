@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import calclavia.lib.prefab.vector.Region3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.api.vector.Vector3;
+import calclavia.lib.prefab.vector.Region3;
 
 /**
  * A defined region.
@@ -43,8 +43,8 @@ public class FlagRegion extends FlagBase
 	{
 		this.name = nbt.getName();
 
-		Vector3 startVector = Vector3.readFromNBT(nbt.getCompoundTag("min"));
-		Vector3 endVector = Vector3.readFromNBT(nbt.getCompoundTag("max"));
+		Vector3 startVector = new Vector3(nbt.getCompoundTag("min"));
+		Vector3 endVector = new Vector3(nbt.getCompoundTag("max"));
 
 		this.region = new Region3(startVector, endVector);
 

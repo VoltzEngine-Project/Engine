@@ -10,8 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.api.UniversalElectricity;
+import universalelectricity.api.vector.Vector3;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

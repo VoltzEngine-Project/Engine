@@ -19,10 +19,10 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import universalelectricity.compatibility.Compatibility;
-import universalelectricity.core.electricity.ElectricityDisplay;
-import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
-import universalelectricity.core.vector.Vector2;
+import universalelectricity.api.Compatibility.CompatibilityType;
+import universalelectricity.api.energy.UnitDisplay;
+import universalelectricity.api.energy.UnitDisplay.Unit;
+import universalelectricity.api.vector.Vector2;
 import calclavia.lib.Calclavia;
 import calclavia.lib.prefab.TranslationHelper;
 import calclavia.lib.prefab.vector.Region2;
@@ -326,16 +326,16 @@ public class GuiContainerBase extends GuiContainer
 		switch (this.energyMode)
 		{
 			default:
-				display = ElectricityDisplay.getDisplay(energy, ElectricUnit.WATT);
+				display = UnitDisplay.getDisplay(energy, Unit.WATT);
 				break;
 			case 1:
-				display = ElectricityDisplay.roundDecimals(energy * Compatibility.TO_BC_RATIO) + " MJ";
+				display = UnitDisplay.roundDecimals(energy * CompatibilityType.BUILDCRAFT.ratio) + " MJ";
 				break;
 			case 2:
-				display = ElectricityDisplay.roundDecimals(energy * Compatibility.TO_IC2_RATIO) + " EU";
+				display = UnitDisplay.roundDecimals(energy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU";
 				break;
 			case 3:
-				display = ElectricityDisplay.roundDecimals(energy * Compatibility.TO_TE_RATIO) + " RF";
+				display = UnitDisplay.roundDecimals(energy * CompatibilityType.THERMAL_EXPANSION.ratio) + " RF";
 				break;
 		}
 
