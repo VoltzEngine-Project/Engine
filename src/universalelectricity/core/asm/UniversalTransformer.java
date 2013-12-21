@@ -51,8 +51,26 @@ public class UniversalTransformer implements IClassTransformer
 						flags = (String) nodes.values.get(1);
 					}
 
-					// TODO: Check hiearchy.
-					if (cnode.interfaces.contains(IEnergyInterface.class.getName().replace(".", "/")) || cnode.interfaces.contains(IConductor.class.getName().replace(".", "/")))
+					/**
+					 * The type of transformation to make.
+					 * 
+					 * -1: Don't transform.
+					 * 0: Transform IEnergyInterface
+					 * 1: Transform IConductor
+					 * 2: Transform IElectricItem
+					 */
+					int transformationType = -1;
+
+					if (cnode.interfaces.contains(IEnergyInterface.class.getName().replace(".", "/")))
+					{
+						transformationType = 0;
+					}
+					else if (cnode.interfaces.contains(IConductor.class.getName().replace(".", "/")))
+					{
+						transformationType = 1;
+					}
+					
+					if (transformationType == 0)
 					{
 						if (flags == null || flags.equals(""))
 						{
