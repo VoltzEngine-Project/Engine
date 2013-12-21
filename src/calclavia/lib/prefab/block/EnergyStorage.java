@@ -3,31 +3,31 @@ package calclavia.lib.prefab.block;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Used internally for IEnergyInterface tiles.
+ * Used longernally for IEnergylongerface tiles.
  * 
  * @author Calclavia, King Lemming
  * 
  */
 public class EnergyStorage
 {
-	protected int energy;
-	protected int capacity;
-	protected int maxReceive;
-	protected int maxExtract;
+	protected long energy;
+	protected long capacity;
+	protected long maxReceive;
+	protected long maxExtract;
 
-	public EnergyStorage(int capacity)
+	public EnergyStorage(long capacity)
 	{
 
 		this(capacity, capacity, capacity);
 	}
 
-	public EnergyStorage(int capacity, int maxTransfer)
+	public EnergyStorage(long capacity, long maxTransfer)
 	{
 
 		this(capacity, maxTransfer, maxTransfer);
 	}
 
-	public EnergyStorage(int capacity, int maxReceive, int maxExtract)
+	public EnergyStorage(long capacity, long maxReceive, long maxExtract)
 	{
 
 		this.capacity = capacity;
@@ -38,18 +38,18 @@ public class EnergyStorage
 	public EnergyStorage readFromNBT(NBTTagCompound nbt)
 	{
 
-		this.energy = nbt.getInteger("Energy");
+		this.energy = nbt.getLong("energy");
 		return this;
 	}
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 
-		nbt.setInteger("Energy", energy);
+		nbt.setLong("energy", energy);
 		return nbt;
 	}
 
-	public void setCapacity(int capacity)
+	public void setCapacity(long capacity)
 	{
 
 		this.capacity = capacity;
@@ -60,32 +60,32 @@ public class EnergyStorage
 		}
 	}
 
-	public void setMaxTransfer(int maxTransfer)
+	public void setMaxTransfer(long maxTransfer)
 	{
 
 		setMaxReceive(maxTransfer);
 		setMaxExtract(maxTransfer);
 	}
 
-	public void setMaxReceive(int maxReceive)
+	public void setMaxReceive(long maxReceive)
 	{
 
 		this.maxReceive = maxReceive;
 	}
 
-	public void setMaxExtract(int maxExtract)
+	public void setMaxExtract(long maxExtract)
 	{
 
 		this.maxExtract = maxExtract;
 	}
 
-	public int getMaxReceive()
+	public long getMaxReceive()
 	{
 
 		return maxReceive;
 	}
 
-	public int getMaxExtract()
+	public long getMaxExtract()
 	{
 
 		return maxExtract;
@@ -98,7 +98,7 @@ public class EnergyStorage
 	 * 
 	 * @param energy
 	 */
-	public void setEnergyStored(int energy)
+	public void setEnergyStored(long energy)
 	{
 
 		this.energy = energy;
@@ -120,7 +120,7 @@ public class EnergyStorage
 	 * 
 	 * @param energy
 	 */
-	public void modifyEnergyStored(int energy)
+	public void modifyEnergyStored(long energy)
 	{
 
 		this.energy += energy;
@@ -135,35 +135,35 @@ public class EnergyStorage
 		}
 	}
 
-	public int receiveEnergy(int maxReceive, boolean doAction)
+	public long receiveEnergy(long receive, boolean doReceive)
 	{
 
-		int energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
+		long energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
 
-		if (doAction)
+		if (doReceive)
 		{
 			energy += energyReceived;
 		}
 		return energyReceived;
 	}
 
-	public int extractEnergy(int maxExtract, boolean doAction)
+	public long extractEnergy(long extract, boolean doExtract)
 	{
-		int energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
+		long energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
 
-		if (doAction)
+		if (doExtract)
 		{
 			energy -= energyExtracted;
 		}
 		return energyExtracted;
 	}
 
-	public boolean checkReceive(int receive)
+	public boolean checkReceive(long receive)
 	{
 		return this.receiveEnergy(receive, false) >= receive;
 	}
 
-	public boolean checkExtract(int extract)
+	public boolean checkExtract(long extract)
 	{
 		return this.extractEnergy(extract, false) >= extract;
 	}
@@ -173,12 +173,12 @@ public class EnergyStorage
 		return this.getEnergyStored() >= this.getMaxEnergyStored();
 	}
 
-	public int getEnergyStored()
+	public long getEnergyStored()
 	{
 		return energy;
 	}
 
-	public int getMaxEnergyStored()
+	public long getMaxEnergyStored()
 	{
 		return capacity;
 	}
