@@ -13,9 +13,9 @@ import cofh.api.energy.IEnergyHandler;
 public class ModuleThermalExpansion extends CompatibilityModule
 {
 	@Override
-	public long doReceiveEnergy(Object obj, ForgeDirection direction, long energy)
+	public long doReceiveEnergy(Object obj, ForgeDirection direction, long energy, boolean doReceive)
 	{
-		return (long) (((IEnergyHandler) obj).receiveEnergy(direction, (int) (energy * CompatibilityType.THERMAL_EXPANSION.ratio), false) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+		return (long) (((IEnergyHandler) obj).receiveEnergy(direction, (int) (energy * CompatibilityType.THERMAL_EXPANSION.ratio), !doReceive) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
 	}
 
 	@Override

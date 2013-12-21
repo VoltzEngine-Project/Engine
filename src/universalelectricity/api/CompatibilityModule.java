@@ -30,11 +30,11 @@ public abstract class CompatibilityModule
 	 * 
 	 * @return The actual energy that was used.
 	 */
-	public static long receiveEnergy(Object handler, ForgeDirection direction, long energy)
+	public static long receiveEnergy(Object handler, ForgeDirection direction, long energy, boolean doReceive)
 	{
 		if (isEnergyHandler(handler))
 		{
-			return energyHandlerCache.get(handler.getClass()).doReceiveEnergy(handler, direction, energy);
+			return energyHandlerCache.get(handler.getClass()).doReceiveEnergy(handler, direction, energy, doReceive);
 		}
 
 		return 0;
@@ -66,7 +66,7 @@ public abstract class CompatibilityModule
 		return false;
 	}
 
-	public abstract long doReceiveEnergy(Object obj, ForgeDirection direction, long energy);
+	public abstract long doReceiveEnergy(Object obj, ForgeDirection direction, long energy, boolean doReceive);
 
 	public abstract boolean isHandler(Object obj);
 

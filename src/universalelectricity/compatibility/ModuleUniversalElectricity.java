@@ -10,11 +10,10 @@ import universalelectricity.api.energy.IEnergyInterface;
  */
 public class ModuleUniversalElectricity extends CompatibilityModule
 {
-
 	@Override
-	public long doReceiveEnergy(Object obj, ForgeDirection direction, long energy)
+	public long doReceiveEnergy(Object obj, ForgeDirection direction, long energy, boolean doReceive)
 	{
-		return ((IEnergyInterface) obj).onReceiveEnergy(direction, energy, true);
+		return ((IEnergyInterface) obj).onReceiveEnergy(direction, energy, doReceive);
 	}
 
 	@Override

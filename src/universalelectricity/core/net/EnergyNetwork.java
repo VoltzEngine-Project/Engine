@@ -59,17 +59,21 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 
 		if (!evt.isCanceled())
 		{
-			long totalEnergy = this.networkEnergyBuffer;
-			long energyLoss = this.networkEnergyLoss;
-			long totalUsableEnergy = totalEnergy - energyLoss;
+			long totalUsableEnergy = this.networkEnergyBuffer - this.networkEnergyLoss;
+			long energyPerHandler = totalUsableEnergy / this.handlerSet.size();
+			long energyRemainderHandler = (energyPerHandler + totalUsableEnergy % this.handlerSet.size());
 			long remainingUsableEnergy = totalUsableEnergy;
+
+			boolean isFirst = true;
 
 			for (Object handler : this.handlerSet)
 			{
 				if (remainingUsableEnergy >= 0)
 				{
-					remainingUsableEnergy -= CompatibilityModule.receiveEnergy(handler, handlerDirectionMap.get(handler), remainingUsableEnergy);
+					remainingUsableEnergy -= CompatibilityModule.receiveEnergy(handler, handlerDirectionMap.get(handler), isFirst ? energyRemainderHandler : energyPerHandler, true);
 				}
+
+				isFirst = false;
 			}
 
 			this.networkEnergyBuffer = Math.max(remainingUsableEnergy, 0);
