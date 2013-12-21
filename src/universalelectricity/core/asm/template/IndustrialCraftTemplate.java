@@ -42,6 +42,7 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	@Override
 	public void validate()
 	{
+		StaticForwarder.validateTile(this);
 		StaticForwarder.loadIC(this);
 	}
 
@@ -49,14 +50,13 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	public void invalidate()
 	{
 		StaticForwarder.unloadIC(this);
-		super.invalidate();
+		StaticForwarder.invalidateTile(this);
 	}
 
 	@Override
 	public void onChunkUnload()
 	{
 		StaticForwarder.unloadIC(this);
-		super.onChunkUnload();
 	}
 
 	@Override

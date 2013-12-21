@@ -16,7 +16,7 @@ public interface IConnector<N> extends INetworkProvider<N>
 	 * 
 	 * @return An array of length "6".
 	 */
-	public TileEntity[] getAdjacentConnections();
+	public TileEntity[] getConnections();
 
 	/**
 	 * Can this TileEntity connect with another?

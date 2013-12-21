@@ -92,7 +92,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 			 * Loop through the connected blocks and attempt to see if there are connections between
 			 * the two points elsewhere.
 			 */
-			TileEntity[] connectedBlocks = splitPoint.getAdjacentConnections();
+			TileEntity[] connectedBlocks = splitPoint.getConnections();
 
 			for (int i = 0; i < connectedBlocks.length; i++)
 			{

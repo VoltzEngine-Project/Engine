@@ -4,6 +4,7 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyTile;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 
 import net.minecraft.tileentity.TileEntity;
@@ -94,5 +95,48 @@ public class StaticForwarder
 	public static boolean canConnect(IEnergyInterface handler, ForgeDirection from)
 	{
 		return handler.canConnect(from);
+	}
+
+	public static void validateTile(Object obj)
+	{
+		if (obj instanceof TileEntity)
+		{
+			TileEntity tileEntity = (TileEntity) obj;
+			if (tileEntity.isInvalid())
+			{
+				try
+				{
+					Field f = tileEntity.getClass().getField("tileEntityInvalid");
+					f.setAccessible(true);
+					f.set(tileEntity, false);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static void invalidateTile(Object obj)
+	{
+		if (obj instanceof TileEntity)
+		{
+			TileEntity tileEntity = (TileEntity) obj;
+
+			if (!tileEntity.isInvalid())
+			{
+				try
+				{
+					Field f = tileEntity.getClass().getField("tileEntityInvalid");
+					f.setAccessible(true);
+					f.set(tileEntity, true);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
