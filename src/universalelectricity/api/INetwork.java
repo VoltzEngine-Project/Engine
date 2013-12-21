@@ -1,10 +1,6 @@
 package universalelectricity.api;
 
-import java.util.ArrayList;
 import java.util.Set;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
 
 /**
  * Implement this in your network class/interface if you plan to have your own network defined by

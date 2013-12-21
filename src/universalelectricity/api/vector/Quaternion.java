@@ -1,197 +1,160 @@
 package universalelectricity.api.vector;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
 /**
- * Quaternion class designed to be used for the rotation of objects. *
+ * Quaternion class designed to be used for the rotation of objects.
  * 
- * @author DarkGuardsman, Calclavia
+ * @author ChickenBones
  */
 public class Quaternion implements Cloneable
 {
-	public double x, y, z, w;
+	public double x;
+	public double y;
+	public double z;
+	public double s;
+	public static final double SQRT2 = Math.sqrt(2D);
 
 	public Quaternion()
 	{
-		this(0, 0, 0, 1);
+		s = 1;
+		x = 0;
+		y = 0;
+		z = 0;
 	}
 
-	public Quaternion(Quaternion copy)
+	public Quaternion(Quaternion Quaternion)
 	{
-		this(copy.x, copy.y, copy.z, copy.w);
+		x = Quaternion.x;
+		y = Quaternion.y;
+		z = Quaternion.z;
+		s = Quaternion.s;
 	}
 
-	public Quaternion(Vector3 vector, double w)
+	public Quaternion(double d, double d1, double d2, double d3)
 	{
-		this(vector.x, vector.y, vector.z, w);
+		x = d1;
+		y = d2;
+		z = d3;
+		s = d;
 	}
 
-	public Quaternion(double x, double y, double z, double w)
+	public Quaternion set(Quaternion Quaternion)
 	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.w = w;
-	}
+		x = Quaternion.x;
+		y = Quaternion.y;
+		z = Quaternion.z;
+		s = Quaternion.s;
 
-	/**
-	 * Convert from Euler Angles. Basically we create 3 Quaternions, one for pitch, one for yaw, one
-	 * for roll and multiply those together. the calculation below does the same, just shorter
-	 */
-	public Quaternion(float pitch, float yaw, float roll)
-	{
-		float p = (float) (pitch * (Math.PI / 180) / 2.0);
-		float y = (float) (yaw * (Math.PI / 180) / 2.0);
-		float r = (float) (roll * (Math.PI / 180) / 2.0);
-
-		float sinp = (float) Math.sin(p);
-		float siny = (float) Math.sin(y);
-		float sinr = (float) Math.sin(r);
-		float cosp = (float) Math.cos(p);
-		float cosy = (float) Math.cos(y);
-		float cosr = (float) Math.cos(r);
-
-		this.x = sinr * cosp * cosy - cosr * sinp * siny;
-		this.y = cosr * sinp * cosy + sinr * cosp * siny;
-		this.z = cosr * cosp * siny - sinr * sinp * cosy;
-		this.w = cosr * cosp * cosy + sinr * sinp * siny;
-
-		this.normalize();
-	}
-
-	public static Quaternion IDENTITY()
-	{
-		return new Quaternion();
-	}
-
-	public Quaternion set(Quaternion quaternion)
-	{
-		this.w = quaternion.w;
-		this.x = quaternion.x;
-		this.y = quaternion.y;
-		this.z = quaternion.z;
 		return this;
 	}
 
-	public Quaternion set(double x, double y, double z, double w)
+	public Quaternion set(double d, double d1, double d2, double d3)
 	{
-		return this.set(new Quaternion(x, y, z, w));
+		x = d1;
+		y = d2;
+		z = d3;
+		s = d;
+
+		return this;
+	}
+
+	public static Quaternion aroundAxis(double ax, double ay, double az, double angle)
+	{
+		return new Quaternion().setAroundAxis(ax, ay, az, angle);
+	}
+
+	public static Quaternion aroundAxis(Vector3 axis, double angle)
+	{
+		return aroundAxis(axis.x, axis.y, axis.z, angle);
+	}
+
+	public Quaternion setAroundAxis(double ax, double ay, double az, double angle)
+	{
+		angle *= 0.5;
+		double d4 = Math.sin(angle);
+		return set(Math.cos(angle), ax * d4, ay * d4, az * d4);
+	}
+
+	public Quaternion setAroundAxis(Vector3 axis, double angle)
+	{
+		return setAroundAxis(axis.x, axis.y, axis.z, angle);
+	}
+
+	public Quaternion multiply(Quaternion Quaternion)
+	{
+		double d = s * Quaternion.s - x * Quaternion.x - y * Quaternion.y - z * Quaternion.z;
+		double d1 = s * Quaternion.x + x * Quaternion.s - y * Quaternion.z + z * Quaternion.y;
+		double d2 = s * Quaternion.y + x * Quaternion.z + y * Quaternion.s - z * Quaternion.x;
+		double d3 = s * Quaternion.z - x * Quaternion.y + y * Quaternion.x + z * Quaternion.s;
+		s = d;
+		x = d1;
+		y = d2;
+		z = d3;
+
+		return this;
+	}
+
+	public Quaternion rightMultiply(Quaternion Quaternion)
+	{
+		double d = s * Quaternion.s - x * Quaternion.x - y * Quaternion.y - z * Quaternion.z;
+		double d1 = s * Quaternion.x + x * Quaternion.s + y * Quaternion.z - z * Quaternion.y;
+		double d2 = s * Quaternion.y - x * Quaternion.z + y * Quaternion.s + z * Quaternion.x;
+		double d3 = s * Quaternion.z + x * Quaternion.y - y * Quaternion.x + z * Quaternion.s;
+		s = d;
+		x = d1;
+		y = d2;
+		z = d3;
+
+		return this;
+	}
+
+	public double mag()
+	{
+		return Math.sqrt(x * x + y * y + z * z + s * s);
 	}
 
 	public Quaternion normalize()
 	{
-		double magnitude = this.magnitude();
-		this.x /= magnitude;
-		this.y /= magnitude;
-		this.z /= magnitude;
-		this.w /= magnitude;
+		double d = mag();
+		if (d != 0)
+		{
+			d = 1 / d;
+			x *= d;
+			y *= d;
+			z *= d;
+			s *= d;
+		}
+
 		return this;
 	}
 
-	public double magnitude()
-	{
-		return Math.sqrt(this.magnitudeSquared());
-	}
-
-	public double magnitudeSquared()
-	{
-		return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
-	}
-
-	public Quaternion inverse()
-	{
-		double d = this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
-		return new Quaternion(this.x / d, -this.y / d, -this.z / d, -this.w / d);
-	}
-
-	/**
-	 * Gets the conjugate of this Quaternion
-	 */
-	public Quaternion getConjugate()
-	{
-		return this.clone().conjugate();
-	}
-
-	public Quaternion conjugate()
-	{
-		this.y = -this.y;
-		this.z = -this.z;
-		this.w = -this.w;
-		return this;
-	}
-
-	/**
-	 * Let the current quaternion be "a". Multiplying the a with b applies the rotation a to b.
-	 */
-	public Quaternion getMultiply(Quaternion b)
-	{
-		return this.clone().multiply(b);
-	}
-
-	public Quaternion multiply(Quaternion b)
-	{
-		Quaternion a = this;
-		double newX = a.x * b.x - a.y * b.y - a.z * b.z - a.w * b.w;
-		double newY = a.x * b.y + a.y * b.x + a.z * b.w - a.w * b.z;
-		double newZ = a.x * b.z - a.y * b.w + a.z * b.x + a.w * b.y;
-		double newW = a.x * b.w + a.y * b.z - a.z * b.y + a.w * b.x;
-		this.set(newX, newY, newZ, newW);
-		return this;
-	}
-
-	public Quaternion divide(Quaternion b)
-	{
-		Quaternion a = this;
-		return a.inverse().multiply(b);
-	}
-
-	/** Multi a vector against this in other words applying rotation */
-	public Vector3 multi(Vector3 vec)
-	{
-		Vector3 vn = vec.clone();
-
-		Quaternion vecQuat = new Quaternion(0, 0, 0, 1), resQuat;
-		vecQuat.x = (float) vn.x;
-		vecQuat.y = (float) vn.y;
-		vecQuat.z = (float) vn.z;
-		vecQuat.w = 0.0f;
-
-		resQuat = vecQuat.multiply(this.getConjugate());
-		resQuat = this.multiply(resQuat);
-
-		return new Vector3(resQuat.x, resQuat.y, resQuat.z);
-	}
-
-	public static Quaternion fromAxis(Vector3 vector, double angle)
-	{
-		angle *= 0.5f;
-		Vector3 vn = vector.clone().normalize();
-		float sinAngle = (float) Math.sin(angle);
-		return new Quaternion(vn.x * sinAngle, vn.y * sinAngle, vn.z * sinAngle, Math.cos(angle));
-	}
-
-	/**
-	 * Convert to Axis/Angles
-	 * 
-	 * @param axis - The axis of rotation
-	 * @param angle - The angle of rotation
-	 */
-	public void getAxisAngle(Vector3 axis, float angle)
-	{
-		float scale = (float) axis.getMagnitude();
-		this.x = this.x / scale;
-		this.y = this.y / scale;
-		this.z = this.z / scale;
-		angle = (float) (Math.acos(this.w) * 2.0f);
-	}
-
-	@Override
-	public Quaternion clone()
+	public Quaternion copy()
 	{
 		return new Quaternion(this);
 	}
 
-	@Override
+	public void rotate(Vector3 vec)
+	{
+		double d = -x * vec.x - y * vec.y - z * vec.z;
+		double d1 = s * vec.x + y * vec.z - z * vec.y;
+		double d2 = s * vec.y - x * vec.z + z * vec.x;
+		double d3 = s * vec.z + x * vec.y - y * vec.x;
+		vec.x = d1 * s - d * x - d2 * z + d3 * y;
+		vec.y = d2 * s - d * y + d1 * z - d3 * x;
+		vec.z = d3 * s - d * z - d1 * y + d2 * x;
+	}
+
 	public String toString()
 	{
-		return "Quaternion [" + x + ", " + y + ", " + z + ", " + w + "]";
+		MathContext cont = new MathContext(4, RoundingMode.HALF_UP);
+		return "Quaternion[" + new BigDecimal(s, cont) + ", " + new BigDecimal(x, cont) + ", " + new BigDecimal(y, cont) + ", " + new BigDecimal(z, cont) + "]";
+	}
+
+	public Rotation rotation()
+	{
+		return new Rotation(this);
 	}
 }

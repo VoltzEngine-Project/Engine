@@ -98,6 +98,16 @@ public class Vector3 implements Cloneable
 		this(Math.cos(Math.toRadians(rotationYaw + 90)), Math.sin(Math.toRadians(-rotationPitch)), Math.sin(Math.toRadians(rotationYaw + 90)));
 	}
 
+	public static Vector3 fromCenter(Entity e)
+	{
+		return new Vector3(e.posX, e.posY - e.yOffset + e.height / 2, e.posZ);
+	}
+
+	public static Vector3 fromCenter(TileEntity e)
+	{
+		return new Vector3(e.xCoord + 0.5, e.yCoord + 0.5, e.zCoord + 0.5);
+	}
+
 	/**
 	 * Returns the coordinates as integers, ideal for block placement.
 	 */
@@ -194,7 +204,6 @@ public class Vector3 implements Cloneable
 	{
 		return Vec3.createVectorHelper(this.x, this.y, this.z);
 	}
-	
 
 	/**
 	 * Saves this Vector3 to disk
@@ -225,7 +234,7 @@ public class Vector3 implements Cloneable
 
 		return ForgeDirection.UNKNOWN;
 	}
-	
+
 	/**
 	 * ---------------------- MAGNITUDE FUNCTIONS ----------------------------
 	 */
@@ -483,7 +492,7 @@ public class Vector3 implements Cloneable
 	 */
 	public boolean isZero()
 	{
-		return (this.x == 0) && (this.y == 0) && (this.z == 0);
+		return this.equals(ZERO());
 	}
 
 	/**
@@ -576,6 +585,12 @@ public class Vector3 implements Cloneable
 		}
 	}
 
+	public Vector3 rotate(Quaternion rotator)
+	{
+		rotator.rotate(this);
+		return this;
+	}
+
 	/**
 	 * Gets the delta look position based on the rotation yaw and pitch. Minecraft coordinates are
 	 * messed up. Y and Z are flipped. Yaw is displaced by 90 degrees. Pitch is inversed.
@@ -613,7 +628,6 @@ public class Vector3 implements Cloneable
 		return Math.acos(vec1.clone().dotProduct(vec2));
 	}
 
-
 	public static Vector3 UP()
 	{
 		return new Vector3(0, 1, 0);
@@ -642,6 +656,16 @@ public class Vector3 implements Cloneable
 	public static Vector3 EAST()
 	{
 		return new Vector3(1, 0, 0);
+	}
+
+	public static Vector3 ZERO()
+	{
+		return new Vector3(0, 0, 0);
+	}
+
+	public static Vector3 CENTER()
+	{
+		return new Vector3(0.5, 0.5, 0.5);
 	}
 
 	/**

@@ -3,12 +3,13 @@ package universalelectricity.core.asm;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import org.objectweb.asm.tree.ClassNode;
-
-import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
+
+import org.objectweb.asm.tree.ClassNode;
+
+import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 
 /**
  * This is added as a class transformer if CodeChickenCore is installed. Adding it as a class

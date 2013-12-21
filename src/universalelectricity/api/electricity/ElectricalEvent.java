@@ -6,7 +6,6 @@ import net.minecraftforge.event.Cancelable;
 import net.minecraftforge.event.Event;
 import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.api.energy.IEnergyNetwork;
-import universalelectricity.core.electricity.ElectricityPack;
 
 public class ElectricalEvent extends Event
 {
