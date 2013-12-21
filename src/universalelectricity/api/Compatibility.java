@@ -14,9 +14,9 @@ public class Compatibility
 {
 	public static enum CompatibilityType
 	{
-		THERMAL_EXPANSION("ThermalExpansion", "ThermalExpansion", "Redstone Flux", "RF", 281.4f),
-		INDUSTRIALCRAFT("IC2", "IndustrialCraft", "Electrical Unit", "EU", 112.56f),
-		BUILDCRAFT("BuildCraft|Energy", "BuildCraft", "Minecraft Joule", "MJ", 28.14f);
+		THERMAL_EXPANSION("ThermalExpansion", "ThermalExpansion", "Redstone Flux", "RF", 0.008f),
+		INDUSTRIALCRAFT("IC2", "IndustrialCraft", "Electrical Unit", "EU", 0.0032f),
+		BUILDCRAFT("BuildCraft|Energy", "BuildCraft", "Minecraft Joule", "MJ", 0.0008f);
 
 		public final String modID;
 		public final String moduleName;
