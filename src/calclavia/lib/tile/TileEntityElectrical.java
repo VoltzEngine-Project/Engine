@@ -12,9 +12,9 @@ import universalelectricity.api.electricity.ElectricityPack;
 import universalelectricity.api.electricity.IVoltage;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
+import universalelectricity.api.item.ElectricItemHelper;
 import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorHelper;
-import universalelectricity.core.item.ElectricItemHelper;
 
 @UniversalClass
 public class TileEntityElectrical extends TileEntityAdvanced implements IEnergyInterface, IEnergyContainer, IVoltage
