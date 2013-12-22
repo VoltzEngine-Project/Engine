@@ -26,6 +26,4 @@ public interface IConductor extends IConnector<IEnergyNetwork>, IEnergyInterface
 	 */
 	public long getEnergyCapacitance();
 
-	public World getWorld();
-
 }

@@ -180,8 +180,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	@Override
 	public void split(IConductor splitPoint)
 	{
-		World world = splitPoint.getWorld();
-
 		this.removeConnector(splitPoint);
 
 		/**
