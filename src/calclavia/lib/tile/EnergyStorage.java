@@ -125,7 +125,7 @@ public class EnergyStorage
 	public long receiveEnergy(long receive, boolean doReceive)
 	{
 
-		long energyReceived = Math.min(this.capacity - this.energy, Math.min(this.maxReceive, this.maxReceive));
+		long energyReceived = Math.min(this.capacity - this.energy, Math.min(this.maxReceive, receive));
 
 		if (doReceive)
 		{
@@ -136,7 +136,7 @@ public class EnergyStorage
 
 	public long extractEnergy(long extract, boolean doExtract)
 	{
-		long energyExtracted = Math.min(this.energy, Math.min(this.maxExtract, this.maxExtract));
+		long energyExtracted = Math.min(this.energy, Math.min(this.maxExtract, extract));
 
 		if (doExtract)
 		{
