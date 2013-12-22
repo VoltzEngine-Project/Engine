@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.CompatibilityModule;
+import universalelectricity.api.item.ElectricItemHelper;
 import universalelectricity.api.vector.Vector3;
 
 /** @author Calclavia */
@@ -43,7 +44,10 @@ public class ModuleIndustrialCraft extends CompatibilityModule
     @Override
     public long chargeItem(ItemStack itemStack, long joules, boolean docharge)
     {
-        // TODO Auto-generated method stub
+        if (itemStack.getItem() instanceof IElectricItem)
+        {
+            return (long) (ElectricItem.manager.charge(itemStack, (int) (joules * CompatibilityType.INDUSTRIALCRAFT.ratio), 4, true, false) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+        }
         return 0;
     }
 
@@ -56,7 +60,7 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 
             if (item.canProvideEnergy(itemStack))
             {
-                return ElectricItem.manager.discharge(itemStack, (int) joules, 4, true, doDischarge);
+                return (long) (ElectricItem.manager.discharge(itemStack, (int) (joules * CompatibilityType.INDUSTRIALCRAFT.ratio), 4, true, doDischarge) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
             }
         }
         return 0;
