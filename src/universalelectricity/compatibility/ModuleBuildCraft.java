@@ -1,5 +1,7 @@
 package universalelectricity.compatibility;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.CompatibilityModule;
@@ -38,4 +40,24 @@ public class ModuleBuildCraft extends CompatibilityModule
 	{
 		return ((IPowerReceptor) obj).getPowerReceiver(direction) != null;
 	}
+
+    @Override
+    public long chargeItem(ItemStack itemStack, long joules, boolean docharge)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public long dischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public boolean doIsEnergyItem(Item stack)
+    {
+        return false;
+    }
 }

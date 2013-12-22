@@ -1,9 +1,12 @@
 package universalelectricity.api.item;
 
+import ic2.api.item.ElectricItem;
+import ic2.api.item.IElectricItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.energy.IEnergyInterface;
+import cofh.api.energy.IEnergyContainerItem;
 
 /** Some helper functions for electric items.
  * 
@@ -74,7 +77,7 @@ public class ElectricItemHelper
         {
             if (itemStack.getItem() instanceof IElectricalItem)
             {
-                return ((IElectricalItem) itemStack.getItem()).discharge(itemStack, Math.min(((IElectricalItem) itemStack.getItem()).getElectricityCapacity(itemStack), joules), doDischarge);
+                return ((IElectricalItem) itemStack.getItem()).discharge(itemStack, joules, doDischarge);
             }
         }
 
