@@ -54,14 +54,4 @@ public abstract class Network<N, C, A> implements INetwork<N, C, A>
 	{
 		return this.getClass().getSimpleName() + "[" + this.hashCode() + ", Handlers: " + this.handlerSet.size() + ", Connectors: " + this.connectorSet.size() + "]";
 	}
-
-	public boolean isFirstConnector(C connector)
-	{
-		if (connector == null)
-		{
-			return false;
-		}
-
-		return this.connectorSet.iterator().next().equals(connector);
-	}
 }
