@@ -69,9 +69,9 @@ public class ConnectionPathfinder
 
         for (int i = 0; i < currentNode.getConnections().length; i++)
         {
-            Object obj = currentNode.getConnections();
+            Object obj = currentNode.getConnections()[i];
 
-            if (obj instanceof IConnector && this.ignoreConnector.contains(obj))
+            if (obj instanceof IConnector && !this.ignoreConnector.contains(obj))
             {
                 connectedNodes.add((IConnector) obj);
             }

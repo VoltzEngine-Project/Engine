@@ -9,10 +9,10 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.electricity.ElectricalEvent.EnergyUpdateEvent;
+import universalelectricity.api.energy.EnergyNetworkLoader;
 import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyNetwork;
 import universalelectricity.api.net.IConnector;
-import universalelectricity.api.net.INetwork;
 
 /** @author Calclavia */
 public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> implements IEnergyNetwork
@@ -181,7 +181,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     @Override
     public void split(IConductor splitPoint)
     {
+        System.out.println("Splitting network");
         this.removeConnector(splitPoint);
+        this.reconstruct();
 
         /** Loop through the connected blocks and attempt to see if there are connections between the
          * two points elsewhere. */
@@ -202,26 +204,13 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
                         ConnectionPathfinder finder = new ConnectionPathfinder((IConnector) connectedBlockB, splitPoint);
                         finder.findNodes((IConnector) connectedBlockA);
 
-                        if (finder.results.size() > 0)
-                        {
-                            /** The connections A and B are still intact elsewhere. Set all
-                             * references of wire connection into one network. */
-
-                            for (IConnector node : finder.closedSet)
-                            {
-                                if (node != splitPoint)
-                                {
-                                    ((IConnector) node).setNetwork(this);
-                                }
-                            }
-                        }
-                        else
+                        if (finder.results.size() <= 0)
                         {
                             try
                             {
                                 /** The connections A and B are not connected anymore. Give them both
                                  * a new common network. */
-                                INetwork newNetwork = this.getClass().newInstance();
+                                IEnergyNetwork newNetwork = EnergyNetworkLoader.getNewNetwork();
 
                                 for (IConnector node : finder.closedSet)
                                 {
