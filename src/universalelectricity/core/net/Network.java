@@ -54,7 +54,7 @@ public abstract class Network<N, C, A> implements INetwork<N, C, A>
 	@Override
 	public String toString()
 	{
-		return this.getClass().getSimpleName() + "[" + this.hashCode() + "|Connectors:" + this.connectorSet.size() + "]";
+		return this.getClass().getSimpleName() + "[" + this.hashCode() + ", Handlers: " + this.handlerSet.size() + ", Connectors: " + this.connectorSet.size() + "]";
 	}
 
 	public boolean isFirstConnector(C connector)
