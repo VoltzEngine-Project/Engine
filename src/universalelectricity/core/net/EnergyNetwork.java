@@ -115,6 +115,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 			while (it.hasNext())
 			{
 				IConductor conductor = it.next();
+				conductor.setNetwork(this);
 
 				for (int i = 0; i < conductor.getConnections().length; i++)
 				{
@@ -151,8 +152,11 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 			IEnergyNetwork newNetwork = new EnergyNetwork();
 			newNetwork.getConnectors().addAll(this.getConnectors());
 			newNetwork.getConnectors().addAll(network.getConnectors());
+
 			network.getConnectors().clear();
 			this.connectorSet.clear();
+
+			newNetwork.reconstruct();
 
 			return newNetwork;
 		}
