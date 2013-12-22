@@ -11,10 +11,10 @@ import net.minecraftforge.common.ForgeDirection;
 public interface IVoltageSource
 {
 	/**
-	 * Can this machine emit voltage on the given side. Should
+	 * Can this machine emit voltage on the given side.
 	 * 
 	 * @param side - side that the voltage will be emitted on
-	 * @return true if there is a voltage output on the side
+	 * @return the voltage emitted
 	 */
-	public boolean canEmitVoltage(ForgeDirection side);
+	public long getEmittedVoltage(ForgeDirection side);
 }
