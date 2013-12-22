@@ -71,13 +71,16 @@ public class ConnectionPathfinder
 	{
 		Set<IConnector> connectedNodes = new HashSet<IConnector>();
 
-		for (int i = 0; i < currentNode.getConnections().length; i++)
+		if (currentNode != null)
 		{
-			Object obj = currentNode.getConnections()[i];
-
-			if (obj instanceof IConnector && !this.ignoreConnector.contains(obj))
+			for (int i = 0; i < currentNode.getConnections().length; i++)
 			{
-				connectedNodes.add((IConnector) obj);
+				Object obj = currentNode.getConnections()[i];
+
+				if (obj instanceof IConnector && !this.ignoreConnector.contains(obj))
+				{
+					connectedNodes.add((IConnector) obj);
+				}
 			}
 		}
 
