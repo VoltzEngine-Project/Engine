@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -45,6 +44,32 @@ public abstract class CompatibilityModule
         return 0;
     }
 
+    /** Charges an item
+     * 
+     * @return The actual energy that was accepted. */
+    public static long chargeItem(ItemStack itemStack, long energy, boolean doCharge)
+    {
+        if (itemStack != null && isHandler(itemStack.getItem()))
+        {
+            return energyHandlerCache.get(itemStack.getItem().getClass()).doChargeItem(itemStack, energy, doCharge);
+        }
+
+        return 0;
+    }
+
+    /** Discharges an item
+     * 
+     * @return The actual energy that was removed. */
+    public static long disChargeItem(ItemStack itemStack, long energy, boolean doCharge)
+    {
+        if (itemStack != null && isHandler(itemStack.getItem()))
+        {
+            return energyHandlerCache.get(itemStack.getItem().getClass()).doDischargeItem(itemStack, energy, doCharge);
+        }
+
+        return 0;
+    }
+
     /** Is this object a valid energy handler?
      * 
      * @param handler */
@@ -80,7 +105,7 @@ public abstract class CompatibilityModule
      * @param joules - input energy
      * @param docharge - do the action
      * @return amount of energy accepted */
-    public abstract long chargeItem(ItemStack itemStack, long joules, boolean docharge);
+    public abstract long doChargeItem(ItemStack itemStack, long joules, boolean docharge);
 
     /** discharges an item with the given energy
      * 
@@ -88,11 +113,9 @@ public abstract class CompatibilityModule
      * @param joules - input energy
      * @param docharge - do the action
      * @return amount of energy that was removed */
-    public abstract long dischargeItem(ItemStack itemStack, long joules, boolean doDischarge);
+    public abstract long doDischargeItem(ItemStack itemStack, long joules, boolean doDischarge);
 
     public abstract boolean doIsHandler(Object obj);
-
-    public abstract boolean doIsEnergyItem(Item item);
 
     public abstract boolean doCanConnect(Object obj, ForgeDirection direction);
 

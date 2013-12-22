@@ -3,13 +3,11 @@ package universalelectricity.compatibility;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.CompatibilityModule;
-import universalelectricity.api.item.ElectricItemHelper;
 import universalelectricity.api.vector.Vector3;
 
 /** @author Calclavia */
@@ -25,7 +23,7 @@ public class ModuleIndustrialCraft extends CompatibilityModule
     @Override
     public boolean doIsHandler(Object obj)
     {
-        return obj instanceof IEnergySink;
+        return obj instanceof IEnergySink || obj instanceof IElectricItem;
     }
 
     @Override
@@ -42,7 +40,7 @@ public class ModuleIndustrialCraft extends CompatibilityModule
     }
 
     @Override
-    public long chargeItem(ItemStack itemStack, long joules, boolean docharge)
+    public long doChargeItem(ItemStack itemStack, long joules, boolean docharge)
     {
         if (itemStack.getItem() instanceof IElectricItem)
         {
@@ -52,7 +50,7 @@ public class ModuleIndustrialCraft extends CompatibilityModule
     }
 
     @Override
-    public long dischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
+    public long doDischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
     {
         if (itemStack.getItem() instanceof IElectricItem)
         {
@@ -64,11 +62,5 @@ public class ModuleIndustrialCraft extends CompatibilityModule
             }
         }
         return 0;
-    }
-
-    @Override
-    public boolean doIsEnergyItem(Item item)
-    {
-        return item instanceof IElectricItem;
     }
 }

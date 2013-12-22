@@ -1,6 +1,5 @@
 package universalelectricity.compatibility;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.CompatibilityModule;
@@ -19,7 +18,7 @@ public class ModuleUniversalElectricity extends CompatibilityModule
     @Override
     public boolean doIsHandler(Object obj)
     {
-        return obj instanceof IEnergyInterface;
+        return obj instanceof IEnergyInterface || obj instanceof IElectricalItem;
     }
 
     @Override
@@ -29,7 +28,7 @@ public class ModuleUniversalElectricity extends CompatibilityModule
     }
 
     @Override
-    public long chargeItem(ItemStack itemStack, long joules, boolean doCharge)
+    public long doChargeItem(ItemStack itemStack, long joules, boolean doCharge)
     {
         if (itemStack != null && itemStack.getItem() instanceof IElectricalItem)
         {
@@ -39,18 +38,12 @@ public class ModuleUniversalElectricity extends CompatibilityModule
     }
 
     @Override
-    public long dischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
+    public long doDischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
     {
         if (itemStack != null && itemStack.getItem() instanceof IElectricalItem)
         {
             return ((IElectricalItem) itemStack.getItem()).discharge(itemStack, joules, doDischarge);
         }
         return 0;
-    }
-
-    @Override
-    public boolean doIsEnergyItem(Item item)
-    {
-        return item instanceof IElectricalItem;
     }
 }

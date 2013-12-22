@@ -1,6 +1,5 @@
 package universalelectricity.compatibility;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.Compatibility.CompatibilityType;
@@ -20,7 +19,7 @@ public class ModuleThermalExpansion extends CompatibilityModule
     @Override
     public boolean doIsHandler(Object obj)
     {
-        return obj instanceof IEnergyHandler;
+        return obj instanceof IEnergyHandler || obj instanceof IEnergyContainerItem;
     }
 
     @Override
@@ -30,7 +29,7 @@ public class ModuleThermalExpansion extends CompatibilityModule
     }
 
     @Override
-    public long chargeItem(ItemStack itemStack, long joules, boolean docharge)
+    public long doChargeItem(ItemStack itemStack, long joules, boolean docharge)
     {
         if (itemStack.getItem() instanceof IEnergyContainerItem)
         {
@@ -40,18 +39,12 @@ public class ModuleThermalExpansion extends CompatibilityModule
     }
 
     @Override
-    public long dischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
+    public long doDischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
     {
         if (itemStack.getItem() instanceof IEnergyContainerItem)
         {
             return (long) (((IEnergyContainerItem) itemStack.getItem()).extractEnergy(itemStack, (int) (joules * CompatibilityType.THERMAL_EXPANSION.ratio), doDischarge) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
         }
         return 0;
-    }
-
-    @Override
-    public boolean doIsEnergyItem(Item item)
-    {
-        return item instanceof IEnergyContainerItem;
     }
 }
