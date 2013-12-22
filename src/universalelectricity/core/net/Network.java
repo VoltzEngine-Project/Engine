@@ -20,12 +20,12 @@ public abstract class Network<N, C, A> implements INetwork<N, C, A>
 	/**
 	 * A set of handlers that handles events from the network.
 	 */
-	protected final Set<A> handlerSet = new LinkedHashSet<A>();
+	private final Set<A> handlerSet = new LinkedHashSet<A>();
 
 	/**
 	 * A set of connectors (e.g conductors).
 	 */
-	protected final Set<C> connectorSet = new LinkedHashSet<C>();
+	private final Set<C> connectorSet = new LinkedHashSet<C>();
 
 	@Override
 	public void addConnector(C connector)

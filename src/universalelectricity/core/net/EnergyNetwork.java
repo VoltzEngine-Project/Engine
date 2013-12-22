@@ -29,6 +29,10 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
     /** The total energy buffer in the last tick. */
     private long lastEnergyBuffer;
+    /** Last recorded value for network demand energy */
+    private long lastNetworkDemand = 0;
+    /** Last time request calculation was made */
+    private long lastNetworkDemandCheck = 0;
 
     /** The direction in which a conductor is placed relative to a specific conductor. */
     private HashMap<Object, EnumSet<ForgeDirection>> handlerDirectionMap = new HashMap<Object, EnumSet<ForgeDirection>>();
@@ -48,7 +52,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
         if (!evt.isCanceled())
         {
-            int handlerSize = this.handlerSet.size();
+            int handlerSize = this.getNodes().size();
             this.lastEnergyBuffer = this.energyBuffer;
             long totalUsableEnergy = this.energyBuffer - this.networkEnergyLoss;
             long remainingUsableEnergy = totalUsableEnergy;
@@ -86,22 +90,24 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     @Override
     public long getRequest()
     {
-        long energyRequest = 0;
-        int handlerSize = this.handlerSet.size();
-
-        if (handlerSize > 0)
+        if (System.currentTimeMillis() - this.lastNetworkDemandCheck > 20)
         {
-            for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
+            this.lastNetworkDemandCheck = System.currentTimeMillis();
+            this.lastNetworkDemand = 0;
+
+            if (this.getNodes().size() > 0)
             {
-                if (entry.getValue() != null)
+                for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
                 {
-                    for (ForgeDirection direction : entry.getValue())
-                        energyRequest += CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false);
+                    if (entry.getValue() != null)
+                    {
+                        for (ForgeDirection direction : entry.getValue())
+                            this.lastNetworkDemand += CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false);
+                    }
                 }
             }
         }
-
-        return energyRequest;
+        return this.lastNetworkDemand;
     }
 
     @Override
@@ -114,11 +120,11 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     @Override
     public void reconstruct()
     {
-        if (this.connectorSet.size() > 0)
+        if (this.getConnectors().size() > 0)
         {
-            this.handlerSet.clear();
+            this.getNodes().clear();
             this.handlerDirectionMap.clear();
-            Iterator<IConductor> it = this.connectorSet.iterator();
+            Iterator<IConductor> it = this.getConnectors().iterator();
 
             while (it.hasNext())
             {
@@ -138,7 +144,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
                             {
                                 set = EnumSet.noneOf(ForgeDirection.class);
                             }
-                            this.handlerSet.add(obj);
+                            this.getNodes().add(obj);
                             set.add(ForgeDirection.getOrientation(i).getOpposite());
                             this.handlerDirectionMap.put(obj, set);
                         }
@@ -149,9 +155,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
                 this.networkEnergyLoss += conductor.getEnergyLoss();
             }
 
-            this.energyBufferCapacity /= this.connectorSet.size();
+            this.energyBufferCapacity /= this.getConnectors().size();
 
-            if (this.handlerSet.size() > 0)
+            if (this.getNodes().size() > 0)
             {
                 NetworkTickHandler.addNetwork(this);
             }
@@ -168,7 +174,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
             newNetwork.getConnectors().addAll(network.getConnectors());
 
             network.getConnectors().clear();
-            this.connectorSet.clear();
+            this.getConnectors().clear();
 
             newNetwork.reconstruct();
 
@@ -235,7 +241,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     @Override
     public long produce(Object source, long amount, boolean doReceive)
     {
-        if (amount > 0)
+        if (amount > 0 && this.getRequest() > 0)
         {
             long prevEnergyStored = this.energyBuffer;
             long newEnergyStored = Math.min(this.energyBuffer + amount, this.energyBufferCapacity);

@@ -20,7 +20,7 @@ public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Obj
     /** @return The last buffer in the network that was sent to all energy handlers. */
     public long getLastBuffer();
 
-    /** Gets an estimated value of what the network inputs */
+    /** Gets an estimated value of what the network wants for energy */
     public long getRequest();
 
     /** Gets a value that represents the amount of energy lost in the network */
