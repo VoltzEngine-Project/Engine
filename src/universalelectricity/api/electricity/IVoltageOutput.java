@@ -8,7 +8,7 @@ import net.minecraftforge.common.ForgeDirection;
  * 
  * @author DarkGuardsman
  */
-public interface IVoltageSource
+public interface IVoltageOutput
 {
 	/**
 	 * Can this machine emit voltage on the given side.
@@ -16,5 +16,5 @@ public interface IVoltageSource
 	 * @param side - side that the voltage will be emitted on
 	 * @return the voltage emitted
 	 */
-	public long getEmittedVoltage(ForgeDirection side);
+	public long getVoltageOutput(ForgeDirection side);
 }

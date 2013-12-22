@@ -4,7 +4,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 /**
  * Implement this on your TileEntity if it has a voltage based energy input. You machine will still
- * need to run its own voltage checks as this doesn't do anything on its own
+ * need to run its own voltage checks as this doesn't do anything on its own.
  * 
  * @author DarkGuardsman
  */
