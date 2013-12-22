@@ -2,7 +2,7 @@ package universalelectricity.api.energy;
 
 import universalelectricity.api.net.INetwork;
 
-/** The Electrical Network in interface form.
+/** The Energy Network in interface form.
  * 
  * @author Calclavia */
 public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Object>
@@ -12,9 +12,10 @@ public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Obj
 
     /** Produces power to the energy network.
      * 
+     * @param source - machine that is producing the energy
      * @param receive - The amount that is produced.
      * @return - The amount that was accepted by the network. */
-    public long produce(long receive);
+    public long produce(Object source, long amount, boolean doProduce);
 
     /** @return The last buffer in the network that was sent to all energy handlers. */
     public long getLastBuffer();

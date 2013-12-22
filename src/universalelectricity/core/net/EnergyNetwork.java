@@ -233,14 +233,18 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     }
 
     @Override
-    public long produce(long amount)
+    public long produce(Object source, long amount, boolean doReceive)
     {
         if (amount > 0)
         {
             long prevEnergyStored = this.energyBuffer;
-            this.energyBuffer = Math.min(this.energyBuffer + amount, this.energyBufferCapacity);
-            NetworkTickHandler.addNetwork(this);
-            return Math.max(this.energyBuffer - prevEnergyStored, 0);
+            long newEnergyStored = Math.min(this.energyBuffer + amount, this.energyBufferCapacity);
+            if (doReceive)
+            {
+                this.energyBuffer = newEnergyStored;
+                NetworkTickHandler.addNetwork(this);
+            }
+            return Math.max(newEnergyStored - prevEnergyStored, 0);
         }
         return 0;
     }
