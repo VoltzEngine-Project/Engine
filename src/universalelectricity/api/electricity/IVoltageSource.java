@@ -6,7 +6,7 @@ import net.minecraftforge.common.ForgeDirection;
  * network. Mainly used to calculate the over all voltage of a network correctly.
  * 
  * @author DarkGuardsman */
-public interface IVoltageSource extends IVoltage
+public interface IVoltageSource
 {
     /** Can this machine emit voltage on the given side. Should
      * 

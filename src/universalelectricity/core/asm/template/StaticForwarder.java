@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.api.Compatibility.CompatibilityType;
-import universalelectricity.api.electricity.IVoltage;
+import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
 
@@ -77,9 +77,9 @@ public class StaticForwarder
 	 * 
 	 * @return The amount of volts. E.g 120v or 240v
 	 */
-	public static long getVoltage(IVoltage handler, ForgeDirection direction)
+	public static long getVoltage(IVoltageInput handler, ForgeDirection direction)
 	{
-		return handler.getVoltage(direction);
+		return handler.getVoltageInput(direction);
 	}
 
 	public static long getElectricityStored(IEnergyContainer handler, ForgeDirection from)
