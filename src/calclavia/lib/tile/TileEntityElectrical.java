@@ -4,20 +4,14 @@ import java.util.EnumSet;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.UniversalClass;
-import universalelectricity.api.UniversalElectricity;
-import universalelectricity.api.electricity.ElectricityPack;
-import universalelectricity.api.electricity.IVoltage;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.api.item.ElectricItemHelper;
-import universalelectricity.api.vector.Vector3;
-import universalelectricity.api.vector.VectorHelper;
 
 @UniversalClass
-public class TileEntityElectrical extends TileEntityAdvanced implements IEnergyInterface, IEnergyContainer, IVoltage
+public class TileEntityElectrical extends TileEntityAdvanced implements IEnergyInterface, IEnergyContainer
 {
 	protected EnergyStorage energyStorage;
 
@@ -106,12 +100,6 @@ public class TileEntityElectrical extends TileEntityAdvanced implements IEnergyI
 	public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract)
 	{
 		return this.energyStorage.extractEnergy(extract, doExtract);
-	}
-
-	@Override
-	public long getVoltage(ForgeDirection direction)
-	{
-		return UniversalElectricity.DEFAULT_VOLTAGE;
 	}
 
 	@Override

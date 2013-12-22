@@ -3,7 +3,7 @@ package calclavia.lib.tile;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Used longernally for IEnergylongerface tiles.
+ * Used internally for IEnergyInterface blocks.
  * 
  * @author Calclavia, King Lemming
  * 
@@ -17,19 +17,16 @@ public class EnergyStorage
 
 	public EnergyStorage(long capacity)
 	{
-
 		this(capacity, capacity, capacity);
 	}
 
 	public EnergyStorage(long capacity, long maxTransfer)
 	{
-
 		this(capacity, maxTransfer, maxTransfer);
 	}
 
 	public EnergyStorage(long capacity, long maxReceive, long maxExtract)
 	{
-
 		this.capacity = capacity;
 		this.maxReceive = maxReceive;
 		this.maxExtract = maxExtract;
@@ -49,7 +46,6 @@ public class EnergyStorage
 
 	public void setCapacity(long capacity)
 	{
-
 		this.capacity = capacity;
 
 		if (energy > capacity)
@@ -60,32 +56,27 @@ public class EnergyStorage
 
 	public void setMaxTransfer(long maxTransfer)
 	{
-
 		setMaxReceive(maxTransfer);
 		setMaxExtract(maxTransfer);
 	}
 
 	public void setMaxReceive(long maxReceive)
 	{
-
 		this.maxReceive = maxReceive;
 	}
 
 	public void setMaxExtract(long maxExtract)
 	{
-
 		this.maxExtract = maxExtract;
 	}
 
 	public long getMaxReceive()
 	{
-
 		return maxReceive;
 	}
 
 	public long getMaxExtract()
 	{
-
 		return maxExtract;
 	}
 
@@ -98,7 +89,6 @@ public class EnergyStorage
 	 */
 	public void setEnergy(long energy)
 	{
-
 		this.energy = energy;
 
 		if (this.energy > capacity)
@@ -120,12 +110,11 @@ public class EnergyStorage
 	 */
 	public void modifyEnergyStored(long energy)
 	{
-
 		this.energy += energy;
 
-		if (this.energy > capacity)
+		if (this.energy > this.capacity)
 		{
-			this.energy = capacity;
+			this.energy = this.capacity;
 		}
 		else if (this.energy < 0)
 		{
@@ -136,22 +125,22 @@ public class EnergyStorage
 	public long receiveEnergy(long receive, boolean doReceive)
 	{
 
-		long energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
+		long energyReceived = Math.min(this.capacity - this.energy, Math.min(this.maxReceive, this.maxReceive));
 
 		if (doReceive)
 		{
-			energy += energyReceived;
+			this.energy += energyReceived;
 		}
 		return energyReceived;
 	}
 
 	public long extractEnergy(long extract, boolean doExtract)
 	{
-		long energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
+		long energyExtracted = Math.min(this.energy, Math.min(this.maxExtract, this.maxExtract));
 
 		if (doExtract)
 		{
-			energy -= energyExtracted;
+			this.energy -= energyExtracted;
 		}
 		return energyExtracted;
 	}
@@ -181,12 +170,17 @@ public class EnergyStorage
 
 	public long getEnergy()
 	{
-		return energy;
+		return this.energy;
 	}
 
 	public long getEnergyCapacity()
 	{
-		return capacity;
+		return this.capacity;
 	}
 
+	@Override
+	public String toString()
+	{
+		return this.getClass().getSimpleName() + "[" + this.getEnergy() + "/" + this.getEnergyCapacity() + "]";
+	}
 }
