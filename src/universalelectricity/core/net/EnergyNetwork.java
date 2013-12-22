@@ -8,11 +8,12 @@ import java.util.Map.Entry;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.api.CompatibilityModule;
-import universalelectricity.api.electricity.ElectricalEvent.EnergyUpdateEvent;
 import universalelectricity.api.energy.EnergyNetworkLoader;
 import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyNetwork;
 import universalelectricity.api.net.IConnector;
+import universalelectricity.api.net.NetworkEvent.EnergyProduceEvent;
+import universalelectricity.api.net.NetworkEvent.EnergyUpdateEvent;
 
 /** @author Calclavia */
 public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> implements IEnergyNetwork
@@ -267,7 +268,10 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	@Override
 	public long produce(Object source, long amount, boolean doReceive)
 	{
-		if (amount > 0 && this.getRequest() > 0)
+		EnergyProduceEvent evt = new EnergyProduceEvent(this, source, amount, doReceive);
+		MinecraftForge.EVENT_BUS.post(evt);
+
+		if (!evt.isCanceled() && amount > 0 && this.getRequest() > 0)
 		{
 			long prevEnergyStored = this.energyBuffer;
 			long newEnergyStored = Math.min(this.energyBuffer + amount, this.energyBufferCapacity);
@@ -280,6 +284,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
 			return Math.max(newEnergyStored - prevEnergyStored, 0);
 		}
+
 		return 0;
 	}
 
