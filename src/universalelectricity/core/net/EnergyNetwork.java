@@ -112,6 +112,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
         return energyRequest;
     }
+
     @Override
     public long getEnergyLoss()
     {
@@ -254,7 +255,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     @Override
     public long produce(long amount)
     {
-        long receive = Math.min(this.energyBufferCapacity - amount, amount);
+        long receive = Math.min(Math.max(this.energyBufferCapacity - amount, 0), amount);
         this.energyBuffer += receive;
         NetworkTickHandler.addNetwork(this);
         return receive;
