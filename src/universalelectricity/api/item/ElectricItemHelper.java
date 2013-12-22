@@ -14,42 +14,6 @@ import cofh.api.energy.IEnergyContainerItem;
 public class ElectricItemHelper
 {
 
-    /** Recharges an electric item from a machine
-     * 
-     * @param machine - machine that will give the item power
-     * @param chargingSide - side to be used to call the getEnergy methods from
-     * @param joules - The joules being provided to the electric item */
-    public static void chargeItemFromMachine(IEnergyInterface machine, ForgeDirection chargingSide, ItemStack itemStack)
-    {
-        if (itemStack != null && machine != null)
-        {
-            if (itemStack.getItem() instanceof IElectricalItem)
-            {
-                long room = ((IElectricalItem) itemStack.getItem()).getElectricityCapacity(itemStack) - ((IElectricalItem) itemStack.getItem()).getElectricityStored(itemStack);
-                long joules = machine.onExtractEnergy(chargingSide, room, false);
-
-                machine.onExtractEnergy(chargingSide, chargeItem(itemStack, joules), true);
-            }
-        }
-    }
-
-    /** Decharges an electric item into a machine
-     * 
-     * @param machine - machine that gets the power
-     * @param chargingSide - side to be used to call the getEnergy methods from
-     * @param joules - The joules being withdrawn from the electric item */
-    public static void dischargeItemToMachine(IEnergyInterface machine, ForgeDirection chargingSide, ItemStack itemStack)
-    {
-        if (itemStack != null && machine != null)
-        {
-            if (itemStack.getItem() instanceof IElectricalItem)
-            {
-                long joules = ((IElectricalItem) itemStack.getItem()).getElectricityStored(itemStack);
-                dischargeItem(itemStack, machine.onReceiveEnergy(chargingSide, dischargeItem(itemStack, machine.onReceiveEnergy(chargingSide, joules, false)), true), true);
-            }
-        }
-    }
-
     /** Recharges an electric item.
      * 
      * @param joules - The joules being provided to the electric item
@@ -88,6 +52,7 @@ public class ElectricItemHelper
      * 
      * @param joules - The joules being provided to the electric item
      * @return The total amount of joules provided by the provider. */
+    @Deprecated
     public static long chargeItem(ItemStack itemStack, long joules)
     {
         return chargeItem(itemStack, joules, true);
@@ -97,6 +62,7 @@ public class ElectricItemHelper
      * 
      * @param joules - The joules being withdrawn from the electric item
      * @return The total amount of joules the provider received. */
+    @Deprecated
     public static long dischargeItem(ItemStack itemStack, long joules)
     {
         return dischargeItem(itemStack, joules, true);
