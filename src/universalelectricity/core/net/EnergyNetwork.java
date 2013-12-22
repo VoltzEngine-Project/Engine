@@ -178,7 +178,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     {
         if (obj != null && !(obj instanceof IConductor))
         {
-            if (CompatibilityModule.isHandler(obj))
+            if (CompatibilityModule.canConnect(obj, side))
             {
                 EnumSet<ForgeDirection> set = this.handlerDirectionMap.get(obj);
                 if (set == null)
