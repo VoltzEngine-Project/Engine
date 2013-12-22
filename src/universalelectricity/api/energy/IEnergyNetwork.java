@@ -28,4 +28,13 @@ public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Til
 	 * @return The last buffer in the network that was sent to all energy handlers.
 	 */
 	public long getLastBuffer();
+
+	/**
+	 * Iterates through all the energy handlers in the network and calculate the total energy
+	 * request of the network. This method is slightly intensive and shouldn't be called often.
+	 * Consider multi-threading.
+	 * 
+	 * @return Energy that is being request at this moment in the network.
+	 */
+	public long getRequest();
 }

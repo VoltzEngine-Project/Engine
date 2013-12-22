@@ -100,6 +100,23 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 		return this.canUpdate();
 	}
 
+	@Override
+	public long getRequest()
+	{
+		long energyRequest = 0;
+		int handlerSize = this.handlerSet.size();
+
+		if (handlerSize > 0)
+		{
+			for (Object handler : this.handlerSet)
+			{
+				energyRequest += CompatibilityModule.receiveEnergy(handler, this.handlerDirectionMap.get(handler), Long.MAX_VALUE, false);
+			}
+		}
+
+		return energyRequest;
+	}
+
 	/**
 	 * Clears all cache and reconstruct the network.
 	 */
