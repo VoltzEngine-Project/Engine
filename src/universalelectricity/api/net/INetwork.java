@@ -54,8 +54,9 @@ public interface INetwork<N, C, A>
 	 * parameters. Be sure to refresh the new network inside this method.
 	 * 
 	 * @param network - network to merge
+	 * @return The new network instance.
 	 */
-	public void merge(N network);
+	public N merge(N network);
 
 	/**
 	 * Splits a network by the conductor referenced in the parameters. It will then create and

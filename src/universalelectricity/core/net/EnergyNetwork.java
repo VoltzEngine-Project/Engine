@@ -144,7 +144,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 	}
 
 	@Override
-	public void merge(IEnergyNetwork network)
+	public IEnergyNetwork merge(IEnergyNetwork network)
 	{
 		if (network != null && network != this)
 		{
@@ -153,8 +153,11 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 			newNetwork.getConnectors().addAll(network.getConnectors());
 			network.getConnectors().clear();
 			this.connectorSet.clear();
+
+			return newNetwork;
 		}
 
+		return null;
 	}
 
 	@Override
