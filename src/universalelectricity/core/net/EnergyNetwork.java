@@ -112,6 +112,11 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
         return energyRequest;
     }
+    @Override
+    public long getEnergyLose()
+    {
+        return this.networkEnergyLoss;
+    }
 
     /** Clears all cache and reconstruct the network. */
     @Override
