@@ -23,5 +23,5 @@ public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Obj
     public long getRequest();
 
     /** Gets a value that represents the amount of energy lost in the network */
-    public long getEnergyLose();
+    public long getEnergyLoss();
 }

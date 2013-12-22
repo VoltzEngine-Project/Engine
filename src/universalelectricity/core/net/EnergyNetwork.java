@@ -113,7 +113,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
         return energyRequest;
     }
     @Override
-    public long getEnergyLose()
+    public long getEnergyLoss()
     {
         return this.networkEnergyLoss;
     }
