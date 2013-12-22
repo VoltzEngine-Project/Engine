@@ -1,6 +1,5 @@
 package universalelectricity.api.energy;
 
-import net.minecraft.world.World;
 import universalelectricity.api.net.IConnector;
 
 /**

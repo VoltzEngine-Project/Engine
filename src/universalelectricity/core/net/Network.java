@@ -1,10 +1,8 @@
 package universalelectricity.core.net;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import net.minecraft.tileentity.TileEntity;
 import universalelectricity.api.net.INetwork;
 
 /**

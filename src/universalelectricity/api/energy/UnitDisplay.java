@@ -125,7 +125,7 @@ public class UnitDisplay
 			for (int i = 0; i < UnitPrefix.values().length; i++)
 			{
 				UnitPrefix lowerMeasure = UnitPrefix.values()[i];
-				
+
 				if (lowerMeasure.isBellow(value) && lowerMeasure.ordinal() == 0)
 				{
 					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(isShort) + unitName;
@@ -134,9 +134,9 @@ public class UnitDisplay
 				{
 					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(isShort) + unitName;
 				}
-				
+
 				UnitPrefix upperMeasure = UnitPrefix.values()[i + 1];
-				
+
 				if ((lowerMeasure.isAbove(value) && upperMeasure.isBellow(value)) || lowerMeasure.value == value)
 				{
 					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(isShort) + unitName;

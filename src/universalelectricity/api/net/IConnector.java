@@ -1,7 +1,5 @@
 package universalelectricity.api.net;
 
-import net.minecraft.tileentity.TileEntity;
-
 /**
  * Applied to TileEntities that has an instance of an electricity network.
  * 

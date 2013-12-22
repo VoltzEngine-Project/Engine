@@ -147,6 +147,7 @@ public class Quaternion implements Cloneable
 		vec.z = d3 * s - d * z - d1 * y + d2 * x;
 	}
 
+	@Override
 	public String toString()
 	{
 		MathContext cont = new MathContext(4, RoundingMode.HALF_UP);

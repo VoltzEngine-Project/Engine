@@ -5,13 +5,13 @@ import universalelectricity.api.electricity.IElectricalNetwork;
 /** @author DarkGuardsman */
 public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwork
 {
-    /** Voltage the network is producing at */
-    private long voltage = 0;
+	/** Voltage the network is producing at */
+	private long voltage = 0;
 
-    @Override
-    public long getVoltage()
-    {
-        return voltage;
-    }
+	@Override
+	public long getVoltage()
+	{
+		return voltage;
+	}
 
 }
