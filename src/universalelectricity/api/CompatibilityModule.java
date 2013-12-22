@@ -60,7 +60,7 @@ public abstract class CompatibilityModule
     /** Discharges an item
      * 
      * @return The actual energy that was removed. */
-    public static long disChargeItem(ItemStack itemStack, long energy, boolean doCharge)
+    public static long dischargeItem(ItemStack itemStack, long energy, boolean doCharge)
     {
         if (itemStack != null && isHandler(itemStack.getItem()))
         {
