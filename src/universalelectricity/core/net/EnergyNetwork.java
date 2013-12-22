@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     private long lastNetworkRequest = -1;
 
     /** The direction in which a conductor is placed relative to a specific conductor. */
-    private HashMap<Object, EnumSet<ForgeDirection>> handlerDirectionMap = new HashMap<Object, EnumSet<ForgeDirection>>();
+    private HashMap<Object, EnumSet<ForgeDirection>> handlerDirectionMap = new LinkedHashMap<Object, EnumSet<ForgeDirection>>();
 
     private Set<Object> sources = new HashSet<Object>();
 
@@ -265,7 +266,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     }
 
     @Override
-    public long produce(Object source, long amount, boolean doReceive)
+    public long produce(Object source, ForgeDirection side, long amount, boolean doReceive)
     {
         EnergyProduceEvent evt = new EnergyProduceEvent(this, source, amount, doReceive);
         MinecraftForge.EVENT_BUS.post(evt);
