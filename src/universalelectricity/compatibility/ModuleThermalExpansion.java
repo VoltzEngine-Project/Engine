@@ -34,7 +34,7 @@ public class ModuleThermalExpansion extends CompatibilityModule
     {
         if (itemStack.getItem() instanceof IEnergyContainerItem)
         {
-
+            return (long) (((IEnergyContainerItem) itemStack.getItem()).receiveEnergy(itemStack, (int) (joules * CompatibilityType.THERMAL_EXPANSION.ratio), docharge) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
         }
         return 0;
     }
@@ -44,7 +44,7 @@ public class ModuleThermalExpansion extends CompatibilityModule
     {
         if (itemStack.getItem() instanceof IEnergyContainerItem)
         {
-            IEnergyContainerItem item = (IEnergyContainerItem) itemStack.getItem();
+            return (long) (((IEnergyContainerItem) itemStack.getItem()).extractEnergy(itemStack, (int) (joules * CompatibilityType.THERMAL_EXPANSION.ratio), doDischarge) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
         }
         return 0;
     }
