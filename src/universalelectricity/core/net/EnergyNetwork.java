@@ -3,8 +3,8 @@ package universalelectricity.core.net;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.api.CompatibilityModule;
@@ -49,28 +49,20 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
         if (!evt.isCanceled())
         {
             int handlerSize = this.handlerSet.size();
-
             this.lastEnergyBuffer = this.energyBuffer;
             long totalUsableEnergy = this.energyBuffer - this.networkEnergyLoss;
-            long energyPerHandler = totalUsableEnergy / handlerSize;
-            long energyRemainderHandler = (energyPerHandler + totalUsableEnergy % handlerSize);
             long remainingUsableEnergy = totalUsableEnergy;
 
-            boolean isFirst = true;
-
-            for (Object handler : this.handlerSet)
+            for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
             {
-                EnumSet<ForgeDirection> set = this.handlerDirectionMap.get(handler);
-                if (set != null)
+                if (entry.getValue() != null)
                 {
-                    for (ForgeDirection direction : set)
+                    for (ForgeDirection direction : entry.getValue())
                     {
                         if (remainingUsableEnergy >= 0)
                         {
-                            remainingUsableEnergy -= CompatibilityModule.receiveEnergy(handler, direction, isFirst ? energyRemainderHandler : energyPerHandler, true);
+                            remainingUsableEnergy -= CompatibilityModule.receiveEnergy(entry.getKey(), direction, (totalUsableEnergy / handlerSize) + totalUsableEnergy % handlerSize, true);
                         }
-
-                        isFirst = false;
                     }
                 }
             }
@@ -99,13 +91,12 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
         if (handlerSize > 0)
         {
-            for (Object handler : this.handlerSet)
+            for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
             {
-                EnumSet<ForgeDirection> set = this.handlerDirectionMap.get(handler);
-                if (set != null)
+                if (entry.getValue() != null)
                 {
-                    for (ForgeDirection direction : set)
-                        energyRequest += CompatibilityModule.receiveEnergy(handler, direction, Long.MAX_VALUE, false);
+                    for (ForgeDirection direction : entry.getValue())
+                        energyRequest += CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false);
                 }
             }
         }
@@ -255,10 +246,14 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     @Override
     public long produce(long amount)
     {
-        long receive = Math.min(Math.max(this.energyBufferCapacity - amount, 0), amount);
-        this.energyBuffer += receive;
-        NetworkTickHandler.addNetwork(this);
-        return receive;
+        if (amount > 0)
+        {
+            long prevEnergyStored = this.energyBuffer;
+            this.energyBuffer = Math.min(this.energyBuffer + amount, this.energyBufferCapacity);
+            NetworkTickHandler.addNetwork(this);
+            return Math.max(this.energyBuffer - prevEnergyStored, 0);
+        }
+        return 0;
     }
 
     @Override

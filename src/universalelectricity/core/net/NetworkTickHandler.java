@@ -40,6 +40,7 @@ public class NetworkTickHandler implements ITickHandler
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
 		this.networks.addAll(this.toAddNetworks);
+		this.toAddNetworks.clear();
 
 		Iterator<INetwork> it = this.networks.iterator();
 
