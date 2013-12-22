@@ -11,9 +11,9 @@ import net.minecraft.tileentity.TileEntity;
 public interface IConnector<N> extends INetworkProvider<N>, IConnectable
 {
 	/**
-	 * Gets an array of all the connected TileEntity that this conductor is connected to.
+	 * Gets an array of all the connected IConnectors that this conductor is connected to.
 	 * 
 	 * @return An array of length "6".
 	 */
-	public TileEntity[] getConnections();
+	public Object[] getConnections();
 }

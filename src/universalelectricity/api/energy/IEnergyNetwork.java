@@ -9,7 +9,7 @@ import universalelectricity.api.net.INetwork;
  * @author Calclavia
  * 
  */
-public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, TileEntity>
+public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Object>
 {
 	/**
 	 * Reconstructs the energy network.

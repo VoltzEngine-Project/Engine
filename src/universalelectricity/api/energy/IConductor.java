@@ -1,5 +1,6 @@
 package universalelectricity.api.energy;
 
+import net.minecraft.world.World;
 import universalelectricity.api.net.IConnector;
 
 /**
@@ -24,5 +25,7 @@ public interface IConductor extends IConnector<IEnergyNetwork>, IEnergyInterface
 	 * @return The amount of energy in joules.
 	 */
 	public long getEnergyCapacitance();
+
+	public World getWorld();
 
 }

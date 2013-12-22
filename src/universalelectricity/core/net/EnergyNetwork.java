@@ -3,7 +3,6 @@ package universalelectricity.core.net;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
@@ -13,15 +12,12 @@ import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyNetwork;
 import universalelectricity.api.net.IConnector;
 import universalelectricity.api.net.INetwork;
-import universalelectricity.api.vector.Vector3;
-import universalelectricity.core.path.ConnectionPathfinder;
-import universalelectricity.core.path.Pathfinder;
 
 /**
  * @author Calclavia
  * 
  */
-public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntity> implements IEnergyNetwork
+public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> implements IEnergyNetwork
 {
 	/**
 	 * The energy to be distributed on the next update.
@@ -136,9 +132,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 
 				for (int i = 0; i < conductor.getConnections().length; i++)
 				{
-					TileEntity obj = conductor.getConnections()[i];
+					Object obj = conductor.getConnections()[i];
 
-					if (obj != null)
+					if (obj != null && !(obj instanceof IConductor))
 					{
 						if (CompatibilityModule.isHandler(obj))
 						{
@@ -184,81 +180,69 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, TileEntit
 	@Override
 	public void split(IConductor splitPoint)
 	{
-		if (splitPoint instanceof TileEntity)
+		World world = splitPoint.getWorld();
+
+		this.removeConnector(splitPoint);
+
+		/**
+		 * Loop through the connected blocks and attempt to see if there are connections between
+		 * the two points elsewhere.
+		 */
+		Object[] connectedBlocks = splitPoint.getConnections();
+
+		for (int i = 0; i < connectedBlocks.length; i++)
 		{
-			World world = ((TileEntity) splitPoint).worldObj;
+			Object connectedBlockA = connectedBlocks[i];
 
-			this.removeConnector(splitPoint);
-
-			/**
-			 * Loop through the connected blocks and attempt to see if there are connections between
-			 * the two points elsewhere.
-			 */
-			TileEntity[] connectedBlocks = splitPoint.getConnections();
-
-			for (int i = 0; i < connectedBlocks.length; i++)
+			if (connectedBlockA instanceof IConnector)
 			{
-				TileEntity connectedBlockA = connectedBlocks[i];
-
-				if (connectedBlockA instanceof IConnector)
+				for (int ii = 0; ii < connectedBlocks.length; ii++)
 				{
-					for (int ii = 0; ii < connectedBlocks.length; ii++)
+					final Object connectedBlockB = connectedBlocks[ii];
+
+					if (connectedBlockA != connectedBlockB && connectedBlockB instanceof IConnector)
 					{
-						final TileEntity connectedBlockB = connectedBlocks[ii];
+						ConnectionPathfinder finder = new ConnectionPathfinder((IConnector) connectedBlockB, splitPoint);
+						finder.findNodes((IConnector) connectedBlockA);
 
-						if (connectedBlockA != connectedBlockB && connectedBlockB instanceof IConnector)
+						if (finder.results.size() > 0)
 						{
-							Pathfinder finder = new ConnectionPathfinder(world, (IConnector) connectedBlockB, splitPoint);
-							finder.init(new Vector3(connectedBlockA));
+							/**
+							 * The connections A and B are still intact elsewhere. Set all
+							 * references of wire connection into one network.
+							 */
 
-							if (finder.results.size() > 0)
+							for (IConnector node : finder.closedSet)
+							{
+								if (node != splitPoint)
+								{
+									((IConnector) node).setNetwork(this);
+								}
+							}
+						}
+						else
+						{
+							try
 							{
 								/**
-								 * The connections A and B are still intact elsewhere. Set all
-								 * references of wire connection into one network.
+								 * The connections A and B are not connected anymore.
+								 * Give them both a new common network.
 								 */
+								INetwork newNetwork = this.getClass().newInstance();
 
-								for (Vector3 node : finder.closedSet)
+								for (IConnector node : finder.closedSet)
 								{
-									TileEntity nodeTile = node.getTileEntity(world);
-
-									if (nodeTile instanceof IConnector)
+									if (node != splitPoint)
 									{
-										if (nodeTile != splitPoint)
-										{
-											((IConnector) nodeTile).setNetwork(this);
-										}
+										newNetwork.addConnector((IConductor) node);
 									}
 								}
 							}
-							else
+							catch (Exception e)
 							{
-								try
-								{
-									/**
-									 * The connections A and B are not connected anymore.
-									 * Give them both a new common network.
-									 */
-									INetwork newNetwork = this.getClass().newInstance();
-
-									for (Vector3 node : finder.closedSet)
-									{
-										TileEntity nodeTile = node.getTileEntity(world);
-
-										if (nodeTile instanceof IConnector)
-										{
-											if (nodeTile != splitPoint)
-											{
-												newNetwork.addConnector((IConductor) nodeTile);
-											}
-										}
-									}
-								}
-								catch (Exception e)
-								{
-									e.printStackTrace();
-								}
+								e.printStackTrace();
 							}
+
 						}
 					}
 				}
