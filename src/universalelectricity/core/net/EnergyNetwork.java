@@ -58,6 +58,10 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
         if (!evt.isCanceled())
         {
             int handlerSize = this.getNodes().size() - this.sources.size();
+            if (handlerSize <= 0)
+            {
+                handlerSize = 1;
+            }
             this.lastEnergyBuffer = this.energyBuffer;
             long totalUsableEnergy = this.energyBuffer - this.networkEnergyLoss;
             long remainingUsableEnergy = totalUsableEnergy;
