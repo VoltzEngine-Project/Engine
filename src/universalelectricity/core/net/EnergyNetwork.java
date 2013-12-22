@@ -31,10 +31,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
 	/** The total energy buffer in the last tick. */
 	private long lastEnergyBuffer;
-	/** Last recorded value for network demand energy */
-	private long lastNetworkDemand = 0;
-	/** Last time request calculation was made */
-	private long lastNetworkDemandCheck = 0;
+
+	/** Last cached value for network demand energy */
+	private long lastNetworkRequest = -1;
 
 	/** The direction in which a conductor is placed relative to a specific conductor. */
 	private HashMap<Object, EnumSet<ForgeDirection>> handlerDirectionMap = new HashMap<Object, EnumSet<ForgeDirection>>();
@@ -75,6 +74,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
 			this.energyBuffer = Math.max(remainingUsableEnergy, 0);
 		}
+
+		// Clear the network request cache.
+		this.lastNetworkRequest = -1;
 	}
 
 	@Override
@@ -92,10 +94,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	@Override
 	public long getRequest()
 	{
-		if (System.currentTimeMillis() - this.lastNetworkDemandCheck > 20)
+		if (this.lastNetworkRequest == -1)
 		{
-			this.lastNetworkDemandCheck = System.currentTimeMillis();
-			this.lastNetworkDemand = 0;
+			this.lastNetworkRequest = 0;
 
 			if (this.getNodes().size() > 0)
 			{
@@ -104,12 +105,15 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 					if (entry.getValue() != null)
 					{
 						for (ForgeDirection direction : entry.getValue())
-							this.lastNetworkDemand += CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false);
+						{
+							this.lastNetworkRequest += CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false);
+						}
 					}
 				}
 			}
 		}
-		return this.lastNetworkDemand;
+
+		return this.lastNetworkRequest;
 	}
 
 	@Override
@@ -146,22 +150,26 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 		}
 	}
 
-	/** Segmented out call so overriding can be done when conductors are reconstructed */
+	/**
+	 * Segmented out call so overriding can be done when conductors are reconstructed.
+	 */
 	protected void reconstructConductor(IConductor conductor)
 	{
 		conductor.setNetwork(this);
 
 		for (int i = 0; i < conductor.getConnections().length; i++)
 		{
-			reconstructMachine(conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
+			reconstructHandler(conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
 		}
 
 		this.energyBufferCapacity += conductor.getEnergyCapacitance();
 		this.networkEnergyLoss += conductor.getEnergyLoss();
 	}
 
-	/** Segmented out call so overriding can be done when machines are reconstructed */
-	protected void reconstructMachine(Object obj, ForgeDirection side)
+	/**
+	 * Segmented out call so overriding can be done when machines are reconstructed.
+	 */
+	protected void reconstructHandler(Object obj, ForgeDirection side)
 	{
 		if (obj != null && !(obj instanceof IConductor))
 		{
@@ -202,7 +210,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	@Override
 	public void split(IConductor splitPoint)
 	{
-		System.out.println("Splitting network");
 		this.removeConnector(splitPoint);
 		this.reconstruct();
 
@@ -264,11 +271,13 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 		{
 			long prevEnergyStored = this.energyBuffer;
 			long newEnergyStored = Math.min(this.energyBuffer + amount, this.energyBufferCapacity);
+
 			if (doReceive)
 			{
 				this.energyBuffer = newEnergyStored;
 				NetworkTickHandler.addNetwork(this);
 			}
+
 			return Math.max(newEnergyStored - prevEnergyStored, 0);
 		}
 		return 0;
