@@ -9,7 +9,4 @@ public interface IElectricalNetwork extends IEnergyNetwork
 {
     /** Gets Voltage that the network is at */
     public long getVoltage();
-
-    /** Gets the Amps the network is outputting */
-    public long getAmperage();
 }

@@ -11,6 +11,6 @@ public interface IVoltageSource
     /** Can this machine emit voltage on the given side. Should
      * 
      * @param side - side that the voltage will be emitted on
-     * @return true if at any given time this machine can output voltage on the side */
+     * @return true if there is a voltage output on the side */
     public boolean canEmitVoltage(ForgeDirection side);
 }

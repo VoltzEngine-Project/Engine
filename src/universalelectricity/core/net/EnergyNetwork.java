@@ -122,37 +122,17 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     {
         if (this.getConnectors().size() > 0)
         {
+            //Reset all values related to wires
             this.getNodes().clear();
             this.handlerDirectionMap.clear();
-            Iterator<IConductor> it = this.getConnectors().iterator();
+            this.energyBufferCapacity = 0;
+            this.networkEnergyLoss = 0;
 
+            //Iterate threw list of wires 
+            Iterator<IConductor> it = this.getConnectors().iterator();
             while (it.hasNext())
             {
-                IConductor conductor = it.next();
-                conductor.setNetwork(this);
-
-                for (int i = 0; i < conductor.getConnections().length; i++)
-                {
-                    Object obj = conductor.getConnections()[i];
-
-                    if (obj != null && !(obj instanceof IConductor))
-                    {
-                        if (CompatibilityModule.isHandler(obj))
-                        {
-                            EnumSet<ForgeDirection> set = this.handlerDirectionMap.get(obj);
-                            if (set == null)
-                            {
-                                set = EnumSet.noneOf(ForgeDirection.class);
-                            }
-                            this.getNodes().add(obj);
-                            set.add(ForgeDirection.getOrientation(i).getOpposite());
-                            this.handlerDirectionMap.put(obj, set);
-                        }
-                    }
-                }
-
-                this.energyBufferCapacity += conductor.getEnergyCapacitance();
-                this.networkEnergyLoss += conductor.getEnergyLoss();
+                this.reconstructConductor(it.next());
             }
 
             this.energyBufferCapacity /= this.getConnectors().size();
@@ -160,6 +140,39 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
             if (this.getNodes().size() > 0)
             {
                 NetworkTickHandler.addNetwork(this);
+            }
+        }
+    }
+
+    /** Segmented out call so overriding can be done when conductors are reconstructed */
+    protected void reconstructConductor(IConductor conductor)
+    {
+        conductor.setNetwork(this);
+
+        for (int i = 0; i < conductor.getConnections().length; i++)
+        {
+            reconstructMachine(conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
+        }
+
+        this.energyBufferCapacity += conductor.getEnergyCapacitance();
+        this.networkEnergyLoss += conductor.getEnergyLoss();
+    }
+
+    /** Segmented out call so overriding can be done when machines are reconstructed */
+    protected void reconstructMachine(Object obj, ForgeDirection side)
+    {
+        if (obj != null && !(obj instanceof IConductor))
+        {
+            if (CompatibilityModule.isHandler(obj))
+            {
+                EnumSet<ForgeDirection> set = this.handlerDirectionMap.get(obj);
+                if (set == null)
+                {
+                    set = EnumSet.noneOf(ForgeDirection.class);
+                }
+                this.getNodes().add(obj);
+                set.add(side);
+                this.handlerDirectionMap.put(obj, set);
             }
         }
     }
