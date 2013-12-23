@@ -2,6 +2,7 @@ package universalelectricity.core;
 
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
+import ic2.api.item.ISpecialElectricItem;
 
 import java.io.File;
 import java.util.Map;
@@ -14,10 +15,13 @@ import universalelectricity.api.energy.EnergyNetworkLoader;
 import universalelectricity.compatibility.ModuleUniversalElectricity;
 import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
+import universalelectricity.core.asm.template.ICElectricItemTemplate;
 import universalelectricity.core.asm.template.IndustrialCraftTemplate;
+import universalelectricity.core.asm.template.TEEnergyItemTemplate;
 import universalelectricity.core.asm.template.ThermalExpansionTemplate;
 import universalelectricity.core.net.EnergyNetwork;
 import universalelectricity.core.net.NetworkTickHandler;
+import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -36,6 +40,9 @@ public class UELoader implements IFMLLoadingPlugin
 	{
 		TemplateInjectionManager.registerTileTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, ThermalExpansionTemplate.class, IEnergyHandler.class);
 		TemplateInjectionManager.registerTileTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, IndustrialCraftTemplate.class, IEnergySink.class, IEnergySource.class);
+
+		TemplateInjectionManager.registerItemTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TEEnergyItemTemplate.class, IEnergyContainerItem.class);
+		TemplateInjectionManager.registerItemTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, ICElectricItemTemplate.class, ISpecialElectricItem.class);
 	}
 
 	/**

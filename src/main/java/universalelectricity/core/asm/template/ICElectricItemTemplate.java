@@ -12,10 +12,10 @@ import universalelectricity.api.item.IEnergyItem;
  * @author Calclavia
  * 
  */
-public abstract class IndustrialCraftElectricItemTemplate extends Item implements ISpecialElectricItem, IEnergyItem
+public abstract class ICElectricItemTemplate extends Item implements ISpecialElectricItem, IEnergyItem
 {
 
-	public IndustrialCraftElectricItemTemplate(int par1)
+	public ICElectricItemTemplate(int par1)
 	{
 		super(par1);
 	}
@@ -28,19 +28,19 @@ public abstract class IndustrialCraftElectricItemTemplate extends Item implement
 	@Override
 	public boolean canProvideEnergy(ItemStack itemStack)
 	{
-		return false;
+		return true;
 	}
 
 	@Override
 	public int getChargedItemId(ItemStack itemStack)
 	{
-		return 0;
+		return this.itemID;
 	}
 
 	@Override
 	public int getEmptyItemId(ItemStack itemStack)
 	{
-		return 0;
+		return this.itemID;
 	}
 
 	@Override
