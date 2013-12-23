@@ -1,0 +1,7 @@
+/.gradle
+/build
+/eclipse
+/output
+
+*.jar
+*.class
