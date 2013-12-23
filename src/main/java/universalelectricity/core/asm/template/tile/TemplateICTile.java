@@ -1,4 +1,4 @@
-package universalelectricity.core.asm.template;
+package universalelectricity.core.asm.template.tile;
 
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
@@ -14,7 +14,7 @@ import universalelectricity.api.energy.IEnergyInterface;
  * @author Calclavia
  * 
  */
-public abstract class IndustrialCraftTemplate extends TileEntity implements IEnergySink, IEnergySource, IEnergyInterface
+public abstract class TemplateICTile extends TileEntity implements IEnergySink, IEnergySource, IEnergyInterface
 {
 	protected boolean isAddedToEnergyNet;
 
@@ -24,45 +24,45 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction)
 	{
-		return StaticForwarder.canConnect(this, direction);
+		return StaticTileForwarder.canConnect(this, direction);
 	}
 
 	@Override
 	public double getOfferedEnergy()
 	{
-		return StaticForwarder.onExtractEnergy(this, ForgeDirection.UNKNOWN, Integer.MAX_VALUE, false) * CompatibilityType.INDUSTRIALCRAFT.ratio;
+		return StaticTileForwarder.onExtractEnergy(this, ForgeDirection.UNKNOWN, Integer.MAX_VALUE, false) * CompatibilityType.INDUSTRIALCRAFT.ratio;
 	}
 
 	@Override
 	public void drawEnergy(double amount)
 	{
-		StaticForwarder.onExtractEnergy(this, ForgeDirection.UNKNOWN, (int) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), true);
+		StaticTileForwarder.onExtractEnergy(this, ForgeDirection.UNKNOWN, (int) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), true);
 	}
 
 	@Override
 	public void validate()
 	{
-		StaticForwarder.validateTile(this);
-		StaticForwarder.loadIC(this);
+		StaticTileForwarder.validateTile(this);
+		StaticTileForwarder.loadIC(this);
 	}
 
 	@Override
 	public void invalidate()
 	{
-		StaticForwarder.unloadIC(this);
-		StaticForwarder.invalidateTile(this);
+		StaticTileForwarder.unloadIC(this);
+		StaticTileForwarder.invalidateTile(this);
 	}
 
 	@Override
 	public void onChunkUnload()
 	{
-		StaticForwarder.unloadIC(this);
+		StaticTileForwarder.unloadIC(this);
 	}
 
 	@Override
 	public double demandedEnergyUnits()
 	{
-		return StaticForwarder.onReceiveEnergy(this, ForgeDirection.UNKNOWN, Integer.MAX_VALUE, false) * CompatibilityType.INDUSTRIALCRAFT.ratio;
+		return StaticTileForwarder.onReceiveEnergy(this, ForgeDirection.UNKNOWN, Integer.MAX_VALUE, false) * CompatibilityType.INDUSTRIALCRAFT.ratio;
 	}
 
 	@Override
@@ -70,9 +70,9 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	{
 		int toSend = (int) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 
-		if (StaticForwarder.onReceiveEnergy(this, direction, toSend, false) > 0)
+		if (StaticTileForwarder.onReceiveEnergy(this, direction, toSend, false) > 0)
 		{
-			long receive = StaticForwarder.onReceiveEnergy(this, direction, toSend, true);
+			long receive = StaticTileForwarder.onReceiveEnergy(this, direction, toSend, true);
 
 			/*
 			 * Return the difference, since injectEnergy returns left over energy, and
@@ -87,7 +87,7 @@ public abstract class IndustrialCraftTemplate extends TileEntity implements IEne
 	@Override
 	public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction)
 	{
-		return receiver instanceof IEnergyTile && StaticForwarder.onExtractEnergy(this, direction, 1, false) > 0;
+		return receiver instanceof IEnergyTile && StaticTileForwarder.onExtractEnergy(this, direction, 1, false) > 0;
 	}
 
 	@Override

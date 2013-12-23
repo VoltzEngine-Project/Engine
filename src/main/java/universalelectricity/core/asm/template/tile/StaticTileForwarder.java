@@ -1,4 +1,4 @@
-package universalelectricity.core.asm.template;
+package universalelectricity.core.asm.template.tile;
 
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
@@ -19,7 +19,7 @@ import universalelectricity.api.energy.IEnergyInterface;
  * @author Calclavia
  * 
  */
-public class StaticForwarder
+public class StaticTileForwarder
 {
 	/**
 	 * IC2 Functions

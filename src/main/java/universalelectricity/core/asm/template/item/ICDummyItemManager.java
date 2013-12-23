@@ -1,4 +1,4 @@
-package universalelectricity.core.asm.template;
+package universalelectricity.core.asm.template.item;
 
 import ic2.api.item.IElectricItemManager;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,9 +10,9 @@ import universalelectricity.api.item.IEnergyItem;
  * @author Calclavia
  * 
  */
-public class IC2DummyItem implements IElectricItemManager
+public class ICDummyItemManager implements IElectricItemManager
 {
-	public static final IC2DummyItem INSTANCE = new IC2DummyItem();
+	public static final ICDummyItemManager INSTANCE = new ICDummyItemManager();
 
 	private IEnergyItem get(ItemStack itemStack)
 	{

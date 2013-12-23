@@ -15,10 +15,10 @@ import universalelectricity.api.energy.EnergyNetworkLoader;
 import universalelectricity.compatibility.ModuleUniversalElectricity;
 import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
-import universalelectricity.core.asm.template.ICElectricItemTemplate;
-import universalelectricity.core.asm.template.IndustrialCraftTemplate;
-import universalelectricity.core.asm.template.TEEnergyItemTemplate;
-import universalelectricity.core.asm.template.ThermalExpansionTemplate;
+import universalelectricity.core.asm.template.item.TemplateICItem;
+import universalelectricity.core.asm.template.item.TemplateTEItem;
+import universalelectricity.core.asm.template.tile.TemplateICTile;
+import universalelectricity.core.asm.template.tile.TemplateTETile;
 import universalelectricity.core.net.EnergyNetwork;
 import universalelectricity.core.net.NetworkTickHandler;
 import cofh.api.energy.IEnergyContainerItem;
@@ -38,11 +38,11 @@ public class UELoader implements IFMLLoadingPlugin
 {
 	static
 	{
-		TemplateInjectionManager.registerTileTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, ThermalExpansionTemplate.class, IEnergyHandler.class);
-		TemplateInjectionManager.registerTileTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, IndustrialCraftTemplate.class, IEnergySink.class, IEnergySource.class);
+		TemplateInjectionManager.registerTileTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TemplateTETile.class, IEnergyHandler.class);
+		TemplateInjectionManager.registerTileTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, TemplateICTile.class, IEnergySink.class, IEnergySource.class);
 
-		TemplateInjectionManager.registerItemTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TEEnergyItemTemplate.class, IEnergyContainerItem.class);
-		TemplateInjectionManager.registerItemTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, ICElectricItemTemplate.class, ISpecialElectricItem.class);
+		TemplateInjectionManager.registerItemTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TemplateTEItem.class, IEnergyContainerItem.class);
+		TemplateInjectionManager.registerItemTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, TemplateICItem.class, ISpecialElectricItem.class);
 	}
 
 	/**

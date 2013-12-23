@@ -1,4 +1,4 @@
-package universalelectricity.core.asm.template;
+package universalelectricity.core.asm.template.item;
 
 import ic2.api.item.IElectricItemManager;
 import net.minecraft.item.Item;
@@ -13,9 +13,9 @@ import cofh.api.energy.IEnergyContainerItem;
  * @author Calclavia
  * 
  */
-public abstract class TEEnergyItemTemplate extends Item implements IEnergyContainerItem, IEnergyItem
+public abstract class TemplateTEItem extends Item implements IEnergyContainerItem, IEnergyItem
 {
-	public TEEnergyItemTemplate(int par1)
+	public TemplateTEItem(int par1)
 	{
 		super(par1);
 	}

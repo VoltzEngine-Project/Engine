@@ -1,4 +1,4 @@
-package universalelectricity.core.asm.template;
+package universalelectricity.core.asm.template.item;
 
 import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
@@ -12,17 +12,16 @@ import universalelectricity.api.item.IEnergyItem;
  * @author Calclavia
  * 
  */
-public abstract class ICElectricItemTemplate extends Item implements ISpecialElectricItem, IEnergyItem
+public abstract class TemplateICItem extends Item implements ISpecialElectricItem, IEnergyItem
 {
-
-	public ICElectricItemTemplate(int par1)
+	public TemplateICItem(int par1)
 	{
 		super(par1);
 	}
 
 	public IElectricItemManager getManager(ItemStack itemStack)
 	{
-		return IC2DummyItem.INSTANCE;
+		return ICDummyItemManager.INSTANCE;
 	}
 
 	@Override
@@ -52,7 +51,7 @@ public abstract class ICElectricItemTemplate extends Item implements ISpecialEle
 	@Override
 	public int getTier(ItemStack itemStack)
 	{
-		return 4;
+		return 1;
 	}
 
 	@Override
