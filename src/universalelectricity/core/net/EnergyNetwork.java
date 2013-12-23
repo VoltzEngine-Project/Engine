@@ -289,6 +289,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 										newNetwork.addConnector((IConductor) node);
 									}
 								}
+
+								newNetwork.reconstruct();
 							}
 							catch (Exception e)
 							{
@@ -327,6 +329,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 				{
 					newNetwork.addConnector((IConductor) node);
 				}
+
+				newNetwork.reconstruct();
 			}
 			catch (Exception e)
 			{
