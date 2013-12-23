@@ -132,9 +132,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
                     {
                         for (ForgeDirection direction : entry.getValue())
                         {
-                            System.out.println("RequestB:" + this.lastNetworkRequest);
-                            this.lastNetworkRequest += Math.max(CompatibilityModule.receiveEnergy(entry.getKey(), direction, Integer.MAX_VALUE, false), 0);
-                            System.out.println("RequestA:" + this.lastNetworkRequest);
+                            this.lastNetworkRequest += Math.max(CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false), 0);
                         }
                     }
                 }
