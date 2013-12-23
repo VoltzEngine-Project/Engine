@@ -40,10 +40,10 @@ public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Obj
 	 */
 	public long getRequest();
 	
-	public long lastAmperageBuffer();
+	public long getLastAmperageBuffer();
 
 	/**
 	 * Gets a value that represents the amount of energy lost in the network
 	 */
-	public float getAverageResistance();
+	public float getResistance();
 }

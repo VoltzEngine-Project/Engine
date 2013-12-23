@@ -36,7 +36,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	private long energyBufferCapacity;
 
 	/** The total energy loss of this network. The loss is based on the loss in each conductor. */
-	private float averageResistance;
+	private float resistance;
 
 	/** The total energy buffer in the last tick. */
 	private long lastEnergyBuffer;
@@ -81,7 +81,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 			 * Therefore: P = I^2 x R
 			 */
 			this.amperageBuffer = this.energyBuffer / UniversalElectricity.DEFAULT_VOLTAGE;
-			long totalUsableEnergy = (long) (this.energyBuffer - ((this.amperageBuffer * this.amperageBuffer) * this.averageResistance));
+			long energyLoss = (long) ((this.amperageBuffer * this.amperageBuffer) * this.resistance);
+			long totalUsableEnergy = (long) (this.energyBuffer - energyLoss);
 			long remainingUsableEnergy = totalUsableEnergy;
 
 			int receiverCount = Math.max(this.getNodes().size() - this.sources.size(), 1);
@@ -157,9 +158,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	}
 
 	@Override
-	public float getAverageResistance()
+	public float getResistance()
 	{
-		return this.averageResistance;
+		return this.resistance;
 	}
 
 	/** Clears all cache and reconstruct the network. */
@@ -172,7 +173,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 			this.getNodes().clear();
 			this.handlerDirectionMap.clear();
 			this.energyBufferCapacity = 0;
-			this.averageResistance = 0;
+			this.resistance = 0;
 
 			// Iterate threw list of wires
 			Iterator<IConductor> it = this.getConnectors().iterator();
@@ -211,7 +212,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 		}
 
 		this.energyBufferCapacity += conductor.getTransferCapacity();
-		this.averageResistance += conductor.getResistance();
+		this.resistance += conductor.getResistance();
 	}
 
 	/** Segmented out call so overriding can be done when machines are reconstructed. */
@@ -348,7 +349,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	}
 
 	@Override
-	public long lastAmperageBuffer()
+	public long getLastAmperageBuffer()
 	{
 		return this.amperageBuffer;
 	}
