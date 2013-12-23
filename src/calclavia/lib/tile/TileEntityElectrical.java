@@ -4,23 +4,26 @@ import java.util.EnumSet;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.UniversalClass;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.api.item.ElectricItemHelper;
+import universalelectricity.api.vector.Vector3;
 
 @UniversalClass
 public class TileEntityElectrical extends TileEntityAdvanced implements IEnergyInterface, IEnergyContainer
 {
-	protected EnergyStorage energyStorage;
+	protected EnergyStorage energy;
 
 	/**
 	 * Recharges electric item.
 	 */
 	public void recharge(ItemStack itemStack)
 	{
-		this.energyStorage.setEnergy(this.energyStorage.getEnergy() - ElectricItemHelper.chargeItem(itemStack, this.energyStorage.getEmptySpace()));
+		this.energy.setEnergy(this.energy.getEnergy() - ElectricItemHelper.chargeItem(itemStack, this.energy.getEmptySpace()));
 	}
 
 	/**
@@ -28,7 +31,7 @@ public class TileEntityElectrical extends TileEntityAdvanced implements IEnergyI
 	 */
 	public void discharge(ItemStack itemStack)
 	{
-		this.energyStorage.setEnergy(this.energyStorage.getEnergy() + ElectricItemHelper.dischargeItem(itemStack, this.energyStorage.getEnergy()));
+		this.energy.setEnergy(this.energy.getEnergy() + ElectricItemHelper.dischargeItem(itemStack, this.energy.getEnergy()));
 	}
 
 	/**
@@ -68,43 +71,60 @@ public class TileEntityElectrical extends TileEntityAdvanced implements IEnergyI
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
-		this.energyStorage.readFromNBT(nbt);
+		this.energy.readFromNBT(nbt);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
-		this.energyStorage.writeToNBT(nbt);
+		this.energy.writeToNBT(nbt);
 	}
 
 	@Override
 	public long getEnergy(ForgeDirection from)
 	{
-		return this.energyStorage.getEnergy();
+		return this.energy.getEnergy();
 	}
 
 	@Override
 	public long getEnergyCapacity(ForgeDirection from)
 	{
-		return this.energyStorage.getEnergyCapacity();
+		return this.energy.getEnergyCapacity();
 	}
 
 	@Override
 	public long onReceiveEnergy(ForgeDirection from, long receive, boolean doReceive)
 	{
-		return this.energyStorage.receiveEnergy(receive, doReceive);
+		return this.energy.receiveEnergy(receive, doReceive);
 	}
 
 	@Override
 	public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract)
 	{
-		return this.energyStorage.extractEnergy(extract, doExtract);
+		return this.energy.extractEnergy(extract, doExtract);
 	}
 
 	@Override
 	public void setEnergy(ForgeDirection from, long energy)
 	{
-		this.energyStorage.setEnergy(energy);
+		this.energy.setEnergy(energy);
+	}
+
+	protected void produce()
+	{
+		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+		{
+			if (this.energy.getEnergy() > 0)
+			{
+				TileEntity tileEntity = new Vector3(this).modifyPositionFromSide(direction).getTileEntity(this.worldObj);
+
+				if (tileEntity != null)
+				{
+					long used = CompatibilityModule.receiveEnergy(tileEntity, direction.getOpposite(), this.energy.extractEnergy(this.energy.getEnergy(), false), true);
+					this.energy.extractEnergy(used, true);
+				}
+			}
+		}
 	}
 }
