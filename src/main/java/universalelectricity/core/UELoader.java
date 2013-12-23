@@ -33,7 +33,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "UniversalElectricity", version = UniversalElectricity.VERSION, name = "Universal Electricity")
-@TransformerExclusions({ "universalelectricity.core.asm" })
+@TransformerExclusions({ "universalelectricity.core.asm", "universalelectricity.core.asm.template" })
 public class UELoader implements IFMLLoadingPlugin
 {
 	static
