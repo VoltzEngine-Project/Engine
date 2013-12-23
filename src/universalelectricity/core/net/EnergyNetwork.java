@@ -21,7 +21,7 @@ import universalelectricity.api.net.NetworkEvent.EnergyUpdateEvent;
 
 /**
  * The energy network, neglecting voltage.
- * 
+ *
  * @author Calclavia
  */
 public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> implements IEnergyNetwork
@@ -134,7 +134,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 			{
 				for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
 				{
-					if (entry.getValue() != null)
+					if (entry.getValue() != null && !(entry.getValue() instanceof IConductor))
 					{
 						for (ForgeDirection direction : entry.getValue())
 						{
