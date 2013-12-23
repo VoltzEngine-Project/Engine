@@ -41,12 +41,18 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	/** The total energy buffer in the last tick. */
 	private long lastEnergyBuffer;
 
+	/** The cached amperage that was last sent in the network */
+	private long amperageBuffer;
+
 	/** Last cached value for network demand energy */
 	private long lastNetworkRequest = -1;
 
 	/** The direction in which a conductor is placed relative to a specific conductor. */
 	private HashMap<Object, EnumSet<ForgeDirection>> handlerDirectionMap = new LinkedHashMap<Object, EnumSet<ForgeDirection>>();
 
+	/**
+	 * The energy sources cached for the next network update event.
+	 */
 	private Set<Object> sources = new HashSet<Object>();
 
 	@Override
@@ -64,13 +70,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
 		if (!evt.isCanceled())
 		{
-			int divisionSize = this.getNodes().size() - this.sources.size();
-
-			if (divisionSize <= 0)
-			{
-				divisionSize = 1;
-			}
-
 			this.lastEnergyBuffer = this.energyBuffer;
 
 			/**
@@ -81,11 +80,13 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 			 * P = I x V
 			 * Therefore: P = I^2 x R
 			 */
-			long amperageBuffer = this.energyBuffer / UniversalElectricity.DEFAULT_VOLTAGE;
-			long totalUsableEnergy = (long) (this.energyBuffer - ((amperageBuffer * amperageBuffer) * this.averageResistance));
+			this.amperageBuffer = this.energyBuffer / UniversalElectricity.DEFAULT_VOLTAGE;
+			long totalUsableEnergy = (long) (this.energyBuffer - ((this.amperageBuffer * this.amperageBuffer) * this.averageResistance));
 			long remainingUsableEnergy = totalUsableEnergy;
 
-			// TODO: Need to fix the distribution.
+			int receiverCount = Math.max(this.getNodes().size() - this.sources.size(), 1);
+
+			distribution:
 			for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
 			{
 				if (entry.getValue() != null)
@@ -94,13 +95,18 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 					{
 						if (remainingUsableEnergy >= 0)
 						{
-							remainingUsableEnergy -= CompatibilityModule.receiveEnergy(entry.getKey(), direction, (totalUsableEnergy / divisionSize) + totalUsableEnergy % divisionSize, true);
+							long energyPerReceiver = (remainingUsableEnergy / receiverCount) + totalUsableEnergy % receiverCount;
+							remainingUsableEnergy -= CompatibilityModule.receiveEnergy(entry.getKey(), direction, energyPerReceiver, true);
+						}
+						else
+						{
+							break distribution;
 						}
 					}
 
-					if (divisionSize > 1)
+					if (receiverCount > 1)
 					{
-						divisionSize--;
+						receiverCount--;
 					}
 				}
 			}
@@ -339,5 +345,11 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	public long getBufferCapacity()
 	{
 		return this.energyBufferCapacity;
+	}
+
+	@Override
+	public long lastAmperageBuffer()
+	{
+		return this.amperageBuffer;
 	}
 }
