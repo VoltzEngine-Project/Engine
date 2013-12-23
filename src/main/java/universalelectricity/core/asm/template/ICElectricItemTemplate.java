@@ -34,13 +34,13 @@ public abstract class ICElectricItemTemplate extends Item implements ISpecialEle
 	@Override
 	public int getChargedItemId(ItemStack itemStack)
 	{
-		return this.itemID;
+		return itemStack.getItem().itemID;
 	}
 
 	@Override
 	public int getEmptyItemId(ItemStack itemStack)
 	{
-		return this.itemID;
+		return itemStack.getItem().itemID;
 	}
 
 	@Override
