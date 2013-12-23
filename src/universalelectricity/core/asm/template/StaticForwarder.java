@@ -106,7 +106,7 @@ public class StaticForwarder
 			{
 				try
 				{
-					Field f = tileEntity.getClass().getField("tileEntityInvalid");
+					Field f = TileEntity.class.getField("tileEntityInvalid");
 					f.setAccessible(true);
 					f.set(tileEntity, false);
 				}
@@ -128,7 +128,7 @@ public class StaticForwarder
 			{
 				try
 				{
-					Field f = tileEntity.getClass().getField("tileEntityInvalid");
+					Field f = TileEntity.class.getField("tileEntityInvalid");
 					f.setAccessible(true);
 					f.set(tileEntity, true);
 				}
