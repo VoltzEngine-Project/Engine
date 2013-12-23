@@ -34,6 +34,7 @@ import cpw.mods.fml.common.network.Player;
  * 
  * @author Calclavia
  */
+@Deprecated
 public class PacketManager implements IPacketHandler, IPacketReceiver
 {
 	public enum PacketType

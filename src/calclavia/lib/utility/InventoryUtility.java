@@ -1,4 +1,4 @@
-package calclavia.lib;
+package calclavia.lib.utility;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -11,7 +11,7 @@ import net.minecraftforge.common.ForgeDirection;
  * @author Calclavia
  * 
  */
-public class InventoryHelper
+public class InventoryUtility
 {
 	public static IInventory checkChestInv(IInventory inv)
 	{
