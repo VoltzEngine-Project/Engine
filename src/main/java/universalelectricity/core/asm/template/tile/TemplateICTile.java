@@ -16,8 +16,6 @@ import universalelectricity.api.energy.IEnergyInterface;
  */
 public abstract class TemplateICTile extends TileEntity implements IEnergySink, IEnergySource, IEnergyInterface
 {
-	protected boolean isAddedToEnergyNet;
-
 	/**
 	 * IC2 Methods
 	 */
