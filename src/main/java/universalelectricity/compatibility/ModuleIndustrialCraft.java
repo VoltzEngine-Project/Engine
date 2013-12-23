@@ -6,61 +6,68 @@ import ic2.api.item.IElectricItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.CompatibilityModule;
+import universalelectricity.api.CompatibilityType;
+import universalelectricity.api.item.IEnergyItem;
 import universalelectricity.api.vector.Vector3;
 
 /** @author Calclavia */
 public class ModuleIndustrialCraft extends CompatibilityModule
 {
-    @Override
-    public long doReceiveEnergy(Object obj, ForgeDirection direction, long energy, boolean doReceive)
-    {
-        double rejected = ((IEnergySink) obj).injectEnergyUnits(direction, energy * CompatibilityType.INDUSTRIALCRAFT.ratio);
-        return (long) (energy - (rejected * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio));
-    }
+	@Override
+	public long doReceiveEnergy(Object obj, ForgeDirection direction, long energy, boolean doReceive)
+	{
+		double rejected = ((IEnergySink) obj).injectEnergyUnits(direction, energy * CompatibilityType.INDUSTRIALCRAFT.ratio);
+		return (long) (energy - (rejected * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio));
+	}
 
-    @Override
-    public boolean doIsHandler(Object obj)
-    {
-        return obj instanceof IEnergySink || obj instanceof IElectricItem;
-    }
+	@Override
+	public boolean doIsHandler(Object obj)
+	{
+		return obj instanceof IEnergySink || obj instanceof IElectricItem;
+	}
 
-    @Override
-    public boolean doCanConnect(Object obj, ForgeDirection direction)
-    {
-        if (obj instanceof TileEntity)
-        {
-            TileEntity tileEntity = (TileEntity) obj;
-            Vector3 adjacentCoordinate = new Vector3(tileEntity).modifyPositionFromSide(direction);
-            return ((IEnergySink) obj).acceptsEnergyFrom(adjacentCoordinate.getTileEntity(tileEntity.worldObj), direction);
-        }
+	@Override
+	public boolean doCanConnect(Object obj, ForgeDirection direction)
+	{
+		if (obj instanceof TileEntity)
+		{
+			TileEntity tileEntity = (TileEntity) obj;
+			Vector3 adjacentCoordinate = new Vector3(tileEntity).modifyPositionFromSide(direction);
+			return ((IEnergySink) obj).acceptsEnergyFrom(adjacentCoordinate.getTileEntity(tileEntity.worldObj), direction);
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public long doChargeItem(ItemStack itemStack, long joules, boolean docharge)
-    {
-        if (itemStack.getItem() instanceof IElectricItem)
-        {
-            return (long) (ElectricItem.manager.charge(itemStack, (int) (joules * CompatibilityType.INDUSTRIALCRAFT.ratio), 4, true, false) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
-        }
-        return 0;
-    }
+	@Override
+	public long doChargeItem(ItemStack itemStack, long joules, boolean docharge)
+	{
+		if (itemStack.getItem() instanceof IElectricItem)
+		{
+			return (long) (ElectricItem.manager.charge(itemStack, (int) (joules * CompatibilityType.INDUSTRIALCRAFT.ratio), 4, true, false) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+		}
+		return 0;
+	}
 
-    @Override
-    public long doDischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
-    {
-        if (itemStack.getItem() instanceof IElectricItem)
-        {
-            IElectricItem item = (IElectricItem) itemStack.getItem();
+	@Override
+	public long doDischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
+	{
+		if (itemStack.getItem() instanceof IElectricItem)
+		{
+			IElectricItem item = (IElectricItem) itemStack.getItem();
 
-            if (item.canProvideEnergy(itemStack))
-            {
-                return (long) (ElectricItem.manager.discharge(itemStack, (int) (joules * CompatibilityType.INDUSTRIALCRAFT.ratio), 4, true, doDischarge) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
-            }
-        }
-        return 0;
-    }
+			if (item.canProvideEnergy(itemStack))
+			{
+				return (long) (ElectricItem.manager.discharge(itemStack, (int) (joules * CompatibilityType.INDUSTRIALCRAFT.ratio), 4, true, doDischarge) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public ItemStack doGetItemWithCharge(ItemStack itemStack, long energy)
+	{
+		return null;
+	}
 }

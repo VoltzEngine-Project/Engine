@@ -5,7 +5,7 @@ import ic2.api.energy.tile.IEnergySource;
 import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.Compatibility.CompatibilityType;
+import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.energy.IEnergyInterface;
 
 /**

@@ -2,7 +2,7 @@ package universalelectricity.api.item;
 
 import net.minecraft.item.ItemStack;
 
-public interface IElectricalItem
+public interface IEnergyItem
 {
 	/**
 	 * Adds energy to an item. Returns the quantity of energy that was accepted. This should always
@@ -29,12 +29,12 @@ public interface IElectricalItem
 	/**
 	 * Get the amount of energy currently stored in the item.
 	 */
-	public long getElectricityStored(ItemStack theItem);
+	public long getEnergy(ItemStack theItem);
 
 	/**
 	 * Get the max amount of energy that can be stored in the item.
 	 */
-	public long getElectricityCapacity(ItemStack theItem);
+	public long getEnergyCapacity(ItemStack theItem);
 
 	/**
 	 * Sets the amount of energy in the ItemStack. Use recharge or discharge instead of calling this
@@ -43,5 +43,5 @@ public interface IElectricalItem
 	 * @param itemStack - the ItemStack.
 	 * @param energy - Amount of electrical energy.
 	 */
-	public void setElectricity(ItemStack itemStack, long energy);
+	public void setEnergy(ItemStack itemStack, long energy);
 }

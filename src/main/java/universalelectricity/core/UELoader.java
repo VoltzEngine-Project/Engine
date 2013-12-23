@@ -7,8 +7,8 @@ import java.io.File;
 import java.util.Map;
 
 import net.minecraftforge.common.Configuration;
-import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.CompatibilityModule;
+import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.energy.EnergyNetworkLoader;
 import universalelectricity.compatibility.ModuleUniversalElectricity;
@@ -34,8 +34,8 @@ public class UELoader implements IFMLLoadingPlugin
 {
 	static
 	{
-		TemplateInjectionManager.registerDefaultImpl(CompatibilityType.THERMAL_EXPANSION.moduleName, ThermalExpansionTemplate.class, IEnergyHandler.class);
-		TemplateInjectionManager.registerDefaultImpl(CompatibilityType.INDUSTRIALCRAFT.moduleName, IndustrialCraftTemplate.class, IEnergySink.class, IEnergySource.class);
+		TemplateInjectionManager.registerTileTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, ThermalExpansionTemplate.class, IEnergyHandler.class);
+		TemplateInjectionManager.registerTileTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, IndustrialCraftTemplate.class, IEnergySink.class, IEnergySource.class);
 	}
 
 	/**

@@ -3,6 +3,8 @@
  */
 package universalelectricity.core.asm;
 
+import java.util.HashMap;
+
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
@@ -10,9 +12,10 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 
-import universalelectricity.api.Compatibility.CompatibilityType;
+import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyInterface;
+import universalelectricity.api.item.IEnergyItem;
 import universalelectricity.core.asm.TemplateInjectionManager.InjectionTemplate;
 
 /**
@@ -26,7 +29,7 @@ public class UniversalTransformer implements IClassTransformer
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes)
 	{
-		if (transformedName.startsWith("net.minecraft") || TemplateInjectionManager.injectionTemplates.isEmpty())
+		if (transformedName.startsWith("net.minecraft") || TemplateInjectionManager.tileTemplates.isEmpty())
 		{
 			return bytes;
 		}
@@ -70,38 +73,18 @@ public class UniversalTransformer implements IClassTransformer
 					{
 						transformationType = 1;
 					}
-
-					if (transformationType == 0)
+					else if (cnode.interfaces.contains(IEnergyItem.class.getName().replace(".", "/")))
 					{
-						if (flags == null || flags.equals(""))
-						{
-							for (InjectionTemplate template : TemplateInjectionManager.injectionTemplates.values())
-							{
-								if (template != null)
-								{
-									changed |= template.patch(cnode);
-									System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
-								}
-							}
-						}
-						else
-						{
-							String[] separatedFlags = flags.split(";");
+						transformationType = 2;
+					}
 
-							for (String separated : separatedFlags)
-							{
-								if (CompatibilityType.get(separated) != null)
-								{
-									InjectionTemplate template = TemplateInjectionManager.injectionTemplates.get(separated);
-
-									if (template != null)
-									{
-										changed |= template.patch(cnode);
-										System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
-									}
-								}
-							}
-						}
+					if (transformationType == 0 || transformationType == 1)
+					{
+						changed |= injectTemplate(cnode, flags, TemplateInjectionManager.tileTemplates);
+					}
+					else if (transformationType == 2)
+					{
+						changed |= injectTemplate(cnode, flags, TemplateInjectionManager.itemTemplates);
 					}
 					else
 					{
@@ -115,5 +98,42 @@ public class UniversalTransformer implements IClassTransformer
 		}
 
 		return changed ? ASMHelper.createBytes(cnode, ClassWriter.COMPUTE_FRAMES) : bytes;
+	}
+
+	private boolean injectTemplate(ClassNode cnode, String flags, HashMap<String, InjectionTemplate> templates)
+	{
+		boolean changed = false;
+
+		if (flags == null || flags.equals(""))
+		{
+			for (InjectionTemplate template : templates.values())
+			{
+				if (template != null)
+				{
+					changed |= template.patch(cnode);
+					System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
+				}
+			}
+		}
+		else
+		{
+			String[] separatedFlags = flags.split(";");
+
+			for (String separated : separatedFlags)
+			{
+				if (CompatibilityType.get(separated) != null)
+				{
+					InjectionTemplate template = templates.get(separated);
+
+					if (template != null)
+					{
+						changed |= template.patch(cnode);
+						System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
+					}
+				}
+			}
+		}
+
+		return changed;
 	}
 }

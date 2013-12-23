@@ -2,8 +2,8 @@ package universalelectricity.compatibility;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.Compatibility.CompatibilityType;
 import universalelectricity.api.CompatibilityModule;
+import universalelectricity.api.CompatibilityType;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.power.PowerHandler.Type;
@@ -43,14 +43,18 @@ public class ModuleBuildCraft extends CompatibilityModule
     @Override
     public long doChargeItem(ItemStack itemStack, long joules, boolean docharge)
     {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public long doDischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
     {
-        // TODO Auto-generated method stub
         return 0;
     }
+
+	@Override
+	public ItemStack doGetItemWithCharge(ItemStack itemStack, long energy)
+	{
+		return null;
+	}
 }

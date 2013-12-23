@@ -92,14 +92,10 @@ public class TemplateInjectionManager
 		}
 	}
 
-	static HashMap<String, InjectionTemplate> injectionTemplates = new HashMap<String, InjectionTemplate>();
+	static HashMap<String, InjectionTemplate> tileTemplates = new HashMap<String, InjectionTemplate>();
+	static HashMap<String, InjectionTemplate> itemTemplates = new HashMap<String, InjectionTemplate>();
 
-	/**
-	 * 
-	 * @param templateClass - The abstract class holding the template.
-	 * @param cname
-	 */
-	public static void registerDefaultImpl(String name, Class templateClass, Class... templateInterfaces)
+	public static void registerTileTemplate(String name, Class templateClass, Class... templateInterfaces)
 	{
 		List<String> interfaces = new ArrayList<String>();
 
@@ -108,7 +104,19 @@ public class TemplateInjectionManager
 			interfaces.add(templateInterface.getName());
 		}
 
-		injectionTemplates.put(name, new InjectionTemplate(templateClass.getName(), interfaces));
+		tileTemplates.put(name, new InjectionTemplate(templateClass.getName(), interfaces));
+	}
+
+	public static void registerItemTemplate(String name, Class templateClass, Class... templateInterfaces)
+	{
+		List<String> interfaces = new ArrayList<String>();
+
+		for (Class templateInterface : templateInterfaces)
+		{
+			interfaces.add(templateInterface.getName());
+		}
+
+		itemTemplates.put(name, new InjectionTemplate(templateClass.getName(), interfaces));
 	}
 
 	private static ClassNode getClassNode(String name)
