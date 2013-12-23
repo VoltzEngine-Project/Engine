@@ -18,8 +18,9 @@ public interface IPathCallBack
 	 * Called when looping through nodes.
 	 * 
 	 * @param finder - The Pathfinder.
-	 * @param node - The node being searched.
+	 * @param start- The starting node.
+	 * @param currentNode - The node being searched.
 	 * @return True to stop the path finding operation.
 	 */
-	public boolean onSearch(Pathfinder finder, Vector3 node);
+	public boolean onSearch(Pathfinder finder, Vector3 node, Vector3 currentNode);
 }

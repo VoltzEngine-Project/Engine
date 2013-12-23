@@ -2,6 +2,8 @@ package calclavia.lib.path;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import net.minecraftforge.common.ForgeDirection;
@@ -16,11 +18,6 @@ import universalelectricity.api.vector.Vector3;
  */
 public class PathfinderAStar extends Pathfinder
 {
-	/**
-	 * A pathfinding call back interface used to call back on paths.
-	 */
-	public IPathCallBack callBackCheck;
-
 	/**
 	 * The set of tentative nodes to be evaluated, initially containing the start node
 	 */
@@ -52,6 +49,7 @@ public class PathfinderAStar extends Pathfinder
 	@Override
 	public boolean findNodes(Vector3 start)
 	{
+		this.reset();
 		this.openSet.add(start);
 		this.gScore.put(start, 0d);
 		this.fScore.put(start, this.gScore.get(start) + getHeuristicEstimatedCost(start, this.goal));
@@ -77,7 +75,7 @@ public class PathfinderAStar extends Pathfinder
 				break;
 			}
 
-			if (this.callBackCheck.onSearch(this, currentNode))
+			if (this.callBackCheck.onSearch(this, start, currentNode))
 			{
 				return false;
 			}
@@ -121,15 +119,17 @@ public class PathfinderAStar extends Pathfinder
 	{
 		this.openSet = new HashSet<Vector3>();
 		this.navigationMap = new HashMap<Vector3, Vector3>();
+		this.gScore = new HashMap<Vector3, Double>();
+		this.fScore = new HashMap<Vector3, Double>();
 		return super.reset();
 	}
 
 	/**
 	 * A recursive function to back track and find the path in which we have analyzed.
 	 */
-	public Set<Vector3> reconstructPath(HashMap<Vector3, Vector3> nagivationMap, Vector3 current_node)
+	public List<Vector3> reconstructPath(HashMap<Vector3, Vector3> nagivationMap, Vector3 current_node)
 	{
-		Set<Vector3> path = new HashSet<Vector3>();
+		List<Vector3> path = new LinkedList<Vector3>();
 		path.add(current_node);
 
 		if (nagivationMap.containsKey(current_node))

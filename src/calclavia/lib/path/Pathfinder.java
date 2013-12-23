@@ -1,6 +1,8 @@
 package calclavia.lib.path;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import universalelectricity.api.vector.Vector3;
@@ -27,7 +29,9 @@ public class Pathfinder
 	/**
 	 * The resulted path found by the pathfinder. Could be null if no path was found.
 	 */
-	public Set<Vector3> results;
+	public List<Vector3> results;
+
+	private Vector3 start;
 
 	public Pathfinder(IPathCallBack callBack)
 	{
@@ -40,9 +44,14 @@ public class Pathfinder
 	 */
 	public boolean findNodes(Vector3 currentNode)
 	{
+		if (this.start == null)
+		{
+			this.start = currentNode;
+		}
+
 		this.closedSet.add(currentNode);
 
-		if (this.callBackCheck.onSearch(this, currentNode))
+		if (this.callBackCheck.onSearch(this, this.start, currentNode))
 		{
 			return false;
 		}
@@ -72,8 +81,8 @@ public class Pathfinder
 
 	public Pathfinder reset()
 	{
-		this.closedSet = new HashSet<Vector3>();
-		this.results = new HashSet<Vector3>();
+		this.closedSet = new LinkedHashSet<Vector3>();
+		this.results = new LinkedList<Vector3>();
 		return this;
 	}
 }
