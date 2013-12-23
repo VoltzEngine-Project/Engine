@@ -303,6 +303,39 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	}
 
 	@Override
+	public void split(IConductor connectorA, IConductor connectorB)
+	{
+		this.reconstruct();
+
+		/**
+		 * Check if connectorA connects with connectorB.
+		 */
+		ConnectionPathfinder finder = new ConnectionPathfinder((IConnector) connectorB);
+		finder.findNodes((IConnector) connectorA);
+
+		if (finder.results.size() <= 0)
+		{
+			try
+			{
+				/**
+				 * The connections A and B are not connected anymore. Give them both
+				 * a new common network.
+				 */
+				IEnergyNetwork newNetwork = EnergyNetworkLoader.getNewNetwork();
+
+				for (IConnector node : finder.closedSet)
+				{
+					newNetwork.addConnector((IConductor) node);
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
 	public long produce(Object source, ForgeDirection side, long amount, boolean doReceive)
 	{
 		EnergyProduceEvent evt = new EnergyProduceEvent(this, source, amount, doReceive);

@@ -58,11 +58,19 @@ public interface INetwork<N, C, A>
 	public N merge(N network);
 
 	/**
-	 * Splits a network by the conductor referenced in the parameters. It will then create and
+	 * Splits a network by removing a conductor referenced in the parameter. It will then create and
 	 * refresh the new independent networks possibly created by this operation.
 	 * 
 	 * @param connection
 	 */
 	public void split(C connection);
+
+	/**
+	 * Splits the network between 2 connectors, separating their networks.
+	 * 
+	 * @param connectorA
+	 * @param connectorB
+	 */
+	public void split(C connectorA, C connectorB);
 
 }

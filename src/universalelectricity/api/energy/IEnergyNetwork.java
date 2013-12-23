@@ -39,7 +39,7 @@ public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Obj
 	 * Gets an estimated value of what the network wants for energy
 	 */
 	public long getRequest();
-	
+
 	public long getLastAmperageBuffer();
 
 	/**
