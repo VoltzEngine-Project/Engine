@@ -11,6 +11,7 @@ import java.util.Set;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.api.CompatibilityModule;
+import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.energy.EnergyNetworkLoader;
 import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyNetwork;
@@ -18,7 +19,11 @@ import universalelectricity.api.net.IConnector;
 import universalelectricity.api.net.NetworkEvent.EnergyProduceEvent;
 import universalelectricity.api.net.NetworkEvent.EnergyUpdateEvent;
 
-/** @author Calclavia */
+/**
+ * The energy network, neglecting voltage.
+ * 
+ * @author Calclavia
+ */
 public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> implements IEnergyNetwork
 {
 	/** The energy to be distributed on the next update. */
@@ -31,7 +36,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	private long energyBufferCapacity;
 
 	/** The total energy loss of this network. The loss is based on the loss in each conductor. */
-	private long networkEnergyLoss;
+	private float averageResistance;
 
 	/** The total energy buffer in the last tick. */
 	private long lastEnergyBuffer;
@@ -60,18 +65,27 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 		if (!evt.isCanceled())
 		{
 			int divisionSize = this.getNodes().size() - this.sources.size();
-			
+
 			if (divisionSize <= 0)
 			{
 				divisionSize = 1;
 			}
-			
+
 			this.lastEnergyBuffer = this.energyBuffer;
-			// TODO: Fix energy loss being too obsurdly high and causing no energy transfer.
-			long totalUsableEnergy = Math.max(this.energyBuffer - this.networkEnergyLoss, 0);
+
+			/**
+			 * Assume voltage to be the default voltage for the energy network to calculate energy
+			 * loss.
+			 * Energy Loss Forumla:
+			 * Delta V = I x R
+			 * P = I x V
+			 * Therefore: P = I^2 x R
+			 */
+			long amperageBuffer = this.energyBuffer / UniversalElectricity.DEFAULT_VOLTAGE;
+			long totalUsableEnergy = (long) (this.energyBuffer - ((amperageBuffer * amperageBuffer) * this.averageResistance));
 			long remainingUsableEnergy = totalUsableEnergy;
 
-			//TODO: Need to fix the distribution.
+			// TODO: Need to fix the distribution.
 			for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
 			{
 				if (entry.getValue() != null)
@@ -83,7 +97,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 							remainingUsableEnergy -= CompatibilityModule.receiveEnergy(entry.getKey(), direction, (totalUsableEnergy / divisionSize) + totalUsableEnergy % divisionSize, true);
 						}
 					}
-					
+
 					if (divisionSize > 1)
 					{
 						divisionSize--;
@@ -137,9 +151,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	}
 
 	@Override
-	public long getEnergyLoss()
+	public float getAverageResistance()
 	{
-		return this.networkEnergyLoss;
+		return this.averageResistance;
 	}
 
 	/** Clears all cache and reconstruct the network. */
@@ -152,13 +166,23 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 			this.getNodes().clear();
 			this.handlerDirectionMap.clear();
 			this.energyBufferCapacity = 0;
-			this.networkEnergyLoss = 0;
+			this.averageResistance = 0;
 
 			// Iterate threw list of wires
 			Iterator<IConductor> it = this.getConnectors().iterator();
+
 			while (it.hasNext())
 			{
-				this.reconstructConductor(it.next());
+				IConductor conductor = it.next();
+
+				if (conductor != null)
+				{
+					this.reconstructConductor(conductor);
+				}
+				else
+				{
+					it.remove();
+				}
 			}
 
 			this.energyBufferCapacity /= this.getConnectors().size();
@@ -180,8 +204,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 			reconstructHandler(conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
 		}
 
-		this.energyBufferCapacity += conductor.getEnergyCapacitance();
-		this.networkEnergyLoss += conductor.getEnergyLoss();
+		this.energyBufferCapacity += conductor.getTransferCapacity();
+		this.averageResistance += conductor.getResistance();
 	}
 
 	/** Segmented out call so overriding can be done when machines are reconstructed. */
@@ -309,5 +333,11 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	public long getLastBuffer()
 	{
 		return this.lastEnergyBuffer;
+	}
+
+	@Override
+	public long getBufferCapacity()
+	{
+		return this.energyBufferCapacity;
 	}
 }

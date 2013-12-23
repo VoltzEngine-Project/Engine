@@ -11,11 +11,11 @@ import universalelectricity.api.net.IConnector;
 public interface IConductor extends IConnector<IEnergyNetwork>, IEnergyInterface
 {
 	/**
-	 * Gets the amount of energy loss through conducting pass this conductor.
+	 * Gets the amount of resistance of energy conducting pass this conductor.
 	 * 
-	 * @return The amount of loss in joules.
+	 * @return The amount of loss in Ohms.
 	 */
-	public long getEnergyLoss();
+	public float getResistance();
 
 	/**
 	 * The maximum amount of energy this conductor can buffer (the transfer rate,
@@ -23,6 +23,6 @@ public interface IConductor extends IConnector<IEnergyNetwork>, IEnergyInterface
 	 * 
 	 * @return The amount of energy in joules.
 	 */
-	public long getEnergyCapacitance();
+	public long getTransferCapacity();
 
 }
