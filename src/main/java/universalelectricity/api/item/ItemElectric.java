@@ -8,9 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.world.World;
 import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.UniversalElectricity;
@@ -68,28 +66,32 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 	@Override
 	public long recharge(ItemStack itemStack, long energy, boolean doReceive)
 	{
-		long rejectedElectricity = Math.max((this.getEnergy(itemStack) + energy) - this.getEnergyCapacity(itemStack), 0);
-		long energyToReceive = energy - rejectedElectricity;
+		long energyReceived = Math.min(this.getEnergyCapacity(itemStack) - energy, Math.min(this.getTransferRate(itemStack), energy));
 
 		if (doReceive)
 		{
-			this.setEnergy(itemStack, this.getEnergy(itemStack) + energyToReceive);
+			this.setEnergy(itemStack, this.getEnergy(itemStack) + energyReceived);
 		}
 
-		return energyToReceive;
+		return energyReceived;
+	}
+
+	public long getTransferRate(ItemStack itemStack)
+	{
+		return this.getEnergyCapacity(itemStack) / 100;
 	}
 
 	@Override
 	public long discharge(ItemStack itemStack, long energy, boolean doTransfer)
 	{
-		long energyToTransfer = Math.min(this.getEnergy(itemStack), energy);
+		long energyExtracted = Math.min(energy, Math.min(this.getTransferRate(itemStack), energy));
 
 		if (doTransfer)
 		{
-			this.setEnergy(itemStack, this.getEnergy(itemStack) - energyToTransfer);
+			this.setEnergy(itemStack, this.getEnergy(itemStack) - energyExtracted);
 		}
 
-		return energyToTransfer;
+		return energyExtracted;
 	}
 
 	@Override
@@ -101,7 +103,6 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 	@Override
 	public void setEnergy(ItemStack itemStack, long joules)
 	{
-		// Saves the frequency in the ItemStack
 		if (itemStack.getTagCompound() == null)
 		{
 			itemStack.setTagCompound(new NBTTagCompound());
@@ -109,9 +110,7 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 
 		long electricityStored = Math.max(Math.min(joules, this.getEnergyCapacity(itemStack)), 0);
 		itemStack.getTagCompound().setLong("electricity", electricityStored);
-
-		/** Sets the damage as a percentage to render the bar properly. */
-		itemStack.setItemDamage((int) (100 - (electricityStored / getEnergyCapacity(itemStack)) * 100));
+		itemStack.setItemDamage((int) (100 - ((double) electricityStored / (double) getEnergyCapacity(itemStack)) * 100));
 	}
 
 	public long getTransfer(ItemStack itemStack)
@@ -119,7 +118,6 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 		return this.getEnergyCapacity(itemStack) - this.getEnergy(itemStack);
 	}
 
-	/** Gets the energy stored in the item. Energy is stored using item NBT */
 	@Override
 	public long getEnergy(ItemStack itemStack)
 	{
@@ -132,17 +130,10 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 
 		if (itemStack.getTagCompound().hasKey("electricity"))
 		{
+			// Backwards compatibility
 			NBTBase obj = itemStack.getTagCompound().getTag("electricity");
 
-			if (obj instanceof NBTTagLong)
-			{
-				energyStored = (long) ((NBTTagLong) obj).data;
-			}
-			else if (obj instanceof NBTTagDouble)
-			{
-				energyStored = (long) ((NBTTagDouble) obj).data;
-			}
-			else if (obj instanceof NBTTagFloat)
+			if (obj instanceof NBTTagFloat)
 			{
 				energyStored = (long) ((NBTTagFloat) obj).data;
 			}
@@ -152,8 +143,7 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 			}
 		}
 
-		/** Sets the damage as a percentage to render the bar properly. */
-		itemStack.setItemDamage((int) (100 - (energyStored / getEnergyCapacity(itemStack)) * 100));
+		itemStack.setItemDamage((int) (100 - ((double) energyStored / (double) getEnergyCapacity(itemStack)) * 100));
 		return energyStored;
 	}
 
