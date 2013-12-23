@@ -84,18 +84,6 @@ public class UELoader implements IFMLLoadingPlugin
 	}
 
 	/**
-	 * Return a list of classes that implement the ILibrarySet interface
-	 * 
-	 * @return a list of classes that implement the ILibrarySet interface
-	 */
-	@Deprecated
-	@Override
-	public String[] getLibraryRequestClass()
-	{
-		return new String[0];
-	}
-
-	/**
 	 * Return a list of classes that implements the IClassTransformer interface
 	 * 
 	 * @return a list of classes that implements the IClassTransformer interface
