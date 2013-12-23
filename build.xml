@@ -74,6 +74,9 @@
 		<!-- OUTPUT LATEST JAR AND ZIP FILES -->
 		<jar destfile="${file.ue_core_latest}">
 			<fileset dir="ue_core" />
+			<manifest>
+				<attribute name="FMLCorePlugin" value="universalelectricity.core.UELoader" />
+			</manifest>
 		</jar>
 		<zip destfile="${file.ue_api_latest}">
 			<fileset dir="ue_api" />
