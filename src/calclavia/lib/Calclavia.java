@@ -1,12 +1,9 @@
 package calclavia.lib;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.Loader;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.Configuration;
 
 public class Calclavia
 {

@@ -1,7 +1,6 @@
 package calclavia.lib.tile;
 
 import net.minecraft.block.Block;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
 
 /**

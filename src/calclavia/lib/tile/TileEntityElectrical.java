@@ -10,7 +10,6 @@ import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.UniversalClass;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
-import universalelectricity.api.item.ElectricItemHelper;
 import universalelectricity.api.vector.Vector3;
 
 @UniversalClass
@@ -23,7 +22,7 @@ public class TileEntityElectrical extends TileEntityAdvanced implements IEnergyI
 	 */
 	public void recharge(ItemStack itemStack)
 	{
-		this.energy.setEnergy(this.energy.getEnergy() - ElectricItemHelper.chargeItem(itemStack, this.energy.getEmptySpace()));
+		this.energy.extractEnergy(CompatibilityModule.chargeItem(itemStack, this.energy.getEmptySpace(), true), true);
 	}
 
 	/**
@@ -31,7 +30,7 @@ public class TileEntityElectrical extends TileEntityAdvanced implements IEnergyI
 	 */
 	public void discharge(ItemStack itemStack)
 	{
-		this.energy.setEnergy(this.energy.getEnergy() + ElectricItemHelper.dischargeItem(itemStack, this.energy.getEnergy()));
+		this.energy.receiveEnergy(CompatibilityModule.dischargeItem(itemStack, this.energy.getEnergy(), true), true);
 	}
 
 	/**
