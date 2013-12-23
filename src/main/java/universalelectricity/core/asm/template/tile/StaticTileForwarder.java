@@ -4,7 +4,6 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyTile;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
 
 import net.minecraft.tileentity.TileEntity;
@@ -14,6 +13,7 @@ import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**
  * @author Calclavia
@@ -106,9 +106,7 @@ public class StaticTileForwarder
 			{
 				try
 				{
-					Field f = TileEntity.class.getField("tileEntityInvalid");
-					f.setAccessible(true);
-					f.set(tileEntity, false);
+					ReflectionHelper.setPrivateValue(TileEntity.class, tileEntity, false, "tileEntityInvalid");
 				}
 				catch (Exception e)
 				{
@@ -128,9 +126,7 @@ public class StaticTileForwarder
 			{
 				try
 				{
-					Field f = TileEntity.class.getField("tileEntityInvalid");
-					f.setAccessible(true);
-					f.set(tileEntity, true);
+					ReflectionHelper.setPrivateValue(TileEntity.class, tileEntity, true, "tileEntityInvalid");
 				}
 				catch (Exception e)
 				{
