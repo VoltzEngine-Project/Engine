@@ -72,17 +72,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 		{
 			this.lastEnergyBuffer = this.energyBuffer;
 
-			/**
-			 * Assume voltage to be the default voltage for the energy network to calculate energy
-			 * loss.
-			 * Energy Loss Forumla:
-			 * Delta V = I x R
-			 * P = I x V
-			 * Therefore: P = I^2 x R
-			 */
 			this.amperageBuffer = this.energyBuffer / UniversalElectricity.DEFAULT_VOLTAGE;
-			long energyLoss = (long) ((this.amperageBuffer * this.amperageBuffer) * this.resistance);
-			long totalUsableEnergy = (long) (this.energyBuffer - energyLoss);
+			long totalUsableEnergy = (long) (this.energyBuffer - this.getEnergyLoss(this.energyBuffer));
 			long remainingUsableEnergy = totalUsableEnergy;
 
 			int receiverCount = Math.max(this.getNodes().size() - this.sources.size(), 1);
@@ -319,21 +310,35 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
 		if (!evt.isCanceled() && amount > 0)
 		{
-			long prevEnergyStored = this.energyBuffer;
-			long newEnergyStored = Math.min(this.energyBuffer + amount, this.energyBufferCapacity);
+			// Take account in the resistance of the system to prevent overflow.
+			long energyReceived = Math.min(this.energyBufferCapacity - this.energyBuffer, amount);
 
 			if (doReceive)
 			{
-				this.energyBuffer = newEnergyStored;
+				this.energyBuffer += energyReceived;
 				NetworkTickHandler.addNetwork(this);
 			}
 
 			this.sources.add(source);
 
-			return Math.max(newEnergyStored - prevEnergyStored, 0);
+			return energyReceived;
 		}
 
 		return 0;
+	}
+
+	/**
+	 * Assume voltage to be the default voltage for the energy network to calculate energy
+	 * loss.
+	 * Energy Loss Forumla:
+	 * Delta V = I x R
+	 * P = I x V
+	 * Therefore: P = I^2 x R
+	 */
+	private long getEnergyLoss(long energy)
+	{
+		long amperage = energy / UniversalElectricity.DEFAULT_VOLTAGE;
+		return (long) ((amperage * amperage) * this.resistance);
 	}
 
 	@Override
