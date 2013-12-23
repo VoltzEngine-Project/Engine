@@ -129,4 +129,9 @@ public class UELoader implements IFMLLoadingPlugin
 	public void injectData(Map<String, Object> data)
 	{
 	}
+
+	public String[] getLibraryRequestClass()
+	{
+		return null;
+	}
 }
