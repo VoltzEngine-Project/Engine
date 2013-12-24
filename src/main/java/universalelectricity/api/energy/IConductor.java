@@ -18,11 +18,12 @@ public interface IConductor extends IConnector<IEnergyNetwork>, IEnergyInterface
 	public float getResistance();
 
 	/**
-	 * The maximum amount of energy this conductor can buffer (the transfer rate,
-	 * essentially).
+	 * The maximum amount of current this conductor can buffer (the transfer rate,
+	 * essentially). You can simply do divide your energy transfer rate by
+	 * UniversalElectricity.DEFAULT_VOLTAGE if your conductor is not voltage sensitive.
 	 * 
-	 * @return The amount of energy in joules.
+	 * @return The amount of current in amperes.
 	 */
-	public long getTransferCapacity();
+	public long getCurrentCapacity();
 
 }

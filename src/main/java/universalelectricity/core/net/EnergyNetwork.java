@@ -33,10 +33,10 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	 * The maximum buffer that the network can take. It is the average of all energy capacitance of
 	 * the conductors.
 	 */
-	private long energyBufferCapacity;
+	protected long energyBufferCapacity;
 
 	/** The total energy loss of this network. The loss is based on the loss in each conductor. */
-	private float resistance;
+	protected float resistance;
 
 	/** The total energy buffer in the last tick. */
 	private long lastEnergyBuffer;
@@ -215,7 +215,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 			reconstructHandler(conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
 		}
 
-		this.energyBufferCapacity += conductor.getTransferCapacity();
+		this.energyBufferCapacity += (conductor.getCurrentCapacity() * UniversalElectricity.DEFAULT_VOLTAGE);
 		this.resistance += conductor.getResistance();
 	}
 

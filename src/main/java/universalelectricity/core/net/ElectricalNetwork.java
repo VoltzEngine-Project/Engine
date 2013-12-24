@@ -12,11 +12,28 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
 	/** Voltage the network is producing at */
 	private long voltage = 0;
 
+	/** The average current capacity of the network. */
+	private long currentCapacity;
+
 	@Override
 	public void reconstruct()
 	{
-		this.voltage = 0;
-		super.reconstruct();
+		if (this.getConnectors().size() > 0)
+		{
+			this.voltage = 0;
+			super.reconstruct();
+			this.currentCapacity /= this.getConnectors().size();
+
+			// Override the energy buffer.
+			this.energyBufferCapacity = this.currentCapacity * this.voltage;
+		}
+	}
+
+	@Override
+	protected void reconstructConductor(IConductor conductor)
+	{
+		super.reconstructConductor(conductor);
+		this.currentCapacity += conductor.getCurrentCapacity();
 	}
 
 	/** Segmented out call so overriding can be done when machines are reconstructed. */
@@ -27,7 +44,7 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
 		{
 			if (((IVoltageOutput) obj).getVoltageOutput(side) > voltage)
 			{
-				voltage = ((IVoltageOutput) obj).getVoltageOutput(side);
+				this.voltage = ((IVoltageOutput) obj).getVoltageOutput(side);
 			}
 		}
 	}
