@@ -16,6 +16,11 @@ public class EnergyStorageHandler
 	protected long maxReceive;
 	protected long maxExtract;
 
+	/**
+	 * A cache of the last energy stored through extract and receive.
+	 */
+	protected long lastEnergy;
+
 	public EnergyStorageHandler(long capacity)
 	{
 		this(capacity, capacity, capacity);
@@ -125,11 +130,11 @@ public class EnergyStorageHandler
 
 	public long receiveEnergy(long receive, boolean doReceive)
 	{
-
 		long energyReceived = Math.min(this.capacity - this.energy, Math.min(this.maxReceive, receive));
 
 		if (doReceive)
 		{
+			this.lastEnergy = this.energy;
 			this.energy += energyReceived;
 		}
 		return energyReceived;
@@ -141,6 +146,7 @@ public class EnergyStorageHandler
 
 		if (doExtract)
 		{
+			this.lastEnergy = this.energy;
 			this.energy -= energyExtracted;
 		}
 		return energyExtracted;
@@ -159,6 +165,20 @@ public class EnergyStorageHandler
 	public boolean isFull()
 	{
 		return this.getEnergy() >= this.getEnergyCapacity();
+	}
+
+	public long getLastEnergy()
+	{
+		return this.lastEnergy;
+	}
+
+	/**
+	 * @return True if the last energy state and the current one are either in an
+	 * "empty or not empty" change state.
+	 */
+	public boolean didEnergyStateChange()
+	{
+		return (this.lastEnergy == 0 && this.energy > 0) || (this.lastEnergy > 0 && this.energy == 0);
 	}
 
 	/**
