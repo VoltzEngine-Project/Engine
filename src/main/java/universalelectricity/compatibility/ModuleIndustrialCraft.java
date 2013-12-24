@@ -1,6 +1,7 @@
 package universalelectricity.compatibility;
 
 import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
 import net.minecraft.item.ItemStack;
@@ -16,14 +17,19 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 	@Override
 	public long doReceiveEnergy(Object obj, ForgeDirection direction, long energy, boolean doReceive)
 	{
-		double rejected = ((IEnergySink) obj).injectEnergyUnits(direction, energy * CompatibilityType.INDUSTRIALCRAFT.ratio);
-		return (long) (energy - (rejected * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio));
+		if (obj instanceof IEnergySink)
+		{
+			double rejected = ((IEnergySink) obj).injectEnergyUnits(direction, energy * CompatibilityType.INDUSTRIALCRAFT.ratio);
+			return (long) (energy - (rejected * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio));
+		}
+
+		return 0;
 	}
 
 	@Override
 	public boolean doIsHandler(Object obj)
 	{
-		return obj instanceof IEnergySink || obj instanceof IElectricItem;
+		return obj instanceof IEnergySink || obj instanceof IEnergySource || obj instanceof IElectricItem;
 	}
 
 	@Override
@@ -33,7 +39,15 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 		{
 			TileEntity tileEntity = (TileEntity) obj;
 			Vector3 adjacentCoordinate = new Vector3(tileEntity).modifyPositionFromSide(direction);
-			return ((IEnergySink) obj).acceptsEnergyFrom(adjacentCoordinate.getTileEntity(tileEntity.worldObj), direction);
+
+			if (tileEntity instanceof IEnergySink)
+			{
+				((IEnergySink) tileEntity).acceptsEnergyFrom(adjacentCoordinate.getTileEntity(tileEntity.worldObj), direction);
+			}
+			else if (tileEntity instanceof IEnergySource)
+			{
+				return ((IEnergySource) tileEntity).emitsEnergyTo(adjacentCoordinate.getTileEntity(tileEntity.worldObj), direction);
+			}
 		}
 
 		return false;
