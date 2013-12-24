@@ -2,6 +2,7 @@ package universalelectricity.core.net;
 
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.electricity.IElectricalNetwork;
+import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.electricity.IVoltageOutput;
 import universalelectricity.api.energy.IConductor;
 
@@ -28,6 +29,19 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
                 voltage = ((IVoltageOutput) obj).getVoltageOutput(side);
             }
         }
+    }
+
+    @Override
+    public long applyPowerToHandler(Object handler, ForgeDirection side, long energy, boolean doPower)
+    {
+        if (handler instanceof IVoltageInput)
+        {
+            if (((IVoltageInput) handler).getVoltageInput(side) != this.getVoltage())
+            {
+                ((IVoltageInput) handler).onWrongVoltage(side, this.voltage);
+            }
+        }
+        return super.applyPowerToHandler(handler, side, energy, doPower);
     }
 
     @Override
