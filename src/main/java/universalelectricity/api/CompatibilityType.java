@@ -12,9 +12,9 @@ import cpw.mods.fml.common.Loader;
  */
 public enum CompatibilityType
 {
-	THERMAL_EXPANSION("ThermalExpansion", "ThermalExpansion", "Redstone Flux", "RF", 0.008f),
-	INDUSTRIALCRAFT("IC2", "IndustrialCraft", "Electrical Unit", "EU", 0.0032f),
-	BUILDCRAFT("BuildCraft|Energy", "BuildCraft", "Minecraft Joule", "MJ", 0.0008f);
+	THERMAL_EXPANSION("ThermalExpansion", "ThermalExpansion", "Redstone Flux", "RF", 0.000177683013504f),
+	INDUSTRIALCRAFT("IC2", "IndustrialCraft", "Electrical Unit", "EU", 0.0000710732054016f),
+	BUILDCRAFT("BuildCraft|Energy", "BuildCraft", "Minecraft Joule", "MJ", 0.0000177683013504f);
 
 	public final String modID;
 	public final String moduleName;

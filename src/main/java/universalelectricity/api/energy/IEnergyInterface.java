@@ -6,12 +6,12 @@ import universalelectricity.api.net.IConnectable;
 /**
  * Applied to all TileEntities that can interact with energy.
  * 
- * @author Calclavia, Inspired by King_Lemming
+ * @author Calclavia, Inspired by Thermal Expansion
  */
 public interface IEnergyInterface extends IConnectable
 {
 	/**
-	 * Adds energy to an block. Returns the quantity of energy that was accepted. This should always
+	 * Adds energy to a block. Returns the quantity of energy that was accepted. This should always
 	 * return 0 if the block cannot be externally charged.
 	 * 
 	 * @param from Orientation the energy is sent in from.
@@ -22,7 +22,7 @@ public interface IEnergyInterface extends IConnectable
 	public long onReceiveEnergy(ForgeDirection from, long receive, boolean doReceive);
 
 	/**
-	 * Adds energy to an block. Returns the quantity of energy that was extracted. This should
+	 * Removes energy from a block. Returns the quantity of energy that was extracted. This should
 	 * always return 0 if the block cannot be externally discharged.
 	 * 
 	 * @param from Orientation the energy is requested from.
