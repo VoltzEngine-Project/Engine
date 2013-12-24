@@ -320,22 +320,31 @@ public class GuiContainerBase extends GuiContainer
 		this.drawSlot(x, y, type, 1, 1, 1);
 	}
 
-	public void renderUniversalDisplay(int x, int y, float energy, int mouseX, int mouseY)
+	public void renderUniversalDisplay(int x, int y, float energy, int mouseX, int mouseY, Unit unit)
 	{
+		String displaySuffix = "";
+
+		if (unit == Unit.WATT)
+		{
+			displaySuffix = "/s";
+		}
+
 		String display;
 		switch (this.energyMode)
 		{
 			default:
-				display = UnitDisplay.getDisplay(energy, Unit.WATT);
+				display = UnitDisplay.getDisplay(energy, unit);
 				break;
 			case 1:
-				display = UnitDisplay.roundDecimals(energy * CompatibilityType.BUILDCRAFT.ratio) + " MJ";
+
+				display = UnitDisplay.roundDecimals(energy * CompatibilityType.BUILDCRAFT.ratio) + " MJ" + displaySuffix;
+
 				break;
 			case 2:
-				display = UnitDisplay.roundDecimals(energy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU";
+				display = UnitDisplay.roundDecimals(energy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix;
 				break;
 			case 3:
-				display = UnitDisplay.roundDecimals(energy * CompatibilityType.THERMAL_EXPANSION.ratio) + " RF";
+				display = UnitDisplay.roundDecimals(energy * CompatibilityType.THERMAL_EXPANSION.ratio) + " RF" + displaySuffix;
 				break;
 		}
 
