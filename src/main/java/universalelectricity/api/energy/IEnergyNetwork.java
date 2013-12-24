@@ -36,4 +36,5 @@ public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Obj
     public void saveBuffer();
 
     public void loadBuffer();
+
 }

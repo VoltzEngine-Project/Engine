@@ -10,6 +10,8 @@ import java.util.Set;
 
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.ChunkDataEvent.Save;
 import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.energy.EnergyNetworkLoader;
@@ -48,6 +50,13 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
     /** The energy sources cached for the next network update event. */
     private Set<Object> sources = new HashSet<Object>();
+
+    private boolean hasLoaded = false;
+
+    public EnergyNetwork()
+    {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 
     @Override
     public void addConnector(IConductor connector)
@@ -165,6 +174,11 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     @Override
     public void reconstruct()
     {
+        if (!this.hasLoaded)
+        {
+            this.loadBuffer();
+            this.hasLoaded = true;
+        }
         if (this.getConnectors().size() > 0)
         {
             // Reset all values related to wires
@@ -235,19 +249,22 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     @Override
     public IEnergyNetwork merge(IEnergyNetwork network)
     {
-        if (network != null && network != this)
+        if (network instanceof EnergyNetwork && network != this)
         {
-            this.saveBuffer();
-            network.saveBuffer();
-            IEnergyNetwork newNetwork = new EnergyNetwork();
+            long newBuffer = this.getBuffer();
+            newBuffer += ((EnergyNetwork) network).getBuffer();
+            EnergyNetwork newNetwork = new EnergyNetwork();
             newNetwork.getConnectors().addAll(this.getConnectors());
             newNetwork.getConnectors().addAll(network.getConnectors());
 
             network.getConnectors().clear();
+            network.getNodes().clear();
             this.getConnectors().clear();
+            this.getNodes().clear();
 
             newNetwork.reconstruct();
-            newNetwork.loadBuffer();
+
+            newNetwork.setBuffer(newBuffer);
             return newNetwork;
         }
 
@@ -315,6 +332,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     public void split(IConductor connectorA, IConductor connectorB)
     {
         this.reconstruct();
+        this.saveBuffer();
 
         /** Check if connectorA connects with connectorB. */
         ConnectionPathfinder finder = new ConnectionPathfinder(connectorB);
@@ -334,6 +352,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
                 }
 
                 newNetwork.reconstruct();
+                newNetwork.loadBuffer();
             }
             catch (Exception e)
             {
@@ -348,7 +367,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
         EnergyProduceEvent evt = new EnergyProduceEvent(this, source, amount, doReceive);
         MinecraftForge.EVENT_BUS.post(evt);
 
-        if (!evt.isCanceled() && amount > 0 && this.getRequest() > 0)
+        if (!evt.isCanceled() && amount > 0)
         {
             // Take account in the resistance of the system to prevent overflow.
             long energyReceived = Math.min(this.energyBufferCapacity - this.energyBuffer, amount);
@@ -374,6 +393,16 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
         return (long) ((amperage * amperage) * this.resistance);
     }
 
+    public long getBuffer()
+    {
+        return this.energyBuffer;
+    }
+
+    public void setBuffer(long newBuffer)
+    {
+        this.energyBuffer = newBuffer;
+    }
+
     @Override
     public long getLastBuffer()
     {
@@ -392,6 +421,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
         return this.amperageBuffer;
     }
 
+    @Override
     public void saveBuffer()
     {
         if (this.getConnectors().size() > 0)
@@ -399,12 +429,13 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
             long energyPerPart = 0;
             for (IConductor conductor : this.getConnectors())
             {
-                energyPerPart = this.energyBuffer / this.getConnectors().size();
+                energyPerPart = (this.energyBuffer / this.getConnectors().size()) + this.energyBuffer % this.getConnectors().size();
                 conductor.setSaveBuffer(energyPerPart);
             }
         }
     }
 
+    @Override
     public void loadBuffer()
     {
         this.energyBuffer = 0;
@@ -413,4 +444,5 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
             this.energyBuffer += conductor.getSavedBuffer();
         }
     }
+
 }
