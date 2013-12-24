@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
  * @author Calclavia
  * 
  */
-public abstract class TileEntityAdvanced extends TileEntity
+public abstract class TileAdvanced extends TileEntity
 {
 	protected long ticks = 0;
 

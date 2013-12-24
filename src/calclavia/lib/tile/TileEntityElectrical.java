@@ -14,7 +14,7 @@ import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.api.vector.Vector3;
 
 @UniversalClass
-public class TileEntityElectrical extends TileEntityAdvanced implements IEnergyInterface, IEnergyContainer
+public class TileEntityElectrical extends TileAdvanced implements IEnergyInterface, IEnergyContainer
 {
 	protected EnergyStorageHandler energy;
 
