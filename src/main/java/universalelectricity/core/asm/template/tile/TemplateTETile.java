@@ -18,13 +18,13 @@ public abstract class TemplateTETile implements IEnergyHandler, IEnergyInterface
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
 	{
-		return (int) (StaticTileForwarder.onReceiveEnergy(this, from, (int) (maxReceive * CompatibilityType.THERMAL_EXPANSION.ratio), !simulate) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+		return (int) (StaticTileForwarder.onReceiveEnergy(this, from, (int) (maxReceive * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio), !simulate) * CompatibilityType.THERMAL_EXPANSION.ratio);
 	}
 
 	@Override
 	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
 	{
-		return (int) (StaticTileForwarder.onExtractEnergy(this, from, (int) (maxExtract * CompatibilityType.THERMAL_EXPANSION.ratio), !simulate) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+		return (int) (StaticTileForwarder.onExtractEnergy(this, from, (int) (maxExtract * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio), !simulate) * CompatibilityType.THERMAL_EXPANSION.ratio);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public abstract class TemplateTETile implements IEnergyHandler, IEnergyInterface
 	{
 		if (this instanceof IEnergyContainer)
 		{
-			return (int) (StaticTileForwarder.getElectricityStored((IEnergyContainer) this, from) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+			return (int) (StaticTileForwarder.getElectricityStored((IEnergyContainer) this, from) * CompatibilityType.THERMAL_EXPANSION.ratio);
 		}
 
 		return 0;
@@ -55,7 +55,7 @@ public abstract class TemplateTETile implements IEnergyHandler, IEnergyInterface
 	{
 		if (this instanceof IEnergyContainer)
 		{
-			return (int) (StaticTileForwarder.getMaxElectricity((IEnergyContainer) this, from) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+			return (int) (StaticTileForwarder.getMaxElectricity((IEnergyContainer) this, from) * CompatibilityType.THERMAL_EXPANSION.ratio);
 		}
 
 		return 0;

@@ -363,7 +363,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
 			if (doReceive)
 			{
-				System.out.println(this.energyBufferCapacity);
 				this.energyBuffer += energyReceived;
 				this.sources.add(source);
 				NetworkTickHandler.addNetwork(this);
