@@ -1,9 +1,5 @@
 package universalelectricity.core;
 
-import ic2.api.energy.tile.IEnergySink;
-import ic2.api.energy.tile.IEnergySource;
-import ic2.api.item.ISpecialElectricItem;
-
 import java.io.File;
 import java.util.Map;
 
@@ -13,16 +9,9 @@ import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.energy.EnergyNetworkLoader;
 import universalelectricity.compatibility.ModuleUniversalElectricity;
-import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
-import universalelectricity.core.asm.template.item.TemplateICItem;
-import universalelectricity.core.asm.template.item.TemplateTEItem;
-import universalelectricity.core.asm.template.tile.TemplateICTile;
-import universalelectricity.core.asm.template.tile.TemplateTETile;
 import universalelectricity.core.net.EnergyNetwork;
 import universalelectricity.core.net.NetworkTickHandler;
-import cofh.api.energy.IEnergyContainerItem;
-import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -36,15 +25,6 @@ import cpw.mods.fml.relauncher.Side;
 @TransformerExclusions({ "universalelectricity.core.asm", "universalelectricity.core.asm.template" })
 public class UELoader implements IFMLLoadingPlugin
 {
-	static
-	{
-		TemplateInjectionManager.registerTileTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TemplateTETile.class, IEnergyHandler.class);
-		TemplateInjectionManager.registerTileTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, TemplateICTile.class, IEnergySink.class, IEnergySource.class);
-
-		TemplateInjectionManager.registerItemTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TemplateTEItem.class, IEnergyContainerItem.class);
-		TemplateInjectionManager.registerItemTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, TemplateICItem.class, ISpecialElectricItem.class);
-	}
-
 	/**
 	 * The Universal Electricity configuration file.
 	 */
