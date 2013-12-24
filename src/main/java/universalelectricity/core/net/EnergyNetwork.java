@@ -71,6 +71,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
             long remainingUsableEnergy = totalUsableEnergy;
 
             int receiverCount = Math.max(this.getNodes().size() - this.sources.size(), 1);
+            long energyPerReceiver = 0;
 
             distribution:
             for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
@@ -81,8 +82,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
                     {
                         if (remainingUsableEnergy >= 0)
                         {
-                            long energyPerReceiver = (remainingUsableEnergy / receiverCount) + totalUsableEnergy % receiverCount;
-                            remainingUsableEnergy -= CompatibilityModule.receiveEnergy(entry.getKey(), direction, energyPerReceiver, true);
+                            energyPerReceiver = (remainingUsableEnergy / receiverCount) + totalUsableEnergy % receiverCount;
+                            remainingUsableEnergy -= this.applyPowerToHandler(entry.getValue(), direction, energyPerReceiver, true);
                         }
                         else
                         {
@@ -103,6 +104,19 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
         // Clear the network request cache.
         this.lastNetworkRequest = -1;
+    }
+
+    /** Applies power to a machine
+     *
+     * @param handler - machine getting the power
+     * @param side - side to apply the power
+     * @param energy - energy sum
+     * @param doPower - true it will give the power, false will check how much power will be
+     * received
+     * @return energy accepted */
+    public long applyPowerToHandler(Object handler, ForgeDirection side, long energy, boolean doPower)
+    {
+        return CompatibilityModule.receiveEnergy(handler, side, energy, doPower);
     }
 
     @Override
@@ -138,7 +152,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
                 }
             }
         }
-
         return this.lastNetworkRequest;
     }
 
