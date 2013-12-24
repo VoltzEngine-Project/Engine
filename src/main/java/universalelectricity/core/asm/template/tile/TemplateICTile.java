@@ -16,6 +16,26 @@ import universalelectricity.api.energy.IEnergyInterface;
  */
 public abstract class TemplateICTile extends TileEntity implements IEnergySink, IEnergySource, IEnergyInterface
 {
+	@Override
+	public void validate()
+	{
+		StaticTileForwarder.validateTile(this);
+		StaticTileForwarder.loadIC(this);
+	}
+
+	@Override
+	public void invalidate()
+	{
+		StaticTileForwarder.unloadIC(this);
+		StaticTileForwarder.invalidateTile(this);
+	}
+
+	@Override
+	public void onChunkUnload()
+	{
+		StaticTileForwarder.unloadIC(this);
+	}
+
 	/**
 	 * IC2 Methods
 	 */
@@ -38,26 +58,6 @@ public abstract class TemplateICTile extends TileEntity implements IEnergySink, 
 	}
 
 	@Override
-	public void validate()
-	{
-		StaticTileForwarder.validateTile(this);
-		StaticTileForwarder.loadIC(this);
-	}
-
-	@Override
-	public void invalidate()
-	{
-		StaticTileForwarder.unloadIC(this);
-		StaticTileForwarder.invalidateTile(this);
-	}
-
-	@Override
-	public void onChunkUnload()
-	{
-		StaticTileForwarder.unloadIC(this);
-	}
-
-	@Override
 	public double demandedEnergyUnits()
 	{
 		return StaticTileForwarder.onReceiveEnergy(this, ForgeDirection.UNKNOWN, Integer.MAX_VALUE, false) * CompatibilityType.INDUSTRIALCRAFT.ratio;
@@ -66,11 +66,11 @@ public abstract class TemplateICTile extends TileEntity implements IEnergySink, 
 	@Override
 	public double injectEnergyUnits(ForgeDirection direction, double amount)
 	{
-		int toSend = (int) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+		long energyToInject = (long) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 
-		if (StaticTileForwarder.onReceiveEnergy(this, direction, toSend, false) > 0)
+		if (StaticTileForwarder.onReceiveEnergy(this, direction, energyToInject, false) > 0)
 		{
-			long receive = StaticTileForwarder.onReceiveEnergy(this, direction, toSend, true);
+			long receive = StaticTileForwarder.onReceiveEnergy(this, direction, energyToInject, true);
 
 			/*
 			 * Return the difference, since injectEnergy returns left over energy, and
