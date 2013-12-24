@@ -4,6 +4,7 @@ import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
+import ic2.api.tile.IEnergyStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -15,12 +16,35 @@ import universalelectricity.api.vector.Vector3;
 public class ModuleIndustrialCraft extends CompatibilityModule
 {
 	@Override
-	public long doReceiveEnergy(Object obj, ForgeDirection direction, long energy, boolean doReceive)
+	public long doReceiveEnergy(Object handler, ForgeDirection direction, long energy, boolean doReceive)
 	{
-		if (obj instanceof IEnergySink)
+		if (handler instanceof IEnergySink)
 		{
-			double rejected = ((IEnergySink) obj).injectEnergyUnits(direction, energy * CompatibilityType.INDUSTRIALCRAFT.ratio);
-			return (long) (energy - (rejected * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio));
+			if (doReceive)
+			{
+				double rejected = ((IEnergySink) handler).injectEnergyUnits(direction, energy * CompatibilityType.INDUSTRIALCRAFT.ratio);
+				return (long) (energy - (rejected * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio));
+			}
+
+			return (long) (((IEnergySink) handler).demandedEnergyUnits() * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+		}
+
+		return 0;
+	}
+
+	@Override
+	public long doExtractEnergy(Object handler, ForgeDirection direction, long energy, boolean doExtract)
+	{
+		if (handler instanceof IEnergySource)
+		{
+			long demand = (long) Math.min(((IEnergySource) handler).getOfferedEnergy() * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio, energy);
+
+			if (doExtract)
+			{
+				((IEnergySource) handler).drawEnergy(demand * CompatibilityType.INDUSTRIALCRAFT.ratio);
+			}
+
+			return demand;
 		}
 
 		return 0;
@@ -82,5 +106,17 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 	public ItemStack doGetItemWithCharge(ItemStack itemStack, long energy)
 	{
 		return null;
+	}
+
+	@Override
+	public boolean doIsEnergyContainer(Object obj)
+	{
+		return obj instanceof IEnergyStorage;
+	}
+
+	@Override
+	public long doGetEnergy(Object obj, ForgeDirection direction)
+	{
+		return (long) (((IEnergyStorage) obj).getStored() * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 	}
 }

@@ -14,6 +14,7 @@ public abstract class CompatibilityModule
 
 	/** A cache to know which module to use with when facing objects with a specific class. */
 	public static final HashMap<Class, CompatibilityModule> energyHandlerCache = new HashMap<Class, CompatibilityModule>();
+	public static final HashMap<Class, CompatibilityModule> energyStorageCache = new HashMap<Class, CompatibilityModule>();
 
 	public static void register(CompatibilityModule module)
 	{
@@ -41,6 +42,34 @@ public abstract class CompatibilityModule
 		if (isHandler(handler))
 		{
 			return energyHandlerCache.get(handler.getClass()).doReceiveEnergy(handler, direction, energy, doReceive);
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Make the handler extract energy.
+	 * 
+	 * @return The actual energy that was extract.
+	 */
+	public static long extractEnergy(Object handler, ForgeDirection direction, long energy, boolean doReceive)
+	{
+		if (isHandler(handler))
+		{
+			return energyHandlerCache.get(handler.getClass()).doExtractEnergy(handler, direction, energy, doReceive);
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Gets the energy stored in the handler.
+	 */
+	public static long getEnergy(Object handler, ForgeDirection direction)
+	{
+		if (isEnergyContainer(handler))
+		{
+			return energyStorageCache.get(handler.getClass()).doGetEnergy(handler, direction);
 		}
 
 		return 0;
@@ -94,7 +123,7 @@ public abstract class CompatibilityModule
 	/**
 	 * Is this object a valid energy handler?
 	 * 
-	 * @param handler
+	 * @param True if the handler can store energy.
 	 */
 	public static boolean isHandler(Object handler)
 	{
@@ -120,7 +149,39 @@ public abstract class CompatibilityModule
 		return false;
 	}
 
-	public abstract long doReceiveEnergy(Object obj, ForgeDirection direction, long energy, boolean doReceive);
+	/**
+	 * Is this object able to store energy?
+	 * 
+	 * @param handler
+	 * @return True if the handler can store energy.
+	 */
+	public static boolean isEnergyContainer(Object handler)
+	{
+		if (handler != null)
+		{
+			Class clazz = handler.getClass();
+
+			if (energyStorageCache.containsKey(clazz))
+			{
+				return true;
+			}
+
+			for (CompatibilityModule module : CompatibilityModule.loadedModules)
+			{
+				if (module.doIsEnergyContainer(handler))
+				{
+					energyStorageCache.put(clazz, module);
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public abstract long doReceiveEnergy(Object handler, ForgeDirection direction, long energy, boolean doReceive);
+
+	public abstract long doExtractEnergy(Object handler, ForgeDirection direction, long energy, boolean doExtract);
 
 	/**
 	 * Charges an item with the given energy
@@ -143,6 +204,10 @@ public abstract class CompatibilityModule
 	public abstract long doDischargeItem(ItemStack itemStack, long joules, boolean doDischarge);
 
 	public abstract boolean doIsHandler(Object obj);
+
+	public abstract boolean doIsEnergyContainer(Object obj);
+
+	public abstract long doGetEnergy(Object obj, ForgeDirection direction);
 
 	public abstract boolean doCanConnect(Object obj, ForgeDirection direction);
 

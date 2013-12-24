@@ -11,9 +11,15 @@ import cofh.api.energy.IEnergyHandler;
 public class ModuleThermalExpansion extends CompatibilityModule
 {
 	@Override
-	public long doReceiveEnergy(Object obj, ForgeDirection direction, long energy, boolean doReceive)
+	public long doReceiveEnergy(Object handler, ForgeDirection direction, long energy, boolean doReceive)
 	{
-		return (long) (((IEnergyHandler) obj).receiveEnergy(direction, (int) (energy * CompatibilityType.THERMAL_EXPANSION.ratio), !doReceive) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+		return (long) (((IEnergyHandler) handler).receiveEnergy(direction, (int) (energy * CompatibilityType.THERMAL_EXPANSION.ratio), !doReceive) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+	}
+
+	@Override
+	public long doExtractEnergy(Object handler, ForgeDirection direction, long energy, boolean doExtract)
+	{
+		return (long) (((IEnergyHandler) handler).extractEnergy(direction, (int) (energy * CompatibilityType.THERMAL_EXPANSION.ratio), !doExtract) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
 	}
 
 	@Override
@@ -52,5 +58,17 @@ public class ModuleThermalExpansion extends CompatibilityModule
 	public ItemStack doGetItemWithCharge(ItemStack itemStack, long energy)
 	{
 		return null;
+	}
+
+	@Override
+	public boolean doIsEnergyContainer(Object obj)
+	{
+		return obj instanceof IEnergyHandler;
+	}
+
+	@Override
+	public long doGetEnergy(Object obj, ForgeDirection from)
+	{
+		return ((IEnergyHandler) obj).getEnergyStored(from);
 	}
 }

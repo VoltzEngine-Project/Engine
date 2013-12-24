@@ -15,16 +15,27 @@ import buildcraft.api.power.PowerHandler.Type;
 public class ModuleBuildCraft extends CompatibilityModule
 {
 	@Override
-	public long doReceiveEnergy(Object obj, ForgeDirection direction, long energy, boolean doReceive)
+	public long doReceiveEnergy(Object handler, ForgeDirection direction, long energy, boolean doReceive)
 	{
-		IPowerReceptor receptor = ((IPowerReceptor) obj);
+		IPowerReceptor receptor = ((IPowerReceptor) handler);
 		PowerReceiver receiver = receptor.getPowerReceiver(direction);
 
 		if (receiver != null)
 		{
-			return (long) (receiver.receiveEnergy(Type.PIPE, energy * CompatibilityType.BUILDCRAFT.ratio, direction) * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
+			if (doReceive)
+			{
+				return (long) (receiver.receiveEnergy(Type.PIPE, energy * CompatibilityType.BUILDCRAFT.ratio, direction) * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
+			}
+
+			return (long) (receiver.powerRequest() * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
 		}
 
+		return 0;
+	}
+
+	@Override
+	public long doExtractEnergy(Object handler, ForgeDirection direction, long energy, boolean doExtract)
+	{
 		return 0;
 	}
 
@@ -56,5 +67,25 @@ public class ModuleBuildCraft extends CompatibilityModule
 	public ItemStack doGetItemWithCharge(ItemStack itemStack, long energy)
 	{
 		return null;
+	}
+
+	@Override
+	public boolean doIsEnergyContainer(Object obj)
+	{
+		return obj instanceof IPowerReceptor;
+	}
+
+	@Override
+	public long doGetEnergy(Object obj, ForgeDirection direction)
+	{
+		if (obj instanceof IPowerReceptor)
+		{
+			if (((IPowerReceptor) obj).getPowerReceiver(direction) != null)
+			{
+				return (long) (((IPowerReceptor) obj).getPowerReceiver(direction).getEnergyStored() * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
+			}
+		}
+
+		return 0;
 	}
 }
