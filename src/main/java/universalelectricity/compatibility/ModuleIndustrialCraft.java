@@ -20,13 +20,15 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 	{
 		if (handler instanceof IEnergySink)
 		{
+			long request = (long) Math.min(((IEnergySink) handler).demandedEnergyUnits() * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio, energy);
+
 			if (doReceive)
 			{
-				double rejected = ((IEnergySink) handler).injectEnergyUnits(direction, energy * CompatibilityType.INDUSTRIALCRAFT.ratio);
-				return (long) (energy - (rejected * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio));
+				double rejected = ((IEnergySink) handler).injectEnergyUnits(direction, request * CompatibilityType.INDUSTRIALCRAFT.ratio);
+				return (long) Math.max(energy - (rejected * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), 0);
 			}
 
-			return (long) (((IEnergySink) handler).demandedEnergyUnits() * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+			return request;
 		}
 
 		return 0;
@@ -62,11 +64,11 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 		if (obj instanceof TileEntity)
 		{
 			TileEntity tileEntity = (TileEntity) obj;
-			Vector3 adjacentCoordinate = new Vector3(tileEntity).modifyPositionFromSide(direction);
+			Vector3 adjacentCoordinate = new Vector3(tileEntity).modifyPositionFromSide(direction.getOpposite());
 
 			if (tileEntity instanceof IEnergySink)
 			{
-				((IEnergySink) tileEntity).acceptsEnergyFrom(adjacentCoordinate.getTileEntity(tileEntity.worldObj), direction);
+				return ((IEnergySink) tileEntity).acceptsEnergyFrom(adjacentCoordinate.getTileEntity(tileEntity.worldObj), direction);
 			}
 			else if (tileEntity instanceof IEnergySource)
 			{
