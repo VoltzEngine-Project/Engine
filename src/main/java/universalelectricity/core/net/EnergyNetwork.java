@@ -39,9 +39,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     /** The total energy buffer in the last tick. */
     private long lastEnergyBuffer;
 
-    /** The cached amperage that was last sent in the network */
-    private long amperageBuffer;
-
     /** Last cached value for network demand energy */
     private long lastNetworkRequest = -1;
 
@@ -63,15 +60,13 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     @Override
     public void update()
     {
+        this.lastEnergyBuffer = this.energyBuffer;
         EnergyUpdateEvent evt = new EnergyUpdateEvent(this);
         MinecraftForge.EVENT_BUS.post(evt);
 
         if (!evt.isCanceled())
         {
-            this.lastEnergyBuffer = this.energyBuffer;
-
-            this.amperageBuffer = this.energyBuffer / UniversalElectricity.DEFAULT_VOLTAGE;
-            long totalEnergy = this.energyBuffer - this.getEnergyLoss(this.energyBuffer);
+            long totalEnergy = this.energyBuffer - this.getEnergyLoss();
             long remainingEnergy = totalEnergy;
 
             int receiverCount = Math.max(this.getNodes().size() - this.sources.size(), 1);
@@ -384,10 +379,15 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
     /** Assume voltage to be the default voltage for the energy network to calculate energy loss.
      * Energy Loss Forumla: Delta V = I x R; P = I x V; Therefore: P = I^2 x R */
-    private long getEnergyLoss(long energy)
+    protected long getEnergyLoss()
     {
-        long amperage = energy / UniversalElectricity.DEFAULT_VOLTAGE;
+        long amperage = this.getBuffer() / this.getVoltage();
         return (long) ((amperage * amperage) * this.resistance);
+    }
+
+    public long getVoltage()
+    {
+        return UniversalElectricity.DEFAULT_VOLTAGE;
     }
 
     public long getBuffer()
@@ -410,12 +410,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     public long getBufferCapacity()
     {
         return this.energyBufferCapacity;
-    }
-
-    @Override
-    public long getLastAmperageBuffer()
-    {
-        return this.amperageBuffer;
     }
 
     @Override
