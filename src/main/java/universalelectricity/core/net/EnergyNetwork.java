@@ -71,7 +71,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 			this.lastEnergyBuffer = this.energyBuffer;
 
 			this.amperageBuffer = this.energyBuffer / UniversalElectricity.DEFAULT_VOLTAGE;
-			long totalUsableEnergy = (long) (this.energyBuffer - this.getEnergyLoss(this.energyBuffer));
+			long totalUsableEnergy = this.energyBuffer - this.getEnergyLoss(this.energyBuffer);
 			long remainingUsableEnergy = totalUsableEnergy;
 
 			int receiverCount = Math.max(this.getNodes().size() - this.sources.size(), 1);
@@ -323,8 +323,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 		this.reconstruct();
 
 		/** Check if connectorA connects with connectorB. */
-		ConnectionPathfinder finder = new ConnectionPathfinder((IConnector) connectorB);
-		finder.findNodes((IConnector) connectorA);
+		ConnectionPathfinder finder = new ConnectionPathfinder(connectorB);
+		finder.findNodes(connectorA);
 
 		if (finder.results.size() <= 0)
 		{
@@ -363,6 +363,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
 			if (doReceive)
 			{
+				System.out.println(this.energyBufferCapacity);
 				this.energyBuffer += energyReceived;
 				this.sources.add(source);
 				NetworkTickHandler.addNetwork(this);

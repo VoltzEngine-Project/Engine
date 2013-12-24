@@ -1,7 +1,7 @@
 package universalelectricity.core.asm.template.item;
 
-import universalelectricity.api.item.IEnergyItem;
 import net.minecraft.item.ItemStack;
+import universalelectricity.api.item.IEnergyItem;
 
 /**
  * @author Calclavia

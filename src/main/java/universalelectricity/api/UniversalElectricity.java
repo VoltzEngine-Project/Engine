@@ -5,9 +5,9 @@ import net.minecraft.block.material.Material;
 
 /**
  * General Universal Electricity class.
- *
+ * 
  * @author Calclavia
- *
+ * 
  */
 public class UniversalElectricity
 {

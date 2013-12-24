@@ -110,7 +110,7 @@ public class UniversalTransformer implements IClassTransformer
 			{
 				if (template != null)
 				{
-					changed |= template.patch(cnode);
+					changed |= template.patch(cnode, false);
 					System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
 				}
 			}
@@ -127,7 +127,7 @@ public class UniversalTransformer implements IClassTransformer
 
 					if (template != null)
 					{
-						changed |= template.patch(cnode);
+						changed |= template.patch(cnode, false);
 						System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
 					}
 				}

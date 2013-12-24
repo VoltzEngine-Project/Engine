@@ -7,8 +7,6 @@ import ic2.api.item.ISpecialElectricItem;
 import java.io.File;
 import java.util.Map;
 
-import cofh.api.energy.IEnergyContainerItem;
-import cofh.api.energy.IEnergyHandler;
 import net.minecraftforge.common.Configuration;
 import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.CompatibilityType;
@@ -23,6 +21,8 @@ import universalelectricity.core.asm.template.tile.TemplateICTile;
 import universalelectricity.core.asm.template.tile.TemplateTETile;
 import universalelectricity.core.net.EnergyNetwork;
 import universalelectricity.core.net.NetworkTickHandler;
+import cofh.api.energy.IEnergyContainerItem;
+import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -129,6 +129,7 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 	{
 	}
 
+	@Override
 	public String[] getLibraryRequestClass()
 	{
 		return null;

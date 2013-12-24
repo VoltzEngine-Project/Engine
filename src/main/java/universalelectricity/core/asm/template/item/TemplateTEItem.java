@@ -1,6 +1,5 @@
 package universalelectricity.core.asm.template.item;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.item.IEnergyItem;
@@ -12,13 +11,8 @@ import cofh.api.energy.IEnergyContainerItem;
  * @author Calclavia
  * 
  */
-public abstract class TemplateTEItem extends Item implements IEnergyContainerItem, IEnergyItem
+public abstract class TemplateTEItem implements IEnergyContainerItem, IEnergyItem
 {
-	public TemplateTEItem(int par1)
-	{
-		super(par1);
-	}
-
 	@Override
 	public int receiveEnergy(ItemStack container, int maxReceive, boolean simulate)
 	{

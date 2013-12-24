@@ -2,7 +2,6 @@ package universalelectricity.core.asm.template.item;
 
 import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import universalelectricity.api.item.IEnergyItem;
 
@@ -12,13 +11,9 @@ import universalelectricity.api.item.IEnergyItem;
  * @author Calclavia
  * 
  */
-public abstract class TemplateICItem extends Item implements ISpecialElectricItem, IEnergyItem
+public abstract class TemplateICItem implements ISpecialElectricItem, IEnergyItem
 {
-	public TemplateICItem(int par1)
-	{
-		super(par1);
-	}
-
+	@Override
 	public IElectricItemManager getManager(ItemStack itemStack)
 	{
 		return ICDummyItemManager.INSTANCE;

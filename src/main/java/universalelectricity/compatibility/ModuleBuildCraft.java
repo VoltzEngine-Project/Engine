@@ -40,17 +40,17 @@ public class ModuleBuildCraft extends CompatibilityModule
 		return ((IPowerReceptor) obj).getPowerReceiver(direction) != null;
 	}
 
-    @Override
-    public long doChargeItem(ItemStack itemStack, long joules, boolean docharge)
-    {
-        return 0;
-    }
+	@Override
+	public long doChargeItem(ItemStack itemStack, long joules, boolean docharge)
+	{
+		return 0;
+	}
 
-    @Override
-    public long doDischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
-    {
-        return 0;
-    }
+	@Override
+	public long doDischargeItem(ItemStack itemStack, long joules, boolean doDischarge)
+	{
+		return 0;
+	}
 
 	@Override
 	public ItemStack doGetItemWithCharge(ItemStack itemStack, long energy)

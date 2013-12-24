@@ -49,7 +49,7 @@ public class TemplateInjectionManager
 		 * @param cnode
 		 * @return
 		 */
-		public boolean patch(ClassNode cnode)
+		public boolean patch(ClassNode cnode, boolean injectConstructor)
 		{
 			for (String interfaceName : this.interfaces)
 			{
@@ -77,15 +77,18 @@ public class TemplateInjectionManager
 
 			for (MethodNode impl : this.methodImplementations)
 			{
-				if (names.contains(impl.name + impl.desc))
+				if (!impl.name.equals("<init>") || injectConstructor)
 				{
-					continue;
-				}
+					if (names.contains(impl.name + impl.desc))
+					{
+						continue;
+					}
 
-				MethodNode copy = new MethodNode(impl.access, impl.name, impl.desc, impl.signature, impl.exceptions == null ? null : impl.exceptions.toArray(new String[0]));
-				ASMHelper.copy(impl, copy);
-				cnode.methods.add(impl);
-				changed = true;
+					MethodNode copy = new MethodNode(impl.access, impl.name, impl.desc, impl.signature, impl.exceptions == null ? null : impl.exceptions.toArray(new String[0]));
+					ASMHelper.copy(impl, copy);
+					cnode.methods.add(impl);
+					changed = true;
+				}
 			}
 
 			return changed;
