@@ -19,386 +19,398 @@ import universalelectricity.api.net.IConnector;
 import universalelectricity.api.net.NetworkEvent.EnergyProduceEvent;
 import universalelectricity.api.net.NetworkEvent.EnergyUpdateEvent;
 
-/**
- * The energy network, neglecting voltage.
- * 
- * @author Calclavia
- */
+/** The energy network, neglecting voltage.
+ *
+ * @author Calclavia */
 public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> implements IEnergyNetwork
 {
-	/** The energy to be distributed on the next update. */
-	private long energyBuffer;
+    /** The energy to be distributed on the next update. */
+    private long energyBuffer;
 
-	/**
-	 * The maximum buffer that the network can take. It is the average of all energy capacitance of
-	 * the conductors.
-	 */
-	protected long energyBufferCapacity;
+    /** The maximum buffer that the network can take. It is the average of all energy capacitance of
+     * the conductors. */
+    protected long energyBufferCapacity;
 
-	/** The total energy loss of this network. The loss is based on the loss in each conductor. */
-	protected float resistance;
+    /** The total energy loss of this network. The loss is based on the loss in each conductor. */
+    protected float resistance;
 
-	/** The total energy buffer in the last tick. */
-	private long lastEnergyBuffer;
+    /** The total energy buffer in the last tick. */
+    private long lastEnergyBuffer;
 
-	/** The cached amperage that was last sent in the network */
-	private long amperageBuffer;
+    /** The cached amperage that was last sent in the network */
+    private long amperageBuffer;
 
-	/** Last cached value for network demand energy */
-	private long lastNetworkRequest = -1;
+    /** Last cached value for network demand energy */
+    private long lastNetworkRequest = -1;
 
-	/** The direction in which a conductor is placed relative to a specific conductor. */
-	private HashMap<Object, EnumSet<ForgeDirection>> handlerDirectionMap = new LinkedHashMap<Object, EnumSet<ForgeDirection>>();
+    /** The direction in which a conductor is placed relative to a specific conductor. */
+    private HashMap<Object, EnumSet<ForgeDirection>> handlerDirectionMap = new LinkedHashMap<Object, EnumSet<ForgeDirection>>();
 
-	/** The energy sources cached for the next network update event. */
-	private Set<Object> sources = new HashSet<Object>();
+    /** The energy sources cached for the next network update event. */
+    private Set<Object> sources = new HashSet<Object>();
 
-	@Override
-	public void addConnector(IConductor connector)
-	{
-		connector.setNetwork(this);
-		super.addConnector(connector);
-	}
+    @Override
+    public void addConnector(IConductor connector)
+    {
+        connector.setNetwork(this);
+        super.addConnector(connector);
+    }
 
-	@Override
-	public void update()
-	{
-		EnergyUpdateEvent evt = new EnergyUpdateEvent(this);
-		MinecraftForge.EVENT_BUS.post(evt);
+    @Override
+    public void update()
+    {
+        EnergyUpdateEvent evt = new EnergyUpdateEvent(this);
+        MinecraftForge.EVENT_BUS.post(evt);
 
-		if (!evt.isCanceled())
-		{
-			this.lastEnergyBuffer = this.energyBuffer;
+        if (!evt.isCanceled())
+        {
+            this.lastEnergyBuffer = this.energyBuffer;
 
-			this.amperageBuffer = this.energyBuffer / UniversalElectricity.DEFAULT_VOLTAGE;
-			long totalUsableEnergy = this.energyBuffer - this.getEnergyLoss(this.energyBuffer);
-			long remainingUsableEnergy = totalUsableEnergy;
+            this.amperageBuffer = this.energyBuffer / UniversalElectricity.DEFAULT_VOLTAGE;
+            long totalUsableEnergy = this.energyBuffer - this.getEnergyLoss(this.energyBuffer);
+            long remainingUsableEnergy = totalUsableEnergy;
 
-			int receiverCount = Math.max(this.getNodes().size() - this.sources.size(), 1);
-			long energyPerReceiver = 0;
+            int receiverCount = Math.max(this.getNodes().size() - this.sources.size(), 1);
+            long energyPerReceiver = 0;
 
-			distribution:
-			for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
-			{
-				if (entry.getValue() != null)
-				{
-					for (ForgeDirection direction : entry.getValue())
-					{
-						if (remainingUsableEnergy >= 0)
-						{
-							energyPerReceiver = (remainingUsableEnergy / receiverCount) + totalUsableEnergy % receiverCount;
-							remainingUsableEnergy -= this.applyPowerToHandler(entry.getKey(), direction, energyPerReceiver, true);
-						}
-						else
-						{
-							break distribution;
-						}
-					}
+            distribution:
+            for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
+            {
+                if (entry.getValue() != null)
+                {
+                    for (ForgeDirection direction : entry.getValue())
+                    {
+                        if (remainingUsableEnergy >= 0)
+                        {
+                            energyPerReceiver = (remainingUsableEnergy / receiverCount) + totalUsableEnergy % receiverCount;
+                            remainingUsableEnergy -= this.applyPowerToHandler(entry.getKey(), direction, energyPerReceiver, true);
+                        }
+                        else
+                        {
+                            break distribution;
+                        }
+                    }
 
-					if (receiverCount > 1)
-					{
-						receiverCount--;
-					}
-				}
-			}
+                    if (receiverCount > 1)
+                    {
+                        receiverCount--;
+                    }
+                }
+            }
 
-			this.energyBuffer = Math.max(remainingUsableEnergy, 0);
-			this.sources.clear();
-		}
+            this.energyBuffer = Math.max(remainingUsableEnergy, 0);
+            this.sources.clear();
+        }
 
-		// Clear the network request cache.
-		this.lastNetworkRequest = -1;
-	}
+        // Clear the network request cache.
+        this.lastNetworkRequest = -1;
+    }
 
-	/**
-	 * Applies power to a machine
-	 * 
-	 * @param handler - machine getting the power
-	 * @param side - side to apply the power
-	 * @param energy - energy sum
-	 * @param doPower - true it will give the power, false will check how much power will be
-	 * received
-	 * @return energy accepted
-	 */
-	public long applyPowerToHandler(Object handler, ForgeDirection side, long energy, boolean doPower)
-	{
-		return CompatibilityModule.receiveEnergy(handler, side, energy, doPower);
-	}
+    /** Applies power to a machine
+     *
+     * @param handler - machine getting the power
+     * @param side - side to apply the power
+     * @param energy - energy sum
+     * @param doPower - true it will give the power, false will check how much power will be
+     * received
+     * @return energy accepted */
+    public long applyPowerToHandler(Object handler, ForgeDirection side, long energy, boolean doPower)
+    {
+        return CompatibilityModule.receiveEnergy(handler, side, energy, doPower);
+    }
 
-	@Override
-	public boolean canUpdate()
-	{
-		return this.getConnectors().size() > 0 && this.getNodes().size() > 0 && this.energyBuffer > 0 && this.energyBufferCapacity > 0;
-	}
+    @Override
+    public boolean canUpdate()
+    {
+        return this.getConnectors().size() > 0 && this.getNodes().size() > 0 && this.energyBuffer > 0 && this.energyBufferCapacity > 0;
+    }
 
-	@Override
-	public boolean continueUpdate()
-	{
-		return this.canUpdate();
-	}
+    @Override
+    public boolean continueUpdate()
+    {
+        return this.canUpdate();
+    }
 
-	@Override
-	public long getRequest()
-	{
-		if (this.lastNetworkRequest == -1)
-		{
-			this.lastNetworkRequest = 0;
+    @Override
+    public long getRequest()
+    {
+        if (this.lastNetworkRequest == -1)
+        {
+            this.lastNetworkRequest = 0;
 
-			if (this.getNodes().size() > 0)
-			{
-				for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
-				{
-					if (entry.getValue() != null && !(entry.getValue() instanceof IConductor))
-					{
-						for (ForgeDirection direction : entry.getValue())
-						{
-							this.lastNetworkRequest += Math.max(CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false), 0);
-						}
-					}
-				}
-			}
-		}
-		return this.lastNetworkRequest;
-	}
+            if (this.getNodes().size() > 0)
+            {
+                for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
+                {
+                    if (entry.getValue() != null && !(entry.getValue() instanceof IConductor))
+                    {
+                        for (ForgeDirection direction : entry.getValue())
+                        {
+                            this.lastNetworkRequest += Math.max(CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false), 0);
+                        }
+                    }
+                }
+            }
+        }
+        return this.lastNetworkRequest;
+    }
 
-	@Override
-	public float getResistance()
-	{
-		return this.resistance;
-	}
+    @Override
+    public float getResistance()
+    {
+        return this.resistance;
+    }
 
-	/** Clears all cache and reconstruct the network. */
-	@Override
-	public void reconstruct()
-	{
-		if (this.getConnectors().size() > 0)
-		{
-			// Reset all values related to wires
-			this.getNodes().clear();
-			this.handlerDirectionMap.clear();
-			this.energyBufferCapacity = 0;
-			this.resistance = 0;
+    /** Clears all cache and reconstruct the network. */
+    @Override
+    public void reconstruct()
+    {
+        if (this.getConnectors().size() > 0)
+        {
+            // Reset all values related to wires
+            this.getNodes().clear();
+            this.handlerDirectionMap.clear();
+            this.energyBufferCapacity = 0;
+            this.resistance = 0;
 
-			// Iterate threw list of wires
-			Iterator<IConductor> it = this.getConnectors().iterator();
+            // Iterate threw list of wires
+            Iterator<IConductor> it = this.getConnectors().iterator();
 
-			while (it.hasNext())
-			{
-				IConductor conductor = it.next();
+            while (it.hasNext())
+            {
+                IConductor conductor = it.next();
 
-				if (conductor != null)
-				{
-					this.reconstructConductor(conductor);
-				}
-				else
-				{
-					it.remove();
-				}
-			}
+                if (conductor != null)
+                {
+                    this.reconstructConductor(conductor);
+                }
+                else
+                {
+                    it.remove();
+                }
+            }
 
-			this.energyBufferCapacity /= this.getConnectors().size();
+            this.energyBufferCapacity /= this.getConnectors().size();
 
-			if (this.getNodes().size() > 0)
-			{
-				NetworkTickHandler.addNetwork(this);
-			}
-		}
-	}
+            if (this.getNodes().size() > 0)
+            {
+                NetworkTickHandler.addNetwork(this);
+            }
+        }
+    }
 
-	/** Segmented out call so overriding can be done when conductors are reconstructed. */
-	protected void reconstructConductor(IConductor conductor)
-	{
-		conductor.setNetwork(this);
+    /** Segmented out call so overriding can be done when conductors are reconstructed. */
+    protected void reconstructConductor(IConductor conductor)
+    {
+        conductor.setNetwork(this);
 
-		for (int i = 0; i < conductor.getConnections().length; i++)
-		{
-			reconstructHandler(conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
-		}
+        for (int i = 0; i < conductor.getConnections().length; i++)
+        {
+            reconstructHandler(conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
+        }
 
-		this.energyBufferCapacity += (conductor.getCurrentCapacity() * UniversalElectricity.DEFAULT_VOLTAGE);
-		this.resistance += conductor.getResistance();
-	}
+        this.energyBufferCapacity += (conductor.getCurrentCapacity() * UniversalElectricity.DEFAULT_VOLTAGE);
+        this.resistance += conductor.getResistance();
+    }
 
-	/** Segmented out call so overriding can be done when machines are reconstructed. */
-	protected void reconstructHandler(Object obj, ForgeDirection side)
-	{
-		if (obj != null && !(obj instanceof IConductor))
-		{
-			if (CompatibilityModule.canConnect(obj, side))
-			{
-				EnumSet<ForgeDirection> set = this.handlerDirectionMap.get(obj);
-				if (set == null)
-				{
-					set = EnumSet.noneOf(ForgeDirection.class);
-				}
-				this.getNodes().add(obj);
-				set.add(side);
-				this.handlerDirectionMap.put(obj, set);
-			}
-		}
-	}
+    /** Segmented out call so overriding can be done when machines are reconstructed. */
+    protected void reconstructHandler(Object obj, ForgeDirection side)
+    {
+        if (obj != null && !(obj instanceof IConductor))
+        {
+            if (CompatibilityModule.canConnect(obj, side))
+            {
+                EnumSet<ForgeDirection> set = this.handlerDirectionMap.get(obj);
+                if (set == null)
+                {
+                    set = EnumSet.noneOf(ForgeDirection.class);
+                }
+                this.getNodes().add(obj);
+                set.add(side);
+                this.handlerDirectionMap.put(obj, set);
+            }
+        }
+    }
 
-	@Override
-	public IEnergyNetwork merge(IEnergyNetwork network)
-	{
-		if (network != null && network != this)
-		{
-			IEnergyNetwork newNetwork = new EnergyNetwork();
-			newNetwork.getConnectors().addAll(this.getConnectors());
-			newNetwork.getConnectors().addAll(network.getConnectors());
+    @Override
+    public IEnergyNetwork merge(IEnergyNetwork network)
+    {
+        if (network != null && network != this)
+        {
+            this.saveBuffer();
+            network.saveBuffer();
+            IEnergyNetwork newNetwork = new EnergyNetwork();
+            newNetwork.getConnectors().addAll(this.getConnectors());
+            newNetwork.getConnectors().addAll(network.getConnectors());
 
-			network.getConnectors().clear();
-			this.getConnectors().clear();
+            network.getConnectors().clear();
+            this.getConnectors().clear();
 
-			newNetwork.reconstruct();
+            newNetwork.reconstruct();
+            newNetwork.loadBuffer();
+            return newNetwork;
+        }
 
-			return newNetwork;
-		}
+        return null;
+    }
 
-		return null;
-	}
+    @Override
+    public void split(IConductor splitPoint)
+    {
+        this.removeConnector(splitPoint);
+        this.reconstruct();
+        this.saveBuffer();
 
-	@Override
-	public void split(IConductor splitPoint)
-	{
-		this.removeConnector(splitPoint);
-		this.reconstruct();
+        /** Loop through the connected blocks and attempt to see if there are connections between the
+         * two points elsewhere. */
+        Object[] connectedBlocks = splitPoint.getConnections();
 
-		/**
-		 * Loop through the connected blocks and attempt to see if there are connections between the
-		 * two points elsewhere.
-		 */
-		Object[] connectedBlocks = splitPoint.getConnections();
+        for (int i = 0; i < connectedBlocks.length; i++)
+        {
+            Object connectedBlockA = connectedBlocks[i];
 
-		for (int i = 0; i < connectedBlocks.length; i++)
-		{
-			Object connectedBlockA = connectedBlocks[i];
+            if (connectedBlockA instanceof IConnector)
+            {
+                for (int ii = 0; ii < connectedBlocks.length; ii++)
+                {
+                    final Object connectedBlockB = connectedBlocks[ii];
 
-			if (connectedBlockA instanceof IConnector)
-			{
-				for (int ii = 0; ii < connectedBlocks.length; ii++)
-				{
-					final Object connectedBlockB = connectedBlocks[ii];
+                    if (connectedBlockA != connectedBlockB && connectedBlockB instanceof IConnector)
+                    {
+                        ConnectionPathfinder finder = new ConnectionPathfinder((IConnector) connectedBlockB, splitPoint);
+                        finder.findNodes((IConnector) connectedBlockA);
 
-					if (connectedBlockA != connectedBlockB && connectedBlockB instanceof IConnector)
-					{
-						ConnectionPathfinder finder = new ConnectionPathfinder((IConnector) connectedBlockB, splitPoint);
-						finder.findNodes((IConnector) connectedBlockA);
+                        if (finder.results.size() <= 0)
+                        {
+                            try
+                            {
+                                /** The connections A and B are not connected anymore. Give them both
+                                 * a new common network. */
+                                IEnergyNetwork newNetwork = EnergyNetworkLoader.getNewNetwork();
 
-						if (finder.results.size() <= 0)
-						{
-							try
-							{
-								/**
-								 * The connections A and B are not connected anymore. Give them both
-								 * a new common network.
-								 */
-								IEnergyNetwork newNetwork = EnergyNetworkLoader.getNewNetwork();
+                                for (IConnector node : finder.closedSet)
+                                {
+                                    if (node != splitPoint && node instanceof IConductor)
+                                    {
+                                        newNetwork.addConnector((IConductor) node);
+                                        this.removeConnector((IConductor) node);
+                                    }
+                                }
+                                newNetwork.loadBuffer();
+                                newNetwork.reconstruct();
+                            }
+                            catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
 
-								for (IConnector node : finder.closedSet)
-								{
-									if (node != splitPoint)
-									{
-										newNetwork.addConnector((IConductor) node);
-									}
-								}
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-								newNetwork.reconstruct();
-							}
-							catch (Exception e)
-							{
-								e.printStackTrace();
-							}
+    @Override
+    public void split(IConductor connectorA, IConductor connectorB)
+    {
+        this.reconstruct();
 
-						}
-					}
-				}
-			}
-		}
-	}
+        /** Check if connectorA connects with connectorB. */
+        ConnectionPathfinder finder = new ConnectionPathfinder(connectorB);
+        finder.findNodes(connectorA);
 
-	@Override
-	public void split(IConductor connectorA, IConductor connectorB)
-	{
-		this.reconstruct();
+        if (finder.results.size() <= 0)
+        {
+            try
+            {
+                /** The connections A and B are not connected anymore. Give them both a new common
+                 * network. */
+                IEnergyNetwork newNetwork = EnergyNetworkLoader.getNewNetwork();
 
-		/** Check if connectorA connects with connectorB. */
-		ConnectionPathfinder finder = new ConnectionPathfinder(connectorB);
-		finder.findNodes(connectorA);
+                for (IConnector node : finder.closedSet)
+                {
+                    newNetwork.addConnector((IConductor) node);
+                }
 
-		if (finder.results.size() <= 0)
-		{
-			try
-			{
-				/**
-				 * The connections A and B are not connected anymore. Give them both a new common
-				 * network.
-				 */
-				IEnergyNetwork newNetwork = EnergyNetworkLoader.getNewNetwork();
+                newNetwork.reconstruct();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 
-				for (IConnector node : finder.closedSet)
-				{
-					newNetwork.addConnector((IConductor) node);
-				}
+    @Override
+    public long produce(Object source, ForgeDirection side, long amount, boolean doReceive)
+    {
+        EnergyProduceEvent evt = new EnergyProduceEvent(this, source, amount, doReceive);
+        MinecraftForge.EVENT_BUS.post(evt);
 
-				newNetwork.reconstruct();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-	}
+        if (!evt.isCanceled() && amount > 0 && this.getRequest() > 0)
+        {
+            // Take account in the resistance of the system to prevent overflow.
+            long energyReceived = Math.min(this.energyBufferCapacity - this.energyBuffer, amount);
 
-	@Override
-	public long produce(Object source, ForgeDirection side, long amount, boolean doReceive)
-	{
-		EnergyProduceEvent evt = new EnergyProduceEvent(this, source, amount, doReceive);
-		MinecraftForge.EVENT_BUS.post(evt);
+            if (doReceive && energyReceived > 0)
+            {
+                this.energyBuffer += energyReceived;
+                this.sources.add(source);
+                NetworkTickHandler.addNetwork(this);
+            }
 
-		if (!evt.isCanceled() && amount > 0)
-		{
-			// Take account in the resistance of the system to prevent overflow.
-			long energyReceived = Math.min(this.energyBufferCapacity - this.energyBuffer, amount);
+            return Math.max(energyReceived, 0);
+        }
 
-			if (doReceive)
-			{
-				this.energyBuffer += energyReceived;
-				this.sources.add(source);
-				NetworkTickHandler.addNetwork(this);
-			}
+        return 0;
+    }
 
-			return energyReceived;
-		}
+    /** Assume voltage to be the default voltage for the energy network to calculate energy loss.
+     * Energy Loss Forumla: Delta V = I x R; P = I x V; Therefore: P = I^2 x R */
+    private long getEnergyLoss(long energy)
+    {
+        long amperage = energy / UniversalElectricity.DEFAULT_VOLTAGE;
+        return (long) ((amperage * amperage) * this.resistance);
+    }
 
-		return 0;
-	}
+    @Override
+    public long getLastBuffer()
+    {
+        return this.lastEnergyBuffer;
+    }
 
-	/**
-	 * Assume voltage to be the default voltage for the energy network to calculate energy loss.
-	 * Energy Loss Forumla: Delta V = I x R; P = I x V; Therefore: P = I^2 x R
-	 */
-	private long getEnergyLoss(long energy)
-	{
-		long amperage = energy / UniversalElectricity.DEFAULT_VOLTAGE;
-		return (long) ((amperage * amperage) * this.resistance);
-	}
+    @Override
+    public long getBufferCapacity()
+    {
+        return this.energyBufferCapacity;
+    }
 
-	@Override
-	public long getLastBuffer()
-	{
-		return this.lastEnergyBuffer;
-	}
+    @Override
+    public long getLastAmperageBuffer()
+    {
+        return this.amperageBuffer;
+    }
 
-	@Override
-	public long getBufferCapacity()
-	{
-		return this.energyBufferCapacity;
-	}
+    public void saveBuffer()
+    {
+        if (this.getConnectors().size() > 0)
+        {
+            long energyPerPart = 0;
+            for (IConductor conductor : this.getConnectors())
+            {
+                energyPerPart = this.energyBuffer / this.getConnectors().size();
+                conductor.setSaveBuffer(energyPerPart);
+            }
+        }
+    }
 
-	@Override
-	public long getLastAmperageBuffer()
-	{
-		return this.amperageBuffer;
-	}
+    public void loadBuffer()
+    {
+        this.energyBuffer = 0;
+        for (IConductor conductor : this.getConnectors())
+        {
+            this.energyBuffer += conductor.getSavedBuffer();
+        }
+    }
 }
