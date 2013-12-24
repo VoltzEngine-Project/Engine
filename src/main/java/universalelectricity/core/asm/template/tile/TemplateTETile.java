@@ -14,7 +14,7 @@ import cofh.api.energy.IEnergyHandler;
  * @author Calclavia
  * 
  */
-public abstract class TemplateTETile extends TileEntity implements IEnergyHandler, IEnergyInterface
+public abstract class TemplateTETile implements IEnergyHandler, IEnergyInterface
 {
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)

@@ -1,6 +1,5 @@
 package universalelectricity.core.asm.template.item;
 
-import ic2.api.item.IElectricItemManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import universalelectricity.api.CompatibilityType;

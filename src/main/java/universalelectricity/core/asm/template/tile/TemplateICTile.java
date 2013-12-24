@@ -14,23 +14,20 @@ import universalelectricity.api.energy.IEnergyInterface;
  * @author Calclavia
  * 
  */
-public abstract class TemplateICTile extends TileEntity implements IEnergySink, IEnergySource, IEnergyInterface
+public abstract class TemplateICTile implements IEnergySink, IEnergySource, IEnergyInterface
 {
-	@Override
 	public void validate()
 	{
 		StaticTileForwarder.validateTile(this);
 		StaticTileForwarder.loadIC(this);
 	}
 
-	@Override
 	public void invalidate()
 	{
 		StaticTileForwarder.unloadIC(this);
 		StaticTileForwarder.invalidateTile(this);
 	}
 
-	@Override
 	public void onChunkUnload()
 	{
 		StaticTileForwarder.unloadIC(this);

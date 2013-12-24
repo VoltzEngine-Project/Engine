@@ -1,15 +1,26 @@
 package universalelectricity.core;
 
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
+import ic2.api.item.ISpecialElectricItem;
+
 import java.io.File;
 import java.util.Map;
 
+import cofh.api.energy.IEnergyContainerItem;
+import cofh.api.energy.IEnergyHandler;
 import net.minecraftforge.common.Configuration;
 import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.energy.EnergyNetworkLoader;
 import universalelectricity.compatibility.ModuleUniversalElectricity;
+import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
+import universalelectricity.core.asm.template.item.TemplateICItem;
+import universalelectricity.core.asm.template.item.TemplateTEItem;
+import universalelectricity.core.asm.template.tile.TemplateICTile;
+import universalelectricity.core.asm.template.tile.TemplateTETile;
 import universalelectricity.core.net.EnergyNetwork;
 import universalelectricity.core.net.NetworkTickHandler;
 import cpw.mods.fml.common.Loader;
@@ -17,13 +28,14 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "UniversalElectricity", version = UniversalElectricity.VERSION, name = "Universal Electricity", dependencies = "before:ForgeMultipart")
 @TransformerExclusions({ "universalelectricity.core.asm", "universalelectricity.core.asm.template" })
-public class UELoader implements IFMLLoadingPlugin
+public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 {
 	/**
 	 * The Universal Electricity configuration file.
@@ -104,7 +116,7 @@ public class UELoader implements IFMLLoadingPlugin
 	@Override
 	public String getSetupClass()
 	{
-		return null;
+		return UELoader.class.getName();
 	}
 
 	/**
@@ -119,6 +131,18 @@ public class UELoader implements IFMLLoadingPlugin
 
 	public String[] getLibraryRequestClass()
 	{
+		return null;
+	}
+
+	@Override
+	public Void call() throws Exception
+	{
+		TemplateInjectionManager.registerTileTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TemplateTETile.class, IEnergyHandler.class);
+		TemplateInjectionManager.registerTileTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, TemplateICTile.class, IEnergySink.class, IEnergySource.class);
+
+		TemplateInjectionManager.registerItemTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TemplateTEItem.class, IEnergyContainerItem.class);
+		TemplateInjectionManager.registerItemTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, TemplateICItem.class, ISpecialElectricItem.class);
+
 		return null;
 	}
 }

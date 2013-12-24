@@ -3,10 +3,6 @@
  */
 package universalelectricity.core.asm;
 
-import ic2.api.energy.tile.IEnergySink;
-import ic2.api.energy.tile.IEnergySource;
-import ic2.api.item.ISpecialElectricItem;
-
 import java.util.HashMap;
 
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -21,12 +17,6 @@ import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.api.item.IEnergyItem;
 import universalelectricity.core.asm.TemplateInjectionManager.InjectionTemplate;
-import universalelectricity.core.asm.template.item.TemplateICItem;
-import universalelectricity.core.asm.template.item.TemplateTEItem;
-import universalelectricity.core.asm.template.tile.TemplateICTile;
-import universalelectricity.core.asm.template.tile.TemplateTETile;
-import cofh.api.energy.IEnergyContainerItem;
-import cofh.api.energy.IEnergyHandler;
 
 /**
  * @author Calclavia
@@ -35,15 +25,6 @@ import cofh.api.energy.IEnergyHandler;
 public class UniversalTransformer implements IClassTransformer
 {
 	static LaunchClassLoader cl = (LaunchClassLoader) UniversalTransformer.class.getClassLoader();
-
-	static
-	{
-		TemplateInjectionManager.registerTileTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TemplateTETile.class, IEnergyHandler.class);
-		TemplateInjectionManager.registerTileTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, TemplateICTile.class, IEnergySink.class, IEnergySource.class);
-
-		TemplateInjectionManager.registerItemTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TemplateTEItem.class, IEnergyContainerItem.class);
-		TemplateInjectionManager.registerItemTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, TemplateICItem.class, ISpecialElectricItem.class);
-	}
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes)
