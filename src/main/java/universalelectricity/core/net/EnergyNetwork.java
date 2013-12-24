@@ -53,11 +53,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
     private boolean hasLoaded = false;
 
-    public EnergyNetwork()
-    {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
     @Override
     public void addConnector(IConductor connector)
     {
@@ -76,8 +71,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
             this.lastEnergyBuffer = this.energyBuffer;
 
             this.amperageBuffer = this.energyBuffer / UniversalElectricity.DEFAULT_VOLTAGE;
-            long totalUsableEnergy = this.energyBuffer - this.getEnergyLoss(this.energyBuffer);
-            long remainingUsableEnergy = totalUsableEnergy;
+            long totalEnergy = this.energyBuffer - this.getEnergyLoss(this.energyBuffer);
+            long remainingEnergy = totalEnergy;
 
             int receiverCount = Math.max(this.getNodes().size() - this.sources.size(), 1);
             long energyPerReceiver = 0;
@@ -89,10 +84,10 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
                 {
                     for (ForgeDirection direction : entry.getValue())
                     {
-                        if (remainingUsableEnergy >= 0)
+                        if (remainingEnergy >= 0)
                         {
-                            energyPerReceiver = (remainingUsableEnergy / receiverCount) + totalUsableEnergy % receiverCount;
-                            remainingUsableEnergy -= this.applyPowerToHandler(entry.getKey(), direction, energyPerReceiver, true);
+                            energyPerReceiver = (remainingEnergy / receiverCount) + (remainingEnergy % receiverCount);
+                            remainingEnergy -= this.applyPowerToHandler(entry.getKey(), direction, energyPerReceiver, true);
                         }
                         else
                         {
@@ -106,9 +101,11 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
                     }
                 }
             }
-
-            this.energyBuffer = Math.max(remainingUsableEnergy, 0);
-            this.sources.clear();
+            if (totalEnergy != remainingEnergy)
+            {
+                this.energyBuffer = Math.max(remainingEnergy, 0);
+                this.sources.clear();
+            }
         }
 
         // Clear the network request cache.
