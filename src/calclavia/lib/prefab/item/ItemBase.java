@@ -1,4 +1,4 @@
-package calclavia.lib.base;
+package calclavia.lib.prefab.item;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;

@@ -1,4 +1,4 @@
-package calclavia.lib.tile;
+package calclavia.lib.prefab.tile;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;

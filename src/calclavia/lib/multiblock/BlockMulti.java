@@ -2,6 +2,7 @@ package calclavia.lib.multiblock;
 
 import java.util.Random;
 
+import calclavia.lib.network.PacketTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -18,7 +19,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockMulti extends BlockContainer
 {
 	public String textureName = null;
-	public String channel = "";
+	public PacketTile packetType;
 
 	public BlockMulti(int id)
 	{
@@ -27,9 +28,9 @@ public class BlockMulti extends BlockContainer
 		this.setUnlocalizedName("multiBlock");
 	}
 
-	public BlockMulti setChannel(String channel)
+	public BlockMulti setChannel(PacketTile packetType)
 	{
-		this.channel = channel;
+		this.packetType = packetType;
 		return this;
 	}
 
@@ -140,7 +141,7 @@ public class BlockMulti extends BlockContainer
 	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
-		return new TileEntityMultiBlockPart(this.channel);
+		return new TileEntityMultiBlockPart();
 	}
 
 	@Override

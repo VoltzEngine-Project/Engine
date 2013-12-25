@@ -8,8 +8,8 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
-import calclavia.lib.prefab.network.IPacketReceiver;
-import calclavia.lib.prefab.network.PacketManager;
+import calclavia.lib.network.IPacketReceiver;
+import calclavia.lib.network.PacketTile;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -23,17 +23,6 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 {
 	// The the position of the main block. Relative to this block's position.
 	private Vector3 mainBlockPosition;
-	public String channel;
-
-	public TileEntityMultiBlockPart()
-	{
-
-	}
-
-	public TileEntityMultiBlockPart(String channel)
-	{
-		this.channel = channel;
-	}
 
 	public Vector3 getMainBlock()
 	{
@@ -60,23 +49,18 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 	{
 		if (this.mainBlockPosition != null)
 		{
-			if (this.channel == null || this.channel == "" && this.getBlockType() instanceof BlockMulti)
-			{
-				this.channel = ((BlockMulti) this.getBlockType()).channel;
-			}
-
-			return PacketManager.getPacket(this.channel, this, this.mainBlockPosition.intX(), this.mainBlockPosition.intY(), this.mainBlockPosition.intZ());
+			return ((BlockMulti) this.getBlockType()).packetType.getPacket(this, this.mainBlockPosition.intX(), this.mainBlockPosition.intY(), this.mainBlockPosition.intZ());
 		}
 
 		return null;
 	}
 
 	@Override
-	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+	public void onReceivePacket(ByteArrayDataInput data, EntityPlayer player)
 	{
 		try
 		{
-			this.mainBlockPosition = new Vector3(dataStream.readInt(), dataStream.readInt(), dataStream.readInt());
+			this.mainBlockPosition = new Vector3(data.readInt(), data.readInt(), data.readInt());
 		}
 		catch (Exception e)
 		{
@@ -124,9 +108,6 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 		{
 			this.mainBlockPosition = new Vector3(nbt.getCompoundTag("mainBlockPosition"));
 		}
-
-		this.channel = nbt.getString("channel");
-
 	}
 
 	/**
@@ -141,8 +122,6 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 		{
 			nbt.setCompoundTag("mainBlockPosition", this.mainBlockPosition.writeToNBT(new NBTTagCompound()));
 		}
-
-		nbt.setString("channel", this.channel);
 	}
 
 	/**
