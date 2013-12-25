@@ -60,7 +60,7 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
     }
 
     @Override
-    public long applyPowerToHandler(Object handler, ForgeDirection side, long energy, boolean doPower)
+    public long addEnergyToHandler(Object handler, ForgeDirection side, long energy, boolean doPower)
     {
         if (handler instanceof IVoltageOutput)
         {
@@ -76,7 +76,7 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
                 ((IVoltageInput) handler).onWrongVoltage(side, this.voltage);
             }
         }
-        return super.applyPowerToHandler(handler, side, energy, doPower);
+        return super.addEnergyToHandler(handler, side, energy, doPower);
     }
 
     @Override
@@ -85,17 +85,18 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
         return voltage;
     }
 
+    //TODO: FIX THIS!
     @Override
-    public long produce(Object source, ForgeDirection side, long amount, boolean doReceive)
+    public long produce(IConductor conductor, ForgeDirection from, long amount, boolean doReceive)
     {
-        if (source instanceof IVoltageOutput && !(source instanceof IConductor))
+        if (conductor instanceof IVoltageOutput && !(conductor instanceof IConductor))
         {
-            if (((IVoltageOutput) source).getVoltageOutput(side) >= voltage)
+            if (((IVoltageOutput) conductor).getVoltageOutput(from) >= voltage)
             {
-                return super.produce(source, side, amount, doReceive);
+                return super.produce(conductor, from, amount, doReceive);
             }
             return 0;
         }
-        return super.produce(source, side, amount, doReceive);
+        return super.produce(conductor, from, amount, doReceive);
     }
 }
