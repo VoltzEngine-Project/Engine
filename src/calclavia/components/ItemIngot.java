@@ -1,4 +1,4 @@
-package basiccomponents;
+package calclavia.components;
 
 import net.minecraft.creativetab.CreativeTabs;
 

@@ -1,4 +1,4 @@
-package calclavia.lib.prefab;
+package calclavia.lib.prefab.slot;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

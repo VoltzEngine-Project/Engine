@@ -1,4 +1,4 @@
-package basiccomponents;
+package calclavia.components;
 
 import java.util.List;
 

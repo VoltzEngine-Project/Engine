@@ -1,4 +1,4 @@
-package basiccomponents.api;
+package calclavia.components.api;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

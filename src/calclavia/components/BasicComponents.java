@@ -1,4 +1,4 @@
-package basiccomponents;
+package calclavia.components;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -14,7 +14,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import basiccomponents.api.BasicRegistry;
+import calclavia.components.api.BasicRegistry;
 import calclavia.lib.prefab.RecipeHelper;
 import calclavia.lib.prefab.TranslationHelper;
 import calclavia.lib.prefab.ore.OreGenBase;
