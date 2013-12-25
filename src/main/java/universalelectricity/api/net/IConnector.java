@@ -9,7 +9,8 @@ package universalelectricity.api.net;
 public interface IConnector<N> extends INetworkProvider<N>, IConnectable
 {
 	/**
-	 * Gets an array of all the connected IConnectors that this conductor is connected to.
+	 * Gets an array of all the connected IConnectors that this conductor is connected to. This
+	 * should correspond to the ForgeDirection index.
 	 * 
 	 * @return An array of length "6".
 	 */

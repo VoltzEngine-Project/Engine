@@ -40,8 +40,20 @@ public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Obj
 	 */
 	public float getResistance();
 
-	public void saveBuffer();
+	/**
+	 * Used by conductors to load their internal buffers to the network. This should be called when
+	 * reading NBT data.
+	 * 
+	 * @param conductor
+	 */
+	public long getBufferOf(IConductor conductor);
 
-	public void loadBuffer();
+	/**
+	 * Used by conductors to load their internal buffers to the network. This should be called when
+	 * writing NBT data.
+	 * 
+	 * @param conductor
+	 */
+	public void setBufferFor(IConductor conductor, long buffer);
 
 }

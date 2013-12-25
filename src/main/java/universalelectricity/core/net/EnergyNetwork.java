@@ -260,7 +260,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	{
 		this.removeConnector(splitPoint);
 		this.reconstruct();
-		this.saveBuffer();
 
 		/**
 		 * Loop through the connected blocks and attempt to see if there are connections between the
@@ -301,7 +300,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 										this.removeConnector((IConductor) node);
 									}
 								}
-								newNetwork.loadBuffer();
+
 								newNetwork.reconstruct();
 							}
 							catch (Exception e)
@@ -320,7 +319,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	public void split(IConductor connectorA, IConductor connectorB)
 	{
 		this.reconstruct();
-		this.saveBuffer();
 
 		/** Check if connectorA connects with connectorB. */
 		ConnectionPathfinder finder = new ConnectionPathfinder(connectorB);
@@ -342,7 +340,6 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 				}
 
 				newNetwork.reconstruct();
-				newNetwork.loadBuffer();
 			}
 			catch (Exception e)
 			{
@@ -414,27 +411,14 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	}
 
 	@Override
-	public void saveBuffer()
+	public long getBufferOf(IConductor conductor)
 	{
-		if (this.getConnectors().size() > 0)
-		{
-			long energyPerPart = 0;
-			for (IConductor conductor : this.getConnectors())
-			{
-				energyPerPart = (this.energyBuffer / this.getConnectors().size()) + this.energyBuffer % this.getConnectors().size();
-				conductor.setSaveBuffer(energyPerPart);
-			}
-		}
+		return this.conductorBuffer.get(conductor);
 	}
 
 	@Override
-	public void loadBuffer()
+	public void setBufferFor(IConductor conductor, long buffer)
 	{
-		this.energyBuffer = 0;
-		for (IConductor conductor : this.getConnectors())
-		{
-			this.energyBuffer += conductor.getSavedBuffer();
-		}
+		this.conductorBuffer.put(conductor, buffer);
 	}
-
 }
