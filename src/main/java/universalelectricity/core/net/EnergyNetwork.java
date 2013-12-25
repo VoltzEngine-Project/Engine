@@ -45,6 +45,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     public void addConnector(IConductor connector)
     {
         connector.setNetwork(this);
+        this.conductorBuffer.put(connector, (long) 0);
         super.addConnector(connector);
     }
 
@@ -62,35 +63,36 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
         long perSide = 0;
         /** Number of handlers */
         int handlers = handlerDirectionMap.size();
-
-        /** For each conductor, output the energy into the handlers. */
-        for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
+        if (handlers > 0)
         {
-            /** Energy to give to each handler */
-            perHandler = (usableEnergy / handlers) + (usableEnergy % handlers);
+            /** For each conductor, output the energy into the handlers. */
+            for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
+            {
+                /** Energy to give to each handler */
+                perHandler = (usableEnergy / handlers) + (usableEnergy % handlers);
 
-            for (ForgeDirection direction : entry.getValue())
-            {
-                /** Energy per to give per side */
-                perSide = (perHandler / entry.getValue().size()) + (perHandler % entry.getValue().size());
-                currentEnergy -= this.addEnergyToHandler(entry.getKey(), direction, perSide, true);
+                for (ForgeDirection direction : entry.getValue())
+                {
+                    /** Energy per to give per side */
+                    perSide = (perHandler / entry.getValue().size()) + (perHandler % entry.getValue().size());
+                    currentEnergy -= this.addEnergyToHandler(entry.getKey(), direction, perSide, true);
+                }
+                if (handlers > 1)
+                {
+                    handlers--;
+                }
             }
-            if (handlers > 1)
-            {
-                handlers--;
-            }
+
+            /** Don't set energy if none was sent to prevent energy loss */
+            if (usableEnergy != currentEnergy)
+                this.energyBuffer = Math.max(currentEnergy, 0);
         }
-        /** Don't set energy if none was sent to prevent energy loss */
-        if (usableEnergy != currentEnergy)
-            this.energyBuffer = Math.max(currentEnergy, 0);
-
-        long remainingBufferPerConductor = this.energyBuffer / this.conductorBuffer.size();
-        Iterator<Entry<IConductor, Long>> it = this.conductorBuffer.entrySet().iterator();
+        long remainingBufferPerConductor = this.energyBuffer / this.getConnectors().size();
+        Iterator<IConductor> it = this.getConnectors().iterator();
 
         while (it.hasNext())
         {
-            Entry<IConductor, Long> entry = it.next();
-            entry.setValue(remainingBufferPerConductor);
+            this.conductorBuffer.put(it.next(), remainingBufferPerConductor);
         }
 
         // Clear the network request cache.
