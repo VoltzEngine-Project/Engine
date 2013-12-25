@@ -245,6 +245,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
         this.removeConnector(splitPoint);
         this.reconstruct();
 
+        long energyPerWire = this.energyBuffer / Math.max(this.getConnectors().size(), 1);
+
         /** Loop through the connected blocks and attempt to see if there are connections between the
          * two points elsewhere. */
         Object[] connectedBlocks = splitPoint.getConnections();
@@ -270,7 +272,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
                             {
                                 /** The connections A and B are not connected anymore. Give them both
                                  * a new common network. */
-                                IEnergyNetwork newNetwork = EnergyNetworkLoader.getNewNetwork();
+                                EnergyNetwork newNetwork = new EnergyNetwork();
 
                                 for (IConnector node : finder.closedSet)
                                 {
@@ -278,9 +280,10 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
                                     {
                                         newNetwork.addConnector((IConductor) node);
                                         this.removeConnector((IConductor) node);
+                                        newNetwork.energyBuffer += energyPerWire;
+                                        this.energyBuffer -= energyPerWire;
                                     }
                                 }
-
                                 newNetwork.reconstruct();
                             }
                             catch (Exception e)
