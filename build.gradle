@@ -23,7 +23,7 @@ buildProps.withReader {
 
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
 group = "universalelectricity"
-archivesBaseName = "UniversalElectricity"
+archivesBaseName = "Universal-Electricity"
 
 minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
