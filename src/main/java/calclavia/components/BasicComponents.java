@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
+import codechicken.core.launch.DepLoader;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -34,9 +35,9 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class BasicComponents
 {
-	public static final String ID = "BasicComponents";
-	public static final String NAME = "Basic Components";
-	public static String CHANNEL = "basicComponents";
+	public static final String ID = "CalclaviaCore";
+	public static final String NAME = "Calclavia Core";
+	public static String CHANNEL = "calclaviacore";
 
 	public static final String MAJOR_VERSION = "@MAJOR@";
 	public static final String MINOR_VERSION = "@MINOR@";
