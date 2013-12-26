@@ -41,6 +41,11 @@ task copyBuildXml(type: Copy) {
 jar {
     dependsOn copyBuildXml
     classifier = 'core'
+	
+	manifest {
+        attributes FMLCorePlugin: "calclavia.core.CalclaviaLoader"
+    }
+	
     destinationDir = file 'output'
 }
 
