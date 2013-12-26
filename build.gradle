@@ -12,6 +12,7 @@ buildscript {
 }
 
 apply plugin: 'forge'
+apply plugin: 'maven-publish'
 
 ext.buildProps = file "build.properties"
 
@@ -73,4 +74,24 @@ artifacts {
 
 wrapper {
     version = "1.8"
+}
+
+publications {
+	mavenJava(MavenPublication) {
+		from components.java
+		
+		artifact deobfJar {
+			classifier "dev"
+		}
+		
+		artifact apiZip {
+			classifier "api"
+		}
+	}
+	
+	repositories {
+		maven {
+			url "$buildDir/repo" // change to point to your repo, e.g. http://my.org/repo
+		}
+	}
 }
