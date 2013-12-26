@@ -16,7 +16,7 @@ import universalelectricity.api.vector.Vector3;
 @UniversalClass
 public class TileEntityElectrical extends TileAdvanced implements IEnergyInterface, IEnergyContainer
 {
-	protected EnergyStorageHandler energy;
+	public EnergyStorageHandler energy;
 
 	/**
 	 * Recharges electric item.
