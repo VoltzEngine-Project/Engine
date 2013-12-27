@@ -123,7 +123,7 @@ public abstract class CompatibilityModule
 	/**
 	 * Is this object a valid energy handler?
 	 * 
-	 * @param True if the handler can store energy.
+	 * @param True if the handler can store energy. This can be for items and blocks.
 	 */
 	public static boolean isHandler(Object handler)
 	{
@@ -153,7 +153,7 @@ public abstract class CompatibilityModule
 	 * Is this object able to store energy?
 	 * 
 	 * @param handler
-	 * @return True if the handler can store energy.
+	 * @return True if the handler can store energy. The handler MUST be a block.
 	 */
 	public static boolean isEnergyContainer(Object handler)
 	{
