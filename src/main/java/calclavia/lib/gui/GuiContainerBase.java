@@ -43,7 +43,7 @@ public class GuiContainerBase extends GuiContainer
 	protected int meterWidth = 14;
 	protected int meterEnd = meterX + meterWidth;
 
-	protected int energyMode = 0;
+	protected int energyType = 0;
 
 	public String tooltip = "";
 	protected HashMap<Region2, String> tooltips = new HashMap<Region2, String>();
@@ -57,12 +57,6 @@ public class GuiContainerBase extends GuiContainer
 		super(container);
 		this.ySize = 217;
 		this.baseTexture = Calclavia.GUI_BASE;
-	}
-
-	@Override
-	public void initGui()
-	{
-		super.initGui();
 	}
 
 	@Override
@@ -329,30 +323,30 @@ public class GuiContainerBase extends GuiContainer
 			displaySuffix = "/s";
 		}
 
-		String display;
-		switch (this.energyMode)
+		String display = UnitDisplay.getDisplay(energy, unit);
+
+		// Check different energy system types.
+		if (unit == Unit.WATT || unit == Unit.JOULES)
 		{
-			default:
-				display = UnitDisplay.getDisplay(energy, unit);
-				break;
-			case 1:
-
-				display = UnitDisplay.roundDecimals(energy * CompatibilityType.BUILDCRAFT.ratio) + " MJ" + displaySuffix;
-
-				break;
-			case 2:
-				display = UnitDisplay.roundDecimals(energy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix;
-				break;
-			case 3:
-				display = UnitDisplay.roundDecimals(energy * CompatibilityType.THERMAL_EXPANSION.ratio) + " RF" + displaySuffix;
-				break;
+			switch (this.energyType)
+			{
+				case 1:
+					display = UnitDisplay.roundDecimals(energy * CompatibilityType.BUILDCRAFT.ratio) + " MJ" + displaySuffix;
+					break;
+				case 2:
+					display = UnitDisplay.roundDecimals(energy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix;
+					break;
+				case 3:
+					display = UnitDisplay.roundDecimals(energy * CompatibilityType.THERMAL_EXPANSION.ratio) + " RF" + displaySuffix;
+					break;
+			}
 		}
 
 		if (this.isPointInRegion(x, y, display.length() * 5, 9, mouseX, mouseY))
 		{
 			if (Mouse.isButtonDown(0) && this.lastChangeFrameTime <= 0)
 			{
-				this.energyMode = (this.energyMode + 1) % 4;
+				this.energyType = (this.energyType + 1) % 4;
 				this.lastChangeFrameTime = 30;
 			}
 			else

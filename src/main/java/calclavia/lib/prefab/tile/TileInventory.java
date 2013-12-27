@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.ForgeDirection;
 import calclavia.lib.IPlayerUsing;
 
-public abstract class TileInventory extends TileEntityElectrical implements IInventory, IPlayerUsing
+public abstract class TileInventory extends TileElectrical implements IInventory, IPlayerUsing
 {
 	public final HashSet<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
 

@@ -14,7 +14,7 @@ import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.api.vector.Vector3;
 
 @UniversalClass
-public class TileEntityElectrical extends TileAdvanced implements IEnergyInterface, IEnergyContainer
+public class TileElectrical extends TileAdvanced implements IEnergyInterface, IEnergyContainer
 {
 	public EnergyStorageHandler energy;
 
@@ -96,13 +96,23 @@ public class TileEntityElectrical extends TileAdvanced implements IEnergyInterfa
 	@Override
 	public long onReceiveEnergy(ForgeDirection from, long receive, boolean doReceive)
 	{
-		return this.energy.receiveEnergy(receive, doReceive);
+		if (this.getInputDirections().contains(from))
+		{
+			return this.energy.receiveEnergy(receive, doReceive);
+		}
+
+		return 0;
 	}
 
 	@Override
 	public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract)
 	{
-		return this.energy.extractEnergy(extract, doExtract);
+		if (this.getOutputDirections().contains(from))
+		{
+			return this.energy.extractEnergy(extract, doExtract);
+		}
+
+		return 0;
 	}
 
 	@Override
