@@ -392,7 +392,11 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
     @Override
     public long getBufferOf(IConductor conductor)
     {
-        return this.conductorBuffer.get(conductor);
+        if (this.conductorBuffer != null && this.conductorBuffer.containsKey(conductor))
+        {
+            return this.conductorBuffer.get(conductor);
+        }
+        return 0;
     }
 
     @Override
