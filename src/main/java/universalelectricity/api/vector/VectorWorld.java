@@ -1,8 +1,12 @@
 package universalelectricity.api.vector;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
@@ -63,5 +67,40 @@ public class VectorWorld extends Vector3
         super.writeToNBT(nbt);
         nbt.setInteger("d", this.world.provider.dimensionId);
         return nbt;
+    }
+
+    public int getBlockID()
+    {
+        return super.getBlockID(this.world);
+    }
+
+    public int getBlockMetadata()
+    {
+        return super.getBlockMetadata(this.world);
+    }
+
+    public TileEntity getTileEntity()
+    {
+        return super.getTileEntity(this.world);
+    }
+
+    public boolean setBlock(int id, int metadata, int notify)
+    {
+        return super.setBlock(this.world, id, metadata, notify);
+    }
+
+    public boolean setBlock(int id, int metadata)
+    {
+        return this.setBlock(id, metadata, 3);
+    }
+
+    public boolean setBlock(int id)
+    {
+        return this.setBlock(id, 0);
+    }
+    
+    public List<Entity> getEntitiesWithin(Class<? extends Entity> par1Class)
+    {
+        return super.getEntitiesWithin(this.world, par1Class);
     }
 }
