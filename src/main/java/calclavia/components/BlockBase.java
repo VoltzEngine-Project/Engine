@@ -8,10 +8,10 @@ public class BlockBase extends Block
 {
 	public BlockBase(String name, int id)
 	{
-		super(BasicComponents.CONFIGURATION.getItem(name, id).getInt(id), Material.rock);
+		super(CalclaviaCore.CONFIGURATION.getItem(name, id).getInt(id), Material.rock);
 		this.setCreativeTab(CreativeTabs.tabBlock);
-		this.setUnlocalizedName(BasicComponents.PREFIX + name);
-		this.setTextureName(BasicComponents.PREFIX + name);
+		this.setUnlocalizedName(CalclaviaCore.PREFIX + name);
+		this.setTextureName(CalclaviaCore.PREFIX + name);
 		this.setHardness(2f);
 	}
 }

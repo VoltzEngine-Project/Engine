@@ -25,7 +25,7 @@ public class ItemCircuit extends ItemBase
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack)
 	{
-		return "item." + BasicComponents.PREFIX + TYPES[itemStack.getItemDamage()];
+		return "item." + CalclaviaCore.PREFIX + TYPES[itemStack.getItemDamage()];
 	}
 
 	@Override

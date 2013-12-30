@@ -20,12 +20,12 @@ public class BasicRegistry
 	 */
 	public static void register(String request)
 	{
-		BasicComponents.CONFIGURATION.load();
-		if (BasicComponents.CONFIGURATION.get("Allow Load Items", request, true).getBoolean(true))
+		CalclaviaCore.CONFIGURATION.load();
+		if (CalclaviaCore.CONFIGURATION.get("Allow Load Items", request, true).getBoolean(true))
 		{
 			requests.add(request);
 		}
-		BasicComponents.CONFIGURATION.save();
+		CalclaviaCore.CONFIGURATION.save();
 	}
 
 	/**

@@ -29,9 +29,9 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
-@Mod(modid = BasicComponents.ID, name = BasicComponents.NAME, version = BasicComponents.VERSION, dependencies = "after:*")
+@Mod(modid = CalclaviaCore.ID, name = CalclaviaCore.NAME, version = CalclaviaCore.VERSION)
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-public class BasicComponents
+public class CalclaviaCore
 {
 	public static final String ID = "CalclaviaCore";
 	public static final String NAME = "Calclavia Core";
@@ -147,11 +147,11 @@ public class BasicComponents
 		{
 			if (request.contains("block"))
 			{
-				BasicComponents.requestBlock(request, 0);
+				CalclaviaCore.requestBlock(request, 0);
 			}
 			else if (request.contains("item"))
 			{
-				BasicComponents.requestItem(request, 0);
+				CalclaviaCore.requestItem(request, 0);
 			}
 			else
 			{
@@ -195,11 +195,11 @@ public class BasicComponents
 			String name = fieldName.replace("item", "");
 			name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
 
-			Field field = ReflectionHelper.findField(BasicComponents.class, fieldName);
+			Field field = ReflectionHelper.findField(CalclaviaCore.class, fieldName);
 			Item f = (Item) field.get(null);
 
 			// Grabs the default ID.
-			Field idField = ReflectionHelper.findField(BasicComponents.class, "id" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1));
+			Field idField = ReflectionHelper.findField(CalclaviaCore.class, "id" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1));
 			id = id <= 0 ? (Integer) idField.get(null) : id;
 
 			if (f == null)
@@ -362,9 +362,9 @@ public class BasicComponents
 			String name = fieldName.replace("block", "");
 			name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
 
-			Field field = ReflectionHelper.findField(BasicComponents.class, fieldName);
+			Field field = ReflectionHelper.findField(CalclaviaCore.class, fieldName);
 			Block f = (Block) field.get(null);
-			Field idField = ReflectionHelper.findField(BasicComponents.class, "id" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1));
+			Field idField = ReflectionHelper.findField(CalclaviaCore.class, "id" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1));
 			id = id <= 0 ? (Integer) idField.get(null) : id;
 
 			if (f == null)
@@ -383,8 +383,8 @@ public class BasicComponents
 						GameRegistry.addSmelting(block.blockID, OreDictionary.getOres(ingotName).get(0), 0.6f);
 					}
 
-					Field generationField = ReflectionHelper.findField(BasicComponents.class, "generation" + Character.toUpperCase(name.charAt(0)) + name.substring(1));
-					generationField.set(null, new OreGenReplaceStone(name, name, new ItemStack(block), 60, 22, 4).enable(BasicComponents.CONFIGURATION));
+					Field generationField = ReflectionHelper.findField(CalclaviaCore.class, "generation" + Character.toUpperCase(name.charAt(0)) + name.substring(1));
+					generationField.set(null, new OreGenReplaceStone(name, name, new ItemStack(block), 60, 22, 4).enable(CalclaviaCore.CONFIGURATION));
 					OreGenerator.addOre((OreGenReplaceStone) generationField.get(null));
 				}
 
