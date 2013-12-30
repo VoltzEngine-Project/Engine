@@ -121,9 +121,29 @@ public class TileElectrical extends TileAdvanced implements IEnergyInterface, IE
 		this.energy.setEnergy(energy);
 	}
 
-	protected void produce(long energy)
+	protected long produce(long outputEnergy)
 	{
-		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+		long usedEnergy = 0;
+
+		for (ForgeDirection direction : this.getOutputDirections())
+		{
+			if (outputEnergy > 0)
+			{
+				TileEntity tileEntity = new Vector3(this).modifyPositionFromSide(direction).getTileEntity(this.worldObj);
+
+				if (tileEntity != null)
+				{
+					usedEnergy += CompatibilityModule.receiveEnergy(tileEntity, direction.getOpposite(), outputEnergy, true);
+				}
+			}
+		}
+
+		return usedEnergy;
+	}
+
+	protected void produce()
+	{
+		for (ForgeDirection direction : this.getOutputDirections())
 		{
 			if (this.energy.getEnergy() > 0)
 			{
@@ -131,15 +151,10 @@ public class TileElectrical extends TileAdvanced implements IEnergyInterface, IE
 
 				if (tileEntity != null)
 				{
-					long used = CompatibilityModule.receiveEnergy(tileEntity, direction.getOpposite(), this.energy.extractEnergy(energy, false), true);
+					long used = CompatibilityModule.receiveEnergy(tileEntity, direction.getOpposite(), this.energy.extractEnergy(this.energy.getEnergy(), false), true);
 					this.energy.extractEnergy(used, true);
 				}
 			}
 		}
-	}
-
-	protected void produce()
-	{
-		produce(this.energy.getEnergy());
 	}
 }
