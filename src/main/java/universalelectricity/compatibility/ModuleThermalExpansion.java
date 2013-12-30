@@ -69,6 +69,6 @@ public class ModuleThermalExpansion extends CompatibilityModule
 	@Override
 	public long doGetEnergy(Object obj, ForgeDirection from)
 	{
-		return ((IEnergyHandler) obj).getEnergyStored(from);
+		return (long) (((IEnergyHandler) obj).getEnergyStored(from) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
 	}
 }
