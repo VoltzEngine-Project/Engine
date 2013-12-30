@@ -56,7 +56,7 @@ public class TileEntityMultiBlockPart extends TileEntity implements IPacketRecei
 	}
 
 	@Override
-	public void onReceivePacket(ByteArrayDataInput data, EntityPlayer player)
+	public void onReceivePacket(ByteArrayDataInput data, EntityPlayer player, Object... obj)
 	{
 		try
 		{
