@@ -19,7 +19,7 @@ import com.google.common.io.ByteArrayDataInput;
  * @author Calclavia
  * 
  */
-public class TileEntityMultiBlockPart extends TileEntity implements IPacketReceiver
+public class TileMultiBlockPart extends TileEntity implements IPacketReceiver
 {
 	// The the position of the main block. Relative to this block's position.
 	private Vector3 mainBlockPosition;
