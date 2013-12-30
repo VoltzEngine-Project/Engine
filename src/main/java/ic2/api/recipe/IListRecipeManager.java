@@ -9,14 +9,15 @@ import net.minecraft.item.ItemStack;
  * 
  * @author Richard
  */
-public interface IListRecipeManager extends Iterable<ItemStack> {
+public interface IListRecipeManager extends Iterable<ItemStack>
+{
 	/**
 	 * Adds a stack to the list.
 	 * 
 	 * @param stack Stack to add
 	 */
 	public void add(ItemStack stack);
-	
+
 	/**
 	 * Checks whether the specified stack is in the list.
 	 * 
@@ -24,7 +25,7 @@ public interface IListRecipeManager extends Iterable<ItemStack> {
 	 * @return Whether the stack is in the list
 	 */
 	public boolean contains(ItemStack stack);
-	
+
 	/**
 	 * Gets the list of stacks.
 	 * 

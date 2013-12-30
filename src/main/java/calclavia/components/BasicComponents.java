@@ -4,7 +4,6 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import codechicken.core.launch.DepLoader;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -207,7 +206,7 @@ public class BasicComponents
 
 				if (name.contains("ingot"))
 				{
-				    ItemIngot ingot = new ItemIngot(name, id);
+					ItemIngot ingot = new ItemIngot(name, id);
 					field.set(null, ingot);
 					OreDictionary.registerOre(name, ingot);
 				}
@@ -239,7 +238,7 @@ public class BasicComponents
 						RecipeHelper.addRecipe(new ShapelessOreRecipe(new ItemStack(itemIngot, 4), item), CONFIGURATION, true);
 						RecipeHelper.addRecipe(new ShapedOreRecipe(item, "II", "II", 'I', itemIngot), CONFIGURATION, true);
 					}
-					
+
 					RecipeHelper.addRecipe(new ShapedOreRecipe(item, "II", "II", 'I', ingotName), CONFIGURATION, true);
 				}
 				else if (name.contains("dust"))
@@ -377,7 +376,7 @@ public class BasicComponents
 					OreDictionary.registerOre(name, block);
 
 					String ingotName = name.replaceAll("ore", "ingot");
-					
+
 					if (OreDictionary.getOres(ingotName).size() > 0)
 					{
 						GameRegistry.addSmelting(block.blockID, OreDictionary.getOres(ingotName).get(0), 0.6f);

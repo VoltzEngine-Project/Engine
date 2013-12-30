@@ -4,7 +4,8 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
-public interface ICannerBottleRecipeManager {
+public interface ICannerBottleRecipeManager
+{
 	/**
 	 * Adds a recipe to the machine.
 	 * 
@@ -20,7 +21,8 @@ public interface ICannerBottleRecipeManager {
 	 * @param container Container to be filled
 	 * @param fill Item to fill into the container
 	 * @param adjustInput modify the input according to the recipe's requirements
-	 * @param acceptTest allow either container or fill to be null to see if either of them is part of a recipe
+	 * @param acceptTest allow either container or fill to be null to see if either of them is part
+	 * of a recipe
 	 * @return Recipe output, or null if none
 	 */
 	public RecipeOutput getOutputFor(ItemStack container, ItemStack fill, boolean adjustInput, boolean acceptTest);
@@ -34,14 +36,16 @@ public interface ICannerBottleRecipeManager {
 	 */
 	public Map<Input, RecipeOutput> getRecipes();
 
-
-	public static class Input {
-		public Input(IRecipeInput container, IRecipeInput fill) {
+	public static class Input
+	{
+		public Input(IRecipeInput container, IRecipeInput fill)
+		{
 			this.container = container;
 			this.fill = fill;
 		}
 
-		public boolean matches(ItemStack container, ItemStack fill) {
+		public boolean matches(ItemStack container, ItemStack fill)
+		{
 			return this.container.matches(container) && this.fill.matches(fill);
 		}
 

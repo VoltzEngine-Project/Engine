@@ -10,7 +10,8 @@ import net.minecraft.nbt.NBTTagCompound;
  * 
  * @author RichardG, Player
  */
-public interface IMachineRecipeManager {
+public interface IMachineRecipeManager
+{
 	/**
 	 * Adds a recipe to the machine.
 	 * 
