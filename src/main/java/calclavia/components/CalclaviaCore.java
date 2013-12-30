@@ -3,6 +3,7 @@ package calclavia.components;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -51,13 +52,13 @@ public class CalclaviaCore
 	 */
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), NAME + ".cfg"));
 
-	public static final String RESOURCE_PATH = "/assets/basiccomponents/";
+	public static final String RESOURCE_PATH = "/assets/calclavia/";
 	public static final String TEXTURE_DIRECTORY = RESOURCE_PATH + "textures/";
 	public static final String BLOCK_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "blocks/";
 	public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items/";
 	public static final String MODEL_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "models/";
 
-	public static final String DOMAIN = "basiccomponents";
+	public static final String DOMAIN = "calclavia";
 	public static final String PREFIX = DOMAIN + ":";
 
 	public static final String LANGUAGE_PATH = RESOURCE_PATH + "languages/";
@@ -134,6 +135,8 @@ public class CalclaviaCore
 
 	public static OreGenBase generationOreCopper, generationOreTin;
 
+	public static final Logger LOGGER = Logger.getLogger(NAME);
+
 	@EventHandler
 	public void init(FMLInitializationEvent evt) throws MinecraftException
 	{
@@ -141,7 +144,7 @@ public class CalclaviaCore
 
 		BasicRegistry.registerAll();
 
-		FMLLog.fine("Basic Components: Attempting to load " + BasicRegistry.requests.size() + " items.");
+		LOGGER.fine("Attempting to load " + BasicRegistry.requests.size() + " items.");
 
 		for (String request : BasicRegistry.requests)
 		{
@@ -155,13 +158,13 @@ public class CalclaviaCore
 			}
 			else
 			{
-				FMLLog.severe("Failed to load Basic Components item: " + request);
+				LOGGER.severe("Failed to load Calclavia Core item: " + request);
 			}
 		}
 
 		CONFIGURATION.save();
 
-		System.out.println("Basic Components Loaded: " + TranslationHelper.loadLanguages(LANGUAGE_PATH, LANGUAGES_SUPPORTED) + " Languages.");
+		LOGGER.fine("Loaded: " + TranslationHelper.loadLanguages(LANGUAGE_PATH, LANGUAGES_SUPPORTED) + " Languages.");
 
 		metadata.modId = ID;
 		metadata.name = NAME;
