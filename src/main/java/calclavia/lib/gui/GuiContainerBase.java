@@ -364,13 +364,11 @@ public class GuiContainerBase extends GuiContainer
 	{
 		if (!GuiScreen.isShiftKeyDown())
 		{
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			RenderHelper.disableStandardItemLighting();
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-
 			if (toolTips != null)
 			{
+				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+				GL11.glDisable(GL11.GL_DEPTH_TEST);
+
 				int var5 = 0;
 				int var6;
 				int var7;
@@ -425,8 +423,6 @@ public class GuiContainerBase extends GuiContainer
 				this.zLevel = 0;
 
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
-				GL11.glEnable(GL11.GL_LIGHTING);
-				RenderHelper.enableGUIStandardItemLighting();
 				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			}
 		}
