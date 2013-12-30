@@ -14,7 +14,6 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import calclavia.components.api.BasicRegistry;
 import calclavia.lib.prefab.RecipeHelper;
 import calclavia.lib.prefab.TranslationHelper;
 import calclavia.lib.prefab.ore.OreGenBase;
@@ -139,6 +138,8 @@ public class BasicComponents
 	public void init(FMLInitializationEvent evt) throws MinecraftException
 	{
 		CONFIGURATION.load();
+
+		BasicRegistry.registerAll();
 
 		FMLLog.fine("Basic Components: Attempting to load " + BasicRegistry.requests.size() + " items.");
 

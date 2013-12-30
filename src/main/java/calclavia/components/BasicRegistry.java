@@ -1,4 +1,4 @@
-package calclavia.components.api;
+package calclavia.components;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,13 +20,18 @@ public class BasicRegistry
 	 */
 	public static void register(String request)
 	{
-		requests.add(request);
+		BasicComponents.CONFIGURATION.load();
+		if (BasicComponents.CONFIGURATION.get("Allow Load Items", request, true).getBoolean(true))
+		{
+			requests.add(request);
+		}
+		BasicComponents.CONFIGURATION.save();
 	}
 
 	/**
 	 * Requests all items in Basic Components.
 	 */
-	public static void requestAll()
+	public static void registerAll()
 	{
 		register("itemIngotCopper");
 		register("itemIngotTin");
