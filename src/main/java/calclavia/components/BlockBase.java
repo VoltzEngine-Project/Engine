@@ -1,9 +1,10 @@
 package calclavia.components;
 
-import calclavia.lib.Calclavia;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import calclavia.lib.Calclavia;
+import calclavia.lib.CalclaviaCoreLoader;
 
 public class BlockBase extends Block
 {
@@ -11,8 +12,8 @@ public class BlockBase extends Block
 	{
 		super(Calclavia.CONFIGURATION.getItem(name, id).getInt(id), Material.rock);
 		this.setCreativeTab(CreativeTabs.tabBlock);
-		this.setUnlocalizedName(CalclaviaCore.PREFIX + name);
-		this.setTextureName(CalclaviaCore.PREFIX + name);
+		this.setUnlocalizedName(CalclaviaCoreLoader.PREFIX + name);
+		this.setTextureName(CalclaviaCoreLoader.PREFIX + name);
 		this.setHardness(2f);
 	}
 }

@@ -1,11 +1,10 @@
 package calclavia.lib.asm;
 
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.MinecraftForge;
 
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -14,7 +13,6 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 import universalelectricity.core.asm.ASMHelper;
 import universalelectricity.core.asm.ObfMapping;
-import static org.objectweb.asm.Opcodes.*;
 
 /**
  * @author Calclavia

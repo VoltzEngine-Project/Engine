@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import calclavia.lib.CalclaviaCoreLoader;
 
 public class ItemCircuit extends ItemBase
 {
@@ -25,7 +26,7 @@ public class ItemCircuit extends ItemBase
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack)
 	{
-		return "item." + CalclaviaCore.PREFIX + TYPES[itemStack.getItemDamage()];
+		return "item." + CalclaviaCoreLoader.PREFIX + TYPES[itemStack.getItemDamage()];
 	}
 
 	@Override

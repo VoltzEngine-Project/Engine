@@ -1,6 +1,5 @@
 package calclavia.components;
 
-import calclavia.components.event.WrenchEvent;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,6 +9,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event.Result;
 import buildcraft.api.tools.IToolWrench;
+import calclavia.components.event.WrenchEvent;
 
 public class ItemWrench extends ItemBase implements IToolWrench
 {

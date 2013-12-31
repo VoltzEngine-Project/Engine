@@ -1,8 +1,9 @@
 package calclavia.components;
 
-import calclavia.lib.Calclavia;
 import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
+import calclavia.lib.Calclavia;
+import calclavia.lib.CalclaviaCoreLoader;
 
 /**
  * An Base Item Class for Basic Components. Do not use this! Make your own!
@@ -17,8 +18,8 @@ public class ItemBase extends Item
 	public ItemBase(String name, int id)
 	{
 		super(Calclavia.CONFIGURATION.getItem(name, id).getInt(id));
-		this.setUnlocalizedName(CalclaviaCore.PREFIX + name);
-		this.setTextureName(CalclaviaCore.PREFIX + name);
+		this.setUnlocalizedName(CalclaviaCoreLoader.PREFIX + name);
+		this.setTextureName(CalclaviaCoreLoader.PREFIX + name);
 		this.setNoRepair();
 	}
 }

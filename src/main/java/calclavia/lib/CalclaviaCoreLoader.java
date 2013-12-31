@@ -1,7 +1,8 @@
-package calclavia.components;
+package calclavia.lib;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
@@ -13,7 +14,13 @@ import net.minecraft.world.MinecraftException;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import calclavia.lib.Calclavia;
+import calclavia.components.BasicRegistry;
+import calclavia.components.BlockBase;
+import calclavia.components.ItemBase;
+import calclavia.components.ItemIngot;
+import calclavia.components.ItemPlate;
+import calclavia.components.ItemWrench;
+import calclavia.lib.asm.CalclaviaTransformer;
 import calclavia.lib.prefab.RecipeHelper;
 import calclavia.lib.prefab.TranslationHelper;
 import calclavia.lib.prefab.ore.OreGenBase;
@@ -27,11 +34,20 @@ import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
-@Mod(modid = CalclaviaCore.ID, name = CalclaviaCore.NAME, version = CalclaviaCore.VERSION, dependencies = "required-after:UniversalElectricity")
+/**
+ * The FMLLoadingPlugin for Calclavia Core
+ * 
+ * @author Calclavia
+ * 
+ */
+@Mod(modid = CalclaviaCoreLoader.ID, name = CalclaviaCoreLoader.NAME, version = CalclaviaCoreLoader.VERSION, dependencies = "required-after:UniversalElectricity")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-public class CalclaviaCore
+@TransformerExclusions({ "calclavia.lib.asm" })
+public class CalclaviaCoreLoader implements IFMLLoadingPlugin
 {
 	public static final String ID = "CalclaviaCore";
 	public static final String NAME = "Calclavia Core";
@@ -144,11 +160,11 @@ public class CalclaviaCore
 		{
 			if (request.contains("block"))
 			{
-				CalclaviaCore.requestBlock(request, 0);
+				CalclaviaCoreLoader.requestBlock(request, 0);
 			}
 			else if (request.contains("item"))
 			{
-				CalclaviaCore.requestItem(request, 0);
+				CalclaviaCoreLoader.requestItem(request, 0);
 			}
 			else
 			{
@@ -190,11 +206,11 @@ public class CalclaviaCore
 			String name = fieldName.replace("item", "");
 			name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
 
-			Field field = ReflectionHelper.findField(CalclaviaCore.class, fieldName);
+			Field field = ReflectionHelper.findField(CalclaviaCoreLoader.class, fieldName);
 			Item f = (Item) field.get(null);
 
 			// Grabs the default ID.
-			Field idField = ReflectionHelper.findField(CalclaviaCore.class, "id" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1));
+			Field idField = ReflectionHelper.findField(CalclaviaCoreLoader.class, "id" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1));
 			id = id <= 0 ? (Integer) idField.get(null) : id;
 
 			if (f == null)
@@ -357,9 +373,9 @@ public class CalclaviaCore
 			String name = fieldName.replace("block", "");
 			name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
 
-			Field field = ReflectionHelper.findField(CalclaviaCore.class, fieldName);
+			Field field = ReflectionHelper.findField(CalclaviaCoreLoader.class, fieldName);
 			Block f = (Block) field.get(null);
-			Field idField = ReflectionHelper.findField(CalclaviaCore.class, "id" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1));
+			Field idField = ReflectionHelper.findField(CalclaviaCoreLoader.class, "id" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1));
 			id = id <= 0 ? (Integer) idField.get(null) : id;
 
 			if (f == null)
@@ -378,7 +394,7 @@ public class CalclaviaCore
 						GameRegistry.addSmelting(block.blockID, OreDictionary.getOres(ingotName).get(0), 0.6f);
 					}
 
-					Field generationField = ReflectionHelper.findField(CalclaviaCore.class, "generation" + Character.toUpperCase(name.charAt(0)) + name.substring(1));
+					Field generationField = ReflectionHelper.findField(CalclaviaCoreLoader.class, "generation" + Character.toUpperCase(name.charAt(0)) + name.substring(1));
 					generationField.set(null, new OreGenReplaceStone(name, name, new ItemStack(block), 60, 22, 4).enable(Calclavia.CONFIGURATION));
 					OreGenerator.addOre((OreGenReplaceStone) generationField.get(null));
 				}
@@ -415,5 +431,34 @@ public class CalclaviaCore
 		}
 
 		return null;
+	}
+
+	public String[] getLibraryRequestClass()
+	{
+		return null;
+	}
+
+	@Override
+	public String[] getASMTransformerClass()
+	{
+		return new String[] { CalclaviaTransformer.class.getName() };
+	}
+
+	@Override
+	public String getModContainerClass()
+	{
+		return null;
+	}
+
+	@Override
+	public String getSetupClass()
+	{
+		return null;
+	}
+
+	@Override
+	public void injectData(Map<String, Object> data)
+	{
+
 	}
 }

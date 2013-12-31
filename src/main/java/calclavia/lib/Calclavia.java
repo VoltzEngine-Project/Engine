@@ -4,10 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import calclavia.components.CalclaviaCore;
-import cpw.mods.fml.common.Loader;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Configuration;
+import cpw.mods.fml.common.Loader;
 
 public class Calclavia
 {
@@ -27,7 +26,7 @@ public class Calclavia
 	/**
 	 * The configuration file.
 	 */
-	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), CalclaviaCore.NAME + ".cfg"));
+	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), CalclaviaCoreLoader.NAME + ".cfg"));
 
 	public static List<String> splitStringPerWord(String string, int wordsPerLine)
 	{
