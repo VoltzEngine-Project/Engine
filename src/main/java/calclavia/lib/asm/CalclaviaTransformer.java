@@ -1,12 +1,22 @@
 package calclavia.lib.asm;
 
 import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ARETURN;
+import static org.objectweb.asm.Opcodes.DRETURN;
+import static org.objectweb.asm.Opcodes.FRETURN;
 import static org.objectweb.asm.Opcodes.ILOAD;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.LRETURN;
+import static org.objectweb.asm.Opcodes.RET;
+import static org.objectweb.asm.Opcodes.RETURN;
 import net.minecraft.launchwrapper.IClassTransformer;
 
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -44,7 +54,16 @@ public class CalclaviaTransformer implements IClassTransformer
 					list.add(new VarInsnNode(ILOAD, 4));
 					list.add(new VarInsnNode(ILOAD, 5));
 					list.add(new MethodInsnNode(INVOKESTATIC, "calclavia/lib/asm/StaticForwarder", "chunkSetBlockEvent", "(Lnet/minecraft/world/chunk/Chunk;IIIII)V"));
-					method.instructions.insert(list);
+
+					AbstractInsnNode lastInsn = method.instructions.getLast();
+					while (lastInsn instanceof LabelNode || lastInsn instanceof LineNumberNode)
+						lastInsn = lastInsn.getPrevious();
+
+					if (isReturn(lastInsn))
+						method.instructions.insertBefore(lastInsn, list);
+					else
+						method.instructions.insert(list);
+
 					System.out.println("[Calclavia Core] Injected instruction to method: " + m.s_name);
 				}
 			}
@@ -53,6 +72,24 @@ public class CalclaviaTransformer implements IClassTransformer
 		}
 
 		return bytes;
+	}
+
+	private boolean isReturn(AbstractInsnNode node)
+	{
+		switch (node.getOpcode())
+		{
+			case RET:
+			case RETURN:
+			case ARETURN:
+			case DRETURN:
+			case FRETURN:
+			case IRETURN:
+			case LRETURN:
+				return true;
+
+			default:
+				return false;
+		}
 	}
 
 }

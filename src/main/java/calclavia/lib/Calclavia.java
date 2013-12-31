@@ -27,7 +27,8 @@ public class Calclavia
 	/**
 	 * The configuration file.
 	 */
-	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), CalclaviaCoreLoader.NAME + ".cfg"));
+	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), NAME + ".cfg"));
+	public static final Logger LOGGER = Logger.getLogger(NAME);
 
 	public static List<String> splitStringPerWord(String string, int wordsPerLine)
 	{
@@ -48,7 +49,5 @@ public class Calclavia
 
 		return lines;
 	}
-
-	public static final Logger LOGGER = Logger.getLogger(CalclaviaCoreLoader.NAME);
 
 }

@@ -45,7 +45,7 @@
 		
 		<copy todir="ModContents">
 			<fileset dir="${dir.mcp}/reobf/minecraft">
-				<include name="**"/>
+				<include name="universalelectricity/**"/>
 			</fileset>
 			
 			<!-- Copy all resources -->
@@ -62,7 +62,7 @@
 		<jar destfile="output/${file.JarFile}">
 			<fileset dir="ModContents" />
 			<manifest>
-				<attribute name="FMLCorePlugin" value="calclavia.lib.CalclaviaCoreLoader" />
+				<attribute name="FMLCorePlugin" value="calclavia.lib.CalclaviaPluginLoader" />
 				<attribute name="FMLCorePluginContainsFMLMod" value="true" />
 			</manifest>
 		</jar>
