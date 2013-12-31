@@ -253,7 +253,7 @@ public class CalclaviaCore
 					}
 					else if (name.equals("dustSteel"))
 					{
-						RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), " C ", "CIC", " C ", 'I', Item.ingotIron, 'C', Item.coal), Calclavia.CONFIGURATION, true);
+						RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), " C ", "CIC", " C ", 'I', Item.ingotIron, 'C', Item.coal), Calclavia.CONFIGURATION, RecipeHelper.getRecipesByOutput(new ItemStack(item)).size() <= 0);
 
 						if (OreDictionary.getOres("ingotSteel").size() > 0)
 						{
