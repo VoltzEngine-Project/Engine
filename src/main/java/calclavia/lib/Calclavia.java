@@ -1,9 +1,13 @@
 package calclavia.lib;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import calclavia.components.CalclaviaCore;
+import cpw.mods.fml.common.Loader;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.Configuration;
 
 public class Calclavia
 {
@@ -20,6 +24,10 @@ public class Calclavia
 	public static final ResourceLocation GUI_EMPTY_FILE = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "gui_empty.png");
 	public static final ResourceLocation GUI_COMPONENTS = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "gui_components.png");
 	public static final ResourceLocation GUI_BASE = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "gui_base.png");
+	/**
+	 * The configuration file.
+	 */
+	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), CalclaviaCore.NAME + ".cfg"));
 
 	public static List<String> splitStringPerWord(String string, int wordsPerLine)
 	{

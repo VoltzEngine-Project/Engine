@@ -3,6 +3,8 @@ package calclavia.components;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import calclavia.lib.Calclavia;
+
 /**
  * This should be the only class you include in your mod. If your mod is a coremod, feel free to
  * download Basic Components Core directly during run-time.
@@ -20,12 +22,12 @@ public class BasicRegistry
 	 */
 	public static void register(String request)
 	{
-		CalclaviaCore.CONFIGURATION.load();
-		if (CalclaviaCore.CONFIGURATION.get("Allow Load Items", request, true).getBoolean(true))
+		Calclavia.CONFIGURATION.load();
+		if (Calclavia.CONFIGURATION.get("Allow Load Items", request, true).getBoolean(true))
 		{
 			requests.add(request);
 		}
-		CalclaviaCore.CONFIGURATION.save();
+		Calclavia.CONFIGURATION.save();
 	}
 
 	/**

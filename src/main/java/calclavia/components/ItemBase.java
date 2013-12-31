@@ -1,5 +1,6 @@
 package calclavia.components;
 
+import calclavia.lib.Calclavia;
 import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
 
@@ -15,7 +16,7 @@ public class ItemBase extends Item
 
 	public ItemBase(String name, int id)
 	{
-		super(CalclaviaCore.CONFIGURATION.getItem(name, id).getInt(id));
+		super(Calclavia.CONFIGURATION.getItem(name, id).getInt(id));
 		this.setUnlocalizedName(CalclaviaCore.PREFIX + name);
 		this.setTextureName(CalclaviaCore.PREFIX + name);
 		this.setNoRepair();
