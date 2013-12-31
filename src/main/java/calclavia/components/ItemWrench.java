@@ -1,11 +1,14 @@
 package calclavia.components;
 
+import calclavia.components.event.WrenchEvent;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.Event.Result;
 import buildcraft.api.tools.IToolWrench;
 
 public class ItemWrench extends ItemBase implements IToolWrench
@@ -33,14 +36,21 @@ public class ItemWrench extends ItemBase implements IToolWrench
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer entityPlayer, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
 	{
 		int blockID = world.getBlockId(x, y, z);
+		int blockMeta = world.getBlockMetadata(x, y, z);
+		Block block = Block.blocksList[blockID];
+		WrenchEvent evt = new WrenchEvent(world, x, y, z, side, hitX, hitY, hitZ, block, blockMeta);
+		MinecraftForge.EVENT_BUS.post(evt);
 
-		if (Block.blocksList[blockID].rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+		if (!evt.isCanceled())
 		{
-			this.wrenchUsed(entityPlayer, x, y, z);
-			return true;
+			if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+			{
+				this.wrenchUsed(entityPlayer, x, y, z);
+				return true;
+			}
 		}
 
-		return false;
+		return evt.getResult() == Result.DENY ? true : false;
 	}
 
 	@Override
