@@ -62,7 +62,7 @@
 		<jar destfile="output/${file.JarFile}">
 			<fileset dir="ModContents" />
 			<manifest>
-				<attribute name="FMLCorePlugin" value="calclavia.lib.asm.CalclaviaCoreLoader" />
+				<attribute name="FMLCorePlugin" value="calclavia.lib.CalclaviaCoreLoader" />
 			</manifest>
 		</jar>
 		
