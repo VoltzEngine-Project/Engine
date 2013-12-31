@@ -45,7 +45,7 @@
 		
 		<copy todir="ModContents">
 			<fileset dir="${dir.mcp}/reobf/minecraft">
-				<include name="universalelectricity/**"/>
+				<exclude name="universalelectricity/**"/>
 			</fileset>
 			
 			<!-- Copy all resources -->
