@@ -45,6 +45,7 @@ jar {
     classifier = 'core'
     manifest {
         attributes FMLCorePlugin: "universalelectricity.core.UELoader"
+		attributes FMLCorePluginContainsFMLMod: "true"
     }
 
     destinationDir = file 'output'
@@ -55,6 +56,7 @@ task deobfJar(type: Jar) {
 
     manifest {
         attributes FMLCorePlugin: "universalelectricity.core.UELoader"
+        attributes FMLCorePluginContainsFMLMod: "true"
     }
 
     destinationDir = file 'output'
