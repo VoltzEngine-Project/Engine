@@ -3,6 +3,7 @@ package calclavia.lib;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Configuration;
@@ -47,5 +48,7 @@ public class Calclavia
 
 		return lines;
 	}
+
+	public static final Logger LOGGER = Logger.getLogger(CalclaviaCoreLoader.NAME);
 
 }

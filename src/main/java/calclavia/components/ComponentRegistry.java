@@ -12,7 +12,7 @@ import calclavia.lib.Calclavia;
  * @author Calclavia
  */
 
-public class BasicRegistry
+public class ComponentRegistry
 {
 	public static final Set<String> requests = new LinkedHashSet<String>();
 
