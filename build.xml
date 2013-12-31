@@ -63,6 +63,7 @@
 			<fileset dir="ModContents" />
 			<manifest>
 				<attribute name="FMLCorePlugin" value="calclavia.lib.CalclaviaCoreLoader" />
+				<attribute name="FMLCorePluginContainsFMLMod" value="true" />
 			</manifest>
 		</jar>
 		
