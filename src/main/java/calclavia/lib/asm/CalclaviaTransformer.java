@@ -43,7 +43,7 @@ public class CalclaviaTransformer implements IClassTransformer
 			{
 				ObfMapping m = new ObfMapping(cnode.name, method.name, method.desc).toRuntime();
 
-				if (m.s_name.equals("setBlockIDWithMetadata"))
+				if (m.s_name.equals("setBlockIDWithMetadata") || m.s_name.equals("func_76592_a"))
 				{
 					System.out.println("[Calclavia Core] Found method " + m.s_name);
 					InsnList list = new InsnList();
