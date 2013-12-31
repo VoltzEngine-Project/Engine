@@ -21,7 +21,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
  */
 @Mod(modid = CalclaviaCoreLoader.ID, name = CalclaviaCoreLoader.NAME, version = CalclaviaCoreLoader.VERSION, dependencies = "required-after:UniversalElectricity")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-@TransformerExclusions({ "calclavia.lib", "calclavia.lib.asm" })
+@TransformerExclusions({ "calclavia.lib.asm" })
 public class CalclaviaCoreLoader implements IFMLLoadingPlugin
 {
 	public static final String ID = "CalclaviaCore";

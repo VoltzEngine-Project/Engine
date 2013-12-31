@@ -20,16 +20,14 @@ import universalelectricity.core.asm.ObfMapping;
  */
 public class CalclaviaTransformer implements IClassTransformer
 {
-	boolean didASM = false;
-	
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes)
 	{
-		if (!didASM && transformedName.equals("net.minecraft.world.chunk.Chunk"))
+		if (transformedName.equals("net.minecraft.world.chunk.Chunk"))
 		{
-			ClassNode cnode = ASMHelper.createClassNode(bytes);
-
 			System.out.println("[Calclavia Core] Transforming Chunk class for chunkModified event.");
+
+			ClassNode cnode = ASMHelper.createClassNode(bytes);
 
 			for (MethodNode method : cnode.methods)
 			{
@@ -47,11 +45,11 @@ public class CalclaviaTransformer implements IClassTransformer
 					list.add(new VarInsnNode(ILOAD, 5));
 					list.add(new MethodInsnNode(INVOKESTATIC, "calclavia/lib/asm/StaticForwarder", "chunkSetBlockEvent", "(Lnet/minecraft/world/chunk/Chunk;IIIII)V"));
 					method.instructions.insert(list);
-					System.out.println("[Calclavia Core] Injected ChunkModifyEvent instruction to method: " + m.s_name);
-					didASM = true;
-					return ASMHelper.createBytes(cnode, 0);
+					System.out.println("[Calclavia Core] Injected instruction to method: " + m.s_name);
 				}
 			}
+
+			return ASMHelper.createBytes(cnode, 0);
 		}
 
 		return bytes;
