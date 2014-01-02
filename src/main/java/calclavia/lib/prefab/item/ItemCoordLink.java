@@ -47,7 +47,7 @@ public abstract class ItemCoordLink extends ItemBase
 			}
 
 			list.add(vec.intX() + ", " + vec.intY() + ", " + vec.intZ());
-			list.add("Dimension: '" + vec.world.getWorldInfo().getWorldName() + "'");
+			list.add("Dimension: '" + vec.world.provider.getDimensionName() + "'");
 		}
 		else
 		{
