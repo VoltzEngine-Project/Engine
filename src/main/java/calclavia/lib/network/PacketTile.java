@@ -24,11 +24,16 @@ public class PacketTile extends PacketType
 
 	public Packet getPacket(TileEntity tileEntity, Object... args)
 	{
+		return this.getPacket(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, args);
+	}
+
+	public Packet getPacket(int x, int y, int z, Object... args)
+	{
 		List newArgs = new ArrayList();
 
-		newArgs.add(tileEntity.xCoord);
-		newArgs.add(tileEntity.yCoord);
-		newArgs.add(tileEntity.zCoord);
+		newArgs.add(x);
+		newArgs.add(y);
+		newArgs.add(z);
 
 		for (Object obj : args)
 		{

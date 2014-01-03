@@ -22,7 +22,7 @@ public abstract class PacketType
 		this.channel = channel;
 	}
 
-	public Packet getPacket(Object... arg)
+	protected Packet getPacket(Object... arg)
 	{
 		try
 		{
