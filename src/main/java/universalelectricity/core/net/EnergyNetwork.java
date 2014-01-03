@@ -319,25 +319,21 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
 		if (finder.results.size() <= 0)
 		{
-			try
-			{
-				/**
-				 * The connections A and B are not connected anymore. Give them both a new common
-				 * network.
-				 */
-				IEnergyNetwork newNetwork = EnergyNetworkLoader.getNewNetwork();
+			/**
+			 * The connections A and B are not connected anymore. Give them both a new common
+			 * network.
+			 */
+			IEnergyNetwork newNetwork = EnergyNetworkLoader.getNewNetwork();
 
-				for (IConnector node : finder.closedSet)
+			for (IConnector node : finder.closedSet)
+			{
+				if (node instanceof IConductor)
 				{
 					newNetwork.addConnector((IConductor) node);
 				}
+			}
 
-				newNetwork.reconstruct();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
+			newNetwork.reconstruct();
 		}
 	}
 
