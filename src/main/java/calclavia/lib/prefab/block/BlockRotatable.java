@@ -64,7 +64,7 @@ public abstract class BlockRotatable extends BlockTile implements IRotatableBloc
 		ForgeDirection rotated = orientation.getRotation(axis);
 		int rmeta = rotated.ordinal();
 		int rmetaBit = 1 << rmeta;
-		System.out.println(rmetaBit + ": " + (rmetaBit & this.rotationMask));
+
 		if ((rmetaBit & this.rotationMask) == rmetaBit)
 		{
 			worldObj.setBlockMetadataWithNotify(x, y, z, rmeta, 3);
