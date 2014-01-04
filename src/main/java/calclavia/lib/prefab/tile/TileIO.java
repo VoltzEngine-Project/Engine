@@ -64,7 +64,7 @@ public class TileIO extends TileAdvanced implements IIO
 	@Override
 	public void setIO(ForgeDirection dir, int type)
 	{
-		String currentIO = Integer.toString(ioMap, 3);
+		String currentIO = getIOMapBase3();
 		StringBuilder str = new StringBuilder(currentIO);
 		str.setCharAt(dir.ordinal(), Integer.toString(type).charAt(0));
 		this.ioMap = Short.parseShort(str.toString(), 3);
@@ -73,8 +73,20 @@ public class TileIO extends TileAdvanced implements IIO
 	@Override
 	public int getIO(ForgeDirection dir)
 	{
-		String currentIO = Integer.toString(ioMap, 3);
+		String currentIO = getIOMapBase3();
 		return Integer.parseInt("" + currentIO.charAt(dir.ordinal()));
+	}
+
+	public String getIOMapBase3()
+	{
+		String currentIO = Integer.toString(ioMap, 3);
+
+		while (currentIO.length() < 6)
+		{
+			currentIO = "0" + currentIO;
+		}
+
+		return currentIO;
 	}
 
 	@Override
