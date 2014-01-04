@@ -87,9 +87,6 @@ public abstract class BlockAdvanced extends Block
 				Method methodCanWrench = wrenchClass.getMethod("canWrench", EntityPlayer.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
 				return (Boolean) methodCanWrench.invoke(itemStack.getItem(), entityPlayer, x, y, z);
 			}
-			catch (NoClassDefFoundError e)
-			{
-			}
 			catch (Exception e)
 			{
 			}

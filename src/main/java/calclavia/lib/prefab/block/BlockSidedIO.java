@@ -29,7 +29,13 @@ public abstract class BlockSidedIO extends BlockAdvanced
 		{
 			int newIO = (((IIO) tile).getIO(ForgeDirection.getOrientation(side)) + 1) % 3;
 			((IIO) tile).setIO(ForgeDirection.getOrientation(side), newIO);
-			entityPlayer.addChatMessage("Side changed to: " + (newIO == 0 ? "None" : (newIO == 1 ? "Input" : "Output")));
+
+			if (!world.isRemote)
+			{
+				entityPlayer.addChatMessage("Side changed to: " + (newIO == 0 ? "None" : (newIO == 1 ? "Input" : "Output")));
+			}
+
+			world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 		}
 
 		return true;

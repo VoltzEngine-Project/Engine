@@ -82,7 +82,7 @@ public class TileIO extends TileAdvanced implements IIO
 	{
 		super.readFromNBT(nbt);
 
-		if (saveIOMap)
+		if (saveIOMap && nbt.hasKey("ioMap"))
 		{
 			this.ioMap = nbt.getShort("ioMap");
 		}
