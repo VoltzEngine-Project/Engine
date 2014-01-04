@@ -14,7 +14,7 @@ import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.api.vector.Vector3;
 
 @UniversalClass
-public class TileElectrical extends TileAdvanced implements IEnergyInterface, IEnergyContainer
+public class TileElectrical extends TileAdvanced implements IEnergyInterface, IEnergyContainer, IIO
 {
 	public EnergyStorageHandler energy;
 
@@ -34,28 +34,6 @@ public class TileElectrical extends TileAdvanced implements IEnergyInterface, IE
 		this.energy.receiveEnergy(CompatibilityModule.dischargeItem(itemStack, this.energy.getEnergy(), true), true);
 	}
 
-	/**
-	 * The electrical input direction.
-	 * 
-	 * @return The direction that electricity is entered into the tile. Return null for no input. By
-	 * default you can accept power from all sides.
-	 */
-	public EnumSet<ForgeDirection> getInputDirections()
-	{
-		return EnumSet.allOf(ForgeDirection.class);
-	}
-
-	/**
-	 * The electrical output direction.
-	 * 
-	 * @return The direction that electricity is output from the tile. Return null for no output. By
-	 * default it will return an empty EnumSet.
-	 */
-	public EnumSet<ForgeDirection> getOutputDirections()
-	{
-		return EnumSet.noneOf(ForgeDirection.class);
-	}
-
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
@@ -72,6 +50,11 @@ public class TileElectrical extends TileAdvanced implements IEnergyInterface, IE
 	{
 		super.readFromNBT(nbt);
 		this.energy.readFromNBT(nbt);
+
+		if (saveIOMap)
+		{
+			this.ioMap = nbt.getShort("ioMap");
+		}
 	}
 
 	@Override
@@ -79,6 +62,11 @@ public class TileElectrical extends TileAdvanced implements IEnergyInterface, IE
 	{
 		super.writeToNBT(nbt);
 		this.energy.writeToNBT(nbt);
+
+		if (saveIOMap)
+		{
+			nbt.setShort("ioMap", this.ioMap);
+		}
 	}
 
 	@Override
@@ -161,5 +149,75 @@ public class TileElectrical extends TileAdvanced implements IEnergyInterface, IE
 		}
 
 		return totalUsed;
+	}
+
+	/**
+	 * IO METHODS.
+	 * Default: Connect from all sides. "111111"
+	 * 0 - Nothing
+	 * 1 - Input
+	 * 2 - Output
+	 */
+	private short ioMap = 364;
+	protected boolean saveIOMap = false;
+
+	/**
+	 * The electrical input direction.
+	 * 
+	 * @return The direction that electricity is entered into the tile. Return null for no input. By
+	 * default you can accept power from all sides.
+	 */
+	@Override
+	public EnumSet<ForgeDirection> getInputDirections()
+	{
+		EnumSet<ForgeDirection> dirs = EnumSet.noneOf(ForgeDirection.class);
+
+		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+		{
+			if (getIO(direction) == 1)
+			{
+				dirs.add(direction);
+			}
+		}
+
+		return dirs;
+	}
+
+	/**
+	 * The electrical output direction.
+	 * 
+	 * @return The direction that electricity is output from the tile. Return null for no output. By
+	 * default it will return an empty EnumSet.
+	 */
+	@Override
+	public EnumSet<ForgeDirection> getOutputDirections()
+	{
+		EnumSet<ForgeDirection> dirs = EnumSet.noneOf(ForgeDirection.class);
+
+		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+		{
+			if (getIO(direction) == 2)
+			{
+				dirs.add(direction);
+			}
+		}
+
+		return dirs;
+	}
+
+	@Override
+	public void setIO(ForgeDirection dir, int type)
+	{
+		String currentIO = Integer.toString(ioMap, 3);
+		StringBuilder str = new StringBuilder(currentIO);
+		str.setCharAt(dir.ordinal(), Integer.toString(type).charAt(0));
+		this.ioMap = Short.parseShort(str.toString(), 3);
+	}
+
+	@Override
+	public int getIO(ForgeDirection dir)
+	{
+		String currentIO = Integer.toString(ioMap, 3);
+		return Integer.parseInt("" + currentIO.charAt(dir.ordinal()));
 	}
 }
