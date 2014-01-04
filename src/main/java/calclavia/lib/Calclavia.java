@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Loader;
@@ -48,6 +50,27 @@ public class Calclavia
 		}
 
 		return lines;
+	}
+
+	/**
+	 * Gets a compound from an itemStack.
+	 * 
+	 * @param itemStack
+	 * @return
+	 */
+	public static NBTTagCompound getNBTTagCompound(ItemStack itemStack)
+	{
+		if (itemStack != null)
+		{
+			if (itemStack.getTagCompound() == null)
+			{
+				itemStack.setTagCompound(new NBTTagCompound());
+			}
+	
+			return itemStack.getTagCompound();
+		}
+	
+		return null;
 	}
 
 }
