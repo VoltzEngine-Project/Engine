@@ -49,12 +49,34 @@ jar {
     destinationDir = file 'output'
 }
 
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier 'dev'
+
+    manifest {
+        attributes FMLCorePlugin: "calclavia.core.CalclaviaLoader"
+    }
+}
+
 artifacts {
 
 }
 
 wrapper {
     version = "1.8"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact deobfJar
+        }
+    }
+    repositories {
+        maven {
+            url "file://var/www/maven/"
+        }
+    }
 }
 
 repositories {

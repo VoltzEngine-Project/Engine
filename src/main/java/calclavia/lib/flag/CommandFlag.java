@@ -318,8 +318,10 @@ public class CommandFlag extends CommandBase
 	}
 	
 	@Override
-	public int compareTo(Object o) {
-		if (o instanceof CommandBase) {
+	public int compareTo(Object o) 
+	{
+		if (o instanceof CommandBase)
+		{
 			return ((CommandBase)o).getCommandName().compareTo(getCommandName());
 		}
 		
