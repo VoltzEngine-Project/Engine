@@ -199,7 +199,6 @@ public class CalclaviaComponents
 
 			if (f == null)
 			{
-
 				if (name.contains("ingot"))
 				{
 					ItemIngot ingot = new ItemIngot(name, id);
@@ -228,11 +227,13 @@ public class CalclaviaComponents
 					{
 						itemIngot = Item.ingotGold;
 					}
-
+					
 					if (itemIngot != null)
-					{
-						RecipeHelper.addRecipe(new ShapelessOreRecipe(new ItemStack(itemIngot, 4), item), Calclavia.CONFIGURATION, true);
-						RecipeHelper.addRecipe(new ShapedOreRecipe(item, "II", "II", 'I', itemIngot), Calclavia.CONFIGURATION, true);
+					{						
+						if (OreDictionary.getOres(ingotName).size() == 0)
+						{
+							RecipeHelper.addRecipe(new ShapedOreRecipe(item, "II", "II", 'I', itemIngot), Calclavia.CONFIGURATION, true);
+						}
 					}
 
 					RecipeHelper.addRecipe(new ShapedOreRecipe(item, "II", "II", 'I', ingotName), Calclavia.CONFIGURATION, true);
