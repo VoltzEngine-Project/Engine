@@ -84,5 +84,5 @@ repositories {
     maven { url 'http://calclavia.com/maven/' }
 }
 dependencies {
-    compile 'universalelectricity:Universal-Electricity:3.0.0.257:dev'
+    compile 'universalelectricity:Universal-Electricity:3.0.0.258:dev'
 }
