@@ -56,3 +56,10 @@ artifacts {
 wrapper {
     version = "1.8"
 }
+
+repositories {
+    maven { url 'http://calclavia.com/maven/universal-electricity' }
+}
+dependencies {
+    compile 'universalelectricity:Universal-Electricity:3.0.0.257:dev'
+}

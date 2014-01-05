@@ -316,5 +316,13 @@ public class CommandFlag extends CommandBase
 	{
 		return args.length == 1 ? getListOfStringsMatchingLastWord(args, COMMANDS) : null;
 	}
-
+	
+	@Override
+	public int compareTo(Object o) {
+		if (o instanceof CommandBase) {
+			return ((CommandBase)o).getCommandName().compareTo(getCommandName());
+		}
+		
+		return 0;
+	}
 }
