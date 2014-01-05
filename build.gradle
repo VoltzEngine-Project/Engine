@@ -55,8 +55,8 @@ task deobfJar(type: Jar) {
     classifier 'dev'
 
     manifest {
-        attributes FMLCorePlugin: "universalelectricity.core.UELoader"
-        attributes FMLCorePluginContainsFMLMod: "true"
+        attributes FMLCorePlugin: "universalelectricity.core.UELoader",
+                FMLCorePluginContainsFMLMod: "true"
     }
 
     destinationDir = file 'output'
@@ -75,5 +75,19 @@ artifacts {
 }
 
 wrapper {
-    version = "1.8"
+    version = "1.10"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact apiZip
+            artifact deobfJar
+        }
+    }
+    repositories {
+        maven {
+            url "file://var/www/maven/universal-electricity"
+        }
+    }
 }
