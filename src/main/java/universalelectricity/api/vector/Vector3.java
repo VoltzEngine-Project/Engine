@@ -235,18 +235,26 @@ public class Vector3 implements Cloneable
         return this;
     }
 
-    /** Gets the distance between two vectors
-     * 
-     * @return The distance */
+    /** Gets the distance between two vectors */
     public static double distance(Vector3 vec1, Vector3 vec2)
     {
         return vec1.distance(vec2);
     }
 
+    public double distance(double x, double y, double z)
+    {
+        Vector3 difference = this.clone().difference(x, y, z);
+        return difference.getMagnitude();
+    }
+
     public double distance(Vector3 compare)
     {
-        Vector3 difference = this.clone().difference(compare);
-        return difference.getMagnitude();
+        return this.distance(compare.x, compare.y, compare.z);
+    }
+
+    public double distance(Entity entity)
+    {
+        return this.distance(entity.posX, entity.posY, entity.posZ);
     }
 
     /** Multiplies the vector by negative one. */
@@ -340,7 +348,7 @@ public class Vector3 implements Cloneable
         this.z *= amount;
         return this;
     }
-    
+
     public Vector3 scale(double x, double y, double z)
     {
         this.x *= x;
