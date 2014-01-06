@@ -8,6 +8,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ConfigCategory;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -136,26 +138,30 @@ public class CalclaviaComponents
 	{
 		Calclavia.CONFIGURATION.load();
 
-		ComponentRegistry.registerAll();
+		boolean defaultDoLoad = !(Loader.isModLoaded("ThermalExpansion") || Loader.isModLoaded("IC2"));
 
-		Calclavia.LOGGER.fine("Attempting to load " + ComponentRegistry.requests.size() + " items.");
-
-		for (String request : ComponentRegistry.requests)
+		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable Calclavia Core Components", defaultDoLoad).getBoolean(defaultDoLoad))
 		{
-			if (request.contains("block"))
+			ComponentRegistry.registerAll();
+
+			Calclavia.LOGGER.fine("Attempting to load " + ComponentRegistry.requests.size() + " items.");
+
+			for (String request : ComponentRegistry.requests)
 			{
-				requestBlock(request, 0);
-			}
-			else if (request.contains("item"))
-			{
-				requestItem(request, 0);
-			}
-			else
-			{
-				Calclavia.LOGGER.severe("Failed to load Calclavia Core item: " + request);
+				if (request.contains("block"))
+				{
+					requestBlock(request, 0);
+				}
+				else if (request.contains("item"))
+				{
+					requestItem(request, 0);
+				}
+				else
+				{
+					Calclavia.LOGGER.severe("Failed to load Calclavia Core item: " + request);
+				}
 			}
 		}
-
 		Calclavia.CONFIGURATION.save();
 
 		Calclavia.LOGGER.fine("Loaded: " + TranslationHelper.loadLanguages(CalclaviaComponents.LANGUAGE_PATH, CalclaviaComponents.LANGUAGES_SUPPORTED) + " Languages.");
@@ -227,9 +233,9 @@ public class CalclaviaComponents
 					{
 						itemIngot = Item.ingotGold;
 					}
-					
+
 					if (itemIngot != null)
-					{						
+					{
 						if (OreDictionary.getOres(ingotName).size() == 0)
 						{
 							RecipeHelper.addRecipe(new ShapedOreRecipe(item, "II", "II", 'I', itemIngot), Calclavia.CONFIGURATION, true);
