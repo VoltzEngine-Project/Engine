@@ -79,12 +79,16 @@ public class TemplateInjectionManager
 			{
 				if (!impl.name.equals("<init>") || injectConstructor)
 				{
+					/**
+					 * If the method is ALREADY implemented, then skip it.
+					 */
 					if (names.contains(impl.name + impl.desc))
 					{
 						continue;
 					}
-
-					MethodNode copy = new MethodNode(impl.access, impl.name, impl.desc, impl.signature, impl.exceptions == null ? null : impl.exceptions.toArray(new String[0]));
+					
+					ObfMapping mapping =  new ObfMapping(cnode.name, impl.name, impl.desc).toRuntime();
+					MethodNode copy = new MethodNode(impl.access, mapping.s_name, mapping.s_desc, impl.signature, impl.exceptions == null ? null : impl.exceptions.toArray(new String[0]));
 					ASMHelper.copy(impl, copy);
 					cnode.methods.add(impl);
 					changed = true;
