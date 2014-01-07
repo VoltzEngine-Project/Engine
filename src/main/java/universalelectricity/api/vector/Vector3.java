@@ -335,7 +335,7 @@ public class Vector3 implements Cloneable
 
     public Vector3 difference(double x, double y, double z)
     {
-        this.x -= z;
+        this.x -= x;
         this.y -= y;
         this.z -= z;
         return this;
