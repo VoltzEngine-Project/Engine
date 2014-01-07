@@ -12,12 +12,12 @@ import net.minecraftforge.event.world.BlockEvent;
  */
 @Cancelable
 @HasResult
-public class WrenchEvent extends BlockEvent
+public class MultitoolEvent extends BlockEvent
 {
 	private int side;
 	private float hitX, hitY, hitZ;
 
-	public WrenchEvent(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, Block block, int blockMetadata)
+	public MultitoolEvent(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, Block block, int blockMetadata)
 	{
 		super(x, y, z, world, block, blockMetadata);
 		this.side = side;
