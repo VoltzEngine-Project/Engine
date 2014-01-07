@@ -15,7 +15,7 @@ public class ItemWrench extends ItemBase implements IToolWrench
 {
 	public ItemWrench(int id)
 	{
-		super("wrench", id);
+		super("multitool", id);
 		this.setMaxStackSize(1);
 		this.setCreativeTab(CreativeTabs.tabTools);
 	}

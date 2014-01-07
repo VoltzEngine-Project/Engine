@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import calclavia.lib.Calclavia;
-import calclavia.lib.CalclaviaPluginLoader;
 
 public class BlockBase extends Block
 {

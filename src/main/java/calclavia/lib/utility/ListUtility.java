@@ -1,11 +1,11 @@
-package calclavia.lib;
+package calclavia.lib.utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-public class ListUtil
+public class ListUtility
 {
 	public static <V> List<V> inverse(List<V> list)
 	{

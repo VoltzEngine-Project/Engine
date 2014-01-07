@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.net.IConnector;
 import universalelectricity.core.net.ConnectionPathfinder;
 

@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.ForgeDirection;
-import calclavia.lib.IPlayerUsing;
 
 public abstract class TileInventory extends TileElectrical implements IInventory, IPlayerUsing
 {

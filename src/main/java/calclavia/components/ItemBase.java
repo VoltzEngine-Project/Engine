@@ -3,7 +3,6 @@ package calclavia.components;
 import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
 import calclavia.lib.Calclavia;
-import calclavia.lib.CalclaviaPluginLoader;
 
 /**
  * An Base Item Class for Basic Components. Do not use this! Make your own!

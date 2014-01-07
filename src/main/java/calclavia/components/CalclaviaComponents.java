@@ -8,17 +8,15 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 import calclavia.lib.Calclavia;
-import calclavia.lib.prefab.RecipeHelper;
-import calclavia.lib.prefab.TranslationHelper;
-import calclavia.lib.prefab.ore.OreGenBase;
-import calclavia.lib.prefab.ore.OreGenReplaceStone;
-import calclavia.lib.prefab.ore.OreGenerator;
+import calclavia.lib.ore.OreGenBase;
+import calclavia.lib.ore.OreGenReplaceStone;
+import calclavia.lib.ore.OreGenerator;
+import calclavia.lib.recipe.RecipeUtility;
+import calclavia.lib.utility.LanguageUtility;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -164,7 +162,7 @@ public class CalclaviaComponents
 		}
 		Calclavia.CONFIGURATION.save();
 
-		Calclavia.LOGGER.fine("Loaded: " + TranslationHelper.loadLanguages(CalclaviaComponents.LANGUAGE_PATH, CalclaviaComponents.LANGUAGES_SUPPORTED) + " Languages.");
+		Calclavia.LOGGER.fine("Loaded: " + LanguageUtility.loadLanguages(CalclaviaComponents.LANGUAGE_PATH, CalclaviaComponents.LANGUAGES_SUPPORTED) + " Languages.");
 
 		CalclaviaComponents.metadata.modId = ID;
 		CalclaviaComponents.metadata.name = ID;
@@ -238,11 +236,11 @@ public class CalclaviaComponents
 					{
 						if (OreDictionary.getOres(ingotName).size() == 0)
 						{
-							RecipeHelper.addRecipe(new ShapedOreRecipe(item, "II", "II", 'I', itemIngot), Calclavia.CONFIGURATION, true);
+							RecipeUtility.addRecipe(new ShapedOreRecipe(item, "II", "II", 'I', itemIngot), Calclavia.CONFIGURATION, true);
 						}
 					}
 
-					RecipeHelper.addRecipe(new ShapedOreRecipe(item, "II", "II", 'I', ingotName), Calclavia.CONFIGURATION, true);
+					RecipeUtility.addRecipe(new ShapedOreRecipe(item, "II", "II", 'I', ingotName), Calclavia.CONFIGURATION, true);
 				}
 				else if (name.contains("dust"))
 				{
@@ -251,7 +249,7 @@ public class CalclaviaComponents
 
 					if (name.equals("dustBronze"))
 					{
-						RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", '!', "ingotCopper", '#', "ingotTin"), Calclavia.CONFIGURATION, true);
+						RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", '!', "ingotCopper", '#', "ingotTin"), Calclavia.CONFIGURATION, true);
 
 						if (OreDictionary.getOres("ingotBronze").size() > 0)
 						{
@@ -260,7 +258,7 @@ public class CalclaviaComponents
 					}
 					else if (name.equals("dustSteel"))
 					{
-						RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), " C ", "CIC", " C ", 'I', Item.ingotIron, 'C', Item.coal), Calclavia.CONFIGURATION, RecipeHelper.getRecipesByOutput(new ItemStack(item)).size() <= 0);
+						RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " C ", "CIC", " C ", 'I', Item.ingotIron, 'C', Item.coal), Calclavia.CONFIGURATION, RecipeUtility.getRecipesByOutput(new ItemStack(item)).size() <= 0);
 
 						if (OreDictionary.getOres("ingotSteel").size() > 0)
 						{
@@ -275,11 +273,11 @@ public class CalclaviaComponents
 
 					if (OreDictionary.getOres("ingotSteel").size() > 0)
 					{
-						RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", " SS", "S  ", 'S', "ingotSteel"), Calclavia.CONFIGURATION, true);
+						RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", " SS", "S  ", 'S', "ingotSteel"), Calclavia.CONFIGURATION, true);
 					}
 					else
 					{
-						RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", " SS", "S  ", 'S', Item.ingotIron), Calclavia.CONFIGURATION, true);
+						RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", " SS", "S  ", 'S', Item.ingotIron), Calclavia.CONFIGURATION, true);
 					}
 				}
 				else
@@ -291,32 +289,32 @@ public class CalclaviaComponents
 					{
 						if (OreDictionary.getOres("copperWire").size() > 0)
 						{
-							RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Item.redstone, '!', "copperWire"), Calclavia.CONFIGURATION, true);
-							RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Item.redstone, '!', "copperWire"), Calclavia.CONFIGURATION, true);
+							RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Item.redstone, '!', "copperWire"), Calclavia.CONFIGURATION, true);
+							RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Item.redstone, '!', "copperWire"), Calclavia.CONFIGURATION, true);
 						}
 						else
 						{
-							RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Item.redstone, '!', Item.comparator), Calclavia.CONFIGURATION, true);
-							RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Item.redstone, '!', Item.comparator), Calclavia.CONFIGURATION, true);
+							RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Item.redstone, '!', Item.comparator), Calclavia.CONFIGURATION, true);
+							RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Item.redstone, '!', Item.comparator), Calclavia.CONFIGURATION, true);
 						}
 					}
 					else if (name.equals("circuitAdvanced"))
 					{
-						RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', "circuitBasic"), Calclavia.CONFIGURATION, true);
+						RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', "circuitBasic"), Calclavia.CONFIGURATION, true);
 					}
 					else if (name.equals("circuitElite"))
 					{
-						RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@@@", "?#?", "@@@", '@', Item.ingotGold, '?', "circuitAdvanced", '#', Block.blockLapis), Calclavia.CONFIGURATION, true);
+						RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@@@", "?#?", "@@@", '@', Item.ingotGold, '?', "circuitAdvanced", '#', Block.blockLapis), Calclavia.CONFIGURATION, true);
 					}
 					else if (name.equals("motor"))
 					{
 						if (OreDictionary.getOres("copperWire").size() > 0)
 						{
-							RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', "copperWire"), Calclavia.CONFIGURATION, true);
+							RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', "copperWire"), Calclavia.CONFIGURATION, true);
 						}
 						else
 						{
-							RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', Item.comparator), Calclavia.CONFIGURATION, true);
+							RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', Item.comparator), Calclavia.CONFIGURATION, true);
 						}
 					}
 				}

@@ -1,4 +1,4 @@
-package calclavia.lib.prefab.ore;
+package calclavia.lib.ore;
 
 import java.util.ArrayList;
 import java.util.List;

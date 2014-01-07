@@ -5,8 +5,7 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-public interface ICannerEnrichRecipeManager
-{
+public interface ICannerEnrichRecipeManager {
 	/**
 	 * Adds a recipe to the machine.
 	 * 
@@ -22,8 +21,7 @@ public interface ICannerEnrichRecipeManager
 	 * @param input Fluid input
 	 * @param additive Item to enrich the fluid with
 	 * @param adjustInput modify the input according to the recipe's requirements
-	 * @param acceptTest allow input or additive to be null to see if either of them is part of a
-	 * recipe
+	 * @param acceptTest allow input or additive to be null to see if either of them is part of a recipe
 	 * @return Recipe output, or null if none, output fluid in nbt
 	 */
 	public RecipeOutput getOutputFor(FluidStack input, ItemStack additive, boolean adjustInput, boolean acceptTest);
@@ -37,17 +35,16 @@ public interface ICannerEnrichRecipeManager
 	 */
 	public Map<Input, FluidStack> getRecipes();
 
-	public static class Input
-	{
-		public Input(FluidStack fluid, IRecipeInput additive)
-		{
+
+	public static class Input {
+		public Input(FluidStack fluid, IRecipeInput additive) {
 			this.fluid = fluid;
 			this.additive = additive;
 		}
 
-		public boolean matches(FluidStack fluid, ItemStack additive)
-		{
-			return (this.fluid == null || this.fluid.isFluidEqual(fluid)) && this.additive.matches(additive);
+		public boolean matches(FluidStack fluid, ItemStack additive) {
+			return (this.fluid == null || this.fluid.isFluidEqual(fluid)) &&
+					this.additive.matches(additive);
 		}
 
 		public final FluidStack fluid;

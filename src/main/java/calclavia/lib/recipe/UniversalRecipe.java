@@ -1,4 +1,4 @@
-package calclavia.lib;
+package calclavia.lib.recipe;
 
 import ic2.api.item.Items;
 

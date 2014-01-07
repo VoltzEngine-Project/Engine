@@ -1,4 +1,4 @@
-package calclavia.lib;
+package calclavia.lib.prefab.tile;
 
 import java.util.HashSet;
 

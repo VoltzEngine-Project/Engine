@@ -5,14 +5,13 @@ import net.minecraftforge.common.ForgeDirection;
 
 /**
  * For internal/multi-block usage only.
- * 
+ *
  * @see IEnergySink
  * @see IEnergyConductor
  * 
  * See ic2/api/energy/usage.txt for an overall description of the energy net api.
  */
-public interface IEnergyAcceptor extends IEnergyTile
-{
+public interface IEnergyAcceptor extends IEnergyTile {
 	/**
 	 * Determine if this acceptor can accept current from an adjacent emitter in a direction.
 	 * 
@@ -24,3 +23,4 @@ public interface IEnergyAcceptor extends IEnergyTile
 	 */
 	boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction);
 }
+

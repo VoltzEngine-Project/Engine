@@ -16,7 +16,8 @@ public class SafeTimeTracker
 	private long duration = -1;
 
 	/**
-	 * Return true if a given delay has passed since last time marked was called successfully.
+	 * Return true if a given delay has passed since last time marked was called
+	 * successfully.
 	 */
 	public boolean markTimeIfDelay(World world, long delay)
 	{

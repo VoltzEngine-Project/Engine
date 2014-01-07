@@ -13,8 +13,8 @@ import net.minecraftforge.common.ForgeDirection;
 /**
  * Essentially only used for Wooden Power Pipe connection rules.
  * 
- * This Tile Entity interface allows you to indicate that a block can emit power from a specific
- * side.
+ * This Tile Entity interface allows you to indicate that a block can emit power
+ * from a specific side.
  * 
  * @author CovertJaguar <http://www.railcraft.info/>
  */

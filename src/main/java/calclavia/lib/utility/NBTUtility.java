@@ -1,9 +1,10 @@
-package calclavia.lib;
+package calclavia.lib.utility;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -11,7 +12,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 
-public class NBTFileLoader
+public class NBTUtility
 {
 	/**
 	 * Saves NBT data in the world folder.
@@ -108,5 +109,26 @@ public class NBTFileLoader
 		{
 			return new File(".");
 		}
+	}
+
+	/**
+	 * Gets a compound from an itemStack.
+	 * 
+	 * @param itemStack
+	 * @return
+	 */
+	public static NBTTagCompound getNBTTagCompound(ItemStack itemStack)
+	{
+		if (itemStack != null)
+		{
+			if (itemStack.getTagCompound() == null)
+			{
+				itemStack.setTagCompound(new NBTTagCompound());
+			}
+	
+			return itemStack.getTagCompound();
+		}
+	
+		return null;
 	}
 }

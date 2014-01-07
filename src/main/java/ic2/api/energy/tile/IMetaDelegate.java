@@ -22,10 +22,11 @@ import net.minecraft.tileentity.TileEntity;
  * 
  * See ic2/api/energy/usage.txt for an overall description of the energy net api.
  */
-public interface IMetaDelegate extends IEnergyTile
-{
+public interface IMetaDelegate extends IEnergyTile {
 	/**
 	 * Get the sub-TileEntities belonging to this Meta TileEntity.
+	 * 
+	 * @note the list has to be consistent between the EnergyNet Load and Unload events.
 	 * 
 	 * @return sub-TileEntity array
 	 */

@@ -1,4 +1,4 @@
-package calclavia.lib.multiblock;
+package calclavia.lib.multiblock.link;
 
 import net.minecraft.entity.player.EntityPlayer;
 

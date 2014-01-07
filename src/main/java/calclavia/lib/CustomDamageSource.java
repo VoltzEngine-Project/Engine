@@ -1,25 +1,23 @@
-package calclavia.lib.prefab;
+package calclavia.lib;
 
 import net.minecraft.util.DamageSource;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
+/**
+ * Extend this class to create more custom damage sources.
+ * 
+ * @author Calclavia
+ * 
+ */
 public class CustomDamageSource extends DamageSource
 {
 	/**
 	 * Use this damage source for all types of electrical attacks.
 	 */
-	public static final CustomDamageSource electrocution = ((CustomDamageSource) new CustomDamageSource("electrocution").setDamageBypassesArmor()).setDeathMessage("%1$s got electrocuted!");
+	public static final CustomDamageSource electrocution = ((CustomDamageSource) new CustomDamageSource("electrocution").setDamageBypassesArmor());
 
 	public CustomDamageSource(String damageType)
 	{
 		super(damageType);
-	}
-
-	@Deprecated
-	public CustomDamageSource setDeathMessage(String deathMessage)
-	{
-		LanguageRegistry.instance().addStringLocalization("death.attack." + this.damageType, deathMessage);
-		return this;
 	}
 
 	@Override

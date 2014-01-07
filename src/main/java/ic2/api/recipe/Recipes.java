@@ -1,12 +1,13 @@
 package ic2.api.recipe;
 
+
+
 /**
  * General recipe registry.
  * 
  * @author Richard
  */
-public class Recipes
-{
+public class Recipes {
 	public static IMachineRecipeManager macerator;
 	public static IMachineRecipeManager extractor;
 	public static IMachineRecipeManager compressor;
@@ -23,7 +24,7 @@ public class Recipes
 	/**
 	 * Reference amplifier values:
 	 * 
-	 * 5000: Scrap
+	 *  5000: Scrap
 	 * 45000: Scrapbox
 	 * 
 	 * As Parameter for the Amplification Value you have to use the NBTTagCompound
@@ -35,7 +36,7 @@ public class Recipes
 	public static IMachineRecipeManager matterAmplifier;
 	/**
 	 * Reference scrap box chance values:
-	 * 
+	 *
 	 * 0.1: Diamond
 	 * 0.5: Cake, Gold Helmet, Iron Ore, Gold Ore
 	 * 1.0: Wooden tools, Soul Sand, Sign, Leather, Feather, Bone

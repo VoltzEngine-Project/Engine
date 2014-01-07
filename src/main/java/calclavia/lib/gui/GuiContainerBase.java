@@ -23,9 +23,9 @@ import universalelectricity.api.energy.UnitDisplay;
 import universalelectricity.api.energy.UnitDisplay.Unit;
 import universalelectricity.api.vector.Vector2;
 import calclavia.lib.Calclavia;
-import calclavia.lib.prefab.TranslationHelper;
 import calclavia.lib.prefab.vector.Region2;
 import calclavia.lib.render.CalclaviaRenderHelper;
+import calclavia.lib.utility.LanguageUtility;
 
 public class GuiContainerBase extends GuiContainer
 {
@@ -83,7 +83,7 @@ public class GuiContainerBase extends GuiContainer
 
 		if (this.tooltip != null && this.tooltip != "")
 		{
-			this.drawTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, Calclavia.splitStringPerWord(this.tooltip, 5).toArray(new String[] {}));
+			this.drawTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, LanguageUtility.splitStringPerWord(this.tooltip, 5).toArray(new String[] {}));
 		}
 
 		this.tooltip = "";
@@ -148,11 +148,11 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawTextWithTooltip(String textName, String format, int x, int y, int mouseX, int mouseY, int color)
 	{
-		String name = TranslationHelper.getLocal("gui." + textName + ".name");
+		String name = LanguageUtility.getLocal("gui." + textName + ".name");
 		String text = format.replaceAll("%1", name);
 		this.fontRenderer.drawString(text, x, y, color);
 
-		String tooltip = TranslationHelper.getLocal("gui." + textName + ".tooltip");
+		String tooltip = LanguageUtility.getLocal("gui." + textName + ".tooltip");
 
 		if (tooltip != null && tooltip != "")
 		{

@@ -1,4 +1,4 @@
-package calclavia.lib.prefab;
+package calclavia.lib.recipe;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,7 +18,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
  * @author Calclavia
  * 
  */
-public class RecipeHelper
+public class RecipeUtility
 {
 	public static List<IRecipe> getRecipesByOutput(ItemStack output)
 	{

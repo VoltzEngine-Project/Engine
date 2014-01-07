@@ -13,7 +13,7 @@ public interface ITerraformingBP
 	 * @return Energy consumption in EU
 	 */
 	public abstract int getConsume();
-
+	
 	/**
 	 * Get the maximum range of the blueprint.
 	 * Should be a divisor of 5.
@@ -21,7 +21,7 @@ public interface ITerraformingBP
 	 * @return Maximum range in blocks
 	 */
 	public abstract int getRange();
-
+	
 	/**
 	 * Perform the terraforming operation.
 	 * 
