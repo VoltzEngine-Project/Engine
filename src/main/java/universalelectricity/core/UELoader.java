@@ -18,10 +18,12 @@ import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
 import universalelectricity.core.asm.template.item.TemplateICItem;
 import universalelectricity.core.asm.template.item.TemplateTEItem;
+import universalelectricity.core.asm.template.tile.TemplateBCTile;
 import universalelectricity.core.asm.template.tile.TemplateICTile;
 import universalelectricity.core.asm.template.tile.TemplateTETile;
 import universalelectricity.core.net.EnergyNetwork;
 import universalelectricity.core.net.NetworkTickHandler;
+import buildcraft.api.power.IPowerReceptor;
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Loader;
@@ -159,6 +161,7 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 	{
 		TemplateInjectionManager.registerTileTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TemplateTETile.class, IEnergyHandler.class);
 		TemplateInjectionManager.registerTileTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, TemplateICTile.class, IEnergySink.class, IEnergySource.class);
+		TemplateInjectionManager.registerTileTemplate(CompatibilityType.BUILDCRAFT.moduleName, TemplateBCTile.class, IPowerReceptor.class);
 
 		TemplateInjectionManager.registerItemTemplate(CompatibilityType.THERMAL_EXPANSION.moduleName, TemplateTEItem.class, IEnergyContainerItem.class);
 		TemplateInjectionManager.registerItemTemplate(CompatibilityType.INDUSTRIALCRAFT.moduleName, TemplateICItem.class, ISpecialElectricItem.class);

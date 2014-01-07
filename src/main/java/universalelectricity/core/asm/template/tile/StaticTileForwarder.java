@@ -7,12 +7,17 @@ import ic2.api.energy.tile.IEnergyTile;
 import java.util.HashSet;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
+import buildcraft.api.power.PowerHandler.Type;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**
@@ -134,5 +139,67 @@ public class StaticTileForwarder
 				}
 			}
 		}
+	}
+
+	/**
+	 * BuildCraft
+	 */
+	public static class DummyPowerHandler extends PowerHandler
+	{
+		public DummyPowerHandler(IPowerReceptor receptor, Type type)
+		{
+			super(receptor, type);
+		}
+
+		public DummyPowerReceiver receiver = new DummyPowerReceiver();
+
+		public class DummyPowerReceiver extends PowerReceiver
+		{
+			DummyPowerReceiver()
+			{
+				super();
+			}
+
+			@Override
+			public float receiveEnergy(Type source, final float quantity, ForgeDirection from)
+			{
+				return ((IEnergyInterface) receptor).onReceiveEnergy(from, (long) (quantity * CompatibilityType.BUILDCRAFT.reciprocal_ratio), true) * CompatibilityType.BUILDCRAFT.ratio;
+			}
+
+			public float powerRequest()
+			{
+				return ((IEnergyInterface) receptor).onReceiveEnergy(ForgeDirection.UNKNOWN, Integer.MAX_VALUE, true) * CompatibilityType.BUILDCRAFT.ratio;
+			}
+		}
+
+		public PowerReceiver getPowerReceiver()
+		{
+			return receiver;
+		}
+	}
+
+	/**
+	 * @param templateBCTile
+	 * @param side
+	 * @return
+	 */
+	public static PowerReceiver getPowerReceiver(IEnergyInterface handler, ForgeDirection side)
+	{
+		DummyPowerHandler dummy = new DummyPowerHandler((IPowerReceptor) handler, Type.MACHINE);
+		return dummy.getPowerReceiver();
+	}
+
+	/**
+	 * @param templateBCTile
+	 * @return
+	 */
+	public static World getWorld(IEnergyInterface handler)
+	{
+		if (handler instanceof TileEntity)
+		{
+			return ((TileEntity) handler).worldObj;
+		}
+
+		return null;
 	}
 }

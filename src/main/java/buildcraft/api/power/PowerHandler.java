@@ -397,7 +397,7 @@ public class PowerHandler
 	public class PowerReceiver
 	{
 
-		private PowerReceiver()
+		protected PowerReceiver()
 		{
 		}
 
