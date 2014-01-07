@@ -54,6 +54,8 @@ public abstract class BlockAdvanced extends Block
 			{
 				return true;
 			}
+
+			return false;
 		}
 
 		if (entityPlayer.isSneaking())
