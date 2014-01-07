@@ -268,7 +268,7 @@ public class CalclaviaComponents
 				}
 				else if (name.equals("wrench"))
 				{
-					field.set(null, new ItemWrench(id));
+					field.set(null, new ItemMultitool(id));
 					Item item = (Item) field.get(null);
 
 					if (OreDictionary.getOres("ingotSteel").size() > 0)

@@ -11,9 +11,9 @@ import net.minecraftforge.event.Event.Result;
 import buildcraft.api.tools.IToolWrench;
 import calclavia.components.event.MultitoolEvent;
 
-public class ItemWrench extends ItemBase implements IToolWrench
+public class ItemMultitool extends ItemBase implements IToolWrench
 {
-	public ItemWrench(int id)
+	public ItemMultitool(int id)
 	{
 		super("multitool", id);
 		this.setMaxStackSize(1);
@@ -38,7 +38,7 @@ public class ItemWrench extends ItemBase implements IToolWrench
 		int blockID = world.getBlockId(x, y, z);
 		int blockMeta = world.getBlockMetadata(x, y, z);
 		Block block = Block.blocksList[blockID];
-		MultitoolEvent evt = new MultitoolEvent(world, x, y, z, side, hitX, hitY, hitZ, block, blockMeta);
+		MultitoolEvent evt = new MultitoolEvent(world, stack, entityPlayer, x, y, z, side, hitX, hitY, hitZ, block, blockMeta);
 		MinecraftForge.EVENT_BUS.post(evt);
 
 		if (!evt.isCanceled())
