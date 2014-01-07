@@ -111,7 +111,7 @@ public class StaticTileForwarder
 			{
 				try
 				{
-					ReflectionHelper.setPrivateValue(TileEntity.class, tileEntity, false, "tileEntityInvalid");
+					ReflectionHelper.setPrivateValue(TileEntity.class, tileEntity, false, "tileEntityInvalid", "field_70328_o");
 				}
 				catch (Exception e)
 				{
@@ -131,7 +131,7 @@ public class StaticTileForwarder
 			{
 				try
 				{
-					ReflectionHelper.setPrivateValue(TileEntity.class, tileEntity, true, "tileEntityInvalid");
+					ReflectionHelper.setPrivateValue(TileEntity.class, tileEntity, true, "tileEntityInvalid", "field_70328_o");
 				}
 				catch (Exception e)
 				{
