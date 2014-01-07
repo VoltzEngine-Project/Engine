@@ -31,6 +31,7 @@ public class StaticTileForwarder
 		if (CompatibilityType.INDUSTRIALCRAFT.isLoaded() && !loadedIC2Tiles.contains(tile) && !((TileEntity) tile).worldObj.isRemote)
 		{
 			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(tile));
+			System.out.println("UE Loaded and IC TIle "+tile);
 			loadedIC2Tiles.add(tile);
 		}
 	}
@@ -40,6 +41,7 @@ public class StaticTileForwarder
 		if (CompatibilityType.INDUSTRIALCRAFT.isLoaded() && loadedIC2Tiles.contains(tile) && !((TileEntity) tile).worldObj.isRemote)
 		{
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(tile));
+			System.out.println("UE Unloaded and IC TIle "+tile);
 			loadedIC2Tiles.remove(tile);
 		}
 	}
