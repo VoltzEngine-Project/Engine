@@ -86,8 +86,8 @@ public class TemplateInjectionManager
 					{
 						continue;
 					}
-					
-					ObfMapping mapping =  new ObfMapping(cnode.name, impl.name, impl.desc).toRuntime();
+
+					ObfMapping mapping = new ObfMapping(cnode.name, impl.name, impl.desc).toRuntime();
 					MethodNode copy = new MethodNode(impl.access, mapping.s_name, mapping.s_desc, impl.signature, impl.exceptions == null ? null : impl.exceptions.toArray(new String[0]));
 					ASMHelper.copy(impl, copy);
 					cnode.methods.add(impl);

@@ -16,6 +16,9 @@ import universalelectricity.api.energy.IEnergyInterface;
  */
 public abstract class TemplateICTile implements IEnergySink, IEnergySource, IEnergyInterface
 {
+	/**
+	 * Deobfuscated environment
+	 */
 	public void validate()
 	{
 		StaticTileForwarder.validateTile(this);
@@ -29,6 +32,26 @@ public abstract class TemplateICTile implements IEnergySink, IEnergySource, IEne
 	}
 
 	public void onChunkUnload()
+	{
+		StaticTileForwarder.unloadIC(this);
+	}
+
+	/**
+	 * Obfuscated Environment
+	 */
+	public void func_70312_q()
+	{
+		StaticTileForwarder.validateTile(this);
+		StaticTileForwarder.loadIC(this);
+	}
+
+	public void func_70313_j()
+	{
+		StaticTileForwarder.unloadIC(this);
+		StaticTileForwarder.invalidateTile(this);
+	}
+
+	public void func_76631_c()
 	{
 		StaticTileForwarder.unloadIC(this);
 	}

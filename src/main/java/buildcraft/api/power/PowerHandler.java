@@ -29,7 +29,7 @@ import buildcraft.api.core.SafeTimeTracker;
  * 
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public final class PowerHandler
+public class PowerHandler
 {
 
 	public static enum Type
@@ -394,7 +394,7 @@ public final class PowerHandler
 		data.setCompoundTag(tag, nbt);
 	}
 
-	public final class PowerReceiver
+	public class PowerReceiver
 	{
 
 		private PowerReceiver()
