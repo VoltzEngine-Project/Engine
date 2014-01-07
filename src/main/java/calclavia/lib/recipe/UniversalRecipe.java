@@ -80,7 +80,7 @@ public class UniversalRecipe
 			BATTERY_BOX = new UniversalRecipe("batteryBox", Items.getItem("batBox"), new ItemStack(Block.blockGold));
 
 			WRENCH = new UniversalRecipe("wrench", Items.getItem("wrench"), new ItemStack(Item.axeIron));
-			WIRE = new UniversalRecipe("copperWire", "copperCableBlock", new ItemStack(Item.redstone));
+			WIRE = new UniversalRecipe("copperWire", "ironWire", "copperCableBlock", new ItemStack(Item.redstone));
 
 			MOTOR = new UniversalRecipe("motor", Items.getItem("generator"), new ItemStack(Block.pistonBase));
 

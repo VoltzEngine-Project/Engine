@@ -138,28 +138,54 @@ public class CalclaviaComponents
 
 		boolean defaultDoLoad = !(Loader.isModLoaded("ThermalExpansion") || Loader.isModLoaded("IC2"));
 
-		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable Calclavia Core Components", defaultDoLoad).getBoolean(defaultDoLoad))
+		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable Calclavia Core Resources", defaultDoLoad).getBoolean(defaultDoLoad))
 		{
 			ComponentRegistry.registerAll();
+			ComponentRegistry.register("itemIngotCopper");
+			ComponentRegistry.register("itemIngotTin");
 
-			Calclavia.LOGGER.fine("Attempting to load " + ComponentRegistry.requests.size() + " items.");
+			ComponentRegistry.register("blockOreCopper");
+			ComponentRegistry.register("blockOreTin");
 
-			for (String request : ComponentRegistry.requests)
+			ComponentRegistry.register("itemIngotSteel");
+			ComponentRegistry.register("itemDustSteel");
+			ComponentRegistry.register("itemPlateSteel");
+
+			ComponentRegistry.register("itemIngotBronze");
+			ComponentRegistry.register("itemDustBronze");
+			ComponentRegistry.register("itemPlateBronze");
+
+			ComponentRegistry.register("itemPlateCopper");
+			ComponentRegistry.register("itemPlateTin");
+			ComponentRegistry.register("itemPlateIron");
+			ComponentRegistry.register("itemPlateGold");
+		}
+
+		ComponentRegistry.register("itemCircuitBasic");
+		ComponentRegistry.register("itemCircuitAdvanced");
+		ComponentRegistry.register("itemCircuitElite");
+
+		ComponentRegistry.register("itemMotor");
+		ComponentRegistry.register("itemWrench");
+
+		Calclavia.LOGGER.fine("Attempting to load " + ComponentRegistry.requests.size() + " items.");
+
+		for (String request : ComponentRegistry.requests)
+		{
+			if (request.contains("block"))
 			{
-				if (request.contains("block"))
-				{
-					requestBlock(request, 0);
-				}
-				else if (request.contains("item"))
-				{
-					requestItem(request, 0);
-				}
-				else
-				{
-					Calclavia.LOGGER.severe("Failed to load Calclavia Core item: " + request);
-				}
+				requestBlock(request, 0);
+			}
+			else if (request.contains("item"))
+			{
+				requestItem(request, 0);
+			}
+			else
+			{
+				Calclavia.LOGGER.severe("Failed to load Calclavia Core item: " + request);
 			}
 		}
+
 		Calclavia.CONFIGURATION.save();
 
 		Calclavia.LOGGER.fine("Loaded: " + LanguageUtility.loadLanguages(CalclaviaComponents.LANGUAGE_PATH, CalclaviaComponents.LANGUAGES_SUPPORTED) + " Languages.");
@@ -287,15 +313,22 @@ public class CalclaviaComponents
 
 					if (name.equals("circuitBasic"))
 					{
-						if (OreDictionary.getOres("copperWire").size() > 0)
+						if (OreDictionary.getOres("plateBronze").size() > 0)
 						{
-							RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Item.redstone, '!', "copperWire"), Calclavia.CONFIGURATION, true);
-							RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Item.redstone, '!', "copperWire"), Calclavia.CONFIGURATION, true);
+							if (OreDictionary.getOres("copperWire").size() > 0)
+							{
+								RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Item.redstone, '!', "copperWire"), Calclavia.CONFIGURATION, true);
+								RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Item.redstone, '!', "copperWire"), Calclavia.CONFIGURATION, true);
+							}
+							else
+							{
+								RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Item.redstone, '!', Item.comparator), Calclavia.CONFIGURATION, true);
+								RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Item.redstone, '!', Item.comparator), Calclavia.CONFIGURATION, true);
+							}
 						}
 						else
 						{
-							RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Item.redstone, '!', Item.comparator), Calclavia.CONFIGURATION, true);
-							RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Item.redstone, '!', Item.comparator), Calclavia.CONFIGURATION, true);
+							RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', Block.blockIron, '#', Item.redstone, '!', Item.comparator), Calclavia.CONFIGURATION, true);
 						}
 					}
 					else if (name.equals("circuitAdvanced"))

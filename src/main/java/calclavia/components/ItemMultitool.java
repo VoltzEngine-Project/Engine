@@ -1,15 +1,19 @@
 package calclavia.components;
 
+import ic2.api.tile.IWrenchable;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event.Result;
+import universalelectricity.api.vector.Vector3;
 import buildcraft.api.tools.IToolWrench;
 import calclavia.components.event.MultitoolEvent;
+import calclavia.lib.utility.InventoryUtility;
 
 public class ItemMultitool extends ItemBase implements IToolWrench
 {
@@ -33,30 +37,54 @@ public class ItemMultitool extends ItemBase implements IToolWrench
 	}
 
 	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer entityPlayer, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
 	{
 		int blockID = world.getBlockId(x, y, z);
 		int blockMeta = world.getBlockMetadata(x, y, z);
 		Block block = Block.blocksList[blockID];
-		MultitoolEvent evt = new MultitoolEvent(world, stack, entityPlayer, x, y, z, side, hitX, hitY, hitZ, block, blockMeta);
+		MultitoolEvent evt = new MultitoolEvent(world, stack, player, x, y, z, side, hitX, hitY, hitZ, block, blockMeta);
 		MinecraftForge.EVENT_BUS.post(evt);
 
 		if (!evt.isCanceled())
 		{
-			if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+			TileEntity tile = world.getBlockTileEntity(x, y, z);
+
+			if (tile instanceof IWrenchable && ((IWrenchable) tile).wrenchCanSetFacing(player, side))
 			{
-				this.wrenchUsed(entityPlayer, x, y, z);
+				ForgeDirection direction = ForgeDirection.getOrientation(side);
+				short setSide = 0;
+
+				if (player.isSneaking())
+				{
+					direction = direction.getOpposite();
+				}
+				setSide = (short) direction.ordinal();
+
+				if (setSide != ((IWrenchable) tile).getFacing())
+				{
+					((IWrenchable) tile).setFacing(setSide);
+				}
+				else if (((IWrenchable) tile).wrenchCanRemove(player))
+				{
+					ItemStack output = ((IWrenchable) tile).getWrenchDrop(player);
+
+					if (output != null)
+					{
+						world.setBlockToAir(x, y, z);
+						InventoryUtility.dropItemStack(world, new Vector3(x, y, z), output);
+					}
+				}
+
+				return true;
+			}
+			else if (block != null && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+			{
+				this.wrenchUsed(player, x, y, z);
 				return true;
 			}
 		}
 
-		return evt.getResult() == Result.DENY ? true : false;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
-	{
-		return false;
+		return evt.hasResult() ? evt.getResult() == Result.DENY ? true : false : true;
 	}
 
 	@Override

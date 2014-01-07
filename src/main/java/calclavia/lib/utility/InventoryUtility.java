@@ -1,10 +1,13 @@
 package calclavia.lib.utility;
 
+import universalelectricity.api.vector.Vector3;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
 /**
@@ -201,5 +204,22 @@ public class InventoryUtility
 		}
 
 		return null;
+	}
+
+	/**
+	 * Drops an item stack on the floor.
+	 */
+	public static void dropItemStack(World world, Vector3 position, ItemStack itemStack)
+	{
+		if (!world.isRemote)
+		{
+			float f = 0.7F;
+			double randomX = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			double randomY = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			double randomZ = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			EntityItem entityitem = new EntityItem(world, position.x + randomX, position.y + randomY, position.z + randomZ, itemStack);
+			entityitem.delayBeforeCanPickup = 10;
+			world.spawnEntityInWorld(entityitem);
+		}
 	}
 }
