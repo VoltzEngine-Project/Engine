@@ -72,7 +72,7 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 	@Override
 	public long onReceiveEnergy(ForgeDirection from, long receive, boolean doReceive)
 	{
-		if (this.getInputDirections().contains(from))
+		if (from == ForgeDirection.UNKNOWN || this.getInputDirections().contains(from))
 		{
 			return this.energy.receiveEnergy(receive, doReceive);
 		}
@@ -83,7 +83,7 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 	@Override
 	public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract)
 	{
-		if (this.getOutputDirections().contains(from))
+		if (from == ForgeDirection.UNKNOWN || this.getOutputDirections().contains(from))
 		{
 			return this.energy.extractEnergy(extract, doExtract);
 		}
