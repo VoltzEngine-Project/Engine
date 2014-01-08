@@ -1,6 +1,5 @@
 package calclavia.lib.utility;
 
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 /**

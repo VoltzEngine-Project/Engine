@@ -1,6 +1,5 @@
 package calclavia.lib.utility;
 
-import universalelectricity.api.vector.Vector3;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -9,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.api.vector.Vector3;
 
 /**
  * @author Calclavia
