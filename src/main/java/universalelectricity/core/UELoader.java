@@ -37,7 +37,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = UELoader.ID, version = UniversalElectricity.VERSION, name = UELoader.NAME, dependencies = "before:ForgeMultipart")
+@Mod(modid = UELoader.ID, version = UniversalElectricity.VERSION, name = UELoader.NAME, dependencies = "before:ForgeMultipart;before:BuildCraft|Energy")
 @TransformerExclusions({ "universalelectricity.core.asm", "universalelectricity.core.asm.template" })
 public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 {
