@@ -4,6 +4,7 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyTile;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import net.minecraft.tileentity.TileEntity;
@@ -141,58 +142,31 @@ public class StaticTileForwarder
 		}
 	}
 
-	/**
-	 * BuildCraft
-	 */
-	public static class DummyPowerHandler extends PowerHandler
-	{
-		public DummyPowerHandler(IPowerReceptor receptor, Type type)
-		{
-			super(receptor, type);
-		}
+	public static final HashMap<IEnergyInterface, PowerHandler> powerProviderMap = new HashMap<IEnergyInterface, PowerHandler>();
 
-		public DummyPowerReceiver receiver = new DummyPowerReceiver();
-
-		public class DummyPowerReceiver extends PowerReceiver
-		{
-			DummyPowerReceiver()
-			{
-				super();
-			}
-
-			@Override
-			public float receiveEnergy(Type source, final float quantity, ForgeDirection from)
-			{
-				return ((IEnergyInterface) receptor).onReceiveEnergy(from, (long) (quantity * CompatibilityType.BUILDCRAFT.reciprocal_ratio), true) * CompatibilityType.BUILDCRAFT.ratio;
-			}
-
-			public float powerRequest()
-			{
-				return ((IEnergyInterface) receptor).onReceiveEnergy(ForgeDirection.UNKNOWN, Integer.MAX_VALUE, true) * CompatibilityType.BUILDCRAFT.ratio;
-			}
-		}
-
-		public PowerReceiver getPowerReceiver()
-		{
-			return receiver;
-		}
-	}
-
-	/**
-	 * @param templateBCTile
-	 * @param side
-	 * @return
-	 */
 	public static PowerReceiver getPowerReceiver(IEnergyInterface handler, ForgeDirection side)
 	{
-		DummyPowerHandler dummy = new DummyPowerHandler((IPowerReceptor) handler, Type.MACHINE);
-		return dummy.getPowerReceiver();
+		if (!powerProviderMap.containsKey(handler))
+		{
+			PowerHandler powerHandler = new PowerHandler((IPowerReceptor) handler, Type.MACHINE);
+
+			if (handler instanceof IEnergyContainer)
+			{
+				powerHandler.configure(0, ((IEnergyContainer) handler).getEnergyCapacity(ForgeDirection.UNKNOWN), 1, ((IEnergyContainer) handler).getEnergyCapacity(ForgeDirection.UNKNOWN));
+			}
+
+			powerHandler.configurePowerPerdition(0, 0);
+			powerProviderMap.put(handler, powerHandler);
+		}
+System.out.println(powerProviderMap.get(handler));
+		return powerProviderMap.get(handler).getPowerReceiver();
 	}
 
-	/**
-	 * @param templateBCTile
-	 * @return
-	 */
+	public static void doWork(IEnergyInterface handler, PowerHandler workProvider)
+	{
+		handler.onReceiveEnergy(ForgeDirection.UNKNOWN, (long) (workProvider.getEnergyStored() * CompatibilityType.BUILDCRAFT.reciprocal_ratio), true);
+	}
+
 	public static World getWorld(IEnergyInterface handler)
 	{
 		if (handler instanceof TileEntity)
@@ -202,4 +176,5 @@ public class StaticTileForwarder
 
 		return null;
 	}
+
 }

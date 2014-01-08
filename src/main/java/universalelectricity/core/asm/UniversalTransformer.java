@@ -33,11 +33,6 @@ public class UniversalTransformer implements IClassTransformer
 		{
 			return bytes;
 		}
-		
-		if(transformedName.startsWith("buildcraft.api") && transformedName.contains("package-info"))
-		{
-			return new byte[0];
-		}
 
 		boolean changed = false;
 

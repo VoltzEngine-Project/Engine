@@ -42,7 +42,7 @@ public abstract class TemplateBCTile implements IPowerReceptor, IEnergyInterface
 	 */
 	public void doWork(PowerHandler workProvider)
 	{
-
+		StaticTileForwarder.doWork(this, workProvider);
 	}
 
 	public World getWorld()
