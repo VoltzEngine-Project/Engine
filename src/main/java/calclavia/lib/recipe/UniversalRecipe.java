@@ -19,88 +19,86 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class UniversalRecipe
 {
+	public static final ArrayList<UniversalRecipe> RECIPES = new ArrayList<UniversalRecipe>();
+
 	/**
 	 * Primary Metal: Steel
 	 */
-	public static UniversalRecipe PRIMARY_METAL;
-	public static UniversalRecipe PRIMARY_PLATE;
+	public static final UniversalRecipe PRIMARY_METAL;
+	public static final UniversalRecipe PRIMARY_PLATE;
 
 	/**
 	 * Secondary Metal: Bronze
 	 */
-	public static UniversalRecipe SECONDARY_METAL;
-	public static UniversalRecipe SECONDARY_PLATE;
+	public static final UniversalRecipe SECONDARY_METAL;
+	public static final UniversalRecipe SECONDARY_PLATE;
 
 	/**
 	 * Circuits
 	 */
-	public static UniversalRecipe CIRCUIT_T1;
-	public static UniversalRecipe CIRCUIT_T2;
-	public static UniversalRecipe CIRCUIT_T3;
+	public static final UniversalRecipe CIRCUIT_T1;
+	public static final UniversalRecipe CIRCUIT_T2;
+	public static final UniversalRecipe CIRCUIT_T3;
 
 	/**
 	 * Battery
 	 */
-	public static UniversalRecipe BATTERY;
-	public static UniversalRecipe ADVANCED_BATTERY;
-	public static UniversalRecipe BATTERY_BOX;
+	public static final UniversalRecipe BATTERY;
+	public static final UniversalRecipe ADVANCED_BATTERY;
+	public static final UniversalRecipe BATTERY_BOX;
 
 	/**
 	 * Misc
 	 */
-	public static UniversalRecipe WRENCH;
-	public static UniversalRecipe WIRE;
-	public static UniversalRecipe MOTOR;
+	public static final UniversalRecipe WRENCH;
+	public static final UniversalRecipe WIRE;
+	public static final UniversalRecipe MOTOR;
 
-	private static boolean isInit = false;
-
-	public static boolean MARK_ALLOW_ALTERNATIVES = true;
-
-	/**
-	 * Load before adding recipes but after OreDict registrations.
-	 */
-	public static void init()
+	static
 	{
-		if (!isInit)
-		{
-			// Metals
-			PRIMARY_METAL = new UniversalRecipe("ingotSteel", "ingotRefinedIron", new ItemStack(Item.ingotIron));
-			SECONDARY_METAL = new UniversalRecipe("ingotBronze", new ItemStack(Item.brick));
+		// Metals
+		PRIMARY_METAL = new UniversalRecipe("ingotSteel", "ingotRefinedIron", new ItemStack(Item.ingotIron));
+		SECONDARY_METAL = new UniversalRecipe("ingotBronze", new ItemStack(Item.brick));
 
-			// Plates
-			PRIMARY_PLATE = new UniversalRecipe("plateSteel", Items.getItem("advancedAlloy"), new ItemStack(Block.blockIron));
-			SECONDARY_PLATE = new UniversalRecipe("plateBronze", Items.getItem("carbonPlate"), new ItemStack(Block.brick));
-			// Miscs
-			CIRCUIT_T1 = new UniversalRecipe("circuitBasic", Items.getItem("electronicCircuit"), new ItemStack(Block.torchRedstoneActive));
-			CIRCUIT_T2 = new UniversalRecipe("circuitAdvanced", Items.getItem("advancedCircuit"), new ItemStack(Item.redstoneRepeater));
-			CIRCUIT_T3 = new UniversalRecipe("circuitElite", Items.getItem("iridiumPlate"), new ItemStack(Item.comparator));
+		// Plates
+		PRIMARY_PLATE = new UniversalRecipe("plateSteel", Items.getItem("advancedAlloy"), new ItemStack(Block.blockIron));
+		SECONDARY_PLATE = new UniversalRecipe("plateBronze", Items.getItem("carbonPlate"), new ItemStack(Block.brick));
+		// Miscs
+		CIRCUIT_T1 = new UniversalRecipe("circuitBasic", Items.getItem("electronicCircuit"), new ItemStack(Block.torchRedstoneActive));
+		CIRCUIT_T2 = new UniversalRecipe("circuitAdvanced", Items.getItem("advancedCircuit"), new ItemStack(Item.redstoneRepeater));
+		CIRCUIT_T3 = new UniversalRecipe("circuitElite", Items.getItem("iridiumPlate"), new ItemStack(Item.comparator));
 
-			ADVANCED_BATTERY = new UniversalRecipe("advancedBattery", Items.getItem("energyCrystal"), "battery", new ItemStack(Item.redstoneRepeater));
-			BATTERY = new UniversalRecipe("battery", Items.getItem("reBattery"), new ItemStack(Item.redstoneRepeater));
-			BATTERY_BOX = new UniversalRecipe("batteryBox", Items.getItem("batBox"), new ItemStack(Block.blockGold));
+		ADVANCED_BATTERY = new UniversalRecipe("advancedBattery", Items.getItem("energyCrystal"), "battery", new ItemStack(Item.redstoneRepeater));
+		BATTERY = new UniversalRecipe("battery", Items.getItem("reBattery"), new ItemStack(Item.redstoneRepeater));
+		BATTERY_BOX = new UniversalRecipe("batteryBox", Items.getItem("batBox"), new ItemStack(Block.blockGold));
 
-			WRENCH = new UniversalRecipe("wrench", Items.getItem("wrench"), new ItemStack(Item.axeIron));
-			WIRE = new UniversalRecipe("copperWire", "ironWire", "copperCableBlock", new ItemStack(Item.redstone));
+		WRENCH = new UniversalRecipe("wrench", Items.getItem("wrench"), new ItemStack(Item.axeIron));
+		WIRE = new UniversalRecipe("copperWire", "ironWire", "copperCableBlock", new ItemStack(Item.redstone));
 
-			MOTOR = new UniversalRecipe("motor", Items.getItem("generator"), new ItemStack(Block.pistonBase));
+		MOTOR = new UniversalRecipe("motor", Items.getItem("generator"), new ItemStack(Block.pistonBase));
 
-			isInit = true;
-		}
 	}
 
 	public String defaultRecipe;
 	private final ArrayList alternatives = new ArrayList();
+	private final Object[] originalRecipes;
+	private boolean didGenerate = false;
 
 	public UniversalRecipe(String defaultRecipe, Object... alternativeRecipes)
 	{
 		this.defaultRecipe = defaultRecipe;
+		this.originalRecipes = alternativeRecipes;
+		RECIPES.add(this);
+	}
 
+	public void generate()
+	{
 		if (recipeExists(this.defaultRecipe))
 		{
 			this.alternatives.add(this.defaultRecipe);
 		}
 
-		for (Object alternative : alternativeRecipes)
+		for (Object alternative : this.originalRecipes)
 		{
 			if (alternative instanceof ItemStack)
 			{
@@ -118,6 +116,7 @@ public class UniversalRecipe
 			}
 		}
 
+		didGenerate = true;
 	}
 
 	/**
@@ -125,14 +124,24 @@ public class UniversalRecipe
 	 * 
 	 * @return - Either a String for the OreDict recipe name, or an ItemStack
 	 */
-	public Object get()
+	public Object get(boolean allowAlternatives)
 	{
-		if (MARK_ALLOW_ALTERNATIVES)
+		if (!didGenerate)
+		{
+			generate();
+		}
+
+		if (allowAlternatives)
 		{
 			return this.alternatives.get(0);
 		}
 
 		return recipeExists(this.defaultRecipe) ? this.defaultRecipe : this.alternatives.get(this.alternatives.size() - 1);
+	}
+
+	public Object get()
+	{
+		return get(true);
 	}
 
 	/**
