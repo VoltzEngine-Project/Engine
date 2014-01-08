@@ -167,7 +167,6 @@ public class StaticTileForwarder
 	{
 		long energyToInject = (long) (workProvider.useEnergy(0, workProvider.getEnergyStored(), false) * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
 		long energyUsed = handler.onReceiveEnergy(ForgeDirection.UNKNOWN, energyToInject, true);
-		System.out.println("Injecting Energy From BC: " + energyToInject + ", Energy Used: " + energyUsed);
 		workProvider.useEnergy(0, energyUsed * CompatibilityType.BUILDCRAFT.ratio, true);
 	}
 

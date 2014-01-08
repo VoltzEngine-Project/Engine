@@ -12,9 +12,9 @@ import cpw.mods.fml.common.Loader;
  */
 public enum CompatibilityType
 {
-	THERMAL_EXPANSION("ThermalExpansion", "ThermalExpansion", "Redstone Flux", "RF", 0.000177683013504f),
-	INDUSTRIALCRAFT("IC2", "IndustrialCraft", "Electrical Unit", "EU", 0.0000710732054016f),
-	BUILDCRAFT("BuildCraft|Energy", "BuildCraft", "Minecraft Joule", "MJ", 0.0000177683013504f);
+	THERMAL_EXPANSION("ThermalExpansion", "ThermalExpansion", "Redstone Flux", "RF", 5628),
+	INDUSTRIALCRAFT("IC2", "IndustrialCraft", "Electrical Unit", "EU", 140700),
+	BUILDCRAFT("BuildCraft|Energy", "BuildCraft", "Minecraft Joule", "MJ", 56280);
 
 	public final String modID;
 	public final String moduleName;
@@ -37,14 +37,21 @@ public enum CompatibilityType
 	 */
 	public boolean isModuleEnabled;
 
-	CompatibilityType(String modID, String moduleName, String fullUnit, String unit, float ratio)
+	/**
+	 * @param modID - The Forge mod ID.
+	 * @param moduleName - The name of the module, used for config and ASM
+	 * @param fullUnit - The unit used
+	 * @param unit - The unit short form used
+	 * @param ratio - How much UE energy equates to the forgien energy?
+	 */
+	CompatibilityType(String modID, String moduleName, String fullUnit, String unit, int ratio)
 	{
 		this.modID = modID;
 		this.moduleName = moduleName;
 		this.fullUnit = fullUnit;
 		this.unit = unit;
-		this.ratio = ratio;
-		this.reciprocal_ratio = 1 / this.ratio;
+		this.ratio = 1 / ratio;
+		this.reciprocal_ratio = ratio;
 	}
 
 	public boolean isLoaded()
