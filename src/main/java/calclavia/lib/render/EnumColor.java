@@ -1,11 +1,13 @@
 package calclavia.lib.render;
 
+import java.awt.Color;
+
 import net.minecraft.util.StatCollector;
 
 /**
  * Simple color enum for adding colors to in-game GUI strings of text.
  * 
- * @author AidanBrady
+ * @author Calclavia
  * 
  */
 public enum EnumColor
@@ -65,6 +67,11 @@ public enum EnumColor
 	public int getMetaValue()
 	{
 		return mcMeta;
+	}
+
+	public Color toColor()
+	{
+		return new Color(rgbCode[0], rgbCode[1], rgbCode[2]);
 	}
 
 	@Override
