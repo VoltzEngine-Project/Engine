@@ -71,7 +71,7 @@ public class MovementUtility
 			{
 				if (position.intY() >= heightMapValue)
 				{
-					relightBlock(chunk, Vector3.translate(chunkPosition, new Vector3(0, 1, 0)));
+					relightBlock(chunk, chunkPosition.clone().translate(new Vector3(0, 1, 0)));
 				}
 			}
 			else if (position.intY() == heightMapValue - 1)

@@ -21,7 +21,7 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 	 */
 	public void recharge(ItemStack itemStack)
 	{
-		this.energy.extractEnergy(CompatibilityModule.chargeItem(itemStack, this.energy.getEmptySpace(), true), true);
+		this.energy.extractEnergy(CompatibilityModule.chargeItem(itemStack, this.energy.getEnergy(), true), true);
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 	 */
 	public void discharge(ItemStack itemStack)
 	{
-		this.energy.receiveEnergy(CompatibilityModule.dischargeItem(itemStack, this.energy.getEnergy(), true), true);
+		this.energy.receiveEnergy(CompatibilityModule.dischargeItem(itemStack, this.energy.getEmptySpace(), true), true);
 	}
 
 	@Override
