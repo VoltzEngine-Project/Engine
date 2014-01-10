@@ -1,5 +1,6 @@
 package calclavia.lib.prefab.potion;
 
+import calclavia.lib.Calclavia;
 import net.minecraft.potion.Potion;
 
 public abstract class CustomPotion extends Potion
@@ -14,9 +15,17 @@ public abstract class CustomPotion extends Potion
 	 */
 	public CustomPotion(int id, boolean isBadEffect, int color, String name)
 	{
-		super(id, isBadEffect, color);
+		super(getPotionID(name, id), isBadEffect, color);
 		this.setPotionName("potion." + name);
 		Potion.potionTypes[this.getId()] = this;
+	}
+
+	public static int getPotionID(String name, int id)
+	{
+		Calclavia.CONFIGURATION.load();
+		int finalID = Calclavia.CONFIGURATION.get("Potion ID", name + " ID", id).getInt(id);
+		Calclavia.CONFIGURATION.save();
+		return finalID;
 	}
 
 	@Override
