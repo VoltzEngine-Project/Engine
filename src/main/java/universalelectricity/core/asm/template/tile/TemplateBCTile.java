@@ -27,6 +27,7 @@ public abstract class TemplateBCTile implements IPowerReceptor, IEnergyInterface
 	 * @param side
 	 * @return
 	 */
+	@Override
 	public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side)
 	{
 		return StaticTileForwarder.getPowerReceiver(this, side);
@@ -40,11 +41,13 @@ public abstract class TemplateBCTile implements IPowerReceptor, IEnergyInterface
 	 * 
 	 * @param workProvider
 	 */
+	@Override
 	public void doWork(PowerHandler workProvider)
 	{
 		StaticTileForwarder.doWork(this, workProvider);
 	}
 
+	@Override
 	public World getWorld()
 	{
 		return StaticTileForwarder.getWorld(this);

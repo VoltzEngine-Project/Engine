@@ -10,11 +10,11 @@ import java.util.HashSet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
+import universalelectricity.core.net.NetworkTickHandler;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
@@ -36,7 +36,7 @@ public class StaticTileForwarder
 	{
 		if (CompatibilityType.INDUSTRIALCRAFT.isLoaded() && !loadedIC2Tiles.contains(tile) && !((TileEntity) tile).worldObj.isRemote)
 		{
-			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(tile));
+			NetworkTickHandler.queueEvent(new EnergyTileLoadEvent(tile));
 			loadedIC2Tiles.add(tile);
 		}
 	}
@@ -45,7 +45,7 @@ public class StaticTileForwarder
 	{
 		if (CompatibilityType.INDUSTRIALCRAFT.isLoaded() && loadedIC2Tiles.contains(tile) && !((TileEntity) tile).worldObj.isRemote)
 		{
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(tile));
+			NetworkTickHandler.queueEvent(new EnergyTileUnloadEvent(tile));
 			loadedIC2Tiles.remove(tile);
 		}
 	}
