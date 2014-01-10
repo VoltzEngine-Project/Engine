@@ -151,7 +151,7 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 	{
 	}
 
-	@Override
+	
 	public String[] getLibraryRequestClass()
 	{
 		return null;
