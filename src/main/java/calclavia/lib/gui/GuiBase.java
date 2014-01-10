@@ -78,13 +78,13 @@ public abstract class GuiBase extends GuiScreen
 	/**
 	 * Draws the foreground layer for the GUI
 	 */
-	protected abstract void drawForegroundLayer(int var2, int var3, float var1);
+	protected abstract void drawForegroundLayer(int mouseX, int mouseY, float var1);
 
 	/**
 	 * Draws the background layer for the GUI
 	 */
 
-	protected abstract void drawBackgroundLayer(int var2, int var3, float var1);
+	protected abstract void drawBackgroundLayer(int mouseX, int mouseY, float var1);
 
 	/**
 	 * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).

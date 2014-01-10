@@ -1,13 +1,16 @@
 package calclavia.lib.terminal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import universalelectricity.api.vector.Vector2;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.util.AxisAlignedBB;
+import calclavia.lib.access.AccessUser;
 import calclavia.lib.network.IPacketReceiver;
 import calclavia.lib.network.IPacketSender;
 import calclavia.lib.network.PacketHandler;
@@ -36,7 +39,6 @@ public abstract class TileTerminal extends TileElectrical implements ITerminal, 
 	/**
 	 * Packet Code
 	 */
-
 	public abstract Packet getTerminalPacket();
 
 	public abstract Packet getCommandPacket(String username, String cmdInput);
