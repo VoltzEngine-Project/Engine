@@ -10,11 +10,12 @@ public class TileIO extends TileAdvanced implements IIO
 	/**
 	 * IO METHODS.
 	 * Default: Connect from all sides. "111111"
+	 * Output all sides: 728
 	 * 0 - Nothing
 	 * 1 - Input
 	 * 2 - Output
 	 */
-	private short ioMap = 364;
+	protected short ioMap = 364;
 	protected boolean saveIOMap = false;
 
 	/**
