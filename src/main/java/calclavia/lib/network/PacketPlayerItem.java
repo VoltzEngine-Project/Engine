@@ -40,7 +40,7 @@ public class PacketPlayerItem extends PacketType
 
 		if (itemStack != null && itemStack.getItem() instanceof IPacketReceiver)
 		{
-			((IPacketReceiver) itemStack.getItem()).onReceivePacket(data, player);
+			((IPacketReceiver) itemStack.getItem()).onReceivePacket(data, player, itemStack);
 		}
 	}
 }
