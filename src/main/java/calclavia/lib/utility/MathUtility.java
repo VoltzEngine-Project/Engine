@@ -6,7 +6,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.vector.Vector3;
 
-public class MathUtility extends MathHelper
+public class MathUtility
 {
 	/**
 	 * Generates an array of random numbers
