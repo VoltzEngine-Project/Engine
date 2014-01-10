@@ -3,7 +3,6 @@ package calclavia.lib.terminal;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import calclavia.lib.access.ISpecialAccess;
 
 /**
  * Basic methods to make it easier to construct or interact with a terminal based tile. Recommend to
@@ -12,7 +11,7 @@ import calclavia.lib.access.ISpecialAccess;
  * 
  * @author DarkGuardsmsan
  */
-public interface ITerminal extends ISpecialAccess
+public interface ITerminal
 {
 	/** Gets an output of the string stored in the console. */
 	public List<String> getTerminalOuput();

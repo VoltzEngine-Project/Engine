@@ -18,6 +18,8 @@ public class CommandUser implements ITerminalCommand
 	{
 		if (args[0].equalsIgnoreCase("users") && args.length > 1 && args[1] != null)
 		{
+			//TODO: FIX
+			/*
 			// ILockable
 			if (args[1].equalsIgnoreCase("List"))
 			{
@@ -78,7 +80,7 @@ public class CommandUser implements ITerminalCommand
 					terminal.addToConsole("Invalid group.");
 					return true;
 				}
-			}
+			}*/
 			return false;
 		}
 		return false;

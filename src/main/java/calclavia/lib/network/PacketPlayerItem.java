@@ -33,6 +33,11 @@ public class PacketPlayerItem extends PacketType
 		return super.getPacket(newArgs.toArray());
 	}
 
+	public Packet getPacket(EntityPlayer player, Object... args)
+	{
+		return this.getPacket(player.inventory.currentItem, args);
+	}
+
 	@Override
 	public void receivePacket(ByteArrayDataInput data, EntityPlayer player)
 	{
