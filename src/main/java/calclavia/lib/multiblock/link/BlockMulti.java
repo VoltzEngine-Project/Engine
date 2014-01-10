@@ -28,7 +28,7 @@ public class BlockMulti extends BlockContainer
 		this.setUnlocalizedName("multiBlock");
 	}
 
-	public BlockMulti setChannel(PacketTile packetType)
+	public BlockMulti setPacketType(PacketTile packetType)
 	{
 		this.packetType = packetType;
 		return this;
