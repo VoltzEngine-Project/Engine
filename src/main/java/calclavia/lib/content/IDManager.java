@@ -1,4 +1,4 @@
-package calclavia.lib.prefab.block;
+package calclavia.lib.content;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
