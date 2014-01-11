@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.Configuration;
+import calclavia.lib.Calclavia;
 import calclavia.lib.content.IExtraInfo.IExtraBlockInfo;
 import calclavia.lib.content.IExtraInfo.IExtraItemInfo;
 
@@ -97,6 +98,13 @@ public class ContentRegistry
 			try
 			{
 				block = blockClass.newInstance();
+
+				if (block != null)
+				{
+					blocks.put(block, name);
+					proxy.registerBlock(block, itemClass, name, modID);
+					finishCreation(block, tileClass);
+				}
 			}
 			catch (IllegalArgumentException e)
 			{
@@ -104,15 +112,8 @@ public class ContentRegistry
 			}
 			catch (Exception e)
 			{
-				System.out.println("Warning: Block [" + name + "] failed to be created!");
+				Calclavia.LOGGER.severe("Block [" + name + "] failed to be created!");
 				e.printStackTrace();
-			}
-
-			if (block != null)
-			{
-				blocks.put(block, name);
-				proxy.registerBlock(block, itemClass, name, modID);
-				finishCreation(block, tileClass);
 			}
 		}
 
@@ -172,6 +173,16 @@ public class ContentRegistry
 		return null;
 	}
 
+	public Item createItem(Class<? extends Item> clazz)
+	{
+		return createItem(clazz.getSimpleName(), clazz, true);
+	}
+
+	public Item createItem(String name, Class<? extends Item> clazz)
+	{
+		return createItem(name, clazz, true);
+	}
+
 	/**
 	 * Creates a new item using reflection as well runs it threw some check to activate any
 	 * interface methods
@@ -182,7 +193,7 @@ public class ContentRegistry
 	 * @param canDisable - can a user disable this item
 	 * @return the new item
 	 */
-	public Item createNewItem(String name, Class<? extends Item> clazz, boolean canDisable)
+	public Item createItem(String name, Class<? extends Item> clazz, boolean canDisable)
 	{
 		Item item = null;
 		if (clazz != null && (!canDisable || canDisable && config.get("Enabled_List", "Enabled_" + name, true).getBoolean(true)))
