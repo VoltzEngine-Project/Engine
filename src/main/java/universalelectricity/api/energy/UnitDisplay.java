@@ -15,7 +15,7 @@ public class UnitDisplay
 	{
 		AMPERE("Amp", "I"), AMP_HOUR("Amp Hour", "Ah"), VOLTAGE("Volt", "V"), WATT("Watt", "W"),
 		WATT_HOUR("Watt Hour", "Wh"), RESISTANCE("Ohm", "R"), CONDUCTANCE("Siemen", "S"),
-		JOULES("Joule", "J"),LITER("Liter", "L"), REDFLUX("RedstoneFlux", "Rf"),
+		JOULES("Joule", "J"), LITER("Liter", "L"), REDFLUX("RedstoneFlux", "Rf"),
 		MINECRAFT_JOULES("MinecraftJoules", "Mj"), ELECTRICAL_UNITS("ElectricalUnits", "Eu");
 
 		public String name;
@@ -97,15 +97,17 @@ public class UnitDisplay
 	 * front of the output string showing this. Use string.replace to remove the negative sign if
 	 * unwanted
 	 */
-	public static String getDisplay(double value, Unit unit, int decimalPlaces, boolean isShort, long multiplier)
+	public static String getDisplay(double value, Unit unit, int decimalPlaces, boolean isShort, double multiplier)
 	{
 		String unitName = unit.name;
 		String prefix = "";
+
 		if (value < 0)
 		{
 			value = Math.abs(value);
 			prefix = "-";
 		}
+
 		value *= multiplier;
 
 		if (isShort)
@@ -153,9 +155,22 @@ public class UnitDisplay
 		return getDisplay(value, unit, 2, false);
 	}
 
+	public static String getDisplay(double value, Unit unit, UnitPrefix prefix)
+	{
+		return getDisplay(value, unit, 2, false, prefix.value);
+	}
+
 	public static String getDisplayShort(double value, Unit unit)
 	{
 		return getDisplay(value, unit, 2, true);
+	}
+
+	/**
+	 * Gets a display for the value with a unit that is in the specific prefix.
+	 */
+	public static String getDisplayShort(double value, Unit unit, UnitPrefix prefix)
+	{
+		return getDisplay(value, unit, 2, true, prefix.value);
 	}
 
 	public static String getDisplayShort(double value, Unit unit, int decimalPlaces)

@@ -21,6 +21,11 @@ public class EnergyStorageHandler
 	 */
 	protected long lastEnergy;
 
+	public EnergyStorageHandler()
+	{
+		this(0);
+	}
+
 	public EnergyStorageHandler(long capacity)
 	{
 		this(capacity, capacity, capacity);
