@@ -46,11 +46,32 @@ public class Vector2 implements Cloneable
 		return new Vector2(this.x, this.y);
 	}
 
+	/** ---------------------- MAGNITUDE FUNCTIONS ---------------------------- */
+	public double getMagnitude()
+	{
+		return Math.sqrt(this.getMagnitudeSquared());
+	}
+
+	public double getMagnitudeSquared()
+	{
+		return this.x * this.x + this.y * this.y;
+	}
+
+	public Vector2 normalize()
+	{
+		double d = this.getMagnitude();
+
+		if (d != 0)
+		{
+			this.scale(1 / d);
+		}
+
+		return this;
+	}
+
 	public static double distance(Vector2 point1, Vector2 point2)
 	{
-		double xDifference = point1.x - point2.x;
-		double yDiference = point1.y - point2.y;
-		return Math.sqrt(xDifference * xDifference + yDiference * yDiference);
+		return point1.clone().distance(point2);
 	}
 
 	public static double slope(Vector2 point1, Vector2 point2)
@@ -62,9 +83,8 @@ public class Vector2 implements Cloneable
 
 	public double distance(Vector2 target)
 	{
-		double xDifference = this.x - target.x;
-		double yDifference = this.y - target.y;
-		return Math.sqrt(xDifference * xDifference + yDifference * yDifference);
+		Vector2 difference = this.clone().subtract(target);
+		return difference.getMagnitude();
 	}
 
 	public Vector2 add(Vector2 par1)
@@ -81,17 +101,30 @@ public class Vector2 implements Cloneable
 		return this;
 	}
 
+	public Vector2 subtract(Vector2 par1)
+	{
+		this.x -= par1.x;
+		this.y -= par1.y;
+		return this;
+	}
+
 	public Vector2 invert()
 	{
 		this.multiply(-1);
 		return this;
 	}
 
-	public Vector2 multiply(double amount)
+	public Vector2 scale(double amount)
 	{
 		this.x *= amount;
 		this.y *= amount;
 		return this;
+	}
+
+	@Deprecated
+	public Vector2 multiply(double amount)
+	{
+		return this.scale(amount);
 	}
 
 	public Vector2 round()
