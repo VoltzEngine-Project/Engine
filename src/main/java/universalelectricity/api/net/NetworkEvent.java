@@ -3,7 +3,6 @@ package universalelectricity.api.net;
 import net.minecraftforge.event.Cancelable;
 import net.minecraftforge.event.Event;
 import universalelectricity.api.energy.IEnergyNetwork;
-import universalelectricity.core.net.EnergyNetwork;
 
 public class NetworkEvent extends Event
 {
@@ -27,7 +26,7 @@ public class NetworkEvent extends Event
 		private long amount;
 		private boolean doReceive;
 
-		public EnergyProduceEvent(EnergyNetwork network, Object source, long amount, boolean doReceive)
+		public EnergyProduceEvent(IEnergyNetwork network, Object source, long amount, boolean doReceive)
 		{
 			super(network);
 			this.source = source;
