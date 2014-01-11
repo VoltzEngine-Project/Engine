@@ -37,10 +37,20 @@ public class ContentRegistry
 	private final Configuration config;
 	private final String modID;
 
+	/**
+	 * Custom unique packet IDs for the mod to use.
+	 */
+	private int packetID = 0;
+
 	public ContentRegistry(Configuration config, String modID)
 	{
 		this.config = config;
 		this.modID = modID;
+	}
+
+	public int getNextPacketID()
+	{
+		return ++packetID;
 	}
 
 	public Block createBlock(Class<? extends Block> blockClass)
