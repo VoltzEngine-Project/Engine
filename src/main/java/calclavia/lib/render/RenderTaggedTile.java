@@ -59,7 +59,7 @@ public abstract class RenderTaggedTile extends TileEntitySpecialRenderer
 
 								if (entry.getKey() != null)
 								{
-									CalclaviaRenderHelper.renderFloatingText(entry.getKey(), (float) x + 0.5f, ((float) y + (i * 0.25f)) - 2f + height, (float) z + 0.5f, entry.getValue());
+									RenderUtility.renderFloatingText(entry.getKey(), (float) x + 0.5f, ((float) y + (i * 0.25f)) - 2f + height, (float) z + 0.5f, entry.getValue());
 								}
 
 								i++;

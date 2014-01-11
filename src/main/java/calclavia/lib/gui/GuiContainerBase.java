@@ -24,7 +24,7 @@ import universalelectricity.api.energy.UnitDisplay.Unit;
 import universalelectricity.api.vector.Vector2;
 import calclavia.lib.Calclavia;
 import calclavia.lib.prefab.vector.Region2;
-import calclavia.lib.render.CalclaviaRenderHelper;
+import calclavia.lib.render.RenderUtility;
 import calclavia.lib.utility.LanguageUtility;
 
 public class GuiContainerBase extends GuiContainer
@@ -449,7 +449,7 @@ public class GuiContainerBase extends GuiContainer
 			liquidIcon = fluid.getStillIcon();
 		}
 
-		CalclaviaRenderHelper.setSpriteTexture(fluid.getSpriteNumber());
+		RenderUtility.setSpriteTexture(fluid.getSpriteNumber());
 
 		if (liquidIcon != null)
 		{
