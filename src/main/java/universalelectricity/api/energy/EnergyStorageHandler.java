@@ -197,6 +197,11 @@ public class EnergyStorageHandler
 		return this.getEnergy() >= this.getEnergyCapacity();
 	}
 
+	public boolean isEmpty()
+	{
+		return this.getEnergy() == 0;
+	}
+
 	public long getLastEnergy()
 	{
 		return this.lastEnergy;
