@@ -92,7 +92,7 @@ public class ContentRegistry
 	{
 		Block block = null;
 
-		if (blockClass != null && (!canDisable || canDisable && config.get("Enabled List", "Enabled " + name, true).getBoolean(true)))
+		if (blockClass != null && (!canDisable || canDisable && config.get("Enabled_List", "Enabled " + name, true).getBoolean(true)))
 		{
 			// TODO redesign to catch blockID conflict
 			try

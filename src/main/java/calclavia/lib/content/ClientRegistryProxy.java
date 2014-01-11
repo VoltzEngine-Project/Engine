@@ -49,8 +49,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
 		}
 		catch (Exception e)
 		{
-			Calclavia.LOGGER.severe("Failed to register TileEntity rendere for " + name);
-			e.printStackTrace();
+			Calclavia.LOGGER.severe("Failed to register TileEntity renderer for " + name);
 		}
 
 		if (tileRenderer != null)
