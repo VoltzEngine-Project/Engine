@@ -166,4 +166,21 @@ public class ListUtility
 	{
 		return (List<V>) Arrays.asList(set.toArray());
 	}
+
+	public static <V> V[] asArray(List<V> list)
+	{
+		return (V[]) list.toArray();
+	}
+
+	public static int[] integerListAsArray(List<Integer> list)
+	{
+		int[] returnArray = new int[list.size()];
+
+		for (int i = 0; i < returnArray.length; i++)
+		{
+			returnArray[i] = list.get(i);
+		}
+
+		return returnArray;
+	}
 }
