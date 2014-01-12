@@ -57,13 +57,13 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 		CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
 		/** Loads the configuration and sets all the values. */
 		CONFIGURATION.load();
-		CompatibilityType.THERMAL_EXPANSION.ratio = (float) CONFIGURATION.get("Compatiblity", "Thermal Expansion Conversion Ratio", CompatibilityType.THERMAL_EXPANSION.ratio).getDouble(CompatibilityType.THERMAL_EXPANSION.ratio);
-		CompatibilityType.INDUSTRIALCRAFT.ratio = (float) CONFIGURATION.get("Compatiblity", "IndustrialCraft Conversion Ratio", CompatibilityType.INDUSTRIALCRAFT.ratio).getDouble(CompatibilityType.INDUSTRIALCRAFT.ratio);
-		CompatibilityType.BUILDCRAFT.ratio = (float) CONFIGURATION.get("Compatiblity", "BuildCraft Conversion Ratio", CompatibilityType.BUILDCRAFT.ratio).getDouble(CompatibilityType.BUILDCRAFT.ratio);
+		CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio = (float) CONFIGURATION.get("Compatibility", "Thermal Expansion Conversion Ratio", CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio).getDouble(CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+		CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio = (float) CONFIGURATION.get("Compatibility", "IndustrialCraft Conversion Ratio", CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio).getDouble(CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+		CompatibilityType.BUILDCRAFT.reciprocal_ratio = (float) CONFIGURATION.get("Compatibility", "BuildCraft Conversion Ratio", CompatibilityType.BUILDCRAFT.reciprocal_ratio).getDouble(CompatibilityType.BUILDCRAFT.reciprocal_ratio);
 
-		CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio = 1 / CompatibilityType.THERMAL_EXPANSION.ratio;
-		CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio = 1 / CompatibilityType.INDUSTRIALCRAFT.ratio;
-		CompatibilityType.BUILDCRAFT.reciprocal_ratio = 1 / CompatibilityType.BUILDCRAFT.ratio;
+		CompatibilityType.THERMAL_EXPANSION.ratio = 1 / CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio;
+		CompatibilityType.INDUSTRIALCRAFT.ratio = 1 / CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio;
+		CompatibilityType.BUILDCRAFT.ratio = 1 / CompatibilityType.BUILDCRAFT.reciprocal_ratio;
 
 		CompatibilityModule.register(new ModuleUniversalElectricity());
 
@@ -151,7 +151,6 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 	{
 	}
 
-	
 	public String[] getLibraryRequestClass()
 	{
 		return null;

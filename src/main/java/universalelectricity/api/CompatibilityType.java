@@ -24,12 +24,12 @@ public enum CompatibilityType
 	/**
 	 * Multiply UE energy by this ratio to convert it to the forgien ratio.
 	 */
-	public float ratio;
+	public double ratio;
 
 	/**
 	 * Multiply the forgien energy by this ratio to convert it into UE energy.
 	 */
-	public float reciprocal_ratio;
+	public double reciprocal_ratio;
 
 	/**
 	 * The Universal Electricity Loader will change this value to indicate if the module is

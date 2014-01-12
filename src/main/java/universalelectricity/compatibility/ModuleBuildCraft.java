@@ -24,7 +24,7 @@ public class ModuleBuildCraft extends CompatibilityModule
 		{
 			if (doReceive)
 			{
-				return (long) (receiver.receiveEnergy(Type.PIPE, energy * CompatibilityType.BUILDCRAFT.ratio, direction) * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
+				return (long) (receiver.receiveEnergy(Type.PIPE, (float) (energy * CompatibilityType.BUILDCRAFT.ratio), direction) * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
 			}
 
 			return (long) (receiver.powerRequest() * CompatibilityType.BUILDCRAFT.reciprocal_ratio);

@@ -152,7 +152,7 @@ public class StaticTileForwarder
 
 			if (handler instanceof IEnergyContainer)
 			{
-				float capacity = ((IEnergyContainer) handler).getEnergyCapacity(ForgeDirection.UNKNOWN) * CompatibilityType.BUILDCRAFT.ratio;
+				float capacity = (float) (((IEnergyContainer) handler).getEnergyCapacity(ForgeDirection.UNKNOWN) * CompatibilityType.BUILDCRAFT.ratio);
 				powerHandler.configure(0, capacity, 1, capacity);
 			}
 
@@ -167,7 +167,7 @@ public class StaticTileForwarder
 	{
 		long energyToInject = (long) (workProvider.useEnergy(0, workProvider.getEnergyStored(), false) * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
 		long energyUsed = handler.onReceiveEnergy(ForgeDirection.UNKNOWN, energyToInject, true);
-		workProvider.useEnergy(0, energyUsed * CompatibilityType.BUILDCRAFT.ratio, true);
+		workProvider.useEnergy(0, (float) (energyUsed * CompatibilityType.BUILDCRAFT.ratio), true);
 	}
 
 	public static World getWorld(IEnergyInterface handler)
