@@ -10,7 +10,7 @@ import net.minecraftforge.common.ForgeDirection;
 /** A module to extend for compatibility with other energy systems. */
 public abstract class CompatibilityModule
 {
-	private static final Set<CompatibilityModule> loadedModules = new LinkedHashSet<CompatibilityModule>();
+	public static final Set<CompatibilityModule> loadedModules = new LinkedHashSet<CompatibilityModule>();
 
 	/** A cache to know which module to use with when facing objects with a specific class. */
 	public static final HashMap<Class, CompatibilityModule> energyHandlerCache = new HashMap<Class, CompatibilityModule>();
