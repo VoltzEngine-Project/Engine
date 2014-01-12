@@ -110,4 +110,10 @@ public class NetworkTickHandler implements ITickHandler
 		return "Universal Electricity Grid Ticker";
 	}
 
+	public void clearNetworks()
+	{
+		toAddNetworks.clear();
+		networks.clear();
+	}
+
 }

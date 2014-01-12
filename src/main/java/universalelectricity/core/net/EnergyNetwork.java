@@ -59,10 +59,9 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	public void update()
 	{
 		/** Energy we have to move after loss has been removed */
-		long usableEnergy = this.energyBuffer - this.getEnergyLoss();
+		long usableEnergy = Math.max(this.energyBuffer - this.getEnergyLoss(), 0);
 		/** Energy currently left after we have moved some */
 		long currentEnergy = usableEnergy;
-
 		/** Energy per handler */
 		long perHandler = 0;
 		/** Energy per side of a handler */
