@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL12;
 import com.google.common.collect.Maps;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 {
@@ -22,6 +23,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	 * Maps fake TileEntities
 	 */
 	public static final Map<Block, TileEntity> inventoryTileEntities = Maps.newIdentityHashMap();
+	private static final int ID = RenderingRegistry.getNextAvailableRenderId();
 
 	public TileEntity getTileEntityForBlock(Block block)
 	{
@@ -80,5 +82,11 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	public boolean shouldRender3DInInventory()
 	{
 		return true;
+	}
+
+	@Override
+	public int getRenderId()
+	{
+		return ID;
 	}
 }
