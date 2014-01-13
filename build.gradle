@@ -83,13 +83,13 @@ publishing {
     }
     repositories {
         maven {
-            url "file://var/www/maven/"
+            url "file://var/www/maven"
         }
     }
 }
 
 repositories {
-    maven { url 'http://calclavia.com/maven/' }
+    maven { url 'http://calclavia.com/maven' }
 }
 dependencies {
     compile 'universalelectricity:Universal-Electricity:+:dev'
