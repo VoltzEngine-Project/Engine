@@ -82,6 +82,20 @@ public class RenderUtility
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 	}
 
+	public static void disableLightmap()
+	{
+		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+	}
+
+	public static void reenableLightmap()
+	{
+		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+	}
+
 	public static void renderNormalBlockAsItem(Block block, int metadata, RenderBlocks renderer)
 	{
 		Tessellator tessellator = Tessellator.instance;
