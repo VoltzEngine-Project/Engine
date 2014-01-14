@@ -6,9 +6,9 @@ Copyright (c) 2011-2014 Calclavia
 Universal Electricity's website can be found at www.universalelectricity.com. All downloads of the API are there.
 
 #### Developers
-Calclavia
-DarkGuardsman
-Aidancbrady
+* Calclavia
+* DarkGuardsman
+* Aidancbrady
 
 ### Contact
 Join *#universalelectricity* on EsperNet (irc.esper.net:5555). Remember to follow the rules and respect others as with any other channel.
