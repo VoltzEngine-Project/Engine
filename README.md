@@ -1,13 +1,13 @@
 ## Universal Electricity
 Universal Electricity is a Minecraft modding library that provides an easy, flexible energy framework and compatibility bridges between various energy systems in Minecraft.
 
-Copyright (c) 2011-2013 Calclavia
+Copyright (c) 2011-2014 Calclavia
 
 Universal Electricity's website can be found at www.universalelectricity.com. All downloads of the API are there.
 
 #### Developers
 Calclavia
-
+DarkGuardsman
 Aidancbrady
 
 ### Contact
