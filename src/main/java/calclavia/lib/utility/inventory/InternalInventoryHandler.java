@@ -1,4 +1,4 @@
-package calclavia.lib.utility;
+package calclavia.lib.utility.inventory;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,14 +18,14 @@ import universalelectricity.api.vector.Vector3;
  * 
  * @author Rseifert
  */
-public class InventoryInteractionHelper
+public class InternalInventoryHandler
 {
 	public World world;
 	Vector3 location;
 	Set<ItemStack> filteredItems;
 	boolean inverted;
 
-	public InventoryInteractionHelper(World world, Vector3 location, Set<ItemStack> filters, boolean inverted)
+	public InternalInventoryHandler(World world, Vector3 location, Set<ItemStack> filters, boolean inverted)
 	{
 		this.world = world;
 		this.location = location;

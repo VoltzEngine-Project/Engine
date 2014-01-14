@@ -1,4 +1,4 @@
-package calclavia.lib.utility;
+package calclavia.lib.utility.inventory;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;

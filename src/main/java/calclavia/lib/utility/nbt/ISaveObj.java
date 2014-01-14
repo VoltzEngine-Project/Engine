@@ -1,4 +1,4 @@
-package calclavia.lib.utility;
+package calclavia.lib.utility.nbt;
 
 import net.minecraft.nbt.NBTTagCompound;
 

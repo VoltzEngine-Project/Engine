@@ -11,9 +11,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import calclavia.lib.utility.IVirtualObject;
-import calclavia.lib.utility.NBTUtility;
-import calclavia.lib.utility.SaveManager;
+import calclavia.lib.utility.nbt.IVirtualObject;
+import calclavia.lib.utility.nbt.NBTUtility;
+import calclavia.lib.utility.nbt.SaveManager;
 
 /** Designed to be used as a container for AccessGroups and AccessUser. If you plan to use this make
  * sure to use it correctly. This is designed to be saved separate from the world save if marked for

@@ -1,4 +1,4 @@
-package calclavia.lib.utility;
+package calclavia.lib.utility.nbt;
 
 import java.io.File;
 import java.io.FileInputStream;

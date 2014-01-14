@@ -1,4 +1,4 @@
-package calclavia.lib.utility;
+package calclavia.lib.utility.inventory;
 
 import java.util.ArrayList;
 import java.util.List;

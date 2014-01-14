@@ -13,7 +13,7 @@ import net.minecraftforge.event.Event.Result;
 import universalelectricity.api.vector.Vector3;
 import buildcraft.api.tools.IToolWrench;
 import calclavia.components.event.MultitoolEvent;
-import calclavia.lib.utility.InventoryUtility;
+import calclavia.lib.utility.inventory.InventoryUtility;
 
 public class ItemMultitool extends ItemBase implements IToolWrench
 {

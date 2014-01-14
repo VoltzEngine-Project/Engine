@@ -1,4 +1,4 @@
-package calclavia.lib.inventory;
+package calclavia.lib.utility.inventory;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
