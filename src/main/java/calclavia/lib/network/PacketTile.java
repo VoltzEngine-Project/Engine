@@ -10,59 +10,82 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.google.common.io.ByteArrayDataInput;
 
-/**
- * Packet handler for blocks and tile entities.
+/** Packet handler for blocks and tile entities.
  * 
- * @author Calclavia
- */
+ * @author Calclavia */
 public class PacketTile extends PacketType
 {
-	public PacketTile(String channel)
-	{
-		super(channel);
-	}
+    public PacketTile(String channel)
+    {
+        super(channel);
+    }
 
-	public Packet getPacket(TileEntity tileEntity, Object... args)
-	{
-		return this.getPacket(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, args);
-	}
+    public Packet getPacket(TileEntity tileEntity, Object... args)
+    {
+        return this.getPacket(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, args);
+    }
 
-	public Packet getPacket(int x, int y, int z, Object... args)
-	{
-		List newArgs = new ArrayList();
+    public Packet getPacket(int id, TileEntity tileEntity, Object... args)
+    {
+        return this.getPacket(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, id, args);
+    }
 
-		newArgs.add(x);
-		newArgs.add(y);
-		newArgs.add(z);
+    public Packet getPacket(int x, int y, int z, Object... args)
+    {
+        List newArgs = new ArrayList();
 
-		for (Object obj : args)
-		{
-			newArgs.add(obj);
-		}
+        newArgs.add(x);
+        newArgs.add(y);
+        newArgs.add(z);
 
-		return super.getPacket(newArgs.toArray());
-	}
+        for (Object obj : args)
+        {
+            newArgs.add(obj);
+        }
 
-	@Override
-	public void receivePacket(ByteArrayDataInput data, EntityPlayer player)
-	{
-		int x = data.readInt();
-		int y = data.readInt();
-		int z = data.readInt();
-		TileEntity tileEntity = player.worldObj.getBlockTileEntity(x, y, z);
+        return super.getPacket(newArgs.toArray());
+    }
 
-		if (tileEntity instanceof IPacketReceiver)
-		{
-			((IPacketReceiver) tileEntity).onReceivePacket(data, player);
-		}
-		else
-		{
-			int blockID = player.worldObj.getBlockId(x, y, z);
+    public Packet getPacket(int x, int y, int z, int id, Object... args)
+    {
+        List newArgs = new ArrayList();
 
-			if (Block.blocksList[blockID] instanceof IPacketReceiver)
-			{
-				((IPacketReceiver) Block.blocksList[blockID]).onReceivePacket(data, player, x, y, z);
-			}
-		}
-	}
+        newArgs.add(x);
+        newArgs.add(y);
+        newArgs.add(z);
+        newArgs.add(id);
+
+        for (Object obj : args)
+        {
+            newArgs.add(obj);
+        }
+
+        return super.getPacket(newArgs.toArray());
+    }
+
+    @Override
+    public void receivePacket(ByteArrayDataInput data, EntityPlayer player)
+    {
+        int x = data.readInt();
+        int y = data.readInt();
+        int z = data.readInt();
+        TileEntity tileEntity = player.worldObj.getBlockTileEntity(x, y, z);
+        if (tileEntity instanceof IPacketReceiverWithID)
+        {
+            ((IPacketReceiverWithID) tileEntity).onReceivePacket(data.readInt(), data, player);
+        }
+        else if (tileEntity instanceof IPacketReceiver)
+        {
+            ((IPacketReceiver) tileEntity).onReceivePacket(data, player);
+        }
+        else
+        {
+            int blockID = player.worldObj.getBlockId(x, y, z);
+
+            if (Block.blocksList[blockID] instanceof IPacketReceiver)
+            {
+                ((IPacketReceiver) Block.blocksList[blockID]).onReceivePacket(data, player, x, y, z);
+            }
+        }
+    }
 }
