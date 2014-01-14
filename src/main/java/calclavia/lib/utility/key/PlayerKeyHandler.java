@@ -1,4 +1,4 @@
-package calclavia.lib.utility;
+package calclavia.lib.utility.key;
 
 import java.util.EnumSet;
 
