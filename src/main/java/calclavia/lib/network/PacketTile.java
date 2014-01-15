@@ -25,9 +25,9 @@ public class PacketTile extends PacketType
         return this.getPacket(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, args);
     }
 
-    public Packet getPacket(int id, TileEntity tileEntity, Object... args)
+    public Packet getPacketWithID(int id, TileEntity tileEntity, Object... args)
     {
-        return this.getPacket(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, id, args);
+        return this.getPacketWithID(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, id, args);
     }
 
     public Packet getPacket(int x, int y, int z, Object... args)
@@ -46,7 +46,7 @@ public class PacketTile extends PacketType
         return super.getPacket(newArgs.toArray());
     }
 
-    public Packet getPacket(int x, int y, int z, int id, Object... args)
+    public Packet getPacketWithID(int x, int y, int z, int id, Object... args)
     {
         List newArgs = new ArrayList();
 
