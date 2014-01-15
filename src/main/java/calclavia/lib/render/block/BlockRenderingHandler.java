@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
@@ -39,9 +40,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
 	{
-		if (block instanceof ICustomBlockRender)
+		if (block instanceof ICustomBlockRenderer)
 		{
-			((ICustomBlockRender) block).renderInventory(block, metadata, modelID, renderer);
+			((ICustomBlockRenderer) block).renderInventory(block, metadata, modelID, renderer);
 			return;
 		}
 
@@ -60,7 +61,24 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 			GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
 			GL11.glPushMatrix();
 			GL11.glTranslated(-0.5, -0.5, -0.5);
-			TileEntityRenderer.instance.renderTileEntityAt(renderTile, 0, 0, 0, 0);
+			TileEntitySpecialRenderer tesr = TileEntityRenderer.instance.getSpecialRendererForEntity(renderTile);
+
+			try
+			{
+				if (tesr instanceof ICustomBlockRenderer)
+				{
+					((ICustomBlockRenderer) tesr).renderDynamic(renderTile, block, metadata, modelID, renderer);
+				}
+				else
+				{
+					tesr.renderTileEntityAt(renderTile, 0, 0, 0, 0);
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
 			GL11.glPopMatrix();
 			GL11.glPopAttrib();
 		}
@@ -70,9 +88,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
 	{
-		if (block instanceof ICustomBlockRender)
+		if (block instanceof ICustomBlockRenderer)
 		{
-			return ((ICustomBlockRender) block).renderStatic(world, x, y, z, block, modelId, renderer);
+			return ((ICustomBlockRenderer) block).renderStatic(world, x, y, z, block, modelId, renderer);
 		}
 
 		return true;

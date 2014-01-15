@@ -50,9 +50,12 @@ public abstract class TileAdvanced extends TileEntity
 	@Override
 	public Block getBlockType()
 	{
-		if (this.blockType == null)
+		if (this.worldObj != null)
 		{
-			this.blockType = Block.blocksList[this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord)];
+			if (this.blockType == null)
+			{
+				this.blockType = Block.blocksList[this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord)];
+			}
 		}
 
 		return this.blockType;
