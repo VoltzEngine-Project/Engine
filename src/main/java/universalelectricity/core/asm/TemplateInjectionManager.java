@@ -2,12 +2,13 @@ package universalelectricity.core.asm;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
+
+import com.google.common.collect.HashBiMap;
 
 /**
  * 
@@ -99,8 +100,8 @@ public class TemplateInjectionManager
 		}
 	}
 
-	static HashMap<String, InjectionTemplate> tileTemplates = new HashMap<String, InjectionTemplate>();
-	static HashMap<String, InjectionTemplate> itemTemplates = new HashMap<String, InjectionTemplate>();
+	static HashBiMap<String, InjectionTemplate> tileTemplates = HashBiMap.create();
+	static HashBiMap<String, InjectionTemplate> itemTemplates = HashBiMap.create();
 
 	public static void registerTileTemplate(String name, Class templateClass, Class... templateInterfaces)
 	{

@@ -4,6 +4,7 @@
 package universalelectricity.core.asm;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
@@ -11,6 +12,8 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
+
+import com.google.common.collect.HashBiMap;
 
 import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.energy.IConductor;
@@ -100,7 +103,7 @@ public class UniversalTransformer implements IClassTransformer
 		return changed ? ASMHelper.createBytes(cnode, ClassWriter.COMPUTE_FRAMES) : bytes;
 	}
 
-	private boolean injectTemplate(ClassNode cnode, String flags, HashMap<String, InjectionTemplate> templates)
+	private boolean injectTemplate(ClassNode cnode, String flags, HashBiMap<String, InjectionTemplate> templates)
 	{
 		boolean changed = false;
 
@@ -110,8 +113,11 @@ public class UniversalTransformer implements IClassTransformer
 			{
 				if (template != null)
 				{
-					changed |= template.patch(cnode, false);
-					System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
+					if (CompatibilityType.get(templates.inverse().get(template)).isModuleEnabled)
+					{
+						changed |= template.patch(cnode, false);
+						System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
+					}
 				}
 			}
 		}
@@ -121,7 +127,7 @@ public class UniversalTransformer implements IClassTransformer
 
 			for (String separated : separatedFlags)
 			{
-				if (CompatibilityType.get(separated) != null)
+				if (CompatibilityType.get(separated) != null && CompatibilityType.get(separated).isModuleEnabled)
 				{
 					InjectionTemplate template = templates.get(separated);
 

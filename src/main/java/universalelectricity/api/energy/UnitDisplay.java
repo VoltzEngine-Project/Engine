@@ -15,8 +15,9 @@ public class UnitDisplay
 	{
 		AMPERE("Amp", "I"), AMP_HOUR("Amp Hour", "Ah"), VOLTAGE("Volt", "V"), WATT("Watt", "W"),
 		WATT_HOUR("Watt Hour", "Wh"), RESISTANCE("Ohm", "R"), CONDUCTANCE("Siemen", "S"),
-		JOULES("Joule", "J"), LITER("Liter", "L"), REDFLUX("RedstoneFlux", "Rf"),
-		MINECRAFT_JOULES("MinecraftJoules", "Mj"), ELECTRICAL_UNITS("ElectricalUnits", "Eu");
+		JOULES("Joule", "J"), LITER("Liter", "L"), NEWTON_METER("Newton Meter", "Nm"),
+		REDFLUX("Redstone-Flux", "Rf"), MINECRAFT_JOULES("Minecraft-Joules", "Mj"),
+		ELECTRICAL_UNITS("Electrical-Units", "Eu");
 
 		public String name;
 		public String symbol;

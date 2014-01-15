@@ -33,14 +33,14 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.ModMetadata;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = UELoader.ID, version = UniversalElectricity.VERSION, name = UELoader.NAME, dependencies = "before:ForgeMultipart;before:BuildCraft|Energy")
+@Mod(modid = UELoader.ID, version = UniversalElectricity.VERSION, name = UELoader.NAME, dependencies = "before:ForgeMultipart")
 @TransformerExclusions({ "universalelectricity.core.asm", "universalelectricity.core.asm.template" })
 public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 {
@@ -55,7 +55,7 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 	public static ModMetadata metadata;
 
 	@EventHandler
-	public void init(FMLInitializationEvent evt)
+	public void preInit(FMLPreInitializationEvent evt)
 	{
 		CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
 		/** Loads the configuration and sets all the values. */
