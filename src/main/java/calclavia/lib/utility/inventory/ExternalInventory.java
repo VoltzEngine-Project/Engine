@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
-public class TileInventory implements IInvBox
+public class ExternalInventory implements IInvBox
 {
 	/** Access able slots side all */
 	protected int[] openSlots;
@@ -21,19 +21,19 @@ public class TileInventory implements IInvBox
 	/** Default slot max count */
 	protected final int slots;
 
-	public TileInventory(TileEntity chest, IExternalInv inv, int slots)
+	public ExternalInventory(TileEntity chest, IExternalInv inv, int slots)
 	{
 		this.hostTile = chest;
 		this.slots = slots;
 		this.inv = inv;
 	}
 
-	public TileInventory(TileEntity chest, int slots)
+	public ExternalInventory(TileEntity chest, int slots)
 	{
 		this(chest, ((IExternalInv) chest), slots);
 	}
 
-	public TileInventory(Entity entity, int i)
+	public ExternalInventory(Entity entity, int i)
 	{
 		this.slots = i;
 		this.inv = (IExternalInv) entity;
