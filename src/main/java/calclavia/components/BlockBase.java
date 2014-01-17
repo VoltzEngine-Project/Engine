@@ -11,8 +11,8 @@ public class BlockBase extends Block
 	{
 		super(Calclavia.CONFIGURATION.getItem(name, id).getInt(id), Material.rock);
 		this.setCreativeTab(CreativeTabs.tabBlock);
-		this.setUnlocalizedName(CalclaviaComponents.PREFIX + name);
-		this.setTextureName(CalclaviaComponents.PREFIX + name);
+		this.setUnlocalizedName(CalclaviaLoader.PREFIX + name);
+		this.setTextureName(CalclaviaLoader.PREFIX + name);
 		this.setHardness(2f);
 	}
 }

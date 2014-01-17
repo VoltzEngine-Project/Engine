@@ -12,6 +12,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.vector.Vector3;
+import calclavia.components.CalclaviaLoader;
 import calclavia.lib.network.PacketTile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,6 +21,11 @@ public class BlockMulti extends BlockContainer
 {
 	public String textureName = null;
 	public PacketTile packetType;
+
+	public BlockMulti()
+	{
+		this(CalclaviaLoader.idManager.getNextBlockID());
+	}
 
 	public BlockMulti(int id)
 	{

@@ -17,8 +17,8 @@ public class ItemBase extends Item
 	public ItemBase(String name, int id)
 	{
 		super(Calclavia.CONFIGURATION.getItem(name, id).getInt(id));
-		this.setUnlocalizedName(CalclaviaComponents.PREFIX + name);
-		this.setTextureName(CalclaviaComponents.PREFIX + name);
+		this.setUnlocalizedName(CalclaviaLoader.PREFIX + name);
+		this.setTextureName(CalclaviaLoader.PREFIX + name);
 		this.setNoRepair();
 	}
 }
