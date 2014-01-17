@@ -209,12 +209,7 @@ public abstract class BlockAdvanced extends Block
 		/**
 		 * Try to extract.
 		 */
-		if (player.isSneaking())
-		{
-			return extractItem(inventory, slotID, player);
-		}
-
-		return false;
+		return extractItem(inventory, slotID, player);
 	}
 
 	public boolean insertCurrentItem(IInventory inventory, int slotID, EntityPlayer player)
