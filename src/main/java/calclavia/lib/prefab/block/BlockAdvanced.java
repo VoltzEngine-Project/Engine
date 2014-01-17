@@ -277,11 +277,11 @@ public abstract class BlockAdvanced extends Block
 			 */
 			if (isControlDown(player))
 			{
-				InventoryUtility.dropItemStack(player.worldObj, new Vector3(player), stackInInventory.splitStack(1));
+				InventoryUtility.dropItemStack(player.worldObj, new Vector3(player), stackInInventory.splitStack(1),0);
 			}
 			else
 			{
-				InventoryUtility.dropItemStack(player.worldObj, new Vector3(player), stackInInventory);
+				InventoryUtility.dropItemStack(player.worldObj, new Vector3(player), stackInInventory,0);
 				stackInInventory = null;
 			}
 
