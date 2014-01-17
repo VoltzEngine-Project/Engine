@@ -208,40 +208,43 @@ public class ExternalInventory implements IExternalInventoryBox
 	}
 
 	@Override
-	public NBTTagCompound save(NBTTagCompound nbt)
+	public void load(NBTTagCompound nbt)
 	{
-		NBTTagList itemList = new NBTTagList();
-		for (int s = 0; s < this.getContainedItems().length; ++s)
+		NBTTagList nbtList = nbt.getTagList("Items");
+
+		for (int i = 0; i < nbtList.tagCount(); ++i)
 		{
-			if (this.getContainedItems()[s] != null)
+			NBTTagCompound stackTag = (NBTTagCompound) nbtList.tagAt(i);
+			byte id = stackTag.getByte("Slot");
+
+			if (id >= 0 && id < this.getSizeInventory())
 			{
-				NBTTagCompound tag = new NBTTagCompound();
-				tag.setByte("Slot", (byte) s);
-				this.getContainedItems()[s].writeToNBT(tag);
-				itemList.appendTag(tag);
+				this.setInventorySlotContents(id, ItemStack.loadItemStackFromNBT(stackTag));
 			}
 		}
-		nbt.setTag("Items", itemList);
-		return nbt;
+
+		nbt.setTag("Items", nbtList);
 	}
 
 	@Override
-	public void load(NBTTagCompound nbt)
+	public NBTTagCompound save(NBTTagCompound nbt)
 	{
-		// chest inv reading
-		NBTTagList itemList = nbt.getTagList("Items");
+		NBTTagList nbtList = new NBTTagList();
 
-		for (int s = 0; s < itemList.tagCount(); ++s)
+		for (int i = 0; i < this.getSizeInventory(); ++i)
 		{
-			NBTTagCompound tag = (NBTTagCompound) itemList.tagAt(s);
-			int slotID = tag.getByte("Slot") & 255;
-
-			if (slotID >= 0 && slotID < this.getContainedItems().length)
+			if (this.getStackInSlot(i) != null)
 			{
-				this.getContainedItems()[slotID] = ItemStack.loadItemStackFromNBT(tag);
+				NBTTagCompound var4 = new NBTTagCompound();
+				var4.setByte("Slot", (byte) i);
+				this.getStackInSlot(i).writeToNBT(var4);
+				nbtList.appendTag(var4);
 			}
 		}
 
+		nbt.setTag("Items", nbtList);
+
+		return nbt;
 	}
 
 	@Override
