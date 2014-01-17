@@ -3,9 +3,9 @@ package calclavia.lib.utility.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 
-public interface IExternalInv
+public interface IExternalInventory
 {
-	public IInvBox getInventory();
+	public IExternalInventoryBox getInventory();
 
 	public boolean canStore(ItemStack stack, int slot, ForgeDirection side);
 

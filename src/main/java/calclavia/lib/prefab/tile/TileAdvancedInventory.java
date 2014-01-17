@@ -17,17 +17,17 @@ import calclavia.lib.access.GroupRegistry;
 import calclavia.lib.access.ISpecialAccess;
 import calclavia.lib.access.Nodes;
 import calclavia.lib.utility.inventory.ExternalInventory;
-import calclavia.lib.utility.inventory.IExternalInv;
-import calclavia.lib.utility.inventory.IInvBox;
+import calclavia.lib.utility.inventory.IExternalInventory;
+import calclavia.lib.utility.inventory.IExternalInventoryBox;
 
 /**
  * Prefab for simple object who only need basic inv support and nothing more
  * 
  * @author Darkguardsman
  */
-public class TileAdvancedInventory extends TileAdvanced implements IExternalInv, ISidedInventory, ISpecialAccess
+public class TileAdvancedInventory extends TileAdvanced implements IExternalInventory, ISidedInventory, ISpecialAccess
 {
-	protected IInvBox inventory;
+	protected IExternalInventoryBox inventory;
 	protected boolean lockInv;
 	protected int invSlots = 1;
 	private Vector3 thisPos;
@@ -50,7 +50,7 @@ public class TileAdvancedInventory extends TileAdvanced implements IExternalInv,
 	}
 
 	@Override
-	public IInvBox getInventory()
+	public IExternalInventoryBox getInventory()
 	{
 		if (inventory == null)
 		{

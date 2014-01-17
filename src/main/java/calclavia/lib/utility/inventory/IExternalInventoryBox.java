@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 /** @author DarkGuardsman */
-public interface IInvBox extends ISidedInventory
+public interface IExternalInventoryBox extends ISidedInventory
 {
 	/** Gets the inventory array. ForgeDirection.UNKOWN must return all sides */
 	public ItemStack[] getContainedItems();
