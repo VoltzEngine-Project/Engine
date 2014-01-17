@@ -15,7 +15,7 @@ import calclavia.lib.utility.inventory.IExternalInventoryBox;
  * 
  * @author Darkguardsman
  */
-public class TileExternalInventory extends TileAdvanced implements IExternalInventory, ISidedInventory
+public class TileElectricalInventory extends TileElectrical implements IExternalInventory, ISidedInventory
 {
 	protected IExternalInventoryBox inventory;
 	protected int maxSlots = 1;
