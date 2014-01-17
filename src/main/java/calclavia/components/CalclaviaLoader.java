@@ -21,6 +21,7 @@ import calclavia.lib.flag.FlagRegistry;
 import calclavia.lib.flag.ModFlag;
 import calclavia.lib.multiblock.link.BlockMulti;
 import calclavia.lib.multiblock.link.TileMultiBlockPart;
+import calclavia.lib.network.PacketTile;
 import calclavia.lib.ore.OreGenBase;
 import calclavia.lib.ore.OreGenReplaceStone;
 import calclavia.lib.ore.OreGenerator;
@@ -144,19 +145,21 @@ public class CalclaviaLoader
 	public static OreGenBase generationOreCopper, generationOreTin;
 	public static String CHANNEL = "calclaviacore";
 
-    public static final IDManager idManager = new IDManager(2467, 12450);
+	public static final IDManager idManager = new IDManager(2467, 12450);
 	public static final ContentRegistry contentRegistry = new ContentRegistry(Calclavia.CONFIGURATION, ID);
+	public static final PacketTile PACKET_TILE = new PacketTile(CHANNEL);
 
 	/**
 	 * Calclavia Core Blocks for mods
 	 */
-	
+
 	public static BlockMulti blockMulti;
 
 	@EventHandler
 	public void init(FMLPreInitializationEvent evt)
 	{
 		blockMulti = (BlockMulti) contentRegistry.createTile(BlockMulti.class, TileMultiBlockPart.class);
+		blockMulti.setPacketType(PACKET_TILE);
 	}
 
 	@EventHandler
