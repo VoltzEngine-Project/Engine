@@ -2,16 +2,15 @@ package calclavia.lib.prefab.block;
 
 import java.lang.reflect.Method;
 
-import universalelectricity.api.vector.Vector3;
-import calclavia.lib.utility.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import universalelectricity.api.vector.Vector3;
 import buildcraft.api.tools.IToolWrench;
-import codechicken.multipart.ControlKeyModifer;
+import calclavia.lib.utility.inventory.InventoryUtility;
 
 /**
  * An advanced block class that is to be extended for wrenching capabilities.
@@ -232,7 +231,7 @@ public abstract class BlockAdvanced extends Block
 					/**
 					 * If control is down, insert one only.
 					 */
-					if (ControlKeyModifer.isControlDown(player))
+					if (isControlDown(player))
 					{
 						if (stackInInventory == null)
 						{
@@ -281,7 +280,7 @@ public abstract class BlockAdvanced extends Block
 			/**
 			 * If control is down, insert one only.
 			 */
-			if (ControlKeyModifer.isControlDown(player))
+			if (isControlDown(player))
 			{
 				InventoryUtility.dropItemStack(player.worldObj, new Vector3(player), stackInInventory.splitStack(1));
 			}
@@ -302,4 +301,8 @@ public abstract class BlockAdvanced extends Block
 		return false;
 	}
 
+	public boolean isControlDown(EntityPlayer player)
+	{
+		return false;
+	}
 }
