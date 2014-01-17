@@ -1,6 +1,6 @@
 package calclavia.lib.network;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Applied to all classes that can send packets. For ease of use.
@@ -10,5 +10,5 @@ import java.util.ArrayList;
  */
 public interface IPacketSender
 {
-	public ArrayList getPacketData(int type);
+	public List getPacketData(int type);
 }
