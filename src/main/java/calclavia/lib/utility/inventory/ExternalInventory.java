@@ -210,6 +210,8 @@ public class ExternalInventory implements IExternalInventoryBox
 	@Override
 	public void load(NBTTagCompound nbt)
 	{
+		this.clear();
+
 		NBTTagList nbtList = nbt.getTagList("Items");
 
 		for (int i = 0; i < nbtList.tagCount(); ++i)
