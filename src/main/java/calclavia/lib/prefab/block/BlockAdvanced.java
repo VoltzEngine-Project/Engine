@@ -2,12 +2,16 @@ package calclavia.lib.prefab.block;
 
 import java.lang.reflect.Method;
 
+import universalelectricity.api.vector.Vector3;
+import calclavia.lib.utility.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import buildcraft.api.tools.IToolWrench;
+import codechicken.multipart.ControlKeyModifer;
 
 /**
  * An advanced block class that is to be extended for wrenching capabilities.
@@ -181,6 +185,121 @@ public abstract class BlockAdvanced extends Block
 	public boolean onSneakUseWrench(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		return this.onUseWrench(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ);
+	}
+
+	/**
+	 * Player-Inventory interaction methods.
+	 */
+	public boolean interactCurrentItem(IInventory inventory, int slotID, EntityPlayer player)
+	{
+		ItemStack stackInInventory = inventory.getStackInSlot(slotID);
+		ItemStack current = player.inventory.getCurrentItem();
+
+		/**
+		 * Try to insert.
+		 */
+		if (current != null)
+		{
+			if (stackInInventory == null || stackInInventory.isItemEqual(current))
+			{
+				return insertCurrentItem(inventory, slotID, player);
+
+			}
+		}
+
+		/**
+		 * Try to extract.
+		 */
+		if (player.isSneaking())
+		{
+			return extractItem(inventory, slotID, player);
+		}
+
+		return false;
+	}
+
+	public boolean insertCurrentItem(IInventory inventory, int slotID, EntityPlayer player)
+	{
+		ItemStack stackInInventory = inventory.getStackInSlot(slotID);
+		ItemStack current = player.inventory.getCurrentItem();
+
+		if (current != null)
+		{
+			if (stackInInventory == null || stackInInventory.isItemEqual(current))
+			{
+				if (inventory.isItemValidForSlot(slotID, current))
+				{
+					/**
+					 * If control is down, insert one only.
+					 */
+					if (ControlKeyModifer.isControlDown(player))
+					{
+						if (stackInInventory == null)
+						{
+							inventory.setInventorySlotContents(slotID, current.splitStack(1));
+						}
+						else
+						{
+							stackInInventory.stackSize++;
+							current.stackSize--;
+						}
+					}
+					else
+					{
+						if (stackInInventory == null)
+						{
+							inventory.setInventorySlotContents(slotID, current);
+						}
+						else
+						{
+							stackInInventory.stackSize += current.stackSize;
+							current.stackSize = 0;
+						}
+
+						current = null;
+					}
+
+					if (current == null || current.stackSize <= 0)
+					{
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+					}
+
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public boolean extractItem(IInventory inventory, int slotID, EntityPlayer player)
+	{
+		ItemStack stackInInventory = inventory.getStackInSlot(slotID);
+
+		if (stackInInventory != null)
+		{
+			/**
+			 * If control is down, insert one only.
+			 */
+			if (ControlKeyModifer.isControlDown(player))
+			{
+				InventoryUtility.dropItemStack(player.worldObj, new Vector3(player), stackInInventory.splitStack(1));
+			}
+			else
+			{
+				InventoryUtility.dropItemStack(player.worldObj, new Vector3(player), stackInInventory);
+				stackInInventory = null;
+			}
+
+			if (stackInInventory == null || stackInInventory.stackSize <= 0)
+			{
+				inventory.setInventorySlotContents(slotID, null);
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 }
