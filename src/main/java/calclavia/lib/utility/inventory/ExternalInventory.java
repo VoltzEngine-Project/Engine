@@ -208,7 +208,7 @@ public class ExternalInventory implements IExternalInventoryBox
 	}
 
 	@Override
-	public NBTTagCompound saveInv(NBTTagCompound nbt)
+	public NBTTagCompound save(NBTTagCompound nbt)
 	{
 		NBTTagList itemList = new NBTTagList();
 		for (int s = 0; s < this.getContainedItems().length; ++s)
@@ -226,7 +226,7 @@ public class ExternalInventory implements IExternalInventoryBox
 	}
 
 	@Override
-	public void loadInv(NBTTagCompound nbt)
+	public void load(NBTTagCompound nbt)
 	{
 		// chest inv reading
 		NBTTagList itemList = nbt.getTagList("Items");

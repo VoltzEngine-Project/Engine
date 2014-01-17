@@ -11,10 +11,10 @@ public interface IExternalInventoryBox extends ISidedInventory
 	public ItemStack[] getContainedItems();
 
 	/** Called to save the inventory array */
-	public NBTTagCompound saveInv(NBTTagCompound tag);
+	public NBTTagCompound save(NBTTagCompound tag);
 
 	/** Called to load the inventory array */
-	public void loadInv(NBTTagCompound tag);
+	public void load(NBTTagCompound tag);
 
 	/** Dels all the items in the inventory */
 	public void clear();
