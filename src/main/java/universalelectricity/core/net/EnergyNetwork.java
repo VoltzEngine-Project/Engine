@@ -192,9 +192,12 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	{
 		conductor.setNetwork(this);
 
-		for (int i = 0; i < conductor.getConnections().length; i++)
+		if (conductor.getConnections() != null)
 		{
-			reconstructHandler(conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
+			for (int i = 0; i < conductor.getConnections().length; i++)
+			{
+				reconstructHandler(conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
+			}
 		}
 
 		this.resistance += conductor.getResistance();
