@@ -25,29 +25,28 @@ public abstract class BlockRotatable extends BlockTile implements IRotatableBloc
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
 	{
-		int angle = MathHelper.floor_double((entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int change = 3;
+		world.setBlockMetadataWithNotify(x, y, z, determineOrientation(world, x, y, z, entityLiving), 3);
+	}
 
-		switch (angle)
+	public int determineOrientation(World world, int x, int y, int z, EntityLivingBase entityLiving)
+	{
+		if (MathHelper.abs((float) entityLiving.posX - (float) x) < 2.0F && MathHelper.abs((float) entityLiving.posZ - (float) z) < 2.0F)
 		{
-			case 0:
-				change = 2;
-				break;
+			double d0 = entityLiving.posY + 1.82D - (double) entityLiving.yOffset;
 
-			case 1:
-				change = 5;
-				break;
+			if ((rotationMask & (1 << 1)) != 0 && d0 - (double) y > 2.0D)
+			{
+				return 1;
+			}
 
-			case 2:
-				change = 3;
-				break;
-
-			case 3:
-				change = 4;
-				break;
+			if ((rotationMask & (1 << 0)) != 0 && (double) y - d0 > 0.0D)
+			{
+				return 0;
+			}
 		}
 
-		world.setBlockMetadataWithNotify(x, y, z, change, 3);
+		int l = MathHelper.floor_double((double) (entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		return l == 0 ? 2 : (l == 1 ? 5 : (l == 2 ? 3 : (l == 3 ? 4 : 0)));
 	}
 
 	@Override
