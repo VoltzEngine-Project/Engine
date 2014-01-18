@@ -15,7 +15,7 @@ import net.minecraftforge.common.ForgeDirection;
  */
 public abstract class BlockRotatable extends BlockTile implements IRotatableBlock
 {
-	protected byte rotationMask = 60;
+	protected byte rotationMask = 0b111100;
 
 	public BlockRotatable(int id, Material material)
 	{
@@ -54,6 +54,17 @@ public abstract class BlockRotatable extends BlockTile implements IRotatableBloc
 	public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		return this.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
+	}
+
+	@Override
+	public boolean onSneakUseWrench(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
+		if (!world.isRemote)
+		{
+			world.setBlockMetadataWithNotify(x, y, z, side, 3);
+		}
+
+		return true;
 	}
 
 	@Override
