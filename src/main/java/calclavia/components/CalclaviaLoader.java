@@ -19,8 +19,8 @@ import calclavia.lib.content.IDManager;
 import calclavia.lib.flag.CommandFlag;
 import calclavia.lib.flag.FlagRegistry;
 import calclavia.lib.flag.ModFlag;
-import calclavia.lib.multiblock.link.BlockMulti;
-import calclavia.lib.multiblock.link.TileMultiBlockPart;
+import calclavia.lib.multiblock.fake.BlockMultiFake;
+import calclavia.lib.multiblock.fake.TileMultiBlockPart;
 import calclavia.lib.network.PacketTile;
 import calclavia.lib.ore.OreGenBase;
 import calclavia.lib.ore.OreGenReplaceStone;
@@ -153,12 +153,12 @@ public class CalclaviaLoader
 	 * Calclavia Core Blocks for mods
 	 */
 
-	public static BlockMulti blockMulti;
+	public static BlockMultiFake blockMulti;
 
 	@EventHandler
 	public void init(FMLPreInitializationEvent evt)
 	{
-		blockMulti = (BlockMulti) contentRegistry.createTile(BlockMulti.class, TileMultiBlockPart.class);
+		blockMulti = (BlockMultiFake) contentRegistry.createTile(BlockMultiFake.class, TileMultiBlockPart.class);
 		blockMulti.setPacketType(PACKET_TILE);
 	}
 

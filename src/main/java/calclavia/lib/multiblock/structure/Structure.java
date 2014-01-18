@@ -8,7 +8,7 @@ import universalelectricity.api.net.IConnector;
 import universalelectricity.core.net.ConnectionPathfinder;
 
 /**
- * A Multiblock Structure Network
+ * A network-based multiblock freeform structure.
  * 
  * @author Calclavia
  * 

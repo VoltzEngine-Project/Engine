@@ -1,4 +1,4 @@
-package calclavia.lib.multiblock.link;
+package calclavia.lib.multiblock.fake;
 
 import java.util.Random;
 
@@ -17,31 +17,38 @@ import calclavia.lib.network.PacketTile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockMulti extends BlockContainer
+/**
+ * A fake-block based multiblock structure uses fake invisible blocks that are automatically placed
+ * to create block bounds.
+ * 
+ * @author Calclavia
+ * 
+ */
+public class BlockMultiFake extends BlockContainer
 {
 	public String textureName = null;
 	public PacketTile packetType;
 
-	public BlockMulti()
+	public BlockMultiFake()
 	{
 		this(CalclaviaLoader.idManager.getNextBlockID());
 	}
 
-	public BlockMulti(int id)
+	public BlockMultiFake(int id)
 	{
 		super(id, UniversalElectricity.machine);
 		this.setHardness(0.8F);
 		this.setUnlocalizedName("multiBlock");
 	}
 
-	public BlockMulti setPacketType(PacketTile packetType)
+	public BlockMultiFake setPacketType(PacketTile packetType)
 	{
 		this.packetType = packetType;
 		return this;
 	}
 
 	@Override
-	public BlockMulti setTextureName(String name)
+	public BlockMultiFake setTextureName(String name)
 	{
 		this.textureName = name;
 		return this;

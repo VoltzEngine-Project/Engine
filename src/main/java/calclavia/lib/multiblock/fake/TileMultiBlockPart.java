@@ -1,4 +1,4 @@
-package calclavia.lib.multiblock.link;
+package calclavia.lib.multiblock.fake;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,7 +46,7 @@ public class TileMultiBlockPart extends TileEntity implements IPacketReceiver
 	{
 		if (this.mainBlockPosition != null)
 		{
-			return ((BlockMulti) this.getBlockType()).packetType.getPacket(this, this.mainBlockPosition.intX(), this.mainBlockPosition.intY(), this.mainBlockPosition.intZ());
+			return ((BlockMultiFake) this.getBlockType()).packetType.getPacket(this, this.mainBlockPosition.intX(), this.mainBlockPosition.intY(), this.mainBlockPosition.intZ());
 		}
 
 		return null;
@@ -65,7 +65,7 @@ public class TileMultiBlockPart extends TileEntity implements IPacketReceiver
 		}
 	}
 
-	public void onBlockRemoval(BlockMulti block)
+	public void onBlockRemoval(BlockMultiFake block)
 	{
 		if (this.getMainBlock() != null)
 		{

@@ -1,4 +1,4 @@
-package calclavia.lib.multiblock.link;
+package calclavia.lib.multiblock.fake;
 
 import universalelectricity.api.vector.Vector3;
 
