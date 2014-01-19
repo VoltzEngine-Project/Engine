@@ -42,6 +42,8 @@ public interface INetwork<N, C, A>
 	 * @return True to leave the network in the ticker. False to remove the network from the ticker.
 	 */
 	public boolean continueUpdate();
+	
+	public void reconstruct();
 
 	/**
 	 * Updates the network. Called by the {NetworkTickHandler}.
