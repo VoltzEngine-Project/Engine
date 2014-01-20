@@ -19,23 +19,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 
  * @author DarkGuardsman
  */
-public interface IExtraInfo
+public interface IContentInfo
 {
-
-	/** Does this object need to generate a settings config */
-	public boolean hasExtraConfigs();
-
-	/**
-	 * Loads the config file for this block. This is a single config file that is tied to just this
-	 * block alone. Anything can be stored in the config file but its suggested to use it for
-	 * advanced settings for the block/tile. Things like power, update rate, optional features,
-	 * graphics, or crafting cost
-	 */
-	public void loadExtraConfigs(Configuration config);
-
-	public static interface IExtraBlockInfo extends IExtraInfo, ITileEntityProvider
+	public static interface IExtraBlockInfo extends IContentInfo, ITileEntityProvider
 	{
-
 		/** Loads the names used to reference this item in a recipe */
 		public void loadOreNames();
 
@@ -46,12 +33,7 @@ public interface IExtraInfo
 		public void getClientTileEntityRenderers(List<Pair<Class<? extends TileEntity>, TileEntitySpecialRenderer>> list);
 	}
 
-	public static interface IExtraTileEntityInfo extends IExtraInfo
-	{
-
-	}
-
-	public static interface IExtraItemInfo extends IExtraInfo
+	public static interface IExtraItemInfo extends IContentInfo
 	{
 		/** Loads the names used to reference this item in a recipe */
 		public void loadOreNames();

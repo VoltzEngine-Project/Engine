@@ -12,8 +12,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.Configuration;
 import calclavia.lib.Calclavia;
-import calclavia.lib.content.IExtraInfo.IExtraBlockInfo;
-import calclavia.lib.content.IExtraInfo.IExtraItemInfo;
+import calclavia.lib.content.IContentInfo.IExtraBlockInfo;
+import calclavia.lib.content.IContentInfo.IExtraItemInfo;
 
 import com.builtbroken.common.Pair;
 
@@ -127,15 +127,8 @@ public class ContentRegistry
 	 */
 	public void finishCreation(Block block, Class<? extends TileEntity> tileClass)
 	{
-		if (block instanceof IExtraInfo)
+		if (block instanceof IContentInfo)
 		{
-			if (((IExtraInfo) block).hasExtraConfigs())
-			{
-				Configuration extraBlockConfig = new Configuration(new File(Loader.instance().getConfigDir(), "objects/blocks/" + block.getUnlocalizedName() + ".cfg"));
-				extraBlockConfig.load();
-				((IExtraInfo) block).loadExtraConfigs(extraBlockConfig);
-				extraBlockConfig.save();
-			}
 			if (block instanceof IExtraBlockInfo)
 			{
 				((IExtraBlockInfo) block).loadOreNames();
@@ -210,15 +203,8 @@ public class ContentRegistry
 			{
 				items.put(item, name);
 				GameRegistry.registerItem(item, name, modID);
-				if (item instanceof IExtraInfo)
+				if (item instanceof IContentInfo)
 				{
-					if (((IExtraInfo) item).hasExtraConfigs())
-					{
-						Configuration extraBlockConfig = new Configuration(new File(Loader.instance().getConfigDir(), "objects/items/" + item.getUnlocalizedName() + ".cfg"));
-						extraBlockConfig.load();
-						((IExtraInfo) item).loadExtraConfigs(extraBlockConfig);
-						extraBlockConfig.save();
-					}
 					if (item instanceof IExtraItemInfo)
 					{
 						((IExtraItemInfo) item).loadOreNames();

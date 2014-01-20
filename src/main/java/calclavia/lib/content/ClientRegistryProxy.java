@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import calclavia.lib.Calclavia;
-import calclavia.lib.content.IExtraInfo.IExtraBlockInfo;
+import calclavia.lib.content.IContentInfo.IExtraBlockInfo;
 
 import com.builtbroken.common.Pair;
 
