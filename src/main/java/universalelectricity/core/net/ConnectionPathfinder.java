@@ -23,10 +23,10 @@ public class ConnectionPathfinder<C extends IConnector>
 	/** The resulted path found by the pathfinder. Could be null if no path was found. */
 	public final Set<C> results = new LinkedHashSet<C>();
 
-	private final Class<? extends IConnector> connectorClass;
+	protected final Class<? extends IConnector> connectorClass;
 
-	private final C targetConnector;
-	private final List<C> ignoreConnector;
+	protected final C targetConnector;
+	protected final List<C> ignoreConnector;
 
 	public ConnectionPathfinder(C targetConnector, C... ignoreConnector)
 	{
@@ -77,13 +77,16 @@ public class ConnectionPathfinder<C extends IConnector>
 
 		if (currentNode != null)
 		{
-			for (int i = 0; i < currentNode.getConnections().length; i++)
+			if (currentNode.getConnections() != null)
 			{
-				Object obj = currentNode.getConnections()[i];
-
-				if (obj != null && connectorClass.isAssignableFrom(obj.getClass()) && !this.ignoreConnector.contains(obj))
+				for (int i = 0; i < currentNode.getConnections().length; i++)
 				{
-					connectedNodes.add((C) obj);
+					Object obj = currentNode.getConnections()[i];
+
+					if (obj != null && connectorClass.isAssignableFrom(obj.getClass()) && !this.ignoreConnector.contains(obj))
+					{
+						connectedNodes.add((C) obj);
+					}
 				}
 			}
 		}
