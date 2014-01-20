@@ -46,7 +46,7 @@ public class VectorHelper
 
 	public static TileEntity getTileEntityFromSide(World world, Vector3 position, ForgeDirection side)
 	{
-		return position.clone().modifyPositionFromSide(side).getTileEntity(world);
+		return position.clone().translate(side).getTileEntity(world);
 	}
 
 }

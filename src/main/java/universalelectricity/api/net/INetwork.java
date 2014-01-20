@@ -12,7 +12,7 @@ import java.util.Set;
  * @param <C> - the class/interface Type which makes up the network's connector set
  * @param <A> - the class/interface Type which makes up the network's node set
  */
-public interface INetwork<N extends INetwork, C extends IConnector, A> extends IUpdate
+public interface INetwork<N extends INetwork, C extends IConnector, A> extends IGrid<N, A>, IUpdate
 {
 	public void addConnector(C connector);
 
@@ -25,21 +25,7 @@ public interface INetwork<N extends INetwork, C extends IConnector, A> extends I
 	 */
 	public Set<C> getConnectors();
 
-	/**
-	 * * @return The list of nodes in the network.
-	 */
-	public Set<A> getNodes();
-
 	public void reconstruct();
-
-	/**
-	 * Creates a new network that makes up the current network and the network defined in the
-	 * parameters. Be sure to refresh the new network inside this method.
-	 * 
-	 * @param network - network to merge
-	 * @return The new network instance.
-	 */
-	public N merge(N network);
 
 	/**
 	 * Splits a network by removing a conductor referenced in the parameter. It will then create and

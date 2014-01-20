@@ -17,13 +17,8 @@ import universalelectricity.api.net.INetwork;
  * @author Calclavia
  * 
  */
-public abstract class Network<N extends INetwork, C extends IConnector, A> implements INetwork<N, C, A>
+public abstract class Network<N extends INetwork, C extends IConnector, A> extends Grid<N, C, A> implements INetwork<N, C, A>
 {
-	/**
-	 * A set of handlers that handles events from the network.
-	 */
-	private final Set<A> handlerSet = new LinkedHashSet<A>();
-
 	/**
 	 * A set of connectors (e.g conductors).
 	 */
@@ -47,12 +42,6 @@ public abstract class Network<N extends INetwork, C extends IConnector, A> imple
 		return this.connectorSet;
 	}
 
-	@Override
-	public Set<A> getNodes()
-	{
-		return this.handlerSet;
-	}
-
 	/**
 	 * Merges two networks together.
 	 * 
@@ -62,7 +51,7 @@ public abstract class Network<N extends INetwork, C extends IConnector, A> imple
 	@Override
 	public N merge(N network)
 	{
-		if (this.getClass().isAssignableFrom(network.getClass()) && network != this)
+		if (network != null && network.getClass().isAssignableFrom(this.getClass()) && network != this)
 		{
 			N newNetwork = newInstance();
 			newNetwork.getConnectors().addAll(this.getConnectors());
@@ -176,8 +165,6 @@ public abstract class Network<N extends INetwork, C extends IConnector, A> imple
 			newNetwork.reconstruct();
 		}
 	}
-
-	public abstract N newInstance();
 
 	@Override
 	public String toString()
