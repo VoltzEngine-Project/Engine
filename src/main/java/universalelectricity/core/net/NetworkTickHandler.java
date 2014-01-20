@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import universalelectricity.api.net.INetwork;
+import universalelectricity.api.net.IUpdate;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -20,8 +21,8 @@ public class NetworkTickHandler implements ITickHandler
 {
 	public static final NetworkTickHandler INSTANCE = new NetworkTickHandler();
 
-	private final LinkedHashSet<INetwork> toAddNetworks = new LinkedHashSet<INetwork>();
-	private final LinkedHashSet<INetwork> networks = new LinkedHashSet<INetwork>();
+	private final LinkedHashSet<IUpdate> toAddUpdaters = new LinkedHashSet<IUpdate>();
+	private final LinkedHashSet<IUpdate> updaters = new LinkedHashSet<IUpdate>();
 
 	/**
 	 * For queuing Forge events to be invoked the next tick.
@@ -29,13 +30,13 @@ public class NetworkTickHandler implements ITickHandler
 	private final LinkedHashSet<Event> toAddEvents = new LinkedHashSet<Event>();
 	private final LinkedHashSet<Event> queuedEvents = new LinkedHashSet<Event>();
 
-	public static void addNetwork(INetwork network)
+	public static void addNetwork(IUpdate updater)
 	{
-		synchronized (INSTANCE.toAddNetworks)
+		synchronized (INSTANCE.toAddUpdaters)
 		{
-			if (!INSTANCE.networks.contains(network))
+			if (!INSTANCE.updaters.contains(updater))
 			{
-				INSTANCE.toAddNetworks.add(network);
+				INSTANCE.toAddUpdaters.add(updater);
 			}
 		}
 	}
@@ -63,14 +64,14 @@ public class NetworkTickHandler implements ITickHandler
 		/**
 		 * Network
 		 */
-		this.networks.addAll(this.toAddNetworks);
-		this.toAddNetworks.clear();
+		this.updaters.addAll(this.toAddUpdaters);
+		this.toAddUpdaters.clear();
 
-		Iterator<INetwork> networkIt = this.networks.iterator();
+		Iterator<IUpdate> networkIt = this.updaters.iterator();
 
 		while (networkIt.hasNext())
 		{
-			INetwork network = networkIt.next();
+			IUpdate network = networkIt.next();
 
 			if (network.canUpdate())
 			{
@@ -112,8 +113,8 @@ public class NetworkTickHandler implements ITickHandler
 
 	public void clearNetworks()
 	{
-		toAddNetworks.clear();
-		networks.clear();
+		toAddUpdaters.clear();
+		updaters.clear();
 	}
 
 }

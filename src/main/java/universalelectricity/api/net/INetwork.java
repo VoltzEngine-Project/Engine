@@ -12,7 +12,7 @@ import java.util.Set;
  * @param <C> - the class/interface Type which makes up the network's connector set
  * @param <A> - the class/interface Type which makes up the network's node set
  */
-public interface INetwork<N, C, A>
+public interface INetwork<N extends INetwork, C extends IConnector, A> extends IUpdate
 {
 	public void addConnector(C connector);
 
@@ -30,25 +30,7 @@ public interface INetwork<N, C, A>
 	 */
 	public Set<A> getNodes();
 
-	/**
-	 * Can the network update?
-	 * 
-	 * @return True if the network can update, otherwise the network tick handler will remove the
-	 * network from the tick list.
-	 */
-	public boolean canUpdate();
-
-	/**
-	 * @return True to leave the network in the ticker. False to remove the network from the ticker.
-	 */
-	public boolean continueUpdate();
-	
 	public void reconstruct();
-
-	/**
-	 * Updates the network. Called by the {NetworkTickHandler}.
-	 */
-	public void update();
 
 	/**
 	 * Creates a new network that makes up the current network and the network defined in the

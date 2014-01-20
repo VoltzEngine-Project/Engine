@@ -81,7 +81,7 @@ public class ConnectionPathfinder<C extends IConnector>
 			{
 				Object obj = currentNode.getConnections()[i];
 
-				if (obj.isAssignableFrom(connectorClass) && !this.ignoreConnector.contains(obj))
+				if (connectorClass.isAssignableFrom(obj.getClass()) && !this.ignoreConnector.contains(obj))
 				{
 					connectedNodes.add((C) obj);
 				}

@@ -225,21 +225,11 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	@Override
 	public IEnergyNetwork merge(IEnergyNetwork network)
 	{
-		if (network instanceof EnergyNetwork && network != this)
+		long newBuffer = getBuffer() + ((EnergyNetwork) network).getBuffer();
+		IEnergyNetwork newNetwork = super.merge(network);
+
+		if (newNetwork != null)
 		{
-			long newBuffer = this.getBuffer();
-			newBuffer += ((EnergyNetwork) network).getBuffer();
-			EnergyNetwork newNetwork = new EnergyNetwork();
-			newNetwork.getConnectors().addAll(this.getConnectors());
-			newNetwork.getConnectors().addAll(network.getConnectors());
-
-			network.getConnectors().clear();
-			network.getNodes().clear();
-			this.getConnectors().clear();
-			this.getNodes().clear();
-
-			newNetwork.reconstruct();
-
 			newNetwork.setBuffer(newBuffer);
 			return newNetwork;
 		}
@@ -247,96 +237,29 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 		return null;
 	}
 
+	/**
+	 * Temporary variable used through these two methods.
+	 */
+	private long energyPerWire;
+
 	@Override
 	public void split(IConductor splitPoint)
 	{
-		this.removeConnector(splitPoint);
-		this.reconstruct();
-
-		long energyPerWire = this.energyBuffer / Math.max(this.getConnectors().size(), 1);
-
-		/**
-		 * Loop through the connected blocks and attempt to see if there are connections between the
-		 * two points elsewhere.
-		 */
-		Object[] connectedBlocks = splitPoint.getConnections();
-
-		for (int i = 0; i < connectedBlocks.length; i++)
-		{
-			Object connectedBlockA = connectedBlocks[i];
-
-			if (connectedBlockA instanceof IConnector)
-			{
-				for (int ii = 0; ii < connectedBlocks.length; ii++)
-				{
-					final Object connectedBlockB = connectedBlocks[ii];
-
-					if (connectedBlockA != connectedBlockB && connectedBlockB instanceof IConnector)
-					{
-						ConnectionPathfinder finder = new ConnectionPathfinder((IConnector) connectedBlockB, splitPoint);
-						finder.findNodes((IConnector) connectedBlockA);
-
-						if (finder.results.size() <= 0)
-						{
-							try
-							{
-								/**
-								 * The connections A and B are not connected anymore. Give them both
-								 * a new common network.
-								 */
-								EnergyNetwork newNetwork = new EnergyNetwork();
-
-								for (IConnector node : finder.closedSet)
-								{
-									if (node != splitPoint && node instanceof IConductor)
-									{
-										newNetwork.addConnector((IConductor) node);
-										this.removeConnector((IConductor) node);
-										newNetwork.energyBuffer += energyPerWire;
-										this.energyBuffer -= energyPerWire;
-									}
-								}
-								newNetwork.reconstruct();
-							}
-							catch (Exception e)
-							{
-								e.printStackTrace();
-							}
-
-						}
-					}
-				}
-			}
-		}
+		energyPerWire = this.energyBuffer / Math.max(this.getConnectors().size() - 1, 1);
+		super.split(splitPoint);
 	}
 
 	@Override
-	public void split(IConductor connectorA, IConductor connectorB)
+	public void onSplit(IEnergyNetwork newNetwork)
 	{
-		this.reconstruct();
+		newNetwork.setBuffer(newNetwork.getBuffer() + energyPerWire);
+		energyBuffer -= energyPerWire;
+	}
 
-		/** Check if connectorA connects with connectorB. */
-		ConnectionPathfinder finder = new ConnectionPathfinder(connectorB);
-		finder.findNodes(connectorA);
-
-		if (finder.results.size() <= 0)
-		{
-			/**
-			 * The connections A and B are not connected anymore. Give them both a new common
-			 * network.
-			 */
-			IEnergyNetwork newNetwork = EnergyNetworkLoader.getNewNetwork();
-
-			for (IConnector node : finder.closedSet)
-			{
-				if (node instanceof IConductor)
-				{
-					newNetwork.addConnector((IConductor) node);
-				}
-			}
-
-			newNetwork.reconstruct();
-		}
+	@Override
+	public IEnergyNetwork newInstance()
+	{
+		return EnergyNetworkLoader.getNewNetwork();
 	}
 
 	@Override
@@ -419,4 +342,5 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 	{
 		this.conductorBuffer.put(conductor, buffer);
 	}
+
 }
