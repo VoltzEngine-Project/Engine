@@ -15,27 +15,31 @@ import universalelectricity.api.net.IConnector;
  * 
  * @author Calclavia
  */
-public class ConnectionPathfinder
+public class ConnectionPathfinder<C extends IConnector>
 {
 	/** A list of nodes that the pathfinder already went through. */
-	public final Set<IConnector> closedSet = new LinkedHashSet<IConnector>();
+	public final Set<C> closedSet = new LinkedHashSet<C>();
 
 	/** The resulted path found by the pathfinder. Could be null if no path was found. */
-	public final Set<IConnector> results = new LinkedHashSet<IConnector>();
+	public final Set<C> results = new LinkedHashSet<C>();
 
-	private final IConnector targetConnector;
-	private final List<IConnector> ignoreConnector;
+	private final Class<? extends IConnector> connectorClass;
 
-	public ConnectionPathfinder(IConnector targetConnector, IConnector... ignoreConnector)
+	private final C targetConnector;
+	private final List<C> ignoreConnector;
+
+	public ConnectionPathfinder(C targetConnector, C... ignoreConnector)
 	{
 		this.targetConnector = targetConnector;
+		connectorClass = this.targetConnector.getClass();
+
 		if (ignoreConnector != null)
 		{
 			this.ignoreConnector = Arrays.asList(ignoreConnector);
 		}
 		else
 		{
-			this.ignoreConnector = new ArrayList<IConnector>();
+			this.ignoreConnector = new ArrayList<C>();
 		}
 	}
 
@@ -44,7 +48,7 @@ public class ConnectionPathfinder
 	 * 
 	 * @return True on success finding, false on failure.
 	 */
-	public boolean findNodes(IConnector currentNode)
+	public boolean findNodes(C currentNode)
 	{
 		this.closedSet.add(currentNode);
 
@@ -53,7 +57,7 @@ public class ConnectionPathfinder
 			return false;
 		}
 
-		for (IConnector node : this.getConnectedNodes(currentNode))
+		for (C node : this.getConnectedNodes(currentNode))
 		{
 			if (!this.closedSet.contains(node))
 			{
@@ -67,9 +71,9 @@ public class ConnectionPathfinder
 		return false;
 	}
 
-	public Set<IConnector> getConnectedNodes(IConnector currentNode)
+	public Set<C> getConnectedNodes(C currentNode)
 	{
-		Set<IConnector> connectedNodes = new HashSet<IConnector>();
+		Set<C> connectedNodes = new HashSet<C>();
 
 		if (currentNode != null)
 		{
@@ -77,9 +81,9 @@ public class ConnectionPathfinder
 			{
 				Object obj = currentNode.getConnections()[i];
 
-				if (obj instanceof IConnector && !this.ignoreConnector.contains(obj))
+				if (obj.isAssignableFrom(connectorClass) && !this.ignoreConnector.contains(obj))
 				{
-					connectedNodes.add((IConnector) obj);
+					connectedNodes.add((C) obj);
 				}
 			}
 		}
@@ -87,7 +91,7 @@ public class ConnectionPathfinder
 		return connectedNodes;
 	}
 
-	public boolean onSearch(IConnector node)
+	public boolean onSearch(C node)
 	{
 		if (node == this.targetConnector)
 		{
