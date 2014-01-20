@@ -35,9 +35,9 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
 	}
 
 	@Override
-	protected void reconstructConductor(IConductor conductor)
+	protected void reconstructConnector(IConductor conductor)
 	{
-		super.reconstructConductor(conductor);
+		super.reconstructConnector(conductor);
 		if (conductor.getCurrentCapacity() < this.currentCapacity)
 		{
 			// TODO simulate this better using a path finder cache of sources to acceptors

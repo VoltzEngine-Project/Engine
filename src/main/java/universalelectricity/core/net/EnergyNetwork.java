@@ -21,7 +21,7 @@ import universalelectricity.api.net.NetworkEvent.EnergyProduceEvent;
  * 
  * @author Calclavia
  */
-public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> implements IEnergyNetwork
+public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Object> implements IEnergyNetwork
 {
 	/** The energy to be distributed on the next update. */
 	protected long energyBuffer;
@@ -172,7 +172,7 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 
 				if (conductor != null)
 				{
-					this.reconstructConductor(conductor);
+					this.reconstructConnector(conductor);
 				}
 				else
 				{
@@ -187,8 +187,8 @@ public class EnergyNetwork extends Network<IEnergyNetwork, IConductor, Object> i
 		}
 	}
 
-	/** Segmented out call so overriding can be done when conductors are reconstructed. */
-	protected void reconstructConductor(IConductor conductor)
+	@Override
+	protected void reconstructConnector(IConductor conductor)
 	{
 		conductor.setNetwork(this);
 

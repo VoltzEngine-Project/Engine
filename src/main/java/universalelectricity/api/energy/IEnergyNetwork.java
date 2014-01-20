@@ -1,14 +1,15 @@
 package universalelectricity.api.energy;
 
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.net.INetwork;
+import universalelectricity.api.net.INodeNetwork;
+import universalelectricity.api.net.IUpdate;
 
 /**
- * The Energy Network in interface form.
+ * The Energy Network for energy items and blocks.
  * 
  * @author Calclavia
  */
-public interface IEnergyNetwork extends INetwork<IEnergyNetwork, IConductor, Object>
+public interface IEnergyNetwork extends INodeNetwork<IEnergyNetwork, IConductor, Object>, IUpdate
 {
 	/**
 	 * Produces power to the energy network.

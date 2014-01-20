@@ -6,7 +6,7 @@ import java.util.LinkedHashSet;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
-import universalelectricity.api.net.INetwork;
+import universalelectricity.api.net.INodeNetwork;
 import universalelectricity.api.net.IUpdate;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
