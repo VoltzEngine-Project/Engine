@@ -8,12 +8,10 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import calclavia.lib.Calclavia;
-import calclavia.lib.content.IContentInfo.IExtraBlockInfo;
 
 import com.builtbroken.common.Pair;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ClientRegistryProxy extends CommonRegistryProxy
 {
@@ -22,10 +20,10 @@ public class ClientRegistryProxy extends CommonRegistryProxy
 	{
 		super.registerBlock(block, itemClass, name, modID);
 
-		if (block instanceof IExtraBlockInfo)
+		if (block instanceof IBlockInfo)
 		{
 			List<Pair<Class<? extends TileEntity>, TileEntitySpecialRenderer>> set = new ArrayList<Pair<Class<? extends TileEntity>, TileEntitySpecialRenderer>>();
-			((IExtraBlockInfo) block).getClientTileEntityRenderers(set);
+			((IBlockInfo) block).getClientTileEntityRenderers(set);
 			for (Pair<Class<? extends TileEntity>, TileEntitySpecialRenderer> par : set)
 			{
 				ClientRegistry.bindTileEntitySpecialRenderer(par.left(), par.right());
