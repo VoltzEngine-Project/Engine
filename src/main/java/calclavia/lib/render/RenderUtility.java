@@ -14,6 +14,7 @@ import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glShadeModel;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
+import java.util.HashMap;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -36,6 +37,20 @@ public class RenderUtility
 {
 	public static RenderBlocks renderBlocks = new RenderBlocks();
 	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
+
+	public static final HashMap<String, ResourceLocation> resourceCahce = new HashMap<String, ResourceLocation>();
+
+	public static ResourceLocation getResource(String domain, String name)
+	{
+		String cacheName = domain + ":" + name;
+
+		if (!resourceCahce.containsKey(cacheName))
+		{
+			resourceCahce.put(cacheName, new ResourceLocation(domain, name));
+		}
+
+		return resourceCahce.get(cacheName);
+	}
 
 	public static void setTerrainTexture()
 	{
@@ -433,6 +448,7 @@ public class RenderUtility
 
 	/**
 	 * Rotates a block based on the direction it is facing.
+	 * 
 	 * @param direction
 	 */
 	public static void rotateBlockBasedOnDirection(ForgeDirection direction)
@@ -458,5 +474,15 @@ public class RenderUtility
 				glRotatef(180, 0, 1, 0);
 				break;
 		}
+	}
+
+	public static void bind(String domain, String name)
+	{
+		bind(getResource(domain, name));
+	}
+
+	public static void bind(ResourceLocation location)
+	{
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(location);
 	}
 }
