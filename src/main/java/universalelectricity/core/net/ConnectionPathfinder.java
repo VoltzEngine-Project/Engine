@@ -23,15 +23,20 @@ public class ConnectionPathfinder<C extends IConnector>
 	/** The resulted path found by the pathfinder. Could be null if no path was found. */
 	public final Set<C> results = new LinkedHashSet<C>();
 
-	protected final Class<? extends IConnector> connectorClass;
+	protected Class<? extends IConnector> connectorClass;
 
 	protected final C targetConnector;
 	protected final List<C> ignoreConnector;
 
 	public ConnectionPathfinder(C targetConnector, C... ignoreConnector)
 	{
+		this(null, targetConnector, ignoreConnector);
+	}
+
+	public ConnectionPathfinder(Class<? extends IConnector> connectorClass, C targetConnector, C... ignoreConnector)
+	{
 		this.targetConnector = targetConnector;
-		connectorClass = this.targetConnector.getClass();
+		this.connectorClass = connectorClass != null ? connectorClass : targetConnector.getClass();
 
 		if (ignoreConnector != null)
 		{

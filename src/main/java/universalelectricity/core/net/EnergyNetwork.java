@@ -256,6 +256,12 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	}
 
 	@Override
+	public Class getConnectorClass()
+	{
+		return IConductor.class;
+	}
+
+	@Override
 	public IEnergyNetwork newInstance()
 	{
 		return EnergyNetworkLoader.getNewNetwork();

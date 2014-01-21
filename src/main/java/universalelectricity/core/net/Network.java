@@ -140,7 +140,7 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 
 					if (connectedBlockB != null && connectedBlockA != connectedBlockB && connectorClass.isAssignableFrom(connectedBlockB.getClass()))
 					{
-						ConnectionPathfinder<C> finder = new ConnectionPathfinder<C>((C) connectedBlockB, splitPoint);
+						ConnectionPathfinder<C> finder = new ConnectionPathfinder<C>(getConnectorClass(), (C) connectedBlockB, splitPoint);
 						finder.findNodes((C) connectedBlockA);
 
 						if (finder.results.size() <= 0)
@@ -184,7 +184,7 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 		if (connectorA != null && connectorB != null)
 		{
 			/** Check if connectorA connects with connectorB. */
-			ConnectionPathfinder<C> finder = new ConnectionPathfinder<C>(connectorB);
+			ConnectionPathfinder<C> finder = new ConnectionPathfinder<C>(getConnectorClass(), connectorB);
 			finder.findNodes(connectorA);
 
 			if (finder.results.size() <= 0)
@@ -213,6 +213,11 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	 */
 	public void onSplit(N newNetwork)
 	{
+	}
+
+	public Class getConnectorClass()
+	{
+		return null;
 	}
 
 	@Override
