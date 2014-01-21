@@ -79,7 +79,7 @@ public abstract class BlockAdvanced extends Block
 	 * 
 	 * @return True if it is a wrench.
 	 */
-	public boolean isUsableWrench(EntityPlayer player, ItemStack itemStack, int x, int y, int z)
+	public static boolean isUsableWrench(EntityPlayer player, ItemStack itemStack, int x, int y, int z)
 	{
 		if (player != null && itemStack != null)
 		{
@@ -113,9 +113,9 @@ public abstract class BlockAdvanced extends Block
 	 * 
 	 * @return True if damage was successfull.
 	 */
-	public boolean damageWrench(EntityPlayer player, ItemStack itemStack, int x, int y, int z)
+	public static boolean damageWrench(EntityPlayer player, ItemStack itemStack, int x, int y, int z)
 	{
-		if (this.isUsableWrench(player, itemStack, x, y, z))
+		if (isUsableWrench(player, itemStack, x, y, z))
 		{
 			if (itemStack.getItem() instanceof IToolWrench)
 			{
