@@ -224,11 +224,11 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	@Override
 	public IEnergyNetwork merge(IEnergyNetwork network)
 	{
-		long newBuffer = getBuffer() + ((EnergyNetwork) network).getBuffer();
 		IEnergyNetwork newNetwork = super.merge(network);
 
 		if (newNetwork != null)
 		{
+			long newBuffer = getBuffer() + ((EnergyNetwork) network).getBuffer();
 			newNetwork.setBuffer(newBuffer);
 			return newNetwork;
 		}
