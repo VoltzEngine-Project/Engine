@@ -3,9 +3,6 @@
  */
 package universalelectricity.core.asm;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
@@ -13,13 +10,13 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 
-import com.google.common.collect.HashBiMap;
-
 import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.api.item.IEnergyItem;
 import universalelectricity.core.asm.TemplateInjectionManager.InjectionTemplate;
+
+import com.google.common.collect.HashBiMap;
 
 /**
  * @author Calclavia

@@ -3,9 +3,6 @@ package universalelectricity.core.net;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import universalelectricity.api.energy.EnergyNetworkLoader;
-import universalelectricity.api.energy.IConductor;
-import universalelectricity.api.energy.IEnergyNetwork;
 import universalelectricity.api.net.IConnector;
 import universalelectricity.api.net.INodeNetwork;
 
@@ -34,6 +31,7 @@ public abstract class NodeNetwork<N extends INodeNetwork, C extends IConnector, 
 		this.nodes.remove(battery);
 	}
 
+	@Override
 	public Set<A> getNodes()
 	{
 		return this.nodes;

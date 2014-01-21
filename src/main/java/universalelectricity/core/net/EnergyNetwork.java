@@ -13,7 +13,6 @@ import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.energy.EnergyNetworkLoader;
 import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyNetwork;
-import universalelectricity.api.net.IConnector;
 import universalelectricity.api.net.NetworkEvent.EnergyProduceEvent;
 
 /**
@@ -308,11 +307,13 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 		return UniversalElectricity.DEFAULT_VOLTAGE;
 	}
 
+	@Override
 	public long getBuffer()
 	{
 		return this.energyBuffer;
 	}
 
+	@Override
 	public void setBuffer(long newBuffer)
 	{
 		this.energyBuffer = newBuffer;

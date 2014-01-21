@@ -45,6 +45,7 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	/**
 	 * A simple reconstruct class. You may override this.
 	 */
+	@Override
 	public void reconstruct()
 	{
 		Iterator<C> it = this.getConnectors().iterator();

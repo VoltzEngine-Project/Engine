@@ -21,8 +21,8 @@ import ic2.api.energy.tile.IEnergyTile;
  */
 public class EnergyTileUnloadEvent extends EnergyTileEvent
 {
-	public EnergyTileUnloadEvent(IEnergyTile energyTile)
+	public EnergyTileUnloadEvent(IEnergyTile energyTile1)
 	{
-		super(energyTile);
+		super(energyTile1);
 	}
 }
