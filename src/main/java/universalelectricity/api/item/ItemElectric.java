@@ -26,22 +26,22 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 	public ItemElectric(int id)
 	{
 		super(id);
-		this.setMaxStackSize(1);
-		this.setMaxDamage(100);
-		this.setNoRepair();
+		setMaxStackSize(1);
+		setMaxDamage(100);
+		setNoRepair();
 	}
 
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4)
 	{
 		String color = "";
-		long joules = this.getEnergy(itemStack);
+		long joules = getEnergy(itemStack);
 
-		if (joules <= this.getEnergyCapacity(itemStack) / 3)
+		if (joules <= getEnergyCapacity(itemStack) / 3)
 		{
 			color = "\u00a74";
 		}
-		else if (joules > this.getEnergyCapacity(itemStack) * 2 / 3)
+		else if (joules > getEnergyCapacity(itemStack) * 2 / 3)
 		{
 			color = "\u00a72";
 		}
@@ -50,7 +50,7 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 			color = "\u00a76";
 		}
 
-		list.add(color + UnitDisplay.getDisplayShort(joules, Unit.JOULES) + "/" + UnitDisplay.getDisplayShort(this.getEnergyCapacity(itemStack), Unit.JOULES));
+		list.add(color + UnitDisplay.getDisplayShort(joules, Unit.JOULES) + "/" + UnitDisplay.getDisplayShort(getEnergyCapacity(itemStack), Unit.JOULES));
 	}
 
 	/**
@@ -60,17 +60,17 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 	@Override
 	public void onCreated(ItemStack itemStack, World par2World, EntityPlayer par3EntityPlayer)
 	{
-		this.setEnergy(itemStack, 0);
+		setEnergy(itemStack, 0);
 	}
 
 	@Override
 	public long recharge(ItemStack itemStack, long energy, boolean doReceive)
 	{
-		long energyReceived = Math.min(this.getEnergyCapacity(itemStack) - energy, Math.min(this.getTransferRate(itemStack), energy));
+		long energyReceived = Math.min(getEnergyCapacity(itemStack) - getEnergy(itemStack), Math.min(getTransferRate(itemStack), energy));
 
 		if (doReceive)
 		{
-			this.setEnergy(itemStack, this.getEnergy(itemStack) + energyReceived);
+			setEnergy(itemStack, getEnergy(itemStack) + energyReceived);
 		}
 
 		return energyReceived;
@@ -78,17 +78,17 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 
 	public long getTransferRate(ItemStack itemStack)
 	{
-		return this.getEnergyCapacity(itemStack) / 100;
+		return getEnergyCapacity(itemStack) / 100;
 	}
 
 	@Override
 	public long discharge(ItemStack itemStack, long energy, boolean doTransfer)
 	{
-		long energyExtracted = Math.min(energy, Math.min(this.getTransferRate(itemStack), energy));
+		long energyExtracted = Math.min(getEnergy(itemStack), Math.min(getTransferRate(itemStack), energy));
 
 		if (doTransfer)
 		{
-			this.setEnergy(itemStack, this.getEnergy(itemStack) - energyExtracted);
+			setEnergy(itemStack, getEnergy(itemStack) - energyExtracted);
 		}
 
 		return energyExtracted;
@@ -108,14 +108,14 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
 
-		long electricityStored = Math.max(Math.min(joules, this.getEnergyCapacity(itemStack)), 0);
+		long electricityStored = Math.max(Math.min(joules, getEnergyCapacity(itemStack)), 0);
 		itemStack.getTagCompound().setLong("electricity", electricityStored);
 		itemStack.setItemDamage((int) (100 - ((double) electricityStored / (double) getEnergyCapacity(itemStack)) * 100));
 	}
 
 	public long getTransfer(ItemStack itemStack)
 	{
-		return this.getEnergyCapacity(itemStack) - this.getEnergy(itemStack);
+		return getEnergyCapacity(itemStack) - getEnergy(itemStack);
 	}
 
 	@Override
@@ -151,6 +151,6 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		par3List.add(CompatibilityModule.getItemWithCharge(new ItemStack(this), 0));
-		par3List.add(CompatibilityModule.getItemWithCharge(new ItemStack(this), this.getEnergyCapacity(new ItemStack(this))));
+		par3List.add(CompatibilityModule.getItemWithCharge(new ItemStack(this), getEnergyCapacity(new ItemStack(this))));
 	}
 }
