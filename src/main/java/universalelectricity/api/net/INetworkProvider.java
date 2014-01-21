@@ -1,5 +1,7 @@
 package universalelectricity.api.net;
 
+import net.minecraftforge.common.ForgeDirection;
+
 /**
  * Applied to TileEntities that has an instance of an electricity network.
  * 
@@ -8,7 +10,7 @@ package universalelectricity.api.net;
  */
 public interface INetworkProvider<N>
 {
-	public N getNetwork();
+	public N getNetwork(ForgeDirection from);
 
 	public void setNetwork(N network);
 }
