@@ -395,4 +395,68 @@ public class RenderUtility
 		GL11.glPopMatrix();
 	}
 
+	/**
+	 * Rotates a render based on the direction it is placed on. Used for things like flat wires or
+	 * panels. The model will need to be centered and be facing upright to begin with.
+	 * 
+	 * @param placementSide
+	 */
+	public static void rotateFaceBlockToSide(ForgeDirection placementSide)
+	{
+		switch (placementSide)
+		{
+			case DOWN:
+				GL11.glTranslatef(0, -0.45f, 0);
+				break;
+			case UP:
+				GL11.glTranslatef(0, 0.45f, 0);
+				GL11.glRotatef(180, 1, 0, 0);
+				break;
+			case NORTH:
+				GL11.glTranslatef(0, 0, -0.45f);
+				GL11.glRotatef(90, 1, 0, 0);
+				break;
+			case SOUTH:
+				GL11.glTranslatef(0, 0, 0.45f);
+				GL11.glRotatef(-90, 1, 0, 0);
+				break;
+			case WEST:
+				GL11.glTranslatef(-0.45f, 0, 0);
+				GL11.glRotatef(-90, 0, 0, 1);
+				break;
+			case EAST:
+				GL11.glTranslatef(0.45f, 0, 0);
+				GL11.glRotatef(90, 0, 0, 1);
+				break;
+		}
+	}
+
+	/**
+	 * Rotates a block based on the direction it is facing.
+	 * @param direction
+	 */
+	public static void rotateBlockBasedOnDirection(ForgeDirection direction)
+	{
+		switch (direction)
+		{
+			case DOWN:
+				glRotatef(90, 1, 0, 0);
+				break;
+			case UP:
+				glRotatef(-90, 1, 0, 0);
+				break;
+			case NORTH:
+				glRotatef(90, 0, 1, 0);
+				break;
+			case SOUTH:
+				glRotatef(-90, 0, 1, 0);
+				break;
+			case WEST:
+				glRotatef(-180, 0, 1, 0);
+				break;
+			case EAST:
+				glRotatef(180, 0, 1, 0);
+				break;
+		}
+	}
 }
