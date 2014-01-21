@@ -1,5 +1,7 @@
 package universalelectricity.api.net;
 
+import net.minecraftforge.common.ForgeDirection;
+
 /**
  * Applied to TileEntities that has an instance of an electricity network.
  * 
@@ -15,4 +17,11 @@ public interface IConnector<N> extends INetworkProvider<N>, IConnectable
 	 * @return An array of length "6".
 	 */
 	public Object[] getConnections();
+
+	/**
+	 * Gets this connector instance. Used specially for MultiPart connections.
+	 * 
+	 * @return The instance, in most cases, just return "this".
+	 */
+	public IConnector<N> getInstance(ForgeDirection dir);
 }

@@ -10,7 +10,7 @@ import net.minecraftforge.common.ForgeDirection;
  */
 public interface INetworkProvider<N>
 {
-	public N getNetwork(ForgeDirection from);
+	public N getNetwork();
 
 	public void setNetwork(N network);
 }
