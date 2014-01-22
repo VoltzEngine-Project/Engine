@@ -10,9 +10,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Configuration;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.vector.Vector3;
 import calclavia.components.CalclaviaLoader;
+import calclavia.lib.Calclavia;
 import calclavia.lib.network.PacketTile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,7 +33,7 @@ public class BlockMultiFake extends BlockContainer
 
 	public BlockMultiFake()
 	{
-		this(CalclaviaLoader.idManager.getNextBlockID());
+		this(Calclavia.CONFIGURATION.get(Configuration.CATEGORY_BLOCK, "Multiblock", CalclaviaLoader.idManager.getNextBlockID()).getInt());
 	}
 
 	public BlockMultiFake(int id)
