@@ -1,9 +1,16 @@
 package calclavia.lib.thermal;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.event.Event;
+import net.minecraftforge.event.Event.HasResult;
 import net.minecraftforge.fluids.FluidStack;
 import universalelectricity.api.vector.Vector3;
+
+import com.builtbroken.common.science.ChemElement;
 
 /**
  * A thermal block manager
@@ -20,6 +27,26 @@ public class Thermal
 	 * A map of the temperature of the blocks
 	 */
 	public final HashMap<Vector3, Integer> thermalMap = new HashMap<Vector3, Integer>();
+
+	public void update()
+	{
+		/**
+		 * Reach thermal equilibrium
+		 */
+		Iterator<Entry<Vector3, Integer>> it = thermalMap.entrySet().iterator();
+
+		while (it.hasNext())
+		{
+			Entry<Vector3, Integer> entry = it.next();
+
+			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+			{
+				Vector3 checkPos = entry.getKey().clone().translate(dir);
+				int neighbourTemp = getTemperature(checkPos);
+				entry.setValue((entry.getValue() + neighbourTemp) / 2);
+			}
+		}
+	}
 
 	/**
 	 * Adds energy to the fluid and thereby, increasing its temperature.
@@ -45,9 +72,18 @@ public class Thermal
 		return changeInTemperature;
 	}
 
-	public void addEnergy()
+	/**
+	 * Adds energy to a block in the form of heat.
+	 */
+	public void addEnergy(Vector3 position, ChemElement element, long energy)
 	{
+		// Mass (KG) = Volume (Cubic Meters) * Densitry (kg/m-cubed)
+		int mass = (int) (1 * element.density);
 
+		// c = Q/(mT); Therefore: Temperature (in Kelvin) = Q/mc
+		int changeInTemperature = (int) (energy / (mass * element.heatData.specificHeat));
+
+		setTemperature(position, getTemperature(position) + changeInTemperature);
 	}
 
 	public void setTemperature(Vector3 position, int temperature)
@@ -63,5 +99,16 @@ public class Thermal
 		}
 
 		return ROOM_TEMPERATURE;
+	}
+
+	@HasResult
+	public static class EventVaporize extends Event
+	{
+		public final Vector3 position;
+
+		public EventVaporize(Vector3 position)
+		{
+			this.position = position;
+		}
 	}
 }
