@@ -1,4 +1,4 @@
-package calclavia.lib.utility;
+package calclavia.lib.thermal;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;

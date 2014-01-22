@@ -2,7 +2,6 @@ package calclavia.lib.utility;
 
 import java.util.Random;
 
-import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.vector.Vector3;
 
