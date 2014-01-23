@@ -471,7 +471,7 @@ public class RenderUtility
 				glRotatef(-180, 0, 1, 0);
 				break;
 			case EAST:
-				glRotatef(180, 0, 1, 0);
+				glRotatef(0, 0, 1, 0);
 				break;
 		}
 	}
