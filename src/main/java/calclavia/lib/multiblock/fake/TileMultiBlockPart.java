@@ -46,7 +46,7 @@ public class TileMultiBlockPart extends TileEntity implements IPacketReceiver
 	{
 		if (this.mainBlockPosition != null)
 		{
-			return ((BlockMultiFake) this.getBlockType()).packetType.getPacket(this, this.mainBlockPosition.intX(), this.mainBlockPosition.intY(), this.mainBlockPosition.intZ());
+			return ((BlockMultiBlockPart) this.getBlockType()).packetType.getPacket(this, this.mainBlockPosition.intX(), this.mainBlockPosition.intY(), this.mainBlockPosition.intZ());
 		}
 
 		return null;
@@ -65,7 +65,7 @@ public class TileMultiBlockPart extends TileEntity implements IPacketReceiver
 		}
 	}
 
-	public void onBlockRemoval(BlockMultiFake block)
+	public void onBlockRemoval(BlockMultiBlockPart block)
 	{
 		if (this.getMainBlock() != null)
 		{

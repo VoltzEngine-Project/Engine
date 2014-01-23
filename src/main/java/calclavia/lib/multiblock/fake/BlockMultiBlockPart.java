@@ -26,31 +26,31 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author Calclavia
  * 
  */
-public class BlockMultiFake extends BlockContainer
+public class BlockMultiBlockPart extends BlockContainer
 {
 	public String textureName = null;
 	public PacketTile packetType;
 
-	public BlockMultiFake()
+	public BlockMultiBlockPart()
 	{
 		this(Calclavia.CONFIGURATION.get(Configuration.CATEGORY_BLOCK, "Multiblock", CalclaviaLoader.idManager.getNextBlockID()).getInt());
 	}
 
-	public BlockMultiFake(int id)
+	public BlockMultiBlockPart(int id)
 	{
 		super(id, UniversalElectricity.machine);
 		this.setHardness(0.8F);
 		this.setUnlocalizedName("multiBlock");
 	}
 
-	public BlockMultiFake setPacketType(PacketTile packetType)
+	public BlockMultiBlockPart setPacketType(PacketTile packetType)
 	{
 		this.packetType = packetType;
 		return this;
 	}
 
 	@Override
-	public BlockMultiFake setTextureName(String name)
+	public BlockMultiBlockPart setTextureName(String name)
 	{
 		this.textureName = name;
 		return this;
