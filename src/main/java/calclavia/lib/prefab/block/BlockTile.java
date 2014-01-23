@@ -69,9 +69,9 @@ public abstract class BlockTile extends BlockAdvanced implements ITileEntityProv
 			{
 				IInventory inventory = (IInventory) tileEntity;
 
-				for (int var6 = 0; var6 < inventory.getSizeInventory(); ++var6)
+				for (int i = 0; i < inventory.getSizeInventory(); ++i)
 				{
-					ItemStack var7 = inventory.getStackInSlot(var6);
+					ItemStack var7 = inventory.getStackInSlot(i);
 
 					if (var7 != null)
 					{
@@ -102,9 +102,16 @@ public abstract class BlockTile extends BlockAdvanced implements ITileEntityProv
 							var12.motionY = ((float) random.nextGaussian() * var13 + 0.2F);
 							var12.motionZ = ((float) random.nextGaussian() * var13);
 							world.spawnEntityInWorld(var12);
+
+							if (var7.stackSize <= 0)
+							{
+								inventory.setInventorySlotContents(i, null);
+							}
 						}
 					}
 				}
+
+				inventory.onInventoryChanged();
 			}
 		}
 	}

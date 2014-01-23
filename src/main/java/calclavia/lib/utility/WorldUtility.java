@@ -1,5 +1,7 @@
 package calclavia.lib.utility;
 
+import static org.lwjgl.opengl.GL11.glRotatef;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,38 @@ import universalelectricity.api.vector.Vector3;
  */
 public class WorldUtility
 {
+	public static int getAngleFromForgeDirection(ForgeDirection dir)
+	{
+		switch (dir)
+		{
+			default:
+				break;
+			case NORTH:
+				return 90;
+			case SOUTH:
+				return -90;
+			case WEST:
+				return -180;
+			case EAST:
+				return 0;
+		}
+
+		return 0;
+	}
+
+	public static ForgeDirection invertX(ForgeDirection dir)
+	{
+		switch (dir)
+		{
+			case NORTH:
+				return ForgeDirection.SOUTH;
+			case SOUTH:
+				return ForgeDirection.NORTH;
+		}
+
+		return dir;
+	}
+
 	/**
 	 * Used to find all tileEntities sounding the location you will have to filter for selective
 	 * tileEntities

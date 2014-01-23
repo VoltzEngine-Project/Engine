@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import universalelectricity.api.vector.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -59,7 +60,7 @@ public abstract class RenderTaggedTile extends TileEntitySpecialRenderer
 
 								if (entry.getKey() != null)
 								{
-									RenderUtility.renderFloatingText(entry.getKey(), (float) x + 0.5f, ((float) y + (i * 0.25f)) - 2f + height, (float) z + 0.5f, entry.getValue());
+									RenderUtility.renderFloatingText(entry.getKey(), new Vector3(x, y, z).translate(0.5, i * 0.25f, z + 0.5f), entry.getValue());
 								}
 
 								i++;
