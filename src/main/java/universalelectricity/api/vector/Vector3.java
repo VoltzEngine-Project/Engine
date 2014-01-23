@@ -517,7 +517,7 @@ public class Vector3 implements Cloneable
 	 */
 	public Vector3 rotate(float angle, Vector3 axis)
 	{
-		return translateMatrix(getRotationMatrix(angle, axis), this.clone());
+		return translateMatrix(getRotationMatrix(angle, axis), this);
 	}
 
 	public double[] getRotationMatrix(float angle)
