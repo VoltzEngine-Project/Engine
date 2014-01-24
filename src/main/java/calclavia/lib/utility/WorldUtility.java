@@ -55,6 +55,19 @@ public class WorldUtility
 		return dir;
 	}
 
+	public static ForgeDirection invertZ(ForgeDirection dir)
+	{
+		switch (dir)
+		{
+			case WEST:
+				return ForgeDirection.EAST;
+			case EAST:
+				return ForgeDirection.WEST;
+		}
+
+		return dir;
+	}
+
 	/**
 	 * Used to find all tileEntities sounding the location you will have to filter for selective
 	 * tileEntities
