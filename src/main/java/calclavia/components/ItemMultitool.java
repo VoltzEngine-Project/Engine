@@ -45,7 +45,7 @@ public class ItemMultitool extends ItemBase implements IToolWrench
 		MultitoolEvent evt = new MultitoolEvent(world, stack, player, x, y, z, side, hitX, hitY, hitZ, block, blockMeta);
 		MinecraftForge.EVENT_BUS.post(evt);
 
-		if (!evt.isCanceled())
+		if (!evt.isCanceled() && !player.isSneaking())
 		{
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 
@@ -79,12 +79,11 @@ public class ItemMultitool extends ItemBase implements IToolWrench
 			}
 			else if (block != null && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
 			{
-				this.wrenchUsed(player, x, y, z);
-				return true;
+				wrenchUsed(player, x, y, z);
 			}
 		}
-
-		return evt.hasResult() ? evt.getResult() == Result.DENY ? true : false : true;
+		
+		return evt.hasResult() ? evt.getResult() == Result.DENY ? true : false : false;
 	}
 
 	@Override
