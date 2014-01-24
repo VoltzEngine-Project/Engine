@@ -22,8 +22,9 @@ public class ItemBlockMetadata extends ItemBlock
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack)
 	{
-		if (LanguageUtility.getLocal(this.getUnlocalizedName() + "." + itemstack.getItemDamage()) != "")
-			return this.getUnlocalizedName() + "." + itemstack.getItemDamage();
-		return this.getUnlocalizedName();
+		String localized = LanguageUtility.getLocal(getUnlocalizedName() + "." + itemstack.getItemDamage() + ".name");
+		if (localized != null && !localized.isEmpty())
+			return getUnlocalizedName() + "." + itemstack.getItemDamage();
+		return getUnlocalizedName();
 	}
 }
