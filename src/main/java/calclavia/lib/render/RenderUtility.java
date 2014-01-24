@@ -469,6 +469,11 @@ public class RenderUtility
 		}
 	}
 
+	public static void bind(String name)
+	{
+		bind(getResource("minecraft", name));
+	}
+
 	public static void bind(String domain, String name)
 	{
 		bind(getResource(domain, name));
