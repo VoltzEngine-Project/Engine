@@ -179,6 +179,39 @@ public abstract class CompatibilityModule
 		return false;
 	}
 
+	/**
+	 * Blocks only
+	 */
+	public static long getMaxEnergy(Object handler, ForgeDirection direction)
+	{
+		if (isEnergyContainer(handler))
+		{
+			return energyStorageCache.get(handler.getClass()).doGetMaxEnergy(handler, direction);
+		}
+
+		return 0;
+	}
+
+	public static long getEnergyItem(ItemStack is)
+	{
+		if (isEnergyContainer(is.getItem()))
+		{
+			return energyStorageCache.get(is.getItem().getClass()).doGetEnergyItem(is);
+		}
+
+		return 0;
+	}
+
+	public static long getMaxEnergyItem(ItemStack is)
+	{
+		if (isEnergyContainer(is.getItem()))
+		{
+			return energyStorageCache.get(is.getItem().getClass()).doGetMaxEnergyItem(is);
+		}
+
+		return 0;
+	}
+
 	public abstract long doReceiveEnergy(Object handler, ForgeDirection direction, long energy, boolean doReceive);
 
 	public abstract long doExtractEnergy(Object handler, ForgeDirection direction, long energy, boolean doExtract);
@@ -212,4 +245,10 @@ public abstract class CompatibilityModule
 	public abstract boolean doCanConnect(Object obj, ForgeDirection direction);
 
 	public abstract ItemStack doGetItemWithCharge(ItemStack itemStack, long energy);
+
+	public abstract long doGetMaxEnergy(Object handler, ForgeDirection direction);
+
+	public abstract long doGetEnergyItem(ItemStack is);
+
+	public abstract long doGetMaxEnergyItem(ItemStack is);
 }

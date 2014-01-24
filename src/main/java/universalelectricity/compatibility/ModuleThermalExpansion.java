@@ -55,7 +55,7 @@ public class ModuleThermalExpansion extends CompatibilityModule
 	}
 
 	@Override
-	public ItemStack doGetItemWithCharge(ItemStack itemStack, long energy)
+	public ItemStack doGetItemWithCharge(ItemStack is, long energy)
 	{
 		return null;
 	}
@@ -70,5 +70,31 @@ public class ModuleThermalExpansion extends CompatibilityModule
 	public long doGetEnergy(Object obj, ForgeDirection from)
 	{
 		return (long) (((IEnergyHandler) obj).getEnergyStored(from) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+	}
+
+	@Override
+	public long doGetMaxEnergy(Object obj, ForgeDirection from)
+	{
+		return (long) (((IEnergyHandler) obj).getMaxEnergyStored(from) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+	}
+
+	@Override
+	public long doGetEnergyItem(ItemStack is)
+	{
+		if (is.getItem() instanceof IEnergyContainerItem)
+		{
+			return (long) (((IEnergyContainerItem) is.getItem()).getEnergyStored(is) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+		}
+		return 0;
+	}
+
+	@Override
+	public long doGetMaxEnergyItem(ItemStack is)
+	{
+		if (is.getItem() instanceof IEnergyContainerItem)
+		{
+			return (long) (((IEnergyContainerItem) is.getItem()).getMaxEnergyStored(is) * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
+		}
+		return 0;
 	}
 }

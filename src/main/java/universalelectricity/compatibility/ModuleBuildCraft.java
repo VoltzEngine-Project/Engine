@@ -88,4 +88,30 @@ public class ModuleBuildCraft extends CompatibilityModule
 
 		return 0;
 	}
+
+	@Override
+	public long doGetMaxEnergy(Object obj, ForgeDirection direction)
+	{
+		if (obj instanceof IPowerReceptor)
+		{
+			if (((IPowerReceptor) obj).getPowerReceiver(direction) != null)
+			{
+				return (long) (((IPowerReceptor) obj).getPowerReceiver(direction).getMaxEnergyStored() * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
+			}
+		}
+
+		return 0;
+	}
+
+	@Override
+	public long doGetEnergyItem(ItemStack is)
+	{
+		return 0;
+	}
+
+	@Override
+	public long doGetMaxEnergyItem(ItemStack is)
+	{
+		return 0;
+	}
 }
