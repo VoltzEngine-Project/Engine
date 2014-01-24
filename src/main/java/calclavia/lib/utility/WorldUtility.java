@@ -215,49 +215,4 @@ public class WorldUtility
 		}
 		return newItemList;
 	}
-
-	/**
-	 * grabs all the items that the block can drop then pass them onto dropBlockAsItem_do
-	 * 
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
-	 */
-	public static void dropBlockAsItem(World world, Vector3 loc)
-	{
-		if (!world.isRemote)
-		{
-			int meta = loc.getBlockMetadata(world);
-			int id = loc.getBlockID(world);
-			ArrayList<ItemStack> items = Block.blocksList[id].getBlockDropped(world, loc.intX(), loc.intY(), loc.intZ(), meta, 0);
-
-			for (ItemStack item : items)
-			{
-				dropItemStack(world, loc, item, false);
-			}
-		}
-	}
-
-	public static ItemStack dropItemStack(World world, Vector3 location, ItemStack itemStack, boolean random)
-	{
-		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
-		{
-			float f = 0.7F;
-			double xx = 0;
-			double yy = 0;
-			double zz = 0;
-			if (random)
-			{
-				xx = (world.rand.nextFloat() * f) + (1.0F - f) * 0.5D;
-				yy = (world.rand.nextFloat() * f) + (1.0F - f) * 0.5D;
-				zz = (world.rand.nextFloat() * f) + (1.0F - f) * 0.5D;
-			}
-			EntityItem entityitem = new EntityItem(world, location.x + xx, location.y + yy, location.z + zz, itemStack);
-			entityitem.delayBeforeCanPickup = 10;
-			world.spawnEntityInWorld(entityitem);
-			return null;
-		}
-		return itemStack;
-	}
 }

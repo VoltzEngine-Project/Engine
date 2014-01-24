@@ -1,5 +1,8 @@
 package calclavia.lib.utility.inventory;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -204,6 +207,21 @@ public class InventoryUtility
 		}
 
 		return null;
+	}
+
+	public static void dropBlockAsItem(World world, Vector3 position)
+	{
+		if (!world.isRemote)
+		{
+			int meta = position.getBlockMetadata(world);
+			int id = position.getBlockID(world);
+			ArrayList<ItemStack> items = Block.blocksList[id].getBlockDropped(world, position.intX(), position.intY(), position.intZ(), meta, 0);
+
+			for (ItemStack itemStack : items)
+			{
+				dropItemStack(world, position, itemStack);
+			}
+		}
 	}
 
 	/**
