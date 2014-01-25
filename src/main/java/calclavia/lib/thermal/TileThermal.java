@@ -8,6 +8,12 @@ public abstract class TileThermal extends TileAdvanced
 {
 	private int temperature = 273 + 20;
 
+	@Override
+	public boolean canUpdate()
+	{
+		return false;
+	}
+
 	public int addThermalEnergy(long energy)
 	{
 		float mass = getMass();
