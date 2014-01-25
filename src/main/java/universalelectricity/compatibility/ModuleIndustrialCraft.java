@@ -108,10 +108,10 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 	public ItemStack doGetItemWithCharge(ItemStack itemStack, long energy)
 	{
 		ItemStack is = itemStack.copy();
-		
+
 		ElectricItem.manager.discharge(is, Integer.MAX_VALUE, 1, true, false);
 		ElectricItem.manager.charge(is, (int) (energy * CompatibilityType.INDUSTRIALCRAFT.ratio), 1, true, false);
-		
+
 		return is;
 	}
 
@@ -127,21 +127,21 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 		return (long) (((IEnergyStorage) obj).getStored() * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 	}
 
-    @Override
-    public long doGetMaxEnergy(Object obj, ForgeDirection direction)
-    {
-        return (long) (((IEnergyStorage) obj).getCapacity() * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
-    }
+	@Override
+	public long doGetMaxEnergy(Object obj, ForgeDirection direction)
+	{
+		return (long) (((IEnergyStorage) obj).getCapacity() * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+	}
 
 	@Override
 	public long doGetEnergyItem(ItemStack is)
 	{
-        return (long) (ElectricItem.manager.getCharge(is) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+		return (long) (ElectricItem.manager.getCharge(is) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 	}
 
 	@Override
 	public long doGetMaxEnergyItem(ItemStack is)
 	{
-        return (long) (((IElectricItem) is.getItem()).getMaxCharge(is) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+		return (long) (((IElectricItem) is.getItem()).getMaxCharge(is) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 	}
 }

@@ -81,11 +81,11 @@ public class ModuleUniversalElectricity extends CompatibilityModule
 		return ((IEnergyContainer) obj).getEnergy(direction);
 	}
 
-    @Override
-    public long doGetMaxEnergy(Object obj, ForgeDirection direction)
-    {
-        return ((IEnergyContainer) obj).getEnergyCapacity(direction);
-    }
+	@Override
+	public long doGetMaxEnergy(Object obj, ForgeDirection direction)
+	{
+		return ((IEnergyContainer) obj).getEnergyCapacity(direction);
+	}
 
 	@Override
 	public long doGetEnergyItem(ItemStack is)
