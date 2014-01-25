@@ -194,7 +194,7 @@ public abstract class CompatibilityModule
 
 	public static long getEnergyItem(ItemStack is)
 	{
-		if (isEnergyContainer(is.getItem()))
+		if (isHandler(is.getItem()))
 		{
 			return energyStorageCache.get(is.getItem().getClass()).doGetEnergyItem(is);
 		}
@@ -204,7 +204,7 @@ public abstract class CompatibilityModule
 
 	public static long getMaxEnergyItem(ItemStack is)
 	{
-		if (isEnergyContainer(is.getItem()))
+		if (isHandler(is.getItem()))
 		{
 			return energyStorageCache.get(is.getItem().getClass()).doGetMaxEnergyItem(is);
 		}
