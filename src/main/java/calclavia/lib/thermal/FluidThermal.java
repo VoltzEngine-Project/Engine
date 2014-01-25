@@ -9,9 +9,9 @@ import net.minecraftforge.fluids.FluidStack;
  * @author Calclavia
  * 
  */
-public class FluidAdvanced extends Fluid
+public class FluidThermal extends Fluid
 {
-	public FluidAdvanced(String fluidName)
+	public FluidThermal(String fluidName)
 	{
 		super(fluidName);
 	}

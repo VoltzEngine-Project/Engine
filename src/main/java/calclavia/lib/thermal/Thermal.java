@@ -64,9 +64,9 @@ public class Thermal
 		// c = Q/(mT); Therefore: Temperature (in Kelvin) = Q/mc
 		int changeInTemperature = (int) (energy / (mass * specificHeatCapacity));
 
-		if (fluidStack.getFluid() instanceof FluidAdvanced)
+		if (fluidStack.getFluid() instanceof FluidThermal)
 		{
-			((FluidAdvanced) fluidStack.getFluid()).setTemperature(fluidStack, fluidStack.getFluid().getTemperature(fluidStack) + changeInTemperature);
+			((FluidThermal) fluidStack.getFluid()).setTemperature(fluidStack, fluidStack.getFluid().getTemperature(fluidStack) + changeInTemperature);
 		}
 
 		return changeInTemperature;
