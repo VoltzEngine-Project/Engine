@@ -50,7 +50,7 @@ public enum CompatibilityType
 		this.moduleName = moduleName;
 		this.fullUnit = fullUnit;
 		this.unit = unit;
-		this.ratio = 1 / ratio;
+		this.ratio = 1.0 / ratio;
 		this.reciprocal_ratio = ratio;
 	}
 
