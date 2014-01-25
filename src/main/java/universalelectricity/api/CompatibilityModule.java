@@ -196,7 +196,7 @@ public abstract class CompatibilityModule
 	{
 		if (isHandler(is.getItem()))
 		{
-			return energyStorageCache.get(is.getItem().getClass()).doGetEnergyItem(is);
+			return energyHandlerCache.get(is.getItem().getClass()).doGetEnergyItem(is);
 		}
 
 		return 0;
@@ -206,7 +206,7 @@ public abstract class CompatibilityModule
 	{
 		if (isHandler(is.getItem()))
 		{
-			return energyStorageCache.get(is.getItem().getClass()).doGetMaxEnergyItem(is);
+			return energyHandlerCache.get(is.getItem().getClass()).doGetMaxEnergyItem(is);
 		}
 
 		return 0;
