@@ -29,6 +29,8 @@ public class NetworkTickHandler implements ITickHandler
 	private final LinkedHashSet<Event> toAddEvents = new LinkedHashSet<Event>();
 	private final LinkedHashSet<Event> queuedEvents = new LinkedHashSet<Event>();
 
+	private boolean markClear = true;
+
 	public static void addNetwork(IUpdate updater)
 	{
 		synchronized (INSTANCE.toAddUpdaters)
@@ -60,6 +62,15 @@ public class NetworkTickHandler implements ITickHandler
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
+		if (markClear)
+		{
+			toAddUpdaters.clear();
+			updaters.clear();
+			toAddEvents.clear();
+			queuedEvents.clear();
+			markClear = false;
+		}
+
 		/**
 		 * Network
 		 */
@@ -112,8 +123,7 @@ public class NetworkTickHandler implements ITickHandler
 
 	public void clearNetworks()
 	{
-		toAddUpdaters.clear();
-		updaters.clear();
+		markClear = true;
 	}
 
 }
