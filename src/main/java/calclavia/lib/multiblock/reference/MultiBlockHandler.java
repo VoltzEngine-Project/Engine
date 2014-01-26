@@ -21,6 +21,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure>
 {
 	/** The main block used for reference */
 	protected W primary = null;
+	/** The relative primary block position to be loaded in once the tile is initiated. */
 	protected Vector3 newPrimary = null;
 	protected final W self;
 	protected Class<? extends W> wrapperClass;
@@ -35,7 +36,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure>
 	{
 		if (self.getWorld() != null && newPrimary != null)
 		{
-			W checkWrapper = getWrapperAt(newPrimary);
+			W checkWrapper = getWrapperAt(newPrimary.clone().translate(self.getPosition()));
 
 			if (checkWrapper != null)
 			{
@@ -185,7 +186,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure>
 	{
 		if (nbt.hasKey("primaryMultiBlock"))
 		{
-			newPrimary = new Vector3(nbt.getCompoundTag("primaryMultiBlock")).translate(self.getPosition());
+			newPrimary = new Vector3(nbt.getCompoundTag("primaryMultiBlock"));
 			update();
 		}
 		else
