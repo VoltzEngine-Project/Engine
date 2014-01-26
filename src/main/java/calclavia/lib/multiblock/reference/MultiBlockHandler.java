@@ -109,6 +109,10 @@ public class MultiBlockHandler<W extends IMultiBlockStructure>
 				for (W structure : structures)
 				{
 					structure.getMultiBlock().primary = primary;
+				}
+
+				for (W structure : structures)
+				{
 					structure.onMultiBlockChanged();
 				}
 			}
@@ -132,6 +136,10 @@ public class MultiBlockHandler<W extends IMultiBlockStructure>
 					for (W structure : structures)
 					{
 						structure.getMultiBlock().primary = null;
+					}
+
+					for (W structure : structures)
+					{
 						structure.onMultiBlockChanged();
 					}
 				}
