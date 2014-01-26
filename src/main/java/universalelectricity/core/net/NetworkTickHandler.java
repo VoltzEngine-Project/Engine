@@ -1,6 +1,7 @@
 package universalelectricity.core.net;
 
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
@@ -74,7 +75,7 @@ public class NetworkTickHandler implements ITickHandler
 		/**
 		 * Network
 		 */
-		this.updaters.addAll(this.toAddUpdaters);
+		this.updaters.addAll(new HashSet<IUpdate>(this.toAddUpdaters));
 		this.toAddUpdaters.clear();
 
 		Iterator<IUpdate> networkIt = this.updaters.iterator();
