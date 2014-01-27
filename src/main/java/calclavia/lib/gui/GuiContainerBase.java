@@ -58,6 +58,11 @@ public class GuiContainerBase extends GuiContainer
 		this.baseTexture = Calclavia.GUI_BASE;
 	}
 
+	public GuiContainerBase()
+	{
+		this(new ContainerDummy());
+	}
+
 	@Override
 	public void onGuiClosed()
 	{
@@ -91,7 +96,7 @@ public class GuiContainerBase extends GuiContainer
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int x, int y)
+	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY)
 	{
 		this.containerWidth = (this.width - this.xSize) / 2;
 		this.containerHeight = (this.height - this.ySize) / 2;
