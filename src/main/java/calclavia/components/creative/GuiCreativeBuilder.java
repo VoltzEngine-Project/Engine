@@ -83,12 +83,13 @@ public class GuiCreativeBuilder extends GuiContainerBase
 
 			if (radius > 0)
 			{
-				PacketDispatcher.sendPacketToServer(CalclaviaLoader.PACKET_TILE.getPacketWithID(position.intX(), position.intY(), position.intZ(), mode, radius));
+				PacketDispatcher.sendPacketToServer(CalclaviaLoader.PACKET_TILE.getPacket(position.intX(), position.intY(), position.intZ(), mode, radius));
+				this.mc.thePlayer.closeScreen();
 			}
 		}
 		else if (par1GuiButton.id == 1)
 		{
-			this.mode = (this.mode + 1) % (BlockCreativeBuilder.REGISTRY.size() - 1);
+			this.mode = (this.mode + 1) % (BlockCreativeBuilder.REGISTRY.size());
 		}
 	}
 

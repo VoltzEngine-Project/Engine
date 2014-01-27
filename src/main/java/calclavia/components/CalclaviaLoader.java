@@ -22,10 +22,12 @@ import calclavia.lib.flag.FlagRegistry;
 import calclavia.lib.flag.ModFlag;
 import calclavia.lib.multiblock.fake.BlockMultiBlockPart;
 import calclavia.lib.multiblock.fake.TileMultiBlockPart;
+import calclavia.lib.network.PacketHandler;
 import calclavia.lib.network.PacketTile;
 import calclavia.lib.ore.OreGenBase;
 import calclavia.lib.ore.OreGenReplaceStone;
 import calclavia.lib.ore.OreGenerator;
+import calclavia.lib.prefab.ProxyBase;
 import calclavia.lib.recipe.RecipeUtility;
 import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.nbt.NBTUtility;
@@ -36,10 +38,12 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.ModMetadata;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
@@ -50,15 +54,19 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
  * 
  */
 @Mod(modid = CalclaviaLoader.ID, name = Calclavia.NAME, version = CalclaviaLoader.VERSION, dependencies = "required-after:UniversalElectricity")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false)
+@NetworkMod(channels = CalclaviaLoader.CHANNEL, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
 public class CalclaviaLoader
 {
 	public static final String ID = "CalclaviaCore";
+	public static final String CHANNEL = "calclaviacore";
 	public static final String MAJOR_VERSION = "@MAJOR@";
 	public static final String MINOR_VERSION = "@MINOR@";
 	public static final String REVISION_VERSION = "@REVIS@";
 	public static final String BUILD_VERSION = "@BUILD@";
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
+
+	@SidedProxy(clientSide = "calclavia.components.ClientProxy", serverSide = "calclavia.lib.prefab.ProxyBase")
+	public static ProxyBase proxy;
 
 	@Mod.Metadata(ID)
 	public static ModMetadata metadata;
@@ -147,7 +155,6 @@ public class CalclaviaLoader
 	public static final int idItemDustBronze = idManager.getNextItemID();
 
 	public static OreGenBase generationOreCopper, generationOreTin;
-	public static String CHANNEL = "calclaviacore";
 
 	public static final ContentRegistry contentRegistry = new ContentRegistry(Calclavia.CONFIGURATION, ID);
 	public static final PacketTile PACKET_TILE = new PacketTile(CHANNEL);
@@ -162,8 +169,19 @@ public class CalclaviaLoader
 	@EventHandler
 	public void init(FMLPreInitializationEvent evt)
 	{
+		NetworkRegistry.instance().registerGuiHandler(this, proxy);
+
+		Calclavia.CONFIGURATION.load();
+
 		blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class);
 		blockMulti.setPacketType(PACKET_TILE);
+
+		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable Calclavia Core Tools", true).getBoolean(true))
+		{
+			blockCreativeBuilder = (BlockCreativeBuilder) contentRegistry.createBlock(BlockCreativeBuilder.class);
+		}
+
+		Calclavia.CONFIGURATION.save();
 	}
 
 	@EventHandler
@@ -196,14 +214,15 @@ public class CalclaviaLoader
 			ComponentRegistry.register("itemPlateGold");
 		}
 
-		ComponentRegistry.register("itemCircuitBasic");
-		ComponentRegistry.register("itemCircuitAdvanced");
-		ComponentRegistry.register("itemCircuitElite");
+		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable Calclavia Core Tools", true).getBoolean(true))
+		{
+			ComponentRegistry.register("itemCircuitBasic");
+			ComponentRegistry.register("itemCircuitAdvanced");
+			ComponentRegistry.register("itemCircuitElite");
 
-		ComponentRegistry.register("itemMotor");
-		ComponentRegistry.register("itemWrench");
-
-		blockCreativeBuilder = new BlockCreativeBuilder(idManager.getNextBlockID());
+			ComponentRegistry.register("itemMotor");
+			ComponentRegistry.register("itemWrench");
+		}
 
 		Calclavia.LOGGER.fine("Attempting to load " + ComponentRegistry.requests.size() + " items.");
 
@@ -441,7 +460,7 @@ public class CalclaviaLoader
 			{
 				if (name.contains("ore"))
 				{
-					field.set(null, new BlockBase(name, id));
+					field.set(null, new BlockCC(name, id));
 					Block block = (Block) field.get(null);
 					GameRegistry.registerBlock(block, name);
 					OreDictionary.registerOre(name, block);

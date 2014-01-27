@@ -61,6 +61,7 @@ public class GuiContainerBase extends GuiContainer
 	public GuiContainerBase()
 	{
 		this(new ContainerDummy());
+		this.baseTexture = Calclavia.GUI_EMPTY_FILE;
 	}
 
 	@Override

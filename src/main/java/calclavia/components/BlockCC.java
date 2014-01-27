@@ -1,13 +1,13 @@
 package calclavia.components;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import calclavia.lib.Calclavia;
+import calclavia.lib.prefab.block.BlockAdvanced;
 
-public class BlockBase extends Block
+public class BlockCC extends BlockAdvanced
 {
-	public BlockBase(String name, int id)
+	public BlockCC(String name, int id)
 	{
 		super(Calclavia.CONFIGURATION.getItem(name, id).getInt(id), Material.rock);
 		this.setCreativeTab(CreativeTabs.tabBlock);
