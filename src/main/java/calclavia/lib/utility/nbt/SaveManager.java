@@ -17,12 +17,22 @@ import cpw.mods.fml.common.FMLLog;
  * @author Darkguardsman */
 public class SaveManager
 {
+    /** Map of save names with there class file */
     private static HashMap<String, Class<?>> idToClassMap = new HashMap<String, Class<?>>();
+
+    /** Reverse of the idToClassMap */
     private static HashMap<Class<?>, String> classToIDMap = new HashMap<Class<?>, String>();
+
+    /** List of object to save on the next save call */
     private static List<Object> saveList = new ArrayList<Object>();
+
+    /** Object that save each time the world saves */
     private static List<Object> objects = new ArrayList<Object>();
+
+    /** Instanceof this class */
     private static SaveManager instance;
 
+    /** Gets an instance of this class */
     public static SaveManager instance()
     {
         if (instance == null)
@@ -57,6 +67,12 @@ public class SaveManager
         }
     }
 
+    /** Call this to register a class with an id to be use in recreating an object from a save. Any
+     * object that is registered to this should use a no parm constructor. Unless the class plans to
+     * construct itself without using the save manager.
+     * 
+     * @param id - string that will be used to save the class by
+     * @param clazz - class to link with the id */
     public static void registerClass(String id, Class clazz)
     {
         synchronized (classToIDMap)
@@ -81,6 +97,11 @@ public class SaveManager
         }
     }
 
+    /** Creates then loads an object from a file. The file should have an nbt structure or it may not
+     * work.
+     * 
+     * @param file - file
+     * @return the object created from the file */
     public static Object createAndLoad(File file)
     {
         if (file.exists())

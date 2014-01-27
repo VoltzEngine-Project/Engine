@@ -2,6 +2,9 @@ package calclavia.lib.utility.nbt;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+/** Simple interface to apply a save and load method to any object
+ * 
+ * @author Darkguardsman */
 public interface ISaveObj
 {
     /** Saves the object to NBT */
