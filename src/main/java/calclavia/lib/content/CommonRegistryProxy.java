@@ -3,6 +3,7 @@ package calclavia.lib.content;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
+import calclavia.lib.prefab.item.ItemBlockTooltip;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonRegistryProxy
@@ -11,7 +12,7 @@ public class CommonRegistryProxy
 	{
 		if (block != null && name != null)
 		{
-			GameRegistry.registerBlock(block, itemClass == null ? ItemBlock.class : itemClass, name, modID);
+			GameRegistry.registerBlock(block, itemClass == null ? ItemBlockTooltip.class : itemClass, name, modID);
 		}
 	}
 
