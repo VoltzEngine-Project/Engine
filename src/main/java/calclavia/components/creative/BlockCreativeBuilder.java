@@ -33,7 +33,7 @@ public class BlockCreativeBuilder extends BlockCC implements IPacketReceiver
 
 	public BlockCreativeBuilder()
 	{
-		super("creativeBuilder", CalclaviaLoader.idManager.getNextItemID());
+		super("creativeBuilder", CalclaviaLoader.idManager.getNextBlockID());
 		setCreativeTab(CreativeTabs.tabTools);
 	}
 
