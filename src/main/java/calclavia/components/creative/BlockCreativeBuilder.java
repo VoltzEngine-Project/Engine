@@ -5,16 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraftforge.common.Configuration;
 import universalelectricity.api.vector.Vector3;
 import calclavia.components.BlockCC;
 import calclavia.components.CalclaviaLoader;
-import calclavia.lib.Calclavia;
 import calclavia.lib.network.IPacketReceiver;
 import calclavia.lib.schematic.Schematic;
 

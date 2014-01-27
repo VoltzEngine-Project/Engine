@@ -14,6 +14,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import calclavia.components.creative.BlockCreativeBuilder;
+import calclavia.components.creative.BlockInfinite;
 import calclavia.lib.Calclavia;
 import calclavia.lib.content.ContentRegistry;
 import calclavia.lib.content.IDManager;
@@ -28,6 +29,7 @@ import calclavia.lib.ore.OreGenBase;
 import calclavia.lib.ore.OreGenReplaceStone;
 import calclavia.lib.ore.OreGenerator;
 import calclavia.lib.prefab.ProxyBase;
+import calclavia.lib.prefab.item.ItemBlockMetadata;
 import calclavia.lib.recipe.RecipeUtility;
 import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.nbt.NBTUtility;
@@ -165,6 +167,7 @@ public class CalclaviaLoader
 
 	public static BlockMultiBlockPart blockMulti;
 	public static BlockCreativeBuilder blockCreativeBuilder;
+	public static Block blockInfinite;
 
 	@EventHandler
 	public void init(FMLPreInitializationEvent evt)
@@ -180,6 +183,8 @@ public class CalclaviaLoader
 		{
 			blockCreativeBuilder = (BlockCreativeBuilder) contentRegistry.createBlock(BlockCreativeBuilder.class);
 		}
+
+		blockInfinite = contentRegistry.createBlock(BlockInfinite.class, ItemBlockMetadata.class);
 
 		Calclavia.CONFIGURATION.save();
 	}
