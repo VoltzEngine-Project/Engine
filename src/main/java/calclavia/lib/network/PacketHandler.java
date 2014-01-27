@@ -105,18 +105,19 @@ public class PacketHandler implements IPacketHandler
 	}
 
 	/** Reads a compressed NBTTagCompound from the InputStream */
-	public static NBTTagCompound readNBTTagCompound(DataInput par0DataInput) throws IOException
+	public static NBTTagCompound readNBTTagCompound(DataInput reader) throws IOException
 	{
-		short short1 = par0DataInput.readShort();
+		// added null check
+		Short short1 = reader.readShort();
 
-		if (short1 < 0)
+		if (short1 == null || short1 < 0)
 		{
 			return null;
 		}
 		else
 		{
 			byte[] abyte = new byte[short1];
-			par0DataInput.readFully(abyte);
+			reader.readFully(abyte);
 			return CompressedStreamTools.decompress(abyte);
 		}
 	}
