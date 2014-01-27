@@ -28,7 +28,7 @@ public class FlagWorld extends FlagBase
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void load(NBTTagCompound nbt)
 	{
 		// A list containing all flags within it for this world.
 		Iterator<NBTTagCompound> childCompounds = nbt.getTags().iterator();
@@ -40,7 +40,7 @@ public class FlagWorld extends FlagBase
 			try
 			{
 				FlagRegion flagRegion = new FlagRegion(this);
-				flagRegion.readFromNBT(childCompound);
+				flagRegion.load(childCompound);
 				this.regions.add(flagRegion);
 			}
 			catch (Exception e)
@@ -52,14 +52,14 @@ public class FlagWorld extends FlagBase
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void save(NBTTagCompound nbt)
 	{
 		for (FlagRegion region : this.regions)
 		{
 			try
 			{
 				NBTTagCompound flagCompound = new NBTTagCompound();
-				region.writeToNBT(flagCompound);
+				region.save(flagCompound);
 				nbt.setTag(region.name, flagCompound);
 			}
 			catch (Exception e)

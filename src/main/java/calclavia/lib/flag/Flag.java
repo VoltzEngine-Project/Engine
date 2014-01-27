@@ -27,14 +27,14 @@ public class Flag extends FlagBase
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void load(NBTTagCompound nbt)
 	{
 		this.name = nbt.getString("name");
 		this.value = nbt.getString("value");
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void save(NBTTagCompound nbt)
 	{
 		nbt.setString("name", this.name);
 		nbt.setString("value", this.value);

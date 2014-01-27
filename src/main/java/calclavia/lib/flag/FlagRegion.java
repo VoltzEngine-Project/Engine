@@ -39,7 +39,7 @@ public class FlagRegion extends FlagBase
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void load(NBTTagCompound nbt)
 	{
 		this.name = nbt.getName();
 
@@ -60,7 +60,7 @@ public class FlagRegion extends FlagBase
 			try
 			{
 				Flag flag = new Flag(this);
-				flag.readFromNBT(childNode);
+				flag.load(childNode);
 				this.flags.add(flag);
 			}
 			catch (Exception e)
@@ -72,7 +72,7 @@ public class FlagRegion extends FlagBase
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void save(NBTTagCompound nbt)
 	{
 		nbt.setName(this.name);
 

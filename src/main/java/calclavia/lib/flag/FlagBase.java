@@ -1,26 +1,41 @@
 package calclavia.lib.flag;
 
+import java.io.File;
+
+import calclavia.lib.utility.nbt.IVirtualObject;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class FlagBase
+/** @author Calclavia */
+public abstract class FlagBase implements IVirtualObject
 {
-	public abstract void readFromNBT(NBTTagCompound nbt);
+    /** Gets the NBT data that would normally be saved by the object */
+    public NBTTagCompound getNBT()
+    {
+        NBTTagCompound nbt = new NBTTagCompound();
+        try
+        {
+            this.save(nbt);
+        }
+        catch (Exception e)
+        {
+            System.out.println("[Caclavia-Core]FlagBase: Failed to read flag");
+            e.printStackTrace();
+        }
 
-	public abstract void writeToNBT(NBTTagCompound nbt);
+        return nbt;
+    }
 
-	public NBTTagCompound getNBT()
-	{
-		NBTTagCompound nbt = new NBTTagCompound();
-		try
-		{
-			this.writeToNBT(nbt);
-		}
-		catch (Exception e)
-		{
-			System.out.println("Failed to read flag");
-			e.printStackTrace();
-		}
+    @Override
+    public File getSaveFile()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-		return nbt;
-	}
+    @Override
+    public void setSaveFile(File file)
+    {
+        // TODO Auto-generated method stub
+
+    }
 }
