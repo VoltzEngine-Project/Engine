@@ -12,6 +12,9 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.FMLLog;
 
+/** Simple manager that handles common saving and creation of object threw Minecraft's NBT system.
+ * 
+ * @author Darkguardsman */
 public class SaveManager
 {
     private static HashMap<String, Class<?>> idToClassMap = new HashMap<String, Class<?>>();
@@ -33,35 +36,47 @@ public class SaveManager
      * save manager after */
     public static void markNeedsSaved(Object object)
     {
-        if (object instanceof IVirtualObject && !saveList.contains(object))
+        synchronized (objects)
         {
-            saveList.add(object);
+            if (object instanceof IVirtualObject && !saveList.contains(object))
+            {
+                saveList.add(object);
+            }
         }
     }
 
     /** Registers the object to be saved on each world save event */
     public static void register(Object object)
     {
-        if (object instanceof IVirtualObject && !objects.contains(object))
+        synchronized (objects)
         {
-            objects.add(object);
+            if (object instanceof IVirtualObject && !objects.contains(object))
+            {
+                objects.add(object);
+            }
         }
     }
 
     public static void registerClass(String id, Class clazz)
     {
-        if (id != null && clazz != null)
+        synchronized (classToIDMap)
         {
-            if (idToClassMap.containsKey(id) && idToClassMap.get(id) != null)
+            synchronized (idToClassMap)
             {
-                System.out.println("[CoreMachine]SaveManager: Something attempted to register a class with the id of another class");
-                System.out.println("[CoreMachine]SaveManager: Id:" + id + "  Class:" + clazz.getName());
-                System.out.println("[CoreMachine]SaveManager: OtherClass:" + idToClassMap.get(id).getName());
-            }
-            else
-            {
-                idToClassMap.put(id, clazz);
-                classToIDMap.put(clazz, id);
+                if (id != null && clazz != null)
+                {
+                    if (idToClassMap.containsKey(id) && idToClassMap.get(id) != null)
+                    {
+                        System.out.println("[CoreMachine]SaveManager: Something attempted to register a class with the id of another class");
+                        System.out.println("[CoreMachine]SaveManager: Id:" + id + "  Class:" + clazz.getName());
+                        System.out.println("[CoreMachine]SaveManager: OtherClass:" + idToClassMap.get(id).getName());
+                    }
+                    else
+                    {
+                        idToClassMap.put(id, clazz);
+                        classToIDMap.put(clazz, id);
+                    }
+                }
             }
         }
     }
