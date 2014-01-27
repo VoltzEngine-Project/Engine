@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import calclavia.components.creative.BlockCreativeBuilder;
 import calclavia.lib.Calclavia;
 import calclavia.lib.content.ContentRegistry;
 import calclavia.lib.content.IDManager;
@@ -33,6 +34,7 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -61,6 +63,9 @@ public class CalclaviaLoader
 	@Mod.Metadata(ID)
 	public static ModMetadata metadata;
 
+	@Instance(ID)
+	public static CalclaviaLoader INSTANCE;
+
 	public static final String RESOURCE_PATH = "/assets/calclavia/";
 	public static final String TEXTURE_DIRECTORY = RESOURCE_PATH + "textures/";
 	public static final String BLOCK_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "blocks/";
@@ -76,76 +81,74 @@ public class CalclaviaLoader
 	/**
 	 * Auto-incrementing configuration IDs. Use this to make sure no config ID is the same.
 	 */
-	public static final int BLOCK_ID_PREFIX = 3970;
-	public static final int ITEM_ID_PREFIX = 13970;
+	public static final IDManager idManager = new IDManager(3970, 13970);
 
 	/**
 	 * Blocks
 	 */
 	public static Block blockOreCopper;
-	public static final int idBlockOreCopper = BLOCK_ID_PREFIX + 0;
+	public static final int idBlockOreCopper = idManager.getNextBlockID();
 
 	public static Block blockOreTin;
-	public static final int idBlockOreTin = BLOCK_ID_PREFIX + 1;
+	public static final int idBlockOreTin = idManager.getNextBlockID();
 
 	/**
 	 * Items
 	 */
 	public static Item itemWrench;
-	public static final int idItemWrench = ITEM_ID_PREFIX + 2;
+	public static final int idItemWrench = idManager.getNextItemID();
 
 	public static Item itemMotor;
-	public static final int idItemMotor = ITEM_ID_PREFIX + 3;
+	public static final int idItemMotor = idManager.getNextItemID();
 
 	public static Item itemCircuitBasic;
-	public static final int idItemCircuitBasic = ITEM_ID_PREFIX + 4;
+	public static final int idItemCircuitBasic = idManager.getNextItemID();
 
 	public static Item itemCircuitAdvanced;
-	public static final int idItemCircuitAdvanced = ITEM_ID_PREFIX + 5;
+	public static final int idItemCircuitAdvanced = idManager.getNextItemID();
 
 	public static Item itemCircuitElite;
-	public static final int idItemCircuitElite = ITEM_ID_PREFIX + 6;
+	public static final int idItemCircuitElite = idManager.getNextItemID();
 
 	public static Item itemPlateCopper;
-	public static final int idItemPlateCopper = ITEM_ID_PREFIX + 7;
+	public static final int idItemPlateCopper = idManager.getNextItemID();
 
 	public static Item itemPlateTin;
-	public static final int idItemPlateTin = ITEM_ID_PREFIX + 8;
+	public static final int idItemPlateTin = idManager.getNextItemID();
 
 	public static Item itemPlateBronze;
-	public static final int idItemPlateBronze = ITEM_ID_PREFIX + 9;
+	public static final int idItemPlateBronze = idManager.getNextItemID();
 
 	public static Item itemPlateSteel;
-	public static final int idItemPlateSteel = ITEM_ID_PREFIX + 10;
+	public static final int idItemPlateSteel = idManager.getNextItemID();
 
 	public static Item itemPlateIron;
-	public static final int idItemPlateIron = ITEM_ID_PREFIX + 11;
+	public static final int idItemPlateIron = idManager.getNextItemID();
 
 	public static Item itemPlateGold;
-	public static final int idItemPlateGold = ITEM_ID_PREFIX + 12;
+	public static final int idItemPlateGold = idManager.getNextItemID();
 
 	public static Item itemIngotCopper;
-	public static final int idItemIngotCopper = ITEM_ID_PREFIX + 13;
+	public static final int idItemIngotCopper = idManager.getNextItemID();
 
 	public static Item itemIngotTin;
-	public static final int idItemIngotTin = ITEM_ID_PREFIX + 14;
+	public static final int idItemIngotTin = idManager.getNextItemID();
 
 	public static Item itemIngotSteel;
-	public static final int idItemIngotSteel = ITEM_ID_PREFIX + 15;
+	public static final int idItemIngotSteel = idManager.getNextItemID();
 
 	public static Item itemIngotBronze;
-	public static final int idItemIngotBronze = ITEM_ID_PREFIX + 16;
+	public static final int idItemIngotBronze = idManager.getNextItemID();
 
 	public static Item itemDustSteel;
-	public static final int idItemDustSteel = ITEM_ID_PREFIX + 17;
+	public static final int idItemDustSteel = idManager.getNextItemID();
 
 	public static Item itemDustBronze;
-	public static final int idItemDustBronze = ITEM_ID_PREFIX + 18;
+	public static final int idItemDustBronze = idManager.getNextItemID();
 
 	public static OreGenBase generationOreCopper, generationOreTin;
 	public static String CHANNEL = "calclaviacore";
 
-	public static final IDManager idManager = new IDManager(2467, 12450);
 	public static final ContentRegistry contentRegistry = new ContentRegistry(Calclavia.CONFIGURATION, ID);
 	public static final PacketTile PACKET_TILE = new PacketTile(CHANNEL);
 
@@ -154,6 +157,7 @@ public class CalclaviaLoader
 	 */
 
 	public static BlockMultiBlockPart blockMulti;
+	public static BlockCreativeBuilder blockCreativeBuilder;
 
 	@EventHandler
 	public void init(FMLPreInitializationEvent evt)
@@ -198,6 +202,8 @@ public class CalclaviaLoader
 
 		ComponentRegistry.register("itemMotor");
 		ComponentRegistry.register("itemWrench");
+
+		blockCreativeBuilder = new BlockCreativeBuilder(idManager.getNextBlockID());
 
 		Calclavia.LOGGER.fine("Attempting to load " + ComponentRegistry.requests.size() + " items.");
 
