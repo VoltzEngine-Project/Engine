@@ -23,21 +23,25 @@ public abstract class BlockSidedIO extends BlockAdvanced
 	@Override
 	public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
-
-		if (tile instanceof IIO)
+		if (!entityPlayer.isSneaking())
 		{
-			int newIO = (((IIO) tile).getIO(ForgeDirection.getOrientation(side)) + 1) % 3;
-			((IIO) tile).setIO(ForgeDirection.getOrientation(side), newIO);
+			TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-			if (!world.isRemote)
+			if (tile instanceof IIO)
 			{
-				entityPlayer.addChatMessage("Side changed to: " + (newIO == 0 ? "None" : (newIO == 1 ? "Input" : "Output")));
+				int newIO = (((IIO) tile).getIO(ForgeDirection.getOrientation(side)) + 1) % 3;
+				((IIO) tile).setIO(ForgeDirection.getOrientation(side), newIO);
+
+				if (!world.isRemote)
+				{
+					entityPlayer.addChatMessage("Side changed to: " + (newIO == 0 ? "None" : (newIO == 1 ? "Input" : "Output")));
+				}
+
+				world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+				return true;
 			}
-
-			world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 		}
-
-		return true;
+		
+		return false;
 	}
 }

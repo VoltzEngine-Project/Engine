@@ -17,6 +17,8 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import calclavia.components.creative.BlockCreativeBuilder;
 import calclavia.components.creative.BlockInfinite;
+import calclavia.components.tool.ToolMode;
+import calclavia.components.tool.ToolModeGeneral;
 import calclavia.lib.Calclavia;
 import calclavia.lib.content.ContentRegistry;
 import calclavia.lib.content.IDManager;
@@ -172,6 +174,8 @@ public class CalclaviaLoader
 		NetworkRegistry.instance().registerGuiHandler(this, proxy);
 		SaveManager.registerClass("ModFlag", ModFlag.class);
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance());
+
+		ToolMode.REGISTRY.add(new ToolModeGeneral());
 
 		Calclavia.CONFIGURATION.load();
 

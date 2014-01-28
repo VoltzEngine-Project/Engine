@@ -1,19 +1,16 @@
 package calclavia.components;
 
-import ic2.api.tile.IWrenchable;
-import net.minecraft.block.Block;
+import java.util.List;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.Event.Result;
-import universalelectricity.api.vector.Vector3;
 import buildcraft.api.tools.IToolWrench;
-import calclavia.components.event.MultitoolEvent;
-import calclavia.lib.utility.inventory.InventoryUtility;
+import calclavia.components.tool.ToolMode;
+import calclavia.lib.utility.LanguageUtility;
+import calclavia.lib.utility.nbt.NBTUtility;
 
 public class ItemMultitool extends ItemBase implements IToolWrench
 {
@@ -37,53 +34,41 @@ public class ItemMultitool extends ItemBase implements IToolWrench
 	}
 
 	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+	public void addInformation(ItemStack itemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
-		int blockID = world.getBlockId(x, y, z);
-		int blockMeta = world.getBlockMetadata(x, y, z);
-		Block block = Block.blocksList[blockID];
-		MultitoolEvent evt = new MultitoolEvent(world, stack, player, x, y, z, side, hitX, hitY, hitZ, block, blockMeta);
-		MinecraftForge.EVENT_BUS.post(evt);
+		par3List.add("Mode: " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
+	}
 
-		if (!evt.isCanceled() && !player.isSneaking())
+	@Override
+	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player)
+	{
+		if (player.isSneaking())
 		{
-			TileEntity tile = world.getBlockTileEntity(x, y, z);
+			MovingObjectPosition objectMouseOver = player.rayTrace(10, 1);
 
-			if (tile instanceof IWrenchable && ((IWrenchable) tile).wrenchCanSetFacing(player, side))
+			if (objectMouseOver == null)
 			{
-				ForgeDirection direction = ForgeDirection.getOrientation(side);
-				short setSide = 0;
+				setMode(itemStack, (getMode(itemStack) + 1) % ToolMode.REGISTRY.size());
 
-				if (player.isSneaking())
-				{
-					direction = direction.getOpposite();
-				}
-				setSide = (short) direction.ordinal();
-
-				if (setSide != ((IWrenchable) tile).getFacing())
-				{
-					((IWrenchable) tile).setFacing(setSide);
-				}
-				else if (((IWrenchable) tile).wrenchCanRemove(player))
-				{
-					ItemStack output = ((IWrenchable) tile).getWrenchDrop(player);
-
-					if (output != null)
-					{
-						world.setBlockToAir(x, y, z);
-						InventoryUtility.dropItemStack(world, new Vector3(x, y, z), output);
-					}
-				}
-
-				return true;
-			}
-			else if (block != null && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
-			{
-				wrenchUsed(player, x, y, z);
+				if (!world.isRemote)
+					player.addChatMessage("Set tool mode to: " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
+				return itemStack;
 			}
 		}
-		
-		return evt.hasResult() ? evt.getResult() == Result.DENY ? true : false : false;
+
+		return ToolMode.REGISTRY.get(getMode(itemStack)).onItemRightClick(itemStack, world, player);
+	}
+
+	@Override
+	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+	{
+		return ToolMode.REGISTRY.get(getMode(stack)).onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
+	}
+
+	@Override
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+	{
+		return ToolMode.REGISTRY.get(getMode(stack)).onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
 	}
 
 	@Override
@@ -91,4 +76,15 @@ public class ItemMultitool extends ItemBase implements IToolWrench
 	{
 		return true;
 	}
+
+	public int getMode(ItemStack itemStack)
+	{
+		return NBTUtility.getNBTTagCompound(itemStack).getInteger("mode");
+	}
+
+	public void setMode(ItemStack itemStack, int mode)
+	{
+		NBTUtility.getNBTTagCompound(itemStack).setInteger("mode", mode);
+	}
+
 }
