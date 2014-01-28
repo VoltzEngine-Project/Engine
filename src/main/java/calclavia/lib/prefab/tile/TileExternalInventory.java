@@ -55,6 +55,20 @@ public class TileExternalInventory extends TileAdvanced implements IExternalInve
 		return this.getInventory().decrStackSize(i, j);
 	}
 
+	public void incrStackSize(int slot, ItemStack itemStack)
+	{
+		if (this.getStackInSlot(slot) == null)
+		{
+			setInventorySlotContents(slot, itemStack.copy());
+		}
+		else if (this.getStackInSlot(slot).isItemEqual(itemStack))
+		{
+			getStackInSlot(slot).stackSize += itemStack.stackSize;
+		}
+
+		onInventoryChanged();
+	}
+
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i)
 	{
@@ -103,7 +117,6 @@ public class TileExternalInventory extends TileAdvanced implements IExternalInve
 	public void closeChest()
 	{
 		this.getInventory().closeChest();
-
 	}
 
 	@Override

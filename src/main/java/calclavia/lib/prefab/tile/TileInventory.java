@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.ForgeDirection;
 
+@Deprecated
 public abstract class TileInventory extends TileElectrical implements IInventory, IPlayerUsing
 {
 	public final HashSet<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
