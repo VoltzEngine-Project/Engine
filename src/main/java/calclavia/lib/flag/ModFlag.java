@@ -45,7 +45,6 @@ public class ModFlag extends FlagBase implements IVirtualObject
 
             while (dimensions.hasNext())
             {
-
                 Object tag = dimensions.next();
                 if (tag instanceof NBTTagCompound)
                 {

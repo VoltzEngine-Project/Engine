@@ -11,6 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 
 /** Simple manager that handles common saving and creation of object threw Minecraft's NBT system.
  * 
@@ -29,8 +30,11 @@ public class SaveManager
     /** Object that save each time the world saves */
     private static List<Object> objects = new ArrayList<Object>();
 
-    /** Instanceof this class */
+    /** Instance of this class */
     private static SaveManager instance;
+
+    /** Last cpu time that the save manager tried to save a file */
+    private static long lastSaveMills = 0;
 
     /** Gets an instance of this class */
     public static SaveManager instance()
@@ -160,6 +164,22 @@ public class SaveManager
 
     @ForgeSubscribe
     public void worldSave(WorldEvent evt)
+    {
+        //current time milli-seconds is used to prevent the files from saving 20 times when the world loads
+        if (System.currentTimeMillis() - lastSaveMills > 2000)
+        {
+            lastSaveMills = System.currentTimeMillis();
+            this.saveAll();
+        }
+    }
+
+    @ForgeSubscribe
+    public void onServerStopping(FMLServerStoppingEvent evt)
+    {
+        this.saveAll();
+    }
+
+    public void saveAll()
     {
         List<Object> objs = new ArrayList<Object>();
         objs.addAll(SaveManager.objects);
