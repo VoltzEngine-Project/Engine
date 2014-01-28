@@ -173,13 +173,9 @@ public class SaveManager
         }
     }
 
-    @ForgeSubscribe
-    public void onServerStopping(FMLServerStoppingEvent evt)
-    {
-        this.saveAll();
-    }
+   
 
-    public void saveAll()
+    public static void saveAll()
     {
         List<Object> objs = new ArrayList<Object>();
         objs.addAll(SaveManager.objects);
