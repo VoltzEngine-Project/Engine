@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 
-public abstract class ProxyBase implements IGuiHandler
+public class ProxyBase implements IGuiHandler
 {
 	public void preInit()
 	{
