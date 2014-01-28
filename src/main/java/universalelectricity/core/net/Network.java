@@ -119,8 +119,8 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	public void split(C splitPoint)
 	{
 		Class connectorClass = splitPoint.getClass();
-		this.removeConnector(splitPoint);
-		this.reconstruct();
+		removeConnector(splitPoint);
+		reconstruct();
 
 		/**
 		 * Loop through the connected blocks and attempt to see if there are connections between the

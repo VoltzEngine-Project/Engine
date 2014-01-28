@@ -57,12 +57,6 @@ public class NetworkTickHandler implements ITickHandler
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
-
-	}
-
-	@Override
-	public void tickEnd(EnumSet<TickType> type, Object... tickData)
-	{
 		if (markClear)
 		{
 			toAddUpdaters.clear();
@@ -71,7 +65,11 @@ public class NetworkTickHandler implements ITickHandler
 			queuedEvents.clear();
 			markClear = false;
 		}
+	}
 
+	@Override
+	public void tickEnd(EnumSet<TickType> type, Object... tickData)
+	{
 		/**
 		 * Network
 		 */
