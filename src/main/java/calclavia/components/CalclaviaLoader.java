@@ -165,6 +165,7 @@ public class CalclaviaLoader
     public void init(FMLPreInitializationEvent evt)
     {
         NetworkRegistry.instance().registerGuiHandler(this, proxy);
+        SaveManager.registerClass("ModFlag", ModFlag.class);
         MinecraftForge.EVENT_BUS.register(SaveManager.instance());
 
         Calclavia.CONFIGURATION.load();
@@ -510,7 +511,13 @@ public class CalclaviaLoader
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event)
     {
-        FlagRegistry.registerModFlag(FlagRegistry.DEFAULT_NAME, new ModFlag(NBTUtility.loadData(FlagRegistry.DEFAULT_NAME)));
+        //Load ModFlag from world save
+        Object object = SaveManager.createAndLoad(NBTUtility.loadData(FlagRegistry.DEFAULT_NAME));
+        if (!(object instanceof ModFlag))
+            object = new ModFlag(FlagRegistry.DEFAULT_NAME);
+        FlagRegistry.registerModFlag(FlagRegistry.DEFAULT_NAME, (ModFlag) object);
+
+        //Setup command
         ICommandManager commandManager = FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
         ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
         serverCommandManager.registerCommand(new CommandFlag(FlagRegistry.getModFlag(FlagRegistry.DEFAULT_NAME)));

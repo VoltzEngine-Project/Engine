@@ -9,20 +9,30 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import universalelectricity.api.vector.Vector3;
+import calclavia.lib.utility.nbt.IVirtualObject;
+import calclavia.lib.utility.nbt.NBTUtility;
+import calclavia.lib.utility.nbt.SaveManager;
 
 /** @author Calclavia */
-public class ModFlag extends FlagBase
+public class ModFlag extends FlagBase implements IVirtualObject
 {
     /** An array of world flag data. Each representing a world. */
     private final List<FlagWorld> flagWorlds = new ArrayList<FlagWorld>();
+    private String name = FlagRegistry.DEFAULT_NAME;
+
+    public ModFlag()
+    {
+        SaveManager.register(this);
+    }
 
     /** Initiates a new mod flag data and loads everything from NBT into memory. Only exists server
      * side.
      * 
      * @param nbt */
-    public ModFlag(NBTTagCompound nbt)
+    public ModFlag(String name)
     {
-        this.load(nbt);
+        this();
+        this.name = name;
     }
 
     @Override
@@ -35,20 +45,24 @@ public class ModFlag extends FlagBase
 
             while (dimensions.hasNext())
             {
-                NBTTagCompound dimensionCompound = (NBTTagCompound) dimensions.next();
 
-                try
+                Object tag = dimensions.next();
+                if (tag instanceof NBTTagCompound)
                 {
-                    int dimensionID = Integer.parseInt(dimensionCompound.getName().replace("dim_", ""));
-                    World world = DimensionManager.getWorld(dimensionID);
-                    FlagWorld flagWorld = new FlagWorld(world);
-                    flagWorld.load(dimensionCompound);
-                    this.flagWorlds.add(flagWorld);
-                }
-                catch (Exception e)
-                {
-                    System.out.println("Mod Flag: Failed to read dimension data: " + dimensionCompound.getName());
-                    e.printStackTrace();
+                    NBTTagCompound dimensionCompound = (NBTTagCompound) tag;
+                    try
+                    {
+                        int dimensionID = Integer.parseInt(dimensionCompound.getName().replace("dim_", ""));
+                        World world = DimensionManager.getWorld(dimensionID);
+                        FlagWorld flagWorld = new FlagWorld(world);
+                        flagWorld.load(dimensionCompound);
+                        this.flagWorlds.add(flagWorld);
+                    }
+                    catch (Exception e)
+                    {
+                        System.out.println("Mod Flag: Failed to read dimension data: " + dimensionCompound.getName());
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -113,5 +127,17 @@ public class ModFlag extends FlagBase
         return this.flagWorlds;
     }
 
-   
+    @Override
+    public File getSaveFile()
+    {
+        return new File(NBTUtility.getSaveDirectory(), this.name + ".dat");
+    }
+
+    @Override
+    public void setSaveFile(File file)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
 }

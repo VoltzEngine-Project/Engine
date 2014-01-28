@@ -1,12 +1,10 @@
 package calclavia.lib.flag;
 
-import java.io.File;
-
-import calclavia.lib.utility.nbt.IVirtualObject;
 import net.minecraft.nbt.NBTTagCompound;
+import calclavia.lib.utility.nbt.ISaveObj;
 
 /** @author Calclavia */
-public abstract class FlagBase implements IVirtualObject
+public abstract class FlagBase implements ISaveObj
 {
     /** Gets the NBT data that would normally be saved by the object */
     public NBTTagCompound getNBT()
@@ -23,19 +21,5 @@ public abstract class FlagBase implements IVirtualObject
         }
 
         return nbt;
-    }
-
-    @Override
-    public File getSaveFile()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setSaveFile(File file)
-    {
-        // TODO Auto-generated method stub
-
     }
 }

@@ -161,8 +161,10 @@ public class SaveManager
     @ForgeSubscribe
     public void worldSave(WorldEvent evt)
     {
-        SaveManager.saveList.addAll(SaveManager.objects);
-        for (Object object : SaveManager.saveList)
+        List<Object> objs = new ArrayList<Object>();
+        objs.addAll(SaveManager.objects);
+        objs.addAll(SaveManager.saveList);
+        for (Object object : objs)
         {
             if (object instanceof IVirtualObject)
             {

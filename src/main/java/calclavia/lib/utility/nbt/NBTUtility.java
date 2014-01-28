@@ -27,6 +27,9 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 
+/** Utility that manages common NBT save and load methods
+ * 
+ * @author Calclavia, DarkGuardsamn */
 public class NBTUtility
 {
     /** Saves NBT data in the world folder.
@@ -102,6 +105,11 @@ public class NBTUtility
     public static NBTTagCompound loadData(String filename)
     {
         return loadData(getSaveDirectory(MinecraftServer.getServer().getFolderName()), filename);
+    }
+
+    public static File getSaveDirectory()
+    {
+        return getSaveDirectory(MinecraftServer.getServer().getFolderName());
     }
 
     public static File getSaveDirectory(String worldName)
