@@ -24,6 +24,11 @@ public class FlagRegistry
 		MOD_FLAGS.put(name, flagData);
 	}
 
+	public static ModFlag getModFlag()
+	{
+	    return getModFlag(DEFAULT_NAME);
+	}
+	
 	public static ModFlag getModFlag(String name)
 	{
 		return MOD_FLAGS.get(name);
