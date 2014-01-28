@@ -169,7 +169,7 @@ public class SaveManager
         if (System.currentTimeMillis() - lastSaveMills > 2000)
         {
             lastSaveMills = System.currentTimeMillis();
-            this.saveAll();
+            saveAll();
         }
     }
 

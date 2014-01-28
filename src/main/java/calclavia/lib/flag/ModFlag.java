@@ -1,11 +1,12 @@
 package calclavia.lib.flag;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import universalelectricity.api.vector.Vector3;
@@ -17,7 +18,7 @@ import calclavia.lib.utility.nbt.SaveManager;
 public class ModFlag extends FlagBase implements IVirtualObject
 {
     /** An array of world flag data. Each representing a world. */
-    private final List<FlagWorld> flagWorlds = new ArrayList<FlagWorld>();
+    private final HashMap<Integer, FlagWorld> flagWorlds = new HashMap<Integer, FlagWorld>();
     private String name = FlagRegistry.DEFAULT_NAME;
 
     public ModFlag()
@@ -38,8 +39,21 @@ public class ModFlag extends FlagBase implements IVirtualObject
     @Override
     public void load(NBTTagCompound nbt)
     {
-        if (nbt != null)
+        if (nbt.hasKey("name"))
         {
+            this.name = nbt.getString("name");
+            NBTTagList nbtList = nbt.getTagList("WorldFlags");
+
+            for (int i = 0; i < nbtList.tagCount(); ++i)
+            {
+                NBTTagCompound stackTag = (NBTTagCompound) nbtList.tagAt(i);
+                FlagWorld flagWorld = new FlagWorld(stackTag);
+                this.flagWorlds.put(flagWorld.world.provider.dimensionId, flagWorld);
+            }
+        }
+        else
+        {
+
             // A list containing all dimension ID and data within it.
             Iterator dimensions = nbt.getTags().iterator();
 
@@ -55,7 +69,7 @@ public class ModFlag extends FlagBase implements IVirtualObject
                         World world = DimensionManager.getWorld(dimensionID);
                         FlagWorld flagWorld = new FlagWorld(world);
                         flagWorld.load(dimensionCompound);
-                        this.flagWorlds.add(flagWorld);
+                        this.flagWorlds.put(dimensionID, flagWorld);
                     }
                     catch (Exception e)
                     {
@@ -70,21 +84,28 @@ public class ModFlag extends FlagBase implements IVirtualObject
     @Override
     public void save(NBTTagCompound nbt)
     {
-        if (nbt != null)
+        nbt.setString("name", this.name);
+
+        NBTTagList nbtFlagWorldList = new NBTTagList();
+
+        for (Entry<Integer, FlagWorld> entry : this.flagWorlds.entrySet())
         {
-            for (FlagWorld worldData : this.flagWorlds)
+            if (entry.getValue() != null)
             {
                 try
                 {
-                    nbt.setTag("dim_" + worldData.world.provider.dimensionId, worldData.getNBT());
+                    NBTTagCompound worldFlagNBT = new NBTTagCompound();
+                    entry.getValue().save(worldFlagNBT);
+                    nbtFlagWorldList.appendTag(worldFlagNBT);
                 }
                 catch (Exception e)
                 {
-                    System.out.println("Mod Flag: Failed to save world flag data: " + worldData.world);
+                    System.out.println("Mod Flag: Failed to save world flag data: " + entry.getValue().world.provider.dimensionId);
                     e.printStackTrace();
                 }
             }
         }
+        nbt.setTag("WorldFlags", nbtFlagWorldList);
     }
 
     public FlagWorld getFlagWorld(World world)
@@ -93,23 +114,13 @@ public class ModFlag extends FlagBase implements IVirtualObject
 
         if (world != null)
         {
-            for (FlagWorld data : this.flagWorlds)
-            {
-                if (data.world != null && data.world.provider != null)
-                {
-                    if (data.world.provider.dimensionId == world.provider.dimensionId)
-                    {
-                        worldData = data;
-                        break;
-                    }
-                }
-            }
+            worldData = this.flagWorlds.get(world.provider.dimensionId);
 
             // If data is null, create it.
             if (worldData == null)
             {
                 worldData = new FlagWorld(world);
-                this.flagWorlds.add(worldData);
+                this.flagWorlds.put(world.provider.dimensionId, worldData);
             }
         }
 
@@ -121,7 +132,7 @@ public class ModFlag extends FlagBase implements IVirtualObject
         return this.getFlagWorld(world).containsValue(flagName, checkValue, position);
     }
 
-    public List<FlagWorld> getFlagWorlds()
+    public HashMap<Integer, FlagWorld> getFlagWorlds()
     {
         return this.flagWorlds;
     }

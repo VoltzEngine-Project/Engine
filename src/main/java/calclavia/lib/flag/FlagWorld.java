@@ -5,196 +5,213 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.prefab.vector.Region3;
 
-/**
- * Data structure for world protection.
+/** Data structure for world protection.
  * 
- * @author Calclavia
- * 
- */
+ * @author Calclavia */
 public class FlagWorld extends FlagBase
 {
-	public static final String GLOBAL_REGION = "dimension";
+    public static final String GLOBAL_REGION = "dimension";
 
-	public World world;
-	private final List<FlagRegion> regions = new ArrayList<FlagRegion>();
+    public World world;
+    private final List<FlagRegion> regions = new ArrayList<FlagRegion>();
 
-	public FlagWorld(World world)
-	{
-		this.world = world;
-	}
+    public FlagWorld(World world)
+    {
+        this.world = world;
+    }
 
-	@Override
-	public void load(NBTTagCompound nbt)
-	{
-		// A list containing all flags within it for this world.
-		Iterator<NBTTagCompound> childCompounds = nbt.getTags().iterator();
+    public FlagWorld(NBTTagCompound nbt)
+    {
+        this.load(nbt);
+    }
 
-		while (childCompounds.hasNext())
-		{
-			NBTTagCompound childCompound = childCompounds.next();
+    @Override
+    public void load(NBTTagCompound nbt)
+    {
+        if (nbt.hasKey("Dim"))
+        {
+            this.world = WorldProvider.getProviderForDimension(nbt.getInteger("Dim")).worldObj;
 
-			try
-			{
-				FlagRegion flagRegion = new FlagRegion(this);
-				flagRegion.load(childCompound);
-				this.regions.add(flagRegion);
-			}
-			catch (Exception e)
-			{
-				System.out.println("Mod Flag: Failed to read flag data: " + childCompound.getName());
-				e.printStackTrace();
-			}
-		}
-	}
+            NBTTagList nbtList = nbt.getTagList("Regions");
+            for (int i = 0; i < nbtList.tagCount(); ++i)
+            {
+                NBTTagCompound stackTag = (NBTTagCompound) nbtList.tagAt(i);
+                FlagRegion flagRegion = new FlagRegion(this);
+                flagRegion.load(stackTag);
+                this.regions.add(flagRegion);
+            }
+        }
+        else
+        {
+            // A list containing all flags within it for this world.
+            Iterator<NBTTagCompound> childCompounds = nbt.getTags().iterator();
 
-	@Override
-	public void save(NBTTagCompound nbt)
-	{
-		for (FlagRegion region : this.regions)
-		{
-			try
-			{
-				NBTTagCompound flagCompound = new NBTTagCompound();
-				region.save(flagCompound);
-				nbt.setTag(region.name, flagCompound);
-			}
-			catch (Exception e)
-			{
-				System.out.println("Failed to save world flag data: " + region.name);
-				e.printStackTrace();
-			}
-		}
-	}
+            while (childCompounds.hasNext())
+            {
+                NBTTagCompound childCompound = childCompounds.next();
 
-	/**
-	 * Gets all the flags that have an effect in this position.
-	 * 
-	 * @param position
-	 * @return
-	 */
-	public List<Flag> getFlagsInPosition(Vector3 position)
-	{
-		List<Flag> returnFlags = new ArrayList<Flag>();
+                try
+                {
+                    FlagRegion flagRegion = new FlagRegion(this);
+                    flagRegion.load(childCompound);
+                    this.regions.add(flagRegion);
+                }
+                catch (Exception e)
+                {
+                    System.out.println("Mod Flag: Failed to read flag data: " + childCompound.getName());
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
-		for (FlagRegion flagRegion : this.regions)
-		{
-			if (flagRegion.region.isIn(position) || flagRegion.name.equalsIgnoreCase(GLOBAL_REGION))
-			{
-				for (Flag flag : flagRegion.getFlags())
-				{
-					returnFlags.add(flag);
-				}
-			}
-		}
+    @Override
+    public void save(NBTTagCompound nbt)
+    {
+        nbt.setInteger("Dim", this.world.provider.dimensionId);
 
-		return returnFlags;
-	}
+        NBTTagList nbtRegionList = new NBTTagList();
 
-	/**
-	 * Gets all the values of the flags in this position.
-	 */
-	public List<String> getValues(String flagName, Vector3 position)
-	{
-		List<String> values = new ArrayList<String>();
+        for (FlagRegion region : this.regions)
+        {
+            try
+            {
+                NBTTagCompound flagCompound = new NBTTagCompound();
+                region.save(flagCompound);
+                nbtRegionList.appendTag(flagCompound);
+            }
+            catch (Exception e)
+            {
+                System.out.println("Failed to save world flag data: " + region.name);
+                e.printStackTrace();
+            }
+        }
+        nbt.setTag("Regions", nbtRegionList);
+    }
 
-		for (Flag flag : this.getFlagsInPosition(position))
-		{
-			values.add(flag.value);
-		}
+    /** Gets all the flags that have an effect in this position.
+     * 
+     * @param position
+     * @return */
+    public List<Flag> getFlagsInPosition(Vector3 position)
+    {
+        List<Flag> returnFlags = new ArrayList<Flag>();
 
-		return values;
-	}
+        for (FlagRegion flagRegion : this.regions)
+        {
+            if (flagRegion.region.isIn(position) || flagRegion.name.equalsIgnoreCase(GLOBAL_REGION))
+            {
+                for (Flag flag : flagRegion.getFlags())
+                {
+                    returnFlags.add(flag);
+                }
+            }
+        }
 
-	/**
-	 * Checks if there is a flag in this position that has a specific value.
-	 */
-	public boolean containsValue(String flagName, String checkValue, Vector3 position)
-	{
-		for (Flag flag : this.getFlagsInPosition(position))
-		{
-			if (flag.name.equalsIgnoreCase(flagName) && flag.value.equalsIgnoreCase(checkValue))
-			{
-				return true;
-			}
-		}
+        return returnFlags;
+    }
 
-		return false;
-	}
+    /** Gets all the values of the flags in this position. */
+    public List<String> getValues(String flagName, Vector3 position)
+    {
+        List<String> values = new ArrayList<String>();
 
-	public boolean addRegion(String name, Vector3 position, int radius)
-	{
-		Vector3 minVec = new Vector3(position.intX() - radius, 0, position.intZ() - radius);
-		Vector3 maxVec = new Vector3(position.intX() + radius, this.world.getHeight(), position.intZ() + radius);
+        for (Flag flag : this.getFlagsInPosition(position))
+        {
+            values.add(flag.value);
+        }
 
-		return this.regions.add(new FlagRegion(this, name, new Region3(minVec, maxVec)));
-	}
+        return values;
+    }
 
-	public FlagRegion getRegion(String name)
-	{
-		for (FlagRegion region : this.regions)
-		{
-			if (region.name.equals(name))
-			{
-				return region;
-			}
-		}
-		return null;
-	}
+    /** Checks if there is a flag in this position that has a specific value. */
+    public boolean containsValue(String flagName, String checkValue, Vector3 position)
+    {
+        for (Flag flag : this.getFlagsInPosition(position))
+        {
+            if (flag.name.equalsIgnoreCase(flagName) && flag.value.equalsIgnoreCase(checkValue))
+            {
+                return true;
+            }
+        }
 
-	/**
-	 * Gets all regions that intersect this point.
-	 */
-	public List<FlagRegion> getRegions(Vector3 position)
-	{
-		List<FlagRegion> returnRegions = new ArrayList<FlagRegion>();
-		for (FlagRegion region : this.regions)
-		{
-			if (region.region.isIn(position))
-			{
-				returnRegions.add(region);
-			}
-		}
-		return returnRegions;
-	}
+        return false;
+    }
 
-	public boolean removeRegion(String name)
-	{
-		for (FlagRegion region : this.regions)
-		{
-			if (region.name.equals(name))
-			{
-				this.regions.remove(region);
-				return true;
-			}
-		}
+    public boolean addRegion(String name, Vector3 position, int radius)
+    {
+        Vector3 minVec = new Vector3(position.intX() - radius, 0, position.intZ() - radius);
+        Vector3 maxVec = new Vector3(position.intX() + radius, this.world.getHeight(), position.intZ() + radius);
 
-		return false;
-	}
+        return this.regions.add(new FlagRegion(this, name, new Region3(minVec, maxVec)));
+    }
 
-	public List<FlagRegion> getRegions()
-	{
-		Iterator<FlagRegion> it = this.regions.iterator();
-		while (it.hasNext())
-		{
-			FlagRegion region = it.next();
+    public FlagRegion getRegion(String name)
+    {
+        for (FlagRegion region : this.regions)
+        {
+            if (region.name.equals(name))
+            {
+                return region;
+            }
+        }
+        return null;
+    }
 
-			if (region == null)
-			{
-				it.remove();
-				continue;
-			}
+    /** Gets all regions that intersect this point. */
+    public List<FlagRegion> getRegions(Vector3 position)
+    {
+        List<FlagRegion> returnRegions = new ArrayList<FlagRegion>();
+        for (FlagRegion region : this.regions)
+        {
+            if (region.region.isIn(position))
+            {
+                returnRegions.add(region);
+            }
+        }
+        return returnRegions;
+    }
 
-			if (region.name == null || region.name == "")
-			{
-				it.remove();
-				continue;
-			}
-		}
+    public boolean removeRegion(String name)
+    {
+        for (FlagRegion region : this.regions)
+        {
+            if (region.name.equals(name))
+            {
+                this.regions.remove(region);
+                return true;
+            }
+        }
 
-		return this.regions;
-	}
+        return false;
+    }
+
+    public List<FlagRegion> getRegions()
+    {
+        Iterator<FlagRegion> it = this.regions.iterator();
+        while (it.hasNext())
+        {
+            FlagRegion region = it.next();
+
+            if (region == null)
+            {
+                it.remove();
+                continue;
+            }
+
+            if (region.name == null || region.name == "")
+            {
+                it.remove();
+                continue;
+            }
+        }
+
+        return this.regions;
+    }
 }

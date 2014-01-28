@@ -2,6 +2,7 @@ package calclavia.lib.flag;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -78,15 +79,10 @@ public class CommandFlag extends CommandBase
 					{
 						String msg = "";
 
-						Iterator<FlagWorld> itWorlds = this.modFlagData.getFlagWorlds().iterator();
-
-						while (itWorlds.hasNext())
+						for(Entry<Integer, FlagWorld> entry : this.modFlagData.getFlagWorlds().entrySet())
 						{
-							Iterator<FlagRegion> itRegion = itWorlds.next().getRegions().iterator();
-
-							while (itRegion.hasNext())
-							{
-								FlagRegion flagRegion = itRegion.next();
+							for(FlagRegion flagRegion : entry.getValue().getRegions())
+	                        {
 								msg = msg + " " + flagRegion.name + " (" + flagRegion.region.min.x + "," + flagRegion.region.min.z + ")" + ",";
 							}
 						}
