@@ -412,6 +412,16 @@ public class Vector3 implements Cloneable
 		return vec.scale(amount);
 	}
 
+	public Vector3 max(Vector3 other)
+	{
+		return new Vector3(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z));
+	}
+
+	public Vector3 min(Vector3 other)
+	{
+		return new Vector3(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z));
+	}
+
 	public Vector3 round()
 	{
 		return new Vector3(Math.round(this.x), Math.round(this.y), Math.round(this.z));
