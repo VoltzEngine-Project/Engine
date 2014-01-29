@@ -457,6 +457,11 @@ public class Vector3 implements Cloneable
 		return worldObj.getEntitiesWithinAABB(par1Class, AxisAlignedBB.getBoundingBox(this.intX(), this.intY(), this.intZ(), this.intX() + 1, this.intY() + 1, this.intZ() + 1));
 	}
 
+	public Vector3 midPoint(Vector3 pos)
+	{
+		return new Vector3((x + pos.x) / 2, (y + pos.y) / 2, (z + pos.z) / 2);
+	}
+
 	/**
 	 * Cross product functions
 	 * 
