@@ -34,7 +34,7 @@ public class StaticTileForwarder
 
 	public static void loadIC(IEnergyTile tile)
 	{
-		if (CompatibilityType.INDUSTRIALCRAFT.isLoaded() && !loadedIC2Tiles.contains(tile) && !((TileEntity) tile).worldObj.isRemote)
+		if (CompatibilityType.INDUSTRIALCRAFT.isModuleEnabled && !loadedIC2Tiles.contains(tile) && !((TileEntity) tile).worldObj.isRemote)
 		{
 			NetworkTickHandler.queueEvent(new EnergyTileLoadEvent(tile));
 			loadedIC2Tiles.add(tile);
@@ -43,7 +43,7 @@ public class StaticTileForwarder
 
 	public static void unloadIC(IEnergyTile tile)
 	{
-		if (CompatibilityType.INDUSTRIALCRAFT.isLoaded() && loadedIC2Tiles.contains(tile) && !((TileEntity) tile).worldObj.isRemote)
+		if (CompatibilityType.INDUSTRIALCRAFT.isModuleEnabled && loadedIC2Tiles.contains(tile) && !((TileEntity) tile).worldObj.isRemote)
 		{
 			NetworkTickHandler.queueEvent(new EnergyTileUnloadEvent(tile));
 			loadedIC2Tiles.remove(tile);

@@ -30,7 +30,8 @@ public class NetworkTickHandler implements ITickHandler
 	private final LinkedHashSet<Event> toAddEvents = new LinkedHashSet<Event>();
 	private final LinkedHashSet<Event> queuedEvents = new LinkedHashSet<Event>();
 
-	private boolean markClear = true;
+	private boolean markClear;
+	private boolean markQueueClear;
 
 	public static void addNetwork(IUpdate updater)
 	{
@@ -57,14 +58,7 @@ public class NetworkTickHandler implements ITickHandler
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
-		if (markClear)
-		{
-			toAddUpdaters.clear();
-			updaters.clear();
-			toAddEvents.clear();
-			queuedEvents.clear();
-			markClear = false;
-		}
+	
 	}
 
 	@Override
@@ -106,6 +100,20 @@ public class NetworkTickHandler implements ITickHandler
 			MinecraftForge.EVENT_BUS.post(eventIt.next());
 			eventIt.remove();
 		}
+		
+		if (markClear)
+		{
+			updaters.clear();
+			queuedEvents.clear();
+			markClear = false;
+		}
+
+		if (markQueueClear)
+		{
+			toAddUpdaters.clear();
+			toAddEvents.clear();
+			markQueueClear = false;
+		}
 	}
 
 	@Override
@@ -117,12 +125,17 @@ public class NetworkTickHandler implements ITickHandler
 	@Override
 	public String getLabel()
 	{
-		return "Universal Electricity Grid Ticker";
+		return "Universal Electricity Ticker";
 	}
 
 	public void clearNetworks()
 	{
 		markClear = true;
+	}
+
+	public void clearQueues()
+	{
+		markQueueClear = true;
 	}
 
 }

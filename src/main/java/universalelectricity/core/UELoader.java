@@ -12,6 +12,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent.Load;
+import net.minecraftforge.event.world.WorldEvent.Unload;
 import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.UniversalElectricity;
@@ -111,6 +112,13 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 	@ForgeSubscribe
 	public void worldLoad(Load evt)
 	{
+		NetworkTickHandler.INSTANCE.clearNetworks();
+	}
+
+	@ForgeSubscribe
+	public void worldUnload(Unload evt)
+	{
+		NetworkTickHandler.INSTANCE.clearQueues();
 		NetworkTickHandler.INSTANCE.clearNetworks();
 	}
 
