@@ -69,7 +69,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 				{
 					((ICustomBlockRenderer) tesr).renderDynamic(renderTile, block, metadata, modelID, renderer);
 				}
-				else
+				else if(tesr != null)
 				{
 					tesr.renderTileEntityAt(renderTile, 0, 0, 0, 0);
 				}

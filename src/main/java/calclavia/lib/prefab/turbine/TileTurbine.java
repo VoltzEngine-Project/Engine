@@ -6,7 +6,6 @@ import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -24,7 +23,6 @@ import calclavia.lib.multiblock.reference.MultiBlockHandler;
 import calclavia.lib.network.IPacketReceiver;
 import calclavia.lib.network.PacketHandler;
 import calclavia.lib.prefab.tile.TileElectrical;
-import calclavia.lib.utility.WorldUtility;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -35,6 +33,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Turbine TileEntity
  * 
  * 1 cubic meter of steam = 338260 J of energy
+ * 
+ * The front of the turbine is where the output is.
  */
 public abstract class TileTurbine extends TileElectrical implements IMultiBlockStructure<TileTurbine>, IPacketReceiver, IFluidHandler
 {
@@ -42,8 +42,6 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	 * Radius of large turbine?
 	 */
 	protected int multiBlockRadius = 1;
-
-	protected ForgeDirection placementDir = ForgeDirection.DOWN;
 
 	/**
 	 * Max power in watts.
@@ -77,6 +75,11 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 		this.energy = new EnergyStorageHandler();
 	}
 
+	public ForgeDirection getDirection()
+	{
+		return ForgeDirection.getOrientation(getBlockMetadata());
+	}
+
 	@Override
 	public void updateEntity()
 	{
@@ -101,27 +104,25 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 				/**
 				 * Set angular velocity based on power and torque.
 				 */
-				angularVelocity = power / getTorque();
+				angularVelocity = (float) ((double) power / (double) getTorque());
 				/**
 				 * Update rotation.
 				 */
-				rotation += angularVelocity;
+				rotation = (float) ((rotation + angularVelocity) % (Math.PI * 2));
 
 				if (!worldObj.isRemote && this.ticks % 3 == 0)
 				{
 					sendPowerUpdate();
 				}
-
-				rotation = MathHelper.wrapAngleTo180_float(rotation);
 			}
 
 			if (this.getMultiBlock().isConstructed())
 			{
-				power = Math.max(Math.min(power - powerDamping * 9, getMaxPower()), 0);
+				power = (long) Math.max(Math.min(power - (power * 0.1f), getMaxPower()), 0);
 			}
 			else
 			{
-				power = Math.max(Math.min(power - powerDamping, getMaxPower()), 0);
+				power = (long) Math.max(Math.min(power - (power * 0.1f), getMaxPower()), 0);
 			}
 		}
 	}
@@ -170,7 +171,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 			}
 			else if (id == 2)
 			{
-				this.power = data.readLong();
+				angularVelocity = data.readFloat();
 			}
 		}
 		catch (Exception e)
@@ -262,16 +263,17 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	/**
 	 * MutliBlock methods.
 	 */
-	private MultiBlockHandler<TileTurbine> multiBlock;
+	private TurbineMultiBlockHandler multiBlock;
 
 	@Override
 	public Vector3[] getMultiBlockVectors()
 	{
 		Set<Vector3> vectors = new HashSet<Vector3>();
 
-		int xMulti = placementDir.offsetX != 0 ? 0 : 1;
-		int yMulti = placementDir.offsetY != 0 ? 0 : 1;
-		int zMulti = placementDir.offsetZ != 0 ? 0 : 1;
+		ForgeDirection dir = getDirection();
+		int xMulti = dir.offsetX != 0 ? 0 : 1;
+		int yMulti = dir.offsetY != 0 ? 0 : 1;
+		int zMulti = dir.offsetZ != 0 ? 0 : 1;
 
 		for (int x = -multiBlockRadius; x <= multiBlockRadius; x++)
 		{
@@ -297,7 +299,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	public MultiBlockHandler<TileTurbine> getMultiBlock()
 	{
 		if (multiBlock == null)
-			multiBlock = new MultiBlockHandler<TileTurbine>(this);
+			multiBlock = new TurbineMultiBlockHandler(this);
 
 		return multiBlock;
 	}

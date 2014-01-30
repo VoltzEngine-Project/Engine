@@ -497,6 +497,27 @@ public class RenderUtility
 		}
 	}
 
+	/**
+	 * Use this for models that are facing up by default.
+	 * 
+	 * @param direction
+	 */
+	public static void rotateBlockBasedOnDirectionUp(ForgeDirection direction)
+	{
+		switch (direction)
+		{
+			default:
+				glRotatef(WorldUtility.getAngleFromForgeDirection(direction), 0, 1, 0);
+				glRotatef(-90, 0, 0, 1);
+				break;
+			case DOWN:
+				glRotatef(180, 0, 0, 1);
+				break;
+			case UP:
+				break;
+		}
+	}
+
 	public static void bind(String name)
 	{
 		bind(getResource("minecraft", name));

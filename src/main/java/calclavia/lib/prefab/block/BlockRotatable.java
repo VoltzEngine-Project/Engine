@@ -34,19 +34,24 @@ public abstract class BlockRotatable extends BlockTile implements IRotatableBloc
 		{
 			double d0 = entityLiving.posY + 1.82D - (double) entityLiving.yOffset;
 
-			if ((rotationMask & (1 << 1)) != 0 && d0 - (double) y > 2.0D)
+			if (canRotate(1) && d0 - (double) y > 2.0D)
 			{
 				return 1;
 			}
 
-			if ((rotationMask & (1 << 0)) != 0 && (double) y - d0 > 0.0D)
+			if (canRotate(0) && (double) y - d0 > 0.0D)
 			{
 				return 0;
 			}
 		}
 
-		int l = MathHelper.floor_double((double) (entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		return l == 0 ? 2 : (l == 1 ? 5 : (l == 2 ? 3 : (l == 3 ? 4 : 0)));
+		int playerSide = MathHelper.floor_double((double) (entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		return (playerSide == 0 && canRotate(2)) ? 2 : ((playerSide == 1 && canRotate(5)) ? 5 : ((playerSide == 2 && canRotate(3)) ? 3 : ((playerSide == 3 && canRotate(4)) ? 4 : 0)));
+	}
+
+	public boolean canRotate(int ord)
+	{
+		return (rotationMask & (1 << ord)) != 0;
 	}
 
 	@Override

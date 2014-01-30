@@ -4,16 +4,17 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import calclavia.lib.prefab.block.BlockTile;
+import calclavia.lib.prefab.block.BlockRotatable;
 
 /*
  * Turbine block, extend this.
  */
-public class BlockTurbine extends BlockTile
+public class BlockTurbine extends BlockRotatable
 {
 	public BlockTurbine(int id, Material material)
 	{
 		super(id, material);
+		rotationMask = Byte.parseByte("000011", 2);
 	}
 
 	@Override
