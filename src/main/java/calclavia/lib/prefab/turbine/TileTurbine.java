@@ -296,7 +296,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	}
 
 	@Override
-	public MultiBlockHandler<TileTurbine> getMultiBlock()
+	public TurbineMultiBlockHandler getMultiBlock()
 	{
 		if (multiBlock == null)
 			multiBlock = new TurbineMultiBlockHandler(this);

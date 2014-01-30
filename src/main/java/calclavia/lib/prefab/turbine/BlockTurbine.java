@@ -37,6 +37,7 @@ public class BlockTurbine extends BlockRotatable
 
 		if (tileEntity instanceof TileTurbine)
 		{
+			System.out.println("PRIMARY " + ((TileTurbine) tileEntity).getMultiBlock().getPrimary());
 			((TileTurbine) tileEntity).getMultiBlock().deconstruct();
 		}
 

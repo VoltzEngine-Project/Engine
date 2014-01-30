@@ -130,7 +130,6 @@ public class MultiBlockHandler<W extends IMultiBlockStructure>
 			if (isPrimary())
 			{
 				Set<W> structures = getStructure();
-
 				if (structures != null)
 				{
 					for (W structure : structures)

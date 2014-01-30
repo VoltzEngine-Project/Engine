@@ -16,7 +16,8 @@ public class TurbineMultiBlockHandler extends MultiBlockHandler<TileTurbine>
 		TileEntity tile = position.getTileEntity(self.getWorld());
 
 		if (tile != null && wrapperClass.isAssignableFrom(tile.getClass()))
-		{
+		{				
+
 			if (((TileTurbine) tile).getDirection() == self.getDirection())
 			{
 				return (TileTurbine) tile;
