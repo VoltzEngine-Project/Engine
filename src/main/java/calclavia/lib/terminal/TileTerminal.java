@@ -19,7 +19,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 /** @author Calclavia, DarkGuardsman */
-public abstract class TileTerminal extends TileElectrical implements ITerminal, IScroll, IPacketReceiverWithID, IPacketSender, IPlayerUsing
+public abstract class TileTerminal extends TileElectrical implements ITerminal, IScroll, IPacketReceiverWithID, IPlayerUsing
 {
     public final HashSet<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
 
