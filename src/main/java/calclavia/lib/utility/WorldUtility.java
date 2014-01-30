@@ -55,6 +55,19 @@ public class WorldUtility
 		return dir;
 	}
 
+	public static ForgeDirection invertY(ForgeDirection dir)
+	{
+		switch (dir)
+		{
+			case UP:
+				return ForgeDirection.DOWN;
+			case DOWN:
+				return ForgeDirection.UP;
+		}
+
+		return dir;
+	}
+
 	public static ForgeDirection invertZ(ForgeDirection dir)
 	{
 		switch (dir)
