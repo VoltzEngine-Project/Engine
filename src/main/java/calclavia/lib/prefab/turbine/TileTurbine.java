@@ -85,9 +85,9 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	{
 		super.updateEntity();
 
-		this.getMultiBlock().update();
+		getMultiBlock().update();
 
-		if (this.getMultiBlock().isPrimary())
+		if (	getMultiBlock().isPrimary())
 		{
 			/**
 			 * Increase spin rate and consume steam.

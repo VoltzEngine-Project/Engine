@@ -24,7 +24,12 @@ public class BlockTurbine extends BlockRotatable
 
 		if (tileEntity instanceof TileTurbine)
 		{
-			return ((TileTurbine) tileEntity).getMultiBlock().toggleConstruct();
+			if (!world.isRemote)
+			{
+				return ((TileTurbine) tileEntity).getMultiBlock().toggleConstruct();
+			}
+
+			return true;
 		}
 
 		return false;
@@ -37,7 +42,6 @@ public class BlockTurbine extends BlockRotatable
 
 		if (tileEntity instanceof TileTurbine)
 		{
-			System.out.println("PRIMARY " + ((TileTurbine) tileEntity).getMultiBlock().getPrimary());
 			((TileTurbine) tileEntity).getMultiBlock().deconstruct();
 		}
 

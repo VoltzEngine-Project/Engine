@@ -61,17 +61,6 @@ public abstract class BlockRotatable extends BlockTile implements IRotatableBloc
 	}
 
 	@Override
-	public boolean onSneakUseWrench(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ)
-	{
-		if (!world.isRemote)
-		{
-			world.setBlockMetadataWithNotify(x, y, z, side, 3);
-		}
-
-		return true;
-	}
-
-	@Override
 	public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis)
 	{
 		int currentRotMeta = worldObj.getBlockMetadata(x, y, z);

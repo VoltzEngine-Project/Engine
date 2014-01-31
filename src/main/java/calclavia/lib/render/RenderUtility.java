@@ -632,7 +632,7 @@ public class RenderUtility
 		FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
 
 		int requiredWidth = Math.max(fontRenderer.getStringWidth(text), 1);
-		int lineHeight = fontRenderer.FONT_HEIGHT + 2;
+		int lineHeight = fontRenderer.FONT_HEIGHT;
 		int requiredHeight = lineHeight;
 		float scaleX = (displayWidth / requiredWidth);
 		float scaleY = (displayHeight / requiredHeight);
