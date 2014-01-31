@@ -51,14 +51,14 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	/**
 	 * Turn slow down when not powered
 	 */
-	protected long powerDamping = 10000;
+	protected float powerDamping = 0.05f;
 
 	/**
 	 * Amount of energy per liter of steam.
 	 */
 	protected long energyPerSteam = 339;
 
-	private final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 100);
+	private final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
 
 	public long power = 0;
 
@@ -68,7 +68,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	public float rotation = 0;
 
 	protected long torque = 1000;
-	protected float angularVelocity = 0;
+	protected float prevAngularVelocity, angularVelocity = 0;
 
 	public TileTurbine()
 	{
@@ -87,43 +87,44 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 
 		getMultiBlock().update();
 
-		if (	getMultiBlock().isPrimary())
+		if (getMultiBlock().isPrimary())
 		{
 			/**
 			 * Increase spin rate and consume steam.
 			 */
-			if (tank.getFluid() != null)
+			if (tank.getFluid() != null && power < maxPower)
 			{
-				power += tank.drain(tank.getCapacity(), true).amount * energyPerSteam;
+				power += tank.drain((int) Math.ceil(tank.getFluidAmount() * 0.05), true).amount * energyPerSteam;
 			}
 
 			if (power > 0)
 			{
 				playSound();
 
+				prevAngularVelocity = angularVelocity;
+
 				/**
 				 * Set angular velocity based on power and torque.
 				 */
 				angularVelocity = (float) ((double) power / (double) getTorque());
-				/**
-				 * Update rotation.
-				 */
-				rotation = (float) ((rotation + angularVelocity) % (Math.PI * 2));
 
-				if (!worldObj.isRemote && this.ticks % 3 == 0)
+				if (!worldObj.isRemote && this.ticks % 3 == 0 && prevAngularVelocity != angularVelocity)
 				{
 					sendPowerUpdate();
 				}
+
+				onProduce();
 			}
 
-			if (this.getMultiBlock().isConstructed())
+			if (angularVelocity != 0)
 			{
-				power = (long) Math.max(Math.min(power - (power * 0.1f), getMaxPower()), 0);
+				/**
+				 * Update rotation.
+				 */
+				rotation = (float) ((rotation + angularVelocity / 20) % (Math.PI * 2));
 			}
-			else
-			{
-				power = (long) Math.max(Math.min(power - (power * 0.1f), getMaxPower()), 0);
-			}
+
+			power = 0;
 		}
 	}
 
