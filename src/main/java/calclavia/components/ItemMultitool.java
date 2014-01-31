@@ -44,9 +44,9 @@ public class ItemMultitool extends ItemBase implements IToolWrench
 	{
 		if (player.isSneaking())
 		{
-			MovingObjectPosition objectMouseOver = player.rayTrace(10, 1);
+			MovingObjectPosition objectMouseOver = player.rayTrace(5, 1);
 
-			if (objectMouseOver == null)
+			if (objectMouseOver == null || objectMouseOver.hitVec == null)
 			{
 				setMode(itemStack, (getMode(itemStack) + 1) % ToolMode.REGISTRY.size());
 
