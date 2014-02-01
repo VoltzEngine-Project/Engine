@@ -14,6 +14,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
+import calclavia.lib.Calclavia;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -94,6 +95,10 @@ public class PacketHandler implements IPacketHandler
 				else if (dataValue instanceof NBTTagCompound)
 				{
 					writeNBTTagCompound((NBTTagCompound) dataValue, data);
+				}
+				else
+				{
+					Calclavia.LOGGER.severe("Calclavia packet attempt to write an invalid type: " + dataValue.getClass());
 				}
 			}
 		}

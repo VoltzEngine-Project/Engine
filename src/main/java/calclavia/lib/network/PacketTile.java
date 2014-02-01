@@ -86,7 +86,7 @@ public class PacketTile extends PacketType
 				((IPacketReceiver) tileEntity).onReceivePacket(data, player);
 			}
 			else
-			{System.out.println("RE");
+			{
 				int blockID = player.worldObj.getBlockId(x, y, z);
 
 				if (Block.blocksList[blockID] instanceof IPacketReceiver)
