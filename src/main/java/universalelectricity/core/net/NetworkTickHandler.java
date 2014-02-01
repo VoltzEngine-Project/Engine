@@ -1,10 +1,12 @@
 package universalelectricity.core.net;
 
 import java.lang.ref.WeakReference;
+import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
@@ -12,129 +14,116 @@ import universalelectricity.api.net.IUpdate;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
-/** A ticker to update all networks. Register your custom network here to have it ticked by Universal
+/**
+ * A ticker to update all networks. Register your custom network here to have it ticked by Universal
  * Electricity.
  * 
- * @author Calclavia */
+ * @author Calclavia
+ */
 public class NetworkTickHandler implements ITickHandler
 {
-    public static final NetworkTickHandler INSTANCE = new NetworkTickHandler();
+	public static final NetworkTickHandler INSTANCE = new NetworkTickHandler();
 
-    private final LinkedHashSet<WeakReference<IUpdate>> toAddUpdaters = new LinkedHashSet<WeakReference<IUpdate>>();
-    private final LinkedHashSet<WeakReference<IUpdate>> updaters = new LinkedHashSet<WeakReference<IUpdate>>();
+	/** For updaters to be ticked. */
+	private final Set<IUpdate> updaters = Collections.newSetFromMap(new WeakHashMap<IUpdate, Boolean>());
 
-    /** For queuing Forge events to be invoked the next tick. */
-    private final LinkedHashSet<Event> toAddEvents = new LinkedHashSet<Event>();
-    private final LinkedHashSet<Event> queuedEvents = new LinkedHashSet<Event>();
+	/** For queuing Forge events to be invoked the next tick. */
+	private final LinkedHashSet<Event> queuedEvents = new LinkedHashSet<Event>();
 
-    private boolean markClear;
-    private boolean markQueueClear;
+	private boolean markClear;
 
-    public static void addNetwork(IUpdate updater)
-    {
-        synchronized (INSTANCE.toAddUpdaters)
-        {
-            if (!INSTANCE.updaters.contains(updater))
-            {
-                INSTANCE.toAddUpdaters.add(new WeakReference<IUpdate>(updater));
-            }
-        }
-    }
+	public static void addNetwork(IUpdate updater)
+	{
+		synchronized (INSTANCE.updaters)
+		{
+			INSTANCE.updaters.add(updater);
+		}
+	}
 
-    public static void queueEvent(Event event)
-    {
-        synchronized (INSTANCE.toAddEvents)
-        {
-            if (!INSTANCE.queuedEvents.contains(event))
-            {
-                INSTANCE.toAddEvents.add(event);
-            }
-        }
-    }
+	public static void queueEvent(Event event)
+	{
+		synchronized (INSTANCE.queuedEvents)
+		{
+			INSTANCE.queuedEvents.add(event);
+		}
+	}
 
-    @Override
-    public void tickStart(EnumSet<TickType> type, Object... tickData)
-    {
+	@Override
+	public void tickStart(EnumSet<TickType> type, Object... tickData)
+	{
 
-    }
+	}
 
-    @Override
-    public void tickEnd(EnumSet<TickType> type, Object... tickData)
-    {
-        /** Network */
-        this.updaters.addAll(new HashSet<WeakReference<IUpdate>>(this.toAddUpdaters));
-        this.toAddUpdaters.clear();
+	@Override
+	public void tickEnd(EnumSet<TickType> type, Object... tickData)
+	{
+		/** Tick all updaters. */
+		synchronized (updaters)
+		{
+			Iterator<IUpdate> updaterIt = updaters.iterator();
 
-        Iterator<WeakReference<IUpdate>> networkIt = this.updaters.iterator();
+			while (updaterIt.hasNext())
+			{
+				IUpdate network = updaterIt.next();
 
-        while (networkIt.hasNext())
-        {
-            IUpdate network = networkIt.next().get();
-            if (network == null)
-            {
-                networkIt.remove();
-            }
-            else
-            {
-                if (network.canUpdate())
-                {
-                    network.update();
-                }
+				if (network == null)
+				{
+					updaterIt.remove();
+				}
+				else
+				{
+					if (network.canUpdate())
+					{
+						network.update();
+					}
 
-                if (!network.continueUpdate())
-                {
-                    networkIt.remove();
-                }
-            }
-        }
+					if (!network.continueUpdate())
+					{
+						updaterIt.remove();
+					}
+				}
+			}
 
-        /** Events */
-        this.queuedEvents.addAll(this.toAddEvents);
-        this.toAddEvents.clear();
+			if (markClear)
+			{
+				updaters.clear();
+			}
+		}
 
-        Iterator<Event> eventIt = this.queuedEvents.iterator();
+		/** Perform all queued events */
+		synchronized (queuedEvents)
+		{
+			Iterator<Event> eventIt = this.queuedEvents.iterator();
 
-        while (eventIt.hasNext())
-        {
-            MinecraftForge.EVENT_BUS.post(eventIt.next());
-            eventIt.remove();
-        }
+			while (eventIt.hasNext())
+			{
+				MinecraftForge.EVENT_BUS.post(eventIt.next());
+				eventIt.remove();
+			}
 
-        if (markClear)
-        {
-            updaters.clear();
-            queuedEvents.clear();
-            markClear = false;
-        }
+			if (markClear)
+			{
+				queuedEvents.clear();
+			}
+		}
 
-        if (markQueueClear)
-        {
-            toAddUpdaters.clear();
-            toAddEvents.clear();
-            markQueueClear = false;
-        }
-    }
+		markClear = false;
+	}
 
-    @Override
-    public EnumSet<TickType> ticks()
-    {
-        return EnumSet.of(TickType.SERVER);
-    }
+	@Override
+	public EnumSet<TickType> ticks()
+	{
+		return EnumSet.of(TickType.SERVER);
+	}
 
-    @Override
-    public String getLabel()
-    {
-        return "Universal Electricity Ticker";
-    }
+	@Override
+	public String getLabel()
+	{
+		return "Universal Electricity Ticker";
+	}
 
-    public void clearNetworks()
-    {
-        markClear = true;
-    }
-
-    public void clearQueues()
-    {
-        markQueueClear = true;
-    }
-
+	public void clearNetworks()
+	{
+		markClear = true;
+	}
 }

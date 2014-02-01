@@ -118,7 +118,6 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 	@ForgeSubscribe
 	public void worldUnload(Unload evt)
 	{
-		NetworkTickHandler.INSTANCE.clearQueues();
 		NetworkTickHandler.INSTANCE.clearNetworks();
 	}
 
