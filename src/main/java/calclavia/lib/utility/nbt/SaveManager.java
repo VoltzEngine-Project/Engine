@@ -148,13 +148,13 @@ public class SaveManager
                 }
                 catch (Exception e)
                 {
-                    FMLLog.log(Level.SEVERE, e, "An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", par0NBTTagCompound.getString("id"), obj.getClass().getName());
+                    FMLLog.log(Level.SEVERE, e, "[CalclaviaCore]SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", par0NBTTagCompound.getString("id"), obj.getClass().getName());
                     obj = null;
                 }
             }
             else
             {
-                MinecraftServer.getServer().getLogAgent().logWarning("Skipping object with id " + par0NBTTagCompound.getString("id"));
+                MinecraftServer.getServer().getLogAgent().logWarning("[CalclaviaCore]SaveManager: Skipping object with id " + par0NBTTagCompound.getString("id"));
             }
 
             return obj;
@@ -173,6 +173,7 @@ public class SaveManager
         }
     }
 
+    /** Called to save all object currently set to save next call */
     public static void saveAll()
     {
         List<WeakReference<Object>> objs = new ArrayList<WeakReference<Object>>();
@@ -183,23 +184,45 @@ public class SaveManager
             Object object = ref.get();
             if (object instanceof IVirtualObject)
             {
-                saveObject((IVirtualObject)object);
+                saveObject((IVirtualObject) object);
             }
         }
         saveList.clear();
     }
 
-    /** Saves an object along with its ID */
+    /** Saves an object to its preferred save location. Does check for null, registered save class,
+     * and if save file doesn't exist. Redirects to NBTUtility for actual saving of the file itself.
+     * 
+     * @param object - instance of @IVirtualObject */
     public static void saveObject(IVirtualObject object)
     {
-        if (object instanceof IVirtualObject && getID(object.getClass()) != null && ((IVirtualObject) object).getSaveFile() != null)
+        if (object != null)
         {
-            File file = ((IVirtualObject) object).getSaveFile();
-            file.mkdirs();
-            NBTTagCompound tag = new NBTTagCompound();
-            ((IVirtualObject) object).save(tag);
-            tag.setString("id", getID(object.getClass()));
-            NBTUtility.saveData(file, tag);
+            if (getID(object.getClass()) != null)
+            {
+                if (((IVirtualObject) object).getSaveFile() != null)
+                {
+                    File file = ((IVirtualObject) object).getSaveFile();
+                    file.mkdirs();
+                    NBTTagCompound tag = new NBTTagCompound();
+                    ((IVirtualObject) object).save(tag);
+                    tag.setString("id", getID(object.getClass()));
+                    NBTUtility.saveData(file, tag);
+                }
+                else
+                {
+                    FMLLog.fine("[Calclavia-Core]SaveManager: Error Save File returned null for " + object.toString());
+                    FMLLog.fine("[Calclavia-Core]             Class '" + object.getClass());
+                }
+            }
+            else
+            {
+                FMLLog.fine("[Calclavia-Core]SaveManager: Unregistered save class '" + object.getClass() + "' attempted to save");
+            }
+        }
+        else
+        {
+            FMLLog.fine("[Calclavia-Core]SaveManager: Something tried to save null");
         }
     }
 
