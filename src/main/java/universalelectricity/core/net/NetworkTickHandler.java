@@ -32,7 +32,7 @@ public class NetworkTickHandler implements ITickHandler
 
 	private boolean markClear;
 
-	public static void addNetwork(IUpdate updater)
+	public static synchronized void addNetwork(IUpdate updater)
 	{
 		synchronized (INSTANCE.updaters)
 		{
@@ -40,7 +40,7 @@ public class NetworkTickHandler implements ITickHandler
 		}
 	}
 
-	public static void queueEvent(Event event)
+	public static synchronized void queueEvent(Event event)
 	{
 		synchronized (INSTANCE.queuedEvents)
 		{
@@ -57,57 +57,60 @@ public class NetworkTickHandler implements ITickHandler
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		/** Tick all updaters. */
-		synchronized (updaters)
+		synchronized (this)
 		{
-			Iterator<IUpdate> updaterIt = updaters.iterator();
-
-			while (updaterIt.hasNext())
+			/** Tick all updaters. */
+			synchronized (updaters)
 			{
-				IUpdate network = updaterIt.next();
+				Iterator<IUpdate> updaterIt = updaters.iterator();
 
-				if (network == null)
+				while (updaterIt.hasNext())
 				{
-					updaterIt.remove();
-				}
-				else
-				{
-					if (network.canUpdate())
-					{
-						network.update();
-					}
+					IUpdate network = updaterIt.next();
 
-					if (!network.continueUpdate())
+					if (network == null)
 					{
 						updaterIt.remove();
 					}
+					else
+					{
+						if (network.canUpdate())
+						{
+							network.update();
+						}
+
+						if (!network.continueUpdate())
+						{
+							updaterIt.remove();
+						}
+					}
+				}
+
+				if (markClear)
+				{
+					updaters.clear();
 				}
 			}
 
-			if (markClear)
+			/** Perform all queued events */
+			synchronized (queuedEvents)
 			{
-				updaters.clear();
+				Iterator<Event> eventIt = this.queuedEvents.iterator();
+
+				while (eventIt.hasNext())
+				{
+					MinecraftForge.EVENT_BUS.post(eventIt.next());
+					eventIt.remove();
+				}
+
+				if (markClear)
+				{
+					queuedEvents.clear();
+				}
 			}
+
+			markClear = false;
 		}
-
-		/** Perform all queued events */
-		synchronized (queuedEvents)
-		{
-			Iterator<Event> eventIt = this.queuedEvents.iterator();
-
-			while (eventIt.hasNext())
-			{
-				MinecraftForge.EVENT_BUS.post(eventIt.next());
-				eventIt.remove();
-			}
-
-			if (markClear)
-			{
-				queuedEvents.clear();
-			}
-		}
-
-		markClear = false;
 	}
 
 	@Override
