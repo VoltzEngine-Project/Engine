@@ -17,7 +17,9 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * Packet handler for annotated objects.
@@ -27,8 +29,16 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 public class PacketAnnotation extends PacketType
 {
 	static int maxID = 0;
+
+	/**
+	 * A map of sync classes with their correspoding ID.
+	 */
 	protected static final BiMap<Class, Integer> classPacketIDMap = HashBiMap.create();
-	protected static final HashMap<Integer, List<PacketSet>> packetSetIDMap = new HashMap<Integer, List<PacketSet>>();
+
+	/**
+	 * Class ID : List of PacketSet sorted by ID
+	 */
+	protected static final HashMap<Integer, HashMap<Integer, PacketSet>> packetSetIDMap = new HashMap<Integer, HashMap<Integer, PacketSet>>();
 
 	public PacketAnnotation(String channel)
 	{
@@ -48,39 +58,48 @@ public class PacketAnnotation extends PacketType
 		int classID = ++maxID;
 		classPacketIDMap.put(clazz, classID);
 
-		List<PacketSet> packetSets = new ArrayList<PacketSet>();
+		HashMap<Integer, PacketSet> packetSets = new HashMap<Integer, PacketSet>();
 
-		for (Field f : clazz.getFields())
+		for (Field f : clazz.getDeclaredFields())
 		{
-			Synced sync = f.getAnnotation(Synced.class);
-
-			if (sync != null)
+			if (f.isAnnotationPresent(Synced.class))
 			{
-				for (int id : sync.id())
+				Synced sync = f.getAnnotation(Synced.class);
+
+				for (int packetID : sync.id())
 				{
 					PacketSet packetSet = null;
 
-					if (packetSets.get(id) != null)
+					if (packetSets.containsKey(packetID))
 					{
-						packetSet = packetSets.get(id);
+						packetSet = packetSets.get(packetID);
 					}
 					else
 					{
-						packetSet = new PacketSet(id);
+						packetSet = new PacketSet(packetID);
 					}
 
 					packetSet.syncFields.add(f);
-					packetSets.set(id, packetSet);
+					packetSets.put(packetID, packetSet);
 				}
 
 				System.out.println("Annotation Packet Detected for: " + f.getName());
 			}
 		}
+
+		packetSetIDMap.put(classID, packetSets);
 	}
 
 	public void sync(Object obj, int packetSetID)
 	{
-		PacketDispatcher.sendPacketToAllPlayers(getPacket(obj, packetSetID));
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
+		{
+			PacketDispatcher.sendPacketToAllPlayers(getPacket(obj, packetSetID));
+		}
+		else
+		{
+			PacketDispatcher.sendPacketToServer(getPacket(obj, packetSetID));
+		}
 	}
 
 	public Packet getPacket(Object obj)
@@ -90,18 +109,22 @@ public class PacketAnnotation extends PacketType
 
 	public Packet getPacket(Object obj, int packetSetID)
 	{
-		if (!classPacketIDMap.containsKey(obj.getClass()))
-		{
-			constructPacketSets(obj.getClass());
-		}
+		constructPacketSets(obj.getClass());
 
 		int classID = classPacketIDMap.get(obj.getClass());
-		List<PacketSet> packetSets = packetSetIDMap.get(classID);
+		PacketSet packetSet = packetSetIDMap.get(classID).get(packetSetID);
 
-		List args = packetSets.get(packetSetID).getPacketArray(obj);
+		List args = packetSet.getPacketArray(obj);
 
 		args.add(0, classID);
 		args.add(1, packetSetID);
+
+		if (obj instanceof TileEntity)
+		{
+			args.add(2, ((TileEntity) obj).xCoord);
+			args.add(3, ((TileEntity) obj).yCoord);
+			args.add(4, ((TileEntity) obj).zCoord);
+		}
 
 		return super.getPacket(args.toArray());
 	}
@@ -111,15 +134,21 @@ public class PacketAnnotation extends PacketType
 	{
 		int classID = data.readInt();
 		int packetSetID = data.readInt();
+
 		try
 		{
-			if (classPacketIDMap.inverse().get(classID).isAssignableFrom(TileEntity.class))
+			if (TileEntity.class.isAssignableFrom(classPacketIDMap.inverse().get(classID)))
 			{
 				int x = data.readInt();
 				int y = data.readInt();
 				int z = data.readInt();
 				TileEntity tile = player.worldObj.getBlockTileEntity(x, y, z);
 				packetSetIDMap.get(classID).get(packetSetID).read(tile, data);
+
+				if (tile instanceof IPacketReceiver)
+				{
+					((IPacketReceiver) tile).onReceivePacket(data, player, x, y, z);
+				}
 			}
 			else
 			{
@@ -174,37 +203,37 @@ public class PacketAnnotation extends PacketType
 					Class type = f.getType();
 					Object result = null;
 
-					if (type == Integer.class)
+					if (type == Integer.class || type == Integer.TYPE)
 					{
 						result = data.readInt();
 					}
-					else if (type == Float.class)
+					else if (type == Float.class || type == Float.TYPE)
 					{
 						result = data.readFloat();
 					}
-					else if (type == Double.class)
+					else if (type == Double.class || type == Double.TYPE)
 					{
 						result = data.readDouble();
 					}
-					else if (type == Byte.class)
+					else if (type == Byte.class || type == Byte.TYPE)
 					{
 						result = data.readByte();
 					}
-					else if (type == Boolean.class)
+					else if (type == Boolean.class || type == Boolean.TYPE)
 					{
 						result = data.readBoolean();
+					}
+					else if (type == Short.class || type == Short.TYPE)
+					{
+						result = data.readShort();
+					}
+					else if (type == Long.class || type == Long.TYPE)
+					{
+						result = data.readLong();
 					}
 					else if (type == String.class)
 					{
 						result = data.readUTF();
-					}
-					else if (type == Short.class)
-					{
-						result = data.readShort();
-					}
-					else if (type == Long.class)
-					{
-						result = data.readLong();
 					}
 					else if (type == Vector3.class)
 					{
@@ -219,7 +248,7 @@ public class PacketAnnotation extends PacketType
 					{
 						Calclavia.LOGGER.severe("Calclavia packet read a null field for " + obj.getClass().getSimpleName());
 					}
-
+					
 					f.set(obj, result);
 				}
 			}
