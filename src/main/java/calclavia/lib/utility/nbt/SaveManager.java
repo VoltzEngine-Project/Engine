@@ -1,6 +1,7 @@
 package calclavia.lib.utility.nbt;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 
 /** Simple manager that handles common saving and creation of object threw Minecraft's NBT system.
  * 
@@ -25,10 +25,10 @@ public class SaveManager
     private static HashMap<Class<?>, String> classToIDMap = new HashMap<Class<?>, String>();
 
     /** List of object to save on the next save call */
-    private static List<Object> saveList = new ArrayList<Object>();
+    private static List<WeakReference<Object>> saveList = new ArrayList<WeakReference<Object>>();
 
     /** Object that save each time the world saves */
-    private static List<Object> objects = new ArrayList<Object>();
+    private static List<WeakReference<Object>> objects = new ArrayList<WeakReference<Object>>();
 
     /** Instance of this class */
     private static SaveManager instance;
@@ -54,7 +54,7 @@ public class SaveManager
         {
             if (object instanceof IVirtualObject && !saveList.contains(object))
             {
-                saveList.add(object);
+                saveList.add(new WeakReference<Object>(object));
             }
         }
     }
@@ -66,7 +66,7 @@ public class SaveManager
         {
             if (object instanceof IVirtualObject && !objects.contains(object))
             {
-                objects.add(object);
+                objects.add(new WeakReference<Object>(object));
             }
         }
     }
@@ -173,25 +173,24 @@ public class SaveManager
         }
     }
 
-   
-
     public static void saveAll()
     {
-        List<Object> objs = new ArrayList<Object>();
+        List<WeakReference<Object>> objs = new ArrayList<WeakReference<Object>>();
         objs.addAll(SaveManager.objects);
         objs.addAll(SaveManager.saveList);
-        for (Object object : objs)
+        for (WeakReference<Object> ref : objs)
         {
+            Object object = ref.get();
             if (object instanceof IVirtualObject)
             {
-                saveObject(object);
+                saveObject((IVirtualObject)object);
             }
         }
         saveList.clear();
     }
 
     /** Saves an object along with its ID */
-    public static void saveObject(Object object)
+    public static void saveObject(IVirtualObject object)
     {
         if (object instanceof IVirtualObject && getID(object.getClass()) != null && ((IVirtualObject) object).getSaveFile() != null)
         {
