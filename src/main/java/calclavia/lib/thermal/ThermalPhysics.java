@@ -4,9 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.event.Event;
-import net.minecraftforge.event.Event.HasResult;
 import net.minecraftforge.fluids.FluidStack;
 import universalelectricity.api.vector.Vector3;
 
@@ -18,10 +17,63 @@ import com.builtbroken.common.science.ChemElement;
  * @author Calclavia
  * 
  */
-public class Thermal
+public class ThermalPhysics
 {
-	public static final Thermal INSTNACE = new Thermal();
+	public static final ThermalPhysics INSTNACE = new ThermalPhysics();
 	public static final int ROOM_TEMPERATURE = 295;
+
+	/**
+	 * Temperature: 0.5f = 22C
+	 * 
+	 * @return The temperature of the coordinate in the world in kelvin.
+	 */
+	public static int getTemperatureForCoordinate(World world, int x, int z)
+	{
+		int averageTemperature = 273 + (int) (world.getBiomeGenForCoords(x, z).getFloatTemperature() * 22 * 2);
+		double dayNightVariance = averageTemperature * 0.06;
+		return (int) (averageTemperature + (world.isDaytime() ? dayNightVariance : -dayNightVariance));
+	}
+
+	/**
+	 * Q = mcT
+	 * 
+	 * @param mass - KG
+	 * @param specificHeatCapacity - J/KG K
+	 * @param temperature - K
+	 * @return Q, energy in joules
+	 */
+	public static long getEnergyForTemperatureChange(int mass, int specificHeatCapacity, int temperature)
+	{
+		return mass * specificHeatCapacity * temperature;
+	}
+
+	/**
+	 * Q = mL
+	 * 
+	 * @param mass - KG
+	 * @param latentHeatCapacity - J/KG
+	 * @return Q, energy in J
+	 */
+	public static long getEnergyForStateChange(int mass, int latentHeatCapacity)
+	{
+		return mass * latentHeatCapacity;
+	}
+
+	public static int getMass(float volume, float density)
+	{
+		return (int) (volume * density);
+	}
+
+	/**
+	 * Mass (KG) = Volume (Cubic Meters) * Densitry (kg/m-cubed)
+	 * 
+	 * @param fluidStack
+	 * @return The mass in KG
+	 */
+	public static int getMass(FluidStack fluidStack)
+	{
+		return (fluidStack.amount / 1000) * fluidStack.getFluid().getDensity(fluidStack);
+	}
 
 	/**
 	 * A map of the temperature of the blocks
@@ -99,16 +151,5 @@ public class Thermal
 		}
 
 		return ROOM_TEMPERATURE;
-	}
-
-	@HasResult
-	public static class EventVaporize extends Event
-	{
-		public final Vector3 position;
-
-		public EventVaporize(Vector3 position)
-		{
-			this.position = position;
-		}
 	}
 }
