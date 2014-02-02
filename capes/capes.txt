@@ -1,4 +1,6 @@
 Calclavia:https://raw.github.com/Universal-Electricity/Universal-Electricity/master/capes/dev_cape.png
 Darkguardsman:https://raw.github.com/Universal-Electricity/Universal-Electricity/master/capes/dev_cape.png
 Alex_hawks:https://raw.github.com/Universal-Electricity/Universal-Electricity/master/capes/dev_cape.png
-Archadia:https://raw.github.com/Universal-Electricity/Universal-Electricity/master/capes/dev_cape.png
+ronwolf:https://raw.github.com/Universal-Electricity/Universal-Electricity/master/capes/dev_cape.png
+Archtikz:https://raw.github.com/Universal-Electricity/Universal-Electricity/master/capes/dev_cape.png
+Micdoodle:https://raw.github.com/Universal-Electricity/Universal-Electricity/master/capes/dev_cape.png
