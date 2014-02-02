@@ -3,6 +3,7 @@ package calclavia.components;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
+import universalelectricity.api.vector.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -10,15 +11,21 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.Event.Result;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import calclavia.components.creative.BlockCreativeBuilder;
 import calclavia.components.creative.BlockInfinite;
 import calclavia.components.tool.ToolMode;
-import calclavia.components.tool.ToolModeGeneral;
+import calclavia.components.tool.ToolModeRotation;
 import calclavia.lib.Calclavia;
 import calclavia.lib.content.ContentRegistry;
 import calclavia.lib.content.IDManager;
@@ -173,9 +180,10 @@ public class CalclaviaLoader
 	{
 		NetworkRegistry.instance().registerGuiHandler(this, proxy);
 		SaveManager.registerClass("ModFlag", ModFlag.class);
+		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance());
 
-		ToolMode.REGISTRY.add(new ToolModeGeneral());
+		ToolMode.REGISTRY.add(new ToolModeRotation());
 
 		Calclavia.CONFIGURATION.load();
 
@@ -532,6 +540,34 @@ public class CalclaviaLoader
 		ICommandManager commandManager = FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
 		ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
 		serverCommandManager.registerCommand(new CommandFlag(FlagRegistry.getModFlag(FlagRegistry.DEFAULT_NAME)));
+	}
+
+	@ForgeSubscribe
+	public void boilEventHandler(BoilEvent evt)
+	{
+		World world = evt.world;
+		Vector3 position = evt.position;
+
+		for (int height = 1; height <= evt.maxSpread; height++)
+		{
+			TileEntity tileEntity = world.getBlockTileEntity(position.intX(), position.intY() + height, position.intZ());
+
+			if (tileEntity instanceof IFluidHandler)
+			{
+				IFluidHandler handler = (IFluidHandler) tileEntity;
+				FluidStack fluid = evt.getRemainForSpread(height);
+
+				if (fluid.amount > 0)
+				{
+					if (handler.canFill(ForgeDirection.DOWN, fluid.getFluid()))
+					{
+						handler.fill(ForgeDirection.DOWN, fluid, true);
+					}
+				}
+			}
+		}
+
+		evt.setResult(Result.DENY);
 	}
 
 	@EventHandler

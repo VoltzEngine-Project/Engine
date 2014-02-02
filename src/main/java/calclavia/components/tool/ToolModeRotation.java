@@ -12,7 +12,7 @@ import universalelectricity.api.vector.Vector3;
 import calclavia.components.ItemMultitool;
 import calclavia.lib.utility.inventory.InventoryUtility;
 
-public class ToolModeGeneral extends ToolMode
+public class ToolModeRotation extends ToolMode
 {
 	@Override
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
@@ -54,7 +54,8 @@ public class ToolModeGeneral extends ToolMode
 		else if (block != null && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
 		{
 			((ItemMultitool) stack.getItem()).wrenchUsed(player, x, y, z);
-			return true;
+			player.swingItem();
+			return !world.isRemote;
 		}
 
 		return false;

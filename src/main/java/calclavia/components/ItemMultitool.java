@@ -42,16 +42,16 @@ public class ItemMultitool extends ItemBase implements IToolWrench
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player)
 	{
-		if (player.isSneaking())
+		if (player.isSneaking() && !world.isRemote)
 		{
 			MovingObjectPosition objectMouseOver = player.rayTrace(5, 1);
+			// TODO: There's an issue here with right clicking air.
 
 			if (objectMouseOver == null || objectMouseOver.hitVec == null)
 			{
 				setMode(itemStack, (getMode(itemStack) + 1) % ToolMode.REGISTRY.size());
 
-				if (!world.isRemote)
-					player.addChatMessage("Set tool mode to: " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
+				player.addChatMessage("Set tool mode to: " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
 				return itemStack;
 			}
 		}
