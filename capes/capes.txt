@@ -4,3 +4,4 @@ Alex_hawks:https://raw.github.com/Universal-Electricity/Universal-Electricity/ma
 ronwolf:https://raw.github.com/Universal-Electricity/Universal-Electricity/master/capes/dev_cape.png
 Archtikz:https://raw.github.com/Universal-Electricity/Universal-Electricity/master/capes/dev_cape.png
 Micdoodle:https://raw.github.com/Universal-Electricity/Universal-Electricity/master/capes/dev_cape.png
+tgame14:https://raw.github.com/Universal-Electricity/Universal-Electricity/master/capes/dev_cape.png
