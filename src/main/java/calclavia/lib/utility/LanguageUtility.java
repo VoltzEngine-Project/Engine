@@ -93,19 +93,24 @@ public class LanguageUtility
 	{
 		String[] words = string.split(" ");
 		List<String> lines = new ArrayList<String>();
-	
+
 		for (int lineCount = 0; lineCount < Math.ceil((float) words.length / (float) wordsPerLine); lineCount++)
 		{
 			String stringInLine = "";
-	
+
 			for (int i = lineCount * wordsPerLine; i < Math.min(wordsPerLine + lineCount * wordsPerLine, words.length); i++)
 			{
 				stringInLine += words[i] + " ";
 			}
-	
+
 			lines.add(stringInLine.trim());
 		}
-	
+
 		return lines;
+	}
+
+	public static String capitalizeFirst(String str)
+	{
+		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 }
