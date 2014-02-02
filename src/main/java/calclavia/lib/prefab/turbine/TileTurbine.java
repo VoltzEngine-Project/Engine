@@ -68,7 +68,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	 */
 	public float rotation = 0;
 
-	protected long torque = 5000;
+	protected long torque = 3000;
 	protected float prevAngularVelocity, angularVelocity = 0;
 
 	public TileTurbine()
@@ -102,16 +102,15 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 			{
 				playSound();
 
-				prevAngularVelocity = angularVelocity;
-
 				/**
 				 * Set angular velocity based on power and torque.
 				 */
 				angularVelocity = (float) ((double) power / (double) getTorque());
 
-				if (!worldObj.isRemote && this.ticks % 3 == 0 && prevAngularVelocity != angularVelocity)
+				if (!worldObj.isRemote && ticks % 3 == 0 && prevAngularVelocity != angularVelocity)
 				{
 					sendPowerUpdate();
+					prevAngularVelocity = angularVelocity;
 				}
 
 				onProduce();
@@ -124,9 +123,9 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 				 */
 				rotation = (float) ((rotation + angularVelocity / 20) % (Math.PI * 2));
 			}
-
-			power = 0;
 		}
+
+		power = 0;
 	}
 
 	protected long getMaxPower()
