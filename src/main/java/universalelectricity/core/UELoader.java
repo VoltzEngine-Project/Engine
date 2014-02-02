@@ -7,6 +7,7 @@ import ic2.api.item.ISpecialElectricItem;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
@@ -54,6 +55,8 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 
 	@Mod.Metadata(ID)
 	public static ModMetadata metadata;
+	
+	public static final Logger LOGGER = Logger.getLogger(NAME);
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt)
@@ -94,6 +97,7 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 		TickRegistry.registerTickHandler(NetworkTickHandler.INSTANCE, Side.SERVER);
 		EnergyNetworkLoader.setNetworkClass(EnergyNetwork.class);
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(new CapeEventHandler());
 
 		/**
 		 * Metadata
