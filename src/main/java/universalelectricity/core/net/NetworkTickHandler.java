@@ -1,8 +1,8 @@
 package universalelectricity.core.net;
 
-import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -32,7 +32,7 @@ public class NetworkTickHandler implements ITickHandler
 
 	private boolean markClear;
 
-	public static synchronized void addNetwork(IUpdate updater)
+	public static void addNetwork(IUpdate updater)
 	{
 		synchronized (INSTANCE.updaters)
 		{
@@ -40,7 +40,7 @@ public class NetworkTickHandler implements ITickHandler
 		}
 	}
 
-	public static synchronized void queueEvent(Event event)
+	public static void queueEvent(Event event)
 	{
 		synchronized (INSTANCE.queuedEvents)
 		{
@@ -57,60 +57,63 @@ public class NetworkTickHandler implements ITickHandler
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		synchronized (this)
+		/** Tick all updaters. */
+		synchronized (updaters)
 		{
-			/** Tick all updaters. */
-			synchronized (updaters)
-			{
-				Iterator<IUpdate> updaterIt = updaters.iterator();
+			Set<IUpdate> removeUpdaters = Collections.newSetFromMap(new WeakHashMap<IUpdate, Boolean>());
 
+			Iterator<IUpdate> updaterIt = new HashSet(updaters).iterator();
+
+			try
+			{
 				while (updaterIt.hasNext())
 				{
-					IUpdate network = updaterIt.next();
+					IUpdate updater = updaterIt.next();
 
-					if (network == null)
+					if (updater.canUpdate())
 					{
-						updaterIt.remove();
+						updater.update();
 					}
-					else
-					{
-						if (network.canUpdate())
-						{
-							network.update();
-						}
 
-						if (!network.continueUpdate())
-						{
-							updaterIt.remove();
-						}
+					if (!updater.continueUpdate())
+					{
+						removeUpdaters.add(updater);
 					}
 				}
 
-				if (markClear)
-				{
-					updaters.clear();
-				}
+				updaters.removeAll(removeUpdaters);
 			}
-
-			/** Perform all queued events */
-			synchronized (queuedEvents)
+			catch (Exception e)
 			{
-				Iterator<Event> eventIt = this.queuedEvents.iterator();
-
-				while (eventIt.hasNext())
-				{
-					MinecraftForge.EVENT_BUS.post(eventIt.next());
-					eventIt.remove();
-				}
-
-				if (markClear)
-				{
-					queuedEvents.clear();
-				}
+				System.out.println(getLabel() + ": Failed while tcking updater. This is a bug! Clearing list for self repair.");
+				updaters.clear();
+				e.printStackTrace();
 			}
 
-			markClear = false;
+			if (markClear)
+			{
+				updaters.clear();
+			}
 		}
+
+		/** Perform all queued events */
+		synchronized (queuedEvents)
+		{
+			Iterator<Event> eventIt = this.queuedEvents.iterator();
+
+			while (eventIt.hasNext())
+			{
+				MinecraftForge.EVENT_BUS.post(eventIt.next());
+				eventIt.remove();
+			}
+
+			if (markClear)
+			{
+				queuedEvents.clear();
+			}
+		}
+
+		markClear = false;
 	}
 
 	@Override
