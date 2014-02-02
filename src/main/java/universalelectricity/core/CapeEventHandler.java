@@ -52,13 +52,14 @@ public class CapeEventHandler
 		{
 			return;
 		}
+
 		if (event.entityPlayer instanceof AbstractClientPlayer)
 		{
 			AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) event.entityPlayer;
 
 			if (!capePlayers.contains(abstractClientPlayer))
 			{
-				String cloakURL = cloaks.get(event.entityPlayer.getDisplayName());
+				String cloakURL = cloaks.get(event.entityPlayer.getDisplayName().toLowerCase());
 
 				if (cloakURL == null)
 				{
@@ -98,7 +99,7 @@ public class CapeEventHandler
 						String nick = str.substring(0, str.indexOf(":"));
 						String link = str.substring(str.indexOf(":") + 1);
 						new Thread(new CloakPreload(link)).start();
-						cloaks.put(nick, link);
+						cloaks.put(nick.toLowerCase(), link);
 					}
 					else
 					{
