@@ -17,14 +17,14 @@ import calclavia.lib.prefab.tile.TileAdvanced;
  */
 public class TileSteamFunnel extends TileAdvanced implements IFluidHandler
 {
-	public final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 20);
+	public final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME);
 
 	@Override
 	public void updateEntity()
 	{
 		super.updateEntity();
 
-		if (this.ticks % 20 == 0)
+		if (tank.getFluidAmount() > 0)
 		{
 			TileEntity tileEntity = this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord + 1, this.zCoord);
 
@@ -35,12 +35,11 @@ public class TileSteamFunnel extends TileAdvanced implements IFluidHandler
 
 				if (handler.canFill(ForgeDirection.DOWN, steam))
 				{
-					FluidStack drainedStack = this.tank.drain(this.tank.getCapacity(), false);
+					FluidStack drainedStack = tank.drain(tank.getCapacity() / 10, false);
 
 					if (drainedStack != null)
 					{
-						handler.fill(ForgeDirection.DOWN, drainedStack, true);
-						this.tank.drain(this.tank.getCapacity(), true);
+						tank.drain(handler.fill(ForgeDirection.DOWN, drainedStack, true), true);
 					}
 				}
 			}

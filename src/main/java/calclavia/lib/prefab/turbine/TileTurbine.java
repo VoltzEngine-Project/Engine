@@ -73,12 +73,22 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 
 	public TileTurbine()
 	{
-		this.energy = new EnergyStorageHandler();
+		/**
+		 * We're going to use the EnergyStorageHandler to store power.
+		 */
+		energy = new EnergyStorageHandler(maxPower);
 	}
 
 	public ForgeDirection getDirection()
 	{
 		return ForgeDirection.getOrientation(getBlockMetadata());
+	}
+
+	@Override
+	public void initiate()
+	{
+		super.initiate();
+		energy = new EnergyStorageHandler(maxPower);
 	}
 
 	@Override
@@ -88,16 +98,16 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 
 		getMultiBlock().update();
 
+		/**
+		 * Increase spin rate and consume steam.
+		 */
+		if (tank.getFluidAmount() > 0 && power < maxPower)
+		{
+			getMultiBlock().get().power += tank.drain((int) Math.ceil(tank.getFluidAmount() * 0.05), true).amount * energyPerSteam;
+		}
+
 		if (getMultiBlock().isPrimary())
 		{
-			/**
-			 * Increase spin rate and consume steam.
-			 */
-			if (tank.getFluid() != null && power < maxPower)
-			{
-				power += tank.drain((int) Math.ceil(tank.getFluidAmount() * 0.05), true).amount * energyPerSteam;
-			}
-
 			if (power > 0)
 			{
 				playSound();
@@ -253,6 +263,12 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	public AxisAlignedBB getRenderBoundingBox()
 	{
 		return AxisAlignedBB.getAABBPool().getAABB(this.xCoord - 3, this.yCoord, this.zCoord - 3, this.xCoord + 4, this.yCoord + 1, this.zCoord + 4);
+	}
+
+	@Override
+	public EnumSet<ForgeDirection> getInputDirections()
+	{
+		return EnumSet.noneOf(ForgeDirection.class);
 	}
 
 	@Override
