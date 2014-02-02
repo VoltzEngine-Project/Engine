@@ -42,7 +42,7 @@ public class ThermalPhysics
 	 * @param temperature - K
 	 * @return Q, energy in joules
 	 */
-	public static long getEnergyForTemperatureChange(int mass, int specificHeatCapacity, int temperature)
+	public static long getEnergyForTemperatureChange(int mass, long specificHeatCapacity, int temperature)
 	{
 		return mass * specificHeatCapacity * temperature;
 	}
@@ -54,7 +54,7 @@ public class ThermalPhysics
 	 * @param latentHeatCapacity - J/KG
 	 * @return Q, energy in J
 	 */
-	public static long getEnergyForStateChange(int mass, int latentHeatCapacity)
+	public static long getEnergyForStateChange(int mass, long latentHeatCapacity)
 	{
 		return mass * latentHeatCapacity;
 	}
