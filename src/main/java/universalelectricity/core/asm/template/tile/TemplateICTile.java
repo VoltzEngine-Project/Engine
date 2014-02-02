@@ -2,7 +2,6 @@ package universalelectricity.core.asm.template.tile;
 
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
-import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.CompatibilityType;
@@ -105,7 +104,7 @@ public abstract class TemplateICTile implements IEnergySink, IEnergySource, IEne
 	@Override
 	public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction)
 	{
-		return receiver instanceof IEnergyTile && StaticTileForwarder.onExtractEnergy(this, direction, 1, false) > 0;
+		return StaticTileForwarder.onExtractEnergy(this, direction, 1, false) > 0;
 	}
 
 	@Override
