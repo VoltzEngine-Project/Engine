@@ -73,7 +73,7 @@ public abstract class TemplateICTile implements IEnergySink, IEnergySource, IEne
 	@Override
 	public void drawEnergy(double amount)
 	{
-		StaticTileForwarder.onExtractEnergy(this, ForgeDirection.UNKNOWN, (int) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), true);
+		StaticTileForwarder.onExtractEnergy(this, ForgeDirection.UNKNOWN, (long) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), true);
 	}
 
 	@Override
