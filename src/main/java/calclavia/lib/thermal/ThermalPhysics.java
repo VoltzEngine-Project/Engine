@@ -47,9 +47,9 @@ public class ThermalPhysics
 		return (long) (mass * specificHeatCapacity * temperature);
 	}
 
-	public static int getTemperatureForEnergy(int mass, long specificHeatCapacity, long energy)
+	public static float getTemperatureForEnergy(int mass, long specificHeatCapacity, long energy)
 	{
-		return (int) (energy / (mass * specificHeatCapacity));
+		return energy / (mass * specificHeatCapacity);
 	}
 
 	public static long getRequiredBoilWaterEnergy(World world, int x, int z)
