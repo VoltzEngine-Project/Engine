@@ -71,13 +71,13 @@ public class TileElectricalInventory extends TileElectrical implements IExternal
 	@Override
 	public String getInvName()
 	{
-		return this.getInventory().getInvName();
+		return getBlockType().getLocalizedName();
 	}
 
 	@Override
 	public boolean isInvNameLocalized()
 	{
-		return this.getInventory().isInvNameLocalized();
+		return true;
 	}
 
 	@Override
@@ -96,7 +96,6 @@ public class TileElectricalInventory extends TileElectrical implements IExternal
 	public void openChest()
 	{
 		this.getInventory().openChest();
-
 	}
 
 	@Override

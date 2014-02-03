@@ -15,7 +15,7 @@ import net.minecraftforge.common.ForgeDirection;
  */
 public abstract class TileAdvanced extends TileEntity implements IPlayerUsing
 {
-	public final HashSet<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
+	private final HashSet<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
 
 	protected long ticks = 0;
 

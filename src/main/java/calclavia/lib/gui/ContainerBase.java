@@ -5,6 +5,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import calclavia.lib.prefab.tile.IPlayerUsing;
 
 public class ContainerBase extends Container
@@ -21,15 +22,25 @@ public class ContainerBase extends Container
 		this.slotCount = inventory.getSizeInventory();
 	}
 
+	public ContainerBase(EntityPlayer player, IInventory inventory)
+	{
+		this(inventory);
+
+		if (inventory instanceof IPlayerUsing)
+		{
+			((IPlayerUsing) inventory).getPlayersUsing().add(player);
+		}
+	}
+
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer)
 	{
-		super.onContainerClosed(entityplayer);
-
 		if (this.inventory instanceof IPlayerUsing)
 		{
-			((IPlayerUsing) this.inventory).getPlayersUsing().remove(entityplayer);
+		//	((IPlayerUsing) this.inventory).getPlayersUsing().remove(entityplayer);
 		}
+
+		super.onContainerClosed(entityplayer);
 	}
 
 	public void addPlayerInventory(EntityPlayer player)

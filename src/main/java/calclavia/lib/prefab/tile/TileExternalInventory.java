@@ -85,13 +85,13 @@ public class TileExternalInventory extends TileAdvanced implements IExternalInve
 	@Override
 	public String getInvName()
 	{
-		return this.getInventory().getInvName();
+		return getBlockType().getLocalizedName();
 	}
 
 	@Override
 	public boolean isInvNameLocalized()
 	{
-		return this.getInventory().isInvNameLocalized();
+		return true;
 	}
 
 	@Override
