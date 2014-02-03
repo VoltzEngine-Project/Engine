@@ -1,7 +1,11 @@
 package calclavia.lib.prefab.tile;
 
+import java.util.HashSet;
+
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 
 /**
  * A TileEntity with some pre-added functionalities.
@@ -9,8 +13,10 @@ import net.minecraft.tileentity.TileEntity;
  * @author Calclavia
  * 
  */
-public abstract class TileAdvanced extends TileEntity
+public abstract class TileAdvanced extends TileEntity implements IPlayerUsing
 {
+	public final HashSet<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
+
 	protected long ticks = 0;
 
 	@Override
@@ -59,5 +65,21 @@ public abstract class TileAdvanced extends TileEntity
 		}
 
 		return this.blockType;
+	}
+
+	@Override
+	public HashSet<EntityPlayer> getPlayersUsing()
+	{
+		return this.playersUsing;
+	}
+
+	public ForgeDirection getDirection()
+	{
+		return ForgeDirection.getOrientation(this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+	}
+
+	public void setDirection(ForgeDirection direction)
+	{
+		this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, direction.ordinal(), 3);
 	}
 }

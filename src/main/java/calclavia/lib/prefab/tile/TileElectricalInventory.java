@@ -146,6 +146,20 @@ public class TileElectricalInventory extends TileElectrical implements IExternal
 		return true;
 	}
 
+	public void incrStackSize(int slot, ItemStack itemStack)
+	{
+		if (this.getStackInSlot(slot) == null)
+		{
+			setInventorySlotContents(slot, itemStack.copy());
+		}
+		else if (this.getStackInSlot(slot).isItemEqual(itemStack))
+		{
+			getStackInSlot(slot).stackSize += itemStack.stackSize;
+		}
+
+		onInventoryChanged();
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
