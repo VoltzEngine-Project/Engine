@@ -216,7 +216,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	{
 		super.writeToNBT(nbt);
 		nbt.setLong("power", power);
-		getMultiBlock().save(this, nbt);
+		getMultiBlock().save(nbt);
 	}
 
 	/**

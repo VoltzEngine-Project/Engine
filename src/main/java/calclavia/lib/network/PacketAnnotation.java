@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import universalelectricity.api.vector.Vector3;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.FluidTank;
+import universalelectricity.api.vector.Vector3;
 import calclavia.lib.Calclavia;
+import calclavia.lib.utility.nbt.ISaveObj;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -243,12 +244,20 @@ public class PacketAnnotation extends PacketType
 					{
 						result = PacketHandler.readNBTTagCompound(data);
 					}
+					else if (type == FluidTank.class)
+					{
+						result = new FluidTank(data.readInt()).readFromNBT(PacketHandler.readNBTTagCompound(data));
+					}
+					else if (ISaveObj.class.isAssignableFrom(type))
+					{
+						result = new FluidTank(data.readInt()).readFromNBT(PacketHandler.readNBTTagCompound(data));
+					}
 
 					if (result == null)
 					{
 						Calclavia.LOGGER.severe("Calclavia packet read a null field for " + obj.getClass().getSimpleName());
 					}
-					
+
 					f.set(obj, result);
 				}
 			}

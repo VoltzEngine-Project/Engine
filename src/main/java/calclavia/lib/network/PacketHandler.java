@@ -13,8 +13,10 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidTank;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.Calclavia;
+import calclavia.lib.utility.nbt.ISaveObj;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -95,6 +97,17 @@ public class PacketHandler implements IPacketHandler
 				else if (dataValue instanceof NBTTagCompound)
 				{
 					writeNBTTagCompound((NBTTagCompound) dataValue, data);
+				}
+				else if (dataValue instanceof FluidTank)
+				{
+					data.writeInt(((FluidTank) dataValue).getCapacity());
+					writeNBTTagCompound(((FluidTank) dataValue).writeToNBT(new NBTTagCompound()), data);
+				}
+				else if (dataValue instanceof ISaveObj)
+				{
+					NBTTagCompound nbt = new NBTTagCompound();
+					((ISaveObj) dataValue).save(nbt);
+					writeNBTTagCompound(nbt, data);
 				}
 				else
 				{

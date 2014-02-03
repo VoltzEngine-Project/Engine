@@ -4,10 +4,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
+import calclavia.lib.utility.nbt.ISaveObj;
 
 /**
  * A reference-based multiblock structure uses a central block as the "primary block" and have all
@@ -17,7 +16,7 @@ import universalelectricity.api.vector.Vector3;
  * @author Calclavia
  * 
  */
-public class MultiBlockHandler<W extends IMultiBlockStructure>
+public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveObj
 {
 	/** The main block used for reference */
 	protected W primary = null;
@@ -203,10 +202,9 @@ public class MultiBlockHandler<W extends IMultiBlockStructure>
 	}
 
 	/**
-	 * @param saveWrapper - The wrapper that is saving the NBT data.
 	 * @param nbt
 	 */
-	public void save(W saveWrapper, NBTTagCompound nbt)
+	public void save(NBTTagCompound nbt)
 	{
 		if (isConstructed())
 		{
