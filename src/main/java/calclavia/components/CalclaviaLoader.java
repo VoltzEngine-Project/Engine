@@ -190,7 +190,7 @@ public class CalclaviaLoader
 		blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class);
 		blockMulti.setPacketType(PACKET_TILE);
 
-		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable Calclavia Core Tools", true).getBoolean(true))
+		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable_Calclavia_Core_Tools", true).getBoolean(true))
 		{
 			blockCreativeBuilder = (BlockCreativeBuilder) contentRegistry.createBlock(BlockCreativeBuilder.class);
 		}
@@ -207,7 +207,7 @@ public class CalclaviaLoader
 
 		boolean defaultDoLoad = !(Loader.isModLoaded("ThermalExpansion") || Loader.isModLoaded("IC2"));
 
-		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable Calclavia Core Resources", defaultDoLoad).getBoolean(defaultDoLoad))
+		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable_Calclavia_Core_Resources", defaultDoLoad).getBoolean(defaultDoLoad))
 		{
 			ComponentRegistry.registerAll();
 			ComponentRegistry.register("itemIngotCopper");
@@ -230,7 +230,7 @@ public class CalclaviaLoader
 			ComponentRegistry.register("itemPlateGold");
 		}
 
-		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable Calclavia Core Tools", true).getBoolean(true))
+		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable_Calclavia_Core_Tools", true).getBoolean(true))
 		{
 			ComponentRegistry.register("itemCircuitBasic");
 			ComponentRegistry.register("itemCircuitAdvanced");
