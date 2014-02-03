@@ -47,6 +47,18 @@ public class ThermalPhysics
 		return mass * specificHeatCapacity * temperature;
 	}
 
+	public static int getTemperatureForEnergy(int mass, long specificHeatCapacity, long energy)
+	{
+		return (int) (energy / (mass * specificHeatCapacity));
+	}
+
+	public static long getRequiredBoilWaterEnergy(World world, int x, int z)
+	{
+		int temperatureChange = 373 - ThermalPhysics.getTemperatureForCoordinate(world, x, z);
+		int mass = ThermalPhysics.getMass(1000, 1);
+		return ThermalPhysics.getEnergyForTemperatureChange(mass, 4200, temperatureChange) + ThermalPhysics.getEnergyForStateChange(mass, 2257000);
+	}
+
 	/**
 	 * Q = mL
 	 * 

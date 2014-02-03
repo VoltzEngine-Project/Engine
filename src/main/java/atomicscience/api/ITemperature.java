@@ -10,9 +10,9 @@ package atomicscience.api;
 public interface ITemperature
 {
 	/**
-	 * Gets the temperature of this block in celsius.
+	 * Gets the temperature of this block in kelvin.
 	 */
-	public float getTemperature();
+	public int getTemperature();
 
-	public void setTemperature(float celsius);
+	public void setTemperature(int kelvin);
 }
