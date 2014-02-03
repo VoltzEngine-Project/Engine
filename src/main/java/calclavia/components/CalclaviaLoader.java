@@ -3,7 +3,6 @@ package calclavia.components;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import universalelectricity.api.vector.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -16,12 +15,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.Event.Result;
+import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import universalelectricity.api.vector.Vector3;
 import calclavia.components.creative.BlockCreativeBuilder;
 import calclavia.components.creative.BlockInfinite;
 import calclavia.components.tool.ToolMode;
@@ -61,7 +61,6 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**
@@ -178,6 +177,7 @@ public class CalclaviaLoader
 	@EventHandler
 	public void init(FMLPreInitializationEvent evt)
 	{
+		Calclavia.LOGGER.setParent(FMLLog.getLogger());
 		NetworkRegistry.instance().registerGuiHandler(this, proxy);
 		SaveManager.registerClass("ModFlag", ModFlag.class);
 		MinecraftForge.EVENT_BUS.register(this);

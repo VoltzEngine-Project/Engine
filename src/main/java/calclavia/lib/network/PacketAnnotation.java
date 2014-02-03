@@ -1,6 +1,7 @@
 package calclavia.lib.network;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidTank;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.Calclavia;
+import calclavia.lib.network.Synced.SyncedInput;
+import calclavia.lib.network.Synced.SyncedOutput;
 import calclavia.lib.utility.nbt.ISaveObj;
 
 import com.google.common.collect.BiMap;
@@ -69,22 +72,37 @@ public class PacketAnnotation extends PacketType
 
 				for (int packetID : sync.id())
 				{
-					PacketSet packetSet = null;
-
-					if (packetSets.containsKey(packetID))
-					{
-						packetSet = packetSets.get(packetID);
-					}
-					else
-					{
-						packetSet = new PacketSet(packetID);
-					}
-
+					PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
 					packetSet.syncFields.add(f);
 					packetSets.put(packetID, packetSet);
 				}
+			}
+		}
 
-				System.out.println("Annotation Packet Detected for: " + f.getName());
+		for (Method m : clazz.getDeclaredMethods())
+		{
+			if (m.isAnnotationPresent(SyncedInput.class))
+			{
+				SyncedInput sync = m.getAnnotation(SyncedInput.class);
+
+				for (int packetID : sync.id())
+				{
+					PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
+					packetSet.syncInputs.add(m);
+					packetSets.put(packetID, packetSet);
+				}
+			}
+
+			if (m.isAnnotationPresent(SyncedOutput.class))
+			{
+				SyncedOutput sync = m.getAnnotation(SyncedOutput.class);
+
+				for (int packetID : sync.id())
+				{
+					PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
+					packetSet.syncOutputs.add(m);
+					packetSets.put(packetID, packetSet);
+				}
 			}
 		}
 
@@ -144,11 +162,19 @@ public class PacketAnnotation extends PacketType
 				int y = data.readInt();
 				int z = data.readInt();
 				TileEntity tile = player.worldObj.getBlockTileEntity(x, y, z);
-				packetSetIDMap.get(classID).get(packetSetID).read(tile, data);
-
-				if (tile instanceof IPacketReceiver)
+				
+				if (tile != null)
 				{
-					((IPacketReceiver) tile).onReceivePacket(data, player, x, y, z);
+					packetSetIDMap.get(classID).get(packetSetID).read(tile, data);
+
+					if (tile instanceof IPacketReceiver)
+					{
+						((IPacketReceiver) tile).onReceivePacket(data, player, x, y, z);
+					}
+				}
+				else
+				{
+					Calclavia.LOGGER.severe("Annotation packet sent to null: " + x + ", " + y + ", " + z);
 				}
 			}
 			else
@@ -168,6 +194,8 @@ public class PacketAnnotation extends PacketType
 		public final int id;
 
 		public final List<Field> syncFields = new ArrayList<Field>();
+		public final List<Method> syncInputs = new ArrayList<Method>();
+		public final List<Method> syncOutputs = new ArrayList<Method>();
 
 		public PacketSet(int id)
 		{
@@ -185,6 +213,15 @@ public class PacketAnnotation extends PacketType
 					f.setAccessible(true);
 					args.add(f.get(obj));
 				}
+
+				for (Method m : syncOutputs)
+				{
+					m.setAccessible(true);
+					NBTTagCompound nbt = new NBTTagCompound();
+					m.invoke(obj, nbt);
+					args.add(nbt);
+				}
+				
 			}
 			catch (Exception e)
 			{
@@ -250,7 +287,8 @@ public class PacketAnnotation extends PacketType
 					}
 					else if (ISaveObj.class.isAssignableFrom(type))
 					{
-						result = new FluidTank(data.readInt()).readFromNBT(PacketHandler.readNBTTagCompound(data));
+						result = f.get(obj);
+						((ISaveObj) result).load(PacketHandler.readNBTTagCompound(data));
 					}
 
 					if (result == null)
@@ -260,9 +298,16 @@ public class PacketAnnotation extends PacketType
 
 					f.set(obj, result);
 				}
+
+				for (Method m : syncInputs)
+				{
+					m.setAccessible(true);
+					m.invoke(obj, PacketHandler.readNBTTagCompound(data));
+				}
 			}
 			catch (Exception e)
 			{
+				Calclavia.LOGGER.severe("Calclavia annotation packet failed for " + obj.getClass().getSimpleName());
 				e.printStackTrace();
 			}
 		}
