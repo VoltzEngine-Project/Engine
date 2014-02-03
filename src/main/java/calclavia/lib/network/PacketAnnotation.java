@@ -61,51 +61,56 @@ public class PacketAnnotation extends PacketType
 
 		int classID = ++maxID;
 		classPacketIDMap.put(clazz, classID);
-
+		
 		HashMap<Integer, PacketSet> packetSets = new HashMap<Integer, PacketSet>();
 
-		for (Field f : clazz.getDeclaredFields())
+		while (clazz != null)
 		{
-			if (f.isAnnotationPresent(Synced.class))
+			for (Field f : clazz.getDeclaredFields())
 			{
-				Synced sync = f.getAnnotation(Synced.class);
-
-				for (int packetID : sync.id())
+				if (f.isAnnotationPresent(Synced.class))
 				{
-					PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
-					packetSet.syncFields.add(f);
-					packetSets.put(packetID, packetSet);
+					Synced sync = f.getAnnotation(Synced.class);
+
+					for (int packetID : sync.id())
+					{
+						PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
+						packetSet.syncFields.add(f);
+						packetSets.put(packetID, packetSet);
+					}
 				}
 			}
+
+			for (Method m : clazz.getDeclaredMethods())
+			{
+				if (m.isAnnotationPresent(SyncedInput.class))
+				{
+					SyncedInput sync = m.getAnnotation(SyncedInput.class);
+
+					for (int packetID : sync.id())
+					{
+						PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
+						packetSet.syncInputs.add(m);
+						packetSets.put(packetID, packetSet);
+					}
+				}
+
+				if (m.isAnnotationPresent(SyncedOutput.class))
+				{
+					SyncedOutput sync = m.getAnnotation(SyncedOutput.class);
+
+					for (int packetID : sync.id())
+					{
+						PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
+						packetSet.syncOutputs.add(m);
+						packetSets.put(packetID, packetSet);
+					}
+				}
+			}
+
+			clazz = clazz.getSuperclass();
 		}
-
-		for (Method m : clazz.getDeclaredMethods())
-		{
-			if (m.isAnnotationPresent(SyncedInput.class))
-			{
-				SyncedInput sync = m.getAnnotation(SyncedInput.class);
-
-				for (int packetID : sync.id())
-				{
-					PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
-					packetSet.syncInputs.add(m);
-					packetSets.put(packetID, packetSet);
-				}
-			}
-
-			if (m.isAnnotationPresent(SyncedOutput.class))
-			{
-				SyncedOutput sync = m.getAnnotation(SyncedOutput.class);
-
-				for (int packetID : sync.id())
-				{
-					PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
-					packetSet.syncOutputs.add(m);
-					packetSets.put(packetID, packetSet);
-				}
-			}
-		}
-
+		
 		packetSetIDMap.put(classID, packetSets);
 	}
 
@@ -162,7 +167,7 @@ public class PacketAnnotation extends PacketType
 				int y = data.readInt();
 				int z = data.readInt();
 				TileEntity tile = player.worldObj.getBlockTileEntity(x, y, z);
-				
+
 				if (tile != null)
 				{
 					packetSetIDMap.get(classID).get(packetSetID).read(tile, data);
@@ -221,7 +226,7 @@ public class PacketAnnotation extends PacketType
 					m.invoke(obj, nbt);
 					args.add(nbt);
 				}
-				
+
 			}
 			catch (Exception e)
 			{

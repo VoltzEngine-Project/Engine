@@ -83,7 +83,6 @@ public class ContentRegistry
 
         if (blockClass != null && (!canDisable || canDisable && config.get("Enabled_List", "Enabled " + name, true).getBoolean(true)))
         {
-            // TODO redesign to catch blockID conflict
             try
             {
                 block = blockClass.newInstance();

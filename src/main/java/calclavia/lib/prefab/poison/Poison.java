@@ -90,7 +90,24 @@ public abstract class Poison
 	{
 		if (!isEntityProtected(emitPosition, entity, amplifier))
 		{
-			this.doPoisonEntity(emitPosition, entity, amplifier);
+			doPoisonEntity(emitPosition, entity, amplifier);
+
+			if (entity instanceof EntityPlayer)
+			{
+				EntityPlayer entityPlayer = (EntityPlayer) entity;
+
+				for (int i = 0; i < entityPlayer.inventory.armorInventory.length; i++)
+				{
+					if (entityPlayer.inventory.armorInventory[i] != null)
+					{
+						if (entityPlayer.inventory.armorInventory[i].getItem() instanceof IAntiPoisonArmor)
+						{
+							IAntiPoisonArmor armor = (IAntiPoisonArmor) entityPlayer.inventory.armorInventory[i].getItem();
+							armor.onProtectFromPoison(entityPlayer.inventory.armorInventory[i], entity, this.getName());
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -117,7 +134,6 @@ public abstract class Poison
 
 						if (armor.isProtectedFromPoison(entityPlayer.inventory.armorInventory[i], entity, this.getName()))
 						{
-							armor.onProtectFromPoison(entityPlayer.inventory.armorInventory[i], entity, this.getName());
 							armorWorn.add(ArmorType.values()[armor.getArmorType() % ArmorType.values().length]);
 						}
 					}
