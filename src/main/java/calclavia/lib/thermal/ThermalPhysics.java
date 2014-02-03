@@ -42,9 +42,9 @@ public class ThermalPhysics
 	 * @param temperature - K
 	 * @return Q, energy in joules
 	 */
-	public static long getEnergyForTemperatureChange(int mass, long specificHeatCapacity, int temperature)
+	public static long getEnergyForTemperatureChange(int mass, long specificHeatCapacity, float temperature)
 	{
-		return mass * specificHeatCapacity * temperature;
+		return (long) (mass * specificHeatCapacity * temperature);
 	}
 
 	public static int getTemperatureForEnergy(int mass, long specificHeatCapacity, long energy)
@@ -55,7 +55,7 @@ public class ThermalPhysics
 	public static long getRequiredBoilWaterEnergy(World world, int x, int z)
 	{
 		int temperatureChange = 373 - ThermalPhysics.getTemperatureForCoordinate(world, x, z);
-		int mass = ThermalPhysics.getMass(1000, 1);
+		int mass = getMass(1000, 1);
 		return ThermalPhysics.getEnergyForTemperatureChange(mass, 4200, temperatureChange) + ThermalPhysics.getEnergyForStateChange(mass, 2257000);
 	}
 
@@ -71,9 +71,16 @@ public class ThermalPhysics
 		return mass * latentHeatCapacity;
 	}
 
+	/**
+	 * Gets the mass of an object from volume and density.
+	 * 
+	 * @param volume - in liters
+	 * @param density - in kg/m^3
+	 * @return
+	 */
 	public static int getMass(float volume, float density)
 	{
-		return (int) (volume * density);
+		return (int) (volume / 1000 * density);
 	}
 
 	/**

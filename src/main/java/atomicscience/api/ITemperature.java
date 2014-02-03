@@ -12,7 +12,7 @@ public interface ITemperature
 	/**
 	 * Gets the temperature of this block in kelvin.
 	 */
-	public int getTemperature();
+	public float getTemperature();
 
-	public void setTemperature(int kelvin);
+	public void setTemperature(float kelvin);
 }

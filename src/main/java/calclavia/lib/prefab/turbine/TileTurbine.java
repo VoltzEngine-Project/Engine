@@ -57,7 +57,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	 * Amount of energy per liter of steam.
 	 * Boil Water Energy = 327600 + 2260000 = 2587600
 	 */
-	protected long energyPerSteam = 2587600 / 1000;
+	protected long energyPerSteam = 2647600 / 1000;
 
 	private final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
 
