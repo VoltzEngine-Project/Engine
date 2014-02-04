@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Used to specify annotation packets.
  * @author Calclavia
  * 
  */

@@ -1,16 +1,10 @@
 package calclavia.lib.content;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import calclavia.lib.Calclavia;
-
-import com.builtbroken.common.Pair;
-
 import cpw.mods.fml.client.registry.ClientRegistry;
 
 public class ClientRegistryProxy extends CommonRegistryProxy
@@ -20,13 +14,21 @@ public class ClientRegistryProxy extends CommonRegistryProxy
 	{
 		super.registerBlock(block, itemClass, name, modID);
 
-		if (block instanceof IBlockInfo)
+		BlockInfo blockInfo = block.getClass().getAnnotation(BlockInfo.class);
+
+		if (blockInfo != null)
 		{
-			List<Pair<Class<? extends TileEntity>, TileEntitySpecialRenderer>> set = new ArrayList<Pair<Class<? extends TileEntity>, TileEntitySpecialRenderer>>();
-			((IBlockInfo) block).getClientTileEntityRenderers(set);
-			for (Pair<Class<? extends TileEntity>, TileEntitySpecialRenderer> par : set)
+			for (int i = 0; i < blockInfo.renderer().length; i++)
 			{
-				ClientRegistry.bindTileEntitySpecialRenderer(par.left(), par.right());
+				try
+				{
+					ClientRegistry.bindTileEntitySpecialRenderer(blockInfo.tileEntity()[i], blockInfo.renderer()[i].newInstance());
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					throw new RuntimeException("Failed to register block for: " + name);
+				}
 			}
 		}
 	}

@@ -13,7 +13,7 @@ import calclavia.lib.prefab.tile.IIO;
  * @author Calclavia
  * 
  */
-public abstract class BlockSidedIO extends BlockAdvanced
+public abstract class BlockSidedIO extends BlockTile
 {
 	public BlockSidedIO(int id, Material material)
 	{
@@ -41,7 +41,7 @@ public abstract class BlockSidedIO extends BlockAdvanced
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }
