@@ -165,7 +165,7 @@ public class CalclaviaLoader
 
 	public static OreGenBase generationOreCopper, generationOreTin;
 
-	public static final ContentRegistry contentRegistry = new ContentRegistry(Calclavia.CONFIGURATION, ID);
+	public static final ContentRegistry contentRegistry = new ContentRegistry(Calclavia.CONFIGURATION, idManager, ID);
 	public static final PacketTile PACKET_TILE = new PacketTile(CHANNEL);
 
 	/** Calclavia Core Blocks for mods */

@@ -1,21 +1,18 @@
 package calclavia.lib.content;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map.Entry;
-import java.util.Set;
+import java.util.WeakHashMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.Configuration;
-import calclavia.lib.Calclavia;
-
-import com.builtbroken.common.Pair;
-
+import calclavia.lib.utility.LanguageUtility;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**
  * Handler to make registering all parts of a mod's objects that are loaded into the game by forge.
@@ -24,22 +21,39 @@ import cpw.mods.fml.common.registry.GameRegistry;
  */
 public class ContentRegistry
 {
-	public final HashMap<Block, String> blocks = new HashMap<Block, String>();
-	public final HashMap<Item, String> items = new HashMap<Item, String>();
+	public final WeakHashMap<Block, String> blocks = new WeakHashMap<Block, String>();
+	public final WeakHashMap<Item, String> items = new WeakHashMap<Item, String>();
 
 	@SidedProxy(clientSide = "calclavia.lib.content.ClientRegistryProxy", serverSide = "calclavia.lib.content.CommonRegistryProxy")
 	public static CommonRegistryProxy proxy;
 
 	private final Configuration config;
 	private final String modID;
+	private IDManager idManager;
+
+	private String modPrefix;
+	private CreativeTabs defaultTab;
 
 	/** Custom unique packet IDs for the mod to use. */
 	private int packetID = 0;
 
-	public ContentRegistry(Configuration config, String modID)
+	public ContentRegistry(Configuration config, IDManager idManager, String modID)
 	{
 		this.config = config;
 		this.modID = modID;
+		this.idManager = idManager;
+	}
+
+	public ContentRegistry setPrefix(String modPrefix)
+	{
+		this.modPrefix = modPrefix;
+		return this;
+	}
+
+	public ContentRegistry setTab(CreativeTabs defaultTab)
+	{
+		this.defaultTab = defaultTab;
+		return this;
 	}
 
 	public int getNextPacketID()
@@ -64,7 +78,7 @@ public class ContentRegistry
 
 	public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
 	{
-		return createBlock(blockClass.getSimpleName(), blockClass, itemClass, tileClass);
+		return createBlock(LanguageUtility.decapitalizeFirst(blockClass.getSimpleName().replace("Block", "")), blockClass, itemClass, tileClass);
 	}
 
 	public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
@@ -89,10 +103,22 @@ public class ContentRegistry
 		{
 			try
 			{
-				block = blockClass.newInstance();
+				int assignedID = idManager.getNextBlockID();
+				block = blockClass.getConstructor(Integer.TYPE).newInstance(config.getBlock(name, assignedID).getInt(assignedID));
 
 				if (block != null)
 				{
+					if (modPrefix != null)
+					{
+						block.setUnlocalizedName(modPrefix + name);
+
+						if (ReflectionHelper.getPrivateValue(Block.class, block, "textureName", "field_111026_f") == null)
+							block.setTextureName(modPrefix + name);
+					}
+
+					if (defaultTab != null)
+						block.setCreativeTab(defaultTab);
+
 					blocks.put(block, name);
 					proxy.registerBlock(block, itemClass, name, modID);
 					finishCreation(block, tileClass);
@@ -177,18 +203,30 @@ public class ContentRegistry
 		{
 			try
 			{
-				item = clazz.newInstance();
+				int assignedID = idManager.getNextItemID();
+				item = clazz.getConstructor(Integer.TYPE).newInstance(config.getItem(name, assignedID).getInt(assignedID));
+
+				if (item != null)
+				{
+					if (modPrefix != null)
+					{
+						item.setUnlocalizedName(modPrefix + name);
+
+						if (ReflectionHelper.getPrivateValue(Item.class, item, "iconString", "field_111218_cA") == null)
+							item.setTextureName(modPrefix + name);
+					}
+
+					if (defaultTab != null)
+						item.setCreativeTab(defaultTab);
+
+					items.put(item, name);
+					GameRegistry.registerItem(item, name, modID);
+				}
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
 				throw new RuntimeException("Item [" + name + "] failed to be created!");
-			}
-
-			if (item != null)
-			{
-				items.put(item, name);
-				GameRegistry.registerItem(item, name, modID);
 			}
 		}
 		return item;

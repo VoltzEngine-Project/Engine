@@ -1,5 +1,7 @@
 package calclavia.lib.prefab.block;
 
+import java.lang.reflect.Method;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -224,6 +226,16 @@ public abstract class BlockAdvanced extends Block
 
 	public boolean isControlDown(EntityPlayer player)
 	{
+		try
+		{
+			Class ckm = Class.forName("codechicken.multipart.ControlKeyModifer");
+			Method m = ckm.getMethod("isControlDown", EntityPlayer.class);
+			return (boolean) m.invoke(null, player);
+		}
+		catch (Exception e)
+		{
+
+		}
 		return false;
 	}
 }

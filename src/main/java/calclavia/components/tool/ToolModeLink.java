@@ -22,6 +22,7 @@ public class ToolModeLink extends ToolMode
 	{
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
+		/*
 		if (ControlKeyModifer.isControlDown(player))
 		{
 			if (tile instanceof ILinkable)
@@ -36,7 +37,7 @@ public class ToolModeLink extends ToolMode
 					}
 				}
 			}
-		}
+		}*/
 
 		if (!world.isRemote)
 		{
