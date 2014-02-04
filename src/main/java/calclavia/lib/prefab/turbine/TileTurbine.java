@@ -103,7 +103,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 		 */
 		if (tank.getFluidAmount() > 0 && power < maxPower)
 		{
-			getMultiBlock().get().power += tank.drain((int) Math.ceil(tank.getFluidAmount() * 0.05), true).amount * energyPerSteam;
+			getMultiBlock().get().power += tank.drain((int) Math.ceil(tank.getFluidAmount() * 0.08), true).amount * energyPerSteam;
 		}
 
 		if (getMultiBlock().isPrimary())

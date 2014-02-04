@@ -55,9 +55,18 @@ public abstract class BlockRotatable extends BlockTile implements IRotatableBloc
 	}
 
 	@Override
+	public boolean onSneakUseWrench(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
+		return rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
+	}
+
+	/**
+	 * Can be overriden for blocks that required extra functionalities.
+	 */
+	@Override
 	public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
-		return this.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
+		return onSneakUseWrench(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
 	}
 
 	@Override

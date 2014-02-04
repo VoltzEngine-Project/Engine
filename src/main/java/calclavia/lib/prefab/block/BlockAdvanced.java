@@ -1,7 +1,5 @@
 package calclavia.lib.prefab.block;
 
-import java.lang.reflect.Method;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,7 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
-import buildcraft.api.tools.IToolWrench;
+import calclavia.lib.utility.WrenchUtility;
 import calclavia.lib.utility.inventory.InventoryUtility;
 
 /**
@@ -42,9 +40,9 @@ public abstract class BlockAdvanced extends Block
 		 * Check if the player is holding a wrench or an electric item. If so, call the wrench
 		 * event.
 		 */
-		if (this.isUsableWrench(entityPlayer, entityPlayer.inventory.getCurrentItem(), x, y, z))
+		if (WrenchUtility.isUsableWrench(entityPlayer, entityPlayer.inventory.getCurrentItem(), x, y, z))
 		{
-			this.damageWrench(entityPlayer, entityPlayer.inventory.getCurrentItem(), x, y, z);
+			WrenchUtility.damageWrench(entityPlayer, entityPlayer.inventory.getCurrentItem(), x, y, z);
 
 			if (entityPlayer.isSneaking())
 			{
@@ -71,78 +69,6 @@ public abstract class BlockAdvanced extends Block
 		}
 
 		return this.onMachineActivated(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ);
-	}
-
-	/**
-	 * A function that denotes if an itemStack is a wrench that can be used. Override this for more
-	 * wrench compatibility. Compatible with Buildcraft and IC2 wrench API via reflection.
-	 * 
-	 * @return True if it is a wrench.
-	 */
-	public static boolean isUsableWrench(EntityPlayer player, ItemStack itemStack, int x, int y, int z)
-	{
-		if (player != null && itemStack != null)
-		{
-			if (itemStack.getItem() instanceof IToolWrench)
-			{
-				return ((IToolWrench) itemStack.getItem()).canWrench(player, x, y, z);
-			}
-
-			/**
-			 * Industrialcraft
-			 */
-			try
-			{
-				Class wrenchClass = itemStack.getItem().getClass();
-
-				if (wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench") || wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrenchElectric"))
-				{
-					return itemStack.getItemDamage() < itemStack.getMaxDamage();
-				}
-			}
-			catch (Exception e)
-			{
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * This function damages a wrench. Works with Buildcraft and Industrialcraft wrenches.
-	 * 
-	 * @return True if damage was successfull.
-	 */
-	public static boolean damageWrench(EntityPlayer player, ItemStack itemStack, int x, int y, int z)
-	{
-		if (isUsableWrench(player, itemStack, x, y, z))
-		{
-			if (itemStack.getItem() instanceof IToolWrench)
-			{
-				((IToolWrench) itemStack.getItem()).wrenchUsed(player, x, y, z);
-				return true;
-			}
-
-			/**
-			 * Industrialcraft
-			 */
-			try
-			{
-				Class wrenchClass = itemStack.getItem().getClass();
-
-				if (wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench") || wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrenchElectric"))
-				{
-					Method methodWrenchDamage = wrenchClass.getMethod("damage", ItemStack.class, Integer.TYPE, EntityPlayer.class);
-					methodWrenchDamage.invoke(itemStack.getItem(), itemStack, 1, player);
-					return true;
-				}
-			}
-			catch (Exception e)
-			{
-			}
-		}
-
-		return false;
 	}
 
 	/**
