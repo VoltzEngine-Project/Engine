@@ -61,6 +61,9 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 
 	private final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
 
+	/**
+	 * The power of the turbine this tick. In joules/tick
+	 */
 	public long power = 0;
 
 	/**
@@ -68,7 +71,9 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	 */
 	public float rotation = 0;
 
-	protected long torque = 3000;
+	protected final long defaultTorque = 5000;
+	protected long torque = defaultTorque;
+
 	protected float prevAngularVelocity, angularVelocity = 0;
 
 	public TileTurbine()
@@ -115,7 +120,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 				/**
 				 * Set angular velocity based on power and torque.
 				 */
-				angularVelocity = (float) ((double) power / (double) getTorque());
+				angularVelocity = (float) ((double) power / torque);
 
 				if (!worldObj.isRemote && ticks % 3 == 0 && prevAngularVelocity != angularVelocity)
 				{
@@ -150,11 +155,6 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 
 	public long getTorque()
 	{
-		if (this.getMultiBlock().isConstructed())
-		{
-			return torque * 3;
-		}
-
 		return torque;
 	}
 
