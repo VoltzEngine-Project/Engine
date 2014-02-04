@@ -127,7 +127,7 @@ public class ContentRegistry
 			catch (Exception e)
 			{
 				e.printStackTrace();
-				throw new RuntimeException("Block [" + name + "] failed to be created!");
+				throw new RuntimeException("Block [" + name + "] failed to be created: " + e.getLocalizedMessage());
 			}
 		}
 
@@ -178,7 +178,7 @@ public class ContentRegistry
 
 	public Item createItem(Class<? extends Item> clazz)
 	{
-		return createItem(clazz.getSimpleName(), clazz, true);
+		return createItem(LanguageUtility.decapitalizeFirst(clazz.getSimpleName().replace("Item", "")), clazz, true);
 	}
 
 	public Item createItem(String name, Class<? extends Item> clazz)
@@ -226,7 +226,7 @@ public class ContentRegistry
 			catch (Exception e)
 			{
 				e.printStackTrace();
-				throw new RuntimeException("Item [" + name + "] failed to be created!");
+				throw new RuntimeException("Item [" + name + "] failed to be created: " + e.getLocalizedMessage());
 			}
 		}
 		return item;

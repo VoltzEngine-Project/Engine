@@ -230,7 +230,7 @@ public abstract class BlockAdvanced extends Block
 		{
 			Class ckm = Class.forName("codechicken.multipart.ControlKeyModifer");
 			Method m = ckm.getMethod("isControlDown", EntityPlayer.class);
-			return (boolean) m.invoke(null, player);
+			return (Boolean) m.invoke(null, player);
 		}
 		catch (Exception e)
 		{

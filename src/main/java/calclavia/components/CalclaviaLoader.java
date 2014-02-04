@@ -23,7 +23,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import universalelectricity.api.vector.Vector3;
 import calclavia.components.creative.BlockCreativeBuilder;
-import calclavia.components.creative.BlockInfinite;
+import calclavia.components.creative.BlockInfiniteBlock;
 import calclavia.components.tool.ToolMode;
 import calclavia.components.tool.ToolModeRotation;
 import calclavia.lib.Calclavia;
@@ -195,7 +195,7 @@ public class CalclaviaLoader
 			blockCreativeBuilder = (BlockCreativeBuilder) contentRegistry.createBlock(BlockCreativeBuilder.class);
 		}
 
-		blockInfinite = contentRegistry.createBlock(BlockInfinite.class, ItemBlockMetadata.class);
+		blockInfinite = contentRegistry.createBlock(BlockInfiniteBlock.class, ItemBlockMetadata.class);
 
 		Calclavia.CONFIGURATION.save();
 	}

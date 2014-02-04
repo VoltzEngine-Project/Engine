@@ -10,7 +10,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.VectorWorld;
 import calclavia.lib.prefab.block.ILinkable;
-import codechicken.multipart.ControlKeyModifer;
 
 /**
  * @author Calclavia

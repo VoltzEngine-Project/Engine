@@ -2,20 +2,21 @@ package calclavia.components.creative;
 
 import java.util.List;
 
+import universalelectricity.api.UniversalElectricity;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import calclavia.components.BlockCCIO;
 import calclavia.components.CalclaviaLoader;
 import calclavia.lib.content.BlockInfo;
+import calclavia.lib.prefab.block.BlockSidedIO;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @BlockInfo(tileEntity = { TileInfiniteEnergy.class, TileInfiniteFluid.class })
-public class BlockInfinite extends BlockCCIO
+public class BlockInfiniteBlock extends BlockSidedIO
 {
 	private static enum Types
 	{
@@ -44,9 +45,9 @@ public class BlockInfinite extends BlockCCIO
 		}
 	}
 
-	public BlockInfinite()
+	public BlockInfiniteBlock(int id)
 	{
-		super("infiniteBlock", CalclaviaLoader.idManager.getNextBlockID());
+		super(id, UniversalElectricity.machine);
 		setCreativeTab(CreativeTabs.tabTools);
 	}
 
