@@ -218,7 +218,9 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill)
 	{
-		return getMultiBlock().get().tank.fill(resource, doFill);
+		if (resource != null && canFill(from, resource.getFluid()))
+			return getMultiBlock().get().tank.fill(resource, doFill);
+		return 0;
 	}
 
 	@Override
