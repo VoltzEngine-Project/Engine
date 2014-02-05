@@ -95,7 +95,6 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 		CONFIGURATION.save();
 
 		TickRegistry.registerTickHandler(NetworkTickHandler.INSTANCE, Side.SERVER);
-		EnergyNetworkLoader.setNetworkClass(EnergyNetwork.class);
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new CapeEventHandler());
 
