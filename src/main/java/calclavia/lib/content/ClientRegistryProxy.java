@@ -34,9 +34,9 @@ public class ClientRegistryProxy extends CommonRegistryProxy
 	}
 
 	@Override
-	public void regiserTileEntity(String name, Class<? extends TileEntity> tileClass)
+	public void registerTileEntity(String name, Class<? extends TileEntity> tileClass)
 	{
-		super.regiserTileEntity(name, tileClass);
+		super.registerTileEntity(name, tileClass);
 
 		TileEntitySpecialRenderer tileRenderer = null;
 

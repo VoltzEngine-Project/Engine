@@ -16,7 +16,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**
  * Handler to make registering all parts of a mod's objects that are loaded into the game by forge.
- * 
+ *
  * @author DarkGuardsman, Calclavia
  */
 public class ContentRegistry
@@ -88,9 +88,9 @@ public class ContentRegistry
 
 	/**
 	 * Generates a block using reflection, and runs it threw config checks
-	 * 
+	 *
 	 * @param name - name to register the block with
-	 * @param modID - mod id to register the block to
+	 * @param tileClass - the tile class to register this block to
 	 * @param blockClass - class to generate the instance from
 	 * @param canDisable - should we allow the player the option to disable the block
 	 * @param itemClass - item block to register with the block
@@ -136,7 +136,7 @@ public class ContentRegistry
 
 	/**
 	 * Finishes the creation of the block loading config files and tile entities
-	 * 
+	 *
 	 * @param tileClass
 	 */
 	public void finishCreation(Block block, Class<? extends TileEntity> tileClass)
@@ -147,19 +147,20 @@ public class ContentRegistry
 		{
 			for (Class clazz : blockInfo.tileEntity())
 			{
-				proxy.regiserTileEntity(clazz.getName(), clazz);
+				proxy.registerTileEntity(clazz.getName(), clazz);
 			}
-		}
 
+		}
+        //TODO Remove this and transfer to @BlockInfo
 		if (tileClass != null)
 		{
-			proxy.regiserTileEntity(block.getUnlocalizedName(), tileClass);
+			proxy.registerTileEntity(block.getUnlocalizedName(), tileClass);
 		}
 	}
 
 	/**
 	 * Method to get block via name
-	 * 
+	 *
 	 * @param blockName
 	 * @return Block requested
 	 */
@@ -189,7 +190,7 @@ public class ContentRegistry
 	/**
 	 * Creates a new item using reflection as well runs it threw some check to activate any
 	 * interface methods
-	 * 
+	 *
 	 * @param name - name to register the item with
 	 * @param modid - mods that the item comes from
 	 * @param clazz - item class

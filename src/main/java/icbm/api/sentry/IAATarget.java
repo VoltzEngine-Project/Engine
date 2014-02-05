@@ -12,7 +12,7 @@ public interface IAATarget
     public void destroyCraft();
 
     /** Applies damage to the the target
-     * 
+     *
      * @param damage - damage in half HP
      * @return the amount of HP left. Return -1 if this target can't take damage, and will be chance
      * killed. Return 0 if this target is dead and destroyCraft() will be called. */

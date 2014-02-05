@@ -1,6 +1,7 @@
 package calclavia.lib.content;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import calclavia.lib.prefab.item.ItemBlockTooltip;
@@ -16,8 +17,9 @@ public class CommonRegistryProxy
 		}
 	}
 
-	public void regiserTileEntity(String name, Class<? extends TileEntity> clazz)
+	public void registerTileEntity(String name, Class<? extends TileEntity> clazz)
 	{
 		GameRegistry.registerTileEntityWithAlternatives(clazz, name, "CL" + name);
 	}
+
 }
