@@ -6,8 +6,8 @@ import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -18,10 +18,12 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import universalelectricity.api.energy.EnergyStorageHandler;
 import universalelectricity.api.vector.Vector3;
+import calclavia.components.CalclaviaLoader;
 import calclavia.lib.multiblock.reference.IMultiBlockStructure;
-import calclavia.lib.multiblock.reference.MultiBlockHandler;
-import calclavia.lib.network.IPacketReceiver;
 import calclavia.lib.network.PacketHandler;
+import calclavia.lib.network.Synced;
+import calclavia.lib.network.Synced.SyncedInput;
+import calclavia.lib.network.Synced.SyncedOutput;
 import calclavia.lib.prefab.tile.TileElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -36,7 +38,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 
  * The front of the turbine is where the output is.
  */
-public abstract class TileTurbine extends TileElectrical implements IMultiBlockStructure<TileTurbine>, IPacketReceiver, IFluidHandler
+public abstract class TileTurbine extends TileElectrical implements IMultiBlockStructure<TileTurbine>, IFluidHandler
 {
 	/**
 	 * Radius of large turbine?
@@ -49,17 +51,12 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	protected long maxPower = 800000;
 
 	/**
-	 * Turn slow down when not powered
-	 */
-	protected float powerDamping = 0.05f;
-
-	/**
 	 * Amount of energy per liter of steam.
 	 * Boil Water Energy = 327600 + 2260000 = 2587600
 	 */
-	protected long energyPerSteam = 2647600 / 1000;
+	protected final long energyPerSteam = 2647600 / 1000;
 
-	private final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
+	protected final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
 
 	/**
 	 * The power of the turbine this tick. In joules/tick
@@ -73,8 +70,9 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 
 	protected final long defaultTorque = 5000;
 	protected long torque = defaultTorque;
-
-	protected float prevAngularVelocity, angularVelocity = 0;
+	protected float prevAngularVelocity = 0;
+	@Synced(1)
+	protected float angularVelocity = 0;
 
 	public TileTurbine()
 	{
@@ -103,24 +101,24 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 
 		getMultiBlock().update();
 
-		/**
-		 * Increase spin rate and consume steam.
-		 */
-		if (tank.getFluidAmount() > 0 && power < maxPower)
-		{
-			getMultiBlock().get().power += tank.drain((int) Math.ceil(tank.getFluidAmount() * 0.08), true).amount * energyPerSteam;
-		}
-
 		if (getMultiBlock().isPrimary())
 		{
+			/**
+			 * Increase spin rate and consume steam.
+			 */
+			if (tank.getFluidAmount() > 0 && power < maxPower)
+			{
+				power += tank.drain((int) Math.ceil(Math.min(tank.getFluidAmount() * 0.08, maxPower / energyPerSteam)), true).amount * energyPerSteam;
+			}
+
+			/**
+			 * Set angular velocity based on power and torque.
+			 */
+			angularVelocity = (float) ((double) power / torque);
+
 			if (power > 0)
 			{
 				playSound();
-
-				/**
-				 * Set angular velocity based on power and torque.
-				 */
-				angularVelocity = (float) ((double) power / torque);
 
 				if (!worldObj.isRemote && ticks % 3 == 0 && prevAngularVelocity != angularVelocity)
 				{
@@ -138,6 +136,10 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 				 */
 				rotation = (float) ((rotation + angularVelocity / 20) % (Math.PI * 2));
 			}
+		}
+		else if (tank.getFluidAmount() > 0)
+		{
+			getMultiBlock().get().tank.fill(tank.drain(getMultiBlock().get().tank.fill(tank.getFluid(), false), true), true);
 		}
 
 		power = 0;
@@ -167,28 +169,15 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 
 	}
 
-	public abstract void sendPowerUpdate();
-
 	@Override
-	public void onReceivePacket(ByteArrayDataInput data, EntityPlayer player, Object... extra)
+	public Packet getDescriptionPacket()
 	{
-		try
-		{
-			final byte id = data.readByte();
+		return CalclaviaLoader.PACKET_ANNOTATION.getPacket(this);
+	}
 
-			if (id == 1)
-			{
-				this.readFromNBT(PacketHandler.readNBTTagCompound(data));
-			}
-			else if (id == 2)
-			{
-				angularVelocity = data.readFloat();
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+	public void sendPowerUpdate()
+	{
+		CalclaviaLoader.PACKET_ANNOTATION.sync(this, 1);
 	}
 
 	@Override
@@ -201,6 +190,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
+	@SyncedInput
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
@@ -212,6 +202,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
+	@SyncedOutput
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);

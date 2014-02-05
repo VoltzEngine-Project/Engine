@@ -34,6 +34,7 @@ import calclavia.lib.flag.FlagRegistry;
 import calclavia.lib.flag.ModFlag;
 import calclavia.lib.multiblock.fake.BlockMultiBlockPart;
 import calclavia.lib.multiblock.fake.TileMultiBlockPart;
+import calclavia.lib.network.PacketAnnotation;
 import calclavia.lib.network.PacketHandler;
 import calclavia.lib.network.PacketTile;
 import calclavia.lib.ore.OreGenBase;
@@ -165,8 +166,9 @@ public class CalclaviaLoader
 
 	public static OreGenBase generationOreCopper, generationOreTin;
 
-	public static final ContentRegistry contentRegistry = new ContentRegistry(Calclavia.CONFIGURATION, idManager, ID);
+	public static final ContentRegistry contentRegistry = new ContentRegistry(Calclavia.CONFIGURATION, idManager, ID).setPrefix(PREFIX).setTab(CreativeTabs.tabTools);
 	public static final PacketTile PACKET_TILE = new PacketTile(CHANNEL);
+	public static final PacketAnnotation PACKET_ANNOTATION = new PacketAnnotation(CHANNEL);
 
 	/** Calclavia Core Blocks for mods */
 
