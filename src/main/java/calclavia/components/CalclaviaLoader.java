@@ -189,7 +189,7 @@ public class CalclaviaLoader
 
 		Calclavia.CONFIGURATION.load();
 
-		blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class);
+		blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class).setCreativeTab(null);
 		blockMulti.setPacketType(PACKET_TILE);
 
 		if (Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable_Calclavia_Core_Tools", true).getBoolean(true))
