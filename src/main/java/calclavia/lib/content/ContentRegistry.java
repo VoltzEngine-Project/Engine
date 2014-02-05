@@ -1,5 +1,6 @@
 package calclavia.lib.content;
 
+import java.lang.reflect.Constructor;
 import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
@@ -90,7 +91,7 @@ public class ContentRegistry
 	 * Generates a block using reflection, and runs it threw config checks
 	 * 
 	 * @param name - name to register the block with
-	 * @param modID - mod id to register the block to
+	 * @param tileClass - class to assaign the tile to
 	 * @param blockClass - class to generate the instance from
 	 * @param canDisable - should we allow the player the option to disable the block
 	 * @param itemClass - item block to register with the block
@@ -104,7 +105,20 @@ public class ContentRegistry
 			try
 			{
 				int assignedID = idManager.getNextBlockID();
-				block = blockClass.getConstructor(Integer.TYPE).newInstance(config.getBlock(name, assignedID).getInt(assignedID));
+
+                Constructor[] constructors = blockClass.getConstructors();
+
+                for (Constructor con : constructors)
+                {
+                    // Gets the constructor that accepts only 1 int
+                    if (con.getParameterTypes().length == 1)
+                    {
+                        block = (Block) con.newInstance(assignedID);
+                        break;
+                    }
+                }
+
+				//block = blockClass.getConstructor(Integer.TYPE).newInstance(config.getBlock(name, assignedID).getInt(assignedID));
 
 				if (block != null)
 				{
@@ -136,7 +150,7 @@ public class ContentRegistry
 
 	/**
 	 * Finishes the creation of the block loading config files and tile entities
-	 * 
+	 *
 	 * @param tileClass
 	 */
 	public void finishCreation(Block block, Class<? extends TileEntity> tileClass)
@@ -159,7 +173,7 @@ public class ContentRegistry
 
 	/**
 	 * Method to get block via name
-	 * 
+	 *
 	 * @param blockName
 	 * @return Block requested
 	 */
