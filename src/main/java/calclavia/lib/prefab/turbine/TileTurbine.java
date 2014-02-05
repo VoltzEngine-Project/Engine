@@ -48,7 +48,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	/**
 	 * Max power in watts.
 	 */
-	protected long maxPower = 800000;
+	protected long maxPower;
 
 	/**
 	 * Amount of energy per liter of steam.
@@ -56,7 +56,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	 */
 	protected final long energyPerSteam = 2647600 / 1000;
 
-	protected final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
+	protected final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 100);
 
 	/**
 	 * The power of the turbine this tick. In joules/tick
@@ -79,7 +79,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 		/**
 		 * We're going to use the EnergyStorageHandler to store power.
 		 */
-		energy = new EnergyStorageHandler(maxPower);
+		energy = new EnergyStorageHandler(maxPower * 20);
 	}
 
 	public ForgeDirection getDirection()
@@ -91,7 +91,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	public void initiate()
 	{
 		super.initiate();
-		energy = new EnergyStorageHandler(maxPower);
+		energy = new EnergyStorageHandler(maxPower * 20);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 				 */
 				if (tank.getFluidAmount() > 0 && power < maxPower)
 				{
-					power += tank.drain((int) Math.ceil(Math.min(tank.getFluidAmount() * 0.08, getMaxPower() / energyPerSteam)), true).amount * energyPerSteam;
+					power += tank.drain((int) Math.ceil(Math.min(tank.getFluidAmount() * 0.1, getMaxPower() / energyPerSteam)), true).amount * energyPerSteam;
 				}
 
 				/**
@@ -196,7 +196,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
-		power = nbt.getLong("power");
+		tank.readFromNBT(nbt);
 		getMultiBlock().load(nbt);
 	}
 
@@ -208,7 +208,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
-		nbt.setLong("power", power);
+		tank.writeToNBT(nbt);
 		getMultiBlock().save(nbt);
 	}
 

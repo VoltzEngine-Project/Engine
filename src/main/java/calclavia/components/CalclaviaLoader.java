@@ -563,7 +563,7 @@ public class CalclaviaLoader
 				{
 					if (handler.canFill(ForgeDirection.DOWN, fluid.getFluid()))
 					{
-						handler.fill(ForgeDirection.DOWN, fluid, true);
+						fluid.amount -= handler.fill(ForgeDirection.DOWN, fluid, true);
 					}
 				}
 			}

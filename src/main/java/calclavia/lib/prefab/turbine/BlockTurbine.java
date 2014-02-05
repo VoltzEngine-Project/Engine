@@ -14,7 +14,8 @@ public class BlockTurbine extends BlockRotatable
 	public BlockTurbine(int id, Material material)
 	{
 		super(id, material);
-		rotationMask = Byte.parseByte("000011", 2);
+		rotationMask = Byte.parseByte("000001", 2);
+		isFlipPlacement = true;
 	}
 
 	@Override
