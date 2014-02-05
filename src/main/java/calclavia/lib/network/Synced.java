@@ -14,19 +14,19 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Synced
 {
-	public int[] id() default 0;
+	public int[] value() default 0;
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.METHOD)
 	public @interface SyncedInput
 	{
-		public int[] id() default 0;
+		public int[] value() default 0;
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.METHOD)
 	public @interface SyncedOutput
 	{
-		public int[] id() default 0;
+		public int[] value() default 0;
 	}
 }

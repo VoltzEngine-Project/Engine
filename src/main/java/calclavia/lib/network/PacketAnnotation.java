@@ -72,7 +72,7 @@ public class PacketAnnotation extends PacketType
 				{
 					Synced sync = f.getAnnotation(Synced.class);
 
-					for (int packetID : sync.id())
+					for (int packetID : sync.value())
 					{
 						PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
 						packetSet.syncFields.add(f);
@@ -87,7 +87,7 @@ public class PacketAnnotation extends PacketType
 				{
 					SyncedInput sync = m.getAnnotation(SyncedInput.class);
 
-					for (int packetID : sync.id())
+					for (int packetID : sync.value())
 					{
 						PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
 						packetSet.syncInputs.add(m);
@@ -99,7 +99,7 @@ public class PacketAnnotation extends PacketType
 				{
 					SyncedOutput sync = m.getAnnotation(SyncedOutput.class);
 
-					for (int packetID : sync.id())
+					for (int packetID : sync.value())
 					{
 						PacketSet packetSet = packetSets.containsKey(packetID) ? packetSets.get(packetID) : new PacketSet(packetID);
 						packetSet.syncOutputs.add(m);

@@ -103,22 +103,20 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 
 		if (getMultiBlock().isPrimary())
 		{
-			/**
-			 * Increase spin rate and consume steam.
-			 */
-			if (tank.getFluidAmount() > 0 && power < maxPower)
+			if (!worldObj.isRemote)
 			{
-				power += tank.drain((int) Math.ceil(Math.min(tank.getFluidAmount() * 0.08, maxPower / energyPerSteam)), true).amount * energyPerSteam;
-			}
+				/**
+				 * Increase spin rate and consume steam.
+				 */
+				if (tank.getFluidAmount() > 0 && power < maxPower)
+				{
+					power += tank.drain((int) Math.ceil(Math.min(tank.getFluidAmount() * 0.08, getMaxPower() / energyPerSteam)), true).amount * energyPerSteam;
+				}
 
-			/**
-			 * Set angular velocity based on power and torque.
-			 */
-			angularVelocity = (float) ((double) power / torque);
-
-			if (power > 0)
-			{
-				playSound();
+				/**
+				 * Set angular velocity based on power and torque.
+				 */
+				angularVelocity = (float) ((double) power / torque);
 
 				if (!worldObj.isRemote && ticks % 3 == 0 && prevAngularVelocity != angularVelocity)
 				{
@@ -126,11 +124,14 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 					prevAngularVelocity = angularVelocity;
 				}
 
-				onProduce();
+				if (power > 0)
+					onProduce();
 			}
 
 			if (angularVelocity != 0)
 			{
+				playSound();
+
 				/**
 				 * Update rotation.
 				 */
@@ -142,7 +143,8 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 			getMultiBlock().get().tank.fill(tank.drain(getMultiBlock().get().tank.fill(tank.getFluid(), false), true), true);
 		}
 
-		power = 0;
+		if (!worldObj.isRemote)
+			power = 0;
 	}
 
 	protected long getMaxPower()
