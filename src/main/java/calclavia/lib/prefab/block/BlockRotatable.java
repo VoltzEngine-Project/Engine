@@ -16,6 +16,7 @@ import net.minecraftforge.common.ForgeDirection;
 public abstract class BlockRotatable extends BlockTile implements IRotatableBlock
 {
 	protected byte rotationMask = Byte.parseByte("111100", 2);
+	protected boolean isFlipPlacement = false;
 
 	public BlockRotatable(int id, Material material)
 	{
@@ -46,7 +47,12 @@ public abstract class BlockRotatable extends BlockTile implements IRotatableBloc
 		}
 
 		int playerSide = MathHelper.floor_double((double) (entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		return (playerSide == 0 && canRotate(2)) ? 2 : ((playerSide == 1 && canRotate(5)) ? 5 : ((playerSide == 2 && canRotate(3)) ? 3 : ((playerSide == 3 && canRotate(4)) ? 4 : 0)));
+		int returnSide = (playerSide == 0 && canRotate(2)) ? 2 : ((playerSide == 1 && canRotate(5)) ? 5 : ((playerSide == 2 && canRotate(3)) ? 3 : ((playerSide == 3 && canRotate(4)) ? 4 : 0)));
+
+		if (isFlipPlacement)
+			return ForgeDirection.getOrientation(returnSide).getOpposite().ordinal();
+
+		return returnSide;
 	}
 
 	public boolean canRotate(int ord)
