@@ -109,6 +109,32 @@ public class LanguageUtility
 		return lines;
 	}
 
+	public static List<Integer> decodeIDSeparatedByComma(String string)
+	{
+		List<Integer> intList = new ArrayList<Integer>();
+
+		if (string != null)
+		{
+			for (String blockIDString : string.split(","))
+			{
+				if (blockIDString != null && !blockIDString.isEmpty())
+				{
+					try
+					{
+						int blockID = Integer.parseInt(blockIDString);
+						intList.add(blockID);
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+		return intList;
+	}
+
 	public static String capitalizeFirst(String str)
 	{
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
