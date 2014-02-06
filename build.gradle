@@ -29,7 +29,7 @@ archivesBaseName = "Calclavia Core"
 minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
 	
-	replaceIn "components/CalclaviaComponents.java"
+	replaceIn "components/CalclaviaLoader.java"
 	replace "@MAJOR@", config.version.mod.major
 	replace "@MINOR@", config.version.mod.minor
 	replace "@REVIS@", config.version.mod.revis
