@@ -22,7 +22,9 @@ public class ClientRegistryProxy extends CommonRegistryProxy
 			{
 				try
 				{
-					ClientRegistry.bindTileEntitySpecialRenderer(blockInfo.tileEntity()[i], blockInfo.renderer()[i].newInstance());
+					Class<? extends TileEntity> tileClass = (Class<? extends TileEntity>) Class.forName(blockInfo.tileEntity()[i]);
+					Class<? extends TileEntitySpecialRenderer> rendererClass = (Class<? extends TileEntitySpecialRenderer>) Class.forName(blockInfo.renderer()[i]);
+					ClientRegistry.bindTileEntitySpecialRenderer(tileClass, rendererClass.newInstance());
 				}
 				catch (Exception e)
 				{

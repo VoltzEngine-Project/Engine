@@ -138,15 +138,17 @@ public class ContentRegistry
 	 * Finishes the creation of the block loading config files and tile entities
 	 *
 	 * @param tileClass
+	 * @throws ClassNotFoundException 
 	 */
-	public void finishCreation(Block block, Class<? extends TileEntity> tileClass)
+	public void finishCreation(Block block, Class<? extends TileEntity> tileClass) throws ClassNotFoundException
 	{
 		BlockInfo blockInfo = block.getClass().getAnnotation(BlockInfo.class);
 
 		if (blockInfo != null)
 		{
-			for (Class clazz : blockInfo.tileEntity())
+			for (String string : blockInfo.tileEntity())
 			{
+				Class clazz = Class.forName(string);
 				proxy.registerTileEntity(clazz.getName(), clazz);
 			}
 
