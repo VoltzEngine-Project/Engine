@@ -64,6 +64,6 @@ public class ToolModeRotation extends ToolMode
 	@Override
 	public String getName()
 	{
-		return "toolmode.general.name";
+		return "toolmode.rotation.name";
 	}
 }

@@ -37,6 +37,7 @@ public class ItemMultitool extends ItemBase implements IToolWrench
 	public void addInformation(ItemStack itemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
 		par3List.add("Mode: " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
+		par3List.add(LanguageUtility.getLocal("item.multitool.tooltip"));
 	}
 
 	@Override
@@ -47,7 +48,8 @@ public class ItemMultitool extends ItemBase implements IToolWrench
 		{
 			setMode(itemStack, (getMode(itemStack) + 1) % ToolMode.REGISTRY.size());
 
-			player.addChatMessage("Set tool mode to: " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
+			if (!world.isRemote)
+				player.addChatMessage("Set tool mode to: " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
 			return itemStack;
 		}
 

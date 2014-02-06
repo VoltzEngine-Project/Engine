@@ -25,6 +25,7 @@ import universalelectricity.api.vector.Vector3;
 import calclavia.components.creative.BlockCreativeBuilder;
 import calclavia.components.creative.BlockInfiniteBlock;
 import calclavia.components.tool.ToolMode;
+import calclavia.components.tool.ToolModeGeneral;
 import calclavia.components.tool.ToolModeRotation;
 import calclavia.lib.Calclavia;
 import calclavia.lib.content.ContentRegistry;
@@ -185,6 +186,7 @@ public class CalclaviaLoader
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance());
 
+		ToolMode.REGISTRY.add(new ToolModeGeneral());
 		ToolMode.REGISTRY.add(new ToolModeRotation());
 
 		Calclavia.CONFIGURATION.load();
