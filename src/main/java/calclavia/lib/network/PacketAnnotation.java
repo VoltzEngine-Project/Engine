@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,6 +45,8 @@ public class PacketAnnotation extends PacketType
 	 */
 	protected static final HashMap<Integer, HashMap<Integer, PacketSet>> packetSetIDMap = new HashMap<Integer, HashMap<Integer, PacketSet>>();
 
+	public static final List<String> syncedClasses = new ArrayList<String>();
+
 	public PacketAnnotation(String channel)
 	{
 		super(channel);
@@ -52,7 +55,7 @@ public class PacketAnnotation extends PacketType
 	/**
 	 * Constructs the packet sets for this specific class
 	 */
-	public void constructPacketSets(Class clazz)
+	public static void constructPacketSets(Class clazz)
 	{
 		if (classPacketIDMap.containsKey(clazz))
 		{
@@ -61,7 +64,7 @@ public class PacketAnnotation extends PacketType
 
 		int classID = ++maxID;
 		classPacketIDMap.put(clazz, classID);
-		
+
 		HashMap<Integer, PacketSet> packetSets = new HashMap<Integer, PacketSet>();
 
 		while (clazz != null)
@@ -110,7 +113,7 @@ public class PacketAnnotation extends PacketType
 
 			clazz = clazz.getSuperclass();
 		}
-		
+
 		packetSetIDMap.put(classID, packetSets);
 	}
 
@@ -156,6 +159,22 @@ public class PacketAnnotation extends PacketType
 	@Override
 	public void receivePacket(ByteArrayDataInput data, EntityPlayer player)
 	{
+		Iterator<String> it = syncedClasses.iterator();
+
+		while (it.hasNext())
+		{
+			try
+			{
+				constructPacketSets(Class.forName(it.next()));
+			}
+			catch (ClassNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+
+			it.remove();
+		}
+
 		int classID = data.readInt();
 		int packetSetID = data.readInt();
 
@@ -194,7 +213,7 @@ public class PacketAnnotation extends PacketType
 		}
 	}
 
-	class PacketSet
+	public static class PacketSet
 	{
 		public final int id;
 

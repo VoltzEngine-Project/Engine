@@ -38,6 +38,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 
  * The front of the turbine is where the output is.
  */
+@Synced
 public abstract class TileTurbine extends TileElectrical implements IMultiBlockStructure<TileTurbine>, IFluidHandler
 {
 	/**

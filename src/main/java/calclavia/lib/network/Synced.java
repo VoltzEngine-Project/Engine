@@ -7,11 +7,12 @@ import java.lang.annotation.Target;
 
 /**
  * Used to specify annotation packets.
+ * 
  * @author Calclavia
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ ElementType.TYPE, ElementType.FIELD })
 public @interface Synced
 {
 	public int[] value() default 0;

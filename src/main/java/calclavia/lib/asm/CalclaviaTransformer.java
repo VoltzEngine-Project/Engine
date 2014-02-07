@@ -13,6 +13,7 @@ import static org.objectweb.asm.Opcodes.RETURN;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
@@ -21,6 +22,7 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
+import calclavia.lib.network.PacketAnnotation;
 import universalelectricity.core.asm.ASMHelper;
 import universalelectricity.core.asm.ObfMapping;
 
@@ -69,6 +71,22 @@ public class CalclaviaTransformer implements IClassTransformer
 			}
 
 			return ASMHelper.createBytes(cnode, 0);
+		}
+
+		/**
+		 * Auto register all classes with @Synced
+		 */
+		ClassNode cnode = ASMHelper.createClassNode(bytes);
+
+		if (cnode != null && cnode.visibleAnnotations != null)
+		{
+			for (AnnotationNode nodes : cnode.visibleAnnotations)
+			{
+				if (nodes.desc.equals("Lcalclavia/lib/network/Synced;"))
+				{
+					PacketAnnotation.syncedClasses.add(transformedName);
+				}
+			}
 		}
 
 		return bytes;
