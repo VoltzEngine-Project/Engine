@@ -1,7 +1,9 @@
 package universalelectricity.core.net;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import universalelectricity.api.net.IConnector;
 import universalelectricity.api.net.INodeNetwork;
@@ -19,7 +21,7 @@ public abstract class NodeNetwork<N extends INodeNetwork, C extends IConnector, 
 	/**
 	 * A set of handlers that handles events from the network.
 	 */
-	private final Set<A> nodes = new LinkedHashSet<A>();
+	private final Set<A> nodes = Collections.newSetFromMap(new WeakHashMap<A, Boolean>());
 
 	public void add(A battery)
 	{

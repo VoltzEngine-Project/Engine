@@ -1,11 +1,14 @@
 package universalelectricity.core.net;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import universalelectricity.api.net.IConnector;
 import universalelectricity.api.net.INetwork;
+import universalelectricity.api.net.IUpdate;
 
 /**
  * A network with only connectors and no handlers.
@@ -20,7 +23,7 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	/**
 	 * A set of connectors (e.g conductors).
 	 */
-	private final Set<C> connectors = new LinkedHashSet<C>();
+	private final Set<C> connectors = Collections.newSetFromMap(new WeakHashMap<C, Boolean>());
 
 	public abstract N newInstance();
 
