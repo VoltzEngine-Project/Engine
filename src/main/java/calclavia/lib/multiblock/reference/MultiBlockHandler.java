@@ -40,10 +40,9 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 			if (checkWrapper != null)
 			{
 				primary = checkWrapper;
+				newPrimary = null;
+				self.onMultiBlockChanged();
 			}
-
-			newPrimary = null;
-			self.onMultiBlockChanged();
 		}
 	}
 
