@@ -84,7 +84,7 @@ public abstract class BlockRotatable extends BlockTile implements IRotatableBloc
 		int rmeta = rotated.ordinal();
 		int rmetaBit = 1 << rmeta;
 
-		if ((rmetaBit & this.rotationMask) == rmetaBit)
+		if ((rmetaBit & rotationMask) == rmetaBit && canRotate(rmeta))
 		{
 			worldObj.setBlockMetadataWithNotify(x, y, z, rmeta, 3);
 			return true;
