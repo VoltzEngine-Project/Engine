@@ -1,7 +1,6 @@
 package universalelectricity.core.net;
 
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.WeakHashMap;
 

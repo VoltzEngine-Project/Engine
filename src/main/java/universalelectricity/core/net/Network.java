@@ -2,13 +2,11 @@ package universalelectricity.core.net;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.WeakHashMap;
 
 import universalelectricity.api.net.IConnector;
 import universalelectricity.api.net.INetwork;
-import universalelectricity.api.net.IUpdate;
 
 /**
  * A network with only connectors and no handlers.

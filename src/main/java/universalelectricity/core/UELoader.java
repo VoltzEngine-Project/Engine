@@ -17,7 +17,6 @@ import net.minecraftforge.event.world.WorldEvent.Unload;
 import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.UniversalElectricity;
-import universalelectricity.api.energy.EnergyNetworkLoader;
 import universalelectricity.compatibility.ModuleUniversalElectricity;
 import universalelectricity.core.asm.TemplateInjectionManager;
 import universalelectricity.core.asm.UniversalTransformer;
@@ -26,7 +25,6 @@ import universalelectricity.core.asm.template.item.TemplateTEItem;
 import universalelectricity.core.asm.template.tile.TemplateBCTile;
 import universalelectricity.core.asm.template.tile.TemplateICTile;
 import universalelectricity.core.asm.template.tile.TemplateTETile;
-import universalelectricity.core.net.EnergyNetwork;
 import universalelectricity.core.net.NetworkTickHandler;
 import buildcraft.api.power.IPowerReceptor;
 import cofh.api.energy.IEnergyContainerItem;
@@ -35,6 +33,7 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.ModMetadata;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.IFMLCallHook;
@@ -53,9 +52,12 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 	 */
 	public static Configuration CONFIGURATION;
 
+	@SidedProxy(clientSide = "universalelectricity.core.ClientProxy", serverSide = "universalelectricity.core.CommonProxy")
+	public static CommonProxy proxy;
+
 	@Mod.Metadata(ID)
 	public static ModMetadata metadata;
-	
+
 	public static final Logger LOGGER = Logger.getLogger(NAME);
 
 	@EventHandler
@@ -96,7 +98,7 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
 
 		TickRegistry.registerTickHandler(NetworkTickHandler.INSTANCE, Side.SERVER);
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(new CapeEventHandler());
+		proxy.init();
 
 		/**
 		 * Metadata
