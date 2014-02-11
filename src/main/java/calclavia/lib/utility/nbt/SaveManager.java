@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
+import calclavia.lib.utility.ReflectionHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -102,8 +103,7 @@ public class SaveManager
         }
     }
 
-    /** Creates then loads an object from a file. The file should have an nbt structure or it may not
-     * work.
+    /** Creates an object from an NBT save file. 
      * 
      * @param file - file
      * @return the object created from the file */
@@ -121,6 +121,11 @@ public class SaveManager
         return null;
     }
 
+    /** Loads an object from an NBTTagCompound
+     * 
+     * @param nbt - NBTTagCompound
+     * @param args - argument that will be used to construct the object's class
+     * @return new object or null if something went wrong */
     public static Object createAndLoad(NBTTagCompound nbt, Object... args)
     {
         Object obj = null;
@@ -129,43 +134,20 @@ public class SaveManager
             try
             {
                 Class<?> clazz = getClass(nbt.getString("id"));
-
-                if (clazz == null)
+                if (clazz != null)
                 {
-                    return null;
-                }
-                if (args == null || args.length == 0)
-                {
-                    Constructor<?>[] constructors = clazz.getConstructors();
-                    Constructor<?> con = null;
-                    loop:
-                    for (Constructor<?> constructor : constructors)
+                    if (args == null || args.length == 0)
                     {
-                        if (constructor.getParameterTypes().length == args.length)
+                        Constructor<?> con = ReflectionHelper.getConstructorWithArgs(clazz, args);
+                        if (con != null)
                         {
-                            Class<?>[] pType = constructor.getParameterTypes();
-                            for (int i = 0; i < pType.length; i++)
-                            {
-                                if (!pType[i].equals(args[i].getClass()))
-                                {
-                                    continue;
-                                }
-                                if (i == pType.length - 1)
-                                {
-                                    con = constructor;
-                                    break loop;
-                                }
-                            }
+                            obj = con.newInstance(args);
                         }
                     }
-                    if (con != null)
+                    else
                     {
-                        obj = con.newInstance(args);
+                        obj = clazz.newInstance();
                     }
-                }
-                else
-                {
-                    obj = clazz.newInstance();
                 }
             }
             catch (Exception exception)
