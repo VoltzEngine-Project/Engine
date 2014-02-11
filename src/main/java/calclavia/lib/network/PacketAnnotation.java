@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,7 +44,10 @@ public class PacketAnnotation extends PacketType
 	 */
 	protected static final HashMap<Integer, HashMap<Integer, PacketSet>> packetSetIDMap = new HashMap<Integer, HashMap<Integer, PacketSet>>();
 
-	public static final List<String> syncedClasses = new ArrayList<String>();
+	public static void register(Class<? extends TileEntity> clazz)
+	{
+		constructPacketSets(clazz);
+	}
 
 	public PacketAnnotation(String channel)
 	{
@@ -159,22 +161,6 @@ public class PacketAnnotation extends PacketType
 	@Override
 	public void receivePacket(ByteArrayDataInput data, EntityPlayer player)
 	{
-		Iterator<String> it = syncedClasses.iterator();
-
-		while (it.hasNext())
-		{
-			try
-			{
-				constructPacketSets(Class.forName(it.next()));
-			}
-			catch (ClassNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-
-			it.remove();
-		}
-
 		int classID = data.readInt();
 		int packetSetID = data.readInt();
 
@@ -336,4 +322,5 @@ public class PacketAnnotation extends PacketType
 			}
 		}
 	}
+
 }

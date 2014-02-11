@@ -73,22 +73,6 @@ public class CalclaviaTransformer implements IClassTransformer
 			return ASMHelper.createBytes(cnode, 0);
 		}
 
-		/**
-		 * Auto register all classes with @Synced
-		 */
-		ClassNode cnode = ASMHelper.createClassNode(bytes);
-
-		if (cnode != null && cnode.visibleAnnotations != null)
-		{
-			for (AnnotationNode nodes : cnode.visibleAnnotations)
-			{
-				if (nodes.desc.equals("Lcalclavia/lib/network/Synced;"))
-				{
-					PacketAnnotation.syncedClasses.add(transformedName);
-				}
-			}
-		}
-
 		return bytes;
 	}
 

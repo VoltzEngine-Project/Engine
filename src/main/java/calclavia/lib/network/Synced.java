@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.FIELD })
+@Target({ ElementType.FIELD })
 public @interface Synced
 {
 	public int[] value() default 0;
