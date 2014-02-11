@@ -2,6 +2,7 @@ package calclavia.lib.utility.nbt;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,7 +78,7 @@ public class SaveManager
      * 
      * @param id - string that will be used to save the class by
      * @param clazz - class to link with the id */
-    public static void registerClass(String id, Class clazz)
+    public static void registerClass(String id, Class<?> clazz)
     {
         synchronized (classToIDMap)
         {
@@ -106,11 +107,11 @@ public class SaveManager
      * 
      * @param file - file
      * @return the object created from the file */
-    public static Object createAndLoad(File file)
+    public static Object createAndLoad(File file, Object... args)
     {
         if (file.exists())
         {
-            Object obj = createAndLoad(NBTUtility.loadData(file));
+            Object obj = createAndLoad(NBTUtility.loadData(file), args);
             if (obj instanceof IVirtualObject)
             {
                 ((IVirtualObject) obj).setSaveFile(file);
@@ -120,17 +121,49 @@ public class SaveManager
         return null;
     }
 
-    /** Creates an object from the save using its id */
-    public static Object createAndLoad(NBTTagCompound par0NBTTagCompound)
+    public static Object createAndLoad(NBTTagCompound nbt, Object... args)
     {
         Object obj = null;
-        if (par0NBTTagCompound != null && par0NBTTagCompound.hasKey("id"))
+        if (nbt != null && nbt.hasKey("id"))
         {
             try
             {
-                Class clazz = getClass(par0NBTTagCompound.getString("id"));
+                Class<?> clazz = getClass(nbt.getString("id"));
 
-                if (clazz != null)
+                if (clazz == null)
+                {
+                    return null;
+                }
+                if (args == null || args.length == 0)
+                {
+                    Constructor<?>[] constructors = clazz.getConstructors();
+                    Constructor<?> con = null;
+                    loop:
+                    for (Constructor<?> constructor : constructors)
+                    {
+                        if (constructor.getParameterTypes().length == args.length)
+                        {
+                            Class<?>[] pType = constructor.getParameterTypes();
+                            for (int i = 0; i < pType.length; i++)
+                            {
+                                if (!pType[i].equals(args[i].getClass()))
+                                {
+                                    continue;
+                                }
+                                if (i == pType.length - 1)
+                                {
+                                    con = constructor;
+                                    break loop;
+                                }
+                            }
+                        }
+                    }
+                    if (con != null)
+                    {
+                        obj = con.newInstance(args);
+                    }
+                }
+                else
                 {
                     obj = clazz.newInstance();
                 }
@@ -140,21 +173,21 @@ public class SaveManager
                 exception.printStackTrace();
             }
 
-            if (obj instanceof IVirtualObject)
+            if (obj instanceof ISaveObj)
             {
                 try
                 {
-                    ((IVirtualObject) obj).load(par0NBTTagCompound);
+                    ((ISaveObj) obj).load(nbt);
                 }
                 catch (Exception e)
                 {
-                    FMLLog.log(Level.SEVERE, e, "[CalclaviaCore]SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", par0NBTTagCompound.getString("id"), obj.getClass().getName());
+                    FMLLog.log(Level.SEVERE, e, "[CalclaviaCore]SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
                     obj = null;
                 }
             }
             else
             {
-                MinecraftServer.getServer().getLogAgent().logWarning("[CalclaviaCore]SaveManager: Skipping object with id " + par0NBTTagCompound.getString("id"));
+                MinecraftServer.getServer().getLogAgent().logWarning("[CalclaviaCore]SaveManager: Skipping object with id " + nbt.getString("id"));
             }
 
             return obj;
