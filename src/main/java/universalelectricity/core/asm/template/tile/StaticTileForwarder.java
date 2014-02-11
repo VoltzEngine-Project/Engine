@@ -4,8 +4,8 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyTile;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.WeakHashMap;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -142,7 +142,7 @@ public class StaticTileForwarder
 		}
 	}
 
-	public static final HashMap<IEnergyInterface, PowerHandler> powerProviderMap = new HashMap<IEnergyInterface, PowerHandler>();
+	public static final WeakHashMap<IEnergyInterface, PowerHandler> powerProviderMap = new WeakHashMap<IEnergyInterface, PowerHandler>();
 
 	public static PowerReceiver getPowerReceiver(IEnergyInterface handler, ForgeDirection side)
 	{
