@@ -86,11 +86,11 @@ publishing {
             artifact jar
             artifact apiZip
             artifact deobfJar
+					
+			artifact {
+				file 'output/build.properties'
+			}
         }
-		
-		artifacts {
-			file 'build.properties'
-		}
     }
     repositories {
         maven {
