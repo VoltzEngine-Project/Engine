@@ -83,10 +83,14 @@ artifacts {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifact jar
             artifact apiZip
             artifact deobfJar
-			file 'build.properties'
         }
+		
+		artifacts {
+			file 'build.properties'
+		}
     }
     repositories {
         maven {
