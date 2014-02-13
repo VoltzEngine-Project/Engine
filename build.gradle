@@ -67,21 +67,20 @@ task deobfJar(type: Jar) {
     }
 }
 
-artifacts {
-
-}
-
-wrapper {
-    version = "1.8"
-}
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
             artifact deobfJar
 			
+            /*
 			artifact {
+				classifier = "changelog"
+				file 'output/' + "${System.getenv().JOB_NAME}-${project.version}" + '-changelog' + '.txt'
+			}*/
+			
+			artifact {
+				classifier = "properties"
 				file 'output/build.properties'
 			}
         }
@@ -100,6 +99,7 @@ dependencies {
     compile 'universalelectricity:Universal-Electricity:+:dev'
 }
 
+
 import net.minecraftforge.gradle.tasks.dev.ChangelogTask
 import net.minecraftforge.gradle.common.Constants
 import net.minecraftforge.gradle.delayed.*
@@ -107,7 +107,7 @@ import net.minecraftforge.gradle.delayed.*
 task createChangelog(type: ChangelogTask) {
     def jobName = "${System.getenv().JOB_NAME}"
     def buildNumber = "${System.getenv().BUILD_NUMBER}"
-    
+    jobName.replaceAll(' ','%20')
     setServerRoot(new DelayedString(project, 'http://ci.calclavia.com/'))
     setJobName(new DelayedString(project, jobName.toString()));
     setAuthName(new DelayedString(project, 'console_script'));

@@ -135,7 +135,7 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 
 				if (tileEntity != null)
 				{
-					long used = CompatibilityModule.receiveEnergy(tileEntity, direction.getOpposite(), this.energy.extractEnergy(this.energy.getEnergy(), false), true);
+					long used = CompatibilityModule.receiveEnergy(tileEntity, direction.getOpposite(), energy.extractEnergy(energy.getEnergy(), false), true);
 					totalUsed += this.energy.extractEnergy(used, true);
 				}
 			}
