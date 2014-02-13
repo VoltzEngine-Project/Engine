@@ -10,7 +10,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import universalelectricity.api.vector.Vector2;
 import universalelectricity.api.vector.Vector3;
-import calclavia.lib.prefab.vector.Region2;
 
 /**
  * This class allows you to register TileEntities and Entities to be detectable by the ICBM radar.
@@ -18,7 +17,6 @@ import calclavia.lib.prefab.vector.Region2;
  * Make sure you unregister your object when it invalidates!
  * 
  * @author Calclavia
- * 
  */
 public class RadarRegistry
 {
@@ -64,7 +62,9 @@ public class RadarRegistry
 
 		for (TileEntity tileEntity : detectableTileEntities)
 		{
-			if (new Region2(minVector, maxVector).isIn(new Vector3(tileEntity).toVector2()))
+			Vector2 point = new Vector3(tileEntity).toVector2();
+
+			if ((point.x > minVector.x && point.x < maxVector.x) && (point.y > minVector.y && point.y < maxVector.y))
 			{
 				returnArray.add(tileEntity);
 			}
