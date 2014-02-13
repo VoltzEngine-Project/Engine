@@ -292,7 +292,8 @@ public class GuiContainerBase extends GuiContainer
 		/**
 		 * Draw liquid/gas inside
 		 */
-		this.displayGauge(this.containerWidth + x, this.containerHeight + y, -10, 1, 12, (int) ((meterHeight - 1) * scale), liquidStack);
+		if (liquidStack != null)
+			this.displayGauge(this.containerWidth + x, this.containerHeight + y, -10, 1, 12, (int) ((meterHeight - 1) * scale), liquidStack);
 
 		/**
 		 * Draw measurement lines
