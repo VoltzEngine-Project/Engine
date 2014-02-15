@@ -657,7 +657,7 @@ public class RenderUtility
 		int requiredHeight = lineHeight;
 		float scaleX = (displayWidth / requiredWidth);
 		float scaleY = (displayHeight / requiredHeight);
-		float scale = Math.min(maxScale, scaleX * scaler);
+		float scale = Math.min(maxScale, Math.min(scaleX, scaleY) * scaler);
 
 		GL11.glScalef(scale, -scale, scale);
 		GL11.glDepthMask(false);
