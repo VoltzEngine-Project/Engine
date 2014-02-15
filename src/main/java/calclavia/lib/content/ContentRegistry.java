@@ -16,7 +16,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**
  * Handler to make registering all parts of a mod's objects that are loaded into the game by forge.
- *
+ * 
  * @author DarkGuardsman, Calclavia
  */
 public class ContentRegistry
@@ -88,7 +88,7 @@ public class ContentRegistry
 
 	/**
 	 * Generates a block using reflection, and runs it threw config checks
-	 *
+	 * 
 	 * @param name - name to register the block with
 	 * @param tileClass - the tile class to register this block to
 	 * @param blockClass - class to generate the instance from
@@ -126,8 +126,7 @@ public class ContentRegistry
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
-				throw new RuntimeException("Block [" + name + "] failed to be created: " + e.getLocalizedMessage());
+				throw new RuntimeException("Block [" + name + "] failed to be created: " + e.getLocalizedMessage(), e.fillInStackTrace());
 			}
 		}
 
@@ -136,9 +135,9 @@ public class ContentRegistry
 
 	/**
 	 * Finishes the creation of the block loading config files and tile entities
-	 *
+	 * 
 	 * @param tileClass
-	 * @throws ClassNotFoundException 
+	 * @throws ClassNotFoundException
 	 */
 	public void finishCreation(Block block, Class<? extends TileEntity> tileClass) throws ClassNotFoundException
 	{
@@ -153,7 +152,7 @@ public class ContentRegistry
 			}
 
 		}
-        //TODO Remove this and transfer to @BlockInfo
+		// TODO Remove this and transfer to @BlockInfo
 		if (tileClass != null)
 		{
 			proxy.registerTileEntity(block.getUnlocalizedName(), tileClass);
@@ -162,7 +161,7 @@ public class ContentRegistry
 
 	/**
 	 * Method to get block via name
-	 *
+	 * 
 	 * @param blockName
 	 * @return Block requested
 	 */
@@ -192,7 +191,7 @@ public class ContentRegistry
 	/**
 	 * Creates a new item using reflection as well runs it threw some check to activate any
 	 * interface methods
-	 *
+	 * 
 	 * @param name - name to register the item with
 	 * @param modid - mods that the item comes from
 	 * @param clazz - item class
@@ -229,7 +228,7 @@ public class ContentRegistry
 			catch (Exception e)
 			{
 				e.printStackTrace();
-				throw new RuntimeException("Item [" + name + "] failed to be created: " + e.getLocalizedMessage());
+				throw new RuntimeException("Item [" + name + "] failed to be created: " + e.getLocalizedMessage(), e.fillInStackTrace());
 			}
 		}
 		return item;
