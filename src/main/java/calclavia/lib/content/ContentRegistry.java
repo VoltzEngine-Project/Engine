@@ -103,6 +103,7 @@ public class ContentRegistry
 		{
 			try
 			{
+			    
 				int assignedID = idManager.getNextBlockID();
 				block = blockClass.getConstructor(Integer.TYPE).newInstance(config.getBlock(name, assignedID).getInt(assignedID));
 
@@ -126,7 +127,7 @@ public class ContentRegistry
 			}
 			catch (Exception e)
 			{
-				throw new RuntimeException("Block [" + name + "] failed to be created: " + e.getLocalizedMessage(), e.fillInStackTrace());
+				throw new RuntimeException("Block [" + name + "] failed to be created:", e);
 			}
 		}
 
