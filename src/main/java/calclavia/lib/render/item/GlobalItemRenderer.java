@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
 
@@ -22,6 +23,7 @@ public class GlobalItemRenderer implements IItemRenderer
 
 	public static void register(int id, ISimpleItemRenderer renderer)
 	{
+		MinecraftForgeClient.registerItemRenderer(id, GlobalItemRenderer.INSTANCE);
 		RENDERER.put(id, renderer);
 	}
 
