@@ -44,7 +44,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	/**
 	 * Radius of large turbine?
 	 */
-	protected int multiBlockRadius = 1;
+	public int multiBlockRadius = 1;
 
 	/**
 	 * Max power in watts.
@@ -198,6 +198,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	{
 		super.readFromNBT(nbt);
 		tank.readFromNBT(nbt);
+		multiBlockRadius = nbt.getInteger("multiBlockRadius");
 		getMultiBlock().load(nbt);
 	}
 
@@ -210,6 +211,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	{
 		super.writeToNBT(nbt);
 		tank.writeToNBT(nbt);
+		nbt.setInteger("multiBlockRadius", multiBlockRadius);
 		getMultiBlock().save(nbt);
 	}
 
@@ -258,7 +260,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox()
 	{
-		return AxisAlignedBB.getAABBPool().getAABB(this.xCoord - 3, this.yCoord, this.zCoord - 3, this.xCoord + 4, this.yCoord + 1, this.zCoord + 4);
+		return AxisAlignedBB.getAABBPool().getAABB(this.xCoord - multiBlockRadius, this.yCoord - multiBlockRadius, this.zCoord - multiBlockRadius, this.xCoord + 1 + multiBlockRadius, this.yCoord + 1 + multiBlockRadius, this.zCoord + 1 + multiBlockRadius);
 	}
 
 	@Override
@@ -329,4 +331,5 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	{
 		return worldObj;
 	}
+
 }
