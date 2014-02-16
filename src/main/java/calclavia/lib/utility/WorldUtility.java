@@ -23,6 +23,30 @@ import universalelectricity.api.vector.Vector3;
  */
 public class WorldUtility
 {
+	public static void rotateVectorFromDirection(Vector3 vec, ForgeDirection dir)
+	{
+		switch (dir)
+		{
+			default:
+				break;
+			case UP:
+				vec.rotate(180, Vector3.EAST());
+				break;
+			case NORTH:
+				vec.rotate(90, Vector3.WEST());
+				break;
+			case SOUTH:
+				vec.rotate(90, Vector3.EAST());
+				break;
+			case WEST:
+				vec.rotate(90, Vector3.NORTH());
+				break;
+			case EAST:
+				vec.rotate(90, Vector3.SOUTH());
+				break;
+		}
+	}
+
 	public static int getAngleFromForgeDirection(ForgeDirection dir)
 	{
 		switch (dir)
