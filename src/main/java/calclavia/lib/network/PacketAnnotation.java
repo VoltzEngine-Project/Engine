@@ -184,7 +184,7 @@ public class PacketAnnotation extends PacketType
 				}
 				else
 				{
-					Calclavia.LOGGER.severe("Annotation packet sent to null: " + x + ", " + y + ", " + z);
+					//Calclavia.LOGGER.severe("Annotation packet sent to null: " + x + ", " + y + ", " + z);
 				}
 			}
 			else
