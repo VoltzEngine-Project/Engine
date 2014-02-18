@@ -98,9 +98,9 @@ public class StaticTileForwarder
 		return handler.getEnergyCapacity(from);
 	}
 
-	public static boolean canConnect(IEnergyInterface handler, ForgeDirection from)
+	public static boolean canConnect(IEnergyInterface handler, ForgeDirection from, Object source)
 	{
-		return handler.canConnect(from);
+		return handler.canConnect(from, source);
 	}
 
 	public static void validateTile(Object obj)

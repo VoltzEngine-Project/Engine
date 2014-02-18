@@ -30,7 +30,7 @@ public abstract class TemplateTETile implements IEnergyHandler, IEnergyInterface
 	@Override
 	public boolean canInterface(ForgeDirection from)
 	{
-		return StaticTileForwarder.canConnect(this, from);
+		return StaticTileForwarder.canConnect(this, from, this);
 	}
 
 	/**

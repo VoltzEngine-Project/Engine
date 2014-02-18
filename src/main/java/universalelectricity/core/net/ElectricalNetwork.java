@@ -45,9 +45,9 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
 
 	/** Segmented out call so overriding can be done when machines are reconstructed. */
 	@Override
-	protected void reconstructHandler(Object obj, ForgeDirection side)
+	protected void reconstructHandler(IConductor conductor, Object obj, ForgeDirection side)
 	{
-		super.reconstructHandler(obj, side);
+		super.reconstructHandler(conductor, obj, side);
 
 		if (obj instanceof IVoltageOutput && !(obj instanceof IConductor))
 			voltage = Math.max(voltage, ((IVoltageOutput) obj).getVoltageOutput(side));

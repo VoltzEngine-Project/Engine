@@ -195,7 +195,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 		{
 			for (int i = 0; i < conductor.getConnections().length; i++)
 			{
-				reconstructHandler(conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
+				reconstructHandler(conductor, conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
 			}
 		}
 
@@ -203,11 +203,11 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	}
 
 	/** Segmented out call so overriding can be done when machines are reconstructed. */
-	protected void reconstructHandler(Object obj, ForgeDirection side)
+	protected void reconstructHandler(IConductor conductor, Object obj, ForgeDirection side)
 	{
 		if (obj != null && !(obj instanceof IConductor))
 		{
-			if (CompatibilityModule.canConnect(obj, side))
+			if (CompatibilityModule.canConnect(obj, side, conductor))
 			{
 				EnumSet<ForgeDirection> set = this.handlerDirectionMap.get(obj);
 				if (set == null)

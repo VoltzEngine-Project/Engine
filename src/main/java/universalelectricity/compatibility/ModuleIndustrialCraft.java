@@ -59,20 +59,20 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 	}
 
 	@Override
-	public boolean doCanConnect(Object obj, ForgeDirection direction)
+	public boolean doCanConnect(Object obj, ForgeDirection direction, Object source)
 	{
-		if (obj instanceof TileEntity)
+		// TODO: Does not support multipart sources.
+		if (obj instanceof TileEntity && source instanceof TileEntity)
 		{
 			TileEntity tileEntity = (TileEntity) obj;
-			Vector3 adjacentCoordinate = new Vector3(tileEntity).modifyPositionFromSide(direction.getOpposite());
 
 			if (tileEntity instanceof IEnergySink)
 			{
-				return ((IEnergySink) tileEntity).acceptsEnergyFrom(adjacentCoordinate.getTileEntity(tileEntity.worldObj), direction);
+				return ((IEnergySink) tileEntity).acceptsEnergyFrom((TileEntity) source, direction);
 			}
 			else if (tileEntity instanceof IEnergySource)
 			{
-				return ((IEnergySource) tileEntity).emitsEnergyTo(adjacentCoordinate.getTileEntity(tileEntity.worldObj), direction);
+				return ((IEnergySource) tileEntity).emitsEnergyTo((TileEntity) source, direction);
 			}
 		}
 

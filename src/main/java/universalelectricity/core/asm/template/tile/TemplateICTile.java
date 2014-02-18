@@ -61,7 +61,7 @@ public abstract class TemplateICTile implements IEnergySink, IEnergySource, IEne
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction)
 	{
-		return StaticTileForwarder.canConnect(this, direction);
+		return StaticTileForwarder.canConnect(this, direction, this);
 	}
 
 	@Override

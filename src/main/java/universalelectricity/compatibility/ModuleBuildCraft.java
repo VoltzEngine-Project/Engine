@@ -46,7 +46,7 @@ public class ModuleBuildCraft extends CompatibilityModule
 	}
 
 	@Override
-	public boolean doCanConnect(Object obj, ForgeDirection direction)
+	public boolean doCanConnect(Object obj, ForgeDirection direction, Object source)
 	{
 		return ((IPowerReceptor) obj).getPowerReceiver(direction) != null;
 	}

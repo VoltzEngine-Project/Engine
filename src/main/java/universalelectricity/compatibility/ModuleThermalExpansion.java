@@ -29,7 +29,7 @@ public class ModuleThermalExpansion extends CompatibilityModule
 	}
 
 	@Override
-	public boolean doCanConnect(Object obj, ForgeDirection direction)
+	public boolean doCanConnect(Object obj, ForgeDirection direction, Object source)
 	{
 		return ((IEnergyHandler) obj).canInterface(direction);
 	}

@@ -29,13 +29,13 @@ public class VectorHelper
 	/**
 	 * Gets a connector unit based on the given side.
 	 */
-	public static TileEntity getConnectorFromSide(World world, Vector3 position, ForgeDirection side)
+	public static TileEntity getConnectorFromSide(World world, Vector3 position, ForgeDirection side, Object source)
 	{
 		TileEntity tileEntity = VectorHelper.getTileEntityFromSide(world, position, side);
 
 		if (tileEntity instanceof IConnector)
 		{
-			if (((IConnector) tileEntity).canConnect(getOrientationFromSide(side, ForgeDirection.NORTH)))
+			if (((IConnector) tileEntity).canConnect(getOrientationFromSide(side, ForgeDirection.NORTH), source))
 			{
 				return tileEntity;
 			}

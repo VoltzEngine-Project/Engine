@@ -819,9 +819,9 @@ public class Vector3 implements Cloneable
 		long x = Double.doubleToLongBits(this.x);
 		long y = Double.doubleToLongBits(this.y);
 		long z = Double.doubleToLongBits(this.z);
-		int hash = (int)(x ^ (x >>> 32));
-		hash = 31 * hash + (int)(y ^ (y >>> 32));
-		hash = 31 * hash + (int)(z ^ (z >>> 32));
+		int hash = (int) (x ^ (x >>> 32));
+		hash = 31 * hash + (int) (y ^ (y >>> 32));
+		hash = 31 * hash + (int) (z ^ (z >>> 32));
 		return hash;
 	}
 

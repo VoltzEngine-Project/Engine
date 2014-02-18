@@ -22,11 +22,11 @@ public abstract class CompatibilityModule
 	}
 
 	/** Can the handler connect to this specific direction? */
-	public static boolean canConnect(Object handler, ForgeDirection direction)
+	public static boolean canConnect(Object handler, ForgeDirection direction, Object source)
 	{
 		if (isHandler(handler))
 		{
-			return energyHandlerCache.get(handler.getClass()).doCanConnect(handler, direction);
+			return energyHandlerCache.get(handler.getClass()).doCanConnect(handler, direction, source);
 		}
 
 		return false;
@@ -242,7 +242,7 @@ public abstract class CompatibilityModule
 
 	public abstract long doGetEnergy(Object obj, ForgeDirection direction);
 
-	public abstract boolean doCanConnect(Object obj, ForgeDirection direction);
+	public abstract boolean doCanConnect(Object obj, ForgeDirection direction, Object source);
 
 	public abstract ItemStack doGetItemWithCharge(ItemStack itemStack, long energy);
 

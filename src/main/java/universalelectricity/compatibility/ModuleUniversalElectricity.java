@@ -29,9 +29,9 @@ public class ModuleUniversalElectricity extends CompatibilityModule
 	}
 
 	@Override
-	public boolean doCanConnect(Object obj, ForgeDirection direction)
+	public boolean doCanConnect(Object obj, ForgeDirection direction, Object source)
 	{
-		return ((IEnergyInterface) obj).canConnect(direction);
+		return ((IEnergyInterface) obj).canConnect(direction, source);
 	}
 
 	@Override
