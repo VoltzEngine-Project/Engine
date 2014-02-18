@@ -12,11 +12,11 @@ import calclavia.components.tool.ToolMode;
 import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.nbt.NBTUtility;
 
-public class ItemMultitool extends ItemBase implements IToolWrench
+public class ItemScrewdriver extends ItemBase implements IToolWrench
 {
-	public ItemMultitool(int id)
+	public ItemScrewdriver(int id)
 	{
-		super("multitool", id);
+		super("screwdriver", id);
 		this.setMaxStackSize(1);
 		this.setCreativeTab(CreativeTabs.tabTools);
 	}
@@ -37,7 +37,7 @@ public class ItemMultitool extends ItemBase implements IToolWrench
 	public void addInformation(ItemStack itemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
 		par3List.add("Mode: " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
-		par3List.add(LanguageUtility.getLocal("item.multitool.tooltip"));
+		par3List.addAll(LanguageUtility.splitStringPerWord(LanguageUtility.getLocal("item.calclavia:screwdriver.tooltip"), 4));
 	}
 
 	@Override

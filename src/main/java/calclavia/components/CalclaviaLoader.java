@@ -370,7 +370,7 @@ public class CalclaviaLoader
 				}
 				else if (name.equals("wrench"))
 				{
-					field.set(null, new ItemMultitool(id));
+					field.set(null, new ItemScrewdriver(id));
 					Item item = (Item) field.get(null);
 
 					if (OreDictionary.getOres("ingotSteel").size() > 0)

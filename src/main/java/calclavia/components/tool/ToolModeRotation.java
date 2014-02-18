@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.event.Event.Result;
 import universalelectricity.api.vector.Vector3;
-import calclavia.components.ItemMultitool;
+import calclavia.components.ItemScrewdriver;
 import calclavia.lib.utility.inventory.InventoryUtility;
 
 public class ToolModeRotation extends ToolMode
@@ -53,7 +53,7 @@ public class ToolModeRotation extends ToolMode
 		}
 		else if (block != null && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
 		{
-			((ItemMultitool) stack.getItem()).wrenchUsed(player, x, y, z);
+			((ItemScrewdriver) stack.getItem()).wrenchUsed(player, x, y, z);
 			player.swingItem();
 			return !world.isRemote;
 		}
