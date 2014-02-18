@@ -184,7 +184,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	}
 
 	@Override
-	public boolean canConnect(ForgeDirection direction)
+	public boolean canConnect(ForgeDirection direction, Object obj)
 	{
 		return this.getMultiBlock().isPrimary() && direction == ForgeDirection.UP;
 	}

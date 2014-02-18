@@ -154,7 +154,7 @@ public class FluidUtility
 			{
 				if (doDrain)
 				{
-					Vector3 vec = node.clone().modifyPositionFromSide(ForgeDirection.UP);
+					Vector3 vec = node.clone().translate(ForgeDirection.UP);
 					if (vec.getBlockID(world) == Block.waterlily.blockID)
 					{
 						vec.setBlock(world, 0, 0, update);
@@ -244,7 +244,7 @@ public class FluidUtility
 				int blockID = node.getBlockID(world);
 				int meta = node.getBlockMetadata(world);
 				Block block = Block.blocksList[blockID];
-				Vector3 vec = node.clone().modifyPositionFromSide(ForgeDirection.UP);
+				Vector3 vec = node.clone().translate(ForgeDirection.UP);
 
 				if (block != null)
 				{
@@ -311,7 +311,7 @@ public class FluidUtility
 	 */
 	public static int fillTankSide(World world, Vector3 origin, FluidStack stack, boolean doFill, ForgeDirection direction)
 	{
-		TileEntity entity = origin.clone().modifyPositionFromSide(direction).getTileEntity(world);
+		TileEntity entity = origin.clone().translate(direction).getTileEntity(world);
 		if (entity instanceof IFluidHandler && ((IFluidHandler) entity).canFill(direction.getOpposite(), stack.getFluid()))
 		{
 			return ((IFluidHandler) entity).fill(direction.getOpposite(), stack, doFill);

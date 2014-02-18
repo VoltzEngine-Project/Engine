@@ -71,7 +71,7 @@ public class InternalInventoryHandler
 			ItemStack remainingStack = item.copy();
 			for (ForgeDirection direction : directions)
 			{
-				remainingStack = tryPlaceInPosition(remainingStack, this.location.clone().modifyPositionFromSide(direction), direction.getOpposite());
+				remainingStack = tryPlaceInPosition(remainingStack, this.location.clone().translate(direction), direction.getOpposite());
 			}
 			return remainingStack;
 		}
@@ -99,7 +99,7 @@ public class InternalInventoryHandler
 				{
 					ForgeDirection searchDirection = ForgeDirection.getOrientation(i);
 					Vector3 searchPosition = position.clone();
-					searchPosition.modifyPositionFromSide(searchDirection);
+					searchPosition.translate(searchDirection);
 
 					if (searchPosition.getTileEntity(world) != null)
 					{
@@ -229,7 +229,7 @@ public class InternalInventoryHandler
 				{
 					ForgeDirection searchDirection = ForgeDirection.getOrientation(i);
 					Vector3 searchPosition = position.clone();
-					searchPosition.modifyPositionFromSide(searchDirection);
+					searchPosition.translate(searchDirection);
 
 					if (searchPosition.getTileEntity(world) != null)
 					{

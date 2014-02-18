@@ -32,7 +32,7 @@ public class GuiCreativeBuilder extends GuiContainerBase
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		this.fontRenderer.drawString("Auto Builder", 60, 6, 4210752);
+		this.fontRenderer.drawString("Creative Builder", 60, 6, 4210752);
 		this.fontRenderer.drawString("This is a creative only cheat", 9, 20, 4210752);
 		this.fontRenderer.drawString("which allows you to auto build", 9, 30, 4210752);
 		this.fontRenderer.drawString("structures for testing.", 9, 40, 4210752);

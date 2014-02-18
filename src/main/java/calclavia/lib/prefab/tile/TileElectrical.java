@@ -31,14 +31,19 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 	}
 
 	@Override
-	public boolean canConnect(ForgeDirection direction)
+	public boolean canConnect(ForgeDirection direction, Object obj)
 	{
-		if (direction == null || direction.equals(ForgeDirection.UNKNOWN))
+		if (obj instanceof IEnergyInterface)
 		{
-			return false;
+			if (direction == null || direction.equals(ForgeDirection.UNKNOWN))
+			{
+				return false;
+			}
+
+			return this.getInputDirections().contains(direction) || this.getOutputDirections().contains(direction);
 		}
 
-		return this.getInputDirections().contains(direction) || this.getOutputDirections().contains(direction);
+		return false;
 	}
 
 	@Override
