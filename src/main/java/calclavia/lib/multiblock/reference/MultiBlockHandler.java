@@ -158,7 +158,8 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 
 		if (tile != null && wrapperClass.isAssignableFrom(tile.getClass()))
 		{
-			return (W) tile;
+			if (!((IMultiBlockStructure) tile).getMultiBlock().isConstructed())
+				return (W) tile;
 		}
 
 		return null;
