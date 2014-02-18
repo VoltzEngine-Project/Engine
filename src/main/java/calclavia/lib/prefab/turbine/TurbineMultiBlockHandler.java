@@ -20,8 +20,7 @@ public class TurbineMultiBlockHandler extends MultiBlockHandler<TileTurbine>
 		{
 			if (((TileTurbine) tile).getDirection() == self.getDirection())
 			{
-				if (!((IMultiBlockStructure) tile).getMultiBlock().isConstructed())
-					return (TileTurbine) tile;
+				return (TileTurbine) tile;
 			}
 		}
 

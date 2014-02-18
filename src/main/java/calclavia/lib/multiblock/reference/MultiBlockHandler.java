@@ -103,6 +103,12 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 
 			if (structures != null)
 			{
+				for (W structure : structures)
+				{
+					if (structure.getMultiBlock().isConstructed())
+						return false;
+				}
+
 				primary = self;
 				for (W structure : structures)
 				{
@@ -158,8 +164,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 
 		if (tile != null && wrapperClass.isAssignableFrom(tile.getClass()))
 		{
-			if (!((IMultiBlockStructure) tile).getMultiBlock().isConstructed())
-				return (W) tile;
+			return (W) tile;
 		}
 
 		return null;
