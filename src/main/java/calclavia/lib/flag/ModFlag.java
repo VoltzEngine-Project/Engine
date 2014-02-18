@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import universalelectricity.api.vector.Vector3;
+import calclavia.lib.Calclavia;
 import calclavia.lib.utility.nbt.IVirtualObject;
 import calclavia.lib.utility.nbt.NBTUtility;
 import calclavia.lib.utility.nbt.SaveManager;
@@ -17,137 +18,139 @@ import calclavia.lib.utility.nbt.SaveManager;
 /** @author Calclavia */
 public class ModFlag extends FlagBase implements IVirtualObject
 {
-    /** An array of world flag data. Each representing a world. */
-    private final HashMap<Integer, FlagWorld> flagWorlds = new HashMap<Integer, FlagWorld>();
-    private String name = FlagRegistry.DEFAULT_NAME;
+	/** An array of world flag data. Each representing a world. */
+	private final HashMap<Integer, FlagWorld> flagWorlds = new HashMap<Integer, FlagWorld>();
+	private String name = FlagRegistry.DEFAULT_NAME;
 
-    public ModFlag()
-    {
-        SaveManager.register(this);
-    }
+	public ModFlag()
+	{
+		SaveManager.register(this);
+	}
 
-    /** Initiates a new mod flag data and loads everything from NBT into memory. Only exists server
-     * side.
-     * 
-     * @param nbt */
-    public ModFlag(String name)
-    {
-        this();
-        this.name = name;
-    }
+	/**
+	 * Initiates a new mod flag data and loads everything from NBT into memory. Only exists server
+	 * side.
+	 * 
+	 * @param nbt
+	 */
+	public ModFlag(String name)
+	{
+		this();
+		this.name = name;
+	}
 
-    @Override
-    public void load(NBTTagCompound nbt)
-    {
-        if (nbt.hasKey("name"))
-        {
-            this.name = nbt.getString("name");
-            NBTTagList nbtList = nbt.getTagList("WorldFlags");
+	@Override
+	public void load(NBTTagCompound nbt)
+	{
+		if (nbt.hasKey("name"))
+		{
+			this.name = nbt.getString("name");
+			NBTTagList nbtList = nbt.getTagList("WorldFlags");
 
-            for (int i = 0; i < nbtList.tagCount(); ++i)
-            {
-                NBTTagCompound stackTag = (NBTTagCompound) nbtList.tagAt(i);
-                FlagWorld flagWorld = new FlagWorld(stackTag);
-                this.flagWorlds.put(flagWorld.world.provider.dimensionId, flagWorld);
-            }
-        }
-        else
-        {
+			for (int i = 0; i < nbtList.tagCount(); ++i)
+			{
+				NBTTagCompound stackTag = (NBTTagCompound) nbtList.tagAt(i);
+				FlagWorld flagWorld = new FlagWorld(stackTag);
+				this.flagWorlds.put(flagWorld.world.provider.dimensionId, flagWorld);
+			}
+		}
+		else
+		{
 
-            // A list containing all dimension ID and data within it.
-            Iterator dimensions = nbt.getTags().iterator();
+			// A list containing all dimension ID and data within it.
+			Iterator dimensions = nbt.getTags().iterator();
 
-            while (dimensions.hasNext())
-            {
-                Object tag = dimensions.next();
-                if (tag instanceof NBTTagCompound)
-                {
-                    NBTTagCompound dimensionCompound = (NBTTagCompound) tag;
-                    try
-                    {
-                        int dimensionID = Integer.parseInt(dimensionCompound.getName().replace("dim_", ""));
-                        World world = DimensionManager.getWorld(dimensionID);
-                        FlagWorld flagWorld = new FlagWorld(world);
-                        flagWorld.load(dimensionCompound);
-                        this.flagWorlds.put(dimensionID, flagWorld);
-                    }
-                    catch (Exception e)
-                    {
-                        System.out.println("Mod Flag: Failed to read dimension data: " + dimensionCompound.getName());
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
+			while (dimensions.hasNext())
+			{
+				Object tag = dimensions.next();
+				if (tag instanceof NBTTagCompound)
+				{
+					NBTTagCompound dimensionCompound = (NBTTagCompound) tag;
+					try
+					{
+						int dimensionID = Integer.parseInt(dimensionCompound.getName().replace("dim_", ""));
+						World world = DimensionManager.getWorld(dimensionID);
+						FlagWorld flagWorld = new FlagWorld(world);
+						flagWorld.load(dimensionCompound);
+						this.flagWorlds.put(dimensionID, flagWorld);
+					}
+					catch (Exception e)
+					{
+						Calclavia.LOGGER.severe("Mod Flag: Failed to read dimension data: " + dimensionCompound.getName());
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
 
-    @Override
-    public void save(NBTTagCompound nbt)
-    {
-        nbt.setString("name", this.name);
+	@Override
+	public void save(NBTTagCompound nbt)
+	{
+		nbt.setString("name", this.name);
 
-        NBTTagList nbtFlagWorldList = new NBTTagList();
+		NBTTagList nbtFlagWorldList = new NBTTagList();
 
-        for (Entry<Integer, FlagWorld> entry : this.flagWorlds.entrySet())
-        {
-            if (entry.getValue() != null)
-            {
-                try
-                {
-                    NBTTagCompound worldFlagNBT = new NBTTagCompound();
-                    entry.getValue().save(worldFlagNBT);
-                    nbtFlagWorldList.appendTag(worldFlagNBT);
-                }
-                catch (Exception e)
-                {
-                    System.out.println("Mod Flag: Failed to save world flag data: " + entry.getValue().world.provider.dimensionId);
-                    e.printStackTrace();
-                }
-            }
-        }
-        nbt.setTag("WorldFlags", nbtFlagWorldList);
-    }
+		for (Entry<Integer, FlagWorld> entry : this.flagWorlds.entrySet())
+		{
+			if (entry.getValue() != null)
+			{
+				try
+				{
+					NBTTagCompound worldFlagNBT = new NBTTagCompound();
+					entry.getValue().save(worldFlagNBT);
+					nbtFlagWorldList.appendTag(worldFlagNBT);
+				}
+				catch (Exception e)
+				{
+					Calclavia.LOGGER.severe("Mod Flag: Failed to save world flag data: " + entry.getValue().world.provider.dimensionId);
+					e.printStackTrace();
+				}
+			}
+		}
+		nbt.setTag("WorldFlags", nbtFlagWorldList);
+	}
 
-    public FlagWorld getFlagWorld(World world)
-    {
-        FlagWorld worldData = null;
+	public FlagWorld getFlagWorld(World world)
+	{
+		FlagWorld worldData = null;
 
-        if (world != null)
-        {
-            worldData = this.flagWorlds.get(world.provider.dimensionId);
+		if (world != null)
+		{
+			worldData = this.flagWorlds.get(world.provider.dimensionId);
 
-            // If data is null, create it.
-            if (worldData == null)
-            {
-                worldData = new FlagWorld(world);
-                this.flagWorlds.put(world.provider.dimensionId, worldData);
-            }
-        }
+			// If data is null, create it.
+			if (worldData == null)
+			{
+				worldData = new FlagWorld(world);
+				this.flagWorlds.put(world.provider.dimensionId, worldData);
+			}
+		}
 
-        return worldData;
-    }
+		return worldData;
+	}
 
-    public boolean containsValue(World world, String flagName, String checkValue, Vector3 position)
-    {
-        return this.getFlagWorld(world).containsValue(flagName, checkValue, position);
-    }
+	public boolean containsValue(World world, String flagName, String checkValue, Vector3 position)
+	{
+		return this.getFlagWorld(world).containsValue(flagName, checkValue, position);
+	}
 
-    public HashMap<Integer, FlagWorld> getFlagWorlds()
-    {
-        return this.flagWorlds;
-    }
+	public HashMap<Integer, FlagWorld> getFlagWorlds()
+	{
+		return this.flagWorlds;
+	}
 
-    @Override
-    public File getSaveFile()
-    {
-        return new File(NBTUtility.getSaveDirectory(), this.name + ".dat");
-    }
+	@Override
+	public File getSaveFile()
+	{
+		return new File(NBTUtility.getSaveDirectory(), this.name + ".dat");
+	}
 
-    @Override
-    public void setSaveFile(File file)
-    {
-        // TODO Auto-generated method stub
+	@Override
+	public void setSaveFile(File file)
+	{
+		// TODO Auto-generated method stub
 
-    }
+	}
 
 }
