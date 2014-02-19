@@ -7,11 +7,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import calclavia.lib.render.item.ISimpleItemRenderer;
 
 import com.google.common.collect.Maps;
 
@@ -69,7 +72,11 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 				{
 					((ICustomBlockRenderer) tesr).renderDynamic(renderTile, block, metadata, modelID, renderer);
 				}
-				else if(tesr != null)
+				else if (tesr instanceof ISimpleItemRenderer)
+				{
+					((ISimpleItemRenderer) tesr).renderInventoryItem(new ItemStack(block, metadata));
+				}
+				else if (tesr != null)
 				{
 					tesr.renderTileEntityAt(renderTile, 0, 0, 0, 0);
 				}
