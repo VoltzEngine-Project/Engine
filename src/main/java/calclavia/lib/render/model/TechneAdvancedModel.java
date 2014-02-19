@@ -256,7 +256,8 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 
 	private void setup()
 	{
-		GL11.glTranslatef(0, 0.5f, 0);
+		GL11.glTranslatef(0, -0.5f, 0);
+		GL11.glRotatef(180, 1, 0, 0);
 		GL11.glScalef(0.0625F, 0.0625F, 0.0625F);
 	}
 
@@ -269,24 +270,25 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 
 		for (ModelRenderer part : parts.values())
 		{
-			part.renderWithRotation(1.0F);
+			part.render(1);
 		}
+
 		GL11.glPopMatrix();
 	}
 
 	@Override
 	public void renderPart(String partName)
 	{
-		GL11.glPushMatrix();
-		setup();
 		ModelRenderer part = parts.get(partName);
+
 		if (part != null)
 		{
+			GL11.glPushMatrix();
+			setup();
 			bindTexture();
-
-			part.renderWithRotation(1.0F);
+			part.render(1);
+			GL11.glPopMatrix();
 		}
-		GL11.glPopMatrix();
 	}
 
 	@Override
@@ -306,7 +308,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 			{
 				if (entry.getKey().equalsIgnoreCase(groupName))
 				{
-					entry.getValue().render(1.0f);
+					entry.getValue().render(1);
 				}
 			}
 		}
@@ -335,7 +337,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 				}
 			}
 
-			entry.getValue().render(1.0f);
+			entry.getValue().render(1);
 		}
 
 		GL11.glPopMatrix();
