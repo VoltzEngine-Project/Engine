@@ -117,11 +117,11 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 				texture = modelTexture.getTextContent();
 			}
 
-			Node textureSize = modelAttributes.getNamedItem("textureSize");
+			NodeList textureSize = document.getElementsByTagName("TextureSize");
 
-			if (textureSize != null)
+			for (int i = 0; i < textureSize.getLength(); i++)
 			{
-				String size = textureSize.getTextContent();
+				String size = textureSize.item(i).getTextContent();
 				String[] textureDimensions = size.split(",");
 				textureWidth = Integer.parseInt(textureDimensions[0]);
 				textureHeight = Integer.parseInt(textureDimensions[1]);
@@ -254,7 +254,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 		return "tcn";
 	}
 
-	private void scale()
+	private void setup()
 	{
 		GL11.glTranslatef(0, 0.5f, 0);
 		GL11.glScalef(0.0625F, 0.0625F, 0.0625F);
@@ -265,7 +265,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 	{
 		GL11.glPushMatrix();
 		bindTexture();
-		scale();
+		setup();
 
 		for (ModelRenderer part : parts.values())
 		{
@@ -278,7 +278,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 	public void renderPart(String partName)
 	{
 		GL11.glPushMatrix();
-		scale();
+		setup();
 		ModelRenderer part = parts.get(partName);
 		if (part != null)
 		{
@@ -293,7 +293,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 	public void renderOnly(String... groupNames)
 	{
 		GL11.glPushMatrix();
-		scale();
+		setup();
 		bindTexture();
 
 		Iterator<Entry<String, ModelRenderer>> it = parts.entrySet().iterator();
@@ -318,7 +318,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 	public void renderAllExcept(String... excludedGroupNames)
 	{
 		GL11.glPushMatrix();
-		scale();
+		setup();
 
 		Iterator<Entry<String, ModelRenderer>> it = parts.entrySet().iterator();
 
