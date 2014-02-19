@@ -71,7 +71,7 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
 	@Override
 	public long getVoltage()
 	{
-		return voltage;
+		return voltage <= 0 ? UniversalElectricity.DEFAULT_VOLTAGE : voltage;
 	}
 
 	@Override
