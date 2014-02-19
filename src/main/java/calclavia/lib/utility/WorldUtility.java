@@ -1,11 +1,9 @@
 package calclavia.lib.utility;
 
-import static org.lwjgl.opengl.GL11.glRotatef;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import net.minecraft.block.Block;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -15,6 +13,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.vector.Vector3;
+import calclavia.lib.Calclavia;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
 /**
  * Class full of generic World related methods
@@ -251,5 +251,33 @@ public class WorldUtility
 			}
 		}
 		return newItemList;
+	}
+
+	public static void replaceTileEntity(Class<? extends TileEntity> findTile, Class<? extends TileEntity> replaceTile)
+	{
+		try
+		{
+			Map<String, Class> nameToClassMap = ObfuscationReflectionHelper.getPrivateValue(TileEntity.class, null, "field_" + "70326_a", "nameToClassMap", "a");
+			Map<Class, String> classToNameMap = ObfuscationReflectionHelper.getPrivateValue(TileEntity.class, null, "field_" + "70326_b", "classToNameMap", "b");
+
+			String findTileID = classToNameMap.get(findTile);
+
+			if (findTileID != null)
+			{
+				nameToClassMap.put(findTileID, replaceTile);
+				classToNameMap.put(replaceTile, findTileID);
+				classToNameMap.remove(findTile);
+				Calclavia.LOGGER.fine("Replaced TileEntity: " + findTile);
+			}
+			else
+			{
+				Calclavia.LOGGER.severe("Failed to replace TileEntity: " + findTile);
+			}
+		}
+		catch (Exception e)
+		{
+			Calclavia.LOGGER.severe("Failed to replace TileEntity: " + findTile);
+			e.printStackTrace();
+		}
 	}
 }
