@@ -84,7 +84,7 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 	{
 		if (itemStack.getItem() instanceof IElectricItem)
 		{
-			return (long) (ElectricItem.manager.charge(itemStack, (int) (joules * CompatibilityType.INDUSTRIALCRAFT.ratio), 4, true, !doCharge) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+			return (long) (ElectricItem.manager.charge(itemStack, (int) Math.ceil(joules * CompatibilityType.INDUSTRIALCRAFT.ratio), 4, true, !doCharge) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 		}
 		return 0;
 	}
@@ -98,7 +98,7 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 
 			if (item.canProvideEnergy(itemStack))
 			{
-				return (long) (ElectricItem.manager.discharge(itemStack, (int) (joules * CompatibilityType.INDUSTRIALCRAFT.ratio), 4, true, !doDischarge) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+				return (long) (ElectricItem.manager.discharge(itemStack, (int) Math.ceil(joules * CompatibilityType.INDUSTRIALCRAFT.ratio), 4, true, !doDischarge) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 			}
 		}
 		return 0;
