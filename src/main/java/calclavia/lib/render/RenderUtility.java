@@ -458,6 +458,30 @@ public class RenderUtility
 		}
 	}
 
+	public static void rotateFaceToSideNoTranslate(ForgeDirection placementSide)
+	{
+		switch (placementSide)
+		{
+			case DOWN:
+				break;
+			case UP:
+				GL11.glRotatef(180, 1, 0, 0);
+				break;
+			case NORTH:
+				GL11.glRotatef(90, 1, 0, 0);
+				break;
+			case SOUTH:
+				GL11.glRotatef(-90, 1, 0, 0);
+				break;
+			case WEST:
+				GL11.glRotatef(-90, 0, 0, 1);
+				break;
+			case EAST:
+				GL11.glRotatef(90, 0, 0, 1);
+				break;
+		}
+	}
+
 	public static void rotateFaceBlockToSideOutwards(ForgeDirection placementSide)
 	{
 		switch (placementSide)

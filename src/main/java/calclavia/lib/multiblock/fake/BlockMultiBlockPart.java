@@ -8,7 +8,9 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import universalelectricity.api.UniversalElectricity;
@@ -85,6 +87,26 @@ public class BlockMultiBlockPart extends BlockContainer
 		// Creates a fake block, then sets the relative main block position.
 		worldObj.setBlock(position.intX(), position.intY(), position.intZ(), this.blockID);
 		((TileMultiBlockPart) worldObj.getBlockTileEntity(position.intX(), position.intY(), position.intZ())).setMainBlock(mainBlock);
+	}
+
+	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int par5)
+	{
+		try
+		{
+			Vector3 main = ((TileMultiBlockPart) blockAccess.getBlockTileEntity(x, y, z)).getMainBlock();
+			Block block = Block.blocksList[main.getBlockID(blockAccess)];
+
+			if (block != null)
+			{
+				return block.getBlockTexture(blockAccess, main.intX(), main.intY(), main.intZ(), par5);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	@SideOnly(Side.CLIENT)

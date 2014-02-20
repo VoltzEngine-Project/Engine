@@ -209,14 +209,18 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 
 					// That's what the ModelBase subclassing is needed for
 					ModelRenderer cube = new ModelRenderer(this, Integer.parseInt(textureOffset[0]), Integer.parseInt(textureOffset[1]));
-					cube.mirror = mirrored;
+
+					/**
+					 * Fix Techne default translation up by 16 microblocks (1 block) and rotated 180
+					 * degrees.
+					 */
 					cube.addBox(Float.parseFloat(offset[0]), Float.parseFloat(offset[1]), Float.parseFloat(offset[2]), Integer.parseInt(size[0]), Integer.parseInt(size[1]), Integer.parseInt(size[2]));
-					cube.setRotationPoint(Float.parseFloat(position[0]), Float.parseFloat(position[1]) - 23.4F, Float.parseFloat(position[2]));
+					cube.setRotationPoint(Float.parseFloat(position[0]), Float.parseFloat(position[1]) - 16, Float.parseFloat(position[2]));
+					cube.mirror = mirrored;
 
 					cube.rotateAngleX = (float) Math.toRadians(Float.parseFloat(rotation[0]));
 					cube.rotateAngleY = (float) Math.toRadians(Float.parseFloat(rotation[1]));
 					cube.rotateAngleZ = (float) Math.toRadians(Float.parseFloat(rotation[2]));
-
 					parts.put(shapeName, cube);
 				}
 				catch (NumberFormatException e)
@@ -256,9 +260,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 
 	private void setup()
 	{
-		GL11.glTranslatef(0, -0.5f, 0);
-		GL11.glRotatef(180, 1, 0, 0);
-		GL11.glScalef(0.0625F, 0.0625F, 0.0625F);
+		GL11.glScalef(-1.0F, -1.0F, 1.0F);
 	}
 
 	@Override
@@ -270,7 +272,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 
 		for (ModelRenderer part : parts.values())
 		{
-			part.render(1);
+			part.render(0.0625f);
 		}
 
 		GL11.glPopMatrix();
@@ -286,7 +288,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 			GL11.glPushMatrix();
 			setup();
 			bindTexture();
-			part.render(1);
+			part.render(0.0625f);
 			GL11.glPopMatrix();
 		}
 	}
@@ -308,7 +310,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 			{
 				if (entry.getKey().equalsIgnoreCase(groupName))
 				{
-					entry.getValue().render(1);
+					entry.getValue().render(0.0625f);
 				}
 			}
 		}
@@ -337,7 +339,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 				}
 			}
 
-			entry.getValue().render(1);
+			entry.getValue().render(0.0625f);
 		}
 
 		GL11.glPopMatrix();
