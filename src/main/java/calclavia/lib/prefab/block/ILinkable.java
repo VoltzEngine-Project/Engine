@@ -7,6 +7,7 @@ import universalelectricity.api.vector.VectorWorld;
  * @author Calclavia
  * 
  */
+@Deprecated
 public interface ILinkable
 {
 	/**

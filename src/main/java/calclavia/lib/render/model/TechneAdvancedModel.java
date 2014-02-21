@@ -44,6 +44,8 @@ import net.minecraftforge.client.model.obj.GroupObject;
 /**
  * A fixed up version of the Forge Techne model importer. Requires specification for the texture
  * size on load in the Techne XML file.
+ * 
+ * @author Calclavia, iChun
  */
 @SideOnly(Side.CLIENT)
 public class TechneAdvancedModel extends ModelBase implements IModelCustom

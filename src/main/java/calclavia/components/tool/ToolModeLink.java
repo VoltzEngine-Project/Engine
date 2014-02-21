@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.VectorWorld;
 import calclavia.lib.prefab.block.ILinkable;
+import calclavia.lib.utility.nbt.NBTUtility;
 
 /**
  * @author Calclavia
@@ -22,21 +23,22 @@ public class ToolModeLink extends ToolMode
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
 		/*
-		if (ControlKeyModifer.isControlDown(player))
-		{
-			if (tile instanceof ILinkable)
-			{
-				if (!world.isRemote)
-				{
-					if (((ILinkable) tile).onLink(player, this.getLink(stack)))
-					{
-						clearLink(stack);
-						player.addChatMessage("Link cleared.");
-						return true;
-					}
-				}
-			}
-		}*/
+		 * if (ControlKeyModifer.isControlDown(player))
+		 * {
+		 * if (tile instanceof ILinkable)
+		 * {
+		 * if (!world.isRemote)
+		 * {
+		 * if (((ILinkable) tile).onLink(player, this.getLink(stack)))
+		 * {
+		 * clearLink(stack);
+		 * player.addChatMessage("Link cleared.");
+		 * return true;
+		 * }
+		 * }
+		 * }
+		 * }
+		 */
 
 		if (!world.isRemote)
 		{
@@ -80,12 +82,7 @@ public class ToolModeLink extends ToolMode
 
 	public static void setLink(ItemStack itemStack, VectorWorld vec)
 	{
-		if (itemStack.getTagCompound() == null)
-		{
-			itemStack.setTagCompound(new NBTTagCompound());
-		}
-
-		itemStack.getTagCompound().setCompoundTag("link", vec.writeToNBT(new NBTTagCompound()));
+		NBTUtility.getNBTTagCompound(itemStack).setCompoundTag("link", vec.writeToNBT(new NBTTagCompound()));
 	}
 
 	public static void clearLink(ItemStack itemStack)
@@ -93,4 +90,13 @@ public class ToolModeLink extends ToolMode
 		itemStack.getTagCompound().removeTag("link");
 	}
 
+	public static void setSide(ItemStack itemStack, byte side)
+	{
+		NBTUtility.getNBTTagCompound(itemStack).setByte("linkSide", side);
+	}
+
+	public static byte getSide(ItemStack itemStack)
+	{
+		return NBTUtility.getNBTTagCompound(itemStack).getByte("linkSide");
+	}
 }
