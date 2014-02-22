@@ -18,7 +18,7 @@ public class ItemBlockTooltip extends ItemBlock
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List info, boolean par4)
 	{
-		String tooltip = LanguageUtility.getLocal(this.getUnlocalizedName() + ".tooltip");
+		String tooltip = LanguageUtility.getLocal(getUnlocalizedName() + ".tooltip");
 
 		if (tooltip != null && tooltip.length() > 0)
 		{

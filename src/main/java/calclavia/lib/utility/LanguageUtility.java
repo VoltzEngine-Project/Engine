@@ -109,20 +109,20 @@ public class LanguageUtility
 		return lines;
 	}
 
-	public static List<Integer> decodeIDSeparatedByComma(String string)
+	public static List<Integer> decodeIDSplitByComma(String string)
 	{
 		List<Integer> intList = new ArrayList<Integer>();
 
 		if (string != null)
 		{
-			for (String blockIDString : string.split(","))
+			for (String IDString : string.split(","))
 			{
-				if (blockIDString != null && !blockIDString.isEmpty())
+				if (IDString != null && !IDString.isEmpty())
 				{
 					try
 					{
-						int blockID = Integer.parseInt(blockIDString);
-						intList.add(blockID);
+						int contentID = Integer.parseInt(IDString);
+						intList.add(contentID);
 					}
 					catch (Exception e)
 					{
