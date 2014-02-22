@@ -1,7 +1,6 @@
 package calclavia.lib.thermal;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.FluidStack;
 import calclavia.lib.prefab.tile.TileAdvanced;
 
 public abstract class TileThermal extends TileAdvanced

@@ -4,7 +4,6 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.util.AxisAlignedBB;
@@ -20,14 +19,10 @@ import universalelectricity.api.energy.EnergyStorageHandler;
 import universalelectricity.api.vector.Vector3;
 import calclavia.components.CalclaviaLoader;
 import calclavia.lib.multiblock.reference.IMultiBlockStructure;
-import calclavia.lib.network.PacketHandler;
 import calclavia.lib.network.Synced;
 import calclavia.lib.network.Synced.SyncedInput;
 import calclavia.lib.network.Synced.SyncedOutput;
 import calclavia.lib.prefab.tile.TileElectrical;
-
-import com.google.common.io.ByteArrayDataInput;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

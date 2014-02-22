@@ -1,9 +1,8 @@
 package calclavia.lib.utility.inventory;
 
-import calclavia.lib.utility.nbt.ISaveObj;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import calclavia.lib.utility.nbt.ISaveObj;
 
 /** @author DarkGuardsman */
 public interface IExternalInventoryBox extends ISidedInventory, ISaveObj

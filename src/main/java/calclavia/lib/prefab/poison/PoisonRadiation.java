@@ -1,7 +1,5 @@
 package calclavia.lib.prefab.poison;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.EntityLivingBase;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.CustomDamageSource;

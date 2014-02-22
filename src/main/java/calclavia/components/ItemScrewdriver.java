@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import buildcraft.api.tools.IToolWrench;
 import calclavia.components.tool.ToolMode;

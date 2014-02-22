@@ -1,7 +1,6 @@
 package calclavia.lib.content;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import calclavia.lib.prefab.item.ItemBlockTooltip;

@@ -1,7 +1,7 @@
 package calclavia.lib.prefab.potion;
 
-import calclavia.lib.Calclavia;
 import net.minecraft.potion.Potion;
+import calclavia.lib.Calclavia;
 
 public abstract class CustomPotion extends Potion
 {

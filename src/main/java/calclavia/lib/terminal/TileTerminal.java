@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 import calclavia.lib.network.IPacketReceiverWithID;
-import calclavia.lib.network.IPacketSender;
 import calclavia.lib.network.PacketHandler;
 import calclavia.lib.prefab.tile.IPlayerUsing;
 import calclavia.lib.prefab.tile.TileElectrical;

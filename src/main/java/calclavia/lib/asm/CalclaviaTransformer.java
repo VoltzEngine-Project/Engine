@@ -13,7 +13,6 @@ import static org.objectweb.asm.Opcodes.RETURN;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
@@ -22,7 +21,6 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-import calclavia.lib.network.PacketAnnotation;
 import universalelectricity.core.asm.ASMHelper;
 import universalelectricity.core.asm.ObfMapping;
 

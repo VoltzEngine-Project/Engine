@@ -2,7 +2,6 @@ package calclavia.lib.prefab.turbine;
 
 import net.minecraft.tileentity.TileEntity;
 import universalelectricity.api.vector.Vector3;
-import calclavia.lib.multiblock.reference.IMultiBlockStructure;
 import calclavia.lib.multiblock.reference.MultiBlockHandler;
 
 public class TurbineMultiBlockHandler extends MultiBlockHandler<TileTurbine>

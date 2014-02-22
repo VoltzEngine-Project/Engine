@@ -26,7 +26,6 @@ import com.builtbroken.common.science.units.UnitHelper;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
 
 /**
  * Utility that manages common NBT save and load methods

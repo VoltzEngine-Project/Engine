@@ -2,11 +2,10 @@ package calclavia.lib.prefab.item;
 
 import java.util.List;
 
-import calclavia.lib.utility.LanguageUtility;
-import net.minecraft.client.resources.Language;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import calclavia.lib.utility.LanguageUtility;
 
 public class ItemBlockMetadata extends ItemBlock
 {

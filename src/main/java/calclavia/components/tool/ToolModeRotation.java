@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.event.Event.Result;
 import universalelectricity.api.vector.Vector3;
 import calclavia.components.ItemScrewdriver;
 import calclavia.lib.utility.inventory.InventoryUtility;

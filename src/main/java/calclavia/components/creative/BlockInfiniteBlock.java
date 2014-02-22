@@ -2,13 +2,13 @@ package calclavia.components.creative;
 
 import java.util.List;
 
-import universalelectricity.api.UniversalElectricity;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import universalelectricity.api.UniversalElectricity;
 import calclavia.components.CalclaviaLoader;
 import calclavia.lib.content.BlockInfo;
 import calclavia.lib.prefab.block.BlockSidedIO;

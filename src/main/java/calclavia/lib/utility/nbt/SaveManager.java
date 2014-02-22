@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
-import calclavia.lib.utility.ReflectionHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
+import calclavia.lib.utility.ReflectionHelper;
 import cpw.mods.fml.common.FMLLog;
 
 /** Simple manager that handles common saving and creation of object threw Minecraft's NBT system.

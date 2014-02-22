@@ -1,10 +1,10 @@
 package calclavia.components;
 
-import universalelectricity.api.vector.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
+import universalelectricity.api.vector.Vector3;
 import calclavia.components.creative.BlockCreativeBuilder;
 import calclavia.components.creative.GuiCreativeBuilder;
 import calclavia.lib.prefab.ProxyBase;
