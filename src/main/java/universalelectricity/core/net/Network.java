@@ -102,15 +102,18 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	{
 		if (network != null && network.getClass().isAssignableFrom(this.getClass()) && network != this)
 		{
-			N newNetwork = newInstance();
-			newNetwork.getConnectors().addAll(this.getConnectors());
-			newNetwork.getConnectors().addAll(network.getConnectors());
+			synchronized (getConnectors())
+			{
+				N newNetwork = newInstance();
+				newNetwork.getConnectors().addAll(this.getConnectors());
+				newNetwork.getConnectors().addAll(network.getConnectors());
 
-			network.getConnectors().clear();
-			getConnectors().clear();
+				network.getConnectors().clear();
+				getConnectors().clear();
 
-			newNetwork.reconstruct();
-			return newNetwork;
+				newNetwork.reconstruct();
+				return newNetwork;
+			}
 		}
 
 		return null;
