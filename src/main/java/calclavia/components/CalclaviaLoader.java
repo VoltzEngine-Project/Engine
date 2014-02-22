@@ -3,6 +3,7 @@ package calclavia.components;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
+import calclavia.lib.utility.PotionUtility;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -182,6 +183,10 @@ public class CalclaviaLoader
 	{
 		Calclavia.LOGGER.setParent(FMLLog.getLogger());
 		NetworkRegistry.instance().registerGuiHandler(this, proxy);
+
+        // Potion Array resized to 256, Allows to miss conflicting ID's
+        PotionUtility.resizePotionArray();
+
 		SaveManager.registerClass("ModFlag", ModFlag.class);
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance());
@@ -285,7 +290,7 @@ public class CalclaviaLoader
 	 * 
 	 * Ingot, Ores, Dust, Plate, Copper Wire, Circuits, Motor, Wrench
 	 * 
-	 * @param name - Name of the item: e.g ingotCopper, ingotSteel
+	 * @param fieldName - Name of the item: e.g ingotCopper, ingotSteel
 	 * @param id - The specified ID of the item. Use 0 for a default value to be used.
 	 * @return The Item/Block class.
 	 */
