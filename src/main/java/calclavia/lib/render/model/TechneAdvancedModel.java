@@ -55,7 +55,7 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 	private String fileName;
 	private Map<String, byte[]> zipContents = new HashMap<String, byte[]>();
 
-	private Map<String, ModelRenderer> parts = new LinkedHashMap<String, ModelRenderer>();
+	public Map<String, ModelRenderer> parts = new LinkedHashMap<String, ModelRenderer>();
 	private String texture = null;
 	private int textureName;
 	private boolean textureNameSet = false;
@@ -210,7 +210,8 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 					}
 
 					// That's what the ModelBase subclassing is needed for
-					ModelRenderer cube = new ModelRenderer(this, Integer.parseInt(textureOffset[0]), Integer.parseInt(textureOffset[1]));
+					ModelRenderer cube = new ModelRenderer(this, shapeName);
+					cube.setTextureOffset(Integer.parseInt(textureOffset[0]), Integer.parseInt(textureOffset[1]));
 
 					/**
 					 * Fix Techne default translation up by 16 microblocks (1 block) and rotated 180
@@ -223,6 +224,12 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 					cube.rotateAngleX = (float) Math.toRadians(Float.parseFloat(rotation[0]));
 					cube.rotateAngleY = (float) Math.toRadians(Float.parseFloat(rotation[1]));
 					cube.rotateAngleZ = (float) Math.toRadians(Float.parseFloat(rotation[2]));
+
+					if (parts.containsKey(shapeName))
+					{
+						throw new ModelFormatException("Model contained duplicate part name: '" + shapeName + "' node #" + i);
+					}
+
 					parts.put(shapeName, cube);
 				}
 				catch (NumberFormatException e)
