@@ -210,6 +210,7 @@ public class RenderUtility
 		tessellator.addVertex(stringMiddle + 1, -1 + yOffset, 0.0D);
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+
 		GL11.glColor4f(1f, 1f, 1f, 0.5f);
 		fontRenderer.drawString(text, -fontRenderer.getStringWidth(text) / 2, yOffset, color);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -218,6 +219,141 @@ public class RenderUtility
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glPopMatrix();
+	}
+
+	public static void renderText(String text, int side, float maxScale, double x, double y, double z)
+	{
+		renderText(text, ForgeDirection.getOrientation(side), maxScale, x, y, z);
+	}
+
+	public static void renderText(String text, ForgeDirection side, float maxScale, double x, double y, double z)
+	{
+		GL11.glPushMatrix();
+
+		GL11.glPolygonOffset(-10, -10);
+		GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
+
+		float displayWidth = 1 - (2 / 16);
+		float displayHeight = 1 - (2 / 16);
+		GL11.glTranslated(x, y, z);
+		GL11.glPushMatrix();
+
+		switch (side)
+		{
+			case SOUTH:
+				GL11.glTranslatef(0, 1, 0);
+				GL11.glRotatef(0, 0, 1, 0);
+				GL11.glRotatef(90, 1, 0, 0);
+
+				break;
+			case NORTH:
+				GL11.glTranslatef(1, 1, 1);
+				GL11.glRotatef(180, 0, 1, 0);
+				GL11.glRotatef(90, 1, 0, 0);
+
+				break;
+			case EAST:
+				GL11.glTranslatef(0, 1, 1);
+				GL11.glRotatef(90, 0, 1, 0);
+				GL11.glRotatef(90, 1, 0, 0);
+
+				break;
+			case WEST:
+				GL11.glTranslatef(1, 1, 0);
+				GL11.glRotatef(-90, 0, 1, 0);
+				GL11.glRotatef(90, 1, 0, 0);
+				break;
+		}
+
+		// Find Center
+		GL11.glTranslatef(displayWidth / 2, 1F, displayHeight / 2);
+		GL11.glRotatef(-90, 1, 0, 0);
+
+		FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
+
+		int requiredWidth = Math.max(fontRenderer.getStringWidth(text), 1);
+		int lineHeight = fontRenderer.FONT_HEIGHT + 2;
+		int requiredHeight = lineHeight * 1;
+		float scaler = 0.8f;
+		float scaleX = (displayWidth / requiredWidth);
+		float scaleY = (displayHeight / requiredHeight);
+		float scale = scaleX * scaler;
+
+		if (maxScale > 0)
+		{
+			scale = Math.min(scale, maxScale);
+		}
+
+		GL11.glScalef(scale, -scale, scale);
+		GL11.glDepthMask(false);
+
+		int offsetX;
+		int offsetY;
+		int realHeight = (int) Math.floor(displayHeight / scale);
+		int realWidth = (int) Math.floor(displayWidth / scale);
+
+		offsetX = (realWidth - requiredWidth) / 2;
+		offsetY = (realHeight - requiredHeight) / 2;
+
+		GL11.glDisable(GL11.GL_LIGHTING);
+		fontRenderer.drawString("\u00a7f" + text, offsetX - (realWidth / 2), 1 + offsetY - (realHeight / 2), 1);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glDepthMask(true);
+		GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
+
+		GL11.glPopMatrix();
+		GL11.glPopMatrix();
+	}
+
+	/**
+	 * Pre-translated and rotated version. The current position will be the center of the text
+	 * render.
+	 */
+	public static void renderText(String text, float scaler, float maxScale)
+	{
+		GL11.glPushMatrix();
+
+		GL11.glPolygonOffset(-10, -10);
+		GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
+
+		float displayWidth = 1 - (2 / 16);
+		float displayHeight = 1 - (2 / 16);
+
+		// Rotate so we're facing up.
+		GL11.glRotatef(-90, 1, 0, 0);
+
+		FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
+
+		int requiredWidth = Math.max(fontRenderer.getStringWidth(text), 1);
+		int lineHeight = fontRenderer.FONT_HEIGHT;
+		int requiredHeight = lineHeight;
+		float scaleX = (displayWidth / requiredWidth);
+		float scaleY = (displayHeight / requiredHeight);
+		float scale = Math.min(maxScale, Math.min(scaleX, scaleY) * scaler);
+
+		GL11.glScalef(scale, -scale, scale);
+		GL11.glDepthMask(false);
+
+		int offsetX;
+		int offsetY;
+		int realHeight = (int) Math.floor(displayHeight / scale);
+		int realWidth = (int) Math.floor(displayWidth / scale);
+
+		offsetX = (realWidth - requiredWidth) / 2;
+		offsetY = (realHeight - requiredHeight) / 2;
+
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glColor4f(1f, 1f, 1f, 0.5f);
+		fontRenderer.drawString("\u00a7f" + text, offsetX - (realWidth / 2), 2 + offsetY - (realHeight / 2), 1);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthMask(true);
+		fontRenderer.drawString("\u00a7f" + text, offsetX - (realWidth / 2), 2 + offsetY - (realHeight / 2), 1);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glDepthMask(true);
+		GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
+
 		GL11.glPopMatrix();
 	}
 
@@ -571,136 +707,6 @@ public class RenderUtility
 	public static void bind(ResourceLocation location)
 	{
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture(location);
-	}
-
-	public static void renderText(String text, int side, float maxScale, double x, double y, double z)
-	{
-		renderText(text, ForgeDirection.getOrientation(side), maxScale, x, y, z);
-	}
-
-	public static void renderText(String text, ForgeDirection side, float maxScale, double x, double y, double z)
-	{
-		GL11.glPushMatrix();
-
-		GL11.glPolygonOffset(-10, -10);
-		GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
-
-		float displayWidth = 1 - (2 / 16);
-		float displayHeight = 1 - (2 / 16);
-		GL11.glTranslated(x, y, z);
-		GL11.glPushMatrix();
-
-		switch (side)
-		{
-			case SOUTH:
-				GL11.glTranslatef(0, 1, 0);
-				GL11.glRotatef(0, 0, 1, 0);
-				GL11.glRotatef(90, 1, 0, 0);
-
-				break;
-			case NORTH:
-				GL11.glTranslatef(1, 1, 1);
-				GL11.glRotatef(180, 0, 1, 0);
-				GL11.glRotatef(90, 1, 0, 0);
-
-				break;
-			case EAST:
-				GL11.glTranslatef(0, 1, 1);
-				GL11.glRotatef(90, 0, 1, 0);
-				GL11.glRotatef(90, 1, 0, 0);
-
-				break;
-			case WEST:
-				GL11.glTranslatef(1, 1, 0);
-				GL11.glRotatef(-90, 0, 1, 0);
-				GL11.glRotatef(90, 1, 0, 0);
-				break;
-		}
-
-		// Find Center
-		GL11.glTranslatef(displayWidth / 2, 1F, displayHeight / 2);
-		GL11.glRotatef(-90, 1, 0, 0);
-
-		FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
-
-		int requiredWidth = Math.max(fontRenderer.getStringWidth(text), 1);
-		int lineHeight = fontRenderer.FONT_HEIGHT + 2;
-		int requiredHeight = lineHeight * 1;
-		float scaler = 0.8f;
-		float scaleX = (displayWidth / requiredWidth);
-		float scaleY = (displayHeight / requiredHeight);
-		float scale = scaleX * scaler;
-
-		if (maxScale > 0)
-		{
-			scale = Math.min(scale, maxScale);
-		}
-
-		GL11.glScalef(scale, -scale, scale);
-		GL11.glDepthMask(false);
-
-		int offsetX;
-		int offsetY;
-		int realHeight = (int) Math.floor(displayHeight / scale);
-		int realWidth = (int) Math.floor(displayWidth / scale);
-
-		offsetX = (realWidth - requiredWidth) / 2;
-		offsetY = (realHeight - requiredHeight) / 2;
-
-		GL11.glDisable(GL11.GL_LIGHTING);
-		fontRenderer.drawString("\u00a7f" + text, offsetX - (realWidth / 2), 1 + offsetY - (realHeight / 2), 1);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glDepthMask(true);
-		GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
-
-		GL11.glPopMatrix();
-		GL11.glPopMatrix();
-	}
-
-	/**
-	 * Pre-translated and rotated version. The current position will be the center of the text
-	 * render.
-	 */
-	public static void renderText(String text, float scaler, float maxScale)
-	{
-		GL11.glPushMatrix();
-
-		GL11.glPolygonOffset(-10, -10);
-		GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
-
-		float displayWidth = 1 - (2 / 16);
-		float displayHeight = 1 - (2 / 16);
-
-		// Rotate so we're facing up.
-		GL11.glRotatef(-90, 1, 0, 0);
-
-		FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
-
-		int requiredWidth = Math.max(fontRenderer.getStringWidth(text), 1);
-		int lineHeight = fontRenderer.FONT_HEIGHT;
-		int requiredHeight = lineHeight;
-		float scaleX = (displayWidth / requiredWidth);
-		float scaleY = (displayHeight / requiredHeight);
-		float scale = Math.min(maxScale, Math.min(scaleX, scaleY) * scaler);
-
-		GL11.glScalef(scale, -scale, scale);
-		GL11.glDepthMask(false);
-
-		int offsetX;
-		int offsetY;
-		int realHeight = (int) Math.floor(displayHeight / scale);
-		int realWidth = (int) Math.floor(displayWidth / scale);
-
-		offsetX = (realWidth - requiredWidth) / 2;
-		offsetY = (realHeight - requiredHeight) / 2;
-
-		GL11.glDisable(GL11.GL_LIGHTING);
-		fontRenderer.drawString("\u00a7f" + text, offsetX - (realWidth / 2), 2 + offsetY - (realHeight / 2), 1);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glDepthMask(true);
-		GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
-
-		GL11.glPopMatrix();
 	}
 
 	/**

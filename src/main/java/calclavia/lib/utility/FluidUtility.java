@@ -165,7 +165,7 @@ public class FluidUtility
 						node.setBlock(world, 0, 0, update);
 					}
 				}
-				return new FluidStack(FluidRegistry.getFluid("water"), FluidContainerRegistry.BUCKET_VOLUME);
+				return new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
 			}
 			else if ((block.blockID == Block.lavaStill.blockID || block.blockID == Block.lavaMoving.blockID) && node.getBlockMetadata(world) == 0)
 			{
@@ -173,7 +173,7 @@ public class FluidUtility
 				{
 					node.setBlock(world, 0, 0, update);
 				}
-				return new FluidStack(FluidRegistry.getFluid("lava"), FluidContainerRegistry.BUCKET_VOLUME);
+				return new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME);
 			}
 		}
 		return null;
