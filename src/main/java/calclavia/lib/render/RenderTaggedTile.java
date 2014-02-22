@@ -60,7 +60,7 @@ public abstract class RenderTaggedTile extends TileEntitySpecialRenderer
 
 								if (entry.getKey() != null)
 								{
-									RenderUtility.renderFloatingText(entry.getKey(), new Vector3(x, y, z).translate(0.5, i * 0.25f + 1, z + 0.5f), entry.getValue());
+									RenderUtility.renderFloatingText(entry.getKey(), new Vector3(x, y, z).translate(0.5, i * 0.25f + height, 0.5f), entry.getValue());
 								}
 
 								i++;
