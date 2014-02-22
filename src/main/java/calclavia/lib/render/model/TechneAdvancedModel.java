@@ -327,6 +327,36 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 		GL11.glPopMatrix();
 	}
 
+	public void renderOnlyAroundPivot(double angle, double rotX, double rotY, double rotZ, String... groupNames)
+	{
+		GL11.glPushMatrix();
+		setup();
+		bindTexture();
+
+		Iterator<Entry<String, ModelRenderer>> it = parts.entrySet().iterator();
+
+		while (it.hasNext())
+		{
+			Entry<String, ModelRenderer> entry = it.next();
+
+			for (String groupName : groupNames)
+			{
+				if (entry.getKey().equalsIgnoreCase(groupName))
+				{
+					GL11.glPushMatrix();
+					ModelRenderer model = entry.getValue();
+					GL11.glTranslatef(model.rotationPointX / 16, model.rotationPointY / 16, model.rotationPointZ / 16);
+					GL11.glRotated(angle, rotX, rotY, rotZ);
+					GL11.glTranslatef(-model.rotationPointX / 16, -model.rotationPointY / 16, -model.rotationPointZ / 16);
+					model.render(0.0625f);
+					GL11.glPopMatrix();
+				}
+			}
+		}
+
+		GL11.glPopMatrix();
+	}
+
 	@Override
 	public void renderAllExcept(String... excludedGroupNames)
 	{
