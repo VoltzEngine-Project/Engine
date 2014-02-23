@@ -29,7 +29,7 @@ public class ICDummyItemManager implements IElectricItemManager
 	{
 		if (get(itemStack) != null)
 		{
-			return (int) (get(itemStack).recharge(itemStack, (long) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), !simulate) * CompatibilityType.INDUSTRIALCRAFT.ratio);
+			return (int) Math.round(get(itemStack).recharge(itemStack, (long) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), !simulate) * CompatibilityType.INDUSTRIALCRAFT.ratio);
 		}
 
 		return 0;
@@ -40,7 +40,7 @@ public class ICDummyItemManager implements IElectricItemManager
 	{
 		if (get(itemStack) != null)
 		{
-			return (int) (get(itemStack).discharge(itemStack, (long) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), !simulate) * CompatibilityType.INDUSTRIALCRAFT.ratio);
+			return (int) Math.round(get(itemStack).discharge(itemStack, (long) (amount * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), !simulate) * CompatibilityType.INDUSTRIALCRAFT.ratio);
 		}
 
 		return 0;
@@ -51,7 +51,7 @@ public class ICDummyItemManager implements IElectricItemManager
 	{
 		if (get(itemStack) != null)
 		{
-			return (int) (get(itemStack).getEnergy(itemStack) * CompatibilityType.INDUSTRIALCRAFT.ratio);
+			return (int) Math.round(get(itemStack).getEnergy(itemStack) * CompatibilityType.INDUSTRIALCRAFT.ratio);
 		}
 
 		return 0;
