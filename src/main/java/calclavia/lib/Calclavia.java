@@ -28,5 +28,5 @@ public class Calclavia
 	 */
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), NAME + ".cfg"));
 	public static final Logger LOGGER = Logger.getLogger(NAME);
- 
+
 }
