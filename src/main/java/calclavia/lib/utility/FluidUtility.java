@@ -59,6 +59,33 @@ public class FluidUtility
 		replacableBlocks.add(Block.torchWood);
 	}
 
+	public static int getFluidAmountFromBlock(World world, Vector3 vector)
+	{
+		FluidStack fluidStack = getFluidStackFromBlock(world, vector);
+		return fluidStack != null ? fluidStack.amount : 0;
+	}
+
+	public static FluidStack getFluidStackFromBlock(World world, Vector3 vector)
+	{
+		int id = vector.getBlockID(world);
+
+		if (Block.blocksList[id] instanceof IFluidBlock)
+		{
+			IFluidBlock fluidBlock = ((IFluidBlock) Block.blocksList[id]);
+			return new FluidStack(fluidBlock.getFluid(), (int) (FluidContainerRegistry.BUCKET_VOLUME * fluidBlock.getFilledPercentage(world, vector.intX(), vector.intY(), vector.intZ())));
+		}
+		else if (id == Block.waterStill.blockID || id == Block.waterMoving.blockID)
+		{
+			return new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
+		}
+		else if (id == Block.lavaStill.blockID || id == Block.lavaMoving.blockID)
+		{
+			return new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME);
+		}
+
+		return null;
+	}
+
 	/**
 	 * Gets the block's fluid if it has one
 	 * 
@@ -66,7 +93,7 @@ public class FluidUtility
 	 * @param vector - 3D location in world
 	 * @return @Fluid that the block is
 	 */
-	public static Fluid getLiquidFromBlock(World world, Vector3 vector)
+	public static Fluid getFluidFromBlock(World world, Vector3 vector)
 	{
 		return FluidUtility.getFluidFromBlockID(vector.getBlockID(world));
 	}
@@ -80,12 +107,13 @@ public class FluidUtility
 		}
 		else if (id == Block.waterStill.blockID || id == Block.waterMoving.blockID)
 		{
-			return FluidRegistry.getFluid("water");
+			return FluidRegistry.WATER;
 		}
 		else if (id == Block.lavaStill.blockID || id == Block.lavaMoving.blockID)
 		{
-			return FluidRegistry.getFluid("lava");
+			return FluidRegistry.LAVA;
 		}
+
 		return null;
 	}
 
