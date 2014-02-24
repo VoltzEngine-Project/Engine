@@ -68,6 +68,7 @@ public class FluidUtility
 	public static FluidStack getFluidStackFromBlock(World world, Vector3 vector)
 	{
 		int id = vector.getBlockID(world);
+		int meta = vector.getBlockMetadata(world);
 
 		if (Block.blocksList[id] instanceof IFluidBlock)
 		{
@@ -76,11 +77,13 @@ public class FluidUtility
 		}
 		else if (id == Block.waterStill.blockID || id == Block.waterMoving.blockID)
 		{
-			return new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
+			if (meta == 0)
+				return new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
 		}
 		else if (id == Block.lavaStill.blockID || id == Block.lavaMoving.blockID)
 		{
-			return new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME);
+			if (meta == 0)
+				return new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME);
 		}
 
 		return null;
