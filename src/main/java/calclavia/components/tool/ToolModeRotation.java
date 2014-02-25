@@ -20,6 +20,18 @@ public class ToolModeRotation extends ToolMode
 		int blockMeta = world.getBlockMetadata(x, y, z);
 		Block block = Block.blocksList[blockID];
 
+		if (block != null && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+		{
+			((ItemScrewdriver) stack.getItem()).wrenchUsed(player, x, y, z);
+			player.swingItem();
+			return !world.isRemote;
+		}
+
+		return false;
+	}
+
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+	{
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
 		if (tile instanceof IWrenchable && ((IWrenchable) tile).wrenchCanSetFacing(player, side))
@@ -43,18 +55,12 @@ public class ToolModeRotation extends ToolMode
 
 				if (output != null)
 				{
-					world.setBlockToAir(x, y, z);
 					InventoryUtility.dropItemStack(world, new Vector3(x, y, z), output);
+					world.setBlockToAir(x, y, z);
 				}
 			}
 
 			return true;
-		}
-		else if (block != null && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
-		{
-			((ItemScrewdriver) stack.getItem()).wrenchUsed(player, x, y, z);
-			player.swingItem();
-			return !world.isRemote;
 		}
 
 		return false;

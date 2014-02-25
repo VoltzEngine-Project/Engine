@@ -184,8 +184,8 @@ public class CalclaviaLoader
 		Calclavia.LOGGER.setParent(FMLLog.getLogger());
 		NetworkRegistry.instance().registerGuiHandler(this, proxy);
 
-        // Potion Array resized to 256, Allows to miss conflicting ID's
-        PotionUtility.resizePotionArray();
+		// Potion Array resized to 256, Allows to miss conflicting ID's
+		PotionUtility.resizePotionArray();
 
 		SaveManager.registerClass("ModFlag", ModFlag.class);
 		MinecraftForge.EVENT_BUS.register(this);
@@ -380,11 +380,11 @@ public class CalclaviaLoader
 
 					if (OreDictionary.getOres("ingotSteel").size() > 0)
 					{
-						RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", " SS", "S  ", 'S', "ingotSteel"), Calclavia.CONFIGURATION, true);
+						RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", "W  ", 'S', "ingotSteel", 'W', Block.wood), Calclavia.CONFIGURATION, true);
 					}
 					else
 					{
-						RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", " SS", "S  ", 'S', Item.ingotIron), Calclavia.CONFIGURATION, true);
+						RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", "W  ", 'S', Item.ingotIron, 'W', Block.wood), Calclavia.CONFIGURATION, true);
 					}
 				}
 				else

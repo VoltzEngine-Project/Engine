@@ -153,9 +153,9 @@ public class FluidUtility
 	 * @param doDrain - do the action
 	 * @return FluidStack drained from the block
 	 */
-	public static FluidStack drainBlock(World world, Vector3 node, boolean doDrain)
+	public static FluidStack drainBlock(World world, Vector3 position, boolean doDrain)
 	{
-		return drainBlock(world, node, doDrain, 2);
+		return drainBlock(world, position, doDrain, 2);
 	}
 
 	/**
@@ -165,44 +165,44 @@ public class FluidUtility
 	 * @param update - block update flag to use
 	 * @return FluidStack drained from the block
 	 */
-	public static FluidStack drainBlock(World world, Vector3 node, boolean doDrain, int update)
+	public static FluidStack drainBlock(World world, Vector3 position, boolean doDrain, int update)
 	{
-		if (world == null || node == null)
+		if (world == null || position == null)
 		{
 			return null;
 		}
 
-		int blockID = node.getBlockID(world);
-		int meta = node.getBlockMetadata(world);
+		int blockID = position.getBlockID(world);
+		int meta = position.getBlockMetadata(world);
 		Block block = Block.blocksList[blockID];
 		if (block != null)
 		{
-			if (block instanceof IFluidBlock && ((IFluidBlock) block).canDrain(world, node.intX(), node.intY(), node.intZ()))
+			if (block instanceof IFluidBlock && ((IFluidBlock) block).canDrain(world, position.intX(), position.intY(), position.intZ()))
 			{
-				return ((IFluidBlock) block).drain(world, node.intX(), node.intY(), node.intZ(), doDrain);
+				return ((IFluidBlock) block).drain(world, position.intX(), position.intY(), position.intZ(), doDrain);
 			}
-			else if ((block.blockID == Block.waterStill.blockID || block.blockID == Block.waterMoving.blockID) && node.getBlockMetadata(world) == 0)
+			else if ((block.blockID == Block.waterStill.blockID || block.blockID == Block.waterMoving.blockID) && position.getBlockMetadata(world) == 0)
 			{
 				if (doDrain)
 				{
-					Vector3 vec = node.clone().translate(ForgeDirection.UP);
+					Vector3 vec = position.clone().translate(ForgeDirection.UP);
 					if (vec.getBlockID(world) == Block.waterlily.blockID)
 					{
 						vec.setBlock(world, 0, 0, update);
-						node.setBlock(world, blockID, meta);
+						position.setBlock(world, blockID, meta);
 					}
 					else
 					{
-						node.setBlock(world, 0, 0, update);
+						position.setBlock(world, 0, 0, update);
 					}
 				}
 				return new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
 			}
-			else if ((block.blockID == Block.lavaStill.blockID || block.blockID == Block.lavaMoving.blockID) && node.getBlockMetadata(world) == 0)
+			else if ((block.blockID == Block.lavaStill.blockID || block.blockID == Block.lavaMoving.blockID) && position.getBlockMetadata(world) == 0)
 			{
 				if (doDrain)
 				{
-					node.setBlock(world, 0, 0, update);
+					position.setBlock(world, 0, 0, update);
 				}
 				return new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME);
 			}
