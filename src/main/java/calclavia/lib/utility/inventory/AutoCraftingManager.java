@@ -556,7 +556,8 @@ public class AutoCraftingManager
 						{
 							if (AutoCraftingManager.areStacksEqual(searchStack, checkStack))
 							{
-								this.craftingInv.setInventorySlotContents(invSlots[i], AutoCraftingManager.consumeItem(checkStack, 1));
+								if (doConsume)
+									this.craftingInv.setInventorySlotContents(invSlots[i], AutoCraftingManager.consumeItem(checkStack, 1));
 								count++;
 								break;
 							}
