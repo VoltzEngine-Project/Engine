@@ -95,7 +95,7 @@ public abstract class TemplateICTile implements IEnergySink, IEnergySource, IEne
 			 * Return the difference, since injectEnergy returns left over energy, and
 			 * receiveElectricity returns energy used.
 			 */
-			return Math.round(amount - (receive * CompatibilityType.INDUSTRIALCRAFT.ratio));
+			return amount - (receive * CompatibilityType.INDUSTRIALCRAFT.ratio);
 		}
 
 		return amount;

@@ -97,7 +97,7 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
 				conductorBuffer = this.conductorBuffer.get(conductor);
 			}
 
-			long energyReceived = Math.min((conductor.getCurrentCapacity() * voltage) - conductorBuffer, amount);
+			long energyReceived = Math.min((conductor.getCurrentCapacity() * getVoltage()) - conductorBuffer, amount);
 
 			if (doReceive && energyReceived > 0)
 			{
