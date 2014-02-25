@@ -3,6 +3,8 @@ package calclavia.lib.utility;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.CaseFormat;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -161,6 +163,16 @@ public class LanguageUtility
 		}
 
 		return camelCaseString;
+	}
+
+	public static String camelToLowerUnderscore(String s)
+	{
+		return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, s);
+	}
+
+	public static String underscoreToCamel(String s)
+	{
+		return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s);
 	}
 
 	public static String toProperCase(String s)
