@@ -83,7 +83,7 @@ public class ContentRegistry
 
 	public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
 	{
-		return createBlock(name, blockClass, itemClass, tileClass, true);
+		return createBlock(name, blockClass, itemClass, tileClass, false);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class ContentRegistry
 
 	public Item createItem(String name, Class<? extends Item> clazz)
 	{
-		return createItem(name, clazz, true);
+		return createItem(name, clazz, false);
 	}
 
 	/**
