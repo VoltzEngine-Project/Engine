@@ -24,18 +24,18 @@ public abstract class NodeNetwork<N extends INodeNetwork, C extends IConnector, 
 
 	public void add(A battery)
 	{
-		this.nodes.add(battery);
+		nodes.add(battery);
 	}
 
 	public void remove(A battery)
 	{
-		this.nodes.remove(battery);
+		nodes.remove(battery);
 	}
 
 	@Override
 	public Set<A> getNodes()
 	{
-		return this.nodes;
+		return nodes;
 	}
 
 	/**
@@ -63,6 +63,6 @@ public abstract class NodeNetwork<N extends INodeNetwork, C extends IConnector, 
 	@Override
 	public String toString()
 	{
-		return this.getClass().getSimpleName() + "[" + this.hashCode() + ", Nodes: " + this.nodes.size() + ", Connectors: " + this.getConnectors().size() + "]";
+		return getClass().getSimpleName() + "[" + hashCode() + ", Nodes: " + nodes.size() + ", Connectors: " + getConnectors().size() + "]";
 	}
 }

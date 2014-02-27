@@ -1,6 +1,7 @@
 package universalelectricity.core.net;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -28,36 +29,36 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	@Override
 	public void addConnector(C connector)
 	{
-		this.connectors.add(connector);
+		connectors.add(connector);
 	}
 
 	@Override
 	public void removeConnector(C connector)
 	{
-		this.connectors.remove(connector);
+		connectors.remove(connector);
 	}
 
 	@Override
 	public Set<C> getConnectors()
 	{
-		return this.connectors;
+		return connectors;
 	}
 
 	/**
-	 * A simple reconstruct class. You may override this.
+	 * A simple reconstruct class. You may override
 	 */
 	@Override
 	public void reconstruct()
 	{
-		Iterator<C> it = this.getConnectors().iterator();
+		Iterator<C> it = new HashSet<C>(getConnectors()).iterator();
 
 		while (it.hasNext())
 		{
 			C connector = it.next();
 
-			if (this.isValidConnector(connector))
+			if (isValidConnector(connector))
 			{
-				this.reconstructConnector(connector);
+				reconstructConnector(connector);
 			}
 			else
 			{
@@ -78,7 +79,7 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	 */
 	public C getFirstConnector()
 	{
-		for (C node : this.getConnectors())
+		for (C node : getConnectors())
 		{
 			return node;
 		}
@@ -100,12 +101,12 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	@Override
 	public N merge(N network)
 	{
-		if (network != null && network.getClass().isAssignableFrom(this.getClass()) && network != this)
+		if (network != null && network.getClass().isAssignableFrom(getClass()) && network != this)
 		{
 			synchronized (getConnectors())
 			{
 				N newNetwork = newInstance();
-				newNetwork.getConnectors().addAll(this.getConnectors());
+				newNetwork.getConnectors().addAll(getConnectors());
 				newNetwork.getConnectors().addAll(network.getConnectors());
 
 				network.getConnectors().clear();
@@ -183,7 +184,7 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	@Override
 	public void split(C connectorA, C connectorB)
 	{
-		this.reconstruct();
+		reconstruct();
 
 		if (connectorA != null && connectorB != null)
 		{
@@ -227,6 +228,6 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	@Override
 	public String toString()
 	{
-		return this.getClass().getSimpleName() + "[" + this.hashCode() + ", Connectors: " + this.connectors.size() + "]";
+		return getClass().getSimpleName() + "[" + hashCode() + ", Connectors: " + connectors.size() + "]";
 	}
 }
