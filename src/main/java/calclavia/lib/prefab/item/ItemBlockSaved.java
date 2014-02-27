@@ -1,5 +1,9 @@
 package calclavia.lib.prefab.item;
 
+import universalelectricity.api.vector.Vector3;
+import calclavia.lib.utility.inventory.InventoryUtility;
+import calclavia.lib.utility.nbt.NBTUtility;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -28,21 +32,54 @@ public class ItemBlockSaved extends ItemBlock
 	{
 		boolean flag = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
 
-		NBTTagCompound setNbt = stack.getTagCompound();
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-		/**
-		 * Inject essential tile data
-		 */
-		NBTTagCompound essentialNBT = new NBTTagCompound();
-		tile.writeToNBT(essentialNBT);
-		setNbt.setString("id", essentialNBT.getString("id"));
-		setNbt.setInteger("x", essentialNBT.getInteger("x"));
-		setNbt.setInteger("y", essentialNBT.getInteger("y"));
-		setNbt.setInteger("z", essentialNBT.getInteger("z"));
+		if (tile != null)
+		{
+			/**
+			 * Inject essential tile data
+			 */
+			NBTTagCompound essentialNBT = new NBTTagCompound();
+			tile.writeToNBT(essentialNBT);
+			NBTTagCompound setNbt = NBTUtility.getNBTTagCompound(stack);
 
-		tile.readFromNBT(setNbt);
+			if (essentialNBT.hasKey("id"))
+			{
+				setNbt.setString("id", essentialNBT.getString("id"));
+				setNbt.setInteger("x", essentialNBT.getInteger("x"));
+				setNbt.setInteger("y", essentialNBT.getInteger("y"));
+				setNbt.setInteger("z", essentialNBT.getInteger("z"));
+			}
+
+			tile.readFromNBT(setNbt);
+		}
+
 		return flag;
 	}
 
+	public static void dropBlockWithNBT(Block block, World world, int x, int y, int z)
+	{
+		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+		{
+			if (block != null)
+			{
+				int meta = world.getBlockMetadata(x, y, z);
+
+				ItemStack dropStack = new ItemStack(block, block.quantityDropped(meta, 0, world.rand), meta);
+				NBTTagCompound tag = new NBTTagCompound();
+
+				TileEntity tile = world.getBlockTileEntity(x, y, z);
+
+				if (tile != null)
+					tile.writeToNBT(tag);
+
+				tag.removeTag("id");
+				tag.removeTag("x");
+				tag.removeTag("y");
+				tag.removeTag("z");
+				dropStack.setTagCompound(tag);
+				InventoryUtility.dropItemStack(world, new Vector3(x, y, z), dropStack);
+			}
+		}
+	}
 }
