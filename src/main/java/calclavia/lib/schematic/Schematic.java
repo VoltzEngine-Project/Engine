@@ -2,6 +2,7 @@ package calclavia.lib.schematic;
 
 import java.util.HashMap;
 
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.vector.Vector3;
 
 import com.builtbroken.common.Pair;
@@ -28,5 +29,5 @@ public abstract class Schematic
 	 * @param size - The size multiplier.
 	 * @return A Hashmap of positions and block IDs with metadata.
 	 */
-	public abstract HashMap<Vector3, Pair<Integer, Integer>> getStructure(int size);
+	public abstract HashMap<Vector3, Pair<Integer, Integer>> getStructure(ForgeDirection dir, int size);
 }

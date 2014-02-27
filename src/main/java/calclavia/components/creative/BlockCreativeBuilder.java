@@ -9,11 +9,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.vector.Vector3;
 import calclavia.components.CalclaviaLoader;
 import calclavia.lib.network.IPacketReceiver;
-import calclavia.lib.prefab.block.BlockTile;
+import calclavia.lib.prefab.block.BlockRotatable;
 import calclavia.lib.schematic.Schematic;
 
 import com.builtbroken.common.Pair;
@@ -22,7 +23,7 @@ import com.google.common.io.ByteArrayDataInput;
 /**
  * Automatically set up structures to allow easy debugging in creative mode.
  */
-public class BlockCreativeBuilder extends BlockTile implements IPacketReceiver
+public class BlockCreativeBuilder extends BlockRotatable implements IPacketReceiver
 {
 	public static final List<Schematic> REGISTRY = new ArrayList<Schematic>();
 
@@ -36,6 +37,7 @@ public class BlockCreativeBuilder extends BlockTile implements IPacketReceiver
 	{
 		super(id, UniversalElectricity.machine);
 		setCreativeTab(CreativeTabs.tabTools);
+		rotationMask = Byte.parseByte("111111", 2);
 	}
 
 	/**
@@ -71,7 +73,7 @@ public class BlockCreativeBuilder extends BlockTile implements IPacketReceiver
 
 					if (size > 0)
 					{
-						HashMap<Vector3, Pair<Integer, Integer>> map = REGISTRY.get(schematicID).getStructure(size);
+						HashMap<Vector3, Pair<Integer, Integer>> map = REGISTRY.get(schematicID).getStructure(ForgeDirection.getOrientation(position.getBlockMetadata(world)), size);
 
 						for (Entry<Vector3, Pair<Integer, Integer>> entry : map.entrySet())
 						{
