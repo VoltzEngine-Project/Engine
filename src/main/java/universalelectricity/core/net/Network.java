@@ -131,7 +131,7 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 		 * Loop through the connected blocks and attempt to see if there are connections between the
 		 * two points elsewhere.
 		 */
-		Object[] connectedBlocks = splitPoint.getConnections();
+		Object[] connectedBlocks = getConnectionsFor(splitPoint);
 
 		for (int i = 0; i < connectedBlocks.length; i++)
 		{
@@ -179,6 +179,11 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 				}
 			}
 		}
+	}
+	
+	public Object[] getConnectionsFor(C connector)
+	{
+		return connector.getConnections();
 	}
 
 	@Override
