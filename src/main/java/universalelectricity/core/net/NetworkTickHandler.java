@@ -30,8 +30,6 @@ public class NetworkTickHandler implements ITickHandler
 	/** For queuing Forge events to be invoked the next tick. */
 	private final LinkedHashSet<Event> queuedEvents = new LinkedHashSet<Event>();
 
-	private boolean markClear;
-
 	public static void addNetwork(IUpdate updater)
 	{
 		synchronized (INSTANCE.updaters)
@@ -85,14 +83,9 @@ public class NetworkTickHandler implements ITickHandler
 			}
 			catch (Exception e)
 			{
-				System.out.println(getLabel() + ": Failed while tcking updater. This is a bug! Clearing list for self repair.");
+				System.out.println(getLabel() + ": Failed while tcking updater. This is a bug! Clearing all tickers for self repair.");
 				updaters.clear();
 				e.printStackTrace();
-			}
-
-			if (markClear)
-			{
-				updaters.clear();
 			}
 		}
 
@@ -106,14 +99,7 @@ public class NetworkTickHandler implements ITickHandler
 				MinecraftForge.EVENT_BUS.post(eventIt.next());
 				eventIt.remove();
 			}
-
-			if (markClear)
-			{
-				queuedEvents.clear();
-			}
 		}
-
-		markClear = false;
 	}
 
 	@Override
@@ -126,10 +112,5 @@ public class NetworkTickHandler implements ITickHandler
 	public String getLabel()
 	{
 		return "Universal Electricity Ticker";
-	}
-
-	public void clearNetworks()
-	{
-		markClear = true;
 	}
 }
