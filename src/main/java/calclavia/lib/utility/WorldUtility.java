@@ -280,4 +280,14 @@ public class WorldUtility
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * Checks based on a bitmap for sides if this side can be rendered.
+	 * 
+	 * @return True if so.
+	 */
+	public static boolean isEnabledSide(byte renderSides, ForgeDirection direction)
+	{
+		return (renderSides & (1 << direction.ordinal())) != 0;
+	}
 }

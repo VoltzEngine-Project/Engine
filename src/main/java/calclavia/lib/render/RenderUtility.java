@@ -714,12 +714,12 @@ public class RenderUtility
 	 */
 	public static void renderBlockWithConnectedTextures(byte renderSides, Block faceBlock, Icon faceOverride, Block edgeBlock, Icon edgeOverride)
 	{
-		boolean down = canRenderSide(renderSides, ForgeDirection.DOWN);
-		boolean up = canRenderSide(renderSides, ForgeDirection.UP);
-		boolean north = canRenderSide(renderSides, ForgeDirection.NORTH);
-		boolean south = canRenderSide(renderSides, ForgeDirection.SOUTH);
-		boolean east = canRenderSide(renderSides, ForgeDirection.EAST);
-		boolean west = canRenderSide(renderSides, ForgeDirection.WEST);
+		boolean down = WorldUtility.isEnabledSide(renderSides, ForgeDirection.DOWN);
+		boolean up = WorldUtility.isEnabledSide(renderSides, ForgeDirection.UP);
+		boolean north = WorldUtility.isEnabledSide(renderSides, ForgeDirection.NORTH);
+		boolean south = WorldUtility.isEnabledSide(renderSides, ForgeDirection.SOUTH);
+		boolean east = WorldUtility.isEnabledSide(renderSides, ForgeDirection.EAST);
+		boolean west = WorldUtility.isEnabledSide(renderSides, ForgeDirection.WEST);
 
 		bind(TextureMap.locationBlocksTexture);
 
@@ -730,7 +730,7 @@ public class RenderUtility
 		{
 			ForgeDirection dir = ForgeDirection.getOrientation(i);
 
-			if (!canRenderSide(renderSides, dir))
+			if (!WorldUtility.isEnabledSide(renderSides, dir))
 			{
 				GL11.glPushMatrix();
 				GL11.glScalef(0.99f, 0.99f, 0.99f);
@@ -841,16 +841,6 @@ public class RenderUtility
 				renderCube(-0.501, -0.501, 0.475, 0.501, -0.475, 0.501, edgeBlock, edgeOverride);
 			}
 		}
-	}
-
-	/**
-	 * Checks based on a bitmap for sides if this side can be rendered.
-	 * 
-	 * @return True if so.
-	 */
-	public static boolean canRenderSide(byte renderSides, ForgeDirection direction)
-	{
-		return (renderSides & (1 << direction.ordinal())) != 0;
 	}
 
 }
