@@ -50,7 +50,6 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	public void addConnector(IConductor connector)
 	{
 		connector.setNetwork(this);
-		this.conductorBuffer.put(connector, (long) 0);
 		super.addConnector(connector);
 	}
 
@@ -112,13 +111,13 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	@Override
 	public boolean canUpdate()
 	{
-		return this.getConnectors().size() > 0 && this.getNodes().size() > 0 && this.energyBuffer > 0;
+		return getConnectors().size() > 0 && getNodes().size() > 0 && energyBuffer > 0;
 	}
 
 	@Override
 	public boolean continueUpdate()
 	{
-		return this.canUpdate();
+		return canUpdate();
 	}
 
 	@Override
@@ -341,13 +340,16 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 				return this.conductorBuffer.get(conductor);
 			}
 		}
+
 		return 0;
 	}
 
+	// TODO: Use UE external saving instead of having conductors save files.
 	@Override
 	public void setBufferFor(IConductor conductor, long buffer)
 	{
-		this.conductorBuffer.put(conductor, buffer);
+		conductorBuffer.put(conductor, buffer);
+		energyBuffer += buffer;
 	}
 
 }
