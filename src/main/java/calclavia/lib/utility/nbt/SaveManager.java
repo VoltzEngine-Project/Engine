@@ -13,7 +13,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 import calclavia.lib.utility.ReflectionHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.relauncher.Side;
 
 /** Simple manager that handles common saving and creation of object threw Minecraft's NBT system.
  * 
@@ -211,7 +213,7 @@ public class SaveManager
      * @param object - instance of @IVirtualObject */
     public static void saveObject(IVirtualObject object)
     {
-        if (object != null)
+        if (object != null && FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
         {
             if (getID(object.getClass()) != null)
             {
