@@ -17,7 +17,7 @@ public class TurbineMultiBlockHandler extends MultiBlockHandler<TileTurbine>
 
 		if (tile != null && wrapperClass.isAssignableFrom(tile.getClass()))
 		{
-			if (((TileTurbine) tile).getDirection() == self.getDirection())
+			if (((TileTurbine) tile).getDirection() == self.getDirection() && ((TileTurbine) tile).tier == self.tier)
 			{
 				return (TileTurbine) tile;
 			}

@@ -67,8 +67,11 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	protected final long defaultTorque = 5000;
 	protected long torque = defaultTorque;
 	protected float prevAngularVelocity = 0;
+
 	@Synced(1)
 	protected float angularVelocity = 0;
+	@Synced
+	public int tier = 0;
 
 	public TileTurbine()
 	{
