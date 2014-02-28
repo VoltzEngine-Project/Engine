@@ -74,7 +74,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 				}
 				else if (tesr instanceof ISimpleItemRenderer)
 				{
-					((ISimpleItemRenderer) tesr).renderInventoryItem(new ItemStack(block, metadata));
+					((ISimpleItemRenderer) tesr).renderInventoryItem(new ItemStack(block, 1, metadata));
 				}
 				else if (tesr != null)
 				{

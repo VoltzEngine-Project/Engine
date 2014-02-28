@@ -24,7 +24,7 @@ public class ToolModeRotation extends ToolMode
 		{
 			((ItemScrewdriver) stack.getItem()).wrenchUsed(player, x, y, z);
 			player.swingItem();
-			return !world.isRemote;
+			return true;
 		}
 
 		return false;
