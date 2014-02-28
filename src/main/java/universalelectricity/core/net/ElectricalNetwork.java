@@ -61,7 +61,7 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
 
 		if (handler instanceof IVoltageInput)
 		{
-			if (((IVoltageInput) handler).getVoltageInput(side) != this.getVoltage())
+			if (((IVoltageInput) handler).getVoltageInput(side) != getVoltage())
 				((IVoltageInput) handler).onWrongVoltage(side, voltage);
 		}
 
@@ -92,18 +92,18 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
 		{
 			long conductorBuffer = 0;
 
-			if (this.conductorBuffer.containsKey(conductor))
+			if (conductorBuffers.containsKey(conductor))
 			{
-				conductorBuffer = this.conductorBuffer.get(conductor);
+				conductorBuffer = conductorBuffers.get(conductor);
 			}
 
 			long energyReceived = Math.min((conductor.getCurrentCapacity() * getVoltage()) - conductorBuffer, amount);
-			
+
 			if (doReceive && energyReceived > 0)
 			{
-				this.energyBuffer += energyReceived;
+				energyBuffer += energyReceived;
 				conductorBuffer += energyReceived;
-				this.conductorBuffer.put(conductor, conductorBuffer);
+				conductorBuffers.put(conductor, conductorBuffer);
 				NetworkTickHandler.addNetwork(this);
 			}
 

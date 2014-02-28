@@ -10,10 +10,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.world.WorldEvent.Load;
-import net.minecraftforge.event.world.WorldEvent.Unload;
 import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.UniversalElectricity;

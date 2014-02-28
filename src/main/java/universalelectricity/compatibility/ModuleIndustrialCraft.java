@@ -10,7 +10,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.CompatibilityType;
-import universalelectricity.api.vector.Vector3;
 
 /** @author Calclavia */
 public class ModuleIndustrialCraft extends CompatibilityModule

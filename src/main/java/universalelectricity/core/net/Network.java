@@ -74,11 +74,6 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 		}
 	}
 
-	public boolean isValidConnector(C node)
-	{
-		return true;
-	}
-
 	public boolean isValidConnector(Object node)
 	{
 		return connectorType.isAssignableFrom(node.getClass());
@@ -144,18 +139,18 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 
 		for (int i = 0; i < connectedBlocks.length; i++)
 		{
-			Object connectedBlockA = connectedBlocks[i];
+			Object connectedA = connectedBlocks[i];
 
-			if (connectedBlockA != null && isValidConnector(connectedBlockA))
+			if (connectedA != null && isValidConnector(connectedA))
 			{
 				for (int ii = 0; ii < connectedBlocks.length; ii++)
 				{
-					final Object connectedBlockB = connectedBlocks[ii];
+					final Object connectedB = connectedBlocks[ii];
 
-					if (connectedBlockB != null && connectedBlockA != connectedBlockB && isValidConnector(connectedBlockA))
+					if (connectedB != null && connectedA != connectedB && isValidConnector(connectedB))
 					{
-						ConnectionPathfinder<C> finder = new ConnectionPathfinder<C>(getConnectorClass(), (C) connectedBlockB, splitPoint);
-						finder.findNodes((C) connectedBlockA);
+						ConnectionPathfinder<C> finder = new ConnectionPathfinder<C>(getConnectorClass(), (C) connectedB, splitPoint);
+						finder.findNodes((C) connectedA);
 
 						if (finder.results.size() <= 0)
 						{

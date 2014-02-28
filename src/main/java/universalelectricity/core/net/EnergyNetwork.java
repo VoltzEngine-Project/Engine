@@ -29,7 +29,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	 * The individual buffer from each conductor. Used to limit the amount of buffer that can be
 	 * stored.
 	 */
-	protected final HashMap<IConductor, Long> conductorBuffer = new HashMap<IConductor, Long>();
+	protected final HashMap<IConductor, Long> conductorBuffers = new HashMap<IConductor, Long>();
 
 	/**
 	 * The total resistance of this entire network. The loss is based on the resistance in each
@@ -62,7 +62,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	public void update()
 	{
 		/** Energy we have to move after loss has been removed */
-		long usableEnergy = Math.max(this.energyBuffer - this.getEnergyLoss(), 0);
+		long usableEnergy = Math.max(energyBuffer - getEnergyLoss(), 0);
 		/** Energy currently left after we have moved some */
 		long currentEnergy = usableEnergy;
 		/** Energy per handler */
@@ -83,7 +83,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 				{
 					/** Energy per to give per side */
 					perSide = (perHandler / entry.getValue().size()) + (perHandler % entry.getValue().size());
-					currentEnergy -= this.addEnergyToHandler(entry.getKey(), direction, perSide, true);
+					currentEnergy -= addEnergyToHandler(entry.getKey(), direction, perSide, true);
 				}
 				if (handlers > 1)
 				{
@@ -93,18 +93,18 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 
 			/** Don't set energy if none was sent to prevent energy loss */
 			if (usableEnergy != currentEnergy)
-				this.energyBuffer = Math.max(currentEnergy, 0);
+				energyBuffer = Math.max(currentEnergy, 0);
 		}
-		long remainingBufferPerConductor = this.energyBuffer / this.getConnectors().size();
-		Iterator<IConductor> it = this.getConnectors().iterator();
+		long remainingBufferPerConductor = energyBuffer / getConnectors().size();
+		Iterator<IConductor> it = getConnectors().iterator();
 
 		while (it.hasNext())
 		{
-			this.conductorBuffer.put(it.next(), remainingBufferPerConductor);
+			conductorBuffers.put(it.next(), remainingBufferPerConductor);
 		}
 
 		// Clear the network request cache.
-		this.lastNetworkRequest = -1;
+		lastNetworkRequest = -1;
 	}
 
 	/** Applies power to the machine */
@@ -128,11 +128,11 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	@Override
 	public long getRequest()
 	{
-		if (this.lastNetworkRequest == -1)
+		if (lastNetworkRequest == -1)
 		{
-			this.lastNetworkRequest = 0;
+			lastNetworkRequest = 0;
 
-			if (this.getNodes().size() > 0)
+			if (getNodes().size() > 0)
 			{
 				for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
 				{
@@ -140,17 +140,17 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 					{
 						for (ForgeDirection direction : entry.getValue())
 						{
-							this.lastNetworkRequest += Math.max(CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false), 0);
+							lastNetworkRequest += Math.max(CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false), 0);
 						}
 					}
 				}
 			}
 		}
-		return this.lastNetworkRequest;
+		return lastNetworkRequest;
 	}
 
 	@Override
-	public boolean isValidConnector(IConductor node)
+	public boolean isValidConnector(Object node)
 	{
 		return node instanceof IConductor;
 	}
@@ -158,22 +158,22 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	@Override
 	public float getResistance()
 	{
-		return this.resistance;
+		return resistance;
 	}
 
 	/** Clears all cache and reconstruct the network. */
 	@Override
 	public void reconstruct()
 	{
-		if (this.getConnectors().size() > 0)
+		if (getConnectors().size() > 0)
 		{
 			// Reset all values related to wires
-			this.getNodes().clear();
-			this.handlerDirectionMap.clear();
-			this.resistance = 0;
+			getNodes().clear();
+			handlerDirectionMap.clear();
+			resistance = 0;
 
 			// Iterate threw list of wires
-			Iterator<IConductor> it = this.getConnectors().iterator();
+			Iterator<IConductor> it = getConnectors().iterator();
 
 			while (it.hasNext())
 			{
@@ -181,7 +181,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 
 				if (conductor != null)
 				{
-					this.reconstructConnector(conductor);
+					reconstructConnector(conductor);
 				}
 				else
 				{
@@ -189,7 +189,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 				}
 			}
 
-			if (this.getNodes().size() > 0)
+			if (getNodes().size() > 0)
 			{
 				NetworkTickHandler.addNetwork(this);
 			}
@@ -209,7 +209,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 			}
 		}
 
-		this.resistance += conductor.getResistance();
+		resistance += conductor.getResistance();
 	}
 
 	/** Segmented out call so overriding can be done when machines are reconstructed. */
@@ -219,14 +219,14 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 		{
 			if (CompatibilityModule.canConnect(obj, side, conductor))
 			{
-				EnumSet<ForgeDirection> set = this.handlerDirectionMap.get(obj);
+				EnumSet<ForgeDirection> set = handlerDirectionMap.get(obj);
 				if (set == null)
 				{
 					set = EnumSet.noneOf(ForgeDirection.class);
 				}
-				this.getNodes().add(obj);
+				getNodes().add(obj);
 				set.add(side);
-				this.handlerDirectionMap.put(obj, set);
+				handlerDirectionMap.put(obj, set);
 			}
 		}
 	}
@@ -254,7 +254,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	@Override
 	public void split(IConductor splitPoint)
 	{
-		energyPerWire = this.energyBuffer / Math.max(this.getConnectors().size() - 1, 1);
+		energyPerWire = energyBuffer / Math.max(getConnectors().size() - 1, 1);
 		super.split(splitPoint);
 	}
 
@@ -287,18 +287,18 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 		{
 			long conductorBuffer = 0;
 
-			if (this.conductorBuffer.containsKey(conductor))
+			if (conductorBuffers.containsKey(conductor))
 			{
-				conductorBuffer = this.conductorBuffer.get(conductor);
+				conductorBuffer = conductorBuffers.get(conductor);
 			}
 
 			long energyReceived = Math.min((conductor.getCurrentCapacity() * UniversalElectricity.DEFAULT_VOLTAGE) - conductorBuffer, amount);
 
 			if (doReceive && energyReceived > 0)
 			{
-				this.energyBuffer += energyReceived;
+				energyBuffer += energyReceived;
 				conductorBuffer += energyReceived;
-				this.conductorBuffer.put(conductor, conductorBuffer);
+				conductorBuffers.put(conductor, conductorBuffer);
 				NetworkTickHandler.addNetwork(this);
 			}
 
@@ -314,8 +314,8 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	 */
 	protected long getEnergyLoss()
 	{
-		long amperage = this.getBuffer() / this.getVoltage();
-		return (long) ((amperage * amperage) * this.resistance);
+		long amperage = getBuffer() / getVoltage();
+		return (long) ((amperage * amperage) * resistance);
 	}
 
 	public long getVoltage()
@@ -326,29 +326,29 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	@Override
 	public long getBuffer()
 	{
-		return this.energyBuffer;
+		return energyBuffer;
 	}
 
 	@Override
 	public void setBuffer(long newBuffer)
 	{
-		this.energyBuffer = newBuffer;
+		energyBuffer = newBuffer;
 	}
 
 	@Override
 	public long getLastBuffer()
 	{
-		return this.lastEnergyBuffer;
+		return lastEnergyBuffer;
 	}
 
 	@Override
 	public long getBufferOf(IConductor conductor)
 	{
-		if (this.conductorBuffer != null && this.conductorBuffer.containsKey(conductor))
+		if (conductorBuffers != null && conductorBuffers.containsKey(conductor))
 		{
-			if (this.conductorBuffer.get(conductor) != null)
+			if (conductorBuffers.get(conductor) != null)
 			{
-				return this.conductorBuffer.get(conductor);
+				return conductorBuffers.get(conductor);
 			}
 		}
 
@@ -359,7 +359,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	@Override
 	public void setBufferFor(IConductor conductor, long buffer)
 	{
-		conductorBuffer.put(conductor, buffer);
+		conductorBuffers.put(conductor, buffer);
 		energyBuffer += buffer;
 	}
 
