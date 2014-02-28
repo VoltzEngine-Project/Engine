@@ -40,7 +40,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 			if (checkWrapper != null)
 			{
 				newPrimary = null;
-				
+
 				if (checkWrapper != primary)
 				{
 					primary = checkWrapper;
@@ -123,9 +123,9 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 				{
 					structure.onMultiBlockChanged();
 				}
+				
+				return true;
 			}
-
-			return true;
 		}
 
 		return false;
