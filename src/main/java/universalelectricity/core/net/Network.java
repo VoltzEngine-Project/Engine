@@ -124,14 +124,13 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	public void split(C splitPoint)
 	{
 		Class connectorClass = splitPoint.getClass();
-		removeConnector(splitPoint);
-		reconstruct();
 
 		/**
 		 * Loop through the connected blocks and attempt to see if there are connections between the
 		 * two points elsewhere.
 		 */
 		Object[] connectedBlocks = getConnectionsFor(splitPoint);
+		removeConnector(splitPoint);
 
 		for (int i = 0; i < connectedBlocks.length; i++)
 		{
@@ -179,8 +178,11 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 				}
 			}
 		}
+
+		// Note: The reconstruct may resurrect "dead nodes" if not implemented correctly.
+		reconstruct();
 	}
-	
+
 	public Object[] getConnectionsFor(C connector)
 	{
 		return connector.getConnections();
