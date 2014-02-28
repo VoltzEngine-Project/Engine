@@ -22,6 +22,11 @@ public abstract class NodeNetwork<N extends INodeNetwork, C extends IConnector, 
 	 */
 	private final Set<A> nodes = Collections.newSetFromMap(new WeakHashMap<A, Boolean>());
 
+	public NodeNetwork(Class<? extends C> type)
+	{
+		super(type);
+	}
+
 	public void add(A battery)
 	{
 		nodes.add(battery);

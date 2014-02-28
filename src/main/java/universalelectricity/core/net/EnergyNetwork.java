@@ -46,6 +46,11 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 	/** The direction in which a conductor is placed relative to a specific conductor. */
 	protected final HashMap<Object, EnumSet<ForgeDirection>> handlerDirectionMap = new LinkedHashMap<Object, EnumSet<ForgeDirection>>();
 
+	public EnergyNetwork()
+	{
+		super(IConductor.class);
+	}
+
 	@Override
 	public void addConnector(IConductor connector)
 	{
@@ -142,6 +147,12 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 			}
 		}
 		return this.lastNetworkRequest;
+	}
+
+	@Override
+	public boolean isValidConnector(IConductor node)
+	{
+		return node instanceof IConductor;
 	}
 
 	@Override

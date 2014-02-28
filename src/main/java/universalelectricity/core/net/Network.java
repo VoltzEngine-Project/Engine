@@ -24,6 +24,13 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	 */
 	private final Set<C> connectors = Collections.newSetFromMap(new WeakHashMap<C, Boolean>());
 
+	private final Class<? extends C> connectorType;
+
+	public Network(Class<? extends C> type)
+	{
+		connectorType = type;
+	}
+
 	public abstract N newInstance();
 
 	@Override
@@ -70,6 +77,11 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	public boolean isValidConnector(C node)
 	{
 		return true;
+	}
+
+	public boolean isValidConnector(Object node)
+	{
+		return connectorType.isAssignableFrom(node.getClass());
 	}
 
 	/**
@@ -123,8 +135,6 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	@Override
 	public void split(C splitPoint)
 	{
-		Class connectorClass = splitPoint.getClass();
-
 		/**
 		 * Loop through the connected blocks and attempt to see if there are connections between the
 		 * two points elsewhere.
@@ -136,13 +146,13 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 		{
 			Object connectedBlockA = connectedBlocks[i];
 
-			if (connectedBlockA != null && connectorClass.isAssignableFrom(connectedBlockA.getClass()))
+			if (connectedBlockA != null && isValidConnector(connectedBlockA))
 			{
 				for (int ii = 0; ii < connectedBlocks.length; ii++)
 				{
 					final Object connectedBlockB = connectedBlocks[ii];
 
-					if (connectedBlockB != null && connectedBlockA != connectedBlockB && connectorClass.isAssignableFrom(connectedBlockB.getClass()))
+					if (connectedBlockB != null && connectedBlockA != connectedBlockB && isValidConnector(connectedBlockA))
 					{
 						ConnectionPathfinder<C> finder = new ConnectionPathfinder<C>(getConnectorClass(), (C) connectedBlockB, splitPoint);
 						finder.findNodes((C) connectedBlockA);
@@ -179,7 +189,6 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 			}
 		}
 
-		// Note: The reconstruct may resurrect "dead nodes" if not implemented correctly.
 		reconstruct();
 	}
 
@@ -191,8 +200,6 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 	@Override
 	public void split(C connectorA, C connectorB)
 	{
-		reconstruct();
-
 		if (connectorA != null && connectorB != null)
 		{
 			/** Check if connectorA connects with connectorB. */
@@ -215,6 +222,8 @@ public abstract class Network<N extends INetwork, C extends IConnector> implemen
 				newNetwork.reconstruct();
 			}
 		}
+
+		reconstruct();
 	}
 
 	/**
