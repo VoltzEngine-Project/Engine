@@ -234,12 +234,25 @@ public class InventoryUtility
 
 	public static void dropItemStack(World world, Vector3 position, ItemStack itemStack, int delay)
 	{
+		dropItemStack(world, position, itemStack, delay, true);
+	}
+
+	public static void dropItemStack(World world, Vector3 position, ItemStack itemStack, int delay, boolean doRandom)
+	{
 		if (!world.isRemote)
 		{
 			float f = 0.7F;
-			double randomX = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-			double randomY = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-			double randomZ = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			double randomX = 0;
+			double randomY = 0;
+			double randomZ = 0;
+
+			if (doRandom)
+			{
+				randomX = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+				randomY = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+				randomZ = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+			}
+
 			EntityItem entityitem = new EntityItem(world, position.x + randomX, position.y + randomY, position.z + randomZ, itemStack);
 			entityitem.delayBeforeCanPickup = delay;
 			world.spawnEntityInWorld(entityitem);
