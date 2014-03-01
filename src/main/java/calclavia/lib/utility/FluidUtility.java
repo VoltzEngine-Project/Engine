@@ -122,14 +122,17 @@ public class FluidUtility
 		return 0;
 	}
 
-	public static double getAveragePercentageFilledForSides(World world, Vector3 position, ForgeDirection... sides)
+	public static double getAveragePercentageFilledForSides(double defaultFill, World world, Vector3 position, ForgeDirection... sides)
 	{
-		double fullness = 0;
+		if (defaultFill > 0.98)
+			return 1.0;
+
+		double fullness = defaultFill;
 		int count = 1;
 
 		for (ForgeDirection side : sides)
 		{
-			if (getTankInfo(world, position, side).length > 0)
+			if (getTankInfo(world, position.clone().translate(side.getOpposite()), side).length > 0)
 			{
 				fullness += getFilledPercentage(getTankInfo(world, position, side));
 				count++;
