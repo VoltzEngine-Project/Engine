@@ -14,6 +14,7 @@ import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
+import universalelectricity.api.vector.Vector3;
 import universalelectricity.core.net.NetworkTickHandler;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
@@ -160,7 +161,20 @@ public class StaticTileForwarder
 			powerProviderMap.put(handler, powerHandler);
 		}
 
-		return powerProviderMap.get(handler).getPowerReceiver();
+		if (handler instanceof TileEntity)
+		{
+			TileEntity incomingTile = new Vector3((TileEntity) handler).translate(side).getTileEntity(((TileEntity) handler).worldObj);
+
+			if (handler.canConnect(side, incomingTile))
+				return powerProviderMap.get(handler).getPowerReceiver();
+		}
+		else
+		{
+			if (handler.canConnect(side, null))
+				return powerProviderMap.get(handler).getPowerReceiver();
+		}
+
+		return null;
 	}
 
 	public static void doWork(IEnergyInterface handler, PowerHandler workProvider)
