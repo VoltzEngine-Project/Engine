@@ -132,9 +132,11 @@ public class FluidUtility
 
 		for (ForgeDirection side : sides)
 		{
-			if (getTankInfo(world, position.clone().translate(side.getOpposite()), side).length > 0)
+			FluidTankInfo[] info = getTankInfo(world, position.clone().translate(side), side);
+			
+			if (info.length > 0)
 			{
-				fullness += getFilledPercentage(getTankInfo(world, position, side));
+				fullness += getFilledPercentage(info);
 				count++;
 			}
 		}
@@ -408,11 +410,11 @@ public class FluidUtility
 	 */
 	public static boolean playerActivatedFluidItem(World world, int x, int y, int z, EntityPlayer entityplayer, int side)
 	{
-		// TODO add double click support similar to the crates in assembly line
+		// TODO Add double click support similar to the crates in assembly line
 		ItemStack current = entityplayer.inventory.getCurrentItem();
+
 		if (current != null && world.getBlockTileEntity(x, y, z) instanceof IFluidHandler)
 		{
-
 			FluidStack liquid = FluidContainerRegistry.getFluidForFilledItem(current);
 
 			IFluidHandler tank = (IFluidHandler) world.getBlockTileEntity(x, y, z);
