@@ -89,6 +89,56 @@ public class FluidUtility
 		return null;
 	}
 
+	public static FluidTankInfo[] getTankInfo(World world, Vector3 posiiton, ForgeDirection from)
+	{
+		TileEntity tile = posiiton.getTileEntity(world);
+
+		if (tile instanceof IFluidHandler)
+		{
+			if (((IFluidHandler) tile).getTankInfo(from) != null)
+				return ((IFluidHandler) tile).getTankInfo(from);
+		}
+
+		return new FluidTankInfo[0];
+	}
+
+	public static double getFilledPercentage(FluidTankInfo... info)
+	{
+		int amount = 0;
+		int capacity = 0;
+
+		for (FluidTankInfo tankInfo : info)
+		{
+			if (tankInfo != null && tankInfo.fluid != null)
+			{
+				amount += tankInfo.fluid.amount;
+				capacity += tankInfo.capacity;
+			}
+		}
+
+		if (capacity > 0)
+			return (double) amount / (double) capacity;
+
+		return 0;
+	}
+
+	public static double getAveragePercentageFilledForSides(World world, Vector3 position, ForgeDirection... sides)
+	{
+		double fullness = 0;
+		int count = 1;
+
+		for (ForgeDirection side : sides)
+		{
+			if (getTankInfo(world, position, side).length > 0)
+			{
+				fullness += getFilledPercentage(getTankInfo(world, position, side));
+				count++;
+			}
+		}
+
+		return Math.max(0, Math.min(1, fullness / count));
+	}
+
 	/**
 	 * Gets the block's fluid if it has one
 	 * 

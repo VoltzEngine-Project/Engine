@@ -67,7 +67,12 @@ public class RenderUtility
 
 	public static void setSpriteTexture(int sprite)
 	{
-		FMLClientHandler.instance().getClient().renderEngine.bindTexture(FMLClientHandler.instance().getClient().renderEngine.getResourceLocation(sprite));
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(getSpriteTexture(sprite));
+	}
+
+	public static ResourceLocation getSpriteTexture(int sprite)
+	{
+		return FMLClientHandler.instance().getClient().renderEngine.getResourceLocation(sprite);
 	}
 
 	/**
@@ -564,6 +569,7 @@ public class RenderUtility
 	 * 
 	 * @param placementSide
 	 */
+	@SuppressWarnings("incomplete-switch")
 	public static void rotateFaceBlockToSide(ForgeDirection placementSide)
 	{
 		switch (placementSide)
@@ -594,6 +600,7 @@ public class RenderUtility
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public static void rotateFaceToSideNoTranslate(ForgeDirection placementSide)
 	{
 		switch (placementSide)
@@ -618,6 +625,7 @@ public class RenderUtility
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public static void rotateFaceBlockToSideOutwards(ForgeDirection placementSide)
 	{
 		switch (placementSide)

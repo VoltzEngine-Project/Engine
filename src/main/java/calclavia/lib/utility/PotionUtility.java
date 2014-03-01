@@ -1,11 +1,10 @@
 package calclavia.lib.utility;
 
-import calclavia.components.CalclaviaLoader;
-import calclavia.lib.Calclavia;
-import net.minecraft.potion.Potion;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+
+import net.minecraft.potion.Potion;
+import calclavia.lib.Calclavia;
 
 /**
  * call on preinit

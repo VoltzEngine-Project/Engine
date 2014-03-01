@@ -66,6 +66,7 @@ public class WorldUtility
 		return 0;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public static ForgeDirection invertX(ForgeDirection dir)
 	{
 		switch (dir)
@@ -79,6 +80,7 @@ public class WorldUtility
 		return dir;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public static ForgeDirection invertY(ForgeDirection dir)
 	{
 		switch (dir)
@@ -92,6 +94,7 @@ public class WorldUtility
 		return dir;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public static ForgeDirection invertZ(ForgeDirection dir)
 	{
 		switch (dir)
@@ -286,8 +289,22 @@ public class WorldUtility
 	 * 
 	 * @return True if so.
 	 */
-	public static boolean isEnabledSide(byte renderSides, ForgeDirection direction)
+	public static boolean isEnabledSide(byte sideMap, ForgeDirection direction)
 	{
-		return (renderSides & (1 << direction.ordinal())) != 0;
+		return (sideMap & (1 << direction.ordinal())) != 0;
+	}
+
+	public static byte setEnableSide(byte sideMap, ForgeDirection direction, boolean doEnable)
+	{
+		if (doEnable)
+		{
+			sideMap = (byte) (sideMap | (1 << direction.ordinal()));
+		}
+		else
+		{
+			sideMap = (byte) (sideMap & ~(1 << direction.ordinal()));
+		}
+
+		return sideMap;
 	}
 }
