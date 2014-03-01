@@ -84,10 +84,10 @@ public class MathUtility
 	public static float clampAngle(float var, float min, float max)
 	{
 		while (var < min)
-			var += max;
+			var += 360;
 
 		while (var > max)
-			var -= max;
+			var -= 360;
 
 		return var;
 	}

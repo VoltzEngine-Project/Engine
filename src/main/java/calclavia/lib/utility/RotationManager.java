@@ -73,8 +73,8 @@ public class RotationManager implements ISaveObj, IPacketLoad
 			{
 				actualRotation = targetRotation;
 			}
-			
-			actualRotation = MathUtility.clampAngleTo360(actualRotation);
+
+			actualRotation = MathUtility.clampAngleTo180(actualRotation);
 
 			if (actualRotation > servo.upperLimit())
 			{
