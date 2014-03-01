@@ -18,7 +18,7 @@ import cpw.mods.fml.client.FMLClientHandler;
  */
 public class FxLaser extends EntityFX
 {
-	public static final ResourceLocation TEXTURE = new ResourceLocation(CalclaviaLoader.DOMAIN, CalclaviaLoader.TEXTURE_DIRECTORY + "laser.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(CalclaviaLoader.DOMAIN, CalclaviaLoader.TEXTURE_DIRECTORY + "noise.png");
 	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
 
 	double movX = 0.0D;
