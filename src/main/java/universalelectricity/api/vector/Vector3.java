@@ -797,29 +797,29 @@ public class Vector3 implements Cloneable
 	public MovingObjectPosition rayTraceEntities(World world, Vector3 target)
 	{
 		MovingObjectPosition pickedEntity = null;
-		Vec3 startingPosition = this.toVec3();
+		Vec3 startingPosition = toVec3();
 		Vec3 look = target.toVec3();
-		double reachDistance = this.distance(target);
-		Vec3 reachPoint = Vec3.createVectorHelper(startingPosition.xCoord + look.xCoord * reachDistance, startingPosition.yCoord + look.yCoord * reachDistance, startingPosition.zCoord + look.zCoord * reachDistance);
+		double reachDistance = distance(target);
+		//Vec3 reachPoint = Vec3.createVectorHelper(startingPosition.xCoord + look.xCoord * reachDistance, startingPosition.yCoord + look.yCoord * reachDistance, startingPosition.zCoord + look.zCoord * reachDistance);
 
 		double checkBorder = 1.1 * reachDistance;
 		AxisAlignedBB boxToScan = AxisAlignedBB.getAABBPool().getAABB(-checkBorder, -checkBorder, -checkBorder, checkBorder, checkBorder, checkBorder).offset(this.x, this.y, this.z);
 
 		@SuppressWarnings("unchecked")
-		List<Entity> entitiesHit = world.getEntitiesWithinAABBExcludingEntity(null, boxToScan);
+		List<Entity> entitiesInBounds = world.getEntitiesWithinAABBExcludingEntity(null, boxToScan);
 		double closestEntity = reachDistance;
-
-		if (entitiesHit == null || entitiesHit.isEmpty())
+		
+		if (entitiesInBounds == null || entitiesInBounds.isEmpty())
 		{
 			return null;
 		}
-		for (Entity entityHit : entitiesHit)
+		for (Entity possibleHits : entitiesInBounds)
 		{
-			if (entityHit != null && entityHit.canBeCollidedWith() && entityHit.boundingBox != null)
+			if (possibleHits != null && possibleHits.canBeCollidedWith() && possibleHits.boundingBox != null)
 			{
-				float border = entityHit.getCollisionBorderSize();
-				AxisAlignedBB aabb = entityHit.boundingBox.expand(border, border, border);
-				MovingObjectPosition hitMOP = aabb.calculateIntercept(startingPosition, reachPoint);
+				float border = possibleHits.getCollisionBorderSize();
+				AxisAlignedBB aabb = possibleHits.boundingBox.expand(border, border, border);
+				MovingObjectPosition hitMOP = aabb.calculateIntercept(startingPosition, target.toVec3());
 
 				if (hitMOP != null)
 				{
@@ -827,7 +827,7 @@ public class Vector3 implements Cloneable
 					{
 						if (0.0D < closestEntity || closestEntity == 0.0D)
 						{
-							pickedEntity = new MovingObjectPosition(entityHit);
+							pickedEntity = new MovingObjectPosition(possibleHits);
 							if (pickedEntity != null)
 							{
 								pickedEntity.hitVec = hitMOP.hitVec;
@@ -841,7 +841,7 @@ public class Vector3 implements Cloneable
 
 						if (distance < closestEntity || closestEntity == 0.0D)
 						{
-							pickedEntity = new MovingObjectPosition(entityHit);
+							pickedEntity = new MovingObjectPosition(possibleHits);
 							pickedEntity.hitVec = hitMOP.hitVec;
 							closestEntity = distance;
 						}
