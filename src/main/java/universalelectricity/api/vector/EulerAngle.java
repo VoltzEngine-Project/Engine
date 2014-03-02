@@ -29,11 +29,23 @@ public class EulerAngle
 	 */
 	public double yaw, pitch, roll;
 
+	public EulerAngle()
+	{
+		this(0, 0, 0);
+	}
+
 	public EulerAngle(double yaw, double pitch, double roll)
 	{
 		this.yaw = yaw;
 		this.pitch = pitch;
 		this.roll = roll;
+	}
+
+	public EulerAngle(double[] angles)
+	{
+		this.yaw = angles[0];
+		this.pitch = angles[1];
+		this.roll = angles[2];
 	}
 
 	public EulerAngle(EulerAngle angle)
@@ -66,16 +78,68 @@ public class EulerAngle
 		return new Vector3(-Math.sin(yaw()) * Math.cos(pitch()), Math.sin(pitch()), -Math.cos(yaw()) * Math.cos(pitch()));
 	}
 
+	public double[] toArray()
+	{
+		return new double[] { yaw, pitch, roll };
+	}
+
+	public double[] toRadianArray()
+	{
+		return new double[] { yaw(), pitch(), roll() };
+	}
+
+	public EulerAngle set(int i, double value)
+	{
+		switch (i)
+		{
+			case 0:
+				yaw = value;
+				break;
+			case 1:
+				pitch = value;
+				break;
+			case 2:
+				roll = value;
+				break;
+		}
+
+		return this;
+	}
+
 	/** gets the difference in degrees between the two angles */
 	public EulerAngle difference(EulerAngle other)
 	{
 		return new EulerAngle(yaw - other.yaw, pitch - other.pitch, roll - other.roll);
 	}
 
+	public EulerAngle absoluteDifference(EulerAngle other)
+	{
+		return new EulerAngle(getAngleDifference(yaw, other.yaw), getAngleDifference(pitch, other.pitch), getAngleDifference(roll, other.roll));
+	}
+
+	public boolean isWithin(EulerAngle other, double margin)
+	{
+		for (int i = 0; i < 3; i++)
+			if (absoluteDifference(other).toArray()[i] > margin)
+				return false;
+		
+		return true;
+	}
+
+	public static double getAngleDifference(double angleA, double angleB)
+	{
+		return Math.abs(angleA - angleB);
+	}
+
 	@Override
 	public EulerAngle clone()
 	{
 		return new EulerAngle(this);
+	}
+
+	public static double clampAngleTo360(double var)
+	{
+		return clampAngle(var, -360, 360);
 	}
 
 	public static double clampAngleTo180(double var)
