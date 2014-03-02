@@ -6,13 +6,14 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import calclavia.lib.utility.nbt.ISaveObj;
 
 import com.builtbroken.common.User;
 
 /** Used to define a users access to a terminal based object.
  * 
  * @author DarkGuardsman */
-public class AccessUser extends User
+public class AccessUser extends User implements ISaveObj
 {
     protected boolean isTempary = false;
     protected NBTTagCompound extraData;
@@ -42,14 +43,11 @@ public class AccessUser extends User
 
     public boolean hasNode(String node)
     {
-        if (group != null && group.hasNode(node))
-        {
-            return true;
-        }
-        return nodes.contains(node);
+        return nodes.contains(node) || group != null && group.hasNode(node);
     }
 
-    public NBTTagCompound save(NBTTagCompound nbt)
+    @Override
+    public void save(NBTTagCompound nbt)
     {
         nbt.setString("username", this.username);
         nbt.setCompoundTag("extraData", this.userData());
@@ -61,10 +59,10 @@ public class AccessUser extends User
             usersTag.appendTag(accessData);
         }
         nbt.setTag("nodes", usersTag);
-        return nbt;
     }
 
-    public AccessUser load(NBTTagCompound nbt)
+    @Override
+    public void load(NBTTagCompound nbt)
     {
         this.username = nbt.getString("username");
         this.extraData = nbt.getCompoundTag("extraData");
@@ -73,12 +71,13 @@ public class AccessUser extends User
         {
             this.nodes.add(((NBTTagCompound) userList.tagAt(i)).getString("name"));
         }
-        return this;
     }
 
     public static AccessUser loadFromNBT(NBTTagCompound nbt)
     {
-        return new AccessUser("").load(nbt);
+        AccessUser user = new AccessUser("");
+        user.load(nbt);
+        return user;
     }
 
     public AccessUser setTempary(boolean si)

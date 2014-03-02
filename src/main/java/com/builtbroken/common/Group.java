@@ -1,7 +1,6 @@
 package com.builtbroken.common;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 
 /** Generic class for link objects of the same class type to each other.
  * 
@@ -9,7 +8,7 @@ import java.util.List;
 public class Group<J>
 {
     private String groupName;
-    protected List<J> memebers = new ArrayList<J>();
+    protected LinkedHashSet<J> memebers = new LinkedHashSet<J>();
 
     public Group(String name, J... js)
     {
@@ -23,7 +22,7 @@ public class Group<J>
         }
     }
 
-    public List<J> getMembers()
+    public LinkedHashSet<J> getMembers()
     {
         return this.memebers;
     }
@@ -60,5 +59,17 @@ public class Group<J>
     public void setName(String name)
     {
         this.groupName = name;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return obj instanceof Group && ((Group<?>) obj).getName().equalsIgnoreCase(this.getName());
+    }
+
+    @Override
+    public String toString()
+    {
+        return "[Group:" + this.getName() + "]";
     }
 }

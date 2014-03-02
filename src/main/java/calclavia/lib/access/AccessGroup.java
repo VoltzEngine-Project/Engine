@@ -1,7 +1,6 @@
 package calclavia.lib.access;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -14,7 +13,7 @@ import com.builtbroken.common.Group;
  * @author DarkGuardsman */
 public class AccessGroup extends Group<AccessUser>
 {
-    protected List<String> nodes = new ArrayList<String>();
+    protected LinkedHashSet<String> nodes = new LinkedHashSet<String>();
     protected AccessGroup extendGroup;
 
     public AccessGroup(String name, AccessUser... js)
@@ -25,27 +24,6 @@ public class AccessGroup extends Group<AccessUser>
     public void setToExtend(AccessGroup group)
     {
         this.extendGroup = group;
-    }
-
-    @Override
-    public boolean addMemeber(AccessUser obj)
-    {
-        if (obj != null)
-        {
-            for (AccessUser user : this.memebers)
-            {
-                if (user.getName().equalsIgnoreCase(obj.getName()))
-                {
-                    return false;
-                }
-            }
-            if (super.addMemeber(obj))
-            {
-                obj.setGroup(this);
-                return true;
-            }
-        }
-        return false;
     }
 
     public AccessUser getMember(String name)
@@ -120,13 +98,6 @@ public class AccessGroup extends Group<AccessUser>
 
     public boolean isMemeber(String string)
     {
-        for (AccessUser user : this.memebers)
-        {
-            if (user.getName().equalsIgnoreCase(string))
-            {
-                return true;
-            }
-        }
-        return false;
+        return this.memebers.contains(new AccessUser(string));
     }
 }
