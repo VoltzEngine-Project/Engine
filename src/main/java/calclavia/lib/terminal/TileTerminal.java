@@ -10,7 +10,7 @@ import net.minecraft.network.packet.Packet;
 import calclavia.lib.network.IPacketReceiverWithID;
 import calclavia.lib.network.PacketHandler;
 import calclavia.lib.prefab.tile.IPlayerUsing;
-import calclavia.lib.prefab.tile.TileElectrical;
+import calclavia.lib.prefab.tile.TileAdvanced;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -18,7 +18,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 /** @author Calclavia, DarkGuardsman */
-public abstract class TileTerminal extends TileElectrical implements ITerminal, IScroll, IPacketReceiverWithID, IPlayerUsing
+public abstract class TileTerminal extends TileAdvanced implements ITerminal, IScroll, IPacketReceiverWithID, IPlayerUsing
 {
     public final HashSet<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
 
