@@ -258,4 +258,37 @@ public class InventoryUtility
 			world.spawnEntityInWorld(entityitem);
 		}
 	}
+	
+	/**
+     * Decreases the stack by a set amount
+     * 
+     * @param stack - starting stack
+     * @param amount - amount of items
+     * @return the edited stack
+     */
+    public static ItemStack decrStackSize(ItemStack stack, int amount)
+    {
+        if (stack != null)
+        {
+            ItemStack itemStack = stack.copy();
+            if (itemStack.stackSize <= amount)
+            {
+                return null;
+            }
+            else
+            {
+                itemStack.stackSize -= amount;
+
+                if (itemStack.stackSize <= 0)
+                {
+                    return null;
+                }
+                return itemStack;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

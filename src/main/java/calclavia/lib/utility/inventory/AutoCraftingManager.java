@@ -328,7 +328,7 @@ public class AutoCraftingManager
 						int match = this.doesItemExist(recipeItem, containingItems);
 						if (match >= 0)
 						{
-							containingItems[match] = AutoCraftingManager.decrStackSize(containingItems[match], recipeItem.stackSize);
+							containingItems[match] = InventoryUtility.decrStackSize(containingItems[match], recipeItem.stackSize);
 							this.printDebug("ResourceChecker", "Match found @" + match);
 							itemMatch++;
 						}
@@ -354,7 +354,7 @@ public class AutoCraftingManager
 								int match = this.doesItemExist(recipeItem, containingItems);
 								if (match >= 0)
 								{
-									containingItems[match] = AutoCraftingManager.decrStackSize(containingItems[match], recipeItem.stackSize);
+									containingItems[match] = InventoryUtility.decrStackSize(containingItems[match], recipeItem.stackSize);
 									this.printDebug("ResourceChecker", "Match found @" + match);
 									itemMatch++;
 									break;
@@ -381,39 +381,7 @@ public class AutoCraftingManager
 
 		return null;
 	}
-
-	/**
-	 * Decreases the stack by a set amount
-	 * 
-	 * @param stack - starting stack
-	 * @param amount - amount of items
-	 * @return the edited stack
-	 */
-	public static ItemStack decrStackSize(ItemStack stack, int amount)
-	{
-		if (stack != null)
-		{
-			ItemStack itemStack = stack.copy();
-			if (itemStack.stackSize <= amount)
-			{
-				return null;
-			}
-			else
-			{
-				itemStack.stackSize -= amount;
-
-				if (itemStack.stackSize <= 0)
-				{
-					return null;
-				}
-				return itemStack;
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
+	
 
 	/**
 	 * Checks if an item exist within the inv array
@@ -523,7 +491,7 @@ public class AutoCraftingManager
 			}
 		}
 		// System.out.println("ItemGrinder: "+stack.toString());
-		return decrStackSize(stack, amount);
+		return InventoryUtility.decrStackSize(stack, amount);
 	}
 
 	public boolean consumeItems(ItemStack... requiredItems)
