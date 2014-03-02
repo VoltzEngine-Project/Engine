@@ -1,8 +1,5 @@
 package calclavia.lib.prefab.item;
 
-import universalelectricity.api.vector.Vector3;
-import calclavia.lib.utility.inventory.InventoryUtility;
-import calclavia.lib.utility.nbt.NBTUtility;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -10,6 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import universalelectricity.api.vector.Vector3;
+import calclavia.lib.utility.inventory.InventoryUtility;
+import calclavia.lib.utility.nbt.NBTUtility;
 
 /**
  * An item that can store a block's tile data.
@@ -57,29 +57,39 @@ public class ItemBlockSaved extends ItemBlock
 		return flag;
 	}
 
+	public static ItemStack getItemStackWithNBT(Block block, World world, int x, int y, int z)
+	{
+		if (block != null)
+		{
+			int meta = world.getBlockMetadata(x, y, z);
+
+			ItemStack dropStack = new ItemStack(block, block.quantityDropped(meta, 0, world.rand), meta);
+			NBTTagCompound tag = new NBTTagCompound();
+
+			TileEntity tile = world.getBlockTileEntity(x, y, z);
+
+			if (tile != null)
+				tile.writeToNBT(tag);
+
+			tag.removeTag("id");
+			tag.removeTag("x");
+			tag.removeTag("y");
+			tag.removeTag("z");
+			dropStack.setTagCompound(tag);
+			return dropStack;
+		}
+
+		return null;
+	}
+
 	public static void dropBlockWithNBT(Block block, World world, int x, int y, int z)
 	{
 		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
 		{
-			if (block != null)
-			{
-				int meta = world.getBlockMetadata(x, y, z);
+			ItemStack itemStack = getItemStackWithNBT(block, world, x, y, z);
 
-				ItemStack dropStack = new ItemStack(block, block.quantityDropped(meta, 0, world.rand), meta);
-				NBTTagCompound tag = new NBTTagCompound();
-
-				TileEntity tile = world.getBlockTileEntity(x, y, z);
-
-				if (tile != null)
-					tile.writeToNBT(tag);
-
-				tag.removeTag("id");
-				tag.removeTag("x");
-				tag.removeTag("y");
-				tag.removeTag("z");
-				dropStack.setTagCompound(tag);
-				InventoryUtility.dropItemStack(world, new Vector3(x, y, z), dropStack);
-			}
+			if (itemStack != null)
+				InventoryUtility.dropItemStack(world, new Vector3(x, y, z), itemStack);
 		}
 	}
 }
