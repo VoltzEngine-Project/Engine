@@ -1,0 +1,126 @@
+package universalelectricity.api.vector;
+
+/**
+ * The euler angles describing a 3D rotation. The rotation always in degrees.
+ * 
+ * Note: The rotational system Minecraft uses is non-standard. The angles and vector calculations
+ * have been calibrated to match.
+ * DEFINITIONS:
+ * 
+ * Yaw:
+ * 0 Degrees - Looking at NORTH
+ * 90 - Looking at WEST
+ * 180 - Looking at SOUTH
+ * 270 - Looking at EAST
+ * 
+ * Pitch:
+ * 0 Degrees - Looking straight forward towards the horizon.
+ * 90 Degrees - Looking straight up to the sky.
+ * -90 Degrees - Looking straight down to the void.
+ * 
+ * Make sure all models are use the Techne Model loader, they will naturally follow this rule.
+ * 
+ * @author Calclavia
+ */
+public class EulerAngle
+{
+	/**
+	 * Angles in degrees.
+	 */
+	public double yaw, pitch, roll;
+
+	public EulerAngle(double yaw, double pitch, double roll)
+	{
+		this.yaw = yaw;
+		this.pitch = pitch;
+		this.roll = roll;
+	}
+
+	public EulerAngle(EulerAngle angle)
+	{
+		this(angle.yaw, angle.pitch, angle.roll);
+	}
+
+	public EulerAngle(double yaw, double pitch)
+	{
+		this(yaw, pitch, 0);
+	}
+
+	public double yaw()
+	{
+		return Math.toRadians(yaw);
+	}
+
+	public double pitch()
+	{
+		return Math.toRadians(pitch);
+	}
+
+	public double roll()
+	{
+		return Math.toRadians(roll);
+	}
+
+	public Vector3 toVector()
+	{
+		return new Vector3(-Math.sin(yaw()) * Math.cos(pitch()), Math.sin(pitch()), -Math.cos(yaw()) * Math.cos(pitch()));
+	}
+
+	/** gets the difference in degrees between the two angles */
+	public EulerAngle difference(EulerAngle other)
+	{
+		return new EulerAngle(yaw - other.yaw, pitch - other.pitch, roll - other.roll);
+	}
+
+	@Override
+	public EulerAngle clone()
+	{
+		return new EulerAngle(this);
+	}
+
+	public static double clampAngleTo180(double var)
+	{
+		return clampAngle(var, -180, 180);
+	}
+
+	public static double clampAngle(double var, double min, double max)
+	{
+		while (var < min)
+			var += 360;
+
+		while (var > max)
+			var -= 360;
+
+		return var;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		long x = Double.doubleToLongBits(yaw);
+		long y = Double.doubleToLongBits(pitch);
+		long z = Double.doubleToLongBits(roll);
+		int hash = (int) (x ^ (x >>> 32));
+		hash = 31 * hash + (int) (y ^ (y >>> 32));
+		hash = 31 * hash + (int) (z ^ (z >>> 32));
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o instanceof EulerAngle)
+		{
+			EulerAngle angle = (EulerAngle) o;
+			return yaw == angle.yaw && pitch == angle.pitch && roll == angle.roll;
+		}
+
+		return false;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Angle [" + this.yaw + "," + this.pitch + "," + this.roll + "]";
+	}
+}
