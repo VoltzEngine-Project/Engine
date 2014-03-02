@@ -18,7 +18,7 @@ import cpw.mods.fml.client.FMLClientHandler;
  */
 public class FxLaser extends EntityFX
 {
-	public static final ResourceLocation TEXTURE = new ResourceLocation(CalclaviaLoader.DOMAIN, CalclaviaLoader.TEXTURE_DIRECTORY + "noise.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(CalclaviaLoader.DOMAIN, CalclaviaLoader.TEXTURE_PATH + "noise.png");
 	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
 
 	double movX = 0.0D;
@@ -114,7 +114,7 @@ public class FxLaser extends EntityFX
 			op = 0.5F - (4 - (this.particleMaxAge - this.particleAge)) * 0.1F;
 		}
 
-		FMLClientHandler.instance().getClient().renderEngine.bindTexture(TEXTURE);
+		RenderUtility.bind(TEXTURE);
 
 		// Do Render Here:
 		GL11.glTexParameterf(3553, 10242, 10497.0F);

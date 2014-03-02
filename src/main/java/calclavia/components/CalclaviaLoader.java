@@ -92,8 +92,9 @@ public class CalclaviaLoader
 	@Instance(ID)
 	public static CalclaviaLoader INSTANCE;
 
-	public static final String RESOURCE_PATH = "/assets/calclavia/";
-	public static final String TEXTURE_DIRECTORY = RESOURCE_PATH + "textures/";
+	public static final String ASSET_DIRECTORY = "/assets/calclavia/";
+	public static final String TEXTURE_PATH = "textures/";
+	public static final String TEXTURE_DIRECTORY = ASSET_DIRECTORY + TEXTURE_PATH;
 	public static final String BLOCK_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "blocks/";
 	public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items/";
 	public static final String MODEL_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "models/";
@@ -101,7 +102,7 @@ public class CalclaviaLoader
 	public static final String DOMAIN = "calclavia";
 	public static final String PREFIX = DOMAIN + ":";
 
-	public static final String LANGUAGE_PATH = RESOURCE_PATH + "languages/";
+	public static final String LANGUAGE_PATH = ASSET_DIRECTORY + "languages/";
 	public static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL", "de_DE", "tr_TR", "ru_RU" };
 
 	/** Auto-incrementing configuration IDs. Use this to make sure no config ID is the same. */
