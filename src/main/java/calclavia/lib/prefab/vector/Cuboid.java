@@ -30,13 +30,13 @@ public class Cuboid
 
 	public Cuboid(Cuboid cuboid)
 	{
-		this(cuboid.min, cuboid.max);
+		this(cuboid.min.clone(), cuboid.max.clone());
 	}
 
 	public Cuboid(Vector3 min, Vector3 max)
 	{
-		this.min = min;
-		this.max = max;
+		this.min = min.clone();
+		this.max = max.clone();
 	}
 
 	public Cuboid(double minx, double miny, double minz, double maxx, double maxy, double maxz)
@@ -103,9 +103,9 @@ public class Cuboid
 	 * Returns whether the given region intersects with this one.
 	 */
 	@Deprecated
-	public boolean isIn(Cuboid region)
+	public boolean isIn(Cuboid other)
 	{
-		return region.max.x > this.min.x && region.min.x < this.max.x ? (region.max.y > this.min.y && region.min.y < this.max.y ? region.max.z > this.min.z && region.min.z < this.max.z : false) : false;
+		return other.max.x > this.min.x && other.min.x < this.max.x ? (other.max.y > this.min.y && other.min.y < this.max.y ? other.max.z > this.min.z && other.min.z < this.max.z : false) : false;
 	}
 
 	public boolean intersects(Vector3 point)
@@ -113,9 +113,9 @@ public class Cuboid
 		return (point.x > this.min.x && point.x < this.max.x) && (point.y > this.min.y && point.y < this.max.y) && (point.z > this.min.z && point.z < this.max.z);
 	}
 
-	public boolean intersects(Cuboid b)
+	public boolean intersects(Cuboid other)
 	{
-		return max.x - 1E-5 > b.min.x && b.max.x - 1E-5 > min.x && max.y - 1E-5 > b.min.y && b.max.y - 1E-5 > min.y && max.z - 1E-5 > b.min.z && b.max.z - 1E-5 > min.z;
+		return max.x - 1E-5 > other.min.x && other.max.x - 1E-5 > min.x && max.y - 1E-5 > other.min.y && other.max.y - 1E-5 > min.y && max.z - 1E-5 > other.min.z && other.max.z - 1E-5 > min.z;
 	}
 
 	public Cuboid offset(Cuboid o)
@@ -216,7 +216,7 @@ public class Cuboid
 	public String toString()
 	{
 		MathContext cont = new MathContext(4, RoundingMode.HALF_UP);
-		return "Cuboid: (" + new BigDecimal(min.x, cont) + ", " + new BigDecimal(min.y, cont) + ", " + new BigDecimal(min.z, cont) + ") -> (" + new BigDecimal(max.x, cont) + ", " + new BigDecimal(max.y, cont) + ", " + new BigDecimal(max.z, cont) + ")";
+		return "Cuboid: [" + new BigDecimal(min.x, cont) + ", " + new BigDecimal(min.y, cont) + ", " + new BigDecimal(min.z, cont) + "] -> [" + new BigDecimal(max.x, cont) + ", " + new BigDecimal(max.y, cont) + ", " + new BigDecimal(max.z, cont) + "]";
 	}
 
 	@Override

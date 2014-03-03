@@ -74,9 +74,15 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
 	{
 		inject(world, x, y, z);
-		Iterable<Cuboid> bounds = getTile(world, x, y, z).getCollisionBoxes(new Cuboid(aabb), entity);
-		for (Cuboid cuboid : bounds)
-			list.add(cuboid.toAABB());
+
+		Iterable<Cuboid> bounds = getTile(world, x, y, z).getCollisionBoxes(aabb != null ? new Cuboid(aabb).translate(new Vector3(x, y, z).invert()) : null, entity);
+
+		if (bounds != null)
+		{
+			for (Cuboid cuboid : bounds)
+				list.add(cuboid.clone().translate(new Vector3(x, y, z)).toAABB());
+		}
+
 		eject(world, x, y, z);
 	}
 
@@ -85,18 +91,18 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
 	{
 		inject(world, x, y, z);
-		Cuboid value = getTile(world, x, y, z).getSelectBounds();
+		Cuboid value = getTile(world, x, y, z).getSelectBounds().clone().translate(new Vector3(x, y, z));
 		eject(world, x, y, z);
-		return value.clone().translate(new Vector3(x, y, z)).toAABB();
+		return value.toAABB();
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
 	{
 		inject(world, x, y, z);
-		Cuboid value = getTile(world, x, y, z).getCollisionBounds();
+		Cuboid value = getTile(world, x, y, z).getCollisionBounds().clone().translate(new Vector3(x, y, z));
 		eject(world, x, y, z);
-		return value.translate(new Vector3(x, y, z)).toAABB();
+		return value.toAABB();
 	}
 
 	/**

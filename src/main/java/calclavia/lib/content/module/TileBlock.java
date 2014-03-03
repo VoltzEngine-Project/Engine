@@ -167,13 +167,19 @@ public abstract class TileBlock extends TileEntity
 
 	/**
 	 * Collision
+	 * Note that all bounds done in the the tile is relative to the tile's position.
 	 */
 	public Iterable<Cuboid> getCollisionBoxes(Cuboid intersect, Entity entity)
 	{
-		if (bounds.intersects(intersect))
+		if (intersect != null && bounds.intersects(intersect))
 			return getCollisionBoxes();
 
 		return null;
+	}
+
+	public Iterable<Cuboid> getCollisionBoxes()
+	{
+		return Arrays.asList(new Cuboid[] { bounds });
 	}
 
 	public Cuboid getSelectBounds()
@@ -184,11 +190,6 @@ public abstract class TileBlock extends TileEntity
 	public Cuboid getCollisionBounds()
 	{
 		return bounds;
-	}
-
-	public Iterable<Cuboid> getCollisionBoxes()
-	{
-		return Arrays.asList(new Cuboid[] { bounds });
 	}
 
 	/**
