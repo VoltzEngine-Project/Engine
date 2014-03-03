@@ -208,15 +208,27 @@ public class InventoryUtility
 
     public static void dropBlockAsItem(World world, Vector3 position)
     {
+        dropBlockAsItem(world, position.intX(), position.intY(), position.intZ(), false);
+    }
+
+    public static void dropBlockAsItem(World world, int x, int y, int z, boolean destroy)
+    {
         if (!world.isRemote)
         {
-            int meta = position.getBlockMetadata(world);
-            int id = position.getBlockID(world);
-            ArrayList<ItemStack> items = Block.blocksList[id].getBlockDropped(world, position.intX(), position.intY(), position.intZ(), meta, 0);
-
-            for (ItemStack itemStack : items)
+            int meta = world.getBlockMetadata(x, y, z);
+            int id = world.getBlockId(x, y, z);
+            if (Block.blocksList[id] != null)
             {
-                dropItemStack(world, position, itemStack);
+                ArrayList<ItemStack> items = Block.blocksList[id].getBlockDropped(world, x, y, z, meta, 0);
+
+                for (ItemStack itemStack : items)
+                {
+                    dropItemStack(world, x, y, z, itemStack, 10, false);
+                }
+            }
+            if(destroy)
+            {
+                world.setBlockToAir(x, y, z);
             }
         }
     }
@@ -232,7 +244,7 @@ public class InventoryUtility
         dropItemStack(world, position, itemStack, delay, true);
     }
 
-    public static void dropItemStack(World world, Vector3 position, ItemStack itemStack, int delay, boolean doRandom)
+    public static void dropItemStack(World world, double x, double y, double z, ItemStack itemStack, int delay, boolean doRandom)
     {
         if (!world.isRemote && itemStack != null)
         {
@@ -248,10 +260,15 @@ public class InventoryUtility
                 randomZ = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
             }
 
-            EntityItem entityitem = new EntityItem(world, position.x + randomX, position.y + randomY, position.z + randomZ, itemStack);
+            EntityItem entityitem = new EntityItem(world, x + randomX, y + randomY, z + randomZ, itemStack);
             entityitem.delayBeforeCanPickup = delay;
             world.spawnEntityInWorld(entityitem);
         }
+    }
+
+    public static void dropItemStack(World world, Vector3 position, ItemStack itemStack, int delay, boolean doRandom)
+    {
+        dropItemStack(world, position.x, position.y, position.z, itemStack, delay, doRandom);
     }
 
     /** Decreases the stack by a set amount
