@@ -205,6 +205,7 @@ public abstract class TileBlock extends TileEntity
 		return renderer;
 	}
 
+	@SideOnly(Side.CLIENT)
 	protected TileRender renderer()
 	{
 		return null;
