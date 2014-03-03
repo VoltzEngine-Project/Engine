@@ -1,71 +1,118 @@
 package calclavia.components.creative;
 
-import java.util.HashMap;
-
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import universalelectricity.api.vector.Vector3;
+import calclavia.lib.multiblock.fake.IBlockActivate;
 import calclavia.lib.prefab.tile.TileIO;
 
-/**
- * Designed to debug fluid devices by draining everything that comes in at one time
+/** Designed to debug fluid devices by draining everything that comes in at one time
  * 
- * @author DarkGuardsman
- */
-public class TileInfiniteFluid extends TileIO implements IFluidHandler
+ * @author DarkGuardsman */
+public class TileInfiniteFluid extends TileIO implements IFluidHandler, IBlockActivate
 {
-	// TODO later add to this to make it actually have an ingame use other than debug
-	public static HashMap<FluidStack, Long> storage = new HashMap<FluidStack, Long>();
 
-	FluidTank tank = new FluidTank(Integer.MAX_VALUE);
+    FluidTank tank = new FluidTank(Integer.MAX_VALUE);
+    boolean active = false;
 
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from)
-	{
-		return new FluidTankInfo[] { this.tank.getInfo() };
-	}
+    @Override
+    public void updateEntity()
+    {
+        super.updateEntity();
+        if (active)
+        {
+            for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+            {
+                if (this.getOutputDirections().contains(direction))
+                {
+                    TileEntity tile = new Vector3(this).translate(direction).getTileEntity(this.worldObj);
+                    if (tile instanceof IFluidHandler)
+                    {
+                        ((IFluidHandler) tile).fill(direction.getOpposite(), this.tank.getFluid(), true);
+                    }
+                }
+            }
+        }
+    }
 
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill)
-	{
-		if (getInputDirections().contains(from))
-			return resource.amount;
+    @Override
+    public FluidTankInfo[] getTankInfo(ForgeDirection from)
+    {
+        return new FluidTankInfo[] { this.tank.getInfo() };
+    }
 
-		return 0;
-	}
+    @Override
+    public int fill(ForgeDirection from, FluidStack resource, boolean doFill)
+    {
+        if (getInputDirections().contains(from))
+            return resource.amount;
 
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain)
-	{
-		if (getOutputDirections().contains(from))
-			return resource;
+        return 0;
+    }
 
-		return null;
-	}
+    @Override
+    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain)
+    {
+        if (getOutputDirections().contains(from))
+            return resource;
 
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain)
-	{
-		if (getOutputDirections().contains(from))
-			return new FluidStack(FluidRegistry.WATER, maxDrain);
+        return null;
+    }
 
-		return null;
-	}
+    @Override
+    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain)
+    {
+        if (getOutputDirections().contains(from))
+            return this.tank.drain(maxDrain, false);
 
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid)
-	{
-		return getInputDirections().contains(from);
-	}
+        return null;
+    }
 
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid)
-	{
-		return getOutputDirections().contains(from);
-	}
+    @Override
+    public boolean canFill(ForgeDirection from, Fluid fluid)
+    {
+        return getInputDirections().contains(from);
+    }
+
+    @Override
+    public boolean canDrain(ForgeDirection from, Fluid fluid)
+    {
+        return getOutputDirections().contains(from);
+    }
+
+    @Override
+    public boolean onActivated(EntityPlayer entityPlayer)
+    {
+        if (entityPlayer != null && entityPlayer.getHeldItem() != null)
+        {
+            if (entityPlayer.getHeldItem().getItem() == Item.stick)
+            {
+                this.active = !this.active;
+                entityPlayer.sendChatToPlayer(ChatMessageComponent.createFromText("[FluidVoid]Pumping:" + this.active));
+                return true;
+            }
+            FluidStack stack = FluidContainerRegistry.getFluidForFilledItem(entityPlayer.getHeldItem());
+            if (stack != null)
+            {
+                stack = stack.copy();
+                stack.amount = Integer.MAX_VALUE;
+                this.tank.setFluid(stack);
+                entityPlayer.sendChatToPlayer(ChatMessageComponent.createFromText("[FluidVoid]Fluid:" + stack.getFluid().getName()));
+
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
