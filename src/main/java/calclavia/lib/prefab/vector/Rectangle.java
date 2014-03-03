@@ -2,17 +2,17 @@ package calclavia.lib.prefab.vector;
 
 import universalelectricity.api.vector.Vector2;
 
-public class Region2
+public class Rectangle
 {
 	public Vector2 min;
 	public Vector2 max;
 
-	public Region2()
+	public Rectangle()
 	{
 		this(new Vector2(), new Vector2());
 	}
 
-	public Region2(Vector2 min, Vector2 max)
+	public Rectangle(Vector2 min, Vector2 max)
 	{
 		this.min = min;
 		this.max = max;
@@ -29,7 +29,7 @@ public class Region2
 	/**
 	 * Returns whether the given region intersects with this one.
 	 */
-	public boolean isIn(Region2 region)
+	public boolean isIn(Rectangle region)
 	{
 		return region.max.x > this.min.x && region.min.x < this.max.x ? (region.max.y > this.min.y && region.min.y < this.max.y ? true : false) : false;
 	}

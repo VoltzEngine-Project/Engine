@@ -7,7 +7,7 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import universalelectricity.api.vector.Vector3;
-import calclavia.lib.prefab.vector.Region3;
+import calclavia.lib.prefab.vector.Cuboid;
 
 /**
  * A defined region.
@@ -23,7 +23,7 @@ public class FlagRegion extends FlagBase
 	public FlagWorld flagWorld;
 
 	public String name;
-	public Region3 region;
+	public Cuboid region;
 	private final List<Flag> flags = new ArrayList<Flag>();
 
 	public FlagRegion(FlagWorld worldFlagData)
@@ -31,7 +31,7 @@ public class FlagRegion extends FlagBase
 		this.flagWorld = worldFlagData;
 	}
 
-	public FlagRegion(FlagWorld flagWorld, String name, Region3 region)
+	public FlagRegion(FlagWorld flagWorld, String name, Cuboid region)
 	{
 		this.flagWorld = flagWorld;
 		this.name = name;
@@ -46,7 +46,7 @@ public class FlagRegion extends FlagBase
 		Vector3 startVector = new Vector3(nbt.getCompoundTag("min"));
 		Vector3 endVector = new Vector3(nbt.getCompoundTag("max"));
 
-		this.region = new Region3(startVector, endVector);
+		this.region = new Cuboid(startVector, endVector);
 
 		/**
 		 * Child Data
@@ -179,6 +179,6 @@ public class FlagRegion extends FlagBase
 	{
 		Vector3 minVec = new Vector3(position.intX() - radius, 0, position.intZ() - radius);
 		Vector3 maxVec = new Vector3(position.intX() + radius, this.flagWorld.world.getHeight(), position.intZ() + radius);
-		this.region = new Region3(minVec, maxVec);
+		this.region = new Cuboid(minVec, maxVec);
 	}
 }

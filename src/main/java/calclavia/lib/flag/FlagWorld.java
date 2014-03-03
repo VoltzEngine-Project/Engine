@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import universalelectricity.api.vector.Vector3;
-import calclavia.lib.prefab.vector.Region3;
+import calclavia.lib.prefab.vector.Cuboid;
 
 /** Data structure for world protection.
  * 
@@ -149,7 +149,7 @@ public class FlagWorld extends FlagBase
         Vector3 minVec = new Vector3(position.intX() - radius, 0, position.intZ() - radius);
         Vector3 maxVec = new Vector3(position.intX() + radius, this.world.getHeight(), position.intZ() + radius);
 
-        return this.regions.add(new FlagRegion(this, name, new Region3(minVec, maxVec)));
+        return this.regions.add(new FlagRegion(this, name, new Cuboid(minVec, maxVec)));
     }
 
     public FlagRegion getRegion(String name)

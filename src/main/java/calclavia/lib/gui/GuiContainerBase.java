@@ -23,7 +23,7 @@ import universalelectricity.api.energy.UnitDisplay;
 import universalelectricity.api.energy.UnitDisplay.Unit;
 import universalelectricity.api.vector.Vector2;
 import calclavia.lib.Calclavia;
-import calclavia.lib.prefab.vector.Region2;
+import calclavia.lib.prefab.vector.Rectangle;
 import calclavia.lib.render.RenderUtility;
 import calclavia.lib.utility.LanguageUtility;
 
@@ -45,7 +45,7 @@ public class GuiContainerBase extends GuiContainer
 	protected int energyType = 0;
 
 	public String tooltip = "";
-	protected HashMap<Region2, String> tooltips = new HashMap<Region2, String>();
+	protected HashMap<Rectangle, String> tooltips = new HashMap<Rectangle, String>();
 
 	protected int containerWidth;
 	protected int containerHeight;
@@ -74,11 +74,11 @@ public class GuiContainerBase extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		Iterator<Entry<Region2, String>> it = this.tooltips.entrySet().iterator();
+		Iterator<Entry<Rectangle, String>> it = this.tooltips.entrySet().iterator();
 
 		while (it.hasNext())
 		{
-			Entry<Region2, String> entry = it.next();
+			Entry<Rectangle, String> entry = it.next();
 
 			if (entry.getKey().isIn(new Vector2(mouseX - this.guiLeft, mouseY - this.guiTop)))
 			{
