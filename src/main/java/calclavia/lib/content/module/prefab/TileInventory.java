@@ -2,7 +2,6 @@ package calclavia.lib.content.module.prefab;
 
 import java.lang.reflect.Method;
 
-import universalelectricity.api.vector.Vector3;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -11,6 +10,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.api.vector.Vector3;
 import calclavia.lib.content.module.TileBase;
 import calclavia.lib.utility.inventory.ExternalInventory;
 import calclavia.lib.utility.inventory.IExternalInventory;

@@ -1,12 +1,12 @@
 package calclavia.lib.modproxy;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * the Class that handles the submods of All ICBM

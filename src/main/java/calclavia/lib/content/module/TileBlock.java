@@ -1,7 +1,6 @@
 package calclavia.lib.content.module;
 
 import java.util.Arrays;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -10,7 +9,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.prefab.item.ItemBlockTooltip;
