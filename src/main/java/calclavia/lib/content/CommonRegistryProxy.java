@@ -21,4 +21,8 @@ public class CommonRegistryProxy
 		GameRegistry.registerTileEntityWithAlternatives(clazz, name, "CL" + name);
 	}
 
+	public void registerDummyRenderer(Class<? extends TileEntity> clazz)
+	{
+
+	}
 }

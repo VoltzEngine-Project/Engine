@@ -8,13 +8,21 @@ import universalelectricity.api.vector.Vector3;
 import calclavia.components.creative.BlockCreativeBuilder;
 import calclavia.components.creative.GuiCreativeBuilder;
 import calclavia.lib.prefab.ProxyBase;
+import calclavia.lib.render.block.BlockRenderingHandler;
 import calclavia.lib.render.model.TechneAdvancedModelLoader;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends ProxyBase
 {
 	static
 	{
 		AdvancedModelLoader.registerModelHandler(new TechneAdvancedModelLoader());
+	}
+
+	@Override
+	public void preInit()
+	{
+		RenderingRegistry.registerBlockHandler(BlockRenderingHandler.INSTANCE);
 	}
 
 	@Override

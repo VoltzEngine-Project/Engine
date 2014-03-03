@@ -1,10 +1,12 @@
 package calclavia.lib.content;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.entity.RenderDragon;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import calclavia.lib.Calclavia;
+import calclavia.lib.content.module.RenderTileDummy;
 import cpw.mods.fml.client.registry.ClientRegistry;
 
 public class ClientRegistryProxy extends CommonRegistryProxy
@@ -64,5 +66,11 @@ public class ClientRegistryProxy extends CommonRegistryProxy
 		{
 			ClientRegistry.bindTileEntitySpecialRenderer(tileClass, tileRenderer);
 		}
+	}
+
+	@Override
+	public void registerDummyRenderer(Class<? extends TileEntity> clazz)
+	{
+		ClientRegistry.bindTileEntitySpecialRenderer(clazz, new RenderTileDummy());
 	}
 }

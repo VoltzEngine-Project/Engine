@@ -14,6 +14,9 @@ import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import universalelectricity.api.vector.Vector3;
+import calclavia.lib.content.module.BlockDummy;
+import calclavia.lib.content.module.TileBlock;
 import calclavia.lib.render.item.ISimpleItemRenderer;
 
 import com.google.common.collect.Maps;
@@ -23,11 +26,13 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 {
+	public static final BlockRenderingHandler INSTANCE = new BlockRenderingHandler();
+	public static final int ID = RenderingRegistry.getNextAvailableRenderId();
+
 	/**
 	 * Maps fake TileEntities
 	 */
 	public static final Map<Block, TileEntity> inventoryTileEntities = Maps.newIdentityHashMap();
-	private static final int ID = RenderingRegistry.getNextAvailableRenderId();
 
 	public TileEntity getTileEntityForBlock(Block block)
 	{
@@ -49,6 +54,18 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 			return;
 		}
 
+		if (block instanceof BlockDummy)
+		{
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
+			GL11.glPushMatrix();
+			GL11.glTranslated(-0.5, -0.5, -0.5);
+			((BlockDummy) block).dummyTile.renderItem(new ItemStack(block, 1, metadata));
+			GL11.glPopMatrix();
+			GL11.glPopAttrib();
+			return;
+		}
+
 		TileEntity renderTile = null;
 
 		if (block.hasTileEntity(metadata))
@@ -57,7 +74,6 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 		}
 
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 
 		if (renderTile != null)
 		{
@@ -100,7 +116,22 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 			return ((ICustomBlockRenderer) block).renderStatic(world, x, y, z, block, modelId, renderer);
 		}
 
-		return true;
+		if (block.renderAsNormalBlock())
+		{
+			TileEntity tile = world.getBlockTileEntity(x, y, z);
+
+			if (tile instanceof TileBlock)
+			{
+				if (!((TileBlock) tile).renderStatic(new Vector3(x, y, z)))
+				{
+					renderer.renderStandardBlock(block, x, y, z);
+				}
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override

@@ -9,6 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.Configuration;
+import calclavia.lib.content.module.BlockDummy;
+import calclavia.lib.content.module.TileBlock;
 import calclavia.lib.utility.LanguageUtility;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -61,6 +63,45 @@ public class ContentRegistry
 		return ++packetID;
 	}
 
+	/**
+	 * New TileBlocks system.
+	 */
+	public Block newBlock(Class<? extends TileBlock> tileBlockClass)
+	{
+		try
+		{
+			TileBlock tileBlock = tileBlockClass.newInstance();
+			final String name = tileBlock.name;
+
+			int assignedID = idManager.getNextBlockID();
+			int actualID = config.getBlock(name, assignedID).getInt(assignedID);
+
+			Block block = new BlockDummy(actualID, modPrefix, tileBlock);
+
+			if (block.getCreativeTabToDisplayOn() == null)
+				block.setCreativeTab(defaultTab);
+
+			blocks.put(block, name);
+			proxy.registerBlock(block, tileBlock.itemBlock, name, modID);
+
+			if (tileBlock.tile() != null)
+			{
+				proxy.registerTileEntity(name, tileBlock.tile().getClass());
+
+				if (!tileBlock.normalRender)
+				{
+					proxy.registerDummyRenderer(tileBlock.tile().getClass());
+				}
+			}
+
+			return block;
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException("TileBlock [" + tileBlockClass.getSimpleName() + "] failed to be created:", e);
+		}
+	}
+
 	public Block createBlock(Class<? extends Block> blockClass)
 	{
 		return createBlock(blockClass, null);
@@ -103,7 +144,7 @@ public class ContentRegistry
 		{
 			try
 			{
-			    
+
 				int assignedID = idManager.getNextBlockID();
 				block = blockClass.getConstructor(Integer.TYPE).newInstance(config.getBlock(name, assignedID).getInt(assignedID));
 

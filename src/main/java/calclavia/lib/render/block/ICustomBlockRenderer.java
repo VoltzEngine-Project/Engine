@@ -9,6 +9,7 @@ import net.minecraft.world.IBlockAccess;
  * @author Calclavia
  * 
  */
+@Deprecated
 public interface ICustomBlockRenderer
 {
 	void renderInventory(Block block, int metadata, int modelID, RenderBlocks renderer);
