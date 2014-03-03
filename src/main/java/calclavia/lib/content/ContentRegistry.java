@@ -76,10 +76,8 @@ public class ContentRegistry
 			int assignedID = idManager.getNextBlockID();
 			int actualID = config.getBlock(name, assignedID).getInt(assignedID);
 
-			Block block = new BlockDummy(actualID, modPrefix, tileBlock);
+			Block block = new BlockDummy(actualID, modPrefix,defaultTab, tileBlock);
 
-			if (block.getCreativeTabToDisplayOn() == null)
-				block.setCreativeTab(defaultTab);
 
 			blocks.put(block, name);
 			proxy.registerBlock(block, tileBlock.itemBlock, name, modID);

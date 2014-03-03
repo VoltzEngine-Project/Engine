@@ -48,22 +48,19 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
 	{
-		if (block instanceof ICustomBlockRenderer)
-		{
-			((ICustomBlockRenderer) block).renderInventory(block, metadata, modelID, renderer);
-			return;
-		}
-
 		if (block instanceof BlockDummy)
 		{
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
-			GL11.glPushMatrix();
-			GL11.glTranslated(-0.5, -0.5, -0.5);
-			((BlockDummy) block).dummyTile.renderItem(new ItemStack(block, 1, metadata));
-			GL11.glPopMatrix();
-			GL11.glPopAttrib();
-			return;
+			if (((BlockDummy) block).dummyTile.getRenderer() != null)
+			{
+				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+				GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
+				GL11.glPushMatrix();
+				GL11.glTranslated(-0.5, -0.5, -0.5);
+				((BlockDummy) block).dummyTile.getRenderer().renderItem(new ItemStack(block, 1, metadata));
+				GL11.glPopMatrix();
+				GL11.glPopAttrib();
+				return;
+			}
 		}
 
 		TileEntity renderTile = null;
@@ -84,11 +81,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 
 			try
 			{
-				if (tesr instanceof ICustomBlockRenderer)
-				{
-					((ICustomBlockRenderer) tesr).renderDynamic(renderTile, block, metadata, modelID, renderer);
-				}
-				else if (tesr instanceof ISimpleItemRenderer)
+				if (tesr instanceof ISimpleItemRenderer)
 				{
 					((ISimpleItemRenderer) tesr).renderInventoryItem(new ItemStack(block, 1, metadata));
 				}
@@ -111,18 +104,13 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
 	{
-		if (block instanceof ICustomBlockRenderer)
-		{
-			return ((ICustomBlockRenderer) block).renderStatic(world, x, y, z, block, modelId, renderer);
-		}
-
 		if (block.renderAsNormalBlock())
 		{
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-			if (tile instanceof TileBlock)
+			if (tile instanceof TileBlock && ((TileBlock) tile).getRenderer() != null)
 			{
-				if (!((TileBlock) tile).renderStatic(new Vector3(x, y, z)))
+				if (!((TileBlock) tile).getRenderer().renderStatic(new Vector3(x, y, z)))
 				{
 					renderer.renderStandardBlock(block, x, y, z);
 				}

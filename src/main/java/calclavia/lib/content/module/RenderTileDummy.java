@@ -14,11 +14,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class RenderTileDummy extends TileEntitySpecialRenderer
 {
 	@Override
-	public void renderTileEntityAt(TileEntity t, double x, double y, double z, float f)
+	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f)
 	{
-		if (t instanceof TileBlock)
-		{
-			((TileBlock) t).renderDynamic(new Vector3(x, y, z), f);
-		}
+		if (tile instanceof TileBlock)
+			if (((TileBlock) tile).getRenderer() != null)
+				((TileBlock) tile).getRenderer().renderDynamic(new Vector3(x, y, z), f);
 	}
 }

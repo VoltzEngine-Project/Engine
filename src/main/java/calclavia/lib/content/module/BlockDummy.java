@@ -2,6 +2,7 @@ package calclavia.lib.content.module;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -14,13 +15,17 @@ public class BlockDummy extends Block implements ITileEntityProvider
 {
 	public final TileBlock dummyTile;
 
-	public BlockDummy(int id, String modPrefix, TileBlock dummyTile)
+	public BlockDummy(int id, String modPrefix, CreativeTabs defaultTab, TileBlock dummyTile)
 	{
 		super(id, dummyTile.material);
 		this.dummyTile = dummyTile;
 		setUnlocalizedName(modPrefix + dummyTile.name);
 		setTextureName(modPrefix + dummyTile.textureName);
-		setCreativeTab(dummyTile.creativeTab);
+
+		if (dummyTile.creativeTab != null)
+			setCreativeTab(dummyTile.creativeTab);
+		else
+			setCreativeTab(defaultTab);
 
 		/**
 		 * Reinject opaqueCube data
