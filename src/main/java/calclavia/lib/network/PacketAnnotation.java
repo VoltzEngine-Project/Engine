@@ -141,21 +141,27 @@ public class PacketAnnotation extends PacketType
 		constructPacketSets(obj.getClass());
 
 		int classID = classPacketIDMap.get(obj.getClass());
-		PacketSet packetSet = packetSetIDMap.get(classID).get(packetSetID);
 
-		List args = packetSet.getPacketArray(obj);
-
-		args.add(0, classID);
-		args.add(1, packetSetID);
-
-		if (obj instanceof TileEntity)
+		if (packetSetIDMap.size() > classID)
 		{
-			args.add(2, ((TileEntity) obj).xCoord);
-			args.add(3, ((TileEntity) obj).yCoord);
-			args.add(4, ((TileEntity) obj).zCoord);
+			PacketSet packetSet = packetSetIDMap.get(classID).get(packetSetID);
+
+			List args = packetSet.getPacketArray(obj);
+
+			args.add(0, classID);
+			args.add(1, packetSetID);
+
+			if (obj instanceof TileEntity)
+			{
+				args.add(2, ((TileEntity) obj).xCoord);
+				args.add(3, ((TileEntity) obj).yCoord);
+				args.add(4, ((TileEntity) obj).zCoord);
+			}
+
+			return super.getPacket(args.toArray());
 		}
 
-		return super.getPacket(args.toArray());
+		return null;
 	}
 
 	@Override
@@ -184,7 +190,8 @@ public class PacketAnnotation extends PacketType
 				}
 				else
 				{
-					//Calclavia.LOGGER.severe("Annotation packet sent to null: " + x + ", " + y + ", " + z);
+					// Calclavia.LOGGER.severe("Annotation packet sent to null: " + x + ", " + y +
+					// ", " + z);
 				}
 			}
 			else
