@@ -57,7 +57,7 @@ public class Cuboid
 
 	public AxisAlignedBB toAABB()
 	{
-		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+		return AxisAlignedBB.getAABBPool().getAABB(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
 
 	public static Cuboid full()
@@ -84,9 +84,10 @@ public class Cuboid
 		return this;
 	}
 
-	public void setBounds(Block block)
+	public Cuboid setBounds(Block block)
 	{
 		block.setBlockBounds((float) min.x, (float) min.y, (float) min.z, (float) max.x, (float) max.y, (float) max.z);
+		return this;
 	}
 
 	/**
@@ -119,8 +120,15 @@ public class Cuboid
 
 	public Cuboid offset(Cuboid o)
 	{
-		min.add(o.min);
-		max.add(o.max);
+		min.translate(o.min);
+		max.translate(o.max);
+		return this;
+	}
+
+	public Cuboid translate(Vector3 vec)
+	{
+		min.translate(vec);
+		max.translate(vec);
 		return this;
 	}
 
@@ -129,10 +137,18 @@ public class Cuboid
 		return min.clone().add(max).scale(0.5);
 	}
 
-	public void expand(Vector3 difference)
+	public Cuboid expand(Vector3 difference)
 	{
 		this.min.subtract(difference);
 		this.max.add(difference);
+		return this;
+	}
+
+	public Cuboid expand(double difference)
+	{
+		this.min.subtract(difference);
+		this.max.add(difference);
+		return this;
 	}
 
 	/**
@@ -216,4 +232,5 @@ public class Cuboid
 	{
 		return new Cuboid(this);
 	}
+
 }

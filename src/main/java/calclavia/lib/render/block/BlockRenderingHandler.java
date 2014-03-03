@@ -50,13 +50,20 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	{
 		if (block instanceof BlockDummy)
 		{
-			if (((BlockDummy) block).dummyTile.getRenderer() != null)
+			TileBlock tile = ((BlockDummy) block).dummyTile;
+
+			if (tile != null && tile.getRenderer() != null)
 			{
 				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 				GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
 				GL11.glPushMatrix();
 				GL11.glTranslated(-0.5, -0.5, -0.5);
-				((BlockDummy) block).dummyTile.getRenderer().renderItem(new ItemStack(block, 1, metadata));
+
+				if (!tile.getRenderer().renderItem(new ItemStack(block, 1, metadata)))
+				{
+					tile.getRenderer().renderDynamic(new Vector3(), 0);
+				}
+
 				GL11.glPopMatrix();
 				GL11.glPopAttrib();
 				return;

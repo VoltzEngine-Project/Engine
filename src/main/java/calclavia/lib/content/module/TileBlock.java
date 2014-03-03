@@ -1,15 +1,21 @@
 package calclavia.lib.content.module;
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.prefab.item.ItemBlockTooltip;
+import calclavia.lib.prefab.vector.Cuboid;
+import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.WrenchUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,6 +42,7 @@ public abstract class TileBlock extends TileEntity
 	public CreativeTabs creativeTab = null;
 	public boolean normalRender = true;
 	public boolean isOpaqueCube = true;
+	public Cuboid bounds = Cuboid.full();
 
 	public TileBlock(String newName, Material newMaterial)
 	{
@@ -46,7 +53,7 @@ public abstract class TileBlock extends TileEntity
 
 	public TileBlock(Material newMaterial)
 	{
-		name = getClass().getSimpleName().replaceFirst("Tile", "");
+		name = LanguageUtility.decapitalizeFirst(getClass().getSimpleName().replaceFirst("Tile", ""));
 		material = newMaterial;
 		textureName = name;
 	}
@@ -78,6 +85,12 @@ public abstract class TileBlock extends TileEntity
 	{
 		assert world() != null : "TileBlock [" + getClass().getSimpleName() + "] attempted to access invalid method.";
 		return new Vector3(this);
+	}
+
+	protected Vector3 center()
+	{
+		assert world() != null : "TileBlock [" + getClass().getSimpleName() + "] attempted to access invalid method.";
+		return Vector3.fromCenter(this);
 	}
 
 	/**
@@ -134,14 +147,48 @@ public abstract class TileBlock extends TileEntity
 		return use(player, side, vector3);
 	}
 
-	public boolean use(EntityPlayer player, int side, Vector3 vector3)
+	protected boolean use(EntityPlayer player, int side, Vector3 vector3)
 	{
 		return false;
 	}
 
-	public boolean configure(EntityPlayer player, int side, Vector3 vector3)
+	protected boolean configure(EntityPlayer player, int side, Vector3 vector3)
 	{
 		return false;
+	}
+
+	/**
+	 * Called when an entity collides with this block.
+	 */
+	public void collide(Entity entity)
+	{
+
+	}
+
+	/**
+	 * Collision
+	 */
+	public Iterable<Cuboid> getCollisionBoxes(Cuboid intersect, Entity entity)
+	{
+		if (bounds.intersects(intersect))
+			return getCollisionBoxes();
+
+		return null;
+	}
+
+	public Cuboid getSelectBounds()
+	{
+		return bounds;
+	}
+
+	public Cuboid getCollisionBounds()
+	{
+		return bounds;
+	}
+
+	public Iterable<Cuboid> getCollisionBoxes()
+	{
+		return Arrays.asList(new Cuboid[] { bounds });
 	}
 
 	/**
@@ -154,7 +201,7 @@ public abstract class TileBlock extends TileEntity
 	public final TileRender getRenderer()
 	{
 		if (renderer == null)
-			return renderer();
+			renderer = renderer();
 
 		return renderer;
 	}
@@ -163,4 +210,5 @@ public abstract class TileBlock extends TileEntity
 	{
 		return null;
 	}
+
 }

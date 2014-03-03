@@ -7,7 +7,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class TileRender
-{
+{	
 	/**
 	 * Render the static, unmoving faces of this part into the world renderer.
 	 * The Tessellator is already drawing.
@@ -35,7 +35,14 @@ public class TileRender
 	{
 	}
 
-	public void renderItem(ItemStack itemStack)
+	/**
+	 * Does an item rendering operation
+	 * 
+	 * @param itemStack
+	 * @return True if the render happened.
+	 */
+	public boolean renderItem(ItemStack itemStack)
 	{
+		return false;
 	}
 }

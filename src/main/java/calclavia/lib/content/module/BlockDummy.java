@@ -1,18 +1,26 @@
 package calclavia.lib.content.module;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
+import calclavia.lib.prefab.vector.Cuboid;
 import calclavia.lib.render.block.BlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockDummy extends Block implements ITileEntityProvider
 {
+	/**
+	 * A dummy instance of the block used to forward methods to.
+	 */
 	public final TileBlock dummyTile;
 
 	public BlockDummy(int id, String modPrefix, CreativeTabs defaultTab, TileBlock dummyTile)
@@ -26,6 +34,8 @@ public class BlockDummy extends Block implements ITileEntityProvider
 			setCreativeTab(dummyTile.creativeTab);
 		else
 			setCreativeTab(defaultTab);
+
+		dummyTile.bounds.setBounds(this);
 
 		/**
 		 * Reinject opaqueCube data
@@ -52,25 +62,60 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		return value;
 	}
 
+	@Override
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
+	{
+		inject(world, x, y, z);
+		getTile(world, x, y, z).collide(entity);
+		eject(world, x, y, z);
+	}
+
+	@Override
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
+	{
+		inject(world, x, y, z);
+		Iterable<Cuboid> bounds = getTile(world, x, y, z).getCollisionBoxes(new Cuboid(aabb), entity);
+		for (Cuboid cuboid : bounds)
+			list.add(cuboid.toAABB());
+		eject(world, x, y, z);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
+	{
+		inject(world, x, y, z);
+		Cuboid value = getTile(world, x, y, z).getSelectBounds();
+		eject(world, x, y, z);
+		return value.clone().translate(new Vector3(x, y, z)).toAABB();
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
+	{
+		inject(world, x, y, z);
+		Cuboid value = getTile(world, x, y, z).getCollisionBounds();
+		eject(world, x, y, z);
+		return value.translate(new Vector3(x, y, z)).toAABB();
+	}
+
 	/**
 	 * Injects and ejects data from the TileEntity.
 	 */
 	public void inject(World world, int x, int y, int z)
 	{
-		TileBlock tile = getTile(world, x, y, z);
-		tile.worldObj = world;
-		tile.xCoord = x;
-		tile.yCoord = y;
-		tile.zCoord = z;
+		dummyTile.worldObj = world;
+		dummyTile.xCoord = x;
+		dummyTile.yCoord = y;
+		dummyTile.zCoord = z;
 	}
 
 	public void eject(World world, int x, int y, int z)
 	{
-		TileBlock tile = getTile(world, x, y, z);
-		tile.worldObj = null;
-		tile.xCoord = 0;
-		tile.yCoord = 0;
-		tile.zCoord = 0;
+		dummyTile.worldObj = null;
+		dummyTile.xCoord = 0;
+		dummyTile.yCoord = 0;
+		dummyTile.zCoord = 0;
 	}
 
 	public TileBlock getTile(World world, int x, int y, int z)
@@ -78,7 +123,9 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
 		if (tile instanceof TileBlock)
+		{
 			return (TileBlock) tile;
+		}
 
 		return dummyTile;
 	}

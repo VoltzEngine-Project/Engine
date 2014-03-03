@@ -13,6 +13,7 @@ import net.minecraftforge.common.ForgeDirection;
  * @author Calclavia
  * 
  */
+@Deprecated
 public abstract class TileAdvanced extends TileEntity implements IPlayerUsing
 {
 	private final HashSet<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
