@@ -4,6 +4,7 @@ import java.util.LinkedHashSet;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import calclavia.lib.utility.nbt.ISaveObj;
 
 import com.builtbroken.common.Group;
 
@@ -11,7 +12,7 @@ import com.builtbroken.common.Group;
  * points to the terminal.
  * 
  * @author DarkGuardsman */
-public class AccessGroup extends Group<AccessUser>
+public class AccessGroup extends Group<AccessUser> implements ISaveObj
 {
     protected LinkedHashSet<String> nodes = new LinkedHashSet<String>();
     protected AccessGroup extendGroup;
@@ -38,7 +39,8 @@ public class AccessGroup extends Group<AccessUser>
         return null;
     }
 
-    public NBTTagCompound save(NBTTagCompound nbt)
+    @Override
+    public void save(NBTTagCompound nbt)
     {
         nbt.setString("groupName", this.getName());
         NBTTagList usersTag = new NBTTagList();
@@ -60,22 +62,36 @@ public class AccessGroup extends Group<AccessUser>
             nodesTag.appendTag(accessData);
         }
         nbt.setTag("nodes", nodesTag);
-        return nbt;
     }
 
+    @Override
     public void load(NBTTagCompound nbt)
     {
         this.setName(nbt.getString("groupName"));
         NBTTagList userList = nbt.getTagList("users");
+        this.getMembers().clear();
         for (int i = 0; i < userList.tagCount(); ++i)
         {
-            this.addMemeber(AccessUser.loadFromNBT((NBTTagCompound) userList.tagAt(i)));
+            AccessUser user = AccessUser.loadFromNBT((NBTTagCompound) userList.tagAt(i));
+            this.addMemeber(user);
         }
         NBTTagList nodeList = nbt.getTagList("nodes");
+        this.nodes.clear();
         for (int i = 0; i < nodeList.tagCount(); ++i)
         {
             this.nodes.add(((NBTTagCompound) nodeList.tagAt(i)).getString("name"));
         }
+    }
+
+    @Override
+    public boolean addMemeber(AccessUser obj)
+    {
+        if (super.addMemeber(obj))
+        {
+            obj.setGroup(this);
+            return true;
+        }
+        return false;
     }
 
     public boolean hasNode(String node)

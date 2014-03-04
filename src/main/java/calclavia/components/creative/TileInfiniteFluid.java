@@ -21,8 +21,14 @@ import calclavia.lib.prefab.tile.TileIO;
 public class TileInfiniteFluid extends TileIO implements IFluidHandler, IBlockActivate
 {
 
-    FluidTank tank = new FluidTank(Integer.MAX_VALUE);
+    FluidTank tank;
     boolean active = false;
+    
+    public TileInfiniteFluid()
+    {
+        this.saveIOMap = true;
+        tank = new FluidTank(Integer.MAX_VALUE);
+    }
 
     @Override
     public void updateEntity()

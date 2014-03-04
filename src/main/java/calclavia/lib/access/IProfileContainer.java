@@ -15,4 +15,7 @@ public interface IProfileContainer
     /** Strait up yes or no can this user access the tile. Any future checks should be done after the
      * user has accessed the machine */
     public boolean canAccess(String username);
+
+    /** Called when the profile has changed, useful for updating the client */
+    public void onProfileChange();
 }

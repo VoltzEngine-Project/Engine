@@ -2,9 +2,12 @@ package calclavia.lib.access;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,6 +25,7 @@ import calclavia.lib.utility.nbt.SaveManager;
  * @author DarkGuardsman */
 public class AccessProfile implements ISpecialAccess, IVirtualObject
 {
+    private final Set<IProfileContainer> containers = Collections.newSetFromMap(new WeakHashMap<IProfileContainer, Boolean>());
     /** A list of user access data. */
     protected List<AccessGroup> groups = new ArrayList<AccessGroup>();
     /** Display name */
@@ -149,6 +153,14 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         return users;
     }
 
+    public void addContainer(IProfileContainer container)
+    {
+        if (!this.containers.contains(container))
+        {
+            this.containers.add(container);
+        }
+    }
+
     @Override
     public boolean setUserAccess(String player, AccessGroup g, boolean save)
     {
@@ -195,7 +207,19 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
 
     public void onProfileUpdate()
     {
-
+        Iterator<IProfileContainer> it = containers.iterator();
+        while (it.hasNext())
+        {
+            IProfileContainer container = it.next();
+            if (container != null && this.equals(container.getAccessProfile()))
+            {
+                container.onProfileChange();
+            }
+            else
+            {
+                it.remove();
+            }
+        }
     }
 
     @Override
@@ -216,13 +240,6 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
     {
         if (!this.groups.contains(group))
         {
-            for (AccessGroup g : this.groups)
-            {
-                if (group.getName().equalsIgnoreCase(g.getName()))
-                {
-                    return false;
-                }
-            }
             if (this.groups.add(group))
             {
                 this.onProfileUpdate();
@@ -276,7 +293,9 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         NBTTagList usersTag = new NBTTagList();
         for (AccessGroup group : this.getGroups())
         {
-            usersTag.appendTag(group.save(new NBTTagCompound()));
+            NBTTagCompound group_tag = new NBTTagCompound();
+            group.save(group_tag);
+            usersTag.appendTag(group_tag);
         }
         nbt.setTag("groups", usersTag);
     }
