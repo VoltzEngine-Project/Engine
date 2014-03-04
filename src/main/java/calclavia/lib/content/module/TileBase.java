@@ -1,15 +1,20 @@
 package calclavia.lib.content.module;
 
+import java.util.HashSet;
+
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
+import net.minecraftforge.common.ForgeDirection;
 import calclavia.components.CalclaviaLoader;
+import calclavia.lib.prefab.tile.IPlayerUsing;
 
 /**
  * All tiles inherit this class.
  * 
  * @author Calclavia
  */
-public abstract class TileBase extends TileBlock
+public abstract class TileBase extends TileBlock implements IPlayerUsing
 {
 	public TileBase(String name, Material material)
 	{
@@ -26,9 +31,52 @@ public abstract class TileBase extends TileBlock
 		return this;
 	}
 
+	private final HashSet<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
+
+	protected long ticks = 0;
+
+	/**
+	 * Called on the TileEntity's first tick.
+	 */
+	public void initiate()
+	{
+	}
+
+	@Override
+	public void updateEntity()
+	{
+		if (this.ticks == 0)
+		{
+			initiate();
+		}
+
+		if (ticks >= Long.MAX_VALUE)
+		{
+			ticks = 1;
+		}
+
+		ticks++;
+	}
+
 	@Override
 	public Packet getDescriptionPacket()
 	{
 		return CalclaviaLoader.PACKET_ANNOTATION.getPacket(this);
+	}
+
+	@Override
+	public HashSet<EntityPlayer> getPlayersUsing()
+	{
+		return this.playersUsing;
+	}
+
+	public ForgeDirection getDirection()
+	{
+		return ForgeDirection.getOrientation(this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+	}
+
+	public void setDirection(ForgeDirection direction)
+	{
+		this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, direction.ordinal(), 3);
 	}
 }

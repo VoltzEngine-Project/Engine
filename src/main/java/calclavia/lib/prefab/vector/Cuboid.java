@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import universalelectricity.api.vector.EulerAngle;
 import universalelectricity.api.vector.Vector3;
 
 /**
@@ -80,6 +81,13 @@ public class Cuboid
 	{
 		min.subtract(vec);
 		max.subtract(vec);
+		return this;
+	}
+
+	public Cuboid rotate(EulerAngle angle)
+	{
+		min.rotate(angle);
+		max.rotate(angle);
 		return this;
 	}
 
