@@ -1,5 +1,7 @@
 package universalelectricity.api.vector;
 
+import net.minecraftforge.common.ForgeDirection;
+
 /**
  * The euler angles describing a 3D rotation. The rotation always in degrees.
  * 
@@ -32,6 +34,34 @@ public class EulerAngle
 	public EulerAngle()
 	{
 		this(0, 0, 0);
+	}
+
+	public EulerAngle(ForgeDirection dir)
+	{
+		switch (dir)
+		{
+			case DOWN:
+				pitch = -90;
+				break;
+			case UP:
+				pitch = 90;
+				break;
+			case NORTH:
+				yaw = 0;
+				break;
+			case SOUTH:
+				yaw = 180;
+				break;
+			case WEST:
+				yaw = 90;
+				break;
+			case EAST:
+				// or 270 degrees
+				yaw = -90;
+				break;
+			default:
+				break;
+		}
 	}
 
 	public EulerAngle(double yaw, double pitch, double roll)
@@ -122,7 +152,7 @@ public class EulerAngle
 		for (int i = 0; i < 3; i++)
 			if (absoluteDifference(other).toArray()[i] > margin)
 				return false;
-		
+
 		return true;
 	}
 
