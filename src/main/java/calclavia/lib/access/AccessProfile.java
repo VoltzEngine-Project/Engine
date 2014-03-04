@@ -240,13 +240,6 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
     {
         if (!this.groups.contains(group))
         {
-            for (AccessGroup g : this.groups)
-            {
-                if (group.getName().equalsIgnoreCase(g.getName()))
-                {
-                    return false;
-                }
-            }
             if (this.groups.add(group))
             {
                 this.onProfileUpdate();

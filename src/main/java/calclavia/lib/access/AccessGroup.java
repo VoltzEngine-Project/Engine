@@ -83,6 +83,17 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
         }
     }
 
+    @Override
+    public boolean addMemeber(AccessUser obj)
+    {
+        if (super.addMemeber(obj))
+        {
+            obj.setGroup(this);
+            return true;
+        }
+        return false;
+    }
+
     public boolean hasNode(String node)
     {
         return this.nodes.contains(node);
