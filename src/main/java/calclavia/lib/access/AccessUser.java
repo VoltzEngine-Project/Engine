@@ -67,6 +67,7 @@ public class AccessUser extends User implements ISaveObj
         this.username = nbt.getString("username");
         this.extraData = nbt.getCompoundTag("extraData");
         NBTTagList userList = nbt.getTagList("nodes");
+        this.nodes.clear();
         for (int i = 0; i < userList.tagCount(); ++i)
         {
             this.nodes.add(((NBTTagCompound) userList.tagAt(i)).getString("name"));
