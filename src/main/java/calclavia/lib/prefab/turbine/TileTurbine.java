@@ -155,12 +155,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 
 		return maxPower;
 	}
-
-	public long getTorque()
-	{
-		return angularVelocity != 0 ? torque : 0;
-	}
-
+	
 	public void onProduce()
 	{
 	}

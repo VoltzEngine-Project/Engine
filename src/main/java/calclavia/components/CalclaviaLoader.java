@@ -554,6 +554,12 @@ public class CalclaviaLoader
 		serverCommandManager.registerCommand(new CommandFlag(FlagRegistry.getModFlag(FlagRegistry.DEFAULT_NAME)));
 	}
 
+	@EventHandler
+	public void onServerStopping(FMLServerStoppingEvent evt)
+	{
+		SaveManager.saveAll();
+	}
+
 	@ForgeSubscribe
 	public void boilEventHandler(BoilEvent evt)
 	{
@@ -582,9 +588,4 @@ public class CalclaviaLoader
 		evt.setResult(Result.DENY);
 	}
 
-	@EventHandler
-	public void onServerStopping(FMLServerStoppingEvent evt)
-	{
-		SaveManager.saveAll();
-	}
 }
