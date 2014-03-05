@@ -1,16 +1,22 @@
 package calclavia.lib.content.module;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
+import calclavia.lib.content.module.TileBlock.IComparatorInputOverride;
 import calclavia.lib.prefab.vector.Cuboid;
 import calclavia.lib.render.block.BlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -44,79 +50,19 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		lightOpacity[id] = isOpaqueCube() ? 255 : 0;
 	}
 
-	@Override
-	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
-	{
-		inject(world, x, y, z);
-		// TODO: Raytrace player's look position to determine the hit.
-		getTile(world, x, y, z).click(player);
-		eject(world, x, y, z);
-	}
-
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
-	{
-		inject(world, x, y, z);
-		boolean value = getTile(world, x, y, z).activate(player, side, new Vector3(hitX, hitY, hitZ));
-		eject(world, x, y, z);
-		return value;
-	}
-
-	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
-	{
-		inject(world, x, y, z);
-		getTile(world, x, y, z).collide(entity);
-		eject(world, x, y, z);
-	}
-
-	@Override
-	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
-	{
-		inject(world, x, y, z);
-
-		Iterable<Cuboid> bounds = getTile(world, x, y, z).getCollisionBoxes(aabb != null ? new Cuboid(aabb).translate(new Vector3(x, y, z).invert()) : null, entity);
-
-		if (bounds != null)
-		{
-			for (Cuboid cuboid : bounds)
-				list.add(cuboid.clone().translate(new Vector3(x, y, z)).toAABB());
-		}
-
-		eject(world, x, y, z);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
-	{
-		inject(world, x, y, z);
-		Cuboid value = getTile(world, x, y, z).getSelectBounds().clone().translate(new Vector3(x, y, z));
-		eject(world, x, y, z);
-		return value.toAABB();
-	}
-
-	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
-	{
-		inject(world, x, y, z);
-		Cuboid value = getTile(world, x, y, z).getCollisionBounds().clone().translate(new Vector3(x, y, z));
-		eject(world, x, y, z);
-		return value.toAABB();
-	}
-
 	/**
 	 * Injects and ejects data from the TileEntity.
 	 */
-	public void inject(World world, int x, int y, int z)
+	public void inject(IBlockAccess access, int x, int y, int z)
 	{
-		dummyTile.worldObj = world;
+		if (access instanceof World)
+			dummyTile.worldObj = (World) access;
 		dummyTile.xCoord = x;
 		dummyTile.yCoord = y;
 		dummyTile.zCoord = z;
 	}
 
-	public void eject(World world, int x, int y, int z)
+	public void eject()
 	{
 		dummyTile.worldObj = null;
 		dummyTile.xCoord = 0;
@@ -124,7 +70,7 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		dummyTile.zCoord = 0;
 	}
 
-	public TileBlock getTile(World world, int x, int y, int z)
+	public TileBlock getTile(IBlockAccess world, int x, int y, int z)
 	{
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
@@ -158,6 +104,115 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	}
 
 	@Override
+	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
+	{
+		inject(world, x, y, z);
+		// TODO: Raytrace player's look position to determine the hit.
+		getTile(world, x, y, z).click(player);
+		eject();
+	}
+
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z)
+	{
+		inject(world, x, y, z);
+		getTile(world, x, y, z).onAdded();
+		eject();
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, int side)
+	{
+		inject(world, x, y, z);
+		getTile(world, x, y, z).onNeighborChanged();
+		eject();
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
+	{
+		inject(world, x, y, z);
+		boolean value = getTile(world, x, y, z).activate(player, side, new Vector3(hitX, hitY, hitZ));
+		eject();
+		return value;
+	}
+
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random par5Random)
+	{
+		inject(world, x, y, z);
+		getTile(world, x, y, z).updateEntity();
+		eject();
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
+	{
+		inject(world, x, y, z);
+		getTile(world, x, y, z).collide(entity);
+		eject();
+	}
+
+	@Override
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
+	{
+		inject(world, x, y, z);
+
+		Iterable<Cuboid> bounds = getTile(world, x, y, z).getCollisionBoxes(aabb != null ? new Cuboid(aabb).translate(new Vector3(x, y, z).invert()) : null, entity);
+
+		if (bounds != null)
+		{
+			for (Cuboid cuboid : bounds)
+				list.add(cuboid.clone().translate(new Vector3(x, y, z)).toAABB());
+		}
+
+		eject();
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
+	{
+		inject(world, x, y, z);
+		Cuboid value = getTile(world, x, y, z).getSelectBounds().clone().translate(new Vector3(x, y, z));
+		eject();
+		return value.toAABB();
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
+	{
+		inject(world, x, y, z);
+		Cuboid value = getTile(world, x, y, z).getCollisionBounds().clone().translate(new Vector3(x, y, z));
+		eject();
+		return value.toAABB();
+	}
+
+	@Override
+	public boolean shouldSideBeRendered(IBlockAccess access, int x, int y, int z, int side)
+	{
+		inject(access, x, y, z);
+		boolean value = getTile(access, x, y, z).shouldSideBeRendered(access, side);
+		eject();
+		return value;
+	}
+
+	@Override
+	public int getLightValue(IBlockAccess access, int x, int y, int z)
+	{
+		inject(access, x, y, z);
+		int value = getTile(access, x, y, z).getLightValue(access);
+		eject();
+		return value;
+	}
+
+	@Override
+	public boolean hasComparatorInputOverride()
+	{
+		return dummyTile instanceof IComparatorInputOverride;
+	}
+
+	@Override
 	public boolean isOpaqueCube()
 	{
 		if (dummyTile == null)
@@ -179,4 +234,27 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		return BlockRenderingHandler.ID;
 	}
 
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+	{
+		inject(world, x, y, z);
+		ItemStack value = getTile(world, x, y, z).getPickBlock(target);
+		eject();
+		return value;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		inject(world, x, y, z);
+		ArrayList<ItemStack> value = getTile(world, x, y, z).getDrops(metadata, fortune);
+		eject();
+		return value;
+	}
+
+	@Override
+	public void getSubBlocks(int id, CreativeTabs creativeTab, List list)
+	{
+		dummyTile.getSubBlocks(id, creativeTab, list);
+	}
 }

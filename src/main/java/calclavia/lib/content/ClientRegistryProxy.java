@@ -1,6 +1,7 @@
 package calclavia.lib.content;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
@@ -70,6 +71,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
 	@Override
 	public void registerDummyRenderer(Class<? extends TileEntity> clazz)
 	{
-		ClientRegistry.bindTileEntitySpecialRenderer(clazz, new RenderTileDummy());
+		if (!TileEntityRenderer.instance.specialRendererMap.containsKey(clazz))
+			ClientRegistry.bindTileEntitySpecialRenderer(clazz, new RenderTileDummy());
 	}
 }

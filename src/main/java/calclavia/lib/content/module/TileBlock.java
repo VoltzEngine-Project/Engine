@@ -1,6 +1,8 @@
 package calclavia.lib.content.module;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -8,7 +10,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.prefab.item.ItemBlockTooltip;
@@ -118,9 +123,33 @@ public abstract class TileBlock extends TileEntity
 	}
 
 	/**
+	 * Drops
+	 */
+	public ArrayList<ItemStack> getDrops(int metadata, int fortune)
+	{
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		drops.add(new ItemStack(getBlockType(), 1, 0));
+		return drops;
+	}
+
+	public void getSubBlocks(int id, CreativeTabs creativeTab, List list)
+	{
+		list.add(new ItemStack(id, 1, 0));
+	}
+
+	public ItemStack getPickBlock(MovingObjectPosition target)
+	{
+		return new ItemStack(getBlockType(), 1, 0);
+	}
+
+	public int getLightValue(IBlockAccess access)
+	{
+		return Block.lightValue[access.getBlockId(x(), y(), z())];
+	}
+
+	/**
 	 * Block events
 	 */
-
 	public void click(EntityPlayer player)
 	{
 
@@ -153,6 +182,44 @@ public abstract class TileBlock extends TileEntity
 	protected boolean configure(EntityPlayer player, int side, Vector3 vector3)
 	{
 		return false;
+	}
+
+	protected void onAdded()
+	{
+		onWorldJoin();
+	}
+
+	protected void onWorldJoin()
+	{
+	}
+
+	protected void onNeighborChanged()
+	{
+	}
+
+	protected void notifyChange()
+	{
+		world().notifyBlocksOfNeighborChange(x(), y(), z(), blockID());
+	}
+
+	protected void markRender()
+	{
+		world().markBlockForRenderUpdate(x(), y(), z());
+	}
+
+	protected void markUpdate()
+	{
+		world().markBlockForUpdate(x(), y(), z());
+	}
+
+	protected void updateLight()
+	{
+		world().updateAllLightTypes(x(), y(), z());
+	}
+
+	protected void scheduelTick(int delay)
+	{
+		world().scheduleBlockUpdate(x(), y(), z(), blockID(), delay);
 	}
 
 	/**
@@ -211,4 +278,13 @@ public abstract class TileBlock extends TileEntity
 		return null;
 	}
 
+	public boolean shouldSideBeRendered(IBlockAccess access, int side)
+	{
+		return side == 0 && this.bounds.min.y > 0.0D ? true : (side == 1 && this.bounds.max.y < 1.0D ? true : (side == 2 && this.bounds.min.z > 0.0D ? true : (side == 3 && this.bounds.max.z < 1.0D ? true : (side == 4 && this.bounds.min.x > 0.0D ? true : (side == 5 && this.bounds.max.x < 1.0D ? true : !access.isBlockOpaqueCube(x(), y(), z()))))));
+	}
+
+	public interface IComparatorInputOverride
+	{
+		public int getComparatorInputOverride(int side);
+	}
 }
