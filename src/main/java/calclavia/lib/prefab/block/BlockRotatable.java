@@ -63,7 +63,7 @@ public abstract class BlockRotatable extends BlockTile implements IRotatableBloc
 	@Override
 	public boolean onSneakUseWrench(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
-		return rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
+		return doRotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
 	}
 
 	/**
@@ -75,8 +75,7 @@ public abstract class BlockRotatable extends BlockTile implements IRotatableBloc
 		return onSneakUseWrench(world, x, y, z, par5EntityPlayer, side, hitX, hitY, hitZ);
 	}
 
-	@Override
-	public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis)
+	public boolean doRotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis)
 	{
 		int currentRotMeta = worldObj.getBlockMetadata(x, y, z);
 		ForgeDirection orientation = ForgeDirection.getOrientation(currentRotMeta);
