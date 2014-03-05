@@ -1,18 +1,13 @@
 package universalelectricity.core.net;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.WeakHashMap;
-
+import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.TickType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import universalelectricity.api.net.IUpdate;
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * A ticker to update all networks. Register your custom network here to have it ticked by Universal
@@ -28,7 +23,7 @@ public class NetworkTickHandler implements ITickHandler
 	private final Set<IUpdate> updaters = Collections.newSetFromMap(new WeakHashMap<IUpdate, Boolean>());
 
 	/** For queuing Forge events to be invoked the next tick. */
-	private final LinkedHashSet<Event> queuedEvents = new LinkedHashSet<Event>();
+	private final Queue<Event> queuedEvents = new ConcurrentLinkedQueue<Event>();
 
 	public static void addNetwork(IUpdate updater)
 	{
@@ -38,7 +33,7 @@ public class NetworkTickHandler implements ITickHandler
 		}
 	}
 
-	public static void queueEvent(Event event)
+	public static synchronized void queueEvent(Event event)
 	{
 		synchronized (INSTANCE.queuedEvents)
 		{
@@ -60,7 +55,7 @@ public class NetworkTickHandler implements ITickHandler
 		{
 			Set<IUpdate> removeUpdaters = Collections.newSetFromMap(new WeakHashMap<IUpdate, Boolean>());
 
-			Iterator<IUpdate> updaterIt = new HashSet(updaters).iterator();
+			Iterator<IUpdate> updaterIt = new HashSet<IUpdate>(updaters).iterator();
 
 			try
 			{
@@ -92,12 +87,9 @@ public class NetworkTickHandler implements ITickHandler
 		/** Perform all queued events */
 		synchronized (queuedEvents)
 		{
-			Iterator<Event> eventIt = this.queuedEvents.iterator();
-
-			while (eventIt.hasNext())
+			while (!queuedEvents.isEmpty())
 			{
-				MinecraftForge.EVENT_BUS.post(eventIt.next());
-				eventIt.remove();
+				MinecraftForge.EVENT_BUS.post(queuedEvents.poll());
 			}
 		}
 	}
