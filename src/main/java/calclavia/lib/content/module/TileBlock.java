@@ -46,6 +46,7 @@ public abstract class TileBlock extends TileEntity
 	public boolean normalRender = true;
 	public boolean isOpaqueCube = true;
 	public Cuboid bounds = Cuboid.full();
+	public Block block;
 
 	public TileBlock(String newName, Material newMaterial)
 	{
@@ -59,6 +60,14 @@ public abstract class TileBlock extends TileEntity
 		name = LanguageUtility.decapitalizeFirst(getClass().getSimpleName().replaceFirst("Tile", ""));
 		material = newMaterial;
 		textureName = name;
+	}
+
+	/**
+	 * Called after the block is registred. Use this to add recipes.
+	 */
+	public void onInstantiate()
+	{
+
 	}
 
 	public World world()
@@ -287,4 +296,5 @@ public abstract class TileBlock extends TileEntity
 	{
 		public int getComparatorInputOverride(int side);
 	}
+
 }

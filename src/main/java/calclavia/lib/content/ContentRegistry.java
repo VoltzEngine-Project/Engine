@@ -78,10 +78,12 @@ public class ContentRegistry
 
 			Block block = new BlockDummy(actualID, modPrefix,defaultTab, tileBlock);
 
-
 			blocks.put(block, name);
 			proxy.registerBlock(block, tileBlock.itemBlock, name, modID);
 
+			tileBlock.block = block;
+			tileBlock.onInstantiate();
+			
 			if (tileBlock.tile() != null)
 			{
 				proxy.registerTileEntity(name, tileBlock.tile().getClass());
