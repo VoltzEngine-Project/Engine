@@ -1,7 +1,9 @@
-package calclavia.lib.render;
+package calclavia.lib.render.fx;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -10,17 +12,21 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.api.vector.Vector3;
 import calclavia.components.CalclaviaLoader;
+import calclavia.lib.render.RenderUtility;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * @author Calclavia
+ * Based off Thaumcraft's Beam Renderer.
+ * 
+ * @author Calclavia, Azanor
  * 
  */
-public class FxLaser extends EntityFX
+@SideOnly(Side.CLIENT)
+public abstract class FxBeam extends EntityFX
 {
-	public static final ResourceLocation TEXTURE = new ResourceLocation(CalclaviaLoader.DOMAIN, CalclaviaLoader.TEXTURE_PATH + "noise.png");
-	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
-
+	protected final ResourceLocation texture;
 	double movX = 0.0D;
 	double movY = 0.0D;
 	double movZ = 0.0D;
@@ -32,14 +38,18 @@ public class FxLaser extends EntityFX
 	private float prevPitch = 0.0F;
 	private Vector3 target = new Vector3();
 	private float endModifier = 1.0F;
+	private boolean reverse = false;
 	private boolean pulse = true;
 	private int rotationSpeed = 20;
 	private float prevSize = 0.0F;
 
-	public FxLaser(World par1World, Vector3 position, Vector3 target, float r, float g, float b, int age)
+	public FxBeam(ResourceLocation texture, World par1World, Vector3 position, Vector3 target, float red, float green, float blue, int age)
 	{
 		super(par1World, position.x, position.y, position.z, 0.0D, 0.0D, 0.0D);
-		this.setRGB(r, g, b);
+		this.texture = texture;
+
+		this.setRGB(red, green, blue);
+
 		this.setSize(0.02F, 0.02F);
 		this.noClip = true;
 		this.motionX = 0.0D;
@@ -55,13 +65,24 @@ public class FxLaser extends EntityFX
 		this.rotPitch = ((float) (Math.atan2(yd, var7) * 180.0D / 3.141592653589793D));
 		this.prevYaw = this.rotYaw;
 		this.prevPitch = this.rotPitch;
-	}
 
-	public void setRGB(float r, float g, float b)
-	{
-		this.particleRed = r;
-		this.particleGreen = g;
-		this.particleBlue = b;
+		this.particleMaxAge = age;
+
+		/**
+		 * Sets the particle age based on distance.
+		 */
+		EntityLivingBase renderentity = Minecraft.getMinecraft().renderViewEntity;
+
+		int visibleDistance = 50;
+
+		if (!Minecraft.getMinecraft().gameSettings.fancyGraphics)
+		{
+			visibleDistance = 25;
+		}
+		if (renderentity.getDistance(this.posX, this.posY, this.posZ) > visibleDistance)
+		{
+			this.particleMaxAge = 0;
+		}
 	}
 
 	@Override
@@ -91,6 +112,13 @@ public class FxLaser extends EntityFX
 		}
 	}
 
+	public void setRGB(float r, float g, float b)
+	{
+		this.particleRed = r;
+		this.particleGreen = g;
+		this.particleBlue = b;
+	}
+
 	@Override
 	public void renderParticle(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5)
 	{
@@ -114,18 +142,19 @@ public class FxLaser extends EntityFX
 			op = 0.5F - (4 - (this.particleMaxAge - this.particleAge)) * 0.1F;
 		}
 
-		RenderUtility.bind(TEXTURE);
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(texture);
 
-		// Do Render Here:
 		GL11.glTexParameterf(3553, 10242, 10497.0F);
 		GL11.glTexParameterf(3553, 10243, 10497.0F);
 
 		GL11.glDisable(2884);
 
 		float var11 = slide + f;
+		if (this.reverse)
+			var11 *= -1.0F;
 		float var12 = -var11 * 0.2F - MathHelper.floor_float(-var11 * 0.1F);
 
-		GL11.glEnable(2884);
+		GL11.glEnable(3042);
 		GL11.glBlendFunc(770, 1);
 		GL11.glDepthMask(false);
 
@@ -146,7 +175,6 @@ public class FxLaser extends EntityFX
 		double var17b = 0.15D * size * this.endModifier;
 
 		GL11.glRotatef(rot, 0.0F, 1.0F, 0.0F);
-
 		for (int t = 0; t < 3; t++)
 		{
 			double var29 = this.length * size * var9;
@@ -172,10 +200,10 @@ public class FxLaser extends EntityFX
 		GL11.glEnable(2884);
 
 		GL11.glPopMatrix();
-		FMLClientHandler.instance().getClient().renderEngine.bindTexture(PARTICLE_RESOURCE);
 
 		tessellator.startDrawingQuads();
-		this.prevSize = this.particleScale;
-	}
+		this.prevSize = size;
 
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(RenderUtility.PARTICLE_RESOURCE);
+	}
 }
