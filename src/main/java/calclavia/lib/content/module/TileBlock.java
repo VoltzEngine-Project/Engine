@@ -297,4 +297,9 @@ public abstract class TileBlock extends TileEntity
 		public int getComparatorInputOverride(int side);
 	}
 
+	public void onFillRain()
+	{
+		
+	}
+
 }

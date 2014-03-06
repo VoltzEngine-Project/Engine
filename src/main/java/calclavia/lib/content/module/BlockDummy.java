@@ -104,6 +104,14 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	}
 
 	@Override
+	public void fillWithRain(World world, int x, int y, int z)
+	{
+		inject(world, x, y, z);
+		getTile(world, x, y, z).onFillRain();
+		eject();
+	}
+
+	@Override
 	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
 	{
 		inject(world, x, y, z);
