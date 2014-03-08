@@ -49,6 +49,9 @@ public class BlockDummy extends Block implements ITileEntityProvider
         /** Reinject opaqueCube data */
         opaqueCubeLookup[id] = isOpaqueCube();
         lightOpacity[id] = isOpaqueCube() ? 255 : 0;
+        
+        this.setHardness(dummyTile.blockHardness);
+        this.setResistance(dummyTile.blockResistance);
     }
 
     /** Injects and ejects data from the TileEntity. */

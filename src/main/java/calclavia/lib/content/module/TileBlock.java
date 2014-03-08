@@ -58,6 +58,9 @@ public abstract class TileBlock extends TileEntity
 	public boolean isOpaqueCube = true;
 	public Cuboid bounds = Cuboid.full();
 	public Block block;
+	
+	public float blockHardness = 1;
+	public float blockResistance = 1;
 
 	/**
 	 * Rotation
