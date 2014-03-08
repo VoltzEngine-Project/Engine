@@ -3,31 +3,33 @@ package calclavia.lib.content.module;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+import java.util.WeakHashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.api.vector.Vector2;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.prefab.item.ItemBlockTooltip;
+import calclavia.lib.prefab.tile.IRotatable;
 import calclavia.lib.prefab.vector.Cuboid;
 import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.WrenchUtility;
-import calclavia.lib.utility.inventory.InventoryUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -49,12 +51,19 @@ public abstract class TileBlock extends TileEntity
 	 * The unique string ID of this block.
 	 */
 	public final String name;
+	protected String domain;
 	protected String textureName;
 	public CreativeTabs creativeTab = null;
 	public boolean normalRender = true;
 	public boolean isOpaqueCube = true;
 	public Cuboid bounds = Cuboid.full();
 	public Block block;
+
+	/**
+	 * Rotation
+	 */
+	protected byte rotationMask = Byte.parseByte("111100", 2);
+	protected boolean isFlipPlacement = false;
 
 	public TileBlock(String newName, Material newMaterial)
 	{
@@ -205,14 +214,14 @@ public abstract class TileBlock extends TileEntity
 
 	}
 
-	public boolean activate(EntityPlayer player, int side, Vector3 vector3)
+	public boolean activate(EntityPlayer player, int side, Vector3 hit)
 	{
 		/**
 		 * Check if the player is holding a wrench. If so, call the wrench event.
 		 */
 		if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem(), x(), y(), z()))
 		{
-			if (configure(player, side, vector3))
+			if (configure(player, side, hit))
 			{
 				WrenchUtility.damageWrench(player, player.inventory.getCurrentItem(), x(), y(), z());
 				return true;
@@ -221,7 +230,7 @@ public abstract class TileBlock extends TileEntity
 			return false;
 		}
 
-		return use(player, side, vector3);
+		return use(player, side, hit);
 	}
 
 	protected boolean use(EntityPlayer player, int side, Vector3 hit)
@@ -229,14 +238,214 @@ public abstract class TileBlock extends TileEntity
 		return false;
 	}
 
-	protected boolean configure(EntityPlayer player, int side, Vector3 vector3)
+	protected boolean configure(EntityPlayer player, int side, Vector3 hit)
 	{
+		return tryRotate(side, hit);
+	}
+
+	/**
+	 * Rotatable Block
+	 */
+	protected boolean tryRotate(int side, Vector3 hit)
+	{
+		if (this instanceof IRotatable)
+		{
+			byte result = getSideToRotate((byte) side, hit.x, hit.y, hit.z);
+
+			if (result != -1)
+			{
+				setDirection(ForgeDirection.getOrientation(result));
+				return true;
+			}
+		}
+
 		return false;
 	}
 
+	/**
+	 * @author Based of Greg (GregTech)
+	 */
+	public byte getSideToRotate(byte hitSide, double hitX, double hitY, double hitZ)
+	{
+		byte tBack = (byte) (hitSide ^ 1);
+		switch (hitSide)
+		{
+			case 0:
+			case 1:
+				if (hitX < 0.25)
+				{
+					if (hitZ < 0.25)
+						if (canRotate(tBack))
+							return tBack;
+					if (hitZ > 0.75)
+						if (canRotate(tBack))
+							return tBack;
+					if (canRotate(4))
+						return 4;
+				}
+				if (hitX > 0.75)
+				{
+					if (hitZ < 0.25)
+						if (canRotate(tBack))
+							return tBack;
+					if (hitZ > 0.75)
+						if (canRotate(tBack))
+							return tBack;
+					if (canRotate(5))
+						return 5;
+				}
+				if (hitZ < 0.25)
+					if (canRotate(2))
+						return 2;
+				if (hitZ > 0.75)
+					if (canRotate(3))
+						return 3;
+				if (canRotate(hitSide))
+					return hitSide;
+			case 2:
+			case 3:
+				if (hitX < 0.25)
+				{
+					if (hitY < 0.25)
+						if (canRotate(tBack))
+							return tBack;
+					if (hitY > 0.75)
+						if (canRotate(tBack))
+							return tBack;
+					if (canRotate(4))
+						return 4;
+				}
+				if (hitX > 0.75)
+				{
+					if (hitY < 0.25)
+						if (canRotate(tBack))
+							return tBack;
+					if (hitY > 0.75)
+						if (canRotate(tBack))
+							return tBack;
+					if (canRotate(5))
+						return 5;
+				}
+				if (hitY < 0.25)
+					if (canRotate(0))
+						return 0;
+				if (hitY > 0.75)
+					return 1;
+				if (canRotate(hitSide))
+
+					return hitSide;
+			case 4:
+			case 5:
+				if (hitZ < 0.25)
+				{
+					if (hitY < 0.25)
+						if (canRotate(tBack))
+							return tBack;
+					if (hitY > 0.75)
+						if (canRotate(tBack))
+							return tBack;
+					if (canRotate(2))
+						return 2;
+				}
+				if (hitZ > 0.75)
+				{
+					if (hitY < 0.25)
+						if (canRotate(tBack))
+							return tBack;
+					if (hitY > 0.75)
+						if (canRotate(tBack))
+							return tBack;
+					if (canRotate(3))
+						return 3;
+				}
+				if (hitY < 0.25)
+					if (canRotate(0))
+						return 0;
+				if (hitY > 0.75)
+					if (canRotate(1))
+						return 1;
+				if (canRotate(hitSide))
+					return hitSide;
+		}
+		return -1;
+	}
+
+	public static Vector2 getClickedFace(byte hitSide, float hitX, float hitY, float hitZ)
+	{
+		switch (hitSide)
+		{
+			case 0:
+				return new Vector2(1 - hitX, hitZ);
+			case 1:
+				return new Vector2(hitX, hitZ);
+			case 2:
+				return new Vector2(1 - hitX, 1 - hitY);
+			case 3:
+				return new Vector2(hitX, 1 - hitY);
+			case 4:
+				return new Vector2(hitZ, 1 - hitY);
+			case 5:
+				return new Vector2(1 - hitZ, 1 - hitY);
+			default:
+				return new Vector2(0.5, 0.5);
+		}
+	}
+
+	public ForgeDirection determineOrientation(EntityLivingBase entityLiving)
+	{
+		if (MathHelper.abs((float) entityLiving.posX - (float) x()) < 2.0F && MathHelper.abs((float) entityLiving.posZ - (float) z()) < 2.0F)
+		{
+			double d0 = entityLiving.posY + 1.82D - (double) entityLiving.yOffset;
+
+			if (canRotate(1) && d0 - (double) y() > 2.0D)
+			{
+				return ForgeDirection.UP;
+			}
+
+			if (canRotate(0) && (double) y() - d0 > 0.0D)
+			{
+				return ForgeDirection.DOWN;
+			}
+		}
+
+		int playerSide = MathHelper.floor_double((double) (entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int returnSide = (playerSide == 0 && canRotate(2)) ? 2 : ((playerSide == 1 && canRotate(5)) ? 5 : ((playerSide == 2 && canRotate(3)) ? 3 : ((playerSide == 3 && canRotate(4)) ? 4 : 0)));
+
+		if (isFlipPlacement)
+			return ForgeDirection.getOrientation(returnSide).getOpposite();
+
+		return ForgeDirection.getOrientation(returnSide);
+	}
+
+	public boolean canRotate(int ord)
+	{
+		return (rotationMask & (1 << ord)) != 0;
+	}
+
+	public ForgeDirection getDirection()
+	{
+		return ForgeDirection.getOrientation(getBlockMetadata());
+	}
+
+	public void setDirection(ForgeDirection direction)
+	{
+		world().setBlockMetadataWithNotify(x(), y(), z(), direction.ordinal(), 3);
+	}
+
+	/**
+	 * Block events
+	 */
 	protected void onAdded()
 	{
 		onWorldJoin();
+	}
+
+	public void onPlaced(EntityLivingBase entityLiving, ItemStack itemStack)
+	{
+		if (this instanceof IRotatable)
+		{
+			((IRotatable) this).setDirection(determineOrientation(entityLiving));
+		}
 	}
 
 	public void onRemove(int par5, int par6)
@@ -323,22 +532,23 @@ public abstract class TileBlock extends TileEntity
 	 * Rendering
 	 */
 	@SideOnly(Side.CLIENT)
-	TileRender renderer;
+	private static final WeakHashMap<TileBlock, TileRender> renderer = new WeakHashMap<TileBlock, TileRender>();
 
 	@SideOnly(Side.CLIENT)
-	protected Icon icon;
+	private static final HashMap<String, Icon> icon = new HashMap<String, Icon>();;
 
 	@SideOnly(Side.CLIENT)
 	public final TileRender getRenderer()
 	{
-		if (renderer == null)
-			renderer = renderer();
+		// TODO: Be careful if this might cause memory issues.
+		if (!renderer.containsKey(this))
+			renderer.put(this, newRenderer());
 
-		return renderer;
+		return renderer.get(this);
 	}
 
 	@SideOnly(Side.CLIENT)
-	protected TileRender renderer()
+	protected TileRender newRenderer()
 	{
 		return null;
 	}
@@ -352,19 +562,20 @@ public abstract class TileBlock extends TileEntity
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int meta)
 	{
-		return icon;
+		return icon.get(getTextureName());
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister)
 	{
-		icon = iconRegister.registerIcon(getTextureName());
+		if (!icon.containsKey(getTextureName()))
+			icon.put(getTextureName(), iconRegister.registerIcon(getTextureName()));
 	}
 
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName()
 	{
-		return textureName == null ? "MISSING_ICON_TILE_" + getBlockType().blockID + "_" + name : textureName;
+		return textureName == null ? "MISSING_ICON_TILE_" + getBlockType().blockID + "_" + name : domain + textureName;
 	}
 
 	public boolean shouldSideBeRendered(IBlockAccess access, int side)

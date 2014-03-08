@@ -9,6 +9,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -35,6 +36,7 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	{
 		super(id, dummyTile.material);
 		this.dummyTile = dummyTile;
+		dummyTile.domain = modPrefix;
 		setUnlocalizedName(modPrefix + dummyTile.name);
 		setTextureName(modPrefix + dummyTile.textureName);
 
@@ -127,6 +129,14 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	{
 		inject(world, x, y, z);
 		getTile(world, x, y, z).onAdded();
+		eject();
+	}
+
+	@Override
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
+	{
+		inject(world, x, y, z);
+		getTile(world, x, y, z).onPlaced(entityLiving, itemStack);
 		eject();
 	}
 
