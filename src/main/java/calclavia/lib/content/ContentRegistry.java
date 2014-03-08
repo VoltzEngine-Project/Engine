@@ -72,34 +72,40 @@ public class ContentRegistry
 		{
 			TileBlock tileBlock = tileBlockClass.newInstance();
 			final String name = tileBlock.name;
+			boolean canDisable = false;
 
-			int assignedID = idManager.getNextBlockID();
-			int actualID = config.getBlock(name, assignedID).getInt(assignedID);
-
-			Block block = new BlockDummy(actualID, modPrefix,defaultTab, tileBlock);
-
-			blocks.put(block, name);
-			proxy.registerBlock(block, tileBlock.itemBlock, name, modID);
-
-			tileBlock.block = block;
-			tileBlock.onInstantiate();
-			
-			if (tileBlock.tile() != null)
+			if (!canDisable || (canDisable && config.get("enabled_list", "Enable " + name, true).getBoolean(true)))
 			{
-				proxy.registerTileEntity(name, tileBlock.tile().getClass());
+				int assignedID = idManager.getNextBlockID();
+				int actualID = config.getBlock(name, assignedID).getInt(assignedID);
 
-				if (!tileBlock.normalRender)
+				Block block = new BlockDummy(actualID, modPrefix, defaultTab, tileBlock);
+
+				blocks.put(block, name);
+				proxy.registerBlock(block, tileBlock.itemBlock, name, modID);
+
+				tileBlock.block = block;
+				tileBlock.onInstantiate();
+
+				if (tileBlock.tile() != null)
 				{
-					proxy.registerDummyRenderer(tileBlock.tile().getClass());
-				}
-			}
+					proxy.registerTileEntity(name, tileBlock.tile().getClass());
 
-			return block;
+					if (!tileBlock.normalRender)
+					{
+						proxy.registerDummyRenderer(tileBlock.tile().getClass());
+					}
+				}
+
+				return block;
+			}
 		}
 		catch (Exception e)
 		{
 			throw new RuntimeException("TileBlock [" + tileBlockClass.getSimpleName() + "] failed to be created:", e);
 		}
+
+		return null;
 	}
 
 	public Block createBlock(Class<? extends Block> blockClass)
@@ -140,7 +146,7 @@ public class ContentRegistry
 	{
 		Block block = null;
 
-		if (blockClass != null && (!canDisable || canDisable && config.get("Enabled_List", "Enabled " + name, true).getBoolean(true)))
+		if (blockClass != null && (!canDisable || (canDisable && config.get("Enabled_List", "Enabled " + name, true).getBoolean(true))))
 		{
 			try
 			{
@@ -243,7 +249,7 @@ public class ContentRegistry
 	public Item createItem(String name, Class<? extends Item> clazz, boolean canDisable)
 	{
 		Item item = null;
-		if (clazz != null && (!canDisable || canDisable && config.get("Enabled_List", "Enabled_" + name, true).getBoolean(true)))
+		if (clazz != null && (!canDisable || (canDisable && config.get("Enabled_List", "Enabled_" + name, true).getBoolean(true))))
 		{
 			try
 			{
