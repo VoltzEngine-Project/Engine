@@ -258,10 +258,13 @@ public abstract class TileBlock extends TileEntity
 	 */
 	public Iterable<Cuboid> getCollisionBoxes(Cuboid intersect, Entity entity)
 	{
-		if (intersect != null && bounds.intersects(intersect))
-			return getCollisionBoxes();
+		List<Cuboid> boxes = new ArrayList<Cuboid>();
 
-		return null;
+		for (Cuboid cuboid : getCollisionBoxes())
+			if (intersect != null && cuboid.intersects(intersect))
+				boxes.add(cuboid);
+
+		return boxes;
 	}
 
 	public Iterable<Cuboid> getCollisionBoxes()
