@@ -118,9 +118,16 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	{
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-		if (tile instanceof TileBlock && ((TileBlock) tile).getRenderer() != null)
+		if (tile instanceof TileBlock)
 		{
-			if (!((TileBlock) tile).getRenderer().renderStatic(new Vector3(x, y, z)))
+			if (((TileBlock) tile).getRenderer() != null)
+			{
+				if (!((TileBlock) tile).getRenderer().renderStatic(new Vector3(x, y, z)))
+				{
+					renderer.renderStandardBlock(block, x, y, z);
+				}
+			}
+			else if(((TileBlock) tile).normalRender)
 			{
 				renderer.renderStandardBlock(block, x, y, z);
 			}
