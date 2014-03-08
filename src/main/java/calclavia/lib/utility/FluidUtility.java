@@ -122,7 +122,7 @@ public class FluidUtility
 		return 0;
 	}
 
-	public static double getAveragePercentageFilledForSides(double defaultFill, World world, Vector3 position, ForgeDirection... sides)
+	public static double getAveragePercentageFilledForSides(Class classMask, double defaultFill, World world, Vector3 position, ForgeDirection... sides)
 	{
 		if (defaultFill > 0.98)
 			return 1.0;
@@ -132,12 +132,17 @@ public class FluidUtility
 
 		for (ForgeDirection side : sides)
 		{
-			FluidTankInfo[] info = getTankInfo(world, position.clone().translate(side), side);
-			
-			if (info.length > 0)
+			TileEntity tile = position.clone().translate(side).getTileEntity(world);
+
+			if (tile != null && (classMask == null || classMask.isAssignableFrom(tile.getClass())))
 			{
-				fullness += getFilledPercentage(info);
-				count++;
+				FluidTankInfo[] info = getTankInfo(world, position.clone().translate(side), side);
+
+				if (info.length > 0)
+				{
+					fullness += getFilledPercentage(info);
+					count++;
+				}
 			}
 		}
 

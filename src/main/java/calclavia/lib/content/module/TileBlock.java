@@ -568,8 +568,7 @@ public abstract class TileBlock extends TileEntity
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister)
 	{
-		if (!icon.containsKey(getTextureName()))
-			icon.put(getTextureName(), iconRegister.registerIcon(getTextureName()));
+		icon.put(getTextureName(), iconRegister.registerIcon(getTextureName()));
 	}
 
 	@SideOnly(Side.CLIENT)
