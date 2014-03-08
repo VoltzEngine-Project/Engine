@@ -308,7 +308,7 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		inject(world, x, y, z);
 		ArrayList<ItemStack> value = getTile(world, x, y, z).getDrops(metadata, fortune);
 		eject();
-		return value;
+		return value != null ? value : new ArrayList<ItemStack>();
 	}
 
 	@Override
