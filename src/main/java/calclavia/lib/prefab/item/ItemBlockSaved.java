@@ -68,13 +68,14 @@ public class ItemBlockSaved extends ItemBlock
         return getItemStackWithNBT(Block.blocksList[world.getBlockId(x, y, z)], world, x, y, z);
     }
 
-    public static ItemStack getItemStackWithNBT(Block block, World world, int x, int y, int z)
+    public static ItemStack getItemStackWithNBT(Block b, World world, int x, int y, int z)
     {
+        Block block = b == null ? Block.blocksList[world.getBlockId(x, y, z)] : b;
         if (block != null)
         {
             int meta = world.getBlockMetadata(x, y, z);
 
-            ItemStack dropStack = new ItemStack(block == null ? Block.blocksList[world.getBlockId(x, y, z)] : block, block.quantityDropped(meta, 0, world.rand), meta);
+            ItemStack dropStack = new ItemStack(b, block.quantityDropped(meta, 0, world.rand), block.damageDropped(meta));
             NBTTagCompound tag = new NBTTagCompound();
 
             TileEntity tile = world.getBlockTileEntity(x, y, z);
