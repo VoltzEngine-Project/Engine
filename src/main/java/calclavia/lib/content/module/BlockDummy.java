@@ -6,12 +6,14 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -129,6 +131,21 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	}
 
 	@Override
+	public void breakBlock(World world, int x, int y, int z, int par5, int par6)
+	{
+		inject(world, x, y, z);
+		getTile(world, x, y, z).onRemove(par5, par6);
+		eject();
+		super.breakBlock(world, x, y, z, par5, par6);
+	}
+
+	@Override
+	public int quantityDropped(int meta, int fortune, Random random)
+	{
+		return dummyTile.quantityDropped(meta, fortune);
+	}
+
+	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int side)
 	{
 		inject(world, x, y, z);
@@ -240,6 +257,30 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	public int getRenderType()
 	{
 		return BlockRenderingHandler.ID;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getBlockTexture(IBlockAccess access, int x, int y, int z, int side)
+	{
+		inject(access, x, y, z);
+		Icon value = getTile(access, x, y, z).getIcon(access, side);
+		eject();
+		return value;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getIcon(int side, int meta)
+	{
+		return dummyTile.getIcon(side, meta);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister iconRegister)
+	{
+		dummyTile.registerIcons(iconRegister);
 	}
 
 	@Override

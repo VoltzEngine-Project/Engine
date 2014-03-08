@@ -1,17 +1,24 @@
 package calclavia.lib.content.module;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -20,6 +27,7 @@ import calclavia.lib.prefab.item.ItemBlockTooltip;
 import calclavia.lib.prefab.vector.Cuboid;
 import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.WrenchUtility;
+import calclavia.lib.utility.inventory.InventoryUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -41,7 +49,7 @@ public abstract class TileBlock extends TileEntity
 	 * The unique string ID of this block.
 	 */
 	public final String name;
-	public String textureName;
+	protected String textureName;
 	public CreativeTabs creativeTab = null;
 	public boolean normalRender = true;
 	public boolean isOpaqueCube = true;
@@ -150,8 +158,28 @@ public abstract class TileBlock extends TileEntity
 	public ArrayList<ItemStack> getDrops(int metadata, int fortune)
 	{
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(new ItemStack(getBlockType(), 1, 0));
+		drops.add(new ItemStack(getBlockType(), 1, quantityDropped(metadata, fortune)));
 		return drops;
+	}
+
+	public int quantityDropped(int meta, int fortune)
+	{
+		return 1;
+	}
+
+	public boolean isControlDown(EntityPlayer player)
+	{
+		try
+		{
+			Class ckm = Class.forName("codechicken.multipart.ControlKeyModifer");
+			Method m = ckm.getMethod("isControlDown", EntityPlayer.class);
+			return (Boolean) m.invoke(null, player);
+		}
+		catch (Exception e)
+		{
+
+		}
+		return false;
 	}
 
 	public void getSubBlocks(int id, CreativeTabs creativeTab, List list)
@@ -196,7 +224,7 @@ public abstract class TileBlock extends TileEntity
 		return use(player, side, vector3);
 	}
 
-	protected boolean use(EntityPlayer player, int side, Vector3 vector3)
+	protected boolean use(EntityPlayer player, int side, Vector3 hit)
 	{
 		return false;
 	}
@@ -211,7 +239,16 @@ public abstract class TileBlock extends TileEntity
 		onWorldJoin();
 	}
 
+	public void onRemove(int par5, int par6)
+	{
+		onWorldSeparate();
+	}
+
 	protected void onWorldJoin()
+	{
+	}
+
+	protected void onWorldSeparate()
 	{
 	}
 
@@ -289,6 +326,9 @@ public abstract class TileBlock extends TileEntity
 	TileRender renderer;
 
 	@SideOnly(Side.CLIENT)
+	protected Icon icon;
+
+	@SideOnly(Side.CLIENT)
 	public final TileRender getRenderer()
 	{
 		if (renderer == null)
@@ -301,6 +341,30 @@ public abstract class TileBlock extends TileEntity
 	protected TileRender renderer()
 	{
 		return null;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public Icon getIcon(IBlockAccess access, int side)
+	{
+		return getIcon(side, access.getBlockMetadata(x(), y(), z()));
+	}
+
+	@SideOnly(Side.CLIENT)
+	public Icon getIcon(int side, int meta)
+	{
+		return icon;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister iconRegister)
+	{
+		icon = iconRegister.registerIcon(getTextureName());
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected String getTextureName()
+	{
+		return textureName == null ? "MISSING_ICON_TILE_" + getBlockType().blockID + "_" + name : textureName;
 	}
 
 	public boolean shouldSideBeRendered(IBlockAccess access, int side)

@@ -173,7 +173,7 @@ public class TileInventory extends TileBase implements IExternalInventory, ISide
 		{
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -292,19 +292,35 @@ public class TileInventory extends TileBase implements IExternalInventory, ISide
 		return false;
 	}
 
-	public boolean isControlDown(EntityPlayer player)
+	public void onRemove(int par5, int par6)
 	{
-		try
-		{
-			Class ckm = Class.forName("codechicken.multipart.ControlKeyModifer");
-			Method m = ckm.getMethod("isControlDown", EntityPlayer.class);
-			return (Boolean) m.invoke(null, player);
-		}
-		catch (Exception e)
-		{
+		super.onRemove(par5, par6);
+		dropEntireInventory(par5, par6);
+	}
 
+	public void dropEntireInventory(int par5, int par6)
+	{
+		if (this instanceof IInventory)
+		{
+			IInventory inventory = (IInventory) this;
+
+			for (int i = 0; i < inventory.getSizeInventory(); ++i)
+			{
+				ItemStack dropStack = inventory.getStackInSlot(i);
+
+				if (dropStack != null)
+				{
+					int var11 = dropStack.stackSize;
+					dropStack.stackSize -= var11;
+					InventoryUtility.dropItemStack(world(), center(), dropStack);
+
+					if (dropStack.stackSize <= 0)
+						inventory.setInventorySlotContents(i, null);
+				}
+			}
+
+			inventory.onInventoryChanged();
 		}
-		return false;
 	}
 
 	@Override
