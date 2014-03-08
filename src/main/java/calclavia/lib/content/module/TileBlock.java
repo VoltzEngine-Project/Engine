@@ -105,6 +105,19 @@ public abstract class TileBlock extends TileEntity
 		return Vector3.fromCenter(this);
 	}
 
+	@Override
+	public Block getBlockType()
+	{
+		Block b = super.getBlockType();
+
+		if (tile() == null || b == null)
+		{
+			return block;
+		}
+
+		return b;
+	}
+
 	/**
 	 * @return Return "this" if the block requires a TileEntity.
 	 */
@@ -299,7 +312,7 @@ public abstract class TileBlock extends TileEntity
 
 	public void onFillRain()
 	{
-		
+
 	}
 
 }
