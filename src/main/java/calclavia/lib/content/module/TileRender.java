@@ -1,13 +1,14 @@
 package calclavia.lib.content.module;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import universalelectricity.api.vector.Vector3;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class TileRender
-{	
+{
 	/**
 	 * Render the static, unmoving faces of this part into the world renderer.
 	 * The Tessellator is already drawing.
@@ -31,8 +32,9 @@ public class TileRender
 	 * @param frame The partial interpolation frame value for animations between ticks
 	 * @param pass The render pass, 1 or 0
 	 */
-	public void renderDynamic(Vector3 position, float frame)
+	public boolean renderDynamic(Vector3 position, boolean isItem, float frame)
 	{
+		return false;
 	}
 
 	/**

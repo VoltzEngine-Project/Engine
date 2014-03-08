@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL12;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.content.module.BlockDummy;
 import calclavia.lib.content.module.TileBlock;
+import calclavia.lib.render.RenderUtility;
 import calclavia.lib.render.item.ISimpleItemRenderer;
 
 import com.google.common.collect.Maps;
@@ -61,7 +62,11 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 
 				if (!tile.getRenderer().renderItem(new ItemStack(block, 1, metadata)))
 				{
-					tile.getRenderer().renderDynamic(new Vector3(), 0);
+					if (!tile.getRenderer().renderDynamic(new Vector3(), true, 0))
+					{
+						GL11.glTranslated(0.5, 0.5, 0.5);
+						RenderUtility.renderNormalBlockAsItem(block, metadata, renderer);
+					}
 				}
 
 				GL11.glPopMatrix();
@@ -111,19 +116,16 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
 	{
-		if (block.renderAsNormalBlock())
+		TileEntity tile = world.getBlockTileEntity(x, y, z);
+
+		if (tile instanceof TileBlock && ((TileBlock) tile).getRenderer() != null)
 		{
-			TileEntity tile = world.getBlockTileEntity(x, y, z);
-
-			if (tile instanceof TileBlock && ((TileBlock) tile).getRenderer() != null)
+			if (!((TileBlock) tile).getRenderer().renderStatic(new Vector3(x, y, z)))
 			{
-				if (!((TileBlock) tile).getRenderer().renderStatic(new Vector3(x, y, z)))
-				{
-					renderer.renderStandardBlock(block, x, y, z);
-				}
-
-				return true;
+				renderer.renderStandardBlock(block, x, y, z);
 			}
+
+			return true;
 		}
 
 		return false;

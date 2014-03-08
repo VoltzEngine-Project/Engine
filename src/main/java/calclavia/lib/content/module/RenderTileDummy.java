@@ -17,7 +17,13 @@ public class RenderTileDummy extends TileEntitySpecialRenderer
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f)
 	{
 		if (tile instanceof TileBlock)
-			if (((TileBlock) tile).getRenderer() != null)
-				((TileBlock) tile).getRenderer().renderDynamic(new Vector3(x, y, z), f);
+		{
+			TileBlock tileBlock = ((TileBlock) tile);
+
+			if (tileBlock.getRenderer() != null)
+			{
+				tileBlock.getRenderer().renderDynamic(new Vector3(x, y, z), false, f);
+			}
+		}
 	}
 }
