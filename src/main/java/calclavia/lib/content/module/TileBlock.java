@@ -531,20 +531,24 @@ public abstract class TileBlock extends TileEntity
 	/**
 	 * Rendering
 	 */
-	@SideOnly(Side.CLIENT)
-	private static final WeakHashMap<TileBlock, TileRender> renderer = new WeakHashMap<TileBlock, TileRender>();
+	private static class RenderInfo
+	{
+		@SideOnly(Side.CLIENT)
+		private static final WeakHashMap<TileBlock, TileRender> renderer = new WeakHashMap<TileBlock, TileRender>();
 
-	@SideOnly(Side.CLIENT)
-	private static final HashMap<String, Icon> icon = new HashMap<String, Icon>();;
+		@SideOnly(Side.CLIENT)
+		private static final HashMap<String, Icon> icon = new HashMap<String, Icon>();;
+
+	}
 
 	@SideOnly(Side.CLIENT)
 	public final TileRender getRenderer()
 	{
 		// TODO: Be careful if this might cause memory issues.
-		if (!renderer.containsKey(this))
-			renderer.put(this, newRenderer());
+		if (!RenderInfo.renderer.containsKey(this))
+			RenderInfo.renderer.put(this, newRenderer());
 
-		return renderer.get(this);
+		return RenderInfo.renderer.get(this);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -562,13 +566,13 @@ public abstract class TileBlock extends TileEntity
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int meta)
 	{
-		return icon.get(getTextureName());
+		return RenderInfo.icon.get(getTextureName());
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister)
 	{
-		icon.put(getTextureName(), iconRegister.registerIcon(getTextureName()));
+		RenderInfo.icon.put(getTextureName(), iconRegister.registerIcon(getTextureName()));
 	}
 
 	@SideOnly(Side.CLIENT)
