@@ -3,12 +3,6 @@ package calclavia.lib.configurable;
 import net.minecraftforge.common.Configuration;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Handling Configuration is done here only

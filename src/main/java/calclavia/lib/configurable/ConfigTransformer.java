@@ -6,10 +6,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import universalelectricity.core.asm.ASMHelper;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,7 +32,7 @@ public class ConfigTransformer implements IClassTransformer
                 if (anode.desc.equals("Lcalclavia/configurable/Config;"))
                 {
                     if (!classes.contains(fnode.name))
-                    classes.add(fnode.name);
+                        classes.add(fnode.name);
                 }
             }
         }
