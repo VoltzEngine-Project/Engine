@@ -56,25 +56,25 @@ public abstract class ConfigHandler
     {
         if (field.getType().getName().equals(int.class.getName()))
         {
-            int value = config.get(cfg.category(), cfg.key(), (int) field.getInt(null)).getInt();
+            int value = config.get(cfg.category(), cfg.key(), (int) field.getInt(null), cfg.comment()).getInt();
             field.setInt(null, value);
         }
 
         else if (field.getType().getName().equals(double.class.getName()))
         {
-            double value = config.get(cfg.category(), cfg.key(), (double) field.getDouble(null)).getDouble((double) field.getDouble(null));
+            double value = config.get(cfg.category(), cfg.key(), (double) field.getDouble(null), cfg.comment()).getDouble((double) field.getDouble(null));
             field.setDouble(null, value);
         }
 
         else if (field.getType().getName().equals(String.class.getName()))
         {
-            String value = config.get(cfg.category(), cfg.key(), (String) field.get(null)).getString();
+            String value = config.get(cfg.category(), cfg.key(), (String) field.get(null), cfg.comment()).getString();
             field.set(null, value);
         }
 
         else if (field.getType().getName().equals(boolean.class.getName()))
         {
-            boolean value = config.get(cfg.category(), cfg.key(), (boolean) field.getBoolean(null)).getBoolean((boolean) field.getBoolean(null));
+            boolean value = config.get(cfg.category(), cfg.key(), (boolean) field.getBoolean(null), cfg.comment()).getBoolean((boolean) field.getBoolean(null));
             field.setBoolean(null, value);
         }
     }

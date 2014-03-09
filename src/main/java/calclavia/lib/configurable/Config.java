@@ -27,4 +27,6 @@ public @interface Config
 
     public String key();
 
+    public String comment() default "";
+
 }
