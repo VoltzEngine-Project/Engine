@@ -96,7 +96,6 @@ public class TileInventory extends TileBase implements IExternalInventory, ISide
 	public void setInventorySlotContents(int i, ItemStack itemstack)
 	{
 		this.getInventory().setInventorySlotContents(i, itemstack);
-
 	}
 
 	@Override
@@ -195,10 +194,9 @@ public class TileInventory extends TileBase implements IExternalInventory, ISide
 		 */
 		if (current != null)
 		{
-			if (stackInInventory == null || stackInInventory.isItemEqual(current))
+			if (stackInInventory == null || ItemStack.areItemStacksEqual(stackInInventory, current))
 			{
 				return insertCurrentItem(inventory, slotID, player);
-
 			}
 		}
 
@@ -215,7 +213,7 @@ public class TileInventory extends TileBase implements IExternalInventory, ISide
 
 		if (current != null)
 		{
-			if (stackInInventory == null || stackInInventory.isItemEqual(current))
+			if (stackInInventory == null || ItemStack.areItemStacksEqual(stackInInventory, current))
 			{
 				if (inventory.isItemValidForSlot(slotID, current))
 				{
