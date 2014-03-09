@@ -53,6 +53,7 @@ public class UniversalRecipe
 	public static final UniversalRecipe WRENCH;
 	public static final UniversalRecipe WIRE;
 	public static final UniversalRecipe MOTOR;
+	public static final UniversalRecipe RUBBER;
 
 	static
 	{
@@ -76,7 +77,7 @@ public class UniversalRecipe
 		WIRE = new UniversalRecipe("wire", "ironWire", "copperCableBlock", new ItemStack(Item.redstone));
 
 		MOTOR = new UniversalRecipe("motor", "gear", Items.getItem("generator"), new ItemStack(Block.pistonBase));
-
+		RUBBER = new UniversalRecipe("rubber", "itemRubber", new ItemStack(Item.slimeBall));
 	}
 
 	public String defaultRecipe;
