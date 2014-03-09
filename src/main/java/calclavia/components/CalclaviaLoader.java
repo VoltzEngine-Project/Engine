@@ -91,10 +91,6 @@ public class CalclaviaLoader
 	@Mod.Metadata(ID)
 	public static ModMetadata metadata;
 
-
-    @Config(key = "test1")
-    public static int test = 3;
-
 	@Instance(ID)
 	public static CalclaviaLoader INSTANCE;
 
