@@ -93,9 +93,9 @@ public class TileInventory extends TileBase implements IExternalInventory, ISide
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack)
+	public void setInventorySlotContents(int i, ItemStack itemStack)
 	{
-		this.getInventory().setInventorySlotContents(i, itemstack);
+		this.getInventory().setInventorySlotContents(i, itemStack);
 	}
 
 	@Override

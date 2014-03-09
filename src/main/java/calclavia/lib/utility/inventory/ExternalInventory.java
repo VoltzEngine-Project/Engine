@@ -48,7 +48,9 @@ public class ExternalInventory implements IExternalInventoryBox
 	@Override
 	public ItemStack getStackInSlot(int slot)
 	{
-		return this.getContainedItems()[slot];
+		if (slot < getContainedItems().length)
+			return this.getContainedItems()[slot];
+		return null;
 	}
 
 	@Override
