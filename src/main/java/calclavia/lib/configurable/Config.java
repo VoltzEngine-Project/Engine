@@ -1,5 +1,7 @@
 package calclavia.lib.configurable;
 
+import net.minecraftforge.common.Configuration;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -23,9 +25,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Config
 {
-    public String category() default "Config_Features";
+    public String category() default Configuration.CATEGORY_GENERAL;
 
-    public String key();
+    public String key() default "";
 
     public String comment() default "";
 

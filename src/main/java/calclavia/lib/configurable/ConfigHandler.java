@@ -54,27 +54,37 @@ public abstract class ConfigHandler
 
     private static void handleField(Field field, Config cfg, Configuration config) throws IllegalAccessException
     {
+        String key;
+
+        if (cfg.key().isEmpty())
+        {
+            key = field.getName();
+        }
+        
+        else
+            key = cfg.key();
+
         if (field.getType().getName().equals(int.class.getName()))
         {
-            int value = config.get(cfg.category(), cfg.key(), (int) field.getInt(null), cfg.comment()).getInt();
+            int value = config.get(cfg.category(), key, (int) field.getInt(null), cfg.comment()).getInt();
             field.setInt(null, value);
         }
 
         else if (field.getType().getName().equals(double.class.getName()))
         {
-            double value = config.get(cfg.category(), cfg.key(), (double) field.getDouble(null), cfg.comment()).getDouble((double) field.getDouble(null));
+            double value = config.get(cfg.category(), key, (double) field.getDouble(null), cfg.comment()).getDouble((double) field.getDouble(null));
             field.setDouble(null, value);
         }
 
         else if (field.getType().getName().equals(String.class.getName()))
         {
-            String value = config.get(cfg.category(), cfg.key(), (String) field.get(null), cfg.comment()).getString();
+            String value = config.get(cfg.category(), key, (String) field.get(null), cfg.comment()).getString();
             field.set(null, value);
         }
 
         else if (field.getType().getName().equals(boolean.class.getName()))
         {
-            boolean value = config.get(cfg.category(), cfg.key(), (boolean) field.getBoolean(null), cfg.comment()).getBoolean((boolean) field.getBoolean(null));
+            boolean value = config.get(cfg.category(), key, (boolean) field.getBoolean(null), cfg.comment()).getBoolean((boolean) field.getBoolean(null));
             field.setBoolean(null, value);
         }
 

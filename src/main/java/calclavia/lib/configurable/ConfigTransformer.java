@@ -20,6 +20,7 @@ public class ConfigTransformer implements IClassTransformer
     @Override
     public byte[] transform (String name, String transformedName, byte[] bytes)
     {
+        // no need to iterate over Forge, FML, and MC source
         if (transformedName.startsWith("net.minecraft") || transformedName.startsWith("cpw.mods.fml"))
             return bytes;
 
