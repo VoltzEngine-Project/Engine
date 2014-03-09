@@ -5,7 +5,26 @@ import net.minecraftforge.common.Configuration;
 import java.lang.reflect.Field;
 
 /**
- * Handling the configuration here is done by passing the start namespace, and the Configuration file to write to
+ * How to use the config Handler
+ *
+ * First, mark your field with @Config
+ *
+ * @Config(key = "a key", category = "a category")
+ * public static double aValue = 3.765D;
+ *
+ * this is all you need to do for the field itself,
+ *
+ * next:
+ * Just before you call save for your Configuration file, call this method:
+ *
+ * ConfigHandler.configure(Configuration configObject, String namespace);
+ *
+ * now do remember, The namespace is your mods namespace. for the ICBM mod it would be "icbm", for Calclavia Core, it would be "calclavia"
+ * yet if you want to split config files, you can do that by separating namespaces:
+ * for example, ICBM Sentries separate Config file, and ICBM Explosives separate config file
+ *
+ * ConfigHandler.configure(icbmSentryConfigObject, "icbm.sentry");
+ * ConfigHandler.configure(icbmExplosivesConfigObject, "icbm.explosion");
  *
  * @since 09/03/14
  * @author tgame14
@@ -18,11 +37,8 @@ public abstract class ConfigHandler
         System.out.println("Entering configure " + ConfigTransformer.classes);
         for (String classPath : ConfigTransformer.classes)
         {
-            String str = classPath.replaceAll("/", ".");
-            System.out.println(str);
-
-            Class clazz = Class.forName(str);
-            System.out.println("Clazz " + clazz);
+            String classDir = classPath.replaceAll("/", ".");
+            Class clazz = Class.forName(classDir);
 
             for (Field field : clazz.getFields())
             {
@@ -44,16 +60,22 @@ public abstract class ConfigHandler
             field.setInt(null, value);
         }
 
-        if (field.getType().getName().equals(double.class.getName()))
+        else if (field.getType().getName().equals(double.class.getName()))
         {
             double value = config.get(cfg.category(), cfg.key(), (double) field.getDouble(null)).getDouble((double) field.getDouble(null));
             field.setDouble(null, value);
         }
 
-        if (field.getType().getName().equals(String.class.getName()))
+        else if (field.getType().getName().equals(String.class.getName()))
         {
             String value = config.get(cfg.category(), cfg.key(), (String) field.get(null)).getString();
             field.set(null, value);
+        }
+
+        else if (field.getType().getName().equals(boolean.class.getName()))
+        {
+            boolean value = config.get(cfg.category(), cfg.key(), (boolean) field.getBoolean(null)).getBoolean((boolean) field.getBoolean(null));
+            field.setBoolean(null, value);
         }
     }
 
