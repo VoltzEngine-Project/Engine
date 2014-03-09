@@ -1,5 +1,6 @@
 package calclavia.lib.content.module;
 
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import universalelectricity.api.vector.Vector3;
@@ -13,12 +14,14 @@ public class TileRender
 	 * Render the static, unmoving faces of this part into the world renderer.
 	 * The Tessellator is already drawing.
 	 * 
+	 * @param renderer
+	 * 
 	 * @param olm An optional light matrix to be used for rendering things with perfect MC blended
 	 * lighting (eg microblocks). Only use this if you have to.
 	 * @param pass The render pass, 1 or 0
 	 * @return True if render was used.
 	 */
-	public boolean renderStatic(Vector3 position)
+	public boolean renderStatic(RenderBlocks renderer, Vector3 position)
 	{
 		return false;
 	}

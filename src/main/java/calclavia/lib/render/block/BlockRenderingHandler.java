@@ -130,7 +130,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 		{
 			if (((TileBlock) tile).getRenderer() != null)
 			{
-				if (!((TileBlock) tile).getRenderer().renderStatic(new Vector3(x, y, z)))
+				if (!((TileBlock) tile).getRenderer().renderStatic(renderer, new Vector3(x, y, z)))
 				{
 					renderer.renderStandardBlock(block, x, y, z);
 				}
