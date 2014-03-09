@@ -32,8 +32,8 @@ public class ConfigTransformer implements IClassTransformer
                 {
                     if (anode.desc.equals("Lcalclavia/lib/configurable/Config;"))
                     {
-                        if (!classes.contains(transformedName))
-                            classes.add(transformedName);
+                        classes.add(transformedName);
+                        return bytes;
                     }
                 }
         }

@@ -77,6 +77,10 @@ public abstract class ConfigHandler
             boolean value = config.get(cfg.category(), cfg.key(), (boolean) field.getBoolean(null), cfg.comment()).getBoolean((boolean) field.getBoolean(null));
             field.setBoolean(null, value);
         }
+
+        // TODO: If the lists of Configuration work as key=val1, val2, val3 -- im not sure they do, then add support for that, as that should be quite simple. no reason it shouldnt work
+
+
     }
 
 
