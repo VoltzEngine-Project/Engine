@@ -20,7 +20,7 @@ public class ConfigTransformer implements IClassTransformer
     @Override
     public byte[] transform (String name, String transformedName, byte[] bytes)
     {
-        if (transformedName.startsWith("net.minecraft"))
+        if (transformedName.startsWith("net.minecraft") || transformedName.startsWith("cpw.mods.fml"))
             return bytes;
 
         ClassNode cnode = ASMHelper.createClassNode(bytes);
@@ -30,10 +30,10 @@ public class ConfigTransformer implements IClassTransformer
             if (fnode != null && fnode.visibleAnnotations != null)
                 for (AnnotationNode anode : fnode.visibleAnnotations)
                 {
-                    if (anode.desc.equals("Lcalclavia/configurable/Config;"))
+                    if (anode.desc.equals("Lcalclavia/lib/configurable/Config;"))
                     {
-                        if (!classes.contains(fnode.name))
-                            classes.add(fnode.name);
+                        if (!classes.contains(transformedName))
+                            classes.add(transformedName);
                     }
                 }
         }
