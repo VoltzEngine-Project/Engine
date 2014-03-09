@@ -27,14 +27,15 @@ public class ConfigTransformer implements IClassTransformer
 
         for (FieldNode fnode : cnode.fields)
         {
-            for (AnnotationNode anode : fnode.visibleAnnotations)
-            {
-                if (anode.desc.equals("Lcalclavia/configurable/Config;"))
+            if (fnode != null && fnode.visibleAnnotations != null)
+                for (AnnotationNode anode : fnode.visibleAnnotations)
                 {
-                    if (!classes.contains(fnode.name))
-                        classes.add(fnode.name);
+                    if (anode.desc.equals("Lcalclavia/configurable/Config;"))
+                    {
+                        if (!classes.contains(fnode.name))
+                            classes.add(fnode.name);
+                    }
                 }
-            }
         }
 
         return bytes;

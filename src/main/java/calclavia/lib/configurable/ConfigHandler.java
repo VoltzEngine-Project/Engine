@@ -5,8 +5,7 @@ import net.minecraftforge.common.Configuration;
 import java.lang.reflect.Field;
 
 /**
- * Handling Configuration is done here only
- *
+ * Handling the configuration here is done by passing the start namespace, and the Configuration file to write to
  *
  * @since 09/03/14
  * @author tgame14
@@ -16,10 +15,14 @@ public abstract class ConfigHandler
 
     public static void configure (Configuration config, String namespace) throws ClassNotFoundException, IllegalAccessException
     {
+        System.out.println("Entering configure " + ConfigTransformer.classes);
         for (String classPath : ConfigTransformer.classes)
         {
-            classPath = classPath.replaceAll("/", ".");
-            Class clazz = Class.forName(classPath);
+            String str = classPath.replaceAll("/", ".");
+            System.out.println(str);
+
+            Class clazz = Class.forName(str);
+            System.out.println("Clazz " + clazz);
 
             for (Field field : clazz.getFields())
             {

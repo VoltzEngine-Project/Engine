@@ -3,6 +3,7 @@ package calclavia.lib;
 import java.util.Map;
 
 import calclavia.lib.asm.CalclaviaTransformer;
+import calclavia.lib.configurable.ConfigTransformer;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
@@ -24,7 +25,7 @@ public class CalclaviaPluginLoader implements IFMLLoadingPlugin
 	@Override
 	public String[] getASMTransformerClass()
 	{
-		return new String[] { CalclaviaTransformer.class.getName() };
+		return new String[] { CalclaviaTransformer.class.getName(), ConfigTransformer.class.getName() };
 	}
 
 	@Override
