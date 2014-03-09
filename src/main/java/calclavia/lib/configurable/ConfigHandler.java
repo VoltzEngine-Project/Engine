@@ -60,7 +60,7 @@ public abstract class ConfigHandler
         {
             key = field.getName();
         }
-        
+
         else
             key = cfg.key();
 
