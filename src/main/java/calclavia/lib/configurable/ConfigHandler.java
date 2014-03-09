@@ -40,7 +40,7 @@ public abstract class ConfigHandler
             String classDir = classPath.replaceAll("/", ".");
             Class clazz = Class.forName(classDir);
 
-            for (Field field : clazz.getFields())
+            for (Field field : clazz.getDeclaredFields())
             {
                 Config cfg = field.getAnnotation(Config.class);
                 if (cfg != null)
