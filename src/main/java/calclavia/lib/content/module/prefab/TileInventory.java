@@ -290,6 +290,7 @@ public class TileInventory extends TileBase implements IExternalInventory, ISide
 		return false;
 	}
 
+	@Override
 	public void onRemove(int par5, int par6)
 	{
 		super.onRemove(par5, par6);

@@ -267,6 +267,13 @@ public class InventoryUtility
 
 			EntityItem entityitem = new EntityItem(world, x + randomX, y + randomY, z + randomZ, itemStack);
 
+			if (randomAmount <= 0)
+			{
+				entityitem.motionX = 0;
+				entityitem.motionY = 0;
+				entityitem.motionZ = 0;
+			}
+
 			if (itemStack.hasTagCompound())
 			{
 				entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
