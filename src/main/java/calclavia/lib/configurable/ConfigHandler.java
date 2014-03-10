@@ -37,15 +37,17 @@ public abstract class ConfigHandler
         System.out.println("Entering configure " + ConfigTransformer.classes);
         for (String classPath : ConfigTransformer.classes)
         {
-            String classDir = classPath.replaceAll("/", ".");
-            Class clazz = Class.forName(classDir);
-
-            for (Field field : clazz.getDeclaredFields())
+            if (classPath.startsWith(namespace))
             {
-                Config cfg = field.getAnnotation(Config.class);
-                if (cfg != null)
+                Class clazz = Class.forName(classPath);
+
+                for (Field field : clazz.getDeclaredFields())
                 {
-                    handleField(field, cfg, config);
+                    Config cfg = field.getAnnotation(Config.class);
+                    if (cfg != null)
+                    {
+                        handleField(field, cfg, config);
+                    }
                 }
             }
         }
