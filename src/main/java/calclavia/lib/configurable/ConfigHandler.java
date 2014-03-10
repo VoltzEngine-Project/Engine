@@ -34,7 +34,6 @@ public abstract class ConfigHandler
 
     public static void configure (Configuration config, String namespace) throws ClassNotFoundException, IllegalAccessException
     {
-        System.out.println("Entering configure " + ConfigTransformer.classes);
         for (String classPath : ConfigTransformer.classes)
         {
             if (classPath.startsWith(namespace))
