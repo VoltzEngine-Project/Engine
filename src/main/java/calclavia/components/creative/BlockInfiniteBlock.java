@@ -51,6 +51,7 @@ public class BlockInfiniteBlock extends BlockSidedIO
     {
         super(id, UniversalElectricity.machine);
         setCreativeTab(CreativeTabs.tabTools);
+        this.setBlockUnbreakable();
     }
 
     @Override
