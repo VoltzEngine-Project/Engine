@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.IFluidTank;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.utility.inventory.AutoCraftingManager;
 
@@ -410,6 +411,57 @@ public class FluidUtility
 		return 0;
 	}
 
+	public static int fillAllTanks(List<IFluidTank> tanks, FluidStack resource, boolean doFill)
+	{
+		int totalFilled = 0;
+		FluidStack fill = resource.copy();
+
+		for (IFluidTank tank : tanks)
+		{
+			if (fill.amount > 0)
+			{
+				int filled = tank.fill(fill, doFill);
+				totalFilled += filled;
+				fill.amount -= filled;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		return totalFilled;
+	}
+
+	public static FluidStack drainAllTanks(List<IFluidTank> tanks, int amount, boolean doDrain)
+	{
+		FluidStack drain = null;
+
+		for (IFluidTank tank : tanks)
+		{
+			if (drain != null && drain.amount >= amount)
+				break;
+
+			FluidStack drained = tank.drain(amount, false);
+
+			if (drained != null)
+			{
+				if (drain == null)
+				{
+					drain = drained;
+					tank.drain(amount, doDrain);
+				}
+				else if (drain.equals(drained))
+				{
+					drain.amount += drained.amount;
+					tank.drain(amount, doDrain);
+				}
+			}
+		}
+
+		return drain;
+	}
+
 	/**
 	 * Does all the work needed to fill or drain an item of fluid when a player clicks on the block.
 	 */
@@ -426,17 +478,21 @@ public class FluidUtility
 
 			if (liquid != null)
 			{
-				if (tank.fill(ForgeDirection.UNKNOWN, liquid, true) != 0 && !entityplayer.capabilities.isCreativeMode)
+				if (tank.fill(ForgeDirection.getOrientation(side), liquid, false) == FluidContainerRegistry.BUCKET_VOLUME)
 				{
-					entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, AutoCraftingManager.consumeItem(current, 1));
-				}
+					tank.fill(ForgeDirection.getOrientation(side), liquid, true);
 
-				return true;
+					if (!entityplayer.capabilities.isCreativeMode)
+						entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, AutoCraftingManager.consumeItem(current, 1));
+
+					return true;
+				}
 			}
 			else
 			{
 
 				FluidStack available = tank.drain(ForgeDirection.getOrientation(side), Integer.MAX_VALUE, false);
+
 				if (available != null)
 				{
 					ItemStack filled = FluidContainerRegistry.fillFluidContainer(available, current);
@@ -465,6 +521,67 @@ public class FluidUtility
 							}
 						}
 						tank.drain(ForgeDirection.UNKNOWN, liquid.amount, true);
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean playerActivatedFluidItem(List<IFluidTank> tanks, EntityPlayer entityplayer, int side)
+	{
+		ItemStack current = entityplayer.inventory.getCurrentItem();
+
+		if (current != null)
+		{
+			FluidStack resource = FluidContainerRegistry.getFluidForFilledItem(current);
+
+			if (resource != null)
+			{
+				if (fillAllTanks(tanks, resource, false) >= resource.amount)
+				{
+					fillAllTanks(tanks, resource, true);
+
+					if (!entityplayer.capabilities.isCreativeMode)
+						entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, AutoCraftingManager.consumeItem(current, 1));
+					return true;
+				}
+			}
+			else
+			{
+				FluidStack available = drainAllTanks(tanks, Integer.MAX_VALUE, false);
+
+				if (available != null)
+				{
+					ItemStack filled = FluidContainerRegistry.fillFluidContainer(available, current);
+
+					resource = FluidContainerRegistry.getFluidForFilledItem(filled);
+
+					if (resource != null)
+					{
+						if (!entityplayer.capabilities.isCreativeMode)
+						{
+							if (current.stackSize > 1)
+							{
+								if (!entityplayer.inventory.addItemStackToInventory(filled))
+								{
+									return false;
+								}
+								else
+								{
+									entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, AutoCraftingManager.consumeItem(current, 1));
+								}
+							}
+							else
+							{
+								entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, AutoCraftingManager.consumeItem(current, 1));
+								entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, filled);
+							}
+						}
+
+						drainAllTanks(tanks, Integer.MAX_VALUE, true);
 						return true;
 					}
 				}
