@@ -55,6 +55,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 
 			if (tile != null)
 			{
+				boolean didRender = true;
 				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 				GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
 				GL11.glPushMatrix();
@@ -66,20 +67,33 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 					{
 						if (!tile.getRenderer().renderDynamic(new Vector3(), true, 0))
 						{
-							GL11.glTranslated(0.5, 0.5, 0.5);
-							RenderUtility.renderNormalBlockAsItem(block, metadata, renderer);
+							if (!tile.customItemRender)
+							{
+								GL11.glTranslated(0.5, 0.5, 0.5);
+								RenderUtility.renderNormalBlockAsItem(block, metadata, renderer);
+							}
+							else
+							{
+								didRender = false;
+							}
 						}
 					}
 				}
-				else if (tile.normalRender)
+				else if (!tile.customItemRender)
 				{
 					GL11.glTranslated(0.5, 0.5, 0.5);
 					RenderUtility.renderNormalBlockAsItem(block, metadata, renderer);
 				}
+				else
+				{
+					didRender = false;
+				}
 
 				GL11.glPopMatrix();
 				GL11.glPopAttrib();
-				return;
+
+				if (didRender)
+					return;
 			}
 		}
 
