@@ -17,6 +17,17 @@ import java.lang.annotation.Target;
  * @Config(category = "values", key = "RocketCount")
  * public static int ROCKET_COUNT = 3;
  *
+ * Another very Simple use is:
+ *
+ * @Config
+ * public static int ROCKET_COUNT = 3;
+ *
+ * Which will in turn, put in the config this:
+ *
+ * ROCKET_COUNT=3
+ *
+ * As by reflection the Config Handler goes with Default Configuration.CATEGORY_GENERAL
+ * and uses the Key as the Field name
  *
  * @since 09/03/14
  * @author tgame14
