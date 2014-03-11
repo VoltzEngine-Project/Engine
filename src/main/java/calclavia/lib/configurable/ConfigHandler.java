@@ -54,6 +54,7 @@ public abstract class ConfigHandler
 
     private static void handleField(Field field, Config cfg, Configuration config) throws IllegalAccessException
     {
+        field.setAccessible(true);
         String key;
 
         if (cfg.key().isEmpty())
