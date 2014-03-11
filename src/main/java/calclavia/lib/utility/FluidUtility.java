@@ -352,6 +352,7 @@ public class FluidUtility
 				}
 
 				node.setBlock(world, stack.getFluid().getBlockID());
+				world.markBlockForUpdate(node.intX(), node.intY(), node.intZ());
 			}
 			return FluidContainerRegistry.BUCKET_VOLUME;
 		}
