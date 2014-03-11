@@ -216,7 +216,7 @@ public class FluidUtility
 	 */
 	public static FluidStack drainBlock(World world, Vector3 position, boolean doDrain)
 	{
-		return drainBlock(world, position, doDrain, 2);
+		return drainBlock(world, position, doDrain, 3);
 	}
 
 	/**
@@ -352,7 +352,6 @@ public class FluidUtility
 				}
 
 				node.setBlock(world, stack.getFluid().getBlockID());
-				world.markBlockForUpdate(node.intX(), node.intY(), node.intZ());
 			}
 			return FluidContainerRegistry.BUCKET_VOLUME;
 		}
