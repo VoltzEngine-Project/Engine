@@ -254,7 +254,7 @@ public class InventoryUtility
     {
         assert world.isRemote : "Inventory Utility [Can not drop ItemStacks client side @" + x + "x " + y + "y " + z + "z]";
         assert itemStack == null : "Inventory Utility [Can not drop null ItemStacks @" + x + "x " + y + "y " + z + "z]";
-        
+
         if (!world.isRemote && itemStack != null)
         {
             double randomX = 0;
@@ -316,5 +316,18 @@ public class InventoryUtility
         {
             return null;
         }
+    }
+
+    public static boolean stacksMatchExact(ItemStack stackA, ItemStack stackB)
+    {
+        if (stackA == null && stackB == null)
+        {
+            return true;
+        }
+        else if (stackA != null && stackB != null)
+        {
+            return stackA.isItemEqual(stackB) && stackA.stackSize == stackB.stackSize;
+        }
+        return false;
     }
 }
