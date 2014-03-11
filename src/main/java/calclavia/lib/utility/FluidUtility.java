@@ -581,7 +581,7 @@ public class FluidUtility
 							}
 						}
 
-						drainAllTanks(tanks, Integer.MAX_VALUE, true);
+						drainAllTanks(tanks, resource.amount, true);
 						return true;
 					}
 				}
