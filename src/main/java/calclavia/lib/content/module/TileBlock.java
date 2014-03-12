@@ -334,9 +334,9 @@ public abstract class TileBlock extends TileEntity
 					if (canRotate(0))
 						return 0;
 				if (hitY > 0.75)
-					return 1;
+					if (canRotate(1))
+						return 1;
 				if (canRotate(hitSide))
-
 					return hitSide;
 			case 4:
 			case 5:
