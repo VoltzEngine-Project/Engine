@@ -246,7 +246,7 @@ public class CalclaviaLoader
 			ComponentRegistry.register("itemCircuitAdvanced");
 			ComponentRegistry.register("itemCircuitElite");
 
-			ComponentRegistry.register("itemMotor");
+			//ComponentRegistry.register("itemMotor");
 			ComponentRegistry.register("itemWrench");
 		}
 

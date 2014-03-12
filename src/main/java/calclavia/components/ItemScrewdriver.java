@@ -35,7 +35,7 @@ public class ItemScrewdriver extends ItemBase implements IToolWrench
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
-		par3List.add("Mode: " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
+		par3List.add(LanguageUtility.getLocal("toolmode.mode") + ": " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
 		par3List.addAll(LanguageUtility.splitStringPerWord(LanguageUtility.getLocal("item.calclavia:screwdriver.tooltip"), 4));
 	}
 
