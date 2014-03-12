@@ -322,7 +322,7 @@ public class GuiContainerBase extends GuiContainer
 
 	public void renderUniversalDisplay(int x, int y, float energy, int mouseX, int mouseY, Unit unit)
     {
-	    renderUniversalDisplay(x, y, energy, mouseX, mouseY, unit);
+	    renderUniversalDisplay(x, y, energy, mouseX, mouseY, unit, false);
     }
 	
 	public void renderUniversalDisplay(int x, int y, float energy, int mouseX, int mouseY, Unit unit, boolean small)
