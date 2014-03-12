@@ -171,7 +171,7 @@ public abstract class TileBlock extends TileEntity
 	public ArrayList<ItemStack> getDrops(int metadata, int fortune)
 	{
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(new ItemStack(getBlockType(), 1, quantityDropped(metadata, fortune)));
+		drops.add(new ItemStack(getBlockType(), quantityDropped(metadata, fortune), 1));
 		return drops;
 	}
 
