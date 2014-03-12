@@ -1,6 +1,7 @@
 package calclavia.lib.utility.inventory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
@@ -329,5 +330,58 @@ public class InventoryUtility
             return stackA.isItemEqual(stackB) && stackA.stackSize == stackB.stackSize;
         }
         return false;
+    }
+
+    /** Checks to see how many of the item are in the inventory.
+     * 
+     * @param stack - stack to check against, ignores stacksize
+     * @param inv - inventory
+     * @param slots - slots to checks, if null defaults to entire inventory
+     * @return count of items using the stacksize of each itemstack found */
+    public static int getStackCount(ItemStack stack, IInventory inv, int[] slots)
+    {
+        int count = 0;
+
+        if (stack != null)
+        {
+            List<Integer> slot_list = new ArrayList<Integer>();
+
+            if (slots != null & slots.length > 0)
+                for (int i = 0; i < slots.length; i++)
+                    slot_list.add(slots[i]);
+
+            for (int slot = 0; slot < inv.getSizeInventory(); slot++)
+                if (slot_list.isEmpty() || slot_list.contains(slot))
+                    if (inv.getStackInSlot(slot) != null && inv.getStackInSlot(slot).isItemEqual(stack))
+                        count += inv.getStackInSlot(slot).stackSize;
+        }
+
+        return count;
+    }
+
+    public static int getStackCount(Class<?> compare, IInventory inv)
+    {
+        return getStackCount(compare, inv);
+    }
+
+    public static int getStackCount(Class<?> compare, IInventory inv, int[] slots)
+    {
+        int count = 0;
+
+        if (compare != null)
+        {
+            List<Integer> slot_list = new ArrayList<Integer>();
+
+            if (slots != null & slots.length > 0)
+                for (int i = 0; i < slots.length; i++)
+                    slot_list.add(slots[i]);
+
+            for (int slot = 0; slot < inv.getSizeInventory(); slot++)
+                if (slot_list.isEmpty() || slot_list.contains(slot))
+                    if (inv.getStackInSlot(slot) != null && compare.isInstance(inv.getStackInSlot(slot).getItem()))
+                        count += inv.getStackInSlot(slot).stackSize;
+        }
+
+        return count;
     }
 }
