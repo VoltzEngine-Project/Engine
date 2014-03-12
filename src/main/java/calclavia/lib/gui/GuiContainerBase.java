@@ -321,6 +321,11 @@ public class GuiContainerBase extends GuiContainer
 	}
 
 	public void renderUniversalDisplay(int x, int y, float energy, int mouseX, int mouseY, Unit unit)
+    {
+	    renderUniversalDisplay(x, y, energy, mouseX, mouseY, unit);
+    }
+	
+	public void renderUniversalDisplay(int x, int y, float energy, int mouseX, int mouseY, Unit unit, boolean small)
 	{
 		String displaySuffix = "";
 
@@ -329,7 +334,7 @@ public class GuiContainerBase extends GuiContainer
 			displaySuffix = "/s";
 		}
 
-		String display = UnitDisplay.getDisplay(energy, unit);
+		String display = UnitDisplay.getDisplay(energy, unit, 2, small);
 
 		// Check different energy system types.
 		if (unit == Unit.WATT || unit == Unit.JOULES)
