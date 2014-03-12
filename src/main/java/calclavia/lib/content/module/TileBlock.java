@@ -58,8 +58,8 @@ public abstract class TileBlock extends TileEntity
 	public boolean customItemRender = false;
 	public boolean isOpaqueCube = true;
 	public Cuboid bounds = Cuboid.full();
-	public Block block;
-	
+	public BlockDummy block;
+
 	public float blockHardness = 1;
 	public float blockResistance = 1;
 
@@ -535,14 +535,14 @@ public abstract class TileBlock extends TileEntity
 	/**
 	 * Rendering
 	 */
-	private static class RenderInfo
+	@SideOnly(Side.CLIENT)
+	public static class RenderInfo
 	{
 		@SideOnly(Side.CLIENT)
 		private static final WeakHashMap<TileBlock, TileRender> renderer = new WeakHashMap<TileBlock, TileRender>();
 
 		@SideOnly(Side.CLIENT)
-		private static final HashMap<String, Icon> icon = new HashMap<String, Icon>();;
-
+		private static final HashMap<String, Icon> icon = new HashMap<String, Icon>();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -582,7 +582,7 @@ public abstract class TileBlock extends TileEntity
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName()
 	{
-		return textureName == null ? "MISSING_ICON_TILE_" + getBlockType().blockID + "_" + name : domain + textureName;
+		return textureName == null ? "MISSING_ICON_TILE_" + getBlockType().blockID + "_" + name : block.dummyTile.domain + textureName;
 	}
 
 	public boolean shouldSideBeRendered(IBlockAccess access, int side)
