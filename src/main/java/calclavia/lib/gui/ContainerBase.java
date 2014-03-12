@@ -68,75 +68,40 @@ public class ContainerBase extends Container
 	 * Called to transfer a stack from one inventory to the other eg. when shift clicking.
 	 */
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotID)
-	{
-		ItemStack var2 = null;
+	public ItemStack transferStackInSlot(EntityPlayer player, int slot_id)
+    {
+        ItemStack itemstack = null;
+        Slot slot = (Slot)this.inventorySlots.get(slot_id);
 
-		Slot var3 = (Slot) this.inventorySlots.get(slotID);
+        if (slot != null && slot.getHasStack())
+        {
+            ItemStack slot_stack = slot.getStack();
+            itemstack = slot_stack.copy();
 
-		if (var3 != null && var3.getHasStack())
-		{
-			ItemStack itemStack = var3.getStack();
-			var2 = itemStack.copy();
+            if (slot_id < this.slotCount)
+            {
+                if (!this.mergeItemStack(slot_stack, this.slotCount, this.inventorySlots.size(), true))
+                {
+                    return null;
+                }
+            }
+            else if (!this.mergeItemStack(slot_stack, 0, this.slotCount, false))
+            {
+                return null;
+            }
 
-			// A slot ID greater than the slot count means it is inside the TileEntity GUI.
-			if (slotID >= this.slotCount)
-			{
-				// Player Inventory, Try to place into slot.
-				boolean didTry = false;
+            if (slot_stack.stackSize == 0)
+            {
+                slot.putStack((ItemStack)null);
+            }
+            else
+            {
+                slot.onSlotChanged();
+            }
+        }
 
-				for (int i = 0; i < this.slotCount; i++)
-				{
-					if (this.getSlot(i).isItemValid(itemStack))
-					{
-						didTry = true;
-
-						if (this.mergeItemStack(itemStack, i, i + 1, false))
-						{
-							break;
-						}
-					}
-				}
-
-				if (!didTry)
-				{
-					if (slotID < 27 + this.slotCount)
-					{
-						if (!this.mergeItemStack(itemStack, 27 + this.slotCount, 36 + this.slotCount, false))
-						{
-							return null;
-						}
-					}
-					else if (slotID >= 27 + this.slotCount && slotID < 36 + this.slotCount && !this.mergeItemStack(itemStack, slotCount, 27 + slotCount, false))
-					{
-						return null;
-					}
-				}
-			}
-			else if (!this.mergeItemStack(itemStack, this.slotCount, 36 + this.slotCount, false))
-			{
-				return null;
-			}
-
-			if (itemStack.stackSize == 0)
-			{
-				var3.putStack((ItemStack) null);
-			}
-			else
-			{
-				var3.onSlotChanged();
-			}
-
-			if (itemStack.stackSize == var2.stackSize)
-			{
-				return null;
-			}
-
-			var3.onPickupFromSlot(par1EntityPlayer, itemStack);
-		}
-
-		return var2;
-	}
+        return itemstack;
+    }
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer)
