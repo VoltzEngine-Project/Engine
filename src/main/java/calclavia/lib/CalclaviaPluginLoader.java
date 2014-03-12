@@ -14,7 +14,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
  * 
  */
 
-@TransformerExclusions({ "calclavia.lib.asm" })
+@TransformerExclusions({ "calclavia.lib.asm", "calclavia.lib.configurable" })
 public class CalclaviaPluginLoader implements IFMLLoadingPlugin
 {
 	public String[] getLibraryRequestClass()
