@@ -515,7 +515,7 @@ public class CalclaviaLoader
 					}
 
 					Field generationField = ReflectionHelper.findField(CalclaviaLoader.class, "generation" + Character.toUpperCase(name.charAt(0)) + name.substring(1));
-					generationField.set(null, new OreGenReplaceStone(name, name, new ItemStack(block), 60, 22, 4).enable(Calclavia.CONFIGURATION));
+					generationField.set(null, new OreGenReplaceStone(name, name, new ItemStack(block), 60, 25, 4).enable(Calclavia.CONFIGURATION));
 					OreGenerator.addOre((OreGenReplaceStone) generationField.get(null));
 				}
 

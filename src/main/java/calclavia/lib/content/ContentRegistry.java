@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.Property;
 import calclavia.lib.content.module.BlockDummy;
 import calclavia.lib.content.module.TileBlock;
 import calclavia.lib.utility.LanguageUtility;
@@ -81,7 +82,7 @@ public class ContentRegistry
 
 				BlockDummy block = new BlockDummy(actualID, modPrefix, defaultTab, tileBlock);
 				tileBlock.block = block;
-				
+
 				blocks.put(block, name);
 				proxy.registerBlock(block, tileBlock.itemBlock, name, modID);
 
@@ -253,8 +254,8 @@ public class ContentRegistry
 		{
 			try
 			{
-				int assignedID = idManager.getNextItemID();
-				item = clazz.getConstructor(Integer.TYPE).newInstance(config.getItem(name, assignedID).getInt(assignedID));
+				int assignedID = idManager.getNextItemID(config, name);
+				item = clazz.getConstructor(Integer.TYPE).newInstance(assignedID);
 
 				if (item != null)
 				{
