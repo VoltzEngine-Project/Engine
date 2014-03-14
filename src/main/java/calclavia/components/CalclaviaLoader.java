@@ -3,8 +3,8 @@ package calclavia.components;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import calclavia.lib.configurable.Config;
-import calclavia.lib.configurable.ConfigHandler;
+import calclavia.lib.config.Config;
+import calclavia.lib.config.ConfigHandler;
 import cpw.mods.fml.common.event.*;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandManager;
@@ -36,16 +36,17 @@ import calclavia.lib.content.IDManager;
 import calclavia.lib.flag.CommandFlag;
 import calclavia.lib.flag.FlagRegistry;
 import calclavia.lib.flag.ModFlag;
+import calclavia.lib.grid.UpdateTicker;
 import calclavia.lib.multiblock.fake.BlockMultiBlockPart;
 import calclavia.lib.multiblock.fake.TileMultiBlockPart;
 import calclavia.lib.network.PacketAnnotation;
 import calclavia.lib.network.PacketHandler;
 import calclavia.lib.network.PacketTile;
-import calclavia.lib.ore.OreGenBase;
-import calclavia.lib.ore.OreGenReplaceStone;
-import calclavia.lib.ore.OreGenerator;
 import calclavia.lib.prefab.ProxyBase;
 import calclavia.lib.prefab.item.ItemBlockMetadata;
+import calclavia.lib.prefab.ore.OreGenBase;
+import calclavia.lib.prefab.ore.OreGenReplaceStone;
+import calclavia.lib.prefab.ore.OreGenerator;
 import calclavia.lib.recipe.RecipeUtility;
 import calclavia.lib.thermal.BoilEvent;
 import calclavia.lib.utility.LanguageUtility;
@@ -246,7 +247,7 @@ public class CalclaviaLoader
 			ComponentRegistry.register("itemCircuitAdvanced");
 			ComponentRegistry.register("itemCircuitElite");
 
-			//ComponentRegistry.register("itemMotor");
+			// ComponentRegistry.register("itemMotor");
 			ComponentRegistry.register("itemWrench");
 		}
 
@@ -268,7 +269,7 @@ public class CalclaviaLoader
 			}
 		}
 
-        Calclavia.CONFIGURATION.save();
+		Calclavia.CONFIGURATION.save();
 
 		Calclavia.LOGGER.fine("Loaded: " + LanguageUtility.loadLanguages(CalclaviaLoader.LANGUAGE_PATH, CalclaviaLoader.LANGUAGES_SUPPORTED) + " Languages.");
 
@@ -282,20 +283,24 @@ public class CalclaviaLoader
 		proxy.init();
 	}
 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event)
-    {
-        Calclavia.CONFIGURATION.load();
-        try
-        {
-            Calclavia.LOGGER.info("Generating Automatic Configs");
-            ConfigHandler.configure(Calclavia.CONFIGURATION, "calclavia");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event)
+	{
+		Calclavia.CONFIGURATION.load();
+		try
+		{
+			Calclavia.LOGGER.info("Generating Automatic Configs");
+			ConfigHandler.configure(Calclavia.CONFIGURATION, "calclavia");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		// TODO: Move to UE
+		if (!UpdateTicker.INSTANCE.isAlive())
+			UpdateTicker.INSTANCE.start();
+	}
 
 	/**
 	 * Call all of this in Init stage. Use "requestItem" or "requestBlock" instead to make it so

@@ -3,7 +3,7 @@ package calclavia.lib;
 import java.util.Map;
 
 import calclavia.lib.asm.CalclaviaTransformer;
-import calclavia.lib.configurable.ConfigTransformer;
+import calclavia.lib.config.ConfigTransformer;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
