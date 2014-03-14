@@ -229,10 +229,7 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess access, int x, int y, int z, int side)
 	{
-		inject(access, x, y, z);
-		boolean value = getTile(access, x, y, z).shouldSideBeRendered(access, side);
-		eject();
-		return value;
+		return getTile(access, x, y, z).shouldSideBeRendered(access, x, y, z,side);
 	}
 
 	@Override
