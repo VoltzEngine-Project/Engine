@@ -30,4 +30,10 @@ public class ProxyBase implements IGuiHandler
 		return null;
 	}
 
+	public boolean isPaused()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

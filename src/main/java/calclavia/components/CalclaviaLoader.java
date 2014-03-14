@@ -49,6 +49,7 @@ import calclavia.lib.prefab.ore.OreGenReplaceStone;
 import calclavia.lib.prefab.ore.OreGenerator;
 import calclavia.lib.recipe.RecipeUtility;
 import calclavia.lib.thermal.BoilEvent;
+import calclavia.lib.thermal.ThermalGrid;
 import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.PotionUtility;
 import calclavia.lib.utility.nbt.NBTUtility;
@@ -300,6 +301,9 @@ public class CalclaviaLoader
 		// TODO: Move to UE
 		if (!UpdateTicker.INSTANCE.isAlive())
 			UpdateTicker.INSTANCE.start();
+
+		// Register Thermal Grid
+		UpdateTicker.addNetwork(ThermalGrid.SERVER_INSTANCE);
 	}
 
 	/**
