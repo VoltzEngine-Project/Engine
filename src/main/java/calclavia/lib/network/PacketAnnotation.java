@@ -146,19 +146,22 @@ public class PacketAnnotation extends PacketType
 		{
 			PacketSet packetSet = packetSetIDMap.get(classID).get(packetSetID);
 
-			List args = packetSet.getPacketArray(obj);
-
-			args.add(0, classID);
-			args.add(1, packetSetID);
-
-			if (obj instanceof TileEntity)
+			if (packetSet != null)
 			{
-				args.add(2, ((TileEntity) obj).xCoord);
-				args.add(3, ((TileEntity) obj).yCoord);
-				args.add(4, ((TileEntity) obj).zCoord);
-			}
+				List args = packetSet.getPacketArray(obj);
 
-			return super.getPacket(args.toArray());
+				args.add(0, classID);
+				args.add(1, packetSetID);
+
+				if (obj instanceof TileEntity)
+				{
+					args.add(2, ((TileEntity) obj).xCoord);
+					args.add(3, ((TileEntity) obj).yCoord);
+					args.add(4, ((TileEntity) obj).zCoord);
+				}
+
+				return super.getPacket(args.toArray());
+			}
 		}
 
 		return null;

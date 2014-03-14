@@ -150,12 +150,12 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
 	{
 		if (this.getMultiBlock().isConstructed())
 		{
-			return maxPower * 9;
+			return (long) (maxPower * ((multiBlockRadius + 0.5) * 2) * ((multiBlockRadius + 0.5) * 2));
 		}
 
 		return maxPower;
 	}
-	
+
 	public void onProduce()
 	{
 	}

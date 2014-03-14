@@ -2,6 +2,8 @@ package calclavia.lib.content;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.Property;
 
 /**
  * Automatically gets the next avaliable ID for a mod.
@@ -11,6 +13,8 @@ import net.minecraft.item.Item;
  */
 public class IDManager
 {
+	private static final int ITEM_SHIFT = 256;
+	
 	/** Auto ID Management */
 	private final int blockIDBase;
 	private final int itemIDBase;
@@ -26,35 +30,37 @@ public class IDManager
 
 	public int getNextBlockID()
 	{
-		int id = nextBlockID;
-
-		while (id > 255 && id < (Block.blocksList.length - 1))
-		{
-			Block block = Block.blocksList[id];
-			if (block == null)
-			{
-				break;
-			}
-			id++;
-		}
-		nextBlockID = id + 1;
-		return id;
+		return nextBlockID++;
 	}
 
 	public int getNextItemID()
 	{
-		int id = nextItemID;
-		while (id > 255 && id < (Item.itemsList.length - 1))
-		{
-			Item item = Item.itemsList[id];
-			if (item == null)
-			{
-				break;
-			}
-			id++;
-		}
-		nextItemID = id + 1;
-		return id;
+		return nextItemID++;
 	}
 
+	public int getNextItemID(Configuration config, String name)
+	{
+		int assignedID = getNextItemID();
+		Property prop = config.getItem(name, assignedID);
+		int configID = prop.getInt(assignedID);
+
+		if (Item.itemsList[configID + ITEM_SHIFT] == null  && (configID + ITEM_SHIFT) >= Block.blocksList.length)
+		{
+			prop.set(configID);
+			return configID;
+		}
+		else
+		{
+			for (int x = Item.itemsList.length - 1; x >= ITEM_SHIFT; x--)
+			{
+				if (Item.itemsList[x] == null)
+				{
+					prop.set(x - ITEM_SHIFT);
+					return prop.getInt();
+				}
+			}
+		}
+
+		return configID;
+	}
 }

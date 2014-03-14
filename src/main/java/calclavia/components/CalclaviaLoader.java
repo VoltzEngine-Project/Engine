@@ -3,8 +3,8 @@ package calclavia.components;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import calclavia.lib.configurable.Config;
-import calclavia.lib.configurable.ConfigHandler;
+import calclavia.lib.config.Config;
+import calclavia.lib.config.ConfigHandler;
 import cpw.mods.fml.common.event.*;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandManager;
@@ -36,18 +36,20 @@ import calclavia.lib.content.IDManager;
 import calclavia.lib.flag.CommandFlag;
 import calclavia.lib.flag.FlagRegistry;
 import calclavia.lib.flag.ModFlag;
+import calclavia.lib.grid.UpdateTicker;
 import calclavia.lib.multiblock.fake.BlockMultiBlockPart;
 import calclavia.lib.multiblock.fake.TileMultiBlockPart;
 import calclavia.lib.network.PacketAnnotation;
 import calclavia.lib.network.PacketHandler;
 import calclavia.lib.network.PacketTile;
-import calclavia.lib.ore.OreGenBase;
-import calclavia.lib.ore.OreGenReplaceStone;
-import calclavia.lib.ore.OreGenerator;
 import calclavia.lib.prefab.ProxyBase;
 import calclavia.lib.prefab.item.ItemBlockMetadata;
+import calclavia.lib.prefab.ore.OreGenBase;
+import calclavia.lib.prefab.ore.OreGenReplaceStone;
+import calclavia.lib.prefab.ore.OreGenerator;
 import calclavia.lib.recipe.RecipeUtility;
 import calclavia.lib.thermal.BoilEvent;
+import calclavia.lib.thermal.ThermalGrid;
 import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.PotionUtility;
 import calclavia.lib.utility.nbt.NBTUtility;
@@ -246,7 +248,7 @@ public class CalclaviaLoader
 			ComponentRegistry.register("itemCircuitAdvanced");
 			ComponentRegistry.register("itemCircuitElite");
 
-			ComponentRegistry.register("itemMotor");
+			// ComponentRegistry.register("itemMotor");
 			ComponentRegistry.register("itemWrench");
 		}
 
@@ -268,7 +270,7 @@ public class CalclaviaLoader
 			}
 		}
 
-        Calclavia.CONFIGURATION.save();
+		Calclavia.CONFIGURATION.save();
 
 		Calclavia.LOGGER.fine("Loaded: " + LanguageUtility.loadLanguages(CalclaviaLoader.LANGUAGE_PATH, CalclaviaLoader.LANGUAGES_SUPPORTED) + " Languages.");
 
@@ -282,20 +284,27 @@ public class CalclaviaLoader
 		proxy.init();
 	}
 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event)
-    {
-        Calclavia.CONFIGURATION.load();
-        try
-        {
-            Calclavia.LOGGER.info("Generating Automatic Configs");
-            ConfigHandler.configure(Calclavia.CONFIGURATION, "calclavia");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event)
+	{
+		Calclavia.CONFIGURATION.load();
+		try
+		{
+			Calclavia.LOGGER.info("Generating Automatic Configs");
+			ConfigHandler.configure(Calclavia.CONFIGURATION, "calclavia");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		// TODO: Move to UE
+		if (!UpdateTicker.INSTANCE.isAlive())
+			UpdateTicker.INSTANCE.start();
+
+		// Register Thermal Grid
+		UpdateTicker.addNetwork(ThermalGrid.SERVER_INSTANCE);
+	}
 
 	/**
 	 * Call all of this in Init stage. Use "requestItem" or "requestBlock" instead to make it so
@@ -515,7 +524,7 @@ public class CalclaviaLoader
 					}
 
 					Field generationField = ReflectionHelper.findField(CalclaviaLoader.class, "generation" + Character.toUpperCase(name.charAt(0)) + name.substring(1));
-					generationField.set(null, new OreGenReplaceStone(name, name, new ItemStack(block), 60, 22, 4).enable(Calclavia.CONFIGURATION));
+					generationField.set(null, new OreGenReplaceStone(name, name, new ItemStack(block), 60, 25, 4).enable(Calclavia.CONFIGURATION));
 					OreGenerator.addOre((OreGenReplaceStone) generationField.get(null));
 				}
 

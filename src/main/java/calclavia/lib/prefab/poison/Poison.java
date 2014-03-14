@@ -8,8 +8,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
-import atomicscience.api.IAntiPoisonArmor;
-import atomicscience.api.IAntiPoisonBlock;
+import calclavia.api.atomicscience.IAntiPoisonArmor;
+import calclavia.api.atomicscience.IAntiPoisonBlock;
 import calclavia.lib.Calclavia;
 
 import com.google.common.collect.BiMap;

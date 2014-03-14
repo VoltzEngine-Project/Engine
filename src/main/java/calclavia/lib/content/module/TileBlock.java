@@ -58,8 +58,8 @@ public abstract class TileBlock extends TileEntity
 	public boolean customItemRender = false;
 	public boolean isOpaqueCube = true;
 	public Cuboid bounds = Cuboid.full();
-	public Block block;
-	
+	public BlockDummy block;
+
 	public float blockHardness = 1;
 	public float blockResistance = 1;
 
@@ -171,7 +171,7 @@ public abstract class TileBlock extends TileEntity
 	public ArrayList<ItemStack> getDrops(int metadata, int fortune)
 	{
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(new ItemStack(getBlockType(), 1, quantityDropped(metadata, fortune)));
+		drops.add(new ItemStack(getBlockType(), quantityDropped(metadata, fortune), 1));
 		return drops;
 	}
 
@@ -334,9 +334,9 @@ public abstract class TileBlock extends TileEntity
 					if (canRotate(0))
 						return 0;
 				if (hitY > 0.75)
-					return 1;
+					if (canRotate(1))
+						return 1;
 				if (canRotate(hitSide))
-
 					return hitSide;
 			case 4:
 			case 5:
@@ -535,14 +535,14 @@ public abstract class TileBlock extends TileEntity
 	/**
 	 * Rendering
 	 */
-	private static class RenderInfo
+	@SideOnly(Side.CLIENT)
+	public static class RenderInfo
 	{
 		@SideOnly(Side.CLIENT)
 		private static final WeakHashMap<TileBlock, TileRender> renderer = new WeakHashMap<TileBlock, TileRender>();
 
 		@SideOnly(Side.CLIENT)
-		private static final HashMap<String, Icon> icon = new HashMap<String, Icon>();;
-
+		private static final HashMap<String, Icon> icon = new HashMap<String, Icon>();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -582,12 +582,12 @@ public abstract class TileBlock extends TileEntity
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName()
 	{
-		return textureName == null ? "MISSING_ICON_TILE_" + getBlockType().blockID + "_" + name : domain + textureName;
+		return textureName == null ? "MISSING_ICON_TILE_" + getBlockType().blockID + "_" + name : block.dummyTile.domain + textureName;
 	}
 
-	public boolean shouldSideBeRendered(IBlockAccess access, int side)
+	public boolean shouldSideBeRendered(IBlockAccess access, int x, int y, int z, int side)
 	{
-		return side == 0 && this.bounds.min.y > 0.0D ? true : (side == 1 && this.bounds.max.y < 1.0D ? true : (side == 2 && this.bounds.min.z > 0.0D ? true : (side == 3 && this.bounds.max.z < 1.0D ? true : (side == 4 && this.bounds.min.x > 0.0D ? true : (side == 5 && this.bounds.max.x < 1.0D ? true : !access.isBlockOpaqueCube(x(), y(), z()))))));
+		return side == 0 && this.bounds.min.y > 0.0D ? true : (side == 1 && this.bounds.max.y < 1.0D ? true : (side == 2 && this.bounds.min.z > 0.0D ? true : (side == 3 && this.bounds.max.z < 1.0D ? true : (side == 4 && this.bounds.min.x > 0.0D ? true : (side == 5 && this.bounds.max.x < 1.0D ? true : !access.isBlockOpaqueCube(x, y, z))))));
 	}
 
 	public interface IComparatorInputOverride

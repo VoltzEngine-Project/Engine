@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
-import calclavia.lib.utility.ReflectionHelper;
+import calclavia.lib.utility.ReflectionUtility;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
@@ -140,7 +140,7 @@ public class SaveManager
                 {
                     if (args == null || args.length == 0)
                     {
-                        Constructor<?> con = ReflectionHelper.getConstructorWithArgs(clazz, args);
+                        Constructor<?> con = ReflectionUtility.getConstructorWithArgs(clazz, args);
                         if (con != null)
                         {
                             obj = con.newInstance(args);
