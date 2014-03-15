@@ -18,6 +18,7 @@ import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorWorld;
 import calclavia.api.mffs.fortron.IServerThread;
 import calclavia.components.CalclaviaLoader;
+import calclavia.lib.thermal.EventThermal.EventThermalUpdate;
 
 /**
  * A grid managing the flow of thermal energy.
@@ -78,7 +79,7 @@ public class ThermalGrid implements IUpdate
 	{
 		float spread = this.spread * deltaTime;
 		Iterator<Entry<VectorWorld, Float>> it = new HashMap<VectorWorld, Float>(thermalSource).entrySet().iterator();
-		//System.out.println("NODES " + thermalSource.size());
+		// System.out.println("NODES " + thermalSource.size());
 
 		while (it.hasNext())
 		{
@@ -118,37 +119,10 @@ public class ThermalGrid implements IUpdate
 			 * Deal with different block types
 			 */
 			currentTemperature = getTemperature(pos);
-			float loss = this.loss * deltaTime;
 
-			Block block = Block.blocksList[pos.getBlockID()];
-			Material mat = pos.world.getBlockMaterial(pos.intX(), pos.intY(), pos.intZ());
-
-			if (mat == Material.air)
-			{
-				loss = 0.05f;
-			}
-
-			if (currentTemperature > 373)
-			{
-				if (block == Block.waterMoving || block == Block.waterStill)
-				{
-					if (FluidRegistry.getFluid("steam") != null)
-					{
-						MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME), new FluidStack(FluidRegistry.getFluid("steam"), FluidContainerRegistry.BUCKET_VOLUME), 2));
-					}
-
-					loss = 0.07f;
-				}
-			}
-
-			if (currentTemperature > 273)
-			{
-				if (block == Block.ice)
-				{
-					pos.setBlock(Block.waterMoving.blockID);
-					loss = 0.09f;
-				}
-			}
+			EventThermalUpdate evt = new EventThermalUpdate(pos, currentTemperature);
+			MinecraftForge.EVENT_BUS.post(evt);
+			float loss = evt.heatLoss * deltaTime;
 
 			float deltaFromEquilibrium = getDefaultTemperature(pos) - currentTemperature;
 			addTemperature(pos, deltaFromEquilibrium >= 0 ? 1 : -1 * Math.min(Math.abs(deltaFromEquilibrium), loss));

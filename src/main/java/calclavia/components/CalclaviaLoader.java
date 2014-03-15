@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.creativetab.CreativeTabs;
@@ -17,10 +18,13 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import universalelectricity.api.vector.Vector3;
+import universalelectricity.api.vector.VectorWorld;
 import calclavia.api.resonantinduction.IBoilHandler;
 import calclavia.components.creative.BlockCreativeBuilder;
 import calclavia.components.creative.BlockInfiniteBlock;
@@ -47,6 +51,7 @@ import calclavia.lib.prefab.ore.OreGenReplaceStone;
 import calclavia.lib.prefab.ore.OreGenerator;
 import calclavia.lib.recipe.RecipeUtility;
 import calclavia.lib.thermal.BoilEvent;
+import calclavia.lib.thermal.EventThermal.EventThermalUpdate;
 import calclavia.lib.thermal.ThermalGrid;
 import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.PotionUtility;
@@ -586,6 +591,9 @@ public class CalclaviaLoader
 		SaveManager.saveAll();
 	}
 
+	/**
+	 * Default handler.
+	 */
 	@ForgeSubscribe
 	public void boilEventHandler(BoilEvent evt)
 	{
@@ -614,4 +622,42 @@ public class CalclaviaLoader
 		evt.setResult(Result.DENY);
 	}
 
+	/**
+	 * Default handler.
+	 */
+	@ForgeSubscribe
+	public void thermalEventHandler(EventThermalUpdate evt)
+	{
+		VectorWorld pos = evt.position;
+		Block block = Block.blocksList[pos.getBlockID()];
+		Material mat = pos.world.getBlockMaterial(pos.intX(), pos.intY(), pos.intZ());
+
+		if (mat == Material.air)
+		{
+			evt.heatLoss = 0.3f;
+		}
+
+		if (block == Block.waterMoving || block == Block.waterStill)
+		{
+			if (evt.temperature > 373)
+			{
+				if (FluidRegistry.getFluid("steam") != null)
+				{
+					MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME), new FluidStack(FluidRegistry.getFluid("steam"), FluidContainerRegistry.BUCKET_VOLUME), 2));
+				}
+
+				evt.heatLoss = 0.35f;
+			}
+		}
+
+		if (block == Block.ice)
+		{
+			if (evt.temperature > 273)
+			{
+				pos.setBlock(Block.waterMoving.blockID);
+			}
+
+			evt.heatLoss = 0.5f;
+		}
+	}
 }
