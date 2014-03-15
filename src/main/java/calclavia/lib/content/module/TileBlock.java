@@ -62,7 +62,7 @@ public abstract class TileBlock extends TileEntity
 
 	public float blockHardness = 1;
 	public float blockResistance = 1;
-
+	public boolean canProvidePower = false;
 	/**
 	 * Rotation
 	 */
@@ -598,6 +598,16 @@ public abstract class TileBlock extends TileEntity
 	public void onFillRain()
 	{
 
+	}
+
+	public int getWeakRedstonePower(IBlockAccess access, int side)
+	{
+		return getStrongRedstonePower(access, side);
+	}
+
+	public int getStrongRedstonePower(IBlockAccess access, int side)
+	{
+		return 0;
 	}
 
 }
