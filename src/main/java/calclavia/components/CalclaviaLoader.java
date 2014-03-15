@@ -3,9 +3,6 @@ package calclavia.components;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import calclavia.lib.config.Config;
-import calclavia.lib.config.ConfigHandler;
-import cpw.mods.fml.common.event.*;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -21,16 +18,17 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import universalelectricity.api.vector.Vector3;
+import calclavia.api.resonantinduction.IBoilHandler;
 import calclavia.components.creative.BlockCreativeBuilder;
 import calclavia.components.creative.BlockInfiniteBlock;
 import calclavia.components.tool.ToolMode;
 import calclavia.components.tool.ToolModeGeneral;
 import calclavia.components.tool.ToolModeRotation;
 import calclavia.lib.Calclavia;
+import calclavia.lib.config.ConfigHandler;
 import calclavia.lib.content.ContentRegistry;
 import calclavia.lib.content.IDManager;
 import calclavia.lib.flag.CommandFlag;
@@ -62,6 +60,11 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -593,9 +596,9 @@ public class CalclaviaLoader
 		{
 			TileEntity tileEntity = world.getBlockTileEntity(position.intX(), position.intY() + height, position.intZ());
 
-			if (tileEntity instanceof IFluidHandler)
+			if (tileEntity instanceof IBoilHandler)
 			{
-				IFluidHandler handler = (IFluidHandler) tileEntity;
+				IBoilHandler handler = (IBoilHandler) tileEntity;
 				FluidStack fluid = evt.getRemainForSpread(height);
 
 				if (fluid.amount > 0)

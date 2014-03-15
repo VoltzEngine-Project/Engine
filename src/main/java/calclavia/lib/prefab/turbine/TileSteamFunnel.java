@@ -10,12 +10,13 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import calclavia.api.resonantinduction.IBoilHandler;
 import calclavia.lib.prefab.tile.TileAdvanced;
 
 /**
  * Funnel TileEntity
  */
-public class TileSteamFunnel extends TileAdvanced implements IFluidHandler
+public class TileSteamFunnel extends TileAdvanced implements IBoilHandler
 {
 	public final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME);
 
