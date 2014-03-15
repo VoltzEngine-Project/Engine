@@ -283,12 +283,7 @@ public class RenderUtility
 		float scaler = 0.8f;
 		float scaleX = (displayWidth / requiredWidth);
 		float scaleY = (displayHeight / requiredHeight);
-		float scale = scaleX * scaler;
-
-		if (maxScale > 0)
-		{
-			scale = Math.min(scale, maxScale);
-		}
+		float scale = Math.min(maxScale, Math.min(scaleX, scaleY) * scaler);
 
 		GL11.glScalef(scale, -scale, scale);
 		GL11.glDepthMask(false);

@@ -29,9 +29,12 @@ public class ThermalGrid implements IUpdate
 	public static final ThermalGrid CLIENT_INSTANCE = new ThermalGrid();
 	public static final ThermalGrid SERVER_INSTANCE = new ThermalGrid();
 
-	private final float spread = 0.005f;
-	private final float loss = 0.01f;
+	private final float spread = 0.1f;
+	private final float loss = 0.2f;
 	private final HashMap<VectorWorld, Float> thermalSource = new HashMap<VectorWorld, Float>();
+
+	private int tick = 0;
+	private final float deltaTime = 1;
 
 	public float getDefaultTemperature(VectorWorld position)
 	{
@@ -73,6 +76,7 @@ public class ThermalGrid implements IUpdate
 	@Override
 	public void update()
 	{
+		float spread = this.spread * deltaTime;
 		Iterator<Entry<VectorWorld, Float>> it = new HashMap<VectorWorld, Float>(thermalSource).entrySet().iterator();
 		System.out.println("NODES " + thermalSource.size());
 
@@ -114,7 +118,7 @@ public class ThermalGrid implements IUpdate
 			 * Deal with different block types
 			 */
 			currentTemperature = getTemperature(pos);
-			float loss = 0.01f;
+			float loss = this.loss * deltaTime;
 
 			Block block = Block.blocksList[pos.getBlockID()];
 			Material mat = pos.world.getBlockMaterial(pos.intX(), pos.intY(), pos.intZ());
@@ -154,7 +158,7 @@ public class ThermalGrid implements IUpdate
 	@Override
 	public boolean canUpdate()
 	{
-		return !CalclaviaLoader.proxy.isPaused();
+		return !CalclaviaLoader.proxy.isPaused() && ++tick % 20 == 0;
 	}
 
 	@Override

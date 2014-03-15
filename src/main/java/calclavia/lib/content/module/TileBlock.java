@@ -55,6 +55,7 @@ public abstract class TileBlock extends TileEntity
 	protected String textureName;
 	public CreativeTabs creativeTab = null;
 	public boolean normalRender = true;
+	public boolean forceStandardRender = false;
 	public boolean customItemRender = false;
 	public boolean isOpaqueCube = true;
 	public Cuboid bounds = Cuboid.full();
