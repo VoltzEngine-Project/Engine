@@ -231,7 +231,26 @@ public class PacketAnnotation extends PacketType
 				for (Field f : syncFields)
 				{
 					f.setAccessible(true);
-					args.add(f.get(obj));
+					Class type = f.getType();
+					Object syncObj = f.get(obj);
+
+					if (!type.isPrimitive())
+					{
+						if (syncObj == null)
+						{
+							args.add(false);
+
+						}
+						else
+						{
+							args.add(true);
+							args.add(syncObj);
+						}
+					}
+					else
+					{
+						args.add(syncObj);
+					}
 				}
 
 				for (Method m : syncOutputs)
@@ -261,59 +280,73 @@ public class PacketAnnotation extends PacketType
 					Class type = f.getType();
 					Object result = null;
 
-					if (type == Integer.class || type == Integer.TYPE)
+					// TODO: Integer is not a primitive, int is.
+					if (type.isPrimitive())
 					{
-						result = data.readInt();
-					}
-					else if (type == Float.class || type == Float.TYPE)
-					{
-						result = data.readFloat();
-					}
-					else if (type == Double.class || type == Double.TYPE)
-					{
-						result = data.readDouble();
-					}
-					else if (type == Byte.class || type == Byte.TYPE)
-					{
-						result = data.readByte();
-					}
-					else if (type == Boolean.class || type == Boolean.TYPE)
-					{
-						result = data.readBoolean();
-					}
-					else if (type == Short.class || type == Short.TYPE)
-					{
-						result = data.readShort();
-					}
-					else if (type == Long.class || type == Long.TYPE)
-					{
-						result = data.readLong();
-					}
-					else if (type == String.class)
-					{
-						result = data.readUTF();
-					}
-					else if (type == Vector3.class)
-					{
-						result = new Vector3(data.readDouble(), data.readDouble(), data.readDouble());
-					}
-					else if (type == NBTTagCompound.class)
-					{
-						result = PacketHandler.readNBTTagCompound(data);
-					}
-					else if (type == FluidTank.class)
-					{
-						result = new FluidTank(data.readInt()).readFromNBT(PacketHandler.readNBTTagCompound(data));
-					}
-					else if (ISaveObj.class.isAssignableFrom(type))
-					{
-						result = f.get(obj);
-						((ISaveObj) result).load(PacketHandler.readNBTTagCompound(data));
-					}
+						if (type == Integer.class || type == Integer.TYPE)
+						{
+							result = data.readInt();
+						}
+						else if (type == Float.class || type == Float.TYPE)
+						{
+							result = data.readFloat();
+						}
+						else if (type == Double.class || type == Double.TYPE)
+						{
+							result = data.readDouble();
+						}
+						else if (type == Byte.class || type == Byte.TYPE)
+						{
+							result = data.readByte();
+						}
+						else if (type == Boolean.class || type == Boolean.TYPE)
+						{
+							result = data.readBoolean();
+						}
+						else if (type == Short.class || type == Short.TYPE)
+						{
+							result = data.readShort();
+						}
+						else if (type == Long.class || type == Long.TYPE)
+						{
+							result = data.readLong();
+						}
 
-					if (result == null)
+						if (result == null)
+						{
+							Calclavia.LOGGER.severe("Calclavia packet read a null field for " + obj.getClass().getSimpleName());
+						}
+					}
+					else
 					{
-						Calclavia.LOGGER.severe("Calclavia packet read a null field for " + obj.getClass().getSimpleName());
+						if (data.readBoolean())
+						{
+							if (type == String.class)
+							{
+								result = data.readUTF();
+							}
+							else if (type == Vector3.class)
+							{
+								result = new Vector3(data.readDouble(), data.readDouble(), data.readDouble());
+							}
+							else if (type == NBTTagCompound.class)
+							{
+								result = PacketHandler.readNBTTagCompound(data);
+							}
+							else if (type == FluidTank.class)
+							{
+								result = new FluidTank(data.readInt()).readFromNBT(PacketHandler.readNBTTagCompound(data));
+							}
+							else if (ISaveObj.class.isAssignableFrom(type))
+							{
+								result = f.get(obj);
+								((ISaveObj) result).load(PacketHandler.readNBTTagCompound(data));
+							}
+						}
+						else
+						{
+							result = null;
+						}
 					}
 
 					f.set(obj, result);

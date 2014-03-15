@@ -34,7 +34,7 @@ public class ThermalGrid implements IUpdate
 	private final HashMap<VectorWorld, Float> thermalSource = new HashMap<VectorWorld, Float>();
 
 	private int tick = 0;
-	private final float deltaTime = 1;
+	private final float deltaTime = 1 / 20f;
 
 	public float getDefaultTemperature(VectorWorld position)
 	{
@@ -78,7 +78,7 @@ public class ThermalGrid implements IUpdate
 	{
 		float spread = this.spread * deltaTime;
 		Iterator<Entry<VectorWorld, Float>> it = new HashMap<VectorWorld, Float>(thermalSource).entrySet().iterator();
-		System.out.println("NODES " + thermalSource.size());
+		//System.out.println("NODES " + thermalSource.size());
 
 		while (it.hasNext())
 		{
@@ -158,7 +158,8 @@ public class ThermalGrid implements IUpdate
 	@Override
 	public boolean canUpdate()
 	{
-		return !CalclaviaLoader.proxy.isPaused() && ++tick % 20 == 0;
+		return !CalclaviaLoader.proxy.isPaused();
+		// && ++tick % 20 == 0;
 	}
 
 	@Override
