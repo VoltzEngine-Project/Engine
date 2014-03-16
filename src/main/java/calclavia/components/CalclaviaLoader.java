@@ -650,7 +650,7 @@ public class CalclaviaLoader
 
 		if (mat == Material.air)
 		{
-			evt.heatLoss = 0.3f;
+			evt.heatLoss = 0.25f;
 		}
 
 		if (block == Block.waterMoving || block == Block.waterStill)
@@ -665,7 +665,7 @@ public class CalclaviaLoader
 					MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2));
 				}
 
-				evt.heatLoss = 0.35f;
+				evt.heatLoss = 0.3f;
 			}
 		}
 
@@ -676,7 +676,7 @@ public class CalclaviaLoader
 				pos.setBlock(Block.waterMoving.blockID);
 			}
 
-			evt.heatLoss = 0.5f;
+			evt.heatLoss = 0.4f;
 		}
 	}
 }

@@ -56,7 +56,7 @@ public class ThermalGrid implements IUpdate
 
 			float newTemperature = original + deltaTemperature;
 
-			if (Math.abs(newTemperature - defaultTemperature) > 0.5)
+			if (Math.abs(newTemperature - defaultTemperature) > 0.4)
 				thermalSource.put(position, original + deltaTemperature);
 			else
 				thermalSource.remove(position);
