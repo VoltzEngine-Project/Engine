@@ -44,27 +44,43 @@ public final class MachineRecipes
 		return null;
 	}
 
-	public void addRecipe(String machine, RecipeResource[] input, RecipeResource[] output)
-	{
-		getRecipes(machine).put(input, output);
-	}
-
 	public void addRecipe(String machine, Object inputObj, Object... outputObj)
 	{
-		RecipeResource input = getResourceFromObject(inputObj);
+		addRecipe(machine, new Object[] { inputObj }, outputObj);
+	}
+
+	public void addRecipe(String machine, Object[] inputObj, Object[] outputObj)
+	{
+		RecipeResource[] inputs = new RecipeResource[inputObj.length];
+
+		for (int i = 0; i < inputs.length; i++)
+		{
+			RecipeResource input = getResourceFromObject(inputObj[i]);
+
+			if (input == null)
+				throw new RuntimeException("Tried to add invalid " + machine + " recipe input: " + inputObj[i]);
+
+			inputs[i] = input;
+		}
+
 		RecipeResource[] outputs = new RecipeResource[outputObj.length];
 
 		for (int i = 0; i < outputs.length; i++)
 		{
 			RecipeResource output = getResourceFromObject(outputObj[i]);
 
-			if (input == null || output == null)
-				throw new RuntimeException("Tried to add invalid " + machine + " recipe: " + input + " => " + output);
+			if (output == null)
+				throw new RuntimeException("Tried to add invalid " + machine + " recipe output: " + outputObj[i]);
 
 			outputs[i] = output;
 		}
 
-		addRecipe(machine, new RecipeResource[] { input }, outputs);
+		addRecipe(machine, inputs, outputs);
+	}
+
+	public void addRecipe(String machine, RecipeResource[] input, RecipeResource[] output)
+	{
+		getRecipes(machine).put(input, output);
 	}
 
 	public void removeRecipe(String machine, RecipeResource[] input)
@@ -89,8 +105,14 @@ public final class MachineRecipes
 		while (it.hasNext())
 		{
 			Entry<RecipeResource[], RecipeResource[]> entry = it.next();
+			RecipeResource[] compare = entry.getKey();
 
-			if (Arrays.equals(entry.getKey(), input))
+			RecipeResource[] copyA = Arrays.copyOf(input, input.length);
+			RecipeResource[] copyB = Arrays.copyOf(compare, compare.length);
+			Arrays.sort(copyA);
+			Arrays.sort(copyB);
+			// TODO: This might not fully work.
+			if (Arrays.equals(compare, input) || Arrays.equals(copyA, copyB))
 			{
 				return entry.getValue();
 			}
