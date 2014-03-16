@@ -23,7 +23,7 @@ buildProps.withReader {
 }
 
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
-group = "calclaviacore"
+group = "${System.getenv().JOB_NAME}"
 archivesBaseName = "${System.getenv().JOB_NAME}"
 
 minecraft {
