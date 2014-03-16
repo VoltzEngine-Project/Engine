@@ -149,7 +149,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 					renderer.renderStandardBlock(block, x, y, z);
 				}
 			}
-			else if (((TileBlock) tile).normalRender)
+			else if (((TileBlock) tile).normalRender || ((TileBlock) tile).forceStandardRender)
 			{
 				renderer.renderStandardBlock(block, x, y, z);
 			}

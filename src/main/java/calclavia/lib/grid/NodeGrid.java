@@ -1,6 +1,7 @@
 package calclavia.lib.grid;
 
 import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -19,7 +20,7 @@ public abstract class NodeGrid<N extends Node> extends Grid<N>
 		node.recache();
 		node.setGrid(this);
 
-		AbstractMap<Object, ForgeDirection> connections = node.getConnections();
+		AbstractMap<Object, ForgeDirection> connections = new HashMap(node.getConnections());
 
 		for (Object connection : connections.keySet())
 		{

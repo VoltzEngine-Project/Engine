@@ -1,7 +1,12 @@
 package calclavia.lib.prefab.turbine;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -10,14 +15,35 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import calclavia.lib.prefab.tile.TileAdvanced;
+import calclavia.api.resonantinduction.IBoilHandler;
+import calclavia.lib.content.module.TileBase;
 
 /**
- * Funnel TileEntity
+ * Funnel for gas.
  */
-public class TileSteamFunnel extends TileAdvanced implements IFluidHandler
+public class TileFunnel extends TileBase implements IBoilHandler
 {
-	public final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME);
+	private final FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 16);
+	private static Icon iconTop;
+
+	public TileFunnel()
+	{
+		super(Material.iron);
+	}
+
+	@Override
+	public Icon getIcon(int side, int meta)
+	{
+		return side == 1 || side == 0 ? iconTop : super.getIcon(side, meta);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerIcons(IconRegister iconRegister)
+	{
+		super.registerIcons(iconRegister);
+		iconTop = iconRegister.registerIcon(domain + name + "_top");
+	}
 
 	@Override
 	public void updateEntity()
@@ -31,11 +57,10 @@ public class TileSteamFunnel extends TileAdvanced implements IFluidHandler
 			if (tileEntity instanceof IFluidHandler)
 			{
 				IFluidHandler handler = (IFluidHandler) tileEntity;
-				Fluid steam = FluidRegistry.getFluid("steam");
 
-				if (handler.canFill(ForgeDirection.DOWN, steam))
+				if (handler.canFill(ForgeDirection.DOWN, tank.getFluid().getFluid()))
 				{
-					FluidStack drainedStack = tank.drain(tank.getCapacity() / 10, false);
+					FluidStack drainedStack = tank.drain(tank.getCapacity(), false);
 
 					if (drainedStack != null)
 					{
@@ -90,7 +115,7 @@ public class TileSteamFunnel extends TileAdvanced implements IFluidHandler
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid)
 	{
-		if (fluid.getName().equalsIgnoreCase("steam") && from == ForgeDirection.DOWN)
+		if (fluid.isGaseous() && from == ForgeDirection.DOWN)
 		{
 			return true;
 		}
@@ -101,7 +126,7 @@ public class TileSteamFunnel extends TileAdvanced implements IFluidHandler
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid)
 	{
-		if (fluid.getName().equalsIgnoreCase("steam"))
+		if (fluid.isGaseous() && from == ForgeDirection.UP)
 		{
 			return true;
 		}
@@ -112,6 +137,6 @@ public class TileSteamFunnel extends TileAdvanced implements IFluidHandler
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from)
 	{
-		return new FluidTankInfo[] { this.tank.getInfo() };
+		return new FluidTankInfo[] { tank.getInfo() };
 	}
 }

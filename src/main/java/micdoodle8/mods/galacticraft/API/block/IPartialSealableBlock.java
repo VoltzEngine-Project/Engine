@@ -1,4 +1,4 @@
-package micdoodle8.mods.galacticraft.api.block;
+package micdoodle8.mods.galacticraft.API.block;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;

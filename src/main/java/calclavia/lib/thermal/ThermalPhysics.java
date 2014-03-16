@@ -29,7 +29,7 @@ public class ThermalPhysics
 	 */
 	public static int getTemperatureForCoordinate(World world, int x, int z)
 	{
-		int averageTemperature = 273 + (int) (world.getBiomeGenForCoords(x, z).getFloatTemperature() * 22 * 2);
+		int averageTemperature = 273 + (int) ((world.getBiomeGenForCoords(x, z).getFloatTemperature() - 0.4) * 50);
 		double dayNightVariance = averageTemperature * 0.05;
 		return (int) (averageTemperature + (world.isDaytime() ? dayNightVariance : -dayNightVariance));
 	}

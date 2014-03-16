@@ -55,6 +55,7 @@ public abstract class TileBlock extends TileEntity
 	protected String textureName;
 	public CreativeTabs creativeTab = null;
 	public boolean normalRender = true;
+	public boolean forceStandardRender = false;
 	public boolean customItemRender = false;
 	public boolean isOpaqueCube = true;
 	public Cuboid bounds = Cuboid.full();
@@ -62,7 +63,7 @@ public abstract class TileBlock extends TileEntity
 
 	public float blockHardness = 1;
 	public float blockResistance = 1;
-
+	public boolean canProvidePower = false;
 	/**
 	 * Rotation
 	 */
@@ -598,6 +599,16 @@ public abstract class TileBlock extends TileEntity
 	public void onFillRain()
 	{
 
+	}
+
+	public int getWeakRedstonePower(IBlockAccess access, int side)
+	{
+		return getStrongRedstonePower(access, side);
+	}
+
+	public int getStrongRedstonePower(IBlockAccess access, int side)
+	{
+		return 0;
 	}
 
 }

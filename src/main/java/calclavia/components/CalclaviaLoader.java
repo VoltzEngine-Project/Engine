@@ -3,10 +3,8 @@ package calclavia.components;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import calclavia.lib.config.Config;
-import calclavia.lib.config.ConfigHandler;
-import cpw.mods.fml.common.event.*;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.creativetab.CreativeTabs;
@@ -20,17 +18,21 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import universalelectricity.api.vector.Vector3;
+import universalelectricity.api.vector.VectorWorld;
+import calclavia.api.resonantinduction.IBoilHandler;
 import calclavia.components.creative.BlockCreativeBuilder;
 import calclavia.components.creative.BlockInfiniteBlock;
 import calclavia.components.tool.ToolMode;
 import calclavia.components.tool.ToolModeGeneral;
 import calclavia.components.tool.ToolModeRotation;
 import calclavia.lib.Calclavia;
+import calclavia.lib.config.ConfigHandler;
 import calclavia.lib.content.ContentRegistry;
 import calclavia.lib.content.IDManager;
 import calclavia.lib.flag.CommandFlag;
@@ -49,6 +51,7 @@ import calclavia.lib.prefab.ore.OreGenReplaceStone;
 import calclavia.lib.prefab.ore.OreGenerator;
 import calclavia.lib.recipe.RecipeUtility;
 import calclavia.lib.thermal.BoilEvent;
+import calclavia.lib.thermal.EventThermal.EventThermalUpdate;
 import calclavia.lib.thermal.ThermalGrid;
 import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.PotionUtility;
@@ -62,6 +65,11 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -198,6 +206,15 @@ public class CalclaviaLoader
 
 		Calclavia.CONFIGURATION.load();
 
+		try
+		{
+			ConfigHandler.configure(Calclavia.CONFIGURATION, "calclavia");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
 		blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class).setCreativeTab(null);
 		blockMulti.setPacketType(PACKET_TILE);
 
@@ -287,16 +304,6 @@ public class CalclaviaLoader
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		Calclavia.CONFIGURATION.load();
-		try
-		{
-			Calclavia.LOGGER.info("Generating Automatic Configs");
-			ConfigHandler.configure(Calclavia.CONFIGURATION, "calclavia");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 
 		// TODO: Move to UE
 		if (!UpdateTicker.INSTANCE.isAlive())
@@ -583,6 +590,9 @@ public class CalclaviaLoader
 		SaveManager.saveAll();
 	}
 
+	/**
+	 * Default handler.
+	 */
 	@ForgeSubscribe
 	public void boilEventHandler(BoilEvent evt)
 	{
@@ -593,9 +603,9 @@ public class CalclaviaLoader
 		{
 			TileEntity tileEntity = world.getBlockTileEntity(position.intX(), position.intY() + height, position.intZ());
 
-			if (tileEntity instanceof IFluidHandler)
+			if (tileEntity instanceof IBoilHandler)
 			{
-				IFluidHandler handler = (IFluidHandler) tileEntity;
+				IBoilHandler handler = (IBoilHandler) tileEntity;
 				FluidStack fluid = evt.getRemainForSpread(height);
 
 				if (fluid.amount > 0)
@@ -608,7 +618,67 @@ public class CalclaviaLoader
 			}
 		}
 
+		if (world.rand.nextInt(80) == 0)
+		{
+			world.playSoundEffect(position.x + 0.5F, position.y + 0.5F, position.z + 0.5F, "Fluid.lava", 0.5F, 2.1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.85F);
+		}
+
+		if (world.rand.nextInt(40) == 0)
+		{
+			world.playSoundEffect(position.x + 0.5F, position.y + 0.5F, position.z + 0.5F, "Fluid.lavapop", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+		}
+
+		world.spawnParticle("bubble", position.x + Math.random(), position.y + 0.5f + Math.random(), position.z + Math.random(), 0, 0, 0);
+
+		if (world.rand.nextInt(5) == 0)
+		{
+			world.spawnParticle("smoke", position.x + Math.random(), position.y + 0.5f + Math.random(), position.z + Math.random(), 0, 0, 0);
+		}
+
+		if (position.getBlockMetadata(world) == 0)
+			position.setBlock(world, 0);
+
 		evt.setResult(Result.DENY);
 	}
 
+	/**
+	 * Default handler.
+	 */
+	@ForgeSubscribe
+	public void thermalEventHandler(EventThermalUpdate evt)
+	{
+		VectorWorld pos = evt.position;
+		Block block = Block.blocksList[pos.getBlockID()];
+		Material mat = pos.world.getBlockMaterial(pos.intX(), pos.intY(), pos.intZ());
+
+		if (mat == Material.air)
+		{
+			evt.heatLoss = 0.15f;
+		}
+
+		if (block == Block.waterMoving || block == Block.waterStill)
+		{
+			if (evt.temperature >= 373)
+			{
+				if (FluidRegistry.getFluid("steam") != null)
+				{
+					// TODO: INCORRECT!
+					int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373));
+					MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2));
+				}
+
+				evt.heatLoss = 0.2f;
+			}
+		}
+
+		if (block == Block.ice)
+		{
+			if (evt.temperature >= 273)
+			{
+				pos.setBlock(Block.waterMoving.blockID);
+			}
+
+			evt.heatLoss = 0.4f;
+		}
+	}
 }

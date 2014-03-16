@@ -229,7 +229,7 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess access, int x, int y, int z, int side)
 	{
-		return getTile(access, x, y, z).shouldSideBeRendered(access, x, y, z,side);
+		return getTile(access, x, y, z).shouldSideBeRendered(access, x, y, z, side);
 	}
 
 	@Override
@@ -322,5 +322,32 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	public void getSubBlocks(int id, CreativeTabs creativeTab, List list)
 	{
 		dummyTile.getSubBlocks(id, creativeTab, list);
+	}
+
+	/**
+	 * Redstone interaction
+	 */
+	@Override
+	public boolean canProvidePower()
+	{
+		return dummyTile.canProvidePower;
+	}
+
+	@Override
+	public int isProvidingWeakPower(IBlockAccess access, int x, int y, int z, int side)
+	{
+		inject(access, x, y, z);
+		int value = getTile(access, x, y, z).getWeakRedstonePower(access, side);
+		eject();
+		return value;
+	}
+
+	@Override
+	public int isProvidingStrongPower(IBlockAccess access, int x, int y, int z, int side)
+	{
+		inject(access, x, y, z);
+		int value = getTile(access, x, y, z).getStrongRedstonePower(access, side);
+		eject();
+		return value;
 	}
 }

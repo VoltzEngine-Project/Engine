@@ -4,16 +4,21 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import calclavia.api.mffs.fortron.FrequencyGrid;
-import calclavia.api.mffs.fortron.IServerThread;
-import calclavia.components.CalclaviaLoader;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.server.ServerListenThread;
 import net.minecraft.server.ThreadMinecraftServer;
 import net.minecraftforge.common.ForgeDirection;
-import scala.annotation.meta.getter;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import universalelectricity.api.net.IUpdate;
 import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorWorld;
+import calclavia.api.mffs.fortron.IServerThread;
+import calclavia.components.CalclaviaLoader;
+import calclavia.lib.thermal.EventThermal.EventThermalUpdate;
 
 /**
  * A grid managing the flow of thermal energy.
@@ -25,8 +30,12 @@ public class ThermalGrid implements IUpdate
 	public static final ThermalGrid CLIENT_INSTANCE = new ThermalGrid();
 	public static final ThermalGrid SERVER_INSTANCE = new ThermalGrid();
 
-	private final float spread = 0.01f;
+	private final float spread = 1 / 7f;
+	private final float loss = 0.1f;
 	private final HashMap<VectorWorld, Float> thermalSource = new HashMap<VectorWorld, Float>();
+
+	private int tick = 0;
+	private final float deltaTime = 1 / 20f;
 
 	public float getDefaultTemperature(VectorWorld position)
 	{
@@ -47,7 +56,7 @@ public class ThermalGrid implements IUpdate
 
 			float newTemperature = original + deltaTemperature;
 
-			if (Math.abs(newTemperature - defaultTemperature) > 0.1)
+			if (Math.abs(newTemperature - defaultTemperature) > 0.4)
 				thermalSource.put(position, original + deltaTemperature);
 			else
 				thermalSource.remove(position);
@@ -69,8 +78,7 @@ public class ThermalGrid implements IUpdate
 	public void update()
 	{
 		Iterator<Entry<VectorWorld, Float>> it = new HashMap<VectorWorld, Float>(thermalSource).entrySet().iterator();
-		//System.out.println(thermalSource.size());
-		final float loss = 0.01f;
+		// System.out.println("NODES " + thermalSource.size());
 
 		while (it.hasNext())
 		{
@@ -79,9 +87,10 @@ public class ThermalGrid implements IUpdate
 			// Distribute temperature
 			VectorWorld pos = entry.getKey();
 
-			// Try to restore to equilibium
+			/**
+			 * Deal with different block types
+			 */
 			float currentTemperature = getTemperature(pos);
-			// addTemperature(pos, (getDefaultTemperature(pos) - currentTemperature) * spread );
 
 			if (currentTemperature < 0)
 			{
@@ -89,27 +98,33 @@ public class ThermalGrid implements IUpdate
 				continue;
 			}
 
+			float deltaFromEquilibrium = getDefaultTemperature(pos) - currentTemperature;
+
+			EventThermalUpdate evt = new EventThermalUpdate(pos, currentTemperature, deltaFromEquilibrium, deltaTime);
+			MinecraftForge.EVENT_BUS.post(evt);
+
+			float loss = evt.heatLoss;
+			addTemperature(pos, (deltaFromEquilibrium > 0 ? 1 : -1) * Math.min(Math.abs(deltaFromEquilibrium), Math.abs(loss)));
+
 			/**
-			 * Deal with different block types
+			 * Spread heat to surrounding.
 			 */
-
-			final float spread = Math.abs(Math.min((getDefaultTemperature(pos) - currentTemperature) * 0.001f, 0.01f));
-
-			if (spread > 0)
+			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
 			{
-				for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-				{
-					VectorWorld adjacent = (VectorWorld) pos.clone().translate(dir);
-					float deltaTemperature = getTemperature(pos) - getTemperature(adjacent);
+				VectorWorld adjacent = (VectorWorld) pos.clone().translate(dir);
+				float deltaTemperature = getTemperature(pos) - getTemperature(adjacent);
 
-					if (deltaTemperature >= spread)
-					{
-						// System.out.println(deltaTemperature);
-						addTemperature(adjacent, Math.min(deltaTemperature, spread));
-						addTemperature(pos, -Math.min(deltaTemperature, spread));
-					}
+				Material adjacentMat = adjacent.world.getBlockMaterial(adjacent.intX(), adjacent.intY(), adjacent.intZ());
+
+				float spread = (adjacentMat.isSolid() ? this.spread : this.spread / 2) * deltaTime;
+
+				if (deltaTemperature > 0)
+				{
+					addTemperature(adjacent, deltaTemperature * spread);
+					addTemperature(pos, -deltaTemperature * spread);
 				}
 			}
+
 		}
 	}
 
@@ -117,6 +132,7 @@ public class ThermalGrid implements IUpdate
 	public boolean canUpdate()
 	{
 		return !CalclaviaLoader.proxy.isPaused();
+		// && ++tick % 20 == 0;
 	}
 
 	@Override
