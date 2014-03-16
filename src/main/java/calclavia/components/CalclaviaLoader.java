@@ -205,7 +205,16 @@ public class CalclaviaLoader
 		ToolMode.REGISTRY.add(new ToolModeRotation());
 
 		Calclavia.CONFIGURATION.load();
-
+		
+		try
+		{
+			ConfigHandler.configure(Calclavia.CONFIGURATION, "calclavia");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
 		blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class).setCreativeTab(null);
 		blockMulti.setPacketType(PACKET_TILE);
 
@@ -295,16 +304,6 @@ public class CalclaviaLoader
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		Calclavia.CONFIGURATION.load();
-		try
-		{
-			Calclavia.LOGGER.info("Generating Automatic Configs");
-			ConfigHandler.configure(Calclavia.CONFIGURATION, "calclavia");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 
 		// TODO: Move to UE
 		if (!UpdateTicker.INSTANCE.isAlive())

@@ -15,33 +15,34 @@ import java.util.Set;
  */
 public class ConfigTransformer implements IClassTransformer
 {
-    public static Set<String> classes = new HashSet<String>();
+	public static final Set<String> classes = new HashSet<String>();
 
-    @Override
-    public byte[] transform (String name, String transformedName, byte[] bytes)
-    {
-        // no need to iterate over Forge, FML, and MC source
-        if (transformedName.startsWith("net.minecraft") || transformedName.startsWith("cpw.mods.fml"))
-            return bytes;
+	@Override
+	public byte[] transform(String name, String transformedName, byte[] bytes)
+	{
+		// no need to iterate over Forge, FML, and MC source
+		if (transformedName.startsWith("net.minecraft") || transformedName.startsWith("cpw.mods.fml") || transformedName.startsWith("net.minecraftforge"))
+			return bytes;
 
-        ClassNode cnode = ASMHelper.createClassNode(bytes);
+		ClassNode cnode = ASMHelper.createClassNode(bytes);
 
-        for (FieldNode fnode : cnode.fields)
-        {
-            if (fnode != null && fnode.visibleAnnotations != null)
-                for (AnnotationNode anode : fnode.visibleAnnotations)
-                {
-                    if (anode.desc.equals("Lcalclavia/lib/configurable/Config;"))
-                    {
-                        classes.add(transformedName);
-                        return bytes;
-                    }
-                }
-        }
+		for (FieldNode fnode : cnode.fields)
+		{
+			if (fnode != null && fnode.visibleAnnotations != null)
+			{
+				for (AnnotationNode anode : fnode.visibleAnnotations)
+				{
+					if (anode.desc.equals("Lcalclavia/lib/config/Config;"))
+					{
+						classes.add(transformedName);
+						return bytes;
+					}
+				}
+			}
+		}
 
-        return bytes;
+		return bytes;
 
-    }
-
+	}
 
 }

@@ -1,13 +1,16 @@
 package calclavia.lib.config;
 
-import net.minecraftforge.common.Configuration;
-
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
+import calclavia.lib.Calclavia;
+import net.minecraftforge.common.Configuration;
 
 /**
  * How to use the config Handler
  * 
- * First, mark your field with @Config
+ * First, mark your field with @Config, make sure the class is loaded before you call configure()
  * 
  * @Config(key = "a key", category = "a category")
  * public static double aValue = 3.765D;
@@ -69,34 +72,43 @@ public abstract class ConfigHandler
 			else
 				key = cfg.key();
 
-			if (field.getType().getName().equals(int.class.getName()))
+			String comment = !cfg.comment().isEmpty() ? cfg.comment() : null;
+
+			if (field.getType() == Integer.TYPE)
 			{
-				int value = config.get(cfg.category(), key, (int) field.getInt(null), !cfg.comment().isEmpty() ? cfg.comment() : null).getInt();
+				int value = config.get(cfg.category(), key, field.getInt(null), comment).getInt(field.getInt(null));
 				field.setInt(null, value);
 			}
-
-			else if (field.getType().getName().equals(double.class.getName()))
+			else if (field.getType() == Double.TYPE)
 			{
-				double value = config.get(cfg.category(), key, (double) field.getDouble(null), !cfg.comment().isEmpty() ? cfg.comment() : null).getDouble((double) field.getDouble(null));
+				double value = config.get(cfg.category(), key, field.getDouble(null), comment).getDouble(field.getDouble(null));
 				field.setDouble(null, value);
 			}
-
-			else if (field.getType().getName().equals(String.class.getName()))
+			else if (field.getType() == String.class)
 			{
-				String value = config.get(cfg.category(), key, (String) field.get(null), !cfg.comment().isEmpty() ? cfg.comment() : null).getString();
+				String value = config.get(cfg.category(), key, (String) field.get(null), comment).getString();
 				field.set(null, value);
 			}
-
-			else if (field.getType().getName().equals(boolean.class.getName()))
+			else if (field.getType() == Boolean.TYPE)
 			{
-				boolean value = config.get(cfg.category(), key, (boolean) field.getBoolean(null), !cfg.comment().isEmpty() ? cfg.comment() : null).getBoolean((boolean) field.getBoolean(null));
+				boolean value = config.get(cfg.category(), key, field.getBoolean(null), comment).getBoolean(field.getBoolean(null));
 				field.setBoolean(null, value);
 			}
-
-			// TODO: If the lists of Configuration work as key=val1, val2, val3 -- im not sure they
-			// do, then add support for that, as that should be quite simple. no reason it shouldnt
-			// work
-
+			else if (field.getType() == String[].class)
+			{
+				String[] values = config.get(cfg.category(), key, (String[]) field.get(null), comment).getStringList();
+				field.set(null, values);
+			}
+			else if (field.getType() == int[].class)
+			{
+				int[] values = config.get(cfg.category(), key, (int[]) field.get(null), comment).getIntList();
+				field.set(null, values);
+			}
+			else if (field.getType() == boolean[].class)
+			{
+				boolean[] values = config.get(cfg.category(), key, (boolean[]) field.get(null), comment).getBooleanList();
+				field.set(null, values);
+			}
 		}
 		catch (Exception e)
 		{
@@ -104,5 +116,4 @@ public abstract class ConfigHandler
 			e.printStackTrace();
 		}
 	}
-
 }
