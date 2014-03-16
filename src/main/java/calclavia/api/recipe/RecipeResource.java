@@ -1,4 +1,4 @@
-package calclavia.api.resonantinduction.recipe;
+package calclavia.api.recipe;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;

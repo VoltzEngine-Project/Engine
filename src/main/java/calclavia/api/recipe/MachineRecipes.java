@@ -1,37 +1,25 @@
-package calclavia.api.resonantinduction.recipe;
+package calclavia.api.recipe;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import calclavia.api.resonantinduction.recipe.RecipeResource.FluidStackResource;
-import calclavia.api.resonantinduction.recipe.RecipeResource.ItemStackResource;
-import calclavia.api.resonantinduction.recipe.RecipeResource.OreDictResource;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import calclavia.api.recipe.RecipeResource.FluidStackResource;
+import calclavia.api.recipe.RecipeResource.ItemStackResource;
+import calclavia.api.recipe.RecipeResource.OreDictResource;
 
 public final class MachineRecipes
 {
-	public static enum RecipeType
-	{
-		CRUSHER, GRINDER, MIXER, SMELTER, SAWMILL;
-	}
-
-	private final Map<RecipeType, Map<RecipeResource[], RecipeResource[]>> recipes = new HashMap<RecipeType, Map<RecipeResource[], RecipeResource[]>>();
+	private final Map<String, Map<RecipeResource[], RecipeResource[]>> recipes = new HashMap<String, Map<RecipeResource[], RecipeResource[]>>();
 
 	public static MachineRecipes INSTANCE = new MachineRecipes();
-
-	public MachineRecipes()
-	{
-		for (RecipeType machine : RecipeType.values())
-		{
-			recipes.put(machine, new HashMap<RecipeResource[], RecipeResource[]>());
-		}
-	}
 
 	public RecipeResource getResourceFromObject(Object obj)
 	{
@@ -56,12 +44,12 @@ public final class MachineRecipes
 		return null;
 	}
 
-	public void addRecipe(RecipeType machine, RecipeResource[] input, RecipeResource[] output)
+	public void addRecipe(String machine, RecipeResource[] input, RecipeResource[] output)
 	{
-		this.recipes.get(machine).put(input, output);
+		getRecipes(machine).put(input, output);
 	}
 
-	public void addRecipe(RecipeType machine, Object inputObj, Object... outputObj)
+	public void addRecipe(String machine, Object inputObj, Object... outputObj)
 	{
 		RecipeResource input = getResourceFromObject(inputObj);
 		RecipeResource[] outputs = new RecipeResource[outputObj.length];
@@ -71,7 +59,7 @@ public final class MachineRecipes
 			RecipeResource output = getResourceFromObject(outputObj[i]);
 
 			if (input == null || output == null)
-				throw new RuntimeException("Resonant Induction tried to add invalid machine recipe: " + input + " => " + output);
+				throw new RuntimeException("Tried to add invalid " + machine + " recipe: " + input + " => " + output);
 
 			outputs[i] = output;
 		}
@@ -79,24 +67,24 @@ public final class MachineRecipes
 		addRecipe(machine, new RecipeResource[] { input }, outputs);
 	}
 
-	public void removeRecipe(RecipeType machine, RecipeResource[] input)
+	public void removeRecipe(String machine, RecipeResource[] input)
 	{
-		this.recipes.get(machine).remove(input);
+		getRecipes(machine).remove(input);
 	}
 
-	public Map<RecipeResource[], RecipeResource[]> getRecipes(RecipeType machine)
+	public Map<RecipeResource[], RecipeResource[]> getRecipes(String machine)
 	{
-		return new HashMap<RecipeResource[], RecipeResource[]>(this.recipes.get(machine));
+		machine = machine.toLowerCase(Locale.ENGLISH);
+
+		if (!recipes.containsKey(machine))
+			recipes.put(machine, new HashMap<RecipeResource[], RecipeResource[]>());
+
+		return recipes.get(machine);
 	}
 
-	public Map<RecipeType, Map<RecipeResource[], RecipeResource[]>> getRecipes()
+	public RecipeResource[] getOutput(String machine, RecipeResource... input)
 	{
-		return new HashMap<RecipeType, Map<RecipeResource[], RecipeResource[]>>(this.recipes);
-	}
-
-	public RecipeResource[] getOutput(RecipeType machine, RecipeResource... input)
-	{
-		Iterator<Entry<RecipeResource[], RecipeResource[]>> it = this.getRecipes(machine).entrySet().iterator();
+		Iterator<Entry<RecipeResource[], RecipeResource[]>> it = getRecipes(machine).entrySet().iterator();
 
 		while (it.hasNext())
 		{
@@ -111,7 +99,7 @@ public final class MachineRecipes
 		return new RecipeResource[] {};
 	}
 
-	public RecipeResource[] getOutput(RecipeType machine, Object... inputs)
+	public RecipeResource[] getOutput(String machine, Object... inputs)
 	{
 		RecipeResource[] resourceInputs = new RecipeResource[inputs.length];
 
