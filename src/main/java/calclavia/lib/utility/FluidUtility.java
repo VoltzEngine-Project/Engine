@@ -472,15 +472,14 @@ public class FluidUtility
 
 		if (current != null && world.getBlockTileEntity(x, y, z) instanceof IFluidHandler)
 		{
-			FluidStack liquid = FluidContainerRegistry.getFluidForFilledItem(current);
-
+			FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(current);
 			IFluidHandler tank = (IFluidHandler) world.getBlockTileEntity(x, y, z);
 
-			if (liquid != null)
+			if (fluid != null)
 			{
-				if (tank.fill(ForgeDirection.getOrientation(side), liquid, false) == FluidContainerRegistry.BUCKET_VOLUME)
+				if (tank.fill(ForgeDirection.getOrientation(side), fluid, false) == fluid.amount)
 				{
-					tank.fill(ForgeDirection.getOrientation(side), liquid, true);
+					tank.fill(ForgeDirection.getOrientation(side), fluid, true);
 
 					if (!entityplayer.capabilities.isCreativeMode)
 						entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, AutoCraftingManager.consumeItem(current, 1));
@@ -497,9 +496,9 @@ public class FluidUtility
 				{
 					ItemStack filled = FluidContainerRegistry.fillFluidContainer(available, current);
 
-					liquid = FluidContainerRegistry.getFluidForFilledItem(filled);
+					fluid = FluidContainerRegistry.getFluidForFilledItem(filled);
 
-					if (liquid != null)
+					if (fluid != null)
 					{
 						if (!entityplayer.capabilities.isCreativeMode)
 						{
@@ -520,7 +519,7 @@ public class FluidUtility
 								entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, filled);
 							}
 						}
-						tank.drain(ForgeDirection.UNKNOWN, liquid.amount, true);
+						tank.drain(ForgeDirection.UNKNOWN, fluid.amount, true);
 						return true;
 					}
 				}

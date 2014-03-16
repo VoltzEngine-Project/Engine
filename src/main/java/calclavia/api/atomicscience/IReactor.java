@@ -1,6 +1,8 @@
 package calclavia.api.atomicscience;
 
-public interface IReactor extends ITemperature
+import net.minecraftforge.fluids.IFluidHandler;
+
+public interface IReactor extends IFluidHandler
 {
 	public void heat(long energy);
 
