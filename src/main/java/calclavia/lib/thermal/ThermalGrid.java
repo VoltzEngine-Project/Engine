@@ -88,6 +88,25 @@ public class ThermalGrid implements IUpdate
 			VectorWorld pos = entry.getKey();
 
 			/**
+			 * Deal with different block types
+			 */
+			float currentTemperature = getTemperature(pos);
+
+			if (currentTemperature < 0)
+			{
+				thermalSource.remove(pos);
+				continue;
+			}
+
+			float deltaFromEquilibrium = getDefaultTemperature(pos) - currentTemperature;
+
+			EventThermalUpdate evt = new EventThermalUpdate(pos, currentTemperature, deltaFromEquilibrium, deltaTime);
+			MinecraftForge.EVENT_BUS.post(evt);
+
+			float loss = evt.heatLoss;
+			addTemperature(pos, (deltaFromEquilibrium > 0 ? 1 : -1) * Math.min(Math.abs(deltaFromEquilibrium), Math.abs(loss)));
+
+			/**
 			 * Spread heat to surrounding.
 			 */
 			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
@@ -106,23 +125,6 @@ public class ThermalGrid implements IUpdate
 				}
 			}
 
-			/**
-			 * Deal with different block types
-			 */
-			float currentTemperature = getTemperature(pos);
-
-			if (currentTemperature < 0)
-			{
-				thermalSource.remove(pos);
-				continue;
-			}
-
-			EventThermalUpdate evt = new EventThermalUpdate(pos, currentTemperature);
-			MinecraftForge.EVENT_BUS.post(evt);
-			float loss = evt.heatLoss * deltaTime;
-
-			float deltaFromEquilibrium = getDefaultTemperature(pos) - currentTemperature;
-			addTemperature(pos, deltaFromEquilibrium >= 0 ? 1 : -1 * Math.min(Math.abs(deltaFromEquilibrium), loss));
 		}
 	}
 
