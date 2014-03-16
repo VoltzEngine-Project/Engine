@@ -205,7 +205,7 @@ public class CalclaviaLoader
 		ToolMode.REGISTRY.add(new ToolModeRotation());
 
 		Calclavia.CONFIGURATION.load();
-		
+
 		try
 		{
 			ConfigHandler.configure(Calclavia.CONFIGURATION, "calclavia");
@@ -214,7 +214,7 @@ public class CalclaviaLoader
 		{
 			e.printStackTrace();
 		}
-		
+
 		blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class).setCreativeTab(null);
 		blockMulti.setPacketType(PACKET_TILE);
 
@@ -618,6 +618,23 @@ public class CalclaviaLoader
 			}
 		}
 
+		if (world.rand.nextInt(80) == 0)
+		{
+			world.playSoundEffect(position.x + 0.5F, position.y + 0.5F, position.z + 0.5F, "Fluid.lava", 0.5F, 2.1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.85F);
+		}
+
+		if (world.rand.nextInt(40) == 0)
+		{
+			world.playSoundEffect(position.x + 0.5F, position.y + 0.5F, position.z + 0.5F, "Fluid.lavapop", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+		}
+
+		world.spawnParticle("bubble", position.x + Math.random(), position.y + 0.5f + Math.random(), position.z + Math.random(), 0, 0, 0);
+
+		if (world.rand.nextInt(5) == 0)
+		{
+			world.spawnParticle("smoke", position.x + Math.random(), position.y + 0.5f + Math.random(), position.z + Math.random(), 0, 0, 0);
+		}
+
 		evt.setResult(Result.DENY);
 	}
 
@@ -638,11 +655,14 @@ public class CalclaviaLoader
 
 		if (block == Block.waterMoving || block == Block.waterStill)
 		{
-			if (evt.temperature > 373)
+			if (evt.temperature >= 373)
 			{
 				if (FluidRegistry.getFluid("steam") != null)
 				{
-					MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME), new FluidStack(FluidRegistry.getFluid("steam"), FluidContainerRegistry.BUCKET_VOLUME), 2));
+					// TODO: This is incorrect!
+					float deltaT = evt.temperature - 373;
+					int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * deltaT);
+					MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2));
 				}
 
 				evt.heatLoss = 0.35f;
@@ -651,7 +671,7 @@ public class CalclaviaLoader
 
 		if (block == Block.ice)
 		{
-			if (evt.temperature > 273)
+			if (evt.temperature >= 273)
 			{
 				pos.setBlock(Block.waterMoving.blockID);
 			}
