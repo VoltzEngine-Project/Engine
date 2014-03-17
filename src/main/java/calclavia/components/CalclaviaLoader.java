@@ -603,6 +603,7 @@ public class CalclaviaLoader
 	{
 		World world = evt.world;
 		Vector3 position = evt.position;
+		int blockID = position.getBlockID(world);
 
 		for (int height = 1; height <= evt.maxSpread; height++)
 		{
@@ -640,7 +641,7 @@ public class CalclaviaLoader
 			world.spawnParticle("smoke", position.x + Math.random(), position.y + 0.5f + Math.random(), position.z + Math.random(), 0, 0, 0);
 		}
 
-		if (position.getBlockMetadata(world) == 0)
+		if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0)
 			position.setBlock(world, 0);
 
 		evt.setResult(Result.DENY);
