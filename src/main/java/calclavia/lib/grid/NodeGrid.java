@@ -30,11 +30,11 @@ public abstract class NodeGrid<N extends Node> extends Grid<N>
 
 				if (connectedNode.getGrid() != this)
 				{
-					synchronized (connectedNode.getGrid().getNodes())
+					synchronized (connectedNode.getGrid().nodes)
 					{
-						connectedNode.getGrid().getNodes().clear();
+						connectedNode.getGrid().nodes.clear();
 					}
-
+					
 					add((N) connectedNode);
 					reconstructNode((N) connectedNode);
 				}
