@@ -36,7 +36,7 @@ public class UECommand extends CommandBase
 
 			if (args[0].equalsIgnoreCase("gridinfo"))
 			{
-				sender.sendChatToPlayer(ChatMessageComponent.createFromText("[Universal Electricity Grid] Tick rate: " + (UpdateTicker.INSTANCE.getDeltaTime() > 0 ? 1 / (double) UpdateTicker.INSTANCE.getDeltaTime() : 0) * 1000 + "/s"));
+				sender.sendChatToPlayer(ChatMessageComponent.createFromText("[Universal Electricity Grid] Tick rate: " + (UpdateTicker.INSTANCE.pause ? "Paused" : (UpdateTicker.INSTANCE.getDeltaTime() > 0 ? 1 / (double) UpdateTicker.INSTANCE.getDeltaTime() : 0) * 1000 + "/s")));
 				sender.sendChatToPlayer(ChatMessageComponent.createFromText("[Universal Electricity Grid] Grids running: " + UpdateTicker.INSTANCE.getUpdaterCount()));
 				return;
 			}
