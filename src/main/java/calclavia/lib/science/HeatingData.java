@@ -1,4 +1,4 @@
-package com.builtbroken.common.science;
+package calclavia.lib.science;
 
 /**
  * Used to store values related to temperature and heat of a material. Temperatures are in kelvin,

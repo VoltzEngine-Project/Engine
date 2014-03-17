@@ -1,4 +1,4 @@
-package com.builtbroken.common.science;
+package calclavia.lib.science;
 
 /** Helper class that does the work of basic formulas.
  * 

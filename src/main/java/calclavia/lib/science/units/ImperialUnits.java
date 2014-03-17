@@ -1,4 +1,4 @@
-package com.builtbroken.common.science.units;
+package calclavia.lib.science.units;
 
 /** @Source http://en.wikipedia.org/wiki/Imperial_units
  * @author Robert Seifert */

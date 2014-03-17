@@ -1,9 +1,9 @@
-package com.builtbroken.common.science.units;
+package calclavia.lib.science.units;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.builtbroken.common.Pair;
+import calclavia.lib.java.Pair;
 
 public class UnitHelper
 {

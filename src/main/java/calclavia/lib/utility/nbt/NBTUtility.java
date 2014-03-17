@@ -21,9 +21,7 @@ import net.minecraft.server.MinecraftServer;
 import universalelectricity.api.vector.Vector2;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.Calclavia;
-
-import com.builtbroken.common.science.units.UnitHelper;
-
+import calclavia.lib.science.units.UnitHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 

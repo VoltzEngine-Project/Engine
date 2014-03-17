@@ -1,4 +1,4 @@
-package com.builtbroken.common.science;
+package calclavia.lib.science;
 
 public enum ElementProperty
 {

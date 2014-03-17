@@ -8,8 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import universalelectricity.api.vector.Vector3;
-
-import com.builtbroken.common.science.ChemElement;
+import calclavia.lib.science.ChemElement;
 
 /**
  * A thermal block manager

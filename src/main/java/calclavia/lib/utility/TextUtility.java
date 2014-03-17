@@ -1,8 +1,8 @@
-package com.builtbroken.common.lang;
+package calclavia.lib.utility;
 
 import java.awt.Color;
 
-public final class TextHelper
+public final class TextUtility
 {
     public enum TextColor
     {

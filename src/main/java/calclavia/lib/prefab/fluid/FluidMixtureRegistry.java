@@ -10,11 +10,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import calclavia.lib.java.Pair;
+import calclavia.lib.java.Triple;
 import calclavia.lib.prefab.fluid.FluidRecipeInfo.SimpleFluidRecipe;
 import calclavia.lib.utility.FluidUtility;
-
-import com.builtbroken.common.Pair;
-import com.builtbroken.common.Triple;
 
 /**
  * Handles all kinds of process involving mixing Fluids with other fluids and/or Items, Blocks,

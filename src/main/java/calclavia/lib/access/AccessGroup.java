@@ -4,9 +4,8 @@ import java.util.LinkedHashSet;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import calclavia.lib.java.Group;
 import calclavia.lib.utility.nbt.ISaveObj;
-
-import com.builtbroken.common.Group;
 
 /** Used by a terminal to track what users are part of each group. As well used to setup access
  * points to the terminal.

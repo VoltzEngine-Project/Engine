@@ -1,4 +1,4 @@
-package com.builtbroken.common;
+package calclavia.lib.java;
 
 /** Container for up to 3 objects
  *
