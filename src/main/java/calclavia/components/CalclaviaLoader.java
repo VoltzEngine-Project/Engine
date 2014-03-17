@@ -32,6 +32,7 @@ import calclavia.components.tool.ToolMode;
 import calclavia.components.tool.ToolModeGeneral;
 import calclavia.components.tool.ToolModeRotation;
 import calclavia.lib.Calclavia;
+import calclavia.lib.config.Config;
 import calclavia.lib.config.ConfigHandler;
 import calclavia.lib.content.ContentRegistry;
 import calclavia.lib.content.IDManager;
@@ -641,6 +642,9 @@ public class CalclaviaLoader
 		evt.setResult(Result.DENY);
 	}
 
+	@Config
+	public static double steamMultiplier = 1;
+
 	/**
 	 * Default handler.
 	 */
@@ -663,7 +667,7 @@ public class CalclaviaLoader
 				if (FluidRegistry.getFluid("steam") != null)
 				{
 					// TODO: INCORRECT!
-					int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373));
+					int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373) * steamMultiplier);
 					MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2));
 				}
 
