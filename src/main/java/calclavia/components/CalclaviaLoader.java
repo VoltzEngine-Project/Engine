@@ -635,6 +635,9 @@ public class CalclaviaLoader
 			world.spawnParticle("smoke", position.x + Math.random(), position.y + 0.5f + Math.random(), position.z + Math.random(), 0, 0, 0);
 		}
 
+		if (position.getBlockMetadata(world) == 0)
+			position.setBlock(world, 0);
+
 		evt.setResult(Result.DENY);
 	}
 
@@ -650,7 +653,7 @@ public class CalclaviaLoader
 
 		if (mat == Material.air)
 		{
-			evt.heatLoss = 0.25f;
+			evt.heatLoss = 0.15f;
 		}
 
 		if (block == Block.waterMoving || block == Block.waterStill)
@@ -659,13 +662,12 @@ public class CalclaviaLoader
 			{
 				if (FluidRegistry.getFluid("steam") != null)
 				{
-					// TODO: This is incorrect!
-					float deltaT = evt.temperature - 373;
-					int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * deltaT);
+					// TODO: INCORRECT!
+					int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373));
 					MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2));
 				}
 
-				evt.heatLoss = 0.3f;
+				evt.heatLoss = 0.2f;
 			}
 		}
 
