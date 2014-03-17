@@ -39,6 +39,7 @@ import calclavia.lib.content.IDManager;
 import calclavia.lib.flag.CommandFlag;
 import calclavia.lib.flag.FlagRegistry;
 import calclavia.lib.flag.ModFlag;
+import calclavia.lib.grid.UECommand;
 import calclavia.lib.grid.UpdateTicker;
 import calclavia.lib.multiblock.fake.BlockMultiBlockPart;
 import calclavia.lib.multiblock.fake.TileMultiBlockPart;
@@ -583,6 +584,9 @@ public class CalclaviaLoader
 		ICommandManager commandManager = FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
 		ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
 		serverCommandManager.registerCommand(new CommandFlag(FlagRegistry.getModFlag(FlagRegistry.DEFAULT_NAME)));
+
+		// TODO: Move to UE
+		serverCommandManager.registerCommand(new UECommand());
 	}
 
 	@EventHandler

@@ -233,6 +233,15 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	}
 
 	@Override
+	public boolean isBlockSolid(IBlockAccess access, int x, int y, int z, int side)
+	{
+		inject(access, x, y, z);
+		boolean value = getTile(access, x, y, z).isSolid(access, side);
+		eject();
+		return value;
+	}
+
+	@Override
 	public int getLightValue(IBlockAccess access, int x, int y, int z)
 	{
 		inject(access, x, y, z);
@@ -349,5 +358,11 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		int value = getTile(access, x, y, z).getStrongRedstonePower(access, side);
 		eject();
 		return value;
+	}
+
+	@Override
+	public int getRenderBlockPass()
+	{
+		return dummyTile.getRenderBlockPass();
 	}
 }

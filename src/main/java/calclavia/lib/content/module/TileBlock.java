@@ -611,4 +611,13 @@ public abstract class TileBlock extends TileEntity
 		return 0;
 	}
 
+	public boolean isSolid(IBlockAccess access, int side)
+	{
+		return material.isSolid();
+	}
+
+	public int getRenderBlockPass()
+	{
+		return 0;
+	}
 }

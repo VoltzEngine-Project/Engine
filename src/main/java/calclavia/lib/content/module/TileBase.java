@@ -79,4 +79,5 @@ public abstract class TileBase extends TileBlock implements IPlayerUsing
 	{
 		this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, direction.ordinal(), 3);
 	}
+
 }
