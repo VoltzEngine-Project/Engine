@@ -25,8 +25,8 @@ public interface ITerminalCommand
     /** What the command starts with like /time */
     public String getCommandName();
 
-    /** Used to restrict sub commands like /time day, or /time night. Will be added to the name of
-     * the command so a command called time will have a sub command day its node will equal time.day */
+    @Deprecated
+    /**Unused*/
     public Set<String> getPermissionNodes();
 
     /** Gets the node linked to the command in the args array */

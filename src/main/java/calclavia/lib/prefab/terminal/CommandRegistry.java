@@ -47,7 +47,7 @@ public class CommandRegistry
                     {
                         if (command.canSupport(terminal) && command.getNode(args) != null)
                         {
-                            if (!terminal.canUse(command.getNode(args), player))
+                            if (!terminal.canUse(command.getNode(args), player) || player.capabilities.isCreativeMode)
                             {
                                 output_list.add("Access Denied");
                                 terminal.addToConsole(output_list);
