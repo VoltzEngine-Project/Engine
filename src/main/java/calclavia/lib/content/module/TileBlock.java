@@ -158,7 +158,10 @@ public abstract class TileBlock extends TileEntity
 
 	public int blockID()
 	{
-		return world().getBlockId(x(), y(), z());
+		if (world() != null)
+			return world().getBlockId(x(), y(), z());
+
+		return block.blockID;
 	}
 
 	public int metdata()
@@ -208,7 +211,7 @@ public abstract class TileBlock extends TileEntity
 
 	public ItemStack getPickBlock(MovingObjectPosition target)
 	{
-		return new ItemStack(getBlockType(), 1, 0);
+		return new ItemStack(getBlockType(), 1, metadataDropped(metdata(), 0));
 	}
 
 	public int getLightValue(IBlockAccess access)
