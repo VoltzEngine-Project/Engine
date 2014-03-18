@@ -163,6 +163,18 @@ public abstract class TileTerminal extends TileAdvanced implements ITerminal, IS
 
         return false;
     }
+    
+    @Override
+    public void addToConsole(List<String> output_list)
+    {
+        if(output_list != null && !output_list.isEmpty())
+        {
+            for(String string : output_list)
+            {
+                this.addToConsole(string);
+            }
+        }        
+    }
 
     @Override
     public void scroll(int amount)
