@@ -172,13 +172,18 @@ public abstract class TileBlock extends TileEntity
 	public ArrayList<ItemStack> getDrops(int metadata, int fortune)
 	{
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(new ItemStack(getBlockType(), quantityDropped(metadata, fortune), 1));
+		drops.add(new ItemStack(getBlockType(), quantityDropped(metadata, fortune), metadataDropped(metadata, fortune)));
 		return drops;
 	}
 
 	public int quantityDropped(int meta, int fortune)
 	{
 		return 1;
+	}
+
+	public int metadataDropped(int meta, int fortune)
+	{
+		return 0;
 	}
 
 	public boolean isControlDown(EntityPlayer player)
