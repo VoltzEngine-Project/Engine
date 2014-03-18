@@ -16,24 +16,26 @@ public class GroupRegistry
     {
         List<String> list = new ArrayList<String>();
         //Owner group defaults
-        list.add(Nodes.GROUP_OWNER_NODE);
-        list.add(Nodes.INV_DISABLE_NODE);
-        list.add(Nodes.INV_ENABLE_NODE);
+        list.add(Nodes.PROFILE_OWNER);
+        list.add(Nodes.INV_DISABLE);
+        list.add(Nodes.INV_ENABLE);
+        list.add(Nodes.PROFILE);
         createDefaultGroup("owner", "admin", list);
         //Admin group defaults
         List<String> list2 = new ArrayList<String>();
-        list2.add(Nodes.GROUP_ADMIN_NODE);
-        list2.add(Nodes.INV_EDIT_NODE);
-        list2.add(Nodes.INV_LOCK_NODE);
-        list2.add(Nodes.INV_UNLOCK_NODE);
-        list2.add(Nodes.INV_CHANGE_NODE);
+        list2.add(Nodes.PROFILE_ADMIN);
+        list2.add(Nodes.INV_EDIT);
+        list2.add(Nodes.INV_LOCK);
+        list2.add(Nodes.INV_UNLOCK);
+        list2.add(Nodes.INV_CHANGE);
+        list2.add(Nodes.GROUP);
         createDefaultGroup("admin", "user", list2);
         //User group defaults
         List<String> list3 = new ArrayList<String>();
-        list3.add(Nodes.GROUP_USER_NODE);
-        list3.add(Nodes.INV_OPEN_NODE);
-        list3.add(Nodes.INV_TAKE_NODE);
-        list3.add(Nodes.INV_GIVE_NODE);
+        list3.add(Nodes.PROFILE_USER);
+        list3.add(Nodes.INV_OPEN);
+        list3.add(Nodes.INV_TAKE);
+        list3.add(Nodes.INV_GIVE);
         createDefaultGroup("user", null, list3);
     }
 

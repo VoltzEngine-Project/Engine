@@ -5,7 +5,7 @@ package calclavia.lib.access;
  * all machines, entities, and other mods. Too change the meaning of the node will make it difficult
  * to offer universal meaning for all machines. As well would create the need to add a per node per
  * machine per group access list making it more complicated for users to use.
- *
+ * 
  * @author DarkGuardsman */
 public class Nodes
 {
@@ -36,49 +36,55 @@ public class Nodes
      */
 
     //Inventory only nodes, overrided by machine nodes
-    public static final String INV_OPEN_NODE = "inv.open";
-    public static final String INV_TAKE_NODE = "inv.take";
-    public static final String INV_GIVE_NODE = "inv.give";
-    public static final String INV_EDIT_NODE = "inv.edit";
-    public static final String INV_CHANGE_NODE = "inv.change";
-    public static final String INV_LOCK_NODE = "inv.lock";
-    public static final String INV_UNLOCK_NODE = "inv.unlock";
-    public static final String INV_DISABLE_NODE = "inv.disable";
-    public static final String INV_ENABLE_NODE = "inv.enable";
+    public static final String INV = "inv.*";
+    public static final String INV_OPEN = "inv.open";
+    public static final String INV_TAKE = "inv.take";
+    public static final String INV_GIVE = "inv.give";
+    public static final String INV_EDIT = "inv.edit";
+    public static final String INV_CHANGE = "inv.change";
+    public static final String INV_LOCK = "inv.lock";
+    public static final String INV_UNLOCK = "inv.unlock";
+    public static final String INV_DISABLE = "inv.disable";
+    public static final String INV_ENABLE = "inv.enable";
 
     //Master machines nodes, overrides all lower nodes of the same type
-    public static final String MACHINE_OPEN_NODE = "machine.open";
-    public static final String MACHINE_LOCK_NODE = "machine.lock";
-    public static final String MACHINE_UNLOCK_NODE = "machine.unlock";
-    public static final String MACHINE_ENABLE_NODE = "machine.enable";
-    public static final String MACHINE_DISABLE_NODE = "machine.disable";
-    public static final String MACHINE_TURN_ON_NODE = "machine.on";
-    public static final String MACHINE_TURN_OFF_NODE = "machine.off";
-    public static final String MACHINE_CONFIG_NODE = "machine.config";
-    public static final String MACHINE_UPGRADE_NODE = "machine.upgrade";
-    public static final String MACHINE_DOWNGRADE_NODE = "machine.downgrade";
+    public static final String MACHINE = "machine.*";
+    public static final String MACHINE_OPEN = "machine.open";
+    public static final String MACHINE_LOCK = "machine.lock";
+    public static final String MACHINE_UNLOCK = "machine.unlock";
+    public static final String MACHINE_ENABLE = "machine.enable";
+    public static final String MACHINE_DISABLE = "machine.disable";
+    public static final String MACHINE_TURN_ON = "machine.on";
+    public static final String MACHINE_TURN_OFF = "machine.off";
+    public static final String MACHINE_CONFIG = "machine.config";
+    public static final String MACHINE_UPGRADE = "machine.upgrade";
+    public static final String MACHINE_DOWNGRADE = "machine.downgrade";
 
     //Group nodes, these are almost always held by only admins and owners
-    public static final String GROUP_CREATE_NODE = "group.create";
-    public static final String GROUP_DEL_NODE = "group.del";
-    public static final String GROUP_EDIT_NODE = "group.edit";//Still bound by other nodes
-    public static final String GROUP_ADD_NODE = "group.add";
-    public static final String GROUP_ADD_USER_NODE = "group.add.user";
-    public static final String GROUP_ADD_ENTITY_NODE = "group.add.entity";
-    public static final String GROUP_ADD_NODE_NODE = "group.add.node";
-    public static final String GROUP_REMOVE_NODE = "group.remove";
-    public static final String GROUP_REMOVE_USER_NODE = "group.remove.user";
-    public static final String GROUP_REMOVE_ENTITY_NODE = "group.remove.entity";
-    public static final String GROUP_REMOVE_NODE_NODE = "group.remove.node";
+    public static final String PROFILE = "profile.*";
+    public static final String PROFILE_CREATE_GROUP = "profile.group.add";
+    public static final String PROFILE_REMOVE_GROUP = "profile.group.remove";
+    public static final String PROFILE_EDIT_GROUP = "profile.group.edit";
+    public static final String PROFILE_EDIT = "profile.edit";
 
-    //Nodes for editing users inside of a group
-    public static final String USER_EDIT_NODE = "user.edit";
-    public static final String USER_CHANGE_GROUP_NODE = "user.change.group";
-    public static final String USER_ADD_NODE = "user.add.node";
-    public static final String USER_REMOVE_NODE = "user.remove.node";
+    public static final String GROUP = "group.*";
+    public static final String GROUP_ADD_NODE = "group.node.add";
+    public static final String GROUP_REMOVE_NODE = "group.node.remove";
+    public static final String GROUP_ADD_USER = "group.user.add";
+    public static final String GROUP_REMOVE_USER = "group.user.remove";
+    public static final String GROUP_EDIT_USER = "group.user.edit";
+    public static final String GROUP_USER_ADD_NODE = "group.user.node.add";
+    public static final String GROUP_USER_REMOVE_NODE = "group.user.node.remove";
+    public static final String GROUP_ADD_ENTITY = "group.entity.add";
+    public static final String GROUP_REMOVE_ENTITY = "group.entity.remove";
 
-    //Prefab group nodes, designed to be placed on the master group of the type
-    public static final String GROUP_OWNER_NODE = "group.owner";
-    public static final String GROUP_ADMIN_NODE = "group.admin";
-    public static final String GROUP_USER_NODE = "group.user";
+    //Applied to group in an access profile
+    public static final String PROFILE_OWNER = "profile.owner";
+    public static final String PROFILE_ADMIN = "profile.admin";
+    public static final String PROFILE_USER = "profile.user";
+
+    //Applied to users in a group, make sure to remove on group change
+    public static final String GROUP_OWNER = "group.owner";
+    public static final String GROUP_ADMIN = "group.admin";
+    public static final String GROUP_USER = "group.user";
 }
