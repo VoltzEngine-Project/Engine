@@ -41,7 +41,7 @@ public class GroupRegistry
 
     /** Creates a default group for all machines to use. Only add a group if there is no option to
      * really manage the group's settings
-     *
+     * 
      * @param name - group name
      * @param prefabGroup - group this should extend. Make sure it exists.
      * @param nodes - all commands or custom nodes */
@@ -56,7 +56,7 @@ public class GroupRegistry
 
     /** Creates a default group for all machines to use. Only add a group if there is no option to
      * really manage the group's settings
-     *
+     * 
      * @param name - group name
      * @param prefabGroup - group this should extend. Make sure it exists.
      * @param nodes - all commands or custom nodes */
@@ -93,15 +93,19 @@ public class GroupRegistry
     }
 
     /** Builds then loaded a new default group set into the terminal */
-    public static void loadNewGroupSet(ISpecialAccess terminal)
+    public static void loadNewGroupSet(IProfileContainer container)
     {
-        if (terminal != null)
+        if (container != null)
+            loadNewGroupSet(container.getAccessProfile());
+    }
+
+    public static void loadNewGroupSet(AccessProfile profile)
+    {
+        if (profile != null)
         {
             List<AccessGroup> groups = getNewGroupSet();
             for (AccessGroup group : groups)
-            {
-                terminal.addGroup(group);
-            }
+                profile.addGroup(group);
         }
     }
 
