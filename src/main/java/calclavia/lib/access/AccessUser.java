@@ -41,7 +41,28 @@ public class AccessUser extends User implements ISaveObj
 
     public boolean hasNode(String node)
     {
-        return nodes.contains(node) || group != null && group.hasNode(node);
+        if (node != null && !node.isEmpty())
+        {
+            String newNode = node;
+            if (node.endsWith(".*"))
+            {
+                newNode.substring(0, newNode.length() - 2);
+            }
+            String[] sub_nodes = newNode.split(".");
+            if (sub_nodes != null && sub_nodes.length > 0)
+            {
+                newNode = "";
+                for (int i = 0; i < sub_nodes.length; i++)
+                {
+                    newNode += (i != 0 ? "." : "") + sub_nodes[i];
+                    if (nodes.contains(newNode + ".*") || group != null && group.hasNode(newNode + ".*") || nodes.contains(newNode) || group != null && group.hasNode(newNode))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override
