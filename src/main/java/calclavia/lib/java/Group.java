@@ -36,7 +36,8 @@ public class Group<J>
     {
         if (this.isValid(obj))
         {
-            return memebers.add(obj);
+            memebers.add(obj);
+            return memebers.contains(obj);
         }
         return false;
     }

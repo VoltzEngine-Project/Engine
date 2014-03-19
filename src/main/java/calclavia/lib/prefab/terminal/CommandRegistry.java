@@ -36,7 +36,6 @@ public class CommandRegistry
         List<String> output_list = new ArrayList<String>();
         if (cmd != null && cmd != "")
         {
-            System.out.println("onCommand: " + cmd);
             String[] args = cmd.split(" ");
 
             if (args[0] != null)

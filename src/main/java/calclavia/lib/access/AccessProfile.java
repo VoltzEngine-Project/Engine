@@ -32,7 +32,7 @@ public class AccessProfile implements IVirtualObject
     private final Set<IProfileContainer> containers = Collections.newSetFromMap(new WeakHashMap<IProfileContainer, Boolean>());
 
     /** A list of all groups attached to this profile */
-    protected List<AccessGroup> groups = new ArrayList<AccessGroup>();
+    protected Set<AccessGroup> groups = new LinkedHashSet<AccessGroup>();
 
     /** Display name of the profile for the user to easily read */
     protected String profileName = "";
@@ -139,7 +139,7 @@ public class AccessProfile implements IVirtualObject
     {
         return this.global;
     }
-   
+
     public AccessUser getUserAccess(String username)
     {
         for (AccessGroup group : this.groups)
@@ -152,7 +152,7 @@ public class AccessProfile implements IVirtualObject
         }
         return new AccessUser(username);
     }
-    
+
     public List<AccessUser> getUsers()
     {
         List<AccessUser> users = new ArrayList<AccessUser>();
@@ -260,9 +260,9 @@ public class AccessProfile implements IVirtualObject
         return this.getGroup("owner");
     }
 
-    public List<AccessGroup> getGroups()
+    public Set<AccessGroup> getGroups()
     {
-        if (this.groups == null || this.groups.isEmpty())
+        if (this.groups == null)
         {
             GroupRegistry.loadNewGroupSet(this);
         }
@@ -275,7 +275,7 @@ public class AccessProfile implements IVirtualObject
         this.profileName = nbt.getString("name");
         this.global = nbt.getBoolean("global");
         this.profileID = nbt.getString("profileID");
-        
+
         //Load groups
         NBTTagList group_list = nbt.getTagList("groups");
         if (group_list != null && group_list.tagCount() > 0)
@@ -289,9 +289,9 @@ public class AccessProfile implements IVirtualObject
                 this.groups.add(group);
             }
             //Set group extensions
-            for(AccessGroup group : this.groups)
+            for (AccessGroup group : this.groups)
             {
-                if(group.getExtendGroupName() != null)
+                if (group.getExtendGroupName() != null)
                 {
                     group.setToExtend(this.getGroup(group.getExtendGroupName()));
                 }

@@ -20,6 +20,10 @@ public class User
     @Override
     public boolean equals(Object obj)
     {
+        if(obj instanceof String)
+        {
+            return ((String) obj).equalsIgnoreCase(this.getName());
+        }
         return obj instanceof User && ((User) obj).getName().equalsIgnoreCase(this.getName());
     }
 
