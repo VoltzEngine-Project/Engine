@@ -41,6 +41,17 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
     }
 
     @Override
+    public boolean addMemeber(AccessUser obj)
+    {
+        if (super.addMemeber(obj))
+        {
+            obj.setGroup(this);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void save(NBTTagCompound nbt)
     {
         nbt.setString("groupName", this.getName());
@@ -108,17 +119,6 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
         {
             this.creation_time = System.currentTimeMillis();
         }
-    }
-
-    @Override
-    public boolean addMemeber(AccessUser obj)
-    {
-        if (super.addMemeber(obj))
-        {
-            obj.setGroup(this);
-            return true;
-        }
-        return false;
     }
 
     /** Checks if this or it's supper group has the permission node */
