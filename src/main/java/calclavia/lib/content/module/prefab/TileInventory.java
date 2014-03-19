@@ -335,5 +335,4 @@ public class TileInventory extends TileBase implements IExternalInventory, ISide
 		super.writeToNBT(nbt);
 		getInventory().save(nbt);
 	}
-
 }

@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.vector.Vector2;
 import universalelectricity.api.vector.Vector3;
+import universalelectricity.api.vector.VectorWorld;
 import calclavia.lib.prefab.item.ItemBlockTooltip;
 import calclavia.lib.prefab.tile.IRotatable;
 import calclavia.lib.prefab.vector.Cuboid;
@@ -115,16 +116,16 @@ public abstract class TileBlock extends TileEntity
 		return zCoord;
 	}
 
-	public Vector3 position()
+	public VectorWorld position()
 	{
 		assert world() != null : "TileBlock [" + getClass().getSimpleName() + "] attempted to access invalid method.";
-		return new Vector3(this);
+		return new VectorWorld(this);
 	}
 
-	protected Vector3 center()
+	protected VectorWorld center()
 	{
 		assert world() != null : "TileBlock [" + getClass().getSimpleName() + "] attempted to access invalid method.";
-		return Vector3.fromCenter(this);
+		return (VectorWorld) position().translate(0.5);
 	}
 
 	@Override
@@ -607,6 +608,16 @@ public abstract class TileBlock extends TileEntity
 	public void onFillRain()
 	{
 
+	}
+
+	public boolean isIndirectlyPowered()
+	{
+		return world().isBlockIndirectlyGettingPowered(x(), y(), z());
+	}
+
+	public int getStrongestIndirectPower()
+	{
+		return world().getStrongestIndirectPower(x(), y(), z());
 	}
 
 	public int getWeakRedstonePower(IBlockAccess access, int side)
