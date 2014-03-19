@@ -23,7 +23,7 @@ import calclavia.lib.utility.nbt.SaveManager;
  * global access. Which means it can save/load at will from the world file.
  * 
  * @author DarkGuardsman */
-public class AccessProfile implements ISpecialAccess, IVirtualObject
+public class AccessProfile implements IVirtualObject
 {
     /** List of all AccessProfiles defined in the game */
     private static final Set<AccessProfile> globalList = new LinkedHashSet<AccessProfile>();
@@ -139,8 +139,7 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
     {
         return this.global;
     }
-
-    @Override
+   
     public AccessUser getUserAccess(String username)
     {
         for (AccessGroup group : this.groups)
@@ -153,8 +152,7 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         }
         return new AccessUser(username);
     }
-
-    @Override
+    
     public List<AccessUser> getUsers()
     {
         List<AccessUser> users = new ArrayList<AccessUser>();
@@ -173,13 +171,11 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         }
     }
 
-    @Override
     public boolean setUserAccess(String player, AccessGroup g, boolean save)
     {
         return setUserAccess(new AccessUser(player).setTempary(save), g);
     }
 
-    @Override
     public boolean setUserAccess(AccessUser user, AccessGroup group)
     {
         boolean bool = false;
@@ -234,7 +230,6 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         }
     }
 
-    @Override
     public AccessGroup getGroup(String name)
     {
         for (AccessGroup group : this.getGroups())
@@ -247,7 +242,6 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         return null;
     }
 
-    @Override
     public boolean addGroup(AccessGroup group)
     {
         if (!this.groups.contains(group))
@@ -261,13 +255,11 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         return false;
     }
 
-    @Override
     public AccessGroup getOwnerGroup()
     {
         return this.getGroup("owner");
     }
 
-    @Override
     public List<AccessGroup> getGroups()
     {
         if (this.groups == null || this.groups.isEmpty())
