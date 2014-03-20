@@ -14,7 +14,7 @@ import calclavia.lib.utility.nbt.ISaveObj;
  * @author DarkGuardsman */
 public class AccessGroup extends Group<AccessUser> implements ISaveObj
 {
-    protected LinkedHashSet<String> nodes = new LinkedHashSet<String>();
+    protected Set<String> nodes = new LinkedHashSet<String>();
     protected AccessGroup extendGroup;
     protected String extendGroup_name;
     protected long creation_time;
@@ -171,5 +171,10 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
     public String getExtendGroupName()
     {
         return this.extendGroup_name;
+    }
+
+    public Set<String> getNodes()
+    {
+        return nodes;
     }   
 }
