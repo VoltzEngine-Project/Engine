@@ -54,6 +54,11 @@ public class InternalInventoryHandler
         this.inverted = inverted;
     }
 
+    public void throwItem(ForgeDirection direction, ItemStack items)
+    {
+        throwItem(this.location.clone().translate(direction), items);
+    }
+
     /** Throws the items from the manipulator into the world.
      * 
      * @param outputPosition
