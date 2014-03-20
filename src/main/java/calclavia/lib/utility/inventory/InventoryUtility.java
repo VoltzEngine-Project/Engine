@@ -231,7 +231,7 @@ public class InventoryUtility
 		return null;
 	}
 
-    public static ItemBlock takeTopItemBlockFromInventory(IInventory inventory, int side)
+    public static ItemStack takeTopBlockFromInventory(IInventory inventory, int side)
     {
         if (!(inventory instanceof ISidedInventory))
         {
@@ -244,7 +244,7 @@ public class InventoryUtility
 
                     inventory.decrStackSize(i, 1);
 
-                    return (ItemBlock) toSend.getItem();
+                    return toSend;
                 }
             }
         }
@@ -259,7 +259,7 @@ public class InventoryUtility
                 {
                     int slotID = slots[get];
 
-                    if (sidedInventory.getStackInSlot(slotID) != null)
+                    if (sidedInventory.getStackInSlot(slotID) != null && inventory.getStackInSlot(slotID).getItem() instanceof ItemBlock)
                     {
                         ItemStack toSend = sidedInventory.getStackInSlot(slotID);
                         toSend.stackSize = 1;
@@ -268,7 +268,7 @@ public class InventoryUtility
                         {
                             sidedInventory.decrStackSize(slotID, 1);
 
-                            return (ItemBlock) toSend.getItem();
+                            return toSend;
                         }
                     }
                 }
