@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import calclavia.lib.access.GroupRegistry;
+import calclavia.lib.access.AccessUtility;
 
 public class CommandRegistry
 {
@@ -19,7 +19,7 @@ public class CommandRegistry
             COMMANDS.add(cmd);
             if (group != null)
             {
-                if (GroupRegistry.groupDefaultNodes.containsKey(group))
+                if (AccessUtility.groupDefaultNodes.containsKey(group))
                 {
                     List<String> stra = new ArrayList<String>();
                     stra.add(cmd.getCommandName());

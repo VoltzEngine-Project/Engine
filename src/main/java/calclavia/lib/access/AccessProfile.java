@@ -99,7 +99,7 @@ public class AccessProfile implements IVirtualObject
     /** Generates the default 3 group access profile */
     public AccessProfile generateNew(String name, Object object)
     {
-        GroupRegistry.loadNewGroupSet(this);
+        AccessUtility.loadNewGroupSet(this);
         this.profileName = name;
         name.replaceAll(" ", "");
         String id = null;
@@ -232,14 +232,7 @@ public class AccessProfile implements IVirtualObject
 
     public AccessGroup getGroup(String name)
     {
-        for (AccessGroup group : this.getGroups())
-        {
-            if (group.getName().equalsIgnoreCase(name))
-            {
-                return group;
-            }
-        }
-        return null;
+        return AccessUtility.getGroup(this.getGroups(), name);
     }
 
     public boolean addGroup(AccessGroup group)
@@ -264,7 +257,7 @@ public class AccessProfile implements IVirtualObject
     {
         if (this.groups == null)
         {
-            GroupRegistry.loadNewGroupSet(this);
+            AccessUtility.loadNewGroupSet(this);
         }
         return this.groups;
     }
