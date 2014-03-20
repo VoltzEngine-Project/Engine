@@ -1,12 +1,12 @@
 package calclavia.lib.content.module;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.WeakHashMap;
-
+import calclavia.lib.prefab.item.ItemBlockTooltip;
+import calclavia.lib.prefab.tile.IRotatable;
+import calclavia.lib.prefab.vector.Cuboid;
+import calclavia.lib.utility.LanguageUtility;
+import calclavia.lib.utility.WrenchUtility;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -26,34 +26,26 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.vector.Vector2;
 import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorWorld;
-import calclavia.lib.prefab.item.ItemBlockTooltip;
-import calclavia.lib.prefab.tile.IRotatable;
-import calclavia.lib.prefab.vector.Cuboid;
-import calclavia.lib.utility.LanguageUtility;
-import calclavia.lib.utility.WrenchUtility;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * All blocks inherit this class.
- * 
+ * <p/>
  * Note that a lot of the variables will not exist except on the primary instance of the TileBlock,
  * hosted in BlockDummy.
- * 
+ *
  * @author Calclavia
- * 
  */
 public abstract class TileBlock extends TileEntity
 {
-	protected final Material material;
-	public Class<? extends ItemBlock> itemBlock = ItemBlockTooltip.class;
-
 	/**
 	 * The unique string ID of this block.
 	 */
 	public final String name;
-	protected String domain;
-	protected String textureName;
+	protected final Material material;
+	public Class<? extends ItemBlock> itemBlock = ItemBlockTooltip.class;
 	public CreativeTabs creativeTab = null;
 	public boolean normalRender = true;
 	public boolean forceStandardRender = false;
@@ -61,10 +53,11 @@ public abstract class TileBlock extends TileEntity
 	public boolean isOpaqueCube = true;
 	public Cuboid bounds = Cuboid.full();
 	public BlockDummy block;
-
 	public float blockHardness = 1;
 	public float blockResistance = 1;
 	public boolean canProvidePower = false;
+	protected String domain;
+	protected String textureName;
 	/**
 	 * Rotation
 	 */
@@ -83,6 +76,27 @@ public abstract class TileBlock extends TileEntity
 		name = LanguageUtility.decapitalizeFirst(getClass().getSimpleName().replaceFirst("Tile", ""));
 		material = newMaterial;
 		textureName = name;
+	}
+
+	public static Vector2 getClickedFace(byte hitSide, float hitX, float hitY, float hitZ)
+	{
+		switch (hitSide)
+		{
+			case 0:
+				return new Vector2(1 - hitX, hitZ);
+			case 1:
+				return new Vector2(hitX, hitZ);
+			case 2:
+				return new Vector2(1 - hitX, 1 - hitY);
+			case 3:
+				return new Vector2(hitX, 1 - hitY);
+			case 4:
+				return new Vector2(hitZ, 1 - hitY);
+			case 5:
+				return new Vector2(1 - hitZ, 1 - hitY);
+			default:
+				return new Vector2(0.5, 0.5);
+		}
 	}
 
 	/**
@@ -160,7 +174,9 @@ public abstract class TileBlock extends TileEntity
 	public int blockID()
 	{
 		if (world() != null)
+		{
 			return world().getBlockId(x(), y(), z());
+		}
 
 		return block.blockID;
 	}
@@ -289,120 +305,189 @@ public abstract class TileBlock extends TileEntity
 				if (hitX < 0.25)
 				{
 					if (hitZ < 0.25)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (hitZ > 0.75)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (canRotate(4))
+					{
 						return 4;
+					}
 				}
 				if (hitX > 0.75)
 				{
 					if (hitZ < 0.25)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (hitZ > 0.75)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (canRotate(5))
+					{
 						return 5;
+					}
 				}
 				if (hitZ < 0.25)
+				{
 					if (canRotate(2))
+					{
 						return 2;
+					}
+				}
 				if (hitZ > 0.75)
+				{
 					if (canRotate(3))
+					{
 						return 3;
+					}
+				}
 				if (canRotate(hitSide))
+				{
 					return hitSide;
+				}
 			case 2:
 			case 3:
 				if (hitX < 0.25)
 				{
 					if (hitY < 0.25)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (hitY > 0.75)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (canRotate(4))
+					{
 						return 4;
+					}
 				}
 				if (hitX > 0.75)
 				{
 					if (hitY < 0.25)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (hitY > 0.75)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (canRotate(5))
+					{
 						return 5;
+					}
 				}
 				if (hitY < 0.25)
+				{
 					if (canRotate(0))
+					{
 						return 0;
+					}
+				}
 				if (hitY > 0.75)
+				{
 					if (canRotate(1))
+					{
 						return 1;
+					}
+				}
 				if (canRotate(hitSide))
+				{
 					return hitSide;
+				}
 			case 4:
 			case 5:
 				if (hitZ < 0.25)
 				{
 					if (hitY < 0.25)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (hitY > 0.75)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (canRotate(2))
+					{
 						return 2;
+					}
 				}
 				if (hitZ > 0.75)
 				{
 					if (hitY < 0.25)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (hitY > 0.75)
+					{
 						if (canRotate(tBack))
+						{
 							return tBack;
+						}
+					}
 					if (canRotate(3))
+					{
 						return 3;
+					}
 				}
 				if (hitY < 0.25)
+				{
 					if (canRotate(0))
+					{
 						return 0;
+					}
+				}
 				if (hitY > 0.75)
+				{
 					if (canRotate(1))
+					{
 						return 1;
+					}
+				}
 				if (canRotate(hitSide))
+				{
 					return hitSide;
+				}
 		}
 		return -1;
-	}
-
-	public static Vector2 getClickedFace(byte hitSide, float hitX, float hitY, float hitZ)
-	{
-		switch (hitSide)
-		{
-			case 0:
-				return new Vector2(1 - hitX, hitZ);
-			case 1:
-				return new Vector2(hitX, hitZ);
-			case 2:
-				return new Vector2(1 - hitX, 1 - hitY);
-			case 3:
-				return new Vector2(hitX, 1 - hitY);
-			case 4:
-				return new Vector2(hitZ, 1 - hitY);
-			case 5:
-				return new Vector2(1 - hitZ, 1 - hitY);
-			default:
-				return new Vector2(0.5, 0.5);
-		}
 	}
 
 	public ForgeDirection determineOrientation(EntityLivingBase entityLiving)
@@ -426,7 +511,9 @@ public abstract class TileBlock extends TileEntity
 		int returnSide = (playerSide == 0 && canRotate(2)) ? 2 : ((playerSide == 1 && canRotate(5)) ? 5 : ((playerSide == 2 && canRotate(3)) ? 3 : ((playerSide == 3 && canRotate(4)) ? 4 : 0)));
 
 		if (isFlipPlacement)
+		{
 			return ForgeDirection.getOrientation(returnSide).getOpposite();
+		}
 
 		return ForgeDirection.getOrientation(returnSide);
 	}
@@ -521,8 +608,12 @@ public abstract class TileBlock extends TileEntity
 		List<Cuboid> boxes = new ArrayList<Cuboid>();
 
 		for (Cuboid cuboid : getCollisionBoxes())
+		{
 			if (intersect != null && cuboid.intersects(intersect))
+			{
 				boxes.add(cuboid);
+			}
+		}
 
 		return boxes;
 	}
@@ -542,25 +633,14 @@ public abstract class TileBlock extends TileEntity
 		return bounds;
 	}
 
-	/**
-	 * Rendering
-	 */
-	@SideOnly(Side.CLIENT)
-	public static class RenderInfo
-	{
-		@SideOnly(Side.CLIENT)
-		private static final WeakHashMap<TileBlock, TileRender> renderer = new WeakHashMap<TileBlock, TileRender>();
-
-		@SideOnly(Side.CLIENT)
-		private static final HashMap<String, Icon> icon = new HashMap<String, Icon>();
-	}
-
 	@SideOnly(Side.CLIENT)
 	public final TileRender getRenderer()
 	{
 		// TODO: Be careful if this might cause memory issues.
 		if (!RenderInfo.renderer.containsKey(this))
+		{
 			RenderInfo.renderer.put(this, newRenderer());
+		}
 
 		return RenderInfo.renderer.get(this);
 	}
@@ -600,11 +680,6 @@ public abstract class TileBlock extends TileEntity
 		return side == 0 && this.bounds.min.y > 0.0D ? true : (side == 1 && this.bounds.max.y < 1.0D ? true : (side == 2 && this.bounds.min.z > 0.0D ? true : (side == 3 && this.bounds.max.z < 1.0D ? true : (side == 4 && this.bounds.min.x > 0.0D ? true : (side == 5 && this.bounds.max.x < 1.0D ? true : !access.isBlockOpaqueCube(x, y, z))))));
 	}
 
-	public interface IComparatorInputOverride
-	{
-		public int getComparatorInputOverride(int side);
-	}
-
 	public void onFillRain()
 	{
 
@@ -638,5 +713,23 @@ public abstract class TileBlock extends TileEntity
 	public int getRenderBlockPass()
 	{
 		return 0;
+	}
+
+	public interface IComparatorInputOverride
+	{
+		public int getComparatorInputOverride(int side);
+	}
+
+	/**
+	 * Rendering
+	 */
+	@SideOnly(Side.CLIENT)
+	public static class RenderInfo
+	{
+		@SideOnly(Side.CLIENT)
+		private static final WeakHashMap<TileBlock, TileRender> renderer = new WeakHashMap<TileBlock, TileRender>();
+
+		@SideOnly(Side.CLIENT)
+		private static final HashMap<String, Icon> icon = new HashMap<String, Icon>();
 	}
 }
