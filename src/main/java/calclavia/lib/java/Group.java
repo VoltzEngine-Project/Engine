@@ -9,12 +9,12 @@ import java.util.Set;
  * @author Robert Seifert */
 public class Group<J>
 {
-    private String groupName;
-    protected Set<J> memebers = new LinkedHashSet<J>();
+    private String name;
+    protected final Set<J> members = new LinkedHashSet<J>();
 
     public Group(String name, J... js)
     {
-        this.groupName = name;
+        this.name = name;
         if (js != null)
         {
             for (J obj : js)
@@ -26,19 +26,19 @@ public class Group<J>
 
     public Set<J> getMembers()
     {
-        return this.memebers;
+        return members;
     }
 
     protected boolean isValid(J obj)
     {
-        return obj != null && !memebers.contains(obj);
+        return obj != null && !members.contains(obj);
     }
 
     public boolean addMemeber(J obj)
     {
         if (this.isValid(obj))
         {
-            return memebers.add(obj);
+			return members.add(obj);
         }
         return false;
     }
@@ -54,22 +54,22 @@ public class Group<J>
 
     public boolean removeMemeber(J obj)
     {
-        return memebers.remove(obj);
+        return members.remove(obj);
     }
 
     public boolean isMemeber(J obj)
     {
-        return memebers.contains(obj);
+        return members.contains(obj);
     }
 
     public String getName()
     {
-        return this.groupName;
+        return this.name;
     }
 
     public void setName(String name)
     {
-        this.groupName = name;
+        this.name = name;
     }
 
     @Override

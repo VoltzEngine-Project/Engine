@@ -31,7 +31,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
      * @return the exact user, or a fake user to prevent NPE */
     public AccessUser getMember(String username)
     {
-        for (AccessUser user : this.memebers)
+        for (AccessUser user : this.members)
         {
             if (user.getName().equalsIgnoreCase(username))
             {
@@ -55,13 +55,13 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
     @Override
     public void save(NBTTagCompound nbt)
     {
-        nbt.setString("groupName", this.getName());
+		nbt.setString("groupName", this.getName());
         if (this.extendGroup_name != null)
         {
             nbt.setString("extendGroup", this.extendGroup_name);
         }
         NBTTagList usersTag = new NBTTagList();
-        for (AccessUser user : this.memebers)
+        for (AccessUser user : this.members)
         {
             if (!user.isTempary)
             {
@@ -70,7 +70,9 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
                 usersTag.appendTag(accessData);
             }
         }
+
         nbt.setTag("users", usersTag);
+
         NBTTagList nodesTag = new NBTTagList();
         for (String str : this.nodes)
         {
@@ -80,12 +82,13 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
         }
         nbt.setTag("nodes", nodesTag);
         nbt.setLong("creationDate", this.creation_time);
+
     }
 
     @Override
     public void load(NBTTagCompound nbt)
     {
-        //load group name
+		//load group name
         this.setName(nbt.getString("groupName"));
 
         //Load extend group
@@ -96,8 +99,9 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
 
         //Load users
         NBTTagList userList = nbt.getTagList("users");
-        this.getMembers().clear();
-        for (int i = 0; i < userList.tagCount(); ++i)
+        getMembers().clear();
+
+		for (int i = 0; i < userList.tagCount(); ++i)
         {
             AccessUser user = AccessUser.loadFromNBT((NBTTagCompound) userList.tagAt(i));
             this.addMemeber(user);
@@ -120,7 +124,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
         {
             this.creation_time = System.currentTimeMillis();
         }
-    }
+	}
 
     /** Checks if this or it's supper group has the permission node */
     public boolean hasNode(String node)
@@ -147,7 +151,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
     /** Checks if the user is a member of the group */
     public boolean isMemeber(String string)
     {
-        return this.memebers.contains(new AccessUser(string));
+        return this.members.contains(new AccessUser(string));
     }
 
     /** Sets this group it extends another group */

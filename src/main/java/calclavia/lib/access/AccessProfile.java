@@ -173,7 +173,7 @@ public class AccessProfile implements IVirtualObject
 
     public boolean setUserAccess(String player, AccessGroup g, boolean save)
     {
-        return setUserAccess(new AccessUser(player).setTempary(save), g);
+        return setUserAccess(new AccessUser(player).setTempary(!save), g);
     }
 
     public boolean setUserAccess(AccessUser user, AccessGroup group)
@@ -183,9 +183,10 @@ public class AccessProfile implements IVirtualObject
         if (user != null && user.getName() != null)
         {
             bool = this.removeUserAccess(user.getName()) && group == null;
+
             if (group != null)
             {
-                bool = group.addMemeber(user);
+				bool = group.addMemeber(user);
             }
             if (bool)
             {
@@ -298,14 +299,14 @@ public class AccessProfile implements IVirtualObject
         nbt.setString("name", this.profileName);
         nbt.setBoolean("global", this.global);
         nbt.setString("profileID", this.profileID);
-        NBTTagList usersTag = new NBTTagList();
+        NBTTagList groupTags = new NBTTagList();
         for (AccessGroup group : this.getGroups())
         {
-            NBTTagCompound group_tag = new NBTTagCompound();
-            group.save(group_tag);
-            usersTag.appendTag(group_tag);
+            NBTTagCompound groupTag = new NBTTagCompound();
+            group.save(groupTag);
+            groupTags.appendTag(groupTag);
         }
-        nbt.setTag("groups", usersTag);
+        nbt.setTag("groups", groupTags);
     }
 
     @Override
