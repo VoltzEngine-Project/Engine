@@ -1,6 +1,8 @@
 package calclavia.lib.java;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 /** Generic class for link objects of the same class type to each other.
  * 
@@ -8,7 +10,7 @@ import java.util.LinkedHashSet;
 public class Group<J>
 {
     private String groupName;
-    protected LinkedHashSet<J> memebers = new LinkedHashSet<J>();
+    protected Set<J> memebers = new LinkedHashSet<J>();
 
     public Group(String name, J... js)
     {
@@ -22,7 +24,7 @@ public class Group<J>
         }
     }
 
-    public LinkedHashSet<J> getMembers()
+    public Set<J> getMembers()
     {
         return this.memebers;
     }
@@ -36,10 +38,18 @@ public class Group<J>
     {
         if (this.isValid(obj))
         {
-            memebers.add(obj);
-            return memebers.contains(obj);
+            return memebers.add(obj);
         }
         return false;
+    }
+
+    public void addMemebers(Collection<J> members)
+    {
+        for (J mem : members)
+        {
+            addMemeber(mem);
+        }
+
     }
 
     public boolean removeMemeber(J obj)

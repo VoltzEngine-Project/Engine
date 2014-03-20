@@ -1,6 +1,7 @@
 package calclavia.lib.access;
 
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -13,7 +14,7 @@ import calclavia.lib.utility.nbt.ISaveObj;
  * @author DarkGuardsman */
 public class AccessGroup extends Group<AccessUser> implements ISaveObj
 {
-    protected LinkedHashSet<String> nodes = new LinkedHashSet<String>();
+    protected Set<String> nodes = new LinkedHashSet<String>();
     protected AccessGroup extendGroup;
     protected String extendGroup_name;
     protected long creation_time;
@@ -38,6 +39,17 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean addMemeber(AccessUser obj)
+    {
+        if (super.addMemeber(obj))
+        {
+            obj.setGroup(this);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -110,17 +122,6 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
         }
     }
 
-    @Override
-    public boolean addMemeber(AccessUser obj)
-    {
-        if (super.addMemeber(obj))
-        {
-            obj.setGroup(this);
-            return true;
-        }
-        return false;
-    }
-
     /** Checks if this or it's supper group has the permission node */
     public boolean hasNode(String node)
     {
@@ -171,4 +172,9 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
     {
         return this.extendGroup_name;
     }
+
+    public Set<String> getNodes()
+    {
+        return nodes;
+    }   
 }

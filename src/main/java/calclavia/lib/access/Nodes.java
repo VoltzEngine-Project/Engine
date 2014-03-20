@@ -9,33 +9,7 @@ package calclavia.lib.access;
  * @author DarkGuardsman */
 public class Nodes
 {
-    /*
-     * Rules for using nodes with groups and your machine:
-     *
-     * Keep everything the same.
-     *   Eg: Open should be as simple as opening the gui and no more
-     *
-     * Enable is not the same as on
-     *   Eg: you can disable a machine preventing users from using it
-     *   Eg: When enabled the machine can still be turned off
-     *
-     * Lock node automatically includes unlock node but not the other way around
-     *
-     *
-     * Machine nodes override inv node as inv nodes are only designed for containers.
-     *  Machines nodes are global for all guis inside the machine
-     *
-     *
-     *  Groups do not need there own nodes. Group.user, Group.owner, Group.admin are designed to flag the default groups.
-     *
-     *
-     * Your machine must always have a group that at least has a owner group. This group should be flagged with Group.owner but is not required.
-     *
-     *
-     *
-     */
-
-    //Inventory only nodes, overrided by machine nodes
+    //Inventory only nodes, overridden by machine nodes
     public static final String INV = "inv.*";
     public static final String INV_OPEN = "inv.open";
     public static final String INV_TAKE = "inv.take";
