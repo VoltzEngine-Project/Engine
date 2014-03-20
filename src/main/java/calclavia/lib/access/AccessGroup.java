@@ -1,6 +1,7 @@
 package calclavia.lib.access;
 
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -170,5 +171,5 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
     public String getExtendGroupName()
     {
         return this.extendGroup_name;
-    }
+    }   
 }

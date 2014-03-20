@@ -1,5 +1,6 @@
 package calclavia.lib.java;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -40,6 +41,15 @@ public class Group<J>
             return memebers.add(obj);
         }
         return false;
+    }
+
+    public void addMemebers(Collection<J> members)
+    {
+        for (J mem : members)
+        {
+            addMemeber(mem);
+        }
+
     }
 
     public boolean removeMemeber(J obj)
