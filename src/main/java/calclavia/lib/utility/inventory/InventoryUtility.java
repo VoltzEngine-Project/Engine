@@ -8,6 +8,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryLargeChest;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -229,6 +230,53 @@ public class InventoryUtility
 
 		return null;
 	}
+
+    public static ItemBlock takeTopItemBlockFromInventory(IInventory inventory, int side)
+    {
+        if (!(inventory instanceof ISidedInventory))
+        {
+            for (int i = inventory.getSizeInventory() - 1; i >= 0; i--)
+            {
+                if (inventory.getStackInSlot(i) != null && inventory.getStackInSlot(i).getItem() instanceof ItemBlock)
+                {
+                    ItemStack toSend = inventory.getStackInSlot(i).copy();
+                    toSend.stackSize = 1;
+
+                    inventory.decrStackSize(i, 1);
+
+                    return (ItemBlock) toSend.getItem();
+                }
+            }
+        }
+        else
+        {
+            ISidedInventory sidedInventory = (ISidedInventory) inventory;
+            int[] slots = sidedInventory.getAccessibleSlotsFromSide(side);
+
+            if (slots != null)
+            {
+                for (int get = slots.length - 1; get >= 0; get--)
+                {
+                    int slotID = slots[get];
+
+                    if (sidedInventory.getStackInSlot(slotID) != null)
+                    {
+                        ItemStack toSend = sidedInventory.getStackInSlot(slotID);
+                        toSend.stackSize = 1;
+
+                        if (sidedInventory.canExtractItem(slotID, toSend, side))
+                        {
+                            sidedInventory.decrStackSize(slotID, 1);
+
+                            return (ItemBlock) toSend.getItem();
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
 
 	public static void dropBlockAsItem(World world, Vector3 position)
 	{
