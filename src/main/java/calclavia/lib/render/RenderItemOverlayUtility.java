@@ -86,6 +86,10 @@ public class RenderItemOverlayUtility
 	}
 
 	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText)
+    {
+	    renderItemOnSides(tile, itemStack, x, y, z, renderText, forge_sides);
+    }
+	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText, ForgeDirection... sides)
 	{
 		/** Render the Output */
 		String amount = "";
@@ -96,7 +100,7 @@ public class RenderItemOverlayUtility
 			amount = Integer.toString(itemStack.stackSize);
 		}
 
-		for (ForgeDirection direction : forge_sides)
+		for (ForgeDirection direction : sides)
 		{
 			if (tile.worldObj.isBlockSolidOnSide(tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite()))
 			{
