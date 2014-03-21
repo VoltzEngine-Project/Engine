@@ -17,6 +17,7 @@ import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.api.vector.Vector3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,10 +55,11 @@ public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyI
     @Override
     public List<String> getWailaBody (ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
-        currenttip.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + this.getEnergy(ForgeDirection.UNKNOWN));
-        currenttip.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + this.getEnergyCapacity(ForgeDirection.UNKNOWN));
+        List<String> list = new ArrayList<String>();
+        list.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + String.valueOf(this.getEnergy(ForgeDirection.UNKNOWN)));
+        list.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + String.valueOf(this.getEnergyCapacity(ForgeDirection.UNKNOWN)));
 
-        return currenttip;
+        return list;
     }
 
     @Override
