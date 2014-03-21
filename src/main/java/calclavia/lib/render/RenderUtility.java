@@ -875,32 +875,33 @@ public class RenderUtility
 		 * Render faces
 		 */
 		float faceThickness = thickness / 2;
+		final float s  = 0.5f;
 
 		if (!up)
 		{
-			renderCube(-0.5, -0.5, -0.5, 0.5, -0.5 + faceThickness, 0.5, faceBlock, faceOverride);
+			renderCube(-s, -s, -s, s, -s + faceThickness, s, faceBlock, faceOverride);
 		}
 		if (!down)
 		{
-			renderCube(-0.5, 0.5 - faceThickness, -0.5, 0.5, 0.5, 0.5, faceBlock, faceOverride);
+			renderCube(-s, s - faceThickness, -s, s, s, s, faceBlock, faceOverride);
 		}
 
 		if (!north)
 		{
-			renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, -0.5 + faceThickness, faceBlock, faceOverride);
+			renderCube(-s, -s, -s, s, s, -s + faceThickness, faceBlock, faceOverride);
 		}
 		if (!south)
 		{
-			renderCube(-0.5, -0.5, 0.5 - faceThickness, 0.5, 0.5, 0.5, faceBlock, faceOverride);
+			renderCube(-s, -s, s - faceThickness, s, s, s, faceBlock, faceOverride);
 		}
 
 		if (!east)
 		{
-			renderCube(0.5 - faceThickness, -0.5, -0.5, 0.5, 0.5, 0.5, faceBlock, faceOverride);
+			renderCube(s - faceThickness, -s, -s, s, s, s, faceBlock, faceOverride);
 		}
 		if (!west)
 		{
-			renderCube(-0.5, -0.5, -0.5, -0.5 - faceThickness, 0.5, 0.5, faceBlock, faceOverride);
+			renderCube(-s, -s, -s, -s - faceThickness, s, s, faceBlock, faceOverride);
 		}
 
 		/**
