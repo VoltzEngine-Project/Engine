@@ -1,0 +1,6 @@
+package calclavia.lib.scala
+
+trait TraitRedstoneReceptor
+{
+  def
+}
