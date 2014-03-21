@@ -42,7 +42,7 @@ public class TileFunnel extends TileBase implements IBoilHandler
 	public void registerIcons(IconRegister iconRegister)
 	{
 		super.registerIcons(iconRegister);
-		iconTop = iconRegister.registerIcon(domain + name + "_top");
+		iconTop = iconRegister.registerIcon(getDomain() + name + "_top");
 	}
 
 	@Override

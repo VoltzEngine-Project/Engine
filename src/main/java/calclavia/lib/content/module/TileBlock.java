@@ -56,7 +56,7 @@ public abstract class TileBlock extends TileEntity
 	public float blockHardness = 1;
 	public float blockResistance = 1;
 	public boolean canProvidePower = false;
-	protected String domain;
+	private String domain;
 	protected String textureName;
 	/**
 	 * Rotation
@@ -672,7 +672,7 @@ public abstract class TileBlock extends TileEntity
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName()
 	{
-		return textureName == null ? "MISSING_ICON_TILE_" + getBlockType().blockID + "_" + name : block.dummyTile.domain + textureName;
+		return textureName == null ? "MISSING_ICON_TILE_" + getBlockType().blockID + "_" + name : block.dummyTile.getDomain() + textureName;
 	}
 
 	public boolean shouldSideBeRendered(IBlockAccess access, int x, int y, int z, int side)
@@ -715,7 +715,17 @@ public abstract class TileBlock extends TileEntity
 		return 0;
 	}
 
-	public interface IComparatorInputOverride
+	public String getDomain()
+    {
+        return domain;
+    }
+
+    public void setDomain(String domain)
+    {
+        this.domain = domain;
+    }
+
+    public interface IComparatorInputOverride
 	{
 		public int getComparatorInputOverride(int side);
 	}

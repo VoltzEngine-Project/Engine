@@ -35,7 +35,7 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	{
 		super(id, dummyTile.material);
 		this.dummyTile = dummyTile;
-		dummyTile.domain = modPrefix;
+		dummyTile.setDomain(modPrefix);
 		setUnlocalizedName(modPrefix + dummyTile.name);
 		setTextureName(modPrefix + dummyTile.textureName);
 
