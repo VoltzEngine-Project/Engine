@@ -56,13 +56,13 @@ public abstract class TileBlock extends TileEntity
 	public float blockHardness = 1;
 	public float blockResistance = 1;
 	public boolean canProvidePower = false;
-	private String domain;
 	protected String textureName;
 	/**
 	 * Rotation
 	 */
 	protected byte rotationMask = Byte.parseByte("111100", 2);
 	protected boolean isFlipPlacement = false;
+	private String domain;
 
 	public TileBlock(String newName, Material newMaterial)
 	{
@@ -145,14 +145,14 @@ public abstract class TileBlock extends TileEntity
 	@Override
 	public Block getBlockType()
 	{
-		Block b = super.getBlockType();
-
-		if (tile() == null || b == null)
+		if (world() != null)
 		{
-			return block;
+			Block b = super.getBlockType();
+
+			return b;
 		}
 
-		return b;
+		return block;
 	}
 
 	/**
@@ -716,16 +716,16 @@ public abstract class TileBlock extends TileEntity
 	}
 
 	public String getDomain()
-    {
-        return domain;
-    }
+	{
+		return domain;
+	}
 
-    public void setDomain(String domain)
-    {
-        this.domain = domain;
-    }
+	public void setDomain(String domain)
+	{
+		this.domain = domain;
+	}
 
-    public interface IComparatorInputOverride
+	public interface IComparatorInputOverride
 	{
 		public int getComparatorInputOverride(int side);
 	}
