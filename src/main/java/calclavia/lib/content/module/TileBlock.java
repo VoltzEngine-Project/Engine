@@ -62,7 +62,7 @@ public abstract class TileBlock extends TileEntity
 	 */
 	protected byte rotationMask = Byte.parseByte("111100", 2);
 	protected boolean isFlipPlacement = false;
-	private String domain;
+	protected String domain;
 
 	public TileBlock(String newName, Material newMaterial)
 	{
@@ -672,7 +672,7 @@ public abstract class TileBlock extends TileEntity
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName()
 	{
-		return textureName == null ? "MISSING_ICON_TILE_" + getBlockType().blockID + "_" + name : block.dummyTile.getDomain() + textureName;
+		return textureName == null ? "MISSING_ICON_TILE_" + getBlockType().blockID + "_" + name : block.dummyTile.domain + textureName;
 	}
 
 	public boolean shouldSideBeRendered(IBlockAccess access, int x, int y, int z, int side)
@@ -713,16 +713,6 @@ public abstract class TileBlock extends TileEntity
 	public int getRenderBlockPass()
 	{
 		return 0;
-	}
-
-	public String getDomain()
-	{
-		return domain;
-	}
-
-	public void setDomain(String domain)
-	{
-		this.domain = domain;
 	}
 
 	public interface IComparatorInputOverride
