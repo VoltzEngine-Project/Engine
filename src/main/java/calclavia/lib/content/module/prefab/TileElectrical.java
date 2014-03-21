@@ -26,26 +26,17 @@ import java.util.List;
 @UniversalClass
 public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyInterface, IWailaDataProvider
 {
-    private EnergyStorageHandler energy;
+    protected EnergyStorageHandler energy;
 
     public TileElectrical ()
     {
-        super(UniversalElectricity.machine);
+        this(UniversalElectricity.machine);
+
     }
 
     public TileElectrical (Material material)
     {
         super(material);
-    }
-
-    public EnergyStorageHandler getEnergyObj()
-    {
-        return this.energy;
-    }
-
-    public void setEnergyObj (EnergyStorageHandler energy)
-    {
-        this.energy = energy;
     }
 
     @Override
@@ -63,8 +54,8 @@ public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyI
     @Override
     public List<String> getWailaBody (ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
-        currenttip.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + this.getEnergyObj().getEnergy());
-        currenttip.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + this.getEnergyObj().getEnergyCapacity());
+        currenttip.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + this.getEnergy(ForgeDirection.UNKNOWN));
+        currenttip.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + this.getEnergyCapacity(ForgeDirection.UNKNOWN));
 
         return currenttip;
     }
@@ -76,21 +67,21 @@ public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyI
     }
 
     /** Recharges electric item. */
-    public void recharge(ItemStack itemStack)
+    public void recharge (ItemStack itemStack)
     {
         if (this.energy != null)
             this.energy.extractEnergy(CompatibilityModule.chargeItem(itemStack, this.energy.getEnergy(), true), true);
     }
 
     /** Discharges electric item. */
-    public void discharge(ItemStack itemStack)
+    public void discharge (ItemStack itemStack)
     {
         if (this.energy != null)
             this.energy.receiveEnergy(CompatibilityModule.dischargeItem(itemStack, this.energy.getEmptySpace(), true), true);
     }
 
     @Override
-    public boolean canConnect(ForgeDirection direction, Object obj)
+    public boolean canConnect (ForgeDirection direction, Object obj)
     {
         if (CompatibilityModule.isHandler(obj))
         {
@@ -106,7 +97,7 @@ public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyI
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt)
+    public void readFromNBT (NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
         if (this.energy != null)
@@ -114,7 +105,7 @@ public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyI
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt)
+    public void writeToNBT (NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
         if (this.energy != null)
@@ -122,7 +113,7 @@ public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyI
     }
 
     @Override
-    public long getEnergy(ForgeDirection from)
+    public long getEnergy (ForgeDirection from)
     {
         if (this.energy != null)
             return this.energy.getEnergy();
@@ -131,7 +122,7 @@ public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyI
     }
 
     @Override
-    public long getEnergyCapacity(ForgeDirection from)
+    public long getEnergyCapacity (ForgeDirection from)
     {
         if (this.energy != null)
             return this.energy.getEnergyCapacity();
@@ -140,7 +131,7 @@ public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyI
     }
 
     @Override
-    public long onReceiveEnergy(ForgeDirection from, long receive, boolean doReceive)
+    public long onReceiveEnergy (ForgeDirection from, long receive, boolean doReceive)
     {
         if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getInputDirections().contains(from)))
         {
@@ -151,7 +142,7 @@ public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyI
     }
 
     @Override
-    public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract)
+    public long onExtractEnergy (ForgeDirection from, long extract, boolean doExtract)
     {
         if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getOutputDirections().contains(from)))
         {
@@ -162,12 +153,12 @@ public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyI
     }
 
     @Override
-    public void setEnergy(ForgeDirection from, long energy)
+    public void setEnergy (ForgeDirection from, long energy)
     {
         this.energy.setEnergy(energy);
     }
 
-    protected long produce(long outputEnergy)
+    protected long produce (long outputEnergy)
     {
         long usedEnergy = 0;
 
@@ -187,7 +178,7 @@ public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyI
         return usedEnergy;
     }
 
-    protected long produce()
+    protected long produce ()
     {
         long totalUsed = 0;
 

@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
+import calclavia.components.creative.TileInfiniteEnergy;
 import calclavia.lib.compat.WailaRegistrar;
 import cpw.mods.fml.common.event.*;
 import mcp.mobius.waila.api.IWailaRegistrar;
@@ -177,6 +178,8 @@ public class CalclaviaLoader
 	public static Item itemDustBronze;
 	public static final int idItemDustBronze = idManager.getNextItemID();
 
+    public static Block tileInfiniteEnergy;
+
 	public static OreGenBase generationOreCopper, generationOreTin;
 
 	public static final ContentRegistry contentRegistry = new ContentRegistry(Calclavia.CONFIGURATION, idManager, ID).setPrefix(PREFIX).setTab(CreativeTabs.tabTools);
@@ -204,6 +207,8 @@ public class CalclaviaLoader
 
 		ToolMode.REGISTRY.add(new ToolModeGeneral());
 		ToolMode.REGISTRY.add(new ToolModeRotation());
+
+        tileInfiniteEnergy = contentRegistry.newBlock(TileInfiniteEnergy.class);
 
 		Calclavia.CONFIGURATION.load();
 
@@ -288,10 +293,11 @@ public class CalclaviaLoader
 			}
 		}
 
+
         if (Loader.isModLoaded("Waila"))
         {
             Calclavia.LOGGER.info("Deteced mod Waila, Adding compatibility");
-            FMLInterModComms.sendMessage("Waila", "register", WailaRegistrar.class.getName());
+            FMLInterModComms.sendMessage("Waila", "register", "calclavia.lib.compat.WailaRegistrar.WailaRegistry");
         }
 
 		Calclavia.CONFIGURATION.save();

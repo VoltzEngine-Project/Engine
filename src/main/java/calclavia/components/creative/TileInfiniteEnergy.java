@@ -1,8 +1,8 @@
 package calclavia.components.creative;
 
+import calclavia.lib.content.module.prefab.TileElectrical;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.energy.EnergyStorageHandler;
-import calclavia.lib.prefab.tile.TileElectrical;
 
 /**
  * Creative mode way to quickly debug machines that use or produce electrical energy
