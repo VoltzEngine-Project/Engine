@@ -380,27 +380,31 @@ public class InventoryUtility
 	public static boolean placeItemBlock(World world, int x, int y, int z, ItemStack itemStack, int side)
 	{
 		//TODO implement support for micro blocks
-		if (world.isAirBlock(x, y, z))
+		if (itemStack != null)
 		{
-			if (itemStack != null)
+			try
 			{
-				try
-				{
-					Vector3 rightClickPos = new Vector3(x, y, z).translate(ForgeDirection.getOrientation(side));
-					side ^= 1;
-					return itemStack.getItem().onItemUse(itemStack, new FakePlayer(world, "InventoryUtility-FakePlayer"), world, rightClickPos.intX(), rightClickPos.intY(), rightClickPos.intZ(), side, 0, 0, 0);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
+				Vector3 rightClickPos = new Vector3(x, y, z);
 
-					if (world.getBlockId(x, y, z) == itemStack.itemID)
-					{
-						return true;
-					}
+				if (world.isAirBlock(x, y, z))
+				{
+					rightClickPos.translate(ForgeDirection.getOrientation(side));
+				}
+
+				side ^= 1;
+				return itemStack.getItem().onItemUse(itemStack, new FakePlayer(world, "InventoryUtility-FakePlayer"), world, rightClickPos.intX(), rightClickPos.intY(), rightClickPos.intZ(), side, 0, 0, 0);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+
+				if (world.getBlockId(x, y, z) == itemStack.itemID)
+				{
+					return true;
 				}
 			}
 		}
+
 		return false;
 	}
 
