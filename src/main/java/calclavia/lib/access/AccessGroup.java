@@ -55,7 +55,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
     @Override
     public void save(NBTTagCompound nbt)
     {
-		nbt.setString("groupName", this.getName());
+        nbt.setString("groupName", this.getName());
         if (this.extendGroup_name != null)
         {
             nbt.setString("extendGroup", this.extendGroup_name);
@@ -63,12 +63,9 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
         NBTTagList usersTag = new NBTTagList();
         for (AccessUser user : this.members)
         {
-            if (!user.isTempary)
-            {
-                NBTTagCompound accessData = new NBTTagCompound();
-                user.save(accessData);
-                usersTag.appendTag(accessData);
-            }
+            NBTTagCompound accessData = new NBTTagCompound();
+            user.save(accessData);
+            usersTag.appendTag(accessData);
         }
 
         nbt.setTag("users", usersTag);
@@ -88,7 +85,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
     @Override
     public void load(NBTTagCompound nbt)
     {
-		//load group name
+        //load group name
         this.setName(nbt.getString("groupName"));
 
         //Load extend group
@@ -101,7 +98,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
         NBTTagList userList = nbt.getTagList("users");
         getMembers().clear();
 
-		for (int i = 0; i < userList.tagCount(); ++i)
+        for (int i = 0; i < userList.tagCount(); ++i)
         {
             AccessUser user = AccessUser.loadFromNBT((NBTTagCompound) userList.tagAt(i));
             this.addMemeber(user);
@@ -124,7 +121,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
         {
             this.creation_time = System.currentTimeMillis();
         }
-	}
+    }
 
     /** Checks if this or it's supper group has the permission node */
     public boolean hasNode(String node)
@@ -180,5 +177,5 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
     public Set<String> getNodes()
     {
         return nodes;
-    }   
+    }
 }

@@ -171,6 +171,11 @@ public class AccessProfile implements IVirtualObject
         }
     }
 
+    public boolean setUserAccess(String player, AccessGroup g)
+    {
+        return setUserAccess(player, g, true);
+    }
+    
     public boolean setUserAccess(String player, AccessGroup g, boolean save)
     {
         return setUserAccess(new AccessUser(player).setTempary(!save), g);
