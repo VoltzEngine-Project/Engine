@@ -382,6 +382,10 @@ public class InventoryUtility
                 catch (Exception e)
                 {
                     e.printStackTrace();
+                    if(world.getBlockId((int) x, (int) y, (int) z) == itemStack.itemID)
+                    {
+                        return true;
+                    }
                 }
             }
         }
