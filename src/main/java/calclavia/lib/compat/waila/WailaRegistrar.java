@@ -1,4 +1,4 @@
-package calclavia.lib.compat;
+package calclavia.lib.compat.waila;
 
 import calclavia.lib.content.module.prefab.TileElectrical;
 import mcp.mobius.waila.api.IWailaDataProvider;
@@ -10,7 +10,7 @@ import mcp.mobius.waila.api.IWailaRegistrar;
  */
 public class WailaRegistrar
 {
-    public static void WailaRegistry(IWailaRegistrar registrar)
+    public static void WailaCallBack (IWailaRegistrar registrar)
     {
         registrar.registerBodyProvider((IWailaDataProvider) new TileElectrical(), TileElectrical.class);
     }

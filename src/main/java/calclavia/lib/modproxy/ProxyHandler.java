@@ -21,7 +21,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
  * @since 23/02/14
  * @author tgame14
  */
-public abstract class PrefabProxyHandler
+public class ProxyHandler
 {
 
     private static List<IMod> submodList = new LinkedList<IMod>();
@@ -35,11 +35,15 @@ public abstract class PrefabProxyHandler
             return;
         }
         IMod submodule = null;
+        ICompatProxy subProxy = null;
         try
         {
             Object module = clazz.newInstance();
             if (module instanceof IMod)
                 submodule = (IMod) module;
+
+            else if (module instanceof ICompatProxy)
+                subProxy = (ICompatProxy) module;
         }
         catch (Exception e)
         {
@@ -48,25 +52,20 @@ public abstract class PrefabProxyHandler
 
         if (submodule != null)
         {
+            submodList.add(submodule);
+        }
 
-            if (submodule instanceof ICompatProxy)
+        else if (subProxy != null)
+        {
+            if (Loader.isModLoaded(subProxy.modId()))
             {
-                ICompatProxy proxy = (ICompatProxy) submodule;
-                if (Loader.isModLoaded(proxy.modId()))
-                {
-                    compatModulesList.add(proxy);
-                }
+                compatModulesList.add(subProxy);
             }
-
-            else
-            {
-                submodList.add(submodule);
-            }
-
         }
     }
 
     /** Call for modules late or as already existing modules, DO NOT CALL FOR REGISTERED Proxies! */
+    @Deprecated
     public static void applyModule (ICompatProxy module)
     {
         boolean registered = false;
@@ -113,6 +112,7 @@ public abstract class PrefabProxyHandler
         }
 
         System.out.println("submod list: " + submodList);
+        System.out.println("subProxy list: " + compatModulesList);
 
     }
 
