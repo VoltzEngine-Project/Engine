@@ -305,6 +305,11 @@ public class InternalInventoryHandler
         return returnStack;
     }
 
+    public ItemStack tryGrabFromPosition(ForgeDirection dir, int ammount)
+    {
+        return tryGrabFromPosition(location.clone(), dir, ammount);
+    }
+
     /** Takes an item from the given inventory */
     public ItemStack removeStackFromInventory(int slotIndex, IInventory inventory, int amount)
     {
