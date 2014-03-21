@@ -1,5 +1,6 @@
 package calclavia.lib.content.module.prefab;
 
+import calclavia.components.CalclaviaLoader;
 import calclavia.lib.content.module.TileBase;
 import calclavia.lib.utility.LanguageUtility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -12,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.UniversalClass;
+import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.energy.EnergyStorageHandler;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
@@ -27,6 +29,11 @@ import java.util.List;
 public class TileElectrical extends TileBase implements IEnergyContainer, IEnergyInterface, IWailaDataProvider
 {
     private EnergyStorageHandler energy;
+
+    public TileElectrical ()
+    {
+        super(UniversalElectricity.machine);
+    }
 
     public TileElectrical (Material material)
     {

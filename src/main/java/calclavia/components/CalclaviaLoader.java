@@ -2,7 +2,11 @@ package calclavia.components;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
+import calclavia.lib.compat.WailaRegistrar;
+import cpw.mods.fml.common.event.*;
+import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandManager;
@@ -67,11 +71,6 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -191,7 +190,7 @@ public class CalclaviaLoader
 	public static Block blockInfinite;
 
 	@EventHandler
-	public void init(FMLPreInitializationEvent evt)
+	public void preInit(FMLPreInitializationEvent evt)
 	{
 		Calclavia.LOGGER.setParent(FMLLog.getLogger());
 		NetworkRegistry.instance().registerGuiHandler(this, proxy);
@@ -288,6 +287,12 @@ public class CalclaviaLoader
 				Calclavia.LOGGER.severe("Failed to load Calclavia Core item: " + request);
 			}
 		}
+
+        if (Loader.isModLoaded("Waila"))
+        {
+            Calclavia.LOGGER.info("Deteced mod Waila, Adding compatibility");
+            FMLInterModComms.sendMessage("Waila", "register", WailaRegistrar.class.getName());
+        }
 
 		Calclavia.CONFIGURATION.save();
 
