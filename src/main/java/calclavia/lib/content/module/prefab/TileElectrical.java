@@ -1,7 +1,5 @@
 package calclavia.lib.content.module.prefab;
 
-import calclavia.components.CalclaviaLoader;
-import calclavia.lib.content.module.TileBase;
 import calclavia.lib.utility.LanguageUtility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -26,7 +24,7 @@ import java.util.List;
  * @author tgame14
  */
 @UniversalClass
-public class TileElectrical extends TileBase implements IEnergyContainer, IEnergyInterface, IWailaDataProvider
+public class TileElectrical extends TileIO implements IEnergyContainer, IEnergyInterface, IWailaDataProvider
 {
     private EnergyStorageHandler energy;
 
@@ -40,7 +38,44 @@ public class TileElectrical extends TileBase implements IEnergyContainer, IEnerg
         super(material);
     }
 
+    public EnergyStorageHandler getEnergyObj()
+    {
+        return this.energy;
+    }
 
+    public void setEnergyObj (EnergyStorageHandler energy)
+    {
+        this.energy = energy;
+    }
+
+    @Override
+    public ItemStack getWailaStack (IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        return new ItemStack(this.block());
+    }
+
+    @Override
+    public List<String> getWailaHead (ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        return currenttip;
+    }
+
+    @Override
+    public List<String> getWailaBody (ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        currenttip.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + this.getEnergyObj().getEnergy());
+        currenttip.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + this.getEnergyObj().getEnergyCapacity());
+
+        return currenttip;
+    }
+
+    @Override
+    public List<String> getWailaTail (ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        return currenttip;
+    }
+
+    /** Recharges electric item. */
     public void recharge(ItemStack itemStack)
     {
         if (this.energy != null)
@@ -63,6 +98,8 @@ public class TileElectrical extends TileBase implements IEnergyContainer, IEnerg
             {
                 return false;
             }
+
+            return this.getInputDirections().contains(direction) || this.getOutputDirections().contains(direction);
         }
 
         return false;
@@ -105,7 +142,7 @@ public class TileElectrical extends TileBase implements IEnergyContainer, IEnerg
     @Override
     public long onReceiveEnergy(ForgeDirection from, long receive, boolean doReceive)
     {
-        if (this.energy != null && (from == ForgeDirection.UNKNOWN ))
+        if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getInputDirections().contains(from)))
         {
             return this.energy.receiveEnergy(receive, doReceive);
         }
@@ -116,7 +153,7 @@ public class TileElectrical extends TileBase implements IEnergyContainer, IEnerg
     @Override
     public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract)
     {
-        if (this.energy != null && from == ForgeDirection.UNKNOWN)
+        if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getOutputDirections().contains(from)))
         {
             return this.energy.extractEnergy(extract, doExtract);
         }
@@ -134,7 +171,7 @@ public class TileElectrical extends TileBase implements IEnergyContainer, IEnerg
     {
         long usedEnergy = 0;
 
-        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+        for (ForgeDirection direction : this.getOutputDirections())
         {
             if (outputEnergy > 0)
             {
@@ -154,7 +191,7 @@ public class TileElectrical extends TileBase implements IEnergyContainer, IEnerg
     {
         long totalUsed = 0;
 
-        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+        for (ForgeDirection direction : this.getOutputDirections())
         {
             if (this.energy.getEnergy() > 0)
             {
@@ -169,42 +206,5 @@ public class TileElectrical extends TileBase implements IEnergyContainer, IEnerg
         }
 
         return totalUsed;
-    }
-
-    public EnergyStorageHandler getEnergyObj()
-    {
-        return this.energy;
-    }
-
-    public void setEnergyObj (EnergyStorageHandler energy)
-    {
-        this.energy = energy;
-    }
-
-    @Override
-    public ItemStack getWailaStack (IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
-        return new ItemStack(this.block());
-    }
-
-    @Override
-    public List<String> getWailaHead (ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
-        return currenttip;
-    }
-
-    @Override
-    public List<String> getWailaBody (ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
-        currenttip.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + this.getEnergyObj().getEnergy());
-        currenttip.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + this.getEnergyObj().getEnergyCapacity());
-
-        return currenttip;
-    }
-
-    @Override
-    public List<String> getWailaTail (ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
-        return currenttip;
     }
 }
