@@ -88,24 +88,8 @@ trait TraitIO extends IIO with ISaveObj
 
   }
 
-  def readFromNBT(nbt: NBTTagCompound)
-  {
-    if (saveIOMap && nbt.hasKey("ioMap"))
-    {
-      this.ioMap = nbt.getShort("ioMap")
-    }
-  }
-
-  def writeToNBT(nbt: NBTTagCompound)
-  {
-    if (saveIOMap)
-    {
-      nbt.setShort("ioMap", this.ioMap)
-    }
-  }
-
   /** Saves the object to NBT */
-  def save(nbt: NBTTagCompound)
+  override def save(nbt: NBTTagCompound)
   {
     if (saveIOMap && nbt.hasKey("ioMap"))
     {
@@ -114,7 +98,7 @@ trait TraitIO extends IIO with ISaveObj
   }
 
   /** Load the object from NBT */
-  def load(nbt: NBTTagCompound)
+  override def load(nbt: NBTTagCompound)
   {
     if (saveIOMap)
     {
