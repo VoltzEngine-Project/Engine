@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
+import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorWorld;
@@ -377,7 +378,7 @@ public class InventoryUtility
             {
                 try
                 {
-                    return ((ItemBlock) itemStack.getItem()).placeBlockAt(itemStack, null, world, (int) x, (int) y, (int) z, 0, 0, 0, 0, ((ItemBlock) itemStack.getItem()).getMetadata(itemStack.getItemDamage()));
+                    return ((ItemBlock) itemStack.getItem()).placeBlockAt(itemStack, new FakePlayer(world, "InventoryUtility-FakePlayer"), world, (int) x, (int) y, (int) z, 0, 0, 0, 0, ((ItemBlock) itemStack.getItem()).getMetadata(itemStack.getItemDamage()));
                 }
                 catch (Exception e)
                 {
