@@ -1,22 +1,7 @@
 package calclavia.lib.render;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_FLAT;
-import static org.lwjgl.opengl.GL11.GL_LINE_SMOOTH;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_POLYGON_SMOOTH;
-import static org.lwjgl.opengl.GL11.GL_SMOOTH;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glRotatef;
-import static org.lwjgl.opengl.GL11.glShadeModel;
-import static org.lwjgl.opengl.GL11.glTranslatef;
-
-import java.util.HashMap;
-import java.util.Set;
-
+import calclavia.lib.utility.WorldUtility;
+import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -28,20 +13,25 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
-
 import universalelectricity.api.vector.Vector3;
-import calclavia.lib.utility.WorldUtility;
-import cpw.mods.fml.client.FMLClientHandler;
+
+import java.util.HashMap;
+import java.util.Set;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class RenderUtility
 {
-	public static RenderBlocks renderBlocks = new RenderBlocks();
 	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
-
 	public static final HashMap<String, ResourceLocation> resourceCahce = new HashMap<String, ResourceLocation>();
+	/**
+	 * Icon loading map for external icon registration.
+	 */
+	public static final HashMap<String, Icon> loadedIconMap = new HashMap<String, Icon>();
+	public static RenderBlocks renderBlocks = new RenderBlocks();
 
 	public static ResourceLocation getResource(String domain, String name)
 	{
@@ -75,11 +65,6 @@ public class RenderUtility
 		return FMLClientHandler.instance().getClient().renderEngine.getResourceLocation(sprite);
 	}
 
-	/**
-	 * Icon loading map for external icon registration.
-	 */
-	public static final HashMap<String, Icon> loadedIconMap = new HashMap<String, Icon>();
-
 	public static void registerIcon(String name, TextureMap textureMap)
 	{
 		loadedIconMap.put(name, textureMap.registerIcon(name));
@@ -90,7 +75,9 @@ public class RenderUtility
 		return loadedIconMap.get(name);
 	}
 
-	/** Enables blending. */
+	/**
+	 * Enables blending.
+	 */
 	public static void enableBlending()
 	{
 		glShadeModel(GL_SMOOTH);
@@ -98,7 +85,9 @@ public class RenderUtility
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
-	/** Disables blending. */
+	/**
+	 * Disables blending.
+	 */
 	public static void disableBlending()
 	{
 		glShadeModel(GL_FLAT);
@@ -112,7 +101,9 @@ public class RenderUtility
 		RenderHelper.enableStandardItemLighting();
 	}
 
-	/** Disables lighting and turns glow on. */
+	/**
+	 * Disables lighting and turns glow on.
+	 */
 	public static void disableLighting()
 	{
 		RenderHelper.disableStandardItemLighting();
@@ -177,7 +168,7 @@ public class RenderUtility
 
 	/**
 	 * Renders a floating text in a specific position.
-	 * 
+	 *
 	 * @author Briman0094
 	 */
 	public static void renderFloatingText(String text, Vector3 position, int color)
@@ -357,7 +348,9 @@ public class RenderUtility
 		GL11.glPopMatrix();
 	}
 
-	/** @author OpenBlocks */
+	/**
+	 * @author OpenBlocks
+	 */
 	public static void rotateFacesOnRenderer(Block block, ForgeDirection rotation, RenderBlocks renderer, boolean fullRotation)
 	{
 		if (fullRotation)
@@ -518,7 +511,9 @@ public class RenderUtility
 		renderCube(x1, y1, z1, x2, y2, z2, block, overrideTexture, 0);
 	}
 
-	/** Renders a cube with custom block boundaries. */
+	/**
+	 * Renders a cube with custom block boundaries.
+	 */
 	public static void renderCube(double x1, double y1, double z1, double x2, double y2, double z2, Block block, Icon overrideTexture, int meta)
 	{
 		GL11.glPushMatrix();
@@ -561,7 +556,7 @@ public class RenderUtility
 	/**
 	 * Rotates a render based on the direction it is placed on. Used for things like flat wires or
 	 * panels. The model will need to be centered and be facing upright to begin with.
-	 * 
+	 *
 	 * @param placementSide
 	 */
 	@SuppressWarnings("incomplete-switch")
@@ -657,7 +652,7 @@ public class RenderUtility
 
 	/**
 	 * Rotates a block based on the direction it is facing.
-	 * 
+	 *
 	 * @param direction
 	 */
 	public static void rotateBlockBasedOnDirection(ForgeDirection direction)
@@ -678,7 +673,7 @@ public class RenderUtility
 
 	/**
 	 * Use this for models that are facing up by default.
-	 * 
+	 *
 	 * @param direction
 	 */
 	public static void rotateBlockBasedOnDirectionUp(ForgeDirection direction)
@@ -842,6 +837,149 @@ public class RenderUtility
 			{
 				// bottom south
 				renderCube(-0.501, -0.501, 0.475, 0.501, -0.475, 0.501, edgeBlock, edgeOverride);
+			}
+		}
+	}
+
+	public static void setupLight(World world, int x, int y, int z)
+	{
+		if (world.isBlockOpaqueCube(x, y, z))
+		{
+			return;
+		}
+
+		int br = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
+		int var11 = br % 65536;
+		int var12 = br / 65536;
+		float scale = 1;
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var11 * scale, var12 * scale);
+	}
+
+	public static void tessellateBlockWithConnectedTextures(byte renderSides, Block faceBlock, Icon faceOverride, Block edgeBlock, Icon edgeOverride)
+	{
+		tessellateBlockWithConnectedTextures(renderSides, faceBlock, faceOverride, edgeBlock, edgeOverride, 0.03f);
+	}
+
+	public static void tessellateBlockWithConnectedTextures(byte renderSides, Block faceBlock, Icon faceOverride, Block edgeBlock, Icon edgeOverride, float thickness)
+	{
+		boolean down = WorldUtility.isEnabledSide(renderSides, ForgeDirection.DOWN);
+		boolean up = WorldUtility.isEnabledSide(renderSides, ForgeDirection.UP);
+		boolean north = WorldUtility.isEnabledSide(renderSides, ForgeDirection.NORTH);
+		boolean south = WorldUtility.isEnabledSide(renderSides, ForgeDirection.SOUTH);
+		boolean east = WorldUtility.isEnabledSide(renderSides, ForgeDirection.EAST);
+		boolean west = WorldUtility.isEnabledSide(renderSides, ForgeDirection.WEST);
+
+		bind(TextureMap.locationBlocksTexture);
+
+		/**
+		 * Render faces
+		 */
+		float faceThickness = thickness / 2;
+
+		if (!up)
+		{
+			renderCube(-0.5, -0.5, -0.5, 0.5, -0.5 + faceThickness, 0.5, faceBlock, faceOverride);
+		}
+		if (!down)
+		{
+			renderCube(-0.5, 0.5 - faceThickness, -0.5, 0.5, 0.5, 0.5, faceBlock, faceOverride);
+		}
+
+		if (!north)
+		{
+			renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, -0.5 + faceThickness, faceBlock, faceOverride);
+		}
+		if (!south)
+		{
+			renderCube(-0.5, -0.5, 0.5 - faceThickness, 0.5, 0.5, 0.5, faceBlock, faceOverride);
+		}
+
+		if (!east)
+		{
+			renderCube(0.5 - faceThickness, -0.5, -0.5, 0.5, 0.5, 0.5, faceBlock, faceOverride);
+		}
+		if (!west)
+		{
+			renderCube(-0.5, -0.5, -0.5, -0.5 - faceThickness, 0.5, 0.5, faceBlock, faceOverride);
+		}
+
+		/**
+		 * Render edges
+		 */
+		if (!east)
+		{
+			if (!north)
+			{
+				// north east
+				renderCube(0.5 - thickness, -0.501, -0.501, 0.501, 0.501, -0.5 + thickness, edgeBlock, edgeOverride);
+			}
+			if (!south)
+			{
+				// south east
+				renderCube(0.501 - thickness, -0.501, 0.501 - thickness, 0.501, 0.501, 0.501, edgeBlock, edgeOverride);
+			}
+
+			if (!down)
+			{
+				// bottom east
+				renderCube(0.5 - thickness, -0.501, -0.501, 0.501, -0.5 + thickness, 0.501, edgeBlock, edgeOverride);
+			}
+
+			if (!up)
+			{
+				// top east
+				renderCube(0.5 - thickness, 0.5 - thickness, -0.501, 0.501, 0.501, 0.501, edgeBlock, edgeOverride);
+			}
+		}
+
+		if (!west)
+		{
+			if (!north)
+			{
+				// north west
+				renderCube(-0.501, -0.501, -0.501, -0.5 + thickness, 0.501, -0.5 + thickness, edgeBlock, edgeOverride);
+			}
+			if (!south)
+			{
+				// south west
+				renderCube(-0.501, -0.501, 0.5 - thickness, -0.5 + thickness, 0.501, 0.501, edgeBlock, edgeOverride);
+			}
+			if (!down)
+			{
+				// bottom west
+				renderCube(-0.501, -0.501, -0.501, -0.5 + thickness, -0.5 + thickness, 0.501, edgeBlock, edgeOverride);
+			}
+			if (!up)
+			{
+				// top west
+				renderCube(-0.501, 0.5 - thickness, -0.501, -0.5 + thickness, 0.501, 0.501, edgeBlock, edgeOverride);
+			}
+		}
+		if (!north)
+		{
+			if (!up)
+			{
+				// top north
+				renderCube(-0.501, 0.5 - thickness, -0.501, 0.501, 0.501, -0.5 + thickness, edgeBlock, edgeOverride);
+			}
+			if (!down)
+			{
+				// bottom north
+				renderCube(-0.501, -0.501, -0.501, 0.501, -0.5 + thickness, -0.5 + thickness, edgeBlock, edgeOverride);
+			}
+		}
+
+		if (!south)
+		{
+			if (!up)
+			{
+				// top south
+				renderCube(-0.501, 0.5 - thickness, 0.5 - thickness, 0.501, 0.501, 0.501, edgeBlock, edgeOverride);
+			}
+			if (!down)
+			{
+				// bottom south
+				renderCube(-0.501, -0.501, 0.5 - thickness, 0.501, -0.5 + thickness, 0.501, edgeBlock, edgeOverride);
 			}
 		}
 	}
