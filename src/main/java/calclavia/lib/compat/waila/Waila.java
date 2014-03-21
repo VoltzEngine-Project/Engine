@@ -1,7 +1,6 @@
 package calclavia.lib.compat.waila;
 
 import calclavia.lib.modproxy.ICompatProxy;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
 
 /**

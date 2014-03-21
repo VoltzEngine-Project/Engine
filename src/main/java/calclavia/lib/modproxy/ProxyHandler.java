@@ -9,7 +9,8 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 /**
- * the Class that handles the submods of All ICBM
+ * the Object
+ * that handles the submods of the mod
  *
  * to have the submodules work, You must register them in this class,
  * Adding support for a submodule includes only aquiring its class and throwing it in the
@@ -23,39 +24,38 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
  */
 public class ProxyHandler
 {
+    private List<ICompatProxy> compatModulesList;
+    private LoadPhase phase;
 
-    private static List<IMod> submodList = new LinkedList<IMod>();
-    private static List<ICompatProxy> compatModulesList = new LinkedList<ICompatProxy>();
-    private static LoadPhase phase = LoadPhase.PRELAUNCH;
+    /**
+     * initiate in Mod constructor
+     */
+    public ProxyHandler()
+    {
+        this.compatModulesList = new LinkedList<ICompatProxy>();
+        this.phase = LoadPhase.PRELAUNCH;
+    }
 
-    public static void applyModule (Class<?> clazz, boolean load)
+    public void applyModule (Class<?> clazz, boolean load)
     {
         if (!load)
         {
             return;
         }
-        IMod submodule = null;
+
         ICompatProxy subProxy = null;
         try
         {
             Object module = clazz.newInstance();
-            if (module instanceof IMod)
-                submodule = (IMod) module;
 
-            else if (module instanceof ICompatProxy)
+            if (module instanceof ICompatProxy)
                 subProxy = (ICompatProxy) module;
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-
-        if (submodule != null)
-        {
-            submodList.add(submodule);
-        }
-
-        else if (subProxy != null)
+        if (subProxy != null)
         {
             if (Loader.isModLoaded(subProxy.modId()))
             {
@@ -66,7 +66,7 @@ public class ProxyHandler
 
     /** Call for modules late or as already existing modules, DO NOT CALL FOR REGISTERED Proxies! */
     @Deprecated
-    public static void applyModule (ICompatProxy module)
+    public void applyModule (ICompatProxy module)
     {
         boolean registered = false;
 
@@ -97,33 +97,21 @@ public class ProxyHandler
         }
     }
 
-    public static void preInit (FMLPreInitializationEvent event)
+    public void preInit ()
     {
         phase = LoadPhase.PREINIT;
-
-        for (IMod submod : submodList)
-        {
-            submod.preInit(event);
-        }
-
         for (ICompatProxy proxy : compatModulesList)
         {
             proxy.preInit();
         }
 
-        System.out.println("submod list: " + submodList);
         System.out.println("subProxy list: " + compatModulesList);
 
     }
 
-    public static void init (FMLInitializationEvent event)
+    public void init ()
     {
         phase = LoadPhase.INIT;
-
-        for (IMod submod : submodList)
-        {
-            submod.init(event);
-        }
 
         for (ICompatProxy proxy : compatModulesList)
         {
@@ -131,21 +119,14 @@ public class ProxyHandler
         }
     }
 
-    public static void postInit (FMLPostInitializationEvent event)
+    public void postInit ()
     {
         phase = LoadPhase.POSTINIT;
-
-        for (IMod submod : submodList)
-        {
-            submod.postInit(event);
-        }
-
         for (ICompatProxy proxy : compatModulesList)
         {
             proxy.postInit();
         }
 
         phase = LoadPhase.DONE;
-        System.out.println("submod list: " + submodList);
     }
 }
