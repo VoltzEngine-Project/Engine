@@ -19,6 +19,8 @@ import universalelectricity.api.vector.VectorWorld;
 import java.util.ArrayList;
 import java.util.List;
 
+import calclavia.lib.utility.MachinePlayer;
+
 /**
  * @author Calclavia
  */
@@ -392,7 +394,7 @@ public class InventoryUtility
 				}
 
 				side ^= 1;
-				return itemStack.getItem().onItemUse(itemStack, new FakePlayer(world, "InventoryUtility-FakePlayer"), world, rightClickPos.intX(), rightClickPos.intY(), rightClickPos.intZ(), side, 0, 0, 0);
+				return MachinePlayer.useItemAt(itemStack, world, x, y, z, side);
 			}
 			catch (Exception e)
 			{
