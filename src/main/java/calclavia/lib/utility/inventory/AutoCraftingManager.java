@@ -17,7 +17,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import calclavia.lib.java.Pair;
+import calclavia.lib.type.Pair;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**

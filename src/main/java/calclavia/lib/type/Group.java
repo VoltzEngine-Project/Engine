@@ -1,4 +1,4 @@
-package calclavia.lib.java;
+package calclavia.lib.type;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;

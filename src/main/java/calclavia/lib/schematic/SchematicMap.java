@@ -14,7 +14,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorWorld;
-import calclavia.lib.java.Pair;
+import calclavia.lib.type.Pair;
 import calclavia.lib.utility.nbt.ISaveObj;
 import calclavia.lib.utility.nbt.NBTUtility;
 

@@ -40,7 +40,7 @@ public abstract class TileBlock extends TileEntity
 {
     /** The unique string ID of this block. */
     public final String name;
-    protected final Material material;
+	public final Material material;
     public Class<? extends ItemBlock> itemBlock = ItemBlockTooltip.class;
     public CreativeTabs creativeTab = null;
     public boolean normalRender = true;

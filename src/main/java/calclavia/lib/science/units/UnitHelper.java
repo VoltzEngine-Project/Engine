@@ -3,7 +3,7 @@ package calclavia.lib.science.units;
 import java.util.ArrayList;
 import java.util.List;
 
-import calclavia.lib.java.Pair;
+import calclavia.lib.type.Pair;
 
 public class UnitHelper
 {

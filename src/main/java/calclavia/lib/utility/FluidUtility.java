@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
 import universalelectricity.api.vector.Vector3;
-import calclavia.lib.java.Pair;
+import calclavia.lib.type.Pair;
 import calclavia.lib.utility.inventory.AutoCraftingManager;
 
 /**

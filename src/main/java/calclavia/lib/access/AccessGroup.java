@@ -5,7 +5,7 @@ import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import calclavia.lib.java.Group;
+import calclavia.lib.type.Group;
 import calclavia.lib.utility.nbt.ISaveObj;
 
 /** Permission system group used to track players with the access they have. Used with several

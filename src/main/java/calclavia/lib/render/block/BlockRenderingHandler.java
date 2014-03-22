@@ -1,7 +1,12 @@
 package calclavia.lib.render.block;
 
-import java.util.Map;
-
+import calclavia.lib.content.module.BlockDummy;
+import calclavia.lib.content.module.TileBlock;
+import calclavia.lib.render.RenderUtility;
+import calclavia.lib.render.item.ISimpleItemRenderer;
+import com.google.common.collect.Maps;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -10,20 +15,11 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-
 import universalelectricity.api.vector.Vector3;
-import calclavia.lib.content.module.BlockDummy;
-import calclavia.lib.content.module.TileBlock;
-import calclavia.lib.render.RenderUtility;
-import calclavia.lib.render.item.ISimpleItemRenderer;
 
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import java.util.Map;
 
 public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 {
@@ -93,7 +89,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 				GL11.glPopAttrib();
 
 				if (didRender)
+				{
 					return;
+				}
 			}
 		}
 
@@ -140,7 +138,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	{
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-		if (tile instanceof TileBlock && ((TileBlock) tile).block != null)
+		if (tile instanceof TileBlock && ((TileBlock) tile).material != null)
 		{
 			if (((TileBlock) tile).getRenderer() != null)
 			{

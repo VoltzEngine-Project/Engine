@@ -1,4 +1,4 @@
-package calclavia.lib.java;
+package calclavia.lib.type;
 
 /** Container for up to 3 objects
  *

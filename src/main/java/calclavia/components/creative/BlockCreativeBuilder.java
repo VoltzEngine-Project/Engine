@@ -13,7 +13,7 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.vector.Vector3;
 import calclavia.components.CalclaviaLoader;
-import calclavia.lib.java.Pair;
+import calclavia.lib.type.Pair;
 import calclavia.lib.network.IPacketReceiver;
 import calclavia.lib.prefab.block.BlockRotatable;
 import calclavia.lib.schematic.Schematic;

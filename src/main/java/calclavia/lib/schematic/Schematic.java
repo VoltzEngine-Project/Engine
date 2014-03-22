@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.vector.Vector3;
-import calclavia.lib.java.Pair;
+import calclavia.lib.type.Pair;
 
 /**
  * Stores building structure data.

@@ -5,7 +5,6 @@ import calclavia.lib.utility.render.RenderBlockUtility
 import net.minecraftforge.common.ForgeDirection
 import universalelectricity.api.vector.Vector3
 import calclavia.lib.utility.WorldUtility
-import net.minecraft.client.renderer.texture.TextureMap
 import calclavia.lib.content.module.TileRender
 import net.minecraft.item.ItemStack
 import net.minecraft.client.renderer.RenderBlocks
@@ -19,8 +18,10 @@ class ConnectedTextureRenderer(tile: TileEntity, edgeTexture: String) extends Ti
 {
   override def renderItem(itemStack: ItemStack): Boolean =
   {
+    GL11.glPushMatrix()
     GL11.glTranslated(0.5, 0.5, 0.5)
     RenderBlockUtility.tessellateBlockWithConnectedTextures(itemStack.getItemDamage, tile.getBlockType, null, RenderUtility.getIcon(edgeTexture))
+    GL11.glPopMatrix()
     return true
   }
 
@@ -44,7 +45,6 @@ class ConnectedTextureRenderer(tile: TileEntity, edgeTexture: String) extends Ti
     }
 
     RenderBlockUtility.tessellateBlockWithConnectedTextures(sideMap, world, x, y, z, tile.getBlockType, null, RenderUtility.getIcon(edgeTexture))
-    RenderUtility.bind(TextureMap.locationBlocksTexture)
     return true
   }
 }
