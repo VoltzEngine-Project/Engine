@@ -140,7 +140,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	{
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-		if (tile instanceof TileBlock)
+		if (tile instanceof TileBlock && ((TileBlock) tile).block != null)
 		{
 			if (((TileBlock) tile).getRenderer() != null)
 			{

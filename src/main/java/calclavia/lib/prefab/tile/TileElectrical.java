@@ -1,5 +1,6 @@
 package calclavia.lib.prefab.tile;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -16,18 +17,36 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 {
 	public EnergyStorageHandler energy;
 
-	/** Recharges electric item. */
+	public TileElectrical()
+	{
+		super(null);
+	}
+
+	public TileElectrical(Material material)
+	{
+		super(material);
+	}
+
+	/**
+	 * Recharges electric item.
+	 */
 	public void recharge(ItemStack itemStack)
 	{
 		if (this.energy != null)
+		{
 			this.energy.extractEnergy(CompatibilityModule.chargeItem(itemStack, this.energy.getEnergy(), true), true);
+		}
 	}
 
-	/** Discharges electric item. */
+	/**
+	 * Discharges electric item.
+	 */
 	public void discharge(ItemStack itemStack)
 	{
 		if (this.energy != null)
+		{
 			this.energy.receiveEnergy(CompatibilityModule.dischargeItem(itemStack, this.energy.getEmptySpace(), true), true);
+		}
 	}
 
 	@Override
@@ -51,7 +70,9 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 	{
 		super.readFromNBT(nbt);
 		if (this.energy != null)
+		{
 			this.energy.readFromNBT(nbt);
+		}
 	}
 
 	@Override
@@ -59,25 +80,35 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 	{
 		super.writeToNBT(nbt);
 		if (this.energy != null)
+		{
 			this.energy.writeToNBT(nbt);
+		}
 	}
 
 	@Override
 	public long getEnergy(ForgeDirection from)
 	{
 		if (this.energy != null)
+		{
 			return this.energy.getEnergy();
+		}
 		else
+		{
 			return 0;
+		}
 	}
 
 	@Override
 	public long getEnergyCapacity(ForgeDirection from)
 	{
 		if (this.energy != null)
+		{
 			return this.energy.getEnergyCapacity();
+		}
 		else
+		{
 			return 0;
+		}
 	}
 
 	@Override

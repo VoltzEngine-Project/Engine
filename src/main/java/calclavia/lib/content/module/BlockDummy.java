@@ -56,8 +56,8 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		opaqueCubeLookup[id] = isOpaqueCube();
 		lightOpacity[id] = isOpaqueCube() ? 255 : 0;
 
-		this.setHardness(dummyTile.blockHardness);
-		this.setResistance(dummyTile.blockResistance);
+		setHardness(dummyTile.blockHardness);
+		setResistance(dummyTile.blockResistance);
 	}
 
 	/**

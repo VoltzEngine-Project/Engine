@@ -1,11 +1,13 @@
 package calclavia.lib.prefab.tile;
 
-import java.util.EnumSet;
-
+import calclavia.lib.content.module.TileBase;
+import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 
-public class TileIO extends TileAdvanced implements IIO
+import java.util.EnumSet;
+
+public class TileIO extends TileBase implements IIO
 {
 	/**
 	 * IO METHODS.
@@ -18,9 +20,19 @@ public class TileIO extends TileAdvanced implements IIO
 	protected short ioMap = 364;
 	protected boolean saveIOMap = false;
 
+	public TileIO()
+	{
+		super(null);
+	}
+
+	public TileIO(Material material)
+	{
+		super(material);
+	}
+
 	/**
 	 * The electrical input direction.
-	 * 
+	 *
 	 * @return The direction that electricity is entered into the tile. Return null for no input. By
 	 * default you can accept power from all sides.
 	 */
@@ -42,7 +54,7 @@ public class TileIO extends TileAdvanced implements IIO
 
 	/**
 	 * The electrical output direction.
-	 * 
+	 *
 	 * @return The direction that electricity is output from the tile. Return null for no output. By
 	 * default it will return an empty EnumSet.
 	 */
