@@ -177,8 +177,6 @@ public class CalclaviaLoader
 	public static Item itemDustBronze;
 	public static final int idItemDustBronze = idManager.getNextItemID();
 
-    public static Block tileInfiniteEnergy;
-
 	public static OreGenBase generationOreCopper, generationOreTin;
 
 	public static final ContentRegistry contentRegistry = new ContentRegistry(Calclavia.CONFIGURATION, idManager, ID).setPrefix(PREFIX).setTab(CreativeTabs.tabTools);
@@ -215,8 +213,6 @@ public class CalclaviaLoader
 
 		ToolMode.REGISTRY.add(new ToolModeGeneral());
 		ToolMode.REGISTRY.add(new ToolModeRotation());
-
-        tileInfiniteEnergy = contentRegistry.newBlock(TileInfiniteEnergy.class);
 
 		Calclavia.CONFIGURATION.load();
 

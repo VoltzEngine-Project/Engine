@@ -9,12 +9,16 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import universalelectricity.api.vector.Vector3
 import net.minecraft.world.World
+import cpw.mods.fml.common.Optional.Interface
+import li.cil.oc.api.network.{Callback, SimpleComponent}
 
 @UniversalClass
+//@Interface()
 trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContainer with ISaveObj
 {
   protected var energy: EnergyStorageHandler
 
+  //@Callback
   def recharge(stack: ItemStack)
   {
     if (this.energy != null)
@@ -24,6 +28,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
 
   }
 
+  //@Callback
   def discharge(stack: ItemStack)
   {
     if (this.energy != null)
@@ -46,6 +51,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
     return false
   }
 
+  //@Callback
   def getEnergy(from: ForgeDirection): Long =
   {
     if (this.energy != null)
@@ -55,6 +61,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
     return 0
   }
 
+  //@Callback
   def getEnergyCapacity(from: ForgeDirection): Long =
   {
     if (this.energy != null)
@@ -66,6 +73,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
 
   }
 
+  //TODO: Add OC Event firing
   def onReceiveEnergy(from: ForgeDirection, receive: Long, doReceive: Boolean): Long =
   {
     if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getInputDirections.contains(from)))
@@ -75,6 +83,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
     return 0
   }
 
+  //TODO: Add OC Event firing
   def onExtractEnergy(from: ForgeDirection, extract: Long, doExtract: Boolean): Long =
   {
     if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getOutputDirections.contains(from)))
