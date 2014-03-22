@@ -9,20 +9,20 @@ import calclavia.lib.utility.Mods
  */
 class OpenComputers extends ICompatProxy
 {
-  def preInit:
+  override def preInit(): Unit =
   {
 
   }
 
-  def init:
+  override def init(): Unit =
   {
 
   }
 
-  def postInit:
+  override def postInit(): Unit =
   {
 
   }
 
-  def modId = Mods.OC
+  override def modId(): String = Mods.OC
 }
