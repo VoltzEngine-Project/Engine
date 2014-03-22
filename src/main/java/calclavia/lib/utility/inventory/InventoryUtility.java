@@ -394,7 +394,7 @@ public class InventoryUtility
 				}
 
 				side ^= 1;
-				return MachinePlayer.useItemAt(itemStack, world, x, y, z, side);
+				return MachinePlayer.useItemAt(itemStack, world, x, y - 1, z, side);
 			}
 			catch (Exception e)
 			{
