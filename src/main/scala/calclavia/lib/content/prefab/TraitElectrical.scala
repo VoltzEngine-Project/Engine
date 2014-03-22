@@ -9,14 +9,12 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import universalelectricity.api.vector.Vector3
 import net.minecraft.world.World
-import cpw.mods.fml.common.Optional.Interface
-import li.cil.oc.api.network.{Callback, SimpleComponent}
 
 @UniversalClass
 //@Interface()
 trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContainer with ISaveObj
 {
-  protected var energy: EnergyStorageHandler
+  protected var energy: EnergyStorageHandler = _
 
   //@Callback
   def recharge(stack: ItemStack)
@@ -38,7 +36,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
 
   }
 
-  def canConnect(dir: ForgeDirection, obj: Object): Boolean =
+  override def canConnect(dir: ForgeDirection, obj: Object): Boolean =
   {
     if (CompatibilityModule.isHandler(obj))
     {
@@ -52,7 +50,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
   }
 
   //@Callback
-  def getEnergy(from: ForgeDirection): Long =
+  override def getEnergy(from: ForgeDirection): Long =
   {
     if (this.energy != null)
     {
@@ -62,7 +60,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
   }
 
   //@Callback
-  def getEnergyCapacity(from: ForgeDirection): Long =
+  override def getEnergyCapacity(from: ForgeDirection): Long =
   {
     if (this.energy != null)
     {
@@ -74,7 +72,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
   }
 
   //TODO: Add OC Event firing
-  def onReceiveEnergy(from: ForgeDirection, receive: Long, doReceive: Boolean): Long =
+  override def onReceiveEnergy(from: ForgeDirection, receive: Long, doReceive: Boolean): Long =
   {
     if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getInputDirections.contains(from)))
     {
@@ -84,7 +82,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
   }
 
   //TODO: Add OC Event firing
-  def onExtractEnergy(from: ForgeDirection, extract: Long, doExtract: Boolean): Long =
+  override def onExtractEnergy(from: ForgeDirection, extract: Long, doExtract: Boolean): Long =
   {
     if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getOutputDirections.contains(from)))
     {
@@ -119,8 +117,16 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
 
   }
 
+  /**
+   * Sets the amount of energy this unit stored.
+   *
+   * This function is NOT recommended for calling.
+   */
+  override def setEnergy(from: ForgeDirection, energy: Long) = this.energy.setEnergy(energy)
+
   override def save(nbt: NBTTagCompound)
   {
+    super.save(nbt);
     if (this.energy != null)
     {
       this.energy.readFromNBT(nbt)
@@ -129,6 +135,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
 
   override def load(nbt: NBTTagCompound)
   {
+    super.load(nbt);
     if (this.energy != null)
     {
       this.energy.writeToNBT(nbt)

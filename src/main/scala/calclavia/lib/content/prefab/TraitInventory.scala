@@ -15,7 +15,7 @@ import calclavia.lib.content.module.TileBase
  */
 trait TraitInventory extends TileBase with IExternalInventory with ISidedInventory
 {
-  protected var inventory: IExternalInventoryBox
+  protected var inventory: IExternalInventoryBox = _
   protected var maxSlots: Int = 1
 
   override def getInventory(): IExternalInventoryBox =
