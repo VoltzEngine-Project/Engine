@@ -351,7 +351,7 @@ public class RenderUtility
 	/**
 	 * @author OpenBlocks
 	 */
-	public static void rotateFacesOnRenderer(Block block, ForgeDirection rotation, RenderBlocks renderer, boolean fullRotation)
+	public static void rotateFacesOnRenderer(ForgeDirection rotation, RenderBlocks renderer, boolean fullRotation)
 	{
 		if (fullRotation)
 		{
@@ -709,7 +709,9 @@ public class RenderUtility
 
 	/**
 	 * Renders a block with connected textures.
+	 * This is very laggy.
 	 */
+	@Deprecated
 	public static void renderBlockWithConnectedTextures(byte renderSides, Block faceBlock, Icon faceOverride, Block edgeBlock, Icon edgeOverride)
 	{
 		boolean down = WorldUtility.isEnabledSide(renderSides, ForgeDirection.DOWN);
@@ -840,149 +842,4 @@ public class RenderUtility
 			}
 		}
 	}
-
-	public static void setupLight(World world, int x, int y, int z)
-	{
-		if (world.isBlockOpaqueCube(x, y, z))
-		{
-			return;
-		}
-
-		int br = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
-		int var11 = br % 65536;
-		int var12 = br / 65536;
-		float scale = 1;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var11 * scale, var12 * scale);
-	}
-
-	public static void tessellateBlockWithConnectedTextures(byte renderSides, Block faceBlock, Icon faceOverride, Block edgeBlock, Icon edgeOverride)
-	{
-		tessellateBlockWithConnectedTextures(renderSides, faceBlock, faceOverride, edgeBlock, edgeOverride, 0.03f);
-	}
-
-	public static void tessellateBlockWithConnectedTextures(byte renderSides, Block faceBlock, Icon faceOverride, Block edgeBlock, Icon edgeOverride, float thickness)
-	{
-		boolean down = WorldUtility.isEnabledSide(renderSides, ForgeDirection.DOWN);
-		boolean up = WorldUtility.isEnabledSide(renderSides, ForgeDirection.UP);
-		boolean north = WorldUtility.isEnabledSide(renderSides, ForgeDirection.NORTH);
-		boolean south = WorldUtility.isEnabledSide(renderSides, ForgeDirection.SOUTH);
-		boolean east = WorldUtility.isEnabledSide(renderSides, ForgeDirection.EAST);
-		boolean west = WorldUtility.isEnabledSide(renderSides, ForgeDirection.WEST);
-
-		bind(TextureMap.locationBlocksTexture);
-
-		/**
-		 * Render faces
-		 */
-		float faceThickness = thickness / 2;
-		final float s  = 0.5f;
-
-		if (!up)
-		{
-			renderCube(-s, -s, -s, s, -s + faceThickness, s, faceBlock, faceOverride);
-		}
-		if (!down)
-		{
-			renderCube(-s, s - faceThickness, -s, s, s, s, faceBlock, faceOverride);
-		}
-
-		if (!north)
-		{
-			renderCube(-s, -s, -s, s, s, -s + faceThickness, faceBlock, faceOverride);
-		}
-		if (!south)
-		{
-			renderCube(-s, -s, s - faceThickness, s, s, s, faceBlock, faceOverride);
-		}
-
-		if (!east)
-		{
-			renderCube(s - faceThickness, -s, -s, s, s, s, faceBlock, faceOverride);
-		}
-		if (!west)
-		{
-			renderCube(-s, -s, -s, -s - faceThickness, s, s, faceBlock, faceOverride);
-		}
-
-		/**
-		 * Render edges
-		 */
-		if (!east)
-		{
-			if (!north)
-			{
-				// north east
-				renderCube(0.5 - thickness, -0.501, -0.501, 0.501, 0.501, -0.5 + thickness, edgeBlock, edgeOverride);
-			}
-			if (!south)
-			{
-				// south east
-				renderCube(0.501 - thickness, -0.501, 0.501 - thickness, 0.501, 0.501, 0.501, edgeBlock, edgeOverride);
-			}
-
-			if (!down)
-			{
-				// bottom east
-				renderCube(0.5 - thickness, -0.501, -0.501, 0.501, -0.5 + thickness, 0.501, edgeBlock, edgeOverride);
-			}
-
-			if (!up)
-			{
-				// top east
-				renderCube(0.5 - thickness, 0.5 - thickness, -0.501, 0.501, 0.501, 0.501, edgeBlock, edgeOverride);
-			}
-		}
-
-		if (!west)
-		{
-			if (!north)
-			{
-				// north west
-				renderCube(-0.501, -0.501, -0.501, -0.5 + thickness, 0.501, -0.5 + thickness, edgeBlock, edgeOverride);
-			}
-			if (!south)
-			{
-				// south west
-				renderCube(-0.501, -0.501, 0.5 - thickness, -0.5 + thickness, 0.501, 0.501, edgeBlock, edgeOverride);
-			}
-			if (!down)
-			{
-				// bottom west
-				renderCube(-0.501, -0.501, -0.501, -0.5 + thickness, -0.5 + thickness, 0.501, edgeBlock, edgeOverride);
-			}
-			if (!up)
-			{
-				// top west
-				renderCube(-0.501, 0.5 - thickness, -0.501, -0.5 + thickness, 0.501, 0.501, edgeBlock, edgeOverride);
-			}
-		}
-		if (!north)
-		{
-			if (!up)
-			{
-				// top north
-				renderCube(-0.501, 0.5 - thickness, -0.501, 0.501, 0.501, -0.5 + thickness, edgeBlock, edgeOverride);
-			}
-			if (!down)
-			{
-				// bottom north
-				renderCube(-0.501, -0.501, -0.501, 0.501, -0.5 + thickness, -0.5 + thickness, edgeBlock, edgeOverride);
-			}
-		}
-
-		if (!south)
-		{
-			if (!up)
-			{
-				// top south
-				renderCube(-0.501, 0.5 - thickness, 0.5 - thickness, 0.501, 0.501, 0.501, edgeBlock, edgeOverride);
-			}
-			if (!down)
-			{
-				// bottom south
-				renderCube(-0.501, -0.501, 0.5 - thickness, 0.501, -0.5 + thickness, 0.501, edgeBlock, edgeOverride);
-			}
-		}
-	}
-
 }

@@ -1,14 +1,15 @@
 package calclavia.lib.content.module.prefab
 
 import net.minecraftforge.common.ForgeDirection
+import net.minecraft.tileentity.TileEntity
 
-trait TraitRotatable
+trait TraitRotatable extends TileEntity
 {
   def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata)
 
-  def setDirection(direction: ForgeDirection) = world.setBlockMetadataWithNotify(x, y, z, direction.ordinal, 3)
+  def setDirection(direction: ForgeDirection) = getWorldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, getDirection.ordinal, 3)
 
-  def rotationMask = Byte.parseByte("111100", 2)
+  def rotationMask = 0x3C
 
   def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
 

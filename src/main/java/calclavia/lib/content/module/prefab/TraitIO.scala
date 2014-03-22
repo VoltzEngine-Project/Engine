@@ -1,6 +1,5 @@
-package calclavia.lib.scala
+package calclavia.lib.content.module.prefab
 
-import java.util.EnumSet
 import net.minecraftforge.common.ForgeDirection
 import net.minecraft.nbt.NBTTagCompound
 import calclavia.lib.prefab.tile.IIO
@@ -11,7 +10,7 @@ import calclavia.lib.utility.nbt.ISaveObj
  *
  * @author tgame14
  */
-trait TraitIO extends IIO with ISaveObj
+trait TraitIO extends ISaveObj
 {
   /**
    * IO METHODS.
@@ -30,14 +29,15 @@ trait TraitIO extends IIO with ISaveObj
    * @return The direction that electricity is entered into the tile. Return null for no input. By
    *         default you can accept power from all sides.
    */
-  def getInputDirections: EnumSet[ForgeDirection] =
+  def getInputDirections: Set[ForgeDirection] =
   {
-    val dirs: EnumSet[ForgeDirection] = EnumSet.noneOf(classOf[ForgeDirection])
+    var dirs = Set[ForgeDirection]()
+
     for (direction <- ForgeDirection.VALID_DIRECTIONS)
     {
       if (getIO(direction) == 1)
       {
-        dirs.add(direction)
+        dirs += direction
       }
 
     }
@@ -50,16 +50,18 @@ trait TraitIO extends IIO with ISaveObj
    * @return The direction that electricity is output from the tile. Return null for no output. By
    *         default it will return an empty EnumSet.
    */
-  def getOutputDirections: EnumSet[ForgeDirection] =
+  def getOutputDirections: Set[ForgeDirection] =
   {
-    val dirs: EnumSet[ForgeDirection] = EnumSet.noneOf(classOf[ForgeDirection])
+    var dirs = Set[ForgeDirection]()
+
     for (direction <- ForgeDirection.VALID_DIRECTIONS)
     {
       if (getIO(direction) == 2)
       {
-        dirs.add(direction)
+        dirs += direction
       }
     }
+
     return dirs
   }
 
@@ -68,7 +70,7 @@ trait TraitIO extends IIO with ISaveObj
     val currentIO: String = getIOMapBase3
     val str: StringBuilder = new StringBuilder(currentIO)
     str.setCharAt(dir.ordinal, Integer.toString(`type`).charAt(0))
-    this.ioMap = Short.parseShort(str.toString, 3)
+    this.ioMap = Integer.parseInt(str.toString, 3).toShort
   }
 
   def getIO(dir: ForgeDirection): Int =

@@ -1,4 +1,4 @@
-package calclavia.lib.scala
+package calclavia.lib.content.module.prefab
 
 import universalelectricity.api.energy.{EnergyStorageHandler, IEnergyContainer, IEnergyInterface}
 import net.minecraft.item.ItemStack
@@ -15,7 +15,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
 {
   protected var energy: EnergyStorageHandler
 
-  def recharge (stack: ItemStack)
+  def recharge(stack: ItemStack)
   {
     if (this.energy != null)
     {
@@ -41,7 +41,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
       {
         return false
       }
-      return this.getInputDirections.contains(direction) || this.getOutputDirections.contains(direction)
+      return getInputDirections.contains(dir) || getOutputDirections.contains(dir)
     }
     return false
   }
@@ -66,7 +66,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
 
   }
 
-  def onReceiveEnergy(from: ForgeDirection, receive: Long, doReceive: Boolean)
+  def onReceiveEnergy(from: ForgeDirection, receive: Long, doReceive: Boolean): Long =
   {
     if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getInputDirections.contains(from)))
     {
@@ -75,7 +75,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
     return 0
   }
 
-  def onExtractEnergy(from: ForgeDirection, extract: Long, doExtract: Boolean)
+  def onExtractEnergy(from: ForgeDirection, extract: Long, doExtract: Boolean): Long =
   {
     if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getOutputDirections.contains(from)))
     {
@@ -106,22 +106,7 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
 
   protected def produce(coord: Vector3, world: World): Long =
   {
-    var totalUsed: Long = 0;
-
-    for (dir: ForgeDirection <- this.getOutputDirections)
-    {
-      if (outputEnergy > 0)
-      {
-        val tile: TileEntity = coord.translate(dir).getTileEntity(world)
-
-        if (tile != null)
-        {
-          val used: Long = CompatibilityModule.receiveEnergy(tile, dir.getOpposite, energy.extractEnergy(energy.getEnergy, false), true)
-          totalUsed += this.energy.extractEnergy(used, true)
-        }
-      }
-    }
-    return totalUsed
+    return energy.extractEnergy(produce(energy.getMaxExtract, coord, world), true)
 
   }
 
@@ -140,7 +125,6 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
       this.energy.writeToNBT(nbt)
     }
   }
-
 
 
 }
