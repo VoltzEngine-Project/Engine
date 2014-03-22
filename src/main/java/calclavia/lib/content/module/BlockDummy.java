@@ -1,9 +1,11 @@
 package calclavia.lib.content.module;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import calclavia.lib.content.module.TileBlock.IComparatorInputOverride;
+import calclavia.lib.prefab.vector.Cuboid;
+import calclavia.lib.render.block.BlockRenderingHandler;
+import calclavia.lib.utility.inventory.InventoryUtility;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -19,16 +21,16 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
-import calclavia.lib.content.module.TileBlock.IComparatorInputOverride;
-import calclavia.lib.prefab.vector.Cuboid;
-import calclavia.lib.render.block.BlockRenderingHandler;
-import calclavia.lib.utility.inventory.InventoryUtility;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class BlockDummy extends Block implements ITileEntityProvider
 {
-	/** A dummy instance of the block used to forward methods to. */
+	/**
+	 * A dummy instance of the block used to forward methods to.
+	 */
 	public final TileBlock dummyTile;
 
 	public BlockDummy(int id, String modPrefix, CreativeTabs defaultTab, TileBlock dummyTile)
@@ -40,9 +42,13 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		setTextureName(modPrefix + dummyTile.textureName);
 
 		if (dummyTile.creativeTab != null)
+		{
 			setCreativeTab(dummyTile.creativeTab);
+		}
 		else
+		{
 			setCreativeTab(defaultTab);
+		}
 
 		dummyTile.bounds.setBounds(this);
 
@@ -54,11 +60,15 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		this.setResistance(dummyTile.blockResistance);
 	}
 
-	/** Injects and ejects data from the TileEntity. */
+	/**
+	 * Injects and ejects data from the TileEntity.
+	 */
 	public void inject(IBlockAccess access, int x, int y, int z)
 	{
 		if (access instanceof World)
+		{
 			dummyTile.worldObj = (World) access;
+		}
 		dummyTile.xCoord = x;
 		dummyTile.yCoord = y;
 		dummyTile.zCoord = z;
@@ -66,7 +76,9 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		TileEntity tile = access.getBlockTileEntity(x, y, z);
 
 		if (tile instanceof TileBlock)
+		{
 			((TileBlock) tile).block = this;
+		}
 	}
 
 	public void eject()
@@ -201,7 +213,9 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		if (bounds != null)
 		{
 			for (Cuboid cuboid : bounds)
+			{
 				list.add(cuboid.clone().translate(new Vector3(x, y, z)).toAABB());
+			}
 		}
 
 		eject();
@@ -244,9 +258,14 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	@Override
 	public int getLightValue(IBlockAccess access, int x, int y, int z)
 	{
-		inject(access, x, y, z);
-		int value = getTile(access, x, y, z).getLightValue(access);
-		eject();
+		int value = 0;
+
+		if (access != null)
+		{
+			inject(access, x, y, z);
+			value = getTile(access, x, y, z).getLightValue(access);
+			eject();
+		}
 		return value;
 	}
 
@@ -260,7 +279,9 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	public boolean isOpaqueCube()
 	{
 		if (dummyTile == null)
+		{
 			return true;
+		}
 
 		return dummyTile.isOpaqueCube;
 	}
@@ -324,7 +345,9 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	protected void dropBlockAsItem_do(World world, int x, int y, int z, ItemStack itemStack)
 	{
 		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+		{
 			InventoryUtility.dropItemStack(world, new Vector3(x, y, z), itemStack);
+		}
 	}
 
 	@Override
