@@ -6,7 +6,11 @@ import net.minecraftforge.common.ForgeDirection
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraft.block.Block
 import net.minecraft.util.Icon
+import org.lwjgl.opengl.GL11
 
+/**
+ * A block rendering helper class.
+ */
 object RenderBlockUtility
 {
   def setupLight(world: World, x: Int, y: Int, z: Int)
@@ -22,7 +26,7 @@ object RenderBlockUtility
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var11 * scale, var12 * scale)
   }
 
-  def tessellateFace(renderBlocks: RenderBlocks, x: Int, y: Int, z: Int, block: Block, overrideTexture: Icon, side: Int)
+  def tessellateFace(renderBlocks: RenderBlocks, x: Float, y: Float, z: Float, block: Block, overrideTexture: Icon, side: Int)
   {
     val t: Tessellator = Tessellator.instance
     var useTexture: Icon = null
@@ -65,6 +69,17 @@ object RenderBlockUtility
     }
   }
 
+  /**
+   * Renders a connected texture block with a bitmask
+   * @param sideMap - The sides that are connected
+   * @param blockAccess
+   * @param x
+   * @param y
+   * @param z
+   * @param block
+   * @param faceOverride
+   * @param edgeOverride
+   */
   def tessellateBlockWithConnectedTextures(sideMap: Byte, blockAccess: IBlockAccess, x: Int, y: Int, z: Int, block: Block, faceOverride: Icon, edgeOverride: Icon)
   {
     val renderBlocks = RenderUtility.renderBlocks
@@ -75,14 +90,43 @@ object RenderBlockUtility
 
     for (dir <- ForgeDirection.VALID_DIRECTIONS; r <- 0 until 4)
     {
-      val absDir = ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
-
-      if (!WorldUtility.isEnabledSide(sideMap, absDir))
+      if (!WorldUtility.isEnabledSide(sideMap, dir))
       {
-        RenderUtility.rotateFacesOnRenderer(absDir, renderBlocks, true);
-        tessellateFace(renderBlocks, x, y, z, block, edgeOverride, dir.ordinal)
-        RenderUtility.resetFacesOnRenderer(renderBlocks);
+        val absDir = ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
+
+        if (!WorldUtility.isEnabledSide(sideMap, absDir))
+        {
+          RenderUtility.rotateFacesOnRenderer(absDir, renderBlocks, true);
+          tessellateFace(renderBlocks, x, y, z, block, edgeOverride, dir.ordinal)
+          RenderUtility.resetFacesOnRenderer(renderBlocks);
+        }
       }
     }
   }
+
+  /**
+   * For rendering items.
+   */
+  def tessellateBlockWithConnectedTextures(metadata: Int, block: Block, faceOverride: Icon, edgeOverride: Icon)
+  {
+    GL11.glPushMatrix();
+    val renderBlocks = RenderUtility.renderBlocks
+    renderBlocks.overrideBlockTexture = faceOverride
+    GL11.glPushMatrix();
+    GL11.glScaled(0.999, 0.999, 0.999);
+    RenderUtility.renderNormalBlockAsItem(block, metadata, renderBlocks)
+    Tessellator.instance.startDrawingQuads();
+    GL11.glPopMatrix();
+    for (dir <- ForgeDirection.VALID_DIRECTIONS; r <- 0 until 4)
+    {
+      val absDir = ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
+      RenderUtility.rotateFacesOnRenderer(absDir, renderBlocks, true);
+      tessellateFace(renderBlocks, -0.5f, -0.5f, -0.5f, block, edgeOverride, dir.ordinal)
+      RenderUtility.resetFacesOnRenderer(renderBlocks);
+    }
+
+    Tessellator.instance.draw();
+    GL11.glPopMatrix();
+  }
+
 }
