@@ -1,19 +1,19 @@
 package calclavia.lib.content.prefab
 
 import calclavia.lib.utility.inventory.{InventoryUtility, ExternalInventory, IExternalInventoryBox, IExternalInventory}
-import net.minecraft.tileentity.TileEntity
 import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
 import universalelectricity.api.vector.Vector3
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraftforge.common.ForgeDirection
+import calclavia.lib.content.module.TileBase
 
 /**
  * @since 22/03/14
  * @author tgame14
  */
-trait TraitInventory extends TileEntity with IExternalInventory with ISidedInventory
+trait TraitInventory extends TileBase with IExternalInventory with ISidedInventory
 {
   protected var inventory: IExternalInventoryBox
   protected var maxSlots: Int = 1
@@ -25,11 +25,6 @@ trait TraitInventory extends TileEntity with IExternalInventory with ISidedInven
       this.inventory = new ExternalInventory(this, this.maxSlots)
     }
     return this.inventory
-  }
-
-  override def getContainer(): Class =
-  {
-
   }
 
   override def getSizeInventory(): Int =
@@ -47,7 +42,7 @@ trait TraitInventory extends TileEntity with IExternalInventory with ISidedInven
     return this.getInventory().decrStackSize(index, amount)
   }
 
-  override def incrStackSize(slot: Int, stack: ItemStack)
+  def incrStackSize(slot: Int, stack: ItemStack)
   {
     if (this.getStackInSlot(slot) == null)
     {
@@ -202,33 +197,29 @@ trait TraitInventory extends TileEntity with IExternalInventory with ISidedInven
   override def onRemove(par5: Int, par6: Int)
   {
     super.onRemove(par5, par6)
-    dropEntireInventory(par5, par6)
+    //dropEntireInventory(par5, par6)
   }
 
-  def dropEntireInventory(par5: Int, par6: Int)
-  {
-    if (this.isInstanceOf[IInventory]) {
-      val inventory: IInventory = this.asInstanceOf[IInventory]
-      {
-        var i: Int = 0
-        while (i < inventory.getSizeInventory) {
-          {
-            val dropStack: ItemStack = inventory.getStackInSlot(i)
-            if (dropStack != null) {
-              val var11: Int = dropStack.stackSize
-              dropStack.stackSize -= var11
-              InventoryUtility.dropItemStack(world, center, dropStack)
-              if (dropStack.stackSize <= 0) inventory.setInventorySlotContents(i, null)
-            }
-          }
-          ({
-            i += 1; i
-          })
-        }
-      }
-      inventory.onInventoryChanged
-    }
-  }
+//  def dropEntireInventory(par5: Int, par6: Int)
+//  {
+//    if (this.isInstanceOf[IInventory]) {
+//      val inventory: IInventory = this.asInstanceOf[IInventory]
+//      {
+//        var i: Int = 0
+//        while (i < inventory.getSizeInventory) {
+//          val dropStack: ItemStack = inventory.getStackInSlot(i)
+//          if (dropStack != null) {
+//            val var11: Int = dropStack.stackSize
+//            dropStack.stackSize -= var11
+//            InventoryUtility.dropItemStack(world, center, dropStack)
+//            if (dropStack.stackSize <= 0) inventory.setInventorySlotContents(i, null)
+//          }
+//          i += 1;
+//        }
+//      }
+//      inventory.onInventoryChanged
+//    }
+//  }
 
   override def readFromNBT(nbt: NBTTagCompound)
   {
