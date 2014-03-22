@@ -140,7 +140,10 @@ public abstract class TileBlock extends TileEntity
         if (world() != null)
         {
             Block b = super.getBlockType();
-
+            if(b == null)
+            {
+                return block;
+            }
             return b;
         }
 
