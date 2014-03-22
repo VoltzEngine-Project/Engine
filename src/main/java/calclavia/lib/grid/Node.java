@@ -46,12 +46,9 @@ public abstract class Node<P extends INodeProvider, G extends Grid, N> implement
 	 */
 	public void reconstruct()
 	{
-		synchronized (connections)
-		{
-			recache();
-			getGrid().add(this);
-			getGrid().reconstruct();
-		}
+		recache();
+		getGrid().add(this);
+		getGrid().reconstruct();
 	}
 
 	public void deconstruct()
@@ -77,15 +74,24 @@ public abstract class Node<P extends INodeProvider, G extends Grid, N> implement
 	/**
 	 * Called for a node to recache all its connections.
 	 */
-	public void recache()
+	public final void recache()
+	{
+		synchronized (connections)
+		{
+			doRecache();
+		}
+	}
+
+	protected void doRecache()
 	{
 
 	}
 
 	/**
-	 * Returns all the connections in this node.
+	 * All the connections we are connected to. Note that this may not be thread safe for
+	 * modification unless synchronized.
 	 * 
-	 * @return
+	 * @return Returns all the connections in this node.
 	 */
 	public AbstractMap<N, ForgeDirection> getConnections()
 	{

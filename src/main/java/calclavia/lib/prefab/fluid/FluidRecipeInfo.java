@@ -4,9 +4,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-
-import com.builtbroken.common.Pair;
-import com.builtbroken.common.Triple;
+import calclavia.lib.java.Pair;
+import calclavia.lib.java.Triple;
 
 /**
  * Used to store more complex info, than A + B = C, on two FluidStack mixing behavior

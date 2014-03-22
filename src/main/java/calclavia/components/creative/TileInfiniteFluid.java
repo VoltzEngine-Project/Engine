@@ -1,5 +1,6 @@
 package calclavia.components.creative;
 
+import calclavia.lib.content.module.prefab.TileIO;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -11,9 +12,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.multiblock.fake.IBlockActivate;
-import calclavia.lib.prefab.tile.TileIO;
 
 /** Designed to debug fluid devices by draining everything that comes in at one time
  * 
@@ -26,6 +27,7 @@ public class TileInfiniteFluid extends TileIO implements IFluidHandler, IBlockAc
     
     public TileInfiniteFluid()
     {
+        super(UniversalElectricity.machine);
         this.saveIOMap = true;
         tank = new FluidTank(Integer.MAX_VALUE);
     }

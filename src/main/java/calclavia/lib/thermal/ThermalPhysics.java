@@ -8,8 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import universalelectricity.api.vector.Vector3;
-
-import com.builtbroken.common.science.ChemElement;
+import calclavia.lib.science.ChemElement;
 
 /**
  * A thermal block manager
@@ -27,11 +26,11 @@ public class ThermalPhysics
 	 * 
 	 * @return The temperature of the coordinate in the world in kelvin.
 	 */
-	public static int getTemperatureForCoordinate(World world, int x, int z)
+	public static float getTemperatureForCoordinate(World world, int x, int z)
 	{
 		int averageTemperature = 273 + (int) ((world.getBiomeGenForCoords(x, z).getFloatTemperature() - 0.4) * 50);
 		double dayNightVariance = averageTemperature * 0.05;
-		return (int) (averageTemperature + (world.isDaytime() ? dayNightVariance : -dayNightVariance));
+		return (float) (averageTemperature + (world.isDaytime() ? dayNightVariance : -dayNightVariance));
 	}
 
 	/**
@@ -42,20 +41,25 @@ public class ThermalPhysics
 	 * @param temperature - K
 	 * @return Q, energy in joules
 	 */
-	public static long getEnergyForTemperatureChange(int mass, long specificHeatCapacity, float temperature)
+	public static double getEnergyForTemperatureChange(float mass, double specificHeatCapacity, float temperature)
 	{
-		return (long) (mass * specificHeatCapacity * temperature);
+		return mass * specificHeatCapacity * temperature;
 	}
 
-	public static float getTemperatureForEnergy(int mass, long specificHeatCapacity, long energy)
+	public static float getTemperatureForEnergy(float mass, long specificHeatCapacity, long energy)
 	{
 		return energy / (mass * specificHeatCapacity);
 	}
 
-	public static long getRequiredBoilWaterEnergy(World world, int x, int z)
+	public static double getRequiredBoilWaterEnergy(World world, int x, int z)
 	{
-		int temperatureChange = 373 - ThermalPhysics.getTemperatureForCoordinate(world, x, z);
-		int mass = getMass(1000, 1);
+		return getRequiredBoilWaterEnergy(world, x, z, 1000);
+	}
+
+	public static double getRequiredBoilWaterEnergy(World world, int x, int z, int volume)
+	{
+		float temperatureChange = 373 - ThermalPhysics.getTemperatureForCoordinate(world, x, z);
+		float mass = getMass(volume, 1);
 		return ThermalPhysics.getEnergyForTemperatureChange(mass, 4200, temperatureChange) + ThermalPhysics.getEnergyForStateChange(mass, 2257000);
 	}
 
@@ -66,7 +70,7 @@ public class ThermalPhysics
 	 * @param latentHeatCapacity - J/KG
 	 * @return Q, energy in J
 	 */
-	public static long getEnergyForStateChange(int mass, long latentHeatCapacity)
+	public static double getEnergyForStateChange(float mass, double latentHeatCapacity)
 	{
 		return mass * latentHeatCapacity;
 	}
@@ -78,9 +82,9 @@ public class ThermalPhysics
 	 * @param density - in kg/m^3
 	 * @return
 	 */
-	public static int getMass(float volume, float density)
+	public static float getMass(float volume, float density)
 	{
-		return (int) (volume / 1000 * density);
+		return (volume / 1000f * density);
 	}
 
 	/**
@@ -171,4 +175,5 @@ public class ThermalPhysics
 
 		return ROOM_TEMPERATURE;
 	}
+
 }

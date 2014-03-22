@@ -3,8 +3,8 @@ package calclavia.lib.access;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -23,22 +23,29 @@ import calclavia.lib.utility.nbt.SaveManager;
  * global access. Which means it can save/load at will from the world file.
  * 
  * @author DarkGuardsman */
-public class AccessProfile implements ISpecialAccess, IVirtualObject
+public class AccessProfile implements IVirtualObject
 {
+    /** List of all AccessProfiles defined in the game */
+    private static final Set<AccessProfile> globalList = new LinkedHashSet<AccessProfile>();
+
+    /** List of all containers that use this profile to define some part of their functionality */
     private final Set<IProfileContainer> containers = Collections.newSetFromMap(new WeakHashMap<IProfileContainer, Boolean>());
-    /** A list of user access data. */
-    protected List<AccessGroup> groups = new ArrayList<AccessGroup>();
-    /** Display name */
+
+    /** A list of all groups attached to this profile */
+    protected Set<AccessGroup> groups = new LinkedHashSet<AccessGroup>();
+
+    /** Display name of the profile for the user to easily read */
     protected String profileName = "";
-    /** Only used by global profiles that have no defined container. Also LocalHost means it was
-     * created by a tileEntity */
+
+    /** Only used by global profiles that have no defined container. Defaults to localHost defining
+     * the profile as non-global */
     protected String profileID = "LocalHost";
+
     /** Is this profile global */
     protected boolean global = false;
-    /** Save file by which this was loaded from. Mainly used to save it in the same location again. */
-    protected File saveFile;
 
-    private static final Set<AccessProfile> globalList = new HashSet<AccessProfile>();
+    /** Save file by which this was loaded. Not currently used */
+    protected File saveFile;
 
     static
     {
@@ -76,6 +83,7 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         }
     }
 
+    /** Gets an access profile using its name ID */
     public static AccessProfile get(String name)
     {
         for (AccessProfile profile : globalList)
@@ -88,9 +96,10 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         return null;
     }
 
+    /** Generates the default 3 group access profile */
     public AccessProfile generateNew(String name, Object object)
     {
-        GroupRegistry.loadNewGroupSet(this);
+        AccessUtility.loadNewGroupSet(this);
         this.profileName = name;
         name.replaceAll(" ", "");
         String id = null;
@@ -113,22 +122,24 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         return this;
     }
 
+    /** Display name of the profile */
     public String getName()
     {
         return this.profileName;
     }
 
+    /** Save/Global id of the profie */
     public String getID()
     {
         return this.profileID;
     }
 
+    /** Is this a global profile that is can be accessed by all objects */
     public boolean isGlobal()
     {
         return this.global;
     }
 
-    @Override
     public AccessUser getUserAccess(String username)
     {
         for (AccessGroup group : this.groups)
@@ -142,7 +153,6 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         return new AccessUser(username);
     }
 
-    @Override
     public List<AccessUser> getUsers()
     {
         List<AccessUser> users = new ArrayList<AccessUser>();
@@ -161,13 +171,16 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         }
     }
 
-    @Override
+    public boolean setUserAccess(String player, AccessGroup g)
+    {
+        return setUserAccess(player, g, true);
+    }
+    
     public boolean setUserAccess(String player, AccessGroup g, boolean save)
     {
-        return setUserAccess(new AccessUser(player).setTempary(save), g);
+        return setUserAccess(new AccessUser(player).setTempary(!save), g);
     }
 
-    @Override
     public boolean setUserAccess(AccessUser user, AccessGroup group)
     {
         boolean bool = false;
@@ -175,9 +188,10 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         if (user != null && user.getName() != null)
         {
             bool = this.removeUserAccess(user.getName()) && group == null;
+
             if (group != null)
             {
-                bool = group.addMemeber(user);
+				bool = group.addMemeber(user);
             }
             if (bool)
             {
@@ -222,20 +236,11 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         }
     }
 
-    @Override
     public AccessGroup getGroup(String name)
     {
-        for (AccessGroup group : this.getGroups())
-        {
-            if (group.getName().equalsIgnoreCase(name))
-            {
-                return group;
-            }
-        }
-        return null;
+        return AccessUtility.getGroup(this.getGroups(), name);
     }
 
-    @Override
     public boolean addGroup(AccessGroup group)
     {
         if (!this.groups.contains(group))
@@ -249,18 +254,16 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         return false;
     }
 
-    @Override
     public AccessGroup getOwnerGroup()
     {
         return this.getGroup("owner");
     }
 
-    @Override
-    public List<AccessGroup> getGroups()
+    public Set<AccessGroup> getGroups()
     {
-        if (this.groups == null || this.groups.isEmpty())
+        if (this.groups == null)
         {
-            GroupRegistry.loadNewGroupSet(this);
+            AccessUtility.loadNewGroupSet(this);
         }
         return this.groups;
     }
@@ -271,15 +274,26 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         this.profileName = nbt.getString("name");
         this.global = nbt.getBoolean("global");
         this.profileID = nbt.getString("profileID");
-        NBTTagList userList = nbt.getTagList("groups");
-        if (userList != null && userList.tagCount() > 0)
+
+        //Load groups
+        NBTTagList group_list = nbt.getTagList("groups");
+        if (group_list != null && group_list.tagCount() > 0)
         {
             this.groups.clear();
-            for (int i = 0; i < userList.tagCount(); i++)
+            //Load group save data
+            for (int i = 0; i < group_list.tagCount(); i++)
             {
                 AccessGroup group = new AccessGroup("");
-                group.load((NBTTagCompound) userList.tagAt(i));
+                group.load((NBTTagCompound) group_list.tagAt(i));
                 this.groups.add(group);
+            }
+            //Set group extensions
+            for (AccessGroup group : this.groups)
+            {
+                if (group.getExtendGroupName() != null)
+                {
+                    group.setToExtend(this.getGroup(group.getExtendGroupName()));
+                }
             }
         }
     }
@@ -290,14 +304,14 @@ public class AccessProfile implements ISpecialAccess, IVirtualObject
         nbt.setString("name", this.profileName);
         nbt.setBoolean("global", this.global);
         nbt.setString("profileID", this.profileID);
-        NBTTagList usersTag = new NBTTagList();
+        NBTTagList groupTags = new NBTTagList();
         for (AccessGroup group : this.getGroups())
         {
-            NBTTagCompound group_tag = new NBTTagCompound();
-            group.save(group_tag);
-            usersTag.appendTag(group_tag);
+            NBTTagCompound groupTag = new NBTTagCompound();
+            group.save(groupTag);
+            groupTags.appendTag(groupTag);
         }
-        nbt.setTag("groups", usersTag);
+        nbt.setTag("groups", groupTags);
     }
 
     @Override

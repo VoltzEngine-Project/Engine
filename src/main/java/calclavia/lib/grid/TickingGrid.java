@@ -8,7 +8,6 @@ public class TickingGrid<N extends Node> extends NodeGrid<N> implements IUpdate
 	{
 		super(type);
 		add(node);
-		// NetworkTickHandler.addNetwork(this);
 		UpdateTicker.addNetwork(this);
 	}
 
@@ -23,7 +22,7 @@ public class TickingGrid<N extends Node> extends NodeGrid<N> implements IUpdate
 		{
 			for (Node node : nodes)
 			{
-				node.update(1 / 20f);
+				node.update(UpdateTicker.INSTANCE.getDeltaTime() / 1000f);
 			}
 		}
 	}

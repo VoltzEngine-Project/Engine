@@ -42,6 +42,11 @@ public abstract class Grid<N>
 		}
 	}
 
+	/**
+	 * This is READ ONLY! Make sure nodes are synchronized if modification is required.
+	 * 
+	 * @return
+	 */
 	public Set<N> getNodes()
 	{
 		return nodes;
@@ -53,22 +58,19 @@ public abstract class Grid<N>
 	 */
 	public void reconstruct()
 	{
-		synchronized (nodes)
+		Iterator<N> it = new HashSet<N>(nodes).iterator();
+
+		while (it.hasNext())
 		{
-			Iterator<N> it = new HashSet<N>(nodes).iterator();
+			N node = it.next();
 
-			while (it.hasNext())
+			if (isValidNode(node))
 			{
-				N node = it.next();
-
-				if (isValidNode(node))
-				{
-					reconstructNode(node);
-				}
-				else
-				{
-					it.remove();
-				}
+				reconstructNode(node);
+			}
+			else
+			{
+				it.remove();
 			}
 		}
 	}
@@ -92,11 +94,12 @@ public abstract class Grid<N>
 	}
 
 	/**
-	 * Gets the first connector in the set.
+	 * Gets the first node that gets iterated in the node set. Note that the first node may be
+	 * random as this is a hashset.
 	 * 
-	 * @return
+	 * @return The first node.
 	 */
-	public N getFirstNode()
+	public synchronized N getFirstNode()
 	{
 		synchronized (nodes)
 		{
@@ -105,6 +108,7 @@ public abstract class Grid<N>
 				return node;
 			}
 		}
+		
 		return null;
 	}
 

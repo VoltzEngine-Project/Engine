@@ -1,38 +1,34 @@
 package calclavia.lib.prefab.terminal;
 
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-/**
- * Prefab for creating commands that most terminal entities can use
+/** Prefab for creating commands that most terminal entities can use
  * 
- * @author DarkGuardsman
- */
+ * @author DarkGuardsman */
 public interface ITerminalCommand
 {
-	/**
-	 * The command has been called by a player in a terminal.
-	 * 
-	 * @return false if the call was not supported rather than failed. Used too allow several
-	 * commands with the same name to exist but each has its own sub calls
-	 */
-	public boolean called(EntityPlayer player, ITerminal terminal, String[] args);
+    /** The command has been called by a player in a terminal. If player is null assume that the
+     * command was triggered by the terminal itself.
+     * 
+     * @return List of output from the command, empty or null list is treated as skipping this
+     * command. Any time your command is not used return a null or empty list. This way other
+     * commands have a chance to process the same input. */
+    public List<String> called(EntityPlayer player, ITerminal terminal, String[] args);
 
-	/**
-	 * Can the machine use the command. Used to prevent commands from being called on machines that
-	 * can't support it
-	 */
-	public boolean canSupport(ITerminal terminal);
+    /** Safty check to make sure the command can execute on the terminal without issues. Take this
+     * time to check if the machine is instance of a class that you will cast to run the command */
+    public boolean canSupport(ITerminal terminal);
 
-	/** What the command starts with like /time */
-	public String getCommandName();
+    /** What the command starts with like /time */
+    public String getCommandName();
 
-	/**
-	 * Used to restrict sub commands like /time day, or /time night. Will be added to the name of
-	 * the command so a command called time will have a sub comamnd day its node will equal time.day
-	 */
-	public Set<String> getPermissionNodes();
+    @Deprecated
+    /**Unused*/
+    public Set<String> getPermissionNodes();
 
-	public String getNode(String[] args);
+    /** Gets the node linked to the command in the args array */
+    public String getNode(String[] args);
 }

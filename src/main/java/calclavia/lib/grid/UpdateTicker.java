@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import net.minecraft.profiler.Profiler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import universalelectricity.api.net.IUpdate;
@@ -28,6 +29,11 @@ public class UpdateTicker extends Thread
 	private final Queue<Event> queuedEvents = new ConcurrentLinkedQueue<Event>();
 
 	public boolean pause = false;
+
+	/**
+	 * The time in milliseconds between successive updates.
+	 */
+	private long deltaTime;
 
 	public UpdateTicker()
 	{
@@ -51,6 +57,16 @@ public class UpdateTicker extends Thread
 		}
 	}
 
+	public long getDeltaTime()
+	{
+		return deltaTime;
+	}
+
+	public int getUpdaterCount()
+	{
+		return updaters.size();
+	}
+
 	@Override
 	public void run()
 	{
@@ -62,8 +78,9 @@ public class UpdateTicker extends Thread
 			{
 				if (!pause)
 				{
+					// theProfiler.profilingEnabled = true;
 					long current = System.currentTimeMillis();
-					long delta = current - last;
+					deltaTime = current - last;
 
 					/** Tick all updaters. */
 					synchronized (updaters)
