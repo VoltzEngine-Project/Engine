@@ -1,9 +1,8 @@
-package calclavia.lib.content.module.prefab
+package calclavia.lib.content.prefab
 
+import _root_.calclavia.lib.utility.nbt.ISaveObj
 import net.minecraftforge.common.ForgeDirection
 import net.minecraft.nbt.NBTTagCompound
-import calclavia.lib.prefab.tile.IIO
-import calclavia.lib.utility.nbt.ISaveObj
 
 /**
  * a Trait that handles IO Traits

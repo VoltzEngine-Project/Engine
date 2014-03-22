@@ -1,4 +1,4 @@
-package calclavia.lib.render
+package calclavia.lib.utility.render
 
 import calclavia.lib.utility.{RotationUtility, WorldUtility}
 import net.minecraft.client.renderer.{RenderBlocks, Tessellator, OpenGlHelper}
@@ -7,6 +7,7 @@ import net.minecraft.world.{IBlockAccess, World}
 import net.minecraft.block.Block
 import net.minecraft.util.Icon
 import org.lwjgl.opengl.GL11
+import calclavia.lib.render.RenderUtility
 
 /**
  * A block rendering helper class.

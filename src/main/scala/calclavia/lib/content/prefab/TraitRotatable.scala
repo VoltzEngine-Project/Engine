@@ -1,4 +1,4 @@
-package calclavia.lib.content.module.prefab
+package calclavia.lib.content.prefab
 
 import net.minecraftforge.common.ForgeDirection
 import net.minecraft.tileentity.TileEntity

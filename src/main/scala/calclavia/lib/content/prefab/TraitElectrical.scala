@@ -1,10 +1,10 @@
-package calclavia.lib.content.module.prefab
+package calclavia.lib.content.prefab
 
+import _root_.calclavia.lib.utility.nbt.ISaveObj
 import universalelectricity.api.energy.{EnergyStorageHandler, IEnergyContainer, IEnergyInterface}
 import net.minecraft.item.ItemStack
 import universalelectricity.api.{CompatibilityModule, UniversalClass}
 import net.minecraftforge.common.ForgeDirection
-import calclavia.lib.utility.nbt.ISaveObj
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import universalelectricity.api.vector.Vector3
