@@ -7,7 +7,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 import java.util.EnumSet;
 
-public class TileIO extends TileBase implements IIO
+public abstract class TileIO extends TileBase implements IIO
 {
 	/**
 	 * IO METHODS.
@@ -19,11 +19,6 @@ public class TileIO extends TileBase implements IIO
 	 */
 	protected short ioMap = 364;
 	protected boolean saveIOMap = false;
-
-	public TileIO()
-	{
-		super(null);
-	}
 
 	public TileIO(Material material)
 	{
