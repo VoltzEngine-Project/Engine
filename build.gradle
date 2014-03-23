@@ -81,7 +81,7 @@ artifacts {
 
 publishing {
     publications {
-        mavenScala(MavenPublication) {
+        mavenJava(MavenPublication) {
             artifact jar
             artifact deobfJar
 			artifact apiZip
