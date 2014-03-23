@@ -5,11 +5,11 @@ import net.minecraft.tileentity.TileEntity
 
 trait TraitRotatable extends TileEntity
 {
+  protected var rotationMask = 0x3C
+
   def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata)
 
   def setDirection(direction: ForgeDirection) = getWorldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, getDirection.ordinal, 3)
-
-  def rotationMask = 0x3C
 
   def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
 
