@@ -86,12 +86,12 @@ publishing {
             artifact deobfJar
 			artifact apiZip
 
-			artifact {
+			artifact changelog{
 				classifier "changelog"
 				file 'output/' + "${System.getenv().JOB_NAME}-${project.version}" + '-changelog' + '.txt'
 			}
 			
-			artifact {
+			artifact properties{
 				classifier "properties"
 				file 'output/build.properties'
 			}
