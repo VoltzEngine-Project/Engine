@@ -28,7 +28,7 @@ class RotatedTextureRenderer(tile: TileBlock) extends TileRender
       }
     }
 
-    return true;
+    return false
   }
 
 }
