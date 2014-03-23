@@ -17,17 +17,17 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
   protected var energy: EnergyStorageHandler = _
 
   //@Callback
-  def recharge(stack: ItemStack)
+  protected def recharge(stack: ItemStack)
   {
     if (this.energy != null)
     {
-      this.energy.extractEnergy(CompatibilityModule.chargeItem(stack, this.energy.getEnergy(), true), true)
+      this.energy.extractEnergy(CompatibilityModule.chargeItem(stack, this.energy.getEnergy, true), true)
     }
 
   }
 
   //@Callback
-  def discharge(stack: ItemStack)
+  protected  def discharge(stack: ItemStack)
   {
     if (this.energy != null)
     {
@@ -49,27 +49,6 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
     return false
   }
 
-  //@Callback
-  override def getEnergy(from: ForgeDirection): Long =
-  {
-    if (this.energy != null)
-    {
-      return this.energy.getEnergy()
-    }
-    return 0
-  }
-
-  //@Callback
-  override def getEnergyCapacity(from: ForgeDirection): Long =
-  {
-    if (this.energy != null)
-    {
-      return this.energy.getEnergyCapacity
-    }
-    else
-      return 0
-
-  }
 
   //TODO: Add OC Event firing
   override def onReceiveEnergy(from: ForgeDirection, receive: Long, doReceive: Boolean): Long =
@@ -122,23 +101,51 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
    *
    * This function is NOT recommended for calling.
    */
-  override def setEnergy(from: ForgeDirection, energy: Long) = this.energy.setEnergy(energy)
+  override def setEnergy(from: ForgeDirection, amount: Long) =
+  {
+    if (energy != null)
+      energy.setEnergy(amount)
+  }
+
+  //@Callback
+  override def getEnergy(from: ForgeDirection): Long =
+  {
+    if (energy != null)
+    {
+      return energy.getEnergy()
+    }
+    return 0
+  }
+
+  //@Callback
+  override def getEnergyCapacity(from: ForgeDirection): Long =
+  {
+    if (energy != null)
+    {
+      return energy.getEnergyCapacity
+    }
+    else
+      return 0
+
+  }
 
   override def save(nbt: NBTTagCompound)
   {
     super.save(nbt);
-    if (this.energy != null)
+
+    if (energy != null)
     {
-      this.energy.readFromNBT(nbt)
+      energy.readFromNBT(nbt)
     }
   }
 
   override def load(nbt: NBTTagCompound)
   {
     super.load(nbt);
-    if (this.energy != null)
+
+    if (energy != null)
     {
-      this.energy.writeToNBT(nbt)
+      energy.writeToNBT(nbt)
     }
   }
 
