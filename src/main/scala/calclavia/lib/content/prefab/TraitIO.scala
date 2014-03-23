@@ -3,13 +3,14 @@ package calclavia.lib.content.prefab
 import _root_.calclavia.lib.utility.nbt.ISaveObj
 import net.minecraftforge.common.ForgeDirection
 import net.minecraft.nbt.NBTTagCompound
+import calclavia.lib.content.module.TileBase
 
 /**
  * a Trait that handles IO Traits
  *
  * @author tgame14
  */
-trait TraitIO extends ISaveObj
+trait TraitIO extends TileBase with ISaveObj
 {
   /**
    * IO METHODS.
