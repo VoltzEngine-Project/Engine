@@ -5,7 +5,7 @@ import calclavia.lib.utility.render.RenderBlockUtility
 import net.minecraftforge.common.ForgeDirection
 import universalelectricity.api.vector.Vector3
 import calclavia.lib.utility.WorldUtility
-import calclavia.lib.content.module.TileRender
+import calclavia.lib.content.module.{TileBlock, TileRender}
 import net.minecraft.item.ItemStack
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.tileentity.TileEntity
@@ -14,13 +14,13 @@ import net.minecraft.tileentity.TileEntity
  * A generic TileEntity connected texture renderer.
  * Created by Calclavia on 3/22/2014.
  */
-class ConnectedTextureRenderer(tile: TileEntity, edgeTexture: String) extends TileRender
+class ConnectedTextureRenderer(tile: TileBlock, edgeTexture: String) extends TileRender
 {
   override def renderItem(itemStack: ItemStack): Boolean =
   {
     GL11.glPushMatrix()
     GL11.glTranslated(0.5, 0.5, 0.5)
-    RenderBlockUtility.tessellateBlockWithConnectedTextures(itemStack.getItemDamage, tile.getBlockType, null, RenderUtility.getIcon(edgeTexture))
+    RenderBlockUtility.tessellateBlockWithConnectedTextures(itemStack.getItemDamage, tile.block, null, RenderUtility.getIcon(edgeTexture))
     GL11.glPopMatrix()
     return true
   }

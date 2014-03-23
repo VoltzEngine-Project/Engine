@@ -2,10 +2,11 @@ package calclavia.lib.content.prefab
 
 import net.minecraftforge.common.ForgeDirection
 import net.minecraft.tileentity.TileEntity
+import calclavia.lib.prefab.tile.IRotatable
 
-trait TraitRotatable extends TileEntity
+trait TraitRotatable extends TileEntity with IRotatable
 {
-  protected var rotationMask = 0x3C
+  protected var rotationMask : Byte = 0x3C
 
   def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata)
 

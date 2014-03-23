@@ -58,6 +58,7 @@ public class BlockDummy extends Block implements ITileEntityProvider
 
 		setHardness(dummyTile.blockHardness);
 		setResistance(dummyTile.blockResistance);
+		setTickRandomly(dummyTile.tickRandomly);
 	}
 
 	/**
@@ -69,6 +70,8 @@ public class BlockDummy extends Block implements ITileEntityProvider
 		{
 			dummyTile.worldObj = (World) access;
 		}
+
+		dummyTile.access = access;
 		dummyTile.xCoord = x;
 		dummyTile.yCoord = y;
 		dummyTile.zCoord = z;
@@ -387,5 +390,11 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	public int getRenderBlockPass()
 	{
 		return dummyTile.getRenderBlockPass();
+	}
+
+	@Override
+	public int tickRate(World world)
+	{
+		return dummyTile.tickRate(world);
 	}
 }

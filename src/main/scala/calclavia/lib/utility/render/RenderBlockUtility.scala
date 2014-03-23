@@ -27,11 +27,48 @@ object RenderBlockUtility
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var11 * scale, var12 * scale)
   }
 
-  def tessellateFace(renderBlocks: RenderBlocks, x: Float, y: Float, z: Float, block: Block, overrideTexture: Icon, side: Int)
+  def tessellateFace(renderBlocks: RenderBlocks, block: Block, overrideTexture: Icon, side: Int)
   {
     val tessellator = Tessellator.instance
     val meta = 0
-    var useTexture: Icon = if (overrideTexture != null) overrideTexture else block.getIcon(side, meta)
+    val useTexture: Icon = if (overrideTexture != null) overrideTexture else block.getIcon(side, meta)
+
+    if (side == 0)
+    {
+      tessellator.setNormal(0.0F, -1.0F, 0.0F)
+      renderBlocks.renderFaceYNeg(block, 0, 0, 0, useTexture)
+    }
+    if (side == 1)
+    {
+      tessellator.setNormal(0.0F, 1.0F, 0.0F)
+      renderBlocks.renderFaceYPos(block, 0, 0, 0, useTexture)
+    }
+    if (side == 2)
+    {
+      tessellator.setNormal(0.0F, 0.0F, -1.0F)
+      renderBlocks.renderFaceZNeg(block, 0, 0, 0, useTexture)
+    }
+    if (side == 3)
+    {
+      tessellator.setNormal(0.0F, 0.0F, 1.0F)
+      renderBlocks.renderFaceZPos(block, 0, 0, 0, useTexture)
+    }
+    if (side == 4)
+    {
+      tessellator.setNormal(-1.0F, 0.0F, 0.0F)
+      renderBlocks.renderFaceXNeg(block, 0, 0, 0, useTexture)
+    }
+    if (side == 5)
+    {
+      tessellator.setNormal(1.0F, 0.0F, 0.0F)
+      renderBlocks.renderFaceXPos(block, 0, 0, 0, useTexture)
+    }
+  }
+
+  def tessellateFace(renderBlocks: RenderBlocks, access: IBlockAccess, x: Int, y: Int, z: Int, block: Block, overrideTexture: Icon, side: Int)
+  {
+    val tessellator = Tessellator.instance
+    val useTexture: Icon = if (overrideTexture != null) overrideTexture else block.getBlockTexture(access, x, y, z, side)
 
     if (side == 0)
     {
@@ -68,17 +105,14 @@ object RenderBlockUtility
   /**
    * Renders a connected texture block with a bitmask
    * @param sideMap - The sides that are connected
-   * @param blockAccess
-   * @param x
-   * @param y
-   * @param z
-   * @param block
-   * @param faceOverride
-   * @param edgeOverride
    */
   def tessellateBlockWithConnectedTextures(sideMap: Byte, blockAccess: IBlockAccess, x: Int, y: Int, z: Int, block: Block, faceOverride: Icon, edgeOverride: Icon)
   {
-    val renderBlocks = RenderUtility.renderBlocks
+    tessellateBlockWithConnectedTextures(sideMap, RenderUtility.renderBlocks, blockAccess, x, y, z, block, faceOverride, edgeOverride)
+  }
+
+  def tessellateBlockWithConnectedTextures(sideMap: Byte, renderBlocks: RenderBlocks, blockAccess: IBlockAccess, x: Int, y: Int, z: Int, block: Block, faceOverride: Icon, edgeOverride: Icon)
+  {
     renderBlocks.blockAccess = blockAccess
 
     if (faceOverride != null)
@@ -96,7 +130,7 @@ object RenderBlockUtility
         if (!WorldUtility.isEnabledSide(sideMap, absDir))
         {
           RenderUtility.rotateFacesOnRenderer(absDir, renderBlocks, true)
-          tessellateFace(renderBlocks, x, y, z, block, edgeOverride, dir.ordinal)
+          tessellateFace(renderBlocks, blockAccess, x, y, z, block, edgeOverride, dir.ordinal)
           RenderUtility.resetFacesOnRenderer(renderBlocks)
         }
       }
@@ -110,24 +144,25 @@ object RenderBlockUtility
    */
   def tessellateBlockWithConnectedTextures(metadata: Int, block: Block, faceOverride: Icon, edgeOverride: Icon)
   {
-    GL11.glPushMatrix();
+    GL11.glPushMatrix()
     val renderBlocks = RenderUtility.renderBlocks
-    renderBlocks.overrideBlockTexture = faceOverride
-    GL11.glPushMatrix();
-    GL11.glScaled(0.999, 0.999, 0.999);
+    renderBlocks.setOverrideBlockTexture(faceOverride)
+    GL11.glPushMatrix()
+    GL11.glScaled(0.999, 0.999, 0.999)
     RenderUtility.renderNormalBlockAsItem(block, metadata, renderBlocks)
-    Tessellator.instance.startDrawingQuads();
-    GL11.glPopMatrix();
+    Tessellator.instance.startDrawingQuads()
+    GL11.glPopMatrix()
+    GL11.glTranslated(-0.5, -0.5, -0.5)
     for (dir <- ForgeDirection.VALID_DIRECTIONS; r <- 0 until 4)
     {
       val absDir = ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
       RenderUtility.rotateFacesOnRenderer(absDir, renderBlocks, true);
-      tessellateFace(renderBlocks, -0.5f, -0.5f, -0.5f, block, edgeOverride, dir.ordinal)
+      tessellateFace(renderBlocks, block, edgeOverride, dir.ordinal)
       RenderUtility.resetFacesOnRenderer(renderBlocks);
     }
 
-    Tessellator.instance.draw();
-    GL11.glPopMatrix();
+    Tessellator.instance.draw()
+    GL11.glPopMatrix()
   }
 
 }

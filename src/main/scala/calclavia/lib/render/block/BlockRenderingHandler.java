@@ -134,27 +134,35 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 	}
 
 	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
+	public boolean renderWorldBlock(IBlockAccess access, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
 	{
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
-
-		if (tile instanceof TileBlock && ((TileBlock) tile).material != null)
+		if (block instanceof BlockDummy)
 		{
-			if (((TileBlock) tile).getRenderer() != null)
+			BlockDummy dummy = (BlockDummy) block;
+			dummy.inject(access, x, y, z);
+			TileBlock tileBlock = dummy.getTile(access, x, y, z);
+
+			if (tileBlock != null)
 			{
-				if (!((TileBlock) tile).getRenderer().renderStatic(renderer, new Vector3(x, y, z)))
+				tileBlock.access = access;
+
+				if (tileBlock.getRenderer() != null)
+				{
+					if (!tileBlock.getRenderer().renderStatic(renderer, new Vector3(x, y, z)))
+					{
+						renderer.renderStandardBlock(block, x, y, z);
+					}
+				}
+				else if (tileBlock.normalRender || tileBlock.forceStandardRender)
 				{
 					renderer.renderStandardBlock(block, x, y, z);
 				}
-			}
-			else if (((TileBlock) tile).normalRender || ((TileBlock) tile).forceStandardRender)
-			{
-				renderer.renderStandardBlock(block, x, y, z);
+
 			}
 
+			//dummy.eject();
 			return true;
 		}
-
 		return false;
 	}
 
