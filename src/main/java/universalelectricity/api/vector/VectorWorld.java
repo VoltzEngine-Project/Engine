@@ -9,7 +9,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
-public class VectorWorld extends Vector3
+public class VectorWorld extends Vector3 implements IVectorWorld
 {
     public World world;
 
@@ -17,6 +17,11 @@ public class VectorWorld extends Vector3
     {
         super(x, y, z);
         this.world = world;
+    }
+    
+    public VectorWorld(IVectorWorld vectorWorld)
+    {
+        this(vectorWorld.world(), vectorWorld.x(), vectorWorld.y(), vectorWorld.z());
     }
 
     public VectorWorld(NBTTagCompound nbt)
@@ -37,12 +42,18 @@ public class VectorWorld extends Vector3
         this.world = tile.worldObj;
     }
 
-    public VectorWorld(World world, Vector3 v)
+    public VectorWorld(World world, IVector3 v)
     {
-        this.x = v.x;
-        this.y = v.y;
-        this.z = v.z;
+        this.x = v.x();
+        this.y = v.y();
+        this.z = v.z();
         this.world = world;
+    }
+    
+    @Override
+    public World world()
+    {
+        return this.world;
     }
 
     @Override
@@ -115,7 +126,7 @@ public class VectorWorld extends Vector3
 
     public MovingObjectPosition rayTraceEntities(VectorWorld target)
     {
-        return super.rayTraceEntities(target.world, target);
+        return super.rayTraceEntities(target.world(), target);
     }
     
     public MovingObjectPosition rayTraceEntities(Entity target)
@@ -142,5 +153,5 @@ public class VectorWorld extends Vector3
     public String toString()
     {
         return "VectorWorld [" + this.x + "," + this.y + "," + this.z + "," + this.world + "]";
-    }
+    }    
 }

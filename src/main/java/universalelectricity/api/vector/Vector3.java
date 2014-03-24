@@ -19,7 +19,7 @@ import net.minecraftforge.common.ForgeDirection;
  * @author Calclavia
  */
 
-public class Vector3 implements Cloneable
+public class Vector3 implements Cloneable, IVector3
 {
 	public double x;
 	public double y;
@@ -37,10 +37,16 @@ public class Vector3 implements Cloneable
 		this(0, 0, 0);
 	}
 
+	@Deprecated
 	public Vector3(Vector3 vector)
 	{
 		this(vector.x, vector.y, vector.z);
 	}
+	
+	public Vector3(IVector3 vector)
+    {
+        this(vector.x(), vector.y(), vector.z());
+    }
 
 	public Vector3(double amount)
 	{
@@ -111,6 +117,24 @@ public class Vector3 implements Cloneable
 		return new Vector3(e.xCoord + 0.5, e.yCoord + 0.5, e.zCoord + 0.5);
 	}
 
+	@Override
+	public double x()
+    {
+        return this.x;
+    }
+
+	@Override
+    public double y()
+    {
+        return this.y;
+    }
+
+	@Override
+    public double z()
+    {
+        return this.z;
+    }
+    
 	/** Returns the coordinates as integers, ideal for block placement. */
 	public int intX()
 	{
@@ -146,7 +170,7 @@ public class Vector3 implements Cloneable
 	@Override
 	public Vector3 clone()
 	{
-		return new Vector3(this);
+		return new Vector3(x(), y(), z());
 	}
 
 	/**
@@ -203,7 +227,7 @@ public class Vector3 implements Cloneable
 		return new EulerAngle(Math.toDegrees(Math.atan2(x, z)), Math.toDegrees(-Math.atan2(y, Math.hypot(z, x))));
 	}
 
-	public EulerAngle toAngle(Vector3 target)
+	public EulerAngle toAngle(IVector3 target)
 	{
 		return clone().difference(target).toAngle();
 	}
@@ -260,10 +284,15 @@ public class Vector3 implements Cloneable
 	}
 
 	/** Gets the distance between two vectors */
-	public static double distance(Vector3 vec1, Vector3 vec2)
+	public static double distance(Vector3 vec1, IVector3 vec2)
 	{
 		return vec1.distance(vec2);
 	}
+	
+	public static double distance(IVector3 vec1, IVector3 vec2)
+    {
+        return new Vector3(vec1).distance(vec2);
+    }
 
 	public double distance(double x, double y, double z)
 	{
@@ -271,9 +300,9 @@ public class Vector3 implements Cloneable
 		return difference.getMagnitude();
 	}
 
-	public double distance(Vector3 compare)
+	public double distance(IVector3 compare)
 	{
-		return this.distance(compare.x, compare.y, compare.z);
+		return this.distance(compare.x(), compare.y(), compare.z());
 	}
 
 	public double distance(Entity entity)
@@ -317,11 +346,11 @@ public class Vector3 implements Cloneable
 		return this.translate(side);
 	}
 
-	public Vector3 translate(Vector3 addition)
+	public Vector3 translate(IVector3 addition)
 	{
-		this.x += addition.x;
-		this.y += addition.y;
-		this.z += addition.z;
+		this.x += addition.x();
+		this.y += addition.y();
+		this.z += addition.z();
 		return this;
 	}
 
@@ -341,7 +370,7 @@ public class Vector3 implements Cloneable
 		return this;
 	}
 
-	public static Vector3 translate(Vector3 first, Vector3 second)
+	public static Vector3 translate(Vector3 first, IVector3 second)
 	{
 		return first.clone().translate(second);
 	}
@@ -351,7 +380,7 @@ public class Vector3 implements Cloneable
 		return translate.clone().translate(addition);
 	}
 
-	public Vector3 add(Vector3 amount)
+	public Vector3 add(IVector3 amount)
 	{
 		return translate(amount);
 	}
@@ -361,9 +390,9 @@ public class Vector3 implements Cloneable
 		return translate(amount);
 	}
 
-	public Vector3 subtract(Vector3 amount)
+	public Vector3 subtract(IVector3 amount)
 	{
-		return this.translate(amount.clone().invert());
+		return this.translate(-amount.x(), -amount.y(), -amount.z());
 	}
 
 	public Vector3 subtract(double amount)
@@ -376,9 +405,9 @@ public class Vector3 implements Cloneable
 		return this.difference(x, y, z);
 	}
 
-	public Vector3 difference(Vector3 amount)
+	public Vector3 difference(IVector3 amount)
 	{
-		return this.translate(amount.clone().invert());
+		return this.translate(-amount.x(), -amount.y(), -amount.z());
 	}
 
 	public Vector3 difference(double amount)
