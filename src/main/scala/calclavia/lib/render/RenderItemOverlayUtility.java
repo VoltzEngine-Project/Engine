@@ -1,5 +1,9 @@
 package calclavia.lib.render;
 
+import calclavia.lib.utility.LanguageUtility;
+import calclavia.lib.utility.WorldUtility;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -14,14 +18,10 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
-
 import universalelectricity.api.vector.Vector3;
-import calclavia.lib.utility.LanguageUtility;
-import calclavia.lib.utility.WorldUtility;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.EnumSet;
 
 @SideOnly(Side.CLIENT)
 public class RenderItemOverlayUtility
@@ -86,10 +86,11 @@ public class RenderItemOverlayUtility
 	}
 
 	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText)
-    {
-	    renderItemOnSides(tile, itemStack, x, y, z, renderText, forge_sides);
-    }
-	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText, ForgeDirection... sides)
+	{
+		renderItemOnSides(tile, itemStack, x, y, z, renderText, EnumSet.allOf(ForgeDirection.class));
+	}
+
+	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText, EnumSet<ForgeDirection> sides)
 	{
 		/** Render the Output */
 		String amount = "";
@@ -102,21 +103,24 @@ public class RenderItemOverlayUtility
 
 		for (ForgeDirection direction : sides)
 		{
-			if (tile.worldObj.isBlockSolidOnSide(tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite()))
+			if (direction != ForgeDirection.UNKNOWN)
 			{
-				continue;
+				if (tile.worldObj.isBlockSolidOnSide(tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite()))
+				{
+					continue;
+				}
+
+				renderItemOnSide(tile, itemStack, direction, x, y, z, renderText, amount);
+
+				GL11.glPushMatrix();
+				setupLight(tile, direction.offsetX, direction.offsetZ);
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+				GL11.glDisable(2896);
+				RenderUtility.renderText(renderText, direction, 0.02f, x, y - 0.35f, z);
+				RenderUtility.renderText(amount, direction, 0.02f, x, y - 0.15f, z);
+				GL11.glEnable(2896);
+				GL11.glPopMatrix();
 			}
-
-			renderItemOnSide(tile, itemStack, direction, x, y, z, renderText, amount);
-
-			GL11.glPushMatrix();
-			setupLight(tile, direction.offsetX, direction.offsetZ);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-			GL11.glDisable(2896);
-			RenderUtility.renderText(renderText, direction, 0.02f, x, y - 0.35f, z);
-			RenderUtility.renderText(amount, direction, 0.02f, x, y - 0.15f, z);
-			GL11.glEnable(2896);
-			GL11.glPopMatrix();
 		}
 	}
 
