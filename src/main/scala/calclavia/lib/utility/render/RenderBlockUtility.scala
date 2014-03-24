@@ -116,9 +116,9 @@ object RenderBlockUtility
     renderBlocks.blockAccess = blockAccess
 
     if (faceOverride != null)
-      renderBlocks.setOverrideBlockTexture(faceOverride);
+      renderBlocks.setOverrideBlockTexture(faceOverride)
 
-    renderBlocks.setRenderBoundsFromBlock(block);
+    renderBlocks.setRenderBoundsFromBlock(block)
     renderBlocks.renderStandardBlock(block, x, y, z)
 
     for (dir <- ForgeDirection.VALID_DIRECTIONS; r <- 0 until 4)
@@ -153,12 +153,13 @@ object RenderBlockUtility
     Tessellator.instance.startDrawingQuads()
     GL11.glPopMatrix()
     GL11.glTranslated(-0.5, -0.5, -0.5)
+
     for (dir <- ForgeDirection.VALID_DIRECTIONS; r <- 0 until 4)
     {
       val absDir = ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
-      RenderUtility.rotateFacesOnRenderer(absDir, renderBlocks, true);
+      RenderUtility.rotateFacesOnRenderer(absDir, renderBlocks, true)
       tessellateFace(renderBlocks, block, edgeOverride, dir.ordinal)
-      RenderUtility.resetFacesOnRenderer(renderBlocks);
+      RenderUtility.resetFacesOnRenderer(renderBlocks)
     }
 
     Tessellator.instance.draw()

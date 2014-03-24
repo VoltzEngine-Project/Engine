@@ -4,31 +4,41 @@ import calclavia.lib.content.module.{TileBlock, TileRender}
 import net.minecraft.client.renderer.RenderBlocks
 import universalelectricity.api.vector.Vector3
 import net.minecraftforge.common.ForgeDirection
-import calclavia.lib.utility.RotationUtility
 import calclavia.lib.utility.render.RenderBlockUtility
+import calclavia.lib.utility.RotationUtility
 
 /**
  * Created by Henry on 3/23/2014.
  */
 class RotatedTextureRenderer(tile: TileBlock) extends TileRender
 {
+  val renderBlocks = new RenderBlockAdvanced()
+
   override def renderStatic(renderer: RenderBlocks, position: Vector3): Boolean =
   {
-    renderer.setRenderBoundsFromBlock(tile.block)
+    renderBlocks.setRenderBoundsFromBlock(tile.block)
+    renderBlocks.blockAccess = tile.access
 
-    for (dir <- ForgeDirection.VALID_DIRECTIONS; r <- 0 until 4)
+    val targetDir = tile.getDirection;
+
+    for (dir <- ForgeDirection.VALID_DIRECTIONS)
     {
-      val absDir = ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
+      renderBlocks.limitedSide = dir.ordinal
 
-      if (absDir == tile.getDirection)
+      if ((0 until 4).exists(r => targetDir == ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))))
       {
-        RenderUtility.rotateFacesOnRenderer(absDir, renderer, true)
-        RenderBlockUtility.tessellateFace(renderer, tile.access, tile.x, tile.y, tile.z, tile.block, null, dir.ordinal)
-        RenderUtility.resetFacesOnRenderer(renderer)
+        RenderUtility.rotateFacesOnRenderer(targetDir, renderBlocks, true)
+        renderBlocks.renderStandardBlock(tile.block, position.intX(), position.intY(), position.intZ())
+        // RenderBlockUtility.tessellateFace(rendeerBlocks, tile.access, position.intX(), position.intY(), position.intZ(), tile.block, null, dir.ordinal)
+        RenderUtility.resetFacesOnRenderer(renderBlocks)
+      }
+      else
+      {
+        renderBlocks.renderStandardBlock(tile.block, position.intX(), position.intY(), position.intZ())
       }
     }
 
-    return false
+    return true
   }
 
 }
