@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import universalelectricity.api.vector.IVector3;
 import universalelectricity.api.vector.Vector3;
 import calclavia.components.CalclaviaLoader;
 import calclavia.lib.render.RenderUtility;
@@ -36,16 +37,16 @@ public abstract class FxBeam extends EntityFX
 	private float rotPitch = 0.0F;
 	private float prevYaw = 0.0F;
 	private float prevPitch = 0.0F;
-	private Vector3 target = new Vector3();
+	private IVector3 target = new Vector3();
 	private float endModifier = 1.0F;
 	private boolean reverse = false;
 	private boolean pulse = true;
 	private int rotationSpeed = 20;
 	private float prevSize = 0.0F;
 
-	public FxBeam(ResourceLocation texture, World par1World, Vector3 position, Vector3 target, float red, float green, float blue, int age)
+	public FxBeam(ResourceLocation texture, World par1World, IVector3 position, IVector3 target2, float red, float green, float blue, int age)
 	{
-		super(par1World, position.x, position.y, position.z, 0.0D, 0.0D, 0.0D);
+		super(par1World, position.x(), position.y(), position.z(), 0.0D, 0.0D, 0.0D);
 		this.texture = texture;
 
 		this.setRGB(red, green, blue);
@@ -55,10 +56,10 @@ public abstract class FxBeam extends EntityFX
 		this.motionX = 0.0D;
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
-		this.target = target;
-		float xd = (float) (this.posX - this.target.x);
-		float yd = (float) (this.posY - this.target.y);
-		float zd = (float) (this.posZ - this.target.z);
+		this.target = target2;
+		float xd = (float) (this.posX - this.target.x());
+		float yd = (float) (this.posY - this.target.y());
+		float zd = (float) (this.posZ - this.target.z());
 		this.length = (float) new Vector3(this).distance(this.target);
 		double var7 = MathHelper.sqrt_double(xd * xd + zd * zd);
 		this.rotYaw = ((float) (Math.atan2(xd, zd) * 180.0D / 3.141592653589793D));
@@ -95,9 +96,9 @@ public abstract class FxBeam extends EntityFX
 		this.prevYaw = this.rotYaw;
 		this.prevPitch = this.rotPitch;
 
-		float xd = (float) (this.posX - this.target.x);
-		float yd = (float) (this.posY - this.target.y);
-		float zd = (float) (this.posZ - this.target.z);
+		float xd = (float) (this.posX - this.target.x());
+		float yd = (float) (this.posY - this.target.y());
+		float zd = (float) (this.posZ - this.target.z());
 
 		this.length = MathHelper.sqrt_float(xd * xd + yd * yd + zd * zd);
 
