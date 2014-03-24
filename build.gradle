@@ -12,6 +12,7 @@ buildscript {
 }
 
 apply plugin: 'forge'
+apply plugin: 'scala'
 apply plugin: 'maven-publish'
 
 ext.buildProps = file "build.properties"
@@ -47,7 +48,7 @@ task copyBuildXml(type: Copy) {
 
 jar {
     dependsOn copyBuildXml
-    classifier = 'main'
+    classifier = 'universal'
 	
 	manifest {
         attributes FMLCorePlugin: "calclavia.lib.CalclaviaPluginLoader",
@@ -85,13 +86,13 @@ publishing {
             artifact deobfJar
 			artifact apiZip
 
-            /*
-			artifact {
+			/*
+			artifact{
 				classifier = "changelog"
 				file 'output/' + "${System.getenv().JOB_NAME}-${project.version}" + '-changelog' + '.txt'
 			}*/
 			
-			artifact {
+			artifact{
 				classifier = "properties"
 				file 'output/build.properties'
 			}
