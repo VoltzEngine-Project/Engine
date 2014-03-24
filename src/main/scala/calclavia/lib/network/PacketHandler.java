@@ -14,7 +14,8 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidTank;
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.api.vector.IVector2;
+import universalelectricity.api.vector.IVector3;
 import calclavia.lib.Calclavia;
 import calclavia.lib.utility.nbt.ISaveObj;
 
@@ -88,12 +89,17 @@ public class PacketHandler implements IPacketHandler
 				{
 					data.writeLong((Long) dataValue);
 				}
-				else if (dataValue instanceof Vector3)
+				else if (dataValue instanceof IVector3)
 				{
-					data.writeDouble(((Vector3) dataValue).x);
-					data.writeDouble(((Vector3) dataValue).y);
-					data.writeDouble(((Vector3) dataValue).z);
+					data.writeDouble(((IVector3) dataValue).x());
+					data.writeDouble(((IVector3) dataValue).y());
+					data.writeDouble(((IVector3) dataValue).z());
 				}
+				else if (dataValue instanceof IVector2)
+                {
+                    data.writeDouble(((IVector2) dataValue).x());
+                    data.writeDouble(((IVector2) dataValue).y());
+                }
 				else if (dataValue instanceof NBTTagCompound)
 				{
 					writeNBTTagCompound((NBTTagCompound) dataValue, data);
@@ -158,11 +164,11 @@ public class PacketHandler implements IPacketHandler
 	 * Sends packets to clients around a specific coordinate. A wrapper using Vector3. See
 	 * {@PacketDispatcher} for detailed information.
 	 */
-	public static void sendPacketToClients(Packet packet, World worldObj, Vector3 position, double range)
+	public static void sendPacketToClients(Packet packet, World worldObj, IVector3 position, double range)
 	{
 		try
 		{
-			PacketDispatcher.sendPacketToAllAround(position.x, position.y, position.z, range, worldObj.provider.dimensionId, packet);
+			PacketDispatcher.sendPacketToAllAround(position.x(), position.y(), position.z(), range, worldObj.provider.dimensionId, packet);
 		}
 		catch (Exception e)
 		{
