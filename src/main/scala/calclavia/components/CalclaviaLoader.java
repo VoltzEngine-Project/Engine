@@ -596,7 +596,7 @@ public class CalclaviaLoader
 		ICommandManager commandManager = FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
 		ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
 		serverCommandManager.registerCommand(new CommandFlag(FlagRegistry.getModFlag(FlagRegistry.DEFAULT_NAME)));
-
+ 
 		// TODO: Move to UE
 		serverCommandManager.registerCommand(new UECommand());
 	}
