@@ -1,24 +1,19 @@
 package calclavia.api.mffs.fortron;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.WeakHashMap;
-
+import calclavia.api.icbm.IBlockFrequency;
 import net.minecraft.server.ServerListenThread;
 import net.minecraft.server.ThreadMinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
-import calclavia.api.icbm.IBlockFrequency;
+
+import java.util.*;
 
 /**
  * A grid MFFS uses to search for machines with frequencies that can be linked and spread Fortron
  * energy.
- * 
+ *
  * @author Calclavia
- * 
  */
 public class FrequencyGrid
 {
@@ -27,42 +22,33 @@ public class FrequencyGrid
 
 	private final Set<IBlockFrequency> frequencyGrid = Collections.newSetFromMap(new WeakHashMap<IBlockFrequency, Boolean>());
 
+	/**
+	 * Called to re-initiate the grid. Used when server restarts or when player rejoins a world to
+	 * clean up previously registered objects.
+	 */
+	public static void reinitiate()
+	{
+		CLIENT_INSTANCE = new FrequencyGrid();
+		SERVER_INSTANCE = new FrequencyGrid();
+	}
+
+	public static FrequencyGrid instance()
+	{
+		Thread thr = Thread.currentThread();
+
+		if ((thr instanceof ThreadMinecraftServer) || (thr instanceof ServerListenThread) || (thr instanceof IServerThread))
+		{
+			return SERVER_INSTANCE;
+		}
+
+		return CLIENT_INSTANCE;
+	}
+
 	public void register(IBlockFrequency tileEntity)
 	{
 		synchronized (frequencyGrid)
 		{
-			try
-			{
-				Iterator<IBlockFrequency> it = this.frequencyGrid.iterator();
-
-				while (it.hasNext())
-				{
-					IBlockFrequency frequency = it.next();
-
-					if (frequency == null)
-					{
-						it.remove();
-						continue;
-					}
-
-					if (((TileEntity) frequency).isInvalid())
-					{
-						it.remove();
-						continue;
-					}
-
-					if (new Vector3((TileEntity) frequency).equals(new Vector3((TileEntity) tileEntity)))
-					{
-						it.remove();
-						continue;
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-
+			cleanUp();
 			frequencyGrid.add(tileEntity);
 		}
 	}
@@ -83,9 +69,9 @@ public class FrequencyGrid
 
 	/**
 	 * Gets a list of TileEntities that has a specific frequency.
-	 * 
+	 *
 	 * @param frequency - The Frequency
-	 * */
+	 */
 	public Set<IBlockFrequency> get(int frequency)
 	{
 		Set<IBlockFrequency> set = new HashSet<IBlockFrequency>();
@@ -106,7 +92,6 @@ public class FrequencyGrid
 
 	public void cleanUp()
 	{
-		Set<IBlockFrequency> tilesToRemove = new HashSet<IBlockFrequency>();
 		Iterator<IBlockFrequency> it = this.frequencyGrid.iterator();
 
 		while (it.hasNext())
@@ -115,26 +100,21 @@ public class FrequencyGrid
 
 			if (frequency == null)
 			{
-				tilesToRemove.add(frequency);
+				it.remove();
 				continue;
 			}
 
 			if (((TileEntity) frequency).isInvalid())
 			{
-				tilesToRemove.add(frequency);
+				it.remove();
 				continue;
 			}
 
 			if (((TileEntity) frequency).worldObj.getBlockTileEntity(((TileEntity) frequency).xCoord, ((TileEntity) frequency).yCoord, ((TileEntity) frequency).zCoord) != ((TileEntity) frequency))
 			{
-				tilesToRemove.add(frequency);
+				it.remove();
 				continue;
 			}
-		}
-
-		for (IBlockFrequency tile : tilesToRemove)
-		{
-			this.unregister(tile);
 		}
 	}
 
@@ -185,27 +165,5 @@ public class FrequencyGrid
 			}
 		}
 		return set;
-	}
-
-	/**
-	 * Called to re-initiate the grid. Used when server restarts or when player rejoins a world to
-	 * clean up previously registered objects.
-	 */
-	public static void reinitiate()
-	{
-		CLIENT_INSTANCE = new FrequencyGrid();
-		SERVER_INSTANCE = new FrequencyGrid();
-	}
-
-	public static FrequencyGrid instance()
-	{
-		Thread thr = Thread.currentThread();
-
-		if ((thr instanceof ThreadMinecraftServer) || (thr instanceof ServerListenThread) || (thr instanceof IServerThread))
-		{
-			return SERVER_INSTANCE;
-		}
-
-		return CLIENT_INSTANCE;
 	}
 }
