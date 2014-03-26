@@ -42,7 +42,7 @@ public class GuiContainerBase extends GuiContainer
 	protected int meterWidth = 14;
 	protected int meterEnd = meterX + meterWidth;
 
-	protected int energyType = 0;
+	protected static int energyType = 0;
 
 	public String tooltip = "";
 	protected HashMap<Rectangle, String> tooltips = new HashMap<Rectangle, String>();
@@ -339,7 +339,7 @@ public class GuiContainerBase extends GuiContainer
 		// Check different energy system types.
 		if (unit == Unit.WATT || unit == Unit.JOULES)
 		{
-			switch (this.energyType)
+			switch (energyType)
 			{
 				case 1:
 					display = UnitDisplay.roundDecimals(energy * CompatibilityType.BUILDCRAFT.ratio) + " MJ" + displaySuffix;
@@ -357,8 +357,8 @@ public class GuiContainerBase extends GuiContainer
 		{
 			if (Mouse.isButtonDown(0) && this.lastChangeFrameTime <= 0)
 			{
-				this.energyType = (this.energyType + 1) % 4;
-				this.lastChangeFrameTime = 30;
+				energyType = (energyType + 1) % 4;
+				this.lastChangeFrameTime = 60;
 			}
 			else
 			{
