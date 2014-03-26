@@ -525,7 +525,7 @@ public class AutoCraftingManager
 								if (doConsume)
 									this.craftingInv.setInventorySlotContents(invSlots[i], AutoCraftingManager.consumeItem(checkStack, 1));
 								count++;
-								break;
+								//break; -- What?? Breaks the system
 							}
 						}
 					}
