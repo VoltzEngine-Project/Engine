@@ -8,7 +8,6 @@ import calclavia.lib.utility.WorldUtility
 import calclavia.lib.content.module.{TileBlock, TileRender}
 import net.minecraft.item.ItemStack
 import net.minecraft.client.renderer.RenderBlocks
-import net.minecraft.tileentity.TileEntity
 
 /**
  * A generic TileEntity connected texture renderer.
