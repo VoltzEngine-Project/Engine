@@ -51,7 +51,7 @@ public class EnergyStorageHandler
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setLong("energy", energy);
+		nbt.setLong("energy", this.getEnergy());
 		return nbt;
 	}
 
@@ -59,7 +59,7 @@ public class EnergyStorageHandler
 	{
 		this.capacity = capacity;
 
-		if (energy > capacity)
+		if (getEnergy() > capacity)
 		{
 			energy = capacity;
 		}
@@ -102,11 +102,11 @@ public class EnergyStorageHandler
 	{
 		this.energy = energy;
 
-		if (this.energy > capacity)
+		if (this.getEnergy() > this.getEnergyCapacity())
 		{
-			this.energy = capacity;
+			this.energy = this.getEnergyCapacity();
 		}
-		else if (this.energy < 0)
+		else if (this.getEnergy() < 0)
 		{
 			this.energy = 0;
 		}
@@ -121,26 +121,26 @@ public class EnergyStorageHandler
 	 */
 	public void modifyEnergyStored(long energy)
 	{
-		this.energy += energy;
+		this.setEnergy(this.getEmptySpace() + energy);
 
-		if (this.energy > this.capacity)
+		if (this.getEnergy() > this.getEnergyCapacity())
 		{
-			this.energy = this.capacity;
+			this.setEnergy(this.getEnergyCapacity());
 		}
-		else if (this.energy < 0)
+		else if (this.getEnergy() < 0)
 		{
-			this.energy = 0;
+			this.setEnergy(0);
 		}
 	}
 
 	public long receiveEnergy(long receive, boolean doReceive)
 	{
-		long energyReceived = Math.min(this.capacity - this.energy, Math.min(this.maxReceive, receive));
+		long energyReceived = Math.min(this.getEnergyCapacity() - this.getEnergy(), Math.min(this.getMaxReceive(), receive));
 
 		if (doReceive)
 		{
-			this.lastEnergy = this.energy;
-			this.energy += energyReceived;
+			this.lastEnergy = this.getEnergy();
+			this.setEnergy(this.getEnergy() + energyReceived);
 		}
 		return energyReceived;
 	}
@@ -157,12 +157,12 @@ public class EnergyStorageHandler
 
 	public long extractEnergy(long extract, boolean doExtract)
 	{
-		long energyExtracted = Math.min(this.energy, Math.min(this.maxExtract, extract));
+		long energyExtracted = Math.min(this.getEnergy(), Math.min(this.getMaxExtract(), extract));
 
 		if (doExtract)
 		{
-			this.lastEnergy = this.energy;
-			this.energy -= energyExtracted;
+			this.lastEnergy = this.getEnergy();
+			this.setEnergy(this.getEnergy() - energyExtracted);
 		}
 		return energyExtracted;
 	}
@@ -218,7 +218,7 @@ public class EnergyStorageHandler
 	 */
 	public boolean didEnergyStateChange()
 	{
-		return (this.lastEnergy == 0 && this.energy > 0) || (this.lastEnergy > 0 && this.energy == 0);
+		return (this.getLastEnergy() == 0 && this.getEnergy() > 0) || (this.getLastEnergy() > 0 && this.getEnergy() == 0);
 	}
 
 	/**
