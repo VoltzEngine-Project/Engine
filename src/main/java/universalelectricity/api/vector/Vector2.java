@@ -1,5 +1,9 @@
 package universalelectricity.api.vector;
 
+import net.minecraft.nbt.NBTTagCompound;
+
+import com.google.common.io.ByteArrayDataInput;
+
 /** Vector2 Class is used for defining objects in a 2D space.
  * 
  * @author Calclavia */
@@ -24,6 +28,16 @@ public class Vector2 implements Cloneable, IVector2
     {
         this.x = vec.x();
         this.y = vec.y();
+    }
+    
+    public Vector2(ByteArrayDataInput data)
+    {
+        this(data.readDouble(), data.readDouble());
+    }
+    
+    public Vector2(NBTTagCompound nbt)
+    {
+        this(nbt.getDouble("x"), nbt.getDouble("y"));
     }
 
     @Override

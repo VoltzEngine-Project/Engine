@@ -2,6 +2,8 @@ package universalelectricity.api.vector;
 
 import java.util.List;
 
+import com.google.common.io.ByteArrayDataInput;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -88,6 +90,11 @@ public class Vector3 implements Cloneable, IVector3
 	public Vector3(NBTTagCompound nbt)
 	{
 		this(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"));
+	}
+	
+	public Vector3(ByteArrayDataInput data)
+	{
+	    this(data.readDouble(), data.readDouble(), data.readDouble());
 	}
 
 	/**
