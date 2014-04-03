@@ -109,11 +109,6 @@ public class Vector3 implements Cloneable, IVector3
 		this(new EulerAngle(yaw, pitch));
 	}
 
-	public Vector3(EulerAngle angle)
-	{
-		this(angle.toVector());
-	}
-
 	public static Vector3 fromCenter(Entity e)
 	{
 		return new Vector3(e.posX, e.posY - e.yOffset + e.height / 2, e.posZ);
@@ -636,9 +631,9 @@ public class Vector3 implements Cloneable, IVector3
 	/** Rotates this Vector by a yaw, pitch and roll value. */
 	public void rotate(EulerAngle angle)
 	{
-		double yawRadians = angle.yaw();
-		double pitchRadians = angle.pitch();
-		double rollRadians = angle.roll();
+		double yawRadians = angle.yawRadians();
+		double pitchRadians = angle.pitchRadians();
+		double rollRadians = angle.rollRadians();
 
 		double x = this.x;
 		double y = this.y;
