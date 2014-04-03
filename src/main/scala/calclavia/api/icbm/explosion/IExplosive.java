@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.IModelCustom;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -49,7 +50,7 @@ public interface IExplosive extends ITier
     public ModelBase getBlockModel();
 
     @SideOnly(Side.CLIENT)
-    public ModelBase getMissileModel();
+    public IModelCustom getMissileModel();
 
     @SideOnly(Side.CLIENT)
     public ResourceLocation getBlockResource();
