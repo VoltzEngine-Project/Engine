@@ -31,12 +31,13 @@ public class PotionUtility
                     Field modfield = Field.class.getDeclaredField("modifiers");
                     modfield.setAccessible(true);
                     modfield.setInt(f, f.getModifiers() & ~Modifier.FINAL);
-					POT_ARRAY_SIZE = resizedPotionArray.length + EXTEND_LIMIT;
 
                     resizedPotionArray = (Potion[]) f.get(null);
                     final Potion[] newPotionTypes = new Potion[resizedPotionArray.length + EXTEND_LIMIT];
                     System.arraycopy(resizedPotionArray, 0, newPotionTypes, 0, resizedPotionArray.length);
                     f.set(null, newPotionTypes);
+
+					POT_ARRAY_SIZE = resizedPotionArray.length + EXTEND_LIMIT;
                 }
             }
             catch (Exception e)
