@@ -14,6 +14,9 @@ import calclavia.lib.Calclavia;
  */
 public class PotionUtility
 {
+	public static final int EXTEND_LIMIT = 32;
+	public static int POT_ARRAY_SIZE;
+
     public static void resizePotionArray ()
     {
         Potion[] resizedPotionArray = null;
@@ -28,9 +31,10 @@ public class PotionUtility
                     Field modfield = Field.class.getDeclaredField("modifiers");
                     modfield.setAccessible(true);
                     modfield.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+					POT_ARRAY_SIZE = resizedPotionArray.length + EXTEND_LIMIT;
 
                     resizedPotionArray = (Potion[]) f.get(null);
-                    final Potion[] newPotionTypes = new Potion[256];
+                    final Potion[] newPotionTypes = new Potion[resizedPotionArray.length + EXTEND_LIMIT];
                     System.arraycopy(resizedPotionArray, 0, newPotionTypes, 0, resizedPotionArray.length);
                     f.set(null, newPotionTypes);
                 }
