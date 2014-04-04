@@ -397,4 +397,6 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	{
 		return dummyTile.tickRate(world);
 	}
+
+
 }

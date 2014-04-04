@@ -2,6 +2,7 @@ package calclavia.lib.prefab.item;
 
 import java.util.List;
 
+import calclavia.lib.utility.TooltipUtility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -33,6 +34,11 @@ public class ItemBlockTooltip extends ItemBlock
 			{
 				list.addAll(LanguageUtility.splitStringPerWord(tooltip, 5));
 			}
+		}
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_J))
+		{
+			TooltipUtility.addTooltip(itemStack, list);
 		}
 	}
 

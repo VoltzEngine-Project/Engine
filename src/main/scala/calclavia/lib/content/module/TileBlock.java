@@ -770,4 +770,5 @@ public abstract class TileBlock extends TileEntity
 		@SideOnly(Side.CLIENT)
 		private static final HashMap<String, Icon> icon = new HashMap<String, Icon>();
 	}
+
 }
