@@ -435,7 +435,7 @@ public class CalclaviaLoader
 
 		modproxies.applyModule(Waila.class, Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable_Waila_Support", true).getBoolean(true));
 
-		// Potion Array resized to 256, Allows to miss conflicting ID's
+		// Potion Array resized to Current potion array, +32, Allows to miss conflicting ID's
 		PotionUtility.resizePotionArray();
 
 		SaveManager.registerClass("ModFlag", ModFlag.class);
@@ -446,15 +446,6 @@ public class CalclaviaLoader
 		ToolMode.REGISTRY.add(new ToolModeRotation());
 
 		Calclavia.CONFIGURATION.load();
-
-		try
-		{
-			ConfigHandler.configure(Calclavia.CONFIGURATION, "calclavia");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 
 		blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class).setCreativeTab(null);
 		blockMulti.setPacketType(PACKET_TILE);
@@ -553,6 +544,16 @@ public class CalclaviaLoader
 		{
 			UpdateTicker.INSTANCE.start();
 		}
+		Calclavia.CONFIGURATION.load();
+		try
+		{
+			ConfigHandler.configure(Calclavia.CONFIGURATION, Calclavia.DOMAIN);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		Calclavia.CONFIGURATION.save();
 
 		// Register Thermal Grid
 		UpdateTicker.addNetwork(ThermalGrid.SERVER_INSTANCE);

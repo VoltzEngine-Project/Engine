@@ -40,6 +40,10 @@ public class ItemBlockTooltip extends ItemBlock
 		{
 			TooltipUtility.addTooltip(itemStack, list);
 		}
+		else
+		{
+			list.add(LanguageUtility.getLocal("info.recipes.tooltip").replace("%0", EnumColor.AQUA.toString()).replace("%1", EnumColor.GREY.toString()));
+		}
 	}
 
 }

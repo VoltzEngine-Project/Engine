@@ -147,7 +147,8 @@ public class ContentRegistry
             {
 
                 int assignedID = idManager.getNextBlockID();
-                block = blockClass.getConstructor(Integer.TYPE).newInstance(config.getBlock(name, assignedID).getInt(assignedID));
+				int actualID = config.getBlock(name, assignedID).getInt(assignedID);
+                block = blockClass.getConstructor(Integer.TYPE).newInstance(actualID);
 
                 if (block != null)
                 {
