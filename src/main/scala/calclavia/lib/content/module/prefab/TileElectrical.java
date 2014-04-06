@@ -20,6 +20,7 @@ import java.util.List;
  * @since 21/03/14
  */
 @UniversalClass
+@Deprecated
 public class TileElectrical extends calclavia.lib.prefab.tile.TileElectrical
 		implements IEnergyContainer, IEnergyInterface, IWailaDataProvider
 {

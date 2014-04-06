@@ -16,7 +16,8 @@ import java.util
  * @since 01/04/14
  * @author Sangar, adapted by tgame14
  */
-object TooltipUtility {
+object TooltipUtility
+{
   protected val cache = mutable.Map.empty[ItemStack, Iterable[(ItemStack, Double)]]
 
   def terminate(item: Item, meta: Int = 0) = cache += new ItemStack(item, 1, meta) -> mutable.Iterable((new ItemStack(item, 1, meta), 1))
@@ -126,6 +127,6 @@ object TooltipUtility {
     accumulate(what)
   }
 
-  def fuzzyEquals(stack1: ItemStack, stack2: ItemStack) = stack1.isItemEqual(stack2) || (stack1.itemID == stack2.itemID && (stack1.getItemDamage == OreDictionary.WILDCARD_VALUE || stack2.getItemDamage == OreDictionary.WILDCARD_VALUE))
+  def fuzzyEquals(stack1: ItemStack, stack2: ItemStack) = (stack1.isItemEqual(stack2) || (stack1.itemID == stack2.itemID && (stack1.getItemDamage == OreDictionary.WILDCARD_VALUE || stack2.getItemDamage == OreDictionary.WILDCARD_VALUE))) && ItemStack.areItemStackTagsEqual(stack1, stack2)
 
 }

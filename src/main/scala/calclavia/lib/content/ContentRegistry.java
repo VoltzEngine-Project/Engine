@@ -3,6 +3,7 @@ package calclavia.lib.content;
 import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
+import calclavia.lib.prefab.item.ItemBlockTooltip;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -107,12 +108,12 @@ public class ContentRegistry
 
     public Block createBlock(Class<? extends Block> blockClass)
     {
-        return createBlock(blockClass, null);
+        return createBlock(blockClass, ItemBlockTooltip.class);
     }
 
     public Block createTile(Class<? extends Block> blockClass, Class<? extends TileEntity> tileClass)
     {
-        return createBlock(blockClass, null, tileClass);
+        return createBlock(blockClass, ItemBlockTooltip.class, tileClass);
     }
 
     public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass)
@@ -236,7 +237,7 @@ public class ContentRegistry
      * interface methods
      * 
      * @param name - name to register the item with
-     * @param modid - mods that the item comes from
+     * //@param modid - mods that the item comes from
      * @param clazz - item class
      * @param canDisable - can a user disable this item
      * @return the new item */

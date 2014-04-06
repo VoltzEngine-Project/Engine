@@ -15,7 +15,7 @@ import calclavia.lib.utility.nbt.NBTUtility;
 /** An item that can store a block's tile data.
  * 
  * @author Calclavia */
-public class ItemBlockSaved extends ItemBlock
+public class ItemBlockSaved extends ItemBlockTooltip
 {
     public ItemBlockSaved(int par1)
     {

@@ -4,7 +4,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.Configuration;
 
-public class ItemBase extends Item
+public class ItemBase extends ItemTooltip
 {
 	public ItemBase(int id, String name, Configuration config, String prefix, CreativeTabs tab)
 	{
