@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @UniversalClass
-public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyContainer, IWailaDataProvider
+public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyContainer
 {
     public EnergyStorageHandler energy;
 
@@ -183,32 +183,4 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 
         return totalUsed;
     }
-
-	@Override
-	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config)
-	{
-		return new ItemStack(this.block());
-	}
-
-	@Override
-	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-	{
-		return currenttip;
-	}
-
-	@Override
-	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-	{
-		List<String> list = new ArrayList<String>();
-		list.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + String.valueOf(this.getEnergy(ForgeDirection.UNKNOWN)));
-		list.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + String.valueOf(this.getEnergyCapacity(ForgeDirection.UNKNOWN)));
-
-		return list;
-	}
-
-	@Override
-	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-	{
-		return currenttip;
-	}
 }
