@@ -36,7 +36,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 		TileEntity te = inventoryTileEntities.get(block);
 		if (te == null)
 		{
-			te = block.createTileEntity(Minecraft.getMinecraft().theWorld, 0);
+			te = block.createTileEntity(Minecraft.getMinecraft().thePlayer.getEntityWorld(), 0);
 			inventoryTileEntities.put(block, te);
 		}
 		return te;
