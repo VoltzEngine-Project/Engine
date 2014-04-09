@@ -11,10 +11,12 @@ import java.util.HashSet;
  */
 public class ConfigSet extends HashSet<String>
 {
+	public static boolean isPostInit = false;
+
 	@Override
 	public boolean add(String c)
 	{
-		if (CalclaviaLoader.isPostInit)
+		if (isPostInit)
 		{
 			try
 			{

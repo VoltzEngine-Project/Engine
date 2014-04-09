@@ -11,6 +11,7 @@ import calclavia.lib.compat.waila.Waila;
 import calclavia.lib.config.Config;
 import calclavia.lib.config.ConfigAnnotationEvent;
 import calclavia.lib.config.ConfigHandler;
+import calclavia.lib.config.ConfigSet;
 import calclavia.lib.content.ContentRegistry;
 import calclavia.lib.content.IDManager;
 import calclavia.lib.flag.CommandFlag;
@@ -167,7 +168,6 @@ public class CalclaviaLoader
 	public static double steamMultiplier = 1;
 
 	private ProxyHandler modproxies;
-	public static boolean isPostInit = false;
 
 	public CalclaviaLoader()
 	{
@@ -554,7 +554,7 @@ public class CalclaviaLoader
 		UpdateTicker.addNetwork(ThermalGrid.SERVER_INSTANCE);
 
 		modproxies.postInit();
-		isPostInit = true;
+		ConfigSet.isPostInit = true;
 	}
 
 	@EventHandler
