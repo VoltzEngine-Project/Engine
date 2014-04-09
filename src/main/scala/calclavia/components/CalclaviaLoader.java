@@ -443,7 +443,7 @@ public class CalclaviaLoader
 		PotionUtility.resizePotionArray();
 
 		SaveManager.registerClass("ModFlag", ModFlag.class);
-		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance());
 
 		ToolMode.REGISTRY.add(new ToolModeGeneral());
@@ -682,15 +682,15 @@ public class CalclaviaLoader
 			}
 		}
 	}
-
-	@ForgeSubscribe
-	public void configAnnotationAdded(ConfigAnnotationEvent event)
-	{
-		Calclavia.CONFIGURATION.load();
-		if (event.sourceClass.getName().startsWith(Calclavia.DOMAIN))
-		{
-			ConfigHandler.handleClass(event.sourceClass, Calclavia.CONFIGURATION);
-		}
-		Calclavia.CONFIGURATION.save();
-	}
+//
+//	@ForgeSubscribe
+//	public void configAnnotationAdded(ConfigAnnotationEvent event)
+//	{
+//		Calclavia.CONFIGURATION.load();
+//		if (event.sourceClass.startsWith(Calclavia.DOMAIN))
+//		{
+//			ConfigHandler.handleClass(event.sourceClass, Calclavia.CONFIGURATION);
+//		}
+//		Calclavia.CONFIGURATION.save();
+//	}
 }

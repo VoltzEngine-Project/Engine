@@ -18,14 +18,8 @@ public class ConfigSet extends HashSet<String>
 	{
 		if (isPostInit)
 		{
-			try
-			{
-				MinecraftForge.EVENT_BUS.post(new ConfigAnnotationEvent(Class.forName(c)));
-			}
-			catch (ClassNotFoundException e)
-			{
-				e.printStackTrace();
-			}
+			//MinecraftForge.EVENT_BUS.post(new ConfigAnnotationEvent(c));
+
 		}
 		return super.add(c);
 	}

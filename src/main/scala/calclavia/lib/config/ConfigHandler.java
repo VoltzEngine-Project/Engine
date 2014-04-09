@@ -1,6 +1,8 @@
 package calclavia.lib.config;
 
 import java.lang.reflect.Field;
+
+import calclavia.lib.Calclavia;
 import net.minecraftforge.common.Configuration;
 
 /**
@@ -63,10 +65,20 @@ public final class ConfigHandler
 
 	}
 
-	public static void handleClass(Class clazz, Configuration config)
+	public static void handleClass(String clazz, Configuration config)
 	{
+		Class c = null;
+		try
+		{
+			c = Class.forName(clazz);
+		}
+		catch (ClassNotFoundException e)
+		{
+			Calclavia.LOGGER.warning("\n\n\n\n ERR");
+			e.printStackTrace();
+		}
 		config.load();
-		for (Field field : clazz.getDeclaredFields())
+		for (Field field : c.getDeclaredFields())
 		{
 			Config cfg = field.getAnnotation(Config.class);
 			if (cfg != null)
