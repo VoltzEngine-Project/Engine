@@ -9,6 +9,7 @@ import calclavia.components.tool.ToolModeRotation;
 import calclavia.lib.Calclavia;
 import calclavia.lib.compat.waila.Waila;
 import calclavia.lib.config.Config;
+import calclavia.lib.config.ConfigAnnotationEvent;
 import calclavia.lib.config.ConfigHandler;
 import calclavia.lib.content.ContentRegistry;
 import calclavia.lib.content.IDManager;
@@ -164,7 +165,9 @@ public class CalclaviaLoader
 	public static Block blockInfinite;
 	@Config
 	public static double steamMultiplier = 1;
+
 	private ProxyHandler modproxies;
+	public static boolean isPostInit = false;
 
 	public CalclaviaLoader()
 	{
@@ -544,21 +547,14 @@ public class CalclaviaLoader
 		{
 			UpdateTicker.INSTANCE.start();
 		}
-		Calclavia.CONFIGURATION.load();
-		try
-		{
-			ConfigHandler.configure(Calclavia.CONFIGURATION, Calclavia.DOMAIN);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		Calclavia.CONFIGURATION.save();
+
+		ConfigHandler.configure(Calclavia.CONFIGURATION, Calclavia.DOMAIN);
 
 		// Register Thermal Grid
 		UpdateTicker.addNetwork(ThermalGrid.SERVER_INSTANCE);
 
 		modproxies.postInit();
+		isPostInit = true;
 	}
 
 	@EventHandler
@@ -684,5 +680,16 @@ public class CalclaviaLoader
 				evt.heatLoss = 0.4f;
 			}
 		}
+	}
+
+	@ForgeSubscribe
+	public void configAnnotationAdded(ConfigAnnotationEvent event)
+	{
+		Calclavia.CONFIGURATION.load();
+		if (event.sourceClass.getName().startsWith(Calclavia.DOMAIN))
+		{
+			ConfigHandler.handleClass(event.sourceClass, Calclavia.CONFIGURATION);
+		}
+		Calclavia.CONFIGURATION.save();
 	}
 }

@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class ConfigTransformer implements IClassTransformer
 {
-	public static final Set<String> classes = new HashSet<String>();
+	public static final Set<String> classes = new ConfigSet();
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes)

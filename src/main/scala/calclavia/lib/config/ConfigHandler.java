@@ -1,10 +1,6 @@
 package calclavia.lib.config;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
-import calclavia.lib.Calclavia;
 import net.minecraftforge.common.Configuration;
 
 /**
@@ -33,16 +29,25 @@ import net.minecraftforge.common.Configuration;
  * @since 09/03/14
  * @author tgame14
  */
-public abstract class ConfigHandler
+public final class ConfigHandler
 {
 
-	public static void configure(Configuration config, String namespace) throws ClassNotFoundException, IllegalAccessException
+	public static void configure(Configuration config, String namespace)
 	{
+		config.load();
 		for (String classPath : ConfigTransformer.classes)
 		{
 			if (classPath.startsWith(namespace))
 			{
-				Class clazz = Class.forName(classPath);
+				Class clazz = null;
+				try
+				{
+					clazz = Class.forName(classPath);
+				}
+				catch (ClassNotFoundException e)
+				{
+					e.printStackTrace();
+				}
 
 				for (Field field : clazz.getDeclaredFields())
 				{
@@ -54,10 +59,25 @@ public abstract class ConfigHandler
 				}
 			}
 		}
+		config.save();
 
 	}
 
-	private static void handleField(Field field, Config cfg, Configuration config) throws IllegalAccessException
+	public static void handleClass(Class clazz, Configuration config)
+	{
+		config.load();
+		for (Field field : clazz.getDeclaredFields())
+		{
+			Config cfg = field.getAnnotation(Config.class);
+			if (cfg != null)
+			{
+				handleField(field, cfg, config);
+			}
+		}
+		config.save();
+	}
+
+	private static void handleField(Field field, Config cfg, Configuration config)
 	{
 		try
 		{
@@ -83,6 +103,12 @@ public abstract class ConfigHandler
 			{
 				double value = config.get(cfg.category(), key, field.getDouble(null), comment).getDouble(field.getDouble(null));
 				field.setDouble(null, value);
+			}
+
+			else if (field.getType() == Float.TYPE)
+			{
+				float value = (float) config.get(cfg.category(), key, field.getFloat(null), comment).getDouble(field.getDouble(null));
+				field.setFloat(null, value);
 			}
 			else if (field.getType() == String.class)
 			{
