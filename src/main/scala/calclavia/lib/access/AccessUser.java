@@ -3,6 +3,7 @@ package calclavia.lib.access;
 import java.util.ArrayList;
 import java.util.List;
 
+import calclavia.lib.Calclavia;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -41,29 +42,38 @@ public class AccessUser extends User implements ISaveObj
 
     public boolean hasNode(String node)
     {
-        if (node != null && !node.isEmpty())
-        {
-            String newNode = node;
-            if (node.endsWith(".*"))
-            {
-                newNode.substring(0, newNode.length() - 2);
-            }
-            String[] sub_nodes = newNode.split(".");
-            if (sub_nodes != null && sub_nodes.length > 0)
-            {
-                newNode = "";
-                for (int i = 0; i < sub_nodes.length; i++)
-                {
-                    newNode += (i != 0 ? "." : "") + sub_nodes[i];
-                    if (nodes.contains(newNode + ".*") || group != null && group.hasNode(newNode + ".*") || nodes.contains(newNode) || group != null && group.hasNode(newNode))
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+		if (node != null && !node.isEmpty())
+		{
+			String newNode = node;
+			newNode = newNode.replaceAll(".*", "");
+
+			if (this.getGroup() != null && this.getGroup().hasNode(node))
+				return true;
+
+			for (String headNode : nodes)
+			{
+				Calclavia.LOGGER.info("node: " + node + " against: " + headNode + " with " + newNode);
+				if (headNode.contains(newNode))
+					return true;
+			}
+		}
+// TODO: What is this meant to do? Added temporary fix above
+//			String[] sub_nodes = newNode.split(".");
+//            if (sub_nodes != null && sub_nodes.length > 0)
+//            {
+//                newNode = "";
+//                for (int i = 0; i < sub_nodes.length; i++)
+//                {
+//                    newNode += (i != 0 ? "." : "") + sub_nodes[i];
+//                    if (nodes.contains(newNode + ".*") || group != null && group.hasNode(newNode + ".*") || nodes.contains(newNode) || group != null && group.hasNode(newNode))
+//                    {
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+		return false;
+	}
 
     @Override
     public void save(NBTTagCompound nbt)
