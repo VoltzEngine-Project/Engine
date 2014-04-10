@@ -1,5 +1,6 @@
 package calclavia.lib.multiblock.reference;
 
+import java.lang.ref.WeakReference;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ import calclavia.lib.utility.nbt.ISaveObj;
 public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveObj
 {
 	/** The main block used for reference */
-	protected W primary = null;
+	protected WeakReference<W> prim = null;
 	/** The relative primary block position to be loaded in once the tile is initiated. */
 	protected Vector3 newPrimary = null;
 	protected final W self;
@@ -41,9 +42,9 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 			{
 				newPrimary = null;
 
-				if (checkWrapper != primary)
+				if (checkWrapper != getPrimary())
 				{
-					primary = checkWrapper;
+					prim =  new WeakReference(checkWrapper);
 					self.onMultiBlockChanged();
 				}
 			}
@@ -113,10 +114,10 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 						return false;
 				}
 
-				primary = self;
+				prim = new WeakReference(self);
 				for (W structure : structures)
 				{
-					structure.getMultiBlock().primary = primary;
+					structure.getMultiBlock().prim = prim;
 				}
 
 				for (W structure : structures)
@@ -142,7 +143,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 				{
 					for (W structure : structures)
 					{
-						structure.getMultiBlock().primary = null;
+						structure.getMultiBlock().prim = null;
 					}
 
 					for (W structure : structures)
@@ -153,7 +154,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 			}
 			else
 			{
-				primary.getMultiBlock().deconstruct();
+			    getPrimary().getMultiBlock().deconstruct();
 			}
 
 			return true;
@@ -176,22 +177,22 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 
 	public boolean isConstructed()
 	{
-		return primary != null;
+		return prim != null;
 	}
 
 	public boolean isPrimary()
 	{
-		return !isConstructed() || primary == self;
+		return !isConstructed() || getPrimary() == self;
 	}
 
 	public W getPrimary()
 	{
-		return primary;
+		return prim == null ? null : prim.get();
 	}
 
 	public W get()
 	{
-		return primary != null ? primary : self;
+		return getPrimary() != null ? getPrimary() : self;
 	}
 
 	/**
@@ -206,7 +207,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 		}
 		else
 		{
-			primary = null;
+			prim = null;
 		}
 	}
 
@@ -217,7 +218,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 	{
 		if (isConstructed())
 		{
-			nbt.setTag("primaryMultiBlock", primary.getPosition().subtract(self.getPosition()).writeToNBT(new NBTTagCompound()));
+			nbt.setTag("primaryMultiBlock", getPrimary().getPosition().subtract(self.getPosition()).writeToNBT(new NBTTagCompound()));
 		}
 	}
 
