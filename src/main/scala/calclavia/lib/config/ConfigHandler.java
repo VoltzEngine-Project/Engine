@@ -3,6 +3,7 @@ package calclavia.lib.config;
 import java.lang.reflect.Field;
 
 import calclavia.lib.Calclavia;
+import calclavia.lib.asm.ConfigTransformer;
 import net.minecraftforge.common.Configuration;
 
 /**

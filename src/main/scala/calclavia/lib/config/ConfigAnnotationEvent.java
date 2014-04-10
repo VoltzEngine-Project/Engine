@@ -7,7 +7,7 @@ import net.minecraftforge.event.Event;
  * @since 09/04/14
  * 
  */
-public class ConfigAnnotationEvent //extends Event
+public class ConfigAnnotationEvent extends Event
 {
 	public final String sourceClass;
 

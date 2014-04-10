@@ -1,5 +1,6 @@
-package calclavia.lib.config;
+package calclavia.lib.asm;
 
+import calclavia.lib.config.ConfigSet;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;

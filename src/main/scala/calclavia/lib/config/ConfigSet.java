@@ -2,6 +2,7 @@ package calclavia.lib.config;
 
 import calclavia.components.CalclaviaLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.Event;
 
 import java.util.HashSet;
 
@@ -20,7 +21,9 @@ public class ConfigSet extends HashSet<String>
 	{
 		if (isPostInit)
 		{
-			//MinecraftForge.EVENT_BUS.post(new ConfigAnnotationEvent(c));
+			Event event = new ConfigAnnotationEvent(c);
+			MinecraftForge.EVENT_BUS.post(event);
+			System.out.println("Posted ConfigAnnotationEvent \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
 		}
 		return super.add(c);

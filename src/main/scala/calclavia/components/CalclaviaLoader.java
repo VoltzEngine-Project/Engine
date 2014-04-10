@@ -682,15 +682,13 @@ public class CalclaviaLoader
 			}
 		}
 	}
-//
-//	@ForgeSubscribe
-//	public void configAnnotationAdded(ConfigAnnotationEvent event)
-//	{
-//		Calclavia.CONFIGURATION.load();
-//		if (event.sourceClass.startsWith(Calclavia.DOMAIN))
-//		{
-//			ConfigHandler.handleClass(event.sourceClass, Calclavia.CONFIGURATION);
-//		}
-//		Calclavia.CONFIGURATION.save();
-//	}
+
+	@ForgeSubscribe
+	public void configAnnotationAdded(ConfigAnnotationEvent event)
+	{
+		if (event.sourceClass.startsWith(Calclavia.DOMAIN))
+		{
+			ConfigHandler.handleClass(event.sourceClass, Calclavia.CONFIGURATION);
+		}
+	}
 }
