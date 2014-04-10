@@ -22,7 +22,6 @@ public class ConfigSet extends HashSet<String>
 		{
 			Event event = new ConfigAnnotationEvent(c);
 			MinecraftForge.EVENT_BUS.post(event);
-			System.out.println("Posted ConfigAnnotationEvent \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
 		}
 		return super.add(c);
