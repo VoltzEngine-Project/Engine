@@ -1,7 +1,6 @@
 package calclavia.lib.prefab.item;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraftforge.common.Configuration;
 
 public class ItemBase extends ItemTooltip

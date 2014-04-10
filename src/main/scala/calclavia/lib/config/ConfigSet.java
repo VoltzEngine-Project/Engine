@@ -1,6 +1,5 @@
 package calclavia.lib.config;
 
-import calclavia.components.CalclaviaLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 
@@ -15,7 +14,7 @@ import java.util.HashSet;
 public class ConfigSet extends HashSet<String>
 {
 	public static boolean isPostInit = false;
- 
+
 	@Override
 	public boolean add(String c)
 	{

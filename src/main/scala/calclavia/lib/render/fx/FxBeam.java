@@ -12,7 +12,6 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.api.vector.IVector3;
 import universalelectricity.api.vector.Vector3;
-import calclavia.components.CalclaviaLoader;
 import calclavia.lib.render.RenderUtility;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;

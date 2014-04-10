@@ -1,7 +1,5 @@
 package calclavia.lib.content.module.prefab;
 
-import java.lang.reflect.Method;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

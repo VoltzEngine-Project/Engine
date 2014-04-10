@@ -1,7 +1,6 @@
 package calclavia.api.icbm;
 
 import universalelectricity.api.vector.Vector3;
-import net.minecraft.util.DamageSource;
 
 /** This should only be used to improve or restrict the targeting behavior of an entity. By default
  * sentry guns and other automated tracking will target an entity. Especially if they use build in

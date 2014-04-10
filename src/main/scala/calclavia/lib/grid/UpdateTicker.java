@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import net.minecraft.profiler.Profiler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import universalelectricity.api.net.IUpdate;

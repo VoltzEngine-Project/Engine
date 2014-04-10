@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import calclavia.lib.Calclavia;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

@@ -1,10 +1,10 @@
 package calclavia.lib.config;
 
-import java.lang.reflect.Field;
-
 import calclavia.lib.Calclavia;
 import calclavia.lib.asm.ConfigTransformer;
 import net.minecraftforge.common.Configuration;
+
+import java.lang.reflect.Field;
 
 /**
  * How to use the config Handler

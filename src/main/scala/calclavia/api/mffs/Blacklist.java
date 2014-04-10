@@ -3,8 +3,6 @@ package calclavia.api.mffs;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-
 public class Blacklist
 {
 	/**
