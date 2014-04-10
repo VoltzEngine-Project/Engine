@@ -6,6 +6,8 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.HashSet;
 
 /**
+ * a Set used to hook into adding an entry in order to post Event in the case of Adding a value late phase.
+ *
  * @author tgame14
  * @since 09/04/14
  */

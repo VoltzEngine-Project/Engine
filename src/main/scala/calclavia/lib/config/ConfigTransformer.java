@@ -6,7 +6,6 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import universalelectricity.core.asm.ASMHelper;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -21,7 +20,7 @@ public class ConfigTransformer implements IClassTransformer
 	public byte[] transform(String name, String transformedName, byte[] bytes)
 	{
 		// no need to iterate over Forge, FML, and MC source
-		if (transformedName.startsWith("net.minecraft") || transformedName.startsWith("cpw.mods.fml") || transformedName.startsWith("net.minecraftforge"))
+		if (transformedName.startsWith("net.minecraft") || transformedName.startsWith("cpw.mods.fml") || transformedName.startsWith("universalelectricity."))
 			return bytes;
 
 		ClassNode cnode = ASMHelper.createClassNode(bytes);
