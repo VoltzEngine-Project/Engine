@@ -66,6 +66,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorWorld;
 
@@ -260,7 +261,7 @@ public class CalclaviaLoader
 					}
 					else if (name.equals("dustSteel"))
 					{
-						RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " C ", "CIC", " C ", 'I', Item.ingotIron, 'C', Item.coal), Calclavia.CONFIGURATION, RecipeUtility.getRecipesByOutput(new ItemStack(item)).size() <= 0);
+						RecipeUtility.addRecipe(new ShapelessOreRecipe(new ItemStack(item), Item.ingotIron, Item.coal, Item.coal), Calclavia.CONFIGURATION, RecipeUtility.getRecipesByOutput(new ItemStack(item)).size() <= 0);
 
 						if (OreDictionary.getOres("ingotSteel").size() > 0)
 						{
@@ -332,7 +333,7 @@ public class CalclaviaLoader
 				GameRegistry.registerItem(item, name);
 				OreDictionary.registerOre(name, item);
 
-				FMLLog.info("Basic Components: Successfully requested item: " + name);
+				FMLLog.info("Calclavia Core: Successfully requested item: " + name);
 				return item;
 			}
 
@@ -340,7 +341,7 @@ public class CalclaviaLoader
 		}
 		catch (Exception e)
 		{
-			FMLLog.severe("Basic Components: Failed to require item: " + fieldName);
+			FMLLog.severe("Calclavia Core: Failed to require item: " + fieldName);
 			e.printStackTrace();
 		}
 
@@ -349,12 +350,12 @@ public class CalclaviaLoader
 
 	public static Item requestItem(String name, int id)
 	{
-		if (OreDictionary.getOres(name).size() <= 0 && !(name.equals("wrench") && Loader.isModLoaded("BuildCraft|Core")))
+		if (OreDictionary.getOres(name).size() <= 0)
 		{
 			return requireItem(name, id);
 		}
 
-		FMLLog.info("Basic Components: " + name + " already exists in Ore Dictionary, using the ore instead.");
+		FMLLog.info("Calclavia Core: " + name + " already exists in Ore Dictionary, using the ore instead.");
 
 		if (OreDictionary.getOres(name).size() > 0)
 		{
