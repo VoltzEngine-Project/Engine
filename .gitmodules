@@ -1,0 +1,4 @@
+[submodule "src/main/resources/assets/calclavia/languages"]
+	path = src/main/resources/assets/calclavia/languages
+	url = https://github.com/calclavia/Calclavia-Core-Localization.git
+	branch = master
