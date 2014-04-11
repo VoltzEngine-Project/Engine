@@ -252,7 +252,9 @@ public class CalclaviaLoader
                     }
                     else if (name.equals("dustSteel"))
                     {
-                        RecipeUtility.addShaplessRecipe(new ItemStack(item), new Object[]{Item.coal, Item.coal, Item.ingotIron}, Calclavia.CONFIGURATION, RecipeUtility.getRecipesByOutput(new ItemStack(item)).size() <= 0);
+                        RecipeUtility.addShaplessRecipe(new ItemStack(item), new Object[] { new ItemStack(Item.coal, 1), new ItemStack(Item.coal, 1), new ItemStack(Item.ingotIron) }, Calclavia.CONFIGURATION, true);
+                        RecipeUtility.addShaplessRecipe(new ItemStack(item), new Object[] { new ItemStack(Item.coal, 1, 1), new ItemStack(Item.coal, 1, 1), new ItemStack(Item.ingotIron) }, Calclavia.CONFIGURATION, true);
+                        RecipeUtility.addShaplessRecipe(new ItemStack(item), new Object[] { new ItemStack(Item.coal, 1, 1), new ItemStack(Item.coal, 1), new ItemStack(Item.ingotIron) }, Calclavia.CONFIGURATION, true);
 
                         if (OreDictionary.getOres("ingotSteel").size() > 0)
                         {
