@@ -146,6 +146,12 @@ public final class ConfigHandler
 					boolean value = config.get(cfg.category(), key, field.getBoolean(null), comment).getBoolean(field.getBoolean(null));
 					field.setBoolean(null, value);
 				}
+				else if (field.getType() == Long.TYPE)
+				{
+					// TODO: Add support for reading long values, marked for 1.7
+					long value = config.get(cfg.category(), key, field.getLong(null), comment).getInt();
+					field.setLong(null, value);
+				}
 			}
 
 			else
@@ -165,6 +171,7 @@ public final class ConfigHandler
 					boolean[] values = config.get(cfg.category(), key, (boolean[]) field.get(null), comment).getBooleanList();
 					field.set(null, values);
 				}
+				// TODO Add support for reading Long[] lists from config
 			}
 		}
 		catch (Exception e)
