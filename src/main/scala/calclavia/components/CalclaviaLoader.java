@@ -400,7 +400,7 @@ public class CalclaviaLoader
 
 				Block block = (Block) field.get(null);
 
-				FMLLog.info("Basic Components: Successfully requested block: " + name);
+				FMLLog.info("Calclavia Core: Successfully requested block: " + name);
 				return block;
 			}
 
@@ -408,7 +408,7 @@ public class CalclaviaLoader
 		}
 		catch (Exception e)
 		{
-			FMLLog.severe("Basic Components: Failed to require block: " + fieldName);
+			FMLLog.severe("Calclavia Core: Failed to require block: " + fieldName);
 			e.printStackTrace();
 		}
 
@@ -422,7 +422,7 @@ public class CalclaviaLoader
 			return requireBlock(name, id);
 		}
 
-		FMLLog.info("Basic Components: " + name + " already exists in Ore Dictionary, using the ore instead.");
+		FMLLog.info("Calclavia Core: " + name + " already exists in Ore Dictionary, using the ore instead.");
 
 		if (OreDictionary.getOres(name).get(0).getItem() instanceof ItemBlock)
 		{
