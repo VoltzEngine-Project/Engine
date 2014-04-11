@@ -189,4 +189,27 @@ public class RecipeUtility
 	{
 		addRecipe(recipe, recipe.getRecipeOutput().getUnlocalizedName(), config, defaultBoolean);
 	}
+	
+	/**
+     * Use this function if you want to check if the recipe is allowed in the configuration file.
+     */
+    public static void addShaplessRecipe(ItemStack itemStack, Object[] items, String name, Configuration configuration, boolean defaultBoolean)
+    {
+        if (configuration != null)
+        {
+            configuration.load();
+
+            if (configuration.get("Crafting", "Allow " + name + " Crafting", defaultBoolean).getBoolean(defaultBoolean))
+            {
+                CraftingManager.getInstance().addShapelessRecipe(itemStack, items);
+            }
+
+            configuration.save();
+        }
+    }
+
+    public static void addShaplessRecipe(ItemStack itemStack, Object[] items, Configuration config, boolean defaultBoolean)
+    {
+        addShaplessRecipe(itemStack, items, itemStack.getItem().getUnlocalizedName(), config, defaultBoolean);
+    }
 }
