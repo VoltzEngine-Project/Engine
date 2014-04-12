@@ -1,9 +1,5 @@
 package calclavia.lib.prefab.tile;
 
-import calclavia.lib.utility.LanguageUtility;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,13 +12,10 @@ import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.api.vector.Vector3;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @UniversalClass
 public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyContainer
 {
-    public EnergyStorageHandler energy;
+    protected EnergyStorageHandler energy;
 
     public TileElectrical()
     {
@@ -97,7 +90,7 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
         }
         else
         {
-            return 0;
+            return -1;
         }
     }
 
@@ -110,7 +103,7 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
         }
         else
         {
-            return 0;
+            return -1;
         }
     }
 
@@ -183,4 +176,14 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 
         return totalUsed;
     }
+
+	public EnergyStorageHandler getEnergyHandler()
+	{
+		return energy;
+	}
+
+	public void setEnergyHandler(EnergyStorageHandler energy)
+	{
+		this.energy = energy;
+	}
 }
