@@ -4,8 +4,8 @@ package calclavia.lib.utility
  * @since 22/03/14
  * @author tgame14
  */
-object Mods {
-
+object Mods
+{
   val OC = "OpenComputers"
   val CC = "ComputerCraft"
   val AE = "AppliedEnergistics"
