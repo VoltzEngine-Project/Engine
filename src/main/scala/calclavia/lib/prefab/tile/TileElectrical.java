@@ -30,18 +30,18 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
     /** Recharges electric item. */
     public void recharge(ItemStack itemStack)
     {
-        if (this.energy != null)
+        if (this.getEnergyHandler() != null)
         {
-            this.energy.extractEnergy(CompatibilityModule.chargeItem(itemStack, this.energy.getEnergy(), true), true);
+            this.getEnergyHandler().extractEnergy(CompatibilityModule.chargeItem(itemStack, this.getEnergyHandler().getEnergy(), true), true);
         }
     }
 
     /** Discharges electric item. */
     public void discharge(ItemStack itemStack)
     {
-        if (this.energy != null)
+        if (this.getEnergyHandler() != null)
         {
-            this.energy.receiveEnergy(CompatibilityModule.dischargeItem(itemStack, this.energy.getEmptySpace(), true), true);
+            this.getEnergyHandler().receiveEnergy(CompatibilityModule.dischargeItem(itemStack, this.getEnergyHandler().getEmptySpace(), true), true);
         }
     }
 
@@ -65,9 +65,9 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
     public void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
-        if (this.energy != null)
+        if (this.getEnergyHandler() != null)
         {
-            this.energy.readFromNBT(nbt);
+            this.getEnergyHandler().readFromNBT(nbt);
         }
     }
 
@@ -75,18 +75,18 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
     public void writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
-        if (this.energy != null)
+        if (this.getEnergyHandler() != null)
         {
-            this.energy.writeToNBT(nbt);
+            this.getEnergyHandler().writeToNBT(nbt);
         }
     }
 
     @Override
     public long getEnergy(ForgeDirection from)
     {
-        if (this.energy != null)
+        if (this.getEnergyHandler() != null)
         {
-            return this.energy.getEnergy();
+            return this.getEnergyHandler().getEnergy();
         }
         else
         {
@@ -97,9 +97,9 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
     @Override
     public long getEnergyCapacity(ForgeDirection from)
     {
-        if (this.energy != null)
+        if (this.getEnergyHandler() != null)
         {
-            return this.energy.getEnergyCapacity();
+            return this.getEnergyHandler().getEnergyCapacity();
         }
         else
         {
@@ -110,9 +110,9 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
     @Override
     public long onReceiveEnergy(ForgeDirection from, long receive, boolean doReceive)
     {
-        if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getInputDirections().contains(from)))
+        if (this.getEnergyHandler() != null && (from == ForgeDirection.UNKNOWN || this.getInputDirections().contains(from)))
         {
-            return this.energy.receiveEnergy(receive, doReceive);
+            return this.getEnergyHandler().receiveEnergy(receive, doReceive);
         }
 
         return 0;
@@ -121,9 +121,9 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
     @Override
     public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract)
     {
-        if (this.energy != null && (from == ForgeDirection.UNKNOWN || this.getOutputDirections().contains(from)))
+        if (this.getEnergyHandler() != null && (from == ForgeDirection.UNKNOWN || this.getOutputDirections().contains(from)))
         {
-            return this.energy.extractEnergy(extract, doExtract);
+            return this.getEnergyHandler().extractEnergy(extract, doExtract);
         }
 
         return 0;
@@ -132,8 +132,8 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
     @Override
     public void setEnergy(ForgeDirection from, long energy)
     {
-        if (this.energy != null)
-            this.energy.setEnergy(energy);
+        if (this.getEnergyHandler() != null)
+            this.getEnergyHandler().setEnergy(energy);
     }
 
     protected long produce(long outputEnergy)
@@ -169,7 +169,7 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
                 if (tileEntity != null)
                 {
                     long used = CompatibilityModule.receiveEnergy(tileEntity, direction.getOpposite(), energy.extractEnergy(energy.getEnergy(), false), true);
-                    totalUsed += this.energy.extractEnergy(used, true);
+                    totalUsed += this.getEnergyHandler().extractEnergy(used, true);
                 }
             }
         }
