@@ -19,7 +19,7 @@ public class Waila implements ICompatProxy
     @Override
     public void init ()
     {
-        FMLInterModComms.sendMessage(Mods.WAILA(), "register", "calclavia.lib.compat.waila.WailaRegistrar.WailaCallBack");
+        FMLInterModComms.sendMessage(Mods.WAILA(), "register", "calclavia.lib.compat.waila.WailaRegistrar.wailaCallBack");
     }
 
     @Override

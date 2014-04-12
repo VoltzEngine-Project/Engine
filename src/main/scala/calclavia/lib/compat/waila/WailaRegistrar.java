@@ -9,7 +9,7 @@ import mcp.mobius.waila.api.IWailaRegistrar;
  */
 public class WailaRegistrar
 {
-    public static void WailaCallBack (IWailaRegistrar registrar)
+    public static void wailaCallBack (IWailaRegistrar registrar)
     {
         registrar.registerBodyProvider(new WailaTileElectricalData(), TileElectrical.class);
 

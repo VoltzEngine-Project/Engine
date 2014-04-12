@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import calclavia.lib.utility.LanguageUtility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -330,4 +331,10 @@ public class AccessProfile implements IVirtualObject
         this.saveFile = file;
 
     }
+
+	@Override
+	public String toString()
+	{
+		return LanguageUtility.getLocal("info.accessprofile.tostring").replaceAll("%p", this.profileName.toString()).replaceAll("%g", groups.toString());
+	}
 }

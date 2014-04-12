@@ -431,7 +431,7 @@ public class CalclaviaLoader
         Calclavia.LOGGER.setParent(FMLLog.getLogger());
         NetworkRegistry.instance().registerGuiHandler(this, proxy);
 
-        modproxies.applyModule(Waila.class, Calclavia.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable_Waila_Support", true).getBoolean(true));
+        modproxies.applyModule(Waila.class, true);
 
         // Potion Array resized to Current potion array, +32, Allows to miss conflicting ID's
         PotionUtility.resizePotionArray();
