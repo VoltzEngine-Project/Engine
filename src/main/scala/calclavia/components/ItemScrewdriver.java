@@ -2,6 +2,8 @@ package calclavia.components;
 
 import java.util.List;
 
+import calclavia.lib.utility.Mods;
+import cpw.mods.fml.common.Optional;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -11,6 +13,7 @@ import calclavia.components.tool.ToolMode;
 import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.nbt.NBTUtility;
 
+@Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraft|Core")
 public class ItemScrewdriver extends ItemBase implements IToolWrench
 {
 	public ItemScrewdriver(int id)
