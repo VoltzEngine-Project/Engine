@@ -15,10 +15,10 @@ import universalelectricity.api.energy.UnitDisplay;
 import universalelectricity.api.energy.UnitDisplay.Unit;
 
 /**
+ * Waila support for Electrical tiles
  * @author tgame14
- * @since 12/04/14
  */
-public class WailaTileElectricalData implements IWailaDataProvider
+public class WailaEnergyData implements IWailaDataProvider
 {
 	@Override
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config)

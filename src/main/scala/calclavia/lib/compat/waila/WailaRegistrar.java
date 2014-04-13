@@ -11,7 +11,7 @@ public class WailaRegistrar
 {
     public static void wailaCallBack (IWailaRegistrar registrar)
     {
-        registrar.registerBodyProvider(new WailaTileElectricalData(), TileElectrical.class);
+        registrar.registerBodyProvider(new WailaEnergyData(), TileElectrical.class);
 
     }
 }
