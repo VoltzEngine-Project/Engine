@@ -38,8 +38,8 @@ public class WailaTileElectricalData implements IWailaDataProvider
 			return currenttip;
 		}
 		TileElectrical te = (TileElectrical) tile;
-		currenttip.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + String.valueOf(te.getEnergy(ForgeDirection.UNKNOWN)));
-		currenttip.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + String.valueOf(te.getEnergyCapacity(ForgeDirection.UNKNOWN)));
+		currenttip.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + String.valueOf(te.getEnergyHandler().getEnergy()));
+		currenttip.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + String.valueOf(te.getEnergyHandler().getEnergyCapacity()));
 
 		return currenttip;
 	}
