@@ -15,352 +15,343 @@ import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyNetwork;
 import universalelectricity.api.net.NetworkEvent.EnergyProduceEvent;
 
-/**
- * The energy network, neglecting voltage.
+/** The energy network, neglecting voltage.
  * 
- * @author Calclavia
- */
+ * @author Calclavia */
 public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Object> implements IEnergyNetwork
 {
-	/** The energy to be distributed on the next update. */
-	protected long energyBuffer;
+    /** The energy to be distributed on the next update. */
+    protected long energyBuffer;
 
-	/**
-	 * The individual buffer from each conductor. Used to limit the amount of buffer that can be
-	 * stored.
-	 */
-	protected final HashMap<IConductor, Long> conductorBuffers = new HashMap<IConductor, Long>();
+    /** The individual buffer from each conductor. Used to limit the amount of buffer that can be
+     * stored. */
+    protected final HashMap<IConductor, Long> conductorBuffers = new HashMap<IConductor, Long>();
 
-	/**
-	 * The total resistance of this entire network. The loss is based on the resistance in each
-	 * conductor.
-	 */
-	protected float resistance;
+    /** The total resistance of this entire network. The loss is based on the resistance in each
+     * conductor. */
+    protected float resistance;
 
-	/** The total energy buffer in the last tick. */
-	protected long lastEnergyBuffer;
+    /** The total energy buffer in the last tick. */
+    protected long lastEnergyBuffer;
 
-	/** Last cached value for network demand energy */
-	protected long lastNetworkRequest = -1;
+    /** Last cached value for network demand energy */
+    protected long lastNetworkRequest = -1;
 
-	/** The direction in which a conductor is placed relative to a specific conductor. */
-	protected final HashMap<Object, EnumSet<ForgeDirection>> handlerDirectionMap = new LinkedHashMap<Object, EnumSet<ForgeDirection>>();
+    /** The direction in which a conductor is placed relative to a specific conductor. */
+    protected final HashMap<Object, EnumSet<ForgeDirection>> handlerDirectionMap = new LinkedHashMap<Object, EnumSet<ForgeDirection>>();
 
-	public EnergyNetwork()
-	{
-		super(IConductor.class);
-	}
+    public EnergyNetwork()
+    {
+        super(IConductor.class);
+    }
 
-	@Override
-	public void addConnector(IConductor connector)
-	{
-		connector.setNetwork(this);
-		super.addConnector(connector);
-	}
+    @Override
+    public void addConnector(IConductor connector)
+    {
+        connector.setNetwork(this);
+        super.addConnector(connector);
+    }
 
-	@Override
-	public void update()
-	{
-		/** Energy we have to move after loss has been removed */
-		long usableEnergy = Math.max(energyBuffer - getEnergyLoss(), 0);
-		/** Energy currently left after we have moved some */
-		long currentEnergy = usableEnergy;
-		/** Energy per handler */
-		long perHandler = 0;
-		/** Energy per side of a handler */
-		long perSide = 0;
-		/** Number of handlers */
-		int handlers = handlerDirectionMap.size();
-		if (handlers > 0)
-		{
-			/** For each conductor, output the energy into the handlers. */
-			for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
-			{
-				/** Energy to give to each handler */
-				perHandler = (usableEnergy / handlers) + (usableEnergy % handlers);
+    @Override
+    public void update()
+    {
+        /** Energy we have to move after loss has been removed */
+        long usableEnergy = Math.max(energyBuffer - getEnergyLoss(), 0);
+        /** Energy currently left after we have moved some */
+        long currentEnergy = usableEnergy;
+        /** Energy per handler */
+        long perHandler = 0;
+        /** Energy per side of a handler */
+        long perSide = 0;
+        /** Number of handlers */
+        int handlers = handlerDirectionMap.size();
 
-				for (ForgeDirection direction : entry.getValue())
-				{
-					/** Energy per to give per side */
-					perSide = (perHandler / entry.getValue().size()) + (perHandler % entry.getValue().size());
-					currentEnergy -= addEnergyToHandler(entry.getKey(), direction, perSide, true);
-				}
-				if (handlers > 1)
-				{
-					handlers--;
-				}
-			}
+        if (handlers > 0)
+        {
+            /** For each conductor, output the energy into the handlers. */
+            for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
+            {
+                /** Energy to give to each handler */
+                perHandler = (usableEnergy / handlers) + (usableEnergy % handlers);
 
-			/** Don't set energy if none was sent to prevent energy loss */
-			if (usableEnergy != currentEnergy)
-				energyBuffer = Math.max(currentEnergy, 0);
-		}
-		long remainingBufferPerConductor = energyBuffer / getConnectors().size();
-		Iterator<IConductor> it = getConnectors().iterator();
+                for (ForgeDirection direction : entry.getValue())
+                {
+                    /** Energy per to give per side */
+                    perSide = (perHandler / entry.getValue().size()) + (perHandler % entry.getValue().size());
+                    currentEnergy -= addEnergyToHandler(entry.getKey(), direction, perSide, true);
+                }
+                if (handlers > 1)
+                {
+                    handlers--;
+                }
+            }
+            this.lastEnergyBuffer = this.energyBuffer;
+            /** Don't set energy if none was sent to prevent energy loss */
+            if (usableEnergy != currentEnergy)
+                energyBuffer = Math.max(currentEnergy, 0);
+        }
+        long remainingBufferPerConductor = energyBuffer / getConnectors().size();
+        Iterator<IConductor> it = getConnectors().iterator();
 
-		while (it.hasNext())
-		{
-			conductorBuffers.put(it.next(), remainingBufferPerConductor);
-		}
+        while (it.hasNext())
+        {
+            conductorBuffers.put(it.next(), remainingBufferPerConductor);
+        }
 
-		// Clear the network request cache.
-		lastNetworkRequest = -1;
-	}
+        // Clear the network request cache.
+        lastNetworkRequest = -1;
+    }
 
-	/** Applies power to the machine */
-	public long addEnergyToHandler(Object handler, ForgeDirection side, long energy, boolean doApply)
-	{
-		return CompatibilityModule.receiveEnergy(handler, side, energy, doApply);
-	}
+    /** Applies power to the machine */
+    public long addEnergyToHandler(Object handler, ForgeDirection side, long energy, boolean doApply)
+    {
+        return CompatibilityModule.receiveEnergy(handler, side, energy, doApply);
+    }
 
-	@Override
-	public boolean canUpdate()
-	{
-		return getConnectors().size() > 0 && getNodes().size() > 0 && energyBuffer > 0;
-	}
+    @Override
+    public boolean canUpdate()
+    {
+        return getConnectors().size() > 0 && getNodes().size() > 0 && energyBuffer > 0;
+    }
 
-	@Override
-	public boolean continueUpdate()
-	{
-		return canUpdate();
-	}
+    @Override
+    public boolean continueUpdate()
+    {
+        return canUpdate();
+    }
 
-	@Override
-	public long getRequest()
-	{
-		if (lastNetworkRequest == -1)
-		{
-			lastNetworkRequest = 0;
+    @Override
+    public long getRequest()
+    {
+        if (lastNetworkRequest == -1)
+        {
+            lastNetworkRequest = 0;
 
-			if (getNodes().size() > 0)
-			{
-				for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
-				{
-					if (entry.getValue() != null && !(entry.getValue() instanceof IConductor))
-					{
-						for (ForgeDirection direction : entry.getValue())
-						{
-							lastNetworkRequest += Math.max(CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false), 0);
-						}
-					}
-				}
-			}
-		}
-		return lastNetworkRequest;
-	}
+            if (getNodes().size() > 0)
+            {
+                for (Entry<Object, EnumSet<ForgeDirection>> entry : handlerDirectionMap.entrySet())
+                {
+                    if (entry.getValue() != null && !(entry.getValue() instanceof IConductor))
+                    {
+                        for (ForgeDirection direction : entry.getValue())
+                        {
+                            lastNetworkRequest += Math.max(CompatibilityModule.receiveEnergy(entry.getKey(), direction, Long.MAX_VALUE, false), 0);
+                        }
+                    }
+                }
+            }
+        }
+        return lastNetworkRequest;
+    }
 
-	@Override
-	public boolean isValidConnector(Object node)
-	{
-		return node instanceof IConductor;
-	}
+    @Override
+    public boolean isValidConnector(Object node)
+    {
+        return node instanceof IConductor;
+    }
 
-	@Override
-	public float getResistance()
-	{
-		return resistance;
-	}
+    @Override
+    public float getResistance()
+    {
+        return resistance;
+    }
 
-	/** Clears all cache and reconstruct the network. */
-	@Override
-	public void reconstruct()
-	{
-		if (getConnectors().size() > 0)
-		{
-			// Reset all values related to wires
-			getNodes().clear();
-			handlerDirectionMap.clear();
-			resistance = 0;
+    /** Clears all cache and reconstruct the network. */
+    @Override
+    public void reconstruct()
+    {
+        if (getConnectors().size() > 0)
+        {
+            // Reset all values related to wires
+            getNodes().clear();
+            handlerDirectionMap.clear();
+            resistance = 0;
 
-			// Iterate threw list of wires
-			Iterator<IConductor> it = getConnectors().iterator();
+            // Iterate threw list of wires
+            Iterator<IConductor> it = getConnectors().iterator();
 
-			while (it.hasNext())
-			{
-				IConductor conductor = it.next();
+            while (it.hasNext())
+            {
+                IConductor conductor = it.next();
 
-				if (conductor != null)
-				{
-					reconstructConnector(conductor);
-				}
-				else
-				{
-					it.remove();
-				}
-			}
+                if (conductor != null)
+                {
+                    reconstructConnector(conductor);
+                }
+                else
+                {
+                    it.remove();
+                }
+            }
 
-			if (getNodes().size() > 0)
-			{
-				NetworkTickHandler.addNetwork(this);
-			}
-		}
-	}
+            if (getNodes().size() > 0)
+            {
+                NetworkTickHandler.addNetwork(this);
+            }
+        }
+    }
 
-	@Override
-	protected void reconstructConnector(IConductor conductor)
-	{
-		conductor.setNetwork(this);
+    @Override
+    protected void reconstructConnector(IConductor conductor)
+    {
+        conductor.setNetwork(this);
 
-		if (conductor.getConnections() != null)
-		{
-			for (int i = 0; i < conductor.getConnections().length; i++)
-			{
-				reconstructHandler(conductor, conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
-			}
-		}
+        if (conductor.getConnections() != null)
+        {
+            for (int i = 0; i < conductor.getConnections().length; i++)
+            {
+                reconstructHandler(conductor, conductor.getConnections()[i], ForgeDirection.getOrientation(i).getOpposite());
+            }
+        }
 
-		resistance += conductor.getResistance();
-	}
+        resistance += conductor.getResistance();
+    }
 
-	/** Segmented out call so overriding can be done when machines are reconstructed. */
-	protected void reconstructHandler(IConductor conductor, Object obj, ForgeDirection side)
-	{
-		if (obj != null && !(obj instanceof IConductor))
-		{
-			if (CompatibilityModule.canConnect(obj, side, conductor))
-			{
-				EnumSet<ForgeDirection> set = handlerDirectionMap.get(obj);
-				if (set == null)
-				{
-					set = EnumSet.noneOf(ForgeDirection.class);
-				}
-				getNodes().add(obj);
-				set.add(side);
-				handlerDirectionMap.put(obj, set);
-			}
-		}
-	}
+    /** Segmented out call so overriding can be done when machines are reconstructed. */
+    protected void reconstructHandler(IConductor conductor, Object obj, ForgeDirection side)
+    {
+        if (obj != null && !(obj instanceof IConductor))
+        {
+            if (CompatibilityModule.canConnect(obj, side, conductor))
+            {
+                EnumSet<ForgeDirection> set = handlerDirectionMap.get(obj);
+                if (set == null)
+                {
+                    set = EnumSet.noneOf(ForgeDirection.class);
+                }
+                getNodes().add(obj);
+                set.add(side);
+                handlerDirectionMap.put(obj, set);
+            }
+        }
+    }
 
-	@Override
-	public IEnergyNetwork merge(IEnergyNetwork network)
-	{
-		IEnergyNetwork newNetwork = super.merge(network);
+    @Override
+    public IEnergyNetwork merge(IEnergyNetwork network)
+    {
+        IEnergyNetwork newNetwork = super.merge(network);
 
-		if (newNetwork != null)
-		{
-			long newBuffer = getBuffer() + ((EnergyNetwork) network).getBuffer();
-			newNetwork.setBuffer(newBuffer);
-			return newNetwork;
-		}
+        if (newNetwork != null)
+        {
+            long newBuffer = getBuffer() + ((EnergyNetwork) network).getBuffer();
+            newNetwork.setBuffer(newBuffer);
+            return newNetwork;
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Temporary variable used through these two methods.
-	 */
-	private long energyPerWire;
+    /** Temporary variable used through these two methods. */
+    private long energyPerWire;
 
-	@Override
-	public void split(IConductor splitPoint)
-	{
-		energyPerWire = energyBuffer / Math.max(getConnectors().size() - 1, 1);
-		super.split(splitPoint);
-	}
+    @Override
+    public void split(IConductor splitPoint)
+    {
+        energyPerWire = energyBuffer / Math.max(getConnectors().size() - 1, 1);
+        super.split(splitPoint);
+    }
 
-	@Override
-	public void onSplit(IEnergyNetwork newNetwork)
-	{
-		newNetwork.setBuffer(newNetwork.getBuffer() + energyPerWire);
-		energyBuffer -= energyPerWire;
-	}
+    @Override
+    public void onSplit(IEnergyNetwork newNetwork)
+    {
+        newNetwork.setBuffer(newNetwork.getBuffer() + energyPerWire);
+        energyBuffer -= energyPerWire;
+    }
 
-	@Override
-	public Class getConnectorClass()
-	{
-		return IConductor.class;
-	}
+    @Override
+    public Class getConnectorClass()
+    {
+        return IConductor.class;
+    }
 
-	@Override
-	public IEnergyNetwork newInstance()
-	{
-		return EnergyNetworkLoader.getNewNetwork();
-	}
+    @Override
+    public IEnergyNetwork newInstance()
+    {
+        return EnergyNetworkLoader.getNewNetwork();
+    }
 
-	@Override
-	public long produce(IConductor conductor, ForgeDirection from, long amount, boolean doReceive)
-	{
-		EnergyProduceEvent evt = new EnergyProduceEvent(this, conductor, amount, doReceive);
-		MinecraftForge.EVENT_BUS.post(evt);
+    @Override
+    public long produce(IConductor conductor, ForgeDirection from, long amount, boolean doReceive)
+    {
+        EnergyProduceEvent evt = new EnergyProduceEvent(this, conductor, amount, doReceive);
+        MinecraftForge.EVENT_BUS.post(evt);
 
-		if (!evt.isCanceled() && amount > 0)
-		{
-			long conductorBuffer = 0;
+        if (!evt.isCanceled() && amount > 0)
+        {
+            long conductorBuffer = 0;
 
-			if (conductorBuffers.containsKey(conductor))
-			{
-				conductorBuffer = conductorBuffers.get(conductor);
-			}
+            if (conductorBuffers.containsKey(conductor))
+            {
+                conductorBuffer = conductorBuffers.get(conductor);
+            }
 
-			long energyReceived = Math.min((conductor.getCurrentCapacity() * UniversalElectricity.DEFAULT_VOLTAGE) - conductorBuffer, amount);
+            long energyReceived = Math.min((conductor.getCurrentCapacity() * UniversalElectricity.DEFAULT_VOLTAGE) - conductorBuffer, amount);
 
-			if (doReceive && energyReceived > 0)
-			{
-				energyBuffer += energyReceived;
-				conductorBuffer += energyReceived;
-				conductorBuffers.put(conductor, conductorBuffer);
-				NetworkTickHandler.addNetwork(this);
-			}
+            if (doReceive && energyReceived > 0)
+            {
+                energyBuffer += energyReceived;
+                conductorBuffer += energyReceived;
+                conductorBuffers.put(conductor, conductorBuffer);
+                NetworkTickHandler.addNetwork(this);
+            }
 
-			return Math.max(energyReceived, 0);
-		}
+            return Math.max(energyReceived, 0);
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
-	/**
-	 * Assume voltage to be the default voltage for the energy network to calculate energy loss.
-	 * Energy Loss Forumla: Delta V = I x R; P = I x V; Therefore: P = I^2 x R
-	 */
-	protected long getEnergyLoss()
-	{
-		long amperage = getBuffer() / getVoltage();
-		return (long) ((amperage * amperage) * resistance);
-	}
+    /** Assume voltage to be the default voltage for the energy network to calculate energy loss.
+     * Energy Loss Forumla: Delta V = I x R; P = I x V; Therefore: P = I^2 x R */
+    protected long getEnergyLoss()
+    {
+        long amperage = getBuffer() / getVoltage();
+        return (long) ((amperage * amperage) * resistance);
+    }
 
-	public long getVoltage()
-	{
-		return UniversalElectricity.DEFAULT_VOLTAGE;
-	}
+    public long getVoltage()
+    {
+        return UniversalElectricity.DEFAULT_VOLTAGE;
+    }
 
-	@Override
-	public long getBuffer()
-	{
-		return energyBuffer;
-	}
+    @Override
+    public long getBuffer()
+    {
+        return energyBuffer;
+    }
 
-	@Override
-	public void setBuffer(long newBuffer)
-	{
-		energyBuffer = newBuffer;
-	}
+    @Override
+    public void setBuffer(long newBuffer)
+    {
+        energyBuffer = newBuffer;
+    }
 
-	@Override
-	public long getLastBuffer()
-	{
-		return lastEnergyBuffer;
-	}
+    @Override
+    public long getLastBuffer()
+    {
+        return lastEnergyBuffer;
+    }
 
-	@Override
-	public long getBufferOf(IConductor conductor)
-	{
-		if (conductorBuffers != null && conductorBuffers.containsKey(conductor))
-		{
-			if (conductorBuffers.get(conductor) != null)
-			{
-				return conductorBuffers.get(conductor);
-			}
-		}
+    @Override
+    public long getBufferOf(IConductor conductor)
+    {
+        if (conductorBuffers != null && conductorBuffers.containsKey(conductor))
+        {
+            if (conductorBuffers.get(conductor) != null)
+            {
+                return conductorBuffers.get(conductor);
+            }
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
-	// TODO: Use UE external saving instead of having conductors save files.
-	@Override
-	public void setBufferFor(IConductor conductor, long buffer)
-	{
-		conductorBuffers.put(conductor, buffer);
-		energyBuffer += buffer;
-	}
+    // TODO: Use UE external saving instead of having conductors save files.
+    @Override
+    public void setBufferFor(IConductor conductor, long buffer)
+    {
+        conductorBuffers.put(conductor, buffer);
+        energyBuffer += buffer;
+    }
 
 }
