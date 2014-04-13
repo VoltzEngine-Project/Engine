@@ -11,6 +11,9 @@ import net.minecraftforge.common.ForgeDirection;
 
 import java.util.List;
 
+import universalelectricity.api.energy.UnitDisplay;
+import universalelectricity.api.energy.UnitDisplay.Unit;
+
 /**
  * @author tgame14
  * @since 12/04/14
@@ -38,8 +41,8 @@ public class WailaTileElectricalData implements IWailaDataProvider
 			return currenttip;
 		}
 		TileElectrical te = (TileElectrical) tile;
-		currenttip.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + String.valueOf(te.getEnergyHandler().getEnergy()));
-		currenttip.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + String.valueOf(te.getEnergyHandler().getEnergyCapacity()));
+		currenttip.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + UnitDisplay.getDisplay(te.getEnergyHandler().getEnergy(), Unit.JOULES));
+		currenttip.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + UnitDisplay.getDisplay(te.getEnergyHandler().getEnergyCapacity(), Unit.JOULES));
 
 		return currenttip;
 	}
