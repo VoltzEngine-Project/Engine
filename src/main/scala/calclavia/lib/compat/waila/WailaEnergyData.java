@@ -13,6 +13,7 @@ import java.util.List;
 
 import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.electricity.IVoltageOutput;
+import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.UnitDisplay;
 import universalelectricity.api.energy.UnitDisplay.Unit;
@@ -47,6 +48,13 @@ public class WailaEnergyData implements IWailaDataProvider
         {
             IVoltageOutput te = (IVoltageOutput) tile;
             currenttip.add(LanguageUtility.getLocal("info.waila.voltage.out") + " " + UnitDisplay.getDisplayShort(te.getVoltageOutput(accessor.getSide()), Unit.VOLTAGE));
+        }
+        //Wire support
+        if(tile instanceof IConductor)
+        {
+            IConductor te = (IConductor) tile;
+            currenttip.add(LanguageUtility.getLocal("info.waila.amp") + " " + UnitDisplay.getDisplayShort(te.getCurrentCapacity(), Unit.AMPERE));
+            currenttip.add(LanguageUtility.getLocal("info.waila.ohm") + " " + UnitDisplay.getDisplayShort(te.getResistance(), Unit.RESISTANCE));
         }
         return currenttip;
     }
