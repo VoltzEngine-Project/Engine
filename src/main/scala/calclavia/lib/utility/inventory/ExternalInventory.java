@@ -112,7 +112,10 @@ public class ExternalInventory implements IExternalInventoryBox
             insertStack.stackSize = this.getInventoryStackLimit();
         }
         if (!InventoryUtility.stacksMatchExact(pre_stack, getContainedItems()[slot]))
+        {
+            System.out.println("External inv slot change " + pre_stack + " to " + getContainedItems()[slot]);
             this.onInventoryChanged();
+        }
     }
 
     @Override

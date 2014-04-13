@@ -80,8 +80,6 @@ public class TileInventory extends TileBase implements IExternalInventory, ISide
 		{
 			getStackInSlot(slot).stackSize += itemStack.stackSize;
 		}
-
-		onInventoryChanged();
 	}
 
 	@Override
@@ -315,8 +313,6 @@ public class TileInventory extends TileBase implements IExternalInventory, ISide
 						inventory.setInventorySlotContents(i, null);
 				}
 			}
-
-			inventory.onInventoryChanged();
 		}
 	}
 

@@ -64,9 +64,10 @@ public class TileExternalInventory extends TileAdvanced implements IExternalInve
 		else if (this.getStackInSlot(slot).isItemEqual(itemStack))
 		{
 			getStackInSlot(slot).stackSize += itemStack.stackSize;
+			onInventoryChanged();
 		}
 
-		onInventoryChanged();
+		
 	}
 
 	@Override

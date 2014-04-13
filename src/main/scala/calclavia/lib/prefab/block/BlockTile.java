@@ -110,8 +110,6 @@ public abstract class BlockTile extends BlockAdvanced implements ITileEntityProv
 						}
 					}
 				}
-
-				inventory.onInventoryChanged();
 			}
 		}
 	}
