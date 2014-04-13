@@ -9,7 +9,7 @@ public interface IMechanicalNode extends IEnergyNode
 
 	public double getAngularVelocity();
 
-	public void apply(double torque, double angularVelocity);
+	public void apply(Object source, double torque, double angularVelocity);
 
 	public float getRatio(ForgeDirection dir, IMechanicalNode with);
 
