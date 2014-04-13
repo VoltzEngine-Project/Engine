@@ -16,7 +16,7 @@ import calclavia.lib.utility.inventory.IExternalInventoryBox;
 import calclavia.lib.utility.inventory.InventoryUtility;
 
 /**
- * Prefab for simple object who has an inventory inventory.
+ * Prefab for tiles that need a basic inventory
  * 
  * @author Darkguardsman
  */
