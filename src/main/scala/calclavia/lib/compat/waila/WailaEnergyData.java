@@ -1,5 +1,6 @@
 package calclavia.lib.compat.waila;
 
+import calclavia.lib.prefab.tile.IIO;
 import calclavia.lib.prefab.tile.TileElectrical;
 import calclavia.lib.utility.LanguageUtility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -9,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import universalelectricity.api.electricity.IVoltageInput;
@@ -27,24 +29,40 @@ public class WailaEnergyData implements IWailaDataProvider
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
         TileEntity tile = accessor.getTileEntity();
+        boolean input = true, output = true;
+        currenttip.add(""+accessor.getSide());
+        if(tile instanceof IIO)
+        {
+            IIO te = (IIO) tile;
+            input = false;
+            output = false;
+            if(te.getInputDirections() != null)
+            {
+                input = te.getInputDirections().contains(accessor.getSide().getOpposite());
+            }
+            if(te.getOutputDirections() != null)
+            {
+                output = te.getOutputDirections().contains(accessor.getSide().getOpposite());
+            }
+        }
         //Energy support
         if (tile instanceof TileElectrical)
         {
             TileElectrical te = (TileElectrical) tile;
             currenttip.add(LanguageUtility.getLocal("info.waila.energy") + " " + UnitDisplay.getDisplayShort(te.getEnergyHandler().getEnergy(), Unit.JOULES) + " / " + UnitDisplay.getDisplayShort(te.getEnergyHandler().getEnergyCapacity(), Unit.JOULES));
         }
-        else if (tile instanceof IEnergyContainer)
+        else if ((input || output) && tile instanceof IEnergyContainer)
         {
             IEnergyContainer te = (IEnergyContainer) tile;
             currenttip.add(LanguageUtility.getLocal("info.waila.energy") + " " + UnitDisplay.getDisplayShort(te.getEnergy(accessor.getSide()), Unit.JOULES) + " / " + UnitDisplay.getDisplayShort(te.getEnergyCapacity(accessor.getSide()), Unit.JOULES));
         }
-        //Voltage support
-        if(tile instanceof IVoltageInput)
+        //Voltage support        
+        if(input && tile instanceof IVoltageInput)
         {
             IVoltageInput te = (IVoltageInput) tile;
             currenttip.add(LanguageUtility.getLocal("info.waila.voltage.in") + " " + UnitDisplay.getDisplayShort(te.getVoltageInput(accessor.getSide()), Unit.VOLTAGE));
         }
-        if(tile instanceof IVoltageOutput)
+        if(output && tile instanceof IVoltageOutput)
         {
             IVoltageOutput te = (IVoltageOutput) tile;
             currenttip.add(LanguageUtility.getLocal("info.waila.voltage.out") + " " + UnitDisplay.getDisplayShort(te.getVoltageOutput(accessor.getSide()), Unit.VOLTAGE));
