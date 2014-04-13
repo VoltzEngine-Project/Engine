@@ -63,7 +63,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
     public TileTurbine()
     {
         /** We're going to use the EnergyStorageHandler to store power. */
-        energy = new EnergyStorageHandler(maxPower * 20);
+        setEnergyHandler(new EnergyStorageHandler(maxPower * 20));
     }
 
     public ForgeDirection getDirection()
@@ -75,7 +75,7 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
     public void initiate()
     {
         super.initiate();
-        energy = new EnergyStorageHandler(maxPower * 20);
+        setEnergyHandler(new EnergyStorageHandler(maxPower * 20));
     }
 
     @Override

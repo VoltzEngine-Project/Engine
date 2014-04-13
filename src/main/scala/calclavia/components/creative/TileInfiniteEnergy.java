@@ -13,8 +13,8 @@ public class TileInfiniteEnergy extends TileElectrical
 {
 	public TileInfiniteEnergy()
 	{
-		energy = new EnergyStorageHandler(Long.MAX_VALUE);
-		energy.setMaxExtract(Long.MAX_VALUE);
+		setEnergyHandler(new EnergyStorageHandler(Long.MAX_VALUE));
+		getEnergyHandler().setMaxExtract(Long.MAX_VALUE);
 		ioMap = 728;
 	}
 
@@ -22,7 +22,7 @@ public class TileInfiniteEnergy extends TileElectrical
 	public void updateEntity()
 	{
 		super.updateEntity();
-		energy.setEnergy(Long.MAX_VALUE);
+		getEnergyHandler().setEnergy(Long.MAX_VALUE);
 		produce();
 	}
 
