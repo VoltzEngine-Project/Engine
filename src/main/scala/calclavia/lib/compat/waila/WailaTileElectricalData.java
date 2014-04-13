@@ -41,8 +41,8 @@ public class WailaTileElectricalData implements IWailaDataProvider
 			return currenttip;
 		}
 		TileElectrical te = (TileElectrical) tile;
-		currenttip.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + UnitDisplay.getDisplay(te.getEnergyHandler().getEnergy(), Unit.JOULES));
-		currenttip.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + UnitDisplay.getDisplay(te.getEnergyHandler().getEnergyCapacity(), Unit.JOULES));
+		currenttip.add(LanguageUtility.getLocal("info.energylevel.waila") + " " + UnitDisplay.getDisplayShort(te.getEnergyHandler().getEnergy(), Unit.JOULES));
+		currenttip.add(LanguageUtility.getLocal("info.energycapacity.waila") + " " + UnitDisplay.getDisplayShort(te.getEnergyHandler().getEnergyCapacity(), Unit.JOULES));
 
 		return currenttip;
 	}
