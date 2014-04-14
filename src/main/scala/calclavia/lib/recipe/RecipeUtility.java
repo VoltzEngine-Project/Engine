@@ -28,7 +28,7 @@ public class RecipeUtility
 		{
 			if (obj instanceof IRecipe)
 			{
-				if (((IRecipe) obj).getRecipeOutput() == output)
+				if (ItemStack.areItemStacksEqual(((IRecipe) obj).getRecipeOutput(), output))
 				{
 					list.add((IRecipe) obj);
 				}
