@@ -1,5 +1,6 @@
 package calclavia.lib.utility.inventory;
 
+import calclavia.lib.utility.MachinePlayer;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
@@ -17,8 +18,6 @@ import universalelectricity.api.vector.VectorWorld;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import calclavia.lib.utility.MachinePlayer;
 
 /**
  * @author Calclavia
@@ -129,7 +128,7 @@ public class InventoryUtility
 		{
 			if (!(inventory instanceof ISidedInventory))
 			{
-				putStackInInventory(inventory, toInsert, force);
+				return putStackInInventory(inventory, toInsert, force);
 			}
 			else
 			{
