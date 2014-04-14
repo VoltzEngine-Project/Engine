@@ -87,7 +87,7 @@ public class RenderItemOverlayUtility
 
 	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText)
 	{
-		renderItemOnSides(tile, itemStack, x, y, z, renderText, EnumSet.allOf(ForgeDirection.class));
+		renderItemOnSides(tile, itemStack, x, y, z, renderText, EnumSet.of(ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST));
 	}
 
 	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText, EnumSet<ForgeDirection> sides)
