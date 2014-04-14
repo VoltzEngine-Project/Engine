@@ -7,14 +7,14 @@ import cpw.mods.fml.common.Loader;
  * A coal in Universal Electricity (based on an estimate in real life) is worth 4MJ.
  * A fission reactor should make around 4-9GW.
  * A fusion reactor would go into the tera-watts.
- * Reika's conversion: IC2[22512], BC[56280], RF[5628]
+ * 
  * @author Calclavia
  */
 public enum CompatibilityType
 {
-	THERMAL_EXPANSION("ThermalExpansion", "ThermalExpansion", "Redstone Flux", "RF", 50),
-	INDUSTRIALCRAFT("IC2", "IndustrialCraft", "Electrical Unit", "EU", 250),
-	BUILDCRAFT("BuildCraft|Energy", "BuildCraft", "Minecraft Joule", "MJ", 500);
+	THERMAL_EXPANSION("ThermalExpansion", "ThermalExpansion", "Redstone Flux", "RF", 5628),
+	INDUSTRIALCRAFT("IC2", "IndustrialCraft", "Electrical Unit", "EU", 22512),
+	BUILDCRAFT("BuildCraft|Energy", "BuildCraft", "Minecraft Joule", "MJ", 56280);
 
 	public final String modID;
 	public final String moduleName;
