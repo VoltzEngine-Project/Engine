@@ -162,13 +162,13 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
 
         for (ForgeDirection direction : this.getOutputDirections())
         {
-            if (this.energy.getEnergy() > 0)
+            if (this.getEnergyHandler().getEnergy() > 0)
             {
                 TileEntity tileEntity = new Vector3(this).translate(direction).getTileEntity(this.worldObj);
 
                 if (tileEntity != null)
                 {
-                    long used = CompatibilityModule.receiveEnergy(tileEntity, direction.getOpposite(), energy.extractEnergy(energy.getEnergy(), false), true);
+                    long used = CompatibilityModule.receiveEnergy(tileEntity, direction.getOpposite(), getEnergyHandler().extractEnergy(getEnergyHandler().getEnergy(), false), true);
                     totalUsed += this.getEnergyHandler().extractEnergy(used, true);
                 }
             }
