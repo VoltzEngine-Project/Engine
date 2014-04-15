@@ -2,6 +2,7 @@ package calclavia.lib.prefab.damage;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.electricity.IElectricalNetwork;
 import calclavia.lib.prefab.CustomDamageSource;
@@ -35,7 +36,7 @@ public class ElectricalDamage extends CustomDamageSource
      * @param network - network to calculate damage from, and drain energy from */
     public static void handleElectrocution(Entity entity, Object source, IElectricalNetwork network)
     {
-        handleElectrocution(entity, source, network);
+        handleElectrocution(entity, source, network, 1);
     }
 
     /** Handles wire or machine based electrocution
@@ -60,10 +61,10 @@ public class ElectricalDamage extends CustomDamageSource
      * @return damage applied to the entity */
     public static float electrocuteEntity(Entity entity, Object source, long voltage, float percent)
     {
-        if (entity instanceof EntityLiving)
+        if (entity instanceof EntityLivingBase)
         {
             /* Damage is percent based of default voltage, this prevents insta-killing entities */
-            float damage = Math.abs(voltage) / UniversalElectricity.DEFAULT_VOLTAGE;
+            float damage = Math.abs(voltage / UniversalElectricity.DEFAULT_VOLTAGE);
 
             /* Apply percentage from the source */
             damage *= percent;
@@ -74,7 +75,8 @@ public class ElectricalDamage extends CustomDamageSource
 
             /* No damage no method call */
             if (damage > 0)
-                entity.attackEntityFrom(CustomDamageSource.electrocution, Math.min(damage, 15));
+                entity.attackEntityFrom(new ElectricalDamage(source), Math.min(damage, 15));
+            
             return damage;
         }
         return -1;
