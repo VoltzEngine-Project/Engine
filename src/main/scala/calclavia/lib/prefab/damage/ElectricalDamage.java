@@ -1,6 +1,7 @@
 package calclavia.lib.prefab.damage;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.electricity.IElectricalNetwork;
 import calclavia.lib.prefab.CustomDamageSource;
@@ -10,10 +11,12 @@ import calclavia.lib.prefab.CustomDamageSource;
  * @author Darkguardsman */
 public class ElectricalDamage extends CustomDamageSource
 {
-    
+
     public ElectricalDamage(Object source)
     {
         super("electrocution");
+        this.setDamageBypassesArmor();
+        this.setDifficultyScaled();
     }
 
     /** Handles wire or machine based electrocution
@@ -45,7 +48,7 @@ public class ElectricalDamage extends CustomDamageSource
     {
         if (network != null && network.getRequest() > 0 && network.getVoltage() != 0)
         {
-            electrocuteEntity(entity, source, Math.abs(network.getVoltage()), percent);
+            electrocuteEntity(entity, source, network.getVoltage(), percent);
             network.setBuffer((long) Math.max(0, network.getBuffer() - network.getVoltage() * 10));
         }
     }
@@ -57,19 +60,24 @@ public class ElectricalDamage extends CustomDamageSource
      * @return damage applied to the entity */
     public static float electrocuteEntity(Entity entity, Object source, long voltage, float percent)
     {
-        float damage = 0;
-        /* Damage is percent based of default voltage, this prevents insta-killing entities */
-        damage = voltage / UniversalElectricity.DEFAULT_VOLTAGE;
+        if (entity instanceof EntityLiving)
+        {
+            /* Damage is percent based of default voltage, this prevents insta-killing entities */
+            float damage = Math.abs(voltage) / UniversalElectricity.DEFAULT_VOLTAGE;
 
-        /* Apply percentage from the source */
-        damage *= percent;
+            /* Apply percentage from the source */
+            damage *= percent;
 
-        /* TODO apply potion effects */
+            /* TODO apply potion effects */
 
-        /* No damage no method call */
-        if (damage > 0)
-            entity.attackEntityFrom(CustomDamageSource.electrocution, Math.min(damage, 20));
-        return damage;
+            /* TODO do armor checks, leather does 60% reduction in damage, MPS armor shields block damage, metal armor x5 damage */
+
+            /* No damage no method call */
+            if (damage > 0)
+                entity.attackEntityFrom(CustomDamageSource.electrocution, Math.min(damage, 15));
+            return damage;
+        }
+        return -1;
     }
 
 }
