@@ -19,11 +19,11 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 	{
 		if (handler instanceof IEnergySink)
 		{
-			long request = (long) Math.min(((IEnergySink) handler).demandedEnergyUnits() * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio, energy);
+			long request = (long) Math.min(((IEnergySink) handler).demandedEnergyUnits(), energy * CompatibilityType.INDUSTRIALCRAFT.ratio);
 
 			if (doReceive)
 			{
-				double rejected = ((IEnergySink) handler).injectEnergyUnits(direction, request * CompatibilityType.INDUSTRIALCRAFT.ratio);
+				double rejected = ((IEnergySink) handler).injectEnergyUnits(direction, request);
 				return (long) Math.max(energy - (rejected * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), 0);
 			}
 
@@ -38,14 +38,14 @@ public class ModuleIndustrialCraft extends CompatibilityModule
 	{
 		if (handler instanceof IEnergySource)
 		{
-			long demand = (long) Math.min(((IEnergySource) handler).getOfferedEnergy() * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio, energy);
+			long demand = (long) Math.min(((IEnergySource) handler).getOfferedEnergy(), energy * CompatibilityType.INDUSTRIALCRAFT.ratio);
 
 			if (doExtract)
 			{
-				((IEnergySource) handler).drawEnergy(demand * CompatibilityType.INDUSTRIALCRAFT.ratio);
+				((IEnergySource) handler).drawEnergy(demand);
 			}
 
-			return demand;
+			return (long) (demand * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
 		}
 
 		return 0;
