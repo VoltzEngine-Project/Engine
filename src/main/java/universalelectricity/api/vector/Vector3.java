@@ -919,6 +919,6 @@ public class Vector3 implements Cloneable, IVector3, Comparable<IVector3>
 	@Override
 	public int compareTo(IVector3 o)
 	{
-		return (int) this.clone().floor().distance(new Vector3(o).floor());
+		return (int) (ZERO().distance(this) - ZERO().distance(o));
 	}
 }
