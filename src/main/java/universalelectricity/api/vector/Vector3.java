@@ -21,7 +21,7 @@ import net.minecraftforge.common.ForgeDirection;
  * @author Calclavia
  */
 
-public class Vector3 implements Cloneable, IVector3
+public class Vector3 implements Cloneable, IVector3, Comparable<IVector3>
 {
 	public double x;
 	public double y;
@@ -101,8 +101,8 @@ public class Vector3 implements Cloneable, IVector3
 	 * Get a relative Vector3 based on the rotationYaw and rotationPitch. Note that ROTATION PTICH
 	 * is inversed because of the way Minecraft handles things in the world.
 	 * 
-	 * @param rotationYaw - Degree
-	 * @param rotationPitch- Degree
+	 * @param yaw - Degree
+	 * @param pitch- Degree
 	 */
 	public Vector3(double yaw, double pitch)
 	{
@@ -237,7 +237,7 @@ public class Vector3 implements Cloneable, IVector3
 	/**
 	 * Saves this Vector3 to disk
 	 * 
-	 * @param prefix - The prefix of this save. Use some unique string.
+	 * //@param prefix - The prefix of this save. Use some unique string.
 	 * @param nbt - The NBT compound object to save the data in
 	 */
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
@@ -321,8 +321,7 @@ public class Vector3 implements Cloneable, IVector3
 
 	/**
 	 * Gets a position relative to a position's side
-	 * 
-	 * @param position - The position
+	 *
 	 * @param side - The side. 0-5
 	 * @return The position relative to the original position's side
 	 */
@@ -917,4 +916,9 @@ public class Vector3 implements Cloneable, IVector3
 		return "Vector3 [" + this.x + "," + this.y + "," + this.z + "]";
 	}
 
+	@Override
+	public int compareTo(IVector3 o)
+	{
+		return (int) this.clone().floor().distance(new Vector3(o).floor());
+	}
 }
