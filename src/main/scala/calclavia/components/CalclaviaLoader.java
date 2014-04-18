@@ -650,55 +650,57 @@ public class CalclaviaLoader
 	{
 		final VectorWorld pos = evt.position;
 
-		Block block = Block.blocksList[pos.getBlockID()];
-		Material mat = pos.world.getBlockMaterial(pos.intX(), pos.intY(), pos.intZ());
-
-		if (mat == Material.air)
+		synchronized (pos.world)
 		{
-			evt.heatLoss = 0.15f;
-		}
+			Block block = Block.blocksList[pos.getBlockID()];
+			Material mat = pos.world.getBlockMaterial(pos.intX(), pos.intY(), pos.intZ());
 
-		if (block == Block.waterMoving || block == Block.waterStill)
-		{
-			if (evt.temperature >= 373)
+			if (mat == Material.air)
 			{
-				if (FluidRegistry.getFluid("steam") != null)
+				evt.heatLoss = 0.15f;
+			}
+
+			if (block == Block.waterMoving || block == Block.waterStill)
+			{
+				if (evt.temperature >= 373)
 				{
-					// TODO: INCORRECT!
-					int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373) * steamMultiplier);
-					MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2));
+					if (FluidRegistry.getFluid("steam") != null)
+					{
+						// TODO: INCORRECT!
+						int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373) * steamMultiplier);
+						MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2));
+					}
+
+					evt.heatLoss = 0.2f;
+				}
+			}
+
+			if (block == Block.ice)
+			{
+				if (evt.temperature >= 273)
+				{
+					NetworkTickHandler.addNetwork(new IUpdate()
+					{
+						@Override public void update()
+						{
+							pos.setBlock(Block.waterMoving.blockID);
+						}
+
+						@Override public boolean canUpdate()
+						{
+							return true;
+						}
+
+						@Override public boolean continueUpdate()
+						{
+							return false;
+						}
+					});
 				}
 
-				evt.heatLoss = 0.2f;
+				evt.heatLoss = 0.4f;
 			}
 		}
-
-		if (block == Block.ice)
-		{
-			if (evt.temperature >= 273)
-			{
-				NetworkTickHandler.addNetwork(new IUpdate()
-				{
-					@Override public void update()
-					{
-						pos.setBlock(Block.waterMoving.blockID);
-					}
-
-					@Override public boolean canUpdate()
-					{
-						return true;
-					}
-
-					@Override public boolean continueUpdate()
-					{
-						return false;
-					}
-				});
-			}
-
-			evt.heatLoss = 0.4f;
-		}
-
 	}
 
 	@ForgeSubscribe
