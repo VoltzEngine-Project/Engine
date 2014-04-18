@@ -286,11 +286,13 @@ public abstract class TileBlock extends TileEntity
 		return use(player, side, hit);
 	}
 
+	/** Called when the block is clicked by a player */
 	protected boolean use(EntityPlayer player, int side, Vector3 hit)
 	{
 		return false;
 	}
 
+	/** Called when the block is clicked with a wrench */
 	protected boolean configure(EntityPlayer player, int side, Vector3 hit)
 	{
 		return tryRotate(side, hit);
