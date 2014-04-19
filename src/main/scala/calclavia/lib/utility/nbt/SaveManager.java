@@ -1,11 +1,9 @@
 package calclavia.lib.utility.nbt;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.logging.Level;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,22 +21,22 @@ import cpw.mods.fml.relauncher.Side;
 public class SaveManager
 {
     /** Map of save names with there class file */
-    private static HashMap<String, Class<?>> idToClassMap = new HashMap<String, Class<?>>();
+    private HashMap<String, Class<?>> idToClassMap = new HashMap<String, Class<?>>();
 
     /** Reverse of the idToClassMap */
-    private static HashMap<Class<?>, String> classToIDMap = new HashMap<Class<?>, String>();
+    private HashMap<Class<?>, String> classToIDMap = new HashMap<Class<?>, String>();
 
     /** List of object to save on the next save call */
-    private static List<WeakReference<Object>> saveList = new ArrayList<WeakReference<Object>>();
+    private LinkedHashSet<IVirtualObject> saveList = new LinkedHashSet<IVirtualObject>();
 
     /** Object that save each time the world saves */
-    private static List<WeakReference<Object>> objects = new ArrayList<WeakReference<Object>>();
+    private LinkedHashSet<IVirtualObject> objects = new LinkedHashSet<IVirtualObject>();
 
     /** Instance of this class */
     private static SaveManager instance;
 
     /** Last cpu time that the save manager tried to save a file */
-    private static long lastSaveMills = 0;
+    private long lastSaveMills = 0;
 
     /** Gets an instance of this class */
     public static SaveManager instance()
@@ -54,11 +52,11 @@ public class SaveManager
      * save manager after */
     public static void markNeedsSaved(Object object)
     {
-        synchronized (objects)
+        synchronized (instance())
         {
-            if (object instanceof IVirtualObject && !saveList.contains(object))
+            if (object instanceof IVirtualObject && !instance().saveList.contains((IVirtualObject) object))
             {
-                saveList.add(new WeakReference<Object>(object));
+                instance().saveList.add((IVirtualObject) object);
             }
         }
     }
@@ -66,11 +64,11 @@ public class SaveManager
     /** Registers the object to be saved on each world save event */
     public static void register(Object object)
     {
-        synchronized (objects)
+        synchronized (instance())
         {
-            if (object instanceof IVirtualObject && !objects.contains(object))
+            if (object instanceof IVirtualObject && !instance().objects.contains((IVirtualObject) object))
             {
-                objects.add(new WeakReference<Object>(object));
+                instance().saveList.add((IVirtualObject) object);
             }
         }
     }
@@ -83,29 +81,26 @@ public class SaveManager
      * @param clazz - class to link with the id */
     public static void registerClass(String id, Class<?> clazz)
     {
-        synchronized (classToIDMap)
+        synchronized (instance())
         {
-            synchronized (idToClassMap)
+            if (id != null && clazz != null)
             {
-                if (id != null && clazz != null)
+                if (instance().idToClassMap.containsKey(id) && instance().idToClassMap.get(id) != null)
                 {
-                    if (idToClassMap.containsKey(id) && idToClassMap.get(id) != null)
-                    {
-                        System.out.println("[CoreMachine]SaveManager: Something attempted to register a class with the id of another class");
-                        System.out.println("[CoreMachine]SaveManager: Id:" + id + "  Class:" + clazz.getName());
-                        System.out.println("[CoreMachine]SaveManager: OtherClass:" + idToClassMap.get(id).getName());
-                    }
-                    else
-                    {
-                        idToClassMap.put(id, clazz);
-                        classToIDMap.put(clazz, id);
-                    }
+                    System.out.println("[CoreMachine]SaveManager: Something attempted to register a class with the id of another class");
+                    System.out.println("[CoreMachine]SaveManager: Id:" + id + "  Class:" + clazz.getName());
+                    System.out.println("[CoreMachine]SaveManager: OtherClass:" + instance().idToClassMap.get(id).getName());
+                }
+                else
+                {
+                    instance().idToClassMap.put(id, clazz);
+                    instance().classToIDMap.put(clazz, id);
                 }
             }
         }
     }
 
-    /** Creates an object from an NBT save file. 
+    /** Creates an object from an NBT save file.
      * 
      * @param file - file
      * @return the object created from the file */
@@ -131,50 +126,58 @@ public class SaveManager
     public static Object createAndLoad(NBTTagCompound nbt, Object... args)
     {
         Object obj = null;
-        if (nbt != null && nbt.hasKey("id"))
+        try
         {
-            try
-            {
-                Class<?> clazz = getClass(nbt.getString("id"));
-                if (clazz != null)
-                {
-                    if (args == null || args.length == 0)
-                    {
-                        Constructor<?> con = ReflectionUtility.getConstructorWithArgs(clazz, args);
-                        if (con != null)
-                        {
-                            obj = con.newInstance(args);
-                        }
-                    }
-                    else
-                    {
-                        obj = clazz.newInstance();
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace();
-            }
-
-            if (obj instanceof ISaveObj)
+            if (nbt != null && nbt.hasKey("id"))
             {
                 try
                 {
-                    ((ISaveObj) obj).load(nbt);
+                    Class<?> clazz = getClass(nbt.getString("id"));
+                    if (clazz != null)
+                    {
+                        if (args == null || args.length == 0)
+                        {
+                            Constructor<?> con = ReflectionUtility.getConstructorWithArgs(clazz, args);
+                            if (con != null)
+                            {
+                                obj = con.newInstance(args);
+                            }
+                        }
+                        else
+                        {
+                            obj = clazz.newInstance();
+                        }
+                    }
                 }
-                catch (Exception e)
+                catch (Exception exception)
                 {
-                    FMLLog.log(Level.SEVERE, e, "[CalclaviaCore]SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
-                    obj = null;
+                    exception.printStackTrace();
                 }
-            }
-            else
-            {
-                MinecraftServer.getServer().getLogAgent().logWarning("[CalclaviaCore]SaveManager: Skipping object with id " + nbt.getString("id"));
-            }
 
-            return obj;
+                if (obj instanceof ISaveObj)
+                {
+                    try
+                    {
+                        ((ISaveObj) obj).load(nbt);
+                    }
+                    catch (Exception e)
+                    {
+                        FMLLog.log(Level.SEVERE, e, "[CalclaviaCore]SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
+                        obj = null;
+                    }
+                }
+                else
+                {
+                    MinecraftServer.getServer().getLogAgent().logWarning("[CalclaviaCore]SaveManager: Skipping object with id " + nbt.getString("id"));
+                }
+
+                return obj;
+            }
+        }
+        catch (Exception e)
+        {
+            FMLLog.fine("[Calclavia-Core]SaveManager: Error trying to load object from save");
+            e.printStackTrace();
         }
         return null;
     }
@@ -193,18 +196,15 @@ public class SaveManager
     /** Called to save all object currently set to save next call */
     public static void saveAll()
     {
-        List<WeakReference<Object>> objs = new ArrayList<WeakReference<Object>>();
-        objs.addAll(SaveManager.objects);
-        objs.addAll(SaveManager.saveList);
-        for (WeakReference<Object> ref : objs)
+        for (IVirtualObject ref : instance().objects)
         {
-            Object object = ref.get();
-            if (object instanceof IVirtualObject)
-            {
-                saveObject((IVirtualObject) object);
-            }
+            saveObject(ref);
         }
-        saveList.clear();
+        for (IVirtualObject ref : instance().saveList)
+        {
+            saveObject(ref);
+        }
+        instance().saveList.clear();
     }
 
     /** Saves an object to its preferred save location. Does check for null, registered save class,
@@ -213,45 +213,60 @@ public class SaveManager
      * @param object - instance of @IVirtualObject */
     public static void saveObject(IVirtualObject object)
     {
-        if (object != null && FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
+        try
         {
-            if (getID(object.getClass()) != null)
+            if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
             {
-                if (((IVirtualObject) object).getSaveFile() != null)
+                if (object != null)
                 {
-                    File file = ((IVirtualObject) object).getSaveFile();
-                    file.mkdirs();
-                    NBTTagCompound tag = new NBTTagCompound();
-                    ((IVirtualObject) object).save(tag);
-                    tag.setString("id", getID(object.getClass()));
-                    NBTUtility.saveData(file, tag);
+                    if (getID(object.getClass()) != null)
+                    {
+                        if (((IVirtualObject) object).getSaveFile() != null)
+                        {
+                            /* Get file, and make directories */
+                            File file = ((IVirtualObject) object).getSaveFile();
+                            file.mkdirs();
+
+                            /* Create nbt save object */
+                            NBTTagCompound tag = new NBTTagCompound();
+                            ((IVirtualObject) object).save(tag);
+                            tag.setString("id", getID(object.getClass()));
+
+                            /* Save data using NBTUtility */
+                            NBTUtility.saveData(file, tag);
+                        }
+                        else
+                        {
+                            throw new NullPointerException("SaveManager: Object save file path is null");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("SaveManager: Object does not have a save ID");
+                    }
                 }
                 else
                 {
-                    FMLLog.fine("[Calclavia-Core]SaveManager: Error Save File returned null for " + object.toString());
-                    FMLLog.fine("[Calclavia-Core]             Class '" + object.getClass());
+                    throw new NullPointerException("SaveManager: Attempted to save a null object");
                 }
             }
-            else
-            {
-                FMLLog.fine("[Calclavia-Core]SaveManager: Unregistered save class '" + object.getClass() + "' attempted to save");
-            }
         }
-        else
+        catch (Exception e)
         {
-            FMLLog.fine("[Calclavia-Core]SaveManager: Something tried to save null");
+            FMLLog.fine("[Calclavia-Core]SaveManager: Error trying to save object class: " + (object != null ? object.getClass() : "null"));
+            e.printStackTrace();
         }
     }
 
     /** Gets the ID that the class will be saved using */
     public static String getID(Class clazz)
     {
-        return classToIDMap.get(clazz);
+        return instance().classToIDMap.get(clazz);
     }
 
     /** Gets the class that was registered with the ID */
     public static Class getClass(String id)
     {
-        return idToClassMap.get(id);
+        return instance().idToClassMap.get(id);
     }
 }
