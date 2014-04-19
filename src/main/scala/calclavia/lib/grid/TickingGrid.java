@@ -1,6 +1,7 @@
 package calclavia.lib.grid;
 
 import universalelectricity.api.net.IUpdate;
+import universalelectricity.core.net.NetworkTickHandler;
 
 public class TickingGrid<N extends Node> extends NodeGrid<N> implements IUpdate
 {
@@ -8,7 +9,7 @@ public class TickingGrid<N extends Node> extends NodeGrid<N> implements IUpdate
 	{
 		super(type);
 		add(node);
-		UpdateTicker.addNetwork(this);
+		NetworkTickHandler.addNetwork(this);
 	}
 
 	/**
