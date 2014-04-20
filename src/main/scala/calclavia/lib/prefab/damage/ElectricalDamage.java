@@ -103,6 +103,7 @@ public class ElectricalDamage extends CustomDamageSource
             float appliedDamage = damage;
             /** Is the character wearing a full suit of the same armor */
             boolean fullSuit = true;
+            boolean hadArmor = false;
 
             /* Check for full suit of protected armor */
             for (int armorSlot = 0; armorSlot < entityPlayer.inventory.armorInventory.length; armorSlot++)
@@ -113,7 +114,7 @@ public class ElectricalDamage extends CustomDamageSource
                     {
                         IInsulatedArmor insulatedArmor = (IInsulatedArmor) entityPlayer.inventory.armorInventory[armorSlot].getItem();
                         float d = insulatedArmor.onEletricalDamage(entityPlayer.inventory.armorInventory[armorSlot], (EntityLivingBase) entity, source, voltage, damage);
-
+                        hadArmor = true;
                         if (insulatedArmor.areAllPartsNeeded(entityPlayer.inventory.armorInventory[armorSlot], (EntityLivingBase) entity, source, "Electrical", voltage))
                         {
                             averageDamage += d;
@@ -135,7 +136,7 @@ public class ElectricalDamage extends CustomDamageSource
                     }
                 }
             }
-            if (fullSuit)
+            if (fullSuit && hadArmor)
             {
                 return averageDamage > 0 ? averageDamage / 4 : 0;
             }
