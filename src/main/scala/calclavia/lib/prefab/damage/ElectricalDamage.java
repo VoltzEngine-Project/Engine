@@ -2,9 +2,11 @@ package calclavia.lib.prefab.damage;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.potion.Potion;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.electricity.IElectricalNetwork;
 import calclavia.lib.prefab.CustomDamageSource;
+import calclavia.lib.prefab.potion.CustomPotionEffect;
 
 /** Electrical based damage source
  * 
@@ -63,18 +65,21 @@ public class ElectricalDamage extends CustomDamageSource
         if (entity instanceof EntityLivingBase)
         {
             /* Damage is percent based of default voltage, this prevents insta-killing entities */
-            float damage = Math.abs(voltage / UniversalElectricity.DEFAULT_VOLTAGE);
-
-            /* Apply percentage from the source */
-            damage *= percent;
-
-            /* TODO apply potion effects */
+            float damage = Math.abs(voltage / UniversalElectricity.DEFAULT_VOLTAGE) * percent;
 
             /* TODO do armor checks, leather does 60% reduction in damage, MPS armor shields block damage, metal armor x5 damage */
 
-            /* No damage no method call */
+            /* No damage no method calls */
             if (damage > 0)
+            {
                 entity.attackEntityFrom(new ElectricalDamage(source), Math.min(damage, 15));
+                if (entity instanceof EntityLivingBase && damage >= 2)
+                {
+                    ((EntityLivingBase) entity).addPotionEffect(new CustomPotionEffect(Potion.confusion.id, (int) ((voltage / 120) * 20), 1));
+                    ((EntityLivingBase) entity).addPotionEffect(new CustomPotionEffect(Potion.weakness.id, (int) ((voltage / 120) * 20), 1));
+                    ((EntityLivingBase) entity).addPotionEffect(new CustomPotionEffect(Potion.digSlowdown.id, (int) ((voltage / 120) * 20), 1));
+                }
+            }
 
             return damage;
         }
