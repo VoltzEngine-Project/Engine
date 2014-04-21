@@ -571,7 +571,6 @@ public class CalclaviaLoader
         UpdateTicker.addNetwork(ThermalGrid.SERVER_INSTANCE);
 
         modproxies.postInit();
-        ConfigSet.isPostInit = true;
     }
 
     @EventHandler
@@ -717,7 +716,7 @@ public class CalclaviaLoader
     @ForgeSubscribe
     public void configAnnotationAdded(ConfigAnnotationEvent event)
     {
-        if (event.sourceClass.startsWith(Calclavia.DOMAIN))
+        if (event.sourceClass.getName().startsWith(Calclavia.DOMAIN))
         {
             ConfigHandler.handleClass(event.sourceClass, Calclavia.CONFIGURATION);
         }

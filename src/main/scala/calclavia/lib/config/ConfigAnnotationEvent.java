@@ -9,9 +9,9 @@ import net.minecraftforge.event.Event;
  */
 public class ConfigAnnotationEvent extends Event
 {
-	public final String sourceClass;
+	public final Class sourceClass;
 
-	public ConfigAnnotationEvent(String sourceClass)
+	public ConfigAnnotationEvent(Class sourceClass)
 	{
 		this.sourceClass = sourceClass;
 	}

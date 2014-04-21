@@ -11,19 +11,12 @@ import java.util.HashSet;
  * @author tgame14
  * @since 09/04/14
  */
+@Deprecated
 public class ConfigSet extends HashSet<String>
 {
-	public static boolean isPostInit = false;
-
 	@Override
 	public boolean add(String c)
 	{
-		if (isPostInit)
-		{
-			Event event = new ConfigAnnotationEvent(c);
-			MinecraftForge.EVENT_BUS.post(event);
-
-		}
 		return super.add(c);
 	}
 }

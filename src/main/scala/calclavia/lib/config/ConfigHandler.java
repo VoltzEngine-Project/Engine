@@ -73,20 +73,10 @@ public final class ConfigHandler
 	 * @param clazz - class that is being handled
 	 * @param config - the config object to write and read from
 	 */
-	public static void handleClass(String clazz, Configuration config)
+	public static void handleClass(Class clazz, Configuration config)
 	{
-		Class c = null;
-		try
-		{
-			c = Class.forName(clazz);
-		}
-		catch (ClassNotFoundException e)
-		{
-			Calclavia.LOGGER.warning("Error in finding class " + clazz);
-			e.printStackTrace();
-		}
 		config.load();
-		for (Field field : c.getDeclaredFields())
+		for (Field field : clazz.getDeclaredFields())
 		{
 			Config cfg = field.getAnnotation(Config.class);
 			if (cfg != null)
