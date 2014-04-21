@@ -1,11 +1,9 @@
 package calclavia.lib.asm;
 
 import calclavia.lib.config.ConfigAnnotationEvent;
+import calclavia.lib.event.ChunkModifiedEvent.ChunkSetBlockEvent;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
-import calclavia.lib.event.ChunkModifiedEvent.ChunkSetBlockEvent;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodNode;
 
 /**
  * @author Calclavia
@@ -26,13 +24,5 @@ public class StaticForwarder
 	public static void onConfigClassLoad(Class c)
 	{
 		MinecraftForge.EVENT_BUS.post(new ConfigAnnotationEvent(c));
-	}
-
-	private static void cll(ClassNode c)
-	{
-		for (MethodNode mnode : c.methods)
-		{
-
-		}
 	}
 }
