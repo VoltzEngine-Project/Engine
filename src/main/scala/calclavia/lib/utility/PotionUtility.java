@@ -14,12 +14,12 @@ import calclavia.lib.Calclavia;
  */
 public class PotionUtility
 {
-	public static final int EXTEND_LIMIT = 32;
-	public static int POT_ARRAY_SIZE;
+	private static final int EXTEND_LIMIT = 32;
+	public static int potionOffset;
 
     public static void resizePotionArray ()
     {
-        Potion[] resizedPotionArray = null;
+        Potion[] headPotionArray = null;
 
         for (Field f : Potion.class.getDeclaredFields())
         {
@@ -32,12 +32,12 @@ public class PotionUtility
                     modfield.setAccessible(true);
                     modfield.setInt(f, f.getModifiers() & ~Modifier.FINAL);
 
-                    resizedPotionArray = (Potion[]) f.get(null);
-                    final Potion[] newPotionTypes = new Potion[resizedPotionArray.length + EXTEND_LIMIT];
-                    System.arraycopy(resizedPotionArray, 0, newPotionTypes, 0, resizedPotionArray.length);
+                    headPotionArray = (Potion[]) f.get(null);
+                    final Potion[] newPotionTypes = new Potion[headPotionArray.length + EXTEND_LIMIT];
+                    System.arraycopy(headPotionArray, 0, newPotionTypes, 0, headPotionArray.length);
                     f.set(null, newPotionTypes);
 
-					POT_ARRAY_SIZE = resizedPotionArray.length + EXTEND_LIMIT;
+					potionOffset = newPotionTypes.length - 1;
                 }
             }
             catch (Exception e)
@@ -47,4 +47,9 @@ public class PotionUtility
             }
         }
     }
+
+	public static int getNextOptimalPotId()
+	{
+		return --potionOffset + 1;
+	}
 }
