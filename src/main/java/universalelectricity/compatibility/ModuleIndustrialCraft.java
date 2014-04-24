@@ -32,10 +32,10 @@ public class ModuleIndustrialCraft extends CompatibilityModule
             if (doReceive)
             {
                 double rejected = ((IEnergySink) handler).injectEnergyUnits(direction, send);
-                return (long) Math.max(send - (rejected * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio), 0);
+                return (long) (Math.max(send - rejected, 0) * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
             }
 
-            return send;
+            return (long) (send * CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
         }
 
         return 0;
