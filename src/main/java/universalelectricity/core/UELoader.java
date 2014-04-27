@@ -44,7 +44,7 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
     public static final String ID = "UniversalElectricity";
     public static final String NAME = "Universal Electricity";
     /** The Universal Electricity configuration file. */
-    public static Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
+    public static Configuration CONFIGURATION;
 
     @SidedProxy(clientSide = "universalelectricity.core.ClientProxy", serverSide = "universalelectricity.core.CommonProxy")
     public static CommonProxy proxy;
@@ -58,6 +58,7 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
     public void preInit(FMLPreInitializationEvent evt)
     {
         /** Loads the configuration and sets all the values. */
+        CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
         CONFIGURATION.load();
         CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio = CONFIGURATION.get("Compatibility", "Thermal Expansion Conversion Ratio", CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio).getDouble(CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
         CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio = CONFIGURATION.get("Compatibility", "IndustrialCraft Conversion Ratio", CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio).getDouble(CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
