@@ -646,14 +646,14 @@ public class CalclaviaLoader
             world.spawnParticle("smoke", position.x + Math.random(), position.y + 0.5f + Math.random(), position.z + Math.random(), 0, 0, 0);
         }
 
-        if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0)
-        {
-            // Don't always destroy the source block, reduces lag in world.
-            if (world.rand.nextBoolean() && world.rand.nextInt(10000) <= 420)
-            {
-                //position.setBlock(world, 0);
-            }
-        }
+//        if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0)
+//        {
+//            // Don't always destroy the source block, reduces lag in world.
+//            if (world.rand.nextBoolean() && world.rand.nextInt(10000) <= 420)
+//            {
+//                position.setBlock(world, 0);
+//            }
+//        }
 
         evt.setResult(Result.DENY);
     }
