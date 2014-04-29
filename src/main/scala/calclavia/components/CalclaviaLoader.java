@@ -651,7 +651,7 @@ public class CalclaviaLoader
             // Don't always destroy the source block, reduces lag in world.
             if (world.rand.nextBoolean() && world.rand.nextInt(10000) <= 420)
             {
-                position.setBlock(world, 0);
+                //position.setBlock(world, 0);
             }
         }
 
