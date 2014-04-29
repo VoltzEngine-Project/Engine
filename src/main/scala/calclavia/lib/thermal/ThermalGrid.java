@@ -20,113 +20,136 @@ import calclavia.api.mffs.fortron.IServerThread;
 import calclavia.components.CalclaviaLoader;
 import calclavia.lib.thermal.EventThermal.EventThermalUpdate;
 
-/** A grid managing the flow of thermal energy.
+/**
+ * A grid managing the flow of thermal energy.
  * 
- * TODO: Make this not temperature based, but more "energy based". */
+ * TODO: Make this not temperature based, but more "energy based".
+ */
 public class ThermalGrid implements IUpdate
 {
-    private final float spread = 1 / 7f;
-    private final float loss = 0.1f;
-    private final static HashMap<VectorWorld, Float> thermalSource = new HashMap<VectorWorld, Float>();
+	public static final ThermalGrid CLIENT_INSTANCE = new ThermalGrid();
+	public static final ThermalGrid SERVER_INSTANCE = new ThermalGrid();
 
-    private int tick = 0;
-    private final float deltaTime = 1 / 20f;
+	private final float spread = 1 / 7f;
+	private final float loss = 0.1f;
+	private final HashMap<VectorWorld, Float> thermalSource = new HashMap<VectorWorld, Float>();
 
-    public static float getDefaultTemperature(VectorWorld position)
-    {
-        return ThermalPhysics.getTemperatureForCoordinate(position.world, position.intX(), position.intZ());
-    }
+	private int tick = 0;
+	private final float deltaTime = 1 / 20f;
 
-    public static void addTemperature(VectorWorld position, float deltaTemperature)
-    {
+	public float getDefaultTemperature(VectorWorld position)
+	{
+		return ThermalPhysics.getTemperatureForCoordinate(position.world, position.intX(), position.intZ());
+	}
 
-        float original;
-        float defaultTemperature = getDefaultTemperature(position);
+	public void addTemperature(VectorWorld position, float deltaTemperature)
+	{
+		synchronized (thermalSource)
+		{
+			float original;
+			float defaultTemperature = getDefaultTemperature(position);
 
-        if (thermalSource.containsKey(position))
-            original = thermalSource.get(position);
-        else
-            original = defaultTemperature;
+			if (thermalSource.containsKey(position))
+				original = thermalSource.get(position);
+			else
+				original = defaultTemperature;
 
-        float newTemperature = original + deltaTemperature;
+			float newTemperature = original + deltaTemperature;
 
-        if (Math.abs(newTemperature - defaultTemperature) > 0.4)
-            thermalSource.put(position, original + deltaTemperature);
-        else
-            thermalSource.remove(position);
+			if (Math.abs(newTemperature - defaultTemperature) > 0.4)
+				thermalSource.put(position, original + deltaTemperature);
+			else
+				thermalSource.remove(position);
+		}
+	}
 
-    }
+	public float getTemperature(VectorWorld position)
+	{
+		synchronized (thermalSource)
+		{
+			if (thermalSource.containsKey(position))
+				return thermalSource.get(position);
+			else
+				return ThermalPhysics.getTemperatureForCoordinate(position.world, position.intX(), position.intZ());
+		}
+	}
 
-    public static float getTemperature(VectorWorld position)
-    {
+	@Override
+	public void update()
+	{
+		Iterator<Entry<VectorWorld, Float>> it = new HashMap<VectorWorld, Float>(thermalSource).entrySet().iterator();
+		// System.out.println("NODES " + thermalSource.size());
 
-        if (thermalSource.containsKey(position))
-            return thermalSource.get(position);
-        else
-            return ThermalPhysics.getTemperatureForCoordinate(position.world, position.intX(), position.intZ());
+		while (it.hasNext())
+		{
+			Entry<VectorWorld, Float> entry = it.next();
 
-    }
+			// Distribute temperature
+			VectorWorld pos = entry.getKey();
 
-    @Override
-    public void update()
-    {
-        Iterator<Entry<VectorWorld, Float>> it = new HashMap<VectorWorld, Float>(thermalSource).entrySet().iterator();
-        // System.out.println("NODES " + thermalSource.size());
+			/**
+			 * Deal with different block types
+			 */
+			float currentTemperature = getTemperature(pos);
 
-        while (it.hasNext())
-        {
-            Entry<VectorWorld, Float> entry = it.next();
+			if (currentTemperature < 0)
+			{
+				thermalSource.remove(pos);
+				continue;
+			}
 
-            // Distribute temperature
-            VectorWorld pos = entry.getKey();
+			float deltaFromEquilibrium = getDefaultTemperature(pos) - currentTemperature;
 
-            /** Deal with different block types */
-            float currentTemperature = getTemperature(pos);
+			EventThermalUpdate evt = new EventThermalUpdate(pos, currentTemperature, deltaFromEquilibrium, deltaTime);
+			MinecraftForge.EVENT_BUS.post(evt);
 
-            if (currentTemperature < 0)
-            {
-                thermalSource.remove(pos);
-                continue;
-            }
+			float loss = evt.heatLoss;
+			addTemperature(pos, (deltaFromEquilibrium > 0 ? 1 : -1) * Math.min(Math.abs(deltaFromEquilibrium), Math.abs(loss)));
 
-            float deltaFromEquilibrium = getDefaultTemperature(pos) - currentTemperature;
+			/**
+			 * Spread heat to surrounding.
+			 */
+			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+			{
+				VectorWorld adjacent = (VectorWorld) pos.clone().translate(dir);
+				float deltaTemperature = getTemperature(pos) - getTemperature(adjacent);
 
-            EventThermalUpdate evt = new EventThermalUpdate(pos, currentTemperature, deltaFromEquilibrium, deltaTime);
-            MinecraftForge.EVENT_BUS.post(evt);
+				Material adjacentMat = adjacent.world.getBlockMaterial(adjacent.intX(), adjacent.intY(), adjacent.intZ());
 
-            float loss = evt.heatLoss;
-            addTemperature(pos, (deltaFromEquilibrium > 0 ? 1 : -1) * Math.min(Math.abs(deltaFromEquilibrium), Math.abs(loss)));
+				float spread = (adjacentMat.isSolid() ? this.spread : this.spread / 2) * deltaTime;
 
-            /** Spread heat to surrounding. */
-            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-            {
-                VectorWorld adjacent = (VectorWorld) pos.clone().translate(dir);
-                float deltaTemperature = getTemperature(pos) - getTemperature(adjacent);
+				if (deltaTemperature > 0)
+				{
+					addTemperature(adjacent, deltaTemperature * spread);
+					addTemperature(pos, -deltaTemperature * spread);
+				}
+			}
 
-                Material adjacentMat = adjacent.world.getBlockMaterial(adjacent.intX(), adjacent.intY(), adjacent.intZ());
+		}
+	}
 
-                float spread = (adjacentMat.isSolid() ? this.spread : this.spread / 2) * deltaTime;
+	@Override
+	public boolean canUpdate()
+	{
+		return !CalclaviaLoader.proxy.isPaused();
+		// && ++tick % 20 == 0;
+	}
 
-                if (deltaTemperature > 0)
-                {
-                    addTemperature(adjacent, deltaTemperature * spread);
-                    addTemperature(pos, -deltaTemperature * spread);
-                }
-            }
+	@Override
+	public boolean continueUpdate()
+	{
+		return true;
+	}
 
-        }
-    }
+	public static ThermalGrid instance()
+	{
+		Thread thr = Thread.currentThread();
 
-    @Override
-    public boolean canUpdate()
-    {
-        return !CalclaviaLoader.proxy.isPaused();
-        // && ++tick % 20 == 0;
-    }
+		if ((thr instanceof ThreadMinecraftServer) || (thr instanceof ServerListenThread) || (thr instanceof IServerThread))
+		{
+			return SERVER_INSTANCE;
+		}
 
-    @Override
-    public boolean continueUpdate()
-    {
-        return true;
-    }
+		return CLIENT_INSTANCE;
+	}
 }
