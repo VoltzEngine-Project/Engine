@@ -2,6 +2,7 @@ package calclavia.components;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
@@ -645,7 +646,11 @@ public class CalclaviaLoader
 
         if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0)
         {
-            position.setBlock(world, 0);
+            // Don't always destroy the source block.
+            if (world.rand.nextBoolean() && world.rand.nextInt(10000) <= 420)
+            {
+                position.setBlock(world, 0);
+            }
         }
 
         evt.setResult(Result.DENY);
@@ -673,7 +678,7 @@ public class CalclaviaLoader
                 {
                     if (FluidRegistry.getFluid("steam") != null)
                     {
-                        // TODO: INCORRECT!
+                        // TODO: Math here could use some work, default is 1000.
                         int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373) * steamMultiplier);
                         MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2));
                     }
