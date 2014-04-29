@@ -2,7 +2,6 @@ package calclavia.components;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
@@ -175,14 +174,10 @@ public class CalclaviaLoader
     public static double steamMultiplier = 1;
 
     private ProxyHandler modproxies;
-    
-    /** Keeps track of heat dispersion allowing water to boil and reactor to cool down. */
-    private ThermalGrid thermalGrid;
 
     public CalclaviaLoader()
     {
         this.modproxies = new ProxyHandler();
-        this.thermalGrid = new ThermalGrid();
     }
 
     /** Call all of this in Init stage. Use "requestItem" or "requestBlock" instead to make it so
@@ -573,7 +568,7 @@ public class CalclaviaLoader
         ConfigHandler.configure(Calclavia.CONFIGURATION, Calclavia.DOMAIN);
 
         // Register Thermal Grid
-        UpdateTicker.addNetwork(this.thermalGrid);
+        UpdateTicker.addNetwork(ThermalGrid.SERVER_INSTANCE);
 
         modproxies.postInit();
     }
@@ -650,11 +645,7 @@ public class CalclaviaLoader
 
         if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0)
         {
-            // Don't always destroy the source block.
-            if (world.rand.nextBoolean() && world.rand.nextInt(10000) <= 420)
-            {
-                position.setBlock(world, 0);
-            }
+            position.setBlock(world, 0);
         }
 
         evt.setResult(Result.DENY);
@@ -682,7 +673,7 @@ public class CalclaviaLoader
                 {
                     if (FluidRegistry.getFluid("steam") != null)
                     {
-                        // TODO: Math here could use some work, default is 1000.
+                        // TODO: INCORRECT!
                         int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373) * steamMultiplier);
                         MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2));
                     }
