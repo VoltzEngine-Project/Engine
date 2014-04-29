@@ -174,10 +174,13 @@ public class CalclaviaLoader
     public static double steamMultiplier = 1;
 
     private ProxyHandler modproxies;
+    
+    private ThermalGrid thermalGrid;
 
     public CalclaviaLoader()
     {
         this.modproxies = new ProxyHandler();
+        this.thermalGrid = new ThermalGrid();
     }
 
     /** Call all of this in Init stage. Use "requestItem" or "requestBlock" instead to make it so
@@ -568,7 +571,7 @@ public class CalclaviaLoader
         ConfigHandler.configure(Calclavia.CONFIGURATION, Calclavia.DOMAIN);
 
         // Register Thermal Grid
-        UpdateTicker.addNetwork(ThermalGrid.SERVER_INSTANCE);
+        UpdateTicker.addNetwork(this.thermalGrid);
 
         modproxies.postInit();
     }
@@ -645,7 +648,11 @@ public class CalclaviaLoader
 
         if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0)
         {
-            position.setBlock(world, 0);
+            // Don't always destroy the source block, reduces lag in world.
+            if (world.rand.nextBoolean() && world.rand.nextInt(10000) <= 420)
+            {
+                position.setBlock(world, 0);
+            }
         }
 
         evt.setResult(Result.DENY);
