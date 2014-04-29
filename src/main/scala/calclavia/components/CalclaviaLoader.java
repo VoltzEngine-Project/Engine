@@ -175,10 +175,14 @@ public class CalclaviaLoader
     public static double steamMultiplier = 1;
 
     private ProxyHandler modproxies;
+    
+    /** Keeps track of heat dispersion allowing water to boil and reactor to cool down. */
+    private ThermalGrid thermalGrid;
 
     public CalclaviaLoader()
     {
         this.modproxies = new ProxyHandler();
+        this.thermalGrid = new ThermalGrid();
     }
 
     /** Call all of this in Init stage. Use "requestItem" or "requestBlock" instead to make it so
@@ -569,7 +573,7 @@ public class CalclaviaLoader
         ConfigHandler.configure(Calclavia.CONFIGURATION, Calclavia.DOMAIN);
 
         // Register Thermal Grid
-        UpdateTicker.addNetwork(ThermalGrid.SERVER_INSTANCE);
+        UpdateTicker.addNetwork(this.thermalGrid);
 
         modproxies.postInit();
     }
