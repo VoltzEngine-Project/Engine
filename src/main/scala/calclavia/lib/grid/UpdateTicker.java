@@ -37,7 +37,7 @@ public class UpdateTicker extends Thread
 	public UpdateTicker()
 	{
 		setName("Universal Electricity");
-		setPriority(MIN_PRIORITY);
+		setPriority(MAX_PRIORITY);
 	}
 
 	public static void addNetwork(IUpdate updater)
