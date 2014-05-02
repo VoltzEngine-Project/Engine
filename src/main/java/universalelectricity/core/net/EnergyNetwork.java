@@ -48,6 +48,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
     public EnergyNetwork()
     {
         super(IConductor.class);
+        NetworkTickHandler.addNetwork(this);
     }
 
     @Override
