@@ -15,9 +15,12 @@ import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyNetwork;
 import universalelectricity.api.net.NetworkEvent.EnergyProduceEvent;
 
-/** The energy network, neglecting voltage.
+/** Basic energy network that moves energy from point A to point B. If you implement this in your own
+ * conductor code you will need to save the energy yourself. To do this have each conductor save its
+ * buffer from conductorBuffer map. When loading from the map make sure to also load up the buffer
+ * into the network as well.
  * 
- * @author Calclavia */
+ * @author Calclavia, Darkguardsman */
 public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Object> implements IEnergyNetwork
 {
     /** The energy to be distributed on the next update. */
@@ -27,8 +30,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
      * stored. */
     protected final HashMap<IConductor, Long> conductorBuffers = new HashMap<IConductor, Long>();
 
-    /** The total resistance of this entire network. The loss is based on the resistance in each
-     * conductor. */
+    /** Resistance of the network to flow of energy, is based on total resistance of each conductor */
     protected float resistance;
 
     /** The total energy buffer in the last tick. */
@@ -36,6 +38,9 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
 
     /** Last cached value for network demand energy */
     protected long lastNetworkRequest = -1;
+
+    /** Temporary variable */
+    private long energyPerWire;
 
     /** The direction in which a conductor is placed relative to a specific conductor. */
     protected final HashMap<Object, EnumSet<ForgeDirection>> handlerDirectionMap = new LinkedHashMap<Object, EnumSet<ForgeDirection>>();
@@ -241,9 +246,6 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
         return null;
     }
 
-    /** Temporary variable used through these two methods. */
-    private long energyPerWire;
-
     @Override
     public void split(IConductor splitPoint)
     {
@@ -273,32 +275,36 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
     @Override
     public long produce(IConductor conductor, ForgeDirection from, long amount, boolean doReceive)
     {
-        EnergyProduceEvent evt = new EnergyProduceEvent(this, conductor, amount, doReceive);
-        MinecraftForge.EVENT_BUS.post(evt);
-
-        if (!evt.isCanceled() && amount > 0)
+        long energyReceived = 0;
+        long conductorBuffer = 0;
+        //No energy nothing should happen
+        if (amount > 0)
         {
-            long conductorBuffer = 0;
+            //Fire event giving other mods a change to interact with this network
+            EnergyProduceEvent evt = new EnergyProduceEvent(this, conductor, amount, doReceive);
+            MinecraftForge.EVENT_BUS.post(evt);
 
-            if (conductorBuffers.containsKey(conductor))
+            if (!evt.isCanceled())
             {
-                conductorBuffer = conductorBuffers.get(conductor);
+                if (conductorBuffers.containsKey(conductor))
+                {
+                    conductorBuffer = conductorBuffers.get(conductor);
+                }
+
+                energyReceived = Math.min(Math.max(((conductor.getCurrentCapacity() * UniversalElectricity.DEFAULT_VOLTAGE) - conductorBuffer), 0), amount);
+
+                if (doReceive && energyReceived > 0)
+                {
+                    energyBuffer += energyReceived;
+                    conductorBuffer += energyReceived;
+                    conductorBuffers.put(conductor, conductorBuffer);
+                }
             }
-
-            long energyReceived = Math.min((conductor.getCurrentCapacity() * UniversalElectricity.DEFAULT_VOLTAGE) - conductorBuffer, amount);
-
-            if (doReceive && energyReceived > 0)
-            {
-                energyBuffer += energyReceived;
-                conductorBuffer += energyReceived;
-                conductorBuffers.put(conductor, conductorBuffer);
-                NetworkTickHandler.addNetwork(this);
-            }
-
-            return Math.max(energyReceived, 0);
         }
 
-        return 0;
+        if (this.energyBuffer > 0)
+            NetworkTickHandler.addNetwork(this);
+        return energyReceived;
     }
 
     /** Assume voltage to be the default voltage for the energy network to calculate energy loss.
@@ -346,7 +352,6 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
         return 0;
     }
 
-    // TODO: Use UE external saving instead of having conductors save files.
     @Override
     public void setBufferFor(IConductor conductor, long buffer)
     {
