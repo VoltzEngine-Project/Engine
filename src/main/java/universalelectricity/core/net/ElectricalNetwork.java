@@ -1,13 +1,13 @@
 package universalelectricity.core.net;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.electricity.IElectricalNetwork;
 import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.electricity.IVoltageOutput;
 import universalelectricity.api.energy.IConductor;
-import universalelectricity.api.net.NetworkEvent.EnergyProduceEvent;
+import universalelectricity.api.vector.Vector3;
 
 /** Modified version of energy network that takes voltage into account. Use of voltage causes energy
  * lose but also allows for faster energy transfers.
@@ -82,39 +82,19 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
     @Override
     public long produce(IConductor conductor, ForgeDirection from, long amount, boolean doReceive)
     {
-        if (conductor instanceof IVoltageOutput && !(conductor instanceof IConductor))
+        TileEntity tile = null;
+        if (conductor instanceof TileEntity)
         {
-            if (((IVoltageOutput) conductor).getVoltageOutput(from) < voltage)
+            tile = new Vector3((TileEntity) conductor).translate(from).getTileEntity(((TileEntity) conductor).worldObj);
+        }
+        //Don't accept power from under powered generators
+        if (tile instanceof IVoltageOutput && !(tile instanceof IConductor))
+        {
+            if (((IVoltageOutput) tile).getVoltageOutput(from) < voltage)
             {
                 return 0;
             }
         }
-
-        EnergyProduceEvent evt = new EnergyProduceEvent(this, conductor, amount, doReceive);
-        MinecraftForge.EVENT_BUS.post(evt);
-
-        if (!evt.isCanceled() && amount > 0)
-        {
-            long conductorBuffer = 0;
-
-            if (conductorBuffers.containsKey(conductor))
-            {
-                conductorBuffer = conductorBuffers.get(conductor);
-            }
-
-            long energyReceived = Math.min((conductor.getCurrentCapacity() * getVoltage()) - conductorBuffer, amount);
-
-            if (doReceive && energyReceived > 0)
-            {
-                energyBuffer += energyReceived;
-                conductorBuffer += energyReceived;
-                conductorBuffers.put(conductor, conductorBuffer);
-                NetworkTickHandler.addNetwork(this);
-            }
-
-            return Math.max(energyReceived, 0);
-        }
-
-        return 0;
+        return super.produce(conductor, from, amount, doReceive);
     }
 }

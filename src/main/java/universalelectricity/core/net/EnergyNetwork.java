@@ -291,7 +291,7 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
                     conductorBuffer = conductorBuffers.get(conductor);
                 }
 
-                energyReceived = Math.min(Math.max(((conductor.getCurrentCapacity() * UniversalElectricity.DEFAULT_VOLTAGE) - conductorBuffer), 0), amount);
+                energyReceived = Math.min(Math.max(((conductor.getCurrentCapacity() * getVoltage()) - conductorBuffer), 0), amount);
 
                 if (doReceive && energyReceived > 0)
                 {
