@@ -54,10 +54,7 @@ public abstract class TileTerminal extends TileAdvanced implements ITerminal, IS
     /** Send a terminal command Client -> server */
     public void sendCommandToServer(EntityPlayer entityPlayer, String cmdInput)
     {
-        if (this.worldObj.isRemote)
-        {
-            PacketDispatcher.sendPacketToServer(getCommandPacket(entityPlayer.username, cmdInput));
-        }
+            PacketDispatcher.sendPacketToServer(getCommandPacket(entityPlayer.username, cmdInput)); 
     }
 
     /** Retrieves the data needed to generate a packet for the data type. Does not encode the type as

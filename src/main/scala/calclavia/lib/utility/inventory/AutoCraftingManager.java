@@ -426,19 +426,6 @@ public class AutoCraftingManager
         {
             ItemStack containerStack = stack.getItem().getContainerItemStack(stack);
 
-            if (containerStack.isItemStackDamageable() && containerStack.getItemDamage() > containerStack.getMaxDamage())
-            {
-                try
-                {
-                    MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(null, containerStack));
-                }
-                catch (Exception e)
-                {
-
-                }
-                return null;
-            }
-
             if (containerStack != null && !stack.getItem().doesContainerItemLeaveCraftingGrid(stack))
             {
                 return containerStack;

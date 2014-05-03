@@ -27,25 +27,22 @@ import calclavia.lib.thermal.EventThermal.EventThermalUpdate;
  */
 public class ThermalGrid implements IUpdate
 {
-	public static final ThermalGrid CLIENT_INSTANCE = new ThermalGrid();
-	public static final ThermalGrid SERVER_INSTANCE = new ThermalGrid();
-
 	private final float spread = 1 / 7f;
 	private final float loss = 0.1f;
-	private final HashMap<VectorWorld, Float> thermalSource = new HashMap<VectorWorld, Float>();
+	private final static HashMap<VectorWorld, Float> thermalSource = new HashMap<VectorWorld, Float>();
 
 	private int tick = 0;
 	private final float deltaTime = 1 / 20f;
 
-	public float getDefaultTemperature(VectorWorld position)
+	public static float getDefaultTemperature(VectorWorld position)
 	{
 		return ThermalPhysics.getTemperatureForCoordinate(position.world, position.intX(), position.intZ());
 	}
 
-	public void addTemperature(VectorWorld position, float deltaTemperature)
+	public static void addTemperature(VectorWorld position, float deltaTemperature)
 	{
-		synchronized (thermalSource)
-		{
+
+		
 			float original;
 			float defaultTemperature = getDefaultTemperature(position);
 
@@ -60,18 +57,18 @@ public class ThermalGrid implements IUpdate
 				thermalSource.put(position, original + deltaTemperature);
 			else
 				thermalSource.remove(position);
-		}
+		
 	}
 
-	public float getTemperature(VectorWorld position)
+	public static float getTemperature(VectorWorld position)
 	{
-		synchronized (thermalSource)
-		{
+
+		
 			if (thermalSource.containsKey(position))
 				return thermalSource.get(position);
 			else
 				return ThermalPhysics.getTemperatureForCoordinate(position.world, position.intX(), position.intZ());
-		}
+		
 	}
 
 	@Override
@@ -139,17 +136,5 @@ public class ThermalGrid implements IUpdate
 	public boolean continueUpdate()
 	{
 		return true;
-	}
-
-	public static ThermalGrid instance()
-	{
-		Thread thr = Thread.currentThread();
-
-		if ((thr instanceof ThreadMinecraftServer) || (thr instanceof ServerListenThread) || (thr instanceof IServerThread))
-		{
-			return SERVER_INSTANCE;
-		}
-
-		return CLIENT_INSTANCE;
 	}
 }
