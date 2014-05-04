@@ -201,6 +201,8 @@ public class LaserEvent extends Event
                 start = new Vector3((TileEntity) player);
             }
 
+            List<ItemStack> items = block.getBlockDropped(world, vec.intX(), vec.intY(), vec.intZ(), meta, 1);
+
             // TODO make this use or call to the correct methods, and events so it can be canceled
             if (block != null && block.getBlockHardness(world, vec.intX(), vec.intY(), vec.intZ()) >= 0 && doLaserHarvestCheck(world, start, player, vec))
             {
@@ -226,7 +228,7 @@ public class LaserEvent extends Event
                         vec.setBlock(world, Block.fire.blockID, 0, 3);
                         return;
                     }
-                    List<ItemStack> items = block.getBlockDropped(world, vec.intX(), vec.intY(), vec.intZ(), meta, 1);
+
                     if (items == null)
                     {
                         items = new ArrayList<ItemStack>();
@@ -264,10 +266,6 @@ public class LaserEvent extends Event
                     LaserEvent.LaserDropItemEvent event = new LaserEvent.LaserDropItemEvent(world, start, vec, items);
                     MinecraftForge.EVENT_BUS.post(event);
                     items = event.items;
-                    for (ItemStack stack : items)
-                    {
-                        InventoryUtility.dropItemStack(world, vec.translate(0.5), stack);
-                    }
                 }
                 catch (Exception e)
                 {
@@ -275,7 +273,16 @@ public class LaserEvent extends Event
                 }
             }
             System.out.println("Break Bitch break");
+            System.out.println("Tile: " + world.getBlockTileEntity(vec.intX(), vec.intY(), vec.intZ()));
             world.destroyBlock(vec.intX(), vec.intY(), vec.intZ(), false);
+            Block b = Block.blocksList[world.getBlockId(vec.intX(), vec.intY(), vec.intZ())];
+            if ((b == null || b.isAirBlock(world, vec.intX(), vec.intY(), vec.intZ())) && items != null)
+            {
+                for (ItemStack stack : items)
+                {
+                    InventoryUtility.dropItemStack(world, vec.translate(0.5), stack);
+                }
+            }
         }
     }
 }
