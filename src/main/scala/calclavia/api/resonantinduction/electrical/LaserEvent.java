@@ -138,7 +138,7 @@ public class LaserEvent extends Event
         {
             start = new Vector3((TileEntity) player);
         }
-        if (block != null)
+        if (block != null && block.blockHardness > -1)
         {
             float chance = world.rand.nextFloat();
 
@@ -208,7 +208,6 @@ public class LaserEvent extends Event
             {
                 try
                 {
-                    System.out.println("Breaking Block");
                     Block blockBellow = Block.blocksList[vec.clone().translate(ForgeDirection.DOWN).getBlockID(world)];
 
                     if (block.blockID == Block.tnt.blockID)
@@ -233,7 +232,6 @@ public class LaserEvent extends Event
                     {
                         items = new ArrayList<ItemStack>();
                     }
-                    System.out.println("Items: " + items);
                     // TODO have glass refract the laser causing it to hit random things
                     if (id == Block.glass.blockID)
                     {
@@ -272,9 +270,8 @@ public class LaserEvent extends Event
                     e.printStackTrace();
                 }
             }
-            System.out.println("Break Bitch break");
-            System.out.println("Tile: " + world.getBlockTileEntity(vec.intX(), vec.intY(), vec.intZ()));
             world.destroyBlock(vec.intX(), vec.intY(), vec.intZ(), false);
+            world.destroyBlockInWorldPartially(0, vec.intX(), vec.intY(), vec.intZ(), -1);
             Block b = Block.blocksList[world.getBlockId(vec.intX(), vec.intY(), vec.intZ())];
             if ((b == null || b.isAirBlock(world, vec.intX(), vec.intY(), vec.intZ())) && items != null)
             {
