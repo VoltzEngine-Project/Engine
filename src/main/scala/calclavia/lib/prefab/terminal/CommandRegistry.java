@@ -34,7 +34,11 @@ public class CommandRegistry
     public static List<String> onCommand(EntityPlayer player, ITerminal terminal, String cmd)
     {
         List<String> output_list = new ArrayList<String>();
-        if (cmd != null && cmd != "")
+        if (player.worldObj.isRemote)
+        {
+            output_list.add("Error: Command called client side");
+        }
+        else if (cmd != null && cmd != "")
         {
             String[] args = cmd.split(" ");
 
@@ -55,7 +59,7 @@ public class CommandRegistry
                             else
                             {
                                 List<String> out = command.called(player, terminal, args);
-                                if(out != null && !out.isEmpty())
+                                if (out != null && !out.isEmpty())
                                 {
                                     output_list.addAll(out);
                                     terminal.addToConsole(output_list);
@@ -67,6 +71,10 @@ public class CommandRegistry
                 }
             }
             output_list.add("Unkown Command.");
+        }
+        else
+        {
+            output_list.add("Error: Empty command");
         }
         terminal.addToConsole(output_list);
         return output_list;
