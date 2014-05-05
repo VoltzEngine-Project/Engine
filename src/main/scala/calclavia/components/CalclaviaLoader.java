@@ -646,19 +646,11 @@ public class CalclaviaLoader
             world.spawnParticle("smoke", position.x + Math.random(), position.y + 0.5f + Math.random(), position.z + Math.random(), 0, 0, 0);
         }
 
-//        if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0)
-//        {
-//            // Don't always destroy the source block, reduces lag in world.
-//            if (world.rand.nextBoolean() && world.rand.nextInt(10000) <= 420)
-//            {
-//                position.setBlock(world, 0);
-//                VectorWorld waterPosition = new VectorWorld(world, position);
-//                float defaultTemp = ThermalGrid.getDefaultTemperature(waterPosition);
-//                float currentTemp = ThermalGrid.getTemperature(waterPosition);
-//                ThermalGrid.addTemperature(waterPosition, defaultTemp);
-//                System.out.println("[Atomic Science] [Thermal Grid] [Boil Event] Temperature Reset Default @ " + String.valueOf(waterPosition) + ": " + String.valueOf(currentTemp));
-//            }
-//        }
+        // Reactors will not actually remove water source blocks, however weapons will.
+        if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0 && !evt.isReactor)
+        {
+            position.setBlock(world, 0);
+        }
 
         evt.setResult(Result.DENY);
     }
@@ -687,7 +679,7 @@ public class CalclaviaLoader
                     {
                         // TODO: INCORRECT!
                         int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373) * steamMultiplier);
-                        MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2));
+                        MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2, evt.isReactor));
                     }
 
                     evt.heatLoss = 0.2f;
