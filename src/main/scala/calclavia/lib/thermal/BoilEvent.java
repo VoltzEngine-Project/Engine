@@ -12,19 +12,22 @@ public class BoilEvent extends WorldEvent
 	public final FluidStack fluid;
 	public final Vector3 position;
 	public final int maxSpread;
+	public final boolean isReactor;
 
 	/**
 	 * @param world - The World Objecto
 	 * @param position - The position in which the boiling happens.
 	 * @param result - The fluid being boiled.
 	 * @param maxSpread - The maximum distance the evaporated fluid can spread.
+	 * @param isReactor - Determined if heat source if from power generation or a weapon.
 	 */
-	public BoilEvent(World world, Vector3 position, FluidStack source, FluidStack result, int maxSpread)
+	public BoilEvent(World world, Vector3 position, FluidStack source, FluidStack result, int maxSpread, boolean isReactor)
 	{
 		super(world);
 		this.position = position;
 		this.fluid = result;
 		this.maxSpread = maxSpread;
+		this.isReactor = isReactor;
 	}
 
 	/**
