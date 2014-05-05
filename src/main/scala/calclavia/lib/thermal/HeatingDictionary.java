@@ -3,13 +3,21 @@ package calclavia.lib.thermal;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialLiquid;
+import net.minecraft.block.material.MaterialLogic;
+import net.minecraft.block.material.MaterialPortal;
+import net.minecraft.block.material.MaterialTransparent;
+import net.minecraft.block.material.MaterialWeb;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.IVector3;
 import universalelectricity.api.vector.IVectorWorld;
 import calclavia.lib.type.Pair;
 
 /** Dictionary of heat values related to blocks
+ * http://www.engineeringtoolbox.com/specific-heat-metals-d_152.html
+ * http://www.engineeringtoolbox.com/specific-heat-solids-d_154.html
  * 
  * @author Darkguardsman */
 public class HeatingDictionary
@@ -18,6 +26,43 @@ public class HeatingDictionary
     private static HashMap<Integer, Float> idToHeatMap = new HashMap<Integer, Float>();
     private static HashMap<Pair<Integer, Integer>, Float> idMetaToHeatMap = new HashMap<Pair<Integer, Integer>, Float>();
     private static HashMap<Material, Float> materialToHeatMap = new HashMap<Material, Float>();
+
+    static
+    {
+        register(Material.iron, 0.45f);
+        register(Material.air, 1f);        
+        register(Material.grass, 0.84f);        
+        register(Material.ground, 0.9f);
+        register(Material.wood, 0.84f);        
+        register(Material.rock, 0.8f);
+        register(Material.anvil, 0.5f);
+        register(Material.water, 1f);        
+        register(Material.lava, 0.84f);
+        register(Material.leaves, 0.84f);
+        register(Material.plants, 0.84f);
+        register(Material.vine, 0.84f);
+        register(Material.sponge, 0.84f);        
+        register(Material.cloth, 2f);
+        register(Material.fire, 1f);        
+        register(Material.sand, 1f);        
+        register(Material.circuits, 1f);        
+        register(Material.materialCarpet, 2f);
+        register(Material.glass, 0.84f);
+        register(Material.redstoneLight, 0.9f);
+        register(Material.tnt, 2f);
+        register(Material.coral, 0.84f);        
+        register(Material.ice, 1f);
+        register(Material.snow, 1f);
+        register(Material.craftedSnow, 1f);
+        register(Material.cactus, 0.84f);
+        register(Material.clay, 0.92f);
+        register(Material.pumpkin, 0.84f);
+        register(Material.dragonEgg, 0.84f);
+        register(Material.portal, 1f);
+        register(Material.cake, 2f);
+        register(Material.web, 0.84f);
+        register(Material.piston, 0.9f);
+    }
 
     /** Registers a block with a specific heating value */
     public static void register(Block block, float f)
