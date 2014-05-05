@@ -14,6 +14,10 @@ public class BoilEvent extends WorldEvent
 	public final int maxSpread;
 	public final boolean isReactor;
 
+	public BoilEvent(World world, Vector3 position, FluidStack source, FluidStack result, int maxSpread)
+    {
+	    this(world, position, source, result, maxSpread, false);
+    }
 	/**
 	 * @param world - The World Objecto
 	 * @param position - The position in which the boiling happens.
