@@ -218,13 +218,13 @@ public class LaserEvent extends Event
             else if (player instanceof TileEntity)
             {
                 start = new Vector3((TileEntity) player);
-            }
-
-            List<ItemStack> items = block.getBlockDropped(world, vec.intX(), vec.intY(), vec.intZ(), meta, 1);
-
+            }           
+            List<ItemStack> items = null;
             // TODO make this use or call to the correct methods, and events so it can be canceled
             if (block != null && block.getBlockHardness(world, vec.intX(), vec.intY(), vec.intZ()) >= 0 && doLaserHarvestCheck(world, start, player, vec))
             {
+                items = block.getBlockDropped(world, vec.intX(), vec.intY(), vec.intZ(), meta, 0);
+                
                 try
                 {
                     Block blockBellow = Block.blocksList[vec.clone().translate(ForgeDirection.DOWN).getBlockID(world)];
