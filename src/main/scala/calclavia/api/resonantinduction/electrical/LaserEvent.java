@@ -110,8 +110,18 @@ public class LaserEvent extends Event
 
     }
 
+    @SuppressWarnings("unused")
     public static boolean doLaserHarvestCheck(World world, Vector3 pos, Object player, Vector3 hit)
     {
+        Block block = Block.blocksList[pos.getBlockID(world)];
+        //TODO add laser item to tool list to allow a proper can harvest check
+        if (false && player instanceof EntityPlayer)
+        {
+            if (!block.canHarvestBlock((EntityPlayer) player, world.getBlockMetadata(pos.intX(), pos.intY(), pos.intZ())))
+            {
+                return false;
+            }
+        }
         LaserEvent event = new LaserMineBlockEvent(world, pos, hit, player);
         MinecraftForge.EVENT_BUS.post(event);
         return !event.isCanceled();
@@ -119,6 +129,11 @@ public class LaserEvent extends Event
 
     /** Called while the block is being mined */
     public static void onLaserHitBlock(World world, Object player, Vector3 vec, ForgeDirection side)
+    {
+        onLaserHitBlock(world, player, vec, side, true);
+    }
+
+    public static void onLaserHitBlock(World world, Object player, Vector3 vec, ForgeDirection side, boolean doDamage)
     {
         int id = vec.getBlockID(world);
         int meta = vec.getBlockMetadata(world);
@@ -140,42 +155,46 @@ public class LaserEvent extends Event
         }
         if (block != null && block.blockHardness > -1)
         {
-            float chance = world.rand.nextFloat();
+            //TODO remove all these condition and place them into an event handler
+            if (doDamage)
+            {
+                float chance = world.rand.nextFloat();
 
-            int fireChance = block.getFlammability(world, vec.intX(), vec.intY(), vec.intZ(), meta, side);
-            if ((fireChance / 300) >= chance && (block2 == null || block2.isAirBlock(world, vec.intX(), vec.intY(), vec.intZ())))
-            {
-                world.setBlock(vec.intX(), vec.intY(), vec.intZ(), Block.fire.blockID, 0, 3);
-                return;
-            }
-            if (block.blockID == Block.grass.blockID && (block2 == null || block2.isAirBlock(world, vec.intX(), vec.intY() + 1, vec.intZ())))
-            {
-                world.setBlock(vec.intX(), vec.intY() + 1, vec.intZ(), Block.fire.blockID, 0, 3);
-                world.setBlock(vec.intX(), vec.intY(), vec.intZ(), Block.dirt.blockID, 0, 3);
-                return;
-            }
-            if (chance > 0.8f)
-            {
-                // TODO turn water into steam
-                if (block.blockID == Block.sand.blockID)
+                int fireChance = block.getFlammability(world, vec.intX(), vec.intY(), vec.intZ(), meta, side);
+                if ((fireChance / 300) >= chance && (block2 == null || block2.isAirBlock(world, vec.intX(), vec.intY(), vec.intZ())))
                 {
-                    world.setBlock(vec.intX(), vec.intY(), vec.intZ(), Block.glass.blockID, 0, 3);
+                    world.setBlock(vec.intX(), vec.intY(), vec.intZ(), Block.fire.blockID, 0, 3);
                     return;
                 }
-                else if (block.blockID == Block.cobblestone.blockID)
+                if (block.blockID == Block.grass.blockID && (block2 == null || block2.isAirBlock(world, vec.intX(), vec.intY() + 1, vec.intZ())))
                 {
-                    world.setBlock(vec.intX(), vec.intY(), vec.intZ(), 1, 0, 3);
+                    world.setBlock(vec.intX(), vec.intY() + 1, vec.intZ(), Block.fire.blockID, 0, 3);
+                    world.setBlock(vec.intX(), vec.intY(), vec.intZ(), Block.dirt.blockID, 0, 3);
                     return;
                 }
-                else if (block.blockID == Block.ice.blockID)
+                if (chance > 0.8f)
                 {
-                    world.setBlock(vec.intX(), vec.intY(), vec.intZ(), Block.waterStill.blockID, 15, 3);
-                    return;
-                }
-                else if (block.blockID == Block.obsidian.blockID)
-                {
-                    world.setBlock(vec.intX(), vec.intY(), vec.intZ(), Block.lavaStill.blockID, 15, 3);
-                    return;
+                    // TODO turn water into steam
+                    if (block.blockID == Block.sand.blockID)
+                    {
+                        world.setBlock(vec.intX(), vec.intY(), vec.intZ(), Block.glass.blockID, 0, 3);
+                        return;
+                    }
+                    else if (block.blockID == Block.cobblestone.blockID)
+                    {
+                        world.setBlock(vec.intX(), vec.intY(), vec.intZ(), 1, 0, 3);
+                        return;
+                    }
+                    else if (block.blockID == Block.ice.blockID)
+                    {
+                        world.setBlock(vec.intX(), vec.intY(), vec.intZ(), Block.waterStill.blockID, 15, 3);
+                        return;
+                    }
+                    else if (block.blockID == Block.obsidian.blockID)
+                    {
+                        world.setBlock(vec.intX(), vec.intY(), vec.intZ(), Block.lavaStill.blockID, 15, 3);
+                        return;
+                    }
                 }
             }
             MinecraftForge.EVENT_BUS.post(new LaserEvent.LaserMeltBlockEvent(world, start, vec, player));
@@ -199,13 +218,13 @@ public class LaserEvent extends Event
             else if (player instanceof TileEntity)
             {
                 start = new Vector3((TileEntity) player);
-            }
-
-            List<ItemStack> items = block.getBlockDropped(world, vec.intX(), vec.intY(), vec.intZ(), meta, 1);
-
+            }           
+            List<ItemStack> items = null;
             // TODO make this use or call to the correct methods, and events so it can be canceled
             if (block != null && block.getBlockHardness(world, vec.intX(), vec.intY(), vec.intZ()) >= 0 && doLaserHarvestCheck(world, start, player, vec))
             {
+                items = block.getBlockDropped(world, vec.intX(), vec.intY(), vec.intZ(), meta, 0);
+                
                 try
                 {
                     Block blockBellow = Block.blocksList[vec.clone().translate(ForgeDirection.DOWN).getBlockID(world)];
@@ -270,8 +289,27 @@ public class LaserEvent extends Event
                     e.printStackTrace();
                 }
             }
-            world.destroyBlock(vec.intX(), vec.intY(), vec.intZ(), false);
-            world.destroyBlockInWorldPartially(0, vec.intX(), vec.intY(), vec.intZ(), -1);
+            if (player instanceof EntityPlayer)
+            {
+                if (block != null)
+                {
+                    block.onBlockHarvested(world, vec.intX(), vec.intY(), vec.intZ(), meta, (EntityPlayer) player);
+
+                    boolean flag = block.removeBlockByPlayer(world, (EntityPlayer) player, vec.intX(), vec.intY(), vec.intZ());
+
+                    if (flag)
+                    {
+                        block.onBlockDestroyedByPlayer(world, vec.intX(), vec.intY(), vec.intZ(), meta);
+                    }
+                }
+            }
+            else
+            {
+                world.destroyBlock(vec.intX(), vec.intY(), vec.intZ(), false);
+                world.destroyBlockInWorldPartially(player instanceof Entity ? ((Entity) player).entityId : 0, vec.intX(), vec.intY(), vec.intZ(), -1);                
+            }
+            
+            //Do drops last preventing any issues when the block doesn't break            
             Block b = Block.blocksList[world.getBlockId(vec.intX(), vec.intY(), vec.intZ())];
             if ((b == null || b.isAirBlock(world, vec.intX(), vec.intY(), vec.intZ())) && items != null)
             {

@@ -51,7 +51,7 @@ public class ItemScrewdriver extends ItemBase implements IToolWrench
 			setMode(itemStack, (getMode(itemStack) + 1) % ToolMode.REGISTRY.size());
 
 			if (!world.isRemote)
-				player.addChatMessage("Set tool mode to: " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
+				player.addChatMessage(LanguageUtility.getLocal("item.calclavia:screwdriver.toolmode.set") + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
 			return itemStack;
 		}
 
