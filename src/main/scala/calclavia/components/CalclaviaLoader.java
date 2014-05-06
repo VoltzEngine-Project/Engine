@@ -647,10 +647,10 @@ public class CalclaviaLoader
         }
 
         // Reactors will not actually remove water source blocks, however weapons will.
-        if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0 && !evt.isReactor)
-        {
-            position.setBlock(world, 0);
-        }
+//        if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0 && !evt.isReactor)
+//        {
+//            position.setBlock(world, 0);
+//        }
 
         evt.setResult(Result.DENY);
     }
