@@ -1,11 +1,11 @@
 package universalelectricity.compatibility;
 
-import cofh.api.energy.IEnergyContainerItem;
-import cofh.api.energy.IEnergyHandler;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.CompatibilityModule;
 import universalelectricity.api.CompatibilityType;
+import cofh.api.energy.IEnergyContainerItem;
+import cofh.api.energy.IEnergyHandler;
 
 /**
  * @author Calclavia

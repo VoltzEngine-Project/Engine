@@ -24,9 +24,9 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 {
     private static final String ENERGY_NBT = "electricity";
 
-    public ItemElectric(int id)
+    public ItemElectric()
     {
-        super(id);
+        super();
         setMaxStackSize(1);
         setMaxDamage(100);
         setNoRepair();
@@ -134,11 +134,11 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
 
             if (obj instanceof NBTTagFloat)
             {
-                energyStored = (long) ((NBTTagFloat) obj).data;
+                energyStored = (long) ((NBTTagFloat) obj).func_150288_h();
             }
             else if (obj instanceof NBTTagLong)
             {
-                energyStored = (long) ((NBTTagLong) obj).data;
+                energyStored = (long) ((NBTTagLong) obj).func_150291_c();
             }
         }
 
@@ -147,7 +147,7 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
     }
 
     @Override
-    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
+    public void getSubItems(Item id, CreativeTabs par2CreativeTabs, List par3List)
     {
         par3List.add(CompatibilityModule.getItemWithCharge(new ItemStack(this), 0));
         par3List.add(CompatibilityModule.getItemWithCharge(new ItemStack(this), getEnergyCapacity(new ItemStack(this))));

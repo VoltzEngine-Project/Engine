@@ -1,13 +1,18 @@
 package universalelectricity.core.net;
 
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.Event;
-import universalelectricity.api.net.IUpdate;
-
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Queue;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import net.minecraftforge.common.MinecraftForge;
+import universalelectricity.api.net.IUpdate;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 
 /**
  * A ticker to update all networks. Register your custom network here to have it ticked by Universal
@@ -15,7 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * 
  * @author Calclavia
  */
-public class NetworkTickHandler implements ITickHandler
+public class NetworkTickHandler
 {
 	public static final NetworkTickHandler INSTANCE = new NetworkTickHandler();
 
@@ -41,14 +46,8 @@ public class NetworkTickHandler implements ITickHandler
 		}
 	}
 
-	@Override
-	public void tickStart(EnumSet<TickType> type, Object... tickData)
-	{
-
-	}
-
-	@Override
-	public void tickEnd(EnumSet<TickType> type, Object... tickData)
+	@SubscribeEvent
+	public void tickEnd(TickEvent.ServerTickEvent event)
 	{
 		/** Tick all updaters. */
 		synchronized (updaters)
@@ -94,13 +93,6 @@ public class NetworkTickHandler implements ITickHandler
 		}
 	}
 
-	@Override
-	public EnumSet<TickType> ticks()
-	{
-		return EnumSet.of(TickType.SERVER);
-	}
-
-	@Override
 	public String getLabel()
 	{
 		return "Universal Electricity Ticker";

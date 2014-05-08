@@ -1,8 +1,8 @@
 package universalelectricity.api.net;
 
-import net.minecraftforge.event.Cancelable;
-import net.minecraftforge.event.Event;
 import universalelectricity.api.energy.IEnergyNetwork;
+import cpw.mods.fml.common.eventhandler.Cancelable;
+import cpw.mods.fml.common.eventhandler.Event;
 
 public class NetworkEvent extends Event
 {

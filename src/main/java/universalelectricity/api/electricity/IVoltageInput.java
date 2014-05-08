@@ -1,6 +1,6 @@
 package universalelectricity.api.electricity;
 
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Implement this on your TileEntity if it has a voltage based energy input. You machine will still

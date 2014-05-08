@@ -2,6 +2,7 @@ package universalelectricity.api.vector;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -39,7 +40,7 @@ public class VectorWorld extends Vector3 implements IVectorWorld
     public VectorWorld(TileEntity tile)
     {
         super(tile);
-        this.world = tile.worldObj;
+        this.world = tile.getWorldObj();
     }
 
     public VectorWorld(World world, IVector3 v)
@@ -79,9 +80,9 @@ public class VectorWorld extends Vector3 implements IVectorWorld
         return nbt;
     }
 
-    public int getBlockID()
+    public Block getBlock()
     {
-        return super.getBlockID(this.world);
+        return super.getBlock(this.world);
     }
 
     public int getBlockMetadata()
@@ -94,19 +95,19 @@ public class VectorWorld extends Vector3 implements IVectorWorld
         return super.getTileEntity(this.world);
     }
 
-    public boolean setBlock(int id, int metadata, int notify)
+    public boolean setBlock(Block block, int metadata, int notify)
     {
-        return super.setBlock(this.world, id, metadata, notify);
+        return super.setBlock(this.world, block, metadata, notify);
     }
 
-    public boolean setBlock(int id, int metadata)
+    public boolean setBlock(Block block, int metadata)
     {
-        return this.setBlock(id, metadata, 3);
+        return this.setBlock(block, metadata, 3);
     }
 
-    public boolean setBlock(int id)
+    public boolean setBlock(Block block)
     {
-        return this.setBlock(id, 0);
+        return this.setBlock(block, 0);
     }
 
     public List<Entity> getEntitiesWithin(Class<? extends Entity> par1Class)
@@ -121,7 +122,7 @@ public class VectorWorld extends Vector3 implements IVectorWorld
 
     public static VectorWorld fromCenter(TileEntity e)
     {
-        return new VectorWorld(e.worldObj, e.xCoord + 0.5, e.yCoord + 0.5, e.zCoord + 0.5);
+        return new VectorWorld(e.getWorldObj(), e.xCoord + 0.5, e.yCoord + 0.5, e.zCoord + 0.5);
     }
 
     public MovingObjectPosition rayTraceEntities(VectorWorld target)

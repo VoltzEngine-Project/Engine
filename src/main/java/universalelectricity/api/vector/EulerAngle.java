@@ -1,6 +1,6 @@
 package universalelectricity.api.vector;
 
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /** The euler angles describing a 3D rotation. The rotation always in degrees.
  * 

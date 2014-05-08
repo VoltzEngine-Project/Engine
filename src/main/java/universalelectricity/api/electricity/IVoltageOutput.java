@@ -1,6 +1,6 @@
 package universalelectricity.api.electricity;
 
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Applied to electrical machines that are designed to act as sources of power in an electrical

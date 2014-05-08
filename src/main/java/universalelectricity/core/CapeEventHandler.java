@@ -12,14 +12,16 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.event.ForgeSubscribe;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -35,6 +37,8 @@ public class CapeEventHandler
 	private static final Graphics TEST_GRAPHICS = new BufferedImage(128, 128, BufferedImage.TYPE_INT_RGB).getGraphics();
 	private HashMap<String, String> cloaks = new HashMap<String, String>();
 	private ArrayList<AbstractClientPlayer> capePlayers = new ArrayList<AbstractClientPlayer>();
+	
+	
 
 	public static CapeEventHandler instance;
 
@@ -43,12 +47,21 @@ public class CapeEventHandler
 		buildCloakURLDatabase();
 		instance = this;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static boolean isOptifineInstalled()
+	{
+		for (String s : ((List<String>)Launch.blackboard.get("TweakClasses")))
+			if(s.toLowerCase().contains("OptiFineTweaker".toLowerCase()) || s.toLowerCase().contains("OptiFineForgeTweaker".toLowerCase()))
+				return true;
+		return false;
+	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onPreRenderSpecials(RenderPlayerEvent.Specials.Pre event)
 	{
-		if (Loader.isModLoaded("shadersmod"))
+		if (Loader.isModLoaded("shadersmod") || isOptifineInstalled())
 		{
 			return;
 		}

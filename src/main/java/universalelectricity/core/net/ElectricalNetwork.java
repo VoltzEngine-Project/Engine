@@ -1,7 +1,7 @@
 package universalelectricity.core.net;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.electricity.IElectricalNetwork;
 import universalelectricity.api.electricity.IVoltageInput;
@@ -85,7 +85,7 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
         TileEntity tile = null;
         if (conductor instanceof TileEntity)
         {
-            tile = new Vector3((TileEntity) conductor).translate(from).getTileEntity(((TileEntity) conductor).worldObj);
+            tile = new Vector3((TileEntity) conductor).translate(from).getTileEntity(((TileEntity) conductor).getWorldObj());
         }
         //Don't accept power from under powered generators
         if (tile instanceof IVoltageOutput && !(tile instanceof IConductor))

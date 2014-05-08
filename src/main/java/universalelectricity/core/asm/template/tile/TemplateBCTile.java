@@ -1,7 +1,7 @@
 package universalelectricity.core.asm.template.tile;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.energy.IEnergyInterface;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;

@@ -2,8 +2,7 @@ package universalelectricity.api.vector;
 
 import java.util.List;
 
-import com.google.common.io.ByteArrayDataInput;
-
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -13,7 +12,9 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import com.google.common.io.ByteArrayDataInput;
 
 /**
  * A Vector class used for defining objects in a 3D space.
@@ -181,9 +182,9 @@ public class Vector3 implements Cloneable, IVector3, Comparable<IVector3>
 	 * @param world
 	 * @return
 	 */
-	public int getBlockID(IBlockAccess world)
+	public Block getBlock(IBlockAccess world)
 	{
-		return world.getBlockId(this.intX(), this.intY(), this.intZ());
+		return world.getBlock(this.intX(), this.intY(), this.intZ());
 	}
 
 	public int getBlockMetadata(IBlockAccess world)
@@ -193,22 +194,22 @@ public class Vector3 implements Cloneable, IVector3, Comparable<IVector3>
 
 	public TileEntity getTileEntity(IBlockAccess world)
 	{
-		return world.getBlockTileEntity(this.intX(), this.intY(), this.intZ());
+		return world.getTileEntity(this.intX(), this.intY(), this.intZ());
 	}
 
-	public boolean setBlock(World world, int id, int metadata, int notify)
+	public boolean setBlock(World world, Block block, int metadata, int notify)
 	{
-		return world.setBlock(this.intX(), this.intY(), this.intZ(), id, metadata, notify);
+		return world.setBlock(this.intX(), this.intY(), this.intZ(), block, metadata, notify);
 	}
 
-	public boolean setBlock(World world, int id, int metadata)
+	public boolean setBlock(World world, Block block, int metadata)
 	{
-		return this.setBlock(world, id, metadata, 3);
+		return this.setBlock(world, block, metadata, 3);
 	}
 
-	public boolean setBlock(World world, int id)
+	public boolean setBlock(World world, Block block)
 	{
-		return this.setBlock(world, id, 0);
+		return this.setBlock(world, block, 0);
 	}
 
 	/** ---------------------- CONVERSION FUNCTIONS ---------------------------- */
@@ -802,7 +803,7 @@ public class Vector3 implements Cloneable, IVector3, Comparable<IVector3>
 
 	public MovingObjectPosition rayTraceBlocks(World world, Vector3 vec, boolean collisionFlag)
 	{
-		return world.rayTraceBlocks_do_do(this.toVec3(), vec.toVec3(), collisionFlag, !collisionFlag);
+		return world.func_147447_a(this.toVec3(), vec.toVec3(), collisionFlag, !collisionFlag, true);
 	}
 
 	@Deprecated
