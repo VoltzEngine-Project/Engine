@@ -629,23 +629,6 @@ public class CalclaviaLoader
             }
         }
 
-        if (world.rand.nextInt(80) == 0)
-        {
-            world.playSoundEffect(position.x + 0.5F, position.y + 0.5F, position.z + 0.5F, "Fluid.lava", 0.5F, 2.1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.85F);
-        }
-
-        if (world.rand.nextInt(40) == 0)
-        {
-            world.playSoundEffect(position.x + 0.5F, position.y + 0.5F, position.z + 0.5F, "Fluid.lavapop", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-        }
-
-        world.spawnParticle("bubble", position.x + Math.random(), position.y + 0.5f + Math.random(), position.z + Math.random(), 0, 0, 0);
-
-        if (world.rand.nextInt(5) == 0)
-        {
-            world.spawnParticle("smoke", position.x + Math.random(), position.y + 0.5f + Math.random(), position.z + Math.random(), 0, 0, 0);
-        }
-
         // Reactors will not actually remove water source blocks, however weapons will.
 //        if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0 && !evt.isReactor)
 //        {
