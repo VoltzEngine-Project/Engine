@@ -101,7 +101,7 @@ public abstract class TileTurbine extends TileElectrical
 				}
 
 				/** Set angular velocity based on power and torque. */
-				angularVelocity = (float) ((double) power / torque);
+				angularVelocity = (float) ((double) (power * 4) / torque);
 
 				if (!worldObj.isRemote && ticks % 3 == 0 && prevAngularVelocity != angularVelocity)
 				{
