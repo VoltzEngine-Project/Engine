@@ -20,6 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Cancelable;
 import net.minecraftforge.event.Event;
 import universalelectricity.api.vector.Vector3;
+import calclavia.lib.utility.WorldUtility;
 import calclavia.lib.utility.inventory.InventoryUtility;
 
 /** An event triggered by entities or tiles that create lasers
@@ -223,7 +224,7 @@ public class LaserEvent extends Event
             // TODO make this use or call to the correct methods, and events so it can be canceled
             if (block != null && block.getBlockHardness(world, vec.intX(), vec.intY(), vec.intZ()) >= 0 && doLaserHarvestCheck(world, start, player, vec))
             {
-                items = block.getBlockDropped(world, vec.intX(), vec.intY(), vec.intZ(), meta, 0);
+                items = WorldUtility.getItemStackFromBlock(world, vec.intX(), vec.intY(), vec.intZ());
                 
                 try
                 {
