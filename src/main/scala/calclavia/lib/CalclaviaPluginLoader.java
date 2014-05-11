@@ -24,7 +24,7 @@ public class CalclaviaPluginLoader implements IFMLLoadingPlugin
 	@Override
 	public String[] getASMTransformerClass()
 	{
-		return new String[] { CalclaviaTransformer.class.getName(), ConfigTransformer.class.getName() };
+		return new String[] { CalclaviaTransformer.class.getName() };
 	}
 
 	@Override
