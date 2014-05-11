@@ -1,7 +1,5 @@
 package calclavia.lib.config;
 
-import calclavia.lib.Calclavia;
-import calclavia.lib.asm.ConfigTransformer;
 import net.minecraftforge.common.Configuration;
 
 import java.lang.reflect.Field;
@@ -38,20 +36,10 @@ public final class ConfigHandler
 	public static void configure(Configuration config, String namespace)
 	{
 		config.load();
-		for (String classPath : ConfigTransformer.classes)
+		for (Class clazz : ConfigScanner.instance().classes)
 		{
-			if (classPath.startsWith(namespace))
+			if (clazz.getName().startsWith(namespace))
 			{
-				Class clazz = null;
-				try
-				{
-					clazz = Class.forName(classPath);
-				}
-				catch (ClassNotFoundException e)
-				{
-					e.printStackTrace();
-				}
-
 				for (Field field : clazz.getDeclaredFields())
 				{
 					Config cfg = field.getAnnotation(Config.class);
@@ -63,7 +51,6 @@ public final class ConfigHandler
 			}
 		}
 		config.save();
-
 	}
 
 	/**
@@ -73,6 +60,7 @@ public final class ConfigHandler
 	 * @param clazz - class that is being handled
 	 * @param config - the config object to write and read from
 	 */
+	@Deprecated
 	public static void handleClass(Class clazz, Configuration config)
 	{
 		config.load();

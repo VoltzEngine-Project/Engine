@@ -3,8 +3,7 @@ package calclavia.components;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import javax.swing.JOptionPane;
-
+import calclavia.lib.config.ConfigScanner;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandManager;
@@ -40,7 +39,6 @@ import calclavia.lib.compat.waila.Waila;
 import calclavia.lib.config.Config;
 import calclavia.lib.config.ConfigAnnotationEvent;
 import calclavia.lib.config.ConfigHandler;
-import calclavia.lib.config.ConfigSet;
 import calclavia.lib.content.ContentRegistry;
 import calclavia.lib.content.IDManager;
 import calclavia.lib.flag.CommandFlag;
@@ -443,6 +441,7 @@ public class CalclaviaLoader
     public void preInit(FMLPreInitializationEvent evt)
     {
         Calclavia.LOGGER.setParent(FMLLog.getLogger());
+		ConfigScanner.instance().generateSets(evt.getAsmData());
 
         /* Does a system check to see if we are running in an IDE as a Dev
          * http://andydunkel.net/java/2011/06/22/java-check-if-your-code-is-running-in-eclipse.html */
@@ -697,15 +696,6 @@ public class CalclaviaLoader
 
                 evt.heatLoss = 0.4f;
             }
-        }
-    }
-
-    @ForgeSubscribe
-    public void configAnnotationAdded(ConfigAnnotationEvent event)
-    {
-        if (event.sourceClass.getName().startsWith(Calclavia.DOMAIN))
-        {
-            ConfigHandler.handleClass(event.sourceClass, Calclavia.CONFIGURATION);
         }
     }
 }

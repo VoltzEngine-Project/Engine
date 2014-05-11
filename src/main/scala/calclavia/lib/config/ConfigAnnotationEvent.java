@@ -7,6 +7,7 @@ import net.minecraftforge.event.Event;
  * @since 09/04/14
  * 
  */
+@Deprecated
 public class ConfigAnnotationEvent extends Event
 {
 	public final Class sourceClass;
