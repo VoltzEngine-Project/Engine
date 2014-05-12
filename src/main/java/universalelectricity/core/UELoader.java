@@ -52,16 +52,16 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
         CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
         CONFIGURATION.load();
         CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio = CONFIGURATION.get("Compatibility", "Thermal Expansion Conversion Ratio", CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio).getDouble(CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio);
-        CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio = CONFIGURATION.get("Compatibility", "IndustrialCraft Conversion Ratio", CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio).getDouble(CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
+//        CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio = CONFIGURATION.get("Compatibility", "IndustrialCraft Conversion Ratio", CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio).getDouble(CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio);
         CompatibilityType.BUILDCRAFT.reciprocal_ratio = CONFIGURATION.get("Compatibility", "BuildCraft Conversion Ratio", CompatibilityType.BUILDCRAFT.reciprocal_ratio).getDouble(CompatibilityType.BUILDCRAFT.reciprocal_ratio);
 
         CompatibilityType.THERMAL_EXPANSION.ratio = 1d / CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio;
-        CompatibilityType.INDUSTRIALCRAFT.ratio = 1d / CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio;
+//        CompatibilityType.INDUSTRIALCRAFT.ratio = 1d / CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio;
         CompatibilityType.BUILDCRAFT.ratio = 1d / CompatibilityType.BUILDCRAFT.reciprocal_ratio;
 
         CompatibilityModule.register(new ModuleUniversalElectricity());
 
-        for (CompatibilityType compatibility : CompatibilityType.values())
+        for (CompatibilityType compatibility : CompatibilityType.getModules())
         {
             compatibility.isModuleEnabled = CONFIGURATION.get("Compatibility", "Load " + compatibility.moduleName + " Module", true).getBoolean(true);
 
@@ -69,7 +69,7 @@ public class UELoader implements IFMLLoadingPlugin, IFMLCallHook
             {
                 try
                 {
-                    CompatibilityModule.register((CompatibilityModule) Class.forName("universalelectricity.compatibility.Module" + compatibility.moduleName).newInstance());
+                    CompatibilityModule.register((CompatibilityModule) (compatibility.moduleClass).newInstance());
                 }
                 catch (Exception e)
                 {
