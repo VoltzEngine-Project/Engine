@@ -91,7 +91,13 @@ public class VectorWorld extends Vector3 implements IVectorWorld
 
     public TileEntity getTileEntity()
     {
-        return super.getTileEntity(this.world);
+        // Ensure that the world object actually exists.
+        if (this.world != null)
+        {
+            return super.getTileEntity(this.world);
+        }
+        
+        return null;
     }
 
     public boolean setBlock(int id, int metadata, int notify)
