@@ -3,6 +3,7 @@ package resonant.lib.utility.inventory;
 import java.util.HashSet;
 import java.util.Set;
 
+import resonant.api.IExtendedStorage;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;

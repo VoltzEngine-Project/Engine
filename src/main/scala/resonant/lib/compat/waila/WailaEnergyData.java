@@ -7,7 +7,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import resonant.lib.prefab.tile.IIO;
+import resonant.api.IIO;
 import resonant.lib.prefab.tile.TileElectrical;
 import resonant.lib.utility.LanguageUtility;
 import universalelectricity.api.electricity.IVoltageInput;

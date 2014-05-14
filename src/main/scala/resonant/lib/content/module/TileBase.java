@@ -6,9 +6,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraftforge.common.ForgeDirection;
+import resonant.api.IPlayerUsing;
 import resonant.core.ResonantEngine;
 import resonant.lib.References;
-import resonant.lib.prefab.tile.IPlayerUsing;
 
 /** All tiles inherit this class.
  * 

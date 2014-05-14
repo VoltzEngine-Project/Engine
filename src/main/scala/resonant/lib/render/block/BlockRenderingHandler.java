@@ -14,10 +14,10 @@ import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import resonant.api.items.ISimpleItemRenderer;
 import resonant.lib.content.module.BlockDummy;
 import resonant.lib.content.module.TileBlock;
 import resonant.lib.render.RenderUtility;
-import resonant.lib.render.item.ISimpleItemRenderer;
 import universalelectricity.api.vector.Vector3;
 
 import com.google.common.collect.Maps;

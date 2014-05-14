@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import resonant.core.ResonantEngine;
 import resonant.lib.References;
 import resonant.lib.content.BlockInfo;
-import resonant.lib.multiblock.fake.IBlockActivate;
+import resonant.lib.multiblock.IBlockActivate;
 import resonant.lib.prefab.block.BlockSidedIO;
 import universalelectricity.api.UniversalElectricity;
 import cpw.mods.fml.relauncher.Side;

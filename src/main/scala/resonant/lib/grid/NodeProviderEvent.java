@@ -1,5 +1,6 @@
 package resonant.lib.grid;
 
+import resonant.api.grid.INodeProvider;
 import net.minecraftforge.event.Event;
 
 //NO-OP

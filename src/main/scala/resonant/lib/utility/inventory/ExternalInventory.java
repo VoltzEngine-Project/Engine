@@ -1,5 +1,7 @@
 package resonant.lib.utility.inventory;
 
+import resonant.api.IExternalInventory;
+import resonant.api.IExternalInventoryBox;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

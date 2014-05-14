@@ -1,5 +1,6 @@
 package resonant.lib.prefab.block;
 
+import resonant.api.blocks.IRotatableBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

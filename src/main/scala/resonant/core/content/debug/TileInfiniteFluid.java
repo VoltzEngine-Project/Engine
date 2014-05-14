@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import resonant.lib.multiblock.fake.IBlockActivate;
+import resonant.lib.multiblock.IBlockActivate;
 import resonant.lib.prefab.tile.TileIO;
 import universalelectricity.api.UniversalElectricity;
 import universalelectricity.api.vector.Vector3;

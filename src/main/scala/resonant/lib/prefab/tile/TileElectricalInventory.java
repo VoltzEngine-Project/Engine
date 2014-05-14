@@ -6,9 +6,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
+import resonant.api.IExternalInventory;
+import resonant.api.IExternalInventoryBox;
 import resonant.lib.utility.inventory.ExternalInventory;
-import resonant.lib.utility.inventory.IExternalInventory;
-import resonant.lib.utility.inventory.IExternalInventoryBox;
 
 /** Prefab for simple object who only need basic inv support and nothing more
  * 

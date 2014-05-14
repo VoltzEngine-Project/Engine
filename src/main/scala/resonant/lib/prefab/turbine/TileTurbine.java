@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import resonant.core.ResonantEngine;
 import resonant.lib.References;
-import resonant.lib.multiblock.reference.IMultiBlockStructure;
+import resonant.lib.multiblock.IMultiBlockStructure;
 import resonant.lib.network.Synced;
 import resonant.lib.network.Synced.SyncedInput;
 import resonant.lib.network.Synced.SyncedOutput;

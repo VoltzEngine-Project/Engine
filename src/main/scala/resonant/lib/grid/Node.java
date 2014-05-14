@@ -3,6 +3,8 @@ package resonant.lib.grid;
 import java.util.AbstractMap;
 import java.util.WeakHashMap;
 
+import resonant.api.grid.INode;
+import resonant.api.grid.INodeProvider;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 

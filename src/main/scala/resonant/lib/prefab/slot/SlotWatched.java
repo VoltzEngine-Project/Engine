@@ -1,5 +1,6 @@
 package resonant.lib.prefab.slot;
 
+import resonant.api.ISlotWatcher;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 

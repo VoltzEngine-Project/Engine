@@ -8,7 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import resonant.api.atomicscience.IReactor;
+import resonant.api.IReactor;
 import resonant.core.ResonantEngine;
 import resonant.lib.thermal.EventThermal.EventThermalUpdate;
 import universalelectricity.api.net.IUpdate;

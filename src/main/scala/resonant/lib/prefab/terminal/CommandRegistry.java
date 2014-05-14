@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import resonant.api.ITerminal;
+import resonant.api.ITerminalCommand;
 import resonant.lib.access.AccessUtility;
 
 public class CommandRegistry

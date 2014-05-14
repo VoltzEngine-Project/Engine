@@ -2,6 +2,7 @@ package resonant.lib.prefab.tile;
 
 import java.util.HashSet;
 
+import resonant.api.IPlayerUsing;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

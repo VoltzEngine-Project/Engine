@@ -2,6 +2,9 @@ package resonant.lib.grid;
 
 import java.util.HashMap;
 
+import resonant.api.grid.INode;
+import resonant.api.grid.INodeProvider;
+
 /** A dynamic node loader for registering different nodes for different node interfaces.
  * 
  * @author Calclavia */

@@ -5,7 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import resonant.lib.prefab.tile.IIO;
+import resonant.api.IIO;
 
 /** For blocks that can be set to input/output for their sides.
  * 

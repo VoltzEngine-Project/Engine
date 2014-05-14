@@ -2,7 +2,7 @@ package resonant.lib.content.prefab
 
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.ForgeDirection
-import resonant.lib.prefab.tile.IRotatable
+import resonant.api.IRotatable
 
 trait TraitRotatable extends TileEntity with IRotatable {
   protected var rotationMask: Byte = 0x3C

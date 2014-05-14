@@ -5,7 +5,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import resonant.lib.prefab.tile.IPlayerUsing;
+import resonant.api.IPlayerUsing;
 
 public class ContainerBase extends Container
 {

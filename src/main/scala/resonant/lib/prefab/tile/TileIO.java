@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
+import resonant.api.IIO;
 import resonant.lib.content.module.TileBase;
 
 public abstract class TileIO extends TileBase implements IIO

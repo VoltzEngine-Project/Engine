@@ -7,8 +7,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import resonant.api.atomicscience.IAntiPoisonArmor;
-import resonant.api.atomicscience.IAntiPoisonBlock;
+import resonant.api.armor.IAntiPoisonArmor;
+import resonant.api.blocks.IAntiPoisonBlock;
 import resonant.lib.References;
 import universalelectricity.api.vector.Vector3;
 

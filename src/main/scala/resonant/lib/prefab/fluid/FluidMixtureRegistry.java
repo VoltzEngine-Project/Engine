@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import resonant.api.recipe.IFluidRecipeCrafter;
 import resonant.lib.prefab.fluid.FluidRecipeInfo.SimpleFluidRecipe;
 import resonant.lib.type.Pair;
 import resonant.lib.type.Triple;

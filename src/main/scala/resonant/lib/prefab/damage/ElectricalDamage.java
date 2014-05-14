@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
-import resonant.api.IInsulatedArmor;
+import resonant.api.armor.IInsulatedArmor;
 import resonant.lib.prefab.CustomDamageSource;
 import resonant.lib.prefab.potion.CustomPotionEffect;
 import universalelectricity.api.UniversalElectricity;

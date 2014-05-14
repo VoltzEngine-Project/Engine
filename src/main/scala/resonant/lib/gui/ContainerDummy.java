@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
-import resonant.lib.prefab.tile.IPlayerUsing;
+import resonant.api.IPlayerUsing;
 
 /** Allows the use of a tile inventory without the need for a container class.
  * 
