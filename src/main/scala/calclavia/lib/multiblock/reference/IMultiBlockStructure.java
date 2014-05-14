@@ -6,11 +6,11 @@ import calclavia.lib.multiblock.fake.IMultiBlock;
 
 public interface IMultiBlockStructure<W extends IMultiBlockStructure> extends IMultiBlock
 {
-	public World getWorld();
+    public World getWorld();
 
-	public void onMultiBlockChanged();
+    public void onMultiBlockChanged();
 
-	public Vector3 getPosition();
+    public Vector3 getPosition();
 
-	public MultiBlockHandler<W> getMultiBlock();
+    public MultiBlockHandler<W> getMultiBlock();
 }

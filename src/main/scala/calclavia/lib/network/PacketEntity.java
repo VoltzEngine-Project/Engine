@@ -12,33 +12,33 @@ import com.google.common.io.ByteArrayDataInput;
 /** @author Calclavia */
 public class PacketEntity extends PacketType
 {
-	public PacketEntity(String channel)
-	{
-		super(channel);
-	}
+    public PacketEntity(String channel)
+    {
+        super(channel);
+    }
 
-	public Packet getPacket(Entity entity, Object... args)
-	{
-		List newArgs = new ArrayList();
+    public Packet getPacket(Entity entity, Object... args)
+    {
+        List newArgs = new ArrayList();
 
-		newArgs.add(entity.entityId);
+        newArgs.add(entity.entityId);
 
-		for (Object obj : args)
-		{
-			newArgs.add(obj);
-		}
+        for (Object obj : args)
+        {
+            newArgs.add(obj);
+        }
 
-		return super.getPacket(newArgs.toArray());
-	}
+        return super.getPacket(newArgs.toArray());
+    }
 
-	@Override
-	public void receivePacket(ByteArrayDataInput data, EntityPlayer player)
-	{
-		Entity entity = player.worldObj.getEntityByID(data.readInt());
+    @Override
+    public void receivePacket(ByteArrayDataInput data, EntityPlayer player)
+    {
+        Entity entity = player.worldObj.getEntityByID(data.readInt());
 
-		if (entity instanceof IPacketReceiver)
-		{
-			((IPacketReceiver) entity).onReceivePacket(data, player);
-		}
-	}
+        if (entity instanceof IPacketReceiver)
+        {
+            ((IPacketReceiver) entity).onReceivePacket(data, player);
+        }
+    }
 }

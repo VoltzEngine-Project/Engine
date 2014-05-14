@@ -13,8 +13,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import calclavia.lib.recipe.RecipeUtility;
@@ -115,7 +113,7 @@ public class AutoCraftingManager
 
         for (IRecipe object : RecipeUtility.getRecipesByOutput(outputItem))
         {
-            if (AutoCraftingManager.areStacksEqual(outputItem, ((IRecipe) object).getRecipeOutput()))
+            if (AutoCraftingManager.areStacksEqual(outputItem, object.getRecipeOutput()))
             {
                 this.printDebug("IdealRecipe", "Output Match Found");
                 if (object instanceof ShapedRecipes)
@@ -123,7 +121,7 @@ public class AutoCraftingManager
                     if (this.hasResource(((ShapedRecipes) object).recipeItems) != null)
                     {
                         this.printDebug("IdealRecipe", "Shaped Recipe Found");
-                        return new Pair<ItemStack, ItemStack[]>(((IRecipe) object).getRecipeOutput().copy(), ((ShapedRecipes) object).recipeItems);
+                        return new Pair<ItemStack, ItemStack[]>(object.getRecipeOutput().copy(), ((ShapedRecipes) object).recipeItems);
                     }
                 }
                 else if (object instanceof ShapelessRecipes)
@@ -131,7 +129,7 @@ public class AutoCraftingManager
                     if (this.hasResource(((ShapelessRecipes) object).recipeItems.toArray(new ItemStack[1])) != null)
                     {
                         this.printDebug("IdealRecipe", "Shapeless Recipe Found");
-                        return new Pair<ItemStack, ItemStack[]>(((IRecipe) object).getRecipeOutput().copy(), (ItemStack[]) ((ShapelessRecipes) object).recipeItems.toArray(new ItemStack[1]));
+                        return new Pair<ItemStack, ItemStack[]>(object.getRecipeOutput().copy(), (ItemStack[]) ((ShapelessRecipes) object).recipeItems.toArray(new ItemStack[1]));
                     }
                 }
                 else if (object instanceof ShapedOreRecipe)
@@ -144,7 +142,7 @@ public class AutoCraftingManager
                     if (hasResources != null)
                     {
                         this.printDebug("IdealRecipe", "ShapedOre Recipe Found");
-                        return new Pair<ItemStack, ItemStack[]>(((IRecipe) object).getRecipeOutput().copy(), hasResources.toArray(new ItemStack[1]));
+                        return new Pair<ItemStack, ItemStack[]>(object.getRecipeOutput().copy(), hasResources.toArray(new ItemStack[1]));
                     }
                 }
                 else if (object instanceof ShapelessOreRecipe)
@@ -157,7 +155,7 @@ public class AutoCraftingManager
                     if (hasResources != null)
                     {
                         this.printDebug("IdealRecipe", "ShapelessOre Recipe Found");
-                        return new Pair<ItemStack, ItemStack[]>(((IRecipe) object).getRecipeOutput().copy(), hasResources.toArray(new ItemStack[1]));
+                        return new Pair<ItemStack, ItemStack[]>(object.getRecipeOutput().copy(), hasResources.toArray(new ItemStack[1]));
                     }
                 }
             }

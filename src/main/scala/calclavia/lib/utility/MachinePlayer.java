@@ -2,11 +2,11 @@ package calclavia.lib.utility;
 
 import java.util.LinkedHashMap;
 
-import universalelectricity.api.vector.VectorWorld;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.api.vector.VectorWorld;
 
 /** Fake player used by machines, also includes utilities for using the fake player better.
  * 
@@ -44,7 +44,7 @@ public class MachinePlayer extends FakePlayer
     {
         return useItemAt(itemStack, location.world, location.intX(), location.intY(), location.intZ(), direction.ordinal(), 0, 0, 0);
     }
-    
+
     public static boolean useItemAt(ItemStack itemStack, World world, int x, int y, int z, int side)
     {
         return useItemAt(itemStack, world, x, y, z, side, 0, 0, 0);

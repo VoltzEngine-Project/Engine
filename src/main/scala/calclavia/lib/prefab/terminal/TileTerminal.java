@@ -54,7 +54,7 @@ public abstract class TileTerminal extends TileAdvanced implements ITerminal, IS
     /** Send a terminal command Client -> server */
     public void sendCommandToServer(EntityPlayer entityPlayer, String cmdInput)
     {
-            PacketDispatcher.sendPacketToServer(getCommandPacket(entityPlayer.username, cmdInput)); 
+        PacketDispatcher.sendPacketToServer(getCommandPacket(entityPlayer.username, cmdInput));
     }
 
     /** Retrieves the data needed to generate a packet for the data type. Does not encode the type as
@@ -160,17 +160,17 @@ public abstract class TileTerminal extends TileAdvanced implements ITerminal, IS
 
         return false;
     }
-    
+
     @Override
     public void addToConsole(List<String> output_list)
     {
-        if(output_list != null && !output_list.isEmpty())
+        if (output_list != null && !output_list.isEmpty())
         {
-            for(String string : output_list)
+            for (String string : output_list)
             {
                 this.addToConsole(string);
             }
-        }        
+        }
     }
 
     @Override

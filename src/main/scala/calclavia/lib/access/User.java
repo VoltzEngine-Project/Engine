@@ -20,7 +20,7 @@ public class User
     @Override
     public boolean equals(Object obj)
     {
-        if(obj instanceof String)
+        if (obj instanceof String)
         {
             return ((String) obj).equalsIgnoreCase(this.getName());
         }

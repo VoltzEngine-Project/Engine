@@ -1,16 +1,13 @@
 package calclavia.api.mffs;
 
-/**
- * For objects that uses caching method to speed up process power.
+/** For objects that uses caching method to speed up process power.
  * 
- * @author Calclavia
- * 
- */
+ * @author Calclavia */
 public interface ICache
 {
-	public Object getCache(String cacheID);
+    public Object getCache(String cacheID);
 
-	public void clearCache(String cacheID);
+    public void clearCache(String cacheID);
 
-	public void clearCache();
+    public void clearCache();
 }

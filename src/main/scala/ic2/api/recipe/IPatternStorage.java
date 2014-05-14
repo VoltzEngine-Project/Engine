@@ -2,14 +2,15 @@ package ic2.api.recipe;
 
 import net.minecraft.item.ItemStack;
 
-public interface IPatternStorage {
+public interface IPatternStorage
+{
 
-	boolean transferPattern(ItemStack itemstack, int amountUU , int amountEU);
+    boolean transferPattern(ItemStack itemstack, int amountUU, int amountEU);
 
-	int[] getPatternvalus(ItemStack itemstack);
+    int[] getPatternvalus(ItemStack itemstack);
 
-	short getPatternCount();
+    short getPatternCount();
 
-	ItemStack getPatternItemstack(int index);
+    ItemStack getPatternItemstack(int index);
 
 }

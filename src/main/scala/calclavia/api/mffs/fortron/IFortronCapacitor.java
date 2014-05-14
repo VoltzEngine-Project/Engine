@@ -2,17 +2,14 @@ package calclavia.api.mffs.fortron;
 
 import java.util.Set;
 
-/**
- * Applied to the Fortron Capacitor TileEntity. Extends IFortronFrequency
+/** Applied to the Fortron Capacitor TileEntity. Extends IFortronFrequency
  * 
- * @author Calclavia
- * 
- */
+ * @author Calclavia */
 public interface IFortronCapacitor
 {
-	public Set<IFortronFrequency> getLinkedDevices();
+    public Set<IFortronFrequency> getLinkedDevices();
 
-	public int getTransmissionRange();
+    public int getTransmissionRange();
 
-	public int getTransmissionRate();
+    public int getTransmissionRate();
 }

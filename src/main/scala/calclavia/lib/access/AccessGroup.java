@@ -126,17 +126,17 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
     /** Checks if this or it's supper group has the permission node */
     public boolean hasNode(String node)
     {
-		if (node.contains(".*"))
-		{
-			String tempNode = node.replaceAll(".*", "");
-			for (String headNode : nodes)
-			{
-				if (headNode.contains(tempNode))
-				{
-					return true;
-				}
-			}
-		}
+        if (node.contains(".*"))
+        {
+            String tempNode = node.replaceAll(".*", "");
+            for (String headNode : nodes)
+            {
+                if (headNode.contains(tempNode))
+                {
+                    return true;
+                }
+            }
+        }
         return this.nodes.contains(node) || this.getExtendGroup() != null && this.getExtendGroup().hasNode(node);
     }
 

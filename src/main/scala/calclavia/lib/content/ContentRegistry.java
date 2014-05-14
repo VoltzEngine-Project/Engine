@@ -3,16 +3,15 @@ package calclavia.lib.content;
 import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
-import calclavia.lib.prefab.item.ItemBlockTooltip;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.Property;
 import calclavia.lib.content.module.BlockDummy;
 import calclavia.lib.content.module.TileBlock;
+import calclavia.lib.prefab.item.ItemBlockTooltip;
 import calclavia.lib.utility.LanguageUtility;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -148,7 +147,7 @@ public class ContentRegistry
             {
 
                 int assignedID = idManager.getNextBlockID();
-				int actualID = config.getBlock(name, assignedID).getInt(assignedID);
+                int actualID = config.getBlock(name, assignedID).getInt(assignedID);
                 block = blockClass.getConstructor(Integer.TYPE).newInstance(actualID);
 
                 if (block != null)
@@ -236,8 +235,7 @@ public class ContentRegistry
     /** Creates a new item using reflection as well runs it threw some check to activate any
      * interface methods
      * 
-     * @param name - name to register the item with
-     * //@param modid - mods that the item comes from
+     * @param name - name to register the item with //@param modid - mods that the item comes from
      * @param clazz - item class
      * @param canDisable - can a user disable this item
      * @return the new item */

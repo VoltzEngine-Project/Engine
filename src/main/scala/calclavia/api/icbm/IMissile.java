@@ -1,7 +1,7 @@
 package calclavia.api.icbm;
 
-import calclavia.api.icbm.explosion.IExplosiveContainer;
 import universalelectricity.api.vector.Vector3;
+import calclavia.api.icbm.explosion.IExplosiveContainer;
 
 /** This is an interface applied by all missile entities. You may cast this into an @Entity. The
  * "set" version of the function will make the entity do the action on the next tick.

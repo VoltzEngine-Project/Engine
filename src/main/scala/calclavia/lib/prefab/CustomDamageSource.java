@@ -1,12 +1,9 @@
 package calclavia.lib.prefab;
 
-import calclavia.lib.prefab.damage.ElectricalDamage;
-import calclavia.lib.prefab.damage.ObjectDamageSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import universalelectricity.api.UniversalElectricity;
-import universalelectricity.api.electricity.IElectricalNetwork;
+import calclavia.lib.prefab.damage.ElectricalDamage;
 
 /** Extend this class to create more custom damage sources.
  * 
@@ -46,10 +43,10 @@ public class CustomDamageSource extends DamageSource
     @Override
     public CustomDamageSource setFireDamage()
     {
-       super.setFireDamage();
-       return this;
+        super.setFireDamage();
+        return this;
     }
-    
+
     @Override
     public CustomDamageSource setProjectile()
     {

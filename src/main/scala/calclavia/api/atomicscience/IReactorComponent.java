@@ -2,10 +2,8 @@ package calclavia.api.atomicscience;
 
 import net.minecraft.item.ItemStack;
 
-/**
- * All items that act as components in the reactor cell implements this method.
- */
+/** All items that act as components in the reactor cell implements this method. */
 public interface IReactorComponent
 {
-	public void onReact(ItemStack itemStack, IReactor reactor);
+    public void onReact(ItemStack itemStack, IReactor reactor);
 }

@@ -54,7 +54,7 @@ public class ElectricalDamage extends CustomDamageSource
         if (network != null && network.getRequest() > 0 && network.getBuffer() > 0 && network.getVoltage() != 0)
         {
             electrocuteEntity(entity, source, network.getVoltage(), percent);
-            network.setBuffer((long) Math.max(0, network.getBuffer() - network.getVoltage() * 10));
+            network.setBuffer(Math.max(0, network.getBuffer() - network.getVoltage() * 10));
         }
     }
 

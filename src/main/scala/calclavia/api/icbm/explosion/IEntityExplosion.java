@@ -1,11 +1,9 @@
 package calclavia.api.icbm.explosion;
 
-/**
- * An entity that is currently conducting an explosion.
+/** An entity that is currently conducting an explosion.
  * 
- * @author Calclavia
- */
+ * @author Calclavia */
 public interface IEntityExplosion
 {
-	public void endExplosion();
+    public void endExplosion();
 }

@@ -219,13 +219,13 @@ public class LaserEvent extends Event
             else if (player instanceof TileEntity)
             {
                 start = new Vector3((TileEntity) player);
-            }           
+            }
             List<ItemStack> items = null;
             // TODO make this use or call to the correct methods, and events so it can be canceled
             if (block != null && block.getBlockHardness(world, vec.intX(), vec.intY(), vec.intZ()) >= 0 && doLaserHarvestCheck(world, start, player, vec))
             {
                 items = WorldUtility.getItemStackFromBlock(world, vec.intX(), vec.intY(), vec.intZ());
-                
+
                 try
                 {
                     Block blockBellow = Block.blocksList[vec.clone().translate(ForgeDirection.DOWN).getBlockID(world)];
@@ -307,9 +307,9 @@ public class LaserEvent extends Event
             else
             {
                 world.destroyBlock(vec.intX(), vec.intY(), vec.intZ(), false);
-                world.destroyBlockInWorldPartially(player instanceof Entity ? ((Entity) player).entityId : 0, vec.intX(), vec.intY(), vec.intZ(), -1);                
+                world.destroyBlockInWorldPartially(player instanceof Entity ? ((Entity) player).entityId : 0, vec.intX(), vec.intY(), vec.intZ(), -1);
             }
-            
+
             //Do drops last preventing any issues when the block doesn't break            
             Block b = Block.blocksList[world.getBlockId(vec.intX(), vec.intY(), vec.intZ())];
             if ((b == null || b.isAirBlock(world, vec.intX(), vec.intY(), vec.intZ())) && items != null)

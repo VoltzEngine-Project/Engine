@@ -6,18 +6,16 @@ import java.lang.reflect.Modifier;
 import net.minecraft.potion.Potion;
 import calclavia.lib.Calclavia;
 
-/**
- * call on preinit
- *
+/** call on preinit
+ * 
  * @since 22/02/14
- * @author tgame14
- */
+ * @author tgame14 */
 public class PotionUtility
 {
-	private static final int EXTEND_LIMIT = 32;
-	public static int potionOffset;
+    private static final int EXTEND_LIMIT = 32;
+    public static int potionOffset;
 
-    public static void resizePotionArray ()
+    public static void resizePotionArray()
     {
         Potion[] headPotionArray = null;
 
@@ -37,7 +35,7 @@ public class PotionUtility
                     System.arraycopy(headPotionArray, 0, newPotionTypes, 0, headPotionArray.length);
                     f.set(null, newPotionTypes);
 
-					potionOffset = newPotionTypes.length - 1;
+                    potionOffset = newPotionTypes.length - 1;
                 }
             }
             catch (Exception e)
@@ -48,8 +46,8 @@ public class PotionUtility
         }
     }
 
-	public static int getNextOptimalPotId()
-	{
-		return --potionOffset + 1;
-	}
+    public static int getNextOptimalPotId()
+    {
+        return --potionOffset + 1;
+    }
 }

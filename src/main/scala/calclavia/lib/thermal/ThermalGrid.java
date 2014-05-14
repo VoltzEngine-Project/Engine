@@ -4,21 +4,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.server.ServerListenThread;
-import net.minecraft.server.ThreadMinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import universalelectricity.api.net.IUpdate;
-import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorWorld;
 import calclavia.api.atomicscience.IReactor;
-import calclavia.api.mffs.fortron.IServerThread;
 import calclavia.components.CalclaviaLoader;
 import calclavia.lib.thermal.EventThermal.EventThermalUpdate;
 
@@ -89,7 +81,7 @@ public class ThermalGrid implements IUpdate
             }
 
             float deltaFromEquilibrium = getDefaultTemperature(pos) - currentTemperature;
-            
+
             // Determine if position of heat is IReactor based.
             TileEntity possibleReactor = pos.getTileEntity();
             boolean isReactor = false;

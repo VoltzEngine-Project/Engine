@@ -1,7 +1,7 @@
 package calclavia.lib.content.prefab
 
-import calclavia.lib.utility.inventory.{InventoryUtility, ExternalInventory, IExternalInventoryBox, IExternalInventory}
-import net.minecraft.inventory.{IInventory, ISidedInventory}
+import calclavia.lib.utility.inventory.{ InventoryUtility, ExternalInventory, IExternalInventoryBox, IExternalInventory }
+import net.minecraft.inventory.{ IInventory, ISidedInventory }
 import net.minecraft.item.ItemStack
 import universalelectricity.api.vector.Vector3
 import net.minecraft.nbt.NBTTagCompound
@@ -13,43 +13,37 @@ import calclavia.lib.content.module.TileBase
  * @since 22/03/14
  * @author tgame14
  */
-trait TraitInventory extends TileBase with IExternalInventory with ISidedInventory
-{
+trait TraitInventory extends TileBase with IExternalInventory with ISidedInventory {
   protected var inventory: IExternalInventoryBox = _
   protected var maxSlots: Int = 1
 
   override def getInventory(): IExternalInventoryBox =
-  {
-    if (this.inventory == null)
     {
-      this.inventory = new ExternalInventory(this, this.maxSlots)
+      if (this.inventory == null) {
+        this.inventory = new ExternalInventory(this, this.maxSlots)
+      }
+      return this.inventory
     }
-    return this.inventory
-  }
 
   override def getSizeInventory(): Int =
-  {
-    return this.getInventory().getSizeInventory
-  }
+    {
+      return this.getInventory().getSizeInventory
+    }
 
   override def getStackInSlot(index: Int): ItemStack =
-  {
-    return this.getInventory().getStackInSlot(index)
-  }
+    {
+      return this.getInventory().getStackInSlot(index)
+    }
 
   override def decrStackSize(index: Int, amount: Int): ItemStack =
-  {
-    return this.getInventory().decrStackSize(index, amount)
-  }
-
-  def incrStackSize(slot: Int, stack: ItemStack)
-  {
-    if (this.getStackInSlot(slot) == null)
     {
-      setInventorySlotContents(slot, stack.copy())
+      return this.getInventory().decrStackSize(index, amount)
     }
-    else if (this.getStackInSlot(slot).isItemEqual(stack))
-    {
+
+  def incrStackSize(slot: Int, stack: ItemStack) {
+    if (this.getStackInSlot(slot) == null) {
+      setInventorySlotContents(slot, stack.copy())
+    } else if (this.getStackInSlot(slot).isItemEqual(stack)) {
       getStackInSlot(slot).stackSize += stack.stackSize
     }
 
@@ -57,42 +51,39 @@ trait TraitInventory extends TileBase with IExternalInventory with ISidedInvento
   }
 
   override def getStackInSlotOnClosing(index: Int): ItemStack =
-  {
-    return this.getInventory().getStackInSlotOnClosing(index)
-  }
+    {
+      return this.getInventory().getStackInSlotOnClosing(index)
+    }
 
-  override def setInventorySlotContents(index: Int, stack: ItemStack)
-  {
+  override def setInventorySlotContents(index: Int, stack: ItemStack) {
     this.getInventory().setInventorySlotContents(index, stack)
   }
 
   override def getInvName(): String =
-  {
-    return this.getBlockType.getLocalizedName
-  }
+    {
+      return this.getBlockType.getLocalizedName
+    }
 
   def isInvNameLocalized(): Boolean =
-  {
-    return true
-  }
+    {
+      return true
+    }
 
   def getInventoryStackLimit: Int =
-  {
-    return this.getInventory.getInventoryStackLimit
-  }
+    {
+      return this.getInventory.getInventoryStackLimit
+    }
 
   def isUseableByPlayer(entityplayer: EntityPlayer): Boolean =
-  {
-    return this.getInventory.isUseableByPlayer(entityplayer)
-  }
+    {
+      return this.getInventory.isUseableByPlayer(entityplayer)
+    }
 
-  def openChest
-  {
+  def openChest {
     this.getInventory.openChest
   }
 
-  def closeChest
-  {
+  def closeChest {
     this.getInventory.closeChest
   }
 
@@ -150,17 +141,14 @@ trait TraitInventory extends TileBase with IExternalInventory with ISidedInvento
           if (isControlDown(player)) {
             if (stackInInventory == null) {
               inventory.setInventorySlotContents(slotID, current.splitStack(1))
-            }
-            else {
+            } else {
               stackInInventory.stackSize += 1
               current.stackSize -= 1
             }
-          }
-          else {
+          } else {
             if (stackInInventory == null) {
               inventory.setInventorySlotContents(slotID, current)
-            }
-            else {
+            } else {
               stackInInventory.stackSize += current.stackSize
               current.stackSize = 0
             }
@@ -181,8 +169,7 @@ trait TraitInventory extends TileBase with IExternalInventory with ISidedInvento
     if (stackInInventory != null) {
       if (isControlDown(player)) {
         InventoryUtility.dropItemStack(player.worldObj, new Vector3(player), stackInInventory.splitStack(1), 0)
-      }
-      else {
+      } else {
         InventoryUtility.dropItemStack(player.worldObj, new Vector3(player), stackInInventory, 0)
         stackInInventory = null
       }
@@ -194,47 +181,40 @@ trait TraitInventory extends TileBase with IExternalInventory with ISidedInvento
     return false
   }
 
-  override def onRemove(par5: Int, par6: Int)
-  {
+  override def onRemove(par5: Int, par6: Int) {
     super.onRemove(par5, par6)
     //dropEntireInventory(par5, par6)
   }
 
-//  def dropEntireInventory(par5: Int, par6: Int)
-//  {
-//    if (this.isInstanceOf[IInventory]) {
-//      val inventory: IInventory = this.asInstanceOf[IInventory]
-//      {
-//        var i: Int = 0
-//        while (i < inventory.getSizeInventory) {
-//          val dropStack: ItemStack = inventory.getStackInSlot(i)
-//          if (dropStack != null) {
-//            val var11: Int = dropStack.stackSize
-//            dropStack.stackSize -= var11
-//            InventoryUtility.dropItemStack(world, center, dropStack)
-//            if (dropStack.stackSize <= 0) inventory.setInventorySlotContents(i, null)
-//          }
-//          i += 1;
-//        }
-//      }
-//      inventory.onInventoryChanged
-//    }
-//  }
+  //  def dropEntireInventory(par5: Int, par6: Int)
+  //  {
+  //    if (this.isInstanceOf[IInventory]) {
+  //      val inventory: IInventory = this.asInstanceOf[IInventory]
+  //      {
+  //        var i: Int = 0
+  //        while (i < inventory.getSizeInventory) {
+  //          val dropStack: ItemStack = inventory.getStackInSlot(i)
+  //          if (dropStack != null) {
+  //            val var11: Int = dropStack.stackSize
+  //            dropStack.stackSize -= var11
+  //            InventoryUtility.dropItemStack(world, center, dropStack)
+  //            if (dropStack.stackSize <= 0) inventory.setInventorySlotContents(i, null)
+  //          }
+  //          i += 1;
+  //        }
+  //      }
+  //      inventory.onInventoryChanged
+  //    }
+  //  }
 
-  override def readFromNBT(nbt: NBTTagCompound)
-  {
+  override def readFromNBT(nbt: NBTTagCompound) {
     super.readFromNBT(nbt)
     getInventory.load(nbt)
   }
 
-  override def writeToNBT(nbt: NBTTagCompound)
-  {
+  override def writeToNBT(nbt: NBTTagCompound) {
     super.writeToNBT(nbt)
     getInventory.save(nbt)
   }
-
-
-
-
 
 }

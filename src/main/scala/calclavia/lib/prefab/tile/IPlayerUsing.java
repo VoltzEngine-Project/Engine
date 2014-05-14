@@ -6,5 +6,5 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public interface IPlayerUsing
 {
-	public HashSet<EntityPlayer> getPlayersUsing();
+    public HashSet<EntityPlayer> getPlayersUsing();
 }

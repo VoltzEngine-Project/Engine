@@ -2,13 +2,10 @@ package calclavia.lib.network;
 
 import java.util.List;
 
-/**
- * Applied to all classes that can send packets. For ease of use.
+/** Applied to all classes that can send packets. For ease of use.
  * 
- * @author Calclavia
- * 
- */
+ * @author Calclavia */
 public interface IPacketSender
 {
-	public List getPacketData(int type);
+    public List getPacketData(int type);
 }

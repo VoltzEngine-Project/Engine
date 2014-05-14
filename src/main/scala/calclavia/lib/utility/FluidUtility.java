@@ -21,7 +21,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
 import universalelectricity.api.vector.Vector3;
 import calclavia.lib.type.Pair;
 import calclavia.lib.utility.inventory.AutoCraftingManager;
@@ -471,7 +470,7 @@ public class FluidUtility
                     return true;
                 }
             }
-            else if(FluidContainerRegistry.isEmptyContainer(current))
+            else if (FluidContainerRegistry.isEmptyContainer(current))
             {
                 FluidStack available = tank.drain(ForgeDirection.getOrientation(side), Integer.MAX_VALUE, false);
 

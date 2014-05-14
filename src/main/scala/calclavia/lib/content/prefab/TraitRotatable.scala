@@ -4,9 +4,8 @@ import net.minecraftforge.common.ForgeDirection
 import net.minecraft.tileentity.TileEntity
 import calclavia.lib.prefab.tile.IRotatable
 
-trait TraitRotatable extends TileEntity with IRotatable
-{
-  protected var rotationMask : Byte = 0x3C
+trait TraitRotatable extends TileEntity with IRotatable {
+  protected var rotationMask: Byte = 0x3C
 
   def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata)
 
@@ -18,197 +17,145 @@ trait TraitRotatable extends TileEntity with IRotatable
    * @author Based of Greg (GregTech)
    */
   def getSideToRotate(hitSide: Byte, hitX: Double, hitY: Double, hitZ: Double): Byte =
-  {
-    val tBack: Byte = (hitSide ^ 1).asInstanceOf[Byte]
-    hitSide match
     {
-      case 0 =>
-      case 1 =>
-        if (hitX < 0.25)
-        {
-          if (hitZ < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+      val tBack: Byte = (hitSide ^ 1).asInstanceOf[Byte]
+      hitSide match {
+        case 0 =>
+        case 1 =>
+          if (hitX < 0.25) {
+            if (hitZ < 0.25) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (hitZ > 0.75) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (canRotate(4)) {
+              return 4
             }
           }
-          if (hitZ > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+          if (hitX > 0.75) {
+            if (hitZ < 0.25) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (hitZ > 0.75) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (canRotate(5)) {
+              return 5
             }
           }
-          if (canRotate(4))
-          {
-            return 4
-          }
-        }
-        if (hitX > 0.75)
-        {
-          if (hitZ < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+          if (hitZ < 0.25) {
+            if (canRotate(2)) {
+              return 2
             }
           }
-          if (hitZ > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+          if (hitZ > 0.75) {
+            if (canRotate(3)) {
+              return 3
             }
           }
-          if (canRotate(5))
-          {
-            return 5
+          if (canRotate(hitSide)) {
+            return hitSide
           }
-        }
-        if (hitZ < 0.25)
-        {
-          if (canRotate(2))
-          {
-            return 2
-          }
-        }
-        if (hitZ > 0.75)
-        {
-          if (canRotate(3))
-          {
-            return 3
-          }
-        }
-        if (canRotate(hitSide))
-        {
-          return hitSide
-        }
-      case 2 =>
-      case 3 =>
-        if (hitX < 0.25)
-        {
-          if (hitY < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+        case 2 =>
+        case 3 =>
+          if (hitX < 0.25) {
+            if (hitY < 0.25) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (hitY > 0.75) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (canRotate(4)) {
+              return 4
             }
           }
-          if (hitY > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+          if (hitX > 0.75) {
+            if (hitY < 0.25) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (hitY > 0.75) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (canRotate(5)) {
+              return 5
             }
           }
-          if (canRotate(4))
-          {
-            return 4
-          }
-        }
-        if (hitX > 0.75)
-        {
-          if (hitY < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+          if (hitY < 0.25) {
+            if (canRotate(0)) {
+              return 0
             }
           }
-          if (hitY > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+          if (hitY > 0.75) {
+            if (canRotate(1)) {
+              return 1
             }
           }
-          if (canRotate(5))
-          {
-            return 5
+          if (canRotate(hitSide)) {
+            return hitSide
           }
-        }
-        if (hitY < 0.25)
-        {
-          if (canRotate(0))
-          {
-            return 0
-          }
-        }
-        if (hitY > 0.75)
-        {
-          if (canRotate(1))
-          {
-            return 1
-          }
-        }
-        if (canRotate(hitSide))
-        {
-          return hitSide
-        }
-      case 4 =>
-      case 5 =>
-        if (hitZ < 0.25)
-        {
-          if (hitY < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+        case 4 =>
+        case 5 =>
+          if (hitZ < 0.25) {
+            if (hitY < 0.25) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (hitY > 0.75) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (canRotate(2)) {
+              return 2
             }
           }
-          if (hitY > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+          if (hitZ > 0.75) {
+            if (hitY < 0.25) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (hitY > 0.75) {
+              if (canRotate(tBack)) {
+                return tBack
+              }
+            }
+            if (canRotate(3)) {
+              return 3
             }
           }
-          if (canRotate(2))
-          {
-            return 2
-          }
-        }
-        if (hitZ > 0.75)
-        {
-          if (hitY < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+          if (hitY < 0.25) {
+            if (canRotate(0)) {
+              return 0
             }
           }
-          if (hitY > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
+          if (hitY > 0.75) {
+            if (canRotate(1)) {
+              return 1
             }
           }
-          if (canRotate(3))
-          {
-            return 3
+          if (canRotate(hitSide)) {
+            return hitSide
           }
-        }
-        if (hitY < 0.25)
-        {
-          if (canRotate(0))
-          {
-            return 0
-          }
-        }
-        if (hitY > 0.75)
-        {
-          if (canRotate(1))
-          {
-            return 1
-          }
-        }
-        if (canRotate(hitSide))
-        {
-          return hitSide
-        }
+      }
+      return -1
     }
-    return -1
-  }
 }

@@ -1,24 +1,21 @@
 package calclavia.lib.compat.waila;
 
-import calclavia.lib.prefab.tile.IIO;
-import calclavia.lib.prefab.tile.TileElectrical;
-import calclavia.lib.utility.LanguageUtility;
+import java.util.List;
+
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
-
-import java.util.EnumSet;
-import java.util.List;
-
 import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.electricity.IVoltageOutput;
 import universalelectricity.api.energy.IConductor;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.UnitDisplay;
 import universalelectricity.api.energy.UnitDisplay.Unit;
+import calclavia.lib.prefab.tile.IIO;
+import calclavia.lib.prefab.tile.TileElectrical;
+import calclavia.lib.utility.LanguageUtility;
 
 /** Waila support for Electrical tiles
  * 
@@ -30,17 +27,17 @@ public class WailaEnergyData implements IWailaDataProvider
     {
         TileEntity tile = accessor.getTileEntity();
         boolean input = true, output = true;
-        currenttip.add(""+accessor.getSide());
-        if(tile instanceof IIO)
+        currenttip.add("" + accessor.getSide());
+        if (tile instanceof IIO)
         {
             IIO te = (IIO) tile;
             input = false;
             output = false;
-            if(te.getInputDirections() != null)
+            if (te.getInputDirections() != null)
             {
                 input = te.getInputDirections().contains(accessor.getSide().getOpposite());
             }
-            if(te.getOutputDirections() != null)
+            if (te.getOutputDirections() != null)
             {
                 output = te.getOutputDirections().contains(accessor.getSide().getOpposite());
             }
@@ -57,18 +54,18 @@ public class WailaEnergyData implements IWailaDataProvider
             currenttip.add(LanguageUtility.getLocal("info.waila.energy") + " " + UnitDisplay.getDisplayShort(te.getEnergy(accessor.getSide()), Unit.JOULES) + " / " + UnitDisplay.getDisplayShort(te.getEnergyCapacity(accessor.getSide()), Unit.JOULES));
         }
         //Voltage support        
-        if(input && tile instanceof IVoltageInput)
+        if (input && tile instanceof IVoltageInput)
         {
             IVoltageInput te = (IVoltageInput) tile;
             currenttip.add(LanguageUtility.getLocal("info.waila.voltage.in") + " " + UnitDisplay.getDisplayShort(te.getVoltageInput(accessor.getSide()), Unit.VOLTAGE));
         }
-        if(output && tile instanceof IVoltageOutput)
+        if (output && tile instanceof IVoltageOutput)
         {
             IVoltageOutput te = (IVoltageOutput) tile;
             currenttip.add(LanguageUtility.getLocal("info.waila.voltage.out") + " " + UnitDisplay.getDisplayShort(te.getVoltageOutput(accessor.getSide()), Unit.VOLTAGE));
         }
         //Wire support
-        if(tile instanceof IConductor)
+        if (tile instanceof IConductor)
         {
             IConductor te = (IConductor) tile;
             currenttip.add(LanguageUtility.getLocal("info.waila.amp") + " " + UnitDisplay.getDisplayShort(te.getCurrentCapacity(), Unit.AMPERE));

@@ -177,13 +177,13 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
         return totalUsed;
     }
 
-	public EnergyStorageHandler getEnergyHandler()
-	{
-		return energy;
-	}
+    public EnergyStorageHandler getEnergyHandler()
+    {
+        return energy;
+    }
 
-	public void setEnergyHandler(EnergyStorageHandler energy)
-	{
-		this.energy = energy;
-	}
+    public void setEnergyHandler(EnergyStorageHandler energy)
+    {
+        this.energy = energy;
+    }
 }

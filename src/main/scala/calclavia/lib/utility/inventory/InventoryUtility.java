@@ -338,9 +338,9 @@ public class InventoryUtility
 
             if (randomAmount > 0)
             {
-                randomX = (double) (world.rand.nextFloat() * randomAmount) + (double) (1.0F - randomAmount) * 0.5D;
-                randomY = (double) (world.rand.nextFloat() * randomAmount) + (double) (1.0F - randomAmount) * 0.5D;
-                randomZ = (double) (world.rand.nextFloat() * randomAmount) + (double) (1.0F - randomAmount) * 0.5D;
+                randomX = world.rand.nextFloat() * randomAmount + (1.0F - randomAmount) * 0.5D;
+                randomY = world.rand.nextFloat() * randomAmount + (1.0F - randomAmount) * 0.5D;
+                randomZ = world.rand.nextFloat() * randomAmount + (1.0F - randomAmount) * 0.5D;
             }
 
             EntityItem entityitem = new EntityItem(world, x + randomX, y + randomY, z + randomZ, itemStack);

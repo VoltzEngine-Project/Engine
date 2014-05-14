@@ -1,21 +1,20 @@
 package calclavia.lib.utility;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @since 09/03/14
- * @author tgame14
- */
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+
+/** @since 09/03/14
+ * @author tgame14 */
 public class ModUtility
 {
-    public static void removeMod (String modid, boolean doRemove)
+    public static void removeMod(String modid, boolean doRemove)
     {
         if (doRemove)
         {
@@ -59,7 +58,6 @@ public class ModUtility
 
                 System.out.println("mods " + modContainerList);
                 System.out.println("namedMods " + modContainerMap);
-
 
             }
             catch (Exception e)

@@ -4,32 +4,30 @@ import calclavia.lib.modproxy.ICompatProxy;
 import calclavia.lib.utility.Mods;
 import cpw.mods.fml.common.event.FMLInterModComms;
 
-/**
- * @since 21/03/14
- * @author tgame14
- */
+/** @since 21/03/14
+ * @author tgame14 */
 public class Waila implements ICompatProxy
 {
     @Override
-    public void preInit ()
+    public void preInit()
     {
         // nothing
     }
 
     @Override
-    public void init ()
+    public void init()
     {
         FMLInterModComms.sendMessage(Mods.WAILA(), "register", "calclavia.lib.compat.waila.WailaRegistrar.wailaCallBack");
     }
 
     @Override
-    public void postInit ()
+    public void postInit()
     {
         // nothing
     }
 
     @Override
-    public String modId ()
+    public String modId()
     {
         return Mods.WAILA();
     }

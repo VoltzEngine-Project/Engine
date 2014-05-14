@@ -10,8 +10,7 @@ import calclavia.lib.content.module.TileBase
  *
  * @author tgame14
  */
-trait TraitIO extends TileBase with ISaveObj
-{
+trait TraitIO extends TileBase with ISaveObj {
   /**
    * IO METHODS.
    * Default: Connect from all sides. "111111"
@@ -30,19 +29,17 @@ trait TraitIO extends TileBase with ISaveObj
    *         default you can accept power from all sides.
    */
   def getInputDirections: Set[ForgeDirection] =
-  {
-    var dirs = Set[ForgeDirection]()
-
-    for (direction <- ForgeDirection.VALID_DIRECTIONS)
     {
-      if (getIO(direction) == 1)
-      {
-        dirs += direction
-      }
+      var dirs = Set[ForgeDirection]()
 
+      for (direction <- ForgeDirection.VALID_DIRECTIONS) {
+        if (getIO(direction) == 1) {
+          dirs += direction
+        }
+
+      }
+      return dirs
     }
-    return dirs
-  }
 
   /**
    * The electrical output direction.
@@ -51,22 +48,19 @@ trait TraitIO extends TileBase with ISaveObj
    *         default it will return an empty EnumSet.
    */
   def getOutputDirections: Set[ForgeDirection] =
-  {
-    var dirs = Set[ForgeDirection]()
-
-    for (direction <- ForgeDirection.VALID_DIRECTIONS)
     {
-      if (getIO(direction) == 2)
-      {
-        dirs += direction
+      var dirs = Set[ForgeDirection]()
+
+      for (direction <- ForgeDirection.VALID_DIRECTIONS) {
+        if (getIO(direction) == 2) {
+          dirs += direction
+        }
       }
+
+      return dirs
     }
 
-    return dirs
-  }
-
-  def setIO(dir: ForgeDirection, `type`: Int)
-  {
+  def setIO(dir: ForgeDirection, `type`: Int) {
     val currentIO: String = getIOMapBase3
     val str: StringBuilder = new StringBuilder(currentIO)
     str.setCharAt(dir.ordinal, Integer.toString(`type`).charAt(0))
@@ -74,39 +68,33 @@ trait TraitIO extends TileBase with ISaveObj
   }
 
   def getIO(dir: ForgeDirection): Int =
-  {
-    val currentIO: String = getIOMapBase3
-    return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
-  }
+    {
+      val currentIO: String = getIOMapBase3
+      return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
+    }
 
   def getIOMapBase3: String =
-  {
-    var currentIO: String = Integer.toString(ioMap, 3)
-    while (currentIO.length < 6)
     {
-      currentIO = "0" + currentIO
-    }
-    return currentIO
+      var currentIO: String = Integer.toString(ioMap, 3)
+      while (currentIO.length < 6) {
+        currentIO = "0" + currentIO
+      }
+      return currentIO
 
-  }
+    }
 
   /** Saves the object to NBT */
-  override def save(nbt: NBTTagCompound)
-  {
-    if (saveIOMap && nbt.hasKey("ioMap"))
-    {
+  override def save(nbt: NBTTagCompound) {
+    if (saveIOMap && nbt.hasKey("ioMap")) {
       this.ioMap = nbt.getShort("ioMap")
     }
   }
 
   /** Load the object from NBT */
-  override def load(nbt: NBTTagCompound)
-  {
-    if (saveIOMap)
-    {
+  override def load(nbt: NBTTagCompound) {
+    if (saveIOMap) {
       nbt.setShort("ioMap", this.ioMap)
     }
   }
-
 
 }

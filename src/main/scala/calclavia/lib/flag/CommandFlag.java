@@ -11,316 +11,311 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatMessageComponent;
 import universalelectricity.api.vector.Vector3;
 
-/**
- * Commands used for flags and regions. This can be used for protection for specific mod components
+/** Commands used for flags and regions. This can be used for protection for specific mod components
  * that might be dangerous.
  * 
- * @author Calclavia
- * 
- */
+ * @author Calclavia */
 public class CommandFlag extends CommandBase
 {
-	public static final String[] COMMANDS = new String[] { "list", "setregion", "removeregion", "set" };
-	public String commandName = "modflag";
-	public ModFlag modFlagData;
+    public static final String[] COMMANDS = new String[] { "list", "setregion", "removeregion", "set" };
+    public String commandName = "modflag";
+    public ModFlag modFlagData;
 
-	public CommandFlag(ModFlag modFlag)
-	{
-		this.modFlagData = modFlag;
-	}
+    public CommandFlag(ModFlag modFlag)
+    {
+        this.modFlagData = modFlag;
+    }
 
-	public CommandFlag(ModFlag modFlag, String commandName)
-	{
-		this(modFlag);
-		this.commandName = commandName;
-	}
+    public CommandFlag(ModFlag modFlag, String commandName)
+    {
+        this(modFlag);
+        this.commandName = commandName;
+    }
 
-	@Override
-	public String getCommandName()
-	{
-		return commandName;
-	}
+    @Override
+    public String getCommandName()
+    {
+        return commandName;
+    }
 
-	@Override
-	public String getCommandUsage(ICommandSender par1ICommandSender)
-	{
-		String returnString = "";
+    @Override
+    public String getCommandUsage(ICommandSender par1ICommandSender)
+    {
+        String returnString = "";
 
-		for (String command : COMMANDS)
-		{
-			returnString = returnString + "\n/" + this.getCommandName() + " " + command;
-		}
+        for (String command : COMMANDS)
+        {
+            returnString = returnString + "\n/" + this.getCommandName() + " " + command;
+        }
 
-		return returnString;
-	}
+        return returnString;
+    }
 
-	@Override
-	public void processCommand(ICommandSender sender, String[] args)
-	{
-		if (args.length > 0)
-		{
-			EntityPlayer entityPlayer = (EntityPlayer) sender;
+    @Override
+    public void processCommand(ICommandSender sender, String[] args)
+    {
+        if (args.length > 0)
+        {
+            EntityPlayer entityPlayer = (EntityPlayer) sender;
 
-			// The world data the player is on.
-			FlagWorld flagWorld = this.modFlagData.getFlagWorld(entityPlayer.worldObj);
+            // The world data the player is on.
+            FlagWorld flagWorld = this.modFlagData.getFlagWorld(entityPlayer.worldObj);
 
-			String commandName = args[0].toLowerCase();
+            String commandName = args[0].toLowerCase();
 
-			if (commandName.equalsIgnoreCase("list"))
-			{
-				/**
-				 * The list command lists out all regions in this world/region.
-				 */
-				if (args.length > 1)
-				{
-					String regionName = args[1];
+            if (commandName.equalsIgnoreCase("list"))
+            {
+                /** The list command lists out all regions in this world/region. */
+                if (args.length > 1)
+                {
+                    String regionName = args[1];
 
-					if (regionName.equalsIgnoreCase("all"))
-					{
-						String msg = "";
+                    if (regionName.equalsIgnoreCase("all"))
+                    {
+                        String msg = "";
 
-						for(Entry<Integer, FlagWorld> entry : this.modFlagData.getFlagWorlds().entrySet())
-						{
-							for(FlagRegion flagRegion : entry.getValue().getRegions())
-	                        {
-								msg = msg + " " + flagRegion.name + " (" + flagRegion.region.min.x + "," + flagRegion.region.min.z + ")" + ",";
-							}
-						}
+                        for (Entry<Integer, FlagWorld> entry : this.modFlagData.getFlagWorlds().entrySet())
+                        {
+                            for (FlagRegion flagRegion : entry.getValue().getRegions())
+                            {
+                                msg = msg + " " + flagRegion.name + " (" + flagRegion.region.min.x + "," + flagRegion.region.min.z + ")" + ",";
+                            }
+                        }
 
-						if (msg != "")
-						{
-							msg = "List of regions in world:\n" + msg;
-						}
-						else
-						{
-							msg = "No regions in this world.";
-						}
+                        if (msg != "")
+                        {
+                            msg = "List of regions in world:\n" + msg;
+                        }
+                        else
+                        {
+                            msg = "No regions in this world.";
+                        }
 
-						sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));
-					}
-					else if (flagWorld.getRegion(regionName) != null)
-					{
-						String msg = "";
+                        sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));
+                    }
+                    else if (flagWorld.getRegion(regionName) != null)
+                    {
+                        String msg = "";
 
-						Iterator<Flag> i = flagWorld.getRegion(regionName).getFlags().iterator();
+                        Iterator<Flag> i = flagWorld.getRegion(regionName).getFlags().iterator();
 
-						while (i.hasNext())
-						{
-							Flag flag = i.next();
-							msg = msg + " " + flag.name + " => " + flag.value + ",";
-						}
+                        while (i.hasNext())
+                        {
+                            Flag flag = i.next();
+                            msg = msg + " " + flag.name + " => " + flag.value + ",";
+                        }
 
-						if (msg != "")
-						{
-							msg = "List of flags in region " + regionName + ":\n" + msg;
-						}
-						else
-						{
-							msg = "No flags in this region.";
-						}
+                        if (msg != "")
+                        {
+                            msg = "List of flags in region " + regionName + ":\n" + msg;
+                        }
+                        else
+                        {
+                            msg = "No flags in this region.";
+                        }
 
-						sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));
-					}
-					else
-					{
-						String msg = "Region does not exist, but here are existing flags in the position you are standing on:\n";
+                        sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));
+                    }
+                    else
+                    {
+                        String msg = "Region does not exist, but here are existing flags in the position you are standing on:\n";
 
-						Iterator<Flag> i = flagWorld.getFlagsInPosition(new Vector3(entityPlayer)).iterator();
+                        Iterator<Flag> i = flagWorld.getFlagsInPosition(new Vector3(entityPlayer)).iterator();
 
-						while (i.hasNext())
-						{
-							Flag flag = i.next();
-							msg = msg + " " + flag.name + "=>" + flag.value + ",";
-						}
+                        while (i.hasNext())
+                        {
+                            Flag flag = i.next();
+                            msg = msg + " " + flag.name + "=>" + flag.value + ",";
+                        }
 
-						sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));
-					}
+                        sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));
+                    }
 
-				}
-				else
-				{
-					String msg = "";
+                }
+                else
+                {
+                    String msg = "";
 
-					Iterator<FlagRegion> i = flagWorld.getRegions().iterator();
-					while (i.hasNext())
-					{
-						FlagRegion flagRegion = i.next();
-						msg = msg + " " + flagRegion.name + " (" + flagRegion.region.min.x + "," + flagRegion.region.min.z + ")" + ",";
-					}
+                    Iterator<FlagRegion> i = flagWorld.getRegions().iterator();
+                    while (i.hasNext())
+                    {
+                        FlagRegion flagRegion = i.next();
+                        msg = msg + " " + flagRegion.name + " (" + flagRegion.region.min.x + "," + flagRegion.region.min.z + ")" + ",";
+                    }
 
-					if (msg != "")
-					{
-						msg = "List of regions in this dimension:\n" + msg;
-					}
-					else
-					{
-						msg = "No regions in this dimension.";
-					}
+                    if (msg != "")
+                    {
+                        msg = "List of regions in this dimension:\n" + msg;
+                    }
+                    else
+                    {
+                        msg = "No regions in this dimension.";
+                    }
 
-					sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));
-				}
+                    sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));
+                }
 
-				return;
-			}
-			else if (commandName.equalsIgnoreCase("setregion"))
-			{
-				if (args.length > 1)
-				{
-					String regionName = args[1];
+                return;
+            }
+            else if (commandName.equalsIgnoreCase("setregion"))
+            {
+                if (args.length > 1)
+                {
+                    String regionName = args[1];
 
-					if (regionName.equalsIgnoreCase(FlagWorld.GLOBAL_REGION))
-					{
-						if (flagWorld.addRegion(regionName, new Vector3(entityPlayer), 1))
-						{
-							sender.sendChatToPlayer(ChatMessageComponent.createFromText("Created global dimension region setting."));
-							return;
-						}
-					}
-					else if (args.length > 2)
-					{
-						int radius = 0;
+                    if (regionName.equalsIgnoreCase(FlagWorld.GLOBAL_REGION))
+                    {
+                        if (flagWorld.addRegion(regionName, new Vector3(entityPlayer), 1))
+                        {
+                            sender.sendChatToPlayer(ChatMessageComponent.createFromText("Created global dimension region setting."));
+                            return;
+                        }
+                    }
+                    else if (args.length > 2)
+                    {
+                        int radius = 0;
 
-						try
-						{
-							radius = Integer.parseInt(args[2]);
-						}
-						catch (Exception e)
-						{
-							throw new WrongUsageException("Radius not a number!");
-						}
+                        try
+                        {
+                            radius = Integer.parseInt(args[2]);
+                        }
+                        catch (Exception e)
+                        {
+                            throw new WrongUsageException("Radius not a number!");
+                        }
 
-						if (radius > 0)
-						{
-							FlagRegion region = flagWorld.getRegion(regionName);
-							if (region == null)
-							{
-								if (flagWorld.addRegion(regionName, new Vector3(entityPlayer), radius))
-								{
-									sender.sendChatToPlayer(ChatMessageComponent.createFromText("Region " + regionName + " added."));
-								}
-							}
-							else
-							{
-								region.edit(new Vector3(entityPlayer), radius);
-								sender.sendChatToPlayer(ChatMessageComponent.createFromText("Region " + regionName + " already exists. Modified region to have a radius of: " + radius));
-							}
-						}
-						else
-						{
-							throw new WrongUsageException("Radius has to be greater than zero!");
-						}
+                        if (radius > 0)
+                        {
+                            FlagRegion region = flagWorld.getRegion(regionName);
+                            if (region == null)
+                            {
+                                if (flagWorld.addRegion(regionName, new Vector3(entityPlayer), radius))
+                                {
+                                    sender.sendChatToPlayer(ChatMessageComponent.createFromText("Region " + regionName + " added."));
+                                }
+                            }
+                            else
+                            {
+                                region.edit(new Vector3(entityPlayer), radius);
+                                sender.sendChatToPlayer(ChatMessageComponent.createFromText("Region " + regionName + " already exists. Modified region to have a radius of: " + radius));
+                            }
+                        }
+                        else
+                        {
+                            throw new WrongUsageException("Radius has to be greater than zero!");
+                        }
 
-					}
-					else
-					{
-						throw new WrongUsageException("/" + this.getCommandName() + " addregion <name> <radius>");
-					}
-				}
-				else
-				{
-					throw new WrongUsageException("Please specify the region name.");
-				}
+                    }
+                    else
+                    {
+                        throw new WrongUsageException("/" + this.getCommandName() + " addregion <name> <radius>");
+                    }
+                }
+                else
+                {
+                    throw new WrongUsageException("Please specify the region name.");
+                }
 
-				return;
-			}
-			else if (commandName.equalsIgnoreCase("removeregion"))
+                return;
+            }
+            else if (commandName.equalsIgnoreCase("removeregion"))
 
-			{
-				if (args.length > 1)
-				{
-					String regionName = args[1];
+            {
+                if (args.length > 1)
+                {
+                    String regionName = args[1];
 
-					if (flagWorld.removeRegion(regionName))
-					{
-						sender.sendChatToPlayer(ChatMessageComponent.createFromText("Region with name " + regionName + " is removed."));
-					}
-					else
-					{
-						throw new WrongUsageException("The specified region does not exist in this world.");
-					}
-				}
-				else
-				{
-					throw new WrongUsageException("Please specify the region name.");
-				}
+                    if (flagWorld.removeRegion(regionName))
+                    {
+                        sender.sendChatToPlayer(ChatMessageComponent.createFromText("Region with name " + regionName + " is removed."));
+                    }
+                    else
+                    {
+                        throw new WrongUsageException("The specified region does not exist in this world.");
+                    }
+                }
+                else
+                {
+                    throw new WrongUsageException("Please specify the region name.");
+                }
 
-				return;
-			}
-			else if (commandName.equalsIgnoreCase("set"))
-			{
-				if (args.length > 2)
-				{
-					String regionName = args[1];
-					String flagName = args[2];
-					FlagRegion flagRegion = flagWorld.getRegion(regionName);
+                return;
+            }
+            else if (commandName.equalsIgnoreCase("set"))
+            {
+                if (args.length > 2)
+                {
+                    String regionName = args[1];
+                    String flagName = args[2];
+                    FlagRegion flagRegion = flagWorld.getRegion(regionName);
 
-					if (flagRegion != null)
-					{
-						if (FlagRegistry.flags.contains(flagName))
-						{
-							if (args.length > 3)
-							{
-								String flagValue = args[3];
+                    if (flagRegion != null)
+                    {
+                        if (FlagRegistry.flags.contains(flagName))
+                        {
+                            if (args.length > 3)
+                            {
+                                String flagValue = args[3];
 
-								flagRegion.setFlag(flagName, flagValue);
-								sender.sendChatToPlayer(ChatMessageComponent.createFromText("Flag '" + flagName + "' has been set to '" + flagValue + "' in " + regionName + "."));
-							}
-							else
-							{
-								flagRegion.removeFlag(flagName);
-								sender.sendChatToPlayer(ChatMessageComponent.createFromText("Removed flag '" + flagName + "'."));
-							}
-						}
-						else
-						{
-							String flags = "Flag does not exist. Existing flags:\n";
+                                flagRegion.setFlag(flagName, flagValue);
+                                sender.sendChatToPlayer(ChatMessageComponent.createFromText("Flag '" + flagName + "' has been set to '" + flagValue + "' in " + regionName + "."));
+                            }
+                            else
+                            {
+                                flagRegion.removeFlag(flagName);
+                                sender.sendChatToPlayer(ChatMessageComponent.createFromText("Removed flag '" + flagName + "'."));
+                            }
+                        }
+                        else
+                        {
+                            String flags = "Flag does not exist. Existing flags:\n";
 
-							for (String registeredFlag : FlagRegistry.flags)
-							{
-								flags = flags + registeredFlag + ", ";
-							}
+                            for (String registeredFlag : FlagRegistry.flags)
+                            {
+                                flags = flags + registeredFlag + ", ";
+                            }
 
-							throw new WrongUsageException(flags);
-						}
-					}
-					else
-					{
-						throw new WrongUsageException("The specified region '" + regionName + "' does not exist.");
-					}
-				}
-				else
-				{
-					throw new WrongUsageException("/" + this.getCommandName() + " set <regionName> <flagName> <value>");
-				}
+                            throw new WrongUsageException(flags);
+                        }
+                    }
+                    else
+                    {
+                        throw new WrongUsageException("The specified region '" + regionName + "' does not exist.");
+                    }
+                }
+                else
+                {
+                    throw new WrongUsageException("/" + this.getCommandName() + " set <regionName> <flagName> <value>");
+                }
 
-				return;
-			}
-		}
+                return;
+            }
+        }
 
-		throw new WrongUsageException(this.getCommandUsage(sender));
+        throw new WrongUsageException(this.getCommandUsage(sender));
 
-	}
+    }
 
-	@Override
-	public int getRequiredPermissionLevel()
-	{
-		return 2;
-	}
+    @Override
+    public int getRequiredPermissionLevel()
+    {
+        return 2;
+    }
 
-	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args)
-	{
-		return args.length == 1 ? getListOfStringsMatchingLastWord(args, COMMANDS) : null;
-	}
-	
-	@Override
-	public int compareTo(Object o) 
-	{
-		if (o instanceof CommandBase)
-		{
-			return ((CommandBase)o).getCommandName().compareTo(getCommandName());
-		}
-		
-		return 0;
-	}
+    @Override
+    public List addTabCompletionOptions(ICommandSender sender, String[] args)
+    {
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, COMMANDS) : null;
+    }
+
+    @Override
+    public int compareTo(Object o)
+    {
+        if (o instanceof CommandBase)
+        {
+            return ((CommandBase) o).getCommandName().compareTo(getCommandName());
+        }
+
+        return 0;
+    }
 }

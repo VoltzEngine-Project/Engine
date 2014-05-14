@@ -1,12 +1,12 @@
 package calclavia.api.icbm.explosion;
 
-import calclavia.api.icbm.ITier;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModelCustom;
+import calclavia.api.icbm.ITier;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

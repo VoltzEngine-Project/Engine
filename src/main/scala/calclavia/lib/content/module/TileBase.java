@@ -9,75 +9,74 @@ import net.minecraftforge.common.ForgeDirection;
 import calclavia.components.CalclaviaLoader;
 import calclavia.lib.prefab.tile.IPlayerUsing;
 
-/**
- * All tiles inherit this class.
+/** All tiles inherit this class.
  * 
- * @author Calclavia
- */
+ * @author Calclavia */
 public abstract class TileBase extends TileBlock implements IPlayerUsing
 {
-	public TileBase(String name, Material material)
-	{
-		super(name, material);
-	}
+    public TileBase(String name, Material material)
+    {
+        super(name, material);
+    }
 
-	public TileBase(Material material)
-	{
-		super(material);
-	}
+    public TileBase(Material material)
+    {
+        super(material);
+    }
 
-	public TileBlock tile()
-	{
-		return this;
-	}
+    @Override
+    public TileBlock tile()
+    {
+        return this;
+    }
 
-	private final HashSet<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
+    private final HashSet<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
 
-	protected long ticks = 0;
+    protected long ticks = 0;
 
-	/**
-	 * Called on the TileEntity's first tick.
-	 */
-	public void initiate()
-	{
-	}
+    /** Called on the TileEntity's first tick. */
+    public void initiate()
+    {
+    }
 
-	@Override
-	public void updateEntity()
-	{
-		if (this.ticks == 0)
-		{
-			initiate();
-		}
+    @Override
+    public void updateEntity()
+    {
+        if (this.ticks == 0)
+        {
+            initiate();
+        }
 
-		if (ticks >= Long.MAX_VALUE)
-		{
-			ticks = 1;
-		}
+        if (ticks >= Long.MAX_VALUE)
+        {
+            ticks = 1;
+        }
 
-		ticks++;
-	}
+        ticks++;
+    }
 
-	@Override
-	public Packet getDescriptionPacket()
-	{
-		return CalclaviaLoader.PACKET_ANNOTATION.getPacket(this);
-	}
+    @Override
+    public Packet getDescriptionPacket()
+    {
+        return CalclaviaLoader.PACKET_ANNOTATION.getPacket(this);
+    }
 
-	@Override
-	public HashSet<EntityPlayer> getPlayersUsing()
-	{
-		return this.playersUsing;
-	}
+    @Override
+    public HashSet<EntityPlayer> getPlayersUsing()
+    {
+        return this.playersUsing;
+    }
 
-	public ForgeDirection getDirection()
-	{
-		return ForgeDirection.getOrientation(this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-	}
+    @Override
+    public ForgeDirection getDirection()
+    {
+        return ForgeDirection.getOrientation(this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+    }
 
-	public void setDirection(ForgeDirection direction)
-	{
-		this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, direction.ordinal(), 3);
-	}
+    @Override
+    public void setDirection(ForgeDirection direction)
+    {
+        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, direction.ordinal(), 3);
+    }
 
 }

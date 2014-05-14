@@ -54,7 +54,7 @@ public class SaveManager
     {
         synchronized (instance())
         {
-            if (object instanceof IVirtualObject && !instance().saveList.contains((IVirtualObject) object))
+            if (object instanceof IVirtualObject && !instance().saveList.contains(object))
             {
                 instance().saveList.add((IVirtualObject) object);
             }
@@ -66,7 +66,7 @@ public class SaveManager
     {
         synchronized (instance())
         {
-            if (object instanceof IVirtualObject && !instance().objects.contains((IVirtualObject) object))
+            if (object instanceof IVirtualObject && !instance().objects.contains(object))
             {
                 instance().saveList.add((IVirtualObject) object);
             }
@@ -221,15 +221,15 @@ public class SaveManager
                 {
                     if (getID(object.getClass()) != null)
                     {
-                        if (((IVirtualObject) object).getSaveFile() != null)
+                        if (object.getSaveFile() != null)
                         {
                             /* Get file, and make directories */
-                            File file = ((IVirtualObject) object).getSaveFile();
+                            File file = object.getSaveFile();
                             file.mkdirs();
 
                             /* Create nbt save object */
                             NBTTagCompound tag = new NBTTagCompound();
-                            ((IVirtualObject) object).save(tag);
+                            object.save(tag);
                             tag.setString("id", getID(object.getClass()));
 
                             /* Save data using NBTUtility */

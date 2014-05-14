@@ -3,7 +3,6 @@ package calclavia.components;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import calclavia.lib.config.ConfigScanner;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandManager;
@@ -37,8 +36,8 @@ import calclavia.components.tool.ToolModeRotation;
 import calclavia.lib.Calclavia;
 import calclavia.lib.compat.waila.Waila;
 import calclavia.lib.config.Config;
-import calclavia.lib.config.ConfigAnnotationEvent;
 import calclavia.lib.config.ConfigHandler;
+import calclavia.lib.config.ConfigScanner;
 import calclavia.lib.content.ContentRegistry;
 import calclavia.lib.content.IDManager;
 import calclavia.lib.flag.CommandFlag;
@@ -172,13 +171,13 @@ public class CalclaviaLoader
     public static double steamMultiplier = 1;
 
     private ProxyHandler modproxies;
-    
+
     private static ThermalGrid thermalGrid;
 
     public CalclaviaLoader()
     {
         this.modproxies = new ProxyHandler();
-        this.thermalGrid = new ThermalGrid();
+        CalclaviaLoader.thermalGrid = new ThermalGrid();
     }
 
     /** Call all of this in Init stage. Use "requestItem" or "requestBlock" instead to make it so
@@ -441,7 +440,7 @@ public class CalclaviaLoader
     public void preInit(FMLPreInitializationEvent evt)
     {
         Calclavia.LOGGER.setParent(FMLLog.getLogger());
-		ConfigScanner.instance().generateSets(evt.getAsmData());
+        ConfigScanner.instance().generateSets(evt.getAsmData());
 
         /* Does a system check to see if we are running in an IDE as a Dev
          * http://andydunkel.net/java/2011/06/22/java-check-if-your-code-is-running-in-eclipse.html */
@@ -570,7 +569,7 @@ public class CalclaviaLoader
         ConfigHandler.configure(Calclavia.CONFIGURATION, Calclavia.DOMAIN);
 
         // Register Thermal Grid
-        UpdateTicker.addNetwork(this.thermalGrid);
+        UpdateTicker.addNetwork(CalclaviaLoader.thermalGrid);
 
         modproxies.postInit();
     }
@@ -629,10 +628,10 @@ public class CalclaviaLoader
         }
 
         // Reactors will not actually remove water source blocks, however weapons will.
-//        if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0 && !evt.isReactor)
-//        {
-//            position.setBlock(world, 0);
-//        }
+        //        if ((blockID == Block.waterMoving.blockID || blockID == Block.waterStill.blockID) && position.getBlockMetadata(world) == 0 && !evt.isReactor)
+        //        {
+        //            position.setBlock(world, 0);
+        //        }
 
         evt.setResult(Result.DENY);
     }

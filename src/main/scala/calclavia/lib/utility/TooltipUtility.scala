@@ -2,8 +2,8 @@ package calclavia.lib.utility
 
 import net.minecraft.block.Block
 import net.minecraft.item.crafting._
-import net.minecraft.item.{Item, ItemStack}
-import net.minecraftforge.oredict.{OreDictionary, ShapelessOreRecipe, ShapedOreRecipe}
+import net.minecraft.item.{ Item, ItemStack }
+import net.minecraftforge.oredict.{ OreDictionary, ShapelessOreRecipe, ShapedOreRecipe }
 import scala.Some
 import scala.collection.convert.WrapAsScala._
 import scala.collection.mutable
@@ -16,8 +16,7 @@ import java.util
  * @since 01/04/14
  * @author Sangar, adapted by tgame14
  */
-object TooltipUtility
-{
+object TooltipUtility {
   protected val cache = mutable.Map.empty[ItemStack, Iterable[(ItemStack, Double)]]
 
   def terminate(item: Item, meta: Int = 0) = cache += new ItemStack(item, 1, meta) -> mutable.Iterable((new ItemStack(item, 1, meta), 1))
@@ -78,8 +77,7 @@ object TooltipUtility
           case _ =>
             if (path.exists(value => fuzzyEquals(value, stack))) {
               Iterable((stack, 1.0))
-            }
-            else {
+            } else {
               val recipes = CraftingManager.getInstance.getRecipeList.map(_.asInstanceOf[IRecipe])
               val recipe = recipes.find((recipe: IRecipe) => recipe.getRecipeOutput != null && fuzzyEquals(stack, recipe.getRecipeOutput))
               val (ingredients, output) = recipe match {
@@ -108,7 +106,7 @@ object TooltipUtility
               scaled
             }
         }
-      case list: util.ArrayList[ItemStack]@unchecked if !list.isEmpty =>
+      case list: util.ArrayList[ItemStack] @unchecked if !list.isEmpty =>
         var result = Iterable.empty[(ItemStack, Double)]
         for (stack <- list if result.isEmpty) {
           cache.find {

@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import calclavia.lib.utility.LanguageUtility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import calclavia.lib.utility.LanguageUtility;
 import calclavia.lib.utility.nbt.IVirtualObject;
 import calclavia.lib.utility.nbt.NBTUtility;
 import calclavia.lib.utility.nbt.SaveManager;
@@ -176,7 +176,7 @@ public class AccessProfile implements IVirtualObject
     {
         return setUserAccess(player, g, true);
     }
-    
+
     public boolean setUserAccess(String player, AccessGroup g, boolean save)
     {
         return setUserAccess(new AccessUser(player).setTempary(!save), g);
@@ -192,7 +192,7 @@ public class AccessProfile implements IVirtualObject
 
             if (group != null)
             {
-				bool = group.addMemeber(user);
+                bool = group.addMemeber(user);
             }
             if (bool)
             {
@@ -332,9 +332,9 @@ public class AccessProfile implements IVirtualObject
 
     }
 
-	@Override
-	public String toString()
-	{
-		return LanguageUtility.getLocal("info.accessprofile.tostring").replaceAll("%p", this.profileName.toString()).replaceAll("%g", groups.toString());
-	}
+    @Override
+    public String toString()
+    {
+        return LanguageUtility.getLocal("info.accessprofile.tostring").replaceAll("%p", this.profileName.toString()).replaceAll("%g", groups.toString());
+    }
 }

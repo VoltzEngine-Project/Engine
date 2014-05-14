@@ -4,39 +4,31 @@ import java.util.LinkedList;
 import java.util.List;
 
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-/**
- * the Object
- * that handles the submods of the mod
- *
- * to have the submodules work, You must register them in this class,
- * Adding support for a submodule includes only aquiring its class and throwing it in the
- * registerModules method, this is handled as such to allow turning these modules off by configuration,
- * and disable them if the parent mod is not loaded (Integration modules with other mods)
- *
+/** the Object that handles the submods of the mod
+ * 
+ * to have the submodules work, You must register them in this class, Adding support for a submodule
+ * includes only aquiring its class and throwing it in the registerModules method, this is handled
+ * as such to allow turning these modules off by configuration, and disable them if the parent mod
+ * is not loaded (Integration modules with other mods)
+ * 
  * Replace @Mod annotation with this system and it allows better handling in the end of it
- *
+ * 
  * @since 23/02/14
- * @author tgame14
- */
+ * @author tgame14 */
 public class ProxyHandler
 {
     private List<ICompatProxy> compatModulesList;
     private LoadPhase phase;
 
-    /**
-     * initiate in Mod constructor
-     */
+    /** initiate in Mod constructor */
     public ProxyHandler()
     {
         this.compatModulesList = new LinkedList<ICompatProxy>();
         this.phase = LoadPhase.PRELAUNCH;
     }
 
-    public void applyModule (Class<?> clazz, boolean load)
+    public void applyModule(Class<?> clazz, boolean load)
     {
         if (!load)
         {
@@ -66,13 +58,13 @@ public class ProxyHandler
 
     /** Call for modules late or as already existing modules, DO NOT CALL FOR REGISTERED Proxies! */
     @Deprecated
-    public void applyModule (ICompatProxy module)
+    public void applyModule(ICompatProxy module)
     {
         boolean registered = false;
 
         if (Loader.isModLoaded(module.modId()))
         {
-            compatModulesList.add((ICompatProxy) module);
+            compatModulesList.add(module);
             registered = true;
         }
 
@@ -80,24 +72,24 @@ public class ProxyHandler
         {
             switch (phase)
             {
-            case DONE:
-                break;
-            case POSTINIT:
-                module.preInit();
-                module.init();
-                module.preInit();
-                break;
-            case INIT:
-                module.preInit();
-                module.init();
-                break;
-            case PREINIT:
+                case DONE:
+                    break;
+                case POSTINIT:
+                    module.preInit();
+                    module.init();
+                    module.preInit();
+                    break;
+                case INIT:
+                    module.preInit();
+                    module.init();
+                    break;
+                case PREINIT:
 
             }
         }
     }
 
-    public void preInit ()
+    public void preInit()
     {
         phase = LoadPhase.PREINIT;
         for (ICompatProxy proxy : compatModulesList)
@@ -109,7 +101,7 @@ public class ProxyHandler
 
     }
 
-    public void init ()
+    public void init()
     {
         phase = LoadPhase.INIT;
 
@@ -119,7 +111,7 @@ public class ProxyHandler
         }
     }
 
-    public void postInit ()
+    public void postInit()
     {
         phase = LoadPhase.POSTINIT;
         for (ICompatProxy proxy : compatModulesList)

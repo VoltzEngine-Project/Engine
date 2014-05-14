@@ -1,7 +1,7 @@
 package calclavia.lib.type;
 
 /** Container for up to 3 objects
- *
+ * 
  * @author Robert Seifert * */
 public class Triple<A, B, C>
 {
