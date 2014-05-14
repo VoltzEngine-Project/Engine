@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import resonant.core.ResonantEngine;
+import resonant.lib.References;
 import resonant.lib.content.BlockInfo;
 import resonant.lib.multiblock.fake.IBlockActivate;
 import resonant.lib.prefab.block.BlockSidedIO;
@@ -62,7 +63,7 @@ public class BlockInfiniteBlock extends BlockSidedIO
 
         for (Types block : Types.values())
         {
-            block.icon = iconReg.registerIcon(ResonantEngine.PREFIX + block.getTextureName());
+            block.icon = iconReg.registerIcon(References.PREFIX + block.getTextureName());
         }
     }
 

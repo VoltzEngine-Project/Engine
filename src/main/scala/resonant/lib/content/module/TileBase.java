@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraftforge.common.ForgeDirection;
 import resonant.core.ResonantEngine;
+import resonant.lib.References;
 import resonant.lib.prefab.tile.IPlayerUsing;
 
 /** All tiles inherit this class.
@@ -58,7 +59,7 @@ public abstract class TileBase extends TileBlock implements IPlayerUsing
     @Override
     public Packet getDescriptionPacket()
     {
-        return ResonantEngine.PACKET_ANNOTATION.getPacket(this);
+        return References.PACKET_ANNOTATION.getPacket(this);
     }
 
     @Override

@@ -2,7 +2,7 @@ package resonant.core;
 
 import java.util.Map;
 
-import resonant.core.asm.CalclaviaTransformer;
+import resonant.core.asm.Transformer;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
@@ -10,7 +10,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
  * 
  * @author Calclavia */
 
-@TransformerExclusions({ "calclavia.lib.asm" })
+@TransformerExclusions({ "resonant.lib.asm" })
 public class ResonantPluginLoader implements IFMLLoadingPlugin
 {
     @Override
@@ -22,7 +22,7 @@ public class ResonantPluginLoader implements IFMLLoadingPlugin
     @Override
     public String[] getASMTransformerClass()
     {
-        return new String[] { CalclaviaTransformer.class.getName() };
+        return new String[] { Transformer.class.getName() };
     }
 
     @Override

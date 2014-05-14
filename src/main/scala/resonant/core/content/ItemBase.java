@@ -15,8 +15,8 @@ public class ItemBase extends Item
     public ItemBase(String name, int id)
     {
         super(References.CONFIGURATION.getItem(name, id).getInt(id));
-        this.setUnlocalizedName(ResonantEngine.PREFIX + name);
-        this.setTextureName(ResonantEngine.PREFIX + name);
+        this.setUnlocalizedName(References.PREFIX + name);
+        this.setTextureName(References.PREFIX + name);
         this.setNoRepair();
     }
 }

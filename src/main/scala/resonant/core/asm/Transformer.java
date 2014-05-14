@@ -25,7 +25,7 @@ import universalelectricity.core.asm.ASMHelper;
 import universalelectricity.core.asm.ObfMapping;
 
 /** @author Calclavia */
-public class CalclaviaTransformer implements IClassTransformer
+public class Transformer implements IClassTransformer
 {
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes)

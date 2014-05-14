@@ -12,8 +12,8 @@ public class BlockBase extends BlockAdvanced
     {
         super(References.CONFIGURATION.getItem(name, id).getInt(id), Material.rock);
         this.setCreativeTab(CreativeTabs.tabBlock);
-        this.setUnlocalizedName(ResonantEngine.PREFIX + name);
-        this.setTextureName(ResonantEngine.PREFIX + name);
+        this.setUnlocalizedName(References.PREFIX + name);
+        this.setTextureName(References.PREFIX + name);
         this.setHardness(2f);
     }
 }

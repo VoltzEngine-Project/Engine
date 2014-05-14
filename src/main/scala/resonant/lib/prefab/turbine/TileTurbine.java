@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import resonant.core.ResonantEngine;
+import resonant.lib.References;
 import resonant.lib.multiblock.reference.IMultiBlockStructure;
 import resonant.lib.network.Synced;
 import resonant.lib.network.Synced.SyncedInput;
@@ -152,14 +153,14 @@ public abstract class TileTurbine extends TileElectrical implements IMultiBlockS
     @Override
     public Packet getDescriptionPacket()
     {
-        return ResonantEngine.PACKET_ANNOTATION.getPacket(this);
+        return References.PACKET_ANNOTATION.getPacket(this);
     }
 
     public void sendPowerUpdate()
     {
         if (!world().isRemote)
         {
-            ResonantEngine.PACKET_ANNOTATION.sync(this, 1);
+            References.PACKET_ANNOTATION.sync(this, 1);
         }
     }
 

@@ -3,6 +3,7 @@ package resonant.core.content.debug;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import resonant.core.ResonantEngine;
+import resonant.lib.References;
 import resonant.lib.gui.GuiContainerBase;
 import resonant.lib.utility.LanguageUtility;
 import universalelectricity.api.vector.Vector3;
@@ -83,7 +84,7 @@ public class GuiCreativeBuilder extends GuiContainerBase
 
             if (radius > 0)
             {
-                PacketDispatcher.sendPacketToServer(ResonantEngine.PACKET_TILE.getPacket(position.intX(), position.intY(), position.intZ(), mode, radius));
+                PacketDispatcher.sendPacketToServer(References.PACKET_TILE.getPacket(position.intX(), position.intY(), position.intZ(), mode, radius));
                 this.mc.thePlayer.closeScreen();
             }
         }

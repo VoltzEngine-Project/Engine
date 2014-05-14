@@ -88,36 +88,27 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
-/** Basic Components
+/** Mob class for Resonant Engine that handles common loading
  * 
- * @author Calclavia */
-@Mod(modid = ResonantEngine.ID, name = References.NAME, version = ResonantEngine.VERSION, dependencies = "required-after:UniversalElectricity")
-@NetworkMod(channels = ResonantEngine.CHANNEL, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
+ * @author Calclavia, DarkGuardsman */
+@Mod(modid = References.NAME, name = References.NAME, version = References.VERSION, dependencies = "required-after:UniversalElectricity")
+@NetworkMod(channels = References.CHANNEL, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
 public class ResonantEngine
-{
-    public static final String ID = "CalclaviaCore";
-    public static final String CHANNEL = "calclaviacore";
-    public static final PacketTile PACKET_TILE = new PacketTile(CHANNEL);
-    public static final PacketAnnotation PACKET_ANNOTATION = new PacketAnnotation(CHANNEL);
-    public static final String MAJOR_VERSION = "@MAJOR@";
-    public static final String MINOR_VERSION = "@MINOR@";
-    public static final String REVISION_VERSION = "@REVIS@";
-    public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
-    public static final String BUILD_VERSION = "@BUILD@";
-    public static final String ASSET_DIRECTORY = "/assets/calclavia/";
-    public static final String LANGUAGE_PATH = ASSET_DIRECTORY + "languages/";
-    public static final String TEXTURE_PATH = "textures/";
-    public static final String TEXTURE_DIRECTORY = ASSET_DIRECTORY + TEXTURE_PATH;
-    public static final String BLOCK_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "blocks/";
-    public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items/";
-    public static final String MODEL_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "models/";
+{ 
 
-    public static final String DOMAIN = "calclavia";
-    public static final String PREFIX = DOMAIN + ":";
-    public static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL", "de_DE", "tr_TR", "ru_RU" };
-
-    /** Auto-incrementing configuration IDs. Use this to make sure no config ID is the same. */
     public static final IDManager idManager = new IDManager(3970, 13970);
+    public static final ContentRegistry contentRegistry = new ContentRegistry(References.CONFIGURATION, idManager, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
+
+    @SidedProxy(clientSide = "resonant.core.ClientProxy", serverSide = "resonant.lib.prefab.ProxyBase")
+    public static ProxyBase proxy;
+
+    @Mod.Metadata(References.NAME)
+    public static ModMetadata metadata;
+
+    @Instance(References.NAME)
+    public static ResonantEngine INSTANCE;
+    
+    /** Auto-incrementing configuration IDs. Use this to make sure no config ID is the same. */    
     public static final int idBlockOreCopper = idManager.getNextBlockID();
     public static final int idBlockOreTin = idManager.getNextBlockID();
     public static final int idItemWrench = idManager.getNextItemID();
@@ -137,13 +128,6 @@ public class ResonantEngine
     public static final int idItemIngotBronze = idManager.getNextItemID();
     public static final int idItemDustSteel = idManager.getNextItemID();
     public static final int idItemDustBronze = idManager.getNextItemID();
-    public static final ContentRegistry contentRegistry = new ContentRegistry(References.CONFIGURATION, idManager, ID).setPrefix(PREFIX).setTab(CreativeTabs.tabTools);
-    @SidedProxy(clientSide = "calclavia.components.ClientProxy", serverSide = "calclavia.lib.prefab.ProxyBase")
-    public static ProxyBase proxy;
-    @Mod.Metadata(ID)
-    public static ModMetadata metadata;
-    @Instance(ID)
-    public static ResonantEngine INSTANCE;
 
     public static boolean runningAsDev = false;
     /** Blocks */
@@ -454,7 +438,7 @@ public class ResonantEngine
 
         if (inEclipse != null && inEclipse.equals("true"))
         {
-            References.LOGGER.fine("######Running mod as a dev IDE######");
+            References.LOGGER.fine("\n######Running mod as a dev IDE######\n");
             ResonantEngine.runningAsDev = true;
         }
 
@@ -475,7 +459,7 @@ public class ResonantEngine
         References.CONFIGURATION.load();
 
         blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class).setCreativeTab(null);
-        blockMulti.setPacketType(PACKET_TILE);
+        blockMulti.setPacketType(References.PACKET_TILE);
 
         if (References.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable_Calclavia_Core_Tools", true).getBoolean(true))
         {
@@ -549,13 +533,13 @@ public class ResonantEngine
 
         References.CONFIGURATION.save();
 
-        References.LOGGER.fine("Loaded: " + LanguageUtility.loadLanguages(ResonantEngine.LANGUAGE_PATH, ResonantEngine.LANGUAGES_SUPPORTED) + " Languages.");
+        References.LOGGER.fine("Loaded: " + LanguageUtility.loadLanguages(References.LANGUAGE_DIRECTORY, References.LANGUAGES) + " Languages.");
 
-        ResonantEngine.metadata.modId = ID;
-        ResonantEngine.metadata.name = ID;
-        ResonantEngine.metadata.description = "Calclavia Core is an FML Plugin to provide core functionalities in order to run Calclavia's mods.";
+        ResonantEngine.metadata.modId = References.NAME;
+        ResonantEngine.metadata.name = References.NAME;
+        ResonantEngine.metadata.description = References.NAME + " is a mod developement framework designed to assist in creation of mods. It provided basic classes for packet handling, tile creation, inventory handling, saving/loading of NBT, and general all around prefabs.";
         ResonantEngine.metadata.url = "http://calclavia.com/calclavia-core";
-        ResonantEngine.metadata.version = VERSION + BUILD_VERSION;
+        ResonantEngine.metadata.version = References.VERSION + References.BUILD_VERSION;
         ResonantEngine.metadata.authorList = Arrays.asList(new String[] { "Calclavia", "DarkCow", "tgame14", "Maxwolf" });
         ResonantEngine.metadata.autogenerated = false;
         proxy.init();
