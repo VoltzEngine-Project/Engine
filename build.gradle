@@ -30,7 +30,7 @@ archivesBaseName = "${System.getenv().JOB_NAME}"
 minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
 	
-	replaceIn "components/CalclaviaLoader.java"
+	replaceIn "components/References.java"
 	replace "@MAJOR@", config.version.mod.major
 	replace "@MINOR@", config.version.mod.minor
 	replace "@REVIS@", config.version.mod.revis
@@ -57,7 +57,7 @@ jar {
     classifier = 'universal'
 	
 	manifest {
-        attributes FMLCorePlugin: "calclavia.lib.CalclaviaPluginLoader",
+        attributes FMLCorePlugin: "resonant.core.ResonantPluginLoader",
 				   FMLCorePluginContainsFMLMod: "true"
     }
 	
@@ -76,7 +76,7 @@ task deobfJar(type: Jar) {
     classifier 'dev'
 
     manifest {
-        attributes FMLCorePlugin: "calclavia.lib.CalclaviaPluginLoader",
+        attributes FMLCorePlugin: "resonant.core.ResonantPluginLoader",
 				   FMLCorePluginContainsFMLMod: "true"
     }
 }
