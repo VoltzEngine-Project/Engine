@@ -18,7 +18,7 @@ import universalelectricity.api.UniversalElectricity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@BlockInfo(tileEntity = { "calclavia.components.creative.TileInfiniteEnergy", "calclavia.components.creative.TileInfiniteFluid" })
+@BlockInfo(tileEntity = { "resonant.core.content.debug.TileInfiniteEnergy", "resonant.core.content.debug.TileInfiniteFluid" })
 public class BlockInfiniteBlock extends BlockSidedIO
 {
     private static enum Types

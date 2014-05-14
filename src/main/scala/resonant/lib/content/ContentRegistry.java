@@ -25,7 +25,7 @@ public class ContentRegistry
     public final WeakHashMap<Block, String> blocks = new WeakHashMap<Block, String>();
     public final WeakHashMap<Item, String> items = new WeakHashMap<Item, String>();
 
-    @SidedProxy(clientSide = "calclavia.lib.content.ClientRegistryProxy", serverSide = "calclavia.lib.content.CommonRegistryProxy")
+    @SidedProxy(clientSide = "resonant.lib.content.ClientRegistryProxy", serverSide = "resonant  .lib.content.CommonRegistryProxy")
     public static CommonRegistryProxy proxy;
 
     private final Configuration config;

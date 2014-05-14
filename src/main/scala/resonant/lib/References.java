@@ -12,7 +12,7 @@ import cpw.mods.fml.common.Loader;
 /** References too common static objects used by Resonant Engine and its sub mods */
 public class References
 {
-    public static final String NAME = "Resonant-Engine";
+    public static final String NAME = "ResonantEngine";
     
     public static final String MAJOR_VERSION = "@MAJOR@";
     public static final String MINOR_VERSION = "@MINOR@";
