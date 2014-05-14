@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 @TransformerExclusions({ "resonant.lib.asm" })
 public class ResonantPluginLoader implements IFMLLoadingPlugin
 {
-    @Override
+
     public String[] getLibraryRequestClass()
     {
         return null;
