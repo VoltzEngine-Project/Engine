@@ -1,0 +1,16 @@
+package resonant.lib.multiblock.reference;
+
+import net.minecraft.world.World;
+import resonant.lib.multiblock.fake.IMultiBlock;
+import universalelectricity.api.vector.Vector3;
+
+public interface IMultiBlockStructure<W extends IMultiBlockStructure> extends IMultiBlock
+{
+    public World getWorld();
+
+    public void onMultiBlockChanged();
+
+    public Vector3 getPosition();
+
+    public MultiBlockHandler<W> getMultiBlock();
+}

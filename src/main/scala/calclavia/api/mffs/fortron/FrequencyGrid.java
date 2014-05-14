@@ -10,8 +10,8 @@ import net.minecraft.server.ServerListenThread;
 import net.minecraft.server.ThreadMinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import resonant.api.icbm.IBlockFrequency;
 import universalelectricity.api.vector.Vector3;
-import calclavia.api.icbm.IBlockFrequency;
 
 /** A grid MFFS uses to search for machines with frequencies that can be linked and spread Fortron
  * energy.
