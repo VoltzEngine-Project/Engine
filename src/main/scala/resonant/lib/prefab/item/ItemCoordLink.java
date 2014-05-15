@@ -6,22 +6,19 @@ package resonant.lib.prefab.item;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.Configuration;
 import universalelectricity.api.vector.VectorWorld;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /** @author Calclavia */
-public abstract class ItemCoordLink extends ItemBase
+public abstract class ItemCoordLink extends ItemTooltip
 {
-    public ItemCoordLink(int id, String name, Configuration config, String prefix, CreativeTabs tab)
+    public ItemCoordLink(int id)
     {
-        super(id, name, config, prefix, tab);
-        this.setMaxStackSize(1);
+        super(id);
     }
 
     @Override
