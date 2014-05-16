@@ -50,9 +50,7 @@ import resonant.lib.grid.UpdateTicker;
 import resonant.lib.modproxy.ProxyHandler;
 import resonant.lib.multiblock.BlockMultiBlockPart;
 import resonant.lib.multiblock.TileMultiBlockPart;
-import resonant.lib.network.PacketAnnotation;
 import resonant.lib.network.PacketHandler;
-import resonant.lib.network.PacketTile;
 import resonant.lib.prefab.ProxyBase;
 import resonant.lib.prefab.item.ItemBlockMetadata;
 import resonant.lib.prefab.ore.OreGenBase;
@@ -63,6 +61,7 @@ import resonant.lib.thermal.BoilEvent;
 import resonant.lib.thermal.EventThermal.EventThermalUpdate;
 import resonant.lib.thermal.ThermalGrid;
 import resonant.lib.utility.LanguageUtility;
+import resonant.lib.utility.PlayerInteractionHandler;
 import resonant.lib.utility.PotionUtility;
 import resonant.lib.utility.nbt.NBTUtility;
 import resonant.lib.utility.nbt.SaveManager;
@@ -94,7 +93,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 @Mod(modid = References.NAME, name = References.NAME, version = References.VERSION, dependencies = "required-after:UniversalElectricity")
 @NetworkMod(channels = References.CHANNEL, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
 public class ResonantEngine
-{ 
+{
 
     public static final IDManager idManager = new IDManager(3970, 13970);
     public static final ContentRegistry contentRegistry = new ContentRegistry(References.CONFIGURATION, idManager, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
@@ -107,8 +106,8 @@ public class ResonantEngine
 
     @Instance(References.NAME)
     public static ResonantEngine INSTANCE;
-    
-    /** Auto-incrementing configuration IDs. Use this to make sure no config ID is the same. */    
+
+    /** Auto-incrementing configuration IDs. Use this to make sure no config ID is the same. */
     public static final int idBlockOreCopper = idManager.getNextBlockID();
     public static final int idBlockOreTin = idManager.getNextBlockID();
     public static final int idItemWrench = idManager.getNextItemID();
@@ -182,6 +181,7 @@ public class ResonantEngine
      * @param fieldName - Name of the item: e.g ingotCopper, ingotSteel
      * @param id - The specified ID of the item. Use 0 for a default value to be used.
      * @return The Item/Block class. */
+    @Deprecated
     public static Item requireItem(String fieldName, int id)
     {
         try
@@ -342,6 +342,7 @@ public class ResonantEngine
         return null;
     }
 
+    @Deprecated
     public static Item requestItem(String name, int id)
     {
         if (OreDictionary.getOres(name).size() <= 0)
@@ -359,6 +360,7 @@ public class ResonantEngine
         return null;
     }
 
+    @Deprecated
     public static Block requireBlock(String fieldName, int id)
     {
         try
@@ -450,24 +452,28 @@ public class ResonantEngine
         PotionUtility.resizePotionArray();
 
         SaveManager.registerClass("ModFlag", ModFlag.class);
+
+        //EventHandlers
         MinecraftForge.EVENT_BUS.register(INSTANCE);
         MinecraftForge.EVENT_BUS.register(SaveManager.instance());
+        MinecraftForge.EVENT_BUS.register(new PlayerInteractionHandler());
 
         ToolMode.REGISTRY.add(new ToolModeGeneral());
         ToolMode.REGISTRY.add(new ToolModeRotation());
 
-        References.CONFIGURATION.load();
-
         blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class).setCreativeTab(null);
         blockMulti.setPacketType(References.PACKET_TILE);
 
-        if (References.CONFIGURATION.get(Configuration.CATEGORY_GENERAL, "Enable_Calclavia_Core_Tools", true).getBoolean(true))
+        if (References.CONFIGURATION.get("CreaiveModeTools", "CreativeBuilder", runningAsDev).getBoolean(true))
         {
             blockCreativeBuilder = (BlockCreativeBuilder) contentRegistry.createBlock(BlockCreativeBuilder.class);
         }
-
-        blockInfinite = contentRegistry.createBlock(BlockInfiniteBlock.class, ItemBlockMetadata.class);
-
+        if (References.CONFIGURATION.get("CreaiveModeTools", "InfiniteSource", runningAsDev).getBoolean(true))
+        {
+            blockInfinite = contentRegistry.createBlock(BlockInfiniteBlock.class, ItemBlockMetadata.class);
+        }
+        //Finish and close all resources
+        References.CONFIGURATION.load();
         References.CONFIGURATION.save();
         proxy.preInit();
         modproxies.preInit();
