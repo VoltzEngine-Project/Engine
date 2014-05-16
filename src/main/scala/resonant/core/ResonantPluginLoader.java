@@ -6,7 +6,7 @@ import resonant.core.asm.Transformer;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
-/** The FMLLoadingPlugin for Calclavia Core including the ASM Transformer
+/** The FMLLoadingPlugin for Resonant Engine including the ASM Transformer
  * 
  * @author Calclavia */
 
