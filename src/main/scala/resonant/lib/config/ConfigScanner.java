@@ -1,7 +1,9 @@
 package resonant.lib.config;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import cpw.mods.fml.common.discovery.ASMDataTable;
 
@@ -16,8 +18,8 @@ public class ConfigScanner
 
     private ConfigScanner()
     {
-        this.configs = new HashSet<ASMDataTable.ASMData>();
-        this.classes = new HashSet<Class>();
+        this.configs = new LinkedHashSet<ASMDataTable.ASMData>();
+        this.classes = new LinkedHashSet<Class>();
     }
 
     public static ConfigScanner instance()
@@ -27,7 +29,7 @@ public class ConfigScanner
 
     public void generateSets(ASMDataTable table)
     {
-        configs = table.getAll("calclavia.lib.config.Config");
+        configs = table.getAll(Config.class.getName());
 
         for (ASMDataTable.ASMData data : configs)
         {

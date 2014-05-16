@@ -12,7 +12,6 @@ import resonant.lib.utility.nbt.NBTUtility;
 import buildcraft.api.tools.IToolWrench;
 import cpw.mods.fml.common.Optional;
 
-@Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraft|Core")
 public class ItemScrewdriver extends ItemBase implements IToolWrench
 {
     public ItemScrewdriver(int id)
