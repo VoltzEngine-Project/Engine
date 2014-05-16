@@ -1,11 +1,8 @@
 package calclavia.api.mffs.fortron;
 
-/**
- * Implemented by threads that exist server side.
+/** Implemented by threads that exist server side.
  * 
- * @author Calclavia
- * 
- */
+ * @author Calclavia */
 public interface IServerThread
 {
 

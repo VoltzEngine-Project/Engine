@@ -1,15 +1,10 @@
 package calclavia.api.mffs.modules;
 
-/**
- * @author Calclavia
- * 
- */
+/** @author Calclavia */
 public interface IFortronCost
 {
-	/**
-	 * The amount of Fortron this module consumes per tick.
-	 * 
-	 * @return
-	 */
-	public float getFortronCost(float amplifier);
+    /** The amount of Fortron this module consumes per tick.
+     * 
+     * @return */
+    public float getFortronCost(float amplifier);
 }

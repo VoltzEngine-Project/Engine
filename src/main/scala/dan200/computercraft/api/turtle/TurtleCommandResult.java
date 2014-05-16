@@ -8,8 +8,8 @@ package dan200.computercraft.api.turtle;
 
 public final class TurtleCommandResult
 {
-    private static final TurtleCommandResult s_success = new TurtleCommandResult( true, null );
-    private static final TurtleCommandResult s_emptyFailure = new TurtleCommandResult( false, null );
+    private static final TurtleCommandResult s_success = new TurtleCommandResult(true, null);
+    private static final TurtleCommandResult s_emptyFailure = new TurtleCommandResult(false, null);
 
     public static TurtleCommandResult success()
     {
@@ -18,14 +18,14 @@ public final class TurtleCommandResult
 
     public static TurtleCommandResult failure()
     {
-        return failure( null );
+        return failure(null);
     }
 
-    public static TurtleCommandResult failure( String errorMessage )
+    public static TurtleCommandResult failure(String errorMessage)
     {
-        if( errorMessage != null )
+        if (errorMessage != null)
         {
-            return new TurtleCommandResult( false, errorMessage );
+            return new TurtleCommandResult(false, errorMessage);
         }
         else
         {
@@ -36,7 +36,7 @@ public final class TurtleCommandResult
     private final boolean m_success;
     private final String m_errorMessage;
 
-    private TurtleCommandResult( boolean success, String errorMessage )
+    private TurtleCommandResult(boolean success, String errorMessage)
     {
         m_success = success;
         m_errorMessage = errorMessage;
