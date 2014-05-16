@@ -117,13 +117,13 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
     @Override
     public boolean canUpdate()
     {
-        return getConnectors().size() > 0 && getNodes().size() > 0 && energyBuffer > 0;
+        return true;
     }
 
     @Override
     public boolean continueUpdate()
     {
-        return canUpdate();
+        return getConnectors().size() > 0 && energyBuffer > 0;
     }
 
     @Override
