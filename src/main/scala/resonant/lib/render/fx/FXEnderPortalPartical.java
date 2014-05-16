@@ -21,7 +21,7 @@ public class FXEnderPortalPartical extends EntityPortalFX
         }
         catch (Exception e)
         {
-            FMLLog.warning("[Calclavia-Core] Failed to correctly spawn portal effects.");
+            FMLLog.warning("[Resonant Engine] Failed to correctly spawn portal effects.");
         }
         this.renderDistanceWeight = distance;
     }

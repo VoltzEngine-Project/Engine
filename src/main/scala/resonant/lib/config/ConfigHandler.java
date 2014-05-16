@@ -17,7 +17,7 @@ import net.minecraftforge.common.Configuration;
  * ConfigHandler.configure(Configuration configObject, String namespace);
  * 
  * now do remember, The namespace is your mods namespace. for the ICBM mod it would be "icbm", for
- * Calclavia Core, it would be "calclavia" yet if you want to split config files, you can do that by
+ * Resonant Engine, it would be "calclavia" yet if you want to split config files, you can do that by
  * separating namespaces: for example, ICBM Sentries separate Config file, and ICBM Explosives
  * separate config file
  * 

@@ -191,12 +191,12 @@ public class PacketAnnotation extends PacketType
             }
             else
             {
-                References.LOGGER.severe("Calclavia annotation packet failed to be read.");
+                References.LOGGER.severe("Resonant Engine annotation packet failed to be read.");
             }
         }
         catch (Exception e)
         {
-            References.LOGGER.severe("Calclavia packet failed with CLASS ID: " + classID);
+            References.LOGGER.severe("Resonant Engine packet failed with CLASS ID: " + classID);
             e.printStackTrace();
         }
     }
@@ -352,7 +352,7 @@ public class PacketAnnotation extends PacketType
             }
             catch (Exception e)
             {
-                References.LOGGER.severe("Calclavia annotation packet failed for " + obj.getClass().getSimpleName());
+                References.LOGGER.severe("Resonant Engine annotation packet failed for " + obj.getClass().getSimpleName());
                 e.printStackTrace();
             }
         }

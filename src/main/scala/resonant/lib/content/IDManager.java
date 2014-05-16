@@ -41,7 +41,7 @@ public class IDManager
         Property prop = config.getItem(name, assignedID);
         int configID = prop.getInt(assignedID);
 
-        if (Item.itemsList[configID + ITEM_SHIFT] == null && (configID + ITEM_SHIFT) >= Block.blocksList.length)
+        if (Item.itemsList[configID] == null && configID >= Block.blocksList.length)
         {
             prop.set(configID);
             return configID;
@@ -52,7 +52,7 @@ public class IDManager
             {
                 if (Item.itemsList[x] == null)
                 {
-                    prop.set(x - ITEM_SHIFT);
+                    prop.set(x);
                     return prop.getInt();
                 }
             }

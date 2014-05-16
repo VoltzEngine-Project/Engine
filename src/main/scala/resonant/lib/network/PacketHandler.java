@@ -115,7 +115,7 @@ public class PacketHandler implements IPacketHandler
                 }
                 else
                 {
-                    References.LOGGER.severe("Calclavia packet attempt to write an invalid type: " + dataValue.getClass());
+                    References.LOGGER.severe("Resonant Engine packet attempt to write an invalid type: " + dataValue.getClass());
                 }
             }
         }

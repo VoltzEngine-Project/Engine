@@ -25,6 +25,7 @@ import resonant.lib.type.Pair;
 import resonant.lib.utility.inventory.AutoCraftingManager;
 import resonant.lib.utility.inventory.InventoryUtility;
 import universalelectricity.api.vector.Vector3;
+import universalelectricity.api.vector.VectorWorld;
 
 /** Fluid interactions.
  * 
@@ -458,11 +459,11 @@ public class FluidUtility
             FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(current);
             IFluidHandler tank = (IFluidHandler) world.getBlockTileEntity(x, y, z);
 
-            if (FluidContainerRegistry.isFilledContainer(current))
+            if (fluid != null)
             {
-                if (tank.fill(ForgeDirection.getOrientation(side), fluid, false) == fluid.amount)
+                if (tank.fill(ForgeDirection.getOrientation(side), fluid.copy(), false) == fluid.amount)
                 {
-                    tank.fill(ForgeDirection.getOrientation(side), fluid, true);
+                    tank.fill(ForgeDirection.getOrientation(side), fluid.copy(), true);
                     if (!entityplayer.capabilities.isCreativeMode)
                     {
                         InventoryUtility.consumeHeldItem(entityplayer);
@@ -470,7 +471,7 @@ public class FluidUtility
                     return true;
                 }
             }
-            else if (FluidContainerRegistry.isEmptyContainer(current))
+            else
             {
                 FluidStack available = tank.drain(ForgeDirection.getOrientation(side), Integer.MAX_VALUE, false);
 
@@ -484,21 +485,13 @@ public class FluidUtility
                     {
                         if (!entityplayer.capabilities.isCreativeMode)
                         {
-                            if (current.stackSize > 1)
+                            if (!entityplayer.inventory.addItemStackToInventory(filled))
                             {
-                                if (!entityplayer.inventory.addItemStackToInventory(filled))
-                                {
-                                    return false;
-                                }
-                                else
-                                {
-                                    entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, AutoCraftingManager.consumeItem(current, 1));
-                                }
+                                return false;
                             }
                             else
                             {
-                                entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, AutoCraftingManager.consumeItem(current, 1));
-                                entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, filled);
+                                InventoryUtility.dropItemStack(new VectorWorld(entityplayer), filled);
                             }
                         }
                         tank.drain(ForgeDirection.UNKNOWN, fluid.amount, true);

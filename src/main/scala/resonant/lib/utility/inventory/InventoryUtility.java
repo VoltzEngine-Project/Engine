@@ -309,6 +309,11 @@ public class InventoryUtility
         }
     }
 
+    public static void dropItemStack(VectorWorld position, ItemStack itemStack)
+    {
+        dropItemStack(position.world, position, itemStack);
+    }
+
     /** Drops an item stack on the floor. */
     public static void dropItemStack(World world, Vector3 position, ItemStack itemStack)
     {
@@ -317,7 +322,7 @@ public class InventoryUtility
 
     public static void dropItemStack(World world, Vector3 position, ItemStack itemStack, int delay)
     {
-        dropItemStack(world, position, itemStack, delay, 0.7f);
+        dropItemStack(world, position, itemStack, delay, 0f);
     }
 
     public static void dropItemStack(World world, Vector3 position, ItemStack itemStack, int delay, float randomAmount)

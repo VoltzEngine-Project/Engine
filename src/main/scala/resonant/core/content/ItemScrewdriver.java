@@ -37,7 +37,7 @@ public class ItemScrewdriver extends ItemBase implements IToolWrench
     public void addInformation(ItemStack itemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
     {
         par3List.add(LanguageUtility.getLocal("toolmode.mode") + ": " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
-        par3List.addAll(LanguageUtility.splitStringPerWord(LanguageUtility.getLocal("item.calclavia:screwdriver.tooltip"), 4));
+        par3List.addAll(LanguageUtility.splitStringPerWord(LanguageUtility.getLocal("item.resonant:screwdriver.tooltip"), 4));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ItemScrewdriver extends ItemBase implements IToolWrench
             setMode(itemStack, (getMode(itemStack) + 1) % ToolMode.REGISTRY.size());
 
             if (!world.isRemote)
-                player.addChatMessage(LanguageUtility.getLocal("item.calclavia:screwdriver.toolmode.set") + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
+                player.addChatMessage(LanguageUtility.getLocal("item.resonant:screwdriver.toolmode.set") + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
             return itemStack;
         }
 

@@ -95,7 +95,7 @@ public class PacketTile extends PacketType
         }
         catch (Exception e)
         {
-            References.LOGGER.severe("Calclavia packet failed at: " + tileEntity + " in " + x + ", " + y + ", " + z);
+            References.LOGGER.severe("Resonant Engine packet failed at: " + tileEntity + " in " + x + ", " + y + ", " + z);
             e.printStackTrace();
         }
     }

@@ -32,7 +32,7 @@ public class Transformer implements IClassTransformer
     {
         if (transformedName.equals("net.minecraft.world.chunk.Chunk"))
         {
-            System.out.println("[Calclavia Core] Transforming Chunk class for chunkModified event.");
+            System.out.println("[Resonant-Engine] Transforming Chunk class for chunkModified event.");
 
             ClassNode cnode = ASMHelper.createClassNode(bytes);
 
@@ -42,7 +42,7 @@ public class Transformer implements IClassTransformer
 
                 if (m.s_name.equals("setBlockIDWithMetadata") || m.s_name.equals("func_76592_a"))
                 {
-                    System.out.println("[Calclavia Core] Found method " + m.s_name);
+                    System.out.println("[Resonant-Engine] Found method " + m.s_name);
                     InsnList list = new InsnList();
                     list.add(new VarInsnNode(ALOAD, 0));
                     list.add(new VarInsnNode(ILOAD, 1));
@@ -50,7 +50,7 @@ public class Transformer implements IClassTransformer
                     list.add(new VarInsnNode(ILOAD, 3));
                     list.add(new VarInsnNode(ILOAD, 4));
                     list.add(new VarInsnNode(ILOAD, 5));
-                    list.add(new MethodInsnNode(INVOKESTATIC, "calclavia/lib/asm/StaticForwarder", "chunkSetBlockEvent", "(Lnet/minecraft/world/chunk/Chunk;IIIII)V"));
+                    list.add(new MethodInsnNode(INVOKESTATIC, "resonant/core/asm/StaticForwarder", "chunkSetBlockEvent", "(Lnet/minecraft/world/chunk/Chunk;IIIII)V"));
 
                     AbstractInsnNode lastInsn = method.instructions.getLast();
                     while (lastInsn instanceof LabelNode || lastInsn instanceof LineNumberNode)
@@ -61,7 +61,7 @@ public class Transformer implements IClassTransformer
                     else
                         method.instructions.insert(list);
 
-                    System.out.println("[Calclavia Core] Injected instruction to method: " + m.s_name);
+                    System.out.println("[Resonant-Engine] Injected instruction to method: " + m.s_name);
                 }
             }
 

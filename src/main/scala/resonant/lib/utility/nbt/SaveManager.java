@@ -176,7 +176,7 @@ public class SaveManager
         }
         catch (Exception e)
         {
-            FMLLog.fine("[Calclavia-Core]SaveManager: Error trying to load object from save");
+            FMLLog.fine("[Resonant Engine]SaveManager: Error trying to load object from save");
             e.printStackTrace();
         }
         return null;
@@ -253,7 +253,7 @@ public class SaveManager
         }
         catch (Exception e)
         {
-            FMLLog.fine("[Calclavia-Core]SaveManager: Error trying to save object class: " + (object != null ? object.getClass() : "null"));
+            FMLLog.fine("[Resonant Engine]SaveManager: Error trying to save object class: " + (object != null ? object.getClass() : "null"));
             e.printStackTrace();
         }
     }
