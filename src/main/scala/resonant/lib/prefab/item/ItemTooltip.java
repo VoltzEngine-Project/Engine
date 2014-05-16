@@ -3,7 +3,6 @@ package resonant.lib.prefab.item;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.input.Keyboard;
@@ -16,9 +15,8 @@ import resonant.lib.utility.TooltipUtility;
  * 
  * @author tgame14
  * @since 06/04/14 */
-public abstract class ItemTooltip extends Item
+public abstract class ItemTooltip extends ItemBase
 {
-
     public ItemTooltip(int id)
     {
         super(id);
