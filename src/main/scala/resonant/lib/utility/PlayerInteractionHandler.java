@@ -85,7 +85,13 @@ public class PlayerInteractionHandler
                                     for (ItemStack item : drops)
                                     {
                                         if (!event.entityPlayer.inventory.addItemStackToInventory(item))
+                                        {
                                             InventoryUtility.dropItemStack(vec, item);
+                                        }
+                                        else
+                                        {
+                                            event.entityPlayer.inventory.onInventoryChanged();
+                                        }
                                     }
                                 }
                             }
