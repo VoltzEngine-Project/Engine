@@ -27,7 +27,7 @@ public class ConfigScanner
 
     public void generateSets(ASMDataTable table)
     {
-        configs = table.getAll("calclavia.lib.config.Config");
+        configs = table.getAll("resonant.lib.config.Config");
 
         for (ASMDataTable.ASMData data : configs)
         {
