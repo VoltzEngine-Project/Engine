@@ -44,7 +44,7 @@ public class PlayerInteractionHandler
                     if (tile instanceof IRemovable)
                     {
                         boolean do_drop = false;
-                        List<ItemStack> drops = ((IRemovable) tile).getRemovedItems(event.entityPlayer);
+                        List<ItemStack> drops;
 
                         if (tile instanceof ICustomRemoval)
                         {
@@ -69,6 +69,7 @@ public class PlayerInteractionHandler
 
                         if (do_drop)
                         {
+                            drops = ((IRemovable) tile).getRemovedItems(event.entityPlayer);
                             //Not sure if we need to cancel but there is nothing to right click after this
                             if (event.isCancelable())
                                 event.setCanceled(true);
