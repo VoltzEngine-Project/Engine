@@ -13,7 +13,7 @@ import buildcraft.api.tools.IToolWrench;
 public class WrenchUtility
 {
     /** Is the item the player is hold a wrench */
-    public static boolean hasWrench(EntityPlayer player)
+    public static boolean isHoldingWrench(EntityPlayer player)
     {
         return isWrench(player.getHeldItem());
     }
