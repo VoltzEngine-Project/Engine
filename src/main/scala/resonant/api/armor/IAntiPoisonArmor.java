@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 
 /** Apply this to all item armors and it will prevent the player from receiving a specific type of
  * poison. */
-public interface IAntiPoisonArmor
+public interface IAntiPoisonArmor extends IArmorSet
 {
     /** @itemStack - The item stack this armor is in.
      * @type - The type of poison given to this entity
@@ -17,6 +17,5 @@ public interface IAntiPoisonArmor
      * @itemStack - The item stack this armor is in.
      * @type - The type of poison given to this entity */
     public void onProtectFromPoison(ItemStack itemStack, EntityLivingBase entityLiving, String type);
-
-    public int getArmorType();
+    
 }

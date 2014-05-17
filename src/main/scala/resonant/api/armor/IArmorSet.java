@@ -9,6 +9,9 @@ import net.minecraft.util.DamageSource;
  * @author Darkguardsman */
 public interface IArmorSet
 {
+    /** Basically the slot on the entity of 0-3 */
+    public int getArmorType();
+
     /** Checks if the armor is part of the same set
      * 
      * @param armorStack - the armor item
