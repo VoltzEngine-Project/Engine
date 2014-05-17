@@ -196,7 +196,7 @@ public abstract class TileTerminal extends TileAdvanced implements ITerminal, IS
     @Override
     public boolean canUse(String node, EntityPlayer player)
     {
-        return false;
+        return true;
     }
 
     @Override
