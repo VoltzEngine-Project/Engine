@@ -1,5 +1,7 @@
 package resonant.lib.utility;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraftforge.common.ForgeDirection;
@@ -16,6 +18,38 @@ public class MathUtility
     public static int[] generateRandomIntArray(Random random, int maxNumber, int arraySize)
     {
         return MathUtility.generateRandomIntArray(random, 0, maxNumber, arraySize);
+    }
+
+    public static int[] generateSqeuncedArray(int start, int size)
+    {
+        int[] array = new int[size];
+        for (int i = 0; i < array.length; i++)
+        {
+            array[i] = start + i;
+        }
+        return array;
+    }
+
+    public static List<Integer> getSquencedList(int start, int end, int... ignore)
+    {
+        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> remove = new ArrayList<Integer>();
+
+        //Create remove list
+        if (ignore != null & ignore.length > 0)
+            for (int i = 0; i <= ignore.length; i++)
+            {
+                remove.add(ignore[i]);
+            }
+
+        //Create sequence list void of the remove list's items
+        for (int i = 0; i <= end; i++)
+        {
+            if (!remove.contains(start + i))
+                list.add(start + i);
+        }
+
+        return list;
     }
 
     /** Generates an array of random numbers
