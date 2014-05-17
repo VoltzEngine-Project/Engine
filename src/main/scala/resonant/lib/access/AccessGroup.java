@@ -131,7 +131,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
             String tempNode = node.replaceAll(".*", "");
             for (String headNode : nodes)
             {
-                if (headNode.contains(tempNode))
+                if (tempNode.contains(headNode))
                 {
                     return true;
                 }
