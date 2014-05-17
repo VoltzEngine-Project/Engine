@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import resonant.lib.References;
 import resonant.lib.utility.nbt.ISaveObj;
 
 /** Used to define a users access to a terminal based object.
@@ -44,34 +43,26 @@ public class AccessUser extends User implements ISaveObj
     {
         if (node != null && !node.isEmpty())
         {
+            //Remove the wild card from the end
             String newNode = node;
             newNode = newNode.replaceAll(".*", "");
 
-            if (this.getGroup() != null && this.getGroup().hasNode(node))
-                return true;
-
-            for (String headNode : nodes)
+            //Loop threw all super nodes to see if the user has a super node of the sub node
+            String[] sub_nodes = newNode.split(".");
+            if (sub_nodes != null && sub_nodes.length > 0)
             {
-                References.LOGGER.info("node: " + node + " against: " + headNode + " with " + newNode);
-                if (headNode.contains(newNode))
-                    return true;
+                newNode = "";
+                //Build a new node start from the most super node moving to the lowest sub node
+                for (int i = 0; i < sub_nodes.length; i++)
+                {
+                    newNode += (i != 0 ? "." : "") + sub_nodes[i];
+                    if (nodes.contains(newNode + ".*") || group != null && group.hasNode(newNode + ".*") || nodes.contains(newNode) || group != null && group.hasNode(newNode))
+                    {
+                        return true;
+                    }
+                }
             }
         }
-        // TODO: What is this meant to do? Added temporary fix above
-        //			String[] sub_nodes = newNode.split(".");
-        //            if (sub_nodes != null && sub_nodes.length > 0)
-        //            {
-        //                newNode = "";
-        //                for (int i = 0; i < sub_nodes.length; i++)
-        //                {
-        //                    newNode += (i != 0 ? "." : "") + sub_nodes[i];
-        //                    if (nodes.contains(newNode + ".*") || group != null && group.hasNode(newNode + ".*") || nodes.contains(newNode) || group != null && group.hasNode(newNode))
-        //                    {
-        //                        return true;
-        //                    }
-        //                }
-        //            }
-        //        }
         return false;
     }
 
