@@ -30,6 +30,7 @@ public class TileInfiniteFluid extends TileIO implements IFluidHandler, IBlockAc
         super(UniversalElectricity.machine);
         this.saveIOMap = true;
         tank = new FluidTank(Integer.MAX_VALUE);
+        ioMap = 728;
     }
 
     @Override
