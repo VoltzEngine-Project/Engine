@@ -10,7 +10,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
  * to be removed and replaced as Separate jars are a thing
  * 
  * @since 23/02/14
- * @author tgame14 */
+ * @author tgame14
+ */
 @Deprecated
 public interface IMod
 {

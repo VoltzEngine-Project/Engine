@@ -15,4 +15,5 @@ output/
 .cache
 *.iml
 *.ipr
-*.iwr
+*.iws
+*.idea/
