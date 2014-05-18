@@ -57,6 +57,7 @@ import resonant.lib.prefab.ore.OreGenBase;
 import resonant.lib.prefab.ore.OreGenReplaceStone;
 import resonant.lib.prefab.ore.OreGenerator;
 import resonant.lib.recipe.RecipeUtility;
+import resonant.lib.schematic.SchematicTestRoom;
 import resonant.lib.thermal.BoilEvent;
 import resonant.lib.thermal.EventThermal.EventThermalUpdate;
 import resonant.lib.thermal.ThermalGrid;
@@ -472,6 +473,7 @@ public class ResonantEngine
         {
             blockInfinite = contentRegistry.createBlock(BlockInfiniteBlock.class, ItemBlockMetadata.class);
         }
+        BlockCreativeBuilder.register(new SchematicTestRoom());
         //Finish and close all resources
         References.CONFIGURATION.load();
         References.CONFIGURATION.save();
