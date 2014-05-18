@@ -60,11 +60,11 @@ public class PlayerInteractionHandler
                         }
                         else if (tile instanceof ISneakPickup)
                         {
-                            do_drop = event.entityPlayer.isSneaking();
+                            do_drop = event.entityPlayer.isSneaking() && event.entityPlayer.getHeldItem() == null;
                         }
                         else
                         {
-                            do_drop = tile instanceof IPickup;
+                            do_drop = tile instanceof IPickup && event.entityPlayer.getHeldItem() == null;
                         }
 
                         if (do_drop)
