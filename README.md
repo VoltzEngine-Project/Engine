@@ -1,11 +1,15 @@
-Calclavia Library
+Resonant Engine
 ======
-Calclavia Library is a Minecraft modding library used mainly by Calclavia's mods.
+Mod framework and source dev kit used mainly by Calclavia's mods.
 
 
 ### Developer
 * Calclavia
+* Darkguardsman(aka DarkCow)
+* Alex_hawks
 
 
 ### License
-"Calclavia Library" is under the Educational Public License: http://calclavia.com/license/rpl
+License
+
+Resonant Engine is licensed under Calclavia's Educational Public License (http://calclavia.com/educational-public-license/). By using or interacting with this software in any way shape or form, you agree to the license of this software.

@@ -31,7 +31,7 @@ public class References
     public static final String MODEL_PATH = "models/";
     public static final String MODEL_DIRECTORY = DIRECTORY + MODEL_PATH;
     public static final String LANGUAGE_DIRECTORY = DIRECTORY + "languages/";
-    public static final String[] LANGUAGES = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL", "de_DE", "tr_TR", "ru_RU" };
+    public static final String[] LANGUAGES = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL", "de_DE", "tr_TR", "ru_RU", "pl_PL" };
     
     public static final PacketTile PACKET_TILE = new PacketTile(References.CHANNEL);
     public static final PacketAnnotation PACKET_ANNOTATION = new PacketAnnotation(References.CHANNEL); 
