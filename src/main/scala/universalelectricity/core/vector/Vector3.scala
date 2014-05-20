@@ -8,7 +8,7 @@ import java.lang.Double.doubleToLongBits
 import net.minecraft.entity.Entity
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraft.block.Block
-import universalelectricity.api.vector.{Quaternion, EulerAngle}
+import universalelectricity.api.vector.EulerAngle
 
 /**
  * @author Calclavia
@@ -68,6 +68,11 @@ class Vector3 extends Vector2
   def this(par1: ChunkCoordinates)
   {
     this(par1.posX, par1.posY, par1.posZ)
+  }
+
+  def z(amount: Double)
+  {
+    z = amount
   }
 
   /**
@@ -169,9 +174,9 @@ class Vector3 extends Vector2
   {
     if (this.z == 0.0F)
     {
-      return this.zCrossProduct
+      return this.zCross
     }
-    return this.xCrossProduct
+    return this.xCross
   }
 
   def isZero = x == 0 && y == 0 && z == 0
@@ -231,7 +236,7 @@ class Vector3 extends Vector2
    */
   def getAngle(vec2: Vector3): Double =
   {
-    return anglePreNorm(this.clone.normalize, vec2.clone.normalize)
+    return this.clone.normalize.anglePreNorm(vec2.clone.normalize)
   }
 
   def getAngle(vec1: Vector3, vec2: Vector3): Double =
@@ -241,7 +246,7 @@ class Vector3 extends Vector2
 
   def anglePreNorm(vec2: Vector3): Double =
   {
-    return Math.acos(this.dotProduct(vec2))
+    return Math.acos(this $ vec2)
   }
 
   def rotate(angle: Double, axis: Vector3): Vector3 = translateMatrix(getRotationMatrix(angle, axis), this)

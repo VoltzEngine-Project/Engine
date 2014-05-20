@@ -1,4 +1,4 @@
-package universalelectricity.api.vector;
+package universalelectricity.core.vector;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 
 /**
  * Quaternion class designed to be used for the rotation of objects.
- * 
+ *
  * @author ChickenBones
  */
 public class Quaternion implements Cloneable
@@ -68,7 +68,7 @@ public class Quaternion implements Cloneable
 
 	public static Quaternion aroundAxis(Vector3 axis, double angle)
 	{
-		return aroundAxis(axis.x, axis.y, axis.z, angle);
+		return aroundAxis(axis.x(), axis.y(), axis.z(), angle);
 	}
 
 	public Quaternion setAroundAxis(double ax, double ay, double az, double angle)
@@ -80,7 +80,7 @@ public class Quaternion implements Cloneable
 
 	public Quaternion setAroundAxis(Vector3 axis, double angle)
 	{
-		return setAroundAxis(axis.x, axis.y, axis.z, angle);
+		return setAroundAxis(axis.x(), axis.y(), axis.z(), angle);
 	}
 
 	public Quaternion multiply(Quaternion Quaternion)
@@ -138,13 +138,13 @@ public class Quaternion implements Cloneable
 
 	public void rotate(Vector3 vec)
 	{
-		double d = -x * vec.x - y * vec.y - z * vec.z;
-		double d1 = s * vec.x + y * vec.z - z * vec.y;
-		double d2 = s * vec.y - x * vec.z + z * vec.x;
-		double d3 = s * vec.z + x * vec.y - y * vec.x;
-		vec.x = d1 * s - d * x - d2 * z + d3 * y;
-		vec.y = d2 * s - d * y + d1 * z - d3 * x;
-		vec.z = d3 * s - d * z - d1 * y + d2 * x;
+		double d = -x * vec.x() - y * vec.y() - z * vec.z();
+		double d1 = s * vec.x() + y * vec.z() - z * vec.y();
+		double d2 = s * vec.y() - x * vec.z() + z * vec.x();
+		double d3 = s * vec.z() + x * vec.y() - y * vec.x();
+		vec.x(d1 * s - d * x - d2 * z + d3 * y);
+		vec.y(d2 * s - d * y + d1 * z - d3 * x);
+		vec.z(d3 * s - d * z - d1 * y + d2 * x);
 	}
 
 	@Override

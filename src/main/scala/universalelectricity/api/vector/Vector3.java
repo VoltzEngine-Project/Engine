@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.google.common.io.ByteArrayDataInput;
+import universalelectricity.core.vector.Quaternion;
 
 /**
  * A Vector class used for defining objects in a 3D space.
@@ -666,7 +667,7 @@ public class Vector3 implements Cloneable, IVector3, Comparable<IVector3>
 
 	public Vector3 rotate(Quaternion rotator)
 	{
-		rotator.rotate(this);
+		//rotator.rotate(this);
 		return this;
 	}
 

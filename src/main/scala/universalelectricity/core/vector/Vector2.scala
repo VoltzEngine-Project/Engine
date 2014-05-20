@@ -20,6 +20,16 @@ class Vector2 extends Cloneable
     this.y = y
   }
 
+  def x(amount: Double)
+  {
+    x = amount
+  }
+
+  def y(amount: Double)
+  {
+    y = amount
+  }
+
   def xi = x.toInt
 
   def yi = y.toInt

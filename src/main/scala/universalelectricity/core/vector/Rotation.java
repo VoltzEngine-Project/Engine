@@ -1,8 +1,7 @@
-package universalelectricity.api.vector;
+package universalelectricity.core.vector;
 
 /**
  * @author ChickenBones
- * 
  */
 public class Rotation
 {
@@ -40,7 +39,9 @@ public class Rotation
 	public void apply(Vector3 vec)
 	{
 		if (quat == null)
+		{
 			quat = Quaternion.aroundAxis(axis, angle);
+		}
 
 		vec.rotate(quat);
 	}
