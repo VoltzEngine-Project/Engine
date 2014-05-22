@@ -15,7 +15,6 @@ public class Quaternion implements Cloneable
 	public double y;
 	public double z;
 	public double s;
-	public static final double SQRT2 = Math.sqrt(2D);
 
 	public Quaternion()
 	{
