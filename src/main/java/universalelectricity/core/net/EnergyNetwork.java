@@ -96,12 +96,22 @@ public class EnergyNetwork extends NodeNetwork<IEnergyNetwork, IConductor, Objec
             if (usableEnergy != currentEnergy)
                 energyBuffer = Math.max(currentEnergy, 0);
         }
-        long remainingBufferPerConductor = energyBuffer / getConnectors().size();
-        Iterator<IConductor> it = getConnectors().iterator();
-
-        while (it.hasNext())
+        
+        // Check if there are any conductors to loop through before starting.
+        long remainingBufferPerConductor = 0;
+        if (getConnectors().size() > 0)
         {
-            conductorBuffers.put(it.next(), remainingBufferPerConductor);
+            remainingBufferPerConductor = energyBuffer / getConnectors().size();
+        }
+        
+        // Ensure that the iterator for the conductors is not null.
+        Iterator<IConductor> it = getConnectors().iterator();
+        if (it != null)
+        {
+            while (it.hasNext())
+            {
+                conductorBuffers.put(it.next(), remainingBufferPerConductor);
+            }
         }
 
         // Clear the network request cache.
