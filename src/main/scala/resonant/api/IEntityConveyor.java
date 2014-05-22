@@ -4,7 +4,8 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 
-/** An interface applied to the tile entity of a conveyor belt
+/** An interface applied to a TileEntity that can move entities. An example of this is a conveyor
+ * belt.
  * 
  * @Author DarkGuardsman */
 public interface IEntityConveyor
@@ -14,8 +15,7 @@ public interface IEntityConveyor
      * @return list of entities in the belts are of effect */
     public List<Entity> getAffectedEntities();
 
-    /** Adds and entity to the ignore list so its not moved has to be done every 20 ticks
-     * 
-     * @param entity */
+    /** Used by other automation to prevent this tile from effecting the entity. Most cases this is
+     * used by robotic arms, and rejectors. Allowing them to pick up the entity without issues. */
     public void ignoreEntity(Entity entity);
 }
