@@ -96,7 +96,7 @@ public abstract class ItemElectric extends Item implements IEnergyItem, IVoltage
     @Override
     public long getVoltage(ItemStack itemStack)
     {
-        return UniversalElectricity.DEFAULT_VOLTAGE;
+        return 120;
     }
 
     @Override
