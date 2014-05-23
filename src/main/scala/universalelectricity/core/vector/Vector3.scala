@@ -85,7 +85,15 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
     return nbt
   }
 
+  def xi = x.toInt
+
+  def yi = y.toInt
+
   def zi = z.toInt
+
+  def xf = x.toFloat
+
+  def yf = y.toFloat
 
   def zf = z.toFloat
 
@@ -99,12 +107,16 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
 
   def min(other: Vector3): Vector3 = new Vector3(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z))
 
+  override def reciprocal: Vector3 = new Vector3(1 / x, 1 / y, 1 / z)
+
   /**
    * Operations
    */
   override def +(amount: Double): Vector3 = new Vector3(x + amount, y + amount, z + amount)
 
   override def +(amount: Vector3): Vector3 = new Vector3(x + amount.x, y + amount.y, z + amount.z)
+
+  def +(amount: ForgeDirection): Vector3 = this + new Vector3(amount)
 
   override def *(amount: Double): Vector3 = new Vector3(x * amount, y * amount, z * amount)
 
@@ -309,12 +321,9 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
   }
 
   /**
-   * Block Access
+   * World Access
    */
-  def getBlockID(world: IBlockAccess): Block =
-  {
-    return world.getBlock(xi, yi, zi)
-  }
+  def getBlockID(world: IBlockAccess): Block = world.getBlock(xi, yi, zi)
 
   def getBlockMetadata(world: IBlockAccess) = world.getBlockMetadata(xi, yi, zi)
 

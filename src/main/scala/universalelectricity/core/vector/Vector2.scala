@@ -61,6 +61,8 @@ class Vector2(var x: Double, var y: Double) extends Cloneable with TraitVector[V
 
   override def clone: Vector2 = return new Vector2(this.x, this.y)
 
+  override def reciprocal:Vector2 = new Vector2(1 / x, 1 / y)
+
   /**
    * Operations
    */
@@ -75,7 +77,7 @@ class Vector2(var x: Double, var y: Double) extends Cloneable with TraitVector[V
    */
   override def $(other: Vector2) = x * other.x + y * other.y
 
-  override def slope(other: Vector2) = (y - other.y) / (x - other.x)
+  def slope(other: Vector2) = (y - other.y) / (x - other.x)
 
   override def hashCode: Int =
   {

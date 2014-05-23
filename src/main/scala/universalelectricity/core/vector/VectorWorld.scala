@@ -1,157 +1,65 @@
 package universalelectricity.core.vector
 
-import java.util.List
 import net.minecraft.world.World
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
+import net.minecraftforge.common.DimensionManager
+import net.minecraft.util.MovingObjectPosition
+import net.minecraft.block.Block
 
 
-class VectorWorld(var world: World) extends Vector3 with IVectorWorld
+class VectorWorld(var world: World, x: Double, y: Double, z: Double) extends Vector3(x, y, z) with IVectorWorld
 {
-  def this(world: World, x: Double, y: Double, z: Double)
-  {
-    this(world)
-    this.x = x
-    this.y = x
-    this.z = x
-  }
+  def this(nbt: NBTTagCompound) = this(DimensionManager.getWorld(nbt.getInteger("dimension")), nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
 
-  def this(nbt: NBTTagCompound)
-  {
-    this(world)
-    `super`(nbt)
-  }
+  def this(entity: Entity) = this(entity.worldObj, entity.posX, entity.posY, entity.posZ)
 
-  def this(entity: Entity)
-  {
-    this(entity.worldObj, entity.posX, entity.posY, entity.posZ)
-  }
+  def this(tile: TileEntity) = this(tile.getWorldObj, tile.xCoord, tile.yCoord, tile.zCoord)
 
-  def this(tile: TileEntity)
-  {
-    this(tile.getWorldObj, tile.x, tile.y, tile.z)
-  }
+  def this(world: World, vector: IVector3) = this(world, vector.x, vector.y, vector.z)
 
-  def this(world: World, vector: IVector3)
+  def world(newWorld: World)
   {
-    this(world, vector.x, vector.y, vector.z)
+    world = newWorld
   }
 
   /**
-   * Operations
+   * Conversions
    */
-  override def +(amount: Double): Vector3 = new Vector3(x + amount, y + amount, z + amount)
-
-  def +(amount: Vector3): Vector3 = new Vector3(x + amount.x, y + amount.y, z + amount.z)
-
-  override def -(amount: Double): Vector3 = this + -amount
-
-  def -(amount: Vector3): Vector3 = this + (amount * -1)
-
-  override def *(amount: Double): Vector3 = new Vector3(x * amount, y * amount, z * amount)
-
-  override def /(amount: Double): Vector3 = new Vector3(x / amount, y / amount, z / amount)
-
-  override def +=(amount: Double): Vector3 =
+  override def toNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
-    x += amount
-    y += amount
-    z += amount
-    return this
-  }
-
-  def +=(amount: Vector3): Vector3 =
-  {
-    x += amount.x
-    y += amount.y
-    z += amount.z
-    return this
-  }
-
-  override def /=(amount: Double): Vector3 =
-  {
-    x /= amount
-    y /= amount
-    z /= amount
-    return this
-  }
-
-  override def *=(amount: Double): Vector3 =
-  {
-    x *= amount
-    y *= amount
-    z *= amount
-    return this
-  }
-
-  override def clone: VectorWorld =
-  {
-    return new VectorWorld(world, x, y, z)
-  }
-
-  def writeToNBT(nbt: Nothing): Nothing =
-  {
-    super.writeToNBT(nbt)
-    nbt.setInteger("d", this.world.provider.dimensionId)
+    nbt.setDouble("dimension", world.provider.dimensionId)
+    nbt.setDouble("x", x)
+    nbt.setDouble("y", y)
+    nbt.setDouble("z", z)
     return nbt
   }
 
-  def getBlock: Nothing =
-  {
-    return super.getBlock(this.world)
-  }
+  /**
+   * World Access
+   */
+  def getBlockID(): Block = super.getBlockID(world)
 
-  def getBlockMetadata: Int =
-  {
-    return super.getBlockMetadata(this.world)
-  }
+  def getBlockMetadata() = super.getBlockMetadata(world)
 
-  def getTileEntity: Nothing =
-  {
-    return super.getTileEntity(this.world)
-  }
+  def getTileEntity() = super.getTileEntity(world)
 
-  def setBlock(block: Nothing, metadata: Int, notify: Int): Boolean =
-  {
-    return super.setBlock(this.world, block, metadata, notify)
-  }
+  def setBlock(block: Block, metadata: Int, notify: Int): Boolean = super.setBlock(world, block, metadata, notify)
 
-  def setBlock(block: Nothing, metadata: Int): Boolean =
-  {
-    return this.setBlock(block, metadata, 3)
-  }
+  def setBlock(block: Block, metadata: Int): Boolean = super.setBlock(world, block, metadata)
 
-  def setBlock(block: Nothing): Boolean =
-  {
-    return this.setBlock(block, 0)
-  }
+  def setBlock(block: Block): Boolean = super.setBlock(world, block)
 
-  def getEntitiesWithin(par1Class: Class[_ <: Nothing]): List[Nothing] =
-  {
-    return super.getEntitiesWithin(this.world, par1Class)
-  }
+  def rayTraceEntities(target: Vector3): MovingObjectPosition = super.rayTraceEntities(world, target)
 
-  def rayTraceEntities(target: VectorWorld): Nothing =
-  {
-    return super.rayTraceEntities(target.world, target)
-  }
+  override def clone: VectorWorld = new VectorWorld(world, x, y, z)
 
-  def rayTraceEntities(target: Nothing): Nothing =
-  {
-    return super.rayTraceEntities(world, target)
-  }
-
-  def rayTraceEntities(target: Vector3): Nothing =
-  {
-    return super.rayTraceEntities(world, target)
-  }
-
-  override def equals(o: AnyRef): Boolean =
+  override def equals(o: Any): Boolean =
   {
     if (o.isInstanceOf[VectorWorld])
     {
-      return (super.equals(o)) && this.world eq (o.asInstanceOf[VectorWorld]).world
+      return (super.equals(o)) && this.world == (o.asInstanceOf[VectorWorld]).world
     }
     return false
   }
