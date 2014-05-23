@@ -1,18 +1,21 @@
 package universalelectricity.core.grid;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.grid.INode;
 import universalelectricity.api.grid.INodeProvider;
+import universalelectricity.core.vector.Vector3;
 
-import java.util.AbstractMap;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 public abstract class Node<P extends INodeProvider, G extends Grid, N> implements INode
 {
 	public final P parent;
 
-	protected final AbstractMap<N, ForgeDirection> connections = new WeakHashMap<N, ForgeDirection>();
+	protected final Map<N, ForgeDirection> connections = new WeakHashMap<N, ForgeDirection>();
 
 	public G grid = null;
 
@@ -99,7 +102,7 @@ public abstract class Node<P extends INodeProvider, G extends Grid, N> implement
 	 *
 	 * @return Returns all the connections in this node.
 	 */
-	public AbstractMap<N, ForgeDirection> getConnections()
+	public Map<N, ForgeDirection> getConnections()
 	{
 		return connections;
 	}
@@ -130,6 +133,16 @@ public abstract class Node<P extends INodeProvider, G extends Grid, N> implement
 	public void save(NBTTagCompound nbt)
 	{
 
+	}
+
+	public World world()
+	{
+		return (parent instanceof TileEntity) ? ((TileEntity) parent).getWorldObj() : null;
+	}
+
+	public Vector3 position()
+	{
+		return (parent instanceof TileEntity) ? new Vector3((TileEntity) parent) : null;
 	}
 
 	@Override

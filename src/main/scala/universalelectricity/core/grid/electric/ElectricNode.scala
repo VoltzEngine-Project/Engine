@@ -5,9 +5,7 @@ import universalelectricity.core.grid.{Node, TickingGrid}
 import java.lang.Byte._
 import universalelectricity.api.grid.INodeProvider
 import universalelectricity.api.grid.electric.IElectricNode
-import universalelectricity.core.vector.Vector3
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.world.World
+import scala.collection.convert.wrapAsScala._
 import net.minecraft.nbt.NBTTagCompound
 
 /**
@@ -15,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound
  *
  * @author Calclavia
  */
-class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGrid[_], ElectricNode](parent) with IElectricNode
+class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGrid[ElectricNode], ElectricNode](parent) with IElectricNode
 {
   var amperage = 0D
   var voltage = 0D
@@ -151,5 +149,5 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
     nbt.setDouble("amperage", amperage)
   }
 
-  protected def newGrid: TickingGrid[_] = new TickingGrid[ElectricNode](this, classOf[ElectricNode])
+  protected def newGrid: TickingGrid[ElectricNode] = new TickingGrid[ElectricNode](this, classOf[ElectricNode])
 }
