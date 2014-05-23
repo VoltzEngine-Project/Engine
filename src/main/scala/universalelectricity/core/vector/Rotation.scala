@@ -1,6 +1,8 @@
 package universalelectricity.core.vector
 
 import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.nbt.NBTTagCompound
+import java.lang.Double.doubleToLongBits
 
 /**
  * The euler angles describing a 3D rotation. The rotation always in degrees.
@@ -14,16 +16,17 @@ import net.minecraftforge.common.util.ForgeDirection
  * Pitch: 0 Degrees - Looking straight forward towards the horizon. 90 Degrees - Looking straight up
  * to the sky. -90 Degrees - Looking straight down to the void.
  * <p/>
- * Make sure all models are use the Techne Model loader, they will naturally follow this rule.
+ * Make sure all models use the Techne Model loader, they will naturally follow this rule.
  *
  * @author Calclavia
  */
-class Rotation extends ITransform
+class Rotation extends ITransform with IRotation
 {
   /**
    * An angle in radians
    */
   var angle = 0D
+
   /**
    * A normalized axis
    */
@@ -38,8 +41,7 @@ class Rotation extends ITransform
 
   def this(angle: Double, x: Double, y: Double, z: Double)
   {
-    this()
-    `this`(angle, new Vector3(x, y, z))
+    this(angle, new Vector3(x, y, z))
   }
 
   def this(quat: Quaternion)
@@ -57,45 +59,67 @@ class Rotation extends ITransform
     }
   }
 
+  def this(yaw: Double, pitch: Double, roll: Double)
+  {
+    this()
+    set(yaw, pitch, roll)
+  }
+
+  def this(nbt: NBTTagCompound)
+  {
+    this()
+    axis = new Vector3(nbt)
+    angle = nbt.getDouble("angle")
+  }
+
   def this(dir: ForgeDirection)
   {
     this()
     dir match
     {
-      case DOWN =>
-        pitch = -90
-        break //todo: break is not supported
-      case UP =>
-        pitch = 90
-        break //todo: break is not supported
-      case NORTH =>
-        yaw = 0
-        break //todo: break is not supported
-      case SOUTH =>
-        yaw = 180
-        break //todo: break is not supported
-      case WEST =>
-        yaw = 90
-        break //todo: break is not supported
-      case EAST =>
-        yaw = -90
-        break //todo: break is not supported
+      case ForgeDirection.DOWN => set(0, -90, 0)
+      case ForgeDirection.UP => set(0, 90, 0)
+      case ForgeDirection.NORTH => set(0, 0, 0)
+      case ForgeDirection.SOUTH => set(180, 0, 0)
+      case ForgeDirection.WEST => set(90, 0, 0)
+      case ForgeDirection.EAST => set(-90, 0, 0)
       case _ =>
-        break //todo: break is not supported
     }
-  }
-
-  def this(yaw: Double, pitch: Double, roll: Double)
-  {
-    this()
-    this.yaw = yaw
-    this.pitch = pitch
-    this.roll = roll
   }
 
   def angle(radians: Double)
   {
     angle = radians
+  }
+
+  /**
+   * Sets the euler angles. Angles are in radians.
+   */
+  def set(yaw: Double, pitch: Double, roll: Double)
+  {
+    val c1 = Math.cos(yaw / 2)
+    val s1 = Math.sin(yaw / 2)
+    val c2 = Math.cos(pitch / 2)
+    val s2 = Math.sin(pitch / 2)
+    val c3 = Math.cos(roll / 2)
+    val s3 = Math.sin(roll / 2)
+    val c1c2 = c1 * c2
+    val s1s2 = s1 * s2
+    val w = c1c2 * c3 - s1s2 * s3
+    val x = c1c2 * s3 + s1s2 * c3
+    val y = s1 * c2 * c3 + c1 * s2 * s3
+    val z = c1 * s2 * c3 - s1 * c2 * s3
+    angle = 2 * Math.acos(w)
+    axis = new Vector3(x, y, z)
+
+    if (axis.magnitudeSquared < 0.001)
+    {
+      axis = new Vector3(0, 0, -1)
+    }
+    else
+    {
+      axis = axis.normalize
+    }
   }
 
   /**
@@ -137,24 +161,100 @@ class Rotation extends ITransform
     return new Tuple3(yaw, pitch, roll)
   }
 
+  def toVector(): Vector3 = new Vector3(-Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch))
+
+  def toNBT(): NBTTagCompound = toNBT(new NBTTagCompound())
+
+  def toNBT(nbt: NBTTagCompound): NBTTagCompound =
+  {
+    axis.toNBT(nbt)
+    nbt.setDouble("angle", angle)
+    return nbt
+  }
+
+  def yaw: Double =
+  {
+    return toEuler()._1
+  }
+
+  def pitch: Double =
+  {
+    return toEuler()._2
+  }
+
+  def roll: Double =
+  {
+    return toEuler()._3
+  }
+
+  /** Gets the difference in degrees between the two angles */
+  def difference(other: Rotation): Rotation = this - other
+
+  def -(other: Rotation): Rotation = new Rotation(yaw - other.yaw, pitch - other.pitch, roll - other.roll)
+
+  def absoluteDifference(other: Rotation): Rotation =
+  {
+    return new Rotation(getAngleDifference(yaw, other.yaw), getAngleDifference(pitch, other.pitch), getAngleDifference(roll, other.roll))
+  }
+
+  def isWithin(other: Rotation, margin: Double): Boolean =
+  {
+    var i: Int = 0
+
+    val difference = absoluteDifference(other).toEuler()
+
+    difference.productIterator.find(
+      i =>
+      {
+        if (i > margin) return false
+      }
+    )
+
+    return true
+  }
+
+  def getAngleDifference(angleA: Double, angleB: Double): Double =
+  {
+    return Math.abs(angleA - angleB)
+  }
+
+  def clampAngleTo360(value: Double): Double =
+  {
+    return clampAngle(value, -360, 360)
+  }
+
+  def clampAngleTo180(value: Double): Double =
+  {
+    return clampAngle(value, -180, 180)
+  }
+
+  def clampAngle(value: Double, min: Double, max: Double): Double =
+  {
+    while (value < min) value += 360
+    while (value > max) value -= 360
+    return value
+  }
+
   def transform(vector: Vector3)
   {
     val quat: Quaternion = Quaternion.aroundAxis(axis, angle)
     quat.rotate(vector)
   }
 
-  /**
-   * Angles in degrees.
-   */
+  override def clone: Rotation =
+  {
+    return new Rotation(angle, axis)
+  }
+
   override def hashCode: Int =
   {
-    val angle: Long = Double.doubleToLongBits(this.angle)
-    var hash: Int = axis.hashCode
+    val angle = doubleToLongBits(this.angle)
+    var hash = axis.hashCode
     hash = 31 * hash + (angle ^ (angle >>> 32)).asInstanceOf[Int]
     return hash
   }
 
-  override def equals(o: AnyRef): Boolean =
+  override def equals(o: Any): Boolean =
   {
     if (o.isInstanceOf[Rotation])
     {
@@ -164,9 +264,5 @@ class Rotation extends ITransform
     return false
   }
 
-  override def toString: String =
-  {
-    return "Angle [" + this.yaw + "," + this.pitch + "," + this.roll + "]"
-  }
-
+  override def toString: String = "Rotation[" + Math.toDegrees(yaw) + "," + Math.toDegrees(pitch) + "," + Math.toDegrees(roll) + "]"
 }

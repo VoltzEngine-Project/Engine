@@ -184,9 +184,10 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
     }
   }
 
-  def transform(transform: ITransform): Vector3 =
+  def apply(transformer: ITransform): Vector3 =
   {
-    return transform.transform(this)
+    transformer.transform(this)
+    return this
   }
 
   /**

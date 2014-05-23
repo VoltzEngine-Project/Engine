@@ -7,6 +7,7 @@ import universalelectricity.api.electricity.IElectricalNetwork;
 import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.electricity.IVoltageOutput;
 import universalelectricity.api.energy.IConductor;
+import universalelectricity.core.vector.Vector3;
 
 /** Modified version of energy network that takes voltage into account. Use of voltage causes energy
  * lose but also allows for faster energy transfers.
