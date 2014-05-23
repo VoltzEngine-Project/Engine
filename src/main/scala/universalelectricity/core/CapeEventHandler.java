@@ -116,7 +116,7 @@ public class CapeEventHandler
 					}
 					else
 					{
-						UELoader.LOGGER.severe("[capes.txt] Syntax error on line " + linetracker + ": " + str);
+						UELoader$.MODULE$.logger().severe("[capes.txt] Syntax error on line " + linetracker + ": " + str);
 					}
 				}
 				linetracker++;
@@ -158,7 +158,7 @@ public class CapeEventHandler
 			}
 			catch (MalformedURLException e)
 			{
-				UELoader.LOGGER.fine("Failed to load capes");
+				UELoader$.MODULE$.logger().fine("Failed to load capes");
 				e.printStackTrace();
 			}
 		}
