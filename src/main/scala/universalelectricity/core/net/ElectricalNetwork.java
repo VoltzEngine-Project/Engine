@@ -85,7 +85,7 @@ public class ElectricalNetwork extends EnergyNetwork implements IElectricalNetwo
         TileEntity tile = null;
         if (conductor instanceof TileEntity)
         {
-            tile = new Vector3((TileEntity) conductor).translate(from).getTileEntity(((TileEntity) conductor).getWorldObj());
+            tile = new Vector3((TileEntity) conductor).add(from).getTileEntity(((TileEntity) conductor).getWorldObj());
         }
         //Don't accept power from under powered generators
         if (tile instanceof IVoltageOutput && !(tile instanceof IConductor))

@@ -1,7 +1,10 @@
 package universalelectricity.core.asm.template.tile;
 
-import java.util.WeakHashMap;
-
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
+import buildcraft.api.power.PowerHandler.Type;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -9,24 +12,21 @@ import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.energy.IEnergyContainer;
 import universalelectricity.api.energy.IEnergyInterface;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.power.PowerHandler.Type;
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import universalelectricity.core.vector.Vector3;
+
+import java.util.WeakHashMap;
 
 /**
  * @author Calclavia
- * 
  */
 public class StaticTileForwarder
 {
 	/**
 	 * Adds electricity to an block. Returns the quantity of electricity that was accepted. This
 	 * should always return 0 if the block cannot be externally charged.
-	 * 
-	 * @param from Orientation the electricity is sent in from.
-	 * @param receive Maximum amount of electricity (joules) to be sent into the block.
+	 *
+	 * @param from      Orientation the electricity is sent in from.
+	 * @param receive   Maximum amount of electricity (joules) to be sent into the block.
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the block.
 	 */
@@ -38,9 +38,9 @@ public class StaticTileForwarder
 	/**
 	 * Adds electricity to an block. Returns the ElectricityPack, the electricity provided. This
 	 * should always return null if the block cannot be externally discharged.
-	 * 
-	 * @param from Orientation the electricity is requested from.
-	 * @param energy Maximum amount of energy to be sent into the block.
+	 *
+	 * @param from      Orientation the electricity is requested from.
+	 * @param energy    Maximum amount of energy to be sent into the block.
 	 * @param doReceive If false, the charge will only be simulated.
 	 * @return Amount of energy that was given out by the block.
 	 */
@@ -51,7 +51,7 @@ public class StaticTileForwarder
 
 	/**
 	 * Gets the voltage of this TileEntity.
-	 * 
+	 *
 	 * @return The amount of volts. E.g 120v or 240v
 	 */
 	public static long getVoltage(IVoltageInput handler, ForgeDirection direction)
@@ -133,15 +133,19 @@ public class StaticTileForwarder
 
 		if (handler instanceof TileEntity)
 		{
-			TileEntity incomingTile = new Vector3((TileEntity) handler).translate(side).getTileEntity(((TileEntity) handler).getWorldObj());
+			TileEntity incomingTile = new Vector3((TileEntity) handler).add(side).getTileEntity(((TileEntity) handler).getWorldObj());
 
 			if (handler.canConnect(side, incomingTile))
+			{
 				return powerProviderMap.get(handler).getPowerReceiver();
+			}
 		}
 		else
 		{
 			if (handler.canConnect(side, null))
+			{
 				return powerProviderMap.get(handler).getPowerReceiver();
+			}
 		}
 
 		return null;

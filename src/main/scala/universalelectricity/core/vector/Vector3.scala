@@ -122,6 +122,8 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
 
   def +(amount: ForgeDirection): Vector3 = this + new Vector3(amount)
 
+  def add(amount: ForgeDirection): Vector3 = this + amount
+
   override def *(amount: Double): Vector3 = new Vector3(x * amount, y * amount, z * amount)
 
   override def *(amount: Vector3): Vector3 = new Vector3(x * amount.x, y * amount.y, z * amount.z)
