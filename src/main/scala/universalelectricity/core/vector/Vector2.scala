@@ -8,17 +8,11 @@ import net.minecraft.nbt.NBTTagCompound
  *
  * @author Calclavia
  */
-class Vector2 extends Cloneable
+class Vector2(var x: Double, var y: Double) extends Cloneable with TraitVector[Vector2]
 {
-  var x = 0D
-  var y = 0D
+  def this() = this(0, 0)
 
-  def this(x: Double, y: Double)
-  {
-    this()
-    this.x = x
-    this.y = y
-  }
+  def this(value: Double) = this(value, value)
 
   def x(amount: Double)
   {
@@ -30,6 +24,23 @@ class Vector2 extends Cloneable
     y = amount
   }
 
+  override def set(vec: Vector2): Vector2 =
+  {
+    x = vec.x
+    y = vec.y
+    return this
+  }
+
+  /**
+   * Conversion
+   */
+  override def toNBT(nbt: NBTTagCompound): NBTTagCompound =
+  {
+    nbt.setDouble("x", x)
+    nbt.setDouble("y", y)
+    return nbt
+  }
+
   def xi = x.toInt
 
   def yi = y.toInt
@@ -38,112 +49,33 @@ class Vector2 extends Cloneable
 
   def yf = y.toFloat
 
-  def round: Vector2 = new Vector2(Math.round(x), Math.round(y))
+  override def round: Vector2 = new Vector2(Math.round(x), Math.round(y))
 
-  def ceil: Vector2 = new Vector2(Math.ceil(x), Math.ceil(y))
+  override def ceil: Vector2 = new Vector2(Math.ceil(x), Math.ceil(y))
 
-  def floor: Vector2 = new Vector2(Math.floor(x), Math.floor(y))
+  override def floor: Vector2 = new Vector2(Math.floor(x), Math.floor(y))
 
-  def max(other: Vector2): Vector2 = new Vector2(Math.max(x, other.x), Math.max(y, other.y))
+  override def max(other: Vector2): Vector2 = new Vector2(Math.max(x, other.x), Math.max(y, other.y))
 
-  def min(other: Vector2): Vector2 = new Vector2(Math.min(x, other.x), Math.min(y, other.y))
+  override def min(other: Vector2): Vector2 = new Vector2(Math.min(x, other.x), Math.min(y, other.y))
 
   override def clone: Vector2 = return new Vector2(this.x, this.y)
 
   /**
    * Operations
    */
-  def +(amount: Double): Vector2 = new Vector2(x + amount, y + amount)
+  override def +(amount: Double): Vector2 = new Vector2(x + amount, y + amount)
 
-  def +(amount: Vector2): Vector2 = new Vector2(x + amount.x, y + amount.y)
+  override def +(amount: Vector2): Vector2 = new Vector2(x + amount.x, y + amount.y)
 
-  def -(amount: Double): Vector2 = this + -amount
-
-  def -(amount: Vector2): Vector2 = this + (amount * -1)
-
-  def *(amount: Double): Vector2 = new Vector2(x * amount, y * amount)
-
-  def /(amount: Double): Vector2 = new Vector2(x / amount, y / amount)
-
-  def +=(amount: Double): Vector2 =
-  {
-    x += amount
-    y += amount
-    return this
-  }
-
-  def +=(amount: Vector2): Vector2 =
-  {
-    x += amount.x
-    y += amount.y
-    return this
-  }
-
-  def -=(amount: Double): Vector2 =
-  {
-    this += -amount
-    return this
-  }
-
-  def -=(amount: Vector2): Vector2 =
-  {
-    this += (amount * -1)
-    return this
-  }
-
-  def *=(amount: Double): Vector2 =
-  {
-    x *= amount
-    y *= amount
-    return this
-  }
-
-  def *=(amount: Vector2): Vector2 =
-  {
-    x *= amount.x
-    y *= amount.y
-    return this
-  }
-
-  def /=(amount: Double): Vector2 =
-  {
-    this *= (1 / amount)
-    return this
-  }
-
-
-  def /=(amount: Vector2): Vector2 =
-  {
-    x /= amount.x
-    y /= amount.y
-    return this
-  }
+  override def *(amount: Double): Vector2 = new Vector2(x * amount, y * amount)
 
   /**
    * Magnitude
    */
-  def dot(other: Vector2) = $(other)
+  override def $(other: Vector2) = x * other.x + y * other.y
 
-  def $(other: Vector2) = x * other.x + y * other.y
-
-  def magnitudeSquared = this $ this;
-
-  def magnitude = Math.sqrt(magnitudeSquared)
-
-  def normalize = this / magnitude
-
-  def distance(other: Vector3) = (other - this).magnitude
-
-  def midpoint(pos: Vector2): Vector2 = new Vector2((x + pos.x) / 2, (y + pos.y) / 2)
-
-  def slope(other: Vector2) = (y - other.y) / (x - other.x)
-
-  def writeToNBT(nbt: NBTTagCompound): NBTTagCompound =
-  {
-    nbt.setDouble("x", x)
-    nbt.setDouble("y", y)
-    return nbt
-  }
+  override def slope(other: Vector2) = (y - other.y) / (x - other.x)
 
   override def hashCode: Int =
   {

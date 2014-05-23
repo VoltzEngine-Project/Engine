@@ -1,4 +1,4 @@
-package universalelectricity.api.vector;
+package universalelectricity.core.vector;
 
 
 /** Useful interface to define that an object has a 3D location.

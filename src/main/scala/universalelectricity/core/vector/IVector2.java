@@ -1,4 +1,4 @@
-package universalelectricity.api.vector;
+package universalelectricity.core.vector;
 
 
 /** Useful interface to define that an object has a 2D location.
@@ -6,7 +6,6 @@ package universalelectricity.api.vector;
  * @author DarkGuardsman */
 public interface IVector2
 {
-    
     double x();
 
     double y();

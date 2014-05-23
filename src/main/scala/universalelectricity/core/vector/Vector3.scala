@@ -8,66 +8,40 @@ import java.lang.Double.doubleToLongBits
 import net.minecraft.entity.Entity
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraft.block.Block
-import universalelectricity.api.vector.EulerAngle
 
 /**
  * @author Calclavia
  */
-class Vector3 extends Vector2
+class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable with TraitVector[Vector3]
 {
-  var z = 0D
+  def this() = this(0, 0, 0)
 
-  def this(newX: Double, newY: Double, newZ: Double)
+  def this(amount: Double) = this(amount, amount, amount)
+
+  def this(yaw: Double, pitch: Double) = this(-Math.sin(Math.toRadians(yaw)), Math.sin(Math.toRadians(pitch)), -Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)))
+
+  def this(tile: TileEntity) = this(tile.xCoord, tile.yCoord, tile.zCoord)
+
+  def this(entity: Entity) = this(entity.posX, entity.posY, entity.posZ)
+
+  def this(vec: Vec3) = this(vec.xCoord, vec.yCoord, vec.zCoord)
+
+  def this(nbt: NBTTagCompound) = this(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
+
+  def this(dir: ForgeDirection) = this(dir.offsetX, dir.offsetY, dir.offsetZ)
+
+  def this(par1: MovingObjectPosition) = this(par1.blockX, par1.blockY, par1.blockZ)
+
+  def this(par1: ChunkCoordinates) = this(par1.posX, par1.posY, par1.posZ)
+
+  def x(amount: Double)
   {
-    this()
-    this.x = newX
-    this.y = newY
-    this.z = newZ
+    x = amount
   }
 
-  def this(amount: Double)
+  def y(amount: Double)
   {
-    this(amount, amount, amount)
-  }
-
-  def this(yaw: Double, pitch: Double)
-  {
-    this(-Math.sin(Math.toRadians(yaw)), Math.sin(Math.toRadians(pitch)), -Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)))
-  }
-
-  def this(tile: TileEntity)
-  {
-    this(tile.xCoord, tile.yCoord, tile.zCoord)
-  }
-
-  def this(entity: Entity)
-  {
-    this(entity.posX, entity.posY, entity.posZ)
-  }
-
-  def this(vec: Vec3)
-  {
-    this(vec.xCoord, vec.yCoord, vec.zCoord)
-  }
-
-  def this(nbt: NBTTagCompound)
-  {
-    this(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
-  }
-
-  def this(dir: ForgeDirection)
-  {
-    this(dir.offsetX, dir.offsetY, dir.offsetZ)
-  }
-
-  def this(par1: MovingObjectPosition)
-  {
-    this(par1.blockX, par1.blockY, par1.blockZ)
-  }
-
-  def this(par1: ChunkCoordinates)
-  {
-    this(par1.posX, par1.posY, par1.posZ)
+    y = amount
   }
 
   def z(amount: Double)
@@ -75,8 +49,17 @@ class Vector3 extends Vector2
     z = amount
   }
 
+  override def set(vec: Vector3): Vector3 =
+  {
+    x = vec.x
+    y = vec.y
+    z = vec.z
+    return this
+  }
+
+
   /**
-   * Conversion methods
+   * Conversion
    */
   def toVec3 = Vec3.createVectorHelper(x, y, z)
 
@@ -92,6 +75,14 @@ class Vector3 extends Vector2
       }
     }
     return ForgeDirection.UNKNOWN
+  }
+
+  override def toNBT(nbt: NBTTagCompound): NBTTagCompound =
+  {
+    nbt.setDouble("x", x)
+    nbt.setDouble("y", y)
+    nbt.setDouble("z", z)
+    return nbt
   }
 
   def zi = z.toInt
@@ -113,53 +104,11 @@ class Vector3 extends Vector2
    */
   override def +(amount: Double): Vector3 = new Vector3(x + amount, y + amount, z + amount)
 
-  def +(amount: Vector3): Vector3 = new Vector3(x + amount.x, y + amount.y, z + amount.z)
-
-  override def -(amount: Double): Vector3 = this + -amount
-
-  def -(amount: Vector3): Vector3 = this + (amount * -1)
+  override def +(amount: Vector3): Vector3 = new Vector3(x + amount.x, y + amount.y, z + amount.z)
 
   override def *(amount: Double): Vector3 = new Vector3(x * amount, y * amount, z * amount)
 
-  override def /(amount: Double): Vector3 = new Vector3(x / amount, y / amount, z / amount)
-
-  override def +=(amount: Double): Vector3 =
-  {
-    x += amount
-    y += amount
-    z += amount
-    return this
-  }
-
-  def +=(amount: Vector3): Vector3 =
-  {
-    x += amount.x
-    y += amount.y
-    z += amount.z
-    return this
-  }
-
-  override def /=(amount: Double): Vector3 =
-  {
-    x /= amount
-    y /= amount
-    z /= amount
-    return this
-  }
-
-  override def *=(amount: Double): Vector3 =
-  {
-    x *= amount
-    y *= amount
-    z *= amount
-    return this
-  }
-
-  def $(other: Vector3) = x * other.x + y * other.y + z * other.z
-
-  override def normalize = this / magnitude
-
-  def midpoint(pos: Vector3): Vector3 = new Vector3((x + pos.x) / 2, (y + pos.y) / 2, (z + pos.z) / 2)
+  override def $(other: Vector3) = x * other.x + y * other.y + z * other.z
 
   def cross(other: Vector3) = %(other)
 
@@ -291,7 +240,7 @@ class Vector3 extends Vector2
 
   def rayTrace(world: World, end: Vector3): MovingObjectPosition =
   {
-    val block = world.rayTraceBlocks(toVec3, end.toVec3)
+    val block = rayTraceBlocks(world, end)
     val entity = rayTraceEntities(world, end)
 
     if (block == null)
@@ -304,6 +253,8 @@ class Vector3 extends Vector2
 
     return entity
   }
+
+  def rayTraceBlocks(world: World, end: Vector3): MovingObjectPosition = world.rayTraceBlocks(toVec3, end.toVec3)
 
   def rayTraceEntities(world: World, end: Vector3): MovingObjectPosition =
   {
@@ -358,10 +309,7 @@ class Vector3 extends Vector2
   }
 
   /**
-   * Easy block access functions.
-   *
-   * @param world
-   * @return
+   * Block Access
    */
   def getBlockID(world: IBlockAccess): Block =
   {
@@ -378,12 +326,15 @@ class Vector3 extends Vector2
 
   def setBlock(world: World, block: Block): Boolean = setBlock(world, block, 0)
 
-  override def writeToNBT(nbt: NBTTagCompound): NBTTagCompound =
+  override def hashCode(): Int =
   {
-    nbt.setDouble("x", x)
-    nbt.setDouble("y", y)
-    nbt.setDouble("z", z)
-    return nbt
+    val x = doubleToLongBits(this.x)
+    val y = doubleToLongBits(this.y)
+    val z = doubleToLongBits(this.z)
+    var hash = (x ^ (x >>> 32))
+    hash = 31 * hash + y ^ (y >>> 32)
+    hash = 31 * hash + z ^ (z >>> 32)
+    return hash.toInt;
   }
 
   override def equals(o: Any): Boolean =
@@ -401,14 +352,4 @@ class Vector3 extends Vector2
 
   override def toString = "Vector3[" + x + "," + y + "," + z + "]"
 
-  override def hashCode(): Int =
-  {
-    val x = doubleToLongBits(this.x)
-    val y = doubleToLongBits(this.y)
-    val z = doubleToLongBits(this.z)
-    var hash = (x ^ (x >>> 32))
-    hash = 31 * hash + y ^ (y >>> 32)
-    hash = 31 * hash + z ^ (z >>> 32)
-    return hash.toInt;
-  }
 }

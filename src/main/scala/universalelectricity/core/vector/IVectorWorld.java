@@ -1,4 +1,4 @@
-package universalelectricity.api.vector;
+package universalelectricity.core.vector;
 
 import net.minecraft.world.World;
 

@@ -4,12 +4,12 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
-import universalelectricity.api.vector.Vector3
-import universalelectricity.core.grid.{Grid, Node, TickingGrid}
+import universalelectricity.core.grid.{Node, TickingGrid}
 import universalelectricity.core.grid.api.INodeProvider
 import java.util.Iterator
 import java.util.Map
 import java.lang.Byte._
+import universalelectricity.core.vector.Vector3
 
 /**
  * The node used for electrical objects.
@@ -42,7 +42,7 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
 
     for (dir <- ForgeDirection.VALID_DIRECTIONS)
     {
-      val tile: TileEntity = position.translate(dir).getTileEntity(world)
+      val tile: TileEntity = (position + dir) getTileEntity (world)
       if (tile.isInstanceOf[INodeProvider])
       {
         val check: ElectricNode = (tile.asInstanceOf[INodeProvider]).getNode(classOf[ElectricNode], dir.getOpposite)
@@ -144,5 +144,5 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
     nbt.setDouble("amperage", amperage)
   }
 
-  protected def newGrid: TickingGrid[_] =  new TickingGrid[ElectricNode](this, classOf[ElectricNode])
+  protected def newGrid: TickingGrid[_] = new TickingGrid[ElectricNode](this, classOf[ElectricNode])
 }
