@@ -85,6 +85,10 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
     return nbt
   }
 
+  def toRotation = new Rotation(Math.toDegrees(Math.atan2(x, z)), Math.toDegrees(-Math.atan2(y, Math.hypot(z, x))), 0)
+
+  def toRotation(target: Vector3): Rotation = (clone - target).toRotation
+
   def xi = x.toInt
 
   def yi = y.toInt
@@ -120,6 +124,8 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
 
   override def *(amount: Double): Vector3 = new Vector3(x * amount, y * amount, z * amount)
 
+  override def *(amount: Vector3): Vector3 = new Vector3(x * amount.x, y * amount.y, z * amount.z)
+
   override def $(other: Vector3) = x * other.x + y * other.y + z * other.z
 
   def cross(other: Vector3) = %(other)
@@ -142,48 +148,6 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
 
   def isZero = x == 0 && y == 0 && z == 0
 
-  /**
-   * Angle and rotation methods
-   */
-  def eulerAngle = new EulerAngle(Math.toDegrees(Math.atan2(x, z)), Math.toDegrees(-Math.atan2(y, Math.hypot(z, x))))
-
-  def eulerAngle(target: Vector3): EulerAngle =
-  {
-    return (clone - target).eulerAngle
-  }
-
-  /** Rotates this Vector by a yaw, pitch and roll value. */
-  def rotate(angle: EulerAngle)
-  {
-    val yawRadians: Double = angle.yaw
-    val pitchRadians: Double = angle.pitch
-    val rollRadians: Double = angle.roll
-    val x: Double = this.x
-    val y: Double = this.y
-    val z: Double = this.z
-    this.x = x * Math.cos(yawRadians) * Math.cos(pitchRadians) + z * (Math.cos(yawRadians) * Math.sin(pitchRadians) * Math.sin(rollRadians) - Math.sin(yawRadians) * Math.cos(rollRadians)) + y * (Math.cos(yawRadians) * Math.sin(pitchRadians) * Math.cos(rollRadians) + Math.sin(yawRadians) * Math.sin(rollRadians))
-    this.z = x * Math.sin(yawRadians) * Math.cos(pitchRadians) + z * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.sin(rollRadians) + Math.cos(yawRadians) * Math.cos(rollRadians)) + y * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.cos(rollRadians) - Math.cos(yawRadians) * Math.sin(rollRadians))
-    this.y = -x * Math.sin(pitchRadians) + z * Math.cos(pitchRadians) * Math.sin(rollRadians) + y * Math.cos(pitchRadians) * Math.cos(rollRadians)
-  }
-
-  /** Rotates a point by a yaw and pitch around the anchor 0,0 by a specific angle. */
-  def rotate(yaw: Double, pitch: Double)
-  {
-    rotate(new EulerAngle(yaw, pitch))
-  }
-
-  def rotate(yaw: Double)
-  {
-    val yawRadians: Double = Math.toRadians(yaw)
-    val x: Double = this.x
-    val z: Double = this.z
-    if (yaw != 0)
-    {
-      this.x = x * Math.cos(yawRadians) - z * Math.sin(yawRadians)
-      this.z = x * Math.sin(yawRadians) + z * Math.cos(yawRadians)
-    }
-  }
-
   def apply(transformer: ITransform): Vector3 =
   {
     transformer.transform(this)
@@ -192,63 +156,9 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
 
   /**
    * Gets the angle between this vector and another vector.
-   *
-   * @return Angle in degrees
+   * @return Angle in radians
    */
-  def getAngle(vec2: Vector3): Double =
-  {
-    return this.clone.normalize.anglePreNorm(vec2.clone.normalize)
-  }
-
-  def getAngle(vec1: Vector3, vec2: Vector3): Double =
-  {
-    return vec1.getAngle(vec2)
-  }
-
-  def anglePreNorm(vec2: Vector3): Double =
-  {
-    return Math.acos(this $ vec2)
-  }
-
-  def rotate(angle: Double, axis: Vector3): Vector3 = translateMatrix(getRotationMatrix(angle, axis), this)
-
-  def getRotationMatrix(angle: Double, axis: Vector3): Seq[Double] = axis.getRotationMatrix(angle)
-
-  def getRotationMatrix(newAngle: Double): Seq[Double] =
-  {
-    var angle = newAngle
-    val matrix = new Array[Double](16)
-    val axis = this.clone().normalize
-    val x = axis.x
-    val y = axis.y
-    val z = axis.z
-    angle *= 0.0174532925D
-    val cos = Math.cos(angle)
-    val ocos = 1.0F - cos
-    val sin = Math.sin(angle)
-    matrix(0) = (x * x * ocos + cos)
-    matrix(1) = (y * x * ocos + z * sin)
-    matrix(2) = (x * z * ocos - y * sin)
-    matrix(4) = (x * y * ocos - z * sin)
-    matrix(5) = (y * y * ocos + cos)
-    matrix(6) = (y * z * ocos + x * sin)
-    matrix(8) = (x * z * ocos + y * sin)
-    matrix(9) = (y * z * ocos - x * sin)
-    matrix(10) = (z * z * ocos + cos)
-    matrix(15) = 1.0F
-    return matrix
-  }
-
-  def translateMatrix(matrix: Seq[Double], translation: Vector3): Vector3 =
-  {
-    val x = translation.x * matrix(0) + translation.y * matrix(1) + translation.z * matrix(2) + matrix(3)
-    val y = translation.x * matrix(4) + translation.y * matrix(5) + translation.z * matrix(6) + matrix(7)
-    val z = translation.x * matrix(8) + translation.y * matrix(9) + translation.z * matrix(10) + matrix(11)
-    translation.x = x
-    translation.y = y
-    translation.z = z
-    return translation
-  }
+  def angle(other: Vector3) = Math.acos((this $ other) / (magnitude * other.magnitude))
 
   def rayTrace(world: World, end: Vector3): MovingObjectPosition =
   {

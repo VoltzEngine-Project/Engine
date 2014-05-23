@@ -18,9 +18,11 @@ import java.lang.Double.doubleToLongBits
  * <p/>
  * Make sure all models use the Techne Model loader, they will naturally follow this rule.
  *
+ * TODO: Cache all other representations of rotation for optimization
+ *
  * @author Calclavia
  */
-class Rotation extends ITransform with IRotation
+class Rotation extends TraitOperation[Rotation] with ITransform with IRotation
 {
   /**
    * An angle in radians
@@ -30,7 +32,7 @@ class Rotation extends ITransform with IRotation
   /**
    * A normalized axis
    */
-  var axis: Vector3 = new Vector3()
+  var axis = new Vector3()
 
   def this(angle: Double, axis: Vector3)
   {
@@ -87,9 +89,20 @@ class Rotation extends ITransform with IRotation
     }
   }
 
+
+  /**
+   * Sets the angle in radians
+   */
   def angle(radians: Double)
   {
     angle = radians
+  }
+
+  override def set(rotation: Rotation): Rotation =
+  {
+    axis = rotation.axis
+    angle = rotation.angle
+    return this
   }
 
   /**
@@ -125,7 +138,7 @@ class Rotation extends ITransform with IRotation
   /**
    * Conversions
    */
-  def toEuler(): Tuple3[Double, Double, Double] =
+  def toEuler(): (Double, Double, Double) =
   {
     val x = axis.x
     val y = axis.y
@@ -144,7 +157,7 @@ class Rotation extends ITransform with IRotation
       yaw = 2 * Math.atan2(x * Math.sin(angle / 2), Math.cos(angle / 2))
       pitch = Math.PI / 2
       roll = 0
-      return new Tuple3(yaw, pitch, roll)
+      return (yaw, pitch, roll)
     }
 
     if ((x * y * t + z * s) < -0.998)
@@ -152,20 +165,18 @@ class Rotation extends ITransform with IRotation
       yaw = -2 * Math.atan2(x * Math.sin(angle / 2), Math.cos(angle / 2))
       pitch = -Math.PI / 2
       roll = 0
-      return new Tuple3(yaw, pitch, roll)
+      return (yaw, pitch, roll)
     }
 
     yaw = Math.atan2(y * s - x * z * t, 1 - (y * y + z * z) * t)
     pitch = Math.asin(x * y * t + z * s)
     roll = Math.atan2(x * s - y * z * t, 1 - (x * x + z * z) * t)
-    return new Tuple3(yaw, pitch, roll)
+    return (yaw, pitch, roll)
   }
 
   def toVector(): Vector3 = new Vector3(-Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch))
 
-  def toNBT(): NBTTagCompound = toNBT(new NBTTagCompound())
-
-  def toNBT(nbt: NBTTagCompound): NBTTagCompound =
+  override def toNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
     axis.toNBT(nbt)
     nbt.setDouble("angle", angle)
@@ -187,10 +198,29 @@ class Rotation extends ITransform with IRotation
     return toEuler()._3
   }
 
-  /** Gets the difference in degrees between the two angles */
-  def difference(other: Rotation): Rotation = this - other
+  /**
+   * Operations
+   */
+  override def +(other: Double): Rotation = new Rotation(yaw + other, pitch + other, roll + other)
 
-  def -(other: Rotation): Rotation = new Rotation(yaw - other.yaw, pitch - other.pitch, roll - other.roll)
+  override def +(other: Rotation): Rotation = new Rotation(yaw + other.yaw, pitch + other.pitch, roll + other.roll)
+
+  override def *(other: Double): Rotation = new Rotation(yaw * other, pitch * other, roll * other)
+
+  override def *(other: Rotation): Rotation = new Rotation(yaw * other.yaw, pitch * other.pitch, roll * other.roll)
+
+  override def reciprocal() = new Rotation(1 / yaw, 1 / pitch, 1 / roll)
+
+  def ceil = new Rotation(Math.ceil(angle), axis.ceil)
+
+  def floor = new Rotation(Math.floor(angle), axis.floor)
+
+  def round = new Rotation(Math.round(angle), axis.round)
+
+  //TODO: NO-OP
+  def max(other: Rotation) = this
+
+  def min(other: Rotation): Rotation = this
 
   def absoluteDifference(other: Rotation): Rotation =
   {
@@ -199,18 +229,8 @@ class Rotation extends ITransform with IRotation
 
   def isWithin(other: Rotation, margin: Double): Boolean =
   {
-    var i: Int = 0
-
     val difference = absoluteDifference(other).toEuler()
-
-    difference.productIterator.find(
-      i =>
-      {
-        if (i > margin) return false
-      }
-    )
-
-    return true
+    return difference.productIterator.exists(i => (i.asInstanceOf[Double] > margin))
   }
 
   def getAngleDifference(angleA: Double, angleB: Double): Double =
@@ -230,9 +250,10 @@ class Rotation extends ITransform with IRotation
 
   def clampAngle(value: Double, min: Double, max: Double): Double =
   {
-    while (value < min) value += 360
-    while (value > max) value -= 360
-    return value
+    var result = value
+    while (result < min) result += 360
+    while (result > max) result -= 360
+    return result
   }
 
   def transform(vector: Vector3)

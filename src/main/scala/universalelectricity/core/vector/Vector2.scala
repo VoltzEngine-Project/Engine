@@ -61,7 +61,7 @@ class Vector2(var x: Double, var y: Double) extends Cloneable with TraitVector[V
 
   override def clone: Vector2 = return new Vector2(this.x, this.y)
 
-  override def reciprocal:Vector2 = new Vector2(1 / x, 1 / y)
+  override def reciprocal: Vector2 = new Vector2(1 / x, 1 / y)
 
   /**
    * Operations
@@ -71,6 +71,15 @@ class Vector2(var x: Double, var y: Double) extends Cloneable with TraitVector[V
   override def +(amount: Vector2): Vector2 = new Vector2(x + amount.x, y + amount.y)
 
   override def *(amount: Double): Vector2 = new Vector2(x * amount, y * amount)
+
+  override def *(amount: Vector2): Vector2 = new Vector2(x * amount.x, y * amount.y)
+
+  /**
+   * Rotates this vector by an angle.
+   * @param angle Angle in radians.
+   * @return The rotated vector.
+   */
+  def rotate(angle: Double) = new Vector2(x * Math.cos(angle) - y * Math.sin(angle), x * Math.sin(angle) + y * Math.cos(angle))
 
   /**
    * Magnitude
