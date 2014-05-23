@@ -23,7 +23,7 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
   var connectionMap: Byte = parseByte("111111", 2)
   private var currents: Array[Double] = null
   var capacity = 0D
-  final val timeMultiplier = 20D
+  final val timeMultiplier = 1 / 20D
 
   def getCurrentCapacity = capacity
 
@@ -71,14 +71,15 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
     return if (parent.isInstanceOf[TileEntity]) new Vector3(parent.asInstanceOf[TileEntity]) else null
   }
 
-  protected def computeVoltage
+  protected def computeVoltage(deltaTime: Double)
   {
-    this.voltage += timeMultiplier * amperage * getCurrentCapacity
+    this.voltage += deltaTime * amperage * getCurrentCapacity
     this.amperage = 0.0D
   }
 
   def getVoltage: Double =
   {
+    computeVoltage(timeMultiplier)
     return this.voltage
   }
 
@@ -108,9 +109,10 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
     return if (tr < 0.0D) 0.0D else tr
   }
 
-  override def update(deltaTime: Float)
+  override def update(deltaTime: Double)
   {
-    computeVoltage
+    computeVoltage(deltaTime)
+
     connections synchronized
       {
         val it: Iterator[Map.Entry[ElectricNode, ForgeDirection]] = connections.entrySet.iterator

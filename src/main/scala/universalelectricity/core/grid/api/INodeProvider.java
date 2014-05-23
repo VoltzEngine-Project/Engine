@@ -3,7 +3,6 @@ package universalelectricity.core.grid.api;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
- * @param <N> - Node type.
  * @author Calclavia
  */
 public interface INodeProvider

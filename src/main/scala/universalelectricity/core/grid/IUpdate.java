@@ -1,11 +1,11 @@
-package universalelectricity.api.net;
+package universalelectricity.core.grid;
 
 public interface IUpdate
 {
 	/**
-	 * Updates the network. Called by the {NetworkTickHandler}.
+	 * Updates the network. Called by the {UpdateTicker}.
 	 */
-	public void update();
+	public void update(double deltaTime);
 
 	/**
 	 * Can the network update?

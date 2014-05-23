@@ -3,6 +3,7 @@ package universalelectricity.core.grid.api;
 import cpw.mods.fml.common.eventhandler.Event;
 
 //NO-OP
+@Deprecated
 abstract class NodeProviderEvent extends Event
 {
     public final INodeProvider provider;

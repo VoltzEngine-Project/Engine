@@ -39,7 +39,7 @@ public abstract class Node<P extends INodeProvider, G extends Grid, N> implement
 	}
 
 	@Override
-	public void update(float deltaTime)
+	public void update(double deltaTime)
 	{
 
 	}

@@ -12,7 +12,7 @@ public interface INode
     public void recache();
 
     /** Called to update the node.
-     * 
+     *
      * @param deltaTime - Time in seconds that has passed compared to the last update time. */
-    public void update(float deltaTime);
+    public void update(double deltaTime);
 }

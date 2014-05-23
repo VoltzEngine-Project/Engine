@@ -2,7 +2,7 @@ package universalelectricity.api.energy;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.net.INodeNetwork;
-import universalelectricity.api.net.IUpdate;
+import universalelectricity.core.grid.IUpdate;
 
 /**
  * The Energy Network for energy items and blocks.
