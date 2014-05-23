@@ -1,4 +1,4 @@
-package universalelectricity.core.asm;
+package universalelectricity.compatibility.asm;
 
 import org.objectweb.asm.ClassWriter;
 

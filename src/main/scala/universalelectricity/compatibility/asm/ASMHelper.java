@@ -1,4 +1,4 @@
-package universalelectricity.core.asm;
+package universalelectricity.compatibility.asm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 
-import universalelectricity.core.asm.InstructionComparator.InsnListSection;
+import universalelectricity.compatibility.asm.InstructionComparator.InsnListSection;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;

@@ -1,4 +1,4 @@
-package universalelectricity.core.asm;
+package universalelectricity.compatibility.asm;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -24,7 +24,7 @@ import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 import org.objectweb.asm.util.Textifier;
 
-import universalelectricity.core.asm.InstructionComparator.InsnListSection;
+import universalelectricity.compatibility.asm.InstructionComparator.InsnListSection;
 
 public class InsnListPrinter extends Textifier
 {

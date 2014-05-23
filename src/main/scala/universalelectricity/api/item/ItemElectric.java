@@ -12,9 +12,8 @@ import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.world.World;
 import universalelectricity.api.CompatibilityModule;
-import universalelectricity.api.UniversalElectricity;
-import universalelectricity.api.energy.UnitDisplay;
-import universalelectricity.api.energy.UnitDisplay.Unit;
+import universalelectricity.api.UnitDisplay;
+import universalelectricity.api.UnitDisplay.Unit;
 
 /** Extend from this class if your item requires electricity or to be charged. Optionally, you can
  * implement IItemElectric instead.

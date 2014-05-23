@@ -1,4 +1,4 @@
-package universalelectricity.api.energy;
+package universalelectricity.api;
 
 /**
  * An easy way to display information on electricity for the client.

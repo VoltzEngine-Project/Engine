@@ -1,4 +1,4 @@
-package universalelectricity.core.asm.template.item;
+package universalelectricity.compatibility.asm.template.item;
 
 import net.minecraft.item.ItemStack;
 import universalelectricity.api.item.IEnergyItem;

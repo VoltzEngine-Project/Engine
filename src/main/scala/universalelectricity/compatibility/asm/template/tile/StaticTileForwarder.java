@@ -1,4 +1,4 @@
-package universalelectricity.core.asm.template.tile;
+package universalelectricity.compatibility.asm.template.tile;
 
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;

@@ -2,8 +2,8 @@ package universalelectricity.core.grid;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
-import universalelectricity.core.grid.api.INode;
-import universalelectricity.core.grid.api.INodeProvider;
+import universalelectricity.api.grid.INode;
+import universalelectricity.api.grid.INodeProvider;
 
 import java.util.AbstractMap;
 import java.util.WeakHashMap;

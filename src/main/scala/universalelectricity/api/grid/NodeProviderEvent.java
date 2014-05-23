@@ -1,4 +1,4 @@
-package universalelectricity.core.grid.api;
+package universalelectricity.api.grid;
 
 import cpw.mods.fml.common.eventhandler.Event;
 

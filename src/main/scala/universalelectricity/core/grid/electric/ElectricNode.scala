@@ -5,11 +5,11 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.grid.{Node, TickingGrid}
-import universalelectricity.core.grid.api.INodeProvider
 import java.util.Iterator
 import java.util.Map
 import java.lang.Byte._
 import universalelectricity.core.vector.Vector3
+import universalelectricity.api.grid.INodeProvider
 
 /**
  * The node used for electrical objects.
