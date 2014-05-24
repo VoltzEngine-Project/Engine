@@ -1,7 +1,8 @@
-package universalelectricity.core.vector
+package universalelectricity.core.transform.vector
 
 import java.lang.Double.doubleToLongBits
 import net.minecraft.nbt.NBTTagCompound
+import universalelectricity.core.transform.TraitVector
 
 /**
  * Vector2 Class is used for defining objects in a 2D space.

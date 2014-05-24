@@ -1,4 +1,4 @@
-package universalelectricity.core.vector
+package universalelectricity.core.transform.region
 
 import java.math.BigDecimal
 import java.math.MathContext
@@ -10,6 +10,9 @@ import net.minecraft.entity.Entity
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.world.World
 import net.minecraft.nbt.NBTTagCompound
+import universalelectricity.core.transform.TraitOperation
+import universalelectricity.core.transform.vector.Vector3
+import universalelectricity.core.transform.rotation.Rotation
 
 /**
  * A cubical region class to specify a region.

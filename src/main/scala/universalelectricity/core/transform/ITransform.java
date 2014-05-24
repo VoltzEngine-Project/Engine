@@ -1,4 +1,6 @@
-package universalelectricity.core.vector;
+package universalelectricity.core.transform;
+
+import universalelectricity.core.transform.vector.Vector3;
 
 /**
  * Applied to objects that can transform vectors

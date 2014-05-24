@@ -1,8 +1,10 @@
-package universalelectricity.core.vector
+package universalelectricity.core.transform.rotation
 
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.nbt.NBTTagCompound
 import java.lang.Double.doubleToLongBits
+import universalelectricity.core.transform.{ITransform, TraitOperation}
+import universalelectricity.core.transform.vector.Vector3
 
 /**
  * The euler angles describing a 3D rotation. The rotation always in degrees.

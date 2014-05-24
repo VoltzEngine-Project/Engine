@@ -1,8 +1,9 @@
-package universalelectricity.core.vector
+package universalelectricity.core.transform.rotation
 
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
+import universalelectricity.core.transform.vector.Vector3
 
 /**
  * Quaternion class designed to be used for the rotation of objects.

@@ -1,7 +1,9 @@
-package universalelectricity.core.vector
+package universalelectricity.core.transform.region
 
 import java.math.{BigDecimal, RoundingMode, MathContext}
 import net.minecraft.nbt.NBTTagCompound
+import universalelectricity.core.transform.TraitOperation
+import universalelectricity.core.transform.vector.Vector2
 
 class Rectangle(var min: Vector2, var max: Vector2) extends TraitOperation[Rectangle]
 {

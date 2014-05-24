@@ -1,4 +1,4 @@
-package universalelectricity.core.vector
+package universalelectricity.core.transform.vector
 
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
@@ -8,6 +8,8 @@ import java.lang.Double.doubleToLongBits
 import net.minecraft.entity.Entity
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraft.block.Block
+import universalelectricity.core.transform.{ITransform, TraitVector}
+import universalelectricity.core.transform.rotation.Rotation
 
 /**
  * @author Calclavia

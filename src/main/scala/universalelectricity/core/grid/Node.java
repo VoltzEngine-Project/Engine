@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.core.grid.INode;
 import universalelectricity.api.core.grid.INodeProvider;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.Map;
 import java.util.WeakHashMap;

@@ -1,4 +1,4 @@
-package universalelectricity.core.vector
+package universalelectricity.core.transform
 
 import net.minecraft.nbt.NBTTagCompound
 

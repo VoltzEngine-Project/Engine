@@ -1,4 +1,4 @@
-package universalelectricity.core.vector;
+package universalelectricity.core.transform.rotation;
 
 /** Simple interface to define that an object has rotation
  * 

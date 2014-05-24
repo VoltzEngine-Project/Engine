@@ -1,6 +1,4 @@
-package universalelectricity.core.vector
-
-import net.minecraft.nbt.NBTTagCompound
+package universalelectricity.core.transform
 
 /**
  * @author Calclavia
