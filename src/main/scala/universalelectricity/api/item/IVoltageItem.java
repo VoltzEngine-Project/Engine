@@ -11,5 +11,5 @@ public interface IVoltageItem
 	/**
 	 * Get the max amount of voltage of this item.
 	 */
-	public long getVoltage(ItemStack theItem);
+	public double getVoltage(ItemStack theItem);
 }

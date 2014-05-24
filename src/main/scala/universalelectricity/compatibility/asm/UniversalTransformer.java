@@ -9,9 +9,9 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
-import universalelectricity.compatibility.CompatibilityType;
 import universalelectricity.api.grid.INodeProvider;
 import universalelectricity.api.item.IEnergyItem;
+import universalelectricity.compatibility.Compatibility;
 import universalelectricity.compatibility.asm.TemplateInjectionManager.InjectionTemplate;
 
 /**
@@ -101,7 +101,8 @@ public class UniversalTransformer implements IClassTransformer
 			{
 				if (template != null)
 				{
-					if (CompatibilityType.get(templates.inverse().get(template)).isModuleEnabled)
+					//TODO: Fix
+					if (Compatibility.getHandler(templates.inverse().get(template)).isEnabled)
 					{
 						changed |= template.patch(cnode, false);
 						System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
@@ -115,7 +116,8 @@ public class UniversalTransformer implements IClassTransformer
 
 			for (String separated : separatedFlags)
 			{
-				if (CompatibilityType.get(separated) != null && CompatibilityType.get(separated).isModuleEnabled)
+				//TODO: Fix
+				if (Compatibility.getHandler(separated) != null && Compatibility.getHandler(separated).isEnabled)
 				{
 					InjectionTemplate template = templates.get(separated);
 

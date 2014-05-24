@@ -13,7 +13,7 @@ public interface IEnergyItem
 	 * @param doRecharge If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the item.
 	 */
-	public long recharge(ItemStack itemStack, long energy, boolean doRecharge);
+	public double recharge(ItemStack itemStack, double energy, boolean doRecharge);
 
 	/**
 	 * Removes energy from an item. Returns the quantity of energy that was removed. This should
@@ -24,17 +24,17 @@ public interface IEnergyItem
 	 * @param doDischarge If false, the discharge will only be simulated.
 	 * @return Amount of energy that was removed from the item.
 	 */
-	public long discharge(ItemStack itemStack, long energy, boolean doDischarge);
+	public double discharge(ItemStack itemStack, double energy, boolean doDischarge);
 
 	/**
 	 * Get the amount of energy currently stored in the item.
 	 */
-	public long getEnergy(ItemStack theItem);
+	public double getEnergy(ItemStack theItem);
 
 	/**
 	 * Get the max amount of energy that can be stored in the item.
 	 */
-	public long getEnergyCapacity(ItemStack theItem);
+	public double getEnergyCapacity(ItemStack theItem);
 
 	/**
 	 * Sets the amount of energy in the ItemStack. Use recharge or discharge instead of calling this
@@ -43,5 +43,5 @@ public interface IEnergyItem
 	 * @param itemStack - the ItemStack.
 	 * @param energy - Amount of electrical energy.
 	 */
-	public void setEnergy(ItemStack itemStack, long energy);
+	public void setEnergy(ItemStack itemStack, double energy);
 }
