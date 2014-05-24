@@ -4,25 +4,28 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import resonant.api.IRotatable;
 import resonant.lib.prefab.item.ItemBlockTooltip;
-import universalelectricity.core.vector.Cuboid;
 import resonant.lib.utility.LanguageUtility;
 import resonant.lib.utility.WrenchUtility;
-import universalelectricity.core.vector.Vector2;
-import universalelectricity.core.vector.Vector3;
-import universalelectricity.core.vector.VectorWorld;
+import universalelectricity.core.transform.region.Cuboid;
+import universalelectricity.core.transform.vector.Vector2;
+import universalelectricity.core.transform.vector.Vector3;
+import universalelectricity.core.transform.vector.VectorWorld;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -239,9 +242,9 @@ public abstract class TileBlock extends TileEntity
 		return false;
 	}
 
-	public void getSubBlocks(int id, CreativeTabs creativeTab, List list)
+	public void getSubBlocks(Item item, CreativeTabs creativeTabs, List list)
 	{
-		list.add(new ItemStack(id, 1, 0));
+		list.add(new ItemStack(item));
 	}
 
 	public ItemStack getPickBlock(MovingObjectPosition target)
@@ -676,7 +679,7 @@ public abstract class TileBlock extends TileEntity
 	 * Called in the world.
 	 */
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(IBlockAccess access, int side)
+	public IIcon getIcon(IBlockAccess access, int side)
 	{
 		return getIcon(side, access.getBlockMetadata(x(), y(), z()));
 	}
@@ -685,18 +688,18 @@ public abstract class TileBlock extends TileEntity
 	 * Called either by an item, or in a world.
 	 */
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int meta)
+	public IIcon getIcon(int side, int meta)
 	{
 		return getIcon();
 	}
 
-	public Icon getIcon()
+	public IIcon getIcon()
 	{
 		return RenderInfo.icon.get(getTextureName());
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister)
+	public void registerIcons(IIconRegister iconRegister)
 	{
 		RenderInfo.icon.put(getTextureName(), iconRegister.registerIcon(getTextureName()));
 	}
@@ -767,7 +770,7 @@ public abstract class TileBlock extends TileEntity
 		private static final WeakHashMap<TileBlock, TileRender> renderer = new WeakHashMap<TileBlock, TileRender>();
 
 		@SideOnly(Side.CLIENT)
-		private static final HashMap<String, Icon> icon = new HashMap<String, Icon>();
+		private static final HashMap<String, IIcon> icon = new HashMap<String, IIcon>();
 	}
 
 }

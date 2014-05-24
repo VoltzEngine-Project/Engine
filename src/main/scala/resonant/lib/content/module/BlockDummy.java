@@ -4,22 +4,26 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import resonant.lib.content.module.TileBlock.IComparatorInputOverride;
-import universalelectricity.core.vector.Cuboid;
+import universalelectricity.core.transform.region.Cuboid;
 import resonant.lib.render.block.BlockRenderingHandler;
 import resonant.lib.utility.inventory.InventoryUtility;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -302,24 +306,24 @@ public class BlockDummy extends Block implements ITileEntityProvider
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getBlockTexture(IBlockAccess access, int x, int y, int z, int side)
+	public IIcon getIcon(IBlockAccess access, int x, int y, int z, int side)
 	{
 		inject(access, x, y, z);
-		Icon value = getTile(access, x, y, z).getIcon(access, side);
+		IIcon value = getTile(access, x, y, z).getIcon(access, side);
 		eject();
 		return value;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int meta)
+	public IIcon getIcon(int side, int meta)
 	{
 		return dummyTile.getIcon(side, meta);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister)
+	public void registerBlockIcons(IIconRegister iconRegister)
 	{
 		dummyTile.registerIcons(iconRegister);
 	}
@@ -352,9 +356,9 @@ public class BlockDummy extends Block implements ITileEntityProvider
 	}
 
 	@Override
-	public void getSubBlocks(int id, CreativeTabs creativeTab, List list)
+	public void getSubBlocks(Item item, CreativeTabs createiveTabs, List list)
 	{
-		dummyTile.getSubBlocks(id, creativeTab, list);
+		dummyTile.getSubBlocks(item, createiveTabs, list);
 	}
 
 	/**

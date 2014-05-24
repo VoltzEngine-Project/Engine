@@ -15,10 +15,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import resonant.lib.utility.MachinePlayer;
-import universalelectricity.api.vector.Vector3;
-import universalelectricity.api.vector.VectorWorld;
+import universalelectricity.core.transform.vector.Vector3;
+import universalelectricity.core.transform.vector.VectorWorld;
 
 /** @author Calclavia */
 public class InventoryUtility

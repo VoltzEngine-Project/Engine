@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
-import universalelectricity.core.vector.Cuboid;
+import universalelectricity.core.transform.region.Cuboid;
 import universalelectricity.api.vector.Vector3;
 
 /** Data structure for world protection.
