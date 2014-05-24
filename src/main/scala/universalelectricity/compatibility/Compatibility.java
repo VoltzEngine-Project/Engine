@@ -3,9 +3,6 @@ package universalelectricity.compatibility;
 import cpw.mods.fml.common.Loader;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
-import universalelectricity.compatibility.module.ModuleBuildCraft$;
-import universalelectricity.compatibility.module.ModuleThermalExpansion$;
-import universalelectricity.compatibility.module.ModuleUniversalElectricity$;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -18,10 +15,6 @@ import java.util.Set;
  */
 public class Compatibility
 {
-	public static final ModuleUniversalElectricity$ universalElectricity = ModuleUniversalElectricity$.MODULE$;
-	public static final ModuleThermalExpansion$ thermalExpansion = ModuleThermalExpansion$.MODULE$;
-	public static final ModuleBuildCraft$ buildcraft = ModuleBuildCraft$.MODULE$;
-
 	public static final Set<CompatibilityModule> loadedModules = new LinkedHashSet<CompatibilityModule>();
 
 	/**
