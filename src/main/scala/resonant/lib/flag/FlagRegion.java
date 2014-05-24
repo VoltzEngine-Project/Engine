@@ -6,7 +6,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import resonant.lib.prefab.vector.Cuboid;
+import universalelectricity.core.vector.Cuboid;
 import universalelectricity.api.vector.Vector3;
 
 /** A defined region.

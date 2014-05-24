@@ -10,6 +10,10 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import universalelectricity.api.vector.Vector3;
 
+/**
+ * TODO: Integrate to Vector3
+ */
+@Deprecated
 public class RayTraceHelper
 {
     public static MovingObjectPosition raytraceEntities_fromAnEntity(World world, Entity entity, Vec3 error, double reachDistance, boolean collisionFlag)

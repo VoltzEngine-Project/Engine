@@ -1,11 +1,12 @@
 package resonant.lib.config;
 
+import net.minecraftforge.common.config.Configuration;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import net.minecraftforge.common.Configuration;
 
 /** Apply this annotation to static fields only, otherwise will malfunction and fail. use this to
  * automate the configuration file activity, and as such, no need to "forget" to add a configuration

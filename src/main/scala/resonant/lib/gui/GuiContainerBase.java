@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import resonant.lib.References;
-import resonant.lib.prefab.vector.Rectangle;
+import universalelectricity.core.vector.Rectangle;
 import resonant.lib.render.RenderUtility;
 import resonant.lib.utility.LanguageUtility;
 import universalelectricity.api.CompatibilityType;
