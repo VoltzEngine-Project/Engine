@@ -1,4 +1,4 @@
-package universalelectricity.api.grid.electric;
+package universalelectricity.api.core.grid.electric;
 
 import net.minecraftforge.common.util.ForgeDirection;
 

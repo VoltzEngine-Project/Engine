@@ -3,8 +3,8 @@ package universalelectricity.core.grid.electric
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.grid.{Node, TickingGrid}
 import java.lang.Byte._
-import universalelectricity.api.grid.INodeProvider
-import universalelectricity.api.grid.electric.IElectricNode
+import universalelectricity.api.core.grid.INodeProvider
+import universalelectricity.api.core.grid.electric.IElectricNode
 import scala.collection.convert.wrapAsScala._
 import net.minecraft.nbt.NBTTagCompound
 

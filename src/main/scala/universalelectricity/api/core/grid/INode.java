@@ -1,4 +1,4 @@
-package universalelectricity.api.grid;
+package universalelectricity.api.core.grid;
 
 public interface INode
 {

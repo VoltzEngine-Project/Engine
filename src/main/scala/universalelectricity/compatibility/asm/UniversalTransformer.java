@@ -9,7 +9,7 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
-import universalelectricity.api.grid.INodeProvider;
+import universalelectricity.api.core.grid.INodeProvider;
 import universalelectricity.api.item.IEnergyItem;
 import universalelectricity.compatibility.Compatibility;
 import universalelectricity.compatibility.asm.TemplateInjectionManager.InjectionTemplate;

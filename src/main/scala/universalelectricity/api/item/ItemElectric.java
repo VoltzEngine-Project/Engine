@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Calclavia
  */
-public abstract class ItemElectric extends Item implements IEnergyItem, IVoltageItem
+public abstract class ItemElectric extends Item implements IEnergyItem
 {
 	private static final String ENERGY_NBT = "electricity";
 

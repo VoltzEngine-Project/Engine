@@ -1,6 +1,6 @@
-package universalelectricity.api.grid.electric;
+package universalelectricity.api.core.grid.electric;
 
-import universalelectricity.api.grid.INode;
+import universalelectricity.api.core.grid.INode;
 
 public interface IEnergyNode extends INode
 {

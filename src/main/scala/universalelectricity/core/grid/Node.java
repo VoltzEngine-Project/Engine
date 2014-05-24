@@ -4,8 +4,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import universalelectricity.api.grid.INode;
-import universalelectricity.api.grid.INodeProvider;
+import universalelectricity.api.core.grid.INode;
+import universalelectricity.api.core.grid.INodeProvider;
 import universalelectricity.core.vector.Vector3;
 
 import java.util.Map;

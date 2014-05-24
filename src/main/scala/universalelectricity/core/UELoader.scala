@@ -14,8 +14,8 @@ import cpw.mods.fml.relauncher.IFMLCallHook
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions
 import universalelectricity.core.grid.UpdateTicker
-import universalelectricity.api.grid.NodeRegistry
-import universalelectricity.api.grid.electric.IElectricNode
+import universalelectricity.api.core.grid.NodeRegistry
+import universalelectricity.api.core.grid.electric.IElectricNode
 import universalelectricity.core.grid.electric.ElectricNode
 import universalelectricity.compatibility.module.{ModuleBuildCraft, ModuleThermalExpansion, ModuleUniversalElectricity}
 

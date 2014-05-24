@@ -44,4 +44,10 @@ public interface IEnergyItem
 	 * @param energy - Amount of electrical energy.
 	 */
 	public void setEnergy(ItemStack itemStack, double energy);
+
+	/**
+	 * TODO: Make this value more realistic
+	 * Get the max amount of voltage of this item.
+	 */
+	public double getVoltage(ItemStack theItem);
 }
