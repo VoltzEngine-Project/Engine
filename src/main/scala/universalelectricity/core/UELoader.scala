@@ -38,7 +38,7 @@ object UELoader extends IFMLLoadingPlugin with IFMLCallHook
   {
     config = new Configuration(new File(Loader.instance.getConfigDir, "UniversalElectricity.cfg"))
     config.load
-    config.get(Configuration.CATEGORY_GENERAL, "Use multithreading", UpdateTicker.useThreads).getBoolean(UpdateTicker.useThreads)
+    UpdateTicker.useThreads = config.get(Configuration.CATEGORY_GENERAL, "Use multithreading", UpdateTicker.useThreads).getBoolean(UpdateTicker.useThreads)
 
     Compatibility.register(ModuleUniversalElectricity)
 

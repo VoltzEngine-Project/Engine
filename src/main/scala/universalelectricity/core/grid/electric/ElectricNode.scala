@@ -74,21 +74,21 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
     return (source.isInstanceOf[ElectricNode]) && (connectionMap & (1 << from.ordinal)) != 0
   }
 
-  protected def computeVoltage(deltaTime: Double)
+  protected def calculateVoltage(deltaTime: Double)
   {
-    this.voltage += deltaTime * amperage * getEnergyCapacity
-    this.amperage = 0
+    voltage += deltaTime * amperage * getEnergyCapacity
+    amperage = 0
   }
 
   override def getVoltage: Double =
   {
-    computeVoltage(1 / timeMultiplier)
+    calculateVoltage(1 / timeMultiplier)
     return voltage
   }
 
   def applyCurrent(amperage: Double)
   {
-    computeVoltage(1 / timeMultiplier)
+    calculateVoltage(1 / timeMultiplier)
     this.amperage += amperage
   }
 
@@ -114,7 +114,7 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
 
   override def update(deltaTime: Double)
   {
-    computeVoltage(deltaTime)
+    calculateVoltage(deltaTime)
 
     connections synchronized
       {
