@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.world.World;
-import universalelectricity.api.CompatibilityModule;
+import universalelectricity.compatibility.CompatibilityModule;
 import universalelectricity.api.UnitDisplay;
 import universalelectricity.api.UnitDisplay.Unit;
 
