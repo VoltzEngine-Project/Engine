@@ -6,16 +6,10 @@
  * License 1.0, or MMPL. Please check the contents of the license located in
  * http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
-package buildcraft.api.power;
+package buildcraft.api.mj;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-/**
- * Essentially only used for Wooden Power Pipe connection rules.
- *
- * This Tile Entity interface allows you to indicate that a block can emit power
- * from a specific side.
- */
-public interface IPowerEmitter {
-	boolean canEmitPowerFrom(ForgeDirection side);
+public interface ISidedBatteryProvider {
+	IBatteryObject getMjBattery(String kind, ForgeDirection direction);
 }

@@ -2,9 +2,8 @@ package universalelectricity.compatibility.module
 
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
-import buildcraft.api.power.IPowerReceptor
-import buildcraft.api.power.PowerHandler.Type
 import universalelectricity.compatibility.Compatibility
+import buildcraft.api.mj.{MjAPI, IBatteryProvider}
 
 /**
  * Module for BuildCraft support
@@ -14,33 +13,45 @@ object ModuleBuildCraft extends Compatibility.CompatibilityModule("BuildCraft|En
 {
   def receiveEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doReceive: Boolean): Double =
   {
-    val receptor = (handler.asInstanceOf[IPowerReceptor])
-    val receiver = receptor.getPowerReceiver(direction)
+    val receiver = handler.asInstanceOf[IBatteryProvider].getMjBattery(MjAPI.DEFAULT_POWER_FRAMEWORK)
 
     if (receiver != null)
     {
       if (doReceive)
       {
-        return (receiver.receiveEnergy(Type.PIPE, (energy * ratio).asInstanceOf[Float], direction) * reciprocal_ratio)
+        return receiver.addEnergy(energy * ratio) * reciprocal_ratio
       }
-      return (receiver.powerRequest * reciprocal_ratio)
+
+      return (receiver.getEnergyRequested * reciprocal_ratio)
     }
     return 0
   }
 
   def extractEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doExtract: Boolean): Double =
   {
+    val receiver = handler.asInstanceOf[IBatteryProvider].getMjBattery(MjAPI.DEFAULT_POWER_FRAMEWORK)
+
+    if (receiver != null)
+    {
+      if (doExtract)
+      {
+        return receiver.addEnergy(energy * ratio) * reciprocal_ratio
+      }
+
+      return energy
+    }
+
     return 0
   }
 
   def doIsHandler(obj: AnyRef): Boolean =
   {
-    return obj.isInstanceOf[IPowerReceptor]
+    return obj.isInstanceOf[IBatteryProvider]
   }
 
   def canConnect(obj: AnyRef, direction: ForgeDirection, source: AnyRef): Boolean =
   {
-    return (obj.asInstanceOf[IPowerReceptor]).getPowerReceiver(direction) != null
+    return obj.asInstanceOf[IBatteryProvider].getMjBattery(MjAPI.DEFAULT_POWER_FRAMEWORK) != null
   }
 
   def chargeItem(itemStack: ItemStack, joules: Double, docharge: Boolean): Double =
@@ -60,29 +71,28 @@ object ModuleBuildCraft extends Compatibility.CompatibilityModule("BuildCraft|En
 
   def doIsEnergyContainer(obj: AnyRef): Boolean =
   {
-    return obj.isInstanceOf[IPowerReceptor]
+    return obj.isInstanceOf[IBatteryProvider]
   }
 
   def getEnergy(obj: AnyRef, direction: ForgeDirection): Double =
   {
-    if (obj.isInstanceOf[IPowerReceptor])
+    val receiver = obj.asInstanceOf[IBatteryProvider].getMjBattery(MjAPI.DEFAULT_POWER_FRAMEWORK)
+
+    if (receiver != null)
     {
-      if ((obj.asInstanceOf[IPowerReceptor]).getPowerReceiver(direction) != null)
-      {
-        return ((obj.asInstanceOf[IPowerReceptor]).getPowerReceiver(direction).getEnergyStored * reciprocal_ratio)
-      }
+      return receiver.getEnergyStored * reciprocal_ratio
     }
+
     return 0
   }
 
   def getMaxEnergy(obj: AnyRef, direction: ForgeDirection): Double =
   {
-    if (obj.isInstanceOf[IPowerReceptor])
+    val receiver = obj.asInstanceOf[IBatteryProvider].getMjBattery(MjAPI.DEFAULT_POWER_FRAMEWORK)
+
+    if (receiver != null)
     {
-      if ((obj.asInstanceOf[IPowerReceptor]).getPowerReceiver(direction) != null)
-      {
-        return ((obj.asInstanceOf[IPowerReceptor]).getPowerReceiver(direction).getMaxEnergyStored * reciprocal_ratio)
-      }
+      return receiver.maxCapacity * reciprocal_ratio
     }
     return 0
   }

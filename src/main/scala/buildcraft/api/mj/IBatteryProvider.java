@@ -6,13 +6,8 @@
  * License 1.0, or MMPL. Please check the contents of the license located in
  * http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
-package buildcraft.api.core;
+package buildcraft.api.mj;
 
-import java.lang.ref.WeakReference;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.WorldServer;
-
-public interface ICoreProxy {
-	WeakReference<EntityPlayer> getBuildCraftPlayer(WorldServer world);
+public interface IBatteryProvider {
+	IBatteryObject getMjBattery(String kind);
 }

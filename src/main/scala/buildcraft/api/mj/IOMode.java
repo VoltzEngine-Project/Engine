@@ -6,13 +6,15 @@
  * License 1.0, or MMPL. Please check the contents of the license located in
  * http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
-package buildcraft.api.core;
+package buildcraft.api.mj;
 
-import java.lang.ref.WeakReference;
+public enum IOMode {
+	Both(true, true), Receive(true, false), Send(false, true), None(false, false);
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.WorldServer;
+	public final boolean canReceive, canSend;
 
-public interface ICoreProxy {
-	WeakReference<EntityPlayer> getBuildCraftPlayer(WorldServer world);
+	IOMode(boolean canReceive, boolean canSend) {
+		this.canReceive = canReceive;
+		this.canSend = canSend;
+	}
 }
