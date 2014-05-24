@@ -19,15 +19,15 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
   var voltage = 0D
 
   private var currents: Array[Double] = null
-  final val timeMultiplier = 1 / 20D
+  final val timeMultiplier = 20D
 
   var connectionMap = parseByte("111111", 2)
   private var capacity = 0D
   private var resistance = 0.01D
 
-  override def getCapacity = capacity
+  override def getEnergyCapacity = capacity
 
-  override def setCapacity(value: Double)
+  override def setEnergyCapacity(value: Double)
   {
     capacity = value
   }
@@ -76,39 +76,39 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
 
   protected def computeVoltage(deltaTime: Double)
   {
-    this.voltage += deltaTime * amperage * getCapacity
+    this.voltage += deltaTime * amperage * getEnergyCapacity
     this.amperage = 0
   }
 
   override def getVoltage: Double =
   {
-    computeVoltage(timeMultiplier)
+    computeVoltage(1 / timeMultiplier)
     return voltage
   }
 
   def applyCurrent(amperage: Double)
   {
-    computeVoltage(timeMultiplier)
+    computeVoltage(1 / timeMultiplier)
     this.amperage += amperage
   }
 
   override def applyPower(wattage: Double)
   {
-    val calculatedVoltage = Math.sqrt(voltage * voltage + 0.1 * wattage * getCapacity) - voltage
-    applyCurrent(timeMultiplier * calculatedVoltage / getCapacity)
+    val calculatedVoltage = Math.sqrt(voltage * voltage + 0.1 * wattage * getEnergyCapacity) - voltage
+    applyCurrent(timeMultiplier * calculatedVoltage / getEnergyCapacity)
   }
 
   override def drawPower(wattage: Double)
   {
-    val voltageSquared = voltage * voltage - 0.1 * wattage * getCapacity
+    val voltageSquared = voltage * voltage - 0.1 * wattage * getEnergyCapacity
     val calculatedVoltage = if (voltageSquared < 0.0D) 0.0D else Math.sqrt(voltageSquared) - this.voltage
-    applyCurrent(timeMultiplier * calculatedVoltage / getCapacity)
+    applyCurrent(timeMultiplier * calculatedVoltage / getEnergyCapacity)
   }
 
   override def getEnergy(voltageThreshold: Double): Double =
   {
     val volts = getVoltage
-    val tr = 0.5D * (volts * volts - voltageThreshold * voltageThreshold) / getCapacity
+    val tr = 0.5D * (volts * volts - voltageThreshold * voltageThreshold) / getEnergyCapacity
     return if (tr < 0.0D) 0.0D else tr
   }
 

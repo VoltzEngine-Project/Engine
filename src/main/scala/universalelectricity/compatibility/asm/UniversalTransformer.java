@@ -10,8 +10,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import universalelectricity.api.CompatibilityType;
-import universalelectricity.api.energy.IConductor;
-import universalelectricity.api.energy.IEnergyInterface;
+import universalelectricity.api.grid.INodeProvider;
 import universalelectricity.api.item.IEnergyItem;
 import universalelectricity.compatibility.asm.TemplateInjectionManager.InjectionTemplate;
 
@@ -61,24 +60,20 @@ public class UniversalTransformer implements IClassTransformer
 					 */
 					int transformationType = -1;
 
-					if (cnode.interfaces.contains(IEnergyInterface.class.getName().replace(".", "/")))
+					if (cnode.interfaces.contains(INodeProvider.class.getName().replace(".", "/")))
 					{
 						transformationType = 0;
 					}
-					else if (cnode.interfaces.contains(IConductor.class.getName().replace(".", "/")))
+					else if (cnode.interfaces.contains(IEnergyItem.class.getName().replace(".", "/")))
 					{
 						transformationType = 1;
 					}
-					else if (cnode.interfaces.contains(IEnergyItem.class.getName().replace(".", "/")))
-					{
-						transformationType = 2;
-					}
 
-					if (transformationType == 0 || transformationType == 1)
+					if (transformationType == 0)
 					{
 						changed |= injectTemplate(cnode, flags, TemplateInjectionManager.tileTemplates);
 					}
-					else if (transformationType == 2)
+					else if (transformationType == 1)
 					{
 						changed |= injectTemplate(cnode, flags, TemplateInjectionManager.itemTemplates);
 					}

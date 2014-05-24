@@ -1,5 +1,8 @@
 package universalelectricity.core.grid;
 
+/**
+ * Applies to objects that can update in the grid.
+ */
 public interface IUpdate
 {
 	/**

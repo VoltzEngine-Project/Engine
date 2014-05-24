@@ -3,35 +3,40 @@ package universalelectricity.compatibility;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.CompatibilityModule;
-import universalelectricity.api.energy.IEnergyContainer;
-import universalelectricity.api.energy.IEnergyInterface;
+import universalelectricity.api.grid.INodeProvider;
+import universalelectricity.api.grid.electric.IElectricNode;
+import universalelectricity.api.grid.electric.IEnergyContainer;
 import universalelectricity.api.item.IEnergyItem;
 
-/** @author Calclavia */
+/**
+ * @author Calclavia
+ */
 public class ModuleUniversalElectricity extends CompatibilityModule
 {
 	@Override
 	public long doReceiveEnergy(Object handler, ForgeDirection direction, long energy, boolean doReceive)
 	{
-		return ((IEnergyInterface) handler).onReceiveEnergy(direction, energy, doReceive);
+		((INodeProvider) handler).getNode(IElectricNode.class, direction).applyPower(energy);
+		return energy;
 	}
 
 	@Override
 	public long doExtractEnergy(Object handler, ForgeDirection direction, long energy, boolean doExtract)
 	{
-		return ((IEnergyInterface) handler).onExtractEnergy(direction, energy, doExtract);
+		((INodeProvider) handler).getNode(IElectricNode.class, direction).drawPower(energy);
+		return energy;
 	}
 
 	@Override
 	public boolean doIsHandler(Object obj)
 	{
-		return obj instanceof IEnergyInterface || obj instanceof IEnergyItem;
+		return (obj instanceof INodeProvider && ((INodeProvider) obj).getNode(IElectricNode.class, null) != null) || obj instanceof IEnergyItem;
 	}
 
 	@Override
 	public boolean doCanConnect(Object obj, ForgeDirection direction, Object source)
 	{
-		return ((IEnergyInterface) obj).canConnect(direction, source);
+		return ((INodeProvider) obj).getNode(IElectricNode.class, direction) != null;
 	}
 
 	@Override

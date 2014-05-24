@@ -15,9 +15,9 @@ public interface IElectricNode extends INode
 
 	public double getVoltage();
 
-	public double getCapacity();
+	public double getEnergyCapacity();
 
-	public void setCapacity(double value);
+	public void setEnergyCapacity(double value);
 
 	/**
 	 * Resistance in Ohms
