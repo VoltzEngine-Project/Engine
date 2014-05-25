@@ -14,12 +14,9 @@ import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.IIcon
-import net.minecraft.util.MathHelper
 import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
-import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.IRotatable
 import resonant.lib.prefab.item.ItemBlockTooltip
 import resonant.lib.utility.LanguageUtility
 import resonant.lib.utility.WrenchUtility
@@ -32,7 +29,7 @@ import java.util._
 import resonant.lib.content.module.TileBlock.RenderInfo
 import java.lang.Byte._
 import scala.collection.immutable
-import resonant.lib.content.prefab.TraitRotatable
+import resonant.lib.content.prefab.{TraitIO, TraitRotatable}
 
 /**
  * All blocks inherit this class.
@@ -290,12 +287,22 @@ abstract class TileBlock(val name: String, val material: Material) extends TileE
    */
   protected def configure(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
+    val both = this.isInstanceOf[TraitIO] && this.isInstanceOf[TraitRotatable]
+
+    if (both)
+    {
+      if (!player.isSneaking)
+      {
+        return this.asInstanceOf[TraitIO].toggleIO(side)
+      }
+    }
     if (this.isInstanceOf[TraitRotatable])
       return this.asInstanceOf[TraitRotatable].rotate(side, hit)
+    if (this.isInstanceOf[TraitIO])
+      return this.asInstanceOf[TraitIO].toggleIO(side)
 
     return false
   }
-
 
 
   /**

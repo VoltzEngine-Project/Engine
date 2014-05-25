@@ -1,4 +1,4 @@
-package resonant.lib.prefab.block;
+package resonant.lib.prefab;
 
 import java.util.List;
 import java.util.Random;
@@ -20,6 +20,7 @@ import universalelectricity.api.vector.Vector3;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@Deprecated
 public class BlockRadioactive extends Block
 {
     public static int RECOMMENDED_ID = 3768;

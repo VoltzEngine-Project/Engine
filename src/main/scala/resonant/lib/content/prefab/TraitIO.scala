@@ -1,7 +1,6 @@
 package resonant.lib.content.prefab
 
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.common.ForgeDirection
 import resonant.lib.content.module.TileBase
 import resonant.lib.utility.nbt.ISaveObj
 import net.minecraftforge.common.util.ForgeDirection
@@ -11,7 +10,8 @@ import net.minecraftforge.common.util.ForgeDirection
  *
  * @author tgame14
  */
-trait TraitIO extends TileBase with ISaveObj {
+trait TraitIO extends TileBase with ISaveObj
+{
   /**
    * IO METHODS.
    * Default: Connect from all sides. "111111"
@@ -23,6 +23,19 @@ trait TraitIO extends TileBase with ISaveObj {
   protected var ioMap: Short = 364
   protected var saveIOMap: Boolean = false
 
+  def toggleIO(side: Int)
+  {
+    val newIO = (getIO(ForgeDirection.getOrientation(side)) + 1) % 3
+    setIO(ForgeDirection.getOrientation(side), newIO)
+
+    if (!world.isRemote)
+    {
+      entityPlayer.addChatMessage("Side changed to: " + (if (newIO == 0) "None" else (if (newIO == 1) "Input" else "Output")))
+    }
+
+    world.notifyBlocksOfNeighborChange(x, y, z, this.blockID)
+  }
+
   /**
    * The electrical input direction.
    *
@@ -30,17 +43,19 @@ trait TraitIO extends TileBase with ISaveObj {
    *         default you can accept power from all sides.
    */
   def getInputDirections: Set[ForgeDirection] =
+  {
+    var dirs = Set[ForgeDirection]()
+
+    for (direction <- ForgeDirection.VALID_DIRECTIONS)
     {
-      var dirs = Set[ForgeDirection]()
-
-      for (direction <- ForgeDirection.VALID_DIRECTIONS) {
-        if (getIO(direction) == 1) {
-          dirs += direction
-        }
-
+      if (getIO(direction) == 1)
+      {
+        dirs += direction
       }
-      return dirs
+
     }
+    return dirs
+  }
 
   /**
    * The electrical output direction.
@@ -49,19 +64,22 @@ trait TraitIO extends TileBase with ISaveObj {
    *         default it will return an empty EnumSet.
    */
   def getOutputDirections: Set[ForgeDirection] =
+  {
+    var dirs = Set[ForgeDirection]()
+
+    for (direction <- ForgeDirection.VALID_DIRECTIONS)
     {
-      var dirs = Set[ForgeDirection]()
-
-      for (direction <- ForgeDirection.VALID_DIRECTIONS) {
-        if (getIO(direction) == 2) {
-          dirs += direction
-        }
+      if (getIO(direction) == 2)
+      {
+        dirs += direction
       }
-
-      return dirs
     }
 
-  def setIO(dir: ForgeDirection, `type`: Int) {
+    return dirs
+  }
+
+  def setIO(dir: ForgeDirection, `type`: Int)
+  {
     val currentIO: String = getIOMapBase3
     val str: StringBuilder = new StringBuilder(currentIO)
     str.setCharAt(dir.ordinal, Integer.toString(`type`).charAt(0))
@@ -69,31 +87,36 @@ trait TraitIO extends TileBase with ISaveObj {
   }
 
   def getIO(dir: ForgeDirection): Int =
-    {
-      val currentIO: String = getIOMapBase3
-      return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
-    }
+  {
+    val currentIO: String = getIOMapBase3
+    return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
+  }
 
   def getIOMapBase3: String =
+  {
+    var currentIO: String = Integer.toString(ioMap, 3)
+    while (currentIO.length < 6)
     {
-      var currentIO: String = Integer.toString(ioMap, 3)
-      while (currentIO.length < 6) {
-        currentIO = "0" + currentIO
-      }
-      return currentIO
-
+      currentIO = "0" + currentIO
     }
+    return currentIO
+
+  }
 
   /** Saves the object to NBT */
-  override def save(nbt: NBTTagCompound) {
-    if (saveIOMap && nbt.hasKey("ioMap")) {
+  override def save(nbt: NBTTagCompound)
+  {
+    if (saveIOMap && nbt.hasKey("ioMap"))
+    {
       this.ioMap = nbt.getShort("ioMap")
     }
   }
 
   /** Load the object from NBT */
-  override def load(nbt: NBTTagCompound) {
-    if (saveIOMap) {
+  override def load(nbt: NBTTagCompound)
+  {
+    if (saveIOMap)
+    {
       nbt.setShort("ioMap", this.ioMap)
     }
   }
