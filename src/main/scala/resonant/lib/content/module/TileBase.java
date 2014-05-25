@@ -1,14 +1,13 @@
 package resonant.lib.content.module;
 
-import java.util.HashSet;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.packet.Packet;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraft.network.Packet;
+import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IPlayerUsing;
-import resonant.core.ResonantEngine;
 import resonant.lib.References;
+
+import java.util.HashSet;
 
 /** All tiles inherit this class.
  * 
@@ -55,9 +54,15 @@ public abstract class TileBase extends TileBlock implements IPlayerUsing
 
         ticks++;
     }
+//
+//    public Packet getDescriptionPacket()
+//    {
+//        return References.PACKET_ANNOTATION.getPacket(this);
+//    }
+
 
     @Override
-    public Packet getDescriptionPacket()
+    public Packet getDescriptionPacket ()
     {
         return References.PACKET_ANNOTATION.getPacket(this);
     }

@@ -293,13 +293,13 @@ abstract class TileBlock(val name: String, val material: Material) extends TileE
     {
       if (!player.isSneaking)
       {
-        return this.asInstanceOf[TraitIO].toggleIO(side)
+        return this.asInstanceOf[TraitIO].toggleIO(side, player)
       }
     }
     if (this.isInstanceOf[TraitRotatable])
       return this.asInstanceOf[TraitRotatable].rotate(side, hit)
     if (this.isInstanceOf[TraitIO])
-      return this.asInstanceOf[TraitIO].toggleIO(side)
+      return this.asInstanceOf[TraitIO].toggleIO(side, player)
 
     return false
   }

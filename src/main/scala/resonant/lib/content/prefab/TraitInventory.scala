@@ -5,13 +5,13 @@ import net.minecraft.inventory.IInventory
 import net.minecraft.inventory.ISidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.common.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IExternalInventory
 import resonant.api.IExternalInventoryBox
 import resonant.lib.content.module.TileBase
 import resonant.lib.utility.inventory.ExternalInventory
 import resonant.lib.utility.inventory.InventoryUtility
-import universalelectricity.api.vector.Vector3
+import universalelectricity.core.transform.vector.Vector3
 
 /**
  * @since 22/03/14

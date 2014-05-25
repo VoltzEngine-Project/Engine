@@ -4,6 +4,8 @@ import net.minecraft.nbt.NBTTagCompound
 import resonant.lib.content.module.TileBase
 import resonant.lib.utility.nbt.ISaveObj
 import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.util.ChatComponentText
 
 /**
  * a Trait that handles IO Traits
@@ -23,14 +25,14 @@ trait TraitIO extends TileBase with ISaveObj
   protected var ioMap: Short = 364
   protected var saveIOMap: Boolean = false
 
-  def toggleIO(side: Int) : Boolean =
+  def toggleIO(side: Int, entityPlayer: EntityPlayer) : Boolean =
   {
     val newIO = (getIO(ForgeDirection.getOrientation(side)) + 1) % 3
     setIO(ForgeDirection.getOrientation(side), newIO)
 
     if (!world.isRemote)
     {
-      entityPlayer.addChatMessage("Side changed to: " + (if (newIO == 0) "None" else (if (newIO == 1) "Input" else "Output")))
+      entityPlayer.addChatMessage(new ChatComponentText("Side changed to: " + (if (newIO == 0) "None" else (if (newIO == 1) "Input" else "Output"))))
     }
 
     world.notifyBlocksOfNeighborChange(x, y, z, block)
