@@ -32,6 +32,7 @@ import java.util._
 import resonant.lib.content.module.TileBlock.RenderInfo
 import java.lang.Byte._
 import scala.collection.immutable
+import resonant.lib.content.prefab.TraitRotatable
 
 /**
  * All blocks inherit this class.
@@ -289,261 +290,13 @@ abstract class TileBlock(val name: String, val material: Material) extends TileE
    */
   protected def configure(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
-    return tryRotate(side, hit)
-  }
+    if (this.isInstanceOf[TraitRotatable])
+      return this.asInstanceOf[TraitRotatable].rotate(side, hit)
 
-  /**
-   * Rotatable Block
-   */
-  protected def tryRotate(side: Int, hit: Vector3): Boolean =
-  {
-    if (this.isInstanceOf[IRotatable])
-    {
-      val result: Byte = getSideToRotate(side.asInstanceOf[Byte], hit.x, hit.y, hit.z)
-      if (result != -1)
-      {
-        setDirection(ForgeDirection.getOrientation(result))
-        return true
-      }
-    }
     return false
   }
 
-  /**
-   * @author Based of Greg (GregTech)
-   */
-  def getSideToRotate(hitSide: Byte, hitX: Double, hitY: Double, hitZ: Double): Byte =
-  {
-    val tBack: Byte = (hitSide ^ 1).asInstanceOf[Byte]
-    hitSide match
-    {
-      case 0 =>
-      case 1 =>
-        if (hitX < 0.25)
-        {
-          if (hitZ < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (hitZ > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (canRotate(4))
-          {
-            return 4
-          }
-        }
-        if (hitX > 0.75)
-        {
-          if (hitZ < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (hitZ > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (canRotate(5))
-          {
-            return 5
-          }
-        }
-        if (hitZ < 0.25)
-        {
-          if (canRotate(2))
-          {
-            return 2
-          }
-        }
-        if (hitZ > 0.75)
-        {
-          if (canRotate(3))
-          {
-            return 3
-          }
-        }
-        if (canRotate(hitSide))
-        {
-          return hitSide
-        }
-      case 2 =>
-      case 3 =>
-        if (hitX < 0.25)
-        {
-          if (hitY < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (hitY > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (canRotate(4))
-          {
-            return 4
-          }
-        }
-        if (hitX > 0.75)
-        {
-          if (hitY < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (hitY > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (canRotate(5))
-          {
-            return 5
-          }
-        }
-        if (hitY < 0.25)
-        {
-          if (canRotate(0))
-          {
-            return 0
-          }
-        }
-        if (hitY > 0.75)
-        {
-          if (canRotate(1))
-          {
-            return 1
-          }
-        }
-        if (canRotate(hitSide))
-        {
-          return hitSide
-        }
-      case 4 =>
-      case 5 =>
-        if (hitZ < 0.25)
-        {
-          if (hitY < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (hitY > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (canRotate(2))
-          {
-            return 2
-          }
-        }
-        if (hitZ > 0.75)
-        {
-          if (hitY < 0.25)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (hitY > 0.75)
-          {
-            if (canRotate(tBack))
-            {
-              return tBack
-            }
-          }
-          if (canRotate(3))
-          {
-            return 3
-          }
-        }
-        if (hitY < 0.25)
-        {
-          if (canRotate(0))
-          {
-            return 0
-          }
-        }
-        if (hitY > 0.75)
-        {
-          if (canRotate(1))
-          {
-            return 1
-          }
-        }
-        if (canRotate(hitSide))
-        {
-          return hitSide
-        }
-    }
-    return -1
-  }
 
-  def determineOrientation(entityLiving: EntityLivingBase): ForgeDirection =
-  {
-    if (MathHelper.abs(entityLiving.posX.asInstanceOf[Float] - x) < 2.0F && MathHelper.abs(entityLiving.posZ.asInstanceOf[Float] - z) < 2.0F)
-    {
-      val d0: Double = entityLiving.posY + 1.82D - entityLiving.yOffset
-      if (canRotate(1) && d0 - y > 2.0D)
-      {
-        return ForgeDirection.UP
-      }
-      if (canRotate(0) && y - d0 > 0.0D)
-      {
-        return ForgeDirection.DOWN
-      }
-    }
-    val playerSide: Int = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3
-    val returnSide: Int = if ((playerSide == 0 && canRotate(2))) 2 else (if ((playerSide == 1 && canRotate(5))) 5 else (if ((playerSide == 2 && canRotate(3))) 3 else (if ((playerSide == 3 && canRotate(4))) 4 else 0)))
-    if (isFlipPlacement)
-    {
-      return ForgeDirection.getOrientation(returnSide).getOpposite
-    }
-    return ForgeDirection.getOrientation(returnSide)
-  }
-
-  def canRotate(ord: Int): Boolean =
-  {
-    return (rotationMask & (1 << ord)) != 0
-  }
-
-  def getDirection: ForgeDirection =
-  {
-    return ForgeDirection.getOrientation(metadata)
-  }
-
-  def setDirection(direction: ForgeDirection)
-  {
-    world.setBlockMetadataWithNotify(x, y, z, direction.ordinal, 3)
-  }
 
   /**
    * Block events
@@ -555,9 +308,9 @@ abstract class TileBlock(val name: String, val material: Material) extends TileE
 
   def onPlaced(entityLiving: EntityLivingBase, itemStack: ItemStack)
   {
-    if (this.isInstanceOf[IRotatable])
+    if (this.isInstanceOf[TraitRotatable])
     {
-      (this.asInstanceOf[IRotatable]).setDirection(determineOrientation(entityLiving))
+      this.asInstanceOf[TraitRotatable].setDirection(this.asInstanceOf[TraitRotatable].determineRotation(entityLiving))
     }
   }
 
