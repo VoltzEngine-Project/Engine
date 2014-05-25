@@ -4,6 +4,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.ForgeDirection
 import resonant.lib.content.module.TileBase
 import resonant.lib.utility.nbt.ISaveObj
+import net.minecraftforge.common.util.ForgeDirection
 
 /**
  * a Trait that handles IO Traits

@@ -12,9 +12,12 @@ import universalelectricity.api.energy.EnergyStorageHandler
 import universalelectricity.api.energy.IEnergyContainer
 import universalelectricity.api.energy.IEnergyInterface
 import universalelectricity.api.vector.Vector3
+import universalelectricity.api.core.grid.electric.{EnergyStorageHandler, IEnergyContainer}
+import universalelectricity.api.core.grid.INodeProvider
 
 @UniversalClass //@Interface()
-trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContainer with ISaveObj {
+trait TraitElectric extends TraitIO with INodeProvider with IEnergyContainer with ISaveObj
+{
   protected var energy: EnergyStorageHandler = _
 
   //@Callback
@@ -22,7 +25,6 @@ trait TraitElectrical extends TraitIO with IEnergyInterface with IEnergyContaine
     if (this.energy != null) {
       this.energy.extractEnergy(CompatibilityModule.chargeItem(stack, this.energy.getEnergy, true), true)
     }
-
   }
 
   //@Callback
