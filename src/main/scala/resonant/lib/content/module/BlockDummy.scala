@@ -24,13 +24,13 @@ import universalelectricity.core.transform.vector.Vector3
 import java.util.ArrayList
 import java.util.List
 import java.util.Random
-import scala.collection.convert.wrapAsScala._
 
-class BlockDummy(modPrefix: String, defaultTab: CreativeTabs, dummyTile: TileBlock) extends Block(dummyTile.material) with ITileEntityProvider
+class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: TileBlock) extends Block(dummyTile.material) with ITileEntityProvider
 {
   dummyTile.domain = modPrefix
   setBlockName(modPrefix + dummyTile.name)
   setBlockTextureName(modPrefix + dummyTile.textureName)
+
   if (dummyTile.creativeTab != null)
   {
     setCreativeTab(dummyTile.creativeTab)
@@ -39,6 +39,7 @@ class BlockDummy(modPrefix: String, defaultTab: CreativeTabs, dummyTile: TileBlo
   {
     setCreativeTab(defaultTab)
   }
+
   dummyTile.bounds.setBounds(this)
   opaque = isOpaqueCube
   setLightOpacity(if (isOpaqueCube) 255 else 0)
@@ -55,11 +56,14 @@ class BlockDummy(modPrefix: String, defaultTab: CreativeTabs, dummyTile: TileBlo
     {
       dummyTile.world(access.asInstanceOf[World])
     }
-    dummyTile.access = access
+
+    dummyTile._access = access
     dummyTile.xCoord = x
     dummyTile.yCoord = y
     dummyTile.zCoord = z
+
     val tile: TileEntity = access.getTileEntity(x, y, z)
+
     if (tile.isInstanceOf[TileBlock])
     {
       (tile.asInstanceOf[TileBlock]).block = this
