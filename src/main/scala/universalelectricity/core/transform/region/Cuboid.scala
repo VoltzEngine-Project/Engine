@@ -19,6 +19,11 @@ import universalelectricity.core.transform.rotation.Rotation
  *
  * @author Calclavia
  */
+object Cuboid
+{
+  def full() = new Cuboid(0, 0, 0, 1, 1, 1)
+}
+
 class Cuboid(var min: Vector3, var max: Vector3) extends TraitOperation[Cuboid]
 {
   def this() = this(new Vector3, new Vector3)
