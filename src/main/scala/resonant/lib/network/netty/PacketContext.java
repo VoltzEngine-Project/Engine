@@ -12,7 +12,6 @@ import net.minecraft.network.NetHandlerPlayServer;
 public class PacketContext
 {
     public final INetHandler netHandler;
-
     public final Side side;
 
     PacketContext (INetHandler netHandler, Side side)

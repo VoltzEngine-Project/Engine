@@ -1,16 +1,17 @@
 package resonant.lib;
 
 import java.io.File;
-import java.util.logging.Logger;
 
+import net.minecraftforge.common.config.Configuration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import resonant.lib.network.PacketAnnotation;
 import resonant.lib.network.PacketTile;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Loader;
 
 /** References too common static objects used by Resonant Engine and its sub mods */
-public class References
+public final class References
 {
     public static final String NAME = "ResonantEngine";
     
@@ -42,6 +43,6 @@ public class References
 
     /** The configuration file. */
     public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), NAME + ".cfg"));
-    public static final Logger LOGGER = Logger.getLogger(NAME);
+    public static final Logger LOGGER = LogManager.getLogger(NAME);
 
 }

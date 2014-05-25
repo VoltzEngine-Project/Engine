@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -92,7 +93,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
  * 
  * @author Calclavia, DarkGuardsman */
 @Mod(modid = References.NAME, name = References.NAME, version = References.VERSION, dependencies = "required-after:UniversalElectricity")
-@NetworkMod(channels = References.CHANNEL, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
+//@NetworkMod(channels = References.CHANNEL, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
 public class ResonantEngine
 {
 
@@ -221,11 +222,11 @@ public class ResonantEngine
 
                     if (name.equals("plateIron"))
                     {
-                        itemIngot = Item.ingotIron;
+                        itemIngot = Items.iron_ingot;
                     }
                     else if (name.equals("plateGold"))
                     {
-                        itemIngot = Item.ingotGold;
+                        itemIngot = Items.gold_ingot;
                     }
 
                     if (itemIngot != null)
@@ -249,7 +250,7 @@ public class ResonantEngine
 
                         if (OreDictionary.getOres("ingotBronze").size() > 0)
                         {
-                            GameRegistry.addSmelting(item.itemID, OreDictionary.getOres("ingotBronze").get(0), 0.6f);
+                            GameRegistry.addSmelting(item, OreDictionary.getOres("ingotBronze").get(0), 0.6f);
                         }
                     }
                     else if (name.equals("dustSteel"))
@@ -260,7 +261,7 @@ public class ResonantEngine
 
                         if (OreDictionary.getOres("ingotSteel").size() > 0)
                         {
-                            GameRegistry.addSmelting(item.itemID, OreDictionary.getOres("ingotSteel").get(0), 0.8f);
+                            GameRegistry.addSmelting(item, OreDictionary.getOres("ingotSteel").get(0), 0.8f);
                         }
                     }
                 }
@@ -432,7 +433,6 @@ public class ResonantEngine
     @EventHandler
     public void preInit(FMLPreInitializationEvent evt)
     {
-        References.LOGGER.setParent(FMLLog.getLogger());
         ConfigScanner.instance().generateSets(evt.getAsmData());
 
         /* Does a system check to see if we are running in an IDE as a Dev
