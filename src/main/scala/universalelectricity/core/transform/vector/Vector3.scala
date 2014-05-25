@@ -2,7 +2,7 @@ package universalelectricity.core.transform.vector
 
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraft.util.{AxisAlignedBB, ChunkCoordinates, MovingObjectPosition, Vec3}
+import net.minecraft.util._
 import net.minecraft.nbt.NBTTagCompound
 import java.lang.Double.doubleToLongBits
 import net.minecraft.entity.Entity
@@ -14,6 +14,63 @@ import universalelectricity.core.transform.rotation.Rotation
 /**
  * @author Calclavia
  */
+object Vector3
+{
+  def getLook(entity: Entity, distance: Double): Vector3 =
+  {
+    var f1 = 0D
+    var f2 = 0D
+    var f3 = 0D
+    var f4 = 0D
+
+    if (distance == 1.0F)
+    {
+      f1 = Math.cos(-entity.rotationYaw * 0.017453292F - Math.PI)
+      f2 = Math.sin(-entity.rotationYaw * 0.017453292F - Math.PI)
+      f3 = -Math.cos(-entity.rotationPitch * 0.017453292F)
+      f4 = Math.sin(-entity.rotationPitch * 0.017453292F)
+      return new Vector3((f2 * f3), f4, (f1 * f3))
+    }
+    else
+    {
+      f1 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * distance
+      f2 = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * distance
+      f3 = Math.cos(-f2 * 0.017453292F - Math.PI)
+      f4 = Math.sin(-f2 * 0.017453292F - Math.PI)
+      val f5 = -Math.cos(-f1 * 0.017453292F)
+      val f6 = Math.sin(-f1 * 0.017453292F)
+      return new Vector3((f4 * f5), f6, (f3 * f5))
+    }
+  }
+
+  def getLook(yaw: Double, pitch: Double, distance: Double): Vector3 =
+  {
+    var f1 = 0D
+    var f2 = 0D
+    var f3 = 0D
+    var f4 = 0D
+
+    if (distance == 1.0F)
+    {
+      f1 = Math.cos(-yaw * 0.017453292F - Math.PI.asInstanceOf[Float])
+      f2 = Math.sin(-yaw * 0.017453292F - Math.PI.asInstanceOf[Float])
+      f3 = -Math.cos(-pitch * 0.017453292F)
+      f4 = Math.sin(-pitch * 0.017453292F)
+      return new Vector3((f2 * f3), f4, (f1 * f3))
+    }
+    else
+    {
+      f1 = pitch * distance
+      f2 = yaw * distance
+      f3 = Math.cos(-f2 * 0.017453292F - Math.PI.asInstanceOf[Float])
+      f4 = Math.sin(-f2 * 0.017453292F - Math.PI.asInstanceOf[Float])
+      val f5 = -Math.cos(-f1 * 0.017453292F)
+      val f6 = Math.sin(-f1 * 0.017453292F)
+      return new Vector3((f4 * f5), f6, (f3 * f5))
+    }
+  }
+}
+
 class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable with TraitVector[Vector3]
 {
   def this() = this(0, 0, 0)
