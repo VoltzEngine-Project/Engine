@@ -69,7 +69,7 @@ public class RenderUtility
 		loadedIconMap.put(name, textureMap.registerIcon(name));
 	}
 
-	public static Icon getIcon(String name)
+	public static IIcon getIcon(String name)
 	{
 		return loadedIconMap.get(name);
 	}
@@ -172,7 +172,7 @@ public class RenderUtility
 	 */
 	public static void renderFloatingText(String text, Vector3 position, int color)
 	{
-		renderFloatingText(text, position.x, position.y, position.z, color);
+		renderFloatingText(text, position.x(), position.y(), position.z(), color);
 	}
 
 	public static void renderFloatingText(String text, double x, double y, double z, int color)

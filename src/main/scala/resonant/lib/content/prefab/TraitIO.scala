@@ -23,7 +23,7 @@ trait TraitIO extends TileBase with ISaveObj
   protected var ioMap: Short = 364
   protected var saveIOMap: Boolean = false
 
-  def toggleIO(side: Int)
+  def toggleIO(side: Int) : Boolean =
   {
     val newIO = (getIO(ForgeDirection.getOrientation(side)) + 1) % 3
     setIO(ForgeDirection.getOrientation(side), newIO)
@@ -33,7 +33,8 @@ trait TraitIO extends TileBase with ISaveObj
       entityPlayer.addChatMessage("Side changed to: " + (if (newIO == 0) "None" else (if (newIO == 1) "Input" else "Output")))
     }
 
-    world.notifyBlocksOfNeighborChange(x, y, z, this.blockID)
+    world.notifyBlocksOfNeighborChange(x, y, z, block)
+    return true
   }
 
   /**
