@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import resonant.core.ResonantEngine;
 import resonant.lib.network.IPacketReceiver;
+import resonant.lib.network.IPacketReceiverWithID;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,9 +64,60 @@ public class PacketTile extends PacketType
     @Override
     public void handleClientSide (EntityPlayer player)
     {
+        TileEntity tile = player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
         if (this.id == -1)
         {
-            IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+            if (tile instanceof IPacketReceiver)
+            {
+                IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+                receiver.onReceivePacket(data.slice(), player, this.x, this.y, this.z);
+            }
+            else
+            {
+                throw new UnsupportedOperationException("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error");
+            }
+        }
+        else
+        {
+            if (tile instanceof IPacketReceiverWithID)
+            {
+                IPacketReceiverWithID receiver = (IPacketReceiverWithID) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+                receiver.onReceivePacket(this.id, data.slice(), player, this.x, this.y, this.z);
+            }
+            else
+            {
+                throw new UnsupportedOperationException("Packet was sent to a tile not implementing IPacketReceiverWithID, this is a coding error");
+            }
+        }
+    }
+
+    @Override
+    public void handleServerSide (EntityPlayer player)
+    {
+        TileEntity tile = player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+        if (this.id == -1)
+        {
+            if (tile instanceof IPacketReceiver)
+            {
+                IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+                receiver.onReceivePacket(data.slice(), player, this.x, this.y, this.z);
+            }
+            else
+            {
+                throw new UnsupportedOperationException("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error");
+            }
+        }
+        else
+        {
+            if (tile instanceof IPacketReceiverWithID)
+            {
+                IPacketReceiverWithID receiver = (IPacketReceiverWithID) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+                receiver.onReceivePacket(this.id, data.slice(), player, this.x, this.y, this.z);
+            }
+            else
+            {
+                throw new UnsupportedOperationException("Packet was sent to a tile not implementing IPacketReceiverWithID, this is a coding error");
+            }
         }
     }
 }
