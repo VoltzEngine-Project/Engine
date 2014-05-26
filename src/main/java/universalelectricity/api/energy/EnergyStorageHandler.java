@@ -44,10 +44,26 @@ public class EnergyStorageHandler
 	}
 
 	public EnergyStorageHandler readFromNBT(NBTTagCompound nbt)
-	{
-		this.energy = nbt.getLong("energy");
-		return this;
-	}
+    {
+        NBTBase energyTag = nbt.getTag("energy");
+        if (energyTag instanceof NBTTagDouble)
+        {
+            this.energy = (long) ((NBTTagDouble) energyTag).data;
+        }
+        else if (energyTag instanceof NBTTagFloat)
+        {
+            this.energy = (long) ((NBTTagFloat) energyTag).data;
+        }
+        else if (energyTag instanceof NBTTagInt)
+        {
+            this.energy = ((NBTTagInt) energyTag).data;
+        }
+        else if (energyTag instanceof NBTTagLong)
+        {
+            this.energy = ((NBTTagLong) energyTag).data;
+        }
+        return this;
+    }
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
