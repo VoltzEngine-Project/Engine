@@ -8,7 +8,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.config.Configuration;
 import resonant.lib.content.module.BlockDummy;
 import resonant.lib.content.module.TileBlock;
 import resonant.lib.prefab.item.ItemBlockTooltip;
@@ -68,19 +68,19 @@ public class ContentRegistry
         try
         {
             TileBlock tileBlock = tileBlockClass.newInstance();
-            final String name = tileBlock.name;
+            final String name = tileBlock.name();
             boolean canDisable = false;
 
             if (!canDisable || (canDisable && config.get("enabled_list", "Enable " + name, true).getBoolean(true)))
             {
-                int assignedID = idManager.getNextBlockID();
-                int actualID = config.getBlock(name, assignedID).getInt(assignedID);
+//                int assignedID = idManager.getNextBlockID();
+//                int actualID = config.getBlock(name, assignedID).getInt(assignedID);
 
-                BlockDummy block = new BlockDummy(actualID, modPrefix, defaultTab, tileBlock);
-                tileBlock.block = block;
+                BlockDummy block = new BlockDummy(modPrefix, defaultTab, tileBlock);
+                tileBlock.setBlock(block);
 
                 blocks.put(block, name);
-                proxy.registerBlock(block, tileBlock.itemBlock, name, modID);
+                proxy.registerBlock(block, tileBlock.itemBlock(), name, modID);
 
                 tileBlock.onInstantiate();
 
@@ -88,7 +88,7 @@ public class ContentRegistry
                 {
                     proxy.registerTileEntity(name, tileBlock.tile().getClass());
 
-                    if (!tileBlock.normalRender)
+                    if (!tileBlock.normalRender())
                     {
                         proxy.registerDummyRenderer(tileBlock.tile().getClass());
                     }
@@ -146,18 +146,18 @@ public class ContentRegistry
             try
             {
 
-                int assignedID = idManager.getNextBlockID();
-                int actualID = config.getBlock(name, assignedID).getInt(assignedID);
-                block = blockClass.getConstructor(Integer.TYPE).newInstance(actualID);
+//                int assignedID = idManager.getNextBlockID();
+//                int actualID = config.getBlock(name, assignedID).getInt(assignedID);
+                block = blockClass.getConstructor().newInstance();
 
                 if (block != null)
                 {
                     if (modPrefix != null)
                     {
-                        block.setUnlocalizedName(modPrefix + name);
+                        block.setBlockName(modPrefix + name);
 
                         if (ReflectionHelper.getPrivateValue(Block.class, block, "textureName", "field_111026_f") == null)
-                            block.setTextureName(modPrefix + name);
+                            block.setBlockTextureName(modPrefix + name);
                     }
 
                     if (defaultTab != null)
@@ -246,8 +246,8 @@ public class ContentRegistry
         {
             try
             {
-                int assignedID = idManager.getNextItemID(config, name);
-                item = clazz.getConstructor(Integer.TYPE).newInstance(assignedID);
+//                int assignedID = idManager.getNextItemID(config, name);
+                item = clazz.getConstructor().newInstance();
 
                 if (item != null)
                 {

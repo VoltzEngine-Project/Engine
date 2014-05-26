@@ -87,6 +87,10 @@ abstract class TileBlock(val name: String, val material: Material) extends TileE
   var creativeTab: CreativeTabs = null
   var bounds: Cuboid = Cuboid.full
   var block: BlockDummy = null
+  def setBlock(block: BlockDummy)
+  {
+    this.block = block
+  }
   var blockHardness: Float = 1
   var blockResistance: Float = 1
   var canProvidePower: Boolean = false

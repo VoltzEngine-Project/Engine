@@ -50,7 +50,10 @@ import resonant.lib.flag.ModFlag;
 import resonant.lib.modproxy.ProxyHandler;
 import resonant.lib.multiblock.BlockMultiBlockPart;
 import resonant.lib.multiblock.TileMultiBlockPart;
+import resonant.lib.network.netty.PacketEntity;
 import resonant.lib.network.netty.PacketPipelineHandler;
+import resonant.lib.network.netty.PacketPlayerItem;
+import resonant.lib.network.netty.PacketTile;
 import resonant.lib.prefab.ProxyBase;
 import resonant.lib.prefab.item.ItemBlockMetadata;
 import resonant.lib.prefab.ore.OreGenBase;
@@ -522,13 +525,17 @@ public class ResonantEngine
             }
             else
             {
-                References.LOGGER.severe("Failed to load Resonant Engine item: " + request);
+                References.LOGGER.fatal("Failed to load Resonant Engine item: " + request);
             }
         }
 
         References.CONFIGURATION.save();
 
-        References.LOGGER.fine("Loaded: " + LanguageUtility.loadLanguages(References.LANGUAGE_DIRECTORY, References.LANGUAGES) + " Languages.");
+        this.packetHandler.registerPacket(PacketEntity.class);
+        this.packetHandler.registerPacket(PacketTile.class);
+        this.packetHandler.registerPacket(PacketPlayerItem.class);
+
+        References.LOGGER.info("Loaded: " + LanguageUtility.loadLanguages(References.LANGUAGE_DIRECTORY, References.LANGUAGES) + " Languages.");
 
         ResonantEngine.metadata.modId = References.NAME;
         ResonantEngine.metadata.name = References.NAME;
@@ -591,11 +598,11 @@ public class ResonantEngine
     {
         World world = evt.world;
         Vector3 position = evt.position;
-        int blockID = position.getBlockID(world);
+        Block block = position.getBlockID(world);
 
         for (int height = 1; height <= evt.maxSpread; height++)
         {
-            TileEntity tileEntity = world.getTileEntity(position.intX(), position.intY() + height, position.intZ());
+            TileEntity tileEntity = world.getTileEntity(position.xi(), position.yi() + height, position.zi());
 
             if (tileEntity instanceof IBoilHandler)
             {
