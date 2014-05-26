@@ -20,9 +20,8 @@ import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
-
-import universalelectricity.core.asm.ASMHelper;
-import universalelectricity.core.asm.ObfMapping;
+import universalelectricity.compatibility.asm.ASMHelper;
+import universalelectricity.compatibility.asm.ObfMapping;
 
 /** @author Calclavia */
 public class Transformer implements IClassTransformer

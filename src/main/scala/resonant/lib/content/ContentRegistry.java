@@ -30,7 +30,6 @@ public class ContentRegistry
 
     private final Configuration config;
     private final String modID;
-    private IDManager idManager;
 
     private String modPrefix;
     private CreativeTabs defaultTab;
@@ -38,11 +37,10 @@ public class ContentRegistry
     /** Custom unique packet IDs for the mod to use. */
     private int packetID = 0;
 
-    public ContentRegistry(Configuration config, IDManager idManager, String modID)
+    public ContentRegistry(Configuration config, String modID)
     {
         this.config = config;
         this.modID = modID;
-        this.idManager = idManager;
     }
 
     public ContentRegistry setPrefix(String modPrefix)

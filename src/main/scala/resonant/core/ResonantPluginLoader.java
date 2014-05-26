@@ -42,4 +42,10 @@ public class ResonantPluginLoader implements IFMLLoadingPlugin
     {
 
     }
+
+    @Override
+    public String getAccessTransformerClass ()
+    {
+        return null;
+    }
 }

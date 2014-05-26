@@ -6,8 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import resonant.lib.type.Pair;
-import universalelectricity.api.vector.IVector3;
-import universalelectricity.api.vector.IVectorWorld;
 
 /** Dictionary of heat values related to blocks
  * http://www.engineeringtoolbox.com/specific-heat-metals-d_152.html
@@ -40,7 +38,7 @@ public class HeatingDictionary
         register(Material.fire, 1f);
         register(Material.sand, 1f);
         register(Material.circuits, 1f);
-        register(Material.materialCarpet, 2f);
+        register(Material.carpet, 2f);
         register(Material.glass, 0.84f);
         register(Material.redstoneLight, 0.9f);
         register(Material.tnt, 2f);
@@ -50,7 +48,7 @@ public class HeatingDictionary
         register(Material.craftedSnow, 1f);
         register(Material.cactus, 0.84f);
         register(Material.clay, 0.92f);
-        register(Material.pumpkin, 0.84f);
+        register(Material.gourd, 0.84f);
         register(Material.dragonEgg, 0.84f);
         register(Material.portal, 1f);
         register(Material.cake, 2f);

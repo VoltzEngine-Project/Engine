@@ -4,12 +4,12 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.logging.Level;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
+import org.apache.logging.log4j.Level;
+import resonant.lib.References;
 import resonant.lib.utility.ReflectionUtility;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
@@ -162,13 +162,14 @@ public class SaveManager
                     }
                     catch (Exception e)
                     {
-                        FMLLog.log(Level.SEVERE, e, "[CalclaviaCore]SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
+                        References.LOGGER.catching(Level.FATAL, e);
+                        References.LOGGER.fatal("SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
                         obj = null;
                     }
                 }
                 else
                 {
-                    MinecraftServer.getServer().getLogAgent().logWarning("[CalclaviaCore]SaveManager: Skipping object with id " + nbt.getString("id"));
+                    References.LOGGER.warn("SaveManager: Skipping object with id " + nbt.getString("id"));
                 }
 
                 return obj;
@@ -182,7 +183,7 @@ public class SaveManager
         return null;
     }
 
-    @ForgeSubscribe
+    @SubscribeEvent
     public void worldSave(WorldEvent evt)
     {
         //current time milli-seconds is used to prevent the files from saving 20 times when the world loads

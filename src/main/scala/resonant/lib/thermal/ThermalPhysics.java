@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import resonant.lib.science.ChemElement;
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 /** A thermal block manager
  * 
@@ -23,7 +23,7 @@ public class ThermalPhysics
      * @return The temperature of the coordinate in the world in kelvin. */
     public static float getTemperatureForCoordinate(World world, int x, int z)
     {
-        int averageTemperature = 273 + (int) ((world.getBiomeGenForCoords(x, z).getFloatTemperature() - 0.4) * 50);
+        int averageTemperature = 273 + (int) ((world.getBiomeGenForCoords(x, z).getFloatTemperature(x, 0, z) - 0.4) * 50);
         double dayNightVariance = averageTemperature * 0.05;
         return (float) (averageTemperature + (world.isDaytime() ? dayNightVariance : -dayNightVariance));
     }
@@ -99,7 +99,7 @@ public class ThermalPhysics
 
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
             {
-                Vector3 checkPos = entry.getKey().clone().translate(dir);
+                Vector3 checkPos = entry.getKey().clone().$plus(dir);
                 int neighbourTemp = getTemperature(checkPos);
                 entry.setValue((entry.getValue() + neighbourTemp) / 2);
             }

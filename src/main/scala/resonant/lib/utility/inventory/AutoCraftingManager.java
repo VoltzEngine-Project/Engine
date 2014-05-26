@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
@@ -349,7 +350,7 @@ public class AutoCraftingManager
      * the item was not found */
     private int doesItemExist(ItemStack recipeItem, ItemStack[] containingItems)
     {
-        if (recipeItem == null || recipeItem.itemID == 0 || recipeItem.stackSize <= 0)
+        if (recipeItem == null || recipeItem.stackSize <= 0)
         {
             return -1;
         }
@@ -403,8 +404,8 @@ public class AutoCraftingManager
 
     /** Consumes an item checking for extra conditions like container items
      * 
-     * @param stack - starting itemStack
-     * @param ammount - amount to consume
+     * @param itemStack - starting itemStack
+     * @param amount - amount to consume
      * @return what is left of the itemStack if any */
     public static ItemStack consumeItem(ItemStack itemStack, int amount)
     {
@@ -415,14 +416,14 @@ public class AutoCraftingManager
 
         ItemStack stack = itemStack.copy();
 
-        if (stack.getItem() instanceof ItemBucket && stack.itemID != Item.bucketEmpty.itemID)
+        if (stack.getItem() instanceof ItemBucket && stack.getItem() != Items.bucket)
         {
-            return new ItemStack(Item.bucketEmpty, 1);
+            return new ItemStack(Items.bucket, 1);
         }
 
         if (stack.getItem().hasContainerItem())
         {
-            ItemStack containerStack = stack.getItem().getContainerItemStack(stack);
+            ItemStack containerStack = stack.getItem().getContainerItem(stack);
 
             if (containerStack != null && !stack.getItem().doesContainerItemLeaveCraftingGrid(stack))
             {

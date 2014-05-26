@@ -43,7 +43,6 @@ import resonant.lib.config.Config;
 import resonant.lib.config.ConfigHandler;
 import resonant.lib.config.ConfigScanner;
 import resonant.lib.content.ContentRegistry;
-import resonant.lib.content.IDManager;
 import resonant.lib.flag.CommandFlag;
 import resonant.lib.flag.FlagRegistry;
 import resonant.lib.flag.ModFlag;
@@ -85,8 +84,7 @@ import java.util.Arrays;
 public class ResonantEngine
 {
 
-    public static final IDManager idManager = new IDManager(3970, 13970);
-    public static final ContentRegistry contentRegistry = new ContentRegistry(References.CONFIGURATION, idManager, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
+    public static final ContentRegistry contentRegistry = new ContentRegistry(References.CONFIGURATION, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 
     @SidedProxy(clientSide = "resonant.core.ClientProxy", serverSide = "resonant.lib.prefab.ProxyBase")
     public static ProxyBase proxy;
@@ -96,27 +94,6 @@ public class ResonantEngine
 
     @Instance(References.NAME)
     public static ResonantEngine INSTANCE;
-
-    /** Auto-incrementing configuration IDs. Use this to make sure no config ID is the same. */
-    public static final int idBlockOreCopper = idManager.getNextBlockID();
-    public static final int idBlockOreTin = idManager.getNextBlockID();
-    public static final int idItemWrench = idManager.getNextItemID();
-    public static final int idItemMotor = idManager.getNextItemID();
-    public static final int idItemCircuitBasic = idManager.getNextItemID();
-    public static final int idItemCircuitAdvanced = idManager.getNextItemID();
-    public static final int idItemCircuitElite = idManager.getNextItemID();
-    public static final int idItemPlateCopper = idManager.getNextItemID();
-    public static final int idItemPlateTin = idManager.getNextItemID();
-    public static final int idItemPlateBronze = idManager.getNextItemID();
-    public static final int idItemPlateSteel = idManager.getNextItemID();
-    public static final int idItemPlateIron = idManager.getNextItemID();
-    public static final int idItemPlateGold = idManager.getNextItemID();
-    public static final int idItemIngotCopper = idManager.getNextItemID();
-    public static final int idItemIngotTin = idManager.getNextItemID();
-    public static final int idItemIngotSteel = idManager.getNextItemID();
-    public static final int idItemIngotBronze = idManager.getNextItemID();
-    public static final int idItemDustSteel = idManager.getNextItemID();
-    public static final int idItemDustBronze = idManager.getNextItemID();
 
     public static boolean runningAsDev = false;
     /** Blocks */

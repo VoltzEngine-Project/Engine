@@ -20,10 +20,10 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
 import resonant.lib.References;
 import resonant.lib.science.units.UnitHelper;
-import universalelectricity.api.vector.Vector2;
-import universalelectricity.api.vector.Vector3;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import universalelectricity.core.transform.vector.Vector2;
+import universalelectricity.core.transform.vector.Vector3;
 
 /** Utility that manages common NBT save and load methods
  * 
@@ -53,7 +53,7 @@ public class NBTUtility
         }
         catch (Exception e)
         {
-            References.LOGGER.severe("Failed to save " + file.getName() + ".dat!");
+            References.LOGGER.fatal("Failed to save " + file.getName() + ".dat!");
             e.printStackTrace();
             return false;
         }
@@ -86,7 +86,7 @@ public class NBTUtility
         }
         catch (Exception e)
         {
-            References.LOGGER.severe("Failed to load " + file.getName() + ".dat!");
+            References.LOGGER.fatal("Failed to load " + file.getName() + ".dat!");
             e.printStackTrace();
             return null;
         }
@@ -214,15 +214,15 @@ public class NBTUtility
         }
         else if (value instanceof NBTTagCompound)
         {
-            tag.setCompoundTag(key, (NBTTagCompound) value);
+            tag.setTag(key, (NBTTagCompound) value);
         }
         else if (value instanceof Vector2)
         {
-            tag.setString(key, "NBT:SAVE:VECTOR:2:" + ((Vector2) value).x + ":" + ((Vector2) value).y);
+            tag.setString(key, "NBT:SAVE:VECTOR:2:" + ((Vector2) value).x() + ":" + ((Vector2) value).y());
         }
         else if (value instanceof Vector3)
         {
-            tag.setString(key, "NBT:SAVE:VECTOR:3:" + ((Vector3) value).x + ":" + ((Vector3) value).y + ":" + ((Vector3) value).z);
+            tag.setString(key, "NBT:SAVE:VECTOR:3:" + ((Vector3) value).x() + ":" + ((Vector3) value).y() + ":" + ((Vector3) value).z());
         }
         return tag;
 
