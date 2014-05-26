@@ -7,11 +7,15 @@ import com.google.common.io.ByteArrayDataInput;
 
 /** Used for object that only have one set of data to send and receive. Mainly designed to encode
  * data from simple objects
- * 
+ *
+ * Deprecated as this is replaced by {@link resonant.lib.network.netty.INettyPacket}
+ *
  * @author DarkGuardsman */
+
+@Deprecated
 public interface IPacketLoad
 {
-    public void readPacket(ByteArrayDataInput data);
+    public void readPacket (ByteArrayDataInput data);
 
-    public void loadPacket(DataOutputStream data) throws IOException;
+    public void loadPacket (DataOutputStream data) throws IOException;
 }

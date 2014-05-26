@@ -27,14 +27,18 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 /** Handles the packets.
- * 
+ *
+ * Deprecated as minecraft now has moved to Netty
+ *
  * @author Calclavia */
+
+@Deprecated
 public class PacketHandler implements IPacketHandler
 {
     public static final ArrayList<PacketType> registeredPackets = new ArrayList<PacketType>();
 
     @Override
-    public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
+    public void onPacketData (INetworkManager manager, Packet250CustomPayload packet, Player player)
     {
         try
         {
@@ -49,7 +53,7 @@ public class PacketHandler implements IPacketHandler
         }
     }
 
-    public static void writeData(DataOutputStream data, Object... sendData)
+    public static void writeData (DataOutputStream data, Object... sendData)
     {
         try
         {
@@ -127,7 +131,7 @@ public class PacketHandler implements IPacketHandler
     }
 
     /** Reads a compressed NBTTagCompound from the InputStream */
-    public static NBTTagCompound readNBTTagCompound(DataInput reader) throws IOException
+    public static NBTTagCompound readNBTTagCompound (DataInput reader) throws IOException
     {
         // added null check
         Short short1 = reader.readShort();
@@ -144,7 +148,7 @@ public class PacketHandler implements IPacketHandler
         }
     }
 
-    public static void writeNBTTagCompound(NBTTagCompound par0NBTTagCompound, DataOutput par1DataOutput) throws IOException
+    public static void writeNBTTagCompound (NBTTagCompound par0NBTTagCompound, DataOutput par1DataOutput) throws IOException
     {
         if (par0NBTTagCompound == null)
         {
@@ -160,7 +164,7 @@ public class PacketHandler implements IPacketHandler
 
     /** Sends packets to clients around a specific coordinate. A wrapper using Vector3. See
      * {@PacketDispatcher} for detailed information. */
-    public static void sendPacketToClients(Packet packet, World worldObj, IVector3 position, double range)
+    public static void sendPacketToClients (Packet packet, World worldObj, IVector3 position, double range)
     {
         try
         {
@@ -174,7 +178,7 @@ public class PacketHandler implements IPacketHandler
     }
 
     /** Sends a packet to all the clients on this server. */
-    public static void sendPacketToClients(Packet packet, World worldObj)
+    public static void sendPacketToClients (Packet packet, World worldObj)
     {
         try
         {
@@ -187,7 +191,7 @@ public class PacketHandler implements IPacketHandler
         }
     }
 
-    public static void sendPacketToClients(Packet packet)
+    public static void sendPacketToClients (Packet packet)
     {
         try
         {

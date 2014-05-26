@@ -1,7 +1,7 @@
 package resonant.lib.thermal;
 
-import net.minecraftforge.event.Event;
-import universalelectricity.api.vector.VectorWorld;
+import cpw.mods.fml.common.eventhandler.Event;
+import universalelectricity.core.transform.vector.VectorWorld;
 
 public abstract class EventThermal extends Event
 {

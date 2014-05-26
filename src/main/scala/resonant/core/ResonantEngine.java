@@ -1,36 +1,37 @@
 package resonant.core;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
-
+import cpw.mods.fml.common.*;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.Event.Result;
-import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import org.apache.logging.log4j.Level;
 import resonant.api.IBoilHandler;
-import resonant.core.content.BlockBase;
-import resonant.core.content.ComponentRegistry;
-import resonant.core.content.ItemBase;
-import resonant.core.content.ItemIngot;
-import resonant.core.content.ItemPlate;
-import resonant.core.content.ItemScrewdriver;
+import resonant.core.content.*;
 import resonant.core.content.debug.BlockCreativeBuilder;
 import resonant.core.content.debug.BlockInfiniteBlock;
 import resonant.core.content.tool.ToolMode;
@@ -46,12 +47,10 @@ import resonant.lib.content.IDManager;
 import resonant.lib.flag.CommandFlag;
 import resonant.lib.flag.FlagRegistry;
 import resonant.lib.flag.ModFlag;
-import resonant.lib.grid.UECommand;
-import resonant.lib.grid.UpdateTicker;
 import resonant.lib.modproxy.ProxyHandler;
 import resonant.lib.multiblock.BlockMultiBlockPart;
 import resonant.lib.multiblock.TileMultiBlockPart;
-import resonant.lib.network.PacketHandler;
+import resonant.lib.network.netty.PacketPipelineHandler;
 import resonant.lib.prefab.ProxyBase;
 import resonant.lib.prefab.item.ItemBlockMetadata;
 import resonant.lib.prefab.ore.OreGenBase;
@@ -67,27 +66,12 @@ import resonant.lib.utility.PlayerInteractionHandler;
 import resonant.lib.utility.PotionUtility;
 import resonant.lib.utility.nbt.NBTUtility;
 import resonant.lib.utility.nbt.SaveManager;
-import universalelectricity.api.net.IUpdate;
-import universalelectricity.api.vector.Vector3;
-import universalelectricity.api.vector.VectorWorld;
-import universalelectricity.core.net.NetworkTickHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.ModMetadata;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import universalelectricity.core.grid.IUpdate;
+import universalelectricity.core.transform.vector.Vector3;
+import universalelectricity.core.transform.vector.VectorWorld;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
 
 /** Mob class for Resonant Engine that handles common loading
  * 
@@ -162,12 +146,14 @@ public class ResonantEngine
     public static double steamMultiplier = 1;
 
     private ProxyHandler modproxies;
+    private PacketPipelineHandler packetHandler;
 
     private static ThermalGrid thermalGrid;
 
     public ResonantEngine()
     {
         this.modproxies = new ProxyHandler();
+        this.packetHandler = new PacketPipelineHandler();
         ResonantEngine.thermalGrid = new ThermalGrid();
     }
 
@@ -445,9 +431,10 @@ public class ResonantEngine
             ResonantEngine.runningAsDev = true;
         }
 
-        NetworkRegistry.instance().registerGuiHandler(this, proxy);
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
         modproxies.applyModule(Waila.class, true);
+        modproxies.applyModule(this.packetHandler);
 
         // Potion Array resized to Current potion array, +32, Allows to miss conflicting ID's
         PotionUtility.resizePotionArray();
@@ -521,7 +508,7 @@ public class ResonantEngine
             ComponentRegistry.register("itemWrench");
         }
 
-        References.LOGGER.fine("Attempting to load " + ComponentRegistry.requests.size() + " items.");
+        References.LOGGER.log(Level.INFO, "Attempting to load " + ComponentRegistry.requests.size() + " items.");
 
         for (String request : ComponentRegistry.requests)
         {
@@ -599,7 +586,7 @@ public class ResonantEngine
     }
 
     /** Default handler. */
-    @ForgeSubscribe
+    @SubscribeEvent
     public void boilEventHandler(BoilEvent evt)
     {
         World world = evt.world;
@@ -608,7 +595,7 @@ public class ResonantEngine
 
         for (int height = 1; height <= evt.maxSpread; height++)
         {
-            TileEntity tileEntity = world.getBlockTileEntity(position.intX(), position.intY() + height, position.intZ());
+            TileEntity tileEntity = world.getTileEntity(position.intX(), position.intY() + height, position.intZ());
 
             if (tileEntity instanceof IBoilHandler)
             {
@@ -631,26 +618,26 @@ public class ResonantEngine
         //            position.setBlock(world, 0);
         //        }
 
-        evt.setResult(Result.DENY);
+        evt.setResult(Event.Result.DENY);
     }
 
     /** Default handler. */
-    @ForgeSubscribe
+    @SubscribeEvent
     public void thermalEventHandler(EventThermalUpdate evt)
     {
         final VectorWorld pos = evt.position;
 
-        synchronized (pos.world)
+        synchronized (pos.world())
         {
-            Block block = Block.blocksList[pos.getBlockID()];
-            Material mat = pos.world.getBlockMaterial(pos.intX(), pos.intY(), pos.intZ());
+            Block block = pos.getBlockID();
+            Material mat = pos.getBlockID().getMaterial();
 
             if (mat == Material.air)
             {
                 evt.heatLoss = 0.15f;
             }
 
-            if (block == Block.waterMoving || block == Block.waterStill)
+            if (block == Blocks.flowing_water || block == Blocks.water)
             {
                 if (evt.temperature >= 373)
                 {
@@ -658,7 +645,7 @@ public class ResonantEngine
                     {
                         // TODO: INCORRECT!
                         int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373) * steamMultiplier);
-                        MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2, evt.isReactor));
+                        MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world(), pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2, evt.isReactor));
                     }
 
                     evt.heatLoss = 0.2f;
@@ -672,9 +659,9 @@ public class ResonantEngine
                     NetworkTickHandler.addNetwork(new IUpdate()
                     {
                         @Override
-                        public void update()
+                        public void update(double delta)
                         {
-                            pos.setBlock(Block.waterMoving.blockID);
+                            pos.setBlock(Blocks.flowing_water);
                         }
 
                         @Override

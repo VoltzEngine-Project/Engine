@@ -1,12 +1,12 @@
 package resonant.lib.thermal;
 
+import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.world.World;
-import net.minecraftforge.event.Event.HasResult;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fluids.FluidStack;
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
-@HasResult
+@Event.HasResult
 public class BoilEvent extends WorldEvent
 {
     public final FluidStack fluid;

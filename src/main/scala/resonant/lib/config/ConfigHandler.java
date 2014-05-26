@@ -1,8 +1,8 @@
 package resonant.lib.config;
 
-import java.lang.reflect.Field;
+import net.minecraftforge.common.config.Configuration;
 
-import net.minecraftforge.common.Configuration;
+import java.lang.reflect.Field;
 
 /** How to use the config Handler
  * <p/>
