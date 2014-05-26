@@ -12,6 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 import net.minecraft.client.Minecraft;
@@ -34,6 +35,7 @@ import java.util.*;
  * @since 26/05/14
  * @author tgame14
  */
+@ChannelHandler.Sharable
 public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket, AbstractPacket> implements ICompatProxy
 {
 

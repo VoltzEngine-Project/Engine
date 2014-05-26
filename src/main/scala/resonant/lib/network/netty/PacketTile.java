@@ -2,8 +2,10 @@ package resonant.lib.network.netty;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import resonant.core.ResonantEngine;
+import resonant.lib.network.IPacketReceiver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,46 +20,52 @@ public class PacketTile extends PacketType
     protected int x;
     protected int y;
     protected int z;
+    protected int id;
 
-    public PacketTile (TileEntity tile, Object... args)
+    public PacketTile (int x, int y, int z, int id, Object... args)
     {
-        this(tile.xCoord, tile.yCoord, tile.zCoord, args);
-    }
-
-    public PacketTile(int id, TileEntity tile, Object... args)
-    {
-        super(id, getArgs(tile.xCoord, tile.yCoord, tile.zCoord, args));
+        super(args);
+        this.x = x;
+        this.y = y;
+        this.z = y;
+        this.id = id;
     }
 
     public PacketTile (int x, int y, int z, Object... args)
     {
-        super(getArgs(x, y, z, args));
+        this(x, y, z, -1, args);
     }
+
 
     @Override
     public void encodeInto (ChannelHandlerContext ctx, ByteBuf buffer)
     {
+        buffer.writeInt(x);
+        buffer.writeInt(y);
+        buffer.writeInt(z);
+        buffer.writeInt(id);
+
+        buffer.writeBytes(this.data);
 
     }
 
     @Override
     public void decodeInto (ChannelHandlerContext ctx, ByteBuf buffer)
     {
+        this.x = buffer.readInt();
+        this.y = buffer.readInt();
+        this.z = buffer.readInt();
+        this.id = buffer.readInt();
 
+        this.data = buffer.slice();
     }
 
-    public static Object[] getArgs (int x, int y, int z, Object... args)
+    @Override
+    public void handleClientSide (EntityPlayer player)
     {
-        List newArgs = new ArrayList();
-
-        newArgs.add(x);
-        newArgs.add(y);
-        newArgs.add(z);
-
-        for (Object obj : args)
+        if (this.id == -1)
         {
-            newArgs.add(obj);
+            IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
         }
-        return newArgs.toArray();
     }
 }
