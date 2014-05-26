@@ -2,8 +2,6 @@ package resonant.lib.network;
 
 import com.google.common.io.ByteArrayDataInput;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.Packet;
-import resonant.lib.network.netty.PacketPipelineHandler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -16,9 +14,7 @@ public abstract class PacketType
 
     public PacketType(String channel)
     {
-        this.id = PacketPipelineHandler;
-
-        this.id = (byte) PacketPi.registeredPackets.size();
+        this.id = (byte) PacketHandler.registeredPackets.size();
         PacketHandler.registeredPackets.add(this);
         this.channel = channel;
     }

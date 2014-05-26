@@ -3,6 +3,7 @@ package resonant.lib.network.netty;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.LoaderState;
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -16,13 +17,17 @@ import io.netty.handler.codec.MessageToMessageCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraftforge.fluids.FluidTank;
 import resonant.core.ResonantEngine;
 import resonant.lib.References;
 import resonant.lib.modproxy.ICompatProxy;
+import resonant.lib.utility.nbt.ISaveObj;
+import universalelectricity.core.transform.vector.IVector2;
+import universalelectricity.core.transform.vector.IVector3;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
@@ -35,7 +40,7 @@ public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket,
     private EnumMap<Side, FMLEmbeddedChannel> channelEnumMap;
     private List<Class<? extends AbstractPacket>> packets;
 
-    public PacketPipelineHandler()
+    public PacketPipelineHandler ()
     {
         this.packets = new LinkedList<Class<? extends AbstractPacket>>();
     }
@@ -88,7 +93,7 @@ public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket,
         out.add(packet);
     }
 
-    public boolean registerPacket(Class<? extends AbstractPacket> clazz)
+    public boolean registerPacket (Class<? extends AbstractPacket> clazz)
     {
         if (this.packets.size() > 256)
         {
@@ -198,4 +203,75 @@ public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket,
         this.channelEnumMap.get(Side.CLIENT).writeAndFlush(packet);
     }
 
+    public void writeData (ByteBuf data, Object... sendData)
+    {
+        for (Object dataValue : sendData)
+        {
+            if (dataValue instanceof Integer)
+            {
+                data.writeInt((Integer) dataValue);
+            }
+            else if (dataValue instanceof Float)
+            {
+                data.writeFloat((Float) dataValue);
+            }
+            else if (dataValue instanceof Double)
+            {
+                data.writeDouble((Double) dataValue);
+            }
+            else if (dataValue instanceof Byte)
+            {
+                data.writeByte((Byte) dataValue);
+            }
+            else if (dataValue instanceof Boolean)
+            {
+                data.writeBoolean((Boolean) dataValue);
+            }
+            else if (dataValue instanceof String)
+            {
+                ByteBufUtils.writeUTF8String(data, (String) dataValue);
+            }
+            else if (dataValue instanceof Short)
+            {
+                data.writeShort((Short) dataValue);
+            }
+            else if (dataValue instanceof Long)
+            {
+                data.writeLong((Long) dataValue);
+            }
+            else if (dataValue instanceof IVector3)
+            {
+                data.writeDouble(((IVector3) dataValue).x());
+                data.writeDouble(((IVector3) dataValue).y());
+                data.writeDouble(((IVector3) dataValue).z());
+            }
+            else if (dataValue instanceof IVector2)
+            {
+                data.writeDouble(((IVector2) dataValue).x());
+                data.writeDouble(((IVector2) dataValue).y());
+            }
+            else if (dataValue instanceof NBTTagCompound)
+            {
+                ByteBufUtils.writeTag(data, (NBTTagCompound) dataValue);
+            }
+            else if (dataValue instanceof FluidTank)
+            {
+                data.writeInt(((FluidTank) dataValue).getCapacity());
+                ByteBufUtils.writeTag(data, ((FluidTank) dataValue).writeToNBT(new NBTTagCompound()));
+            }
+            else if (dataValue instanceof ISaveObj)
+            {
+                NBTTagCompound nbt = new NBTTagCompound();
+                ((ISaveObj) dataValue).save(nbt);
+                ByteBufUtils.writeTag(data, nbt);
+            }
+            else
+            {
+                References.LOGGER.fatal("Resonant Engine packet attempt to write an invalid type: " + dataValue.getClass());
+            }
+        }
+    }
+
 }
+
+

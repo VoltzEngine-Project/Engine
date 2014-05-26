@@ -146,7 +146,7 @@ public class ResonantEngine
     public static double steamMultiplier = 1;
 
     private ProxyHandler modproxies;
-    private PacketPipelineHandler packetHandler;
+    public final PacketPipelineHandler packetHandler;
 
     private static ThermalGrid thermalGrid;
 
