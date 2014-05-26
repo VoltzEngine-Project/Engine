@@ -39,7 +39,7 @@ class VectorWorld(var world: World, x: Double, y: Double, z: Double) extends Vec
   /**
    * World Access
    */
-  def getBlockID(): Block = super.getBlockID(world)
+  def getBlockID(): Block = super.getBlock(world)
 
   def getBlockMetadata() = super.getBlockMetadata(world)
 

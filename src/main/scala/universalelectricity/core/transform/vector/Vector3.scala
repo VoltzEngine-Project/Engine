@@ -298,7 +298,7 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
   /**
    * World Access
    */
-  def getBlockID(world: IBlockAccess): Block = world.getBlock(xi, yi, zi)
+  def getBlock(world: IBlockAccess): Block = world.getBlock(xi, yi, zi)
 
   def getBlockMetadata(world: IBlockAccess) = world.getBlockMetadata(xi, yi, zi)
 
