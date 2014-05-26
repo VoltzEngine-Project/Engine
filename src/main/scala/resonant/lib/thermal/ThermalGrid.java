@@ -6,13 +6,13 @@ import java.util.Map.Entry;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IReactor;
 import resonant.core.ResonantEngine;
 import resonant.lib.thermal.EventThermal.EventThermalUpdate;
-import universalelectricity.api.net.IUpdate;
-import universalelectricity.api.vector.VectorWorld;
+import universalelectricity.core.grid.IUpdate;
+import universalelectricity.core.transform.vector.VectorWorld;
 
 /** A grid managing the flow of thermal energy.
  * 
@@ -28,7 +28,7 @@ public class ThermalGrid implements IUpdate
 
     public static float getDefaultTemperature(VectorWorld position)
     {
-        return ThermalPhysics.getTemperatureForCoordinate(position.world, position.intX(), position.intZ());
+        return ThermalPhysics.getTemperatureForCoordinate(position.world(), position.xi(), position.zi());
     }
 
     public static void addTemperature(VectorWorld position, float deltaTemperature)
@@ -55,11 +55,11 @@ public class ThermalGrid implements IUpdate
         if (thermalSource.containsKey(position))
             return thermalSource.get(position);
         else
-            return ThermalPhysics.getTemperatureForCoordinate(position.world, position.intX(), position.intZ());
+            return ThermalPhysics.getTemperatureForCoordinate(position.world(), position.xi(), position.zi());
     }
 
     @Override
-    public void update()
+    public void update(double delta)
     {
         Iterator<Entry<VectorWorld, Float>> it = new HashMap<VectorWorld, Float>(thermalSource).entrySet().iterator();
         // System.out.println("NODES " + thermalSource.size());
@@ -103,10 +103,10 @@ public class ThermalGrid implements IUpdate
             /** Spread heat to surrounding. */
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
             {
-                VectorWorld adjacent = (VectorWorld) pos.clone().translate(dir);
+                VectorWorld adjacent = (VectorWorld) pos.clone().$plus(dir);
                 float deltaTemperature = getTemperature(pos) - getTemperature(adjacent);
 
-                Material adjacentMat = adjacent.world.getBlockMaterial(adjacent.intX(), adjacent.intY(), adjacent.intZ());
+                Material adjacentMat = adjacent.world().getBlock(adjacent.xi(), adjacent.yi(), adjacent.zi()).getMaterial();
 
                 float spread = (adjacentMat.isSolid() ? this.spread : this.spread / 2) * deltaTime;
 

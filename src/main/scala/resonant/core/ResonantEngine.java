@@ -70,6 +70,7 @@ import resonant.lib.utility.PotionUtility;
 import resonant.lib.utility.nbt.NBTUtility;
 import resonant.lib.utility.nbt.SaveManager;
 import universalelectricity.core.grid.IUpdate;
+import universalelectricity.core.grid.UpdateTicker;
 import universalelectricity.core.transform.vector.Vector3;
 import universalelectricity.core.transform.vector.VectorWorld;
 
@@ -77,7 +78,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 
 /** Mob class for Resonant Engine that handles common loading
- * 
+ *
  * @author Calclavia, DarkGuardsman */
 @Mod(modid = References.NAME, name = References.NAME, version = References.VERSION, dependencies = "required-after:UniversalElectricity")
 //@NetworkMod(channels = References.CHANNEL, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
@@ -153,7 +154,7 @@ public class ResonantEngine
 
     private static ThermalGrid thermalGrid;
 
-    public ResonantEngine()
+    public ResonantEngine ()
     {
         this.modproxies = new ProxyHandler();
         this.packetHandler = new PacketPipelineHandler();
@@ -168,12 +169,12 @@ public class ResonantEngine
      * If you want correct recipes, make sure you register required items in the following order:
      * <p/>
      * Ingot, Ores, Dust, Plate, Copper Wire, Circuits, Motor, Wrench
-     * 
+     *
      * @param fieldName - Name of the item: e.g ingotCopper, ingotSteel
      * @param id - The specified ID of the item. Use 0 for a default value to be used.
      * @return The Item/Block class. */
     @Deprecated
-    public static Item requireItem(String fieldName, int id)
+    public static Item requireItem (String fieldName, int id)
     {
         try
         {
@@ -334,7 +335,7 @@ public class ResonantEngine
     }
 
     @Deprecated
-    public static Item requestItem(String name, int id)
+    public static Item requestItem (String name, int id)
     {
         if (OreDictionary.getOres(name).size() <= 0)
         {
@@ -352,7 +353,7 @@ public class ResonantEngine
     }
 
     @Deprecated
-    public static Block requireBlock(String fieldName, int id)
+    public static Block requireBlock (String fieldName, int id)
     {
         try
         {
@@ -402,7 +403,7 @@ public class ResonantEngine
         return null;
     }
 
-    public static Block requestBlock(String name, int id)
+    public static Block requestBlock (String name, int id)
     {
         if (OreDictionary.getOres(name).size() <= 0)
         {
@@ -420,7 +421,7 @@ public class ResonantEngine
     }
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent evt)
+    public void preInit (FMLPreInitializationEvent evt)
     {
         ConfigScanner.instance().generateSets(evt.getAsmData());
 
@@ -455,6 +456,8 @@ public class ResonantEngine
         blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class).setCreativeTab(null);
         blockMulti.setPacketType(References.PACKET_TILE);
 
+        //TODO: Calclavia - Return the prefabs as we still need them. Using traits is all nice and all but we still need java classes
+
         if (References.CONFIGURATION.get("CreaiveModeTools", "CreativeBuilder", runningAsDev).getBoolean(true))
         {
             blockCreativeBuilder = (BlockCreativeBuilder) contentRegistry.createBlock(BlockCreativeBuilder.class);
@@ -472,7 +475,7 @@ public class ResonantEngine
     }
 
     @EventHandler
-    public void init(FMLInitializationEvent evt)
+    public void init (FMLInitializationEvent evt)
     {
         References.CONFIGURATION.load();
 
@@ -549,25 +552,19 @@ public class ResonantEngine
     }
 
     @EventHandler
-    public void postInit(FMLPostInitializationEvent evt)
+    public void postInit (FMLPostInitializationEvent evt)
     {
-
-        // TODO: Move to UE
-        if (!UpdateTicker.INSTANCE.isAlive())
-        {
-            UpdateTicker.INSTANCE.start();
-        }
-
         ConfigHandler.configure(References.CONFIGURATION, References.DOMAIN);
 
         // Register Thermal Grid
         UpdateTicker.addNetwork(ResonantEngine.thermalGrid);
 
+        proxy.postInit();
         modproxies.postInit();
     }
 
     @EventHandler
-    public void serverStarting(FMLServerStartingEvent event)
+    public void serverStarting (FMLServerStartingEvent event)
     {
         // Load ModFlag from world save
         Object object = SaveManager.createAndLoad(NBTUtility.loadData(FlagRegistry.DEFAULT_NAME));
@@ -581,20 +578,17 @@ public class ResonantEngine
         ICommandManager commandManager = FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
         ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
         serverCommandManager.registerCommand(new CommandFlag(FlagRegistry.getModFlag(FlagRegistry.DEFAULT_NAME)));
-
-        // TODO: Move to UE
-        serverCommandManager.registerCommand(new UECommand());
     }
 
     @EventHandler
-    public void onServerStopping(FMLServerStoppingEvent evt)
+    public void onServerStopping (FMLServerStoppingEvent evt)
     {
         SaveManager.saveAll();
     }
 
     /** Default handler. */
     @SubscribeEvent
-    public void boilEventHandler(BoilEvent evt)
+    public void boilEventHandler (BoilEvent evt)
     {
         World world = evt.world;
         Vector3 position = evt.position;
@@ -630,7 +624,7 @@ public class ResonantEngine
 
     /** Default handler. */
     @SubscribeEvent
-    public void thermalEventHandler(EventThermalUpdate evt)
+    public void thermalEventHandler (EventThermalUpdate evt)
     {
         final VectorWorld pos = evt.position;
 
@@ -659,26 +653,27 @@ public class ResonantEngine
                 }
             }
 
-            if (block == Block.ice)
+            if (block == Blocks.ice)
             {
                 if (evt.temperature >= 273)
                 {
-                    NetworkTickHandler.addNetwork(new IUpdate()
+
+                    UpdateTicker.addNetwork(new IUpdate()
                     {
                         @Override
-                        public void update(double delta)
+                        public void update (double delta)
                         {
                             pos.setBlock(Blocks.flowing_water);
                         }
 
                         @Override
-                        public boolean canUpdate()
+                        public boolean canUpdate ()
                         {
                             return true;
                         }
 
                         @Override
-                        public boolean continueUpdate()
+                        public boolean continueUpdate ()
                         {
                             return false;
                         }
