@@ -7,8 +7,8 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.common.config.Configuration;
 
 /** This class is used to replace recipes that are already added in the existing recipe pool for
  * crafting and smelting. All recipe functions take account of the Forge Ore Dictionary. It also

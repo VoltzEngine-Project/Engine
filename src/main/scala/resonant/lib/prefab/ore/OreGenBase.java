@@ -1,15 +1,15 @@
 package resonant.lib.prefab.ore;
 
-import java.util.Random;
-
+import cpw.mods.fml.common.FMLLog;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
-import cpw.mods.fml.common.FMLLog;
+
+import java.util.Random;
 
 /** This class is used for storing ore generation data. If you are too lazy to generate your own
  * ores, you can do {@link #OreGenerator.addOre()} to add your ore to the list of ores to generate.
@@ -54,11 +54,12 @@ public abstract class OreGenBase
             this.harvestLevel = harvestLevel;
             this.oreDictionaryName = oreDiectionaryName;
             this.oreStack = stack;
-            this.oreID = stack.itemID;
+            //this.oreID = stack.itemID;
             this.oreMeta = stack.getItemDamage();
 
             OreDictionary.registerOre(oreDictionaryName, stack);
-            MinecraftForge.setBlockHarvestLevel(Block.blocksList[stack.itemID], stack.getItemDamage(), harvestTool, harvestLevel);
+            Block block = Block.getBlockFromItem(stack.getItem());
+            block.setHarvestLevel(this.harvestTool, this.harvestLevel, stack.getItemDamage());
         }
         else
         {

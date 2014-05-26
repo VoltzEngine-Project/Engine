@@ -5,20 +5,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import resonant.core.ResonantEngine;
 import resonant.lib.network.IPacketReceiver;
-import resonant.lib.prefab.block.BlockRotatable;
 import resonant.lib.schematic.Schematic;
 import resonant.lib.type.Pair;
 import universalelectricity.api.UniversalElectricity;
-import universalelectricity.api.vector.Vector3;
 
-import com.google.common.io.ByteArrayDataInput;
+import universalelectricity.core.transform.vector.Vector3;
 
 /** Automatically set up structures to allow easy debugging in creative mode. */
 public class BlockCreativeBuilder extends BlockRotatable implements IPacketReceiver
@@ -52,14 +52,14 @@ public class BlockCreativeBuilder extends BlockRotatable implements IPacketRecei
     }
 
     @Override
-    public void onReceivePacket(ByteArrayDataInput data, EntityPlayer player, Object... extra)
+    public void onReceivePacket(ByteBuf data, EntityPlayer player, Object... extra)
     {
         World world = player.worldObj;
 
         if (!world.isRemote)
         {
             // Only allow operators.
-            if (MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username))
+            if (MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.getCommandSenderName()))
             {
                 try
                 {
@@ -69,12 +69,12 @@ public class BlockCreativeBuilder extends BlockRotatable implements IPacketRecei
 
                     if (size > 0)
                     {
-                        HashMap<Vector3, Pair<Integer, Integer>> map = REGISTRY.get(schematicID).getStructure(ForgeDirection.getOrientation(position.getBlockMetadata(world)), size);
+                        HashMap<Vector3, Pair<Block, Integer>> map = REGISTRY.get(schematicID).getStructure(ForgeDirection.getOrientation(position.getBlockMetadata(world)), size);
 
-                        for (Entry<Vector3, Pair<Integer, Integer>> entry : map.entrySet())
+                        for (Entry<Vector3, Pair<Block, Integer>> entry : map.entrySet())
                         {
                             Vector3 placePos = entry.getKey().clone();
-                            placePos.translate(position);
+                            placePos.$plus(position);
                             placePos.setBlock(world, entry.getValue().left(), entry.getValue().right());
                         }
                     }

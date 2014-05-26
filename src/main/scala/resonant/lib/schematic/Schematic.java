@@ -2,9 +2,10 @@ package resonant.lib.schematic;
 
 import java.util.HashMap;
 
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraft.block.Block;
+import net.minecraftforge.common.util.ForgeDirection;
 import resonant.lib.type.Pair;
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 /** Stores building structure data.
  * 
@@ -21,6 +22,6 @@ public abstract class Schematic
     /** Gets the structure of the schematic.
      * 
      * @param size - The size multiplier.
-     * @return A Hashmap of positions and block IDs with metadata. */
-    public abstract HashMap<Vector3, Pair<Integer, Integer>> getStructure(ForgeDirection dir, int size);
+     * @return A Hashmap of positions and blocks with metadata. */
+    public abstract HashMap<Vector3, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size);
 }

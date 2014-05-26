@@ -244,9 +244,9 @@ public class ResonantEngine
                     }
                     else if (name.equals("dustSteel"))
                     {
-                        RecipeUtility.addShaplessRecipe(new ItemStack(item), new Object[] { new ItemStack(Item.coal, 1), new ItemStack(Item.coal, 1), new ItemStack(Item.ingotIron) }, References.CONFIGURATION, true);
-                        RecipeUtility.addShaplessRecipe(new ItemStack(item), new Object[] { new ItemStack(Item.coal, 1, 1), new ItemStack(Item.coal, 1, 1), new ItemStack(Item.ingotIron) }, References.CONFIGURATION, true);
-                        RecipeUtility.addShaplessRecipe(new ItemStack(item), new Object[] { new ItemStack(Item.coal, 1, 1), new ItemStack(Item.coal, 1), new ItemStack(Item.ingotIron) }, References.CONFIGURATION, true);
+                        RecipeUtility.addShaplessRecipe(new ItemStack(item), new Object[] { new ItemStack(Items.coal, 1), new ItemStack(Items.coal, 1), new ItemStack(Items.iron_ingot) }, References.CONFIGURATION, true);
+                        RecipeUtility.addShaplessRecipe(new ItemStack(item), new Object[] { new ItemStack(Items.coal, 1, 1), new ItemStack(Items.coal, 1, 1), new ItemStack(Items.iron_ingot) }, References.CONFIGURATION, true);
+                        RecipeUtility.addShaplessRecipe(new ItemStack(item), new Object[] { new ItemStack(Items.coal, 1, 1), new ItemStack(Items.coal, 1), new ItemStack(Items.iron_ingot) }, References.CONFIGURATION, true);
 
                         if (OreDictionary.getOres("ingotSteel").size() > 0)
                         {
@@ -261,11 +261,11 @@ public class ResonantEngine
 
                     if (OreDictionary.getOres("ingotSteel").size() > 0)
                     {
-                        RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", "W  ", 'S', "ingotSteel", 'W', Block.wood), References.CONFIGURATION, true);
+                        RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", "W  ", 'S', "ingotSteel", 'W', Blocks.log), References.CONFIGURATION, true);
                     }
                     else
                     {
-                        RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", "W  ", 'S', Item.ingotIron, 'W', Block.wood), References.CONFIGURATION, true);
+                        RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), " S ", "W  ", 'S', Items.iron_ingot, 'W', Blocks.log), References.CONFIGURATION, true);
                     }
                 }
                 else
@@ -279,37 +279,37 @@ public class ResonantEngine
                         {
                             if (OreDictionary.getOres("copperWire").size() > 0)
                             {
-                                RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Item.redstone, '!', "copperWire"), References.CONFIGURATION, true);
-                                RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Item.redstone, '!', "copperWire"), References.CONFIGURATION, true);
+                                RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Items.redstone, '!', "copperWire"), References.CONFIGURATION, true);
+                                RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Items.redstone, '!', "copperWire"), References.CONFIGURATION, true);
                             }
                             else
                             {
-                                RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Item.redstone, '!', Item.comparator), References.CONFIGURATION, true);
-                                RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Item.redstone, '!', Item.comparator), References.CONFIGURATION, true);
+                                RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateBronze", '#', Items.redstone, '!', Items.comparator), References.CONFIGURATION, true);
+                                RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', "plateSteel", '#', Items.redstone, '!', Items.comparator), References.CONFIGURATION, true);
                             }
                         }
                         else
                         {
-                            RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', Block.blockIron, '#', Item.redstone, '!', Item.comparator), References.CONFIGURATION, true);
+                            RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "!#!", "#@#", "!#!", '@', Blocks.iron_block, '#', Items.redstone, '!', Items.comparator), References.CONFIGURATION, true);
                         }
                     }
                     else if (name.equals("circuitAdvanced"))
                     {
-                        RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@@@", "#?#", "@@@", '@', Item.redstone, '?', Item.diamond, '#', "circuitBasic"), References.CONFIGURATION, true);
+                        RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@@@", "#?#", "@@@", '@', Items.redstone, '?', Items.diamond, '#', "circuitBasic"), References.CONFIGURATION, true);
                     }
                     else if (name.equals("circuitElite"))
                     {
-                        RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@@@", "?#?", "@@@", '@', Item.ingotGold, '?', "circuitAdvanced", '#', Block.blockLapis), References.CONFIGURATION, true);
+                        RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@@@", "?#?", "@@@", '@', Items.gold_ingot, '?', "circuitAdvanced", '#', Blocks.lapis_block), References.CONFIGURATION, true);
                     }
                     else if (name.equals("motor"))
                     {
                         if (OreDictionary.getOres("copperWire").size() > 0)
                         {
-                            RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', "copperWire"), References.CONFIGURATION, true);
+                            RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Items.iron_ingot, '@', "copperWire"), References.CONFIGURATION, true);
                         }
                         else
                         {
-                            RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Item.ingotIron, '@', Item.comparator), References.CONFIGURATION, true);
+                            RecipeUtility.addRecipe(new ShapedOreRecipe(new ItemStack(item), "@!@", "!#!", "@!@", '!', "ingotSteel", '#', Items.iron_ingot, '@', Items.comparator), References.CONFIGURATION, true);
                         }
                     }
                 }
@@ -377,7 +377,7 @@ public class ResonantEngine
 
                     if (OreDictionary.getOres(ingotName).size() > 0)
                     {
-                        GameRegistry.addSmelting(block.blockID, OreDictionary.getOres(ingotName).get(0), 0.6f);
+                        GameRegistry.addSmelting(block, OreDictionary.getOres(ingotName).get(0), 0.6f);
                     }
 
                     Field generationField = ReflectionHelper.findField(ResonantEngine.class, "generation" + Character.toUpperCase(name.charAt(0)) + name.substring(1));
@@ -413,7 +413,7 @@ public class ResonantEngine
 
         if (OreDictionary.getOres(name).get(0).getItem() instanceof ItemBlock)
         {
-            return Block.blocksList[((ItemBlock) OreDictionary.getOres(name).get(0).getItem()).getBlockID()];
+            return Block.getBlockFromItem(OreDictionary.getOres(name).get(0).getItem());
         }
 
         return null;
@@ -430,7 +430,7 @@ public class ResonantEngine
 
         if (inEclipse != null && inEclipse.equals("true"))
         {
-            References.LOGGER.fine("\n######Running mod as a dev IDE######\n");
+            References.LOGGER.info("\n######Running mod as a dev IDE######\n");
             ResonantEngine.runningAsDev = true;
         }
 
@@ -598,7 +598,7 @@ public class ResonantEngine
     {
         World world = evt.world;
         Vector3 position = evt.position;
-        Block block = position.getBlockID(world);
+        Block block = position.getBlock(world);
 
         for (int height = 1; height <= evt.maxSpread; height++)
         {
