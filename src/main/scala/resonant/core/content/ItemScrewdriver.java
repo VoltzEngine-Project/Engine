@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import resonant.core.content.tool.ToolMode;
 import resonant.lib.utility.LanguageUtility;
@@ -49,7 +50,7 @@ public class ItemScrewdriver extends ItemBase implements IToolWrench
             setMode(itemStack, (getMode(itemStack) + 1) % ToolMode.REGISTRY.size());
 
             if (!world.isRemote)
-                player.addChatMessage(LanguageUtility.getLocal("item.resonant:screwdriver.toolmode.set") + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
+                player.addChatMessage(new ChatComponentText(LanguageUtility.getLocal("item.resonant:screwdriver.toolmode.set") + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName())));
             return itemStack;
         }
 
@@ -68,13 +69,13 @@ public class ItemScrewdriver extends ItemBase implements IToolWrench
         return ToolMode.REGISTRY.get(getMode(stack)).onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
     }
 
-    @Override
-    public boolean shouldPassSneakingClickToBlock(World world, int x, int y, int z)
-    {
-        return true;
-    }
+	@Override
+	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player)
+	{
+		return true;
+	}
 
-    public int getMode(ItemStack itemStack)
+	public int getMode(ItemStack itemStack)
     {
         return NBTUtility.getNBTTagCompound(itemStack).getInteger("mode");
     }

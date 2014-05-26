@@ -433,7 +433,7 @@ public class ResonantEngine
         blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class).setCreativeTab(null);
         blockMulti.setPacketType(References.PACKET_TILE);
 
-        //TODO: Calclavia - Return the prefabs as we still need them. Using traits is all nice and all but we still need java classes
+        //TODO: Calclavia - Return the prefabs as we still need them. Using traits is nice and all but we still need java classes
 
         if (References.CONFIGURATION.get("CreaiveModeTools", "CreativeBuilder", runningAsDev).getBoolean(true))
         {

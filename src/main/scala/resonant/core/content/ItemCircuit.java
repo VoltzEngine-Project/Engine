@@ -3,6 +3,7 @@ package resonant.core.content;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import resonant.core.ResonantEngine;
 import resonant.lib.References;
@@ -31,7 +32,7 @@ public class ItemCircuit extends ItemBase
     }
 
     @Override
-    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List list)
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List list)
     {
         for (int i = 0; i < TYPES.length; i++)
         {
