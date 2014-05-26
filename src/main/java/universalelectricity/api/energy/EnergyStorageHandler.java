@@ -1,6 +1,11 @@
 package universalelectricity.api.energy;
 
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagLong;
 
 /**
  * Can be used internally for IEnergyInterface blocks. This is optional and should be used for
