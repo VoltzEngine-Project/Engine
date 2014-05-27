@@ -10,32 +10,32 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public class EnergyStorageHandler
 {
-	protected long energy;
-	protected long capacity;
-	protected long maxReceive;
-	protected long maxExtract;
+	protected double energy;
+	protected double capacity;
+	protected double maxReceive;
+	protected double maxExtract;
 
 	/**
 	 * A cache of the last energy stored through extract and receive.
 	 */
-	protected long lastEnergy;
+	protected double lastEnergy;
 
 	public EnergyStorageHandler()
 	{
 		this(0);
 	}
 
-	public EnergyStorageHandler(long capacity)
+	public EnergyStorageHandler(double capacity)
 	{
 		this(capacity, capacity, capacity);
 	}
 
-	public EnergyStorageHandler(long capacity, long maxTransfer)
+	public EnergyStorageHandler(double capacity, double maxTransfer)
 	{
 		this(capacity, maxTransfer, maxTransfer);
 	}
 
-	public EnergyStorageHandler(long capacity, long maxReceive, long maxExtract)
+	public EnergyStorageHandler(double capacity, double maxReceive, double maxExtract)
 	{
 		this.capacity = capacity;
 		this.maxReceive = maxReceive;
@@ -44,17 +44,17 @@ public class EnergyStorageHandler
 
 	public EnergyStorageHandler readFromNBT(NBTTagCompound nbt)
 	{
-		this.energy = nbt.getLong("energy");
+		this.energy = nbt.getDouble("energy");
 		return this;
 	}
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setLong("energy", this.getEnergy());
+		nbt.setDouble("energy", this.getEnergy());
 		return nbt;
 	}
 
-	public void setCapacity(long capacity)
+	public void setCapacity(double capacity)
 	{
 		this.capacity = capacity;
 
@@ -64,28 +64,28 @@ public class EnergyStorageHandler
 		}
 	}
 
-	public void setMaxTransfer(long maxTransfer)
+	public void setMaxTransfer(double maxTransfer)
 	{
 		setMaxReceive(maxTransfer);
 		setMaxExtract(maxTransfer);
 	}
 
-	public void setMaxReceive(long maxReceive)
+	public void setMaxReceive(double maxReceive)
 	{
 		this.maxReceive = maxReceive;
 	}
 
-	public void setMaxExtract(long maxExtract)
+	public void setMaxExtract(double maxExtract)
 	{
 		this.maxExtract = maxExtract;
 	}
 
-	public long getMaxReceive()
+	public double getMaxReceive()
 	{
 		return maxReceive;
 	}
 
-	public long getMaxExtract()
+	public double getMaxExtract()
 	{
 		return maxExtract;
 	}
@@ -97,7 +97,7 @@ public class EnergyStorageHandler
 	 * 
 	 * @param energy
 	 */
-	public void setEnergy(long energy)
+	public void setEnergy(double energy)
 	{
 		this.energy = energy;
 
@@ -118,7 +118,7 @@ public class EnergyStorageHandler
 	 * 
 	 * @param energy
 	 */
-	public void modifyEnergyStored(long energy)
+	public void modifyEnergyStored(double energy)
 	{
 		this.setEnergy(this.getEmptySpace() + energy);
 
@@ -132,9 +132,9 @@ public class EnergyStorageHandler
 		}
 	}
 
-	public long receiveEnergy(long receive, boolean doReceive)
+	public double receiveEnergy(double receive, boolean doReceive)
 	{
-		long energyReceived = Math.min(this.getEnergyCapacity() - this.getEnergy(), Math.min(this.getMaxReceive(), receive));
+		double energyReceived = Math.min(this.getEnergyCapacity() - this.getEnergy(), Math.min(this.getMaxReceive(), receive));
 
 		if (doReceive)
 		{
@@ -144,19 +144,19 @@ public class EnergyStorageHandler
 		return energyReceived;
 	}
 
-	public long receiveEnergy(boolean doReceive)
+	public double receiveEnergy(boolean doReceive)
 	{
 		return this.receiveEnergy(this.getMaxReceive(), doReceive);
 	}
 
-	public long receiveEnergy()
+	public double receiveEnergy()
 	{
 		return this.receiveEnergy(true);
 	}
 
-	public long extractEnergy(long extract, boolean doExtract)
+	public double extractEnergy(double extract, boolean doExtract)
 	{
-		long energyExtracted = Math.min(this.getEnergy(), Math.min(this.getMaxExtract(), extract));
+		double energyExtracted = Math.min(this.getEnergy(), Math.min(this.getMaxExtract(), extract));
 
 		if (doExtract)
 		{
@@ -166,17 +166,17 @@ public class EnergyStorageHandler
 		return energyExtracted;
 	}
 
-	public long extractEnergy(boolean doExtract)
+	public double extractEnergy(boolean doExtract)
 	{
 		return this.extractEnergy(this.getMaxExtract(), doExtract);
 	}
 
-	public long extractEnergy()
+	public double extractEnergy()
 	{
 		return this.extractEnergy(true);
 	}
 
-	public boolean checkReceive(long receive)
+	public boolean checkReceive(double receive)
 	{
 		return this.receiveEnergy(receive, false) >= receive;
 	}
@@ -186,7 +186,7 @@ public class EnergyStorageHandler
 		return this.checkReceive(this.getMaxReceive());
 	}
 
-	public boolean checkExtract(long extract)
+	public boolean checkExtract(double extract)
 	{
 		return this.extractEnergy(extract, false) >= extract;
 	}
@@ -206,7 +206,7 @@ public class EnergyStorageHandler
 		return this.getEnergy() == 0;
 	}
 
-	public long getLastEnergy()
+	public double getLastEnergy()
 	{
 		return this.lastEnergy;
 	}
@@ -223,17 +223,17 @@ public class EnergyStorageHandler
 	/**
 	 * Returns the amount of energy this storage can further store.
 	 */
-	public long getEmptySpace()
+	public double getEmptySpace()
 	{
 		return this.getEnergyCapacity() - this.getEnergy();
 	}
 
-	public long getEnergy()
+	public double getEnergy()
 	{
 		return this.energy;
 	}
 
-	public long getEnergyCapacity()
+	public double getEnergyCapacity()
 	{
 		return this.capacity;
 	}
