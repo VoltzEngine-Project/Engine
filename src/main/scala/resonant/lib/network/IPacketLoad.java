@@ -8,7 +8,7 @@ import com.google.common.io.ByteArrayDataInput;
 /** Used for object that only have one set of data to send and receive. Mainly designed to encode
  * data from simple objects
  *
- * Deprecated as this is replaced by {@link resonant.lib.network.netty.INettyPacket}
+ * Deprecated as this is replaced by {@link resonant.lib.network.netty.IByteBufObject}
  *
  * @author DarkGuardsman */
 

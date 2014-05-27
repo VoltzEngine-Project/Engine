@@ -6,6 +6,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidTank;
@@ -140,9 +141,9 @@ public class PacketAnnotationManager
 			this.id = id;
 		}
 
-		public List getPacketArray(Object obj)
+		public ByteBuf getPacketArrayData(Object obj)
 		{
-			List args = new ArrayList();
+			ByteBuf data = Unpooled.buffer();
 
 			try
 			{
@@ -156,18 +157,18 @@ public class PacketAnnotationManager
 					{
 						if (syncObj == null)
 						{
-							args.add(false);
+							data.writeBoolean(false);
 
 						}
 						else
 						{
-							args.add(true);
-							args.add(syncObj);
+							data.writeBoolean(true);
+							ResonantEngine.INSTANCE.packetHandler.writeData(data, syncObj);
 						}
 					}
 					else
 					{
-						args.add(syncObj);
+						ResonantEngine.INSTANCE.packetHandler.writeData(data, syncObj);
 					}
 				}
 
@@ -176,7 +177,7 @@ public class PacketAnnotationManager
 					m.setAccessible(true);
 					NBTTagCompound nbt = new NBTTagCompound();
 					m.invoke(obj, nbt);
-					args.add(nbt);
+					ByteBufUtils.writeTag(data, nbt);
 				}
 
 			}
@@ -185,7 +186,7 @@ public class PacketAnnotationManager
 				e.printStackTrace();
 			}
 
-			return args;
+			return data;
 
 
 		}

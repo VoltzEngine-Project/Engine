@@ -53,7 +53,7 @@ public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket,
         ByteBuf buffer = Unpooled.buffer();
         Class<? extends AbstractPacket> clazz = msg.getClass();
         if (!this.packets.contains(msg.getClass()))
-            throw new Exception("No packets registered for " + msg.getClass().getSimpleName());
+            throw new NullPointerException("No packets registered for " + msg.getClass().getSimpleName());
 
         int packetId = this.packets.indexOf(clazz);
         buffer.writeByte(packetId);

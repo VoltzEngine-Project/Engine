@@ -4,7 +4,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import org.apache.logging.log4j.Level;
 import resonant.core.ResonantEngine;
+import resonant.lib.References;
+import resonant.lib.network.IPacketReceiver;
 
 /**
  * @author tgame14
@@ -41,7 +44,7 @@ public class PacketAnnotation extends PacketType
 					ResonantEngine.INSTANCE.packetHandler.writeData(data, ((TileEntity) obj).xCoord, ((TileEntity) obj).yCoord, ((TileEntity) obj).zCoord);
 				}
 
-				ResonantEngine.INSTANCE.packetHandler.writeData(data, packetSet.getPacketArray(obj).toArray());
+				data.writeBytes(packetSet.getPacketArrayData(obj));
 			}
 		}
 
@@ -66,12 +69,70 @@ public class PacketAnnotation extends PacketType
 	@Override
 	public void handleClientSide(EntityPlayer player)
 	{
-		super.handleClientSide(player);
+		try
+		{
+			if (TileEntity.class.isAssignableFrom(PacketAnnotationManager.INSTANCE.classPacketIDMap.inverse().get(this.classID)))
+			{
+				int x = data.readInt();
+				int y = data.readInt();
+				int z = data.readInt();
+
+				TileEntity tile = player.getEntityWorld().getTileEntity(x, y, z);
+
+				if (tile != null)
+				{
+					PacketAnnotationManager.INSTANCE.packetSetIDMap.get(this.classID).get(this.packetSetID).read(tile, data.slice());
+
+					if (tile instanceof IPacketReceiver)
+					{
+						((IPacketReceiver) tile).onReceivePacket(data, player, x, y, z);
+					}
+				}
+				else
+				{
+					References.LOGGER.error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			References.LOGGER.fatal("Failed to read Annotation Packet", e);
+			throw new UnsupportedOperationException(e);
+		}
 	}
 
 	@Override
 	public void handleServerSide(EntityPlayer player)
 	{
-		super.handleServerSide(player);
+		try
+		{
+			if (TileEntity.class.isAssignableFrom(PacketAnnotationManager.INSTANCE.classPacketIDMap.inverse().get(this.classID)))
+			{
+				int x = data.readInt();
+				int y = data.readInt();
+				int z = data.readInt();
+
+				TileEntity tile = player.getEntityWorld().getTileEntity(x, y, z);
+
+				if (tile != null)
+				{
+					PacketAnnotationManager.INSTANCE.packetSetIDMap.get(this.classID).get(this.packetSetID).read(tile, data.slice());
+
+					if (tile instanceof IPacketReceiver)
+					{
+						((IPacketReceiver) tile).onReceivePacket(data, player, x, y, z);
+					}
+				}
+				else
+				{
+					References.LOGGER.error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			References.LOGGER.fatal("Failed to read Annotation Packet", e);
+			throw new UnsupportedOperationException(e);
+		}
 	}
 }
