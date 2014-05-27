@@ -13,14 +13,14 @@ trait TraitElectricStorage extends TraitElectric
    *
    * This function is NOT recommended for calling.
    */
-  override def setEnergy(from: ForgeDirection, amount: Long) =
+  override def setEnergy(from: ForgeDirection, amount: Double) =
   {
     if (energy != null)
       energy.setEnergy(amount)
   }
 
   //@Callback
-  def getEnergy(from: ForgeDirection): Long =
+  def getEnergy(from: ForgeDirection): Double =
   {
     if (energy != null)
     {
@@ -30,7 +30,7 @@ trait TraitElectricStorage extends TraitElectric
   }
 
   //@Callback
-  def getEnergyCapacity(from: ForgeDirection): Long =
+  def getEnergyCapacity(from: ForgeDirection): Double =
   {
     if (energy != null)
     {
