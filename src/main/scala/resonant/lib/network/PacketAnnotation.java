@@ -28,6 +28,7 @@ import cpw.mods.fml.relauncher.Side;
 /** Packet handler for annotated objects.
  * 
  * @author Calclavia */
+@Deprecated
 public class PacketAnnotation extends PacketType
 {
     static int maxID = 0;

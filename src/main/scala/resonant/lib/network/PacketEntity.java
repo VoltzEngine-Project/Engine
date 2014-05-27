@@ -10,6 +10,7 @@ import net.minecraft.network.packet.Packet;
 import com.google.common.io.ByteArrayDataInput;
 
 /** @author Calclavia */
+@Deprecated
 public class PacketEntity extends PacketType
 {
     public PacketEntity(String channel)

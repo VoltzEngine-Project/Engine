@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
 /** @author Calclavia */
+@Deprecated
 public abstract class PacketType
 {
     public final String channel;

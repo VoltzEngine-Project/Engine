@@ -241,6 +241,10 @@ public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket,
             {
                 data.writeLong((Long) dataValue);
             }
+			else if (dataValue instanceof IByteBufObject)
+			{
+				((IByteBufObject) dataValue).writeBytes(data);
+			}
             else if (dataValue instanceof IVector3)
             {
                 data.writeDouble(((IVector3) dataValue).x());

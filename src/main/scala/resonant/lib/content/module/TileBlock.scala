@@ -84,21 +84,43 @@ abstract class TileBlock(val name: String, val material: Material) extends TileE
    * The unique string ID of this block.
    */
   var itemBlock: Class[_ <: ItemBlock] = classOf[ItemBlockTooltip]
+
   var creativeTab: CreativeTabs = null
+  def creativeTab(tab : CreativeTabs): Unit = this.creativeTab = tab
+
   var bounds: Cuboid = Cuboid.full
+  def bounds(cuboid: Cuboid): Unit = this.bounds = cuboid
+
   var block: BlockDummy = null
   def setBlock(block: BlockDummy)
   {
     this.block = block
   }
+
   var blockHardness: Float = 1
+  def blockHardness(hardness: Float): Unit = this.blockHardness = hardness
+
   var blockResistance: Float = 1
+  def blockResistance(resistance: Float): Unit = this.blockResistance = resistance
+
   var canProvidePower: Boolean = false
+  def canProvidePower(bool : Boolean): Unit = this.canProvidePower = bool
+
   var tickRandomly: Boolean = false
+  def tickRandomly(bool: Boolean): Unit = this.tickRandomly = bool
+
   var normalRender: Boolean = true
+  def normalRender(bool: Boolean): Unit = this.normalRender = bool
+
   var forceStandardRender: Boolean = false
+  def forceStandardRender(bool: Boolean): Unit = this.forceStandardRender = bool
+
   var customItemRender: Boolean = false
+  def customItemRender(bool: Boolean): Unit = this.customItemRender = bool
+
   var isOpaqueCube: Boolean = true
+  def isOpaqueCube(bool: Boolean): Unit = this.isOpaqueCube = bool
+
   /**
    * Temporary
    */

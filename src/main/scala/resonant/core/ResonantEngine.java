@@ -49,10 +49,7 @@ import resonant.lib.flag.ModFlag;
 import resonant.lib.modproxy.ProxyHandler;
 import resonant.lib.multiblock.BlockMultiBlockPart;
 import resonant.lib.multiblock.TileMultiBlockPart;
-import resonant.lib.network.netty.PacketEntity;
-import resonant.lib.network.netty.PacketPipelineHandler;
-import resonant.lib.network.netty.PacketPlayerItem;
-import resonant.lib.network.netty.PacketTile;
+import resonant.lib.network.netty.*;
 import resonant.lib.prefab.ProxyBase;
 import resonant.lib.prefab.item.ItemBlockMetadata;
 import resonant.lib.prefab.ore.OreGenBase;
@@ -346,7 +343,7 @@ public class ResonantEngine
             {
                 if (name.contains("ore"))
                 {
-                    field.set(null, new BlockBase(name, id));
+                    field.set(null, new BlockBase(name, Material.rock));
                     Block block = (Block) field.get(null);
                     GameRegistry.registerBlock(block, name);
                     OreDictionary.registerOre(name, block);
@@ -514,6 +511,7 @@ public class ResonantEngine
         this.packetHandler.registerPacket(PacketEntity.class);
         this.packetHandler.registerPacket(PacketTile.class);
         this.packetHandler.registerPacket(PacketPlayerItem.class);
+		this.packetHandler.registerPacket(PacketAnnotation.class);
 
         References.LOGGER.info("Loaded: " + LanguageUtility.loadLanguages(References.LANGUAGE_DIRECTORY, References.LANGUAGES) + " Languages.");
 

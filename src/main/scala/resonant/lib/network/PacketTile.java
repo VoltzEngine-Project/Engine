@@ -14,6 +14,7 @@ import com.google.common.io.ByteArrayDataInput;
 /** Packet handler for blocks and tile entities.
  * 
  * @author Calclavia */
+@Deprecated
 public class PacketTile extends PacketType
 {
     public PacketTile(String channel)
