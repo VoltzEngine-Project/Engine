@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -38,13 +39,13 @@ public class FluidRenderUtility
         return RenderUtility.getSpriteTexture(fluid.getSpriteNumber());
     }
 
-    public static Icon getFluidTexture(Fluid fluid, boolean flowing)
+    public static IIcon getFluidTexture(Fluid fluid, boolean flowing)
     {
         if (fluid == null)
         {
             return null;
         }
-        Icon icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
+		IIcon icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
         if (icon == null)
         {
             icon = ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationBlocksTexture)).getAtlasSprite("missingno");

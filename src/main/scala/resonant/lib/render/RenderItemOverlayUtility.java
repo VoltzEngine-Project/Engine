@@ -15,15 +15,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.common.ForgeDirection;
 
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import resonant.lib.utility.LanguageUtility;
 import resonant.lib.utility.WorldUtility;
-import universalelectricity.api.vector.Vector3;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import universalelectricity.core.transform.vector.Vector3;
 
 @SideOnly(Side.CLIENT)
 public class RenderItemOverlayUtility
@@ -58,14 +58,14 @@ public class RenderItemOverlayUtility
             if (inventory[i] != null)
             {
                 Vector3 translation = new Vector3((double) (i / matrixX) / ((double) matrixX) + (0.5 / (matrixX)), 1.1, (double) (i % matrixZ) / ((double) matrixZ) + (0.5 / (matrixZ))).translate(-0.5);
-                translation.scale(0.85);
+                translation.multiply(0.85);
                 GL11.glPushMatrix();
                 GL11.glTranslated(x + 0.5f, y + 0.5f, z + 0.5f);
                 RenderUtility.rotateBlockBasedOnDirection(dir);
                 GL11.glTranslated(translation.x, translation.y, translation.z);
                 GL11.glScalef(scale, scale, scale);
                 OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-                renderItem(tileEntity.worldObj, ForgeDirection.UP, inventory[i], new Vector3(0, 0, 0), 0, 4);
+                renderItem(tileEntity.getWorldObj(), ForgeDirection.UP, inventory[i], new Vector3(0, 0, 0), 0, 4);
                 GL11.glPopMatrix();
 
                 if (isLooking)
@@ -199,7 +199,7 @@ public class RenderItemOverlayUtility
 
     private static void setupLight(TileEntity tileEntity, int xDifference, int zDifference)
     {
-        World world = tileEntity.worldObj;
+        World world = tileEntity.getWorldObj();
 
         if (world.isBlockOpaqueCube(tileEntity.xCoord + xDifference, tileEntity.yCoord, tileEntity.zCoord + zDifference))
         {
