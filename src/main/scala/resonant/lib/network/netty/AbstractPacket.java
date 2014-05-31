@@ -7,9 +7,9 @@ import net.minecraft.entity.player.EntityPlayer;
 /**
  * For custom packets extend this Class and register on Mod loading phase
  *
- * Without registering a NPE will be thrown as the {@link resonant.lib.network.netty.PacketPipelineHandler} won't know how to handle it
+ * Without registering a NPE will be thrown as the {@link PacketManager} won't know how to handle it
  *
- * To send this packet also look at {@link resonant.lib.network.netty.PacketPipelineHandler#sendToAll(AbstractPacket)}
+ * To send this packet also look at {@link PacketManager#sendToAll(AbstractPacket)}
  * And other implementations there.
  *
  * @author tgame14
@@ -24,7 +24,7 @@ public abstract class AbstractPacket
 	 * @param ctx    channel context
 	 * @param buffer the buffer to encode into
 	 * @see {@link cpw.mods.fml.common.network.ByteBufUtils}
-	 * @see {@link resonant.lib.network.netty.PacketPipelineHandler#writeData(io.netty.buffer.ByteBuf, Object...)}
+	 * @see {@link PacketManager#writeData(io.netty.buffer.ByteBuf, Object...)}
 	 */
 	public abstract void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer);
 

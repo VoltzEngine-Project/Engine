@@ -1,8 +1,10 @@
 package resonant.core;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.INetHandler;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import resonant.core.content.debug.BlockCreativeBuilder;
@@ -56,4 +58,10 @@ public class ClientProxy extends ProxyBase
 
         return null;
     }
+
+	@Override
+	public EntityPlayer getPlayerFromNetHandler(INetHandler handler)
+	{
+		return Minecraft.getMinecraft().thePlayer;
+	}
 }

@@ -128,14 +128,14 @@ public class ResonantEngine
     public static double steamMultiplier = 1;
 
     private ProxyHandler modproxies;
-    public final PacketPipelineHandler packetHandler;
+    public final PacketManager packetHandler;
 
     private static ThermalGrid thermalGrid;
 
     public ResonantEngine ()
     {
         this.modproxies = new ProxyHandler();
-        this.packetHandler = new PacketPipelineHandler();
+        this.packetHandler = new PacketManager();
         ResonantEngine.thermalGrid = new ThermalGrid();
     }
 
@@ -511,12 +511,6 @@ public class ResonantEngine
         }
 
         References.CONFIGURATION.save();
-
-        this.packetHandler.registerPacket(PacketEntity.class);
-        this.packetHandler.registerPacket(PacketTile.class);
-        this.packetHandler.registerPacket(PacketPlayerItem.class);
-		this.packetHandler.registerPacket(PacketAnnotation.class);
-
         References.LOGGER.info("Loaded: " + LanguageUtility.loadLanguages(References.LANGUAGE_DIRECTORY, References.LANGUAGES) + " Languages.");
 
         ResonantEngine.metadata.modId = References.NAME;
