@@ -1,8 +1,8 @@
 package resonant.api;
 
-import java.util.EnumSet;
+import net.minecraftforge.common.util.ForgeDirection;
 
-import net.minecraftforge.common.ForgeDirection;
+import java.util.EnumSet;
 
 /** @author Calclavia */
 public interface IIO

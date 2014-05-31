@@ -6,13 +6,14 @@ import resonant.lib.utility.nbt.ISaveObj
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ChatComponentText
+import resonant.api.IIO
 
 /**
  * a Trait that handles IO Traits
  *
  * @author tgame14
  */
-trait TraitIO extends TileBase with ISaveObj
+trait TraitIO extends TileBase with IIO with ISaveObj
 {
   /**
    * IO METHODS.

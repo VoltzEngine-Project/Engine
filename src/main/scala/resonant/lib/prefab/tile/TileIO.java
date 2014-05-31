@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IIO;
 import resonant.lib.content.module.TileBase;
 
