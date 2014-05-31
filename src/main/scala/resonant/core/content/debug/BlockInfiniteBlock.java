@@ -18,6 +18,7 @@ import universalelectricity.api.UniversalElectricity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@Deprecated
 @BlockInfo(tileEntity = { "resonant.core.content.debug.TileInfiniteEnergy", "resonant.core.content.debug.TileInfiniteFluid" })
 public class BlockInfiniteBlock extends BlockSidedIO
 {

@@ -42,6 +42,8 @@ public class UniversalRecipe
     public static final UniversalRecipe MOTOR;
     public static final UniversalRecipe RUBBER;
 
+	//TODO: FIX!! SUCH A COMPATIBILITY BELONGS TO ICOMPATPROXY
+
     static
     {
         // Metals

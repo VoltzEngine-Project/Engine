@@ -4,15 +4,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.CompatibilityModule;
+import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.UniversalClass;
-import universalelectricity.api.energy.EnergyStorageHandler;
-import universalelectricity.api.energy.IEnergyContainer;
-import universalelectricity.api.energy.IEnergyInterface;
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.api.core.grid.electric.EnergyStorageHandler;
+import universalelectricity.api.core.grid.electric.IEnergyContainer;
+import universalelectricity.compatibility.Compatibility;
 
 @UniversalClass
+@Deprecated
 public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyContainer
 {
     protected EnergyStorageHandler energy;
@@ -32,7 +31,7 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
     {
         if (this.getEnergyHandler() != null)
         {
-            this.getEnergyHandler().extractEnergy(CompatibilityModule.chargeItem(itemStack, this.getEnergyHandler().getEnergy(), true), true);
+            this.getEnergyHandler().extractEnergy(Compatibility.CompatibilityModule.chargeItem(itemStack, this.getEnergyHandler().getEnergy(), true), true);
         }
     }
 
@@ -41,14 +40,14 @@ public class TileElectrical extends TileIO implements IEnergyInterface, IEnergyC
     {
         if (this.getEnergyHandler() != null)
         {
-            this.getEnergyHandler().receiveEnergy(CompatibilityModule.dischargeItem(itemStack, this.getEnergyHandler().getEmptySpace(), true), true);
+            this.getEnergyHandler().receiveEnergy(Compatibility.CompatibilityModule.dischargeItem(itemStack, this.getEnergyHandler().getEmptySpace(), true), true);
         }
     }
 
     @Override
     public boolean canConnect(ForgeDirection direction, Object obj)
     {
-        if (CompatibilityModule.isHandler(obj))
+        if (Compatibility.CompatibilityModule.isHandler(obj))
         {
             if (direction == null || direction.equals(ForgeDirection.UNKNOWN))
             {

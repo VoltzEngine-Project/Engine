@@ -2,68 +2,50 @@ package resonant.lib.utility.key;
 
 import java.util.EnumSet;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import cpw.mods.fml.common.IScheduledTickHandler;
-import cpw.mods.fml.common.TickType;
-
 /** This class handles keys already binded to the game so to avoid creating new key bindings
  * 
  * @author DarkGuardsman */
-public class PlayerKeyHandler implements IScheduledTickHandler
+public class PlayerKeyHandler
 {
-    private String channel;
+	private String channel;
 
-    public PlayerKeyHandler(String channel)
-    {
-        this.channel = channel;
-    }
+	public PlayerKeyHandler(String channel)
+	{
+		this.channel = channel;
+	}
 
-    @Override
-    public final void tickStart(EnumSet<TickType> type, Object... tickData)
-    {
-        keyTick(type, false);
-    }
+	@SubscribeEvent
+	public void tickEvent(TickEvent.ClientTickEvent event)
+	{
+		switch (event.phase)
+		{
+			case START:
+				keyTick(false);
+				break;
+			case END:
+				keyTick(true);
+		}
+	}
 
-    @Override
-    public final void tickEnd(EnumSet<TickType> type, Object... tickData)
-    {
-        keyTick(type, true);
-    }
-
-    private void keyTick(EnumSet<TickType> type, boolean tickEnd)
+    private void keyTick(boolean tickEnd)
     {
         for (int i = 0; i < Minecraft.getMinecraft().gameSettings.keyBindings.length; i++)
         {
             KeyBinding keyBinding = Minecraft.getMinecraft().gameSettings.keyBindings[i];
-            int keyCode = keyBinding.keyCode;
+            int keyCode = keyBinding.getKeyCode();
             boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
             if (state)
             {
                 //PacketManagerKeyEvent.sendPacket(this.channel, keyCode);
             }
         }
-    }
-
-    @Override
-    public EnumSet<TickType> ticks()
-    {
-        return EnumSet.of(TickType.CLIENT);
-    }
-
-    @Override
-    public String getLabel()
-    {
-        return "[CoreMachine]KeyBindingCatcher";
-    }
-
-    @Override
-    public int nextTickSpacing()
-    {
-        return 2;
     }
 }
