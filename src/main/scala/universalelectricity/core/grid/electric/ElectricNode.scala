@@ -112,6 +112,8 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
     return if (tr < 0.0D) 0.0D else tr
   }
 
+    def getEmptySpace : Double = this.getEnergyCapacity - this.getEnergy(getVoltage)
+
   override def update(deltaTime: Double)
   {
     calculateVoltage(deltaTime)

@@ -19,6 +19,8 @@ public interface IElectricNode extends INode
 
 	public void setEnergyCapacity(double value);
 
+	public double getEmptySpace();
+
 	/**
 	 * Resistance in Ohms
 	 */
