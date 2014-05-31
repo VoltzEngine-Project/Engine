@@ -49,7 +49,7 @@ public class ClientProxy extends ProxyBase
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
-        Block block = Block.blocksList[world.getBlockId(x, y, z)];
+        Block block = world.getBlock(x, y, z);
 
         if (block instanceof BlockCreativeBuilder)
             return new GuiCreativeBuilder(new Vector3(x, y, z));

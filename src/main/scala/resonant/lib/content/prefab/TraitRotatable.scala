@@ -1,13 +1,13 @@
 package resonant.lib.content.prefab
 
-import net.minecraft.tileentity.TileEntity
 import resonant.api.IRotatable
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.transform.vector.Vector3
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.MathHelper
+import resonant.lib.content.module.TileBlock
 
-trait TraitRotatable extends TileEntity with IRotatable
+trait TraitRotatable extends TileBlock with IRotatable
 {
   protected var rotationMask: Byte = 0x3C
 

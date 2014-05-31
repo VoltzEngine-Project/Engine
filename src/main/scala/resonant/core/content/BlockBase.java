@@ -4,13 +4,15 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import resonant.lib.References;
 import resonant.lib.content.module.TileBlock;
+import resonant.lib.prefab.block.BlockAdvanced;
 
-public class BlockBase extends TileBlock
+public class BlockBase extends BlockAdvanced
 {
     public BlockBase(String name, Material mat)
     {
-        super(name, mat);
-        this.creativeTab(CreativeTabs.tabBlock);
-        this.blockHardness(2f);
+        super(mat);
+		this.setBlockName(name);
+        this.setCreativeTab(CreativeTabs.tabBlock);
+        this.setHardness(2f);
     }
 }

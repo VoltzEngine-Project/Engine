@@ -5,14 +5,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IPlayerUsing;
+import resonant.core.ResonantEngine;
 import resonant.lib.References;
+import resonant.lib.content.module.prefab.TileRotatable;
+import resonant.lib.network.PacketAnnotation;
 
 import java.util.HashSet;
 
 /** All tiles inherit this class.
  * 
  * @author Calclavia */
-public abstract class TileBase extends TileBlock implements IPlayerUsing
+public abstract class TileBase extends TileRotatable implements IPlayerUsing
 {
     public TileBase(String name, Material material)
     {
@@ -21,7 +24,8 @@ public abstract class TileBase extends TileBlock implements IPlayerUsing
 
     public TileBase(Material material)
     {
-        super(material);
+		//TODO: Fix to call actual constructor of TileBlock
+        super("", material);
     }
 
     @Override
@@ -64,7 +68,7 @@ public abstract class TileBase extends TileBlock implements IPlayerUsing
     @Override
     public Packet getDescriptionPacket ()
     {
-        return References.PACKET_ANNOTATION.getPacket(this);
+        return ResonantEngine.INSTANCE.packetHandler.toMCPacket(new PacketAnnotation(this));
     }
 
     @Override

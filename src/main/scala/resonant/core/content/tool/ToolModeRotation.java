@@ -6,19 +6,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import resonant.core.content.ItemScrewdriver;
 import resonant.lib.utility.inventory.InventoryUtility;
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 public class ToolModeRotation extends ToolMode
 {
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
     {
-        int blockID = world.getBlockId(x, y, z);
         int blockMeta = world.getBlockMetadata(x, y, z);
-        Block block = Block.blocksList[blockID];
+        Block block = world.getBlock(x, y, z);
 
         if (block != null && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
         {
@@ -33,7 +32,7 @@ public class ToolModeRotation extends ToolMode
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
     {
-        TileEntity tile = world.getBlockTileEntity(x, y, z);
+        TileEntity tile = world.getTileEntity(x, y, z);
 
         if (tile instanceof IWrenchable && ((IWrenchable) tile).wrenchCanSetFacing(player, side))
         {
