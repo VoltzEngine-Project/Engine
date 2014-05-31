@@ -25,7 +25,7 @@ public class AccessUser extends User implements ISaveObj
 
     public AccessUser(EntityPlayer player)
     {
-        super(player.username);
+        super(player.getCommandSenderName());
     }
 
     public AccessGroup getGroup()
@@ -70,7 +70,7 @@ public class AccessUser extends User implements ISaveObj
     public void save(NBTTagCompound nbt)
     {
         nbt.setString("username", this.username);
-        nbt.setCompoundTag("extraData", this.userData());
+        nbt.setTag("extraData", this.userData());
         NBTTagList usersTag = new NBTTagList();
         for (String str : this.nodes)
         {
@@ -86,11 +86,11 @@ public class AccessUser extends User implements ISaveObj
     {
         this.username = nbt.getString("username");
         this.extraData = nbt.getCompoundTag("extraData");
-        NBTTagList userList = nbt.getTagList("nodes");
+        NBTTagList userList = nbt.getTagList("nodes", 0);
         this.nodes.clear();
         for (int i = 0; i < userList.tagCount(); ++i)
         {
-            this.nodes.add(((NBTTagCompound) userList.tagAt(i)).getString("name"));
+            this.nodes.add(((NBTTagCompound) userList.getCompoundTagAt(i)).getString("name"));
         }
     }
 

@@ -107,7 +107,7 @@ public class AccessProfile implements IVirtualObject
         // Created by player for personal use
         if (object instanceof EntityPlayer)
         {
-            id = ((EntityPlayer) object).username + "_" + System.currentTimeMillis();
+            id = ((EntityPlayer) object).getCommandSenderName() + "_" + System.currentTimeMillis();
             this.global = true;
         }//Created by a tile
         else if (object instanceof TileEntity || object == null)
@@ -277,7 +277,7 @@ public class AccessProfile implements IVirtualObject
         this.profileID = nbt.getString("profileID");
 
         //Load groups
-        NBTTagList group_list = nbt.getTagList("groups");
+        NBTTagList group_list = nbt.getTagList("groups", 0);
         if (group_list != null && group_list.tagCount() > 0)
         {
             this.groups.clear();
@@ -285,7 +285,7 @@ public class AccessProfile implements IVirtualObject
             for (int i = 0; i < group_list.tagCount(); i++)
             {
                 AccessGroup group = new AccessGroup("");
-                group.load((NBTTagCompound) group_list.tagAt(i));
+                group.load((NBTTagCompound) group_list.getCompoundTagAt(i));
                 this.groups.add(group);
             }
             //Set group extensions

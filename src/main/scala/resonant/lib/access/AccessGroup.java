@@ -95,21 +95,21 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
         }
 
         //Load users
-        NBTTagList userList = nbt.getTagList("users");
+        NBTTagList userList = nbt.getTagList("users", 0);
         getMembers().clear();
 
         for (int i = 0; i < userList.tagCount(); ++i)
         {
-            AccessUser user = AccessUser.loadFromNBT((NBTTagCompound) userList.tagAt(i));
+            AccessUser user = AccessUser.loadFromNBT((NBTTagCompound) userList.getCompoundTagAt(i));
             this.addMemeber(user);
         }
 
         //Load permission nodes
-        NBTTagList nodeList = nbt.getTagList("nodes");
+        NBTTagList nodeList = nbt.getTagList("nodes", 0);
         this.nodes.clear();
         for (int i = 0; i < nodeList.tagCount(); ++i)
         {
-            this.nodes.add(((NBTTagCompound) nodeList.tagAt(i)).getString("name"));
+            this.nodes.add(((NBTTagCompound) nodeList.getCompoundTagAt(i)).getString("name"));
         }
 
         //Load creation date

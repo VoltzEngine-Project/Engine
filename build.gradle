@@ -112,10 +112,22 @@ publishing {
 }
 
 repositories {
-    maven { url 'http://calclavia.com/maven' }
+    maven {
+        url 'http://calclavia.com/maven'
+    }
+    maven {
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
+    }
+    maven {
+        name 'CB Repo'
+        url "https://chickenbones.net/maven/"
+    }
+
 }
 dependencies {
     compile 'universalelectricity:Universal-Electricity:+:dev'
+    compile "mcp.mobius.waila:Waila:1.5.2a"
 }
 
 
