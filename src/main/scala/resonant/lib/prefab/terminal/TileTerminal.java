@@ -11,7 +11,6 @@ import resonant.api.IPlayerUsing;
 import resonant.api.IScroll;
 import resonant.api.ITerminal;
 import resonant.lib.network.IPacketReceiverWithID;
-import resonant.lib.network.PacketHandler;
 import resonant.lib.prefab.tile.TileAdvanced;
 
 import com.google.common.io.ByteArrayDataInput;

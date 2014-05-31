@@ -6,7 +6,6 @@ package resonant.lib.modproxy;
  * @since 23/02/14
  * @author tgame14
  */
-@Deprecated
 public enum LoadPhase
 {
     PRELAUNCH,

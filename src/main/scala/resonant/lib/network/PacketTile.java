@@ -1,104 +1,126 @@
 package resonant.lib.network;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
-import resonant.lib.References;
 
-import com.google.common.io.ByteArrayDataInput;
-
-/** Packet handler for blocks and tile entities.
- * 
- * @author Calclavia */
-@Deprecated
+/**
+ * @since 26/05/14
+ * @author tgame14
+ */
 public class PacketTile extends PacketType
 {
-    public PacketTile(String channel)
+    protected int x;
+    protected int y;
+    protected int z;
+    protected int id;
+
+    public PacketTile (int x, int y, int z, int id, Object... args)
     {
-        super(channel);
+        super(args);
+        this.x = x;
+        this.y = y;
+        this.z = y;
+        this.id = id;
     }
 
-    public Packet getPacket(TileEntity tileEntity, Object... args)
+    public PacketTile (int x, int y, int z, Object... args)
     {
-        return this.getPacket(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, args);
+        this(x, y, z, -1, args);
     }
 
-    public Packet getPacketWithID(int id, TileEntity tileEntity, Object... args)
+	public PacketTile(TileEntity tile, Object... args)
+	{
+		this(tile.xCoord, tile.yCoord, tile.zCoord, args);
+	}
+
+	public PacketTile(TileEntity tile, int id, Object... args)
+	{
+		this(tile.xCoord, tile.yCoord, tile.zCoord, id, args);
+	}
+
+
+    @Override
+    public void encodeInto (ChannelHandlerContext ctx, ByteBuf buffer)
     {
-        return this.getPacketWithID(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, id, args);
-    }
+        buffer.writeInt(x);
+        buffer.writeInt(y);
+        buffer.writeInt(z);
+        buffer.writeInt(id);
 
-    public Packet getPacket(int x, int y, int z, Object... args)
-    {
-        List newArgs = new ArrayList();
+        buffer.writeBytes(this.data);
 
-        newArgs.add(x);
-        newArgs.add(y);
-        newArgs.add(z);
-
-        for (Object obj : args)
-        {
-            newArgs.add(obj);
-        }
-
-
-        return super.getPacket(newArgs.toArray());
-    }
-
-    public Packet getPacketWithID(int x, int y, int z, int id, Object... args)
-    {
-        List newArgs = new ArrayList();
-
-        newArgs.add(x);
-        newArgs.add(y);
-        newArgs.add(z);
-        newArgs.add(id);
-
-        for (Object obj : args)
-        {
-            newArgs.add(obj);
-        }
-
-        return super.getPacket(newArgs.toArray());
     }
 
     @Override
-    public void receivePacket(ByteArrayDataInput data, EntityPlayer player)
+    public void decodeInto (ChannelHandlerContext ctx, ByteBuf buffer)
     {
-        int x = data.readInt();
-        int y = data.readInt();
-        int z = data.readInt();
+        this.x = buffer.readInt();
+        this.y = buffer.readInt();
+        this.z = buffer.readInt();
+        this.id = buffer.readInt();
 
-        TileEntity tileEntity = player.worldObj.getBlockTileEntity(x, y, z);
+        this.data = buffer.slice();
+    }
 
-        try
+    @Override
+    public void handleClientSide (EntityPlayer player)
+    {
+        TileEntity tile = player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+        if (this.id == -1)
         {
-            if (tileEntity instanceof IPacketReceiverWithID)
+            if (tile instanceof IPacketReceiver)
             {
-                ((IPacketReceiverWithID) tileEntity).onReceivePacket(data.readInt(), data, player);
-            }
-            else if (tileEntity instanceof IPacketReceiver)
-            {
-                ((IPacketReceiver) tileEntity).onReceivePacket(data, player);
+                IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+                receiver.onReceivePacket(data.slice(), player, this.x, this.y, this.z);
             }
             else
             {
-                int blockID = player.worldObj.getBlockId(x, y, z);
-
-                if (Block.blocksList[blockID] instanceof IPacketReceiver)
-                {
-                    ((IPacketReceiver) Block.blocksList[blockID]).onReceivePacket(data, player, x, y, z);
-                }
+                throw new UnsupportedOperationException("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error");
             }
         }
-        catch (Exception e)
+        else
         {
-            References.LOGGER.severe("Resonant Engine packet failed at: " + tileEntity + " in " + x + ", " + y + ", " + z);
-            e.printStackTrace();
+            if (tile instanceof IPacketReceiverWithID)
+            {
+                IPacketReceiverWithID receiver = (IPacketReceiverWithID) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+                receiver.onReceivePacket(this.id, data.slice(), player, this.x, this.y, this.z);
+            }
+            else
+            {
+                throw new UnsupportedOperationException("Packet was sent to a tile not implementing IPacketReceiverWithID, this is a coding error");
+            }
+        }
+    }
+
+    @Override
+    public void handleServerSide (EntityPlayer player)
+    {
+        TileEntity tile = player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+        if (this.id == -1)
+        {
+            if (tile instanceof IPacketReceiver)
+            {
+                IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+                receiver.onReceivePacket(data.slice(), player, this.x, this.y, this.z);
+            }
+            else
+            {
+                throw new UnsupportedOperationException("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error");
+            }
+        }
+        else
+        {
+            if (tile instanceof IPacketReceiverWithID)
+            {
+                IPacketReceiverWithID receiver = (IPacketReceiverWithID) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+                receiver.onReceivePacket(this.id, data.slice(), player, this.x, this.y, this.z);
+            }
+            else
+            {
+                throw new UnsupportedOperationException("Packet was sent to a tile not implementing IPacketReceiverWithID, this is a coding error");
+            }
         }
     }
 }

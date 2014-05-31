@@ -1,48 +1,22 @@
 package resonant.lib.network;
 
-import com.google.common.io.ByteArrayDataInput;
-import net.minecraft.entity.player.EntityPlayer;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import net.minecraft.network.Packet;
+import resonant.core.ResonantEngine;
+import resonant.lib.network.netty.AbstractPacket;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-
-/** @author Calclavia */
-@Deprecated
-public abstract class PacketType
+/**
+ * @since 26/05/14
+ * @author tgame14
+ */
+public abstract class PacketType extends AbstractPacket
 {
-    public final String channel;
-    public final byte id;
+    protected ByteBuf data;
 
-    public PacketType(String channel)
+    public PacketType (Object... args)
     {
-        this.id = (byte) PacketHandler.registeredPackets.size();
-        PacketHandler.registeredPackets.add(this);
-        this.channel = channel;
+        this.data = Unpooled.buffer();
+        ResonantEngine.INSTANCE.packetHandler.writeData(this.data, args);
     }
-
-    protected Packet getPacket(Object... arg)
-    {
-        try
-        {
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            DataOutputStream data = new DataOutputStream(bytes);
-
-            PacketHandler.writeData(data, this.id);
-            PacketHandler.writeData(data, arg);
-
-            Packet250CustomPayload packet = new Packet250CustomPayload();
-            packet.channel = channel;
-            packet.data = bytes.toByteArray();
-            packet.length = packet.data.length;
-
-            return packet;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public abstract void receivePacket(ByteArrayDataInput data, EntityPlayer player);
 }

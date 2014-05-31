@@ -12,7 +12,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
  * @since 23/02/14
  * @author tgame14
  */
-@Deprecated
 public interface IMod
 {
     public void preInit(FMLPreInitializationEvent event);

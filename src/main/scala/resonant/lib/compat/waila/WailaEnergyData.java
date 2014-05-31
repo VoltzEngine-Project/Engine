@@ -50,7 +50,7 @@ public class WailaEnergyData implements IWailaDataProvider
 		{
 			IEnergyContainer te = (IEnergyContainer) tile;
 			currenttip.add(LanguageUtility.getLocal("info.waila.energy") + " " + UnitDisplay.getDisplayShort(te.getEnergy(accessor.getSide()), UnitDisplay.Unit.JOULES) + " / " + UnitDisplay.getDisplayShort(te.getEnergyCapacity(accessor.getSide()), UnitDisplay.Unit.JOULES));
-		}
+		}/*
 		//Voltage support
 		if (input && tile instanceof IVoltageInput)
 		{
@@ -68,7 +68,7 @@ public class WailaEnergyData implements IWailaDataProvider
 			IConductor te = (IConductor) tile;
 			currenttip.add(LanguageUtility.getLocal("info.waila.amp") + " " + UnitDisplay.getDisplayShort(te.getCurrentCapacity(), UnitDisplay.Unit.AMPERE));
 			currenttip.add(LanguageUtility.getLocal("info.waila.ohm") + " " + UnitDisplay.getDisplayShort(te.getResistance(), UnitDisplay.Unit.RESISTANCE));
-		}
+		}*/
 		return currenttip;
 	}
 

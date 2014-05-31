@@ -21,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.Packet;
 import net.minecraftforge.fluids.FluidTank;
 import resonant.core.ResonantEngine;
 import resonant.lib.References;
@@ -154,6 +155,11 @@ public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket,
     {
         return ResonantEngine.metadata.modId;
     }
+
+	public Packet toMCPacket(AbstractPacket packet)
+	{
+		return channelEnumMap.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
+	}
 
     /// *** THIS IS SPECIAL PACKET SENDING METHODS SIMILAR TO 1.6.4 IMPLEMENTATIONS *** ///
 

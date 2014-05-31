@@ -5,8 +5,6 @@ import java.io.File;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import resonant.lib.network.PacketAnnotation;
-import resonant.lib.network.PacketTile;
 import net.minecraft.util.ResourceLocation;
 import cpw.mods.fml.common.Loader;
 
@@ -33,11 +31,6 @@ public final class References
     public static final String MODEL_DIRECTORY = DIRECTORY + MODEL_PATH;
     public static final String LANGUAGE_DIRECTORY = DIRECTORY + "languages/";
     public static final String[] LANGUAGES = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL", "de_DE", "tr_TR", "ru_RU", "pl_PL", "et_EE" };
-
-	@Deprecated
-    public static final PacketTile PACKET_TILE = new PacketTile(References.CHANNEL);
-	@Deprecated
-    public static final PacketAnnotation PACKET_ANNOTATION = new PacketAnnotation(References.CHANNEL); 
     
     public static final ResourceLocation GUI_EMPTY_FILE = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "gui_empty.png");
     public static final ResourceLocation GUI_BASE = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "gui_base.png");

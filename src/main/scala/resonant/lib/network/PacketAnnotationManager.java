@@ -1,4 +1,4 @@
-package resonant.lib.network.netty;
+package resonant.lib.network;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -12,8 +12,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidTank;
 import resonant.core.ResonantEngine;
 import resonant.lib.References;
-import resonant.lib.network.PacketHandler;
-import resonant.lib.network.Synced;
 import resonant.lib.utility.nbt.ISaveObj;
 import universalelectricity.core.transform.vector.Vector3;
 

@@ -1,50 +1,62 @@
 package resonant.lib.network;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.Packet;
 
-import com.google.common.io.ByteArrayDataInput;
-
-/** @author Calclavi */
-@Deprecated
+/**
+ * @since 26/05/14
+ * @author tgame14
+ */
 public class PacketPlayerItem extends PacketType
 {
-    public PacketPlayerItem(String channel)
+    protected int slotId;
+
+    public PacketPlayerItem (int slotId, Object... args)
     {
-        super(channel);
+        super(args);
+        this.slotId = slotId;
     }
 
-    public Packet getPacket(int slotID, Object... args)
+    public PacketPlayerItem (EntityPlayer player, Object... args)
     {
-        List newArgs = new ArrayList();
-
-        newArgs.add(slotID);
-
-        for (Object obj : args)
-        {
-            newArgs.add(obj);
-        }
-
-        return super.getPacket(newArgs.toArray());
-    }
-
-    public Packet getPacket(EntityPlayer player, Object... args)
-    {
-        return this.getPacket(player.inventory.currentItem, args);
+        this(player.inventory.currentItem, args);
     }
 
     @Override
-    public void receivePacket(ByteArrayDataInput data, EntityPlayer player)
+    public void encodeInto (ChannelHandlerContext ctx, ByteBuf buffer)
     {
-        ItemStack itemStack = player.inventory.getStackInSlot(data.readInt());
+        buffer.writeInt(this.slotId);
+        buffer.writeBytes(this.data);
+    }
 
-        if (itemStack != null && itemStack.getItem() instanceof IPacketReceiver)
+    @Override
+    public void decodeInto (ChannelHandlerContext ctx, ByteBuf buffer)
+    {
+        this.slotId = buffer.readInt();
+        this.data = buffer.slice();
+    }
+
+    @Override
+    public void handleClientSide (EntityPlayer player)
+    {
+        ItemStack stack = player.inventory.getStackInSlot(this.slotId);
+
+        if (stack != null && stack.getItem() instanceof IPacketReceiver)
         {
-            ((IPacketReceiver) itemStack.getItem()).onReceivePacket(data, player, itemStack);
+            ((IPacketReceiver) stack.getItem()).onReceivePacket(this.data, player, stack);
+        }
+    }
+
+    @Override
+    public void handleServerSide (EntityPlayer player)
+    {
+        ItemStack stack = player.inventory.getStackInSlot(this.slotId);
+
+        if (stack != null && stack.getItem() instanceof IPacketReceiver)
+        {
+            ((IPacketReceiver) stack.getItem()).onReceivePacket(this.data, player, stack);
         }
     }
 }
