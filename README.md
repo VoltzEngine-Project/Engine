@@ -8,8 +8,8 @@ Universal Electricity's website can be found at www.universalelectricity.com. Al
 Documentation: https://github.com/Universal-Electricity/Universal-Electricity/wiki
 
 #### Developers
-* Calclavia
-* DarkGuardsman
+* Calclavia http://www.patreon.com/calclavia
+* DarkGuardsman 
 
 ### Contact
 Join *#universalelectricity* on EsperNet (irc.esper.net:5555). Remember to follow the rules and respect others as with any other channel.
