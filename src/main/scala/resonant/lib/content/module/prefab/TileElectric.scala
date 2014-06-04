@@ -9,7 +9,7 @@ import net.minecraft.block.material.Material
  * @since 27/05/14
  * @author tgame14
  */
-class TileElectric(mat: Material) extends TraitElectric(mat)
+class TileElectric extends TraitElectric
 {
 
 }
