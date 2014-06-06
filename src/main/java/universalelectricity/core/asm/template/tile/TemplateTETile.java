@@ -18,7 +18,13 @@ public abstract class TemplateTETile implements IEnergyHandler, IEnergyInterface
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
 	{
-		return (int) (StaticTileForwarder.onReceiveEnergy(this, from, (int) (maxReceive * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio), !simulate) * CompatibilityType.THERMAL_EXPANSION.ratio);
+	    double ue = maxReceive * CompatibilityType.THERMAL_EXPANSION.reciprocal_ratio;
+	    double rf = (StaticTileForwarder.onReceiveEnergy(this, from, (int) ue, !simulate) * CompatibilityType.THERMAL_EXPANSION.ratio);
+	    if(rf == 0 && ue > 0)
+	    {
+	        rf = 1;
+	    }
+		return (int) rf;
 	}
 
 	@Override
