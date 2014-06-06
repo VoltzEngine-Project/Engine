@@ -154,6 +154,10 @@ public class StaticTileForwarder
 			if (handler instanceof IEnergyContainer)
 			{
 				float capacity = (float) (((IEnergyContainer) handler).getEnergyCapacity(ForgeDirection.UNKNOWN) * CompatibilityType.BUILDCRAFT.ratio);
+				if(capacity < 1)
+				{
+				    capacity = 1;
+				}
 				powerHandler.configure(0, capacity, 1, capacity);
 			}
 

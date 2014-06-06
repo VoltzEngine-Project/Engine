@@ -23,10 +23,6 @@ public class ModuleBuildCraft extends CompatibilityModule
 		if (receiver != null && energy > 0)
 		{
 		    float bc = (float) (energy * CompatibilityType.BUILDCRAFT.ratio);
-		    if (bc > 0 && bc <= 1)
-            {
-                bc = 1;
-            }
 			if (doReceive)
 			{
 				return (long) (receiver.receiveEnergy(Type.PIPE, bc, direction) * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
