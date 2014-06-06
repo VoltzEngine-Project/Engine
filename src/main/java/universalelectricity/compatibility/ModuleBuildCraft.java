@@ -20,14 +20,19 @@ public class ModuleBuildCraft extends CompatibilityModule
 		IPowerReceptor receptor = ((IPowerReceptor) handler);
 		PowerReceiver receiver = receptor.getPowerReceiver(direction);
 
-		if (receiver != null)
+		if (receiver != null && energy > 0)
 		{
+		    float bc = (float) (energy * CompatibilityType.BUILDCRAFT.ratio);
+		    if (bc > 0 && bc <= 1)
+            {
+                bc = 1;
+            }
 			if (doReceive)
 			{
-				return (long) (receiver.receiveEnergy(Type.PIPE, (float) (energy * CompatibilityType.BUILDCRAFT.ratio), direction) * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
+				return (long) (receiver.receiveEnergy(Type.PIPE, bc, direction) * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
 			}
 
-			return (long) (receiver.powerRequest() * CompatibilityType.BUILDCRAFT.reciprocal_ratio);
+			return (long) bc;
 		}
 
 		return 0;
