@@ -26,7 +26,7 @@ trait TIO extends TileBase with IIO with ISaveObj
   protected var ioMap: Short = 364
   protected var saveIOMap: Boolean = false
 
-  def toggleIO(side: Int, entityPlayer: EntityPlayer) : Boolean =
+  def toggleIO(side: Int, entityPlayer: EntityPlayer): Boolean =
   {
     val newIO = (getIO(ForgeDirection.getOrientation(side)) + 1) % 3
     setIO(ForgeDirection.getOrientation(side), newIO)

@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import resonant.lib.utility.nbt.ISaveObj
 import universalelectricity.api.UniversalClass
-import universalelectricity.api.core.grid.electric.{IElectricNode, EnergyStorageHandler, IEnergyContainer}
+import universalelectricity.api.core.grid.electric.{IElectricNode, IEnergyContainer}
 import universalelectricity.api.core.grid.{NodeRegistry, INode, INodeProvider}
 import universalelectricity.compatibility.Compatibility
 import net.minecraftforge.common.util.ForgeDirection
@@ -12,8 +12,6 @@ import net.minecraftforge.common.util.ForgeDirection
 @UniversalClass
 trait TElectric extends TIO with INodeProvider with IEnergyContainer with ISaveObj
 {
-  protected var energy: EnergyStorageHandler = _
-
   protected var electricNode = NodeRegistry.get(this, classOf[IElectricNode])
 
   /**

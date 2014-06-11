@@ -2,12 +2,15 @@ package resonant.lib.content.prefab
 
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.nbt.NBTTagCompound
+import universalelectricity.api.core.grid.electric.EnergyStorageHandler
 
 /**
  * @author Calclavia
  */
 trait TElectricStorage extends TElectric
 {
+  protected var energy: EnergyStorageHandler = _
+
   /**
    * Sets the amount of energy this unit stored.
    *
@@ -35,9 +38,11 @@ trait TElectricStorage extends TElectric
     if (energy != null)
     {
       return energy.getEnergyCapacity
-    } else
+    }
+    else
       return 0
   }
+
   override def save(nbt: NBTTagCompound)
   {
     super.save(nbt);
