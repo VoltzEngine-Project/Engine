@@ -1,4 +1,4 @@
-package resonant.lib.content.prefab
+package resonant.lib.content.prefab.trait
 
 import net.minecraft.nbt.NBTTagCompound
 import resonant.lib.content.module.TileBase

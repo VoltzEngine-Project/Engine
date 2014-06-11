@@ -1,4 +1,4 @@
-package resonant.lib.prefab.tile;
+package resonant.lib.content.prefab.java;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -8,12 +8,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import resonant.api.IExternalInventory;
 import resonant.api.IExternalInventoryBox;
+import resonant.lib.content.module.TileBase;
+import resonant.lib.content.prefab.TraitInventory;
+import resonant.lib.prefab.tile.TileAdvanced;
 import resonant.lib.utility.inventory.ExternalInventory;
 
 /** Prefab for simple object who only need basic inv support and nothing more
  * 
  * @author Darkguardsman */
-public class TileExternalInventory extends TileAdvanced implements IExternalInventory, ISidedInventory
+public class TileInventory extends TileBase implements TraitInventory
 {
     protected IExternalInventoryBox inventory;
     protected int maxSlots = 1;

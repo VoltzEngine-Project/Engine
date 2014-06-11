@@ -6,8 +6,7 @@ import net.minecraft.network.Packet;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IPlayerUsing;
 import resonant.core.ResonantEngine;
-import resonant.lib.References;
-import resonant.lib.content.module.prefab.TileRotatable;
+import resonant.lib.content.prefab.java.TileRotatable;
 import resonant.lib.network.PacketAnnotation;
 
 import java.util.HashSet;

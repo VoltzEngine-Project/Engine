@@ -1,8 +1,8 @@
 package resonant.core.content.debug
 
-import resonant.lib.content.module.prefab.TileElectric
 import universalelectricity.api.core.grid.electric.EnergyStorageHandler
 import net.minecraft.block.material.Material
+import resonant.lib.content.prefab.java.TileElectric
 
 /**
  * @since 31/05/14

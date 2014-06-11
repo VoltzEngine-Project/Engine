@@ -1,4 +1,4 @@
-package resonant.lib.content.prefab
+package resonant.lib.content.prefab.trait
 
 import resonant.api.IRotatable
 import net.minecraftforge.common.util.ForgeDirection

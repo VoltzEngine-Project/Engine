@@ -1,4 +1,4 @@
-package resonant.lib.content.prefab
+package resonant.lib.content.prefab.trait
 
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.nbt.NBTTagCompound

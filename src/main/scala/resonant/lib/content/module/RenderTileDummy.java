@@ -2,9 +2,9 @@ package resonant.lib.content.module;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import universalelectricity.api.vector.Vector3;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import universalelectricity.core.transform.vector.Vector3;
 
 /** @author Calclavia */
 @SideOnly(Side.CLIENT)

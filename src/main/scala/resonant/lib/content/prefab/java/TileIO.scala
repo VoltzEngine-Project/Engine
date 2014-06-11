@@ -1,7 +1,7 @@
-package resonant.lib.content.module.prefab
+package resonant.lib.content.prefab.java
 
-import resonant.lib.content.prefab.TraitIO
 import resonant.lib.content.module.TileBlock
+import resonant.lib.content.prefab.TraitIO
 
 /**
  * @since 27/05/14

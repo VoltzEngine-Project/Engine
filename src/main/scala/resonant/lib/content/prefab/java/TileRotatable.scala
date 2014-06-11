@@ -1,8 +1,8 @@
-package resonant.lib.content.module.prefab
+package resonant.lib.content.prefab.java
 
-import resonant.lib.content.prefab.TraitRotatable
 import resonant.lib.content.module.TileBlock
 import net.minecraft.block.material.Material
+import resonant.lib.content.prefab.TraitRotatable
 
 /**
  * @since 27/05/14
