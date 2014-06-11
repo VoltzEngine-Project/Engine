@@ -24,19 +24,19 @@ trait TraitInventory extends IExternalInventory with ISidedInventory
 	protected var inventory: IExternalInventoryBox = _
 	protected var maxSlots: Int = 1
 
+	protected def getNewInventory() = new ExternalInventory(this, maxSlots)
+
 	override def getInventory(): IExternalInventoryBox =
 	{
 		if (this.inventory == null)
 		{
-			this.inventory = new ExternalInventory(this, this.maxSlots)
+			this.inventory = getNewInventory()
 		}
+
 		return this.inventory
 	}
 
-	override def getSizeInventory(): Int =
-	{
-		return this.getInventory().getSizeInventory
-	}
+	override def getSizeInventory() = getInventory().getSizeInventory
 
 	override def getStackInSlot(index: Int): ItemStack =
 	{
