@@ -13,7 +13,7 @@ import resonant.api.IIO
  *
  * @author tgame14
  */
-trait TIO extends TileBase with IIO with ISaveObj
+trait TIO extends IIO with ISaveObj
 {
   /**
    * IO METHODS.
