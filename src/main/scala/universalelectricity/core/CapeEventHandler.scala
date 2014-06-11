@@ -100,7 +100,7 @@ object CapeEventHandler
           }
           else
           {
-            UELoader$.MODULE$.logger.severe("[capes.txt] Syntax error on line " + linetracker + ": " + str)
+            UELoader.logger.severe("[capes.txt] Syntax error on line " + linetracker + ": " + str)
           }
         }
         linetracker += 1
@@ -152,7 +152,7 @@ object CapeEventHandler
         {
           case e: MalformedURLException =>
           {
-            UELoader$.MODULE$.logger.fine("Failed to load capes")
+            UELoader.logger.fine("Failed to load capes")
             e.printStackTrace
           }
         }
