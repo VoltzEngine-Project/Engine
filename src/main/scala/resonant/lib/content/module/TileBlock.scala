@@ -29,7 +29,7 @@ import java.util._
 import resonant.lib.content.module.TileBlock.RenderInfo
 import java.lang.Byte._
 import scala.collection.immutable
-import resonant.lib.content.prefab.{TraitIO, TraitRotatable}
+import resonant.lib.content.prefab.{TIO, TRotatable}
 
 /**
  * All blocks inherit this class.
@@ -313,19 +313,19 @@ abstract class TileBlock(val name: String, val material: Material) extends TileE
    */
   protected def configure(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
-    val both = this.isInstanceOf[TraitIO] && this.isInstanceOf[TraitRotatable]
+    val both = this.isInstanceOf[TIO] && this.isInstanceOf[TRotatable]
 
     if (both)
     {
       if (!player.isSneaking)
       {
-        return this.asInstanceOf[TraitIO].toggleIO(side, player)
+        return this.asInstanceOf[TIO].toggleIO(side, player)
       }
     }
-    if (this.isInstanceOf[TraitRotatable])
-      return this.asInstanceOf[TraitRotatable].rotate(side, hit)
-    if (this.isInstanceOf[TraitIO])
-      return this.asInstanceOf[TraitIO].toggleIO(side, player)
+    if (this.isInstanceOf[TRotatable])
+      return this.asInstanceOf[TRotatable].rotate(side, hit)
+    if (this.isInstanceOf[TIO])
+      return this.asInstanceOf[TIO].toggleIO(side, player)
 
     return false
   }
@@ -341,9 +341,9 @@ abstract class TileBlock(val name: String, val material: Material) extends TileE
 
   def onPlaced(entityLiving: EntityLivingBase, itemStack: ItemStack)
   {
-    if (this.isInstanceOf[TraitRotatable])
+    if (this.isInstanceOf[TRotatable])
     {
-      this.asInstanceOf[TraitRotatable].setDirection(this.asInstanceOf[TraitRotatable].determineRotation(entityLiving))
+      this.asInstanceOf[TRotatable].setDirection(this.asInstanceOf[TRotatable].determineRotation(entityLiving))
     }
   }
 

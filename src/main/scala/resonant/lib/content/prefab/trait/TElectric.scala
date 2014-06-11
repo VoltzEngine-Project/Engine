@@ -10,7 +10,7 @@ import universalelectricity.compatibility.Compatibility
 import net.minecraftforge.common.util.ForgeDirection
 
 @UniversalClass
-trait TraitElectric extends TraitIO with INodeProvider with IEnergyContainer with ISaveObj
+trait TElectric extends TIO with INodeProvider with IEnergyContainer with ISaveObj
 {
   protected var energy: EnergyStorageHandler = _
 

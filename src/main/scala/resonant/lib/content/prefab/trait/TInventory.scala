@@ -1,6 +1,5 @@
 package resonant.lib.content.prefab
 
-.trait
 
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.IInventory
@@ -10,16 +9,14 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IExternalInventory
 import resonant.api.IExternalInventoryBox
-import resonant.lib.content.module.TileBase
 import resonant.lib.utility.inventory.ExternalInventory
 import resonant.lib.utility.inventory.InventoryUtility
 import universalelectricity.core.transform.vector.Vector3
 
 /**
- * @since 22/03/14
- * @author tgame14
+ * A trait applied to inventory objects.
  */
-trait TraitInventory extends IExternalInventory with ISidedInventory
+trait TInventory extends IExternalInventory with ISidedInventory
 {
 	protected var inventory: IExternalInventoryBox = _
 	protected var maxSlots: Int = 1

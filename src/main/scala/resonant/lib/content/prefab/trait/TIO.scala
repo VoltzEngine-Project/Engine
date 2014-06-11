@@ -1,4 +1,4 @@
-package resonant.lib.content.prefab.trait
+package resonant.lib.content.prefab
 
 import net.minecraft.nbt.NBTTagCompound
 import resonant.lib.content.module.TileBase
@@ -13,7 +13,7 @@ import resonant.api.IIO
  *
  * @author tgame14
  */
-trait TraitIO extends TileBase with IIO with ISaveObj
+trait TIO extends TileBase with IIO with ISaveObj
 {
   /**
    * IO METHODS.

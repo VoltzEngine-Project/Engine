@@ -1,4 +1,4 @@
-package resonant.lib.content.prefab.trait
+package resonant.lib.content.prefab
 
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.nbt.NBTTagCompound
@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagCompound
 /**
  * @author Calclavia
  */
-trait TraitElectricStorage extends TraitElectric
+trait TElectricStorage extends TElectric
 {
   /**
    * Sets the amount of energy this unit stored.
