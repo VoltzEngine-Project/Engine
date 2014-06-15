@@ -16,7 +16,7 @@ public class PacketTile extends PacketType
     protected int z;
     protected int id;
 
-    public PacketTile (int x, int y, int z, int id, Object... args)
+    public PacketTile (int x, int y, int z, int id, Object[] args)
     {
         super(args);
         this.x = x;
@@ -25,17 +25,17 @@ public class PacketTile extends PacketType
         this.id = id;
     }
 
-    public PacketTile (int x, int y, int z, Object... args)
+    public PacketTile (int x, int y, int z, Object[] args)
     {
         this(x, y, z, -1, args);
     }
 
-	public PacketTile(TileEntity tile, Object... args)
+	public PacketTile(TileEntity tile, Object[] args)
 	{
 		this(tile.xCoord, tile.yCoord, tile.zCoord, args);
 	}
 
-	public PacketTile(TileEntity tile, int id, Object... args)
+	public PacketTile(TileEntity tile, int id, Object[] args)
 	{
 		this(tile.xCoord, tile.yCoord, tile.zCoord, id, args);
 	}

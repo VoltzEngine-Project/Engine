@@ -13,13 +13,13 @@ public class PacketPlayerItem extends PacketType
 {
     protected int slotId;
 
-    public PacketPlayerItem (int slotId, Object... args)
+    public PacketPlayerItem (int slotId, Object[] args)
     {
         super(args);
         this.slotId = slotId;
     }
 
-    public PacketPlayerItem (EntityPlayer player, Object... args)
+    public PacketPlayerItem (EntityPlayer player, Object[] args)
     {
         this(player.inventory.currentItem, args);
     }

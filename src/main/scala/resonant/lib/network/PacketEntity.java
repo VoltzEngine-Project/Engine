@@ -13,7 +13,7 @@ public class PacketEntity extends PacketType
 {
     protected int entityId;
 
-    public PacketEntity(Entity entity, Object... args)
+    public PacketEntity(Entity entity, Object[] args)
     {
         super(args);
         this.entityId = entity.getEntityId();
