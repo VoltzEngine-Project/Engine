@@ -1,7 +1,11 @@
 Resonant Engine
 ======
-Mod framework and source dev kit used mainly by Calclavia's mods.
+Resonant Engine is a Minecraft modding library to allow easy mod creations.
 
+Copyright (c) Calclavia
+
+### Founder
+* Calclavia
 
 ### Developer
 * Calclavia
