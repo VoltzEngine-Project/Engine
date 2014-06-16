@@ -6,6 +6,7 @@ import cpw.mods.fml.common.gameevent.TickEvent
 import com.nicta.scoobi.impl.collection.WeakHashSet
 import scala.collection.mutable
 import universalelectricity.api.core.grid.IUpdate
+import java.lang.{Deprecated, Thread}
 
 /**
  * A ticker to update all grids. This is multi-threaded based on configuration.
@@ -31,6 +32,7 @@ object UpdateTicker extends Thread
    */
   var pause = false
 
+  @Deprecated
   var useThreads = true
 
   /**
@@ -106,7 +108,10 @@ object UpdateTicker extends Thread
     try
     {
       //TODO: Check if this works properly
-      updaters.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
+      /**
+       * TODO: Perform test to check if parallel evaluation is worth it.
+       */
+      updaters.par.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
       updaters = updaters.filterNot(_.continueUpdate()).asInstanceOf[WeakHashSet[IUpdate]]
     }
     catch

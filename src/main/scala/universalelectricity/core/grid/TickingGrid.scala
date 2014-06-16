@@ -20,7 +20,9 @@ class TickingGrid[N <: Node] extends NodeGrid[N] with IUpdate
    */
   def update(deltaTime: Double)
   {
-    //TODO: Optimize parallel evaluation of nodes only after node count exceeds a specific limit.
+    /**
+     * TODO: Perform test to check if parallel evaluation is worth it.
+     */
     nodes.par.foreach(_.update(deltaTime))
   }
 
