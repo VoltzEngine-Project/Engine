@@ -3,6 +3,8 @@ package resonant.lib.content.prefab
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.nbt.NBTTagCompound
 import universalelectricity.api.core.grid.electric.EnergyStorageHandler
+import net.minecraft.item.ItemStack
+import universalelectricity.compatibility.Compatibility
 
 /**
  * @author Calclavia
@@ -10,6 +12,18 @@ import universalelectricity.api.core.grid.electric.EnergyStorageHandler
 trait TElectricStorage extends TElectric
 {
   protected var energy: EnergyStorageHandler = _
+
+  //@Callback
+  def recharge(stack: ItemStack)
+  {
+    electricNode.drawPower(Compatibility.getHandler(stack.getItem).chargeItem(stack, electricNode.getEnergy(getVoltage), true))
+  }
+
+  //@Callback
+  protected def discharge(stack: ItemStack)
+  {
+    electricNode.applyPower(Compatibility.getHandler(stack.getItem).dischargeItem(stack, this.energy.getEmptySpace, true))
+  }
 
   /**
    * Sets the amount of energy this unit stored.

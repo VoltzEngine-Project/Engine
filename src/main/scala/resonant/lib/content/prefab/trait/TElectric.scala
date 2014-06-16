@@ -27,19 +27,6 @@ trait TElectric extends TIO with INodeProvider with IEnergyContainer with ISaveO
     return null
   }
 
-  //@Callback
-  def recharge(stack: ItemStack)
-  {
-
-    electricNode.drawPower(Compatibility.getHandler(stack.getItem).chargeItem(stack, electricNode.getEnergy(getVoltage), true))
-  }
-
-  //@Callback
-  protected def discharge(stack: ItemStack)
-  {
-    electricNode.applyPower(Compatibility.getHandler(stack.getItem).dischargeItem(stack, this.energy.getEmptySpace, true))
-  }
-
   def getVoltage = 100D
 
   override def save(nbt: NBTTagCompound)
