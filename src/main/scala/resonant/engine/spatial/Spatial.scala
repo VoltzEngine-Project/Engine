@@ -14,16 +14,16 @@ import scala.collection.mutable
  */
 trait Spatial
 {
-  val components: List[IComponent] = new mutable.LinkedList[IComponent]()
+  val components = new mutable.LinkedList[IComponent]()
   {
-    def getFirst(clazz: Class): IComponent =
+    def getFirst[C](clazz: Class[C]): C =
     {
-      return collectFirst(_.getClass().isAssignableFrom(clazz)).get
+      return collectFirst(_.getClass().isAssignableFrom(clazz)).get.asInstanceOf[C]
     }
 
-    def get(clazz: Class): List[IComponent] =
+    def  get[C](clazz: Class[C]): List[C] =
     {
-      return filter(_.getClass().isAssignableFrom(clazz))
+      return filter(_.getClass().isAssignableFrom(clazz)).asInstanceOf[List[C]]
     }
   }
 

@@ -2,8 +2,7 @@ package resonant.lib.content.module
 
 import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
-import net.minecraft.block.Block
-import net.minecraft.block.ITileEntityProvider
+import net.minecraft.block.{ITileEntityProvider, Block}
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.Entity
@@ -23,10 +22,10 @@ import universalelectricity.core.transform.vector.Vector3
 import java.util.ArrayList
 import java.util.List
 import java.util.Random
-import resonant.engine.spatial.block.TileBlock
+import resonant.engine.spatial.block.{SpatialBlock, SpatialBlock}
 import resonant.engine.wrapper.BlockRenderingHandler
 
-class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: TileBlock) extends Block(dummyTile.material) with ITileEntityProvider
+class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: SpatialBlock) extends Block(dummyTile.material) with ITileEntityProvider
 {
   dummyTile.domain = modPrefix
   setBlockName(modPrefix + dummyTile.name)
@@ -65,9 +64,9 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
 
     val tile: TileEntity = access.getTileEntity(x, y, z)
 
-    if (tile.isInstanceOf[TileBlock])
+    if (tile.isInstanceOf[SpatialBlock])
     {
-      (tile.asInstanceOf[TileBlock]).block = this
+      (tile.asInstanceOf[SpatialBlock]).block = this
     }
   }
 
@@ -79,12 +78,12 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     dummyTile.zCoord = 0
   }
 
-  def getTile(world: IBlockAccess, x: Int, y: Int, z: Int): TileBlock =
+  def getTile(world: IBlockAccess, x: Int, y: Int, z: Int): SpatialBlock =
   {
     val tile: TileEntity = world.getTileEntity(x, y, z)
-    if (tile.isInstanceOf[TileBlock])
+    if (tile.isInstanceOf[SpatialBlock])
     {
-      return tile.asInstanceOf[TileBlock]
+      return tile.asInstanceOf[SpatialBlock]
     }
     return dummyTile
   }
@@ -241,7 +240,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
 
   override def hasComparatorInputOverride: Boolean =
   {
-    return dummyTile.isInstanceOf[TileBlock.IComparatorInputOverride]
+    return dummyTile.isInstanceOf[SpatialBlock.IComparatorInputOverride]
   }
 
   override def isOpaqueCube: Boolean =

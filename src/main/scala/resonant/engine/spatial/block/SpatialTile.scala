@@ -25,7 +25,7 @@ abstract class SpatialTile(name: String, material: Material) extends SpatialBloc
   /**
    * Called on the TileEntity's first tick.
    */
-  def initiate
+  def start()
   {
   }
 
@@ -33,7 +33,7 @@ abstract class SpatialTile(name: String, material: Material) extends SpatialBloc
   {
     if (this.ticks == 0)
     {
-      initiate
+      start()
     }
     if (ticks >= Long.MaxValue)
     {

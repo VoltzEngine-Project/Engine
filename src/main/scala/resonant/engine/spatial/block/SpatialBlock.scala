@@ -49,16 +49,6 @@ object TileBlock
   {
     def getComparatorInputOverride(side: Int): Int
   }
-
-  /**
-   * Rendering
-   */
-  @SideOnly(Side.CLIENT) object RenderInfo
-  {
-    @SideOnly(Side.CLIENT) final val renderer: WeakHashMap[TileBlock, TileRender] = new WeakHashMap[TileBlock, TileRender]
-    @SideOnly(Side.CLIENT) final val icon: HashMap[String, IIcon] = new HashMap[String, IIcon]
-  }
-
 }
 
 abstract class SpatialBlock(val name: String, val material: Material) extends TileEntity with Spatial
