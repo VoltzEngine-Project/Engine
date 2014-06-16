@@ -1,4 +1,4 @@
-package resonant.engine.block
+package resonant.engine.spatial.block
 
 import resonant.api.IPlayerUsing
 import resonant.core.ResonantEngine
@@ -10,7 +10,7 @@ import resonant.lib.utility.LanguageUtility
  *
  * @author Calclavia
  */
-abstract class TileBase(name: String, material: Material) extends TileBlock(name, material) with IPlayerUsing
+abstract class SpatialTile(name: String, material: Material) extends SpatialBlock(name, material) with IPlayerUsing
 {
   private final val playersUsing: HashSet[EntityPlayer] = new HashSet[EntityPlayer]
   protected var ticks = 0L

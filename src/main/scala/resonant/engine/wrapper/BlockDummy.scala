@@ -23,7 +23,7 @@ import universalelectricity.core.transform.vector.Vector3
 import java.util.ArrayList
 import java.util.List
 import java.util.Random
-import resonant.engine.block.TileBlock
+import resonant.engine.spatial.block.TileBlock
 import resonant.engine.wrapper.BlockRenderingHandler
 
 class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: TileBlock) extends Block(dummyTile.material) with ITileEntityProvider

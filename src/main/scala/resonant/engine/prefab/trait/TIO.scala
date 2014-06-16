@@ -6,7 +6,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ChatComponentText
 import resonant.api.IIO
-import resonant.engine.block.TileBase
+import resonant.engine.spatial.block.SpatialTile
 
 /**
  * a Trait that handles IO Traits

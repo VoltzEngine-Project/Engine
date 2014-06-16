@@ -5,7 +5,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.transform.vector.Vector3
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.MathHelper
-import resonant.engine.block.TileBlock
+import resonant.engine.spatial.block.TileBlock
 
 trait TRotatable extends TileBlock with IRotatable
 {

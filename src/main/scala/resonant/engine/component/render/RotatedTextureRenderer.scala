@@ -3,11 +3,12 @@ package resonant.engine.component.render
 import resonant.lib.utility.RotationUtility
 import universalelectricity.core.transform.vector.Vector3
 import resonant.lib.render.{RenderUtility, RenderBlockAdvanced}
-import resonant.engine.block.TileBlock
+import resonant.engine.spatial.block.TileBlock
 import net.minecraft.client.renderer.RenderBlocks
 
 /**
- * Created by Henry on 3/23/2014.
+ *
+ * @author Calclavia
  */
 class RotatedTextureRenderer(tile: TileBlock) extends TileRender {
   val renderBlocks = new RenderBlockAdvanced()

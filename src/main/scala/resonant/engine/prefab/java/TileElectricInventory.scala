@@ -3,7 +3,7 @@ package resonant.lib.content.prefab.java
 import resonant.lib.content.prefab.{TElectric, TInventory}
 import net.minecraft.block.material.Material
 import resonant.lib.utility.LanguageUtility
-import resonant.engine.block.TileBlock
+import resonant.engine.spatial.block.TileBlock
 
 /**
  * @author Calclavia

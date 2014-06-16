@@ -1,4 +1,4 @@
-package resonant.engine.block
+package resonant.engine.spatial.block
 
 import resonant.lib.prefab.item.ItemBlockTooltip
 import resonant.lib.utility.LanguageUtility
@@ -11,11 +11,13 @@ import scala.collection.immutable
 import resonant.lib.content.prefab.{TIO, TRotatable}
 import resonant.lib.content.module.BlockDummy
 import resonant.engine.prefab.java
+import net.minecraft.tileentity.TileEntity
+import resonant.engine.spatial.Spatial
 
 /**
  * All blocks inherit this class.
- * <p/>
- * Note that a lot of the variables will not exist except on the primary instance of the TileBlock,
+ *
+ * Note that a lot of the variables will not exist except on the primary instance of the Spatial Block,
  * hosted in BlockDummy.
  *
  * @author Calclavia
@@ -59,7 +61,7 @@ object TileBlock
 
 }
 
-abstract class TileBlock(val name: String, val material: Material) extends TileEntity
+abstract class SpatialBlock(val name: String, val material: Material) extends TileEntity with Spatial
 {
   /**
    * The unique string ID of this block.
