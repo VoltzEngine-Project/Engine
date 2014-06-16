@@ -10,7 +10,7 @@ import net.minecraftforge.client.model.AdvancedModelLoader;
 import resonant.core.content.debug.BlockCreativeBuilder;
 import resonant.core.content.debug.GuiCreativeBuilder;
 import resonant.lib.prefab.ProxyBase;
-import resonant.lib.render.block.BlockRenderingHandler;
+import resonant.engine.wrapper.BlockRenderingHandler;
 import resonant.lib.render.model.TechneAdvancedModelLoader;
 import universalelectricity.api.vector.Vector3;
 import cpw.mods.fml.client.FMLClientHandler;

@@ -1,9 +1,9 @@
 package resonant.lib.content.prefab.java
 
-import resonant.lib.content.module.TileBase
 import resonant.lib.content.prefab.TElectricStorage
 import net.minecraft.block.material.Material
 import resonant.lib.utility.LanguageUtility
+import resonant.engine.block.TileBase
 
 /**
  * @since 27/05/14

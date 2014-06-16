@@ -18,12 +18,13 @@ import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 import universalelectricity.core.transform.region.Cuboid
-import resonant.lib.render.block.BlockRenderingHandler
 import resonant.lib.utility.inventory.InventoryUtility
 import universalelectricity.core.transform.vector.Vector3
 import java.util.ArrayList
 import java.util.List
 import java.util.Random
+import resonant.engine.block.TileBlock
+import resonant.engine.wrapper.BlockRenderingHandler
 
 class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: TileBlock) extends Block(dummyTile.material) with ITileEntityProvider
 {

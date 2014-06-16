@@ -1,15 +1,15 @@
 package resonant.lib.content.prefab.java
 
-import resonant.lib.content.prefab.TElectric
-import resonant.lib.content.module.TileBlock
+import resonant.lib.content.prefab.TIO
 import net.minecraft.block.material.Material
 import resonant.lib.utility.LanguageUtility
+import resonant.engine.block.TileBlock
 
 /**
  * @since 27/05/14
  * @author tgame14
  */
-class TileElectric(name: String, material: Material) extends TileBlock(name, material) with TElectric
+class TileIO(name: String, material: Material) extends TileBlock(name, material) with TIO
 {
   def this(newMaterial: Material) = this(LanguageUtility.decapitalizeFirst(getClass.getSimpleName.replaceFirst("Tile", "")), newMaterial)
 

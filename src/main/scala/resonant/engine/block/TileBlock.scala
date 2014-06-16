@@ -1,22 +1,5 @@
-package resonant.lib.content.module
+package resonant.engine.block
 
-import cpw.mods.fml.relauncher.Side
-import cpw.mods.fml.relauncher.SideOnly
-import net.minecraft.block.Block
-import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.Item
-import net.minecraft.item.ItemBlock
-import net.minecraft.item.ItemStack
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.IIcon
-import net.minecraft.util.MovingObjectPosition
-import net.minecraft.world.IBlockAccess
-import net.minecraft.world.World
 import resonant.lib.prefab.item.ItemBlockTooltip
 import resonant.lib.utility.LanguageUtility
 import resonant.lib.utility.WrenchUtility
@@ -24,12 +7,10 @@ import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.Vector2
 import universalelectricity.core.transform.vector.Vector3
 import universalelectricity.core.transform.vector.VectorWorld
-import java.lang.reflect.Method
-import java.util._
-import resonant.lib.content.module.TileBlock.RenderInfo
-import java.lang.Byte._
 import scala.collection.immutable
 import resonant.lib.content.prefab.{TIO, TRotatable}
+import resonant.lib.content.module.BlockDummy
+import resonant.engine.prefab.java
 
 /**
  * All blocks inherit this class.
@@ -411,7 +392,6 @@ abstract class TileBlock(val name: String, val material: Material) extends TileE
   def getCollisionBoxes(intersect: Cuboid, entity: Entity): Iterable[Cuboid] =
   {
     val boxes: List[Cuboid] = new ArrayList[Cuboid]
-    import scala.collection.JavaConversions._
     for (cuboid <- getCollisionBoxes)
     {
       if (intersect != null && cuboid.intersects(intersect))

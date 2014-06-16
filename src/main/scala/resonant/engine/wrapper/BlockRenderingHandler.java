@@ -1,4 +1,4 @@
-package resonant.lib.render.block;
+package resonant.engine.wrapper;
 
 import java.util.Map;
 
@@ -15,8 +15,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import resonant.api.items.ISimpleItemRenderer;
-import resonant.lib.content.module.BlockDummy;
-import resonant.lib.content.module.TileBlock;
+import resonant.engine.wrapper.BlockDummy;
+import resonant.engine.wrapper.TileBlock;
 import resonant.lib.render.RenderUtility;
 import universalelectricity.api.vector.Vector3;
 

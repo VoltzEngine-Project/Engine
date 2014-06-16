@@ -1,4 +1,4 @@
-package resonant.lib.content;
+package resonant.engine;
 
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -9,8 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.config.Configuration;
-import resonant.lib.content.module.BlockDummy;
-import resonant.lib.content.module.TileBlock;
+import resonant.engine.wrapper.BlockDummy;
+import resonant.engine.wrapper.TileBlock;
 import resonant.lib.prefab.item.ItemBlockTooltip;
 import resonant.lib.utility.LanguageUtility;
 
@@ -22,10 +22,11 @@ import java.util.WeakHashMap;
  *
  * @author DarkGuardsman, Calclavia
  */
-public class ContentRegistry
+public class EngineRegistry
 {
-	@SidedProxy(clientSide = "resonant.lib.content.ClientRegistryProxy", serverSide = "resonant.lib.content.CommonRegistryProxy")
+	@SidedProxy(clientSide = "resonant.content.ClientRegistryProxy", serverSide = "resonant.content.CommonRegistryProxy")
 	public static CommonRegistryProxy proxy;
+
 	public final WeakHashMap<Block, String> blocks = new WeakHashMap<Block, String>();
 	public final WeakHashMap<Item, String> items = new WeakHashMap<Item, String>();
 	private final Configuration config;
@@ -39,19 +40,19 @@ public class ContentRegistry
 	 */
 	private int packetID = 0;
 
-	public ContentRegistry(Configuration config, String modID)
+	public EngineRegistry(Configuration config, String modID)
 	{
 		this.config = config;
 		this.modID = modID;
 	}
 
-	public ContentRegistry setPrefix(String modPrefix)
+	public EngineRegistry setPrefix(String modPrefix)
 	{
 		this.modPrefix = modPrefix;
 		return this;
 	}
 
-	public ContentRegistry setTab(CreativeTabs defaultTab)
+	public EngineRegistry setTab(CreativeTabs defaultTab)
 	{
 		this.defaultTab = defaultTab;
 		return this;
@@ -75,9 +76,6 @@ public class ContentRegistry
 
 			if (!canDisable || (canDisable && config.get("enabled_list", "Enable " + name, true).getBoolean(true)))
 			{
-				//                int assignedID = idManager.getNextBlockID();
-				//                int actualID = config.getBlock(name, assignedID).getInt(assignedID);
-
 				BlockDummy block = new BlockDummy(modPrefix, defaultTab, tileBlock);
 				tileBlock.setBlock(block);
 

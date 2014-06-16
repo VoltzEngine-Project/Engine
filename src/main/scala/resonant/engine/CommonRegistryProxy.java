@@ -1,4 +1,4 @@
-package resonant.lib.content;
+package resonant.engine;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;

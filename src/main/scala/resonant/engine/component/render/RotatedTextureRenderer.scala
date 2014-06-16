@@ -1,11 +1,10 @@
-package resonant.lib.render
+package resonant.engine.component.render
 
-import net.minecraft.client.renderer.RenderBlocks
-import net.minecraftforge.common.util.ForgeDirection
-import resonant.lib.content.module.TileBlock
-import resonant.lib.content.module.TileRender
 import resonant.lib.utility.RotationUtility
 import universalelectricity.core.transform.vector.Vector3
+import resonant.lib.render.{RenderUtility, RenderBlockAdvanced}
+import resonant.engine.block.TileBlock
+import net.minecraft.client.renderer.RenderBlocks
 
 /**
  * Created by Henry on 3/23/2014.

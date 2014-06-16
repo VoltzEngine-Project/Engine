@@ -1,13 +1,8 @@
-package resonant.lib.content.module
+package resonant.engine.block
 
-import net.minecraft.block.material.Material
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.network.Packet
-import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IPlayerUsing
 import resonant.core.ResonantEngine
 import resonant.lib.network.PacketAnnotation
-import java.util.HashSet
 import resonant.lib.utility.LanguageUtility
 
 /**

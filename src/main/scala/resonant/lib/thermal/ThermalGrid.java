@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IReactor;
 import resonant.core.ResonantEngine;
 import resonant.lib.thermal.EventThermal.EventThermalUpdate;
-import universalelectricity.core.grid.IUpdate;
+import universalelectricity.api.core.grid.IUpdate;
 import universalelectricity.core.transform.vector.VectorWorld;
 
 /** A grid managing the flow of thermal energy.

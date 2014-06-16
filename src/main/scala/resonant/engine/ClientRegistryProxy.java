@@ -1,4 +1,4 @@
-package resonant.lib.content;
+package resonant.engine;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraft.block.Block;
@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import resonant.lib.References;
-import resonant.lib.content.module.RenderTileDummy;
+import resonant.engine.wrapper.RenderTileDummy;
 
 public class ClientRegistryProxy extends CommonRegistryProxy
 {
