@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge
 import cpw.mods.fml.common.gameevent.TickEvent
 import com.nicta.scoobi.impl.collection.WeakHashSet
 import scala.collection.mutable
+import universalelectricity.api.core.grid.IUpdate
 
 /**
  * A ticker to update all grids. This is multi-threaded based on configuration.
@@ -104,10 +105,9 @@ object UpdateTicker extends Thread
   {
     try
     {
+      //TODO: Check if this works properly
       updaters.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
       updaters = updaters.filterNot(_.continueUpdate()).asInstanceOf[WeakHashSet[IUpdate]]
-
-      //TODO: Check if this works properly
     }
     catch
       {

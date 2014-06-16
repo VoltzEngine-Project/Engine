@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound
  *
  * @author Calclavia
  */
-class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGrid[ElectricNode], ElectricNode](parent) with IElectricNode
+class ElectricNode(parent: INodeProvider) extends Node(parent) with IElectricNode
 {
   var amperage = 0D
   var voltage = 0D
@@ -46,26 +46,9 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
   /**
    * Recache the connections. This is the default connection implementation.
    */
-  override def doRecache
+  override def doRecache()
   {
-    connections.clear
-
-    ForgeDirection.VALID_DIRECTIONS.foreach(
-      dir =>
-      {
-        val tile = (position + dir).getTileEntity(world)
-
-        if (tile.isInstanceOf[INodeProvider])
-        {
-          val check: ElectricNode = (tile.asInstanceOf[INodeProvider]).getNode(classOf[ElectricNode], dir.getOpposite)
-
-          if (check != null && canConnect(dir, check) && check.canConnect(dir.getOpposite, this))
-          {
-            connections.put(check, dir)
-          }
-        }
-      })
-
+    super.doRecache()
     this.currents = new Array[Double](connections.size)
   }
 
@@ -112,29 +95,29 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
     return if (tr < 0.0D) 0.0D else tr
   }
 
-    def getEmptySpace : Double = this.getEnergyCapacity - this.getEnergy(getVoltage)
+  def getEmptySpace: Double = this.getEnergyCapacity - this.getEnergy(getVoltage)
 
   override def update(deltaTime: Double)
   {
     calculateVoltage(deltaTime)
 
     connections synchronized
-      {
-        connections.entrySet.iterator.foreach(
-          entry =>
-          {
-            val dir = entry.getValue
-            val adjacent = entry.getKey
-            val totalResistance = getResistance + adjacent.getResistance
-            var current = currents(dir.ordinal)
-            val voltageDifference = voltage - adjacent.getVoltage
-            currents(dir.ordinal) += (voltageDifference - current * totalResistance) * getCurrentEfficiency
-            current += voltageDifference * getParallelMultiplier
-            applyCurrent(-current)
-            adjacent.applyCurrent(current)
-          }
-        )
-      }
+            {
+              connections.entrySet.iterator.foreach(
+                entry =>
+                {
+                  val dir = entry.getValue
+                  val adjacent = entry.getKey
+                  val totalResistance = getResistance + adjacent.getResistance
+                  var current = currents(dir.ordinal)
+                  val voltageDifference = voltage - adjacent.getVoltage
+                  currents(dir.ordinal) += (voltageDifference - current * totalResistance) * getCurrentEfficiency
+                  current += voltageDifference * getParallelMultiplier
+                  applyCurrent(-current)
+                  adjacent.applyCurrent(current)
+                }
+              )
+            }
   }
 
   override def load(nbt: NBTTagCompound)
@@ -151,5 +134,5 @@ class ElectricNode(parent: INodeProvider) extends Node[INodeProvider, TickingGri
     nbt.setDouble("amperage", amperage)
   }
 
-  protected def newGrid: TickingGrid[ElectricNode] = new TickingGrid[ElectricNode](this, classOf[ElectricNode])
+  protected def newGrid: TickingGrid[ElectricNode] = new TickingGrid[ElectricNode](classOf[ElectricNode])
 }

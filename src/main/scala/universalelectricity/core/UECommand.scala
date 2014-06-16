@@ -1,11 +1,12 @@
-package universalelectricity.core.grid
+package universalelectricity.core
 
 import net.minecraft.command.CommandBase
-import net.minecraft.command.ICommand
 import net.minecraft.command.ICommandSender
 import net.minecraft.command.WrongUsageException
 import net.minecraft.util.ChatComponentText
 import java.util.List
+import universalelectricity.core.grid.UpdateTicker
+import universalelectricity.api.UniversalElectricity
 
 object UECommand extends CommandBase
 {
@@ -25,9 +26,14 @@ object UECommand extends CommandBase
     {
       if (args == null || args.length == 0 || args(0).equalsIgnoreCase("help"))
       {
+        sender.addChatMessage(new ChatComponentText("/ue version"))
         sender.addChatMessage(new ChatComponentText("/ue gridinfo"))
         sender.addChatMessage(new ChatComponentText("/ue gridpause"))
         return
+      }
+      if (args(0).equalsIgnoreCase("version"))
+      {
+        sender.addChatMessage(new ChatComponentText("Universal Electricity Version: " + UniversalElectricity.VERSION))
       }
       if (args(0).equalsIgnoreCase("gridinfo"))
       {
@@ -48,6 +54,7 @@ object UECommand extends CommandBase
         {
         }
       }
+
     throw new WrongUsageException(this.getCommandUsage(sender))
   }
 
