@@ -9,7 +9,7 @@ import resonant.engine.spatial.block.SpatialTile
  * @since 27/05/14
  * @author tgame14
  */
-class SpatialTileElectricStorage(name: String, material: Material) extends SpatialTile(name, material) with TElectricStorage
+class TileElectricStorage(name: String, material: Material) extends SpatialTile(name, material) with TElectricStorage
 {
   def this(newMaterial: Material) = this(LanguageUtility.decapitalizeFirst(getClass.getSimpleName.replaceFirst("Tile", "")), newMaterial)
 }

@@ -8,6 +8,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import universalelectricity.core.transform.vector.Vector3;
 
+@Deprecated
 public class BlockRenderInfo
 {
     /** Block lower corner size */

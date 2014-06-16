@@ -29,7 +29,7 @@ abstract class SpatialTile(name: String, material: Material) extends SpatialBloc
   {
   }
 
-  override def updateEntity
+  override def update()
   {
     if (this.ticks == 0)
     {

@@ -168,7 +168,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   override def updateTick(world: World, x: Int, y: Int, z: Int, par5Random: Random)
   {
     inject(world, x, y, z)
-    getTile(world, x, y, z).updateEntity
+    getTile(world, x, y, z).blockUpdate()
     eject
   }
 

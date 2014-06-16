@@ -196,14 +196,23 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   /**
    * @return Return "this" if the block requires a TileEntity.
    */
-  def tile: TileBlock =
+  def tile: SpatialBlock =
   {
     return null
   }
 
-  def metadata: Int =
+  def metadata: Int = access.getBlockMetadata(x, y, z)
+
+  /**
+   * Update
+   */
+  final override def updateEntity() = update()
+
+  def blockUpdate() = update()
+
+  def update()
   {
-    return access.getBlockMetadata(x, y, z)
+
   }
 
   /**

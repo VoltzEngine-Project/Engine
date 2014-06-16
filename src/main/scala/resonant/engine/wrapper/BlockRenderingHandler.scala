@@ -13,14 +13,6 @@ import resonant.lib.content.module.BlockDummy
 import resonant.engine.component.render.{RenderStatic, RenderItem}
 import universalelectricity.core.transform.vector.Vector3
 
-object BlockRenderingHandler
-{
-  final val INSTANCE: BlockRenderingHandler = new BlockRenderingHandler
-  final val ID: Int = RenderingRegistry.getNextAvailableRenderId
-  /** Maps fake TileEntities */
-  final val inventoryTileEntities: Nothing = Maps.newIdentityHashMap
-}
-
 class BlockRenderingHandler extends ISimpleBlockRenderingHandler
 {
   def getTileEntityForBlock(block: Nothing): Nothing =
