@@ -10,7 +10,7 @@ import universalelectricity.api.core.grid.IUpdate
  *
  * @author Calclavia
  */
-class TickingGrid[N <: Node](nodeClass: Class[_ <: N]) extends NodeGrid[N](nodeClass) with IUpdate
+class TickingGrid[N <: Node] extends NodeGrid[N] with IUpdate
 {
   /** Upon init, add this grid into the ticker. */
   UpdateTicker.addUpdater(this)
@@ -23,7 +23,6 @@ class TickingGrid[N <: Node](nodeClass: Class[_ <: N]) extends NodeGrid[N](nodeC
     //TODO: Optimize parallel evaluation of nodes only after node count exceeds a specific limit.
     nodes.par.foreach(_.update(deltaTime))
   }
-
 
   def canUpdate() = nodes.size > 0
 

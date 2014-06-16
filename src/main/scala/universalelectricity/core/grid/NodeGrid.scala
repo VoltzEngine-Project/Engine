@@ -1,14 +1,12 @@
 package universalelectricity.core.grid
 
 import scala.collection.convert.wrapAll._
-
 /**
  * A grid that consists of specific INodes
  *
- * @param nodeClass - The class the node
  * @tparam N - The type of the node
  */
-abstract class NodeGrid[N <: Node](nodeClass: Class[_ <: N]) extends Grid[N](nodeClass)
+abstract class NodeGrid[N <: Node] extends Grid[N]
 {
   protected override def reconstructNode(node: N)
   {

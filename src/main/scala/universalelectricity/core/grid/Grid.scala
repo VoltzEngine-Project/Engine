@@ -5,14 +5,15 @@ import com.nicta.scoobi.impl.collection.WeakHashSet
 /**
  * A grid containing a series of arbitary nodes.
  *
- * @param nodeClass - The type of the node.
- *
  * @author Calclavia
  */
-class Grid[N](nodeClass: Class[_ <: N])
+class Grid[N]
 {
   /** A set of nodes in the grid (e.g conductors). */
   protected final val nodes = new WeakHashSet[N]()
+
+  /** A class instance of the node type used to node validation checks. */
+  protected var nodeClass: Class[_ <: N] = _
 
   /**
    * Adds a node to the grid.
@@ -21,6 +22,9 @@ class Grid[N](nodeClass: Class[_ <: N])
   def add(node: N)
   {
     nodes.add(node)
+
+    if (nodeClass == null)
+      nodeClass = node.getClass()
   }
 
   /**
@@ -66,6 +70,7 @@ class Grid[N](nodeClass: Class[_ <: N])
 
   def isValidNode(node: Any): Boolean =
   {
+    //TODO: Check if better way to do this.
     return nodeClass.isAssignableFrom(node.getClass)
   }
 

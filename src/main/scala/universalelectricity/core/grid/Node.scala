@@ -82,11 +82,11 @@ abstract class Node(parent: INodeProvider) extends INode
 
       if (tile.isInstanceOf[INodeProvider])
       {
-        val check = tile.asInstanceOf[INodeProvider].getNode(this.getClass(), dir.getOpposite)
+        val check = tile.asInstanceOf[INodeProvider].getNode(getClass(), dir.getOpposite)
 
-        if (check != null && canConnect(dir, check) && check.canConnect(dir.getOpposite, this))
+        if (check.isInstanceOf[this.type] && canConnect(dir, check) && check.canConnect(dir.getOpposite, this))
         {
-          connections.put(check, dir)
+          connections.put(check.asInstanceOf[this.type], dir)
         }
       }
     })

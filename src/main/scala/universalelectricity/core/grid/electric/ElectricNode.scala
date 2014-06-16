@@ -134,5 +134,5 @@ class ElectricNode(parent: INodeProvider) extends Node(parent) with IElectricNod
     nbt.setDouble("amperage", amperage)
   }
 
-  protected def newGrid: TickingGrid[ElectricNode] = new TickingGrid[ElectricNode](classOf[ElectricNode])
+  protected override def newGrid: TickingGrid[this.type] = new TickingGrid[this.type]()
 }
