@@ -2,13 +2,12 @@ package universalelectricity.core.grid
 
 import cpw.mods.fml.common.eventhandler.{SubscribeEvent, Event}
 import net.minecraftforge.common.MinecraftForge
-import java.util._
-import java.util.concurrent.ConcurrentLinkedQueue
-import scala.collection.mutable
 import cpw.mods.fml.common.gameevent.TickEvent
+import com.nicta.scoobi.impl.collection.WeakHashSet
+import scala.collection.mutable
 
 /**
- * A ticker to update all grids. This is multithreaded.
+ * A ticker to update all grids. This is multi-threaded based on configuration.
  *
  * @author Calclavia
  */
@@ -20,11 +19,11 @@ object UpdateTicker extends Thread
   /**
    * For updaters to be ticked.
    */
-  private final val updaters = Collections.newSetFromMap(new WeakHashMap[IUpdate, java.lang.Boolean])
+  private final var updaters = new WeakHashSet[IUpdate]()
   /**
    * For queuing Forge events to be invoked the next tick.
    */
-  private final val queuedEvents = new ConcurrentLinkedQueue[Event]
+  private final val queuedEvents = new mutable.SynchronizedQueue[Event]()
 
   /**
    * Becomes true if the network needs to be paused.
@@ -36,22 +35,22 @@ object UpdateTicker extends Thread
   /**
    * The time in milliseconds between successive updates.
    */
-  private var deltaTime: Long = 0L
+  private var deltaTime = 0L
 
-  def addNetwork(updater: IUpdate)
+  def addUpdater(updater: IUpdate)
   {
     updaters synchronized
-      {
-        updaters.add(updater)
-      }
+            {
+              updaters += updater
+            }
   }
 
   def queueEvent(event: Event)
   {
     queuedEvents synchronized
-      {
-        queuedEvents.add(event)
-      }
+            {
+              queuedEvents += event
+            }
   }
 
   def getDeltaTime = deltaTime
@@ -60,84 +59,61 @@ object UpdateTicker extends Thread
 
   override def run
   {
-    try
+    var last = System.currentTimeMillis()
+
+    while (true)
     {
-      var last: Long = System.currentTimeMillis
-
-      while (true)
+      if (!pause)
       {
-        if (!pause)
-        {
-          val current: Long = System.currentTimeMillis
-          deltaTime = current - last
-          updaters synchronized
-            {
-              update()
-            }
-          queuedEvents synchronized
-            {
-              while (!queuedEvents.isEmpty)
-              {
-                MinecraftForge.EVENT_BUS.post(queuedEvents.poll)
-              }
-            }
-          last = current
-        }
+        val current = System.currentTimeMillis()
+        deltaTime = current - last
 
-        Thread.sleep(50L)
+        updaters synchronized
+                {
+                  update()
+                }
+
+        queuedEvents synchronized
+                {
+                  queuedEvents.foreach(MinecraftForge.EVENT_BUS.post(_))
+                  queuedEvents.clear()
+                }
+
+        last = current
       }
+
+      Thread.sleep(50L)
     }
-    catch
-      {
-        case e: Exception =>
-        {
-          e.printStackTrace
-        }
-      }
   }
 
   @SubscribeEvent
   def tickEnd(event: TickEvent.ServerTickEvent)
   {
     updaters synchronized
-      {
-        update()
-      }
+            {
+              update()
+            }
     queuedEvents synchronized
-      {
-        while (!queuedEvents.isEmpty)
-        {
-          MinecraftForge.EVENT_BUS.post(queuedEvents.poll)
-        }
-      }
+            {
+              queuedEvents.foreach(MinecraftForge.EVENT_BUS.post(_))
+              queuedEvents.clear()
+            }
   }
 
   def update()
   {
-    val removeUpdaters: Set[IUpdate] = Collections.newSetFromMap[IUpdate](new WeakHashMap[IUpdate, java.lang.Boolean])
-    val updaterIt: Iterator[IUpdate] = new HashSet[IUpdate](updaters).iterator
-
     try
     {
-      while (updaterIt.hasNext)
-      {
-        val updater: IUpdate = updaterIt.next
-        if (updater.canUpdate)
-        {
-          updater.update(getDeltaTime / 1000f)
-        }
-        if (!updater.continueUpdate)
-        {
-          removeUpdaters.add(updater)
-        }
-      }
-      updaters.removeAll(removeUpdaters)
+      updaters.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
+      updaters = updaters.filterNot(_.continueUpdate()).asInstanceOf[WeakHashSet[IUpdate]]
+
+      //TODO: Check if this works properly
     }
     catch
       {
         case e: Exception =>
         {
-          System.out.println("Universal Electricity Threaded Ticker: Failed while tcking updater. This is a bug! Clearing all tickers for self repair.")
+          System.out.println("Universal Electricity Ticker: Failed while ticking updaters. This is a bug! Clearing all tickers for self repair.")
           updaters.clear
           e.printStackTrace
         }

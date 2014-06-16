@@ -9,7 +9,7 @@ import universalelectricity.compatibility.Compatibility
 import universalelectricity.compatibility.asm.UniversalTransformer
 import cpw.mods.fml.common._
 import cpw.mods.fml.common.Mod.EventHandler
-import cpw.mods.fml.common.event.{FMLPostInitializationEvent, FMLPreInitializationEvent}
+import cpw.mods.fml.common.event.{FMLServerStoppedEvent, FMLServerStartedEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import cpw.mods.fml.relauncher.IFMLCallHook
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions
@@ -74,6 +74,7 @@ object UELoader extends IFMLLoadingPlugin with IFMLCallHook
   @EventHandler
   def postInit(evt: FMLPostInitializationEvent)
   {
+    //TODO: Check this
     if (UpdateTicker.useThreads && !UpdateTicker.isAlive())
     {
       UpdateTicker.start();
@@ -82,6 +83,18 @@ object UELoader extends IFMLLoadingPlugin with IFMLCallHook
     NodeRegistry.register(classOf[IElectricNode], classOf[ElectricNode])
     // TODO: register Thermal Grid
     //UpdateTicker.addNetwork(ResonantEngine.thermalGrid);
+  }
+
+  @EventHandler
+  def serverStartedEvent(evt: FMLServerStartedEvent)
+  {
+    println("Started")
+  }
+
+  @EventHandler
+  def serverStoppedEvent(evt: FMLServerStoppedEvent)
+  {
+    println("Stopped")
   }
 
   /** Return a list of classes that implements the IClassTransformer interface
