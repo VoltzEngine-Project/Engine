@@ -11,6 +11,12 @@ Documentation: https://github.com/Universal-Electricity/Universal-Electricity/wi
 * Calclavia
 * DarkGuardsman
 
+
+Support
+======
+* Make sure you used the latest Versions even try dev versions. 
+* use Pastebin to make it easier and so we don't have to scroll down a giant wall of text.
+
 ### Contact
 Join *#universalelectricity* on EsperNet (irc.esper.net:5555). Remember to follow the rules and respect others as with any other channel.
 
