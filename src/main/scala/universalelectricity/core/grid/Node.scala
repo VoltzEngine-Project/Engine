@@ -12,11 +12,13 @@ import net.minecraftforge.common.util.ForgeDirection
 
 abstract class Node(parent: INodeProvider) extends INode
 {
-  protected final val connections: Map[this.type, ForgeDirection] = new util.WeakHashMap[this.type, ForgeDirection]
+  type This = this.type
 
-  protected var grid: Grid[this.type] = _
+  protected final val connections: Map[This, ForgeDirection] = new util.WeakHashMap[This, ForgeDirection]
 
-  final def getGrid(): Grid[this.type] =
+  protected var grid: Grid[This] = _
+
+  final def getGrid(): Grid[This] =
   {
     if (grid == null)
     {
@@ -27,11 +29,11 @@ abstract class Node(parent: INodeProvider) extends INode
     return grid
   }
 
-  protected def newGrid(): Grid[this.type]
+  protected def newGrid(): Grid[This]
 
   final def setGrid(grid: Grid[_])
   {
-    this.grid = grid.asInstanceOf[Grid[this.type]]
+    this.grid = grid.asInstanceOf[Grid[This]]
   }
 
   /**
@@ -84,9 +86,9 @@ abstract class Node(parent: INodeProvider) extends INode
       {
         val check = tile.asInstanceOf[INodeProvider].getNode(getClass(), dir.getOpposite)
 
-        if (check.isInstanceOf[this.type] && canConnect(dir, check) && check.canConnect(dir.getOpposite, this))
+        if (check.isInstanceOf[This] && canConnect(dir, check) && check.canConnect(dir.getOpposite, this))
         {
-          connections.put(check.asInstanceOf[this.type], dir)
+          connections.put(check.asInstanceOf[This], dir)
         }
       }
     })
@@ -98,7 +100,7 @@ abstract class Node(parent: INodeProvider) extends INode
    *
    * @return Returns all the connections in this node.
    */
-  def getConnections(): Map[this.type, ForgeDirection] = connections
+  def getConnections(): Map[This, ForgeDirection] = connections
 
   /**
    * Can this node connect with the source?
