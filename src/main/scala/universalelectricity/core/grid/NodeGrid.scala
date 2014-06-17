@@ -32,12 +32,12 @@ abstract class NodeGrid[N <: Node] extends Grid[N]
 
   override def deconstruct
   {
-    nodes.foreach(node =>
+    getNodes().foreach(node =>
     {
       node.setGrid(null)
       node.reconstruct()
     })
 
-    nodes.clear
+    getNodes().clear
   }
 }

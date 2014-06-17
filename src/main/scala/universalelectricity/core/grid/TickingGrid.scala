@@ -15,6 +15,16 @@ class TickingGrid[N <: Node] extends NodeGrid[N] with IUpdate
   /** Upon init, add this grid into the ticker. */
   UpdateTicker.addUpdater(this)
 
+  override def add(node: N)
+  {
+    UpdateTicker.enqueue(() => super.add(node))
+  }
+
+  override def remove(node: N)
+  {
+    UpdateTicker.enqueue(() => super.remove(node))
+  }
+
   /**
    * An grid update called only server side.
    */
@@ -23,10 +33,10 @@ class TickingGrid[N <: Node] extends NodeGrid[N] with IUpdate
     /**
      * TODO: Perform test to check if parallel evaluation is worth it.
      */
-    nodes.par.foreach(_.update(deltaTime))
+    getNodes().par.foreach(_.update(deltaTime))
   }
 
-  def canUpdate() = nodes.size > 0
+  def canUpdate() = getNodes().size > 0
 
   def continueUpdate = canUpdate()
 

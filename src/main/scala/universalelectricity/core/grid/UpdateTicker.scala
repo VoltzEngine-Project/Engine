@@ -22,6 +22,9 @@ object UpdateTicker extends Thread
    * For updaters to be ticked.
    */
   private final var updaters = new WeakHashSet[IUpdate]()
+
+  private final val enqueued = new mutable.SynchronizedQueue[() => Unit]()
+
   /**
    * For queuing Forge events to be invoked the next tick.
    */
@@ -42,19 +45,18 @@ object UpdateTicker extends Thread
 
   def addUpdater(updater: IUpdate)
   {
-    updaters synchronized
-            {
-              updaters += updater
-            }
+    enqueue(() => updaters += updater)
+  }
+
+  def enqueue(f: (() => Unit))
+  {
+    enqueued += f
   }
 
   def queueEvent(event: Event)
-  {
-    queuedEvents synchronized
-            {
-              queuedEvents += event
-            }
-  }
+{
+  queuedEvents += event
+}
 
   def getDeltaTime = deltaTime
 
@@ -92,10 +94,8 @@ object UpdateTicker extends Thread
   @SubscribeEvent
   def tickEnd(event: TickEvent.ServerTickEvent)
   {
-    updaters synchronized
-            {
-              update()
-            }
+    update()
+
     queuedEvents synchronized
             {
               queuedEvents.foreach(MinecraftForge.EVENT_BUS.post(_))
@@ -107,12 +107,14 @@ object UpdateTicker extends Thread
   {
     try
     {
-      //TODO: Check if this works properly
+      enqueued.foreach(_.apply())
+      enqueued.clear()
+
       /**
        * TODO: Perform test to check if parallel evaluation is worth it.
        */
       updaters.par.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
-      updaters = updaters.filterNot(_.continueUpdate()).asInstanceOf[WeakHashSet[IUpdate]]
+      updaters = updaters.filter(_.continueUpdate()).asInstanceOf[WeakHashSet[IUpdate]]
     }
     catch
       {

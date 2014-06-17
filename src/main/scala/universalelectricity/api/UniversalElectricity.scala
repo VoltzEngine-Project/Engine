@@ -1,7 +1,5 @@
 package universalelectricity.api
 
-import _root_.net.minecraft.block.material.{MapColor, Material}
-
 /**
  * General Universal Electricity variable reference class.
  *
