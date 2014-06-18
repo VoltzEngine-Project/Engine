@@ -747,6 +747,13 @@ public class Vector3 implements Cloneable, IVector3, Comparable<IVector3>
 		return new Vector3(0.5, 0.5, 0.5);
 	}
 
+	public boolean isInBounds()
+	{
+		if (this.y < 0 || this.y > 256)
+			return false;
+		return true;
+	}
+
 	/**
 	 * RayTrace Code, retrieved from MachineMuse.
 	 * 
