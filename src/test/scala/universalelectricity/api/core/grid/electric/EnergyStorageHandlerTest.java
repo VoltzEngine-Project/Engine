@@ -47,9 +47,9 @@ public class EnergyStorageHandlerTest
 	public void testIsFull() throws Exception
 	{
 		EnergyStorageHandler handler = new EnergyStorageHandler(10000, 1000);
-		Assert.assertFalse("checks wether when not full, will return false", handler.isFull());
+		Assert.assertFalse("checks whether when not full, will return false", handler.isFull());
 		handler.setEnergy(handler.getEnergyCapacity());
-		Assert.assertTrue("checks wether isFull is proper", handler.isFull());
+		Assert.assertTrue("checks whether isFull is proper", handler.isFull());
 	}
 
 	@Test
@@ -57,8 +57,8 @@ public class EnergyStorageHandlerTest
 	{
 
 		EnergyStorageHandler handler = new EnergyStorageHandler(10000, 1000);
-		Assert.assertTrue("checks wether when not empty, will return false", handler.isEmpty());
+		Assert.assertTrue("checks whether when not empty, will return false", handler.isEmpty());
 		handler.setEnergy(1);
-		Assert.assertFalse("checks wether isFull is proper", handler.isEmpty());
+		Assert.assertFalse("checks whether isFull is proper", handler.isEmpty());
 	}
 }
