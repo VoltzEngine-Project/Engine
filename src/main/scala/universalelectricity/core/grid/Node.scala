@@ -12,7 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection
 
 abstract class Node(parent: INodeProvider) extends INode
 {
-  type This = this.type
+  type This <: Node
 
   protected final val connections: Map[This, ForgeDirection] = new util.WeakHashMap[This, ForgeDirection]
 
