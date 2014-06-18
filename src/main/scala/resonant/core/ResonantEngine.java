@@ -1,7 +1,9 @@
 package resonant.core;
 
+import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -31,7 +33,6 @@ import org.apache.logging.log4j.Level;
 import resonant.api.IBoilHandler;
 import resonant.core.content.*;
 import resonant.core.content.debug.BlockCreativeBuilder;
-import resonant.core.content.debug.BlockInfiniteBlock;
 import resonant.core.content.tool.ToolMode;
 import resonant.core.content.tool.ToolModeGeneral;
 import resonant.core.content.tool.ToolModeRotation;
@@ -47,7 +48,7 @@ import resonant.lib.flag.ModFlag;
 import resonant.lib.modproxy.ProxyHandler;
 import resonant.lib.multiblock.BlockMultiBlockPart;
 import resonant.lib.multiblock.TileMultiBlockPart;
-import resonant.lib.network.netty.*;
+import resonant.lib.network.netty.PacketManager;
 import resonant.lib.prefab.ProxyBase;
 import resonant.lib.prefab.item.ItemBlockMetadata;
 import resonant.lib.prefab.ore.OreGenBase;
@@ -64,7 +65,6 @@ import resonant.lib.utility.PotionUtility;
 import resonant.lib.utility.nbt.NBTUtility;
 import resonant.lib.utility.nbt.SaveManager;
 import universalelectricity.api.core.grid.IUpdate;
-import universalelectricity.core.grid.UpdateTicker;
 import universalelectricity.core.transform.vector.Vector3;
 import universalelectricity.core.transform.vector.VectorWorld;
 

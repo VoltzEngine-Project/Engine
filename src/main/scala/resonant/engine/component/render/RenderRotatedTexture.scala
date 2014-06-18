@@ -1,5 +1,6 @@
 package resonant.engine.component.render
 
+import net.minecraftforge.common.util.ForgeDirection
 import resonant.lib.utility.RotationUtility
 import universalelectricity.core.transform.vector.Vector3
 import resonant.lib.render.{RenderUtility, RenderBlockAdvanced}
@@ -28,7 +29,7 @@ class RenderRotatedTexture(tile: SpatialTile) extends RenderStatic
       if ((0 until 4).exists(targetDir == ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, _))))
       {
         RenderUtility.rotateFacesOnRenderer(targetDir, renderBlocks, true)
-        renderBlocks.renderStandardBlock(tile.block, position.intX(), position.intY(), position.intZ())
+        renderBlocks.renderStandardBlock(tile.block, position.xi, position.yi, position.zi())
         // RenderBlockUtility.tessellateFace(rendeerBlocks, tile.access, position.intX(), position.intY(), position.intZ(), tile.block, null, dir.ordinal)
         RenderUtility.resetFacesOnRenderer(renderBlocks)
       }

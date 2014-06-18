@@ -1,5 +1,8 @@
 package resonant.engine.component.render
 
+import net.minecraft.block.Block
+import net.minecraft.client.renderer.RenderBlocks
+import net.minecraft.world.IBlockAccess
 import resonant.engine.component.IComponent
 import universalelectricity.core.transform.vector.Vector3
 

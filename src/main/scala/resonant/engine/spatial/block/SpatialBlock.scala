@@ -1,18 +1,29 @@
 package resonant.engine.spatial.block
 
-import resonant.lib.prefab.item.ItemBlockTooltip
-import resonant.lib.utility.LanguageUtility
-import resonant.lib.utility.WrenchUtility
-import universalelectricity.core.transform.region.Cuboid
-import universalelectricity.core.transform.vector.Vector2
-import universalelectricity.core.transform.vector.Vector3
-import universalelectricity.core.transform.vector.VectorWorld
-import scala.collection.immutable
-import resonant.lib.content.prefab.{TIO, TRotatable}
-import resonant.lib.content.module.BlockDummy
-import resonant.engine.prefab.java
+import _root_.java.lang.reflect.Method
+import _root_.java.util
+
+import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraft.block.Block
+import net.minecraft.block.material.Material
+import net.minecraft.client.renderer.texture.IIconRegister
+import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.entity.Entity
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.{IIcon, MovingObjectPosition}
+import net.minecraft.world.{IBlockAccess, World}
+import resonant.engine.prefab.java
 import resonant.engine.spatial.Spatial
+import resonant.lib.content.module.BlockDummy
+import resonant.lib.content.prefab.{TIO, TRotatable}
+import resonant.lib.prefab.item.ItemBlockTooltip
+import resonant.lib.utility.{LanguageUtility, WrenchUtility}
+import universalelectricity.core.transform.region.Cuboid
+import universalelectricity.core.transform.vector.{Vector2, Vector3, VectorWorld}
+
+import scala.collection.immutable
 
 /**
  * All blocks inherit this class.
@@ -218,9 +229,9 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   /**
    * Drops
    */
-  def getDrops(metadata: Int, fortune: Int): ArrayList[ItemStack] =
+  def getDrops(metadata: Int, fortune: Int): util.ArrayList[ItemStack] =
   {
-    val drops: ArrayList[ItemStack] = new ArrayList[ItemStack]
+    val drops: util.ArrayList[ItemStack] = new util.ArrayList[ItemStack]
     if (getBlockType != null)
     {
       drops.add(new ItemStack(getBlockType, quantityDropped(metadata, fortune), metadataDropped(metadata, fortune)))
@@ -392,7 +403,7 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
    */
   def getCollisionBoxes(intersect: Cuboid, entity: Entity): Iterable[Cuboid] =
   {
-    val boxes: List[Cuboid] = new ArrayList[Cuboid]
+    val boxes: List[Cuboid] = new util.ArrayList[Cuboid]
     for (cuboid <- getCollisionBoxes)
     {
       if (intersect != null && cuboid.intersects(intersect))

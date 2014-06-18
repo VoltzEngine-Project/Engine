@@ -1,5 +1,11 @@
 package resonant.engine.spatial.block
 
+import java.util
+
+import net.minecraft.block.material.Material
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.network.Packet
+import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IPlayerUsing
 import resonant.core.ResonantEngine
 import resonant.lib.network.PacketAnnotation
@@ -12,7 +18,7 @@ import resonant.lib.utility.LanguageUtility
  */
 abstract class SpatialTile(name: String, material: Material) extends SpatialBlock(name, material) with IPlayerUsing
 {
-  private final val playersUsing: HashSet[EntityPlayer] = new HashSet[EntityPlayer]
+  private final val playersUsing: util.HashSet[EntityPlayer] = new util.HashSet[EntityPlayer]
   protected var ticks = 0L
 
   def this(newMaterial: Material) = this(LanguageUtility.decapitalizeFirst(getClass.getSimpleName.replaceFirst("Tile", "")), newMaterial)
@@ -47,7 +53,7 @@ abstract class SpatialTile(name: String, material: Material) extends SpatialBloc
     return ResonantEngine.INSTANCE.packetHandler.toMCPacket(new PacketAnnotation(this))
   }
 
-  def getPlayersUsing: HashSet[EntityPlayer] =
+  def getPlayersUsing: util.HashSet[EntityPlayer] =
   {
     return this.playersUsing
   }

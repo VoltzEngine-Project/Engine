@@ -1,5 +1,6 @@
 package resonant.engine.component.render
 
+import net.minecraft.item.ItemStack
 import resonant.engine.component.IComponent
 import resonant.lib.render.RenderUtility
 
