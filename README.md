@@ -18,7 +18,7 @@ Support
 * use Pastebin to make it easier and so we don't have to scroll down a giant wall of text.
 
 ### Contact
-Join *UE* on EsperNet (irc.esper.net:5555). Remember to follow the rules and respect others as with any other channel.
+Join *#UE* on EsperNet (irc.esper.net:5555). Remember to follow the rules and respect others as with any other channel.
 
 ### License
 Universal Electricity is licensed under the Lesser General Public License (LGPL) version 3.0. The license can be found here:
