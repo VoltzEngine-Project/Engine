@@ -2,6 +2,7 @@ package universalelectricity.core.grid
 
 import com.nicta.scoobi.impl.collection.WeakHashSet
 import scala.reflect._
+import scala.reflect.ClassTag
 
 /**
  * A grid containing a series of arbitary nodes.
@@ -14,7 +15,7 @@ class Grid[N]
 	private final val nodes = new WeakHashSet[N]()
 
 	/** A class instance of the node type used to node validation checks. */
-	val nodeClass = classTag[N].runtimeClass
+	var nodeClass : Class[N] = _
 
 	/**
 	 * Adds a node to the grid.
@@ -23,6 +24,9 @@ class Grid[N]
 	def add(node: N)
 	{
 		nodes.add(node)
+
+    //TODO: Check this?
+    nodeClass = node.getClass
 	}
 
 	/**
