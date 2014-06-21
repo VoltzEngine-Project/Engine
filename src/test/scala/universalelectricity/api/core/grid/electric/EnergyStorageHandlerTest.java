@@ -13,7 +13,7 @@ public class EnergyStorageHandlerTest
 	@Test
 	public void testModifyEnergyStored() throws Exception
 	{
-		EnergyStorageHandler handler = new EnergyStorageHandler(10000, 1000);
+		EnergyStorage handler = new EnergyStorage(10000, 1000);
 		handler.setEnergy(5000);
 
 		handler.modifyEnergyStored(5001);
@@ -24,7 +24,7 @@ public class EnergyStorageHandlerTest
 	@Test
 	public void testReceiveEnergy() throws Exception
 	{
-		EnergyStorageHandler handler = new EnergyStorageHandler(10000, 1000);
+		EnergyStorage handler = new EnergyStorage(10000, 1000);
 		double receive = 5000;
 
 		double result1 = handler.receiveEnergy(receive, true);
@@ -39,14 +39,14 @@ public class EnergyStorageHandlerTest
 	@Test
 	public void testExtractEnergy() throws Exception
 	{
-		EnergyStorageHandler handler = new EnergyStorageHandler(10000, 1000);
+		EnergyStorage handler = new EnergyStorage(10000, 1000);
 		Assert.assertTrue("check energy extraction", handler.checkExtract());
 	}
 
 	@Test
 	public void testIsFull() throws Exception
 	{
-		EnergyStorageHandler handler = new EnergyStorageHandler(10000, 1000);
+		EnergyStorage handler = new EnergyStorage(10000, 1000);
 		Assert.assertFalse("checks whether when not full, will return false", handler.isFull());
 		handler.setEnergy(handler.getEnergyCapacity());
 		Assert.assertTrue("checks whether isFull is proper", handler.isFull());
@@ -56,7 +56,7 @@ public class EnergyStorageHandlerTest
 	public void testIsEmpty() throws Exception
 	{
 
-		EnergyStorageHandler handler = new EnergyStorageHandler(10000, 1000);
+		EnergyStorage handler = new EnergyStorage(10000, 1000);
 		Assert.assertTrue("checks whether when not empty, will return false", handler.isEmpty());
 		handler.setEnergy(1);
 		Assert.assertFalse("checks whether isFull is proper", handler.isEmpty());

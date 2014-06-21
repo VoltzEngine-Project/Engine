@@ -26,7 +26,7 @@ class Grid[N]
 		nodes.add(node)
 
     //TODO: Check this?
-    nodeClass = node.getClass
+   nodeClass = classOf[node]
 	}
 
 	/**

@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * @author Calclavia
  * 
  */
-public class EnergyStorageHandler
+public class EnergyStorage
 {
 	protected double energy;
 	protected double capacity;
@@ -20,29 +20,29 @@ public class EnergyStorageHandler
 	 */
 	protected double lastEnergy;
 
-	public EnergyStorageHandler()
+	public EnergyStorage()
 	{
 		this(0);
 	}
 
-	public EnergyStorageHandler(double capacity)
+	public EnergyStorage(double capacity)
 	{
 		this(capacity, capacity, capacity);
 	}
 
-	public EnergyStorageHandler(double capacity, double maxTransfer)
+	public EnergyStorage(double capacity, double maxTransfer)
 	{
 		this(capacity, maxTransfer, maxTransfer);
 	}
 
-	public EnergyStorageHandler(double capacity, double maxReceive, double maxExtract)
+	public EnergyStorage(double capacity, double maxReceive, double maxExtract)
 	{
 		this.capacity = capacity;
 		this.maxReceive = maxReceive;
 		this.maxExtract = maxExtract;
 	}
 
-	public EnergyStorageHandler readFromNBT(NBTTagCompound nbt)
+	public EnergyStorage readFromNBT(NBTTagCompound nbt)
 	{
 		this.energy = nbt.getDouble("energy");
 		return this;

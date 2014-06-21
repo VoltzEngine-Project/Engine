@@ -8,7 +8,6 @@ import net.minecraftforge.common.DimensionManager
 import net.minecraft.util.MovingObjectPosition
 import net.minecraft.block.Block
 
-
 class VectorWorld(var world: World, x: Double, y: Double, z: Double) extends Vector3(x, y, z) with IVectorWorld
 {
   def this(nbt: NBTTagCompound) = this(DimensionManager.getWorld(nbt.getInteger("dimension")), nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
@@ -39,11 +38,11 @@ class VectorWorld(var world: World, x: Double, y: Double, z: Double) extends Vec
   /**
    * World Access
    */
-  def getBlockID(): Block = super.getBlock(world)
+  def getBlock(): Block = if (world != null) super.getBlock(world) else null
 
-  def getBlockMetadata() = super.getBlockMetadata(world)
+  def getBlockMetadata() = if (world != null) super.getBlockMetadata(world) else null
 
-  def getTileEntity() = super.getTileEntity(world)
+  def getTileEntity() = if (world != null) super.getTileEntity(world) else null
 
   def setBlock(block: Block, metadata: Int, notify: Int): Boolean = super.setBlock(world, block, metadata, notify)
 
