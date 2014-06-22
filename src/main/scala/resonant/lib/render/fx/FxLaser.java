@@ -2,7 +2,7 @@ package resonant.lib.render.fx;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import resonant.lib.References;
+import resonant.engine.References;
 import universalelectricity.api.vector.IVector3;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

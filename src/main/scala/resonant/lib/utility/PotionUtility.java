@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import net.minecraft.potion.Potion;
-import resonant.lib.References;
+import resonant.engine.References;
 
 /** call on preinit
  * 

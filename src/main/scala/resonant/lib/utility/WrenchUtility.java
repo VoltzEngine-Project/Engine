@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import resonant.core.content.ItemScrewdriver;
+import resonant.engine.content.ItemScrewdriver;
 import buildcraft.api.tools.IToolWrench;
 
 /** Utility to handle several different types of wrench implementation better.

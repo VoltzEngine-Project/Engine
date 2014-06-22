@@ -1,7 +1,7 @@
 package resonant.lib.prefab.potion;
 
 import net.minecraft.potion.Potion;
-import resonant.lib.References;
+import resonant.engine.References;
 
 public abstract class CustomPotion extends Potion
 {

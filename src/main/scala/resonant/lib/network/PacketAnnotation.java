@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import resonant.core.ResonantEngine;
-import resonant.lib.References;
+import resonant.engine.ResonantEngine;
+import resonant.engine.References;
 
 /**
  * @author tgame14
@@ -39,7 +39,7 @@ public class PacketAnnotation extends PacketType
 
 				if (obj instanceof TileEntity)
 				{
-					ResonantEngine.INSTANCE.packetHandler.writeData(data, ((TileEntity) obj).xCoord, ((TileEntity) obj).yCoord, ((TileEntity) obj).zCoord);
+					ResonantEngine.instance.packetHandler.writeData(data, ((TileEntity) obj).xCoord, ((TileEntity) obj).yCoord, ((TileEntity) obj).zCoord);
 				}
 
 				data.writeBytes(packetSet.getPacketArrayData(obj));

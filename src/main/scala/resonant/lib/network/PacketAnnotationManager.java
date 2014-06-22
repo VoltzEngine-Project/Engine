@@ -10,8 +10,8 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidTank;
-import resonant.core.ResonantEngine;
-import resonant.lib.References;
+import resonant.engine.ResonantEngine;
+import resonant.engine.References;
 import resonant.lib.utility.nbt.ISaveObj;
 import universalelectricity.core.transform.vector.Vector3;
 
@@ -114,11 +114,11 @@ public class PacketAnnotationManager
 	{
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
 		{
-			ResonantEngine.INSTANCE.packetHandler.sendToAll(new PacketAnnotation(obj, packetSetID));
+			ResonantEngine.instance.packetHandler.sendToAll(new PacketAnnotation(obj, packetSetID));
 		}
 		else
 		{
-			ResonantEngine.INSTANCE.packetHandler.sendToServer(new PacketAnnotation(obj, packetSetID));
+			ResonantEngine.instance.packetHandler.sendToServer(new PacketAnnotation(obj, packetSetID));
 		}
 	}
 
@@ -161,12 +161,12 @@ public class PacketAnnotationManager
 						else
 						{
 							data.writeBoolean(true);
-							ResonantEngine.INSTANCE.packetHandler.writeData(data, syncObj);
+							ResonantEngine.instance.packetHandler.writeData(data, syncObj);
 						}
 					}
 					else
 					{
-						ResonantEngine.INSTANCE.packetHandler.writeData(data, syncObj);
+						ResonantEngine.instance.packetHandler.writeData(data, syncObj);
 					}
 				}
 

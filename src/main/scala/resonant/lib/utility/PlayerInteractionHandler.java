@@ -2,9 +2,7 @@ package resonant.lib.utility;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -15,7 +13,7 @@ import resonant.api.IRemovable.IPickup;
 import resonant.api.IRemovable.ISneakPickup;
 import resonant.api.IRemovable.ISneakWrenchable;
 import resonant.api.IRemovable.IWrenchable;
-import resonant.lib.References;
+import resonant.engine.References;
 import resonant.lib.utility.inventory.InventoryUtility;
 import universalelectricity.api.vector.VectorWorld;
 

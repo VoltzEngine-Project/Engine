@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import resonant.core.ResonantEngine;
+import resonant.engine.ResonantEngine;
 import resonant.lib.network.IPacketReceiver;
 import resonant.lib.network.PacketTile;
 import universalelectricity.core.transform.vector.Vector3;
@@ -47,7 +47,7 @@ public class TileMultiBlockPart extends TileEntity implements IPacketReceiver
 		if (this.mainBlockPosition != null)
 		{
 			final PacketTile packetTile = new PacketTile(this, new Object[] { this.mainBlockPosition.xi(), this.mainBlockPosition.yi(), this.mainBlockPosition.zi() });
-			return ResonantEngine.INSTANCE.packetHandler.toMCPacket(packetTile);
+			return ResonantEngine.instance.packetHandler.toMCPacket(packetTile);
 		}
 
 		return null;

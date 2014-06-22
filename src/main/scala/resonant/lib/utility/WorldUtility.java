@@ -11,7 +11,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
-import resonant.lib.References;
+import resonant.engine.References;
 import universalelectricity.core.transform.rotation.Rotation;
 import universalelectricity.core.transform.vector.Vector3;
 

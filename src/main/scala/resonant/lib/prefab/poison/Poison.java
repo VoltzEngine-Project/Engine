@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import resonant.api.armor.IAntiPoisonArmor;
 import resonant.api.blocks.IAntiPoisonBlock;
-import resonant.lib.References;
+import resonant.engine.References;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

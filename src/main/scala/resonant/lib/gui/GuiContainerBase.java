@@ -18,7 +18,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import resonant.lib.References;
+import resonant.engine.References;
 import universalelectricity.core.transform.region.Rectangle;
 import resonant.lib.render.RenderUtility;
 import resonant.lib.utility.LanguageUtility;

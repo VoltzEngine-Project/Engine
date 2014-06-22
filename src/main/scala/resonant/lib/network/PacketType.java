@@ -2,8 +2,7 @@ package resonant.lib.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.network.Packet;
-import resonant.core.ResonantEngine;
+import resonant.engine.ResonantEngine;
 import resonant.lib.network.netty.AbstractPacket;
 
 /**
@@ -17,6 +16,6 @@ public abstract class PacketType extends AbstractPacket
     public PacketType (Object... args)
     {
         this.data = Unpooled.buffer();
-        ResonantEngine.INSTANCE.packetHandler.writeData(this.data, args);
+        ResonantEngine.instance.packetHandler.writeData(this.data, args);
     }
 }

@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IReactor;
-import resonant.core.ResonantEngine;
+import resonant.engine.ResonantEngine;
 import resonant.lib.thermal.EventThermal.EventThermalUpdate;
 import universalelectricity.api.core.grid.IUpdate;
 import universalelectricity.core.transform.vector.VectorWorld;
