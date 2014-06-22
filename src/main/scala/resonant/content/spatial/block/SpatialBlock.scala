@@ -8,7 +8,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.Entity
+import net.minecraft.entity.{EntityLivingBase, Entity}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
@@ -427,20 +427,6 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   def getCollisionBounds: Cuboid =
   {
     return bounds
-  }
-
-  @SideOnly(Side.CLIENT) final def getRenderer: TileRender =
-  {
-    if (!RenderInfo.renderer.containsKey(this))
-    {
-      RenderInfo.renderer.put(this, newRenderer)
-    }
-    return RenderInfo.renderer.get(this)
-  }
-
-  @SideOnly(Side.CLIENT) protected def newRenderer: TileRender =
-  {
-    return null
   }
 
   /**

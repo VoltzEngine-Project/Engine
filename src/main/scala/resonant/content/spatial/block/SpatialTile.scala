@@ -23,7 +23,7 @@ abstract class SpatialTile(name: String, material: Material) extends SpatialBloc
 
   def this(newMaterial: Material) = this(LanguageUtility.decapitalizeFirst(getClass.getSimpleName.replaceFirst("Tile", "")), newMaterial)
 
-  override def tile: TileBlock =
+  override def tile: SpatialTile =
   {
     return this
   }

@@ -9,9 +9,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.config.Configuration;
-import resonant.content.wrapper.BlockDummy;
-import resonant.content.wrapper.TileBlock;
+import resonant.content.spatial.block.SpatialBlock;
 import resonant.lib.prefab.item.ItemBlockTooltip;
+import resonant.content.wrapper.BlockDummy;
 import resonant.lib.utility.LanguageUtility;
 
 import java.util.Map.Entry;
@@ -22,13 +22,13 @@ import java.util.WeakHashMap;
  *
  * @author DarkGuardsman, Calclavia
  */
-public class EngineRegistry
+public class ContentRegistry
 {
 	@SidedProxy(clientSide = "resonant.content.ClientRegistryProxy", serverSide = "resonant.content.CommonRegistryProxy")
 	public static CommonRegistryProxy proxy;
 
-	public final WeakHashMap<Block, String> blocks = new WeakHashMap<Block, String>();
-	public final WeakHashMap<Item, String> items = new WeakHashMap<Item, String>();
+	public final WeakHashMap<Block, String> blocks = new WeakHashMap();
+	public final WeakHashMap<Item, String> items = new WeakHashMap();
 	private final Configuration config;
 	private final String modID;
 
@@ -40,19 +40,19 @@ public class EngineRegistry
 	 */
 	private int packetID = 0;
 
-	public EngineRegistry(Configuration config, String modID)
+	public ContentRegistry(Configuration config, String modID)
 	{
 		this.config = config;
 		this.modID = modID;
 	}
 
-	public EngineRegistry setPrefix(String modPrefix)
+	public ContentRegistry setPrefix(String modPrefix)
 	{
 		this.modPrefix = modPrefix;
 		return this;
 	}
 
-	public EngineRegistry setTab(CreativeTabs defaultTab)
+	public ContentRegistry setTab(CreativeTabs defaultTab)
 	{
 		this.defaultTab = defaultTab;
 		return this;
@@ -64,67 +64,68 @@ public class EngineRegistry
 	}
 
 	/**
-	 * New TileBlocks system.
+	 * New SpatialBlocks system.
 	 */
-	public Block newBlock(Class<? extends TileBlock> tileBlockClass)
+	public Block newBlock(Class<? extends SpatialBlock> tileBlockClass)
 	{
 		try
 		{
-			TileBlock tileBlock = tileBlockClass.newInstance();
+			SpatialBlock tileBlock = tileBlockClass.newInstance();
 			final String name = tileBlock.name();
-			boolean canDisable = false;
 
-			if (!canDisable || (canDisable && config.get("enabled_list", "Enable " + name, true).getBoolean(true)))
+			BlockDummy block = new BlockDummy(modPrefix, defaultTab, tileBlock);
+			tileBlock.setBlock(block);
+
+			blocks.put(block, name);
+			proxy.registerBlock(block, tileBlock.itemBlock(), name, modID);
+
+			tileBlock.onInstantiate();
+
+			if (tileBlock.tile() != null)
 			{
-				BlockDummy block = new BlockDummy(modPrefix, defaultTab, tileBlock);
-				tileBlock.setBlock(block);
+				proxy.registerTileEntity(name, tileBlock.tile().getClass());
 
-				blocks.put(block, name);
-				proxy.registerBlock(block, tileBlock.itemBlock(), name, modID);
-
-				tileBlock.onInstantiate();
-
-				if (tileBlock.tile() != null)
+				if (!tileBlock.normalRender())
 				{
-					proxy.registerTileEntity(name, tileBlock.tile().getClass());
-
-					if (!tileBlock.normalRender())
-					{
-						proxy.registerDummyRenderer(tileBlock.tile().getClass());
-					}
+					proxy.registerDummyRenderer(tileBlock.tile().getClass());
 				}
-
-				return block;
 			}
+
+			return block;
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeException("TileBlock [" + tileBlockClass.getSimpleName() + "] failed to be created:", e);
+			throw new RuntimeException("SpatialBlock [" + tileBlockClass.getSimpleName() + "] failed to be created:", e);
 		}
 
 		return null;
 	}
-
+	/**
+	@Deprecated
 	public Block createBlock(Class<? extends Block> blockClass)
 	{
 		return createBlock(blockClass, ItemBlockTooltip.class);
 	}
 
+	@Deprecated
 	public Block createTile(Class<? extends Block> blockClass, Class<? extends TileEntity> tileClass)
 	{
 		return createBlock(blockClass, ItemBlockTooltip.class, tileClass);
 	}
 
+	@Deprecated
 	public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass)
 	{
 		return createBlock(blockClass, itemClass, null);
 	}
 
+	@Deprecated
 	public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
 	{
 		return createBlock(LanguageUtility.decapitalizeFirst(blockClass.getSimpleName().replace("Block", "")), blockClass, itemClass, tileClass);
 	}
 
+	@Deprecated
 	public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
 	{
 		return createBlock(name, blockClass, itemClass, tileClass, false);
@@ -138,7 +139,8 @@ public class EngineRegistry
 	 * @param blockClass - class to generate the instance from
 	 * @param canDisable - should we allow the player the option to disable the block
 	 * @param itemClass  - item block to register with the block
-	 */
+
+	@Deprecated
 	public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass, boolean canDisable)
 	{
 		Block block = null;
@@ -192,7 +194,8 @@ public class EngineRegistry
 	 *
 	 * @param tileClass
 	 * @throws ClassNotFoundException
-	 */
+
+	@Deprecated
 	public void finishCreation(Block block, Class<? extends TileEntity> tileClass) throws ClassNotFoundException
 	{
 		BlockInfo blockInfo = block.getClass().getAnnotation(BlockInfo.class);
@@ -211,7 +214,7 @@ public class EngineRegistry
 		{
 			proxy.registerTileEntity(block.getUnlocalizedName(), tileClass);
 		}
-	}
+	}*/
 
 	/**
 	 * Method to get block via name
@@ -232,14 +235,14 @@ public class EngineRegistry
 		return null;
 	}
 
-	public Item createItem(Class<? extends Item> clazz)
+	public Item newItem(Class<? extends Item> clazz)
 	{
-		return createItem(LanguageUtility.decapitalizeFirst(clazz.getSimpleName().replace("Item", "")), clazz, true);
+		return newItem(LanguageUtility.decapitalizeFirst(clazz.getSimpleName().replace("Item", "")), clazz, true);
 	}
 
-	public Item createItem(String name, Class<? extends Item> clazz)
+	public Item newItem(String name, Class<? extends Item> clazz)
 	{
-		return createItem(name, clazz, false);
+		return newItem(name, clazz, false);
 	}
 
 	/**
@@ -251,15 +254,15 @@ public class EngineRegistry
 	 * @param canDisable - can a user disable this item
 	 * @return the new item
 	 */
-	public Item createItem(String name, Class<? extends Item> clazz, boolean canDisable)
+	public Item newItem(String name, Class<? extends Item> clazz, boolean canDisable)
 	{
 		Item item = null;
+
 		if (clazz != null && (!canDisable || (canDisable && config.get("Enabled_List", "Enabled_" + name, true).getBoolean(true))))
 		{
 			try
 			{
-				//                int assignedID = idManager.getNextItemID(config, name);
-				item = clazz.getConstructor().newInstance();
+				Item item = clazz.getConstructor().newInstance();
 
 				if (item != null)
 				{
@@ -281,6 +284,7 @@ public class EngineRegistry
 					items.put(item, name);
 					GameRegistry.registerItem(item, name, modID);
 				}
+				return item;
 			}
 			catch (Exception e)
 			{
@@ -288,6 +292,6 @@ public class EngineRegistry
 				throw new RuntimeException("Item [" + name + "] failed to be created: " + e.getLocalizedMessage(), e.fillInStackTrace());
 			}
 		}
-		return item;
+		return null;
 	}
 }

@@ -31,12 +31,12 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Level;
 import resonant.api.IBoilHandler;
+import resonant.content.ContentRegistry;
 import resonant.engine.content.*;
 import resonant.engine.content.debug.BlockCreativeBuilder;
 import resonant.engine.content.tool.ToolMode;
 import resonant.engine.content.tool.ToolModeGeneral;
 import resonant.engine.content.tool.ToolModeRotation;
-import resonant.content.EngineRegistry;
 import resonant.lib.compat.waila.Waila;
 import resonant.lib.config.Config;
 import resonant.lib.config.ConfigHandler;
@@ -79,7 +79,7 @@ import java.util.Arrays;
 @Mod(modid = References.NAME, name = References.NAME, version = References.VERSION, dependencies = "required-after:UniversalElectricity")
 public class ResonantEngine
 {
-	public static final EngineRegistry contentRegistry = new EngineRegistry(References.CONFIGURATION, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
+	public static final ContentRegistry contentRegistry = new ContentRegistry(References.CONFIGURATION, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 
 	@SidedProxy(clientSide = "resonant.core.ClientProxy", serverSide = "resonant.lib.prefab.ProxyBase")
 	public static ProxyBase proxy;
