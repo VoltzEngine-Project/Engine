@@ -1,18 +1,17 @@
 package resonant.lib.utility.key;
 
-import java.util.EnumSet;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-/** This class handles keys already binded to the game so to avoid creating new key bindings
- * 
- * @author DarkGuardsman */
+/**
+ * This class handles keys already binded to the game so to avoid creating new key bindings
+ *
+ * @author DarkGuardsman
+ */
 public class PlayerKeyHandler
 {
 	private String channel;
@@ -35,17 +34,17 @@ public class PlayerKeyHandler
 		}
 	}
 
-    private void keyTick(boolean tickEnd)
-    {
-        for (int i = 0; i < Minecraft.getMinecraft().gameSettings.keyBindings.length; i++)
-        {
-            KeyBinding keyBinding = Minecraft.getMinecraft().gameSettings.keyBindings[i];
-            int keyCode = keyBinding.getKeyCode();
-            boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
-            if (state)
-            {
-                //PacketManagerKeyEvent.sendPacket(this.channel, keyCode);
-            }
-        }
-    }
+	private void keyTick(boolean tickEnd)
+	{
+		for (int i = 0; i < Minecraft.getMinecraft().gameSettings.keyBindings.length; i++)
+		{
+			KeyBinding keyBinding = Minecraft.getMinecraft().gameSettings.keyBindings[i];
+			int keyCode = keyBinding.getKeyCode();
+			boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
+			if (state)
+			{
+				//PacketManagerKeyEvent.sendPacket(this.channel, keyCode);
+			}
+		}
+	}
 }

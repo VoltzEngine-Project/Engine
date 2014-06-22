@@ -18,6 +18,7 @@ import java.util.Set;
  */
 public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveObj
 {
+	protected final W self;
 	/**
 	 * The main block used for reference
 	 */
@@ -26,7 +27,6 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 	 * The relative primary block position to be loaded in once the tile is initiated.
 	 */
 	protected Vector3 newPrimary = null;
-	protected final W self;
 	protected Class<? extends W> wrapperClass;
 
 	public MultiBlockHandler(W wrapper)
@@ -114,7 +114,9 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 				for (W structure : structures)
 				{
 					if (structure.getMultiBlock().isConstructed())
+					{
 						return false;
+					}
 				}
 
 				prim = new WeakReference(self);

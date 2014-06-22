@@ -1,7 +1,5 @@
 package resonant.lib.compat.waila;
 
-import java.util.List;
-
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
@@ -12,6 +10,8 @@ import resonant.lib.prefab.tile.TileElectrical;
 import resonant.lib.utility.LanguageUtility;
 import universalelectricity.api.UnitDisplay;
 import universalelectricity.api.core.grid.electric.IEnergyContainer;
+
+import java.util.List;
 
 /**
  * Waila support for Electrical tiles

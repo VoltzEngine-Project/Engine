@@ -1,15 +1,12 @@
 package resonant.lib.content.prefab
 
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.IInventory
-import net.minecraft.inventory.ISidedInventory
+import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.IExternalInventory
-import resonant.api.IExternalInventoryBox
-import resonant.lib.utility.inventory.ExternalInventory
-import resonant.lib.utility.inventory.InventoryUtility
+import resonant.api.{IExternalInventory, IExternalInventoryBox}
+import resonant.lib.utility.inventory.{ExternalInventory, InventoryUtility}
 import universalelectricity.core.transform.vector.Vector3
 
 /**

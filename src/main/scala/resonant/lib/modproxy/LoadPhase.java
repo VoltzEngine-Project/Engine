@@ -1,16 +1,18 @@
 package resonant.lib.modproxy;
 
-/** A Class that holds an enum that indicates Loading Phases of mods
- *
+/**
+ * A Class that holds an enum that indicates Loading Phases of mods
+ * <p/>
  * deprecated as FML / Forge already provides a similar version
- * @since 23/02/14
+ *
  * @author tgame14
+ * @since 23/02/14
  */
 public enum LoadPhase
 {
-    PRELAUNCH,
-    PREINIT,
-    INIT,
-    POSTINIT,
-    DONE;
+	PRELAUNCH,
+	PREINIT,
+	INIT,
+	POSTINIT,
+	DONE;
 }

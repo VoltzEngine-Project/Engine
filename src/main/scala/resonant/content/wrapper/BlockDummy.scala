@@ -1,29 +1,21 @@
 package resonant.lib.content.module
 
-import cpw.mods.fml.relauncher.Side
-import cpw.mods.fml.relauncher.SideOnly
-import net.minecraft.block.{ITileEntityProvider, Block}
+import java.util.{ArrayList, List, Random}
+
+import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraft.block.{Block, ITileEntityProvider}
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.AxisAlignedBB
-import net.minecraft.util.IIcon
-import net.minecraft.util.MovingObjectPosition
-import net.minecraft.world.IBlockAccess
-import net.minecraft.world.World
-import universalelectricity.core.transform.region.Cuboid
+import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
+import net.minecraft.world.{IBlockAccess, World}
+import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.utility.inventory.InventoryUtility
+import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.Vector3
-import java.util.ArrayList
-import java.util.List
-import java.util.Random
-import resonant.content.spatial.block.{SpatialBlock, SpatialBlock}
-import resonant.content.wrapper.BlockRenderingHandler
 
 class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: SpatialBlock) extends Block(dummyTile.material) with ITileEntityProvider
 {

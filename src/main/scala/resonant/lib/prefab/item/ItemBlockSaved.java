@@ -11,96 +11,102 @@ import resonant.lib.utility.nbt.NBTUtility;
 import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorWorld;
 
-/** An item that can store a block's tile data.
- * 
- * @author Calclavia */
+/**
+ * An item that can store a block's tile data.
+ *
+ * @author Calclavia
+ */
 public class ItemBlockSaved extends ItemBlockTooltip
 {
-    public ItemBlockSaved(int par1)
-    {
-        super(par1);
-        this.setMaxDamage(0);
-        this.setHasSubtypes(true);
-        this.setMaxStackSize(1);
-    }
+	public ItemBlockSaved(int par1)
+	{
+		super(par1);
+		this.setMaxDamage(0);
+		this.setHasSubtypes(true);
+		this.setMaxStackSize(1);
+	}
 
-    @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
-    {
-        boolean flag = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
+	public static ItemStack getItemStackWithNBT(VectorWorld vector)
+	{
+		return getItemStackWithNBT(vector.world, vector);
+	}
 
-        TileEntity tile = world.getBlockTileEntity(x, y, z);
+	public static ItemStack getItemStackWithNBT(World world, Vector3 vector)
+	{
+		return getItemStackWithNBT(world, vector.intX(), vector.intY(), vector.intZ());
+	}
 
-        if (tile != null)
-        {
-            /** Inject essential tile data */
-            NBTTagCompound essentialNBT = new NBTTagCompound();
-            tile.writeToNBT(essentialNBT);
-            NBTTagCompound setNbt = NBTUtility.getNBTTagCompound(stack);
+	public static ItemStack getItemStackWithNBT(World world, int x, int y, int z)
+	{
+		return getItemStackWithNBT(Block.blocksList[world.getBlockId(x, y, z)], world, x, y, z);
+	}
 
-            if (essentialNBT.hasKey("id"))
-            {
-                setNbt.setString("id", essentialNBT.getString("id"));
-                setNbt.setInteger("x", essentialNBT.getInteger("x"));
-                setNbt.setInteger("y", essentialNBT.getInteger("y"));
-                setNbt.setInteger("z", essentialNBT.getInteger("z"));
-            }
+	public static ItemStack getItemStackWithNBT(Block b, World world, int x, int y, int z)
+	{
+		Block block = (b == null ? Block.blocksList[world.getBlockId(x, y, z)] : b);
+		if (block != null)
+		{
+			int meta = world.getBlockMetadata(x, y, z);
 
-            tile.readFromNBT(setNbt);
-        }
+			ItemStack dropStack = new ItemStack(block, block.quantityDropped(meta, 0, world.rand), block.damageDropped(meta));
+			NBTTagCompound tag = new NBTTagCompound();
 
-        return flag;
-    }
+			TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-    public static ItemStack getItemStackWithNBT(VectorWorld vector)
-    {
-        return getItemStackWithNBT(vector.world, vector);
-    }
+			if (tile != null)
+			{
+				tile.writeToNBT(tag);
+			}
 
-    public static ItemStack getItemStackWithNBT(World world, Vector3 vector)
-    {
-        return getItemStackWithNBT(world, vector.intX(), vector.intY(), vector.intZ());
-    }
+			tag.removeTag("id");
+			tag.removeTag("x");
+			tag.removeTag("y");
+			tag.removeTag("z");
+			dropStack.setTagCompound(tag);
+			return dropStack;
+		}
 
-    public static ItemStack getItemStackWithNBT(World world, int x, int y, int z)
-    {
-        return getItemStackWithNBT(Block.blocksList[world.getBlockId(x, y, z)], world, x, y, z);
-    }
+		return null;
+	}
 
-    public static ItemStack getItemStackWithNBT(Block b, World world, int x, int y, int z)
-    {
-        Block block = (b == null ? Block.blocksList[world.getBlockId(x, y, z)] : b);
-        if (block != null)
-        {
-            int meta = world.getBlockMetadata(x, y, z);
+	public static void dropBlockWithNBT(Block block, World world, int x, int y, int z)
+	{
+		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+		{
+			ItemStack itemStack = getItemStackWithNBT(block, world, x, y, z);
 
-            ItemStack dropStack = new ItemStack(block, block.quantityDropped(meta, 0, world.rand), block.damageDropped(meta));
-            NBTTagCompound tag = new NBTTagCompound();
+			if (itemStack != null)
+			{
+				InventoryUtility.dropItemStack(world, new Vector3(x, y, z), itemStack);
+			}
+		}
+	}
 
-            TileEntity tile = world.getBlockTileEntity(x, y, z);
+	@Override
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
+	{
+		boolean flag = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
 
-            if (tile != null)
-                tile.writeToNBT(tag);
+		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-            tag.removeTag("id");
-            tag.removeTag("x");
-            tag.removeTag("y");
-            tag.removeTag("z");
-            dropStack.setTagCompound(tag);
-            return dropStack;
-        }
+		if (tile != null)
+		{
+			/** Inject essential tile data */
+			NBTTagCompound essentialNBT = new NBTTagCompound();
+			tile.writeToNBT(essentialNBT);
+			NBTTagCompound setNbt = NBTUtility.getNBTTagCompound(stack);
 
-        return null;
-    }
+			if (essentialNBT.hasKey("id"))
+			{
+				setNbt.setString("id", essentialNBT.getString("id"));
+				setNbt.setInteger("x", essentialNBT.getInteger("x"));
+				setNbt.setInteger("y", essentialNBT.getInteger("y"));
+				setNbt.setInteger("z", essentialNBT.getInteger("z"));
+			}
 
-    public static void dropBlockWithNBT(Block block, World world, int x, int y, int z)
-    {
-        if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
-        {
-            ItemStack itemStack = getItemStackWithNBT(block, world, x, y, z);
+			tile.readFromNBT(setNbt);
+		}
 
-            if (itemStack != null)
-                InventoryUtility.dropItemStack(world, new Vector3(x, y, z), itemStack);
-        }
-    }
+		return flag;
+	}
 }

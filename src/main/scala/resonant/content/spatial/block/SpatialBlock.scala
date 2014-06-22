@@ -8,8 +8,8 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.{EntityLivingBase, Entity}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{IIcon, MovingObjectPosition}
@@ -60,6 +60,7 @@ object TileBlock
   {
     def getComparatorInputOverride(side: Int): Int
   }
+
 }
 
 abstract class SpatialBlock(val name: String, val material: Material) extends TileEntity with Spatial

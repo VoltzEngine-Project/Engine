@@ -1,13 +1,11 @@
 package resonant.lib.content.prefab
 
-import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.common.util.ForgeDirection
 import resonant.lib.utility.nbt.ISaveObj
 import universalelectricity.api.UniversalClass
 import universalelectricity.api.core.grid.electric.{IElectricNode, IEnergyContainer}
-import universalelectricity.api.core.grid.{NodeRegistry, INode, INodeProvider}
-import universalelectricity.compatibility.Compatibility
-import net.minecraftforge.common.util.ForgeDirection
+import universalelectricity.api.core.grid.{INode, INodeProvider, NodeRegistry}
 
 @UniversalClass
 trait TElectric extends TIO with INodeProvider with IEnergyContainer with ISaveObj

@@ -105,7 +105,6 @@ public class BlockMultiBlockPart extends BlockContainer
 		return null;
 	}
 
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister)
@@ -119,7 +118,6 @@ public class BlockMultiBlockPart extends BlockContainer
 			super.registerBlockIcons(iconRegister);
 		}
 	}
-
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block par5, int par6)

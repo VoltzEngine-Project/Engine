@@ -1,9 +1,8 @@
 package resonant.lib.content.prefab.java
 
-import resonant.lib.content.prefab.{TElectric, TInventory}
 import net.minecraft.block.material.Material
+import resonant.lib.content.prefab.{TElectric, TInventory}
 import resonant.lib.utility.LanguageUtility
-import resonant.content.spatial.block.TileBlock
 
 /**
  * @author Calclavia

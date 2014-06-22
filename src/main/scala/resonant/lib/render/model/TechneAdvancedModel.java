@@ -1,28 +1,12 @@
 package resonant.lib.render.model;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipInputStream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraftforge.client.model.IModelCustom;
 import net.minecraftforge.client.model.ModelFormatException;
-
 import org.lwjgl.opengl.GL11;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -30,346 +14,354 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipInputStream;
 
-/** A fixed up version of the Forge Techne model importer. Requires specification for the texture
+/**
+ * A fixed up version of the Forge Techne model importer. Requires specification for the texture
  * size on load in the Techne XML file.
- * 
- * @author Calclavia, iChun */
+ *
+ * @author Calclavia, iChun
+ */
 @SideOnly(Side.CLIENT)
 public class TechneAdvancedModel extends ModelBase implements IModelCustom
 {
-    public static final List<String> cubeTypes = Arrays.asList("d9e621f7-957f-4b77-b1ae-20dcd0da7751", "de81aa14-bd60-4228-8d8d-5238bcd3caaa");
+	public static final List<String> cubeTypes = Arrays.asList("d9e621f7-957f-4b77-b1ae-20dcd0da7751", "de81aa14-bd60-4228-8d8d-5238bcd3caaa");
+	public Map<String, ModelRenderer> parts = new LinkedHashMap<String, ModelRenderer>();
+	private String fileName;
+	private Map<String, byte[]> zipContents = new HashMap<String, byte[]>();
+	private String texture = null;
+	private int textureName;
+	private boolean textureNameSet = false;
 
-    private String fileName;
-    private Map<String, byte[]> zipContents = new HashMap<String, byte[]>();
+	public TechneAdvancedModel(String fileName, URL resource) throws ModelFormatException
+	{
+		this.fileName = fileName;
+		loadTechneModel(resource);
+	}
 
-    public Map<String, ModelRenderer> parts = new LinkedHashMap<String, ModelRenderer>();
-    private String texture = null;
-    private int textureName;
-    private boolean textureNameSet = false;
+	private void loadTechneModel(URL fileURL) throws ModelFormatException
+	{
+		try
+		{
+			ZipInputStream zipInput = new ZipInputStream(fileURL.openStream());
 
-    public TechneAdvancedModel(String fileName, URL resource) throws ModelFormatException
-    {
-        this.fileName = fileName;
-        loadTechneModel(resource);
-    }
+			ZipEntry entry;
+			while ((entry = zipInput.getNextEntry()) != null)
+			{
+				byte[] data = new byte[(int) entry.getSize()];
+				// For some reason, using read(byte[]) makes reading stall upon reaching a 0x1E byte
+				int i = 0;
+				while (zipInput.available() > 0 && i < data.length)
+				{
+					data[i++] = (byte) zipInput.read();
+				}
+				zipContents.put(entry.getName(), data);
+			}
 
-    private void loadTechneModel(URL fileURL) throws ModelFormatException
-    {
-        try
-        {
-            ZipInputStream zipInput = new ZipInputStream(fileURL.openStream());
+			byte[] modelXml = zipContents.get("model.xml");
+			if (modelXml == null)
+			{
+				throw new ModelFormatException("Model " + fileName + " contains no model.xml file");
+			}
 
-            ZipEntry entry;
-            while ((entry = zipInput.getNextEntry()) != null)
-            {
-                byte[] data = new byte[(int) entry.getSize()];
-                // For some reason, using read(byte[]) makes reading stall upon reaching a 0x1E byte
-                int i = 0;
-                while (zipInput.available() > 0 && i < data.length)
-                {
-                    data[i++] = (byte) zipInput.read();
-                }
-                zipContents.put(entry.getName(), data);
-            }
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			Document document = documentBuilder.parse(new ByteArrayInputStream(modelXml));
 
-            byte[] modelXml = zipContents.get("model.xml");
-            if (modelXml == null)
-            {
-                throw new ModelFormatException("Model " + fileName + " contains no model.xml file");
-            }
+			NodeList nodeListTechne = document.getElementsByTagName("Techne");
+			if (nodeListTechne.getLength() < 1)
+			{
+				throw new ModelFormatException("Model " + fileName + " contains no Techne tag");
+			}
 
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = documentBuilder.parse(new ByteArrayInputStream(modelXml));
+			NodeList nodeListModel = document.getElementsByTagName("Model");
+			if (nodeListModel.getLength() < 1)
+			{
+				throw new ModelFormatException("Model " + fileName + " contains no Model tag");
+			}
 
-            NodeList nodeListTechne = document.getElementsByTagName("Techne");
-            if (nodeListTechne.getLength() < 1)
-            {
-                throw new ModelFormatException("Model " + fileName + " contains no Techne tag");
-            }
+			NamedNodeMap modelAttributes = nodeListModel.item(0).getAttributes();
+			if (modelAttributes == null)
+			{
+				throw new ModelFormatException("Model " + fileName + " contains a Model tag with no attributes");
+			}
 
-            NodeList nodeListModel = document.getElementsByTagName("Model");
-            if (nodeListModel.getLength() < 1)
-            {
-                throw new ModelFormatException("Model " + fileName + " contains no Model tag");
-            }
+			Node modelTexture = modelAttributes.getNamedItem("texture");
+			if (modelTexture != null)
+			{
+				texture = modelTexture.getTextContent();
+			}
 
-            NamedNodeMap modelAttributes = nodeListModel.item(0).getAttributes();
-            if (modelAttributes == null)
-            {
-                throw new ModelFormatException("Model " + fileName + " contains a Model tag with no attributes");
-            }
+			NodeList textureSize = document.getElementsByTagName("TextureSize");
 
-            Node modelTexture = modelAttributes.getNamedItem("texture");
-            if (modelTexture != null)
-            {
-                texture = modelTexture.getTextContent();
-            }
+			for (int i = 0; i < textureSize.getLength(); i++)
+			{
+				String size = textureSize.item(i).getTextContent();
+				String[] textureDimensions = size.split(",");
+				textureWidth = Integer.parseInt(textureDimensions[0]);
+				textureHeight = Integer.parseInt(textureDimensions[1]);
+			}
 
-            NodeList textureSize = document.getElementsByTagName("TextureSize");
+			NodeList shapes = document.getElementsByTagName("Shape");
+			for (int i = 0; i < shapes.getLength(); i++)
+			{
+				Node shape = shapes.item(i);
+				NamedNodeMap shapeAttributes = shape.getAttributes();
+				if (shapeAttributes == null)
+				{
+					throw new ModelFormatException("Shape #" + (i + 1) + " in " + fileName + " has no attributes");
+				}
 
-            for (int i = 0; i < textureSize.getLength(); i++)
-            {
-                String size = textureSize.item(i).getTextContent();
-                String[] textureDimensions = size.split(",");
-                textureWidth = Integer.parseInt(textureDimensions[0]);
-                textureHeight = Integer.parseInt(textureDimensions[1]);
-            }
+				Node name = shapeAttributes.getNamedItem("name");
+				String shapeName = null;
+				if (name != null)
+				{
+					shapeName = name.getNodeValue();
+				}
+				if (shapeName == null)
+				{
+					shapeName = "Shape #" + (i + 1);
+				}
 
-            NodeList shapes = document.getElementsByTagName("Shape");
-            for (int i = 0; i < shapes.getLength(); i++)
-            {
-                Node shape = shapes.item(i);
-                NamedNodeMap shapeAttributes = shape.getAttributes();
-                if (shapeAttributes == null)
-                {
-                    throw new ModelFormatException("Shape #" + (i + 1) + " in " + fileName + " has no attributes");
-                }
+				String shapeType = null;
+				Node type = shapeAttributes.getNamedItem("type");
+				if (type != null)
+				{
+					shapeType = type.getNodeValue();
+				}
+				if (shapeType != null && !cubeTypes.contains(shapeType))
+				{
+					FMLLog.warning("Model shape [" + shapeName + "] in " + fileName + " is not a cube, ignoring");
+					continue;
+				}
 
-                Node name = shapeAttributes.getNamedItem("name");
-                String shapeName = null;
-                if (name != null)
-                {
-                    shapeName = name.getNodeValue();
-                }
-                if (shapeName == null)
-                {
-                    shapeName = "Shape #" + (i + 1);
-                }
+				try
+				{
+					boolean mirrored = false;
+					String[] offset = new String[3];
+					String[] position = new String[3];
+					String[] rotation = new String[3];
+					String[] size = new String[3];
+					String[] textureOffset = new String[2];
 
-                String shapeType = null;
-                Node type = shapeAttributes.getNamedItem("type");
-                if (type != null)
-                {
-                    shapeType = type.getNodeValue();
-                }
-                if (shapeType != null && !cubeTypes.contains(shapeType))
-                {
-                    FMLLog.warning("Model shape [" + shapeName + "] in " + fileName + " is not a cube, ignoring");
-                    continue;
-                }
+					NodeList shapeChildren = shape.getChildNodes();
+					for (int j = 0; j < shapeChildren.getLength(); j++)
+					{
+						Node shapeChild = shapeChildren.item(j);
 
-                try
-                {
-                    boolean mirrored = false;
-                    String[] offset = new String[3];
-                    String[] position = new String[3];
-                    String[] rotation = new String[3];
-                    String[] size = new String[3];
-                    String[] textureOffset = new String[2];
+						String shapeChildName = shapeChild.getNodeName();
+						String shapeChildValue = shapeChild.getTextContent();
+						if (shapeChildValue != null)
+						{
+							shapeChildValue = shapeChildValue.trim();
 
-                    NodeList shapeChildren = shape.getChildNodes();
-                    for (int j = 0; j < shapeChildren.getLength(); j++)
-                    {
-                        Node shapeChild = shapeChildren.item(j);
+							if (shapeChildName.equals("IsMirrored"))
+							{
+								mirrored = !shapeChildValue.equals("False");
+							}
+							else if (shapeChildName.equals("Offset"))
+							{
+								offset = shapeChildValue.split(",");
+							}
+							else if (shapeChildName.equals("Position"))
+							{
+								position = shapeChildValue.split(",");
+							}
+							else if (shapeChildName.equals("Rotation"))
+							{
+								rotation = shapeChildValue.split(",");
+							}
+							else if (shapeChildName.equals("Size"))
+							{
+								size = shapeChildValue.split(",");
+							}
+							else if (shapeChildName.equals("TextureOffset"))
+							{
+								textureOffset = shapeChildValue.split(",");
+							}
+						}
+					}
 
-                        String shapeChildName = shapeChild.getNodeName();
-                        String shapeChildValue = shapeChild.getTextContent();
-                        if (shapeChildValue != null)
-                        {
-                            shapeChildValue = shapeChildValue.trim();
+					// That's what the ModelBase subclassing is needed for
+					ModelRenderer cube = new ModelRenderer(this, shapeName);
+					cube.setTextureOffset(Integer.parseInt(textureOffset[0]), Integer.parseInt(textureOffset[1]));
 
-                            if (shapeChildName.equals("IsMirrored"))
-                            {
-                                mirrored = !shapeChildValue.equals("False");
-                            }
-                            else if (shapeChildName.equals("Offset"))
-                            {
-                                offset = shapeChildValue.split(",");
-                            }
-                            else if (shapeChildName.equals("Position"))
-                            {
-                                position = shapeChildValue.split(",");
-                            }
-                            else if (shapeChildName.equals("Rotation"))
-                            {
-                                rotation = shapeChildValue.split(",");
-                            }
-                            else if (shapeChildName.equals("Size"))
-                            {
-                                size = shapeChildValue.split(",");
-                            }
-                            else if (shapeChildName.equals("TextureOffset"))
-                            {
-                                textureOffset = shapeChildValue.split(",");
-                            }
-                        }
-                    }
+					/** Fix Techne default translation up by 16 microblocks (1 block) and rotated 180
+					 * degrees. */
+					cube.addBox(Float.parseFloat(offset[0]), Float.parseFloat(offset[1]), Float.parseFloat(offset[2]), Integer.parseInt(size[0]), Integer.parseInt(size[1]), Integer.parseInt(size[2]));
+					cube.setRotationPoint(Float.parseFloat(position[0]), Float.parseFloat(position[1]) - 16, Float.parseFloat(position[2]));
+					cube.mirror = mirrored;
 
-                    // That's what the ModelBase subclassing is needed for
-                    ModelRenderer cube = new ModelRenderer(this, shapeName);
-                    cube.setTextureOffset(Integer.parseInt(textureOffset[0]), Integer.parseInt(textureOffset[1]));
+					cube.rotateAngleX = (float) Math.toRadians(Float.parseFloat(rotation[0]));
+					cube.rotateAngleY = (float) Math.toRadians(Float.parseFloat(rotation[1]));
+					cube.rotateAngleZ = (float) Math.toRadians(Float.parseFloat(rotation[2]));
 
-                    /** Fix Techne default translation up by 16 microblocks (1 block) and rotated 180
-                     * degrees. */
-                    cube.addBox(Float.parseFloat(offset[0]), Float.parseFloat(offset[1]), Float.parseFloat(offset[2]), Integer.parseInt(size[0]), Integer.parseInt(size[1]), Integer.parseInt(size[2]));
-                    cube.setRotationPoint(Float.parseFloat(position[0]), Float.parseFloat(position[1]) - 16, Float.parseFloat(position[2]));
-                    cube.mirror = mirrored;
+					if (parts.containsKey(shapeName))
+					{
+						throw new ModelFormatException("Model contained duplicate part name: '" + shapeName + "' node #" + i);
+					}
 
-                    cube.rotateAngleX = (float) Math.toRadians(Float.parseFloat(rotation[0]));
-                    cube.rotateAngleY = (float) Math.toRadians(Float.parseFloat(rotation[1]));
-                    cube.rotateAngleZ = (float) Math.toRadians(Float.parseFloat(rotation[2]));
+					parts.put(shapeName, cube);
+				}
+				catch (NumberFormatException e)
+				{
+					FMLLog.warning("Model shape [" + shapeName + "] in " + fileName + " contains malformed integers within its data, ignoring");
+					e.printStackTrace();
+				}
+			}
+		}
+		catch (ZipException e)
+		{
+			throw new ModelFormatException("Model " + fileName + " is not a valid zip file");
+		}
+		catch (IOException e)
+		{
+			throw new ModelFormatException("Model " + fileName + " could not be read", e);
+		}
+		catch (ParserConfigurationException e)
+		{
+			// hush
+		}
+		catch (SAXException e)
+		{
+			throw new ModelFormatException("Model " + fileName + " contains invalid XML", e);
+		}
+	}
 
-                    if (parts.containsKey(shapeName))
-                    {
-                        throw new ModelFormatException("Model contained duplicate part name: '" + shapeName + "' node #" + i);
-                    }
+	private void bindTexture()
+	{
+	}
 
-                    parts.put(shapeName, cube);
-                }
-                catch (NumberFormatException e)
-                {
-                    FMLLog.warning("Model shape [" + shapeName + "] in " + fileName + " contains malformed integers within its data, ignoring");
-                    e.printStackTrace();
-                }
-            }
-        }
-        catch (ZipException e)
-        {
-            throw new ModelFormatException("Model " + fileName + " is not a valid zip file");
-        }
-        catch (IOException e)
-        {
-            throw new ModelFormatException("Model " + fileName + " could not be read", e);
-        }
-        catch (ParserConfigurationException e)
-        {
-            // hush
-        }
-        catch (SAXException e)
-        {
-            throw new ModelFormatException("Model " + fileName + " contains invalid XML", e);
-        }
-    }
+	@Override
+	public String getType()
+	{
+		return "tcn";
+	}
 
-    private void bindTexture()
-    {
-    }
+	private void setup()
+	{
+		GL11.glScalef(-1.0F, -1.0F, 1.0F);
+	}
 
-    @Override
-    public String getType()
-    {
-        return "tcn";
-    }
+	@Override
+	public void renderAll()
+	{
+		GL11.glPushMatrix();
+		bindTexture();
+		setup();
 
-    private void setup()
-    {
-        GL11.glScalef(-1.0F, -1.0F, 1.0F);
-    }
+		for (ModelRenderer part : parts.values())
+		{
+			part.render(0.0625f);
+		}
 
-    @Override
-    public void renderAll()
-    {
-        GL11.glPushMatrix();
-        bindTexture();
-        setup();
+		GL11.glPopMatrix();
+	}
 
-        for (ModelRenderer part : parts.values())
-        {
-            part.render(0.0625f);
-        }
+	@Override
+	public void renderPart(String partName)
+	{
+		ModelRenderer part = parts.get(partName);
 
-        GL11.glPopMatrix();
-    }
+		if (part != null)
+		{
+			GL11.glPushMatrix();
+			setup();
+			bindTexture();
+			part.render(0.0625f);
+			GL11.glPopMatrix();
+		}
+	}
 
-    @Override
-    public void renderPart(String partName)
-    {
-        ModelRenderer part = parts.get(partName);
+	@Override
+	public void renderOnly(String... groupNames)
+	{
+		GL11.glPushMatrix();
+		setup();
+		bindTexture();
 
-        if (part != null)
-        {
-            GL11.glPushMatrix();
-            setup();
-            bindTexture();
-            part.render(0.0625f);
-            GL11.glPopMatrix();
-        }
-    }
+		Iterator<Entry<String, ModelRenderer>> it = parts.entrySet().iterator();
 
-    @Override
-    public void renderOnly(String... groupNames)
-    {
-        GL11.glPushMatrix();
-        setup();
-        bindTexture();
+		while (it.hasNext())
+		{
+			Entry<String, ModelRenderer> entry = it.next();
 
-        Iterator<Entry<String, ModelRenderer>> it = parts.entrySet().iterator();
+			for (String groupName : groupNames)
+			{
+				if (entry.getKey().equalsIgnoreCase(groupName))
+				{
+					entry.getValue().render(0.0625f);
+				}
+			}
+		}
 
-        while (it.hasNext())
-        {
-            Entry<String, ModelRenderer> entry = it.next();
+		GL11.glPopMatrix();
+	}
 
-            for (String groupName : groupNames)
-            {
-                if (entry.getKey().equalsIgnoreCase(groupName))
-                {
-                    entry.getValue().render(0.0625f);
-                }
-            }
-        }
+	public void renderOnlyAroundPivot(double angle, double rotX, double rotY, double rotZ, String... groupNames)
+	{
+		GL11.glPushMatrix();
+		setup();
+		bindTexture();
 
-        GL11.glPopMatrix();
-    }
+		Iterator<Entry<String, ModelRenderer>> it = parts.entrySet().iterator();
 
-    public void renderOnlyAroundPivot(double angle, double rotX, double rotY, double rotZ, String... groupNames)
-    {
-        GL11.glPushMatrix();
-        setup();
-        bindTexture();
+		while (it.hasNext())
+		{
+			Entry<String, ModelRenderer> entry = it.next();
 
-        Iterator<Entry<String, ModelRenderer>> it = parts.entrySet().iterator();
+			for (String groupName : groupNames)
+			{
+				if (entry.getKey().equalsIgnoreCase(groupName))
+				{
+					GL11.glPushMatrix();
+					ModelRenderer model = entry.getValue();
+					GL11.glTranslatef(model.rotationPointX / 16, model.rotationPointY / 16, model.rotationPointZ / 16);
+					GL11.glRotated(angle, rotX, rotY, rotZ);
+					GL11.glTranslatef(-model.rotationPointX / 16, -model.rotationPointY / 16, -model.rotationPointZ / 16);
+					model.render(0.0625f);
+					GL11.glPopMatrix();
+				}
+			}
+		}
 
-        while (it.hasNext())
-        {
-            Entry<String, ModelRenderer> entry = it.next();
+		GL11.glPopMatrix();
+	}
 
-            for (String groupName : groupNames)
-            {
-                if (entry.getKey().equalsIgnoreCase(groupName))
-                {
-                    GL11.glPushMatrix();
-                    ModelRenderer model = entry.getValue();
-                    GL11.glTranslatef(model.rotationPointX / 16, model.rotationPointY / 16, model.rotationPointZ / 16);
-                    GL11.glRotated(angle, rotX, rotY, rotZ);
-                    GL11.glTranslatef(-model.rotationPointX / 16, -model.rotationPointY / 16, -model.rotationPointZ / 16);
-                    model.render(0.0625f);
-                    GL11.glPopMatrix();
-                }
-            }
-        }
+	@Override
+	public void renderAllExcept(String... excludedGroupNames)
+	{
+		GL11.glPushMatrix();
+		setup();
 
-        GL11.glPopMatrix();
-    }
+		Iterator<Entry<String, ModelRenderer>> it = parts.entrySet().iterator();
 
-    @Override
-    public void renderAllExcept(String... excludedGroupNames)
-    {
-        GL11.glPushMatrix();
-        setup();
+		loop:
+		while (it.hasNext())
+		{
+			Entry<String, ModelRenderer> entry = it.next();
 
-        Iterator<Entry<String, ModelRenderer>> it = parts.entrySet().iterator();
+			for (String groupName : excludedGroupNames)
+			{
+				if (entry.getKey().equalsIgnoreCase(groupName))
+				{
+					continue loop;
+				}
+			}
 
-        loop:
-        while (it.hasNext())
-        {
-            Entry<String, ModelRenderer> entry = it.next();
+			entry.getValue().render(0.0625f);
+		}
 
-            for (String groupName : excludedGroupNames)
-            {
-                if (entry.getKey().equalsIgnoreCase(groupName))
-                {
-                    continue loop;
-                }
-            }
-
-            entry.getValue().render(0.0625f);
-        }
-
-        GL11.glPopMatrix();
-    }
+		GL11.glPopMatrix();
+	}
 }

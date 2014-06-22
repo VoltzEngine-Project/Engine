@@ -6,11 +6,8 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.config.Configuration;
 import resonant.content.spatial.block.SpatialBlock;
-import resonant.lib.prefab.item.ItemBlockTooltip;
 import resonant.content.wrapper.BlockDummy;
 import resonant.lib.utility.LanguageUtility;
 
@@ -101,120 +98,113 @@ public class ContentRegistry
 		return null;
 	}
 	/**
-	@Deprecated
-	public Block createBlock(Class<? extends Block> blockClass)
-	{
-		return createBlock(blockClass, ItemBlockTooltip.class);
-	}
+	 @Deprecated public Block createBlock(Class<? extends Block> blockClass)
+	 {
+	 return createBlock(blockClass, ItemBlockTooltip.class);
+	 }
 
-	@Deprecated
-	public Block createTile(Class<? extends Block> blockClass, Class<? extends TileEntity> tileClass)
-	{
-		return createBlock(blockClass, ItemBlockTooltip.class, tileClass);
-	}
+	 @Deprecated public Block createTile(Class<? extends Block> blockClass, Class<? extends TileEntity> tileClass)
+	 {
+	 return createBlock(blockClass, ItemBlockTooltip.class, tileClass);
+	 }
 
-	@Deprecated
-	public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass)
-	{
-		return createBlock(blockClass, itemClass, null);
-	}
+	 @Deprecated public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass)
+	 {
+	 return createBlock(blockClass, itemClass, null);
+	 }
 
-	@Deprecated
-	public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
-	{
-		return createBlock(LanguageUtility.decapitalizeFirst(blockClass.getSimpleName().replace("Block", "")), blockClass, itemClass, tileClass);
-	}
+	 @Deprecated public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
+	 {
+	 return createBlock(LanguageUtility.decapitalizeFirst(blockClass.getSimpleName().replace("Block", "")), blockClass, itemClass, tileClass);
+	 }
 
-	@Deprecated
-	public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
-	{
-		return createBlock(name, blockClass, itemClass, tileClass, false);
-	}
+	 @Deprecated public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
+	 {
+	 return createBlock(name, blockClass, itemClass, tileClass, false);
+	 }
 
-	/**
-	 * Generates a block using reflection, and runs it threw config checks
-	 *
-	 * @param name       - name to register the block with
+	 /**
+	  * Generates a block using reflection, and runs it threw config checks
+	  *
+	  * @param name       - name to register the block with
 	 * @param tileClass  - the tile class to register this block to
 	 * @param blockClass - class to generate the instance from
 	 * @param canDisable - should we allow the player the option to disable the block
 	 * @param itemClass  - item block to register with the block
 
-	@Deprecated
-	public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass, boolean canDisable)
-	{
-		Block block = null;
+	 @Deprecated public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass, boolean canDisable)
+	 {
+	 Block block = null;
 
-		if (blockClass != null && (!canDisable || (canDisable && config.get("Enabled_List", "Enabled " + name, true).getBoolean(true))))
-		{
-			try
-			{
+	 if (blockClass != null && (!canDisable || (canDisable && config.get("Enabled_List", "Enabled " + name, true).getBoolean(true))))
+	 {
+	 try
+	 {
 
-				//                int assignedID = idManager.getNextBlockID();
-				//                int actualID = config.getBlock(name, assignedID).getInt(assignedID);
-				block = blockClass.getConstructor().newInstance();
+	 //                int assignedID = idManager.getNextBlockID();
+	 //                int actualID = config.getBlock(name, assignedID).getInt(assignedID);
+	 block = blockClass.getConstructor().newInstance();
 
-				if (block != null)
-				{
-					if (modPrefix != null)
-					{
-						block.setBlockName(modPrefix + name);
+	 if (block != null)
+	 {
+	 if (modPrefix != null)
+	 {
+	 block.setBlockName(modPrefix + name);
 
-						if (ReflectionHelper.getPrivateValue(Block.class, block, "textureName", "field_111026_f") == null)
-						{
-							block.setBlockTextureName(modPrefix + name);
-						}
-					}
+	 if (ReflectionHelper.getPrivateValue(Block.class, block, "textureName", "field_111026_f") == null)
+	 {
+	 block.setBlockTextureName(modPrefix + name);
+	 }
+	 }
 
-					if (defaultTab != null)
-					{
-						block.setCreativeTab(defaultTab);
-					}
+	 if (defaultTab != null)
+	 {
+	 block.setCreativeTab(defaultTab);
+	 }
 
-					blocks.put(block, name);
-					proxy.registerBlock(block, itemClass, name, modID);
-					finishCreation(block, tileClass);
-				}
-			}
-			catch (IllegalArgumentException e)
-			{
-				throw e;
-			}
-			catch (Exception e)
-			{
-				throw new RuntimeException("Block [" + name + "] failed to be created:", e);
-			}
-		}
+	 blocks.put(block, name);
+	 proxy.registerBlock(block, itemClass, name, modID);
+	 finishCreation(block, tileClass);
+	 }
+	 }
+	 catch (IllegalArgumentException e)
+	 {
+	 throw e;
+	 }
+	 catch (Exception e)
+	 {
+	 throw new RuntimeException("Block [" + name + "] failed to be created:", e);
+	 }
+	 }
 
-		return block;
-	}
+	 return block;
+	 }
 
-	/**
-	 * Finishes the creation of the block loading config files and tile entities
-	 *
-	 * @param tileClass
+	 /**
+	  * Finishes the creation of the block loading config files and tile entities
+	  *
+	  * @param tileClass
 	 * @throws ClassNotFoundException
 
-	@Deprecated
-	public void finishCreation(Block block, Class<? extends TileEntity> tileClass) throws ClassNotFoundException
-	{
-		BlockInfo blockInfo = block.getClass().getAnnotation(BlockInfo.class);
+	 @Deprecated public void finishCreation(Block block, Class<? extends TileEntity> tileClass) throws ClassNotFoundException
+	 {
+	 BlockInfo blockInfo = block.getClass().getAnnotation(BlockInfo.class);
 
-		if (blockInfo != null)
-		{
-			for (String string : blockInfo.tileEntity())
-			{
-				Class clazz = Class.forName(string);
-				proxy.registerTileEntity(clazz.getName(), clazz);
-			}
+	 if (blockInfo != null)
+	 {
+	 for (String string : blockInfo.tileEntity())
+	 {
+	 Class clazz = Class.forName(string);
+	 proxy.registerTileEntity(clazz.getName(), clazz);
+	 }
 
-		}
-		// TODO Remove this and transfer to @BlockInfo
-		if (tileClass != null)
-		{
-			proxy.registerTileEntity(block.getUnlocalizedName(), tileClass);
-		}
-	}*/
+	 }
+	 // TODO Remove this and transfer to @BlockInfo
+	 if (tileClass != null)
+	 {
+	 proxy.registerTileEntity(block.getUnlocalizedName(), tileClass);
+	 }
+	 }*/
 
 	/**
 	 * Method to get block via name

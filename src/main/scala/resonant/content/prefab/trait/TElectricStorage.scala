@@ -1,9 +1,9 @@
 package resonant.lib.content.prefab
 
-import net.minecraftforge.common.util.ForgeDirection
-import net.minecraft.nbt.NBTTagCompound
-import universalelectricity.api.core.grid.electric.EnergyStorage
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.common.util.ForgeDirection
+import universalelectricity.api.core.grid.electric.EnergyStorage
 import universalelectricity.compatibility.Compatibility
 
 /**

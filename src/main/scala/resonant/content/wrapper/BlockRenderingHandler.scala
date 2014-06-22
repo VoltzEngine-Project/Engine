@@ -1,16 +1,12 @@
 package resonant.content.wrapper
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.world.IBlockAccess
 import org.lwjgl.opengl.GL11._
-import resonant.api.items.ISimpleItemRenderer
-import resonant.content.wrapper.BlockDummy
-import universalelectricity.api.vector.Vector3
-import com.google.common.collect.Maps
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler
+import resonant.content.component.render.{RenderItem, RenderStatic}
 import resonant.lib.content.module.BlockDummy
-import resonant.content.component.render.{RenderStatic, RenderItem}
 import universalelectricity.core.transform.vector.Vector3
 
 class BlockRenderingHandler extends ISimpleBlockRenderingHandler

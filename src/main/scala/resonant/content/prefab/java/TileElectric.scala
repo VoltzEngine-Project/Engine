@@ -1,7 +1,7 @@
 package resonant.lib.content.prefab.java
 
-import resonant.lib.content.prefab.TElectric
 import net.minecraft.block.material.Material
+import resonant.lib.content.prefab.TElectric
 import resonant.lib.utility.LanguageUtility
 
 /**

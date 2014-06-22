@@ -11,52 +11,52 @@ import resonant.lib.prefab.block.BlockRotatable;
  */
 public class BlockTurbine extends BlockRotatable
 {
-    public BlockTurbine(int id, Material material)
-    {
-        super(id, material);
-        rotationMask = Byte.parseByte("000001", 2);
-    }
+	public BlockTurbine(int id, Material material)
+	{
+		super(id, material);
+		rotationMask = Byte.parseByte("000001", 2);
+	}
 
-    @Override
-    public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
-    {
-        TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+	@Override
+	public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
+	{
+		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
-        if (tileEntity instanceof TileTurbine)
-        {
-            if (!world.isRemote)
-            {
-                return ((TileTurbine) tileEntity).getMultiBlock().toggleConstruct();
-            }
+		if (tileEntity instanceof TileTurbine)
+		{
+			if (!world.isRemote)
+			{
+				return ((TileTurbine) tileEntity).getMultiBlock().toggleConstruct();
+			}
 
-            return true;
-        }
+			return true;
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public void breakBlock(World world, int x, int y, int z, int par5, int par6)
-    {
-        TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+	@Override
+	public void breakBlock(World world, int x, int y, int z, int par5, int par6)
+	{
+		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
-        if (tileEntity instanceof TileTurbine)
-        {
-            ((TileTurbine) tileEntity).getMultiBlock().deconstruct();
-        }
+		if (tileEntity instanceof TileTurbine)
+		{
+			((TileTurbine) tileEntity).getMultiBlock().deconstruct();
+		}
 
-        super.breakBlock(world, x, y, z, par5, par6);
-    }
+		super.breakBlock(world, x, y, z, par5, par6);
+	}
 
-    @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
+	@Override
+	public boolean renderAsNormalBlock()
+	{
+		return false;
+	}
 
-    @Override
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
+	@Override
+	public boolean isOpaqueCube()
+	{
+		return false;
+	}
 }

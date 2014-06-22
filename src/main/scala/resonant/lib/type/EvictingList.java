@@ -4,33 +4,33 @@ import java.util.LinkedList;
 
 public class EvictingList<E> extends LinkedList<E>
 {
-    private final int limit;
+	private final int limit;
 
-    public EvictingList(int limit)
-    {
-        this.limit = limit;
-    }
+	public EvictingList(int limit)
+	{
+		this.limit = limit;
+	}
 
-    @Override
-    public boolean add(E o)
-    {
-        boolean value = super.add(o);
+	@Override
+	public boolean add(E o)
+	{
+		boolean value = super.add(o);
 
-        while (size() > limit)
-        {
-            super.remove();
-        }
+		while (size() > limit)
+		{
+			super.remove();
+		}
 
-        return value;
-    }
+		return value;
+	}
 
-    public E getOldest()
-    {
-        return get(0);
-    }
+	public E getOldest()
+	{
+		return get(0);
+	}
 
-    public E getLastest()
-    {
-        return get(size() - 1);
-    }
+	public E getLastest()
+	{
+		return get(size() - 1);
+	}
 }

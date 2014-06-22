@@ -1,9 +1,8 @@
 package resonant.lib.content.prefab.java
 
-import resonant.lib.content.prefab.TInventory
 import net.minecraft.block.material.Material
+import resonant.lib.content.prefab.TInventory
 import resonant.lib.utility.LanguageUtility
-import resonant.content.spatial.block.TileBlock
 
 class TileInventory(name: String, material: Material) extends TileBlock(name, material) with TInventory
 {

@@ -5,11 +5,11 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 public interface IReactor extends IFluidHandler
 {
-    public void heat(long energy);
+	public void heat(long energy);
 
-    public float getTemperature();
+	public float getTemperature();
 
-    public boolean isOverToxic();
+	public boolean isOverToxic();
 
-    public World world();
+	public World world();
 }

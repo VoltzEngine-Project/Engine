@@ -1,11 +1,10 @@
 package resonant.lib.content.prefab
 
-import resonant.api.IRotatable
-import net.minecraftforge.common.util.ForgeDirection
-import universalelectricity.core.transform.vector.Vector3
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.MathHelper
-import resonant.content.spatial.block.TileBlock
+import net.minecraftforge.common.util.ForgeDirection
+import resonant.api.IRotatable
+import universalelectricity.core.transform.vector.Vector3
 
 trait TRotatable extends TileBlock with IRotatable
 {

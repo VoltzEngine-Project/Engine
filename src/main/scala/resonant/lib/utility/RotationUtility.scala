@@ -1,6 +1,7 @@
 package resonant.lib.utility
 
-object RotationUtility {
+object RotationUtility
+{
   var sideRotMap: Array[Int] = Array[Int](3, 4, 2, 5, 3, 5, 2, 4, 1, 5, 0, 4, 1, 4, 0, 5, 1, 2, 0, 3, 1, 3, 0, 2)
 
   /**
@@ -11,7 +12,7 @@ object RotationUtility {
    * @return The ForgeDirection ordinal from 0-5.
    */
   def rotateSide(s: Int, r: Int): Int =
-    {
-      return sideRotMap(s << 2 | r)
-    }
+  {
+    return sideRotMap(s << 2 | r)
+  }
 }

@@ -1,8 +1,7 @@
 package resonant.lib.prefab.poison;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,10 +9,10 @@ import net.minecraft.world.World;
 import resonant.api.armor.IAntiPoisonArmor;
 import resonant.api.blocks.IAntiPoisonBlock;
 import resonant.engine.References;
-
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import universalelectricity.core.transform.vector.Vector3;
+
+import java.util.EnumSet;
+import java.util.HashMap;
 
 /**
  * A poison registry class used to register different types of poison effects.
@@ -22,21 +21,19 @@ import universalelectricity.core.transform.vector.Vector3;
  */
 public abstract class Poison
 {
-	public enum ArmorType
-	{
-		HELM,
-		BODY,
-		LEGGINGS,
-		BOOTS
-	}
-
 	static HashMap<String, Poison> poisons = new HashMap();
 	static BiMap<String, Integer> poisonIDs = HashBiMap.create();
 	private static int maxID = 0;
-
+	protected final boolean isDisabled;
 	protected String name;
 	protected EnumSet<ArmorType> armorRequired = EnumSet.range(ArmorType.HELM, ArmorType.BOOTS);
-	protected final boolean isDisabled;
+	public Poison(String name)
+	{
+		this.name = name;
+		poisons.put(name, this);
+		poisonIDs.put(name, ++maxID);
+		isDisabled = References.CONFIGURATION.get("Disable Poison", "Disable " + this.name, false).getBoolean(false);
+	}
 
 	public static Poison getPoison(String name)
 	{
@@ -56,14 +53,6 @@ public abstract class Poison
 	public static int getID(String name)
 	{
 		return poisonIDs.get(name);
-	}
-
-	public Poison(String name)
-	{
-		this.name = name;
-		poisons.put(name, this);
-		poisonIDs.put(name, ++maxID);
-		isDisabled = References.CONFIGURATION.get("Disable Poison", "Disable " + this.name, false).getBoolean(false);
 	}
 
 	public String getName()
@@ -162,4 +151,12 @@ public abstract class Poison
 	}
 
 	protected abstract void doPoisonEntity(Vector3 emitPosition, EntityLivingBase entity, int amplifier);
+
+	public enum ArmorType
+	{
+		HELM,
+		BODY,
+		LEGGINGS,
+		BOOTS
+	}
 }

@@ -6,9 +6,9 @@ import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * For custom packets extend this Class and register on Mod loading phase
- *
+ * <p/>
  * Without registering a NPE will be thrown as the {@link PacketManager} won't know how to handle it
- *
+ * <p/>
  * To send this packet also look at {@link PacketManager#sendToAll(AbstractPacket)}
  * And other implementations there.
  *

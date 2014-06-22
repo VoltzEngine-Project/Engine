@@ -126,11 +126,9 @@ public class ResonantEngine
 	public static Block blockInfinite;
 	@Config
 	public static double steamMultiplier = 1;
-
-	private ProxyHandler modproxies;
-	public final PacketManager packetHandler;
-
 	private static ThermalGrid thermalGrid;
+	public final PacketManager packetHandler;
+	private ProxyHandler modproxies;
 
 	public ResonantEngine()
 	{

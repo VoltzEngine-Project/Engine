@@ -10,8 +10,8 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidTank;
-import resonant.engine.ResonantEngine;
 import resonant.engine.References;
+import resonant.engine.ResonantEngine;
 import resonant.lib.utility.nbt.ISaveObj;
 import universalelectricity.core.transform.vector.Vector3;
 
@@ -28,26 +28,28 @@ import java.util.List;
 public class PacketAnnotationManager
 {
 	public static final PacketAnnotationManager INSTANCE = new PacketAnnotationManager();
+	/**
+	 * A map of sync classes with their correspoding ID.
+	 */
+	protected final BiMap<Class, Integer> classPacketIDMap = HashBiMap.create();
+	/**
+	 * Class ID : List of PacketSet sorted by ID
+	 */
+	protected final HashMap<Integer, HashMap<Integer, PacketSet>> packetSetIDMap = new HashMap<Integer, HashMap<Integer, PacketSet>>();
+	private int maxID = 0;
 
 	private PacketAnnotationManager()
 	{
 	}
-
-
-	private int maxID = 0;
-
-	/** A map of sync classes with their correspoding ID. */
-	protected final BiMap<Class, Integer> classPacketIDMap = HashBiMap.create();
-
-	/** Class ID : List of PacketSet sorted by ID */
-	protected final HashMap<Integer, HashMap<Integer, PacketSet>> packetSetIDMap = new HashMap<Integer, HashMap<Integer, PacketSet>>();
 
 	public void register(Class<? extends TileEntity> clazz)
 	{
 		constructPacketSets(clazz);
 	}
 
-	/** Constructs the packet sets for this specific class */
+	/**
+	 * Constructs the packet sets for this specific class
+	 */
 	public void constructPacketSets(Class clazz)
 	{
 		if (classPacketIDMap.containsKey(clazz))
@@ -122,10 +124,6 @@ public class PacketAnnotationManager
 		}
 	}
 
-
-
-
-
 	public static class PacketSet
 	{
 		public final int id;
@@ -185,7 +183,6 @@ public class PacketAnnotationManager
 			}
 
 			return data;
-
 
 		}
 

@@ -1,12 +1,11 @@
 package resonant.lib.content.prefab
 
-import net.minecraft.nbt.NBTTagCompound
-import resonant.lib.utility.nbt.ISaveObj
-import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ChatComponentText
+import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IIO
-import resonant.content.spatial.block.SpatialTile
+import resonant.lib.utility.nbt.ISaveObj
 
 /**
  * a Trait that handles IO Traits

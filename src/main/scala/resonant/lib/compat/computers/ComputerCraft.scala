@@ -9,21 +9,22 @@ import resonant.lib.utility.Mods
  * @since 12/04/14
  * @author tgame14
  */
-class ComputerCraft extends ICompatProxy {
+class ComputerCraft extends ICompatProxy
+{
   override def preInit(): Unit =
-    {
+  {
 
-    }
+  }
 
   override def init(): Unit =
-    {
+  {
 
-    }
+  }
 
   override def postInit(): Unit =
-    {
+  {
 
-    }
+  }
 
   override def modId(): String = Mods.CC
 

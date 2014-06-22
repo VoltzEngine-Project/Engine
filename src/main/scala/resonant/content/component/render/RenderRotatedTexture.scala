@@ -1,11 +1,11 @@
 package resonant.content.component.render
 
+import net.minecraft.client.renderer.RenderBlocks
 import net.minecraftforge.common.util.ForgeDirection
+import resonant.content.spatial.block.SpatialTile
+import resonant.lib.render.{RenderBlockAdvanced, RenderUtility}
 import resonant.lib.utility.RotationUtility
 import universalelectricity.core.transform.vector.Vector3
-import resonant.lib.render.{RenderUtility, RenderBlockAdvanced}
-import resonant.content.spatial.block.SpatialTile
-import net.minecraft.client.renderer.RenderBlocks
 
 /**
  * A rotated texture renderer applied to blocks capable of having rotated textured.

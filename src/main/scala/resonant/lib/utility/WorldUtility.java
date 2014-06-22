@@ -181,7 +181,7 @@ public class WorldUtility
 
 	public static List<EntityItem> getEntitiesInDirection(World world, Vector3 center, ForgeDirection dir)
 	{
-		List<EntityItem> list = world.selectEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().getAABB(center.x()+ dir.offsetX, center.y()+ dir.offsetY, center.z()+ dir.offsetZ, center.x()+ dir.offsetX + 1, center.y()+ dir.offsetY + 1, center.z()+ dir.offsetZ + 1), IEntitySelector.selectAnything);
+		List<EntityItem> list = world.selectEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().getAABB(center.x() + dir.offsetX, center.y() + dir.offsetY, center.z() + dir.offsetZ, center.x() + dir.offsetX + 1, center.y() + dir.offsetY + 1, center.z() + dir.offsetZ + 1), IEntitySelector.selectAnything);
 		return list.size() > 0 ? list : null;
 	}
 
@@ -317,7 +317,7 @@ public class WorldUtility
 
 	public static List<ItemStack> getItemStackFromBlock(World world, int i, int j, int k)
 	{
-		Block block =world.getBlock(i,j,k);
+		Block block = world.getBlock(i, j, k);
 
 		if (block == null)
 		{

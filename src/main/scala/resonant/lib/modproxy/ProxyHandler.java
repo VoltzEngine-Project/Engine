@@ -1,9 +1,9 @@
 package resonant.lib.modproxy;
 
+import cpw.mods.fml.common.Loader;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import cpw.mods.fml.common.Loader;
 
 /**
  * the Object that handles the submods of the mod
@@ -45,7 +45,9 @@ public class ProxyHandler
 			Object module = clazz.newInstance();
 
 			if (module instanceof ICompatProxy)
+			{
 				subProxy = (ICompatProxy) module;
+			}
 		}
 		catch (Exception e)
 		{
@@ -82,7 +84,6 @@ public class ProxyHandler
 				module.init();
 				break;
 			case PREINIT:
-
 
 		}
 	}

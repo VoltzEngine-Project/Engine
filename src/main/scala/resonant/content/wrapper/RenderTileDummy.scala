@@ -1,8 +1,8 @@
 package resonant.content.wrapper
 
-import resonant.content.spatial.block.SpatialBlock
-import resonant.content.component.render.RenderDynamic
 import net.minecraft.tileentity.TileEntity
+import resonant.content.component.render.RenderDynamic
+import resonant.content.spatial.block.SpatialBlock
 import universalelectricity.core.transform.vector.Vector3
 
 /**

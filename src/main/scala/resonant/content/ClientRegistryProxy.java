@@ -6,8 +6,8 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
-import resonant.engine.References;
 import resonant.content.wrapper.RenderTileDummy;
+import resonant.engine.References;
 
 public class ClientRegistryProxy extends CommonRegistryProxy
 {
