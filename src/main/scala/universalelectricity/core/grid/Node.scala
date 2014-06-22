@@ -10,15 +10,19 @@ import scala.collection.convert.wrapAll._
 import java.util
 import net.minecraftforge.common.util.ForgeDirection
 
-abstract class Node(parent: INodeProvider) extends INode
+abstract class Node[N <: Node[N]](parent: INodeProvider) extends INode
 {
-  type This = Node.this.type
+  /**
+   * All the connections we are connected to. Note that this may not be thread safe for
+   * modification unless synchronized.
+   *
+   * @return Returns all the connections in this node.
+   */
+  final val connections: Map[N, ForgeDirection] = new util.WeakHashMap()
 
-  protected final val connections: Map[This, ForgeDirection] = new util.WeakHashMap[This, ForgeDirection]
+  protected var grid: Grid[N] = _
 
-  protected var grid: Grid[This] = _
-
-  final def getGrid(): Grid[This] =
+  final def getGrid(): Grid[N] =
   {
     if (grid == null)
     {
@@ -29,21 +33,21 @@ abstract class Node(parent: INodeProvider) extends INode
     return grid
   }
 
-  protected def newGrid(): Grid[This]
+  protected def newGrid(): Grid[N]
 
   final def setGrid(grid: Grid[_])
   {
-    this.grid = grid.asInstanceOf[Grid[This]]
+    this.grid = grid.asInstanceOf[Grid[N]]
   }
 
   /**
-   * Called to construct the node. This must be called in tile validate.
+   * Called to construct the node. Node must be called in tile validate.
    */
   def reconstruct
   {
 
     /**
-     * TODO: Try inject tile validate and invalidate events so this does not have to be called. This
+     * TODO: Try inject tile validate and invalidate events so this does not have to be called. Node
      * constructs the node. It should be called whenever the connections of the node are updated OR
      * when the node is first initiated and can access its connections.
      */
@@ -58,7 +62,7 @@ abstract class Node(parent: INodeProvider) extends INode
   def deconstruct()
   {
     //Remove all connection references to the current node.
-    connections.keySet().filter(getGrid().isValidNode(_)).foreach(_.getConnections().remove(this))
+    connections.keySet().filter(getGrid().isValidNode(_)).foreach(_.connections.remove(this))
     getGrid.remove(this)
     getGrid.deconstruct()
   }
@@ -72,7 +76,7 @@ abstract class Node(parent: INodeProvider) extends INode
   }
 
   /**
-   * Recache the connections. This is the default connection implementation for TileEntities.
+   * Recache the connections. Node is the default connection implementation for TileEntities.
    */
   def doRecache()
   {
@@ -86,27 +90,19 @@ abstract class Node(parent: INodeProvider) extends INode
       {
         val check = tile.asInstanceOf[INodeProvider].getNode(getClass(), dir.getOpposite)
 
-        if (check.isInstanceOf[This] && canConnect(dir, check) && check.canConnect(dir.getOpposite, this))
+        if (check != null && getClass().isAssignableFrom(check.getClass()) && canConnect(dir, check) && check.canConnect(dir.getOpposite, this))
         {
-          connections.put(check.asInstanceOf[This], dir)
+          connections.put(check.asInstanceOf[N], dir)
         }
       }
     })
   }
 
   /**
-   * All the connections we are connected to. Note that this may not be thread safe for
-   * modification unless synchronized.
-   *
-   * @return Returns all the connections in this node.
-   */
-  def getConnections(): Map[This, ForgeDirection] = connections
-
-  /**
    * Can this node connect with the source?
    *
    * @param from   - Direction coming from.
-   * @param source - Object trying to connect with this node. This should either extend Node or be an object that can interface with the node.
+   * @param source - Object trying to connect with this node. Node should either extend Node or be an object that can interface with the node.
    */
   def canConnect(from: ForgeDirection, source: AnyRef): Boolean =
   {

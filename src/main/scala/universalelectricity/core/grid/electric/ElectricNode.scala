@@ -1,11 +1,11 @@
 package universalelectricity.core.grid.electric
 
 import net.minecraftforge.common.util.ForgeDirection
-import universalelectricity.core.grid.{Node, TickingGrid}
+import universalelectricity.core.grid.{Grid, Node, TickingGrid}
 import java.lang.Byte._
 import universalelectricity.api.core.grid.INodeProvider
 import universalelectricity.api.core.grid.electric.IElectricNode
-import scala.collection.convert.wrapAsScala._
+import scala.collection.convert.wrapAll._
 import net.minecraft.nbt.NBTTagCompound
 
 /**
@@ -95,29 +95,26 @@ class ElectricNode(parent: INodeProvider) extends Node(parent) with IElectricNod
     return if (tr < 0.0D) 0.0D else tr
   }
 
-  def getEmptySpace: Double = this.getEnergyCapacity - this.getEnergy(getVoltage)
+  def getEmptySpace = getEnergyCapacity() - getEnergy(getVoltage)
 
   override def update(deltaTime: Double)
   {
     calculateVoltage(deltaTime)
 
-    connections synchronized
-            {
-              connections.entrySet.iterator.foreach(
-                entry =>
-                {
-                  val dir = entry.getValue
-                  val adjacent = entry.getKey
-                  val totalResistance = getResistance + adjacent.getResistance
-                  var current = currents(dir.ordinal)
-                  val voltageDifference = voltage - adjacent.getVoltage
-                  currents(dir.ordinal) += (voltageDifference - current * totalResistance) * getCurrentEfficiency
-                  current += voltageDifference * getParallelMultiplier
-                  applyCurrent(-current)
-                  adjacent.applyCurrent(current)
-                }
-              )
-            }
+    connections.foreach(
+      entry =>
+      {
+        val adjacent = entry._1
+        val dir = entry._2
+        val totalResistance = getResistance + adjacent.getResistance()
+        var current = currents(dir.ordinal)
+        val voltageDifference = voltage - adjacent.getVoltage
+        currents(dir.ordinal) += (voltageDifference - current * totalResistance) * getCurrentEfficiency
+        current += voltageDifference * getParallelMultiplier
+        applyCurrent(-current)
+        adjacent.applyCurrent(current)
+      }
+    )
   }
 
   override def load(nbt: NBTTagCompound)
@@ -134,5 +131,5 @@ class ElectricNode(parent: INodeProvider) extends Node(parent) with IElectricNod
     nbt.setDouble("amperage", amperage)
   }
 
-  protected override def newGrid: TickingGrid[this.type] = new TickingGrid[this.type]()
+  protected override def newGrid() = new Grid[Node]()
 }

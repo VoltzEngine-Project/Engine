@@ -1,19 +1,21 @@
 package universalelectricity.core.grid
 
 import scala.collection.convert.wrapAll._
+import scala.reflect.ClassTag
+
 /**
  * A grid that consists of specific INodes
  *
  * @tparam N - The type of the node
  */
-abstract class NodeGrid[N <: Node] extends Grid[N]
+abstract class NodeGrid[N <: Node : ClassTag] extends Grid[N]
 {
   protected override def reconstructNode(node: N)
   {
     node.recache()
     node.setGrid(this)
 
-    val connections = node.getConnections()
+    val connections = node.connections
 
     connections.keySet().foreach(connectedNode =>
     {
@@ -23,7 +25,7 @@ abstract class NodeGrid[N <: Node] extends Grid[N]
         if (connectedNode.getGrid() != this)
         {
           connectedNode.getGrid().getNodes().clear()
-          add(connectedNode)
+          add(connectedNode.asInstanceOf[N])
           reconstructNode(connectedNode.asInstanceOf[N])
         }
       }

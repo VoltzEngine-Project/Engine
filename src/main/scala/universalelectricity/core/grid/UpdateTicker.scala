@@ -1,12 +1,16 @@
 package universalelectricity.core.grid
 
-import cpw.mods.fml.common.eventhandler.{SubscribeEvent, Event}
-import net.minecraftforge.common.MinecraftForge
+import java.util
+import java.util.Collections
+
+import cpw.mods.fml.common.eventhandler.{Event, SubscribeEvent}
 import cpw.mods.fml.common.gameevent.TickEvent
-import com.nicta.scoobi.impl.collection.WeakHashSet
-import scala.collection.mutable
+import net.minecraftforge.common.MinecraftForge
 import universalelectricity.api.core.grid.IUpdate
-import java.lang.{Deprecated, Thread}
+
+import scala.collection.mutable
+import scala.reflect.internal.util.WeakHashSet
+import scala.collection.convert.wrapAll._
 
 /**
  * A ticker to update all grids. This is multi-threaded based on configuration.
@@ -21,9 +25,9 @@ object UpdateTicker extends Thread
   /**
    * For updaters to be ticked.
    */
-  private final var updaters = new WeakHashSet[IUpdate]()
+  private final var updaters = Collections.newSetFromMap(new util.WeakHashMap[IUpdate, java.lang.Boolean]())
 
-  private final val enqueued = new mutable.SynchronizedQueue[() => Unit]()
+  private final val queue = new mutable.SynchronizedQueue[() => Unit]()
 
   /**
    * For queuing Forge events to be invoked the next tick.
@@ -50,13 +54,13 @@ object UpdateTicker extends Thread
 
   def enqueue(f: (() => Unit))
   {
-    enqueued += f
+    queue += f
   }
 
   def queueEvent(event: Event)
-{
-  queuedEvents += event
-}
+  {
+    queuedEvents += event
+  }
 
   def getDeltaTime = deltaTime
 
@@ -107,14 +111,14 @@ object UpdateTicker extends Thread
   {
     try
     {
-      enqueued.foreach(_.apply())
-      enqueued.clear()
+      queue.foreach(_.apply())
+      queue.clear()
 
       /**
        * TODO: Perform test to check if parallel evaluation is worth it.
        */
       updaters.par.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
-      updaters = updaters.filter(_.continueUpdate()).asInstanceOf[WeakHashSet[IUpdate]]
+      updaters.removeAll(updaters.filterNot(_.continueUpdate()))
     }
     catch
       {

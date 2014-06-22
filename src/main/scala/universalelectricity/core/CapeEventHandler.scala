@@ -64,7 +64,7 @@ object CapeEventHandler
           return
         }
         capePlayers.add(abstractClientPlayer)
-        ReflectionHelper.setPrivateValue(classOf[ThreadDownloadImageData], abstractClientPlayer.getTextureCape, false,"textureUploaded", "field_110559_g")
+        ReflectionHelper.setPrivateValue(classOf[ThreadDownloadImageData], abstractClientPlayer.getTextureCape, false, "textureUploaded", "field_110559_g")
         new Thread(new CloakThread(abstractClientPlayer, cloakURL)).start
         event.renderCape = true
       }

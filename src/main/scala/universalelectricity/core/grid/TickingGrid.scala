@@ -2,15 +2,17 @@ package universalelectricity.core.grid
 
 import universalelectricity.api.core.grid.IUpdate
 
+import scala.reflect.ClassTag
+import scala.collection.convert.wrapAll._
+
 /**
  * A grid that ticks. May be multi-threaded.
  *
- * @param nodeClass - The class the node
  * @tparam N - The type of the node
  *
  * @author Calclavia
  */
-class TickingGrid[N <: Node] extends NodeGrid[N] with IUpdate
+class TickingGrid[N <: Node : ClassTag] extends NodeGrid[N] with IUpdate
 {
   /** Upon init, add this grid into the ticker. */
   UpdateTicker.addUpdater(this)
