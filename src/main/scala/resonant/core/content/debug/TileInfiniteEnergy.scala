@@ -1,6 +1,6 @@
 package resonant.core.content.debug
 
-import universalelectricity.api.core.grid.electric.EnergyStorageHandler
+import universalelectricity.api.core.grid.electric.EnergyStorage
 import net.minecraft.block.material.Material
 import resonant.lib.content.prefab.java.TileElectricStorage
 
@@ -10,7 +10,7 @@ import resonant.lib.content.prefab.java.TileElectricStorage
  */
 class TileInfiniteEnergy(mat: Material) extends TileElectricStorage(mat)
 {
-	energy = new EnergyStorageHandler(Double.MaxValue)
+	energy = new EnergyStorage(Double.MaxValue)
 	energy.setMaxExtract(Double.MaxValue)
 	ioMap = 728
 

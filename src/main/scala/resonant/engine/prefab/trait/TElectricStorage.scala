@@ -2,7 +2,7 @@ package resonant.lib.content.prefab
 
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.nbt.NBTTagCompound
-import universalelectricity.api.core.grid.electric.EnergyStorageHandler
+import universalelectricity.api.core.grid.electric.EnergyStorage
 import net.minecraft.item.ItemStack
 import universalelectricity.compatibility.Compatibility
 
@@ -11,7 +11,7 @@ import universalelectricity.compatibility.Compatibility
  */
 trait TElectricStorage extends TElectric
 {
-  protected var energy: EnergyStorageHandler = _
+  protected var energy: EnergyStorage = _
 
   //@Callback
   def recharge(stack: ItemStack)
