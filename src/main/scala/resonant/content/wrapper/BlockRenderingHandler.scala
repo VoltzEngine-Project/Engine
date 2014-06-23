@@ -1,8 +1,10 @@
 package resonant.content.wrapper
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler
+import cpw.mods.fml.client.registry.{RenderingRegistry, ISimpleBlockRenderingHandler}
 import net.minecraft.block.Block
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.RenderBlocks
+import net.minecraft.item.ItemStack
 import net.minecraft.world.IBlockAccess
 import org.lwjgl.opengl.GL11._
 import resonant.content.component.render.{RenderItem, RenderStatic}
@@ -11,6 +13,8 @@ import universalelectricity.core.transform.vector.Vector3
 
 class BlockRenderingHandler extends ISimpleBlockRenderingHandler
 {
+  val ID = RenderingRegistry.getNextAvailableRenderId()
+
   def getTileEntityForBlock(block: Nothing): Nothing =
   {
     var te: Nothing = inventoryTileEntities.get(block)

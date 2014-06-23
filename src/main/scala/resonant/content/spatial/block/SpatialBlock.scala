@@ -1,7 +1,7 @@
 package resonant.content.spatial.block
 
 import _root_.java.lang.reflect.Method
-import _root_.java.util
+import java.util
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
@@ -14,8 +14,6 @@ import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
-import resonant.content.prefab.java
-import resonant.content.spatial.Spatial
 import resonant.lib.content.module.BlockDummy
 import resonant.lib.content.prefab.{TIO, TRotatable}
 import resonant.lib.prefab.item.ItemBlockTooltip
@@ -23,6 +21,7 @@ import resonant.lib.util.{LanguageUtility, WrenchUtility}
 import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.{Vector2, Vector3, VectorWorld}
 
+import scala.collection.convert.wrapAll._
 import scala.collection.immutable
 
 /**
@@ -33,8 +32,10 @@ import scala.collection.immutable
  *
  * @author Calclavia
  */
-object TileBlock
+object SpatialBlock
 {
+  val icon = new util.HashMap[String, IIcon]
+
   def getClickedFace(hitSide: Byte, hitX: Float, hitY: Float, hitZ: Float): Vector2 =
   {
     hitSide match
@@ -63,7 +64,7 @@ object TileBlock
 
 }
 
-abstract class SpatialBlock(val name: String, val material: Material) extends TileEntity with Spatial
+abstract class SpatialBlock(val name: String, val material: Material) extends TileEntity
 {
   /**
    * The unique string ID of this block.
@@ -129,7 +130,7 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   /**
    * Rotation
    */
-  protected var rotationMask: Byte = parseByte("111100", 2)
+  protected var rotationMask: Byte = Integer.parseInt("111100", 2).toByte
   protected var isFlipPlacement: Boolean = false
 
   def this(newMaterial: Material) = this(LanguageUtility.decapitalizeFirst(getClass.getSimpleName.replaceFirst("Tile", "")), newMaterial)
@@ -137,14 +138,11 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   /**
    * Called after the block is registred. Use this to add recipes.
    */
-  def onInstantiate
+  def onInstantiate()
   {
   }
 
-  def world: World =
-  {
-    return worldObj
-  }
+  def world: World = worldObj
 
   def world(world: World)
   {
@@ -269,7 +267,7 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
 
   def getSubBlocks(item: Item, creativeTabs: CreativeTabs, list: List[_])
   {
-    def add[T](list: java.util.List[T], value: Any) = list.add(value.asInstanceOf[T])
+    def add[T](list: _root_.java.util.List[T], value: Any) = list.add(value.asInstanceOf[T])
     add(list, new ItemStack(item))
   }
 
@@ -404,7 +402,7 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
    */
   def getCollisionBoxes(intersect: Cuboid, entity: Entity): Iterable[Cuboid] =
   {
-    val boxes: List[Cuboid] = new util.ArrayList[Cuboid]
+    val boxes = new util.ArrayList[Cuboid]
     for (cuboid <- getCollisionBoxes)
     {
       if (intersect != null && cuboid.intersects(intersect))
@@ -433,7 +431,8 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   /**
    * Called in the world.
    */
-  @SideOnly(Side.CLIENT) def getIcon(access: IBlockAccess, side: Int): IIcon =
+  @SideOnly(Side.CLIENT)
+  def getIcon(access: IBlockAccess, side: Int): IIcon =
   {
     return getIcon(side, access.getBlockMetadata(x, y, z))
   }
@@ -448,17 +447,45 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
 
   def getIcon: IIcon =
   {
-    return RenderInfo.icon.get(getTextureName)
+    return SpatialBlock.icon.get(getTextureName)
   }
 
   @SideOnly(Side.CLIENT) def registerIcons(iconRegister: IIconRegister)
   {
-    RenderInfo.icon.put(getTextureName, iconRegister.registerIcon(getTextureName))
+    SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName))
   }
 
   @SideOnly(Side.CLIENT) protected def getTextureName: String =
   {
     return if (textureName == null) "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name else block.dummyTile.domain + textureName
+  }
+
+  /**
+   * Render the static, unmoving faces of this part into the world renderer.
+   * The Tessellator is already drawing.
+   * @param pass The render pass, 1 or 0
+   * @return true if vertices were added to the tessellator
+   */
+  @SideOnly(Side.CLIENT)
+  def renderStatic(pos: Vector3, pass: Int) = false
+
+  /**
+   * Render the dynamic, changing faces of this part and other gfx as in a TESR.
+   * The Tessellator will need to be started if it is to be used.
+   * @param pos The position of this block space relative to the renderer, same as x, y, z passed to TESR.
+   * @param frame The partial interpolation frame value for animations between ticks
+   * @param pass The render pass, 1 or 0
+   */
+  @SideOnly(Side.CLIENT)
+  def renderDynamic(pos: Vector3, frame: Float, pass: Int)
+  {
+
+  }
+
+  @SideOnly(Side.CLIENT)
+  def renderItem(itemStack: ItemStack)
+  {
+
   }
 
   def shouldSideBeRendered(access: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Boolean =

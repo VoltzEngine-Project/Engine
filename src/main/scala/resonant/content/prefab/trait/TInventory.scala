@@ -212,20 +212,20 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
 
   def dropEntireInventory(block: Block, par6: Int)
   {
+    var i = 0
 
-      var i: Int = 0
-      while (i < this.getSizeInventory)
+    inventory.getContainedItems().foreach(dropStack =>
+    {
+      if (dropStack != null)
       {
-        val dropStack: ItemStack = inventory.getStackInSlot(i)
-        if (dropStack != null)
-        {
-          val var11: Int = dropStack.stackSize
-          dropStack.stackSize -= var11
-          InventoryUtility.dropItemStack(world, center, dropStack)
-          if (dropStack.stackSize <= 0) inventory.setInventorySlotContents(i, null)
-        }
-        i += 1;
+        val var11: Int = dropStack.stackSize
+        dropStack.stackSize -= var11
+        InventoryUtility.dropItemStack(world, center, dropStack)
+        if (dropStack.stackSize <= 0) inventory.setInventorySlotContents(i, null)
       }
+
+      i += 1
+    })
 
     markDirty()
   }
