@@ -26,11 +26,11 @@ class RenderRotatedTexture(tile: SpatialTile) extends RenderStatic
     {
       renderBlocks.limitedSide = dir.ordinal
 
-      if ((0 until 4).exists(targetDir == ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, _))))
+      if ((0 until 4).exists(targetDir.ordinal() == RotationUtility.rotateSide(dir.ordinal(), _)))
       {
         RenderUtility.rotateFacesOnRenderer(targetDir, renderBlocks, true)
-        renderBlocks.renderStandardBlock(tile.block, position.xi, position.yi, position.zi())
-        // RenderBlockUtility.tessellateFace(rendeerBlocks, tile.access, position.intX(), position.intY(), position.intZ(), tile.block, null, dir.ordinal)
+        renderBlocks.renderStandardBlock(tile.block, position.xi, position.yi, position.zi)
+        // RenderBlockUtility.tessellateFace(renderBlocks, tile.access, position.intX(), position.intY(), position.intZ(), tile.block, null, dir.ordinal)
         RenderUtility.resetFacesOnRenderer(renderBlocks)
       }
       else

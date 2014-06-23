@@ -1,16 +1,15 @@
 package resonant.lib.util.inventory;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IExternalInventory;
-import resonant.api.IExternalInventoryBox;
+import resonant.api.IInventoryProvider;
 
-public class ExternalInventory implements IExternalInventoryBox
+public class ExternalInventory implements IExternalInventory
 {
 	/**
 	 * Default slot max count
@@ -27,28 +26,17 @@ public class ExternalInventory implements IExternalInventoryBox
 	/**
 	 * Host tileEntity
 	 */
-	protected TileEntity hostTile;
-	/**
-	 * Host tileEntity as external inv
-	 */
-	protected IExternalInventory inv;
+	protected IInventoryProvider host;
 
-	public ExternalInventory(TileEntity chest, IExternalInventory inv, int slots)
+	public ExternalInventory(IInventoryProvider inv, int slots)
 	{
-		this.hostTile = chest;
+		this.host = inv;
 		this.slots = slots;
-		this.inv = inv;
 	}
 
-	public ExternalInventory(TileEntity chest, int slots)
+	protected TileEntity tile()
 	{
-		this(chest, ((IExternalInventory) chest), slots);
-	}
-
-	public ExternalInventory(Entity entity, int i)
-	{
-		this.slots = i;
-		this.inv = (IExternalInventory) entity;
+		return (TileEntity)host;
 	}
 
 	@Override
@@ -77,8 +65,8 @@ public class ExternalInventory implements IExternalInventoryBox
 			if (this.getContainedItems()[slot].stackSize <= ammount)
 			{
 				var3 = this.getContainedItems()[slot];
-				this.getContainedItems()[slot] = null;
-				this.onInventoryChanged();
+				getContainedItems()[slot] = null;
+				markDirty();
 				return var3;
 			}
 			else
@@ -90,7 +78,7 @@ public class ExternalInventory implements IExternalInventoryBox
 					this.getContainedItems()[slot] = null;
 				}
 
-				this.onInventoryChanged();
+				markDirty();
 				return var3;
 			}
 		}
@@ -127,31 +115,30 @@ public class ExternalInventory implements IExternalInventoryBox
 		}
 		if (!InventoryUtility.stacksMatchExact(pre_stack, getContainedItems()[slot]))
 		{
-			//System.out.println("External inv slot change " + pre_stack + " to " + getContainedItems()[slot]);
-			this.onInventoryChanged();
+			markDirty();
 		}
 	}
 
 	@Override
-	public String getInvName()
+	public String getInventoryName()
 	{
 		return "container.chest";
 	}
 
 	@Override
-	public void openChest()
+	public void openInventory()
 	{
 
 	}
 
 	@Override
-	public void closeChest()
+	public void closeInventory()
 	{
 
 	}
 
 	@Override
-	public boolean isInvNameLocalized()
+	public boolean hasCustomInventoryName()
 	{
 		return false;
 	}
@@ -183,13 +170,13 @@ public class ExternalInventory implements IExternalInventoryBox
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j)
 	{
-		return this.isItemValidForSlot(i, itemstack) && this.inv.canStore(itemstack, i, ForgeDirection.getOrientation(j));
+		return this.isItemValidForSlot(i, itemstack) && host.canStore(itemstack, i, ForgeDirection.getOrientation(j));
 	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j)
 	{
-		return this.inv.canRemove(itemstack, i, ForgeDirection.getOrientation(j));
+		return host.canRemove(itemstack, i, ForgeDirection.getOrientation(j));
 	}
 
 	@Override
@@ -199,21 +186,22 @@ public class ExternalInventory implements IExternalInventoryBox
 	}
 
 	@Override
-	public void onInventoryChanged()
+	public void markDirty()
 	{
-		if (this.hostTile != null)
+		if (host instanceof TileEntity)
 		{
-			this.hostTile.onInventoryChanged();
+			tile().markDirty();
 		}
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
 	{
-		if (this.hostTile != null)
+		if (host instanceof TileEntity)
 		{
-			return this.hostTile.worldObj.getBlockTileEntity(this.hostTile.xCoord, this.hostTile.yCoord, this.hostTile.zCoord) != this.hostTile ? false : par1EntityPlayer.getDistanceSq(this.hostTile.xCoord + 0.5D, this.hostTile.yCoord + 0.5D, this.hostTile.zCoord + 0.5D) <= 64.0D;
+			return tile().getWorldObj().getTileEntity(tile().xCoord, tile().yCoord, tile().zCoord) != tile() ? false : par1EntityPlayer.getDistanceSq(tile().xCoord + 0.5D, tile().yCoord + 0.5D, tile().zCoord + 0.5D) <= 64.0D;
 		}
+
 		return true;
 	}
 
@@ -232,11 +220,11 @@ public class ExternalInventory implements IExternalInventoryBox
 	{
 		this.clear();
 
-		NBTTagList nbtList = nbt.getTagList("Items");
+		NBTTagList nbtList = nbt.getTagList("Items", 10);
 
 		for (int i = 0; i < nbtList.tagCount(); ++i)
 		{
-			NBTTagCompound stackTag = (NBTTagCompound) nbtList.tagAt(i);
+			NBTTagCompound stackTag = nbtList.getCompoundTagAt(i);
 			byte id = stackTag.getByte("Slot");
 
 			if (id >= 0 && id < this.getSizeInventory())

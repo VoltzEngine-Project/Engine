@@ -1,13 +1,21 @@
 package resonant.api;
 
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
+import resonant.lib.util.nbt.ISaveObj;
 
-public interface IExternalInventory
+/**
+ * @author DarkGuardsman
+ */
+public interface IExternalInventory extends ISidedInventory, ISaveObj
 {
-	public IExternalInventoryBox getInventory();
+	/**
+	 * Gets the inventory array. ForgeDirection.UNKOWN must return all sides
+	 */
+	public ItemStack[] getContainedItems();
 
-	public boolean canStore(ItemStack stack, int slot, ForgeDirection side);
-
-	public boolean canRemove(ItemStack stack, int slot, ForgeDirection side);
+	/**
+	 * Deletes all the items in the inventory
+	 */
+	public void clear();
 }

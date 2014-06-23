@@ -5,14 +5,15 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ChatComponentText
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IIO
+import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.util.nbt.ISaveObj
 
 /**
- * a Trait that handles IO Traits
+ * A Trait that handles IO Traits
  *
- * @author tgame14
+ * @author Calclavia
  */
-trait TIO extends IIO with ISaveObj
+trait TIO extends SpatialBlock with IIO with ISaveObj
 {
   /**
    * IO METHODS.

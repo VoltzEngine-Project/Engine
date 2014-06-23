@@ -1,25 +1,27 @@
 package resonant.lib.content.prefab
 
+import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.{IExternalInventory, IExternalInventoryBox}
+import resonant.api.{IExternalInventory, IInventoryProvider}
+import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.util.inventory.{ExternalInventory, InventoryUtility}
 import universalelectricity.core.transform.vector.Vector3
 
 /**
  * A trait applied to inventory objects.
  */
-trait TInventory extends IExternalInventory with ISidedInventory
+trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInventory
 {
-  protected var inventory: IExternalInventoryBox = _
+  protected var inventory: IExternalInventory = _
   protected var maxSlots: Int = 1
 
   protected def getNewInventory() = new ExternalInventory(this, maxSlots)
 
-  override def getInventory(): IExternalInventoryBox =
+  override def getInventory(): IExternalInventory =
   {
     if (this.inventory == null)
     {
@@ -52,7 +54,7 @@ trait TInventory extends IExternalInventory with ISidedInventory
       getStackInSlot(slot).stackSize += stack.stackSize
     }
 
-    onInventoryChanged()
+    markDirty()
   }
 
   override def getStackInSlotOnClosing(index: Int): ItemStack =
@@ -65,35 +67,17 @@ trait TInventory extends IExternalInventory with ISidedInventory
     this.getInventory().setInventorySlotContents(index, stack)
   }
 
-  override def getInvName(): String =
-  {
-    return this.getBlockType.getLocalizedName
-  }
+  override def getInventoryName() = getBlockType().getLocalizedName()
 
-  def isInvNameLocalized(): Boolean =
-  {
-    return true
-  }
+  override def hasCustomInventoryName() = inventory.hasCustomInventoryName()
 
-  def getInventoryStackLimit: Int =
-  {
-    return this.getInventory.getInventoryStackLimit
-  }
+  override def getInventoryStackLimit() = getInventory.getInventoryStackLimit
 
-  def isUseableByPlayer(entityplayer: EntityPlayer): Boolean =
-  {
-    return this.getInventory.isUseableByPlayer(entityplayer)
-  }
+  override def isUseableByPlayer(entityplayer: EntityPlayer) = getInventory.isUseableByPlayer(entityplayer)
 
-  def openChest
-  {
-    this.getInventory.openChest
-  }
+  override def openInventory() = getInventory.openInventory()
 
-  def closeChest
-  {
-    this.getInventory.closeChest
-  }
+  override def closeInventory() = getInventory.closeInventory()
 
   def isItemValidForSlot(i: Int, itemstack: ItemStack): Boolean =
   {
@@ -220,32 +204,31 @@ trait TInventory extends IExternalInventory with ISidedInventory
     return false
   }
 
-  override def onRemove(par5: Int, par6: Int)
+  override def onRemove(block: Block, par6: Int)
   {
-    super.onRemove(par5, par6)
-    //dropEntireInventory(par5, par6)
+    super.onRemove(block, par6)
+    dropEntireInventory(block, par6)
   }
 
-  //  def dropEntireInventory(par5: Int, par6: Int)
-  //  {
-  //    if (this.isInstanceOf[IInventory]) {
-  //      val inventory: IInventory = this.asInstanceOf[IInventory]
-  //      {
-  //        var i: Int = 0
-  //        while (i < inventory.getSizeInventory) {
-  //          val dropStack: ItemStack = inventory.getStackInSlot(i)
-  //          if (dropStack != null) {
-  //            val var11: Int = dropStack.stackSize
-  //            dropStack.stackSize -= var11
-  //            InventoryUtility.dropItemStack(world, center, dropStack)
-  //            if (dropStack.stackSize <= 0) inventory.setInventorySlotContents(i, null)
-  //          }
-  //          i += 1;
-  //        }
-  //      }
-  //      inventory.onInventoryChanged
-  //    }
-  //  }
+  def dropEntireInventory(block: Block, par6: Int)
+  {
+
+      var i: Int = 0
+      while (i < this.getSizeInventory)
+      {
+        val dropStack: ItemStack = inventory.getStackInSlot(i)
+        if (dropStack != null)
+        {
+          val var11: Int = dropStack.stackSize
+          dropStack.stackSize -= var11
+          InventoryUtility.dropItemStack(world, center, dropStack)
+          if (dropStack.stackSize <= 0) inventory.setInventorySlotContents(i, null)
+        }
+        i += 1;
+      }
+
+    markDirty()
+  }
 
   override def readFromNBT(nbt: NBTTagCompound)
   {

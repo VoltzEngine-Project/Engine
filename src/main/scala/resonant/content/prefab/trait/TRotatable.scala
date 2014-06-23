@@ -4,13 +4,14 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.MathHelper
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IRotatable
+import resonant.content.spatial.block.SpatialBlock
 import universalelectricity.core.transform.vector.Vector3
 
-trait TRotatable extends TileBlock with IRotatable
+trait TRotatable extends SpatialBlock with IRotatable
 {
   protected var rotationMask: Byte = 0x3C
 
-  override def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata)
+  override def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata())
 
   override def setDirection(direction: ForgeDirection) = getWorldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, getDirection.ordinal, 3)
 
@@ -46,13 +47,15 @@ trait TRotatable extends TileBlock with IRotatable
    */
   def rotate(side: Int, hit: Vector3): Boolean =
   {
-    val result: Byte = getSideToRotate(side.asInstanceOf[Byte], hit.x, hit.y, hit.z)
+    val result = getSideToRotate(side.asInstanceOf[Byte], hit.x, hit.y, hit.z)
 
     if (result != -1)
     {
       setDirection(ForgeDirection.getOrientation(result))
       return true
     }
+
+    return false
   }
 
   /**
