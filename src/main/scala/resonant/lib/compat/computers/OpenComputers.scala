@@ -1,7 +1,7 @@
 package resonant.lib.compat.computers
 
+import resonant.lib.compat.Mods
 import resonant.lib.modproxy.ICompatProxy
-import resonant.lib.utility.Mods
 
 /**
  * @since 22/03/14

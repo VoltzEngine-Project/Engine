@@ -2,7 +2,7 @@ package resonant.lib.content.prefab
 
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.lib.utility.nbt.ISaveObj
+import resonant.lib.util.nbt.ISaveObj
 import universalelectricity.api.UniversalClass
 import universalelectricity.api.core.grid.electric.{IElectricNode, IEnergyContainer}
 import universalelectricity.api.core.grid.{INode, INodeProvider, NodeRegistry}

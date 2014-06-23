@@ -5,9 +5,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import resonant.engine.References;
-import resonant.lib.utility.nbt.IVirtualObject;
-import resonant.lib.utility.nbt.NBTUtility;
-import resonant.lib.utility.nbt.SaveManager;
+import resonant.lib.util.nbt.IVirtualObject;
+import resonant.lib.util.nbt.NBTUtility;
+import resonant.lib.util.nbt.SaveManager;
 import universalelectricity.api.vector.Vector3;
 
 import java.io.File;

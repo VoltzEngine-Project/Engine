@@ -16,8 +16,8 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Cancelable;
 import net.minecraftforge.event.Event;
-import resonant.lib.utility.WorldUtility;
-import resonant.lib.utility.inventory.InventoryUtility;
+import resonant.lib.util.WorldUtility;
+import resonant.lib.util.inventory.InventoryUtility;
 import universalelectricity.api.vector.Vector3;
 
 import java.util.ArrayList;

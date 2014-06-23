@@ -5,7 +5,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ChatComponentText
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IIO
-import resonant.lib.utility.nbt.ISaveObj
+import resonant.lib.util.nbt.ISaveObj
 
 /**
  * a Trait that handles IO Traits

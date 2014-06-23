@@ -9,7 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 import resonant.content.spatial.block.SpatialBlock;
 import resonant.content.wrapper.BlockDummy;
-import resonant.lib.utility.LanguageUtility;
+import resonant.lib.util.LanguageUtility;
 
 import java.util.Map.Entry;
 import java.util.WeakHashMap;

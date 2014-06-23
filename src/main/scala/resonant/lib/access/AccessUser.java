@@ -3,7 +3,7 @@ package resonant.lib.access;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import resonant.lib.utility.nbt.ISaveObj;
+import resonant.lib.util.nbt.ISaveObj;
 
 import java.util.ArrayList;
 import java.util.List;

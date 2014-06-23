@@ -5,8 +5,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
 import resonant.lib.render.EnumColor;
-import resonant.lib.utility.LanguageUtility;
-import resonant.lib.utility.TooltipUtility;
+import resonant.lib.util.LanguageUtility;
+import resonant.lib.util.TooltipUtility;
 
 import java.util.List;
 

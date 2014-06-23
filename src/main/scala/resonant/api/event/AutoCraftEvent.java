@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.event.Cancelable;
 import net.minecraftforge.event.Event;
-import resonant.lib.utility.inventory.AutoCraftingManager.IAutoCrafter;
+import resonant.lib.util.inventory.AutoCraftingManager.IAutoCrafter;
 import universalelectricity.api.vector.Vector3;
 
 /**

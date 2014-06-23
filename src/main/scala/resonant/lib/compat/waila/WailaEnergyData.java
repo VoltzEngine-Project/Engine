@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import resonant.api.IIO;
 import resonant.lib.prefab.tile.TileElectrical;
-import resonant.lib.utility.LanguageUtility;
+import resonant.lib.util.LanguageUtility;
 import universalelectricity.api.UnitDisplay;
 import universalelectricity.api.core.grid.electric.IEnergyContainer;
 

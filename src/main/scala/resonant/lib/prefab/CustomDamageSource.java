@@ -69,9 +69,4 @@ public class CustomDamageSource extends DamageSource
 		return damageSource instanceof TileEntity ? ((TileEntity) damageSource) : null;
 	}
 
-	public Object attacker()
-	{
-		return damageSource;
-	}
-
 }

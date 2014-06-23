@@ -45,8 +45,8 @@ import resonant.lib.flag.CommandFlag;
 import resonant.lib.flag.FlagRegistry;
 import resonant.lib.flag.ModFlag;
 import resonant.lib.modproxy.ProxyHandler;
-import resonant.lib.multiblock.BlockMultiBlockPart;
-import resonant.lib.multiblock.TileMultiBlockPart;
+import resonant.lib.multiblock.BlockSyntheticPart;
+import resonant.lib.multiblock.TileSyntheticPart;
 import resonant.lib.network.netty.PacketManager;
 import resonant.lib.prefab.ProxyBase;
 import resonant.lib.prefab.item.ItemBlockMetadata;
@@ -58,11 +58,11 @@ import resonant.lib.schematic.SchematicTestRoom;
 import resonant.lib.thermal.BoilEvent;
 import resonant.lib.thermal.EventThermal.EventThermalUpdate;
 import resonant.lib.thermal.ThermalGrid;
-import resonant.lib.utility.LanguageUtility;
-import resonant.lib.utility.PlayerInteractionHandler;
-import resonant.lib.utility.PotionUtility;
-import resonant.lib.utility.nbt.NBTUtility;
-import resonant.lib.utility.nbt.SaveManager;
+import resonant.lib.util.LanguageUtility;
+import resonant.lib.util.PlayerInteractionHandler;
+import resonant.lib.util.PotionUtility;
+import resonant.lib.util.nbt.NBTUtility;
+import resonant.lib.util.nbt.SaveManager;
 import universalelectricity.api.core.grid.IUpdate;
 import universalelectricity.core.transform.vector.Vector3;
 import universalelectricity.core.transform.vector.VectorWorld;
@@ -121,7 +121,7 @@ public class ResonantEngine
 	 * Resonant Engine Blocks for mods
 	 */
 
-	public static BlockMultiBlockPart blockMulti;
+	public static BlockSyntheticPart blockMulti;
 	public static BlockCreativeBuilder blockCreativeBuilder;
 	public static Block blockInfinite;
 	@Config
@@ -431,7 +431,7 @@ public class ResonantEngine
 		ToolMode.REGISTRY.add(new ToolModeGeneral());
 		ToolMode.REGISTRY.add(new ToolModeRotation());
 
-		blockMulti = (BlockMultiBlockPart) contentRegistry.createTile(BlockMultiBlockPart.class, TileMultiBlockPart.class).setCreativeTab(null);
+		blockMulti = (BlockSyntheticPart) contentRegistry.createTile(BlockSyntheticPart.class, TileSyntheticPart.class).setCreativeTab(null);
 		blockMulti.setPacketType(References.PACKET_TILE);
 
 		//TODO: Calclavia - Return the prefabs as we still need them. Using traits is nice and all but we still need java classes

@@ -3,7 +3,7 @@ package resonant.lib.access;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import resonant.lib.type.Group;
-import resonant.lib.utility.nbt.ISaveObj;
+import resonant.lib.util.nbt.ISaveObj;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

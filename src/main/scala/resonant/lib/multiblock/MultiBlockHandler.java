@@ -2,7 +2,7 @@ package resonant.lib.multiblock;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import resonant.lib.utility.nbt.ISaveObj;
+import resonant.lib.util.nbt.ISaveObj;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.lang.ref.WeakReference;

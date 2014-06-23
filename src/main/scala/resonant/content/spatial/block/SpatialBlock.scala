@@ -19,7 +19,7 @@ import resonant.content.spatial.Spatial
 import resonant.lib.content.module.BlockDummy
 import resonant.lib.content.prefab.{TIO, TRotatable}
 import resonant.lib.prefab.item.ItemBlockTooltip
-import resonant.lib.utility.{LanguageUtility, WrenchUtility}
+import resonant.lib.util.{LanguageUtility, WrenchUtility}
 import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.{Vector2, Vector3, VectorWorld}
 

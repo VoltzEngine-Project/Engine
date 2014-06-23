@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.{IExternalInventory, IExternalInventoryBox}
-import resonant.lib.utility.inventory.{ExternalInventory, InventoryUtility}
+import resonant.lib.util.inventory.{ExternalInventory, InventoryUtility}
 import universalelectricity.core.transform.vector.Vector3
 
 /**

@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.RenderBlocks
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.content.spatial.block.SpatialTile
 import resonant.lib.render.{RenderBlockAdvanced, RenderUtility}
-import resonant.lib.utility.RotationUtility
+import resonant.lib.util.RotationUtility
 import universalelectricity.core.transform.vector.Vector3
 
 /**

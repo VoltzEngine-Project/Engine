@@ -14,7 +14,7 @@ import net.minecraft.network.Packet;
 import net.minecraftforge.fluids.FluidTank;
 import resonant.engine.References;
 import resonant.lib.modproxy.ICompatProxy;
-import resonant.lib.utility.nbt.ISaveObj;
+import resonant.lib.util.nbt.ISaveObj;
 import universalelectricity.core.transform.vector.IVector2;
 import universalelectricity.core.transform.vector.IVector3;
 

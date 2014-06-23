@@ -1,7 +1,7 @@
 package resonant.lib.prefab.item;
 
 import net.minecraft.item.ItemStack;
-import resonant.lib.utility.LanguageUtility;
+import resonant.lib.util.LanguageUtility;
 
 public class ItemBlockMetadata extends ItemBlockTooltip
 {

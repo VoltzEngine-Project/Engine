@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import resonant.engine.References;
 import resonant.lib.render.RenderUtility;
-import resonant.lib.utility.LanguageUtility;
+import resonant.lib.util.LanguageUtility;
 import universalelectricity.api.CompatibilityType;
 import universalelectricity.api.energy.UnitDisplay;
 import universalelectricity.api.energy.UnitDisplay.Unit;

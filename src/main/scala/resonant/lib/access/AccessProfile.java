@@ -5,10 +5,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import resonant.lib.utility.LanguageUtility;
-import resonant.lib.utility.nbt.IVirtualObject;
-import resonant.lib.utility.nbt.NBTUtility;
-import resonant.lib.utility.nbt.SaveManager;
+import resonant.lib.util.LanguageUtility;
+import resonant.lib.util.nbt.IVirtualObject;
+import resonant.lib.util.nbt.NBTUtility;
+import resonant.lib.util.nbt.SaveManager;
 
 import java.io.File;
 import java.util.*;
@@ -25,7 +25,7 @@ public class AccessProfile implements IVirtualObject
 	/**
 	 * List of all AccessProfiles defined in the game
 	 */
-	private static final Set<AccessProfile> globalList = new LinkedHashSet<AccessProfile>();
+	private static final Set<AccessProfile> globalList = new LinkedHashSet();
 
 	/**
 	 * List of all containers that use this profile to define some part of their functionality
@@ -35,7 +35,7 @@ public class AccessProfile implements IVirtualObject
 	/**
 	 * A list of all groups attached to this profile
 	 */
-	protected Set<AccessGroup> groups = new LinkedHashSet<AccessGroup>();
+	protected Set<AccessGroup> groups = new LinkedHashSet();
 
 	/**
 	 * Display name of the profile for the user to easily read

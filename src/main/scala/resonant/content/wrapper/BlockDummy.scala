@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
 import resonant.content.spatial.block.SpatialBlock
-import resonant.lib.utility.inventory.InventoryUtility
+import resonant.lib.util.inventory.InventoryUtility
 import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.Vector3
 
