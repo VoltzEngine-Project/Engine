@@ -10,6 +10,11 @@ import scala.collection.convert.wrapAll._
 import java.util
 import net.minecraftforge.common.util.ForgeDirection
 
+/**
+ * A node is an object return by INodeProvider that provides the details of what the specific node does.
+ * @param parent - The parent/host node
+ * @tparam N - The self node type
+ */
 abstract class Node[N <: Node[N]](parent: INodeProvider) extends INode
 {
   /**

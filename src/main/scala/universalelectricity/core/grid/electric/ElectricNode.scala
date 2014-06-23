@@ -1,19 +1,21 @@
 package universalelectricity.core.grid.electric
 
-import net.minecraftforge.common.util.ForgeDirection
-import universalelectricity.core.grid.{Grid, Node, TickingGrid}
 import java.lang.Byte._
+
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.api.core.grid.INodeProvider
 import universalelectricity.api.core.grid.electric.IElectricNode
+import universalelectricity.core.grid.{Grid, Node}
+
 import scala.collection.convert.wrapAll._
-import net.minecraft.nbt.NBTTagCompound
 
 /**
  * The node used for electrical objects.
  *
  * @author Calclavia
  */
-class ElectricNode(parent: INodeProvider) extends Node(parent) with IElectricNode
+class ElectricNode(parent: INodeProvider) extends Node[ElectricNode](parent) with IElectricNode
 {
   var amperage = 0D
   var voltage = 0D
@@ -128,8 +130,8 @@ class ElectricNode(parent: INodeProvider) extends Node(parent) with IElectricNod
   {
     super.save(nbt)
     nbt.setDouble("voltage", voltage)
-    nbt.setDouble("amperage", amperage)
+    nbt.setDouble("amperage", amperage)w
   }
 
-  protected override def newGrid() = new Grid[Node]()
+  protected override def newGrid() = new Grid[Node[ElectricNode]]()
 }

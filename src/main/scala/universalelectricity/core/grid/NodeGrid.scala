@@ -8,7 +8,7 @@ import scala.reflect.ClassTag
  *
  * @tparam N - The type of the node
  */
-abstract class NodeGrid[N <: Node : ClassTag] extends Grid[N]
+abstract class NodeGrid[N <: Node[N] : ClassTag] extends Grid[N]
 {
   protected override def reconstructNode(node: N)
   {
@@ -40,6 +40,6 @@ abstract class NodeGrid[N <: Node : ClassTag] extends Grid[N]
       node.reconstruct()
     })
 
-    getNodes().clear
+    getNodes().clear()
   }
 }
