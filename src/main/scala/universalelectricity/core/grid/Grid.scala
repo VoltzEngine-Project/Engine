@@ -7,7 +7,7 @@ import scala.collection.convert.wrapAll._
 import scala.reflect.ClassTag
 
 /**
- * A grid containing a series of arbitary nodes.
+ * A grid containing a series of arbitrary nodes.
  *
  * @author Calclavia
  */
@@ -56,7 +56,7 @@ class Grid[N: ClassTag]
   {
     //TODO: Check if better way to do this.
     return nodeClass.isAssignableFrom(node.getClass)
-  }
+   }
 
   protected def reconstructNode(node: N)
   {

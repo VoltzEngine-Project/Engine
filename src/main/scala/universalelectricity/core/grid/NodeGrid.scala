@@ -25,8 +25,8 @@ abstract class NodeGrid[N <: Node[N] : ClassTag] extends Grid[N]
         if (connectedNode.getGrid() != this)
         {
           connectedNode.getGrid().getNodes().clear()
-          add(connectedNode.asInstanceOf[N])
-          reconstructNode(connectedNode.asInstanceOf[N])
+          add(connectedNode)
+          reconstructNode(connectedNode)
         }
       }
     })

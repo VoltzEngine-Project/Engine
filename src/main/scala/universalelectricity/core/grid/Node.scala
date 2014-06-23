@@ -25,9 +25,9 @@ abstract class Node[N <: Node[N]](parent: INodeProvider) extends INode
    */
   final val connections: Map[N, ForgeDirection] = new util.WeakHashMap()
 
-  protected var grid: Grid[N] = _
+  protected var grid: Grid[this.type] = _
 
-  final def getGrid(): Grid[N] =
+  final def getGrid(): Grid[this.type] =
   {
     if (grid == null)
     {
@@ -38,11 +38,11 @@ abstract class Node[N <: Node[N]](parent: INodeProvider) extends INode
     return grid
   }
 
-  protected def newGrid(): Grid[N]
+  protected def newGrid() = new Grid[this.type]()
 
   final def setGrid(grid: Grid[_])
   {
-    this.grid = grid.asInstanceOf[Grid[N]]
+    this.grid = grid.asInstanceOf[Grid[this.type]]
   }
 
   /**

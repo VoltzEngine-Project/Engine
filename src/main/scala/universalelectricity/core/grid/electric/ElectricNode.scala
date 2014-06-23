@@ -130,8 +130,8 @@ class ElectricNode(parent: INodeProvider) extends Node[ElectricNode](parent) wit
   {
     super.save(nbt)
     nbt.setDouble("voltage", voltage)
-    nbt.setDouble("amperage", amperage)w
+    nbt.setDouble("amperage", amperage)
   }
 
-  protected override def newGrid() = new Grid[Node[ElectricNode]]()
+  //protected override def newGrid() = new Grid[this.type]()
 }
