@@ -24,8 +24,8 @@ buildProps.withReader {
 }
 
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
-group = "${System.getenv().JOB_NAME}".toLowerCase()
-archivesBaseName = "${System.getenv().JOB_NAME}"
+group = System.getenv("TEAMCITY_PROJECT_NAME").toLowerCase()
+archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")
 
 minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
@@ -95,7 +95,7 @@ publishing {
 			/*
 			artifact{
 				classifier = "changelog"
-				file 'output/' + "${System.getenv().JOB_NAME}-${project.version}" + '-changelog' + '.txt'
+				file 'output/' + "${System.getenv("TEAMCITY_PROJECT_NAME")}-${project.version}" + '-changelog' + '.txt'
 			}*/
 			
 			artifact{
@@ -136,7 +136,7 @@ import net.minecraftforge.gradle.common.Constants
 import net.minecraftforge.gradle.delayed.*
 
 task createChangelog(type: ChangelogTask) {
-    def jobName = "${System.getenv().JOB_NAME}"
+    def jobName = System.getenv("TEAMCITY_PROJECT_NAME")
     def buildNumber = "${System.getenv().BUILD_NUMBER}"
     jobName.replaceAll(' ','%20')
     setServerRoot(new DelayedString(project, 'http://ci.calclavia.com/'))

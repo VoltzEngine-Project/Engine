@@ -118,7 +118,7 @@ public class TileSyntheticPart extends TileEntity implements IPacketReceiver
 
 		if (this.mainBlockPosition != null)
 		{
-			nbt.setTag("mainBlockPosition", this.mainBlockPosition.writeToNBT(getWorldObj(), new NBTTagCompound()));
+			nbt.setTag("mainBlockPosition", this.mainBlockPosition.toNBT(new NBTTagCompound()));
 		}
 	}
 
