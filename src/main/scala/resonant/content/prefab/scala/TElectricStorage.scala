@@ -3,13 +3,13 @@ package resonant.lib.content.prefab
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
-import universalelectricity.api.core.grid.electric.EnergyStorage
+import universalelectricity.api.core.grid.electric.{EnergyStorage, IEnergyContainer}
 import universalelectricity.compatibility.Compatibility
 
 /**
  * @author Calclavia
  */
-trait TElectricStorage extends TElectric
+trait TElectricStorage extends TElectric with IEnergyContainer
 {
   protected var energy: EnergyStorage = _
 

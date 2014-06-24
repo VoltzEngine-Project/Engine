@@ -16,7 +16,7 @@ object RenderBlockUtility
 {
   def setupLight(world: World, x: Int, y: Int, z: Int)
   {
-    if (world.isBlockOpaqueCube(x, y, z))
+    if (world.getBlock(x, y, z).isOpaqueCube())
     {
       return
     }
@@ -68,7 +68,7 @@ object RenderBlockUtility
   def tessellateFace(renderBlocks: RenderBlocks, access: IBlockAccess, x: Int, y: Int, z: Int, block: Block, overrideTexture: IIcon, side: Int)
   {
     val tessellator = Tessellator.instance
-    val useTexture: IIcon = if (overrideTexture != null) overrideTexture else block.getBlockTexture(access, x, y, z, side)
+    val useTexture: IIcon = if (overrideTexture != null) overrideTexture else block.getIcon(access, x, y, z, side)
 
     if (side == 0)
     {

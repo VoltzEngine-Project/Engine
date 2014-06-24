@@ -23,7 +23,7 @@ object TooltipUtility
 {
   protected val cache = mutable.Map.empty[ItemStack, Iterable[(ItemStack, Double)]]
 
-  cache += li.cil.oc.Items.ironNugget.createItemStack() -> Iterable((new ItemStack(Items.iron_ingot), 1.0 / 9.0))
+ // cache += li.cil.oc.Items.ironNugget.createItemStack() -> Iterable((new ItemStack(Items.iron_ingot), 1.0 / 9.0))
 
   def terminate(item: Item, meta: Int = 0) = cache += new ItemStack(item, 1, meta) -> mutable.Iterable((new ItemStack(item, 1, meta), 1))
 
