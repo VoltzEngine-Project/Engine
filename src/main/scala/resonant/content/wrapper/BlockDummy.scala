@@ -1,18 +1,18 @@
-package resonant.lib.content.module
-
+package resonant.content.wrapper
 import java.util.{ArrayList, List, Random}
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.{Block, ITileEntityProvider}
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
 import resonant.content.spatial.block.SpatialBlock
+import resonant.content.wrapper.BlockRenderHandler
 import resonant.lib.util.inventory.InventoryUtility
 import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.Vector3
@@ -62,7 +62,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     }
   }
 
-  def eject
+  def eject()
   {
     dummyTile.world(null)
     dummyTile.xCoord = 0
@@ -249,12 +249,14 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     return dummyTile.normalRender
   }
 
-  @SideOnly(Side.CLIENT) override def getRenderType: Int =
+  @SideOnly(Side.CLIENT)
+  override def getRenderType: Int =
   {
-    return BlockRenderingHandler.ID
+    return BlockRenderHandler.ID
   }
 
-  @SideOnly(Side.CLIENT) override def getIcon(access: IBlockAccess, x: Int, y: Int, z: Int, side: Int): IIcon =
+  @SideOnly(Side.CLIENT)
+  override def getIcon(access: IBlockAccess, x: Int, y: Int, z: Int, side: Int): IIcon =
   {
     inject(access, x, y, z)
     val value: IIcon = getTile(access, x, y, z).getIcon(access, side)
@@ -276,7 +278,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   {
     inject(world, x, y, z)
     val value: ItemStack = getTile(world, x, y, z).getPickBlock(target)
-    eject
+    eject()
     return value
   }
 
@@ -284,7 +286,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   {
     inject(world, x, y, z)
     val value: ArrayList[ItemStack] = getTile(world, x, y, z).getDrops(metadata, fortune)
-    eject
+    eject()
     return if (value != null) value else new ArrayList[ItemStack]
   }
 
@@ -296,9 +298,9 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     }
   }
 
-  override def getSubBlocks(item: Item, createiveTabs: CreativeTabs, list: List[_])
+  override def getSubBlocks(item: Item, creativeTabs: CreativeTabs, list: List[_])
   {
-    dummyTile.getSubBlocks(item, createiveTabs, list)
+    dummyTile.getSubBlocks(item, creativeTabs, list)
   }
 
   /**

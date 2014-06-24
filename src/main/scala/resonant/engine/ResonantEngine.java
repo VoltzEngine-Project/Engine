@@ -31,7 +31,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Level;
 import resonant.api.IBoilHandler;
-import resonant.content.ContentRegistry;
+import resonant.content.ModManager;
 import resonant.engine.content.*;
 import resonant.engine.content.debug.BlockCreativeBuilder;
 import resonant.engine.content.tool.ToolMode;
@@ -79,7 +79,7 @@ import java.util.Arrays;
 @Mod(modid = References.NAME, name = References.NAME, version = References.VERSION, dependencies = "required-after:UniversalElectricity")
 public class ResonantEngine
 {
-	public static final ContentRegistry contentRegistry = new ContentRegistry(References.CONFIGURATION, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
+	public static final ModManager contentRegistry = new ModManager(References.CONFIGURATION, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 
 	@SidedProxy(clientSide = "resonant.core.ClientProxy", serverSide = "resonant.lib.prefab.ProxyBase")
 	public static ProxyBase proxy;

@@ -6,6 +6,7 @@ import java.util
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
@@ -14,7 +15,7 @@ import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
-import resonant.lib.content.module.BlockDummy
+import resonant.content.wrapper.BlockDummy
 import resonant.lib.content.prefab.{TIO, TRotatable}
 import resonant.lib.prefab.item.ItemBlockTooltip
 import resonant.lib.util.{LanguageUtility, WrenchUtility}
@@ -265,9 +266,9 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
     return false
   }
 
-  def getSubBlocks(item: Item, creativeTabs: CreativeTabs, list: List[_])
+  def getSubBlocks(item: Item, creativeTabs: CreativeTabs, list: util.List[_])
   {
-    def add[T](list: _root_.java.util.List[T], value: Any) = list.add(value.asInstanceOf[T])
+    def add[T](list: util.List[T], value: Any) = list.add(value.asInstanceOf[T])
     add(list, new ItemStack(item))
   }
 
@@ -463,11 +464,10 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   /**
    * Render the static, unmoving faces of this part into the world renderer.
    * The Tessellator is already drawing.
-   * @param pass The render pass, 1 or 0
    * @return true if vertices were added to the tessellator
    */
   @SideOnly(Side.CLIENT)
-  def renderStatic(pos: Vector3, pass: Int) = false
+  def renderStatic(renderer: RenderBlocks, pos: Vector3) = false
 
   /**
    * Render the dynamic, changing faces of this part and other gfx as in a TESR.
@@ -483,7 +483,7 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   }
 
   @SideOnly(Side.CLIENT)
-  def renderItem(itemStack: ItemStack)
+  def renderInventory(itemStack: ItemStack)
   {
 
   }

@@ -1,5 +1,7 @@
 package resonant.content.wrapper
 
+import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
 import resonant.content.component.render.RenderDynamic
 import resonant.content.spatial.block.SpatialBlock

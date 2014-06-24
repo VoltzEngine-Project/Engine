@@ -6,9 +6,12 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
+import resonant.content.component.render.ISimpleItemRenderer;
 import resonant.content.spatial.block.SpatialBlock;
 import resonant.content.wrapper.BlockDummy;
+import resonant.content.wrapper.ItemRenderHandler;
 import resonant.lib.util.LanguageUtility;
 
 import java.util.Map.Entry;
@@ -19,7 +22,7 @@ import java.util.WeakHashMap;
  *
  * @author DarkGuardsman, Calclavia
  */
-public class ContentRegistry
+public class ModManager
 {
 	@SidedProxy(clientSide = "resonant.content.ClientRegistryProxy", serverSide = "resonant.content.CommonRegistryProxy")
 	public static CommonRegistryProxy proxy;
@@ -37,19 +40,19 @@ public class ContentRegistry
 	 */
 	private int packetID = 0;
 
-	public ContentRegistry(Configuration config, String modID)
+	public ModManager(Configuration config, String modID)
 	{
 		this.config = config;
 		this.modID = modID;
 	}
 
-	public ContentRegistry setPrefix(String modPrefix)
+	public ModManager setPrefix(String modPrefix)
 	{
 		this.modPrefix = modPrefix;
 		return this;
 	}
 
-	public ContentRegistry setTab(CreativeTabs defaultTab)
+	public ModManager setTab(CreativeTabs defaultTab)
 	{
 		this.defaultTab = defaultTab;
 		return this;
@@ -78,6 +81,11 @@ public class ContentRegistry
 
 			tileBlock.onInstantiate();
 
+			if (tileBlock instanceof ISimpleItemRenderer)
+			{
+				ItemRenderHandler.register(new ItemStack(block).getItem(), (ISimpleItemRenderer) tileBlock);
+			}
+
 			if (tileBlock.tile() != null)
 			{
 				proxy.registerTileEntity(name, tileBlock.tile().getClass());
@@ -92,10 +100,8 @@ public class ContentRegistry
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeException("SpatialBlock [" + tileBlockClass.getSimpleName() + "] failed to be created:", e);
+			throw new RuntimeException("Block [" + tileBlockClass.getSimpleName() + "] failed to be created:", e);
 		}
-
-		return null;
 	}
 	/**
 	 @Deprecated public Block createBlock(Class<? extends Block> blockClass)
@@ -227,12 +233,7 @@ public class ContentRegistry
 
 	public Item newItem(Class<? extends Item> clazz)
 	{
-		return newItem(LanguageUtility.decapitalizeFirst(clazz.getSimpleName().replace("Item", "")), clazz, true);
-	}
-
-	public Item newItem(String name, Class<? extends Item> clazz)
-	{
-		return newItem(name, clazz, false);
+		return newItem(LanguageUtility.decapitalizeFirst(clazz.getSimpleName().replace("Item", "")), clazz);
 	}
 
 	/**
@@ -241,47 +242,42 @@ public class ContentRegistry
 	 *
 	 * @param name       - name to register the item with //@param modid - mods that the item comes from
 	 * @param clazz      - item class
-	 * @param canDisable - can a user disable this item
 	 * @return the new item
 	 */
-	public Item newItem(String name, Class<? extends Item> clazz, boolean canDisable)
+	public Item newItem(String name, Class<? extends Item> clazz)
 	{
-		Item item = null;
 
-		if (clazz != null && (!canDisable || (canDisable && config.get("Enabled_List", "Enabled_" + name, true).getBoolean(true))))
+		try
 		{
-			try
-			{
-				Item item = clazz.getConstructor().newInstance();
+			Item item = clazz.getConstructor().newInstance();
 
-				if (item != null)
+			if (item != null)
+			{
+				if (modPrefix != null)
 				{
-					if (modPrefix != null)
+					item.setUnlocalizedName(modPrefix + name);
+
+					if (ReflectionHelper.getPrivateValue(Item.class, item, "iconString", "field_111218_cA") == null)
 					{
-						item.setUnlocalizedName(modPrefix + name);
-
-						if (ReflectionHelper.getPrivateValue(Item.class, item, "iconString", "field_111218_cA") == null)
-						{
-							item.setTextureName(modPrefix + name);
-						}
+						item.setTextureName(modPrefix + name);
 					}
-
-					if (defaultTab != null)
-					{
-						item.setCreativeTab(defaultTab);
-					}
-
-					items.put(item, name);
-					GameRegistry.registerItem(item, name, modID);
 				}
-				return item;
+
+				if (defaultTab != null)
+				{
+					item.setCreativeTab(defaultTab);
+				}
+
+				items.put(item, name);
+				GameRegistry.registerItem(item, name, modID);
 			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				throw new RuntimeException("Item [" + name + "] failed to be created: " + e.getLocalizedMessage(), e.fillInStackTrace());
-			}
+
+			return item;
 		}
-		return null;
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException("Item [" + name + "] failed to be created: " + e.getLocalizedMessage(), e.fillInStackTrace());
+		}
 	}
 }

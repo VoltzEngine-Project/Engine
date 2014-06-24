@@ -1,32 +1,22 @@
 package resonant.content.wrapper
 
-import cpw.mods.fml.client.registry.{RenderingRegistry, ISimpleBlockRenderingHandler}
+import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
 import net.minecraft.block.Block
-import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.item.ItemStack
 import net.minecraft.world.IBlockAccess
 import org.lwjgl.opengl.GL11._
-import resonant.content.component.render.{RenderItem, RenderStatic}
-import resonant.lib.content.module.BlockDummy
+import org.lwjgl.opengl.GL12._
 import universalelectricity.core.transform.vector.Vector3
 
-class BlockRenderingHandler extends ISimpleBlockRenderingHandler
+object BlockRenderHandler
 {
   val ID = RenderingRegistry.getNextAvailableRenderId()
+}
 
-  def getTileEntityForBlock(block: Nothing): Nothing =
-  {
-    var te: Nothing = inventoryTileEntities.get(block)
-    if (te == null)
-    {
-      te = block.createTileEntity(Minecraft.getMinecraft.thePlayer.getEntityWorld, 0)
-      inventoryTileEntities.put(block, te)
-    }
-    return te
-  }
-
-  def renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: Nothing)
+class BlockRenderHandler extends ISimpleBlockRenderingHandler
+{
+  def renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks)
   {
     if (block.isInstanceOf[BlockDummy])
     {
@@ -36,7 +26,7 @@ class BlockRenderingHandler extends ISimpleBlockRenderingHandler
       glPushAttrib(GL_TEXTURE_BIT)
       glPushMatrix
       glTranslated(-0.5, -0.5, -0.5)
-      tile.components.get(classOf[RenderItem]).foreach(_.renderItem(new ItemStack(block, 1, metadata)))
+      tile.renderInventory(new ItemStack(block, 1, metadata))
       glPopMatrix
       glPopAttrib
     }
@@ -52,7 +42,7 @@ class BlockRenderingHandler extends ISimpleBlockRenderingHandler
 
       if (tile != null)
       {
-        tile.components.get(classOf[RenderStatic]).foreach(_.renderStatic(access, block, renderer, new Vector3(x, y, z)))
+        tile.renderStatic(renderer, new Vector3(x, y, z));
       }
 
       return true
@@ -60,13 +50,8 @@ class BlockRenderingHandler extends ISimpleBlockRenderingHandler
     return false
   }
 
-  def shouldRender3DInInventory: Boolean =
-  {
-    return true
-  }
+  def shouldRender3DInInventory = true
 
-  def getRenderId: Int =
-  {
-    return ID
-  }
+  def getRenderId = BlockRenderHandler.ID
+
 }
