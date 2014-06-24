@@ -8,7 +8,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import resonant.content.component.render.ISimpleItemRenderer;
+import resonant.content.prefab.scala.render.ISimpleItemRenderer;
 import resonant.content.spatial.block.SpatialBlock;
 import resonant.content.wrapper.BlockDummy;
 import resonant.content.wrapper.ItemRenderHandler;

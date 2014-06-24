@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
-import resonant.content.component.render.ISimpleItemRenderer;
+import resonant.content.prefab.scala.render.ISimpleItemRenderer;
 
 import java.util.HashMap;
 

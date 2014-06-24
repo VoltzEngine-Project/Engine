@@ -42,7 +42,7 @@ class BlockRenderHandler extends ISimpleBlockRenderingHandler
 
       if (tile != null)
       {
-        tile.renderStatic(renderer, new Vector3(x, y, z));
+        tile.renderStatic(renderer, new Vector3(x, y, z), 0);
       }
 
       return true

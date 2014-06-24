@@ -2,7 +2,9 @@ package resonant.lib.util.render
 
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.{OpenGlHelper, RenderBlocks, Tessellator}
+import net.minecraft.util.IIcon
 import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.common.util.ForgeDirection
 import org.lwjgl.opengl.GL11
 import resonant.lib.render.RenderUtility
 import resonant.lib.util.{RotationUtility, WorldUtility}
@@ -25,11 +27,11 @@ object RenderBlockUtility
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var11 * scale, var12 * scale)
   }
 
-  def tessellateFace(renderBlocks: RenderBlocks, block: Block, overrideTexture: Icon, side: Int)
+  def tessellateFace(renderBlocks: RenderBlocks, block: Block, overrideTexture: IIcon, side: Int)
   {
     val tessellator = Tessellator.instance
     val meta = 0
-    val useTexture: Icon = if (overrideTexture != null) overrideTexture else block.getIcon(side, meta)
+    val useTexture: IIcon = if (overrideTexture != null) overrideTexture else block.getIcon(side, meta)
 
     if (side == 0)
     {
@@ -63,10 +65,10 @@ object RenderBlockUtility
     }
   }
 
-  def tessellateFace(renderBlocks: RenderBlocks, access: IBlockAccess, x: Int, y: Int, z: Int, block: Block, overrideTexture: Icon, side: Int)
+  def tessellateFace(renderBlocks: RenderBlocks, access: IBlockAccess, x: Int, y: Int, z: Int, block: Block, overrideTexture: IIcon, side: Int)
   {
     val tessellator = Tessellator.instance
-    val useTexture: Icon = if (overrideTexture != null) overrideTexture else block.getBlockTexture(access, x, y, z, side)
+    val useTexture: IIcon = if (overrideTexture != null) overrideTexture else block.getBlockTexture(access, x, y, z, side)
 
     if (side == 0)
     {
@@ -104,12 +106,12 @@ object RenderBlockUtility
    * Renders a connected texture block with a bitmask
    * @param sideMap - The sides that are connected
    */
-  def tessellateBlockWithConnectedTextures(sideMap: Byte, blockAccess: IBlockAccess, x: Int, y: Int, z: Int, block: Block, faceOverride: Icon, edgeOverride: Icon)
+  def tessellateBlockWithConnectedTextures(sideMap: Byte, blockAccess: IBlockAccess, x: Int, y: Int, z: Int, block: Block, faceOverride: IIcon, edgeOverride: IIcon)
   {
     tessellateBlockWithConnectedTextures(sideMap, RenderUtility.renderBlocks, blockAccess, x, y, z, block, faceOverride, edgeOverride)
   }
 
-  def tessellateBlockWithConnectedTextures(sideMap: Byte, renderBlocks: RenderBlocks, blockAccess: IBlockAccess, x: Int, y: Int, z: Int, block: Block, faceOverride: Icon, edgeOverride: Icon)
+  def tessellateBlockWithConnectedTextures(sideMap: Byte, renderBlocks: RenderBlocks, blockAccess: IBlockAccess, x: Int, y: Int, z: Int, block: Block, faceOverride: IIcon, edgeOverride: IIcon)
   {
     renderBlocks.blockAccess = blockAccess
 
@@ -140,7 +142,7 @@ object RenderBlockUtility
   /**
    * For rendering items.
    */
-  def tessellateBlockWithConnectedTextures(metadata: Int, block: Block, faceOverride: Icon, edgeOverride: Icon)
+  def tessellateBlockWithConnectedTextures(metadata: Int, block: Block, faceOverride: IIcon, edgeOverride: IIcon)
   {
     GL11.glPushMatrix()
     val renderBlocks = RenderUtility.renderBlocks

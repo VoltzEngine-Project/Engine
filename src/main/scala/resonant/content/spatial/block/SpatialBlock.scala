@@ -15,9 +15,11 @@ import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
+import org.lwjgl.opengl.GL11._
 import resonant.content.wrapper.BlockDummy
 import resonant.lib.content.prefab.{TIO, TRotatable}
 import resonant.lib.prefab.item.ItemBlockTooltip
+import resonant.lib.render.RenderUtility
 import resonant.lib.util.{LanguageUtility, WrenchUtility}
 import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.{Vector2, Vector3, VectorWorld}
@@ -467,7 +469,11 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
    * @return true if vertices were added to the tessellator
    */
   @SideOnly(Side.CLIENT)
-  def renderStatic(renderer: RenderBlocks, pos: Vector3) = false
+  def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
+  {
+    renderer.renderStandardBlock(block, position.xi, position.yi, position.zi)
+    return false
+  }
 
   /**
    * Render the dynamic, changing faces of this part and other gfx as in a TESR.
@@ -485,7 +491,8 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
   {
-
+    glTranslated(0.5, 0.5, 0.5)
+    RenderUtility.renderNormalBlockAsItem(itemStack.getItem().asInstanceOf[ItemBlock].field_150939_a, itemStack.getItemDamage(), RenderUtility.renderBlocks)
   }
 
   def shouldSideBeRendered(access: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Boolean =

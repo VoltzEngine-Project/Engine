@@ -1,4 +1,4 @@
-package resonant.content.component.render;
+package resonant.content.prefab.scala.render;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;

@@ -3,7 +3,6 @@ package resonant.content.wrapper
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
-import resonant.content.component.render.RenderDynamic
 import resonant.content.spatial.block.SpatialBlock
 import universalelectricity.core.transform.vector.Vector3
 
@@ -18,7 +17,7 @@ class RenderTileDummy extends TileEntitySpecialRenderer
     if (tile.isInstanceOf[SpatialBlock])
     {
       val spatial = tile.asInstanceOf[SpatialBlock]
-      spatial.components.get(classOf[RenderDynamic]).foreach(_.renderDynamic(new Vector3(x, y, z), false, f))
+      spatial.renderDynamic(new Vector3(x, y, z), f, 0)
     }
   }
 }

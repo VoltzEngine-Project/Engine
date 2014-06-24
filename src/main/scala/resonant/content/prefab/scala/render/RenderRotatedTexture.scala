@@ -1,8 +1,9 @@
-package resonant.content.component.render
+package resonant.content.prefab
 
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.content.spatial.block.SpatialTile
+import resonant.api.IRotatable
+import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.render.{RenderBlockAdvanced, RenderUtility}
 import resonant.lib.util.RotationUtility
 import universalelectricity.core.transform.vector.Vector3
@@ -11,16 +12,16 @@ import universalelectricity.core.transform.vector.Vector3
  * A rotated texture renderer applied to blocks capable of having rotated textured.
  * @author Calclavia
  */
-class RenderRotatedTexture(tile: SpatialTile) extends RenderStatic
+trait RenderRotatedTexture extends SpatialBlock with IRotatable
 {
   val renderBlocks = new RenderBlockAdvanced()
 
   override def renderStatic(renderer: RenderBlocks, position: Vector3)
   {
-    renderBlocks.setRenderBoundsFromBlock(tile.block)
-    renderBlocks.blockAccess = tile.access
+    renderBlocks.setRenderBoundsFromBlock(block)
+    renderBlocks.blockAccess = access
 
-    val targetDir = tile.getDirection;
+    val targetDir = getDirection()
 
     for (dir <- ForgeDirection.VALID_DIRECTIONS)
     {
