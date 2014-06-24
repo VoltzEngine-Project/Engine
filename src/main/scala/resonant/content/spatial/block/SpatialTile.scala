@@ -9,7 +9,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IPlayerUsing
 import resonant.engine.ResonantEngine
 import resonant.lib.network.PacketAnnotation
-import resonant.lib.util.LanguageUtility
+import resonant.lib.utility.LanguageUtility
 
 /**
  * All tiles inherit this class.

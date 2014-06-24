@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import resonant.lib.util.inventory.InventoryUtility;
-import resonant.lib.util.nbt.NBTUtility;
+import resonant.lib.utility.inventory.InventoryUtility;
+import resonant.lib.utility.nbt.NBTUtility;
 import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorWorld;
 

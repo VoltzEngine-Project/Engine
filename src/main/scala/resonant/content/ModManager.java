@@ -12,7 +12,7 @@ import resonant.content.prefab.scala.render.ISimpleItemRenderer;
 import resonant.content.spatial.block.SpatialBlock;
 import resonant.content.wrapper.BlockDummy;
 import resonant.content.wrapper.ItemRenderHandler;
-import resonant.lib.util.LanguageUtility;
+import resonant.lib.utility.LanguageUtility;
 
 import java.util.Map.Entry;
 import java.util.WeakHashMap;

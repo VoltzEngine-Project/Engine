@@ -2,7 +2,7 @@ package resonant.api;
 
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import resonant.lib.util.nbt.ISaveObj;
+import resonant.lib.utility.nbt.ISaveObj;
 
 /**
  * @author DarkGuardsman

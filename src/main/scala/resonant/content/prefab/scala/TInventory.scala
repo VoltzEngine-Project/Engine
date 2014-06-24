@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.{IExternalInventory, IInventoryProvider}
 import resonant.content.spatial.block.SpatialBlock
-import resonant.lib.util.inventory.{ExternalInventory, InventoryUtility}
+import resonant.lib.utility.inventory.{ExternalInventory, InventoryUtility}
 import universalelectricity.core.transform.vector.Vector3
 
 /**

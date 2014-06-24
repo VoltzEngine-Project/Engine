@@ -5,10 +5,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import resonant.lib.util.LanguageUtility;
-import resonant.lib.util.nbt.IVirtualObject;
-import resonant.lib.util.nbt.NBTUtility;
-import resonant.lib.util.nbt.SaveManager;
+import resonant.lib.utility.LanguageUtility;
+import resonant.lib.utility.nbt.IVirtualObject;
+import resonant.lib.utility.nbt.NBTUtility;
+import resonant.lib.utility.nbt.SaveManager;
 
 import java.io.File;
 import java.util.*;

@@ -5,7 +5,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IRotatable
 import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.render.{RenderBlockAdvanced, RenderUtility}
-import resonant.lib.util.RotationUtility
+import resonant.lib.utility.RotationUtility
 import universalelectricity.core.transform.vector.Vector3
 
 /**
@@ -16,7 +16,7 @@ trait RenderRotatedTexture extends SpatialBlock with IRotatable
 {
   val renderBlocks = new RenderBlockAdvanced()
 
-  override def renderStatic(renderer: RenderBlocks, position: Vector3)
+  override def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
   {
     renderBlocks.setRenderBoundsFromBlock(block)
     renderBlocks.blockAccess = access
@@ -39,6 +39,8 @@ trait RenderRotatedTexture extends SpatialBlock with IRotatable
         renderBlocks.renderStandardBlock(tile.block, position.xi, position.yi, position.zi)
       }
     }
+
+    return true
   }
 
 }

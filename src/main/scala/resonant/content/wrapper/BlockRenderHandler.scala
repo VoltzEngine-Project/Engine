@@ -42,16 +42,14 @@ class BlockRenderHandler extends ISimpleBlockRenderingHandler
 
       if (tile != null)
       {
-        tile.renderStatic(renderer, new Vector3(x, y, z), 0);
+        return tile.renderStatic(renderer, new Vector3(x, y, z), 0);
       }
-
-      return true
     }
     return false
   }
 
-  def shouldRender3DInInventory = true
+  def shouldRender3DInInventory(modelId: Int) = true
 
-  def getRenderId = BlockRenderHandler.ID
+  def getRenderId() = BlockRenderHandler.ID
 
 }

@@ -14,7 +14,7 @@ class TileInfiniteEnergy(mat: Material) extends TileElectricStorage(mat)
   energy.setMaxExtract(Double.MaxValue)
   ioMap = 728
 
-  override def updateEntity()
+  override def update()
   {
     super.updateEntity()
     energy.setEnergy(Double.MaxValue)

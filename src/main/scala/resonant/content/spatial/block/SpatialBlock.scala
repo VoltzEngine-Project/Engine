@@ -20,7 +20,7 @@ import resonant.content.wrapper.BlockDummy
 import resonant.lib.content.prefab.{TIO, TRotatable}
 import resonant.lib.prefab.item.ItemBlockTooltip
 import resonant.lib.render.RenderUtility
-import resonant.lib.util.{LanguageUtility, WrenchUtility}
+import resonant.lib.utility.{LanguageUtility, WrenchUtility}
 import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.{Vector2, Vector3, VectorWorld}
 
@@ -130,11 +130,6 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
    */
   var textureName: String = name
   var domain: String = null
-  /**
-   * Rotation
-   */
-  protected var rotationMask: Byte = Integer.parseInt("111100", 2).toByte
-  protected var isFlipPlacement: Boolean = false
 
   def this(newMaterial: Material) = this(LanguageUtility.decapitalizeFirst(getClass.getSimpleName.replaceFirst("Tile", "")), newMaterial)
 
@@ -471,8 +466,7 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   @SideOnly(Side.CLIENT)
   def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
   {
-    renderer.renderStandardBlock(block, position.xi, position.yi, position.zi)
-    return false
+    return renderer.renderStandardBlock(block, position.xi, position.yi, position.zi)
   }
 
   /**

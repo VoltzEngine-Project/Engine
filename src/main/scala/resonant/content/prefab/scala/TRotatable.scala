@@ -9,7 +9,8 @@ import universalelectricity.core.transform.vector.Vector3
 
 trait TRotatable extends SpatialBlock with IRotatable
 {
-  protected var rotationMask: Byte = 0x3C
+  protected var rotationMask = Integer.parseInt("111100", 2).toByte
+  protected var isFlipPlacement = false
 
   override def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata())
 

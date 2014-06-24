@@ -10,7 +10,7 @@ import resonant.api.recipe.IFluidRecipeCrafter;
 import resonant.lib.prefab.fluid.FluidRecipeInfo.SimpleFluidRecipe;
 import resonant.lib.type.Pair;
 import resonant.lib.type.Triple;
-import resonant.lib.util.FluidUtility;
+import resonant.lib.utility.FluidUtility;
 
 import java.util.ArrayList;
 import java.util.HashMap;

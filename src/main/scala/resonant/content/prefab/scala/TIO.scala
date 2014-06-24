@@ -1,12 +1,16 @@
 package resonant.lib.content.prefab
 
+import _root_.java.util
+
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ChatComponentText
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IIO
 import resonant.content.spatial.block.SpatialBlock
-import resonant.lib.util.nbt.ISaveObj
+import resonant.lib.utility.nbt.ISaveObj
+
+import scala.collection.convert.wrapAll._
 
 /**
  * A Trait that handles IO Traits
@@ -46,9 +50,9 @@ trait TIO extends SpatialBlock with IIO with ISaveObj
    * @return The direction that electricity is entered into the tile. Return null for no input. By
    *         default you can accept power from all sides.
    */
-  def getInputDirections: Set[ForgeDirection] =
+  override def getInputDirections(): util.HashSet[ForgeDirection] =
   {
-    var dirs = Set[ForgeDirection]()
+    var dirs = new util.HashSet[ForgeDirection]()
 
     for (direction <- ForgeDirection.VALID_DIRECTIONS)
     {
@@ -67,9 +71,9 @@ trait TIO extends SpatialBlock with IIO with ISaveObj
    * @return The direction that electricity is output from the tile. Return null for no output. By
    *         default it will return an empty EnumSet.
    */
-  def getOutputDirections: Set[ForgeDirection] =
+  override def getOutputDirections(): util.HashSet[ForgeDirection] =
   {
-    var dirs = Set[ForgeDirection]()
+    var dirs = new util.HashSet[ForgeDirection]()
 
     for (direction <- ForgeDirection.VALID_DIRECTIONS)
     {
@@ -82,7 +86,7 @@ trait TIO extends SpatialBlock with IIO with ISaveObj
     return dirs
   }
 
-  def setIO(dir: ForgeDirection, `type`: Int)
+  override def setIO(dir: ForgeDirection, `type`: Int)
   {
     val currentIO: String = getIOMapBase3
     val str: StringBuilder = new StringBuilder(currentIO)
@@ -90,7 +94,7 @@ trait TIO extends SpatialBlock with IIO with ISaveObj
     this.ioMap = Integer.parseInt(str.toString, 3).toShort
   }
 
-  def getIO(dir: ForgeDirection): Int =
+  override def getIO(dir: ForgeDirection): Int =
   {
     val currentIO: String = getIOMapBase3
     return Integer.parseInt("" + currentIO.charAt(dir.ordinal))

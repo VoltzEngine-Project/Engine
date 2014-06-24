@@ -3,7 +3,7 @@ package resonant.lib.content.prefab.java
 import net.minecraft.block.material.Material
 import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.content.prefab.TRotatable
-import resonant.lib.util.LanguageUtility
+import resonant.lib.utility.LanguageUtility
 
 /**
  * @since 27/05/14

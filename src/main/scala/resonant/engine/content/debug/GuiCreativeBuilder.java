@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import resonant.engine.References;
 import resonant.lib.gui.GuiContainerBase;
-import resonant.lib.util.LanguageUtility;
+import resonant.lib.utility.LanguageUtility;
 import universalelectricity.api.vector.Vector3;
 
 public class GuiCreativeBuilder extends GuiContainerBase

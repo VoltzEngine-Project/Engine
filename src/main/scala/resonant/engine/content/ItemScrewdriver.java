@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import resonant.engine.content.tool.ToolMode;
-import resonant.lib.util.LanguageUtility;
-import resonant.lib.util.nbt.NBTUtility;
+import resonant.lib.utility.LanguageUtility;
+import resonant.lib.utility.nbt.NBTUtility;
 
 import java.util.List;
 

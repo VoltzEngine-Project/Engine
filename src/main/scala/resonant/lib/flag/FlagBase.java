@@ -1,7 +1,7 @@
 package resonant.lib.flag;
 
 import net.minecraft.nbt.NBTTagCompound;
-import resonant.lib.util.nbt.ISaveObj;
+import resonant.lib.utility.nbt.ISaveObj;
 
 /**
  * @author Calclavia

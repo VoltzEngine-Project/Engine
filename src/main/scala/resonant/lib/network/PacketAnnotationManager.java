@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidTank;
 import resonant.engine.References;
 import resonant.engine.ResonantEngine;
-import resonant.lib.util.nbt.ISaveObj;
+import resonant.lib.utility.nbt.ISaveObj;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.lang.reflect.Field;

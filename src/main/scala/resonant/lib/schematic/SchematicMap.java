@@ -9,8 +9,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.lib.type.Pair;
-import resonant.lib.util.nbt.ISaveObj;
-import resonant.lib.util.nbt.NBTUtility;
+import resonant.lib.utility.nbt.ISaveObj;
+import resonant.lib.utility.nbt.NBTUtility;
 import universalelectricity.core.transform.vector.Vector3;
 import universalelectricity.core.transform.vector.VectorWorld;
 

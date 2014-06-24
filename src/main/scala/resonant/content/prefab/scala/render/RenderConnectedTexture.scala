@@ -1,14 +1,12 @@
 package resonant.content.prefab
 
-import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.item.ItemStack
-import net.minecraft.util.IIcon
 import net.minecraftforge.common.util.ForgeDirection
-import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL11._
 import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.render.RenderUtility
-import resonant.lib.util.WorldUtility
-import resonant.lib.util.render.RenderBlockUtility
+import resonant.lib.utility.WorldUtility
+import resonant.lib.utility.render.RenderBlockUtility
 import universalelectricity.core.transform.vector.Vector3
 
 /**
@@ -19,16 +17,15 @@ trait RenderConnectedTexture extends SpatialBlock
 {
   val edgeTexture: String
 
-  override def renderItem(itemStack: ItemStack): Boolean =
+  override def renderInventory(itemStack: ItemStack)
   {
-    GL11.glPushMatrix()
-    GL11.glTranslated(0.5, 0.5, 0.5)
+    glPushMatrix()
+    glTranslated(0.5, 0.5, 0.5)
     RenderBlockUtility.tessellateBlockWithConnectedTextures(itemStack.getItemDamage(), tile.block, null, RenderUtility.getIcon(edgeTexture))
-    GL11.glPopMatrix()
-    return true
+    glPopMatrix()
   }
 
-  override def renderStatic(renderer: RenderBlocks, position: Vector3): Boolean =
+  override def renderDynamic(pos: Vector3, frame: Float, pass: Int)
   {
     var sideMap: Byte = 0
 
@@ -44,6 +41,5 @@ trait RenderConnectedTexture extends SpatialBlock
     }
 
     RenderBlockUtility.tessellateBlockWithConnectedTextures(sideMap, world, x, y, z, tile.getBlockType, null, RenderUtility.getIcon(edgeTexture))
-    return true
   }
 }

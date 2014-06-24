@@ -17,8 +17,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
-import resonant.lib.util.LanguageUtility;
-import resonant.lib.util.WorldUtility;
+import resonant.lib.utility.LanguageUtility;
+import resonant.lib.utility.WorldUtility;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.EnumSet;
