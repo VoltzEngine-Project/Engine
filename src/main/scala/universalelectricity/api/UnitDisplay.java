@@ -1,8 +1,11 @@
 package universalelectricity.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * An easy way to display information on electricity for the client.
- * 
+ *
  * @author Calclavia
  */
 public class UnitDisplay
@@ -11,16 +14,24 @@ public class UnitDisplay
 	 * Universal Electricity's units are in KILOJOULES, KILOWATTS and KILOVOLTS. Try to make your
 	 * energy ratio as close to real life as possible.
 	 */
-	public static enum Unit
+	public static class Unit
 	{
-		AMPERE("Amp", "I"), AMP_HOUR("Amp Hour", "Ah"), VOLTAGE("Volt", "V"), WATT("Watt", "W"),
-		WATT_HOUR("Watt Hour", "Wh"), RESISTANCE("Ohm", "R"), CONDUCTANCE("Siemen", "S"),
-		JOULES("Joule", "J"), LITER("Liter", "L"), NEWTON_METER("Newton Meter", "Nm"),
-		REDFLUX("Redstone-Flux", "Rf"), MINECRAFT_JOULES("Minecraft-Joules", "Mj"),
-		ELECTRICAL_UNITS("Electrical-Units", "Eu");
+		public static final Unit AMPERE = new Unit("Amp", "I");
+		public static final Unit AMP_HOUR = new Unit("Amp Hour", "Ah");
+		public static final Unit VOLTAGE = new Unit("Volt", "V");
+		public static final Unit WATT = new Unit("Watt", "W");
+		public static final Unit WATT_HOUR = new Unit("Watt Hour", "Wh");
+		public static final Unit RESISTANCE = new Unit("Ohm", "R");
+		public static final Unit CONDUCTANCE = new Unit("Siemen", "S");
+		public static final Unit JOULES = new Unit("Joule", "J");
+		public static final Unit LITER = new Unit("Liter", "L");
+		public static final Unit NEWTON_METER = new Unit("Newton Meter", "Nm");
+		public static final Unit REDFLUX = new Unit("Redstone-Flux", "Rf");
+		public static final Unit MINECRAFT_JOULES = new Unit("Minecraft-Joules", "Mj");
+		public static final Unit ELECTRICAL_UNITS = new Unit("Electrical-Units", "Eu");
 
-		public String name;
-		public String symbol;
+		public final String name;
+		public final String symbol;
 
 		private Unit(String name, String symbol)
 		{
@@ -34,27 +45,44 @@ public class UnitDisplay
 		}
 	}
 
-	/** Metric system of measurement. */
-	public static enum UnitPrefix
+	/**
+	 * Metric system of measurement.
+	 */
+	public static class UnitPrefix
 	{
-		MICRO("Micro", "u", 0.000001), MILLI("Milli", "m", 0.001), BASE("", "", 1),
-		KILO("Kilo", "k", 1000), MEGA("Mega", "M", 1000000), GIGA("Giga", "G", 1000000000),
-		TERA("Tera", "T", 1000000000000d), PETA("Peta", "P", 1000000000000000d),
-		EXA("Exa", "E", 1000000000000000000d), ZETTA("Zetta", "Z", 1000000000000000000000d),
-		YOTTA("Yotta", "Y", 1000000000000000000000000d);
+		public static final UnitPrefix MICRO = new UnitPrefix("Micro", "u", 0.000001);
+		public static final UnitPrefix MILLI = new UnitPrefix("Milli", "m", 0.001);
+		public static final UnitPrefix BASE = new UnitPrefix("", "", 1);
+		public static final UnitPrefix KILO = new UnitPrefix("Kilo", "k", 1000);
+		public static final UnitPrefix MEGA = new UnitPrefix("Mega", "M", 1000000);
+		public static final UnitPrefix GIGA = new UnitPrefix("Giga", "G", 1000000000);
+		public static final UnitPrefix TERA = new UnitPrefix("Tera", "T", 1000000000000d);
+		public static final UnitPrefix PETA = new UnitPrefix("Peta", "P", 1000000000000000d);
+		public static final UnitPrefix EXA = new UnitPrefix("Exa", "E", 1000000000000000000d);
+		public static final UnitPrefix ZETTA = new UnitPrefix("Zetta", "Z", 1000000000000000000000d);
+		public static final UnitPrefix YOTTA = new UnitPrefix("Yotta", "Y", 1000000000000000000000000d);
 
-		/** long name for the unit */
-		public String name;
-		/** short unit version of the unit */
-		public String symbol;
-		/** Point by which a number is consider to be of this unit */
-		public double value;
+		/**
+		 * long name for the unit
+		 */
+		public final String name;
+		/**
+		 * short unit version of the unit
+		 */
+		public final String symbol;
+		/**
+		 * Point by which a number is consider to be of this unit
+		 */
+		public final double value;
+
+		public static final List<UnitPrefix> unitPrefixes = new ArrayList();
 
 		private UnitPrefix(String name, String symbol, double value)
 		{
 			this.name = name;
 			this.symbol = symbol;
 			this.value = value;
+			unitPrefixes.add(this);
 		}
 
 		public String getName(boolean getShort)
@@ -69,39 +97,97 @@ public class UnitDisplay
 			}
 		}
 
-		/** Divides the value by the unit value start */
+		/**
+		 * Divides the value by the unit value start
+		 */
 		public double process(double value)
 		{
 			return value / this.value;
 		}
 
-		/** Checks if a value is above the unit value start */
+		/**
+		 * Checks if a value is above the unit value start
+		 */
 		public boolean isAbove(double value)
 		{
 			return value > this.value;
 		}
 
-		/** Checks if a value is lower than the unit value start */
+		/**
+		 * Checks if a value is lower than the unit value start
+		 */
 		public boolean isBellow(double value)
 		{
 			return value < this.value;
 		}
 	}
 
-	public static String getDisplay(double value, Unit unit, int decimalPlaces, boolean isShort)
+	public Unit unit;
+	public double value;
+	public boolean useSymbol = false;
+	public int decimalPlaces = 2;
+	public boolean isSimple = false;
+
+	public UnitDisplay(Unit unit, double value)
 	{
-		return getDisplay(value, unit, decimalPlaces, isShort, 1);
+		this.unit = unit;
+		this.value = value;
 	}
 
-	/**
-	 * Displays the unit as text. Does handle negative numbers, and will place a negative sign in
-	 * front of the output string showing this. Use string.replace to remove the negative sign if
-	 * unwanted
-	 */
-	public static String getDisplay(double value, Unit unit, int decimalPlaces, boolean isShort, double multiplier)
+	public UnitDisplay multiply(double value)
+	{
+		this.value *= value;
+		return this;
+	}
+
+	public UnitDisplay simple()
+	{
+		isSimple = true;
+		return this;
+	}
+
+	public UnitDisplay symbol()
+	{
+		return symbol(true);
+	}
+
+	public UnitDisplay symbol(boolean useSymbol)
+	{
+		this.useSymbol = useSymbol;
+		return this;
+	}
+
+	public UnitDisplay decimal(int decimalPlaces)
+	{
+		this.decimalPlaces = decimalPlaces;
+		return this;
+	}
+
+	@Override
+	public String toString()
 	{
 		String unitName = unit.name;
 		String prefix = "";
+
+		if (isSimple)
+		{
+			if (value > 1)
+			{
+				if (decimalPlaces < 1)
+				{
+					return (int) value + " " + unit.getPlural();
+				}
+
+				return roundDecimals(value, decimalPlaces) + " " + unit.getPlural();
+			}
+
+			if (decimalPlaces < 1)
+			{
+				return (int) value + " " + unit.name;
+			}
+
+			return roundDecimals(value, decimalPlaces) + " " + unit.name;
+		}
 
 		if (value < 0)
 		{
@@ -109,9 +195,7 @@ public class UnitDisplay
 			prefix = "-";
 		}
 
-		value *= multiplier;
-
-		if (isShort)
+		if (useSymbol)
 		{
 			unitName = unit.symbol;
 		}
@@ -126,24 +210,24 @@ public class UnitDisplay
 		}
 		else
 		{
-			for (int i = 0; i < UnitPrefix.values().length; i++)
+			for (int i = 0; i < UnitPrefix.unitPrefixes.size(); i++)
 			{
-				UnitPrefix lowerMeasure = UnitPrefix.values()[i];
+				UnitPrefix lowerMeasure = UnitPrefix.unitPrefixes.get(i);
 
-				if (lowerMeasure.isBellow(value) && lowerMeasure.ordinal() == 0)
+				if (lowerMeasure.isBellow(value) && i == 0)
 				{
-					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(isShort) + unitName;
+					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(useSymbol) + unitName;
 				}
-				if (lowerMeasure.ordinal() + 1 >= UnitPrefix.values().length)
+				if (i + 1 >= UnitPrefix.unitPrefixes.size())
 				{
-					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(isShort) + unitName;
+					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(useSymbol) + unitName;
 				}
 
-				UnitPrefix upperMeasure = UnitPrefix.values()[i + 1];
+				UnitPrefix upperMeasure = UnitPrefix.unitPrefixes.get(i + 1);
 
 				if ((lowerMeasure.isAbove(value) && upperMeasure.isBellow(value)) || lowerMeasure.value == value)
 				{
-					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(isShort) + unitName;
+					return prefix + roundDecimals(lowerMeasure.process(value), decimalPlaces) + " " + lowerMeasure.getName(useSymbol) + unitName;
 				}
 			}
 		}
@@ -151,57 +235,9 @@ public class UnitDisplay
 		return prefix + roundDecimals(value, decimalPlaces) + " " + unitName;
 	}
 
-	public static String getDisplay(double value, Unit unit)
-	{
-		return getDisplay(value, unit, 2, false);
-	}
-
-	public static String getDisplay(double value, Unit unit, UnitPrefix prefix)
-	{
-		return getDisplay(value, unit, 2, false, prefix.value);
-	}
-
-	public static String getDisplayShort(double value, Unit unit)
-	{
-		return getDisplay(value, unit, 2, true);
-	}
-
-	/**
-	 * Gets a display for the value with a unit that is in the specific prefix.
-	 */
-	public static String getDisplayShort(double value, Unit unit, UnitPrefix prefix)
-	{
-		return getDisplay(value, unit, 2, true, prefix.value);
-	}
-
-	public static String getDisplayShort(double value, Unit unit, int decimalPlaces)
-	{
-		return getDisplay(value, unit, decimalPlaces, true);
-	}
-
-	public static String getDisplaySimple(double value, Unit unit, int decimalPlaces)
-	{
-		if (value > 1)
-		{
-			if (decimalPlaces < 1)
-			{
-				return (int) value + " " + unit.getPlural();
-			}
-
-			return roundDecimals(value, decimalPlaces) + " " + unit.getPlural();
-		}
-
-		if (decimalPlaces < 1)
-		{
-			return (int) value + " " + unit.name;
-		}
-
-		return roundDecimals(value, decimalPlaces) + " " + unit.name;
-	}
-
 	/**
 	 * Rounds a number to a specific number place places
-	 * 
+	 *
 	 * @param The number
 	 * @return The rounded number
 	 */

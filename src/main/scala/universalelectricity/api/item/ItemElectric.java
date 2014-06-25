@@ -49,7 +49,7 @@ public abstract class ItemElectric extends Item implements IEnergyItem
 			color = "\u00a76";
 		}
 
-		list.add(color + UnitDisplay.getDisplayShort(joules, Unit.JOULES) + "/" + UnitDisplay.getDisplayShort(getEnergyCapacity(itemStack), Unit.JOULES));
+		list.add(color + new UnitDisplay(Unit.JOULES, joules) + "/" + new UnitDisplay(Unit.JOULES, getEnergyCapacity(itemStack)).symbol());
 	}
 
 	/**
