@@ -31,7 +31,7 @@ trait TItemToolTip extends Item
     }
     if (Keyboard.isKeyDown(Keyboard.KEY_J))
     {
-      TooltipUtility.addTooltip(itemStack, list)
+      TooltipUtility.addTooltip(itemStack, list.asInstanceOf[util.List[String]])
     }
     else
     {

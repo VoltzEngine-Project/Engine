@@ -5,12 +5,6 @@ import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.content.prefab.TElectric
 import resonant.lib.utility.LanguageUtility
 
-/**
- * @since 27/05/14
- * @author tgame14
- */
-class TileElectric(name: String, material: Material) extends SpatialBlock(name, material) with TElectric
+class TileElectric(material: Material) extends SpatialBlock(material) with TElectric
 {
-  def this(newMaterial: Material) = this(LanguageUtility.decapitalizeFirst(getClass.getSimpleName.replaceFirst("Tile", "")), newMaterial)
-
 }

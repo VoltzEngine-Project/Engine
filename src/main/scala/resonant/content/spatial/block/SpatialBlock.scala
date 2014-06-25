@@ -16,18 +16,17 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
 import org.lwjgl.opengl.GL11._
+import resonant.content.prefab.itemblock.ItemBlockTooltip
 import resonant.content.wrapper.BlockDummy
 import resonant.lib.content.prefab.{TIO, TRotatable}
-import resonant.content.prefab.itemblock.ItemBlockTooltip
 import resonant.lib.render.RenderUtility
 import resonant.lib.utility.{LanguageUtility, WrenchUtility}
-import resonant.lib.wrapper.WrapList
+import resonant.lib.wrapper.WrapList._
 import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.{Vector2, Vector3, VectorWorld}
 
 import scala.collection.convert.wrapAll._
 import scala.collection.immutable
-import WrapList._
 
 /**
  * All blocks inherit this class.
@@ -35,7 +34,7 @@ import WrapList._
  * Note that a lot of the variables will not exist except on the primary instance of the Spatial Block,
  * hosted in BlockDummy.
  *
- * @author Calclavia
+ * @author - Calclavia
  */
 object SpatialBlock
 {
@@ -69,8 +68,9 @@ object SpatialBlock
 
 }
 
-abstract class SpatialBlock(val name: String, val material: Material) extends TileEntity
+abstract class SpatialBlock(val material: Material) extends TileEntity
 {
+  var name = LanguageUtility.decapitalizeFirst(this.getClass().getSimpleName().replaceFirst("Tile", ""))
   /**
    * The unique string ID of this block.
    */
@@ -133,10 +133,8 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   var textureName: String = name
   var domain: String = null
 
-  def this(newMaterial: Material) = this(LanguageUtility.decapitalizeFirst(getClass().getSimpleName().replaceFirst("Tile", "")), newMaterial)
-
   /**
-   * Called after the block is registred. Use this to add recipes.
+   * Called after the block is registered. Use this to add recipes.
    */
   def onInstantiate()
   {

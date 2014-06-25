@@ -90,7 +90,7 @@ public class LanguageUtility
 	public static List<String> splitStringPerWord(String string, int wordsPerLine)
 	{
 		String[] words = string.split(" ");
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new ArrayList();
 
 		for (int lineCount = 0; lineCount < Math.ceil((float) words.length / (float) wordsPerLine); lineCount++)
 		{

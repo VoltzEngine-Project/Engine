@@ -9,19 +9,16 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IPlayerUsing
 import resonant.engine.ResonantEngine
 import resonant.lib.network.PacketAnnotation
-import resonant.lib.utility.LanguageUtility
 
 /**
  * All tiles inherit this class.
  *
  * @author Calclavia
  */
-abstract class SpatialTile(name: String, material: Material) extends SpatialBlock(name, material) with IPlayerUsing
+abstract class SpatialTile(material: Material) extends SpatialBlock(material) with IPlayerUsing
 {
   private final val playersUsing: util.HashSet[EntityPlayer] = new util.HashSet[EntityPlayer]
   protected var ticks = 0L
-
-  def this(newMaterial: Material) = this(LanguageUtility.decapitalizeFirst(getClass.getSimpleName.replaceFirst("Tile", "")), newMaterial)
 
   override def tile: SpatialTile =
   {
