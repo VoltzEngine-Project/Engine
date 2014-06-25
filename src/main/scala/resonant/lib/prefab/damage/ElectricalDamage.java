@@ -1,7 +1,5 @@
 package resonant.lib.prefab.damage;
 
-import resonant.lib.prefab.CustomDamageSource;
-
 /**
  * Electrical based damage source
  *

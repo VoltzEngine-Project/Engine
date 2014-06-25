@@ -1,9 +1,9 @@
 package resonant.lib.prefab.damage;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 /**
@@ -18,7 +18,7 @@ public class EntityDamageSourceLaser extends EntityDamageSource
 		super("Laser", source);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void LivingDeathEvent(LivingDeathEvent event)
 	{
 		if (event.entity instanceof EntityCreeper)

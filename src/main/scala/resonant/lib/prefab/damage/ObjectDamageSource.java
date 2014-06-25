@@ -1,7 +1,5 @@
 package resonant.lib.prefab.damage;
 
-import resonant.lib.prefab.CustomDamageSource;
-
 /**
  * Damage source classed designed for things that are not entity based.
  *

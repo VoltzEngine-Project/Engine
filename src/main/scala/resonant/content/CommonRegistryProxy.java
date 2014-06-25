@@ -4,7 +4,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
-import resonant.lib.prefab.item.ItemBlockTooltip;
+import resonant.content.prefab.itemblock.ItemBlockTooltip;
 
 public class CommonRegistryProxy
 {

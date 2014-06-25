@@ -1,9 +1,8 @@
-package resonant.lib.prefab;
+package resonant.lib.prefab.damage;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import resonant.lib.prefab.damage.ElectricalDamage;
 
 /**
  * Extend this class to create more custom damage sources.

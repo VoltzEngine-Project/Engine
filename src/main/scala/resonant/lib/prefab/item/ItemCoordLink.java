@@ -9,7 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import universalelectricity.api.vector.VectorWorld;
+import universalelectricity.core.transform.vector.VectorWorld;
 
 import java.util.List;
 
@@ -32,15 +32,15 @@ public abstract class ItemCoordLink extends ItemTooltip
 		if (hasLink(itemstack))
 		{
 			VectorWorld vec = getLink(itemstack);
-			int blockId = vec.getBlockID(entityplayer.worldObj);
+			Block block = vec.getBlock(entityplayer.worldObj);
 
-			if (Block.blocksList[blockId] != null)
+			if (block != null)
 			{
-				list.add("Linked with: " + Block.blocksList[blockId].getLocalizedName());
+				list.add("Linked with: " + block.getLocalizedName());
 			}
 
-			list.add(vec.intX() + ", " + vec.intY() + ", " + vec.intZ());
-			list.add("Dimension: '" + vec.world.provider.getDimensionName() + "'");
+			list.add(vec.xi() + ", " + vec.yi() + ", " + vec.zi());
+			list.add("Dimension: '" + vec.world().provider.getDimensionName() + "'");
 		}
 		else
 		{
@@ -70,7 +70,7 @@ public abstract class ItemCoordLink extends ItemTooltip
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
 
-		itemStack.getTagCompound().setCompoundTag("link", vec.writeToNBT(new NBTTagCompound()));
+		itemStack.getTagCompound().setTag("link", vec.toNBT());
 	}
 
 	public void clearLink(ItemStack itemStack)

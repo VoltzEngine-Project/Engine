@@ -18,14 +18,16 @@ import net.minecraft.world.{IBlockAccess, World}
 import org.lwjgl.opengl.GL11._
 import resonant.content.wrapper.BlockDummy
 import resonant.lib.content.prefab.{TIO, TRotatable}
-import resonant.lib.prefab.item.ItemBlockTooltip
+import resonant.content.prefab.itemblock.ItemBlockTooltip
 import resonant.lib.render.RenderUtility
 import resonant.lib.utility.{LanguageUtility, WrenchUtility}
+import resonant.lib.wrapper.WrapList
 import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.{Vector2, Vector3, VectorWorld}
 
 import scala.collection.convert.wrapAll._
 import scala.collection.immutable
+import WrapList._
 
 /**
  * All blocks inherit this class.
@@ -131,7 +133,7 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
   var textureName: String = name
   var domain: String = null
 
-  def this(newMaterial: Material) = this(LanguageUtility.decapitalizeFirst(getClass.getSimpleName.replaceFirst("Tile", "")), newMaterial)
+  def this(newMaterial: Material) = this(LanguageUtility.decapitalizeFirst(getClass().getSimpleName().replaceFirst("Tile", "")), newMaterial)
 
   /**
    * Called after the block is registred. Use this to add recipes.
@@ -265,8 +267,7 @@ abstract class SpatialBlock(val name: String, val material: Material) extends Ti
 
   def getSubBlocks(item: Item, creativeTabs: CreativeTabs, list: util.List[_])
   {
-    def add[T](list: util.List[T], value: Any) = list.add(value.asInstanceOf[T])
-    add(list, new ItemStack(item))
+    list.add(new ItemStack(item))
   }
 
   def getPickBlock(target: MovingObjectPosition): ItemStack =

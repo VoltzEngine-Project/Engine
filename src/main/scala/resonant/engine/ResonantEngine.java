@@ -49,7 +49,7 @@ import resonant.lib.multiblock.BlockSyntheticPart;
 import resonant.lib.multiblock.TileSyntheticPart;
 import resonant.lib.network.netty.PacketManager;
 import resonant.lib.prefab.ProxyBase;
-import resonant.lib.prefab.item.ItemBlockMetadata;
+import resonant.content.prefab.itemblock.ItemBlockMetadata;
 import resonant.lib.prefab.ore.OreGenBase;
 import resonant.lib.prefab.ore.OreGenReplaceStone;
 import resonant.lib.prefab.ore.OreGenerator;

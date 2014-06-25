@@ -2,7 +2,6 @@ package resonant.api.map;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import universalelectricity.api.vector.Vector2;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.*;

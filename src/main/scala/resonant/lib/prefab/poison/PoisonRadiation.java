@@ -1,7 +1,7 @@
 package resonant.lib.prefab.poison;
 
 import net.minecraft.entity.EntityLivingBase;
-import resonant.lib.prefab.CustomDamageSource;
+import resonant.lib.prefab.damage.CustomDamageSource;
 import resonant.lib.prefab.potion.CustomPotionEffect;
 import universalelectricity.core.transform.vector.Vector3;
 

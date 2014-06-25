@@ -1,4 +1,4 @@
-package resonant.lib.prefab.item;
+package resonant.content.prefab.itemblock;
 
 import net.minecraft.item.ItemStack;
 import resonant.lib.utility.LanguageUtility;
@@ -7,7 +7,6 @@ public class ItemBlockMetadata extends ItemBlockTooltip
 {
 	public ItemBlockMetadata(int id)
 	{
-		super(id);
 		this.setHasSubtypes(true);
 	}
 

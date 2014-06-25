@@ -7,7 +7,7 @@ import universalelectricity.core.transform.region.Cuboid
  * Wraps ChickenBone's Vector3 with UE's Vector3.
  * @author Calclavia
  */
-trait ChickenBonesWrapper
+object ChickenBonesWrapper
 {
   implicit def asUEVector3(vec: codechicken.lib.vec.Vector3): universalelectricity.core.transform.vector.Vector3 = new universalelectricity.core.transform.vector.Vector3(vec.x, vec.y, vec.z)
 

@@ -1,4 +1,4 @@
-package resonant.lib.prefab.item;
+package resonant.content.prefab.itemblock;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,8 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import resonant.lib.utility.inventory.InventoryUtility;
 import resonant.lib.utility.nbt.NBTUtility;
-import universalelectricity.api.vector.VectorWorld;
 import universalelectricity.core.transform.vector.Vector3;
+import universalelectricity.core.transform.vector.VectorWorld;
 
 /**
  * An item that can store a block's tile data.
@@ -18,9 +18,8 @@ import universalelectricity.core.transform.vector.Vector3;
  */
 public class ItemBlockSaved extends ItemBlockTooltip
 {
-	public ItemBlockSaved(int par1)
+	public ItemBlockSaved()
 	{
-		super(par1);
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
 		this.setMaxStackSize(1);
@@ -28,22 +27,22 @@ public class ItemBlockSaved extends ItemBlockTooltip
 
 	public static ItemStack getItemStackWithNBT(VectorWorld vector)
 	{
-		return getItemStackWithNBT(vector.world, vector);
+		return getItemStackWithNBT(vector.world(), vector);
 	}
 
 	public static ItemStack getItemStackWithNBT(World world, Vector3 vector)
 	{
-		return getItemStackWithNBT(world, vector.intX(), vector.intY(), vector.intZ());
+		return getItemStackWithNBT(world, vector.xi(), vector.yi(), vector.zi());
 	}
 
 	public static ItemStack getItemStackWithNBT(World world, int x, int y, int z)
 	{
-		return getItemStackWithNBT(Block.blocksList[world.getBlockId(x, y, z)], world, x, y, z);
+		return getItemStackWithNBT(world.getBlock(x, y, z), world, x, y, z);
 	}
 
 	public static ItemStack getItemStackWithNBT(Block b, World world, int x, int y, int z)
 	{
-		Block block = (b == null ? Block.blocksList[world.getBlockId(x, y, z)] : b);
+		Block block = (b == null ? world.getBlock(x, y, z) : b);
 		if (block != null)
 		{
 			int meta = world.getBlockMetadata(x, y, z);
@@ -51,7 +50,7 @@ public class ItemBlockSaved extends ItemBlockTooltip
 			ItemStack dropStack = new ItemStack(block, block.quantityDropped(meta, 0, world.rand), block.damageDropped(meta));
 			NBTTagCompound tag = new NBTTagCompound();
 
-			TileEntity tile = world.getBlockTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(x, y, z);
 
 			if (tile != null)
 			{
@@ -87,7 +86,7 @@ public class ItemBlockSaved extends ItemBlockTooltip
 	{
 		boolean flag = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
 
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(x, y, z);
 
 		if (tile != null)
 		{

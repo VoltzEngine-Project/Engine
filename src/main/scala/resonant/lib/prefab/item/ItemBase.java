@@ -17,9 +17,10 @@ import java.util.Map.Entry;
  *
  * @author Darkguardsman
  */
+@Deprecated
 public class ItemBase extends Item
 {
-	private LinkedHashMap<Integer, SubItem> subItems = new LinkedHashMap<Integer, SubItem>();
+	private LinkedHashMap<Integer, SubItem> subItems = new LinkedHashMap();
 	private int lastMeta = 0;
 
 	/**

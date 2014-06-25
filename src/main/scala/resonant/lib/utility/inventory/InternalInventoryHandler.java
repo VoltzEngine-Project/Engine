@@ -9,7 +9,8 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IExtendedStorage;
-import universalelectricity.api.vector.VectorWorld;
+import universalelectricity.core.transform.vector.VectorWorld;
+
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.HashSet;
