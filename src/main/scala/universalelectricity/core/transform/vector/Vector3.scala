@@ -72,7 +72,7 @@ object Vector3
   }
 }
 
-class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable with TraitVector[Vector3]
+class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable with TraitVector[Vector3] with IVector3
 {
   def this() = this(0, 0, 0)
 

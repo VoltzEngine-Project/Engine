@@ -10,7 +10,7 @@ import universalelectricity.core.transform.TraitVector
  *
  * @author Calclavia
  */
-class Vector2(var x: Double, var y: Double) extends Cloneable with TraitVector[Vector2]
+class Vector2(var x: Double, var y: Double) extends Cloneable with TraitVector[Vector2] with IVector2
 {
   def this() = this(0, 0)
 
