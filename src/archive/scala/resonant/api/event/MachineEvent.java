@@ -2,7 +2,7 @@ package resonant.api.event;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.event.Event;
+import cpw.mods.fml.common.eventhandler.Event;
 import universalelectricity.core.transform.vector.Vector3;
 
 /**
@@ -25,7 +25,7 @@ public class MachineEvent extends Event
 
 	public MachineEvent(TileEntity machine)
 	{
-		this.world = machine.worldObj;
+		this.world = machine.getWorldObj();
 		this.spot = new Vector3(machine);
 		this.machine = machine;
 	}

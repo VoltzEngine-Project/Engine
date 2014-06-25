@@ -2,6 +2,8 @@ package resonant.api.map;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import universalelectricity.core.transform.region.Rectangle;
+import universalelectricity.core.transform.vector.Vector2;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.*;
@@ -53,13 +55,13 @@ public class RadarRegistry
 	public static List<TileEntity> getTileEntitiesInArea(Vector2 minVector, Vector2 maxVector)
 	{
 		cleanUpArray();
-		List<TileEntity> returnArray = new ArrayList<TileEntity>();
+		List<TileEntity> returnArray = new ArrayList();
 
 		for (TileEntity tileEntity : detectableTileEntities)
 		{
 			Vector2 point = new Vector3(tileEntity).toVector2();
 
-			if ((point.x > minVector.x && point.x < maxVector.x) && (point.y > minVector.y && point.y < maxVector.y))
+			if (new Rectangle(minVector, maxVector).intersects(point))
 			{
 				returnArray.add(tileEntity);
 			}
@@ -75,7 +77,7 @@ public class RadarRegistry
 
 		for (Entity entity : detectableEntities)
 		{
-			if (Vector2.distance(vector, new Vector3(entity).toVector2()) <= radius)
+			if (vector.distance(new Vector3(entity).toVector2()) <= radius)
 			{
 				returnArray.add(entity);
 			}
@@ -114,7 +116,7 @@ public class RadarRegistry
 				{
 					it.remove();
 				}
-				else if (tileEntity.worldObj.getBlockTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) != tileEntity)
+				else if (tileEntity.getWorldObj().getTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) != tileEntity)
 				{
 					it.remove();
 				}
