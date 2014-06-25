@@ -4,7 +4,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -15,11 +15,12 @@ import org.lwjgl.opengl.GL12;
 import resonant.engine.References;
 import resonant.lib.render.RenderUtility;
 import resonant.lib.utility.LanguageUtility;
-import universalelectricity.api.CompatibilityType;
-import universalelectricity.api.energy.UnitDisplay;
-import universalelectricity.api.energy.UnitDisplay.Unit;
-import universalelectricity.api.vector.Vector2;
+import universalelectricity.api.UnitDisplay;
+import universalelectricity.api.UnitDisplay.Unit;
+import universalelectricity.compatibility.module.ModuleBuildCraft$;
+import universalelectricity.compatibility.module.ModuleThermalExpansion$;
 import universalelectricity.core.transform.region.Rectangle;
+import universalelectricity.core.transform.vector.Vector2;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,7 +35,7 @@ public class GuiContainerBase extends GuiContainer
 	protected int meterHeight = 49;
 	protected int meterWidth = 14;
 	protected int meterEnd = meterX + meterWidth;
-	protected HashMap<Rectangle, String> tooltips = new HashMap<Rectangle, String>();
+	protected HashMap<Rectangle, String> tooltips = new HashMap();
 	protected int containerWidth;
 	protected int containerHeight;
 	private float lastChangeFrameTime;
@@ -68,7 +69,7 @@ public class GuiContainerBase extends GuiContainer
 		{
 			Entry<Rectangle, String> entry = it.next();
 
-			if (entry.getKey().isIn(new Vector2(mouseX - this.guiLeft, mouseY - this.guiTop)))
+			if (entry.getKey().intersects(new Vector2(mouseX - this.guiLeft, mouseY - this.guiTop)))
 			{
 				this.tooltip = entry.getValue();
 				break;
@@ -131,7 +132,7 @@ public class GuiContainerBase extends GuiContainer
 		// drawTexturedModelRectFromIcon
 		// GL11.glEnable(GL11.GL_BLEND);
 		// GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		itemRenderer.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, itemStack, x, y);
+		itemRender.renderItemAndEffectIntoGUI(fontRendererObj, this.mc.renderEngine, itemStack, x, y);
 		// GL11.glDisable(GL11.GL_BLEND);
 	}
 
@@ -144,13 +145,13 @@ public class GuiContainerBase extends GuiContainer
 	{
 		String name = LanguageUtility.getLocal("gui." + textName + ".name");
 		String text = format.replaceAll("%1", name);
-		this.fontRenderer.drawString(text, x, y, color);
+		fontRendererObj.drawString(text, x, y, color);
 
 		String tooltip = LanguageUtility.getLocal("gui." + textName + ".tooltip");
 
 		if (tooltip != null && tooltip != "")
 		{
-			if (this.isPointInRegion(x, y, (int) (text.length() * 4.8), 12, mouseX, mouseY))
+			if (new Rectangle(x, y, (int) (text.length() * 4.8), 12).intersects(new Vector2(mouseX, mouseY)))
 			{
 				this.tooltip = tooltip;
 			}
@@ -291,7 +292,7 @@ public class GuiContainerBase extends GuiContainer
 		renderUniversalDisplay(x, y, energy, mouseX, mouseY, unit, false);
 	}
 
-	public void renderUniversalDisplay(int x, int y, float energy, float maxEnergy, int mouseX, int mouseY, Unit unit, boolean small)
+	public void renderUniversalDisplay(int x, int y, float energy, float maxEnergy, int mouseX, int mouseY, Unit unit, boolean symbol)
 	{
 		String displaySuffix = "";
 
@@ -300,7 +301,7 @@ public class GuiContainerBase extends GuiContainer
 			displaySuffix = "/s";
 		}
 
-		String display = UnitDisplay.getDisplay(energy, unit, 2, small) + "/" + UnitDisplay.getDisplay(maxEnergy, unit, 2, small);
+		String display = new UnitDisplay(unit, energy).symbol(symbol) + "/" + new UnitDisplay(unit, maxEnergy).symbol(symbol);
 
 		// Check different energy system types.
 		if (unit == Unit.WATT || unit == Unit.JOULES)
@@ -308,13 +309,13 @@ public class GuiContainerBase extends GuiContainer
 			switch (energyType)
 			{
 				case 1:
-					display = UnitDisplay.roundDecimals(energy * CompatibilityType.BUILDCRAFT.ratio) + " MJ" + "/" + displaySuffix + UnitDisplay.roundDecimals(maxEnergy * CompatibilityType.BUILDCRAFT.ratio) + " MJ" + displaySuffix;
+					display = UnitDisplay.roundDecimals(energy * ModuleBuildCraft$.MODULE$.ratio) + " MJ" + "/" + displaySuffix + UnitDisplay.roundDecimals(maxEnergy * ModuleBuildCraft$.MODULE$.ratio) + " MJ" + displaySuffix;
 					break;
-				case 2:
-					display = UnitDisplay.roundDecimals(energy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix + "/" + UnitDisplay.roundDecimals(maxEnergy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix;
-					break;
+				/*case 2:
+					display = UnitDisplay.roundDecimals(energy * Module.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix + "/" + UnitDisplay.roundDecimals(maxEnergy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix;
+					break;*/
 				case 3:
-					display = UnitDisplay.roundDecimals(energy * CompatibilityType.THERMAL_EXPANSION.ratio) + " RF" + displaySuffix + "/" + UnitDisplay.roundDecimals(maxEnergy * CompatibilityType.THERMAL_EXPANSION.ratio) + " RF" + displaySuffix;
+					display = UnitDisplay.roundDecimals(energy * ModuleThermalExpansion$.MODULE$.ratio) + " RF" + displaySuffix + "/" + UnitDisplay.roundDecimals(maxEnergy * ModuleThermalExpansion$.MODULE$.ratio) + " RF" + displaySuffix;
 					break;
 			}
 		}
@@ -334,7 +335,7 @@ public class GuiContainerBase extends GuiContainer
 
 		this.lastChangeFrameTime--;
 
-		this.fontRenderer.drawString(display, x, y, 4210752);
+		fontRendererObj.drawString(display, x, y, 4210752);
 	}
 
 	public void renderUniversalDisplay(int x, int y, float energy, int mouseX, int mouseY, Unit unit, boolean small)
@@ -354,13 +355,13 @@ public class GuiContainerBase extends GuiContainer
 			switch (energyType)
 			{
 				case 1:
-					display = UnitDisplay.roundDecimals(energy * CompatibilityType.BUILDCRAFT.ratio) + " MJ" + displaySuffix;
+					display = UnitDisplay.roundDecimals(energy * ModuleBuildCraft$.MODULE$.ratio) + " MJ" + displaySuffix;
 					break;
 				case 2:
-					display = UnitDisplay.roundDecimals(energy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix;
+					//display = UnitDisplay.roundDecimals(energy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix;
 					break;
 				case 3:
-					display = UnitDisplay.roundDecimals(energy * CompatibilityType.THERMAL_EXPANSION.ratio) + " RF" + displaySuffix;
+					display = UnitDisplay.roundDecimals(energy * ModuleThermalExpansion$.MODULE$.ratio) + " RF" + displaySuffix;
 					break;
 			}
 		}
@@ -380,7 +381,7 @@ public class GuiContainerBase extends GuiContainer
 
 		this.lastChangeFrameTime--;
 
-		this.fontRenderer.drawString(display, x, y, 4210752);
+		fontRendererObj.drawString(display, x, y, 4210752);
 	}
 
 	public void drawTooltip(int x, int y, String... toolTips)
@@ -398,7 +399,7 @@ public class GuiContainerBase extends GuiContainer
 
 				for (var6 = 0; var6 < toolTips.length; ++var6)
 				{
-					var7 = this.fontRenderer.getStringWidth(toolTips[var6]);
+					var7 = fontRendererObj.getStringWidth(toolTips[var6]);
 
 					if (var7 > var5)
 					{
@@ -439,7 +440,7 @@ public class GuiContainerBase extends GuiContainer
 				{
 					String var14 = toolTips[var13];
 
-					this.fontRenderer.drawStringWithShadow(var14, var6, var7, -1);
+					fontRendererObj.drawStringWithShadow(var14, var6, var7, -1);
 					var7 += 10;
 				}
 
@@ -465,7 +466,7 @@ public class GuiContainerBase extends GuiContainer
 
 		int start = 0;
 
-		Icon liquidIcon = null;
+		IIcon liquidIcon = null;
 		Fluid fluid = liquid.getFluid();
 
 		if (fluid != null && fluid.getStillIcon() != null)

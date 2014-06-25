@@ -40,17 +40,17 @@ class BlockCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable w
   /**
    * Called when the block is right clicked by the player
    */
-  def onMachineActivated(par1World: World, x: Int, y: Int, z: Int, par5EntityPlayer: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean =
+  override def activate(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
     if (BlockCreativeBuilder.REGISTRY.size > 0)
     {
-      par5EntityPlayer.openGui(ResonantEngine.instance, -1, par1World, x, y, z)
+      player.openGui(ResonantEngine.instance, -1, world, x, y, z)
       return true
     }
     return false
   }
 
-  def onReceivePacket(data: ByteBuf, player: EntityPlayer, extra: AnyRef*)
+  override def onReceivePacket(data: ByteBuf, player: EntityPlayer, extra: AnyRef*)
   {
     val world: World = player.worldObj
     if (!world.isRemote)
