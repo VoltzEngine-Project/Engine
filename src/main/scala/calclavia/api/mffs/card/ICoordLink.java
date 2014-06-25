@@ -1,7 +1,7 @@
 package calclavia.api.mffs.card;
 
 import net.minecraft.item.ItemStack;
-import universalelectricity.api.vector.VectorWorld;
+import universalelectricity.core.transform.vector.VectorWorld;
 
 public interface ICoordLink
 {

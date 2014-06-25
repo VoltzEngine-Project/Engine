@@ -1,8 +1,8 @@
 package calclavia.api.mffs;
 
+import cpw.mods.fml.common.eventhandler.Cancelable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.event.Cancelable;
 import net.minecraftforge.event.world.WorldEvent;
 
 /** The event called when stabilizing a field into solid blocks. Canceling
