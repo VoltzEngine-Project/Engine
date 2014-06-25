@@ -10,6 +10,7 @@ import net.minecraft.network.INetHandler;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import resonant.content.wrapper.BlockRenderHandler;
+import resonant.content.wrapper.BlockRenderHandler$;
 import resonant.engine.content.debug.BlockCreativeBuilder;
 import resonant.engine.content.debug.GuiCreativeBuilder;
 import resonant.lib.prefab.ProxyBase;
@@ -26,7 +27,7 @@ public class ClientProxy extends ProxyBase
 	@Override
 	public void preInit()
 	{
-		RenderingRegistry.registerBlockHandler(BlockRenderHandler.INSTANCE);
+		RenderingRegistry.registerBlockHandler(BlockRenderHandler$.MODULE$);
 	}
 
 	@Override

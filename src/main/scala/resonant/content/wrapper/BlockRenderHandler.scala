@@ -9,13 +9,10 @@ import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL12._
 import universalelectricity.core.transform.vector.Vector3
 
-object BlockRenderHandler
+object BlockRenderHandler  extends ISimpleBlockRenderingHandler
 {
   val ID = RenderingRegistry.getNextAvailableRenderId()
-}
 
-class BlockRenderHandler extends ISimpleBlockRenderingHandler
-{
   def renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks)
   {
     if (block.isInstanceOf[BlockDummy])
