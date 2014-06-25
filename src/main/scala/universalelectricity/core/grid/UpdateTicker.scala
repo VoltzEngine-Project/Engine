@@ -8,9 +8,8 @@ import cpw.mods.fml.common.gameevent.TickEvent
 import net.minecraftforge.common.MinecraftForge
 import universalelectricity.api.core.grid.IUpdate
 
-import scala.collection.mutable
-import scala.reflect.internal.util.WeakHashSet
 import scala.collection.convert.wrapAll._
+import scala.collection.mutable
 
 /**
  * A ticker to update all grids. This is multi-threaded based on configuration.

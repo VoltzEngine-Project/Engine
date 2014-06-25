@@ -1,30 +1,13 @@
 package universalelectricity.compatibility.asm;
 
+import org.objectweb.asm.Label;
+import org.objectweb.asm.tree.*;
+import org.objectweb.asm.util.Textifier;
+import universalelectricity.compatibility.asm.InstructionComparator.InsnListSection;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
-
-import org.objectweb.asm.Label;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FrameNode;
-import org.objectweb.asm.tree.IincInsnNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.IntInsnNode;
-import org.objectweb.asm.tree.InvokeDynamicInsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.LineNumberNode;
-import org.objectweb.asm.tree.LookupSwitchInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MultiANewArrayInsnNode;
-import org.objectweb.asm.tree.TableSwitchInsnNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
-import org.objectweb.asm.util.Textifier;
-
-import universalelectricity.compatibility.asm.InstructionComparator.InsnListSection;
 
 public class InsnListPrinter extends Textifier
 {
@@ -34,29 +17,43 @@ public class InsnListPrinter extends Textifier
 	{
 		text.clear();
 		if (labelNames == null)
+		{
 			labelNames = new HashMap<Label, String>();
+		}
 		else
+		{
 			labelNames.clear();
+		}
 
 		buildingLabelMap = true;
 		for (AbstractInsnNode insn = list.getFirst(); insn != null; insn = insn.getNext())
+		{
 			if (insn.getType() == 8)
+			{
 				visitLabel(((LabelNode) insn).getLabel());
+			}
+		}
 
 		text.clear();
 		buildingLabelMap = false;
 
 		for (AbstractInsnNode insn = list.getFirst(); insn != null; insn = insn.getNext())
+		{
 			_visitInsn(insn);
+		}
 	}
 
 	public void visitInsnList(InsnListSection subsection)
 	{
 		text.clear();
 		if (labelNames == null)
+		{
 			labelNames = new HashMap<Label, String>();
+		}
 		else
+		{
 			labelNames.clear();
+		}
 
 		buildingLabelMap = true;
 		{
@@ -64,9 +61,13 @@ public class InsnListPrinter extends Textifier
 			while (true)
 			{
 				if (insn.getType() == 8)
+				{
 					visitLabel(((LabelNode) insn).getLabel());
+				}
 				if (insn == subsection.last)
+				{
 					break;
+				}
 				insn = insn.getNext();
 			}
 		}
@@ -80,7 +81,9 @@ public class InsnListPrinter extends Textifier
 			{
 				_visitInsn(insn);
 				if (insn == subsection.last)
+				{
 					break;
+				}
 				insn = insn.getNext();
 			}
 		}
@@ -90,9 +93,13 @@ public class InsnListPrinter extends Textifier
 	{
 		text.clear();
 		if (labelNames == null)
+		{
 			labelNames = new HashMap<Label, String>();
+		}
 		else
+		{
 			labelNames.clear();
+		}
 
 		_visitInsn(insn);
 	}
@@ -148,17 +155,23 @@ public class InsnListPrinter extends Textifier
 				TableSwitchInsnNode tsinsn = (TableSwitchInsnNode) insn;
 				Label[] tslables = new Label[tsinsn.labels.size()];
 				for (int i = 0; i < tslables.length; i++)
+				{
 					tslables[i] = tsinsn.labels.get(i).getLabel();
+				}
 				visitTableSwitchInsn(tsinsn.min, tsinsn.max, tsinsn.dflt.getLabel(), tslables);
 				break;
 			case 12:
 				LookupSwitchInsnNode lsinsn = (LookupSwitchInsnNode) insn;
 				Label[] lslables = new Label[lsinsn.labels.size()];
 				for (int i = 0; i < lslables.length; i++)
+				{
 					lslables[i] = lsinsn.labels.get(i).getLabel();
+				}
 				int[] lskeys = new int[lsinsn.keys.size()];
 				for (int i = 0; i < lskeys.length; i++)
+				{
 					lskeys[i] = lsinsn.keys.get(i);
+				}
 				visitLookupSwitchInsn(lsinsn.dflt.getLabel(), lskeys, lslables);
 				break;
 			case 13:

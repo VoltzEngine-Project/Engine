@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.api.core.grid.INodeProvider
 import universalelectricity.api.core.grid.electric.IElectricNode
-import universalelectricity.core.grid.{Grid, Node}
+import universalelectricity.core.grid.Node
 
 import scala.collection.convert.wrapAll._
 

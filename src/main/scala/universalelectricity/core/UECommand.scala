@@ -1,12 +1,11 @@
 package universalelectricity.core
 
-import net.minecraft.command.CommandBase
-import net.minecraft.command.ICommandSender
-import net.minecraft.command.WrongUsageException
-import net.minecraft.util.ChatComponentText
 import java.util.List
-import universalelectricity.core.grid.UpdateTicker
+
+import net.minecraft.command.{CommandBase, ICommandSender, WrongUsageException}
+import net.minecraft.util.ChatComponentText
 import universalelectricity.api.UniversalElectricity
+import universalelectricity.core.grid.UpdateTicker
 
 object UECommand extends CommandBase
 {

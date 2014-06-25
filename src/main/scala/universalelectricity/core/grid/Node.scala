@@ -1,14 +1,16 @@
 package universalelectricity.core.grid
 
+import java.util
+import java.util.Map
+
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
-import universalelectricity.api.core.grid.{INodeProvider, INode}
-import universalelectricity.core.transform.vector.Vector3
-import java.util.Map
-import scala.collection.convert.wrapAll._
-import java.util
 import net.minecraftforge.common.util.ForgeDirection
+import universalelectricity.api.core.grid.{INode, INodeProvider}
+import universalelectricity.core.transform.vector.Vector3
+
+import scala.collection.convert.wrapAll._
 
 /**
  * A node is an object return by INodeProvider that provides the details of what the specific node does.

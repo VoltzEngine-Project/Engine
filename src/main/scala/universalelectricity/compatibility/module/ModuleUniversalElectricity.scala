@@ -3,8 +3,7 @@ package universalelectricity.compatibility.module
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.api.core.grid.INodeProvider
-import universalelectricity.api.core.grid.electric.IElectricNode
-import universalelectricity.api.core.grid.electric.IEnergyContainer
+import universalelectricity.api.core.grid.electric.{IElectricNode, IEnergyContainer}
 import universalelectricity.api.item.IEnergyItem
 import universalelectricity.compatibility.Compatibility
 

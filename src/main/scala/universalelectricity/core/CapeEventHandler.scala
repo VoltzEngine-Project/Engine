@@ -1,28 +1,20 @@
 package universalelectricity.core
 
-import java.awt.Graphics
-import java.awt.Image
+import java.awt.{Graphics, Image}
 import java.awt.image.BufferedImage
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.net.MalformedURLException
-import java.net.URL
-import java.net.URLConnection
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.List
+import java.io.{BufferedReader, IOException, InputStream, InputStreamReader}
+import java.net.{MalformedURLException, URL, URLConnection}
+import java.util.{ArrayList, HashMap, List}
 import javax.swing.ImageIcon
+
+import cpw.mods.fml.common.Loader
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.relauncher.{ReflectionHelper, Side, SideOnly}
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.renderer.ThreadDownloadImageData
 import net.minecraft.launchwrapper.Launch
 import net.minecraftforge.client.event.RenderPlayerEvent
-import cpw.mods.fml.common.Loader
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.relauncher.ReflectionHelper
-import cpw.mods.fml.relauncher.Side
-import cpw.mods.fml.relauncher.SideOnly
+
 import scala.collection.JavaConversions._
 
 /**

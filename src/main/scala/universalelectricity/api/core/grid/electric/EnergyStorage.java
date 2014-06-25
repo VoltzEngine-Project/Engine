@@ -4,9 +4,8 @@ import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Can be used internally for IEnergyInterface blocks. This is optional.
- * 
+ *
  * @author Calclavia
- * 
  */
 public class EnergyStorage
 {
@@ -70,19 +69,14 @@ public class EnergyStorage
 		setMaxExtract(maxTransfer);
 	}
 
-	public void setMaxReceive(double maxReceive)
-	{
-		this.maxReceive = maxReceive;
-	}
-
-	public void setMaxExtract(double maxExtract)
-	{
-		this.maxExtract = maxExtract;
-	}
-
 	public double getMaxReceive()
 	{
 		return maxReceive;
+	}
+
+	public void setMaxReceive(double maxReceive)
+	{
+		this.maxReceive = maxReceive;
 	}
 
 	public double getMaxExtract()
@@ -90,32 +84,16 @@ public class EnergyStorage
 		return maxExtract;
 	}
 
-	/**
-	 * This function is included to allow for server -> client sync. Do not call this externally to
-	 * the containing Tile Entity, as not all IEnergyHandlers are
-	 * guaranteed to have it.
-	 * 
-	 * @param energy
-	 */
-	public void setEnergy(double energy)
+	public void setMaxExtract(double maxExtract)
 	{
-		this.energy = energy;
-
-		if (this.getEnergy() > this.getEnergyCapacity())
-		{
-			this.energy = this.getEnergyCapacity();
-		}
-		else if (this.getEnergy() < 0)
-		{
-			this.energy = 0;
-		}
+		this.maxExtract = maxExtract;
 	}
 
 	/**
 	 * This function is included to allow the containing tile to directly and efficiently modify the
 	 * energy contained in the EnergyStorage. Do not rely on this
 	 * externally, as not all IEnergyHandlers are guaranteed to have it.
-	 * 
+	 *
 	 * @param energy
 	 */
 	public void modifyEnergyStored(double energy)
@@ -231,6 +209,27 @@ public class EnergyStorage
 	public double getEnergy()
 	{
 		return this.energy;
+	}
+
+	/**
+	 * This function is included to allow for server -> client sync. Do not call this externally to
+	 * the containing Tile Entity, as not all IEnergyHandlers are
+	 * guaranteed to have it.
+	 *
+	 * @param energy
+	 */
+	public void setEnergy(double energy)
+	{
+		this.energy = energy;
+
+		if (this.getEnergy() > this.getEnergyCapacity())
+		{
+			this.energy = this.getEnergyCapacity();
+		}
+		else if (this.getEnergy() < 0)
+		{
+			this.energy = 0;
+		}
 	}
 
 	public double getEnergyCapacity()

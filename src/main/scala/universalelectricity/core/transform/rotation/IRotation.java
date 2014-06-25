@@ -1,13 +1,15 @@
 package universalelectricity.core.transform.rotation;
 
-/** Simple interface to define that an object has rotation
- * 
- * @author DarkGuardsman */
+/**
+ * Simple interface to define that an object has rotation
+ *
+ * @author DarkGuardsman
+ */
 public interface IRotation
 {
-    double yaw();
-    
-    double pitch();
-    
-    double roll();
+	double yaw();
+
+	double pitch();
+
+	double roll();
 }

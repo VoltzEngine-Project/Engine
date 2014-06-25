@@ -1,7 +1,7 @@
 package universalelectricity.core
 
-import universalelectricity.core.grid.UpdateTicker
 import cpw.mods.fml.common.FMLCommonHandler
+import universalelectricity.core.grid.UpdateTicker
 
 class CommonProxy
 {

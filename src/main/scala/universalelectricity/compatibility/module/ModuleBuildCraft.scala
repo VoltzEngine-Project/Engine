@@ -1,9 +1,9 @@
 package universalelectricity.compatibility.module
 
+import buildcraft.api.mj.{IBatteryProvider, MjAPI}
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.compatibility.Compatibility
-import buildcraft.api.mj.{MjAPI, IBatteryProvider}
 
 /**
  * Module for BuildCraft support

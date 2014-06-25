@@ -1,9 +1,9 @@
 package universalelectricity.compatibility.module
 
 import cofh.api.energy.{IEnergyContainerItem, IEnergyHandler}
-import universalelectricity.compatibility.Compatibility
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
+import universalelectricity.compatibility.Compatibility
 
 /**
  * Module for Thermal Expansion support

@@ -1,23 +1,23 @@
 package universalelectricity.core
 
-import _root_.net.minecraftforge.common.config.Configuration
 import java.io.File
 import java.util.Map
 import java.util.logging.Logger
-import universalelectricity.api.UniversalElectricity
-import universalelectricity.compatibility.Compatibility
-import universalelectricity.compatibility.asm.UniversalTransformer
-import cpw.mods.fml.common._
+
+import _root_.net.minecraftforge.common.config.Configuration
 import cpw.mods.fml.common.Mod.EventHandler
-import cpw.mods.fml.common.event.{FMLServerStoppedEvent, FMLServerStartedEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
-import cpw.mods.fml.relauncher.IFMLCallHook
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin
+import cpw.mods.fml.common._
+import cpw.mods.fml.common.event.{FMLPostInitializationEvent, FMLPreInitializationEvent, FMLServerStartedEvent, FMLServerStoppedEvent}
+import cpw.mods.fml.relauncher.{IFMLCallHook, IFMLLoadingPlugin}
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions
-import universalelectricity.core.grid.UpdateTicker
+import universalelectricity.api.UniversalElectricity
 import universalelectricity.api.core.grid.NodeRegistry
 import universalelectricity.api.core.grid.electric.IElectricNode
-import universalelectricity.core.grid.electric.ElectricNode
+import universalelectricity.compatibility.Compatibility
+import universalelectricity.compatibility.asm.UniversalTransformer
 import universalelectricity.compatibility.module.{ModuleBuildCraft, ModuleThermalExpansion, ModuleUniversalElectricity}
+import universalelectricity.core.grid.UpdateTicker
+import universalelectricity.core.grid.electric.ElectricNode
 
 @Mod(modid = UniversalElectricity.ID, version = UniversalElectricity.VERSION, name = UniversalElectricity.NAME, dependencies = "before:ForgeMultipart", modLanguage = "scala")
 @TransformerExclusions(Array("universalelectricity.compatibility.asm", "universalelectricity.compatibility.asm.template"))

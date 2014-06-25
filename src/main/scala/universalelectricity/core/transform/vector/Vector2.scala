@@ -1,6 +1,7 @@
 package universalelectricity.core.transform.vector
 
 import java.lang.Double.doubleToLongBits
+
 import net.minecraft.nbt.NBTTagCompound
 import universalelectricity.core.transform.TraitVector
 

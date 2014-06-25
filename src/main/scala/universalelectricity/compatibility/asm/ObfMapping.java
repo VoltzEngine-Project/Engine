@@ -1,35 +1,20 @@
 package universalelectricity.compatibility.asm;
 
-import java.io.IOException;
-
+import com.google.common.base.Objects;
+import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraft.launchwrapper.LaunchClassLoader;
-
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.commons.Remapper;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.TypeInsnNode;
+import org.objectweb.asm.tree.*;
 
-import com.google.common.base.Objects;
-
-import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import java.io.IOException;
 
 /**
  * @author ChickenBones
  */
 public class ObfMapping
 {
-	/**
-	 * CCC will deal with this.
-	 */
-	public static Remapper runtimeMapper = FMLDeobfuscatingRemapper.INSTANCE;
-	public static Remapper mcpMapper = null;
-
 	public static final boolean obfuscated;
-
 	static
 	{
 		boolean obf = true;
@@ -42,7 +27,11 @@ public class ObfMapping
 		}
 		obfuscated = obf;
 	}
-
+	/**
+	 * CCC will deal with this.
+	 */
+	public static Remapper runtimeMapper = FMLDeobfuscatingRemapper.INSTANCE;
+	public static Remapper mcpMapper = null;
 	public String s_owner;
 	public String s_name;
 	public String s_desc;
@@ -61,10 +50,14 @@ public class ObfMapping
 		this.s_desc = desc;
 
 		if (s_owner.contains("."))
+		{
 			throw new IllegalArgumentException(s_owner);
+		}
 
 		if (mcpMapper != null)
+		{
 			map(mcpMapper);
+		}
 	}
 
 	public ObfMapping(ObfMapping descmap, String subclass)
@@ -76,7 +69,9 @@ public class ObfMapping
 	{
 		int lastDot = s.lastIndexOf('.');
 		if (lastDot < 0)
+		{
 			return new ObfMapping(s, "", "");
+		}
 		int sep = s.indexOf('(');// methods
 		int sep_end = sep;
 		if (sep < 0)
@@ -90,7 +85,9 @@ public class ObfMapping
 			sep_end = sep + 1;
 		}
 		if (sep < 0)
+		{
 			return new ObfMapping(s.substring(0, lastDot), s.substring(lastDot + 1), "");
+		}
 
 		return new ObfMapping(s.substring(0, lastDot), s.substring(lastDot + 1, sep), s.substring(sep_end));
 	}
@@ -113,11 +110,17 @@ public class ObfMapping
 	public AbstractInsnNode toInsn(int opcode)
 	{
 		if (isClass())
+		{
 			return new TypeInsnNode(opcode, s_owner);
+		}
 		else if (isMethod())
+		{
 			return new MethodInsnNode(opcode, s_owner, s_name, s_desc);
+		}
 		else
+		{
 			return new FieldInsnNode(opcode, s_owner, s_name, s_desc);
+		}
 	}
 
 	public void visitTypeInsn(MethodVisitor mv, int opcode)
@@ -164,7 +167,9 @@ public class ObfMapping
 	public boolean equals(Object obj)
 	{
 		if (!(obj instanceof ObfMapping))
+		{
 			return false;
+		}
 
 		ObfMapping desc = (ObfMapping) obj;
 		return s_owner.equals(desc.s_owner) && s_name.equals(desc.s_name) && s_desc.equals(desc.s_desc);
@@ -180,9 +185,13 @@ public class ObfMapping
 	public String toString()
 	{
 		if (s_name.length() == 0)
+		{
 			return "[" + s_owner + "]";
+		}
 		if (s_desc.length() == 0)
+		{
 			return "[" + s_owner + "." + s_name + "]";
+		}
 		return "[" + (isMethod() ? methodDesc() : fieldDesc()) + "]";
 	}
 
@@ -214,16 +223,24 @@ public class ObfMapping
 	public ObfMapping map(Remapper mapper)
 	{
 		if (isMethod())
+		{
 			s_name = mapper.mapMethodName(s_owner, s_name, s_desc);
+		}
 		else if (isField())
+		{
 			s_name = mapper.mapFieldName(s_owner, s_name, s_desc);
+		}
 
 		s_owner = mapper.mapType(s_owner);
 
 		if (isMethod())
+		{
 			s_desc = mapper.mapMethodDesc(s_desc);
+		}
 		else if (s_desc.length() > 0)
+		{
 			s_desc = mapper.mapDesc(s_desc);
+		}
 
 		return this;
 	}
@@ -231,7 +248,9 @@ public class ObfMapping
 	public ObfMapping toRuntime()
 	{
 		if (!runtime)
+		{
 			map(runtimeMapper);
+		}
 
 		runtime = true;
 		return this;

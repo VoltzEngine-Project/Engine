@@ -1,15 +1,16 @@
 package universalelectricity.core.transform.vector
 
-import net.minecraft.tileentity.TileEntity
-import net.minecraftforge.common.util.ForgeDirection
-import net.minecraft.util._
-import net.minecraft.nbt.NBTTagCompound
 import java.lang.Double.doubleToLongBits
-import net.minecraft.entity.Entity
-import net.minecraft.world.{IBlockAccess, World}
+
 import net.minecraft.block.Block
-import universalelectricity.core.transform.{ITransform, TraitVector}
+import net.minecraft.entity.Entity
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
+import net.minecraft.util._
+import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.transform.rotation.Rotation
+import universalelectricity.core.transform.{ITransform, TraitVector}
 
 /**
  * @author Calclavia
@@ -115,7 +116,6 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
     z = vec.z
     return this
   }
-
 
   /**
    * Conversion

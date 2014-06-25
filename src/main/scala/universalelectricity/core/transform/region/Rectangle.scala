@@ -1,6 +1,7 @@
 package universalelectricity.core.transform.region
 
-import java.math.{BigDecimal, RoundingMode, MathContext}
+import java.math.{BigDecimal, MathContext, RoundingMode}
+
 import net.minecraft.nbt.NBTTagCompound
 import universalelectricity.core.transform.TraitOperation
 import universalelectricity.core.transform.vector.Vector2
@@ -8,6 +9,8 @@ import universalelectricity.core.transform.vector.Vector2
 class Rectangle(var min: Vector2, var max: Vector2) extends TraitOperation[Rectangle]
 {
   def this() = this(new Vector2, new Vector2)
+
+  def this(minX: Double, minY: Double, maxX: Double, maxY: Double) = this(new Vector2(minX, minY), new Vector2(maxX, maxY))
 
   def this(rect: Rectangle) = this(rect.min.clone, rect.max.clone)
 
@@ -108,7 +111,6 @@ class Rectangle(var min: Vector2, var max: Vector2) extends TraitOperation[Recta
     val cont: MathContext = new MathContext(4, RoundingMode.HALF_UP)
     return "Rectangle[" + new BigDecimal(min.x, cont) + ", " + new BigDecimal(min.y, cont) + "] -> [" + new BigDecimal(max.x, cont) + ", " + new BigDecimal(max.y, cont) + "]"
   }
-
 
   override def equals(o: Any): Boolean =
   {

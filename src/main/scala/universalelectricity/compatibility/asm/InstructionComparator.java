@@ -1,56 +1,22 @@
 package universalelectricity.compatibility.asm;
 
-import static org.objectweb.asm.tree.AbstractInsnNode.FIELD_INSN;
-import static org.objectweb.asm.tree.AbstractInsnNode.IINC_INSN;
-import static org.objectweb.asm.tree.AbstractInsnNode.INT_INSN;
-import static org.objectweb.asm.tree.AbstractInsnNode.LDC_INSN;
-import static org.objectweb.asm.tree.AbstractInsnNode.METHOD_INSN;
-import static org.objectweb.asm.tree.AbstractInsnNode.TYPE_INSN;
-import static org.objectweb.asm.tree.AbstractInsnNode.VAR_INSN;
+import org.objectweb.asm.tree.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.IincInsnNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.IntInsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.LineNumberNode;
-import org.objectweb.asm.tree.LookupSwitchInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.TableSwitchInsnNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
+import static org.objectweb.asm.tree.AbstractInsnNode.*;
 
 public class InstructionComparator
 {
-	public static class InsnListSection
-	{
-		public InsnListSection(AbstractInsnNode first, AbstractInsnNode last)
-		{
-			this.first = first;
-			this.last = last;
-		}
-
-		public InsnListSection(InsnList haystack, int start, int end)
-		{
-			this(haystack.get(start), haystack.get(end));
-		}
-
-		public AbstractInsnNode first;
-		public AbstractInsnNode last;
-	}
-
 	public static boolean varInsnEqual(VarInsnNode insn1, VarInsnNode insn2)
 	{
 		if (insn1.var == -1 || insn2.var == -1)
+		{
 			return true;
+		}
 
 		return insn1.var == insn2.var;
 	}
@@ -58,7 +24,9 @@ public class InstructionComparator
 	public static boolean methodInsnEqual(AbstractInsnNode absnode, int Opcode, ObfMapping method)
 	{
 		if (!(absnode instanceof MethodInsnNode) || absnode.getOpcode() != Opcode)
+		{
 			return false;
+		}
 
 		return method.matches((MethodInsnNode) absnode);
 	}
@@ -76,7 +44,9 @@ public class InstructionComparator
 	public static boolean ldcInsnEqual(LdcInsnNode insn1, LdcInsnNode insn2)
 	{
 		if (insn1.cst.equals("~") || insn2.cst.equals("~"))
+		{
 			return true;
+		}
 
 		return insn1.cst.equals(insn2.cst);
 	}
@@ -84,7 +54,9 @@ public class InstructionComparator
 	public static boolean typeInsnEqual(TypeInsnNode insn1, TypeInsnNode insn2)
 	{
 		if (insn1.desc.equals("~") || insn2.desc.equals("~"))
+		{
 			return true;
+		}
 
 		return insn1.desc.equals(insn2.desc);
 	}
@@ -97,7 +69,9 @@ public class InstructionComparator
 	public static boolean intInsnEqual(IntInsnNode node1, IntInsnNode node2)
 	{
 		if (node1.operand == -1 || node2.operand == -1)
+		{
 			return true;
+		}
 
 		return node1.operand == node2.operand;
 	}
@@ -105,7 +79,9 @@ public class InstructionComparator
 	public static boolean insnEqual(AbstractInsnNode node1, AbstractInsnNode node2)
 	{
 		if (node1.getOpcode() != node2.getOpcode())
+		{
 			return false;
+		}
 
 		switch (node2.getType())
 		{
@@ -131,20 +107,26 @@ public class InstructionComparator
 	public static InsnList getImportantList(InsnList list)
 	{
 		if (list.size() == 0)
+		{
 			return list;
+		}
 
 		HashMap<LabelNode, LabelNode> labels = new HashMap<LabelNode, LabelNode>();
 		for (AbstractInsnNode insn = list.getFirst(); insn != null; insn = insn.getNext())
 		{
 			if (insn instanceof LabelNode)
+			{
 				labels.put((LabelNode) insn, (LabelNode) insn);
+			}
 		}
 
 		InsnList importantNodeList = new InsnList();
 		for (AbstractInsnNode insn = list.getFirst(); insn != null; insn = insn.getNext())
 		{
 			if (insn instanceof LabelNode || insn instanceof LineNumberNode)
+			{
 				continue;
+			}
 
 			importantNodeList.add(insn.clone(labels));
 		}
@@ -154,12 +136,16 @@ public class InstructionComparator
 	public static boolean insnListMatches(InsnList haystack, InsnList needle, int start)
 	{
 		if (haystack.size() - start < needle.size())
+		{
 			return false;
+		}
 
 		for (int i = 0; i < needle.size(); i++)
 		{
 			if (!insnEqual(haystack.get(i + start), needle.get(i)))
+			{
 				return false;
+			}
 		}
 		return true;
 	}
@@ -168,8 +154,12 @@ public class InstructionComparator
 	{
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		for (int start = 0; start <= haystack.size() - needle.size(); start++)
+		{
 			if (insnListMatches(haystack, needle, start))
+			{
 				list.add(start);
+			}
+		}
 
 		return list;
 	}
@@ -178,7 +168,9 @@ public class InstructionComparator
 	{
 		LinkedList<AbstractInsnNode> callNodes = new LinkedList<AbstractInsnNode>();
 		for (int callPoint : insnListFind(haystack, needle))
+		{
 			callNodes.add(haystack.get(callPoint));
+		}
 		return callNodes;
 	}
 
@@ -186,7 +178,9 @@ public class InstructionComparator
 	{
 		LinkedList<AbstractInsnNode> callNodes = new LinkedList<AbstractInsnNode>();
 		for (int callPoint : insnListFind(haystack, needle))
+		{
 			callNodes.add(haystack.get(callPoint + needle.size() - 1));
+		}
 		return callNodes;
 	}
 
@@ -208,12 +202,16 @@ public class InstructionComparator
 				case 11:
 					TableSwitchInsnNode tsinsn = (TableSwitchInsnNode) insn;
 					for (LabelNode label : tsinsn.labels)
+					{
 						controlFlowLabels.add(label);
+					}
 					break;
 				case 12:
 					LookupSwitchInsnNode lsinsn = (LookupSwitchInsnNode) insn;
 					for (LabelNode label : lsinsn.labels)
+					{
 						controlFlowLabels.add(label);
+					}
 					break;
 			}
 		}
@@ -226,8 +224,12 @@ public class InstructionComparator
 			if (section != null)
 			{
 				for (InsnListSection asection : list)
+				{
 					if (asection.last == section.last)
+					{
 						continue nextsection;
+					}
+				}
 
 				list.add(section);
 			}
@@ -243,17 +245,41 @@ public class InstructionComparator
 		{
 			AbstractInsnNode insn = haystack.get(h);
 			if (insn.getType() == 15)
+			{
 				continue;
+			}
 			if (insn.getType() == 8 && !controlFlowLabels.contains(insn))
+			{
 				continue;
+			}
 
 			if (!insnEqual(haystack.get(h), needle.get(n)))
+			{
 				return null;
+			}
 			n++;
 		}
 		if (n != needle.size())
+		{
 			return null;
+		}
 
 		return new InsnListSection(haystack, start, h - 1);
+	}
+
+	public static class InsnListSection
+	{
+		public AbstractInsnNode first;
+		public AbstractInsnNode last;
+
+		public InsnListSection(AbstractInsnNode first, AbstractInsnNode last)
+		{
+			this.first = first;
+			this.last = last;
+		}
+		public InsnListSection(InsnList haystack, int start, int end)
+		{
+			this(haystack.get(start), haystack.get(end));
+		}
 	}
 }

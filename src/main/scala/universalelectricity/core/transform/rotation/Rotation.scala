@@ -1,10 +1,11 @@
 package universalelectricity.core.transform.rotation
 
-import net.minecraftforge.common.util.ForgeDirection
-import net.minecraft.nbt.NBTTagCompound
 import java.lang.Double.doubleToLongBits
-import universalelectricity.core.transform.{ITransform, TraitOperation}
+
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.transform.vector.Vector3
+import universalelectricity.core.transform.{ITransform, TraitOperation}
 
 /**
  * The euler angles describing a 3D rotation. The rotation always in degrees.
@@ -90,7 +91,6 @@ class Rotation extends TraitOperation[Rotation] with ITransform with IRotation
       case _ =>
     }
   }
-
 
   /**
    * Sets the angle in radians

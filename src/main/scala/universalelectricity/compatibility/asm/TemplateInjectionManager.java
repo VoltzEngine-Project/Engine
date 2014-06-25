@@ -1,22 +1,58 @@
 package universalelectricity.compatibility.asm;
 
+import com.google.common.collect.HashBiMap;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodNode;
-
-import com.google.common.collect.HashBiMap;
-
 /**
- * 
  * @author Calclavia, ChickenBones
- * 
  */
 public class TemplateInjectionManager
 {
+	static HashBiMap<String, InjectionTemplate> tileTemplates = HashBiMap.create();
+	static HashBiMap<String, InjectionTemplate> itemTemplates = HashBiMap.create();
+
+	public static void registerTileTemplate(String name, Class templateClass, Class... templateInterfaces)
+	{
+		List<String> interfaces = new ArrayList<String>();
+
+		for (Class templateInterface : templateInterfaces)
+		{
+			interfaces.add(templateInterface.getName());
+		}
+
+		tileTemplates.put(name, new InjectionTemplate(templateClass.getName(), interfaces));
+	}
+
+	public static void registerItemTemplate(String name, Class templateClass, Class... templateInterfaces)
+	{
+		List<String> interfaces = new ArrayList<String>();
+
+		for (Class templateInterface : templateInterfaces)
+		{
+			interfaces.add(templateInterface.getName());
+		}
+
+		itemTemplates.put(name, new InjectionTemplate(templateClass.getName(), interfaces));
+	}
+
+	private static ClassNode getClassNode(String name)
+	{
+		try
+		{
+			return ASMHelper.createClassNode(UniversalTransformer.cl.getClassBytes(name.replace('/', '.')));
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static class InjectionTemplate
 	{
 		/**
@@ -46,7 +82,7 @@ public class TemplateInjectionManager
 
 		/**
 		 * Patches the cnode with the methods from this template.
-		 * 
+		 *
 		 * @param cnode
 		 * @return
 		 */
@@ -97,45 +133,6 @@ public class TemplateInjectionManager
 			}
 
 			return changed;
-		}
-	}
-
-	static HashBiMap<String, InjectionTemplate> tileTemplates = HashBiMap.create();
-	static HashBiMap<String, InjectionTemplate> itemTemplates = HashBiMap.create();
-
-	public static void registerTileTemplate(String name, Class templateClass, Class... templateInterfaces)
-	{
-		List<String> interfaces = new ArrayList<String>();
-
-		for (Class templateInterface : templateInterfaces)
-		{
-			interfaces.add(templateInterface.getName());
-		}
-
-		tileTemplates.put(name, new InjectionTemplate(templateClass.getName(), interfaces));
-	}
-
-	public static void registerItemTemplate(String name, Class templateClass, Class... templateInterfaces)
-	{
-		List<String> interfaces = new ArrayList<String>();
-
-		for (Class templateInterface : templateInterfaces)
-		{
-			interfaces.add(templateInterface.getName());
-		}
-
-		itemTemplates.put(name, new InjectionTemplate(templateClass.getName(), interfaces));
-	}
-
-	private static ClassNode getClassNode(String name)
-	{
-		try
-		{
-			return ASMHelper.createClassNode(UniversalTransformer.cl.getClassBytes(name.replace('/', '.')));
-		}
-		catch (IOException e)
-		{
-			throw new RuntimeException(e);
 		}
 	}
 

@@ -1,12 +1,12 @@
 package universalelectricity.core.transform.vector
 
-import net.minecraft.world.World
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.entity.Entity
-import net.minecraft.tileentity.TileEntity
-import net.minecraftforge.common.DimensionManager
-import net.minecraft.util.MovingObjectPosition
 import net.minecraft.block.Block
+import net.minecraft.entity.Entity
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.MovingObjectPosition
+import net.minecraft.world.World
+import net.minecraftforge.common.DimensionManager
 
 class VectorWorld(var world: World, x: Double, y: Double, z: Double) extends Vector3(x, y, z) with IVectorWorld
 {

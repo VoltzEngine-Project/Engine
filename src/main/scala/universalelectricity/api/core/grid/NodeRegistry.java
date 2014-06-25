@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 /**
  * A dynamic node loader for registering different nodes for different node interfaces.
- *
+ * <p/>
  * This is the essential class for loading different nodes.
  *
  * @author Calclavia

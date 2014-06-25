@@ -1,18 +1,16 @@
 package universalelectricity.core.transform.region
 
-import java.math.BigDecimal
-import java.math.MathContext
-import java.math.RoundingMode
-import java.util.ArrayList
-import java.util.List
+import java.math.{BigDecimal, MathContext, RoundingMode}
+import java.util.{ArrayList, List}
+
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.world.World
-import net.minecraft.nbt.NBTTagCompound
 import universalelectricity.core.transform.TraitOperation
-import universalelectricity.core.transform.vector.Vector3
 import universalelectricity.core.transform.rotation.Rotation
+import universalelectricity.core.transform.vector.Vector3
 
 /**
  * A cubical region class to specify a region.

@@ -56,7 +56,7 @@ class Grid[N: ClassTag]
   {
     //TODO: Check if better way to do this.
     return nodeClass.isAssignableFrom(node.getClass)
-   }
+  }
 
   protected def reconstructNode(node: N)
   {

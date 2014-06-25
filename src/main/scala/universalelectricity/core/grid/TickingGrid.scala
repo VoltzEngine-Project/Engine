@@ -2,8 +2,8 @@ package universalelectricity.core.grid
 
 import universalelectricity.api.core.grid.IUpdate
 
-import scala.reflect.ClassTag
 import scala.collection.convert.wrapAll._
+import scala.reflect.ClassTag
 
 /**
  * A grid that ticks. May be multi-threaded.
