@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import resonant.engine.References;
-import universalelectricity.api.vector.IVector3;
+import universalelectricity.core.transform.vector.IVector3;
 
 @SideOnly(Side.CLIENT)
 public class FxLaser extends FxBeam

@@ -4,9 +4,8 @@
 package resonant.lib.utility;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import resonant.lib.utility.nbt.NBTUtility;
-import universalelectricity.api.vector.VectorWorld;
+import universalelectricity.core.transform.vector.VectorWorld;
 
 /**
  * @author Calclavia
@@ -30,7 +29,7 @@ public class LinkUtility
 
 	public static void setLink(ItemStack itemStack, VectorWorld vec)
 	{
-		NBTUtility.getNBTTagCompound(itemStack).setCompoundTag("link", vec.writeToNBT(new NBTTagCompound()));
+		NBTUtility.getNBTTagCompound(itemStack).setTag("link", vec.toNBT());
 	}
 
 	public static void clearLink(ItemStack itemStack)

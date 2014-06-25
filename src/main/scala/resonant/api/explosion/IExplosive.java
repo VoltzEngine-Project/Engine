@@ -4,7 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModelCustom;
@@ -74,6 +74,6 @@ public interface IExplosive extends ITier
 	public ResourceLocation getBlockResource();
 
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon();
+	public IIcon getIcon();
 
 }

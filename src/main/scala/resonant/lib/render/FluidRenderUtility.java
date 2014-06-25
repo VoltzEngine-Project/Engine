@@ -21,7 +21,7 @@ import java.util.Map;
 public class FluidRenderUtility
 {
 	public static final int DISPLAY_STAGES = 100;
-	private static final BlockRenderInfo liquidBlock = new BlockRenderInfo();
+	//private static final BlockRenderInfo liquidBlock = new BlockRenderInfo();
 	private static Map<Fluid, int[]> flowingRenderCache = new HashMap<Fluid, int[]>();
 	private static Map<Fluid, int[]> stillRenderCache = new HashMap<Fluid, int[]>();
 
@@ -63,7 +63,7 @@ public class FluidRenderUtility
 		GL11.glColor4f(red, green, blue, 1);
 	}
 
-	public static int[] getFluidDisplayLists(FluidStack fluidStack, World world, boolean flowing)
+	/*public static int[] getFluidDisplayLists(FluidStack fluidStack, World world, boolean flowing)
 	{
 		if (fluidStack == null)
 		{
@@ -103,7 +103,7 @@ public class FluidRenderUtility
 		for (int s = 0; s < DISPLAY_STAGES; ++s)
 		{
 			diplayLists[s] = GLAllocation.generateDisplayLists(1);
-			GL11.glNewList(diplayLists[s], 4864 /* GL_COMPILE */);
+			GL11.glNewList(diplayLists[s], 4864 /* GL_COMPILE *);
 
 			liquidBlock.min.x = 0.01f;
 			liquidBlock.min.y = 0;
@@ -124,7 +124,7 @@ public class FluidRenderUtility
 		GL11.glEnable(GL11.GL_LIGHTING);
 
 		return diplayLists;
-	}
+	}*/
 
 	/**
 	 * Based on Open Blocks tank renderer

@@ -2,7 +2,7 @@ package resonant.api.explosion;
 
 import net.minecraft.item.ItemStack;
 import resonant.api.blocks.IBlockFrequency;
-import universalelectricity.api.energy.IEnergyContainer;
+import universalelectricity.api.core.grid.electric.IEnergyContainer;
 import universalelectricity.core.transform.vector.Vector3;
 
 /**

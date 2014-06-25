@@ -12,7 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import resonant.lib.render.RenderUtility;
-import universalelectricity.api.vector.IVector3;
 import universalelectricity.core.transform.vector.Vector3;
 
 /**
@@ -33,14 +32,14 @@ public abstract class FxBeam extends EntityFX
 	private float rotPitch = 0.0F;
 	private float prevYaw = 0.0F;
 	private float prevPitch = 0.0F;
-	private IVector3 target = new Vector3();
+	private Vector3 target = new Vector3();
 	private float endModifier = 1.0F;
 	private boolean reverse = false;
 	private boolean pulse = true;
 	private int rotationSpeed = 20;
 	private float prevSize = 0.0F;
 
-	public FxBeam(ResourceLocation texture, World par1World, IVector3 position, IVector3 target2, float red, float green, float blue, int age)
+	public FxBeam(ResourceLocation texture, World par1World, Vector3 position, Vector3 target2, float red, float green, float blue, int age)
 	{
 		super(par1World, position.x(), position.y(), position.z(), 0.0D, 0.0D, 0.0D);
 		this.texture = texture;
