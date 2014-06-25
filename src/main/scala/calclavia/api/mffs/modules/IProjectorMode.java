@@ -2,7 +2,7 @@ package calclavia.api.mffs.modules;
 
 import java.util.Set;
 
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 import calclavia.api.mffs.IFieldInteraction;
 import calclavia.api.mffs.IProjector;
 

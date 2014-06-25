@@ -1,6 +1,6 @@
 package resonant.api.ai;
 
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 /**
  * This should only be used to improve or restrict the targeting behavior of an entity. By default

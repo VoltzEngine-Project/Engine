@@ -36,7 +36,7 @@ public class ExternalInventory implements IExternalInventory
 
 	protected TileEntity tile()
 	{
-		return (TileEntity)host;
+		return (TileEntity) host;
 	}
 
 	@Override

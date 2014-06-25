@@ -58,6 +58,7 @@ public class UniversalRecipe
 	private final Object[] originalRecipes;
 	public String defaultRecipe;
 	private boolean didGenerate = false;
+
 	static
 	{
 		// Metals

@@ -1,7 +1,7 @@
 package resonant.api.blocks;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * The interface is applied to Blocks that can rotate.

@@ -1,7 +1,7 @@
 package resonant.lib.path;
 
-import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.vector.Vector3;
+import net.minecraftforge.common.util.ForgeDirection;
+import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.*;
 

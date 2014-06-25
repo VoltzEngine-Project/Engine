@@ -1,8 +1,8 @@
 package resonant.api;
 
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.grid.IEnergyNode;
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 public interface IMechanicalNode extends IEnergyNode
 {

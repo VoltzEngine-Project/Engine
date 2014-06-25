@@ -2,7 +2,7 @@ package resonant.lib.prefab.turbine;
 
 import net.minecraft.tileentity.TileEntity;
 import resonant.lib.multiblock.MultiBlockHandler;
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 public class TurbineMultiBlockHandler extends MultiBlockHandler<TileTurbine>
 {

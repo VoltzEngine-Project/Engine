@@ -4,8 +4,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
-import universalelectricity.api.vector.Vector3;
 import universalelectricity.core.transform.region.Cuboid;
+import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,6 +16,7 @@ import java.util.List;
  *
  * @author Calclavia
  */
+@Deprecated
 public class FlagWorld extends FlagBase
 {
 	public static final String GLOBAL_REGION = "dimension";

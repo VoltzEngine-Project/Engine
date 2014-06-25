@@ -1,6 +1,6 @@
 package resonant.lib.path;
 
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.Set;
 

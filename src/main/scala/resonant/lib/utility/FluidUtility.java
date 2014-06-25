@@ -6,13 +6,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import resonant.lib.type.Pair;
 import resonant.lib.utility.inventory.AutoCraftingManager;
 import resonant.lib.utility.inventory.InventoryUtility;
-import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorWorld;
+import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.ArrayList;
 import java.util.HashMap;

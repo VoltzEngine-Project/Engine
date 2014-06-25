@@ -1,6 +1,6 @@
 package resonant.api;
 
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public interface IRedstoneProvider
 {

@@ -2,7 +2,6 @@ package resonant.api;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.EnumSet;
 import java.util.Set;
 
 /**

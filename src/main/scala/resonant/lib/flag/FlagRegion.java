@@ -2,8 +2,8 @@ package resonant.lib.flag;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import universalelectricity.api.vector.Vector3;
 import universalelectricity.core.transform.region.Cuboid;
+import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -173,8 +173,8 @@ public class FlagRegion extends FlagBase
 
 	public void edit(Vector3 position, int radius)
 	{
-		Vector3 minVec = new Vector3(position.intX() - radius, 0, position.intZ() - radius);
-		Vector3 maxVec = new Vector3(position.intX() + radius, this.flagWorld.world.getHeight(), position.intZ() + radius);
+		Vector3 minVec = new Vector3(position.xi() - radius, 0, position.zi() - radius);
+		Vector3 maxVec = new Vector3(position.xi() + radius, this.flagWorld.world.getHeight(), position.zi() + radius);
 		this.region = new Cuboid(minVec, maxVec);
 	}
 }

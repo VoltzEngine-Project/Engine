@@ -8,7 +8,7 @@ import resonant.engine.References;
 import resonant.lib.utility.nbt.IVirtualObject;
 import resonant.lib.utility.nbt.NBTUtility;
 import resonant.lib.utility.nbt.SaveManager;
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 import java.io.File;
 import java.util.HashMap;

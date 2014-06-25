@@ -6,6 +6,7 @@ import resonant.lib.utility.nbt.ISaveObj;
 /**
  * @author Calclavia
  */
+@Deprecated
 public abstract class FlagBase implements ISaveObj
 {
 	/**

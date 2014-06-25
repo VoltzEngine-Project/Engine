@@ -14,7 +14,7 @@ import resonant.engine.content.debug.BlockCreativeBuilder;
 import resonant.engine.content.debug.GuiCreativeBuilder;
 import resonant.lib.prefab.ProxyBase;
 import resonant.lib.render.model.TechneAdvancedModelLoader;
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 public class ClientProxy extends ProxyBase
 {

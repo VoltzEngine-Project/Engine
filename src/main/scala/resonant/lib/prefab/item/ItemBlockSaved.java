@@ -8,8 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import resonant.lib.utility.inventory.InventoryUtility;
 import resonant.lib.utility.nbt.NBTUtility;
-import universalelectricity.api.vector.Vector3;
 import universalelectricity.api.vector.VectorWorld;
+import universalelectricity.core.transform.vector.Vector3;
 
 /**
  * An item that can store a block's tile data.

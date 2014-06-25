@@ -240,8 +240,8 @@ public class ModManager
 	 * Creates a new item using reflection as well runs it threw some check to activate any
 	 * interface methods
 	 *
-	 * @param name       - name to register the item with //@param modid - mods that the item comes from
-	 * @param clazz      - item class
+	 * @param name  - name to register the item with //@param modid - mods that the item comes from
+	 * @param clazz - item class
 	 * @return the new item
 	 */
 	public Item newItem(String name, Class<? extends Item> clazz)

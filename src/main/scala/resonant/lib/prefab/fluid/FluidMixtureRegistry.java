@@ -206,7 +206,7 @@ public class FluidMixtureRegistry
 					System.out.println("[FluidNetworkHelper] Attempted to merge two fluids into a waste fluid stack but Forge fluid registry return null for waste. Possible that waste fluid was disabled or not registered correctly.");
 					return null;
 				}
-                /* If both liquids are waste then copy fluidStack lists then merge */
+				/* If both liquids are waste then copy fluidStack lists then merge */
 				if (stackTwo.fluidID == waste.getID() && stackOne.fluidID == waste.getID())
 				{
 					List<FluidStack> stacks = new ArrayList<FluidStack>();

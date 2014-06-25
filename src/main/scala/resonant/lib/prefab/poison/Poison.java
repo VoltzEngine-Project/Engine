@@ -27,6 +27,7 @@ public abstract class Poison
 	protected final boolean isDisabled;
 	protected String name;
 	protected EnumSet<ArmorType> armorRequired = EnumSet.range(ArmorType.HELM, ArmorType.BOOTS);
+
 	public Poison(String name)
 	{
 		this.name = name;

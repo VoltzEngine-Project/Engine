@@ -3,8 +3,9 @@ package calclavia.api.mffs;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.vector.Vector3;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import universalelectricity.core.transform.vector.Vector3;
 import calclavia.api.mffs.modules.IModule;
 import calclavia.api.mffs.modules.IModuleAcceptor;
 import calclavia.api.mffs.modules.IProjectorMode;

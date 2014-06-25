@@ -38,6 +38,7 @@ public class GuiContainerBase extends GuiContainer
 	protected int containerWidth;
 	protected int containerHeight;
 	private float lastChangeFrameTime;
+
 	public GuiContainerBase(Container container)
 	{
 		super(container);

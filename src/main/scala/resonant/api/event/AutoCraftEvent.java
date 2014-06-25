@@ -5,7 +5,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.Cancelable;
 import net.minecraftforge.event.Event;
 import resonant.lib.utility.inventory.AutoCraftingManager.IAutoCrafter;
-import universalelectricity.api.vector.Vector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 /**
  * Events called when an automated crafter is working on crafting an item
