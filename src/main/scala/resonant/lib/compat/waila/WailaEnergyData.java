@@ -6,7 +6,6 @@ import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import resonant.api.IIO;
-import resonant.lib.prefab.tile.TileElectrical;
 import resonant.lib.utility.LanguageUtility;
 import universalelectricity.api.UnitDisplay;
 import universalelectricity.api.core.grid.electric.IEnergyContainer;
@@ -40,6 +39,7 @@ public class WailaEnergyData implements IWailaDataProvider
 				output = te.getOutputDirections().contains(accessor.getSide().getOpposite());
 			}
 		}
+		/*
 		//Energy support
 		if (tile instanceof TileElectrical)
 		{
@@ -50,7 +50,7 @@ public class WailaEnergyData implements IWailaDataProvider
 		{
 			IEnergyContainer te = (IEnergyContainer) tile;
 			currenttip.add(LanguageUtility.getLocal("info.waila.energy") + " " + UnitDisplay.getDisplayShort(te.getEnergy(accessor.getSide()), UnitDisplay.Unit.JOULES) + " / " + UnitDisplay.getDisplayShort(te.getEnergyCapacity(accessor.getSide()), UnitDisplay.Unit.JOULES));
-		}/*
+		}
 		//Voltage support
 		if (input && tile instanceof IVoltageInput)
 		{

@@ -1,4 +1,4 @@
-package resonant.lib.multiblock;
+package resonant.lib.multiblock.synthetic;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -14,6 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import resonant.lib.multiblock.reference.IMultiBlock;
 import resonant.lib.network.PacketTile;
 import universalelectricity.core.transform.vector.Vector3;
 

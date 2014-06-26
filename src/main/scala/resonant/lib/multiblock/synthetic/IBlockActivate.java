@@ -1,4 +1,4 @@
-package resonant.lib.multiblock;
+package resonant.lib.multiblock.synthetic;
 
 import net.minecraft.entity.player.EntityPlayer;
 

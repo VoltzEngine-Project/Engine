@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import resonant.engine.References;
-import resonant.lib.multiblock.IMultiBlockStructure;
+import resonant.lib.multiblock.reference.IMultiBlockStructure;
 import resonant.lib.network.Synced;
 import resonant.lib.network.Synced.SyncedInput;
 import resonant.lib.network.Synced.SyncedOutput;

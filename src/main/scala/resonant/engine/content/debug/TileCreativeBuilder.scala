@@ -21,7 +21,7 @@ import scala.collection.convert.wrapAll._
 /**
  * Automatically set up structures to allow easy debugging in creative mode.
  */
-object BlockCreativeBuilder
+object TileCreativeBuilder
 {
   def register(schematic: Schematic): Int =
   {
@@ -32,7 +32,7 @@ object BlockCreativeBuilder
   final val registry: List[Schematic] = new ArrayList[Schematic]
 }
 
-class BlockCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable with IPacketReceiver
+class TileCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable with IPacketReceiver
 {
   creativeTab = CreativeTabs.tabTools
   rotationMask = Integer.parseInt("111111", 2).toByte
@@ -42,7 +42,7 @@ class BlockCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable w
    */
   override def activate(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
-    if (BlockCreativeBuilder.registry.size > 0)
+    if (TileCreativeBuilder.registry.size > 0)
     {
       player.openGui(ResonantEngine.instance, -1, world, x, y, z)
       return true
@@ -64,7 +64,7 @@ class BlockCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable w
           val translation: Vector3 = new Vector3(extra(0).asInstanceOf[Double], extra(1).asInstanceOf[Double], extra(2).asInstanceOf[Double])
           if (size > 0)
           {
-            val map = BlockCreativeBuilder.registry.get(schematicID).getStructure(ForgeDirection.getOrientation(translation.getBlockMetadata(world)), size)
+            val map = TileCreativeBuilder.registry.get(schematicID).getStructure(ForgeDirection.getOrientation(translation.getBlockMetadata(world)), size)
             map.foreach(entry => (entry._1 + translation).setBlock(world, entry._2.left(), entry._2.right()))
           }
         }

@@ -1,10 +1,10 @@
 package resonant.engine.content.debug;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
-import resonant.engine.References;
+import resonant.engine.ResonantEngine;
 import resonant.lib.gui.GuiContainerBase;
+import resonant.lib.network.PacketTile;
 import resonant.lib.utility.LanguageUtility;
 import universalelectricity.core.transform.vector.Vector3;
 
@@ -40,7 +40,7 @@ public class GuiCreativeBuilder extends GuiContainerBase
 		fontRendererObj.drawString("Size: ", 9, 60, 4210752);
 		this.textFieldSize.drawTextBox();
 
-		((GuiButton) this.buttonList.get(1)).displayString = LanguageUtility.getLocal(BlockCreativeBuilder$.MODULE$.registry().get(mode).getName());
+		((GuiButton) this.buttonList.get(1)).displayString = LanguageUtility.getLocal(TileCreativeBuilder$.MODULE$.registry().get(mode).getName());
 		fontRendererObj.drawString("Mode: ", 9, 80, 4210752);
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 
@@ -83,13 +83,13 @@ public class GuiCreativeBuilder extends GuiContainerBase
 
 			if (radius > 0)
 			{
-				PacketDispatcher.sendPacketToServer(References.PACKET_TILE.getPacket(position.xi(), position.yi(), position.zi(), mode, radius));
+				ResonantEngine.instance.packetHandler.sendToServer(new PacketTile(position.xi(), position.yi(), position.zi(), new Object[] { mode, radius }));
 				this.mc.thePlayer.closeScreen();
 			}
 		}
 		else if (par1GuiButton.id == 1)
 		{
-			this.mode = (this.mode + 1) % (BlockCreativeBuilder$.MODULE$.registry().size());
+			this.mode = (this.mode + 1) % (TileCreativeBuilder$.MODULE$.registry().size());
 		}
 	}
 

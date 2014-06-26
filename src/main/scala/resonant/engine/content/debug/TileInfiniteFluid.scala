@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
 import resonant.lib.content.prefab.java.TileIO
-import resonant.lib.multiblock.IBlockActivate
+import resonant.lib.multiblock.synthetic.IBlockActivate
 import universalelectricity.core.transform.vector.Vector3
 
 /**

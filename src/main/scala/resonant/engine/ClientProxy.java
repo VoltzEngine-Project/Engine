@@ -9,7 +9,7 @@ import net.minecraft.network.INetHandler;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import resonant.content.wrapper.BlockRenderHandler$;
-import resonant.engine.content.debug.BlockCreativeBuilder;
+import resonant.engine.content.debug.TileCreativeBuilder;
 import resonant.engine.content.debug.GuiCreativeBuilder;
 import resonant.lib.prefab.ProxyBase;
 import resonant.lib.render.model.FixedTechneModelLoader;
@@ -50,7 +50,7 @@ public class ClientProxy extends ProxyBase
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		if (world.getTileEntity(x, y, z) instanceof BlockCreativeBuilder)
+		if (world.getTileEntity(x, y, z) instanceof TileCreativeBuilder)
 		{
 			return new GuiCreativeBuilder(new Vector3(x, y, z));
 		}

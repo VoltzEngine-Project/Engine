@@ -161,7 +161,7 @@ public class PathfinderAStar extends Pathfinder
 
 			for (int i = 0; i < 6; i++)
 			{
-				neighbors.add(vector.clone().translate(ForgeDirection.getOrientation(i)));
+				neighbors.add(vector.clone().add(ForgeDirection.getOrientation(i)));
 			}
 
 			return neighbors;

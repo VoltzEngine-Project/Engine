@@ -1,4 +1,4 @@
-package resonant.lib.multiblock;
+package resonant.lib.multiblock.reference;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -225,7 +225,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 	{
 		if (isConstructed())
 		{
-			nbt.setTag("primaryMultiBlock", getPrimary().getPosition().subtract(self.getPosition()).writeToNBT(getPrimary().getWorld(), new NBTTagCompound()));
+			nbt.setTag("primaryMultiBlock", getPrimary().getPosition().subtract(self.getPosition()).toNBT());
 		}
 	}
 

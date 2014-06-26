@@ -1,4 +1,4 @@
-package resonant.lib.multiblock;
+package resonant.lib.multiblock.synthetic;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,6 +7,9 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import resonant.engine.ResonantEngine;
+import resonant.lib.multiblock.reference.IMultiBlock;
+import resonant.lib.multiblock.synthetic.BlockSyntheticPart;
+import resonant.lib.multiblock.synthetic.IBlockActivate;
 import resonant.lib.network.IPacketReceiver;
 import resonant.lib.network.PacketTile;
 import universalelectricity.core.transform.vector.Vector3;

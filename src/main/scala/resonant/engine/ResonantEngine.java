@@ -33,10 +33,15 @@ import org.apache.logging.log4j.Level;
 import resonant.api.IBoilHandler;
 import resonant.content.ModManager;
 import resonant.engine.content.*;
-import resonant.engine.content.debug.BlockCreativeBuilder;
+import resonant.engine.content.debug.TileCreativeBuilder;
+import resonant.engine.content.debug.TileInfiniteEnergy;
+import resonant.engine.content.debug.TileInfiniteFluid;
 import resonant.engine.content.tool.ToolMode;
 import resonant.engine.content.tool.ToolModeGeneral;
 import resonant.engine.content.tool.ToolModeRotation;
+import resonant.engine.grid.thermal.BoilEvent;
+import resonant.engine.grid.thermal.EventThermal.EventThermalUpdate;
+import resonant.engine.grid.thermal.ThermalGrid;
 import resonant.lib.compat.waila.Waila;
 import resonant.lib.config.Config;
 import resonant.lib.config.ConfigHandler;
@@ -45,18 +50,13 @@ import resonant.lib.flag.CommandFlag;
 import resonant.lib.flag.FlagRegistry;
 import resonant.lib.flag.ModFlag;
 import resonant.lib.modproxy.ProxyHandler;
-import resonant.lib.multiblock.BlockSyntheticPart;
-import resonant.lib.multiblock.TileSyntheticPart;
+import resonant.lib.multiblock.synthetic.TileSyntheticPart;
+import resonant.lib.multiblock.synthetic.BlockSyntheticPart;
 import resonant.lib.network.netty.PacketManager;
-import resonant.lib.prefab.ProxyBase;
-import resonant.content.prefab.itemblock.ItemBlockMetadata;
-import resonant.lib.ore.OreGenerator;
 import resonant.lib.ore.OreGenReplaceStone;
+import resonant.lib.ore.OreGenerator;
+import resonant.lib.prefab.ProxyBase;
 import resonant.lib.recipe.RecipeUtility;
-import resonant.lib.schematic.SchematicTestRoom;
-import resonant.engine.grid.thermal.BoilEvent;
-import resonant.engine.grid.thermal.EventThermal.EventThermalUpdate;
-import resonant.engine.grid.thermal.ThermalGrid;
 import resonant.lib.utility.LanguageUtility;
 import resonant.lib.utility.PlayerInteractionHandler;
 import resonant.lib.utility.PotionUtility;
@@ -121,7 +121,7 @@ public class ResonantEngine
 	 */
 
 	public static BlockSyntheticPart blockMulti;
-	public static BlockCreativeBuilder blockCreativeBuilder;
+	public static TileCreativeBuilder blockCreativeBuilder;
 	public static Block blockInfinite;
 	@Config
 	public static double steamMultiplier = 1;
@@ -359,7 +359,7 @@ public class ResonantEngine
 					}
 
 					Field generationField = ReflectionHelper.findField(ResonantEngine.class, "generation" + Character.toUpperCase(name.charAt(0)) + name.substring(1));
-					generationField.set(null, new OreGenReplaceStone(name, name, new ItemStack(block), 60, 25, 4).enable(References.CONFIGURATION));
+					generationField.set(null, new OreGenReplaceStone(name,  new ItemStack(block), 60, 25, 4).enable(References.CONFIGURATION));
 					OreGenerator.addOre((OreGenReplaceStone) generationField.get(null));
 				}
 
@@ -437,13 +437,15 @@ public class ResonantEngine
 
 		if (References.CONFIGURATION.get("CreaiveModeTools", "CreativeBuilder", runningAsDev).getBoolean(true))
 		{
-			blockCreativeBuilder = (BlockCreativeBuilder) contentRegistry.newBlock(BlockCreativeBuilder.class);
+			blockCreativeBuilder = (TileCreativeBuilder) contentRegistry.newBlock(TileCreativeBuilder.class);
 		}
 		if (References.CONFIGURATION.get("CreaiveModeTools", "InfiniteSource", runningAsDev).getBoolean(true))
 		{
-			blockInfinite = contentRegistry.newBlock(BlockInfiniteBlock.class, ItemBlockMetadata.class);
+			blockInfinite = contentRegistry.newBlock(TileInfiniteFluid.class);
+			blockInfinite = contentRegistry.newBlock(TileInfiniteEnergy.class);
 		}
-		BlockCreativeBuilder.register(new SchematicTestRoom());
+
+		//BlockCreativeBuilder.register(new SchematicTestRoom());
 		//Finish and close all resources
 		References.CONFIGURATION.load();
 		References.CONFIGURATION.save();

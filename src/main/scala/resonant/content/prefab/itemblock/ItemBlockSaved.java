@@ -18,8 +18,9 @@ import universalelectricity.core.transform.vector.VectorWorld;
  */
 public class ItemBlockSaved extends ItemBlockTooltip
 {
-	public ItemBlockSaved()
+	public ItemBlockSaved(Block block)
 	{
+		super(block);
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
 		this.setMaxStackSize(1);

@@ -1,4 +1,4 @@
-package resonant.lib.multiblock;
+package resonant.lib.multiblock.reference;
 
 import universalelectricity.core.transform.vector.Vector3;
 
