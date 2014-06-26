@@ -1,4 +1,4 @@
-package resonant.lib.thermal;
+package resonant.engine.grid.thermal;
 
 import net.minecraft.nbt.NBTTagCompound;
 import resonant.lib.prefab.tile.TileAdvanced;

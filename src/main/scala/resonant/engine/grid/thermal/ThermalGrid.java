@@ -1,4 +1,4 @@
-package resonant.lib.thermal;
+package resonant.engine.grid.thermal;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
@@ -6,7 +6,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IReactor;
 import resonant.engine.ResonantEngine;
-import resonant.lib.thermal.EventThermal.EventThermalUpdate;
+import resonant.engine.grid.thermal.EventThermal.EventThermalUpdate;
 import universalelectricity.api.core.grid.IUpdate;
 import universalelectricity.core.transform.vector.VectorWorld;
 

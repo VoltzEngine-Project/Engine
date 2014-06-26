@@ -1,9 +1,11 @@
-package resonant.lib.thermal;
+package resonant.engine.grid.thermal;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import resonant.lib.type.Pair;
+import universalelectricity.core.transform.vector.IVector3;
+import universalelectricity.core.transform.vector.IVectorWorld;
 
 import java.util.HashMap;
 
@@ -123,7 +125,7 @@ public class HeatingDictionary
 	 */
 	public static float getSpecificHeat(World world, int x, int y, int z)
 	{
-		Block block = Block.blocksList[world.getBlockId(x, y, z)];
+		Block block = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		if (block != null)
 		{

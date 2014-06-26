@@ -1,4 +1,4 @@
-package resonant.lib.thermal;
+package resonant.engine.grid.thermal;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import universalelectricity.core.transform.vector.VectorWorld;

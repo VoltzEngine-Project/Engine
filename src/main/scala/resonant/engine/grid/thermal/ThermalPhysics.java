@@ -1,4 +1,4 @@
-package resonant.lib.thermal;
+package resonant.engine.grid.thermal;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;

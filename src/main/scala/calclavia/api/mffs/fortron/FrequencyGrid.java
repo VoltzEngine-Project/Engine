@@ -1,167 +1,71 @@
 package calclavia.api.mffs.fortron;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.WeakHashMap;
-
-import net.minecraft.server.ServerListenThread;
-import net.minecraft.server.ThreadMinecraftServer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import resonant.api.blocks.IBlockFrequency;
+import universalelectricity.core.transform.region.Cuboid;
 import universalelectricity.core.transform.vector.Vector3;
 
-/** A grid MFFS uses to search for machines with frequencies that can be linked and spread Fortron
+import java.util.Set;
+
+/**
+ * A grid MFFS uses to search for machines with frequencies that can be linked and spread Fortron
  * energy.
- * 
- * @author Calclavia */
+ *
+ * @author Calclavia
+ */
 public class FrequencyGrid
 {
-    private static FrequencyGrid CLIENT_INSTANCE = new FrequencyGrid();
-    private static FrequencyGrid SERVER_INSTANCE = new FrequencyGrid();
+	private static IFrequencyGrid CLIENT_INSTANCE = new resonant.engine.grid.frequency.FrequencyGrid();
+	private static IFrequencyGrid SERVER_INSTANCE = new resonant.engine.grid.frequency.FrequencyGrid();
 
-    private final Set<IBlockFrequency> frequencyGrid = Collections.newSetFromMap(new WeakHashMap<IBlockFrequency, Boolean>());
+	public static IFrequencyGrid instance()
+	{
+		Thread thr = Thread.currentThread();
 
-    /** Called to re-initiate the grid. Used when server restarts or when player rejoins a world to
-     * clean up previously registered objects. */
-    public static void reinitiate()
-    {
-        CLIENT_INSTANCE = new FrequencyGrid();
-        SERVER_INSTANCE = new FrequencyGrid();
-    }
+		if (thr.getName().equals("Server thread") || thr instanceof IServerThread)
+		{
+			return SERVER_INSTANCE;
+		}
 
-    public static FrequencyGrid instance()
-    {
-        Thread thr = Thread.currentThread();
+		return CLIENT_INSTANCE;
+	}
 
-        if ((thr instanceof ThreadMinecraftServer) || (thr instanceof ServerListenThread) || (thr instanceof IServerThread))
-        {
-            return SERVER_INSTANCE;
-        }
+	/**
+	 * Called to re-initiate the grid. Used when server restarts or when player rejoins a world to
+	 * clean up previously registered objects.
+	 */
+	public static void reinitiate()
+	{
+		CLIENT_INSTANCE = new resonant.engine.grid.frequency.FrequencyGrid();
+		SERVER_INSTANCE = new resonant.engine.grid.frequency.FrequencyGrid();
+	}
 
-        return CLIENT_INSTANCE;
-    }
+	public static interface IFrequencyGrid
+	{
+		void add(IBlockFrequency tileEntity);
 
-    public void register(IBlockFrequency tileEntity)
-    {
-        synchronized (frequencyGrid)
-        {
-            cleanUp();
-            frequencyGrid.add(tileEntity);
-        }
-    }
+		void remove(IBlockFrequency tileEntity);
 
-    public void unregister(IBlockFrequency tileEntity)
-    {
-        synchronized (frequencyGrid)
-        {
-            frequencyGrid.remove(tileEntity);
-            cleanUp();
-        }
-    }
+		Set<IBlockFrequency> getNodes();
 
-    public Set<IBlockFrequency> get()
-    {
-        return frequencyGrid;
-    }
+		Set<IBlockFrequency> getNodes(Class clazz);
 
-    /** Gets a list of TileEntities that has a specific frequency.
-     * 
-     * @param frequency - The Frequency */
-    public Set<IBlockFrequency> get(int frequency)
-    {
-        Set<IBlockFrequency> set = new HashSet<IBlockFrequency>();
+		/**
+		 * Gets a list of TileEntities that has a specific frequency.
+		 */
+		Set<IBlockFrequency> getNodes(int frequency);
 
-        for (IBlockFrequency tile : this.get())
-        {
-            if (tile != null && !((TileEntity) tile).isInvalid())
-            {
-                if (tile.getFrequency() == frequency)
-                {
-                    set.add(tile);
-                }
-            }
-        }
+		Set<IBlockFrequency> getNodes(Class clazz, int frequency);
 
-        return set;
-    }
+		/**
+		 * Gets a list of TileEntities that has a specific frequency, within a radius around a position.
+		 */
+		Set<IBlockFrequency> getNodes(World world, Vector3 position, int radius, int frequency);
 
-    public void cleanUp()
-    {
-        Iterator<IBlockFrequency> it = this.frequencyGrid.iterator();
+		Set<IBlockFrequency> getNodes(Class clazz, World world, Vector3 position, int radius, int frequency);
 
-        while (it.hasNext())
-        {
-            IBlockFrequency frequency = it.next();
+		Set<IBlockFrequency> getNodes(World world, Cuboid region, int frequency);
 
-            if (frequency == null)
-            {
-                it.remove();
-                continue;
-            }
-
-            if (((TileEntity) frequency).isInvalid())
-            {
-                it.remove();
-                continue;
-            }
-
-            if (((TileEntity) frequency).worldObj.getBlockTileEntity(((TileEntity) frequency).xCoord, ((TileEntity) frequency).yCoord, ((TileEntity) frequency).zCoord) != ((TileEntity) frequency))
-            {
-                it.remove();
-                continue;
-            }
-        }
-    }
-
-    public Set<IBlockFrequency> get(World world, Vector3 position, int radius, int frequency)
-    {
-        Set<IBlockFrequency> set = new HashSet<IBlockFrequency>();
-
-        for (IBlockFrequency tileEntity : this.get(frequency))
-        {
-            if (((TileEntity) tileEntity).worldObj == world)
-            {
-                if (Vector3.distance(new Vector3((TileEntity) tileEntity), position) <= radius)
-                {
-                    set.add(tileEntity);
-                }
-            }
-        }
-        return set;
-
-    }
-
-    public Set<IFortronFrequency> getFortronTiles(World world)
-    {
-        Set<IFortronFrequency> set = new HashSet<IFortronFrequency>();
-
-        for (IBlockFrequency tileEntity : this.get())
-        {
-            if (((TileEntity) tileEntity).worldObj == world && tileEntity instanceof IFortronFrequency)
-            {
-                set.add((IFortronFrequency) tileEntity);
-            }
-        }
-        return set;
-    }
-
-    public Set<IFortronFrequency> getFortronTiles(World world, Vector3 position, int radius, int frequency)
-    {
-        Set<IFortronFrequency> set = new HashSet<IFortronFrequency>();
-
-        for (IBlockFrequency tileEntity : this.get(frequency))
-        {
-            if (((TileEntity) tileEntity).worldObj == world && tileEntity instanceof IFortronFrequency)
-            {
-                if (Vector3.distance(new Vector3((TileEntity) tileEntity), position) <= radius)
-                {
-                    set.add((IFortronFrequency) tileEntity);
-                }
-            }
-        }
-        return set;
-    }
+		Set<IBlockFrequency> getNodes(Class clazz, World world, Cuboid region, int frequency);
+	}
 }

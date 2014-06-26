@@ -1,4 +1,4 @@
-package resonant.lib.thermal;
+package resonant.engine.grid.thermal;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -8,9 +8,9 @@ import net.minecraftforge.fluids.FluidStack;
  *
  * @author Calclavia
  */
-public class FluidThermal extends Fluid
+public class FluidAdvanced extends Fluid
 {
-	public FluidThermal(String fluidName)
+	public FluidAdvanced(String fluidName)
 	{
 		super(fluidName);
 	}
