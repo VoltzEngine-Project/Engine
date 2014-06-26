@@ -225,6 +225,8 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable wit
    */
   def angle(other: Vector3) = Math.acos((this $ other) / (magnitude * other.magnitude))
 
+  def anglePreNorm(other: Vector3) = Math.acos(this $ other)
+
   def rayTrace(world: World, end: Vector3): MovingObjectPosition =
   {
     val block = rayTraceBlocks(world, end)
