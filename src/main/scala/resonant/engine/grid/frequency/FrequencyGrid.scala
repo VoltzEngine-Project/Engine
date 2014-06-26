@@ -2,7 +2,7 @@ package resonant.engine.grid.frequency
 
 import java.util._
 
-import calclavia.api.mffs.fortron.FrequencyGrid
+import calclavia.api.mffs.fortron.FrequencyGridRegistry
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 import resonant.api.blocks.IBlockFrequency
@@ -12,7 +12,7 @@ import universalelectricity.core.transform.vector.Vector3
 
 import scala.collection.convert.wrapAll._
 
-class FrequencyGrid extends Grid[IBlockFrequency] with FrequencyGrid.IFrequencyGrid
+class FrequencyGrid extends Grid[IBlockFrequency] with FrequencyGridRegistry.IFrequencyGrid
 {
   /**
    * Adds a node to the grid.

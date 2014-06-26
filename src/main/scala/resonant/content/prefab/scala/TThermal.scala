@@ -9,6 +9,8 @@ import resonant.content.spatial.block.SpatialBlock
  */
 trait TThermal extends SpatialBlock
 {
+  private var temperature = 273f + 20f
+
   def addThermalEnergy(energy: Long): Int =
   {
     val mass: Float = getMass
@@ -40,13 +42,13 @@ trait TThermal extends SpatialBlock
 
   def boilingPoint: Int
 
-  protected def boil
+  protected def boil()
   {
   }
 
-  def meltingPoint: Int
+  def meltingPoint(): Int
 
-  protected def melt
+  protected def melt()
   {
   }
 
@@ -55,14 +57,12 @@ trait TThermal extends SpatialBlock
   override def readFromNBT(nbt: NBTTagCompound)
   {
     super.readFromNBT(nbt)
-    temperature = nbt.getInteger("temperature")
+    temperature = nbt.getFloat("temperature")
   }
 
   override def writeToNBT(nbt: NBTTagCompound)
   {
     super.writeToNBT(nbt)
-    nbt.setInteger("temperature", temperature)
+    nbt.setFloat("temperature", temperature)
   }
-
-  private var temperature: Int = 273 + 20
 }

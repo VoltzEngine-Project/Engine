@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
  *
  * @author Calclavia
  */
+@Deprecated
 public interface IBlockActivate
 {
 	/**

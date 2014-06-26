@@ -1,8 +1,8 @@
 package resonant.lib.recipe;
 
-import ic2.api.item.Items;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import ic2.api.item.IC2Items;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -62,26 +62,26 @@ public class UniversalRecipe
 	static
 	{
 		// Metals
-		PRIMARY_METAL = new UniversalRecipe("ingotSteel", "ingotRefinedIron", new ItemStack(Item.ingotIron));
-		SECONDARY_METAL = new UniversalRecipe("ingotBronze", new ItemStack(Item.brick));
+		PRIMARY_METAL = new UniversalRecipe("ingotSteel", "ingotRefinedIron", new ItemStack(Items.iron_ingot));
+		SECONDARY_METAL = new UniversalRecipe("ingotBronze", new ItemStack(Items.brick));
 
 		// Plates
-		PRIMARY_PLATE = new UniversalRecipe("plateSteel", Items.getItem("advancedAlloy"), new ItemStack(Block.blockIron));
-		SECONDARY_PLATE = new UniversalRecipe("plateBronze", Items.getItem("carbonPlate"), new ItemStack(Block.brick));
+		PRIMARY_PLATE = new UniversalRecipe("plateSteel", IC2Items.getItem("advancedAlloy"), new ItemStack(Blocks.iron_block));
+		SECONDARY_PLATE = new UniversalRecipe("plateBronze", IC2Items.getItem("carbonPlate"), new ItemStack(Blocks.brick_block));
 		// Miscs
-		CIRCUIT_T1 = new UniversalRecipe("circuitBasic", Items.getItem("electronicCircuit"), new ItemStack(Block.torchRedstoneActive));
-		CIRCUIT_T2 = new UniversalRecipe("circuitAdvanced", Items.getItem("advancedCircuit"), new ItemStack(Item.redstoneRepeater));
-		CIRCUIT_T3 = new UniversalRecipe("circuitElite", Items.getItem("iridiumPlate"), new ItemStack(Item.comparator));
+		CIRCUIT_T1 = new UniversalRecipe("circuitBasic", IC2Items.getItem("electronicCircuit"), new ItemStack(Blocks.unlit_redstone_torch));
+		CIRCUIT_T2 = new UniversalRecipe("circuitAdvanced", IC2Items.getItem("advancedCircuit"), new ItemStack(Items.repeater));
+		CIRCUIT_T3 = new UniversalRecipe("circuitElite", IC2Items.getItem("iridiumPlate"), new ItemStack(Items.comparator));
 
-		ADVANCED_BATTERY = new UniversalRecipe("advancedBattery", Items.getItem("energyCrystal"), "battery", new ItemStack(Item.redstoneRepeater));
-		BATTERY = new UniversalRecipe("battery", Items.getItem("reBattery"), new ItemStack(Item.redstoneRepeater));
-		BATTERY_BOX = new UniversalRecipe("batteryBox", Items.getItem("batBox"), new ItemStack(Block.blockGold));
+		ADVANCED_BATTERY = new UniversalRecipe("advancedBattery", IC2Items.getItem("energyCrystal"), "battery", new ItemStack(Items.repeater));
+		BATTERY = new UniversalRecipe("battery", IC2Items.getItem("reBattery"), new ItemStack(Items.repeater));
+		BATTERY_BOX = new UniversalRecipe("batteryBox", IC2Items.getItem("batBox"), new ItemStack(Blocks.gold_block));
 
-		WRENCH = new UniversalRecipe("wrench", Items.getItem("wrench"), new ItemStack(Item.axeIron));
-		WIRE = new UniversalRecipe("wire", "ironWire", "copperCableBlock", new ItemStack(Item.redstone));
+		WRENCH = new UniversalRecipe("wrench", IC2Items.getItem("wrench"), new ItemStack(Items.iron_axe));
+		WIRE = new UniversalRecipe("wire", "ironWire", "copperCableBlock", new ItemStack(Items.redstone));
 
-		MOTOR = new UniversalRecipe("motor", "gear", Items.getItem("generator"), new ItemStack(Block.pistonBase));
-		RUBBER = new UniversalRecipe("rubber", "itemRubber", new ItemStack(Item.slimeBall));
+		MOTOR = new UniversalRecipe("motor", "gear", IC2Items.getItem("generator"), new ItemStack(Blocks.piston));
+		RUBBER = new UniversalRecipe("rubber", "itemRubber", new ItemStack(Items.slime_ball));
 	}
 
 	public UniversalRecipe(String defaultRecipe, Object... alternativeRecipes)

@@ -242,7 +242,6 @@ public class NBTUtility
 	 *
 	 * @param tag             - tag to read the value from
 	 * @param key             - name of the value
-	 * @param suggestionValue - value to return in case nothing is found
 	 * @return object or suggestionValue if nothing is found
 	 */
 	public static Object loadObject(NBTTagCompound tag, String key)

@@ -13,7 +13,7 @@ import java.util.Set;
  *
  * @author Calclavia
  */
-public class FrequencyGrid
+public class FrequencyGridRegistry
 {
 	private static IFrequencyGrid CLIENT_INSTANCE = new resonant.engine.grid.frequency.FrequencyGrid();
 	private static IFrequencyGrid SERVER_INSTANCE = new resonant.engine.grid.frequency.FrequencyGrid();

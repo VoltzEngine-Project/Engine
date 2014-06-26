@@ -1,8 +1,9 @@
 package resonant.lib.utility;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFluid;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -11,14 +12,10 @@ import net.minecraftforge.fluids.*;
 import resonant.lib.type.Pair;
 import resonant.lib.utility.inventory.AutoCraftingManager;
 import resonant.lib.utility.inventory.InventoryUtility;
+import universalelectricity.core.transform.vector.Vector3;
 import universalelectricity.core.transform.vector.VectorWorld;
 
-import universalelectricity.core.transform.vector.Vector3;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -28,30 +25,30 @@ import java.util.Map.Entry;
  */
 public class FluidUtility
 {
-	public static List<Pair<Integer, Integer>> replacableBlockMeta = new ArrayList<Pair<Integer, Integer>>();
-	public static List<Block> replacableBlocks = new ArrayList<Block>();
-	public static List<Block> nonBlockDropList = new ArrayList<Block>();
+	public static Set<Pair<Block, Integer>> replacableBlockMeta = new HashSet();
+	public static Set<Block> replacableBlocks = new HashSet();
+	public static Set<Block> nonBlockDropList = new HashSet();
 
 	static
 	{
 
         /* Adds default fluid replaceable blocks */
-		replacableBlocks.add(Block.crops);
-		replacableBlocks.add(Block.deadBush);
-		nonBlockDropList.add(Block.deadBush);
-		// TODO have waterlily raise and lower when automaticly filling or draining a block rather
+		replacableBlocks.add(Blocks.wheat);
+		replacableBlocks.add(Blocks.deadbush);
+		nonBlockDropList.add(Blocks.deadbush);
+		// TODO have waterlily raise and lower when auto filling or draining a block rather
 		// than remove it
-		replacableBlocks.add(Block.waterlily);
-		replacableBlocks.add(Block.mushroomRed);
-		replacableBlocks.add(Block.mushroomBrown);
-		replacableBlocks.add(Block.netherStalk);
-		replacableBlocks.add(Block.sapling);
-		replacableBlocks.add(Block.melonStem);
-		nonBlockDropList.add(Block.melonStem);
-		replacableBlocks.add(Block.pumpkinStem);
-		nonBlockDropList.add(Block.pumpkinStem);
-		replacableBlocks.add(Block.tallGrass);
-		replacableBlocks.add(Block.torchWood);
+		replacableBlocks.add(Blocks.waterlily);
+		replacableBlocks.add(Blocks.red_mushroom);
+		replacableBlocks.add(Blocks.brown_mushroom);
+		replacableBlocks.add(Blocks.nether_wart);
+		replacableBlocks.add(Blocks.sapling);
+		replacableBlocks.add(Blocks.melon_stem);
+		nonBlockDropList.add(Blocks.melon_stem);
+		replacableBlocks.add(Blocks.pumpkin_stem);
+		nonBlockDropList.add(Blocks.pumpkin_stem);
+		replacableBlocks.add(Blocks.tallgrass);
+		replacableBlocks.add(Blocks.torch);
 	}
 
 	public static int getFluidAmountFromBlock(World world, Vector3 vector)
@@ -62,22 +59,22 @@ public class FluidUtility
 
 	public static FluidStack getFluidStackFromBlock(World world, Vector3 vector)
 	{
-		int id = vector.getBlockID(world);
+		Block block = vector.getBlock(world);
 		int meta = vector.getBlockMetadata(world);
 
-		if (Block.blocksList[id] instanceof IFluidBlock)
+		if (block instanceof IFluidBlock)
 		{
-			IFluidBlock fluidBlock = ((IFluidBlock) Block.blocksList[id]);
-			return new FluidStack(fluidBlock.getFluid(), (int) (FluidContainerRegistry.BUCKET_VOLUME * fluidBlock.getFilledPercentage(world, vector.intX(), vector.intY(), vector.intZ())));
+			IFluidBlock fluidBlock = ((IFluidBlock) block);
+			return new FluidStack(fluidBlock.getFluid(), (int) (FluidContainerRegistry.BUCKET_VOLUME * fluidBlock.getFilledPercentage(world, vector.xi(), vector.yi(), vector.zi())));
 		}
-		else if (id == Block.waterStill.blockID || id == Block.waterMoving.blockID)
+		else if (block == Blocks.water || block == Blocks.flowing_water)
 		{
 			if (meta == 0)
 			{
 				return new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
 			}
 		}
-		else if (id == Block.lavaStill.blockID || id == Block.lavaMoving.blockID)
+		else if (block == Blocks.lava || block == Blocks.flowing_lava)
 		{
 			if (meta == 0)
 			{
@@ -137,11 +134,11 @@ public class FluidUtility
 
 		for (ForgeDirection side : sides)
 		{
-			TileEntity tile = position.clone().translate(side).getTileEntity(world);
+			TileEntity tile = position.clone().add(side).getTileEntity(world);
 
 			if (tile != null && (classMask == null || classMask.isAssignableFrom(tile.getClass())))
 			{
-				FluidTankInfo[] info = getTankInfo(world, position.clone().translate(side), side);
+				FluidTankInfo[] info = getTankInfo(world, position.clone().add(side), side);
 
 				if (info.length > 0)
 				{
@@ -163,23 +160,23 @@ public class FluidUtility
 	 */
 	public static Fluid getFluidFromBlock(World world, Vector3 vector)
 	{
-		return FluidUtility.getFluidFromBlockID(vector.getBlockID(world));
+		return FluidUtility.getFluidFromBlockID(vector.getBlock(world));
 	}
 
 	/**
 	 * Gets a fluid from blockID
 	 */
-	public static Fluid getFluidFromBlockID(int id)
+	public static Fluid getFluidFromBlockID(Block block)
 	{
-		if (Block.blocksList[id] instanceof IFluidBlock)
+		if (block instanceof IFluidBlock)
 		{
-			return ((IFluidBlock) Block.blocksList[id]).getFluid();
+			return ((IFluidBlock) block).getFluid();
 		}
-		else if (id == Block.waterStill.blockID || id == Block.waterMoving.blockID)
+		else if (block == Blocks.water || block == Blocks.flowing_water)
 		{
 			return FluidRegistry.WATER;
 		}
-		else if (id == Block.lavaStill.blockID || id == Block.lavaMoving.blockID)
+		else if (block == Blocks.lava || block == Blocks.flowing_lava)
 		{
 			return FluidRegistry.LAVA;
 		}
@@ -238,37 +235,38 @@ public class FluidUtility
 			return null;
 		}
 
-		int blockID = position.getBlockID(world);
+		Block block = position.getBlock(world);
 		int meta = position.getBlockMetadata(world);
-		Block block = Block.blocksList[blockID];
+
 		if (block != null)
 		{
-			if (block instanceof IFluidBlock && ((IFluidBlock) block).canDrain(world, position.intX(), position.intY(), position.intZ()))
+			if (block instanceof IFluidBlock && ((IFluidBlock) block).canDrain(world, position.xi(), position.yi(), position.zi()))
 			{
-				return ((IFluidBlock) block).drain(world, position.intX(), position.intY(), position.intZ(), doDrain);
+				return ((IFluidBlock) block).drain(world, position.xi(), position.yi(), position.zi(), doDrain);
 			}
-			else if ((block.blockID == Block.waterStill.blockID || block.blockID == Block.waterMoving.blockID) && position.getBlockMetadata(world) == 0)
+			else if ((block == Blocks.water || block == Blocks.flowing_water) && position.getBlockMetadata(world) == 0)
 			{
 				if (doDrain)
 				{
-					Vector3 vec = position.clone().translate(ForgeDirection.UP);
-					if (vec.getBlockID(world) == Block.waterlily.blockID)
+					Vector3 vec = position.clone().add(ForgeDirection.UP);
+
+					if (vec.getBlock(world) == Blocks.water)
 					{
-						vec.setBlock(world, 0, 0, update);
-						position.setBlock(world, blockID, meta);
+						vec.setBlock(world, Blocks.air, 0, update);
+						position.setBlock(world, block, meta);
 					}
 					else
 					{
-						position.setBlock(world, 0, 0, update);
+						position.setBlock(world, Blocks.air, 0, update);
 					}
 				}
 				return new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
 			}
-			else if ((block.blockID == Block.lavaStill.blockID || block.blockID == Block.lavaMoving.blockID) && position.getBlockMetadata(world) == 0)
+			else if ((block == Blocks.lava || block == Blocks.flowing_lava) && position.getBlockMetadata(world) == 0)
 			{
 				if (doDrain)
 				{
-					position.setBlock(world, 0, 0, update);
+					position.setBlock(world, Blocks.air, 0, update);
 				}
 				return new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME);
 			}
@@ -286,18 +284,18 @@ public class FluidUtility
 			return false;
 		}
 
-		int blockID = node.getBlockID(world);
+		Block block = node.getBlock(world);
 		int meta = node.getBlockMetadata(world);
-		Block block = Block.blocksList[blockID];
+
 		if (drainBlock(world, node, false) != null)
 		{
 			return false;
 		}
-		else if (block == null || block.blockID == 0 || block.isAirBlock(world, node.intX(), node.intY(), node.intZ()))
+		else if (block.isAir(world, node.xi(), node.yi(), node.zi()))
 		{
 			return true;
 		}
-		else if (!(block instanceof IFluidBlock || block instanceof BlockFluid) && block.isBlockReplaceable(world, node.intX(), node.intY(), node.intZ()) || replacableBlockMeta.contains(new Pair<Integer, Integer>(blockID, meta)) || replacableBlocks.contains(block))
+		else if (!(block instanceof IFluidBlock || block instanceof BlockLiquid) && block.isReplaceable(world, node.xi(), node.yi(), node.zi()) || replacableBlockMeta.contains(new Pair(block, meta)) || replacableBlocks.contains(block))
 		{
 			return true;
 		}
@@ -314,15 +312,15 @@ public class FluidUtility
 			return false;
 		}
 
-		int blockID = node.getBlockID(world);
+		Block block = node.getBlock(world);
 		int meta = node.getBlockMetadata(world);
-		Block block = Block.blocksList[blockID];
+
 		// TODO when added change this to call canFill and fill
 		if (drainBlock(world, node, false) != null)
 		{
 			return false;
 		}
-		else if (block instanceof IFluidBlock || block instanceof BlockFluid)
+		else if (block instanceof IFluidBlock || block instanceof BlockLiquid)
 		{
 			return meta != 0;
 		}
@@ -342,25 +340,25 @@ public class FluidUtility
 		{
 			if (doFill)
 			{
-				int blockID = node.getBlockID(world);
+				Block block = node.getBlock(world);
 				int meta = node.getBlockMetadata(world);
-				Block block = Block.blocksList[blockID];
-				Vector3 vec = node.clone().translate(ForgeDirection.UP);
+
+				Vector3 vec = node.clone().add(ForgeDirection.UP);
 
 				if (block != null)
 				{
-					if (block.blockID == Block.waterlily.blockID && vec.getBlockID(world) == 0)
+					if (block == Blocks.water && vec.getBlock(world).isAir(world, node.xi(), node.yi(), node.zi()))
 					{
-						vec.setBlock(world, blockID, meta);
+						vec.setBlock(world, block, meta);
 					}
 					else if (block != null && replacableBlocks.contains(block) && !nonBlockDropList.contains(block))
 					{
-						block.dropBlockAsItem(world, node.intX(), node.intY(), node.intZ(), meta, 1);
-						block.breakBlock(world, node.intX(), node.intY(), node.intZ(), blockID, meta);
+						block.dropBlockAsItem(world, node.xi(), node.yi(), node.zi(), meta, 1);
+						block.breakBlock(world, node.xi(), node.yi(), node.zi(), block, meta);
 					}
 				}
 
-				node.setBlock(world, stack.getFluid().getBlockID());
+				node.setBlock(world, stack.getFluid().getBlock());
 			}
 			return FluidContainerRegistry.BUCKET_VOLUME;
 		}
@@ -412,7 +410,7 @@ public class FluidUtility
 	 */
 	public static int fillTankSide(World world, Vector3 origin, FluidStack stack, boolean doFill, ForgeDirection direction)
 	{
-		TileEntity entity = origin.clone().translate(direction).getTileEntity(world);
+		TileEntity entity = origin.clone().add(direction).getTileEntity(world);
 		if (entity instanceof IFluidHandler && ((IFluidHandler) entity).canFill(direction.getOpposite(), stack.getFluid()))
 		{
 			return ((IFluidHandler) entity).fill(direction.getOpposite(), stack, doFill);
@@ -481,10 +479,10 @@ public class FluidUtility
 		// TODO Add double click support similar to the crates in assembly line
 		ItemStack current = entityplayer.inventory.getCurrentItem();
 
-		if (current != null && world.getBlockTileEntity(x, y, z) instanceof IFluidHandler)
+		if (current != null && world.getTileEntity(x, y, z) instanceof IFluidHandler)
 		{
 			FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(current);
-			IFluidHandler tank = (IFluidHandler) world.getBlockTileEntity(x, y, z);
+			IFluidHandler tank = (IFluidHandler) world.getTileEntity(x, y, z);
 
 			if (fluid != null)
 			{
@@ -597,8 +595,8 @@ public class FluidUtility
 	/**
 	 * Drains an item of fluid and fills the tank with what was drained
 	 *
-	 * @param consumeItem - should it consume the item. Used mainly for creative mode players. This
-	 *                    does effect the return of the method
+	 * @param stack - should it consume the item. Used mainly for creative mode players. This
+	 *              does effect the return of the method
 	 * @return Item stack that would be returned if the item was drain of its fluid. Water bucket ->
 	 * empty bucket
 	 */
@@ -611,7 +609,7 @@ public class FluidUtility
 			{
 				if (tank.fill(side, liquid, true) > 0)
 				{
-					return stack.getItem().getContainerItemStack(stack);
+					return stack.getItem().getContainerItem(stack);
 				}
 			}
 		}
@@ -621,8 +619,8 @@ public class FluidUtility
 	/**
 	 * Fills an item with fluid from the tank
 	 *
-	 * @param consumeItem - should it consume the item. Used mainly for creative mode players. This
-	 *                    does effect the return of the method
+	 * @param stack - should it consume the item. Used mainly for creative mode players. This
+	 *              does effect the return of the method
 	 * @return Item stack that would be returned if the item was filled with fluid. empty bucket ->
 	 * water bucket
 	 */
