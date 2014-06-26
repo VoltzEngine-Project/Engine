@@ -1,5 +1,7 @@
-package resonant.lib.prefab.ore;
+package resonant.lib.ore;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -12,19 +14,19 @@ import java.util.Random;
 
 /**
  * This class is used for storing ore generation data. If you are too lazy to generate your own
- * ores, you can do {@link #OreGenerator.ORES_TO_GENERATE.add()} to add your ore to the list of ores
+ * ores, you can do add to add your ore to the list of ores
  * to generate.
  *
  * @author Calclavia
  */
-public class OreGenReplace extends OreGenBase
+public class OreGenReplace extends OreGenerator
 {
 
 	public int minGenerateLevel;
 	public int maxGenerateLevel;
 	public int amountPerChunk;
 	public int amountPerBranch;
-	public int replaceID;
+	public Block replaceBlock;
 
 	/**
 	 * Dimensions to ignore ore generation
@@ -34,22 +36,21 @@ public class OreGenReplace extends OreGenBase
 	public boolean ignoreEnd = true;
 
 	/**
-	 * @param name             - The name of the ore for display
-	 * @param textureFile      - The 16x16 png texture of your ore to override
+	 * @param name             - The name of the ore dictionary
 	 * @param minGenerateLevel - The highest generation level of your ore
 	 * @param maxGenerateLevel - The lowest generation level of your ore
 	 * @param amountPerChunk   - The amount of ores to generate per chunk
 	 * @param amountPerBranch  - The amount of ores to generate in a clutter. E.g coal generates with
 	 *                         a lot of other coal next to it. How much do you want?
 	 */
-	public OreGenReplace(String name, String oreDiectionaryName, ItemStack stack, int replaceID, int minGenerateLevel, int maxGenerateLevel, int amountPerChunk, int amountPerBranch, String harvestTool, int harvestLevel)
+	public OreGenReplace(String name, ItemStack stack, Block replaceBlock, int minGenerateLevel, int maxGenerateLevel, int amountPerChunk, int amountPerBranch, String harvestTool, int harvestLevel)
 	{
-		super(name, oreDiectionaryName, stack, harvestTool, harvestLevel);
+		super(name, stack, harvestTool, harvestLevel);
 		this.minGenerateLevel = minGenerateLevel;
 		this.maxGenerateLevel = maxGenerateLevel;
 		this.amountPerChunk = amountPerChunk;
 		this.amountPerBranch = amountPerBranch;
-		this.replaceID = replaceID;
+		this.replaceBlock = replaceBlock;
 	}
 
 	@Override
@@ -113,10 +114,10 @@ public class OreGenReplace extends OreGenBase
 							{
 								double var45 = (var44 + 0.5D - var24) / (var28 / 2.0D);
 
-								int block = par1World.getBlockId(var38, var41, var44);
-								if (var39 * var39 + var42 * var42 + var45 * var45 < 1.0D && (this.replaceID == 0 || block == this.replaceID))
+								Block block = par1World.getBlock(var38, var41, var44);
+								if (var39 * var39 + var42 * var42 + var45 * var45 < 1.0D && (this.replaceBlock == Blocks.air || block == this.replaceBlock))
 								{
-									par1World.setBlock(var38, var41, var44, this.oreID, this.oreMeta, 2);
+									par1World.setBlock(var38, var41, var44, this.oreBlock, this.oreMeta, 2);
 								}
 							}
 						}

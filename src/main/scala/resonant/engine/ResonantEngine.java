@@ -50,9 +50,8 @@ import resonant.lib.multiblock.TileSyntheticPart;
 import resonant.lib.network.netty.PacketManager;
 import resonant.lib.prefab.ProxyBase;
 import resonant.content.prefab.itemblock.ItemBlockMetadata;
-import resonant.lib.ore.OreGenBase;
-import resonant.lib.ore.OreGenReplaceStone;
 import resonant.lib.ore.OreGenerator;
+import resonant.lib.ore.OreGenReplaceStone;
 import resonant.lib.recipe.RecipeUtility;
 import resonant.lib.schematic.SchematicTestRoom;
 import resonant.engine.grid.thermal.BoilEvent;
@@ -116,7 +115,7 @@ public class ResonantEngine
 	public static Item itemIngotBronze;
 	public static Item itemDustSteel;
 	public static Item itemDustBronze;
-	public static OreGenBase generationOreCopper, generationOreTin;
+	public static OreGenerator generationOreCopper, generationOreTin;
 	/**
 	 * Resonant Engine Blocks for mods
 	 */

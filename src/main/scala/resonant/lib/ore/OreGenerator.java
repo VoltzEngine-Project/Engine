@@ -1,7 +1,9 @@
-package resonant.lib.prefab.ore;
+package resonant.lib.ore;
 
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -12,23 +14,22 @@ import java.util.Random;
 
 /**
  * This class is used for storing ore generation data. If you are too lazy to generate your own
- * ores, you can do {@link #OreGenerator.addOre()} to add your ore to the list of ores to generate.
+ * ores, you can do to add your ore to the list of ores to generate.
  *
  * @author Calclavia
  */
-public abstract class OreGenBase
+public abstract class OreGenerator implements IWorldGenerator
 {
+	/**
+	 * The ore dictionary name of the ore.
+	 */
 	public String name;
-
-	public String oreDictionaryName;
 
 	public boolean shouldGenerate = false;
 
-	public int blockIndexTexture;
-
 	public ItemStack oreStack;
 
-	public int oreID;
+	public Block oreBlock;
 
 	public int oreMeta;
 
@@ -44,27 +45,20 @@ public abstract class OreGenBase
 	public String harvestTool;
 
 	/**
-	 * @param name             - The name of the ore for display
-	 * @param textureFile      - The 16x16 png texture of your ore to override
-	 * @param minGenerateLevel - The highest generation level of your ore
-	 * @param maxGenerateLevel - The lowest generation level of your ore
-	 * @param amountPerChunk   - The amount of ores to generate per chunk
-	 * @param amountPerBranch  - The amount of ores to generate in a clutter. E.g coal generates with
-	 *                         a lot of other coal next to it. How much do you want?
+	 * @param name - The name of the ore for display
 	 */
-	public OreGenBase(String name, String oreDiectionaryName, ItemStack stack, String harvestTool, int harvestLevel)
+	public OreGenerator(String name, ItemStack stack, String harvestTool, int harvestLevel)
 	{
 		if (stack != null)
 		{
 			this.name = name;
 			this.harvestTool = harvestTool;
 			this.harvestLevel = harvestLevel;
-			this.oreDictionaryName = oreDiectionaryName;
 			this.oreStack = stack;
-			//this.oreID = stack.itemID;
+			this.oreBlock = ((ItemBlock) stack.getItem()).field_150939_a;
 			this.oreMeta = stack.getItemDamage();
 
-			OreDictionary.registerOre(oreDictionaryName, stack);
+			OreDictionary.registerOre(name, stack);
 			Block block = Block.getBlockFromItem(stack.getItem());
 			block.setHarvestLevel(this.harvestTool, this.harvestLevel, stack.getItemDamage());
 		}
@@ -86,7 +80,7 @@ public abstract class OreGenBase
 		return shouldGenerate;
 	}
 
-	public OreGenBase enable(Configuration config)
+	public OreGenerator enable(Configuration config)
 	{
 		this.shouldGenerate = shouldGenerateOre(config, this.name);
 		return this;
@@ -95,4 +89,18 @@ public abstract class OreGenBase
 	public abstract void generate(World world, Random random, int varX, int varZ);
 
 	public abstract boolean isOreGeneratedInWorld(World world, IChunkProvider chunkGenerator);
+
+	@Override
+	public final void generate(Random rand, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
+	{
+		chunkX = chunkX << 4;
+		chunkZ = chunkZ << 4;
+
+		// Checks to make sure this is the normal world
+
+		if (shouldGenerate && isOreGeneratedInWorld(world, chunkGenerator))
+		{
+			generate(world, rand, chunkX, chunkZ);
+		}
+	}
 }
