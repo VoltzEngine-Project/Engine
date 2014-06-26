@@ -286,7 +286,7 @@ public class InventoryUtility
 
 	public static void dropBlockAsItem(World world, Vector3 position)
 	{
-		dropBlockAsItem(world, position.intX(), position.intY(), position.intZ(), false);
+		dropBlockAsItem(world, position.xi(), position.yi(), position.zi(), false);
 	}
 
 	public static void dropBlockAsItem(World world, int x, int y, int z, boolean destroy)

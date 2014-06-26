@@ -31,7 +31,7 @@ trait RenderRotatedTexture extends SpatialBlock with IRotatable
       {
         RenderUtility.rotateFacesOnRenderer(targetDir, renderBlocks, true)
         renderBlocks.renderStandardBlock(tile.block, position.xi, position.yi, position.zi)
-        // RenderBlockUtility.tessellateFace(renderBlocks, tile.access, position.intX(), position.intY(), position.intZ(), tile.block, null, dir.ordinal)
+        // RenderBlockUtility.tessellateFace(renderBlocks, tile.access, position.xi(), position.yi(), position.zi(), tile.block, null, dir.ordinal)
         RenderUtility.resetFacesOnRenderer(renderBlocks)
       }
       else

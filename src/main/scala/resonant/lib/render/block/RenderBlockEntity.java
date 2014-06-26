@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
-import resonant.lib.render.BlockRenderInfo;
 import universalelectricity.core.transform.vector.Vector3;
 
 public class RenderBlockEntity extends Render
@@ -23,9 +22,9 @@ public class RenderBlockEntity extends Render
 	@Override
 	public void doRender(Entity entity, double i, double j, double k, float f, float f1)
 	{
-		doRenderBlock((EntityFakeBlock) entity, i, j, k);
+		//doRenderBlock((EntityFakeBlock) entity, i, j, k);
 	}
-
+/*
 	public void doRenderBlock(EntityFakeBlock entity, double i, double j, double k)
 	{
 		if (entity.isDead)
@@ -35,6 +34,7 @@ public class RenderBlockEntity extends Render
 
 		shadowSize = entity.shadowSize;
 		World world = entity.worldObj;
+
 		BlockRenderInfo util = new BlockRenderInfo();
 		util.texture = entity.texture;
 		this.bindTexture(TextureMap.locationBlocksTexture);
@@ -70,9 +70,9 @@ public class RenderBlockEntity extends Render
 					lightY = (int) (Math.floor(entity.posY) + jBase);
 					lightZ = (int) (Math.floor(entity.posZ) + kBase);
 
-					GL11.glDisable(2896 /* GL_LIGHTING */);
+					GL11.glDisable(2896 /* GL_LIGHTING );
 					renderBlock(util, world, lightX, lightY, lightZ, false, true);
-					GL11.glEnable(2896 /* GL_LIGHTING */);
+					GL11.glEnable(2896 /* GL_LIGHTING );
 					GL11.glPopMatrix();
 
 				}
@@ -185,7 +185,7 @@ public class RenderBlockEntity extends Render
 			tessellator.draw();
 		}
 	}
-
+*/
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity)
 	{

@@ -34,46 +34,46 @@ public class MovementUtility
 	 */
 	public static void setBlockSneaky(World world, Vector3 position, int id, int metadata, TileEntity tileEntity)
 	{
-		Chunk chunk = world.getChunkFromChunkCoords(position.intX() >> 4, position.intZ() >> 4);
-		Vector3 chunkPosition = new Vector3(position.intX() & 0xF, position.intY() & 0xF, position.intZ() & 0xF);
+		Chunk chunk = world.getChunkFromChunkCoords(position.xi() >> 4, position.zi() >> 4);
+		Vector3 chunkPosition = new Vector3(position.xi() & 0xF, position.yi() & 0xF, position.zi() & 0xF);
 
-		int heightMapIndex = chunkPosition.intZ() << 4 | chunkPosition.intX();
+		int heightMapIndex = chunkPosition.zi() << 4 | chunkPosition.xi();
 
-		if (position.intY() >= chunk.precipitationHeightMap[heightMapIndex] - 1)
+		if (position.yi() >= chunk.precipitationHeightMap[heightMapIndex] - 1)
 		{
 			chunk.precipitationHeightMap[heightMapIndex] = -999;
 		}
 
 		int heightMapValue = chunk.heightMap[heightMapIndex];
 
-		world.removeBlockTileEntity(position.intX(), position.intY(), position.intZ());
+		world.removeBlockTileEntity(position.xi(), position.yi(), position.zi());
 
-		ExtendedBlockStorage extendedBlockStorage = chunk.getBlockStorageArray()[position.intY() >> 4];
+		ExtendedBlockStorage extendedBlockStorage = chunk.getBlockStorageArray()[position.yi() >> 4];
 
 		if (extendedBlockStorage == null)
 		{
-			extendedBlockStorage = new ExtendedBlockStorage((position.intY() >> 4) << 4, !world.provider.hasNoSky);
+			extendedBlockStorage = new ExtendedBlockStorage((position.yi() >> 4) << 4, !world.provider.hasNoSky);
 
-			chunk.getBlockStorageArray()[position.intY() >> 4] = extendedBlockStorage;
+			chunk.getBlockStorageArray()[position.yi() >> 4] = extendedBlockStorage;
 		}
 
-		extendedBlockStorage.setExtBlockID(chunkPosition.intX(), chunkPosition.intY(), chunkPosition.intZ(), id);
-		extendedBlockStorage.setExtBlockMetadata(chunkPosition.intX(), chunkPosition.intY(), chunkPosition.intZ(), metadata);
+		extendedBlockStorage.setExtBlockID(chunkPosition.xi(), chunkPosition.yi(), chunkPosition.zi(), id);
+		extendedBlockStorage.setExtBlockMetadata(chunkPosition.xi(), chunkPosition.yi(), chunkPosition.zi(), metadata);
 
-		if (position.intY() >= heightMapValue)
+		if (position.yi() >= heightMapValue)
 		{
 			chunk.generateSkylightMap();
 		}
 		else
 		{
-			if (chunk.getBlockLightOpacity(chunkPosition.intX(), position.intY(), chunkPosition.intZ()) > 0)
+			if (chunk.getBlockLightOpacity(chunkPosition.xi(), position.yi(), chunkPosition.zi()) > 0)
 			{
-				if (position.intY() >= heightMapValue)
+				if (position.yi() >= heightMapValue)
 				{
 					relightBlock(chunk, chunkPosition.clone().translate(new Vector3(0, 1, 0)));
 				}
 			}
-			else if (position.intY() == heightMapValue - 1)
+			else if (position.yi() == heightMapValue - 1)
 			{
 				relightBlock(chunk, chunkPosition);
 			}
@@ -83,14 +83,14 @@ public class MovementUtility
 
 		chunk.isModified = true;
 
-		world.updateAllLightTypes(position.intX(), position.intY(), position.intZ());
+		world.updateAllLightTypes(position.xi(), position.yi(), position.zi());
 
 		if (tileEntity != null)
 		{
-			world.setBlockTileEntity(position.intX(), position.intY(), position.intZ(), tileEntity);
+			world.setBlockTileEntity(position.xi(), position.yi(), position.zi(), tileEntity);
 		}
 
-		world.markBlockForUpdate(position.intX(), position.intY(), position.intZ());
+		world.markBlockForUpdate(position.xi(), position.yi(), position.zi());
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class MovementUtility
 		try
 		{
 			Method m = ReflectionHelper.findMethod(Chunk.class, null, CHUNK_RELIGHT_BLOCK, int.class, int.class, int.class);
-			m.invoke(chunk, position.intX(), position.intY(), position.intZ());
+			m.invoke(chunk, position.xi(), position.yi(), position.zi());
 		}
 		catch (Exception e)
 		{
@@ -123,7 +123,7 @@ public class MovementUtility
 		try
 		{
 			Method m = ReflectionHelper.findMethod(Chunk.class, null, CHUNK_PROPOGATE_SKY_LIGHT_OCCLUSION, int.class, int.class);
-			m.invoke(chunk, position.intX(), position.intZ());
+			m.invoke(chunk, position.xi(), position.zi());
 		}
 		catch (Exception e)
 		{

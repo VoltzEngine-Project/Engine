@@ -17,7 +17,7 @@ public class FXElectricBoltSpawner extends EntityFX
 
 	public FXElectricBoltSpawner(World world, Vector3 startVec, Vector3 targetVec, long seed, int duration)
 	{
-		super(world, startVec.x, startVec.y, startVec.z, 0.0D, 0.0D, 0.0D);
+		super(world, startVec.x(), startVec.y(), startVec.z(), 0.0D, 0.0D, 0.0D);
 
 		if (seed == 0)
 		{

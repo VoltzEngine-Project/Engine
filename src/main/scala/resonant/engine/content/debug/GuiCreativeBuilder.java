@@ -83,7 +83,7 @@ public class GuiCreativeBuilder extends GuiContainerBase
 
 			if (radius > 0)
 			{
-				PacketDispatcher.sendPacketToServer(References.PACKET_TILE.getPacket(position.intX(), position.intY(), position.intZ(), mode, radius));
+				PacketDispatcher.sendPacketToServer(References.PACKET_TILE.getPacket(position.xi(), position.yi(), position.zi(), mode, radius));
 				this.mc.thePlayer.closeScreen();
 			}
 		}

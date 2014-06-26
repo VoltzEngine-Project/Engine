@@ -1,21 +1,20 @@
 package resonant.lib.render.model;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
 import net.minecraftforge.client.model.IModelCustomLoader;
 import net.minecraftforge.client.model.ModelFormatException;
 
-import java.net.URL;
-
-public class TechneAdvancedModelLoader implements IModelCustomLoader
+public class FixedTechneModelLoader implements IModelCustomLoader
 {
-
-	private static final String[] types = { "tcn" };
 
 	@Override
 	public String getType()
 	{
 		return "Techne model";
 	}
+
+	private static final String[] types = { "tcn" };
 
 	@Override
 	public String[] getSuffixes()
@@ -24,9 +23,9 @@ public class TechneAdvancedModelLoader implements IModelCustomLoader
 	}
 
 	@Override
-	public IModelCustom loadInstance(String resourceName, URL resource) throws ModelFormatException
+	public IModelCustom loadInstance(ResourceLocation resource) throws ModelFormatException
 	{
-		return new TechneAdvancedModel(resourceName, resource);
+		return new FixedTechneModel(resource);
 	}
 
 }

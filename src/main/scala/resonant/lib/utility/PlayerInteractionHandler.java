@@ -1,8 +1,9 @@
 package resonant.lib.utility;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import resonant.api.IRemovable;
@@ -10,7 +11,6 @@ import resonant.api.IRemovable.*;
 import resonant.engine.References;
 import resonant.lib.utility.inventory.InventoryUtility;
 import universalelectricity.core.transform.vector.VectorWorld;
-
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class PlayerInteractionHandler
 {
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onPlayInteract(PlayerInteractEvent event)
 	{
 		if (!event.entityPlayer.worldObj.isRemote)
@@ -76,8 +76,8 @@ public class PlayerInteractionHandler
 							//Drop all items
 							try
 							{
-								vec.world().removeBlockTileEntity(vec.intX(), vec.intY(), vec.intZ());
-								vec.setBlock(0);
+								vec.world().removeTileEntity(vec.xi(), vec.yi(), vec.zi());
+								vec.setBlock(Blocks.air);
 
 								if (drops != null && !drops.isEmpty())
 								{
@@ -89,14 +89,14 @@ public class PlayerInteractionHandler
 										}
 										else
 										{
-											event.entityPlayer.inventory.onInventoryChanged();
+											event.entityPlayer.inventory.markDirty();
 										}
 									}
 								}
 							}
 							catch (Exception e)
 							{
-								References.LOGGER.severe("Failed to pick up block using event system");
+								References.LOGGER.error("Failed to pick up block using event system");
 								e.printStackTrace();
 							}
 						}

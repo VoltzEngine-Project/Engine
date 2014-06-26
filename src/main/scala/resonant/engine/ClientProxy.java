@@ -12,14 +12,14 @@ import resonant.content.wrapper.BlockRenderHandler$;
 import resonant.engine.content.debug.BlockCreativeBuilder;
 import resonant.engine.content.debug.GuiCreativeBuilder;
 import resonant.lib.prefab.ProxyBase;
-import resonant.lib.render.model.TechneAdvancedModelLoader;
+import resonant.lib.render.model.FixedTechneModelLoader;
 import universalelectricity.core.transform.vector.Vector3;
 
 public class ClientProxy extends ProxyBase
 {
 	static
 	{
-		AdvancedModelLoader.registerModelHandler(new TechneAdvancedModelLoader());
+		AdvancedModelLoader.registerModelHandler(new FixedTechneModelLoader());
 	}
 
 	@Override

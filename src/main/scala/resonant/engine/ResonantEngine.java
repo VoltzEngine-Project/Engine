@@ -50,9 +50,9 @@ import resonant.lib.multiblock.TileSyntheticPart;
 import resonant.lib.network.netty.PacketManager;
 import resonant.lib.prefab.ProxyBase;
 import resonant.content.prefab.itemblock.ItemBlockMetadata;
-import resonant.lib.prefab.ore.OreGenBase;
-import resonant.lib.prefab.ore.OreGenReplaceStone;
-import resonant.lib.prefab.ore.OreGenerator;
+import resonant.lib.ore.OreGenBase;
+import resonant.lib.ore.OreGenReplaceStone;
+import resonant.lib.ore.OreGenerator;
 import resonant.lib.recipe.RecipeUtility;
 import resonant.lib.schematic.SchematicTestRoom;
 import resonant.engine.grid.thermal.BoilEvent;
@@ -421,7 +421,7 @@ public class ResonantEngine
 		// Potion Array resized to Current potion array, +32, Allows to miss conflicting ID's
 		PotionUtility.resizePotionArray();
 
-		SaveManager.registerClass("ModFlag", ModFlag.class);
+		//SaveManager.registerClass("ModFlag", ModFlag.class);
 
 		//EventHandlers
 		MinecraftForge.EVENT_BUS.register(instance);
@@ -431,18 +431,18 @@ public class ResonantEngine
 		ToolMode.REGISTRY.add(new ToolModeGeneral());
 		ToolMode.REGISTRY.add(new ToolModeRotation());
 
-		blockMulti = (BlockSyntheticPart) contentRegistry.createTile(BlockSyntheticPart.class, TileSyntheticPart.class).setCreativeTab(null);
+		blockMulti = (BlockSyntheticPart) contentRegistry.newBlock(BlockSyntheticPart.class, TileSyntheticPart.class).setCreativeTab(null);
 		blockMulti.setPacketType(References.PACKET_TILE);
 
 		//TODO: Calclavia - Return the prefabs as we still need them. Using traits is nice and all but we still need java classes
 
 		if (References.CONFIGURATION.get("CreaiveModeTools", "CreativeBuilder", runningAsDev).getBoolean(true))
 		{
-			blockCreativeBuilder = (BlockCreativeBuilder) contentRegistry.createBlock(BlockCreativeBuilder.class);
+			blockCreativeBuilder = (BlockCreativeBuilder) contentRegistry.newBlock(BlockCreativeBuilder.class);
 		}
 		if (References.CONFIGURATION.get("CreaiveModeTools", "InfiniteSource", runningAsDev).getBoolean(true))
 		{
-			blockInfinite = contentRegistry.createBlock(BlockInfiniteBlock.class, ItemBlockMetadata.class);
+			blockInfinite = contentRegistry.newBlock(BlockInfiniteBlock.class, ItemBlockMetadata.class);
 		}
 		BlockCreativeBuilder.register(new SchematicTestRoom());
 		//Finish and close all resources

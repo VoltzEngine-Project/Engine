@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import resonant.content.prefab.itemblock.ItemTooltip;
 import universalelectricity.core.transform.vector.VectorWorld;
 
 import java.util.List;

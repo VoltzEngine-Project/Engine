@@ -3,8 +3,11 @@ package resonant.lib.render.model;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
 import net.minecraftforge.client.model.ModelFormatException;
 import org.lwjgl.opengl.GL11;
@@ -19,7 +22,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
@@ -27,33 +30,45 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 
 /**
- * A fixed up version of the Forge Techne model importer. Requires specification for the texture
- * size on load in the Techne XML file.
+ * A fixed up version of the Forge's original Techne model importer. Techne model importer, based on iChun's Hats importer
+ * <p/>
+ * You must load your .tcn file and then bind the Techne texture yourself.
  *
- * @author Calclavia, iChun
+ * @author iChun, Calclavia
  */
 @SideOnly(Side.CLIENT)
-public class TechneAdvancedModel extends ModelBase implements IModelCustom
+public class FixedTechneModel extends ModelBase implements IModelCustom
 {
 	public static final List<String> cubeTypes = Arrays.asList("d9e621f7-957f-4b77-b1ae-20dcd0da7751", "de81aa14-bd60-4228-8d8d-5238bcd3caaa");
-	public Map<String, ModelRenderer> parts = new LinkedHashMap<String, ModelRenderer>();
+
 	private String fileName;
 	private Map<String, byte[]> zipContents = new HashMap<String, byte[]>();
+
+	public Map<String, ModelRenderer> parts = new LinkedHashMap<String, ModelRenderer>();
 	private String texture = null;
 	private int textureName;
 	private boolean textureNameSet = false;
 
-	public TechneAdvancedModel(String fileName, URL resource) throws ModelFormatException
+	public FixedTechneModel(ResourceLocation resource) throws ModelFormatException
 	{
-		this.fileName = fileName;
-		loadTechneModel(resource);
+		this.fileName = resource.toString();
+
+		try
+		{
+			IResource res = Minecraft.getMinecraft().getResourceManager().getResource(resource);
+			loadTechneModel(res.getInputStream());
+		}
+		catch (Exception e)
+		{
+			throw new ModelFormatException("IO Exception reading model format", e);
+		}
 	}
 
-	private void loadTechneModel(URL fileURL) throws ModelFormatException
+	private void loadTechneModel(InputStream stream) throws ModelFormatException
 	{
 		try
 		{
-			ZipInputStream zipInput = new ZipInputStream(fileURL.openStream());
+			ZipInputStream zipInput = new ZipInputStream(stream);
 
 			ZipEntry entry;
 			while ((entry = zipInput.getNextEntry()) != null)
@@ -195,13 +210,9 @@ public class TechneAdvancedModel extends ModelBase implements IModelCustom
 					// That's what the ModelBase subclassing is needed for
 					ModelRenderer cube = new ModelRenderer(this, shapeName);
 					cube.setTextureOffset(Integer.parseInt(textureOffset[0]), Integer.parseInt(textureOffset[1]));
-
-					/** Fix Techne default translation up by 16 microblocks (1 block) and rotated 180
-					 * degrees. */
+					cube.mirror = mirrored;
 					cube.addBox(Float.parseFloat(offset[0]), Float.parseFloat(offset[1]), Float.parseFloat(offset[2]), Integer.parseInt(size[0]), Integer.parseInt(size[1]), Integer.parseInt(size[2]));
 					cube.setRotationPoint(Float.parseFloat(position[0]), Float.parseFloat(position[1]) - 16, Float.parseFloat(position[2]));
-					cube.mirror = mirrored;
-
 					cube.rotateAngleX = (float) Math.toRadians(Float.parseFloat(rotation[0]));
 					cube.rotateAngleY = (float) Math.toRadians(Float.parseFloat(rotation[1]));
 					cube.rotateAngleZ = (float) Math.toRadians(Float.parseFloat(rotation[2]));
