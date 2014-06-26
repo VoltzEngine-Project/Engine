@@ -18,16 +18,14 @@ import java.util.HashMap;
  */
 public class HeatingDictionary
 {
-	private static HashMap<Block, Float> blockToHeatMap = new HashMap<Block, Float>();
-	private static HashMap<Integer, Float> idToHeatMap = new HashMap<Integer, Float>();
-	private static HashMap<Pair<Integer, Integer>, Float> idMetaToHeatMap = new HashMap<Pair<Integer, Integer>, Float>();
-	private static HashMap<Material, Float> materialToHeatMap = new HashMap<Material, Float>();
+	private static HashMap<Block, Float> blockToHeatMap = new HashMap();
+	private static HashMap<Pair<Block, Integer>, Float> idMetaToHeatMap = new HashMap();
+	private static HashMap<Material, Float> materialToHeatMap = new HashMap();
 
 	static
 	{
 		register(Material.iron, 0.45f);
 		register(Material.air, 1f);
-		register(Material.grass, 0.84f);
 		register(Material.ground, 0.9f);
 		register(Material.wood, 0.84f);
 		register(Material.rock, 0.8f);
@@ -74,22 +72,11 @@ public class HeatingDictionary
 	/**
 	 * Registers a block with a specific heating value
 	 */
-	public static void register(int id, float f)
+	public static void register(Block block, int meta, float f)
 	{
-		if (Block.blocksList[id] != null && f > 0)
+		if (block != null && f > 0)
 		{
-			idToHeatMap.put(id, f);
-		}
-	}
-
-	/**
-	 * Registers a block with a specific heating value
-	 */
-	public static void register(int id, int meta, float f)
-	{
-		if (Block.blocksList[id] != null && f > 0)
-		{
-			idMetaToHeatMap.put(new Pair<Integer, Integer>(id, meta), f);
+			idMetaToHeatMap.put(new Pair(block, meta), f);
 		}
 	}
 
@@ -121,31 +108,29 @@ public class HeatingDictionary
 	}
 
 	/**
-	 * Graps the specific heating point of a block at the location
+	 * Grabs the specific heating point of a block at the location
 	 */
 	public static float getSpecificHeat(World world, int x, int y, int z)
 	{
 		Block block = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
+
 		if (block != null)
 		{
 			if (blockToHeatMap.containsKey(block))
 			{
 				return blockToHeatMap.get(block);
 			}
-			else if (idToHeatMap.containsKey(block.blockID))
+			else if (idMetaToHeatMap.containsKey(new Pair(block, meta)))
 			{
-				return idToHeatMap.get(block.blockID);
+				return idMetaToHeatMap.get(new Pair(block, meta));
 			}
-			else if (idMetaToHeatMap.containsKey(new Pair<Integer, Integer>(block.blockID, meta)))
+			else if (materialToHeatMap.containsKey(block.getMaterial()))
 			{
-				return idMetaToHeatMap.get(new Pair<Integer, Integer>(block.blockID, meta));
-			}
-			else if (materialToHeatMap.containsKey(block.blockMaterial))
-			{
-				return materialToHeatMap.get(block.blockMaterial);
+				return materialToHeatMap.get(block.getMaterial());
 			}
 		}
+
 		return 5;
 	}
 }

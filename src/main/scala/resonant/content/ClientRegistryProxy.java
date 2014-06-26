@@ -1,42 +1,14 @@
 package resonant.content;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import resonant.content.wrapper.RenderTileDummy;
 import resonant.engine.References;
 
 public class ClientRegistryProxy extends CommonRegistryProxy
 {
-	@Override
-	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass, String name, String modID)
-	{
-		super.registerBlock(block, itemClass, name, modID);
-
-		BlockInfo blockInfo = block.getClass().getAnnotation(BlockInfo.class);
-
-		if (blockInfo != null)
-		{
-			for (int i = 0; i < blockInfo.renderer().length; i++)
-			{
-				try
-				{
-					Class<? extends TileEntity> tileClass = (Class<? extends TileEntity>) Class.forName(blockInfo.tileEntity()[i]);
-					Class<? extends TileEntitySpecialRenderer> rendererClass = (Class<? extends TileEntitySpecialRenderer>) Class.forName(blockInfo.renderer()[i]);
-					ClientRegistry.bindTileEntitySpecialRenderer(tileClass, rendererClass.newInstance());
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-					throw new RuntimeException("[ClientContentRegistry]Failed to register block for: " + name);
-				}
-			}
-		}
-	}
-
 	@Override
 	public void registerTileEntity(String name, Class<? extends TileEntity> tileClass)
 	{
@@ -57,7 +29,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
 		}
 		catch (Exception e)
 		{
-			References.LOGGER.severe("[ClientContentRegistry]Failed to register TileEntity renderer for " + name);
+			References.LOGGER.entry("[ClientContentRegistry] Failed to register TileEntity renderer for " + name);
 			e.printStackTrace();
 
 		}
@@ -71,7 +43,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
 	@Override
 	public void registerDummyRenderer(Class<? extends TileEntity> clazz)
 	{
-		if (!TileEntityRenderer.instance.specialRendererMap.containsKey(clazz))
+		if (!TileEntityRendererDispatcher.instance.mapSpecialRenderers.containsKey(clazz))
 		{
 			ClientRegistry.bindTileEntitySpecialRenderer(clazz, new RenderTileDummy());
 		}

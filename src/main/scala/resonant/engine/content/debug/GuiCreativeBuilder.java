@@ -24,7 +24,7 @@ public class GuiCreativeBuilder extends GuiContainerBase
 	public void initGui()
 	{
 		super.initGui();
-		this.textFieldSize = new GuiTextField(this.fontRenderer, 45, 58, 50, 12);
+		this.textFieldSize = new GuiTextField(fontRendererObj, 45, 58, 50, 12);
 		this.buttonList.add(new GuiButton(0, this.width / 2 - 80, this.height / 2 - 10, 58, 20, "Build"));
 		this.buttonList.add(new GuiButton(1, this.width / 2 - 50, this.height / 2 - 35, 120, 20, "Mode"));
 	}
@@ -32,21 +32,21 @@ public class GuiCreativeBuilder extends GuiContainerBase
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		this.fontRenderer.drawString("Creative Builder", 60, 6, 4210752);
-		this.fontRenderer.drawString("This is a creative only cheat", 9, 20, 4210752);
-		this.fontRenderer.drawString("which allows you to auto build", 9, 30, 4210752);
-		this.fontRenderer.drawString("structures for testing.", 9, 40, 4210752);
+		fontRendererObj.drawString("Creative Builder", 60, 6, 4210752);
+		fontRendererObj.drawString("This is a creative only cheat", 9, 20, 4210752);
+		fontRendererObj.drawString("which allows you to auto build", 9, 30, 4210752);
+		fontRendererObj.drawString("structures for testing.", 9, 40, 4210752);
 
-		this.fontRenderer.drawString("Size: ", 9, 60, 4210752);
+		fontRendererObj.drawString("Size: ", 9, 60, 4210752);
 		this.textFieldSize.drawTextBox();
 
-		((GuiButton) this.buttonList.get(1)).displayString = LanguageUtility.getLocal(BlockCreativeBuilder.REGISTRY.get(mode).getName());
-		this.fontRenderer.drawString("Mode: ", 9, 80, 4210752);
+		((GuiButton) this.buttonList.get(1)).displayString = LanguageUtility.getLocal(BlockCreativeBuilder$.MODULE$.registry().get(mode).getName());
+		fontRendererObj.drawString("Mode: ", 9, 80, 4210752);
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 
-		this.fontRenderer.drawString("Warning!", 9, 130, 4210752);
-		this.fontRenderer.drawString("This will replace blocks without", 9, 140, 4210752);
-		this.fontRenderer.drawString("dropping it! You may lose items.", 9, 150, 4210752);
+		fontRendererObj.drawString("Warning!", 9, 130, 4210752);
+		fontRendererObj.drawString("This will replace blocks without", 9, 140, 4210752);
+		fontRendererObj.drawString("dropping it! You may lose items.", 9, 150, 4210752);
 
 	}
 
@@ -89,7 +89,7 @@ public class GuiCreativeBuilder extends GuiContainerBase
 		}
 		else if (par1GuiButton.id == 1)
 		{
-			this.mode = (this.mode + 1) % (BlockCreativeBuilder.REGISTRY.size());
+			this.mode = (this.mode + 1) % (BlockCreativeBuilder$.MODULE$.registry().size());
 		}
 	}
 

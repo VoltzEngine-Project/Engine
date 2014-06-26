@@ -25,11 +25,11 @@ object BlockCreativeBuilder
 {
   def register(schematic: Schematic): Int =
   {
-    REGISTRY.add(schematic)
-    return REGISTRY.size - 1
+    registry.add(schematic)
+    return registry.size - 1
   }
 
-  final val REGISTRY: List[Schematic] = new ArrayList[Schematic]
+  final val registry: List[Schematic] = new ArrayList[Schematic]
 }
 
 class BlockCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable with IPacketReceiver
@@ -42,7 +42,7 @@ class BlockCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable w
    */
   override def activate(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
-    if (BlockCreativeBuilder.REGISTRY.size > 0)
+    if (BlockCreativeBuilder.registry.size > 0)
     {
       player.openGui(ResonantEngine.instance, -1, world, x, y, z)
       return true
@@ -64,7 +64,7 @@ class BlockCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable w
           val translation: Vector3 = new Vector3(extra(0).asInstanceOf[Double], extra(1).asInstanceOf[Double], extra(2).asInstanceOf[Double])
           if (size > 0)
           {
-            val map = BlockCreativeBuilder.REGISTRY.get(schematicID).getStructure(ForgeDirection.getOrientation(translation.getBlockMetadata(world)), size)
+            val map = BlockCreativeBuilder.registry.get(schematicID).getStructure(ForgeDirection.getOrientation(translation.getBlockMetadata(world)), size)
             map.foreach(entry => (entry._1 + translation).setBlock(world, entry._2.left(), entry._2.right()))
           }
         }

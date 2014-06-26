@@ -21,7 +21,7 @@ import java.util.Map.Entry;
  */
 public class ThermalGrid implements IUpdate
 {
-	private final static HashMap<VectorWorld, Float> thermalSource = new HashMap<VectorWorld, Float>();
+	private final static HashMap<VectorWorld, Float> thermalSource = new HashMap();
 	private final float spread = 1 / 7f;
 	private final float loss = 0.1f;
 	private final float deltaTime = 1 / 20f;
@@ -97,17 +97,8 @@ public class ThermalGrid implements IUpdate
 
 			// Determine if position of heat is IReactor based.
 			TileEntity possibleReactor = pos.getTileEntity();
-			boolean isReactor = false;
-			if (possibleReactor != null && possibleReactor instanceof IReactor)
-			{
-				isReactor = true;
-			}
-			else
-			{
-				isReactor = false;
-			}
 
-			EventThermalUpdate evt = new EventThermalUpdate(pos, currentTemperature, deltaFromEquilibrium, deltaTime, isReactor);
+			EventThermalUpdate evt = new EventThermalUpdate(pos, currentTemperature, deltaFromEquilibrium, deltaTime, possibleReactor != null && possibleReactor instanceof IReactor);
 			MinecraftForge.EVENT_BUS.post(evt);
 
 			float loss = evt.heatLoss;
