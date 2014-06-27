@@ -9,7 +9,7 @@ import java.util.List;
  * the Object that handles the submods of the mod
  * <p/>
  * to have the submodules work, You must register them in this class, Adding support for a submodule
- * includes only aquiring its class and throwing it in the registerModules method, this is handled
+ * includes only acquiring its class and throwing it in the registerModules method, this is handled
  * as such to allow turning these modules off by configuration, and disable them if the parent mod
  * is not loaded (Integration modules with other mods)
  * <p/>

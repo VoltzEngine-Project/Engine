@@ -66,7 +66,7 @@ public class ModManager
 	/**
 	 * New SpatialBlocks system.
 	 */
-	public Block newBlock(Class<? extends SpatialBlock> tileBlockClass)
+	public BlockDummy newBlock(Class<? extends SpatialBlock> tileBlockClass)
 	{
 		try
 		{
@@ -244,7 +244,7 @@ public class ModManager
 	 * @param clazz - item class
 	 * @return the new item
 	 */
-	public Item newItem(String name, Class<? extends Item> clazz)
+	public <C extends Item> C newItem(String name, Class<C> clazz)
 	{
 
 		try
@@ -272,7 +272,7 @@ public class ModManager
 				GameRegistry.registerItem(item, name, modID);
 			}
 
-			return item;
+			return (C) item;
 		}
 		catch (Exception e)
 		{
