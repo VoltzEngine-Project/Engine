@@ -3,6 +3,7 @@ package resonant.lib.utility;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.core.transform.vector.VectorWorld;
@@ -14,21 +15,21 @@ import java.util.LinkedHashMap;
  *
  * @author DarkGuardsman
  */
-public class MachinePlayer extends FakePlayer
+public class DummyPlayer extends FakePlayer
 {
-	private static final LinkedHashMap<World, MachinePlayer> FAKE_PLAYERS = new LinkedHashMap<World, MachinePlayer>();
+	private static final LinkedHashMap<World, DummyPlayer> FAKE_PLAYERS = new LinkedHashMap<World, DummyPlayer>();
 
-	public MachinePlayer(World world, String name, String sufix)
+	public DummyPlayer(World world, String name, String sufix)
 	{
-		super(world, new GameProfile("0", name + sufix));
+		super((WorldServer) world, new GameProfile("0", name + sufix));
 	}
 
-	public MachinePlayer(World world, String sufix)
+	public DummyPlayer(World world, String sufix)
 	{
 		this(world, "[Calc-Core]FakePlayer", sufix);
 	}
 
-	public MachinePlayer(World world)
+	public DummyPlayer(World world)
 	{
 		this(world, "(" + world.provider.dimensionId + ")");
 	}
@@ -36,11 +37,11 @@ public class MachinePlayer extends FakePlayer
 	/**
 	 * Gets the fake player for the world
 	 */
-	public static MachinePlayer get(World world)
+	public static DummyPlayer get(World world)
 	{
 		if (!FAKE_PLAYERS.containsKey(world) || FAKE_PLAYERS.get(world) == null)
 		{
-			FAKE_PLAYERS.put(world, new MachinePlayer(world));
+			FAKE_PLAYERS.put(world, new DummyPlayer(world));
 		}
 
 		return FAKE_PLAYERS.get(world);

@@ -19,6 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import resonant.lib.utility.LanguageUtility;
 import resonant.lib.utility.WorldUtility;
+import universalelectricity.core.transform.rotation.Rotation;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.EnumSet;
@@ -55,12 +56,12 @@ public class RenderItemOverlayUtility
 		{
 			if (inventory[i] != null)
 			{
-				Vector3 translation = new Vector3((double) (i / matrixX) / ((double) matrixX) + (0.5 / (matrixX)), 1.1, (double) (i % matrixZ) / ((double) matrixZ) + (0.5 / (matrixZ))).translate(-0.5);
+				Vector3 translation = new Vector3((double) (i / matrixX) / ((double) matrixX) + (0.5 / (matrixX)), 1.1, (double) (i % matrixZ) / ((double) matrixZ) + (0.5 / (matrixZ))).add(-0.5);
 				translation.multiply(0.85);
 				GL11.glPushMatrix();
 				GL11.glTranslated(x + 0.5f, y + 0.5f, z + 0.5f);
 				RenderUtility.rotateBlockBasedOnDirection(dir);
-				GL11.glTranslated(translation.x, translation.y, translation.z);
+				GL11.glTranslated(translation.x(), translation.y(), translation.z());
 				GL11.glScalef(scale, scale, scale);
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
 				renderItem(tileEntity.getWorldObj(), ForgeDirection.UP, inventory[i], new Vector3(0, 0, 0), 0, 4);
@@ -71,7 +72,7 @@ public class RenderItemOverlayUtility
 					GL11.glPushMatrix();
 					GL11.glTranslated(x, y, z);
 					int angle = WorldUtility.getAngleFromForgeDirection(WorldUtility.invertX(dir));
-					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.rotate(angle, Vector3.UP()).translate(0.5).translate(0, 0.3, 0));
+					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.apply(new Rotation(angle, Vector3.up())).add(0.5).add(new Vector3(0, 0.3, 0)));
 					GL11.glPopMatrix();
 				}
 			}
@@ -105,7 +106,7 @@ public class RenderItemOverlayUtility
 		{
 			if (direction != ForgeDirection.UNKNOWN)
 			{
-				if (tile.worldObj.isBlockSolidOnSide(tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite()))
+				if (tile.getBlockType().isSideSolid(tile.getWorldObj(), tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite()))
 				{
 					continue;
 				}
@@ -126,7 +127,7 @@ public class RenderItemOverlayUtility
 
 	protected static void renderItemSingleSide(TileEntity tile, double x, double y, double z, ItemStack itemStack, ForgeDirection direction, String renderText)
 	{
-		if (!tile.worldObj.isBlockSolidOnSide(tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite()))
+		if (!tile.getBlockType().isSideSolid(tile.getWorldObj(), tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite()))
 		{
 			String amount = "";
 
@@ -199,7 +200,7 @@ public class RenderItemOverlayUtility
 	{
 		World world = tileEntity.getWorldObj();
 
-		if (world.isBlockOpaqueCube(tileEntity.xCoord + xDifference, tileEntity.yCoord, tileEntity.zCoord + zDifference))
+		if (tileEntity.getBlockType().isOpaqueCube())
 		{
 			return;
 		}
@@ -219,7 +220,7 @@ public class RenderItemOverlayUtility
 			entityItem.getEntityItem().stackSize = 1;
 			entityItem.hoverStart = 0.0F;
 			GL11.glPushMatrix();
-			GL11.glTranslated(position.x, position.y, -position.z);
+			GL11.glTranslated(position.x(), position.y(), -position.z());
 			GL11.glRotatef(180.0F + rotationYaw, 0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(90 * angle, 1, 0, 0);
 
@@ -227,7 +228,7 @@ public class RenderItemOverlayUtility
 
 			boolean fancyGraphics = RenderManager.instance.options.fancyGraphics;
 			RenderManager.instance.options.fancyGraphics = true;
-			renderItem.doRenderItem(entityItem, 0, 0, 0, 0, 0);
+			renderItem.doRender(entityItem, 0, 0, 0, 0, 0);
 			RenderManager.instance.options.fancyGraphics = fancyGraphics;
 
 			GL11.glPopMatrix();

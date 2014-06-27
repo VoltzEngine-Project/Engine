@@ -1,6 +1,7 @@
 package resonant.lib.utility;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -25,14 +26,8 @@ public class MovementUtility
 
 	/**
 	 * Sets a block in a sneaky way to bypass some restraints.
-	 *
-	 * @param world
-	 * @param position
-	 * @param id
-	 * @param metadata
-	 * @param tileEntity
 	 */
-	public static void setBlockSneaky(World world, Vector3 position, int id, int metadata, TileEntity tileEntity)
+	public static void setBlockSneaky(World world, Vector3 position, Block block, int metadata, TileEntity tileEntity)
 	{
 		Chunk chunk = world.getChunkFromChunkCoords(position.xi() >> 4, position.zi() >> 4);
 		Vector3 chunkPosition = new Vector3(position.xi() & 0xF, position.yi() & 0xF, position.zi() & 0xF);
@@ -46,7 +41,7 @@ public class MovementUtility
 
 		int heightMapValue = chunk.heightMap[heightMapIndex];
 
-		world.removeBlockTileEntity(position.xi(), position.yi(), position.zi());
+		world.removeTileEntity(position.xi(), position.yi(), position.zi());
 
 		ExtendedBlockStorage extendedBlockStorage = chunk.getBlockStorageArray()[position.yi() >> 4];
 
@@ -57,7 +52,7 @@ public class MovementUtility
 			chunk.getBlockStorageArray()[position.yi() >> 4] = extendedBlockStorage;
 		}
 
-		extendedBlockStorage.setExtBlockID(chunkPosition.xi(), chunkPosition.yi(), chunkPosition.zi(), id);
+		extendedBlockStorage.func_150818_a(chunkPosition.xi(), chunkPosition.yi(), chunkPosition.zi(), block);
 		extendedBlockStorage.setExtBlockMetadata(chunkPosition.xi(), chunkPosition.yi(), chunkPosition.zi(), metadata);
 
 		if (position.yi() >= heightMapValue)
@@ -66,11 +61,12 @@ public class MovementUtility
 		}
 		else
 		{
-			if (chunk.getBlockLightOpacity(chunkPosition.xi(), position.yi(), chunkPosition.zi()) > 0)
+			//chunk.getBlockLightOpacity(chunkPosition.xi(), position.yi(), chunkPosition.zi())
+			if (chunk.getBlockLightValue(chunkPosition.xi(), position.yi(), chunkPosition.zi(), 0) > 0)
 			{
 				if (position.yi() >= heightMapValue)
 				{
-					relightBlock(chunk, chunkPosition.clone().translate(new Vector3(0, 1, 0)));
+					relightBlock(chunk, chunkPosition.clone().add(new Vector3(0, 1, 0)));
 				}
 			}
 			else if (position.yi() == heightMapValue - 1)
@@ -82,12 +78,12 @@ public class MovementUtility
 		}
 
 		chunk.isModified = true;
-
-		world.updateAllLightTypes(position.xi(), position.yi(), position.zi());
+		//updateAllLightTypes
+		world.func_147451_t(position.xi(), position.yi(), position.zi());
 
 		if (tileEntity != null)
 		{
-			world.setBlockTileEntity(position.xi(), position.yi(), position.zi(), tileEntity);
+			world.setTileEntity(position.xi(), position.yi(), position.zi(), tileEntity);
 		}
 
 		world.markBlockForUpdate(position.xi(), position.yi(), position.zi());

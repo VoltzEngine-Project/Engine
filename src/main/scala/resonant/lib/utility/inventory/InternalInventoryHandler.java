@@ -9,9 +9,8 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IExtendedStorage;
-import universalelectricity.core.transform.vector.VectorWorld;
-
 import universalelectricity.core.transform.vector.Vector3;
+import universalelectricity.core.transform.vector.VectorWorld;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -44,7 +43,7 @@ public class InternalInventoryHandler
 
 	public InternalInventoryHandler(VectorWorld location, Set<ItemStack> filters, boolean inverted)
 	{
-		this(location.world, location, filters, inverted);
+		this(location.world(), location, filters, inverted);
 	}
 
 	public InternalInventoryHandler(TileEntity tile)
@@ -60,7 +59,7 @@ public class InternalInventoryHandler
 
 	public void throwItem(ForgeDirection direction, ItemStack items)
 	{
-		throwItem(this.location.clone().translate(direction), items);
+		throwItem(this.location.clone().add(direction), items);
 	}
 
 	/**
@@ -73,7 +72,7 @@ public class InternalInventoryHandler
 	{
 		if (!world.isRemote)
 		{
-			EntityItem entityItem = new EntityItem(world, outputPosition.x + 0.5, outputPosition.y + 0.8, outputPosition.z + 0.5, items);
+			EntityItem entityItem = new EntityItem(world, outputPosition.x() + 0.5, outputPosition.y() + 0.8, outputPosition.z() + 0.5, items);
 			entityItem.motionX = 0;
 			entityItem.motionZ = 0;
 			entityItem.motionY /= 5;
@@ -89,7 +88,7 @@ public class InternalInventoryHandler
 			ItemStack remainingStack = item.copy();
 			for (ForgeDirection direction : directions)
 			{
-				remainingStack = tryPlaceInPosition(remainingStack, this.location.clone().translate(direction), direction.getOpposite());
+				remainingStack = tryPlaceInPosition(remainingStack, this.location.clone().add(direction), direction.getOpposite());
 			}
 			return remainingStack;
 		}
@@ -117,7 +116,7 @@ public class InternalInventoryHandler
 				{
 					ForgeDirection searchDirection = ForgeDirection.getOrientation(i);
 					Vector3 searchPosition = position.clone();
-					searchPosition.translate(searchDirection);
+					searchPosition.add(searchDirection);
 
 					if (searchPosition.getTileEntity(world) != null)
 					{
@@ -225,9 +224,9 @@ public class InternalInventoryHandler
 	/**
 	 * Tries to get an item from a position
 	 *
-	 * @param position  - location of item
-	 * @param direction - direction this item is from the original
-	 * @param ammount   - amount up to one stack to grab
+	 * @param position - location of item
+	 * @param dir      - direction this item is from the original
+	 * @param ammount  - amount up to one stack to grab
 	 * @return the grabbed item stack
 	 */
 	public ItemStack tryGrabFromPosition(Vector3 position, ForgeDirection dir, int ammount)
@@ -247,7 +246,7 @@ public class InternalInventoryHandler
 				{
 					ForgeDirection searchDirection = ForgeDirection.getOrientation(i);
 					Vector3 searchPosition = position.clone();
-					searchPosition.translate(searchDirection);
+					searchPosition.add(searchDirection);
 
 					if (searchPosition.getTileEntity(world) != null)
 					{

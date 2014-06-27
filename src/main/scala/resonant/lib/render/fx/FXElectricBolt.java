@@ -143,7 +143,7 @@ public class FXElectricBolt extends EntityFX
 			for (BoltSegment segment : oldSegments)
 			{
 				prev = segment.prevSegment;
-				Vector3 subSegment = segment.difference.clone().multiply(1.0F / splitAmount);
+				Vector3 subSegment = segment.difference.multiply(1.0F / splitAmount);
 
 				/** Creates an array of new bolt points. The first and last points of the bolts are
 				 * the respected start and end points of the current segment. */

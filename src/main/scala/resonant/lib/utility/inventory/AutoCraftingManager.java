@@ -1,7 +1,6 @@
 package resonant.lib.utility.inventory;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemBucket;
@@ -191,13 +190,13 @@ public class AutoCraftingManager
 		{
 			return false;
 		}
-		if (recipeItem.itemID < Block.blocksList.length && recipeItem.getItemDamage() == 32767)
+		if (recipeItem.getItemDamage() == 32767)
 		{
-			return recipeItem.itemID == checkStack.itemID;
+			return recipeItem.getItem() == checkStack.getItem();
 		}
 		if (recipeItem.isItemStackDamageable())
 		{
-			return !recipeItem.isItemDamaged() && recipeItem.itemID == checkStack.itemID;
+			return !recipeItem.isItemDamaged() && recipeItem.getItem() == checkStack.getItem();
 		}
 		return recipeItem.isItemEqual(checkStack);
 	}

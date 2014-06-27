@@ -20,7 +20,7 @@ public class FXShockWave extends EntityFX
 
 	public FXShockWave(World par1World, Vector3 position, float r, float g, float b, float size, double distance)
 	{
-		super(par1World, position.x, position.y, position.z, 0.0D, 0.0D, 0.0D);
+		super(par1World, position.x(), position.y(), position.z(), 0.0D, 0.0D, 0.0D);
 		this.particleRed = r;
 		this.particleGreen = g;
 		this.particleBlue = b;

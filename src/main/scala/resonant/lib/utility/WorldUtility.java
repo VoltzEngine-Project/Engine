@@ -277,16 +277,16 @@ public class WorldUtility
 				nameToClassMap.put(findTileID, replaceTile);
 				classToNameMap.put(replaceTile, findTileID);
 				classToNameMap.remove(findTile);
-				References.LOGGER.fine("Replaced TileEntity: " + findTile);
+				References.LOGGER.info("Replaced TileEntity: " + findTile);
 			}
 			else
 			{
-				References.LOGGER.severe("Failed to replace TileEntity: " + findTile);
+				References.LOGGER.error("Failed to replace TileEntity: " + findTile);
 			}
 		}
 		catch (Exception e)
 		{
-			References.LOGGER.severe("Failed to replace TileEntity: " + findTile);
+			References.LOGGER.error("Failed to replace TileEntity: " + findTile);
 			e.printStackTrace();
 		}
 	}
@@ -332,7 +332,7 @@ public class WorldUtility
 		int meta = world.getBlockMetadata(i, j, k);
 
 		ArrayList<ItemStack> dropsList = block.getDrops(world, i, j, k, meta, 0);
-		float dropChance = ForgeEventFactory.fireBlockHarvesting(dropsList, world, block, i, j, k, meta, 0, 1.0F, false, MachinePlayer.get(world));
+		float dropChance = ForgeEventFactory.fireBlockHarvesting(dropsList, world, block, i, j, k, meta, 0, 1.0F, false, DummyPlayer.get(world));
 
 		ArrayList<ItemStack> returnList = new ArrayList<ItemStack>();
 		for (ItemStack s : dropsList)

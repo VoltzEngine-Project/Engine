@@ -320,7 +320,8 @@ public class GuiContainerBase extends GuiContainer
 			}
 		}
 
-		if (this.isPointInRegion(x, y, display.length() * 5, 9, mouseX, mouseY))
+		//TODO: Check if this rect works.
+		if (new Rectangle(x, y, x + display.length() * 5, y + 9).intersects(new Vector2(mouseX, mouseY)))
 		{
 			if (Mouse.isButtonDown(0) && this.lastChangeFrameTime <= 0)
 			{
@@ -347,7 +348,7 @@ public class GuiContainerBase extends GuiContainer
 			displaySuffix = "/s";
 		}
 
-		String display = UnitDisplay.getDisplay(energy, unit, 2, small);
+		String display = new UnitDisplay(unit, energy).symbol(small).toString();
 
 		// Check different energy system types.
 		if (unit == Unit.WATT || unit == Unit.JOULES)
@@ -366,7 +367,7 @@ public class GuiContainerBase extends GuiContainer
 			}
 		}
 
-		if (this.isPointInRegion(x, y, display.length() * 5, 9, mouseX, mouseY))
+		if (new Rectangle(x, y, x + display.length() * 5, y + 9).intersects(new Vector2(mouseX, mouseY)))
 		{
 			if (Mouse.isButtonDown(0) && this.lastChangeFrameTime <= 0)
 			{

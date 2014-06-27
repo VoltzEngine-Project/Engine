@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import resonant.lib.utility.MachinePlayer;
+import resonant.lib.utility.DummyPlayer;
 import universalelectricity.core.transform.vector.Vector3;
 import universalelectricity.core.transform.vector.VectorWorld;
 
@@ -44,9 +44,9 @@ public class InventoryUtility
 			{
 				adj = main.adjacentChestZNeg;
 			}
-			else if (main.adjacentChestZPosition != null)
+			else if (main.adjacentChestZPos != null)
 			{
-				adj = main.adjacentChestZPosition;
+				adj = main.adjacentChestZPos;
 			}
 
 			if (adj != null)
@@ -117,7 +117,7 @@ public class InventoryUtility
 			return putStackInInventory((IInventory) tile, toInsert, force);
 		}
 
-		InventoryUtility.dropItemStack(position.world, position, toInsert, 20, 0);
+		InventoryUtility.dropItemStack(position.world(), position, toInsert, 20, 0);
 
 		return null;
 	}
@@ -293,11 +293,12 @@ public class InventoryUtility
 	{
 		if (!world.isRemote)
 		{
+			Block block = world.getBlock(x, y, z);
+
 			int meta = world.getBlockMetadata(x, y, z);
-			int id = world.getBlockId(x, y, z);
-			if (Block.blocksList[id] != null)
+			if (block != null)
 			{
-				ArrayList<ItemStack> items = Block.blocksList[id].getBlockDropped(world, x, y, z, meta, 0);
+				ArrayList<ItemStack> items = block.getDrops(world, x, y, z, meta, 0);
 
 				for (ItemStack itemStack : items)
 				{
@@ -313,7 +314,7 @@ public class InventoryUtility
 
 	public static void dropItemStack(VectorWorld position, ItemStack itemStack)
 	{
-		dropItemStack(position.world, position, itemStack);
+		dropItemStack(position.world(), position, itemStack);
 	}
 
 	/**
@@ -331,7 +332,7 @@ public class InventoryUtility
 
 	public static void dropItemStack(World world, Vector3 position, ItemStack itemStack, int delay, float randomAmount)
 	{
-		dropItemStack(world, position.x, position.y, position.z, itemStack, delay, randomAmount);
+		dropItemStack(world, position.x(), position.y(), position.z(), itemStack, delay, randomAmount);
 	}
 
 	public static void dropItemStack(World world, double x, double y, double z, ItemStack itemStack, int delay, float randomAmount)
@@ -394,17 +395,17 @@ public class InventoryUtility
 
 				if (world.isAirBlock(x, y, z))
 				{
-					rightClickPos.translate(ForgeDirection.getOrientation(side));
+					rightClickPos.add(ForgeDirection.getOrientation(side));
 				}
 
 				side ^= 1;
-				return MachinePlayer.useItemAt(itemStack, world, x, y - 1, z, side);
+				return DummyPlayer.useItemAt(itemStack, world, x, y - 1, z, side);
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
 
-				if (world.getBlockId(x, y, z) == itemStack.itemID)
+				if (world.getBlock(x, y, z) == ((ItemBlock) itemStack.getItem()).field_150939_a)
 				{
 					return true;
 				}
@@ -462,11 +463,11 @@ public class InventoryUtility
 			{
 				if (stack.stackSize == 1)
 				{
-					stack = stack.getItem().getContainerItemStack(stack);
+					stack = stack.getItem().getContainerItem(stack);
 				}
 				else
 				{
-					player.inventory.addItemStackToInventory(stack.getItem().getContainerItemStack(stack.splitStack(1)));
+					player.inventory.addItemStackToInventory(stack.getItem().getContainerItem(stack.splitStack(1)));
 				}
 			}
 			else
@@ -493,9 +494,9 @@ public class InventoryUtility
 	{
 		if (stack.stackSize == 1)
 		{
-			if (stack.getItem().hasContainerItem())
+			if (stack.getItem().hasContainerItem(stack))
 			{
-				return stack.getItem().getContainerItemStack(stack);
+				return stack.getItem().getContainerItem(stack);
 			}
 		}
 		else

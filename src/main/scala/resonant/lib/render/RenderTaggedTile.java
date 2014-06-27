@@ -61,7 +61,7 @@ public abstract class RenderTaggedTile extends TileEntitySpecialRenderer
 
 								if (entry.getKey() != null)
 								{
-									RenderUtility.renderFloatingText(entry.getKey(), new Vector3(x, y, z).translate(0.5, i * 0.25f + height, 0.5f), entry.getValue());
+									RenderUtility.renderFloatingText(entry.getKey(), new Vector3(x, y, z).add(new Vector3(0.5, i * 0.25f + height, 0.5f)), entry.getValue());
 								}
 
 								i++;
@@ -79,7 +79,7 @@ public abstract class RenderTaggedTile extends TileEntitySpecialRenderer
 	 */
 	public EntityPlayer getPlayer()
 	{
-		EntityLivingBase entity = this.tileEntityRenderer.entityLivingPlayer;
+		EntityLivingBase entity = field_147501_a.field_147551_g;
 
 		if (entity instanceof EntityPlayer)
 		{

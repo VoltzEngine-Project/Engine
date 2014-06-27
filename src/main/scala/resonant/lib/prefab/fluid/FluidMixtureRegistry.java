@@ -1,6 +1,6 @@
 package resonant.lib.prefab.fluid;
 
-import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
@@ -31,8 +31,8 @@ public class FluidMixtureRegistry
 
 	static
 	{
-		registerRecipe(FluidRegistry.LAVA, FluidRegistry.WATER, Block.obsidian);
-		registerRecipe(FluidRegistry.WATER, FluidRegistry.LAVA, Block.cobblestone);
+		registerRecipe(FluidRegistry.LAVA, FluidRegistry.WATER, Blocks.obsidian);
+		registerRecipe(FluidRegistry.WATER, FluidRegistry.LAVA, Blocks.cobblestone);
 	}
 
 	/**
@@ -260,7 +260,7 @@ public class FluidMixtureRegistry
 					if (!liquids[i].getFluid().equals(stack.getFluid()))
 					{
 						count++;
-						stack.tag.setCompoundTag("Liquids" + count, liquids[i].writeToNBT(new NBTTagCompound()));
+						stack.tag.setTag("Liquids" + count, liquids[i].writeToNBT(new NBTTagCompound()));
 						stack.amount += liquids[i].amount;
 					}
 					else
@@ -268,7 +268,7 @@ public class FluidMixtureRegistry
 						for (FluidStack loadStack : getStacksFromWaste(liquids[i]))
 						{
 							count++;
-							stack.tag.setCompoundTag("Liquids" + count, loadStack.writeToNBT(new NBTTagCompound()));
+							stack.tag.setTag("Liquids" + count, loadStack.writeToNBT(new NBTTagCompound()));
 							stack.amount += loadStack.amount;
 						}
 					}

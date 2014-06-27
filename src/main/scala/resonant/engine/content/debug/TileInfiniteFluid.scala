@@ -15,10 +15,9 @@ import universalelectricity.core.transform.vector.Vector3
 class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
 {
   saveIOMap = true
-  tank = new FluidTank(Integer.MAX_VALUE)
   ioMap = 728
 
-  var tank: FluidTank = null
+  var tank: FluidTank = new FluidTank(Integer.MAX_VALUE)
   var active: Boolean = false
 
   override def update()
