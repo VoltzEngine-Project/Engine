@@ -33,11 +33,10 @@ import resonant.engine.content.tool.ToolModeRotation;
 import resonant.engine.grid.thermal.BoilEvent;
 import resonant.engine.grid.thermal.EventThermal.EventThermalUpdate;
 import resonant.engine.grid.thermal.ThermalGrid;
-import resonant.lib.compat.waila.Waila;
 import resonant.lib.config.ConfigHandler;
 import resonant.lib.config.ConfigScanner;
 import resonant.lib.modproxy.ProxyHandler;
-import resonant.lib.multiblock.synthetic.TileSyntheticPart;
+import resonant.lib.multiblock.synthetic.SyntheticMultiblock;
 import resonant.lib.network.netty.PacketManager;
 import resonant.lib.prefab.ProxyBase;
 import resonant.lib.utility.LanguageUtility;
@@ -76,7 +75,6 @@ public class ResonantEngine
 	/**
 	 * Blocks
 	 */
-	public static BlockDummy blockMulti;
 	public static BlockDummy blockCreativeBuilder;
 	public static Block blockInfiniteFluid, blockInfiniteEnergy;
 
@@ -96,7 +94,7 @@ public class ResonantEngine
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
-		modProxy.applyModule(Waila.class, true);
+		//modProxy.applyModule(Waila.class, true);
 		modProxy.applyModule(this.packetHandler);
 
 		// Potion Array resized to Current potion array, +32, Allows to miss conflicting ID's
@@ -104,7 +102,9 @@ public class ResonantEngine
 
 		//SaveManager.registerClass("ModFlag", ModFlag.class);
 
-		//EventHandlers
+		/**
+		 * EventHandlers
+		 */
 		MinecraftForge.EVENT_BUS.register(instance);
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance());
 		MinecraftForge.EVENT_BUS.register(new PlayerInteractionHandler());
@@ -112,8 +112,10 @@ public class ResonantEngine
 		ToolMode.REGISTRY.add(new ToolModeGeneral());
 		ToolMode.REGISTRY.add(new ToolModeRotation());
 
-		blockMulti = contentRegistry.newBlock(TileSyntheticPart.class).setCreativeTab(null);
-		//blockMulti.setPacketType(References.PACKET_TILE);
+		/**
+		 * Multiblock Handling
+		 */
+		SyntheticMultiblock.instance = new SyntheticMultiblock();
 
 		//TODO: Calclavia - Return the prefabs as we still need them. Using traits is nice and all but we still need java classes
 

@@ -43,7 +43,7 @@ public class PotionUtility
 			catch (Exception e)
 			{
 				e.printStackTrace();
-				References.LOGGER.severe("The mod has Errored, Please report to the mod authors");
+				References.LOGGER.error("The mod has Errored, Please report to the mod authors");
 			}
 		}
 	}

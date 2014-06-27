@@ -1,15 +1,18 @@
 package resonant.lib.multiblock.synthetic;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import resonant.content.spatial.block.SpatialBlock;
+import resonant.content.spatial.block.SpatialTile;
 import resonant.engine.ResonantEngine;
 import resonant.lib.multiblock.reference.IMultiBlock;
-import resonant.lib.multiblock.synthetic.BlockSyntheticPart;
-import resonant.lib.multiblock.synthetic.IBlockActivate;
 import resonant.lib.network.IPacketReceiver;
 import resonant.lib.network.PacketTile;
 import universalelectricity.core.transform.vector.Vector3;
@@ -19,10 +22,18 @@ import universalelectricity.core.transform.vector.Vector3;
  *
  * @author Calclavia
  */
-public class TileSyntheticPart extends TileEntity implements IPacketReceiver
+public class TileSyntheticPart extends SpatialTile implements IPacketReceiver
 {
 	// The the position of the main block. Relative to this block's position.
 	private Vector3 mainBlockPosition;
+
+	public TileSyntheticPart()
+	{
+		super(Material.piston);
+		blockHardness(0.8f);
+		normalRender(false);
+		isOpaqueCube(false);
+	}
 
 	public Vector3 getMainBlock()
 	{
@@ -42,6 +53,72 @@ public class TileSyntheticPart extends TileEntity implements IPacketReceiver
 		{
 			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 		}
+	}
+
+	@Override
+	public IIcon getIcon(IBlockAccess access, int side)
+	{
+		try
+		{
+			Vector3 main = ((TileSyntheticPart) access.getTileEntity(x(), y(), z())).getMainBlock();
+			Block block = main.getBlock(access);
+
+			if (block != null)
+			{
+
+				return block.getIcon(access, main.xi(), main.yi(), main.zi(), side);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	@Override
+	public void onRemove(Block block, int par6)
+	{
+		if (getMainBlock() != null)
+		{
+			TileEntity tileEntity = this.getMainBlock().getTileEntity(this.worldObj);
+
+			if (tileEntity instanceof IMultiBlock)
+			{
+				SyntheticMultiblock.instance.destroy((IMultiBlock) tileEntity);
+			}
+		}
+	}
+
+	/**
+	 * Called when the block is right clicked by the player. This modified version detects electric
+	 * items and wrench actions on your machine block. Do not override this function. Use
+	 * machineActivated instead! (It does the same thing)
+	 */
+	@Override
+	public boolean activate(EntityPlayer player, int side, Vector3 hit)
+	{
+		if (this.getMainBlock() != null)
+		{
+			TileEntity tileEntity = this.getMainBlock().getTileEntity(this.worldObj);
+
+			if (tileEntity instanceof SpatialBlock)
+			{
+				return ((SpatialBlock) tileEntity).activate(player, side, hit);
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns the quantity of items to drop on block destruction.
+	 */
+	@Override
+	public int quantityDropped(int meta, int fortune)
+	{
+		return 0;
 	}
 
 	@Override
@@ -67,34 +144,6 @@ public class TileSyntheticPart extends TileEntity implements IPacketReceiver
 		{
 			e.printStackTrace();
 		}
-	}
-
-	public void onBlockRemoval(BlockSyntheticPart block)
-	{
-		if (this.getMainBlock() != null)
-		{
-			TileEntity tileEntity = this.getMainBlock().getTileEntity(this.worldObj);
-
-			if (tileEntity instanceof IMultiBlock)
-			{
-				block.destroyStructure((IMultiBlock) tileEntity);
-			}
-		}
-	}
-
-	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer entityPlayer)
-	{
-		if (this.getMainBlock() != null)
-		{
-			TileEntity tileEntity = this.getMainBlock().getTileEntity(this.worldObj);
-
-			if (tileEntity instanceof IBlockActivate)
-			{
-				return ((IBlockActivate) tileEntity).onActivated(entityPlayer);
-			}
-		}
-
-		return false;
 	}
 
 	/**
