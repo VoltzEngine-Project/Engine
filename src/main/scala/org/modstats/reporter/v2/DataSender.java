@@ -114,7 +114,7 @@ class DataSender extends Thread
     
     private String getSignature(String data)
     {
-        return Hashing.md5().hashString(data).toString();
+        return Hashing.md5().hashUnencodedChars(data).toString();
     }
     
     private String getData()

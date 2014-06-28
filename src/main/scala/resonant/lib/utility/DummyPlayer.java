@@ -9,6 +9,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.core.transform.vector.VectorWorld;
 
 import java.util.LinkedHashMap;
+import java.util.UUID;
 
 /**
  * Fake player used by machines, also includes utilities for using the fake player better.
@@ -21,7 +22,7 @@ public class DummyPlayer extends FakePlayer
 
 	public DummyPlayer(World world, String name, String sufix)
 	{
-		super((WorldServer) world, new GameProfile("0", name + sufix));
+		super((WorldServer) world, new GameProfile(UUID.randomUUID(), name + sufix));
 	}
 
 	public DummyPlayer(World world, String sufix)

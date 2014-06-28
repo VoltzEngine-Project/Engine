@@ -70,7 +70,7 @@ public class ResonantEngine
 	@Instance(References.NAME)
 	public static ResonantEngine instance;
 
-	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("deveopment").equalsIgnoreCase("true");
+	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
 
 	/**
 	 * Blocks
@@ -92,6 +92,7 @@ public class ResonantEngine
 	{
 		ConfigScanner.instance().generateSets(evt.getAsmData());
 
+		References.CONFIGURATION.load();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
 		//modProxy.applyModule(Waila.class, true);
@@ -119,12 +120,12 @@ public class ResonantEngine
 
 		//TODO: Calclavia - Return the prefabs as we still need them. Using traits is nice and all but we still need java classes
 
-		if (References.CONFIGURATION.get("CreaiveModeTools", "CreativeBuilder", runningAsDev).getBoolean(true))
+		if (References.CONFIGURATION.get("Creative Tools", "CreativeBuilder", true).getBoolean(true))
 		{
 			blockCreativeBuilder = contentRegistry.newBlock(TileCreativeBuilder.class);
 		}
 
-		if (References.CONFIGURATION.get("CreaiveModeTools", "InfiniteSource", runningAsDev).getBoolean(true))
+		if (References.CONFIGURATION.get("Creative Tools", "InfiniteSource", true).getBoolean(true))
 		{
 			blockInfiniteFluid = contentRegistry.newBlock(TileInfiniteFluid.class);
 			blockInfiniteEnergy = contentRegistry.newBlock(TileInfiniteEnergy.class);
@@ -132,7 +133,6 @@ public class ResonantEngine
 
 		//BlockCreativeBuilder.register(new SchematicTestRoom());
 		//Finish and close all resources
-		References.CONFIGURATION.load();
 		References.CONFIGURATION.save();
 		proxy.preInit();
 		modProxy.preInit();
