@@ -70,6 +70,18 @@ object Vector3
       return new Vector3((f4 * f5), f6, (f3 * f5))
     }
   }
+
+  def up = new Vector3(ForgeDirection.UP)
+
+  def down = new Vector3(ForgeDirection.DOWN)
+
+  def north = new Vector3(ForgeDirection.NORTH)
+
+  def south = new Vector3(ForgeDirection.SOUTH)
+
+  def east = new Vector3(ForgeDirection.EAST)
+
+  def west = new Vector3(ForgeDirection.WEST)
 }
 
 class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable with TraitVector[Vector3] with IVector3
