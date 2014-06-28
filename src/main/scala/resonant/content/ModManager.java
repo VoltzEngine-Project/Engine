@@ -66,11 +66,11 @@ public class ModManager
 	/**
 	 * New SpatialBlocks system.
 	 */
-	public BlockDummy newBlock(Class<? extends SpatialBlock> tileBlockClass)
+	public BlockDummy newBlock(Class<? extends SpatialBlock> spatialClass)
 	{
 		try
 		{
-			SpatialBlock tileBlock = tileBlockClass.newInstance();
+			SpatialBlock tileBlock = spatialClass.newInstance();
 			final String name = tileBlock.name();
 
 			BlockDummy block = new BlockDummy(modPrefix, defaultTab, tileBlock);
@@ -100,7 +100,7 @@ public class ModManager
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeException("Block [" + tileBlockClass.getSimpleName() + "] failed to be created:", e);
+			throw new RuntimeException("Block [" + spatialClass.getSimpleName() + "] failed to be created:", e);
 		}
 	}
 	/**

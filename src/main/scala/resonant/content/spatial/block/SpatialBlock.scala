@@ -159,31 +159,31 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
 
   def x: Int =
   {
-    assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
+    //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return xCoord
   }
 
   def y: Int =
   {
-    assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
+    //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return yCoord
   }
 
   def z: Int =
   {
-    assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
+    //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return zCoord
   }
 
   def position: VectorWorld =
   {
-    assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
+    //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return new VectorWorld(this)
   }
 
   protected def center: VectorWorld =
   {
-    assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
+    //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return position.add(0.5).asInstanceOf[VectorWorld]
   }
 
@@ -465,7 +465,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   @SideOnly(Side.CLIENT)
   def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
   {
-    return renderer.renderStandardBlock(block, position.xi, position.yi, position.zi)
+    return renderer.renderStandardBlock(block, pos.xi, pos.yi, pos.zi)
   }
 
   /**

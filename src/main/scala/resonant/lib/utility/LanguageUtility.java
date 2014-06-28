@@ -76,7 +76,8 @@ public class LanguageUtility
 
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 		{
-			text = LanguageRegistry.instance().getStringLocalization(key);
+			//TODO: Re-enable
+			//	text = LanguageRegistry.instance().getStringLocalization(key);
 		}
 
 		if (text == null || text == "")

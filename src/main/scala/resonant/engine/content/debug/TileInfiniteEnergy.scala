@@ -8,7 +8,7 @@ import universalelectricity.api.core.grid.electric.EnergyStorage
  * @since 31/05/14
  * @author tgame14
  */
-class TileInfiniteEnergy(mat: Material) extends TileElectricStorage(mat)
+class TileInfiniteEnergy extends TileElectricStorage(Material.iron)
 {
   energy = new EnergyStorage(Double.MaxValue)
   energy.setMaxExtract(Double.MaxValue)
@@ -16,7 +16,7 @@ class TileInfiniteEnergy(mat: Material) extends TileElectricStorage(mat)
 
   override def update()
   {
-    super.updateEntity()
+    super.update()
     energy.setEnergy(Double.MaxValue)
   }
 

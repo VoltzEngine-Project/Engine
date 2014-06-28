@@ -47,6 +47,7 @@ class TileCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable wi
       player.openGui(ResonantEngine.instance, -1, world, x, y, z)
       return true
     }
+
     return false
   }
 

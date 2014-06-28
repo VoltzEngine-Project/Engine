@@ -14,11 +14,11 @@ import universalelectricity.core.transform.vector.Vector3
  */
 class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
 {
-  saveIOMap = true
-  ioMap = 728
-
   var tank: FluidTank = new FluidTank(Integer.MAX_VALUE)
   var active: Boolean = false
+
+  saveIOMap = true
+  ioMap = 728
 
   override def update()
   {
@@ -40,12 +40,12 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
     }
   }
 
-  def getTankInfo(from: ForgeDirection): Array[FluidTankInfo] =
+  override def getTankInfo(from: ForgeDirection): Array[FluidTankInfo] =
   {
     return Array[FluidTankInfo](this.tank.getInfo)
   }
 
-  def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int =
+  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int =
   {
     if (getInputDirections.contains(from))
     {
@@ -54,7 +54,7 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
     return 0
   }
 
-  def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean): FluidStack =
+  override def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean): FluidStack =
   {
     if (getOutputDirections.contains(from))
     {
@@ -63,7 +63,7 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
     return null
   }
 
-  def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean): FluidStack =
+  override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean): FluidStack =
   {
     if (getOutputDirections.contains(from))
     {
@@ -72,12 +72,12 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
     return null
   }
 
-  def canFill(from: ForgeDirection, fluid: Fluid): Boolean =
+  override def canFill(from: ForgeDirection, fluid: Fluid): Boolean =
   {
     return getInputDirections.contains(from)
   }
 
-  def canDrain(from: ForgeDirection, fluid: Fluid): Boolean =
+  override def canDrain(from: ForgeDirection, fluid: Fluid): Boolean =
   {
     return getOutputDirections.contains(from)
   }
