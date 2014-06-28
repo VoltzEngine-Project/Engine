@@ -144,7 +144,7 @@ public class ResonantEngine
 		References.CONFIGURATION.load();
 
 		References.CONFIGURATION.save();
-		References.LOGGER.info("Loaded: " + LanguageUtility.loadLanguages(References.LANGUAGE_DIRECTORY, References.LANGUAGES) + " Languages.");
+		//References.LOGGER.info("Loaded: " + LanguageUtility.loadLanguages(References.LANGUAGE_DIRECTORY, References.LANGUAGES) + " Languages.");
 
 		ResonantEngine.metadata.modId = References.NAME;
 		ResonantEngine.metadata.name = References.NAME;

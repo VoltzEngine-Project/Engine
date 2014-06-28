@@ -13,6 +13,7 @@ import java.io.File;
  */
 public final class References
 {
+	public static final String ID = "resonant";
 	public static final String NAME = "Resonant Engine";
 	/**
 	 * The configuration file.
@@ -27,7 +28,6 @@ public final class References
 	public static final String DOMAIN = "resonant";
 	public static final String PREFIX = DOMAIN + ":";
 	public static final String DIRECTORY = "/assets/" + DOMAIN + "/";
-	public static final String LANGUAGE_DIRECTORY = DIRECTORY + "languages/";
 	public static final String CHANNEL = "resonantengine";
 	public static final String TEXTURE_DIRECTORY = "textures/";
 	public static final String GUI_DIRECTORY = TEXTURE_DIRECTORY + "gui/";
@@ -38,6 +38,4 @@ public final class References
 	public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items/";
 	public static final String MODEL_PATH = "models/";
 	public static final String MODEL_DIRECTORY = DIRECTORY + MODEL_PATH;
-	public static final String[] LANGUAGES = new String[] { "en_US", "zh_CN", "es_ES", "it_IT", "nl_NL", "de_DE", "tr_TR", "ru_RU", "pl_PL", "et_EE" };
-
 }
