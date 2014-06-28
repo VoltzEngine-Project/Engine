@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.world.World
-import universalelectricity.core.transform.TraitOperation
+import universalelectricity.core.transform.AbstractOperation
 import universalelectricity.core.transform.rotation.Rotation
 import universalelectricity.core.transform.vector.Vector3
 
@@ -22,7 +22,7 @@ object Cuboid
   def full() = new Cuboid(0, 0, 0, 1, 1, 1)
 }
 
-class Cuboid(var min: Vector3, var max: Vector3) extends TraitOperation[Cuboid]
+class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboid]
 {
   def this() = this(new Vector3, new Vector3)
 

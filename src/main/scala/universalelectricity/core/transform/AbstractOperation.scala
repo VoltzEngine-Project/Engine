@@ -3,9 +3,10 @@ package universalelectricity.core.transform
 import net.minecraft.nbt.NBTTagCompound
 
 /**
+ * An abstract class that manages arithmetic operations.
  * @author Calclavia
  */
-trait TraitVector[T <: TraitVector[T]]// extends TraitOperation[T]
+abstract class AbstractOperation[T <: AbstractOperation[T]]
 {
   def set(other: T): T
 
@@ -61,21 +62,21 @@ trait TraitVector[T <: TraitVector[T]]// extends TraitOperation[T]
 
   final def divide(amount: Double): T = this / amount
 
-  final def addSet(amount: Double): T = this += amount
+  final def addEquals(amount: Double): T = this += amount
 
-  final def addSet(amount: T): T = this += amount
+  final def addEquals(amount: T): T = this += amount
 
-  final def subtractSet(amount: Double): T = this -= amount
+  final def subtractEquals(amount: Double): T = this -= amount
 
-  final def subtractSet(amount: T): T = this -= amount
+  final def subtractEquals(amount: T): T = this -= amount
 
-  final def multiplySet(amount: Double): T = this *= amount
+  final def multiplyEquals(amount: Double): T = this *= amount
 
-  final def multiplySet(amount: T): T = this *= amount
+  final def multiplyEquals(amount: T): T = this *= amount
 
-  final def divideSet(amount: Double): T = this /= amount
+  final def divideEquals(amount: Double): T = this /= amount
 
-  final def divideSet(amount: T): T = this /= amount
+  final def divideEquals(amount: T): T = this /= amount
 
   /**
    * Conversion
@@ -95,21 +96,4 @@ trait TraitVector[T <: TraitVector[T]]// extends TraitOperation[T]
   final def toNBT: NBTTagCompound = toNBT(new NBTTagCompound())
 
   def toNBT(nbt: NBTTagCompound): NBTTagCompound
-
-  /**
-   * Magnitudes
-   */
-  final def dot(other: T) = $(other)
-
-  def $(other: T): Double
-
-  final def magnitudeSquared: Double = this.asInstanceOf[T] $ this.asInstanceOf[T];
-
-  final def magnitude = Math.sqrt(magnitudeSquared)
-
-  final def normalize = this / magnitude
-
-  final def distance(other: T) = (other - this.asInstanceOf[T]).magnitude
-
-  final def midpoint(other: T): T = (this + other) / 2
 }

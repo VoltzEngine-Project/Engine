@@ -10,7 +10,7 @@ import net.minecraft.util._
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.transform.rotation.Rotation
-import universalelectricity.core.transform.{ITransform, TraitOperation, TraitVector}
+import universalelectricity.core.transform.{ITransform, AbstractVector}
 
 /**
  * @author Calclavia
@@ -84,7 +84,7 @@ object Vector3
   def west = new Vector3(ForgeDirection.WEST)
 }
 
-class Vector3(var x: Double, var y: Double, var z: Double) extends Cloneable with TraitVector[Vector3] with IVector3
+class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVector[Vector3] with Cloneable with IVector3
 {
   def this() = this(0, 0, 0)
 

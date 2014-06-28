@@ -3,14 +3,14 @@ package universalelectricity.core.transform.vector
 import java.lang.Double.doubleToLongBits
 
 import net.minecraft.nbt.NBTTagCompound
-import universalelectricity.core.transform.TraitVector
+import universalelectricity.core.transform.AbstractVector
 
 /**
  * Vector2 Class is used for defining objects in a 2D space.
  *
  * @author Calclavia
  */
-class Vector2(var x: Double, var y: Double) extends Cloneable with TraitVector[Vector2] with IVector2
+class Vector2(var x: Double, var y: Double) extends AbstractVector[Vector2] with Cloneable with IVector2
 {
   def this() = this(0, 0)
 

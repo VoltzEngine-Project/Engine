@@ -3,10 +3,10 @@ package universalelectricity.core.transform.region
 import java.math.{BigDecimal, MathContext, RoundingMode}
 
 import net.minecraft.nbt.NBTTagCompound
-import universalelectricity.core.transform.TraitOperation
+import universalelectricity.core.transform.AbstractOperation
 import universalelectricity.core.transform.vector.Vector2
 
-class Rectangle(var min: Vector2, var max: Vector2) extends TraitOperation[Rectangle]
+class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Rectangle]
 {
   def this() = this(new Vector2, new Vector2)
 

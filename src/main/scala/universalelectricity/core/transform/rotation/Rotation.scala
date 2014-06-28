@@ -5,7 +5,7 @@ import java.lang.Double.doubleToLongBits
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.transform.vector.Vector3
-import universalelectricity.core.transform.{ITransform, TraitOperation}
+import universalelectricity.core.transform.{AbstractOperation, ITransform}
 
 /**
  * The euler angles describing a 3D rotation. The rotation always in degrees.
@@ -22,10 +22,11 @@ import universalelectricity.core.transform.{ITransform, TraitOperation}
  * Make sure all models use the Techne Model loader, they will naturally follow this rule.
  *
  * TODO: Cache all other representations of rotation for optimization
+ * TODO: Check if all conversions are correct.
  *
  * @author Calclavia
  */
-class Rotation extends TraitOperation[Rotation] with ITransform with IRotation
+class Rotation extends AbstractOperation[Rotation] with ITransform with IRotation
 {
   /**
    * An angle in radians
