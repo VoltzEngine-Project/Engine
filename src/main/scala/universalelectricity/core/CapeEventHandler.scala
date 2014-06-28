@@ -1,7 +1,7 @@
 package universalelectricity.core
 
-import java.awt.{Graphics, Image}
 import java.awt.image.BufferedImage
+import java.awt.{Graphics, Image}
 import java.io.{BufferedReader, IOException, InputStream, InputStreamReader}
 import java.net.{MalformedURLException, URL, URLConnection}
 import java.util.{ArrayList, HashMap, List}
@@ -9,9 +9,8 @@ import javax.swing.ImageIcon
 
 import cpw.mods.fml.common.Loader
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.relauncher.{ReflectionHelper, Side, SideOnly}
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.entity.AbstractClientPlayer
-import net.minecraft.client.renderer.ThreadDownloadImageData
 import net.minecraft.launchwrapper.Launch
 import net.minecraftforge.client.event.RenderPlayerEvent
 
@@ -30,7 +29,7 @@ object CapeEventHandler
 
   private final val TEST_GRAPHICS: Graphics = new BufferedImage(128, 128, BufferedImage.TYPE_INT_RGB).getGraphics
 
-  buildCloakURLDatabase
+  buildCloakURLDatabase()
 
   def isOptifineInstalled: Boolean =
   {
@@ -48,6 +47,7 @@ object CapeEventHandler
     if (event.entityPlayer.isInstanceOf[AbstractClientPlayer])
     {
       val abstractClientPlayer: AbstractClientPlayer = event.entityPlayer.asInstanceOf[AbstractClientPlayer]
+
       if (!capePlayers.contains(abstractClientPlayer))
       {
         val cloakURL: String = cloaks.get(event.entityPlayer.getDisplayName.toLowerCase)
@@ -55,15 +55,18 @@ object CapeEventHandler
         {
           return
         }
+
         capePlayers.add(abstractClientPlayer)
-        ReflectionHelper.setPrivateValue(classOf[ThreadDownloadImageData], abstractClientPlayer.getTextureCape, false, "textureUploaded", "field_110559_g")
+
+        //TODO: FIX
+        //ReflectionHelper.setPrivateValue(classOf[ThreadDownloadImageData], abstractClientPlayer.getDownloadImageSkin(), false, "textureUploaded", "field_110559_g")
         new Thread(new CloakThread(abstractClientPlayer, cloakURL)).start
         event.renderCape = true
       }
     }
   }
 
-  def buildCloakURLDatabase
+  def buildCloakURLDatabase()
   {
     var url: URL = null
     try
@@ -74,12 +77,10 @@ object CapeEventHandler
       con.setReadTimeout(timeout)
       val io: InputStream = con.getInputStream
       val br: BufferedReader = new BufferedReader(new InputStreamReader(io))
-      var str: String = null
+      var str: String =  br.readLine()
       var linetracker: Int = 1
-      while ((({
-        str = br.readLine;
-        str
-      })) != null)
+
+      while (str  != null)
       {
         if (!str.startsWith("--") && !str.isEmpty)
         {
@@ -96,8 +97,10 @@ object CapeEventHandler
           }
         }
         linetracker += 1
+        str = br.readLine()
       }
-      br.close
+
+      br.close()
     }
     catch
       {
@@ -112,17 +115,17 @@ object CapeEventHandler
       }
   }
 
-  def refreshCapes
+  def refreshCapes()
   {
-    cloaks.clear
-    capePlayers.clear
-    buildCloakURLDatabase
+    cloaks.clear()
+    capePlayers.clear()
+    buildCloakURLDatabase()
   }
 
   private class CloakThread extends Runnable
   {
-    private[core] var abstractClientPlayer: AbstractClientPlayer = null
-    private[core] var cloakURL: String = null
+    var abstractClientPlayer: AbstractClientPlayer = null
+    var cloakURL: String = null
 
     def this(player: AbstractClientPlayer, cloak: String)
     {
@@ -138,7 +141,8 @@ object CapeEventHandler
         val cape: Image = new ImageIcon(new URL(cloakURL)).getImage
         val bo: BufferedImage = new BufferedImage(cape.getWidth(null), cape.getHeight(null), BufferedImage.TYPE_INT_ARGB)
         bo.getGraphics.drawImage(cape, 0, 0, null)
-        ReflectionHelper.setPrivateValue(classOf[ThreadDownloadImageData], abstractClientPlayer.getTextureCape, bo, "bufferedImage", "field_110560_d")
+        // TODO: FIX
+        //ReflectionHelper.setPrivateValue(classOf[ThreadDownloadImageData], abstractClientPlayer.getDownloadImageSkin(), bo, "bufferedImage", "field_110560_d")
       }
       catch
         {

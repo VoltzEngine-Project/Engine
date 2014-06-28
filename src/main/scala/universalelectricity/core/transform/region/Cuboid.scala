@@ -36,7 +36,7 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
 
   def this(block: Block) = this(block.getBlockBoundsMinX, block.getBlockBoundsMinY, block.getBlockBoundsMinZ, block.getBlockBoundsMaxX, block.getBlockBoundsMaxY, block.getBlockBoundsMaxZ)
 
-  def toAABB: AxisAlignedBB = AxisAlignedBB.getAABBPool.getAABB(min.x, min.y, min.z, max.x, max.y, max.z)
+  def toAABB: AxisAlignedBB = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z)
 
   def toRectangle: Rectangle = new Rectangle(min.toVector2, max.toVector2)
 
