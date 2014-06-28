@@ -10,7 +10,7 @@ import net.minecraft.util._
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.transform.rotation.Rotation
-import universalelectricity.core.transform.{ITransform, TraitVector}
+import universalelectricity.core.transform.{ITransform, TraitOperation, TraitVector}
 
 /**
  * @author Calclavia
