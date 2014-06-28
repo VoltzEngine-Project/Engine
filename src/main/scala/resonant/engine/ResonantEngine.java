@@ -61,7 +61,7 @@ public class ResonantEngine
 {
 	public static final ModManager contentRegistry = new ModManager(References.CONFIGURATION, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 
-	@SidedProxy(clientSide = "resonant.core.ClientProxy", serverSide = "resonant.lib.prefab.ProxyBase")
+	@SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.lib.engine.ProxyBase")
 	public static ProxyBase proxy;
 
 	@Mod.Metadata(References.NAME)

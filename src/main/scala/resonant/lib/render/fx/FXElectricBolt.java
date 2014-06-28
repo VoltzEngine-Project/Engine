@@ -175,7 +175,7 @@ public class FXElectricBolt extends EntityFX
 						//Vector3 splitrot = next.difference.xCross().rotate(this.rand.nextFloat() * 360.0F, next.difference);
 						Vector3 splitrot = next.difference.xCross().apply(new Rotation(this.rand.nextFloat() * 360.0F, next.difference));
 						//Vector3 diff = next.difference.clone().rotate((this.rand.nextFloat() * 0.66F + 0.33F) * splitAngle, splitrot).multiply(splitLength);
-						Vector3 diff = next.difference.clone().apply(new Rotation((this.rand.nextFloat() * 0.66F + 0.33F) * splitAngle, splitrot).multiply(splitLength));
+						Vector3 diff = next.difference.clone().apply(new Rotation((this.rand.nextFloat() * 0.66F + 0.33F) * splitAngle, splitrot)).multiply(splitLength);
 						this.maxSplitID += 1;
 						this.splitparents.put(this.maxSplitID, next.splitID);
 						BoltSegment split = new BoltSegment(newPoints[i], new BoltPoint(newPoints[(i + 1)].basePoint, newPoints[(i + 1)].offSet.clone().add(diff)), segment.weight / 2.0F, next.segmentID, this.maxSplitID);

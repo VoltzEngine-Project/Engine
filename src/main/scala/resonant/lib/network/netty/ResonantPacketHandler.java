@@ -2,6 +2,7 @@ package resonant.lib.network.netty;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +13,7 @@ import resonant.engine.ResonantEngine;
  * @author tgame14
  * @since 31/05/14
  */
+@ChannelHandler.Sharable
 public class ResonantPacketHandler extends SimpleChannelInboundHandler<AbstractPacket>
 {
 

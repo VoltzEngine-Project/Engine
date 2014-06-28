@@ -13,7 +13,7 @@ import java.io.File;
  */
 public final class References
 {
-	public static final String NAME = "ResonantEngine";
+	public static final String NAME = "Resonant Engine";
 	/**
 	 * The configuration file.
 	 */

@@ -15,8 +15,8 @@ import java.util.Set;
  */
 public class FrequencyGridRegistry
 {
-	private static IFrequencyGrid CLIENT_INSTANCE = new resonant.engine.grid.frequency.FrequencyGrid();
-	private static IFrequencyGrid SERVER_INSTANCE = new resonant.engine.grid.frequency.FrequencyGrid();
+	private static IFrequencyGrid CLIENT_INSTANCE;
+	private static IFrequencyGrid SERVER_INSTANCE;
 
 	public static IFrequencyGrid instance()
 	{
@@ -28,16 +28,6 @@ public class FrequencyGridRegistry
 		}
 
 		return CLIENT_INSTANCE;
-	}
-
-	/**
-	 * Called to re-initiate the grid. Used when server restarts or when player rejoins a world to
-	 * clean up previously registered objects.
-	 */
-	public static void reinitiate()
-	{
-		CLIENT_INSTANCE = new resonant.engine.grid.frequency.FrequencyGrid();
-		SERVER_INSTANCE = new resonant.engine.grid.frequency.FrequencyGrid();
 	}
 
 	public static interface IFrequencyGrid
