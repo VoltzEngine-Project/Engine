@@ -451,7 +451,8 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     return SpatialBlock.icon.get(getTextureName)
   }
 
-  @SideOnly(Side.CLIENT) def registerIcons(iconRegister: IIconRegister)
+  @SideOnly(Side.CLIENT)
+  def registerIcons(iconRegister: IIconRegister)
   {
     SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName))
   }

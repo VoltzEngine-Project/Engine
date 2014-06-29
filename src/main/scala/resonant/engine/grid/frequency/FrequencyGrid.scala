@@ -2,7 +2,7 @@ package resonant.engine.grid.frequency
 
 import java.util._
 
-import calclavia.api.mffs.fortron.FrequencyGridRegistry
+import resonant.api.mffs.fortron.FrequencyGridRegistry
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 import resonant.api.blocks.IBlockFrequency
