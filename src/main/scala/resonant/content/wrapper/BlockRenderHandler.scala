@@ -29,9 +29,9 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
     }
   }
 
-  def renderWorldBlock(access: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderer: RenderBlocks): Boolean =
+  def renderWorldBlock(access: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderBlocks: RenderBlocks): Boolean =
   {
-    var renderer: SpatialBlock = _
+    var renderer: SpatialBlock = null
 
     /**
      * Try TileEntity rendering
@@ -41,7 +41,7 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
     if (tile.isInstanceOf[SpatialBlock])
     {
       val spatial = tile.asInstanceOf[SpatialBlock]
-      renderer = spatial.tile()
+      renderer = spatial.tile
     }
 
     /**
@@ -56,7 +56,7 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
 
     if (renderer != null)
     {
-      return renderer.renderStatic(renderer, new Vector3(x, y, z), 0);
+      return renderer.renderStatic(renderBlocks, new Vector3(x, y, z), 0);
     }
 
     return false
