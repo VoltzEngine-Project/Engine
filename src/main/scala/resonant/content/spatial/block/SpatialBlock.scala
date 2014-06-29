@@ -489,7 +489,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
   {
-    glTranslated(0.5, 0.5, 0.5)
     RenderUtility.renderNormalBlockAsItem(itemStack.getItem().asInstanceOf[ItemBlock].field_150939_a, itemStack.getItemDamage(), RenderUtility.renderBlocks)
   }
 

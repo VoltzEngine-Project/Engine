@@ -22,11 +22,10 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
 
       glEnable(GL_RESCALE_NORMAL)
       glPushAttrib(GL_TEXTURE_BIT)
-      glPushMatrix
-      glTranslated(-0.5, -0.5, -0.5)
+      glPushMatrix()
       tile.renderInventory(new ItemStack(block, 1, metadata))
-      glPopMatrix
-      glPopAttrib
+      glPopMatrix()
+      glPopAttrib()
     }
   }
 
