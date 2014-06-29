@@ -14,7 +14,8 @@ import resonant.content.wrapper.BlockDummy;
 import resonant.content.wrapper.ItemRenderHandler;
 import resonant.lib.utility.LanguageUtility;
 
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.WeakHashMap;
 
 /**
@@ -66,33 +67,50 @@ public class ModManager
 	/**
 	 * New SpatialBlocks system.
 	 */
-	public BlockDummy newBlock(Class<? extends SpatialBlock> spatialClass)
+	public BlockDummy newBlock(Class<? extends SpatialBlock> spatialClass, Object... args)
 	{
 		try
 		{
-			SpatialBlock tileBlock = spatialClass.newInstance();
-			final String name = tileBlock.name();
+			SpatialBlock spatial;
 
-			BlockDummy block = new BlockDummy(modPrefix, defaultTab, tileBlock);
-			tileBlock.setBlock(block);
-
-			blocks.put(block, name);
-			proxy.registerBlock(block, tileBlock.itemBlock(), name, modID);
-
-			tileBlock.onInstantiate();
-
-			if (tileBlock instanceof ISimpleItemRenderer)
+			if (args != null && args.length > 0)
 			{
-				ItemRenderHandler.register(new ItemStack(block).getItem(), (ISimpleItemRenderer) tileBlock);
+				List<Class> paramTypes = new ArrayList();
+
+				for (Object arg : args)
+				{
+					paramTypes.add(arg.getClass());
+				}
+
+				spatial = spatialClass.getConstructor(paramTypes.toArray(new Class[0])).newInstance();
+			}
+			else
+			{
+				spatial = spatialClass.newInstance();
 			}
 
-			if (tileBlock.tile() != null)
-			{
-				proxy.registerTileEntity(name, tileBlock.tile().getClass());
+			final String name = spatial.name();
 
-				if (!tileBlock.normalRender())
+			BlockDummy block = new BlockDummy(modPrefix, defaultTab, spatial);
+			spatial.setBlock(block);
+
+			blocks.put(block, name);
+			proxy.registerBlock(block, spatial.itemBlock(), name, modID);
+
+			spatial.onInstantiate();
+
+			if (spatial instanceof ISimpleItemRenderer)
+			{
+				ItemRenderHandler.register(new ItemStack(block).getItem(), (ISimpleItemRenderer) spatial);
+			}
+
+			if (spatial.tile() != null)
+			{
+				proxy.registerTileEntity(name, spatial.tile().getClass());
+
+				if (!spatial.normalRender())
 				{
-					proxy.registerDummyRenderer(tileBlock.tile().getClass());
+					proxy.registerDummyRenderer(spatial.tile().getClass());
 				}
 			}
 
@@ -103,137 +121,107 @@ public class ModManager
 			throw new RuntimeException("Block [" + spatialClass.getSimpleName() + "] failed to be created:", e);
 		}
 	}
+
 	/**
-	 @Deprecated public Block createBlock(Class<? extends Block> blockClass)
-	 {
-	 return createBlock(blockClass, ItemBlockTooltip.class);
-	 }
-
-	 @Deprecated public Block createTile(Class<? extends Block> blockClass, Class<? extends TileEntity> tileClass)
-	 {
-	 return createBlock(blockClass, ItemBlockTooltip.class, tileClass);
-	 }
-
-	 @Deprecated public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass)
-	 {
-	 return createBlock(blockClass, itemClass, null);
-	 }
-
-	 @Deprecated public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
-	 {
-	 return createBlock(LanguageUtility.decapitalizeFirst(blockClass.getSimpleName().replace("Block", "")), blockClass, itemClass, tileClass);
-	 }
-
-	 @Deprecated public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
-	 {
-	 return createBlock(name, blockClass, itemClass, tileClass, false);
-	 }
-
-	 /**
-	  * Generates a block using reflection, and runs it threw config checks
-	  *
-	  * @param name       - name to register the block with
-	 * @param tileClass  - the tile class to register this block to
-	 * @param blockClass - class to generate the instance from
-	 * @param canDisable - should we allow the player the option to disable the block
-	 * @param itemClass  - item block to register with the block
-
-	 @Deprecated public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass, boolean canDisable)
-	 {
-	 Block block = null;
-
-	 if (blockClass != null && (!canDisable || (canDisable && config.get("Enabled_List", "Enabled " + name, true).getBoolean(true))))
-	 {
-	 try
-	 {
-
-	 //                int assignedID = idManager.getNextBlockID();
-	 //                int actualID = config.getBlock(name, assignedID).getInt(assignedID);
-	 block = blockClass.getConstructor().newInstance();
-
-	 if (block != null)
-	 {
-	 if (modPrefix != null)
-	 {
-	 block.setBlockName(modPrefix + name);
-
-	 if (ReflectionHelper.getPrivateValue(Block.class, block, "textureName", "field_111026_f") == null)
-	 {
-	 block.setBlockTextureName(modPrefix + name);
-	 }
-	 }
-
-	 if (defaultTab != null)
-	 {
-	 block.setCreativeTab(defaultTab);
-	 }
-
-	 blocks.put(block, name);
-	 proxy.registerBlock(block, itemClass, name, modID);
-	 finishCreation(block, tileClass);
-	 }
-	 }
-	 catch (IllegalArgumentException e)
-	 {
-	 throw e;
-	 }
-	 catch (Exception e)
-	 {
-	 throw new RuntimeException("Block [" + name + "] failed to be created:", e);
-	 }
-	 }
-
-	 return block;
-	 }
-
-	 /**
-	  * Finishes the creation of the block loading config files and tile entities
-	  *
-	  * @param tileClass
+	 * @param tileClass
 	 * @throws ClassNotFoundException
-
-	 @Deprecated public void finishCreation(Block block, Class<? extends TileEntity> tileClass) throws ClassNotFoundException
-	 {
-	 BlockInfo blockInfo = block.getClass().getAnnotation(BlockInfo.class);
-
-	 if (blockInfo != null)
-	 {
-	 for (String string : blockInfo.tileEntity())
-	 {
-	 Class clazz = Class.forName(string);
-	 proxy.registerTileEntity(clazz.getName(), clazz);
-	 }
-
-	 }
-	 // TODO Remove this and transfer to @BlockInfo
-	 if (tileClass != null)
-	 {
-	 proxy.registerTileEntity(block.getUnlocalizedName(), tileClass);
-	 }
-	 }*/
-
-	/**
-	 * Method to get block via name
-	 *
-	 * @param blockName
-	 * @return Block requested
+	 * @Deprecated public Block createBlock(Class<? extends Block> blockClass)
+	 * {
+	 * return createBlock(blockClass, ItemBlockTooltip.class);
+	 * }
+	 * @Deprecated public Block createTile(Class<? extends Block> blockClass, Class<? extends TileEntity> tileClass)
+	 * {
+	 * return createBlock(blockClass, ItemBlockTooltip.class, tileClass);
+	 * }
+	 * @Deprecated public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass)
+	 * {
+	 * return createBlock(blockClass, itemClass, null);
+	 * }
+	 * @Deprecated public Block createBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
+	 * {
+	 * return createBlock(LanguageUtility.decapitalizeFirst(blockClass.getSimpleName().replace("Block", "")), blockClass, itemClass, tileClass);
+	 * }
+	 * @Deprecated public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass)
+	 * {
+	 * return createBlock(name, blockClass, itemClass, tileClass, false);
+	 * }
+	 * <p/>
+	 * /**
+	 * Generates a block using reflection, and runs it threw config checks
+	 * @Deprecated public Block createBlock(String name, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, Class<? extends TileEntity> tileClass, boolean canDisable)
+	 * {
+	 * Block block = null;
+	 * <p/>
+	 * if (blockClass != null && (!canDisable || (canDisable && config.get("Enabled_List", "Enabled " + name, true).getBoolean(true))))
+	 * {
+	 * try
+	 * {
+	 * <p/>
+	 * //                int assignedID = idManager.getNextBlockID();
+	 * //                int actualID = config.getBlock(name, assignedID).getInt(assignedID);
+	 * block = blockClass.getConstructor().newInstance();
+	 * <p/>
+	 * if (block != null)
+	 * {
+	 * if (modPrefix != null)
+	 * {
+	 * block.setBlockName(modPrefix + name);
+	 * <p/>
+	 * if (ReflectionHelper.getPrivateValue(Block.class, block, "textureName", "field_111026_f") == null)
+	 * {
+	 * block.setBlockTextureName(modPrefix + name);
+	 * }
+	 * }
+	 * <p/>
+	 * if (defaultTab != null)
+	 * {
+	 * block.setCreativeTab(defaultTab);
+	 * }
+	 * <p/>
+	 * blocks.put(block, name);
+	 * proxy.registerBlock(block, itemClass, name, modID);
+	 * finishCreation(block, tileClass);
+	 * }
+	 * }
+	 * catch (IllegalArgumentException e)
+	 * {
+	 * throw e;
+	 * }
+	 * catch (Exception e)
+	 * {
+	 * throw new RuntimeException("Block [" + name + "] failed to be created:", e);
+	 * }
+	 * }
+	 * <p/>
+	 * return block;
+	 * }
+	 * <p/>
+	 * /**
+	 * Finishes the creation of the block loading config files and tile entities
+	 * @Deprecated public void finishCreation(Block block, Class<? extends TileEntity> tileClass) throws ClassNotFoundException
+	 * {
+	 * BlockInfo blockInfo = block.getClass().getAnnotation(BlockInfo.class);
+	 * <p/>
+	 * if (blockInfo != null)
+	 * {
+	 * for (String string : blockInfo.tileEntity())
+	 * {
+	 * Class clazz = Class.forName(string);
+	 * proxy.registerTileEntity(clazz.getName(), clazz);
+	 * }
+	 * <p/>
+	 * }
+	 * // TODO Remove this and transfer to @BlockInfo
+	 * if (tileClass != null)
+	 * {
+	 * proxy.registerTileEntity(block.getUnlocalizedName(), tileClass);
+	 * }
+	 * }
 	 */
-	public Block getBlock(String blockName)
-	{
-		for (Entry<Block, String> entry : blocks.entrySet())
-		{
-			String name = entry.getKey().getUnlocalizedName().replace("tile.", "");
-			if (name.equalsIgnoreCase(blockName))
-			{
-				return entry.getKey();
-			}
-		}
-		return null;
-	}
 
-	public Item newItem(Class<? extends Item> clazz)
+	public Item newItem(Class<? extends Item> clazz, Object... args)
 	{
-		return newItem(LanguageUtility.decapitalizeFirst(clazz.getSimpleName().replace("Item", "")), clazz);
+		return newItem(LanguageUtility.decapitalizeFirst(clazz.getSimpleName().replace("Item", "")), clazz, args);
 	}
 
 	/**
@@ -244,12 +232,28 @@ public class ModManager
 	 * @param clazz - item class
 	 * @return the new item
 	 */
-	public <C extends Item> C newItem(String name, Class<C> clazz)
+	public <C extends Item> C newItem(String name, Class<C> clazz, Object... args)
 	{
 
 		try
 		{
-			Item item = clazz.getConstructor().newInstance();
+			Item item;
+
+			if (args != null && args.length > 0)
+			{
+				List<Class> paramTypes = new ArrayList();
+
+				for (Object arg : args)
+				{
+					paramTypes.add(arg.getClass());
+				}
+
+				item = clazz.getConstructor(paramTypes.toArray(new Class[0])).newInstance();
+			}
+			else
+			{
+				item = clazz.getConstructor().newInstance();
+			}
 
 			if (item != null)
 			{
