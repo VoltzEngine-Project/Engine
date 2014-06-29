@@ -517,24 +517,14 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     return getStrongRedstonePower(access, side)
   }
 
-  def getStrongRedstonePower(access: IBlockAccess, side: Int): Int =
-  {
-    return 0
-  }
+  def getStrongRedstonePower(access: IBlockAccess, side: Int): Int = 0
 
-  def isSolid(access: IBlockAccess, side: Int): Boolean =
-  {
-    return material.isSolid
-  }
+  def isSolid(access: IBlockAccess, side: Int): Boolean = material.isSolid
 
-  def getRenderBlockPass: Int =
-  {
-    return 0
-  }
+  def getRenderBlockPass: Int = 0
 
-  def tickRate(world: World): Int =
-  {
-    return 20
-  }
+  def tickRate(world: World): Int = 20
+
+  def canSilkHarvest(player: EntityPlayer, metadata: Int): Boolean = normalRender && tile == null
 
 }
