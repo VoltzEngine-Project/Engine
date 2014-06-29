@@ -38,6 +38,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   setHardness(dummyTile.blockHardness)
   setResistance(dummyTile.blockResistance)
   setTickRandomly(dummyTile.tickRandomly)
+  setStepSound(dummyTile.stepSound)
 
   /**
    * Injects and ejects data from the TileEntity.

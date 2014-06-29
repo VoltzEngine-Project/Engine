@@ -78,11 +78,11 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
 
   var creativeTab: CreativeTabs = null
 
-  def creativeTab(tab: CreativeTabs): Unit = this.creativeTab = tab
+  def creativeTab(tab: CreativeTabs): Unit = creativeTab = tab
 
   var bounds: Cuboid = Cuboid.full
 
-  def bounds(cuboid: Cuboid): Unit = this.bounds = cuboid
+  def bounds(cuboid: Cuboid): Unit = bounds = cuboid
 
   var block: BlockDummy = null
 
@@ -93,35 +93,39 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
 
   var blockHardness: Float = 1
 
-  def blockHardness(hardness: Float): Unit = this.blockHardness = hardness
+  def blockHardness(hardness: Float): Unit = blockHardness = hardness
 
   var blockResistance: Float = 1
 
-  def blockResistance(resistance: Float): Unit = this.blockResistance = resistance
+  def blockResistance(resistance: Float): Unit = blockResistance = resistance
+
+  var stepSound: Block.SoundType = null
+
+  def stepSound(sound: Block.SoundType): Unit = stepSound = sound
 
   var canProvidePower: Boolean = false
 
-  def canProvidePower(bool: Boolean): Unit = this.canProvidePower = bool
+  def canProvidePower(bool: Boolean): Unit = canProvidePower = bool
 
   var tickRandomly: Boolean = false
 
-  def tickRandomly(bool: Boolean): Unit = this.tickRandomly = bool
+  def tickRandomly(bool: Boolean): Unit = tickRandomly = bool
 
   var normalRender: Boolean = true
 
-  def normalRender(bool: Boolean): Unit = this.normalRender = bool
+  def normalRender(bool: Boolean): Unit = normalRender = bool
 
   var forceStandardRender: Boolean = false
 
-  def forceStandardRender(bool: Boolean): Unit = this.forceStandardRender = bool
+  def forceStandardRender(bool: Boolean): Unit = forceStandardRender = bool
 
   var customItemRender: Boolean = false
 
-  def customItemRender(bool: Boolean): Unit = this.customItemRender = bool
+  def customItemRender(bool: Boolean): Unit = customItemRender = bool
 
   var isOpaqueCube: Boolean = true
 
-  def isOpaqueCube(bool: Boolean): Unit = this.isOpaqueCube = bool
+  def isOpaqueCube(bool: Boolean): Unit = isOpaqueCube = bool
 
   /**
    * Temporary
