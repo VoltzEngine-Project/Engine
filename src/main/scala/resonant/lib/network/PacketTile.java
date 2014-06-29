@@ -21,7 +21,7 @@ public class PacketTile extends PacketType
 		super(args);
 		this.x = x;
 		this.y = y;
-		this.z = y;
+		this.z = z;
 		this.id = id;
 	}
 

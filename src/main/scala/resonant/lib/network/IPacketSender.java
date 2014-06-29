@@ -7,6 +7,7 @@ import java.util.List;
  *
  * @author Calclavia
  */
+@Deprecated
 public interface IPacketSender
 {
 	public List getPacketData(int type);
