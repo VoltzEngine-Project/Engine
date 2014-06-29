@@ -15,8 +15,8 @@ import java.util.Set;
  */
 public class FrequencyGridRegistry
 {
-	private static IFrequencyGrid CLIENT_INSTANCE;
-	private static IFrequencyGrid SERVER_INSTANCE;
+	public static IFrequencyGrid CLIENT_INSTANCE;
+	public static IFrequencyGrid SERVER_INSTANCE;
 
 	public static IFrequencyGrid instance()
 	{

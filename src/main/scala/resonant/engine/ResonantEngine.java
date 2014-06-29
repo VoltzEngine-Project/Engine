@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import resonant.api.IBoilHandler;
+import resonant.api.mffs.fortron.FrequencyGridRegistry;
 import resonant.content.ModManager;
 import resonant.content.wrapper.BlockDummy;
 import resonant.engine.content.debug.TileCreativeBuilder;
@@ -30,6 +31,7 @@ import resonant.engine.content.debug.TileInfiniteFluid;
 import resonant.engine.content.tool.ToolMode;
 import resonant.engine.content.tool.ToolModeGeneral;
 import resonant.engine.content.tool.ToolModeRotation;
+import resonant.engine.grid.frequency.FrequencyGrid;
 import resonant.engine.grid.thermal.BoilEvent;
 import resonant.engine.grid.thermal.EventThermal.EventThermalUpdate;
 import resonant.engine.grid.thermal.ThermalGrid;
@@ -39,7 +41,6 @@ import resonant.lib.modproxy.ProxyHandler;
 import resonant.lib.multiblock.synthetic.SyntheticMultiblock;
 import resonant.lib.network.netty.PacketManager;
 import resonant.lib.prefab.ProxyBase;
-import resonant.lib.utility.LanguageUtility;
 import resonant.lib.utility.PlayerInteractionHandler;
 import resonant.lib.utility.PotionUtility;
 import resonant.lib.utility.nbt.SaveManager;
@@ -186,6 +187,12 @@ public class ResonantEngine
 		ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
 		serverCommandManager.registerCommand(new CommandFlag(FlagRegistry.getModFlag(FlagRegistry.DEFAULT_NAME)));
 		*/
+
+		/**
+		 * Reinitiate FrequencyGrid
+		 */
+		FrequencyGridRegistry.CLIENT_INSTANCE = new FrequencyGrid();
+		FrequencyGridRegistry.SERVER_INSTANCE = new FrequencyGrid();
 	}
 
 	@EventHandler
