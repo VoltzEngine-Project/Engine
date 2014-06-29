@@ -219,7 +219,7 @@ public class ModManager
 	 * }
 	 */
 
-	public Item newItem(Class<? extends Item> clazz, Object... args)
+	public <C extends Item> C newItem(Class<C> clazz, Object... args)
 	{
 		return newItem(LanguageUtility.decapitalizeFirst(clazz.getSimpleName().replace("Item", "")), clazz, args);
 	}
