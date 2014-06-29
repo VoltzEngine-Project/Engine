@@ -265,14 +265,25 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     return value
   }
 
-  @SideOnly(Side.CLIENT) override def getIcon(side: Int, meta: Int): IIcon =
+  @SideOnly(Side.CLIENT)
+  override def getIcon(side: Int, meta: Int): IIcon =
   {
     return dummyTile.getIcon(side, meta)
   }
 
-  @SideOnly(Side.CLIENT) override def registerBlockIcons(iconRegister: IIconRegister)
+  @SideOnly(Side.CLIENT)
+  override def registerBlockIcons(iconRegister: IIconRegister)
   {
     dummyTile.registerIcons(iconRegister)
+  }
+
+  @SideOnly(Side.CLIENT)
+  def colorMultiplier(access : IBlockAccess, x : Int, y : Int, z : Int): Int =
+  {
+    inject(access, x, y, z)
+    val value = getTile(access, x, y, z).colorMultiplier()
+    eject()
+    return value
   }
 
   override def getPickBlock(target: MovingObjectPosition, world: World, x: Int, y: Int, z: Int): ItemStack =

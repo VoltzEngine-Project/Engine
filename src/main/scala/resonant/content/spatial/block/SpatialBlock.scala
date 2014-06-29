@@ -15,7 +15,6 @@ import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
-import org.lwjgl.opengl.GL11._
 import resonant.content.prefab.itemblock.ItemBlockTooltip
 import resonant.content.wrapper.BlockDummy
 import resonant.lib.content.prefab.{TIO, TRotatable}
@@ -441,11 +440,13 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   /**
    * Called either by an item, or in a world.
    */
-  @SideOnly(Side.CLIENT) def getIcon(side: Int, meta: Int): IIcon =
+  @SideOnly(Side.CLIENT)
+  def getIcon(side: Int, meta: Int): IIcon =
   {
     return getIcon
   }
 
+  @SideOnly(Side.CLIENT)
   def getIcon: IIcon =
   {
     return SpatialBlock.icon.get(getTextureName)
@@ -457,10 +458,14 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName))
   }
 
-  @SideOnly(Side.CLIENT) protected def getTextureName: String =
+  @SideOnly(Side.CLIENT)
+  protected def getTextureName: String =
   {
     return if (textureName == null) "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name else block.dummyTile.domain + textureName
   }
+
+  @SideOnly(Side.CLIENT)
+  def colorMultiplier(): Int = 0xFFFFFF
 
   /**
    * Render the static, unmoving faces of this part into the world renderer.
