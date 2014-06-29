@@ -10,7 +10,7 @@ import net.minecraft.util._
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.transform.rotation.Rotation
-import universalelectricity.core.transform.{ITransform, AbstractVector}
+import universalelectricity.core.transform.{AbstractVector, ITransform}
 
 /**
  * @author Calclavia
@@ -191,13 +191,21 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   override def +(amount: Vector3): Vector3 = new Vector3(x + amount.x, y + amount.y, z + amount.z)
 
+  def +(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x + x, this.y + y, this.z + z)
+
+  def +=(x: Double, y: Double, z: Double): Vector3 = set(new Vector3(this.x + x, this.y + y, this.z + z))
+
+  def add(x: Double, y: Double, z: Double): Vector3 = this +(x, y, z)
+
+  def addEquals(x: Double, y: Double, z: Double): Vector3 = this +=(x, y, z)
+
   def +(amount: ForgeDirection): Vector3 = this + new Vector3(amount)
 
   def +=(amount: ForgeDirection): Vector3 = set(this + new Vector3(amount))
 
   def add(amount: ForgeDirection): Vector3 = this + amount
 
-  def addSet(amount: ForgeDirection): Vector3 = this += amount
+  def addEquals(amount: ForgeDirection): Vector3 = this += amount
 
   override def *(amount: Double): Vector3 = new Vector3(x * amount, y * amount, z * amount)
 

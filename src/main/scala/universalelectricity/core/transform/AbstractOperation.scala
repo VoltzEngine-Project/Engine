@@ -13,13 +13,23 @@ abstract class AbstractOperation[T <: AbstractOperation[T]]
   /**
    * Operations
    */
+
+  /**
+   * Returns this value, unmodified.
+   */
+  def unary_+ : T = this.asInstanceOf[T]
+  /**
+   * Returns the negation of this value.
+   */
+  def unary_- : T = this * -1
+
   def +(amount: Double): T
 
   def +(amount: T): T
 
   final def -(amount: Double): T = this + -amount
 
-  final def -(amount: T): T = this + (amount * -1)
+  final def -(amount: T): T = this + (-amount)
 
   def *(amount: Double): T
 
