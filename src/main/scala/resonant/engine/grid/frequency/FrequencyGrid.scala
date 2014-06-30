@@ -2,10 +2,10 @@ package resonant.engine.grid.frequency
 
 import java.util._
 
-import resonant.api.mffs.fortron.FrequencyGridRegistry
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 import resonant.api.blocks.IBlockFrequency
+import resonant.api.mffs.fortron.FrequencyGridRegistry
 import universalelectricity.core.grid.Grid
 import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.Vector3
@@ -33,6 +33,8 @@ class FrequencyGrid extends Grid[IBlockFrequency] with FrequencyGridRegistry.IFr
   }
 
   def getNodes(p: IBlockFrequency => Boolean): Set[IBlockFrequency] = getNodes().filter(p)
+
+  def getNodes(clazz: Class[_], p: IBlockFrequency => Boolean): Set[IBlockFrequency] = getNodes(n => (n.getClass().isAssignableFrom(clazz) && p(n)))
 
   override def getNodes(clazz: Class[_]): Set[IBlockFrequency] = getNodes(_.getClass().isAssignableFrom(clazz))
 

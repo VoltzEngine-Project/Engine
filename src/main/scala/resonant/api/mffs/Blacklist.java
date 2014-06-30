@@ -12,6 +12,6 @@ public class Blacklist
 	 */
 	public static final Set<Block> stabilizationBlacklist = new HashSet();
 	public static final Set<Block> disintegrationBlacklist = new HashSet();
-	public static final Set<Block> forceManipulationBlacklist = new HashSet();
+	public static final Set<Block> mobilizerBlacklist = new HashSet();
 
 }

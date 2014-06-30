@@ -184,7 +184,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     return new VectorWorld(this)
   }
 
-  protected def center: VectorWorld =
+  def center: VectorWorld =
   {
     //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return position.add(0.5).asInstanceOf[VectorWorld]
@@ -353,11 +353,11 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     onWorldSeparate
   }
 
-  def onWorldJoin
+  def onWorldJoin()
   {
   }
 
-  def onWorldSeparate
+  def onWorldSeparate()
   {
   }
 
@@ -365,27 +365,27 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   {
   }
 
-  def notifyChange
+  def notifyChange()
   {
     world.notifyBlocksOfNeighborChange(x, y, z, block)
   }
 
-  protected def markRender
+  protected def markRender()
   {
     world.func_147479_m(x, y, z)
   }
 
-  protected def markUpdate
+  protected def markUpdate()
   {
     world.markBlockForUpdate(x, y, z)
   }
 
-  protected def updateLight
+  protected def updateLight()
   {
     world.func_147451_t(x, y, z)
   }
 
-  protected def scheduelTick(delay: Int)
+  protected def scheduleTick(delay: Int)
   {
     world.scheduleBlockUpdate(x, y, z, block, delay)
   }
@@ -459,13 +459,10 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   }
 
   @SideOnly(Side.CLIENT)
-  protected def getTextureName: String =
-  {
-    return if (textureName == null) "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name else block.dummyTile.domain + textureName
-  }
+  protected def getTextureName: String = if (textureName == null) "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name else block.dummyTile.domain + textureName
 
   @SideOnly(Side.CLIENT)
-  def colorMultiplier(): Int = 0xFFFFFF
+  def colorMultiplier = 0xFFFFFF
 
   /**
    * Render the static, unmoving faces of this part into the world renderer.
@@ -502,24 +499,15 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     return if (side == 0 && this.bounds.min.y > 0.0D) true else (if (side == 1 && this.bounds.max.y < 1.0D) true else (if (side == 2 && this.bounds.min.z > 0.0D) true else (if (side == 3 && this.bounds.max.z < 1.0D) true else (if (side == 4 && this.bounds.min.x > 0.0D) true else (if (side == 5 && this.bounds.max.x < 1.0D) true else !access.getBlock(x, y, z).isOpaqueCube)))))
   }
 
-  def onFillRain
+  def onFillRain()
   {
   }
 
-  def isIndirectlyPowered: Boolean =
-  {
-    return world.isBlockIndirectlyGettingPowered(x, y, z)
-  }
+  def isIndirectlyPowered: Boolean = world.isBlockIndirectlyGettingPowered(x, y, z)
 
-  def getStrongestIndirectPower: Int =
-  {
-    return world.getStrongestIndirectPower(x, y, z)
-  }
+  def getStrongestIndirectPower: Int = world.getStrongestIndirectPower(x, y, z)
 
-  def getWeakRedstonePower(access: IBlockAccess, side: Int): Int =
-  {
-    return getStrongRedstonePower(access, side)
-  }
+  def getWeakRedstonePower(access: IBlockAccess, side: Int): Int = getStrongRedstonePower(access, side)
 
   def getStrongRedstonePower(access: IBlockAccess, side: Int): Int = 0
 
