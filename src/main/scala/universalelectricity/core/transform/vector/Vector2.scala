@@ -76,9 +76,9 @@ class Vector2(var x: Double, var y: Double) extends AbstractVector[Vector2] with
 
   def +=(x: Double, y: Double): Vector2 = set(new Vector2(this.x + x, this.y + y))
 
-  def add(x: Double, y: Double): Vector3 = this +(x, y)
+  def add(x: Double, y: Double): Vector2 = this +(x, y)
 
-  def addEquals(x: Double, y: Double): Vector3 = this +=(x, y)
+  def addEquals(x: Double, y: Double): Vector2 = this +=(x, y)
 
   override def *(amount: Double): Vector2 = new Vector2(x * amount, y * amount)
 
