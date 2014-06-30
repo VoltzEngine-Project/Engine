@@ -332,7 +332,7 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def setBlock(world: World, block: Block): Boolean = setBlock(world, block, 0)
 
-  override def hashCode(): Int =
+  override def hashCode: Int =
   {
     val x = doubleToLongBits(this.x)
     val y = doubleToLongBits(this.y)
