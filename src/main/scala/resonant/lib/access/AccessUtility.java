@@ -90,6 +90,31 @@ public class AccessUtility
 	}
 
 	/**
+	 * Registers a node with the master list making it available
+	 */
+	public static void registerPermission(String node, String group)
+	{
+		registerPermission(new Permission(node), group);
+	}
+
+	/**
+	 * Registers a node with the master list making it available
+	 */
+	public static void registerPermission(Permission perm, String group)
+	{
+		if (!permissions.contains(perm))
+		{
+			permissions.add(perm);
+		}
+		if (group != null && !group.isEmpty() && groupDefaultNodes.containsKey(group))
+		{
+			List<String> perms = groupDefaultNodes.get(group);
+			if (perms != null && !perms.contains(perm.id))
+				perms.add(perm.id);
+		}
+	}
+
+	/**
 	 * Builds a new default group list for a basic machine
 	 */
 	public static List<AccessGroup> buildNewGroup()
@@ -163,27 +188,5 @@ public class AccessUtility
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Registers a node with the master list making it available
-	 */
-	public static void register(String node, String group)
-	{
-		register(new Permission(node), group);
-	}
-
-	public static void register(Permission perm, String group)
-	{
-		if (!permissions.contains(perm))
-		{
-			permissions.add(perm);
-		}
-		if (group != null && !group.isEmpty() && groupDefaultNodes.containsKey(group))
-		{
-			List<String> perms = groupDefaultNodes.get(group);
-			if (perms != null && !perms.contains(perm.id))
-				perms.add(perm.id);
-		}
 	}
 }
