@@ -1,7 +1,7 @@
 package li.cil.oc.api.network;
 
 /**
- * Interface for nodes that act as power connectors between their network and
+ * Interface for permissions that act as power connectors between their network and
  * some power producer or consumer.
  * <p/>
  * For each connector a buffer is managed. Its size is initialized via the

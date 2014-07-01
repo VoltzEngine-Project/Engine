@@ -14,12 +14,12 @@ import java.util.*;
 public class PathfinderAStar extends Pathfinder
 {
 	/**
-	 * The set of tentative nodes to be evaluated, initially containing the start node
+	 * The set of tentative permissions to be evaluated, initially containing the start node
 	 */
 	public Set<Vector3> openSet;
 
 	/**
-	 * The map of navigated nodes storing the data of which position came from which in the format
+	 * The map of navigated permissions storing the data of which position came from which in the format
 	 * of: X came from Y.
 	 */
 	public HashMap<Vector3, Vector3> navigationMap;

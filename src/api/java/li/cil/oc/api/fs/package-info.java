@@ -9,8 +9,8 @@
  * <em>You will usually not need to implement these interfaces!</em>
  * <p/>
  * Consider using the factory methods in {@link li.cil.oc.api.FileSystem} to
- * create file systems and wrapper nodes for these file systems (i.e. nodes
- * that can be added as component nodes to the network, so they can be used
+ * create file systems and wrapper permissions for these file systems (i.e. permissions
+ * that can be added as component permissions to the network, so they can be used
  * from computers).
  */
 package li.cil.oc.api.fs;

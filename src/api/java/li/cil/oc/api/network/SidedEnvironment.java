@@ -43,7 +43,7 @@ public interface SidedEnvironment {
      * returns <tt>true</tt> for it should return a node.
      * <p/>
      * This is intended for the client side, i.e. rendering related things,
-     * since nodes are not created on the client side.
+     * since permissions are not created on the client side.
      * <p/>
      * The side is relative to the environment, same as for <tt>sidedNode</tt>.
      *

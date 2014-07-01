@@ -56,7 +56,7 @@ public class AccessUser extends User implements ISaveObj
 			String newNode = node;
 			newNode = newNode.replaceAll(".*", "");
 
-			//Loop threw all super nodes to see if the user has a super node of the sub node
+			//Loop threw all super permissions to see if the user has a super node of the sub node
 			String[] sub_nodes = newNode.split(".");
 			if (sub_nodes != null && sub_nodes.length > 0)
 			{
@@ -87,7 +87,7 @@ public class AccessUser extends User implements ISaveObj
 			accessData.setString("name", str);
 			usersTag.appendTag(accessData);
 		}
-		nbt.setTag("nodes", usersTag);
+		nbt.setTag("permissions", usersTag);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class AccessUser extends User implements ISaveObj
 	{
 		this.username = nbt.getString("username");
 		this.extraData = nbt.getCompoundTag("extraData");
-		NBTTagList userList = nbt.getTagList("nodes", 0);
+		NBTTagList userList = nbt.getTagList("permissions", 0);
 		this.nodes.clear();
 		for (int i = 0; i < userList.tagCount(); ++i)
 		{

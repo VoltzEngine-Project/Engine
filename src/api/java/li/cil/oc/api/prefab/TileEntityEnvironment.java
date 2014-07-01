@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
  * a {@link li.cil.oc.api.network.Node} and connecting it to said network.
  * <p/>
  * Nodes in such a network can communicate with each other, or just use the
- * network as an index structure to find other nodes connected to them.
+ * network as an index structure to find other permissions connected to them.
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class TileEntityEnvironment extends TileEntity implements Environment {
@@ -22,14 +22,14 @@ public abstract class TileEntityEnvironment extends TileEntity implements Enviro
      * This must be set in subclasses to the node that is used to represent
      * this tile entity.
      * <p/>
-     * You must only create new nodes using the factory method in the network
+     * You must only create new permissions using the factory method in the network
      * API, {@link li.cil.oc.api.Network#newNode(Environment, Visibility)}.
      * <p/>
      * For example:
      * <pre>
      * // The first parameters to newNode is the host() of the node, which will
      * // usually be this tile entity. The second one is it's reachability,
-     * // which determines how other nodes in the same network can query this
+     * // which determines how other permissions in the same network can query this
      * // node. See {@link li.cil.oc.api.network.Network#nodes(li.cil.oc.api.network.Node)}.
      * node = Network.newNode(this, Visibility.Network)
      *       // This call allows the node to consume energy from the
@@ -133,7 +133,7 @@ public abstract class TileEntityEnvironment extends TileEntity implements Enviro
         // The host check may be superfluous for you. It's just there to allow
         // some special cases, where getNode() returns some node managed by
         // some other instance (for example when you have multiple internal
-        // nodes in this tile entity).
+        // permissions in this tile entity).
         if (node != null && node.host() == this) {
             // This restores the node's address, which is required for networks
             // to continue working without interruption across loads. If the

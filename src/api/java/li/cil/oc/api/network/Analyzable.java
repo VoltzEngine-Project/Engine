@@ -27,7 +27,7 @@ public interface Analyzable {
      * @param hitX   the relative X coordinate the player clicked.
      * @param hitY   the relative Y coordinate the player clicked.
      * @param hitZ   the relative Z coordinate the player clicked.
-     * @return the nodes to display information for, usually an environment's
+     * @return the permissions to display information for, usually an environment's
      * main node (i.e. <tt>this.node()</tt>).
      */
     Node[] onAnalyze(EntityPlayer player, int side, float hitX, float hitY, float hitZ);

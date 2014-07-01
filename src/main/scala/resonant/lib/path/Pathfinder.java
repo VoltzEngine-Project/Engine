@@ -21,7 +21,7 @@ public class Pathfinder
 	public IPathCallBack callBackCheck;
 
 	/**
-	 * A list of nodes that the pathfinder already went through.
+	 * A list of permissions that the pathfinder already went through.
 	 */
 	public Set<Vector3> closedSet;
 

@@ -7,16 +7,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 /**
- * This class provides factories for networks and nodes.
+ * This class provides factories for networks and permissions.
  * <p/>
  * The first two functions provided provided by this API are to allow existing
  * environments - implemented in a tile entity for example - to join an existing
- * network or create new ones. The third one is used to create nodes that may
+ * network or create new ones. The third one is used to create permissions that may
  * then be connected to an existing network. It is not possible to create
  * networks that do not belong to at least one tile entity or node.
  * <p/>
  * It is important to understand that component networks only exist on the
- * server side. It is impossible to create nodes, and therefore networks, on
+ * server side. It is impossible to create permissions, and therefore networks, on
  * the client side. This is to enforce a clear distinction of where the actual
  * logic lies - since user code only runs on the server.
  * <p/>
@@ -30,7 +30,7 @@ public final class Network {
      * to adjacent networks.
      * <p/>
      * If the tile entity implements {@link Environment} its one node will be
-     * connected to any existing adjacent tile entity nodes. If none exist a
+     * connected to any existing adjacent tile entity permissions. If none exist a
      * new network with the specified tile entity's node as its sole entry.
      * <p/>
      * If the tile entity is a {@link li.cil.oc.api.network.SidedEnvironment}
@@ -132,7 +132,7 @@ public final class Network {
     // ----------------------------------------------------------------------- //
 
     /**
-     * Factory function for creating new nodes.
+     * Factory function for creating new permissions.
      * <p/>
      * Use this to create a node for your environment (e.g. tile entity). This
      * will return a builder that can be used to further specialize the node,
@@ -155,7 +155,7 @@ public final class Network {
      * </pre>
      * <p/>
      * Note that the <em>reachability</em> specified here is the general
-     * availability of the created node to other nodes in the network. Special
+     * availability of the created node to other permissions in the network. Special
      * rules apply to components, which have a <em>visibility</em> that is used
      * to control how they can be reached from computers. For example, network
      * cards have a <em>reachability</em> of <tt>Visibility.Network</tt>, to

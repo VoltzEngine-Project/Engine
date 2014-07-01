@@ -7,7 +7,7 @@ import java.util.Map.Entry;
  * Handler for the default group loaded by all machines that use AccessProfiles. Includes functions
  * that are helpful when dealing with access profiles. It is suggested to never modify the default
  * group unless there is not other way. However, any access node needs to be registered threw this
- * class to allow other things to access it. This also include applying those nodes to the default
+ * class to allow other things to access it. This also include applying those permissions to the default
  * groups.
  *
  * @author DarkGuardsman
@@ -15,11 +15,7 @@ import java.util.Map.Entry;
 public class AccessUtility
 {
 	/**
-	 * Global list of all nodes used as permissions for access profiles
-	 */
-	public static final Set<String> nodes = new LinkedHashSet<String>();
-	/**
-	 * Map of default groups and those group permissions nodes. Used to build a new group set.
+	 * Map of default groups and those group permissions permissions. Used to build a new group set.
 	 */
 	public static final HashMap<String, List<String>> groupDefaultNodes = new LinkedHashMap<String, List<String>>();
 	/**
@@ -32,26 +28,26 @@ public class AccessUtility
 	{
 		List<String> list = new ArrayList<String>();
 		//Owner group defaults
-		list.add(Nodes.PROFILE_OWNER);
-		list.add(Nodes.INV_DISABLE);
-		list.add(Nodes.INV_ENABLE);
-		list.add(Nodes.PROFILE);
+		list.add(Permissions.PROFILE_OWNER);
+		list.add(Permissions.inventoryDisable);
+		list.add(Permissions.inventoryEnable);
+		list.add(Permissions.PROFILE);
 
 		//Admin group defaults
 		List<String> list2 = new ArrayList<String>();
-		list2.add(Nodes.PROFILE_ADMIN);
-		list2.add(Nodes.INV_EDIT);
-		list2.add(Nodes.INV_LOCK);
-		list2.add(Nodes.INV_UNLOCK);
-		list2.add(Nodes.INV_CHANGE);
-		list2.add(Nodes.GROUP);
+		list2.add(Permissions.PROFILE_ADMIN);
+		list2.add(Permissions.invetoryEdit);
+		list2.add(Permissions.inventoryLock);
+		list2.add(Permissions.inventoryUnlock);
+		list2.add(Permissions.inventoryModify);
+		list2.add(Permissions.GROUP);
 
 		//User group defaults
 		List<String> list3 = new ArrayList<String>();
-		list3.add(Nodes.PROFILE_USER);
-		list3.add(Nodes.INV_OPEN);
-		list3.add(Nodes.INV_TAKE);
-		list3.add(Nodes.INV_GIVE);
+		list3.add(Permissions.PROFILE_USER);
+		list3.add(Permissions.inventoryOpen);
+		list3.add(Permissions.inventoryInput);
+		list3.add(Permissions.inventoryOutput);
 
 		createDefaultGroup("user", null, list3);
 		createDefaultGroup("admin", "user", list2);
@@ -64,7 +60,7 @@ public class AccessUtility
 	 *
 	 * @param name        - group name
 	 * @param prefabGroup - group this should extend. Make sure it exists.
-	 * @param nodes       - all commands or custom nodes
+	 * @param nodes       - all commands or custom permissions
 	 */
 	public static void createDefaultGroup(String name, String prefabGroup, List<String> nodes)
 	{
@@ -81,7 +77,7 @@ public class AccessUtility
 	 *
 	 * @param name        - group name
 	 * @param prefabGroup - group this should extend. Make sure it exists.
-	 * @param nodes       - all commands or custom nodes
+	 * @param nodes       - all commands or custom permissions
 	 */
 	public static void createDefaultGroup(String name, String prefabGroup, String... nodes)
 	{
@@ -95,7 +91,7 @@ public class AccessUtility
 	{
 		List<AccessGroup> groups = new ArrayList<AccessGroup>();
 
-		//Create groups and load nodes
+		//Create groups and load permissions
 		for (Entry<String, List<String>> entry : groupDefaultNodes.entrySet())
 		{
 			AccessGroup group = new AccessGroup(entry.getKey());
@@ -169,9 +165,9 @@ public class AccessUtility
 	 */
 	public static void register(String node)
 	{
-		if (!nodes.contains(node))
+		if (!Permissions.permissions.contains(node))
 		{
-			nodes.add(node);
+			Permissions.permissions.add(node);
 		}
 	}
 

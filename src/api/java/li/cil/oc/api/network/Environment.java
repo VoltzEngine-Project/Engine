@@ -64,10 +64,10 @@ public interface Environment {
      * This is also called for the node itself, if it was added to the network.
      * <p/>
      * At this point the node's network is never <tt>null</tt> and you can use
-     * it to query it for other nodes. Use this to perform initialization logic,
-     * such as building lists of nodes of a certain type in the network.
+     * it to query it for other permissions. Use this to perform initialization logic,
+     * such as building lists of permissions of a certain type in the network.
      * <p/>
-     * For example, if node C is added to a network with nodes A and B, these
+     * For example, if node C is added to a network with permissions A and B, these
      * calls are made:
      * <ul>
      *     <li>A.onConnect(A)</li>
@@ -90,7 +90,7 @@ public interface Environment {
      * Use this to perform clean-up logic such as removing references to the
      * removed node.
      * <p/>
-     * For example, if node C is removed from a network with nodes A, B and C,
+     * For example, if node C is removed from a network with permissions A, B and C,
      * these calls are made:
      * <ul>
      *     <li>A.onDisconnect(A)</li>

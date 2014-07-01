@@ -15,7 +15,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  * than the simple {@link li.cil.oc.api.network.Environment}.
  * <p/>
  * Nodes in such a network can communicate with each other, or just use the
- * network as an index structure to find other nodes connected to them.
+ * network as an index structure to find other permissions connected to them.
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class TileEntitySidedEnvironment extends TileEntity implements SidedEnvironment {
@@ -28,14 +28,14 @@ public abstract class TileEntitySidedEnvironment extends TileEntity implements S
     /**
      * This expects a node per face that is used to represent this tile entity.
      * <p/>
-     * You must only create new nodes using the factory method in the network
+     * You must only create new permissions using the factory method in the network
      * API, {@link li.cil.oc.api.Network#newNode(li.cil.oc.api.network.Environment, li.cil.oc.api.network.Visibility)}.
      * <p/>
      * For example:
      * <pre>
      * // The first parameters to newNode is the host() of the node, which will
      * // usually be this tile entity. The second one is it's reachability,
-     * // which determines how other nodes in the same network can query this
+     * // which determines how other permissions in the same network can query this
      * // node. See {@link li.cil.oc.api.network.Network#nodes(li.cil.oc.api.network.Node)}.
      * super(Network.newNode(???, Visibility.Network)
      *       // This call allows the node to consume energy from the
@@ -88,7 +88,7 @@ public abstract class TileEntitySidedEnvironment extends TileEntity implements S
         if (!addedToNetwork) {
             addedToNetwork = true;
             // Note that joinOrCreateNetwork will try to connect each of our
-            // sided nodes to their respective neighbor (sided) node.
+            // sided permissions to their respective neighbor (sided) node.
             Network.joinOrCreateNetwork(this);
         }
     }
@@ -123,7 +123,7 @@ public abstract class TileEntitySidedEnvironment extends TileEntity implements S
             // The host check may be superfluous for you. It's just there to allow
             // some special cases, where getNode() returns some node managed by
             // some other instance (for example when you have multiple internal
-            // nodes in this tile entity).
+            // permissions in this tile entity).
             if (node != null && node.host() == this) {
                 // This restores the node's address, which is required for networks
                 // to continue working without interruption across loads. If the

@@ -81,7 +81,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
 			accessData.setString("name", str);
 			nodesTag.appendTag(accessData);
 		}
-		nbt.setTag("nodes", nodesTag);
+		nbt.setTag("permissions", nodesTag);
 		nbt.setLong("creationDate", this.creation_time);
 
 	}
@@ -108,8 +108,8 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
 			this.addMemeber(user);
 		}
 
-		//Load permission nodes
-		NBTTagList nodeList = nbt.getTagList("nodes", 0);
+		//Load permission permissions
+		NBTTagList nodeList = nbt.getTagList("permissions", 0);
 		this.nodes.clear();
 		for (int i = 0; i < nodeList.tagCount(); ++i)
 		{
@@ -159,7 +159,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
 	 */
 	public void removeNode(String node)
 	{
-		//TODO remove sub nodes linked to this node
+		//TODO remove sub permissions linked to this node
 		if (this.nodes.contains(node))
 		{
 			this.nodes.remove(node);

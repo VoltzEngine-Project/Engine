@@ -10,7 +10,7 @@ public interface NetworkAPI {
      * to adjacent networks.
      * <p/>
      * If the tile entity implements {@link Environment} its one node will be
-     * connected to any existing adjacent tile entity nodes. If none exist a
+     * connected to any existing adjacent tile entity permissions. If none exist a
      * new network with the specified tile entity's node as its sole entry.
      * <p/>
      * If the tile entity is a {@link li.cil.oc.api.network.SidedEnvironment}
@@ -94,7 +94,7 @@ public interface NetworkAPI {
     // ----------------------------------------------------------------------- //
 
     /**
-     * Factory function for creating new nodes.
+     * Factory function for creating new permissions.
      * <p/>
      * Use this to create a node for your environment (e.g. tile entity). This
      * will return a builder that can be used to further specialize the node,
@@ -117,7 +117,7 @@ public interface NetworkAPI {
      * </pre>
      * <p/>
      * Note that the <em>reachability</em> specified here is the general
-     * availability of the created node to other nodes in the network. Special
+     * availability of the created node to other permissions in the network. Special
      * rules apply to components, which have a <em>visibility</em> that is used
      * to control how they can be reached from computers. For example, network
      * cards have a <em>reachability</em> of <tt>Visibility.Network</tt>, to

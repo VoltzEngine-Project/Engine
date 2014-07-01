@@ -9,13 +9,13 @@ public interface IPathCallBack
 	/**
 	 * @param finder      - The Pathfinder object.
 	 * @param currentNode - The node being iterated through.
-	 * @return A set of nodes connected to the currentNode. Essentially one should return a set of
-	 * neighboring nodes.
+	 * @return A set of permissions connected to the currentNode. Essentially one should return a set of
+	 * neighboring permissions.
 	 */
 	public Set<Vector3> getConnectedNodes(Pathfinder finder, Vector3 currentNode);
 
 	/**
-	 * Called when looping through nodes.
+	 * Called when looping through permissions.
 	 *
 	 * @param finder      - The Pathfinder.
 	 * @param start       - The starting node.
