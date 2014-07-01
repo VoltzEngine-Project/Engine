@@ -9,12 +9,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Permission system group used to track players with the access they have. Used with several
- * different systems include sentry gun AI targeting, and inventory locking.
- *
+ * Permission system group used to track players with the access they have. Used
+ * with several different systems include sentry gun AI targeting, and inventory
+ * locking.
+ * 
  * @author DarkGuardsman
  */
-public class AccessGroup extends Group<AccessUser> implements ISaveObj
+public class AccessGroup extends Group<AccessUser> implements ISaveObj, Cloneable
 {
 	protected Set<String> nodes = new LinkedHashSet<String>();
 	protected AccessGroup extendGroup;
@@ -29,8 +30,9 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
 
 	/**
 	 * Gets the AccessUser object that goes with the user name
-	 *
-	 * @param username - user name of the EntityPlayer
+	 * 
+	 * @param username
+	 * - user name of the EntityPlayer
 	 * @return the exact user, or a fake user to prevent NPE
 	 */
 	public AccessUser getMember(String username)
@@ -89,16 +91,16 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
 	@Override
 	public void load(NBTTagCompound nbt)
 	{
-		//load group name
+		// load group name
 		this.setName(nbt.getString("groupName"));
 
-		//Load extend group
+		// Load extend group
 		if (nbt.hasKey("extendGroup"))
 		{
 			this.extendGroup_name = nbt.getString("extendGroup");
 		}
 
-		//Load users
+		// Load users
 		NBTTagList userList = nbt.getTagList("users", 0);
 		getMembers().clear();
 
@@ -108,7 +110,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
 			this.addMemeber(user);
 		}
 
-		//Load permission permissions
+		// Load permission permissions
 		NBTTagList nodeList = nbt.getTagList("permissions", 0);
 		this.nodes.clear();
 		for (int i = 0; i < nodeList.tagCount(); ++i)
@@ -116,7 +118,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
 			this.nodes.add(((NBTTagCompound) nodeList.getCompoundTagAt(i)).getString("name"));
 		}
 
-		//Load creation date
+		// Load creation date
 		if (nbt.hasKey("creationDate"))
 		{
 			this.creation_time = nbt.getLong("creationDate");
@@ -159,7 +161,7 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
 	 */
 	public void removeNode(String node)
 	{
-		//TODO remove sub permissions linked to this node
+		// TODO remove sub permissions linked to this node
 		if (this.nodes.contains(node))
 		{
 			this.nodes.remove(node);
@@ -195,8 +197,8 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
 	}
 
 	/**
-	 * Gets the name of the group this group extends. Only used to init the extend group after
-	 * loading the group from a save.
+	 * Gets the name of the group this group extends. Only used to init the
+	 * extend group after loading the group from a save.
 	 */
 	public String getExtendGroupName()
 	{
@@ -206,5 +208,14 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj
 	public Set<String> getNodes()
 	{
 		return nodes;
+	}
+
+	@Override
+	public AccessGroup clone()
+	{
+		AccessGroup group = new AccessGroup(this.getName());
+		for (String node : getNodes())
+			group.getNodes().add(node);
+		return group;
 	}
 }
