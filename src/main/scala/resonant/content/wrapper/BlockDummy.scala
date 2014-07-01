@@ -281,7 +281,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   override def colorMultiplier(access: IBlockAccess, x: Int, y: Int, z: Int): Int =
   {
     inject(access, x, y, z)
-    val value = getTile(access, x, y, z).colorMultiplier()
+    val value = getTile(access, x, y, z).colorMultiplier;
     eject()
     return value
   }

@@ -28,26 +28,26 @@ public class AccessUtility
 	{
 		List<String> list = new ArrayList<String>();
 		//Owner group defaults
-		list.add(Permissions.PROFILE_OWNER);
-		list.add(Permissions.inventoryDisable);
-		list.add(Permissions.inventoryEnable);
-		list.add(Permissions.PROFILE);
+		list.add(Permissions.get().PROFILE_OWNER.id);
+		list.add(Permissions.get().inventoryDisable.id);
+		list.add(Permissions.get().inventoryEnable.id);
+		list.add(Permissions.get().profile.id);
 
 		//Admin group defaults
 		List<String> list2 = new ArrayList<String>();
-		list2.add(Permissions.PROFILE_ADMIN);
-		list2.add(Permissions.invetoryEdit);
-		list2.add(Permissions.inventoryLock);
-		list2.add(Permissions.inventoryUnlock);
-		list2.add(Permissions.inventoryModify);
-		list2.add(Permissions.GROUP);
+		list2.add(Permissions.get().PROFILE_ADMIN.id);
+		list2.add(Permissions.get().inventoryModify.id);
+		list2.add(Permissions.get().inventoryLock.id);
+		list2.add(Permissions.get().inventoryUnlock.id);
+		list2.add(Permissions.get().inventoryModify.id);
+		list2.add(Permissions.get().group.id);
 
 		//User group defaults
 		List<String> list3 = new ArrayList<String>();
-		list3.add(Permissions.PROFILE_USER);
-		list3.add(Permissions.inventoryOpen);
-		list3.add(Permissions.inventoryInput);
-		list3.add(Permissions.inventoryOutput);
+		list3.add(Permissions.get().PROFILE_USER.id);
+		list3.add(Permissions.get().inventoryOpen.id);
+		list3.add(Permissions.get().inventoryInput.id);
+		list3.add(Permissions.get().inventoryOutput.id);
 
 		createDefaultGroup("user", null, list3);
 		createDefaultGroup("admin", "user", list2);
@@ -163,12 +163,22 @@ public class AccessUtility
 	/**
 	 * Registers a node with the master list making it available
 	 */
-	public static void register(String node)
+	public static void register(String node, String group)
 	{
-		if (!Permissions.permissions.contains(node))
+		register(new Permission(node), group);
+	}	
+	
+	public static void register(Permission perm, String group)
+	{
+		if (!Permissions.get().permissions.contains(perm))
 		{
-			Permissions.permissions.add(node);
+			Permissions.get().permissions.add(perm);
 		}
+		if(group != null && !group.isEmpty() && groupDefaultNodes.containsKey(group))
+		{
+			List<String> perms = groupDefaultNodes.get(group);
+			if(perms != null && !perms.contains(perm.id))
+				perms.add(perm.id);
+		}		
 	}
-
 }

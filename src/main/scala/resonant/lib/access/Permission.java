@@ -13,7 +13,7 @@ public class Permission extends TreeNode<Permission>
 
 	public Permission(String id)
 	{
-		this.id = id;s
+		this.id = id;
 		Permissions.instance.permissions.add(this);
 	}
 

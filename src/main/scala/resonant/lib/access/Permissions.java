@@ -70,16 +70,19 @@ public class Permissions
 	public final Permission groupEntity = group.addChild("entity");
 	public final Permission GROUP_ADD_ENTITY = groupEntity.addChild("add");
 	public final Permission GROUP_REMOVE_ENTITY = groupEntity.addChild("remove");
-
-	//TODO: Not sure what the followings are.
-	//Applied to group in an access profile
+	
+	//Default group ID nodes for the entire profile
 	public final Permission PROFILE_OWNER = profile.addChild("owner");
 	public final Permission PROFILE_ADMIN = profile.addChild("admin");
 	public final Permission PROFILE_USER = profile.addChild("user");
 
-	//Applied to users in a group, make sure to remove on group change
+	//Default user ID nodes for a single group
 	public final Permission GROUP_OWNER = group.addChild("owner");
 	public final Permission GROUP_ADMIN = group.addChild("admin");
 	public final Permission GROUP_USER = group.addChild("user");
-
+	
+	public static Permissions get()
+	{
+		return instance;
+	}
 }

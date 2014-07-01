@@ -56,7 +56,7 @@ class TileCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable wi
     val world: World = player.worldObj
     if (!world.isRemote)
     {
-      if (MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile()))
+      if (MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.getCommandSenderName()))
       {
         try
         {
