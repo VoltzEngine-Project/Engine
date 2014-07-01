@@ -13,8 +13,9 @@ import java.util.List;
  *
  * @author DarkGuardsman
  */
-public class AccessUser extends User implements ISaveObj
+public class AccessUser implements ISaveObj
 {
+	protected String username;
 	protected boolean isTempary = false;
 	protected NBTTagCompound extraData;
 	protected AccessGroup group;
@@ -22,12 +23,12 @@ public class AccessUser extends User implements ISaveObj
 
 	public AccessUser(String username)
 	{
-		super(username);
+		this.username = username;
 	}
 
 	public AccessUser(EntityPlayer player)
 	{
-		super(player.getCommandSenderName());
+		this(player.getCommandSenderName());
 	}
 
 	public static AccessUser loadFromNBT(NBTTagCompound nbt)
@@ -119,6 +120,27 @@ public class AccessUser extends User implements ISaveObj
 			this.extraData = new NBTTagCompound();
 		}
 		return this.extraData;
+	}
+	
+	public String getName()
+	{
+		return this.username;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj instanceof String)
+		{
+			return ((String) obj).equalsIgnoreCase(this.getName());
+		}
+		return obj instanceof AccessUser && ((AccessUser) obj).getName().equalsIgnoreCase(this.getName());
+	}
+
+	@Override
+	public String toString()
+	{
+		return "[User:" + this.getName() + "]";
 	}
 
 }
