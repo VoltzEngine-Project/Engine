@@ -20,7 +20,7 @@ import universalelectricity.core.transform.vector.Vector3;
  * @author Calclavia, Azanor
  */
 @SideOnly(Side.CLIENT)
-public abstract class FxBeam extends EntityFX
+public abstract class FXBeam extends EntityFX
 {
 	protected final ResourceLocation texture;
 	double movX = 0.0D;
@@ -39,7 +39,7 @@ public abstract class FxBeam extends EntityFX
 	private int rotationSpeed = 20;
 	private float prevSize = 0.0F;
 
-	public FxBeam(ResourceLocation texture, World par1World, Vector3 position, Vector3 target2, float red, float green, float blue, int age)
+	public FXBeam(ResourceLocation texture, World par1World, Vector3 position, Vector3 target2, float red, float green, float blue, int age)
 	{
 		super(par1World, position.x(), position.y(), position.z(), 0.0D, 0.0D, 0.0D);
 		this.texture = texture;

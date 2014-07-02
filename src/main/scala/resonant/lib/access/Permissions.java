@@ -1,8 +1,5 @@
 package resonant.lib.access;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 /**
  * Constants that represent permissions by which machines and entities used in combination with
  * ISpecialAccess to limit users on what they can do. These permissions should be used in the same
@@ -10,7 +7,7 @@ import java.util.Set;
  * all machines, entities, and other mods. Too change the meaning of the node will make it difficult
  * to offer universal meaning for all machines. As well would create the need to add a per node per
  * machine per group access list making it more complicated for users to use.
- * 
+ *
  * @author DarkGuardsman
  */
 public class Permissions
@@ -74,5 +71,30 @@ public class Permissions
 	public static final Permission GROUP_OWNER = group.addChild("owner");
 	public static final Permission GROUP_ADMIN = group.addChild("admin");
 	public static final Permission GROUP_USER = group.addChild("user");
+
+	/**
+	 * Gets the permission instance with the specific name.
+	 *
+	 * @param name - The full name of the permission.
+	 * @return
+	 */
+	public static Permission find(String name)
+	{
+		String[] permNames = name.split(".");
+
+		Permission currentPerm = new Permission(permNames[0]);
+
+		for (int i = 1; i < permNames.length; i++)
+		{
+			currentPerm = currentPerm.find(permNames[i]);
+
+			if (currentPerm == null)
+			{
+				break;
+			}
+		}
+
+		return null;
+	}
 
 }

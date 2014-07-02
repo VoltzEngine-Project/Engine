@@ -1,6 +1,8 @@
 package resonant.api.mffs.security;
 
 import net.minecraft.item.ItemStack;
+import resonant.lib.access.Permission;
+import resonant.lib.access.Permissions;
 
 /** Applied to Biometric Identifiers (extends TileEntity). */
 public interface IBiometricIdentifier

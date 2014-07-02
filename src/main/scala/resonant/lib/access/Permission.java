@@ -21,6 +21,19 @@ public class Permission extends TreeNode<Permission>
 		return super.addChild(new Permission(perm));
 	}
 
+	public Permission find(String id)
+	{
+		for (Permission child : children)
+		{
+			if (child.id.equals(id))
+			{
+				return child;
+			}
+		}
+		
+		return null;
+	}
+
 	@Override
 	public boolean equals(Object o)
 	{

@@ -1,7 +1,7 @@
 package resonant.api.mffs.card;
 
 import net.minecraft.item.ItemStack;
-import resonant.api.mffs.security.Permission;
+import resonant.lib.access.Permission;
 
 /** Applied to Item ID cards.
  * 
