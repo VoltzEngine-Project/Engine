@@ -22,5 +22,5 @@ public interface IBiometricIdentifier
     /** Gets the card currently placed in the manipulating slot.
      * 
      * @return */
-    public ItemStack getManipulatingCard();
+    public ItemStack getEditCard();
 }
