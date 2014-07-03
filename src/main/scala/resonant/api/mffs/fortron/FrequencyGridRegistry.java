@@ -38,24 +38,24 @@ public class FrequencyGridRegistry
 
 		Set<IBlockFrequency> getNodes();
 
-		Set<IBlockFrequency> getNodes(Class clazz);
+		<C extends IBlockFrequency> Set<C> getNodes(Class<C> clazz);
 
 		/**
 		 * Gets a list of TileEntities that has a specific frequency.
 		 */
 		Set<IBlockFrequency> getNodes(int frequency);
 
-		Set<IBlockFrequency> getNodes(Class clazz, int frequency);
+		<C extends IBlockFrequency> Set<C> getNodes(Class<C> clazz, int frequency);
 
 		/**
 		 * Gets a list of TileEntities that has a specific frequency, within a radius around a position.
 		 */
 		Set<IBlockFrequency> getNodes(World world, Vector3 position, int radius, int frequency);
 
-		Set<IBlockFrequency> getNodes(Class clazz, World world, Vector3 position, int radius, int frequency);
+		<C extends IBlockFrequency> Set<C> getNodes(Class<C> clazz, World world, Vector3 position, int radius, int frequency);
 
 		Set<IBlockFrequency> getNodes(World world, Cuboid region, int frequency);
 
-		Set<IBlockFrequency> getNodes(Class clazz, World world, Cuboid region, int frequency);
+		<C extends IBlockFrequency> Set<C> getNodes(Class<C> clazz, World world, Cuboid region, int frequency);
 	}
 }
