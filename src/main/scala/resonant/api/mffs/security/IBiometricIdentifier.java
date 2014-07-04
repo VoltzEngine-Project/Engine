@@ -1,26 +1,34 @@
 package resonant.api.mffs.security;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
 import resonant.lib.access.Permission;
-import resonant.lib.access.Permissions;
 
-/** Applied to Biometric Identifiers (extends TileEntity). */
+/**
+ * Applied to Biometric Identifiers (extends TileEntity).
+ */
 public interface IBiometricIdentifier
 {
-    /** Is access granted to this specific user?
-     * 
-     * @param username - Minecraft username.
-     * @param permission - The permission.
-     * @return */
-    public boolean isAccessGranted(String username, Permission permission);
+	/**
+	 * Is this specific permission granted to this specific user profile?
+	 *
+	 * @param profile    - Minecraft profile.
+	 * @param permission - The permission.
+	 * @return
+	 */
+	public boolean hasPermission(GameProfile profile, Permission permission);
 
-    /** Gets the owner of the security center.
-     * 
-     * @return */
-    public String getOwner();
+	/**
+	 * Gets the owner of the security center.
+	 *
+	 * @return
+	 */
+	public String getOwner();
 
-    /** Gets the card currently placed in the manipulating slot.
-     * 
-     * @return */
-    public ItemStack getEditCard();
+	/**
+	 * Gets the card currently placed in the manipulating slot.
+	 *
+	 * @return
+	 */
+	public ItemStack getEditCard();
 }
