@@ -18,7 +18,7 @@ public interface IFieldInteraction extends IModuleAcceptor, IActivatable
     public ItemStack getModeStack();
 
     /** Gets the slot IDs based on the direction given. */
-    public int[] getSlotsBasedOnDirection(ForgeDirection direction);
+    public int[] getDirectionSlots(ForgeDirection direction);
 
     /** Gets the unspecified, direction-unspecific module slots on the left side of the GUI. */
     public int[] getModuleSlots();

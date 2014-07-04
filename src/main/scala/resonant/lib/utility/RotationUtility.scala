@@ -1,8 +1,11 @@
 package resonant.lib.utility
 
+import net.minecraftforge.common.util.ForgeDirection
+
 object RotationUtility
 {
   var sideRotMap: Array[Int] = Array[Int](3, 4, 2, 5, 3, 5, 2, 4, 1, 5, 0, 4, 1, 4, 0, 5, 1, 2, 0, 3, 1, 3, 0, 2)
+  val relativeMatrix: Array[Array[Int]] = Array(Array(3, 2, 1, 0, 5, 4), Array(4, 5, 0, 1, 2, 3), Array(0, 1, 3, 2, 4, 5), Array(0, 1, 2, 3, 5, 4), Array(0, 1, 5, 4, 3, 2), Array(0, 1, 4, 5, 2, 3))
 
   /**
    * Rototes a relative side into a ForgeDirection global size.
@@ -14,5 +17,27 @@ object RotationUtility
   def rotateSide(s: Int, r: Int): Int =
   {
     return sideRotMap(s << 2 | r)
+  }
+
+  def rotateSide(s: ForgeDirection, r: ForgeDirection): ForgeDirection =
+  {
+    return ForgeDirection.getOrientation(sideRotMap(s.ordinal << 2 | r.ordinal))
+  }
+
+  /**
+   * Finds the direction relative to a base direction.
+   *
+   * @param front - The direction in which this block is facing/front. Use a number between 0 and
+   *              5. Default is 3.
+   * @param side - The side you are trying to find. A number between 0 and 5.
+   * @return The side relative to the facing direction.
+   */
+  def getRelativeSide(front: ForgeDirection, side: ForgeDirection): ForgeDirection =
+  {
+    if (front != ForgeDirection.UNKNOWN && side != ForgeDirection.UNKNOWN)
+    {
+      return ForgeDirection.getOrientation(relativeMatrix(front.ordinal)(side.ordinal))
+    }
+    return ForgeDirection.UNKNOWN
   }
 }
