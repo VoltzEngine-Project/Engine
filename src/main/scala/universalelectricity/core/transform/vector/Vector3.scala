@@ -2,6 +2,7 @@ package universalelectricity.core.transform.vector
 
 import java.lang.Double.doubleToLongBits
 
+import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
@@ -100,6 +101,8 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def this(nbt: NBTTagCompound) = this(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
 
+  def this(data: ByteBuf) = this(data.readDouble(), data.readDouble(), data.readDouble())
+
   def this(dir: ForgeDirection) = this(dir.offsetX, dir.offsetY, dir.offsetZ)
 
   def this(par1: MovingObjectPosition) = this(par1.blockX, par1.blockY, par1.blockZ)
@@ -154,6 +157,14 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
     nbt.setDouble("y", y)
     nbt.setDouble("z", z)
     return nbt
+  }
+
+  def toByteBuf(data: ByteBuf): ByteBuf =
+  {
+    data.writeDouble(x)
+    data.writeDouble(y)
+    data.writeDouble(z)
+    return data
   }
 
   def toRotation = new Rotation(Math.toDegrees(Math.atan2(x, z)), Math.toDegrees(-Math.atan2(y, Math.hypot(z, x))), 0)

@@ -2,6 +2,7 @@ package universalelectricity.core.transform.vector
 
 import java.lang.Double.doubleToLongBits
 
+import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 import universalelectricity.core.transform.AbstractVector
 
@@ -15,6 +16,8 @@ class Vector2(var x: Double, var y: Double) extends AbstractVector[Vector2] with
   def this() = this(0, 0)
 
   def this(value: Double) = this(value, value)
+
+  def this(data: ByteBuf) = this(data.readDouble(), data.readDouble())
 
   def x(amount: Double)
   {
@@ -41,6 +44,13 @@ class Vector2(var x: Double, var y: Double) extends AbstractVector[Vector2] with
     nbt.setDouble("x", x)
     nbt.setDouble("y", y)
     return nbt
+  }
+
+  def toByteBuf(data: ByteBuf): ByteBuf =
+  {
+    data.writeDouble(x)
+    data.writeDouble(y)
+    return data
   }
 
   def xi = x.toInt
