@@ -16,7 +16,6 @@ import resonant.engine.ResonantEngine;
 @ChannelHandler.Sharable
 public class ResonantPacketHandler extends SimpleChannelInboundHandler<AbstractPacket>
 {
-
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, AbstractPacket packet) throws Exception
 	{

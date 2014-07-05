@@ -11,12 +11,14 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidTank;
 import resonant.engine.References;
 import resonant.lib.modproxy.ICompatProxy;
 import resonant.lib.utility.nbt.ISaveObj;
 import universalelectricity.core.transform.vector.IVector2;
 import universalelectricity.core.transform.vector.IVector3;
+import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.EnumMap;
 
@@ -170,6 +172,11 @@ public class PacketManager implements ICompatProxy
 		this.channelEnumMap.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 		this.channelEnumMap.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
 		this.channelEnumMap.get(Side.SERVER).writeAndFlush(message);
+	}
+
+	public void sendToAllAround(AbstractPacket message, World world, Vector3 point, double range)
+	{
+		sendToAllAround(message, new NetworkRegistry.TargetPoint(world.provider.dimensionId, point.x(), point.y(), point.z(), range));
 	}
 
 	@SideOnly(Side.CLIENT)
