@@ -63,35 +63,35 @@ abstract class AbstractOperation[T <: AbstractOperation[T]]
   /**
    * Alias Operation Methods
    */
-  final def add(amount: Double): T = this + amount
+  def add(amount: Double): T = this + amount
 
-  final def add(amount: T): T = this + amount
+  def add(amount: T): T = this + amount
 
-  final def subtract(amount: Double): T = this - amount
+  def subtract(amount: Double): T = this - amount
 
-  final def subtract(amount: T): T = this - amount
+  def subtract(amount: T): T = this - amount
 
-  final def multiply(amount: Double): T = this * amount
+  def multiply(amount: Double): T = this * amount
 
-  final def multiply(amount: T): T = this * amount
+  def multiply(amount: T): T = this * amount
 
-  final def divide(amount: Double): T = this / amount
+  def divide(amount: Double): T = this / amount
 
-  final def addEquals(amount: Double): T = this += amount
+  def addEquals(amount: Double): T = this += amount
 
-  final def addEquals(amount: T): T = this += amount
+  def addEquals(amount: T): T = this += amount
 
-  final def subtractEquals(amount: Double): T = this -= amount
+  def subtractEquals(amount: Double): T = this -= amount
 
-  final def subtractEquals(amount: T): T = this -= amount
+  def subtractEquals(amount: T): T = this -= amount
 
-  final def multiplyEquals(amount: Double): T = this *= amount
+  def multiplyEquals(amount: Double): T = this *= amount
 
-  final def multiplyEquals(amount: T): T = this *= amount
+  def multiplyEquals(amount: T): T = this *= amount
 
-  final def divideEquals(amount: Double): T = this /= amount
+  def divideEquals(amount: Double): T = this /= amount
 
-  final def divideEquals(amount: T): T = this /= amount
+  def divideEquals(amount: T): T = this /= amount
 
   /**
    * Conversion
