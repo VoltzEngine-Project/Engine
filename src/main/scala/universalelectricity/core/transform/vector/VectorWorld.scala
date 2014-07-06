@@ -87,7 +87,7 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   /**
    * "Generated" method override
-    */
+   */
   override def -(amount: Double): VectorWorld = this + -amount
 
   override def -(amount: Vector3): VectorWorld = this + (-amount)
@@ -111,7 +111,7 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
   override def /=(amount: Double): VectorWorld = this *= (1 / amount)
 
   override def /=(amount: Vector3): VectorWorld = this *= (amount.reciprocal)
-          
+
   /**
    * "Generated" Alias Operation Methods override
    */
@@ -150,9 +150,9 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
    */
   def getBlock: Block = if (world != null) super.getBlock(world) else null
 
-  def getBlockMetadata = if (world != null) super.getBlockMetadata(world) else null
+  def getBlockMetadata: Int = if (world != null) super.getBlockMetadata(world) else -1
 
-  def getTileEntity = if (world != null) super.getTileEntity(world) else null
+  def getTileEntity: TileEntity = if (world != null) super.getTileEntity(world) else null
 
   def setBlock(block: Block, metadata: Int, notify: Int): Boolean = super.setBlock(world, block, metadata, notify)
 
