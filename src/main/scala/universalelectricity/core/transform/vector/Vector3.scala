@@ -97,6 +97,8 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def this(entity: Entity) = this(entity.posX, entity.posY, entity.posZ)
 
+  def this(vec: IVector3) = this(vec.x, vec.y, vec.z)
+
   def this(vec: Vec3) = this(vec.xCoord, vec.yCoord, vec.zCoord)
 
   def this(nbt: NBTTagCompound) = this(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
@@ -141,14 +143,11 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def toForgeDirection: ForgeDirection =
   {
-    for (direction <- ForgeDirection.VALID_DIRECTIONS)
+    (ForgeDirection.VALID_DIRECTIONS find (dir => x == dir.offsetX && y == dir.offsetY && z == dir.offsetZ)) match
     {
-      if (this.x == direction.offsetX && this.y == direction.offsetY && this.z == direction.offsetZ)
-      {
-        return direction
-      }
+      case Some(entry) => return entry
+      case _ => return ForgeDirection.UNKNOWN
     }
-    return ForgeDirection.UNKNOWN
   }
 
   override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =

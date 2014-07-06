@@ -13,6 +13,8 @@ class VectorWorld(var world: World, x: Double, y: Double, z: Double) extends Vec
 {
   def this(nbt: NBTTagCompound) = this(DimensionManager.getWorld(nbt.getInteger("dimension")), nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
 
+  def this(data: ByteBuf) = this(DimensionManager.getWorld(data.readInt()), data.readDouble(), data.readDouble(), data.readDouble())
+
   def this(entity: Entity) = this(entity.worldObj, entity.posX, entity.posY, entity.posZ)
 
   def this(tile: TileEntity) = this(tile.getWorldObj, tile.xCoord, tile.yCoord, tile.zCoord)
@@ -48,11 +50,11 @@ class VectorWorld(var world: World, x: Double, y: Double, z: Double) extends Vec
   /**
    * World Access
    */
-  def getBlock(): Block = if (world != null) super.getBlock(world) else null
+  def getBlock: Block = if (world != null) super.getBlock(world) else null
 
-  def getBlockMetadata() = if (world != null) super.getBlockMetadata(world) else null
+  def getBlockMetadata = if (world != null) super.getBlockMetadata(world) else null
 
-  def getTileEntity() = if (world != null) super.getTileEntity(world) else null
+  def getTileEntity = if (world != null) super.getTileEntity(world) else null
 
   def setBlock(block: Block, metadata: Int, notify: Int): Boolean = super.setBlock(world, block, metadata, notify)
 
