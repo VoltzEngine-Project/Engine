@@ -9,7 +9,7 @@ import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.World
 import net.minecraftforge.common.DimensionManager
 
-class VectorWorld(var world: World, x: Double, y: Double, z: Double) extends Vector3(x, y, z) with IVectorWorld
+class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) extends Vector3(newX, newY, newZ) with IVectorWorld
 {
   def this(nbt: NBTTagCompound) = this(DimensionManager.getWorld(nbt.getInteger("dimension")), nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
 
@@ -24,6 +24,16 @@ class VectorWorld(var world: World, x: Double, y: Double, z: Double) extends Vec
   def world(newWorld: World)
   {
     world = newWorld
+  }
+
+  override def set(vec: Vector3): VectorWorld =
+  {
+    if (vec.isInstanceOf[VectorWorld])
+      world = vec.asInstanceOf[VectorWorld].world
+    x = vec.x
+    y = vec.y
+    z = vec.z
+    return this
   }
 
   /**
@@ -46,6 +56,21 @@ class VectorWorld(var world: World, x: Double, y: Double, z: Double) extends Vec
     data.writeDouble(z)
     return data
   }
+
+  /**
+   * Operations
+   */
+  override def +(amount: Double): VectorWorld = new VectorWorld(world, x + amount, y + amount, z + amount)
+
+  override def +(amount: Vector3): VectorWorld = new VectorWorld(world, x + amount.x, y + amount.y, z + amount.z)
+
+  override def +(x: Double, y: Double, z: Double): VectorWorld = new VectorWorld(world, this.x + x, this.y + y, this.z + z)
+
+  override def +=(x: Double, y: Double, z: Double): VectorWorld = set(new VectorWorld(world, this.x + x, this.y + y, this.z + z))
+
+  override def *(amount: Double): VectorWorld = new VectorWorld(world, x * amount, y * amount, z * amount)
+
+  override def *(amount: Vector3): VectorWorld = new VectorWorld(world, x * amount.x, y * amount.y, z * amount.z)
 
   /**
    * World Access
