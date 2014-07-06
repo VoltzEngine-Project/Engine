@@ -1,6 +1,7 @@
 package resonant.api.mffs;
 
 import net.minecraft.inventory.IInventory;
+import resonant.api.blocks.IBlockFrequency;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.Set;
  *
  * @author Calclavia
  */
-public abstract interface IProjector extends IInventory, IBiometricIdentifierLink, IFieldInteraction
+public abstract interface IProjector extends IInventory, IBiometricIdentifierLink, IFieldInteraction, IBlockFrequency
 {
 	/**
 	 * Projects a force field.

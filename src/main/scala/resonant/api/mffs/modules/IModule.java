@@ -23,13 +23,9 @@ public interface IModule extends IFortronCost
 	boolean onDestroy(IProjector projector, Set<Vector3> field);
 
 	/**
-	 * Called right after the projector creates a force field block.
-	 *
-	 * @param projector
-	 * @param position
+	 * Called right before the projector creates a force field block.
 	 * @return 0 - Do nothing; 1 - Skip this block and continue; 2 - Cancel rest of projection;
 	 */
-
 	public int onProject(IProjector projector, Vector3 position);
 
 	/**

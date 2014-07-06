@@ -35,9 +35,9 @@ public class PacketTile extends PacketType
 		this(tile.xCoord, tile.yCoord, tile.zCoord, args);
 	}
 
-	public PacketTile(TileEntity tile, int id, Object... args)
+	public static PacketTile getPacketWithID(TileEntity tile, int id, Object... args)
 	{
-		this(tile.xCoord, tile.yCoord, tile.zCoord, id, args);
+		return new PacketTile(tile.xCoord, tile.yCoord, tile.zCoord, id, args);
 	}
 
 	@Override
