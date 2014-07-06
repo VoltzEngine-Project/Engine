@@ -39,14 +39,14 @@ class Vector2(var x: Double, var y: Double) extends AbstractVector[Vector2] with
   /**
    * Conversion
    */
-  override def toNBT(nbt: NBTTagCompound): NBTTagCompound =
+  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
     nbt.setDouble("x", x)
     nbt.setDouble("y", y)
     return nbt
   }
 
-  def toByteBuf(data: ByteBuf): ByteBuf =
+  override def writeByteBuf(data: ByteBuf): ByteBuf =
   {
     data.writeDouble(x)
     data.writeDouble(y)

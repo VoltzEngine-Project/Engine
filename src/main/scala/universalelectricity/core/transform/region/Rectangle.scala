@@ -2,6 +2,7 @@ package universalelectricity.core.transform.region
 
 import java.math.{BigDecimal, MathContext, RoundingMode}
 
+import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 import universalelectricity.core.transform.AbstractOperation
 import universalelectricity.core.transform.vector.Vector2
@@ -99,11 +100,18 @@ class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Re
     return if (region.max.x > this.min.x && region.min.x < this.max.x) (if (region.max.y > this.min.y && region.min.y < this.max.y) true else false) else false
   }
 
-  override def toNBT(nbt: NBTTagCompound): NBTTagCompound =
+  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
     nbt.setTag("min", min.toNBT)
     nbt.setTag("max", max.toNBT)
     return nbt
+  }
+
+  override def writeByteBuf(data: ByteBuf): ByteBuf =
+  {
+    min.writeByteBuf(data)
+    max.writeByteBuf(data)
+    return data
   }
 
   override def toString: String =

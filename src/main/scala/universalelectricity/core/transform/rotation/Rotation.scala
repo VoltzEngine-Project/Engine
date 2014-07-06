@@ -2,6 +2,7 @@ package universalelectricity.core.transform.rotation
 
 import java.lang.Double.doubleToLongBits
 
+import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.transform.vector.Vector3
@@ -141,7 +142,7 @@ class Rotation extends AbstractOperation[Rotation] with ITransform with IRotatio
   /**
    * Conversions
    */
-  def toEuler(): (Double, Double, Double) =
+  def toEuler: (Double, Double, Double) =
   {
     val x = axis.x
     val y = axis.y
@@ -177,28 +178,35 @@ class Rotation extends AbstractOperation[Rotation] with ITransform with IRotatio
     return (yaw, pitch, roll)
   }
 
-  def toVector(): Vector3 = new Vector3(-Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch))
+  def toVector: Vector3 = new Vector3(-Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch))
 
-  override def toNBT(nbt: NBTTagCompound): NBTTagCompound =
+  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
-    axis.toNBT(nbt)
+    axis.writeNBT(nbt)
     nbt.setDouble("angle", angle)
     return nbt
   }
 
+  override def writeByteBuf(data: ByteBuf): ByteBuf =
+  {
+    axis.writeByteBuf(data)
+    data.writeDouble(angle)
+    return data
+  }
+
   def yaw: Double =
   {
-    return toEuler()._1
+    return toEuler._1
   }
 
   def pitch: Double =
   {
-    return toEuler()._2
+    return toEuler._2
   }
 
   def roll: Double =
   {
-    return toEuler()._3
+    return toEuler._3
   }
 
   /**
@@ -232,7 +240,7 @@ class Rotation extends AbstractOperation[Rotation] with ITransform with IRotatio
 
   def isWithin(other: Rotation, margin: Double): Boolean =
   {
-    val difference = absoluteDifference(other).toEuler()
+    val difference = absoluteDifference(other).toEuler
     return difference.productIterator.exists(i => (i.asInstanceOf[Double] > margin))
   }
 

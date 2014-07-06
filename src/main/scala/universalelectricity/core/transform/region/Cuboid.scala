@@ -3,6 +3,7 @@ package universalelectricity.core.transform.region
 import java.math.{BigDecimal, MathContext, RoundingMode}
 import java.util.{ArrayList, List}
 
+import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
@@ -188,11 +189,18 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
 
   def getEntitiesExclude(world: World, entity: Entity): List[Entity] = world.getEntitiesWithinAABBExcludingEntity(entity, toAABB).asInstanceOf[List[Entity]]
 
-  override def toNBT(nbt: NBTTagCompound): NBTTagCompound =
+  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
     nbt.setTag("min", min.toNBT)
     nbt.setTag("max", max.toNBT)
     return nbt
+  }
+
+  override def writeByteBuf(data: ByteBuf): ByteBuf =
+  {
+    min.writeByteBuf(data)
+    max.writeByteBuf(data)
+    return data
   }
 
   override def toString: String =

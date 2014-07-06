@@ -1,5 +1,6 @@
 package universalelectricity.core.transform.vector
 
+import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
@@ -26,13 +27,22 @@ class VectorWorld(var world: World, x: Double, y: Double, z: Double) extends Vec
   /**
    * Conversions
    */
-  override def toNBT(nbt: NBTTagCompound): NBTTagCompound =
+  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
-    nbt.setDouble("dimension", world.provider.dimensionId)
+    nbt.setInteger("dimension", world.provider.dimensionId)
     nbt.setDouble("x", x)
     nbt.setDouble("y", y)
     nbt.setDouble("z", z)
     return nbt
+  }
+
+  override def writeByteBuf(data: ByteBuf): ByteBuf =
+  {
+    data.writeInt(world.provider.dimensionId)
+    data.writeDouble(x)
+    data.writeDouble(y)
+    data.writeDouble(z)
+    return data
   }
 
   /**

@@ -1,5 +1,6 @@
 package universalelectricity.core.transform
 
+import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 
 /**
@@ -18,6 +19,7 @@ abstract class AbstractOperation[T <: AbstractOperation[T]]
    * Returns this value, unmodified.
    */
   def unary_+ : T = this.asInstanceOf[T]
+
   /**
    * Returns the negation of this value.
    */
@@ -103,7 +105,9 @@ abstract class AbstractOperation[T <: AbstractOperation[T]]
 
   def reciprocal(): T
 
-  final def toNBT: NBTTagCompound = toNBT(new NBTTagCompound())
+  final def toNBT: NBTTagCompound = writeNBT(new NBTTagCompound())
 
-  def toNBT(nbt: NBTTagCompound): NBTTagCompound
+  def writeNBT(nbt: NBTTagCompound): NBTTagCompound
+
+  def writeByteBuf(data: ByteBuf): ByteBuf
 }
