@@ -29,33 +29,36 @@ abstract class AbstractOperation[T <: AbstractOperation[T]]
 
   def +(amount: T): T
 
-  final def -(amount: Double): T = this + -amount
-
-  final def -(amount: T): T = this + (-amount)
-
   def *(amount: Double): T
 
   def *(amount: T): T
 
-  final def /(amount: Double): T = this * (1 / amount)
+  /**
+   * Automatically generated
+   */
+  def -(amount: Double): T = this + -amount
 
-  final def /(amount: T): T = this * (amount * -1)
+  def -(amount: T): T = this + (-amount)
 
-  final def +=(amount: Double): T = set(this + amount)
+  def /(amount: Double): T = this * (1 / amount)
 
-  final def +=(amount: T): T = set(amount)
+  def /(amount: T): T = this * (amount * -1)
 
-  final def -=(amount: Double): T = this += -amount
+  def +=(amount: Double): T = set(this + amount)
 
-  final def -=(amount: T): T = this += (amount * -1)
+  def +=(amount: T): T = set(amount)
 
-  final def *=(amount: Double): T = set(this * amount)
+  def -=(amount: Double): T = this += -amount
 
-  final def *=(amount: T): T = set(this * amount)
+  def -=(amount: T): T = this += (amount * -1)
 
-  final def /=(amount: Double): T = this *= (1 / amount)
+  def *=(amount: Double): T = set(this * amount)
 
-  final def /=(amount: T): T = this *= (amount * -1)
+  def *=(amount: T): T = set(this * amount)
+
+  def /=(amount: Double): T = this *= (1 / amount)
+
+  def /=(amount: T): T = this *= (amount.reciprocal)
 
   /**
    * Alias Operation Methods

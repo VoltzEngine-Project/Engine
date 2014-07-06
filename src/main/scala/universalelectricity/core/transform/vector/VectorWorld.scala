@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.World
 import net.minecraftforge.common.DimensionManager
+import net.minecraftforge.common.util.ForgeDirection
 
 class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) extends Vector3(newX, newY, newZ) with IVectorWorld
 {
@@ -68,9 +69,81 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   override def +=(x: Double, y: Double, z: Double): VectorWorld = set(new VectorWorld(world, this.x + x, this.y + y, this.z + z))
 
+  override def add(x: Double, y: Double, z: Double): VectorWorld = this +(x, y, z)
+
+  override def addEquals(x: Double, y: Double, z: Double): VectorWorld = this +=(x, y, z)
+
+  override def +(amount: ForgeDirection): VectorWorld = this + new Vector3(amount)
+
+  override def +=(amount: ForgeDirection): VectorWorld = set(this + new Vector3(amount))
+
+  override def add(amount: ForgeDirection): VectorWorld = this + amount
+
+  override def addEquals(amount: ForgeDirection): VectorWorld = this += amount
+
   override def *(amount: Double): VectorWorld = new VectorWorld(world, x * amount, y * amount, z * amount)
 
   override def *(amount: Vector3): VectorWorld = new VectorWorld(world, x * amount.x, y * amount.y, z * amount.z)
+
+  /**
+   * "Generated" method override
+    */
+  override def -(amount: Double): VectorWorld = this + -amount
+
+  override def -(amount: Vector3): VectorWorld = this + (-amount)
+
+  override def /(amount: Double): VectorWorld = this * (1 / amount)
+
+  override def /(amount: Vector3): VectorWorld = this * (amount * -1)
+
+  override def +=(amount: Double): VectorWorld = set(this + amount)
+
+  override def +=(amount: Vector3): VectorWorld = set(amount)
+
+  override def -=(amount: Double): VectorWorld = this += -amount
+
+  override def -=(amount: Vector3): VectorWorld = this += (amount * -1)
+
+  override def *=(amount: Double): VectorWorld = set(this * amount)
+
+  override def *=(amount: Vector3): VectorWorld = set(this * amount)
+
+  override def /=(amount: Double): VectorWorld = this *= (1 / amount)
+
+  override def /=(amount: Vector3): VectorWorld = this *= (amount.reciprocal)
+          
+  /**
+   * "Generated" Alias Operation Methods override
+   */
+  override def add(amount: Double): VectorWorld = this + amount
+
+  override def add(amount: Vector3): VectorWorld = this + amount
+
+  override def subtract(amount: Double): VectorWorld = this - amount
+
+  override def subtract(amount: Vector3): VectorWorld = this - amount
+
+  override def multiply(amount: Double): VectorWorld = this * amount
+
+  override def multiply(amount: Vector3): VectorWorld = this * amount
+
+  override def divide(amount: Double): VectorWorld = this / amount
+
+  override def addEquals(amount: Double): VectorWorld = this += amount
+
+  override def addEquals(amount: Vector3): VectorWorld = this += amount
+
+  override def subtractEquals(amount: Double): VectorWorld = this -= amount
+
+  override def subtractEquals(amount: Vector3): VectorWorld = this -= amount
+
+  override def multiplyEquals(amount: Double): VectorWorld = this *= amount
+
+  override def multiplyEquals(amount: Vector3): VectorWorld = this *= amount
+
+  override def divideEquals(amount: Double): VectorWorld = this /= amount
+
+  override def divideEquals(amount: Vector3): VectorWorld = this /= amount
 
   /**
    * World Access
