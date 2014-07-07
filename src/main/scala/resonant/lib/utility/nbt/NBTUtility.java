@@ -1,5 +1,6 @@
 package resonant.lib.utility.nbt;
 
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.item.ItemStack;
@@ -13,6 +14,7 @@ import universalelectricity.core.transform.vector.Vector3;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.UUID;
 
 /**
  * Utility that manages common NBT save and load methods
@@ -240,8 +242,8 @@ public class NBTUtility
 	/**
 	 * Reads an unknown object with a known name from NBT
 	 *
-	 * @param tag             - tag to read the value from
-	 * @param key             - name of the value
+	 * @param tag - tag to read the value from
+	 * @param key - name of the value
 	 * @return object or suggestionValue if nothing is found
 	 */
 	public static Object loadObject(NBTTagCompound tag, String key)
@@ -326,5 +328,17 @@ public class NBTUtility
 			}
 		}
 		return null;
+	}
+
+	public static NBTTagCompound saveProfile(NBTTagCompound nbt, GameProfile profile)
+	{
+		nbt.setString("UUID", profile.getId().toString());
+		nbt.setString("username", profile.getName());
+		return nbt;
+	}
+
+	public static GameProfile loadProfile(NBTTagCompound nbt)
+	{
+		return new GameProfile(UUID.fromString(nbt.getString("UUID")), nbt.getString("username"));
 	}
 }

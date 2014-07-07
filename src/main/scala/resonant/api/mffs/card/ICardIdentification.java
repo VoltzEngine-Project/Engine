@@ -14,7 +14,7 @@ public interface ICardIdentification extends ICard
 
     public boolean removePermission(ItemStack itemStack, Permission permission);
 
-    public String getUsername(ItemStack itemStack);
+    public String getProfile(ItemStack itemStack);
 
-    public void setUsername(ItemStack itemStack, String username);
+    public void setProfile(ItemStack itemStack, String username);
 }

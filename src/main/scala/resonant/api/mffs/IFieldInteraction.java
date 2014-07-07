@@ -2,9 +2,11 @@ package resonant.api.mffs;
 
 import java.util.Set;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import resonant.lib.access.Permission;
 import universalelectricity.core.transform.vector.Vector3;
 import resonant.api.mffs.modules.IModule;
 import resonant.api.mffs.modules.IModuleAcceptor;
@@ -55,4 +57,6 @@ public interface IFieldInteraction extends IModuleAcceptor, IActivatable
 
     /** @return Gets the facing direction. Always returns the front side of the block. */
     public ForgeDirection getDirection();
+
+	public boolean hasPermission(GameProfile profile, Permission permission);
 }

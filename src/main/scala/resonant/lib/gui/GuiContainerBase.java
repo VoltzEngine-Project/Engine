@@ -287,12 +287,12 @@ public class GuiContainerBase extends GuiContainer
 		this.drawSlot(x, y, type, 1, 1, 1);
 	}
 
-	public void renderUniversalDisplay(int x, int y, float energy, int mouseX, int mouseY, Unit unit)
+	public void renderUniversalDisplay(int x, int y, double energy, int mouseX, int mouseY, Unit unit)
 	{
 		renderUniversalDisplay(x, y, energy, mouseX, mouseY, unit, false);
 	}
 
-	public void renderUniversalDisplay(int x, int y, float energy, float maxEnergy, int mouseX, int mouseY, Unit unit, boolean symbol)
+	public void renderUniversalDisplay(int x, int y, double energy, double maxEnergy, int mouseX, int mouseY, Unit unit, boolean symbol)
 	{
 		String displaySuffix = "";
 
@@ -339,7 +339,7 @@ public class GuiContainerBase extends GuiContainer
 		fontRendererObj.drawString(display, x, y, 4210752);
 	}
 
-	public void renderUniversalDisplay(int x, int y, float energy, int mouseX, int mouseY, Unit unit, boolean small)
+	public void renderUniversalDisplay(int x, int y, double energy, int mouseX, int mouseY, Unit unit, boolean small)
 	{
 		String displaySuffix = "";
 
