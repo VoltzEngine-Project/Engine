@@ -141,6 +141,10 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def toVector2: Vector2 = new Vector2(x, z)
 
+  def toList = List(x, y, z)
+
+  def toTuple = (x, y, z)
+
   def toForgeDirection: ForgeDirection =
   {
     (ForgeDirection.VALID_DIRECTIONS find (dir => x == dir.offsetX && y == dir.offsetY && z == dir.offsetZ)) match
@@ -367,5 +371,4 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
   override def clone: Vector3 = new Vector3(x, y, z)
 
   override def toString = "Vector3[" + x + "," + y + "," + z + "]"
-
 }
