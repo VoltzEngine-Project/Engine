@@ -56,9 +56,12 @@ class ElectricNode(parent: INodeProvider) extends Node[ElectricNode](parent) wit
 
   override def canConnect(from: ForgeDirection, source: AnyRef): Boolean =
   {
-    return (source.isInstanceOf[ElectricNode]) && (connectionMap & (1 << from.ordinal)) != 0
+    return source.isInstanceOf[ElectricNode] && (connectionMap & (1 << from.ordinal)) != 0
   }
 
+  /**
+   * Note: Changes the internal state
+   */
   protected def calculateVoltage(deltaTime: Double)
   {
     voltage += deltaTime * amperage * getEnergyCapacity
@@ -93,8 +96,8 @@ class ElectricNode(parent: INodeProvider) extends Node[ElectricNode](parent) wit
   override def getEnergy(voltageThreshold: Double): Double =
   {
     val volts = getVoltage
-    val tr = 0.5D * (volts * volts - voltageThreshold * voltageThreshold) / getEnergyCapacity
-    return if (tr < 0.0D) 0.0D else tr
+    val threashold = 0.5D * (volts * volts - voltageThreshold * voltageThreshold) / getEnergyCapacity
+    return if (threashold < 0.0D) 0.0D else threashold
   }
 
   def getEmptySpace = getEnergyCapacity() - getEnergy(getVoltage)
@@ -109,7 +112,7 @@ class ElectricNode(parent: INodeProvider) extends Node[ElectricNode](parent) wit
         val adjacent = entry._1
         val dir = entry._2
         val totalResistance = getResistance + adjacent.getResistance()
-        var current = currents(dir.ordinal)
+        var current = currents(dir.ordinal) //TODO: Might be incorrect
         val voltageDifference = voltage - adjacent.getVoltage
         currents(dir.ordinal) += (voltageDifference - current * totalResistance) * getCurrentEfficiency
         current += voltageDifference * getParallelMultiplier
