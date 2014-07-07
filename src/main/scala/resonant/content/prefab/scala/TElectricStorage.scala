@@ -13,18 +13,6 @@ trait TElectricStorage extends TElectric with IEnergyContainer
 {
   protected var energy: EnergyStorage = _
 
-  //@Callback
-  def recharge(stack: ItemStack)
-  {
-    electricNode.drawPower(Compatibility.getHandler(stack.getItem).chargeItem(stack, electricNode.getEnergy(getVoltage), true))
-  }
-
-  //@Callback
-  protected def discharge(stack: ItemStack)
-  {
-    electricNode.applyPower(Compatibility.getHandler(stack.getItem).dischargeItem(stack, this.energy.getEmptySpace, true))
-  }
-
   /**
    * Sets the amount of energy this unit stored.
    *

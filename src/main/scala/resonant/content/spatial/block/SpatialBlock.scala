@@ -519,4 +519,19 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
 
   def canSilkHarvest(player: EntityPlayer, metadata: Int): Boolean = normalRender && tile == null
 
+  /**
+   * Gets the explosive resistance of this block.
+   * Note: Called without the world object being present.
+   * @param entity - The affecting entity
+   * @return A value representing the explosive resistance
+   */
+  def getExplosionResistance(entity: Entity): Float = blockResistance / 5f
+
+  /**
+   * Gets the explosive resistance of this block.
+   * @param entity - The affecting entity
+   * @param explosionPosition - The position in which the explosion is ocurring at
+   * @return A value representing the explosive resistance
+   */
+  def getExplosionResistance(entity: Entity, explosionPosition: Vector3): Float = getExplosionResistance(entity)
 }

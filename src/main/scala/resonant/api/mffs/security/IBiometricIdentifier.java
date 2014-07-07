@@ -15,21 +15,7 @@ public interface IBiometricIdentifier extends IBlockFrequency
 	 *
 	 * @param profile    - Minecraft profile.
 	 * @param permission - The permission.
-	 * @return
+	 * @return True if there is permission
 	 */
 	public boolean hasPermission(GameProfile profile, Permission permission);
-
-	/**
-	 * Gets the owner of the security center.
-	 *
-	 * @return
-	 */
-	public String getOwner();
-
-	/**
-	 * Gets the card currently placed in the manipulating slot.
-	 *
-	 * @return
-	 */
-	public ItemStack getEditCard();
 }

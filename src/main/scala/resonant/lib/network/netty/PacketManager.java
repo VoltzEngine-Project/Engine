@@ -156,6 +156,11 @@ public class PacketManager implements ICompatProxy
 		this.channelEnumMap.get(Side.SERVER).writeAndFlush(packet);
 	}
 
+	public void sendToAllInDimension(AbstractPacket packet, World world)
+	{
+		sendToAllInDimension(packet, world.provider.dimensionId);
+	}
+
 	/**
 	 * sends to all clients connected to the server
 	 *

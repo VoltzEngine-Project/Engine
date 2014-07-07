@@ -109,6 +109,20 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     eject
   }
 
+  override def getExplosionResistance(entity: Entity): Float =
+  {
+    return dummyTile.getExplosionResistance(entity)
+  }
+
+  override def getExplosionResistance(entity: Entity, world: World, x: Int, y: Int, z: Int, explosionX: Double, explosionY: Double, explosionZ: Double): Float =
+  {
+    inject(world, x, y, z)
+    val resistance = getTile(world, x, y, z).getExplosionResistance(entity, new Vector3(explosionX, explosionY, explosionZ))
+    eject
+
+    return resistance
+  }
+
   override def onBlockClicked(world: World, x: Int, y: Int, z: Int, player: EntityPlayer)
   {
     inject(world, x, y, z)
