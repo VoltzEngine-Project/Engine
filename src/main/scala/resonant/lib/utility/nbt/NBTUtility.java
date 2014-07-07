@@ -339,6 +339,13 @@ public class NBTUtility
 
 	public static GameProfile loadProfile(NBTTagCompound nbt)
 	{
-		return new GameProfile(UUID.fromString(nbt.getString("UUID")), nbt.getString("username"));
+		GameProfile profile = new GameProfile(UUID.fromString(nbt.getString("UUID")), nbt.getString("username"));
+
+		if (profile.isComplete())
+		{
+			return profile;
+		}
+
+		return null;
 	}
 }
