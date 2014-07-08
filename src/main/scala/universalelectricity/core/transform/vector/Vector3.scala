@@ -247,11 +247,7 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def isZero = x == 0 && y == 0 && z == 0
 
-  def apply(transformer: ITransform): Vector3 =
-  {
-    transformer.transform(this)
-    return this
-  }
+  def apply(transformer: ITransform): Vector3 = transformer.transform(this)
 
   /**
    * Gets the angle between this vector and another vector.

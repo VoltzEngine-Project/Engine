@@ -44,12 +44,7 @@ class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Re
 
   override def +(amount: Rectangle): Rectangle = new Rectangle(min + amount.min, max + amount.max)
 
-  def +(vec: Vector2): Rectangle =
-  {
-    min + vec
-    max + vec
-    return this
-  }
+  def +(vec: Vector2): Rectangle = new Rectangle(min + vec, max + vec)
 
   def +=(vec: Vector2): Rectangle =
   {
@@ -70,19 +65,9 @@ class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Re
 
   def subtractSet(vec: Vector2): Rectangle = this -= vec
 
-  def *(amount: Double): Rectangle =
-  {
-    min * amount
-    max * amount
-    return this
-  }
+  def *(amount: Double): Rectangle = new Rectangle(min * amount, max * amount)
 
-  def *(amount: Rectangle): Rectangle =
-  {
-    min * amount.min
-    max * amount.max
-    return this
-  }
+  def *(amount: Rectangle): Rectangle = new Rectangle(min * amount.min, max * amount.max)
 
   /**
    * Checks if a point is located inside a region

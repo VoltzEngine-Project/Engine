@@ -70,12 +70,7 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
 
   override def +(amount: Cuboid): Cuboid = new Cuboid(min + amount.min, max + amount.max)
 
-  def +(vec: Vector3): Cuboid =
-  {
-    min + vec
-    max + vec
-    return this
-  }
+  def +(vec: Vector3): Cuboid = new Cuboid(min + vec, max + vec)
 
   def +=(vec: Vector3): Cuboid =
   {
@@ -96,26 +91,11 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
 
   def subtractSet(vec: Vector3): Cuboid = this -= vec
 
-  def *(amount: Double): Cuboid =
-  {
-    min * amount
-    max * amount
-    return this
-  }
+  def *(amount: Double): Cuboid = new Cuboid(min * amount, max * amount)
 
-  def *(amount: Cuboid): Cuboid =
-  {
-    min * amount.min
-    max * amount.max
-    return this
-  }
+  def *(amount: Cuboid): Cuboid = new Cuboid(min * amount.min, max * amount.max)
 
-  def rotate(angle: Rotation): Cuboid =
-  {
-    min.apply(angle)
-    max.apply(angle)
-    return this
-  }
+  def rotate(angle: Rotation): Cuboid = new Cuboid(min.apply(angle), max.apply(angle))
 
   def setBounds(block: Block): Cuboid =
   {

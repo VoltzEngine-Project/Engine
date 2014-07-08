@@ -9,5 +9,5 @@ import universalelectricity.core.transform.vector.Vector3;
  */
 public interface ITransform
 {
-	public void transform(Vector3 vector);
+	public Vector3 transform(Vector3 vector);
 }
