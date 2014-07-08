@@ -1,6 +1,6 @@
 package universalelectricity.api;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -180,6 +180,8 @@ public class UnitDisplay
 	 */
 	public static class UnitPrefix
 	{
+		public static final List<UnitPrefix> unitPrefixes = new LinkedList();
+
 		public static final UnitPrefix MICRO = new UnitPrefix("Micro", "u", 0.000001);
 		public static final UnitPrefix MILLI = new UnitPrefix("Milli", "m", 0.001);
 		public static final UnitPrefix BASE = new UnitPrefix("", "", 1);
@@ -191,7 +193,6 @@ public class UnitDisplay
 		public static final UnitPrefix EXA = new UnitPrefix("Exa", "E", 1000000000000000000d);
 		public static final UnitPrefix ZETTA = new UnitPrefix("Zetta", "Z", 1000000000000000000000d);
 		public static final UnitPrefix YOTTA = new UnitPrefix("Yotta", "Y", 1000000000000000000000000d);
-		public static final List<UnitPrefix> unitPrefixes = new ArrayList();
 		/**
 		 * long name for the unit
 		 */
