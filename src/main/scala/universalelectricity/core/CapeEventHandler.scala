@@ -77,10 +77,10 @@ object CapeEventHandler
       con.setReadTimeout(timeout)
       val io: InputStream = con.getInputStream
       val br: BufferedReader = new BufferedReader(new InputStreamReader(io))
-      var str: String =  br.readLine()
+      var str: String = br.readLine()
       var linetracker: Int = 1
 
-      while (str  != null)
+      while (str != null)
       {
         if (!str.startsWith("--") && !str.isEmpty)
         {

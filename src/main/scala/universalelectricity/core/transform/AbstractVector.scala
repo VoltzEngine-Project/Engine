@@ -1,7 +1,5 @@
 package universalelectricity.core.transform
 
-import net.minecraft.nbt.NBTTagCompound
-
 /**
  * @author Calclavia
  */

@@ -113,7 +113,7 @@ class ElectricNode(parent: INodeProvider) extends Node[ElectricNode](parent) wit
         val dir = entry._2
         val totalResistance = getResistance + adjacent.getResistance()
         var current = currents(dir.ordinal) //TODO: Might be incorrect
-        val voltageDifference = voltage - adjacent.getVoltage
+      val voltageDifference = voltage - adjacent.getVoltage
         currents(dir.ordinal) += (voltageDifference - current * totalResistance) * getCurrentEfficiency
         current += voltageDifference * getParallelMultiplier
         applyCurrent(-current)

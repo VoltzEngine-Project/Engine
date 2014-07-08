@@ -18,6 +18,7 @@ public class ClassHeirachyManager implements IClassTransformer
 {
 	public static HashMap<String, SuperCache> superclasses = new HashMap<String, SuperCache>();
 	private static LaunchClassLoader cl = (LaunchClassLoader) ClassHeirachyManager.class.getClassLoader();
+
 	static
 	{
 		cl.addTransformerExclusion("codechicken.lib.asm");

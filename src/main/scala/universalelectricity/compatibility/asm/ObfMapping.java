@@ -15,6 +15,7 @@ import java.io.IOException;
 public class ObfMapping
 {
 	public static final boolean obfuscated;
+
 	static
 	{
 		boolean obf = true;
@@ -27,6 +28,7 @@ public class ObfMapping
 		}
 		obfuscated = obf;
 	}
+
 	/**
 	 * CCC will deal with this.
 	 */

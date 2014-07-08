@@ -4,7 +4,6 @@ import java.util.List
 
 import net.minecraft.command.{CommandBase, ICommandSender, WrongUsageException}
 import net.minecraft.util.ChatComponentText
-import universalelectricity.api.UniversalElectricity
 import universalelectricity.core.grid.UpdateTicker
 
 object UECommand extends CommandBase
@@ -32,7 +31,7 @@ object UECommand extends CommandBase
       }
       if (args(0).equalsIgnoreCase("version"))
       {
-        sender.addChatMessage(new ChatComponentText("Universal Electricity Version: " + UniversalElectricity.VERSION))
+        sender.addChatMessage(new ChatComponentText("Universal Electricity Version: " + UniversalElectricity.version))
       }
       if (args(0).equalsIgnoreCase("gridinfo"))
       {

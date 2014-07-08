@@ -277,6 +277,7 @@ public class InstructionComparator
 			this.first = first;
 			this.last = last;
 		}
+
 		public InsnListSection(InsnList haystack, int start, int end)
 		{
 			this(haystack.get(start), haystack.get(end));

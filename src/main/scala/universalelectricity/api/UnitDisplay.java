@@ -15,6 +15,7 @@ public class UnitDisplay
 	public boolean useSymbol = false;
 	public int decimalPlaces = 2;
 	public boolean isSimple = false;
+
 	public UnitDisplay(Unit unit, double value)
 	{
 		this.unit = unit;
