@@ -77,7 +77,7 @@ public class ProxyHandler
 			case POSTINIT:
 				module.preInit();
 				module.init();
-				module.preInit();
+				module.postInit();
 				break;
 			case INIT:
 				module.preInit();

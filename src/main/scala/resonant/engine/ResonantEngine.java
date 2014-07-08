@@ -85,7 +85,7 @@ public class ResonantEngine
 	public static Item itemWrench;
 
 	private static ThermalGrid thermalGrid = new ThermalGrid();
-	public final PacketManager packetHandler = new PacketManager();
+	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 	private ProxyHandler modProxy = new ProxyHandler();
 
 	@EventHandler
@@ -97,7 +97,7 @@ public class ResonantEngine
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
 		//modProxy.applyModule(Waila.class, true);
-		modProxy.applyModule(this.packetHandler);
+		modProxy.applyModule(packetHandler);
 
 		// Potion Array resized to Current potion array, +32, Allows to miss conflicting ID's
 		PotionUtility.resizePotionArray();
@@ -169,26 +169,15 @@ public class ResonantEngine
 
 		proxy.postInit();
 		modProxy.postInit();
+
+		//TODO: Find better way to do this in terms of not reinitiating grids twice.
+		FrequencyGridRegistry.CLIENT_INSTANCE = new FrequencyGrid();
+		FrequencyGridRegistry.SERVER_INSTANCE = new FrequencyGrid();
 	}
 
 	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event)
+	public void serverStopped(FMLServerStoppedEvent event)
 	{
-		/*
-		// Load ModFlag from world save
-		Object object = SaveManager.createAndLoad(NBTUtility.loadData(FlagRegistry.DEFAULT_NAME));
-		if (!(object instanceof ModFlag))
-		{
-			object = new ModFlag(FlagRegistry.DEFAULT_NAME);
-		}
-		FlagRegistry.registerModFlag(FlagRegistry.DEFAULT_NAME, (ModFlag) object);
-
-		// Setup command
-		ICommandManager commandManager = FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
-		ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
-		serverCommandManager.registerCommand(new CommandFlag(FlagRegistry.getModFlag(FlagRegistry.DEFAULT_NAME)));
-		*/
-
 		/**
 		 * Reinitiate FrequencyGrid
 		 */

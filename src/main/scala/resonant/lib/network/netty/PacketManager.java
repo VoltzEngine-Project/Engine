@@ -28,8 +28,14 @@ import java.util.EnumMap;
  */
 public class PacketManager implements ICompatProxy
 {
-
 	protected EnumMap<Side, FMLEmbeddedChannel> channelEnumMap;
+
+	public final String channel;
+
+	public PacketManager(String channel)
+	{
+		this.channel = channel;
+	}
 
 	public static void writeData(ByteBuf data, Object... sendData)
 	{
@@ -118,7 +124,7 @@ public class PacketManager implements ICompatProxy
 	@Override
 	public void init()
 	{
-		this.channelEnumMap = NetworkRegistry.INSTANCE.newChannel(References.CHANNEL, new ResonantChannelHandler(), new ResonantPacketHandler());
+		this.channelEnumMap = NetworkRegistry.INSTANCE.newChannel(channel, new ResonantChannelHandler(), new ResonantPacketHandler());
 	}
 
 	@Override

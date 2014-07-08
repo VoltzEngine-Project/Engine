@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import resonant.engine.ResonantEngine;
 import resonant.lib.network.netty.AbstractPacket;
+import resonant.lib.network.netty.PacketManager;
 
 /**
  * @author tgame14
@@ -16,6 +17,6 @@ public abstract class PacketType extends AbstractPacket
 	public PacketType(Object... args)
 	{
 		this.data = Unpooled.buffer();
-		ResonantEngine.instance.packetHandler.writeData(this.data, args);
+		PacketManager.writeData(this.data, args);
 	}
 }
