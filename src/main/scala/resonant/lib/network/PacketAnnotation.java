@@ -16,10 +16,14 @@ public class PacketAnnotation extends PacketType
 	protected int classID;
 	protected int packetSetID;
 
+	public PacketAnnotation()
+	{
+
+	}
+
 	public PacketAnnotation(Object obj)
 	{
 		this(obj, 0);
-
 	}
 
 	public PacketAnnotation(Object obj, int packetSetID)

@@ -16,6 +16,11 @@ public class PacketTile extends PacketType
 	protected int z;
 	protected int id;
 
+	public PacketTile()
+	{
+
+	}
+
 	public PacketTile(int x, int y, int z, int id, Object... args)
 	{
 		super(args);
@@ -49,7 +54,6 @@ public class PacketTile extends PacketType
 		buffer.writeInt(id);
 
 		buffer.writeBytes(this.data);
-
 	}
 
 	@Override

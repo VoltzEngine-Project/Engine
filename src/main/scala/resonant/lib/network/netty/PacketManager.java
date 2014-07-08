@@ -105,7 +105,7 @@ public class PacketManager implements ICompatProxy
 			}
 			else
 			{
-				References.LOGGER.fatal("Resonant Engine packet attempt to write an invalid type: " + dataValue.getClass());
+				References.LOGGER.fatal("Resonant Engine packet attempt to write an invalid object: " + dataValue + " with class: " + dataValue.getClass());
 			}
 		}
 	}
