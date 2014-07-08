@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{IIcon, MovingObjectPosition}
+import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
 import resonant.content.prefab.itemblock.ItemBlockTooltip
 import resonant.content.wrapper.BlockDummy
@@ -403,6 +403,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   def getCollisionBoxes(intersect: Cuboid, entity: Entity): Iterable[Cuboid] =
   {
     val boxes = new util.ArrayList[Cuboid]
+
     for (cuboid <- getCollisionBoxes)
     {
       if (intersect != null && cuboid.intersects(intersect))
@@ -427,6 +428,9 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   {
     return bounds
   }
+
+  @SideOnly(Side.CLIENT)
+  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + position).toAABB
 
   /**
    * Called in the world.

@@ -14,6 +14,7 @@ import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
 import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.utility.inventory.InventoryUtility
+import resonant.lib.wrapper.WrapList._
 import universalelectricity.core.transform.region.Cuboid
 import universalelectricity.core.transform.vector.Vector3
 
@@ -188,26 +189,26 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
 
   override def addCollisionBoxesToList(world: World, x: Int, y: Int, z: Int, aabb: AxisAlignedBB, list: List[_], entity: Entity)
   {
-    def add[T](list: java.util.List[T], value: Any) = list.add(value.asInstanceOf[T])
-
     inject(world, x, y, z)
-    val bounds: Iterable[Cuboid] = getTile(world, x, y, z).getCollisionBoxes(if (aabb != null) new Cuboid(aabb) + (new Vector3(x, y, z) * -1) else null, entity)
+
+    val bounds: Iterable[Cuboid] = getTile(world, x, y, z).getCollisionBoxes(if (aabb != null) (new Cuboid(aabb) - new Vector3(x, y, z)) else null, entity)
 
     if (bounds != null)
     {
       for (cuboid <- bounds)
       {
-        add(list, (cuboid + new Vector3(x, y, z)).toAABB)
+        list.add((cuboid + new Vector3(x, y, z)).toAABB)
       }
     }
 
     eject
   }
 
-  @SideOnly(Side.CLIENT) override def getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB =
+  @SideOnly(Side.CLIENT)
+  override def getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB =
   {
     inject(world, x, y, z)
-    val value: Cuboid = getTile(world, x, y, z).getSelectBounds.clone + new Vector3(x, y, z)
+    val value = getTile(world, x, y, z).getSelectBounds + new Vector3(x, y, z)
     eject
     return value.toAABB
   }
@@ -215,7 +216,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   override def getCollisionBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB =
   {
     inject(world, x, y, z)
-    val value: Cuboid = getTile(world, x, y, z).getCollisionBounds.clone + new Vector3(x, y, z)
+    val value = getTile(world, x, y, z).getCollisionBounds + new Vector3(x, y, z)
     eject
     return value.toAABB
   }
