@@ -57,7 +57,7 @@ import java.util.Arrays;
  * @author Calclavia, DarkGuardsman
  */
 
-@Mod(modid = References.NAME, name = References.NAME, version = References.VERSION, dependencies = "required-after:UniversalElectricity")
+@Mod(modid = References.ID, name = References.NAME, version = References.VERSION, dependencies = "required-after:UniversalElectricity")
 public class ResonantEngine
 {
 	public static final ModManager contentRegistry = new ModManager(References.CONFIGURATION, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
@@ -65,7 +65,7 @@ public class ResonantEngine
 	@SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.lib.engine.ProxyBase")
 	public static ProxyBase proxy;
 
-	@Mod.Metadata(References.NAME)
+	@Mod.Metadata(References.ID)
 	public static ModMetadata metadata;
 
 	@Instance(References.NAME)
@@ -107,7 +107,7 @@ public class ResonantEngine
 		/**
 		 * EventHandlers
 		 */
-		MinecraftForge.EVENT_BUS.register(instance);
+		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance());
 		MinecraftForge.EVENT_BUS.register(new PlayerInteractionHandler());
 
