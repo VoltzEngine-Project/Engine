@@ -161,7 +161,8 @@ public class ResonantEngine
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt)
 	{
-		ConfigHandler.configure(References.CONFIGURATION, References.DOMAIN);
+
+		ConfigHandler.sync(References.CONFIGURATION, References.DOMAIN);
 
 		// Register Thermal Grid
 		UpdateTicker.addUpdater(ResonantEngine.thermalGrid);

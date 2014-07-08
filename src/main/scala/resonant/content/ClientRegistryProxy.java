@@ -14,6 +14,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
 	{
 		super.registerTileEntity(name, tileClass);
 
+		/*
 		TileEntitySpecialRenderer tileRenderer = null;
 
 		try
@@ -37,7 +38,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
 		if (tileRenderer != null)
 		{
 			ClientRegistry.bindTileEntitySpecialRenderer(tileClass, tileRenderer);
-		}
+		}*/
 	}
 
 	@Override

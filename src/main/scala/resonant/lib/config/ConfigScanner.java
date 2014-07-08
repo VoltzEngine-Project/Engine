@@ -34,12 +34,20 @@ public class ConfigScanner
 		{
 			try
 			{
-				classes.add(Class.forName(data.getClassName()));
+				addClass(Class.forName(data.getClassName()));
 			}
 			catch (ClassNotFoundException e)
 			{
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * TODO: Temporary patch, ASM Table is not being read properly.
+	 */
+	public void addClass(Class clazz)
+	{
+		classes.add(clazz);
 	}
 }
