@@ -104,6 +104,18 @@ public class LanguageUtility
 		return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, s);
 	}
 
+	public static String camelToReadable(String s)
+	{
+		return capitalizeFirst(s.replaceAll(
+				String.format("%s|%s|%s",
+						"(?<=[A-Z])(?=[A-Z][a-z])",
+						"(?<=[^A-Z])(?=[A-Z])",
+						"(?<=[A-Za-z])(?=[^A-Za-z])"
+				),
+				" "
+		));
+	}
+
 	public static String underscoreToCamel(String s)
 	{
 		return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s);

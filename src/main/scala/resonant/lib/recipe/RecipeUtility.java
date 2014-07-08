@@ -19,6 +19,8 @@ import java.util.List;
  */
 public class RecipeUtility
 {
+	public static final String CATEGORY = "crafting";
+
 	public static List<IRecipe> getRecipesByOutput(ItemStack output)
 	{
 		List<IRecipe> list = new ArrayList<IRecipe>();
@@ -175,7 +177,7 @@ public class RecipeUtility
 		{
 			configuration.load();
 
-			if (configuration.get("Crafting", "Allow " + name + " Crafting", defaultBoolean).getBoolean(defaultBoolean))
+			if (configuration.get(CATEGORY, "Allow " + name + " Crafting", defaultBoolean).getBoolean(defaultBoolean))
 			{
 				GameRegistry.addRecipe(recipe);
 			}
@@ -198,7 +200,7 @@ public class RecipeUtility
 		{
 			configuration.load();
 
-			if (configuration.get("Crafting", "Allow " + name + " Crafting", defaultBoolean).getBoolean(defaultBoolean))
+			if (configuration.get(CATEGORY, "Allow " + name + " Crafting", defaultBoolean).getBoolean(defaultBoolean))
 			{
 				CraftingManager.getInstance().addShapelessRecipe(itemStack, items);
 			}

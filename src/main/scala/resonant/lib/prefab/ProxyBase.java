@@ -5,8 +5,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.world.World;
+import resonant.lib.modproxy.ICompatProxy;
 
-public class ProxyBase implements IGuiHandler
+public class ProxyBase implements IGuiHandler, ICompatProxy
 {
 	public void preInit()
 	{
@@ -18,6 +19,12 @@ public class ProxyBase implements IGuiHandler
 
 	public void postInit()
 	{
+	}
+
+	@Override
+	public String modId()
+	{
+		return null;
 	}
 
 	@Override

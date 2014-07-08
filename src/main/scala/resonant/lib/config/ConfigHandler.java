@@ -1,6 +1,7 @@
 package resonant.lib.config;
 
 import net.minecraftforge.common.config.Configuration;
+import resonant.lib.utility.LanguageUtility;
 
 import java.lang.reflect.Field;
 
@@ -99,7 +100,7 @@ public final class ConfigHandler
 
 			if (cfg.key().isEmpty())
 			{
-				key = field.getName();
+				key = LanguageUtility.camelToReadable(field.getName());
 			}
 
 			else

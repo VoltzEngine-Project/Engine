@@ -37,6 +37,9 @@ public @interface Config
 {
 	public String category() default Configuration.CATEGORY_GENERAL;
 
+	/**
+	 * The default key would be the name of the field. The name of the field must be in camel case.
+	 */
 	public String key() default "";
 
 	public String comment() default "";
