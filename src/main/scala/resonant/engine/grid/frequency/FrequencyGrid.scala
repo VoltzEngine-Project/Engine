@@ -34,13 +34,13 @@ class FrequencyGrid extends Grid[IBlockFrequency] with FrequencyGridRegistry.IFr
 
   def getNodes(p: IBlockFrequency => Boolean): Set[IBlockFrequency] = getNodes().filter(p)
 
-  def getNodes[C <: IBlockFrequency](clazz: Class[C], p: C => Boolean): Set[C] = getNodes(n => (n.getClass().isAssignableFrom(clazz) && p(n.asInstanceOf[C]))).asInstanceOf[Set[C]]
+  def getNodes[C <: IBlockFrequency](clazz: Class[C], p: C => Boolean): Set[C] = getNodes(n => (clazz.isAssignableFrom(n.getClass()) && p(n.asInstanceOf[C]))).asInstanceOf[Set[C]]
 
-  override def getNodes[C <: IBlockFrequency](clazz: Class[C]): Set[C] = getNodes(_.getClass().isAssignableFrom(clazz)).asInstanceOf[Set[C]]
+  override def getNodes[C <: IBlockFrequency](clazz: Class[C]): Set[C] = getNodes(n => clazz.isAssignableFrom(n.getClass())).asInstanceOf[Set[C]]
 
   override def getNodes(frequency: Int): Set[IBlockFrequency] = getNodes(_.getFrequency() == frequency)
 
-  override def getNodes[C <: IBlockFrequency](clazz: Class[C], frequency: Int): Set[C] = getNodes(n => n.getFrequency() == frequency && n.getClass().isAssignableFrom(clazz)).asInstanceOf[Set[C]]
+  override def getNodes[C <: IBlockFrequency](clazz: Class[C], frequency: Int): Set[C] = getNodes(n => n.getFrequency() == frequency && clazz.isAssignableFrom(n.getClass())).asInstanceOf[Set[C]]
 
   override def getNodes(world: World, position: Vector3, radius: Int, frequency: Int): Set[IBlockFrequency] =
   {
@@ -49,7 +49,7 @@ class FrequencyGrid extends Grid[IBlockFrequency] with FrequencyGridRegistry.IFr
 
   override def getNodes[C <: IBlockFrequency](clazz: Class[C], world: World, position: Vector3, radius: Int, frequency: Int): Set[C] =
   {
-    return getNodes(n => n.getFrequency() == frequency && n.getClass().isAssignableFrom(clazz) && n.asInstanceOf[TileEntity].getWorldObj() == world && new Vector3(n.asInstanceOf[TileEntity]).distance(position) <= radius).asInstanceOf[Set[C]]
+    return getNodes(n => n.getFrequency() == frequency && clazz.isAssignableFrom(n.getClass) && n.asInstanceOf[TileEntity].getWorldObj() == world && new Vector3(n.asInstanceOf[TileEntity]).distance(position) <= radius).asInstanceOf[Set[C]]
   }
 
   override def getNodes(world: World, cuboid: Cuboid, frequency: Int): Set[IBlockFrequency] =
@@ -59,6 +59,6 @@ class FrequencyGrid extends Grid[IBlockFrequency] with FrequencyGridRegistry.IFr
 
   override def getNodes[C <: IBlockFrequency](clazz: Class[C], world: World, cuboid: Cuboid, frequency: Int): Set[C] =
   {
-    return getNodes(n => n.getFrequency() == frequency && n.getClass().isAssignableFrom(clazz) && n.asInstanceOf[TileEntity].getWorldObj() == world && cuboid.intersects(new Vector3(n.asInstanceOf[TileEntity]))).asInstanceOf[Set[C]]
+    return getNodes(n => n.getFrequency() == frequency && clazz.isAssignableFrom(n.getClass()) && n.asInstanceOf[TileEntity].getWorldObj() == world && cuboid.intersects(new Vector3(n.asInstanceOf[TileEntity]))).asInstanceOf[Set[C]]
   }
 }
