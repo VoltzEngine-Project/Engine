@@ -216,6 +216,21 @@ public class GuiContainerBase extends GuiContainer
 		}
 	}
 
+	protected void drawLongBlueBar(int x, int y, float scale)
+	{
+		mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+		/** Draw background progress bar/ */
+		drawTexturedModalRect(containerWidth + x, containerHeight + y, meterX, 33, 140, 14);
+
+		if (scale > 0)
+		{
+			/** Draw white color actual progress. */
+			drawTexturedModalRect(containerWidth + x, containerHeight + y, meterX, 48, (int) (scale * 140), 14);
+		}
+	}
+
 	protected void drawElectricity(int x, int y, float scale)
 	{
 		this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);

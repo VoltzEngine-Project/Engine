@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.{IExternalInventory, IInventoryProvider}
 import resonant.content.spatial.block.SpatialBlock
+import resonant.lib.utility.LanguageUtility
 import resonant.lib.utility.inventory.{ExternalInventory, InventoryUtility}
 import universalelectricity.core.transform.vector.Vector3
 
@@ -16,22 +17,9 @@ import universalelectricity.core.transform.vector.Vector3
  */
 trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInventory
 {
-  protected var inventory: IExternalInventory = _
-  protected var maxSlots: Int = 1
+  protected lazy val inventory = new ExternalInventory(this, getSizeInventory())
 
-  protected def getNewInventory() = new ExternalInventory(this, maxSlots)
-
-  override def getInventory(): IExternalInventory =
-  {
-    if (this.inventory == null)
-    {
-      this.inventory = getNewInventory()
-    }
-
-    return this.inventory
-  }
-
-  override def getSizeInventory() = getInventory().getSizeInventory
+  override def getInventory(): IExternalInventory = inventory
 
   override def getStackInSlot(index: Int): ItemStack =
   {
@@ -67,17 +55,17 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     this.getInventory().setInventorySlotContents(index, stack)
   }
 
-  override def getInventoryName() = getBlockType().getLocalizedName()
+  override def getInventoryName = getBlockType.getLocalizedName
 
-  override def hasCustomInventoryName() = inventory.hasCustomInventoryName()
+  override def hasCustomInventoryName = inventory.hasCustomInventoryName()
 
-  override def getInventoryStackLimit() = getInventory.getInventoryStackLimit
+  override def getInventoryStackLimit = getInventory.getInventoryStackLimit
 
   override def isUseableByPlayer(entityplayer: EntityPlayer) = getInventory.isUseableByPlayer(entityplayer)
 
-  override def openInventory() = getInventory.openInventory()
+  override def openInventory = getInventory.openInventory()
 
-  override def closeInventory() = getInventory.closeInventory()
+  override def closeInventory = getInventory.closeInventory()
 
   def isItemValidForSlot(i: Int, itemstack: ItemStack): Boolean =
   {

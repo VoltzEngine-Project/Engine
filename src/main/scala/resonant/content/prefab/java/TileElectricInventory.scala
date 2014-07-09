@@ -7,7 +7,7 @@ import resonant.lib.content.prefab.{TElectric, TInventory}
 /**
  * @author Calclavia
  */
-class TileElectricInventory(material: Material) extends SpatialBlock(material) with TInventory with TElectric
+abstract class TileElectricInventory(material: Material) extends SpatialBlock(material) with TInventory with TElectric
 {
 
 }
