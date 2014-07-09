@@ -58,6 +58,11 @@ public class GuiContainerBase extends GuiContainer
 		fontRendererObj.drawString(str, x, y, 4210752);
 	}
 
+	protected void drawString(String str, int y)
+	{
+		fontRendererObj.drawString(str, xSize / 2, y, 4210752);
+	}
+
 	protected void drawStringCentered(String str, int x, int y)
 	{
 		drawString(str, x - (fontRendererObj.getStringWidth(str) / 2), y);
