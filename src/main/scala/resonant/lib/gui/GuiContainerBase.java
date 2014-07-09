@@ -53,6 +53,26 @@ public class GuiContainerBase extends GuiContainer
 		this.baseTexture = References.GUI_EMPTY_FILE;
 	}
 
+	protected void drawString(String str, int x, int y)
+	{
+		fontRendererObj.drawString(str, x, y, 4210752);
+	}
+
+	protected void drawStringCentered(String str, int x, int y)
+	{
+		drawString(str, x - (fontRendererObj.getStringWidth(str) / 2), y);
+	}
+
+	protected void drawStringCentered(String str, int y)
+	{
+		drawStringCentered(str, xSize / 2, y);
+	}
+
+	protected void drawStringCentered(String str)
+	{
+		drawStringCentered(str, 6);
+	}
+
 	@Override
 	public void onGuiClosed()
 	{

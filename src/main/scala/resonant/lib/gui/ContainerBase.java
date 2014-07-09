@@ -13,7 +13,7 @@ public class ContainerBase extends Container
 	protected int xInventoryDisplacement = 8;
 	protected int yInventoryDisplacement = 135;
 	protected int yHotBarDisplacement = 193;
-	private IInventory inventory;
+	protected IInventory inventory;
 
 	public ContainerBase(IInventory inventory)
 	{
