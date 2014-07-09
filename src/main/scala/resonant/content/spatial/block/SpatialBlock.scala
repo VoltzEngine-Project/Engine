@@ -98,7 +98,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
 
   def blockResistance(resistance: Float): Unit = blockResistance = resistance
 
-  var stepSound: Block.SoundType = null
+  var stepSound: Block.SoundType = Block.soundTypeStone
 
   def stepSound(sound: Block.SoundType): Unit = stepSound = sound
 

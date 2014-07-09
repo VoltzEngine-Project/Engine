@@ -91,7 +91,9 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   {
     try
     {
-      return dummyTile.tile.getClass.newInstance
+      val tile = dummyTile.tile.getClass.newInstance
+      tile.block = this
+      return tile
     }
     catch
       {
