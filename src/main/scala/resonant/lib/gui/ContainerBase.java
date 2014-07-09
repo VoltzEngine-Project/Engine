@@ -5,7 +5,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import resonant.api.IPlayerUsing;
+import resonant.lib.network.IPlayerUsing;
 
 public class ContainerBase extends Container
 {
@@ -80,6 +80,7 @@ public class ContainerBase extends Container
 
 			if (slot_id < this.slotCount)
 			{
+				System.out.println("TEST");
 				if (!this.mergeItemStack(slot_stack, this.slotCount, this.inventorySlots.size(), true))
 				{
 					return null;
@@ -92,7 +93,7 @@ public class ContainerBase extends Container
 
 			if (slot_stack.stackSize == 0)
 			{
-				slot.putStack((ItemStack) null);
+				slot.putStack(null);
 			}
 			else
 			{

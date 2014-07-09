@@ -6,7 +6,7 @@ import cpw.mods.fml.common.network.Player;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
-import resonant.api.IPlayerUsing;
+import resonant.lib.network.IPlayerUsing;
 import resonant.api.IScroll;
 import resonant.api.ITerminal;
 import resonant.lib.network.IPacketReceiverWithID;

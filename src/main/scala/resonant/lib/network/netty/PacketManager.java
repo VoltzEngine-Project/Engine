@@ -143,7 +143,6 @@ public class PacketManager implements ICompatProxy
 	 * @param packet the packet to send to the player
 	 * @param player the player MP object
 	 */
-	@SideOnly(Side.SERVER)
 	public void sendToPlayer(AbstractPacket packet, EntityPlayerMP player)
 	{
 		this.channelEnumMap.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);

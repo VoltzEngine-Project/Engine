@@ -1,13 +1,12 @@
 package resonant.content.spatial.block
 
-import java.util
+import java.util.{HashSet => JHashSet, Set => JSet}
 
 import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.network.Packet
-import resonant.api.IPlayerUsing
 import resonant.engine.ResonantEngine
-import resonant.lib.network.PacketAnnotation
+import resonant.lib.network.{IPlayerUsing, PacketAnnotation}
 
 /**
  * All tiles inherit this class.
@@ -16,7 +15,10 @@ import resonant.lib.network.PacketAnnotation
  */
 abstract class SpatialTile(material: Material) extends SpatialBlock(material) with IPlayerUsing
 {
-  private final val playersUsing = new util.HashSet[EntityPlayer]
+  /**
+   * The players to send packets to for machine update info.
+   */
+  final val playersUsing = new JHashSet[EntityPlayer]()
   protected var ticks = 0L
 
   override def tile: SpatialTile = this
@@ -44,5 +46,5 @@ abstract class SpatialTile(material: Material) extends SpatialBlock(material) wi
 
   override def getDescriptionPacket: Packet = ResonantEngine.instance.packetHandler.toMCPacket(new PacketAnnotation(this))
 
-  def getPlayersUsing: util.HashSet[EntityPlayer] = playersUsing
+  override def getPlayersUsing: JSet[EntityPlayer] = playersUsing
 }
