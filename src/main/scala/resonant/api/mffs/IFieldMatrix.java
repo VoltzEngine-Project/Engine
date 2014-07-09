@@ -12,7 +12,7 @@ import resonant.api.mffs.modules.IModule;
 import resonant.api.mffs.modules.IModuleAcceptor;
 import resonant.api.mffs.modules.IProjectorMode;
 
-public interface IFieldInteraction extends IModuleAcceptor, IActivatable
+public interface IFieldMatrix extends IModuleAcceptor, IActivatable
 {
     /** Gets the mode of the projector, mainly the shape and size of it. */
     public IProjectorMode getMode();

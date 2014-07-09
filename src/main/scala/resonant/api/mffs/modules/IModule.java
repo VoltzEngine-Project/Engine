@@ -3,7 +3,7 @@ package resonant.api.mffs.modules;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import resonant.api.mffs.IFieldInteraction;
+import resonant.api.mffs.IFieldMatrix;
 import resonant.api.mffs.IProjector;
 import universalelectricity.core.transform.vector.Vector3;
 
@@ -41,14 +41,14 @@ public interface IModule extends IFortronCost
 	 *
 	 * @return False if to prevent this position from being added to the projection que.
 	 */
-	public void onPreCalculate(IFieldInteraction projector, Set<Vector3> calculatedField);
+	public void onPreCalculate(IFieldMatrix projector, Set<Vector3> calculatedField);
 
 	/**
 	 * Called in this module when it is being calculated by the projector.
 	 *
 	 * @return False if to prevent this position from being added to the projection que.
 	 */
-	public void onCalculate(IFieldInteraction projector, Set<Vector3> fieldDefinition);
+	public void onCalculate(IFieldMatrix projector, Set<Vector3> fieldDefinition);
 
 	/**
 	 * @param moduleStack

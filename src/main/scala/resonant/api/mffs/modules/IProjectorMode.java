@@ -2,8 +2,8 @@ package resonant.api.mffs.modules;
 
 import java.util.Set;
 
+import resonant.api.mffs.IFieldMatrix;
 import universalelectricity.core.transform.vector.Vector3;
-import resonant.api.mffs.IFieldInteraction;
 import resonant.api.mffs.IProjector;
 
 public interface IProjectorMode extends IFortronCost
@@ -13,13 +13,13 @@ public interface IProjectorMode extends IFortronCost
      * @param projector - The Projector Object. Can cast to TileEntity.
      * @param forceField - The blocks actually making up the force field. This array of blocks are
      * NOT affected by rotation or translation. */
-    public Set<Vector3> getExteriorPoints(IFieldInteraction projector);
+    public Set<Vector3> getExteriorPoints(IFieldMatrix projector);
 
     /** @return Gets all interior points. Not translated or rotated. */
-    public Set<Vector3> getInteriorPoints(IFieldInteraction projector);
+    public Set<Vector3> getInteriorPoints(IFieldMatrix projector);
 
     /** @return Is this specific position inside of this force field? */
-    public boolean isInField(IFieldInteraction projector, Vector3 position);
+    public boolean isInField(IFieldMatrix projector, Vector3 position);
 
     /** Called to render an object in front of the projection. */
     public void render(IProjector projector, double x, double y, double z, float f, long ticks);

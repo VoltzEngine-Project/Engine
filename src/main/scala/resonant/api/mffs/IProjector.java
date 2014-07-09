@@ -11,7 +11,7 @@ import java.util.Set;
  *
  * @author Calclavia
  */
-public abstract interface IProjector extends IInventory, IBiometricIdentifierLink, IFieldInteraction, IBlockFrequency
+public abstract interface IProjector extends IInventory, IBiometricIdentifierLink, IFieldMatrix, IBlockFrequency
 {
 	/**
 	 * Projects a force field.
