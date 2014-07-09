@@ -16,12 +16,14 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
 
   protected def recharge(stack: ItemStack)
   {
-    electricNode.drawPower(Compatibility.getHandler(stack.getItem).chargeItem(stack, electricNode.getEnergy(getVoltage), true))
+    if (stack != null && Compatibility.getHandler(stack.getItem) != null)
+      electricNode.drawPower(Compatibility.getHandler(stack.getItem).chargeItem(stack, electricNode.getEnergy(getVoltage), true))
   }
 
   protected def discharge(stack: ItemStack)
   {
-    electricNode.applyPower(Compatibility.getHandler(stack.getItem).dischargeItem(stack, electricNode.getEmptySpace, true))
+    if (stack != null && Compatibility.getHandler(stack.getItem) != null)
+      electricNode.applyPower(Compatibility.getHandler(stack.getItem).dischargeItem(stack, electricNode.getEmptySpace, true))
   }
 
   /**

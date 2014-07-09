@@ -67,7 +67,6 @@ object TooltipUtility
 
   def addTooltip(stack: ItemStack, tooltip: util.List[String])
   {
-    tooltip.add(StatCollector.translateToLocal("tooltip.Materials"))
     for ((ingredient, count) <- computeIngredients(stack))
     {
       val line = math.ceil(count).toInt + "x " + ingredient.getDisplayName

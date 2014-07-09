@@ -75,23 +75,39 @@ public class ContainerBase extends Container
 
 		if (slot != null && slot.getHasStack())
 		{
-			ItemStack slot_stack = slot.getStack();
-			itemstack = slot_stack.copy();
+			ItemStack slotStack = slot.getStack();
+			itemstack = slotStack.copy();
 
 			if (slot_id < this.slotCount)
 			{
-				System.out.println("TEST");
-				if (!this.mergeItemStack(slot_stack, this.slotCount, this.inventorySlots.size(), true))
+				/**
+				 * The item is inside the block inventory, trying to move an item out.
+				 */
+				if (!mergeItemStack(slotStack, this.slotCount, this.inventorySlots.size(), true))
 				{
 					return null;
 				}
 			}
-			else if (!this.mergeItemStack(slot_stack, 0, this.slotCount, false))
+			else
 			{
-				return null;
+				/**
+				 * We are outside the block inventory, trying to move an item in.
+				 *
+				 * Only merge the inventory if it is valid for the specific slot!
+				 */
+				for (int i = 0; i < slotCount - 1; i++)
+				{
+					if (inventory.isItemValidForSlot(i, slotStack))
+					{
+						if (!mergeItemStack(slotStack, i, i + 1, false))
+						{
+							return null;
+						}
+					}
+				}
 			}
 
-			if (slot_stack.stackSize == 0)
+			if (slotStack.stackSize == 0)
 			{
 				slot.putStack(null);
 			}
