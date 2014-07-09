@@ -11,6 +11,8 @@ class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Re
 {
   def this() = this(new Vector2, new Vector2)
 
+  def this(vec: Vector2, expansion: Double) = this(vec, vec + expansion)
+
   def this(minX: Double, minY: Double, maxX: Double, maxY: Double) = this(new Vector2(minX, minY), new Vector2(maxX, maxY))
 
   def this(rect: Rectangle) = this(rect.min.clone, rect.max.clone)
