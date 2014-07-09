@@ -2,12 +2,13 @@ package resonant.lib.prefab;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.world.World;
 import resonant.lib.modproxy.ICompatProxy;
 
-public class ProxyBase implements IGuiHandler, ICompatProxy
+/**
+ * An abstract proxy that can be extended by any mod.
+ */
+public abstract class AbstractProxy implements IGuiHandler, ICompatProxy
 {
 	public void preInit()
 	{
@@ -38,23 +39,4 @@ public class ProxyBase implements IGuiHandler, ICompatProxy
 	{
 		return null;
 	}
-
-	public boolean isPaused()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public EntityPlayer getPlayerFromNetHandler(INetHandler handler)
-	{
-		if (handler instanceof NetHandlerPlayServer)
-		{
-			return ((NetHandlerPlayServer) handler).playerEntity;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
 }

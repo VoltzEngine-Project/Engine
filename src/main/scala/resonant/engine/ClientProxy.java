@@ -5,17 +5,18 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetHandler;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import resonant.content.wrapper.BlockRenderHandler$;
-import resonant.engine.content.debug.TileCreativeBuilder;
 import resonant.engine.content.debug.GuiCreativeBuilder;
-import resonant.lib.prefab.ProxyBase;
+import resonant.engine.content.debug.TileCreativeBuilder;
 import resonant.lib.render.model.FixedTechneModelLoader;
 import universalelectricity.core.transform.vector.Vector3;
 
-public class ClientProxy extends ProxyBase
+/**
+ * The Resonant Engine client proxy
+ */
+public class ClientProxy extends CommonProxy
 {
 	static
 	{
@@ -59,7 +60,7 @@ public class ClientProxy extends ProxyBase
 	}
 
 	@Override
-	public EntityPlayer getPlayerFromNetHandler(INetHandler handler)
+	public EntityPlayer getClientPlayer()
 	{
 		return Minecraft.getMinecraft().thePlayer;
 	}

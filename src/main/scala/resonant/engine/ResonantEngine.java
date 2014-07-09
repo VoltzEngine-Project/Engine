@@ -40,7 +40,6 @@ import resonant.lib.config.ConfigScanner;
 import resonant.lib.modproxy.ProxyHandler;
 import resonant.lib.multiblock.synthetic.SyntheticMultiblock;
 import resonant.lib.network.netty.PacketManager;
-import resonant.lib.prefab.ProxyBase;
 import resonant.lib.utility.PlayerInteractionHandler;
 import resonant.lib.utility.PotionUtility;
 import resonant.lib.utility.nbt.SaveManager;
@@ -62,8 +61,8 @@ public class ResonantEngine
 {
 	public static final ModManager contentRegistry = new ModManager(References.CONFIGURATION, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 
-	@SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.lib.engine.ProxyBase")
-	public static ProxyBase proxy;
+	@SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
+	public static CommonProxy proxy;
 
 	@Mod.Metadata(References.ID)
 	public static ModMetadata metadata;

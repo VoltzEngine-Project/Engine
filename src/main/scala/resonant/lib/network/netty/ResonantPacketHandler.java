@@ -5,8 +5,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetHandler;
+import net.minecraft.network.NetHandlerPlayServer;
 import resonant.engine.ResonantEngine;
 
 /**
@@ -20,19 +20,19 @@ public class ResonantPacketHandler extends SimpleChannelInboundHandler<AbstractP
 	protected void channelRead0(ChannelHandlerContext ctx, AbstractPacket packet) throws Exception
 	{
 		INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-		EntityPlayer player = ResonantEngine.instance.proxy.getPlayerFromNetHandler(netHandler);
 
 		switch (FMLCommonHandler.instance().getEffectiveSide())
 		{
 			case CLIENT:
-				packet.handleClientSide(player);
+				packet.handleClientSide(ResonantEngine.proxy.getClientPlayer());
 				break;
 			case SERVER:
-				packet.handleServerSide(player);
+				packet.handleServerSide(((NetHandlerPlayServer) netHandler).playerEntity);
 				break;
 			default:
 				break;
 		}
 
 	}
+
 }
