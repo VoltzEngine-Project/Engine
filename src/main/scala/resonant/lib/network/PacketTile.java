@@ -53,7 +53,7 @@ public class PacketTile extends PacketType
 		buffer.writeInt(z);
 		buffer.writeInt(id);
 
-		buffer.writeBytes(this.data);
+		buffer.writeBytes(data);
 	}
 
 	@Override
