@@ -13,6 +13,8 @@ import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.transform.rotation.Rotation
 import universalelectricity.core.transform.{AbstractVector, ITransform}
 
+import scala.collection.convert.wrapAll._
+
 /**
  * @author Calclavia
  */
@@ -273,6 +275,8 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def anglePreNorm(other: Vector3) = Math.acos(this $ other)
 
+  def rayTrace(world: World, dir: Vector3, dist: Double): MovingObjectPosition = rayTrace(world, this + (dir * dist))
+
   def rayTrace(world: World, end: Vector3): MovingObjectPosition =
   {
     val block = rayTraceBlocks(world, end)
@@ -299,7 +303,7 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
     val checkDistance = distance(end)
     val scanRegion = AxisAlignedBB.getBoundingBox(-checkDistance, -checkDistance, -checkDistance, checkDistance, checkDistance, checkDistance).offset(x, y, z)
 
-    val checkEntities = world.getEntitiesWithinAABB(classOf[Entity], scanRegion).asInstanceOf[List[Entity]]
+    val checkEntities = world.getEntitiesWithinAABB(classOf[Entity], scanRegion) map (_.asInstanceOf[Entity])
 
     checkEntities.foreach(
       entity =>

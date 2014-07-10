@@ -58,6 +58,8 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
     return data
   }
 
+  def toVector3 = new Vector3(x, y, z)
+
   /**
    * Operations
    */
