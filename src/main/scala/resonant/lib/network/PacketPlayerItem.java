@@ -13,13 +13,18 @@ public class PacketPlayerItem extends PacketType
 {
 	protected int slotId;
 
-	public PacketPlayerItem(int slotId, Object[] args)
+	public PacketPlayerItem()
+	{
+
+	}
+
+	public PacketPlayerItem(int slotId, Object... args)
 	{
 		super(args);
 		this.slotId = slotId;
 	}
 
-	public PacketPlayerItem(EntityPlayer player, Object[] args)
+	public PacketPlayerItem(EntityPlayer player, Object... args)
 	{
 		this(player.inventory.currentItem, args);
 	}
@@ -27,15 +32,15 @@ public class PacketPlayerItem extends PacketType
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
 	{
-		buffer.writeInt(this.slotId);
-		buffer.writeBytes(this.data);
+		buffer.writeInt(slotId);
+		buffer.writeBytes(data);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
 	{
-		this.slotId = buffer.readInt();
-		this.data = buffer.slice();
+		slotId = buffer.readInt();
+		data = buffer.slice();
 	}
 
 	@Override
