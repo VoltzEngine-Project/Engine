@@ -111,6 +111,10 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def this(par1: ChunkCoordinates) = this(par1.posX, par1.posY, par1.posZ)
 
+  def this(par: Seq[Double]) = this(par(0), par(1), par(2))
+
+  def this(par: (Double, Double, Double)) = this(par._1, par._2, par._3)
+
   def x(amount: Double)
   {
     x = amount
@@ -143,6 +147,8 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def toList = List(x, y, z)
 
+  def toIntList = List(x.toInt, y.toInt, z.toInt)
+
   def toTuple = (x, y, z)
 
   def toForgeDirection: ForgeDirection =
@@ -159,6 +165,16 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
     nbt.setDouble("x", x)
     nbt.setDouble("y", y)
     nbt.setDouble("z", z)
+    return nbt
+  }
+
+  def toIntNBT: NBTTagCompound = writeIntNBT(new NBTTagCompound)
+
+  def writeIntNBT(nbt: NBTTagCompound): NBTTagCompound =
+  {
+    nbt.setInteger("x", x.toInt)
+    nbt.setInteger("y", y.toInt)
+    nbt.setInteger("z", z.toInt)
     return nbt
   }
 
