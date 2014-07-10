@@ -84,18 +84,9 @@ task deobfJar(type: Jar) {
 				   FMLCorePluginContainsFMLMod: "true"
     }
 }
-/*
-task buildProp(type: Zip) {
-	classifier = "properties"
-    from sourceSets*.allSource
-    include 'calclavia/api/**'
-    destinationDir = file 'output'
-}*/
 
 artifacts {
     archives apiZip
-	archives file("build.properties")
-    //archives buildProp
 }
 
 publishing {
@@ -110,12 +101,12 @@ publishing {
 			artifact{
 				classifier = "changelog"
 				file 'output/' + "${System.getenv("TEAMCITY_PROJECT_NAME")}-${project.version}" + '-changelog' + '.txt'
-			}
-			
-			artifact{
-				classifier = "properties"
-				file 'output/build.properties'
 			}*/
+			
+			artifact("output/build.properties") {
+				classifier "properties"
+				extension "properties"
+			}
         }
     }
     repositories {

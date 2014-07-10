@@ -1,4 +1,4 @@
-package resonant.lib.network;
+package resonant.lib.network.discriminator;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import resonant.engine.References;
 import resonant.engine.ResonantEngine;
+import resonant.lib.network.handle.IPacketReceiver;
 
 /**
  * @author tgame14
@@ -43,10 +44,10 @@ public class PacketAnnotation extends PacketType
 
 				if (obj instanceof TileEntity)
 				{
-					ResonantEngine.instance.packetHandler.writeData(data, ((TileEntity) obj).xCoord, ((TileEntity) obj).yCoord, ((TileEntity) obj).zCoord);
+					ResonantEngine.instance.packetHandler.writeData(data(), ((TileEntity) obj).xCoord, ((TileEntity) obj).yCoord, ((TileEntity) obj).zCoord);
 				}
 
-				data.writeBytes(packetSet.getPacketArrayData(obj));
+				data().writeBytes(packetSet.getPacketArrayData(obj));
 			}
 		}
 
@@ -57,7 +58,7 @@ public class PacketAnnotation extends PacketType
 	{
 		buffer.writeInt(this.classID);
 		buffer.writeInt(this.packetSetID);
-		buffer.writeBytes(this.data);
+		buffer.writeBytes(this.data());
 	}
 
 	@Override
@@ -65,7 +66,7 @@ public class PacketAnnotation extends PacketType
 	{
 		this.classID = buffer.readInt();
 		this.packetSetID = buffer.readInt();
-		this.data = buffer.slice();
+		this.data_$eq(buffer.slice());
 	}
 
 	@Override
@@ -75,19 +76,19 @@ public class PacketAnnotation extends PacketType
 		{
 			if (TileEntity.class.isAssignableFrom(PacketAnnotationManager.INSTANCE.classPacketIDMap.inverse().get(this.classID)))
 			{
-				int x = data.readInt();
-				int y = data.readInt();
-				int z = data.readInt();
+				int x = data().readInt();
+				int y = data().readInt();
+				int z = data().readInt();
 
 				TileEntity tile = player.getEntityWorld().getTileEntity(x, y, z);
 
 				if (tile != null)
 				{
-					PacketAnnotationManager.INSTANCE.packetSetIDMap.get(this.classID).get(this.packetSetID).read(tile, data.slice());
+					PacketAnnotationManager.INSTANCE.packetSetIDMap.get(this.classID).get(this.packetSetID).read(tile, data().slice());
 
 					if (tile instanceof IPacketReceiver)
 					{
-						((IPacketReceiver) tile).onReceivePacket(data, player, x, y, z);
+						((IPacketReceiver) tile).onReceivePacket(data(), player, x, y, z);
 					}
 				}
 				else
@@ -110,19 +111,19 @@ public class PacketAnnotation extends PacketType
 		{
 			if (TileEntity.class.isAssignableFrom(PacketAnnotationManager.INSTANCE.classPacketIDMap.inverse().get(this.classID)))
 			{
-				int x = data.readInt();
-				int y = data.readInt();
-				int z = data.readInt();
+				int x = data().readInt();
+				int y = data().readInt();
+				int z = data().readInt();
 
 				TileEntity tile = player.getEntityWorld().getTileEntity(x, y, z);
 
 				if (tile != null)
 				{
-					PacketAnnotationManager.INSTANCE.packetSetIDMap.get(this.classID).get(this.packetSetID).read(tile, data.slice());
+					PacketAnnotationManager.INSTANCE.packetSetIDMap.get(this.classID).get(this.packetSetID).read(tile, data().slice());
 
 					if (tile instanceof IPacketReceiver)
 					{
-						((IPacketReceiver) tile).onReceivePacket(data, player, x, y, z);
+						((IPacketReceiver) tile).onReceivePacket(data(), player, x, y, z);
 					}
 				}
 				else

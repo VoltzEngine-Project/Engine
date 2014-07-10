@@ -3,10 +3,10 @@ package resonant.lib.network.netty;
 import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import resonant.lib.network.PacketAnnotation;
-import resonant.lib.network.PacketEntity;
-import resonant.lib.network.PacketPlayerItem;
-import resonant.lib.network.PacketTile;
+import resonant.lib.network.discriminator.PacketAnnotation;
+import resonant.lib.network.discriminator.PacketEntity;
+import resonant.lib.network.discriminator.PacketPlayerItem;
+import resonant.lib.network.discriminator.PacketTile;
 
 /**
  * @author tgame14

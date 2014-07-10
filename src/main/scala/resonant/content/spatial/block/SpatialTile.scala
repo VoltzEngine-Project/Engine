@@ -6,7 +6,8 @@ import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.network.Packet
 import resonant.engine.ResonantEngine
-import resonant.lib.network.{IPlayerUsing, PacketAnnotation}
+import resonant.lib.network.IPlayerUsing
+import resonant.lib.network.discriminator.PacketAnnotation
 
 /**
  * All tiles inherit this class.

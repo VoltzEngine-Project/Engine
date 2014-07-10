@@ -12,7 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonant.content.spatial.block.SpatialBlock
 import resonant.engine.ResonantEngine
 import resonant.lib.content.prefab.TRotatable
-import resonant.lib.network.IPacketReceiver
+import resonant.lib.network.handle.IPacketReceiver
 import resonant.lib.schematic.Schematic
 import universalelectricity.core.transform.vector.Vector3
 

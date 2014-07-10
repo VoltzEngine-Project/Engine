@@ -1,4 +1,4 @@
-package resonant.lib.network;
+package resonant.lib.network.handle;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
  *
  * @author Darkguardsman
  */
+@Deprecated
 public interface IPacketReceiverWithID
 {
 	/**

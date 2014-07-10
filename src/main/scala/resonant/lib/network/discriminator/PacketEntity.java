@@ -1,9 +1,10 @@
-package resonant.lib.network;
+package resonant.lib.network.discriminator;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import resonant.lib.network.handle.IPacketReceiver;
 
 /**
  * @author tgame14
@@ -23,14 +24,14 @@ public class PacketEntity extends PacketType
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
 	{
 		buffer.writeInt(this.entityId);
-		buffer.writeBytes(this.data);
+		buffer.writeBytes(this.data());
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
 	{
 		this.entityId = buffer.readInt();
-		this.data = buffer.slice();
+		this.data_$eq(buffer.slice());
 
 	}
 
@@ -40,7 +41,7 @@ public class PacketEntity extends PacketType
 		Entity entity = player.getEntityWorld().getEntityByID(this.entityId);
 		if (entity instanceof IPacketReceiver)
 		{
-			((IPacketReceiver) entity).onReceivePacket(data, player);
+			((IPacketReceiver) entity).onReceivePacket(data(), player);
 		}
 	}
 
@@ -50,7 +51,7 @@ public class PacketEntity extends PacketType
 		Entity entity = player.getEntityWorld().getEntityByID(this.entityId);
 		if (entity instanceof IPacketReceiver)
 		{
-			((IPacketReceiver) entity).onReceivePacket(data, player);
+			((IPacketReceiver) entity).onReceivePacket(data(), player);
 		}
 	}
 }

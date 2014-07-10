@@ -1,9 +1,11 @@
-package resonant.lib.network;
+package resonant.lib.network.discriminator;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import resonant.lib.network.handle.IPacketReceiver;
+import resonant.lib.network.handle.IPacketReceiverWithID;
 
 /**
  * @author tgame14
@@ -54,7 +56,7 @@ public class PacketTile extends PacketType
 		buffer.writeInt(z);
 		buffer.writeInt(id);
 
-		buffer.writeBytes(data);
+		buffer.writeBytes(data());
 	}
 
 	@Override
@@ -65,7 +67,7 @@ public class PacketTile extends PacketType
 		this.z = buffer.readInt();
 		this.id = buffer.readInt();
 
-		this.data = buffer.slice();
+		this.data_$eq(buffer.slice());
 	}
 
 	@Override
@@ -89,7 +91,7 @@ public class PacketTile extends PacketType
 			if (tile instanceof IPacketReceiver)
 			{
 				IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
-				receiver.onReceivePacket(data.slice(), player, this.x, this.y, this.z);
+				receiver.onReceivePacket(data().slice(), player, this.x, this.y, this.z);
 			}
 			else
 			{
@@ -101,7 +103,7 @@ public class PacketTile extends PacketType
 			if (tile instanceof IPacketReceiverWithID)
 			{
 				IPacketReceiverWithID receiver = (IPacketReceiverWithID) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
-				receiver.onReceivePacket(id, data.slice(), player, this.x, this.y, this.z);
+				receiver.onReceivePacket(id, data().slice(), player, this.x, this.y, this.z);
 			}
 			else
 			{

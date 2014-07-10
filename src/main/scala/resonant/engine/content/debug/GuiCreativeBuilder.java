@@ -4,7 +4,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import resonant.engine.ResonantEngine;
 import resonant.lib.gui.GuiContainerBase;
-import resonant.lib.network.PacketTile;
+import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.utility.LanguageUtility;
 import universalelectricity.core.transform.vector.Vector3;
 

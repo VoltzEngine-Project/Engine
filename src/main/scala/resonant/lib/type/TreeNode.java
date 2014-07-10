@@ -1,6 +1,7 @@
 package resonant.lib.type;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import java.util.Set;
 public class TreeNode<S extends TreeNode>
 {
 	public S parent;
-	public Set<S> children;
+	public Set<S> children = new HashSet<S>();
 
 	public S addChild(S perm)
 	{

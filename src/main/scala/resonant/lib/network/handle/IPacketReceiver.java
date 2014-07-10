@@ -1,13 +1,13 @@
-package resonant.lib.network;
+package resonant.lib.network.handle;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * Implement this if an object can receive a packet.
- *
+ * Deprecated in favor of TPacketHandler (can also be used in Java)
  * @author Calclavia
  */
+@Deprecated
 public interface IPacketReceiver
 {
 	/**
