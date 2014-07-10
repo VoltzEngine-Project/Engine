@@ -12,9 +12,9 @@ trait TRotatable extends SpatialBlock with IRotatable
   protected var rotationMask = Integer.parseInt("111100", 2).toByte
   protected var isFlipPlacement = false
 
-  override def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata())
+  override def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata)
 
-  override def setDirection(direction: ForgeDirection) = getWorldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, getDirection.ordinal, 3)
+  override def setDirection(direction: ForgeDirection) =world.setBlockMetadataWithNotify(x, y, z, direction.ordinal, 3)
 
   def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
 
@@ -32,8 +32,9 @@ trait TRotatable extends SpatialBlock with IRotatable
         return ForgeDirection.DOWN
       }
     }
-    val playerSide: Int = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3
-    val returnSide: Int = if ((playerSide == 0 && canRotate(2))) 2 else (if ((playerSide == 1 && canRotate(5))) 5 else (if ((playerSide == 2 && canRotate(3))) 3 else (if ((playerSide == 3 && canRotate(4))) 4 else 0)))
+
+    val playerSide = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3
+    val returnSide = if ((playerSide == 0 && canRotate(2))) 2 else (if ((playerSide == 1 && canRotate(5))) 5 else (if ((playerSide == 2 && canRotate(3))) 3 else (if ((playerSide == 3 && canRotate(4))) 4 else 0)))
 
     if (isFlipPlacement)
     {
