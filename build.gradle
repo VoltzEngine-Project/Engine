@@ -81,13 +81,21 @@ task deobfJar(type: Jar) {
     classifier 'dev'
 
     manifest {
-        attributes FMLCorePlugin: "resonant.core.ResonantPluginLoader",
+        attributes FMLCorePlugin: "resonant.engine.ResonantPluginLoader",
 				   FMLCorePluginContainsFMLMod: "true"
     }
 }
+/*
+task buildProp(type: Zip) {
+	classifier = "properties"
+    from sourceSets*.allSource
+    include 'calclavia/api/**'
+    destinationDir = file 'output'
+}*/
 
 artifacts {
     archives apiZip
+    //archives buildProp
 }
 
 publishing {
@@ -96,17 +104,18 @@ publishing {
             artifact jar
             artifact deobfJar
 			artifact apiZip
+			//artifact buildProp
 
 			/*
 			artifact{
 				classifier = "changelog"
 				file 'output/' + "${System.getenv("TEAMCITY_PROJECT_NAME")}-${project.version}" + '-changelog' + '.txt'
-			}*/
+			}
 			
 			artifact{
 				classifier = "properties"
 				file 'output/build.properties'
-			}
+			}*/
         }
     }
     repositories {
@@ -132,7 +141,7 @@ repositories {
 }
 dependencies {
     compile 'universalelectricity:Universal-Electricity:+:dev'
-    compile "mcp.mobius.waila:Waila:1.5.2a"
+    //compile "mcp.mobius.waila:Waila:1.5.2a"
 }
 
 

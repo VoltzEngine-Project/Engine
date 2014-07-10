@@ -8,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.{IExternalInventory, IInventoryProvider}
 import resonant.content.spatial.block.SpatialBlock
-import resonant.lib.utility.LanguageUtility
 import resonant.lib.utility.inventory.{ExternalInventory, InventoryUtility}
 import universalelectricity.core.transform.vector.Vector3
 
@@ -200,20 +199,16 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
 
   def dropEntireInventory(block: Block, par6: Int)
   {
-    var i = 0
-
-    inventory.getContainedItems().foreach(dropStack =>
+    if (!world.isRemote)
     {
-      if (dropStack != null)
-      {
-        val var11: Int = dropStack.stackSize
-        dropStack.stackSize -= var11
-        InventoryUtility.dropItemStack(world, center, dropStack)
-        if (dropStack.stackSize <= 0) inventory.setInventorySlotContents(i, null)
-      }
 
-      i += 1
-    })
+      (0 until getSizeInventory) filter (getStackInSlot(_) != null) foreach (
+              i =>
+              {
+                InventoryUtility.dropItemStack(world, center, getStackInSlot(i))
+                setInventorySlotContents(i, null)
+              })
+    }
 
     markDirty()
   }
