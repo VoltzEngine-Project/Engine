@@ -44,11 +44,11 @@ public interface IModule extends IFortronCost
 	public void onPreCalculate(IFieldMatrix projector, Set<Vector3> calculatedField);
 
 	/**
-	 * Called in this module when it is being calculated by the projector.
+	 * Called in this module when after being calculated by the projector.
 	 *
 	 * @return False if to prevent this position from being added to the projection que.
 	 */
-	public void onCalculate(IFieldMatrix projector, Set<Vector3> fieldDefinition);
+	public void onPostCalculate(IFieldMatrix projector, Set<Vector3> fieldDefinition);
 
 	/**
 	 * @param moduleStack
