@@ -62,7 +62,7 @@ trait RecipeHolder
   {
     final val configCategory = "crafting"
 
-    protected def config(config: Configuration, allow: Boolean = true): IRecipe =
+    def config(config: Configuration, allow: Boolean = true): IRecipe =
     {
       val name = recipe.getRecipeOutput.getDisplayName
 

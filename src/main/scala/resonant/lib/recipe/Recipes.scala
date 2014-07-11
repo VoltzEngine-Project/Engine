@@ -33,9 +33,9 @@ object Recipes
     }
   }*/
 
-  def +=(crafting: IRecipe) = GameRegistry.addRecipe(crafting)
+  def +=(crafting: IRecipe) = if (crafting != null) GameRegistry.addRecipe(crafting)
 
-  def +=(in: ItemStack, out: ItemStack, xp: Float) = GameRegistry.addSmelting(in, out, xp)
+  def +=(in: ItemStack, out: ItemStack, xp: Float) = if (in != null) GameRegistry.addSmelting(in, out, xp)
 
   /**
    * Removes a recipe by its IRecipe class.
