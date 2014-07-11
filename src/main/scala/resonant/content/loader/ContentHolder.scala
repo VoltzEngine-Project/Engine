@@ -1,11 +1,11 @@
 package resonant.content.loader
 
-import resonant.lib.modproxy.ILoadable
+import resonant.lib.loadable.ILoadable
 
 /**
  * Extend this trait, and load all content of the mod in the body of the trait. Registration and recipes will be automatically handled.
  *
- * In the mod class, the content holder must be applied to the mod proxy.
+ * In the mod class, the content holder must be applied to the {@link LoadableHandler}
  *
  * @author Calclavia
  */

@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.world.World;
 import resonant.engine.References;
-import resonant.lib.modproxy.ICompatProxy;
+import resonant.lib.loadable.ICompatProxy;
 import resonant.lib.network.ByteBufWrapper;
 import universalelectricity.core.transform.vector.Vector3;
 

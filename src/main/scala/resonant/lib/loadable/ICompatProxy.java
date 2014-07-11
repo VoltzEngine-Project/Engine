@@ -1,4 +1,4 @@
-package resonant.lib.modproxy;
+package resonant.lib.loadable;
 
 /**
  * An interface to apply on mostly integration modules, and to be called on the Main mod boot cycle

@@ -1,7 +1,7 @@
 package resonant.lib.compat.computers
 
 import resonant.lib.compat.Mods
-import resonant.lib.modproxy.ICompatProxy
+import resonant.lib.loadable.ICompatProxy
 
 /**
  * Stub for the moment, in 1.7 will be adjusted to ship no API files at all.

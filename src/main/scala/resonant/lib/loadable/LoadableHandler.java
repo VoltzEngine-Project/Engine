@@ -1,12 +1,12 @@
-package resonant.lib.modproxy;
+package resonant.lib.loadable;
 
 import cpw.mods.fml.common.Loader;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * the Object that handles the submods of the mod
+ * The Object that handles the load calls or submods of the mod
  * <p/>
  * to have the submodules work, You must register them in this class, Adding support for a submodule
  * includes only acquiring its class and throwing it in the registerModules method, this is handled
@@ -15,23 +15,26 @@ import java.util.List;
  * <p/>
  * Replace @Mod annotation with this system and it allows better handling in the end of it
  *
- * @author tgame14
+ * @author tgame14, Calclavia
  * @since 23/02/14
  */
-public class ProxyHandler
+public class LoadableHandler
 {
-	private List<ICompatProxy> compatModulesList;
-	private LoadPhase phase;
+	private Set<ILoadable> loadables = new HashSet();
+	private LoadPhase phase = LoadPhase.PRELAUNCH;
 
-	/**
-	 * initiate in Mod constructor
-	 */
-	public ProxyHandler()
+	public enum LoadPhase
 	{
-		this.compatModulesList = new LinkedList<ICompatProxy>();
-		this.phase = LoadPhase.PRELAUNCH;
+		PRELAUNCH,
+		PREINIT,
+		INIT,
+		POSTINIT,
+		DONE;
 	}
 
+	/**
+	 * Applies a specific ILoadable module to be loaded.
+	 */
 	public void applyModule(Class<?> clazz, boolean load)
 	{
 		if (!load)
@@ -39,36 +42,36 @@ public class ProxyHandler
 			return;
 		}
 
-		ICompatProxy subProxy = null;
 		try
 		{
 			Object module = clazz.newInstance();
 
 			if (module instanceof ICompatProxy)
 			{
-				subProxy = (ICompatProxy) module;
+				ICompatProxy subProxy = (ICompatProxy) module;
+
+				if (Loader.isModLoaded(subProxy.modId()))
+				{
+					loadables.add(subProxy);
+				}
+			}
+			else if (module instanceof ILoadable)
+			{
+				loadables.add((ILoadable) module);
 			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-		if (subProxy != null)
-		{
-			if (Loader.isModLoaded(subProxy.modId()))
-			{
-				compatModulesList.add(subProxy);
-			}
-		}
 	}
 
 	/**
 	 * Call for modules late or as already existing modules, DO NOT CALL FOR REGISTERED Proxies!
 	 */
-	public void applyModule(ICompatProxy module)
+	public void applyModule(ILoadable module)
 	{
-
-		compatModulesList.add(module);
+		loadables.add(module);
 
 		switch (phase)
 		{
@@ -91,12 +94,11 @@ public class ProxyHandler
 	public void preInit()
 	{
 		phase = LoadPhase.PREINIT;
-		for (ICompatProxy proxy : compatModulesList)
+
+		for (ILoadable proxy : loadables)
 		{
 			proxy.preInit();
 		}
-
-		System.out.println("subProxy list: " + compatModulesList);
 
 	}
 
@@ -104,7 +106,7 @@ public class ProxyHandler
 	{
 		phase = LoadPhase.INIT;
 
-		for (ICompatProxy proxy : compatModulesList)
+		for (ILoadable proxy : loadables)
 		{
 			proxy.init();
 		}
@@ -113,7 +115,8 @@ public class ProxyHandler
 	public void postInit()
 	{
 		phase = LoadPhase.POSTINIT;
-		for (ICompatProxy proxy : compatModulesList)
+
+		for (ILoadable proxy : loadables)
 		{
 			proxy.postInit();
 		}

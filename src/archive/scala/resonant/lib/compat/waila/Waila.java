@@ -2,7 +2,7 @@ package resonant.lib.compat.waila;
 
 import cpw.mods.fml.common.event.FMLInterModComms;
 import resonant.lib.compat.Mods;
-import resonant.lib.modproxy.ICompatProxy;
+import resonant.lib.loadable.ICompatProxy;
 
 /**
  * @author tgame14
