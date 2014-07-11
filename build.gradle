@@ -71,7 +71,7 @@ jar {
 task apiZip(type: Zip) {
     classifier = 'api'
     from sourceSets*.allSource
-    include 'calclavia/api/**'
+    include 'resonant/api/**'
     destinationDir = file 'output'
 }
 
