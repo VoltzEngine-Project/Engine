@@ -28,8 +28,8 @@ buildProps.withReader {
 }
 
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
-group = System.getenv("TEAMCITY_PROJECT_NAME").toLowerCase()
-archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")
+group = System.getenv("TEAMCITY_PROJECT_NAME").replaceAll(' ','-').toLowerCase()
+archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME").replaceAll(' ','-')
 
 minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
