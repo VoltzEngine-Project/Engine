@@ -14,7 +14,7 @@ trait TRotatable extends SpatialBlock with IRotatable
 
   override def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata)
 
-  override def setDirection(direction: ForgeDirection) =world.setBlockMetadataWithNotify(x, y, z, direction.ordinal, 3)
+  override def setDirection(direction: ForgeDirection) = world.setBlockMetadataWithNotify(x, y, z, direction.ordinal, 3)
 
   def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
 

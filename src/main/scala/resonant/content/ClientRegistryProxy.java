@@ -2,10 +2,8 @@ package resonant.content;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import resonant.content.wrapper.RenderTileDummy;
-import resonant.engine.References;
 
 public class ClientRegistryProxy extends CommonRegistryProxy
 {

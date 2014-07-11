@@ -6,8 +6,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import org.lwjgl.input.Keyboard
 import resonant.lib.render.EnumColor
-import resonant.lib.utility.{TooltipUtility, LanguageUtility}
-import resonant.lib.wrapper.WrapList
+import resonant.lib.utility.{LanguageUtility, TooltipUtility}
 import resonant.lib.wrapper.WrapList._
 
 /**

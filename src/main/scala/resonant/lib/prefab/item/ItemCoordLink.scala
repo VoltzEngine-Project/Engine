@@ -11,8 +11,9 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import resonant.content.prefab.itemblock.ItemTooltip
-import universalelectricity.core.transform.vector.VectorWorld
 import resonant.lib.wrapper.WrapList._
+import universalelectricity.core.transform.vector.VectorWorld
+
 /**
  * @author Calclavia
  */

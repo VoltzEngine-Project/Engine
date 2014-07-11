@@ -6,7 +6,6 @@ import net.minecraft.block.Block
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.crafting._
 import net.minecraft.item.{Item, ItemStack}
-import net.minecraft.util.StatCollector
 import net.minecraftforge.oredict.{OreDictionary, ShapedOreRecipe, ShapelessOreRecipe}
 
 import scala.collection.convert.WrapAsScala._
@@ -126,9 +125,9 @@ object TooltipUtility
                 }
               }
               val scaled = deflate(ingredients.map
-              {
-                case (ingredient, count) => (ingredient.copy(), count / output)
-              }).toArray.sortBy(_._1.getUnlocalizedName)
+                                   {
+                                     case (ingredient, count) => (ingredient.copy(), count / output)
+                                   }).toArray.sortBy(_._1.getUnlocalizedName)
               cache += stack.copy() -> scaled
               scaled
             }
@@ -169,8 +168,8 @@ object TooltipUtility
    */
   private def fuzzyEquals(stack1: ItemStack, stack2: ItemStack) =
     stack1.getItem == stack2.getItem &&
-            (stack1.getItemDamage == stack2.getItemDamage ||
-                    stack1.getItemDamage == OreDictionary.WILDCARD_VALUE ||
-                    stack2.getItemDamage == OreDictionary.WILDCARD_VALUE ||
-                    stack1.getItem.isDamageable) && ItemStack.areItemStackTagsEqual(stack1, stack2)
+    (stack1.getItemDamage == stack2.getItemDamage ||
+     stack1.getItemDamage == OreDictionary.WILDCARD_VALUE ||
+     stack2.getItemDamage == OreDictionary.WILDCARD_VALUE ||
+     stack1.getItem.isDamageable) && ItemStack.areItemStackTagsEqual(stack1, stack2)
 }

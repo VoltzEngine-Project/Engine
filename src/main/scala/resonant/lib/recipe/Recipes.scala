@@ -1,6 +1,5 @@
 package resonant.lib.recipe
 
-import java.util
 import java.util.{List => JList, Set => JSet}
 
 import cpw.mods.fml.common.registry.GameRegistry

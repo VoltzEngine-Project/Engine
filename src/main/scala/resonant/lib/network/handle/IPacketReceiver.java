@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * Deprecated in favor of TPacketHandler (can also be used in Java)
+ *
  * @author Calclavia
  */
 @Deprecated

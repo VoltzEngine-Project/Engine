@@ -23,9 +23,8 @@ import java.util.EnumMap;
  */
 public class PacketManager implements ICompatProxy
 {
-	protected EnumMap<Side, FMLEmbeddedChannel> channelEnumMap;
-
 	public final String channel;
+	protected EnumMap<Side, FMLEmbeddedChannel> channelEnumMap;
 
 	public PacketManager(String channel)
 	{

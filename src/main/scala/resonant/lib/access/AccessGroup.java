@@ -12,7 +12,7 @@ import java.util.Set;
  * Permission system group used to track players with the access they have. Used
  * with several different systems include sentry gun AI targeting, and inventory
  * locking.
- * 
+ *
  * @author DarkGuardsman
  */
 public class AccessGroup extends Group<AccessUser> implements ISaveObj, Cloneable
@@ -30,9 +30,8 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj, Cloneabl
 
 	/**
 	 * Gets the AccessUser object that goes with the user name
-	 * 
-	 * @param username
-	 * - user name of the EntityPlayer
+	 *
+	 * @param username - user name of the EntityPlayer
 	 * @return the exact user, or a fake user to prevent NPE
 	 */
 	public AccessUser getMember(String username)
@@ -215,7 +214,9 @@ public class AccessGroup extends Group<AccessUser> implements ISaveObj, Cloneabl
 	{
 		AccessGroup group = new AccessGroup(this.getName());
 		for (String node : getNodes())
+		{
 			group.getNodes().add(node);
+		}
 		return group;
 	}
 }

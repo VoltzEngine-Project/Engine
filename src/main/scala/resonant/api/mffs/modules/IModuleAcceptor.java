@@ -1,21 +1,21 @@
 package resonant.api.mffs.modules;
 
-import java.util.Set;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.Set;
 
 public interface IModuleAcceptor
 {
 	/**
 	 * Gets the ItemStack of a specific module type. This ItemStack is constructed and NOT a reference to the actual stacks within the block.
 	 */
-    public ItemStack getModule(IModule module);
+	public ItemStack getModule(IModule module);
 
-    public int getModuleCount(IModule module, int... slots);
+	public int getModuleCount(IModule module, int... slots);
 
-    public Set<ItemStack> getModuleStacks(int... slots);
+	public Set<ItemStack> getModuleStacks(int... slots);
 
-    public Set<IModule> getModules(int... slots);
+	public Set<IModule> getModules(int... slots);
 
-    public int getFortronCost();
+	public int getFortronCost();
 }

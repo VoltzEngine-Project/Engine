@@ -13,8 +13,8 @@ import resonant.content.spatial.block.SpatialBlock;
 import resonant.content.spatial.block.SpatialTile;
 import resonant.engine.ResonantEngine;
 import resonant.lib.multiblock.reference.IMultiBlock;
-import resonant.lib.network.handle.IPacketReceiver;
 import resonant.lib.network.discriminator.PacketTile;
+import resonant.lib.network.handle.IPacketReceiver;
 import universalelectricity.core.transform.vector.Vector3;
 
 /**

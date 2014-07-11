@@ -23,15 +23,6 @@ public class LoadableHandler
 	private Set<ILoadable> loadables = new HashSet();
 	private LoadPhase phase = LoadPhase.PRELAUNCH;
 
-	public enum LoadPhase
-	{
-		PRELAUNCH,
-		PREINIT,
-		INIT,
-		POSTINIT,
-		DONE;
-	}
-
 	/**
 	 * Applies a specific ILoadable module to be loaded.
 	 */
@@ -122,5 +113,14 @@ public class LoadableHandler
 		}
 
 		phase = LoadPhase.DONE;
+	}
+
+	public enum LoadPhase
+	{
+		PRELAUNCH,
+		PREINIT,
+		INIT,
+		POSTINIT,
+		DONE;
 	}
 }

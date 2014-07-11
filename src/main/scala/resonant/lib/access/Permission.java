@@ -30,7 +30,7 @@ public class Permission extends TreeNode<Permission>
 				return child;
 			}
 		}
-		
+
 		return null;
 	}
 

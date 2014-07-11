@@ -60,18 +60,13 @@ import java.util.Arrays;
 public class ResonantEngine
 {
 	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
-
+	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
 	@SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
 	public static CommonProxy proxy;
-
 	@Mod.Metadata(References.ID)
 	public static ModMetadata metadata;
-
 	@Instance(References.NAME)
 	public static ResonantEngine instance;
-
-	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
-
 	/**
 	 * Blocks
 	 */

@@ -121,7 +121,7 @@ public class AccessUser implements ISaveObj
 		}
 		return this.extraData;
 	}
-	
+
 	public String getName()
 	{
 		return this.username;

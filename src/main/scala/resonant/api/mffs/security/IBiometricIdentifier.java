@@ -1,7 +1,6 @@
 package resonant.api.mffs.security;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.item.ItemStack;
 import resonant.api.blocks.IBlockFrequency;
 import resonant.lib.access.Permission;
 

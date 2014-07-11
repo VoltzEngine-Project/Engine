@@ -10,7 +10,7 @@ import java.util.Map.Entry;
  * class to allow other things to access it. This also include applying those permissions to the
  * default
  * groups.
- * 
+ *
  * @author DarkGuardsman
  */
 public class AccessUtility
@@ -62,10 +62,10 @@ public class AccessUtility
 	/**
 	 * Creates a default group for all machines to use. Only add a group if there is no option to
 	 * really manage the group's settings
-	 * 
-	 * @param name - group name
+	 *
+	 * @param name        - group name
 	 * @param prefabGroup - group this should extend. Make sure it exists.
-	 * @param nodes - all commands or custom permissions
+	 * @param nodes       - all commands or custom permissions
 	 */
 	public static void createDefaultGroup(String name, String prefabGroup, List<String> nodes)
 	{
@@ -79,10 +79,10 @@ public class AccessUtility
 	/**
 	 * Creates a default group for all machines to use. Only add a group if there is no option to
 	 * really manage the group's settings
-	 * 
-	 * @param name - group name
+	 *
+	 * @param name        - group name
 	 * @param prefabGroup - group this should extend. Make sure it exists.
-	 * @param nodes - all commands or custom permissions
+	 * @param nodes       - all commands or custom permissions
 	 */
 	public static void createDefaultGroup(String name, String prefabGroup, String... nodes)
 	{
@@ -110,7 +110,9 @@ public class AccessUtility
 		{
 			List<String> perms = groupDefaultNodes.get(group);
 			if (perms != null && !perms.contains(perm.id))
+			{
 				perms.add(perm.id);
+			}
 		}
 	}
 
