@@ -24,7 +24,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   setBlockName(modPrefix + dummyTile.name)
   setBlockTextureName(modPrefix + dummyTile.textureName)
 
-  if (dummyTile.creativeTab != null)
+  if (dummyTile.isCreativeTabSet)
   {
     setCreativeTab(dummyTile.creativeTab)
   }

@@ -75,9 +75,22 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
    */
   var itemBlock: Class[_ <: ItemBlock] = classOf[ItemBlockTooltip]
 
-  var creativeTab: CreativeTabs = null
+  var isCreativeTabSet = false
 
-  def creativeTab(tab: CreativeTabs): Unit = creativeTab = tab
+  private var _creativeTab: CreativeTabs = null
+
+  def creativeTab = _creativeTab
+
+  def creativeTab(value: CreativeTabs)
+  {
+    creativeTab = value
+  }
+
+  def creativeTab_=(value: CreativeTabs): Unit =
+  {
+    _creativeTab = value
+    isCreativeTabSet = true
+  }
 
   var bounds: Cuboid = Cuboid.full
 

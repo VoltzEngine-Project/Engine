@@ -81,8 +81,11 @@ public class ModManager
 
 	public BlockDummy newBlock(SpatialBlock spatial)
 	{
-		final String name = spatial.name();
+		return newBlock(spatial.name(), spatial);
+	}
 
+	public BlockDummy newBlock(String name, SpatialBlock spatial)
+	{
 		BlockDummy block = new BlockDummy(modPrefix, defaultTab, spatial);
 		spatial.setBlock(block);
 
@@ -124,7 +127,6 @@ public class ModManager
 	 */
 	public <C extends Item> C newItem(String name, Class<C> clazz, Object... args)
 	{
-
 		try
 		{
 			Item item;

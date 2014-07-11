@@ -1,10 +1,10 @@
 package resonant.api.explosion;
 
 import cpw.mods.fml.common.eventhandler.Cancelable;
+import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.eventhandler.Event;
 
 /**
  * Use ForgeSubscribe to subscribe to this event. This event is called every single time when an

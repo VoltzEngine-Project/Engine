@@ -16,14 +16,20 @@ trait ContentLoader
   def preInit() =
   {
     self.getClass.getDeclaredFields
-      .map(m => {m.setAccessible(true); m.get(self) })
-      .foreach
-      {
-        case item: Item =>
-          manager.newItem(item)
-        case block: SpatialBlock =>
-          manager.newBlock(block)
-        case _ =>
-      }
+            .foreach(
+              f =>
+              {
+                f.setAccessible(true)
+                val name = if (f.getAnnotation(classOf[ImplicitContentName]) != null) f.getName else null
+
+                f.get(self) match
+                {
+                  case item: Item =>
+                    if (name != null) manager.newItem(name, item) else manager.newItem(item)
+                  case block: SpatialBlock =>
+                    if (name != null) manager.newBlock(name, block) else manager.newBlock(block)
+                  case _ =>
+                }
+              })
   }
 }
