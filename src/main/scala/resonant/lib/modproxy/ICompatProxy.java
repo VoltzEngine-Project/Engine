@@ -6,13 +6,7 @@ package resonant.lib.modproxy;
  * @author tgame14
  * @since 23/02/14
  */
-public interface ICompatProxy
+public interface ICompatProxy extends ILoadable
 {
-	public void preInit();
-
-	public void init();
-
-	public void postInit();
-
 	public String modId();
 }

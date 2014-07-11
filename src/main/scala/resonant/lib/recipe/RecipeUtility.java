@@ -11,12 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This class is used to replace recipes that are already added in the existing recipe pool for
- * crafting and smelting. All recipe functions take account of the Forge Ore Dictionary. It also
- * includes some recipe helper functions to shorten some of your function calls.
- *
- * @author Calclavia
+ * Alias class of Recipes
  */
+@Deprecated
 public class RecipeUtility
 {
 	public static final String CATEGORY = "crafting";

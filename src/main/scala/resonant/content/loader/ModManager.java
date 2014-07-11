@@ -1,4 +1,4 @@
-package resonant.content;
+package resonant.content.loader;
 
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import resonant.content.CommonRegistryProxy;
 import resonant.content.prefab.scala.render.ISimpleItemRenderer;
 import resonant.content.spatial.block.SpatialBlock;
 import resonant.content.wrapper.BlockDummy;
@@ -70,37 +71,42 @@ public class ModManager
 				spatial = spatialClass.newInstance();
 			}
 
-			final String name = spatial.name();
-
-			BlockDummy block = new BlockDummy(modPrefix, defaultTab, spatial);
-			spatial.setBlock(block);
-
-			blocks.put(block, name);
-			GameRegistry.registerBlock(block, spatial.itemBlock(), name);
-
-			spatial.onInstantiate();
-
-			if (spatial instanceof ISimpleItemRenderer)
-			{
-				ItemRenderHandler.register(new ItemStack(block).getItem(), (ISimpleItemRenderer) spatial);
-			}
-
-			if (spatial.tile() != null)
-			{
-				proxy.registerTileEntity(name, spatial.tile().getClass());
-
-				if (!spatial.normalRender())
-				{
-					proxy.registerDummyRenderer(spatial.tile().getClass());
-				}
-			}
-
-			return block;
+			return newBlock(spatial);
 		}
 		catch (Exception e)
 		{
 			throw new RuntimeException("Block [" + spatialClass.getSimpleName() + "] failed to be created:", e);
 		}
+	}
+
+	public BlockDummy newBlock(SpatialBlock spatial)
+	{
+		final String name = spatial.name();
+
+		BlockDummy block = new BlockDummy(modPrefix, defaultTab, spatial);
+		spatial.setBlock(block);
+
+		blocks.put(block, name);
+		GameRegistry.registerBlock(block, spatial.itemBlock(), name);
+
+		spatial.onInstantiate();
+
+		if (spatial instanceof ISimpleItemRenderer)
+		{
+			ItemRenderHandler.register(new ItemStack(block).getItem(), (ISimpleItemRenderer) spatial);
+		}
+
+		if (spatial.tile() != null)
+		{
+			proxy.registerTileEntity(name, spatial.tile().getClass());
+
+			if (!spatial.normalRender())
+			{
+				proxy.registerDummyRenderer(spatial.tile().getClass());
+			}
+		}
+
+		return block;
 	}
 
 	public <C extends Item> C newItem(Class<C> clazz, Object... args)
@@ -139,33 +145,43 @@ public class ModManager
 				item = clazz.getConstructor().newInstance();
 			}
 
-			if (item != null)
-			{
-				if (modPrefix != null)
-				{
-					item.setUnlocalizedName(modPrefix + name);
-
-					if (ReflectionHelper.getPrivateValue(Item.class, item, "iconString", "field_111218_cA") == null)
-					{
-						item.setTextureName(modPrefix + name);
-					}
-				}
-
-				if (defaultTab != null)
-				{
-					item.setCreativeTab(defaultTab);
-				}
-
-				items.put(item, name);
-				GameRegistry.registerItem(item, name);
-			}
-
-			return (C) item;
+			return (C) newItem(name, item);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			throw new RuntimeException("Item [" + name + "] failed to be created: " + e.getLocalizedMessage(), e.fillInStackTrace());
 		}
+	}
+
+	public Item newItem(Item item)
+	{
+		return newItem(LanguageUtility.decapitalizeFirst(item.getClass().getSimpleName().replace("Item", "")), item);
+	}
+
+	public Item newItem(String name, Item item)
+	{
+		if (item != null)
+		{
+			if (modPrefix != null)
+			{
+				item.setUnlocalizedName(modPrefix + name);
+
+				if (ReflectionHelper.getPrivateValue(Item.class, item, "iconString", "field_111218_cA") == null)
+				{
+					item.setTextureName(modPrefix + name);
+				}
+			}
+
+			if (defaultTab != null)
+			{
+				item.setCreativeTab(defaultTab);
+			}
+
+			items.put(item, name);
+			GameRegistry.registerItem(item, name);
+		}
+
+		return item;
 	}
 }

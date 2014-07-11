@@ -23,7 +23,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import resonant.api.IBoilHandler;
 import resonant.api.mffs.fortron.FrequencyGridRegistry;
-import resonant.content.ModManager;
+import resonant.content.loader.ModManager;
 import resonant.content.wrapper.BlockDummy;
 import resonant.engine.content.debug.TileCreativeBuilder;
 import resonant.engine.content.debug.TileInfiniteEnergy;
@@ -37,7 +37,7 @@ import resonant.engine.grid.thermal.EventThermal.EventThermalUpdate;
 import resonant.engine.grid.thermal.ThermalGrid;
 import resonant.lib.config.ConfigHandler;
 import resonant.lib.config.ConfigScanner;
-import resonant.lib.modproxy.ProxyHandler;
+import resonant.lib.modproxy.LoadableHandler;
 import resonant.lib.multiblock.synthetic.SyntheticMultiblock;
 import resonant.lib.network.netty.PacketManager;
 import resonant.lib.utility.PlayerInteractionHandler;
@@ -59,7 +59,7 @@ import java.util.Arrays;
 @Mod(modid = References.ID, name = References.NAME, version = References.VERSION, dependencies = "required-after:UniversalElectricity")
 public class ResonantEngine
 {
-	public static final ModManager contentRegistry = new ModManager(References.CONFIGURATION, References.NAME).setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
+	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 
 	@SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
 	public static CommonProxy proxy;
@@ -85,7 +85,7 @@ public class ResonantEngine
 
 	private static ThermalGrid thermalGrid = new ThermalGrid();
 	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
-	private ProxyHandler modProxy = new ProxyHandler();
+	private LoadableHandler modProxy = new LoadableHandler();
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt)
