@@ -11,5 +11,13 @@ import resonant.lib.loadable.ILoadable
  */
 trait ContentHolder extends ContentLoader with RecipeHolder with ILoadable
 {
+  def init()
+  {
 
+  }
+
+  def postInit()
+  {
+
+  }
 }

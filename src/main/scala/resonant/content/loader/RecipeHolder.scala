@@ -10,20 +10,10 @@ import resonant.lib.recipe.Recipes
 /**
  * Recipe management syntax enhancements.
  *
- * The recipes generated within the body of the object will not be initiated until a post-init call.
- *
  * @author anti344, Calclavia
  */
-trait RecipeHolder extends DelayedInit
+trait RecipeHolder
 {
-  private var body: () => Unit = () =>
-  {}
-
-  override def delayedInit(x: => Unit) =
-    body = () => x
-
-  def postInit() = body()
-
   val recipes = Recipes
 
   protected def shaped(output: ItemStack, input: Any*): IRecipe =
