@@ -7,12 +7,19 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import resonant.engine.References;
 import resonant.lib.loadable.ICompatProxy;
 import resonant.lib.network.ByteBufWrapper;
+import resonant.lib.network.discriminator.PacketEntity;
+import resonant.lib.network.discriminator.PacketTile;
+import resonant.lib.network.discriminator.PacketType;
+import resonant.lib.network.handle.TPacketIDSender;
+import resonant.lib.network.handle.TPacketSender;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.EnumMap;
@@ -35,6 +42,48 @@ public class PacketManager implements ICompatProxy
 	public static void writeData(ByteBuf data, Object... sendData)
 	{
 		new ByteBufWrapper.ByteBufWrapper(data).$less$less$less(sendData);
+	}
+
+	/**
+	 * Requests a packet for this sender automatically
+	 */
+	public static PacketType request(TPacketSender sender)
+	{
+		PacketType packet = getPacketFor(sender);
+
+		if (packet != null)
+		{
+			sender.write(packet.data());
+		}
+
+		return packet;
+	}
+
+	public static PacketType request(TPacketIDSender sender, int id)
+	{
+		PacketType packet = getPacketFor(sender);
+
+		if (packet != null)
+		{
+			sender.write(packet.data(), id);
+		}
+
+		return packet;
+	}
+
+	public static PacketType getPacketFor(Object obj)
+	{
+		if (obj instanceof TileEntity)
+		{
+			return new PacketTile((TileEntity) obj);
+		}
+
+		if (obj instanceof Entity)
+		{
+			return new PacketEntity((Entity) obj);
+		}
+
+		return null;
 	}
 
 	public Packet toMCPacket(AbstractPacket packet)

@@ -16,7 +16,6 @@ import universalelectricity.core.transform.vector.{Vector2, Vector3}
  */
 object ByteBufWrapper
 {
-
   implicit class ByteBufWrapper(buf: ByteBuf)
   {
     def readTank() = new FluidTank(buf.readInt()).readFromNBT(readTag())
@@ -149,5 +148,4 @@ object ByteBufWrapper
       buf
     }
   }
-
 }
