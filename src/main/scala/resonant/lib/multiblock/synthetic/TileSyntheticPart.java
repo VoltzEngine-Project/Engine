@@ -14,7 +14,8 @@ import resonant.content.spatial.block.SpatialTile;
 import resonant.engine.ResonantEngine;
 import resonant.lib.multiblock.reference.IMultiBlock;
 import resonant.lib.network.discriminator.PacketTile;
-import resonant.lib.network.handle.IPacketReceiver;
+import resonant.lib.network.discriminator.PacketType;
+import resonant.lib.network.handle.TPacketReceiver;
 import universalelectricity.core.transform.vector.Vector3;
 
 /**
@@ -22,7 +23,7 @@ import universalelectricity.core.transform.vector.Vector3;
  *
  * @author Calclavia
  */
-public class TileSyntheticPart extends SpatialTile implements IPacketReceiver
+public class TileSyntheticPart extends SpatialTile implements TPacketReceiver
 {
 	// The the position of the main block. Relative to this block's position.
 	private Vector3 mainBlockPosition;
@@ -134,7 +135,7 @@ public class TileSyntheticPart extends SpatialTile implements IPacketReceiver
 	}
 
 	@Override
-	public void onReceivePacket(ByteBuf data, EntityPlayer player, Object... obj)
+	public void read(ByteBuf data, EntityPlayer player, PacketType packet)
 	{
 		try
 		{

@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import resonant.lib.network.handle.IPacketReceiver;
+import resonant.lib.network.handle.TPacketReceiver;
 
 /**
  * @author tgame14
@@ -39,9 +39,10 @@ public class PacketEntity extends PacketType
 	public void handleClientSide(EntityPlayer player)
 	{
 		Entity entity = player.getEntityWorld().getEntityByID(this.entityId);
-		if (entity instanceof IPacketReceiver)
+
+		if (entity instanceof TPacketReceiver)
 		{
-			((IPacketReceiver) entity).onReceivePacket(data(), player);
+			((TPacketReceiver) entity).read(data(), player, this);
 		}
 	}
 
@@ -49,9 +50,10 @@ public class PacketEntity extends PacketType
 	public void handleServerSide(EntityPlayer player)
 	{
 		Entity entity = player.getEntityWorld().getEntityByID(this.entityId);
-		if (entity instanceof IPacketReceiver)
+
+		if (entity instanceof TPacketReceiver)
 		{
-			((IPacketReceiver) entity).onReceivePacket(data(), player);
+			((TPacketReceiver) entity).read(data(), player, this);
 		}
 	}
 }

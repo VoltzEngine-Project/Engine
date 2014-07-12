@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import resonant.lib.network.handle.IPacketReceiver;
+import resonant.lib.network.handle.TPacketReceiver;
 
 /**
  * @author tgame14
@@ -49,9 +49,9 @@ public class PacketPlayerItem extends PacketType
 	{
 		ItemStack stack = player.inventory.getStackInSlot(this.slotId);
 
-		if (stack != null && stack.getItem() instanceof IPacketReceiver)
+		if (stack != null && stack.getItem() instanceof TPacketReceiver)
 		{
-			((IPacketReceiver) stack.getItem()).onReceivePacket(this.data(), player, stack);
+			((TPacketReceiver) stack.getItem()).read(data(), player, this);
 		}
 	}
 
@@ -60,9 +60,9 @@ public class PacketPlayerItem extends PacketType
 	{
 		ItemStack stack = player.inventory.getStackInSlot(this.slotId);
 
-		if (stack != null && stack.getItem() instanceof IPacketReceiver)
+		if (stack != null && stack.getItem() instanceof TPacketReceiver)
 		{
-			((IPacketReceiver) stack.getItem()).onReceivePacket(this.data(), player, stack);
+			((TPacketReceiver) stack.getItem()).read(data(), player, this);
 		}
 	}
 }

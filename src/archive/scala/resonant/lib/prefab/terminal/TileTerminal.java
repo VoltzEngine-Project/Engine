@@ -9,7 +9,6 @@ import net.minecraft.network.packet.Packet;
 import resonant.lib.network.IPlayerUsing;
 import resonant.api.IScroll;
 import resonant.api.ITerminal;
-import resonant.lib.network.handle.IPacketReceiverWithID;
 import resonant.lib.prefab.tile.TileAdvanced;
 
 import java.util.ArrayList;

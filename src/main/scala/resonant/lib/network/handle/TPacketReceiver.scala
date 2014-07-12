@@ -2,19 +2,19 @@ package resonant.lib.network.handle
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
+import resonant.lib.network.discriminator.PacketType
 
 /**
  *
  * Implement this if an object can receive a packet.
  */
-trait TPacketReceiver extends IPacketReceiver
+trait TPacketReceiver
 {
-  def read(buf: ByteBuf, player: EntityPlayer, extra: AnyRef*)
-
   /**
-   * @param data   - data encoded into the packet
-   * @param player - player that sent or is receiving the packet
-   * @param extra  - Extra data provided. E.g: An item would receive an ItemStack.
+   * Reads a packet
+   * @param buf   - data encoded into the packet
+   * @param player - player that is receiving the packet
+   * @param packet - The packet instance that was sending this packet.
    */
-  final def onReceivePacket(data: ByteBuf, player: EntityPlayer, extra: AnyRef*) = read(data, player, extra)
+  def read(buf: ByteBuf, player: EntityPlayer, packet: PacketType)
 }

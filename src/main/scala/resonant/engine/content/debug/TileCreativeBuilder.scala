@@ -12,7 +12,8 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonant.content.spatial.block.SpatialBlock
 import resonant.engine.ResonantEngine
 import resonant.lib.content.prefab.TRotatable
-import resonant.lib.network.handle.IPacketReceiver
+import resonant.lib.network.discriminator.{PacketTile, PacketType}
+import resonant.lib.network.handle.TPacketReceiver
 import resonant.lib.schematic.Schematic
 import universalelectricity.core.transform.vector.Vector3
 
@@ -32,7 +33,7 @@ object TileCreativeBuilder
   final val registry: List[Schematic] = new ArrayList[Schematic]
 }
 
-class TileCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable with IPacketReceiver
+class TileCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable with TPacketReceiver
 {
   creativeTab = CreativeTabs.tabTools
   rotationMask = Integer.parseInt("111111", 2).toByte
@@ -51,7 +52,7 @@ class TileCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable wi
     return false
   }
 
-  override def onReceivePacket(data: ByteBuf, player: EntityPlayer, extra: AnyRef*)
+  override def read(data: ByteBuf, player: EntityPlayer, packet: PacketType)
   {
     val world: World = player.worldObj
     if (!world.isRemote)
@@ -60,9 +61,11 @@ class TileCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable wi
       {
         try
         {
-          val schematicID: Int = data.readInt
-          val size: Int = data.readInt
-          val translation: Vector3 = new Vector3(extra(0).asInstanceOf[Double], extra(1).asInstanceOf[Double], extra(2).asInstanceOf[Double])
+          val schematicID = data.readInt
+          val size = data.readInt
+          val packetTile = packet.asInstanceOf[PacketTile]
+          val translation = new Vector3(packetTile.x, packetTile.y, packetTile.z)
+
           if (size > 0)
           {
             val map = TileCreativeBuilder.registry.get(schematicID).getStructure(ForgeDirection.getOrientation(translation.getBlockMetadata(world)), size)

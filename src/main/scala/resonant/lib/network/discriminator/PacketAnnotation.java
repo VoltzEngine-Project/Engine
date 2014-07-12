@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import resonant.engine.References;
 import resonant.engine.ResonantEngine;
-import resonant.lib.network.handle.IPacketReceiver;
+import resonant.lib.network.handle.TPacketReceiver;
 
 /**
  * @author tgame14
@@ -86,9 +86,9 @@ public class PacketAnnotation extends PacketType
 				{
 					PacketAnnotationManager.INSTANCE.packetSetIDMap.get(this.classID).get(this.packetSetID).read(tile, data().slice());
 
-					if (tile instanceof IPacketReceiver)
+					if (tile instanceof TPacketReceiver)
 					{
-						((IPacketReceiver) tile).onReceivePacket(data(), player, x, y, z);
+						((TPacketReceiver) tile).read(data(), player, this);
 					}
 				}
 				else
@@ -121,9 +121,9 @@ public class PacketAnnotation extends PacketType
 				{
 					PacketAnnotationManager.INSTANCE.packetSetIDMap.get(this.classID).get(this.packetSetID).read(tile, data().slice());
 
-					if (tile instanceof IPacketReceiver)
+					if (tile instanceof TPacketReceiver)
 					{
-						((IPacketReceiver) tile).onReceivePacket(data(), player, x, y, z);
+						((TPacketReceiver) tile).read(data(), player, this);
 					}
 				}
 				else
