@@ -2,7 +2,7 @@ package resonant.api.mffs.security;
 
 import com.mojang.authlib.GameProfile;
 import resonant.api.blocks.IBlockFrequency;
-import resonant.lib.access.Permission;
+import resonant.lib.access.java.Permission;
 
 /**
  * Applied to Biometric Identifiers (extends TileEntity).

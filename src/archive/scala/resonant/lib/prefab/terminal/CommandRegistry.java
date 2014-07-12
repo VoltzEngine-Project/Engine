@@ -3,7 +3,7 @@ package resonant.lib.prefab.terminal;
 import net.minecraft.entity.player.EntityPlayer;
 import resonant.api.ITerminal;
 import resonant.api.ITerminalCommand;
-import resonant.lib.access.AccessUtility;
+import resonant.lib.access.java.AccessUtility;
 
 import java.util.ArrayList;
 import java.util.List;

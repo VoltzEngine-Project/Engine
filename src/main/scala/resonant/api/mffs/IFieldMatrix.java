@@ -6,7 +6,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.mffs.modules.IModule;
 import resonant.api.mffs.modules.IModuleAcceptor;
 import resonant.api.mffs.modules.IProjectorMode;
-import resonant.lib.access.Permission;
+import resonant.lib.access.java.Permission;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.Set;

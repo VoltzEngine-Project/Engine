@@ -2,13 +2,14 @@ package resonant.api.mffs.card;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
-import resonant.lib.access.Permission;
+import resonant.lib.access.java.Permission;
 
 /**
  * Applied to Item ID cards.
  *
  * @author Calclavia
  */
+@Deprecated
 public interface ICardIdentification extends ICard
 {
 	public boolean hasPermission(ItemStack itemStack, Permission... permission);
@@ -17,7 +18,7 @@ public interface ICardIdentification extends ICard
 
 	public boolean removePermission(ItemStack itemStack, Permission... permission);
 
-	public GameProfile getProfile(ItemStack itemStack);
+	public GameProfile getUsername(ItemStack itemStack);
 
-	public void setProfile(ItemStack itemStack, GameProfile profile);
+	public void setUsername(ItemStack itemStack, String profile);
 }

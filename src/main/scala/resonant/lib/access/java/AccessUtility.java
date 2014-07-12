@@ -1,4 +1,4 @@
-package resonant.lib.access;
+package resonant.lib.access.java;
 
 import java.util.*;
 import java.util.Map.Entry;

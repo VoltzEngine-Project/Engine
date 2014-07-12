@@ -7,7 +7,7 @@ import resonant.api.mffs.IActivatable;
 import resonant.api.mffs.IBiometricIdentifierLink;
 import resonant.api.mffs.fortron.IFortronFrequency;
 import resonant.api.mffs.modules.IModuleAcceptor;
-import resonant.lib.access.Permission;
+import resonant.lib.access.java.Permission;
 
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-package resonant.lib.access;
+package resonant.lib.access.java;
 
 /**
  * Applied to tileEntities that contain an access profile that describes how the tile interacts with

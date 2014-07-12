@@ -1,4 +1,4 @@
-package resonant.lib.access;
+package resonant.lib.access.java;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

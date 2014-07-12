@@ -22,6 +22,19 @@ public class TreeNode<S extends TreeNode>
 		return perm;
 	}
 
+	public Set<S> getAllChildren()
+	{
+		Set<S> perms = new HashSet();
+
+		for (S child : children)
+		{
+			perms.add(child);
+			perms.addAll(child.getAllChildren());
+		}
+
+		return perms;
+	}
+
 	/**
 	 * Checks recursively to see if any of the children permission can match the given permission.
 	 *
