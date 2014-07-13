@@ -80,18 +80,27 @@ public class Permissions
 	 */
 	public static Permission find(String name)
 	{
-		String[] permNames = name.split(".");
+		String[] permNames = name.split("\\.");
 
 		Permission currentPerm = root;
 
-		for (int i = 1; i < permNames.length; i++)
+		if (permNames.length > 0)
 		{
-			currentPerm = currentPerm.find(permNames[i]);
-
-			if (currentPerm == null)
+			for (int i = 1; i < permNames.length; i++)
 			{
-				break;
+				Permission checkPerm = currentPerm.find(permNames[i]);
+
+				if (checkPerm != null)
+				{
+					currentPerm = checkPerm;
+				}
+				else
+				{
+					break;
+				}
 			}
+
+			return currentPerm;
 		}
 
 		return null;

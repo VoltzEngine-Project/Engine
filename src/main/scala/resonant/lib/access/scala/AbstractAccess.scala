@@ -13,7 +13,7 @@ abstract class AbstractAccess
 
   def fromNBT(nbt: NBTTagCompound)
   {
-    val permList = nbt.getTagList("permissions", 10)
+    val permList = nbt.getTagList("permissions", 8)
     permissions = ((0 until permList.tagCount()) map (i => Permissions.find(permList.getStringTagAt(i)))).toSet
   }
 
@@ -21,9 +21,8 @@ abstract class AbstractAccess
   {
     val nbt = new NBTTagCompound
     val permList = new NBTTagList()
-    permissions.foreach(x => permList.appendTag(new NBTTagString(x.toString)))
+    permissions foreach(x => permList.appendTag(new NBTTagString(x.toString)))
     nbt.setTag("permissions", permList)
-
     return nbt
   }
 }
