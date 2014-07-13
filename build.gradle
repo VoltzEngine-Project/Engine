@@ -134,8 +134,14 @@ publishing {
             artifact apiZip
             artifact deobfJar
 
-            artifact {
-                file 'output/build.properties'
+            artifact("output/changelog.xml") {
+                classifier "changelog"
+                extension "xml"
+            }
+
+            artifact("output/build.properties") {
+                classifier "properties"
+                extension "properties"
             }
         }
     }
