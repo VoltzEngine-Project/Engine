@@ -28,11 +28,12 @@ buildProps.withReader {
 }
 
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
-group = "com.calclavia.universalelectricity"
 
 if (System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Production"))
+    group = "com.calclavia.universalelectricity"
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")
 else
+    group = "dev.calclavia.universalelectricity"
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
 
 dependencies {
