@@ -30,7 +30,7 @@ buildProps.withReader {
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
 group = "com.calclavia.universalelectricity"
 
-if (System.getenv("TEAMCITY_BUILDCONF_NAME") == "Development")
+if (System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Development"))
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
 else
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")
@@ -77,6 +77,8 @@ task("createChangelog").doLast {
     def build = new XmlSlurper().parse(teamCityURL + "guestAuth/app/rest/builds/id:" + teamcity["teamcity.build.id"])
     def changes = build.lastChanges[0].change
 
+    out << "<changes>"
+
     for (int i = 0; i < changes.size(); i++) {
         /**
          * Write each changelog XML into the URL
@@ -84,6 +86,7 @@ task("createChangelog").doLast {
         def changelogURL = teamCityURL + "guestAuth/app/rest/changes/id:" + changes[0].@id.text()
         out << new URL(changelogURL).openStream()
     }
+    out << "</changes>"
 
     out.close()
 }
