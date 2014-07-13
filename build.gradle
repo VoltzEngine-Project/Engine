@@ -87,7 +87,7 @@ task("createChangelog").doLast {
          * Write each changelog XML into the URL
          */
         def changelogURL = teamCityURL + "guestAuth/app/rest/changes/id:" + changes[0].@id.text()
-        xmlText = new URL(changelogURL).getText()
+        def xmlText = new URL(changelogURL).getText()
         xmlText = xmlText.replaceAll("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "")
         out << xmlText
     }
