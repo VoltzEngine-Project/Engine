@@ -135,9 +135,11 @@ artifacts {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
             artifactId archivesBaseName
+        }
 
+        mavenJava(MavenPublication) {
             artifact jar
             artifact apiZip
             artifact deobfJar
