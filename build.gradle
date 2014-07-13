@@ -56,6 +56,24 @@ minecraft {
 if (System.getenv("BUILD_NUMBER") != null)
     version += ".${System.getenv("BUILD_NUMBER")}"
 
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in text files, not binary ones.
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.info'
+
+        // replace version and MCVersion
+        // forge version is also accessible via project.minecraftforgeVersion
+        // it contains the full minecraft version, including buildNumber
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    // copy everything else, thats not text
+    from 'build.properties'
+}
+
 
 task copyBuildXml(type: Copy) {
     from 'build.properties'
