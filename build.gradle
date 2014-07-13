@@ -33,10 +33,10 @@ def isProduction = System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Pr
 
 if (isProduction) {
     group = "com.calclavia.universalelectricity"
-    archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")
+    archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME").replaceAll(" ", "-")
 } else {
     group = "dev.calclavia.universalelectricity"
-    archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
+    archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME").replaceAll(" ", "-") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
 }
 
 dependencies {
