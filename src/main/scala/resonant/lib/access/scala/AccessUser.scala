@@ -24,5 +24,7 @@ class AccessUser(var username: String) extends AbstractAccess
     return nbt
   }
 
+  override def hasPermission(username: String, permission: Permission): Boolean = hasPermission(permission)
+
   def hasPermission(permission: Permission): Boolean = permissions.contains(permission)
 }

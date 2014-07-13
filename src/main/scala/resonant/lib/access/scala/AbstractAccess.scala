@@ -21,8 +21,10 @@ abstract class AbstractAccess
   {
     val nbt = new NBTTagCompound
     val permList = new NBTTagList()
-    permissions foreach(x => permList.appendTag(new NBTTagString(x.toString)))
+    permissions foreach (x => permList.appendTag(new NBTTagString(x.toString)))
     nbt.setTag("permissions", permList)
     return nbt
   }
+
+  def hasPermission(username: String, permission: Permission): Boolean
 }

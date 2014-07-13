@@ -25,7 +25,7 @@ class AccessGroup extends AbstractAccess
     return nbt
   }
 
-  def hasPermission(username: String, permission: Permission): Boolean =
+  override def hasPermission(username: String, permission: Permission): Boolean =
   {
     return users.exists(_.username.equals(username)) && (permissions.contains(permission) || users.exists(_.hasPermission(permission)))
   }
