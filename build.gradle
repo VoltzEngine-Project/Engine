@@ -28,7 +28,7 @@ buildProps.withReader {
 }
 
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
-group = System.getenv("TEAMCITY_PROJECT_NAME").replaceAll(' ','-').toLowerCase()
+group = (System.getenv("TEAMCITY_PROJECT_NAME") + "-" + System.getenv("TEAMCITY_PROJECT_NAME")).replaceAll(' ','-').toLowerCase()
 archivesBaseName = (System.getenv("TEAMCITY_PROJECT_NAME") + "-" + System.getenv("TEAMCITY_PROJECT_NAME")).replaceAll(' ','-')
 
 minecraft {
