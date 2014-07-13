@@ -1,4 +1,4 @@
-package resonant.api.mffs;
+package resonant.api.mffs.machine;
 
 public abstract interface IForceField
 {

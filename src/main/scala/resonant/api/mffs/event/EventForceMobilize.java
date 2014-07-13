@@ -1,7 +1,7 @@
 /**
  *
  */
-package resonant.api.mffs;
+package resonant.api.mffs.event;
 
 import cpw.mods.fml.common.eventhandler.Cancelable;
 import net.minecraft.world.World;
@@ -12,11 +12,11 @@ import net.minecraftforge.event.world.WorldEvent;
  *
  * @author Calclavia
  */
-public abstract class EventForceManipulate extends WorldEvent
+public abstract class EventForceMobilize extends WorldEvent
 {
 	public int beforeX, beforeY, beforeZ, afterX, afterY, afterZ;
 
-	public EventForceManipulate(World world, int beforeX, int beforeY, int beforeZ, int afterX, int afterY, int afterZ)
+	public EventForceMobilize(World world, int beforeX, int beforeY, int beforeZ, int afterX, int afterY, int afterZ)
 	{
 		super(world);
 		this.beforeX = beforeX;
@@ -34,7 +34,7 @@ public abstract class EventForceManipulate extends WorldEvent
 	 * @author Calclavia
 	 */
 	@Cancelable
-	public static class EventCheckForceManipulate extends EventForceManipulate
+	public static class EventCheckForceManipulate extends EventForceMobilize
 	{
 		public EventCheckForceManipulate(World world, int beforeX, int beforeY, int beforeZ, int afterX, int afterY, int afterZ)
 		{
@@ -50,7 +50,7 @@ public abstract class EventForceManipulate extends WorldEvent
 	 * and the block will then not move at all.
 	 */
 	@Cancelable
-	public static class EventPreForceManipulate extends EventForceManipulate
+	public static class EventPreForceManipulate extends EventForceMobilize
 	{
 		public EventPreForceManipulate(World world, int beforeX, int beforeY, int beforeZ, int afterX, int afterY, int afterZ)
 		{
@@ -65,7 +65,7 @@ public abstract class EventForceManipulate extends WorldEvent
 	 *
 	 * @author Calclavia
 	 */
-	public static class EventPostForceManipulate extends EventForceManipulate
+	public static class EventPostForceManipulate extends EventForceMobilize
 	{
 		public EventPostForceManipulate(World world, int beforeX, int beforeY, int beforeZ, int afterX, int afterY, int afterZ)
 		{

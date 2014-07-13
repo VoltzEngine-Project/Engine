@@ -3,15 +3,17 @@ package resonant.api.mffs.modules;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import resonant.api.mffs.IFieldMatrix;
-import resonant.api.mffs.IProjector;
+import resonant.api.mffs.machine.IFieldMatrix;
+import resonant.api.mffs.machine.IProjector;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.Set;
 
+/**
+ * A module for any matrix based machines.
+ */
 public interface IModule extends IFortronCost
 {
-
 	/**
 	 * Called before the projector projects a field.
 	 *

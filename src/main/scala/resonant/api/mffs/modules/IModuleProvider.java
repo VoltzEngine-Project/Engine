@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.Set;
 
-public interface IModuleAcceptor
+public interface IModuleProvider
 {
 	/**
 	 * Gets the ItemStack of a specific module type. This ItemStack is constructed and NOT a reference to the actual stacks within the block.

@@ -1,17 +1,15 @@
-package resonant.api.mffs;
+package resonant.api.mffs.machine;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.mffs.modules.IModule;
-import resonant.api.mffs.modules.IModuleAcceptor;
+import resonant.api.mffs.modules.IModuleProvider;
 import resonant.api.mffs.modules.IProjectorMode;
-import resonant.lib.access.java.Permission;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.Set;
 
-public interface IFieldMatrix extends IModuleAcceptor, IActivatable
+public interface IFieldMatrix extends IModuleProvider, IActivatable, IPermissionProvider
 {
 	/**
 	 * Gets the mode of the projector, mainly the shape and size of it.
@@ -68,5 +66,4 @@ public interface IFieldMatrix extends IModuleAcceptor, IActivatable
 	 */
 	public ForgeDirection getDirection();
 
-	public boolean hasPermission(GameProfile profile, Permission permission);
 }

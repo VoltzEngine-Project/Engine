@@ -1,4 +1,4 @@
-package resonant.api.mffs;
+package resonant.api.mffs.event;
 
 import cpw.mods.fml.common.eventhandler.Cancelable;
 import net.minecraft.item.ItemStack;

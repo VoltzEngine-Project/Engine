@@ -19,6 +19,6 @@ public interface IInsulatedArmor extends IArmorSet
 	 * @param voltage    - voltage
 	 * @return damage to apply
 	 */
-	public float onEletricalDamage(ItemStack armorStack, EntityLivingBase entity, Object source, long voltage, float damage);
+	public float onElectricalDamage(ItemStack armorStack, EntityLivingBase entity, Object source, long voltage, float damage);
 
 }

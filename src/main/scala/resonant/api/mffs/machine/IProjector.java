@@ -1,4 +1,4 @@
-package resonant.api.mffs;
+package resonant.api.mffs.machine;
 
 import net.minecraft.inventory.IInventory;
 import resonant.api.blocks.IBlockFrequency;
@@ -11,15 +11,15 @@ import java.util.Set;
  *
  * @author Calclavia
  */
-public abstract interface IProjector extends IInventory, IBiometricIdentifierLink, IFieldMatrix, IBlockFrequency
+public abstract interface IProjector extends IInventory, IFieldMatrix, IBlockFrequency
 {
 	/**
-	 * Projects a force field.
+	 * Projects the force field.
 	 */
 	public void projectField();
 
 	/**
-	 * Destroys a force field.
+	 * Destroys the force field.
 	 */
 	public void destroyField();
 
