@@ -74,8 +74,8 @@ task("createChangelog").doLast {
     /**
      * Grab the build first, parse the XML to find the changelog XML URL
      */
-    def build = new XmlSlurper().parse(teamCityURL + "guestAuth/app/rest/builds/id:" + teamcity["teamcity.build.id"])
-    def changes = build.lastChanges[0].change
+    def changesXML = new XmlSlurper().parse(teamCityURL + "guestAuth/app/rest/changes?locator=build:(id:" + teamcity["teamcity.build.id"]) + ")"
+    def changes = changesXML.change
 
     /**
      * Add the XML definition header in the front of the file and remove all other occurrences of the XML header
