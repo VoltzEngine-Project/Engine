@@ -33,7 +33,7 @@ if (System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Production")) {
     group = "com.calclavia.universalelectricity"
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")
 } else {
-    group = "dev.calclavia.universalelectricity"
+    group = "net.calclavia.universalelectricity"
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
 }
 
