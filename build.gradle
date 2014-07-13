@@ -35,8 +35,6 @@ if (System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Production"))
 else
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
 
-artifactId = archivesBaseName
-
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
