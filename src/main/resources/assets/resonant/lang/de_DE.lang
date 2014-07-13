@@ -1,19 +1,12 @@
-# Basic Components Language Properties
-# @author Calclavia#
-# @translator TheVanoq and Vexatos
- 
-itemGroup.calclavia=Basic Components
+# Resonant Engine Language Properties
+# @author Calclavia and Vexatos
 
 death.attack.electrocution=%1$s starb durch einen Stromschlag!
 
-# Blocks
-tile.resonant\:oreCopper.name=Kupfererz
-tile.resonant\:oreTin.name=Zinnerz
-
 ## Creative Testing Blocks
-tile.resonant\:creativeBuilder.name=Kreativ-Bauer
-tile.resonant\:infinite.0.name=Unendliche Energie
-tile.resonant\:infinite.1.name=Unendliche Fl\u00FCssigkeit
+tile.resonant:creativeBuilder.name=Kreativ-Bauer
+tile.resonant:infiniteEnergy.name=Unendlich Energie
+tile.resonant:infiniteFluid.name=Unendlich Flüssigkeit
 
 ## Tools
 toolmode.mode=Modus
@@ -21,32 +14,13 @@ toolmode.general.name=Generell
 toolmode.rotation.name=Drehung
 
 # Items
-item.resonant\:circuitBasic.name=Einfacher Schaltkreis
-item.resonant\:circuitAdvanced.name=Erweiterter Schaltkreis
-item.resonant\:circuitElite.name=Elite-Schaltkreis
-item.resonant\:screwdriver.name=Schraubendreher
-item.resonant\:screwdriver.tooltip=Genutzt, um B\u00F6cke zu konfigurieren. Shift-rechtsklicke, um Modus zu \u00e4ndern.
-item.resonant\:motor.name=Motor
-
-item.resonant\:plateCopper.name=Kupferplatte
-item.resonant\:plateTin.name=Zinnplatte
-item.resonant\:plateBronze.name=Bronzeplatte
-item.resonant\:plateSteel.name=Stahlplatte
-item.resonant\:plateIron.name=Eisenplatte
-item.resonant\:plateGold.name=Goldplatte
-
-item.resonant\:ingotCopper.name=Kupferbarren
-item.resonant\:ingotTin.name=Zinnbarren
-item.resonant\:ingotBronze.name=Bronzebarren
-item.resonant\:ingotSteel.name=Stahlbarren
-
-item.resonant\:dustBronze.name=Bronzestaub
-item.resonant\:dustSteel.name=Stahlstaub
+item.resonant:screwdriver.name=Schraubendreher
+item.resonant:screwdriver.tooltip=Genutzt, um Blöcke zu konfigurieren. Shift-rechtsklicke, um Modus zu ändern.
 
 #Misc
 # %0 goes before the localized name of the shift key, %1 goes after
-tooltip.noShift=Halte %0Shift %1f\u00FCr weitere Informationen
-info.recipes.tooltip=Halte %0J%1, um ben\u00F6tigte Materialien zu sehen
+tooltip.noShift=Halte #0Shift#1 für Informationen
+info.recipes.tooltip=Halte #0J#1 für Materialien
 
 info.energylevel.waila=Momentanes Energielevel
 info.energycapacity.waila=Maximales Energielevel
