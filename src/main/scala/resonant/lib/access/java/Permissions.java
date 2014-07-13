@@ -82,7 +82,7 @@ public class Permissions
 	{
 		String[] permNames = name.split(".");
 
-		Permission currentPerm = new Permission(permNames[0]);
+		Permission currentPerm = root;
 
 		for (int i = 1; i < permNames.length; i++)
 		{

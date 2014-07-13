@@ -1,5 +1,7 @@
 package resonant.lib.type;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -74,7 +76,7 @@ public class TreeNode<S extends TreeNode>
 			currentParent = (S) currentParent.parent;
 		}
 
-		return hiearchy;
+		return Lists.reverse(hiearchy);
 	}
 
 }
