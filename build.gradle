@@ -29,11 +29,13 @@ buildProps.withReader {
 
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
 
-if (System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Production")) {
+def isProduction = System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Production")
+
+if (isProduction) {
     group = "com.calclavia.universalelectricity"
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")
 } else {
-    group = "net.calclavia.universalelectricity"
+    group = "dev.calclavia.universalelectricity"
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
 }
 
@@ -148,7 +150,7 @@ publishing {
             }
 
             artifact("output/build.properties") {
-                classifier "properties"
+                classifier "build"
                 extension "properties"
             }
         }
