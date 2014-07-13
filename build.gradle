@@ -28,7 +28,7 @@ buildProps.withReader {
 }
 
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
-group = "universalelectricity"
+group = "com.calclavia.universalelectricity"
 archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")
 
 
