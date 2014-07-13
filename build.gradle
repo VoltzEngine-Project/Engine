@@ -80,15 +80,15 @@ task("createChangelog").doLast {
     /**
      * Add the XML definition header in the front of the file and remove all other occurrences of the XML header
      */
-    out << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><changes>"
+    def xmlHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+    out << (xmlHeader + "<changes>")
 
     for (int i = 0; i < changes.size(); i++) {
         /**
          * Write each changelog XML into the URL
          */
         def changelogURL = teamCityURL + "guestAuth/app/rest/changes/id:" + changes[0].@id.text()
-        def xmlText = new URL(changelogURL).getText()
-        xmlText = xmlText.replaceAll("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "")
+        xmlText = new URL(changelogURL).getText().replaceAll(xmlHeader, "")
         out << xmlText
     }
 

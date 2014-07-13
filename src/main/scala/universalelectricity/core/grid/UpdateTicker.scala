@@ -2,6 +2,7 @@ package universalelectricity.core.grid
 
 import java.util
 import java.util.Collections
+import java.util.concurrent.ConcurrentLinkedQueue
 
 import cpw.mods.fml.common.eventhandler.{Event, SubscribeEvent}
 import cpw.mods.fml.common.gameevent.TickEvent
@@ -26,12 +27,12 @@ object UpdateTicker extends Thread
    */
   private final var updaters = Collections.newSetFromMap(new util.WeakHashMap[IUpdate, java.lang.Boolean]())
 
-  private final val queue = new mutable.SynchronizedQueue[() => Unit]()
+  private final val queue = new ConcurrentLinkedQueue[() => Unit]()
 
   /**
    * For queuing Forge events to be invoked the next tick.
    */
-  private final val queuedEvents = new mutable.SynchronizedQueue[Event]()
+  private final val queuedEvents = new ConcurrentLinkedQueue[Event]()
 
   /**
    * Becomes true if the network needs to be paused.
@@ -53,12 +54,12 @@ object UpdateTicker extends Thread
 
   def enqueue(f: (() => Unit))
   {
-    queue += f
+    queue.add(f)
   }
 
   def queueEvent(event: Event)
   {
-    queuedEvents += event
+    queuedEvents.add(event)
   }
 
   def getDeltaTime = deltaTime
