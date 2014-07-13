@@ -128,6 +128,8 @@ task deobfJar(type: Jar) {
         attributes FMLCorePlugin: "resonant.engine.ResonantPluginLoader",
 				   FMLCorePluginContainsFMLMod: "true"
     }
+
+    destinationDir = file 'output'
 }
 
 artifacts {
@@ -147,9 +149,9 @@ publishing {
             }
 
             artifact("output/build.properties") {
-				classifier "properties"
-				extension "properties"
-			}
+                classifier "build"
+                extension "properties"
+            }
         }
     }
     repositories {
