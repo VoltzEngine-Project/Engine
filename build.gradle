@@ -28,15 +28,12 @@ buildProps.withReader {
 }
 
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
+group = "com.calclavia.universalelectricity"
 
-if (System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Production")) {
-    group = "com.calclavia.universalelectricity"
+if (System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Production"))
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")
-}
-else {
-    group = "com.calclavia.dev.universalelectricity"
+else
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
-}
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
@@ -84,6 +81,8 @@ task("createChangelog").doLast {
      * Add the XML definition header in the front of the file and remove all other occurrences of the XML header
      */
     out << ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><changes>")
+
+    println("createChangelog: Identified " + changes.size() + " changes to be written into the changelog.")
 
     for (int i = 0; i < changes.size(); i++) {
         /**
@@ -137,6 +136,8 @@ artifacts {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifactId archivesBaseName
+
             artifact jar
             artifact apiZip
             artifact deobfJar
