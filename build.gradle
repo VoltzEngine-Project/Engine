@@ -77,7 +77,7 @@ task("createChangelog").doLast {
     def build = new XmlSlurper().parse(teamCityURL + "guestAuth/app/rest/builds/id:" + teamcity["teamcity.build.id"])
     def changes = build.lastChanges[0].change
 
-    for (int i = 0; i < changes.length; i++) {
+    for (int i = 0; i < changes.size(); i++) {
         /**
          * Write each changelog XML into the URL
          */
