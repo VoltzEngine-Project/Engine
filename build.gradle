@@ -31,10 +31,10 @@ version = "${config.version.mod.major}.${config.version.mod.minor}.${config.vers
 
 if (System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Production")) {
     group = "com.calclavia.resonantengine"
-    archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")
+    archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME").replaceAll(" ", "-")
 } else {
     group = "dev.calclavia.resonantengine"
-    archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
+    archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME").replaceAll(" ", "-") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
 }
 
 minecraft {
