@@ -1,3 +1,5 @@
+import org.apache.commons.lang3.StringEscapeUtils
+
 buildscript {
     repositories {
         mavenCentral()
@@ -28,12 +30,15 @@ buildProps.withReader {
 }
 
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
-group = "com.calclavia.universalelectricity"
 
-if (System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Production"))
+if (System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Production")) {
+    group = "com.calclavia.universalelectricity"
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")
-else
+}
+else {
+    group = "com.calclavia.dev.universalelectricity"
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
+}
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
@@ -80,7 +85,7 @@ task("createChangelog").doLast {
     /**
      * Add the XML definition header in the front of the file and remove all other occurrences of the XML header
      */
-    def xmlHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+    def xmlHeader = "<?xml version=\"1\\.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
     out << (xmlHeader + "<changes>")
 
     for (int i = 0; i < changes.size(); i++) {
