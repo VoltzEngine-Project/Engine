@@ -1,5 +1,6 @@
 package resonant.lib.event;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkEvent;
 
@@ -17,15 +18,16 @@ public abstract class ChunkModifiedEvent extends ChunkEvent
 
 	public static class ChunkSetBlockEvent extends ChunkModifiedEvent
 	{
-		public final int x, y, z, blockID, blockMetadata;
+		public final int x, y, z, blockMetadata;
+		public final Block block;
 
-		public ChunkSetBlockEvent(Chunk chunk, int chunkX, int y, int chunkZ, int blockID, int blockMetadata)
+		public ChunkSetBlockEvent(Chunk chunk, int chunkX, int y, int chunkZ, Block block, int blockMetadata)
 		{
 			super(chunk);
 			this.x = (chunk.xPosition << 4) + chunkX;
 			this.y = y;
 			this.z = (chunk.zPosition << 4) + chunkZ;
-			this.blockID = blockID;
+			this.block = block;
 			this.blockMetadata = blockMetadata;
 		}
 
