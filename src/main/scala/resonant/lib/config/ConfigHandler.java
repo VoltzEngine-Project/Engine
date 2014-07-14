@@ -1,5 +1,6 @@
 package resonant.lib.config;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import resonant.lib.utility.LanguageUtility;
 
@@ -56,7 +57,13 @@ public final class ConfigHandler
 				}
 			}
 		}
-		config.save();
+
+		MinecraftForge.EVENT_BUS.post(new ConfigEvent.PostConfigEvent(config));
+
+		if (config.hasChanged())
+		{
+			config.save();
+		}
 	}
 
 	/**
@@ -78,6 +85,8 @@ public final class ConfigHandler
 				handleField(obj, field, cfg, config);
 			}
 		}
+
+		MinecraftForge.EVENT_BUS.post(new ConfigEvent.PostConfigEvent(config));
 
 		if (config.hasChanged())
 		{
