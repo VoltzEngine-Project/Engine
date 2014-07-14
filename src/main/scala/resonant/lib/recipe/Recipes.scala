@@ -16,23 +16,6 @@ import scala.collection.convert.wrapAll._
  */
 object Recipes
 {
-  /**
-   * Adds a recipe
-
-  def +=(obj: AnyRef): Boolean =
-  {
-    obj match
-    {
-      case crafting: IRecipe =>
-        GameRegistry.addRecipe(crafting)
-        return true
-      case (in: ItemStack, out: ItemStack, xp: Float) =>
-        GameRegistry.addSmelting(in, out, xp)
-        return true
-      case _ => return false
-    }
-  }*/
-
   def +=(crafting: IRecipe) = if (crafting != null) GameRegistry.addRecipe(crafting)
 
   def +=(in: ItemStack, out: ItemStack, xp: Float) = if (in != null) GameRegistry.addSmelting(in, out, xp)

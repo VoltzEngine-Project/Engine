@@ -65,7 +65,7 @@ public class ResonantEngine
 	public static CommonProxy proxy;
 	@Mod.Metadata(References.ID)
 	public static ModMetadata metadata;
-	@Instance(References.NAME)
+	@Instance(References.ID)
 	public static ResonantEngine instance;
 	/**
 	 * Blocks

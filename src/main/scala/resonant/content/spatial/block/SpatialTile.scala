@@ -8,6 +8,7 @@ import net.minecraft.network.Packet
 import resonant.engine.ResonantEngine
 import resonant.lib.network.IPlayerUsing
 import resonant.lib.network.discriminator.PacketAnnotation
+import resonant.lib.network.netty.PacketManager
 
 /**
  * All tiles inherit this class.
@@ -44,8 +45,6 @@ abstract class SpatialTile(material: Material) extends SpatialBlock(material) wi
     }
     ticks += 1
   }
-
-  override def getDescriptionPacket: Packet = ResonantEngine.instance.packetHandler.toMCPacket(new PacketAnnotation(this))
 
   override def getPlayersUsing: JSet[EntityPlayer] = playersUsing
 }
