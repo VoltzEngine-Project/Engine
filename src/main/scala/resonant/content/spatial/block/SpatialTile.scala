@@ -15,36 +15,14 @@ import resonant.lib.network.netty.PacketManager
  *
  * @author Calclavia
  */
-abstract class SpatialTile(material: Material) extends SpatialBlock(material) with IPlayerUsing
+abstract class SpatialTile(material: Material) extends SpatialBlock(material) with IPlayerUsing with TraitTicker
 {
   /**
    * The players to send packets to for machine update info.
    */
   final val playersUsing = new JHashSet[EntityPlayer]()
-  protected var ticks = 0L
 
   override def tile: SpatialTile = this
-
-  /**
-   * Called on the TileEntity's first tick.
-   */
-  def start()
-  {
-  }
-
-  override def update()
-  {
-    if (ticks == 0)
-    {
-      start()
-    }
-
-    if (ticks >= Long.MaxValue)
-    {
-      ticks = 1
-    }
-    ticks += 1
-  }
 
   override def getPlayersUsing: JSet[EntityPlayer] = playersUsing
 }
