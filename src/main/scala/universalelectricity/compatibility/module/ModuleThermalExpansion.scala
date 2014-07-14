@@ -28,7 +28,7 @@ object ModuleThermalExpansion extends Compatibility.CompatibilityModule("Thermal
 
   def canConnect(obj: AnyRef, direction: ForgeDirection, source: AnyRef): Boolean =
   {
-    return (obj.asInstanceOf[IEnergyHandler]).canInterface(direction)
+    return (obj.asInstanceOf[IEnergyHandler]).canConnectEnergy(direction)
   }
 
   def chargeItem(itemStack: ItemStack, joules: Double, docharge: Boolean): Double =
