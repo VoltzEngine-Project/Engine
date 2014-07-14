@@ -267,7 +267,7 @@ class Rotation extends AbstractOperation[Rotation] with ITransform with IRotatio
     return result
   }
 
-  def transform(vector: Vector3):Vector3=
+  def transform(vector: Vector3): Vector3 =
   {
     val quat: Quaternion = Quaternion.aroundAxis(axis, angle)
     val newVec = vector.clone

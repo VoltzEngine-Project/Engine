@@ -267,6 +267,49 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def apply(transformer: ITransform): Vector3 = transformer.transform(this)
 
+  def rotate(angle: Double, axis: Vector3): Vector3 =
+  {
+    return translateMatrix(getRotationMatrix(angle, axis), this)
+  }
+
+  def getRotationMatrix(angle: Double, axis: Vector3): Seq[Double] = axis.getRotationMatrix(angle)
+
+  def getRotationMatrix(newAngle: Double): Seq[Double] =
+  {
+    var angle = newAngle
+    val matrix = new Array[Double](16)
+    val axis = this.clone().normalize
+    val x = axis.x
+    val y = axis.y
+    val z = axis.z
+    angle *= 0.0174532925D
+    val cos = Math.cos(angle)
+    val ocos = 1.0F - cos
+    val sin = Math.sin(angle)
+    matrix(0) = (x * x * ocos + cos)
+    matrix(1) = (y * x * ocos + z * sin)
+    matrix(2) = (x * z * ocos - y * sin)
+    matrix(4) = (x * y * ocos - z * sin)
+    matrix(5) = (y * y * ocos + cos)
+    matrix(6) = (y * z * ocos + x * sin)
+    matrix(8) = (x * z * ocos + y * sin)
+    matrix(9) = (y * z * ocos - x * sin)
+    matrix(10) = (z * z * ocos + cos)
+    matrix(15) = 1.0F
+    return matrix
+  }
+
+  def translateMatrix(matrix: Seq[Double], translation: Vector3): Vector3 =
+  {
+    val x = translation.x * matrix(0) + translation.y * matrix(1) + translation.z * matrix(2) + matrix(3)
+    val y = translation.x * matrix(4) + translation.y * matrix(5) + translation.z * matrix(6) + matrix(7)
+    val z = translation.x * matrix(8) + translation.y * matrix(9) + translation.z * matrix(10) + matrix(11)
+    translation.x = x
+    translation.y = y
+    translation.z = z
+    return translation
+  }
+
   /**
    * Gets the angle between this vector and another vector.
    * @return Angle in radians
