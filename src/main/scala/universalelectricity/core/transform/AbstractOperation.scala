@@ -46,11 +46,11 @@ abstract class AbstractOperation[T <: AbstractOperation[T]]
 
   def +=(amount: Double): T = set(this + amount)
 
-  def +=(amount: T): T = set(amount)
+  def +=(amount: T): T = set(this + amount)
 
   def -=(amount: Double): T = this += -amount
 
-  def -=(amount: T): T = this += (amount * -1)
+  def -=(amount: T): T = this += (-amount)
 
   def *=(amount: Double): T = set(this * amount)
 
