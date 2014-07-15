@@ -23,7 +23,7 @@ trait ContentLoader
         {
           f.setAccessible(true)
           val annotation = f.getAnnotation(classOf[ExplicitContentName])
-          val name = if (annotation != null) (if (annotation.value != null) annotation.value else f.getName) else null
+          val name = if (annotation != null) (if (!annotation.value.isEmpty) annotation.value else f.getName) else null
 
           f.get(self) match
           {
