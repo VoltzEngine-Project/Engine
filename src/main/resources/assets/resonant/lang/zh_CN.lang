@@ -1,0 +1,26 @@
+# Resonant Engine Language Properties
+# @author crafteverywhere
+
+death.attack.electrocution=%1$s触电了!
+
+## Creative Testing Blocks
+tile.resonant:creativeBuilder.name=神之建造机
+tile.resonant:infiniteEnergy.name=无限能源机
+tile.resonant:infiniteFluid.name=无限流体源
+
+## Tools
+toolmode.mode=模式
+toolmode.general.name=普通
+toolmode.rotation.name=旋转
+
+# Items
+item.resonant:screwdriver.name=螺丝刀
+item.resonant:screwdriver.tooltip=用于配置方块.按住shift右击切换模式.
+
+#Misc
+# %0 goes before the localized name of the shift key, %1 goes after
+tooltip.noShift=按住#0shift#1查看信息
+info.recipes.tooltip=按住#0J#1查看材料
+
+info.energylevel.waila=当前能量等级
+info.energycapacity.waila=最大能量等级
