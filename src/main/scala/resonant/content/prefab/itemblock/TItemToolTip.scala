@@ -6,7 +6,8 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import org.lwjgl.input.Keyboard
 import resonant.lib.render.EnumColor
-import resonant.lib.utility.{LanguageUtility, TooltipUtility}
+import resonant.lib.utility.TooltipUtility
+import resonant.lib.wrapper.StringWrapper._
 import resonant.lib.wrapper.WrapList._
 
 /**
@@ -17,17 +18,17 @@ trait TItemToolTip extends Item
   override def addInformation(itemStack: ItemStack, par2EntityPlayer: EntityPlayer, list: util.List[_], par4: Boolean)
   {
     val tooltipID = getUnlocalizedName(itemStack) + ".tooltip"
-    val tooltip = LanguageUtility.getLocal(tooltipID)
+    val tooltip = tooltipID.getLocal
 
     if (tooltip != null && !tooltip.isEmpty && !tooltip.equals(tooltipID))
     {
       if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
       {
-        list.add(LanguageUtility.getLocal("tooltip.noShift").replace("#0", EnumColor.AQUA.toString).replace("#1", EnumColor.GREY.toString))
+        list.add("tooltip.noShift".getLocal.replace("#0", EnumColor.AQUA.toString).replace("#1", EnumColor.GREY.toString))
       }
       else
       {
-        list.addAll(LanguageUtility.splitStringPerWord(tooltip, 5))
+        list.addAll(tooltip.listWrap(20))
       }
     }
 
@@ -37,7 +38,7 @@ trait TItemToolTip extends Item
     }
     else
     {
-      list.add(LanguageUtility.getLocal("info.recipes.tooltip").replace("#0", EnumColor.AQUA.toString).replace("#1", EnumColor.GREY.toString))
+      list.add("info.recipes.tooltip".getLocal.replace("#0", EnumColor.AQUA.toString).replace("#1", EnumColor.GREY.toString))
     }
   }
 }

@@ -27,7 +27,7 @@ public class LanguageUtility
 
 	public static List<String> splitStringPerWord(String string, int characters)
 	{
-		return wrap(string).jWrap(characters);
+		return wrap(string).listWrap(characters);
 	}
 
 	public static String capitalizeFirst(String str)
