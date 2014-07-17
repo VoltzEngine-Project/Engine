@@ -144,7 +144,14 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   {
     inject(world, x, y, z)
     getTile(world, x, y, z).onPlaced(entityLiving, itemStack)
-    eject
+    eject()
+  }
+
+  override def onPostBlockPlaced(world: World, x: Int, y: Int, z: Int, metadata : Int)
+  {
+    inject(world, x, y, z)
+    getTile(world, x, y, z).onPostPlaced(metadata)
+    eject()
   }
 
   override def breakBlock(world: World, x: Int, y: Int, z: Int, block: Block, par6: Int)

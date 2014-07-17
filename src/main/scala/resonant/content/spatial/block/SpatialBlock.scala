@@ -374,6 +374,11 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     }
   }
 
+  def onPostPlaced(metadata: Int)
+  {
+
+  }
+
   def onRemove(block: Block, par6: Int)
   {
     onWorldSeparate
