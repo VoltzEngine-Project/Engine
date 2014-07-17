@@ -92,9 +92,22 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     isCreativeTabSet = true
   }
 
-  var bounds: Cuboid = Cuboid.full
+  var _bounds: Cuboid = Cuboid.full
 
-  def bounds(cuboid: Cuboid): Unit = bounds = cuboid
+  def bounds_=(cuboid: Cuboid)
+  {
+    _bounds = cuboid
+
+    if (block != null)
+      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
+  }
+
+  def bounds(cuboid: Cuboid)
+  {
+    bounds = cuboid
+  }
+
+  def bounds = _bounds
 
   var block: BlockDummy = null
 
@@ -551,4 +564,20 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
    * @return A value representing the explosive resistance
    */
   def getExplosionResistance(entity: Entity, explosionPosition: Vector3): Float = getExplosionResistance(entity)
+
+  /**
+   * Called upon bounds raytrace. World data given.
+   */
+  def setBlockBoundsBasedOnState()
+  {
+
+  }
+
+  /**
+   * Called upon setting up bounds for item rendering. World data NOT given.
+   */
+  def setBlockBoundsForItemRender() =
+  {
+
+  }
 }

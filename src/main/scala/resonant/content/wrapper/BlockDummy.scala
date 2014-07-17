@@ -365,4 +365,16 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   {
     return dummyTile.tickRate(world)
   }
+
+  override def setBlockBoundsBasedOnState(access : IBlockAccess, x : Int, y : Int, z : Int)
+  {
+    inject(access,x,y,z)
+    getTile(access, x, y, z).setBlockBoundsBasedOnState()
+    eject()
+  }
+
+  override def setBlockBoundsForItemRender() =
+  {
+    dummyTile.setBlockBoundsForItemRender()
+  }
 }
