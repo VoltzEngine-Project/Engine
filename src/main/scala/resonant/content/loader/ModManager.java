@@ -112,6 +112,14 @@ public class ModManager
 		return block;
 	}
 
+	public <C extends Block> C newBlock(String name, C block)
+	{
+		block.setBlockName(modPrefix + name);
+		block.setBlockTextureName(modPrefix + name);
+		GameRegistry.registerBlock(block, name);
+		return block;
+	}
+
 	public <C extends Item> C newItem(Class<C> clazz, Object... args)
 	{
 		return newItem(LanguageUtility.decapitalizeFirst(clazz.getSimpleName().replace("Item", "")), clazz, args);
