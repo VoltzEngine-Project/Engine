@@ -15,9 +15,9 @@ import scala.collection.convert.wrapAll._
 /**
  * A node is an object return by INodeProvider that provides the details of what the specific node does.
  * @param parent - The parent/host node
- * @tparam N - The self node type
+ * @tparam N - The type which this node can connect to.
  */
-abstract class Node[N <: Node[N]](parent: INodeProvider) extends INode
+abstract class Node[N](parent: INodeProvider) extends INode
 {
   /**
    * All the connections we are connected to. Note that this may not be thread safe for
@@ -74,7 +74,7 @@ abstract class Node[N <: Node[N]](parent: INodeProvider) extends INode
   def deconstruct()
   {
     //Remove all connection references to the current node.
-    connections.keySet() filter (getGrid.isValidNode(_)) foreach (_.connections.remove(this))
+    connections.keySet().view filter (getGrid.isValidNode(_)) filter (_.isInstanceOf[Node[_]]) map (_.asInstanceOf[Node[_]]) foreach (_.connections.remove(this))
     getGrid.remove(this)
     getGrid.deconstruct()
   }
