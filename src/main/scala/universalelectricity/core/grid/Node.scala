@@ -47,6 +47,11 @@ abstract class Node[N <: Node[N]](parent: INodeProvider) extends INode
     this.grid = grid.asInstanceOf[Grid[this.type]]
   }
 
+  override def update(deltaTime: Double)
+  {
+
+  }
+
   /**
    * Called to construct the node. Node must be called in tile validate.
    */
