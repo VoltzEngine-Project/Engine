@@ -29,18 +29,18 @@ abstract class Node[N <: Node[N]](parent: INodeProvider) extends INode
 
   protected var grid: Grid[this.type] = _
 
-  final def getGrid(): Grid[this.type] =
+  final def getGrid: Grid[this.type] =
   {
     if (grid == null)
     {
-      grid = newGrid()
+      grid = newGrid.asInstanceOf[Grid[this.type]]
       grid.add(this)
     }
 
     return grid
   }
 
-  protected def newGrid() = new Grid[this.type]()
+  protected def newGrid: Grid[_] = new Grid[this.type]()
 
   final def setGrid(grid: Grid[_])
   {
@@ -69,7 +69,7 @@ abstract class Node[N <: Node[N]](parent: INodeProvider) extends INode
   def deconstruct()
   {
     //Remove all connection references to the current node.
-    connections.keySet().filter(getGrid().isValidNode(_)).foreach(_.connections.remove(this))
+    connections.keySet() filter (getGrid.isValidNode(_)) foreach (_.connections.remove(this))
     getGrid.remove(this)
     getGrid.deconstruct()
   }
@@ -89,20 +89,22 @@ abstract class Node[N <: Node[N]](parent: INodeProvider) extends INode
   {
     connections.clear()
 
-    ForgeDirection.VALID_DIRECTIONS.foreach(dir =>
-    {
-      val tile = (position + dir).getTileEntity(world)
-
-      if (tile.isInstanceOf[INodeProvider])
+    ForgeDirection.VALID_DIRECTIONS.foreach(
+      dir =>
       {
-        val check = tile.asInstanceOf[INodeProvider].getNode(getClass(), dir.getOpposite)
+        val tile = (position + dir).getTileEntity(world)
 
-        if (check != null && getClass().isAssignableFrom(check.getClass()) && canConnect(dir, check) && check.canConnect(dir.getOpposite, this))
+        if (tile.isInstanceOf[INodeProvider])
         {
-          connections.put(check.asInstanceOf[N], dir)
+          val check = tile.asInstanceOf[INodeProvider].getNode(getClass(), dir.getOpposite)
+
+          if (check != null && getClass().isAssignableFrom(check.getClass()) && canConnect(dir, check) && check.canConnect(dir.getOpposite, this))
+          {
+            connections.put(check.asInstanceOf[N], dir)
+          }
         }
       }
-    })
+    )
   }
 
   /**
