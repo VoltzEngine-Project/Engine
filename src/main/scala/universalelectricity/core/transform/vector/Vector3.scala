@@ -14,7 +14,7 @@ import universalelectricity.core.transform.rotation.Rotation
 import universalelectricity.core.transform.{AbstractVector, ITransform}
 
 import scala.collection.convert.wrapAll._
-
+import Array._
 /**
  * @author Calclavia
  */
@@ -267,47 +267,70 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def apply(transformer: ITransform): Vector3 = transformer.transform(this)
 
-  def rotate(angle: Double, axis: Vector3): Vector3 =
-  {
-    return translateMatrix(getRotationMatrix(angle, axis), this)
-  }
+  def rotate(angle: Double, axis: Vector3): Vector3 = apply(axis.getRotationMatrix(angle))
 
-  def getRotationMatrix(angle: Double, axis: Vector3): Seq[Double] = axis.getRotationMatrix(angle)
-
-  def getRotationMatrix(newAngle: Double): Seq[Double] =
+  /**
+   * Creates a rotation matrix for an angle-axis rotation around this vector.
+   * @param rotateAngle - The angle of rotation in degrees
+   * @return - A 3x3 rotation matrix
+   */
+  def getRotationMatrix(rotateAngle: Double): Array[Array[Double]] =
   {
-    var angle = newAngle
-    val matrix = new Array[Double](16)
-    val axis = this.clone().normalize
+    val angle = Math.toRadians(rotateAngle)
+    val axis = this.normalize
     val x = axis.x
     val y = axis.y
     val z = axis.z
-    angle *= 0.0174532925D
+
+    /**
+     * Predefine trigonometric calculation to save computation time.
+     */
     val cos = Math.cos(angle)
-    val ocos = 1.0F - cos
+    val oneMinusCos = 1 - cos
     val sin = Math.sin(angle)
-    matrix(0) = (x * x * ocos + cos)
-    matrix(1) = (y * x * ocos + z * sin)
-    matrix(2) = (x * z * ocos - y * sin)
-    matrix(4) = (x * y * ocos - z * sin)
-    matrix(5) = (y * y * ocos + cos)
-    matrix(6) = (y * z * ocos + x * sin)
-    matrix(8) = (x * z * ocos + y * sin)
-    matrix(9) = (y * z * ocos - x * sin)
-    matrix(10) = (z * z * ocos + cos)
-    matrix(15) = 1.0F
+
+    /**
+     * Creates a 3x3 matrix using Rodrigues' rotation formula.
+     */
+    val matrix = ofDim[Double](3, 3)
+    matrix(0)(0) = x * x * oneMinusCos + cos
+    matrix(0)(1) = y * x * oneMinusCos + z * sin
+    matrix(0)(2) = x * z * oneMinusCos - y * sin
+    matrix(1)(0) = x * y * oneMinusCos - z * sin
+    matrix(1)(1) = y * y * oneMinusCos + cos
+    matrix(1)(2) = y * z * oneMinusCos + x * sin
+    matrix(2)(0) = x * z * oneMinusCos + y * sin
+    matrix(2)(1) = y * z * oneMinusCos - x * sin
+    matrix(2)(2) = z * z * oneMinusCos + cos
     return matrix
   }
 
-  def translateMatrix(matrix: Seq[Double], translation: Vector3): Vector3 =
+  /**
+   * Multiplies this column vector with a given matrix
+   * @param matrix - A 3x3 transformation matrix
+   * @return The vector multiplied with the matrix.
+   */
+  def apply(matrix: Array[Array[Double]]): Vector3 =
   {
-    val x = translation.x * matrix(0) + translation.y * matrix(1) + translation.z * matrix(2) + matrix(3)
-    val y = translation.x * matrix(4) + translation.y * matrix(5) + translation.z * matrix(6) + matrix(7)
-    val z = translation.x * matrix(8) + translation.y * matrix(9) + translation.z * matrix(10) + matrix(11)
-    translation.x = x
-    translation.y = y
-    translation.z = z
-    return translation
+    val newX = x * matrix(0)(0) + y * matrix(0)(1) + z * matrix(0)(2)
+    val newY = x * matrix(1)(0) + y * matrix(1)(1) + z * matrix(1)(2)
+    val newZ = x * matrix(2)(0) + y * matrix(2)(1) + z * matrix(2)(2)
+    return new Vector3(newX, newY, newZ)
+  }
+
+  /**
+   * Multiplies two matricies. This is non-commutative.
+   */
+  def matrixMultiply(m1: Seq[Array[Double]], m2: Array[Array[Double]]): Array[Array[Double]] =
+  {
+    val res = Array.fill(m1.length, m2(0).length)(0.0)
+
+    for (row <- (0 until m1.length).par; col <- (0 until m2(0).length).par; i <- 0 until m1(0).length)
+    {
+      res(row)(col) += m1(row)(i) * m2(i)(col)
+    }
+
+    return res
   }
 
   /**
