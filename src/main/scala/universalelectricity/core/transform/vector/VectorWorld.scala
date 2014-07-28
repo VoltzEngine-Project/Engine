@@ -5,7 +5,7 @@ import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.MovingObjectPosition
+import net.minecraft.util.{Vec3, MovingObjectPosition}
 import net.minecraft.world.World
 import net.minecraftforge.common.DimensionManager
 import net.minecraftforge.common.util.ForgeDirection
@@ -20,7 +20,13 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   def this(tile: TileEntity) = this(tile.getWorldObj, tile.xCoord, tile.yCoord, tile.zCoord)
 
+  def this(vec: IVectorWorld) = this(vec.world(), vec.x(), vec.y(), vec.z())
+
   def this(world: World, vector: IVector3) = this(world, vector.x, vector.y, vector.z)
+
+  def this(world: World, vec: Vec3) = this(world, vec.xCoord, vec.yCoord, vec.zCoord)
+
+  def this(world: World, target: MovingObjectPosition) = this(world, target.hitVec)
 
   def world(newWorld: World)
   {
