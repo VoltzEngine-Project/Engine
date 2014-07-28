@@ -168,6 +168,8 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   def setBlock(block: Block): Boolean = super.setBlock(world, block)
 
+  def setBlockToAir() : Boolean = super.setBlockToAir(world)
+
   def rayTraceEntities(target: Vector3): MovingObjectPosition = super.rayTraceEntities(world, target)
 
   override def clone: VectorWorld = new VectorWorld(world, x, y, z)
