@@ -74,12 +74,23 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
    * The unique string ID of this block.
    */
   var itemBlock: Class[_ <: ItemBlock] = classOf[ItemBlockTooltip]
-
   var isCreativeTabSet = false
-
-  private var _creativeTab: CreativeTabs = null
-
+  var block: BlockDummy = null
+  var _bounds: Cuboid = Cuboid.full
+  var _creativeTab: CreativeTabs = null
   def creativeTab = _creativeTab
+  var blockHardness: Float = 1
+  var blockResistance: Float = 1
+  var stepSound: Block.SoundType = Block.soundTypeStone
+  var canProvidePower: Boolean = false
+  var tickRandomly: Boolean = false
+  var normalRender: Boolean = true
+  var forceStandardRender: Boolean = false
+  var customItemRender: Boolean = false
+  var isOpaqueCube: Boolean = true
+  var _access: IBlockAccess = null
+  var textureName: String = name
+  var domain: String = null
 
   def creativeTab(value: CreativeTabs)
   {
@@ -92,7 +103,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     isCreativeTabSet = true
   }
 
-  var _bounds: Cuboid = Cuboid.full
+  def itemBlock(item: Class[_ <: ItemBlock]) : Unit = {itemBlock = item}
 
   def bounds_=(cuboid: Cuboid)
   {
@@ -109,58 +120,28 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
 
   def bounds = _bounds
 
-  var block: BlockDummy = null
-
   def setBlock(block: BlockDummy)
   {
     this.block = block
   }
 
-  var blockHardness: Float = 1
-
   def blockHardness(hardness: Float): Unit = blockHardness = hardness
-
-  var blockResistance: Float = 1
 
   def blockResistance(resistance: Float): Unit = blockResistance = resistance
 
-  var stepSound: Block.SoundType = Block.soundTypeStone
-
   def stepSound(sound: Block.SoundType): Unit = stepSound = sound
-
-  var canProvidePower: Boolean = false
 
   def canProvidePower(bool: Boolean): Unit = canProvidePower = bool
 
-  var tickRandomly: Boolean = false
-
   def tickRandomly(bool: Boolean): Unit = tickRandomly = bool
-
-  var normalRender: Boolean = true
 
   def normalRender(bool: Boolean): Unit = normalRender = bool
 
-  var forceStandardRender: Boolean = false
-
   def forceStandardRender(bool: Boolean): Unit = forceStandardRender = bool
-
-  var customItemRender: Boolean = false
 
   def customItemRender(bool: Boolean): Unit = customItemRender = bool
 
-  var isOpaqueCube: Boolean = true
-
   def isOpaqueCube(bool: Boolean): Unit = isOpaqueCube = bool
-
-  /**
-   * Temporary
-   */
-  var _access: IBlockAccess = null
-  /**
-   * Rendering
-   */
-  var textureName: String = name
-  var domain: String = null
 
   /**
    * Called after the block is registered. Use this to add recipes.
@@ -294,7 +275,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
 
   def getSubBlocks(item: Item, creativeTabs: CreativeTabs, list: util.List[_])
   {
-    list.add(new ItemStack(item))
+    list.add(new ItemStack(item, 1, 0))
   }
 
   def getPickBlock(target: MovingObjectPosition): ItemStack =
