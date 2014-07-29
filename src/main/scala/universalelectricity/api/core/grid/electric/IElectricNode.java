@@ -21,11 +21,6 @@ public interface IElectricNode extends INode
 
 	public double getEmptySpace();
 
-	/**
-	 * Resistance in Ohms
-	 */
-	public double getResistance();
 
-	public void setResistance(double value);
 
 }
