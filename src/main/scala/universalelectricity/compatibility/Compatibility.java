@@ -107,6 +107,121 @@ public class Compatibility
 		return false;
 	}
 
+    /**
+     * Called to give an amount of energy to the handler in the direction given
+     * @param handler - tile/multipart/etc getting the energy
+     * @param direction - direction in relate to the handler
+     * @param energy - energy(should be possitive)
+     * @param doReceive - true will actually give the energy, false will test
+     * @return amount of energy received
+     */
+    public static double fill(Object handler, ForgeDirection direction, double energy, boolean doReceive)
+    {
+        return receiveEnergy(handler, direction, energy, doReceive);
+    }
+
+    /**
+     * Called to give an amount of energy to the handler in the direction given
+     * @param handler - tile/multipart/etc getting the energy
+     * @param direction - direction in relate to the handler
+     * @param energy - energy(should be possitive)
+     * @param doReceive - true will actually give the energy, false will test
+     * @return amount of energy received
+     */
+    public static double receiveEnergy(Object handler, ForgeDirection direction, double energy, boolean doReceive)
+    {
+        CompatibilityModule module = getHandler(handler);
+        if(module != null)
+        {
+            return module.receiveEnergy(handler, direction, energy, doReceive);
+        }
+        return 0;
+    }
+
+    public static double drain(Object handler, ForgeDirection direction, double energy, boolean doExtract)
+    {
+        return extractEnergy(handler, direction, energy, doExtract);
+    }
+
+    /**
+     * Called to take an amount of energy from the handler in the direction given
+     * @param handler - tile/multipart/etc getting the energy
+     * @param direction - direction in relate to the handler
+     * @param energy - energy(should be possitive)
+     * @param doExtract - true will actually take the energy, false will test
+     * @return amount of energy taken
+     */
+    public static double extractEnergy(Object handler, ForgeDirection direction, double energy, boolean doExtract)
+    {
+        CompatibilityModule module = getHandler(handler);
+        if(module != null)
+        {
+            return module.extractEnergy(handler, direction, energy, doExtract);
+        }
+        return 0;
+    }
+
+    /**
+     * Charge's an ItemStack with energy
+     * @param itemStack - stack being charged
+     * @param joules - energy to charge
+     * @param doCharge - true will add the energy, false will test
+     * @return energy actually charged
+     */
+    public static double fill(ItemStack itemStack, double joules, boolean doCharge)
+    {
+        return chargeItem(itemStack, joules, doCharge);
+    }
+
+    /**
+     * Charge's an ItemStack with energy
+     * @param itemStack - stack being charged
+     * @param joules - energy to charge
+     * @param doCharge - true will add the energy, false will test
+     * @return energy actually charged
+     */
+    public static double chargeItem(ItemStack itemStack, double joules, boolean doCharge)
+    {
+        CompatibilityModule module = getHandler(itemStack);
+        if(module != null)
+        {
+            return module.chargeItem(itemStack, joules, doCharge);
+        }
+        return 0;
+    }
+
+    /**
+     * Discharge's an ItemStack's contained energy
+     * @param itemStack - stack being charged
+     * @param joules - energy to charge
+     * @param doDischarge - true will remove the energy, false will test
+     * @return energy actually taken
+     */
+    public static double drain(ItemStack itemStack, double joules, boolean doDischarge)
+    {
+        return dischargeItem(itemStack, joules, doDischarge);
+    }
+
+    /**
+     * Discharge's an ItemStack's contained energy
+     * @param itemStack - stack being charged
+     * @param joules - energy to charge
+     * @param doDischarge - true will remove the energy, false will test
+     * @return energy actually taken
+     */
+    public static double dischargeItem(ItemStack itemStack, double joules, boolean doDischarge)
+    {
+        CompatibilityModule module = getHandler(itemStack);
+        if(module != null)
+        {
+            return module.dischargeItem(itemStack, joules, doDischarge);
+        }
+        return 0;
+    }
+
+    /**
+     * Prefab for handling each mod's energy system in relation to UE's energy system
+     */
 	public static abstract class CompatibilityModule
 	{
 		public final String modID;
