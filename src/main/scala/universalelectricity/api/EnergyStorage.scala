@@ -1,4 +1,4 @@
-package universalelectricity.api.core.grid.electric
+package universalelectricity.api
 
 import net.minecraft.nbt.NBTTagCompound
 

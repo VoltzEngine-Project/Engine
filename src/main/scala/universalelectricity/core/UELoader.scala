@@ -11,7 +11,7 @@ import universalelectricity.api.core.grid.electric.IElectricNode
 import universalelectricity.compatibility.Compatibility
 import universalelectricity.compatibility.module.{ModuleBuildCraft, ModuleThermalExpansion, ModuleUniversalElectricity}
 import universalelectricity.core.grid.UpdateTicker
-import universalelectricity.core.grid.electric.ElectricNode
+import universalelectricity.core.grid.node.ElectricNode
 
 @Mod(modid = UniversalElectricity.id, version = UniversalElectricity.version, name = UniversalElectricity.name, dependencies = "before:ForgeMultipart", modLanguage = "scala")
 object UELoader

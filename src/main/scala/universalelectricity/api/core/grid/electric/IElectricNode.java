@@ -2,25 +2,9 @@ package universalelectricity.api.core.grid.electric;
 
 import universalelectricity.api.core.grid.INode;
 
-/**
- * @author Calclavia
- */
-public interface IElectricNode extends INode
+/** Enhanced version of the IEnergyNode to allow for voltage */
+public interface IElectricNode extends IEnergyNode
 {
-	public void applyPower(double wattage);
-
-	public void drawPower(double wattage);
-
-	public double getEnergy(double voltageThreshold);
-
+    /** Voltage level of the node */
 	public double getVoltage();
-
-	public double getEnergyCapacity();
-
-	public void setEnergyCapacity(double value);
-
-	public double getEmptySpace();
-
-
-
 }
