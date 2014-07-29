@@ -7,6 +7,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  *
  * @author Calclavia
  */
+@Deprecated
 public interface IEnergyContainer
 {
 	/**
