@@ -2,8 +2,25 @@ package universalelectricity.api.core.grid.electric;
 
 import universalelectricity.api.core.grid.INode;
 
-/** Applied to any object that acts as an electrical node in a network */
-public interface IElectricNode extends IEnergyNode
+/**
+ * @author Calclavia
+ */
+public interface IElectricNode extends INode
 {
+	public void applyPower(double wattage);
+
+	public void drawPower(double wattage);
+
+	public double getEnergy(double voltageThreshold);
+
 	public double getVoltage();
+
+	public double getEnergyCapacity();
+
+	public void setEnergyCapacity(double value);
+
+	public double getEmptySpace();
+
+
+
 }
