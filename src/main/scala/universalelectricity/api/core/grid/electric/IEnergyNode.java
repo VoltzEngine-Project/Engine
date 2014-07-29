@@ -2,15 +2,9 @@ package universalelectricity.api.core.grid.electric;
 
 import universalelectricity.api.core.grid.INode;
 
+/** Applied to all object that can act as an energy node in a network */
 public interface IEnergyNode extends INode
 {
-	/**
-	 * @return Gets the power of this node. Note that power by definition is energy per second.
-	 */
-	public double getPower();
-
-	/**
-	 * @return Gets the energy buffered in this node at this instance.
-	 */
-	public double getEnergy();
+	/** Gets the nodes energy storage object, used to get energy, limit input, limit output, and get capacity */
+	public EnergyStorage getEnergyStorage();
 }
