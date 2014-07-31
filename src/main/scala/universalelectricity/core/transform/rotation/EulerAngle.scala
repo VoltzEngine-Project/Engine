@@ -1,5 +1,7 @@
 package universalelectricity.core.transform.rotation
 
+import io.netty.buffer.ByteBuf
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.core.transform.vector.Vector3
 import universalelectricity.core.transform.{AbstractOperation, ITransform}
@@ -71,6 +73,14 @@ class EulerAngle(var yaw: Double, var pitch: Double, var roll: Double) extends A
     this.yaw = yaw
     this.pitch = pitch
     this.roll = roll
+  }
+
+  override def set(other: EulerAngle): EulerAngle =
+  {
+    yaw = other.yaw
+    pitch = other.pitch
+    roll = other.roll
+    return this
   }
 
   /**
@@ -157,4 +167,19 @@ class EulerAngle(var yaw: Double, var pitch: Double, var roll: Double) extends A
   override def clone() = new EulerAngle(yaw, pitch, roll)
 
   override def toString: String = "EulerAngle[" + yaw + "," + pitch + "," + roll + "]"
+
+  override def writeByteBuf(data: ByteBuf) =
+  {
+    data.writeDouble(yaw)
+    data.writeDouble(pitch)
+    data.writeDouble(roll)
+  }
+
+  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
+  {
+    nbt.setDouble("yaw", yaw)
+    nbt.setDouble("pitch", pitch)
+    nbt.setDouble("roll", roll)
+    return nbt
+  }
 }

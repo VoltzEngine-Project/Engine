@@ -102,14 +102,14 @@ class AngleAxis(var angle: Double = 0D, var axis: Vector3 = new Vector3) extends
     return new EulerAngle(yaw, pitch, roll)
   }
 
-  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
+  def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
     axis.writeNBT(nbt)
     nbt.setDouble("angle", angle)
     return nbt
   }
 
-  override def writeByteBuf(data: ByteBuf): ByteBuf =
+  def writeByteBuf(data: ByteBuf): ByteBuf =
   {
     axis.writeByteBuf(data)
     data.writeDouble(angle)
