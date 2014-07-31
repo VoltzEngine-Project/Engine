@@ -1,5 +1,7 @@
 package universalelectricity.core.transform.matrix
 
+import universalelectricity.core.transform.vector.Vector3
+
 import scala.Array._
 
 /**
@@ -24,10 +26,17 @@ class Matrix(val row: Int, val column: Int)
     }
   }
 
-  def apply(row: Int)(column: Int): Double = matrix(row)(column)
+  class MatrixAux(i: Int)
+  {
+    def apply(j: Int) = matrix(i)(j)
+
+    def update(j: Int, value: Double) = matrix(i)(j) = value
+  }
+
+  def apply(i: Int) = new MatrixAux(i)
 
   /**
-   * Multiplies two matrices. This is non-commutative.
+   * Multiplies two matrices (or with another column vector). This is non-commutative.
    */
   def *(otherMatrix: Matrix): Matrix =
   {
@@ -35,10 +44,24 @@ class Matrix(val row: Int, val column: Int)
 
     for (row <- 0 until row; col <- 0 until otherMatrix.column; i <- 0 until column)
     {
-      res.matrix(row)(col) += matrix(row)(i) * otherMatrix(i)(col)
+      res(row)(col) += matrix(row)(i) * otherMatrix(i)(col)
     }
 
     return res
+  }
+
+
+  /**
+   * Multiplies this column vector with a given matrix
+   * @param vector - A vector to be multiplied
+   * @return The vector multiplied with the matrix.
+   */
+  def *(vector: Vector3): Vector3 =
+  {
+    val newX = vector.x * matrix(0)(0) + vector.y * matrix(0)(1) + vector.z * matrix(0)(2)
+    val newY = vector.x * matrix(1)(0) + vector.y * matrix(1)(1) + vector.z * matrix(1)(2)
+    val newZ = vector.x * matrix(2)(0) + vector.y * matrix(2)(1) + vector.z * matrix(2)(2)
+    return new Vector3(newX, newY, newZ)
   }
 
   def multiply(otherMatrix: Matrix) = this * otherMatrix
