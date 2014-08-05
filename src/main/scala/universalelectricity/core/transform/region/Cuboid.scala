@@ -9,8 +9,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.world.World
-import universalelectricity.core.transform.AbstractOperation
-import universalelectricity.core.transform.rotation.Rotation
+import universalelectricity.core.transform.{ITransform, AbstractOperation}
 import universalelectricity.core.transform.vector.Vector3
 
 /**
@@ -95,7 +94,7 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
 
   def *(amount: Cuboid): Cuboid = new Cuboid(min * amount.min, max * amount.max)
 
-  def rotate(angle: Rotation): Cuboid = new Cuboid(min.apply(angle), max.apply(angle))
+  def transform(transform: ITransform): Cuboid = new Cuboid(min.transform(transform), max.transform(transform))
 
   def setBounds(block: Block): Cuboid =
   {

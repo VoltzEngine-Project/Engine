@@ -15,6 +15,6 @@ class ConnectorNode[N](parent: INodeProvider) extends Node[N](parent)
 
   override def canConnect(from: ForgeDirection, source: AnyRef): Boolean =
   {
-    return source.isInstanceOf[N] && (connectionMap & (1 << from.ordinal)) != 0
+    return source != null && (connectionMap & (1 << from.ordinal)) != 0
   }
 }

@@ -10,7 +10,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util._
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
-import universalelectricity.core.transform.rotation.Rotation
+import universalelectricity.core.transform.rotation.EulerAngle
 import universalelectricity.core.transform.{AbstractVector, ITransform}
 
 import scala.collection.convert.wrapAll._
@@ -147,6 +147,8 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def toVector2: Vector2 = new Vector2(x, z)
 
+  def toArray = Array(x, y, z)
+
   def toList = List(x, y, z)
 
   def toIntList = List(x.toInt, y.toInt, z.toInt)
@@ -188,9 +190,9 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
     return data
   }
 
-  def toRotation = new Rotation(Math.toDegrees(Math.atan2(x, z)), Math.toDegrees(-Math.atan2(y, Math.hypot(z, x))), 0)
+  def toEulerAngle = new EulerAngle(Math.toDegrees(Math.atan2(x, z)), Math.toDegrees(-Math.atan2(y, Math.hypot(z, x))))
 
-  def toRotation(target: Vector3): Rotation = (clone - target).toRotation
+  def toEulerAngle(target: Vector3): EulerAngle = (clone - target).toEulerAngle
 
   def xi = x.toInt
 
@@ -265,73 +267,7 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def isZero = x == 0 && y == 0 && z == 0
 
-  def apply(transformer: ITransform): Vector3 = transformer.transform(this)
-
-  def rotate(angle: Double, axis: Vector3): Vector3 = apply(axis.getRotationMatrix(angle))
-
-  /**
-   * Creates a rotation matrix for an angle-axis rotation around this vector.
-   * @param rotateAngle - The angle of rotation in degrees
-   * @return - A 3x3 rotation matrix
-   */
-  def getRotationMatrix(rotateAngle: Double): Array[Array[Double]] =
-  {
-    val angle = Math.toRadians(rotateAngle)
-    val axis = this.normalize
-    val x = axis.x
-    val y = axis.y
-    val z = axis.z
-
-    /**
-     * Predefine trigonometric calculation to save computation time.
-     */
-    val cos = Math.cos(angle)
-    val oneMinusCos = 1 - cos
-    val sin = Math.sin(angle)
-
-    /**
-     * Creates a 3x3 matrix using Rodrigues' rotation formula.
-     */
-    val matrix = ofDim[Double](3, 3)
-    matrix(0)(0) = x * x * oneMinusCos + cos
-    matrix(0)(1) = y * x * oneMinusCos + z * sin
-    matrix(0)(2) = x * z * oneMinusCos - y * sin
-    matrix(1)(0) = x * y * oneMinusCos - z * sin
-    matrix(1)(1) = y * y * oneMinusCos + cos
-    matrix(1)(2) = y * z * oneMinusCos + x * sin
-    matrix(2)(0) = x * z * oneMinusCos + y * sin
-    matrix(2)(1) = y * z * oneMinusCos - x * sin
-    matrix(2)(2) = z * z * oneMinusCos + cos
-    return matrix
-  }
-
-  /**
-   * Multiplies this column vector with a given matrix
-   * @param matrix - A 3x3 transformation matrix
-   * @return The vector multiplied with the matrix.
-   */
-  def apply(matrix: Array[Array[Double]]): Vector3 =
-  {
-    val newX = x * matrix(0)(0) + y * matrix(0)(1) + z * matrix(0)(2)
-    val newY = x * matrix(1)(0) + y * matrix(1)(1) + z * matrix(1)(2)
-    val newZ = x * matrix(2)(0) + y * matrix(2)(1) + z * matrix(2)(2)
-    return new Vector3(newX, newY, newZ)
-  }
-
-  /**
-   * Multiplies two matricies. This is non-commutative.
-   */
-  def matrixMultiply(m1: Seq[Array[Double]], m2: Array[Array[Double]]): Array[Array[Double]] =
-  {
-    val res = Array.fill(m1.length, m2(0).length)(0.0)
-
-    for (row <- (0 until m1.length).par; col <- (0 until m2(0).length).par; i <- 0 until m1(0).length)
-    {
-      res(row)(col) += m1(row)(i) * m2(i)(col)
-    }
-
-    return res
-  }
+  def transform(transformer: ITransform): Vector3 = transformer.transform(this)
 
   /**
    * Gets the angle between this vector and another vector.
