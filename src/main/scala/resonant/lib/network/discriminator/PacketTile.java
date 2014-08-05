@@ -4,7 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import resonant.lib.network.handle.TPacketReceiver;
+import resonant.lib.network.handle.IPacketIDReceiver;
+import resonant.lib.network.handle.IPacketReceiver;
 import universalelectricity.core.transform.vector.Vector3;
 
 /**
@@ -70,11 +71,11 @@ public class PacketTile extends PacketType
 	{
 		TileEntity tile = player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
 
-		if (tile instanceof TPacketReceiver)
+		if (tile instanceof IPacketReceiver)
 		{
 			try
 			{
-				TPacketReceiver receiver = (TPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+				IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
 				receiver.read(data().slice(), player, this);
 			}
 			catch (Exception e)
@@ -83,6 +84,21 @@ public class PacketTile extends PacketType
 				e.printStackTrace();
 			}
 		}
+        else if(tile instanceof IPacketIDReceiver)
+        {
+            try
+            {
+                IPacketIDReceiver receiver = (IPacketIDReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+                ByteBuf buf = data().slice();
+                int id = buf.readInt();
+                receiver.read(buf, id, player, this);
+            }
+            catch (Exception e)
+            {
+                System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Vector3(x, y, z));
+                e.printStackTrace();
+            }
+        }
 		else
 		{
 			throw new UnsupportedOperationException("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error [" + tile + "] in " + new Vector3(x, y, z));

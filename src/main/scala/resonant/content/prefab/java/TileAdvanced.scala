@@ -8,7 +8,7 @@ import resonant.content.spatial.block.SpatialBlock
  */
 class TileAdvanced(material : Material) extends SpatialBlock(material : Material)
 {
-  var ticks : Long = 0
+  protected var ticks : Long = 0
 
   def initiate()
   {
