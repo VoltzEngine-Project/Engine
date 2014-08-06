@@ -17,13 +17,13 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
   protected def recharge(stack: ItemStack)
   {
     if (stack != null && Compatibility.getHandler(stack.getItem) != null)
-      electricNode.drawPower(Compatibility.getHandler(stack.getItem).chargeItem(stack, electricNode.getEnergy(getVoltage), true))
+      electricNode.removeEnergy(Compatibility.getHandler(stack.getItem).chargeItem(stack, electricNode.getEnergy(), true), true)
   }
 
   protected def discharge(stack: ItemStack)
   {
     if (stack != null && Compatibility.getHandler(stack.getItem) != null)
-      electricNode.applyPower(Compatibility.getHandler(stack.getItem).dischargeItem(stack, electricNode.getEmptySpace, true))
+      electricNode.addEnergy(Compatibility.getHandler(stack.getItem).dischargeItem(stack, electricNode.getEnergyCapacity - electricNode.getEnergy(), true), true)
   }
 
   /**
@@ -31,12 +31,12 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
    * @param from     - The direction.
    * @return Returns the node object.
    */
-  override def getNode[N <: INode](nodeType: Class[N], from: ForgeDirection): N =
+  override def getNode(nodeType: Class[_ <: INode], from: ForgeDirection): IElectricNode =
   {
     if (nodeType == classOf[IElectricNode])
-      return electricNode.asInstanceOf[N]
+      return electricNode
 
-    return null.asInstanceOf[N]
+    return null
   }
 
   def getVoltage = 100D

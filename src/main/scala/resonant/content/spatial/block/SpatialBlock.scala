@@ -37,7 +37,7 @@ import scala.collection.immutable
  */
 object SpatialBlock
 {
-  val icon = new util.HashMap[String, IIcon]
+  protected val icon = new util.HashMap[String, IIcon]
 
   def getClickedFace(hitSide: Byte, hitX: Float, hitY: Float, hitZ: Float): Vector2 =
   {
@@ -64,7 +64,6 @@ object SpatialBlock
   {
     def getComparatorInputOverride(side: Int): Int
   }
-
 }
 
 abstract class SpatialBlock(val material: Material) extends TileEntity
@@ -91,6 +90,11 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   var _access: IBlockAccess = null
   var textureName: String = name
   var domain: String = null
+
+  def textureName(value: String)
+  {
+    textureName = value;
+  }
 
   def creativeTab(value: CreativeTabs)
   {
