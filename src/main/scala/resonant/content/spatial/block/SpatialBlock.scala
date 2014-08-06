@@ -37,7 +37,7 @@ import scala.collection.immutable
  */
 object SpatialBlock
 {
-  protected val icon = new util.HashMap[String, IIcon]
+  val icon = new util.HashMap[String, IIcon]
 
   def getClickedFace(hitSide: Byte, hitX: Float, hitY: Float, hitZ: Float): Vector2 =
   {
@@ -91,7 +91,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   var textureName: String = name
   var domain: String = null
 
-  def textureName(value: String)
+  def setTextureName(value: String)
   {
     textureName = value;
   }

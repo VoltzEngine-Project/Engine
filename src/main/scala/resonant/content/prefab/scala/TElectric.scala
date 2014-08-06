@@ -6,13 +6,14 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonant.lib.utility.nbt.ISaveObj
 import universalelectricity.api.UniversalClass
 import universalelectricity.api.core.grid.electric.IElectricNode
-import universalelectricity.api.core.grid.{INode, INodeProvider, NodeRegistry}
+import universalelectricity.api.core.grid.{INode, INodeProvider}
 import universalelectricity.compatibility.Compatibility
+import universalelectricity.core.grid.node.ElectricNode
 
 @UniversalClass
 trait TElectric extends TIO with INodeProvider with ISaveObj
 {
-  protected var electricNode = NodeRegistry.get(this, classOf[IElectricNode])
+  protected var electricNode = new ElectricNode(this)
 
   protected def recharge(stack: ItemStack)
   {
@@ -31,7 +32,7 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
    * @param from     - The direction.
    * @return Returns the node object.
    */
-  override def getNode(nodeType: Class[_ <: INode], from: ForgeDirection): IElectricNode =
+  override def getNode(nodeType: Class[_ <: INode], from: ForgeDirection): INode =
   {
     if (nodeType == classOf[IElectricNode])
       return electricNode
