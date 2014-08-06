@@ -20,6 +20,8 @@ import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.network.discriminator.PacketType;
 import resonant.lib.network.handle.TPacketIDSender;
 import resonant.lib.network.handle.TPacketSender;
+import universalelectricity.core.transform.vector.IVector3;
+import universalelectricity.core.transform.vector.IVectorWorld;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.EnumMap;
@@ -160,9 +162,29 @@ public class PacketManager implements ICompatProxy
 		this.channelEnumMap.get(Side.SERVER).writeAndFlush(message);
 	}
 
-	public void sendToAllAround(AbstractPacket message, World world, Vector3 point, double range)
+    public void sendToAllAround(AbstractPacket message, IVectorWorld point, double range)
+    {
+        sendToAllAround(message, point.world(), point, range);
+    }
+
+    public void sendToAllAround(AbstractPacket message, World world, IVector3 point, double range)
+    {
+        sendToAllAround(message, world, point.x(), point.y(), point.z(), range);
+    }
+
+    public void sendToAllAround(AbstractPacket message, TileEntity tile)
+    {
+        sendToAllAround(message, tile, 64);
+    }
+
+    public void sendToAllAround(AbstractPacket message, TileEntity tile, double range)
+    {
+        sendToAllAround(message, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord, range);
+    }
+
+	public void sendToAllAround(AbstractPacket message, World world, double x, double y, double z, double range)
 	{
-		sendToAllAround(message, new NetworkRegistry.TargetPoint(world.provider.dimensionId, point.x(), point.y(), point.z(), range));
+		sendToAllAround(message, new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, range));
 	}
 
 	@SideOnly(Side.CLIENT)
