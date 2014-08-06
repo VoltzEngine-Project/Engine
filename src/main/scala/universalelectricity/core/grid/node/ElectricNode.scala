@@ -34,16 +34,16 @@ class ElectricNode(parent: INodeProvider) extends EnergyNode(parent) with IElect
     this.amperage = amperage
   }
 
-  override def addEnergy(wattage: Double, doAdd: Boolean)
+  override def addEnergy(wattage: Double, doAdd: Boolean) : Double =
   {
-    super.addEnergy(wattage, doAdd)
     setCurrent(getEnergy / getVoltage)
+    return super.addEnergy(wattage, doAdd)
   }
 
-  override def removeEnergy(wattage: Double, doRemove: Boolean)
+  override def removeEnergy(wattage: Double, doRemove: Boolean) : Double =
   {
-    super.removeEnergy(wattage, doRemove)
     setCurrent(getEnergy / getVoltage)
+    return super.removeEnergy(wattage, doRemove)
   }
 
   override def load(nbt: NBTTagCompound)
