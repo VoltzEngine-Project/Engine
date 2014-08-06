@@ -1,6 +1,7 @@
 package universalelectricity.api.core.grid;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public interface INode
 {
@@ -13,6 +14,8 @@ public interface INode
 	 * This destroys the node, removing it from the grid and also destroying all references to it.
 	 */
 	public void deconstruct();
+
+    public boolean canConnect(ForgeDirection direction, Object object);
 
 	/**
 	 * Clears all the node's cache.

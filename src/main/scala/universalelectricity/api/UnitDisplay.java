@@ -25,7 +25,7 @@ public class UnitDisplay
 	/**
 	 * Rounds a number to a specific number place places
 	 *
-	 * @param The number
+	 * @param d - the number
 	 * @return The rounded number
 	 */
 	public static double roundDecimals(double d, int decimalPlaces)

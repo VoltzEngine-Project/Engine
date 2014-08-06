@@ -14,13 +14,13 @@ object ModuleUniversalElectricity extends Compatibility.CompatibilityModule("Uni
 {
   def receiveEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doReceive: Boolean): Double =
   {
-    (handler.asInstanceOf[INodeProvider]).getNode(classOf[IElectricNode], direction).applyPower(energy)
+    (handler.asInstanceOf[INodeProvider]).getNode(classOf[IElectricNode], direction).asInstanceOf[IElectricNode].addEnergy(energy, doReceive)
     return energy
   }
 
   def extractEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doExtract: Boolean): Double =
   {
-    (handler.asInstanceOf[INodeProvider]).getNode(classOf[IElectricNode], direction).drawPower(energy)
+    (handler.asInstanceOf[INodeProvider]).getNode(classOf[IElectricNode], direction).asInstanceOf[IElectricNode].removeEnergy(energy, doExtract)
     return energy
   }
 

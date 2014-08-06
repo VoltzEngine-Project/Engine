@@ -47,7 +47,6 @@ public class ClassHeirachyManager implements IClassTransformer
 	 *
 	 * @param name       The class in question
 	 * @param superclass The class being extended
-	 * @param bytes      The bytes for the class. Only needed if not already defined.
 	 * @return
 	 */
 	public static boolean classExtends(String name, String superclass)
