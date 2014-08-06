@@ -1,6 +1,7 @@
 package universalelectricity.core.transform.vector
 
 import java.lang.Double.doubleToLongBits
+import java.util
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
@@ -14,7 +15,6 @@ import universalelectricity.core.transform.rotation.EulerAngle
 import universalelectricity.core.transform.{AbstractVector, ITransform}
 
 import scala.collection.convert.wrapAll._
-import Array._
 /**
  * @author Calclavia
  */
@@ -276,6 +276,39 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
   def angle(other: Vector3) = Math.acos((this $ other) / (magnitude * other.magnitude))
 
   def anglePreNorm(other: Vector3) = Math.acos(this $ other)
+
+  def getAround(world: World, side: ForgeDirection, range: Int) :  util.ArrayList[Vector3] =
+  {
+    val list: util.ArrayList[Vector3] = util.ArrayList[Vector3]
+
+    val dx : Int = side match{
+      case ForgeDirection.EAST => 0
+      case ForgeDirection.WEST => 0
+      case default => range
+    }
+    val dy : Int = side match{
+      case ForgeDirection.DOWN => 0
+      case ForgeDirection.UP => 0
+      case default => range
+    }
+    val dz : Int = side match{
+    case ForgeDirection.NORTH => 0
+    case ForgeDirection.SOUTH => 0
+    case default => range
+    }
+
+    for (x <- (xi - dx) to (xi + dx))
+    {
+      for (y <- (yi - dy) to (yi + dx))
+      {
+        for (z <- (zi - dz) to (zi + dz))
+        {
+            list.add(new Vector3(x, y, z))
+        }
+      }
+    }
+    return list
+  }
 
   def rayTrace(world: World, dir: Vector3, dist: Double): MovingObjectPosition = rayTrace(world, this + (dir * dist))
 
