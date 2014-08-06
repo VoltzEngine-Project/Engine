@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import resonant.engine.References;
-import universalelectricity.core.transform.rotation.Rotation;
+import universalelectricity.core.transform.rotation.Quaternion;
 import universalelectricity.core.transform.vector.Vector3;
 
 import java.util.ArrayList;
@@ -28,28 +28,26 @@ public class WorldUtility
 {
 	public static void rotateVectorFromDirection(Vector3 vec, ForgeDirection dir)
 	{
-		vec.apply(new Rotation(dir));
-		/*
 		switch (dir)
 		{
 			default:
 				break;
 			case UP:
-				vec.rotate(180, Vector3.EAST());
+				vec.transform(new Quaternion(180, Vector3.east()));
 				break;
 			case NORTH:
-				vec.rotate(90, Vector3.WEST());
+				vec.transform(new Quaternion(90, Vector3.west()));
 				break;
 			case SOUTH:
-				vec.rotate(90, Vector3.EAST());
+				vec.transform(new Quaternion(90, Vector3.east()));
 				break;
 			case WEST:
-				vec.rotate(90, Vector3.NORTH());
+				vec.transform(new Quaternion(90, Vector3.north()));
 				break;
 			case EAST:
-				vec.rotate(90, Vector3.SOUTH());
+				vec.transform(new Quaternion(90, Vector3.south()));
 				break;
-		}*/
+		}
 	}
 
 	public static int getAngleFromForgeDirection(ForgeDirection dir)
