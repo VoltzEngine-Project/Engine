@@ -29,6 +29,8 @@ abstract class Node[N](parent: INodeProvider) extends INode
 
   protected var grid: Grid[this.type] = _
 
+  def getParent : INodeProvider = parent
+
   final def getGrid: Grid[this.type] =
   {
     if (grid == null)

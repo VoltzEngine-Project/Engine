@@ -279,7 +279,7 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def getAround(world: World, side: ForgeDirection, range: Int) :  util.ArrayList[Vector3] =
   {
-    val list: util.ArrayList[Vector3] = util.ArrayList[Vector3]
+    var list: util.ArrayList[Vector3] = util.ArrayList[Vector3]
 
     val dx : Int = side match{
       case ForgeDirection.EAST => 0
