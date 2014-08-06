@@ -28,7 +28,7 @@ trait TElectricStorage extends TElectric with IEnergyContainer
   {
     if (energy != null)
     {
-      return energy.getEnergy()
+      return energy.getEnergy
     }
     return 0
   }
