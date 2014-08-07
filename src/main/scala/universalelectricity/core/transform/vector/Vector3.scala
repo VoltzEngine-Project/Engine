@@ -2,6 +2,7 @@ package universalelectricity.core.transform.vector
 
 import java.lang.Double.doubleToLongBits
 
+import com.google.common.io.ByteArrayDataInput
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
@@ -115,6 +116,8 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
   def this(par: Seq[Double]) = this(par(0), par(1), par(2))
 
   def this(par: (Double, Double, Double)) = this(par._1, par._2, par._3)
+
+  def this(data: ByteArrayDataInput) = this(data.readInt(), data.readInt(), data.readInt())
 
   def x(amount: Double)
   {
