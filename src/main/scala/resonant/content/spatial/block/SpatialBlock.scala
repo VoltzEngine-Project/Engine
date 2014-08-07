@@ -571,4 +571,23 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   {
 
   }
+
+  /** Is the world server side */
+  def server() : Boolean  = !world.isRemote
+
+  /** Is the world client side */
+  def client() : Boolean  = !world.isRemote
+
+  /** Opens the main gui for this tile */
+  def openGui(player : EntityPlayer, mod : AnyRef)
+  {
+    openGui(player, 0, mod)
+  }
+
+  /** Opens a gui by the id given */
+  def openGui(player : EntityPlayer, gui : Int, mod : AnyRef)
+  {
+    if(server)
+      player.openGui(mod,gui, world, x, y, z)
+  }
 }
