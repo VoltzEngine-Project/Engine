@@ -16,11 +16,22 @@ public class UnitDisplay
 	public int decimalPlaces = 2;
 	public boolean isSimple = false;
 
-	public UnitDisplay(Unit unit, double value)
+	public UnitDisplay(Unit unit, double value, boolean simple)
 	{
 		this.unit = unit;
 		this.value = value;
 	}
+
+    public UnitDisplay(Unit unit, double value)
+    {
+        this(unit, value, false);
+    }
+
+    @Deprecated
+    public UnitDisplay(double value, Unit unit)
+    {
+       this(unit, value);
+    }
 
 	/**
 	 * Rounds a number to a specific number place places
