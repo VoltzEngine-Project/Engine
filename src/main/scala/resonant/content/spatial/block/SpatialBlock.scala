@@ -590,4 +590,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     if(server)
       player.openGui(mod,gui, world, x, y, z)
   }
+
+  def setMeta(meta: Int) { world.setBlockMetadataWithNotify(x, y, z, meta, 3)}
 }
