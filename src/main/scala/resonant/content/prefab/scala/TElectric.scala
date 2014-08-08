@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.lib.utility.nbt.ISaveObj
-import universalelectricity.api.UniversalClass
+import universalelectricity.api.{EnergyStorage, UniversalClass}
 import universalelectricity.api.core.grid.electric.IElectricNode
 import universalelectricity.api.core.grid.{INode, INodeProvider}
 import universalelectricity.compatibility.Compatibility
@@ -14,6 +14,16 @@ import universalelectricity.core.grid.node.ElectricNode
 trait TElectric extends TIO with INodeProvider with ISaveObj
 {
   protected var electricNode = new ElectricNode(this)
+
+  def energy : EnergyStorage = electricNode.energy
+
+  def setCapacity(value: Double) {energy.setCapacity(value)}
+
+  def setMaxTransfer(maxTransfer: Double) {energy.setMaxTransfer(maxTransfer)}
+
+  def setMaxReceive(maxReceive: Double) {energy.setMaxReceive(maxReceive)}
+
+  def setMaxExtract(maxExtract: Double) {energy.setMaxExtract(maxExtract)}
 
   protected def recharge(stack: ItemStack)
   {
