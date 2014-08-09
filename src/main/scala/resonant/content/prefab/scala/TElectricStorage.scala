@@ -2,7 +2,6 @@ package resonant.lib.content.prefab
 
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
-import universalelectricity.api.EnergyStorage
 import universalelectricity.api.core.grid.electric.IEnergyContainer
 
 /**
@@ -10,8 +9,6 @@ import universalelectricity.api.core.grid.electric.IEnergyContainer
  */
 trait TElectricStorage extends TElectric with IEnergyContainer
 {
-  override def energy: EnergyStorage = _
-
   /**
    * Sets the amount of energy this unit stored.
    *
