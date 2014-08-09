@@ -10,7 +10,7 @@ import universalelectricity.api.core.grid.electric.IEnergyContainer
  */
 trait TElectricStorage extends TElectric with IEnergyContainer
 {
-  protected var energy: EnergyStorage = _
+  var energy: EnergyStorage = _
 
   /**
    * Sets the amount of energy this unit stored.
