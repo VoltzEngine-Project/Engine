@@ -77,7 +77,7 @@ class EnergyNode(parent: INodeProvider) extends ConnectorNode[IEnergyNode](paren
   {
     if(obj.isInstanceOf[INodeProvider])
     {
-      if(obj.asInstanceOf[INodeProvider].getNode(Class[IEnergyNode], accessSide).isInstanceOf[IEnergyNode])
+      if(obj.asInstanceOf[INodeProvider].getNode(classOf[IEnergyNode], accessSide).isInstanceOf[IEnergyNode])
       {
         return true;
       }

@@ -66,7 +66,7 @@ class ElectricNode(parent: INodeProvider) extends EnergyNode(parent) with IElect
   {
     if(obj.isInstanceOf[INodeProvider])
     {
-      if(obj.asInstanceOf[INodeProvider].getNode(Class[IElectricNode], accessSide).isInstanceOf[IElectricNode])
+      if(obj.asInstanceOf[INodeProvider].getNode(classOf[IElectricNode], accessSide).isInstanceOf[IElectricNode])
       {
         return true;
       }
