@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveObj
 {
-	protected final W self;
+	protected final W tile;
 	/**
 	 * The main block used for reference
 	 */
@@ -31,15 +31,15 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 
 	public MultiBlockHandler(W wrapper)
 	{
-		this.self = wrapper;
+		this.tile = wrapper;
 		wrapperClass = (Class<? extends W>) wrapper.getClass();
 	}
 
 	public void update()
 	{
-		if (self.getWorld() != null && newPrimary != null)
+		if (tile.getWorld() != null && newPrimary != null)
 		{
-			W checkWrapper = getWrapperAt(newPrimary.clone().add(self.getPosition()));
+			W checkWrapper = getWrapperAt(newPrimary.clone().add(tile.getPosition()));
 
 			if (checkWrapper != null)
 			{
@@ -48,7 +48,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 				if (checkWrapper != getPrimary())
 				{
 					prim = new WeakReference(checkWrapper);
-					self.onMultiBlockChanged();
+					tile.onMultiBlockChanged();
 				}
 			}
 		}
@@ -77,11 +77,11 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 	public Set<W> getStructure()
 	{
 		Set<W> structure = new LinkedHashSet<W>();
-		Vector3[] vectors = self.getMultiBlockVectors();
+		Vector3[] vectors = tile.getMultiBlockVectors();
 
 		for (Vector3 vector : vectors)
 		{
-			W checkWrapper = getWrapperAt(vector.add(self.getPosition()));
+			W checkWrapper = getWrapperAt(vector.add(tile.getPosition()));
 
 			if (checkWrapper != null)
 			{
@@ -119,7 +119,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 					}
 				}
 
-				prim = new WeakReference(self);
+				prim = new WeakReference(tile);
 				for (W structure : structures)
 				{
 					structure.getMultiBlock().prim = prim;
@@ -170,7 +170,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 
 	public W getWrapperAt(Vector3 position)
 	{
-		TileEntity tile = position.getTileEntity(self.getWorld());
+		TileEntity tile = position.getTileEntity(this.tile.getWorld());
 
 		if (tile != null && wrapperClass.isAssignableFrom(tile.getClass()))
 		{
@@ -187,7 +187,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 
 	public boolean isPrimary()
 	{
-		return !isConstructed() || getPrimary() == self;
+		return !isConstructed() || getPrimary() == tile;
 	}
 
 	public W getPrimary()
@@ -197,7 +197,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 
 	public W get()
 	{
-		return getPrimary() != null ? getPrimary() : self;
+		return getPrimary() != null ? getPrimary() : tile;
 	}
 
 	/**
@@ -225,7 +225,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 	{
 		if (isConstructed())
 		{
-			nbt.setTag("primaryMultiBlock", getPrimary().getPosition().subtract(self.getPosition()).toNBT());
+			nbt.setTag("primaryMultiBlock", getPrimary().getPosition().subtract(tile.getPosition()).toNBT());
 		}
 	}
 
