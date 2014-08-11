@@ -16,10 +16,22 @@ trait RecipeHolder
 {
   val recipes = Recipes
 
+  protected def shaped(output: Item, input: Any*): IRecipe =
+    new ShapedOreRecipe(output, convertToMinecraft(input): _*)
+
+  protected def shaped(output: Block, input: Any*): IRecipe =
+    new ShapedOreRecipe(output, convertToMinecraft(input): _*)
+
   protected def shaped(output: ItemStack, input: Any*): IRecipe =
     new ShapedOreRecipe(output, convertToMinecraft(input): _*)
 
   protected def shapeless(output: ItemStack, input: Any*): IRecipe =
+    new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
+
+  protected def shapeless(output: Item, input: Any*): IRecipe =
+    new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
+
+  protected def shapeless(output: Block, input: Any*): IRecipe =
     new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
 
   private def convertToMinecraft(params: Seq[Any]): Seq[AnyRef] =

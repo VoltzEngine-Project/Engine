@@ -27,7 +27,7 @@ public class DummyPlayer extends FakePlayer
 
 	public DummyPlayer(World world, String sufix)
 	{
-		this(world, "[Calc-Core]FakePlayer", sufix);
+		this(world, "[RE]FakePlayer", sufix);
 	}
 
 	public DummyPlayer(World world)
