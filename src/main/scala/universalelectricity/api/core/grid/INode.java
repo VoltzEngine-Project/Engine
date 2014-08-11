@@ -6,7 +6,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public interface INode
 {
 	/**
-	 * Called to reconstruct and reset all connections for this node/
+	 * Called to reconstruct and reset all connections for this node.
 	 */
 	public void reconstruct();
 

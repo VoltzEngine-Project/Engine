@@ -12,7 +12,7 @@ import scala.reflect.ClassTag
  *
  * @author Calclavia
  */
-class TickingGrid[N <: Node[N] : ClassTag] extends NodeGrid[N] with IUpdate
+class TickingGrid[N <: Node[_] : ClassTag] extends NodeGrid[N] with IUpdate
 {
   /** Upon init, add this grid into the ticker. */
   UpdateTicker.addUpdater(this)

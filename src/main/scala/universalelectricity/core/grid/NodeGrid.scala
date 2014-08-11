@@ -8,7 +8,7 @@ import scala.reflect.ClassTag
  *
  * @tparam N - The type of the node
  */
-abstract class NodeGrid[N <: Node[N] : ClassTag] extends Grid[N]
+abstract class NodeGrid[N <: Node[_] : ClassTag] extends Grid[N]
 {
   protected override def reconstructNode(node: N)
   {
@@ -17,28 +17,31 @@ abstract class NodeGrid[N <: Node[N] : ClassTag] extends Grid[N]
 
     val connections = node.connections
 
-    connections.keySet().foreach(connectedNode =>
-    {
-      //&& connection.isInstanceOf[Node]
-      if (isValidNode(connectedNode))
+    connections.keySet().foreach(
+      connectedNode =>
       {
-        if (connectedNode.getGrid != this)
+        if (isValidNode(connectedNode))
         {
-          connectedNode.getGrid.getNodes().clear()
-          add(connectedNode)
-          reconstructNode(connectedNode)
+          val con = connectedNode.asInstanceOf[N]
+
+          if (con.getGrid != this)
+          {
+            con.getGrid.getNodes().clear()
+            add(con)
+            reconstructNode(con)
+          }
         }
-      }
-    })
+      })
   }
 
   override def deconstruct
   {
-    getNodes().foreach(node =>
-    {
-      node.setGrid(null)
-      node.reconstruct()
-    })
+    getNodes().foreach(
+      node =>
+      {
+        node.setGrid(null)
+        node.reconstruct()
+      })
 
     getNodes().clear()
   }
