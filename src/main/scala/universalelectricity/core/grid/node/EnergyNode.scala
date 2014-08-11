@@ -5,6 +5,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.api.EnergyStorage
 import universalelectricity.api.core.grid.INodeProvider
 import universalelectricity.api.core.grid.electric.IEnergyNode
+import universalelectricity.compatibility.Compatibility
 import scala.collection.convert.wrapAll._
 
 /**
@@ -69,5 +70,26 @@ class EnergyNode(parent: INodeProvider) extends ConnectorNode[IEnergyNode](paren
     val tag: NBTTagCompound = new NBTTagCompound()
     energy.writeToNBT(tag)
     nbt.setTag("EnergyStorage", tag)
+  }
+
+  /** Is the object a or contains an energy node */
+  def isEnergyNode(obj : Any, accessSide : ForgeDirection) : Boolean =
+  {
+    if(obj.isInstanceOf[INodeProvider])
+    {
+      if(obj.asInstanceOf[INodeProvider].getNode(Class[IEnergyNode], accessSide).isInstanceOf[IEnergyNode])
+      {
+        return true;
+      }
+    }else if(obj.isInstanceOf[IEnergyNode])
+    {
+      return true
+    }
+    return false
+  }
+  /** Is the obj a handler of energy */
+  def isEnergyHandler(obj : Any) : Boolean =
+  {
+    return Compatibility.isHandler(obj)
   }
 }

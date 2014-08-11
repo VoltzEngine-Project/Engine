@@ -1,6 +1,7 @@
 package universalelectricity.core.grid.node
 
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.api.core.grid.INodeProvider
 import universalelectricity.api.core.grid.electric.{IElectricNode, IResistance}
 
@@ -58,6 +59,22 @@ class ElectricNode(parent: INodeProvider) extends EnergyNode(parent) with IElect
     super.save(nbt)
     nbt.setDouble("voltage", voltage)
     nbt.setDouble("amperage", amperage)
+  }
+
+  /** Is the object a or contains an electric node */
+  def isElectricNode(obj : Any, accessSide : ForgeDirection) : Boolean =
+  {
+    if(obj.isInstanceOf[INodeProvider])
+    {
+      if(obj.asInstanceOf[INodeProvider].getNode(Class[IElectricNode], accessSide).isInstanceOf[IElectricNode])
+      {
+        return true;
+      }
+    }else if(obj.isInstanceOf[IElectricNode])
+    {
+      return true
+    }
+    return false
   }
 
 }
