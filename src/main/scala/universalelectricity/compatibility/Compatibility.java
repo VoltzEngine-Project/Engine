@@ -219,6 +219,17 @@ public class Compatibility
         return 0;
     }
 
+
+    public static ItemStack getItemWithCharge(ItemStack itemStack, double energy)
+    {
+        CompatibilityModule module = getHandler(itemStack);
+        if(module != null)
+        {
+            return module.getItemWithCharge(itemStack, energy);
+        }
+        return itemStack;
+    }
+
     /**
      * Prefab for handling each mod's energy system in relation to UE's energy system
      */
