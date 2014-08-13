@@ -42,7 +42,7 @@ abstract class Node[N](parent: INodeProvider) extends INode
     return grid
   }
 
-  protected def newGrid: Grid[_] = new Grid[this.type]()
+  protected def newGrid: Grid[_] = new Grid[this.type](classOf[Node[N]])
 
   final def setGrid(grid: Grid[_])
   {

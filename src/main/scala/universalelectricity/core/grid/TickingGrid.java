@@ -6,7 +6,7 @@ import universalelectricity.api.core.grid.IUpdate;
 /**
  * Created by robert on 8/11/2014.
  */
-public class TickingGrid<N extends Node<N>> extends NodeGrid<N> implements IUpdate {
+public class TickingGrid<N extends Node> extends NodeGrid<N> implements IUpdate {
 
     public TickingGrid(Class node)
     {

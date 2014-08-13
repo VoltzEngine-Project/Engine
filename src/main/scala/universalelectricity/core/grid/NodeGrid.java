@@ -7,9 +7,9 @@ import java.util.Map;
 /**
  * Created by robert on 8/13/2014.
  */
-public class NodeGrid<N extends Node<N>> extends Grid<N>
+public class NodeGrid<N extends Node> extends Grid<N>
 {
-    public NodeGrid(Class<N> node)
+    public NodeGrid(Class node)
     {
         super(node);
     }

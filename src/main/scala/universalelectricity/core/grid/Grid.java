@@ -7,13 +7,13 @@ import java.util.Iterator;
 import java.util.Set;
 
 /** Collection of nodes patterened in a grid  */
-public class Grid<N extends Node<N>> implements IGrid<N>
+public class Grid<N> implements IGrid<N>
 {
-    final Class<N> nodeClass;
+    final Class nodeClass;
     private final Set<N> nodes = new HashSet<N>();
 
     /** @param node - class of the node used by the grid */
-    public Grid(Class<N> node)
+    public Grid(Class node)
     {
         this.nodeClass = node;
     }
