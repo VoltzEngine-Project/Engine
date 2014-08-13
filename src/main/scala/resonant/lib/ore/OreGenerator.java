@@ -27,8 +27,6 @@ public abstract class OreGenerator implements IWorldGenerator
 
 	public boolean shouldGenerate = false;
 
-	public ItemStack oreStack;
-
 	public Block oreBlock;
 
 	public int oreMeta;
@@ -47,25 +45,20 @@ public abstract class OreGenerator implements IWorldGenerator
 	/**
 	 * @param name - The name of the ore for display
 	 */
-	public OreGenerator(String name, ItemStack stack, String harvestTool, int harvestLevel)
-	{
-		if (stack != null)
-		{
-			this.name = name;
-			this.harvestTool = harvestTool;
-			this.harvestLevel = harvestLevel;
-			this.oreStack = stack;
-			this.oreBlock = ((ItemBlock) stack.getItem()).field_150939_a;
-			this.oreMeta = stack.getItemDamage();
+    public OreGenerator(String name,ItemStack stack,  String harvestTool, int harvestLevel)
+    {
+        this(name, ((ItemBlock) stack.getItem()).field_150939_a, stack.getItemDamage(), harvestTool, harvestLevel);
+    }
 
-			OreDictionary.registerOre(name, stack);
-			Block block = Block.getBlockFromItem(stack.getItem());
-			block.setHarvestLevel(this.harvestTool, this.harvestLevel, stack.getItemDamage());
-		}
-		else
-		{
-			FMLLog.severe("ItemStack is null while registering ore generation!");
-		}
+	public OreGenerator(String name, Block block, int meta, String harvestTool, int harvestLevel)
+	{
+        this.name = name;
+        this.harvestTool = harvestTool;
+        this.harvestLevel = harvestLevel;
+        this.oreBlock = block;
+        this.oreMeta = meta;
+        OreDictionary.registerOre(name, new ItemStack(block, meta));
+        block.setHarvestLevel(this.harvestTool, this.harvestLevel, meta);
 	}
 
 	/**
