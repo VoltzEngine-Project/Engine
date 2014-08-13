@@ -12,7 +12,7 @@ import universalelectricity.core.transform.vector.Vector3
 
 import scala.collection.convert.wrapAll._
 
-class FrequencyGrid extends Grid[IBlockFrequency] with FrequencyGridRegistry.IFrequencyGrid
+class FrequencyGrid extends Grid[IBlockFrequency](classOf[IBlockFrequency]) with FrequencyGridRegistry.IFrequencyGrid
 {
   /**
    * Adds a node to the grid.
