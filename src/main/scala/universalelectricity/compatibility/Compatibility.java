@@ -107,6 +107,16 @@ public class Compatibility
 		return false;
 	}
 
+    public static boolean canConnect(Object obj, ForgeDirection direction, Object source)
+    {
+        CompatibilityModule module = getHandler(obj);
+        if(module != null)
+        {
+            return module.canConnect(obj, direction, source);
+        }
+        return false;
+    }
+
     /**
      * Called to give an amount of energy to the handler in the direction given
      * @param handler - tile/multipart/etc getting the energy
@@ -230,6 +240,45 @@ public class Compatibility
         return itemStack;
     }
 
+    public static double getEnergy(Object obj, ForgeDirection direction)
+    {
+        CompatibilityModule module = getHandler(obj);
+        if(module != null)
+        {
+            return module.getEnergy(obj, direction);
+        }
+        return 0;
+    }
+
+    public static double getMaxEnergy(Object handler, ForgeDirection direction)
+    {
+        CompatibilityModule module = getHandler(handler);
+        if(module != null)
+        {
+            return module.getMaxEnergy(handler, direction);
+        }
+        return 0;
+    }
+
+    public static double getEnergyItem(ItemStack is)
+    {
+        CompatibilityModule module = getHandler(is);
+        if(module != null)
+        {
+            return module.getEnergyItem(is);
+        }
+        return 0;
+    }
+
+    public static double getMaxEnergyItem(ItemStack is){
+        CompatibilityModule module = getHandler(is);
+        if(module != null)
+        {
+            return module.getMaxEnergyItem(is);
+        }
+        return 0;
+    }
+
     /**
      * Prefab for handling each mod's energy system in relation to UE's energy system
      */
@@ -295,11 +344,11 @@ public class Compatibility
 
 		public abstract boolean doIsEnergyContainer(Object obj);
 
-		public abstract double getEnergy(Object obj, ForgeDirection direction);
-
 		public abstract boolean canConnect(Object obj, ForgeDirection direction, Object source);
 
 		public abstract ItemStack getItemWithCharge(ItemStack itemStack, double energy);
+
+        public abstract double getEnergy(Object obj, ForgeDirection direction);
 
 		public abstract double getMaxEnergy(Object handler, ForgeDirection direction);
 
