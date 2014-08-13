@@ -430,7 +430,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     return boxes
   }
 
-  def getCollisionBoxes: Iterable[Cuboid] =
+  def getCollisionBoxes: java.lang.Iterable[Cuboid] =
   {
     return immutable.List[Cuboid](bounds)
   }
