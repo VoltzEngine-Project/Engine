@@ -257,6 +257,12 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def zCross = new Vector3(-this.y, this.x, 0.0D)
 
+  /** Point between this point and another */
+  def midPoint(pos: Vector3) : Vector3 =
+  {
+    return new Vector3((x + pos.x) / 2, (y + pos.y) / 2, (z + pos.z) / 2);
+  }
+
   /** @return The perpendicular vector to the axis. */
   def perpendicular: Vector3 =
   {
