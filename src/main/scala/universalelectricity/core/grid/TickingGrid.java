@@ -8,9 +8,9 @@ import universalelectricity.api.core.grid.IUpdate;
  */
 public class TickingGrid<N extends Node<N>> extends NodeGrid<N> implements IUpdate {
 
-    public TickingGrid(ClassTag tag)
+    public TickingGrid(Class node)
     {
-        super(tag);
+        super(node);
         UpdateTicker.addUpdater(this);
     }
 
