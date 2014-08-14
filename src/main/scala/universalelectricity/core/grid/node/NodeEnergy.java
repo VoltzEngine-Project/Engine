@@ -49,6 +49,11 @@ public class NodeEnergy extends NodeConnector implements IEnergyNode, IUpdate, I
             shareEnergy();
     }
 
+    public EnergyStorage buffer()
+    {
+        return buffer;
+    }
+
     @Override
     public double addEnergy(ForgeDirection from, double wattage, boolean doAdd)
     {
