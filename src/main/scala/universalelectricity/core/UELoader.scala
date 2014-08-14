@@ -7,11 +7,11 @@ import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common._
 import cpw.mods.fml.common.event.{FMLPostInitializationEvent, FMLPreInitializationEvent, FMLServerStartedEvent, FMLServerStoppedEvent}
 import universalelectricity.api.core.grid.NodeRegistry
-import universalelectricity.api.core.grid.electric.IElectricNode
+import universalelectricity.api.core.grid.electric.IEnergyNode
 import universalelectricity.compatibility.Compatibility
 import universalelectricity.compatibility.module.{ModuleBuildCraft, ModuleThermalExpansion, ModuleUniversalElectricity}
 import universalelectricity.core.grid.UpdateTicker
-import universalelectricity.core.grid.node.ElectricNode
+import universalelectricity.core.grid.node.NodeEnergy
 
 @Mod(modid = UniversalElectricity.id, version = UniversalElectricity.version, name = UniversalElectricity.name, dependencies = "before:ForgeMultipart", modLanguage = "scala")
 object UELoader
@@ -35,7 +35,7 @@ object UELoader
     /**
      * Node registration
      */
-    NodeRegistry.register(classOf[IElectricNode], classOf[ElectricNode])
+    NodeRegistry.register(classOf[IEnergyNode], classOf[NodeEnergy])
 
     Compatibility.register(ModuleUniversalElectricity)
 

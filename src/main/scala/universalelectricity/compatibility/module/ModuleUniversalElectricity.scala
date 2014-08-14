@@ -3,7 +3,7 @@ package universalelectricity.compatibility.module
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.api.core.grid.INodeProvider
-import universalelectricity.api.core.grid.electric.{IElectricNode, IEnergyContainer}
+import universalelectricity.api.core.grid.electric.{IEnergyNode, IEnergyContainer}
 import universalelectricity.api.item.IEnergyItem
 import universalelectricity.compatibility.Compatibility
 
@@ -14,24 +14,24 @@ object ModuleUniversalElectricity extends Compatibility.CompatibilityModule("Uni
 {
   def receiveEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doReceive: Boolean): Double =
   {
-    (handler.asInstanceOf[INodeProvider]).getNode(classOf[IElectricNode], direction).asInstanceOf[IElectricNode].addEnergy(energy, doReceive)
+    (handler.asInstanceOf[INodeProvider]).getNode(classOf[IEnergyNode], direction).asInstanceOf[IEnergyNode].addEnergy(direction, energy, doReceive)
     return energy
   }
 
   def extractEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doExtract: Boolean): Double =
   {
-    (handler.asInstanceOf[INodeProvider]).getNode(classOf[IElectricNode], direction).asInstanceOf[IElectricNode].removeEnergy(energy, doExtract)
+    (handler.asInstanceOf[INodeProvider]).getNode(classOf[IEnergyNode], direction).asInstanceOf[IEnergyNode].removeEnergy(direction, energy, doExtract)
     return energy
   }
 
   def doIsHandler(obj: AnyRef): Boolean =
   {
-    return (obj.isInstanceOf[INodeProvider] && (obj.asInstanceOf[INodeProvider]).getNode(classOf[IElectricNode], null) != null) || obj.isInstanceOf[IEnergyItem]
+    return (obj.isInstanceOf[INodeProvider] && (obj.asInstanceOf[INodeProvider]).getNode(classOf[IEnergyNode], null) != null) || obj.isInstanceOf[IEnergyItem]
   }
 
   def canConnect(obj: AnyRef, direction: ForgeDirection, source: AnyRef): Boolean =
   {
-    return (obj.asInstanceOf[INodeProvider]).getNode(classOf[IElectricNode], direction) != null
+    return (obj.asInstanceOf[INodeProvider]).getNode(classOf[IEnergyNode], direction) != null
   }
 
   def chargeItem(itemStack: ItemStack, joules: Double, doCharge: Boolean): Double =
