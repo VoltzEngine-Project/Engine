@@ -41,6 +41,16 @@ class TileAdvanced(material : Material) extends SpatialBlock(material : Material
 
   def sendPacket(packet: AbstractPacket) {ResonantEngine.instance.packetHandler.sendToAllAround(packet, this) }
 
+  Int
+
+  override def getBlockMetadata: Int =
+  {
+    if(world == null)
+      return 0
+    else
+      return super.getBlockMetadata
+  }
+
   override def getDirection: ForgeDirection = if(canRotate) ForgeDirection.getOrientation(getBlockMetadata) else ForgeDirection.NORTH
 
   override def setDirection(direction: ForgeDirection): Unit = {if(canRotate) setMeta(direction.ordinal())}

@@ -8,14 +8,14 @@ import universalelectricity.api.{EnergyStorage, UniversalClass}
 import universalelectricity.api.core.grid.electric.IElectricNode
 import universalelectricity.api.core.grid.{INode, INodeProvider}
 import universalelectricity.compatibility.Compatibility
-import universalelectricity.core.grid.node.ElectricNode
+import universalelectricity.core.grid.node.NodeElectric
 
 @UniversalClass
 trait TElectric extends TIO with INodeProvider with ISaveObj
 {
-  protected var electricNode = new ElectricNode(this)
+  protected var electricNode = new NodeElectric(this)
 
-  def energy : EnergyStorage = electricNode.energy
+  def energy : EnergyStorage = electricNode.buffer
 
   def setCapacity(value: Double) {energy.setCapacity(value)}
 
@@ -28,13 +28,13 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
   protected def recharge(stack: ItemStack)
   {
     if (stack != null && Compatibility.getHandler(stack.getItem) != null)
-      electricNode.removeEnergy(Compatibility.getHandler(stack.getItem).chargeItem(stack, electricNode.getEnergy(), true), true)
+      electricNode.removeEnergy(ForgeDirection.UNKNOWN, Compatibility.chargeItem(stack, electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
   }
 
   protected def discharge(stack: ItemStack)
   {
     if (stack != null && Compatibility.getHandler(stack.getItem) != null)
-      electricNode.addEnergy(Compatibility.getHandler(stack.getItem).dischargeItem(stack, electricNode.getEnergyCapacity - electricNode.getEnergy(), true), true)
+      electricNode.addEnergy(ForgeDirection.UNKNOWN, Compatibility.dischargeItem(stack, electricNode.getEnergyCapacity(ForgeDirection.UNKNOWN) - electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
   }
 
   /**
