@@ -51,7 +51,8 @@ public class NodeConnector extends Node implements IConnector
     public void deconstruct()
     {
         super.deconstruct();
-        connections = null;
+        if(connections != null)
+            connections.clear();
     }
 
     @Override
@@ -64,6 +65,11 @@ public class NodeConnector extends Node implements IConnector
     /** Called during reconstruct to build the connection map */
     public void buildConnections()
     {
+        if(connections == null)
+            connections = new WeakHashMap<Object, ForgeDirection>();
+        else
+            connections.clear();
+        
         for(ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
         {
             if(canConnect(direction.getOpposite()))
