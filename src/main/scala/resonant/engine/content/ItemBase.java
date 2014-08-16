@@ -13,7 +13,7 @@ public class ItemBase extends Item
 {
 	protected final IIcon[] icons = new IIcon[256];
 
-	public ItemBase(String name, int id)
+	public ItemBase(String name)
 	{
 		super();
 		this.setUnlocalizedName(References.PREFIX + name);

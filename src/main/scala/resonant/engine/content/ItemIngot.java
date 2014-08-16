@@ -4,9 +4,9 @@ import net.minecraft.creativetab.CreativeTabs;
 
 public class ItemIngot extends ItemBase
 {
-	public ItemIngot(String name, int id)
+	public ItemIngot(String name)
 	{
-		super(name, id);
+		super(name);
 		this.setCreativeTab(CreativeTabs.tabMaterials);
 	}
 }

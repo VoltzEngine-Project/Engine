@@ -11,9 +11,9 @@ public class ItemCircuit extends ItemBase
 {
 	public static final String[] TYPES = { "circuitBasic", "circuitAdvanced", "circuitElite" };
 
-	public ItemCircuit(int id, int texture)
+	public ItemCircuit(int texture)
 	{
-		super("circuit", id);
+		super("circuit");
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
 	}

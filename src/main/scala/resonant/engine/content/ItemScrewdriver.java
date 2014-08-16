@@ -14,9 +14,9 @@ import java.util.List;
 
 public class ItemScrewdriver extends ItemBase implements IToolWrench
 {
-	public ItemScrewdriver(int id)
+	public ItemScrewdriver()
 	{
-		super("screwdriver", id);
+		super("screwdriver");
 		this.setMaxStackSize(1);
 		this.setCreativeTab(CreativeTabs.tabTools);
 	}

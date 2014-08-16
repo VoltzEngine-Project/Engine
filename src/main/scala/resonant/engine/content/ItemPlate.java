@@ -4,9 +4,9 @@ import net.minecraft.creativetab.CreativeTabs;
 
 public class ItemPlate extends ItemBase
 {
-	public ItemPlate(String name, int id)
+	public ItemPlate(String name)
 	{
-		super(name, id);
+		super(name);
 		this.setCreativeTab(CreativeTabs.tabMaterials);
 	}
 }
