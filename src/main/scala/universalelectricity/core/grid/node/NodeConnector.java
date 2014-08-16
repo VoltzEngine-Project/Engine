@@ -44,7 +44,7 @@ public class NodeConnector extends Node implements IConnector
 
     public boolean isValidConnection(Object object)
     {
-        return object.getClass().isAssignableFrom(getClass());
+        return object != null && object.getClass().isAssignableFrom(getClass());
     }
 
     @Override
