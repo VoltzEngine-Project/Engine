@@ -61,12 +61,11 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 	 */
 	public boolean toggleConstruct()
 	{
-		if (!construct())
+		if (isConstructed())
 		{
 			return deconstruct();
 		}
-
-		return true;
+		return construct();
 	}
 
 	/**
