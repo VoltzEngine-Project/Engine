@@ -285,9 +285,9 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   def anglePreNorm(other: Vector3) = Math.acos(this $ other)
 
-  def getAround(world: World, side: ForgeDirection, range: Int) :  Array[Vector3] =
+  def getAround(world: World, side: ForgeDirection, range: Int) :  java.util.List[Vector3] =
   {
-    val list: List[Vector3] = List[Vector3]()
+    val list: java.util.List[Vector3] = new java.util.ArrayList[Vector3]()
 
     val dx : Int = side match{
       case ForgeDirection.EAST => 0
@@ -315,7 +315,7 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
         }
       }
     }
-    return list.toArray
+    return list
   }
 
   def rayTrace(world: World, dir: Vector3, dist: Double): MovingObjectPosition = rayTrace(world, this + (dir * dist))
