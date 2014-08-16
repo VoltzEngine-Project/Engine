@@ -65,9 +65,15 @@ public class NodeConnector extends Node implements IConnector
                 TileEntity tile = position().add(direction).getTileEntity();
                 if(isValidConnection(tile))
                 {
-                    connections.put(tile, direction);
+                   addConnection(tile, direction);
                 }
             }
         }
+    }
+
+    /** Called to add an object to the connection map, and allows for add events during connection updating */
+    protected void addConnection(Object obj, ForgeDirection dir)
+    {
+        connections.put(obj, dir);
     }
 }
