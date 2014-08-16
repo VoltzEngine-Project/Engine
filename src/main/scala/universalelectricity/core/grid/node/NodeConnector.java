@@ -58,6 +58,12 @@ public class NodeConnector extends Node implements IConnector
     public void reconstruct()
     {
         super.reconstruct();
+        buildConnections();
+    }
+
+    /** Called during reconstruct to build the connection map */
+    public void buildConnections()
+    {
         for(ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
         {
             if(canConnect(direction.getOpposite()))
@@ -65,7 +71,7 @@ public class NodeConnector extends Node implements IConnector
                 TileEntity tile = position().add(direction).getTileEntity();
                 if(isValidConnection(tile))
                 {
-                   addConnection(tile, direction);
+                    addConnection(tile, direction);
                 }
             }
         }
