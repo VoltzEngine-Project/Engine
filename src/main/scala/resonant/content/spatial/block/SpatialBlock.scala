@@ -3,11 +3,14 @@ package resonant.content.spatial.block
 import _root_.java.lang.reflect.Method
 import java.util
 
+import com.google.common.collect.Maps
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.client.renderer.texture.IIconRegister
+import net.minecraft.client.renderer.tileentity.{TileEntityRendererDispatcher, TileEntitySpecialRenderer}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
@@ -15,8 +18,11 @@ import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.client.IItemRenderer
+import org.lwjgl.opengl.{GL12, GL11}
 import resonant.content.prefab.itemblock.ItemBlockTooltip
-import resonant.content.wrapper.BlockDummy
+import resonant.content.prefab.scala.render.ISimpleItemRenderer
+import resonant.content.wrapper.{RenderTileDummy, BlockDummy}
 import resonant.lib.content.prefab.{TIO, TRotatable}
 import resonant.lib.render.RenderUtility
 import resonant.lib.utility.{LanguageUtility, WrenchUtility}
@@ -38,6 +44,7 @@ import scala.collection.immutable
 object SpatialBlock
 {
   val icon = new util.HashMap[String, IIcon]
+  val inventoryTileEntities : java.util.Map[Block, TileEntity]  = Maps.newIdentityHashMap();
 
   def getClickedFace(hitSide: Byte, hitX: Float, hitY: Float, hitZ: Float): Vector2 =
   {
@@ -63,6 +70,17 @@ object SpatialBlock
   abstract trait IComparatorInputOverride
   {
     def getComparatorInputOverride(side: Int): Int
+  }
+
+  def getTileEntityForBlock(block: Block) : TileEntity =
+  {
+    var te: TileEntity  = inventoryTileEntities.get(block);
+    if (te == null && Minecraft.getMinecraft().thePlayer != null)
+    {
+      te = block.createTileEntity(Minecraft.getMinecraft().thePlayer.getEntityWorld(), 0);
+      inventoryTileEntities.put(block, te);
+    }
+    return te;
   }
 }
 
@@ -90,6 +108,8 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   var _access: IBlockAccess = null
   var textureName: String = name
   var domain: String = null
+
+  private var noDynamicItemRenderCrash: Boolean = true
 
   def setTextureName(value: String)
   {
@@ -223,7 +243,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     return null
   }
 
-  def metadata: Int = access.getBlockMetadata(x, y, z)
+  def metadata: Int = if(access != null) access.getBlockMetadata(x, y, z) else 0
 
   /**
    * Update
@@ -505,13 +525,60 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   @SideOnly(Side.CLIENT)
   def renderDynamic(pos: Vector3, frame: Float, pass: Int)
   {
+      val tesr: TileEntitySpecialRenderer  = getSpecialRenderer;
+      if(tesr != null && !tesr.isInstanceOf[RenderTileDummy]) {
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
+        GL11.glPushMatrix();
+        GL11.glTranslated(-0.5, -0.5, -0.5);
+        tesr.renderTileEntityAt(this, 0, 0, 0, 0);
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
+      }
+  }
 
+  @SideOnly(Side.CLIENT)
+  def getSpecialRenderer: TileEntitySpecialRenderer =
+  {
+      val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass);
+      if (tesr != null && !tesr.isInstanceOf[RenderTileDummy]) {
+        return tesr;
+      }
+    return null;
+  }
+
+  @SideOnly(Side.CLIENT)
+  def hasSpecialRenderer: Boolean =
+  {
+    return getSpecialRenderer != null;
   }
 
   @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
   {
-    RenderUtility.renderNormalBlockAsItem(itemStack.getItem().asInstanceOf[ItemBlock].field_150939_a, itemStack.getItemDamage(), RenderUtility.renderBlocks)
+    val tesr: TileEntitySpecialRenderer = getSpecialRenderer
+    if(tesr != null && tesr.isInstanceOf[ISimpleItemRenderer])
+    {
+      tesr.asInstanceOf[ISimpleItemRenderer].renderInventoryItem(IItemRenderer.ItemRenderType.INVENTORY, itemStack)
+    }
+    else
+    if(normalRender)
+    {
+      RenderUtility.renderNormalBlockAsItem(itemStack.getItem().asInstanceOf[ItemBlock].field_150939_a, itemStack.getItemDamage(), RenderUtility.renderBlocks)
+    }
+    else if(noDynamicItemRenderCrash)
+    {
+      try {
+        renderDynamic(new Vector3(), 0, 0)
+      }catch
+      {
+        case e: Exception => {
+          noDynamicItemRenderCrash = false
+          System.out.println("A tile has failed to render dynamically as an item. Suppressing renderer to prevent future crashes.")
+          e.printStackTrace()
+        }
+      }
+    }
   }
 
   //TODO: Get rid of parameters
