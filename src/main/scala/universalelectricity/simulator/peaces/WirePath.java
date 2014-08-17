@@ -1,19 +1,22 @@
 package universalelectricity.simulator.peaces;
 
+import universalelectricity.simulator.NetworkSimulator;
+
 import java.util.WeakHashMap;
 
 /**
  * Wraps one or more nodes into a simple object that is used in the NetworkSimulation
  * @author Darkguardsman
  */
-public class WirePath implements INetworkPart
+public class WirePath extends NetworkPart
 {
     INetworkPart inputConnection = null;
     INetworkPart outputConnection = null;
     WeakHashMap<NetworkWire, Object> reference;
 
-    public WirePath(NetworkWire... nodes)
+    public WirePath(NetworkSimulator sim, NetworkWire... nodes)
     {
+        super(sim);
         reference = new WeakHashMap<>();
         for(NetworkNode node: nodes)
         {
@@ -48,7 +51,7 @@ public class WirePath implements INetworkPart
 
     public boolean hasInputsDevices()
     {
-        return inputConnection.hasInputsDevices();
+        return inputConnection.hasInputDevices();
     }
 
 }
