@@ -525,16 +525,20 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   @SideOnly(Side.CLIENT)
   def renderDynamic(pos: Vector3, frame: Float, pass: Int)
   {
-      val tesr: TileEntitySpecialRenderer  = getSpecialRenderer;
-      if(tesr != null && !tesr.isInstanceOf[RenderTileDummy]) {
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
-        GL11.glPushMatrix();
-        GL11.glTranslated(-0.5, -0.5, -0.5);
-        tesr.renderTileEntityAt(this, 0, 0, 0, 0);
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
-      }
+    if(forceStandardRender)
+    {
+      RenderUtility.renderNormalBlockAsItem(block, metadata, RenderUtility.renderBlocks)
+    }
+    val tesr: TileEntitySpecialRenderer  = getSpecialRenderer;
+    if(tesr != null && !tesr.isInstanceOf[RenderTileDummy]) {
+      GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+      GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
+      GL11.glPushMatrix();
+      GL11.glTranslated(-0.5, -0.5, -0.5);
+      tesr.renderTileEntityAt(this, 0, 0, 0, 0);
+      GL11.glPopMatrix();
+      GL11.glPopAttrib();
+    }
   }
 
   @SideOnly(Side.CLIENT)
@@ -562,11 +566,11 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
       tesr.asInstanceOf[ISimpleItemRenderer].renderInventoryItem(IItemRenderer.ItemRenderType.INVENTORY, itemStack)
     }
     else
-    if(normalRender)
+    if(normalRender || forceStandardRender)
     {
       RenderUtility.renderNormalBlockAsItem(itemStack.getItem().asInstanceOf[ItemBlock].field_150939_a, itemStack.getItemDamage(), RenderUtility.renderBlocks)
     }
-    else if(noDynamicItemRenderCrash)
+    if(noDynamicItemRenderCrash)
     {
       try {
         renderDynamic(new Vector3(), 0, 0)
