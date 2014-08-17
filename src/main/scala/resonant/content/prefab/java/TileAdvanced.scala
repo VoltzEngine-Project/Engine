@@ -54,4 +54,6 @@ class TileAdvanced(material : Material) extends SpatialBlock(material : Material
   override def getDirection: ForgeDirection = if(canRotate) ForgeDirection.getOrientation(getBlockMetadata) else ForgeDirection.NORTH
 
   override def setDirection(direction: ForgeDirection): Unit = {if(canRotate) setMeta(direction.ordinal())}
+
+  override def tile: TileAdvanced = this
 }
