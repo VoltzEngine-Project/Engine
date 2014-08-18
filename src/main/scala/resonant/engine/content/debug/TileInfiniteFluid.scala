@@ -22,7 +22,7 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
 
   override def update()
   {
-    super.updateEntity
+    super.update
 
     if (active)
     {
