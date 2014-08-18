@@ -102,6 +102,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   var canProvidePower: Boolean = false
   var tickRandomly: Boolean = false
   var normalRender: Boolean = true
+  var renderStaticBlock: Boolean = false
   var forceStandardRender: Boolean = false
   var customItemRender: Boolean = false
   var isOpaqueCube: Boolean = true
@@ -512,7 +513,10 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   @SideOnly(Side.CLIENT)
   def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
   {
-    return renderer.renderStandardBlock(block, pos.xi, pos.yi, pos.zi)
+    if(renderStaticBlock)
+      return renderer.renderStandardBlock(block, pos.xi, pos.yi, pos.zi)
+    else
+      return false;
   }
 
   /**

@@ -87,7 +87,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     return dummyTile.tile != null
   }
 
-  def createNewTileEntity(var1: World, var2: Int): TileEntity =
+  override def createNewTileEntity(var1: World, var2: Int): TileEntity =
   {
     try
     {
