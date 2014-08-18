@@ -28,7 +28,7 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
 {
     INode baseNode = null;
 
-    private static final Map<Class<? extends TileNode>, List<Field>> nodeFields = new LinkedHashMap<>();
+    private static final Map<Class<? extends TileNode>, List<Field>> nodeFields = new LinkedHashMap<Class<? extends TileNode>, List<Field>>();
 
     public TileNode(Material material)
     {
