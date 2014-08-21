@@ -1,6 +1,6 @@
 package universalelectricity.compatibility.module
 
-import buildcraft.api.mj.{IBatteryProvider, MjAPI}
+import buildcraft.api.mj.{IBatteryProvider}
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.compatibility.Compatibility
@@ -13,7 +13,7 @@ object ModuleBuildCraft extends Compatibility.CompatibilityModule("BuildCraft|En
 {
   def receiveEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doReceive: Boolean): Double =
   {
-    val receiver = handler.asInstanceOf[IBatteryProvider].getMjBattery(MjAPI.DEFAULT_POWER_FRAMEWORK)
+    val receiver = handler.asInstanceOf[IBatteryProvider].getMjBattery("buildcraft.kinesis")
 
     if (receiver != null)
     {
@@ -29,7 +29,7 @@ object ModuleBuildCraft extends Compatibility.CompatibilityModule("BuildCraft|En
 
   def extractEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doExtract: Boolean): Double =
   {
-    val receiver = handler.asInstanceOf[IBatteryProvider].getMjBattery(MjAPI.DEFAULT_POWER_FRAMEWORK)
+    val receiver = handler.asInstanceOf[IBatteryProvider].getMjBattery("buildcraft.kinesis")
 
     if (receiver != null)
     {
@@ -51,7 +51,7 @@ object ModuleBuildCraft extends Compatibility.CompatibilityModule("BuildCraft|En
 
   def canConnect(obj: AnyRef, direction: ForgeDirection, source: AnyRef): Boolean =
   {
-    return obj.asInstanceOf[IBatteryProvider].getMjBattery(MjAPI.DEFAULT_POWER_FRAMEWORK) != null
+    return obj.asInstanceOf[IBatteryProvider].getMjBattery("buildcraft.kinesis") != null
   }
 
   def chargeItem(itemStack: ItemStack, joules: Double, docharge: Boolean): Double =
@@ -76,7 +76,7 @@ object ModuleBuildCraft extends Compatibility.CompatibilityModule("BuildCraft|En
 
   def getEnergy(obj: AnyRef, direction: ForgeDirection): Double =
   {
-    val receiver = obj.asInstanceOf[IBatteryProvider].getMjBattery(MjAPI.DEFAULT_POWER_FRAMEWORK)
+    val receiver = obj.asInstanceOf[IBatteryProvider].getMjBattery("buildcraft.kinesis")
 
     if (receiver != null)
     {
@@ -88,7 +88,7 @@ object ModuleBuildCraft extends Compatibility.CompatibilityModule("BuildCraft|En
 
   def getMaxEnergy(obj: AnyRef, direction: ForgeDirection): Double =
   {
-    val receiver = obj.asInstanceOf[IBatteryProvider].getMjBattery(MjAPI.DEFAULT_POWER_FRAMEWORK)
+    val receiver = obj.asInstanceOf[IBatteryProvider].getMjBattery("buildcraft.kinesis")
 
     if (receiver != null)
     {
