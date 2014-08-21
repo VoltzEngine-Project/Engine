@@ -12,7 +12,8 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
+
+import org.apache.logging.log4j2.Level;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -100,11 +101,11 @@ public final class MjAPI {
 
 				return obj;
 			} catch (InstantiationException e) {
-				BCLog.logger.log(Level.WARNING, "can't instantiate class for energy kind \"" + kind + "\"");
+				BCLog.logger.log(Level.WARN, "can't instantiate class for energy kind \"" + kind + "\"");
 
 				return null;
 			} catch (IllegalAccessException e) {
-				BCLog.logger.log(Level.WARNING, "can't instantiate class for energy kind \"" + kind + "\"");
+				BCLog.logger.log(Level.WARN, "can't instantiate class for energy kind \"" + kind + "\"");
 
 				return null;
 			}
@@ -141,7 +142,7 @@ public final class MjAPI {
 		if (!mjBatteryKinds.containsKey(kind)) {
 			mjBatteryKinds.put(kind, clas);
 		} else {
-			BCLog.logger.log(Level.WARNING,
+			BCLog.logger.log(Level.WARN,
 					"energy kind \"" + kind + "\" already registered with " + clas.getCanonicalName());
 		}
 	}
