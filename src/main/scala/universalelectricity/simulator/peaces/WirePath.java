@@ -17,7 +17,7 @@ public class WirePath extends NetworkPart
     public WirePath(NetworkSimulator sim, NetworkWire... nodes)
     {
         super(sim);
-        reference = new WeakHashMap<>();
+        reference = new WeakHashMap();
         for(NetworkNode node: nodes)
         {
 
