@@ -16,7 +16,6 @@ import java.lang.reflect.Method;
  * @author tgame14
  * @since 31/05/14
  */
-@Deprecated
 public abstract class BlockAdvanced extends Block
 {
 
