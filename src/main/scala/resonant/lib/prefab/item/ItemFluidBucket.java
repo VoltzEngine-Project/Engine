@@ -41,6 +41,7 @@ public class ItemFluidBucket extends ItemFluidContainer
     {
         super(0, FluidContainerRegistry.BUCKET_VOLUME);
         this.setUnlocalizedName(Items.bucket.getUnlocalizedName());
+        this.setContainerItem(Items.bucket);
     }
 
     @SideOnly(Side.CLIENT)

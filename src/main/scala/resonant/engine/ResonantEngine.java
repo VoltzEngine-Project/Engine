@@ -14,7 +14,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,8 +24,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 import resonant.api.IBoilHandler;
 import resonant.api.mffs.fortron.FrequencyGridRegistry;
+import resonant.api.recipe.MachineRecipes;
+import resonant.content.factory.resources.ResourceFactoryHandler;
+import resonant.content.factory.resources.RecipeType;
 import resonant.content.loader.ModManager;
 import resonant.content.wrapper.BlockDummy;
 import resonant.engine.content.ItemScrewdriver;
@@ -42,6 +48,7 @@ import resonant.lib.config.ConfigScanner;
 import resonant.lib.loadable.LoadableHandler;
 import resonant.lib.multiblock.synthetic.SyntheticMultiblock;
 import resonant.lib.network.netty.PacketManager;
+import resonant.lib.ore.OreGenerator;
 import resonant.lib.utility.PlayerInteractionHandler;
 import resonant.lib.utility.PotionUtility;
 import resonant.lib.utility.nbt.SaveManager;
@@ -63,22 +70,34 @@ public class ResonantEngine
 {
 	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
-	@SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
+
+    @SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
 	public static CommonProxy proxy;
-	@Mod.Metadata(References.ID)
+
+    @Mod.Metadata(References.ID)
 	public static ModMetadata metadata;
-	@Instance(References.ID)
+
+    @Instance(References.ID)
 	public static ResonantEngine instance;
-	/**
-	 * Blocks
-	 */
+
+	/** Blocks TODO move to XML data if requires no logic */
 	public static BlockDummy blockCreativeBuilder;
 	public static Block blockInfiniteFluid, blockInfiniteEnergy;
+    public static Block blockOreCopper = null;
+    public static Block blockOreTin = null;
 
-	/**
-	 * Items
-	 */
+    /** Items TODO move to XML data if requires no logic */
 	public static Item itemWrench;
+    public static Item itemMotor = null;
+    public static Item itemCircuitBasic = null;
+    public static Item itemCircuitAdvanced = null;
+    public static Item itemCircuitElite = null;
+
+    /** Ore Generator TODO move to XML data */
+    public static OreGenerator generationOreCopper = null;
+    public static OreGenerator generationOreTin  = null;
+    public static ResourceFactoryHandler resourceFactory;
+
 
 	private static ThermalGrid thermalGrid = new ThermalGrid();
 	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
@@ -88,7 +107,7 @@ public class ResonantEngine
 	public void preInit(FMLPreInitializationEvent evt)
 	{
 		ConfigScanner.instance().generateSets(evt.getAsmData());
-
+        resourceFactory = new ResourceFactoryHandler();
 		References.CONFIGURATION.load();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
@@ -96,14 +115,7 @@ public class ResonantEngine
 		loadables.applyModule(proxy);
 		loadables.applyModule(packetHandler);
 
-		// Potion Array resized to Current potion array, +32, Allows to miss conflicting ID's
 		PotionUtility.resizePotionArray();
-
-		//SaveManager.registerClass("ModFlag", ModFlag.class);
-
-		/**
-		 * EventHandlers
-		 */
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance());
 		MinecraftForge.EVENT_BUS.register(new PlayerInteractionHandler());
@@ -115,7 +127,7 @@ public class ResonantEngine
 		 * Multiblock Handling
 		 */
 		SyntheticMultiblock.instance = new SyntheticMultiblock();
-
+        //TODO setup ores
         if(References.CONFIGURATION.get("Content", "LoadScrewDriver", true).getBoolean(true))
         {
             itemWrench = new ItemScrewdriver();
@@ -123,13 +135,12 @@ public class ResonantEngine
         }
         if(References.CONFIGURATION.get("Content", "LoadParts", true).getBoolean(true))
         {
-            //TODO re-add all the basic parts
+            //TODO setup chips, motor, and basic crafting parts
         }
 		if (References.CONFIGURATION.get("Creative Tools", "CreativeBuilder", true).getBoolean(true))
 		{
 			blockCreativeBuilder = contentRegistry.newBlock(TileCreativeBuilder.class);
 		}
-
 		if (References.CONFIGURATION.get("Creative Tools", "InfiniteSource", true).getBoolean(true))
 		{
 			blockInfiniteFluid = contentRegistry.newBlock(TileInfiniteFluid.class);
@@ -159,6 +170,19 @@ public class ResonantEngine
 		ResonantEngine.metadata.autogenerated = false;
 		proxy.init();
 		loadables.init();
+
+        OreDictionary.registerOre("ingotGold", Items.gold_ingot);
+        OreDictionary.registerOre("ingotIron", Items.iron_ingot);
+        OreDictionary.registerOre("oreGold", Blocks.gold_ore);
+        OreDictionary.registerOre("oreIron", Blocks.iron_ore);
+        OreDictionary.registerOre("oreLapis", Blocks.lapis_ore);
+        MachineRecipes.INSTANCE.addRecipe(RecipeType.SMELTER.name(), new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone));
+        MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.cobblestone, Blocks.gravel);
+        MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.stone, Blocks.cobblestone);
+        MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.chest, new ItemStack(Blocks.planks, 7, 0));
+        MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.cobblestone, Blocks.sand);
+        MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
+        MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
 	}
 
 	@EventHandler
