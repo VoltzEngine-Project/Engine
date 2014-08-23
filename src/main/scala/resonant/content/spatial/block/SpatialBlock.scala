@@ -667,4 +667,13 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   }
 
   def setMeta(meta: Int) { world.setBlockMetadataWithNotify(x, y, z, meta, 3)}
+
+
+  override def getBlockMetadata: Int =
+  {
+    if(world == null)
+      return 0
+    else
+      return super.getBlockMetadata
+  }
 }

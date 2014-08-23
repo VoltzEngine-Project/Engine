@@ -2,34 +2,16 @@ package resonant.content.prefab.java
 
 import net.minecraft.block.material.Material
 import net.minecraft.network.Packet
-import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.IRotatable
-import resonant.content.spatial.block.SpatialBlock
+import resonant.content.spatial.block.SpatialTile
 import resonant.engine.ResonantEngine
+import resonant.lib.content.prefab.TRotatable
 import resonant.lib.network.netty.AbstractPacket
 
 /**
  * Created by robert on 7/29/2014.
  */
-class TileAdvanced(material : Material) extends SpatialBlock(material : Material) with IRotatable
+class TileAdvanced(material : Material) extends SpatialTile(material: Material) with TRotatable
 {
-  protected var ticks : Long = 0
-  protected var canRotate : Boolean = true
-
-  def initiate()
-  {
-
-  }
-
-  override def update()
-  {
-    super.update()
-    if(ticks == 0)
-      initiate
-    ticks += 1
-    if(ticks >= Long.MaxValue - 1)
-      ticks = 1
-  }
 
   override def getDescriptionPacket: Packet = {
     ResonantEngine.instance.packetHandler.toMCPacket(getDescPacket)
@@ -40,20 +22,4 @@ class TileAdvanced(material : Material) extends SpatialBlock(material : Material
   }
 
   def sendPacket(packet: AbstractPacket) {ResonantEngine.instance.packetHandler.sendToAllAround(packet, this) }
-
-  Int
-
-  override def getBlockMetadata: Int =
-  {
-    if(world == null)
-      return 0
-    else
-      return super.getBlockMetadata
-  }
-
-  override def getDirection: ForgeDirection = if(canRotate) ForgeDirection.getOrientation(getBlockMetadata) else ForgeDirection.NORTH
-
-  override def setDirection(direction: ForgeDirection): Unit = {if(canRotate) setMeta(direction.ordinal())}
-
-  override def tile: TileAdvanced = this
 }
