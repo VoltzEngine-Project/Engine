@@ -156,20 +156,22 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
         {
             Class clazz = getClass();
             List<Field> fields = new LinkedList<Field>();
+
             for(Field field : clazz.getFields())
             {
-                if(!fields.contains(field) && field.getType().isAssignableFrom(INode.class))
+                if(!fields.contains(field) && INode.class.isAssignableFrom(field.getType()))
                 {
                     fields.add(field);
                 }
             }
             for(Field field : clazz.getDeclaredFields())
             {
-                if(!fields.contains(field) && field.getType().isAssignableFrom(INode.class))
+                if(!fields.contains(field) && INode.class.isAssignableFrom(field.getType()))
                 {
                     fields.add(field);
                 }
             }
+            nodeFields.put(clazz, fields);
         }
     }
 
