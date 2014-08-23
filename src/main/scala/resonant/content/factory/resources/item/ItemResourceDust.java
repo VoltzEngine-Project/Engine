@@ -6,7 +6,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import resonant.content.factory.resources.ResourceFactoryHandler;
 import resonant.engine.ResonantEngine;
 import resonant.lib.utility.LanguageUtility;
 import cpw.mods.fml.relauncher.Side;
