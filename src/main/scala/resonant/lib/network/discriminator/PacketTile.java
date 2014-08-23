@@ -90,7 +90,18 @@ public class PacketTile extends PacketType
             {
                 IPacketIDReceiver receiver = (IPacketIDReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
                 ByteBuf buf = data().slice();
-                int id = buf.readInt();
+
+                int id = 0;
+                try
+                {
+                    System.out.println("Packet sent to a Tile[" + tile + "] failed to provide a packet ID");
+                    System.out.println("Location: " + new Vector3(x, y, z));
+                    id = buf.readInt();
+                }
+                catch(IndexOutOfBoundsException ex)
+                {
+                    return;
+                }
                 receiver.read(buf, id, player, this);
             }
             catch (Exception e)
