@@ -94,12 +94,12 @@ public class PacketTile extends PacketType
                 int id = 0;
                 try
                 {
-                    System.out.println("Packet sent to a Tile[" + tile + "] failed to provide a packet ID");
-                    System.out.println("Location: " + new Vector3(x, y, z));
                     id = buf.readInt();
                 }
                 catch(IndexOutOfBoundsException ex)
                 {
+                    System.out.println("Packet sent to a Tile[" + tile + "] failed to provide a packet ID");
+                    System.out.println("Location: " + new Vector3(x, y, z));
                     return;
                 }
                 receiver.read(buf, id, player, this);
