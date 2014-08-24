@@ -277,7 +277,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   @SideOnly(Side.CLIENT)
   override def getRenderType: Int =
   {
-    return BlockRenderHandler.ID
+    return if(!dummyTile.normalRender) BlockRenderHandler.ID else 0
   }
 
   @SideOnly(Side.CLIENT)

@@ -1,6 +1,7 @@
 package resonant.content.prefab.java;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,6 +35,11 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
     {
         super(material);
         generateNodeList();
+    }
+
+    public void onNeighborChanged(Block block)
+    {
+
     }
 
     @Override
@@ -86,7 +92,8 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
                         node = (INode) object;
                         if(node instanceof IUpdate)
                         {
-                            if(((IUpdate) node).canUpdate()) {
+                            if(((IUpdate) node).canUpdate())
+                            {
                                 ((IUpdate) node).update(20);
                             }
                         }
