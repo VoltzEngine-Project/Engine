@@ -37,15 +37,22 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
         generateNodeList();
     }
 
+    @Override
     public void onNeighborChanged(Block block)
     {
-
+        super.onNeighborChanged(block);
+        reconstructNode();
     }
 
     @Override
     public void onAdded()
     {
         super.onAdded();
+        reconstructNode();
+    }
+
+    private void reconstructNode()
+    {
         if(nodeFields.containsKey(getClass()))
         {
             List<Field> fields = nodeFields.get(getClass());
