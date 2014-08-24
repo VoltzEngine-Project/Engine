@@ -1,6 +1,5 @@
 package resonant.content.factory.resources;
 
-import com.sun.prism.ResourceFactory;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
