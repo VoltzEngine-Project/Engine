@@ -53,31 +53,8 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
 
     private void reconstructNode()
     {
-        if(nodeFields.containsKey(getClass()))
-        {
-            List<Field> fields = nodeFields.get(getClass());
-            for(Field field : fields)
-            {
-                INode node = null;
-                try
-                {
-                    Object object = field.get(this);
-                    if(object instanceof INode)
-                    {
-                        node = (INode) object;
-                        node.reconstruct();
-                    }
-                }
-                catch (Exception e)
-                {
-                    System.out.println("\n=========================================================================================");
-                    System.out.println("[" +References.NAME +"] A node contained in a tile has thrown an exception during build");
-                    System.out.println("[" +References.NAME +"] Tile: " + this);
-                    System.out.println("[" +References.NAME +"] Node: " + node);
-                    e.printStackTrace();
-                    System.out.println("=========================================================================================\n");
-                }
-            }
+        for(INode node : getNodes()) {
+            node.reconstruct();
         }
     }
 
@@ -85,40 +62,12 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
     public void update()
     {
         super.update();
-        if(nodeFields.containsKey(getClass()))
-        {
-            List<Field> fields = nodeFields.get(getClass());
-            for(Field field : fields)
+        for(INode node : getNodes()) {
+            if(node instanceof IUpdate)
             {
-                INode node = null;
-                try
+                if(((IUpdate) node).canUpdate())
                 {
-                    Object object = field.get(this);
-                    if(object instanceof INode)
-                    {
-                        node = (INode) object;
-                        if(node instanceof IUpdate)
-                        {
-                            if(((IUpdate) node).canUpdate())
-                            {
-                                ((IUpdate) node).update(20);
-                            }
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    System.out.println("\n=========================================================================================");
-                    System.out.println("[" +References.NAME +"] A node contained in a tile has thrown an exception during update");
-                    System.out.println("[" +References.NAME +"] Tile: " + this);
-                    System.out.println("[" +References.NAME +"] Node: " + node);
-                    e.printStackTrace();
-                    System.out.println("=========================================================================================\n");
-                    if(node != null)
-                    {
-                        //TODO maybe create new instance of node
-                        node.reconstruct();
-                    }
+                    ((IUpdate) node).update(20);
                 }
             }
         }
@@ -127,32 +76,8 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
     @Override
     public void invalidate()
     {
-        if(nodeFields.containsKey(getClass()))
-        {
-            List<Field> fields = nodeFields.get(getClass());
-            for(Field field : fields)
-            {
-                INode node = null;
-                try
-                {
-                    Object object = field.get(this);
-                    if(object instanceof INode)
-                    {
-                        node = (INode) object;
-                        node.deconstruct();
-                    }
-                    field.set(this, null);
-                }
-                catch (Exception e)
-                {
-                    System.out.println("\n=========================================================================================");
-                    System.out.println("[" +References.NAME +"] A node contained in a tile has thrown an exception invalidate process");
-                    System.out.println("[" +References.NAME +"] Tile: " + this);
-                    System.out.println("[" +References.NAME +"] Node: " + node);
-                    e.printStackTrace();
-                    System.out.println("=========================================================================================\n");
-                }
-            }
+        for(INode node : getNodes()) {
+            node.deconstruct();
         }
         super.invalidate();
     }
@@ -189,37 +114,42 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
         }
     }
 
+    protected List<INode> getNodes()
+    {
+        List<INode> nodes = new LinkedList<INode>();
+        getNodes(nodes);
+        return nodes;
+    }
+
+    /** Grabs the list of nods from the class using reflection, to improve performance override this and manually add nodes to the list */
+    public void getNodes(List<INode> nodes)
+    {
+        if(nodeFields.containsKey(getClass())) {
+            List<Field> fields = nodeFields.get(getClass());
+            for (Field field : fields) {
+                INode node = null;
+                try {
+                    Object object = field.get(this);
+                    if (object instanceof INode)
+                    {
+                        nodes.add(node);
+                    }
+                }catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
        super.readFromNBT(nbt);
-        if(nodeFields.containsKey(getClass()))
-        {
-            List<Field> fields = nodeFields.get(getClass());
-            for(Field field : fields)
-            {
-                INode node = null;
-                try
-                {
-                    Object object = field.get(this);
-                    if(object instanceof INode)
-                    {
-                        node = (INode) object;
-                        if(node instanceof ISave)
-                        {
-                            ((ISave) node).load(nbt);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    System.out.println("\n=========================================================================================");
-                    System.out.println("[" +References.NAME +"] A node contained in a tile has thrown an exception while loading");
-                    System.out.println("[" +References.NAME +"] Tile: " + this);
-                    System.out.println("[" +References.NAME +"] Node: " + node);
-                    e.printStackTrace();
-                    System.out.println("=========================================================================================\n");
-                }
+        for(INode node : getNodes()) {
+            if (node instanceof ISave) {
+                ((ISave) node).load(nbt);
             }
         }
     }
@@ -228,33 +158,9 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
     public void writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
-        if(nodeFields.containsKey(getClass()))
-        {
-            List<Field> fields = nodeFields.get(getClass());
-            for(Field field : fields)
-            {
-                INode node = null;
-                try
-                {
-                    Object object = field.get(this);
-                    if(object instanceof INode)
-                    {
-                        node = (INode) object;
-                        if(node instanceof ISave)
-                        {
-                            ((ISave) node).save(nbt);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    System.out.println("\n=========================================================================================");
-                    System.out.println("[" +References.NAME +"] A node contained in a tile has thrown an exception while saving");
-                    System.out.println("[" +References.NAME +"] Tile: " + this);
-                    System.out.println("[" +References.NAME +"] Node: " + node);
-                    e.printStackTrace();
-                    System.out.println("=========================================================================================\n");
-                }
+        for(INode node : getNodes()) {
+            if (node instanceof ISave) {
+                ((ISave) node).save(nbt);
             }
         }
     }
@@ -264,33 +170,17 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
     {
         if(type instanceof PacketNode && nodeFields.containsKey(getClass()))
         {
-            List<Field> fields = nodeFields.get(getClass());
-            for(Field field : fields)
+            for(INode node : getNodes())
             {
-                INode node = null;
-                try
+                if((((PacketNode)type).nodeClassName.equalsIgnoreCase("INode") || node.getClass().getSimpleName().equalsIgnoreCase(((PacketNode)type).nodeClassName)))
                 {
-                    Object object = field.get(this);
-                    if(object instanceof INode && (((PacketNode)type).nodeClassName.equalsIgnoreCase("INode") || object.getClass().getSimpleName().equalsIgnoreCase(((PacketNode)type).nodeClassName)))
+                    if(node instanceof IPacketIDReceiver)
                     {
-                        node = (INode) object;
-                        if(node instanceof IPacketIDReceiver)
+                        if(((IPacketIDReceiver) node).read(buf, id, player, type))
                         {
-                            if(((IPacketIDReceiver) node).read(buf, id, player, type))
-                            {
-                                return true;
-                            }
+                            return true;
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    System.out.println("\n=========================================================================================");
-                    System.out.println("[" +References.NAME +"] A node contained in a tile has thrown an exception while saving");
-                    System.out.println("[" +References.NAME +"] Tile: " + this);
-                    System.out.println("[" +References.NAME +"] Node: " + node);
-                    e.printStackTrace();
-                    System.out.println("=========================================================================================\n");
                 }
             }
         }
