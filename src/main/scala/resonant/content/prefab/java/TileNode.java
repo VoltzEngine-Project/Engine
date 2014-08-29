@@ -53,9 +53,18 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
 
     private void reconstructNode()
     {
-        for(INode node : getNodes()) {
-            node.reconstruct();
+        for(INode node : getNodes())
+        {
+            if(node != null)
+                node.reconstruct();
         }
+    }
+
+    @Override
+    public void start()
+    {
+        super.start();
+        reconstructNode();
     }
 
     @Override
@@ -77,7 +86,8 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
     public void invalidate()
     {
         for(INode node : getNodes()) {
-            node.deconstruct();
+            if(node != null)
+                node.deconstruct();
         }
         super.invalidate();
     }
@@ -95,15 +105,13 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
         {
             Class clazz = getClass();
             List<Field> fields = new LinkedList<Field>();
+            List<Field> allFields = new LinkedList<Field>();
 
-            for(Field field : clazz.getFields())
-            {
-                if(!fields.contains(field) && INode.class.isAssignableFrom(field.getType()))
-                {
-                    fields.add(field);
-                }
-            }
-            for(Field field : clazz.getDeclaredFields())
+            //Get all fields both inherited and declared
+            allFields.addAll(Arrays.asList(clazz.getFields()));
+            allFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+
+            for(Field field : allFields)
             {
                 if(!fields.contains(field) && INode.class.isAssignableFrom(field.getType()))
                 {
