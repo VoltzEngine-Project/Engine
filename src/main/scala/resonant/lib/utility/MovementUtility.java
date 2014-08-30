@@ -27,66 +27,58 @@ public class MovementUtility
 	/**
 	 * Sets a block in a sneaky way to bypass some restraints.
 	 */
-	public static void setBlockSneaky(World world, Vector3 position, Block block, int metadata, TileEntity tileEntity)
-	{
-		Chunk chunk = world.getChunkFromChunkCoords(position.xi() >> 4, position.zi() >> 4);
-		Vector3 chunkPosition = new Vector3(position.xi() & 0xF, position.yi() & 0xF, position.zi() & 0xF);
+	public static void setBlockSneaky(World world, Vector3 position, Block block, int metadata, TileEntity tileEntity) {
+        if(block != null && world != null)
+        {
+            Chunk chunk = world.getChunkFromChunkCoords(position.xi() >> 4, position.zi() >> 4);
+            Vector3 chunkPosition = new Vector3(position.xi() & 0xF, position.yi() & 0xF, position.zi() & 0xF);
 
-		int heightMapIndex = chunkPosition.zi() << 4 | chunkPosition.xi();
+            int heightMapIndex = chunkPosition.zi() << 4 | chunkPosition.xi();
 
-		if (position.yi() >= chunk.precipitationHeightMap[heightMapIndex] - 1)
-		{
-			chunk.precipitationHeightMap[heightMapIndex] = -999;
-		}
+            if (position.yi() >= chunk.precipitationHeightMap[heightMapIndex] - 1) {
+                chunk.precipitationHeightMap[heightMapIndex] = -999;
+            }
 
-		int heightMapValue = chunk.heightMap[heightMapIndex];
+            int heightMapValue = chunk.heightMap[heightMapIndex];
 
-		world.removeTileEntity(position.xi(), position.yi(), position.zi());
+            world.removeTileEntity(position.xi(), position.yi(), position.zi());
 
-		ExtendedBlockStorage extendedBlockStorage = chunk.getBlockStorageArray()[position.yi() >> 4];
+            ExtendedBlockStorage extendedBlockStorage = chunk.getBlockStorageArray()[position.yi() >> 4];
 
-		if (extendedBlockStorage == null)
-		{
-			extendedBlockStorage = new ExtendedBlockStorage((position.yi() >> 4) << 4, !world.provider.hasNoSky);
+            if (extendedBlockStorage == null) {
+                extendedBlockStorage = new ExtendedBlockStorage((position.yi() >> 4) << 4, !world.provider.hasNoSky);
 
-			chunk.getBlockStorageArray()[position.yi() >> 4] = extendedBlockStorage;
-		}
+                chunk.getBlockStorageArray()[position.yi() >> 4] = extendedBlockStorage;
+            }
 
-		extendedBlockStorage.func_150818_a(chunkPosition.xi(), chunkPosition.yi(), chunkPosition.zi(), block);
-		extendedBlockStorage.setExtBlockMetadata(chunkPosition.xi(), chunkPosition.yi(), chunkPosition.zi(), metadata);
+            extendedBlockStorage.func_150818_a(chunkPosition.xi(), chunkPosition.yi(), chunkPosition.zi(), block);
+            extendedBlockStorage.setExtBlockMetadata(chunkPosition.xi(), chunkPosition.yi(), chunkPosition.zi(), metadata);
 
-		if (position.yi() >= heightMapValue)
-		{
-			chunk.generateSkylightMap();
-		}
-		else
-		{
-			//chunk.getBlockLightOpacity(chunkPosition.xi(), position.yi(), chunkPosition.zi())
-			if (chunk.getBlockLightValue(chunkPosition.xi(), position.yi(), chunkPosition.zi(), 0) > 0)
-			{
-				if (position.yi() >= heightMapValue)
-				{
-					relightBlock(chunk, chunkPosition.clone().add(new Vector3(0, 1, 0)));
-				}
-			}
-			else if (position.yi() == heightMapValue - 1)
-			{
-				relightBlock(chunk, chunkPosition);
-			}
+            if (position.yi() >= heightMapValue) {
+                chunk.generateSkylightMap();
+            } else {
+                //chunk.getBlockLightOpacity(chunkPosition.xi(), position.yi(), chunkPosition.zi())
+                if (chunk.getBlockLightValue(chunkPosition.xi(), position.yi(), chunkPosition.zi(), 0) > 0) {
+                    if (position.yi() >= heightMapValue) {
+                        relightBlock(chunk, chunkPosition.clone().add(new Vector3(0, 1, 0)));
+                    }
+                } else if (position.yi() == heightMapValue - 1) {
+                    relightBlock(chunk, chunkPosition);
+                }
 
-			propagateSkylightOcclusion(chunk, chunkPosition);
-		}
+                propagateSkylightOcclusion(chunk, chunkPosition);
+            }
 
-		chunk.isModified = true;
-		//updateAllLightTypes
-		world.func_147451_t(position.xi(), position.yi(), position.zi());
+            chunk.isModified = true;
+            //updateAllLightTypes
+            world.func_147451_t(position.xi(), position.yi(), position.zi());
 
-		if (tileEntity != null)
-		{
-			world.setTileEntity(position.xi(), position.yi(), position.zi(), tileEntity);
-		}
+            if (tileEntity != null) {
+                world.setTileEntity(position.xi(), position.yi(), position.zi(), tileEntity);
+            }
 
-		world.markBlockForUpdate(position.xi(), position.yi(), position.zi());
+            world.markBlockForUpdate(position.xi(), position.yi(), position.zi());
+        }
 	}
 
 	/**
