@@ -131,7 +131,7 @@ public class Network extends Grid<NetworkNode> implements IUpdate
         //Que first simulation of network data
 
         //Mix of a path finder and logic builder
-       
+
     }
 
     @Override
