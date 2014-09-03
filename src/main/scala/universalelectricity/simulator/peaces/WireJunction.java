@@ -13,16 +13,17 @@ public class WireJunction extends NetworkPart
 {
     HashMap<Object, ForgeDirection> connectionMap;
     HashMap<ForgeDirection, Boolean> inputMap;
+    NetworkNode node = null;
 
-    public WireJunction(NetworkSimulator sim)
+    public WireJunction(NetworkSimulator sim, NetworkNode node)
     {
         super(sim);
+        this.node = node;
     }
 
-    public void add(Object object, ForgeDirection side, boolean input)
+    public void add(Object object, ForgeDirection side)
     {
         connectionMap.put(object, side);
-        inputMap.put(side, input);
     }
 
     public void remove(Object object)

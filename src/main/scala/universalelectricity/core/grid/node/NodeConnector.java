@@ -31,7 +31,11 @@ public class NodeConnector extends Node implements IConnector
         return connections;
     }
 
-    @Override
+    public Map<Object, ForgeDirection> getConnections() {
+        return connections;
+    }
+
+        @Override
     public boolean canConnect(ForgeDirection direction, Object object)
     {
         return object != null && isValidConnection(object) && canConnect(direction);

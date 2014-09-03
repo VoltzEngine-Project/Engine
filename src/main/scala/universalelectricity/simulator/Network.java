@@ -11,10 +11,10 @@ import universalelectricity.core.grid.UpdateTicker;
 import universalelectricity.core.transform.vector.VectorWorld;
 import universalelectricity.simulator.peaces.NetworkNode;
 import universalelectricity.simulator.peaces.NetworkWire;
+import universalelectricity.simulator.peaces.WireJunction;
+import universalelectricity.simulator.peaces.WirePath;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Basic network of parts that function together to simulate a collection of co-existing tiles.
@@ -52,7 +52,7 @@ public class Network extends Grid<NetworkNode> implements IUpdate
     public void remove(NetworkNode node)
     {
         hasChanged = true;
-        changeLocations.add(new VectorWorld(node));
+        //changeLocations.add(new VectorWorld(node));
         super.remove(node);
     }
 
@@ -69,11 +69,10 @@ public class Network extends Grid<NetworkNode> implements IUpdate
         }
         if(hasChanged)
         {
-            updateConnections();
-            if(changeLocations.size() == 0)
-            {
-                hasChanged = false;
-            }
+            //updateConnections();
+            hasChanged = false;
+            this.buildEntireNetwork();
+
         }
         if(getSimulator() != null)
         {
@@ -113,7 +112,7 @@ public class Network extends Grid<NetworkNode> implements IUpdate
             if(connections > 2)
             {
 
-            }
+            } else
             //Was a wire connection
             if(connections > 1)
             {
@@ -131,7 +130,8 @@ public class Network extends Grid<NetworkNode> implements IUpdate
         //Have simulator calculate out delta changes across sections
         //Que first simulation of network data
 
-        NetworkPathFinder finder = new NetworkPathFinder();
+        //Mix of a path finder and logic builder
+       
     }
 
     @Override

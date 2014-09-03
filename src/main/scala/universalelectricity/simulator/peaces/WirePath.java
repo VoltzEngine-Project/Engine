@@ -10,11 +10,11 @@ import java.util.WeakHashMap;
  */
 public class WirePath extends NetworkPart
 {
-    INetworkPart inputConnection = null;
-    INetworkPart outputConnection = null;
-    WeakHashMap<NetworkWire, Object> reference;
+    INetworkPart connectionA = null;
+    INetworkPart connectionB = null;
+    WeakHashMap<NetworkNode, Object> reference;
 
-    public WirePath(NetworkSimulator sim, NetworkWire... nodes)
+    public WirePath(NetworkSimulator sim, NetworkNode... nodes)
     {
         super(sim);
         reference = new WeakHashMap();
@@ -24,34 +24,34 @@ public class WirePath extends NetworkPart
         }
     }
 
-    public void add(NetworkWire node)
+    public void add(NetworkNode node)
     {
         reference.put(node, true);
     }
 
-    public void remove(NetworkWire node)
+    public void remove(NetworkNode node)
     {
         reference.remove(node);
     }
 
-    public void setOutput(INetworkPart part)
+    public void setConnectionA(INetworkPart part)
     {
-        this.outputConnection = part;
+        this.connectionB = part;
     }
 
-    public void setInput(INetworkPart part)
+    public void setConnectionB(INetworkPart part)
     {
-        this.inputConnection = part;
+        this.connectionA = part;
     }
 
     public boolean isConnected()
     {
-        return inputConnection != null && outputConnection != null;
+        return connectionA != null && connectionB != null;
     }
 
     public boolean hasInputsDevices()
     {
-        return inputConnection.hasInputDevices();
+        return connectionA.hasInputDevices() || connectionB.hasInputDevices();
     }
 
 }
