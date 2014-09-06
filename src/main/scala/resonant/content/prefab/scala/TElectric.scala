@@ -15,6 +15,7 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
 {
   protected var electricNode = new NodeElectric(this)
 
+  @deprecated
   def energy : EnergyStorage = electricNode.buffer
 
   def setCapacity(value: Double) {energy.setCapacity(value)}

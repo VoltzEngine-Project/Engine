@@ -62,7 +62,7 @@ public class UniversalRecipe
 	static
 	{
 		// Metals
-		PRIMARY_METAL = new UniversalRecipe("ingotSteel", "ingotRefinedIron", new ItemStack(Items.iron_ingot));
+		PRIMARY_METAL = new UniversalRecipe("ingotSteel", "plateiron", new ItemStack(Items.iron_ingot));
 		SECONDARY_METAL = new UniversalRecipe("ingotBronze", new ItemStack(Items.brick));
 
 		// Plates
