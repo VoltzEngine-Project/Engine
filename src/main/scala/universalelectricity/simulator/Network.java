@@ -9,10 +9,8 @@ import universalelectricity.compatibility.Compatibility;
 import universalelectricity.core.grid.Grid;
 import universalelectricity.core.grid.UpdateTicker;
 import universalelectricity.core.transform.vector.VectorWorld;
-import universalelectricity.simulator.peaces.NetworkNode;
-import universalelectricity.simulator.peaces.NetworkWire;
-import universalelectricity.simulator.peaces.WireJunction;
-import universalelectricity.simulator.peaces.WirePath;
+import universalelectricity.simulator.parts.NetworkNode;
+import universalelectricity.simulator.parts.NetworkWire;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package universalelectricity.simulator.peaces;
+package universalelectricity.simulator.parts;
 
 /**
  * Interface used by peaces of a simulation network.

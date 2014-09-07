@@ -3,10 +3,10 @@ package universalelectricity.simulator;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.core.grid.INode;
 import universalelectricity.api.core.grid.INodeProvider;
-import universalelectricity.simulator.peaces.NetworkNode;
-import universalelectricity.simulator.peaces.NetworkPart;
-import universalelectricity.simulator.peaces.WireJunction;
-import universalelectricity.simulator.peaces.WirePath;
+import universalelectricity.simulator.parts.NetworkNode;
+import universalelectricity.simulator.parts.NetworkPart;
+import universalelectricity.simulator.parts.WireJunction;
+import universalelectricity.simulator.parts.WirePath;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,11 +1,9 @@
 package universalelectricity.simulator.energy;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.EnergyStorage;
-import universalelectricity.api.core.grid.INodeProvider;
 import universalelectricity.api.core.grid.electric.IEnergyNode;
 import universalelectricity.simulator.Network;
-import universalelectricity.simulator.peaces.NetworkNode;
+import universalelectricity.simulator.parts.NetworkNode;
 
 /**
  * Created by robert on 8/30/2014.

@@ -1,4 +1,4 @@
-package universalelectricity.simulator.peaces;
+package universalelectricity.simulator.parts;
 
 import universalelectricity.simulator.NetworkSimulator;
 

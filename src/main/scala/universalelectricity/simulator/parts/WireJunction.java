@@ -1,10 +1,9 @@
-package universalelectricity.simulator.peaces;
+package universalelectricity.simulator.parts;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.simulator.NetworkSimulator;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by robert on 8/16/2014.
