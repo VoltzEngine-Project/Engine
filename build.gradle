@@ -29,7 +29,7 @@ buildProps.withReader {
 
 version = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
 
-if "Production".equalsIgnoreCase(System.getenv("TEAMCITY_BUILDCONF_NAME")) {
+if (System.getenv("TEAMCITY_BUILDCONF_NAME").equalsIgnoreCase("Production")) {
     group = "com.calclavia.resonantengine"
     archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME").replaceAll(" ", "-")
 } else {
