@@ -2,16 +2,16 @@ package universalelectricity.simulator.energy;
 
 import universalelectricity.api.EnergyStorage;
 import universalelectricity.api.core.grid.electric.IEnergyNode;
-import universalelectricity.simulator.Network;
+import universalelectricity.simulator.SimulatedGrid;
 import universalelectricity.simulator.parts.NetworkNode;
 
 /**
  * Created by robert on 8/30/2014.
  */
-public class EnergyNetwork extends Network
+public class EnergySimulatedGrid extends SimulatedGrid
 {
     protected EnergyStorage buffer;
-    public EnergyNetwork(NetworkNode... nodes)
+    public EnergySimulatedGrid(NetworkNode... nodes)
     {
         super(nodes);
         buffer = new EnergyStorage(1000);

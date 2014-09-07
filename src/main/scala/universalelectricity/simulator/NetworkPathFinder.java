@@ -19,13 +19,13 @@ import java.util.Map;
 public class NetworkPathFinder
 {
     /** Network that is being pathed */
-    private Network network = null;
+    private SimulatedGrid network = null;
     /** All parts created by the path finder */
     private List<NetworkPart> parts;
     /** Nodes that have already been pathed */
     private List<NetworkNode> pathed_nodes;
 
-    public NetworkPathFinder(Network network)
+    public NetworkPathFinder(SimulatedGrid network)
     {
         this.network = network;
         pathed_nodes = new ArrayList<NetworkNode>();
@@ -63,7 +63,7 @@ public class NetworkPathFinder
         if (map.size() > 2)
         {
             //Create new junction
-            nextPart = new WireJunction(network.simulator, node);
+            nextPart = new WireJunction(network, node);
 
             //Connection new junction to last part
             if(part instanceof WirePath)
@@ -84,7 +84,7 @@ public class NetworkPathFinder
             }else
             {
                 //Create a new wire and connect it to old part
-                nextPart = new WirePath(network.simulator, node);
+                nextPart = new WirePath(network, node);
                 if(part != null)
                 {
                     ((WirePath)nextPart).setConnectionA(part);
