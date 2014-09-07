@@ -516,7 +516,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     if(renderStaticBlock)
       return renderer.renderStandardBlock(block, pos.xi, pos.yi, pos.zi)
     else
-      return false;
+      return false
   }
 
   /**
