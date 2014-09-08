@@ -10,7 +10,9 @@ import universalelectricity.simulator.parts.NetworkNode;
  */
 public class EnergySimulatedGrid extends SimulatedGrid
 {
-    protected EnergyStorage buffer;
+	protected EnergyStorage buffer;
+	protected EnergySimulator simulator;
+
     public EnergySimulatedGrid(NetworkNode... nodes)
     {
         super(nodes);
