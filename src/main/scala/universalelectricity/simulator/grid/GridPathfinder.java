@@ -1,4 +1,4 @@
-package universalelectricity.simulator;
+package universalelectricity.simulator.grid;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.core.grid.INode;
@@ -16,16 +16,16 @@ import java.util.Map;
  * Simple connection path finder that generates network parts while pathing all routes from a single node.
  * Created by Darkguardsman on 8/16/2014.
  */
-public class NetworkPathFinder
+public class GridPathfinder
 {
     /** Network that is being pathed */
-    private SimulatedGrid network = null;
+    private SimulationGrid network = null;
     /** All parts created by the path finder */
     private List<NetworkPart> parts;
     /** Nodes that have already been pathed */
     private List<NetworkNode> pathed_nodes;
 
-    public NetworkPathFinder(SimulatedGrid network)
+    public GridPathfinder(SimulationGrid network)
     {
         this.network = network;
         pathed_nodes = new ArrayList<NetworkNode>();

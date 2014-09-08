@@ -1,4 +1,4 @@
-package universalelectricity.simulator;
+package universalelectricity.simulator.grid;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -19,7 +19,7 @@ import java.util.*;
  * Basic network of parts that function together to simulate a collection of co-existing tiles.
  * @author Darkguardsman
  */
-public class SimulatedGrid extends Grid<NetworkNode> implements IUpdate
+public class SimulationGrid extends Grid<NetworkNode> implements IUpdate
 {
     protected boolean hasChanged;
     protected Set<VectorWorld> changeLocations;
@@ -27,7 +27,7 @@ public class SimulatedGrid extends Grid<NetworkNode> implements IUpdate
     /**
      * @param nodes - any node to init the network with
      */
-    public SimulatedGrid(NetworkNode... nodes)
+    public SimulationGrid(NetworkNode... nodes)
     {
         super(NetworkWire.class);
         hasChanged = false;
@@ -127,7 +127,7 @@ public class SimulatedGrid extends Grid<NetworkNode> implements IUpdate
         //TODO Collect connection data and formulate all inputs/outputs to machines
 
         //Trigger pathfinder to build our simulator parts that wrapper the nodes
-        NetworkPathFinder networkPathFinder = new NetworkPathFinder(this);
+        GridPathfinder networkPathFinder = new GridPathfinder(this);
         List<NetworkPart> parts = networkPathFinder.generateParts();
         // TODO cache parts
         

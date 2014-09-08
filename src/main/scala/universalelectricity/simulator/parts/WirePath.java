@@ -1,6 +1,6 @@
 package universalelectricity.simulator.parts;
 
-import universalelectricity.simulator.SimulatedGrid;
+import universalelectricity.simulator.grid.SimulationGrid;
 
 import java.util.WeakHashMap;
 
@@ -14,7 +14,7 @@ public class WirePath extends NetworkPart
     INetworkPart connectionB = null;
     WeakHashMap<NetworkNode, Object> reference;
 
-    public WirePath(SimulatedGrid sim, NetworkNode... nodes)
+    public WirePath(SimulationGrid sim, NetworkNode... nodes)
     {
         super(sim);
         reference = new WeakHashMap();

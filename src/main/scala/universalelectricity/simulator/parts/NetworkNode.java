@@ -4,14 +4,14 @@ import universalelectricity.api.core.grid.IGrid;
 import universalelectricity.api.core.grid.IGridNode;
 import universalelectricity.api.core.grid.INodeProvider;
 import universalelectricity.core.grid.node.NodeConnector;
-import universalelectricity.simulator.SimulatedGrid;
+import universalelectricity.simulator.grid.SimulationGrid;
 
 /**
  * Created by robert on 8/16/2014.
  */
 public class NetworkNode extends NodeConnector implements IGridNode
 {
-    protected SimulatedGrid network;
+    protected SimulationGrid network;
 
     public NetworkNode(INodeProvider parent)
     {
@@ -21,18 +21,18 @@ public class NetworkNode extends NodeConnector implements IGridNode
     @Override
     public void setGrid(IGrid grid)
     {
-        if(grid instanceof SimulatedGrid)
+        if(grid instanceof SimulationGrid)
         {
-            network = (SimulatedGrid) grid;
+            network = (SimulationGrid) grid;
         }
     }
 
     @Override
-    public SimulatedGrid getGrid()
+    public SimulationGrid getGrid()
     {
         if(network == null)
         {
-            network = new SimulatedGrid(this);
+            network = new SimulationGrid(this);
         }
         return network;
     }
