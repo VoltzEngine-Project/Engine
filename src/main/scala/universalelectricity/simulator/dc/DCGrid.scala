@@ -6,7 +6,7 @@ import universalelectricity.api.core.grid.IUpdate
 import universalelectricity.core.grid.{Grid, UpdateTicker}
 import universalelectricity.core.transform.vector.Vector3
 import universalelectricity.simulator.dc.component.SeriesComponent
-import universalelectricity.simulator.parts.{NetworkNode, NetworkPart}
+import universalelectricity.simulator.parts.NetworkNode
 
 import scala.collection.JavaConversions._
 
@@ -18,29 +18,28 @@ class DCGrid extends Grid[DCNode](classOf[DCNode]) with IUpdate
 {
   private var circuit: SeriesComponent = _
 
-  protected var hasChanged = false
-  protected var changeLocations = new HashSet[Vector3]
+  protected var changed = false
   protected var ticks = 0L
 
   UpdateTicker.addUpdater(this)
 
-  override def add(node: NetworkNode)
+  override def add(node: DCNode)
   {
-    hasChanged = true
+    changed = true
     super.add(node)
   }
 
-  override def remove(node: NetworkNode)
+  override def remove(node: DCNode)
   {
-    hasChanged = true
+    changed = true
     super.remove(node)
   }
 
   def update(deltaTime: Double)
   {
-    if (ticks == 0 || hasChanged)
+    if (ticks == 0 || changed)
     {
-      hasChanged = false
+      changed = false
       rebuildGrid()
     }
 
@@ -52,19 +51,11 @@ class DCGrid extends Grid[DCNode](classOf[DCNode]) with IUpdate
   /**
    * Maps the entire network out from start to finish
    */
-  def rebuildGrid
+  def rebuildGrid()
   {
     getNodes foreach (_.reconstruct)
 
-    for (node <- getNodes)
-    {
-      node.reconstruct
-    }
-
-    val networkPathFinder: Nothing = new Nothing(this)
-    val parts: List[NetworkPart] = networkPathFinder.generateParts
-    calculateDeltaPoints
-    updateSimulation
+    circuit = new CircuitSolver(this).solve()
   }
 
   /** Called each update to simulate changes */
