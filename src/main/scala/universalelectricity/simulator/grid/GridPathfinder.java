@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * Simple connection path finder that generates grid parts while pathing all routes from a single node.
- * Created by Darkguardsman on 8/16/2014.
+ * @author Darkguardsman, Calclavia
  */
 public class GridPathfinder
 {
