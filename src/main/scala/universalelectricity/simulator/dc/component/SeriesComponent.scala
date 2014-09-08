@@ -18,14 +18,11 @@ class SeriesComponent extends Component
   /**
    * Solves the current based on the voltage
    */
-  def solveEnergy()
+  def solve()
   {
-    //Calculate current
-    val resistance = getResistance
-    current = getVoltage / resistance
-
     //Set each component's current, since in a series all components have the same current
     components foreach (_.setCurrent(current))
+    components foreach (_.solve())
   }
 
   /**

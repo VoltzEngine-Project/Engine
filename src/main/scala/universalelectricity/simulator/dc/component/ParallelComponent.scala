@@ -16,6 +16,16 @@ class ParallelComponent extends Component
   val branches = new util.HashSet[SeriesComponent]()
 
   /**
+   * Solves the current based on the voltage
+   */
+  def solve()
+  {
+    //Set each component's voltage, since in parallel all components have the same voltage drop
+    branches foreach (_.setVoltage(voltage))
+    branches foreach (_.solve())
+  }
+
+  /**
    * Computes resistance in parallel
    * 1/R = 1/R1 + 1/R2
    */

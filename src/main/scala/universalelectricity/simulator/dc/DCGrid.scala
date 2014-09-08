@@ -70,7 +70,7 @@ class DCGrid extends Grid[DCNode](classOf[DCNode]) with IUpdate
   /** Called each update to simulate changes */
   def updateSimulation
   {
-    circuit.solveEnergy()
+    circuit.solve()
   }
 
   override def canUpdate = true

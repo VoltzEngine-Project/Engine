@@ -30,4 +30,9 @@ trait Component
   }
 
   def getResistance: Double
+
+  def solve()
+  {
+
+  }
 }
