@@ -1,17 +1,17 @@
-package universalelectricity.simulator.parts;
+package universalelectricity.simulator.grid.parts;
 
 import universalelectricity.api.core.grid.IGrid;
 import universalelectricity.api.core.grid.IGridNode;
 import universalelectricity.api.core.grid.INodeProvider;
 import universalelectricity.core.grid.node.NodeConnector;
-import universalelectricity.simulator.grid.SimulationGrid;
+import universalelectricity.simulator.grid.LinkedGrid;
 
 /**
  * Created by robert on 8/16/2014.
  */
 public class NetworkNode extends NodeConnector implements IGridNode
 {
-    protected SimulationGrid network;
+    protected LinkedGrid network;
 
     public NetworkNode(INodeProvider parent)
     {
@@ -21,18 +21,18 @@ public class NetworkNode extends NodeConnector implements IGridNode
     @Override
     public void setGrid(IGrid grid)
     {
-        if(grid instanceof SimulationGrid)
+        if(grid instanceof LinkedGrid)
         {
-            network = (SimulationGrid) grid;
+            network = (LinkedGrid) grid;
         }
     }
 
     @Override
-    public SimulationGrid getGrid()
+    public LinkedGrid getGrid()
     {
         if(network == null)
         {
-            network = new SimulationGrid(this);
+            network = new LinkedGrid(this);
         }
         return network;
     }

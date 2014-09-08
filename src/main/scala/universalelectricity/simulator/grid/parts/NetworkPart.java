@@ -1,14 +1,14 @@
-package universalelectricity.simulator.parts;
+package universalelectricity.simulator.grid.parts;
 
-import universalelectricity.simulator.grid.SimulationGrid;
+import universalelectricity.simulator.grid.LinkedGrid;
 
 /**
  * Created by robert on 8/16/2014.
  */
 public class NetworkPart implements INetworkPart {
 
-    SimulationGrid sim;
-    public NetworkPart(SimulationGrid sim)
+    LinkedGrid sim;
+    public NetworkPart(LinkedGrid sim)
     {
         this.sim = sim;
     }

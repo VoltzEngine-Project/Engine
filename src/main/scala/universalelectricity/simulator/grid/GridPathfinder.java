@@ -3,10 +3,10 @@ package universalelectricity.simulator.grid;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.core.grid.INode;
 import universalelectricity.api.core.grid.INodeProvider;
-import universalelectricity.simulator.parts.NetworkNode;
-import universalelectricity.simulator.parts.NetworkPart;
-import universalelectricity.simulator.parts.WireJunction;
-import universalelectricity.simulator.parts.WirePath;
+import universalelectricity.simulator.grid.parts.NetworkNode;
+import universalelectricity.simulator.grid.parts.NetworkPart;
+import universalelectricity.simulator.grid.parts.WireJunction;
+import universalelectricity.simulator.grid.parts.WirePath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +19,13 @@ import java.util.Map;
 public class GridPathfinder
 {
     /** Network that is being pathed */
-    private SimulationGrid network = null;
+    private LinkedGrid network = null;
     /** All parts created by the path finder */
     private List<NetworkPart> parts;
     /** Nodes that have already been pathed */
     private List<NetworkNode> pathed_nodes;
 
-    public GridPathfinder(SimulationGrid network)
+    public GridPathfinder(LinkedGrid network)
     {
         this.network = network;
         pathed_nodes = new ArrayList<NetworkNode>();

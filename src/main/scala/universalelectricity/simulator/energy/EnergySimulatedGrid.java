@@ -2,13 +2,13 @@ package universalelectricity.simulator.energy;
 
 import universalelectricity.api.EnergyStorage;
 import universalelectricity.api.core.grid.electric.IEnergyNode;
-import universalelectricity.simulator.grid.SimulationGrid;
-import universalelectricity.simulator.parts.NetworkNode;
+import universalelectricity.simulator.grid.LinkedGrid;
+import universalelectricity.simulator.grid.parts.NetworkNode;
 
 /**
  * Created by robert on 8/30/2014.
  */
-public class EnergySimulatedGrid extends SimulationGrid
+public class EnergySimulatedGrid extends LinkedGrid
 {
 	protected EnergyStorage buffer;
 	protected EnergySimulator simulator;
