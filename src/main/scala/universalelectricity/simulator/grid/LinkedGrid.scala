@@ -6,7 +6,7 @@ import universalelectricity.api.core.grid.{INode, INodeProvider, IUpdate}
 import universalelectricity.compatibility.Compatibility
 import universalelectricity.core.grid.{Grid, UpdateTicker}
 import universalelectricity.simulator.dc.CircuitSolver
-import universalelectricity.simulator.grid.parts.NetworkNode
+import universalelectricity.simulator.grid.component.NetworkNode
 
 import scala.collection.JavaConversions._
 
@@ -14,7 +14,7 @@ import scala.collection.JavaConversions._
  * Basic network of parts that function together to simulate a collection of co-existing tiles.
  * @author Darkguardsman, Calclavia
  */
-abstract class LinkedGrid[N](clazz: Class[_]) extends Grid[N](clazz) with IUpdate
+class LinkedGrid[N](clazz: Class[_]) extends Grid[N](clazz) with IUpdate
 {
   protected var changed = false
   protected var ticks = 0L
@@ -55,14 +55,8 @@ abstract class LinkedGrid[N](clazz: Class[_]) extends Grid[N](clazz) with IUpdat
     circuit = new CircuitSolver(this).solve()
   }
 
-  /** Called each update to simulate changes */
-  def updateSimulation
-  {
-    circuit.solve()
-  }
-
   /** Updates changes to connections preventing a network wide remap */
-  def updateConnections
+  def updateConnections()
   {
     for (vec <- changeLocations)
     {

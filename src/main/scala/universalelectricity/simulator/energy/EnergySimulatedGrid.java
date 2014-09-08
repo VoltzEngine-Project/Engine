@@ -3,7 +3,7 @@ package universalelectricity.simulator.energy;
 import universalelectricity.api.EnergyStorage;
 import universalelectricity.api.core.grid.electric.IEnergyNode;
 import universalelectricity.simulator.grid.LinkedGrid;
-import universalelectricity.simulator.grid.parts.NetworkNode;
+import universalelectricity.simulator.grid.component.NetworkNode;
 
 /**
  * Created by robert on 8/30/2014.

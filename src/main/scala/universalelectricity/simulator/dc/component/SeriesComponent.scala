@@ -8,12 +8,12 @@ import scala.collection.convert.wrapAll._
  * The voltage of the branch is determined by the sources of voltage (e.g battery cells)
  * @author Calclavia
  */
-class SeriesComponent extends Component
+class SeriesComponent extends DCComponent
 {
   /**
    * A list of components in the branch. Some components may consist of parallel branches.
    */
-  val components = new util.LinkedList[Component]()
+  val components = new util.LinkedList[DCComponent]()
 
   /**
    * Solves the current based on the voltage

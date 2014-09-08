@@ -1,4 +1,4 @@
-package universalelectricity.simulator.grid.parts;
+package universalelectricity.simulator.grid.component;
 
 import universalelectricity.api.core.grid.INodeProvider;
 

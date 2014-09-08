@@ -8,7 +8,7 @@ import scala.collection.convert.wrapAll._
  * A junction that consists of parallel branches
  * @author Calclavia
  */
-class ParallelComponent extends Component
+class ParallelComponent extends DCComponent
 {
   /**
    * A list of components in the branch. Some components may branch off themselves

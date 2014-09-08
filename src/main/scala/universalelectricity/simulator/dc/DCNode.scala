@@ -2,12 +2,12 @@ package universalelectricity.simulator.dc
 
 import universalelectricity.api.core.grid.INodeProvider
 import universalelectricity.core.grid.node.NodeConnector
-import universalelectricity.simulator.dc.component.Component
+import universalelectricity.simulator.dc.component.DCComponent
 
 /**
  * @author Calclavia
  */
-class DCNode(parent: INodeProvider) extends NodeConnector(parent) with Component
+class DCNode(parent: INodeProvider) extends NodeConnector(parent) with DCComponent
 {
   private var resistance = 0D
 

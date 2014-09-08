@@ -1,4 +1,4 @@
-package universalelectricity.simulator.grid.parts;
+package universalelectricity.simulator.grid.component;
 
 import universalelectricity.simulator.grid.LinkedGrid;
 
@@ -10,8 +10,8 @@ import java.util.WeakHashMap;
  */
 public class WirePath extends NetworkPart
 {
-    INetworkPart connectionA = null;
-    INetworkPart connectionB = null;
+    IComponent connectionA = null;
+    IComponent connectionB = null;
     WeakHashMap<NetworkNode, Object> reference;
 
     public WirePath(LinkedGrid sim, NetworkNode... nodes)
@@ -34,12 +34,12 @@ public class WirePath extends NetworkPart
         reference.remove(node);
     }
 
-    public void setConnectionA(INetworkPart part)
+    public void setConnectionA(IComponent part)
     {
         this.connectionB = part;
     }
 
-    public void setConnectionB(INetworkPart part)
+    public void setConnectionB(IComponent part)
     {
         this.connectionA = part;
     }

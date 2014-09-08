@@ -5,7 +5,8 @@ import java.util.{List, Map}
 
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.api.core.grid.{INode, INodeProvider}
-import universalelectricity.simulator.grid.parts.{NetworkNode, NetworkPart, WireJunction, WirePath}
+import universalelectricity.simulator.grid.component.{WirePath, WireJunction, NetworkPart, NetworkNode}
+import universalelectricity.simulator.grid.parts.WirePath
 
 import scala.collection.JavaConversions._
 

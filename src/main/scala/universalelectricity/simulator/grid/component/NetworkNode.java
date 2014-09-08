@@ -1,4 +1,4 @@
-package universalelectricity.simulator.grid.parts;
+package universalelectricity.simulator.grid.component;
 
 import universalelectricity.api.core.grid.IGrid;
 import universalelectricity.api.core.grid.IGridNode;
@@ -7,7 +7,7 @@ import universalelectricity.core.grid.node.NodeConnector;
 import universalelectricity.simulator.grid.LinkedGrid;
 
 /**
- * Created by robert on 8/16/2014.
+ * @uthor DarkCow
  */
 public class NetworkNode extends NodeConnector implements IGridNode
 {
@@ -32,7 +32,8 @@ public class NetworkNode extends NodeConnector implements IGridNode
     {
         if(network == null)
         {
-            network = new LinkedGrid(this);
+            network = new LinkedGrid<NetworkNode>(this.getClass());
+			network.add(this);
         }
         return network;
     }

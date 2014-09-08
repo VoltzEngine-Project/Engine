@@ -4,7 +4,7 @@ package universalelectricity.simulator.dc.component
  * A component is defined as part of the circuit that have well defined current and voltage
  * @author Calclavia
  */
-trait Component
+trait DCComponent
 {
   protected var current = 0D
   protected var voltage = 0D

@@ -1,4 +1,4 @@
-package universalelectricity.simulator.grid.parts;
+package universalelectricity.simulator.grid.component;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.simulator.grid.LinkedGrid;
@@ -6,7 +6,7 @@ import universalelectricity.simulator.grid.LinkedGrid;
 import java.util.HashMap;
 
 /**
- * Created by robert on 8/16/2014.
+ * @author DarkCow
  */
 public class WireJunction extends NetworkPart
 {
@@ -40,7 +40,7 @@ public class WireJunction extends NetworkPart
     {
         for(Object object : connectionMap.keySet())
         {
-            if(object instanceof INetworkPart && ((INetworkPart) object).hasInputDevices())
+            if(object instanceof IComponent && ((IComponent) object).hasInputDevices())
             {
                 return true;
             }else
