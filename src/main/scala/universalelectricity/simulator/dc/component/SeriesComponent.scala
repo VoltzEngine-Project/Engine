@@ -1,4 +1,4 @@
-package universalelectricity.simulator.dc
+package universalelectricity.simulator.dc.component
 
 import java.util
 
@@ -22,13 +22,10 @@ class SeriesComponent extends Component
   {
     //Calculate current
     val resistance = getResistance
-    current = voltage / resistance
+    current = getVoltage / resistance
 
     //Set each component's current, since in a series all components have the same current
-    components foreach (_.current = current)
-
-    //Calculate each component's voltage using Ohm's Law. V = IR
-    components foreach (component => component.voltage = component.current * component.getResistance)
+    components foreach (_.setCurrent(current))
   }
 
   /**
