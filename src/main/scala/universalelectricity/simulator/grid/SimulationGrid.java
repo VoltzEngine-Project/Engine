@@ -9,6 +9,7 @@ import universalelectricity.compatibility.Compatibility;
 import universalelectricity.core.grid.Grid;
 import universalelectricity.core.grid.UpdateTicker;
 import universalelectricity.core.transform.vector.VectorWorld;
+import universalelectricity.simulator.dc.DCPathfinder;
 import universalelectricity.simulator.parts.NetworkNode;
 import universalelectricity.simulator.parts.NetworkPart;
 import universalelectricity.simulator.parts.NetworkWire;
@@ -127,7 +128,7 @@ public class SimulationGrid extends Grid<NetworkNode> implements IUpdate
         //TODO Collect connection data and formulate all inputs/outputs to machines
 
         //Trigger pathfinder to build our simulator parts that wrapper the nodes
-        GridPathfinder networkPathFinder = new GridPathfinder(this);
+        DCPathfinder networkPathFinder = new DCPathfinder(this);
         List<NetworkPart> parts = networkPathFinder.generateParts();
         // TODO cache parts
         
