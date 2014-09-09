@@ -393,13 +393,13 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
   /**
    * World Access
    */
-  def getBlock(world: IBlockAccess): Block = world.getBlock(xi, yi, zi)
+  def getBlock(world: IBlockAccess): Block = if(world != null) world.getBlock(xi, yi, zi) else null
 
-  def getBlockMetadata(world: IBlockAccess) = world.getBlockMetadata(xi, yi, zi)
+  def getBlockMetadata(world: IBlockAccess) = if(world != null) world.getBlockMetadata(xi, yi, zi) else null
 
-  def getTileEntity(world: IBlockAccess) = world.getTileEntity(xi, yi, zi)
+  def getTileEntity(world: IBlockAccess) =  if(world != null) world.getTileEntity(xi, yi, zi) else null
 
-  def setBlock(world: World, block: Block, metadata: Int, notify: Int): Boolean = world.setBlock(xi, yi, zi, block, metadata, notify)
+  def setBlock(world: World, block: Block, metadata: Int, notify: Int): Boolean = if(world != null) world.setBlock(xi, yi, zi, block, metadata, notify) else null
 
   def setBlock(world: World, block: Block, metadata: Int): Boolean = setBlock(world, block, metadata, 3)
 
