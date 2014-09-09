@@ -18,7 +18,7 @@ class ParallelComponent extends DCComponent
   /**
    * Solves the current based on the voltage
    */
-  def solve()
+  override def solve()
   {
     //Set each component's voltage, since in parallel all components have the same voltage drop
     branches foreach (_.setVoltage(voltage))

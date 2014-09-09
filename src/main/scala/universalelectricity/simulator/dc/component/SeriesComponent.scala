@@ -18,7 +18,7 @@ class SeriesComponent extends DCComponent
   /**
    * Solves the current based on the voltage
    */
-  def solve()
+  override def solve()
   {
     //Set each component's current, since in a series all components have the same current
     components foreach (_.setCurrent(current))

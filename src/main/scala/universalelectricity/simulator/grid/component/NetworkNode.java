@@ -32,7 +32,7 @@ public class NetworkNode extends NodeConnector implements IGridNode
     {
         if(network == null)
         {
-            network = new LinkedGrid<NetworkNode>(this.getClass());
+            network = new LinkedGrid(this);
 			network.add(this);
         }
         return network;
