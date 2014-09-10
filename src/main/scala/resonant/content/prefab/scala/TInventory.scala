@@ -39,6 +39,7 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     else if (this.getStackInSlot(slot).isItemEqual(stack))
     {
       getStackInSlot(slot).stackSize += stack.stackSize
+      onInventoryChanged()
     }
 
     markDirty()
@@ -52,6 +53,7 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
   override def setInventorySlotContents(index: Int, stack: ItemStack)
   {
     this.getInventory().setInventorySlotContents(index, stack)
+    onInventoryChanged()
   }
 
   override def getInventoryName = getBlockType.getLocalizedName
@@ -161,6 +163,7 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
           {
             player.inventory.setInventorySlotContents(player.inventory.currentItem, null)
           }
+          onInventoryChanged()
           return true
         }
       }
@@ -186,6 +189,7 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
       {
         inventory.setInventorySlotContents(slotID, null)
       }
+      onInventoryChanged()
       return true
     }
     return false
@@ -209,8 +213,13 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
                                                                               setInventorySlotContents(i, null)
                                                                             })
     }
-
+    onInventoryChanged()
     markDirty()
+  }
+
+  def onInventoryChanged()
+  {
+
   }
 
   override def readFromNBT(nbt: NBTTagCompound)
