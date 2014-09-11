@@ -1,19 +1,23 @@
 package universalelectricity.simulator.grid.component;
 
+import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.core.grid.IGrid;
 import universalelectricity.api.core.grid.IGridNode;
 import universalelectricity.api.core.grid.INodeProvider;
+import universalelectricity.api.core.grid.sim.ISimNode;
+import universalelectricity.api.core.grid.sim.SimType;
 import universalelectricity.core.grid.node.NodeConnector;
 import universalelectricity.simulator.grid.SimulatedGrid;
 
 /**
- * @uthor DarkCow
+ * Node prefab for the simulator grid
+ * @author Darkguardsman
  */
-public class NetworkNode extends NodeConnector implements IGridNode
+public class SimNode extends NodeConnector implements ISimNode
 {
     protected SimulatedGrid network;
 
-    public NetworkNode(INodeProvider parent)
+    public SimNode(INodeProvider parent)
     {
         super(parent);
     }
@@ -36,5 +40,11 @@ public class NetworkNode extends NodeConnector implements IGridNode
 			network.add(this);
         }
         return network;
+    }
+
+    @Override
+    public boolean canPassToSide(SimType type, ForgeDirection from, ForgeDirection two)
+    {
+        return true;
     }
 }

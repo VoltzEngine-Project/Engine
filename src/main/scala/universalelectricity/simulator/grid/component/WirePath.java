@@ -12,24 +12,24 @@ public class WirePath extends NetworkPart
 {
     IComponent connectionA = null;
     IComponent connectionB = null;
-    WeakHashMap<NetworkNode, Object> reference;
+    WeakHashMap<SimNode, Object> reference;
 
-    public WirePath(SimulatedGrid sim, NetworkNode... nodes)
+    public WirePath(SimulatedGrid sim, SimNode... nodes)
     {
         super(sim);
         reference = new WeakHashMap();
-        for(NetworkNode node: nodes)
+        for(SimNode node: nodes)
         {
 
         }
     }
 
-    public void add(NetworkNode node)
+    public void add(SimNode node)
     {
         reference.put(node, true);
     }
 
-    public void remove(NetworkNode node)
+    public void remove(SimNode node)
     {
         reference.remove(node);
     }

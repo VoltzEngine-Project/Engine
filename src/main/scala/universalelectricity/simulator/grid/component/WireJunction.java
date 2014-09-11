@@ -12,9 +12,9 @@ public class WireJunction extends NetworkPart
 {
     HashMap<Object, ForgeDirection> connectionMap;
     HashMap<ForgeDirection, Boolean> inputMap;
-    NetworkNode node = null;
+    SimNode node = null;
 
-    public WireJunction(SimulatedGrid sim, NetworkNode node)
+    public WireJunction(SimulatedGrid sim, SimNode node)
     {
         super(sim);
         this.node = node;

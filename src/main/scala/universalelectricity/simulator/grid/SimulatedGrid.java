@@ -1,15 +1,12 @@
 package universalelectricity.simulator.grid;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import universalelectricity.api.core.grid.INode;
-import universalelectricity.api.core.grid.INodeProvider;
 import universalelectricity.api.core.grid.IUpdate;
-import universalelectricity.compatibility.Compatibility;
+import universalelectricity.api.core.grid.sim.ISimNode;
 import universalelectricity.core.grid.Grid;
 import universalelectricity.core.grid.UpdateTicker;
 import universalelectricity.core.transform.vector.VectorWorld;
-import universalelectricity.simulator.grid.component.NetworkNode;
+import universalelectricity.simulator.grid.component.SimNode;
 import universalelectricity.simulator.grid.component.NetworkPart;
 
 import java.util.*;
@@ -18,20 +15,19 @@ import java.util.*;
  * Basic network of parts that function together to simulate a collection of co-existing tiles.
  * @author Darkguardsman
  */
-public class SimulatedGrid extends Grid<NetworkNode> implements IUpdate
+public class SimulatedGrid extends Grid<ISimNode> implements IUpdate
 {
+    /** Marks the grid to be rebuilt */
     protected boolean hasChanged;
-    protected Set<VectorWorld> changeLocations;
+
+    /** Current update cycle count, resets to 1 every time it maxes out */
     protected long ticks = 0;
-    /**
-     * @param nodes - any node to init the network with
-     */
-    public SimulatedGrid(NetworkNode... nodes)
+    /** @param nodes - any node to init the network with */
+    public SimulatedGrid(ISimNode... nodes)
     {
-        super(NetworkNode.class);
+        super(ISimNode.class);
         hasChanged = false;
-        changeLocations = new HashSet<VectorWorld>();
-        for(NetworkNode node : nodes)
+        for(ISimNode node : nodes)
         {
             add(node);
         }
@@ -39,17 +35,16 @@ public class SimulatedGrid extends Grid<NetworkNode> implements IUpdate
     }
 
     @Override
-    public void add(NetworkNode node)
+    public void add(ISimNode node)
     {
         hasChanged = true;
         super.add(node);
     }
 
     @Override
-    public void remove(NetworkNode node)
+    public void remove(ISimNode node)
     {
         hasChanged = true;
-        //changeLocations.add(new VectorWorld(node));
         super.remove(node);
     }
 
@@ -78,7 +73,7 @@ public class SimulatedGrid extends Grid<NetworkNode> implements IUpdate
     public void buildEntireNetwork()
     {
         // Ask all nodes to rebuild there connections
-        for(NetworkNode node : getNodes())
+        for(SimNode node : getNodes())
         {
             node.reconstruct();
         }

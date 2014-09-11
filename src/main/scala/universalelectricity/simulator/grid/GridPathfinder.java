@@ -3,7 +3,7 @@ package universalelectricity.simulator.grid;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.core.grid.INode;
 import universalelectricity.api.core.grid.INodeProvider;
-import universalelectricity.simulator.grid.component.NetworkNode;
+import universalelectricity.simulator.grid.component.SimNode;
 import universalelectricity.simulator.grid.component.NetworkPart;
 import universalelectricity.simulator.grid.component.WireJunction;
 import universalelectricity.simulator.grid.component.WirePath;
@@ -29,7 +29,7 @@ public class GridPathfinder
 	/**
 	 * Nodes that have already been pathed
 	 */
-	private List<NetworkNode> pathNodes = new LinkedList<NetworkNode>();
+	private List<SimNode> pathNodes = new LinkedList<SimNode>();
 
 	public GridPathfinder(SimulatedGrid grid)
 	{
@@ -43,7 +43,7 @@ public class GridPathfinder
 	 */
 	public List<NetworkPart> generateParts()
 	{
-		NetworkNode firstNode = grid.getFirstNode();
+		SimNode firstNode = grid.getFirstNode();
 		if (firstNode != null)
 		{
 			path(null, firstNode, null);
@@ -59,7 +59,7 @@ public class GridPathfinder
 	 * @param currentNode - current node being pathed
 	 * @param side - side we are pathing to from the node, can only be null for first run
 	 */
-	public void path(NetworkPart part, NetworkNode currentNode, ForgeDirection side)
+	public void path(NetworkPart part, SimNode currentNode, ForgeDirection side)
 	{
 		Map<Object, ForgeDirection> connections = currentNode.getConnections();
 		NetworkPart nextPart = null;
@@ -107,21 +107,21 @@ public class GridPathfinder
 		//Loop threw all connection triggering path() on each instance of NetworkNode
 		for (Map.Entry<Object, ForgeDirection> entry : connections.entrySet())
 		{
-			if (entry.getKey() instanceof NetworkNode)
+			if (entry.getKey() instanceof SimNode)
 			{
 				if (!pathNodes.contains(entry.getKey()))
 				{
-					path(nextPart, (NetworkNode) entry.getKey(), entry.getValue());
+					path(nextPart, (SimNode) entry.getKey(), entry.getValue());
 				}
 			}
 			else if (entry.getKey() instanceof INodeProvider)
 			{
-				INode providerNode = ((INodeProvider) entry.getKey()).getNode(NetworkNode.class, entry.getValue().getOpposite());
-				if (providerNode instanceof NetworkNode)
+				INode providerNode = ((INodeProvider) entry.getKey()).getNode(SimNode.class, entry.getValue().getOpposite());
+				if (providerNode instanceof SimNode)
 				{
 					if (!pathNodes.contains(entry.getKey()))
 					{
-						path(nextPart, (NetworkNode) entry.getKey(), entry.getValue());
+						path(nextPart, (SimNode) entry.getKey(), entry.getValue());
 					}
 				}
 			}

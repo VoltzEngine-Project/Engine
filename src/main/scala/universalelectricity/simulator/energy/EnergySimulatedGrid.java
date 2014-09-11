@@ -3,7 +3,7 @@ package universalelectricity.simulator.energy;
 import universalelectricity.api.EnergyStorage;
 import universalelectricity.api.core.grid.electric.IEnergyNode;
 import universalelectricity.simulator.grid.SimulatedGrid;
-import universalelectricity.simulator.grid.component.NetworkNode;
+import universalelectricity.simulator.grid.component.SimNode;
 
 /**
  * Created by robert on 8/30/2014.
@@ -13,7 +13,7 @@ public class EnergySimulatedGrid extends SimulatedGrid
 	protected EnergyStorage buffer;
 	protected EnergySimulator simulator;
 
-    public EnergySimulatedGrid(NetworkNode... nodes)
+    public EnergySimulatedGrid(SimNode... nodes)
     {
         super(nodes);
         buffer = new EnergyStorage(1000);
@@ -37,7 +37,7 @@ public class EnergySimulatedGrid extends SimulatedGrid
     }
 
     @Override
-    public void add(NetworkNode node)
+    public void add(SimNode node)
     {
         if(node instanceof IEnergyNode)
             super.add(node);
