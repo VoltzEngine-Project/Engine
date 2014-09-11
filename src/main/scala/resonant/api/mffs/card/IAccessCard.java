@@ -13,5 +13,5 @@ public interface IAccessCard extends ICard
 {
 	public AbstractAccess getAccess(ItemStack stack);
 
-	public AbstractAccess setAccess(ItemStack stack, GameProfile profile);
+	public void setAccess(ItemStack stack, AbstractAccess access);
 }
