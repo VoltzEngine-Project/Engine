@@ -21,7 +21,7 @@ public class GridPathfinder
 	/**
 	 * Network that is being pathed
 	 */
-	private LinkedGrid grid;
+	private SimulatedGrid grid;
 	/**
 	 * All parts created by the path finder
 	 */
@@ -31,7 +31,7 @@ public class GridPathfinder
 	 */
 	private List<NetworkNode> pathNodes = new LinkedList<NetworkNode>();
 
-	public GridPathfinder(LinkedGrid grid)
+	public GridPathfinder(SimulatedGrid grid)
 	{
 		this.grid = grid;
 	}

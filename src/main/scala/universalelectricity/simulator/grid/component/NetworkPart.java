@@ -1,15 +1,15 @@
 package universalelectricity.simulator.grid.component;
 
-import universalelectricity.simulator.grid.LinkedGrid;
+import universalelectricity.simulator.grid.SimulatedGrid;
 
 /**
  * @author Dark
  */
 public class NetworkPart implements IComponent
 {
-	LinkedGrid sim;
+	SimulatedGrid sim;
 
-	public NetworkPart(LinkedGrid sim)
+	public NetworkPart(SimulatedGrid sim)
 	{
 		this.sim = sim;
 	}

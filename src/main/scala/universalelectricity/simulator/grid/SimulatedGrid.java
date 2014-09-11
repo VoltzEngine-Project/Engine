@@ -18,7 +18,7 @@ import java.util.*;
  * Basic network of parts that function together to simulate a collection of co-existing tiles.
  * @author Darkguardsman
  */
-public class LinkedGrid extends Grid<NetworkNode> implements IUpdate
+public class SimulatedGrid extends Grid<NetworkNode> implements IUpdate
 {
     protected boolean hasChanged;
     protected Set<VectorWorld> changeLocations;
@@ -26,7 +26,7 @@ public class LinkedGrid extends Grid<NetworkNode> implements IUpdate
     /**
      * @param nodes - any node to init the network with
      */
-    public LinkedGrid(NetworkNode... nodes)
+    public SimulatedGrid(NetworkNode... nodes)
     {
         super(NetworkNode.class);
         hasChanged = false;

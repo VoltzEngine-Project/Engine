@@ -1,7 +1,7 @@
 package universalelectricity.simulator.grid.component;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import universalelectricity.simulator.grid.LinkedGrid;
+import universalelectricity.simulator.grid.SimulatedGrid;
 
 import java.util.HashMap;
 
@@ -14,7 +14,7 @@ public class WireJunction extends NetworkPart
     HashMap<ForgeDirection, Boolean> inputMap;
     NetworkNode node = null;
 
-    public WireJunction(LinkedGrid sim, NetworkNode node)
+    public WireJunction(SimulatedGrid sim, NetworkNode node)
     {
         super(sim);
         this.node = node;

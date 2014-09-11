@@ -2,13 +2,13 @@ package universalelectricity.simulator.dc
 
 import universalelectricity.api.core.grid.IUpdate
 import universalelectricity.simulator.dc.component.SeriesComponent
-import universalelectricity.simulator.grid.LinkedGrid
+import universalelectricity.simulator.grid.SimulatedGrid
 
 /**
  * Basic network of parts that function together to simulate a collection of co-existing tiles.
  * @author Darkguardsman, Calclavia
  */
-class DCGrid extends LinkedGrid with IUpdate
+class DCGrid extends SimulatedGrid with IUpdate
 {
   private var circuit: SeriesComponent = _
 
