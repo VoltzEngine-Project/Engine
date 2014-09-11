@@ -91,7 +91,7 @@ public class PacketTile extends PacketType
                 IPacketIDReceiver receiver = (IPacketIDReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
                 ByteBuf buf = data().slice();
 
-                int id = 0;
+                int id;
                 try
                 {
                     id = buf.readInt();
@@ -112,7 +112,7 @@ public class PacketTile extends PacketType
         }
 		else
 		{
-			throw new UnsupportedOperationException("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error [" + tile + "] in " + new Vector3(x, y, z));
+            System.out.println("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error [" + tile + "] in " + new Vector3(x, y, z));
 		}
 	}
 }
