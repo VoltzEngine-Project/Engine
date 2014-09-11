@@ -9,7 +9,7 @@ import cpw.mods.fml.common.event.{FMLPostInitializationEvent, FMLPreInitializati
 import universalelectricity.api.core.grid.NodeRegistry
 import universalelectricity.api.core.grid.electric.{IElectricNode, IEnergyNode}
 import universalelectricity.compatibility.Compatibility
-import universalelectricity.compatibility.module.{ModuleBuildCraft, ModuleThermalExpansion, ModuleUniversalElectricity}
+import universalelectricity.compatibility.module.{ModuleThermalExpansion, ModuleUniversalElectricity}
 import universalelectricity.core.grid.UpdateTicker
 import universalelectricity.core.grid.node.{NodeElectric, NodeEnergy}
 
@@ -40,7 +40,7 @@ object UELoader
 
     Compatibility.register(ModuleUniversalElectricity)
 
-    Array[Compatibility.CompatibilityModule](ModuleThermalExpansion, ModuleBuildCraft) foreach (module =>
+    Array[Compatibility.CompatibilityModule](ModuleThermalExpansion) foreach (module =>
     {
       module.reciprocal_ratio = config.get("Compatibility", module.moduleName + " Conversion Ratio", module.reciprocal_ratio).getDouble(module.reciprocal_ratio)
       module.ratio = 1d / module.reciprocal_ratio
