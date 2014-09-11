@@ -95,7 +95,9 @@ public class ContainerBase extends Container
 				 *
 				 * Only merge the inventory if it is valid for the specific slot!
 				 */
-				for (int i = 0; i < slotCount - 1; i++)
+				boolean foundValid = false;
+
+				for (int i = 0; i < slotCount; i++)
 				{
 					if (inventory.isItemValidForSlot(i, slotStack))
 					{
@@ -103,8 +105,13 @@ public class ContainerBase extends Container
 						{
 							return null;
 						}
+
+						foundValid = true;
 					}
 				}
+
+				if(!foundValid)
+					return null;
 			}
 
 			if (slotStack.stackSize == 0)
