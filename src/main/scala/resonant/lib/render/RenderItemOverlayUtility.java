@@ -173,6 +173,16 @@ public class RenderItemOverlayUtility
 					GL11.glTranslated(x + 1.01, y + 0.9, z + 0.65);
 					GL11.glRotatef(-90, 0, 1, 0);
 					break;
+                case UP:
+                    //TODO fix rotation
+                    GL11.glTranslated(x + 0.65, y + 1.01, z + 0.9);
+                    GL11.glRotatef(90, 1, 0, 0);
+                    break;
+                case DOWN:
+                    //TODO Fix rotation
+                    GL11.glTranslated(x + 0.65, y - 0.01, z -0.01);
+                    GL11.glRotatef(-90, 1, 0, 0);
+                    break;
 			}
 
 			float scale = 0.03125F;

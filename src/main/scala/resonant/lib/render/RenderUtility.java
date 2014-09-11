@@ -246,13 +246,11 @@ public class RenderUtility
 				GL11.glTranslatef(1, 1, 1);
 				GL11.glRotatef(180, 0, 1, 0);
 				GL11.glRotatef(90, 1, 0, 0);
-
 				break;
 			case EAST:
 				GL11.glTranslatef(0, 1, 1);
 				GL11.glRotatef(90, 0, 1, 0);
 				GL11.glRotatef(90, 1, 0, 0);
-
 				break;
 			case WEST:
 				GL11.glTranslatef(1, 1, 0);
