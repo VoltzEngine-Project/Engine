@@ -138,6 +138,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
       block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
   }
 
+  /** Sets the bounding box of the block */
   def bounds(cuboid: Cuboid)
   {
     bounds = cuboid
@@ -145,27 +146,37 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
 
   def bounds = _bounds
 
+  /** Sets the dummy block class uses by this spatial block */
   def setBlock(block: BlockDummy)
   {
     this.block = block
   }
 
+  /** Sets the resistance to being broken by tools or general actions */
   def blockHardness(hardness: Float): Unit = blockHardness = hardness
 
+  /** Sets the resistance to the block being blown up */
   def blockResistance(resistance: Float): Unit = blockResistance = resistance
 
+  /** Sets the stepping sound */
   def stepSound(sound: Block.SoundType): Unit = stepSound = sound
 
+  /** Sets the block can provide power to other blocks */
   def canProvidePower(bool: Boolean): Unit = canProvidePower = bool
 
+  /** When set true the block will update every so often   */
   def tickRandomly(bool: Boolean): Unit = tickRandomly = bool
 
+  /** When true renders the block as a standard block */
   def normalRender(bool: Boolean): Unit = normalRender = bool
 
+  /** Forces the renderer to render a standard block during tile rendering */
   def forceStandardRender(bool: Boolean): Unit = forceStandardRender = bool
 
+  /** When true tells the dummy block we have a custom item renderer */
   def customItemRender(bool: Boolean): Unit = customItemRender = bool
 
+  /** When false the block is see threw */
   def isOpaqueCube(bool: Boolean): Unit = isOpaqueCube = bool
 
   /**
@@ -177,6 +188,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
 
   def world: World = worldObj
 
+  /** Sets the active world */
   def world(world: World)
   {
     this.worldObj = world
@@ -210,18 +222,21 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     return zCoord
   }
 
+  /** World location of the block */
   def position: VectorWorld =
   {
     //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return new VectorWorld(this)
   }
 
+  /** World location of the block, centered */
   def center: VectorWorld =
   {
     //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return position.add(0.5).asInstanceOf[VectorWorld]
   }
 
+  /** Block object that goes to this tile */
   override def getBlockType: Block =
   {
     if (access != null)
@@ -249,6 +264,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   /**
    * Update
    */
+  @Deprecated
   final override def updateEntity() = update()
 
   def blockUpdate() = update()
@@ -259,7 +275,10 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   }
 
   /**
-   * Drops
+   * Gets all ItemStacks dropped by this machine when its destroyed
+   * @param metadata - meta value of the block when broken
+   * @param fortune - bonus of the tool mining it
+   * @return ArrayList of Items
    */
   def getDrops(metadata: Int, fortune: Int): util.ArrayList[ItemStack] =
   {
@@ -271,20 +290,44 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     return drops
   }
 
+  /**
+   * Number of items dropped when broken.
+   * This method is used by the default implementation of getDrops
+   *
+   * @param meta - meta value of the block
+   * @param fortune - bonus of the tool mining it
+   * @return number of items, 0 will result in no drop
+   */
   def quantityDropped(meta: Int, fortune: Int): Int =
   {
     return 1
   }
 
+  /**
+   * Gets the meta value when this block is dropped.
+   * This method is used by the default implementation of getDrops
+   *
+   * @param meta - meta value of the block
+   * @param fortune - bonus of the tool mining it
+   * @return meta value, shouldn't be less then 0
+   */
   def metadataDropped(meta: Int, fortune: Int): Int =
   {
     return 0
   }
 
+  /**
+   * Detects if the player is holding the control key down.
+   * Requires codechicken multipart package in order to function
+   *
+   * @param player - player to check
+   * @return true if control key is held down
+   */
   def isControlDown(player: EntityPlayer): Boolean =
   {
     try
     {
+      //TODO implement a non dependent solution
       val ckm: Class[_] = Class.forName("codechicken.multipart.ControlKeyModifer")
       val m: Method = ckm.getMethod("isControlDown", classOf[EntityPlayer])
       return m.invoke(null, player).asInstanceOf[Boolean]
@@ -298,28 +341,53 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     return false
   }
 
+  /**
+   * Gets all sub versions of this block to add to the creative menu
+   * @param item - Item object of the block
+   * @param creativeTabs - creative tab to list on
+   * @param list - current list of items
+   */
   def getSubBlocks(item: Item, creativeTabs: CreativeTabs, list: util.List[_])
   {
     list.add(new ItemStack(item, 1, 0))
   }
 
+  /**
+   * Gets the ItemStack when the player pick blocks
+   * @param target - block hit by a ray trace
+   * @return ItemStack of your block, can be null but shouldn't unless the block can't be placed
+   */
   def getPickBlock(target: MovingObjectPosition): ItemStack =
   {
     return new ItemStack(getBlockType, 1, metadataDropped(metadata, 0))
   }
 
+  /**
+   * Gets the light value of the block
+   * @param access - Simple version of the world, though don't assume it is
+   * @return light value from 0 - 16;
+   */
   def getLightValue(access: IBlockAccess): Int =
   {
     return block.getLightValue
   }
 
   /**
-   * Block events
+   * Called when the player left clicks the block
    */
   def click(player: EntityPlayer)
   {
   }
 
+  /**
+   * Called when the player right clicks the block.
+   * Default implementation calls use() and configure()
+   *
+   * @param player - player who clicked the block
+   * @param side - side of the block clicked as an int(0-5)
+   * @param hit - Vector3 location of the spot hit on the block
+   * @return true if the click event was used
+   */
   def activate(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
     if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem, x, y, z))
@@ -335,7 +403,11 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   }
 
   /**
-   * Called when the block is clicked by a player
+   * Called when the player has clicked a block with something other than a wrench
+   * @param player - player who clicked the block, don't assume EntityPlayerMP as it can be a fake player
+   * @param side - side of the block clicked as an int(0-5)
+   * @param hit - Vector3 location of the spot hit on the block
+   * @return true if the click event was used
    */
   protected def use(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
@@ -343,7 +415,12 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   }
 
   /**
-   * Called when the block is clicked with a wrench
+   * Called when the player uses a supported wrench on the block
+   *
+   * @param player - player who clicked the block, don't assume EntityPlayerMP as it can be a fake player
+   * @param side - side of the block clicked as an int(0-5)
+   * @param hit - Vector3 location of the spot hit on the block
+   * @return true if the click event was used
    */
   protected def configure(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
@@ -365,13 +442,18 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   }
 
   /**
-   * Block events
+   * Called when the block is first added to the world
    */
   def onAdded
   {
     onWorldJoin
   }
 
+  /**
+   * Called when the block is placed by a living entity
+   * @param entityLiving - entity who placed the block
+   * @param itemStack - ItemStack the entity used to place the block
+   */
   def onPlaced(entityLiving: EntityLivingBase, itemStack: ItemStack)
   {
     if (this.isInstanceOf[TRotatable])
@@ -380,16 +462,28 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     }
   }
 
+  /**
+   * Called after the block has been placed
+   * @param metadata - meta of the placed block
+   */
   def onPostPlaced(metadata: Int)
   {
 
   }
 
+  /**
+   * Called when the block is removed. Do all cleanup needed in this method.
+   * @param block - Block object being removed
+   * @param par6 - meta of the block
+   */
   def onRemove(block: Block, par6: Int)
   {
     onWorldSeparate
   }
 
+  /**
+   * Called when the block is added/loaded to the world
+   */
   def onWorldJoin()
   {
   }
