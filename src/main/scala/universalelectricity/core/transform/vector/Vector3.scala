@@ -420,9 +420,9 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
   override def equals(o: Any): Boolean =
   {
-    if (o.isInstanceOf[Vector3])
+    if (o.isInstanceOf[IVector3])
     {
-      val other = o.asInstanceOf[Vector3]
+      val other = o.asInstanceOf[IVector3]
       return other.x == x && other.y == y && other.z == z
     }
 

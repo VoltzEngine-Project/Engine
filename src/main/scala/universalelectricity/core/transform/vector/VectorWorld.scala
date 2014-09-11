@@ -176,9 +176,9 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   override def equals(o: Any): Boolean =
   {
-    if (o.isInstanceOf[VectorWorld])
+    if (o.isInstanceOf[IVectorWorld])
     {
-      return (super.equals(o)) && this.world == (o.asInstanceOf[VectorWorld]).world
+      return (super.equals(o)) && this.world == (o.asInstanceOf[IVectorWorld]).world
     }
     return false
   }
