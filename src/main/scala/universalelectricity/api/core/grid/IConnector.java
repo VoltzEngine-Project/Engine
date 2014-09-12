@@ -11,7 +11,7 @@ import java.util.Map;
 public interface IConnector
 {
     /** Map of connections to directions they came from */
-    public Map<Object, ForgeDirection> getConnections(Class< ? extends INode> node);
+    public Map<Object, ForgeDirection> getConnections();
 
     public boolean canConnect(ForgeDirection direction, Object object);
 }

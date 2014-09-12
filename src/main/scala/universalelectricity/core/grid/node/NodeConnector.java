@@ -26,12 +26,8 @@ public class NodeConnector extends Node implements IConnector
     }
 
     @Override
-    public Map<Object, ForgeDirection> getConnections(Class<? extends INode> node)
+    public Map<Object, ForgeDirection> getConnections()
     {
-        return connections;
-    }
-
-    public Map<Object, ForgeDirection> getConnections() {
         return connections;
     }
 
