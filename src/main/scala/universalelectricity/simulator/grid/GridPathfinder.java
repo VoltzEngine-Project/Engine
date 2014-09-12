@@ -3,6 +3,7 @@ package universalelectricity.simulator.grid;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.core.grid.INode;
 import universalelectricity.api.core.grid.INodeProvider;
+import universalelectricity.api.core.grid.sim.ISimNode;
 import universalelectricity.simulator.grid.component.SimNode;
 import universalelectricity.simulator.grid.component.NetworkPart;
 import universalelectricity.simulator.grid.component.WireJunction;
@@ -29,7 +30,7 @@ public class GridPathfinder
 	/**
 	 * Nodes that have already been pathed
 	 */
-	private List<SimNode> pathNodes = new LinkedList<SimNode>();
+	private List<ISimNode> pathNodes = new LinkedList<ISimNode>();
 
 	public GridPathfinder(SimulatedGrid grid)
 	{
@@ -43,7 +44,7 @@ public class GridPathfinder
 	 */
 	public List<NetworkPart> generateParts()
 	{
-		SimNode firstNode = grid.getFirstNode();
+		ISimNode firstNode = grid.getFirstNode();
 		if (firstNode != null)
 		{
 			path(null, firstNode, null);
@@ -59,7 +60,7 @@ public class GridPathfinder
 	 * @param currentNode - current node being pathed
 	 * @param side - side we are pathing to from the node, can only be null for first run
 	 */
-	public void path(NetworkPart part, SimNode currentNode, ForgeDirection side)
+	public void path(NetworkPart part, ISimNode currentNode, ForgeDirection side)
 	{
 		Map<Object, ForgeDirection> connections = currentNode.getConnections();
 		NetworkPart nextPart = null;

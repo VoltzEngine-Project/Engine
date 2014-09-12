@@ -1,6 +1,7 @@
 package universalelectricity.simulator.grid.component;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import universalelectricity.api.core.grid.sim.ISimNode;
 import universalelectricity.simulator.grid.SimulatedGrid;
 
 import java.util.HashMap;
@@ -12,9 +13,9 @@ public class WireJunction extends NetworkPart
 {
     HashMap<Object, ForgeDirection> connectionMap;
     HashMap<ForgeDirection, Boolean> inputMap;
-    SimNode node = null;
+    ISimNode node = null;
 
-    public WireJunction(SimulatedGrid sim, SimNode node)
+    public WireJunction(SimulatedGrid sim, ISimNode node)
     {
         super(sim);
         this.node = node;
@@ -33,22 +34,6 @@ public class WireJunction extends NetworkPart
             connectionMap.remove(object);
             inputMap.remove(direction);
         }
-    }
-
-    @Override
-    public boolean hasInputDevices()
-    {
-        for(Object object : connectionMap.keySet())
-        {
-            if(object instanceof IComponent && ((IComponent) object).hasInputDevices())
-            {
-                return true;
-            }else
-            {
-                return sim.isInputDevice(object, connectionMap.get(object));
-            }
-        }
-        return false;
     }
 
 }

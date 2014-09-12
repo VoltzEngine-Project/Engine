@@ -6,6 +6,7 @@ import universalelectricity.api.core.grid.sim.ISimNode;
 import universalelectricity.core.grid.Grid;
 import universalelectricity.core.grid.UpdateTicker;
 import universalelectricity.core.transform.vector.VectorWorld;
+import universalelectricity.simulator.grid.component.IComponent;
 import universalelectricity.simulator.grid.component.SimNode;
 import universalelectricity.simulator.grid.component.NetworkPart;
 
@@ -22,6 +23,9 @@ public class SimulatedGrid extends Grid<ISimNode> implements IUpdate
 
     /** Current update cycle count, resets to 1 every time it maxes out */
     protected long ticks = 0;
+
+    List<NetworkPart> parts;
+
     /** @param nodes - any node to init the network with */
     public SimulatedGrid(ISimNode... nodes)
     {
@@ -72,8 +76,19 @@ public class SimulatedGrid extends Grid<ISimNode> implements IUpdate
     /** Maps the entire network out from start to finish */
     public void buildEntireNetwork()
     {
+        //Trash old network layout
+        if(parts != null)
+        {
+            for (IComponent comp : parts)
+            {
+                comp.destroy();
+            }
+            parts = null;
+        }
+
         // Ask all nodes to rebuild there connections
-        for(SimNode node : getNodes())
+        // TODO maybe do a first build check so we don't double reconstruct on world load
+        for(ISimNode node : getNodes())
         {
             node.reconstruct();
         }
@@ -81,8 +96,13 @@ public class SimulatedGrid extends Grid<ISimNode> implements IUpdate
 
         //Trigger pathfinder to build our simulator parts that wrapper the nodes
         GridPathfinder networkPathFinder = new GridPathfinder(this);
-        List<NetworkPart> parts = networkPathFinder.generateParts();
-        // TODO cache parts
+        parts = networkPathFinder.generateParts();
+
+        // Init the parts
+        for (IComponent comp : parts)
+        {
+            comp.build();
+        }
 
         //Get delta points to correctly simulate changes in the network
         calculateDeltaPoints();

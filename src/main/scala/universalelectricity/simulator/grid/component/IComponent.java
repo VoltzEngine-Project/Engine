@@ -1,16 +1,60 @@
 package universalelectricity.simulator.grid.component;
 
+import universalelectricity.core.transform.vector.VectorWorld;
+import universalelectricity.simulator.grid.SimulatedGrid;
+
+import java.util.List;
+
 /**
- * Interface used by parts of a simulation network.
+ * Wrapper for nodes existing in a simulator in a way that several nodes can exist as one object.
+ * As well provides a way to store extra data not provided by the nodes.
  *
- * If input & output device check method return false this part is considered dead weight in the network. In which it will be ignored by the network, unless to fill up a internal buffer.
  * @author Darkguardsman
  */
 public interface IComponent
 {
-    /** Used to see if there are machines attached to this part that can input */
-    public boolean hasInputDevices();
+    /** Gets the host simulator for this component */
+    public SimulatedGrid getSimulator();
 
-    /** Used to see if there are machines attached to this part that can output */
-    public boolean hasOutputDevices();
+    /** Components connected to this component */
+    public List<IComponent> connections();
+
+    /**
+     * Does this component exist at the given location.
+     * Used mainly for large multi-block components, or branches
+     * @param vec - location in the world
+     *
+     * @return true if component exists at the location
+     */
+    public boolean doesExistAt(VectorWorld vec);
+
+    /**
+     * Gets the percent change in pressure from one component to the next.
+     * If you don't implement pressure return a percent value of the connections.
+     * Eg. 1 connection in 2 connections out will result in 50%(0.5 return)
+     *
+     * @param from - component the check is coming from
+     * @param to - component the check is going to next
+     * @return percent based value of the change.
+     * Is not limited to any range value, but should reflect the actual change.
+     */
+    public double getPressureChange(IComponent from, IComponent to);
+
+    /**
+     * Gets the percent change in flow from one component to the next.
+     * If you don't implement flow return a percent value of the connections.
+     * Eg. 1 connection in 2 connections out will result in 50%(0.5 return)
+     *
+     * @param from - component the check is coming from
+     * @param to - component the check is going to next
+     * @return percent based value of the change.
+     * Is not limited to any range value, but should reflect the actual change.
+     */
+    public double getFlowChange(IComponent from, IComponent to);
+
+    /** Called to clear out the component */
+    public void destroy();
+
+    /** Called to generate connection data */
+    public void build();
 }

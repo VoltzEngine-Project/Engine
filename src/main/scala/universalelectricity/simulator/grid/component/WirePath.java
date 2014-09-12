@@ -1,5 +1,6 @@
 package universalelectricity.simulator.grid.component;
 
+import universalelectricity.api.core.grid.sim.ISimNode;
 import universalelectricity.simulator.grid.SimulatedGrid;
 
 import java.util.WeakHashMap;
@@ -12,24 +13,24 @@ public class WirePath extends NetworkPart
 {
     IComponent connectionA = null;
     IComponent connectionB = null;
-    WeakHashMap<SimNode, Object> reference;
+    WeakHashMap<ISimNode, Object> reference;
 
-    public WirePath(SimulatedGrid sim, SimNode... nodes)
+    public WirePath(SimulatedGrid sim, ISimNode... nodes)
     {
         super(sim);
         reference = new WeakHashMap();
-        for(SimNode node: nodes)
+        for(ISimNode node: nodes)
         {
 
         }
     }
 
-    public void add(SimNode node)
+    public void add(ISimNode node)
     {
         reference.put(node, true);
     }
 
-    public void remove(SimNode node)
+    public void remove(ISimNode node)
     {
         reference.remove(node);
     }
@@ -47,11 +48,6 @@ public class WirePath extends NetworkPart
     public boolean isConnected()
     {
         return connectionA != null && connectionB != null;
-    }
-
-    public boolean hasInputsDevices()
-    {
-        return connectionA.hasInputDevices() || connectionB.hasInputDevices();
     }
 
 }
