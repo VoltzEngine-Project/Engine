@@ -17,7 +17,6 @@ import resonant.lib.render.RenderUtility;
 import resonant.lib.utility.LanguageUtility;
 import universalelectricity.api.UnitDisplay;
 import universalelectricity.api.UnitDisplay.Unit;
-import universalelectricity.compatibility.module.ModuleBuildCraft$;
 import universalelectricity.compatibility.module.ModuleThermalExpansion$;
 import universalelectricity.core.transform.region.Rectangle;
 import universalelectricity.core.transform.vector.Vector2;
@@ -348,12 +347,6 @@ public class GuiContainerBase extends GuiContainer
 		{
 			switch (energyType)
 			{
-				case 1:
-					display = UnitDisplay.roundDecimals(energy * ModuleBuildCraft$.MODULE$.ratio) + " MJ" + "/" + displaySuffix + UnitDisplay.roundDecimals(maxEnergy * ModuleBuildCraft$.MODULE$.ratio) + " MJ" + displaySuffix;
-					break;
-				/*case 2:
-					display = UnitDisplay.roundDecimals(energy * Module.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix + "/" + UnitDisplay.roundDecimals(maxEnergy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix;
-					break;*/
 				case 3:
 					display = UnitDisplay.roundDecimals(energy * ModuleThermalExpansion$.MODULE$.ratio) + " RF" + displaySuffix + "/" + UnitDisplay.roundDecimals(maxEnergy * ModuleThermalExpansion$.MODULE$.ratio) + " RF" + displaySuffix;
 					break;
@@ -395,12 +388,6 @@ public class GuiContainerBase extends GuiContainer
 		{
 			switch (energyType)
 			{
-				case 1:
-					display = UnitDisplay.roundDecimals(energy * ModuleBuildCraft$.MODULE$.ratio) + " MJ" + displaySuffix;
-					break;
-				case 2:
-					//display = UnitDisplay.roundDecimals(energy * CompatibilityType.INDUSTRIALCRAFT.ratio) + " EU" + displaySuffix;
-					break;
 				case 3:
 					display = UnitDisplay.roundDecimals(energy * ModuleThermalExpansion$.MODULE$.ratio) + " RF" + displaySuffix;
 					break;
