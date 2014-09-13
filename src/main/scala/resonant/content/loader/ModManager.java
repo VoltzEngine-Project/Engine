@@ -6,8 +6,10 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import resonant.content.CommonRegistryProxy;
+import resonant.content.prefab.itemblock.ItemBlockMetadata;
 import resonant.content.prefab.scala.render.ISimpleItemRenderer;
 import resonant.content.spatial.block.SpatialBlock;
 import resonant.content.wrapper.BlockDummy;
@@ -165,10 +167,24 @@ public class ModManager
      * @param block - instance of the block
      */
 	public <C extends Block> C newBlock(String name, C block)
-	{
+    {
+        return newBlock(name, block, ItemBlock.class);
+    }
+
+    /**
+     * Doesn't create a new block but applies the required blockName, textureName, and registers the block
+     * @param name - name the block will be registed with, localization, and texture name
+     * @param block - instance of the block
+     * @param itemBlockClass - item block used with the block
+     */
+    public <C extends Block> C newBlock(String name, C block, Class<? extends ItemBlock> itemBlockClass)
+    {
 		block.setBlockName(modPrefix + name);
 		block.setBlockTextureName(modPrefix + name);
-		GameRegistry.registerBlock(block, name);
+        if(itemBlockClass != null)
+		    GameRegistry.registerBlock(block, itemBlockClass, name);
+        else
+            GameRegistry.registerBlock(block, ItemBlockMetadata.class, name);
 		return block;
 	}
 
