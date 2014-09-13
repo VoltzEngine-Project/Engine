@@ -207,16 +207,17 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     {
 
       (0 until getSizeInventory) filter (getStackInSlot(_) != null) foreach (
-                                                                            i =>
-                                                                            {
-                                                                              InventoryUtility.dropItemStack(world, center, getStackInSlot(i))
-                                                                              setInventorySlotContents(i, null)
-                                                                            })
+          i =>
+            {
+              InventoryUtility.dropItemStack(world, center, getStackInSlot(i))
+              setInventorySlotContents(i, null)
+            })
     }
     onInventoryChanged()
     markDirty()
   }
 
+  /** Called each time the inventory changes */
   def onInventoryChanged()
   {
 
