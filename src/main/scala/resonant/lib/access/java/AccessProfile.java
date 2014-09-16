@@ -161,6 +161,20 @@ public class AccessProfile implements IVirtualObject
 		return this.global;
 	}
 
+    /**
+     * Gets the players Access object
+     * @param player - entity player
+     * @return AccessUser for the player, or an empty AccessUser instance if player was not found
+     */
+    public AccessUser getUserAccess(EntityPlayer player)
+    {
+        return getUserAccess(player.getCommandSenderName());
+    }
+
+    /**
+     * EntityPlayer version should be used as usernames are not longer going to be supported.
+     */
+    @Deprecated
 	public AccessUser getUserAccess(String username)
 	{
 		for (AccessGroup group : this.groups)
