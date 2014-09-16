@@ -13,11 +13,13 @@ import cpw.mods.fml.relauncher.Side
  * A rotated texture renderer applied to blocks capable of having rotated textured.
  * @author Calclavia
  */
+@SideOnly(Side.CLIENT)
 trait RenderRotatedTexture extends SpatialBlock with IRotatable
 {
   @SideOnly(Side.CLIENT)
   var renderBlocks : RenderBlockAdvanced = null
 
+  @SideOnly(Side.CLIENT)
   override def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
   {
     if(renderBlocks == null)

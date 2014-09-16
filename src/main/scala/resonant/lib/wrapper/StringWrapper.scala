@@ -3,7 +3,7 @@ package resonant.lib.wrapper
 import java.util.{List => JList}
 
 import com.google.common.base.CaseFormat
-import net.minecraft.client.resources.I18n
+import net.minecraft.util.StatCollector
 import org.apache.commons.lang3.text.WordUtils
 import scala.collection.convert.wrapAll._
 /**
@@ -11,10 +11,9 @@ import scala.collection.convert.wrapAll._
  */
 object StringWrapper
 {
-
   implicit class WrappedString(str: String)
   {
-    def getLocal: String = I18n.format(str)
+    def getLocal: String = StatCollector.translateToLocal(str);
 
     def listWrap(characters: Int): JList[String] = WordUtils.wrap(str, characters).split("\\n").toList
 
