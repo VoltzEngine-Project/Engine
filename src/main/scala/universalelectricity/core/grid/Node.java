@@ -12,7 +12,7 @@ import universalelectricity.core.transform.vector.VectorWorld;
  */
 public class Node implements INode, IVectorWorld
 {
-    protected INodeProvider parent = null;
+    public INodeProvider parent = null;
 
     public Node(INodeProvider parent)
     {
