@@ -26,7 +26,8 @@ object ModuleUniversalElectricity extends Compatibility.CompatibilityModule("Uni
 
   def doIsHandler(obj: AnyRef): Boolean =
   {
-    return (obj.isInstanceOf[INodeProvider] && (obj.asInstanceOf[INodeProvider]).getNode(classOf[IEnergyNode], null) != null) || obj.isInstanceOf[IEnergyItem]
+    //TODO: This is broken. There is no direction.
+    return (obj.isInstanceOf[INodeProvider] && obj.asInstanceOf[INodeProvider].getNode(classOf[IEnergyNode], null) != null) || obj.isInstanceOf[IEnergyItem]
   }
 
   def canConnect(obj: AnyRef, direction: ForgeDirection, source: AnyRef): Boolean =
