@@ -107,12 +107,12 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   var customItemRender: Boolean = false
   var isOpaqueCube: Boolean = true
   var _access: IBlockAccess = null
-  var textureName: String = name
-  var domain: String = null
+  var textureName: java.lang.String = name
+  var domain: java.lang.String = null
 
   private var noDynamicItemRenderCrash: Boolean = true
 
-  def setTextureName(value: String)
+  def setTextureName(value: java.lang.String)
   {
     textureName = value;
   }
