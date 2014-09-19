@@ -125,7 +125,7 @@ public class NodeEnergy extends NodeConnector implements IEnergyNode, IUpdate, I
                 if (Compatibility.isHandler(entry.getKey(), entry.getValue()))
                 {
                     System.out.println("\tIsHandler");
-                    if (Compatibility.canConnect(entry.getKey(), entry.getValue().getOpposite(), this))
+                    if (Compatibility.canConnect(entry.getKey(), entry.getValue(), this))
                     {
                         System.out.println("Out:" +	buffer.extractEnergy(Compatibility.fill(entry.getKey(), entry.getValue(), buffer.extractEnergy(energyToGive, false), true), true));
                     }
@@ -138,7 +138,7 @@ public class NodeEnergy extends NodeConnector implements IEnergyNode, IUpdate, I
     @Override
     public boolean canConnect(ForgeDirection direction, Object object)
     {
-        return object != null && Compatibility.isHandler(object, direction) && canConnect(direction) && Compatibility.canConnect(object, direction.getOpposite(), this);
+        return object != null && Compatibility.isHandler(object, direction) && canConnect(direction) && Compatibility.canConnect(object, direction, this);
     }
 
     @Override
