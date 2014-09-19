@@ -18,6 +18,7 @@ import java.util.WeakHashMap;
 public class NodeConnector extends Node implements IConnector
 {
 	protected byte connectionMap = Byte.parseByte("111111", 2);
+    /** Connections to other machines, Object denotes the thing that is connected to, Direction is the face of this machine */
 	protected WeakHashMap<Object, ForgeDirection> connections = new WeakHashMap<Object, ForgeDirection>();
 
 	public NodeConnector(INodeProvider parent)

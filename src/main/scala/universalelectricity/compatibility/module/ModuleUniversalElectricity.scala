@@ -12,30 +12,29 @@ import universalelectricity.compatibility.Compatibility
  */
 object ModuleUniversalElectricity extends Compatibility.CompatibilityModule("UniversalElectricity", "Universal Electricity", "Watt", "W", 1)
 {
-  def receiveEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doReceive: Boolean): Double =
+  override def receiveEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doReceive: Boolean): Double =
   {
     (handler.asInstanceOf[INodeProvider]).getNode(classOf[IEnergyNode], direction).asInstanceOf[IEnergyNode].addEnergy(direction, energy, doReceive)
     return energy
   }
 
-  def extractEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doExtract: Boolean): Double =
+  override def extractEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doExtract: Boolean): Double =
   {
     (handler.asInstanceOf[INodeProvider]).getNode(classOf[IEnergyNode], direction).asInstanceOf[IEnergyNode].removeEnergy(direction, energy, doExtract)
     return energy
   }
 
-  def doIsHandler(obj: AnyRef): Boolean =
+  override def doIsHandler(obj: AnyRef, dir: ForgeDirection): Boolean =
   {
-    //TODO: This is broken. There is no direction.
-    return (obj.isInstanceOf[INodeProvider] && obj.asInstanceOf[INodeProvider].getNode(classOf[IEnergyNode], null) != null) || obj.isInstanceOf[IEnergyItem]
+    return (obj.isInstanceOf[INodeProvider] && obj.asInstanceOf[INodeProvider].getNode(classOf[IEnergyNode], dir) != null) || obj.isInstanceOf[IEnergyItem]
   }
 
-  def canConnect(obj: AnyRef, direction: ForgeDirection, source: AnyRef): Boolean =
+  override def canConnect(obj: AnyRef, direction: ForgeDirection, source: AnyRef): Boolean =
   {
     return (obj.asInstanceOf[INodeProvider]).getNode(classOf[IEnergyNode], direction) != null
   }
 
-  def chargeItem(itemStack: ItemStack, joules: Double, doCharge: Boolean): Double =
+  override def chargeItem(itemStack: ItemStack, joules: Double, doCharge: Boolean): Double =
   {
     if (itemStack != null && itemStack.getItem.isInstanceOf[IEnergyItem])
     {
@@ -44,7 +43,7 @@ object ModuleUniversalElectricity extends Compatibility.CompatibilityModule("Uni
     return 0
   }
 
-  def dischargeItem(itemStack: ItemStack, joules: Double, doDischarge: Boolean): Double =
+  override def dischargeItem(itemStack: ItemStack, joules: Double, doDischarge: Boolean): Double =
   {
     if (itemStack != null && itemStack.getItem.isInstanceOf[IEnergyItem])
     {
@@ -53,7 +52,7 @@ object ModuleUniversalElectricity extends Compatibility.CompatibilityModule("Uni
     return 0
   }
 
-  def getItemWithCharge(itemStack: ItemStack, energy: Double): ItemStack =
+  override def getItemWithCharge(itemStack: ItemStack, energy: Double): ItemStack =
   {
     if (itemStack != null)
     {
@@ -66,27 +65,27 @@ object ModuleUniversalElectricity extends Compatibility.CompatibilityModule("Uni
     return itemStack
   }
 
-  def doIsEnergyContainer(obj: AnyRef): Boolean =
+  override def doIsEnergyContainer(obj: AnyRef): Boolean =
   {
     return obj.isInstanceOf[IEnergyContainer]
   }
 
-  def getEnergy(obj: AnyRef, direction: ForgeDirection): Double =
+  override def getEnergy(obj: AnyRef, direction: ForgeDirection): Double =
   {
     return (obj.asInstanceOf[IEnergyContainer]).getEnergy(direction)
   }
 
-  def getMaxEnergy(obj: AnyRef, direction: ForgeDirection): Double =
+  override def getMaxEnergy(obj: AnyRef, direction: ForgeDirection): Double =
   {
     return (obj.asInstanceOf[IEnergyContainer]).getEnergyCapacity(direction)
   }
 
-  def getEnergyItem(is: ItemStack): Double =
+  override def getEnergyItem(is: ItemStack): Double =
   {
     return (is.getItem.asInstanceOf[IEnergyItem]).getEnergy(is)
   }
 
-  def getMaxEnergyItem(is: ItemStack): Double =
+  override def getMaxEnergyItem(is: ItemStack): Double =
   {
     return (is.getItem.asInstanceOf[IEnergyItem]).getEnergyCapacity(is)
   }

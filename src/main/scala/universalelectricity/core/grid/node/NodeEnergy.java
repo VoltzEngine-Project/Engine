@@ -100,20 +100,35 @@ public class NodeEnergy extends NodeConnector implements IEnergyNode, IUpdate, I
         return shareEnergy;
     }
 
+    /**
+     * Sets the node to share energy with connected nodes
+     * @param share - true will share energy
+     */
+    public void setCanShareEnergy(boolean share)
+    {
+        this.shareEnergy = share;
+    }
+
     /** called to share energy with all connected nodes */
     public void shareEnergy()
     {
+        System.out.println("PowerCheck: " + this);
         if(getEnergy(ForgeDirection.UNKNOWN) > 0)
         {
+            System.out.println("\tEnergy: " + getEnergy(ForgeDirection.UNKNOWN));
             int handlers = connections.size();
             for (Map.Entry<Object, ForgeDirection> entry : connections.entrySet())
             {
-                double energyToGive = Math.min(buffer.maxExtract(), (getEnergy(ForgeDirection.UNKNOWN) / handlers) + (getEnergy(ForgeDirection.UNKNOWN) % handlers));
-
+                double energyToGive = Math.min(buffer.maxExtract(), (getEnergy(entry.getValue()) / handlers) + (getEnergy(ForgeDirection.UNKNOWN) % handlers));
+                System.out.println("\tSide: " + entry.getValue() + "  Object: " + entry.getKey() + "   Energy: " + energyToGive);
                 //TODO check if direction is correct
-                if (Compatibility.isHandler(entry.getKey()) && Compatibility.canConnect(entry.getKey(), entry.getValue(), this))
+                if (Compatibility.isHandler(entry.getKey(), entry.getValue()))
                 {
-                    buffer.extractEnergy(Compatibility.fill(entry.getKey(), entry.getValue(), buffer.extractEnergy(energyToGive, false), true), true);
+                    System.out.println("\tIsHandler");
+                    if (Compatibility.canConnect(entry.getKey(), entry.getValue().getOpposite(), this))
+                    {
+                        System.out.println("Out:" +	buffer.extractEnergy(Compatibility.fill(entry.getKey(), entry.getValue(), buffer.extractEnergy(energyToGive, false), true), true));
+                    }
                 }
                 handlers--;
             }
@@ -123,13 +138,7 @@ public class NodeEnergy extends NodeConnector implements IEnergyNode, IUpdate, I
     @Override
     public boolean canConnect(ForgeDirection direction, Object object)
     {
-        return object != null && isValidConnection(object) && canConnect(direction) && Compatibility.canConnect(object, direction.getOpposite(), this);
-    }
-
-    @Override
-    public boolean isValidConnection(Object object)
-    {
-        return Compatibility.isHandler(object);
+        return object != null && Compatibility.isHandler(object, direction) && canConnect(direction) && Compatibility.canConnect(object, direction.getOpposite(), this);
     }
 
     @Override

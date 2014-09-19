@@ -28,9 +28,9 @@ public class Compatibility
 		loadedModules.add(module);
 	}
 
-	public static CompatibilityModule getHandler(Object handler)
+	public static CompatibilityModule getHandler(Object handler, ForgeDirection dir)
 	{
-		if (isHandler(handler))
+		if (isHandler(handler, dir))
 		{
 			return energyHandlerCache.get(handler.getClass());
 		}
@@ -43,7 +43,7 @@ public class Compatibility
 	 *
 	 * @return True if the handler can store energy. This can be for items and blocks.
 	 */
-	public static boolean isHandler(Object handler)
+	public static boolean isHandler(Object handler, ForgeDirection dir)
 	{
 		if (handler != null)
 		{
@@ -56,7 +56,7 @@ public class Compatibility
 
 			for (CompatibilityModule module : loadedModules)
 			{
-				if (module.doIsHandler(handler))
+				if (module.doIsHandler(handler, dir))
 				{
 					energyHandlerCache.put(clazz, module);
 					return true;
@@ -73,7 +73,6 @@ public class Compatibility
 		{
 			return energyStorageCache.get(handler.getClass());
 		}
-
 		return null;
 	}
 
@@ -109,7 +108,7 @@ public class Compatibility
 
     public static boolean canConnect(Object obj, ForgeDirection direction, Object source)
     {
-        CompatibilityModule module = getHandler(obj);
+        CompatibilityModule module = getHandler(obj, direction);
         if(module != null)
         {
             return module.canConnect(obj, direction, source);
@@ -140,7 +139,7 @@ public class Compatibility
      */
     public static double receiveEnergy(Object handler, ForgeDirection direction, double energy, boolean doReceive)
     {
-        CompatibilityModule module = getHandler(handler);
+        CompatibilityModule module = getHandler(handler, direction);
         if(module != null)
         {
             return module.receiveEnergy(handler, direction, energy, doReceive);
@@ -163,7 +162,7 @@ public class Compatibility
      */
     public static double extractEnergy(Object handler, ForgeDirection direction, double energy, boolean doExtract)
     {
-        CompatibilityModule module = getHandler(handler);
+        CompatibilityModule module = getHandler(handler, direction);
         if(module != null)
         {
             return module.extractEnergy(handler, direction, energy, doExtract);
@@ -192,7 +191,7 @@ public class Compatibility
      */
     public static double chargeItem(ItemStack itemStack, double joules, boolean doCharge)
     {
-        CompatibilityModule module = getHandler(itemStack);
+        CompatibilityModule module = getHandler(itemStack, null);
         if(module != null)
         {
             return module.chargeItem(itemStack, joules, doCharge);
@@ -221,7 +220,7 @@ public class Compatibility
      */
     public static double dischargeItem(ItemStack itemStack, double joules, boolean doDischarge)
     {
-        CompatibilityModule module = getHandler(itemStack);
+        CompatibilityModule module = getHandler(itemStack, null);
         if(module != null)
         {
             return module.dischargeItem(itemStack, joules, doDischarge);
@@ -232,7 +231,7 @@ public class Compatibility
 
     public static ItemStack getItemWithCharge(ItemStack itemStack, double energy)
     {
-        CompatibilityModule module = getHandler(itemStack);
+        CompatibilityModule module = getHandler(itemStack, null);
         if(module != null)
         {
             return module.getItemWithCharge(itemStack, energy);
@@ -242,7 +241,7 @@ public class Compatibility
 
     public static double getEnergy(Object obj, ForgeDirection direction)
     {
-        CompatibilityModule module = getHandler(obj);
+        CompatibilityModule module = getHandler(obj, direction);
         if(module != null)
         {
             return module.getEnergy(obj, direction);
@@ -252,7 +251,7 @@ public class Compatibility
 
     public static double getMaxEnergy(Object handler, ForgeDirection direction)
     {
-        CompatibilityModule module = getHandler(handler);
+        CompatibilityModule module = getHandler(handler, direction);
         if(module != null)
         {
             return module.getMaxEnergy(handler, direction);
@@ -262,7 +261,7 @@ public class Compatibility
 
     public static double getEnergyItem(ItemStack is)
     {
-        CompatibilityModule module = getHandler(is);
+        CompatibilityModule module = getHandler(is, null);
         if(module != null)
         {
             return module.getEnergyItem(is);
@@ -271,7 +270,7 @@ public class Compatibility
     }
 
     public static double getMaxEnergyItem(ItemStack is){
-        CompatibilityModule module = getHandler(is);
+        CompatibilityModule module = getHandler(is, null);
         if(module != null)
         {
             return module.getMaxEnergyItem(is);
@@ -340,7 +339,7 @@ public class Compatibility
 		 */
 		public abstract double dischargeItem(ItemStack itemStack, double joules, boolean doDischarge);
 
-		public abstract boolean doIsHandler(Object obj);
+		public abstract boolean doIsHandler(Object obj, ForgeDirection dir);
 
 		public abstract boolean doIsEnergyContainer(Object obj);
 

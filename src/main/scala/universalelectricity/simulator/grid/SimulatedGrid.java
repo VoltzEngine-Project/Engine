@@ -124,18 +124,6 @@ public class SimulatedGrid extends Grid<ISimNode> implements IUpdate
 
     }
 
-    /** Is this object(most likely a tile) an input of data(most likely energy) from the network */
-    public boolean isInputDevice(Object object, ForgeDirection connectingFrom)
-    {
-        return false;
-    }
-
-    /** Is this object(most likely a tile) an output of data(most likely energy) for the network */
-    public boolean isOutputDevice(Object object, ForgeDirection connectingFrom)
-    {
-        return false;
-    }
-
     @Override
     public boolean canUpdate()
     {

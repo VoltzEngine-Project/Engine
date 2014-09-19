@@ -102,7 +102,7 @@ public class UniversalTransformer implements IClassTransformer
 				if (template != null)
 				{
 					//TODO: Fix
-					if (Compatibility.getHandler(templates.inverse().get(template)).isEnabled)
+					if (Compatibility.getHandler(templates.inverse().get(template), null).isEnabled)
 					{
 						changed |= template.patch(cnode, false);
 						System.out.println("[Universal Electricity] Injected " + template.className + " API into: " + cnode.name);
@@ -117,7 +117,7 @@ public class UniversalTransformer implements IClassTransformer
 			for (String separated : separatedFlags)
 			{
 				//TODO: Fix
-				if (Compatibility.getHandler(separated) != null && Compatibility.getHandler(separated).isEnabled)
+				if (Compatibility.getHandler(separated, null) != null && Compatibility.getHandler(separated, null).isEnabled)
 				{
 					InjectionTemplate template = templates.get(separated);
 

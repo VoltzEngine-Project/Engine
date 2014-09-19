@@ -11,27 +11,27 @@ import universalelectricity.compatibility.Compatibility
  */
 object ModuleThermalExpansion extends Compatibility.CompatibilityModule("ThermalExpansion", "ThermalExpansion", "Redstone Flux", "RF", 50)
 {
-  def receiveEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doReceive: Boolean): Double =
+  override def receiveEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doReceive: Boolean): Double =
   {
     return (handler.asInstanceOf[IEnergyHandler]).receiveEnergy(direction, (energy * ratio).toInt, !doReceive) * reciprocal_ratio
   }
 
-  def extractEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doExtract: Boolean): Double =
+  override def extractEnergy(handler: AnyRef, direction: ForgeDirection, energy: Double, doExtract: Boolean): Double =
   {
     return ((handler.asInstanceOf[IEnergyHandler]).extractEnergy(direction, (energy * ratio).toInt, !doExtract) * reciprocal_ratio)
   }
 
-  def doIsHandler(obj: AnyRef): Boolean =
+  override def doIsHandler(obj: AnyRef, dir: ForgeDirection): Boolean =
   {
     return obj.isInstanceOf[IEnergyHandler] || obj.isInstanceOf[IEnergyContainerItem]
   }
 
-  def canConnect(obj: AnyRef, direction: ForgeDirection, source: AnyRef): Boolean =
+  override def canConnect(obj: AnyRef, direction: ForgeDirection, source: AnyRef): Boolean =
   {
     return (obj.asInstanceOf[IEnergyHandler]).canConnectEnergy(direction)
   }
 
-  def chargeItem(itemStack: ItemStack, joules: Double, docharge: Boolean): Double =
+  override def chargeItem(itemStack: ItemStack, joules: Double, docharge: Boolean): Double =
   {
     if (itemStack.getItem.isInstanceOf[IEnergyContainerItem])
     {
@@ -40,7 +40,7 @@ object ModuleThermalExpansion extends Compatibility.CompatibilityModule("Thermal
     return 0
   }
 
-  def dischargeItem(itemStack: ItemStack, joules: Double, doDischarge: Boolean): Double =
+  override def dischargeItem(itemStack: ItemStack, joules: Double, doDischarge: Boolean): Double =
   {
     if (itemStack.getItem.isInstanceOf[IEnergyContainerItem])
     {
@@ -49,27 +49,27 @@ object ModuleThermalExpansion extends Compatibility.CompatibilityModule("Thermal
     return 0
   }
 
-  def getItemWithCharge(is: ItemStack, energy: Double): ItemStack =
+  override def getItemWithCharge(is: ItemStack, energy: Double): ItemStack =
   {
     return null
   }
 
-  def doIsEnergyContainer(obj: AnyRef): Boolean =
+  override def doIsEnergyContainer(obj: AnyRef): Boolean =
   {
     return obj.isInstanceOf[IEnergyHandler]
   }
 
-  def getEnergy(obj: AnyRef, from: ForgeDirection): Double =
+  override def getEnergy(obj: AnyRef, from: ForgeDirection): Double =
   {
     return ((obj.asInstanceOf[IEnergyHandler]).getEnergyStored(from) * reciprocal_ratio)
   }
 
-  def getMaxEnergy(obj: AnyRef, from: ForgeDirection): Double =
+  override def getMaxEnergy(obj: AnyRef, from: ForgeDirection): Double =
   {
     return ((obj.asInstanceOf[IEnergyHandler]).getMaxEnergyStored(from) * reciprocal_ratio)
   }
 
-  def getEnergyItem(is: ItemStack): Double =
+  override def getEnergyItem(is: ItemStack): Double =
   {
     if (is.getItem.isInstanceOf[IEnergyContainerItem])
     {
@@ -78,7 +78,7 @@ object ModuleThermalExpansion extends Compatibility.CompatibilityModule("Thermal
     return 0
   }
 
-  def getMaxEnergyItem(is: ItemStack): Double =
+  override def getMaxEnergyItem(is: ItemStack): Double =
   {
     if (is.getItem.isInstanceOf[IEnergyContainerItem])
     {

@@ -133,7 +133,7 @@ public abstract class ItemElectric extends Item implements IEnergyItem
 	@Override
 	public void getSubItems(Item id, CreativeTabs par2CreativeTabs, List par3List)
 	{
-		par3List.add(Compatibility.getHandler(this).getItemWithCharge(new ItemStack(this), 0));
-		par3List.add(Compatibility.getHandler(this).getItemWithCharge(new ItemStack(this), getEnergyCapacity(new ItemStack(this))));
+		par3List.add(Compatibility.getHandler(this, null).getItemWithCharge(new ItemStack(this), 0));
+		par3List.add(Compatibility.getHandler(this, null).getItemWithCharge(new ItemStack(this), getEnergyCapacity(new ItemStack(this))));
 	}
 }
