@@ -114,20 +114,15 @@ public class NodeEnergy extends NodeConnector implements IEnergyNode, IUpdate, I
     {
         System.out.println("PowerCheck: " + this);
         if(getEnergy(ForgeDirection.UNKNOWN) > 0)
-        {
-            System.out.println("\tEnergy: " + getEnergy(ForgeDirection.UNKNOWN));
-            int handlers = connections.size();
+        { int handlers = connections.size();
             for (Map.Entry<Object, ForgeDirection> entry : connections.entrySet())
             {
                 double energyToGive = Math.min(buffer.maxExtract(), (getEnergy(entry.getValue()) / handlers) + (getEnergy(ForgeDirection.UNKNOWN) % handlers));
-                System.out.println("\tSide: " + entry.getValue() + "  Object: " + entry.getKey() + "   Energy: " + energyToGive);
-                //TODO check if direction is correct
                 if (Compatibility.isHandler(entry.getKey(), entry.getValue()))
                 {
-                    System.out.println("\tIsHandler");
                     if (Compatibility.canConnect(entry.getKey(), entry.getValue(), this))
                     {
-                        System.out.println("Out:" +	buffer.extractEnergy(Compatibility.fill(entry.getKey(), entry.getValue(), buffer.extractEnergy(energyToGive, false), true), true));
+                        	buffer.extractEnergy(Compatibility.fill(entry.getKey(), entry.getValue(), buffer.extractEnergy(energyToGive, false), true), true);
                     }
                 }
                 handlers--;
@@ -138,7 +133,11 @@ public class NodeEnergy extends NodeConnector implements IEnergyNode, IUpdate, I
     @Override
     public boolean canConnect(ForgeDirection direction, Object object)
     {
-        return object != null && Compatibility.isHandler(object, direction) && canConnect(direction) && Compatibility.canConnect(object, direction, this);
+        if(object != null)
+        {
+            return canConnect(direction) && Compatibility.isHandler(object, direction) && Compatibility.canConnect(object, direction, this);
+        }
+        return false;
     }
 
     @Override

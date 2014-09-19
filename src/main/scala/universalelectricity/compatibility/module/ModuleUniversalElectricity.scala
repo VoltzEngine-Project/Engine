@@ -15,7 +15,7 @@ object ModuleUniversalElectricity extends Compatibility.CompatibilityModule("Uni
   /**
    * Gets the node from the side of the machine that deals with energy
    * @param handler - instanceof INodeProvider that contains IEnergyNode, or an IEnergyNode
-   * @param direction - direction of the connection
+   * @param direction - direction of the connection coming from the handler
    * @return null if its not a handler, or there is no return from INodeProvider.getNode
    */
   def getEnergyNode(handler: AnyRef, direction: ForgeDirection) : IEnergyNode =
