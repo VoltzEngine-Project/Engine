@@ -112,9 +112,9 @@ public class NodeEnergy extends NodeConnector implements IEnergyNode, IUpdate, I
     /** called to share energy with all connected nodes */
     public void shareEnergy()
     {
-        System.out.println("PowerCheck: " + this);
         if(getEnergy(ForgeDirection.UNKNOWN) > 0)
-        { int handlers = connections.size();
+        {
+            int handlers = connections.size();
             for (Map.Entry<Object, ForgeDirection> entry : connections.entrySet())
             {
                 double energyToGive = Math.min(buffer.maxExtract(), (getEnergy(entry.getValue()) / handlers) + (getEnergy(ForgeDirection.UNKNOWN) % handlers));
