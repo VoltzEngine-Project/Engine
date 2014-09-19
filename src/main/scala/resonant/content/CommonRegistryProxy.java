@@ -10,9 +10,9 @@ import java.lang.reflect.Method;
 
 public class CommonRegistryProxy
 {
-	public void registerTileEntity(String name, Class<? extends TileEntity> clazz)
+	public void registerTileEntity(String name, String prefix, Class<? extends TileEntity> clazz)
 	{
-		GameRegistry.registerTileEntityWithAlternatives(clazz, name, "CL" + name);
+		GameRegistry.registerTileEntityWithAlternatives(clazz, name, name);
         for (Field field : clazz.getDeclaredFields())
         {
             if(field.isAnnotationPresent(Synced.class))

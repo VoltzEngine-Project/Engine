@@ -126,7 +126,7 @@ public class ModManager
 
 		if (spatial.tile() != null)
 		{
-			proxy.registerTileEntity(name, spatial.tile().getClass());
+			proxy.registerTileEntity(name, modPrefix, spatial.tile().getClass());
 
 			if (!spatial.normalRender())
 			{
