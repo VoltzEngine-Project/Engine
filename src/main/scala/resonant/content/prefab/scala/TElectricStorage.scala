@@ -1,9 +1,7 @@
 package resonant.lib.content.prefab
 
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.api.core.grid.electric.IEnergyContainer
-
 /**
  * @author Calclavia
  */
@@ -39,25 +37,5 @@ trait TElectricStorage extends TElectric with IEnergyContainer
     }
     else
       return 0
-  }
-
-  override def save(nbt: NBTTagCompound)
-  {
-    super.save(nbt);
-
-    if (energy != null)
-    {
-      energy.readFromNBT(nbt)
-    }
-  }
-
-  override def load(nbt: NBTTagCompound)
-  {
-    super.load(nbt);
-
-    if (energy != null)
-    {
-      energy.writeToNBT(nbt)
-    }
   }
 }

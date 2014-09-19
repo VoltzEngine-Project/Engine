@@ -15,7 +15,6 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
 {
   protected var electricNode = new NodeElectric(this)
 
-  @deprecated
   def energy : EnergyStorage = electricNode.buffer
 
   def setCapacity(value: Double) {energy.setCapacity(value)}
@@ -28,13 +27,13 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
 
   protected def recharge(stack: ItemStack)
   {
-    if (stack != null && Compatibility.getHandler(stack.getItem) != null)
+    if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
       electricNode.removeEnergy(ForgeDirection.UNKNOWN, Compatibility.chargeItem(stack, electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
   }
 
   protected def discharge(stack: ItemStack)
   {
-    if (stack != null && Compatibility.getHandler(stack.getItem) != null)
+    if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
       electricNode.addEnergy(ForgeDirection.UNKNOWN, Compatibility.dischargeItem(stack, electricNode.getEnergyCapacity(ForgeDirection.UNKNOWN) - electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
   }
 
@@ -45,7 +44,7 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
    */
   override def getNode(nodeType: Class[_ <: INode], from: ForgeDirection): INode =
   {
-    if (nodeType == classOf[IElectricNode])
+    if (classOf[IElectricNode].isAssignableFrom(nodeType))
       return electricNode
 
     return null
