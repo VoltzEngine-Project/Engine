@@ -39,7 +39,7 @@ public class NodeConnector extends Node implements IConnector
 
 	public boolean canConnect(ForgeDirection from)
 	{
-		return (connectionMap & (1 << from.ordinal())) != 0;
+		return ((connectionMap & (1 << from.ordinal())) != 0) || from == ForgeDirection.UNKNOWN;
 	}
 
 	public boolean isValidConnection(Object object)
@@ -84,7 +84,6 @@ public class NodeConnector extends Node implements IConnector
 			{
 				TileEntity tile = position().add(direction).getTileEntity();
 				INode node = getNodeFrom(tile, direction.getOpposite());
-
 				if (node != null)
 				{
 					addConnection(node, direction);
