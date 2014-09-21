@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import resonant.engine.References;
+import resonant.lib.wrapper.BitmaskWrapper;
 import universalelectricity.core.transform.rotation.Quaternion;
 import universalelectricity.core.transform.vector.Vector3;
 
@@ -294,23 +295,16 @@ public class WorldUtility
 	 *
 	 * @return True if so.
 	 */
+	@Deprecated
 	public static boolean isEnabledSide(int sideMap, ForgeDirection direction)
 	{
-		return (sideMap & (1 << direction.ordinal())) != 0;
+		return BitmaskWrapper.mask(sideMap, direction);
 	}
 
+	@Deprecated
 	public static int setEnableSide(int sideMap, ForgeDirection direction, boolean doEnable)
 	{
-		if (doEnable)
-		{
-			sideMap = sideMap | (1 << direction.ordinal());
-		}
-		else
-		{
-			sideMap = sideMap & ~(1 << direction.ordinal());
-		}
-
-		return sideMap;
+		return BitmaskWrapper.mask(sideMap, direction, doEnable);
 	}
 
 	public static List<ItemStack> getItemStackFromBlock(World world, int i, int j, int k)
