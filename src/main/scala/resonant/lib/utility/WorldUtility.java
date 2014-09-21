@@ -294,20 +294,20 @@ public class WorldUtility
 	 *
 	 * @return True if so.
 	 */
-	public static boolean isEnabledSide(byte sideMap, ForgeDirection direction)
+	public static boolean isEnabledSide(int sideMap, ForgeDirection direction)
 	{
 		return (sideMap & (1 << direction.ordinal())) != 0;
 	}
 
-	public static byte setEnableSide(byte sideMap, ForgeDirection direction, boolean doEnable)
+	public static int setEnableSide(int sideMap, ForgeDirection direction, boolean doEnable)
 	{
 		if (doEnable)
 		{
-			sideMap = (byte) (sideMap | (1 << direction.ordinal()));
+			sideMap = sideMap | (1 << direction.ordinal());
 		}
 		else
 		{
-			sideMap = (byte) (sideMap & ~(1 << direction.ordinal()));
+			sideMap = sideMap & ~(1 << direction.ordinal());
 		}
 
 		return sideMap;

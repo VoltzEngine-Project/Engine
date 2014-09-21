@@ -106,12 +106,12 @@ object RenderBlockUtility
    * Renders a connected texture block with a bitmask
    * @param sideMap - The sides that are connected
    */
-  def tessellateBlockWithConnectedTextures(sideMap: Byte, blockAccess: IBlockAccess, x: Int, y: Int, z: Int, block: Block, faceOverride: IIcon, edgeOverride: IIcon)
+  def tessellateBlockWithConnectedTextures(sideMap: Int, blockAccess: IBlockAccess, x: Int, y: Int, z: Int, block: Block, faceOverride: IIcon, edgeOverride: IIcon)
   {
     tessellateBlockWithConnectedTextures(sideMap, RenderUtility.renderBlocks, blockAccess, x, y, z, block, faceOverride, edgeOverride)
   }
 
-  def tessellateBlockWithConnectedTextures(sideMap: Byte, renderBlocks: RenderBlocks, blockAccess: IBlockAccess, x: Int, y: Int, z: Int, block: Block, faceOverride: IIcon, edgeOverride: IIcon)
+  def tessellateBlockWithConnectedTextures(sideMap: Int, renderBlocks: RenderBlocks, blockAccess: IBlockAccess, x: Int, y: Int, z: Int, block: Block, faceOverride: IIcon, edgeOverride: IIcon)
   {
     renderBlocks.blockAccess = blockAccess
 

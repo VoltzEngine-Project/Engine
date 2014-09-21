@@ -27,7 +27,7 @@ trait RenderConnectedTexture extends SpatialBlock
 
   override def renderDynamic(pos: Vector3, frame: Float, pass: Int)
   {
-    var sideMap: Byte = 0
+    var sideMap = 0
 
     for (dir <- ForgeDirection.VALID_DIRECTIONS)
     {
