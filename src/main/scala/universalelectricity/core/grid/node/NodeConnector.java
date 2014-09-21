@@ -13,13 +13,16 @@ import java.util.WeakHashMap;
 /**
  * A Node that is designed to connect to other nodes, tiles, or objects.
  *
- * @author Darkguardsman
+ * @author Darkguardsman, Calclavia
  */
 public class NodeConnector extends Node implements IConnector
 {
-	protected byte connectionMap = Byte.parseByte("111111", 2);
-    /** Connections to other machines, Object denotes the thing that is connected to, Direction is the face of this machine */
-	protected WeakHashMap<Object, ForgeDirection> connections = new WeakHashMap<Object, ForgeDirection>();
+	protected byte connectionMap = 0x3F;
+
+	/**
+	 * Connections to other machines, Object denotes the thing that is connected to, Direction is the face of this machine
+	 */
+	protected final WeakHashMap<Object, ForgeDirection> connections = new WeakHashMap();
 
 	public NodeConnector(INodeProvider parent)
 	{
@@ -52,6 +55,7 @@ public class NodeConnector extends Node implements IConnector
 	public void deconstruct()
 	{
 		super.deconstruct();
+
 		if (connections != null)
 		{
 			connections.clear();
@@ -66,25 +70,19 @@ public class NodeConnector extends Node implements IConnector
 	}
 
 	/**
-	 * Called during reconstruct to build the connection map
+	 * Called during reconstruct to build the connection map. This is a general way used to search all adjacent TileEntity to see and try to connect to it.
 	 */
-	public void buildConnections()
+	protected void buildConnections()
 	{
-		if (connections == null)
-		{
-			connections = new WeakHashMap<Object, ForgeDirection>();
-		}
-		else
-		{
-			connections.clear();
-		}
+		connections.clear();
 
 		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
 		{
-			if (canConnect(direction.getOpposite()))
+			if (canConnect(direction))
 			{
 				TileEntity tile = position().add(direction).getTileEntity();
 				INode node = getNodeFrom(tile, direction.getOpposite());
+
 				if (node != null)
 				{
 					addConnection(node, direction);
@@ -93,25 +91,34 @@ public class NodeConnector extends Node implements IConnector
 		}
 	}
 
-	public INode getNodeFrom(TileEntity tile, ForgeDirection from)
+	protected INode getNodeFrom(TileEntity tile, ForgeDirection from)
 	{
 		if (tile instanceof INodeProvider)
 		{
-			INodeProvider provider = (INodeProvider) tile;
-			INode node = provider.getNode(this.getClass(), from);
+			INode node = ((INodeProvider) tile).getNode(getRelativeClass(), from);
 
 			if (node != null)
+			{
 				return node;
+			}
 		}
 
 		return null;
 	}
 
 	/**
-	 * Called to add an object to the connection map, and allows for add events during connection updating
+	 * Called to add an object to the connection map. Override this to update connection masks for client packets if needed.
 	 */
 	protected void addConnection(Object obj, ForgeDirection dir)
 	{
 		connections.put(obj, dir);
+	}
+
+	/**
+	 * The class used to compare when making connections
+	 */
+	protected Class<? extends INode> getRelativeClass()
+	{
+		return getClass();
 	}
 }

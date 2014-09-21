@@ -1,6 +1,6 @@
 package universalelectricity.simulator.dc
 
-import universalelectricity.api.core.grid.INodeProvider
+import universalelectricity.api.core.grid.{INode, INodeProvider}
 import universalelectricity.core.grid.node.NodeConnector
 import universalelectricity.simulator.dc.component.DCComponent
 
@@ -18,4 +18,6 @@ class DCNode(parent: INodeProvider) extends NodeConnector(parent) with DCCompone
   }
 
   override def getResistance = resistance
+
+  protected override def getRelativeClass: Class[_ <: INode] = classOf[DCNode]
 }
