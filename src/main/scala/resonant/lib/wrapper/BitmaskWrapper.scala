@@ -40,8 +40,11 @@ object BitmaskWrapper
      * Forge Direction Alternatives
      */
     def mask(dir: ForgeDirection): Boolean = mask(dir.ordinal())
-
     def mask(dir: ForgeDirection, value: Boolean): Int = mask(dir.ordinal(), value)
+
+
+    def openMask(dir: ForgeDirection) = mask(dir.ordinal(), true)
+    def closeMask(dir: ForgeDirection) = mask(dir.ordinal(), false)
   }
 
   /**
