@@ -6,9 +6,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import resonant.lib.network.handle.IPacketIDReceiver;
 import resonant.lib.network.handle.IPacketReceiver;
+import universalelectricity.core.transform.vector.IVector3;
 import universalelectricity.core.transform.vector.Vector3;
 
-/**
+/** Packet type designed to be used with Tiles
+ *
  * @author tgame14
  * @since 26/05/14
  */
@@ -23,6 +25,13 @@ public class PacketTile extends PacketType
 
 	}
 
+    /** @param x - location
+     * @param y - location
+     * @param z - location
+     * @param args -  data to send, first arg should be packetID if
+     *             the tile is an instance of {@code IPacketIDReceiver}
+     *             Should never be null
+     */
 	public PacketTile(int x, int y, int z, Object... args)
 	{
 		super(args);
@@ -32,6 +41,21 @@ public class PacketTile extends PacketType
 		this.z = z;
 	}
 
+    /** @param vec - location
+     * @param args -  data to send, first arg should be packetID if
+     *             the tile is an instance of {@code IPacketIDReceiver}
+     *             Should never be null
+     */
+    public PacketTile(IVector3 vec, Object... args)
+    {
+        this((int)vec.x(), (int)vec.y(), (int)vec.z(), args);
+    }
+
+    /** @param  tile - TileEntity to send this packet to, only used for location data
+     * @param args -  data to send, first arg should be packetID if
+     *             the tile is an instance of {@code IPacketIDReceiver}
+     *             Should never be null
+     */
 	public PacketTile(TileEntity tile, Object... args)
 	{
 		this(tile.xCoord, tile.yCoord, tile.zCoord, args);
