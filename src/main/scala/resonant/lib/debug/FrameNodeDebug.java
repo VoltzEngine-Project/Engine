@@ -3,9 +3,10 @@ package resonant.lib.debug;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import codechicken.multipart.TMultiPart;
 import universalelectricity.api.core.grid.INode;
 import universalelectricity.api.core.grid.INodeProvider;
+import universalelectricity.core.transform.vector.IVector3;
+import universalelectricity.core.transform.vector.IVectorWorld;
 
 /** @author Darkguardsman */
 @SuppressWarnings("serial")
@@ -58,9 +59,9 @@ public class FrameNodeDebug extends FrameDebug
         {
             return ((TileEntity) nodeProvider).zCoord;
         }
-        else if (nodeProvider instanceof TMultiPart)
+        else if (nodeProvider instanceof IVector3)
         {
-            return ((TMultiPart) nodeProvider).z();
+            return ((IVector3) nodeProvider).z();
         }
         return super.z();
     }
@@ -72,9 +73,9 @@ public class FrameNodeDebug extends FrameDebug
         {
             return ((TileEntity) nodeProvider).xCoord;
         }
-        else if (nodeProvider instanceof TMultiPart)
+        else if (nodeProvider instanceof IVector3)
         {
-            return ((TMultiPart) nodeProvider).x();
+            return ((IVector3) nodeProvider).x();
         }
         return super.x();
     }
@@ -86,9 +87,9 @@ public class FrameNodeDebug extends FrameDebug
         {
             return ((TileEntity) nodeProvider).yCoord;
         }
-        else if (nodeProvider instanceof TMultiPart)
+        else if (nodeProvider instanceof IVector3)
         {
-            return ((TMultiPart) nodeProvider).y();
+            return ((IVector3) nodeProvider).y();
         }
         return super.y();
     }
@@ -100,9 +101,9 @@ public class FrameNodeDebug extends FrameDebug
         {
             return ((TileEntity) nodeProvider).getWorldObj();
         }
-        else if (nodeProvider instanceof TMultiPart)
+        else if (nodeProvider instanceof IVectorWorld)
         {
-            return ((TMultiPart) nodeProvider).world();
+            return ((IVectorWorld) nodeProvider).world();
         }
         return super.world();
     }

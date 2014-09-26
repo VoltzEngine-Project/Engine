@@ -9,7 +9,7 @@ import net.minecraftforge.fluids.FluidTank
 trait TTankProvider {
 
   /** Gets the primary tank for this object */
-  abstract def getPrimaryTank: FluidTank
+  def getPrimaryTank: FluidTank
 
   /** Gets the tank for the given fluid.
    *

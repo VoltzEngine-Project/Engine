@@ -9,7 +9,7 @@ import resonant.engine.ResonantEngine
 import resonant.lib.network.discriminator.{PacketTile, PacketType}
 import resonant.lib.network.netty.AbstractPacket
 import universalelectricity.api.core.grid.ISave
-import universalelectricity.core.transform.vector.{IVectorWorld, IVector3, TVectorWorld}
+import universalelectricity.core.transform.vector.{IVectorWorld, TVectorWorld}
 
 /** Trait to be applied to scala classes to implement basic packet handling.
   * Handles desc packet by default using packet ID 0
@@ -46,13 +46,13 @@ class TPacketIDReceiver extends IPacketIDReceiver with TVectorWorld
     {
       nbt = new NBTTagCompound
       this.asInstanceOf[TileEntity].writeToNBT(nbt)
-      return new PacketTile(this.asInstanceOf[IVector3], 0, nbt)
+      return new PacketTile(x.asInstanceOf[Int], y.asInstanceOf[Int], z.asInstanceOf[Int], Array[Any](0, nbt))
     }
     else if(this.isInstanceOf[ISave])
     {
       nbt = new NBTTagCompound
       this.asInstanceOf[ISave].save(nbt)
-      return new PacketTile(this.asInstanceOf[IVector3], 0, nbt)
+      return new PacketTile(x.asInstanceOf[Int], y.asInstanceOf[Int], z.asInstanceOf[Int],  Array[Any](0, nbt))
     }
     return null
   }
