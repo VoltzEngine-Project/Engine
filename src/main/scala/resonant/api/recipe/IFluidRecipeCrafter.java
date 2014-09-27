@@ -6,6 +6,7 @@ package resonant.api.recipe;
  *
  * @author DarkGuardsman
  */
+@Deprecated //No longer used, or even functional
 public interface IFluidRecipeCrafter
 {
 	/**
