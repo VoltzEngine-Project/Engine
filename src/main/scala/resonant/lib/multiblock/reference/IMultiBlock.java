@@ -13,5 +13,5 @@ public interface IMultiBlock
 	/**
 	 * @return An array of Vector3 containing the multiblock relative coordinates to be constructed.
 	 */
-	public Vector3[] getMultiBlockVectors();
+	public Iterable<Vector3> getMultiBlockVectors();
 }

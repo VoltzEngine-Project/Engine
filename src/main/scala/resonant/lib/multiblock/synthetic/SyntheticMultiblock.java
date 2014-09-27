@@ -25,7 +25,7 @@ public class SyntheticMultiblock
 	public void create(IMultiBlock tile)
 	{
 		TileEntity tileEntity = (TileEntity) tile;
-		Vector3[] positions = tile.getMultiBlockVectors();
+		Iterable<Vector3> positions = tile.getMultiBlockVectors();
 
 		for (Vector3 position : positions)
 		{
@@ -43,7 +43,7 @@ public class SyntheticMultiblock
 	public void destroy(IMultiBlock tile)
 	{
 		TileEntity tileEntity = (TileEntity) tile;
-		Vector3[] positions = tile.getMultiBlockVectors();
+		Iterable<Vector3> positions = tile.getMultiBlockVectors();
 
 		for (Vector3 position : positions)
 		{

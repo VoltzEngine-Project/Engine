@@ -76,7 +76,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 	public Set<W> getStructure()
 	{
 		Set<W> structure = new LinkedHashSet<W>();
-		Vector3[] vectors = tile.getMultiBlockVectors();
+		Iterable<Vector3> vectors = tile.getMultiBlockVectors();
 
 		for (Vector3 vector : vectors)
 		{
