@@ -243,7 +243,12 @@ public class ModManager
         {
             return newItem(LanguageUtility.decapitalizeFirst(item.getClass().getSimpleName().replace("Item", "")), item);
         }
-        catch(IllegalArgumentException  | StringIndexOutOfBoundsException e)
+        catch(StringIndexOutOfBoundsException e)
+        {
+            System.out.println("Item: " + item + "   Class: " + item.getClass());
+            throw e;
+        }
+        catch(IllegalArgumentException e)
         {
             System.out.println("Item: " + item + "   Class: " + item.getClass());
             throw e;
