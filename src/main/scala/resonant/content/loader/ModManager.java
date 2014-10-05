@@ -239,8 +239,16 @@ public class ModManager
 
 	public Item newItem(Item item)
 	{
-		return newItem(LanguageUtility.decapitalizeFirst(item.getClass().getSimpleName().replace("Item", "")), item);
-	}
+        try
+        {
+            return newItem(LanguageUtility.decapitalizeFirst(item.getClass().getSimpleName().replace("Item", "")), item);
+        }
+        catch(IllegalArgumentException  | StringIndexOutOfBoundsException e)
+        {
+            System.out.println("Item: " + item + "   Class: " + item.getClass());
+            throw e;
+        }
+    }
 
 	public Item newItem(String name, Item item)
 	{
