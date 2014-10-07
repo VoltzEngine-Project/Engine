@@ -16,6 +16,7 @@ import resonant.content.wrapper.BlockDummy;
 import resonant.content.wrapper.ItemRenderHandler;
 import resonant.lib.utility.LanguageUtility;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
@@ -179,8 +180,37 @@ public class ModManager
      */
     public <C extends Block> C newBlock(String name, C block, Class<? extends ItemBlock> itemBlockClass)
     {
-		block.setBlockName(modPrefix + name);
-		block.setBlockTextureName(modPrefix + name);
+        //Set block name if not present
+        if(!block.getUnlocalizedName().contains(modPrefix))
+        {
+            block.setBlockName(modPrefix + name);
+        }
+
+        //Set texture name, reflection is used to prevent overriding the blocks existing name
+        try
+        {
+            Field field = block.getClass().getField("field_149768_d");
+            if(field == null)
+            {
+                field = block.getClass().getField("textureName");
+            }
+            field.setAccessible(true);
+
+            if(field.get(block) == null)
+            {
+                block.setBlockTextureName(modPrefix + name);
+            }
+        }
+        catch(NoSuchFieldException e)
+        {
+            block.setBlockTextureName(modPrefix + name);
+        }
+        catch(IllegalAccessException e)
+        {
+            block.setBlockTextureName(modPrefix + name);
+        }
+
+        // Register block with item block
         if(itemBlockClass != null)
 		    GameRegistry.registerBlock(block, itemBlockClass, name);
         else
