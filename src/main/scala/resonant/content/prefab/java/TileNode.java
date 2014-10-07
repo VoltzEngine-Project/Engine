@@ -137,6 +137,7 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
             for (Field field : fields) {
                 INode node = null;
                 try {
+                    field.setAccessible(true);
                     Object object = field.get(this);
                     if (object instanceof INode)
                     {
