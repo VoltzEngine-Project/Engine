@@ -92,6 +92,17 @@ public class PacketTile extends PacketType
 				IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
 				receiver.read(data().slice(), player, this);
 			}
+            catch(IndexOutOfBoundsException e)
+            {
+                if(e.getMessage().contains("EmptyByteBuf"))
+                {
+                    System.out.println("Packet sent to a TileEntity was empty [" + tile + "] in " + new Vector3(x, y, z));
+                }
+                else
+                {
+                    System.out.println("Packet sent to a TileEntity was read out side its bounds [" + tile + "] in " + new Vector3(x, y, z));
+                }
+            }
 			catch (Exception e)
 			{
 				System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Vector3(x, y, z));
