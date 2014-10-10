@@ -5,7 +5,6 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fluids.FluidTank
-import resonant.engine.References
 import resonant.lib.network.netty.IByteBufObject
 import resonant.lib.utility.nbt.ISaveObj
 import universalelectricity.core.transform.vector.{Vector2, Vector3}
@@ -37,27 +36,42 @@ object ByteBufWrapper
      */
     def <<<(data: Any): ByteBuf =
     {
-      data match
-      {
-        case x: Array[Any] => this <<< x
-        case x: Seq[Any] => this <<< x
-        case x: Int => buf <<< x
-        case x: Float => buf <<< x
-        case x: Double => buf <<< x
-        case x: Byte => buf <<< x
-        case x: Boolean => buf <<< x
-        case x: String => buf <<< x
-        case x: Short => buf <<< x
-        case x: Long => buf <<< x
-        case x: IByteBufObject => x.writeBytes(buf)
-        case x: Vector3 => x.writeByteBuf(buf)
-        case x: Vector2 => x.writeByteBuf(buf)
-        case x: NBTTagCompound => buf <<< x
-        case x: FluidTank => buf <<< x
-        case x: ISaveObj => buf <<< x
-        case _ => References.LOGGER.fatal("Resonant Engine ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
-      }
-
+        try
+        {
+            data match
+            {
+                case x: Array[Any] => this <<< x
+                case x: Seq[Any] => this <<< x
+                case x: Int => buf <<< x
+                case x: Float => buf <<< x
+                case x: Double => buf <<< x
+                case x: Byte => buf <<< x
+                case x: Boolean => buf <<< x
+                case x: String => buf <<< x
+                case x: Short => buf <<< x
+                case x: Long => buf <<< x
+                case x: IByteBufObject => x.writeBytes(buf)
+                case x: Vector3 => x.writeByteBuf(buf)
+                case x: Vector2 => x.writeByteBuf(buf)
+                case x: NBTTagCompound => buf <<< x
+                case x: FluidTank => buf <<< x
+                case x: ISaveObj => buf <<< x
+                case _ => throw new IllegalArgumentException("Resonant Engine ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
+            }
+        }catch
+            {
+                case ie: IllegalArgumentException =>
+                  {
+                      if(ie.getMessage.contains("Resonant Engine"))
+                      {
+                          ie.printStackTrace()
+                      }
+                      else
+                      {
+                          throw ie
+                      }
+                  }
+            }
       buf
     }
 
