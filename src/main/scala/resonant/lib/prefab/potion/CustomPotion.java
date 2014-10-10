@@ -5,11 +5,39 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import resonant.engine.References;
 
+/**
+ * @author Calclavia, Darkguardsman
+ */
 public abstract class CustomPotion extends Potion
 {
     public boolean enable = true;
     public boolean disableCreative = true;
     public boolean disablePeaceful = true;
+
+    protected static int NEXT_ID = 32;
+
+    /**
+     * Creates a new type of potion
+     *
+     * @param color       - The color of this potion.
+     * @param name        - The name of this potion.
+     */
+    public CustomPotion(int color, String name)
+    {
+        this(getNextId(), false, color, name);
+    }
+
+    /**
+     * Creates a new type of potion
+     *
+     * @param isBadEffect - Is this potion a good potion or a bad one?
+     * @param color       - The color of this potion.
+     * @param name        - The name of this potion.
+     */
+    public CustomPotion(boolean isBadEffect, int color, String name)
+    {
+        this(getNextId(), isBadEffect, color, name);
+    }
 
     /**
      * Creates a new type of potion
@@ -105,5 +133,11 @@ public abstract class CustomPotion extends Potion
     {
         super.setPotionName(name);
         return this;
+    }
+
+    /** Gets the increments a static potion id making it easier to register new potion effects */
+    protected static int getNextId()
+    {
+        return NEXT_ID++;
     }
 }
