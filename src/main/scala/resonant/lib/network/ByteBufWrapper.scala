@@ -15,8 +15,37 @@ import universalelectricity.core.transform.vector.{Vector2, Vector3}
  */
 object ByteBufWrapper
 {
+
   implicit class ByteBufWrapper(buf: ByteBuf)
   {
+    def read[T](sample: T): T =
+    {
+      return (sample match
+      {
+        case x: Array[Any] => readArray(x)
+        case x: Int => buf.readInt()
+        case x: Float => buf.readFloat()
+        case x: Double => buf.readDouble()
+        case x: Byte => buf.readByte()
+        case x: Boolean => buf.readBoolean()
+        case x: String => buf.readString()
+        case x: Short => buf.readShort()
+        case x: Long => buf.readLong()
+        case x: IByteBufObject => x.readBytes(buf)
+        case x: Vector3 => new Vector3(buf)
+        case x: Vector2 => new Vector2(buf)
+        case x: NBTTagCompound => buf.readTag()
+        case x: FluidTank => buf.readTank()
+        case x: ISaveObj => x.load(buf.readTag())
+        case _ => throw new IllegalArgumentException("Resonant Engine ByteBuf attempt to read an invalid object [" + sample + "] of class [" + sample.getClass + "]")
+      }).asInstanceOf[T]
+    }
+
+    def readArray(data: Array[Any]): Array[Any] =
+    {
+      return data map read
+    }
+
     def readTank() = new FluidTank(buf.readInt()).readFromNBT(readTag())
 
     def readVector2() = new Vector2(buf)
@@ -36,42 +65,43 @@ object ByteBufWrapper
      */
     def <<<(data: Any): ByteBuf =
     {
-        try
+      try
+      {
+        data match
         {
-            data match
+          case x: Array[Any] => this <<< x
+          case x: Seq[Any] => this <<< x
+          case x: Int => buf <<< x
+          case x: Float => buf <<< x
+          case x: Double => buf <<< x
+          case x: Byte => buf <<< x
+          case x: Boolean => buf <<< x
+          case x: String => buf <<< x
+          case x: Short => buf <<< x
+          case x: Long => buf <<< x
+          case x: IByteBufObject => x.writeBytes(buf)
+          case x: Vector3 => x.writeByteBuf(buf)
+          case x: Vector2 => x.writeByteBuf(buf)
+          case x: NBTTagCompound => buf <<< x
+          case x: FluidTank => buf <<< x
+          case x: ISaveObj => buf <<< x
+          case _ => throw new IllegalArgumentException("Resonant Engine ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
+        }
+      }
+      catch
+        {
+          case ie: IllegalArgumentException =>
+          {
+            if (ie.getMessage.contains("Resonant Engine"))
             {
-                case x: Array[Any] => this <<< x
-                case x: Seq[Any] => this <<< x
-                case x: Int => buf <<< x
-                case x: Float => buf <<< x
-                case x: Double => buf <<< x
-                case x: Byte => buf <<< x
-                case x: Boolean => buf <<< x
-                case x: String => buf <<< x
-                case x: Short => buf <<< x
-                case x: Long => buf <<< x
-                case x: IByteBufObject => x.writeBytes(buf)
-                case x: Vector3 => x.writeByteBuf(buf)
-                case x: Vector2 => x.writeByteBuf(buf)
-                case x: NBTTagCompound => buf <<< x
-                case x: FluidTank => buf <<< x
-                case x: ISaveObj => buf <<< x
-                case _ => throw new IllegalArgumentException("Resonant Engine ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
+              ie.printStackTrace()
             }
-        }catch
+            else
             {
-                case ie: IllegalArgumentException =>
-                  {
-                      if(ie.getMessage.contains("Resonant Engine"))
-                      {
-                          ie.printStackTrace()
-                      }
-                      else
-                      {
-                          throw ie
-                      }
-                  }
+              throw ie
             }
+          }
+        }
       buf
     }
 
@@ -162,4 +192,5 @@ object ByteBufWrapper
       buf
     }
   }
+
 }
