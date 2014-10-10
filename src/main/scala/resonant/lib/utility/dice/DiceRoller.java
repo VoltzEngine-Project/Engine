@@ -64,7 +64,7 @@ public class DiceRoller extends ArrayList<Dice>
             this.add(new Dice(sidesPerDice));
         }
     }
-    
+
     /**  Rolls the dice returning true if enough dice match the requirements*/
     public boolean roll()
     {

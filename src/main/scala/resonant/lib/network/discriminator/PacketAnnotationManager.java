@@ -125,6 +125,55 @@ public class PacketAnnotationManager
 		}
 	}
 
+    /**
+     * Gets the packet set for the id pair
+     * @param clazzId - class id
+     * @param packetSetId - set id
+     * @return packet set, can be null
+     */
+    public PacketSet getSet(int clazzId, int packetSetId)
+    {
+        if(packetSetIDMap.containsKey(clazzId))
+        {
+            HashMap<Integer, PacketSet> map = packetSetIDMap.get(clazzId);
+            if(map != null && map.containsKey(packetSetId))
+            {
+                return map.get(packetSetId);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets the packet set for the id pair
+     * @param clazz - class to pull the id from
+     * @param packetSetId - set id
+     * @return packet set, will be null if the clazz is not found
+     */
+    public PacketSet getSet(Class clazz, int packetSetId)
+    {
+        if(classPacketIDMap.containsKey(clazz))
+        {
+           return getSet(classPacketIDMap.get(clazz), packetSetId);
+        }
+        return null;
+    }
+
+    /** Checks to see if the clazz was registered with the manager
+     *
+     * @param clazz - class to check
+     * @return true if an instance exists for the class
+     */
+    public boolean isAnnotationClass(Class clazz)
+    {
+        return classPacketIDMap.containsKey(clazz);
+    }
+
+    public Class getClassForId(int classId)
+    {
+        return classPacketIDMap.inverse().containsKey(classId) ? classPacketIDMap.inverse().get(classId) : null;
+    }
+
 	public static class PacketSet
 	{
 		public final int id;
