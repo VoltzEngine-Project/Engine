@@ -34,7 +34,7 @@ class DCNode(parent: INodeProvider) extends NodeConnector(parent)
 
   def charge = _charge
 
-  def charge(terminal: ForgeDirection) = charge
+  def charge(terminal: ForgeDirection) : Double = charge
 
   def charge_=(charge: Double) = _charge = Math.min(_charge + charge, chargeCapacity)
 
@@ -67,7 +67,7 @@ class DCNode(parent: INodeProvider) extends NodeConnector(parent)
    * Pushes charges in this DC Component
    * @param chargeAmount
    */
-  private def push(chargeAmount: Double, exclude: DCNode*)
+  def push(chargeAmount: Double, exclude: DCNode*)
   {
     val excluded = exclude :+ this
 
@@ -103,7 +103,7 @@ class DCNode(parent: INodeProvider) extends NodeConnector(parent)
    * Pushes charges in this DC Component
    * @param charge The amount of charge in coulombs
    */
-  def charge(charge: Double)
+  def buffer(charge: Double)
   {
     chargeBuffer += charge
   }
