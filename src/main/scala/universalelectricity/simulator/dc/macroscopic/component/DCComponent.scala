@@ -1,4 +1,4 @@
-package universalelectricity.simulator.dc
+package universalelectricity.simulator.dc.macroscopic.component
 
 /**
  * A component is defined as part of the circuit that have well defined current and voltage

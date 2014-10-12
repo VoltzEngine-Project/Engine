@@ -1,4 +1,4 @@
-package universalelectricity.simulator.dc
+package universalelectricity.simulator.dc.macroscopic.component
 
 import java.util
 

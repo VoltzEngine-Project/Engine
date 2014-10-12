@@ -1,6 +1,6 @@
-package universalelectricity.simulator.dc.macro
+package universalelectricity.simulator.dc.macroscopic
 
-import universalelectricity.simulator.dc.component.SeriesComponent
+import universalelectricity.simulator.dc.macroscopic.component.SeriesComponent
 
 /**
  * Solves the circuit into branches

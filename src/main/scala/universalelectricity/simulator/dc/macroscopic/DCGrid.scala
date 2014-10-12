@@ -1,7 +1,7 @@
-package universalelectricity.simulator.dc.macro
+package universalelectricity.simulator.dc.macroscopic
 
 import universalelectricity.api.core.grid.IUpdate
-import universalelectricity.simulator.dc.component.SeriesComponent
+import universalelectricity.simulator.dc.macroscopic.component.SeriesComponent
 import universalelectricity.simulator.grid.SimulatedGrid
 
 /**

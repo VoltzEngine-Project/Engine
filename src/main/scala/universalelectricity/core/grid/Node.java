@@ -8,7 +8,8 @@ import universalelectricity.core.transform.vector.IVectorWorld;
 import universalelectricity.core.transform.vector.VectorWorld;
 
 /**
- * Created by robert on 8/14/2014.
+ * A node is any single point on the grid.
+ * @author Calclavia
  */
 public class Node implements INode, IVectorWorld
 {

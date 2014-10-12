@@ -13,7 +13,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class DCComponent(parent: INodeProvider) extends NodeConnector(parent)
+class DCNode(parent: INodeProvider) extends NodeConnector(parent)
 {
   private var _current = 0D
   private var _charge = 0D
@@ -52,7 +52,7 @@ class DCComponent(parent: INodeProvider) extends NodeConnector(parent)
      * Charge always wants to flow to places with the least resistance.
      * Charge always wants to flow to places with less charge. Electrons repell each other.
      */
-    val components = connections.keys.map(_.asInstanceOf[DCComponent])
+    val components = connections.keys.map(_.asInstanceOf[DCNode])
 
     //We only want to push to components that have less charge.
     val comp = components.filter(_charge > _._charge)
@@ -82,4 +82,6 @@ class DCComponent(parent: INodeProvider) extends NodeConnector(parent)
   {
     chargeBuffer += charge
   }
+
+  override def toString = "DCNode [" + charge + "C " + current + "A " + voltage + "V]"
 }

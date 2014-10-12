@@ -1,8 +1,8 @@
-package universalelectricity.simulator.dc.macro
+package universalelectricity.simulator.dc.macroscopic
 
 import universalelectricity.api.core.grid.{INode, INodeProvider}
 import universalelectricity.core.grid.node.NodeConnector
-import universalelectricity.simulator.dc.component.DCComponent
+import universalelectricity.simulator.dc.macroscopic.component.DCComponent
 
 /**
  * @author Calclavia

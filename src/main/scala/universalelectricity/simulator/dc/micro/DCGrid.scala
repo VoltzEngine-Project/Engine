@@ -6,7 +6,7 @@ package universalelectricity.simulator.dc.micro
  */
 class DCGrid
 {
-  var components = Set.empty[DCComponent]
+  var components = Set.empty[DCNode]
 
 
 }
