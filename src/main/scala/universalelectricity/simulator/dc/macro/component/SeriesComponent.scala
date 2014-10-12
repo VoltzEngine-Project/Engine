@@ -1,4 +1,4 @@
-package universalelectricity.simulator.dc.component
+package universalelectricity.simulator.dc
 
 import java.util
 
@@ -30,5 +30,5 @@ class SeriesComponent extends DCComponent
    * R = R1 + R2
    * TODO: Consider cache?
    */
-  override def getResistance: Double = components.foldLeft(0D)((b, a) => b + a.getResistance)
+  override def resistance: Double = components.foldLeft(0D)((b, a) => b + a.resistance)
 }

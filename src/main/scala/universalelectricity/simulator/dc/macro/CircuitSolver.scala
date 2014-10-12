@@ -1,4 +1,4 @@
-package universalelectricity.simulator.dc
+package universalelectricity.simulator.dc.macro
 
 import universalelectricity.simulator.dc.component.SeriesComponent
 

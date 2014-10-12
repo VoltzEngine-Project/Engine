@@ -1,4 +1,4 @@
-package universalelectricity.simulator.dc
+package universalelectricity.simulator.dc.macro
 
 import universalelectricity.api.core.grid.{INode, INodeProvider}
 import universalelectricity.core.grid.node.NodeConnector
@@ -9,15 +9,12 @@ import universalelectricity.simulator.dc.component.DCComponent
  */
 class DCNode(parent: INodeProvider) extends NodeConnector(parent) with DCComponent
 {
-  private var resistance = 0D
+  private var _resistance = 0D
 
-  def setResistance(resistance: Double)
-  {
-    //Resistance cannot be zero or there will be infinite current
-    this.resistance = Math.max(resistance, Double.MinPositiveValue)
-  }
+  //Resistance cannot be zero or there will be infinite current
+  def resistance_=(resistance: Double) = _resistance = Math.max(resistance, Double.MinPositiveValue)
 
-  override def getResistance = resistance
+  override def resistance = _resistance
 
   protected override def getRelativeClass: Class[_ <: INode] = classOf[DCNode]
 }

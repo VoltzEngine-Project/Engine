@@ -1,4 +1,4 @@
-package universalelectricity.simulator.dc.component
+package universalelectricity.simulator.dc
 
 /**
  * A component is defined as part of the circuit that have well defined current and voltage
@@ -16,7 +16,7 @@ trait DCComponent
     this.current = Math.max(current, 0)
 
     //Calculate each component's voltage using Ohm's Law. V = IR
-    voltage = current * getResistance
+    voltage = current * resistance
   }
 
   def getVoltage = voltage
@@ -26,10 +26,10 @@ trait DCComponent
     this.voltage = Math.max(voltage, 0)
 
     //Calculate each component's current using Ohm's Law. V = IR
-    current = voltage / getResistance
+    current = voltage / resistance
   }
 
-  def getResistance: Double
+  def resistance: Double
 
   def solve()
   {

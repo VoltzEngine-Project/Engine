@@ -1,4 +1,4 @@
-package universalelectricity.simulator.dc
+package universalelectricity.simulator.dc.macro
 
 import universalelectricity.api.core.grid.IUpdate
 import universalelectricity.simulator.dc.component.SeriesComponent
