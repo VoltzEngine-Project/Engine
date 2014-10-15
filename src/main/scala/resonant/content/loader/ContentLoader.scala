@@ -21,11 +21,14 @@ trait ContentLoader
         //Automated handler for registering blocks & items vars
         for (field <- self.getClass.getDeclaredFields)
         {
+            //Set it so we can access the field
+            field.setAccessible(true)
+
+            //Get contents for reference
             val obj = field.get(self)
+
             if (obj != null)
             {
-                field.setAccessible(true)
-
                 // Get Annotation Name if present
                 var name = "";
                 val annotation = field.getAnnotation(classOf[ExplicitContentName])
@@ -42,12 +45,6 @@ trait ContentLoader
                         name = name.replace("Item", "").replace("Block", "")
                         name = name.replace("item", "").replace("block", "")
                     }
-                    name = name.decapitalizeFirst
-                }
-                else if (obj.isInstanceOf[Block])
-                {
-                    name = obj.getClass().getSimpleName
-                    name = name.replace("Block", "")
                     name = name.decapitalizeFirst
                 }
 
@@ -68,6 +65,10 @@ trait ContentLoader
                 }
                 else if (obj.isInstanceOf[Block])
                 {
+                    name = obj.getClass().getSimpleName
+                    name = name.replace("Block", "")
+                    name = name.decapitalizeFirst
+
                     field.set(self, manager.newBlock(name, obj.asInstanceOf[Block]))
                 }
             }
