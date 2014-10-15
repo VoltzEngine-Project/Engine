@@ -30,7 +30,7 @@ trait ContentLoader
             if (obj != null)
             {
                 // Get Annotation Name if present
-                var name = "";
+                var name : String  = null;
                 val annotation = field.getAnnotation(classOf[ExplicitContentName])
 
                 if (annotation != null)
