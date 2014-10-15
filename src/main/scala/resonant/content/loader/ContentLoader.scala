@@ -31,6 +31,8 @@ trait ContentLoader
               f.set(self, if (name != null) manager.newItem(name, item) else manager.newItem(item))
             case block: DummySpatialBlock =>
               f.set(self, if (name != null) manager.newBlock(name, block.spatial) else manager.newBlock(block.spatial))
+            case block: Block =>
+              f.set(self, if (name != null) manager.newBlock(name, block) else manager.newBlock(block.getClass().getSimpleName().replace("Block","").toLowerCase, block))
             case _ => //println("ContentLoader attempted to create an object that is not a block or item: " + f)
           }
         })
