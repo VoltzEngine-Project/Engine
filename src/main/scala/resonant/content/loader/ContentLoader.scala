@@ -4,6 +4,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.Item
 import resonant.content.spatial.block.SpatialBlock
+import resonant.lib.wrapper.StringWrapper._
 
 /**
  * Automatic content registration for all fields extending this trait.
@@ -11,41 +12,76 @@ import resonant.content.spatial.block.SpatialBlock
  */
 trait ContentLoader
 {
-  self =>
+    self =>
 
-  lazy val manager = new ModManager()
+    lazy val manager = new ModManager()
 
-  def preInit() =
-  {
-    self.getClass.getDeclaredFields
-      .foreach(
-        f =>
+    def preInit() =
+    {
+        //Automated handler for registering blocks & items vars
+        for (field <- self.getClass.getDeclaredFields)
         {
-          f.setAccessible(true)
-          val annotation = f.getAnnotation(classOf[ExplicitContentName])
-          val name = if (annotation != null) (if (!annotation.value.isEmpty) annotation.value else f.getName) else null
+            val obj = field.get(self)
+            if (obj != null)
+            {
+                field.setAccessible(true)
 
-          f.get(self) match
-          {
-            case item: Item =>
-              f.set(self, if (name != null) manager.newItem(name, item) else manager.newItem(item))
-            case block: DummySpatialBlock =>
-              f.set(self, if (name != null) manager.newBlock(name, block.spatial) else manager.newBlock(block.spatial))
-            case block: Block =>
-              f.set(self, if (name != null) manager.newBlock(name, block) else manager.newBlock(block.getClass().getSimpleName().replace("Block","").toLowerCase, block))
-            case _ => //println("ContentLoader attempted to create an object that is not a block or item: " + f)
-          }
-        })
-  }
+                // Get Annotation Name if present
+                var name = "";
+                val annotation = field.getAnnotation(classOf[ExplicitContentName])
 
-  /**
-   * Creates a dummy block temporarily until the preInit stage is passed
-   */
-  implicit protected def wrapSpatialToBlock(spatial: SpatialBlock): Block = new DummySpatialBlock(spatial)
+                if (annotation != null)
+                {
+                    if (!annotation.value.isEmpty)
+                    {
+                        name = annotation.value
+                    }
+                    else
+                    {
+                        name = field.getName
+                        name = name.replace("Item", "").replace("Block", "")
+                        name = name.replace("item", "").replace("block", "")
+                    }
+                    name = name.decapitalizeFirst
+                }
+                else if (obj.isInstanceOf[Block])
+                {
+                    name = obj.getClass().getSimpleName
+                    name = name.replace("Block", "")
+                    name = name.decapitalizeFirst
+                }
 
-  protected class DummySpatialBlock(val spatial: SpatialBlock) extends Block(Material.air)
-  {
+                // Get type of object, then register it if supported
+                if (obj.isInstanceOf[Item])
+                {
+                    if (name != null)
+                        field.set(self, manager.newItem(name, obj.asInstanceOf[Item]))
+                    else
+                        field.set(self, manager.newItem(obj.asInstanceOf[Item]))
+                }
+                else if (obj.isInstanceOf[DummySpatialBlock])
+                {
+                    if (name != null)
+                        field.set(self, manager.newBlock(name, obj.asInstanceOf[DummySpatialBlock].spatial))
+                    else
+                        field.set(self, manager.newBlock(obj.asInstanceOf[DummySpatialBlock].spatial))
+                }
+                else if (obj.isInstanceOf[Block])
+                {
+                    field.set(self, manager.newBlock(name, obj.asInstanceOf[Block]))
+                }
+            }
+        }
+    }
 
-  }
+    /**
+     * Creates a dummy block temporarily until the preInit stage is passed
+     */
+    implicit protected def wrapSpatialToBlock(spatial: SpatialBlock): Block = new DummySpatialBlock(spatial)
+
+    protected class DummySpatialBlock(val spatial: SpatialBlock) extends Block(Material.air)
+    {
+
+    }
 
 }
