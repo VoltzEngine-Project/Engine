@@ -8,18 +8,23 @@ import net.minecraftforge.common.config.Configuration;
  *
  * @author Calclavia
  */
-public class ConfigEvent
+public class ConfigEvent extends Event
 {
+    public final Configuration config;
+
+    public ConfigEvent(Configuration config)
+    {
+        this.config = config;
+    }
+
 	/**
 	 * Called after the mod's settings have been synced with the config values.
 	 */
-	public static class PostConfigEvent extends Event
+	public static class PostConfigEvent extends ConfigEvent
 	{
-		public final Configuration config;
-
 		public PostConfigEvent(Configuration config)
 		{
-			this.config = config;
+			super(config);
 		}
 	}
 }
