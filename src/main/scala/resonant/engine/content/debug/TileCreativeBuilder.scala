@@ -7,9 +7,8 @@ import net.minecraft.block.material.Material
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.server.MinecraftServer
-import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.content.spatial.block.SpatialBlock
+import resonant.content.prefab.java.TileAdvanced
 import resonant.engine.ResonantEngine
 import resonant.lib.content.prefab.TRotatable
 import resonant.lib.network.discriminator.{PacketTile, PacketType}
@@ -24,62 +23,66 @@ import scala.collection.convert.wrapAll._
  */
 object TileCreativeBuilder
 {
-  def register(schematic: Schematic): Int =
-  {
-    registry.add(schematic)
-    return registry.size - 1
-  }
+    val registry: List[Schematic] = new ArrayList[Schematic]
 
-  final val registry: List[Schematic] = new ArrayList[Schematic]
+    def register(schematic: Schematic): Int =
+    {
+        registry.add(schematic)
+        return registry.size - 1
+    }
+
 }
 
-class TileCreativeBuilder extends SpatialBlock(Material.iron) with TRotatable with TPacketReceiver
+class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable with TPacketReceiver
 {
-  creativeTab = CreativeTabs.tabTools
-  rotationMask = Integer.parseInt("111111", 2).toByte
+    //Constructor
+    creativeTab = CreativeTabs.tabTools
+    rotationMask = Integer.parseInt("111111", 2).toByte
 
-  /**
-   * Called when the block is right clicked by the player
-   */
-  override def activate(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
-  {
-    if (TileCreativeBuilder.registry.size > 0)
+    /**
+     * Called when the block is right clicked by the player
+     */
+    override def activate(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
     {
-      player.openGui(ResonantEngine.instance, -1, world, x, y, z)
-      return true
+        player.openGui(ResonantEngine.instance, -1, world, x, y, z)
+        return true
     }
 
-    return false
-  }
-
-  override def read(data: ByteBuf, player: EntityPlayer, packet: PacketType)
-  {
-    val world: World = player.worldObj
-    if (!world.isRemote)
+    override def read(data: ByteBuf, player: EntityPlayer, packet: PacketType)
     {
-      if (MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile()))
-      {
-        try
+        if (!world.isRemote)
         {
-          val schematicID = data.readInt
-          val size = data.readInt
-          val packetTile = packet.asInstanceOf[PacketTile]
-          val translation = new Vector3(packetTile.x, packetTile.y, packetTile.z)
-
-          if (size > 0)
-          {
-            val map = TileCreativeBuilder.registry.get(schematicID).getStructure(ForgeDirection.getOrientation(translation.getBlockMetadata(world)), size)
-            map.foreach(entry => (entry._1 + translation).setBlock(world, entry._2.left(), entry._2.right()))
-          }
-        }
-        catch
-          {
-            case e: Exception =>
+            if (MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile()))
             {
-              e.printStackTrace
+                try
+                {
+                    val schematicID = data.readInt
+                    val size = data.readInt
+                    val packetTile = packet.asInstanceOf[PacketTile]
+                    val translation = new Vector3(packetTile.x, packetTile.y, packetTile.z)
+
+                    if (size > 0)
+                    {
+                        val sch = TileCreativeBuilder.registry.get(schematicID)
+                        if (sch != null)
+                        {
+                            val map = sch.getStructure(ForgeDirection.getOrientation(translation.getBlockMetadata(world)), size)
+                            for (entry <- map)
+                            {
+                                (entry._1 + translation).setBlock(world, entry._2.left(), entry._2.right())
+                            }
+                        }
+                    }
+                }
+                catch
+                    {
+                        case e: Exception =>
+                        {
+                            e.printStackTrace
+                        }
+                    }
             }
-          }
-      }
+        }
     }
-  }
+
 }
