@@ -103,7 +103,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   var tickRandomly: Boolean = false
   var normalRender: Boolean = true
   var renderStaticBlock: Boolean = false
-  var forceStandardRender: Boolean = false
+  var forceItemToRenderAsBlock: Boolean = false
   var customItemRender: Boolean = false
   var isOpaqueCube: Boolean = true
   var _access: IBlockAccess = null
@@ -171,7 +171,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   def normalRender(bool: Boolean): Unit = normalRender = bool
 
   /** Forces the renderer to render a standard block during tile rendering */
-  def forceStandardRender(bool: Boolean): Unit = forceStandardRender = bool
+  def forceStandardRender(bool: Boolean): Unit = forceItemToRenderAsBlock = bool
 
   /** When true tells the dummy block we have a custom item renderer */
   def customItemRender(bool: Boolean): Unit = customItemRender = bool
@@ -623,7 +623,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   @SideOnly(Side.CLIENT)
   def renderDynamic(pos: Vector3, frame: Float, pass: Int)
   {
-    if(forceStandardRender)
+    if(forceItemToRenderAsBlock)
     {
       RenderUtility.renderNormalBlockAsItem(block, metadata, RenderUtility.renderBlocks)
     }
@@ -664,7 +664,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
       tesr.asInstanceOf[ISimpleItemRenderer].renderInventoryItem(IItemRenderer.ItemRenderType.INVENTORY, itemStack)
     }
     else
-    if(normalRender || forceStandardRender)
+    if(normalRender || forceItemToRenderAsBlock)
     {
       RenderUtility.renderNormalBlockAsItem(itemStack.getItem().asInstanceOf[ItemBlock].field_150939_a, itemStack.getItemDamage(), RenderUtility.renderBlocks)
     }
