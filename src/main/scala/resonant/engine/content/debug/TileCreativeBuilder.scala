@@ -1,5 +1,6 @@
 package resonant.engine.content.debug
 
+import java.util
 import java.util.Map.Entry
 import java.util.{ArrayList, List}
 
@@ -10,6 +11,7 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import resonant.content.prefab.java.TileAdvanced
 import resonant.engine.ResonantEngine
+import resonant.lib.`type`.Pair
 import resonant.lib.content.prefab.TRotatable
 import resonant.lib.network.discriminator.{PacketTile, PacketType}
 import resonant.lib.network.handle.TPacketIDReceiver
@@ -35,7 +37,7 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
 {
     //Current build task vars
     var doBuild: Boolean = true
-    var buildMap: java.util.HashMap[Vector3, Block] = null
+    var buildMap: util.HashMap[Vector3, Pair[Block, Integer]] = null
     var buildLimit = 20
     //Gui vars
     var schematicID = 0
@@ -48,22 +50,33 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
     override def update()
     {
         super.update()
-        val buildThisUpdate = Math.min(buildLimit, buildMap.size())
-        if (buildThisUpdate > 0)
+        if(buildMap != null)
         {
-            for (i <- 0 until buildThisUpdate)
+            val buildThisUpdate = Math.min(buildLimit, buildMap.size())
+            if (buildThisUpdate > 0)
             {
-                val entry: Entry[Vector3, Block] = buildMap.entrySet().toArray()(i).asInstanceOf[Entry[Vector3, Block]]
-                val placement = this.position + entry.getKey
-                placement.setBlock(world, entry.getValue)
-                buildMap.remove(entry.getKey)
+                for (i <- 0 until buildThisUpdate)
+                {
+                    val entry: Entry[Vector3, Pair[Block, Integer]] = buildMap.entrySet().toArray()(i).asInstanceOf[Entry[Vector3, Pair[Block, Integer]]]
+                    val placement = this.asVectorWorld + entry.getKey
+                    placement.setBlock(entry.getValue.left, entry.getValue.right)
+                    buildMap.remove(entry.getKey)
+                }
+            }
+            if (buildThisUpdate <= 0)
+            {
+                doBuild = false
+                buildMap = null
+                sendDescPacket
             }
         }
-        if (buildThisUpdate <= 0)
+        else
         {
-            doBuild = false
-            buildMap = null
-            sendDescPacket
+            var sch = TileCreativeBuilder.registry.get(schematicID)
+            if(sch != null)
+            {
+                buildMap = sch.getStructure(getDirection, size);
+            }
         }
     }
 
@@ -80,7 +93,7 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
         return new PacketTile(x.asInstanceOf[Int], y.asInstanceOf[Int], z.asInstanceOf[Int], Array(1, schematicID, size, doBuild))
     }
 
-    override def read(data: ByteBuf, packetID: Int, player: EntityPlayer, packet: PacketType)
+    override def read(data: ByteBuf, packetID: Int, player: EntityPlayer, packet: PacketType) : Boolean =
     {
         if (!world.isRemote)
         {
@@ -90,6 +103,7 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
                 size = data.readInt
                 //TODO check for packet spamming as this could be abused by players to create a lag machine
                 sendDescPacket
+                return true
             }
         }
         else if(packetID == 1)
@@ -97,7 +111,9 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
             schematicID = data.readInt()
             size = data.readInt()
             doBuild = data.readBoolean()
+            return true
         }
+        return false
     }
 
 }

@@ -5,7 +5,6 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
 import resonant.lib.content.prefab.java.TileIO
-import universalelectricity.core.transform.vector.Vector3
 
 /**
  * Designed to debug fluid devices by draining everything that comes in at one time
@@ -29,7 +28,7 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
       ForgeDirection.VALID_DIRECTIONS.filter(getOutputDirections.contains(_)).foreach(
         direction =>
         {
-          val tile: TileEntity = (new Vector3(this) + direction).getTileEntity(world)
+          val tile: TileEntity = (asVectorWorld + direction).getTileEntity
 
           if (tile.isInstanceOf[IFluidHandler])
           {

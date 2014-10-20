@@ -40,7 +40,7 @@ trait TIO extends SpatialBlock with IIO with ISaveObj
       entityPlayer.addChatMessage(new ChatComponentText("Side changed to: " + (if (newIO == 0) "None" else (if (newIO == 1) "Input" else "Output"))))
     }
 
-    world.notifyBlocksOfNeighborChange(x, y, z, block)
+    world.notifyBlocksOfNeighborChange(xi, yi, zi, block)
     return true
   }
 

@@ -36,13 +36,13 @@ trait RenderRotatedTexture extends SpatialBlock with IRotatable
       if ((0 until 4).exists(targetDir.ordinal() == RotationUtility.rotateSide(dir.ordinal(), _)))
       {
         RenderUtility.rotateFacesOnRenderer(targetDir, renderBlocks, true)
-        renderBlocks.renderStandardBlock(tile.block, position.xi, position.yi, position.zi)
+        renderBlocks.renderStandardBlock(tile.block, xi, yi, zi)
         // RenderBlockUtility.tessellateFace(renderBlocks, tile.access, position.xi(), position.yi(), position.zi(), tile.block, null, dir.ordinal)
         RenderUtility.resetFacesOnRenderer(renderBlocks)
       }
       else
       {
-        renderBlocks.renderStandardBlock(tile.block, position.xi, position.yi, position.zi)
+        renderBlocks.renderStandardBlock(tile.block, xi, yi, zi)
       }
     }
 

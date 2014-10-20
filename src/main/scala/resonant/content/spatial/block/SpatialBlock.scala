@@ -28,7 +28,7 @@ import resonant.lib.render.RenderUtility
 import resonant.lib.utility.{LanguageUtility, WrenchUtility}
 import resonant.lib.wrapper.WrapList._
 import universalelectricity.core.transform.region.Cuboid
-import universalelectricity.core.transform.vector.{Vector2, Vector3, VectorWorld}
+import universalelectricity.core.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorld}
 
 import scala.collection.convert.wrapAll._
 import scala.collection.immutable
@@ -84,7 +84,7 @@ object SpatialBlock
   }
 }
 
-abstract class SpatialBlock(val material: Material) extends TileEntity
+abstract class SpatialBlock(val material: Material) extends TileEntity with TVectorWorld
 {
   var name = LanguageUtility.decapitalizeFirst(this.getClass().getSimpleName().replaceFirst("Tile", ""))
   /**
@@ -186,13 +186,13 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   {
   }
 
-  def world: World = worldObj
-
   /** Sets the active world */
   def world(world: World)
   {
     this.worldObj = world
   }
+
+  override def world : World = getWorldObj
 
   def access: IBlockAccess =
   {
@@ -204,36 +204,26 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     return _access
   }
 
-  def x: Int =
+  override def x: Double =
   {
-    //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return xCoord
   }
 
-  def y: Int =
+  override def y: Double =
   {
-    //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return yCoord
   }
 
-  def z: Int =
+  override def z: Double =
   {
-    //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return zCoord
-  }
-
-  /** World location of the block */
-  def position: VectorWorld =
-  {
-    //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
-    return new VectorWorld(this)
   }
 
   /** World location of the block, centered */
   def center: VectorWorld =
   {
     //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
-    return position.add(0.5).asInstanceOf[VectorWorld]
+    return asVectorWorld.add(0.5).asInstanceOf[VectorWorld]
   }
 
   /** Block object that goes to this tile */
@@ -241,7 +231,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   {
     if (access != null)
     {
-      val b: Block = access.getBlock(x, y, z)
+      val b: Block = access.getBlock(xi, yi, zi)
       if (b == null)
       {
         return block
@@ -259,7 +249,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
     return null
   }
 
-  def metadata: Int = if(access != null) access.getBlockMetadata(x, y, z) else 0
+  def metadata: Int = if(access != null) access.getBlockMetadata(xi, yi, zi) else 0
 
   /**
    * Update
@@ -390,11 +380,11 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
    */
   def activate(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
-    if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem, x, y, z))
+    if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem, xi, yi, zi))
     {
       if (configure(player, side, hit))
       {
-        WrenchUtility.damageWrench(player, player.inventory.getCurrentItem, x, y, z)
+        WrenchUtility.damageWrench(player, player.inventory.getCurrentItem, xi, yi, zi)
         return true
       }
       return false
@@ -498,27 +488,27 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
 
   def notifyChange()
   {
-    world.notifyBlocksOfNeighborChange(x, y, z, block)
+    world.notifyBlocksOfNeighborChange(xi, yi, zi, block)
   }
 
   protected def markRender()
   {
-    world.func_147479_m(x, y, z)
+    world.func_147479_m(xi, yi, zi)
   }
 
   protected def markUpdate()
   {
-    world.markBlockForUpdate(x, y, z)
+    world.markBlockForUpdate(xi, yi, zi)
   }
 
   protected def updateLight()
   {
-    world.func_147451_t(x, y, z)
+    world.func_147451_t(xi, yi, zi)
   }
 
   protected def scheduleTick(delay: Int)
   {
-    world.scheduleBlockUpdate(x, y, z, block, delay)
+    world.scheduleBlockUpdate(xi, yi, zi, block, delay)
   }
 
   /**
@@ -561,7 +551,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   }
 
   @SideOnly(Side.CLIENT)
-  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + position).toAABB
+  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + asVectorWorld).toAABB
 
   /**
    * Called in the world.
@@ -569,7 +559,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   @SideOnly(Side.CLIENT)
   def getIcon(access: IBlockAccess, side: Int): IIcon =
   {
-    return getIcon(side, access.getBlockMetadata(x, y, z))
+    return getIcon(side, access.getBlockMetadata(xi, yi, zi))
   }
 
   /**
@@ -693,9 +683,9 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   {
   }
 
-  def isIndirectlyPowered: Boolean = world.isBlockIndirectlyGettingPowered(x, y, z)
+  def isIndirectlyPowered: Boolean = world.isBlockIndirectlyGettingPowered(xi, yi, zi)
 
-  def getStrongestIndirectPower: Int = world.getStrongestIndirectPower(x, y, z)
+  def getStrongestIndirectPower: Int = world.getStrongestIndirectPower(xi, yi, zi)
 
   def getWeakRedstonePower(access: IBlockAccess, side: Int): Int = getStrongRedstonePower(access, side)
 
@@ -757,10 +747,10 @@ abstract class SpatialBlock(val material: Material) extends TileEntity
   def openGui(player : EntityPlayer, gui : Int, mod : AnyRef)
   {
     if(server)
-      player.openGui(mod,gui, world, x, y, z)
+      player.openGui(mod,gui, world, xi, yi, zi)
   }
 
-  def setMeta(meta: Int) { world.setBlockMetadataWithNotify(x, y, z, meta, 3)}
+  def setMeta(meta: Int) { world.setBlockMetadataWithNotify(xi, yi, zi, meta, 3)}
 
 
   override def getBlockMetadata: Int =

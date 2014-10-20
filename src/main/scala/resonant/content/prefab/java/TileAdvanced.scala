@@ -20,6 +20,4 @@ class TileAdvanced(material : Material) extends SpatialTile(material: Material) 
   def getDescPacket: AbstractPacket = {
     return null
   }
-
-  def sendPacket(packet: AbstractPacket) {ResonantEngine.instance.packetHandler.sendToAllAround(packet, this) }
 }

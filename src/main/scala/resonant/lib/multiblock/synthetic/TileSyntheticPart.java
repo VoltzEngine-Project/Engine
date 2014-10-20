@@ -15,6 +15,7 @@ import resonant.engine.ResonantEngine;
 import resonant.lib.multiblock.reference.IMultiBlock;
 import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.network.discriminator.PacketType;
+import resonant.lib.network.handle.IPacketReceiver;
 import resonant.lib.network.handle.TPacketReceiver;
 import universalelectricity.core.transform.vector.Vector3;
 
@@ -23,7 +24,7 @@ import universalelectricity.core.transform.vector.Vector3;
  *
  * @author Calclavia
  */
-public class TileSyntheticPart extends SpatialTile implements TPacketReceiver
+public class TileSyntheticPart extends SpatialTile implements IPacketReceiver
 {
 	// The the position of the main block. Relative to this block's position.
 	private Vector3 mainBlockPosition;
@@ -40,7 +41,7 @@ public class TileSyntheticPart extends SpatialTile implements TPacketReceiver
 	{
 		if (this.mainBlockPosition != null)
 		{
-			return new Vector3(this).add(this.mainBlockPosition);
+			return asVector3().add(this.mainBlockPosition);
 		}
 
 		return null;
@@ -48,7 +49,7 @@ public class TileSyntheticPart extends SpatialTile implements TPacketReceiver
 
 	public void setMainBlock(Vector3 mainBlock)
 	{
-		this.mainBlockPosition = mainBlock.clone().add(new Vector3(this).multiply(-1));
+		this.mainBlockPosition = mainBlock.clone().add(asVector3().multiply(-1));
 
 		if (!this.worldObj.isRemote)
 		{
@@ -61,7 +62,7 @@ public class TileSyntheticPart extends SpatialTile implements TPacketReceiver
 	{
 		try
 		{
-			Vector3 main = ((TileSyntheticPart) access.getTileEntity(x(), y(), z())).getMainBlock();
+			Vector3 main = ((TileSyntheticPart) access.getTileEntity(xi(), yi(), zi())).getMainBlock();
 			Block block = main.getBlock(access);
 
 			if (block != null)

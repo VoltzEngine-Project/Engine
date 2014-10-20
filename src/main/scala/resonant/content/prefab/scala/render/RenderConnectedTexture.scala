@@ -31,8 +31,8 @@ trait RenderConnectedTexture extends SpatialBlock
 
     for (dir <- ForgeDirection.VALID_DIRECTIONS)
     {
-      val check = new Vector3(tile) + dir
-      val checkTile = check.getTileEntity(world)
+      val check = asVectorWorld + dir
+      val checkTile = check.getTileEntity
 
       if (checkTile != null && checkTile.getClass == tile.getClass && check.getBlockMetadata(world) == tile.getBlockMetadata)
       {
@@ -40,6 +40,6 @@ trait RenderConnectedTexture extends SpatialBlock
       }
     }
 
-    RenderBlockUtility.tessellateBlockWithConnectedTextures(sideMap, world, x, y, z, tile.getBlockType, null, RenderUtility.getIcon(edgeTexture))
+    RenderBlockUtility.tessellateBlockWithConnectedTextures(sideMap, world, xi, yi, zi, tile.getBlockType, null, RenderUtility.getIcon(edgeTexture))
   }
 }
