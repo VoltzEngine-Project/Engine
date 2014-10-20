@@ -2,13 +2,10 @@ package resonant.engine.content.debug;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
-import resonant.engine.ResonantEngine;
 import resonant.lib.gui.GuiContainerBase;
-import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.schematic.Schematic;
 import resonant.lib.schematic.SchematicRegistry;
 import resonant.lib.utility.LanguageUtility;
-import universalelectricity.core.transform.vector.Vector3;
 
 public class GuiCreativeBuilder extends GuiContainerBase
 {

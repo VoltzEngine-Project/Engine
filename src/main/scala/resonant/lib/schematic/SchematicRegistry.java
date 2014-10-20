@@ -16,20 +16,20 @@ public final class SchematicRegistry extends HashMap<String, Schematic>
     public static SchematicRegistry INSTANCE = new SchematicRegistry();
 
     /**
-     * Registers a schematic using Schematic.getName()
+     * Registers a schematic using Schematic.getUnlocalizedName()
      *
      * @param schematic - schematic to register
      */
     public static void register(Schematic schematic)
     {
-        register(schematic.getName(), schematic);
+        register(schematic.getUnlocalizedName(), schematic);
     }
 
     /**
      * Registers a schematic using a set name.
      *
      * @param name      - name to register it with. Will only be used
-     *                  for looking up the schematic. Schematic.getName will
+     *                  for looking up the schematic. Schematic.getUnlocalizedName will
      *                  be used for displaying in GUIs
      * @param schematic - schematic to register
      */
