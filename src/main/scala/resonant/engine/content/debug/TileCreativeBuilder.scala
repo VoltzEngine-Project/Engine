@@ -34,7 +34,7 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
     override def update()
     {
         super.update()
-        if(buildMap != null)
+        if(buildMap != null && schematicID > -1)
         {
             val buildThisUpdate = Math.min(buildLimit, buildMap.size())
             if (buildThisUpdate > 0)

@@ -53,7 +53,7 @@ public final class SchematicRegistry extends HashMap<String, Schematic>
      */
     public Schematic getByID(int id)
     {
-        if (id < size())
+        if (id > 0 && id < size())
             return values().toArray(new Schematic[size()])[id];
         return null;
     }

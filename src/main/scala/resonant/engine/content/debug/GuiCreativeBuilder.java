@@ -41,8 +41,13 @@ public class GuiCreativeBuilder extends GuiContainerBase
 		fontRendererObj.drawString("Size: ", 9, 60, 4210752);
 		this.textFieldSize.drawTextBox();
 
-		((GuiButton) this.buttonList.get(1)).displayString = LanguageUtility.getLocal(SchematicRegistry.INSTANCE.getByID(builder.schematicID()).getName());
-		fontRendererObj.drawString("Mode: ", 9, 80, 4210752);
+        //Button Name
+        Schematic sch = SchematicRegistry.INSTANCE.getByID(builder.schematicID());
+        String name = sch != null ? LanguageUtility.getLocal(sch.getName()) : "None";
+		((GuiButton) this.buttonList.get(1)).displayString = name;
+
+
+        fontRendererObj.drawString("Mode: ", 9, 80, 4210752);
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 	}
 
