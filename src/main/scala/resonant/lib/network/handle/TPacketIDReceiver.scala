@@ -16,7 +16,7 @@ import universalelectricity.core.transform.vector.{IVectorWorld, TVectorWorld}
   *
   * Created by robert(Darkguardsman) on 9/25/2014.
   */
-class TPacketIDReceiver extends IPacketIDReceiver with TVectorWorld
+trait TPacketIDReceiver extends IPacketIDReceiver with TVectorWorld
 {
   override def read(buf: ByteBuf, id: Int, player: EntityPlayer, `type`: PacketType): Boolean =
   {
