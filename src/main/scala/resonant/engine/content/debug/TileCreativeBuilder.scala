@@ -36,7 +36,7 @@ object TileCreativeBuilder
 class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable with TPacketIDReceiver
 {
     //Current build task vars
-    var doBuild: Boolean = true
+    var doBuild: Boolean = false
     var buildMap: util.HashMap[Vector3, Pair[Block, Integer]] = null
     var buildLimit = 20
     //Gui vars
