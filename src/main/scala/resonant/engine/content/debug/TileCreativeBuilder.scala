@@ -2,7 +2,6 @@ package resonant.engine.content.debug
 
 import java.util
 import java.util.Map.Entry
-import java.util.{ArrayList, List}
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
@@ -15,23 +14,8 @@ import resonant.lib.`type`.Pair
 import resonant.lib.content.prefab.TRotatable
 import resonant.lib.network.discriminator.{PacketTile, PacketType}
 import resonant.lib.network.handle.TPacketIDReceiver
-import resonant.lib.schematic.Schematic
+import resonant.lib.schematic.SchematicRegistry
 import universalelectricity.core.transform.vector.Vector3
-
-/**
- * Automatically set up structures to allow easy debugging in creative mode.
- */
-object TileCreativeBuilder
-{
-    val registry: List[Schematic] = new ArrayList[Schematic]
-
-    def register(schematic: Schematic): Int =
-    {
-        registry.add(schematic)
-        return registry.size - 1
-    }
-
-}
 
 class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable with TPacketIDReceiver
 {
@@ -40,8 +24,8 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
     var buildMap: util.HashMap[Vector3, Pair[Block, Integer]] = null
     var buildLimit = 20
     //Gui vars
-    var schematicID = 0
-    var size = 0
+    var schematicID = -1
+    var size = -1
 
     //Constructor
     creativeTab = CreativeTabs.tabTools
@@ -72,7 +56,7 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
         }
         else
         {
-            var sch = TileCreativeBuilder.registry.get(schematicID)
+            val sch = SchematicRegistry.INSTANCE.getByID(schematicID)
             if(sch != null)
             {
                 buildMap = sch.getStructure(getDirection, size);

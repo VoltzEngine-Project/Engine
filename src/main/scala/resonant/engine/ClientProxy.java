@@ -5,6 +5,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import resonant.content.wrapper.BlockRenderHandler$;
@@ -51,9 +52,10 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		if (world.getTileEntity(x, y, z) instanceof TileCreativeBuilder)
+        TileEntity ent = world.getTileEntity(x, y, z);
+		if (ent instanceof TileCreativeBuilder)
 		{
-			return new GuiCreativeBuilder(new Vector3(x, y, z));
+			return new GuiCreativeBuilder((TileCreativeBuilder)ent);
 		}
 
 		return null;

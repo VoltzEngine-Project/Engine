@@ -5,19 +5,20 @@ import net.minecraft.client.gui.GuiTextField;
 import resonant.engine.ResonantEngine;
 import resonant.lib.gui.GuiContainerBase;
 import resonant.lib.network.discriminator.PacketTile;
+import resonant.lib.schematic.Schematic;
+import resonant.lib.schematic.SchematicRegistry;
 import resonant.lib.utility.LanguageUtility;
 import universalelectricity.core.transform.vector.Vector3;
 
 public class GuiCreativeBuilder extends GuiContainerBase
 {
 	private GuiTextField textFieldSize;
-	private int mode = 0;
-	private Vector3 position;
+    private TileCreativeBuilder builder;
 
-	public GuiCreativeBuilder(Vector3 position)
+	public GuiCreativeBuilder(TileCreativeBuilder builder)
 	{
 		super();
-		this.position = position;
+		this.builder = builder;
 	}
 
 	@Override
@@ -40,14 +41,9 @@ public class GuiCreativeBuilder extends GuiContainerBase
 		fontRendererObj.drawString("Size: ", 9, 60, 4210752);
 		this.textFieldSize.drawTextBox();
 
-		((GuiButton) this.buttonList.get(1)).displayString = LanguageUtility.getLocal(TileCreativeBuilder$.MODULE$.registry().get(mode).getName());
+		((GuiButton) this.buttonList.get(1)).displayString = LanguageUtility.getLocal(SchematicRegistry.INSTANCE.getByID(builder.schematicID()).getName());
 		fontRendererObj.drawString("Mode: ", 9, 80, 4210752);
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-
-		fontRendererObj.drawString("Warning!", 9, 130, 4210752);
-		fontRendererObj.drawString("This will replace blocks without", 9, 140, 4210752);
-		fontRendererObj.drawString("dropping it! You may lose items.", 9, 150, 4210752);
-
 	}
 
 	@Override
@@ -71,25 +67,24 @@ public class GuiCreativeBuilder extends GuiContainerBase
 
 		if (par1GuiButton.id == 0)
 		{
-			int radius = 0;
-
 			try
 			{
-				radius = Integer.parseInt(this.textFieldSize.getText());
+                builder.size_$eq(Integer.parseInt(this.textFieldSize.getText()));
 			}
-			catch (Exception e)
+			catch (NumberFormatException e)
 			{
+                textFieldSize.setText("");
 			}
 
-			if (radius > 0)
+			if (builder.size() > 0)
 			{
-				ResonantEngine.instance.packetHandler.sendToServer(new PacketTile(position.xi(), position.yi(), position.zi(), new Object[] { mode, radius }));
+				builder.sendDescPacket();
 				this.mc.thePlayer.closeScreen();
 			}
 		}
 		else if (par1GuiButton.id == 1)
 		{
-			this.mode = (this.mode + 1) % (TileCreativeBuilder$.MODULE$.registry().size());
+            builder.schematicID_$eq((builder.schematicID() + 1) % (SchematicRegistry.INSTANCE.size()));
 		}
 	}
 
