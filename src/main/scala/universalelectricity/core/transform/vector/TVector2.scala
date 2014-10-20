@@ -23,6 +23,8 @@ trait TVector2 extends IVector2
     return 0;
   }
 
+  def xi : Int = x.asInstanceOf[Int]
+
   override def y: Double =
   {
     if(this.isInstanceOf[TileEntity])
@@ -35,6 +37,8 @@ trait TVector2 extends IVector2
     }
     return 0;
   }
+
+  def yi : Int = y.asInstanceOf[Int]
 
   /** Gets this object as a Vector2 */
   def asVector2 : Vector2 = new Vector2(x(), y())

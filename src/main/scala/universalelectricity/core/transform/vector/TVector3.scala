@@ -23,6 +23,8 @@ trait TVector3 extends TVector2 with IVector3
     return 0;
   }
 
+  def zi : Int = z.asInstanceOf[Int]
+
   /** Gets this object as a Vector3 */
   def asVector3 : Vector3 = new Vector3(this)
 
