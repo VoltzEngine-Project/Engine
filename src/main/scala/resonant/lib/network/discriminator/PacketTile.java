@@ -87,21 +87,7 @@ public class PacketTile extends PacketType
     {
         TileEntity tile = player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
 
-        if (tile instanceof IPacketReceiver)
-        {
-            try
-            {
-                IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
-                receiver.read(data().slice(), player, this);
-            } catch (IndexOutOfBoundsException e)
-            {
-                System.out.println("Packet sent to a TileEntity was read out side its bounds [" + tile + "] in " + new Vector3(x, y, z));
-            } catch (Exception e)
-            {
-                System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Vector3(x, y, z));
-                e.printStackTrace();
-            }
-        } else if (tile instanceof IPacketIDReceiver)
+        if (tile instanceof IPacketIDReceiver)
         {
             try
             {
@@ -119,6 +105,20 @@ public class PacketTile extends PacketType
                     return;
                 }
                 receiver.read(buf, id, player, this);
+            } catch (Exception e)
+            {
+                System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Vector3(x, y, z));
+                e.printStackTrace();
+            }
+        } else if (tile instanceof IPacketReceiver)
+        {
+            try
+            {
+                IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
+                receiver.read(data().slice(), player, this);
+            } catch (IndexOutOfBoundsException e)
+            {
+                System.out.println("Packet sent to a TileEntity was read out side its bounds [" + tile + "] in " + new Vector3(x, y, z));
             } catch (Exception e)
             {
                 System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Vector3(x, y, z));
