@@ -23,12 +23,10 @@ trait TPacketReceiver extends IPacketReceiver with TVectorWorld
         if(this.isInstanceOf[TileEntity])
         {
             this.asInstanceOf[TileEntity].readFromNBT(ByteBufUtils.readTag(buf))
-            return true
         }
         else if(this.isInstanceOf[ISave])
         {
             this.asInstanceOf[ISave].load(ByteBufUtils.readTag(buf))
-            return true
         }
     }
 
