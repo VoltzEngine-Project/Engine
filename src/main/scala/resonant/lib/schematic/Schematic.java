@@ -71,7 +71,7 @@ public abstract class Schematic
      */
     public HashMap<Vector3, Pair<Block, Integer>> getBox(final Vector3 center, Block block, int meta, int size)
     {
-        return getBox(center, block, meta, size);
+        return getBox(center, block, meta, size, size);
     }
 
     /**
