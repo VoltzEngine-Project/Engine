@@ -22,7 +22,7 @@ public final class SchematicRegistry extends HashMap<String, Schematic>
      */
     public static void register(Schematic schematic)
     {
-        register(schematic.getUnlocalizedName(), schematic);
+        register(schematic.getName(), schematic);
     }
 
     /**

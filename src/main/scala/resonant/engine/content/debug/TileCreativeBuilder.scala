@@ -1,7 +1,6 @@
 package resonant.engine.content.debug
 
 import java.util
-import java.util.Map.Entry
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
@@ -16,6 +15,8 @@ import resonant.lib.network.discriminator.{PacketTile, PacketType}
 import resonant.lib.network.handle.TPacketIDReceiver
 import resonant.lib.schematic.SchematicRegistry
 import universalelectricity.core.transform.vector.Vector3
+
+import scala.collection.JavaConversions._
 
 class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable with TPacketIDReceiver
 {
@@ -34,32 +35,26 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
     override def update()
     {
         super.update()
-        if(buildMap != null && schematicID > -1)
+        if(!world.isRemote)
         {
-            val buildThisUpdate = Math.min(buildLimit, buildMap.size())
-            if (buildThisUpdate > 0)
+            if (buildMap != null)
             {
-                for (i <- 0 until buildThisUpdate)
+                for (entry <- buildMap.entrySet())
                 {
-                    val entry: Entry[Vector3, Pair[Block, Integer]] = buildMap.entrySet().toArray()(i).asInstanceOf[Entry[Vector3, Pair[Block, Integer]]]
                     val placement = this.asVectorWorld + entry.getKey
                     placement.setBlock(entry.getValue.left, entry.getValue.right)
-                    buildMap.remove(entry.getKey)
                 }
-            }
-            if (buildThisUpdate <= 0)
-            {
                 doBuild = false
                 buildMap = null
                 sendDescPacket
             }
-        }
-        else
-        {
-            val sch = SchematicRegistry.INSTANCE.getByID(schematicID)
-            if(sch != null)
+            else
             {
-                buildMap = sch.getStructure(getDirection, size);
+                val sch = SchematicRegistry.INSTANCE.getByID(schematicID)
+                if (sch != null)
+                {
+                    buildMap = sch.getStructure(getDirection, size);
+                }
             }
         }
     }
@@ -81,16 +76,17 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
     {
         if (!world.isRemote)
         {
-            if (!doBuild && player.capabilities.isCreativeMode)
+            if (packetID == 0 && player.capabilities.isCreativeMode)
             {
                 schematicID = data.readInt
                 size = data.readInt
+                doBuild = true
                 //TODO check for packet spamming as this could be abused by players to create a lag machine
                 sendDescPacket
                 return true
             }
         }
-        else if(packetID == 1)
+        if(packetID == 1)
         {
             schematicID = data.readInt()
             size = data.readInt()

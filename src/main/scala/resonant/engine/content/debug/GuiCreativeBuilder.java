@@ -2,7 +2,9 @@ package resonant.engine.content.debug;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
+import resonant.engine.ResonantEngine;
 import resonant.lib.gui.GuiContainerBase;
+import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.schematic.Schematic;
 import resonant.lib.schematic.SchematicRegistry;
 import resonant.lib.utility.LanguageUtility;
@@ -23,6 +25,7 @@ public class GuiCreativeBuilder extends GuiContainerBase
 	{
 		super.initGui();
 		this.textFieldSize = new GuiTextField(fontRendererObj, 45, 58, 50, 12);
+        this.textFieldSize.setText("10");
 		this.buttonList.add(new GuiButton(0, this.width / 2 - 80, this.height / 2 - 10, 58, 20, "Build"));
 		this.buttonList.add(new GuiButton(1, this.width / 2 - 50, this.height / 2 - 35, 120, 20, "Mode"));
 	}
@@ -80,8 +83,8 @@ public class GuiCreativeBuilder extends GuiContainerBase
 
 			if (builder.size() > 0)
 			{
-				builder.sendDescPacket();
-				this.mc.thePlayer.closeScreen();
+                ResonantEngine.instance.packetHandler.sendToServer(new PacketTile(builder, 0, builder.schematicID(), builder.size()));
+                this.mc.thePlayer.closeScreen();
 			}
 		}
 		else if (par1GuiButton.id == 1)

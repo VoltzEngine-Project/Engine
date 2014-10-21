@@ -311,7 +311,7 @@ public class SchematicMap extends Schematic implements ISaveObj
 	}
 
 	@Override
-	public String getUnlocalizedName()
+	public String getName()
 	{
 		return this.name;
 	}
