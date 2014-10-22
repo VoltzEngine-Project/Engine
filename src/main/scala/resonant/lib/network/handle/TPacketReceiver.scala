@@ -2,7 +2,7 @@ package resonant.lib.network.handle
 
 import cpw.mods.fml.common.network.ByteBufUtils
 import io.netty.buffer.ByteBuf
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.{EntityPlayerMP, EntityPlayer}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import resonant.engine.ResonantEngine
@@ -70,5 +70,17 @@ trait TPacketReceiver extends IPacketReceiver with TVectorWorld
     def sendPacket(packet: AbstractPacket, distance : Double)
     {
         ResonantEngine.instance.packetHandler.sendToAllAround(packet, this.asInstanceOf[IVectorWorld], distance)
+    }
+
+    /** Sends the packet to the player. Useful for updating GUI information of those with GUIs open.
+     * @param player - player to send the packet to
+     * @param packet - packet to send
+     */
+    def sendPacketToPlayer(player: EntityPlayer, packet: AbstractPacket)
+    {
+        if(player.isInstanceOf[EntityPlayerMP])
+        {
+            ResonantEngine.instance.packetHandler.sendToPlayer(packet, player.asInstanceOf[EntityPlayerMP])
+        }
     }
 }
