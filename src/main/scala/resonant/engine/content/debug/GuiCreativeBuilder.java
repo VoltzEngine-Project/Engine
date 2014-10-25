@@ -12,7 +12,7 @@ import resonant.lib.utility.LanguageUtility;
 public class GuiCreativeBuilder extends GuiContainerBase
 {
 	private GuiTextField textFieldSize;
-    private TileCreativeBuilder builder;
+	private TileCreativeBuilder builder;
 
 	public GuiCreativeBuilder(TileCreativeBuilder builder)
 	{
@@ -25,7 +25,7 @@ public class GuiCreativeBuilder extends GuiContainerBase
 	{
 		super.initGui();
 		this.textFieldSize = new GuiTextField(fontRendererObj, 45, 58, 50, 12);
-        this.textFieldSize.setText("10");
+		this.textFieldSize.setText("10");
 		this.buttonList.add(new GuiButton(0, this.width / 2 - 80, this.height / 2 - 10, 58, 20, "Build"));
 		this.buttonList.add(new GuiButton(1, this.width / 2 - 50, this.height / 2 - 35, 120, 20, "Mode"));
 	}
@@ -41,13 +41,12 @@ public class GuiCreativeBuilder extends GuiContainerBase
 		fontRendererObj.drawString("Size: ", 9, 60, 4210752);
 		this.textFieldSize.drawTextBox();
 
-        //Button Name
-        Schematic sch = SchematicRegistry.INSTANCE.getByID(builder.schematicID());
-        String name = sch != null ? LanguageUtility.getLocal(sch.getName()) : "None";
+		//Button Name
+		Schematic sch = SchematicRegistry.INSTANCE.getByID(builder.schematicID());
+		String name = sch != null ? LanguageUtility.getLocal(sch.getName()) : "None";
 		((GuiButton) this.buttonList.get(1)).displayString = name;
 
-
-        fontRendererObj.drawString("Mode: ", 9, 80, 4210752);
+		fontRendererObj.drawString("Mode: ", 9, 80, 4210752);
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 	}
 
@@ -74,22 +73,22 @@ public class GuiCreativeBuilder extends GuiContainerBase
 		{
 			try
 			{
-                builder.size_$eq(Integer.parseInt(this.textFieldSize.getText()));
+				builder.size_$eq(Integer.parseInt(this.textFieldSize.getText()));
 			}
 			catch (NumberFormatException e)
 			{
-                textFieldSize.setText("");
+				textFieldSize.setText("");
 			}
 
 			if (builder.size() > 0)
 			{
-                ResonantEngine.instance.packetHandler.sendToServer(new PacketTile(builder, 0, builder.schematicID(), builder.size()));
-                this.mc.thePlayer.closeScreen();
+				ResonantEngine.instance.packetHandler.sendToServer(new PacketTile(builder, 0, builder.schematicID(), builder.size()));
+				this.mc.thePlayer.closeScreen();
 			}
 		}
 		else if (par1GuiButton.id == 1)
 		{
-            builder.schematicID_$eq((builder.schematicID() + 1) % (SchematicRegistry.INSTANCE.size()));
+			builder.schematicID_$eq((builder.schematicID() + 1) % (SchematicRegistry.INSTANCE.size()));
 		}
 	}
 

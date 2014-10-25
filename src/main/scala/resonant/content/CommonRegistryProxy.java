@@ -13,22 +13,22 @@ public class CommonRegistryProxy
 	public void registerTileEntity(String name, String prefix, Class<? extends TileEntity> clazz)
 	{
 		GameRegistry.registerTileEntityWithAlternatives(clazz, name, name);
-        for (Field field : clazz.getDeclaredFields())
-        {
-            if(field.isAnnotationPresent(Synced.class))
-            {
-                PacketAnnotationManager.INSTANCE.register(clazz);
-                break;
-            }
-        }
-        for (Method m : clazz.getDeclaredMethods())
-        {
-            if (m.isAnnotationPresent(Synced.SyncedInput.class) || m.isAnnotationPresent(Synced.SyncedOutput.class))
-            {
-                PacketAnnotationManager.INSTANCE.register(clazz);
-                break;
-            }
-        }
+		for (Field field : clazz.getDeclaredFields())
+		{
+			if (field.isAnnotationPresent(Synced.class))
+			{
+				PacketAnnotationManager.INSTANCE.register(clazz);
+				break;
+			}
+		}
+		for (Method m : clazz.getDeclaredMethods())
+		{
+			if (m.isAnnotationPresent(Synced.SyncedInput.class) || m.isAnnotationPresent(Synced.SyncedOutput.class))
+			{
+				PacketAnnotationManager.INSTANCE.register(clazz);
+				break;
+			}
+		}
 	}
 
 	public void registerDummyRenderer(Class<? extends TileEntity> clazz)

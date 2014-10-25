@@ -9,12 +9,13 @@ import resonant.lib.network.discriminator.PacketType;
  */
 public interface IPacketReceiver
 {
-    /**
-     * Reads a packet
-     * @param buf   - data encoded into the packet
-     * @param player - player that is receiving the packet
-     * @param packet - The packet instance that was sending this packet.
-     */
-    public void read(ByteBuf buf, EntityPlayer player, PacketType packet);
+	/**
+	 * Reads a packet
+	 *
+	 * @param buf    - data encoded into the packet
+	 * @param player - player that is receiving the packet
+	 * @param packet - The packet instance that was sending this packet.
+	 */
+	public void read(ByteBuf buf, EntityPlayer player, PacketType packet);
 
 }

@@ -18,13 +18,6 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
 {
   protected lazy val inventory = new ExternalInventory(this, getSizeInventory())
 
-  override def getInventory(): IExternalInventory = inventory
-
-  override def getStackInSlot(index: Int): ItemStack =
-  {
-    return this.getInventory().getStackInSlot(index)
-  }
-
   override def decrStackSize(index: Int, amount: Int): ItemStack =
   {
     return this.getInventory().decrStackSize(index, amount)
@@ -45,15 +38,20 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     markDirty()
   }
 
-  override def getStackInSlotOnClosing(index: Int): ItemStack =
+  override def getStackInSlot(index: Int): ItemStack =
   {
-    return this.getInventory().getStackInSlotOnClosing(index)
+    return this.getInventory().getStackInSlot(index)
   }
 
   override def setInventorySlotContents(index: Int, stack: ItemStack)
   {
     this.getInventory().setInventorySlotContents(index, stack)
     onInventoryChanged()
+  }
+
+  override def getStackInSlotOnClosing(index: Int): ItemStack =
+  {
+    return this.getInventory().getStackInSlotOnClosing(index)
   }
 
   override def getInventoryName = getBlockType.getLocalizedName
@@ -195,6 +193,12 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     return false
   }
 
+  /** Called each time the inventory changes */
+  def onInventoryChanged()
+  {
+
+  }
+
   override def onRemove(block: Block, par6: Int)
   {
     super.onRemove(block, par6)
@@ -207,20 +211,14 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     {
 
       (0 until getSizeInventory) filter (getStackInSlot(_) != null) foreach (
-          i =>
-            {
-              InventoryUtility.dropItemStack(world, center, getStackInSlot(i))
-              setInventorySlotContents(i, null)
-            })
+                                                                            i =>
+                                                                            {
+                                                                              InventoryUtility.dropItemStack(world, center, getStackInSlot(i))
+                                                                              setInventorySlotContents(i, null)
+                                                                            })
     }
     onInventoryChanged()
     markDirty()
-  }
-
-  /** Called each time the inventory changes */
-  def onInventoryChanged()
-  {
-
   }
 
   override def readFromNBT(nbt: NBTTagCompound)
@@ -234,4 +232,6 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     super.writeToNBT(nbt)
     getInventory.save(nbt)
   }
+
+  override def getInventory(): IExternalInventory = inventory
 }

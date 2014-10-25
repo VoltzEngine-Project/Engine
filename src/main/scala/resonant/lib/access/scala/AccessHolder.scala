@@ -1,6 +1,5 @@
 package resonant.lib.access.scala
 
-import com.mojang.authlib.GameProfile
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import resonant.lib.access.java.Permission
 

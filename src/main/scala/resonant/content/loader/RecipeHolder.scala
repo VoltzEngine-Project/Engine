@@ -22,18 +22,6 @@ trait RecipeHolder
   protected def shaped(output: Block, input: Any*): IRecipe =
     new ShapedOreRecipe(output, convertToMinecraft(input): _*)
 
-  protected def shaped(output: ItemStack, input: Any*): IRecipe =
-    new ShapedOreRecipe(output, convertToMinecraft(input): _*)
-
-  protected def shapeless(output: ItemStack, input: Any*): IRecipe =
-    new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
-
-  protected def shapeless(output: Item, input: Any*): IRecipe =
-    new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
-
-  protected def shapeless(output: Block, input: Any*): IRecipe =
-    new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
-
   private def convertToMinecraft(params: Seq[Any]): Seq[AnyRef] =
     params.flatMap
     {
@@ -48,6 +36,18 @@ trait RecipeHolder
       case _ =>
         Seq()
     }
+
+  protected def shaped(output: ItemStack, input: Any*): IRecipe =
+    new ShapedOreRecipe(output, convertToMinecraft(input): _*)
+
+  protected def shapeless(output: ItemStack, input: Any*): IRecipe =
+    new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
+
+  protected def shapeless(output: Item, input: Any*): IRecipe =
+    new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
+
+  protected def shapeless(output: Block, input: Any*): IRecipe =
+    new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
 
   protected def smelting(input: ItemStack, output: ItemStack, xp: Double = 0.0): (ItemStack, ItemStack, Float) =
     (input, output, xp.toFloat)

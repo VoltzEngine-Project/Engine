@@ -13,7 +13,8 @@ import universalelectricity.core.transform.vector.Vector3
  * @param name - unlocalized name for translation
  * @param block - block to build with
  */
-class SchematicPlate(name : String, block : Block) extends Schematic {
+class SchematicPlate(name: String, block: Block) extends Schematic
+{
 
   def getName: String =
   {
@@ -24,11 +25,11 @@ class SchematicPlate(name : String, block : Block) extends Schematic {
   {
     val returnMap: HashMap[Vector3, Pair[Block, Integer]] = new HashMap[Vector3, Pair[Block, Integer]]
 
-    for (x : Int  <- size to -size)
+    for (x: Int <- size to -size)
     {
-      for (y : Int  <- size to -size)
+      for (y: Int <- size to -size)
       {
-        for (z : Int <- size to -size)
+        for (z: Int <- size to -size)
         {
           if ((dir.offsetX != 0 && x == 0) || (dir.offsetY != 0 && y == 0) || (dir.offsetZ != 0 && z == 0))
           {

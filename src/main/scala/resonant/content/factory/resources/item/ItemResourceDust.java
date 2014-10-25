@@ -1,16 +1,15 @@
 package resonant.content.factory.resources.item;
 
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import resonant.engine.ResonantEngine;
 import resonant.lib.utility.LanguageUtility;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import scala.collection.Iterator;
+
+import java.util.List;
 
 /**
  * An item used for auto-generated dusts based on registered ingots in the OreDict.
@@ -19,23 +18,23 @@ import scala.collection.Iterator;
  */
 public class ItemResourceDust extends Item
 {
-    private boolean dirt = false;
-    private boolean dust = true;
+	private boolean dirt = false;
+	private boolean dust = true;
 
-    public ItemResourceDust()
-    {
-        this(false, false);
-    }
+	public ItemResourceDust()
+	{
+		this(false, false);
+	}
 
-    public ItemResourceDust(boolean dirt, boolean dust)
-    {
-        this(dirt);
-        this.dust = dust;
-    }
+	public ItemResourceDust(boolean dirt, boolean dust)
+	{
+		this(dirt);
+		this.dust = dust;
+	}
 
 	public ItemResourceDust(boolean dirt)
 	{
-        this.dirt = dirt;
+		this.dirt = dirt;
 		setHasSubtypes(true);
 		setMaxDamage(0);
 	}
@@ -69,8 +68,8 @@ public class ItemResourceDust extends Item
 	@Override
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
-        java.util.Iterator<String> it = ResonantEngine.resourceFactory.materials.iterator();
-		while(it.hasNext())
+		java.util.Iterator<String> it = ResonantEngine.resourceFactory.materials.iterator();
+		while (it.hasNext())
 		{
 			par3List.add(it.next());
 		}

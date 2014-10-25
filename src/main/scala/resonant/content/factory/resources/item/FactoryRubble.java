@@ -18,32 +18,36 @@ import java.util.List;
  */
 public class FactoryRubble extends FactoryResource
 {
-    public static Item rubble;
-    public FactoryRubble(ResourceFactoryHandler gen, String modID, String prefix) {
-        super(gen, modID, prefix);
-    }
+	public static Item rubble;
 
-    public Object generate(String objectName, Object... data)
-    {
-        if(rubble == null)
-        {
-            rubble = new ItemResourceDust();
-            rubble.setCreativeTab(CreativeTabs.tabMaterials);
-            GameRegistry.registerItem(rubble, "oreRubble", modID);
-        }
+	public FactoryRubble(ResourceFactoryHandler gen, String modID, String prefix)
+	{
+		super(gen, modID, prefix);
+	}
 
-        ItemStack stack = null;
-        if(gen.materialIds.inverse().containsKey(objectName)) {
-            stack = new ItemStack(rubble, 1, gen.materialIds.inverse().get(objectName));
-            OreDictionary.registerOre("rubble" + LanguageUtility.capitalizeFirst(objectName), stack);
-            MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), "ore" + LanguageUtility.capitalizeFirst(objectName), "rubble" + LanguageUtility.capitalizeFirst(objectName));
-            List<ItemStack> ingots = OreDictionary.getOres("ingot" + LanguageUtility.capitalizeFirst(objectName));
-            if(ingots != null && !ingots.isEmpty()) {
-                ItemStack ingot = ingots.get(0).copy();
-                ingot.stackSize = 1;
-                GameRegistry.addSmelting(rubble, ingot, 0.7f);
-            }
-        }
-        return stack;
-    }
+	public Object generate(String objectName, Object... data)
+	{
+		if (rubble == null)
+		{
+			rubble = new ItemResourceDust();
+			rubble.setCreativeTab(CreativeTabs.tabMaterials);
+			GameRegistry.registerItem(rubble, "oreRubble", modID);
+		}
+
+		ItemStack stack = null;
+		if (gen.materialIds.inverse().containsKey(objectName))
+		{
+			stack = new ItemStack(rubble, 1, gen.materialIds.inverse().get(objectName));
+			OreDictionary.registerOre("rubble" + LanguageUtility.capitalizeFirst(objectName), stack);
+			MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), "ore" + LanguageUtility.capitalizeFirst(objectName), "rubble" + LanguageUtility.capitalizeFirst(objectName));
+			List<ItemStack> ingots = OreDictionary.getOres("ingot" + LanguageUtility.capitalizeFirst(objectName));
+			if (ingots != null && !ingots.isEmpty())
+			{
+				ItemStack ingot = ingots.get(0).copy();
+				ingot.stackSize = 1;
+				GameRegistry.addSmelting(rubble, ingot, 0.7f);
+			}
+		}
+		return stack;
+	}
 }

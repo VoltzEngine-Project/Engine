@@ -16,7 +16,6 @@ import resonant.lib.multiblock.reference.IMultiBlock;
 import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.network.discriminator.PacketType;
 import resonant.lib.network.handle.IPacketReceiver;
-import resonant.lib.network.handle.TPacketReceiver;
 import universalelectricity.core.transform.vector.Vector3;
 
 /**

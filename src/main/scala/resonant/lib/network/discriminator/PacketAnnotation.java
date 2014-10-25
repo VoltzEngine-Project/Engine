@@ -1,6 +1,5 @@
 package resonant.lib.network.discriminator;
 
-import com.google.common.collect.BiMap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
@@ -75,46 +74,46 @@ public class PacketAnnotation extends PacketType
 	{
 		try
 		{
-            // Get class for our id and check for null
-            Class clazz = PacketAnnotationManager.INSTANCE.getClassForId(classID);
-            if(clazz != null)
-            {
-                // TODO support other class types
-                if (TileEntity.class.isAssignableFrom(clazz))
-                {
-                    int x = data().readInt();
-                    int y = data().readInt();
-                    int z = data().readInt();
+			// Get class for our id and check for null
+			Class clazz = PacketAnnotationManager.INSTANCE.getClassForId(classID);
+			if (clazz != null)
+			{
+				// TODO support other class types
+				if (TileEntity.class.isAssignableFrom(clazz))
+				{
+					int x = data().readInt();
+					int y = data().readInt();
+					int z = data().readInt();
 
-                    TileEntity tile = player.getEntityWorld().getTileEntity(x, y, z);
+					TileEntity tile = player.getEntityWorld().getTileEntity(x, y, z);
 
-                    if (tile != null)
-                    {
-                        // If its a TPacketReceiver let it handle the packet
-                        if (tile instanceof TPacketReceiver)
-                        {
-                            ((TPacketReceiver) tile).read(data(), player, this);
-                        }
-                        //Else assign values with reflection
-                        else
-                        {
-                            PacketAnnotationManager.INSTANCE.getSet(clazz, packetSetID).read(tile, data().slice());
-                        }
-                    }
-                    else
-                    {
-                        References.LOGGER.error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
-                    }
-                }
-                else
-                {
-                    References.LOGGER.fatal("PacketAnnotation: Unsupported class type " + clazz);
-                }
-            }
-            else
-            {
-                References.LOGGER.fatal("PacketAnnotation: Unknown classID " + this.classID);
-            }
+					if (tile != null)
+					{
+						// If its a TPacketReceiver let it handle the packet
+						if (tile instanceof TPacketReceiver)
+						{
+							((TPacketReceiver) tile).read(data(), player, this);
+						}
+						//Else assign values with reflection
+						else
+						{
+							PacketAnnotationManager.INSTANCE.getSet(clazz, packetSetID).read(tile, data().slice());
+						}
+					}
+					else
+					{
+						References.LOGGER.error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
+					}
+				}
+				else
+				{
+					References.LOGGER.fatal("PacketAnnotation: Unsupported class type " + clazz);
+				}
+			}
+			else
+			{
+				References.LOGGER.fatal("PacketAnnotation: Unknown classID " + this.classID);
+			}
 		}// TODO replace catch with a set area of catches to allow for crashing on bad crashes
 		catch (Exception e)
 		{

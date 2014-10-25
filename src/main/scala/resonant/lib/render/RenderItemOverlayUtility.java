@@ -91,37 +91,42 @@ public class RenderItemOverlayUtility
 		renderItemOnSides(tile, itemStack, x, y, z, renderText, EnumSet.of(ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST));
 	}
 
-    //TODO replace tile param with world to reduce errors and increases uses of this method
+	//TODO replace tile param with world to reduce errors and increases uses of this method
 	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText, EnumSet<ForgeDirection> sides)
 	{
-        if(tile != null && tile.getWorldObj() != null) {
-            /** Render the Output */
-            String amount = "";
+		if (tile != null && tile.getWorldObj() != null)
+		{
+			/** Render the Output */
+			String amount = "";
 
-            if (itemStack != null) {
-                renderText = itemStack.getDisplayName();
-                amount = Integer.toString(itemStack.stackSize);
-            }
+			if (itemStack != null)
+			{
+				renderText = itemStack.getDisplayName();
+				amount = Integer.toString(itemStack.stackSize);
+			}
 
-            for (ForgeDirection direction : sides) {
-                if (direction != ForgeDirection.UNKNOWN) {
-                    if (tile.getBlockType().isSideSolid(tile.getWorldObj(), tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite())) {
-                        continue;
-                    }
+			for (ForgeDirection direction : sides)
+			{
+				if (direction != ForgeDirection.UNKNOWN)
+				{
+					if (tile.getBlockType().isSideSolid(tile.getWorldObj(), tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite()))
+					{
+						continue;
+					}
 
-                    renderItemOnSide(tile, itemStack, direction, x, y, z, renderText, amount);
+					renderItemOnSide(tile, itemStack, direction, x, y, z, renderText, amount);
 
-                    GL11.glPushMatrix();
-                    setupLight(tile, direction.offsetX, direction.offsetZ);
-                    OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-                    GL11.glDisable(2896);
-                    RenderUtility.renderText(renderText, direction, 0.02f, x, y - 0.35f, z);
-                    RenderUtility.renderText(amount, direction, 0.02f, x, y - 0.15f, z);
-                    GL11.glEnable(2896);
-                    GL11.glPopMatrix();
-                }
-            }
-        }
+					GL11.glPushMatrix();
+					setupLight(tile, direction.offsetX, direction.offsetZ);
+					OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+					GL11.glDisable(2896);
+					RenderUtility.renderText(renderText, direction, 0.02f, x, y - 0.35f, z);
+					RenderUtility.renderText(amount, direction, 0.02f, x, y - 0.15f, z);
+					GL11.glEnable(2896);
+					GL11.glPopMatrix();
+				}
+			}
+		}
 	}
 
 	protected static void renderItemSingleSide(TileEntity tile, double x, double y, double z, ItemStack itemStack, ForgeDirection direction, String renderText)
@@ -173,16 +178,16 @@ public class RenderItemOverlayUtility
 					GL11.glTranslated(x + 1.01, y + 0.9, z + 0.65);
 					GL11.glRotatef(-90, 0, 1, 0);
 					break;
-                case UP:
-                    //TODO fix rotation
-                    GL11.glTranslated(x + 0.65, y + 1.01, z + 0.9);
-                    GL11.glRotatef(90, 1, 0, 0);
-                    break;
-                case DOWN:
-                    //TODO Fix rotation
-                    GL11.glTranslated(x + 0.65, y - 0.01, z -0.01);
-                    GL11.glRotatef(-90, 1, 0, 0);
-                    break;
+				case UP:
+					//TODO fix rotation
+					GL11.glTranslated(x + 0.65, y + 1.01, z + 0.9);
+					GL11.glRotatef(90, 1, 0, 0);
+					break;
+				case DOWN:
+					//TODO Fix rotation
+					GL11.glTranslated(x + 0.65, y - 0.01, z - 0.01);
+					GL11.glRotatef(-90, 1, 0, 0);
+					break;
 			}
 
 			float scale = 0.03125F;

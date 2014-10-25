@@ -6,20 +6,20 @@ import universalelectricity.api.core.grid.INodeProvider
 import universalelectricity.core.grid.node.NodeConnector
 
 /** Version of NodeConnector designed for usage with fluids,
- * can be directly used as a tank object thanks to {@link TFluidTank}
- *
- * Created by robert(Darkguardsman) on 9/25/2014.
+  * can be directly used as a tank object thanks to {@link TFluidTank}
+  *
+  * Created by robert(Darkguardsman) on 9/25/2014.
   *
   * @param parent - parent(TileEntity or Multipart) that contains this node
- */
+  */
 class NodeFluidHandler(parent: INodeProvider) extends NodeConnector(parent) with TFluidHandler with TFluidTank
 {
   /** Internal tank */
-  private var tank : FluidTank = new FluidTank(1000);
+  private var tank: FluidTank = new FluidTank(1000);
 
   /** @param parent - parent(TileEntity or Multipart) that contains this node
-   * @param milliBuckets - number of millibuckets to set the tank capacity to */
-  def this(parent: INodeProvider, milliBuckets : Int)
+    * @param milliBuckets - number of millibuckets to set the tank capacity to */
+  def this(parent: INodeProvider, milliBuckets: Int)
   {
     this(parent)
     this.setCapacity(milliBuckets)
@@ -33,14 +33,13 @@ class NodeFluidHandler(parent: INodeProvider) extends NodeConnector(parent) with
     this.tank = tank
   }
 
-
   override def getPrimaryTank: FluidTank = tank
 
   /** Sets the primary tank without checks
     *
-   * @param t - tank, can be null but not recommended
-   */
-  def setPrimaryTank(t : FluidTank)
+    * @param t - tank, can be null but not recommended
+    */
+  def setPrimaryTank(t: FluidTank)
   {
     tank = t
   }

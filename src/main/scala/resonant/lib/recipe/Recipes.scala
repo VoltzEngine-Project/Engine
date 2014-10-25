@@ -16,31 +16,7 @@ import scala.collection.convert.wrapAll._
  */
 object Recipes
 {
-  def +=(crafting: IRecipe) = if (crafting != null) GameRegistry.addRecipe(crafting)
-
   def +=(in: ItemStack, out: ItemStack, xp: Float) = if (in != null) GameRegistry.addSmelting(in, out, xp)
-
-  /**
-   * Removes a recipe by its IRecipe class.
-   * @return True if successful
-   */
-  def -=(recipe: IRecipe): Boolean =
-  {
-    val matches = get filter (rec => rec == recipe || recipe.equals(rec))
-    CraftingManager.getInstance.getRecipeList.removeAll(matches)
-    return matches.size > 0
-  }
-
-  /**
-   * Removes all recipes that have a given output.
-   * @return True if successful
-   */
-  def -=(stack: ItemStack): Boolean =
-  {
-    val matches = get filter (rec => rec.getRecipeOutput.isItemEqual(stack))
-    CraftingManager.getInstance.getRecipeList.removeAll(matches)
-    return matches.size > 0
-  }
 
   def get(output: ItemStack): Set[IRecipe] = get filter (check => ItemStack.areItemStacksEqual(check.getRecipeOutput, output))
 
@@ -61,6 +37,19 @@ object Recipes
     return false
   }
 
+  def +=(crafting: IRecipe) = if (crafting != null) GameRegistry.addRecipe(crafting)
+
+  /**
+   * Removes a recipe by its IRecipe class.
+   * @return True if successful
+   */
+  def -=(recipe: IRecipe): Boolean =
+  {
+    val matches = get filter (rec => rec == recipe || recipe.equals(rec))
+    CraftingManager.getInstance.getRecipeList.removeAll(matches)
+    return matches.size > 0
+  }
+
   /**
    * Replaces a recipe with the resulting ItemStack with a new IRecipe.
    * @return True if successful
@@ -74,6 +63,17 @@ object Recipes
     }
 
     return false
+  }
+
+  /**
+   * Removes all recipes that have a given output.
+   * @return True if successful
+   */
+  def -=(stack: ItemStack): Boolean =
+  {
+    val matches = get filter (rec => rec.getRecipeOutput.isItemEqual(stack))
+    CraftingManager.getInstance.getRecipeList.removeAll(matches)
+    return matches.size > 0
   }
 
 }

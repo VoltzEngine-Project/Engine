@@ -28,8 +28,8 @@ import net.minecraftforge.oredict.OreDictionary;
 import resonant.api.IBoilHandler;
 import resonant.api.mffs.fortron.FrequencyGridRegistry;
 import resonant.api.recipe.MachineRecipes;
-import resonant.content.factory.resources.ResourceFactoryHandler;
 import resonant.content.factory.resources.RecipeType;
+import resonant.content.factory.resources.ResourceFactoryHandler;
 import resonant.content.loader.ModManager;
 import resonant.content.wrapper.BlockDummy;
 import resonant.engine.content.ItemScrewdriver;
@@ -71,33 +71,38 @@ public class ResonantEngine
 	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
 
-    @SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
+	@SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
 	public static CommonProxy proxy;
 
-    @Mod.Metadata(References.ID)
+	@Mod.Metadata(References.ID)
 	public static ModMetadata metadata;
 
-    @Instance(References.ID)
+	@Instance(References.ID)
 	public static ResonantEngine instance;
 
-	/** Blocks TODO move to XML data if requires no logic */
+	/**
+	 * Blocks TODO move to XML data if requires no logic
+	 */
 	public static BlockDummy blockCreativeBuilder;
 	public static Block blockInfiniteFluid, blockInfiniteEnergy;
-    public static Block blockOreCopper = null;
-    public static Block blockOreTin = null;
+	public static Block blockOreCopper = null;
+	public static Block blockOreTin = null;
 
-    /** Items TODO move to XML data if requires no logic */
+	/**
+	 * Items TODO move to XML data if requires no logic
+	 */
 	public static Item itemWrench;
-    public static Item itemMotor = null;
-    public static Item itemCircuitBasic = null;
-    public static Item itemCircuitAdvanced = null;
-    public static Item itemCircuitElite = null;
+	public static Item itemMotor = null;
+	public static Item itemCircuitBasic = null;
+	public static Item itemCircuitAdvanced = null;
+	public static Item itemCircuitElite = null;
 
-    /** Ore Generator TODO move to XML data */
-    public static OreGenerator generationOreCopper = null;
-    public static OreGenerator generationOreTin  = null;
-    public static ResourceFactoryHandler resourceFactory;
-
+	/**
+	 * Ore Generator TODO move to XML data
+	 */
+	public static OreGenerator generationOreCopper = null;
+	public static OreGenerator generationOreTin = null;
+	public static ResourceFactoryHandler resourceFactory;
 
 	private static ThermalGrid thermalGrid = new ThermalGrid();
 	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
@@ -107,7 +112,7 @@ public class ResonantEngine
 	public void preInit(FMLPreInitializationEvent evt)
 	{
 		ConfigScanner.instance().generateSets(evt.getAsmData());
-        resourceFactory = new ResourceFactoryHandler();
+		resourceFactory = new ResourceFactoryHandler();
 		References.CONFIGURATION.load();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
@@ -127,16 +132,16 @@ public class ResonantEngine
 		 * Multiblock Handling
 		 */
 		SyntheticMultiblock.instance = new SyntheticMultiblock();
-        //TODO setup ores
-        if(References.CONFIGURATION.get("Content", "LoadScrewDriver", true).getBoolean(true))
-        {
-            itemWrench = new ItemScrewdriver();
-            GameRegistry.registerItem(itemWrench, "screwdriver", References.ID);
-        }
-        if(References.CONFIGURATION.get("Content", "LoadParts", true).getBoolean(true))
-        {
-            //TODO setup chips, motor, and basic crafting parts
-        }
+		//TODO setup ores
+		if (References.CONFIGURATION.get("Content", "LoadScrewDriver", true).getBoolean(true))
+		{
+			itemWrench = new ItemScrewdriver();
+			GameRegistry.registerItem(itemWrench, "screwdriver", References.ID);
+		}
+		if (References.CONFIGURATION.get("Content", "LoadParts", true).getBoolean(true))
+		{
+			//TODO setup chips, motor, and basic crafting parts
+		}
 		if (References.CONFIGURATION.get("Creative Tools", "CreativeBuilder", true).getBoolean(true))
 		{
 			blockCreativeBuilder = contentRegistry.newBlock(TileCreativeBuilder.class);
@@ -171,18 +176,18 @@ public class ResonantEngine
 		proxy.init();
 		loadables.init();
 
-        OreDictionary.registerOre("ingotGold", Items.gold_ingot);
-        OreDictionary.registerOre("ingotIron", Items.iron_ingot);
-        OreDictionary.registerOre("oreGold", Blocks.gold_ore);
-        OreDictionary.registerOre("oreIron", Blocks.iron_ore);
-        OreDictionary.registerOre("oreLapis", Blocks.lapis_ore);
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.SMELTER.name(), new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone));
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.cobblestone, Blocks.gravel);
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.stone, Blocks.cobblestone);
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.chest, new ItemStack(Blocks.planks, 7, 0));
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.cobblestone, Blocks.sand);
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
+		OreDictionary.registerOre("ingotGold", Items.gold_ingot);
+		OreDictionary.registerOre("ingotIron", Items.iron_ingot);
+		OreDictionary.registerOre("oreGold", Blocks.gold_ore);
+		OreDictionary.registerOre("oreIron", Blocks.iron_ore);
+		OreDictionary.registerOre("oreLapis", Blocks.lapis_ore);
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.SMELTER.name(), new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone));
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.cobblestone, Blocks.gravel);
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.stone, Blocks.cobblestone);
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.chest, new ItemStack(Blocks.planks, 7, 0));
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.cobblestone, Blocks.sand);
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
 	}
 
 	@EventHandler

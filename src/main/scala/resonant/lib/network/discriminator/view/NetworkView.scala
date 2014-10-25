@@ -1,11 +1,8 @@
 package resonant.lib.network.discriminator.view
 
-import java.lang.reflect.Method
-
 import io.netty.buffer.ByteBuf
 import resonant.lib.network.ByteBufWrapper._
 
-import reflect.runtime.universe._
 /**
  * Designed by on Unity 3D's packet system.
  *
@@ -17,14 +14,6 @@ abstract class NetworkView(obj: AnyRef)
 {
   var byteBuf: ByteBuf = _
   var reading = false
-
-  object TargetType extends Enumeration
-  {
-    type TargetType = Value
-    val all, allExcludeSelf, server = Value
-  }
-
-  import TargetType._
 
   def sync[T](value: T): T =
   {
@@ -43,5 +32,11 @@ abstract class NetworkView(obj: AnyRef)
   def rpc(method: String, params: Any*)
   {
 
+  }
+
+  object TargetType extends Enumeration
+  {
+    type TargetType = Value
+    val all, allExcludeSelf, server = Value
   }
 }

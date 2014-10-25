@@ -7,10 +7,11 @@ import resonant.content.factory.Factory;
  */
 public class FactoryResource extends Factory
 {
-    protected ResourceFactoryHandler gen;
-    public FactoryResource(ResourceFactoryHandler gen, String modID, String prefix)
-    {
-        super(modID, prefix);
-        this.gen = gen;
-    }
+	protected ResourceFactoryHandler gen;
+
+	public FactoryResource(ResourceFactoryHandler gen, String modID, String prefix)
+	{
+		super(modID, prefix);
+		this.gen = gen;
+	}
 }

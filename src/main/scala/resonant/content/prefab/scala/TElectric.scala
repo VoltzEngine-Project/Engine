@@ -4,9 +4,9 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.lib.utility.nbt.ISaveObj
-import universalelectricity.api.{EnergyStorage, UniversalClass}
 import universalelectricity.api.core.grid.electric.IElectricNode
 import universalelectricity.api.core.grid.{INode, INodeProvider}
+import universalelectricity.api.{EnergyStorage, UniversalClass}
 import universalelectricity.compatibility.Compatibility
 import universalelectricity.core.grid.node.NodeElectric
 
@@ -15,27 +15,19 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
 {
   protected var electricNode = new NodeElectric(this)
 
-  def energy : EnergyStorage = electricNode.buffer
+  def setCapacity(value: Double)
+  { energy.setCapacity(value) }
 
-  def setCapacity(value: Double) {energy.setCapacity(value)}
+  def energy: EnergyStorage = electricNode.buffer
 
-  def setMaxTransfer(maxTransfer: Double) {energy.setMaxTransfer(maxTransfer)}
+  def setMaxTransfer(maxTransfer: Double)
+  { energy.setMaxTransfer(maxTransfer) }
 
-  def setMaxReceive(maxReceive: Double) {energy.setMaxReceive(maxReceive)}
+  def setMaxReceive(maxReceive: Double)
+  { energy.setMaxReceive(maxReceive) }
 
-  def setMaxExtract(maxExtract: Double) {energy.setMaxExtract(maxExtract)}
-
-  protected def recharge(stack: ItemStack)
-  {
-    if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
-      electricNode.removeEnergy(ForgeDirection.UNKNOWN, Compatibility.chargeItem(stack, electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
-  }
-
-  protected def discharge(stack: ItemStack)
-  {
-    if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
-      electricNode.addEnergy(ForgeDirection.UNKNOWN, Compatibility.dischargeItem(stack, electricNode.getEnergyCapacity(ForgeDirection.UNKNOWN) - electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
-  }
+  def setMaxExtract(maxExtract: Double)
+  { energy.setMaxExtract(maxExtract) }
 
   /**
    * @param nodeType - The type of node we are looking for.
@@ -70,6 +62,18 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
     {
       electricNode.load(nbt)
     }
+  }
+
+  protected def recharge(stack: ItemStack)
+  {
+    if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
+      electricNode.removeEnergy(ForgeDirection.UNKNOWN, Compatibility.chargeItem(stack, electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
+  }
+
+  protected def discharge(stack: ItemStack)
+  {
+    if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
+      electricNode.addEnergy(ForgeDirection.UNKNOWN, Compatibility.dischargeItem(stack, electricNode.getEnergyCapacity(ForgeDirection.UNKNOWN) - electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
   }
 
 }

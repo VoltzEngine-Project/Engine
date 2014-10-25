@@ -18,28 +18,28 @@ import universalelectricity.api.core.grid.ISave
  */
 trait TPacketIDReceiver extends TPacketReceiver with IPacketIDReceiver
 {
-    override def read(buf: ByteBuf, player: EntityPlayer, packet: PacketType)
-    {
-        val id = buf.readInt()
-        read(buf, id, player, packet)
-    }
+  override def read(buf: ByteBuf, player: EntityPlayer, packet: PacketType)
+  {
+    val id = buf.readInt()
+    read(buf, id, player, packet)
+  }
 
-    override def read(buf: ByteBuf, id: Int, player: EntityPlayer, `type`: PacketType): Boolean =
+  override def read(buf: ByteBuf, id: Int, player: EntityPlayer, `type`: PacketType): Boolean =
+  {
+    if (id == 0)
     {
-        if (id == 0)
-        {
-            if (this.isInstanceOf[TileEntity])
-            {
-                this.asInstanceOf[TileEntity].readFromNBT(ByteBufUtils.readTag(buf))
-                return true
-            }
-            else if (this.isInstanceOf[ISave])
-            {
-                this.asInstanceOf[ISave].load(ByteBufUtils.readTag(buf))
-                return true
-            }
-        }
-        return false
+      if (this.isInstanceOf[TileEntity])
+      {
+        this.asInstanceOf[TileEntity].readFromNBT(ByteBufUtils.readTag(buf))
+        return true
+      }
+      else if (this.isInstanceOf[ISave])
+      {
+        this.asInstanceOf[ISave].load(ByteBufUtils.readTag(buf))
+        return true
+      }
     }
+    return false
+  }
 
 }

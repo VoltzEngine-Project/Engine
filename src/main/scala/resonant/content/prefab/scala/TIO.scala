@@ -44,6 +44,31 @@ trait TIO extends SpatialBlock with IIO with ISaveObj
     return true
   }
 
+  override def setIO(dir: ForgeDirection, `type`: Int)
+  {
+    val currentIO: String = getIOMapBase3
+    val str: StringBuilder = new StringBuilder(currentIO)
+    str.setCharAt(dir.ordinal, Integer.toString(`type`).charAt(0))
+    this.ioMap = Integer.parseInt(str.toString, 3).toShort
+  }
+
+  def getIOMapBase3: String =
+  {
+    var currentIO: String = Integer.toString(ioMap, 3)
+    while (currentIO.length < 6)
+    {
+      currentIO = "0" + currentIO
+    }
+    return currentIO
+
+  }
+
+  override def getIO(dir: ForgeDirection): Int =
+  {
+    val currentIO: String = getIOMapBase3
+    return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
+  }
+
   /**
    * The electrical input direction.
    *
@@ -84,31 +109,6 @@ trait TIO extends SpatialBlock with IIO with ISaveObj
     }
 
     return dirs
-  }
-
-  override def setIO(dir: ForgeDirection, `type`: Int)
-  {
-    val currentIO: String = getIOMapBase3
-    val str: StringBuilder = new StringBuilder(currentIO)
-    str.setCharAt(dir.ordinal, Integer.toString(`type`).charAt(0))
-    this.ioMap = Integer.parseInt(str.toString, 3).toShort
-  }
-
-  override def getIO(dir: ForgeDirection): Int =
-  {
-    val currentIO: String = getIOMapBase3
-    return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
-  }
-
-  def getIOMapBase3: String =
-  {
-    var currentIO: String = Integer.toString(ioMap, 3)
-    while (currentIO.length < 6)
-    {
-      currentIO = "0" + currentIO
-    }
-    return currentIO
-
   }
 
   /** Saves the object to NBT */

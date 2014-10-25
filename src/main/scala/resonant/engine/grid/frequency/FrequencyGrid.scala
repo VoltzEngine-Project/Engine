@@ -32,8 +32,6 @@ class FrequencyGrid extends Grid[IBlockFrequency](classOf[IBlockFrequency]) with
     getNodes().synchronized(super.remove(node))
   }
 
-  def getNodes(p: IBlockFrequency => Boolean): Set[IBlockFrequency] = getNodes().filter(p)
-
   def getNodes[C <: IBlockFrequency](clazz: Class[C], p: C => Boolean): Set[C] = getNodes(n => (clazz.isAssignableFrom(n.getClass()) && p(n.asInstanceOf[C]))).asInstanceOf[Set[C]]
 
   override def getNodes[C <: IBlockFrequency](clazz: Class[C]): Set[C] = getNodes(n => clazz.isAssignableFrom(n.getClass())).asInstanceOf[Set[C]]
@@ -61,4 +59,6 @@ class FrequencyGrid extends Grid[IBlockFrequency](classOf[IBlockFrequency]) with
   {
     return getNodes(n => n.getFrequency() == frequency && clazz.isAssignableFrom(n.getClass()) && n.asInstanceOf[TileEntity].getWorldObj() == world && cuboid.intersects(new Vector3(n.asInstanceOf[TileEntity]))).asInstanceOf[Set[C]]
   }
+
+  def getNodes(p: IBlockFrequency => Boolean): Set[IBlockFrequency] = getNodes().filter(p)
 }

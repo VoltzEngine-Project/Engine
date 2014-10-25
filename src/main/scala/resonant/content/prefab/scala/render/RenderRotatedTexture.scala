@@ -1,6 +1,6 @@
 package resonant.content.prefab
 
-import cpw.mods.fml.relauncher.SideOnly
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IRotatable
@@ -8,7 +8,7 @@ import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.render.{RenderBlockAdvanced, RenderUtility}
 import resonant.lib.utility.RotationUtility
 import universalelectricity.core.transform.vector.Vector3
-import cpw.mods.fml.relauncher.Side
+
 /**
  * A rotated texture renderer applied to blocks capable of having rotated textured.
  * @author Calclavia
@@ -17,12 +17,12 @@ import cpw.mods.fml.relauncher.Side
 trait RenderRotatedTexture extends SpatialBlock with IRotatable
 {
   @SideOnly(Side.CLIENT)
-  var renderBlocks : RenderBlockAdvanced = null
+  var renderBlocks: RenderBlockAdvanced = null
 
   @SideOnly(Side.CLIENT)
   override def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
   {
-    if(renderBlocks == null)
+    if (renderBlocks == null)
       renderBlocks = new RenderBlockAdvanced()
     renderBlocks.setRenderBoundsFromBlock(block)
     renderBlocks.blockAccess = access

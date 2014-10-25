@@ -7,17 +7,15 @@ import resonant.engine.ResonantEngine
 import resonant.lib.content.prefab.TRotatable
 import resonant.lib.network.netty.AbstractPacket
 
-/**
- * Created by robert on 7/29/2014.
- */
-class TileAdvanced(material : Material) extends SpatialTile(material: Material) with TRotatable
+class TileAdvanced(material: Material) extends SpatialTile(material: Material) with TRotatable
 {
-
-  override def getDescriptionPacket: Packet = {
+  override def getDescriptionPacket: Packet =
+  {
     ResonantEngine.instance.packetHandler.toMCPacket(getDescPacket)
   }
 
-  def getDescPacket: AbstractPacket = {
+  def getDescPacket: AbstractPacket =
+  {
     return null
   }
 }

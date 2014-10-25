@@ -9,5 +9,5 @@ import resonant.lib.network.discriminator.PacketType;
  */
 public interface IPacketIDReceiver
 {
-    public boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type);
+	public boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type);
 }

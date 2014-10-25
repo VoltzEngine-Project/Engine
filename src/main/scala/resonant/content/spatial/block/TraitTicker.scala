@@ -8,13 +8,6 @@ trait TraitTicker
 {
   protected var ticks = 0L
 
-  /**
-   * Called on the TileEntity's first tick.
-   */
-  def start()
-  {
-  }
-
   def update()
   {
     if (ticks == 0)
@@ -28,5 +21,12 @@ trait TraitTicker
     }
 
     ticks += 1
+  }
+
+  /**
+   * Called on the TileEntity's first tick.
+   */
+  def start()
+  {
   }
 }

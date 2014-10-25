@@ -67,11 +67,6 @@ object SpatialBlock
     }
   }
 
-  abstract trait IComparatorInputOverride
-  {
-    def getComparatorInputOverride(side: Int): Int
-  }
-
   def getTileEntityForBlock(block: Block): TileEntity =
   {
     var te: TileEntity = inventoryTileEntities.get(block);
@@ -81,6 +76,11 @@ object SpatialBlock
       inventoryTileEntities.put(block, te);
     }
     return te;
+  }
+
+  abstract trait IComparatorInputOverride
+  {
+    def getComparatorInputOverride(side: Int): Int
   }
 }
 
@@ -95,9 +95,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   var block: BlockDummy = null
   var _bounds: Cuboid = Cuboid.full
   var _creativeTab: CreativeTabs = null
-
-  def creativeTab = _creativeTab
-
   var blockHardness: Float = 1
   var blockResistance: Float = 1
   var stepSound: Block.SoundType = Block.soundTypeStone
@@ -111,18 +108,25 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   var _access: IBlockAccess = null
   var textureName: java.lang.String = name
   var domain: java.lang.String = null
-
   private var noDynamicItemRenderCrash: Boolean = true
 
-  def setTextureName(value: java.lang.String)
+  /**
+   * Update
+   */
+  @Deprecated
+  final override def updateEntity() = update()
+
+  def update()
   {
-    textureName = value;
+
   }
 
   def creativeTab(value: CreativeTabs)
   {
     creativeTab = value
   }
+
+  def creativeTab = _creativeTab
 
   def creativeTab_=(value: CreativeTabs): Unit =
   {
@@ -133,14 +137,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   def itemBlock(item: Class[_ <: ItemBlock]): Unit =
   { itemBlock = item }
 
-  def bounds_=(cuboid: Cuboid)
-  {
-    _bounds = cuboid
-
-    if (block != null)
-      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
-  }
-
   /** Sets the bounding box of the block */
   def bounds(cuboid: Cuboid)
   {
@@ -148,6 +144,14 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   }
 
   def bounds = _bounds
+
+  def bounds_=(cuboid: Cuboid)
+  {
+    _bounds = cuboid
+
+    if (block != null)
+      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
+  }
 
   /** Sets the dummy block class uses by this spatial block */
   def setBlock(block: BlockDummy)
@@ -195,18 +199,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     this.worldObj = world
   }
 
-  override def world: World = getWorldObj
-
-  def access: IBlockAccess =
-  {
-    if (world != null)
-    {
-      return world
-    }
-
-    return _access
-  }
-
   override def x: Double =
   {
     return xCoord
@@ -229,43 +221,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     return asVectorWorld.add(0.5).asInstanceOf[VectorWorld]
   }
 
-  /** Block object that goes to this tile */
-  override def getBlockType: Block =
-  {
-    if (access != null)
-    {
-      val b: Block = access.getBlock(xi, yi, zi)
-      if (b == null)
-      {
-        return block
-      }
-      return b
-    }
-    return block
-  }
-
-  /**
-   * @return Return "this" if the block requires a TileEntity.
-   */
-  def tile: SpatialBlock =
-  {
-    return null
-  }
-
-  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
-
-  /**
-   * Update
-   */
-  @Deprecated
-  final override def updateEntity() = update()
-
   def blockUpdate() = update()
-
-  def update()
-  {
-
-  }
 
   /**
    * Gets all ItemStacks dropped by this machine when its destroyed
@@ -281,6 +237,21 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
       drops.add(new ItemStack(getBlockType, quantityDropped(metadata, fortune), metadataDropped(metadata, fortune)))
     }
     return drops
+  }
+
+  /** Block object that goes to this tile */
+  override def getBlockType: Block =
+  {
+    if (access != null)
+    {
+      val b: Block = access.getBlock(xi, yi, zi)
+      if (b == null)
+      {
+        return block
+      }
+      return b
+    }
+    return block
   }
 
   /**
@@ -443,6 +414,13 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   }
 
   /**
+   * Called when the block is added/loaded to the world
+   */
+  def onWorldJoin()
+  {
+  }
+
+  /**
    * Called when the block is placed by a living entity
    * @param entityLiving - entity who placed the block
    * @param itemStack - ItemStack the entity used to place the block
@@ -474,13 +452,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     onWorldSeparate
   }
 
-  /**
-   * Called when the block is added/loaded to the world
-   */
-  def onWorldJoin()
-  {
-  }
-
   def onWorldSeparate()
   {
   }
@@ -492,26 +463,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   def notifyChange()
   {
     world.notifyBlocksOfNeighborChange(xi, yi, zi, block)
-  }
-
-  protected def markRender()
-  {
-    world.func_147479_m(xi, yi, zi)
-  }
-
-  protected def markUpdate()
-  {
-    world.markBlockForUpdate(xi, yi, zi)
-  }
-
-  protected def updateLight()
-  {
-    world.func_147451_t(xi, yi, zi)
-  }
-
-  protected def scheduleTick(delay: Int)
-  {
-    world.scheduleBlockUpdate(xi, yi, zi, block, delay)
   }
 
   /**
@@ -548,13 +499,13 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     return bounds
   }
 
+  @SideOnly(Side.CLIENT)
+  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + asVectorWorld).toAABB
+
   def getCollisionBounds: Cuboid =
   {
     return bounds
   }
-
-  @SideOnly(Side.CLIENT)
-  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + asVectorWorld).toAABB
 
   /**
    * Called in the world.
@@ -581,13 +532,18 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   }
 
   @SideOnly(Side.CLIENT)
+  protected def getTextureName: String = if (textureName == null) "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name else block.dummyTile.domain + textureName
+
+  def setTextureName(value: java.lang.String)
+  {
+    textureName = value;
+  }
+
+  @SideOnly(Side.CLIENT)
   def registerIcons(iconRegister: IIconRegister)
   {
     SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName))
   }
-
-  @SideOnly(Side.CLIENT)
-  protected def getTextureName: String = if (textureName == null) "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name else block.dummyTile.domain + textureName
 
   @SideOnly(Side.CLIENT)
   def colorMultiplier = 0xFFFFFF
@@ -606,34 +562,8 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
       return false
   }
 
-  /**
-   * Render the dynamic, changing faces of this part and other gfx as in a TESR.
-   * The Tessellator will need to be started if it is to be used.
-   * @param pos The position of this block space relative to the renderer, same as x, y, z passed to TESR.
-   * @param frame The partial interpolation frame value for animations between ticks
-   * @param pass The render pass, 1 or 0
-   */
   @SideOnly(Side.CLIENT)
-  def renderDynamic(pos: Vector3, frame: Float, pass: Int)
-  {
-    if (forceItemToRenderAsBlock)
-    {
-      RenderUtility.renderNormalBlockAsItem(block, metadata, RenderUtility.renderBlocks)
-    }
-
-    val tesr: TileEntitySpecialRenderer = getSpecialRenderer
-
-    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
-    {
-      GL11.glEnable(GL12.GL_RESCALE_NORMAL)
-      GL11.glPushAttrib(GL11.GL_TEXTURE_BIT)
-      GL11.glPushMatrix()
-      GL11.glTranslated(-0.5, -0.5, -0.5)
-      tesr.renderTileEntityAt(this, 0, 0, 0, 0)
-      GL11.glPopMatrix()
-      GL11.glPopAttrib()
-    }
-  }
+  def hasSpecialRenderer = getSpecialRenderer != null
 
   @SideOnly(Side.CLIENT)
   def getSpecialRenderer: TileEntitySpecialRenderer =
@@ -647,9 +577,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
     return null
   }
-
-  @SideOnly(Side.CLIENT)
-  def hasSpecialRenderer = getSpecialRenderer != null
 
   @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
@@ -682,6 +609,47 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     }
   }
 
+  /**
+   * Render the dynamic, changing faces of this part and other gfx as in a TESR.
+   * The Tessellator will need to be started if it is to be used.
+   * @param pos The position of this block space relative to the renderer, same as x, y, z passed to TESR.
+   * @param frame The partial interpolation frame value for animations between ticks
+   * @param pass The render pass, 1 or 0
+   */
+  @SideOnly(Side.CLIENT)
+  def renderDynamic(pos: Vector3, frame: Float, pass: Int)
+  {
+    if (forceItemToRenderAsBlock)
+    {
+      RenderUtility.renderNormalBlockAsItem(block, metadata, RenderUtility.renderBlocks)
+    }
+
+    val tesr: TileEntitySpecialRenderer = getSpecialRenderer
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      GL11.glEnable(GL12.GL_RESCALE_NORMAL)
+      GL11.glPushAttrib(GL11.GL_TEXTURE_BIT)
+      GL11.glPushMatrix()
+      GL11.glTranslated(-0.5, -0.5, -0.5)
+      tesr.renderTileEntityAt(this, 0, 0, 0, 0)
+      GL11.glPopMatrix()
+      GL11.glPopAttrib()
+    }
+  }
+
+  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
+
+  def access: IBlockAccess =
+  {
+    if (world != null)
+    {
+      return world
+    }
+
+    return _access
+  }
+
   //TODO: Get rid of parameters
   def shouldSideBeRendered(access: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Boolean =
   {
@@ -709,12 +677,12 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   def canSilkHarvest(player: EntityPlayer, metadata: Int): Boolean = normalRender && tile == null
 
   /**
-   * Gets the explosive resistance of this block.
-   * Note: Called without the world object being present.
-   * @param entity - The affecting entity
-   * @return A value representing the explosive resistance
+   * @return Return "this" if the block requires a TileEntity.
    */
-  def getExplosionResistance(entity: Entity): Float = blockResistance / 5f
+  def tile: SpatialBlock =
+  {
+    return null
+  }
 
   /**
    * Gets the explosive resistance of this block.
@@ -723,6 +691,14 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
    * @return A value representing the explosive resistance
    */
   def getExplosionResistance(entity: Entity, explosionPosition: Vector3): Float = getExplosionResistance(entity)
+
+  /**
+   * Gets the explosive resistance of this block.
+   * Note: Called without the world object being present.
+   * @param entity - The affecting entity
+   * @return A value representing the explosive resistance
+   */
+  def getExplosionResistance(entity: Entity): Float = blockResistance / 5f
 
   /**
    * Called upon bounds raytrace. World data given.
@@ -740,9 +716,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
   }
 
-  /** Is the world server side */
-  def server(): Boolean = !world.isRemote
-
   /** Is the world client side */
   def client(): Boolean = !world.isRemote
 
@@ -759,6 +732,9 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
       player.openGui(mod, gui, world, xi, yi, zi)
   }
 
+  /** Is the world server side */
+  def server(): Boolean = !world.isRemote
+
   def setMeta(meta: Int)
   { world.setBlockMetadataWithNotify(xi, yi, zi, meta, 3) }
 
@@ -768,5 +744,27 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
       return 0
     else
       return super.getBlockMetadata
+  }
+
+  protected def markRender()
+  {
+    world.func_147479_m(xi, yi, zi)
+  }
+
+  protected def markUpdate()
+  {
+    world.markBlockForUpdate(xi, yi, zi)
+  }
+
+  override def world: World = getWorldObj
+
+  protected def updateLight()
+  {
+    world.func_147451_t(xi, yi, zi)
+  }
+
+  protected def scheduleTick(delay: Int)
+  {
+    world.scheduleBlockUpdate(xi, yi, zi, block, delay)
   }
 }

@@ -1,63 +1,56 @@
 package resonant.lib.render.fx;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_SMOOTH;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glShadeModel;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
 import org.lwjgl.opengl.GL11;
-
 import resonant.engine.References;
 import universalelectricity.core.transform.rotation.Quaternion;
 import universalelectricity.core.transform.vector.Vector3;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.*;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Electric shock Fxs.
  *
  * @author Calclavia
- *
  */
 @SideOnly(Side.CLIENT)
 public class FXElectricBolt2 extends EntityFX
 {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(References.DOMAIN, References.MODEL_PATH + "fadedSphere.png");
 	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
-
-	/** The width of the electrical bolt. */
-	private float boltWidth;
-	/** The maximum length of the bolt */
-	public double boltLength;
-	/** Electric Bolt's start and end positions; */
-	private BoltPoint start;
-	private BoltPoint end;
-	/** An array of the segments of the bolt. */
-	private List<BoltSegment> segments = new ArrayList<BoltSegment>();
 	private final Map<Integer, Integer> parentIDMap = new HashMap<Integer, Integer>();
-	/** Determines how complex the bolt is. */
+	/**
+	 * The maximum length of the bolt
+	 */
+	public double boltLength;
+	/**
+	 * Determines how complex the bolt is.
+	 */
 	public float complexity;
 	public int segmentCount;
+	/**
+	 * The width of the electrical bolt.
+	 */
+	private float boltWidth;
+	/**
+	 * Electric Bolt's start and end positions;
+	 */
+	private BoltPoint start;
+	private BoltPoint end;
+	/**
+	 * An array of the segments of the bolt.
+	 */
+	private List<BoltSegment> segments = new ArrayList<BoltSegment>();
 	private int maxSplitID;
 	private Random rand;
 
@@ -129,10 +122,10 @@ public class FXElectricBolt2 extends EntityFX
 	 * Slits a large segment into multiple smaller ones.
 	 *
 	 * @param splitAmount - The amount of splits
-	 * @param offset - The multiplier scale for the offset.
+	 * @param offset      - The multiplier scale for the offset.
 	 * @param splitChance - The chance of creating a split.
 	 * @param splitLength - The length of each split.
-	 * @param splitAngle - The angle of the split.
+	 * @param splitAngle  - The angle of the split.
 	 */
 	public void split(int splitAmount, double offset, float splitChance, float splitLength, float splitAngle)
 	{

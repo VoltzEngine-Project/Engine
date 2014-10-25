@@ -2,6 +2,7 @@ package resonant.lib.content.prefab
 
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.api.core.grid.electric.IEnergyContainer
+
 /**
  * @author Calclavia
  */

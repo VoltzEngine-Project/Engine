@@ -12,7 +12,6 @@ import resonant.content.wrapper.BlockRenderHandler$;
 import resonant.engine.content.debug.GuiCreativeBuilder;
 import resonant.engine.content.debug.TileCreativeBuilder;
 import resonant.lib.render.model.FixedTechneModelLoader;
-import universalelectricity.core.transform.vector.Vector3;
 
 /**
  * The Resonant Engine client proxy
@@ -52,10 +51,10 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-        TileEntity ent = world.getTileEntity(x, y, z);
+		TileEntity ent = world.getTileEntity(x, y, z);
 		if (ent instanceof TileCreativeBuilder)
 		{
-			return new GuiCreativeBuilder((TileCreativeBuilder)ent);
+			return new GuiCreativeBuilder((TileCreativeBuilder) ent);
 		}
 
 		return null;

@@ -1,6 +1,5 @@
 package resonant.lib.ore;
 
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
@@ -45,20 +44,20 @@ public abstract class OreGenerator implements IWorldGenerator
 	/**
 	 * @param name - The name of the ore for display
 	 */
-    public OreGenerator(String name,ItemStack stack,  String harvestTool, int harvestLevel)
-    {
-        this(name, ((ItemBlock) stack.getItem()).field_150939_a, stack.getItemDamage(), harvestTool, harvestLevel);
-    }
+	public OreGenerator(String name, ItemStack stack, String harvestTool, int harvestLevel)
+	{
+		this(name, ((ItemBlock) stack.getItem()).field_150939_a, stack.getItemDamage(), harvestTool, harvestLevel);
+	}
 
 	public OreGenerator(String name, Block block, int meta, String harvestTool, int harvestLevel)
 	{
-        this.name = name;
-        this.harvestTool = harvestTool;
-        this.harvestLevel = harvestLevel;
-        this.oreBlock = block;
-        this.oreMeta = meta;
-        OreDictionary.registerOre(name, new ItemStack(block, meta));
-        block.setHarvestLevel(this.harvestTool, this.harvestLevel, meta);
+		this.name = name;
+		this.harvestTool = harvestTool;
+		this.harvestLevel = harvestLevel;
+		this.oreBlock = block;
+		this.oreMeta = meta;
+		OreDictionary.registerOre(name, new ItemStack(block, meta));
+		block.setHarvestLevel(this.harvestTool, this.harvestLevel, meta);
 	}
 
 	/**

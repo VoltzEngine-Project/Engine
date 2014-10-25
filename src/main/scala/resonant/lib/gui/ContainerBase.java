@@ -110,8 +110,10 @@ public class ContainerBase extends Container
 					}
 				}
 
-				if(!foundValid)
+				if (!foundValid)
+				{
 					return null;
+				}
 			}
 
 			if (slotStack.stackSize == 0)

@@ -10,12 +10,12 @@ import net.minecraftforge.common.config.Configuration;
  */
 public class ConfigEvent extends Event
 {
-    public final Configuration config;
+	public final Configuration config;
 
-    public ConfigEvent(Configuration config)
-    {
-        this.config = config;
-    }
+	public ConfigEvent(Configuration config)
+	{
+		this.config = config;
+	}
 
 	/**
 	 * Called after the mod's settings have been synced with the config values.

@@ -125,9 +125,9 @@ object TooltipUtility
                 }
               }
               val scaled = deflate(ingredients.map
-                                   {
-                                     case (ingredient, count) => (ingredient.copy(), count / output)
-                                   }).toArray.sortBy(_._1.getUnlocalizedName)
+              {
+                case (ingredient, count) => (ingredient.copy(), count / output)
+              }).toArray.sortBy(_._1.getUnlocalizedName)
               cache += stack.copy() -> scaled
               scaled
             }
