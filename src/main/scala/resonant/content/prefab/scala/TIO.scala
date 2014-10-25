@@ -27,7 +27,7 @@ trait TIO extends SpatialBlock with IIO with ISaveObj
    * 1 - Input
    * 2 - Output
    */
-  protected var ioMap: Short = 364
+  protected var ioMap = 364
   protected var saveIOMap: Boolean = false
 
   def toggleIO(side: Int, entityPlayer: EntityPlayer): Boolean =
@@ -49,7 +49,7 @@ trait TIO extends SpatialBlock with IIO with ISaveObj
     val currentIO: String = getIOMapBase3
     val str: StringBuilder = new StringBuilder(currentIO)
     str.setCharAt(dir.ordinal, Integer.toString(`type`).charAt(0))
-    this.ioMap = Integer.parseInt(str.toString, 3).toShort
+    ioMap = Integer.parseInt(str.toString, 3)
   }
 
   def getIOMapBase3: String =
@@ -85,7 +85,6 @@ trait TIO extends SpatialBlock with IIO with ISaveObj
       {
         dirs += direction
       }
-
     }
     return dirs
   }
@@ -125,7 +124,7 @@ trait TIO extends SpatialBlock with IIO with ISaveObj
   {
     if (saveIOMap)
     {
-      nbt.setShort("ioMap", this.ioMap)
+      nbt.setShort("ioMap", ioMap.toShort)
     }
   }
 

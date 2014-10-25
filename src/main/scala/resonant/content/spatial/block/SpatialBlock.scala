@@ -82,6 +82,7 @@ object SpatialBlock
   {
     def getComparatorInputOverride(side: Int): Int
   }
+
 }
 
 abstract class SpatialBlock(val material: Material) extends TileEntity with TVectorWorld
@@ -106,8 +107,8 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   var customItemRender: Boolean = false
   var isOpaqueCube: Boolean = true
   var _access: IBlockAccess = null
-  var textureName: java.lang.String = name
-  var domain: java.lang.String = null
+  var textureName: String = name
+  var domain: String = null
   private var noDynamicItemRenderCrash: Boolean = true
 
   /**
@@ -199,20 +200,11 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     this.worldObj = world
   }
 
-  override def x: Double =
-  {
-    return xCoord
-  }
+  override def x: Double = xCoord
 
-  override def y: Double =
-  {
-    return yCoord
-  }
+  override def y: Double = yCoord
 
-  override def z: Double =
-  {
-    return zCoord
-  }
+  override def z: Double = zCoord
 
   /** World location of the block, centered */
   def center: VectorWorld =
