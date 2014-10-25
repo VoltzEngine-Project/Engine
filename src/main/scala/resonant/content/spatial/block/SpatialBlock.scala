@@ -19,10 +19,10 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
-import org.lwjgl.opengl.{GL12, GL11}
+import org.lwjgl.opengl.{GL11, GL12}
 import resonant.content.prefab.itemblock.ItemBlockTooltip
 import resonant.content.prefab.scala.render.ISimpleItemRenderer
-import resonant.content.wrapper.{RenderTileDummy, BlockDummy}
+import resonant.content.wrapper.{BlockDummy, RenderTileDummy}
 import resonant.lib.content.prefab.{TIO, TRotatable}
 import resonant.lib.render.RenderUtility
 import resonant.lib.utility.{LanguageUtility, WrenchUtility}
@@ -44,7 +44,7 @@ import scala.collection.immutable
 object SpatialBlock
 {
   val icon = new util.HashMap[String, IIcon]
-  val inventoryTileEntities : java.util.Map[Block, TileEntity]  = Maps.newIdentityHashMap();
+  val inventoryTileEntities: java.util.Map[Block, TileEntity] = Maps.newIdentityHashMap();
 
   def getClickedFace(hitSide: Byte, hitX: Float, hitY: Float, hitZ: Float): Vector2 =
   {
@@ -72,9 +72,9 @@ object SpatialBlock
     def getComparatorInputOverride(side: Int): Int
   }
 
-  def getTileEntityForBlock(block: Block) : TileEntity =
+  def getTileEntityForBlock(block: Block): TileEntity =
   {
-    var te: TileEntity  = inventoryTileEntities.get(block);
+    var te: TileEntity = inventoryTileEntities.get(block);
     if (te == null && Minecraft.getMinecraft().thePlayer != null)
     {
       te = block.createTileEntity(Minecraft.getMinecraft().thePlayer.getEntityWorld(), 0);
@@ -95,7 +95,9 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   var block: BlockDummy = null
   var _bounds: Cuboid = Cuboid.full
   var _creativeTab: CreativeTabs = null
+
   def creativeTab = _creativeTab
+
   var blockHardness: Float = 1
   var blockResistance: Float = 1
   var stepSound: Block.SoundType = Block.soundTypeStone
@@ -128,7 +130,8 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     isCreativeTabSet = true
   }
 
-  def itemBlock(item: Class[_ <: ItemBlock]) : Unit = {itemBlock = item}
+  def itemBlock(item: Class[_ <: ItemBlock]): Unit =
+  { itemBlock = item }
 
   def bounds_=(cuboid: Cuboid)
   {
@@ -192,7 +195,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     this.worldObj = world
   }
 
-  override def world : World = getWorldObj
+  override def world: World = getWorldObj
 
   def access: IBlockAccess =
   {
@@ -249,7 +252,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     return null
   }
 
-  def metadata: Int = if(access != null) access.getBlockMetadata(xi, yi, zi) else 0
+  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
 
   /**
    * Update
@@ -597,7 +600,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
   {
-    if(renderStaticBlock)
+    if (renderStaticBlock)
       return renderer.renderStandardBlock(block, pos.xi, pos.yi, pos.zi)
     else
       return false
@@ -613,63 +616,69 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   def renderDynamic(pos: Vector3, frame: Float, pass: Int)
   {
-    if(forceItemToRenderAsBlock)
+    if (forceItemToRenderAsBlock)
     {
       RenderUtility.renderNormalBlockAsItem(block, metadata, RenderUtility.renderBlocks)
     }
-    val tesr: TileEntitySpecialRenderer  = getSpecialRenderer;
-    if(tesr != null && !tesr.isInstanceOf[RenderTileDummy]) {
-      GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-      GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
-      GL11.glPushMatrix();
-      GL11.glTranslated(-0.5, -0.5, -0.5);
-      tesr.renderTileEntityAt(this, 0, 0, 0, 0);
-      GL11.glPopMatrix();
-      GL11.glPopAttrib();
+
+    val tesr: TileEntitySpecialRenderer = getSpecialRenderer
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      GL11.glEnable(GL12.GL_RESCALE_NORMAL)
+      GL11.glPushAttrib(GL11.GL_TEXTURE_BIT)
+      GL11.glPushMatrix()
+      GL11.glTranslated(-0.5, -0.5, -0.5)
+      tesr.renderTileEntityAt(this, 0, 0, 0, 0)
+      GL11.glPopMatrix()
+      GL11.glPopAttrib()
     }
   }
 
   @SideOnly(Side.CLIENT)
   def getSpecialRenderer: TileEntitySpecialRenderer =
   {
-      val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass);
-      if (tesr != null && !tesr.isInstanceOf[RenderTileDummy]) {
-        return tesr;
-      }
-    return null;
+    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      return tesr
+    }
+
+    return null
   }
 
   @SideOnly(Side.CLIENT)
-  def hasSpecialRenderer: Boolean =
-  {
-    return getSpecialRenderer != null;
-  }
+  def hasSpecialRenderer = getSpecialRenderer != null
 
   @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
   {
     val tesr: TileEntitySpecialRenderer = getSpecialRenderer
-    if(tesr != null && tesr.isInstanceOf[ISimpleItemRenderer])
+
+    if (tesr != null && tesr.isInstanceOf[ISimpleItemRenderer])
     {
       tesr.asInstanceOf[ISimpleItemRenderer].renderInventoryItem(IItemRenderer.ItemRenderType.INVENTORY, itemStack)
     }
-    else
-    if(normalRender || forceItemToRenderAsBlock)
+    else if (normalRender || forceItemToRenderAsBlock)
     {
       RenderUtility.renderNormalBlockAsItem(itemStack.getItem().asInstanceOf[ItemBlock].field_150939_a, itemStack.getItemDamage(), RenderUtility.renderBlocks)
     }
-    if(noDynamicItemRenderCrash)
+    if (noDynamicItemRenderCrash)
     {
-      try {
-        renderDynamic(new Vector3(), 0, 0)
-      }catch
+      try
       {
-        case e: Exception => {
-          noDynamicItemRenderCrash = false
-          System.out.println("A tile has failed to render dynamically as an item. Suppressing renderer to prevent future crashes.")
-          e.printStackTrace()
-        }
+        renderDynamic(new Vector3(-0.5, -0.5, -0.5), 0, 0)
       }
+      catch
+        {
+          case e: Exception =>
+          {
+            noDynamicItemRenderCrash = false
+            System.out.println("A tile has failed to render dynamically as an item. Suppressing renderer to prevent future crashes.")
+            e.printStackTrace()
+          }
+        }
     }
   }
 
@@ -732,30 +741,30 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   }
 
   /** Is the world server side */
-  def server() : Boolean  = !world.isRemote
+  def server(): Boolean = !world.isRemote
 
   /** Is the world client side */
-  def client() : Boolean  = !world.isRemote
+  def client(): Boolean = !world.isRemote
 
   /** Opens the main gui for this tile */
-  def openGui(player : EntityPlayer, mod : AnyRef)
+  def openGui(player: EntityPlayer, mod: AnyRef)
   {
     openGui(player, 0, mod)
   }
 
   /** Opens a gui by the id given */
-  def openGui(player : EntityPlayer, gui : Int, mod : AnyRef)
+  def openGui(player: EntityPlayer, gui: Int, mod: AnyRef)
   {
-    if(server)
-      player.openGui(mod,gui, world, xi, yi, zi)
+    if (server)
+      player.openGui(mod, gui, world, xi, yi, zi)
   }
 
-  def setMeta(meta: Int) { world.setBlockMetadataWithNotify(xi, yi, zi, meta, 3)}
-
+  def setMeta(meta: Int)
+  { world.setBlockMetadataWithNotify(xi, yi, zi, meta, 3) }
 
   override def getBlockMetadata: Int =
   {
-    if(world == null)
+    if (world == null)
       return 0
     else
       return super.getBlockMetadata
