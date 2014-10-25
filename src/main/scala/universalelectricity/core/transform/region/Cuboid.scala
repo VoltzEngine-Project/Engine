@@ -19,7 +19,7 @@ import universalelectricity.core.transform.vector.Vector3
  */
 object Cuboid
 {
-  def full() = new Cuboid(0, 0, 0, 1, 1, 1)
+  def full= new Cuboid(0, 0, 0, 1, 1, 1)
 }
 
 class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboid]

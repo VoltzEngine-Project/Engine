@@ -26,6 +26,11 @@ class Quaternion extends Cloneable with ITransform
     w = Quaternion.w
   }
 
+  /**
+   * Creates a Quaternion based on an angle and an axis.
+   * @param angle - Radians
+   * @param axis - Axis to rotate around
+   */
   def this(angle: Double, axis: Vector3)
   {
     this()
