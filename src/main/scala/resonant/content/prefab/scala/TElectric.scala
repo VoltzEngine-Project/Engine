@@ -9,11 +9,15 @@ import universalelectricity.api.core.grid.{INode, INodeProvider}
 import universalelectricity.api.{EnergyStorage, UniversalClass}
 import universalelectricity.compatibility.Compatibility
 import universalelectricity.core.grid.node.NodeElectric
+import universalelectricity.simulator.dc.micro.DCNode
 
 @UniversalClass
 trait TElectric extends TIO with INodeProvider with ISaveObj
 {
+  @deprecated
   protected var electricNode = new NodeElectric(this)
+
+  protected var dcNode = new DCNode(this)
 
   def setCapacity(value: Double)
   { energy.setCapacity(value) }

@@ -44,7 +44,7 @@ import scala.collection.immutable
 object SpatialBlock
 {
   val icon = new util.HashMap[String, IIcon]
-  val inventoryTileEntities: java.util.Map[Block, TileEntity] = Maps.newIdentityHashMap();
+  val inventoryTileEntities: java.util.Map[Block, TileEntity] = Maps.newIdentityHashMap()
 
   def getClickedFace(hitSide: Byte, hitX: Float, hitY: Float, hitZ: Float): Vector2 =
   {
