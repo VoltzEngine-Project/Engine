@@ -1,0 +1,18 @@
+[{
+    "modid": "UniversalElectricity",
+    "name": "Universal Electricity",
+    "description": "Universal Electricity is a Minecraft modding library that provides an easy, flexible energy framework and compatibility bridges between various energy systems in Minecraft.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "www.universalelectricity.com/",
+    "updateUrl": "",
+    "authors": ["Calclavia", "DarkCow", "tgame14", "Alex_hawks"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "parent": "",
+    "requiredMods": [],
+    "dependencies": [],
+    "dependants": [],
+    "useDependencyInformation": "false"
+}]
