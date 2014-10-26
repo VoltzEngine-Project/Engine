@@ -1,7 +1,10 @@
 package resonant.engine;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import resonant.lib.prefab.AbstractProxy;
+import universalelectricity.core.grid.UpdateTicker;
+import universalelectricity.core.grid.UpdateTicker$;
 
 /**
  * The Resonant Engine common proxy
@@ -19,4 +22,10 @@ public class CommonProxy extends AbstractProxy
 	{
 		return null;
 	}
+
+    public void init()
+    {
+        if (!UpdateTicker.useThreads())
+            FMLCommonHandler.instance().bus().register(UpdateTicker$.MODULE$);
+    }
 }
