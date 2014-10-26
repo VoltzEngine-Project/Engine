@@ -124,7 +124,7 @@ jar {
 
     classifier = 'core'
     manifest {
-        attributes FMLCorePlugin: "universalelectricity.core.UELoader"
+        attributes FMLCorePlugin: "universalelectricity.core.UEPluginLoader"
         attributes FMLCorePluginContainsFMLMod: "true"
     }
 
