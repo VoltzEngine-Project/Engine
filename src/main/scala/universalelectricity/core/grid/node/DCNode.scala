@@ -1,11 +1,10 @@
-package universalelectricity.simulator.dc.micro
+package universalelectricity.core.grid.node
 
 import java.util
 import java.util.{Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.api.core.grid.INodeProvider
-import universalelectricity.core.grid.node.NodeConnector
 
 import scala.collection.convert.wrapAll._
 
