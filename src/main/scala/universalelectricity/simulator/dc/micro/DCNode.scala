@@ -25,17 +25,10 @@ class DCNode(parent: INodeProvider) extends NodeConnector(parent)
   //Charges are pushed to positive terminals
   val positiveTerminals: JSet[ForgeDirection] = new util.HashSet()
 
-  //Charges are taken from negative terminals
-  val negativeTerminals: JSet[ForgeDirection] = new util.HashSet()
-
   private var _current = 0D
-
-  private var prevCharge = 0D
-  private var _charge = 0D
-
-  var canCharge = true
-
-  var chargeCapacity = 10000
+  var chargeCapacity = 10000D
+  private var _charge = chargeCapacity
+  private var chargeAccumulator = 0D
 
   private var _resistance = Double.MinPositiveValue
 
@@ -50,7 +43,7 @@ class DCNode(parent: INodeProvider) extends NodeConnector(parent)
 
   def charge = _charge
 
-  def charge_=(charge: Double) = _charge = Math.min(_charge + charge, chargeCapacity)
+  def charge_=(newCharge: Double) = _charge = Math.min(newCharge, chargeCapacity)
 
   //Gets the resistance of this component
   def resistance = _resistance
@@ -65,100 +58,92 @@ class DCNode(parent: INodeProvider) extends NodeConnector(parent)
   def update(deltaTime: Float)
   {
     //Calculate current based on the change of charges over time
-    _current = Math.abs(charge - prevCharge) / deltaTime
-    prevCharge = charge
+    _current = chargeAccumulator / deltaTime
+    chargeAccumulator = 0
 
     if (pushChargeBuffer > 0)
     {
-      //Attempt to gather charge from negative terminals
-      val negatives = connections.filter(c => negativeTerminals.contains(c._2)).keys.map(_.asInstanceOf[DCNode])
-
-      if (negatives.size > 0)
-      {
-        //TODO: Make it more difficult to gather charge when a side is very negatively charged. Consider exponential difficulty.
-        negatives.foreach(_.charge -= pushChargeBuffer / negatives.size)
-        charge += pushChargeBuffer
-      }
-
-      //TODO: Should we set this to zero?
+      charge = charge - pushChargeBuffer
+      var remain = 0D
+      val positiveNodes = connections.filter(c => positiveTerminals.contains(c._2)).keys.map(_.asInstanceOf[DCNode])
+      positiveNodes.foreach(c => remain += c.push(pushChargeBuffer / positiveNodes.size, this))
+      println("DCNode: Failed to push amount: " + remain)
+      charge += remain
       pushChargeBuffer = 0
-
-      //TODO: Temporarily solution to prevent backfeeding into the battery
-      canCharge = false
     }
-
-    /**
-     * Push charge for every component like a "snake".
-     * Cause positive charged areas to move to negative charged areas
-     * Charge always wants to flow to places with the least resistance.
-     * Charge always wants to flow to places with less charge. Electrons repel each other.
-     */
-    //TODO: We shouldn't need the isInstance check
-    val allComponents = connections.keys.filter(_.isInstanceOf[DCNode]).map(_.asInstanceOf[DCNode]).toSet
-    //We only want to consider components that have less charge.
-    val components = allComponents.filter(c => charge > c.prevCharge && !negativeTerminals.contains(c) && c.canCharge)
-
-    val totalDeltaCharge = components.map(c => charge - c.prevCharge).foldLeft(0D)(_ + _)
-    val totalResistance = components.map(_.resistance).foldLeft(0D)(_ + _)
-
-    components.foreach(c =>
-    {
-      val diff = charge - c.prevCharge
-      val chargePerct = diff / totalDeltaCharge
-      val resisPerct = c.resistance / totalResistance
-
-      //TODO: Consider resistance
-      val transfer = Math.min(charge * chargePerct /*(chargePerct + (1 - resisPerct)) / 2*/ , diff)
-
-      c.charge += transfer
-      charge -= transfer
-    })
   }
 
   /**
-   * Pushes charges in this DC Component
-   * @param chargeAmount
+   * Pushes charges in this DC Component in a snake fashion.
+   *
+   * Charges are pushed based on resistance and how "less" charged another area is.
+   * All components start with no charge. A negative charge is created at negative terminals and the positive terminal gets pushed.
+   *
+   * TODO: Consider queuing into another thread instead of requiring all components ticking
+   * TODO: Cache pathfinding operations in the grid
+   * @param pushCharge The amount of charge in coulombs
    */
-  @deprecated
-  def push(chargeAmount: Double, exclude: DCNode*)
+  def buffer(pushCharge: Double)
   {
-    val excluded = exclude :+ this
+    pushChargeBuffer += charge
+  }
 
-    val allComponents = connections.keys.map(_.asInstanceOf[DCNode]).toSet
-    //We only want to consider components that have less charge.
-    val components = allComponents.filter(c => charge > c.charge && !excluded.contains(c))
+  /**
+   *
+   * This recursive function will gather the paths into a list, then push charges backwards.
+   *
+   * @param pushAmount - The amount of charges we are pushing
+   * @param passed - The nodes we already went through while pushing
+   */
+  protected def push(pushAmount: Double, passed: DCNode*): Double =
+  {
+    val excluded = passed :+ this
+
+    val transfer = Math.min(charge + pushAmount, chargeCapacity) - charge
+    var remain = pushAmount - transfer
+    charge += transfer
+
+    if (transfer > 0)
+    {
+      passed.foreach(_.chargeAccumulator += transfer)
+      //      println("Reached low charge area!")
+    }
+
+    //TODO: Why checking?
+    val components = connections.keys
+      .filter(_.isInstanceOf[DCNode])
+      .map(_.asInstanceOf[DCNode])
+      .filter(c => if (passed.size == 1) !excluded.contains(c) else !excluded.drop(1).contains(c))
+
+    //    println("Stepping over: " + passed.size + " " + pushAmount + " " + remain)
 
     /**
-     * Push charge for every component like a "snake".
+     * Distribution:
      * Charge always wants to flow to places with the least resistance.
-     * Charge always wants to flow to places with less charge. Electrons repel each other.
+     * Charge always wants to flow to places with less charge. Like charges repel.
      */
-    val totalDeltaCharge = components.map(c => charge - c.charge).foldLeft(0D)(_ + _)
-    val totalResistance = components.map(_.resistance).foldLeft(0D)(_ + _)
+    //    val totalDeltaCharge = components.map(c => charge - c.charge).foldLeft(0D)(_ + _)
+    //    val totalResistance = components.map(_.resistance).foldLeft(0D)(_ + _)
 
     components.foreach(c =>
     {
+      /*
       val diff = charge - c.charge
       val chargePerct = diff / totalDeltaCharge
       val resisPerct = c.resistance / totalResistance
 
       //TODO: Consider resistance
       val transfer = Math.min(charge * chargePerct /*(chargePerct + (1 - resisPerct)) / 2*/ , diff)
+      */
 
-      c.push(charge, excluded: _*)
-      charge -= transfer
+      if (remain > 0)
+      {
+        val pushRemain = c.push(remain, excluded: _*)
+        remain -= pushRemain
+      }
     })
 
-    charge += chargeAmount
-  }
-
-  /**
-   * Pushes charges in this DC Component
-   * @param charge The amount of charge in coulombs
-   */
-  def buffer(charge: Double)
-  {
-    pushChargeBuffer += charge
+    return remain
   }
 
   override protected def getRelativeClass = classOf[DCNode]
