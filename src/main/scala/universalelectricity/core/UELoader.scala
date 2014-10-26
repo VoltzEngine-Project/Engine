@@ -54,28 +54,4 @@ object UELoader
     config.save
     proxy.init
   }
-
-  @EventHandler
-  def postInit(evt: FMLPostInitializationEvent)
-  {
-    //TODO: Check this, might be better way!S
-    if (UpdateTicker.useThreads && !UpdateTicker.isAlive())
-    {
-      UpdateTicker.start();
-    }
-    // TODO: register Thermal Grid
-    //UpdateTicker.addNetwork(ResonantEngine.thermalGrid);
-  }
-
-  @EventHandler
-  def serverStartedEvent(evt: FMLServerStartedEvent)
-  {
-    println("Started")
-  }
-
-  @EventHandler
-  def serverStoppedEvent(evt: FMLServerStoppedEvent)
-  {
-    println("Stopped")
-  }
 }

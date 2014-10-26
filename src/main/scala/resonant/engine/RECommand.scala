@@ -1,4 +1,4 @@
-package universalelectricity.core
+package resonant.engine
 
 import java.util.List
 
@@ -6,32 +6,30 @@ import net.minecraft.command.{CommandBase, ICommandSender, WrongUsageException}
 import net.minecraft.util.ChatComponentText
 import universalelectricity.core.grid.UpdateTicker
 
-object UECommand extends CommandBase
+object RECommand extends CommandBase
 {
-  def getCommandName: String =
+  override def getCommandName: String =
   {
     return "ue"
   }
 
-  def getCommandUsage(par1ICommandSender: ICommandSender): String =
+  override def getCommandUsage(par1ICommandSender: ICommandSender): String =
   {
     return "/ue help"
   }
 
-  def processCommand(sender: ICommandSender, args: Array[String])
+  override def processCommand(sender: ICommandSender, args: Array[String])
   {
-    try
-    {
       if (args == null || args.length == 0 || args(0).equalsIgnoreCase("help"))
       {
-        sender.addChatMessage(new ChatComponentText("/ue version"))
-        sender.addChatMessage(new ChatComponentText("/ue gridinfo"))
-        sender.addChatMessage(new ChatComponentText("/ue gridpause"))
+        sender.addChatMessage(new ChatComponentText("/" + getCommandName + " version"))
+        sender.addChatMessage(new ChatComponentText("/" + getCommandName + " gridinfo"))
+        sender.addChatMessage(new ChatComponentText("/" + getCommandName + " gridpause"))
         return
       }
       if (args(0).equalsIgnoreCase("version"))
       {
-        sender.addChatMessage(new ChatComponentText("Universal Electricity Version: " + UniversalElectricity.version))
+        sender.addChatMessage(new ChatComponentText("Version: " + References.VERSION +"  Build: " + References.BUILD_VERSION))
       }
       if (args(0).equalsIgnoreCase("gridinfo"))
       {
@@ -45,15 +43,8 @@ object UECommand extends CommandBase
         sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Ticking grids running state: " + !UpdateTicker.pause))
         return
       }
-    }
-    catch
-      {
-        case e: Exception =>
-        {
-        }
-      }
 
-    throw new WrongUsageException(this.getCommandUsage(sender))
+        throw new WrongUsageException(this.getCommandUsage(sender))
   }
 
   override def getRequiredPermissionLevel: Int =
