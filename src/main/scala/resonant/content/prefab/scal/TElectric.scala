@@ -41,7 +41,7 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
   { energy.setCapacity(value) }
 
   @deprecated
-  def energy: EnergyStorage = null
+  def energy: EnergyStorage = new EnergyStorage(0)
 
   @deprecated
   def setMaxTransfer(maxTransfer: Double)
