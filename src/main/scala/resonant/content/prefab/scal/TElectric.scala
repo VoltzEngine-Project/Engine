@@ -2,22 +2,17 @@ package resonant.lib.content.prefab
 
 import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.lib.utility.nbt.ISaveObj
-import universalelectricity.api.core.grid.electric.IElectricNode
+import universalelectricity.api.EnergyStorage
 import universalelectricity.api.core.grid.{INode, INodeProvider}
-import universalelectricity.api.{EnergyStorage, UniversalClass}
-import universalelectricity.compatibility.Compatibility
-import universalelectricity.core.grid.node.NodeElectric
-import universalelectricity.simulator.dc.micro.DCNode
+import universalelectricity.core.grid.node.DCNode
 
-@UniversalClass
+/**
+ * A trait for all INodeProviders that implement a DC circuit. Nodes must handle energy storage themself.
+ */
 trait TElectric extends TIO with INodeProvider with ISaveObj
 {
-  @deprecated
-  protected var electricNode = new NodeElectric(this)
-
   protected var dcNode = new DCNode(this)
 
   override def start()
@@ -46,7 +41,7 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
   { energy.setCapacity(value) }
 
   @deprecated
-  def energy: EnergyStorage = electricNode.buffer
+  def energy: EnergyStorage = null
 
   @deprecated
   def setMaxTransfer(maxTransfer: Double)
@@ -60,6 +55,9 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
   def setMaxExtract(maxExtract: Double)
   { energy.setMaxExtract(maxExtract) }
 
+  @deprecated
+  def getVoltage = 120
+
   /**
    * @param nodeType - The type of node we are looking for.
    * @param from     - The direction.
@@ -67,47 +65,22 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
    */
   override def getNode(nodeType: Class[_ <: INode], from: ForgeDirection): INode =
   {
-    if (classOf[IElectricNode].isAssignableFrom(nodeType))
-      return electricNode
-
     if (classOf[DCNode].isAssignableFrom(nodeType))
       return dcNode
 
     return null
   }
 
-  def getVoltage = 100D
-
-  override def save(nbt: NBTTagCompound)
-  {
-    super.save(nbt)
-
-    if (electricNode != null)
-    {
-      electricNode.save(nbt)
-    }
-  }
-
-  override def load(nbt: NBTTagCompound)
-  {
-    super.load(nbt)
-
-    if (electricNode != null)
-    {
-      electricNode.load(nbt)
-    }
-  }
-
   protected def recharge(stack: ItemStack)
   {
-    if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
-      electricNode.removeEnergy(ForgeDirection.UNKNOWN, Compatibility.chargeItem(stack, electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
+    //if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
+    //   electricNode.removeEnergy(ForgeDirection.UNKNOWN, Compatibility.chargeItem(stack, electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
   }
 
   protected def discharge(stack: ItemStack)
   {
-    if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
-      electricNode.addEnergy(ForgeDirection.UNKNOWN, Compatibility.dischargeItem(stack, electricNode.getEnergyCapacity(ForgeDirection.UNKNOWN) - electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
+    // if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
+    //   electricNode.addEnergy(ForgeDirection.UNKNOWN, Compatibility.dischargeItem(stack, electricNode.getEnergyCapacity(ForgeDirection.UNKNOWN) - electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
   }
 
 }

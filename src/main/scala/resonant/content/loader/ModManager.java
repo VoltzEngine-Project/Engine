@@ -10,7 +10,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import resonant.content.CommonRegistryProxy;
 import resonant.content.prefab.itemblock.ItemBlockMetadata;
-import resonant.content.prefab.scala.render.ISimpleItemRenderer;
+import resonant.content.prefab.scal.render.ISimpleItemRenderer;
 import resonant.content.spatial.block.SpatialBlock;
 import resonant.content.wrapper.BlockDummy;
 import resonant.content.wrapper.ItemRenderHandler;

@@ -1,4 +1,4 @@
-package resonant.content.prefab.scala
+package resonant.content.prefab.scal
 
 import net.minecraft.nbt.NBTTagCompound
 import resonant.content.spatial.block.SpatialBlock

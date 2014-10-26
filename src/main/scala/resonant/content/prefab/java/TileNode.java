@@ -20,6 +20,7 @@ import java.util.*;
 /**
  * Prefab designed to automate all node interaction of the time.
  * Does use some reflection to generate a list of all fields holding nodes
+ * This is only used for Java. For Scala classes, use traits instead.
  * <p/>
  * TODO if timing for reflection proves to take to long replace with getAllNodes() method
  *

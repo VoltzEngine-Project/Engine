@@ -1,7 +1,7 @@
 package resonant.content.prefab.java
 
 import net.minecraft.block.material.Material
-import resonant.content.prefab.scala.TThermal
+import resonant.content.prefab.scal.TThermal
 
 /**
  * @since 27/05/14

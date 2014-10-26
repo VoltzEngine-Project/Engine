@@ -21,7 +21,7 @@ import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
 import org.lwjgl.opengl.{GL11, GL12}
 import resonant.content.prefab.itemblock.ItemBlockTooltip
-import resonant.content.prefab.scala.render.ISimpleItemRenderer
+import resonant.content.prefab.scal.render.ISimpleItemRenderer
 import resonant.content.wrapper.{BlockDummy, RenderTileDummy}
 import resonant.lib.content.prefab.{TIO, TRotatable}
 import resonant.lib.render.RenderUtility

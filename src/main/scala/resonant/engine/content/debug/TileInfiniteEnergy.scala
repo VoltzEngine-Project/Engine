@@ -9,17 +9,17 @@ class TileInfiniteEnergy extends TileElectricStorage(Material.iron)
   energy.setCapacity(Double.MaxValue)
   energy.setMaxTransfer(Double.MaxValue)
   ioMap = 728
-  electricNode.setCanShareEnergy(true)
+//  electricNode.setCanShareEnergy(true)
 
   override def update()
   {
     super.update()
     energy.setEnergy(Double.MaxValue)
-    electricNode.shareEnergy()
+//    electricNode.shareEnergy()
   }
 
   override def getNodes(nodes: java.util.List[INode])
   {
-    nodes.add(electricNode)
+//    nodes.add(electricNode)
   }
 }
