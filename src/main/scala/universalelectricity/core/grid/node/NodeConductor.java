@@ -8,6 +8,7 @@ import universalelectricity.api.core.grid.INodeProvider;
  * Simple node designed to act as a pathway in a grid.
  * @author Darkgurdsman
  */
+@Deprecated
 public class NodeConductor extends NodeConnector implements IGridNode
 {
     protected IGrid grid = null;

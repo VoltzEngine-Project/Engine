@@ -11,7 +11,7 @@ import universalelectricity.api.core.grid.electric.{IElectricNode, IEnergyNode}
 import universalelectricity.compatibility.Compatibility
 import universalelectricity.compatibility.module.{ModuleThermalExpansion, ModuleUniversalElectricity}
 import universalelectricity.core.grid.UpdateTicker
-import universalelectricity.core.grid.node.{NodeElectric, NodeEnergy}
+import universalelectricity.core.grid.node.{DCNode, NodeEnergy}
 
 @Mod(modid = UniversalElectricity.id, version = UniversalElectricity.version, name = UniversalElectricity.name, dependencies = "before:ForgeMultipart", modLanguage = "scala")
 object UELoader
@@ -35,8 +35,7 @@ object UELoader
     /**
      * Node registration
      */
-    NodeRegistry.register(classOf[IEnergyNode], classOf[NodeEnergy])
-    NodeRegistry.register(classOf[IElectricNode], classOf[NodeElectric])
+    NodeRegistry.register(classOf[IElectricNode], classOf[DCNode])
 
     Compatibility.register(ModuleUniversalElectricity)
 

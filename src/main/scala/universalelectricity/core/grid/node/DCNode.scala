@@ -5,6 +5,7 @@ import java.util.{Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
 import universalelectricity.api.core.grid.{INodeProvider, IUpdate}
+import universalelectricity.core.grid.UpdateTicker
 
 import scala.collection.convert.wrapAll._
 
@@ -53,6 +54,18 @@ class DCNode(parent: INodeProvider) extends NodeEnergy(parent) with IUpdate
   override def energy = charge * voltage
 
   override def power = current * voltage
+
+  /**
+   * Called during reconstruct to build the connection map. This is a general way used to search all adjacent TileEntity to see and try to connect to it.
+   */
+  override def reconstruct(): Unit =
+  {
+    UpdateTicker.addUpdater(this)
+  }
+
+  override def canUpdate = true
+
+  override def continueUpdate = true
 
   override def update(deltaTime: Double)
   {
