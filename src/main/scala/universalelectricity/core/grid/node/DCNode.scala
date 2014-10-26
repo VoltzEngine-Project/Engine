@@ -4,12 +4,12 @@ import java.util
 import java.util.{Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
-import universalelectricity.api.core.grid.INodeProvider
+import universalelectricity.api.core.grid.{INodeProvider, IUpdate}
 
 import scala.collection.convert.wrapAll._
 
 /**
- * Represents a DC component within a circuit.
+ * Represents a direct current component within a circuit.
  *
  * Based on the concept of electricity as being the flow of charge.
  *
@@ -19,7 +19,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class DCNode(parent: INodeProvider) extends NodeConnector(parent)
+class DCNode(parent: INodeProvider) extends NodeEnergy(parent) with IUpdate
 {
   //Charges are pushed to positive terminals
   val positiveTerminals: JSet[ForgeDirection] = new util.HashSet()
@@ -50,11 +50,11 @@ class DCNode(parent: INodeProvider) extends NodeConnector(parent)
   //Resistance cannot be zero or there will be infinite current
   def resistance_=(resistance: Double) = _resistance = Math.max(resistance, Double.MinPositiveValue)
 
-  def energy = charge * voltage
+  override def energy = charge * voltage
 
-  def power = current * voltage
+  override def power = current * voltage
 
-  def update(deltaTime: Float)
+  override def update(deltaTime: Double)
   {
     //Calculate current based on the change of charges over time
     _current = chargeAccumulator / deltaTime
@@ -144,8 +144,6 @@ class DCNode(parent: INodeProvider) extends NodeConnector(parent)
 
     return remain
   }
-
-  override protected def getRelativeClass = classOf[DCNode]
 
   override def toString = "DCNode [" + charge.toInt + "C " + current.toInt + "A " + voltage.toInt + "V][" + connections.size + " Connections]"
 }

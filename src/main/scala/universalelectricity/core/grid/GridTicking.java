@@ -1,6 +1,7 @@
 package universalelectricity.core.grid;
 
 import universalelectricity.api.core.grid.IUpdate;
+import universalelectricity.core.grid.node.Node;
 
 /**
  * Created by robert on 8/11/2014.

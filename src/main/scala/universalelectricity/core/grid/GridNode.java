@@ -1,9 +1,7 @@
 package universalelectricity.core.grid;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.core.grid.IGridNode;
-
-import java.util.Map;
+import universalelectricity.core.grid.node.Node;
 
 /**
  * Created by robert on 8/13/2014.

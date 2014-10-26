@@ -3,6 +3,7 @@ package universalelectricity.api.core.grid.electric;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.core.grid.INode;
 
+@Deprecated
 /** Applied to any node that can store energy as part of an energy network */
 public interface IEnergyNode extends INode
 {
