@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ChatComponentText
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IIO
-import resonant.content.spatial.block.SpatialBlock
+import resonant.content.spatial.block.{SpatialTile, SpatialBlock}
 import resonant.lib.utility.nbt.ISaveObj
 
 import scala.collection.convert.wrapAll._
@@ -17,7 +17,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-trait TIO extends SpatialBlock with IIO with ISaveObj
+trait TIO extends SpatialTile with IIO with ISaveObj
 {
   /**
    * IO METHODS.

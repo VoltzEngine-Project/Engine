@@ -20,6 +20,12 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
 
   protected var dcNode = new DCNode(this)
 
+  override def start()
+  {
+    super.start()
+    dcNode.reconstruct()
+  }
+
   override def onWorldJoin()
   {
     dcNode.reconstruct()
