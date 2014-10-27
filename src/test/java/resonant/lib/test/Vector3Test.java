@@ -14,8 +14,19 @@ public class Vector3Test extends TestCase
         Vector3 vec = new Vector3(0, 1, 0);
         vec.add(1, 1, 1);
 
-        assert(vec.y() == 2);
-        assert(vec.x() == 1);
-        assert(vec.z() == 1);
+        assertEquals(2.0, vec.y());
+        assertEquals(1.0, vec.x());
+        assertEquals(1.0, vec.z());
+    }
+
+    /**Simple addition test for Vector3 */
+    public void testBasicSubtraction() throws Exception
+    {
+        Vector3 vec = new Vector3(0, 1, 0);
+        vec.subtract(1, 1, 1);
+
+        assertEquals(0.0, vec.y());
+        assertEquals(-1.0, vec.x());
+        assertEquals(-1.0, vec.z());
     }
 }
