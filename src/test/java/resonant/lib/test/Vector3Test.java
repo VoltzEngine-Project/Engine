@@ -9,7 +9,7 @@ import resonant.lib.transform.vector.Vector3;
 public class Vector3Test extends TestCase
 {
     /**Simple addition test for Vector3 */
-    public void testBasicAddition() throws Exception
+    public void testAddition() throws Exception
     {
         Vector3 vec = new Vector3(0, 1, 0);
         vec.add(1, 1, 1);
@@ -20,7 +20,7 @@ public class Vector3Test extends TestCase
     }
 
     /**Simple addition test for Vector3 */
-    public void testBasicSubtraction() throws Exception
+    public void testSubtraction() throws Exception
     {
         Vector3 vec = new Vector3(0, 1, 0);
         vec.subtract(1, 1, 1);
