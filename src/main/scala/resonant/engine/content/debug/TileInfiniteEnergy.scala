@@ -2,7 +2,7 @@ package resonant.engine.content.debug
 
 import net.minecraft.block.material.Material
 import resonant.lib.content.prefab.java.TileElectricStorage
-import universalelectricity.api.core.grid.INode
+import resonant.api.grid.INode
 
 class TileInfiniteEnergy extends TileElectricStorage(Material.iron)
 {

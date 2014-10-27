@@ -9,10 +9,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import resonant.lib.network.discriminator.PacketNode;
 import resonant.lib.network.discriminator.PacketType;
 import resonant.lib.network.handle.IPacketIDReceiver;
-import universalelectricity.api.core.grid.INode;
-import universalelectricity.api.core.grid.INodeProvider;
-import universalelectricity.api.core.grid.ISave;
-import universalelectricity.api.core.grid.IUpdate;
+import resonant.api.grid.INode;
+import resonant.api.grid.INodeProvider;
+import resonant.api.ISave;
+import resonant.api.grid.IUpdate;
 
 import java.lang.reflect.Field;
 import java.util.*;

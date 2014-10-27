@@ -2,8 +2,8 @@ package resonant.api.mffs.fortron;
 
 import net.minecraft.world.World;
 import resonant.api.blocks.IBlockFrequency;
-import universalelectricity.core.transform.region.Cuboid;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.region.Cuboid;
+import resonant.lib.transform.vector.Vector3;
 
 import java.util.Set;
 

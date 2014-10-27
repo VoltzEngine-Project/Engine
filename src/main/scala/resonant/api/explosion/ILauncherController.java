@@ -2,8 +2,8 @@ package resonant.api.explosion;
 
 import net.minecraft.item.ItemStack;
 import resonant.api.blocks.IBlockFrequency;
-import universalelectricity.api.core.grid.electric.IEnergyContainer;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.api.electric.IEnergyContainer;
+import resonant.lib.transform.vector.Vector3;
 
 /**
  * Applied to all launcher TileEntitiies that operates the launching of missiles.

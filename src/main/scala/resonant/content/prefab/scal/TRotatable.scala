@@ -5,7 +5,7 @@ import net.minecraft.util.MathHelper
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IRotatable
 import resonant.content.spatial.block.SpatialBlock
-import universalelectricity.core.transform.vector.Vector3
+import resonant.lib.transform.vector.Vector3
 
 trait TRotatable extends SpatialBlock with IRotatable
 {

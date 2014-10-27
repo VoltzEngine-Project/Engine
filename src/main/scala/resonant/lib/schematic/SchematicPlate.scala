@@ -5,7 +5,7 @@ import java.util.HashMap
 import net.minecraft.block.Block
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.lib.`type`.Pair
-import universalelectricity.core.transform.vector.Vector3
+import resonant.lib.transform.vector.Vector3
 
 /**
  * Creates a flat box shaped world gen

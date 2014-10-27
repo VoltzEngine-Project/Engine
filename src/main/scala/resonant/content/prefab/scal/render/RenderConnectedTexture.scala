@@ -7,7 +7,7 @@ import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.render.RenderUtility
 import resonant.lib.utility.WorldUtility
 import resonant.lib.utility.render.RenderBlockUtility
-import universalelectricity.core.transform.vector.Vector3
+import resonant.lib.transform.vector.Vector3
 
 /**
  * A generic TileEntity connected texture renderer.

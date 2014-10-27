@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import resonant.content.prefab.itemblock.ItemTooltip
 import resonant.lib.wrapper.WrapList._
-import universalelectricity.core.transform.vector.VectorWorld
+import resonant.lib.transform.vector.VectorWorld
 
 /**
  * @author Calclavia

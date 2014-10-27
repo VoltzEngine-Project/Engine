@@ -12,8 +12,8 @@ import net.minecraftforge.fluids.*;
 import resonant.lib.type.Pair;
 import resonant.lib.utility.inventory.AutoCraftingManager;
 import resonant.lib.utility.inventory.InventoryUtility;
-import universalelectricity.core.transform.vector.Vector3;
-import universalelectricity.core.transform.vector.VectorWorld;
+import resonant.lib.transform.vector.Vector3;
+import resonant.lib.transform.vector.VectorWorld;
 
 import java.util.*;
 import java.util.Map.Entry;

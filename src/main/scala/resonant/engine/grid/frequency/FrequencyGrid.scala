@@ -6,9 +6,9 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 import resonant.api.blocks.IBlockFrequency
 import resonant.api.mffs.fortron.FrequencyGridRegistry
-import universalelectricity.core.grid.Grid
-import universalelectricity.core.transform.region.Cuboid
-import universalelectricity.core.transform.vector.Vector3
+import resonant.lib.grid.Grid
+import resonant.lib.transform.region.Cuboid
+import resonant.lib.transform.vector.Vector3
 
 import scala.collection.convert.wrapAll._
 

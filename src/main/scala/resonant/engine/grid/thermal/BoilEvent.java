@@ -4,8 +4,8 @@ import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fluids.FluidStack;
-import universalelectricity.core.transform.vector.Vector3;
-import universalelectricity.core.transform.vector.VectorWorld;
+import resonant.lib.transform.vector.Vector3;
+import resonant.lib.transform.vector.VectorWorld;
 
 @Event.HasResult
 public class BoilEvent extends WorldEvent

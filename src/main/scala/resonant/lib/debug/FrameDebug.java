@@ -2,8 +2,8 @@ package resonant.lib.debug;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import universalelectricity.api.core.grid.IUpdate;
-import universalelectricity.core.transform.vector.IVectorWorld;
+import resonant.api.grid.IUpdate;
+import resonant.lib.transform.vector.IVectorWorld;
 
 import javax.swing.*;
 import javax.swing.border.Border;

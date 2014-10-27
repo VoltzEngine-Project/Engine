@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import resonant.lib.network.handle.IPacketIDReceiver;
 import resonant.lib.network.handle.IPacketReceiver;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 /**
  * Packet type designed to be used with Tiles

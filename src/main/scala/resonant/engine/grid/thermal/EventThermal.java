@@ -1,7 +1,7 @@
 package resonant.engine.grid.thermal;
 
 import cpw.mods.fml.common.eventhandler.Event;
-import universalelectricity.core.transform.vector.VectorWorld;
+import resonant.lib.transform.vector.VectorWorld;
 
 public abstract class EventThermal extends Event
 {

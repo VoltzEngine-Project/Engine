@@ -8,8 +8,8 @@ import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import resonant.engine.References;
 import resonant.lib.science.units.UnitHelper;
-import universalelectricity.core.transform.vector.Vector2;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector2;
+import resonant.lib.transform.vector.Vector3;
 
 import java.io.File;
 import java.io.FileInputStream;

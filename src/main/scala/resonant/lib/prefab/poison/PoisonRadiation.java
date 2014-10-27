@@ -3,7 +3,7 @@ package resonant.lib.prefab.poison;
 import net.minecraft.entity.EntityLivingBase;
 import resonant.lib.prefab.damage.CustomDamageSource;
 import resonant.lib.prefab.potion.CustomPotionEffect;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 public class PoisonRadiation extends Poison
 {

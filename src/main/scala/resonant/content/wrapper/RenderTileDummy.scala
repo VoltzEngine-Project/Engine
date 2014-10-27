@@ -4,7 +4,7 @@ import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
 import resonant.content.spatial.block.SpatialBlock
-import universalelectricity.core.transform.vector.Vector3
+import resonant.lib.transform.vector.Vector3
 
 /**
  * @author Calclavia

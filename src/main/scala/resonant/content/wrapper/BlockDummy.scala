@@ -15,8 +15,8 @@ import net.minecraft.world.{IBlockAccess, World}
 import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.utility.inventory.InventoryUtility
 import resonant.lib.wrapper.WrapList._
-import universalelectricity.core.transform.region.Cuboid
-import universalelectricity.core.transform.vector.Vector3
+import resonant.lib.transform.region.Cuboid
+import resonant.lib.transform.vector.Vector3
 
 class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: SpatialBlock) extends Block(dummyTile.material) with ITileEntityProvider
 {

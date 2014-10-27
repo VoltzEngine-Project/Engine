@@ -14,7 +14,7 @@ import resonant.lib.content.prefab.TRotatable
 import resonant.lib.network.discriminator.{PacketTile, PacketType}
 import resonant.lib.network.handle.TPacketIDReceiver
 import resonant.lib.schematic.SchematicRegistry
-import universalelectricity.core.transform.vector.Vector3
+import resonant.lib.transform.vector.Vector3
 
 import scala.collection.JavaConversions._
 

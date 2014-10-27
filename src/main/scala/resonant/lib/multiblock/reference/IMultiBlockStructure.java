@@ -1,7 +1,7 @@
 package resonant.lib.multiblock.reference;
 
 import net.minecraft.world.World;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 public interface IMultiBlockStructure<W extends IMultiBlockStructure> extends IMultiBlock
 {

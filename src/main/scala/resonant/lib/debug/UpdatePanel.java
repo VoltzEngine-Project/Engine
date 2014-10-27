@@ -1,6 +1,6 @@
 package resonant.lib.debug;
 
-import universalelectricity.api.core.grid.IUpdate;
+import resonant.api.grid.IUpdate;
 
 import javax.swing.*;
 import java.awt.*;

@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.engine.content.ItemScrewdriver;
 import resonant.lib.utility.inventory.InventoryUtility;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 public class ToolModeRotation extends ToolMode
 {

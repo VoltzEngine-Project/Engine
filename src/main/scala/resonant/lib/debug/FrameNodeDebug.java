@@ -3,10 +3,10 @@ package resonant.lib.debug;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import universalelectricity.api.core.grid.INode;
-import universalelectricity.api.core.grid.INodeProvider;
-import universalelectricity.core.transform.vector.IVector3;
-import universalelectricity.core.transform.vector.IVectorWorld;
+import resonant.api.grid.INode;
+import resonant.api.grid.INodeProvider;
+import resonant.lib.transform.vector.IVector3;
+import resonant.lib.transform.vector.IVectorWorld;
 
 /**
  * @author Darkguardsman

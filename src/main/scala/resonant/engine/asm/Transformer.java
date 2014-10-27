@@ -2,8 +2,8 @@ package resonant.engine.asm;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.tree.*;
-import universalelectricity.compatibility.asm.ASMHelper;
-import universalelectricity.compatibility.asm.ObfMapping;
+import resonant.lib.asm.ASMHelper;
+import resonant.lib.asm.ObfMapping;
 
 import static org.objectweb.asm.Opcodes.*;
 

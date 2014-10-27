@@ -5,11 +5,11 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
+import resonant.api.ISave
 import resonant.engine.ResonantEngine
 import resonant.lib.network.discriminator.{PacketTile, PacketType}
 import resonant.lib.network.netty.AbstractPacket
-import universalelectricity.api.core.grid.ISave
-import universalelectricity.core.transform.vector.{IVectorWorld, TVectorWorld}
+import resonant.lib.transform.vector.{IVectorWorld, TVectorWorld}
 
 /**
  * Mixin prefab designed to implement basic packet handling & helper methods

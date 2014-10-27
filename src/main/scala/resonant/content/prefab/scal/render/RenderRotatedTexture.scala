@@ -7,7 +7,7 @@ import resonant.api.IRotatable
 import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.render.{RenderBlockAdvanced, RenderUtility}
 import resonant.lib.utility.RotationUtility
-import universalelectricity.core.transform.vector.Vector3
+import resonant.lib.transform.vector.Vector3
 
 /**
  * A rotated texture renderer applied to blocks capable of having rotated textured.

@@ -15,11 +15,11 @@ import org.lwjgl.opengl.GL12;
 import resonant.engine.References;
 import resonant.lib.render.RenderUtility;
 import resonant.lib.utility.LanguageUtility;
-import universalelectricity.api.UnitDisplay;
-import universalelectricity.api.UnitDisplay.Unit;
-import universalelectricity.compatibility.module.ModuleThermalExpansion$;
-import universalelectricity.core.transform.region.Rectangle;
-import universalelectricity.core.transform.vector.Vector2;
+import resonant.lib.science.UnitDisplay;
+import resonant.lib.science.UnitDisplay.Unit;
+import resonant.lib.grid.module.ModuleThermalExpansion$;
+import resonant.lib.transform.region.Rectangle;
+import resonant.lib.transform.vector.Vector2;
 
 import java.util.HashMap;
 import java.util.Iterator;

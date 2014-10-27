@@ -2,7 +2,7 @@ package resonant.api.mffs.modules;
 
 import resonant.api.mffs.machine.IFieldMatrix;
 import resonant.api.mffs.machine.IProjector;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 import java.util.Set;
 

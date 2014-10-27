@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Sphere;
 import resonant.lib.render.RenderUtility;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 @SideOnly(Side.CLIENT)
 public class FXShockWave extends EntityFX

@@ -1,7 +1,7 @@
 package resonant.lib.content.prefab
 
 import net.minecraftforge.common.util.ForgeDirection
-import universalelectricity.api.core.grid.electric.IEnergyContainer
+import resonant.api.electric.IEnergyContainer
 
 /**
  * @author Calclavia

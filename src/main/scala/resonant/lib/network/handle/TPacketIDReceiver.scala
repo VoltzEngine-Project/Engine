@@ -4,8 +4,8 @@ import cpw.mods.fml.common.network.ByteBufUtils
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
+import resonant.api.ISave
 import resonant.lib.network.discriminator.PacketType
-import universalelectricity.api.core.grid.ISave
 
 /**
  * Mixin prefab designed to implement basic packet handling & helper methods

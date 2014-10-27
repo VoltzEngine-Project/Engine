@@ -16,7 +16,7 @@ import resonant.lib.multiblock.reference.IMultiBlock;
 import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.network.discriminator.PacketType;
 import resonant.lib.network.handle.IPacketReceiver;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 /**
  * This is a multiblock to be used for blocks that are bigger than one block.

@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import resonant.api.armor.IAntiPoisonArmor;
 import resonant.api.blocks.IAntiPoisonBlock;
 import resonant.engine.References;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 import java.util.EnumSet;
 import java.util.HashMap;

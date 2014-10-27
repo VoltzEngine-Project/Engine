@@ -13,8 +13,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import resonant.engine.References;
 import resonant.lib.wrapper.BitmaskWrapper;
-import universalelectricity.core.transform.rotation.Quaternion;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.rotation.Quaternion;
+import resonant.lib.transform.vector.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -9,7 +9,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.{IExternalInventory, IInventoryProvider}
 import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.utility.inventory.{ExternalInventory, InventoryUtility}
-import universalelectricity.core.transform.vector.Vector3
+import resonant.lib.transform.vector.Vector3
 
 /**
  * A trait applied to inventory objects.

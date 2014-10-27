@@ -1,6 +1,5 @@
 package resonant.engine;
 
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -46,6 +45,7 @@ import resonant.engine.grid.thermal.EventThermal.EventThermalUpdate;
 import resonant.engine.grid.thermal.ThermalGrid;
 import resonant.lib.config.ConfigHandler;
 import resonant.lib.config.ConfigScanner;
+import resonant.lib.grid.UpdateTicker;
 import resonant.lib.loadable.LoadableHandler;
 import resonant.lib.multiblock.synthetic.SyntheticMultiblock;
 import resonant.lib.network.netty.PacketManager;
@@ -53,10 +53,9 @@ import resonant.lib.ore.OreGenerator;
 import resonant.lib.utility.PlayerInteractionHandler;
 import resonant.lib.utility.PotionUtility;
 import resonant.lib.utility.nbt.SaveManager;
-import universalelectricity.api.core.grid.IUpdate;
-import universalelectricity.core.grid.UpdateTicker;
-import universalelectricity.core.transform.vector.Vector3;
-import universalelectricity.core.transform.vector.VectorWorld;
+import resonant.api.grid.IUpdate;
+import resonant.lib.transform.vector.Vector3;
+import resonant.lib.transform.vector.VectorWorld;
 
 import java.util.Arrays;
 

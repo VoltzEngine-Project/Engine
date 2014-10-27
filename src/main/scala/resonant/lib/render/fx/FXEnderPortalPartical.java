@@ -6,7 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.particle.EntityPortalFX;
 import net.minecraft.world.World;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 @SideOnly(Side.CLIENT)
 public class FXEnderPortalPartical extends EntityPortalFX

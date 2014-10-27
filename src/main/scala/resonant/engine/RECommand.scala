@@ -4,7 +4,7 @@ import java.util.List
 
 import net.minecraft.command.{CommandBase, ICommandSender, WrongUsageException}
 import net.minecraft.util.ChatComponentText
-import universalelectricity.core.grid.UpdateTicker
+import resonant.lib.grid.UpdateTicker
 
 object RECommand extends CommandBase
 {

@@ -2,8 +2,8 @@ package resonant.lib.prefab.fluid
 
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank}
-import universalelectricity.api.core.grid.INodeProvider
-import universalelectricity.core.grid.node.NodeConnector
+import resonant.api.grid.INodeProvider
+import resonant.lib.grid.node.NodeConnector
 
 /** Version of NodeConnector designed for usage with fluids,
   * can be directly used as a tank object thanks to {@link TFluidTank}

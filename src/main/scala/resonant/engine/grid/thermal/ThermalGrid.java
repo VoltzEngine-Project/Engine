@@ -7,8 +7,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IReactor;
 import resonant.engine.ResonantEngine;
 import resonant.engine.grid.thermal.EventThermal.EventThermalUpdate;
-import universalelectricity.api.core.grid.IUpdate;
-import universalelectricity.core.transform.vector.VectorWorld;
+import resonant.api.grid.IUpdate;
+import resonant.lib.transform.vector.VectorWorld;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -8,7 +8,7 @@ import net.minecraft.world.IBlockAccess
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL12._
 import resonant.content.spatial.block.SpatialBlock
-import universalelectricity.core.transform.vector.Vector3
+import resonant.lib.transform.vector.Vector3
 
 object BlockRenderHandler extends ISimpleBlockRenderingHandler
 {

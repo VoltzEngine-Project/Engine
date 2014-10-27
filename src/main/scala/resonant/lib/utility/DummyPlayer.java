@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
-import universalelectricity.core.transform.vector.VectorWorld;
+import resonant.lib.transform.vector.VectorWorld;
 
 import java.util.LinkedHashMap;
 import java.util.UUID;

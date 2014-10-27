@@ -14,7 +14,7 @@ import resonant.engine.References;
 import resonant.engine.ResonantEngine;
 import resonant.lib.network.Synced;
 import resonant.lib.utility.nbt.ISaveObj;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

@@ -4,9 +4,9 @@ import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.tileentity.TileEntity;
-import universalelectricity.api.core.grid.INode;
-import universalelectricity.api.core.grid.INodeProvider;
-import universalelectricity.core.transform.vector.IVector3;
+import resonant.api.grid.INode;
+import resonant.api.grid.INodeProvider;
+import resonant.lib.transform.vector.IVector3;
 
 /**
  * Version of PacketTile designed to be used by nodes. Doesn't function any different than the tile packet. However, serves as a way to sort normal tile packets from node generated ones.

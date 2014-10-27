@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fluids.FluidTank
 import resonant.lib.network.netty.IByteBufObject
 import resonant.lib.utility.nbt.ISaveObj
-import universalelectricity.core.transform.vector.{Vector2, Vector3}
+import resonant.lib.transform.vector.{Vector2, Vector3}
 
 /**
  * Some alias methods to make packets more pleasant.

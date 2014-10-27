@@ -1,7 +1,7 @@
 package resonant.lib.grid;
 
-import universalelectricity.api.core.grid.IUpdate;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.api.grid.IUpdate;
+import resonant.lib.transform.vector.Vector3;
 
 import java.util.HashMap;
 

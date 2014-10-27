@@ -27,8 +27,8 @@ import resonant.lib.content.prefab.{TIO, TRotatable}
 import resonant.lib.render.RenderUtility
 import resonant.lib.utility.{LanguageUtility, WrenchUtility}
 import resonant.lib.wrapper.WrapList._
-import universalelectricity.core.transform.region.Cuboid
-import universalelectricity.core.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorld}
+import resonant.lib.transform.region.Cuboid
+import resonant.lib.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorld}
 
 import scala.collection.convert.wrapAll._
 import scala.collection.immutable

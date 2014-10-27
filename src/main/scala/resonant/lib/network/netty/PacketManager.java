@@ -20,8 +20,8 @@ import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.network.discriminator.PacketType;
 import resonant.lib.network.handle.TPacketIDSender;
 import resonant.lib.network.handle.TPacketSender;
-import universalelectricity.core.transform.vector.IVector3;
-import universalelectricity.core.transform.vector.IVectorWorld;
+import resonant.lib.transform.vector.IVector3;
+import resonant.lib.transform.vector.IVectorWorld;
 
 import java.util.EnumMap;
 

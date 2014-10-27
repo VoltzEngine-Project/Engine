@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import resonant.engine.ResonantEngine;
 import resonant.lib.multiblock.reference.IMultiBlock;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 /**
  * @author Calclavia

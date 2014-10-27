@@ -5,7 +5,7 @@ package resonant.lib.utility;
 
 import net.minecraft.item.ItemStack;
 import resonant.lib.utility.nbt.NBTUtility;
-import universalelectricity.core.transform.vector.VectorWorld;
+import resonant.lib.transform.vector.VectorWorld;
 
 /**
  * @author Calclavia

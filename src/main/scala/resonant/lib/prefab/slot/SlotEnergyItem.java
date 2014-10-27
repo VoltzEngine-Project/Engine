@@ -3,7 +3,7 @@ package resonant.lib.prefab.slot;
 import cofh.api.energy.IEnergyContainerItem;
 import ic2.api.item.IElectricItem;
 import net.minecraft.inventory.IInventory;
-import universalelectricity.api.item.IEnergyItem;
+import resonant.api.items.IEnergyItem;
 
 public class SlotEnergyItem extends SlotSpecific
 {

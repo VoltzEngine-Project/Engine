@@ -2,7 +2,7 @@ package resonant.lib.utility;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import universalelectricity.core.transform.vector.IVector3;
+import resonant.lib.transform.vector.IVector3;
 
 import java.util.Comparator;
 

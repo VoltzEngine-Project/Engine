@@ -2,9 +2,9 @@ package resonant.api.map;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import universalelectricity.core.transform.region.Rectangle;
-import universalelectricity.core.transform.vector.Vector2;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.region.Rectangle;
+import resonant.lib.transform.vector.Vector2;
+import resonant.lib.transform.vector.Vector3;
 
 import java.util.*;
 

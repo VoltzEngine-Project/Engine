@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import resonant.lib.utility.WrenchUtility;
 import resonant.lib.utility.inventory.InventoryUtility;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 import java.lang.reflect.Method;
 

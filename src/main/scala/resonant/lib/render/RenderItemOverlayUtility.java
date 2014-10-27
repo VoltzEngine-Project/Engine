@@ -19,8 +19,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import resonant.lib.utility.LanguageUtility;
 import resonant.lib.utility.WorldUtility;
-import universalelectricity.core.transform.rotation.Quaternion;
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.rotation.Quaternion;
+import resonant.lib.transform.vector.Vector3;
 
 import java.util.EnumSet;
 

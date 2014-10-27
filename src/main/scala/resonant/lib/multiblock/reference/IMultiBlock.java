@@ -1,6 +1,6 @@
 package resonant.lib.multiblock.reference;
 
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 /**
  * Interface to be applied to tile entity blocks that occupies more than one block space. Useful for

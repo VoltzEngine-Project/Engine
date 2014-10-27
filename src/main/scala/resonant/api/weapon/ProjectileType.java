@@ -2,9 +2,10 @@ package resonant.api.weapon;
 
 /**
  * Used by sentries to tell what type of projectile its using
- *
+ * @deprecated - Will no longer be used, and will be replaced at a later date
  * @author DarkGuardsman
  */
+@Deprecated
 public enum ProjectileType
 {
 	UNKNOWN, /* NOT A PROJECTILE */

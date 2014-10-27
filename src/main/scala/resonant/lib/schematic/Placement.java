@@ -2,8 +2,8 @@ package resonant.lib.schematic;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import universalelectricity.core.transform.vector.Vector3;
-import universalelectricity.core.transform.vector.VectorWorld;
+import resonant.lib.transform.vector.Vector3;
+import resonant.lib.transform.vector.VectorWorld;
 
 /**
  * Placement data for the schematics.

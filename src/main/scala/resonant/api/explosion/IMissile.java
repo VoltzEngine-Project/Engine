@@ -1,6 +1,6 @@
 package resonant.api.explosion;
 
-import universalelectricity.core.transform.vector.Vector3;
+import resonant.lib.transform.vector.Vector3;
 
 /**
  * This is an interface applied by all missile entities. You may cast this into an @Entity. The

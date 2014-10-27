@@ -4,8 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import resonant.lib.type.Pair;
-import universalelectricity.core.transform.vector.IVector3;
-import universalelectricity.core.transform.vector.IVectorWorld;
+import resonant.lib.transform.vector.IVector3;
+import resonant.lib.transform.vector.IVectorWorld;
 
 import java.util.HashMap;
 

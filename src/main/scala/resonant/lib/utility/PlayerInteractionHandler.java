@@ -10,7 +10,7 @@ import resonant.api.IRemovable;
 import resonant.api.IRemovable.*;
 import resonant.engine.References;
 import resonant.lib.utility.inventory.InventoryUtility;
-import universalelectricity.core.transform.vector.VectorWorld;
+import resonant.lib.transform.vector.VectorWorld;
 
 import java.util.List;
 
