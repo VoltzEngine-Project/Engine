@@ -2,6 +2,7 @@ package resonant.engine;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.Loader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +13,8 @@ import resonant.content.wrapper.BlockRenderHandler$;
 import resonant.engine.content.debug.GuiCreativeBuilder;
 import resonant.engine.content.debug.TileCreativeBuilder;
 import resonant.lib.render.model.FixedTechneModelLoader;
+
+import javax.swing.*;
 
 /**
  * The Resonant Engine client proxy
@@ -28,6 +31,16 @@ public class ClientProxy extends CommonProxy
 	{
 		RenderingRegistry.registerBlockHandler(BlockRenderHandler$.MODULE$);
 	}
+
+    @Override
+    public void init()
+    {
+        if(Loader.isModLoaded("UniversalElectricity"))
+        {
+            JOptionPane.showMessageDialog(null, "UniversalElectricity is already contained within Resonant Engine");
+            throw new RuntimeException("UniversalElectricity is already contained within Resonant Engine and shouldn't be installed as a standalone");
+        }
+    }
 
 	@Override
 	public boolean isPaused()
