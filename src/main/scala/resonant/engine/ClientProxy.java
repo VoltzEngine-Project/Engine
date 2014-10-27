@@ -37,7 +37,7 @@ public class ClientProxy extends CommonProxy
     {
         if(Loader.isModLoaded("UniversalElectricity"))
         {
-            JOptionPane.showMessageDialog(null, "UniversalElectricity is already contained within Resonant Engine");
+            JOptionPane.showMessageDialog(null, "UniversalElectricity is now part of Resonant Engine and should no longer be installed. \n To prevent world corruption the game will now close with a warning.", "Install Error", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException("UniversalElectricity is already contained within Resonant Engine and shouldn't be installed as a standalone");
         }
     }

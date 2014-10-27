@@ -66,7 +66,7 @@ import java.util.Arrays;
  * @author Calclavia, DarkGuardsman
  */
 
-@Mod(modid = References.ID, name = References.NAME, version = References.VERSION, dependencies = "required-after:UniversalElectricity")
+@Mod(modid = References.ID, name = References.NAME, version = References.VERSION)
 public class ResonantEngine
 {
 	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
