@@ -5,25 +5,25 @@ package li.cil.oc.api.network;
  * <p/>
  * Computers and components form ad-hoc "networks" when placed next to each
  * other. They allow computers to communicate with the components attached to
- * them (and permissions amongst each other) by using the network as an index
+ * them (and nodes amongst each other) by using the network as an index
  * structure.
  * <p/>
- * There are three types of permissions:
+ * There are three types of nodes:
  * <ul>
  * <li>{@link Node}, the most basic form.</li>
  * <li>{@link Component}, used to expose callbacks to user code.</li>
  * <li>{@link Connector}, used for consuming of producing energy.</li>
  * </ul>
  * <p/>
- * See <tt>Node</tt> for more details on the behavior of single permissions, and in
- * particular how permissions represented by tile entities should be added.
+ * See <tt>Node</tt> for more details on the behavior of single nodes, and in
+ * particular how nodes represented by tile entities should be added.
  * <p/>
  * Another important concept of node networks is reachability and visibility,
  * see {@link Visibility}.
  * <p/>
  * Note that network access in general is <em>not</em> thread safe! Networks
  * should only be accessed from the main server thread. The exception are the
- * connector permissions, which can be used to consume or produce energy from other
+ * connector nodes, which can be used to consume or produce energy from other
  * threads.
  * <p/>
  * IMPORTANT: do *not* implement this interface yourself and create
@@ -36,19 +36,19 @@ public interface Network {
     /**
      * Adds a new node connection in the network.
      * <p/>
-     * This is used by permissions to join an existing network. At least one of the two
-     * permissions must already be in the network. If one of the permissions is not yet in the
-     * network, it will be added to the network. If both permissions are already in the
-     * network only the connection between the two permissions is added. If one of the
-     * permissions is not in this network but in another network, the networks will be
+     * This is used by nodes to join an existing network. At least one of the two
+     * nodes must already be in the network. If one of the nodes is not yet in the
+     * network, it will be added to the network. If both nodes are already in the
+     * network only the connection between the two nodes is added. If one of the
+     * nodes is not in this network but in another network, the networks will be
      * merged.
      * <p/>
-     * This way of adding permissions is used to build an internal graph to allow
-     * properly splitting networks when permissions are removed.
+     * This way of adding nodes is used to build an internal graph to allow
+     * properly splitting networks when nodes are removed.
      *
      * @param nodeA the first node.
      * @param nodeB the second node.
-     * @return true if a new connection between the two permissions was added; false if
+     * @return true if a new connection between the two nodes was added; false if
      * the connection already existed.
      * @throws IllegalArgumentException if neither node is in this network.
      */
@@ -57,24 +57,24 @@ public interface Network {
     /**
      * Removes a node connection in the network.
      * <p/>
-     * Both permissions must be part of this network.
+     * Both nodes must be part of this network.
      * <p/>
      * This can be useful for cutting connections that depend on some condition
-     * that does not involve the permissions' actual existence in the network, such as
-     * the distance between two permissions, for example (think access points of a
+     * that does not involve the nodes' actual existence in the network, such as
+     * the distance between two nodes, for example (think access points of a
      * wireless network).
      *
      * @param nodeA the first node.
      * @param nodeB the second node.
      * @return true if the connection was cut; false if there was none.
-     * @throws IllegalArgumentException if the permissions are not in this network.
+     * @throws IllegalArgumentException if the nodes are not in this network.
      */
     boolean disconnect(Node nodeA, Node nodeB);
 
     /**
      * Removes a node from the network.
      * <p/>
-     * This should be called by permissions when they are destroyed (e.g. in
+     * This should be called by nodes when they are destroyed (e.g. in
      * {@link net.minecraft.tileentity.TileEntity#invalidate()}) or unloaded
      * (e.g. in {@link net.minecraft.tileentity.TileEntity#onChunkUnload()}).
      * Removing the node can lead to one or more new networks if it was the a
@@ -96,16 +96,16 @@ public interface Network {
     Node node(String address);
 
     /**
-     * The list of all permissions in this network.
+     * The list of all nodes in this network.
      *
-     * @return the list of permissions in this network.
+     * @return the list of nodes in this network.
      */
     Iterable<Node> nodes();
 
     /**
-     * The list of addressed permissions in the network visible to the specified node.
+     * The list of addressed nodes in the network visible to the specified node.
      * <p/>
-     * This does <em>not</em> include permissions with a visibility of <tt>None</tt>
+     * This does <em>not</em> include nodes with a visibility of <tt>None</tt>
      * or a visibility of <tt>Neighbors</tt> when there is no direct connection
      * between that node and the reference node.
      * <p/>
@@ -116,15 +116,15 @@ public interface Network {
      * <tt>component_added</tt> signals for all visible components in the
      * network.
      *
-     * @param reference the node to get the visible other permissions for.
-     * @return the permissions visible to the specified node.
+     * @param reference the node to get the visible other nodes for.
+     * @return the nodes visible to the specified node.
      */
     Iterable<Node> nodes(Node reference);
 
     /**
-     * The list of permissions the specified node is directly connected to.
+     * The list of nodes the specified node is directly connected to.
      * <p/>
-     * This <em>does</em> include permissions with a visibility of <tt>None</tt>.
+     * This <em>does</em> include nodes with a visibility of <tt>None</tt>.
      * <p/>
      * This does <em>not</em> include the node itself.
      * <p/>
@@ -132,7 +132,7 @@ public interface Network {
      * for other components that are directly connected to them, for example.
      *
      * @param node the node to get the neighbors for.
-     * @return a list of permissions the node is directly connect to.
+     * @return a list of nodes the node is directly connect to.
      * @throws IllegalArgumentException if the specified node is not in this network.
      */
     Iterable<Node> neighbors(Node node);
@@ -166,7 +166,7 @@ public interface Network {
      * Sends a message to all addressed, visible neighbors of the source node.
      * <p/>
      * Targets are determined using {@link #neighbors(Node)} and additionally
-     * filtered for reachability (so that unreachable permissions are ignored).
+     * filtered for reachability (so that unreachable nodes are ignored).
      * <p/>
      * Messages should have a unique name to allow differentiating them when
      * handling them in a network node. For example, computers will try to parse
@@ -183,7 +183,7 @@ public interface Network {
     void sendToNeighbors(Node source, String name, Object... data);
 
     /**
-     * Sends a message to all addressed permissions reachable to the source node.
+     * Sends a message to all addressed nodes reachable to the source node.
      * <p/>
      * Targets are determined using {@link #nodes(Node)}.
      * <p/>
@@ -201,13 +201,13 @@ public interface Network {
     void sendToReachable(Node source, String name, Object... data);
 
     /**
-     * Sends a message to all addressed permissions visible to the source node.
+     * Sends a message to all addressed nodes visible to the source node.
      * <p/>
      * Targets are determined using {@link #nodes(Node)} and additionally
-     * filtered for visibility (so that invisible permissions are ignored).
+     * filtered for visibility (so that invisible nodes are ignored).
      * <p/>
      * Note that messages sent this way are <em>only</em> delivered to other
-     * components. The message will <em>not</em> be delivered to normal permissions.
+     * components. The message will <em>not</em> be delivered to normal nodes.
      * <p/>
      * Messages should have a unique name to allow differentiating them when
      * handling them in a network node. For example, computers will try to parse

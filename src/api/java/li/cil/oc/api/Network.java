@@ -1,28 +1,27 @@
 package li.cil.oc.api;
 
 import li.cil.oc.api.detail.Builder;
-import li.cil.oc.api.detail.NetworkAPI;
 import li.cil.oc.api.network.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 /**
- * This class provides factories for networks and permissions.
+ * This class provides factories for networks and nodes.
  * <p/>
  * The first two functions provided provided by this API are to allow existing
  * environments - implemented in a tile entity for example - to join an existing
- * network or create new ones. The third one is used to create permissions that may
+ * network or create new ones. The third one is used to create nodes that may
  * then be connected to an existing network. It is not possible to create
  * networks that do not belong to at least one tile entity or node.
  * <p/>
  * It is important to understand that component networks only exist on the
- * server side. It is impossible to create permissions, and therefore networks, on
+ * server side. It is impossible to create nodes, and therefore networks, on
  * the client side. This is to enforce a clear distinction of where the actual
  * logic lies - since user code only runs on the server.
  * <p/>
  * Note that these methods should <em>not</em> be called in the pre-init phase,
- * since the {@link #instance} may not have been initialized at that time. Only
- * start calling these methods in the init phase or later.
+ * since the {@link li.cil.oc.api.API#network} may not have been initialized
+ * at that time. Only start calling these methods in the init phase or later.
  */
 public final class Network {
     /**
@@ -30,7 +29,7 @@ public final class Network {
      * to adjacent networks.
      * <p/>
      * If the tile entity implements {@link Environment} its one node will be
-     * connected to any existing adjacent tile entity permissions. If none exist a
+     * connected to any existing adjacent tile entity nodes. If none exist a
      * new network with the specified tile entity's node as its sole entry.
      * <p/>
      * If the tile entity is a {@link li.cil.oc.api.network.SidedEnvironment}
@@ -41,8 +40,8 @@ public final class Network {
      * @param tileEntity the tile entity to initialize.
      */
     public static void joinOrCreateNetwork(final TileEntity tileEntity) {
-        if (instance != null)
-            instance.joinOrCreateNetwork(tileEntity);
+        if (API.network != null)
+            API.network.joinOrCreateNetwork(tileEntity);
     }
 
     /**
@@ -56,8 +55,8 @@ public final class Network {
      * @throws IllegalArgumentException if the node already is in a network.
      */
     public static void joinNewNetwork(final Node node) {
-        if (instance != null)
-            instance.joinNewNetwork(node);
+        if (API.network != null)
+            API.network.joinNewNetwork(node);
     }
 
     // ----------------------------------------------------------------------- //
@@ -76,8 +75,8 @@ public final class Network {
      * @param endpoint the endpoint to register with the network.
      */
     public static void joinWirelessNetwork(final WirelessEndpoint endpoint) {
-        if (instance != null)
-            instance.joinWirelessNetwork(endpoint);
+        if (API.network != null)
+            API.network.joinWirelessNetwork(endpoint);
     }
 
     /**
@@ -92,8 +91,8 @@ public final class Network {
      * @param endpoint the endpoint for which to update the position.
      */
     public static void updateWirelessNetwork(final WirelessEndpoint endpoint) {
-        if (instance != null)
-            instance.updateWirelessNetwork(endpoint);
+        if (API.network != null)
+            API.network.updateWirelessNetwork(endpoint);
     }
 
     /**
@@ -107,8 +106,8 @@ public final class Network {
      * @param endpoint the endpoint to remove from the wireless network.
      */
     public static void leaveWirelessNetwork(final WirelessEndpoint endpoint) {
-        if (instance != null)
-            instance.leaveWirelessNetwork(endpoint);
+        if (API.network != null)
+            API.network.leaveWirelessNetwork(endpoint);
     }
 
     /**
@@ -125,14 +124,14 @@ public final class Network {
      * @param packet   the packet to send.
      */
     public static void sendWirelessPacket(final WirelessEndpoint source, final double strength, final Packet packet) {
-        if (instance != null)
-            instance.sendWirelessPacket(source, strength, packet);
+        if (API.network != null)
+            API.network.sendWirelessPacket(source, strength, packet);
     }
 
     // ----------------------------------------------------------------------- //
 
     /**
-     * Factory function for creating new permissions.
+     * Factory function for creating new nodes.
      * <p/>
      * Use this to create a node for your environment (e.g. tile entity). This
      * will return a builder that can be used to further specialize the node,
@@ -155,7 +154,7 @@ public final class Network {
      * </pre>
      * <p/>
      * Note that the <em>reachability</em> specified here is the general
-     * availability of the created node to other permissions in the network. Special
+     * availability of the created node to other nodes in the network. Special
      * rules apply to components, which have a <em>visibility</em> that is used
      * to control how they can be reached from computers. For example, network
      * cards have a <em>reachability</em> of <tt>Visibility.Network</tt>, to
@@ -169,8 +168,8 @@ public final class Network {
      * @return a new node builder.
      */
     public static Builder.NodeBuilder newNode(final Environment host, final Visibility reachability) {
-        if (instance != null)
-            return instance.newNode(host, reachability);
+        if (API.network != null)
+            return API.network.newNode(host, reachability);
         return null;
     }
 
@@ -190,8 +189,8 @@ public final class Network {
      * @return the new packet.
      */
     public static Packet newPacket(final String source, final String destination, final int port, final Object[] data) {
-        if (instance != null)
-            return instance.newPacket(source, destination, port, data);
+        if (API.network != null)
+            return API.network.newPacket(source, destination, port, data);
         return null;
     }
 
@@ -202,8 +201,8 @@ public final class Network {
      * @return the loaded packet.
      */
     public static Packet newPacket(final NBTTagCompound nbt) {
-        if (instance != null)
-            return instance.newPacket(nbt);
+        if (API.network != null)
+            return API.network.newPacket(nbt);
         return null;
     }
 
@@ -211,6 +210,4 @@ public final class Network {
 
     private Network() {
     }
-
-    public static NetworkAPI instance = null;
 }

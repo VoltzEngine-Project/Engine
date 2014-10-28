@@ -19,7 +19,7 @@ public interface Builder<T extends Node> {
     T create();
 
     /**
-     * Builder for basic permissions. These permissions merely allow network access and
+     * Builder for basic nodes. These nodes merely allow network access and
      * take on no special role.
      */
     public static interface NodeBuilder extends Builder<Node> {
@@ -27,7 +27,7 @@ public interface Builder<T extends Node> {
          * Makes the node a component.
          * <p/>
          * Nodes that are components can be accessed from computers, methods
-         * declared in them marked using the {@link Callback} annotation can
+         * declared in them marked using the {@link li.cil.oc.api.machine.Callback} annotation can
          * be invoked from computers that can see the component.
          *
          * @param name       the name of the component.
@@ -76,7 +76,7 @@ public interface Builder<T extends Node> {
     }
 
     /**
-     * Builder for component permissions. These node can be interacted with from
+     * Builder for component nodes. These node can be interacted with from
      * computers in the same network, that can <em>see</em> the component.
      */
     public static interface ComponentBuilder extends Builder<Component> {
@@ -107,7 +107,7 @@ public interface Builder<T extends Node> {
     }
 
     /**
-     * Builder for connector permissions. These permissions can interact with the energy
+     * Builder for connector nodes. These nodes can interact with the energy
      * stored in the network, i.e. increase or reduce it.
      */
     public static interface ConnectorBuilder extends Builder<Connector> {
@@ -115,7 +115,7 @@ public interface Builder<T extends Node> {
          * Makes the node a component.
          * <p/>
          * Nodes that are components can be accessed from computers, methods
-         * declared in them marked using the {@link Callback} annotation can
+         * declared in them marked using the {@link li.cil.oc.api.machine.Callback} annotation can
          * be invoked from computers that can see the component.
          *
          * @param name       the name of the component.
@@ -139,7 +139,7 @@ public interface Builder<T extends Node> {
     }
 
     /**
-     * Builder for permissions that are both component <em>and</em> connector node.
+     * Builder for nodes that are both component <em>and</em> connector node.
      */
     public static interface ComponentConnectorBuilder extends Builder<ComponentConnector> {
     }

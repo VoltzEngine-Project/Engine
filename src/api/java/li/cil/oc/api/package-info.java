@@ -27,7 +27,7 @@
  * <dt>The {@link li.cil.oc.api.Network} API</dt>
  * <dd>
  * This API provides interfaces that allow interacting with the internal network
- * and creating permissions, components and power connectors for said network. If you
+ * and creating nodes, components and power connectors for said network. If you
  * implement <tt>Environment</tt> in your tile entity or provide a
  * {@link li.cil.oc.api.network.ManagedEnvironment} via a driver you'll want to
  * create a node. This API provides factory methods for creating it.
@@ -35,7 +35,7 @@
  * </dl>
  */
 @cpw.mods.fml.common.API(
-        owner = "OpenComputers|Core",
-        provides = "OpenComputersAPI",
-        apiVersion = "2.0.1")
+        owner = API.ID_OWNER,
+        provides = "OpenComputersAPI|Core",
+        apiVersion = API.VERSION)
 package li.cil.oc.api;

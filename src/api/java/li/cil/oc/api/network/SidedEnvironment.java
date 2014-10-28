@@ -14,13 +14,13 @@ import net.minecraftforge.common.util.ForgeDirection;
  * It is used to determine which neighbors a tile entity can connect to when
  * calling {@link li.cil.oc.api.Network#joinOrCreateNetwork(TileEntity)}. It is
  * used by the keyboard to only interface with the side on which it is attached,
- * as well as the router to offer a different node for each side.
+ * as well as the switch to offer a different node for each side.
  */
 public interface SidedEnvironment {
     /**
      * The node this environment uses for the specified side.
      * <p/>
-     * This is the side aware version of the normal {@link Environment#node}
+     * This is the side aware version of the normal {@link li.cil.oc.api.network.Environment#node}
      * method.
      * <p/>
      * The provided side is relative to the environment, i.e. when the tile
@@ -30,7 +30,7 @@ public interface SidedEnvironment {
      *
      * @param side the side to get the node for.
      * @return the node for the specified side.
-     * @see Environment#node
+     * @see li.cil.oc.api.network.Environment#node
      */
     Node sidedNode(ForgeDirection side);
 
@@ -43,7 +43,7 @@ public interface SidedEnvironment {
      * returns <tt>true</tt> for it should return a node.
      * <p/>
      * This is intended for the client side, i.e. rendering related things,
-     * since permissions are not created on the client side.
+     * since nodes are not created on the client side.
      * <p/>
      * The side is relative to the environment, same as for <tt>sidedNode</tt>.
      *

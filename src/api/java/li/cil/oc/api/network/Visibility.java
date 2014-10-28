@@ -1,9 +1,9 @@
 package li.cil.oc.api.network;
 
 /**
- * Possible reachability values for permissions.
+ * Possible reachability values for nodes.
  * <p/>
- * Since all permissions that are connected are packed into the same network, we want
+ * Since all nodes that are connected are packed into the same network, we want
  * some way of controlling what's accessible from where on a low level (to
  * avoid unnecessary messages and unauthorized access).
  * <p/>
@@ -20,8 +20,8 @@ public enum Visibility {
 
     /**
      * Nodes with this visibility only receive messages from their immediate
-     * neighbors, i.e. permissions to which a direct connection exists. It can send
-     * messages to all permissions visible to it.
+     * neighbors, i.e. nodes to which a direct connection exists. It can send
+     * messages to all nodes visible to it.
      * <p/>
      * Components with this visibility can likewise only be reached by the
      * computer(s) they are directly attached to. For example, if a block
@@ -32,7 +32,7 @@ public enum Visibility {
 
     /**
      * Nodes with this visibility can receive messages from any node in its
-     * network. It can still only send messages to all permissions visible to it.
+     * network. It can still only send messages to all nodes visible to it.
      * <p/>
      * Components with this visibility are likewise reachable by all computers
      * in their network. For example, a screen only indirectly connected to a
