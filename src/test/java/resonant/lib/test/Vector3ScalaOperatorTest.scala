@@ -1,6 +1,8 @@
 package resonant.lib.test
 
-import junit.framework.{Assert, TestCase}
+import junit.framework.TestCase
+
+import org.junit.Assert
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.lib.transform.vector.Vector3
 
@@ -19,9 +21,9 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(1, 1, 1)
         vec = vec - 1
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 
     /** Tests the 'vector3 - vector3' operator */
@@ -29,9 +31,9 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(1, 1, 1)
         vec = vec - new Vector3(1, 1, 1)
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 
     /** Tests the 'vector3 - (Double, Double, Double)' operator */
@@ -39,9 +41,9 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(1, 1, 1)
         vec = vec - (1, 1, 1)
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 
     /** Tests the 'vector3 -= (Double, Double, Double)' operator */
@@ -49,9 +51,9 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(1, 1, 1)
         vec -= (1, 1, 1)
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 
     /** Tests the 'vector3 - ForgeDirection' operator */
@@ -59,9 +61,9 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(ForgeDirection.NORTH)
         vec = vec - ForgeDirection.NORTH
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 
     /** Tests the 'vector3 - ForgeDirection' operator */
@@ -69,9 +71,9 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(ForgeDirection.NORTH)
         vec -= ForgeDirection.NORTH
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 
     ////////////////////////////////////////////
@@ -83,9 +85,9 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(-1, -1, -1)
         vec = vec + 1
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 
     /** Tests the 'vector3 - vector3' operator */
@@ -93,9 +95,9 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(-1, -1, -1)
         vec = vec + new Vector3(1, 1, 1)
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 
     /** Tests the 'vector3 - (Double, Double, Double)' operator */
@@ -103,9 +105,9 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(-1, -1, -1)
         vec = vec + (1, 1, 1)
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 
     /** Tests the 'vector3 -= (Double, Double, Double)' operator */
@@ -113,9 +115,9 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(-1, -1, -1)
         vec += (1, 1, 1)
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 
     /** Tests the 'vector3 - ForgeDirection' operator */
@@ -123,9 +125,9 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(ForgeDirection.NORTH)
         vec = vec + ForgeDirection.SOUTH
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 
     /** Tests the 'vector3 - ForgeDirection' operator */
@@ -133,8 +135,8 @@ class Vector3ScalaOperatorTest extends TestCase
     {
         var vec : Vector3 = new Vector3(ForgeDirection.NORTH)
         vec += ForgeDirection.SOUTH
-        Assert.assertEquals(0.0, vec.y)
-        Assert.assertEquals(0.0, vec.x)
-        Assert.assertEquals(0.0, vec.z)
+        Assert.assertEquals(0.0, vec.y, 0)
+        Assert.assertEquals(0.0, vec.x, 0)
+        Assert.assertEquals(0.0, vec.z, 0)
     }
 }
