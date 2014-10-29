@@ -65,7 +65,7 @@ object UpdateTicker extends Thread
 
   def getUpdaterCount = updaters.size
 
-  override def run
+  override def run()
   {
     var last = System.currentTimeMillis()
 
@@ -124,8 +124,8 @@ object UpdateTicker extends Thread
         case e: Exception =>
         {
           System.out.println("Universal Electricity Ticker: Failed while ticking updaters. This is a bug! Clearing all tickers for self repair.")
-          updaters.clear
-          e.printStackTrace
+          updaters.clear()
+          e.printStackTrace()
         }
       }
   }
