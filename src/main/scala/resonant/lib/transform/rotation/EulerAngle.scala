@@ -174,7 +174,7 @@ class EulerAngle(var yaw: Double, var pitch: Double, var roll: Double) extends A
 
   def toTuple: (Double, Double, Double) = (yaw, pitch, roll)
 
-  def toArray: Array[Double] = new Array(yaw, pitch, roll)
+  def toArray: Array[Double] = Array(yaw, pitch, roll)
 
   override def clone() = new EulerAngle(yaw, pitch, roll)
 
