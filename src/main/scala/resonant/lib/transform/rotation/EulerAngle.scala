@@ -75,6 +75,16 @@ class EulerAngle(var yaw: Double, var pitch: Double, var roll: Double) extends A
     this.roll = roll
   }
 
+  def set(index : Int, value: Double)
+  {
+      if(index == 0)
+          this.yaw = value
+      if(index == 1)
+          this.pitch = value
+      if(index == 2)
+          this.roll = value
+  }
+
   override def set(other: EulerAngle): EulerAngle =
   {
     yaw = other.yaw
@@ -163,6 +173,8 @@ class EulerAngle(var yaw: Double, var pitch: Double, var roll: Double) extends A
   }
 
   def toTuple: (Double, Double, Double) = (yaw, pitch, roll)
+
+  def toArray: Array[Double] = new Array(yaw, pitch, roll)
 
   override def clone() = new EulerAngle(yaw, pitch, roll)
 
