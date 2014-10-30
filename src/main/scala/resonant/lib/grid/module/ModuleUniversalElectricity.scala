@@ -117,7 +117,7 @@ object ModuleUniversalElectricity extends Compatibility.CompatibilityModule("Uni
 
   override def getMaxEnergy(obj: AnyRef, direction: ForgeDirection): Double =
   {
-    if(obj != null)
+    if(obj != null && obj.isInstanceOf[IEnergyContainer])
       return obj.asInstanceOf[IEnergyContainer].getEnergyCapacity(direction)
     else
       return 0.0
@@ -125,7 +125,7 @@ object ModuleUniversalElectricity extends Compatibility.CompatibilityModule("Uni
 
   override def getEnergyItem(is: ItemStack): Double =
   {
-    if(is != null && is.isInstanceOf[IEnergyItem])
+    if(is != null && is.getItem.isInstanceOf[IEnergyItem])
       return is.getItem.asInstanceOf[IEnergyItem].getEnergy(is)
     else
       return 0.0
@@ -133,7 +133,7 @@ object ModuleUniversalElectricity extends Compatibility.CompatibilityModule("Uni
 
   override def getMaxEnergyItem(is: ItemStack): Double =
   {
-    if(is != null && is.isInstanceOf[IEnergyItem])
+    if(is != null && is.getItem.isInstanceOf[IEnergyItem])
       return (is.getItem.asInstanceOf[IEnergyItem]).getEnergyCapacity(is)
     else
       return 0.0
