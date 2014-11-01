@@ -87,46 +87,81 @@ object SpatialBlock
 
 abstract class SpatialBlock(val material: Material) extends TileEntity with TVectorWorld
 {
+  /** Name of the block, unlocalized */
   var name = LanguageUtility.decapitalizeFirst(this.getClass().getSimpleName().replaceFirst("Tile", ""))
-  /**
-   * The unique string ID of this block.
-   */
+  /** ItemBlock class used to place this block */
   var itemBlock: Class[_ <: ItemBlock] = classOf[ItemBlockTooltip]
+  /** ???? */
   var isCreativeTabSet = false
+  /** Dummy block that is placed so this tile can spawn */
   var block: BlockDummy = null
+  /** Block's bounds, used for collision checks and rendering if a standard block */
   var _bounds: Cuboid = Cuboid.full
+  /** Creative tab this block will show on */
   var _creativeTab: CreativeTabs = null
+  /** How hard is the block to mine */
   var blockHardness: Float = 1
+  /** Resistance to being blown up */
   var blockResistance: Float = 1
+  /** Sound made when the player steps on this block */
   var stepSound: Block.SoundType = Block.soundTypeStone
+  /** Can this provide a redstone signal */
   var canProvidePower: Boolean = false
+  /** Random block updates */
   var tickRandomly: Boolean = false
+  /** Render as a normal block if true */
   var normalRender: Boolean = true
+  /** Override to force a block to render even if not a normal renderer */
   var renderStaticBlock: Boolean = false
+  /** Forces the item block to render as a block */
   var forceItemToRenderAsBlock: Boolean = false
+  /** Flag to say this has a custom render class for the item */
   var customItemRender: Boolean = false
+  /** False will make the block glass like */
   var isOpaqueCube: Boolean = true
+  /** World accessor */
   var _access: IBlockAccess = null
+  /** Name of the texture */
   var textureName: String = name
+  /** Domain prefix for texture registration  */
   var domain: String = null
+
+  /** Flag that is triggered when the dynamic renderer fails, will cause the item to stop rendering */
   private var noDynamicItemRenderCrash: Boolean = true
 
-  /**
-   * Update
-   */
+  /** Use update() instead */
   @Deprecated
   final override def updateEntity() = update()
 
+  final def blockUpdate() = update()
+
+  /**
+   * Called after the block is registered. Use this to add recipes.
+   */
+  def onInstantiate()
+  {
+  }
+
+  /** Called each tick */
   def update()
   {
 
   }
 
+  @Deprecated
   def creativeTab(value: CreativeTabs)
   {
     creativeTab = value
   }
 
+  /** Sets the creative tab
+   * @param value - tab to set */
+  def setCreativeTab(value: CreativeTabs)
+  {
+    creativeTab = value
+  }
+
+  /** Gets the creative tab */
   def creativeTab = _creativeTab
 
   def creativeTab_=(value: CreativeTabs): Unit =
@@ -144,8 +179,10 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     bounds = cuboid
   }
 
+  /** Bounds for the block */
   def bounds = _bounds
 
+  /** Sets the block bounds */
   def bounds_=(cuboid: Cuboid)
   {
     _bounds = cuboid
@@ -187,12 +224,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   /** When false the block is see threw */
   def isOpaqueCube(bool: Boolean): Unit = isOpaqueCube = bool
 
-  /**
-   * Called after the block is registered. Use this to add recipes.
-   */
-  def onInstantiate()
-  {
-  }
 
   /** Sets the active world */
   def world(world: World)
@@ -212,8 +243,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
     return asVectorWorld.add(0.5).asInstanceOf[VectorWorld]
   }
-
-  def blockUpdate() = update()
 
   /**
    * Gets all ItemStacks dropped by this machine when its destroyed
@@ -514,7 +543,15 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   def getIcon(side: Int, meta: Int): IIcon =
   {
-    return getIcon
+    if(side == 0)
+    {
+      return getTopIcon(meta)
+    }
+    if(side == 1)
+    {
+      return getBottomIcon(meta)
+    }
+    return getSideIcon(meta, side)
   }
 
   @SideOnly(Side.CLIENT)
@@ -524,7 +561,59 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   }
 
   @SideOnly(Side.CLIENT)
-  protected def getTextureName: String = if (textureName == null) "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name else block.dummyTile.domain + textureName
+  protected def getTextureName: String =
+  {
+    if (textureName == null)
+      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
+    else
+      return block.dummyTile.domain + textureName
+  }
+
+  /** Gets the icon that renders on the top
+    * @param meta - placement data
+    * @return icon that will render on top*/
+  @SideOnly(Side.CLIENT)
+  protected def getTopIcon(meta: Int) : IIcon =
+  {
+    IIcon icon = SpatialBlock.icon.get(getTextureName + "_top")
+    if(icon == null)
+      icon = SpatialBlock.icon.get(getTextureName)
+    return icon
+  }
+
+  /** Gets the icon that renders on the bottom
+    * @param meta - placement data
+    * @return icon that will render on bottom*/
+  @SideOnly(Side.CLIENT)
+  protected def getBottomIcon(meta: Int) : IIcon =
+  {
+    IIcon icon = SpatialBlock.icon.get(getTextureName + "_bottom")
+    if(icon == null)
+      icon = SpatialBlock.icon.get(getTextureName)
+    return icon
+  }
+
+  /** Gets the icon that renders on the sides
+    * @param meta - placement data
+    * @return icon that will render on sides*/
+  @SideOnly(Side.CLIENT)
+  protected def getSideIcon(meta: Int) : IIcon =
+  {
+    return getSideIcon(meta, 0)
+  }
+
+  /** Gets the icon that renders on the sides
+    * @param meta - placement data
+    * @param side - side of the icon
+    * @return icon that will render on sides*/
+  @SideOnly(Side.CLIENT)
+  protected def getSideIcon(meta: Int, side: Int) : IIcon =
+  {
+    IIcon icon = SpatialBlock.icon.get(getTextureName + "_side")
+    if(icon == null)
+      icon = SpatialBlock.icon.get(getTextureName)
+    return icon
+  }
 
   def setTextureName(value: java.lang.String)
   {
@@ -535,6 +624,18 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   def registerIcons(iconRegister: IIconRegister)
   {
     SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName))
+  }
+
+  /** Registers a set of 3 textures(top, sides, bottom) to be used for the block renderer
+    * Uses the texture name appended with _top _side _bottom
+   * @param iconRegister
+   */
+  @SideOnly(Side.CLIENT)
+  def registerSideTextureSet(iconRegister: IIconRegister)
+  {
+    SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_top"))
+    SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_side"))
+    SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_bottom"))
   }
 
   @SideOnly(Side.CLIENT)
@@ -648,28 +749,47 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     return if (side == 0 && this.bounds.min.y > 0.0D) true else (if (side == 1 && this.bounds.max.y < 1.0D) true else (if (side == 2 && this.bounds.min.z > 0.0D) true else (if (side == 3 && this.bounds.max.z < 1.0D) true else (if (side == 4 && this.bounds.min.x > 0.0D) true else (if (side == 5 && this.bounds.max.x < 1.0D) true else !access.getBlock(x, y, z).isOpaqueCube)))))
   }
 
+  /** Called when a rain particle hits this block */
   def onFillRain()
   {
   }
 
+  /** Is this block being indirectly being powered */
   def isIndirectlyPowered: Boolean = world.isBlockIndirectlyGettingPowered(xi, yi, zi)
 
+  /** Gets the level of power provide to this block */
   def getStrongestIndirectPower: Int = world.getStrongestIndirectPower(xi, yi, zi)
 
+  /** Gets the level of power being provided by this block */
   def getWeakRedstonePower(access: IBlockAccess, side: Int): Int = getStrongRedstonePower(access, side)
 
+  /** Gets the level of power being provided by this block */
   def getStrongRedstonePower(access: IBlockAccess, side: Int): Int = 0
 
+  /**
+   * Is this block solid on th side
+   * @param access - world accessor
+   * @param side - side
+   * @return true if solid
+   */
   def isSolid(access: IBlockAccess, side: Int): Boolean = material.isSolid
 
+  /** Render pass */
   def getRenderBlockPass: Int = 0
 
+  /** Tick rate of the tile in @param world*/
   def tickRate(world: World): Int = 20
 
+  /**
+   * Can the player silk touch the block
+   * @param player - player mining the block
+   * @param metadata - meta value of the block
+   * @return true if it can
+   */
   def canSilkHarvest(player: EntityPlayer, metadata: Int): Boolean = normalRender && tile == null
 
-  /**
-   * @return Return "this" if the block requires a TileEntity.
+  /** Used to detect if the block is a tile or data object for creating blocks
+   * @return Normally you want to return this class
    */
   def tile: SpatialBlock =
   {
