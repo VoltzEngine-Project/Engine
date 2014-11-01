@@ -139,6 +139,14 @@ public class ModManager
 		return block;
 	}
 
+    /**
+     * Creates a new instance of the block class as long as it has a default constructor
+     */
+    public Block newBlock(Class<? extends Block> blockClazz, Class<? extends ItemBlock> itemBlockClass)
+    {
+        return newBlock(blockClazz.getSimpleName(), blockClazz, itemBlockClass);
+    }
+
 	/**
 	 * Creates a new instance of the block class as long as it has a default constructor
 	 */
@@ -147,6 +155,25 @@ public class ModManager
 		return newBlock(blockClazz.getSimpleName(), blockClazz);
 	}
 
+    /**
+     * Creates a new instance of the block class as long as it has a default constructor
+     */
+    public Block newBlock(String name, Class<? extends Block> blockClazz, Class<? extends ItemBlock> itemBlockClass)
+    {
+        try
+        {
+            return newBlock(name, blockClazz.newInstance(), itemBlockClass);
+        }
+        catch (InstantiationException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
 	/**
 	 * Creates a new instance of the block class as long as it has a default constructor
 	 */
