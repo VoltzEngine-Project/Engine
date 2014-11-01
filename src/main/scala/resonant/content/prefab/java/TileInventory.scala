@@ -11,6 +11,8 @@ abstract class TileInventory(material: Material) extends TileNode(material: Mate
   override def getSizeInventory: Int = maxSlots
 
   def setSizeInventory(slots: Integer)
-  { maxSlots = slots }
+  {
+      maxSlots = slots
+  }
 
 }

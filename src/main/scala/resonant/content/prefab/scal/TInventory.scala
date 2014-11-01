@@ -54,9 +54,9 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     return this.getInventory().getStackInSlotOnClosing(index)
   }
 
-  override def getInventoryName = getBlockType.getLocalizedName
+  override def getInventoryName : String = getBlockType.getLocalizedName
 
-  override def hasCustomInventoryName = inventory.hasCustomInventoryName()
+  override def hasCustomInventoryName : Boolean = inventory.hasCustomInventoryName()
 
   override def getInventoryStackLimit = getInventory.getInventoryStackLimit
 
