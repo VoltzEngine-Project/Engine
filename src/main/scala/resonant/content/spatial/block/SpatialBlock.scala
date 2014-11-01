@@ -109,14 +109,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   var canProvidePower: Boolean = false
   /** Random block updates */
   var tickRandomly: Boolean = false
-  /** Render as a normal block if true */
-  var normalRender: Boolean = true
-  /** Override to force a block to render even if not a normal renderer */
-  var renderStaticBlock: Boolean = false
-  /** Forces the item block to render as a block */
-  var forceItemToRenderAsBlock: Boolean = false
-  /** Flag to say this has a custom render class for the item */
-  var customItemRender: Boolean = false
   /** False will make the block glass like */
   var isOpaqueCube: Boolean = true
   /** World accessor */
@@ -125,6 +117,17 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   var textureName: String = name
   /** Domain prefix for texture registration  */
   var domain: String = null
+
+  /** Render as a normal block if true */
+  var normalRender: Boolean = true
+  /** Override to force a block to render even if not a normal renderer */
+  var renderStaticBlock: Boolean = false
+  /** Forces the item block to render as a block */
+  var forceItemToRenderAsBlock: Boolean = false
+  /** Flag to say this has a custom render class for the item */
+  var customItemRender: Boolean = false
+  /** Sets the block to use side based textures */
+  var useSidedTextures: Boolean = false
 
   /** Flag that is triggered when the dynamic renderer fails, will cause the item to stop rendering */
   private var noDynamicItemRenderCrash: Boolean = true
@@ -543,15 +546,19 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   def getIcon(side: Int, meta: Int): IIcon =
   {
-    if(side == 0)
+    if(useSidedTextures)
     {
-      return getTopIcon(meta)
+      if (side == 0)
+      {
+        return getTopIcon(meta)
+      }
+      if (side == 1)
+      {
+        return getBottomIcon(meta)
+      }
+      return getSideIcon(meta, side)
     }
-    if(side == 1)
-    {
-      return getBottomIcon(meta)
-    }
-    return getSideIcon(meta, side)
+    return getIcon
   }
 
   @SideOnly(Side.CLIENT)
@@ -623,7 +630,14 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   def registerIcons(iconRegister: IIconRegister)
   {
-    SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName))
+    if(useSidedTextures)
+    {
+      registerSideTextureSet(iconRegister)
+    }
+    else
+    {
+      SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName))
+    }
   }
 
   /** Registers a set of 3 textures(top, sides, bottom) to be used for the block renderer
