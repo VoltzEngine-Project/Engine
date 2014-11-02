@@ -24,7 +24,9 @@ import scala.collection.convert.wrapAll._
  */
 class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpdate with TileConnector[DCNode]
 {
-  //Charges are pushed to positive terminals
+  /**
+   * Charges are pushed to positive terminals. Any connections that is NOT
+   */
   val positiveTerminals: JSet[ForgeDirection] = new util.HashSet()
 
   private var _current = 0D
@@ -80,7 +82,12 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
       charge = charge - pushChargeBuffer
       var remain = 0D
       val positiveNodes = directionMap.filter(c => positiveTerminals.contains(c._2)).keys
-      positiveNodes.foreach(c => remain = remain + c.push(pushChargeBuffer / positiveNodes.size, this))
+
+      if (positiveNodes.size > 0)
+        positiveNodes.foreach(c => remain = remain + c.push(pushChargeBuffer / positiveNodes.size, this))
+      else
+        remain = pushChargeBuffer
+
       println("DCNode: Failed to push amount: " + remain)
       charge = charge + remain
       pushChargeBuffer = 0
@@ -102,7 +109,6 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
     pushChargeBuffer = pushChargeBuffer + pushCharge
   }
 
-
   /**
    *
    * This recursive function will gather the paths into a list, then push charges backwards.
@@ -116,7 +122,7 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
 
     val transfer = Math.min(charge + pushAmount, chargeCapacity) - charge
     var remain = pushAmount - transfer
-    charge = charge  + transfer
+    charge = charge + transfer
 
     if (transfer > 0)
     {
