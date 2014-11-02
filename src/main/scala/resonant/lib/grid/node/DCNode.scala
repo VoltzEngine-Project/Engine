@@ -62,8 +62,9 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
   /**
    * Called during reconstruct to build the connection map. This is a general way used to search all adjacent TileEntity to see and try to connect to it.
    */
-  override def reconstruct(): Unit =
+  override def reconstruct()
   {
+    super.reconstruct()
     UpdateTicker.addUpdater(this)
   }
 

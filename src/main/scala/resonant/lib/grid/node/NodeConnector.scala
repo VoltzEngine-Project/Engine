@@ -18,14 +18,14 @@ import scala.collection.mutable
  */
 abstract class NodeConnector[A](parent: INodeProvider) extends Node(parent) // with IConnector
 {
-  protected var connectionMask = 0x3F
+  var connectionMask = 0x3F
 
   /**
    * Connections to other nodes specifically.
    */
   private val connectionMap = mutable.WeakHashMap.empty[A, ForgeDirection]
 
-  def canConnect(obj: AnyRef, from: ForgeDirection): Boolean = obj != null && isValidConnection(obj) && canConnect(from)
+  def canConnect(obj: AnyRef, from: ForgeDirection): Boolean = isValidConnection(obj) && canConnect(from)
 
   def canConnect(from: ForgeDirection): Boolean = ((connectionMask & (1 << from.ordinal)) != 0) || from == ForgeDirection.UNKNOWN
 

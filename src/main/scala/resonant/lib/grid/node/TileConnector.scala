@@ -2,7 +2,7 @@ package resonant.lib.grid.node
 
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.grid.{INodeProvider, INode}
+import resonant.api.grid.{INode, INodeProvider}
 
 /**
  * A trait applied to NodeConnector
@@ -18,7 +18,7 @@ trait TileConnector[A] extends NodeConnector[A]
     {
       if (canConnect(direction))
       {
-        val tile: TileEntity = position.add(direction).getTileEntity
+        val tile: TileEntity = (position + direction).getTileEntity
         val node: INode = getNodeFrom(tile, direction.getOpposite)
 
         if (node != null)
