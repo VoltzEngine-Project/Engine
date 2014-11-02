@@ -13,7 +13,7 @@ import java.util.Map
  *
  * @author Calclavia
  */
-abstract class NodeEnergy(parent:INodeProvider) extends NodeConnector(parent)
+abstract class NodeEnergy[C](parent:INodeProvider) extends NodeConnector[C](parent)
 {
   def energy : Double
   def power : Double

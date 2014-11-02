@@ -1,28 +1,29 @@
 package resonant.lib.grid.node
 
+import java.util
 import java.util.WeakHashMap
 
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.grid.{INodeProvider, INode, IConnector}
+import resonant.api.grid.{IConnector, INode, INodeProvider}
 
 /**
  * A node that can connect to other nodes.
  *
  * TODO: Consider adding generics to restrict the node type
- *
+ * @param C - The connection object type stored
  * @author Darkguardsman, Calclavia
  */
-abstract class NodeConnector(parent: INodeProvider) extends Node(parent) with IConnector
+abstract class NodeConnector[C](parent: INodeProvider) extends Node(parent) with IConnector
 {
   protected var connectionMap: Byte = 0x3F
 
   /**
    * Connections to other nodes specifically.
    */
-  protected val connections = new WeakHashMap[AnyRef, ForgeDirection]
+  protected val connections = new WeakHashMap[C, ForgeDirection]
 
-  def getConnections = connections
+  override def getConnections = connections.asInstanceOf[util.Map[AnyRef, ForgeDirection]]
 
   def canConnect(obj: AnyRef, from: ForgeDirection) = obj != null && isValidConnection(obj) && canConnect(from)
 
@@ -45,9 +46,10 @@ abstract class NodeConnector(parent: INodeProvider) extends Node(parent) with IC
       {
         val tile: TileEntity = position.add(direction).getTileEntity
         val node: INode = getNodeFrom(tile, direction.getOpposite)
+
         if (node != null)
         {
-          addConnection(node, direction)
+          addConnection(node.asInstanceOf[C], direction)
         }
       }
     }
@@ -67,19 +69,21 @@ abstract class NodeConnector(parent: INodeProvider) extends Node(parent) with IC
   {
     if (tile.isInstanceOf[INodeProvider])
     {
-      val node: INode = (tile.asInstanceOf[INodeProvider]).getNode(getRelativeClass, from)
+      val node = tile.asInstanceOf[INodeProvider].getNode(getConnectClass, from)
+
       if (node != null)
       {
         return node
       }
     }
+
     return null
   }
 
   /**
    * Called to add an object to the connection map. Override this to update connection masks for client packets if needed.
    */
-  protected def addConnection(obj: AnyRef, dir: ForgeDirection)
+  protected def addConnection(obj: C, dir: ForgeDirection)
   {
     connections.put(obj, dir)
   }
@@ -87,5 +91,5 @@ abstract class NodeConnector(parent: INodeProvider) extends Node(parent) with IC
   /**
    * The class used to compare when making connections
    */
-  protected def getRelativeClass: Class[_ <: INode] = getClass
+  protected def getConnectClass: Class[_ <: C with INode]
 }

@@ -4,8 +4,8 @@ import java.util
 import java.util.{Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
+import resonant.api.grid.{INodeProvider, IUpdate}
 import resonant.lib.grid.UpdateTicker
-import resonant.api.grid.{IUpdate, INodeProvider}
 
 import scala.collection.convert.wrapAll._
 
@@ -18,9 +18,11 @@ import scala.collection.convert.wrapAll._
  *
  * This is not 100% realistic, but should contain similar mechanics as realistic electricity.
  *
+ * TODO: Check why += is not working.
+ *
  * @author Calclavia
  */
-class DCNode(parent: INodeProvider) extends NodeEnergy(parent) with IUpdate
+class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpdate
 {
   //Charges are pushed to positive terminals
   val positiveTerminals: JSet[ForgeDirection] = new util.HashSet()
@@ -77,10 +79,10 @@ class DCNode(parent: INodeProvider) extends NodeEnergy(parent) with IUpdate
     {
       charge = charge - pushChargeBuffer
       var remain = 0D
-      val positiveNodes = connections.filter(c => positiveTerminals.contains(c._2)).keys.map(_.asInstanceOf[DCNode])
-      positiveNodes.foreach(c => remain += c.push(pushChargeBuffer / positiveNodes.size, this))
+      val positiveNodes = connections.filter(c => positiveTerminals.contains(c._2)).keys
+      positiveNodes.foreach(c => remain = remain + c.push(pushChargeBuffer / positiveNodes.size, this))
       println("DCNode: Failed to push amount: " + remain)
-      charge += remain
+      charge = charge + remain
       pushChargeBuffer = 0
     }
   }
@@ -97,8 +99,9 @@ class DCNode(parent: INodeProvider) extends NodeEnergy(parent) with IUpdate
    */
   def buffer(pushCharge: Double)
   {
-    pushChargeBuffer += charge
+    pushChargeBuffer = pushChargeBuffer + pushCharge
   }
+
 
   /**
    *
@@ -113,18 +116,15 @@ class DCNode(parent: INodeProvider) extends NodeEnergy(parent) with IUpdate
 
     val transfer = Math.min(charge + pushAmount, chargeCapacity) - charge
     var remain = pushAmount - transfer
-    charge += transfer
+    charge = charge  + transfer
 
     if (transfer > 0)
     {
-      passed.foreach(_.chargeAccumulator += transfer)
-      //      println("Reached low charge area!")
+      passed.foreach(c => c.chargeAccumulator = c.chargeAccumulator + transfer)
+      println("Reached low charge area!")
     }
 
-    //TODO: Why checking?
     val components = connections.keys
-      .filter(_.isInstanceOf[DCNode])
-      .map(_.asInstanceOf[DCNode])
       .filter(c => if (passed.size == 1) !excluded.contains(c) else !excluded.drop(1).contains(c))
 
     //    println("Stepping over: " + passed.size + " " + pushAmount + " " + remain)
@@ -151,12 +151,17 @@ class DCNode(parent: INodeProvider) extends NodeEnergy(parent) with IUpdate
       if (remain > 0)
       {
         val pushRemain = c.push(remain, excluded: _*)
-        remain -= pushRemain
+        remain = remain - pushRemain
       }
     })
 
     return remain
   }
+
+  /**
+   * The class used to compare when making connections
+   */
+  override protected def getConnectClass = getClass
 
   override def toString = "DCNode [" + charge.toInt + "C " + current.toInt + "A " + voltage.toInt + "V][" + connections.size + " Connections]"
 }

@@ -2,7 +2,7 @@ package resonant.lib.prefab.fluid
 
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank}
-import resonant.api.grid.INodeProvider
+import resonant.api.grid.{INode, INodeProvider}
 import resonant.lib.grid.node.NodeConnector
 
 /** Version of NodeConnector designed for usage with fluids,
@@ -12,7 +12,7 @@ import resonant.lib.grid.node.NodeConnector
   *
   * @param parent - parent(TileEntity or Multipart) that contains this node
   */
-class NodeFluidHandler(parent: INodeProvider) extends NodeConnector(parent) with TFluidHandler with TFluidTank
+class NodeFluidHandler(parent: INodeProvider) extends NodeConnector[NodeFluidHandler](parent) with TFluidHandler with TFluidTank
 {
   /** Internal tank */
   private var tank: FluidTank = new FluidTank(1000);
@@ -71,4 +71,9 @@ class NodeFluidHandler(parent: INodeProvider) extends NodeConnector(parent) with
   override def canFill(from: ForgeDirection, fluid: Fluid): Boolean = canConnect(from)
 
   override def canDrain(from: ForgeDirection, fluid: Fluid): Boolean = canConnect(from)
+
+  /**
+   * The class used to compare when making connections
+   */
+  override protected def getConnectClass: Class[_ <: NodeFluidHandler with INode] = classOf[NodeFluidHandler]
 }
