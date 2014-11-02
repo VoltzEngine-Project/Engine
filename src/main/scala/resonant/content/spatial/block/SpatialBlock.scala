@@ -582,7 +582,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   protected def getTopIcon(meta: Int) : IIcon =
   {
-    IIcon icon = SpatialBlock.icon.get(getTextureName + "_top")
+    var icon = SpatialBlock.icon.get(getTextureName + "_top")
     if(icon == null)
       icon = SpatialBlock.icon.get(getTextureName)
     return icon
@@ -594,7 +594,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   protected def getBottomIcon(meta: Int) : IIcon =
   {
-    IIcon icon = SpatialBlock.icon.get(getTextureName + "_bottom")
+    var icon = SpatialBlock.icon.get(getTextureName + "_bottom")
     if(icon == null)
       icon = SpatialBlock.icon.get(getTextureName)
     return icon
@@ -616,7 +616,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   protected def getSideIcon(meta: Int, side: Int) : IIcon =
   {
-    IIcon icon = SpatialBlock.icon.get(getTextureName + "_side")
+    var icon = SpatialBlock.icon.get(getTextureName + "_side")
     if(icon == null)
       icon = SpatialBlock.icon.get(getTextureName)
     return icon
