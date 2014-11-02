@@ -6,7 +6,7 @@ import resonant.api.electric.EnergyStorage
 /**
  * @author Calclavia
  */
-trait TElectricStorage extends TElectric
+trait TEnergyStorage extends TElectric
 {
   var energy: EnergyStorage = _
 

@@ -14,12 +14,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import resonant.engine.References;
 import resonant.lib.render.RenderUtility;
-import resonant.lib.utility.LanguageUtility;
 import resonant.lib.science.UnitDisplay;
 import resonant.lib.science.UnitDisplay.Unit;
-import resonant.lib.grid.module.ModuleThermalExpansion$;
 import resonant.lib.transform.region.Rectangle;
 import resonant.lib.transform.vector.Vector2;
+import resonant.lib.utility.LanguageUtility;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -342,6 +341,7 @@ public class GuiContainerBase extends GuiContainer
 
 		String display = new UnitDisplay(unit, energy).symbol(symbol) + "/" + new UnitDisplay(unit, maxEnergy).symbol(symbol);
 
+		/*
 		// Check different energy system types.
 		if (unit == Unit.WATT || unit == Unit.JOULES)
 		{
@@ -351,7 +351,7 @@ public class GuiContainerBase extends GuiContainer
 					display = UnitDisplay.roundDecimals(energy * ModuleThermalExpansion$.MODULE$.ratio) + " RF" + displaySuffix + "/" + UnitDisplay.roundDecimals(maxEnergy * ModuleThermalExpansion$.MODULE$.ratio) + " RF" + displaySuffix;
 					break;
 			}
-		}
+		}*/
 
 		//TODO: Check if this rect works.
 		if (new Rectangle(x, y, x + display.length() * 5, y + 9).intersects(new Vector2(mouseX, mouseY)))
@@ -382,7 +382,7 @@ public class GuiContainerBase extends GuiContainer
 		}
 
 		String display = new UnitDisplay(unit, energy).symbol(small).toString();
-
+/*
 		// Check different energy system types.
 		if (unit == Unit.WATT || unit == Unit.JOULES)
 		{
@@ -393,7 +393,7 @@ public class GuiContainerBase extends GuiContainer
 					break;
 			}
 		}
-
+*/
 		if (new Rectangle(x, y, x + display.length() * 5, y + 9).intersects(new Vector2(mouseX, mouseY)))
 		{
 			if (Mouse.isButtonDown(0) && this.lastChangeFrameTime <= 0)
