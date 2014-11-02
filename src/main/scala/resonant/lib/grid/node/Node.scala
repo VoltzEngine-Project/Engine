@@ -2,7 +2,7 @@ package resonant.lib.grid.node
 
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
-import resonant.api.grid.{INodeProvider, INode}
+import resonant.api.grid.{INode, INodeProvider}
 import resonant.lib.transform.vector.{IVectorWorld, VectorWorld}
 
 /**
@@ -17,12 +17,11 @@ abstract class Node(var parent: INodeProvider) extends INode with IVectorWorld
 
   def deconstruct()
   {
-    parent = null
   }
 
-  def getParent: INodeProvider =parent
+  def getParent: INodeProvider = parent
 
-  def position: VectorWorld =  new VectorWorld(this)
+  def position: VectorWorld = new VectorWorld(this)
 
   def world: World =
   {

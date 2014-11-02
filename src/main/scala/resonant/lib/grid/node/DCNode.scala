@@ -22,7 +22,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpdate
+class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpdate with TileConnector[DCNode]
 {
   //Charges are pushed to positive terminals
   val positiveTerminals: JSet[ForgeDirection] = new util.HashSet()
@@ -79,7 +79,7 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
     {
       charge = charge - pushChargeBuffer
       var remain = 0D
-      val positiveNodes = connections.filter(c => positiveTerminals.contains(c._2)).keys
+      val positiveNodes = directionMap.filter(c => positiveTerminals.contains(c._2)).keys
       positiveNodes.foreach(c => remain = remain + c.push(pushChargeBuffer / positiveNodes.size, this))
       println("DCNode: Failed to push amount: " + remain)
       charge = charge + remain
@@ -124,8 +124,7 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
       println("Reached low charge area!")
     }
 
-    val components = connections.keys
-      .filter(c => if (passed.size == 1) !excluded.contains(c) else !excluded.drop(1).contains(c))
+    val components = connections.filter(c => if (passed.size == 1) !excluded.contains(c) else !excluded.drop(1).contains(c))
 
     //    println("Stepping over: " + passed.size + " " + pushAmount + " " + remain)
 
@@ -161,7 +160,7 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
   /**
    * The class used to compare when making connections
    */
-  override protected def getConnectClass = getClass
+  override protected def getCompareClass = getClass
 
   override def toString = "DCNode [" + charge.toInt + "C " + current.toInt + "A " + voltage.toInt + "V][" + connections.size + " Connections]"
 }
