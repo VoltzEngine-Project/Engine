@@ -15,6 +15,9 @@ import java.util.Set;
  */
 public class Compatibility
 {
+	//Multiply UE by this value to convert to RF
+	public static final double redstoneFluxRatio = 1;
+
 	public static final Set<CompatibilityModule> loadedModules = new LinkedHashSet<CompatibilityModule>();
 
 	/**

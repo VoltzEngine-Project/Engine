@@ -4,9 +4,10 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.electric.EnergyStorage
 
 /**
+ * Any object that can store energy
  * @author Calclavia
  */
-trait TEnergyStorage extends TElectric
+trait TEnergyStorage
 {
   var energy: EnergyStorage = _
 

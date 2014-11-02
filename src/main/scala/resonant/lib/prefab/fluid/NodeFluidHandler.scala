@@ -1,7 +1,7 @@
 package resonant.lib.prefab.fluid
 
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank}
+import net.minecraftforge.fluids.{IFluidHandler, Fluid, FluidStack, FluidTank}
 import resonant.api.grid.{INode, INodeProvider}
 import resonant.lib.grid.node.{TileConnector, NodeConnector}
 
@@ -12,7 +12,7 @@ import resonant.lib.grid.node.{TileConnector, NodeConnector}
   *
   * @param parent - parent(TileEntity or Multipart) that contains this node
   */
-class NodeFluidHandler(parent: INodeProvider) extends NodeConnector[NodeFluidHandler](parent) with TFluidHandler with TFluidTank with TileConnector[NodeFluidHandler]
+class NodeFluidHandler(parent: INodeProvider) extends NodeConnector[IFluidHandler](parent) with TFluidHandler with TFluidTank with TileConnector[IFluidHandler]
 {
   /** Internal tank */
   private var tank: FluidTank = new FluidTank(1000)

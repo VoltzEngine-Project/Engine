@@ -31,9 +31,9 @@ abstract class NodeConnector[A](parent: INodeProvider) extends Node(parent) // w
 
   def isValidConnection(obj: AnyRef): Boolean = obj != null && obj.getClass.isAssignableFrom(getClass)
 
-  def connect[B <: A](obj: A, dir: ForgeDirection) = connectionMap.put(obj, dir)
+  def connect[B <: A](obj: B, dir: ForgeDirection): Unit = connectionMap.put(obj, dir)
 
-  def disconnect[B <: A](obj: B) = connectionMap.remove(obj)
+  def disconnect[B <: A](obj: B): Unit = connectionMap.remove(obj)
 
   def connections: JSet[A] = connectionMap.keys.toSet[A]
 
