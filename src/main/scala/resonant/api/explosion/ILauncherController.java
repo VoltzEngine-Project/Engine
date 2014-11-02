@@ -2,7 +2,6 @@ package resonant.api.explosion;
 
 import net.minecraft.item.ItemStack;
 import resonant.api.blocks.IBlockFrequency;
-import resonant.api.electric.IEnergyContainer;
 import resonant.lib.transform.vector.Vector3;
 
 /**
@@ -10,7 +9,7 @@ import resonant.lib.transform.vector.Vector3;
  *
  * @author Calclavia
  */
-public interface ILauncherController extends IEnergyContainer, IBlockFrequency
+public interface ILauncherController extends IBlockFrequency
 {
 	/**
 	 * What type of launcher is this?

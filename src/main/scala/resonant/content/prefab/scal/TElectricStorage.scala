@@ -1,19 +1,21 @@
 package resonant.lib.content.prefab
 
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.electric.IEnergyContainer
+import resonant.api.electric.EnergyStorage
 
 /**
  * @author Calclavia
  */
-trait TElectricStorage extends TElectric with IEnergyContainer
+trait TElectricStorage extends TElectric
 {
+  var energy: EnergyStorage = _
+
   /**
    * Sets the amount of energy this unit stored.
    *
    * This function is NOT recommended for calling.
    */
-  override def setEnergy(from: ForgeDirection, amount: Double) =
+  def setEnergy(amount: Double, from: ForgeDirection) =
   {
     if (energy != null)
       energy.setEnergy(amount)

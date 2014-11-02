@@ -1,16 +1,16 @@
 package resonant.lib.content.prefab.java
 
 import net.minecraft.block.material.Material
-import resonant.content.prefab.java.TileNode
+import resonant.content.prefab.java.{TileAdvanced, TileNode}
 import resonant.lib.content.prefab.TInventory
 
-abstract class TileInventory(material: Material) extends TileNode(material: Material) with TInventory
+abstract class TileInventory(material: Material) extends TileAdvanced(material: Material) with TInventory
 {
-  var maxSlots: Integer = 0;
+  var maxSlots = 0
 
-  override def getSizeInventory: Int = maxSlots
+  override def getSizeInventory = maxSlots
 
-  def setSizeInventory(slots: Integer)
+  def setSizeInventory(slots: Int)
   {
       maxSlots = slots
   }

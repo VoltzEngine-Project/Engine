@@ -12,5 +12,5 @@ public interface INodeProvider
 	 * @param from     - The direction.
 	 * @return Returns the node object.
 	 */
-	public INode getNode(Class< ? extends INode> nodeType, ForgeDirection from);
+	public <N extends INode> N getNode(Class<? extends N> nodeType, ForgeDirection from);
 }

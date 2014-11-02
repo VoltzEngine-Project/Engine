@@ -9,7 +9,6 @@ import net.minecraft.nbt.NBTTagCompound
  */
 class EnergyStorage
 {
-
   protected var energy: Double = .0
   protected var capacity: Double = .0
   protected var maxReceive: Double = .0

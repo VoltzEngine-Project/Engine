@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import resonant.api.IBoilHandler;
+import resonant.api.grid.IUpdate;
 import resonant.api.mffs.fortron.FrequencyGridRegistry;
 import resonant.api.recipe.MachineRecipes;
 import resonant.content.factory.resources.RecipeType;
@@ -34,7 +35,6 @@ import resonant.content.loader.ModManager;
 import resonant.content.wrapper.BlockDummy;
 import resonant.engine.content.ItemScrewdriver;
 import resonant.engine.content.debug.TileCreativeBuilder;
-import resonant.engine.content.debug.TileInfiniteEnergy;
 import resonant.engine.content.debug.TileInfiniteFluid;
 import resonant.engine.content.tool.ToolMode;
 import resonant.engine.content.tool.ToolModeGeneral;
@@ -50,12 +50,11 @@ import resonant.lib.loadable.LoadableHandler;
 import resonant.lib.multiblock.synthetic.SyntheticMultiblock;
 import resonant.lib.network.netty.PacketManager;
 import resonant.lib.ore.OreGenerator;
+import resonant.lib.transform.vector.Vector3;
+import resonant.lib.transform.vector.VectorWorld;
 import resonant.lib.utility.PlayerInteractionHandler;
 import resonant.lib.utility.PotionUtility;
 import resonant.lib.utility.nbt.SaveManager;
-import resonant.api.grid.IUpdate;
-import resonant.lib.transform.vector.Vector3;
-import resonant.lib.transform.vector.VectorWorld;
 
 import java.util.Arrays;
 
@@ -111,8 +110,8 @@ public class ResonantEngine
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt)
 	{
-        ConfigScanner.instance().generateSets(evt.getAsmData());
-        ConfigHandler.sync(References.CONFIGURATION, References.DOMAIN);
+		ConfigScanner.instance().generateSets(evt.getAsmData());
+		ConfigHandler.sync(References.CONFIGURATION, References.DOMAIN);
 
 		resourceFactory = new ResourceFactoryHandler();
 		References.CONFIGURATION.load();
@@ -150,7 +149,6 @@ public class ResonantEngine
 		if (References.CONFIGURATION.get("Creative Tools", "InfiniteSource", true).getBoolean(true))
 		{
 			blockInfiniteFluid = contentRegistry.newBlock(TileInfiniteFluid.class);
-			blockInfiniteEnergy = contentRegistry.newBlock(TileInfiniteEnergy.class);
 		}
 
 		//BlockCreativeBuilder.register(new SchematicTestRoom());
@@ -175,13 +173,12 @@ public class ResonantEngine
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt)
 	{
-        UpdateTicker.addUpdater(ResonantEngine.thermalGrid);
+		UpdateTicker.addUpdater(ResonantEngine.thermalGrid);
 
-        if (!UpdateTicker.isAlive())
-        {
-            UpdateTicker.start();
-        }
-
+		if (!UpdateTicker.isAlive())
+		{
+			UpdateTicker.start();
+		}
 
 		loadables.postInit();
 
@@ -189,19 +186,18 @@ public class ResonantEngine
 		FrequencyGridRegistry.CLIENT_INSTANCE = new FrequencyGrid();
 		FrequencyGridRegistry.SERVER_INSTANCE = new FrequencyGrid();
 
-
-        OreDictionary.registerOre("ingotGold", Items.gold_ingot);
-        OreDictionary.registerOre("ingotIron", Items.iron_ingot);
-        OreDictionary.registerOre("oreGold", Blocks.gold_ore);
-        OreDictionary.registerOre("oreIron", Blocks.iron_ore);
-        OreDictionary.registerOre("oreLapis", Blocks.lapis_ore);
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.SMELTER.name(), new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone));
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.cobblestone, Blocks.gravel);
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.stone, Blocks.cobblestone);
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.chest, new ItemStack(Blocks.planks, 7, 0));
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.cobblestone, Blocks.sand);
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
-        MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
+		OreDictionary.registerOre("ingotGold", Items.gold_ingot);
+		OreDictionary.registerOre("ingotIron", Items.iron_ingot);
+		OreDictionary.registerOre("oreGold", Blocks.gold_ore);
+		OreDictionary.registerOre("oreIron", Blocks.iron_ore);
+		OreDictionary.registerOre("oreLapis", Blocks.lapis_ore);
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.SMELTER.name(), new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone));
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.cobblestone, Blocks.gravel);
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.stone, Blocks.cobblestone);
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.chest, new ItemStack(Blocks.planks, 7, 0));
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.cobblestone, Blocks.sand);
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
+		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
 	}
 
 	@EventHandler
@@ -229,7 +225,7 @@ public class ResonantEngine
 		World world = evt.world;
 		Vector3 position = evt.position;
 
-        //TODO change to a raytrace to get the block above
+		//TODO change to a raytrace to get the block above
 		for (int height = 1; height <= evt.maxSpread; height++)
 		{
 			TileEntity tileEntity = world.getTileEntity(position.xi(), position.yi() + height, position.zi());

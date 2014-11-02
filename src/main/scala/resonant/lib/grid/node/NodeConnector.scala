@@ -3,9 +3,8 @@ package resonant.lib.grid.node
 import java.lang.{Iterable => JIterable}
 import java.util.{Map => JMap, Set => JSet}
 
-import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.grid.{INode, INodeProvider}
+import resonant.api.grid.INodeProvider
 
 import scala.collection.convert.wrapAll._
 import scala.collection.mutable
@@ -19,20 +18,20 @@ import scala.collection.mutable
  */
 abstract class NodeConnector[A](parent: INodeProvider) extends Node(parent) // with IConnector
 {
-  protected var connectionMask: Byte = 0x3F
+  protected var connectionMask = 0x3F
 
   /**
    * Connections to other nodes specifically.
    */
   private val connectionMap = mutable.WeakHashMap.empty[A, ForgeDirection]
 
-  def canConnect(obj: AnyRef, from: ForgeDirection) :Boolean= obj != null && isValidConnection(obj) && canConnect(from)
+  def canConnect(obj: AnyRef, from: ForgeDirection): Boolean = obj != null && isValidConnection(obj) && canConnect(from)
 
-  def canConnect(from: ForgeDirection) :Boolean= ((connectionMask & (1 << from.ordinal)) != 0) || from == ForgeDirection.UNKNOWN
+  def canConnect(from: ForgeDirection): Boolean = ((connectionMask & (1 << from.ordinal)) != 0) || from == ForgeDirection.UNKNOWN
 
   def isValidConnection(obj: AnyRef): Boolean = obj != null && obj.getClass.isAssignableFrom(getClass)
 
-  def connect[B <: A](obj: B, dir: ForgeDirection) = connectionMap.put(obj, dir)
+  def connect[B <: A](obj: A, dir: ForgeDirection) = connectionMap.put(obj, dir)
 
   def disconnect[B <: A](obj: B) = connectionMap.remove(obj)
 

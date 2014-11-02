@@ -37,38 +37,14 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
   }
 
   @deprecated
-  def setCapacity(value: Double)
-  { energy.setCapacity(value) }
-
-  @deprecated
-  def energy: EnergyStorage = new EnergyStorage(0)
-
-  @deprecated
-  def setMaxTransfer(maxTransfer: Double)
-  { energy.setMaxTransfer(maxTransfer) }
-
-  @deprecated
-  def setMaxReceive(maxReceive: Double)
-  { energy.setMaxReceive(maxReceive) }
-
-  @deprecated
-  def setMaxExtract(maxExtract: Double)
-  { energy.setMaxExtract(maxExtract) }
-
-  @deprecated
   def getVoltage = 120
 
-  /**
-   * @param nodeType - The type of node we are looking for.
-   * @param from     - The direction.
-   * @return Returns the node object.
-   */
-  override def getNode(nodeType: Class[_ <: INode], from: ForgeDirection): INode =
+  override def getNode[N <: INode](nodeType: Class[_ <: N], from: ForgeDirection): N =
   {
     if (classOf[DCNode].isAssignableFrom(nodeType))
-      return dcNode
+      return dcNode.asInstanceOf[N]
 
-    return null
+    return null.asInstanceOf[N]
   }
 
   protected def recharge(stack: ItemStack)
