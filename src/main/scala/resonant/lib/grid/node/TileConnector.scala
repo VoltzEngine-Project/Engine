@@ -18,10 +18,11 @@ trait TileConnector[A] extends NodeConnector[A]
     {
       if (canConnect(direction))
       {
-        val tile: TileEntity = (position + direction).getTileEntity
-        val node: INode = getNodeFrom(tile, direction.getOpposite)
+        val tile = (position + direction).getTileEntity
+        val node = getNodeFrom(tile, direction.getOpposite)
 
         if (node != null)
+
         {
           connect(node.asInstanceOf[A], direction)
         }
