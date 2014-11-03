@@ -22,7 +22,6 @@ trait TileConnector[A] extends NodeConnector[A]
         val node = getNodeFrom(tile, direction.getOpposite)
 
         if (node != null)
-
         {
           connect(node.asInstanceOf[A], direction)
         }

@@ -27,7 +27,11 @@ abstract class NodeConnector[A](parent: INodeProvider) extends Node(parent) // w
 
   def canConnect(obj: AnyRef, from: ForgeDirection): Boolean = isValidConnection(obj) && canConnect(from)
 
-  def canConnect(from: ForgeDirection): Boolean = ((connectionMask & (1 << from.ordinal)) != 0) || from == ForgeDirection.UNKNOWN
+  def canConnect(from: ForgeDirection): Boolean =
+  {
+    val test = (1 << from.ordinal) + " result: " + ((connectionMask & (1 << from.ordinal)) != 0)
+    ((connectionMask & (1 << from.ordinal)) != 0) || from == ForgeDirection.UNKNOWN
+  }
 
   def isValidConnection(obj: AnyRef): Boolean = obj != null && obj.getClass.isAssignableFrom(getClass)
 
