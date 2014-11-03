@@ -182,6 +182,7 @@ repositories {
 dependencies 
 {
     testCompile 'junit:junit:4.11'
+    testCompile 'jmock:jmock:1.1.0'
     //compile "mcp.mobius.waila:Waila:1.5.2a"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.0.+:dev"
 }
