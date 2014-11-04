@@ -8,7 +8,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import org.lwjgl.opengl.GL11
 import resonant.lib.render.RenderUtility
 import resonant.lib.utility.{RotationUtility, WorldUtility}
-
+import resonant.lib.wrapper.BitmaskWrapper._
 /**
  * A block rendering helper class.
  */
@@ -48,11 +48,11 @@ object RenderBlockUtility
 
     for (dir <- ForgeDirection.VALID_DIRECTIONS; r <- 0 until 4)
     {
-      if (!WorldUtility.isEnabledSide(sideMap, dir))
+      if (!sideMap.mask(dir))
       {
         val absDir = ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
 
-        if (!WorldUtility.isEnabledSide(sideMap, absDir))
+        if (!sideMap.mask(absDir))
         {
           RenderUtility.rotateFacesOnRenderer(absDir, renderBlocks, true)
           tessellateFace(renderBlocks, blockAccess, x, y, z, block, edgeOverride, dir.ordinal)
