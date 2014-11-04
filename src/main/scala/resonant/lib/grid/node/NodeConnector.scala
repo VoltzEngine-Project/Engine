@@ -1,6 +1,5 @@
 package resonant.lib.grid.node
 
-import java.lang.{Iterable => JIterable}
 import java.util.{Map => JMap, Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
@@ -35,7 +34,8 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
 
   def canConnect(from: ForgeDirection): Boolean = ((connectionMask & (1 << from.ordinal)) != 0) || from == ForgeDirection.UNKNOWN
 
-  def isValidConnection(obj: AnyRef): Boolean = obj != null && obj.getClass.isAssignableFrom(getClass)
+  //TODO: This getClass.isAssignableFrom has issues.
+  def isValidConnection(other: AnyRef): Boolean = other != null //&& other.getClass.isAssignableFrom(getClass)
 
   def connect[B <: A](obj: B, dir: ForgeDirection): Unit = connectionMap.put(obj, dir)
 
