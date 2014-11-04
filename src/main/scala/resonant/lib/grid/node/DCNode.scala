@@ -154,9 +154,11 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
       val transfer = Math.min(charge * chargePerct /*(chargePerct + (1 - resisPerct)) / 2*/ , diff)
       */
 
-      if (remain > 0)
+      val chargeMove = remain
+
+      if (transfer > 0)
       {
-        remain = c.push(remain, excluded: _*)
+        remain = c.push(chargeMove, excluded: _*)
       }
     })
 
