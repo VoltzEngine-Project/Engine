@@ -80,12 +80,12 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
 
     if (pushChargeBuffer > 0)
     {
-      charge = charge - pushChargeBuffer
+      _charge -= pushChargeBuffer
       var remain = 0D
       val positiveNodes = directionMap.filter(c => positiveTerminals.contains(c._2)).keys
 
       if (positiveNodes.size > 0)
-        positiveNodes.foreach(c => remain  += c.push(pushChargeBuffer / positiveNodes.size, this))
+        positiveNodes.foreach(c => remain += c.push(pushChargeBuffer / positiveNodes.size, this))
       else
         remain = pushChargeBuffer
 
@@ -107,7 +107,7 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
    */
   def buffer(pushCharge: Double)
   {
-    pushChargeBuffer  += pushCharge
+    pushChargeBuffer += pushCharge
   }
 
   /**
@@ -128,12 +128,12 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
     if (transfer > 0)
     {
       passed.foreach(c => c.chargeAccumulator += transfer)
-      println("Reached low charge area!")
+      println("Reached low charge area with remain: " + remain)
     }
 
     val components = connections.filter(c => if (passed.size == 1) !excluded.contains(c) else !excluded.drop(1).contains(c))
 
-    //    println("Stepping over: " + passed.size + " " + pushAmount + " " + remain)
+    println("Stepping over: " + passed.size + " " + pushAmount + " " + remain)
 
     /**
      * Distribution:
@@ -156,8 +156,7 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
 
       if (remain > 0)
       {
-        val pushRemain = c.push(remain, excluded: _*)
-        remain -= pushRemain
+        remain = c.push(remain, excluded: _*)
       }
     })
 
