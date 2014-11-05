@@ -3,11 +3,11 @@ package resonant.lib.grid.electric.macroscopic;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.grid.INode;
 import resonant.api.grid.INodeProvider;
-import resonant.api.grid.sim.ISimNode;
-import resonant.lib.grid.electric.macroscopic.component.SimNode;
-import resonant.lib.grid.electric.macroscopic.component.NetworkPart;
-import resonant.lib.grid.electric.macroscopic.component.WireJunction;
-import resonant.lib.grid.electric.macroscopic.component.WirePath;
+import resonant.api.grid.sim.IPathNode;
+import resonant.lib.grid.electric.macroscopic.part.GridPart;
+import resonant.lib.grid.electric.macroscopic.node.SimNode;
+import resonant.lib.grid.electric.macroscopic.part.Bundle;
+import resonant.lib.grid.electric.macroscopic.part.Junction;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,11 +26,11 @@ public class GridPathfinder
 	/**
 	 * All parts created by the path finder
 	 */
-	private List<NetworkPart> parts = new LinkedList<NetworkPart>();
+	private List<GridPart> parts = new LinkedList<GridPart>();
 	/**
 	 * Nodes that have already been pathed
 	 */
-	private List<ISimNode> pathNodes = new LinkedList<ISimNode>();
+	private List<IPathNode> pathNodes = new LinkedList<IPathNode>();
 
 	public GridPathfinder(PathGrid grid)
 	{
@@ -42,9 +42,9 @@ public class GridPathfinder
 	 *
 	 * @return list of NetworkParts
 	 */
-	public List<NetworkPart> generateParts()
+	public List<GridPart> generateParts()
 	{
-		ISimNode firstNode = grid.getFirstNode();
+		IPathNode firstNode = grid.getFirstNode();
 		if (firstNode != null)
 		{
 			path(null, firstNode, null);
@@ -60,47 +60,47 @@ public class GridPathfinder
 	 * @param currentNode - current node being pathed
 	 * @param side - side we are pathing to from the node, can only be null for first run
 	 */
-	public void path(NetworkPart part, ISimNode currentNode, ForgeDirection side)
+	public void path(GridPart part, IPathNode currentNode, ForgeDirection side)
 	{
 		Map<Object, ForgeDirection> connections = currentNode.directionMap();
-		NetworkPart nextPart = null;
+		GridPart nextPart = null;
 		pathNodes.add(currentNode);
 
 		//More than two connections, wire is a junction connecting to several paths
 		if (connections.size() > 2)
 		{
 			//Create new junction
-			nextPart = new WireJunction(grid, currentNode);
+			nextPart = new Junction(grid, currentNode);
 
 			//Connection new junction to last part
-			if (part instanceof WirePath)
+			if (part instanceof Bundle)
 			{
-				((WirePath) part).setConnectionB(nextPart);
+				((Bundle) part).setConnectionB(nextPart);
 			}
-			else if (part instanceof WireJunction)
+			else if (part instanceof Junction)
 			{
-				((WireJunction) part).add(nextPart, side);
+				((Junction) part).add(nextPart, side);
 			}
 		}//Wire is a path only connecting in two directions
 		else
 		{
 			//If the last part was a wire add this wire to it
-			if (part instanceof WirePath)
+			if (part instanceof Bundle)
 			{
-				((WirePath) part).add(currentNode);
+				((Bundle) part).add(currentNode);
 				nextPart = part;
 			}
 			else
 			{
 				//Create a new wire and connect it to old part
-				nextPart = new WirePath(grid, currentNode);
+				nextPart = new Bundle(grid, currentNode);
 				if (part != null)
 				{
-					((WirePath) nextPart).setConnectionA(part);
+					((Bundle) nextPart).setConnectionA(part);
 				}
-				if (part instanceof WireJunction)
+				if (part instanceof Junction)
 				{
-					((WireJunction) part).add(nextPart, side);
+					((Junction) part).add(nextPart, side);
 				}
 			}
 		}

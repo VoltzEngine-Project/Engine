@@ -1,7 +1,6 @@
-package resonant.lib.grid.electric.macroscopic
+package resonant.lib.grid.electric.macroscopic.node
 
 import resonant.api.grid.INodeProvider
-import resonant.lib.grid.electric.macroscopic.component.DCComponent
 import resonant.lib.grid.node.NodeConnector
 
 /**

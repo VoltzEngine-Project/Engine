@@ -8,7 +8,7 @@ import resonant.lib.transform.vector.IVectorWorld;
  * Version of the node designed to be used with the simulated grid
  * @author Darkguardsman
  */
-public interface ISimNode extends IGridNode, IVectorWorld
+public interface IPathNode extends IGridNode, IVectorWorld
 {
     /**
      * Can the simulator path data(Energy, Fluid, Items) from one side to the other.

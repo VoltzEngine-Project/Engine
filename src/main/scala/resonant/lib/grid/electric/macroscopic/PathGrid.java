@@ -1,135 +1,154 @@
 package resonant.lib.grid.electric.macroscopic;
 
 import resonant.api.grid.IUpdate;
-import resonant.api.grid.sim.ISimNode;
+import resonant.api.grid.sim.IPathNode;
 import resonant.lib.grid.Grid;
 import resonant.lib.grid.UpdateTicker;
-import resonant.lib.grid.electric.macroscopic.component.IComponent;
-import resonant.lib.grid.electric.macroscopic.component.NetworkPart;
+import resonant.lib.grid.electric.macroscopic.part.GridPart;
+import resonant.lib.grid.electric.macroscopic.node.IComponent;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * Basic network of parts that function together to simulate a collection of co-existing tiles.
+ *
  * @author Darkguardsman
  */
-public class PathGrid extends Grid<ISimNode> implements IUpdate
+public class PathGrid extends Grid<IPathNode> implements IUpdate
 {
-    /** Marks the grid to be rebuilt */
-    protected boolean hasChanged;
+	/**
+	 * Marks the grid to be rebuilt
+	 */
+	protected boolean changed;
 
-    /** Current update cycle count, resets to 1 every time it maxes out */
-    protected long ticks = 0;
+	/**
+	 * Current update cycle count, resets to 1 every time it maxes out
+	 */
+	protected long ticks = 0;
 
-    List<NetworkPart> parts;
+	List<GridPart> parts;
 
-    /** @param nodes - any node to init the network with */
-    public PathGrid(ISimNode... nodes)
-    {
-        super(ISimNode.class);
-        hasChanged = false;
-        for(ISimNode node : nodes)
-        {
-            add(node);
-        }
-        UpdateTicker.addUpdater(this);
-    }
+	/**
+	 * @param nodes - any node to init the network with
+	 */
+	public PathGrid(IPathNode... nodes)
+	{
+		super(IPathNode.class);
+		changed = false;
 
-    @Override
-    public void add(ISimNode node)
-    {
-        hasChanged = true;
-        super.add(node);
-    }
+		for (IPathNode node : nodes)
+		{
+			add(node);
+		}
 
-    @Override
-    public void remove(ISimNode node)
-    {
-        hasChanged = true;
-        super.remove(node);
-    }
+		UpdateTicker.addUpdater(this);
+	}
 
-    @Override
-    public void update(double deltaTime)
-    {
-        ticks++;
-        if(ticks == 1)
-        {
-            buildEntireNetwork();
-        }else if(ticks + 1 >= Long.MAX_VALUE)
-        {
-            ticks = 2;
-        }
-        if(hasChanged)
-        {
-            //updateConnections();
-            hasChanged = false;
-            this.buildEntireNetwork();
+	@Override
+	public void add(IPathNode node)
+	{
+		changed = true;
+		super.add(node);
+	}
 
-        }
-        updateSimulation();
-    }
+	@Override
+	public void remove(IPathNode node)
+	{
+		changed = true;
+		super.remove(node);
+	}
 
-    /** Maps the entire network out from start to finish */
-    public void buildEntireNetwork()
-    {
-        //Trash old network layout
-        if(parts != null)
-        {
-            for (IComponent comp : parts)
-            {
-                comp.destroy();
-            }
-            parts = null;
-        }
+	@Override
+	public void update(double deltaTime)
+	{
+		ticks++;
 
-        // Ask all nodes to rebuild there connections
-        // TODO maybe do a first build check so we don't double reconstruct on world load
-        for(ISimNode node : getNodes())
-        {
-            node.reconstruct();
-        }
-        //TODO Collect connection data and formulate all inputs/outputs to machines
+		if (ticks == 1)
+		{
+			rebuild();
+		}
+		else if (ticks + 1 >= Long.MAX_VALUE)
+		{
+			ticks = 2;
+		}
 
-        //Trigger pathfinder to build our simulator parts that wrapper the nodes
-        GridPathfinder networkPathFinder = new GridPathfinder(this);
-        parts = networkPathFinder.generateParts();
+		if (changed)
+		{
+			//updateConnections();
+			changed = false;
+			rebuild();
+		}
 
-        // Init the parts
-        for (IComponent comp : parts)
-        {
-            comp.build();
-        }
+		//TODO: We only have to simulate when emf changes
+		simulation(deltaTime);
+	}
 
-        //Get delta points to correctly simulate changes in the network
-        calculateDeltaPoints();
+	/**
+	 * Maps the entire network out from start to finish
+	 */
+	public void rebuild()
+	{
+		//Clear cached network
+		if (parts != null)
+		{
+			for (IComponent comp : parts)
+			{
+				comp.destroy();
+			}
 
-        //Que first simulation of network data
-        updateSimulation();
-    }
+			parts = null;
+		}
 
-    /** Called each update to simulate changes in data */
-    public void updateSimulation()
-    {
-        //TODO grab delta changes of the network
-        //TODO maybe cache delta changes and check if they change every few ticks
-    }
+		// Ask all nodes to rebuild there connections
+		// TODO maybe do a first build check so we don't double reconstruct on world load
+		for (IPathNode node : getNodes())
+		{
+			node.reconstruct();
+		}
 
-    /** Called to calculate the points of change in the network */
-    public void calculateDeltaPoints()
-    {
+		//TODO Collect connection data and formulate all inputs/outputs to machines
+		//Trigger pathfinder to build our simulator parts that wrapper the nodes
+		GridPathfinder networkPathFinder = new GridPathfinder(this);
+		parts = networkPathFinder.generateParts();
 
-    }
+		// Init the parts
+		for (IComponent comp : parts)
+		{
+			comp.build();
+		}
 
-    @Override
-    public boolean canUpdate()
-    {
-        return true;
-    }
+		//Get delta points to correctly simulate changes in the network
+		calculateDeltaPoints();
+	}
 
-    @Override
-    public boolean continueUpdate()
-    {
-        return getNodes().size() > 0;
-    }
+	/**
+	 * Called each update to simulate changes in the grid
+	 *
+	 * @param deltaTime Time between successive updates
+	 */
+	public void simulation(double deltaTime)
+	{
+		//TODO grab delta changes of the network
+		//TODO maybe cache delta changes and check if they change every few ticks
+	}
+
+	/**
+	 * Called to calculate the points of change in the network
+	 */
+	public void calculateDeltaPoints()
+	{
+
+	}
+
+	@Override
+	public boolean canUpdate()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean continueUpdate()
+	{
+		return getNodes().size() > 0;
+	}
 }

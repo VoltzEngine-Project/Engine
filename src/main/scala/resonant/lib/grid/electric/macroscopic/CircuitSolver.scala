@@ -1,6 +1,6 @@
 package resonant.lib.grid.electric.macroscopic
 
-import resonant.lib.grid.electric.macroscopic.component.SeriesComponent
+import resonant.lib.grid.electric.macroscopic.node.{DCNode, SeriesComponent}
 
 /**
  * Solves the circuit into branches

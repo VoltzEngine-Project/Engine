@@ -1,7 +1,8 @@
-package resonant.lib.grid.electric.macroscopic.component;
+package resonant.lib.grid.electric.macroscopic.part;
 
-import resonant.api.grid.sim.ISimNode;
+import resonant.api.grid.sim.IPathNode;
 import resonant.lib.grid.electric.macroscopic.PathGrid;
+import resonant.lib.grid.electric.macroscopic.node.IComponent;
 
 import java.util.WeakHashMap;
 
@@ -10,29 +11,29 @@ import java.util.WeakHashMap;
  *
  * @author Darkguardsman
  */
-public class WirePath extends NetworkPart
+public class Bundle extends GridPart
 {
 	IComponent connectionA = null;
 	IComponent connectionB = null;
-	WeakHashMap<ISimNode, Object> reference;
+	WeakHashMap<IPathNode, Object> reference;
 
-	public WirePath(PathGrid sim, ISimNode... nodes)
+	public Bundle(PathGrid sim, IPathNode... nodes)
 	{
 		super(sim);
 		reference = new WeakHashMap();
 
-		for (ISimNode node : nodes)
+		for (IPathNode node : nodes)
 		{
 
 		}
 	}
 
-	public void add(ISimNode node)
+	public void add(IPathNode node)
 	{
 		reference.put(node, true);
 	}
 
-	public void remove(ISimNode node)
+	public void remove(IPathNode node)
 	{
 		reference.remove(node);
 	}

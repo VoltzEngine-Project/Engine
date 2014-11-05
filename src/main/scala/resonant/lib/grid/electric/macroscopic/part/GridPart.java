@@ -1,7 +1,8 @@
-package resonant.lib.grid.electric.macroscopic.component;
+package resonant.lib.grid.electric.macroscopic.part;
 
-import resonant.api.grid.sim.ISimNode;
+import resonant.api.grid.sim.IPathNode;
 import resonant.lib.grid.electric.macroscopic.PathGrid;
+import resonant.lib.grid.electric.macroscopic.node.IComponent;
 import resonant.lib.transform.vector.VectorWorld;
 
 import java.util.ArrayList;
@@ -10,18 +11,18 @@ import java.util.List;
 /**
  * @author Dark
  */
-public class NetworkPart implements IComponent
+public class GridPart implements IComponent
 {
 	private PathGrid sim;
 	private List<IComponent> connections;
-	private List<ISimNode> nodes;
+	private List<IPathNode> nodes;
 
-	public NetworkPart(PathGrid sim, ISimNode... nodes)
+	public GridPart(PathGrid sim, IPathNode... nodes)
 	{
 		this.sim = sim;
 		connections = new ArrayList<IComponent>();
-		this.nodes = new ArrayList<ISimNode>();
-		for (ISimNode node : nodes)
+		this.nodes = new ArrayList<IPathNode>();
+		for (IPathNode node : nodes)
 		{
 			this.nodes.add(node);
 		}
@@ -42,7 +43,7 @@ public class NetworkPart implements IComponent
 	@Override
 	public boolean doesExistAt(VectorWorld vec)
 	{
-		for (ISimNode node : nodes)
+		for (IPathNode node : nodes)
 		{
 			if (vec.equals(node))
 			{

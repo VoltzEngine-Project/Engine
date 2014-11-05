@@ -1,9 +1,9 @@
-package resonant.lib.grid.electric.macroscopic.component;
+package resonant.lib.grid.electric.macroscopic.node;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.grid.IGrid;
 import resonant.api.grid.INodeProvider;
-import resonant.api.grid.sim.ISimNode;
+import resonant.api.grid.sim.IPathNode;
 import resonant.api.grid.sim.SimType;
 import resonant.lib.grid.electric.macroscopic.PathGrid;
 import resonant.lib.grid.node.NodeConnector;
@@ -12,7 +12,7 @@ import resonant.lib.grid.node.NodeConnector;
  * Node prefab for the simulator grid
  * @author Darkguardsman
  */
-public class SimNode extends NodeConnector implements ISimNode
+public class SimNode extends NodeConnector implements IPathNode
 {
     protected PathGrid network;
 

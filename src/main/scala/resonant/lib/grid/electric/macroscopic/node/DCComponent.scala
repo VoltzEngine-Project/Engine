@@ -1,4 +1,4 @@
-package resonant.lib.grid.electric.macroscopic.component
+package resonant.lib.grid.electric.macroscopic.node
 
 /**
  * A component is defined as part of the circuit that have well defined current and voltage

@@ -1,4 +1,4 @@
-package resonant.lib.grid.electric.macroscopic.component;
+package resonant.lib.grid.electric.macroscopic.node;
 
 import resonant.lib.grid.electric.macroscopic.PathGrid;
 import resonant.lib.transform.vector.VectorWorld;
