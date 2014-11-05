@@ -1,4 +1,4 @@
-package resonant.lib.grid.node
+package resonant.lib.grid.electric
 
 import java.util
 import java.util.{Set => JSet}
@@ -6,6 +6,7 @@ import java.util.{Set => JSet}
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.grid.{INodeProvider, IUpdate}
 import resonant.lib.grid.UpdateTicker
+import resonant.lib.grid.node.{NodeEnergy, TileConnector}
 
 import scala.collection.convert.wrapAll._
 

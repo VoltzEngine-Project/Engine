@@ -3,10 +3,10 @@ package resonant.lib.content.prefab
 import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
+import resonant.lib.grid.electric.DCNode
 import resonant.lib.utility.nbt.ISaveObj
 import resonant.api.electric.EnergyStorage
 import resonant.api.grid.{INodeProvider, INode}
-import resonant.lib.grid.node.DCNode
 
 /**
  * A trait for all INodeProviders that implement a DC circuit. Nodes must handle energy storage themself.
