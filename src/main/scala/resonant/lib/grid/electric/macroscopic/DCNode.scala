@@ -1,8 +1,8 @@
 package resonant.lib.grid.electric.macroscopic
 
-import universalelectricity.api.core.grid.{INode, INodeProvider}
-import universalelectricity.core.grid.node.NodeConnector
+import resonant.api.grid.INodeProvider
 import resonant.lib.grid.electric.macroscopic.component.DCComponent
+import resonant.lib.grid.node.NodeConnector
 
 /**
  * @author Calclavia
@@ -15,6 +15,4 @@ class DCNode(parent: INodeProvider) extends NodeConnector(parent) with DCCompone
   def resistance_=(resistance: Double) = _resistance = Math.max(resistance, Double.MinPositiveValue)
 
   override def resistance = _resistance
-
-  protected override def getRelativeClass: Class[_ <: INode] = classOf[DCNode]
 }

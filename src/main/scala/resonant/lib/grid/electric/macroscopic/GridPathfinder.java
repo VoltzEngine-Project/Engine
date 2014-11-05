@@ -1,9 +1,9 @@
 package resonant.lib.grid.electric.macroscopic;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import universalelectricity.api.core.grid.INode;
-import universalelectricity.api.core.grid.INodeProvider;
-import universalelectricity.api.core.grid.sim.ISimNode;
+import resonant.api.grid.INode;
+import resonant.api.grid.INodeProvider;
+import resonant.api.grid.sim.ISimNode;
 import resonant.lib.grid.electric.macroscopic.component.SimNode;
 import resonant.lib.grid.electric.macroscopic.component.NetworkPart;
 import resonant.lib.grid.electric.macroscopic.component.WireJunction;
@@ -22,7 +22,7 @@ public class GridPathfinder
 	/**
 	 * Network that is being pathed
 	 */
-	private SimulatedGrid grid;
+	private PathGrid grid;
 	/**
 	 * All parts created by the path finder
 	 */
@@ -32,7 +32,7 @@ public class GridPathfinder
 	 */
 	private List<ISimNode> pathNodes = new LinkedList<ISimNode>();
 
-	public GridPathfinder(SimulatedGrid grid)
+	public GridPathfinder(PathGrid grid)
 	{
 		this.grid = grid;
 	}
@@ -62,7 +62,7 @@ public class GridPathfinder
 	 */
 	public void path(NetworkPart part, ISimNode currentNode, ForgeDirection side)
 	{
-		Map<Object, ForgeDirection> connections = currentNode.getConnections();
+		Map<Object, ForgeDirection> connections = currentNode.directionMap();
 		NetworkPart nextPart = null;
 		pathNodes.add(currentNode);
 
@@ -118,6 +118,7 @@ public class GridPathfinder
 			else if (entry.getKey() instanceof INodeProvider)
 			{
 				INode providerNode = ((INodeProvider) entry.getKey()).getNode(SimNode.class, entry.getValue().getOpposite());
+
 				if (providerNode instanceof SimNode)
 				{
 					if (!pathNodes.contains(entry.getKey()))

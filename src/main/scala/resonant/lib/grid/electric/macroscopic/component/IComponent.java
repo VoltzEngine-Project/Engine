@@ -1,7 +1,7 @@
 package resonant.lib.grid.electric.macroscopic.component;
 
-import universalelectricity.core.transform.vector.VectorWorld;
-import resonant.lib.grid.electric.macroscopic.SimulatedGrid;
+import resonant.lib.grid.electric.macroscopic.PathGrid;
+import resonant.lib.transform.vector.VectorWorld;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public interface IComponent
 {
     /** Gets the host simulator for this component */
-    public SimulatedGrid getSimulator();
+    public PathGrid getSimulator();
 
     /** Components connected to this component */
     public List<IComponent> connections();

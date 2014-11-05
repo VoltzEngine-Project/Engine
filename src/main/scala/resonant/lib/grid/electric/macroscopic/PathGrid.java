@@ -13,7 +13,7 @@ import java.util.*;
  * Basic network of parts that function together to simulate a collection of co-existing tiles.
  * @author Darkguardsman
  */
-public class SimulatedGrid extends Grid<ISimNode> implements IUpdate
+public class PathGrid extends Grid<ISimNode> implements IUpdate
 {
     /** Marks the grid to be rebuilt */
     protected boolean hasChanged;
@@ -24,7 +24,7 @@ public class SimulatedGrid extends Grid<ISimNode> implements IUpdate
     List<NetworkPart> parts;
 
     /** @param nodes - any node to init the network with */
-    public SimulatedGrid(ISimNode... nodes)
+    public PathGrid(ISimNode... nodes)
     {
         super(ISimNode.class);
         hasChanged = false;

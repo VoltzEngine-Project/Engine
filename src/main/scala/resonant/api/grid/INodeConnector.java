@@ -21,4 +21,6 @@ public interface INodeConnector<A> extends INode
     public <B extends A> boolean canConnect(B other, ForgeDirection from);
 
 	public Set<A> connections();
+
+	public Map<A, ForgeDirection> directionMap();
 }

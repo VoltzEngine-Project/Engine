@@ -5,7 +5,7 @@ import resonant.api.grid.IGrid;
 import resonant.api.grid.INodeProvider;
 import resonant.api.grid.sim.ISimNode;
 import resonant.api.grid.sim.SimType;
-import resonant.lib.grid.electric.macroscopic.SimulatedGrid;
+import resonant.lib.grid.electric.macroscopic.PathGrid;
 import resonant.lib.grid.node.NodeConnector;
 
 /**
@@ -14,7 +14,7 @@ import resonant.lib.grid.node.NodeConnector;
  */
 public class SimNode extends NodeConnector implements ISimNode
 {
-    protected SimulatedGrid network;
+    protected PathGrid network;
 
     public SimNode(INodeProvider parent)
     {
@@ -24,18 +24,18 @@ public class SimNode extends NodeConnector implements ISimNode
     @Override
     public void setGrid(IGrid grid)
     {
-        if(grid instanceof SimulatedGrid)
+        if(grid instanceof PathGrid)
         {
-            network = (SimulatedGrid) grid;
+            network = (PathGrid) grid;
         }
     }
 
     @Override
-    public SimulatedGrid getGrid()
+    public PathGrid getGrid()
     {
         if(network == null)
         {
-            network = new SimulatedGrid(this);
+            network = new PathGrid(this);
 			network.add(this);
         }
         return network;
