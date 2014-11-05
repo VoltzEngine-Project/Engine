@@ -12,7 +12,7 @@ public class CommonRegistryProxy
 {
 	public void registerTileEntity(String name, String prefix, Class<? extends TileEntity> clazz)
 	{
-		GameRegistry.registerTileEntityWithAlternatives(clazz, name, name);
+		GameRegistry.registerTileEntityWithAlternatives(clazz, prefix + name, name);
 		for (Field field : clazz.getDeclaredFields())
 		{
 			if (field.isAnnotationPresent(Synced.class))
