@@ -42,9 +42,10 @@ trait ContentLoader
           else
           {
             name = field.getName
-            name = name.replace("Item", "").replace("Block", "")
-            name = name.replace("item", "").replace("block", "")
+            name = if ("block".equalsIgnoreCase(name.substring(0, 5))) name.substring(5) else name
+            name = if ("item".equalsIgnoreCase(name.substring(0, 4))) name.substring(4) else name
           }
+
           name = name.decapitalizeFirst
         }
 
