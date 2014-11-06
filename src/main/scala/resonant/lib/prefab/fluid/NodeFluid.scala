@@ -3,6 +3,7 @@ package resonant.lib.prefab.fluid
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
+import resonant.api.ISave
 import resonant.api.grid.{INode, INodeProvider}
 import resonant.lib.grid.node.{NodeConnector, TileConnector}
 
@@ -10,12 +11,12 @@ import resonant.lib.grid.node.{NodeConnector, TileConnector}
  * A node that handles fluid interactions
  *
  * @param parent Parent(TileEntity or Multipart) that contains this node
- * @param liters Amount of fluid in liters * @author Calclavia
+ * @param volume Amount of fluid in liters * @author Calclavia
  */
-class NodeFluid(parent: INodeProvider, liters: Int = FluidContainerRegistry.BUCKET_VOLUME) extends NodeConnector[IFluidHandler](parent) with TFluidHandler with TFluidTank with TileConnector[IFluidHandler]
+class NodeFluid(parent: INodeProvider, volume: Int = FluidContainerRegistry.BUCKET_VOLUME) extends NodeConnector[IFluidHandler](parent) with ISave with TFluidHandler with TFluidTank with TileConnector[IFluidHandler]
 {
   /** Internal tank */
-  private var tank = new FluidTank(liters)
+  private var tank = new FluidTank(volume)
 
   override def getPrimaryTank: FluidTank = tank
 
@@ -61,12 +62,12 @@ class NodeFluid(parent: INodeProvider, liters: Int = FluidContainerRegistry.BUCK
    */
   override protected def getCompareClass: Class[_ <: NodeFluid with INode] = classOf[NodeFluid]
 
-  def load(nbt: NBTTagCompound)
+  override def load(nbt: NBTTagCompound)
   {
     getPrimaryTank.readFromNBT(nbt.getCompoundTag("tank"))
   }
 
-  def save(nbt: NBTTagCompound)
+  override def save(nbt: NBTTagCompound)
   {
     nbt.setTag("tank", getPrimaryTank.writeToNBT(new NBTTagCompound))
   }
