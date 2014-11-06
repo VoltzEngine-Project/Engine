@@ -57,6 +57,10 @@ minecraft {
 if (System.getenv("BUILD_NUMBER") != null)
     version += ".${System.getenv("BUILD_NUMBER")}"
 
+task javadocJar(type: Jar, dependsOn: 'javadoc') {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
 
 task copyBuildXml(type: Copy) {
     from 'build.properties'
