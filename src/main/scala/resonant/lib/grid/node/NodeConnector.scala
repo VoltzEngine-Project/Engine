@@ -4,6 +4,7 @@ import java.util.{Map => JMap, Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.grid.{INodeConnector, INodeProvider}
+import resonant.lib.wrapper.BitmaskWrapper._
 
 import scala.collection.convert.wrapAll._
 import scala.collection.mutable
@@ -17,7 +18,13 @@ import scala.collection.mutable
  */
 abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(parent) with INodeConnector[A]
 {
+  /** The bitmask containing sides that this node may connect to */
   var connectionMask = 0x3F
+
+  /** The bitmask containing the connected sides */
+  private var _connectedBitmask = 0x00
+
+  def connectedBitmask = _connectedBitmask
 
   /**
    * Connections to other nodes specifically.
@@ -32,14 +39,34 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
    */
   override def canConnect[B <: A](other: B, from: ForgeDirection): Boolean = isValidConnection(other) && canConnect(from)
 
-  def canConnect(from: ForgeDirection): Boolean = ((connectionMask & (1 << from.ordinal)) != 0) || from == ForgeDirection.UNKNOWN
+  def canConnect(from: ForgeDirection): Boolean = connectionMask.mask(from) || from == ForgeDirection.UNKNOWN
 
   //TODO: This getClass.isAssignableFrom has issues.
   def isValidConnection(other: AnyRef): Boolean = other != null //&& other.getClass.isAssignableFrom(getClass)
 
-  def connect[B <: A](obj: B, dir: ForgeDirection): Unit = connectionMap.put(obj, dir)
+  def connect[B <: A](obj: B, dir: ForgeDirection)
+  {
+    connectionMap.put(obj, dir)
+    _connectedBitmask.openMask(dir)
+  }
 
-  def disconnect[B <: A](obj: B): Unit = connectionMap.remove(obj)
+  def disconnect[B <: A](obj: B)
+  {
+    _connectedBitmask.closeMask(connectionMap(obj))
+    connectionMap.remove(obj)
+  }
+
+  def disconnect(dir: ForgeDirection)
+  {
+    _connectedBitmask.closeMask(dir)
+    connectionMap.removeAll(connectionMap.filter(_._2 == dir))
+  }
+
+  def clearConnections()
+  {
+    connectionMap.clear()
+    _connectedBitmask = 0x00
+  }
 
   override def connections: JSet[A] = connectionMap.keys.toSet[A]
 
@@ -52,12 +79,12 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   override def reconstruct()
   {
     super.reconstruct()
-    connectionMap.clear()
+    clearConnections()
   }
 
   override def deconstruct()
   {
     super.deconstruct()
-    connectionMap.clear()
+    clearConnections()
   }
 }
