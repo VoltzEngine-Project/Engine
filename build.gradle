@@ -107,7 +107,7 @@ task("createChangelog").doLast {
 }
 
 jar {
-    dependsOn copyBuildXml, createChangelog
+    dependsOn copyBuildXml, createChangelog, javadocJar
     classifier = 'core'
 	
 	manifest {
