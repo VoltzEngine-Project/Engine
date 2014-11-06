@@ -1,39 +1,43 @@
 package resonant.lib.grid.electric.macroscopic.part;
 
-import net.minecraftforge.common.util.ForgeDirection;
-import resonant.api.grid.sim.IPathNode;
-import resonant.lib.grid.electric.macroscopic.PathGrid;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.util.HashMap;
-
-/**
+/** Connection point of several connections
+ * is not limited to 6 sides of a block
  * @author DarkCow
  */
-public class Junction extends GridPart
+public class Junction extends Part
 {
-	HashMap<Object, ForgeDirection> connectionMap;
-	HashMap<ForgeDirection, Boolean> inputMap;
-	IPathNode node = null;
+    private Set<Part> connections;
 
-	public Junction(PathGrid sim, IPathNode node)
-	{
-		super(sim);
-		this.node = node;
-	}
+    public Junction()
+    {
+        connections = new HashSet<Part>();
+    }
 
-	public void add(Object object, ForgeDirection side)
-	{
-		connectionMap.put(object, side);
-	}
+    /** Set of connections, not limited to 6 */
+    public Set<Part> getConnections()
+    {
+        return connections;
+    }
 
-	public void remove(Object object)
-	{
-		if (connectionMap.containsKey(object))
-		{
-			ForgeDirection direction = connectionMap.get(object);
-			connectionMap.remove(object);
-			inputMap.remove(direction);
-		}
-	}
+    /** Adds a connection to the junction */
+    public void addConnection(Part part)
+    {
+        if(!connections.contains(part))
+            connections.add(part);
+    }
 
+    /** Removes a connection from the junction */
+    public void removeConnection(Part part)
+    {
+        connections.remove(part);
+    }
+
+    @Override
+    public boolean hasMinimalConnections()
+    {
+        return getConnections().size() > 2;
+    }
 }
