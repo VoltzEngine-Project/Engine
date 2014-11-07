@@ -13,10 +13,10 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
 import net.minecraft.world.{IBlockAccess, World}
 import resonant.content.spatial.block.SpatialBlock
-import resonant.lib.utility.inventory.InventoryUtility
-import resonant.lib.wrapper.WrapList._
 import resonant.lib.transform.region.Cuboid
 import resonant.lib.transform.vector.Vector3
+import resonant.lib.utility.inventory.InventoryUtility
+import resonant.lib.wrapper.WrapList._
 
 class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: SpatialBlock) extends Block(dummyTile.material) with ITileEntityProvider
 {
@@ -130,6 +130,13 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   {
     inject(world, x, y, z)
     getTile(world, x, y, z).onNeighborChanged(block)
+    eject
+  }
+
+  override def onNeighborChange(world: IBlockAccess, x: Int, y: Int, z: Int, tileX: Int, tileY: Int, tileZ: Int)
+  {
+    inject(world, x, y, z)
+    getTile(world, x, y, z).onNeighborChanged(new Vector3(tileX, tileY, tileZ))
     eject
   }
 

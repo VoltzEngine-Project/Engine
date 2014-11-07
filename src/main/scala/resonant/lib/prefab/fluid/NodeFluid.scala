@@ -18,37 +18,47 @@ class NodeFluid(parent: INodeProvider, volume: Int = FluidContainerRegistry.BUCK
   /** Internal tank */
   private var tank = new FluidTank(volume)
 
+  var onFluidChanged: () => Unit = () =>
+  {}
+
   override def getPrimaryTank: FluidTank = tank
 
   /**
    * Sets the primary tank (not checked)
    * @param t - The new tank
    */
-  def setPrimaryTank(t: FluidTank)
-  {
-    tank = t
-  }
+  def setPrimaryTank(t: FluidTank) = tank = t
 
   override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int =
   {
     if (canConnect(from))
-      return super.fill(from, resource, doFill)
-
+    {
+      val ret = super.fill(from, resource, doFill)
+      onFluidChanged.apply()
+      return ret
+    }
     return 0
   }
 
   override def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean): FluidStack =
   {
     if (canConnect(from))
-      return super.drain(from, resource, doDrain)
-
+    {
+      val ret = super.drain(from, resource, doDrain)
+      onFluidChanged.apply()
+      return ret
+    }
     return null
   }
 
   override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean): FluidStack =
   {
     if (canConnect(from))
-      return super.drain(from, maxDrain, doDrain)
+    {
+      val ret = super.drain(from, maxDrain, doDrain)
+      onFluidChanged.apply()
+      return ret
+    }
 
     return null
   }

@@ -25,10 +25,10 @@ import resonant.content.prefab.scal.render.ISimpleItemRenderer
 import resonant.content.wrapper.{BlockDummy, RenderTileDummy}
 import resonant.lib.content.prefab.{TIO, TRotatable}
 import resonant.lib.render.RenderUtility
-import resonant.lib.utility.{LanguageUtility, WrenchUtility}
-import resonant.lib.wrapper.WrapList._
 import resonant.lib.transform.region.Cuboid
 import resonant.lib.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorld}
+import resonant.lib.utility.{LanguageUtility, WrenchUtility}
+import resonant.lib.wrapper.WrapList._
 
 import scala.collection.convert.wrapAll._
 import scala.collection.immutable
@@ -158,7 +158,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   }
 
   /** Sets the creative tab
-   * @param value - tab to set */
+    * @param value - tab to set */
   def setCreativeTab(value: CreativeTabs)
   {
     creativeTab = value
@@ -226,7 +226,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
   /** When false the block is see threw */
   def isOpaqueCube(bool: Boolean): Unit = isOpaqueCube = bool
-
 
   /** Sets the active world */
   def world(world: World)
@@ -480,7 +479,19 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   {
   }
 
+  /**
+   * Called when a neighbor block changes
+   * @param block
+   */
   def onNeighborChanged(block: Block)
+  {
+  }
+
+  /**
+   * Called when a neighbor tile changes
+   * @param pos
+   */
+  def onNeighborChanged(pos: Vector3)
   {
   }
 
@@ -546,7 +557,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   def getIcon(side: Int, meta: Int): IIcon =
   {
-    if(useSidedTextures)
+    if (useSidedTextures)
     {
       if (side == 0)
       {
@@ -578,33 +589,33 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
   /** Gets the icon that renders on the top
     * @param meta - placement data
-    * @return icon that will render on top*/
+    * @return icon that will render on top */
   @SideOnly(Side.CLIENT)
-  protected def getTopIcon(meta: Int) : IIcon =
+  protected def getTopIcon(meta: Int): IIcon =
   {
     var icon = SpatialBlock.icon.get(getTextureName + "_top")
-    if(icon == null)
+    if (icon == null)
       icon = SpatialBlock.icon.get(getTextureName)
     return icon
   }
 
   /** Gets the icon that renders on the bottom
     * @param meta - placement data
-    * @return icon that will render on bottom*/
+    * @return icon that will render on bottom */
   @SideOnly(Side.CLIENT)
-  protected def getBottomIcon(meta: Int) : IIcon =
+  protected def getBottomIcon(meta: Int): IIcon =
   {
     var icon = SpatialBlock.icon.get(getTextureName + "_bottom")
-    if(icon == null)
+    if (icon == null)
       icon = SpatialBlock.icon.get(getTextureName)
     return icon
   }
 
   /** Gets the icon that renders on the sides
     * @param meta - placement data
-    * @return icon that will render on sides*/
+    * @return icon that will render on sides */
   @SideOnly(Side.CLIENT)
-  protected def getSideIcon(meta: Int) : IIcon =
+  protected def getSideIcon(meta: Int): IIcon =
   {
     return getSideIcon(meta, 0)
   }
@@ -612,12 +623,12 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   /** Gets the icon that renders on the sides
     * @param meta - placement data
     * @param side - side of the icon
-    * @return icon that will render on sides*/
+    * @return icon that will render on sides */
   @SideOnly(Side.CLIENT)
-  protected def getSideIcon(meta: Int, side: Int) : IIcon =
+  protected def getSideIcon(meta: Int, side: Int): IIcon =
   {
     var icon = SpatialBlock.icon.get(getTextureName + "_side")
-    if(icon == null)
+    if (icon == null)
       icon = SpatialBlock.icon.get(getTextureName)
     return icon
   }
@@ -630,7 +641,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   def registerIcons(iconRegister: IIconRegister)
   {
-    if(useSidedTextures)
+    if (useSidedTextures)
     {
       registerSideTextureSet(iconRegister)
     }
@@ -642,8 +653,8 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
   /** Registers a set of 3 textures(top, sides, bottom) to be used for the block renderer
     * Uses the texture name appended with _top _side _bottom
-   * @param iconRegister
-   */
+    * @param iconRegister
+    */
   @SideOnly(Side.CLIENT)
   def registerSideTextureSet(iconRegister: IIconRegister)
   {
@@ -791,7 +802,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   /** Render pass */
   def getRenderBlockPass: Int = 0
 
-  /** Tick rate of the tile in @param world*/
+  /** Tick rate of the tile in @param world */
   def tickRate(world: World): Int = 20
 
   /**
@@ -803,8 +814,8 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   def canSilkHarvest(player: EntityPlayer, metadata: Int): Boolean = normalRender && tile == null
 
   /** Used to detect if the block is a tile or data object for creating blocks
-   * @return Normally you want to return this class
-   */
+    * @return Normally you want to return this class
+    */
   def tile: SpatialBlock =
   {
     return null

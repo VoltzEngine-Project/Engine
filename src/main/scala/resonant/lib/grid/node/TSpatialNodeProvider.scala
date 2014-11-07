@@ -8,6 +8,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.ISave
 import resonant.api.grid.{INode, INodeProvider}
 import resonant.content.spatial.block.SpatialTile
+import resonant.lib.transform.vector.Vector3
 
 import scala.collection.convert.wrapAll._
 
@@ -31,6 +32,11 @@ trait TSpatialNodeProvider extends SpatialTile with INodeProvider
   }
 
   override def onNeighborChanged(block: Block)
+  {
+    nodes.foreach(_.reconstruct())
+  }
+
+  override def onNeighborChanged(pos: Vector3)
   {
     nodes.foreach(_.reconstruct())
   }
