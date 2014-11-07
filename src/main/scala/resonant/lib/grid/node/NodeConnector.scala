@@ -24,10 +24,11 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   /** The bitmask containing the connected sides */
   private var _connectedBitmask = 0x00
 
-  def connectedBitmask = _connectedBitmask
+  def connectedMask = _connectedBitmask
 
   /** Functional event handler when the connection changes */
-  var onConnectionChanged: () => Unit = () => {}
+  var onConnectionChanged: () => Unit = () =>
+  {}
 
   /**
    * Connections to other nodes specifically.
@@ -50,20 +51,20 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   def connect[B <: A](obj: B, dir: ForgeDirection)
   {
     connectionMap.put(obj, dir)
-    _connectedBitmask.openMask(dir)
+    _connectedBitmask = _connectedBitmask.openMask(dir)
     onConnectionChanged.apply()
   }
 
   def disconnect[B <: A](obj: B)
   {
-    _connectedBitmask.closeMask(connectionMap(obj))
+    _connectedBitmask = _connectedBitmask.closeMask(connectionMap(obj))
     connectionMap.remove(obj)
     onConnectionChanged.apply()
   }
 
   def disconnect(dir: ForgeDirection)
   {
-    _connectedBitmask.closeMask(dir)
+    _connectedBitmask = _connectedBitmask.closeMask(dir)
     connectionMap.removeAll(connectionMap.filter(_._2 == dir))
     onConnectionChanged.apply()
   }
@@ -92,6 +93,7 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   override def deconstruct()
   {
     super.deconstruct()
-    clearConnections()
+    connectionMap.clear()
+    _connectedBitmask = 0x00
   }
 }

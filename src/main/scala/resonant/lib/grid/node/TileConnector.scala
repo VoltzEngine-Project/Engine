@@ -28,8 +28,7 @@ trait TileConnector[A <: AnyRef] extends NodeConnector[A]
           {
             connect(node.asInstanceOf[A], direction)
           }
-
-          if (tile.getClass.isAssignableFrom(getCompareClass))
+          else if (tile.getClass.isAssignableFrom(getCompareClass))
           {
             connect(tile.asInstanceOf[A], direction)
           }
