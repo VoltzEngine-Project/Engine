@@ -30,6 +30,8 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   var onConnectionChanged: () => Unit = () =>
   {}
 
+  var isInvalid = false
+
   /**
    * Connections to other nodes specifically.
    */
@@ -88,6 +90,7 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   {
     super.reconstruct()
     clearConnections()
+    isInvalid = false
   }
 
   override def deconstruct()
@@ -95,5 +98,6 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
     super.deconstruct()
     connectionMap.clear()
     _connectedBitmask = 0x00
+    isInvalid = true
   }
 }
