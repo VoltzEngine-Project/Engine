@@ -59,5 +59,14 @@ object BitmaskWrapper
     def openMask(dir: ForgeDirection) = mask(dir.ordinal(), true)
 
     def closeMask(dir: ForgeDirection) = mask(dir.ordinal(), false)
+
+    def invert(): Int = invert(6)
+
+    def invert(k: Int): Int =
+    {
+      val mask = (1 << k) - 1
+      return ~underlying & mask
+    }
   }
+
 }

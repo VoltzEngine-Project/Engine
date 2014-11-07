@@ -16,12 +16,13 @@ import resonant.lib.wrapper.BitmaskWrapper._
  */
 trait RenderConnectedTexture extends SpatialBlock
 {
-  val edgeTexture: String
+  var faceTexture: String = null
+  var edgeTexture: String = null
 
   override def renderInventory(itemStack: ItemStack)
   {
     glPushMatrix()
-    RenderBlockUtility.tessellateBlockWithConnectedTextures(itemStack.getItemDamage, tile.block, null, RenderUtility.getIcon(edgeTexture))
+    RenderBlockUtility.tessellateBlockWithConnectedTextures(itemStack.getItemDamage, tile.block, if(faceTexture != null) RenderUtility.getIcon(faceTexture) else null, RenderUtility.getIcon(edgeTexture))
     glPopMatrix()
   }
 
@@ -45,7 +46,7 @@ trait RenderConnectedTexture extends SpatialBlock
       }
     }
 
-    RenderBlockUtility.tessellateBlockWithConnectedTextures(sideMap, world, pos.xi, pos.yi, pos.zi, tile.getBlockType, null, RenderUtility.getIcon(edgeTexture))
+    RenderBlockUtility.tessellateBlockWithConnectedTextures(sideMap, world, pos.xi, pos.yi, pos.zi, tile.getBlockType, if(faceTexture != null) RenderUtility.getIcon(faceTexture) else null, RenderUtility.getIcon(edgeTexture))
     return true
   }
 }
