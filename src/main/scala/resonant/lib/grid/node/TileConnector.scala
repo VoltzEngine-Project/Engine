@@ -10,9 +10,9 @@ import resonant.api.grid.{INode, INodeProvider}
  */
 trait TileConnector[A <: AnyRef] extends NodeConnector[A]
 {
-  override def reconstruct()
+  override def rebuild()
   {
-    super.reconstruct()
+    super.rebuild()
 
     ForgeDirection.VALID_DIRECTIONS.foreach(direction =>
     {
