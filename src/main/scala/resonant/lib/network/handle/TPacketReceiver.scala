@@ -1,12 +1,21 @@
 package resonant.lib.network.handle
 
+import io.netty.buffer.ByteBuf
+import net.minecraft.entity.player.EntityPlayer
+import resonant.lib.network.discriminator.PacketType
 import resonant.lib.transform.vector.TVectorWorld
 
 /**
- * Mixin prefab designed to implement basic packet handling & helper methods
- * Created on 8/6/2014.
- * @author robert(Darkguardsman)
+ * A trait that is applied to packet receivers
+ * @author Calclavia
  */
 trait TPacketReceiver extends IPacketReceiver with TVectorWorld
 {
+  override def read(buf: ByteBuf, player: EntityPlayer, packet: PacketType)
+  {
+    val id = buf.readInt()
+    read(buf, id, packet)
+  }
+
+  def read(buf: ByteBuf, id: Int, packetType: PacketType)
 }

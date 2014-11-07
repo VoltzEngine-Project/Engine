@@ -85,6 +85,8 @@ public class PacketTile extends PacketType
 
 	public void handle(EntityPlayer player)
 	{
+		sender_$eq(player);
+
 		TileEntity tile = player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
 
 		if (tile instanceof IPacketIDReceiver)

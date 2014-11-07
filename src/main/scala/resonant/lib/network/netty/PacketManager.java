@@ -18,7 +18,6 @@ import resonant.lib.network.ByteBufWrapper;
 import resonant.lib.network.discriminator.PacketEntity;
 import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.network.discriminator.PacketType;
-import resonant.lib.network.handle.TPacketIDSender;
 import resonant.lib.network.handle.TPacketSender;
 import resonant.lib.transform.vector.IVector3;
 import resonant.lib.transform.vector.IVectorWorld;
@@ -50,17 +49,10 @@ public class PacketManager implements ICompatProxy
 	 */
 	public static PacketType request(TPacketSender sender)
 	{
-		PacketType packet = getPacketFor(sender);
-
-		if (packet != null)
-		{
-			sender.write(packet.data());
-		}
-
-		return packet;
+		return request(sender, 0);
 	}
 
-	public static PacketType request(TPacketIDSender sender, int id)
+	public static PacketType request(TPacketSender sender, int id)
 	{
 		PacketType packet = getPacketFor(sender);
 

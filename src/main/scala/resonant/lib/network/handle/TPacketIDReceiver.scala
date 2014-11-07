@@ -13,6 +13,7 @@ import resonant.lib.network.discriminator.PacketType
  * Created on 8/6/2014.
  * @author robert(Darkguardsman)
  */
+@deprecated
 trait TPacketIDReceiver extends TPacketReceiver with IPacketIDReceiver
 {
   override final def read(buf: ByteBuf, player: EntityPlayer, packet: PacketType)
