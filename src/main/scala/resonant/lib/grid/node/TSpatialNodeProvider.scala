@@ -23,22 +23,27 @@ trait TSpatialNodeProvider extends SpatialTile with INodeProvider
   override def start()
   {
     super.start()
-    nodes.foreach(_.reconstruct())
+
+    if (!world.isRemote)
+      nodes.foreach(_.reconstruct())
   }
 
   override def onWorldJoin()
   {
-    nodes.foreach(_.reconstruct())
+    if (!world.isRemote)
+      nodes.foreach(_.reconstruct())
   }
 
   override def onNeighborChanged(block: Block)
   {
-    nodes.foreach(_.reconstruct())
+    if (!world.isRemote)
+      nodes.foreach(_.reconstruct())
   }
 
   override def onNeighborChanged(pos: Vector3)
   {
-    nodes.foreach(_.reconstruct())
+    if (!world.isRemote)
+      nodes.foreach(_.reconstruct())
   }
 
   override def onWorldSeparate()
