@@ -12,13 +12,13 @@ import resonant.engine.ResonantEngine
 import resonant.lib.`type`.Pair
 import resonant.lib.content.prefab.TRotatable
 import resonant.lib.network.discriminator.{PacketTile, PacketType}
-import resonant.lib.network.handle.TPacketIDReceiver
+import resonant.lib.network.handle.{TPacketIDSender, TPacketSender, TPacketIDReceiver}
 import resonant.lib.schematic.SchematicRegistry
 import resonant.lib.transform.vector.Vector3
 
 import scala.collection.JavaConversions._
 
-class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable with TPacketIDReceiver
+class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable with TPacketIDReceiver with TPacketIDSender
 {
   //Current build task vars
   var doBuild: Boolean = false
@@ -46,7 +46,7 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
         }
         doBuild = false
         buildMap = null
-        sendDescPacket
+        sendDescPacket()
       }
       else
       {
@@ -83,7 +83,7 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
         size = data.readInt
         doBuild = true
         //TODO check for packet spamming as this could be abused by players to create a lag machine
-        sendDescPacket
+        sendDescPacket()
         return true
       }
     }

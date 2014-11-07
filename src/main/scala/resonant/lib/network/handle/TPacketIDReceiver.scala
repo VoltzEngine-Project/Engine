@@ -1,10 +1,7 @@
 package resonant.lib.network.handle
 
-import cpw.mods.fml.common.network.ByteBufUtils
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.tileentity.TileEntity
-import resonant.api.ISave
 import resonant.lib.network.discriminator.PacketType
 
 /**
@@ -18,28 +15,9 @@ import resonant.lib.network.discriminator.PacketType
  */
 trait TPacketIDReceiver extends TPacketReceiver with IPacketIDReceiver
 {
-  override def read(buf: ByteBuf, player: EntityPlayer, packet: PacketType)
+  override final def read(buf: ByteBuf, player: EntityPlayer, packet: PacketType)
   {
     val id = buf.readInt()
     read(buf, id, player, packet)
   }
-
-  override def read(buf: ByteBuf, id: Int, player: EntityPlayer, `type`: PacketType): Boolean =
-  {
-    if (id == 0)
-    {
-      if (this.isInstanceOf[TileEntity])
-      {
-        this.asInstanceOf[TileEntity].readFromNBT(ByteBufUtils.readTag(buf))
-        return true
-      }
-      else if (this.isInstanceOf[ISave])
-      {
-        this.asInstanceOf[ISave].load(ByteBufUtils.readTag(buf))
-        return true
-      }
-    }
-    return false
-  }
-
 }

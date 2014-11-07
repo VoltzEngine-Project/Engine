@@ -10,7 +10,7 @@ import resonant.lib.network.netty.AbstractPacket
  */
 abstract class PacketType extends AbstractPacket
 {
-  protected var data = Unpooled.buffer
+  var data = Unpooled.buffer
 
   def this(args: Array[AnyRef])
   {
