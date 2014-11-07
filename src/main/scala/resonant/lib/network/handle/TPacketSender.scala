@@ -42,7 +42,7 @@ trait TPacketSender extends TileEntity
     sendPacket(0)
   }
 
-  def sendPacket(id: Int, distance: Double = -1)
+  def sendPacket(id: Int, distance: Double =64)
   {
     if (distance > 0)
       sendPacket(getPacket(id), distance)
@@ -56,7 +56,10 @@ trait TPacketSender extends TileEntity
    */
   def sendPacket(packet: AbstractPacket)
   {
-    ResonantEngine.instance.packetHandler.sendToAll(packet)
+    if (!getWorldObj.isRemote)
+      ResonantEngine.instance.packetHandler.sendToAll(packet)
+    else
+      throw new RuntimeException("[TPacketReceiver] Trying to send a packet to clients from client side.")
   }
 
   /** Sends the packet to all players around this tile
@@ -65,7 +68,10 @@ trait TPacketSender extends TileEntity
     */
   def sendPacket(packet: AbstractPacket, distance: Double)
   {
-    ResonantEngine.instance.packetHandler.sendToAllAround(packet, this.asInstanceOf[IVectorWorld], distance)
+    if (!getWorldObj.isRemote)
+      ResonantEngine.instance.packetHandler.sendToAllAround(packet, this.asInstanceOf[IVectorWorld], distance)
+    else
+      throw new RuntimeException("[TPacketReceiver] Trying to send a packet to clients from client side.")
   }
 
   /** Sends the packet to the player. Useful for updating GUI information of those with GUIs open.
@@ -74,13 +80,9 @@ trait TPacketSender extends TileEntity
     */
   def sendPacket(packet: AbstractPacket, player: EntityPlayer)
   {
-    if (player.isInstanceOf[EntityPlayerMP])
-    {
+    if (!getWorldObj.isRemote)
       ResonantEngine.instance.packetHandler.sendToPlayer(packet, player.asInstanceOf[EntityPlayerMP])
-    }
     else
-    {
-      throw new RuntimeException("[TPacketReceiver] Trying to send a packet to player from client side.")
-    }
+      throw new RuntimeException("[TPacketReceiver] Trying to send a packet to clients from client side.")
   }
 }

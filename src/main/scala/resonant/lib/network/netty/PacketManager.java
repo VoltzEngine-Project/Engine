@@ -142,8 +142,8 @@ public class PacketManager implements ICompatProxy
 	 */
 	public void sendToAll(AbstractPacket packet)
 	{
-		this.channelEnumMap.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-		this.channelEnumMap.get(Side.CLIENT).writeAndFlush(packet);
+		this.channelEnumMap.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
+		this.channelEnumMap.get(Side.SERVER).writeAndFlush(packet);
 	}
 
 	public void sendToAllAround(AbstractPacket message, NetworkRegistry.TargetPoint point)
