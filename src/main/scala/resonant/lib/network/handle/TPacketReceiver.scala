@@ -18,4 +18,7 @@ trait TPacketReceiver extends IPacketReceiver with TVectorWorld
   }
 
   def read(buf: ByteBuf, id: Int, packetType: PacketType)
+  {
+
+  }
 }
