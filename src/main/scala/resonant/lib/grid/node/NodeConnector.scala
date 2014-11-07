@@ -26,6 +26,9 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
 
   def connectedBitmask = _connectedBitmask
 
+  /** Functional event handler when the connection changes */
+  var onConnectionChanged: () => Unit = _
+
   /**
    * Connections to other nodes specifically.
    */
@@ -48,24 +51,28 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   {
     connectionMap.put(obj, dir)
     _connectedBitmask.openMask(dir)
+    onConnectionChanged.apply()
   }
 
   def disconnect[B <: A](obj: B)
   {
     _connectedBitmask.closeMask(connectionMap(obj))
     connectionMap.remove(obj)
+    onConnectionChanged.apply()
   }
 
   def disconnect(dir: ForgeDirection)
   {
     _connectedBitmask.closeMask(dir)
     connectionMap.removeAll(connectionMap.filter(_._2 == dir))
+    onConnectionChanged.apply()
   }
 
   def clearConnections()
   {
     connectionMap.clear()
     _connectedBitmask = 0x00
+    onConnectionChanged.apply()
   }
 
   override def connections: JSet[A] = connectionMap.keys.toSet[A]
