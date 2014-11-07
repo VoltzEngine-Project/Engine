@@ -124,11 +124,6 @@ public class FluidUtility
 
 	public static double getAveragePercentageFilledForSides(Class classMask, double defaultFill, World world, Vector3 position, ForgeDirection... sides)
 	{
-		if (defaultFill > 0.98)
-		{
-			return 1.0;
-		}
-
 		double fullness = defaultFill;
 		int count = 1;
 
