@@ -27,7 +27,7 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   def connectedBitmask = _connectedBitmask
 
   /** Functional event handler when the connection changes */
-  var onConnectionChanged: () => Unit = _
+  var onConnectionChanged: () => Unit = () => {}
 
   /**
    * Connections to other nodes specifically.
