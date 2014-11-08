@@ -22,9 +22,9 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   var connectionMask = 0x3F
 
   /** The bitmask containing the connected sides */
-  private var _connectedBitmask = 0x00
+  private var _connectedMask = 0x00
 
-  def connectedMask = _connectedBitmask
+  def connectedMask = _connectedMask
 
   /** Functional event handler when the connection changes */
   var onConnectionChanged: () => Unit = () => ()
@@ -52,20 +52,20 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   def connect[B <: A](obj: B, dir: ForgeDirection)
   {
     connectionMap.put(obj, dir)
-    _connectedBitmask = _connectedBitmask.openMask(dir)
+    _connectedMask = _connectedMask.openMask(dir)
     onConnectionChanged()
   }
 
   def disconnect[B <: A](obj: B)
   {
-    _connectedBitmask = _connectedBitmask.closeMask(connectionMap(obj))
+    _connectedMask = _connectedMask.closeMask(connectionMap(obj))
     connectionMap.remove(obj)
     onConnectionChanged()
   }
 
   def disconnect(dir: ForgeDirection)
   {
-    _connectedBitmask = _connectedBitmask.closeMask(dir)
+    _connectedMask = _connectedMask.closeMask(dir)
     connectionMap.removeAll(connectionMap.filter(_._2 == dir))
     onConnectionChanged()
   }
@@ -73,7 +73,7 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   def clearConnections()
   {
     connectionMap.clear()
-    _connectedBitmask = 0x00
+    _connectedMask = 0x00
   }
 
   override def connections: JSet[A] = connectionMap.keys.toSet[A]
@@ -104,4 +104,6 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
     clearConnections()
     isInvalid = true
   }
+
+  override def toString: String = getClass.getSimpleName + "[Connections: " + connections.size + "]"
 }
