@@ -40,7 +40,7 @@ public class TileSyntheticPart extends SpatialTile implements IPacketReceiver
 	{
 		if (this.mainBlockPosition != null)
 		{
-			return asVector3().add(this.mainBlockPosition);
+			return toVector3().add(this.mainBlockPosition);
 		}
 
 		return null;
@@ -48,7 +48,7 @@ public class TileSyntheticPart extends SpatialTile implements IPacketReceiver
 
 	public void setMainBlock(Vector3 mainBlock)
 	{
-		this.mainBlockPosition = mainBlock.clone().add(asVector3().multiply(-1));
+		this.mainBlockPosition = mainBlock.clone().add(toVector3().multiply(-1));
 
 		if (!this.worldObj.isRemote)
 		{

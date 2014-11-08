@@ -41,7 +41,7 @@ trait TVector2 extends IVector2
   def yi : Int = y.asInstanceOf[Int]
 
   /** Gets this object as a Vector2 */
-  def asVector2 : Vector2 = new Vector2(x(), y())
+  def toVector2 : Vector2 = new Vector2(x(), y())
 
-  def distance2D( vec : IVector2) : Double = asVector2.distance(new Vector2(vec.x(), vec.y()))
+  def distance2D( vec : IVector2) : Double = toVector2.distance(new Vector2(vec.x(), vec.y()))
 }

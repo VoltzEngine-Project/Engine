@@ -26,7 +26,7 @@ trait TVector3 extends TVector2 with IVector3
   def zi : Int = z.asInstanceOf[Int]
 
   /** Gets this object as a Vector3 */
-  def asVector3 : Vector3 = new Vector3(this)
+  def toVector3 : Vector3 = new Vector3(this)
 
-  def distance3D( vec : IVector3) : Double = asVector3.distance(new Vector3(vec))
+  def distance3D( vec : IVector3) : Double = toVector3.distance(new Vector3(vec))
 }

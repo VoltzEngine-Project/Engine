@@ -37,7 +37,7 @@ trait RenderConnectedTexture extends SpatialBlock
 
     for (dir <- ForgeDirection.VALID_DIRECTIONS)
     {
-      val check = asVectorWorld + dir
+      val check = toVectorWorld + dir
       val checkTile = check.getTileEntity
 
       if (checkTile != null && checkTile.getClass == tile.getClass && check.getBlockMetadata(world) == tile.getBlockMetadata)

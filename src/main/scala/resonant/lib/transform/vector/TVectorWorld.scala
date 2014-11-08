@@ -25,5 +25,5 @@ trait TVectorWorld extends TVector3 with IVectorWorld
   }
 
   /** Gets this object as a VectorWorld */
-  def asVectorWorld : VectorWorld = new VectorWorld(this)
+  def toVectorWorld : VectorWorld = new VectorWorld(this)
 }

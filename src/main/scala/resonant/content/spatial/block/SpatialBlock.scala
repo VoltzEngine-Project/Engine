@@ -243,7 +243,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   def center: VectorWorld =
   {
     //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
-    return asVectorWorld.add(0.5).asInstanceOf[VectorWorld]
+    return toVectorWorld.add(0.5).asInstanceOf[VectorWorld]
   }
 
   /**
@@ -535,7 +535,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   }
 
   @SideOnly(Side.CLIENT)
-  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + asVectorWorld).toAABB
+  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + toVectorWorld).toAABB
 
   def getCollisionBounds: Cuboid =
   {
