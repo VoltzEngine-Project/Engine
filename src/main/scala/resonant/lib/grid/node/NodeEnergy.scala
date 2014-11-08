@@ -26,6 +26,6 @@ abstract class NodeEnergy[A <: AnyRef](parent:INodeProvider) extends NodeConnect
   @Deprecated
   def power : Double = getEnergyStorage.getEnergy
 
-  override def getEnergyStorge(): EnergyStorage = buffer
+  override def getEnergyStorage(): EnergyStorage = buffer
 
 }
