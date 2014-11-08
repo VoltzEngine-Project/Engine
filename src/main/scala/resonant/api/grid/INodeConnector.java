@@ -20,6 +20,11 @@ public interface INodeConnector<A> extends INode
      */
     public <B extends A> boolean canConnect(B other, ForgeDirection from);
 
+    /**
+     * @deprecated - return an empty list and use directionMap
+     * @return empty list
+     */
+    @Deprecated
 	public Set<A> connections();
 
 	public Map<A, ForgeDirection> directionMap();
