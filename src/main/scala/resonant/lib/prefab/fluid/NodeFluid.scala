@@ -18,8 +18,7 @@ class NodeFluid(parent: INodeProvider, volume: Int = FluidContainerRegistry.BUCK
   /** Internal tank */
   private var tank = new FluidTank(volume)
 
-  var onFluidChanged: () => Unit = () =>
-  {}
+  var onFluidChanged: () => Unit = () => ()
 
   override def getPrimaryTank: FluidTank = tank
 

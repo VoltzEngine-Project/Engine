@@ -60,14 +60,12 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   {
     _connectedMask = _connectedMask.closeMask(connectionMap(obj))
     connectionMap.remove(obj)
-    onConnectionChanged()
   }
 
   def disconnect(dir: ForgeDirection)
   {
     _connectedMask = _connectedMask.closeMask(dir)
     connectionMap.removeAll(connectionMap.filter(_._2 == dir))
-    onConnectionChanged()
   }
 
   def clearConnections()
@@ -87,9 +85,13 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   override def reconstruct()
   {
     super.reconstruct()
+    val prevCon = connectedMask
     clearConnections()
     rebuild()
-    onConnectionChanged()
+
+    if (prevCon != connectedMask)
+      onConnectionChanged()
+    
     isInvalid = false
   }
 
