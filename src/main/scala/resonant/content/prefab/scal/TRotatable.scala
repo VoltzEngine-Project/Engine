@@ -30,7 +30,7 @@ trait TRotatable extends SpatialBlock with IRotatable
     }
 
     val playerSide = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3
-    val returnSide = if ((playerSide == 0 && canRotate(2))) 2 else (if ((playerSide == 1 && canRotate(5))) 5 else (if ((playerSide == 2 && canRotate(3))) 3 else (if ((playerSide == 3 && canRotate(4))) 4 else 0)))
+    val returnSide = if (playerSide == 0 && canRotate(2)) 2 else if ((playerSide == 1 && canRotate(5))) 5 else (if ((playerSide == 2 && canRotate(3))) 3 else (if ((playerSide == 3 && canRotate(4))) 4 else 0))
 
     if (isFlipPlacement)
     {

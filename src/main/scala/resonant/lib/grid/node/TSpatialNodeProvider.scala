@@ -51,6 +51,11 @@ trait TSpatialNodeProvider extends SpatialTile with INodeProvider
     nodes.foreach(_.deconstruct())
   }
 
+  override def invalidate()
+  {
+    nodes.foreach(_.deconstruct())
+  }
+
   override def writeToNBT(nbt: NBTTagCompound)
   {
     super.writeToNBT(nbt)
