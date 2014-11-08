@@ -18,7 +18,7 @@ trait TileConnector[A <: AnyRef] extends NodeConnector[A]
     {
       if (canConnect(direction))
       {
-        val tile = (position + direction).getTileEntity
+        val tile = (toVectorWorld + direction).getTileEntity
 
         if (tile != null)
         {

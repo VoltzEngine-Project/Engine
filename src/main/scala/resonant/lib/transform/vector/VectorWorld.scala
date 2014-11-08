@@ -20,7 +20,7 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   def this(tile: TileEntity) = this(tile.getWorldObj, tile.xCoord, tile.yCoord, tile.zCoord)
 
-  def this(vec: IVectorWorld) = this(vec.world(), vec.x(), vec.y(), vec.z())
+  def this(vec: IVectorWorld) = this(vec.world, vec.x, vec.y, vec.z)
 
   def this(world: World, vector: IVector3) = this(world, vector.x, vector.y, vector.z)
 

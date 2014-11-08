@@ -22,7 +22,7 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   var connectionMask = 0x3F
 
   /** The bitmask containing the connected sides */
-  private var _connectedMask = 0x00
+  protected var _connectedMask = 0x00
 
   def connectedMask = _connectedMask
 
@@ -53,7 +53,6 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   {
     connectionMap.put(obj, dir)
     _connectedMask = _connectedMask.openMask(dir)
-    onConnectionChanged()
   }
 
   def disconnect[B <: A](obj: B)
@@ -91,7 +90,7 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
 
     if (prevCon != connectedMask)
       onConnectionChanged()
-    
+
     isInvalid = false
   }
 

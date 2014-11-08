@@ -21,7 +21,7 @@ trait TVectorWorld extends TVector3 with IVectorWorld
     {
       return this.asInstanceOf[Entity].worldObj
     }
-    return null;
+    return null
   }
 
   /** Gets this object as a VectorWorld */
