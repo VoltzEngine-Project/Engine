@@ -17,10 +17,10 @@ abstract class NodeGrid[A <: NodeGrid[A]](parent: INodeProvider) extends NodeCon
   {
     super.reconstruct()
 
-    if (grid != null)
-    {
-      grid.reconstruct(this.asInstanceOf[A])
-    }
+    if (grid == null)
+      grid = newGrid
+
+    grid.reconstruct(this.asInstanceOf[A])
   }
 
   override def deconstruct()
@@ -40,4 +40,6 @@ abstract class NodeGrid[A <: NodeGrid[A]](parent: INodeProvider) extends NodeCon
   }
 
   def getGrid: GridNode[_] = grid
+
+  def newGrid: GridNode[A]
 }

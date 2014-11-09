@@ -33,23 +33,22 @@ class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
     if (!getNodes.contains(node) && isValidNode(node))
     {
       add(node)
-      reconstructNode(node)
+      populateNode(node, prev)
       node.connections.foreach(n => populate(n, node))
     }
   }
 
-  protected def populateNode(node: N)
+  protected def populateNode(node: N, prev: N = null.asInstanceOf[N])
   {
     node.setGrid(this)
   }
 
-  override def deconstruct()
+  def deconstruct(first: N)
   {
-    for (node <- getNodes)
-    {
-      node.setGrid(null)
-    }
+    remove(first)
+    first.setGrid(null)
 
-    super.deconstruct()
+    if (getNodes.size() > 0)
+      reconstruct(getNodes.head)
   }
 }
