@@ -445,6 +445,16 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
     def isAirBlock(world: World) : Boolean = world.isAirBlock(xi, yi, zi)
 
+    def isBlockEqual(world: World, block: Block) : Boolean =
+    {
+      val b = getBlock(world)
+      if(b != null && b == block)
+      {
+        return true;
+      }
+      return false
+    }
+
     def isBlockFreezable(world: World) : Boolean = world.isBlockFreezable(xi, yi, zi)
 
     override def hashCode: Int =

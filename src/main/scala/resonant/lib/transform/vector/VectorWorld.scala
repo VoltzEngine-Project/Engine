@@ -172,6 +172,8 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   def isAirBlock() : Boolean = super.isAirBlock(world)
 
+  def isBlockEqual(block: Block) = super.isBlockEqual(world, block)
+
   def isBlockFreezable() : Boolean = super.isBlockFreezable(world)
 
   def rayTraceEntities(target: Vector3): MovingObjectPosition = super.rayTraceEntities(world, target)
