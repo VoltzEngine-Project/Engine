@@ -42,6 +42,7 @@ public class Grid<N> implements IGrid<N>
     }
 
     /** Rebuilds the node during a grid rebuild */
+    @Deprecated
     protected void reconstructNode(N node)
     {
     }

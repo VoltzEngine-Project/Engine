@@ -3,7 +3,7 @@ package resonant.lib.grid;
 import resonant.api.grid.IUpdate;
 import resonant.lib.grid.node.Node;
 
-public class GridTicking<N extends Node> extends GridNode<N> implements IUpdate {
+public class GridTicking<N extends Node> extends Grid<N> implements IUpdate {
 
     public GridTicking(Class node)
     {

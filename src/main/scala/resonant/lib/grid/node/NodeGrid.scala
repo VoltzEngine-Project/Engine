@@ -1,23 +1,17 @@
 package resonant.lib.grid.node
 
-import resonant.api.grid.{IGrid, INodeGrid, INodeProvider}
+import resonant.api.grid.INodeProvider
+import resonant.lib.grid.GridNode
 
 /**
- * A node that implements a grid
+ * A node that is part of a larger grid of nodes
+ *
  * @tparam A The type this node connects to
  * @author Calclavia
  */
-abstract class NodeGrid[A <: AnyRef](parent: INodeProvider) extends NodeConnector[A](parent) with INodeGrid
+abstract class NodeGrid[A <: NodeGrid[A]](parent: INodeProvider) extends NodeConnector[A](parent) //with INodeGrid
 {
-  protected var grid: IGrid[A] = null
-
-  override def deconstruct()
-  {
-    super.deconstruct()
-
-    if (grid != null)
-      grid.remove(this.asInstanceOf[A])
-  }
+  protected var grid: GridNode[A] = null
 
   override def reconstruct()
   {
@@ -25,14 +19,25 @@ abstract class NodeGrid[A <: AnyRef](parent: INodeProvider) extends NodeConnecto
 
     if (grid != null)
     {
-      grid.add(this.asInstanceOf[A])
+      grid.reconstruct(this.asInstanceOf[A])
     }
   }
 
-  override def setGrid(grid: IGrid[_])
+  override def deconstruct()
   {
-    this.grid = grid.asInstanceOf[IGrid[A]]
+    super.deconstruct()
+
+    if (grid != null)
+    {
+      grid.remove(this.asInstanceOf[A])
+      grid.deconstruct()
+    }
   }
 
-  override def getGrid: IGrid[_] = grid
+  def setGrid(grid: GridNode[_])
+  {
+    this.grid = grid.asInstanceOf[GridNode[A]]
+  }
+
+  def getGrid: GridNode[_] = grid
 }

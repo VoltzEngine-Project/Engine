@@ -9,7 +9,7 @@ import cpw.mods.fml.common.gameevent.TickEvent
 import net.minecraftforge.common.MinecraftForge
 import resonant.api.grid.IUpdate
 
-import scala.collection.JavaConversions._
+import scala.collection.convert.wrapAll._
 
 /**
  * A ticker to update all grids. This is multi-threaded based on configuration.
@@ -24,7 +24,7 @@ object UpdateTicker extends Thread
   /**
    * For updaters to be ticked.
    */
-  private final val updaters : java.util.Set[IUpdate] = Collections.newSetFromMap(new util.WeakHashMap[IUpdate, java.lang.Boolean]())
+  private final val updaters: java.util.Set[IUpdate] = Collections.newSetFromMap(new util.WeakHashMap[IUpdate, java.lang.Boolean]())
 
   private final val queue = new ConcurrentLinkedQueue[() => Unit]()
 
@@ -77,15 +77,15 @@ object UpdateTicker extends Thread
         deltaTime = current - last
 
         updaters synchronized
-                {
-                  update()
-                }
+        {
+          update()
+        }
 
         queuedEvents synchronized
-                {
-                  queuedEvents.foreach(MinecraftForge.EVENT_BUS.post(_))
-                  queuedEvents.clear()
-                }
+        {
+          queuedEvents.foreach(MinecraftForge.EVENT_BUS.post)
+          queuedEvents.clear()
+        }
 
         last = current
       }
@@ -100,10 +100,10 @@ object UpdateTicker extends Thread
     update()
 
     queuedEvents synchronized
-            {
-              queuedEvents.foreach(MinecraftForge.EVENT_BUS.post(_))
-              queuedEvents.clear()
-            }
+    {
+      queuedEvents.foreach(MinecraftForge.EVENT_BUS.post)
+      queuedEvents.clear()
+    }
   }
 
   def update()
@@ -114,7 +114,7 @@ object UpdateTicker extends Thread
       queue.clear()
 
       /**
-       * TODO: Perform test to check if parallel evaluation is worth it.
+       * TODO: Perform test to check if parallel evaluation is worth it. Do periodic check every minute or so.
        */
       updaters.par.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
       updaters.removeAll(updaters.filterNot(_.continueUpdate()))
