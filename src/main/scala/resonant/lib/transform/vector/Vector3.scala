@@ -443,6 +443,10 @@ class Vector3(var x: Double, var y: Double, var z: Double) extends AbstractVecto
 
     def setBlockToAir(world: World): Boolean = world.setBlockToAir(xi, yi, zi)
 
+    def isAirBlock(world: World) : Boolean = world.isAirBlock(xi, yi, zi)
+
+    def isBlockFreezable(world: World) : Boolean = world.isBlockFreezable(xi, yi, zi)
+
     override def hashCode: Int =
     {
         val x = doubleToLongBits(this.x)
