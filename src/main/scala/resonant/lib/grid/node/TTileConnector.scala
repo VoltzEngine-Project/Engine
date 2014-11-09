@@ -8,7 +8,7 @@ import resonant.api.grid.{INode, INodeProvider}
  * A trait applied to NodeConnector
  * @author Calclavia
  */
-trait TileConnector[A <: AnyRef] extends NodeConnector[A]
+trait TTileConnector[A <: AnyRef] extends NodeConnector[A]
 {
   override def rebuild()
   {

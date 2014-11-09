@@ -5,7 +5,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
 import resonant.api.ISave
 import resonant.api.grid.{INode, INodeProvider}
-import resonant.lib.grid.node.{NodeConnector, TileConnector}
+import resonant.lib.grid.node.{NodeConnector, TTileConnector}
 
 /**
  * A node that handles fluid interactions
@@ -13,7 +13,7 @@ import resonant.lib.grid.node.{NodeConnector, TileConnector}
  * @param parent Parent(TileEntity or Multipart) that contains this node
  * @param volume Amount of fluid in liters * @author Calclavia
  */
-class NodeFluid(parent: INodeProvider, volume: Int = FluidContainerRegistry.BUCKET_VOLUME) extends NodeConnector[IFluidHandler](parent) with ISave with TFluidHandler with TFluidTank with TileConnector[IFluidHandler]
+class NodeFluid(parent: INodeProvider, volume: Int = FluidContainerRegistry.BUCKET_VOLUME) extends NodeConnector[IFluidHandler](parent) with ISave with TFluidHandler with TFluidTank with TTileConnector[IFluidHandler]
 {
   /** Internal tank */
   private var tank = new FluidTank(volume)

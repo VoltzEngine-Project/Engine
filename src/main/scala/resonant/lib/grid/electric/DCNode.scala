@@ -6,7 +6,7 @@ import java.util.{Set => JSet}
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.grid.{INodeProvider, IUpdate}
 import resonant.lib.grid.UpdateTicker
-import resonant.lib.grid.node.{NodeEnergy, TileConnector}
+import resonant.lib.grid.node.{NodeEnergy, TTileConnector}
 
 import scala.collection.convert.wrapAll._
 
@@ -23,7 +23,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpdate with TileConnector[DCNode]
+class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpdate with TTileConnector[DCNode]
 {
   /**
    * Charges are pushed to positive terminals. Any connections that is NOT

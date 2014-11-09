@@ -63,7 +63,7 @@ abstract class Node(var parent: INodeProvider) extends INode with TVectorWorld
   }
 
   /** @deprecated use asVectorWorld instead */
-  @Deprecated
+  @deprecated
   def position: VectorWorld = toVectorWorld
 
   override def toString: String = getClass.getSimpleName + "[" + hashCode + "]"

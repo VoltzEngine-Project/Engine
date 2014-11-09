@@ -1,6 +1,6 @@
 package resonant.lib.grid;
 
-import resonant.api.grid.IGridNode;
+import resonant.api.grid.INodeGrid;
 import resonant.lib.grid.node.Node;
 
 /**
@@ -17,8 +17,8 @@ public class GridNode<N extends Node> extends Grid<N>
     protected void reconstructNode(N node)
     {
         node.reconstruct();
-        if(node instanceof IGridNode)
-            ((IGridNode)node).setGrid(this);
+        if(node instanceof INodeGrid)
+            ((INodeGrid)node).setGrid(this);
     }
 
     @Override
@@ -26,8 +26,8 @@ public class GridNode<N extends Node> extends Grid<N>
     {
         for(N node : getNodes())
         {
-            if(node instanceof IGridNode)
-                ((IGridNode)node).setGrid(null);
+            if(node instanceof INodeGrid)
+                ((INodeGrid)node).setGrid(null);
             node.reconstruct();
         }
         super.deconstruct();
