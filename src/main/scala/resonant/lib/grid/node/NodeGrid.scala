@@ -13,6 +13,8 @@ abstract class NodeGrid[A <: NodeGrid[A]](parent: INodeProvider) extends NodeCon
 {
   protected var grid: GridNode[A] = null
 
+  var onGridReconstruct: () => Unit = () => ()
+
   override def reconstruct()
   {
     super.reconstruct()

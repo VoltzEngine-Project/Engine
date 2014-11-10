@@ -22,6 +22,8 @@ class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
       //TODO: Reconstruct may be called MANY times unnecessarily multiple times. Add check to prevent extra calls
       getNodes.clear()
       populate(first)
+
+      getNodes.foreach(_.onGridReconstruct())
     }
   }
 
