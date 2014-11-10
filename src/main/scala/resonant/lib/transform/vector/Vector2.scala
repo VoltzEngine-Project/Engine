@@ -127,10 +127,10 @@ class Vector2(var x: Double = 0, var y: Double =0 ) extends AbstractVector[Vecto
 
   override def compare(that: Vector2): Int =
   {
-    if (x < that.x && y < that.y)
+    if (x < that.x || y < that.y)
       return -1
 
-    if (x > that.x && y > that.y)
+    if (x > that.x || y > that.y)
       return 1
 
     return 0

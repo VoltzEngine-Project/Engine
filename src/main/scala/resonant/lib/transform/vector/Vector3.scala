@@ -483,10 +483,10 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
 
   override def compare(that: Vector3): Int =
   {
-    if (x < that.x && y < that.y && z < that.z)
+    if (x < that.x || y < that.y || z < that.z)
       return -1
 
-    if (x > that.x && y > that.y && z > that.z)
+    if (x > that.x || y > that.y || z > that.z)
       return 1
 
     return 0
