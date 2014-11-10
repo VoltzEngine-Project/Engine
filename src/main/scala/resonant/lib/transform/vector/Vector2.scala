@@ -11,7 +11,7 @@ import resonant.lib.transform.AbstractVector
  *
  * @author Calclavia
  */
-class Vector2(var x: Double, var y: Double) extends AbstractVector[Vector2] with Cloneable with IVector2
+class Vector2(var x: Double = 0, var y: Double =0 ) extends AbstractVector[Vector2] with Ordered[Vector2] with Cloneable with IVector2
 {
   def this() = this(0, 0)
 
@@ -123,6 +123,17 @@ class Vector2(var x: Double, var y: Double) extends AbstractVector[Vector2] with
       return this.x == vector.x && this.y == vector.y
     }
     return false
+  }
+
+  override def compare(that: Vector2): Int =
+  {
+    if (x < that.x && y < that.y)
+      return -1
+
+    if (x > that.x && y > that.y)
+      return 1
+
+    return 0
   }
 
   override def toString = "Vector2 [" + this.x + "," + this.y + "]"
