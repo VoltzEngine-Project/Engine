@@ -12,7 +12,7 @@ import resonant.lib.network.handle.TPacketReceiver;
  */
 public class PacketPlayerItem extends PacketType
 {
-	protected int slotId;
+	public int slotId;
 
 	public PacketPlayerItem()
 	{
