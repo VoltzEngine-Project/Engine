@@ -437,13 +437,13 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
 
   def getTileEntity(world: IBlockAccess) = if (world != null) world.getTileEntity(xi, yi, zi) else null
 
-  def getHardness(world: IBlockAccess) : Float =
+  def getHardness(world: World) : java.lang.Float =
   {
     val block = getBlock(world)
     if (block != null)
-      return block.getBlockHardness(world, xi(), yi(), zi())
+      return block.getBlockHardness(world, xi, yi, zi)
     else
-      0
+      return 0
   }
 
   def setBlock(world: World, block: Block, metadata: Int, notify: Int): Boolean = if (world != null && block != null) world.setBlock(xi, yi, zi, block, metadata, notify) else false
