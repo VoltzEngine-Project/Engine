@@ -1,6 +1,7 @@
 package resonant.lib.grid.branch
 
 import resonant.api.grid.{IGrid, INodeGrid, INodeProvider}
+import resonant.lib.grid.branch.part.Branch
 import resonant.lib.grid.node.Node
 import resonant.lib.prefab.TConnector;
 
