@@ -16,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
+import net.minecraft.util.{MathHelper, AxisAlignedBB, IIcon, MovingObjectPosition}
 import net.minecraft.world.{Explosion, IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
 import org.lwjgl.opengl.{GL11, GL12}
@@ -908,5 +908,28 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   protected def scheduleTick(delay: Int)
   {
     world.scheduleBlockUpdate(xi, yi, zi, block, delay)
+  }
+
+  /** gets the way this piston should face for that entity that placed it. */
+  def determineOrientation(entityLiving: EntityLivingBase): Byte =
+  {
+    if (entityLiving != null)
+    {
+      if (MathHelper.abs(entityLiving.posX.asInstanceOf[Float] - x) < 2.0F && MathHelper.abs(entityLiving.posZ.asInstanceOf[Float] - z) < 2.0F)
+      {
+        val var5: Double = entityLiving.posY + 1.82D - entityLiving.yOffset
+        if (var5 - y > 2.0D)
+        {
+          return 1
+        }
+        if (y - var5 > 0.0D)
+        {
+          return 0
+        }
+      }
+      val rotation: Int = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3
+      return (if (rotation == 0) 2 else (if (rotation == 1) 5 else (if (rotation == 2) 3 else (if (rotation == 3) 4 else 0)))).asInstanceOf[Byte]
+    }
+    return 0
   }
 }
