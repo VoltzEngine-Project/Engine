@@ -1,9 +1,8 @@
-package resonant.lib.grid.electric.macroscopic;
+package resonant.lib.grid.branch;
 
 import resonant.lib.grid.GridTicking;
 import resonant.lib.grid.UpdateTicker;
-import resonant.lib.grid.electric.macroscopic.part.Part;
-import resonant.lib.grid.node.NodeConnector;
+import resonant.lib.grid.branch.part.Part;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,14 +10,14 @@ import java.util.Set;
 /**
  * Created by robert on 11/5/2014.
  */
-public class BranchedGrid extends GridTicking<NodeBranchPeace>
+public class BranchedGrid extends GridTicking<NodeBranchPart>
 {
     private boolean markForMapping = true;
     private Set<Part> parts = new HashSet<Part>();
 
     public BranchedGrid()
     {
-        this(NodeBranchPeace.class);
+        this(NodeBranchPart.class);
     }
 
     public BranchedGrid(Class cla)

@@ -1,4 +1,4 @@
-package resonant.lib.grid.electric.macroscopic.part;
+package resonant.lib.grid.branch.part;
 
 import resonant.api.grid.INode;
 import scala.reflect.internal.util.WeakHashSet;

@@ -1,11 +1,11 @@
-package resonant.lib.grid.electric.macroscopic;
+package resonant.lib.grid.branch;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.grid.INode;
 import resonant.api.grid.INodeProvider;
-import resonant.lib.grid.electric.macroscopic.part.Branch;
-import resonant.lib.grid.electric.macroscopic.part.Junction;
-import resonant.lib.grid.electric.macroscopic.part.Part;
+import resonant.lib.grid.branch.part.Branch;
+import resonant.lib.grid.branch.part.Junction;
+import resonant.lib.grid.branch.part.Part;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ public class GridPathfinder
     /**
      * Nodes that have already been pathed
      */
-    private List<NodeBranchPeace> pathNodes = new LinkedList<NodeBranchPeace>();
+    private List<NodeBranchPart> pathNodes = new LinkedList<NodeBranchPart>();
 
     public GridPathfinder(BranchedGrid grid)
     {
@@ -43,7 +43,7 @@ public class GridPathfinder
      */
     public Set<Part> generateParts()
     {
-        NodeBranchPeace firstNode = grid.getFirstNode();
+        NodeBranchPart firstNode = grid.getFirstNode();
         if (firstNode != null)
         {
             path(null, firstNode, null);
@@ -59,7 +59,7 @@ public class GridPathfinder
      * @param currentNode - current node being pathed
      * @param side        - side we are pathing to from the node, can only be null for first run
      */
-    public void path(Part part, NodeBranchPeace currentNode, ForgeDirection side)
+    public void path(Part part, NodeBranchPart currentNode, ForgeDirection side)
     {
         Map<Object, ForgeDirection> connections = currentNode.getConnections();
         Part nextPart = null;
@@ -112,21 +112,21 @@ public class GridPathfinder
         {
             if (entry.getKey() != null)
             {
-                if (entry.getKey() instanceof NodeBranchPeace)
+                if (entry.getKey() instanceof NodeBranchPart)
                 {
                     if (!pathNodes.contains(entry.getKey()))
                     {
-                        path(nextPart, (NodeBranchPeace) entry.getKey(), entry.getValue());
+                        path(nextPart, (NodeBranchPart) entry.getKey(), entry.getValue());
                     }
                 } else if (entry.getKey() instanceof INodeProvider)
                 {
-                    INode providerNode = ((INodeProvider) entry.getKey()).getNode(NodeBranchPeace.class, entry.getValue().getOpposite());
+                    INode providerNode = ((INodeProvider) entry.getKey()).getNode(NodeBranchPart.class, entry.getValue().getOpposite());
 
-                    if (providerNode instanceof NodeBranchPeace)
+                    if (providerNode instanceof NodeBranchPart)
                     {
                         if (!pathNodes.contains(entry.getKey()))
                         {
-                            path(nextPart, (NodeBranchPeace) entry.getKey(), entry.getValue());
+                            path(nextPart, (NodeBranchPart) entry.getKey(), entry.getValue());
                         }
                     }
                 } else

@@ -1,14 +1,13 @@
-package resonant.lib.grid.electric.macroscopic
+package resonant.lib.grid.branch
 
 import resonant.api.grid.{IGrid, INodeGrid, INodeProvider}
-import resonant.lib.grid.electric.macroscopic.part.Branch
 import resonant.lib.grid.node.Node
 import resonant.lib.prefab.TConnector;
 
 /**
  * Created by robert on 11/12/2014.
  */
-class NodeBranchPeace(parent: INodeProvider) extends Node(parent) with TConnector with INodeGrid
+class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector with INodeGrid
 {
   var branch : Branch = null
   var grid : BranchedGrid = null
@@ -44,6 +43,6 @@ class NodeBranchPeace(parent: INodeProvider) extends Node(parent) with TConnecto
     * @param connector - any connecting object, Most likely TileEntity, Node, INodeProvider */
   override protected def isValidConnector(connector: Object): Boolean =
   {
-    return connector != null && connector.isInstanceOf[NodeBranchPeace];
+    return connector != null && connector.isInstanceOf[NodeBranchPart];
   }
 }

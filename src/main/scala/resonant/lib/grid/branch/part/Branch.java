@@ -1,4 +1,4 @@
-package resonant.lib.grid.electric.macroscopic.part;
+package resonant.lib.grid.branch.part;
 
 /**
  * Wraps one or more nodes into a simple object that is used in the NetworkSimulation
