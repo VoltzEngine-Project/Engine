@@ -1,6 +1,7 @@
 package resonant.lib.grid;
 
 import resonant.api.grid.IGrid;
+import resonant.api.grid.INodeGrid;
 import resonant.api.grid.IUpdate;
 
 import java.util.HashSet;
@@ -28,7 +29,14 @@ public class Grid<N> implements IGrid<N>
 	 */
 	public void deconstruct()
 	{
-		nodes.clear();
+        Iterator<N> it = getNodes().iterator();
+        while (it.hasNext())
+        {
+            N node = it.next();
+            if(node instanceof INodeGrid)
+                ((INodeGrid)node).setGrid(null);
+            it.remove();
+        }
 	}
 
 	/**
@@ -54,9 +62,10 @@ public class Grid<N> implements IGrid<N>
 	/**
 	 * Rebuilds the node during a grid rebuild
 	 */
-	@Deprecated
 	protected void reconstructNode(N node)
 	{
+        if(node instanceof INodeGrid)
+            ((INodeGrid)node).setGrid(this);
 	}
 
 	/**
@@ -73,6 +82,8 @@ public class Grid<N> implements IGrid<N>
 	public void add(N node)
 	{
 		nodes.add(node);
+        if(node instanceof INodeGrid)
+            ((INodeGrid)node).setGrid(this);
 	}
 
 	/**
@@ -81,6 +92,8 @@ public class Grid<N> implements IGrid<N>
 	public void remove(N node)
 	{
 		nodes.remove(node);
+        if(node instanceof INodeGrid)
+            ((INodeGrid)node).setGrid(null);
 	}
 
 	/**

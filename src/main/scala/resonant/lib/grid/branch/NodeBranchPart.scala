@@ -2,6 +2,7 @@ package resonant.lib.grid.branch
 
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.grid.{IGrid, INodeGrid, INodeProvider}
+import resonant.engine.References
 import resonant.lib.grid.branch.part.Branch
 import resonant.lib.grid.node.Node
 import resonant.lib.prefab.TConnector
@@ -49,8 +50,16 @@ class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector
     return connector != null && connector.isInstanceOf[NodeBranchPart];
   }
 
+  override def reconstruct()
+  {
+    References.LOGGER.debug("NodeBranchPart: Reconstruct")
+    super.reconstruct()
+    buildConnections()
+  }
+
   override def connect(obj: Object, dir: ForgeDirection)
   {
+    References.LOGGER.debug("NodeBranchPart: connect " + obj +"   dir")
     super.connect(obj, dir)
     if(obj.isInstanceOf[INodeProvider])
     {

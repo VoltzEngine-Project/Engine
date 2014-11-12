@@ -45,10 +45,11 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
 	}
 
 	@Override
-	public void onAdded()
+	public void onWorldJoin()
 	{
-		super.onAdded();
-		reconstructNode();
+		super.onWorldJoin();
+        if(!canUpdate())
+		    reconstructNode();
 	}
 
 	private void reconstructNode()

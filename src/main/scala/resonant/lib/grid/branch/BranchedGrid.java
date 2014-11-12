@@ -37,4 +37,10 @@ public class BranchedGrid extends GridTicking<NodeBranchPart>
             markForMapping = false;
         }
     }
+
+    @Override
+    public boolean isValidNode(Object node)
+    {
+        return node instanceof NodeBranchPart;
+    }
 }
