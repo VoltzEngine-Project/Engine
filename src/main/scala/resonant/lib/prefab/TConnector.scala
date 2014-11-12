@@ -2,7 +2,7 @@ package resonant.lib.prefab
 
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.grid.IConnector
-import resonant.lib.transform.vector.TVectorWorld
+import resonant.lib.transform.vector.{TVectorWorld, VectorWorld}
 import resonant.lib.wrapper.BitmaskWrapper._
 
 /**
@@ -79,11 +79,16 @@ trait TConnector extends IConnector with TVectorWorld
     for(dir <- ForgeDirection.VALID_DIRECTIONS)
     {
       val loc = toVectorWorld + dir
-      val tile = loc.getTileEntity
-      if(canConnect(tile, dir.getOpposite))
-      {
-        connect(loc, dir)
-      }
+      updateConnection(dir, loc)
+    }
+  }
+
+  def updateConnection(dir: ForgeDirection, loc: VectorWorld)
+  {
+    val tile = loc.getTileEntity
+    if(canConnect(tile, dir.getOpposite))
+    {
+      connect(loc, dir)
     }
   }
 }
