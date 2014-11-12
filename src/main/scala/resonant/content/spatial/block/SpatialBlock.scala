@@ -915,7 +915,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   {
     if (entityLiving != null)
     {
-      if (MathHelper.abs(entityLiving.posX.asInstanceOf[Float] - x) < 2.0F && MathHelper.abs(entityLiving.posZ.asInstanceOf[Float] - z) < 2.0F)
+      if (MathHelper.func_154353_e(entityLiving.posX - x) < 2.0F && MathHelper.func_154353_e(entityLiving.posZ - z) < 2.0F)
       {
         val var5: Double = entityLiving.posY + 1.82D - entityLiving.yOffset
         if (var5 - y > 2.0D)
