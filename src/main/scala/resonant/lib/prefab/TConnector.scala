@@ -3,9 +3,7 @@ package resonant.lib.prefab
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.grid.IConnector
 import resonant.lib.transform.vector.TVectorWorld
-
-import scala.collection.mutable
-import scala.collection.JavaConversions._
+import resonant.lib.wrapper.BitmaskWrapper._
 
 /**
  * Created by robert on 11/12/2014.
@@ -18,7 +16,10 @@ trait TConnector extends IConnector with TVectorWorld
   protected var _connectedMask = 0x00
 
   /** Map of connections */
-  private val connectionMap = mutable.WeakHashMap.empty[Object, ForgeDirection]
+  private val connectionMap : java.util.Map[AnyRef, ForgeDirection] = new java.util.HashMap[AnyRef, ForgeDirection]
+
+
+  override def getConnections : java.util.Map[AnyRef, ForgeDirection] = connectionMap
 
   //////////////////////////////
   ///   Connection Rules
@@ -28,12 +29,12 @@ trait TConnector extends IConnector with TVectorWorld
 
   /** Is this connector allowed to connect to any side
    * @param connector - any connecting object, Most likely TileEntity, Node, INodeProvider */
-  protected abstract def isValidConnector(connector : Object) : Boolean
+  protected def isValidConnector(connector : Object) : Boolean
 
   /** Can any connector connect to this side
    * @param from - side connecting from
    * @return true if connection is allowed */
-  def canConnect(from: ForgeDirection): Boolean = connectionMask.mask(from) || from == ForgeDirection.UNKNOWN
+  def canConnect(from: ForgeDirection): Boolean = allowedConnections.mask(from) || from == ForgeDirection.UNKNOWN
 
 
   ////////////////////////////
@@ -54,7 +55,7 @@ trait TConnector extends IConnector with TVectorWorld
   /** Removes the connection */
   def disconnect(obj: Object)
   {
-    _connectedMask = _connectedMask.closeMask(connectionMap(obj))
+    _connectedMask = _connectedMask.closeMask(connectionMap.get(obj))
     connectionMap.remove(obj)
   }
 
@@ -62,7 +63,7 @@ trait TConnector extends IConnector with TVectorWorld
   def disconnect(dir: ForgeDirection)
   {
     _connectedMask = _connectedMask.closeMask(dir)
-    connectionMap.removeAll(connectionMap.filter(_._2 == dir))
+    connectionMap.clear()
   }
 
   /** Removes all connections */

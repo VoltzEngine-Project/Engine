@@ -2,16 +2,16 @@ package resonant.lib.grid.electric.macroscopic
 
 import resonant.api.grid.{IGrid, INodeGrid, INodeProvider}
 import resonant.lib.grid.electric.macroscopic.part.Branch
-import resonant.lib.prefab.TConnector
-import resonant.lib.grid.node.Node;
+import resonant.lib.grid.node.Node
+import resonant.lib.prefab.TConnector;
 
 /**
  * Created by robert on 11/12/2014.
  */
 class NodeBranchPeace(parent: INodeProvider) extends Node(parent) with TConnector with INodeGrid
 {
-  var branch : Branch
-  var grid : BranchedGrid
+  var branch : Branch = null
+  var grid : BranchedGrid = null
 
   /** Gets the branch that contains this node */
   def getBranch : Branch = branch
@@ -23,19 +23,27 @@ class NodeBranchPeace(parent: INodeProvider) extends Node(parent) with TConnecto
   }
 
   /** Sets the grid reference */
-  override def setGrid(grid: BranchedGrid)
+  override def setGrid(grid: IGrid[_]):Unit =
   {
-    this.grid = grid
+    if(grid.isInstanceOf[BranchedGrid])
+      this.grid = grid.asInstanceOf[BranchedGrid]
   }
 
   /** Gets the grid reference */
-  override def getGrid: IGrid[BranchedGrid] =
+  override def getGrid: BranchedGrid =
   {
     if(grid == null)
     {
-      grid = new BranchedGrid[NodeBranchPeace]()
+      grid = new BranchedGrid()
       grid.add(this)
     }
     return grid
+  }
+
+  /** Is this connector allowed to connect to any side
+    * @param connector - any connecting object, Most likely TileEntity, Node, INodeProvider */
+  override protected def isValidConnector(connector: Object): Boolean =
+  {
+    return connector != null && connector.isInstanceOf[NodeBranchPeace];
   }
 }

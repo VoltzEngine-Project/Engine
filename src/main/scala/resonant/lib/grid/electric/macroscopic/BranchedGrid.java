@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Created by robert on 11/5/2014.
  */
-public class BranchedGrid<N extends NodeBranchPeace> extends GridTicking<N>
+public class BranchedGrid extends GridTicking<NodeBranchPeace>
 {
     private boolean markForMapping = true;
     private Set<Part> parts = new HashSet<Part>();

@@ -6,7 +6,6 @@ import resonant.api.grid.INodeProvider;
 import resonant.lib.grid.electric.macroscopic.part.Branch;
 import resonant.lib.grid.electric.macroscopic.part.Junction;
 import resonant.lib.grid.electric.macroscopic.part.Part;
-import resonant.lib.grid.node.NodeConnector;
 
 import java.util.*;
 
@@ -20,7 +19,7 @@ public class GridPathfinder
     /**
      * Network that is being pathed
      */
-    private BranchedGrid<NodeConnector> grid;
+    private BranchedGrid grid;
 
     /**
      * All parts created by the path finder
@@ -30,7 +29,7 @@ public class GridPathfinder
     /**
      * Nodes that have already been pathed
      */
-    private List<NodeConnector> pathNodes = new LinkedList<NodeConnector>();
+    private List<NodeBranchPeace> pathNodes = new LinkedList<NodeBranchPeace>();
 
     public GridPathfinder(BranchedGrid grid)
     {
@@ -44,7 +43,7 @@ public class GridPathfinder
      */
     public Set<Part> generateParts()
     {
-        NodeConnector firstNode = grid.getFirstNode();
+        NodeBranchPeace firstNode = grid.getFirstNode();
         if (firstNode != null)
         {
             path(null, firstNode, null);
@@ -60,9 +59,9 @@ public class GridPathfinder
      * @param currentNode - current node being pathed
      * @param side        - side we are pathing to from the node, can only be null for first run
      */
-    public void path(Part part, NodeConnector currentNode, ForgeDirection side)
+    public void path(Part part, NodeBranchPeace currentNode, ForgeDirection side)
     {
-        Map<Object, ForgeDirection> connections = currentNode.directionMap();
+        Map<Object, ForgeDirection> connections = currentNode.getConnections();
         Part nextPart = null;
         pathNodes.add(currentNode);
 
@@ -113,21 +112,21 @@ public class GridPathfinder
         {
             if (entry.getKey() != null)
             {
-                if (entry.getKey() instanceof NodeConnector)
+                if (entry.getKey() instanceof NodeBranchPeace)
                 {
                     if (!pathNodes.contains(entry.getKey()))
                     {
-                        path(nextPart, (NodeConnector) entry.getKey(), entry.getValue());
+                        path(nextPart, (NodeBranchPeace) entry.getKey(), entry.getValue());
                     }
                 } else if (entry.getKey() instanceof INodeProvider)
                 {
-                    INode providerNode = ((INodeProvider) entry.getKey()).getNode(NodeConnector.class, entry.getValue().getOpposite());
+                    INode providerNode = ((INodeProvider) entry.getKey()).getNode(NodeBranchPeace.class, entry.getValue().getOpposite());
 
-                    if (providerNode instanceof NodeConnector)
+                    if (providerNode instanceof NodeBranchPeace)
                     {
                         if (!pathNodes.contains(entry.getKey()))
                         {
-                            path(nextPart, (NodeConnector) entry.getKey(), entry.getValue());
+                            path(nextPart, (NodeBranchPeace) entry.getKey(), entry.getValue());
                         }
                     }
                 } else
