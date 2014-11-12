@@ -11,7 +11,7 @@ import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
-import net.minecraft.world.{IBlockAccess, World}
+import net.minecraft.world.{Explosion, IBlockAccess, World}
 import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.transform.region.Cuboid
 import resonant.lib.transform.vector.Vector3
@@ -110,6 +110,16 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   {
     inject(world, x, y, z)
     getTile(world, x, y, z).onPostPlaced(metadata)
+    eject()
+  }
+
+  /**
+   * Called upon the block being destroyed by an explosion
+   */
+  override def onBlockDestroyedByExplosion(world : World, x : Int, y : Int, z : Int, ex : Explosion)
+  {
+    inject(world, x, y, z)
+    getTile(world, x, y, z).onDestroyedByExplosion(ex)
     eject()
   }
 

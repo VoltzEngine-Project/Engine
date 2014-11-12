@@ -17,7 +17,7 @@ import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
-import net.minecraft.world.{IBlockAccess, World}
+import net.minecraft.world.{Explosion, IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
 import org.lwjgl.opengl.{GL11, GL12}
 import resonant.content.prefab.itemblock.ItemBlockTooltip
@@ -473,6 +473,11 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   def onRemove(block: Block, par6: Int)
   {
     onWorldSeparate
+  }
+
+  def onDestroyedByExplosion(ex: Explosion)
+  {
+
   }
 
   def onWorldSeparate()
