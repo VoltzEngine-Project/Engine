@@ -8,7 +8,10 @@ import java.util.Set;
 /**
  * Applied to anything that can connect to another object either part of a grid or tile system.
  * @author Darkguardsman
+ *
+ * @deprecated use IConnector
  */
+@Deprecated
 public interface INodeConnector<A> extends INode
 {
     /**
