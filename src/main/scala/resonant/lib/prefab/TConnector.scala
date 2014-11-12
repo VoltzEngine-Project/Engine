@@ -88,7 +88,7 @@ trait TConnector extends IConnector with TVectorWorld
     val tile = loc.getTileEntity
     if(canConnect(tile, dir.getOpposite))
     {
-      connect(loc, dir)
+      connect(tile, dir)
     }
   }
 }

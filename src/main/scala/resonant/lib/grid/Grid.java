@@ -1,6 +1,7 @@
 package resonant.lib.grid;
 
 import resonant.api.grid.IGrid;
+import resonant.api.grid.IUpdate;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -97,6 +98,50 @@ public class Grid<N> implements IGrid<N>
 	{
 		return (N) nodes.toArray()[0];
 	}
+
+    /**
+     * Joins the two grids together as one grid
+     * @param grid
+     */
+    public void merge(IGrid grid)
+    {
+        if(grid.getClass() == this.getClass())
+        {
+            IGrid mergedGrid = this;
+            Set<N> nodes = grid.getNodes();
+            if(grid.getNodes().size() > getNodes().size())
+            {
+                mergedGrid = grid;
+                nodes = getNodes();
+            }
+
+            //Add all nodes to the other grid
+            Iterator<N> it = nodes.iterator();
+            while(it.hasNext())
+            {
+                N node = it.next();
+                mergedGrid.add(node);
+                if(mergedGrid.getNodes().contains(node))
+                    it.remove();
+            }
+
+            // Most likely the grids should be empty, so we need to deconstruct if they are
+            if(mergedGrid == this)
+            {
+                if(grid.getNodes().size() == 0)
+                {
+                    grid.deconstruct();
+                }
+            }
+            else
+            {
+                if(mergedGrid.getNodes().size() == 0)
+                {
+                    mergedGrid.deconstruct();
+                }
+            }
+        }
+    }
 
 	@Override
 	public String toString()
