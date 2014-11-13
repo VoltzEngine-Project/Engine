@@ -30,36 +30,45 @@ class NodeFluid(parent: INodeProvider, volume: Int = FluidContainerRegistry.BUCK
 
   override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int =
   {
-    if (canConnect(from))
+    tank synchronized
     {
-      val ret = super.fill(from, resource, doFill)
-      onFluidChanged.apply()
-      return ret
+      if (canConnect(from))
+      {
+        val ret = super.fill(from, resource, doFill)
+        onFluidChanged.apply()
+        return ret
+      }
+      return 0
     }
-    return 0
   }
 
   override def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean): FluidStack =
   {
-    if (canConnect(from))
+    tank synchronized
     {
-      val ret = super.drain(from, resource, doDrain)
-      onFluidChanged.apply()
-      return ret
+      if (canConnect(from))
+      {
+        val ret = super.drain(from, resource, doDrain)
+        onFluidChanged.apply()
+        return ret
+      }
+      return null
     }
-    return null
   }
 
   override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean): FluidStack =
   {
-    if (canConnect(from))
+    tank synchronized
     {
-      val ret = super.drain(from, maxDrain, doDrain)
-      onFluidChanged.apply()
-      return ret
-    }
+      if (canConnect(from))
+      {
+        val ret = super.drain(from, maxDrain, doDrain)
+        onFluidChanged.apply()
+        return ret
+      }
 
-    return null
+      return null
+    }
   }
 
   override def canFill(from: ForgeDirection, fluid: Fluid): Boolean = canConnect(from)
