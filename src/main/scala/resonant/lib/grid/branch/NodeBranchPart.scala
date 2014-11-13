@@ -2,8 +2,7 @@ package resonant.lib.grid.branch
 
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.grid.{IGrid, INodeGrid, INodeProvider}
-import resonant.engine.References
-import resonant.lib.grid.branch.part.Branch
+import resonant.lib.grid.branch.part.Part
 import resonant.lib.grid.node.Node
 import resonant.lib.prefab.TConnector
 
@@ -17,7 +16,7 @@ import scala.beans.BeanProperty
 class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector[NodeBranchPart] with INodeGrid
 {
   @BeanProperty
-  var branch : Branch = null
+  var branch : Part = null
 
   var grid : BranchedGrid = null
 
@@ -52,14 +51,12 @@ class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector
 
   override def reconstruct()
   {
-    References.LOGGER.info("NodeBranchPart: Reconstruct")
     super.reconstruct()
     buildConnections()
   }
 
   override def connect(obj: NodeBranchPart, dir: ForgeDirection)
   {
-    References.LOGGER.info("NodeBranchPart: connect(" + obj + ", " + dir +")")
     super.connect(obj, dir)
     if(obj.getGrid != this.getGrid)
       obj.getGrid.merge(getGrid)

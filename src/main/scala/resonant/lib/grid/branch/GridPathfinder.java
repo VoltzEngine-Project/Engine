@@ -59,7 +59,7 @@ public class GridPathfinder
      * @param currentNode - current node being pathed
      * @param side        - side we are pathing to from the node, can only be null for first run
      */
-    public void path(Part part, NodeBranchPart currentNode, ForgeDirection side)
+    protected Part path(Part part, NodeBranchPart currentNode, ForgeDirection side)
     {
         Map<NodeBranchPart, ForgeDirection> connections = currentNode.getConnections();
         Part nextPart = null;
@@ -69,14 +69,20 @@ public class GridPathfinder
         if (connections.size() > 2)
         {
             //Connection new junction to last part
-            if (part instanceof Branch)
+            if (part instanceof Branch || part == null)
             {
-                ((Branch) part).setConnectionB(nextPart);
-
                 //Create new junction
                 nextPart = new Junction();
                 nextPart.add(currentNode);
-                ((Junction) nextPart).addConnection(part);
+
+                //Set last branches
+                if(part != null)
+                {
+                    ((Junction) nextPart).addConnection(part);
+                    ((Branch) part).setConnectionB(nextPart);
+                }
+
+
             }//If we have another junction point merge it into a single junction
             else if (part instanceof Junction)
             {
@@ -91,7 +97,8 @@ public class GridPathfinder
             {
                 ((Branch) part).add(currentNode);
                 nextPart = part;
-            } else
+            }
+            else
             {
                 //Create a new wire and connect it to old part
                 nextPart = new Branch();
@@ -105,6 +112,7 @@ public class GridPathfinder
                     ((Junction) part).addConnection(nextPart);
                 }
             }
+
         }
 
         //Loop threw all connection triggering path() on each instance of NetworkNode
@@ -118,6 +126,52 @@ public class GridPathfinder
                 }
             }
         }
+        //End of the line, make sure branches are connected at both ends
+        if(!nextPart.hasMinimalConnections())
+        {
+            for (Map.Entry<NodeBranchPart, ForgeDirection> entry : connections.entrySet())
+            {
+                if (entry.getKey() != null && !nextPart.contains(entry.getKey()))
+                {
+                    Part p = entry.getKey().branch();
+                    if(p != nextPart)
+                    {
+                        if(p instanceof Junction)
+                        {
+                            if(nextPart instanceof Junction)
+                            {
+                                nextPart.join(p);
+                            }
+                            else if(nextPart instanceof Branch)
+                            {
+                                ((Junction) p).addConnection(nextPart);
+                                ((Branch) nextPart).setConnectionB(p);
+                            }
+                        }
+                        else if(p instanceof Branch)
+                        {
+                            if(nextPart instanceof Junction)
+                            {
+                                ((Branch) p).setConnectionB(nextPart);
+                                ((Junction) nextPart).addConnection(p);
+                            }
+                            else if(nextPart instanceof Branch)
+                            {
+                                if(p.hasMinimalConnections())
+                                {
+                                    //TODO create junction, split p into two branches
+                                }
+                                else
+                                {
+                                    nextPart.join(p);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return nextPart;
     }
 
     /**

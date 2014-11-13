@@ -40,4 +40,18 @@ public class Junction extends Part
     {
         return getConnections().size() > 2;
     }
+
+    @Override
+    public Junction join(Part part)
+    {
+        if(part != this && part instanceof Junction)
+        {
+            super.join(part);
+            getConnections().addAll(((Junction) part).getConnections());
+
+            //Clean up
+            ((Junction) part).getConnections().clear();
+        }
+        return this;
+    }
 }

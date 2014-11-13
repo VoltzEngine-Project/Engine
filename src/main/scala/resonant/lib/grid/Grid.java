@@ -127,7 +127,6 @@ public class Grid<N> implements IGrid<N>
      */
     public void merge(IGrid grid)
     {
-        References.LOGGER.info("Grid" + this.getClass().getSimpleName() + ".merge( " + grid + ")");
         if (grid != this && grid.getClass() == this.getClass())
         {
             IGrid mergedGrid = this;

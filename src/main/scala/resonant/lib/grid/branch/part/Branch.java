@@ -9,34 +9,65 @@ import resonant.lib.grid.branch.NodeBranchPart;
  */
 public class Branch extends Part
 {
-	Object connectionA = null;
-	Object connectionB = null;
+	Part connectionA = null;
+	Part connectionB = null;
 
-	public void setConnectionA(Object part)
+	public void setConnectionA(Part part)
 	{
 		this.connectionB = part;
 	}
 
-	public void setConnectionB(Object part)
+    public Part getConnectionA()
+    {
+        return connectionA;
+    }
+
+	public void setConnectionB(Part part)
 	{
 		this.connectionA = part;
 	}
 
-    public void add(NodeBranchPart node)
+    public Part getConnectionB()
     {
-        super.add(node);
-        node.setBranch(this);
-    }
-
-    public void remove(NodeBranchPart node)
-    {
-        super.remove(node);
-        node.setBranch(null);
+        return connectionB;
     }
 
 	public boolean hasMinimalConnections()
 	{
-		return connectionA != null && connectionB != null;
+		return getConnectionA() != null && getConnectionB() != null;
 	}
+
+    @Override
+    public Branch join(Part part)
+    {
+        if(part != this & part instanceof Branch)
+        {
+            // A connection overlap
+            if(((Branch) part).getConnectionA() == null && getConnectionA() == null || getConnectionA() == ((Branch) part).getConnectionA())
+            {
+                setConnectionA(((Branch) part).getConnectionB());
+            }
+            // B connection overlap
+            else if(((Branch) part).getConnectionB() == null && getConnectionB() == null || getConnectionB() == ((Branch) part).getConnectionB())
+            {
+                setConnectionB(((Branch) part).getConnectionA());
+            }
+            // B1 overlap A2
+            else if(((Branch) part).getConnectionA() == null && getConnectionB() == null || ((Branch) part).getConnectionA() == getConnectionB())
+            {
+                setConnectionB(((Branch) part).getConnectionB());
+            }
+            // A1 overlap B2
+            else if(((Branch) part).getConnectionB() == null && getConnectionA() == null || ((Branch) part).getConnectionB() == getConnectionA())
+            {
+                setConnectionA(((Branch) part).getConnectionA());
+            }
+
+            //Cleanup
+            ((Branch) part).setConnectionA(null);
+            ((Branch) part).setConnectionB(null);
+        }
+        return this;
+    }
 
 }
