@@ -11,37 +11,36 @@ import resonant.lib.grid.GridNode
  */
 abstract class NodeGrid[A <: NodeGrid[A]](parent: INodeProvider) extends NodeConnector[A](parent) //with INodeGrid
 {
-  protected var grid: GridNode[A] = null
+  protected var _grid: GridNode[A] = null
 
+  /** Event called after a grid reconstructs itself */
   var onGridReconstruct: () => Unit = () => ()
 
   override def reconstruct()
   {
     super.reconstruct()
-
-    if (grid == null)
-      grid = newGrid
-
     grid.reconstruct(this.asInstanceOf[A])
   }
 
   override def deconstruct()
   {
     super.deconstruct()
-
-    if (grid != null)
-    {
-      grid.remove(this.asInstanceOf[A])
-      grid.deconstruct()
-    }
+    grid.remove(this.asInstanceOf[A])
+    grid.deconstruct()
   }
 
   def setGrid(grid: GridNode[_])
   {
-    this.grid = grid.asInstanceOf[GridNode[A]]
+    this._grid = grid.asInstanceOf[GridNode[A]]
   }
 
-  def getGrid: GridNode[_] = grid
+  def grid: GridNode[A] =
+  {
+    if (_grid == null)
+      _grid = newGrid
 
-  def newGrid: GridNode[A]
+    _grid
+  }
+
+  protected def newGrid: GridNode[A]
 }
