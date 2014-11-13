@@ -21,7 +21,6 @@ class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector
 
   var grid : BranchedGrid = null
 
-  //TODO: Remove this. @BeanProperty autogenerates it
   /** Gets the branch that contains this node
   def getBranch : Branch = branch
 
@@ -63,21 +62,16 @@ class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector
     buildConnections()
   }
 
-  override def connect(obj: Object, dir: ForgeDirection)
+  override def connect(obj: NodeBranchPart, dir: ForgeDirection)
   {
     References.LOGGER.debug("NodeBranchPart: connect " + obj +"   dir")
     super.connect(obj, dir)
-    if(obj.isInstanceOf[INodeProvider])
-    {
-      val node : NodeBranchPart = obj.asInstanceOf[INodeProvider].getNode(classOf[NodeBranchPart], dir)
-      if(node != null)
-      {
-        node.getGrid.merge(getGrid)
-      }
-    }
-    else if(obj.isInstanceOf[NodeBranchPart])
-    {
-      obj.asInstanceOf[NodeBranchPart].getGrid.merge(getGrid)
-    }
+    if(obj.getGrid != this.getGrid)
+      obj.getGrid.merge(getGrid)
+  }
+
+  override def getNodeFromConnection(provider: INodeProvider, dir: ForgeDirection) : NodeBranchPart =
+  {
+    return provider.getNode(classOf[NodeBranchPart], dir)
   }
 }

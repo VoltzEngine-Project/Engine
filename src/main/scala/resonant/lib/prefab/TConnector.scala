@@ -90,7 +90,7 @@ trait TConnector[N] extends IConnector[N] with TVectorWorld
     {
       if(tile.isInstanceOf[INodeProvider])
       {
-        val node = getNodeFromConnection(tile.asInstanceOf[INodeProvider])
+        val node = getNodeFromConnection(tile.asInstanceOf[INodeProvider], dir)
         if(node.isInstanceOf[N])
         {
           if (canConnect(node.asInstanceOf[N], dir.getOpposite))
@@ -110,7 +110,7 @@ trait TConnector[N] extends IConnector[N] with TVectorWorld
     }
   }
 
-  def getNodeFromConnection(provider: INodeProvider) : INode =
+  def getNodeFromConnection(provider: INodeProvider, dir: ForgeDirection) : INode =
   {
     return null
   }

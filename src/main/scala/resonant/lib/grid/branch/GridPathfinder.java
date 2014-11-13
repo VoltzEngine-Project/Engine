@@ -61,7 +61,7 @@ public class GridPathfinder
      */
     public void path(Part part, NodeBranchPart currentNode, ForgeDirection side)
     {
-        Map<Object, ForgeDirection> connections = currentNode.getConnections();
+        Map<NodeBranchPart, ForgeDirection> connections = currentNode.getConnections();
         Part nextPart = null;
         pathNodes.add(currentNode);
 
@@ -108,30 +108,13 @@ public class GridPathfinder
         }
 
         //Loop threw all connection triggering path() on each instance of NetworkNode
-        for (Map.Entry<Object, ForgeDirection> entry : connections.entrySet())
+        for (Map.Entry<NodeBranchPart, ForgeDirection> entry : connections.entrySet())
         {
             if (entry.getKey() != null)
             {
-                if (entry.getKey() instanceof NodeBranchPart)
+                if (!pathNodes.contains(entry.getKey()))
                 {
-                    if (!pathNodes.contains(entry.getKey()))
-                    {
-                        path(nextPart, (NodeBranchPart) entry.getKey(), entry.getValue());
-                    }
-                } else if (entry.getKey() instanceof INodeProvider)
-                {
-                    INode providerNode = ((INodeProvider) entry.getKey()).getNode(NodeBranchPart.class, entry.getValue().getOpposite());
-
-                    if (providerNode instanceof NodeBranchPart)
-                    {
-                        if (!pathNodes.contains(entry.getKey()))
-                        {
-                            path(nextPart, (NodeBranchPart) entry.getKey(), entry.getValue());
-                        }
-                    }
-                } else
-                {
-                    //TODO handle everything else as machines using an input & output logic
+                    path(nextPart, (NodeBranchPart) entry.getKey(), entry.getValue());
                 }
             }
         }
