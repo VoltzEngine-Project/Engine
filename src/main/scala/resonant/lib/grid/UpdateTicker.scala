@@ -16,7 +16,13 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-object UpdateTicker extends Thread
+object UpdateTicker
+{
+  final val threaded = new UpdateTicker
+  final val world = new UpdateTicker
+}
+
+class UpdateTicker extends Thread
 {
   setName("Universal Electricity")
   setPriority(Thread.MIN_PRIORITY)

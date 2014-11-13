@@ -33,14 +33,14 @@ object RECommand extends CommandBase
       }
       if (args(0).equalsIgnoreCase("gridinfo"))
       {
-        sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Tick rate: " + (if (UpdateTicker.pause) "Paused" else (if (UpdateTicker.getDeltaTime > 0) 1 / UpdateTicker.getDeltaTime.asInstanceOf[Double] else 0) * 1000 + "/s")))
-        sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Grids running: " + UpdateTicker.getUpdaterCount))
+        sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Tick rate: " + (if (UpdateTicker.threaded.pause) "Paused" else (if (UpdateTicker.threaded.getDeltaTime > 0) 1 / UpdateTicker.threaded.getDeltaTime.asInstanceOf[Double] else 0) * 1000 + "/s")))
+        sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Grids running: " + UpdateTicker.threaded.getUpdaterCount))
         return
       }
       if (args(0).equalsIgnoreCase("gridpause"))
       {
-        UpdateTicker.pause = !UpdateTicker.pause
-        sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Ticking grids running state: " + !UpdateTicker.pause))
+        UpdateTicker.threaded.pause = !UpdateTicker.threaded.pause
+        sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Ticking grids running state: " + !UpdateTicker.threaded.pause))
         return
       }
 

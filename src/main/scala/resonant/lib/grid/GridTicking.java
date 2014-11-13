@@ -8,7 +8,7 @@ public class GridTicking<N extends Node> extends Grid<N> implements IUpdate {
     public GridTicking(Class node)
     {
         super(node);
-        UpdateTicker.addUpdater(this);
+        UpdateTicker.threaded().addUpdater(this);
     }
 
     @Override

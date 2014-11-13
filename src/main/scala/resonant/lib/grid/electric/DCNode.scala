@@ -66,7 +66,7 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
   override def reconstruct()
   {
     super.reconstruct()
-    UpdateTicker.addUpdater(this)
+    UpdateTicker.threaded.addUpdater(this)
   }
 
   override def canUpdate = true

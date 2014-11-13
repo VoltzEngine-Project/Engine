@@ -23,7 +23,7 @@ public class BranchedGrid extends GridTicking<NodeBranchPart>
     public BranchedGrid(Class cla)
     {
         super(cla);
-        UpdateTicker.addUpdater(this);
+        UpdateTicker.threaded().addUpdater(this);
     }
 
     @Override

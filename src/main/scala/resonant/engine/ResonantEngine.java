@@ -173,11 +173,11 @@ public class ResonantEngine
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt)
 	{
-		UpdateTicker.addUpdater(ResonantEngine.thermalGrid);
+		UpdateTicker.threaded().addUpdater(ResonantEngine.thermalGrid);
 
-		if (!UpdateTicker.isAlive())
+		if (!UpdateTicker.threaded().isAlive())
 		{
-			UpdateTicker.start();
+			UpdateTicker.threaded().start();
 		}
 
 		loadables.postInit();
@@ -286,7 +286,7 @@ public class ResonantEngine
 				if (evt.temperature >= 273)
 				{
 
-					UpdateTicker.addUpdater(new IUpdate()
+					UpdateTicker.threaded().addUpdater(new IUpdate()
 					{
 						@Override
 						public void update(double delta)
