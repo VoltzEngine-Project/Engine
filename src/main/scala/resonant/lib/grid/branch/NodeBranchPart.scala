@@ -21,15 +21,6 @@ class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector
 
   var grid : BranchedGrid = null
 
-  /** Gets the branch that contains this node
-  def getBranch : Branch = branch
-
-   Sets the branch that will contain this node
-  def setBranch(b : Branch)
-  {
-    branch = b
-  }*/
-
   /** Sets the grid reference */
   override def setGrid(grid: IGrid[_]):Unit =
   {
@@ -42,8 +33,33 @@ class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector
   {
     if(grid == null)
     {
-      grid = new BranchedGrid()
-      grid.add(this)
+      //Attempt to get a grid from a connected node to save creating a new grid
+      for(dir <- ForgeDirection.VALID_DIRECTIONS)
+      {
+        if(canConnect(dir))
+        {
+          val node: NodeBranchPart = getNode(classOf[NodeBranchPart], dir)
+          if (node != null && isValidConnector(node) && node.isInstanceOf[INodeGrid])
+          {
+            val grid = node.asInstanceOf[INodeGrid].getGrid
+            if (grid != null && grid.isInstanceOf[BranchedGrid])
+            {
+              grid.asInstanceOf[BranchedGrid].add(this)
+              if (grid.getNodes.contains(this))
+              {
+                setGrid(grid)
+                return this.grid
+              }
+            }
+          }
+        }
+      }
+      //If no grid found threw connections
+      if(grid == null)
+      {
+        grid = new BranchedGrid()
+        grid.add(this)
+      }
     }
     return grid
   }

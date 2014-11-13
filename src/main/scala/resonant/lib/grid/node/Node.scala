@@ -3,8 +3,9 @@ package resonant.lib.grid.node
 import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
+import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.grid.{INode, INodeProvider}
-import resonant.lib.transform.vector.{TVectorWorld, VectorWorld}
+import resonant.lib.transform.vector.TVectorWorld
 
 /**
  * A node is any single part of a grid.
@@ -60,6 +61,23 @@ abstract class Node(var parent: INodeProvider) extends INode with TVectorWorld
       case x: Entity => x.worldObj
       case _ => null
     }
+  }
+
+  /**
+   * Helper method to gets a node on the side
+   * @param nodeType - class of the node
+   * @param dir - side of the tile
+   * @tparam N - generic to force the return to equal the nodeType
+   * @return the node, or null if no node
+   */
+  def getNode[N <: INode](nodeType : Class[_ <: N], dir: ForgeDirection) : N =
+  {
+    val tile = (toVectorWorld + dir).getTileEntity
+    if (tile != null && tile.isInstanceOf[INodeProvider])
+    {
+      return tile.asInstanceOf[INodeProvider].getNode(nodeType, dir.getOpposite)
+    }
+    return null.asInstanceOf[N]
   }
 
   override def toString: String = getClass.getSimpleName + "[" + hashCode + "]"
