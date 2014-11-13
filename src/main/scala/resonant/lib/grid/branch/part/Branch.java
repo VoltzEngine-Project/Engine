@@ -1,5 +1,7 @@
 package resonant.lib.grid.branch.part;
 
+import resonant.lib.grid.branch.NodeBranchPart;
+
 /**
  * Wraps one or more nodes into a simple object that is used in BranchedGrid
  *
@@ -19,6 +21,18 @@ public class Branch extends Part
 	{
 		this.connectionA = part;
 	}
+
+    public void add(NodeBranchPart node)
+    {
+        super.add(node);
+        node.setBranch(this);
+    }
+
+    public void remove(NodeBranchPart node)
+    {
+        super.remove(node);
+        node.setBranch(null);
+    }
 
 	public boolean hasMinimalConnections()
 	{

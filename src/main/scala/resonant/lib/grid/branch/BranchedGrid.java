@@ -27,6 +27,20 @@ public class BranchedGrid extends GridTicking<NodeBranchPart>
     }
 
     @Override
+    public void add(NodeBranchPart node)
+    {
+        super.add(node);
+        markForMapping = true;
+    }
+
+    @Override
+    public void remove(NodeBranchPart node)
+    {
+        super.remove(node);
+        markForMapping = true;
+    }
+
+    @Override
     public void update(double delta)
     {
         super.update(delta);

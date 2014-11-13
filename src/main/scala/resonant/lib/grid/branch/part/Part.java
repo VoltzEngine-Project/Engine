@@ -1,6 +1,7 @@
 package resonant.lib.grid.branch.part;
 
 import resonant.api.grid.INode;
+import resonant.lib.grid.branch.NodeBranchPart;
 import scala.reflect.internal.util.WeakHashSet;
 
 /**
@@ -15,7 +16,7 @@ public abstract class Part
         ecapsulatedParts = new WeakHashSet();
     }
 
-    public void add(INode node)
+    public void add(NodeBranchPart node)
     {
         ecapsulatedParts.add(node);
     }
@@ -25,7 +26,7 @@ public abstract class Part
         ecapsulatedParts.add(node);
     }
 
-    public void remove(INode node)
+    public void remove(NodeBranchPart node)
     {
         ecapsulatedParts.remove(node);
     }
