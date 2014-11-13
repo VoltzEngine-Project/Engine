@@ -1,9 +1,9 @@
 package resonant.lib.grid.branch.part;
 
 /**
- * Wraps one or more nodes into a simple object that is used in the NetworkSimulation
+ * Wraps one or more nodes into a simple object that is used in BranchedGrid
  *
- * @author Darkguardsman
+ * @author DarkCow
  */
 public class Branch extends Part
 {

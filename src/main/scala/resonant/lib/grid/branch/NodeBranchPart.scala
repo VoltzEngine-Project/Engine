@@ -6,24 +6,30 @@ import resonant.engine.References
 import resonant.lib.grid.branch.part.Branch
 import resonant.lib.grid.node.Node
 import resonant.lib.prefab.TConnector
+
+import scala.beans.BeanProperty
 ;
 
 /**
- * Created by robert on 11/12/2014.
+ * A node that is part of a branch
+ * @author DarkCow
  */
 class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector with INodeGrid
 {
+  @BeanProperty
   var branch : Branch = null
+
   var grid : BranchedGrid = null
 
-  /** Gets the branch that contains this node */
+  //TODO: Remove this. @BeanProperty autogenerates it
+  /** Gets the branch that contains this node
   def getBranch : Branch = branch
 
-  /** Sets the branch that will contain this node */
+   Sets the branch that will contain this node
   def setBranch(b : Branch)
   {
     branch = b
-  }
+  }*/
 
   /** Sets the grid reference */
   override def setGrid(grid: IGrid[_]):Unit =

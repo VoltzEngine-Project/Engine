@@ -7,21 +7,26 @@ import resonant.api.grid.sim.{SimType, IPressure, IFlow}
 import resonant.lib.grid.branch.NodeBranchPart
 import resonant.lib.prefab.TEnergyBuffer
 
+import scala.beans.BeanProperty
+
 /**
- * Created by robert on 11/12/2014.
+ * A node that runs on electricity
+ * @author DarkCow
  */
 class NodeElectric(parent: INodeProvider) extends NodeBranchPart(parent) with TEnergyBuffer with IFlow with IPressure
 {
+  @BeanProperty
   var resistance: Double = 0
+
   var buffer : EnergyStorage = null
 
   //Constructor
   buffer = new EnergyStorage()
 
-  override def getEnergyStorage(): EnergyStorage = buffer
+  override def getEnergyStorage: EnergyStorage = buffer
 
-  /** Current flowing threw this part */
-  def getAmps() : Double =
+  /** Current flowing through this node */
+  def current : Double =
   {
     return getFlow(SimType.ELECTRICITY, ForgeDirection.UNKNOWN)
   }
@@ -35,8 +40,8 @@ class NodeElectric(parent: INodeProvider) extends NodeBranchPart(parent) with TE
     return 0
   }
 
-  /** Voltage across this part */
-  def getVolts() : Double =
+  /** Voltage across this node */
+  def voltage : Double =
   {
     return getPressure(SimType.ELECTRICITY, ForgeDirection.UNKNOWN)
   }
