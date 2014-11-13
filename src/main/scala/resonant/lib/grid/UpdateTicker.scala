@@ -44,9 +44,6 @@ class UpdateTicker extends Thread
    */
   var pause = false
 
-  @Deprecated
-  var useThreads = true
-
   /**
    * The time in milliseconds between successive updates.
    */
@@ -57,7 +54,7 @@ class UpdateTicker extends Thread
     enqueue(() => updaters.add(updater))
   }
 
-  def enqueue(f: (() => Unit))
+  def enqueue(f: () => Unit)
   {
     queue.add(f)
   }
@@ -81,17 +78,7 @@ class UpdateTicker extends Thread
       {
         val current = System.currentTimeMillis()
         deltaTime = current - last
-
-        updaters synchronized
-        {
-          update()
-        }
-
-        queuedEvents synchronized
-        {
-          queuedEvents.foreach(MinecraftForge.EVENT_BUS.post)
-          queuedEvents.clear()
-        }
+        update()
 
         last = current
       }
@@ -104,26 +91,33 @@ class UpdateTicker extends Thread
   def tickEnd(event: TickEvent.ServerTickEvent)
   {
     update()
-
-    queuedEvents synchronized
-    {
-      queuedEvents.foreach(MinecraftForge.EVENT_BUS.post)
-      queuedEvents.clear()
-    }
   }
 
   def update()
   {
     try
     {
-      queue.foreach(_.apply())
-      queue.clear()
+      queue synchronized
+      {
+        queue.foreach(_.apply())
+        queue.clear()
+      }
 
-      /**
-       * TODO: Perform test to check if parallel evaluation is worth it. Do periodic check every minute or so.
-       */
-      updaters.par.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
-      updaters.removeAll(updaters.filterNot(_.continueUpdate()))
+      updaters synchronized
+      {
+        if (this == UpdateTicker.threaded)
+          updaters.par.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
+        else
+          updaters.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
+
+        updaters.removeAll(updaters.filterNot(_.continueUpdate()))
+      }
+
+      queuedEvents synchronized
+      {
+        queuedEvents.foreach(MinecraftForge.EVENT_BUS.post)
+        queuedEvents.clear()
+      }
     }
     catch
       {
