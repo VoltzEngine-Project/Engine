@@ -1,6 +1,7 @@
 package resonant.lib.grid;
 
 import resonant.api.grid.IGrid;
+import resonant.api.grid.INode;
 import resonant.api.grid.INodeGrid;
 import resonant.api.grid.IUpdate;
 import resonant.engine.References;
@@ -26,12 +27,17 @@ public class Grid<N> implements IGrid<N>
 	/** Destroys the grid and all of its data */
 	public void deconstruct()
 	{
+        for(N node : getNodes())
+        {
+            if(node instanceof INodeGrid)
+                ((INodeGrid)node).setGrid(null);
+            if(node instanceof INode)
+                ((INode)node).deconstruct();
+        }
         Iterator<N> it = getNodes().iterator();
         while (it.hasNext())
         {
             N node = it.next();
-            if(node instanceof INodeGrid)
-                ((INodeGrid)node).setGrid(null);
             it.remove();
         }
 	}
@@ -146,6 +152,15 @@ public class Grid<N> implements IGrid<N>
                 }
             }
         }
+    }
+
+    /** Called to split the network into two or more smaller networks
+     * @param splitNode - node that was removed to cause the split
+     */
+    public void split(N splitNode)
+    {
+        //TODO code something more effective
+        deconstruct();
     }
 
 	@Override
