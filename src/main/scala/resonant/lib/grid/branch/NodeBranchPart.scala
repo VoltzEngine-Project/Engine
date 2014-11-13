@@ -57,14 +57,14 @@ class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector
 
   override def reconstruct()
   {
-    References.LOGGER.debug("NodeBranchPart: Reconstruct")
+    References.LOGGER.info("NodeBranchPart: Reconstruct")
     super.reconstruct()
     buildConnections()
   }
 
   override def connect(obj: NodeBranchPart, dir: ForgeDirection)
   {
-    References.LOGGER.debug("NodeBranchPart: connect " + obj +"   dir")
+    References.LOGGER.info("NodeBranchPart: connect(" + obj + ", " + dir +")")
     super.connect(obj, dir)
     if(obj.getGrid != this.getGrid)
       obj.getGrid.merge(getGrid)

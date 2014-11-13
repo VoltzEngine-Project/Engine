@@ -3,6 +3,7 @@ package resonant.lib.grid;
 import resonant.api.grid.IGrid;
 import resonant.api.grid.INodeGrid;
 import resonant.api.grid.IUpdate;
+import resonant.engine.References;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,17 +17,13 @@ public class Grid<N> implements IGrid<N>
 	final Class nodeClass;
 	private final Set<N> nodes = new HashSet<N>();
 
-	/**
-	 * @param node - class of the node used by the grid
-	 */
+	/** @param node - class of the node used by the grid, use for checking if nodes added are valid */
 	public Grid(Class node)
 	{
 		this.nodeClass = node;
 	}
 
-	/**
-	 * Destroys the grid and all of its data
-	 */
+	/** Destroys the grid and all of its data */
 	public void deconstruct()
 	{
         Iterator<N> it = getNodes().iterator();
@@ -39,9 +36,7 @@ public class Grid<N> implements IGrid<N>
         }
 	}
 
-	/**
-	 * Called to rebuild the grid node by node
-	 */
+	/** Called to rebuild the grid node by node */
 	public void reconstruct()
 	{
 		Iterator<N> it = getNodes().iterator();
@@ -59,26 +54,20 @@ public class Grid<N> implements IGrid<N>
 		}
 	}
 
-	/**
-	 * Rebuilds the node during a grid rebuild
-	 */
+	/** Rebuilds the node during a grid rebuild */
 	protected void reconstructNode(N node)
 	{
         if(node instanceof INodeGrid)
             ((INodeGrid)node).setGrid(this);
 	}
 
-	/**
-	 * Checks to see if the node is valid
-	 */
+	/** Checks to see if the node is valid */
 	public boolean isValidNode(Object node)
 	{
 		return node != null && nodeClass.isAssignableFrom(node.getClass());
 	}
 
-	/**
-	 * Adds an object to the node list
-	 */
+	/** Adds an object to the node list */
 	public void add(N node)
 	{
 		nodes.add(node);
@@ -87,7 +76,12 @@ public class Grid<N> implements IGrid<N>
 	}
 
 	/**
-	 * Removes an object from the node list
+	 * Removes a node from the node list.
+     *
+     * Do not do any reconstruct when called as
+     * this is meant to clear the node from the grid
+     * only and can in fact be related to the node
+     * being added to another grid.
 	 */
 	public void remove(N node)
 	{
@@ -96,29 +90,27 @@ public class Grid<N> implements IGrid<N>
             ((INodeGrid)node).setGrid(null);
 	}
 
-	/**
-	 * Gets the list of all nodes
-	 */
+	/** Gets the list of all nodes */
 	public Set<N> getNodes()
 	{
 		return nodes;
 	}
 
-	/**
-	 * Gets the first node in the list
-	 */
+	/** Gets the first node in the list */
 	public N getFirstNode()
 	{
-		return (N) nodes.toArray()[0];
+		return nodes != null && !nodes.isEmpty() ? (N) nodes.toArray()[0] : null;
 	}
 
-    /**
-     * Joins the two grids together as one grid
-     * @param grid
+    /** Joins the two grids together as one grid.
+     * Picks one grid then dumps all data into that grid
+     *
+     * @param grid - grid instance to join
      */
     public void merge(IGrid grid)
     {
-        if(grid.getClass() == this.getClass())
+        References.LOGGER.info("Grid" + this.getClass().getSimpleName() +".merge( " + grid +")");
+        if(grid != this && grid.getClass() == this.getClass())
         {
             IGrid mergedGrid = this;
             Set<N> nodes = grid.getNodes();
