@@ -1,9 +1,8 @@
-package resonant.lib.test
+package resonant.lib.test.vector
 
 import junit.framework.TestCase
-
-import org.junit.Assert
 import net.minecraftforge.common.util.ForgeDirection
+import org.junit.Assert
 import resonant.lib.transform.vector.Vector3
 
 /**
