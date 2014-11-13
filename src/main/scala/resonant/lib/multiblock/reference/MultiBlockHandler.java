@@ -88,7 +88,6 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 			}
 			else
 			{
-				structure.clear();
 				return null;
 			}
 		}

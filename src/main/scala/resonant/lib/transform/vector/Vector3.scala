@@ -345,7 +345,7 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
 
     for (x <- (xi - dx) to (xi + dx))
     {
-      for (y <- (yi - dy) to (yi + dx))
+      for (y <- (yi - dy) to (yi + dy))
       {
         for (z <- (zi - dz) to (zi + dz))
         {
