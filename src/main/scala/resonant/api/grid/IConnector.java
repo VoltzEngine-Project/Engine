@@ -8,8 +8,9 @@ import java.util.Map;
  *
  * Created on 11/12/2014.
  * @author Darkguardsman
+ *
  */
-public interface IConnector
+public interface IConnector<N>
 {
     /** Simple direction based connection check.
      *  Should be simple as side == side, and connection instanceof type
@@ -18,7 +19,7 @@ public interface IConnector
      * @param from - desired side to connect, may be null for internal connectons
      * @return true if the object can connect based on direction, and type
      */
-    public boolean canConnect(Object connection, ForgeDirection from);
+    public boolean canConnect(N connection, ForgeDirection from);
 
     /**
      * Map of connections by the sides they connected to. Is not limited to one
@@ -26,6 +27,6 @@ public interface IConnector
      * this side ends up being ForgeDirection.Unknown
      * @return map of connections, or empty map in place of null/no connections
      */
-    public Map<Object, ForgeDirection> getConnections();
+    public Map<N, ForgeDirection> getConnections();
 
 }

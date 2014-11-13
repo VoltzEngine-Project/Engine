@@ -1,14 +1,14 @@
 package resonant.lib.prefab
 
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.grid.IConnector
+import resonant.api.grid.{INode, INodeProvider, IConnector}
 import resonant.lib.transform.vector.{TVectorWorld, VectorWorld}
 import resonant.lib.wrapper.BitmaskWrapper._
 
 /**
  * Created by robert on 11/12/2014.
  */
-trait TConnector extends IConnector with TVectorWorld
+trait TConnector[N] extends IConnector[N] with TVectorWorld
 {
   /** The bitmask containing sides that this node may connect to */
   var allowedConnections = 0x3F
@@ -16,20 +16,20 @@ trait TConnector extends IConnector with TVectorWorld
   protected var _connectedMask = 0x00
 
   /** Map of connections */
-  private val connectionMap : java.util.Map[AnyRef, ForgeDirection] = new java.util.HashMap[AnyRef, ForgeDirection]
+  private val connectionMap : java.util.Map[N, ForgeDirection] = new java.util.HashMap[N, ForgeDirection]
 
 
-  override def getConnections : java.util.Map[AnyRef, ForgeDirection] = connectionMap
+  override def getConnections : java.util.Map[N, ForgeDirection] = connectionMap
 
   //////////////////////////////
   ///   Connection Rules
   //////////////////////////////
 
-  override def canConnect(connection: AnyRef, from: ForgeDirection): Boolean = isValidConnector(connection) && canConnect(from)
+  override def canConnect(connection: N, from: ForgeDirection): Boolean = isValidConnector(connection) && canConnect(from)
 
   /** Is this connector allowed to connect to any side
    * @param connector - any connecting object, Most likely TileEntity, Node, INodeProvider */
-  protected def isValidConnector(connector : Object) : Boolean
+  protected def isValidConnector(connector : N) : Boolean
 
   /** Can any connector connect to this side
    * @param from - side connecting from
@@ -46,14 +46,14 @@ trait TConnector extends IConnector with TVectorWorld
    * @param obj - connection
    * @param dir - from
    */
-  def connect(obj: Object, dir: ForgeDirection)
+  def connect(obj: N, dir: ForgeDirection)
   {
     connectionMap.put(obj, dir)
     _connectedMask = _connectedMask.openMask(dir)
   }
 
   /** Removes the connection */
-  def disconnect(obj: Object)
+  def disconnect(obj: N)
   {
     _connectedMask = _connectedMask.closeMask(connectionMap.get(obj))
     connectionMap.remove(obj)
@@ -86,9 +86,32 @@ trait TConnector extends IConnector with TVectorWorld
   def updateConnection(dir: ForgeDirection, loc: VectorWorld)
   {
     val tile = loc.getTileEntity
-    if(canConnect(tile, dir.getOpposite))
+    if(tile != null)
     {
-      connect(tile, dir)
+      if(tile.isInstanceOf[INodeProvider])
+      {
+        val node = getNodeFromConnection(tile.asInstanceOf[INodeProvider])
+        if(node.isInstanceOf[N])
+        {
+          if (canConnect(node.asInstanceOf[N], dir.getOpposite))
+          {
+            connect(node.asInstanceOf[N], dir)
+            return
+          }
+        }
+      }
+      if(tile.isInstanceOf[N])
+      {
+        if (canConnect(tile.asInstanceOf[N], dir.getOpposite))
+        {
+          connect(tile.asInstanceOf[N], dir)
+        }
+      }
     }
+  }
+
+  def getNodeFromConnection(provider: INodeProvider) : INode =
+  {
+    return null
   }
 }

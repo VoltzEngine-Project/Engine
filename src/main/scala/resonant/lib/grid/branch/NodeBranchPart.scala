@@ -14,7 +14,7 @@ import scala.beans.BeanProperty
  * A node that is part of a branch
  * @author DarkCow
  */
-class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector with INodeGrid
+class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector[NodeBranchPart] with INodeGrid
 {
   @BeanProperty
   var branch : Branch = null
@@ -51,9 +51,9 @@ class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector
 
   /** Is this connector allowed to connect to any side
     * @param connector - any connecting object, Most likely TileEntity, Node, INodeProvider */
-  override protected def isValidConnector(connector: Object): Boolean =
+  override protected def isValidConnector(connector: NodeBranchPart): Boolean =
   {
-    return connector != null && connector.isInstanceOf[NodeBranchPart];
+    return connector != null;
   }
 
   override def reconstruct()
