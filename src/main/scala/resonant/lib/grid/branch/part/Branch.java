@@ -40,7 +40,7 @@ public class Branch extends Part
     @Override
     public Branch join(Part part)
     {
-        if(part != this & part instanceof Branch)
+        if(part instanceof Branch && super.join(part) != null)
         {
             // A connection overlap
             if(((Branch) part).getConnectionA() == null && getConnectionA() == null || getConnectionA() == ((Branch) part).getConnectionA())
@@ -66,8 +66,9 @@ public class Branch extends Part
             //Cleanup
             ((Branch) part).setConnectionA(null);
             ((Branch) part).setConnectionB(null);
+            return this;
         }
-        return this;
+       return null;
     }
 
 }
