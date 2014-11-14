@@ -90,7 +90,7 @@ public class GridPathfinder
                 nextPart = part;
             }
         }//Wire is a path only connecting in two directions
-        else
+        else if(connections.size() < 2 && connections.size() > 1)
         {
             //If the last part was a wire add this wire to it
             if (part instanceof Branch)
@@ -113,6 +113,10 @@ public class GridPathfinder
                 }
             }
 
+        }
+        else
+        {
+            //TODO node is a dead end we need to exclude it from our network
         }
 
         //Loop threw all connection triggering path() on each instance of NetworkNode
