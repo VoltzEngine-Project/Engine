@@ -14,7 +14,7 @@ public class Branch extends Part
 
 	public void setConnectionA(Part part)
 	{
-		this.connectionB = part;
+		this.connectionA = part;
 	}
 
     public Part getConnectionA()
@@ -24,7 +24,7 @@ public class Branch extends Part
 
 	public void setConnectionB(Part part)
 	{
-		this.connectionA = part;
+		this.connectionB = part;
 	}
 
     public Part getConnectionB()

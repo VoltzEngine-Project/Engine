@@ -87,6 +87,6 @@ public abstract class Part
     @Override
     public String toString()
     {
-        return getClass().getSimpleName() +"[" + ecapsulatedParts.size() +"]";
+        return getClass().getSimpleName() + "@" +  hashCode() +"[" + ecapsulatedParts.size() +"]";
     }
 }
