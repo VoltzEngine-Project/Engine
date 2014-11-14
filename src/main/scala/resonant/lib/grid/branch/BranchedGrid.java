@@ -26,6 +26,11 @@ public class BranchedGrid extends GridTicking<NodeBranchPart>
         UpdateTicker.threaded().addUpdater(this);
     }
 
+    public Set<Part> getParts()
+    {
+        return parts;
+    }
+
     @Override
     public void add(NodeBranchPart node)
     {

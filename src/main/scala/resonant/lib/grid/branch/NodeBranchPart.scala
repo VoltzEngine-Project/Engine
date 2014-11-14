@@ -25,6 +25,8 @@ class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector
   {
     if(grid.isInstanceOf[BranchedGrid])
       this.grid = grid.asInstanceOf[BranchedGrid]
+    else if(grid == null)
+      this.grid = null
   }
 
   /** Gets the grid reference */
@@ -54,6 +56,17 @@ class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector
     super.reconstruct()
     buildConnections()
   }
+
+  override def deconstruct()
+  {
+    super.deconstruct()
+    getConnections.clear()
+    setGrid(null)
+    if(branch != null)
+      branch.remove(this)
+    branch = null
+  }
+
 
   override def connect(obj: NodeBranchPart, dir: ForgeDirection)
   {

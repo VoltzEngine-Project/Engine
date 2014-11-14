@@ -10,7 +10,6 @@ import resonant.lib.grid.branch.part.Part;
  */
 public class BranchTest extends TestCase
 {
-
     /**
      * Test a merge of a branch and junction which should fail
      */
