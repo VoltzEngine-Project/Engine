@@ -66,7 +66,7 @@ public abstract class Part
     /** Joins the part to this part,
      * Part will be cleared in the process
      * @param part - part to add to this one
-     * @return this
+     * @return this if the join was good, null if it failed
      */
     public Part join(Part part)
     {
@@ -78,8 +78,9 @@ public abstract class Part
             //Cleanup
             part.getEcapsulatedNodes().clear();
             part.getEcapsulatedParts().clear();
+            return this;
         }
-        return this;
+        return null;
     }
 
     public abstract boolean hasMinimalConnections();
