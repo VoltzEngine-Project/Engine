@@ -52,12 +52,20 @@ public class BranchGridTest extends TestCase
         NodeBranchPart southNode = new NodeBranchPart(null);
         NodeBranchPart eastNode = new NodeBranchPart(null);
         NodeBranchPart westNode = new NodeBranchPart(null);
+        NodeBranchPart northNode2 = new NodeBranchPart(null);
+        NodeBranchPart southNode2 = new NodeBranchPart(null);
+        NodeBranchPart eastNode2 = new NodeBranchPart(null);
+        NodeBranchPart westNode2 = new NodeBranchPart(null);
         NodeBranchPart j4 = new NodeBranchPart(null);
 
         nodes.add(northNode);
         nodes.add(southNode);
         nodes.add(eastNode);
         nodes.add(westNode);
+        nodes.add(northNode2);
+        nodes.add(southNode2);
+        nodes.add(eastNode2);
+        nodes.add(westNode2);
         nodes.add(j4);
 
         for (NodeBranchPart node : nodes)
@@ -66,20 +74,26 @@ public class BranchGridTest extends TestCase
         //North connection
         j4.connect(northNode, ForgeDirection.NORTH);
         northNode.connect(j4, ForgeDirection.SOUTH);
+        northNode.connect(northNode2, ForgeDirection.NORTH);
+        northNode2.connect(northNode, ForgeDirection.SOUTH);
 
         //South connection
         j4.connect(southNode, ForgeDirection.SOUTH);
         southNode.connect(j4, ForgeDirection.NORTH);
+        southNode.connect(southNode2, ForgeDirection.SOUTH);
+        southNode2.connect(southNode, ForgeDirection.NORTH);
 
         //West connection
         j4.connect(westNode, ForgeDirection.WEST);
         westNode.connect(j4, ForgeDirection.EAST);
+        westNode.connect(westNode2, ForgeDirection.WEST);
+        westNode2.connect(westNode, ForgeDirection.EAST);
 
         //East connection
         j4.connect(eastNode, ForgeDirection.EAST);
         eastNode.connect(j4, ForgeDirection.WEST);
-
-
+        eastNode.connect(eastNode2, ForgeDirection.EAST);
+        eastNode2.connect(eastNode, ForgeDirection.WEST);
 
         grid.update(0);
     }

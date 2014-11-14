@@ -1,8 +1,6 @@
 package resonant.lib.grid.branch;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import resonant.api.grid.INode;
-import resonant.api.grid.INodeProvider;
 import resonant.lib.grid.branch.part.Branch;
 import resonant.lib.grid.branch.part.Junction;
 import resonant.lib.grid.branch.part.Part;
@@ -64,13 +62,22 @@ public class GridPathfinder
         Map<NodeBranchPart, ForgeDirection> connections = currentNode.getConnections();
         Part nextPart = null;
         pathNodes.add(currentNode);
-
+        
         //More than two connections, wire is a junction connecting to several paths
         if (connections.size() > 2)
         {
-            //Connection new junction to last part
-            if (part instanceof Branch || part == null)
+            
+            //If we have another junction point merge it into a single junction
+            if (part instanceof Junction)
             {
+                
+                ((Junction) part).add(currentNode);
+                nextPart = part;
+            }
+            //Connection new junction to last part
+            else
+            {
+                
                 //Create new junction
                 nextPart = new Junction();
                 nextPart.add(currentNode);
@@ -81,34 +88,29 @@ public class GridPathfinder
                     ((Junction) nextPart).addConnection(part);
                     ((Branch) part).setConnectionB(nextPart);
                 }
-
-
-            }//If we have another junction point merge it into a single junction
-            else if (part instanceof Junction)
-            {
-                ((Junction) part).add(currentNode);
-                nextPart = part;
             }
         }//Wire is a path only connecting in two directions
-        else if(connections.size() < 2 && connections.size() > 1)
+        else if(connections.size() == 2)
         {
+            
             //If the last part was a wire add this wire to it
             if (part instanceof Branch)
             {
+                
                 ((Branch) part).add(currentNode);
                 nextPart = part;
             }
             else
             {
+                
                 //Create a new wire and connect it to old part
                 nextPart = new Branch();
                 ((Branch) nextPart).add(currentNode);
-                if (part != null)
-                {
-                    ((Branch) nextPart).setConnectionA(part);
-                }
+
+                //Connect if part was not null
                 if (part instanceof Junction)
                 {
+                    ((Branch) nextPart).setConnectionA(part);
                     ((Junction) part).addConnection(nextPart);
                 }
             }
@@ -116,8 +118,13 @@ public class GridPathfinder
         }
         else
         {
+            
             //TODO node is a dead end we need to exclude it from our network
         }
+
+        //Add part to list
+        if(nextPart != null)
+            parts.add(nextPart);
 
         //Loop threw all connection triggering path() on each instance of NetworkNode
         for (Map.Entry<NodeBranchPart, ForgeDirection> entry : connections.entrySet())
@@ -131,7 +138,7 @@ public class GridPathfinder
             }
         }
         //End of the line, make sure branches are connected at both ends
-        if(!nextPart.hasMinimalConnections())
+        if(nextPart != null && !nextPart.hasMinimalConnections())
         {
             for (Map.Entry<NodeBranchPart, ForgeDirection> entry : connections.entrySet())
             {
