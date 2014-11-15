@@ -30,16 +30,19 @@ public class Grid<N> implements IGrid<N>
      */
     public void deconstruct()
     {
-        //Kill the nodes connection to the grid
-        for (N node : getNodes())
+        synchronized (nodes)
         {
-            if (node instanceof INodeGrid)
-                ((INodeGrid) node).setGrid(null);
-            if (node instanceof INode)
-                ((INode) node).deconstruct();
+            //Kill the nodes connection to the grid
+            for (N node : getNodes())
+            {
+                if (node instanceof INodeGrid)
+                    ((INodeGrid) node).setGrid(null);
+                if (node instanceof INode)
+                    ((INode) node).deconstruct();
+            }
+            //empty the node list
+            getNodes().clear();
         }
-        //empty the node list
-        getNodes().clear();
     }
 
     /**
@@ -47,16 +50,20 @@ public class Grid<N> implements IGrid<N>
      */
     public void reconstruct()
     {
-        Iterator<N> it = getNodes().iterator();
-        while (it.hasNext())
+        synchronized (nodes)
         {
-            N node = it.next();
-            if (isValidNode(node))
+            Iterator<N> it = getNodes().iterator();
+            while (it.hasNext())
             {
-                reconstructNode(node);
-            } else
-            {
-                nodes.remove(node);
+                N node = it.next();
+                if (isValidNode(node))
+                {
+                    reconstructNode(node);
+                }
+                else
+                {
+                    nodes.remove(node);
+                }
             }
         }
     }

@@ -25,8 +25,7 @@ abstract class NodeGrid[A <: NodeGrid[A]](parent: INodeProvider) extends NodeCon
   override def deconstruct()
   {
     super.deconstruct()
-    grid.remove(this.asInstanceOf[A])
-    grid.deconstruct()
+    grid.deconstruct(this.asInstanceOf[A])
   }
 
   def setGrid(grid: GridNode[_])
