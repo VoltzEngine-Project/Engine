@@ -14,6 +14,7 @@ public abstract class Part
 {
     private Set<Part> ecapsulatedParts;
     private Set<NodeBranchPart> ecapsulatedNodes;
+    protected boolean lockUpdates = false;
 
     public Part()
     {
@@ -72,15 +73,37 @@ public abstract class Part
     {
         if(part != this)
         {
-            getEcapsulatedNodes().addAll(part.getEcapsulatedNodes());
-            getEcapsulatedParts().addAll(part.getEcapsulatedParts());
+            lockUpdates = true;
+            for(NodeBranchPart node : part.getEcapsulatedNodes())
+            {
+                add(node);
+            }
+            for(Part p : part.getEcapsulatedParts())
+            {
+                add(p);
+            }
 
             //Cleanup
             part.getEcapsulatedNodes().clear();
             part.getEcapsulatedParts().clear();
+
+            onChange(ChangeCause.ADD);
+            lockUpdates = false;
             return this;
         }
         return null;
+    }
+
+    /** Called any time the part changes */
+    public final  void onChange(ChangeCause cause)
+    {
+
+    }
+
+    /** Called any time the part changes */
+    protected void onChanged(ChangeCause cause)
+    {
+
     }
 
     public abstract boolean hasMinimalConnections();
@@ -89,5 +112,15 @@ public abstract class Part
     public String toString()
     {
         return getClass().getSimpleName() + "@" +  hashCode() +"[" + ecapsulatedParts.size() +"]";
+    }
+
+    public static enum ChangeCause
+    {
+        //Something was added
+        ADD,
+        //Something was removed
+        REMOVE,
+        //Node had changed
+        NODE
     }
 }
