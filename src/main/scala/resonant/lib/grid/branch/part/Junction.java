@@ -42,16 +42,17 @@ public class Junction extends Part
     }
 
     @Override
-    public Junction join(Part part)
+    protected Junction _join(Part part)
     {
-        if(part != this && part instanceof Junction)
+        if(part instanceof Junction && super._join(part) != null)
         {
             super.join(part);
             getConnections().addAll(((Junction) part).getConnections());
 
             //Clean up
             ((Junction) part).getConnections().clear();
+            return this;
         }
-        return this;
+        return null;
     }
 }

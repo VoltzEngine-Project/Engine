@@ -69,11 +69,21 @@ public abstract class Part
      * @param part - part to add to this one
      * @return this if the join was good, null if it failed
      */
-    public Part join(Part part)
+    public final Part join(Part part)
+    {
+        //Lock updates to prevent mass updates from onAdd and onRemove method
+        lockUpdates = true;
+        Part p = _join(part);
+        lockUpdates = false;
+        onChange(ChangeCause.ADD);
+        return p;
+    }
+
+    protected Part _join(Part part)
     {
         if(part != this)
         {
-            lockUpdates = true;
+
             for(NodeBranchPart node : part.getEcapsulatedNodes())
             {
                 add(node);
@@ -87,8 +97,8 @@ public abstract class Part
             part.getEcapsulatedNodes().clear();
             part.getEcapsulatedParts().clear();
 
-            onChange(ChangeCause.ADD);
-            lockUpdates = false;
+
+
             return this;
         }
         return null;
@@ -97,7 +107,10 @@ public abstract class Part
     /** Called any time the part changes */
     public final  void onChange(ChangeCause cause)
     {
-
+        if(!lockUpdates)
+        {
+            onChanged(cause);
+        }
     }
 
     /** Called any time the part changes */

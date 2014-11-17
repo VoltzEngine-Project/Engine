@@ -3,13 +3,14 @@ package resonant.lib.grid.electric.part
 import resonant.lib.grid.branch.NodeBranchPart
 import resonant.lib.grid.branch.part.Part
 import resonant.lib.grid.electric.NodeElectric
+import scala.collection.JavaConversions._
 
 /**
  * Created by robert on 11/17/2014.
  */
 trait TElectricPart extends Part
 {
-  var resistance = 0
+  var resistance : Double = 0
 
   def getResistance(): Double =
   {

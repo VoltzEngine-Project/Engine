@@ -38,7 +38,7 @@ public class Branch extends Part
 	}
 
     @Override
-    public Branch join(Part part)
+    protected Branch _join(Part part)
     {
         if(part instanceof Branch && super.join(part) != null)
         {
