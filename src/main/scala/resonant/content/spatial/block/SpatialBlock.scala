@@ -16,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{MathHelper, AxisAlignedBB, IIcon, MovingObjectPosition}
+import net.minecraft.util.{AxisAlignedBB, IIcon, MathHelper, MovingObjectPosition}
 import net.minecraft.world.{Explosion, IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
 import org.lwjgl.opengl.{GL11, GL12}
@@ -858,9 +858,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
   }
 
-  /** Is the world client side */
-  def client(): Boolean = !world.isRemote
-
   /** Opens the main gui for this tile */
   def openGui(player: EntityPlayer, mod: AnyRef)
   {
@@ -874,8 +871,11 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
       player.openGui(mod, gui, world, xi, yi, zi)
   }
 
+  /** Is the world client side */
+  def client: Boolean = world.isRemote
+
   /** Is the world server side */
-  def server(): Boolean = !world.isRemote
+  def server: Boolean = !world.isRemote
 
   def setMeta(meta: Int)
   { world.setBlockMetadataWithNotify(xi, yi, zi, meta, 3) }
