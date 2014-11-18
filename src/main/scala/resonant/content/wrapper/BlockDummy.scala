@@ -312,7 +312,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
    */
   override def canProvidePower: Boolean =
   {
-    return dummyTile.canProvidePower
+    return dummyTile.providePower
   }
 
   override def isProvidingWeakPower(access: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Int =

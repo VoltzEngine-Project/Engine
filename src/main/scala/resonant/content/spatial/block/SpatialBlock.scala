@@ -30,6 +30,7 @@ import resonant.lib.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorl
 import resonant.lib.utility.{LanguageUtility, WrenchUtility}
 import resonant.lib.wrapper.WrapList._
 
+import scala.beans.BeanProperty
 import scala.collection.convert.wrapAll._
 import scala.collection.immutable
 
@@ -100,14 +101,19 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   /** Creative tab this block will show on */
   var _creativeTab: CreativeTabs = null
   /** How hard is the block to mine */
+  @BeanProperty
   var blockHardness: Float = 1
   /** Resistance to being blown up */
+  @BeanProperty
   var blockResistance: Float = 1
   /** Sound made when the player steps on this block */
+  @BeanProperty
   var stepSound: Block.SoundType = Block.soundTypeStone
   /** Can this provide a redstone signal */
-  var canProvidePower: Boolean = false
+  @BeanProperty
+  var providePower: Boolean = false
   /** Random block updates */
+  @BeanProperty
   var tickRandomly: Boolean = false
   /** False will make the block glass like */
   var isOpaqueCube: Boolean = true
@@ -119,24 +125,28 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   var domain: String = null
 
   /** Render as a normal block if true */
+  @BeanProperty
   var normalRender: Boolean = true
   /** Override to force a block to render even if not a normal renderer */
+  @BeanProperty
   var renderStaticBlock: Boolean = false
   /** Forces the item block to render as a block */
+  @BeanProperty
   var forceItemToRenderAsBlock: Boolean = false
   /** Flag to say this has a custom render class for the item */
+  @BeanProperty
   var customItemRender: Boolean = false
   /** Sets the block to use side based textures */
+  @BeanProperty
   var useSidedTextures: Boolean = false
 
   /** Flag that is triggered when the dynamic renderer fails, will cause the item to stop rendering */
   private var noDynamicItemRenderCrash: Boolean = true
 
   /** Use update() instead */
-  @Deprecated
   final override def updateEntity() = update()
 
-  final def blockUpdate() = update()
+  def blockUpdate() = update()
 
   /**
    * Called after the block is registered. Use this to add recipes.
@@ -201,24 +211,29 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   }
 
   /** Sets the resistance to being broken by tools or general actions */
+  @deprecated
   def blockHardness(hardness: Float): Unit = blockHardness = hardness
 
   /** Sets the resistance to the block being blown up */
+  @deprecated
   def blockResistance(resistance: Float): Unit = blockResistance = resistance
 
   /** Sets the stepping sound */
   def stepSound(sound: Block.SoundType): Unit = stepSound = sound
 
   /** Sets the block can provide power to other blocks */
-  def canProvidePower(bool: Boolean): Unit = canProvidePower = bool
+  def canProvidePower(bool: Boolean): Unit = providePower = bool
 
   /** When set true the block will update every so often   */
+  @deprecated
   def tickRandomly(bool: Boolean): Unit = tickRandomly = bool
 
   /** When true renders the block as a standard block */
+  @deprecated
   def normalRender(bool: Boolean): Unit = normalRender = bool
 
   /** Forces the renderer to render a standard block during tile rendering */
+  @deprecated
   def forceStandardRender(bool: Boolean): Unit = forceItemToRenderAsBlock = bool
 
   /** When true tells the dummy block we have a custom item renderer */
@@ -640,7 +655,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
   def setTextureName(value: java.lang.String)
   {
-    textureName = value;
+    textureName = value
   }
 
   @SideOnly(Side.CLIENT)
