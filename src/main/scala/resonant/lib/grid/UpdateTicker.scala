@@ -90,6 +90,7 @@ class UpdateTicker extends Thread
   @SubscribeEvent
   def tickEnd(event: TickEvent.ServerTickEvent)
   {
+    deltaTime = 50
     update()
   }
 
@@ -106,9 +107,9 @@ class UpdateTicker extends Thread
       updaters synchronized
       {
         if (this == UpdateTicker.threaded)
-          updaters.par.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
+          updaters.par.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000d))
         else
-          updaters.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000f))
+          updaters.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000d))
 
         updaters.removeAll(updaters.filterNot(_.continueUpdate()))
       }
