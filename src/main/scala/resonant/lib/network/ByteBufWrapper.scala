@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fluids.FluidTank
 import resonant.lib.network.netty.IByteBufObject
-import resonant.lib.utility.nbt.ISaveObj
 import resonant.lib.transform.vector.{Vector2, Vector3}
+import resonant.lib.utility.nbt.ISaveObj
 
 /**
  * Some alias methods to make packets more pleasant.
@@ -57,6 +57,11 @@ object ByteBufWrapper
     def readStack() = ByteBufUtils.readItemStack(buf)
 
     def readString() = ByteBufUtils.readUTF8String(buf)
+
+    def >>>>(f: (NBTTagCompound => Unit))
+    {
+      f(buf.readTag())
+    }
 
     /**
      * Automatically determine how to write a specific piece of data.
@@ -115,6 +120,13 @@ object ByteBufWrapper
     {
       data foreach (this <<< _)
       buf
+    }
+
+    def <<<<(f: (NBTTagCompound => Unit))
+    {
+      val nbt = new NBTTagCompound
+      f(nbt)
+      buf <<< nbt
     }
 
     def <<<(tank: FluidTank): ByteBuf =

@@ -180,7 +180,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISaveO
 
 	public boolean isConstructed()
 	{
-		return prim != null;
+		return getPrimary() != null;
 	}
 
 	public boolean isPrimary()
