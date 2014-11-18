@@ -116,7 +116,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   /**
    * Called upon the block being destroyed by an explosion
    */
-  override def onBlockDestroyedByExplosion(world : World, x : Int, y : Int, z : Int, ex : Explosion)
+  override def onBlockDestroyedByExplosion(world: World, x: Int, y: Int, z: Int, ex: Explosion)
   {
     inject(world, x, y, z)
     getTile(world, x, y, z).onDestroyedByExplosion(ex)
@@ -162,6 +162,14 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   {
     inject(world, x, y, z)
     getTile(world, x, y, z).blockUpdate()
+    eject
+  }
+
+  @SideOnly(Side.CLIENT)
+  override def randomDisplayTick(world: World, x: Int, y: Int, z: Int, par5Random: Random)
+  {
+    inject(world, x, y, z)
+    getTile(world, x, y, z).randomDisplayTick()
     eject
   }
 
