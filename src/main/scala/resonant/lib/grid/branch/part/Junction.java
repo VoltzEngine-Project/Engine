@@ -46,7 +46,7 @@ public class Junction extends Part
     {
         if(part instanceof Junction && super._join(part) != null)
         {
-            super.join(part);
+            super._join(part);
             getConnections().addAll(((Junction) part).getConnections());
 
             //Clean up

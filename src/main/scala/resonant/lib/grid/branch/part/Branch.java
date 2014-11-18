@@ -40,7 +40,7 @@ public class Branch extends Part
     @Override
     protected Branch _join(Part part)
     {
-        if(part instanceof Branch && super.join(part) != null)
+        if(part instanceof Branch && super._join(part) != null)
         {
             // A connection overlap
             if(((Branch) part).getConnectionA() == null && getConnectionA() == null || getConnectionA() == ((Branch) part).getConnectionA())
