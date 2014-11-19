@@ -7,5 +7,5 @@ package resonant.api.explosion;
  */
 public interface IExplosiveIgnore
 {
-	public boolean canIgnore(IExplosion explosion);
+	public boolean canIgnore(IExplosive explosion);
 }

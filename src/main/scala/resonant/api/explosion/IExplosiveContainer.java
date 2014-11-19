@@ -10,7 +10,5 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public interface IExplosiveContainer
 {
-	public NBTTagCompound getTagCompound();
-
-	public IExplosive getExplosiveType();
+	public IExplosive getExplosive();
 }

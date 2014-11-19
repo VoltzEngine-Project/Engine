@@ -10,6 +10,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public abstract class Trigger
 {
     public final String triggerName;
+    public int size = 1;
 
     public Trigger(String name)
     {
