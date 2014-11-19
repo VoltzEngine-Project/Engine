@@ -1,6 +1,7 @@
 package resonant.api.explosion;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.world.Explosion;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /** Object that tell an explosive how it was triggered
@@ -40,6 +41,17 @@ public abstract class Trigger
         public TriggerEntity(String name, Entity source)
         {
             super(name);
+            this.source = source;
+        }
+    }
+
+    public static class TriggerExplosion extends Trigger
+    {
+        public final Explosion source;
+
+        public TriggerExplosion(Explosion source)
+        {
+            super("explosion");
             this.source = source;
         }
     }
