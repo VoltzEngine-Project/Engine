@@ -20,9 +20,10 @@ public interface IExplosive
 	 * @param y      The Y-Coord
 	 * @param z      The Z-Coord
 	 * @param trigger - object that describes what caused the explosion to try
+     * @param yieldMultiplier - multiplier the size of the explosive
      * @return
 	 */
-	public IExplosiveBlast tryToTriggerExplosion(World world, double x, double y, double z, Trigger trigger);
+	public IExplosiveBlast tryToTriggerExplosion(World world, double x, double y, double z, Trigger trigger, int yieldMultiplier);
 
     /**
      * Called when the explosive is registered
