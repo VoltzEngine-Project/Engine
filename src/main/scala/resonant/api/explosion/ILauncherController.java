@@ -12,11 +12,6 @@ import resonant.lib.transform.vector.Vector3;
 public interface ILauncherController extends IBlockFrequency
 {
 	/**
-	 * What type of launcher is this?
-	 */
-	public LauncherType getLauncherType();
-
-	/**
 	 * Launches the missile into the specified target.
 	 */
 	public void launch();

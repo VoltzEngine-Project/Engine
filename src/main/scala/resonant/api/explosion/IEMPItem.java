@@ -15,7 +15,7 @@ public interface IEMPItem
 	 *
 	 * @param itemStack     - The itemstack attacked by EMP
 	 * @param entity        - The entity holding the item
-	 * @param empExplosives - The IExplosive object
+	 * @param empExplosive - The IExplosive object
 	 */
 	public void onEMP(ItemStack itemStack, Entity entity, IExplosion empExplosive);
 }

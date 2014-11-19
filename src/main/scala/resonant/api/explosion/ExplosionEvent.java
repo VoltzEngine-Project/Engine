@@ -68,26 +68,20 @@ public class ExplosionEvent extends Event
 		 * The explosive object.
 		 */
 		public IExplosive explosion;
-		/**
-		 * The explosive type.
-		 */
-		public ExplosiveType type;
 
-		public ExplosivePreDetonationEvent(World world, double x, double y, double z, ExplosiveType type, IExplosive explosion)
+		public ExplosivePreDetonationEvent(World world, double x, double y, double z, IExplosive explosion)
 		{
 			this.world = world;
-			this.type = type;
 			this.explosion = explosion;
 			this.x = x;
 			this.y = y;
 			this.z = z;
 		}
 
-		public ExplosivePreDetonationEvent(World world, Entity entity, ExplosiveType type, IExplosive explosion)
+		public ExplosivePreDetonationEvent(World world, Entity entity, IExplosive explosion)
 		{
 			this.world = world;
 			this.entity = entity;
-			this.type = type;
 			this.explosion = explosion;
 			this.x = entity.posX;
 			this.y = entity.posY;
