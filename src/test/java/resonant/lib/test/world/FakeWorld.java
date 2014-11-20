@@ -108,6 +108,16 @@ public class FakeWorld extends World
         return null;
     }
 
+    @Override
+    public void notifyBlockOfNeighborChange(int x, int y, int z, final Block block)
+    {
+        Block b = this.getBlock(x, y, z);
+        if(b != null)
+        {
+            b.onNeighborBlockChange(this, x, y, z, block);
+        }
+    }
+
     /** Checks if the location is inside the map bounds */
     private boolean inMap(int x, int y, int z)
     {
