@@ -66,7 +66,6 @@ public class GridPathfinder
         //More than two connections, wire is a junction connecting to several paths
         if (connections.size() > 2)
         {
-            
             //If we have another junction point merge it into a single junction
             if (part instanceof Junction)
             {
