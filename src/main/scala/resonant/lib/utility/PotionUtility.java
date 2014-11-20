@@ -6,50 +6,26 @@ import resonant.engine.References;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-/**
- * call on preinit
- *
- * @author tgame14
- * @since 22/02/14
- */
+/** Utility to handle anything related to Potion.class */
 public class PotionUtility
 {
-	private static final int EXTEND_LIMIT = 32;
-	public static int potionOffset;
+    /** Limit based on the max size the NBT save allows, too set it higher the save must be ASMed */
+	private static final int EXTEND_LIMIT = 256;
 
+    /** Resizes the potion array to its max limit allowing for more potion ids
+     * to be created. */
 	public static void resizePotionArray()
 	{
-		Potion[] headPotionArray = null;
+        if(Potion.potionTypes.length < EXTEND_LIMIT)
+        {
+            Potion[] potions = new Potion[EXTEND_LIMIT];
 
-		for (Field f : Potion.class.getDeclaredFields())
-		{
-			f.setAccessible(true);
-			try
-			{
-				if (f.getName().equals("potionTypes") || f.getName().equals("field_76425_a"))
-				{
-					Field modfield = Field.class.getDeclaredField("modifiers");
-					modfield.setAccessible(true);
-					modfield.setInt(f, f.getModifiers() & ~Modifier.FINAL);
-
-					headPotionArray = (Potion[]) f.get(null);
-					final Potion[] newPotionTypes = new Potion[headPotionArray.length + EXTEND_LIMIT];
-					System.arraycopy(headPotionArray, 0, newPotionTypes, 0, headPotionArray.length);
-					f.set(null, newPotionTypes);
-
-					potionOffset = newPotionTypes.length - 1;
-				}
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				References.LOGGER.error("The mod has Errored, Please report to the mod authors");
-			}
-		}
-	}
-
-	public static int getNextOptimalPotId()
-	{
-		return --potionOffset + 1;
+            for (int i = 0; i < Potion.potionTypes.length; i++)
+            {
+                potions[i] = Potion.potionTypes[i];
+            }
+            //1.7.10 potion array -> "field_76425_a" in srg_name;
+            ReflectionUtility.setMCFieldWithCatch(Potion.class, null, "potionTypes", potions);
+        }
 	}
 }
