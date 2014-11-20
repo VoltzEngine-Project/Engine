@@ -47,23 +47,50 @@ public class FakeWorld extends World
             if(map[x][y][z] == null)
                 map[x][y][z] = new Data();
 
-            TileEntity tile = block.createTileEntity(this, meta);
+
+            TileEntity tile = block != null ? block.createTileEntity(this, meta) : null;
             if(block != map[x][y][z].block || tile != map[x][y][z].tile)
             {
                 if(map[x][y][z].tile != null)
                     map[x][y][z].tile.invalidate();
                 map[x][y][z].tile = null;
             }
+
             map[x][y][z].block = block;
             map[x][y][z].meta = meta;
             map[x][y][z].tile = tile;
-            if(tile != null)
+            if(block != null)
             {
-                tile.setWorldObj(this);
-                tile.xCoord = x;
-                tile.yCoord = y;
-                tile.zCoord = z;
+                if (tile != null)
+                {
+                    tile.setWorldObj(this);
+                    tile.xCoord = x;
+                    tile.yCoord = y;
+                    tile.zCoord = z;
+                }
+                notifyBlockChange(x, y, z, block);
             }
+            return true;
+        }
+        return false;
+    }
+
+    public int getBlockMetadata(int x, int y, int z)
+    {
+        if(inMap(x, y, z) &&  map[x][y][z] != null)
+        {
+            return map[x][y][z].meta;
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean setBlockMetadataWithNotify(int x, int y, int z, int meta, int n)
+    {
+        if(inMap(x, y, z) &&  map[x][y][z] != null)
+        {
+            map[x][y][z].meta = meta;
+            notifyBlockChange(x, y, z, map[x][y][z].block);
             return true;
         }
         return false;
