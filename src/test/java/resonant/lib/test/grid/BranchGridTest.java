@@ -3,6 +3,7 @@ package resonant.lib.test.grid;
 import junit.framework.TestCase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.junit.Test;
 import resonant.api.grid.INode;
@@ -56,8 +57,14 @@ public class BranchGridTest extends TestCase
         map.addBlock('-', wire);
         map.build(world, 0, 0, 0);
 
+        TileEntity tile = world.getTileEntity(5, 0, 6);
+        if(tile instanceof TileWire)
+        {
+            grid = ((TileWire)tile).getNode().getGrid();
+        }
+
         //Trigger grid to update since we do not have a tick handler
-        //grid.update(0);
+        grid.update(0);
     }
 
     @Test
