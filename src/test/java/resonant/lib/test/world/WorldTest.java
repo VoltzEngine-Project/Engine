@@ -1,5 +1,6 @@
 package resonant.lib.test.world;
 
+import com.typesafe.config.ConfigException;
 import cpw.mods.fml.common.registry.GameRegistry;
 import javafx.scene.effect.Reflection;
 import junit.framework.TestCase;
@@ -23,7 +24,7 @@ public class WorldTest extends TestCase
     protected void setUp() throws Exception
     {
         world = new FakeWorld();
-        ReflectionUtility.setMCField(Block.class, null, "blockRegistry" , new FakeRegistryNamespaced());
+        ReflectionUtility.setMCField(Block.class, null, "blockRegistry", new FakeRegistryNamespaced());
         Block.registerBlocks();
     }
 
@@ -31,13 +32,25 @@ public class WorldTest extends TestCase
     {
         Object block = Block.blockRegistry.getObject("sand");
         assertNotNull(block);
-        assertEquals(block.toString(), "sand");
         assertEquals(Block.getIdFromBlock((Block)block), 12);
     }
 
     public void testCreation()
     {
         assertNotNull("Failed to create world", world);
+    }
+
+    public void testNullPlacement()
+    {
+        try
+        {
+            world.setBlock(0, 0, 0, null);
+            fail("World didn't catch null block");
+        }
+        catch (NullPointerException e)
+        {
+
+        }
     }
 
     public void testBlockPlacement()

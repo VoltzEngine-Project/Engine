@@ -43,11 +43,15 @@ public class FakeWorld extends World
     @Override
     public boolean setBlock(int x, int y, int z, Block block, int meta, int notify)
     {
+        if(block == null)
+        {
+            throw new NullPointerException("World.setBlock() can not set a location to null, use Blocks.Air in value of null");
+        }
+
         if(inMap(x, y, z))
         {
             if(map[x][y][z] == null)
                 map[x][y][z] = new Data();
-
 
             TileEntity tile = block != null ? block.createTileEntity(this, meta) : null;
             if(block != map[x][y][z].block || tile != map[x][y][z].tile)
@@ -74,7 +78,10 @@ public class FakeWorld extends World
             }
             return true;
         }
-        return false;
+        else
+        {
+            throw new RuntimeException("Something Attempted to place a block out side of the test area");
+        }
     }
 
     public int getBlockMetadata(int x, int y, int z)
@@ -122,6 +129,30 @@ public class FakeWorld extends World
     private boolean inMap(int x, int y, int z)
     {
         return x >= 0 && x < map.length && y >= 0 && y < map[0].length && z >= 0 && z < map[0][0].length;
+    }
+
+    public void clear()
+    {
+        for(int x = 0; x < map.length; x++)
+        {
+            for(int y = 0; x < map[0].length; x++)
+            {
+                for(int z = 0; x < map[0][0].length; x++)
+                {
+                    Data data = map[x][y][x];
+                    if(data != null)
+                    {
+                        if(data.tile != null)
+                        {
+                            data.tile.invalidate();
+                            data.tile.setWorldObj(null);
+                            data.tile = null;
+                        }
+                        data.block = null;
+                    }
+                }
+            }
+        }
     }
 
     @Override
