@@ -1,9 +1,12 @@
 package resonant.engine.content.debug
 
+import java.util
+
 import net.minecraft.block.material.Material
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
+import resonant.api.grid.INode
 import resonant.lib.content.prefab.java.TileIO
 
 /**
@@ -104,5 +107,10 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
       }
       return false
     }*/
+  override def getNodes(nodes: util.List[INode]): Unit =
+  {
 
+  }
+
+  override def getNode[N <: INode](nodeType: Class[_ <: N], from: ForgeDirection): N = null.asInstanceOf[N];
 }

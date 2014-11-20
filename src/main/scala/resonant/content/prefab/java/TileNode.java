@@ -22,19 +22,14 @@ import java.util.*;
  * Does use some reflection to generate a list of all fields holding nodes
  * This is only used for Java. For Scala classes, use traits instead.
  * <p/>
- * TODO if timing for reflection proves to take to long replace with getAllNodes() method
  *
  * @author Darkguardsman
  */
-public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDReceiver
+public abstract class TileNode extends TileAdvanced implements INodeProvider
 {
-	private static final Map<Class<? extends TileNode>, List<Field>> nodeFields = new LinkedHashMap<Class<? extends TileNode>, List<Field>>();
-	INode baseNode = null;
-
 	public TileNode(Material material)
 	{
 		super(material);
-		generateNodeList();
 	}
 
 	@Override
@@ -99,72 +94,16 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
 		super.invalidate();
 	}
 
-	@Override
-	public <N extends INode> N getNode(Class<? extends N> nodeType, ForgeDirection from)
-	{
-		//TODO: Dangerous?
-		return (N) baseNode;
-	}
-
-	//TODO improve and turn into a helper class
-	public void generateNodeList()
-	{
-		if (!nodeFields.containsKey(getClass()))
-		{
-			Class clazz = getClass();
-			List<Field> fields = new LinkedList<Field>();
-			List<Field> allFields = new LinkedList<Field>();
-
-			//Get all fields both inherited and declared
-			allFields.addAll(Arrays.asList(clazz.getFields()));
-			allFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
-
-			for (Field field : allFields)
-			{
-				if (!fields.contains(field) && INode.class.isAssignableFrom(field.getType()))
-				{
-					fields.add(field);
-				}
-			}
-			nodeFields.put(clazz, fields);
-		}
-	}
-
-	protected List<INode> getNodes()
+    /** Grabs any node that needs called by save() load() invalidate() update() onJoinWorld() etc */
+	protected final List<INode> getNodes()
 	{
 		List<INode> nodes = new LinkedList<INode>();
 		getNodes(nodes);
 		return nodes;
 	}
 
-	/**
-	 * Grabs the list of nods from the class using reflection, to improve performance override this and manually add nodes to the list
-	 */
-	public void getNodes(List<INode> nodes)
-	{
-		if (nodeFields.containsKey(getClass()))
-		{
-			List<Field> fields = nodeFields.get(getClass());
-			for (Field field : fields)
-			{
-				INode node = null;
-				try
-				{
-					field.setAccessible(true);
-					Object object = field.get(this);
-					if (object instanceof INode)
-					{
-						nodes.add(node);
-					}
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-
-			}
-		}
-	}
+	/** Grabs any node that needs called by save() load() invalidate() update() onJoinWorld() etc */
+	public abstract void getNodes(List<INode> nodes);
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
@@ -190,27 +129,5 @@ public class TileNode extends TileAdvanced implements INodeProvider, IPacketIDRe
 				((ISave) node).save(nbt);
 			}
 		}
-	}
-
-	@Override
-	public boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type)
-	{
-		if (type instanceof PacketNode && nodeFields.containsKey(getClass()))
-		{
-			for (INode node : getNodes())
-			{
-				if ((((PacketNode) type).nodeClassName.equalsIgnoreCase("INode") || node.getClass().getSimpleName().equalsIgnoreCase(((PacketNode) type).nodeClassName)))
-				{
-					if (node instanceof IPacketIDReceiver)
-					{
-						if (((IPacketIDReceiver) node).read(buf, id, player, type))
-						{
-							return true;
-						}
-					}
-				}
-			}
-		}
-		return false;
 	}
 }
