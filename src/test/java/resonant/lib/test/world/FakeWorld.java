@@ -1,6 +1,7 @@
 package resonant.lib.test.world;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.profiler.Profiler;
@@ -67,6 +68,7 @@ public class FakeWorld extends World
                     tile.xCoord = x;
                     tile.yCoord = y;
                     tile.zCoord = z;
+                    tile.validate();
                 }
                 notifyBlockChange(x, y, z, block);
             }
