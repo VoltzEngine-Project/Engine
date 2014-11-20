@@ -24,8 +24,6 @@ public class WorldTest extends TestCase
     protected void setUp() throws Exception
     {
         world = new FakeWorld();
-        ReflectionUtility.setMCField(Block.class, null, "blockRegistry", new FakeRegistryNamespaced());
-        Block.registerBlocks();
     }
 
     public void testBlockRegistry()

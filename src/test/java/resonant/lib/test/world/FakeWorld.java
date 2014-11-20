@@ -12,17 +12,36 @@ import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
+import resonant.lib.utility.ReflectionUtility;
 
 /** Fake world that creates a single chunk to work out of
  * Created by robert on 11/20/2014.
  */
 public class FakeWorld extends World
 {
+    public static boolean blocksInit = false;
+
     Data[][][] map = new Data[16][256][16];
 
     public FakeWorld()
     {
         this(null, "FakeWorld", new FakeWorldProvider() , new WorldSettings(new WorldInfo(new NBTTagCompound())), new Profiler());
+        if(!blocksInit)
+        {
+            try
+            {
+                ReflectionUtility.setMCField(Block.class, null, "blockRegistry", new FakeRegistryNamespaced());
+                Block.registerBlocks();
+            }
+            catch (IllegalAccessException e)
+            {
+                e.printStackTrace();
+            }
+            catch (NoSuchFieldException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     public FakeWorld(ISaveHandler p_i45368_1_, String p_i45368_2_, WorldProvider p_i45368_3_, WorldSettings p_i45368_4_, Profiler p_i45368_5_)

@@ -57,7 +57,7 @@ public class BranchGridTest extends TestCase
         map.build(world, 0, 0, 0);
 
         //Trigger grid to update since we do not have a tick handler
-        grid.update(0);
+        //grid.update(0);
     }
 
     @Test
