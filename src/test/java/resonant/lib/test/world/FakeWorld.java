@@ -2,6 +2,7 @@ package resonant.lib.test.world;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
@@ -64,8 +65,7 @@ public class FakeWorld extends World
             if (tile.isInvalid())
             {
                 tile_iterator.remove();
-            }
-            else
+            } else
             {
                 tile.updateEntity();
             }
@@ -75,8 +75,13 @@ public class FakeWorld extends World
     @Override
     public Block getBlock(int x, int y, int z)
     {
-        if (inMap(x, y, z) && map[x][y][z] != null)
+        if (inMap(x, y, z))
         {
+            if (map[x][y][z] == null)
+            {
+                map[x][y][z] = new Data();
+                map[x][y][z].block = Blocks.air;
+            }
             return map[x][y][z].block;
         }
         return null;
@@ -130,8 +135,7 @@ public class FakeWorld extends World
             }
 
             return true;
-        }
-        else
+        } else
         {
             throw new RuntimeException("Something Attempted to place a block out side of the test area");
         }
