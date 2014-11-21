@@ -26,7 +26,7 @@ public class TileConductor extends TileNode
     public <N extends INode> N getNode(Class<? extends N> nodeType, ForgeDirection from)
     {
         //TODO fix later when implement junk tests
-        return (N) node;
+        return (N) getNode();
     }
 
     @Override
