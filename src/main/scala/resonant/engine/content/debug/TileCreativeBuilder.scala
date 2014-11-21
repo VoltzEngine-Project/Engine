@@ -85,7 +85,7 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
         size = buf.readInt
         doBuild = true
         //TODO check for packet spamming as this could be abused by players to create a lag machine
-        sendDescPacket()
+        markUpdate()
       }
     }
     if (packetID == 1)
