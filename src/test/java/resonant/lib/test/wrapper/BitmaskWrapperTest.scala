@@ -1,6 +1,7 @@
 package resonant.lib.test.wrapper
 
 import junit.framework.TestCase
+import net.minecraftforge.common.util.ForgeDirection
 import org.junit.Assert
 import resonant.lib.wrapper.BitmaskWrapper._
 
@@ -29,7 +30,7 @@ class BitmaskWrapperTest extends TestCase
     val resultMask = mask.closeMask(2)
 
     //Expect the mask 100000 (or 32)
-    Assert.assertEquals(32, resultMask, 0)
+    Assert.assertEquals("Close mask test failed.",32, resultMask, 0)
   }
 
   def testCheckMask()
@@ -37,8 +38,8 @@ class BitmaskWrapperTest extends TestCase
     //Equivalent 100100 (36)
     val mask = 36
 
-    Assert.assertTrue(mask.mask(5))
-    Assert.assertTrue(mask.mask(2))
+    Assert.assertTrue("Mask doesn't contain 5",mask.mask(5))
+    Assert.assertTrue("Mask doesn't contain 2",mask.mask(2))
   }
 
   def testInvertMask()
@@ -47,6 +48,18 @@ class BitmaskWrapperTest extends TestCase
     val mask = 36
 
     //Inverted 011011 (27)
-    Assert.assertEquals(27, mask.invert(), 0)
+    Assert.assertEquals("Mask failed to invert correctly", 27, mask.invert(), 0)
+  }
+
+  def testForgeDirectionMask()
+  {
+    var mask = 0
+    for(dir <- ForgeDirection.VALID_DIRECTIONS)
+    {
+      mask = mask.openMask(dir);
+      Assert.assertTrue("Mask should contain " + dir, mask.mask(dir))
+      mask = mask.closeMask(dir);
+      Assert.assertTrue("Mask should not contain " + dir, !mask.mask(dir))
+    }
   }
 }
