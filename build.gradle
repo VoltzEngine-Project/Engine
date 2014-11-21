@@ -142,7 +142,7 @@ artifacts {
 
 processResources {
 	from(sourceSets.main.resources.srcDirs) {
-		include '**/*.lang'
+		//include '**/*.lang'
 		include '**/*.info'
 		include '**/*.properties'
 
@@ -152,7 +152,6 @@ processResources {
 
 	// copy everything else, thats not text
 	from(sourceSets.main.resources.srcDirs) {
-		exclude '**/*.lang'
 		exclude '**/*.info'
 		exclude '**/*.properties'
 	}
