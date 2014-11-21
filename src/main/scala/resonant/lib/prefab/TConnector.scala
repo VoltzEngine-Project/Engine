@@ -100,13 +100,6 @@ trait TConnector[N] extends IConnector[N] with TVectorWorld
           }
         }
       }
-      if(tile.isInstanceOf[N])
-      {
-        if (canConnect(tile.asInstanceOf[N], dir.getOpposite))
-        {
-          connect(tile.asInstanceOf[N], dir)
-        }
-      }
     }
   }
 
