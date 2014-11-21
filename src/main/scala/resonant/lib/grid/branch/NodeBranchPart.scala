@@ -5,6 +5,7 @@ import resonant.api.grid.{IGrid, INodeGrid, INodeProvider}
 import resonant.lib.grid.branch.part.Part
 import resonant.lib.grid.node.Node
 import resonant.lib.prefab.TConnector
+import resonant.lib.transform.vector.VectorWorld
 
 import scala.beans.BeanProperty
 ;
@@ -75,8 +76,17 @@ class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector
       obj.getGrid.merge(getGrid)
   }
 
-  override def getNodeFromConnection(provider: INodeProvider, dir: ForgeDirection) : NodeBranchPart =
+  override def updateConnection(dir: ForgeDirection, loc: VectorWorld)
   {
-    return provider.getNode(classOf[NodeBranchPart], dir)
+    val tile = loc.getTileEntity
+    if(tile != null && tile.isInstanceOf[INodeProvider])
+    {
+        val node : NodeBranchPart = tile.asInstanceOf[INodeProvider].getNode(classOf[NodeBranchPart], dir.getOpposite)
+
+        if (canConnect(node, dir.getOpposite))
+        {
+          connect(node, dir)
+        }
+    }
   }
 }

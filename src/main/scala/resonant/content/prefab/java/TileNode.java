@@ -75,7 +75,7 @@ public abstract class TileNode extends TileAdvanced implements INodeProvider
 			{
 				if (((IUpdate) node).canUpdate())
 				{
-					((IUpdate) node).update(20);
+					((IUpdate) node).update(1/20);
 				}
 			}
 		}

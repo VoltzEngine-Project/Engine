@@ -130,7 +130,7 @@ public class FakeWorld extends World
                 }
                 if (added_flag)
                     block.onBlockAdded(this, x, y, z);
-                if (change_flag)
+                if (change_flag && notify != 0)
                     notifyBlockChange(x, y, z, block);
             }
 
