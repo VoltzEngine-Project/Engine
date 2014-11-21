@@ -13,12 +13,12 @@ class BitmaskWrapperTest extends TestCase
   def testOpenMask()
   {
     //Equivalent 100000 (32)
-    val mask = 1 << 6
+    val mask = 32
     //Opens the mask 000100 (4)
     val resultMask = mask.openMask(2)
 
     //Expect the mask 100100 (or 36)
-    Assert.assertEquals(36, resultMask, 0)
+    Assert.assertEquals("Open mask test failed.", 36, resultMask, 0)
   }
 
   def testCloseMask()
