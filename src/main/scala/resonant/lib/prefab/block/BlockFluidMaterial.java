@@ -1,4 +1,4 @@
-package resonant.content.factory.resources.block;
+package resonant.lib.prefab.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

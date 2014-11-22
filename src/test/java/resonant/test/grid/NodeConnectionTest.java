@@ -18,14 +18,12 @@ import java.util.Map;
  */
 public class NodeConnectionTest extends TestCase
 {
-    private static Block wire;
-
     private FakeWorld world;
     VectorWorld center;
 
     public void testWireExists()
     {
-        assertNotNull("Test can't continue without wire being created", wire);
+        assertNotNull("Test can't continue without wire being created", WireMap.wire());
         assertNotNull("Wire is not in the block registry", Block.blockRegistry.getObject("wire"));
     }
 
@@ -136,7 +134,7 @@ public class NodeConnectionTest extends TestCase
     private void buildWireInDir(ForgeDirection dir)
     {
         VectorWorld vec = center.add(dir);
-        vec.setBlock(wire);
+        vec.setBlock(WireMap.wire());
 
         assertNotNull("Failed to place wire at " + vec, vec.getBlock());
         assertNotNull("Failed to place tile at " + vec, vec.getTileEntity());
@@ -157,17 +155,6 @@ public class NodeConnectionTest extends TestCase
     {
         world = new FakeWorld();
         center = new VectorWorld(world, 8, 8, 8);
-        //Create wire to test with
-        if(Block.blockRegistry.getObject("wire") == null)
-        {
-            wire = new BlockDummy("JUnit", null, new TileConductor());
-            Block.blockRegistry.addObject(175, "wire", wire);
-        }
-        else
-        {
-            wire = (Block) Block.blockRegistry.getObject("wire");
-        }
-
     }
 
     @Override

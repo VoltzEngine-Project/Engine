@@ -10,6 +10,7 @@ import resonant.api.recipe.MachineRecipes;
 import resonant.content.factory.resources.FactoryResource;
 import resonant.content.factory.resources.RecipeType;
 import resonant.content.factory.resources.ResourceFactoryHandler;
+import resonant.lib.prefab.block.BlockFluidMaterial;
 import resonant.lib.prefab.block.FluidColored;
 import resonant.lib.render.RenderUtility;
 import resonant.lib.utility.LanguageUtility;

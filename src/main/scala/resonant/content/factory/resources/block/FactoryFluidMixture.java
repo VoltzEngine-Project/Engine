@@ -10,6 +10,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import resonant.content.factory.resources.FactoryResource;
 import resonant.content.factory.resources.ResourceFactoryHandler;
+import resonant.lib.prefab.block.BlockFluidMixture;
 import resonant.lib.prefab.block.FluidColored;
 import resonant.lib.render.RenderUtility;
 import resonant.lib.utility.LanguageUtility;
