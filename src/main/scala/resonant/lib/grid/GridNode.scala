@@ -52,5 +52,7 @@ class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
 
     if (getNodes.size() > 0)
       reconstruct(getNodes.head)
+    else
+      getNodes.clear()
   }
 }

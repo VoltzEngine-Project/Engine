@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 import cpw.mods.fml.common.eventhandler.{Event, SubscribeEvent}
 import cpw.mods.fml.common.gameevent.TickEvent
+import cpw.mods.fml.common.gameevent.TickEvent.Phase
 import net.minecraftforge.common.MinecraftForge
 import resonant.api.grid.IUpdate
 
@@ -90,8 +91,11 @@ class UpdateTicker extends Thread
   @SubscribeEvent
   def tickEnd(event: TickEvent.ServerTickEvent)
   {
-    deltaTime = 50
-    update()
+    if(event.phase == Phase.END)
+    {
+      deltaTime = 50
+      update()
+    }
   }
 
   def update()
