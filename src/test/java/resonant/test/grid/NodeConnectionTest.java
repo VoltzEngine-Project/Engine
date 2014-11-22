@@ -117,10 +117,10 @@ public class NodeConnectionTest extends TestCase
     private void checkForOnlyConnection(ForgeDirection dir)
     {
         assertEquals("Should only have one connection", centerNode().getConnections().size(), 1, 0);
-        for(ForgeDirection side : ForgeDirection.values())
+        for(Map.Entry<NodeBranchPart, ForgeDirection> entry : centerNode().getConnections().entrySet())
         {
-            if(side != dir)
-                fail("Should only contain connection on the " + dir + " side");
+            if(entry.getValue() != dir)
+                fail("Should only contain connection on the " + dir + " side\nFound a connection on side " + entry.getValue());
         }
     }
 
