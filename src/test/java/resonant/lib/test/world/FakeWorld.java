@@ -12,6 +12,7 @@ import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
+import resonant.lib.transform.vector.Vector3;
 import resonant.lib.utility.ReflectionUtility;
 
 import java.util.ArrayList;
@@ -27,11 +28,20 @@ public class FakeWorld extends World
     public static boolean blocksInit = false;
     public List<TileEntity> tiles = new ArrayList<TileEntity>();
 
-    Data[][][] map = new Data[16][256][16];
+    Data[][][] mapData;
+    int size;
 
     public FakeWorld()
     {
-        this(null, "FakeWorld", new FakeWorldProvider(), new WorldSettings(new WorldInfo(new NBTTagCompound())), new Profiler());
+        this(50);
+    }
+
+    public FakeWorld(int size)
+    {
+        super(null, "FakeWorld", new FakeWorldProvider(), new WorldSettings(new WorldInfo(new NBTTagCompound())), new Profiler());
+        this.size = size;
+        mapData = new Data[size + size + 1][256][size + size + 1];
+
         if (!blocksInit)
         {
             //Sets registry to avoid trigger creating of ModClassLoader
@@ -47,12 +57,6 @@ public class FakeWorld extends World
                 e.printStackTrace();
             }
         }
-        this.updateEntities();
-    }
-
-    public FakeWorld(ISaveHandler p_i45368_1_, String p_i45368_2_, WorldProvider p_i45368_3_, WorldSettings p_i45368_4_, Profiler p_i45368_5_)
-    {
-        super(p_i45368_1_, p_i45368_2_, p_i45368_3_, p_i45368_4_, p_i45368_5_);
     }
 
     @Override
@@ -65,7 +69,8 @@ public class FakeWorld extends World
             if (tile.isInvalid())
             {
                 tile_iterator.remove();
-            } else
+            }
+            else
             {
                 tile.updateEntity();
             }
@@ -77,12 +82,7 @@ public class FakeWorld extends World
     {
         if (inMap(x, y, z))
         {
-            if (map[x][y][z] == null)
-            {
-                map[x][y][z] = new Data();
-                map[x][y][z].block = Blocks.air;
-            }
-            return map[x][y][z].block;
+            return get(x, y, z).block;
         }
         return null;
     }
@@ -102,8 +102,8 @@ public class FakeWorld extends World
             Block pre_block = getBlock(x, y, z);
             if (block != pre_block || getBlockMetadata(x, y, z) != meta)
             {
-                map[x][y][z].block = block;
-                map[x][y][z].meta = meta;
+                get(x, y, z).block = block;
+                get(x, y, z).meta = meta;
                 change_flag = true;
                 if (block != pre_block)
                 {
@@ -112,11 +112,11 @@ public class FakeWorld extends World
 
                 //Check if tile changed
                 TileEntity newTile = block != null ? block.createTileEntity(this, meta) : null;
-                if (newTile != map[x][y][z].tile)
+                if (newTile != get(x, y, z).tile)
                 {
-                    if (map[x][y][z].tile != null)
-                        map[x][y][z].tile.invalidate();
-                    map[x][y][z].tile = newTile;
+                    if (get(x, y, z).tile != null)
+                        get(x, y, z).tile.invalidate();
+                    get(x, y, z).tile = newTile;
                     if (newTile != null)
                     {
                         newTile.setWorldObj(this);
@@ -135,17 +135,18 @@ public class FakeWorld extends World
             }
 
             return true;
-        } else
+        }
+        else
         {
-            throw new RuntimeException("Something Attempted to place a block out side of the test area");
+            throw new RuntimeException("Something Attempted to place a block out side of the test area " + new Vector3(x, y, z));
         }
     }
 
     public int getBlockMetadata(int x, int y, int z)
     {
-        if (inMap(x, y, z) && map[x][y][z] != null)
+        if (inMap(x, y, z))
         {
-            return map[x][y][z].meta;
+            return get(x, y, z).meta;
         }
         return 0;
     }
@@ -153,10 +154,10 @@ public class FakeWorld extends World
     @Override
     public boolean setBlockMetadataWithNotify(int x, int y, int z, int meta, int n)
     {
-        if (inMap(x, y, z) && map[x][y][z] != null)
+        if (inMap(x, y, z))
         {
-            map[x][y][z].meta = meta;
-            notifyBlockChange(x, y, z, map[x][y][z].block);
+            get(x, y, z).meta = meta;
+            notifyBlockChange(x, y, z, get(x, y, z).block);
             return true;
         }
         return false;
@@ -165,9 +166,9 @@ public class FakeWorld extends World
     @Override
     public TileEntity getTileEntity(int x, int y, int z)
     {
-        if (inMap(x, y, z) && map[x][y][z] != null)
+        if (inMap(x, y, z))
         {
-            return map[x][y][z].tile;
+            return get(x, y, z).tile;
         }
         return null;
     }
@@ -187,18 +188,51 @@ public class FakeWorld extends World
      */
     private boolean inMap(int x, int y, int z)
     {
-        return x >= 0 && x < map.length && y >= 0 && y < map[0].length && z >= 0 && z < map[0][0].length;
+        return x >= -size && x < mapData.length - size && y >= -size && y < mapData[0].length - size && z >= -size && z < mapData[0][0].length - size;
+    }
+
+    public Data get(int x, int y, int z)
+    {
+        if (mapData[x + size][y + size][z + size] == null)
+        {
+            mapData[x + size][y + size][z + size] = new Data();
+            mapData[x + size][y + size][z + size].block = Blocks.air;
+        }
+        return mapData[x + size][y + size][z + size];
+    }
+
+    public void genFlatData()
+    {
+        for (int x = -size; x < mapData.length - size; x++)
+        {
+            for (int y = -size; x < mapData[0].length - size; x++)
+            {
+                for (int z = -size; x < mapData[0][0].length - size; x++)
+                {
+                    if(y == 0)
+                        setBlock(x, y, z, Blocks.bedrock);
+                    else if(y < 5)
+                        setBlock(x, y, z, Blocks.stone);
+                    else if(y < 10)
+                        setBlock(x, y, z, Blocks.dirt);
+                    else if(y < 11)
+                        setBlock(x, y, z, Blocks.grass);
+                    else
+                        break;
+                }
+            }
+        }
     }
 
     public void clear()
     {
-        for (int x = 0; x < map.length; x++)
+        for (int x = 0; x < mapData.length; x++)
         {
-            for (int y = 0; x < map[0].length; x++)
+            for (int y = 0; x < mapData[0].length; x++)
             {
-                for (int z = 0; x < map[0][0].length; x++)
+                for (int z = 0; x < mapData[0][0].length; x++)
                 {
-                    Data data = map[x][y][x];
+                    Data data = mapData[x][y][x];
                     if (data != null)
                     {
                         if (data.tile != null)
