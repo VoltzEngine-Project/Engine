@@ -15,26 +15,53 @@ import java.util.Map;
  */
 public abstract class Schematic
 {
+    /** Registry and unlocalized name "schematic.NAME-OF-SCHEMATIC.name" */
+    private String schematicName;
+
+    public Schematic()
+    {
+
+    }
+
+    public Schematic(String name)
+    {
+        this.schematicName = name;
+    }
 	/**
 	 * The name of the schematic that is unlocalized.
 	 *
 	 * @return "schematic.NAME-OF-SCHEMATIC.name"
 	 */
-	public abstract String getName();
+	public String getName()
+    {
+        return schematicName;
+    }
 
-	public BuildMap getBuildMap(Vector3 center, ForgeDirection facingDirection, int size)
+    /** Gets the actual build map to be placed into th world around the location
+     *
+     * @param corner - lower bottom left front most corner
+     * @param facingDirection - facing direction, option & not support by all schematics
+     * @param size - - requested size, optional & not support by all schematics
+     * @return BuildMap instance to be build into the world
+     */
+	public BuildMap getBuildMap(Vector3 corner, ForgeDirection facingDirection, int size)
 	{
 		HashMap<Vector3, Pair<Block, Integer>> map = getStructure(facingDirection, size);
 		BuildMap buildMap = new BuildMap(map.size());
 		int p = 0;
 		for (Map.Entry<Vector3, Pair<Block, Integer>> entry : map.entrySet())
 		{
-			buildMap.add(p, entry.getKey(), new Placement(entry.getValue().left(), entry.getValue().right()));
-			p++;
+			buildMap.add(p++, entry.getKey().add(corner), new Placement(entry.getValue().left(), entry.getValue().right()));
 		}
 		return buildMap;
 	}
 
+    /** Generates generic placement data to be iterated threw to create the actual object in the world.
+     *
+     * @param dir - facing direction, optional
+     * @param size - requested size, optional
+     * @return map of locations to placement data
+     */
 	public abstract HashMap<Vector3, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size);
 
 	///////////////////////////////////////////////////////////////////
