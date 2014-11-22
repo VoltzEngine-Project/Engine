@@ -32,7 +32,7 @@ public class TileConductor extends TileNode
     @Override
     public void getNodes(List<INode> nodes)
     {
-        nodes.add(node);
+        nodes.add(getNode());
     }
 
     public NodeBranchPart getNode()
