@@ -42,7 +42,11 @@ class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
 
   protected def populateNode(node: N, prev: N = null.asInstanceOf[N])
   {
-    node.setGrid(this)
+    if (node.grid != this)
+    {
+      node.grid.remove(node)
+      node.setGrid(this)
+    }
   }
 
   def deconstruct(first: N)
@@ -52,7 +56,5 @@ class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
 
     if (getNodes.size() > 0)
       reconstruct(getNodes.head)
-    else
-      getNodes.clear()
   }
 }
