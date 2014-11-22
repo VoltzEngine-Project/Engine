@@ -1,4 +1,4 @@
-package resonant.lib.test.world;
+package resonant.junit.world;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -7,10 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 import resonant.lib.transform.vector.Vector3;
 import resonant.lib.utility.ReflectionUtility;

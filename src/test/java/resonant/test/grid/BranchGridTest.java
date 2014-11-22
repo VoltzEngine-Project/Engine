@@ -1,4 +1,4 @@
-package resonant.lib.test.grid;
+package resonant.test.grid;
 
 import junit.framework.TestCase;
 import net.minecraft.tileentity.TileEntity;
@@ -7,7 +7,7 @@ import resonant.lib.grid.branch.part.Branch;
 import resonant.lib.grid.branch.part.Junction;
 import resonant.lib.grid.branch.part.Part;
 import resonant.lib.prefab.TileConductor;
-import resonant.lib.test.world.FakeWorld;
+import resonant.junit.world.FakeWorld;
 import resonant.lib.transform.vector.Vector3;
 
 /**
@@ -19,13 +19,13 @@ import resonant.lib.transform.vector.Vector3;
 //   [j] = junction, | or -- = wires, [m] machine
 // 0
 // 1
-// 2          --[j]--
-// 3             |
+// 2       -- --[j]-- --
+// 3    |        |        |
 // 4    |        |        |
 // 5   [j]-- -- [j] -- --[j]
 // 6    |        |        |
-// 7             |
-// 8          --[j]--
+// 7    |        |        |
+// 8       -- --[j]-- --
 // 9
 // 10
 public class BranchGridTest extends TestCase

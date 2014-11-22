@@ -1,4 +1,4 @@
-package resonant.lib.test.grid;
+package resonant.test.grid;
 
 import junit.framework.TestCase;
 import resonant.lib.grid.branch.part.Branch;

@@ -1,10 +1,11 @@
-package resonant.lib.test.world;
+package resonant.test.world;
 
 import junit.framework.TestCase;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
+import resonant.junit.world.FakeWorld;
 
 /**
  * Created by robert on 11/13/2014.

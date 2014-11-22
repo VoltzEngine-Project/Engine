@@ -1,9 +1,6 @@
-package resonant.lib.test.grid;
+package resonant.test.grid;
 
-import junit.extensions.TestSetup;
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -11,7 +8,7 @@ import resonant.api.grid.INodeProvider;
 import resonant.content.wrapper.BlockDummy;
 import resonant.lib.grid.branch.NodeBranchPart;
 import resonant.lib.prefab.TileConductor;
-import resonant.lib.test.world.FakeWorld;
+import resonant.junit.world.FakeWorld;
 import resonant.lib.transform.vector.VectorWorld;
 
 import java.util.Map;

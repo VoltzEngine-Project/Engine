@@ -1,4 +1,4 @@
-package resonant.lib.test.grid;
+package resonant.test.grid;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;

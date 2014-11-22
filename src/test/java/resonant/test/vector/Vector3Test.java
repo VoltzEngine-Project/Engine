@@ -1,4 +1,4 @@
-package resonant.lib.test.vector;
+package resonant.test.vector;
 
 import junit.framework.TestCase;
 import org.junit.Assert;

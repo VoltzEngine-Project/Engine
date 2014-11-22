@@ -1,4 +1,4 @@
-package resonant.lib.test.world;
+package resonant.junit.world;
 
 import net.minecraft.util.RegistryNamespaced;
 
