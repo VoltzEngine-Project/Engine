@@ -24,7 +24,7 @@ trait TTileConnector[A <: AnyRef] extends NodeConnector[A]
         {
           val node = getNodeFrom(tile, direction.getOpposite)
 
-          if (node != null)
+          if (node != null && canConnect(node.asInstanceOf[A], direction) && node.asInstanceOf[NodeConnector[A]].canConnect(this.asInstanceOf[A], direction.getOpposite))
           {
             connect(node.asInstanceOf[A], direction)
           }
