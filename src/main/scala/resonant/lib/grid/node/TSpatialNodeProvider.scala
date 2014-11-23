@@ -48,12 +48,14 @@ trait TSpatialNodeProvider extends SpatialTile with INodeProvider
 
   override def onWorldSeparate()
   {
-    nodes.foreach(_.deconstruct())
+    if (!world.isRemote)
+      nodes.foreach(_.deconstruct())
   }
 
   override def invalidate()
   {
-    nodes.foreach(_.deconstruct())
+    if (!world.isRemote)
+      nodes.foreach(_.deconstruct())
   }
 
   override def writeToNBT(nbt: NBTTagCompound)
