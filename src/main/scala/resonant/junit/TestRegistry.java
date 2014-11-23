@@ -42,13 +42,10 @@ public class TestRegistry
             //Sets registry to avoid trigger creating of ModClassLoader
             try
             {
-                if (Block.blockRegistry instanceof FakeRegistryNamespaced)
-                {
-                    ReflectionUtility.setMCField(Block.class, null, "blockRegistry", new FakeRegistryNamespaced());
-                    ReflectionUtility.setMCField(Item.class, null, "itemRegistry", new FakeRegistryNamespaced());
-                    Block.registerBlocks();
-                    Item.registerItems();
-                }
+                ReflectionUtility.setMCField(Block.class, null, "blockRegistry", new FakeRegistryNamespaced());
+                ReflectionUtility.setMCField(Item.class, null, "itemRegistry", new FakeRegistryNamespaced());
+                Block.registerBlocks();
+                Item.registerItems();
             } catch (IllegalAccessException e)
             {
                 e.printStackTrace();
@@ -79,7 +76,7 @@ public class TestRegistry
     {
         init();
 
-        if(!Block.blockRegistry.containsKey(block))
+        if(!Block.blockRegistry.containsKey(name))
         {
             int id = nextID++;
             Block.blockRegistry.addObject(id, name, block);
@@ -108,6 +105,10 @@ public class TestRegistry
             {
                 e.printStackTrace();
             }
+        }
+        else
+        {
+            throw new IllegalArgumentException("Block is already registered to " + name);
         }
         return Block.getBlockFromName(name);
     }

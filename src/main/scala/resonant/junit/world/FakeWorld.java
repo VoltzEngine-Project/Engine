@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.WorldInfo;
+import resonant.junit.TestRegistry;
 import resonant.lib.transform.vector.Vector3;
 import resonant.lib.utility.ReflectionUtility;
 
@@ -39,10 +40,7 @@ public class FakeWorld extends World
         super(null, "FakeWorld", new FakeWorldProvider(), new WorldSettings(new WorldInfo(new NBTTagCompound())), new Profiler());
         this.size = size;
         mapData = new Data[size + size + 1][256][size + size + 1];
-
-
-
-        }
+        TestRegistry.init();
     }
 
     @Override
