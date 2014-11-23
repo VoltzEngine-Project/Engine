@@ -5,19 +5,24 @@ package resonant.content.factory.resources;
  *
  * @author Darkguardsman
  */
-public enum DefinedOres
+public enum DefinedResources
 {
 	COPPER(true),
 	TIN(true),
 	IRON(false),
 	SILVER(true),
-	GOLD(false);
+	GOLD(false),
+    LEAD(true),
+    ZINC(true),
+    NICKEL(true),
+    ALUMINIUM(true),
+    MAGNESIUM(true);
 
     boolean shouldGenerate;
     int minY = 1;
     int maxY = 100;
 
-	private DefinedOres(boolean gen)
+	private DefinedResources(boolean gen)
 	{
         this.shouldGenerate = gen;
 	}
