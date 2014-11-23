@@ -46,6 +46,7 @@ import resonant.engine.grid.thermal.EventThermal.EventThermalUpdate;
 import resonant.engine.grid.thermal.ThermalGrid;
 import resonant.lib.config.ConfigHandler;
 import resonant.lib.config.ConfigScanner;
+import resonant.lib.debug.F3Handler$;
 import resonant.lib.grid.UpdateTicker;
 import resonant.lib.grid.UpdateTicker$;
 import resonant.lib.loadable.LoadableHandler;
@@ -126,6 +127,7 @@ public class ResonantEngine
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance());
 		MinecraftForge.EVENT_BUS.register(new PlayerInteractionHandler());
+		MinecraftForge.EVENT_BUS.register(F3Handler$.MODULE$);
 
 		ToolMode.REGISTRY.add(new ToolModeGeneral());
 		ToolMode.REGISTRY.add(new ToolModeRotation());
