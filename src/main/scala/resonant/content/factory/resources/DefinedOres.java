@@ -7,14 +7,18 @@ package resonant.content.factory.resources;
  */
 public enum DefinedOres
 {
-	COPPER,
-	TIN,
-	IRON,
-	SILVER,
-	GOLD;
+	COPPER(true),
+	TIN(true),
+	IRON(false),
+	SILVER(true),
+	GOLD(false);
 
-	private DefinedOres()
+    boolean shouldGenerate;
+    int minY = 1;
+    int maxY = 100;
+
+	private DefinedOres(boolean gen)
 	{
-
+        this.shouldGenerate = gen;
 	}
 }

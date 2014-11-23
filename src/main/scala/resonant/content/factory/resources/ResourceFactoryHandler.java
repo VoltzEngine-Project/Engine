@@ -44,7 +44,7 @@ import java.util.Set;
  *
  * @author Darkguardsman
  */
-public class ResourceFactoryHandler extends FactoryHandler implements IVirtualObject
+public class ResourceFactoryHandler extends FactoryHandler
 {
 	public final Set<String> materials;
 	public final HashMap<String, Integer> materialColorCache;
@@ -237,29 +237,18 @@ public class ResourceFactoryHandler extends FactoryHandler implements IVirtualOb
 	@SideOnly(Side.CLIENT)
 	public void reloadTextures(TextureStitchEvent.Post e)
 	{
-		computeColors();
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void computeColors()
-	{
-		for (String material : materials)
-		{
-			int totalR = 0;
-			int totalG = 0;
-			int totalB = 0;
-			int colorCount = 0;
-			for (ItemStack ingotStack : OreDictionary.getOres("ingot" + LanguageUtility.capitalizeFirst(material)))
-			{
-				Item theIngot = ingotStack.getItem();
-				int color = getAverageColor(ingotStack);
-				materialColorCache.put(material, color);
-			}
-			if (!materialColorCache.containsKey(material))
-			{
-				materialColorCache.put(material, 0xFFFFFF);
-			}
-		}
+        for (String material : materials)
+        {
+            for (ItemStack ingotStack : OreDictionary.getOres("ingot" + LanguageUtility.capitalizeFirst(material)))
+            {
+                int color = getAverageColor(ingotStack);
+                materialColorCache.put(material, color);
+            }
+            if (!materialColorCache.containsKey(material))
+            {
+                materialColorCache.put(material, 0xFFFFFF);
+            }
+        }
 	}
 
 	/**
@@ -330,33 +319,5 @@ public class ResourceFactoryHandler extends FactoryHandler implements IVirtualOb
 			e.printStackTrace();
 		}
 		return 0xFFFFFF;
-	}
-
-	@Override
-	public File getSaveFile()
-	{
-		return new File(NBTUtility.getSaveDirectory(), "ResourceFactory");
-	}
-
-	@Override
-	public void setSaveFile(File file)
-	{
-
-	}
-
-	@Override
-	public void save(NBTTagCompound nbt)
-	{
-		NBTTagList list = new NBTTagList();
-		for (Map.Entry<Integer, String> entry : materialIds.entrySet())
-		{
-
-		}
-	}
-
-	@Override
-	public void load(NBTTagCompound nbt)
-	{
-
 	}
 }

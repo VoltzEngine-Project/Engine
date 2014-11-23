@@ -40,20 +40,8 @@ public class FakeWorld extends World
         this.size = size;
         mapData = new Data[size + size + 1][256][size + size + 1];
 
-        if (!blocksInit)
-        {
-            //Sets registry to avoid trigger creating of ModClassLoader
-            try
-            {
-                ReflectionUtility.setMCField(Block.class, null, "blockRegistry", new FakeRegistryNamespaced());
-                Block.registerBlocks();
-            } catch (IllegalAccessException e)
-            {
-                e.printStackTrace();
-            } catch (NoSuchFieldException e)
-            {
-                e.printStackTrace();
-            }
+
+
         }
     }
 

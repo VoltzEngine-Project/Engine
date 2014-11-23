@@ -3,6 +3,7 @@ package resonant.test.grid;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import resonant.content.wrapper.BlockDummy;
+import resonant.junit.TestRegistry;
 import resonant.lib.prefab.TileConductor;
 import resonant.lib.schematic.StringSchematic;
 
@@ -22,23 +23,19 @@ public class WireMap extends StringSchematic
         this.numberOfWires = numberOfWires;
         this.numberOfBranches = numberOfBranches;
         this.numberOfJunctions = numberOfJunctions;
-
-        if(wire == null)
-        {
-            if (Block.blockRegistry.getObject("wire") == null)
-            {
-                wire = new BlockDummy("JUnit", null, new TileConductor());
-                Block.blockRegistry.addObject(175, "wire", wire);
-            } else
-            {
-                wire = (Block) Block.blockRegistry.getObject("wire");
-            }
-        }
-        addBlock('-', wire);
+        addBlock('-', wire());
     }
 
     public static Block wire()
     {
+        if (wire == null)
+        {
+            if (Block.getBlockFromName("wire") == null)
+            {
+                TestRegistry.registerBlock(new BlockDummy("JUnit", null, new TileConductor()), "wire");
+            }
+            wire = Block.getBlockFromName("wire");
+        }
         return wire;
     }
 
