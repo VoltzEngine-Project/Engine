@@ -10,6 +10,22 @@ import java.util.Random;
 public class MathUtility
 {
 	/**
+	 * Interpolates between point a and point b
+	 *
+	 * @param f A percentage value between 0 to 1
+	 * @return The interpolated value
+	 */
+	public static double lerp(double a, double b, double f)
+	{
+		return a + f * (b - a);
+	}
+
+	public static float lerp(float a, float b, float f)
+	{
+		return a + f * (b - a);
+	}
+
+	/**
 	 * Generates an array of random numbers
 	 *
 	 * @param random    - random instance to be used
