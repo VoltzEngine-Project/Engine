@@ -110,7 +110,7 @@ jar {
     classifier = 'core'
 	
 	manifest {
-        attributes FMLCorePlugin: "resonant.core.ResonantPluginLoader",
+        attributes FMLCorePlugin: "resonantresonant.engine.ResonantPluginLoader",
 				   FMLCorePluginContainsFMLMod: "true"
     }
 	
@@ -129,7 +129,7 @@ task deobfJar(type: Jar) {
     classifier 'dev'
 
     manifest {
-        attributes FMLCorePlugin: "resonant.engine.ResonantPluginLoader",
+        attributes FMLCorePlugin: "resonantresonant.engine.ResonantPluginLoader",
 				   FMLCorePluginContainsFMLMod: "true"
     }
 
