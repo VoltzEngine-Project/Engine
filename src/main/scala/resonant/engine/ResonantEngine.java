@@ -30,10 +30,13 @@ import resonant.api.IBoilHandler;
 import resonant.api.grid.IUpdate;
 import resonant.api.mffs.fortron.FrequencyGridRegistry;
 import resonant.api.recipe.MachineRecipes;
+import resonant.content.factory.resources.DefinedResources;
 import resonant.content.factory.resources.RecipeType;
 import resonant.content.factory.resources.ResourceFactoryHandler;
 import resonant.content.loader.ModManager;
+import resonant.content.prefab.itemblock.ItemBlockMetadata;
 import resonant.content.wrapper.BlockDummy;
+import resonant.engine.content.BlockOre;
 import resonant.engine.content.ItemScrewdriver;
 import resonant.engine.content.debug.TileCreativeBuilder;
 import resonant.engine.content.debug.TileInfiniteFluid;
@@ -72,8 +75,9 @@ public class ResonantEngine
 {
 	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
+    public static final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 
-	@SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
+    @SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
 	public static CommonProxy proxy;
 
 	@Mod.Metadata(References.ID)
@@ -82,33 +86,18 @@ public class ResonantEngine
 	@Instance(References.ID)
 	public static ResonantEngine instance;
 
-	/**
-	 * Blocks TODO move to XML data if requires no logic
-	 */
 	public static BlockDummy blockCreativeBuilder;
-	public static Block blockInfiniteFluid, blockInfiniteEnergy;
-	public static Block blockOreCopper = null;
-	public static Block blockOreTin = null;
+	public static Block blockInfiniteFluid;
+    public static Block blockInfiniteEnergy;
+	public static Block ore = null;
 
-	/**
-	 * Items TODO move to XML data if requires no logic
-	 */
 	public static Item itemWrench;
-	public static Item itemMotor = null;
-	public static Item itemCircuitBasic = null;
-	public static Item itemCircuitAdvanced = null;
-	public static Item itemCircuitElite = null;
 
-	/**
-	 * Ore Generator TODO move to XML data
-	 */
-	public static OreGenerator generationOreCopper = null;
-	public static OreGenerator generationOreTin = null;
-	public static ResourceFactoryHandler resourceFactory;
-
+    private static boolean oresRequested = false;
 	private static ThermalGrid thermalGrid = new ThermalGrid();
-	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
+
 	private LoadableHandler loadables = new LoadableHandler();
+
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt)
@@ -116,7 +105,6 @@ public class ResonantEngine
 		ConfigScanner.instance().generateSets(evt.getAsmData());
 		ConfigHandler.sync(References.CONFIGURATION, References.DOMAIN);
 
-		resourceFactory = new ResourceFactoryHandler();
 		References.CONFIGURATION.load();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
@@ -157,7 +145,7 @@ public class ResonantEngine
 
 		//BlockCreativeBuilder.register(new SchematicTestRoom());
 		//Finish and close all resources
-		References.CONFIGURATION.save();
+
 		loadables.preInit();
 	}
 
@@ -174,6 +162,13 @@ public class ResonantEngine
 
 		//Register UpdateTicker
 		FMLCommonHandler.instance().bus().register(UpdateTicker$.MODULE$.world());
+
+        //Late registration of content
+        if(oresRequested)
+        {
+            ore = contentRegistry.newBlock("ReOres", BlockOre.class, ItemBlockMetadata.class);
+            DefinedResources.registerSet(0, ore, References.CONFIGURATION);
+        }
 
 		loadables.init();
 	}
@@ -206,7 +201,32 @@ public class ResonantEngine
 		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.cobblestone, Blocks.sand);
 		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
 		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
+
+        References.CONFIGURATION.save();
 	}
+
+    /**
+     * Requests that all ores are generated
+     * Must be called in pre-init
+     */
+    public static void requestAllOres()
+    {
+        for(DefinedResources resource : DefinedResources.values())
+        {
+            requestOre(resource);
+        }
+    }
+
+    /**
+     * Requests that all ores are generated
+     * Must be called in pre-init
+     * @param resource - resource to request its ore to generate, still restricted by configs
+     */
+    public static void requestOre(DefinedResources resource)
+    {
+        oresRequested = true;
+        resource.requested = true;
+    }
 
 	@EventHandler
 	public void serverStopped(FMLServerStoppedEvent event)

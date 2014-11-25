@@ -24,10 +24,12 @@ public enum DefinedResources
     LEAD(15, 30, 5, 4),
     ZINC(20, 40, 5, 20),
     NICKEL(15, 60, 5, 8),
-    ALUMINIUM(15, 60, 5, 10),
-    MAGNESIUM(5, 10, 3, 6);
+    ALUMINIUM(15, 60, 5, 10), //bauxite, TODO implement to generate in deserts
+    MAGNESIUM(5, 10, 3, 6), //Magnesite, TODO implement as crystal on cave walls
+    URANIUM(5, 30, 2, 4); //uraninite, UO2, TODO implement custom generator to create rare pockets,
 
     final boolean generateOres;
+    public boolean requested = false;
     boolean genItems;
     //TODO add config for the following to test alternate settings
     //TODO add world creation option for each
@@ -68,7 +70,7 @@ public enum DefinedResources
         {
             DefinedResources resource = values()[i];
 
-            if (resource.generateOres && config.getBoolean("ore_" + resource.name().toLowerCase(), "ORE_GENERATOR", true, ""))
+            if (resource.requested && resource.generateOres && config.getBoolean("ore_" + resource.name().toLowerCase(), "ORE_GENERATOR", true, ""))
             {
                 OreGenerator generator = new OreGenReplaceStone(resource.name().toLowerCase() + "Ore", new ItemStack(block, 1, meta), resource.minY, resource.maxY, resource.amountPerChunk, resource.amountPerBranch, "pickaxe", 1);
                 GameRegistry.registerWorldGenerator(generator, meta);
