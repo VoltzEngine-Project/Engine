@@ -39,6 +39,9 @@ public enum DefinedResources
     int amountPerChunk = 16;
     int amountPerBranch = 5;
 
+    public Block block = null;
+    public int meta = -1;
+
 	private DefinedResources()
 	{
         this.generateOres = false;
@@ -69,7 +72,8 @@ public enum DefinedResources
         for(int i = set * 16; i < (set * 16) + 16 && i < values().length; i++)
         {
             DefinedResources resource = values()[i];
-
+            resource.block = block;
+            resource.meta = meta;
             if (resource.requested && resource.generateOres && config.getBoolean("ore_" + resource.name().toLowerCase(), "ORE_GENERATOR", true, ""))
             {
                 OreGenerator generator = new OreGenReplaceStone(resource.name().toLowerCase() + "Ore", new ItemStack(block, 1, meta), resource.minY, resource.maxY, resource.amountPerChunk, resource.amountPerBranch, "pickaxe", 1);

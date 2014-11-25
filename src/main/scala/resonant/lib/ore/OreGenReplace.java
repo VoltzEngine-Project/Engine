@@ -132,10 +132,6 @@ public class OreGenReplace extends OreGenerator
 	@Override
 	public boolean isOreGeneratedInWorld(World world, IChunkProvider chunkGenerator)
 	{
-		if (!this.shouldGenerate)
-		{
-			return false;
-		}
 		if (this.ignoreSurface && chunkGenerator instanceof ChunkProviderGenerate)
 		{
 			return false;

@@ -24,8 +24,6 @@ public abstract class OreGenerator implements IWorldGenerator
 	 */
 	public String name;
 
-	public boolean shouldGenerate = false;
-
 	public Block oreBlock;
 
 	public int oreMeta;
@@ -60,24 +58,6 @@ public abstract class OreGenerator implements IWorldGenerator
 		block.setHarvestLevel(this.harvestTool, this.harvestLevel, meta);
 	}
 
-	/**
-	 * Checks the config file and see if Universal Electricity should generate this ore
-	 */
-	private static boolean shouldGenerateOre(Configuration configuration, String oreName)
-	{
-		boolean defaultValue = OreDictionary.getOres(oreName).size() == 0;
-		configuration.load();
-		boolean shouldGenerate = configuration.get("Ore_Generation", "Generate " + oreName, defaultValue).getBoolean(defaultValue);
-		configuration.save();
-		return shouldGenerate;
-	}
-
-	public OreGenerator enable(Configuration config)
-	{
-		this.shouldGenerate = shouldGenerateOre(config, this.name);
-		return this;
-	}
-
 	public abstract void generate(World world, Random random, int varX, int varZ);
 
 	public abstract boolean isOreGeneratedInWorld(World world, IChunkProvider chunkGenerator);
@@ -90,7 +70,7 @@ public abstract class OreGenerator implements IWorldGenerator
 
 		// Checks to make sure this is the normal world
 
-		if (shouldGenerate && isOreGeneratedInWorld(world, chunkGenerator))
+		if (isOreGeneratedInWorld(world, chunkGenerator))
 		{
 			generate(world, rand, chunkX, chunkZ);
 		}

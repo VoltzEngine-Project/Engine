@@ -38,6 +38,7 @@ import resonant.content.prefab.itemblock.ItemBlockMetadata;
 import resonant.content.wrapper.BlockDummy;
 import resonant.engine.content.BlockOre;
 import resonant.engine.content.ItemScrewdriver;
+import resonant.engine.content.debug.ItemInstaHole;
 import resonant.engine.content.debug.TileCreativeBuilder;
 import resonant.engine.content.debug.TileInfiniteFluid;
 import resonant.engine.content.tool.ToolMode;
@@ -75,7 +76,7 @@ public class ResonantEngine
 {
 	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
-    public static final PacketManager packetHandler = new PacketManager(References.CHANNEL);
+    public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 
     @SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
 	public static CommonProxy proxy;
@@ -88,10 +89,13 @@ public class ResonantEngine
 
 	public static BlockDummy blockCreativeBuilder;
 	public static Block blockInfiniteFluid;
-    public static Block blockInfiniteEnergy;
 	public static Block ore = null;
 
 	public static Item itemWrench;
+    public static Item instaHole;
+
+    @Deprecated
+    public static ResourceFactoryHandler resourceFactory = new ResourceFactoryHandler();
 
     private static boolean oresRequested = false;
 	private static ThermalGrid thermalGrid = new ThermalGrid();
@@ -124,7 +128,8 @@ public class ResonantEngine
 		 * Multiblock Handling
 		 */
 		SyntheticMultiblock.instance = new SyntheticMultiblock();
-		//TODO setup ores
+        if(runningAsDev)
+            instaHole = contentRegistry.newItem(new ItemInstaHole());
 		if (References.CONFIGURATION.get("Content", "LoadScrewDriver", true).getBoolean(true))
 		{
 			itemWrench = new ItemScrewdriver();
