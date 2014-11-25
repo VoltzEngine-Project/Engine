@@ -56,68 +56,74 @@ public class OreGenReplace extends OreGenerator
 	@Override
 	public void generate(World world, Random random, int varX, int varZ)
 	{
-		try
-		{
-			for (int i = 0; i < this.amountPerChunk; i++)
-			{
-				int x = varX + random.nextInt(16);
-				int z = varZ + random.nextInt(16);
-				int y = random.nextInt(Math.max(this.maxGenerateLevel - this.minGenerateLevel, 0)) + this.minGenerateLevel;
-				this.generateReplace(world, random, x, y, z);
-			}
-		}
-		catch (Exception e)
-		{
-			System.out.println("Error generating ore: " + this.name);
-			e.printStackTrace();
-		}
+        for (int i = 0; i < this.amountPerChunk; i++)
+        {
+            int x = varX + random.nextInt(16);
+            int z = varZ + random.nextInt(16);
+            int y = random.nextInt(Math.max(this.maxGenerateLevel - this.minGenerateLevel, 0)) + this.minGenerateLevel;
+            this.generateReplace(world, random, x, y, z);
+        }
 	}
 
-	public boolean generateReplace(World par1World, Random par2Random, int par3, int par4, int par5)
+    /**
+     * Picks a random location in the chunk based on a random rotation and Y value
+     * @param world - world
+     * @param rand - random
+     * @param varX - randomX
+     * @param varY - randomY
+     * @param varZ - randomZ
+     * @return true if it placed blocks
+     */
+	public boolean generateReplace(World world, Random rand, int varX, int varY, int varZ)
 	{
-		float var6 = par2Random.nextFloat() * (float) Math.PI;
-		double var7 = par3 + 8 + MathHelper.sin(var6) * this.amountPerBranch / 8.0F;
-		double var9 = par3 + 8 - MathHelper.sin(var6) * this.amountPerBranch / 8.0F;
-		double var11 = par5 + 8 + MathHelper.cos(var6) * this.amountPerBranch / 8.0F;
-		double var13 = par5 + 8 - MathHelper.cos(var6) * this.amountPerBranch / 8.0F;
-		double var15 = par4 + par2Random.nextInt(3) - 2;
-		double var17 = par4 + par2Random.nextInt(3) - 2;
+        /*TODO recode this as this is causing extra gen time during chunk generation
+            possibly change it to use a simple pathfinding logic to place blocks next to center block
+            In which we use ForgeDirection in combination with a range limiter of 2
+             AS well make sure that only the first iteration uses UP & DOWN*/
+		float angle = rand.nextFloat() * (float) Math.PI;
+		double rxUpper = varX + 8 + MathHelper.sin(angle) * this.amountPerBranch / 8.0F;
+		double rxLower = varX + 8 - MathHelper.sin(angle) * this.amountPerBranch / 8.0F;
+		double rzUpper = varZ + 8 + MathHelper.cos(angle) * this.amountPerBranch / 8.0F;
+		double rzLower = varZ + 8 - MathHelper.cos(angle) * this.amountPerBranch / 8.0F;
+		double randomY = varY + rand.nextInt(3) - 2;
+		double randomY2 = varY + rand.nextInt(3) - 2;
 
-		for (int var19 = 0; var19 <= this.amountPerBranch; ++var19)
+		for (int i = 0; i <= this.amountPerBranch; ++i)
 		{
-			double var20 = var7 + (var9 - var7) * var19 / this.amountPerBranch;
-			double var22 = var15 + (var17 - var15) * var19 / this.amountPerBranch;
-			double var24 = var11 + (var13 - var11) * var19 / this.amountPerBranch;
-			double var26 = par2Random.nextDouble() * this.amountPerBranch / 16.0D;
-			double var28 = (MathHelper.sin(var19 * (float) Math.PI / this.amountPerBranch) + 1.0F) * var26 + 1.0D;
-			double var30 = (MathHelper.sin(var19 * (float) Math.PI / this.amountPerBranch) + 1.0F) * var26 + 1.0D;
-			int var32 = MathHelper.floor_double(var20 - var28 / 2.0D);
-			int var33 = MathHelper.floor_double(var22 - var30 / 2.0D);
-			int var34 = MathHelper.floor_double(var24 - var28 / 2.0D);
-			int var35 = MathHelper.floor_double(var20 + var28 / 2.0D);
-			int var36 = MathHelper.floor_double(var22 + var30 / 2.0D);
-			int var37 = MathHelper.floor_double(var24 + var28 / 2.0D);
+			double var20 = rxUpper + (rxLower - rxUpper) * i / this.amountPerBranch;
+			double var22 = randomY + (randomY2 - randomY) * i / this.amountPerBranch;
+			double var24 = rzUpper + (rzLower - rzUpper) * i / this.amountPerBranch;
+			double var26 = rand.nextDouble() * this.amountPerBranch / 16.0D;
+			double var28 = (MathHelper.sin(i * (float) Math.PI / this.amountPerBranch) + 1.0F) * var26 + 1.0D;
+			double var30 = (MathHelper.sin(i * (float) Math.PI / this.amountPerBranch) + 1.0F) * var26 + 1.0D;
 
-			for (int var38 = var32; var38 <= var35; ++var38)
+            int startX = MathHelper.floor_double(var20 - var28 / 2.0D);
+			int startY = MathHelper.floor_double(var22 - var30 / 2.0D);
+			int startZ = MathHelper.floor_double(var24 - var28 / 2.0D);
+			int endX = MathHelper.floor_double(var20 + var28 / 2.0D);
+			int endY = MathHelper.floor_double(var22 + var30 / 2.0D);
+			int endZ = MathHelper.floor_double(var24 + var28 / 2.0D);
+
+			for (int px = startX; px <= endX; ++px)
 			{
-				double var39 = (var38 + 0.5D - var20) / (var28 / 2.0D);
+				double dx = (px + 0.5D - var20) / (var28 / 2.0D);
 
-				if (var39 * var39 < 1.0D)
+				if (dx * dx < 1.0D)
 				{
-					for (int var41 = var33; var41 <= var36; ++var41)
+					for (int py = startY; py <= endY; ++py)
 					{
-						double var42 = (var41 + 0.5D - var22) / (var30 / 2.0D);
+						double dy = (py + 0.5D - var22) / (var30 / 2.0D);
 
-						if (var39 * var39 + var42 * var42 < 1.0D)
+						if (dx * dx + dy * dy < 1.0D)
 						{
-							for (int var44 = var34; var44 <= var37; ++var44)
+							for (int pz = startZ; pz <= endZ; ++pz)
 							{
-								double var45 = (var44 + 0.5D - var24) / (var28 / 2.0D);
+								double dz = (pz + 0.5D - var24) / (var28 / 2.0D);
 
-								Block block = par1World.getBlock(var38, var41, var44);
-								if (var39 * var39 + var42 * var42 + var45 * var45 < 1.0D && (this.replaceBlock == Blocks.air || block == this.replaceBlock))
+								Block block = world.getBlock(px, py, pz);
+								if (dx * dx + dy * dy + dz * dz < 1.0D && (this.replaceBlock == Blocks.air || block == this.replaceBlock))
 								{
-									par1World.setBlock(var38, var41, var44, this.oreBlock, this.oreMeta, 2);
+									world.setBlock(px, py, pz, this.oreBlock, this.oreMeta, 2);
 								}
 							}
 						}
