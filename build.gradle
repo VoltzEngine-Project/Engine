@@ -110,7 +110,7 @@ jar {
     classifier = 'core'
 	
 	manifest {
-        attributes FMLCorePlugin: "resonantresonant.engine.ResonantPluginLoader",
+        attributes FMLCorePlugin: "resonant.engine.ResonantPluginLoader",
 				   FMLCorePluginContainsFMLMod: "true"
     }
 	
