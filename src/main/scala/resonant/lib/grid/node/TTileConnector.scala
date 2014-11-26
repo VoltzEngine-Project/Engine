@@ -14,23 +14,23 @@ trait TTileConnector[A <: AnyRef] extends NodeConnector[A]
   {
     super.rebuild()
 
-    ForgeDirection.VALID_DIRECTIONS.foreach(direction =>
+    ForgeDirection.VALID_DIRECTIONS.foreach(toDir =>
     {
-      if (canConnect(direction))
+      if (canConnect(toDir))
       {
-        val tile = (toVectorWorld + direction).getTileEntity
+        val tile = (toVectorWorld + toDir).getTileEntity
 
         if (tile != null)
         {
-          val node = getNodeFrom(tile, direction.getOpposite)
+          val node = getNodeFrom(tile, toDir.getOpposite)
 
-          if (node != null && canConnect(node.asInstanceOf[A], direction) && node.asInstanceOf[NodeConnector[A]].canConnect(this.asInstanceOf[A], direction.getOpposite))
+          if (node != null && canConnect(node.asInstanceOf[A], toDir) && node.asInstanceOf[NodeConnector[A]].canConnect(this.asInstanceOf[A], toDir.getOpposite))
           {
-            connect(node.asInstanceOf[A], direction)
+            connect(node.asInstanceOf[A], toDir)
           }
           else if (tile.getClass.isAssignableFrom(getCompareClass))
           {
-            connect(tile.asInstanceOf[A], direction)
+            connect(tile.asInstanceOf[A], toDir)
           }
         }
       }
