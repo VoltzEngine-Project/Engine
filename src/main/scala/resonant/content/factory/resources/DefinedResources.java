@@ -6,6 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import resonant.lib.ore.OreGenReplaceStone;
 import resonant.lib.ore.OreGenerator;
+import resonant.lib.utility.LanguageUtility;
+import resonant.lib.utility.TextUtility;
 
 /**
  * Generic set of ore types that are commonly found in most mods, and MC itself
@@ -26,9 +28,10 @@ public enum DefinedResources
     NICKEL(15, 60, 5, 8),
     ALUMINIUM(15, 60, 5, 10), //bauxite, TODO implement to generate in deserts
     MAGNESIUM(5, 10, 3, 6), //Magnesite, TODO implement as crystal on cave walls
-    URANIUM(5, 30, 2, 4); //uraninite, UO2, TODO implement custom generator to create rare pockets,
+    URANIUM(5, 30, 2, 4), //uraninite, UO2, TODO implement custom generator to create rare pockets,
+    BRASS();
 
-    final boolean generateOres;
+    public final boolean generateOres;
     public boolean requested = false;
     boolean genItems;
     //TODO add config for the following to test alternate settings
@@ -76,7 +79,7 @@ public enum DefinedResources
             resource.meta = meta;
             if (resource.requested && resource.generateOres && config.getBoolean("ore_" + resource.name().toLowerCase(), "ORE_GENERATOR", true, ""))
             {
-                OreGenerator generator = new OreGenReplaceStone(resource.name().toLowerCase() + "Ore", new ItemStack(block, 1, meta), resource.minY, resource.maxY, resource.amountPerChunk, resource.amountPerBranch, "pickaxe", 1);
+                OreGenerator generator = new OreGenReplaceStone("ore" + LanguageUtility.capitalizeFirst(resource.name().toLowerCase()), new ItemStack(block, 1, meta), resource.minY, resource.maxY, resource.amountPerChunk, resource.amountPerBranch, "pickaxe", 1);
                 GameRegistry.registerWorldGenerator(generator, meta);
             }
             meta++;

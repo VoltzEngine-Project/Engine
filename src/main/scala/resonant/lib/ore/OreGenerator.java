@@ -54,7 +54,7 @@ public abstract class OreGenerator implements IWorldGenerator
 		this.harvestLevel = harvestLevel;
 		this.oreBlock = block;
 		this.oreMeta = meta;
-		OreDictionary.registerOre(name, new ItemStack(block, meta));
+		OreDictionary.registerOre(name, new ItemStack(block, 1, meta));
 		block.setHarvestLevel(this.harvestTool, this.harvestLevel, meta);
 	}
 

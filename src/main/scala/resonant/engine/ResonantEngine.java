@@ -37,6 +37,7 @@ import resonant.content.loader.ModManager;
 import resonant.content.prefab.itemblock.ItemBlockMetadata;
 import resonant.content.wrapper.BlockDummy;
 import resonant.engine.content.BlockOre;
+import resonant.engine.content.ItemBlockOre;
 import resonant.engine.content.ItemScrewdriver;
 import resonant.engine.content.debug.ItemInstaHole;
 import resonant.engine.content.debug.TileCreativeBuilder;
@@ -171,7 +172,7 @@ public class ResonantEngine
         //Late registration of content
         if(oresRequested)
         {
-            ore = contentRegistry.newBlock("ReOres", BlockOre.class, ItemBlockMetadata.class);
+            ore = contentRegistry.newBlock("ReOres", BlockOre.class, ItemBlockOre.class);
             DefinedResources.registerSet(0, ore, References.CONFIGURATION);
         }
 
