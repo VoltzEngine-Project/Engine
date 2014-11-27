@@ -4,7 +4,7 @@
     "description": "Universal Electricity is a Minecraft modding library that provides an easy, flexible energy framework and compatibility bridges between various energy systems in Minecraft.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "www.universalelectricity.com/",
+    "url": "http://universalelectricity.com/resonant-engine/",
     "updateUrl": "",
     "authors": ["Calclavia", "DarkCow", "tgame14", "Alex_hawks"],
     "credits": "",
