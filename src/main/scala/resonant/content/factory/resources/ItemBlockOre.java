@@ -1,4 +1,4 @@
-package resonant.engine.content;
+package resonant.content.factory.resources;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

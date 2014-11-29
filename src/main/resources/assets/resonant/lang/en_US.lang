@@ -188,3 +188,5 @@ info.recipes.tooltip=Hold #0J#1 for materials
 
 info.energylevel.waila=Current Energy Level
 info.energycapacity.waila=Maximum Energy Level
+
+info.isCraftingOnlyItem=Crafting Item

@@ -1,11 +1,9 @@
 package resonant.content.factory.resources;
 
-import scala.tools.nsc.doc.model.Def;
-
 /**
  * Created by robert on 11/23/2014.
  */
-public enum DefinedItemTypes
+public enum DefinedGenItems
 {
     DUST(true),
     RUBBLE(true),
@@ -20,9 +18,15 @@ public enum DefinedItemTypes
     HOE_HEAD(false);
 
     public boolean shouldGenerate;
+    public boolean requested = false;
 
-    private DefinedItemTypes(boolean gen)
+    private DefinedGenItems(boolean gen)
     {
         this.shouldGenerate = gen;
+    }
+
+    public GeneratedOreItem getGen()
+    {
+        return new GeneratedOreItem(name().toLowerCase());
     }
 }
