@@ -172,8 +172,10 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     creativeTab = value
   }
 
-  /** Sets the creative tab
-    * @param value - tab to set */
+  /**
+   * Sets the creative tab
+   * @param value - tab to set
+   */
   def setCreativeTab(value: CreativeTabs)
   {
     creativeTab = value
@@ -492,7 +494,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
    */
   def onRemove(block: Block, par6: Int)
   {
-    onWorldSeparate
+    onWorldSeparate()
   }
 
   def onDestroyedByExplosion(ex: Explosion)
