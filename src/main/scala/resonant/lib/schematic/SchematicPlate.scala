@@ -15,7 +15,6 @@ import resonant.lib.transform.vector.Vector3
  */
 class SchematicPlate(name: String, block: Block) extends Schematic
 {
-
   override def getName: String =
   {
     return name
@@ -23,21 +22,16 @@ class SchematicPlate(name: String, block: Block) extends Schematic
 
   def getStructure(dir: ForgeDirection, size: Int): HashMap[Vector3, Pair[Block, Integer]] =
   {
-    val returnMap: HashMap[Vector3, Pair[Block, Integer]] = new HashMap[Vector3, Pair[Block, Integer]]
+    val returnMap = new HashMap[Vector3, Pair[Block, Integer]]
 
-    for (x: Int <- size to -size)
+    for (x <- -size to size; y <- -size to size; z <- -size to size)
     {
-      for (y: Int <- size to -size)
+      if ((dir.offsetX != 0 && x == 0) || (dir.offsetY != 0 && y == 0) || (dir.offsetZ != 0 && z == 0))
       {
-        for (z: Int <- size to -size)
-        {
-          if ((dir.offsetX != 0 && x == 0) || (dir.offsetY != 0 && y == 0) || (dir.offsetZ != 0 && z == 0))
-          {
-            returnMap.put(new Vector3(x, y, z), new Pair[Block, Integer](block, dir.ordinal))
-          }
-        }
+        returnMap.put(new Vector3(x, y, z), new Pair[Block, Integer](block, dir.ordinal))
       }
     }
+
     return returnMap
   }
 }

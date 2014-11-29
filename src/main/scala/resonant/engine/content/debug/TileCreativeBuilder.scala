@@ -30,11 +30,12 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
 
   //Constructor
   creativeTab = CreativeTabs.tabTools
-  rotationMask = Integer.parseInt("111111", 2).toByte
+  rotationMask = 0x3F
 
   override def update()
   {
     super.update()
+
     if (!world.isRemote)
     {
       if (buildMap != null)
@@ -46,7 +47,6 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
         }
         doBuild = false
         buildMap = null
-        sendDescPacket()
       }
       else
       {
