@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import resonant.engine.content.BlockOre;
+import resonant.content.factory.resources.BlockOre;
 
 /** Used to create a hole in the ground for looking at world generation amounts, caves, etc
  * Created by robert on 11/25/2014.

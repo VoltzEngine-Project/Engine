@@ -1,4 +1,4 @@
-package resonant.engine.content;
+package resonant.content.factory.resources;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

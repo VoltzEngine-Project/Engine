@@ -7,7 +7,6 @@ import net.minecraftforge.common.config.Configuration;
 import resonant.lib.ore.OreGenReplaceStone;
 import resonant.lib.ore.OreGenerator;
 import resonant.lib.utility.LanguageUtility;
-import resonant.lib.utility.TextUtility;
 
 /**
  * Generic set of ore types that are commonly found in most mods, and MC itself
@@ -33,17 +32,19 @@ public enum DefinedResources
 
     public final boolean generateOres;
     public boolean requested = false;
-    boolean genItems;
+    public Block block = null;
+    public int meta = -1;
+
     //TODO add config for the following to test alternate settings
     //TODO add world creation option for each
     //TODO add easy world creation config to generation amount(NONE, REDUCED, NORMAL, INCREASED, ABUNDANT)
-    int minY = 1;
-    int maxY = 100;
-    int amountPerChunk = 16;
-    int amountPerBranch = 5;
 
-    public Block block = null;
-    public int meta = -1;
+
+
+    private int minY = 1;
+    private int maxY = 100;
+    private int amountPerChunk = 16;
+    private int amountPerBranch = 5;
 
 	private DefinedResources()
 	{
@@ -52,16 +53,15 @@ public enum DefinedResources
 
     private DefinedResources(int min, int max, int amountPerBranch, int amountPerChunk)
     {
-        this(min, max, amountPerBranch, amountPerChunk, true);
+        this(min, max, amountPerBranch, amountPerChunk, null);
     }
-    private DefinedResources(int min, int max, int amountPerBranch, int amountPerChunk, boolean genItems)
+    private DefinedResources(int min, int max, int amountPerBranch, int amountPerChunk, DefinedGenItems... itemsToGen)
     {
         this.generateOres = true;
         this.minY = min;
         this.maxY = max;
         this.amountPerBranch = amountPerBranch;
         this.amountPerChunk = amountPerChunk;
-        this.genItems = genItems;
     }
 
     /** Registers first 16 ores
