@@ -26,6 +26,21 @@ public class MathUtility
 	}
 
 	/**
+	 * Caps a value between -bounds to +bounds
+	 *
+	 * @return A value capped between two bounds.
+	 */
+	public static double absCap(double value, double bounds)
+	{
+		return Math.min(Math.max(value, -bounds), bounds);
+	}
+
+	public static float absCap(float value, float bounds)
+	{
+		return Math.min(Math.max(value, -bounds), bounds);
+	}
+
+	/**
 	 * Generates an array of random numbers
 	 *
 	 * @param random    - random instance to be used
