@@ -9,7 +9,7 @@ import resonant.lib.transform.vector.Vector3
 
 trait TRotatable extends SpatialBlock with IRotatable
 {
-  var rotationMask = Integer.parseInt("111100", 2).toByte
+  var rotationMask = 0x3C
   var isFlipPlacement = false
 
   override def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata)
