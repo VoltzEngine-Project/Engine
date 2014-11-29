@@ -29,6 +29,12 @@ public class BlockOre extends Block
         setCreativeTab(CreativeTabs.tabBlock);
     }
 
+    @Override
+    public int damageDropped(int m)
+    {
+        return m;
+    }
+
     @SideOnly(Side.CLIENT) @Override
     public IIcon getIcon(int side, int meta)
     {
