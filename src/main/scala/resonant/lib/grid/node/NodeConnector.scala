@@ -57,14 +57,19 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
 
   def disconnect[B <: A](obj: B)
   {
-    _connectedMask = _connectedMask.closeMask(connectionMap(obj))
-    connectionMap.remove(obj)
+    connectionMap.remove(obj) match
+    {
+      case Some(x) => _connectedMask = _connectedMask.closeMask(x)
+      case _ =>
+    }
   }
 
   def disconnect(dir: ForgeDirection)
   {
-    _connectedMask = _connectedMask.closeMask(dir)
-    connectionMap.removeAll(connectionMap.filter(_._2 == dir))
+    if (connectionMap.removeAll(connectionMap.filter(_._2 == dir)))
+    {
+      _connectedMask = _connectedMask.closeMask(dir)
+    }
   }
 
   def clearConnections()

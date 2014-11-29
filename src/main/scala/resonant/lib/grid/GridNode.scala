@@ -13,18 +13,19 @@ import scala.collection.convert.wrapAll._
 class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
 {
   /**
+   * Is the grid dead?
+   */
+  var dead = false
+
+  /**
    * Rebuild the node list starting from the first node and recursively iterating through its connections.
    */
   def reconstruct(first: N)
   {
     //TODO: Reconstruct may be called MANY times unnecessarily multiple times. Add check to prevent extra calls
-    //if (!getNodes.contains(first))
-    {
-      getNodes.clear()
-      populate(first)
-
-      getNodes.foreach(_.onGridReconstruct())
-    }
+    getNodes.clear()
+    populate(first)
+    getNodes.foreach(_.onGridReconstruct())
   }
 
   /**
@@ -54,7 +55,16 @@ class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
     remove(first)
     first.setGrid(null)
 
-    if (getNodes.size() > 0)
-      reconstruct(getNodes.head)
+    getNodes.toList.foreach(n =>
+    {
+      if (n.grid == this)
+      {
+        n.setGrid(null)
+        n.reconstruct()
+      }
+    })
+
+    //This grid is now dead
+    dead = true
   }
 }

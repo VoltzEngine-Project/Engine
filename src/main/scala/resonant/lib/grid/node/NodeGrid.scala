@@ -2,7 +2,7 @@ package resonant.lib.grid.node
 
 import resonant.api.grid.INodeProvider
 import resonant.lib.grid.GridNode
-
+import scala.collection.convert.wrapAll._
 /**
  * A node that is part of a larger grid of nodes
  *
@@ -24,6 +24,10 @@ abstract class NodeGrid[A <: NodeGrid[A]](parent: INodeProvider) extends NodeCon
 
   override def deconstruct()
   {
+    /**
+     * Attempt to remove connections to this node in other nodes
+     */
+    connections.foreach(_.disconnect(this.asInstanceOf[A]))
     super.deconstruct()
     grid.deconstruct(this.asInstanceOf[A])
   }
