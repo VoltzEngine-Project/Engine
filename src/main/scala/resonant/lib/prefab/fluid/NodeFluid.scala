@@ -35,7 +35,7 @@ class NodeFluid(parent: INodeProvider, volume: Int = FluidContainerRegistry.BUCK
       if (canConnect(from))
       {
         val ret = super.fill(from, resource, doFill)
-        onFluidChanged.apply()
+        onFluidChanged()
         return ret
       }
       return 0
@@ -49,7 +49,7 @@ class NodeFluid(parent: INodeProvider, volume: Int = FluidContainerRegistry.BUCK
       if (canConnect(from))
       {
         val ret = super.drain(from, resource, doDrain)
-        onFluidChanged.apply()
+        onFluidChanged()
         return ret
       }
       return null
@@ -63,7 +63,7 @@ class NodeFluid(parent: INodeProvider, volume: Int = FluidContainerRegistry.BUCK
       if (canConnect(from))
       {
         val ret = super.drain(from, maxDrain, doDrain)
-        onFluidChanged.apply()
+        onFluidChanged()
         return ret
       }
 
