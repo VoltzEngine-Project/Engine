@@ -21,9 +21,10 @@ import net.minecraft.world.{Explosion, IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
 import org.lwjgl.opengl.{GL11, GL12}
 import resonant.content.prefab.itemblock.ItemBlockTooltip
+import resonant.content.prefab.scal.TRotatable
 import resonant.content.prefab.scal.render.ISimpleItemRenderer
 import resonant.content.wrapper.{BlockDummy, RenderTileDummy}
-import resonant.lib.content.prefab.{TIO, TRotatable}
+import resonant.lib.content.prefab.TIO
 import resonant.lib.render.RenderUtility
 import resonant.lib.transform.region.Cuboid
 import resonant.lib.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorld}

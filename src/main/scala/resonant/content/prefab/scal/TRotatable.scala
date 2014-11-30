@@ -1,4 +1,4 @@
-package resonant.lib.content.prefab
+package resonant.content.prefab.scal
 
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.MathHelper

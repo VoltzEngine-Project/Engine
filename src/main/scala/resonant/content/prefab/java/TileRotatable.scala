@@ -1,8 +1,7 @@
-package resonant.lib.content.prefab.java
+package resonant.content.prefab.java
 
 import net.minecraft.block.material.Material
-import resonant.content.prefab.java.TileAdvanced
-import resonant.lib.content.prefab.TRotatable
+import resonant.content.prefab.scal.TRotatable
 
 /**
  * @since 27/05/14

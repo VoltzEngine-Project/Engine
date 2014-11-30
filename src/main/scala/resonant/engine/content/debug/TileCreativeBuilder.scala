@@ -8,9 +8,9 @@ import net.minecraft.block.material.Material
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import resonant.content.prefab.java.TileAdvanced
+import resonant.content.prefab.scal.TRotatable
 import resonant.engine.ResonantEngine
 import resonant.lib.`type`.Pair
-import resonant.lib.content.prefab.TRotatable
 import resonant.lib.network.discriminator.{PacketTile, PacketType}
 import resonant.lib.network.handle.{TPacketReceiver, TPacketSender}
 import resonant.lib.schematic.SchematicRegistry
@@ -76,7 +76,7 @@ class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable wi
   override def read(buf: ByteBuf, packetID: Int, packet: PacketType)
   {
     val player = packet.sender
-    
+
     if (!world.isRemote)
     {
       if (packetID == 0 && player.capabilities.isCreativeMode)
