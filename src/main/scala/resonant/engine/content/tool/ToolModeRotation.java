@@ -1,6 +1,5 @@
 package resonant.engine.content.tool;
 
-import ic2.api.tile.IWrenchable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,34 +33,7 @@ public class ToolModeRotation extends ToolMode
 	{
 		TileEntity tile = world.getTileEntity(x, y, z);
 
-		if (tile instanceof IWrenchable && ((IWrenchable) tile).wrenchCanSetFacing(player, side))
-		{
-			ForgeDirection direction = ForgeDirection.getOrientation(side);
-			short setSide = 0;
-
-			if (player.isSneaking())
-			{
-				direction = direction.getOpposite();
-			}
-			setSide = (short) direction.ordinal();
-
-			if (setSide != ((IWrenchable) tile).getFacing())
-			{
-				((IWrenchable) tile).setFacing(setSide);
-			}
-			else if (((IWrenchable) tile).wrenchCanRemove(player))
-			{
-				ItemStack output = ((IWrenchable) tile).getWrenchDrop(player);
-
-				if (output != null)
-				{
-					InventoryUtility.dropItemStack(world, new Vector3(x, y, z), output);
-					world.setBlockToAir(x, y, z);
-				}
-			}
-
-			return true;
-		}
+		//TODO add IC2 support
 
 		return false;
 	}

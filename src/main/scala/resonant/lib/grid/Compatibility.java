@@ -50,7 +50,7 @@ public class Compatibility
 	{
 		if (handler != null)
 		{
-			Class clazz = handler.getClass();
+			Class clazz = handler instanceof ItemStack ? ((ItemStack) handler).getItem().getClass() : handler.getClass();
 
 			if (energyHandlerCache.containsKey(clazz))
 			{
