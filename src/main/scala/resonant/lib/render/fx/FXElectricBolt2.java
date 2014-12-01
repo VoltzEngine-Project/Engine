@@ -369,7 +369,7 @@ public class FXElectricBolt2 extends EntityFX
 
 		public BoltPoint(Vector3 base, Vector3 offset)
 		{
-			super(base.clone().add(offset));
+			super(base.add(offset));
 			this.base = base;
 			this.offset = offset;
 		}

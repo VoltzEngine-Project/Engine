@@ -10,7 +10,7 @@ import net.minecraft.world.World
 import net.minecraftforge.common.DimensionManager
 import net.minecraftforge.common.util.ForgeDirection
 
-class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) extends Vector3(newX, newY, newZ) with IVectorWorld
+class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) extends Vector3(newX, newY, newZ)
 {
   def this(nbt: NBTTagCompound) = this(DimensionManager.getWorld(nbt.getInteger("dimension")), nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
 
@@ -21,6 +21,8 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
   def this(tile: TileEntity) = this(tile.getWorldObj, tile.xCoord, tile.yCoord, tile.zCoord)
 
   def this(vec: IVectorWorld) = this(vec.world, vec.x, vec.y, vec.z)
+
+  def this(world: World, vector: Vector3) = this(world, vector.x, vector.y, vector.z)
 
   def this(world: World, vector: IVector3) = this(world, vector.x, vector.y, vector.z)
 

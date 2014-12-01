@@ -46,7 +46,7 @@ public class BuildMap
 	{
 		for (int i = 0; i < numberOfBlocks; i++)
 		{
-			blocks[lastBlockPos + i].place((VectorWorld) coords[i].clone().add(spot));
+			blocks[lastBlockPos + i].place((VectorWorld) coords[i].add(spot));
 		}
 		lastBlockPos += numberOfBlocks;
 	}

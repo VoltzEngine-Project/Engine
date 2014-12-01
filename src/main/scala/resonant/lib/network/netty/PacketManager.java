@@ -21,6 +21,7 @@ import resonant.lib.network.discriminator.PacketType;
 import resonant.lib.network.handle.TPacketSender;
 import resonant.lib.transform.vector.IVector3;
 import resonant.lib.transform.vector.IVectorWorld;
+import resonant.lib.transform.vector.Vector3;
 
 import java.util.EnumMap;
 
@@ -159,6 +160,11 @@ public class PacketManager implements ICompatProxy
 	}
 
 	public void sendToAllAround(AbstractPacket message, World world, IVector3 point, double range)
+	{
+		sendToAllAround(message, world, point.x(), point.y(), point.z(), range);
+	}
+
+	public void sendToAllAround(AbstractPacket message, World world, Vector3 point, double range)
 	{
 		sendToAllAround(message, world, point.x(), point.y(), point.z(), range);
 	}
