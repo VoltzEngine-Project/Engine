@@ -157,7 +157,7 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
   def getVectors(center: Vector3, radius: Int): List[Vector3] =
   {
     val vectors = new ArrayList[Vector3];
-    foreach(vector => if (center.distance(vector.asInstanceOf[IVector3]) <= radius) vectors.add(vector))
+    foreach(vector => if (center.distanceTo(vector.asInstanceOf[IVector3]) <= radius) vectors.add(vector))
     return vectors
   }
 

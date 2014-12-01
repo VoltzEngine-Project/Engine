@@ -334,7 +334,7 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
 
   def zCross = new Vector3(-this.y, this.x, 0.0D)
 
-  def distance(other: IVector3) : Double  =
+  def distanceTo(other: IVector3) : Double  =
   {
     return new Vector3(other.x - x, other.y - y, other.z - z).magnitude
   }
@@ -414,7 +414,7 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
     if (entity == null)
       return block
 
-    if (distance(new Vector3(block.hitVec).asInstanceOf[IVector3]) < distance(new Vector3(entity.hitVec).asInstanceOf[IVector3]))
+    if (distanceTo(new Vector3(block.hitVec).asInstanceOf[IVector3]) < distanceTo(new Vector3(entity.hitVec).asInstanceOf[IVector3]))
       return block
 
     return entity
@@ -427,7 +427,7 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
     var closestEntityMOP: MovingObjectPosition = null
     var closetDistance = 0D
 
-    val checkDistance = distance(end.asInstanceOf[IVector3])
+    val checkDistance = distanceTo(end.asInstanceOf[IVector3])
     val scanRegion = AxisAlignedBB.getBoundingBox(-checkDistance, -checkDistance, -checkDistance, checkDistance, checkDistance, checkDistance).offset(x, y, z)
 
     val checkEntities = world.getEntitiesWithinAABB(classOf[Entity], scanRegion) map (_.asInstanceOf[Entity])
@@ -456,7 +456,7 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
             }
             else
             {
-              val dist = distance(new Vector3(hit.hitVec).asInstanceOf[IVector3])
+              val dist = distanceTo(new Vector3(hit.hitVec).asInstanceOf[IVector3])
 
               if (dist < closetDistance || closetDistance == 0)
               {
