@@ -189,11 +189,11 @@ repositories {
     }
     maven {
         name "Mobius Repo"
-        url 'http://mobiusstrip.eu/maven'
+        url "http://mobiusstrip.eu/maven"
     }
     maven {
         name 'CB Repo'
-        url 'https://chickenbones.net/maven/'
+        url "http://chickenbones.net/maven/"
     }
     maven { 
         name 'OC Maven'
