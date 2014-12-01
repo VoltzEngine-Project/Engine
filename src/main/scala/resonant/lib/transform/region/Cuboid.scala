@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.world.World
 import resonant.lib.transform.{ITransform, AbstractOperation}
-import resonant.lib.transform.vector.Vector3
+import resonant.lib.transform.vector.{IVector3, Vector3}
 
 /**
  * A cubical region class to specify a region.
@@ -73,8 +73,8 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
 
   def +=(vec: Vector3): Cuboid =
   {
-    min += vec
-    max += vec
+    min += vec.asInstanceOf[IVector3]
+    max += vec.asInstanceOf[IVector3]
     return this
   }
 
@@ -157,7 +157,7 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
   def getVectors(center: Vector3, radius: Int): List[Vector3] =
   {
     val vectors = new ArrayList[Vector3];
-    foreach(vector => if (center.distance(vector) <= radius) vectors.add(vector))
+    foreach(vector => if (center.distance(vector.asInstanceOf[IVector3]) <= radius) vectors.add(vector))
     return vectors
   }
 

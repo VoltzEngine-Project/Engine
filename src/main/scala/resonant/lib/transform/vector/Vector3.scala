@@ -270,6 +270,48 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
 
   def addEquals(x: Double, y: Double, z: Double): Vector3 = this +=(x, y, z)
 
+  //====================
+  // IVector3 handling
+  //====================
+  def -(amount: IVector3): Vector3 = new Vector3(x - amount.x, y - amount.y, z - amount.z)
+
+  def -=(amount: IVector3): Vector3 =
+  {
+    x = x - amount.x
+    y = y - amount.y
+    z = z - amount.z
+    return this
+  }
+
+  def subtract(amount: IVector3): Vector3 = this - amount
+
+  def subEquals(amount: IVector3): Vector3 = this -= amount
+
+  def +(amount: IVector3): Vector3 = new Vector3()
+
+  def +=(amount: IVector3): Vector3 =
+  {
+    x = amount.x + x
+    y = amount.y + y
+    z = amount.z + z
+    return this
+  }
+
+  def add(amount: IVector3): Vector3 = this + amount
+
+  def addEquals(amount: IVector3): Vector3 = this += amount
+
+  def *(amount: IVector3): Vector3 = new Vector3(x * amount.x, y * amount.y, z * amount.z)
+
+  def $(other: IVector3) = x * other.x + y * other.y + z * other.z
+
+  def cross(other: IVector3) = %(other)
+
+  def %(other: IVector3): Vector3 = new Vector3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
+
+  //=========================
+  //ForgeDirection handling
+  //=========================
   def +(amount: ForgeDirection): Vector3 = this + new Vector3(amount)
 
   def +=(amount: ForgeDirection): Vector3 = set(this + new Vector3(amount))
@@ -292,6 +334,10 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
 
   def zCross = new Vector3(-this.y, this.x, 0.0D)
 
+  def distance(other: IVector3) : Double  =
+  {
+    return new Vector3(other.x - x, other.y - y, other.z - z).magnitude
+  }
   /** Point between this point and another */
   def midPoint(pos: Vector3): Vector3 =
   {
@@ -368,7 +414,7 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
     if (entity == null)
       return block
 
-    if (distance(new Vector3(block.hitVec)) < distance(new Vector3(entity.hitVec)))
+    if (distance(new Vector3(block.hitVec).asInstanceOf[IVector3]) < distance(new Vector3(entity.hitVec).asInstanceOf[IVector3]))
       return block
 
     return entity
@@ -381,7 +427,7 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
     var closestEntityMOP: MovingObjectPosition = null
     var closetDistance = 0D
 
-    val checkDistance = distance(end)
+    val checkDistance = distance(end.asInstanceOf[IVector3])
     val scanRegion = AxisAlignedBB.getBoundingBox(-checkDistance, -checkDistance, -checkDistance, checkDistance, checkDistance, checkDistance).offset(x, y, z)
 
     val checkEntities = world.getEntitiesWithinAABB(classOf[Entity], scanRegion) map (_.asInstanceOf[Entity])
@@ -410,7 +456,7 @@ class Vector3(var x: Double = 0, var y: Double= 0, var z: Double= 0) extends Abs
             }
             else
             {
-              val dist = distance(new Vector3(hit.hitVec))
+              val dist = distance(new Vector3(hit.hitVec).asInstanceOf[IVector3])
 
               if (dist < closetDistance || closetDistance == 0)
               {
