@@ -191,10 +191,6 @@ repositories {
         name "Mobius Repo"
         url "http://mobiusstrip.eu/maven"
     }
-    maven {
-        name 'CB Repo'
-        url "https://chickenbones.net/maven/"
-    }
     maven { 
         name 'OC Maven'
         url = "http://maven.cil.li/" }
@@ -207,7 +203,7 @@ repositories {
 dependencies 
 {
     testCompile 'junit:junit:4.11'
-    compile "mcp.mobius.waila:Waila:1.5.6:dev"
+    compile "mcp.mobius.waila:Waila:1.5.6_dev4_1.7.10:dev"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.0.+:dev"
     compile "net.industrial-craft:industrialcraft-2:2.2.654-experimental:api"
 }
