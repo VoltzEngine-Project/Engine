@@ -58,7 +58,7 @@ abstract class AbstractOperation[T <: AbstractOperation[T]]
 
   def /=(amount: Double): T = this *= (1 / amount)
 
-  def /=(amount: T): T = this *= (amount.reciprocal)
+  def /=(amount: T): T = this *= amount.reciprocal
 
   /**
    * Alias Operation Methods
