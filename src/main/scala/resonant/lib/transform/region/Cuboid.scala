@@ -73,8 +73,8 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
 
   def +=(vec: Vector3): Cuboid =
   {
-    min += vec.asInstanceOf[IVector3]
-    max += vec.asInstanceOf[IVector3]
+    min += vec
+    max += vec
     return this
   }
 

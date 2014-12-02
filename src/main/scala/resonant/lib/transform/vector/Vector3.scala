@@ -139,6 +139,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   def z(amount: Double)
   {
     z = amount
+    this
   }
 
   def set(vec: IVector3): Vector3 =

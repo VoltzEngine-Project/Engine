@@ -28,5 +28,5 @@ trait TVector3 extends TVector2 with IVector3
   /** Gets this object as a Vector3 */
   def toVector3 : Vector3 = new Vector3(this)
 
-  def distance3D( vec : IVector3) : Double = toVector3.distance(new Vector3(vec).asInstanceOf[IVector3])
+  def distance3D( vec : IVector3) : Double = toVector3.distance(new Vector3(vec))
 }
