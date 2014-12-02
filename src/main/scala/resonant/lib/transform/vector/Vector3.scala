@@ -11,8 +11,8 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util._
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
+import resonant.lib.transform.ITransform
 import resonant.lib.transform.rotation.EulerAngle
-import resonant.lib.transform.{AbstractVector, ITransform}
 
 import scala.collection.convert.wrapAll._
 
@@ -90,8 +90,10 @@ object Vector3
   def west = new Vector3(ForgeDirection.WEST)
 }
 
-class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends AbstractVector[Vector3] with Ordered[Vector3] with Cloneable
+class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends IVector3 with Ordered[Vector3] with Cloneable
 {
+  def this() = this(0, 0, 0)
+
   def this(amount: Double) = this(amount, amount, amount)
 
   def this(yaw: Double, pitch: Double) = this(-Math.sin(Math.toRadians(yaw)), Math.sin(Math.toRadians(pitch)), -Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)))
@@ -101,8 +103,6 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
   def this(entity: Entity) = this(entity.posX, entity.posY, entity.posZ)
 
   def this(vec: IVector3) = this(vec.x, vec.y, vec.z)
-
-  def this(vec: Vector3) = this(vec.x, vec.y, vec.z)
 
   def this(nbt: NBTTagCompound) = this(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
 
@@ -118,6 +118,14 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
 
   def this(data: ByteArrayDataInput) = this(data.readInt(), data.readInt(), data.readInt())
 
+  def this(dir: ForgeDirection) = this(dir.offsetX, dir.offsetY, dir.offsetZ)
+
+  def this(vec: Vec3) = this(vec.xCoord, vec.yCoord, vec.zCoord)
+
+  //=========================
+  //========Setters==========
+  //=========================
+
   def x(amount: Double)
   {
     x = amount
@@ -132,6 +140,36 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
   {
     z = amount
   }
+
+  def set(vec: IVector3): Vector3 =
+  {
+    x = vec.x
+    y = vec.y
+    z = vec.z
+    return this
+  }
+
+  //=========================
+  //========Accessors========
+  //=========================
+
+  def xf : Float = x.toFloat
+
+  def yf : Float = y.toFloat
+
+  def zf : Float = z.toFloat
+
+  def xi = x.toInt
+
+  def yi = y.toInt
+
+  def zi = z.toInt
+
+  //=========================
+  //========Converters=======
+  //=========================
+
+  def toVec3 = Vec3.createVectorHelper(x, y, z)
 
   def toVector2: Vector2 = new Vector2(x, z)
 
@@ -152,7 +190,23 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
     }
   }
 
-  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
+  def toEulerAngle(target: Vector3): EulerAngle = (clone - target).toEulerAngle
+
+  def toEulerAngle = new EulerAngle(Math.toDegrees(Math.atan2(x, z)), Math.toDegrees(-Math.atan2(y, Math.hypot(z, x))))
+
+  def toIntNBT: NBTTagCompound = writeIntNBT(new NBTTagCompound)
+
+  def unary_+ : Vector3 = this
+
+  def unary_- : Vector3 = this * -1
+
+  //=========================
+  //========NBT==============
+  //=========================
+
+  final def toNBT: NBTTagCompound = writeNBT(new NBTTagCompound())
+
+  def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
     nbt.setDouble("x", x)
     nbt.setDouble("y", y)
@@ -160,7 +214,6 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
     return nbt
   }
 
-  def toIntNBT: NBTTagCompound = writeIntNBT(new NBTTagCompound)
 
   def writeIntNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
@@ -170,7 +223,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
     return nbt
   }
 
-  override def writeByteBuf(data: ByteBuf): ByteBuf =
+  def writeByteBuf(data: ByteBuf): ByteBuf =
   {
     data.writeDouble(x)
     data.writeDouble(y)
@@ -178,108 +231,122 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
     return data
   }
 
-  def toEulerAngle(target: Vector3): EulerAngle = (clone - target).toEulerAngle
 
-  def toEulerAngle = new EulerAngle(Math.toDegrees(Math.atan2(x, z)), Math.toDegrees(-Math.atan2(y, Math.hypot(z, x))))
+  //=========================
+  //========Operators========
+  //=========================
 
-  override def -(amount: Vector3): Vector3 = new Vector3(x - amount.x, y - amount.y, z - amount.z)
+  def magnitudeSquared: Double = this $ this;
 
-  override def clone: Vector3 = new Vector3(x, y, z)
+  def magnitude = Math.sqrt(magnitudeSquared)
 
-  def xf = x.toFloat
+  def normalize = this / magnitude
 
-  def yf = y.toFloat
+  def round: Vector3 = new Vector3(Math.round(x), Math.round(y), Math.round(z))
 
-  def zf = z.toFloat
+  def ceil: Vector3 = new Vector3(Math.ceil(x), Math.ceil(y), Math.ceil(z))
 
-  override def round: Vector3 = new Vector3(Math.round(x), Math.round(y), Math.round(z))
+  def floor: Vector3 = new Vector3(Math.floor(x), Math.floor(y), Math.floor(z))
 
-  override def ceil: Vector3 = new Vector3(Math.ceil(x), Math.ceil(y), Math.ceil(z))
+  def max(other: IVector3): Vector3 = new Vector3(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z))
 
-  override def floor: Vector3 = new Vector3(Math.floor(x), Math.floor(y), Math.floor(z))
+  def min(other: IVector3): Vector3 = new Vector3(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z))
 
-  def max(other: Vector3): Vector3 = new Vector3(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z))
+  def reciprocal: Vector3 = new Vector3(1 / x, 1 / y, 1 / z)
 
-  def min(other: Vector3): Vector3 = new Vector3(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z))
+  //=========================
+  //==Double Handling========
+  //=========================
 
-  override def reciprocal: Vector3 = new Vector3(1 / x, 1 / y, 1 / z)
+  def sub(amount: Double): Vector3 = this - amount
+  def subtract(amount: Double): Vector3 = this - amount
+  def -(amount: Double): Vector3 = new Vector3(x - amount, y - amount, z - amount)
 
-  /**
-   * Operations
-   */
-  override def -(amount: Double): Vector3 = new Vector3(x - amount, y - amount, z - amount)
+  def subEquals(amount: Double): Vector3 = this - amount
+  def subtractEquals(amount: Double): Vector3 = this - amount
+  def -=(amount: Double): Vector3 =
+  {
+    x -= amount
+    y -=amount
+    z -= amount
+    return this
+  }
 
+  def sub(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x - x, this.y - y, this.z - z)
+  def subtract(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x - x, this.y - y, this.z - z)
   def -(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x - x, this.y - y, this.z - z)
 
-  def subtract(x: Double, y: Double, z: Double): Vector3 =
-  {
-    this.x -= x
-    this.y -= y
-    this.z -= z
-    return this
-  }
-
   def subEquals(x: Double, y: Double, z: Double): Vector3 = this -=(x, y, z)
-
+  def subtractEquals(x: Double, y: Double, z: Double): Vector3 = this -=(x, y, z)
   def -=(x: Double, y: Double, z: Double): Vector3 = set(new Vector3(this.x - x, this.y - y, this.z - z))
 
-  def subtract(amount: ForgeDirection): Vector3 = this - amount
+  def add(amount: Double): Vector3 = this + amount
+  def +(amount: Double): Vector3 = new Vector3(x + amount, y + amount, z + amount)
 
-  def -(amount: ForgeDirection): Vector3 = this - new Vector3(amount)
+  def addEquals(amount: Double): Vector3 = this + amount
+  def +=(amount: Double): Vector3 =
+  {
+    x += amount
+    y +=amount
+    z += amount
+    return this
+  }
 
-  def subEquals(amount: ForgeDirection): Vector3 = this -= amount
-
-  def -=(amount: ForgeDirection): Vector3 = set(this - new Vector3(amount))
-
-  override def +(amount: Double): Vector3 = new Vector3(x + amount, y + amount, z + amount)
-
+  def add(x: Double, y: Double, z: Double): Vector3 = return new Vector3(this.x + x, this.y + y, this.z + z)
   def +(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x + x, this.y + y, this.z + z)
 
-  def add(x: Double, y: Double, z: Double): Vector3 =
-  {
-    this.x += x
-    this.y += y
-    this.z += z
-    return this
-  }
-
   def addEquals(x: Double, y: Double, z: Double): Vector3 = this +=(x, y, z)
-
   def +=(x: Double, y: Double, z: Double): Vector3 = set(new Vector3(this.x + x, this.y + y, this.z + z))
 
-  override def set(vec: Vector3): Vector3 =
+  def multi(amount: Double): Vector3 = this * amount
+  def multiply(amount: Double): Vector3 = this * amount
+  def *(amount: Double): Vector3 = new Vector3(x * amount, y * amount, z * amount)
+
+  def divide(amount: Double): Vector3 = this / amount
+  def /(amount: Double): Vector3 = new Vector3(x / amount, y / amount, z / amount)
+
+  def multiplyEquals(amount: Double): Vector3 = this *= amount
+  def *=(amount: Double): Vector3 =
   {
-    x = vec.x
-    y = vec.y
-    z = vec.z
+    this.x *= amount
+    this.y *= amount
+    this.z *= amount
     return this
   }
 
-  def subtract(amount: IVector3): Vector3 = this - amount
+  def divideEquals(amount: Double): Vector3 = this /= amount
+  def /=(amount: Double): Vector3 =
+  {
+    this.x /= amount
+    this.y /= amount
+    this.z /= amount
+    return this
+  }
+
 
   //====================
   // IVector3 handling
   //====================
+
+  def subtract(amount: IVector3): Vector3 = this - amount
   def -(amount: IVector3): Vector3 = new Vector3(x - amount.x, y - amount.y, z - amount.z)
 
-  def subEquals(amount: IVector3): Vector3 = this -= amount
+  def distance(other: IVector3) : Double = (this - other).magnitude
 
+  def subEquals(amount: IVector3): Vector3 = this -= amount
+  def subtractEquals(amount: IVector3): Vector3 = this -= amount
   def -=(amount: IVector3): Vector3 =
   {
-    x = x - amount.x
-    y = y - amount.y
-    z = z - amount.z
+    x -= amount.x
+    y -= amount.y
+    z -= amount.z
     return this
   }
 
   def add(amount: IVector3): Vector3 = this + amount
-
-  def +(amount: IVector3): Vector3 = new Vector3()
-
-  def this() = this(0, 0, 0)
+  def +(amount: IVector3): Vector3 = new Vector3(x + amount.x, y + amount.y, z + amount.z)
 
   def addEquals(amount: IVector3): Vector3 = this += amount
-
   def +=(amount: IVector3): Vector3 =
   {
     x = amount.x + x
@@ -288,40 +355,63 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
     return this
   }
 
+  def multiply(amount: IVector3): Vector3 = this * amount
   def *(amount: IVector3): Vector3 = new Vector3(x * amount.x, y * amount.y, z * amount.z)
 
+  def multiplyEquals(amount: IVector3): Vector3 = this *= amount
+  def *=(amount: IVector3): Vector3 =
+  {
+    x *= amount.x
+    y *= amount.y
+    z *= amount.z
+    return this;
+  }
+
+  def divide(amount: IVector3): Vector3 = this * amount
+  def /(amount: IVector3): Vector3 = new Vector3(x / amount.x, y / amount.y, z / amount.z)
+
+  def divideEquals(amount: IVector3): Vector3 = this /= amount
+  def /=(amount: IVector3): Vector3 =
+  {
+    x /= amount.x
+    y /= amount.y
+    z /= amount.z
+    return this;
+  }
+
+  /** Point between this point and another */
+  @Deprecated
+  def midpoint(pos: IVector3): Vector3 = midPoint(pos)
+  def midPoint(pos: IVector3): Vector3 =
+  {
+    return new Vector3((x + pos.x) / 2, (y + pos.y) / 2, (z + pos.z) / 2);
+  }
+
+  def dot(other: IVector3) = $(other)
   def $(other: IVector3) = x * other.x + y * other.y + z * other.z
 
   def cross(other: IVector3) = %(other)
-
   def %(other: IVector3): Vector3 = new Vector3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
 
-  def add(amount: ForgeDirection): Vector3 = this + amount
+
 
   //=========================
   //ForgeDirection handling
   //=========================
+  def add(amount: ForgeDirection): Vector3 = this + amount
   def +(amount: ForgeDirection): Vector3 = this + new Vector3(amount)
 
   def addEquals(amount: ForgeDirection): Vector3 = this += amount
-
   def +=(amount: ForgeDirection): Vector3 = set(this + new Vector3(amount))
 
-  def this(dir: ForgeDirection) = this(dir.offsetX, dir.offsetY, dir.offsetZ)
 
-  override def +(amount: Vector3): Vector3 = new Vector3(x + amount.x, y + amount.y, z + amount.z)
+  def subtract(amount: ForgeDirection): Vector3 = this - amount
+  def -(amount: ForgeDirection): Vector3 = this - new Vector3(amount)
 
-  override def *(amount: Vector3): Vector3 = new Vector3(x * amount.x, y * amount.y, z * amount.z)
+  def subEquals(amount: ForgeDirection): Vector3 = this -= amount
+  def -=(amount: ForgeDirection): Vector3 = set(this - new Vector3(amount))
 
-  def cross(other: Vector3) = %(other)
 
-  def %(other: Vector3): Vector3 = new Vector3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
-
-  /** Point between this point and another */
-  def midPoint(pos: Vector3): Vector3 =
-  {
-    return new Vector3((x + pos.x) / 2, (y + pos.y) / 2, (z + pos.z) / 2);
-  }
 
   /** @return The perpendicular vector to the axis. */
   def perpendicular: Vector3 =
@@ -345,11 +435,9 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
    * Gets the angle between this vector and another vector.
    * @return Angle in radians
    */
-  def angle(other: Vector3) = Math.acos((this $ other) / (magnitude * other.magnitude))
+  def angle(other: IVector3) = Math.acos((this $ other) / (magnitude * new Vector3(other).magnitude))
 
-  override def $(other: Vector3) = x * other.x + y * other.y + z * other.z
-
-  def anglePreNorm(other: Vector3) = Math.acos(this $ other)
+  def anglePreNorm(other: IVector3) = Math.acos(this $ other)
 
   def getAround(world: World, side: ForgeDirection, range: Int): java.util.List[Vector3] =
   {
@@ -389,7 +477,6 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
 
   def rayTrace(world: World, dir: Vector3, dist: Double): MovingObjectPosition = rayTrace(world, this + (dir * dist))
 
-  override def *(amount: Double): Vector3 = new Vector3(x * amount, y * amount, z * amount)
 
   def rayTrace(world: World, end: Vector3): MovingObjectPosition =
   {
@@ -401,18 +488,14 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
     if (entity == null)
       return block
 
-    if (distance(new Vector3(block.hitVec).asInstanceOf[IVector3]) < distance(new Vector3(entity.hitVec).asInstanceOf[IVector3]))
+    if (distance(new Vector3(block.hitVec)) < distance(new Vector3(entity.hitVec)))
       return block
 
     return entity
   }
 
-  def this(vec: Vec3) = this(vec.xCoord, vec.yCoord, vec.zCoord)
 
-  def distance(other: IVector3): Double =
-  {
-    return new Vector3(other.x - x, other.y - y, other.z - z).magnitude
-  }
+
 
   def rayTraceBlocks(world: World, end: Vector3): MovingObjectPosition = world.rayTraceBlocks(toVec3, end.toVec3)
 
@@ -421,7 +504,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
     var closestEntityMOP: MovingObjectPosition = null
     var closetDistance = 0D
 
-    val checkDistance = distance(end.asInstanceOf[IVector3])
+    val checkDistance = distance(end)
     val scanRegion = AxisAlignedBB.getBoundingBox(-checkDistance, -checkDistance, -checkDistance, checkDistance, checkDistance, checkDistance).offset(x, y, z)
 
     val checkEntities = world.getEntitiesWithinAABB(classOf[Entity], scanRegion) map (_.asInstanceOf[Entity])
@@ -450,7 +533,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
             }
             else
             {
-              val dist = distance(new Vector3(hit.hitVec).asInstanceOf[IVector3])
+              val dist = distance(new Vector3(hit.hitVec))
 
               if (dist < closetDistance || closetDistance == 0)
               {
@@ -468,10 +551,37 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
     return closestEntityMOP
   }
 
-  /**
-   * Conversion
-   */
-  def toVec3 = Vec3.createVectorHelper(x, y, z)
+
+
+  //===================
+  //===World Setters===
+  //===================
+  def setBlock(world: World, block: Block): Boolean = setBlock(world, block, 0)
+
+  def setBlock(world: World, block: Block, metadata: Int): Boolean = setBlock(world, block, metadata, 3)
+
+  def setBlock(world: World, block: Block, metadata: Int, notify: Int): Boolean = if (world != null && block != null) world.setBlock(xi, yi, zi, block, metadata, notify) else false
+
+  def setBlockToAir(world: World): Boolean = world.setBlockToAir(xi, yi, zi)
+
+  //===================
+  //==World Accessors==
+  //===================
+  def isAirBlock(world: World): Boolean = world.isAirBlock(xi, yi, zi)
+
+  def isBlockFreezable(world: World): Boolean = world.isBlockFreezable(xi, yi, zi)
+
+  def isBlockEqual(world: World, block: Block): Boolean =
+  {
+    val b = getBlock(world)
+    if (b != null && b == block)
+    {
+      return true;
+    }
+    return false
+  }
+
+  def getBlock(world: IBlockAccess): Block = if (world != null) world.getBlock(xi, yi, zi) else null
 
   def getBlockMetadata(world: IBlockAccess) = if (world != null) world.getBlockMetadata(xi, yi, zi) else 0
 
@@ -485,39 +595,6 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
     else
       return 0
   }
-
-  def setBlock(world: World, block: Block): Boolean = setBlock(world, block, 0)
-
-  def setBlock(world: World, block: Block, metadata: Int): Boolean = setBlock(world, block, metadata, 3)
-
-  def setBlock(world: World, block: Block, metadata: Int, notify: Int): Boolean = if (world != null && block != null) world.setBlock(xi, yi, zi, block, metadata, notify) else false
-
-  def setBlockToAir(world: World): Boolean = world.setBlockToAir(xi, yi, zi)
-
-  def isAirBlock(world: World): Boolean = world.isAirBlock(xi, yi, zi)
-
-  def isBlockEqual(world: World, block: Block): Boolean =
-  {
-    val b = getBlock(world)
-    if (b != null && b == block)
-    {
-      return true;
-    }
-    return false
-  }
-
-  /**
-   * World Access
-   */
-  def getBlock(world: IBlockAccess): Block = if (world != null) world.getBlock(xi, yi, zi) else null
-
-  def xi = x.toInt
-
-  def yi = y.toInt
-
-  def zi = z.toInt
-
-  def isBlockFreezable(world: World): Boolean = world.isBlockFreezable(xi, yi, zi)
 
   override def hashCode: Int =
   {
@@ -551,6 +628,8 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
 
     return 0
   }
+
+  override def clone: Vector3 = new Vector3(x, y, z)
 
   override def toString = "Vector3[" + x + "," + y + "," + z + "]"
 }
