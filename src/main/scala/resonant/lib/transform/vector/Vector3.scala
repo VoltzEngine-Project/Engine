@@ -139,16 +139,20 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   def z(amount: Double)
   {
     z = amount
-    this
   }
 
-  def set(vec: IVector3): Vector3 =
+
+  def set(x: Double, y: Double, z: Double) : Vector3 =
   {
-    x = vec.x
-    y = vec.y
-    z = vec.z
+    this.x = x
+    this.y = y
+    this.z = z
     return this
   }
+
+  def set(n: Double) : Vector3 = set(n, n, n)
+
+  def set(vec: IVector3): Vector3 = set(vec.x, vec.y, vec.z)
 
   //=========================
   //========Accessors========
