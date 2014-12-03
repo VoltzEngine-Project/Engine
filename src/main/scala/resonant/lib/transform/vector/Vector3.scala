@@ -292,13 +292,13 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   def +=(amount: Double): Vector3 =
   {
     x += amount
-    y +=amount
+    y += amount
     z += amount
     return this
   }
 
-  def add(x: Double, y: Double, z: Double): Vector3 = return new Vector3(this.x + x, this.y + y, this.z + z)
-  def +(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x + x, this.y + y, this.z + z)
+  def add(ax: Double, ay: Double, az: Double): Vector3 = this + (ax, ay, az)
+  def +(ax: Double, ay: Double, az: Double): Vector3 = new Vector3(this.x + ax, this.y + ay, this.z + az)
 
   def addEquals(x: Double, y: Double, z: Double): Vector3 = this +=(x, y, z)
   def +=(x: Double, y: Double, z: Double): Vector3 = set(new Vector3(this.x + x, this.y + y, this.z + z))
