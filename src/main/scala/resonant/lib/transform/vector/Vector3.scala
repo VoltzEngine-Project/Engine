@@ -120,6 +120,8 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
 
   def this(dir: ForgeDirection) = this(dir.offsetX, dir.offsetY, dir.offsetZ)
 
+  def this(dir: EnumFacing) = this(dir.getFrontOffsetX, dir.getFrontOffsetY, dir.getFrontOffsetZ)
+
   def this(vec: Vec3) = this(vec.xCoord, vec.yCoord, vec.zCoord)
 
   //=========================
@@ -415,6 +417,22 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
 
   def subEquals(amount: ForgeDirection): Vector3 = this -= amount
   def -=(amount: ForgeDirection): Vector3 = set(this - new Vector3(amount))
+
+  //=========================
+  //EnumFacing handling
+  //=========================
+  def add(amount: EnumFacing): Vector3 = this + amount
+  def +(amount: EnumFacing): Vector3 = this + new Vector3(amount)
+
+  def addEquals(amount: EnumFacing): Vector3 = this += amount
+  def +=(amount: EnumFacing): Vector3 = set(this + new Vector3(amount))
+
+
+  def subtract(amount: EnumFacing): Vector3 = this - amount
+  def -(amount: EnumFacing): Vector3 = this - new Vector3(amount)
+
+  def subEquals(amount: EnumFacing): Vector3 = this -= amount
+  def -=(amount: EnumFacing): Vector3 = set(this - new Vector3(amount))
 
 
 
