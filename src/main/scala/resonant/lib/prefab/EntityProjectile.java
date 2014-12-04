@@ -23,8 +23,8 @@ import resonant.lib.transform.vector.Vector3;
  */
 public abstract class EntityProjectile extends Entity implements IProjectile
 {
-    protected Vector3 sourceOfProjectile = null;
-    protected Entity firedByEntity = null;
+    public Vector3 sourceOfProjectile = null;
+    public Entity firedByEntity = null;
 
     protected boolean canDamage = false;
 

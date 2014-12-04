@@ -1,6 +1,8 @@
 package resonant.lib.utility;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 
@@ -41,7 +43,7 @@ public class DamageUtility
      * @return true if the entity can be damaged */
     public static boolean canDamage(Entity entity)
     {
-        if (entity != null)
+        if (entity instanceof EntityLivingBase)
         {
             if (!entity.isEntityInvulnerable() && entity.isEntityAlive())
             {
