@@ -35,8 +35,8 @@ public class ModManager
 	public final WeakHashMap<Block, String> blocks = new WeakHashMap();
 	public final WeakHashMap<Item, String> items = new WeakHashMap();
 
-	private String modPrefix;
-	private CreativeTabs defaultTab;
+	public String modPrefix;
+	public CreativeTabs defaultTab;
 
 	public ModManager setPrefix(String modPrefix)
 	{
