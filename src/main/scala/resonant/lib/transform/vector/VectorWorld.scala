@@ -98,29 +98,65 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
   /**
    * "Generated" method override
    */
-  override def -(amount: Double): VectorWorld = this - amount
+  override def -(amount: Double): VectorWorld = new VectorWorld(world, x - amount, y - amount, z - amount)
 
-  override def -(amount: IVector3): VectorWorld = this - amount
+  override def -(amount: IVector3): VectorWorld = new VectorWorld(world, x - amount.x, y - amount.y, z - amount.z)
 
   override def /(amount: Double): VectorWorld = this * (1 / amount)
 
-  override def /(amount: IVector3): VectorWorld = this / amount
+  override def /(amount: IVector3): VectorWorld = new VectorWorld(world, x / amount.x, y / amount.y, z / amount.z)
 
-  override def +=(amount: Double): VectorWorld = set(this + amount)
+  override def +=(amount: Double): VectorWorld =
+  {
+    x += amount
+    y += amount
+    z += amount
+    return this
+  }
 
-  override def +=(amount: IVector3): VectorWorld = set(amount)
+  override def +=(amount: IVector3): VectorWorld =
+  {
+    x += amount.x
+    y += amount.y
+    z += amount.z
+    return this
+  }
 
-  override def -=(amount: Double): VectorWorld = this -= amount
+  override def -=(amount: Double): VectorWorld = this += -amount
 
-  override def -=(amount: IVector3): VectorWorld = this -= amount
+  override def -=(amount: IVector3): VectorWorld =
+  {
+    x -= amount.x
+    y -= amount.y
+    z -= amount.z
+    return this
+  }
 
-  override def *=(amount: Double): VectorWorld = set(this * amount)
+  override def *=(amount: Double): VectorWorld =
+  {
+    x *= amount
+    y *= amount
+    z *= amount
+    return this
+  }
 
-  override def *=(amount: IVector3): VectorWorld = set(this * amount)
+  override def *=(amount: IVector3): VectorWorld =
+  {
+    x *= amount.x
+    y *= amount.y
+    z *= amount.z
+    return this
+  }
 
   override def /=(amount: Double): VectorWorld = this *= (1 / amount)
 
-  override def /=(amount: IVector3): VectorWorld = this /= amount
+  override def /=(amount: IVector3): VectorWorld =
+  {
+    x *= amount.x
+    y *= amount.y
+    z *= amount.z
+    return this
+  }
 
   /**
    * "Generated" Alias Operation Methods override
