@@ -7,6 +7,10 @@ import resonant.engine.References;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.logging.log4j.Level;
 
 /**
@@ -104,6 +108,73 @@ public class ReflectionUtility extends ReflectionHelper
         //Restores final modifier
         if(m != -1)
             setModifiers(field, m);
+    }
+
+    public static void printFields(Class clazz)
+    {
+        System.out.println("==== Outputting Fields Names ====");
+        System.out.println("\tClass: " + clazz);
+        for(String name : getFieldNames(clazz))
+        {
+            System.out.println("\t"+name);
+        }
+        System.out.println("==== Done Listing Field Names ====");
+    }
+
+    public static List<String> getFieldNames(Class clazz)
+    {
+        List<String> fieldNames = new ArrayList<String>();
+        for(Field f : getAllFields(clazz))
+        {
+            String name = f.getName();
+            if(!fieldNames.contains(name))
+                fieldNames.add(name);
+        }
+        return fieldNames;
+    }
+
+    public static List<Field> getAllFields(Class clazz)
+    {
+        List<Field> fields = getFields(clazz);
+        fields.addAll(getDeclaredFields(clazz));
+        return fields;
+    }
+
+    public static List<Field> getFields(Class clazz)
+    {
+        List<Field> fields = new ArrayList();
+        fields.addAll(Arrays.asList(clazz.getFields()));
+        return fields;
+    }
+
+    public static List<Field> getDeclaredFields(Class clazz)
+    {
+        List<Field> fields = new ArrayList();
+        fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+        return fields;
+    }
+
+    public static Field getMCField(Class clazz, String fieldName)
+    {
+        Field f;
+        try
+        {
+            f = clazz.getField(getMCFieldName(clazz, fieldName));
+        }
+        catch(NoSuchFieldException e)
+        {
+            try
+            {
+                f = clazz.getDeclaredField(getMCFieldName(clazz, fieldName));
+            }
+            catch(NoSuchFieldException e2)
+            {
+                return null;
+            }
+        }
+
+        f.setAccessible(true);
+        return f;
     }
 
     public static String getMCFieldName(Class clazz, String fieldName)
