@@ -4,14 +4,18 @@ import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import resonant.engine.References;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
+import resonant.lib.network.Synced;
 
 /**
  * @author DarkGuardsman
@@ -151,6 +155,46 @@ public class ReflectionUtility extends ReflectionHelper
     {
         List<Field> fields = new ArrayList();
         fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+        return fields;
+    }
+
+    public static List<Method> getAllMethods(Class clazz) throws ClassNotFoundException
+    {
+        List<Method> fields = getMethods(clazz);
+        fields.addAll(getDeclaredMethods(clazz));
+        return fields;
+    }
+
+    public static List<Method> getAllMethods(Class clazz, Class< ? extends Annotation>... annotations) throws ClassNotFoundException
+    {
+        List<Method> fields = getAllMethods(clazz);
+        List<Method> returns = new ArrayList();
+        Iterator<Method> it = fields.iterator();
+        while(it.hasNext())
+        {
+            Method m = it.next();
+            for(Class< ? extends Annotation> an : annotations)
+            {
+                if (m.isAnnotationPresent(an))
+                {
+                    returns.add(m);
+                }
+            }
+        }
+        return fields;
+    }
+
+    public static List<Method> getMethods(Class clazz) throws ClassNotFoundException
+    {
+        List<Method> fields = new ArrayList();
+        fields.addAll(Arrays.asList(clazz.getMethods()));
+        return fields;
+    }
+
+    public static List<Method> getDeclaredMethods(Class clazz) throws ClassNotFoundException
+    {
+        List<Method> fields = new ArrayList();
+        fields.addAll(Arrays.asList(clazz.getDeclaredMethods()));
         return fields;
     }
 
