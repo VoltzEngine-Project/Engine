@@ -5,7 +5,7 @@ import net.minecraft.network.Packet
 import resonant.content.prefab.scal.TRotatable
 import resonant.content.spatial.block.SpatialTile
 import resonant.engine.ResonantEngine
-import resonant.lib.network.netty.AbstractPacket
+import resonant.engine.network.netty.AbstractPacket
 
 class TileAdvanced(material: Material) extends SpatialTile(material: Material) with TRotatable
 {

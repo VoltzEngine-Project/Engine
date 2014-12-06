@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
-import resonant.lib.network.Synced;
 
 /**
  * @author DarkGuardsman

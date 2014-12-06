@@ -4,8 +4,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import resonant.lib.ore.OreGenReplaceStone;
-import resonant.lib.ore.OreGenerator;
+import resonant.lib.prefab.ore.OreGenReplaceStone;
+import resonant.lib.prefab.ore.OreGenerator;
 import resonant.lib.utility.LanguageUtility;
 
 /**

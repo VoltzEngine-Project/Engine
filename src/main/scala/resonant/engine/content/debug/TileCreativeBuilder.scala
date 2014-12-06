@@ -11,8 +11,8 @@ import resonant.content.prefab.java.TileAdvanced
 import resonant.content.prefab.scal.TRotatable
 import resonant.engine.ResonantEngine
 import resonant.lib.`type`.Pair
-import resonant.lib.network.discriminator.{PacketTile, PacketType}
-import resonant.lib.network.handle.{TPacketReceiver, TPacketSender}
+import resonant.engine.network.discriminator.{PacketTile, PacketType}
+import resonant.engine.network.handle.{TPacketReceiver, TPacketSender}
 import resonant.lib.schematic.SchematicRegistry
 import resonant.lib.transform.vector.Vector3
 

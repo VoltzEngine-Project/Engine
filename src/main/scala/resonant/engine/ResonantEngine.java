@@ -55,7 +55,7 @@ import resonant.lib.grid.UpdateTicker;
 import resonant.lib.grid.UpdateTicker$;
 import resonant.lib.loadable.LoadableHandler;
 import resonant.lib.multiblock.synthetic.SyntheticMultiblock;
-import resonant.lib.network.netty.PacketManager;
+import resonant.engine.network.netty.PacketManager;
 import resonant.lib.transform.vector.Vector3;
 import resonant.lib.transform.vector.VectorWorld;
 import resonant.lib.utility.PlayerInteractionHandler;

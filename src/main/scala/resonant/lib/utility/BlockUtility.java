@@ -1,5 +1,7 @@
 package resonant.lib.utility;
 
+import com.sun.istack.internal.NotNull;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import resonant.lib.type.Pair;
@@ -12,46 +14,75 @@ import java.util.HashMap;
  */
 public class BlockUtility
 {
-	public static HashMap<Pair<Block, Integer>, Float> BLOCK_HARDNESS = new HashMap<Pair<Block, Integer>, Float>();
+	private static HashMap<Block, Float> BLOCK_HARDNESS = new HashMap();
+    private static HashMap<Block, Float> BLOCK_RESISTANCE = new HashMap();
 
-	public static float getBlockHardness(Block block)
+    /** Gets the block's resistance without using location data required by the
+     * block's getResistance method. Uses a combination of a cache and reflection
+     * to get access to the data.
+     *
+     *
+     * @param block - block, can't be null
+     * @return
+     */
+    public static float getBlockResistance(@NotNull Block block)
+    {
+        //Get block hardness from cache so we don't need to use reflection every time
+        if (BLOCK_RESISTANCE.containsKey(block))
+        {
+            return BLOCK_RESISTANCE.get(block);
+        }
+
+        //Get the block using reflection as the field is private
+        try
+        {
+            Field field = ReflectionUtility.getMCField(Block.class, "blockResistance");
+            BLOCK_RESISTANCE.put(block, field.getFloat(block));
+            return BLOCK_RESISTANCE.get(block);
+        }
+        catch (IllegalAccessException e)
+        {
+        }
+        return 0;
+    }
+
+    /** Gets the block's hardness without using location data required by the
+     * block's getHardness method. Uses a combination of a cache and reflection
+     * to get access to the data.
+     *
+     *
+     * @param block - block, if null will return 0
+     * @return
+     */
+	public static float getBlockHardness(@NotNull Block block)
 	{
-		return getBlockHardness(block, 0);
+        //Get block hardness from cache so we don't need to use reflection every time
+        if (BLOCK_HARDNESS.containsKey(block))
+        {
+            return BLOCK_HARDNESS.get(block);
+        }
+
+        //Get the block using reflection as the field is private
+        try
+        {
+            Field field = ReflectionUtility.getMCField(Block.class, "blockHardness");
+            BLOCK_HARDNESS.put(block, field.getFloat(block));
+            return BLOCK_HARDNESS.get(block);
+        }
+        catch (IllegalAccessException e)
+        {
+        }
+        return 0;
 	}
 
-	public static float getBlockHardness(Block block, int meta)
+    /** Gets the hardness value of the block represented by
+     * the itemstack. Doesn't check if the item is not an ItemBlock
+     * @param stack - stack
+     * @return hardness value
+     */
+	public static float getBlockHardness(@NotNull ItemStack stack)
 	{
-		try
-		{
-			Pair<Block, Integer> pair = new Pair<Block, Integer>(block, meta);
-			if (BLOCK_HARDNESS.containsKey(pair))
-			{
-				return BLOCK_HARDNESS.get(pair);
-			}
-			if (block != null)
-			{
-				Field field = block.getClass().getDeclaredField("blockHardness");
-				if (field == null)
-				{
-					field = block.getClass().getDeclaredField("field_149782_v");
-				}
-				BLOCK_HARDNESS.put(pair, field.getFloat(block));
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return 1;
-	}
-
-	public static float getBlockHardness(ItemStack stack)
-	{
-		if (stack != null)
-		{
-			return getBlockHardness(Block.getBlockFromItem(stack.getItem()), stack.getItemDamage());
-		}
-		return 1;
+        return getBlockHardness(Block.getBlockFromItem(stack.getItem()));
 	}
 
 }

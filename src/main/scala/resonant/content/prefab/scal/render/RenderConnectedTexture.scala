@@ -5,9 +5,8 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
 import org.lwjgl.opengl.GL11._
 import resonant.content.spatial.block.SpatialBlock
-import resonant.lib.render.RenderUtility
+import resonant.lib.render.{RenderBlockUtility, RenderUtility}
 import resonant.lib.transform.vector.Vector3
-import resonant.lib.utility.render.RenderBlockUtility
 import resonant.lib.wrapper.BitmaskWrapper._
 
 /**

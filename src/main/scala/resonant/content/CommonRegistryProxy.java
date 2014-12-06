@@ -1,15 +1,13 @@
 package resonant.content;
 
+import cpw.mods.fml.common.LoaderException;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.tileentity.TileEntity;
 import resonant.engine.References;
 import resonant.engine.ResonantEngine;
-import resonant.lib.network.Synced;
-import resonant.lib.network.discriminator.PacketAnnotationManager;
+import resonant.engine.network.Synced;
+import resonant.engine.network.discriminator.PacketAnnotationManager;
 import resonant.lib.utility.ReflectionUtility;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class CommonRegistryProxy
 {
@@ -25,18 +23,32 @@ public class CommonRegistryProxy
                 PacketAnnotationManager.INSTANCE.register(clazz);
             }
         }
-        catch(ClassNotFoundException e)
+        catch(Throwable e)
         {
             References.LOGGER.error("Error checking if " + clazz.getSimpleName() + ".class contains @Synced methods this may cause packet update issues");
-            if(ResonantEngine.runningAsDev)
+            if(e instanceof NoClassDefFoundError || e instanceof ClassNotFoundException || e instanceof LoaderException)
             {
-                if (e.getMessage().contains("client"))
+                if (ResonantEngine.runningAsDev)
                 {
-                    References.LOGGER.error("Hey client only methods exist in this class" + clazz);
+                    if (e.getMessage().contains("client"))
+                    {
+                        References.LOGGER.error("Hey client only methods exist in this class" + clazz);
+                    }
+                    else
+                    {
+                        e.printStackTrace();
+                    }
                 }
-                else
+            }
+            else
+            {
+                try
                 {
-                    e.printStackTrace();
+                    throw e;
+                }
+                catch (ClassNotFoundException e1)
+                {
+
                 }
             }
         }

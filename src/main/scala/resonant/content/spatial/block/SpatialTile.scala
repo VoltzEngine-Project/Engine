@@ -4,7 +4,7 @@ import java.util.{HashSet => JHashSet, Set => JSet}
 
 import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer
-import resonant.lib.network.IPlayerUsing
+import resonant.engine.network.IPlayerUsing
 
 /**
  * All tiles inherit this class.

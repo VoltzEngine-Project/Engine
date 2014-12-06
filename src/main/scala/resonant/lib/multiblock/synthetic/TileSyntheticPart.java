@@ -13,9 +13,9 @@ import resonant.content.spatial.block.SpatialBlock;
 import resonant.content.spatial.block.SpatialTile;
 import resonant.engine.ResonantEngine;
 import resonant.lib.multiblock.reference.IMultiBlock;
-import resonant.lib.network.discriminator.PacketTile;
-import resonant.lib.network.discriminator.PacketType;
-import resonant.lib.network.handle.IPacketReceiver;
+import resonant.engine.network.discriminator.PacketTile;
+import resonant.engine.network.discriminator.PacketType;
+import resonant.engine.network.handle.IPacketReceiver;
 import resonant.lib.transform.vector.Vector3;
 
 /**

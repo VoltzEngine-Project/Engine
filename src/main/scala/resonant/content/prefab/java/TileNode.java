@@ -1,20 +1,13 @@
 package resonant.content.prefab.java;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.ISave;
 import resonant.api.grid.INode;
 import resonant.api.grid.INodeProvider;
 import resonant.api.grid.IUpdate;
-import resonant.lib.network.discriminator.PacketNode;
-import resonant.lib.network.discriminator.PacketType;
-import resonant.lib.network.handle.IPacketIDReceiver;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
