@@ -78,7 +78,7 @@ public class PlayerInteractionHandler
         {
             if (m.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
             {
-                return new VectorWorld(Minecraft.getMinecraft().theWorld, m.blockX, m.blockY, m.blockZ);
+                return new VectorWorld(entity.worldObj, m.blockX, m.blockY, m.blockZ);
             }
             else if (m.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY)
             {
