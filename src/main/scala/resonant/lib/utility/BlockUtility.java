@@ -1,6 +1,5 @@
 package resonant.lib.utility;
 
-import com.sun.istack.internal.NotNull;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -25,7 +24,7 @@ public class BlockUtility
      * @param block - block, can't be null
      * @return
      */
-    public static float getBlockResistance(@NotNull Block block)
+    public static float getBlockResistance(Block block)
     {
         //Get block hardness from cache so we don't need to use reflection every time
         if (BLOCK_RESISTANCE.containsKey(block))
@@ -54,7 +53,7 @@ public class BlockUtility
      * @param block - block, if null will return 0
      * @return
      */
-	public static float getBlockHardness(@NotNull Block block)
+	public static float getBlockHardness(Block block)
 	{
         //Get block hardness from cache so we don't need to use reflection every time
         if (BLOCK_HARDNESS.containsKey(block))
@@ -80,7 +79,7 @@ public class BlockUtility
      * @param stack - stack
      * @return hardness value
      */
-	public static float getBlockHardness(@NotNull ItemStack stack)
+	public static float getBlockHardness(ItemStack stack)
 	{
         return getBlockHardness(Block.getBlockFromItem(stack.getItem()));
 	}
