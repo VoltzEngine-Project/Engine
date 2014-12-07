@@ -42,14 +42,7 @@ public class CommonRegistryProxy
             }
             else
             {
-                try
-                {
-                    throw e;
-                }
-                catch (ClassNotFoundException e1)
-                {
-
-                }
+                e.printStackTrace();
             }
         }
     }
