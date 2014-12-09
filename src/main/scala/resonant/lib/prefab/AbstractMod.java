@@ -4,6 +4,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import net.minecraftforge.common.config.Configuration;
 import resonant.content.loader.ModManager;
 import resonant.lib.loadable.LoadableHandler;
 
@@ -26,6 +27,7 @@ public abstract class AbstractMod
 {
     protected LoadableHandler loader;
     protected ModManager manager;
+    private Configuration config;
 
     /**
      * @param domain - mod id uses to register textures with, etc
@@ -39,6 +41,7 @@ public abstract class AbstractMod
     public void preInit(FMLPreInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, getProxy());
+        config = new Configuration(event.getSuggestedConfigurationFile());
         loader.applyModule(getProxy());
         loader.preInit();
     }
@@ -51,6 +54,11 @@ public abstract class AbstractMod
     public void postInit(FMLPostInitializationEvent event)
     {
         loader.postInit();
+    }
+
+    public Configuration getConfig()
+    {
+        return config;
     }
 
     public abstract AbstractProxy getProxy();
