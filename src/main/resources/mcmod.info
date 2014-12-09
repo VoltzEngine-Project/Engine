@@ -1,5 +1,5 @@
 [{
-    "modid": "ResonantEngine,
+    "modid": "ResonantEngine",
     "name": "Resonant Engine",
     "description": "Universal Electricity is a Minecraft modding library that provides an easy, flexible energy framework and compatibility bridges between various energy systems in Minecraft.",
     "version": "${version}",
