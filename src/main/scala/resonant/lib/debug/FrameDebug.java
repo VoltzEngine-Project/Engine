@@ -2,7 +2,7 @@ package resonant.lib.debug;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import resonant.api.grid.IUpdate;
+import resonant.api.IUpdate;
 import resonant.lib.transform.vector.IVectorWorld;
 
 import javax.swing.*;

@@ -9,9 +9,9 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
-import resonant.api.grid.INodeProvider;
+import resonant.api.tile.INodeProvider;
 import resonant.api.items.IEnergyItem;
-import resonant.lib.grid.Compatibility;
+import resonant.lib.mod.compat.energy.Compatibility;
 import resonant.lib.asm.TemplateInjectionManager.InjectionTemplate;
 
 /**

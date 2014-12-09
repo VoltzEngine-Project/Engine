@@ -5,8 +5,8 @@ import net.minecraft.client.gui.GuiTextField;
 import resonant.engine.ResonantEngine;
 import resonant.lib.prefab.gui.GuiContainerBase;
 import resonant.engine.network.discriminator.PacketTile;
-import resonant.lib.schematic.Schematic;
-import resonant.lib.schematic.SchematicRegistry;
+import resonant.lib.world.schematic.Schematic;
+import resonant.lib.world.schematic.SchematicRegistry;
 import resonant.lib.utility.LanguageUtility;
 
 public class GuiCreativeBuilder extends GuiContainerBase

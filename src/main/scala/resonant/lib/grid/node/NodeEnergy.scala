@@ -1,7 +1,7 @@
 package resonant.lib.grid.node
 
-import resonant.api.electric.EnergyStorage
-import resonant.api.grid.INodeProvider
+import resonant.api.tile.INodeProvider
+import resonant.lib.grid.energy.EnergyStorage
 import resonant.lib.prefab.TEnergyBuffer
 
 /** Node which acts like glorified battery for storing energy.

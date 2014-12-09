@@ -4,7 +4,8 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
 import resonant.api.ISave
-import resonant.api.grid.{INode, INodeProvider}
+import resonant.api.tile.INodeProvider
+import resonant.api.tile.node.INode
 import resonant.lib.grid.node.{NodeConnector, TTileConnector}
 
 /**

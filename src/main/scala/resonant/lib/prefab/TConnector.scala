@@ -1,7 +1,8 @@
 package resonant.lib.prefab
 
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.grid.{INode, INodeProvider, IConnector}
+import resonant.api.tile.{IConnector, INodeProvider}
+import resonant.api.tile.node.INode
 import resonant.lib.transform.vector.{TVectorWorld, VectorWorld}
 import resonant.lib.wrapper.BitmaskWrapper._
 

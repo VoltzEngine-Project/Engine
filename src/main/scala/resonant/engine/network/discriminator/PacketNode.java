@@ -4,8 +4,8 @@ import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.tileentity.TileEntity;
-import resonant.api.grid.INode;
-import resonant.api.grid.INodeProvider;
+import resonant.api.tile.node.INode;
+import resonant.api.tile.INodeProvider;
 import resonant.lib.transform.vector.IVector3;
 
 /**

@@ -3,8 +3,8 @@ package resonant.lib.debug;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import resonant.api.grid.INode;
-import resonant.api.grid.INodeProvider;
+import resonant.api.tile.node.INode;
+import resonant.api.tile.INodeProvider;
 import resonant.lib.transform.vector.IVector3;
 import resonant.lib.transform.vector.IVectorWorld;
 

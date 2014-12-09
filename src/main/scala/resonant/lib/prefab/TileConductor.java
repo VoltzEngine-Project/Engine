@@ -2,7 +2,7 @@ package resonant.lib.prefab;
 
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.util.ForgeDirection;
-import resonant.api.grid.INode;
+import resonant.api.tile.node.INode;
 import resonant.content.prefab.java.TileNode;
 import resonant.lib.grid.branch.NodeBranchPart;
 

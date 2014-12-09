@@ -4,10 +4,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-import resonant.api.IReactor;
+import resonant.api.tile.IReactor;
 import resonant.engine.ResonantEngine;
 import resonant.engine.grid.thermal.EventThermal.EventThermalUpdate;
-import resonant.api.grid.IUpdate;
+import resonant.api.IUpdate;
 import resonant.lib.transform.vector.VectorWorld;
 
 import java.util.HashMap;

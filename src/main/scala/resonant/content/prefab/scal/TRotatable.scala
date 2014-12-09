@@ -3,7 +3,7 @@ package resonant.content.prefab.scal
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.MathHelper
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.IRotatable
+import resonant.api.tile.IRotatable
 import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.transform.vector.Vector3
 

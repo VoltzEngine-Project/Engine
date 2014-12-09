@@ -1,10 +1,8 @@
 package resonant.engine;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import net.minecraft.entity.player.EntityPlayer;
-import resonant.lib.grid.UpdateTicker$;
-import resonant.lib.prefab.AbstractProxy;
+import resonant.lib.mod.AbstractProxy;
 
 /**
  * The Resonant Engine common proxy

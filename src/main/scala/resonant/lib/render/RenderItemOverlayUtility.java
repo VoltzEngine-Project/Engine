@@ -18,7 +18,7 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import resonant.lib.utility.LanguageUtility;
-import resonant.lib.utility.WorldUtility;
+import resonant.lib.world.WorldUtility;
 import resonant.lib.transform.rotation.Quaternion;
 import resonant.lib.transform.vector.Vector3;
 

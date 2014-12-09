@@ -3,7 +3,8 @@ package resonant.lib.grid.node
 import java.util.{Map => JMap, Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.grid.{INodeConnector, INodeProvider}
+import resonant.api.tile.INodeProvider
+import resonant.api.tile.node.INodeConnector
 import resonant.lib.wrapper.BitmaskWrapper._
 
 import scala.collection.convert.wrapAll._

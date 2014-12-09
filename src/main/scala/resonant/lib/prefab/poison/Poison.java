@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import resonant.api.armor.IAntiPoisonArmor;
-import resonant.api.blocks.IAntiPoisonBlock;
+import resonant.api.tile.IAntiPoisonBlock;
 import resonant.engine.References;
 import resonant.lib.transform.vector.Vector3;
 

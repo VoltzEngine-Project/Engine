@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import resonant.api.items.IEnergyItem;
-import resonant.lib.science.UnitDisplay;
-import resonant.lib.science.UnitDisplay.Unit;
-import resonant.lib.grid.Compatibility;
+import resonant.lib.utility.science.UnitDisplay;
+import resonant.lib.utility.science.UnitDisplay.Unit;
+import resonant.lib.mod.compat.energy.Compatibility;
 
 import java.util.List;
 

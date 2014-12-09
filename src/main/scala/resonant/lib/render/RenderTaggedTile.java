@@ -9,7 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
-import resonant.api.ITagRender;
+import resonant.api.tile.ITagRender;
 import resonant.lib.transform.vector.Vector3;
 
 import java.util.HashMap;

@@ -3,7 +3,8 @@ package resonant.lib.content.prefab
 import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.grid.{INode, INodeProvider}
+import resonant.api.tile.INodeProvider
+import resonant.api.tile.node.INode
 import resonant.lib.grid.electric.DCNode
 import resonant.lib.utility.nbt.ISaveObj
 

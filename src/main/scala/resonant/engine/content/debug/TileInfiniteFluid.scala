@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
-import resonant.api.grid.INode
+import resonant.api.tile.node.INode
 import resonant.lib.content.prefab.java.TileIO
 
 /**

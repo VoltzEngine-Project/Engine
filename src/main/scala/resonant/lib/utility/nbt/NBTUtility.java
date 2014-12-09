@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import resonant.engine.References;
-import resonant.lib.science.units.UnitHelper;
+import resonant.lib.utility.science.units.UnitHelper;
 import resonant.lib.transform.vector.Vector2;
 import resonant.lib.transform.vector.Vector3;
 

@@ -4,7 +4,7 @@ import java.util.Set
 
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
-import resonant.api.blocks.IBlockFrequency
+import resonant.api.tile.IBlockFrequency
 import resonant.api.mffs.fortron.FrequencyGridRegistry
 import resonant.lib.grid.Grid
 import resonant.lib.transform.region.Cuboid

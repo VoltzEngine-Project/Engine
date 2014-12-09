@@ -1,6 +1,6 @@
 package resonant.lib.prefab
 
-import resonant.api.electric.EnergyStorage
+import resonant.lib.grid.energy.EnergyStorage
 
 /** Wrapper for EnergyStorage object
   * Created  on 11/8/2014.

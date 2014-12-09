@@ -6,7 +6,8 @@ import net.minecraft.block.Block
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.ISave
-import resonant.api.grid.{INode, INodeProvider}
+import resonant.api.tile.INodeProvider
+import resonant.api.tile.node.INode
 import resonant.content.spatial.block.SpatialTile
 import resonant.lib.transform.vector.Vector3
 

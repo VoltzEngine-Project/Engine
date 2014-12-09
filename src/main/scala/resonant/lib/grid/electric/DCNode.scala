@@ -4,7 +4,8 @@ import java.util
 import java.util.{Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.grid.{INodeProvider, IUpdate}
+import resonant.api.IUpdate
+import resonant.api.tile.INodeProvider
 import resonant.lib.grid.UpdateTicker
 import resonant.lib.grid.node.{NodeEnergy, TTileConnector}
 

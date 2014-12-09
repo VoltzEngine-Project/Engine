@@ -1,7 +1,7 @@
 package resonant.api.mffs.machine;
 
 import net.minecraft.inventory.IInventory;
-import resonant.api.blocks.IBlockFrequency;
+import resonant.api.tile.IBlockFrequency;
 import resonant.lib.transform.vector.Vector3;
 
 import java.util.Set;

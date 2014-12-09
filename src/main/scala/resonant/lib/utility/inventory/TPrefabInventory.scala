@@ -5,7 +5,7 @@ import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.IInventoryProvider
+import resonant.api.tile.IInventoryProvider
 import resonant.lib.transform.vector.Vector3
 
 /**

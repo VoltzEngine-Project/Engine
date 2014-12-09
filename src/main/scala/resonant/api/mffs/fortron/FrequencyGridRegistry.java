@@ -1,7 +1,7 @@
 package resonant.api.mffs.fortron;
 
 import net.minecraft.world.World;
-import resonant.api.blocks.IBlockFrequency;
+import resonant.api.tile.IBlockFrequency;
 import resonant.lib.transform.region.Cuboid;
 import resonant.lib.transform.vector.Vector3;
 

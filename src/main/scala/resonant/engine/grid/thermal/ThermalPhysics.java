@@ -3,7 +3,7 @@ package resonant.engine.grid.thermal;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
-import resonant.lib.science.ChemElement;
+import resonant.lib.utility.science.ChemElement;
 import resonant.lib.transform.vector.Vector3;
 
 import java.util.HashMap;

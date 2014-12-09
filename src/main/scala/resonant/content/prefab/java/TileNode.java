@@ -4,9 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
 import resonant.api.ISave;
-import resonant.api.grid.INode;
-import resonant.api.grid.INodeProvider;
-import resonant.api.grid.IUpdate;
+import resonant.api.tile.node.INode;
+import resonant.api.tile.INodeProvider;
+import resonant.api.IUpdate;
 
 import java.util.*;
 

@@ -5,7 +5,7 @@ import net.minecraft.item.crafting.IRecipe
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.common.config.Configuration
 import net.minecraftforge.oredict.{OreDictionary, ShapedOreRecipe, ShapelessOreRecipe}
-import resonant.lib.recipe.Recipes
+import resonant.lib.utility.recipe.Recipes
 
 /**
  * Recipe management syntax enhancements.

@@ -3,7 +3,7 @@ package resonant.content.prefab
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.IRotatable
+import resonant.api.tile.IRotatable
 import resonant.content.spatial.block.SpatialBlock
 import resonant.lib.render.{RenderBlockAdvanced, RenderUtility}
 import resonant.lib.utility.RotationUtility

@@ -8,7 +8,7 @@ import cpw.mods.fml.common.eventhandler.{Event, SubscribeEvent}
 import cpw.mods.fml.common.gameevent.TickEvent
 import cpw.mods.fml.common.gameevent.TickEvent.Phase
 import net.minecraftforge.common.MinecraftForge
-import resonant.api.grid.IUpdate
+import resonant.api.IUpdate
 
 import scala.collection.convert.wrapAll._
 

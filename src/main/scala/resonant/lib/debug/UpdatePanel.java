@@ -1,6 +1,6 @@
 package resonant.lib.debug;
 
-import resonant.api.grid.IUpdate;
+import resonant.api.IUpdate;
 
 import javax.swing.*;
 import java.awt.*;

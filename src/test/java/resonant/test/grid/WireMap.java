@@ -5,7 +5,7 @@ import net.minecraft.world.World;
 import resonant.content.wrapper.BlockDummy;
 import resonant.junit.TestRegistry;
 import resonant.lib.prefab.TileConductor;
-import resonant.lib.schematic.StringSchematic;
+import resonant.lib.world.schematic.StringSchematic;
 
 /**
  * Created by robert on 11/21/2014.

@@ -4,7 +4,8 @@ import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.grid.{INode, INodeProvider}
+import resonant.api.tile.INodeProvider
+import resonant.api.tile.node.INode
 import resonant.lib.transform.vector.TVectorWorld
 
 /**

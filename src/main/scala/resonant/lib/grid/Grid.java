@@ -1,8 +1,8 @@
 package resonant.lib.grid;
 
-import resonant.api.grid.IGrid;
-import resonant.api.grid.INode;
-import resonant.api.grid.INodeGrid;
+import resonant.api.IGrid;
+import resonant.api.tile.IGridProvider;
+import resonant.api.tile.node.INode;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,8 +35,8 @@ public class Grid<N> implements IGrid<N>
 			//Kill the nodes connection to the grid
 			for (N node : getNodes())
 			{
-				if (node instanceof INodeGrid)
-					((INodeGrid) node).setGrid(null);
+				if (node instanceof IGridProvider)
+					((IGridProvider) node).setGrid(null);
 				if (node instanceof INode)
 					((INode) node).deconstruct();
 			}
@@ -73,8 +73,8 @@ public class Grid<N> implements IGrid<N>
 	 */
 	protected void reconstructNode(N node)
 	{
-		if (node instanceof INodeGrid)
-			((INodeGrid) node).setGrid(this);
+		if (node instanceof IGridProvider)
+			((IGridProvider) node).setGrid(this);
 	}
 
 	/**
@@ -91,8 +91,8 @@ public class Grid<N> implements IGrid<N>
 	public void add(N node)
 	{
 		nodes.add(node);
-		if (node instanceof INodeGrid)
-			((INodeGrid) node).setGrid(this);
+		if (node instanceof IGridProvider)
+			((IGridProvider) node).setGrid(this);
 	}
 
 	/**
@@ -106,8 +106,8 @@ public class Grid<N> implements IGrid<N>
 	public void remove(N node)
 	{
 		nodes.remove(node);
-		if (node instanceof INodeGrid)
-			((INodeGrid) node).setGrid(null);
+		if (node instanceof IGridProvider)
+			((IGridProvider) node).setGrid(null);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 package resonant.content.loader
 
-import resonant.lib.loadable.ILoadable
+import resonant.lib.mod.loadable.ILoadable
 
 /**
  * Extend this trait, and load all content of the mod in the body of the trait. Registration and recipes will be automatically handled.

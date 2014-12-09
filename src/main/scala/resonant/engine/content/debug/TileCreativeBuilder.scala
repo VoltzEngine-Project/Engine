@@ -13,7 +13,7 @@ import resonant.engine.ResonantEngine
 import resonant.lib.`type`.Pair
 import resonant.engine.network.discriminator.{PacketTile, PacketType}
 import resonant.engine.network.handle.{TPacketReceiver, TPacketSender}
-import resonant.lib.schematic.SchematicRegistry
+import resonant.lib.world.schematic.SchematicRegistry
 import resonant.lib.transform.vector.Vector3
 
 import scala.collection.JavaConversions._

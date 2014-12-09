@@ -2,7 +2,8 @@ package resonant.lib.grid.node
 
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.grid.{INode, INodeProvider}
+import resonant.api.tile.INodeProvider
+import resonant.api.tile.node.INode
 
 /**
  * A trait applied to NodeConnector

@@ -1,7 +1,7 @@
 package resonant.lib.content.prefab
 
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.electric.EnergyStorage
+import resonant.lib.grid.energy.EnergyStorage
 
 /**
  * Any object that can store energy

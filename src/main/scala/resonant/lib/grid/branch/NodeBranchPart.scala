@@ -1,7 +1,8 @@
 package resonant.lib.grid.branch
 
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.api.grid.{IGrid, INodeGrid, INodeProvider}
+import resonant.api.IGrid
+import resonant.api.tile.{IGridProvider, INodeProvider}
 import resonant.lib.grid.branch.part.Part
 import resonant.lib.grid.node.Node
 import resonant.lib.prefab.TConnector
@@ -14,7 +15,7 @@ import scala.beans.BeanProperty
  * A node that is part of a branch
  * @author DarkCow
  */
-class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector[NodeBranchPart] with INodeGrid
+class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector[NodeBranchPart] with IGridProvider
 {
   @BeanProperty
   var branch : Part = null

@@ -1,6 +1,6 @@
 package resonant.lib.grid.node
 
-import resonant.api.grid.INodeProvider
+import resonant.api.tile.INodeProvider
 import resonant.lib.grid.GridNode
 import scala.collection.convert.wrapAll._
 /**

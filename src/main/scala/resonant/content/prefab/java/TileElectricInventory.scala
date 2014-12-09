@@ -1,8 +1,8 @@
 package resonant.lib.content.prefab.java
 
 import net.minecraft.block.material.Material
-import resonant.api.electric.EnergyStorage
 import resonant.lib.content.prefab.TElectric
+import resonant.lib.grid.energy.EnergyStorage
 import resonant.lib.prefab.TEnergyBuffer
 
 /**

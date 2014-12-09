@@ -1,8 +1,6 @@
 package resonant.lib.grid.branch.part;
 
-import resonant.api.grid.INode;
 import resonant.lib.grid.branch.NodeBranchPart;
-import scala.reflect.internal.util.WeakHashSet;
 
 import java.util.HashSet;
 import java.util.Set;

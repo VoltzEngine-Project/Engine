@@ -14,7 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
-import resonant.lib.utility.WorldUtility;
+import resonant.lib.world.WorldUtility;
 import resonant.lib.transform.vector.Vector3;
 
 import java.util.HashMap;
