@@ -7,7 +7,6 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ChatComponentText
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.IIO
-import resonant.content.spatial.block.SpatialTile
 import resonant.lib.prefab.tile.spatial.SpatialTile
 import resonant.lib.utility.nbt.ISaveObj
 

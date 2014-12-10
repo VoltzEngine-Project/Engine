@@ -2,9 +2,8 @@ package resonant.lib.network.discriminator
 
 import io.netty.buffer.Unpooled
 import net.minecraft.entity.player.EntityPlayer
-import resonant.lib.wrapper.ByteBufWrapper
-import ByteBufWrapper._
 import resonant.lib.network.netty.AbstractPacket
+import resonant.lib.wrapper.ByteBufWrapper._
 
 /**
  * @author tgame14, Calclavia

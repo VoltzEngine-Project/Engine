@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import resonant.engine.References;
 import resonant.lib.mod.loadable.ICompatProxy;
-import resonant.lib.network.ByteBufWrapper;
+import resonant.lib.wrapper.ByteBufWrapper;
 import resonant.lib.network.discriminator.PacketEntity;
 import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.network.discriminator.PacketType;

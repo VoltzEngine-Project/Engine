@@ -4,6 +4,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.Item
 import resonant.lib.prefab.tile.spatial.SpatialBlock
+import resonant.lib.wrapper.StringWrapper._
 
 /**
  * Automatic content registration for all fields extending this trait.

@@ -4,8 +4,7 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.tileentity.TileEntity
 import resonant.engine.ResonantEngine
-import resonant.lib.wrapper.ByteBufWrapper
-import ByteBufWrapper.ByteBufWrapper
+import resonant.lib.wrapper.ByteBufWrapper._
 import resonant.lib.network.discriminator.PacketTile
 import resonant.lib.network.netty.AbstractPacket
 import resonant.lib.transform.vector.IVectorWorld
