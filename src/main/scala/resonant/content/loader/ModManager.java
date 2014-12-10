@@ -41,6 +41,10 @@ public class ModManager
 	public ModManager setPrefix(String modPrefix)
 	{
 		this.modPrefix = modPrefix;
+        if(!modPrefix.endsWith(":"))
+        {
+            this.modPrefix += ":";
+        }
 		return this;
 	}
 
