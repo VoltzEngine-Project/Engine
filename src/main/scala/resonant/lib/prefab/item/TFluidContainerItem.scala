@@ -26,10 +26,7 @@ trait TFluidContainerItem extends IFluidContainerItem
     return FluidStack.loadFluidStackFromNBT(container.stackTagCompound.getCompoundTag("Fluid"))
   }
 
-  def getCapacity(container: ItemStack): Int =
-  {
-    return capacity
-  }
+  def getCapacity(container: ItemStack): Int = capacity
 
   def fill(container: ItemStack, resource: FluidStack, doFill: Boolean): Int =
   {

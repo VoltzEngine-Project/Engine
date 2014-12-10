@@ -12,15 +12,9 @@ object BitmaskWrapper
   /**
    * Java forwarding
    */
-  def mask(sideMap: Int, direction: ForgeDirection): Boolean =
-  {
-    return sideMap.mask(direction)
-  }
+  def mask(sideMap: Int, direction: ForgeDirection): Boolean = sideMap.mask(direction)
 
-  def mask(sideMap: Int, direction: ForgeDirection, doEnable: Boolean): Int =
-  {
-    return sideMap.mask(direction, doEnable)
-  }
+  def mask(sideMap: Int, direction: ForgeDirection, doEnable: Boolean): Int = sideMap.mask(direction, doEnable)
 
   implicit class BitmaskInt(val underlying: Int) extends AnyVal
   {

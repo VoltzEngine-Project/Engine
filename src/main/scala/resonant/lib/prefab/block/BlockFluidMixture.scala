@@ -35,10 +35,7 @@ class BlockFluidMixture(fluid: Fluid) extends BlockFluidFinite(fluid, Material.w
     return stack
   }
 
-  @SideOnly(Side.CLIENT) override def colorMultiplier(access: IBlockAccess, x: Int, y: Int, z: Int): Int =
-  {
-    return getFluid.getColor()
-  }
+  @SideOnly(Side.CLIENT) override def colorMultiplier(access: IBlockAccess, x: Int, y: Int, z: Int): Int = getFluid.getColor()
 
   def mix(world: World, x: Int, y: Int, z: Int, stack: ItemStack): Boolean =
   {
@@ -54,13 +51,7 @@ class BlockFluidMixture(fluid: Fluid) extends BlockFluidFinite(fluid, Material.w
     return false
   }
 
-  override def canDrain(world: World, x: Int, y: Int, z: Int): Boolean =
-  {
-    return true
-  }
+  override def canDrain(world: World, x: Int, y: Int, z: Int): Boolean = true
 
-  def getQuantaPerBlock: Int =
-  {
-    return quantaPerBlock
-  }
+  def getQuantaPerBlock: Int = quantaPerBlock
 }

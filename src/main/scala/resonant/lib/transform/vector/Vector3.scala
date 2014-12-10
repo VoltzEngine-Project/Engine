@@ -389,10 +389,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   /** Point between this point and another */
   @Deprecated
   def midpoint(pos: IVector3): Vector3 = midPoint(pos)
-  def midPoint(pos: IVector3): Vector3 =
-  {
-    return new Vector3((x + pos.x) / 2, (y + pos.y) / 2, (z + pos.z) / 2);
-  }
+  def midPoint(pos: IVector3): Vector3 = new Vector3((x + pos.x) / 2, (y + pos.y) / 2, (z + pos.z) / 2)
 
   def dot(other: IVector3) = $(other)
   def $(other: IVector3) = x * other.x + y * other.y + z * other.z

@@ -24,6 +24,7 @@ import resonant.content.prefab.itemblock.ItemBlockTooltip
 import resonant.content.prefab.scal.TRotatable
 import resonant.content.prefab.scal.render.ISimpleItemRenderer
 import resonant.content.wrapper.{BlockDummy, RenderTileDummy}
+import resonant.engine.{References, ResonantEngine}
 import resonant.lib.content.prefab.TIO
 import resonant.lib.render.RenderUtility
 import resonant.lib.transform.region.Cuboid
@@ -263,11 +264,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   override def z: Double = zCoord
 
   /** World location of the block, centered */
-  def center: VectorWorld =
-  {
-    //assert(world != null, "TileBlock [" + getClass.getSimpleName + "] attempted to access invalid method.")
-    return toVectorWorld.add(0.5)
-  }
+  def center: VectorWorld = toVectorWorld.add(0.5)
 
   /**
    * Gets all ItemStacks dropped by this machine when its destroyed
@@ -308,10 +305,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
    * @param fortune - bonus of the tool mining it
    * @return number of items, 0 will result in no drop
    */
-  def quantityDropped(meta: Int, fortune: Int): Int =
-  {
-    return 1
-  }
+  def quantityDropped(meta: Int, fortune: Int): Int = 1
 
   /**
    * Gets the meta value when this block is dropped.
@@ -321,10 +315,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
    * @param fortune - bonus of the tool mining it
    * @return meta value, shouldn't be less then 0
    */
-  def metadataDropped(meta: Int, fortune: Int): Int =
-  {
-    return 0
-  }
+  def metadataDropped(meta: Int, fortune: Int): Int = 0
 
   /**
    * Detects if the player is holding the control key down.
@@ -346,6 +337,8 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
       {
         case e: Exception =>
         {
+          if(ResonantEngine.runningAsDev)
+            References.LOGGER.catching(e)
         }
       }
     return false
@@ -367,20 +360,14 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
    * @param target - block hit by a ray trace
    * @return ItemStack of your block, can be null but shouldn't unless the block can't be placed
    */
-  def getPickBlock(target: MovingObjectPosition): ItemStack =
-  {
-    return new ItemStack(getBlockType, 1, metadataDropped(metadata, 0))
-  }
+  def getPickBlock(target: MovingObjectPosition): ItemStack = new ItemStack(getBlockType, 1, metadataDropped(metadata, 0))
 
   /**
    * Gets the light value of the block
    * @param access - Simple version of the world, though don't assume it is
    * @return light value from 0 - 16;
    */
-  def getLightValue(access: IBlockAccess): Int =
-  {
-    return block.getLightValue
-  }
+  def getLightValue(access: IBlockAccess): Int = block.getLightValue
 
   /**
    * Called when the player left clicks the block
@@ -419,10 +406,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
    * @param hit - Vector3 location of the spot hit on the block
    * @return true if the click event was used
    */
-  protected def use(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
-  {
-    return false
-  }
+  protected def use(player: EntityPlayer, side: Int, hit: Vector3): Boolean = false
 
   /**
    * Called when the player uses a supported wrench on the block
@@ -552,32 +536,20 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     return boxes
   }
 
-  def getCollisionBoxes: java.lang.Iterable[Cuboid] =
-  {
-    return immutable.List[Cuboid](bounds)
-  }
+  def getCollisionBoxes: java.lang.Iterable[Cuboid] = immutable.List[Cuboid](bounds)
 
-  def getSelectBounds: Cuboid =
-  {
-    return bounds
-  }
+  def getSelectBounds: Cuboid = bounds
 
   @SideOnly(Side.CLIENT)
   override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + toVectorWorld).toAABB
 
-  def getCollisionBounds: Cuboid =
-  {
-    return bounds
-  }
+  def getCollisionBounds: Cuboid = bounds
 
   /**
    * Called in the world.
    */
   @SideOnly(Side.CLIENT)
-  def getIcon(access: IBlockAccess, side: Int): IIcon =
-  {
-    return getIcon(side, access.getBlockMetadata(xi, yi, zi))
-  }
+  def getIcon(access: IBlockAccess, side: Int): IIcon = getIcon(side, access.getBlockMetadata(xi, yi, zi))
 
   /**
    * Called either by an item, or in a world.
@@ -601,10 +573,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   }
 
   @SideOnly(Side.CLIENT)
-  def getIcon: IIcon =
-  {
-    return SpatialBlock.icon.get(getTextureName)
-  }
+  def getIcon: IIcon = SpatialBlock.icon.get(getTextureName)
 
   @SideOnly(Side.CLIENT)
   protected def getTextureName: String =
@@ -643,10 +612,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     * @param meta - placement data
     * @return icon that will render on sides */
   @SideOnly(Side.CLIENT)
-  protected def getSideIcon(meta: Int): IIcon =
-  {
-    return getSideIcon(meta, 0)
-  }
+  protected def getSideIcon(meta: Int): IIcon = getSideIcon(meta, 0)
 
   /** Gets the icon that renders on the sides
     * @param meta - placement data
@@ -844,10 +810,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   /** Used to detect if the block is a tile or data object for creating blocks
     * @return Normally you want to return this class
     */
-  def tile: SpatialBlock =
-  {
-    return null
-  }
+  def tile: SpatialBlock = null
 
   /**
    * Gets the explosive resistance of this block.

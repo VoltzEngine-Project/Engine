@@ -21,8 +21,5 @@ trait TTankProvider
     *
     * @return instance of the fluid tank or null if there is no tank/match
     */
-  def getTankForFluid(fluid: FluidTank): FluidTank =
-  {
-    return getPrimaryTank
-  }
+  def getTankForFluid(fluid: FluidTank): FluidTank = getPrimaryTank
 }

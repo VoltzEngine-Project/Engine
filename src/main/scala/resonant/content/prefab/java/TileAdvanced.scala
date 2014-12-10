@@ -14,8 +14,5 @@ class TileAdvanced(material: Material) extends SpatialTile(material: Material) w
     ResonantEngine.instance.packetHandler.toMCPacket(getDescPacket)
   }
 
-  def getDescPacket: AbstractPacket =
-  {
-    return null
-  }
+  def getDescPacket: AbstractPacket = null
 }

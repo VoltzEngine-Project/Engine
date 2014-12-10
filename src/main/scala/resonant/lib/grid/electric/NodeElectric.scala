@@ -26,10 +26,7 @@ class NodeElectric(parent: INodeProvider) extends NodeBranchPart(parent) with TE
   override def getEnergyStorage: EnergyStorage = buffer
 
   /** Current flowing through this node */
-  def current : Double =
-  {
-    return getFlow(NodeType.ELECTRICITY, ForgeDirection.UNKNOWN)
-  }
+  def current : Double = getFlow(NodeType.ELECTRICITY, ForgeDirection.UNKNOWN)
 
   override def getFlow(t: NodeType, side: ForgeDirection): Double =
   {

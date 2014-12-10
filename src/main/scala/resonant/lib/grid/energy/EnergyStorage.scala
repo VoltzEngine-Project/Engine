@@ -57,20 +57,14 @@ class EnergyStorage
     setMaxExtract(maxTransfer)
   }
 
-  def getMaxReceive: Double =
-  {
-    return maxReceive
-  }
+  def getMaxReceive: Double = maxReceive
 
   def setMaxReceive(maxReceive: Double)
   {
     this.maxReceive = maxReceive
   }
 
-  def getMaxExtract: Double =
-  {
-    return maxExtract
-  }
+  def getMaxExtract: Double = maxExtract
 
   def setMaxExtract(maxExtract: Double)
   {
@@ -108,15 +102,9 @@ class EnergyStorage
     return energyReceived
   }
 
-  def receiveEnergy(doReceive: Boolean): Double =
-  {
-    return this.receiveEnergy(this.getMaxReceive, doReceive)
-  }
+  def receiveEnergy(doReceive: Boolean): Double = this.receiveEnergy(this.getMaxReceive, doReceive)
 
-  def receiveEnergy: Double =
-  {
-    return this.receiveEnergy(true)
-  }
+  def receiveEnergy: Double = this.receiveEnergy(true)
 
   def extractEnergy(extract: Double, doExtract: Boolean): Double =
   {
@@ -134,45 +122,21 @@ class EnergyStorage
     return this.extractEnergy(this.getMaxExtract, doExtract)
   }
 
-  def extractEnergy: Double =
-  {
-    return this.extractEnergy(true)
-  }
+  def extractEnergy: Double = this.extractEnergy(true)
 
-  def checkReceive(receive: Double): Boolean =
-  {
-    return this.receiveEnergy(receive, false) >= receive
-  }
+  def checkReceive(receive: Double): Boolean = this.receiveEnergy(receive, false) >= receive
 
-  def checkReceive: Boolean =
-  {
-    return this.checkReceive(this.getMaxReceive)
-  }
+  def checkReceive: Boolean = this.checkReceive(this.getMaxReceive)
 
-  def checkExtract(extract: Double): Boolean =
-  {
-    return this.extractEnergy(extract, false) >= extract
-  }
+  def checkExtract(extract: Double): Boolean = this.extractEnergy(extract, false) >= extract
 
-  def checkExtract: Boolean =
-  {
-    return this.checkExtract(this.getMaxExtract)
-  }
+  def checkExtract: Boolean = this.checkExtract(this.getMaxExtract)
 
-  def isFull: Boolean =
-  {
-    return this.getEnergy >= this.getEnergyCapacity
-  }
+  def isFull: Boolean = this.getEnergy >= this.getEnergyCapacity
 
-  def isEmpty: Boolean =
-  {
-    return this.getEnergy == 0
-  }
+  def isEmpty: Boolean = this.getEnergy == 0
 
-  def getLastEnergy: Double =
-  {
-    return this.lastEnergy
-  }
+  def getLastEnergy: Double = this.lastEnergy
 
   /**
    * @return True if the last energy state and the current one are either in an
@@ -186,15 +150,9 @@ class EnergyStorage
   /**
    * Returns the amount of energy this storage can further store.
    */
-  def getEmptySpace: Double =
-  {
-    return this.getEnergyCapacity - this.getEnergy
-  }
+  def getEmptySpace: Double = this.getEnergyCapacity - this.getEnergy
 
-  def getEnergy: Double =
-  {
-    return this.energy
-  }
+  def getEnergy: Double = this.energy
 
   /**
    * This function is included to allow for server -> client sync. Do not call this externally to
@@ -216,10 +174,7 @@ class EnergyStorage
     }
   }
 
-  def getEnergyCapacity: Double =
-  {
-    return this.capacity
-  }
+  def getEnergyCapacity: Double = this.capacity
 
   override def toString: String =
   {

@@ -14,15 +14,9 @@ object RotationUtility
    * @param r - The rotation to be applied (0-3)
    * @return The ForgeDirection ordinal from 0-5.
    */
-  def rotateSide(s: Int, r: Int): Int =
-  {
-    return sideRotMap(s << 2 | r)
-  }
+  def rotateSide(s: Int, r: Int): Int = sideRotMap(s << 2 | r)
 
-  def rotateSide(s: ForgeDirection, r: ForgeDirection): ForgeDirection =
-  {
-    return ForgeDirection.getOrientation(sideRotMap(s.ordinal << 2 | r.ordinal))
-  }
+  def rotateSide(s: ForgeDirection, r: ForgeDirection): ForgeDirection = ForgeDirection.getOrientation(sideRotMap(s.ordinal << 2 | r.ordinal))
 
   /**
    * Finds the direction relative to a base direction.

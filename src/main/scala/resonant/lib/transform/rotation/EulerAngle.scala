@@ -25,20 +25,11 @@ import resonant.lib.transform.{AbstractOperation, ITransform}
 
 object EulerAngle
 {
-  def angleDifference(angleA: Double, angleB: Double): Double =
-  {
-    return Math.abs(angleA - angleB)
-  }
+  def angleDifference(angleA: Double, angleB: Double): Double = Math.abs(angleA - angleB)
 
-  def clampAngleTo360(value: Double): Double =
-  {
-    return clampAngle(value, -360, 360)
-  }
+  def clampAngleTo360(value: Double): Double = clampAngle(value, -360, 360)
 
-  def clampAngleTo180(value: Double): Double =
-  {
-    return clampAngle(value, -180, 180)
-  }
+  def clampAngleTo180(value: Double): Double = clampAngle(value, -180, 180)
 
   def clampAngle(value: Double, min: Double, max: Double): Double =
   {

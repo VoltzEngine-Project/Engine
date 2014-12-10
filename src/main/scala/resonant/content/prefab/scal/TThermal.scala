@@ -35,10 +35,7 @@ trait TThermal extends SpatialBlock
   /**
    * Gets the mass in KG Mass (KG) = Volume (Cubic Meters) * Densitry (kg/m-cubed)
    */
-  def getMass: Float =
-  {
-    return 1
-  }
+  def getMass: Float = 1
 
   def boilingPoint: Int
 

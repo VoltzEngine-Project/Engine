@@ -74,10 +74,7 @@ class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Re
   /**
    * Checks if a point is located inside a region
    */
-  def intersects(point: Vector2): Boolean =
-  {
-    return (point.x > this.min.x && point.x < this.max.x) && (point.y > this.min.y && point.y < this.max.y)
-  }
+  def intersects(point: Vector2): Boolean = (point.x > this.min.x && point.x < this.max.x) && (point.y > this.min.y && point.y < this.max.y)
 
   /**
    * Returns whether the given region intersects with this one.

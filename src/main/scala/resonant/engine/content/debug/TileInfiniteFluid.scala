@@ -74,15 +74,9 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
     return null
   }
 
-  override def canFill(from: ForgeDirection, fluid: Fluid): Boolean =
-  {
-    return getInputDirections.contains(from)
-  }
+  override def canFill(from: ForgeDirection, fluid: Fluid): Boolean = getInputDirections.contains(from)
 
-  override def canDrain(from: ForgeDirection, fluid: Fluid): Boolean =
-  {
-    return getOutputDirections.contains(from)
-  }
+  override def canDrain(from: ForgeDirection, fluid: Fluid): Boolean = getOutputDirections.contains(from)
 
   /*
     def onActivated(entityPlayer: EntityPlayer): Boolean =

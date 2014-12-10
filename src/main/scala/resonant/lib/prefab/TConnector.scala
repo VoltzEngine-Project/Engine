@@ -104,8 +104,5 @@ trait TConnector[N] extends IConnector[N] with TVectorWorld
     }
   }
 
-  def getNodeFromConnection(provider: INodeProvider, dir: ForgeDirection) : INode =
-  {
-    return null
-  }
+  def getNodeFromConnection(provider: INodeProvider, dir: ForgeDirection) : INode = null
 }

@@ -71,10 +71,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     eject
   }
 
-  override def getExplosionResistance(entity: Entity): Float =
-  {
-    return dummyTile.getExplosionResistance(entity)
-  }
+  override def getExplosionResistance(entity: Entity): Float = dummyTile.getExplosionResistance(entity)
 
   override def getExplosionResistance(entity: Entity, world: World, x: Int, y: Int, z: Int, explosionX: Double, explosionY: Double, explosionZ: Double): Float =
   {
@@ -239,30 +236,14 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     return value
   }
 
-  override def hasComparatorInputOverride: Boolean =
-  {
-    return dummyTile.isInstanceOf[SpatialBlock.IComparatorInputOverride]
-  }
+  override def hasComparatorInputOverride: Boolean = dummyTile.isInstanceOf[SpatialBlock.IComparatorInputOverride]
 
-  override def isOpaqueCube: Boolean =
-  {
-    if (dummyTile == null)
-    {
-      return true
-    }
-    return dummyTile.isOpaqueCube
-  }
+  override def isOpaqueCube: Boolean = dummyTile == null || dummyTile.isOpaqueCube
 
-  override def renderAsNormalBlock: Boolean =
-  {
-    return dummyTile.normalRender
-  }
+  override def renderAsNormalBlock: Boolean = dummyTile.normalRender
 
   @SideOnly(Side.CLIENT)
-  override def getRenderType: Int =
-  {
-    return if (!dummyTile.normalRender) BlockRenderHandler.ID else 0
-  }
+  override def getRenderType: Int = if (!dummyTile.normalRender) BlockRenderHandler.ID else 0
 
   @SideOnly(Side.CLIENT)
   override def getIcon(access: IBlockAccess, x: Int, y: Int, z: Int, side: Int): IIcon =
@@ -274,10 +255,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   }
 
   @SideOnly(Side.CLIENT)
-  override def getIcon(side: Int, meta: Int): IIcon =
-  {
-    return dummyTile.getIcon(side, meta)
-  }
+  override def getIcon(side: Int, meta: Int): IIcon = dummyTile.getIcon(side, meta)
 
   @SideOnly(Side.CLIENT)
   override def registerBlockIcons(iconRegister: IIconRegister)
@@ -289,7 +267,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   override def colorMultiplier(access: IBlockAccess, x: Int, y: Int, z: Int): Int =
   {
     inject(access, x, y, z)
-    val value = getTile(access, x, y, z).colorMultiplier;
+    val value = getTile(access, x, y, z).colorMultiplier
     eject()
     return value
   }
@@ -318,10 +296,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   /**
    * Redstone interaction
    */
-  override def canProvidePower: Boolean =
-  {
-    return dummyTile.providePower
-  }
+  override def canProvidePower: Boolean = dummyTile.providePower
 
   override def isProvidingWeakPower(access: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Int =
   {
@@ -380,15 +355,9 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     return dummyTile
   }
 
-  override def getRenderBlockPass: Int =
-  {
-    return dummyTile.getRenderBlockPass
-  }
+  override def getRenderBlockPass: Int = dummyTile.getRenderBlockPass
 
-  override def tickRate(world: World): Int =
-  {
-    return dummyTile.tickRate(world)
-  }
+  override def tickRate(world: World): Int = dummyTile.tickRate(world)
 
   override def setBlockBoundsBasedOnState(access: IBlockAccess, x: Int, y: Int, z: Int)
   {

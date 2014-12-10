@@ -12,10 +12,7 @@ trait TElectricPart extends Part
 {
   var resistance : Double = 0
 
-  def getResistance(): Double =
-  {
-    return resistance
-  }
+  def getResistance(): Double = return resistance
 
   /** Calculates resistance of the part */
   def calculateResistance()

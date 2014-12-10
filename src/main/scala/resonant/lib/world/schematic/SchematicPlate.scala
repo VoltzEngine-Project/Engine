@@ -15,10 +15,7 @@ import resonant.lib.transform.vector.Vector3
  */
 class SchematicPlate(name: String, block: Block) extends Schematic
 {
-  override def getName: String =
-  {
-    return name
-  }
+  override def getName: String = name
 
   def getStructure(dir: ForgeDirection, size: Int): HashMap[Vector3, Pair[Block, Integer]] =
   {

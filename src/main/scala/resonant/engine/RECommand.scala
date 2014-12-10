@@ -8,15 +8,9 @@ import resonant.lib.grid.UpdateTicker
 
 object RECommand extends CommandBase
 {
-  override def getCommandName: String =
-  {
-    return "ue"
-  }
+  override def getCommandName: String = "ue"
 
-  override def getCommandUsage(par1ICommandSender: ICommandSender): String =
-  {
-    return "/ue help"
-  }
+  override def getCommandUsage(par1ICommandSender: ICommandSender): String = "/ue help"
 
   override def processCommand(sender: ICommandSender, args: Array[String])
   {
@@ -47,10 +41,7 @@ object RECommand extends CommandBase
         throw new WrongUsageException(this.getCommandUsage(sender))
   }
 
-  override def getRequiredPermissionLevel: Int =
-  {
-    return 0
-  }
+  override def getRequiredPermissionLevel: Int = 0
 
   override def addTabCompletionOptions(sender: ICommandSender, args: Array[String]): List[_] =
   {

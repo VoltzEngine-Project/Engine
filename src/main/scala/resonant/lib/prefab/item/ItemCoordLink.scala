@@ -40,10 +40,7 @@ abstract class ItemCoordLink extends ItemTooltip
     }
   }
 
-  def hasLink(itemStack: ItemStack): Boolean =
-  {
-    return getLink(itemStack) != null
-  }
+  def hasLink(itemStack: ItemStack): Boolean = getLink(itemStack) != null
 
   def getLink(itemStack: ItemStack): VectorWorld =
   {

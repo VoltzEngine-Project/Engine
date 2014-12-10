@@ -28,10 +28,7 @@ class AccessHolder
     return nbt
   }
 
-  def hasPermission(username: String, permission: Permission): Boolean =
-  {
-    return groups.exists(_.hasPermission(username, permission))
-  }
+  def hasPermission(username: String, permission: Permission): Boolean = return groups.exists(_.hasPermission(username, permission))
 }
 
 

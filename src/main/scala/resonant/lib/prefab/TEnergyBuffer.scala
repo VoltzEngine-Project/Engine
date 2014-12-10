@@ -61,33 +61,15 @@ trait TEnergyBuffer
   /** @return max amount of energy that can be removed */
   def getMaxExtract() : Double = getEnergyStorage.getMaxExtract
 
-  def receiveEnergy(receive: Double, doReceive: Boolean): Double =
-  {
-    return getEnergyStorage.receiveEnergy(receive, doReceive)
-  }
+  def receiveEnergy(receive: Double, doReceive: Boolean): Double = getEnergyStorage.receiveEnergy(receive, doReceive)
 
-  def receiveEnergy(doReceive: Boolean): Double =
-  {
-    return getEnergyStorage.receiveEnergy(doReceive)
-  }
+  def receiveEnergy(doReceive: Boolean): Double = getEnergyStorage.receiveEnergy(doReceive)
 
-  def receiveEnergy: Double =
-  {
-    return getEnergyStorage.receiveEnergy
-  }
+  def receiveEnergy: Double = getEnergyStorage.receiveEnergy
 
-  def extractEnergy(extract: Double, doExtract: Boolean): Double =
-  {
-    return getEnergyStorage.extractEnergy(extract, doExtract)
-  }
+  def extractEnergy(extract: Double, doExtract: Boolean): Double = getEnergyStorage.extractEnergy(extract, doExtract)
 
-  def extractEnergy(doExtract: Boolean): Double =
-  {
-    return getEnergyStorage.extractEnergy(doExtract)
-  }
+  def extractEnergy(doExtract: Boolean): Double = getEnergyStorage.extractEnergy(doExtract)
 
-  def extractEnergy: Double =
-  {
-    return getEnergyStorage.extractEnergy
-  }
+  def extractEnergy: Double = getEnergyStorage.extractEnergy
 }

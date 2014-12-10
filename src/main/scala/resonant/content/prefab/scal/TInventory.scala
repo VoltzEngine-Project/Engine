@@ -19,10 +19,7 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
 {
   protected lazy val inventory = new ExternalInventory(this, getSizeInventory())
 
-  override def decrStackSize(index: Int, amount: Int): ItemStack =
-  {
-    return this.getInventory().decrStackSize(index, amount)
-  }
+  override def decrStackSize(index: Int, amount: Int): ItemStack = this.getInventory().decrStackSize(index, amount)
 
   def incrStackSize(slot: Int, stack: ItemStack)
   {
@@ -39,10 +36,7 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     markDirty()
   }
 
-  override def getStackInSlot(index: Int): ItemStack =
-  {
-    return this.getInventory().getStackInSlot(index)
-  }
+  override def getStackInSlot(index: Int): ItemStack = this.getInventory().getStackInSlot(index)
 
   override def setInventorySlotContents(index: Int, stack: ItemStack)
   {
@@ -50,10 +44,7 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     onInventoryChanged()
   }
 
-  override def getStackInSlotOnClosing(index: Int): ItemStack =
-  {
-    return this.getInventory().getStackInSlotOnClosing(index)
-  }
+  override def getStackInSlotOnClosing(index: Int): ItemStack = this.getInventory().getStackInSlotOnClosing(index)
 
   override def getInventoryName : String = getBlockType.getLocalizedName
 
@@ -67,47 +58,22 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
 
   override def closeInventory = getInventory.closeInventory()
 
-  def isItemValidForSlot(i: Int, itemstack: ItemStack): Boolean =
-  {
-    return this.getInventory.isItemValidForSlot(i, itemstack)
-  }
+  def isItemValidForSlot(i: Int, itemstack: ItemStack): Boolean = this.getInventory.isItemValidForSlot(i, itemstack)
 
-  def getAccessibleSlotsFromSide(var1: Int): Array[Int] =
-  {
-    return this.getInventory.getAccessibleSlotsFromSide(var1)
-  }
+  def getAccessibleSlotsFromSide(var1: Int): Array[Int] = this.getInventory.getAccessibleSlotsFromSide(var1)
 
-  def canInsertItem(i: Int, itemstack: ItemStack, j: Int): Boolean =
-  {
-    return this.getInventory.canInsertItem(i, itemstack, j)
-  }
+  def canInsertItem(i: Int, itemstack: ItemStack, j: Int): Boolean = this.getInventory.canInsertItem(i, itemstack, j)
 
-  def canExtractItem(i: Int, itemstack: ItemStack, j: Int): Boolean =
-  {
-    return this.getInventory.canExtractItem(i, itemstack, j)
-  }
+  def canExtractItem(i: Int, itemstack: ItemStack, j: Int): Boolean = this.getInventory.canExtractItem(i, itemstack, j)
 
-  def canStore(stack: ItemStack, slot: Int, side: ForgeDirection): Boolean =
-  {
-    return false
-  }
+  def canStore(stack: ItemStack, slot: Int, side: ForgeDirection): Boolean = false
 
-  def canRemove(stack: ItemStack, slot: Int, side: ForgeDirection): Boolean =
-  {
-    if (slot >= this.getSizeInventory)
-    {
-      return false
-    }
-    return true
-  }
+  def canRemove(stack: ItemStack, slot: Int, side: ForgeDirection): Boolean = true
 
   /**
    * Player-Inventory interaction methods.
    */
-  def interactCurrentItem(slotID: Int, player: EntityPlayer): Boolean =
-  {
-    return interactCurrentItem(this, slotID, player)
-  }
+  def interactCurrentItem(slotID: Int, player: EntityPlayer): Boolean = interactCurrentItem(this, slotID, player)
 
   def interactCurrentItem(inventory: IInventory, slotID: Int, player: EntityPlayer): Boolean =
   {
