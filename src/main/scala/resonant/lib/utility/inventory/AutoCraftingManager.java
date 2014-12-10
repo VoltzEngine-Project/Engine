@@ -359,17 +359,14 @@ public class AutoCraftingManager
 					ItemStack recipeItem = (ItemStack) obj;
 					actualResources.add(recipeItem.copy());
 
-					if (recipeItem != null)
-					{
-						this.printDebug("ResourceChecker", "Item0" + itemInList + " = " + recipeItem.toString());
-						int match = this.doesItemExist(recipeItem, containingItems);
-						if (match >= 0)
-						{
-							containingItems[match] = InventoryUtility.decrStackSize(containingItems[match], recipeItem.stackSize);
-							this.printDebug("ResourceChecker", "Match found @" + match);
-							itemMatch++;
-						}
-					}
+                    this.printDebug("ResourceChecker", "Item0" + itemInList + " = " + recipeItem.toString());
+                    int match = this.doesItemExist(recipeItem, containingItems);
+                    if (match >= 0)
+                    {
+                        containingItems[match] = InventoryUtility.decrStackSize(containingItems[match], recipeItem.stackSize);
+                        this.printDebug("ResourceChecker", "Match found @" + match);
+                        itemMatch++;
+                    }
 				}
 				else if (obj instanceof ArrayList)
 				{

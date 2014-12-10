@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import resonant.engine.References;
 import resonant.engine.ResonantEngine;
 import resonant.engine.network.handle.TPacketReceiver;
+import resonant.engine.network.netty.PacketManager;
 
 /**
  * @author tgame14
@@ -44,7 +45,7 @@ public class PacketAnnotation extends PacketType
 
 				if (obj instanceof TileEntity)
 				{
-					ResonantEngine.instance.packetHandler.writeData(data(), ((TileEntity) obj).xCoord, ((TileEntity) obj).yCoord, ((TileEntity) obj).zCoord);
+					PacketManager.writeData(data(), ((TileEntity) obj).xCoord, ((TileEntity) obj).yCoord, ((TileEntity) obj).zCoord);
 				}
 
 				data().writeBytes(packetSet.getPacketArrayData(obj));

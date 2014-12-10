@@ -7,7 +7,11 @@ import resonant.lib.grid.branch.part.Part;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
+/** Version of the grid that uses objects to contain several nodes
+ * in order to create a macro level view of the grid. It also allows
+ * much better control over the nodes as each branch handles the
+ * micro actions of the nodes.
+ *
  * Created by robert on 11/5/2014.
  */
 public class BranchedGrid extends GridTicking<NodeBranchPart>

@@ -1,10 +1,6 @@
 package resonant.lib.utility;
 
 import net.minecraft.potion.Potion;
-import resonant.engine.References;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 /** Utility to handle anything related to Potion.class */
 public class PotionUtility

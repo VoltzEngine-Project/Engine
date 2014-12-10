@@ -30,6 +30,11 @@ public class LanguageUtility
 		return wrap(string).listWrap(characters);
 	}
 
+    public static String[] splitStringPerWordIntoArray(String string, int characters)
+    {
+        return wrap(string).wrap(characters);
+    }
+
 	public static String capitalizeFirst(String str)
 	{
 		return wrap(str).capitalizeFirst();

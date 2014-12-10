@@ -15,7 +15,9 @@ import resonant.engine.References;
 
 import java.util.List;
 
-/**
+/** Generic ore block used by the resource generator
+ * to quickly create ore blocks from its list
+ *
  * Created by robert on 11/24/2014.
  */
 public class BlockOre extends Block

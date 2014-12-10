@@ -154,12 +154,7 @@ public class ListUtility
 
 	public static <V> V getTop(List<V> list)
 	{
-		for (V obj : list)
-		{
-			return obj;
-		}
-
-		return null;
+		return list != null && list.size() >= 1 ? list.get(0) : null;
 	}
 
 	public static <V> List<V> asList(Set<V> set)

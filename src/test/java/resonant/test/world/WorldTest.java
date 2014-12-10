@@ -38,9 +38,10 @@ public class WorldTest extends TestCase
         {
             world.setBlock(0, 0, 0, null);
             fail("World didn't catch null block");
-        } catch (NullPointerException e)
+        }
+        catch (NullPointerException e)
         {
-
+            //This should be thrown :)
         }
     }
 

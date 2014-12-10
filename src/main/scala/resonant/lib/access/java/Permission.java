@@ -54,8 +54,7 @@ public class Permission extends TreeNode<Permission>
 		}
 
 		builder.append(id);
-		String name = builder.toString();
 
-		return name;
+		return builder.toString();
 	}
 }

@@ -267,7 +267,7 @@ public class RenderUtility
 
 		int requiredWidth = Math.max(fontRenderer.getStringWidth(text), 1);
 		int lineHeight = fontRenderer.FONT_HEIGHT + 2;
-		int requiredHeight = lineHeight * 1;
+		int requiredHeight = lineHeight;
 		float scaler = 0.8f;
 		float scaleX = (displayWidth / requiredWidth);
 		float scaleY = (displayHeight / requiredHeight);
@@ -314,10 +314,9 @@ public class RenderUtility
 		FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
 
 		int requiredWidth = Math.max(fontRenderer.getStringWidth(text), 1);
-		int lineHeight = fontRenderer.FONT_HEIGHT;
-		int requiredHeight = lineHeight;
+
 		float scaleX = (displayWidth / requiredWidth);
-		float scaleY = (displayHeight / requiredHeight);
+		float scaleY = (displayHeight / fontRenderer.FONT_HEIGHT);
 		float scale = Math.min(maxScale, Math.min(scaleX, scaleY) * scaler);
 
 		GL11.glScalef(scale, -scale, scale);
@@ -329,7 +328,7 @@ public class RenderUtility
 		int realWidth = (int) Math.floor(displayWidth / scale);
 
 		offsetX = (realWidth - requiredWidth) / 2;
-		offsetY = (realHeight - requiredHeight) / 2;
+		offsetY = (realHeight - fontRenderer.FONT_HEIGHT) / 2;
 
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor4f(1f, 1f, 1f, 0.5f);

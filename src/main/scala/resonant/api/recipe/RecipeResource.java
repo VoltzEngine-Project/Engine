@@ -4,6 +4,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.List;
+
 public abstract class RecipeResource
 {
 	public final boolean hasChance;
@@ -60,7 +62,6 @@ public abstract class RecipeResource
 			{
 				return this.itemStack.isItemEqual((ItemStack) obj);
 			}
-
 			return false;
 		}
 
@@ -113,7 +114,7 @@ public abstract class RecipeResource
 
 			if (obj instanceof ItemStack)
 			{
-				for (ItemStack is : OreDictionary.getOres(name).toArray(new ItemStack[0]))
+				for (ItemStack is : OreDictionary.getOres(name))
 				{
 					if (is.isItemEqual((ItemStack) obj))
 					{

@@ -1,29 +1,16 @@
 package resonant.junit;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.ObjectArrays;
-import com.google.common.collect.Sets;
 import cpw.mods.fml.common.*;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.tileentity.TileEntity;
-import org.apache.logging.log4j.Level;
 import resonant.junit.world.FakeRegistryNamespaced;
 import resonant.lib.utility.ReflectionUtility;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /** In-Between registry for anything that a mod normally needs to register with MC or Forge.
  * This should only be used for JUnit tests and never for actual mod.

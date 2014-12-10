@@ -12,7 +12,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.WorldInfo;
 import resonant.junit.TestRegistry;
 import resonant.lib.transform.vector.Vector3;
-import resonant.lib.utility.ReflectionUtility;
 
 import java.util.ArrayList;
 import java.util.Iterator;

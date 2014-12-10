@@ -223,11 +223,7 @@ public class FluidRecipeInfo
 
 		public boolean canCompleteStep(int step, Object receiving, Object input)
 		{
-			if (this.getStep(step) != null)
-			{
-				return this.getStep(step).canComplete(receiving, input);
-			}
-			return false;
+			return this.getStep(step) != null && this.getStep(step).canComplete(receiving, input);
 		}
 
 		public SimpleFluidRecipe getStep(int step)

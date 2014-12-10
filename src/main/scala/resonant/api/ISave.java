@@ -2,7 +2,9 @@ package resonant.api;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-/**
+/** Simple interface placed over objects that
+ * save data to and from the world.
+ *
  * Created by robert on 8/14/2014.
  */
 public interface ISave

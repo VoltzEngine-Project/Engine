@@ -1,6 +1,8 @@
 package resonant.lib.world.edit;
 
-/**
+/** Enum of results generated when placing blocks
+ * using BlockEdit instances
+ *
  * Created by robert on 12/4/2014.
  */
 public enum BlockEditResult
@@ -18,5 +20,5 @@ public enum BlockEditResult
     /** Data already matched at the location, maybe you want to update the tile instead? */
     ALREADY_PLACED,
     /** Block that was at the original location is no longer the same */
-    PREV_BLOCK_CHANGED;
+    PREV_BLOCK_CHANGED
 }

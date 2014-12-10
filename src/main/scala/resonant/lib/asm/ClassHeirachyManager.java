@@ -4,7 +4,10 @@ import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.tree.ClassNode;
+import resonant.engine.References;
+import resonant.engine.ResonantEngine;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -87,11 +90,13 @@ public class ClassHeirachyManager implements IClassTransformer
 				cache = declareASM(bytes);
 			}
 		}
-		catch (Exception e)
-		{
-		}
+        catch (IOException e)
+        {
+            if(ResonantEngine.runningAsDev)
+                References.LOGGER.catching(e);
+        }
 
-		if (cache != null)
+        if (cache != null)
 		{
 			return cache;
 		}
@@ -102,6 +107,8 @@ public class ClassHeirachyManager implements IClassTransformer
 		}
 		catch (ClassNotFoundException e)
 		{
+            if(ResonantEngine.runningAsDev)
+                References.LOGGER.catching(e);
 		}
 
 		return cache;

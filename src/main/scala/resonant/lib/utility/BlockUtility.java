@@ -1,8 +1,9 @@
 package resonant.lib.utility;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import resonant.engine.References;
+import resonant.engine.ResonantEngine;
 import resonant.lib.type.Pair;
 
 import java.lang.reflect.Field;
@@ -41,6 +42,8 @@ public class BlockUtility
         }
         catch (IllegalAccessException e)
         {
+            if(ResonantEngine.runningAsDev)
+                References.LOGGER.catching(e);
         }
         return 0;
     }
@@ -70,6 +73,8 @@ public class BlockUtility
         }
         catch (IllegalAccessException e)
         {
+            if(ResonantEngine.runningAsDev)
+                References.LOGGER.catching(e);
         }
         return 0;
 	}

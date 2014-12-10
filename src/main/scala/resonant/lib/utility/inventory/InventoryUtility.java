@@ -459,7 +459,7 @@ public class InventoryUtility
 		if (player != null && stack != null)
 		{
 			stack = stack.copy();
-			if (stack.getItem().hasContainerItem())
+			if (stack.getItem().hasContainerItem(stack))
 			{
 				if (stack.stackSize == 1)
 				{

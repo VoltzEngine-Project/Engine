@@ -101,7 +101,7 @@ public class GuiContainerBase extends GuiContainer
 
 		if (this.tooltip != null && this.tooltip != "")
 		{
-			this.drawTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, LanguageUtility.splitStringPerWord(this.tooltip, 5).toArray(new String[] { }));
+			this.drawTooltip(mouseX - this.guiLeft, mouseY - this.guiTop, LanguageUtility.splitStringPerWordIntoArray(this.tooltip, 5));
 		}
 
 		this.tooltip = "";

@@ -6,7 +6,6 @@ import resonant.lib.type.Pair;
 import resonant.lib.transform.vector.Vector3;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Used to store and generate schematic data for world generating buildings

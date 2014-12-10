@@ -38,11 +38,7 @@ public class Group<J>
 
 	public boolean addMemeber(J obj)
 	{
-		if (this.isValid(obj))
-		{
-			return members.add(obj);
-		}
-		return false;
+		return this.isValid(obj) ? members.add(obj) : false;
 	}
 
 	public void addMemebers(Collection<J> members)

@@ -35,15 +35,15 @@ public class ComparatorUtility
 
 			if (arg1 instanceof TileEntity)
 			{
-				y2 = ((TileEntity) arg0).yCoord;
+				y2 = ((TileEntity) arg1).yCoord;
 			}
 			else if (arg1 instanceof Entity)
 			{
-				y2 = ((Entity) arg0).posY;
+				y2 = ((Entity) arg1).posY;
 			}
 			else if (arg1 instanceof IVector3)
 			{
-				y2 = ((IVector3) arg0).y();
+				y2 = ((IVector3) arg1).y();
 			}
 			return Double.compare(y, y2);
 		}

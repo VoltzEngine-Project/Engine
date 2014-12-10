@@ -187,7 +187,7 @@ public class FluidUtility
 			newStack.amount = amount;
 			return newStack;
 		}
-		return stack;
+		return null;
 	}
 
 	public static boolean matchExact(FluidStack stack, FluidStack stack2)
@@ -346,7 +346,7 @@ public class FluidUtility
 					{
 						vec.setBlock(world, block, meta);
 					}
-					else if (block != null && replacableBlocks.contains(block) && !nonBlockDropList.contains(block))
+					else if (replacableBlocks.contains(block) && !nonBlockDropList.contains(block))
 					{
 						block.dropBlockAsItem(world, node.xi(), node.yi(), node.zi(), meta, 1);
 						block.breakBlock(world, node.xi(), node.yi(), node.zi(), block, meta);

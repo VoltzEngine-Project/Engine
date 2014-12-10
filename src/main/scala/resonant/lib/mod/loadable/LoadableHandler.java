@@ -121,6 +121,6 @@ public class LoadableHandler
 		PREINIT,
 		INIT,
 		POSTINIT,
-		DONE;
+		DONE
 	}
 }

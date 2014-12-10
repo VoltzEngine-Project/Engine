@@ -10,6 +10,7 @@ import resonant.lib.utility.WrenchUtility;
 import resonant.lib.utility.inventory.InventoryUtility;
 import resonant.lib.transform.vector.Vector3;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -53,12 +54,7 @@ public abstract class BlockAdvanced extends Block
 				}
 			}
 
-			if (this.onUseWrench(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ))
-			{
-				return true;
-			}
-
-			return false;
+			return this.onUseWrench(world, x, y, z, entityPlayer, side, hitX, hitY, hitZ);
 		}
 
 		if (entityPlayer.isSneaking())
@@ -217,16 +213,26 @@ public abstract class BlockAdvanced extends Block
 
 	public boolean isControlDown(EntityPlayer player)
 	{
+        //TODO replace with a non-CB version
 		try
 		{
 			Class ckm = Class.forName("codechicken.multipart.ControlKeyModifer");
 			Method m = ckm.getMethod("isControlDown", EntityPlayer.class);
 			return (Boolean) m.invoke(null, player);
 		}
-		catch (Exception e)
-		{
+        catch (ClassNotFoundException e)
+        {
+        }
+        catch (NoSuchMethodException e)
+        {
+        }
+        catch (InvocationTargetException e)
+        {
+        }
+        catch (IllegalAccessException e)
+        {
+        }
 
-		}
-		return false;
+        return false;
 	}
 }

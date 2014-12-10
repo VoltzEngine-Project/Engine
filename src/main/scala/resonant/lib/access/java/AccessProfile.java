@@ -191,7 +191,7 @@ public class AccessProfile implements IVirtualObject
 
 	public List<AccessUser> getUsers()
 	{
-		List<AccessUser> users = new ArrayList<AccessUser>();
+		List<AccessUser> users = new ArrayList();
 		for (AccessGroup group : this.groups)
 		{
 			users.addAll(group.getMembers());

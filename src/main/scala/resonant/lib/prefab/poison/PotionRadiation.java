@@ -32,11 +32,6 @@ public class PotionRadiation extends CustomPotion
 	@Override
 	public boolean isReady(int duration, int amplifier)
 	{
-		if (duration % 10 == 0)
-		{
-			return true;
-		}
-
-		return false;
+		return duration % 10 == 0;
 	}
 }

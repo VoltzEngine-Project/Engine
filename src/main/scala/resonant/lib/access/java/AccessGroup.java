@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class AccessGroup extends Group<AccessUser> implements ISaveObj, Cloneable
 {
-	protected Set<String> nodes = new LinkedHashSet<String>();
+	protected Set<String> nodes = new LinkedHashSet();
 	protected AccessGroup extendGroup;
 	protected String extendGroup_name;
 	protected long creation_time;

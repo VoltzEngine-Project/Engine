@@ -74,7 +74,7 @@ public class ModManager
 					paramTypes.add(arg.getClass());
 				}
 
-				spatial = spatialClass.getConstructor(paramTypes.toArray(new Class[0])).newInstance();
+				spatial = spatialClass.getConstructor(paramTypes.toArray(new Class[paramTypes.size()])).newInstance();
 			}
 			else
 			{
@@ -290,7 +290,7 @@ public class ModManager
 					paramTypes.add(arg.getClass());
 				}
 
-				item = clazz.getConstructor(paramTypes.toArray(new Class[0])).newInstance();
+				item = clazz.getConstructor(paramTypes.toArray(new Class[paramTypes.size()])).newInstance();
 			}
 			else
 			{

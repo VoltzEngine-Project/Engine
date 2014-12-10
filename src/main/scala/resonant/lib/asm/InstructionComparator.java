@@ -13,22 +13,12 @@ public class InstructionComparator
 {
 	public static boolean varInsnEqual(VarInsnNode insn1, VarInsnNode insn2)
 	{
-		if (insn1.var == -1 || insn2.var == -1)
-		{
-			return true;
-		}
-
-		return insn1.var == insn2.var;
+		return insn1.var == -1 || insn2.var == -1 || insn1.var == insn2.var;
 	}
 
 	public static boolean methodInsnEqual(AbstractInsnNode absnode, int Opcode, ObfMapping method)
 	{
-		if (!(absnode instanceof MethodInsnNode) || absnode.getOpcode() != Opcode)
-		{
-			return false;
-		}
-
-		return method.matches((MethodInsnNode) absnode);
+		return absnode.getOpcode() == Opcode && absnode instanceof MethodInsnNode && method.matches((MethodInsnNode) absnode);
 	}
 
 	public static boolean methodInsnEqual(MethodInsnNode insn1, MethodInsnNode insn2)
@@ -43,22 +33,12 @@ public class InstructionComparator
 
 	public static boolean ldcInsnEqual(LdcInsnNode insn1, LdcInsnNode insn2)
 	{
-		if (insn1.cst.equals("~") || insn2.cst.equals("~"))
-		{
-			return true;
-		}
-
-		return insn1.cst.equals(insn2.cst);
+		return insn1.cst.equals("~") || insn2.cst.equals("~") || insn1.cst.equals(insn2.cst);
 	}
 
 	public static boolean typeInsnEqual(TypeInsnNode insn1, TypeInsnNode insn2)
 	{
-		if (insn1.desc.equals("~") || insn2.desc.equals("~"))
-		{
-			return true;
-		}
-
-		return insn1.desc.equals(insn2.desc);
+		return insn1.desc.equals("~") || insn2.desc.equals("~") || insn1.desc.equals(insn2.desc);
 	}
 
 	public static boolean iincInsnEqual(IincInsnNode node1, IincInsnNode node2)
@@ -68,12 +48,7 @@ public class InstructionComparator
 
 	public static boolean intInsnEqual(IntInsnNode node1, IntInsnNode node2)
 	{
-		if (node1.operand == -1 || node2.operand == -1)
-		{
-			return true;
-		}
-
-		return node1.operand == node2.operand;
+		return node1.operand == -1 || node2.operand == -1 || node1.operand == node2.operand;
 	}
 
 	public static boolean insnEqual(AbstractInsnNode node1, AbstractInsnNode node2)

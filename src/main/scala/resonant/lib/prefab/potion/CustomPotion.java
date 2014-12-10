@@ -75,7 +75,6 @@ public abstract class CustomPotion extends Potion
 		if (shouldRemoveEffect(ent, amplifier))
 		{
 			removeEffect(ent);
-			return;
 		}
 	}
 
@@ -101,11 +100,7 @@ public abstract class CustomPotion extends Potion
 		}
 
 		//Disable mal effects with peaceful on
-		if (disablePeaceful && ent.worldObj.difficultySetting.getDifficultyId() == 0)
-		{
-			return true;
-		}
-		return false;
+		return disablePeaceful && ent.worldObj.difficultySetting.getDifficultyId() == 0;
 	}
 
 	/**

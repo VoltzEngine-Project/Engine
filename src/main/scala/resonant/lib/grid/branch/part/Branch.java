@@ -1,7 +1,5 @@
 package resonant.lib.grid.branch.part;
 
-import resonant.lib.grid.branch.NodeBranchPart;
-
 /**
  * Wraps one or more nodes into a simple object that is used in BranchedGrid
  *

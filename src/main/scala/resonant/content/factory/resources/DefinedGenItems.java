@@ -1,6 +1,6 @@
 package resonant.content.factory.resources;
 
-/**
+/** List of known items to generate per material
  * Created by robert on 11/23/2014.
  */
 public enum DefinedGenItems

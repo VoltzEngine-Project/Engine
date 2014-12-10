@@ -59,7 +59,7 @@ public class AccessUser implements ISaveObj
 
 			//Loop threw all super permissions to see if the user has a super node of the sub node
 			String[] sub_nodes = newNode.split(".");
-			if (sub_nodes != null && sub_nodes.length > 0)
+			if (sub_nodes.length > 0)
 			{
 				newNode = "";
 				//Build a new node start from the most super node moving to the lowest sub node

@@ -26,5 +26,5 @@ public enum NodeType
     /** DISTRIBUTION NETWORK, Movement of fluids */
     FLUID,
     /** PRESSURE NETWORK, Movement of energy by mechanical movement */
-    FORCE;
+    FORCE
 }

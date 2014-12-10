@@ -11,5 +11,5 @@ public enum ForceUnit
 	dyn(),
 	kp(),
 	Ib(),
-	pdl();
+	pdl()
 }

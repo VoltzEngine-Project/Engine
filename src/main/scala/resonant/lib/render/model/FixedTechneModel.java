@@ -62,6 +62,7 @@ public class FixedTechneModel extends ModelBase implements IModelCustom
 		}
 	}
 
+    //TODO break into smaller methods
 	private void loadTechneModel(InputStream stream) throws ModelFormatException
 	{
 		try

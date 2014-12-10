@@ -67,7 +67,6 @@ public class FXShockWave extends EntityFX
 		if (this.particleAge++ >= this.particleMaxAge)
 		{
 			this.setDead();
-			return;
 		}
 	}
 }

@@ -4,7 +4,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -104,9 +103,8 @@ public class ResourceFactoryHandler extends FactoryHandler
 				totalR /= colorCount;
 				totalG /= colorCount;
 				totalB /= colorCount;
-				int averageColor = new Color(totalR, totalG, totalB).brighter().getRGB();
 				//iconColorCache.put(icon, averageColor);
-				return averageColor;
+				return new Color(totalR, totalG, totalB).brighter().getRGB();
 			}
 		}
 		catch (Exception e)

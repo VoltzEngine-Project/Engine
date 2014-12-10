@@ -43,8 +43,7 @@ public class GuiCreativeBuilder extends GuiContainerBase
 
 		//Button Name
 		Schematic sch = SchematicRegistry.INSTANCE.getByID(builder.schematicID());
-		String name = sch != null ? LanguageUtility.getLocal(sch.getName()) : "None";
-		((GuiButton) this.buttonList.get(1)).displayString = name;
+		((GuiButton) this.buttonList.get(1)).displayString = sch != null ? LanguageUtility.getLocal(sch.getName()) : "None";
 
 		fontRendererObj.drawString("Mode: ", 9, 80, 4210752);
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);

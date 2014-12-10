@@ -92,6 +92,6 @@ public class WorldChangeHelper
     {
         COMPLETED,
         FAILED,
-        BLOCKED;
+        BLOCKED
     }
 }

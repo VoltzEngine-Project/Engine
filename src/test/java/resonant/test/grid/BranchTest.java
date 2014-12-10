@@ -5,7 +5,7 @@ import resonant.lib.grid.branch.part.Branch;
 import resonant.lib.grid.branch.part.Junction;
 import resonant.lib.grid.branch.part.Part;
 
-/**
+/** Unit test for Branch connections and merging
  * Created by robert on 11/13/2014.
  */
 public class BranchTest extends TestCase

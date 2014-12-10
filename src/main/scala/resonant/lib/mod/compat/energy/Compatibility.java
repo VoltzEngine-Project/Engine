@@ -112,11 +112,7 @@ public class Compatibility
     public static boolean canConnect(Object obj, ForgeDirection direction, Object source)
     {
         CompatibilityModule module = getHandler(obj, direction);
-        if(module != null)
-        {
-            return module.canConnect(obj, direction, source);
-        }
-        return false;
+        return module != null && module.canConnect(obj, direction, source);
     }
 
     /**

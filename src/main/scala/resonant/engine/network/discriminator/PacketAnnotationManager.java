@@ -13,6 +13,7 @@ import net.minecraftforge.fluids.FluidTank;
 import resonant.engine.References;
 import resonant.engine.ResonantEngine;
 import resonant.engine.network.Synced;
+import resonant.engine.network.netty.PacketManager;
 import resonant.lib.utility.nbt.ISaveObj;
 import resonant.lib.transform.vector.Vector3;
 
@@ -212,12 +213,12 @@ public class PacketAnnotationManager
 						else
 						{
 							data.writeBoolean(true);
-							ResonantEngine.instance.packetHandler.writeData(data, syncObj);
+							PacketManager.writeData(data, syncObj);
 						}
 					}
 					else
 					{
-						ResonantEngine.instance.packetHandler.writeData(data, syncObj);
+						PacketManager.writeData(data, syncObj);
 					}
 				}
 
