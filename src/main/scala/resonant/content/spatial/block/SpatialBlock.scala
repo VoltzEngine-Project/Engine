@@ -264,7 +264,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   override def z: Double = zCoord
 
   /** World location of the block, centered */
-  def center: VectorWorld = toVectorWorld.add(0.5)
+  def center: VectorWorld = toVectorWorld + 0.5
 
   /**
    * Gets all ItemStacks dropped by this machine when its destroyed
@@ -337,7 +337,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
       {
         case e: Exception =>
         {
-          if(ResonantEngine.runningAsDev)
+          if (ResonantEngine.runningAsDev)
             References.LOGGER.catching(e)
         }
       }
@@ -438,9 +438,9 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   /**
    * Called when the block is first added to the world
    */
-  def onAdded
+  def onAdded()
   {
-    onWorldJoin
+    onWorldJoin()
   }
 
   /**
