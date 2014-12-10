@@ -202,6 +202,11 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   def getHardness() : Float = super.getHardness(world)
 
+  def getResistance(cause: Entity, xx: Double, yy: Double, zz: Double): Float =
+  {
+    return getBlock(world).getExplosionResistance(cause, world, xi, yi, zi, xx, yy, zz)
+  }
+
   def setBlock(block: Block, metadata: Int, notify: Int): Boolean = super.setBlock(world, block, metadata, notify)
 
   def setBlock(block: Block, metadata: Int): Boolean = super.setBlock(world, block, metadata)

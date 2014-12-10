@@ -144,7 +144,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   }
 
 
-  def set(x: Double, y: Double, z: Double) : Vector3 =
+  def set(x: Double, y: Double, z: Double): Vector3 =
   {
     this.x = x
     this.y = y
@@ -152,7 +152,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this
   }
 
-  def set(n: Double) : Vector3 = set(n, n, n)
+  def set(n: Double): Vector3 = set(n, n, n)
 
   def set(vec: IVector3): Vector3 = set(vec.x, vec.y, vec.z)
 
@@ -160,11 +160,11 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   //========Accessors========
   //=========================
 
-  def xf : Float = x.toFloat
+  def xf: Float = x.toFloat
 
-  def yf : Float = y.toFloat
+  def yf: Float = y.toFloat
 
-  def zf : Float = z.toFloat
+  def zf: Float = z.toFloat
 
   def xi = x.toInt
 
@@ -266,31 +266,41 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   //=========================
 
   def sub(amount: Double): Vector3 = this - amount
+
   def subtract(amount: Double): Vector3 = this - amount
+
   def -(amount: Double): Vector3 = new Vector3(x - amount, y - amount, z - amount)
 
   def subEquals(amount: Double): Vector3 = this - amount
+
   def subtractEquals(amount: Double): Vector3 = this - amount
+
   def -=(amount: Double): Vector3 =
   {
     x -= amount
-    y -=amount
+    y -= amount
     z -= amount
     return this
   }
 
   def sub(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x - x, this.y - y, this.z - z)
+
   def subtract(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x - x, this.y - y, this.z - z)
+
   def -(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x - x, this.y - y, this.z - z)
 
   def subEquals(x: Double, y: Double, z: Double): Vector3 = this -=(x, y, z)
+
   def subtractEquals(x: Double, y: Double, z: Double): Vector3 = this -=(x, y, z)
+
   def -=(x: Double, y: Double, z: Double): Vector3 = set(new Vector3(this.x - x, this.y - y, this.z - z))
 
   def add(amount: Double): Vector3 = this + amount
+
   def +(amount: Double): Vector3 = new Vector3(x + amount, y + amount, z + amount)
 
   def addEquals(amount: Double): Vector3 = this + amount
+
   def +=(amount: Double): Vector3 =
   {
     x += amount
@@ -299,20 +309,26 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this
   }
 
-  def add(ax: Double, ay: Double, az: Double): Vector3 = this + (ax, ay, az)
+  def add(ax: Double, ay: Double, az: Double): Vector3 = this +(ax, ay, az)
+
   def +(ax: Double, ay: Double, az: Double): Vector3 = new Vector3(this.x + ax, this.y + ay, this.z + az)
 
   def addEquals(x: Double, y: Double, z: Double): Vector3 = this +=(x, y, z)
+
   def +=(x: Double, y: Double, z: Double): Vector3 = set(new Vector3(this.x + x, this.y + y, this.z + z))
 
   def multi(amount: Double): Vector3 = this * amount
+
   def multiply(amount: Double): Vector3 = this * amount
+
   def *(amount: Double): Vector3 = new Vector3(x * amount, y * amount, z * amount)
 
   def divide(amount: Double): Vector3 = this / amount
+
   def /(amount: Double): Vector3 = new Vector3(x / amount, y / amount, z / amount)
 
   def multiplyEquals(amount: Double): Vector3 = this *= amount
+
   def *=(amount: Double): Vector3 =
   {
     this.x *= amount
@@ -322,6 +338,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   }
 
   def divideEquals(amount: Double): Vector3 = this /= amount
+
   def /=(amount: Double): Vector3 =
   {
     this.x /= amount
@@ -336,12 +353,15 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   //====================
 
   def subtract(amount: IVector3): Vector3 = this - amount
+
   def -(amount: IVector3): Vector3 = new Vector3(x - amount.x, y - amount.y, z - amount.z)
 
-  def distance(other: IVector3) : Double = (this - other).magnitude
+  def distance(other: IVector3): Double = (this - other).magnitude
 
   def subEquals(amount: IVector3): Vector3 = this -= amount
+
   def subtractEquals(amount: IVector3): Vector3 = this -= amount
+
   def -=(amount: IVector3): Vector3 =
   {
     x -= amount.x
@@ -351,9 +371,11 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   }
 
   def add(amount: IVector3): Vector3 = this + amount
+
   def +(amount: IVector3): Vector3 = new Vector3(x + amount.x, y + amount.y, z + amount.z)
 
   def addEquals(amount: IVector3): Vector3 = this += amount
+
   def +=(amount: IVector3): Vector3 =
   {
     x = amount.x + x
@@ -363,9 +385,11 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   }
 
   def multiply(amount: IVector3): Vector3 = this * amount
+
   def *(amount: IVector3): Vector3 = new Vector3(x * amount.x, y * amount.y, z * amount.z)
 
   def multiplyEquals(amount: IVector3): Vector3 = this *= amount
+
   def *=(amount: IVector3): Vector3 =
   {
     x *= amount.x
@@ -375,9 +399,11 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   }
 
   def divide(amount: IVector3): Vector3 = this * amount
+
   def /(amount: IVector3): Vector3 = new Vector3(x / amount.x, y / amount.y, z / amount.z)
 
   def divideEquals(amount: IVector3): Vector3 = this /= amount
+
   def /=(amount: IVector3): Vector3 =
   {
     x /= amount.x
@@ -389,48 +415,57 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   /** Point between this point and another */
   @Deprecated
   def midpoint(pos: IVector3): Vector3 = midPoint(pos)
+
   def midPoint(pos: IVector3): Vector3 = new Vector3((x + pos.x) / 2, (y + pos.y) / 2, (z + pos.z) / 2)
 
   def dot(other: IVector3) = $(other)
+
   def $(other: IVector3) = x * other.x + y * other.y + z * other.z
 
   def cross(other: IVector3) = %(other)
-  def %(other: IVector3): Vector3 = new Vector3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
 
+  def %(other: IVector3): Vector3 = new Vector3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
 
 
   //=========================
   //ForgeDirection handling
   //=========================
   def add(amount: ForgeDirection): Vector3 = this + amount
+
   def +(amount: ForgeDirection): Vector3 = this + new Vector3(amount)
 
   def addEquals(amount: ForgeDirection): Vector3 = this += amount
+
   def +=(amount: ForgeDirection): Vector3 = set(this + new Vector3(amount))
 
 
   def subtract(amount: ForgeDirection): Vector3 = this - amount
+
   def -(amount: ForgeDirection): Vector3 = this - new Vector3(amount)
 
   def subEquals(amount: ForgeDirection): Vector3 = this -= amount
+
   def -=(amount: ForgeDirection): Vector3 = set(this - new Vector3(amount))
 
   //=========================
   //EnumFacing handling
   //=========================
   def add(amount: EnumFacing): Vector3 = this + amount
+
   def +(amount: EnumFacing): Vector3 = this + new Vector3(amount)
 
   def addEquals(amount: EnumFacing): Vector3 = this += amount
+
   def +=(amount: EnumFacing): Vector3 = set(this + new Vector3(amount))
 
 
   def subtract(amount: EnumFacing): Vector3 = this - amount
+
   def -(amount: EnumFacing): Vector3 = this - new Vector3(amount)
 
   def subEquals(amount: EnumFacing): Vector3 = this -= amount
-  def -=(amount: EnumFacing): Vector3 = set(this - new Vector3(amount))
 
+  def -=(amount: EnumFacing): Vector3 = set(this - new Vector3(amount))
 
 
   /** @return The perpendicular vector to the axis. */
@@ -515,8 +550,6 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   }
 
 
-
-
   def rayTraceBlocks(world: World, end: Vector3): MovingObjectPosition = world.rayTraceBlocks(toVec3, end.toVec3)
 
   def rayTraceEntities(world: World, end: Vector3): MovingObjectPosition =
@@ -572,7 +605,6 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   }
 
 
-
   //===================
   //===World Setters===
   //===================
@@ -614,6 +646,56 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
       return block.getBlockHardness(world, xi, yi, zi)
     else
       return 0
+  }
+
+  /**
+   * Gets the resistance of a block using block.getResistance method
+   * @param cause - entity that triggered/is the explosion
+   */
+  def getResistance(cause: Entity)
+  {
+    return getResistance(cause.worldObj, cause, x, y, z)
+  }
+
+  /**
+   * Gets the resistance of a block using block.getResistance method
+   * @param cause - entity that triggered/is the explosion
+   */
+  def getResistanceToEntity(cause: Entity)
+  {
+    return getBlock(cause.worldObj).getExplosionResistance(cause)
+  }
+
+  /**
+   * Gets the resistance of a block using block.getResistance method
+   * @param cause - entity that triggered/is the explosion
+   */
+  def getResistanceToEntity(world: World, cause: Entity)
+  {
+    return getBlock(world).getExplosionResistance(cause)
+  }
+
+  /**
+   * Gets the resistance of a block using block.getResistance method
+   * @param world - world to check in
+   * @param cause - entity that triggered/is the explosion
+   */
+  def getResistance(world: World, cause: Entity): Float =
+  {
+    return getResistance(world, cause, cause.posX, cause.posY, cause.posZ)
+  }
+
+  /**
+   * Gets the resistance of a block using block.getResistance method
+   * @param world - world to check in
+   * @param cause - entity that triggered/is the explosion
+   * @param xx - xPos location of the explosion
+   * @param yy - xPos location of the explosion
+   * @param zz - xPos location of the explosion
+   */
+  def getResistance(world: World, cause: Entity, xx: Double, yy: Double, zz: Double): Float =
+  {
+    return getBlock(world).getExplosionResistance(cause, world, xi, yi, zi, xx, yy, zz)
   }
 
   override def hashCode: Int =
