@@ -53,9 +53,9 @@ public class GridPathfinder
      * Triggers a pathfinding loop from the node through all its connections and those node's connections.
      * Does not end until all connections are plotted, and creates new NetworkParts when required
      *
-     * @param part        - last part created, used to connect new parts to, can be null for first run
+     * @param part        - last part created, used to connect new parts to, can be null for first profile
      * @param currentNode - current node being pathed
-     * @param side        - side we are pathing to from the node, can only be null for first run
+     * @param side        - side we are pathing to from the node, can only be null for first profile
      */
     protected Part path(Part part, NodeBranchPart currentNode, ForgeDirection side)
     {

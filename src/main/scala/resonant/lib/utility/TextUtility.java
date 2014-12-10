@@ -1,101 +1,84 @@
 package resonant.lib.utility;
 
-import java.awt.*;
+import java.text.DecimalFormat;
 
+/**
+ * Quick class to house utility methods related to strings
+ *
+ * @author Darkguardsman
+ */
 public final class TextUtility
 {
-	public enum TextColor
-	{
-		BLACK("\u00a70", 0x000000, 0, 0, 0),
-		DARKBLUE("\u00a71", 0x0000AA, 0, 0, 170),
-		DARKGREEN("\u00a72", 0x00AA00, 0, 170, 0),
-		DARKAQUA("\u00a73", 0x00AAAA, 0, 170, 170),
-		DARKRED("\u00a74", 0xAA0000, 170, 0, 0),
-		PURPLE("\u00a75", 0xAA00AA, 170, 0, 170),
-		GOLD("\u00a76", 0xFFAA00, 255, 170, 0),
-		GREY("\u00a77", 0xAAAAAA, 170, 170, 170),
-		DARKGREY("\u00a78", 0x555555, 85, 85, 85),
-		INDIGO("\u00a79", 0x5555FF, 85, 85, 255),
-		BRIGHTGREEN("\u00a7a", 0x55FF55, 85, 255, 85),
-		AQUA("\u00a7b", 0x55FFFF, 85, 255, 255),
-		RED("\u00a7c", 0xFF5555, 255, 85, 85),
-		PINK("\u00a7d", 0xFF55FF, 255, 85, 255),
-		YELLOW("\u00a7e", 0xFFFF55, 255, 255, 85),
-		WHITE("\u00a7f", 0xFFFFFF, 255, 255, 255);
+    /**
+     * Formatter to clean up numbers
+     */
+    public final static DecimalFormat NUMBER_FORMATTER_NO_DECIMALS = new DecimalFormat("#,###");
+    public final static DecimalFormat NUMBER_FORMATTER = new DecimalFormat("#,###.00");
 
-		private String colorString;
-		private int hexadecimal;
-		private Color colorInstance;
+    /** Adds padding to the right of the string
+     * @param s - string
+     * @param n - number of spaces
+     * @return
+     */
+    public static String padRight(String s, int n)
+    {
+        return String.format("%1$-" + n + "s", s);
+    }
 
-		TextColor(String color, int hexadecimalColor, int red, int green, int blue)
-		{
-			colorString = color;
-			hexadecimal = hexadecimalColor;
-			colorInstance = new Color(red, green, blue);
-		}
+    /** Adds padding to the left of the string
+     * @param s - string
+     * @param n - number of spaces
+     * @return
+     */
+    public static String padLeft(String s, int n)
+    {
+        return String.format("%1$" + n + "s", s);
+    }
 
-		/**
-		 * Retrieves the Hexadecimal integer value for the specified Color
-		 *
-		 * @return The Hexadecimal int for the Color *
-		 */
-		public int getHexValue()
-		{
-			return hexadecimal;
-		}
+    /**
+     * Formats a number to fit into so many spaces, and to contain ,
+     *
+     * @param num    - number to format
+     * @param spaces - spaces to pad the front with
+     * @return formatted string
+     */
+    public static String fitIntoSpaces(long num, int spaces)
+    {
+        return padLeft(NUMBER_FORMATTER_NO_DECIMALS.format(num), spaces);
+    }
 
-		/**
-		 * Retrieves the <code>java.awt.Color</code> instance for the Color
-		 *
-		 * @return the java.awt.Color instance for this color **
-		 */
-		public Color getColor()
-		{
-			return colorInstance;
-		}
+    /**
+     * Gets the difference in time formatted to be
+     * easy to read
+     *
+     * @param start - nano sec start time
+     * @return nano sec difference up to now formatted
+     */
+    public static String formatTimeDifference(long start, long end)
+    {
+        return formatNanoTime(end - start);
+    }
 
-		/**
-		 * Retrieves the String that specifies the color of Text within Minecraft
-		 *
-		 * @return String that can be added to the beginning of another String to specify coloration
-		 * in Minecraft *
-		 */
-		public String getColorString()
-		{
-			return colorString;
-		}
+    /**
+     * Breaks nano second time long into seconds, miliseconds, microseconds, and nanosecond
+     * sections making it easier to read.
+     *
+     * @param nano - long value of time
+     * @return formatted string
+     */
+    public static String formatNanoTime(long nano)
+    {
+        long s = nano / 1000000000;
+        long ms = (nano % 1000000000) / 1000000;
+        long us = ((nano % 1000000000) % 1000000) / 1000;
+        long ns = ((nano % 1000000000) % 1000000) % 1000;
+        String string = "";
+        string += fitIntoSpaces(s, 3) + "s  ";
+        string += fitIntoSpaces(ms, 3) + "ms  ";
+        string += fitIntoSpaces(us, 3) + "us  ";
+        string += fitIntoSpaces(ns, 3) + "ns  ";
 
-		/**
-		 * Retrieves an int Array to retrieve the RGB values for the specified Color. Index 0 is the
-		 * Red value, Index 1 is the Green value, and Index 2 is the Blue value.
-		 *
-		 * @return Array of the primitive type int containing the RGB values for the specified color *
-		 */
-		public int[] getRGBIntArray()
-		{
-			return new int[] { colorInstance.getRed(), colorInstance.getGreen(), colorInstance.getBlue() };
-		}
-	}
+        return string;
+    }
 
-	public enum TextFormat
-	{
-		RANDOMCHARS("\247k"),
-		BOLD("\247l"),
-		STRIKE("\247m"),
-		UNDERLINE("\247n"),
-		ITALICS("\247o"),
-		RESETFORMAT("\247r");
-
-		private final String formatString;
-
-		TextFormat(String format)
-		{
-			this.formatString = format;
-		}
-
-		public final String getFormatString()
-		{
-			return formatString;
-		}
-	}
 }

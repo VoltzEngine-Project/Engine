@@ -320,4 +320,14 @@ public class MathUtility
 	{
 		return getFacingDirectionFromAngle((float) yaw);
 	}
+
+    /** Gets the volume of a sphere
+     *
+     * @param radius - distance from center
+     * @return exact volume
+     */
+    public static double getSphereVolume(double radius)
+    {
+        return (4 * Math.PI * (radius * radius * radius)) / 3;
+    }
 }
