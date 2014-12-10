@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.tile.INodeProvider;
 import resonant.lib.grid.branch.NodeBranchPart;
-import resonant.lib.prefab.TileConductor;
+import resonant.lib.prefab.tile.TileConductor;
 import resonant.junit.world.FakeWorld;
 import resonant.lib.transform.vector.VectorWorld;
 

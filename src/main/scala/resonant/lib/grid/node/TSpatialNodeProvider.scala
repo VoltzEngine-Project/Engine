@@ -8,7 +8,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.ISave
 import resonant.api.tile.INodeProvider
 import resonant.api.tile.node.INode
-import resonant.content.spatial.block.SpatialTile
+import resonant.lib.prefab.tile.spatial.SpatialTile
 import resonant.lib.transform.vector.Vector3
 
 import scala.collection.convert.wrapAll._

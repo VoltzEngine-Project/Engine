@@ -2,9 +2,9 @@ package resonant.test.grid;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import resonant.content.wrapper.BlockDummy;
+import resonant.lib.prefab.tile.spatial.BlockDummy;
 import resonant.junit.TestRegistry;
-import resonant.lib.prefab.TileConductor;
+import resonant.lib.prefab.tile.TileConductor;
 import resonant.lib.world.schematic.StringSchematic;
 
 /**

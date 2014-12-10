@@ -6,7 +6,7 @@ import resonant.lib.grid.branch.BranchedGrid;
 import resonant.lib.grid.branch.part.Branch;
 import resonant.lib.grid.branch.part.Junction;
 import resonant.lib.grid.branch.part.Part;
-import resonant.lib.prefab.TileConductor;
+import resonant.lib.prefab.tile.TileConductor;
 import resonant.junit.world.FakeWorld;
 import resonant.lib.transform.vector.Vector3;
 

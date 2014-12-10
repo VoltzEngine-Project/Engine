@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
-import resonant.content.wrapper.BlockRenderHandler$;
+import resonant.lib.render.wrapper.BlockRenderHandler$;
 import resonant.engine.content.debug.GuiCreativeBuilder;
 import resonant.engine.content.debug.TileCreativeBuilder;
 import resonant.lib.render.model.FixedTechneModelLoader;

@@ -10,7 +10,7 @@ import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import resonant.content.prefab.itemblock.ItemTooltip
+import resonant.lib.prefab.item.ItemTooltip
 import resonant.lib.wrapper.WrapList._
 import resonant.lib.transform.vector.VectorWorld
 

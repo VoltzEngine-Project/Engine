@@ -5,7 +5,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraftforge.common.config.Configuration;
-import resonant.content.loader.ModManager;
+import resonant.lib.mod.content.ModManager;
 import resonant.lib.mod.loadable.LoadableHandler;
 
 /** Default layout for a mod class to make it easier to keep mod.class

@@ -4,7 +4,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import resonant.engine.ResonantEngine;
 import resonant.lib.prefab.gui.GuiContainerBase;
-import resonant.engine.network.discriminator.PacketTile;
+import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.world.schematic.Schematic;
 import resonant.lib.world.schematic.SchematicRegistry;
 import resonant.lib.utility.LanguageUtility;
