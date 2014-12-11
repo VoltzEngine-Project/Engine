@@ -1,35 +1,66 @@
 package resonant.lib.world.explosive;
 
+import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
+import resonant.api.TriggerCause;
 import resonant.api.explosive.IExplosive;
 import resonant.engine.References;
 import resonant.lib.type.Pair;
 import resonant.lib.world.edit.IWorldChangeAction;
-import resonant.api.TriggerCause;
-import net.minecraft.world.World;
-import org.apache.logging.log4j.Level;
 
 /**
+ * Prefab explosive container for generating blasts when triggered
+ * <p/>
  * Created by robert on 11/19/2014.
  */
 public class Explosive implements IExplosive
 {
-    protected String unlocalizedName;
+    /**
+     * unlocalized and registry name
+     */
+    protected String translationKey;
+    protected String id;
+    protected String modID;
+    /**
+     * Class to generate explosives from
+     */
     protected Class<? extends Blast> blastClass;
+    /**
+     * Size multiplier
+     */
     int multiplier = 1;
 
+    /**
+     * Creates an explosive using a blast class, uses the blast class's name as the registry id
+     *
+     * @param blastClass - class extending blast
+     */
     public Explosive(Class<? extends Blast> blastClass)
     {
         this(blastClass.getSimpleName(), blastClass, 1);
     }
 
+    /**
+     * Creates an explosive using a blast class, and name
+     *
+     * @param name       - name to use for registry id
+     * @param blastClass - class extending blast
+     */
     public Explosive(String name, Class<? extends Blast> blastClass)
     {
         this(name, blastClass, 1);
     }
 
+    /**
+     * Creates an explosive using a blast class, and name
+     *
+     * @param name       - name to use for registry id
+     * @param blastClass - class extending blast
+     * @param multiplier - value to mutliply the size by
+     */
     public Explosive(String name, Class<? extends Blast> blastClass, int multiplier)
     {
-        this.unlocalizedName = name;
+        this.translationKey = name;
         this.blastClass = blastClass;
         this.multiplier = multiplier;
     }
@@ -39,14 +70,12 @@ public class Explosive implements IExplosive
     {
         try
         {
-            return blastClass.newInstance().setLocation(world, (int)x, (int)y, (int)z).setYield(yieldMultiplier * multiplier).setCause(triggerCause);
-        }
-        catch (InstantiationException e)
+            return blastClass.newInstance().setLocation(world, (int) x, (int) y, (int) z).setYield(yieldMultiplier * multiplier).setCause(triggerCause);
+        } catch (InstantiationException e)
         {
             References.LOGGER.log(Level.ERROR, "Failed to create blast object");
             e.printStackTrace();
-        }
-        catch (IllegalAccessException e)
+        } catch (IllegalAccessException e)
         {
             References.LOGGER.log(Level.ERROR, "Failed to create blast object");
             e.printStackTrace();
@@ -61,20 +90,21 @@ public class Explosive implements IExplosive
     }
 
     @Override
-    public void onRegistered()
+    public void onRegistered(String id, String modID)
     {
-
+        this.id = id;
+        this.modID = modID;
     }
 
     @Override
-    public String getUnlocalizedName()
+    public String getTranslationKey()
     {
-        return unlocalizedName;
+        return "explosive." + modID + ":" +translationKey;
     }
 
     @Override
-    public String toString()
+    public String getID()
     {
-        return getUnlocalizedName();
+        return id;
     }
 }

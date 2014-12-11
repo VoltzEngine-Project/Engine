@@ -38,14 +38,15 @@ public interface IExplosive
 
     /**
      * Called when the explosive is registered
+     * @param id - name the explosive was registered with
+     * @param modID - mod the explosive was registered by
      */
-    public void onRegistered();
+    public void onRegistered(String id, String modID);
 
-    /** Get the unique name key used to both register the explosive and translate it from a language file.
-     * Should have no issues using it as a unique id due to being related to the mod's domain
-     * Ex. explosive.modName:explosiveName.subName
-     * @return valid string translation, and unique id name
-     */
-    public String getUnlocalizedName();
+    /** Gets the key to use for translating the name */
+    public String getTranslationKey();
+
+    /** Gets the id this was registered with */
+    public String getID();
 
 }
