@@ -101,12 +101,10 @@ public class ContainerBase extends Container
 				{
 					if (inventory.isItemValidForSlot(i, slotStack))
 					{
-						if (!mergeItemStack(slotStack, i, i + 1, false))
+						if (mergeItemStack(slotStack, i, i + 1, false))
 						{
-							return null;
+							foundValid = true;
 						}
-
-						foundValid = true;
 					}
 				}
 
