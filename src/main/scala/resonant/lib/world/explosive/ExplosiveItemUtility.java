@@ -34,7 +34,7 @@ public class ExplosiveItemUtility
             if (ex != null)
             {
                 Pair<Integer, Integer> ranges = getExplosive(stack).getEstimatedRange(null, ExplosiveItemUtility.getSize(stack));
-                lines.add(LanguageUtility.getLocal("info.icbm:warhead.loaded") + ": " + getExplosive(stack).getUnlocalizedName());
+                lines.add(LanguageUtility.getLocal("info.icbm:warhead.loaded") + ": " + LanguageUtility.getLocal(getExplosive(stack).getTranslationKey()));
                 lines.add(LanguageUtility.getLocal("info.icbm:warhead.size") + ": " + ranges.left() + " - " + ranges.right() + " blocks");
             }
         }
@@ -122,7 +122,7 @@ public class ExplosiveItemUtility
     {
         if (ex != null)
         {
-            tag.setString("explosiveString", ex.getUnlocalizedName());
+            tag.setString("explosiveString", ex.getID());
         }
     }
 
