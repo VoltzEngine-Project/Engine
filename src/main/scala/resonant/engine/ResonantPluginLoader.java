@@ -15,11 +15,6 @@ import java.util.Map;
 @TransformerExclusions({ "resonant.engine.asm" })
 public class ResonantPluginLoader implements IFMLLoadingPlugin
 {
-	public String[] getLibraryRequestClass()
-	{
-		return null;
-	}
-
 	@Override
 	public String[] getASMTransformerClass()
 	{

@@ -25,7 +25,7 @@ public class Transformer implements IClassTransformer
 			{
 				ObfMapping m = new ObfMapping(cnode.name, method.name, method.desc).toRuntime();
 
-				if (m.s_name.equals("func_150807_a") || m.s_name.equals("func_150807_a"))
+				if (m.s_name.equals("func_150807_a"))
 				{
 					System.out.println("[Resonant-Engine] Found method " + m.s_name);
 					InsnList list = new InsnList();
