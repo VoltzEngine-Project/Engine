@@ -56,7 +56,7 @@ public final class ExplosiveRegistry
 
             //Save explosive to modID
             List<IExplosive> list;
-            if(!modToExplosiveMap.containsKey(modID))
+            if(modToExplosiveMap.containsKey(modID))
                 list = modToExplosiveMap.get(modID);
             else
                 list = new ArrayList();
