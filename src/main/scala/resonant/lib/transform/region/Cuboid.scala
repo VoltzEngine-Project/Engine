@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{Vec3, AxisAlignedBB}
 import net.minecraft.world.World
 import resonant.lib.transform.{ITransform, AbstractOperation}
-import resonant.lib.transform.vector.{IVector3, Vector3}
+import resonant.lib.transform.vector.{ImmutableVector3, IVector3, Vector3}
 
 /**
  * A cubical region class to specify a region.
@@ -20,6 +20,40 @@ import resonant.lib.transform.vector.{IVector3, Vector3}
 object Cuboid
 {
   def full= new Cuboid(0, 0, 0, 1, 1, 1)
+
+  def getCorners(box: Cuboid): Array[ImmutableVector3] =
+  {
+    val array: Array[ImmutableVector3] = new Array[ImmutableVector3](8)
+    val l: Double = box.max.x - box.min.x
+    val w: Double = box.max.z - box.min.z
+    val h: Double = box.max.y - box.min.y
+    array(0) = new ImmutableVector3(box.min.x, box.min.y, box.min.z)
+    array(1) = new ImmutableVector3(box.min.x, box.min.y + h, box.min.z)
+    array(2) = new ImmutableVector3(box.min.x, box.min.y + h, box.min.z + w)
+    array(3) = new ImmutableVector3(box.min.x, box.min.y, box.min.z + w)
+    array(4) = new ImmutableVector3(box.min.x + l, box.min.y, box.min.z)
+    array(5) = new ImmutableVector3(box.min.x + l, box.min.y + h, box.min.z)
+    array(6) = new ImmutableVector3(box.min.x + l, box.min.y + h, box.min.z + w)
+    array(7) = new ImmutableVector3(box.min.x + l, box.min.y, box.min.z + w)
+    return array
+  }
+
+  def getCorners(box: AxisAlignedBB): Array[ImmutableVector3] =
+  {
+    val array: Array[ImmutableVector3] = new Array[ImmutableVector3](8)
+    val l: Double = box.maxX - box.minX
+    val w: Double = box.maxZ - box.minZ
+    val h: Double = box.maxY - box.minY
+    array(0) = new ImmutableVector3(box.minX, box.minY, box.minZ)
+    array(1) = new ImmutableVector3(box.minX, box.minY + h, box.minZ)
+    array(2) = new ImmutableVector3(box.minX, box.minY + h, box.minZ + w)
+    array(3) = new ImmutableVector3(box.minX, box.minY, box.minZ + w)
+    array(4) = new ImmutableVector3(box.minX + l, box.minY, box.minZ)
+    array(5) = new ImmutableVector3(box.minX + l, box.minY + h, box.minZ)
+    array(6) = new ImmutableVector3(box.minX + l, box.minY + h, box.minZ + w)
+    array(7) = new ImmutableVector3(box.minX + l, box.minY, box.minZ + w)
+    return array
+  }
 }
 
 class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboid]
@@ -110,11 +144,28 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
   def intersects(v: IVector3): Boolean =
   {
     return isWithinX(v) && isWithinY(v) && isWithinZ(v)
-  } 
+  }
+
+  def doesOverlap(box: AxisAlignedBB): Boolean =
+  {
+    //http://www.geeksforgeeks.org/find-two-rectangles-overlap/
+    if (min.x > box.minX || box.maxX > max.x) return false
+    if (min.x > box.minY || box.maxY > max.y) return false
+    if (min.z > box.minZ || box.maxZ > max.z) return false
+    return true
+  }
+
+  def doesOverlap(box: Cuboid): Boolean =
+  {
+    if (min.x > box.min.x || box.max.x > max.x) return false
+    if (min.x > box.min.y || box.max.y > max.y) return false
+    if (min.z > box.min.z || box.max.z > max.z) return false
+    return true
+  }
   
   def isInsideBounds(x: Double, y: Double, z: Double, i: Double, j: Double, k: Double): Boolean =
   {
-    return max.x - 1E-5 > x && i - 1E-5 > min.x && max.y - 1E-5 > y && j - 1E-5 > min.y && max.z - 1E-5 > z && k - 1E-5 > min.z
+    return isWithin(min.x, max.x, x, i) && isWithin(min.y, max.y, y, j) && isWithin(min.z, max.z, z, k)
   }
 
   def isInsideBounds(other: Cuboid): Boolean =
@@ -152,7 +203,7 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
    * @param max - max point
    * @param a - min line point
    * @param b - max line point
-   * @return true if the line segement is within the bounds
+   * @return true if the line segment is within the bounds
    */
   def isWithin(min: Double, max: Double, a: Double , b: Double) : Boolean = a - 1E-5 >= min  && b <= max - 1E-5
 
