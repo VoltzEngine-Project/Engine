@@ -528,7 +528,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
     for (cuboid <- getCollisionBoxes)
     {
-      if (intersect != null && cuboid.intersects(intersect))
+      if (intersect != null && cuboid.isInsideBounds(intersect))
       {
         boxes.add(cuboid)
       }

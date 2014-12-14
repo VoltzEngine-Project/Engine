@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.AxisAlignedBB
+import net.minecraft.util.{Vec3, AxisAlignedBB}
 import net.minecraft.world.World
 import resonant.lib.transform.{ITransform, AbstractOperation}
 import resonant.lib.transform.vector.{IVector3, Vector3}
@@ -102,14 +102,66 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
     return this
   }
 
-  def intersects(point: Vector3): Boolean =
+  def intersects(v: Vec3): Boolean =
   {
-    return (point.x > this.min.x && point.x < this.max.x) && (point.y > this.min.y && point.y < this.max.y) && (point.z > this.min.z && point.z < this.max.z)
+    return isWithinX(v) && isWithinY(v) && isWithinZ(v)
+  }
+  
+  def intersects(v: IVector3): Boolean =
+  {
+    return isWithinX(v) && isWithinY(v) && isWithinZ(v)
+  } 
+  
+  def isInsideBounds(x: Double, y: Double, z: Double, i: Double, j: Double, k: Double): Boolean =
+  {
+    return max.x - 1E-5 > x && i - 1E-5 > min.x && max.y - 1E-5 > y && j - 1E-5 > min.y && max.z - 1E-5 > z && k - 1E-5 > min.z
   }
 
-  def intersects(other: Cuboid): Boolean =
+  def isInsideBounds(other: Cuboid): Boolean =
   {
-    return max.x - 1E-5 > other.min.x && other.max.x - 1E-5 > min.x && max.y - 1E-5 > other.min.y && other.max.y - 1E-5 > min.y && max.z - 1E-5 > other.min.z && other.max.z - 1E-5 > min.z
+    return isInsideBounds(other.min.x, other.min.y, other.min.z, other.max.x, other.max.y, other.max.z)
+  }
+
+  def isInsideBounds(other: AxisAlignedBB) : Boolean =
+  {
+    return isInsideBounds(other.minX, other.minY, other.minZ, other.maxX, other.maxY, other.maxZ)
+  }
+  
+  def isVecInYZ(v : Vec3): Boolean = isWithinY(v) && isWithinZ(v)
+  def isVecInYZ(v : IVector3): Boolean = isWithinY(v) && isWithinZ(v)
+
+  def isWithinXZ(v : Vec3): Boolean = isWithinX(v) && isWithinZ(v)
+  def isWithinXZ(v : IVector3): Boolean = isWithinX(v) && isWithinZ(v)
+  
+  def isWithinX(v: Double) = isWithin(min.x, max.x, v)
+  def isWithinX(v: Vec3) = isWithin(min.x, max.x, v.xCoord)
+  def isWithinX(v: IVector3) = isWithin(min.x, max.x, v.x())
+
+  def isWithinY(v: Double) = isWithin(min.y, max.y, v)
+  def isWithinY(v: Vec3) = isWithin(min.x, max.x, v.yCoord)
+  def isWithinY(v: IVector3) = isWithin(min.x, max.x, v.y())
+
+  def isWithinZ(v: Double) = isWithin(min.z, max.z, v)
+  def isWithinZ(v: Vec3) = isWithin(min.x, max.x, v.zCoord)
+  def isWithinZ(v: IVector3) = isWithin(min.x, max.x, v.z())
+  
+  def isWithin(min: Double, max: Double, v: Double) : Boolean = v - 1E-5 >= min  && v <= max - 1E-5
+
+  /** Checks to see if a line segment is within the defined line. Assume the lines overlap each other.
+   * @param min - min point
+   * @param max - max point
+   * @param a - min line point
+   * @param b - max line point
+   * @return true if the line segement is within the bounds
+   */
+  def isWithin(min: Double, max: Double, a: Double , b: Double) : Boolean = a - 1E-5 >= min  && b <= max - 1E-5
+
+  /**
+   * Checks if the specified vector is within the XY dimensions of the bounding box. Args: Vec3D
+   */
+  def isVecInXY(v : Vec3): Boolean =
+  {
+    return v.xCoord >= this.min.x && v.xCoord <= this.max.x && v.yCoord >= this.min.y && v.yCoord <= this.max.y
   }
 
   def center: Vector3 = (min + max) / 2
