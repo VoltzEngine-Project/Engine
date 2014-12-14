@@ -92,7 +92,7 @@ public class GuiContainerBase extends GuiContainer
 		{
 			Entry<Rectangle, String> entry = it.next();
 
-			if (entry.getKey().intersects(new Vector2(mouseX - this.guiLeft, mouseY - this.guiTop)))
+			if (entry.getKey().isWithin(new Vector2(mouseX - this.guiLeft, mouseY - this.guiTop)))
 			{
 				this.tooltip = entry.getValue();
 				break;
@@ -174,7 +174,7 @@ public class GuiContainerBase extends GuiContainer
 
 		if (tooltip != null && tooltip != "")
 		{
-			if (new Rectangle(x, y, (int) (text.length() * 4.8), 12).intersects(new Vector2(mouseX, mouseY)))
+			if (new Rectangle(x, y, (int) (text.length() * 4.8), 12).isWithin(new Vector2(mouseX, mouseY)))
 			{
 				this.tooltip = tooltip;
 			}
@@ -354,7 +354,7 @@ public class GuiContainerBase extends GuiContainer
 		}*/
 
 		//TODO: Check if this rect works.
-		if (new Rectangle(x, y, x + display.length() * 5, y + 9).intersects(new Vector2(mouseX, mouseY)))
+		if (new Rectangle(x, y, x + display.length() * 5, y + 9).isWithin(new Vector2(mouseX, mouseY)))
 		{
 			if (Mouse.isButtonDown(0) && this.lastChangeFrameTime <= 0)
 			{
@@ -394,7 +394,7 @@ public class GuiContainerBase extends GuiContainer
 			}
 		}
 */
-		if (new Rectangle(x, y, x + display.length() * 5, y + 9).intersects(new Vector2(mouseX, mouseY)))
+		if (new Rectangle(x, y, x + display.length() * 5, y + 9).isWithin(new Vector2(mouseX, mouseY)))
 		{
 			if (Mouse.isButtonDown(0) && this.lastChangeFrameTime <= 0)
 			{

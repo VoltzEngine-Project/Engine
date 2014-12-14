@@ -138,12 +138,17 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
 
   def intersects(v: Vec3): Boolean =
   {
-    return isWithinX(v) && isWithinY(v) && isWithinZ(v)
+    return intersects(v.xCoord, v.yCoord, v.zCoord)
   }
   
   def intersects(v: IVector3): Boolean =
   {
-    return isWithinX(v) && isWithinY(v) && isWithinZ(v)
+    return intersects(v.x, v.y, v.z)
+  }
+
+  def intersects(x: Double, y: Double, z: Double) : Boolean =
+  {
+    return isWithinX(x) && isWithinY(y) && isWithinZ(z)
   }
 
   def doesOverlap(box: AxisAlignedBB): Boolean =
@@ -184,17 +189,17 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
   def isWithinXZ(v : Vec3): Boolean = isWithinX(v) && isWithinZ(v)
   def isWithinXZ(v : IVector3): Boolean = isWithinX(v) && isWithinZ(v)
   
-  def isWithinX(v: Double) = isWithin(min.x, max.x, v)
-  def isWithinX(v: Vec3) = isWithin(min.x, max.x, v.xCoord)
-  def isWithinX(v: IVector3) = isWithin(min.x, max.x, v.x())
+  def isWithinX(v: Double): Boolean = isWithin(min.x, max.x, v)
+  def isWithinX(v: Vec3): Boolean = isWithinX(v.xCoord)
+  def isWithinX(v: IVector3): Boolean = isWithinX(v.x())
 
-  def isWithinY(v: Double) = isWithin(min.y, max.y, v)
-  def isWithinY(v: Vec3) = isWithin(min.x, max.x, v.yCoord)
-  def isWithinY(v: IVector3) = isWithin(min.x, max.x, v.y())
+  def isWithinY(v: Double): Boolean = isWithin(min.y, max.y, v)
+  def isWithinY(v: Vec3): Boolean = isWithinY(v.yCoord)
+  def isWithinY(v: IVector3): Boolean = isWithinY(v.y())
 
-  def isWithinZ(v: Double) = isWithin(min.z, max.z, v)
-  def isWithinZ(v: Vec3) = isWithin(min.x, max.x, v.zCoord)
-  def isWithinZ(v: IVector3) = isWithin(min.x, max.x, v.z())
+  def isWithinZ(v: Double): Boolean = isWithin(min.z, max.z, v)
+  def isWithinZ(v: Vec3): Boolean = isWithinZ(v.zCoord)
+  def isWithinZ(v: IVector3): Boolean = isWithinZ(v.z())
   
   def isWithin(min: Double, max: Double, v: Double) : Boolean = v - 1E-5 >= min  && v <= max - 1E-5
 
@@ -262,6 +267,52 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
     val vectors = new ArrayList[Vector3];
     foreach(vector => if (center.distance(vector.asInstanceOf[IVector3]) <= radius) vectors.add(vector))
     return vectors
+  }
+
+  def radius : Double =
+  {
+    var m: Double = 0;
+    if(xSize > m)
+      m = xSize
+    if(ySize > m)
+      m = ySize
+    if(zSize > m)
+      m = zSize
+    return m
+  }
+
+  def isSquared: Boolean = xSize == ySize && ySize == zSize
+  def isSquaredInt: Boolean = xSizeInt == ySizeInt && ySizeInt == zSizeInt
+  
+  def xSize: Double = max.x - min.x
+  def ySize: Double = max.y - min.y
+  def zSize: Double = max.z - min.z
+
+  def xSizeInt: Int = (max.x - min.x).asInstanceOf[Int]
+  def ySizeInt: Int = (max.y - min.y).asInstanceOf[Int]
+  def zSizeInt: Int = (max.z - min.z).asInstanceOf[Int]
+
+  def distance(v: Vec3): Double = center.distance(v)
+  def distance(v: IVector3): Double = center.distance(v)
+  def distance(box: Cuboid): Double = distance(box.center)
+  def distance(box: AxisAlignedBB): Double = distance(new Cuboid(box))
+  def distance(xx: Double, yy: Double, zz: Double) : Double =
+  {
+    val center = this.center
+    val x = center.x - xx;
+    val y = center.y - yy;
+    val z = center.z - zz;
+    return Math.sqrt(x * x + y * y + z * z)
+  }
+
+  def volume() : Double =
+  {
+    return xSize *  ySize * zSize
+  }
+
+  def area() : Double =
+  {
+    return (2 * xSize * zSize) + (2 * xSize * ySize) + (2 * zSize * ySize)
   }
 
   /** Returns all entities in this region. */
