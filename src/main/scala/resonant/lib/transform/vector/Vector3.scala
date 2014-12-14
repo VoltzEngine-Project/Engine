@@ -347,6 +347,81 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this
   }
 
+  //====================
+  // Vec3 handling
+  //====================
+
+  def subtract(amount: Vec3): Vector3 = this - amount
+
+  def -(amount: Vec3): Vector3 = new Vector3(x - amount.xCoord, y - amount.yCoord, z - amount.zCoord)
+
+  def distance(other: Vec3): Double = (this - other).magnitude
+
+  def subEquals(amount: Vec3): Vector3 = this -= amount
+
+  def subtractEquals(amount: Vec3): Vector3 = this -= amount
+
+  def -=(amount: Vec3): Vector3 =
+  {
+    x -= amount.xCoord
+    y -= amount.yCoord
+    z -= amount.zCoord
+    return this
+  }
+
+  def add(amount: Vec3): Vector3 = this + amount
+
+  def +(amount: Vec3): Vector3 = new Vector3(x + amount.xCoord, y + amount.yCoord, z + amount.zCoord)
+
+  def addEquals(amount: Vec3): Vector3 = this += amount
+
+  def +=(amount: Vec3): Vector3 =
+  {
+    x = amount.xCoord + x
+    y = amount.yCoord + y
+    z = amount.zCoord + z
+    return this
+  }
+
+  def multiply(amount: Vec3): Vector3 = this * amount
+
+  def *(amount: Vec3): Vector3 = new Vector3(x * amount.xCoord, y * amount.yCoord, z * amount.zCoord)
+
+  def multiplyEquals(amount: Vec3): Vector3 = this *= amount
+
+  def *=(amount: Vec3): Vector3 =
+  {
+    x *= amount.xCoord
+    y *= amount.yCoord
+    z *= amount.zCoord
+    return this;
+  }
+
+  def divide(amount: Vec3): Vector3 = this * amount
+
+  def /(amount: Vec3): Vector3 = new Vector3(x / amount.xCoord, y / amount.yCoord, z / amount.zCoord)
+
+  def divideEquals(amount: Vec3): Vector3 = this /= amount
+
+  def /=(amount: Vec3): Vector3 =
+  {
+    x /= amount.xCoord
+    y /= amount.yCoord
+    z /= amount.zCoord
+    return this;
+  }
+
+  def midPoint(pos: Vec3): Vector3 = new Vector3((x + pos.xCoord) / 2, (y + pos.yCoord) / 2, (z + pos.zCoord) / 2)
+
+  def dot(other: Vec3) = $(other)
+
+  def $(other: Vec3) = x * other.xCoord + y * other.yCoord + z * other.zCoord
+
+  def cross(other: Vec3) = %(other)
+
+  def %(other: Vec3): Vector3 = new Vector3(y * other.zCoord - z * other.yCoord, z * other.xCoord - x * other.zCoord, x * other.yCoord - y * other.xCoord)
+
+
 
   //====================
   // IVector3 handling
