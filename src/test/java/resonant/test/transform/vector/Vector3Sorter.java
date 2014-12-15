@@ -1,4 +1,4 @@
-package resonant.test.vector;
+package resonant.test.transform.vector;
 
 import junit.framework.TestCase;
 import resonant.lib.transform.sorting.Vector3DistanceComparator;

@@ -2,7 +2,7 @@ package resonant.lib.transform.region
 
 import net.minecraft.util.AxisAlignedBB
 import resonant.lib.transform.rotation.IRotation
-import resonant.lib.transform.vector.{IVector3, Vector2}
+import resonant.lib.transform.vector.Vector2
 import resonant.lib.utility.MathUtility
 
 /**
@@ -20,42 +20,17 @@ class RotatableCube extends Cuboid with IRotation
     if (distance(x, y, z) > radius)
       return false;
 
-    //Area base check xz
-    val p = new Vector2(x, z)
-
-
-    //Area face check xy
-    p.y = y
-
-    return true
+    return isWithinXZ(x, y, z) && isWithinYZ(x, y, z)
   }
 
-  override def isWithinXZ(pp: IVector3): Boolean =
+  def isWithinXZ(x: Double, y: Double, z: Double): Boolean =
   {
-    return new Rectangle(new Vector2(min.x, min.z), new Vector2(max.x, max.z)).isWithin(new Vector2(pp.x, pp.y))
+    return new Rectangle(new Vector2(min.x, min.z), new Vector2(max.x, max.z)).isWithin(new Vector2(x, z))
   }
 
-  def isWithinYZ(pp: IVector3): Boolean =
+  def isWithinYZ(x: Double, y: Double, z: Double): Boolean =
   {
-    val p = new Vector2(pp.y, pp.z)
-
-    //Rect corners
-    val a = new Vector2(min.y, min.z) // min
-    val b = new Vector2(min.y, max.z)
-    val c = new Vector2(max.y, max.z) // max
-    val d = new Vector2(max.y, min.z)
-
-    //Rectangle area
-    val area = new Rectangle(a, c).area()
-
-    //Area of the triangles made from the corners and p
-    val areaAB = new Triangle(a, b, p).area()
-    val areaBC = new Triangle(b, c, p).area()
-    val areaCD = new Triangle(c, d, p).area()
-    val areaDA = new Triangle(d, a, p).area()
-
-    //If the area of the combined points is less and equals to area
-    return (areaAB + areaBC + areaCD + areaDA) <= area
+    return new Rectangle(new Vector2(min.y, min.z), new Vector2(max.y, max.z)).isWithin(new Vector2(y, z))
   }
 
   override def doesOverlap(box: AxisAlignedBB): Boolean =

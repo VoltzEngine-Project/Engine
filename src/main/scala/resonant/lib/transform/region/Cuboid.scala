@@ -153,21 +153,23 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
 
   def doesOverlap(box: AxisAlignedBB): Boolean =
   {
-    //http://www.geeksforgeeks.org/find-two-rectangles-overlap/
-    if (min.x > box.minX || box.maxX > max.x) return false
-    if (min.x > box.minY || box.maxY > max.y) return false
-    if (min.z > box.minZ || box.maxZ > max.z) return false
-    return true
+    return doesOverlap(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ)
   }
 
   def doesOverlap(box: Cuboid): Boolean =
   {
-    if (min.x > box.min.x || box.max.x > max.x) return false
-    if (min.x > box.min.y || box.max.y > max.y) return false
-    if (min.z > box.min.z || box.max.z > max.z) return false
-    return true
+    return doesOverlap(box.min.x, box.min.y, box.min.z, box.max.x, box.max.y, box.max.z)
   }
-  
+
+  def doesOverlap(x: Double, y: Double, z: Double, i: Double, j: Double, k: Double): Boolean =
+  {
+    return !isOutSideX(x, i) || !isOutSideY(y, j) || !isOutSideZ(z, k)
+  }
+
+  def isOutSideX(x: Double, i: Double): Boolean = (min.x > x || i > max.x)
+  def isOutSideY(y: Double, j: Double): Boolean = (min.y > y || j > max.y)
+  def isOutSideZ(z: Double, k: Double): Boolean = (min.z > z || k > max.z)
+
   def isInsideBounds(x: Double, y: Double, z: Double, i: Double, j: Double, k: Double): Boolean =
   {
     return isWithin(min.x, max.x, x, i) && isWithin(min.y, max.y, y, j) && isWithin(min.z, max.z, z, k)
@@ -210,7 +212,7 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
    * @param b - max line point
    * @return true if the line segment is within the bounds
    */
-  def isWithin(min: Double, max: Double, a: Double , b: Double) : Boolean = a - 1E-5 >= min  && b <= max - 1E-5
+  def isWithin(min: Double, max: Double, a: Double , b: Double) : Boolean = a + 1E-5 >= min  && b - 1E-5 <= max
 
   /**
    * Checks if the specified vector is within the XY dimensions of the bounding box. Args: Vec3D
