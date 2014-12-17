@@ -39,13 +39,13 @@ public class CuboidTest extends TestCase
         assertEquals("Failed overlap check three", true, cube.isOutSideZ(-2, 2));
     }
 
-    public void testCollision()
+    public void testCollisionOverlap()
     {
-        for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
         {
             Vector3 vec = new Vector3(dir).multi(0.3);
             Cuboid c = cube.add(vec);
-            if(!cube.doesOverlap(c))
+            if (!cube.doesOverlap(c))
             {
                 System.out.println("Cube:  " + cube);
                 System.out.println("Above: " + c.toString());
@@ -57,18 +57,72 @@ public class CuboidTest extends TestCase
         }
     }
 
+    public void testCollisionCorners()
+    {
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+        {
+            for (int side = 0; side < 4; side++)
+            {
+                Vector3 vec = new Vector3(dir).multi(0.3);
+                switch (dir)
+                {
+                    case DOWN:
+                    case UP:
+                        switch(side)
+                        {
+                            case 0: vec.add(0.3, 0, 0.3); break;
+                            case 1: vec.add(-0.3, 0, 0.3);break;
+                            case 2: vec.add(0.3, 0, -0.3);break;
+                            case 3: vec.add(-0.3, 0, -0.3); break;
+                        }
+                    case NORTH:
+                    case SOUTH:
+                        switch(side)
+                        {
+                            case 0: vec.add(0.3, 0.3, 0); break;
+                            case 1: vec.add(-0.3, 0.3, 0);break;
+                            case 2: vec.add(0.3, -0.3, 0);break;
+                            case 3: vec.add(-0.3, -0.3, 0); break;
+                        }
+                        break;
+                    case WEST:
+                    case EAST:
+                        switch(side)
+                        {
+                            case 0: vec.add(0, 0.3, 0.3); break;
+                            case 1: vec.add(0, -0.3, 0.3);break;
+                            case 2: vec.add(0, 0.3, -0.3);break;
+                            case 3: vec.add(0, -0.3, -0.3); break;
+                        }
+                        break;
+                }
+
+                Cuboid c = cube.add(vec);
+                if (!cube.doesOverlap(c))
+                {
+                    System.out.println("Cube:  " + cube);
+                    System.out.println("Above: " + c.toString());
+                    System.out.println("Is outside X limits -> " + cube.isOutSideX(c.min().x(), c.max().x()));
+                    System.out.println("Is outside Y limits -> " + cube.isOutSideY(c.min().y(), c.max().y()));
+                    System.out.println("Is outside Z limits -> " + cube.isOutSideZ(c.min().z(), c.max().z()));
+                    fail("Didn't collide for side " + dir + " and corner " + side);
+                }
+            }
+        }
+    }
+
     public void testInsideBounds()
     {
-        for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
         {
             Cuboid above = cube;
             assertEquals("Failed center collision check for side " + dir, true, cube.isInsideBounds(above));
 
             above = above.add(new Vector3(dir));
-            assertEquals("Failed collision check one for side " + dir,false, cube.isInsideBounds(above));
+            assertEquals("Failed collision check one for side " + dir, false, cube.isInsideBounds(above));
 
             above = above.add(new Vector3(dir));
-            assertEquals("Failed collision check two for side " + dir,false, cube.isInsideBounds(above));
+            assertEquals("Failed collision check two for side " + dir, false, cube.isInsideBounds(above));
         }
     }
 

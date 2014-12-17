@@ -214,14 +214,6 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
    */
   def isWithin(min: Double, max: Double, a: Double , b: Double) : Boolean = a + 1E-5 >= min  && b - 1E-5 <= max
 
-  /**
-   * Checks if the specified vector is within the XY dimensions of the bounding box. Args: Vec3D
-   */
-  def isVecInXY(v : Vec3): Boolean =
-  {
-    return v.xCoord >= this.min.x && v.xCoord <= this.max.x && v.yCoord >= this.min.y && v.yCoord <= this.max.y
-  }
-
   def center: Vector3 = (min + max) / 2
 
   def expand(difference: Vector3): Cuboid =
