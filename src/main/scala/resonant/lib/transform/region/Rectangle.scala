@@ -74,13 +74,15 @@ class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Re
   /**
    * Checks if a point is located inside a region
    */
-  def isWithin(point: IVector2): Boolean = (point.x > this.min.x && point.x < this.max.x) && (point.y > this.min.y && point.y < this.max.y)
+  def isWithin(point: IVector2): Boolean = isWithinX(point) && isWithinY(point)
+  def isWithinY(point: IVector2): Boolean = point.y >= this.min.y && point.y <= this.max.y
+  def isWithinX(point: IVector2): Boolean = point.x >= this.min.x && point.x <= this.max.x
 
   def isWithin_rotated(p: IVector2): Boolean =
   {
     //Rect corners
     val cornerB = this.cornerB()
-    val cornerD = this.cornerB()
+    val cornerD = this.cornerD()
 
     //Area of the triangles made from the corners and p
     val areaAB = new Triangle(cornerA, cornerB, p).area

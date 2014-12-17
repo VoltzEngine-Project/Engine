@@ -2,13 +2,21 @@ package resonant.test.transform.region;
 
 import junit.framework.TestCase;
 import resonant.lib.transform.region.Rectangle;
+import resonant.lib.transform.region.Triangle;
 import resonant.lib.transform.vector.Vector2;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by robert on 12/17/2014.
  */
 public class RectangleTest extends TestCase
 {
+    /**
+     * Checks too see if the area math is working :P
+     */
     public void testArea()
     {
         //For the hell of it
@@ -31,42 +39,70 @@ public class RectangleTest extends TestCase
         assertEquals("Expected an exact match for area check four", 900.0, rect.area());
     }
 
-    public void isPointInSideArea()
+    /**
+     * Checks if the basic version of the point bounding box check is working
+     */
+    public void testIsWithin()
     {
         Rectangle rect = new Rectangle(new Vector2(0, 0), new Vector2(2, 2));
 
-        //Always check the zero case :)
-        Vector2 p1 = new Vector2();
-        assertEquals("Failed on (0,0) corner check", true, rect.isWithin(p1));
+        List<Vector2> points_inside = new LinkedList();
+        points_inside.add(rect.cornerA());
+        points_inside.add(rect.cornerB());
+        points_inside.add(rect.cornerC());
+        points_inside.add(rect.cornerD());
+        points_inside.add(new Vector2(1, 1));
 
-        p1 = new Vector2(2, 2);
-        assertEquals("Failed on (2, 2) corner check", true, rect.isWithin(p1));
+        List<Vector2> points_outside = new LinkedList();
+        points_outside.add(new Vector2(-1, -1));
+        points_outside.add(new Vector2(0, -1));
+        points_outside.add(new Vector2(-1, 0));
+        points_outside.add(new Vector2(3, 0));
+        points_outside.add(new Vector2(0, 3));
 
-        p1 = new Vector2(0, 2);
-        assertEquals("Failed on (0, 2) corner check", true, rect.isWithin(p1));
+        for (int i = 0; i < 4; i++)
+        {
+            //First two runs are inside checks
+            boolean inside = i <= 1;
+            boolean rotated = (i == 1 || i == 3);
+            List<Vector2> l = inside ? points_inside : points_outside;
 
-        p1 = new Vector2(2, 0);
-        assertEquals("Failed on (2, 0) corner check", true, rect.isWithin(p1));
+            for (Vector2 vec : l)
+            {
+                boolean flag = !rotated ? rect.isWithin(vec) : rect.isWithin_rotated(vec);
 
-        //Points inside
-        p1 = new Vector2(1, 1);
-        assertEquals("Failed on (1, 1) check", true, rect.isWithin(p1));
+                //Debug for when the checks fail and we need to know why
+                if (flag != inside)
+                {
+                    System.out.println("===   Debug   ===");
+                    if (!rotated)
+                    {
+                        System.out.println("isWithinX: " + rect.isWithinX(vec));
+                        System.out.println("isWithinY: " + rect.isWithinX(vec));
+                    }
+                    else
+                    {
+                        double ab = new Triangle(rect.cornerA(), rect.cornerB(), vec).area();
+                        double bc = new Triangle(rect.cornerB(), rect.cornerC(), vec).area();
+                        double cd = new Triangle(rect.cornerC(), rect.cornerD(), vec).area();
+                        double da = new Triangle(rect.cornerD(), rect.cornerA(), vec).area();
+                        System.out.println("TriABP Area: " + ab);
+                        System.out.println("TriBCP Area: " + bc);
+                        System.out.println("TriCBP Area: " + cd);
+                        System.out.println("TriDAP Area: " + da);
+                        System.out.println("Total Area:  " + (ab + bc + cd +da));
+                        System.out.println("Rect Area:   " + rect.area());
+                    }
+                    System.out.println("==================");
 
-        //Points outside
-        p1 = new Vector2(-1, -1);
-        assertEquals("Failed on (-1, -1) corner check", false, rect.isWithin(p1));
-
-        p1 = new Vector2(0, -1);
-        assertEquals("Failed on (0, -1) corner check", false, rect.isWithin(p1));
-
-        p1 = new Vector2(-1, 0);
-        assertEquals("Failed on (-1, 0) corner check", false, rect.isWithin(p1));
-
-        p1 = new Vector2(3, 0);
-        assertEquals("Failed on (3, 0) corner check", false, rect.isWithin(p1));
-
-        p1 = new Vector2(0, 3);
-        assertEquals("Failed on (0, 3) corner check", false, rect.isWithin(p1));
-
+                    //Failure message
+                    String msg = "Failed for ";
+                    msg += (!rotated ? "Normal Test " : "Rotated Test ");
+                    msg += vec +" ";
+                    msg += (inside ? " should be inside the rect!" : " should be outside the rect!");
+                    fail(msg);
+                }
+            }
+        }
     }
 }
