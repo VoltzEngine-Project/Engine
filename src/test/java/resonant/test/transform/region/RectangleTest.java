@@ -7,7 +7,6 @@ import resonant.lib.transform.vector.Vector2;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by robert on 12/17/2014.
@@ -21,22 +20,22 @@ public class RectangleTest extends TestCase
     {
         //For the hell of it
         Rectangle rect = new Rectangle(new Vector2(), new Vector2());
-        assertEquals("Expected zero as both corners are zero zero", 0.0, rect.area());
+        assertEquals("Expected zero as both corners are zero zero", 0.0, rect.getArea());
         rect = new Rectangle(new Vector2(0, 1), new Vector2(0, 2));
-        assertEquals("Expected zero as both corners are in a strait line", 0.0, rect.area());
+        assertEquals("Expected zero as both corners are in a strait line", 0.0, rect.getArea());
 
         //Random are checks
         rect = new Rectangle(new Vector2(0, 0), new Vector2(2, 2));
-        assertEquals("Expected an exact match for area check one", 4.0, rect.area());
+        assertEquals("Expected an exact match for area check one", 4.0, rect.getArea());
 
         rect = new Rectangle(new Vector2(0, 0), new Vector2(-2, -2));
-        assertEquals("Expected an exact match for area check two", 4.0, rect.area());
+        assertEquals("Expected an exact match for area check two", 4.0, rect.getArea());
 
         rect = new Rectangle(new Vector2(-2, -2), new Vector2(2, 2));
-        assertEquals("Expected an exact match for area check three", 16.0, rect.area());
+        assertEquals("Expected an exact match for area check three", 16.0, rect.getArea());
 
         rect = new Rectangle(new Vector2(10, 20), new Vector2(-20, -10));
-        assertEquals("Expected an exact match for area check four", 900.0, rect.area());
+        assertEquals("Expected an exact match for area check four", 900.0, rect.getArea());
     }
 
     /**
@@ -82,16 +81,16 @@ public class RectangleTest extends TestCase
                     }
                     else
                     {
-                        double ab = new Triangle(rect.cornerA(), rect.cornerB(), vec).area();
-                        double bc = new Triangle(rect.cornerB(), rect.cornerC(), vec).area();
-                        double cd = new Triangle(rect.cornerC(), rect.cornerD(), vec).area();
-                        double da = new Triangle(rect.cornerD(), rect.cornerA(), vec).area();
+                        double ab = new Triangle(rect.cornerA(), rect.cornerB(), vec).getArea();
+                        double bc = new Triangle(rect.cornerB(), rect.cornerC(), vec).getArea();
+                        double cd = new Triangle(rect.cornerC(), rect.cornerD(), vec).getArea();
+                        double da = new Triangle(rect.cornerD(), rect.cornerA(), vec).getArea();
                         System.out.println("TriABP Area: " + ab);
                         System.out.println("TriBCP Area: " + bc);
                         System.out.println("TriCBP Area: " + cd);
                         System.out.println("TriDAP Area: " + da);
                         System.out.println("Total Area:  " + (ab + bc + cd +da));
-                        System.out.println("Rect Area:   " + rect.area());
+                        System.out.println("Rect Area:   " + rect.getArea());
                     }
                     System.out.println("==================");
 

@@ -4,10 +4,9 @@ import java.math.{BigDecimal, MathContext, RoundingMode}
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
-import resonant.lib.transform.AbstractOperation
 import resonant.lib.transform.vector.{IVector2, Vector2}
 
-class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Rectangle]
+class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
 {
   def this() = this(new Vector2, new Vector2)
 
@@ -71,6 +70,9 @@ class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Re
 
   def *(amount: Rectangle): Rectangle = new Rectangle(min * amount.min, max * amount.max)
 
+
+  override def isWithin2D(vec: IVector2): Boolean = isWithin(vec)
+  
   /**
    * Checks if a point is located inside a region
    */
@@ -85,13 +87,13 @@ class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Re
     val cornerD = this.cornerD()
 
     //Area of the triangles made from the corners and p
-    val areaAB = new Triangle(cornerA, cornerB, p).area
-    val areaBC = new Triangle(cornerB, cornerC, p).area
-    val areaCD = new Triangle(cornerC, cornerD, p).area
-    val areaDA = new Triangle(cornerD, cornerA, p).area
+    val areaAB = new Triangle(cornerA, cornerB, p).getArea
+    val areaBC = new Triangle(cornerB, cornerC, p).getArea
+    val areaCD = new Triangle(cornerC, cornerD, p).getArea
+    val areaDA = new Triangle(cornerD, cornerA, p).getArea
 
     //If the area of the combined points is less and equals to area
-    return (areaAB + areaBC + areaCD + areaDA) <= area
+    return (areaAB + areaBC + areaCD + areaDA) <= getArea
   }
 
   def cornerA() = min
@@ -107,7 +109,7 @@ class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Re
     return if (region.max.x > this.min.x && region.min.x < this.max.x) (if (region.max.y > this.min.y && region.min.y < this.max.y) true else false) else false
   }
 
-  def area(): Double = xSize * ySize
+  override def getArea(): Double = xSize * ySize
 
   def xSize(): Double = max.x - min.x
 
@@ -141,4 +143,5 @@ class Rectangle(var min: Vector2, var max: Vector2) extends AbstractOperation[Re
   }
 
   override def clone: Rectangle = new Rectangle(this)
+
 }
