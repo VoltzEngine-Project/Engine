@@ -10,6 +10,8 @@ import resonant.lib.transform.vector.Vector2;
  */
 public class TriangleTest extends TestCase
 {
+    //TODO include a performance test to see how fast these method calls run on average
+
     public void testTriangleAreas()
     {
         //Dummy checks for the hell of it
