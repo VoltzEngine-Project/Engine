@@ -1,8 +1,5 @@
 package resonant.lib.transform.region
 
-import io.netty.buffer.ByteBuf
-import net.minecraft.nbt.NBTTagCompound
-import resonant.lib.transform.vector.IVector2
 import resonant.lib.transform.vector.Vector2
 
 /** Simple point with a radius. Can be used for just about anything including
@@ -33,9 +30,9 @@ class Circle(var center: Vector2, var r: Double) extends Shape[Circle]
     return Math.PI * (r * r)
   }
 
-  def isWithin2D(vec: IVector2): Boolean =
+  def isWithin(x: Double, y: Double): Boolean =
   {
-    return center.distance(new Vector2(vec.x, vec.y)) <= r
+    return center.distance(new Vector2(x, y)) <= r
   }
 
   override def set(other: Circle): Circle =
@@ -49,11 +46,13 @@ class Circle(var center: Vector2, var r: Double) extends Shape[Circle]
 
   override def +(amount: Circle): Circle = new Circle(center.midpoint(amount.center), r + amount.r)
 
-  override def writeByteBuf(data: ByteBuf): ByteBuf = data
-
-  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound = nbt
-
   override def *(amount: Double): Circle = new Circle(center, r  * amount)
 
   override def *(amount: Circle): Circle = new Circle(center.midpoint(amount.center), r * amount.r)
+
+  /** Distance the shape takes in the X axis */
+  override def getSizeX: Double = r
+
+  /** Distance the shape takes in the Y axis */
+  override def getSizeY: Double = r
 }

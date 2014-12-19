@@ -23,6 +23,17 @@ class Triangle(var a: IVector2, var b: IVector2, var c: IVector2) extends Shape[
     return this
   }
 
+
+  /** Checks if the point is inside the shape */
+  override def isWithin(x: Double, y: Double): Boolean =
+  {
+    val p = new Vector2(x, y)
+    var ab = new Triangle(a, b, p).getArea
+    var bc = new Triangle(b, c, p).getArea
+    var ca = new Triangle(c, a, p).getArea
+    return (ab + bc + ca) <= getArea
+  }
+
   override def +(amount: Double): Triangle = new Triangle(new Vector2(a.x + amount, a.y + amount), new Vector2(b.x + amount, b.y + amount), new Vector2(c.x + amount, c.y + amount))
 
   override def +(t: Triangle): Triangle =
@@ -60,4 +71,43 @@ class Triangle(var a: IVector2, var b: IVector2, var c: IVector2) extends Shape[
     val newC  = new Vector2(b.x * t.b.x, b.y * t.b.y)
     return new Triangle(newA, newB, newC)
   }
+
+  /** Distance the shape takes in the X axis */
+  override def getSizeX: Double =
+  {
+    var lower : Double = a.x
+    var upper : Double = a.x
+
+    if(b.x < lower)
+      lower = b.x
+    if(c.x < lower)
+      lower = c.x
+
+    if(b.x > upper)
+      upper = b.x
+    if(c.x > upper)
+      upper = c.x
+
+    return upper - lower
+  }
+
+  /** Distance the shape takes in the Y axis */
+  override def getSizeY: Double =
+  {
+    var lower : Double = a.y
+    var upper : Double = a.y
+
+    if(b.y < lower)
+      lower = b.y
+    if(c.y < lower)
+      lower = c.y
+
+    if(b.y > upper)
+      upper = b.y
+    if(c.y > upper)
+      upper = c.y
+
+    return upper - lower
+  }
+
 }

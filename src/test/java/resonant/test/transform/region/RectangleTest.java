@@ -68,7 +68,7 @@ public class RectangleTest extends TestCase
 
             for (Vector2 vec : l)
             {
-                boolean flag = !rotated ? rect.isWithin(vec) : rect.isWithin_rotated(vec);
+                boolean flag = !rotated ? rect.isWithin2D(vec) : rect.isWithin_rotated(vec);
 
                 //Debug for when the checks fail and we need to know why
                 if (flag != inside)
@@ -76,8 +76,8 @@ public class RectangleTest extends TestCase
                     System.out.println("===   Debug   ===");
                     if (!rotated)
                     {
-                        System.out.println("isWithinX: " + rect.isWithinX(vec));
-                        System.out.println("isWithinY: " + rect.isWithinX(vec));
+                        System.out.println("isWithinX: " + (vec.x() >= rect.min().x() && vec.x() <= rect.max().x()));
+                        System.out.println("isWithinY: " + (vec.y() >= rect.min().y() && vec.y() <= rect.max().y()));
                     }
                     else
                     {

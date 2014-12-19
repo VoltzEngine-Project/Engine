@@ -24,21 +24,6 @@ class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
   }
 
   /**
-   * Conversion
-   */
-  override def round: Rectangle = new Rectangle(min.round, max.round)
-
-  override def ceil: Rectangle = new Rectangle(min.ceil, max.ceil)
-
-  override def floor: Rectangle = new Rectangle(min.floor, max.floor)
-
-  override def max(other: Rectangle): Rectangle = new Rectangle(min.max(other.min), max.max(other.max))
-
-  override def min(other: Rectangle): Rectangle = new Rectangle(min.min(other.min), max.min(other.max))
-
-  override def reciprocal(): Rectangle = new Rectangle(min.reciprocal, max.reciprocal)
-
-  /**
    * Operations
    */
   override def +(amount: Double): Rectangle = new Rectangle(min + amount, max + amount)
@@ -58,27 +43,17 @@ class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
 
   def -=(vec: Vector2): Rectangle = this += (vec * -1)
 
-  def add(vec: Vector2): Rectangle = this + vec
-
-  def addSet(vec: Vector2): Rectangle = this += vec
-
-  def subtract(vec: Vector2): Rectangle = this - vec
-
-  def subtractSet(vec: Vector2): Rectangle = this -= vec
-
   def *(amount: Double): Rectangle = new Rectangle(min * amount, max * amount)
 
   def *(amount: Rectangle): Rectangle = new Rectangle(min * amount.min, max * amount.max)
 
 
-  override def isWithin2D(vec: IVector2): Boolean = isWithin(vec)
-  
-  /**
-   * Checks if a point is located inside a region
-   */
-  def isWithin(point: IVector2): Boolean = isWithinX(point) && isWithinY(point)
-  def isWithinY(point: IVector2): Boolean = point.y >= this.min.y && point.y <= this.max.y
-  def isWithinX(point: IVector2): Boolean = point.x >= this.min.x && point.x <= this.max.x
+
+
+
+
+  /** Checks if the point is inside the shape */
+  override def isWithin(x: Double, y: Double): Boolean = y >= this.min.y && y <= this.max.y && x >= this.min.x && x <= this.max.x
 
   def isWithin_rotated(p: IVector2): Boolean =
   {
@@ -109,11 +84,11 @@ class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
     return if (region.max.x > this.min.x && region.min.x < this.max.x) (if (region.max.y > this.min.y && region.min.y < this.max.y) true else false) else false
   }
 
-  override def getArea(): Double = xSize * ySize
+  override def getArea: Double = getSizeX * getSizeY
 
-  def xSize(): Double = max.x - min.x
+  override def getSizeX: Double = max.x - min.x
 
-  def ySize(): Double = max.y - min.y
+  override def getSizeY: Double = max.y - min.y
 
 
   override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
@@ -143,5 +118,4 @@ class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
   }
 
   override def clone: Rectangle = new Rectangle(this)
-
 }

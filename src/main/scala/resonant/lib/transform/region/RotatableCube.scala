@@ -25,12 +25,12 @@ class RotatableCube extends Cuboid with IRotation
 
   def isWithinXZ(x: Double, y: Double, z: Double): Boolean =
   {
-    return new Rectangle(new Vector2(min.x, min.z), new Vector2(max.x, max.z)).isWithin(new Vector2(x, z))
+    return new Rectangle(new Vector2(min.x, min.z), new Vector2(max.x, max.z)).isWithin(x, z)
   }
 
   def isWithinYZ(x: Double, y: Double, z: Double): Boolean =
   {
-    return new Rectangle(new Vector2(min.y, min.z), new Vector2(max.y, max.z)).isWithin(new Vector2(y, z))
+    return new Rectangle(new Vector2(min.y, min.z), new Vector2(max.y, max.z)).isWithin(y, z)
   }
 
   override def doesOverlap(box: AxisAlignedBB): Boolean =
