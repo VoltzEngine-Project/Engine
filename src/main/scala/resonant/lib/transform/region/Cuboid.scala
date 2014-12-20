@@ -7,55 +7,10 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{Vec3, AxisAlignedBB}
+import net.minecraft.util.{AxisAlignedBB, Vec3}
 import net.minecraft.world.World
-import resonant.lib.transform.{ITransform, AbstractOperation}
 import resonant.lib.transform.vector.{ImmutableVector3, IVector3, Vector3}
-
-/**
- * A cubical region class to specify a region.
- *
- * @author Calclavia
- */
-object Cuboid
-{
-  def full= new Cuboid(0, 0, 0, 1, 1, 1)
-
-  def getCorners(box: Cuboid): Array[ImmutableVector3] =
-  {
-    val array: Array[ImmutableVector3] = new Array[ImmutableVector3](8)
-    val l: Double = box.max.x - box.min.x
-    val w: Double = box.max.z - box.min.z
-    val h: Double = box.max.y - box.min.y
-    array(0) = new ImmutableVector3(box.min.x, box.min.y, box.min.z)
-    array(1) = new ImmutableVector3(box.min.x, box.min.y + h, box.min.z)
-    array(2) = new ImmutableVector3(box.min.x, box.min.y + h, box.min.z + w)
-    array(3) = new ImmutableVector3(box.min.x, box.min.y, box.min.z + w)
-    array(4) = new ImmutableVector3(box.min.x + l, box.min.y, box.min.z)
-    array(5) = new ImmutableVector3(box.min.x + l, box.min.y + h, box.min.z)
-    array(6) = new ImmutableVector3(box.min.x + l, box.min.y + h, box.min.z + w)
-    array(7) = new ImmutableVector3(box.min.x + l, box.min.y, box.min.z + w)
-    return array
-  }
-
-  def getCorners(box: AxisAlignedBB): Array[ImmutableVector3] =
-  {
-    val array: Array[ImmutableVector3] = new Array[ImmutableVector3](8)
-    val l: Double = box.maxX - box.minX
-    val w: Double = box.maxZ - box.minZ
-    val h: Double = box.maxY - box.minY
-    array(0) = new ImmutableVector3(box.minX, box.minY, box.minZ)
-    array(1) = new ImmutableVector3(box.minX, box.minY + h, box.minZ)
-    array(2) = new ImmutableVector3(box.minX, box.minY + h, box.minZ + w)
-    array(3) = new ImmutableVector3(box.minX, box.minY, box.minZ + w)
-    array(4) = new ImmutableVector3(box.minX + l, box.minY, box.minZ)
-    array(5) = new ImmutableVector3(box.minX + l, box.minY + h, box.minZ)
-    array(6) = new ImmutableVector3(box.minX + l, box.minY + h, box.minZ + w)
-    array(7) = new ImmutableVector3(box.minX + l, box.minY, box.minZ + w)
-    return array
-  }
-}
-
+import resonant.lib.transform.{AbstractOperation, ITransform}
 class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboid]
 {
   def this() = this(new Vector3, new Vector3)
@@ -307,6 +262,40 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
   def area() : Double =
   {
     return (2 * xSize * zSize) + (2 * xSize * ySize) + (2 * zSize * ySize)
+  }
+
+  def getCorners(box: Cuboid): Array[ImmutableVector3] =
+  {
+    val array: Array[ImmutableVector3] = new Array[ImmutableVector3](8)
+    val l: Double = box.max.x - box.min.x
+    val w: Double = box.max.z - box.min.z
+    val h: Double = box.max.y - box.min.y
+    array(0) = new ImmutableVector3(box.min.x, box.min.y, box.min.z)
+    array(1) = new ImmutableVector3(box.min.x, box.min.y + h, box.min.z)
+    array(2) = new ImmutableVector3(box.min.x, box.min.y + h, box.min.z + w)
+    array(3) = new ImmutableVector3(box.min.x, box.min.y, box.min.z + w)
+    array(4) = new ImmutableVector3(box.min.x + l, box.min.y, box.min.z)
+    array(5) = new ImmutableVector3(box.min.x + l, box.min.y + h, box.min.z)
+    array(6) = new ImmutableVector3(box.min.x + l, box.min.y + h, box.min.z + w)
+    array(7) = new ImmutableVector3(box.min.x + l, box.min.y, box.min.z + w)
+    return array
+  }
+
+  def getCorners(box: AxisAlignedBB): Array[ImmutableVector3] =
+  {
+    val array: Array[ImmutableVector3] = new Array[ImmutableVector3](8)
+    val l: Double = box.maxX - box.minX
+    val w: Double = box.maxZ - box.minZ
+    val h: Double = box.maxY - box.minY
+    array(0) = new ImmutableVector3(box.minX, box.minY, box.minZ)
+    array(1) = new ImmutableVector3(box.minX, box.minY + h, box.minZ)
+    array(2) = new ImmutableVector3(box.minX, box.minY + h, box.minZ + w)
+    array(3) = new ImmutableVector3(box.minX, box.minY, box.minZ + w)
+    array(4) = new ImmutableVector3(box.minX + l, box.minY, box.minZ)
+    array(5) = new ImmutableVector3(box.minX + l, box.minY + h, box.minZ)
+    array(6) = new ImmutableVector3(box.minX + l, box.minY + h, box.minZ + w)
+    array(7) = new ImmutableVector3(box.minX + l, box.minY, box.minZ + w)
+    return array
   }
 
   /** Returns all entities in this region. */

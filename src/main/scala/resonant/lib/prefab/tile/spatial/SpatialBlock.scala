@@ -99,7 +99,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   /** Dummy block that is placed so this tile can spawn */
   var block: BlockDummy = null
   /** Block's bounds, used for collision checks and rendering if a standard block */
-  var _bounds: Cuboid = Cuboid.full
+  var _bounds: Cuboid = new Cuboid(0, 0, 0, 1, 1, 1)
   /** Creative tab this block will show on */
   var _creativeTab: CreativeTabs = null
   /** How hard is the block to mine */

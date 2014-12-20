@@ -51,7 +51,7 @@ class RotatableCube extends Cuboid with IRotation
         return false;
 
       //Corner check TODO replace with better check in case we get a zero corner overlap
-      for (v <- Cuboid.getCorners(box))
+      for (v <- getCorners(box))
       {
         if (intersects(v))
           return true
