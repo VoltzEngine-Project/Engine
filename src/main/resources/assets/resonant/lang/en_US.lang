@@ -190,3 +190,48 @@ info.energylevel.waila=Current Energy Level
 info.energycapacity.waila=Maximum Energy Level
 
 info.isCraftingOnlyItem=Crafting Item
+
+## Permissions
+root.machine=Manage Machine
+root.machine.enable=Enable Machine
+root.machine.disable=Disable Machine
+root.machine.open=Open Machine
+root.machine.off=Turn Off Machine
+root.machine.on=Turn On Machine
+root.machine.lock=Lock Machine
+root.machine.unlock=Unlock Machine
+root.machine.upgrade=Upgrade Machine
+root.machine.downgrade=Downgrade Machine
+root.machine.config=Configure Machine
+
+root.group=Manage Groups
+root.group.user=Manage User
+root.group.user.add=Add User
+root.group.user.remove=Remove User
+root.group.entity=Manage Entity
+root.group.entity.add=Add Entity
+root.group.entity.remove=Remove Entity
+root.group.permission=Edit Group Permissions
+root.group.permission.add=Add Group Permissions
+root.group.permission.remove=Remove Group Permissions
+root.group.admin=Administer Group
+root.group.owner=Edit Group Owner
+
+root.profile=Administer Profile
+root.profile.admin=Administer Profile
+root.profile.owner=Edit Profile Owner
+root.profile.addGroup=Add Group
+root.profile.removeGroup=Remove Group
+root.profile.modifyGroup=Edit Group
+root.profile.enable=Enable Profile
+root.profile.user=Manage Users
+
+root.inventory=Manage Inventory
+root.inventory.lock=Lock Inventory
+root.inventory.unlock=Unlock Inventory
+root.inventory.input=Input Inventory
+root.inventory.open=Open Inventory
+root.inventory.output=Output Inventory
+root.inventory.enable=Enable Inventory
+root.inventory.disable=Disable Inventory
+root.inventory.modify=Modify Inventory

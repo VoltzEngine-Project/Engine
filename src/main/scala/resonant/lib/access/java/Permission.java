@@ -37,7 +37,8 @@ public class Permission extends TreeNode<Permission>
 	@Override
 	public boolean equals(Object o)
 	{
-		return o instanceof Permission && ((Permission) o).id == id;
+		//TODO: This does not seem to work with large Scala sets?
+		return o instanceof Permission && o.toString().equals(toString());
 	}
 
 	@Override
