@@ -158,7 +158,7 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
   def isWithinZ(v: Vec3): Boolean = isWithinZ(v.zCoord)
   def isWithinZ(v: IVector3): Boolean = isWithinZ(v.z())
   
-  def isWithin(min: Double, max: Double, v: Double) : Boolean = v - 1E-5 >= min  && v <= max - 1E-5
+  def isWithin(min: Double, max: Double, v: Double) : Boolean = v + 1E-5 >= min  && v  - 1E-5 <= max
 
   /** Checks to see if a line segment is within the defined line. Assume the lines overlap each other.
    * @param min - min point
