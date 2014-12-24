@@ -1,5 +1,6 @@
 package resonant.lib.prefab;
 
+import net.minecraft.util.Vec3;
 import resonant.lib.utility.DamageUtility;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -41,12 +42,22 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         this.ignoreFrustumCheck = true;
     }
 
+    public static Vector3 getEntityAim(EntityLivingBase entity)
+    {
+        float f1 = MathHelper.cos(-entity.rotationYaw * 0.017453292F - (float)Math.PI);
+        float f2 = MathHelper.sin(-entity.rotationYaw * 0.017453292F - (float)Math.PI);
+        float f3 = -MathHelper.cos(-entity.rotationPitch * 0.017453292F);
+        float f4 = MathHelper.sin(-entity.rotationPitch * 0.017453292F);
+        return new Vector3((double) (f2 * f3), (double) f4, (double) (f1 * f3));
+    }
+
     public EntityProjectile(EntityLivingBase entity)
     {
         this(entity.worldObj);
-        Vector3 launcher = new Vector3(entity).add(new Vector3(0, 0.5, 0));
-        Vector3 playerAim = new Vector3(entity.getLook(1));
-        Vector3 start = launcher.add(playerAim.multiply(1.1));
+
+        Vector3 launcher = new Vector3(entity).add(new Vector3(0, 1, 0));
+        Vector3 playerAim = getEntityAim(entity);
+        Vector3 start = launcher.add(playerAim.multiply(2));
 
         this.firedByEntity = entity;
         this.sourceOfProjectile = start;
