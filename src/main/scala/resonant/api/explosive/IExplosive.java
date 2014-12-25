@@ -1,9 +1,12 @@
 package resonant.api.explosive;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import resonant.api.TriggerCause;
 import resonant.lib.type.Pair;
 import resonant.lib.world.edit.IWorldChangeAction;
+
+import java.util.List;
 
 /**
  * Applied to any explosive handler that created a blast. Should only create
@@ -30,11 +33,11 @@ public interface IExplosive
 
     /** Gets estimated range info for the given trigger and size
      *
-     * @param triggerCause - predicted cause of the trigger, can be null
-     * @param size - distance in blocks from center to max edge
+     * @param stack - item that contains the explosive
+     * @param lines - list to add info to display for the item tooltip
      * @return min and max pair
      */
-    public Pair<Integer, Integer> getEstimatedRange(TriggerCause triggerCause, int size);
+    public void addInfoToItem(ItemStack stack, List<String> lines);
 
     /**
      * Called when the explosive is registered

@@ -28,13 +28,11 @@ public class ReflectionUtility extends ReflectionHelper
 	 * @param args  - arguments that the constructor should have
 	 * @return first match found
 	 */
-	public static Constructor<?> getConstructorWithArgs(Class<?> clazz, Object... args)
+	public static <e extends Object> Constructor<e> getConstructorWithArgs(Class<e> clazz, Object... args)
 	{
-		Constructor<?> con = null;
 		if (clazz != null)
 		{
 			Constructor<?>[] constructors = clazz.getConstructors();
-			loop:
 			for (Constructor<?> constructor : constructors)
 			{
 				if (constructor.getParameterTypes().length == args.length)
@@ -48,14 +46,21 @@ public class ReflectionUtility extends ReflectionHelper
 						}
 						if (i == pType.length - 1)
 						{
-							con = constructor;
-							break loop;
+                            try
+                            {
+                                Constructor<e> con = (Constructor<e>)constructor;
+                                return con;
+                            }
+                            catch (ClassCastException e)
+                            {
+
+                            }
 						}
 					}
 				}
 			}
 		}
-		return con;
+		return null;
 	}
 
     /** Sets a field inside of Minecraft's code that is normally srg or obfuscated

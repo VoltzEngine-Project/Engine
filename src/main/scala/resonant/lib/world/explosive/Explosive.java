@@ -1,12 +1,16 @@
 package resonant.lib.world.explosive;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import resonant.api.TriggerCause;
 import resonant.api.explosive.IExplosive;
 import resonant.engine.References;
 import resonant.lib.type.Pair;
+import resonant.lib.utility.LanguageUtility;
 import resonant.lib.world.edit.IWorldChangeAction;
+
+import java.util.List;
 
 /**
  * Prefab explosive container for generating blasts when triggered
@@ -84,9 +88,9 @@ public class Explosive implements IExplosive
     }
 
     @Override
-    public Pair<Integer, Integer> getEstimatedRange(TriggerCause triggerCause, int yieldMultiplier)
+    public void addInfoToItem(ItemStack stack, List<String> lines)
     {
-        return new Pair<Integer, Integer>(yieldMultiplier * multiplier, (yieldMultiplier * multiplier) * 2);
+        lines.add(LanguageUtility.getLocal("info.icbm:warhead.size") + ": " + multiplier);
     }
 
     @Override

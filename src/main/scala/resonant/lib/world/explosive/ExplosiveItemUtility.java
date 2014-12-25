@@ -9,6 +9,7 @@ import resonant.api.items.IExplosiveItem;
 import resonant.lib.type.Pair;
 import resonant.lib.utility.LanguageUtility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,9 +34,11 @@ public class ExplosiveItemUtility
             IExplosive ex = ((IExplosiveItem) stack.getItem()).getExplosive(stack);
             if (ex != null)
             {
-                Pair<Integer, Integer> ranges = getExplosive(stack).getEstimatedRange(null, ExplosiveItemUtility.getSize(stack));
                 lines.add(LanguageUtility.getLocal("info.icbm:warhead.loaded") + ": " + LanguageUtility.getLocal(getExplosive(stack).getTranslationKey()));
-                lines.add(LanguageUtility.getLocal("info.icbm:warhead.size") + ": " + ranges.left() + " - " + ranges.right() + " blocks");
+                List<String> l = new ArrayList();
+                ex.addInfoToItem(stack, l);
+                for(String s : l)
+                    lines.add(s);
             }
         }
     }
