@@ -20,7 +20,7 @@ object StringWrapper
 
     def listWrap(characters: Int): JList[String] = wrap(characters).toList
 
-    def wrap(characters: Int): Array[String] = WordUtils.wrap(str, characters).split("\n")
+    def wrap(characters: Int): Array[String] = WordUtils.wrap(str, characters).split("\\r?\\n")
 
     def toCamelCase: String = str.toPascalCase.decapitalizeFirst
 
