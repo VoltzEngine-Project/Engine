@@ -191,6 +191,9 @@ info.energycapacity.waila=Maximum Energy Level
 
 info.isCraftingOnlyItem=Crafting Item
 
+info.resonant:explosive.name=Explosive
+info.resonant:explosive.size.name=Size
+
 ## Permissions
 root.machine=Manage Machine
 root.machine.enable=Enable Machine

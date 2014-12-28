@@ -91,7 +91,7 @@ public class Explosive implements IExplosive
     @Override
     public void addInfoToItem(ItemStack stack, List<String> lines)
     {
-        lines.add(LanguageUtility.getLocal("info.icbm:warhead.size") + ": " + multiplier);
+        lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.size.name") + ": " + multiplier);
     }
 
     @Override

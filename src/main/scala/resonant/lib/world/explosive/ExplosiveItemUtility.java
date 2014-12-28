@@ -6,6 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import resonant.api.explosive.IExplosive;
 import resonant.api.items.IExplosiveItem;
+import resonant.engine.References;
+import resonant.engine.ResonantEngine;
 import resonant.lib.type.Pair;
 import resonant.lib.utility.LanguageUtility;
 
@@ -34,7 +36,7 @@ public class ExplosiveItemUtility
             IExplosive ex = ((IExplosiveItem) stack.getItem()).getExplosive(stack);
             if (ex != null)
             {
-                lines.add(LanguageUtility.getLocal("info.icbm:warhead.loaded") + ": " + LanguageUtility.getLocal(getExplosive(stack).getTranslationKey()));
+                lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(getExplosive(stack).getTranslationKey()));
                 List<String> l = new ArrayList();
                 ex.addInfoToItem(stack, l);
                 for(String s : l)
