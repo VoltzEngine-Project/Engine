@@ -1,7 +1,8 @@
 package resonant.lib.factory.resources;
 
 /**
- * Created by robert on 8/11/2014.
+ * The type of recipe for a specific type of machinery
+ * @author Calclavia
  */
 public enum RecipeType
 {
