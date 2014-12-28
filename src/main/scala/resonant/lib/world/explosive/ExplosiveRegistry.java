@@ -1,5 +1,6 @@
 package resonant.lib.world.explosive;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import resonant.api.TriggerCause;
 import resonant.api.explosive.IExplosive;
@@ -80,9 +81,9 @@ public final class ExplosiveRegistry
      * @param multi        - size of the action
      * @return if the result completed, was blocked, or failed
      */
-    public static WorldChangeHelper.ChangeResult triggerExplosive(World world, double x, double y, double z, IExplosive ex, TriggerCause triggerCause, int multi)
+    public static WorldChangeHelper.ChangeResult triggerExplosive(World world, double x, double y, double z, IExplosive ex, TriggerCause triggerCause, int multi, NBTTagCompound tag)
     {
-        return triggerExplosive(new VectorWorld(world, x, y, z), ex, triggerCause, multi);
+        return triggerExplosive(new VectorWorld(world, x, y, z), ex, triggerCause, multi, tag);
     }
 
     /**
@@ -94,11 +95,11 @@ public final class ExplosiveRegistry
      * @param multi        - size of the action
      * @return if the result completed, was blocked, or failed
      */
-    public static WorldChangeHelper.ChangeResult triggerExplosive(VectorWorld loc, IExplosive ex, TriggerCause triggerCause, int multi)
+    public static WorldChangeHelper.ChangeResult triggerExplosive(VectorWorld loc, IExplosive ex, TriggerCause triggerCause, int multi, NBTTagCompound tag)
     {
         if (isRegistered(ex))
         {
-            IWorldChangeAction blast = ex.createBlastForTrigger(loc.world(), loc.x(), loc.y(), loc.z(), triggerCause, multi);
+            IWorldChangeAction blast = ex.createBlastForTrigger(loc.world(), loc.x(), loc.y(), loc.z(), triggerCause, multi, tag);
             return WorldChangeHelper.doAction(loc, blast, triggerCause);
         }
         return WorldChangeHelper.ChangeResult.FAILED;

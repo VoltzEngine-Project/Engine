@@ -1,6 +1,7 @@
 package resonant.api.explosive;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import resonant.api.TriggerCause;
 import resonant.lib.type.Pair;
@@ -29,7 +30,7 @@ public interface IExplosive
      * @param size  - size of the explosive, will be used to set radius using ex. (size * min_radius)
      * @return instanceof IWorldChangeAction that tells what blocks and entities are to be effected
 	 */
-	public IWorldChangeAction createBlastForTrigger(World world, double x, double y, double z, TriggerCause triggerCause, int size);
+	public IWorldChangeAction createBlastForTrigger(World world, double x, double y, double z, TriggerCause triggerCause, int size, NBTTagCompound tag);
 
     /** Gets estimated range info for the given trigger and size
      *

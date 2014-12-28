@@ -1,6 +1,7 @@
 package resonant.lib.world.explosive;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import resonant.api.TriggerCause;
@@ -70,7 +71,7 @@ public class Explosive implements IExplosive
     }
 
     @Override
-    public IWorldChangeAction createBlastForTrigger(World world, double x, double y, double z, TriggerCause triggerCause, int yieldMultiplier)
+    public IWorldChangeAction createBlastForTrigger(World world, double x, double y, double z, TriggerCause triggerCause, int yieldMultiplier, NBTTagCompound tag)
     {
         try
         {
