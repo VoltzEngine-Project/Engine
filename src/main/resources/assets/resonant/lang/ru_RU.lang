@@ -3,6 +3,170 @@
 
 death.attack.electrocution=%1$s получил разряд электрического тока!
 
+tile.resonant:unknown.name=Неизвестный блок
+item.resonant:unknown.name=Неизвестный предмет
+
+## Ores
+tile.resonant:oreCopper.name=Медная руда
+tile.resonant:oreTin.name=Оловянная руда
+tile.resonant:oreSilver.name=Серебряная руда
+tile.resonant:oreLead.name=Свинцовая руда
+tile.resonant:oreZinc.name=Цинковая руда
+tile.resonant:oreNickel.name=Никелевая руда
+tile.resonant:oreAluminium.name=Бокситовая руда
+tile.resonant:oreMagnesium.name=Магнезитовая руда
+tile.resonant:oreUranium.name=Урановая руда
+
+## Dust
+item.resonant:dustCopper.name=Медная пыль
+item.resonant:dustTin.name=Оловянная пыль
+item.resonant:dustSilver.name=Серебряная пыль
+item.resonant:dustLead.name=Свинцовая пыль
+item.resonant:dustZinc.name=Цинковая пыль
+item.resonant:dustNickel.name=Никелевая пыль
+item.resonant:dustAluminium.name=Алюминиевая пыль
+item.resonant:dustMagnesium.name=Магниевая пыль
+
+item.resonant:dustSteel.name=Стальная пыль
+item.resonant:dustBrass.name=Латунная глыба
+item.resonant:dustBronze.name=Бронзовая глыба
+
+## Ruble
+item.resonant:rubbleCopper.name=Медный бут
+item.resonant:rubbleTin.name=Оловянный бут
+item.resonant:rubbleSilver.name=Серебряный бут
+item.resonant:rubbleLead.name=Свинцовый бут
+item.resonant:rubbleZinc.name=Цинковый бут
+item.resonant:rubbleNickel.name=Никелевый бут
+item.resonant:rubbleAluminium.name=Алюминиевый бут
+item.resonant:rubbleMagnesium.name=Магниевый бут
+
+## Ingot
+item.resonant:ingotCopper.name=Медный слиток
+item.resonant:ingotTin.name=Оловянный слиток
+item.resonant:ingotSilver.name=Серебряный слиток
+item.resonant:ingotLead.name=Свинцовый слиток
+item.resonant:ingotZinc.name=Цинковый слиток
+item.resonant:ingotNickel.name=Никелевый слиток
+item.resonant:ingotAluminium.name=Алюминиевый слиток
+item.resonant:ingotMagnesium.name=Магниевый слиток
+
+item.resonant:ingotSteel.name=Стальной слиток
+item.resonant:ingotBrass.name=Латунный слиток
+item.resonant:ingotBronze.name=Бронзовый слиток
+
+## Plate
+item.resonant:plateCopper.name=Медная пластина
+item.resonant:plateTin.name=Оловянная пластина
+item.resonant:plateSilver.name=Серебряная пластина
+item.resonant:plateLead.name=Свинцовая пластина
+item.resonant:plateZinc.name=Цинковая пластина
+item.resonant:plateNickel.name=Никелевая пластина
+item.resonant:plateAluminium.name=Алюминиевая пластина
+item.resonant:plateMagnesium.name=Магниевая пластина
+
+item.resonant:plateSteel.name=Стальная пластина
+item.resonant:plateBrass.name=Латунная пластина
+item.resonant:plateBronze.name=Бронзовая пластина
+
+## Rod
+item.resonant:rodCopper.name=Медный стержень
+item.resonant:rodTin.name=Оловянный стержень
+item.resonant:rodSilver.name=Серебряный стержень
+item.resonant:rodLead.name=Свинцовый стержень
+item.resonant:rodZinc.name=Цинковый стержень
+item.resonant:rodNickel.name=Никелевый стержень
+item.resonant:rodAluminium.name=Алюминиевый стержень
+item.resonant:rodMagnesium.name=Магниевый стержень
+
+item.resonant:rodSteel.name=Стальной стержень
+item.resonant:rodBrass.name=Латунный стержень
+item.resonant:rodBronze.name=Бронзовый стержень
+
+## Gear
+item.resonant:gearCopper.name=Медная шестерня
+item.resonant:gearTin.name=Оловянная шестерня
+item.resonant:gearSilver.name=Серебряная шестерня
+item.resonant:gearLead.name=Свинцовая шестерня
+item.resonant:gearZinc.name=Цинковая шестерня
+item.resonant:gearNickel.name=Никелевая шестерня
+item.resonant:gearAluminium.name=Алюминиевая шестерня
+item.resonant:gearMagnesium.name=Магниевая шестерня
+
+item.resonant:gearSteel.name=Стальная шестерня
+item.resonant:gearBrass.name=Латунная шестерня
+item.resonant:gearBronze.name=Бронзовая шестерня
+
+## Ax Head
+item.resonant:axHeadCopper.name=Медный обух топора
+item.resonant:axHeadTin.name=Оловянный обух топора
+item.resonant:axHeadSilver.name=Серебряный обух топора
+item.resonant:axHeadLead.name=Свинцовый обух топора
+item.resonant:axHeadZinc.name=Цинковый обух топора
+item.resonant:axHeadNickel.name=Никелевый обух топора
+item.resonant:axHeadAluminium.name=Алюминиевый обух топора
+item.resonant:axHeadMagnesium.name=Магниевый обух топора
+
+item.resonant:axHeadSteel.name=Стальной обух топора
+item.resonant:axHeadBrass.name=Латунный обух топора
+item.resonant:axHeadBronze.name=Бронзовый обух топора
+
+## Shovel Head
+item.resonant:shovelHeadCopper.name=Медный штык лопаты
+item.resonant:shovelHeadTin.name=Оловянный штык лопаты
+item.resonant:shovelHeadSilver.name=Серебряный штык лопаты
+item.resonant:shovelHeadLead.name=Свинцовый штык лопаты
+item.resonant:shovelHeadZinc.name=Цинковый штык лопаты
+item.resonant:shovelHeadNickel.name=Никелевый штык лопаты
+item.resonant:shovelHeadAluminium.name=Алюминиевый штык лопаты
+item.resonant:shovelHeadMagnesium.name=Магниевый штык лопаты
+
+item.resonant:shovelHeadSteel.name=Стальной штык лопаты
+item.resonant:shovelHeadBrass.name=Латунный штык лопаты
+item.resonant:shovelHeadBronze.name=Бронзовый штык лопаты
+
+## Sword Blade
+item.resonant:swordBladeCopper.name=Медное лезвия меча
+item.resonant:swordBladeTin.name=Оловянное лезвия меча
+item.resonant:swordBladeSilver.name=Серебряное лезвия меча
+item.resonant:swordBladeLead.name=Свинцовое лезвия меча
+item.resonant:swordBladeZinc.name=Цинковое лезвия меча
+item.resonant:swordBladeNickel.name=Никелевое лезвия меча
+item.resonant:swordBladeAluminium.name=Алюминиевое лезвия меча
+item.resonant:swordBladeMagnesium.name=Магниевое лезвия меча
+
+item.resonant:shovelHeadSteel.name=Стальной штык лопаты
+item.resonant:shovelHeadBrass.name=Латунный штык лопаты
+item.resonant:shovelHeadBronze.name=Бронзовый штык лопаты
+
+## Pick Head
+item.resonant:pickHeadCopper.name=Медный обух кирки
+item.resonant:pickHeadTin.name=Оловянный обух кирки
+item.resonant:pickHeadSilver.name=Серебряный обух кирки
+item.resonant:pickHeadLead.name=Свинцовый обух кирки
+item.resonant:pickHeadZinc.name=Цинковый обух кирки
+item.resonant:pickHeadNickel.name=Никелевый обух кирки
+item.resonant:pickHeadAluminium.name=Алюминиевый обух кирки
+item.resonant:pickHeadMagnesium.name=Магниевый обух кирки
+
+item.resonant:pickHeadSteel.name=Стальной обух кирки
+item.resonant:pickHeadBrass.name=Латунный обух кирки
+item.resonant:pickHeadBronze.name=Бронзовый обух кирки
+
+## Hoe Head
+item.resonant:hoeHeadCopper.name=Медный обух мотыги
+item.resonant:hoeHeadTin.name=Оловянный обух мотыги
+item.resonant:hoeHeadSilver.name=Серебряный обух мотыги
+item.resonant:hoeHeadLead.name=Свинцовый обух мотыги
+item.resonant:hoeHeadZinc.name=Цинковый обух мотыги
+item.resonant:hoeHeadNickel.name=Никелевый обух мотыги
+item.resonant:hoeHeadAluminium.name=Алюминиевый обух мотыги
+item.resonant:hoeHeadMagnesium.name=Магниевый обух мотыги
+
+item.resonant:hoeHeadSteel.name=Стальной обух мотыги
+item.resonant:hoeHeadBrass.name=Латунный обух мотыги
+item.resonant:hoeHeadBronze.name=Бронзовый обух мотыги
+
 ## Creative Testing Blocks
 tile.resonant:creativeBuilder.name=Строитель для творческого режима
 tile.resonant:infiniteEnergy.name=Бесконечная энергия
@@ -24,3 +188,53 @@ info.recipes.tooltip=Удерживайте #0J#1, для показа нужн�
 
 info.energylevel.waila=Текущий энергетический уровень
 info.energycapacity.waila=Максимальный энергетический уровень
+
+info.isCraftingOnlyItem=Предмет созданий
+
+info.resonant:explosive.name=Взрывчатка
+info.resonant:explosive.size.name=Размер
+
+## Permissions
+root.machine=Управление механизмом
+root.machine.enable=Включить механизм
+root.machine.disable=Отключить механизм
+root.machine.open=Открыть механизм
+root.machine.off=Выключить механизм
+root.machine.on=Включить механизм
+root.machine.lock=Закрыть механизм
+root.machine.unlock=Открыть механизм
+root.machine.upgrade=Улучшить механизм
+root.machine.downgrade=Ухудшить механизм
+root.machine.config=Настроить механизм
+
+root.group=Управление группами
+root.group.user=Управление пользователями
+root.group.user.add=Добавить пользователя
+root.group.user.remove=Убрать пользователя
+root.group.entity=Управление сущностями
+root.group.entity.add=Добавить сущность
+root.group.entity.remove=Убрать сущность
+root.group.permission=Редактировать разрешения групп
+root.group.permission.add=Добавить группу с разрешениями
+root.group.permission.remove=Убрать группу с разрешениями
+root.group.admin=Управление группой
+root.group.owner=Редактировать владельца группой
+
+root.profile=Управление профилем
+root.profile.admin=Управление профилем
+root.profile.owner=Редактировать владельца профиля
+root.profile.addGroup=Добавить группу
+root.profile.removeGroup=Убрать группу
+root.profile.modifyGroup=Редактировать группу
+root.profile.enable=Включить профиль
+root.profile.user=Управление пользователями
+
+root.inventory=Управление инвентарём
+root.inventory.lock=Закрыть инвентарь
+root.inventory.unlock=Открыть инвентарь
+root.inventory.input=Инвентарь входа
+root.inventory.open=Открыть инвентарь
+root.inventory.output=Инвентарь выхода
+root.inventory.enable=Включить инвентарь
+root.inventory.disable=Отключить инвентарь
+root.inventory.modify=Редактировать инвентарь
