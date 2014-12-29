@@ -36,7 +36,7 @@ public class ExplosiveItemUtility
             IExplosive ex = ((IExplosiveItem) stack.getItem()).getExplosive(stack);
             if (ex != null)
             {
-                lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(getExplosive(stack).getTranslationKey()));
+                lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(getExplosive(stack).getTranslationKey() +".name"));
                 List<String> l = new ArrayList();
                 ex.addInfoToItem(stack, l);
                 for(String s : l)
