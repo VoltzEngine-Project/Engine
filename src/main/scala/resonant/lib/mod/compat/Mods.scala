@@ -4,6 +4,7 @@ package resonant.lib.mod.compat
  * @since 22/03/14
  * @author tgame14
  */
+@Deprecated
 object Mods
 {
   val OC = "OpenComputers"
