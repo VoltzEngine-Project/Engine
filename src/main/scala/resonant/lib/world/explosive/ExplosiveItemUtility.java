@@ -20,7 +20,8 @@ import java.util.List;
  */
 public class ExplosiveItemUtility
 {
-
+    public static final String EXPLOSIVE_SAVE = "explosiveString";
+    public static final String SIZE_SAVE = "exSize";
     /**
      * Adds information to the tool tip of the item
      *
@@ -84,7 +85,7 @@ public class ExplosiveItemUtility
     {
         if (tag != null)
         {
-            return ExplosiveRegistry.get(tag.getString("explosiveString"));
+            return ExplosiveRegistry.get(tag.getString(EXPLOSIVE_SAVE));
         }
         return null;
     }
@@ -127,7 +128,7 @@ public class ExplosiveItemUtility
     {
         if (ex != null)
         {
-            tag.setString("explosiveString", ex.getID());
+            tag.setString(EXPLOSIVE_SAVE, ex.getID());
         }
     }
 
@@ -153,7 +154,7 @@ public class ExplosiveItemUtility
      */
     public static int getSize(NBTTagCompound tag)
     {
-        return tag.getInteger("exSize");
+        return tag.getInteger(SIZE_SAVE);
     }
 
     /**
@@ -180,7 +181,7 @@ public class ExplosiveItemUtility
      */
     public static NBTTagCompound setSize(NBTTagCompound tag, int size)
     {
-        tag.setInteger("exSize", size);
+        tag.setInteger(SIZE_SAVE, size);
         return tag;
     }
 }
