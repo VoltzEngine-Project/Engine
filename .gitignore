@@ -1,4 +1,5 @@
 /bin
+/html
 /out
 /run
 *.classpath
