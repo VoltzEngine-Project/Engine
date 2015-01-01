@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
+import resonant.lib.transform.vector.IVector3;
 import resonant.lib.utility.LanguageUtility;
 import resonant.lib.world.WorldUtility;
 import resonant.lib.transform.rotation.Quaternion;
@@ -27,10 +28,10 @@ import java.util.EnumSet;
 @SideOnly(Side.CLIENT)
 public class RenderItemOverlayUtility
 {
-	private static final ForgeDirection[] forge_sides = { ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST };
+    public static final ForgeDirection[] forge_sides = { ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST };
 
-	private static RenderBlocks renderBlocks = new RenderBlocks();
-	private static RenderItem renderItem = ((RenderItem) RenderManager.instance.getEntityClassRenderObject(EntityItem.class));
+	public static RenderBlocks renderBlocks = new RenderBlocks();
+    public static RenderItem renderItem = ((RenderItem) RenderManager.instance.getEntityClassRenderObject(EntityItem.class));
 
 	public static void renderTopOverlay(TileEntity tileEntity, ItemStack[] inventory, ForgeDirection dir, double x, double y, double z)
 	{
@@ -234,7 +235,7 @@ public class RenderItemOverlayUtility
 			entityItem.getEntityItem().stackSize = 1;
 			entityItem.hoverStart = 0.0F;
 			GL11.glPushMatrix();
-			GL11.glTranslated(position.x(), position.y(), -position.z());
+			GL11.glTranslated(position.x(), position.y(), position.z());
 			GL11.glRotatef(180.0F + rotationYaw, 0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(90 * angle, 1, 0, 0);
 
@@ -248,5 +249,4 @@ public class RenderItemOverlayUtility
 			GL11.glPopMatrix();
 		}
 	}
-
 }
