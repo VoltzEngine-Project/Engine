@@ -63,6 +63,11 @@ object ByteBufWrapper
       f(buf.readTag())
     }
 
+    def >>>(obj: ISaveObj)
+    {
+      obj.load(buf.readTag())
+    }
+
     /**
      * Automatically determine how to write a specific piece of data.
      * @param data
