@@ -13,7 +13,7 @@ import java.util.Map.Entry;
 
 public final class MachineRecipes
 {
-	public static MachineRecipes INSTANCE = new MachineRecipes();
+	public static MachineRecipes instance = new MachineRecipes();
 	private final Map<String, Map<RecipeResource[], RecipeResource[]>> recipes = new HashMap<String, Map<RecipeResource[], RecipeResource[]>>();
 
 	public RecipeResource getResourceFromObject(Object obj)
@@ -134,6 +134,11 @@ public final class MachineRecipes
 		return new RecipeResource[] { };
 	}
 
+	/**
+	 * Gets all possible outputs for a specific machine
+	 *
+	 * @return Will never return null, but an empty array
+	 */
 	public RecipeResource[] getOutput(String machine, Object... inputs)
 	{
 		RecipeResource[] resourceInputs = new RecipeResource[inputs.length];

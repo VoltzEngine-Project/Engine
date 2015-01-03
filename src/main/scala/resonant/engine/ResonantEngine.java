@@ -26,17 +26,10 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-import resonant.api.tile.IBoilHandler;
 import resonant.api.IUpdate;
 import resonant.api.mffs.fortron.FrequencyGridRegistry;
 import resonant.api.recipe.MachineRecipes;
-import resonant.lib.factory.resources.DefinedResources;
-import resonant.lib.factory.resources.RecipeType;
-import resonant.lib.factory.resources.ResourceFactoryHandler;
-import resonant.lib.mod.content.ModManager;
-import resonant.lib.prefab.tile.spatial.BlockDummy;
-import resonant.lib.factory.resources.BlockOre;
-import resonant.lib.factory.resources.ItemBlockOre;
+import resonant.api.tile.IBoilHandler;
 import resonant.engine.content.ItemScrewdriver;
 import resonant.engine.content.debug.ItemInstaHole;
 import resonant.engine.content.debug.TileCreativeBuilder;
@@ -44,18 +37,21 @@ import resonant.engine.content.debug.TileInfiniteFluid;
 import resonant.engine.content.tool.ToolMode;
 import resonant.engine.content.tool.ToolModeGeneral;
 import resonant.engine.content.tool.ToolModeRotation;
+import resonant.lib.debug.F3Handler$;
+import resonant.lib.factory.resources.*;
+import resonant.lib.grid.UpdateTicker;
+import resonant.lib.grid.UpdateTicker$;
 import resonant.lib.grid.frequency.FrequencyGrid;
 import resonant.lib.grid.thermal.BoilEvent;
 import resonant.lib.grid.thermal.EventThermal.EventThermalUpdate;
 import resonant.lib.grid.thermal.ThermalGrid;
 import resonant.lib.mod.config.ConfigHandler;
 import resonant.lib.mod.config.ConfigScanner;
-import resonant.lib.debug.F3Handler$;
-import resonant.lib.grid.UpdateTicker;
-import resonant.lib.grid.UpdateTicker$;
+import resonant.lib.mod.content.ModManager;
 import resonant.lib.mod.loadable.LoadableHandler;
-import resonant.lib.prefab.tile.multiblock.synthetic.SyntheticMultiblock;
 import resonant.lib.network.netty.PacketManager;
+import resonant.lib.prefab.tile.multiblock.synthetic.SyntheticMultiblock;
+import resonant.lib.prefab.tile.spatial.BlockDummy;
 import resonant.lib.transform.vector.Vector3;
 import resonant.lib.transform.vector.VectorWorld;
 import resonant.lib.utility.PlayerInteractionHandler;
@@ -75,32 +71,47 @@ public class ResonantEngine
 {
 	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
-    public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
-
     @SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
 	public static CommonProxy proxy;
-
 	@Mod.Metadata(References.ID)
 	public static ModMetadata metadata;
-
 	@Instance(References.ID)
 	public static ResonantEngine instance;
-
 	public static BlockDummy blockCreativeBuilder;
 	public static Block blockInfiniteFluid;
 	public static Block ore = null;
-
 	public static Item itemWrench;
     public static Item instaHole;
-
     @Deprecated
     public static ResourceFactoryHandler resourceFactory = new ResourceFactoryHandler();
-
     private static boolean oresRequested = false;
 	private static ThermalGrid thermalGrid = new ThermalGrid();
-
+	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 	private LoadableHandler loadables = new LoadableHandler();
 
+	/**
+	 * Requests that all ores are generated
+	 * Must be called in pre-init
+	 */
+	public static void requestAllOres()
+	{
+		for (DefinedResources resource : DefinedResources.values())
+		{
+			requestOre(resource);
+		}
+	}
+
+	/**
+	 * Requests that all ores are generated
+	 * Must be called in pre-init
+	 *
+	 * @param resource - resource to request its ore to generate, still restricted by configs
+	 */
+	public static void requestOre(DefinedResources resource)
+	{
+		oresRequested = true;
+		resource.requested = true;
+	}
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt)
@@ -198,39 +209,16 @@ public class ResonantEngine
 		OreDictionary.registerOre("oreGold", Blocks.gold_ore);
 		OreDictionary.registerOre("oreIron", Blocks.iron_ore);
 		OreDictionary.registerOre("oreLapis", Blocks.lapis_ore);
-		MachineRecipes.INSTANCE.addRecipe(RecipeType.SMELTER.name(), new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone));
-		MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.cobblestone, Blocks.gravel);
-		MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.stone, Blocks.cobblestone);
-		MachineRecipes.INSTANCE.addRecipe(RecipeType.CRUSHER.name(), Blocks.chest, new ItemStack(Blocks.planks, 7, 0));
-		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.cobblestone, Blocks.sand);
-		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
-		MachineRecipes.INSTANCE.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
+		MachineRecipes.instance.addRecipe(RecipeType.SMELTER.name(), new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone));
+		MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name(), Blocks.cobblestone, Blocks.gravel);
+		MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name(), Blocks.stone, Blocks.cobblestone);
+		MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name(), Blocks.chest, new ItemStack(Blocks.planks, 7, 0));
+		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.cobblestone, Blocks.sand);
+		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
+		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
 
         References.CONFIGURATION.save();
 	}
-
-    /**
-     * Requests that all ores are generated
-     * Must be called in pre-init
-     */
-    public static void requestAllOres()
-    {
-        for(DefinedResources resource : DefinedResources.values())
-        {
-            requestOre(resource);
-        }
-    }
-
-    /**
-     * Requests that all ores are generated
-     * Must be called in pre-init
-     * @param resource - resource to request its ore to generate, still restricted by configs
-     */
-    public static void requestOre(DefinedResources resource)
-    {
-        oresRequested = true;
-        resource.requested = true;
-    }
 
 	@EventHandler
 	public void serverStopped(FMLServerStoppedEvent event)

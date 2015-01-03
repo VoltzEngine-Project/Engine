@@ -108,7 +108,7 @@ public class FluidRenderUtility
 			liquidBlock.max.y = (float) s / (float) DISPLAY_STAGES;
 			liquidBlock.max.z = 0.99f;
 
-			RenderBlockEntity.INSTANCE.renderBlock(liquidBlock, world, 0, 0, 0, false, true);
+			RenderBlockEntity.instance.renderBlock(liquidBlock, world, 0, 0, 0, false, true);
 
 			GL11.glEndList();
 		}
