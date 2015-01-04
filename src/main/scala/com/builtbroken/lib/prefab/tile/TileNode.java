@@ -1,5 +1,6 @@
 package com.builtbroken.lib.prefab.tile;
 
+import com.builtbroken.lib.prefab.tile.spatial.Tile;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +19,7 @@ import java.util.*;
  *
  * @author Darkguardsman
  */
-public abstract class TileNode extends TileAdvanced implements INodeProvider
+public abstract class TileNode extends Tile implements INodeProvider
 {
 	public TileNode(Material material)
 	{

@@ -1,12 +1,15 @@
 package com.builtbroken.lib.prefab.tile.spatial;
 
 import com.builtbroken.api.items.ISimpleItemRenderer;
+import com.builtbroken.api.tile.IPlayerUsing;
+import com.builtbroken.lib.network.packet.AbstractPacket;
 import com.builtbroken.lib.render.wrapper.RenderTileDummy;
 import com.builtbroken.lib.transform.region.Cuboid;
 import com.builtbroken.lib.transform.vector.IVectorWorld;
 import com.builtbroken.lib.transform.vector.Vector3;
 import com.builtbroken.lib.transform.vector.VectorWorld;
 import com.builtbroken.lib.utility.WrenchUtility;
+import com.builtbroken.mod.BBL;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -21,6 +24,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
@@ -33,14 +37,12 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by robert on 1/4/2015.
  */
-public class Tile extends TileEntity implements IVectorWorld
+public class Tile extends TileEntity implements IVectorWorld, IPlayerUsing
 {
     //Static block vars, never use in your tile
     private BlockTile block = null;
@@ -53,6 +55,10 @@ public class Tile extends TileEntity implements IVectorWorld
     public Material material = Material.clay;
     public float hardness = 1;
     public float resistance = 1;
+    public boolean canEmmitRedstone = false;
+    public boolean isOpaque = false;
+    public Block.SoundType stepSound;
+
     protected Cuboid bounds = new Cuboid(0, 0, 0, 1, 1, 1);
 
     //Icon vars
@@ -66,6 +72,10 @@ public class Tile extends TileEntity implements IVectorWorld
     boolean renderNormalBlock = true;
     boolean renderTileEntity = true;
 
+    //Tile Vars
+    protected long ticks = 0L;
+    protected final Set<EntityPlayer> playersUsing = new HashSet();
+
     public Tile(Material material)
     {
         this.material = material;
@@ -76,7 +86,7 @@ public class Tile extends TileEntity implements IVectorWorld
      *
      * @return Normally you want to return a new instance of this
      */
-    public BlockTile newTile()
+    public Tile newTile()
     {
         return null;
     }
@@ -87,10 +97,31 @@ public class Tile extends TileEntity implements IVectorWorld
         update();
     }
 
+    public void blockUpdate()
+    {
+        update();
+    }
+
+    public void start()
+    {
+    }
+
     public void update()
     {
+        if (ticks == 0)
+        {
+            start();
+        }
 
+        if (ticks >= Long.MAX_VALUE)
+        {
+            ticks = 1;
+        }
+
+        ticks += 1;
     }
+
+
 
     //=============================
     //====== Interaction ==========
@@ -286,6 +317,16 @@ public class Tile extends TileEntity implements IVectorWorld
         return getWorldObj();
     }
 
+    public void setBlock(BlockTile block)
+    {
+        this.block = block;
+    }
+
+    public void setAccess(IBlockAccess access)
+    {
+        this.access = access;
+    }
+
     public IBlockAccess getAccess()
     {
         if (world() != null)
@@ -476,6 +517,12 @@ public class Tile extends TileEntity implements IVectorWorld
             return super.getBlockMetadata();
     }
 
+    @Override
+    public Set<EntityPlayer> getPlayersUsing()
+    {
+        return playersUsing;
+    }
+
     //TODO: Get rid of parameters
     public boolean shouldSideBeRendered(int side)
     {
@@ -519,6 +566,11 @@ public class Tile extends TileEntity implements IVectorWorld
     public int getStrongRedstonePower(int side)
     {
         return 0;
+    }
+
+    public void setBlockBoundsBasedOnState()
+    {
+
     }
 
     /**
@@ -822,6 +874,11 @@ public class Tile extends TileEntity implements IVectorWorld
         }
     }
 
+    public void randomDisplayTick()
+    {
+
+    }
+
     //===========================
     //==== Helpers ==============
     //===========================
@@ -829,6 +886,17 @@ public class Tile extends TileEntity implements IVectorWorld
     public void setMeta(int meta)
     {
         world().setBlockMetadataWithNotify(xi(), yi(), zi(), meta, 3);
+    }
+
+    @Override
+    public final Packet getDescriptionPacket()
+    {
+        return BBL.instance.packetHandler.toMCPacket(getDescPacket());
+    }
+
+    public AbstractPacket getDescPacket()
+    {
+        return null;
     }
 
     /**
