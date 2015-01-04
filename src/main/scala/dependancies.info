@@ -1,7 +1,0 @@
-{
-	"repo": "http://calclavia.com/download.php?name=Universal%20Electricity&r=http%3A%2F%2Fcalclavia.com%2Fjenkins%2Fjobs%2FUniversal+Electricity%2Fbuilds%2F241%2Farchive%2Foutput%2F",
-	"file": "UniversalElectricity-@VERSION@-core.jar",
-	"dev": "UniversalElectricity-@VERSION@-dev.jar",
-	"class": "universalelectricity.compatibility.asm.ASMHelper",
-	"version": "3.0.0.241"
-}
