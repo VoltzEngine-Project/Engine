@@ -1,10 +1,11 @@
 package com.builtbroken.lib.prefab.tile.item;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import com.builtbroken.lib.utility.LanguageUtility;
 
-public class ItemBlockMetadata extends ItemBlockTooltip
+public class ItemBlockMetadata extends ItemBlock
 {
 	public ItemBlockMetadata(Block block)
 	{

@@ -27,13 +27,10 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import com.builtbroken.api.IUpdate;
-import com.builtbroken.api.mffs.fortron.FrequencyGridRegistry;
 import com.builtbroken.api.recipe.MachineRecipes;
 import com.builtbroken.api.tile.IBoilHandler;
-import com.builtbroken.mod.content.ItemScrewdriver;
-import com.builtbroken.mod.content.debug.ItemInstaHole;
-import com.builtbroken.mod.content.debug.TileCreativeBuilder;
-import com.builtbroken.mod.content.debug.TileInfiniteFluid;
+import com.builtbroken.mod.content.tool.ItemScrewdriver;
+import com.builtbroken.mod.content.ItemInstaHole;
 import com.builtbroken.mod.content.tool.ToolMode;
 import com.builtbroken.mod.content.tool.ToolModeGeneral;
 import com.builtbroken.mod.content.tool.ToolModeRotation;
@@ -41,7 +38,6 @@ import com.builtbroken.lib.debug.F3Handler$;
 import com.builtbroken.lib.factory.resources.*;
 import com.builtbroken.lib.grid.UpdateTicker;
 import com.builtbroken.lib.grid.UpdateTicker$;
-import com.builtbroken.lib.grid.frequency.FrequencyGrid;
 import com.builtbroken.lib.grid.thermal.BoilEvent;
 import com.builtbroken.lib.grid.thermal.EventThermal.EventThermalUpdate;
 import com.builtbroken.lib.grid.thermal.ThermalGrid;
@@ -77,8 +73,6 @@ public class BBL
 	public static ModMetadata metadata;
 	@Instance(References.ID)
 	public static BBL instance;
-	public static BlockDummy blockCreativeBuilder;
-	public static Block blockInfiniteFluid;
 	public static Block ore = null;
 	public static Item itemWrench;
     public static Item instaHole;
@@ -145,18 +139,6 @@ public class BBL
 			itemWrench = new ItemScrewdriver();
 			GameRegistry.registerItem(itemWrench, "screwdriver", References.ID);
 		}
-		if (References.CONFIGURATION.get("Content", "LoadParts", true).getBoolean(true))
-		{
-			//TODO setup chips, motor, and basic crafting parts
-		}
-		if (References.CONFIGURATION.get("Creative Tools", "CreativeBuilder", true).getBoolean(true))
-		{
-			blockCreativeBuilder = contentRegistry.newBlock(TileCreativeBuilder.class);
-		}
-		if (References.CONFIGURATION.get("Creative Tools", "InfiniteSource", true).getBoolean(true))
-		{
-			blockInfiniteFluid = contentRegistry.newBlock(TileInfiniteFluid.class);
-		}
 
 		//BlockCreativeBuilder.register(new SchematicTestRoom());
 		//Finish and close all resources
@@ -200,10 +182,6 @@ public class BBL
 
 		loadables.postInit();
 
-		//TODO: Find better way to do this in terms of not reinitiating grids twice.
-		FrequencyGridRegistry.CLIENT_INSTANCE = new FrequencyGrid();
-		FrequencyGridRegistry.SERVER_INSTANCE = new FrequencyGrid();
-
 		OreDictionary.registerOre("ingotGold", Items.gold_ingot);
 		OreDictionary.registerOre("ingotIron", Items.iron_ingot);
 		OreDictionary.registerOre("oreGold", Blocks.gold_ore);
@@ -223,11 +201,6 @@ public class BBL
 	@EventHandler
 	public void serverStopped(FMLServerStoppedEvent event)
 	{
-		/**
-		 * Reinitiate FrequencyGrid
-		 */
-		FrequencyGridRegistry.CLIENT_INSTANCE = new FrequencyGrid();
-		FrequencyGridRegistry.SERVER_INSTANCE = new FrequencyGrid();
 	}
 
 	@EventHandler

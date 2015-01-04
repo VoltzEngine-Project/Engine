@@ -1,13 +1,12 @@
 package com.builtbroken.lib.prefab.tile
 
-import net.minecraft.block.material.Material
-import net.minecraft.network.Packet
-import com.builtbroken.lib.prefab.tile.traits.TRotatable
-import com.builtbroken.mod.BBL
 import com.builtbroken.lib.network.netty.AbstractPacket
 import com.builtbroken.lib.prefab.tile.spatial.SpatialTile
+import com.builtbroken.mod.BBL
+import net.minecraft.block.material.Material
+import net.minecraft.network.Packet
 
-class TileAdvanced(material: Material) extends SpatialTile(material: Material) with TRotatable
+class TileAdvanced(material: Material) extends SpatialTile(material: Material)
 {
   override def getDescriptionPacket: Packet =
   {

@@ -7,7 +7,7 @@ import cpw.mods.fml.relauncher.Side;
 import com.builtbroken.api.TriggerCause;
 import net.minecraftforge.common.MinecraftForge;
 import com.builtbroken.lib.transform.vector.VectorWorld;
-import com.builtbroken.lib.event.WorldChangeActionEvent;
+import com.builtbroken.api.event.WorldChangeActionEvent;
 import com.builtbroken.lib.world.edit.BlockEdit;
 
 import java.util.Collection;
