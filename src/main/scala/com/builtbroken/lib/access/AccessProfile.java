@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import com.builtbroken.lib.utility.LanguageUtility;
-import com.builtbroken.lib.utility.nbt.IVirtualObject;
+import com.builtbroken.api.IVirtualObject;
 import com.builtbroken.lib.utility.nbt.NBTUtility;
 import com.builtbroken.lib.utility.nbt.SaveManager;
 

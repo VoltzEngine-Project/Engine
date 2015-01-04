@@ -10,11 +10,6 @@ public class Dice
 {
 	private int sides = 0;
 
-	public Dice()
-	{
-
-	}
-
 	public Dice(int sides)
 	{
 		this.sides = sides;

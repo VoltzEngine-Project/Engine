@@ -3,8 +3,6 @@ package com.builtbroken.lib.prefab.gui.slot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import com.builtbroken.api.gui.ISlotPickResult;
-import com.builtbroken.api.gui.ISlotWatcher;
 
 /**
  * Easy class to create a slot that is used for an event trigger or crafting based event

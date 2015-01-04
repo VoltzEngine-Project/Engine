@@ -3,7 +3,7 @@ package com.builtbroken.lib.world.explosive;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.builtbroken.lib.world.edit.IWorldChangeAction;
 import net.minecraft.world.World;
-import com.builtbroken.api.TriggerCause;
+import com.builtbroken.api.event.TriggerCause;
 import com.builtbroken.lib.transform.vector.IVectorWorld;
 import com.builtbroken.lib.world.edit.BlockEdit;
 

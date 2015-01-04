@@ -13,5 +13,5 @@ public interface ISave
     public void load(NBTTagCompound nbt);
 
     /** Called to save the object to NBT */
-    public void save(NBTTagCompound nbt);
+    public NBTTagCompound save(NBTTagCompound nbt);
 }

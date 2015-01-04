@@ -3,6 +3,15 @@ package com.builtbroken.lib.prefab.tile.spatial
 import _root_.java.lang.reflect.Method
 import java.util
 
+import com.builtbroken.api.items.ISimpleItemRenderer
+import com.builtbroken.lib.content.prefab.TIO
+import com.builtbroken.lib.render.RenderUtility
+import com.builtbroken.lib.render.wrapper.RenderTileDummy
+import com.builtbroken.lib.transform.region.Cuboid
+import com.builtbroken.lib.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorld}
+import com.builtbroken.lib.utility.{LanguageUtility, WrenchUtility}
+import com.builtbroken.lib.wrapper.WrapList._
+import com.builtbroken.mod.{BBL, References}
 import com.google.common.collect.Maps
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
@@ -20,17 +29,6 @@ import net.minecraft.util.{AxisAlignedBB, IIcon, MathHelper, MovingObjectPositio
 import net.minecraft.world.{Explosion, IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
 import org.lwjgl.opengl.{GL11, GL12}
-import com.builtbroken.api.items.ISimpleItemRenderer
-import com.builtbroken.lib.prefab.tile.item.ItemBlockTooltip
-import com.builtbroken.lib.prefab.tile.traits.TRotatable
-import com.builtbroken.lib.render.wrapper.RenderTileDummy
-import com.builtbroken.mod.{References, BBL}
-import com.builtbroken.lib.content.prefab.TIO
-import com.builtbroken.lib.render.RenderUtility
-import com.builtbroken.lib.transform.region.Cuboid
-import com.builtbroken.lib.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorld}
-import com.builtbroken.lib.utility.{LanguageUtility, WrenchUtility}
-import com.builtbroken.lib.wrapper.WrapList._
 
 import scala.beans.BeanProperty
 import scala.collection.convert.wrapAll._
@@ -93,7 +91,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   /** Name of the block, unlocalized */
   var name = LanguageUtility.decapitalizeFirst(this.getClass().getSimpleName().replaceFirst("Tile", ""))
   /** ItemBlock class used to place this block */
-  var itemBlock: Class[_ <: ItemBlock] = classOf[ItemBlockTooltip]
+  var itemBlock: Class[_ <: ItemBlock] = classOf[ItemBlock]
   /** ???? */
   var isCreativeTabSet = false
   /** Dummy block that is placed so this tile can spawn */
@@ -418,17 +416,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
    */
   protected def configure(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
-    val both = this.isInstanceOf[TIO] && this.isInstanceOf[TRotatable]
-
-    if (both)
-    {
-      if (!player.isSneaking)
-      {
-        return this.asInstanceOf[TIO].toggleIO(side, player)
-      }
-    }
-    if (this.isInstanceOf[TRotatable])
-      return this.asInstanceOf[TRotatable].rotate(side, hit)
     if (this.isInstanceOf[TIO])
       return this.asInstanceOf[TIO].toggleIO(side, player)
 
@@ -457,10 +444,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
    */
   def onPlaced(entityLiving: EntityLivingBase, itemStack: ItemStack)
   {
-    if (this.isInstanceOf[TRotatable])
-    {
-      this.asInstanceOf[TRotatable].setDirection(this.asInstanceOf[TRotatable].determineRotation(entityLiving))
-    }
   }
 
   /**

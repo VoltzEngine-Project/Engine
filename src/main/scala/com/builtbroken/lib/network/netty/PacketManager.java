@@ -1,5 +1,6 @@
 package com.builtbroken.lib.network.netty;
 
+import com.builtbroken.lib.network.packet.AbstractPacket;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
@@ -15,10 +16,9 @@ import net.minecraft.world.World;
 import com.builtbroken.mod.References;
 import com.builtbroken.lib.mod.loadable.ICompatProxy;
 import com.builtbroken.lib.wrapper.ByteBufWrapper;
-import com.builtbroken.lib.network.discriminator.PacketEntity;
-import com.builtbroken.lib.network.discriminator.PacketTile;
-import com.builtbroken.lib.network.discriminator.PacketType;
-import com.builtbroken.lib.network.handle.TPacketSender;
+import com.builtbroken.lib.network.packet.PacketEntity;
+import com.builtbroken.lib.network.packet.PacketTile;
+import com.builtbroken.lib.network.packet.PacketType;
 import com.builtbroken.lib.transform.vector.IVector3;
 import com.builtbroken.lib.transform.vector.IVectorWorld;
 import com.builtbroken.lib.transform.vector.Vector3;
@@ -43,26 +43,6 @@ public class PacketManager implements ICompatProxy
 	public static void writeData(ByteBuf data, Object... sendData)
 	{
 		new ByteBufWrapper.ByteBufWrapper(data).$less$less$less(sendData);
-	}
-
-	/**
-	 * Requests a packet for this sender automatically
-	 */
-	public static PacketType request(TPacketSender sender)
-	{
-		return request(sender, 0);
-	}
-
-	public static PacketType request(TPacketSender sender, int id)
-	{
-		PacketType packet = getPacketFor(sender);
-
-		if (packet != null)
-		{
-			sender.write(packet.data(), id);
-		}
-
-		return packet;
 	}
 
 	public static PacketType getPacketFor(Object obj)

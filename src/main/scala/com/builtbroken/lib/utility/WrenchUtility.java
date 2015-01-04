@@ -1,12 +1,12 @@
 package com.builtbroken.lib.utility;
 
 import buildcraft.api.tools.IToolWrench;
+import com.builtbroken.lib.mod.compat.Mods;
 import com.builtbroken.mod.BBL;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import com.builtbroken.mod.References;
 import com.builtbroken.mod.content.tool.ItemScrewdriver;
-import com.builtbroken.lib.mod.compat.ModEnum;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -43,7 +43,7 @@ public class WrenchUtility
             }
 
             /** Industrialcraft */
-            if (ModEnum.IC2.isLoaded())
+            if (Mods.IC2.isLoaded())
             {
                 try
                 {
@@ -111,7 +111,7 @@ public class WrenchUtility
             }
 
             /** Industrialcraft */
-            if (ModEnum.IC2.isLoaded())
+            if (Mods.IC2.isLoaded())
             {
                 try
                 {
@@ -170,7 +170,7 @@ public class WrenchUtility
             }
 
             /** Industrialcraft */
-            if (ModEnum.IC2.isLoaded())
+            if (Mods.IC2.isLoaded())
             {
                 try
                 {

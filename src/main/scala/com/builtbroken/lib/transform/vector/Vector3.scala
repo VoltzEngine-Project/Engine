@@ -727,7 +727,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
    * Gets the resistance of a block using block.getResistance method
    * @param cause - entity that triggered/is the explosion
    */
-  def getResistance(cause: Entity)
+  def getResistance(cause: Entity): java.lang.Float =
   {
     return getResistance(cause.worldObj, cause, x, y, z)
   }
@@ -736,7 +736,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
    * Gets the resistance of a block using block.getResistance method
    * @param cause - entity that triggered/is the explosion
    */
-  def getResistanceToEntity(cause: Entity)
+  def getResistanceToEntity(cause: Entity): java.lang.Float =
   {
     return getBlock(cause.worldObj).getExplosionResistance(cause)
   }
@@ -745,7 +745,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
    * Gets the resistance of a block using block.getResistance method
    * @param cause - entity that triggered/is the explosion
    */
-  def getResistanceToEntity(world: World, cause: Entity)
+  def getResistanceToEntity(world: World, cause: Entity): java.lang.Float =
   {
     return getBlock(world).getExplosionResistance(cause)
   }

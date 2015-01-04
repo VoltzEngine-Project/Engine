@@ -2,7 +2,6 @@ package com.builtbroken.lib.prefab.gui.slot;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import com.builtbroken.api.gui.ISlotWatcher;
 
 /**
  * A slot that triggers the container class if changed

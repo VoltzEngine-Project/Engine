@@ -1,9 +1,9 @@
 package com.builtbroken.lib.access;
 
+import com.builtbroken.api.ISave;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import com.builtbroken.lib.type.Group;
-import com.builtbroken.lib.utility.nbt.ISaveObj;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author DarkGuardsman
  */
-public class AccessGroup extends Group<AccessUser> implements ISaveObj, Cloneable
+public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
 {
 	protected Set<String> nodes = new LinkedHashSet();
 	protected AccessGroup extendGroup;

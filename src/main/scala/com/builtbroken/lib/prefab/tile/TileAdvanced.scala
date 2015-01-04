@@ -1,6 +1,6 @@
 package com.builtbroken.lib.prefab.tile
 
-import com.builtbroken.lib.network.netty.AbstractPacket
+import com.builtbroken.lib.network.packet.AbstractPacket
 import com.builtbroken.lib.prefab.tile.spatial.SpatialTile
 import com.builtbroken.mod.BBL
 import net.minecraft.block.material.Material

@@ -2,13 +2,13 @@ package com.builtbroken.lib.content.prefab
 
 import _root_.java.util
 
+import com.builtbroken.api.ISave
+import com.builtbroken.api.tile.IIO
+import com.builtbroken.lib.prefab.tile.spatial.SpatialTile
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ChatComponentText
 import net.minecraftforge.common.util.ForgeDirection
-import com.builtbroken.api.tile.IIO
-import com.builtbroken.lib.prefab.tile.spatial.SpatialTile
-import com.builtbroken.lib.utility.nbt.ISaveObj
 
 import scala.collection.convert.wrapAll._
 
@@ -17,7 +17,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-trait TIO extends SpatialTile with IIO with ISaveObj
+trait TIO extends SpatialTile with IIO with ISave
 {
   /**
    * IO METHODS.

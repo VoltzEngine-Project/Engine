@@ -6,7 +6,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.tileentity.TileEntity;
 import com.builtbroken.mod.References;
 import com.builtbroken.lib.network.Synced;
-import com.builtbroken.lib.network.discriminator.PacketAnnotationManager;
 import com.builtbroken.lib.utility.ReflectionUtility;
 
 public class CommonRegistryProxy

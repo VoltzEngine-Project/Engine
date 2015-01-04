@@ -2,7 +2,7 @@ package com.builtbroken.lib.world.explosive;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import com.builtbroken.api.TriggerCause;
+import com.builtbroken.api.event.TriggerCause;
 import com.builtbroken.api.explosive.IExplosive;
 import com.builtbroken.mod.References;
 import com.builtbroken.lib.mod.config.Config;

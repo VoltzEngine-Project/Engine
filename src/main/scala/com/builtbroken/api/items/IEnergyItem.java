@@ -25,29 +25,4 @@ public interface IEnergyItem
 	 * @return Amount of energy that was removed from the item.
 	 */
 	public double discharge(ItemStack itemStack, double energy, boolean doDischarge);
-
-	/**
-	 * Get the amount of energy currently stored in the item.
-	 */
-	public double getEnergy(ItemStack theItem);
-
-	/**
-	 * Get the max amount of energy that can be stored in the item.
-	 */
-	public double getEnergyCapacity(ItemStack theItem);
-
-	/**
-	 * Sets the amount of energy in the ItemStack. Use recharge or discharge instead of calling this
-	 * to be safer!
-	 *
-	 * @param itemStack - the ItemStack.
-	 * @param energy    - Amount of electrical energy.
-	 */
-	public void setEnergy(ItemStack itemStack, double energy);
-
-	/**
-	 * TODO: Make this value more realistic
-	 * Get the max amount of voltage of this item.
-	 */
-	public double getVoltage(ItemStack theItem);
 }

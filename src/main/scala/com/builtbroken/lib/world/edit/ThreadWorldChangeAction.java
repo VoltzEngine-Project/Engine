@@ -4,7 +4,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
-import com.builtbroken.api.TriggerCause;
+import com.builtbroken.api.event.TriggerCause;
 import net.minecraftforge.common.MinecraftForge;
 import com.builtbroken.lib.transform.vector.VectorWorld;
 import com.builtbroken.api.event.WorldChangeActionEvent;

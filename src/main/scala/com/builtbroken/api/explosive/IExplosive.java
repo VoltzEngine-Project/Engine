@@ -3,7 +3,7 @@ package com.builtbroken.api.explosive;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import com.builtbroken.api.TriggerCause;
+import com.builtbroken.api.event.TriggerCause;
 import com.builtbroken.lib.world.edit.IWorldChangeAction;
 
 import java.util.List;

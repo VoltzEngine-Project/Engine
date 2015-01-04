@@ -1,5 +1,7 @@
 package com.builtbroken.lib.utility.nbt;
 
+import com.builtbroken.api.ISave;
+import com.builtbroken.api.IVirtualObject;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -175,11 +177,11 @@ public class SaveManager
 					exception.printStackTrace();
 				}
 
-				if (obj instanceof ISaveObj)
+				if (obj instanceof ISave)
 				{
 					try
 					{
-						((ISaveObj) obj).load(nbt);
+						((ISave) obj).load(nbt);
 					}
 					catch (Exception e)
 					{

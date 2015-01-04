@@ -1,5 +1,6 @@
 package com.builtbroken.lib.network.netty;
 
+import com.builtbroken.lib.network.packet.AbstractPacket;
 import com.builtbroken.mod.BBL;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;

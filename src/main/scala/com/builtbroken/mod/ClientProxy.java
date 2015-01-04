@@ -10,8 +10,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import com.builtbroken.lib.render.wrapper.BlockRenderHandler$;
-import com.builtbroken.mod.content.debug.GuiCreativeBuilder;
-import com.builtbroken.mod.content.debug.TileCreativeBuilder;
 import com.builtbroken.lib.render.model.FixedTechneModelLoader;
 
 import javax.swing.*;
@@ -64,12 +62,6 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		TileEntity ent = world.getTileEntity(x, y, z);
-		if (ent instanceof TileCreativeBuilder)
-		{
-			return new GuiCreativeBuilder((TileCreativeBuilder) ent);
-		}
-
 		return null;
 	}
 

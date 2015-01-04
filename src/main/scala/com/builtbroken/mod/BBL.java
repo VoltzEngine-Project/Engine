@@ -38,15 +38,11 @@ import com.builtbroken.lib.debug.F3Handler$;
 import com.builtbroken.lib.factory.resources.*;
 import com.builtbroken.lib.grid.UpdateTicker;
 import com.builtbroken.lib.grid.UpdateTicker$;
-import com.builtbroken.lib.grid.thermal.BoilEvent;
-import com.builtbroken.lib.grid.thermal.EventThermal.EventThermalUpdate;
-import com.builtbroken.lib.grid.thermal.ThermalGrid;
 import com.builtbroken.lib.mod.config.ConfigHandler;
 import com.builtbroken.lib.mod.config.ConfigScanner;
 import com.builtbroken.lib.mod.content.ModManager;
 import com.builtbroken.lib.mod.loadable.LoadableHandler;
 import com.builtbroken.lib.network.netty.PacketManager;
-import com.builtbroken.lib.prefab.tile.multiblock.synthetic.SyntheticMultiblock;
 import com.builtbroken.lib.prefab.tile.spatial.BlockDummy;
 import com.builtbroken.lib.transform.vector.Vector3;
 import com.builtbroken.lib.transform.vector.VectorWorld;
@@ -76,10 +72,7 @@ public class BBL
 	public static Block ore = null;
 	public static Item itemWrench;
     public static Item instaHole;
-    @Deprecated
-    public static ResourceFactoryHandler resourceFactory = new ResourceFactoryHandler();
     private static boolean oresRequested = false;
-	private static ThermalGrid thermalGrid = new ThermalGrid();
 	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 	private LoadableHandler loadables = new LoadableHandler();
 
@@ -131,7 +124,6 @@ public class BBL
 		/**
 		 * Multiblock Handling
 		 */
-		SyntheticMultiblock.instance = new SyntheticMultiblock();
         if(runningAsDev)
             instaHole = contentRegistry.newItem(new ItemInstaHole());
 		if (References.CONFIGURATION.get("Content", "LoadScrewDriver", true).getBoolean(true))
@@ -173,8 +165,6 @@ public class BBL
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt)
 	{
-		UpdateTicker.threaded().addUpdater(BBL.thermalGrid);
-
 		if (!UpdateTicker.threaded().isAlive())
 		{
 			UpdateTicker.threaded().start();
@@ -209,100 +199,4 @@ public class BBL
 		SaveManager.saveAll();
 	}
 
-	/**
-	 * Default handler.
-	 */
-	@SubscribeEvent
-	public void boilEventHandler(BoilEvent evt)
-	{
-		World world = evt.world;
-		Vector3 position = evt.position;
-
-		//TODO change to a raytrace to get the block above
-		for (int height = 1; height <= evt.maxSpread; height++)
-		{
-			TileEntity tileEntity = world.getTileEntity(position.xi(), position.yi() + height, position.zi());
-
-			if (tileEntity instanceof IBoilHandler)
-			{
-				IBoilHandler handler = (IBoilHandler) tileEntity;
-				FluidStack fluid = evt.getRemainForSpread(height);
-
-				if (fluid.amount > 0)
-				{
-					if (handler.canFill(ForgeDirection.DOWN, fluid.getFluid()))
-					{
-						fluid.amount -= handler.fill(ForgeDirection.DOWN, fluid, true);
-					}
-				}
-			}
-		}
-
-		evt.setResult(Event.Result.DENY);
-	}
-
-	/**
-	 * Default handler.
-	 */
-	@SubscribeEvent
-	public void thermalEventHandler(EventThermalUpdate evt)
-	{
-		final VectorWorld pos = evt.position;
-
-		synchronized (pos.world())
-		{
-			Block block = pos.getBlock();
-			Material mat = pos.getBlock().getMaterial();
-
-			if (mat == Material.air)
-			{
-				evt.heatLoss = 0.15f;
-			}
-
-			if (block == Blocks.flowing_water || block == Blocks.water)
-			{
-				if (evt.temperature >= 373)
-				{
-					if (FluidRegistry.getFluid("steam") != null)
-					{
-						// TODO: INCORRECT!
-						int volume = (int) (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373));
-						MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world(), pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2, evt.isReactor));
-					}
-
-					evt.heatLoss = 0.2f;
-				}
-			}
-
-			if (block == Blocks.ice)
-			{
-				if (evt.temperature >= 273)
-				{
-
-					UpdateTicker.threaded().addUpdater(new IUpdate()
-					{
-						@Override
-						public void update(double delta)
-						{
-							pos.setBlock(Blocks.flowing_water);
-						}
-
-						@Override
-						public boolean canUpdate()
-						{
-							return true;
-						}
-
-						@Override
-						public boolean continueUpdate()
-						{
-							return false;
-						}
-					});
-				}
-
-				evt.heatLoss = 0.4f;
-			}
-		}
-	}
 }

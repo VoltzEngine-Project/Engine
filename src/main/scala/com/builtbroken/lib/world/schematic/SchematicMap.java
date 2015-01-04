@@ -1,5 +1,6 @@
 package com.builtbroken.lib.world.schematic;
 
+import com.builtbroken.api.ISave;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -9,7 +10,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.builtbroken.lib.type.Pair;
-import com.builtbroken.lib.utility.nbt.ISaveObj;
 import com.builtbroken.lib.utility.nbt.NBTUtility;
 import com.builtbroken.lib.transform.vector.Vector3;
 import com.builtbroken.lib.transform.vector.VectorWorld;
@@ -24,7 +24,7 @@ import java.util.Map.Entry;
  *
  * @author DarkGuardsman
  */
-public class SchematicMap extends Schematic implements ISaveObj
+public class SchematicMap extends Schematic implements ISave
 {
 	//TODO save the schematics using block names, include a reference sheet to match block names to IDs instead of saving each block as a string
 

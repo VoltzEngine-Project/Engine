@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
-import com.builtbroken.api.TriggerCause;
+import com.builtbroken.api.event.TriggerCause;
 import com.builtbroken.api.explosive.IExplosive;
 import com.builtbroken.mod.References;
 import com.builtbroken.lib.utility.LanguageUtility;

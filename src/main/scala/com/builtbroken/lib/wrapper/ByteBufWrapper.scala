@@ -1,13 +1,13 @@
 package com.builtbroken.lib.wrapper
 
+import com.builtbroken.api.ISave
+import com.builtbroken.lib.network.netty.IByteBufObject
+import com.builtbroken.lib.transform.vector.{Vector2, Vector3}
 import cpw.mods.fml.common.network.ByteBufUtils
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fluids.FluidTank
-import com.builtbroken.lib.network.netty.IByteBufObject
-import com.builtbroken.lib.transform.vector.{Vector2, Vector3}
-import com.builtbroken.lib.utility.nbt.ISaveObj
 
 /**
  * Some alias methods to make packets more pleasant.
@@ -36,7 +36,7 @@ object ByteBufWrapper
         case x: Vector2 => new Vector2(buf)
         case x: NBTTagCompound => buf.readTag()
         case x: FluidTank => buf.readTank()
-        case x: ISaveObj => x.load(buf.readTag())
+        case x: ISave => x.load(buf.readTag())
         case _ => throw new IllegalArgumentException("Resonant Engine ByteBuf attempt to read an invalid object [" + sample + "] of class [" + sample.getClass + "]")
       }).asInstanceOf[T]
     }
@@ -63,7 +63,7 @@ object ByteBufWrapper
       f(buf.readTag())
     }
 
-    def >>>(obj: ISaveObj)
+    def >>>(obj: ISave)
     {
       obj.load(buf.readTag())
     }
@@ -94,7 +94,7 @@ object ByteBufWrapper
           case x: Vector2 => x.writeByteBuf(buf)
           case x: NBTTagCompound => buf <<< x
           case x: FluidTank => buf <<< x
-          case x: ISaveObj => buf <<< x
+          case x: ISave => buf <<< x
           case _ => throw new IllegalArgumentException("Resonant Engine ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
         }
       }
@@ -141,7 +141,7 @@ object ByteBufWrapper
       buf
     }
 
-    def <<<(saveObj: ISaveObj): ByteBuf =
+    def <<<(saveObj: ISave): ByteBuf =
     {
       val nbt = new NBTTagCompound
       saveObj.save(nbt)

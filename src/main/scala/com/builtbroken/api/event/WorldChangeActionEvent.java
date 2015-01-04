@@ -1,7 +1,6 @@
 package com.builtbroken.api.event;
 
 import cpw.mods.fml.common.eventhandler.Cancelable;
-import com.builtbroken.api.TriggerCause;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import com.builtbroken.lib.transform.vector.VectorWorld;

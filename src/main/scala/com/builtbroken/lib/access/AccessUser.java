@@ -1,9 +1,9 @@
 package com.builtbroken.lib.access;
 
+import com.builtbroken.api.ISave;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import com.builtbroken.lib.utility.nbt.ISaveObj;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author DarkGuardsman
  */
-public class AccessUser implements ISaveObj
+public class AccessUser implements ISave
 {
 	protected String username;
 	protected boolean isTempary = false;

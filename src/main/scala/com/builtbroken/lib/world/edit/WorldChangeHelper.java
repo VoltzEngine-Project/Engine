@@ -1,7 +1,7 @@
 package com.builtbroken.lib.world.edit;
 
 import cpw.mods.fml.common.eventhandler.Event;
-import com.builtbroken.api.TriggerCause;
+import com.builtbroken.api.event.TriggerCause;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import com.builtbroken.lib.transform.vector.VectorWorld;
