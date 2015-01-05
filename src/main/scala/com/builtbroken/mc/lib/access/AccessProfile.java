@@ -7,8 +7,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.api.IVirtualObject;
-import com.builtbroken.mc.lib.helper.nbt.NBTUtility;
-import com.builtbroken.mc.lib.helper.nbt.SaveManager;
+import com.builtbroken.mc.lib.helper.NBTUtility;
+import com.builtbroken.mc.core.handler.SaveManager;
 
 import java.io.File;
 import java.util.*;

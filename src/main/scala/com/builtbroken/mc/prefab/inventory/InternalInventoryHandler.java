@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.helper.inventory;
+package com.builtbroken.mc.prefab.inventory;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;

@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.helper.wrapper
 
+import com.builtbroken.mc.lib.helper.NBTUtility
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import com.builtbroken.mc.lib.helper.nbt.NBTUtility
 
 import scala.reflect.ClassTag
 

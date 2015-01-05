@@ -2,6 +2,7 @@ package com.builtbroken.mc.prefab.tile;
 
 import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
 import com.builtbroken.mc.lib.render.block.RenderTileDummy;
 import com.builtbroken.mc.lib.transform.region.Cuboid;
@@ -9,7 +10,6 @@ import com.builtbroken.mc.lib.transform.vector.IVectorWorld;
 import com.builtbroken.mc.lib.transform.vector.Vector3;
 import com.builtbroken.mc.lib.transform.vector.VectorWorld;
 import com.builtbroken.mc.lib.helper.WrenchUtility;
-import com.builtbroken.mc.core.BBL;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -910,7 +910,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
     @Override
     public final Packet getDescriptionPacket()
     {
-        return BBL.instance.packetHandler.toMCPacket(getDescPacket());
+        return Engine.instance.packetHandler.toMCPacket(getDescPacket());
     }
 
     public AbstractPacket getDescPacket()

@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.network.netty;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
-import com.builtbroken.mc.core.BBL;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import io.netty.channel.ChannelHandler;
@@ -25,7 +25,7 @@ public class ResonantPacketHandler extends SimpleChannelInboundHandler<AbstractP
 		switch (FMLCommonHandler.instance().getEffectiveSide())
 		{
 			case CLIENT:
-				packet.handleClientSide(BBL.proxy.getClientPlayer());
+				packet.handleClientSide(Engine.proxy.getClientPlayer());
 				break;
 			case SERVER:
 				packet.handleServerSide(((NetHandlerPlayServer) netHandler).playerEntity);

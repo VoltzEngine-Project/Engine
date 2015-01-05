@@ -1,7 +1,7 @@
 package com.builtbroken.mc.testing.debug.profiler;
 
 import com.builtbroken.jlib.lang.StringHelpers;
-import com.builtbroken.mc.core.BBL;
+import com.builtbroken.mc.core.Engine;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.Map;
 public class RunProfile
 {
     public String name;
-    public boolean enabled = BBL.runningAsDev;
+    public boolean enabled = Engine.runningAsDev;
     public HashMap<String, TimeSpan> times = new HashMap();
 
     protected int maxNameLength = 0;

@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.builtbroken.jlib.type.Pair;
-import com.builtbroken.mc.lib.helper.nbt.NBTUtility;
+import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.transform.vector.Vector3;
 import com.builtbroken.mc.lib.transform.vector.VectorWorld;
 

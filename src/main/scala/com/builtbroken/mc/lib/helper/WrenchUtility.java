@@ -1,8 +1,8 @@
 package com.builtbroken.mc.lib.helper;
 
 import buildcraft.api.tools.IToolWrench;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.mod.compat.Mods;
-import com.builtbroken.mc.core.BBL;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import com.builtbroken.mc.core.References;
@@ -56,7 +56,7 @@ public class WrenchUtility
                 } catch (ClassNotFoundException e)
                 {
                     References.LOGGER.error("Failed to use reflection for IC2 Wrench support");
-                    if (BBL.runningAsDev)
+                    if (Engine.runningAsDev)
                     {
                         References.LOGGER.catching(e);
                     }
@@ -124,7 +124,7 @@ public class WrenchUtility
                 } catch (ClassNotFoundException e)
                 {
                     References.LOGGER.error("Failed to use reflection for IC2 Wrench support");
-                    if (BBL.runningAsDev)
+                    if (Engine.runningAsDev)
                     {
                         References.LOGGER.catching(e);
                     }
@@ -185,28 +185,28 @@ public class WrenchUtility
                 } catch (ClassNotFoundException e)
                 {
                     References.LOGGER.error("Failed to use reflection to get IC2 wrench classes");
-                    if (BBL.runningAsDev)
+                    if (Engine.runningAsDev)
                     {
                         References.LOGGER.catching(e);
                     }
                 } catch (NoSuchMethodException e)
                 {
                     References.LOGGER.error("Failed to use reflection to access IC2 wrench methods");
-                    if (BBL.runningAsDev)
+                    if (Engine.runningAsDev)
                     {
                         References.LOGGER.catching(e);
                     }
                 } catch (InvocationTargetException e)
                 {
                     References.LOGGER.error("Failed to use reflection to invoke IC2 wrench methods");
-                    if (BBL.runningAsDev)
+                    if (Engine.runningAsDev)
                     {
                         References.LOGGER.catching(e);
                     }
                 } catch (IllegalAccessException e)
                 {
                     References.LOGGER.error("Reflection failure: Something is blocking access to IC2 wrench methods");
-                    if (BBL.runningAsDev)
+                    if (Engine.runningAsDev)
                     {
                         References.LOGGER.catching(e);
                     }

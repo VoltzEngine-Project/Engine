@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.helper.inventory;
+package com.builtbroken.mc.prefab.inventory;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.init.Items;

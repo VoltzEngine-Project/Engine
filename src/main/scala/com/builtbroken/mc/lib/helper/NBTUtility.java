@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.helper.nbt;
+package com.builtbroken.mc.lib.helper;
 
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.FMLClientHandler;

@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import com.builtbroken.jlib.type.Pair;
-import com.builtbroken.mc.lib.helper.inventory.AutoCraftingManager;
-import com.builtbroken.mc.lib.helper.inventory.InventoryUtility;
+import com.builtbroken.mc.prefab.inventory.AutoCraftingManager;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import com.builtbroken.mc.lib.transform.vector.Vector3;
 import com.builtbroken.mc.lib.transform.vector.VectorWorld;
 

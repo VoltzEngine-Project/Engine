@@ -1,6 +1,6 @@
 package com.builtbroken.jlib.data.science.units;
 
-import com.builtbroken.mc.core.BBL;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.jlib.type.Pair;
 
@@ -45,7 +45,7 @@ public class UnitHelper
 			}
 			catch (NumberFormatException e)
 			{
-                if(BBL.runningAsDev)
+                if(Engine.runningAsDev)
                     References.LOGGER.catching(e);
 
 			}
@@ -85,7 +85,7 @@ public class UnitHelper
 			}
 			catch (NumberFormatException e)
 			{
-                if(BBL.runningAsDev)
+                if(Engine.runningAsDev)
                     References.LOGGER.catching(e);
 			}
 		}
@@ -124,7 +124,7 @@ public class UnitHelper
 			}
 			catch (NumberFormatException e)
 			{
-                if(BBL.runningAsDev)
+                if(Engine.runningAsDev)
                     References.LOGGER.catching(e);
 			}
 		}
@@ -192,7 +192,7 @@ public class UnitHelper
 			}
 			catch (NumberFormatException e)
 			{
-                if(BBL.runningAsDev)
+                if(Engine.runningAsDev)
                     References.LOGGER.catching(e);
 			}
 			editedString.replaceAll("[0-9]", "");

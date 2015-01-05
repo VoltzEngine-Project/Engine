@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.helper.key;
+package com.builtbroken.mc.core.handler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;

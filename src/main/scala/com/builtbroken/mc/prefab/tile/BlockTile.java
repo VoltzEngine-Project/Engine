@@ -4,7 +4,7 @@ import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.transform.region.Cuboid;
 import com.builtbroken.mc.lib.transform.vector.Vector2;
 import com.builtbroken.mc.lib.transform.vector.Vector3;
-import com.builtbroken.mc.lib.helper.inventory.InventoryUtility;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

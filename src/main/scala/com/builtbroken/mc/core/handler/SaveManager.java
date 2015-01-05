@@ -1,7 +1,8 @@
-package com.builtbroken.mc.lib.helper.nbt;
+package com.builtbroken.mc.core.handler;
 
 import com.builtbroken.mc.api.ISave;
 import com.builtbroken.mc.api.IVirtualObject;
+import com.builtbroken.mc.lib.helper.NBTUtility;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

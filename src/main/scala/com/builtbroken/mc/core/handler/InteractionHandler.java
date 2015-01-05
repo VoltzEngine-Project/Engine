@@ -1,5 +1,6 @@
-package com.builtbroken.mc.lib.helper;
+package com.builtbroken.mc.core.handler;
 
+import com.builtbroken.mc.lib.helper.WrenchUtility;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,7 +18,7 @@ import com.builtbroken.mc.api.tile.IRemovable.*;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.transform.vector.Vector3;
 import com.builtbroken.mc.lib.transform.vector.VectorWorld;
-import com.builtbroken.mc.lib.helper.inventory.InventoryUtility;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ import java.util.List;
  *
  * @author Darkguardsman
  */
-public class PlayerInteractionHandler
+public class InteractionHandler
 {
     @SideOnly(Side.CLIENT)
     public static Block getMouseOverBlockClient()
@@ -108,7 +109,7 @@ public class PlayerInteractionHandler
     }
 
     @SubscribeEvent
-    public void onPlayInteract(PlayerInteractEvent event)
+    public void onPlayerInteract(PlayerInteractEvent event)
     {
         if (!event.entityPlayer.worldObj.isRemote && event.entityPlayer != null)
         {
