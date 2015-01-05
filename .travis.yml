@@ -1,0 +1,19 @@
+language: java
+cache:
+  directories:
+    - $HOME/.gradle
+    - .gradle
+before_install:
+  - git submodule update --init --recursive
+notifications:
+ irc:
+  channels:
+   - "irc.esper.net#BuiltBrokenModding "
+  template:
+   - "%{build_number} (%{branch} - %{commit}: %{commit_message} : %{author}): %{message} (%{build_url})"
+install: true
+script:
+  - gradle build --refresh-dependencies
+jdk:
+  - oraclejdk7
+  - openjdk6
