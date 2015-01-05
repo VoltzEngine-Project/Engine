@@ -1,4 +1,4 @@
-Resonant Engine
+Voltz Engine
 ======
 Resonant Engine is a powerful modding framework created by the Universal Electricity team to make modding easier. The Resonant Engine contains a systematic and clean way to create blocks and a large library of prefabricated code to reduce the your code so you can focus more on your content.
 Copyright (c) Calclavia
