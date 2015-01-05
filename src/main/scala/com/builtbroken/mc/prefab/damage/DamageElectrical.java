@@ -5,7 +5,7 @@ package com.builtbroken.mc.prefab.damage;
  *
  * @author Darkguardsman
  */
-public class ElectricalDamage extends AbstractDamageSource
+public class DamageElectrical extends AbstractDamageSource
 {
     //TODO replace code calclavia removed, add Factory to setup damage type correctly
     //TODO add armor handling so metal armors cause more not less damage
@@ -13,7 +13,7 @@ public class ElectricalDamage extends AbstractDamageSource
     //TODO damage electric items in the player's inventory
     //TODO destory some weak items
     //TODO catch player on fire
-	public ElectricalDamage()
+	public DamageElectrical()
 	{
 		super("electrocution");
 		this.setDifficultyScaled();
