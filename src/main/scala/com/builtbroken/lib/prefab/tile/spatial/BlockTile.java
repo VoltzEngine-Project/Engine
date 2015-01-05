@@ -36,7 +36,7 @@ public class BlockTile extends Block
 
     private boolean hasTile = false;
 
-    protected BlockTile(Tile tile, String prefix, CreativeTabs tab)
+    public BlockTile(Tile tile, String prefix, CreativeTabs tab)
     {
         super(tile.material);
         setBlockName(prefix + staticTile.name);

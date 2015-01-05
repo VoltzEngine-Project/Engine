@@ -335,7 +335,7 @@ public class AccessProfile implements IVirtualObject
 	}
 
 	@Override
-	public void save(NBTTagCompound nbt)
+	public NBTTagCompound save(NBTTagCompound nbt)
 	{
 		nbt.setString("name", this.profileName);
 		nbt.setBoolean("global", this.global);
@@ -348,6 +348,7 @@ public class AccessProfile implements IVirtualObject
 			groupTags.appendTag(groupTag);
 		}
 		nbt.setTag("groups", groupTags);
+        return nbt;
 	}
 
 	@Override

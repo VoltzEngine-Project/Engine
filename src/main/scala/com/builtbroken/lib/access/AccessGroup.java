@@ -58,7 +58,7 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
 	}
 
 	@Override
-	public void save(NBTTagCompound nbt)
+	public NBTTagCompound save(NBTTagCompound nbt)
 	{
 		nbt.setString("groupName", this.getName());
 		if (this.extendGroup_name != null)
@@ -84,7 +84,7 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
 		}
 		nbt.setTag("permissions", nodesTag);
 		nbt.setLong("creationDate", this.creation_time);
-
+        return nbt;
 	}
 
 	@Override

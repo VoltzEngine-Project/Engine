@@ -1,8 +1,8 @@
 package com.builtbroken.test.grid;
 
+import com.builtbroken.lib.prefab.tile.spatial.BlockTile;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import com.builtbroken.lib.prefab.tile.spatial.BlockDummy;
 import com.builtbroken.junit.TestRegistry;
 import com.builtbroken.lib.prefab.tile.TileConductor;
 import com.builtbroken.lib.world.schematic.StringSchematic;
@@ -32,7 +32,7 @@ public class WireMap extends StringSchematic
         {
             if (Block.getBlockFromName("wire") == null)
             {
-                TestRegistry.registerBlock(new BlockDummy("JUnit", null, new TileConductor()), "wire");
+                TestRegistry.registerBlock(new BlockTile(new TileConductor(), "JUnit", null), "wire");
             }
             wire = Block.getBlockFromName("wire");
         }

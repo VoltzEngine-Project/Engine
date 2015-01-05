@@ -130,7 +130,7 @@ public class SchematicMap extends Schematic implements ISave
 	}
 
 	@Override
-	public void save(NBTTagCompound nbt)
+	public NBTTagCompound save(NBTTagCompound nbt)
 	{
 		if (!init)
 		{
@@ -170,7 +170,7 @@ public class SchematicMap extends Schematic implements ISave
 		}
 		blockNBT.setInteger("count", i);
 		nbt.setTag(BLOCK_LIST_SAVE_NAME, blockNBT);
-
+        return nbt;
 	}
 
 	@Override

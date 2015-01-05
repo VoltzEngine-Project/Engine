@@ -3,6 +3,7 @@ package com.builtbroken.lib.prefab.tile.spatial;
 import com.builtbroken.api.items.ISimpleItemRenderer;
 import com.builtbroken.api.tile.IPlayerUsing;
 import com.builtbroken.lib.network.packet.AbstractPacket;
+import com.builtbroken.lib.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.lib.render.wrapper.RenderTileDummy;
 import com.builtbroken.lib.transform.region.Cuboid;
 import com.builtbroken.lib.transform.vector.IVectorWorld;
@@ -23,6 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
@@ -42,7 +44,7 @@ import java.util.*;
 /**
  * Created by robert on 1/4/2015.
  */
-public class Tile extends TileEntity implements IVectorWorld, IPlayerUsing
+public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUsing
 {
     //Static block vars, never use in your tile
     private BlockTile block = null;
@@ -58,6 +60,7 @@ public class Tile extends TileEntity implements IVectorWorld, IPlayerUsing
     public boolean canEmmitRedstone = false;
     public boolean isOpaque = false;
     public Block.SoundType stepSound;
+    public Class<? extends ItemBlock> itemBlock = ItemBlock.class;
 
     protected Cuboid bounds = new Cuboid(0, 0, 0, 1, 1, 1);
 
@@ -68,9 +71,9 @@ public class Tile extends TileEntity implements IVectorWorld, IPlayerUsing
     protected String textureName;
 
     //Renderer vars
-    boolean dynamicRendererCrashed = false;
-    boolean renderNormalBlock = true;
-    boolean renderTileEntity = true;
+    public boolean dynamicRendererCrashed = false;
+    public boolean renderNormalBlock = true;
+    public boolean renderTileEntity = true;
 
     //Tile Vars
     protected long ticks = 0L;
@@ -94,7 +97,16 @@ public class Tile extends TileEntity implements IVectorWorld, IPlayerUsing
     @Override
     public final void updateEntity()
     {
-        update();
+        if (ticks == 0)
+            firstTick();
+        else
+            update();
+
+        //Increase tick
+        if (ticks >= Long.MAX_VALUE)
+            ticks = 0;
+        ticks += 1;
+
     }
 
     public void blockUpdate()
@@ -102,25 +114,23 @@ public class Tile extends TileEntity implements IVectorWorld, IPlayerUsing
         update();
     }
 
-    public void start()
+    /**
+     * Called first update() call of the tile. Use
+     * this to init any values that are needed right
+     * after the tile has been fully placed into the
+     * world.
+     */
+    public void firstTick()
     {
     }
 
+    /**
+     * Called each tick as long as the the tile can update.
+     */
     public void update()
     {
-        if (ticks == 0)
-        {
-            start();
-        }
 
-        if (ticks >= Long.MAX_VALUE)
-        {
-            ticks = 1;
-        }
-
-        ticks += 1;
     }
-
 
 
     //=============================
@@ -349,6 +359,16 @@ public class Tile extends TileEntity implements IVectorWorld, IPlayerUsing
     //=========================
     //=== Events ==============
     //=========================
+
+    /** Called after the block has been registered.
+     * Use this time to register recipes, events, or
+     * any other data that needs to exist with this
+     * block. Do not register client, or server only
+     * content as this is called both sides */
+    public void onRegistered()
+    {
+
+    }
 
     public void onAdded()
     {
@@ -826,7 +846,7 @@ public class Tile extends TileEntity implements IVectorWorld, IPlayerUsing
     {
         TileEntitySpecialRenderer tesr = getSpecialRenderer();
 
-        if(!(tesr instanceof RenderTileDummy))
+        if (!(tesr instanceof RenderTileDummy))
         {
             if (tesr instanceof ISimpleItemRenderer)
             {

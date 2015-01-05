@@ -1,10 +1,10 @@
 package com.builtbroken.lib.network.packet;
 
+import com.builtbroken.lib.network.IPacketReceiver;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import com.builtbroken.lib.network.handle.TPacketReceiver;
 
 /**
  * @author tgame14
@@ -40,20 +40,20 @@ public class PacketEntity extends PacketType
 	{
 		Entity entity = player.getEntityWorld().getEntityByID(this.entityId);
 
-		if (entity instanceof TPacketReceiver)
-		{
-			((TPacketReceiver) entity).read(data(), player, this);
-		}
-	}
+    if (entity instanceof IPacketReceiver)
+    {
+        ((IPacketReceiver) entity).read(data(), player, this);
+    }
+}
 
 	@Override
 	public void handleServerSide(EntityPlayer player)
 	{
 		Entity entity = player.getEntityWorld().getEntityByID(this.entityId);
 
-		if (entity instanceof TPacketReceiver)
+		if (entity instanceof IPacketReceiver)
 		{
-			((TPacketReceiver) entity).read(data(), player, this);
+			((IPacketReceiver) entity).read(data(), player, this);
 		}
 	}
 }

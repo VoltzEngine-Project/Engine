@@ -2,7 +2,6 @@ package com.builtbroken.lib.network.packet
 
 import io.netty.buffer.Unpooled
 import net.minecraft.entity.player.EntityPlayer
-import AbstractPacket
 import com.builtbroken.lib.wrapper.ByteBufWrapper._
 
 /**

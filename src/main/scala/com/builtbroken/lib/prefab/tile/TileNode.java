@@ -53,9 +53,9 @@ public abstract class TileNode extends Tile implements INodeProvider
 	}
 
 	@Override
-	public void start()
+	public void firstTick()
 	{
-		super.start();
+		super.firstTick();
 		reconstructNode();
 	}
 

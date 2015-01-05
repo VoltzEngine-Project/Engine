@@ -228,7 +228,7 @@ public class ExternalInventory implements IExternalInventory
 	}
 
 	@Override
-	public void save(NBTTagCompound nbt)
+	public NBTTagCompound save(NBTTagCompound nbt)
 	{
 		NBTTagList nbtList = new NBTTagList();
 
@@ -244,6 +244,7 @@ public class ExternalInventory implements IExternalInventory
 		}
 
 		nbt.setTag("Items", nbtList);
+        return nbt;
 	}
 
 	@Override

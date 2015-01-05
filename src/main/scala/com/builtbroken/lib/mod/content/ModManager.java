@@ -1,5 +1,7 @@
 package com.builtbroken.lib.mod.content;
 
+import com.builtbroken.lib.prefab.tile.spatial.BlockTile;
+import com.builtbroken.lib.prefab.tile.spatial.Tile;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -10,8 +12,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import com.builtbroken.lib.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.api.items.ISimpleItemRenderer;
-import com.builtbroken.lib.prefab.tile.spatial.SpatialBlock;
-import com.builtbroken.lib.prefab.tile.spatial.BlockDummy;
 import com.builtbroken.lib.render.wrapper.ItemRenderHandler;
 import com.builtbroken.lib.utility.LanguageUtility;
 
@@ -54,7 +54,7 @@ public class ModManager
 	}
 
 	/**
-	 * Creates a new block based on the SpatialBlock class provided
+	 * Creates a new block based on the Tile class provided
 	 * Handles most common registration and data input tasks for the creation of the block.
 	 * This includes registering the block, tile, built in item & tile renders. It also inits
 	 * the instance used for the block itself.
@@ -62,11 +62,11 @@ public class ModManager
 	 * @param spatialClass - class that will provide all the data to be used when creating the block.
 	 * @param args         - arguments needed to create a new instance of the spatial class
 	 */
-	public BlockDummy newBlock(Class<? extends SpatialBlock> spatialClass, Object... args)
+	public BlockTile newBlock(Class<? extends Tile> spatialClass, Object... args)
 	{
 		try
 		{
-			SpatialBlock spatial;
+			Tile spatial;
 
 			if (args != null && args.length > 0)
 			{
@@ -93,20 +93,20 @@ public class ModManager
 	}
 
 	/**
-	 * Creates a new block based on the SpatialBlock instance provided
+	 * Creates a new block based on the Tile instance provided
 	 * Handles most common registration and data input tasks for the creation of the block.
 	 * This includes registering the block, tile, built in item & tile renders. It also inits
 	 * the instance used for the block itself.
 	 *
 	 * @param spatial - instance of the spatial block used to provide all the data for the block
 	 */
-	public BlockDummy newBlock(SpatialBlock spatial)
+	public BlockTile newBlock(Tile spatial)
 	{
-		return newBlock(spatial.name(), spatial);
+		return newBlock(spatial.name, spatial);
 	}
 
 	/**
-	 * Creates a new block based on the SpatialBlock instance provided.
+	 * Creates a new block based on the Tile instance provided.
 	 * Handles most common registration and data input tasks for the creation of the block.
 	 * This includes registering the block, tile, built in item & tile renders. It also inits
 	 * the instance used for the block itself.
@@ -114,28 +114,28 @@ public class ModManager
 	 * @param spatial - instance of the spatial block used to provide all the data for the block
 	 * @param name    - name the block will use for look up map, registry, texture, etc
 	 */
-	public BlockDummy newBlock(String name, SpatialBlock spatial)
+	public BlockTile newBlock(String name, Tile spatial)
 	{
-		BlockDummy block = new BlockDummy(modPrefix, defaultTab, spatial);
+		BlockTile block = new BlockTile(spatial, modPrefix, defaultTab);
 		spatial.setBlock(block);
 
 		blocks.put(block, name);
-		GameRegistry.registerBlock(block, spatial.itemBlock(), name);
+		GameRegistry.registerBlock(block, spatial.itemBlock, name);
 
-		spatial.onInstantiate();
+		spatial.onRegistered();
 
 		if (spatial instanceof ISimpleItemRenderer)
 		{
 			ItemRenderHandler.register(new ItemStack(block).getItem(), (ISimpleItemRenderer) spatial);
 		}
-
-		if (spatial.tile() != null)
+        Tile newTile = spatial.newTile();
+		if (newTile != null)
 		{
-			proxy.registerTileEntity(name, modPrefix, spatial.tile().getClass());
+			proxy.registerTileEntity(name, modPrefix, newTile.getClass());
 
-			if (!spatial.normalRender())
+			if (!spatial.renderTileEntity)
 			{
-				proxy.registerDummyRenderer(spatial.tile().getClass());
+				proxy.registerDummyRenderer(newTile.getClass());
 			}
 		}
 

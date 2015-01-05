@@ -1,5 +1,6 @@
 package com.builtbroken.lib.render.wrapper
 
+import com.builtbroken.lib.prefab.tile.spatial.{Tile, BlockTile}
 import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.RenderBlocks
@@ -7,7 +8,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.world.IBlockAccess
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL12._
-import com.builtbroken.lib.prefab.tile.spatial.{BlockDummy, SpatialBlock}
 import com.builtbroken.lib.transform.vector.Vector3
 
 object BlockRenderHandler extends ISimpleBlockRenderingHandler
@@ -16,9 +16,9 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
 
   def renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks)
   {
-    if (block.isInstanceOf[BlockDummy])
+    if (block.isInstanceOf[BlockTile])
     {
-      val tile = (block.asInstanceOf[BlockDummy]).dummyTile
+      val tile = (block.asInstanceOf[BlockTile]).staticTile
 
       glEnable(GL_RESCALE_NORMAL)
       glPushAttrib(GL_TEXTURE_BIT)
@@ -31,25 +31,25 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
 
   def renderWorldBlock(access: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderBlocks: RenderBlocks): Boolean =
   {
-    var renderer: SpatialBlock = null
+    var renderer: Tile = null
 
     /**
      * Try TileEntity rendering
      */
     val tile = access.getTileEntity(x, y, z)
 
-    if (tile.isInstanceOf[SpatialBlock])
+    if (tile.isInstanceOf[BlockTile])
     {
-      val spatial = tile.asInstanceOf[SpatialBlock]
-      renderer = spatial.tile
+      val spatial = tile.asInstanceOf[BlockTile]
+      renderer = spatial.staticTile
     }
 
     /**
      * Try Block rendering
      */
-    if (renderer == null && block.isInstanceOf[BlockDummy])
+    if (renderer == null && block.isInstanceOf[BlockTile])
     {
-      val dummy = block.asInstanceOf[BlockDummy]
+      val dummy = block.asInstanceOf[BlockTile]
       dummy.inject(access, x, y, z)
       renderer = dummy.getTile(access, x, y, z)
     }

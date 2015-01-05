@@ -27,7 +27,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import com.builtbroken.api.IUpdate;
-import com.builtbroken.api.recipe.MachineRecipes;
 import com.builtbroken.api.tile.IBoilHandler;
 import com.builtbroken.mod.content.tool.ItemScrewdriver;
 import com.builtbroken.mod.content.ItemInstaHole;
@@ -43,9 +42,6 @@ import com.builtbroken.lib.mod.config.ConfigScanner;
 import com.builtbroken.lib.mod.content.ModManager;
 import com.builtbroken.lib.mod.loadable.LoadableHandler;
 import com.builtbroken.lib.network.netty.PacketManager;
-import com.builtbroken.lib.prefab.tile.spatial.BlockDummy;
-import com.builtbroken.lib.transform.vector.Vector3;
-import com.builtbroken.lib.transform.vector.VectorWorld;
 import com.builtbroken.lib.utility.PlayerInteractionHandler;
 import com.builtbroken.lib.utility.PotionUtility;
 import com.builtbroken.lib.utility.nbt.SaveManager;
@@ -177,13 +173,13 @@ public class BBL
 		OreDictionary.registerOre("oreGold", Blocks.gold_ore);
 		OreDictionary.registerOre("oreIron", Blocks.iron_ore);
 		OreDictionary.registerOre("oreLapis", Blocks.lapis_ore);
-		MachineRecipes.instance.addRecipe(RecipeType.SMELTER.name(), new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone));
-		MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name(), Blocks.cobblestone, Blocks.gravel);
-		MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name(), Blocks.stone, Blocks.cobblestone);
-		MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name(), Blocks.chest, new ItemStack(Blocks.planks, 7, 0));
-		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.cobblestone, Blocks.sand);
-		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
-		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
+		//MachineRecipes.instance.addRecipe(RecipeType.SMELTER.name(), new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone));
+		//MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name(), Blocks.cobblestone, Blocks.gravel);
+		//MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name(), Blocks.stone, Blocks.cobblestone);
+		//MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name(), Blocks.chest, new ItemStack(Blocks.planks, 7, 0));
+		//MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.cobblestone, Blocks.sand);
+		//MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
+		//MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
 
         References.CONFIGURATION.save();
 	}

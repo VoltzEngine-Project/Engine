@@ -77,7 +77,7 @@ public class AccessUser implements ISave
 	}
 
 	@Override
-	public void save(NBTTagCompound nbt)
+	public NBTTagCompound save(NBTTagCompound nbt)
 	{
 		nbt.setString("username", this.username);
 		nbt.setTag("extraData", this.userData());
@@ -89,6 +89,7 @@ public class AccessUser implements ISave
 			usersTag.appendTag(accessData);
 		}
 		nbt.setTag("permissions", usersTag);
+        return nbt;
 	}
 
 	@Override

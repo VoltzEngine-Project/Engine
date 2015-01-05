@@ -1,10 +1,10 @@
 package com.builtbroken.lib.network.packet;
 
+import com.builtbroken.lib.network.IPacketReceiver;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import com.builtbroken.lib.network.handle.TPacketReceiver;
 
 /**
  * @author tgame14
@@ -49,9 +49,9 @@ public class PacketPlayerItem extends PacketType
 	{
 		ItemStack stack = player.inventory.getStackInSlot(this.slotId);
 
-		if (stack != null && stack.getItem() instanceof TPacketReceiver)
+		if (stack != null && stack.getItem() instanceof IPacketReceiver)
 		{
-			((TPacketReceiver) stack.getItem()).read(data(), player, this);
+			((IPacketReceiver) stack.getItem()).read(data(), player, this);
 		}
 	}
 
@@ -60,9 +60,9 @@ public class PacketPlayerItem extends PacketType
 	{
 		ItemStack stack = player.inventory.getStackInSlot(this.slotId);
 
-		if (stack != null && stack.getItem() instanceof TPacketReceiver)
+		if (stack != null && stack.getItem() instanceof IPacketReceiver)
 		{
-			((TPacketReceiver) stack.getItem()).read(data(), player, this);
+			((IPacketReceiver) stack.getItem()).read(data(), player, this);
 		}
 	}
 }
