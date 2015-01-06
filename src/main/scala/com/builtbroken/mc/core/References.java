@@ -13,8 +13,8 @@ import java.io.File;
  */
 public final class References
 {
-	public static final String ID = "BuiltBrokenLib";
-	public static final String NAME = "Built Broken Lib";
+	public static final String ID = "VoltzEngine";
+	public static final String NAME = "Voltz Engine";
 	/**
 	 * The configuration file.
 	 */
@@ -27,11 +27,11 @@ public final class References
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 	public static final String BUILD_VERSION = "@BUILD@";
 
-    public static final String DOMAIN = "bbl";
+    public static final String DOMAIN = "voltzengine";
 	public static final String PREFIX = DOMAIN + ":";
 
     public static final String DIRECTORY = "/assets/" + DOMAIN + "/";
-	public static final String CHANNEL = "builtbrokenlib";
+	public static final String CHANNEL = "voltzengine";
 	public static final String TEXTURE_DIRECTORY = "textures/";
 	public static final String GUI_DIRECTORY = TEXTURE_DIRECTORY + "gui/";
 
