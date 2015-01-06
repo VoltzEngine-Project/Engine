@@ -17,8 +17,6 @@ buildscript {
 }
 
 apply from: './BuiltBrokenScripts/index.gradle'
-apply plugin: 'scala'
-apply plugin: 'forge'
 
 ext.buildProps = file "build.properties"
 
