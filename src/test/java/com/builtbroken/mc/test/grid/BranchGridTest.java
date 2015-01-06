@@ -1,6 +1,10 @@
 package com.builtbroken.mc.test.grid;
 
+import com.builtbroken.mc.testing.junit.SeparateClassloaderTestRunner;
+import com.google.common.io.Files;
 import junit.framework.TestCase;
+import net.minecraft.launchwrapper.Launch;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraft.tileentity.TileEntity;
 import com.builtbroken.mc.lib.grid.branch.BranchedGrid;
 import com.builtbroken.mc.lib.grid.branch.part.Branch;
@@ -9,6 +13,17 @@ import com.builtbroken.mc.lib.grid.branch.part.Part;
 import com.builtbroken.mc.prefab.tile.TileConductor;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
 import com.builtbroken.mc.lib.transform.vector.Vector3;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Collections;
 
 /**
  * Creates a plus sign wire grid for simple connection testing
@@ -28,11 +43,14 @@ import com.builtbroken.mc.lib.transform.vector.Vector3;
 // 8       -- --[j]-- --
 // 9
 // 10
+@RunWith(SeparateClassloaderTestRunner.class)
 public class BranchGridTest extends TestCase
 {
     private static FakeWorld world;
     private static BranchedGrid grid;
 
+
+    @Test
     public void testNodes()
     {
         for (TileEntity tile : world.tiles)
@@ -72,9 +90,10 @@ public class BranchGridTest extends TestCase
         assertEquals("Should only be " + WireMap.WireTests.JUNCTION_FIVE.numberOfJunctions + " junction", WireMap.WireTests.JUNCTION_FIVE.numberOfJunctions, j, 0);
     }
 
-    @Override
-    protected void setUp() throws Exception
+    @Override @Before
+    public void setUp() throws Exception
     {
+        super.setUp();
         //Create fake world to do actions in
         world = new FakeWorld();
         world.genFlatData();
@@ -111,7 +130,7 @@ public class BranchGridTest extends TestCase
         grid.update(0);
     }
 
-    @Override
+    @Override @After
     protected void tearDown() throws Exception
     {
         grid.deconstruct();

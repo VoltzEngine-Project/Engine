@@ -1,5 +1,6 @@
 package com.builtbroken.mc.test.grid;
 
+import com.builtbroken.mc.testing.junit.SeparateClassloaderTestRunner;
 import junit.framework.TestCase;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
@@ -9,17 +10,21 @@ import com.builtbroken.mc.lib.grid.branch.NodeBranchPart;
 import com.builtbroken.mc.prefab.tile.TileConductor;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
 import com.builtbroken.mc.lib.transform.vector.VectorWorld;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Map;
 
 /**
  * Created by robert on 11/20/2014.
  */
+@RunWith(SeparateClassloaderTestRunner.class)
 public class NodeConnectionTest extends TestCase
 {
     private FakeWorld world;
     VectorWorld center;
 
+    @Test
     public void testWireExists()
     {
         assertNotNull("Test can't continue without wire being created", WireMap.wire());

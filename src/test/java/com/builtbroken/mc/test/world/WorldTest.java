@@ -1,15 +1,19 @@
 package com.builtbroken.mc.test.world;
 
+import com.builtbroken.mc.testing.junit.SeparateClassloaderTestRunner;
 import junit.framework.TestCase;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * Created by robert on 11/13/2014.
  */
+@RunWith(SeparateClassloaderTestRunner.class)
 public class WorldTest extends TestCase
 {
     World world = null;
@@ -20,6 +24,7 @@ public class WorldTest extends TestCase
         world = new FakeWorld();
     }
 
+    @Test
     public void testBlockRegistry()
     {
         Object block = Block.blockRegistry.getObject("sand");
@@ -27,11 +32,13 @@ public class WorldTest extends TestCase
         assertEquals(Block.getIdFromBlock((Block) block), 12);
     }
 
+    @Test
     public void testCreation()
     {
         assertNotNull("Failed to create world", world);
     }
 
+    @Test
     public void testNullPlacement()
     {
         try
@@ -45,6 +52,7 @@ public class WorldTest extends TestCase
         }
     }
 
+    @Test
     public void testBlockPlacement()
     {
         if (Blocks.sand != null)
@@ -58,6 +66,7 @@ public class WorldTest extends TestCase
         }
     }
 
+    @Test
     public void testTilePlacement()
     {
         if (Blocks.chest != null)
