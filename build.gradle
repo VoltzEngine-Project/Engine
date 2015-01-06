@@ -100,10 +100,7 @@ repositories {
 dependencies 
 {
     testCompile 'junit:junit:4.11'
-    compile "codechicken:CodeChickenLib:1.7.10-1.1.1.105:dev"
-    compile "codechicken:CodeChickenCore:1.7.10-1.0.4.29:dev"
-    compile "codechicken:NotEnoughItems:1.7.10-1.0.3.66:dev"
-    compile "mcp.mobius.waila:Waila:1.5.6_dev1_1.7.10"
+    compile "mcp.mobius.waila:Waila:1.5.8a_1.7.10"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.0.+:dev"
     compile "net.industrial-craft:industrialcraft-2:2.2.654-experimental:api"
 }
