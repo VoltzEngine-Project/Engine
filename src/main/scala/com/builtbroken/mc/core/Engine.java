@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core;
 
+import com.builtbroken.mc.core.annotation.TestAnnotation;
 import com.builtbroken.mc.core.handler.InteractionHandler;
 import com.builtbroken.mc.core.resources.content.BlockOre;
 import com.builtbroken.mc.core.resources.content.ItemBlockOre;
@@ -65,6 +66,7 @@ public class Engine
 	 * Requests that all ores are generated
 	 * Must be called in pre-init
 	 */
+    @TestAnnotation
 	public static void requestAllOres()
 	{
 		for (DefinedResources resource : DefinedResources.values())

@@ -88,9 +88,11 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      *
      * @return Normally you want to return a new instance of this
      */
-    public Tile newTile()
+    public abstract Tile newTile();
+
+    public Tile newTile(World world, int meta)
     {
-        return null;
+        return newTile();
     }
 
     @Override

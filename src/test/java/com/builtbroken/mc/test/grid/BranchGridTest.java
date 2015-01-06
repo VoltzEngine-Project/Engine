@@ -82,7 +82,15 @@ public class BranchGridTest extends TestCase
         //Set up wire grid
         WireMap.WireTests.JUNCTION_FIVE.build(world, 0, 12, 0);
 
+        if(world.tiles.size() == 0)
+        {
+            world.printLevel(12);
+            fail("No tiles were placed into the world");
+
+        }
+
         world.updateEntities();
+
 
         TileEntity tile = world.tiles.get(0);
         if (tile instanceof TileConductor)

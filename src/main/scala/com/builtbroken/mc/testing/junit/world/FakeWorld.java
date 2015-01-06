@@ -1,5 +1,6 @@
 package com.builtbroken.mc.testing.junit.world;
 
+import com.builtbroken.mc.lib.transform.vector.Vector3;
 import com.builtbroken.mc.testing.junit.ModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -11,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.WorldInfo;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -192,13 +192,13 @@ public class FakeWorld extends World
             {
                 for (int z = -size; x < mapData[0][0].length - size; x++)
                 {
-                    if(y == 0)
+                    if (y == 0)
                         setBlock(x, y, z, Blocks.bedrock);
-                    else if(y < 5)
+                    else if (y < 5)
                         setBlock(x, y, z, Blocks.stone);
-                    else if(y < 10)
+                    else if (y < 10)
                         setBlock(x, y, z, Blocks.dirt);
-                    else if(y < 11)
+                    else if (y < 11)
                         setBlock(x, y, z, Blocks.grass);
                     else
                         break;
@@ -226,6 +226,21 @@ public class FakeWorld extends World
                         }
                         data.block = null;
                     }
+                }
+            }
+        }
+    }
+
+    public void printLevel(int y)
+    {
+        for (int x = 0; x < mapData.length; x++)
+        {
+            for (int z = 0; x < mapData[0][0].length; x++)
+            {
+                Data data = mapData[x][y][x];
+                if (data != null)
+                {
+                    System.out.println("Data[" + data.block +", " + data.meta +"]");
                 }
             }
         }

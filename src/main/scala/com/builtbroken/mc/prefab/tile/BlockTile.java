@@ -8,6 +8,7 @@ import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -30,7 +31,7 @@ import java.util.Random;
 /**
  * Created by robert on 1/4/2015.
  */
-public class BlockTile extends Block
+public class BlockTile extends Block implements ITileEntityProvider
 {
     public Tile staticTile = null;
 
@@ -39,6 +40,8 @@ public class BlockTile extends Block
     public BlockTile(Tile tile, String prefix, CreativeTabs tab)
     {
         super(tile.material);
+        this.staticTile = tile;
+        this.staticTile.setBlock(this);
         setBlockName(prefix + staticTile.name);
         setBlockTextureName(prefix + staticTile.textureName);
         setCreativeTab(staticTile.creativeTab == null ? tab : staticTile.creativeTab);
@@ -51,19 +54,16 @@ public class BlockTile extends Block
     }
 
     @Override
-    public TileEntity createTileEntity(World var1, int meta)
+    public TileEntity createTileEntity(World world, int meta)
     {
-        return staticTile.newTile();
+        return staticTile.newTile(world, meta);
     }
 
+
     @Override
-    public boolean hasTileEntity(int meta)
+    public TileEntity createNewTileEntity(World world, int meta)
     {
-        if (staticTile.newTile() != null)
-        {
-            hasTile = staticTile.newTile() != null;
-        }
-        return hasTile;
+        return staticTile.newTile(world, meta);
     }
 
     @Override
