@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.mod.content;
+package com.builtbroken.mc.core.registry;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.tileentity.TileEntity;

@@ -29,7 +29,7 @@ import com.builtbroken.mc.lib.grid.UpdateTicker;
 import com.builtbroken.mc.lib.grid.UpdateTicker$;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
 import com.builtbroken.mc.lib.mod.config.ConfigScanner;
-import com.builtbroken.mc.lib.mod.content.ModManager;
+import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import com.builtbroken.mc.core.network.netty.PacketManager;
 import com.builtbroken.mc.lib.helper.PotionUtility;
@@ -48,7 +48,7 @@ public class Engine
 {
 	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
-    @SidedProxy(clientSide = "com.builtbroken.mc.mod.ClientProxy", serverSide = "com.builtbroken.mc.mod.CommonProxy")
+    @SidedProxy(clientSide = "com.builtbroken.mc.core.ClientProxy", serverSide = "com.builtbroken.mc.core.CommonProxy")
 	public static CommonProxy proxy;
 	@Mod.Metadata(References.ID)
 	public static ModMetadata metadata;

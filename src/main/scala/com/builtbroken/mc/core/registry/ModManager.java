@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.mod.content;
+package com.builtbroken.mc.core.registry;
 
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
@@ -28,7 +28,7 @@ import java.util.WeakHashMap;
  */
 public class ModManager
 {
-	@SidedProxy(clientSide = "resonant.lib.mod.content.ClientRegistryProxy", serverSide = "resonant.lib.mod.content.CommonRegistryProxy")
+	@SidedProxy(clientSide = "com.builtbroken.mc.core.registry.ClientRegistryProxy", serverSide = "com.builtbroken.mc.core.registry.CommonRegistryProxy")
 	public static CommonRegistryProxy proxy;
 
 	public final WeakHashMap<Block, String> blocks = new WeakHashMap();

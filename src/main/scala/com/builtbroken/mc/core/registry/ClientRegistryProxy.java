@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.mod.content;
+package com.builtbroken.mc.core.registry;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
