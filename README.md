@@ -1,23 +1,62 @@
 Voltz Engine
 ======
-Resonant Engine is a powerful modding framework created by the Universal Electricity team to make modding easier. The Resonant Engine contains a systematic and clean way to create blocks and a large library of prefabricated code to reduce the your code so you can focus more on your content.
-Copyright (c) Calclavia
+Copyright (c) Built Broken Studios
 
-### Founder
-* <a href="http://www.patreon.com/calclavia"> Calclavia </a>
+Voltz Engine is a basic content creation and management system for minecraft modding. It is designed to make creating new tiles and items as easy as possible. Including unit testing, functionality prefabs, and dozens of helper classes. All of which are created to reduce the amount of code and errors created for new mods. 
 
-### Developers
-* <a href="http://www.patreon.com/Alex_hawks"> Alex_hawks </a>
-* <a href="http://www.patreon.com/calclavia"> Calclavia </a>
-* <a href="http://www.patreon.com/darkcow"> Darkguardsman </a>
-* <a href="http://www.patreon.com/tgame14"> Tgame14 </a>
-* <a href="http://www.patreon.com/maxwolf"> Maxwolf Goodliffe </a>
+## Mod pack policy
+Your not permitted to use Voltz Engine in a modpack unless you have permission for a mod using the Voltz Engine. If you do you need to note the permission in a place that can be viewed, give credit to the team, and link to website. 
+
+## Profiting
+Your not permitted to profit off the voltz engine or any mod connected with the engine. This includes but is not limited to download sites, file hosting, in game item sells, website item sells, or anything that includes features of the engine.
+
+The following sites are permitted to profit off the engine within the bounds of Minecraft's [EULA](https://account.mojang.com/documents/minecraft_eula).
+
+* ShadowCity.net
+* BuiltBroken.com 
+
+## Compile
+Run the Build.bat in the scripts folder for local .jar creation. 
+
+For build servers use the Build.gradle in the root folder. If
+you have any issues you may need to set some properties for
+the script to run. Look at Build.bat for information on what
+to change.
+
+### Team
+* <a href="http://www.patreon.com/darkcow"> [Dev]Darkguardsman </a>
+* <a href="http://www.patreon.com/maxwolf"> [Dev]Maxwolf</a>
+* [QA]Dmodoomsirius
 
 
 ### Credits
-* Cazzar
-* Dmodoomsirius
-* Adaptivity
-
-### License
-Resonant Engine is licensed under <a href="http://calclavia.com/educational-public-license"> Calclavia's Educational Public License </a>. By using or interacting with this software in any way shape or form, you agree to the license of this software.
+* AbrarSyed         - Contributor
+* Adaptivity        - Russian translation
+* Aidancbrady       - Mod Compatibility
+* Alex_hawks        - Contributor
+* Atrain99          - Contributor
+* BobDaRedDino      - Contributor
+* Calclavia         - Resonant Engine Creator
+* Cazzar            - Gradle Scripts
+* Crafteverywhere   - zh_CN translation
+* Crazyputje        - Early Bukkit Support
+* Dand0             - Contributor
+* Dmodoomsirius     - Build Scripts
+* Eearslya          - Contributor
+* Fnuecke           - Mod Compatibility
+* Francogp          - Spanish translation
+* Johni0702         - Contributor
+* JohnyCilohokla    - Contributor
+* Maeyanie          - Mod Compatibility
+* Mattredsox        - Contributor
+* Micdoodle8        - Mod Compatibility
+* Parker8283        - Contributor
+* Tambre            - et_EE translation
+* TheNietsnie       - Contributor
+* Tgame14           - Network, and Loadable system
+* Unpairedbracket   - Mod Compatibility
+* Vexatos           - german translation
+* Yuri4171          - Contributor
+* YoWazzup          - Dutch translation
+* Zerotheliger      - Contributor
+* If your name is not listed then we don't have records of your contributions
