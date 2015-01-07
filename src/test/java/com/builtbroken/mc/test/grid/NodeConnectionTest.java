@@ -1,5 +1,6 @@
 package com.builtbroken.mc.test.grid;
 
+import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import junit.framework.TestCase;
 import net.minecraft.block.Block;
@@ -19,7 +20,7 @@ import java.util.Map;
  * Created by robert on 11/20/2014.
  */
 @RunWith(VoltzTestRunner.class)
-public class NodeConnectionTest extends TestCase
+public class NodeConnectionTest extends AbstractTest
 {
     private FakeWorld world;
     VectorWorld center;
@@ -155,14 +156,14 @@ public class NodeConnectionTest extends TestCase
     }
 
     @Override
-    protected void setUp() throws Exception
+    public void setUpForTest(String name)
     {
         world = new FakeWorld();
         center = new VectorWorld(world, 8, 8, 8);
     }
 
     @Override
-    protected void tearDown() throws Exception
+    public void tearDownForTest(String name)
     {
         world.clear();
         center = null;

@@ -1,5 +1,6 @@
 package com.builtbroken.mc.test.grid;
 
+import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import junit.framework.TestCase;
 import net.minecraft.tileentity.TileEntity;
@@ -34,7 +35,7 @@ import org.junit.runner.RunWith;
 // 9
 // 10
 @RunWith(VoltzTestRunner.class)
-public class BranchGridTest extends TestCase
+public class BranchGridTest extends AbstractTest
 {
     private static FakeWorld world;
     private static BranchedGrid grid;
@@ -80,10 +81,9 @@ public class BranchGridTest extends TestCase
         assertEquals("Should only be " + WireMap.WireTests.JUNCTION_FIVE.numberOfJunctions + " junction", WireMap.WireTests.JUNCTION_FIVE.numberOfJunctions, j, 0);
     }
 
-    @Override @Before
-    public void setUp() throws Exception
+    @Override
+    public void setUpForTest(String name)
     {
-        super.setUp();
         //Create fake world to do actions in
         world = new FakeWorld();
         world.genFlatData();
@@ -108,7 +108,7 @@ public class BranchGridTest extends TestCase
         }
         else
         {
-            System.out.println("Something went wrong building " + getName() + ".\n No tile was found to get grid from.");
+            System.out.println("Something went wrong building " + name + ".\n No tile was found to get grid from.");
             for(TileEntity t : world.tiles)
             {
                 System.out.println("Tile: " + t + "   Vec: " + new Vector3(t));
@@ -120,8 +120,8 @@ public class BranchGridTest extends TestCase
         grid.update(0);
     }
 
-    @Override @After
-    protected void tearDown() throws Exception
+    @Override
+    public void tearDownForTest(String name)
     {
         grid.deconstruct();
         grid = null;
