@@ -18,7 +18,7 @@ public final class References
 	/**
 	 * The configuration file.
 	 */
-	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), NAME + ".cfg"));
+	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(),"voltz/" + NAME.replace(" ", "") + ".cfg"));
 	public static final Logger LOGGER = LogManager.getLogger(NAME);
 
     public static final String MAJOR_VERSION = "@MAJOR@";
