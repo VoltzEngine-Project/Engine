@@ -26,26 +26,8 @@ public class ModRegistry
     {
         if (!blocksInit)
         {
-            //Sets registry to avoid trigger creating of ModClassLoader
-            try
-            {
-                /* ReflectionUtility.setMCField(Block.class, null, "blockRegistry", new FakeRegistryNamespaced());
-                if(!(ReflectionUtility.getMCField(Block.class, "blockRegistry").get(null) instanceof FakeRegistryNamespaced))
-                {
-                    throw new RuntimeException("Failed to inject fake registry namespace");
-                } */
-                ReflectionUtility.setMCField(Item.class, null, "itemRegistry", new FakeRegistryNamespaced());
-                Block.registerBlocks();
-                Item.registerItems();
-            }
-            catch (IllegalAccessException e)
-            {
-                e.printStackTrace();
-            }
-            catch (NoSuchFieldException e)
-            {
-                e.printStackTrace();
-            }
+            Block.registerBlocks();
+            Item.registerItems();
             blocksInit = true;
         }
     }
