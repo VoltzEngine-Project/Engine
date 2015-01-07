@@ -30,10 +30,10 @@ version = "${project.minecraft.version}.${config.version.mod.minor}.${config.ver
 
 if (System.getenv("TEAMCITY_BUILDCONF_NAME")?.equalsIgnoreCase("Production")) {
     group = "com.calclavia.resonantengine"
-    archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME").replaceAll(" ", "-")
+    archivesBaseName = "VolzEngine"
 } else {
     group = "dev.calclavia.resonantengine"
-    archivesBaseName = System.getenv("TEAMCITY_PROJECT_NAME")?.replaceAll(" ", "-") + "-" + System.getenv("TEAMCITY_BUILDCONF_NAME")
+    archivesBaseName = "VolzEngine"
 }
 
 // This is used to set the local version
@@ -101,6 +101,7 @@ dependencies
 {
     compile project("processor")
     testCompile 'junit:junit:4.11'
+    compile 'junit:junit:4.11'
     compile "mcp.mobius.waila:Waila:1.5.8a_1.7.10"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.0.+:dev"
     compile "net.industrial-craft:industrialcraft-2:2.2.654-experimental:api"
