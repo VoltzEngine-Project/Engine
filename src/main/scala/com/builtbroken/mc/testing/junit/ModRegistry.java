@@ -5,8 +5,6 @@ import cpw.mods.fml.common.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import com.builtbroken.mc.testing.junit.world.FakeRegistryNamespaced;
-import com.builtbroken.mc.lib.helper.ReflectionUtility;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
