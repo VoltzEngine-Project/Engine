@@ -1,6 +1,7 @@
 package com.builtbroken.mc.test.world;
 
-import com.builtbroken.mc.testing.junit.SeparateClassloaderTestRunner;
+import com.builtbroken.mc.testing.junit.AbstractTest;
+import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import junit.framework.TestCase;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -13,13 +14,18 @@ import org.junit.runner.RunWith;
 /**
  * Created by robert on 11/13/2014.
  */
-@RunWith(SeparateClassloaderTestRunner.class)
-public class WorldTest extends TestCase
+@RunWith(VoltzTestRunner.class)
+public class WorldTest extends AbstractTest
 {
     World world = null;
 
+    public WorldTest()
+    {
+
+    }
+
     @Override
-    protected void setUp() throws Exception
+    public void setUpForEntireClass()
     {
         world = new FakeWorld();
     }

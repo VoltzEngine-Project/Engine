@@ -1,10 +1,7 @@
 package com.builtbroken.mc.test.grid;
 
-import com.builtbroken.mc.testing.junit.SeparateClassloaderTestRunner;
-import com.google.common.io.Files;
+import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import junit.framework.TestCase;
-import net.minecraft.launchwrapper.Launch;
-import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraft.tileentity.TileEntity;
 import com.builtbroken.mc.lib.grid.branch.BranchedGrid;
 import com.builtbroken.mc.lib.grid.branch.part.Branch;
@@ -17,13 +14,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Collections;
 
 /**
  * Creates a plus sign wire grid for simple connection testing
@@ -43,7 +33,7 @@ import java.util.Collections;
 // 8       -- --[j]-- --
 // 9
 // 10
-@RunWith(SeparateClassloaderTestRunner.class)
+@RunWith(VoltzTestRunner.class)
 public class BranchGridTest extends TestCase
 {
     private static FakeWorld world;
