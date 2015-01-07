@@ -1,6 +1,6 @@
 package com.builtbroken.mc.test.grid;
 
-import com.builtbroken.mc.testing.junit.SeparateClassloaderTestRunner;
+import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import junit.framework.TestCase;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * Created by robert on 11/20/2014.
  */
-@RunWith(SeparateClassloaderTestRunner.class)
+@RunWith(VoltzTestRunner.class)
 public class NodeConnectionTest extends TestCase
 {
     private FakeWorld world;

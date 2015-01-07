@@ -162,6 +162,27 @@ public class ReflectionUtility extends ReflectionHelper
         return fields;
     }
 
+    public static Method getMethod(Class clazz, String name, Class<?>... args)
+    {
+        Method method = null;
+        try
+        {
+            method = clazz.getMethod(name, args);
+        }
+        catch (NoSuchMethodException e)
+        {
+            try
+            {
+                method = clazz.getDeclaredMethod(name, args);
+            }
+            catch (NoSuchMethodException e2)
+            {
+
+            }
+        }
+        return method;
+    }
+
     public static List<Method> getAllMethods(Class clazz) throws ClassNotFoundException
     {
         List<Method> fields = getMethods(clazz);

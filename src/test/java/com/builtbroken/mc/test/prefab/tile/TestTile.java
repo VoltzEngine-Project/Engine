@@ -2,11 +2,9 @@ package com.builtbroken.mc.test.prefab.tile;
 
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
-import com.builtbroken.mc.prefab.tile.TileConductor;
 import com.builtbroken.mc.testing.junit.ModRegistry;
-import com.builtbroken.mc.testing.junit.SeparateClassloaderTestRunner;
+import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -17,7 +15,7 @@ import org.junit.runner.RunWith;
 /**
  * Created by robert on 1/6/2015.
  */
-@RunWith(SeparateClassloaderTestRunner.class)
+@RunWith(VoltzTestRunner.class)
 public class TestTile extends TestCase
 {
     public static Block testBlock;
