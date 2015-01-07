@@ -10,7 +10,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic.Kind;
 
-@SupportedAnnotationTypes(value= {"om.builtbroken.mc.core.annotation.TestAnnotation"})
+@SupportedAnnotationTypes(value= {"com.builtbroken.mc.core.annotation.TestAnnotation"})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class Processor extends AbstractProcessor
 {
