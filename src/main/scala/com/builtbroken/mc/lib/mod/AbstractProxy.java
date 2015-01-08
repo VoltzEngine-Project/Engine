@@ -31,7 +31,7 @@ public abstract class AbstractProxy implements IGuiHandler, ILoadable
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		return getClientGuiElement(ID, player, world.getTileEntity(x, y, z));
+		return getServerGuiElement(ID, player, world.getTileEntity(x, y, z));
 	}
 
     public Object getServerGuiElement(int ID, EntityPlayer player, TileEntity tile)
