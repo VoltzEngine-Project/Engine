@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.registry;
 
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
 import cpw.mods.fml.common.SidedProxy;
@@ -102,7 +103,7 @@ public class ModManager
 	 */
 	public BlockTile newBlock(Tile spatial)
 	{
-		return newBlock(spatial.name, spatial);
+		return newBlock(spatial.name != null ? spatial.name : spatial.getClass().getSimpleName(), spatial);
 	}
 
 	/**
@@ -116,6 +117,11 @@ public class ModManager
 	 */
 	public BlockTile newBlock(String name, Tile spatial)
 	{
+        if(spatial.name == null || spatial.name.isEmpty())
+        {
+            References.LOGGER.warn("Tile: " + spatial + " has no defined name to register with and could cause issues with world loading. In order to prevent the game from crashing we are falling back to using the class name.");
+        }
+
 		BlockTile block = new BlockTile(spatial, modPrefix, defaultTab);
 		spatial.setBlock(block);
 
