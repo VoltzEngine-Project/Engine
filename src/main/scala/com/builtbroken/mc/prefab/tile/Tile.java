@@ -22,6 +22,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -76,6 +77,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
 
     //Tile Vars
     protected long ticks = 0L;
+    protected int nextCleanupTick = 200;
     protected final Set<EntityPlayer> playersUsing = new HashSet();
 
     public Tile(Material material)
@@ -99,14 +101,27 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
     public final void updateEntity()
     {
         if (ticks == 0)
+        {
             firstTick();
+        }
         else
+        {
             update();
+        }
 
         //Increase tick
         if (ticks >= Long.MAX_VALUE)
             ticks = 0;
         ticks += 1;
+        if(ticks % nextCleanupTick == 0)
+        {
+            doCleanupCheck();
+            nextCleanupTick = 100 + (int)(world().rand.nextFloat() * 2000);
+        }
+        if(getPlayersUsing().size() > 0)
+        {
+            doUpdateGuiUsers();
+        }
 
     }
 
@@ -129,6 +144,27 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      * Called each tick as long as the the tile can update.
      */
     public void update()
+    {
+
+    }
+
+    /**
+     * Called each tick that users
+     * have the Gui open. Is called
+     * both sides and should be used
+     * to send packets to the client
+     */
+    public void doUpdateGuiUsers()
+    {
+
+    }
+
+    /**
+     * Called every so many ticks to ask the tile to check
+     * for errors and cleanup data. Mainly used to clear
+     * out caches that are no longer needed.
+     */
+    public void doCleanupCheck()
     {
 
     }
@@ -919,6 +955,40 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
     {
         return null;
     }
+
+    /** Sends the desc packet to all players around this tile */
+    public void sendDescPacket()
+    {
+        sendPacket(getDescPacket());
+    }
+
+    /** Sends the packet to all players around this tile
+     * @param packet - packet to send */
+    public void sendPacket(AbstractPacket packet)
+    {
+        sendPacket(packet, 64);
+    }
+
+    /** Sends the packet to all players around this tile
+     * @param packet - packet to send
+     * @param distance - distance in blocks to search for players
+     */
+    public void sendPacket(AbstractPacket packet, double distance)
+    {
+        Engine.instance.packetHandler.sendToAllAround(packet, ((IVectorWorld)this), distance);
+    }
+
+    public void sendPacketToGuiUsers(AbstractPacket packet)
+    {
+        for(EntityPlayer player : getPlayersUsing())
+        {
+            if(player instanceof EntityPlayerMP)
+            {
+                Engine.instance.packetHandler.sendToPlayer(packet, (EntityPlayerMP) player);
+            }
+        }
+    }
+
 
     /**
      * gets the way this piston should face for that entity that placed it.

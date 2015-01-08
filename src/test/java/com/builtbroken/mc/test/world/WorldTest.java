@@ -22,7 +22,7 @@ public class WorldTest extends AbstractTest
     public WorldTest()
     {
 
-    }
+}
 
     @Override
     public void setUpForEntireClass()
