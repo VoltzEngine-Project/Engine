@@ -88,13 +88,15 @@ public class BlockTile extends Block implements ITileEntityProvider
         return resistance;
     }
 
+    @Override
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
     {
         inject(world, x, y, z);
-        getTile(world, x, y, z).click(player);
+        getTile(world, x, y, z).onPlayerLeftClick(player);
         eject();
     }
 
+    @Override
     public void onBlockAdded(World world, int x, int y, int z)
     {
         inject(world, x, y, z);
@@ -163,7 +165,7 @@ public class BlockTile extends Block implements ITileEntityProvider
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
     {
         inject(world, x, y, z);
-        boolean value = getTile(world, x, y, z).activate(player, side, new Vector3(hitX, hitY, hitZ));
+        boolean value = getTile(world, x, y, z).onPlayerActivated(player, side, new Vector3(hitX, hitY, hitZ));
         eject();
         return value;
     }

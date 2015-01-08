@@ -177,31 +177,32 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
     /**
      * Called when the player left clicks the block
      */
-    public void click(EntityPlayer player)
+    public boolean onPlayerLeftClick(EntityPlayer player)
     {
+        return false;
     }
 
     /**
      * Called when the player right clicks the block.
-     * Default implementation calls use() and configure()
+     * Default implementation calls onPlayerRightClick() and onPlayerRightClickWrench()
      *
      * @param player - player who clicked the block
      * @param side   - side of the block clicked as an int(0-5)
      * @param hit    - Vector3 location of the spot hit on the block
      * @return true if the click event was used
      */
-    public boolean activate(EntityPlayer player, int side, Vector3 hit)
+    public boolean onPlayerActivated(EntityPlayer player, int side, Vector3 hit)
     {
         if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem(), xi(), yi(), zi()))
         {
-            if (configure(player, side, hit))
+            if (onPlayerRightClickWrench(player, side, hit))
             {
                 WrenchUtility.damageWrench(player, player.inventory.getCurrentItem(), xi(), yi(), zi());
                 return true;
             }
             return false;
         }
-        return use(player, side, hit);
+        return onPlayerRightClick(player, side, hit);
     }
 
     /**
@@ -212,7 +213,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      * @param hit    - Vector3 location of the spot hit on the block
      * @return true if the click event was used
      */
-    protected boolean use(EntityPlayer player, int side, Vector3 hit)
+    protected boolean onPlayerRightClick(EntityPlayer player, int side, Vector3 hit)
     {
         return false;
     }
@@ -225,7 +226,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      * @param hit    - Vector3 location of the spot hit on the block
      * @return true if the click event was used
      */
-    protected boolean configure(EntityPlayer player, int side, Vector3 hit)
+    protected boolean onPlayerRightClickWrench(EntityPlayer player, int side, Vector3 hit)
     {
         return false;
     }
