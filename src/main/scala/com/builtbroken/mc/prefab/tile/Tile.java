@@ -714,7 +714,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side)
     {
-        return getIcon(side, access.getBlockMetadata(xi(), yi(), zi()));
+        return getIcon();
     }
 
     /**
@@ -735,13 +735,13 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
             }
             return getSideIcon(meta, side);
         }
-        return icons.get(getTextureName());
+        return getIcon(side);
     }
 
     @SideOnly(Side.CLIENT)
     public IIcon getIcon()
     {
-        return getIcon(0, 0);
+        return icons.get(getTextureName());
     }
 
     @SideOnly(Side.CLIENT)
