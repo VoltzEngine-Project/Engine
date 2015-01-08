@@ -59,7 +59,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
     public float resistance = 1;
     public boolean canEmmitRedstone = false;
     public boolean isOpaque = false;
-    public Block.SoundType stepSound;
+    public Block.SoundType stepSound = Block.soundTypeStone;
     public Class<? extends ItemBlock> itemBlock = ItemBlock.class;
 
     protected Cuboid bounds = new Cuboid(0, 0, 0, 1, 1, 1);
