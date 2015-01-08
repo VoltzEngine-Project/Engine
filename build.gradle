@@ -28,13 +28,12 @@ buildProps.withReader {
 
 version = "${project.minecraft.version}.${config.version.mod.minor}.${config.version.mod.revis}"
 
-if (System.getenv("TEAMCITY_BUILDCONF_NAME")?.equalsIgnoreCase("Production")) {
-    group = "com.calclavia.resonantengine"
-    archivesBaseName = "VolzEngine"
-} else {
-    group = "dev.calclavia.resonantengine"
-    archivesBaseName = "VolzEngine"
-}
+if (project.hasProperty("bambooshortPlanName") == "Voltz-Dev") 
+    group = "dev.builtbroken.voltzengine"
+ else 
+    group = "com.builtbroken.voltzengine"
+
+
 
 // This is used to set the local version
 if (project.hasProperty("bambooBuildNumber"))
@@ -57,10 +56,6 @@ minecraft {
 	}
 }
 
-artifacts {
-    archives apiZip
-}
-
 processResources {
 	from(sourceSets.main.resources.srcDirs) {
 		//include '**/*.lang'
@@ -78,6 +73,7 @@ processResources {
 	}
 }
 
+archivesBaseName = "VolzEngine"
 
 repositories {
     maven {
