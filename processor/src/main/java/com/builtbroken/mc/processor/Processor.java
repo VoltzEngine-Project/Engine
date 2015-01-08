@@ -17,18 +17,7 @@ public class Processor extends AbstractProcessor
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment env)
     {
-        processingEnv.getMessager().printMessage(Kind.WARNING, "WARNING TEST!!!");
-        processingEnv.getMessager().printMessage(Kind.MANDATORY_WARNING, "MANDATORY WARNING TEST!!!");
-        processingEnv.getMessager().printMessage(Kind.ERROR, "ERROR TEST!!!");
-        
-        System.out.println("TEST");
-        
-        for (TypeElement element : annotations)
-        {
-            System.out.println(element.getQualifiedName());
-            System.err.println(element.getQualifiedName());
-        }
-        return true;
+        return false;
     }
 
 }
