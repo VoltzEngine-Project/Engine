@@ -80,6 +80,7 @@ public class BlockTile extends Block implements ITileEntityProvider
         return staticTile.getExplosionResistance(entity);
     }
 
+    @Override
     public float getExplosionResistance(Entity entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ)
     {
         inject(world, x, y, z);
@@ -123,6 +124,7 @@ public class BlockTile extends Block implements ITileEntityProvider
     /**
      * Called upon the block being destroyed by an explosion
      */
+    @Override
     public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion ex)
     {
         inject(world, x, y, z);
@@ -221,6 +223,7 @@ public class BlockTile extends Block implements ITileEntityProvider
         return value;
     }
 
+    @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
     {
         inject(world, x, y, z);
@@ -230,6 +233,7 @@ public class BlockTile extends Block implements ITileEntityProvider
         return value;
     }
 
+    @Override
     public boolean shouldSideBeRendered(IBlockAccess access, int x, int y, int z, int side)
     {
         inject(access, x, y, z);
@@ -238,6 +242,7 @@ public class BlockTile extends Block implements ITileEntityProvider
         return value;
     }
 
+    @Override
     public boolean isBlockSolid(IBlockAccess access, int x, int y, int z, int side)
     {
         inject(access, x, y, z);
@@ -246,6 +251,7 @@ public class BlockTile extends Block implements ITileEntityProvider
         return value;
     }
 
+    @Override
     public int getLightValue(IBlockAccess access, int x, int y, int z)
     {
         int value = 0;
@@ -329,6 +335,7 @@ public class BlockTile extends Block implements ITileEntityProvider
         return value != null ? value : new ArrayList<ItemStack>();
     }
 
+    @Override
     public void getSubBlocks(Item item, CreativeTabs creativeTabs, List list)
     {
         staticTile.getSubBlocks(item, creativeTabs, list);
@@ -337,11 +344,13 @@ public class BlockTile extends Block implements ITileEntityProvider
     /**
      * Redstone interaction
      */
+    @Override
     public boolean canProvidePower()
     {
         return staticTile.canEmmitRedstone;
     }
 
+    @Override
     public int isProvidingWeakPower(IBlockAccess access, int x, int y, int z, int side)
     {
         inject(access, x, y, z);
@@ -350,6 +359,7 @@ public class BlockTile extends Block implements ITileEntityProvider
         return value;
     }
 
+    @Override
     public int isProvidingStrongPower(IBlockAccess access, int x, int y, int z, int side)
     {
         inject(access, x, y, z);
@@ -358,7 +368,7 @@ public class BlockTile extends Block implements ITileEntityProvider
         return value;
     }
 
-
+    @Override
     public void setBlockBoundsBasedOnState(IBlockAccess access, int x, int y, int z)
     {
         inject(access, x, y, z);
@@ -366,7 +376,7 @@ public class BlockTile extends Block implements ITileEntityProvider
         eject();
     }
 
-
+    @Override
     protected void dropBlockAsItem(World world, int x, int y, int z, ItemStack itemStack)
     {
         if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
