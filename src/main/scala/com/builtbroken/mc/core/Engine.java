@@ -1,9 +1,12 @@
 package com.builtbroken.mc.core;
 
+import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.annotation.TestAnnotation;
 import com.builtbroken.mc.core.handler.InteractionHandler;
 import com.builtbroken.mc.core.resources.content.BlockOre;
 import com.builtbroken.mc.core.resources.content.ItemBlockOre;
+import com.builtbroken.mc.prefab.recipe.MRHandlerItemStack;
+import com.builtbroken.mc.prefab.recipe.MRSmelterHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -103,6 +106,12 @@ public class Engine
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance());
 		MinecraftForge.EVENT_BUS.register(new InteractionHandler());
+
+        MachineRecipeType.ITEM_SMELTER.setHandler(new MRSmelterHandler());
+        MachineRecipeType.ITEM_GRINDER.setHandler(new MRHandlerItemStack(MachineRecipeType.ITEM_GRINDER));
+        MachineRecipeType.ITEM_CRUSHER.setHandler(new MRHandlerItemStack(MachineRecipeType.ITEM_CRUSHER));
+        MachineRecipeType.ITEM_WASHER.setHandler(new MRHandlerItemStack(MachineRecipeType.ITEM_WASHER));
+        MachineRecipeType.ITEM_SAWMILL.setHandler(new MRHandlerItemStack(MachineRecipeType.ITEM_SAWMILL));
 
 		ToolMode.REGISTRY.add(new ToolModeGeneral());
 		ToolMode.REGISTRY.add(new ToolModeRotation());

@@ -10,6 +10,10 @@ public enum RecipeRegisterResult
     INCOMPLETE,
     /** Recipe is not for the handler's machine type */
     INVALID_TYPE,
+    /** Input items are not supported */
+    INVALID_INPUT,
+    /** Output items are not supported */
+    INVALID_OUTPUT,
     /** Recipe matching the inputs already exists */
     ALREADY_EXISTS,
     /** Everything went correct, recipe is now registered */
