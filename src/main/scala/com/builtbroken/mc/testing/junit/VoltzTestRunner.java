@@ -11,7 +11,6 @@ import org.junit.runner.Runner;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
-import sun.security.krb5.internal.crypto.Des;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

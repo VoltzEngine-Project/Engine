@@ -4,17 +4,32 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-/**
+/** Enum of common recipes type shared by mods that extend the engine.
+ * Also a useful helper to get access to the handlers for this types
+ * quickly.
+ *
  * Created by robert on 1/9/2015.
  */
 public enum MachineRecipeType
 {
-    SMELTER,
-    GRINDER,
-    CRUSHER,
-    WASHER,
-    MIXER,
-    SAWMILL;
+    /** MC furnace recipes, Ore -> Ingot */
+    ITEM_SMELTER,
+    /** Item to Dust recipes, Ore -> Dust */
+    ITEM_GRINDER,
+    /** Item to rubble recipes, Ore -> Rubble */
+    ITEM_CRUSHER,
+    /** Item to clean item recipes, ore rubble -> metal rubble */
+    ITEM_WASHER,
+    /** Item to cut up item, Logs -> Planks */
+    ITEM_SAWMILL,
+    /** Item to items used to craft it, Chest -> 8 planks. Make sure to return the least valuable version of the recipe */
+    ITEM_SALVAGER,
+    /** Fluid + Fluid -> New Fluid */
+    FLUID_MIXER,
+    /** Item -> Molten Fluid */
+    FLUID_SMELTER,
+    /** Fluid -> Item */
+    FLUID_SOLIDIFIER;
 
     private IMachineRecipeHandler handler;
 

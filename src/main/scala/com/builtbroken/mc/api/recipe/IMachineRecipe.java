@@ -1,7 +1,5 @@
 package com.builtbroken.mc.api.recipe;
 
-import java.util.Objects;
-
 /** Used to handle a more complex recipe than input -> output. For example adding NBT or processing
  * item's NBT. Can also be used for standard recipe and intercepting standard recipes.
  *
