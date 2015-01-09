@@ -26,7 +26,7 @@ buildProps.withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
-version = "${project.minecraft.version}.${config.version.mod.minor}.${config.version.mod.revis}"
+version = "${project.minecraft.version}-${config.version.mod.minor}.${config.version.mod.revis}"
 
 if (project.getProperty("bambooshortPlanName") == "Voltz-Dev") {
     group = "dev.builtbroken.voltzengine"
