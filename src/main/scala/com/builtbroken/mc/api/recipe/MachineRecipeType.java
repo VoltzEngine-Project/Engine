@@ -77,7 +77,7 @@ public enum MachineRecipeType
 
     public ItemStack getItemStackRecipe(float extra_chance, float fail_chance, Object... items)
     {
-        return toItemStack(getRecipe(items, extra_chance, items));
+        return toItemStack(getRecipe(extra_chance, fail_chance, items));
     }
 
     /**
