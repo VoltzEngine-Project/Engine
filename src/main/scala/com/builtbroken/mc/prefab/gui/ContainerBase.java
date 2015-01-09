@@ -43,25 +43,31 @@ public class ContainerBase extends Container
 	}
 
 	public void addPlayerInventory(EntityPlayer player)
-	{
+    {
+        addPlayerInventory(player, 8 , 84);
+    }
+
+    public void addPlayerInventory(EntityPlayer player, int x, int y)
+    {
 		if (this.inventory instanceof IPlayerUsing)
 		{
 			((IPlayerUsing) this.inventory).getPlayersUsing().add(player);
 		}
 
-		for (int y = 0; y < 3; y++)
-		{
-			for (int x = 0; x < 9; x++)
-			{
-				this.addSlotToContainer(new Slot(player.inventory, x + y * 9 + 9, this.xInventoryDisplacement + x * 18, this.yInventoryDisplacement + y * 18));
-			}
+        //Inventory
+        for (int row = 0; row < 3; ++row)
+        {
+            for (int slot = 0; slot < 9; ++slot)
+            {
+                this.addSlotToContainer(new Slot(player.inventory, slot + row * 9 + 9, slot * 18 + x, row * 18 + y));
+            }
+        }
 
-		}
-
-		for (int x = 0; x < 9; x++)
-		{
-			this.addSlotToContainer(new Slot(player.inventory, x, this.xInventoryDisplacement + x * 18, this.yHotBarDisplacement));
-		}
+        //Hot bar
+        for (int slot = 0; slot < 9; ++slot)
+        {
+            this.addSlotToContainer(new Slot(player.inventory, slot, slot * 18 + x, 58 + y));
+        }
 	}
 
 	/**

@@ -3,6 +3,7 @@ package com.builtbroken.mc.prefab.gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
@@ -29,10 +30,8 @@ public class GuiContainerBase extends GuiContainer
 	protected static int energyType = 0;
 	public ResourceLocation baseTexture;
 	public String tooltip = "";
-	protected int meterX = 54;
 	protected int meterHeight = 49;
 	protected int meterWidth = 14;
-	protected int meterEnd = meterX + meterWidth;
 	protected HashMap<Rectangle, String> tooltips = new HashMap();
 	protected int containerWidth;
 	protected int containerHeight;
@@ -41,8 +40,7 @@ public class GuiContainerBase extends GuiContainer
 	public GuiContainerBase(Container container)
 	{
 		super(container);
-		this.ySize = 217;
-		this.baseTexture = References.GUI_BASE;
+		this.baseTexture = References.GUI_MC_BASE;
 	}
 
 	public GuiContainerBase()
@@ -56,24 +54,9 @@ public class GuiContainerBase extends GuiContainer
 		fontRendererObj.drawString(str, x, y, 4210752);
 	}
 
-	protected void drawString(String str, int y)
-	{
-		fontRendererObj.drawString(str, xSize / 2, y, 4210752);
-	}
-
 	protected void drawStringCentered(String str, int x, int y)
 	{
 		drawString(str, x - (fontRendererObj.getStringWidth(str) / 2), y);
-	}
-
-	protected void drawStringCentered(String str, int y)
-	{
-		drawStringCentered(str, xSize / 2, y);
-	}
-
-	protected void drawStringCentered(String str)
-	{
-		drawStringCentered(str, 6);
 	}
 
 	@Override
@@ -143,7 +126,8 @@ public class GuiContainerBase extends GuiContainer
 
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
 
-		this.drawItemStack(itemStack, this.containerWidth + x, this.containerHeight + y);
+        if(itemStack != null)
+		    this.drawItemStack(itemStack, this.containerWidth + x, this.containerHeight + y);
 	}
 
 	protected void drawItemStack(ItemStack itemStack, int x, int y)
@@ -186,6 +170,21 @@ public class GuiContainerBase extends GuiContainer
 		this.drawTextWithTooltip(textName, "%1", x, y, mouseX, mouseY);
 	}
 
+    protected void drawSlot(Slot slot)
+    {
+        drawSlot(slot.xDisplayPosition - 1, slot.yDisplayPosition - 1);
+    }
+
+    protected void drawSlot(int x, int y)
+    {
+        this.drawSlot(x, y, GuiSlotType.NONE);
+    }
+
+    protected void drawSlot(int x, int y, GuiSlotType type)
+    {
+        this.drawSlot(x, y, type, 1, 1, 1);
+    }
+
 	protected void drawSlot(int x, int y, GuiSlotType type, float r, float g, float b)
 	{
 		this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
@@ -197,16 +196,6 @@ public class GuiContainerBase extends GuiContainer
 		{
 			this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 18 * type.ordinal(), 18, 18);
 		}
-	}
-
-	protected void drawSlot(int x, int y, GuiSlotType type)
-	{
-		this.drawSlot(x, y, type, 1, 1, 1);
-	}
-
-	protected void drawSlot(int x, int y)
-	{
-		this.drawSlot(x, y, GuiSlotType.NONE);
 	}
 
 	protected void drawBar(int x, int y, float scale)
@@ -224,35 +213,6 @@ public class GuiContainerBase extends GuiContainer
 		}
 	}
 
-	protected void drawForce(int x, int y, float scale)
-	{
-		this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-		/** Draw background progress bar/ */
-		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 54, 0, 107, 11);
-
-		if (scale > 0)
-		{
-			/** Draw white color actual progress. */
-			this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, meterX, 11, (int) (scale * 107), 11);
-		}
-	}
-
-	protected void drawLongBlueBar(int x, int y, float scale)
-	{
-		mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-		/** Draw background progress bar/ */
-		drawTexturedModalRect(containerWidth + x, containerHeight + y, meterX, 33, 140, 14);
-
-		if (scale > 0)
-		{
-			/** Draw white color actual progress. */
-			drawTexturedModalRect(containerWidth + x, containerHeight + y, meterX, 48, (int) (scale * 140), 14);
-		}
-	}
 
 	protected void drawElectricity(int x, int y, float scale)
 	{

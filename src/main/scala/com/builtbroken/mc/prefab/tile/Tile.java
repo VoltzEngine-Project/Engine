@@ -39,6 +39,7 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -53,7 +54,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
 
     //Block vars
     public String name;
-    public CreativeTabs creativeTab = CreativeTabs.tabMisc;
+    public CreativeTabs creativeTab;
     public Material material = Material.clay;
     public float hardness = 1;
     public float resistance = 1;

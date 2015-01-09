@@ -1,5 +1,7 @@
 package com.builtbroken.mc.prefab.tile;
 
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.transform.region.Cuboid;
 import com.builtbroken.mc.lib.transform.vector.Vector2;
@@ -24,6 +26,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -420,12 +423,6 @@ public class BlockTile extends Block implements ITileEntityProvider
             default:
                 return new Vector2(0.5, 0.5);
         }
-    }
-
-    @Override
-    public CreativeTabs getCreativeTabToDisplayOn()
-    {
-        return staticTile.creativeTab;
     }
 
 
