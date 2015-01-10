@@ -108,7 +108,9 @@ public class ItemStackWrapperTest extends AbstractTest
     public void testCheckNBTCompare()
     {
         ItemStackWrapper a = new ItemStackWrapper(new ItemStack(Items.apple));
+        a.nbt_compare = true;
         ItemStackWrapper b = new ItemStackWrapper(new ItemStack(Items.apple));
+        b.nbt_compare = true;
 
         assertTrue("Failed Null equals Null NBT", a.equals(b));
 

@@ -17,6 +17,24 @@ public class ItemStackWrapper
     public ItemStackWrapper(ItemStack itemStack)
     {
         this.itemStack = itemStack;
+        if(!itemStack.getHasSubtypes())
+            meta_compare = false;
+        if(itemStack.getTagCompound() == null)
+            nbt_compare = false;
+    }
+
+    public ItemStackWrapper(Item item)
+    {
+        this.itemStack = new ItemStack(item);
+        this.meta_compare = false;
+        this.nbt_compare = false;
+    }
+
+    public ItemStackWrapper(Block block)
+    {
+        this.itemStack = new ItemStack(block);
+        this.meta_compare = false;
+        this.nbt_compare = false;
     }
 
     @Override
