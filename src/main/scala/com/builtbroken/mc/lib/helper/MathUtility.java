@@ -9,6 +9,7 @@ import java.util.Random;
 
 public class MathUtility
 {
+    public static final Random rand = new Random();
 	/**
 	 * Interpolates between point a and point b
 	 *

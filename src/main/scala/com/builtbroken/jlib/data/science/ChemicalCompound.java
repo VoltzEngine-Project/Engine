@@ -10,6 +10,9 @@ public enum ChemicalCompound
 	METHANE("Methane", "CH4", MatterPhase.GAS, 16.043f, 1.819f, new HeatingData(90.65f, 111.55f, 3656.67f, 31789.56f, 27f)),
 	WATER("Water", "H20", MatterPhase.LIQUID, 18.01528f, 1000f, new HeatingData(274.15f, 373.13f, 18539.817f, 126004.1476f, 4.24f)),
 	AIR("Air", "", MatterPhase.GAS, 29f, .125f, null);
+    //http://science.jrank.org/pages/6523/Stone-Masonry-Chemical-composition.html
+    //SILICON_DIOXIDE("Siliceous stone", "SiO2", MatterPhase.SOLID),
+    //("Argillaceous stone", "AlO2", MatterPhase.SOLID);
 
 	/**
 	 * Formula
