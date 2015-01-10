@@ -7,7 +7,7 @@ public class CommonRegistryProxy
 {
     public void registerTileEntity(String name, String prefix, Class<? extends TileEntity> clazz)
     {
-        GameRegistry.registerTileEntityWithAlternatives(clazz, prefix + name, name);
+        GameRegistry.registerTileEntityWithAlternatives(clazz, prefix + name, name, clazz.getSimpleName(), prefix + clazz.getSimpleName());
     }
 
     public void registerDummyRenderer(Class<? extends TileEntity> clazz)

@@ -24,6 +24,11 @@ public class LoadableHandler
 	private Set<ILoadable> loadables = new HashSet();
 	private LoadPhase phase = LoadPhase.PRELAUNCH;
 
+    public void applyModule(Class<?> clazz)
+    {
+        applyModule(clazz, true);
+    }
+
 	/**
 	 * Applies a specific ILoadable module to be loaded.
 	 */

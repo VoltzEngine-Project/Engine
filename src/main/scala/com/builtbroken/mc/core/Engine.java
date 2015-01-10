@@ -2,6 +2,8 @@ package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.annotation.TestAnnotation;
+import com.builtbroken.mc.core.content.CrusherRecipeLoad;
+import com.builtbroken.mc.core.content.GrinderRecipeLoad;
 import com.builtbroken.mc.core.handler.InteractionHandler;
 import com.builtbroken.mc.core.resources.content.BlockOre;
 import com.builtbroken.mc.core.resources.content.ItemBlockOre;
@@ -101,6 +103,8 @@ public class Engine
 
 		loadables.applyModule(proxy);
 		loadables.applyModule(packetHandler);
+        loadables.applyModule(CrusherRecipeLoad.class);
+        loadables.applyModule(GrinderRecipeLoad.class);
 
 		PotionUtility.resizePotionArray();
 		MinecraftForge.EVENT_BUS.register(this);
