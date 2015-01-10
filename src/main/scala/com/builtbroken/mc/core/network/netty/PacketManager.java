@@ -1,6 +1,8 @@
 package com.builtbroken.mc.core.network.netty;
 
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
+import com.builtbroken.mc.lib.mod.loadable.ILoadable;
+import com.builtbroken.mc.lib.mod.loadable.ILoadableProxy;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
@@ -14,7 +16,6 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.mod.loadable.ICompatProxy;
 import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper;
 import com.builtbroken.mc.core.network.packet.PacketEntity;
 import com.builtbroken.mc.core.network.packet.PacketTile;
@@ -29,7 +30,7 @@ import java.util.EnumMap;
  * @author tgame14
  * @since 26/05/14
  */
-public class PacketManager implements ICompatProxy
+public class PacketManager implements ILoadable
 {
 	public final String channel;
 	protected EnumMap<Side, FMLEmbeddedChannel> channelEnumMap;
@@ -81,12 +82,6 @@ public class PacketManager implements ICompatProxy
 	public void postInit()
 	{
 
-	}
-
-	@Override
-	public String modId()
-	{
-		return References.NAME;
 	}
 
 	/**

@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.mod.loadable;
 
 import cpw.mods.fml.common.Loader;
 
+import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,34 +29,38 @@ public class LoadableHandler
 	 */
 	public void applyModule(Class<?> clazz, boolean load)
 	{
-		if (!load)
-		{
-			return;
-		}
+		if (load)
+        {
+            if (clazz.getAnnotation(LoadWithMod.class) != null)
+            {
+                String id = clazz.getAnnotation(LoadWithMod.class).mod_id();
+                if (!Loader.isModLoaded(id))
+                {
+                    return;
+                }
+            }
+            try
+            {
+                Object module = clazz.newInstance();
 
-		try
-		{
-			Object module = clazz.newInstance();
+                if (module instanceof ILoadableProxy)
+                {
+                    ILoadableProxy subProxy = (ILoadableProxy) module;
 
-			if (module instanceof ICompatProxy)
-			{
-				ICompatProxy subProxy = (ICompatProxy) module;
-
-				if (Loader.isModLoaded(subProxy.modId()))
-				{
-					loadables.add(subProxy);
-				}
-			}
-			else if (module instanceof ILoadable)
-			{
-				loadables.add((ILoadable) module);
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+                    if (subProxy.shouldLoad())
+                    {
+                        loadables.add(subProxy);
+                    }
+                }
+                else if (module instanceof ILoadable)
+                {
+                    loadables.add((ILoadable) module);
+                }
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }	}
 
 	/**
 	 * Call for modules late or as already existing modules, DO NOT CALL FOR REGISTERED Proxies!
