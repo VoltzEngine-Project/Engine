@@ -322,7 +322,8 @@ public class BlockTile extends Block implements ITileEntityProvider
         return value;
     }
 
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+    @Override
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player)
     {
         inject(world, x, y, z);
         ItemStack value = getTile(world, x, y, z).getPickBlock(target);

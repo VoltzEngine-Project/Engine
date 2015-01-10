@@ -222,7 +222,7 @@ public class AutoCraftingManager
 			return new ItemStack(Items.bucket, 1);
 		}
 
-		if (stack.getItem().hasContainerItem())
+		if (stack.getItem().hasContainerItem(stack))
 		{
 			ItemStack containerStack = stack.getItem().getContainerItem(stack);
 

@@ -19,7 +19,7 @@ public class ItemBlockOre extends ItemBlockMetadata
     @Override
     public String getUnlocalizedName(ItemStack itemstack)
     {
-        String s = OreDictionary.getOreName(OreDictionary.getOreID(new ItemStack(this, 1, itemstack.getItemDamage())));
+        String s = OreDictionary.getOreName(OreDictionary.getOreIDs(new ItemStack(this, 1, itemstack.getItemDamage()))[0]);
         if(s != null && !s.isEmpty())
         {
             return "tile." + References.PREFIX + s;

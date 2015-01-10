@@ -48,7 +48,8 @@ public class BlockOre extends Block
     {
         for(int i = 0; i < 16; i++)
         {
-            icon[i] = reg.registerIcon(References.PREFIX + OreDictionary.getOreName(OreDictionary.getOreID(new ItemStack(this, 1, i))));
+            //TODO change this to not use ore dictionary
+            icon[i] = reg.registerIcon(References.PREFIX + OreDictionary.getOreName(OreDictionary.getOreIDs(new ItemStack(this, 1, i))[0]));
         }
     }
 
