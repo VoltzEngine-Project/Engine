@@ -15,7 +15,7 @@ import scala.beans.BeanProperty
  * A node that is part of a branch
  * @author DarkCow
  */
-class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector[NodeBranchPart] with IGridProvider
+abstract class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector[NodeBranchPart] with IGridProvider
 {
   @BeanProperty
   var branch : Part = null

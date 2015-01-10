@@ -279,6 +279,11 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
         return block;
     }
 
+    public BlockTile getTileBlock()
+    {
+        return block;
+    }
+
     /**
      * Number of items to drop
      */

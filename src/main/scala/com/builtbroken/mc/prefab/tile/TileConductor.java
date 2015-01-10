@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.tile;
 
+import com.builtbroken.mc.lib.grid.electric.NodeElectric;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.builtbroken.mc.api.tile.node.INode;
@@ -44,7 +45,7 @@ public class TileConductor extends TileNode
     {
         if (node == null)
         {
-            node = new NodeBranchPart(this);
+            node = new NodeElectric(this);
         }
         return node;
     }

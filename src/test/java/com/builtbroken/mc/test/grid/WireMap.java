@@ -2,7 +2,6 @@ package com.builtbroken.mc.test.grid;
 
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.testing.junit.ModRegistry;
-import junit.framework.Assert;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import com.builtbroken.mc.prefab.tile.TileConductor;
@@ -36,10 +35,6 @@ public class WireMap extends StringSchematic
                 ModRegistry.registerBlock(new BlockTile(new TileConductor(), "JUnit", null), "wire");
             }
             wire = Block.getBlockFromName("wire");
-            if(wire == null)
-            {
-                Assert.fail("Wire is null");
-            }
         }
         return wire;
     }

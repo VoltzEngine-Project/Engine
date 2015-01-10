@@ -53,7 +53,7 @@ public enum DefinedResources
 
     private DefinedResources(int min, int max, int amountPerBranch, int amountPerChunk)
     {
-        this(min, max, amountPerBranch, amountPerChunk, null);
+        this(min, max, amountPerBranch, amountPerChunk, new DefinedGenItems[0]);
     }
     private DefinedResources(int min, int max, int amountPerBranch, int amountPerChunk, DefinedGenItems... itemsToGen)
     {

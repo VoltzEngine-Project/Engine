@@ -41,10 +41,9 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
      */
     val tile = access.getTileEntity(x, y, z)
 
-    if (tile.isInstanceOf[BlockTile])
+    if (tile != null && tile.isInstanceOf[Tile])
     {
-      val spatial = tile.asInstanceOf[BlockTile]
-      renderer = spatial.staticTile
+      renderer = tile.asInstanceOf[Tile]
     }
 
     /**
@@ -55,6 +54,7 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
       val dummy = block.asInstanceOf[BlockTile]
       dummy.inject(access, x, y, z)
       renderer = dummy.getTile(access, x, y, z)
+      dummy.eject()
     }
 
     if (renderer != null)

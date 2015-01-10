@@ -51,4 +51,9 @@ class NodeElectric(parent: INodeProvider) extends NodeBranchPart(parent) with TE
     }
     return 0
   }
+
+  override def getNodeFromConnection(provider: INodeProvider, dir: ForgeDirection): NodeBranchPart =
+  {
+    return provider.getNode(classOf[NodeElectric], dir);
+  }
 }
