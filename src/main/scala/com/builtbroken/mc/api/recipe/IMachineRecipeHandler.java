@@ -36,5 +36,10 @@ public interface IMachineRecipeHandler<O extends Object>
     /**
      * Gets all recipes registered to this machine type
      */
+    public Collection<IMachineRecipe> getRecipes(Object[] items);
+
+    /**
+     * Gets all recipes registered to this machine type
+     */
     public Collection<IMachineRecipe> getRecipes();
 }

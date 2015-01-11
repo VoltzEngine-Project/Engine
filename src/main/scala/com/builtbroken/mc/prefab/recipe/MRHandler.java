@@ -5,18 +5,15 @@ import com.builtbroken.mc.api.recipe.IMachineRecipeHandler;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.api.recipe.RecipeRegisterResult;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by robert on 1/9/2015.
  */
-public abstract class MRHandler<O extends Object> implements IMachineRecipeHandler
+public abstract class MRHandler<O extends Object, K extends Object> implements IMachineRecipeHandler
 {
-    protected MachineRecipeType type;
-    protected Map<Object, List<IMachineRecipe>> recipes = new HashMap();
+    public MachineRecipeType type;
+    public Map<K, List<IMachineRecipe>> recipes = new HashMap();
 
     public MRHandler(MachineRecipeType type)
     {
@@ -34,29 +31,29 @@ public abstract class MRHandler<O extends Object> implements IMachineRecipeHandl
             }
             else if (recipe.getValidInputs() != null && recipe.getOutput() != null)
             {
-                if (!isValidOutput(recipe.getOutput()) || toOutputType(recipe.getOutput()) == null)
+                if (!isValidOutput(recipe.getOutput()))
                 {
                     return RecipeRegisterResult.INVALID_OUTPUT;
                 }
                 for (Object object : recipe.getValidInputs())
                 {
-                    if (!isValidInput(object) || getKeyFor(object) == null)
+                    if (!isValidInput(object))
                         return RecipeRegisterResult.INVALID_INPUT;
                 }
 
-                RecipeRegisterResult result = registerRecipe(recipe);
+                RecipeRegisterResult result = isValidRecipe(recipe);
                 if (result == RecipeRegisterResult.REGISTERED)
                 {
                     for (Object o : recipe.getValidInputs())
                     {
-                        Object object = getKeyFor(o);
+                        K key = getKeyFor(o);
                         List<IMachineRecipe> list = null;
-                        if (recipes.containsKey(object))
-                            list = recipes.get(object);
+                        if (recipes.containsKey(key))
+                            list = recipes.get(key);
                         if (list == null)
                             list = new ArrayList();
                         list.add(recipe);
-                        recipes.put(object, list);
+                        recipes.put(key, list);
                     }
                 }
                 return result;
@@ -73,10 +70,7 @@ public abstract class MRHandler<O extends Object> implements IMachineRecipeHandl
      * Gets the key that is used to refer to the input
      * of the recipe
      */
-    public Object getKeyFor(Object object)
-    {
-        return object;
-    }
+    public abstract K getKeyFor(Object object);
 
     protected abstract boolean isValidInput(Object object);
 
@@ -94,31 +88,39 @@ public abstract class MRHandler<O extends Object> implements IMachineRecipeHandl
     {
         if (items != null)
         {
-            List<IMachineRecipe> handlers = null;
-            if (items.length == 1 && recipes.containsKey(getKeyFor(items[0])))
+            for (IMachineRecipe handler : getRecipes(items))
             {
-                handlers = recipes.get(getKeyFor(items[0]));
-            }
-            else if (recipes.containsKey(getKeyFor(items)))
-            {
-                handlers = recipes.get(getKeyFor(items));
-            }
-            if (handlers != null && handlers.size() > 0)
-            {
-                for (IMachineRecipe handler : handlers)
+                if (handler.shouldHandleRecipe(items))
                 {
-                    if (handler.shouldHandleRecipe(items))
+                    Object result = handler.handleRecipe(items, extraChance, failureChance);
+                    if (result != null)
                     {
-                        Object result = handler.handleRecipe(items, extraChance, failureChance);
-                        if (result != null)
-                        {
-                            return toOutputType(result);
-                        }
+                        return toOutputType(result);
                     }
                 }
             }
         }
         return null;
+    }
+
+    @Override
+    public final Collection<IMachineRecipe> getRecipes(Object[] items)
+    {
+        return getRecipes(getKeyFor(items));
+    }
+
+    public List<IMachineRecipe> getRecipes(K key)
+    {
+        if(key != null)
+        {
+            if (recipes.containsKey(key))
+            {
+                List<IMachineRecipe> handlers = recipes.get(key);
+                if(handlers != null)
+                    return handlers;
+            }
+        }
+        return new ArrayList();
     }
 
     @Override

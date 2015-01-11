@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -52,6 +53,18 @@ public class ItemStackWrapperTest extends AbstractTest
         assertFalse(list.contains(b));
     }
 
+    //Reason 2 why we use the ItemStack wrapper
+    public void testFailMapGet()
+    {
+        ItemStack a = new ItemStack(Items.apple);
+        ItemStack b = new ItemStack(Items.apple);
+        assertTrue(a.isItemEqual(b));
+        HashMap<ItemStack, String> list = new HashMap();
+        list.put(a, "test");
+        //If this ever returns true check if ItemStack has an equals method that works
+        assertFalse(list.containsKey(b));
+    }
+
     public void testListContains()
     {
         ItemStackWrapper a = new ItemStackWrapper(new ItemStack(Items.apple));
@@ -60,6 +73,16 @@ public class ItemStackWrapperTest extends AbstractTest
         List<ItemStackWrapper> list = new ArrayList();
         list.add(a);
         assertTrue("List.contains(ItemStackWrapper) failed", list.contains(b));
+    }
+
+    public void testMapContains()
+    {
+        ItemStackWrapper a = new ItemStackWrapper(new ItemStack(Items.apple));
+        ItemStackWrapper b = new ItemStackWrapper(new ItemStack(Items.apple));
+        assertTrue("Wrappers failed to equal each other", a.equals(b));
+        HashMap<ItemStackWrapper, String> list = new HashMap();
+        list.put(a, "string");
+        assertTrue("List.contains(ItemStackWrapper) failed", list.containsKey(b));
     }
 
     //Check if Wrapper equals items
@@ -170,5 +193,28 @@ public class ItemStackWrapperTest extends AbstractTest
                 assertFalse("Should be false as the blocks are not the same", wrapper.equals(stack));
             }
         }
+    }
+
+    public void testHashCodeEquals()
+    {
+        ItemStackWrapper a = new ItemStackWrapper(new ItemStack(Items.apple));
+        ItemStackWrapper b = new ItemStackWrapper(new ItemStack(Items.apple));
+        assertTrue("Wrappers failed to equal each other", a.equals(b));
+        assertTrue("Hash codes don't equal", a.hashCode() == b.hashCode());
+    }
+
+    public void testHashCodeNotEquals()
+    {
+        ItemStackWrapper a = new ItemStackWrapper(new ItemStack(Items.apple));
+        ItemStackWrapper b = new ItemStackWrapper(new ItemStack(Items.stone_axe));
+        assertFalse("Hash codes should not equal", a.hashCode() == b.hashCode());
+
+        a = new ItemStackWrapper(new ItemStack(Items.apple, 2));
+        b = new ItemStackWrapper(new ItemStack(Items.apple, 1));
+        assertFalse("Hash codes should not equal", a.hashCode() == b.hashCode());
+
+        a = new ItemStackWrapper(new ItemStack(Items.apple, 1, 0));
+        b = new ItemStackWrapper(new ItemStack(Items.apple, 1, 1));
+        assertFalse("Hash codes should not equal", a.hashCode() == b.hashCode());
     }
 }
