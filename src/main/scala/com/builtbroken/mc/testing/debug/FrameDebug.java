@@ -1,6 +1,6 @@
 package com.builtbroken.mc.testing.debug;
 
-import com.builtbroken.mc.api.IPosWorld;
+import com.builtbroken.mc.api.IWorldPosition;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import com.builtbroken.mc.api.IUpdate;
@@ -16,7 +16,7 @@ import java.awt.event.WindowEvent;
  * @author Darkguardsman
  */
 @SuppressWarnings("serial")
-public class FrameDebug extends Frame implements IPosWorld
+public class FrameDebug extends Frame implements IWorldPosition
 {
 	protected long tick = 0;
 	/**

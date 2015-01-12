@@ -8,7 +8,13 @@ import net.minecraft.world.World;
  *
  * @author DarkGuardsman
  */
-public interface IPosWorld extends IPos3D
+public interface IWorldPosition
 {
 	World world();
+
+    double x();
+
+    double y();
+
+    double z();
 }

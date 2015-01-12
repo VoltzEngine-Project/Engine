@@ -1,7 +1,7 @@
 package com.builtbroken.mc.testing.debug;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.api.IPosWorld;
+import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.tile.ITileModuleProvider;
 import com.builtbroken.mc.api.tile.node.ITileModule;
 import net.minecraft.tileentity.TileEntity;
@@ -109,9 +109,9 @@ public class FrameNodeDebug extends FrameDebug
 		{
 			return ((TileEntity) nodeProvider).getWorldObj();
 		}
-		else if (nodeProvider instanceof IPosWorld)
+		else if (nodeProvider instanceof IWorldPosition)
 		{
-			return ((IPosWorld) nodeProvider).world();
+			return ((IWorldPosition) nodeProvider).world();
 		}
 		return super.world();
 	}

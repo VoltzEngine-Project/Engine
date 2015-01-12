@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.grid;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.api.IPosWorld;
+import com.builtbroken.mc.api.IWorldPosition;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
@@ -94,7 +94,7 @@ public class HeatingDictionary
 	/**
 	 * Graps the specific heating point of a block at the location
 	 */
-	public static float getSpecificHeat(IPosWorld vec)
+	public static float getSpecificHeat(IWorldPosition vec)
 	{
 		return getSpecificHeat(vec.world(), (int) vec.x(), (int) vec.y(), (int) vec.z());
 	}

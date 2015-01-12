@@ -1,6 +1,6 @@
 package com.builtbroken.mc.prefab.tile;
 
-import com.builtbroken.mc.api.IPosWorld;
+import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
 import com.builtbroken.mc.core.Engine;
@@ -44,7 +44,7 @@ import java.util.*;
 /**
  * Created by robert on 1/4/2015.
  */
-public abstract class Tile extends TileEntity implements IPosWorld, IPlayerUsing
+public abstract class Tile extends TileEntity implements IWorldPosition, IPlayerUsing
 {
     //Static block vars, never use in your tile
     private BlockTile block = null;
@@ -991,7 +991,7 @@ public abstract class Tile extends TileEntity implements IPosWorld, IPlayerUsing
      */
     public void sendPacket(AbstractPacket packet, double distance)
     {
-        Engine.instance.packetHandler.sendToAllAround(packet, ((IPosWorld)this), distance);
+        Engine.instance.packetHandler.sendToAllAround(packet, ((IWorldPosition)this), distance);
     }
 
     public void sendPacketToGuiUsers(AbstractPacket packet)

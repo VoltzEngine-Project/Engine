@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.network.netty;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.api.IPosWorld;
+import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -127,7 +127,7 @@ public class PacketManager implements ILoadable
 		this.channelEnumMap.get(Side.SERVER).writeAndFlush(message);
 	}
 
-	public void sendToAllAround(AbstractPacket message, IPosWorld point, double range)
+	public void sendToAllAround(AbstractPacket message, IWorldPosition point, double range)
 	{
 		sendToAllAround(message, point.world(), point, range);
 	}

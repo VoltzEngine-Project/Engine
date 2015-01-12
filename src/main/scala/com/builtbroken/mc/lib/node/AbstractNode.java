@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.node;
 
-import com.builtbroken.mc.api.IPosWorld;
+import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.IUpdate;
 import com.builtbroken.mc.api.tile.ITileModuleProvider;
 import com.builtbroken.mc.api.tile.node.ITileModule;
@@ -13,7 +13,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**
  * Created by robert on 1/12/2015.
  */
-public class AbstractNode implements ITileModule, IPosWorld, IUpdate
+public class AbstractNode implements ITileModule, IWorldPosition, IUpdate
 {
     private final ITileModuleProvider parent;
 

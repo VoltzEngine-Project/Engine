@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.transform.vector
 
-import com.builtbroken.mc.api.IPosWorld
+import com.builtbroken.mc.api.IWorldPosition
 import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
@@ -10,7 +10,7 @@ import net.minecraft.world.World
  *
  * Created by robert(Darkguardsman) on 9/25/2014.
  */
-trait TVectorWorld extends TVector3 with IPosWorld
+trait TVectorWorld extends TVector3 with IWorldPosition
 {
   override def world: World =
   {

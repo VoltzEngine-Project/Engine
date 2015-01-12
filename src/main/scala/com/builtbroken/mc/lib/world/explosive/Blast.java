@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.world.explosive;
 
-import com.builtbroken.mc.api.IPosWorld;
+import com.builtbroken.mc.api.IWorldPosition;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.builtbroken.mc.lib.world.edit.IWorldChangeAction;
 import net.minecraft.world.World;
@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class Blast implements IWorldChangeAction, IPosWorld
+public abstract class Blast implements IWorldChangeAction, IWorldPosition
 {
     public World world;
     public int x, y, z;

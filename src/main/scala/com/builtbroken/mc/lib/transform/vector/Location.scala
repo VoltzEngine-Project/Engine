@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.transform.vector
 
 import com.builtbroken.jlib.data.vector.IPos3D
-import com.builtbroken.mc.api.IPosWorld
+import com.builtbroken.mc.api.IWorldPosition
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
@@ -22,7 +22,7 @@ class Location(var world: World, newX: Double, newY: Double, newZ: Double) exten
 
   def this(tile: TileEntity) = this(tile.getWorldObj, tile.xCoord, tile.yCoord, tile.zCoord)
 
-  def this(vec: IPosWorld) = this(vec.world, vec.x, vec.y, vec.z)
+  def this(vec: IWorldPosition) = this(vec.world, vec.x, vec.y, vec.z)
 
   def this(world: World, vector: Pos) = this(world, vector.x, vector.y, vector.z)
 
@@ -229,9 +229,9 @@ class Location(var world: World, newX: Double, newY: Double, newZ: Double) exten
 
   override def equals(o: Any): Boolean =
   {
-    if (o.isInstanceOf[IPosWorld])
+    if (o.isInstanceOf[IWorldPosition])
     {
-      return (super.equals(o)) && this.world == (o.asInstanceOf[IPosWorld]).world
+      return (super.equals(o)) && this.world == (o.asInstanceOf[IWorldPosition]).world
     }
     return false
   }
