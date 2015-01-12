@@ -222,7 +222,7 @@ public class BlockTile extends Block implements ITileEntityProvider
     {
         inject(world, x, y, z);
         Tile tile = getTile(world, x, y, z);
-        AxisAlignedBB value = tile.getSelectBounds().clone().add(tile).toAABB();
+        AxisAlignedBB value = tile.getSelectBounds().clone().add(tile.x(), tile.y(), tile.z()).toAABB();
         eject();
         return value;
     }
@@ -232,7 +232,7 @@ public class BlockTile extends Block implements ITileEntityProvider
     {
         inject(world, x, y, z);
         Tile tile = getTile(world, x, y, z);
-        AxisAlignedBB value = tile.getCollisionBounds().clone().add(tile).toAABB();
+        AxisAlignedBB value = tile.getCollisionBounds().clone().add(tile.x(), tile.y(), tile.z()).toAABB();
         eject();
         return value;
     }

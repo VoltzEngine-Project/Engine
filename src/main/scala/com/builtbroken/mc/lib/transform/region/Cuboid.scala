@@ -78,6 +78,8 @@ class Cuboid(var min: Pos, var max: Pos) extends AbstractOperation[Cuboid]
 
   def add(vec: IPos3D): Cuboid = this + vec
 
+  def add(x: Double, y: Double, z: Double): Cuboid = this + new Pos(x, y, z)
+
   def addSet(vec: IPos3D): Cuboid = this += vec
 
   def subtract(vec: IPos3D): Cuboid = this - vec

@@ -118,6 +118,6 @@ public class AbstractNode implements ITileModule, IWorldPosition, IUpdate
 
     public Pos toPos()
     {
-        return new Pos(this);
+        return new Pos(x(), y(), z());
     }
 }

@@ -555,7 +555,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox()
     {
-        return getCollisionBounds().clone().add(this).toAABB();
+        return getCollisionBounds().clone().add(x(), y(), z()).toAABB();
     }
 
     public Cuboid getCollisionBounds()

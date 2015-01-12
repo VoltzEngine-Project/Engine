@@ -129,7 +129,7 @@ public class PacketManager implements ILoadable
 
 	public void sendToAllAround(AbstractPacket message, IWorldPosition point, double range)
 	{
-		sendToAllAround(message, point.world(), point, range);
+        sendToAllAround(message, point.world(), point.x(), point.y(), point.z(), range);
 	}
 
 	public void sendToAllAround(AbstractPacket message, World world, IPos3D point, double range)
