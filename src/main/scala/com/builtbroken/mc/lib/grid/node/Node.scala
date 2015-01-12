@@ -4,15 +4,15 @@ import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
-import com.builtbroken.mc.api.tile.INodeProvider
-import com.builtbroken.mc.api.tile.node.INode
+import com.builtbroken.mc.api.tile.ITileNodeProvider
+import com.builtbroken.mc.api.tile.node.ITileModule
 import com.builtbroken.mc.lib.transform.vector.TVectorWorld
 
 /**
  * A node is any single part of a grid.
  * @author Calclavia
  */
-abstract class Node(var parent: INodeProvider) extends INode with TVectorWorld
+abstract class Node(var parent: ITileNodeProvider) extends ITileModule with TVectorWorld
 {
   override def reconstruct()
   {
@@ -22,7 +22,7 @@ abstract class Node(var parent: INodeProvider) extends INode with TVectorWorld
   {
   }
 
-  override def getParent: INodeProvider = parent
+  override def getParent: ITileNodeProvider = parent
 
   override def x: Double =
   {
@@ -71,12 +71,12 @@ abstract class Node(var parent: INodeProvider) extends INode with TVectorWorld
    * @tparam N - generic to force the return to equal the nodeType
    * @return the node, or null if no node
    */
-  def getNode[N <: INode](nodeType : Class[_ <: N], dir: ForgeDirection) : N =
+  def getNode[N <: ITileModule](nodeType : Class[_ <: N], dir: ForgeDirection) : N =
   {
     val tile = (toVectorWorld + dir).getTileEntity
-    if (tile != null && tile.isInstanceOf[INodeProvider])
+    if (tile != null && tile.isInstanceOf[ITileNodeProvider])
     {
-      return tile.asInstanceOf[INodeProvider].getNode(nodeType, dir.getOpposite)
+      return tile.asInstanceOf[ITileNodeProvider].getModule(nodeType, dir.getOpposite)
     }
     return null.asInstanceOf[N]
   }

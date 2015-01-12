@@ -41,10 +41,6 @@ class Rectangle(var min: Point, var max: Point) extends Shape[Rectangle]
   def *(amount: Rectangle): Rectangle = new Rectangle(min.multiply(amount.min), max.multiply(amount.max))
 
 
-
-
-
-
   /** Checks if the point is inside the shape */
   override def isWithin(x: Double, y: Double): Boolean = y >= this.min.y && y <= this.max.y && x >= this.min.x && x <= this.max.x
 

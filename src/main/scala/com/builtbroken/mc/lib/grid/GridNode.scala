@@ -60,7 +60,7 @@ class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
       if (n.grid == this)
       {
         n.setGrid(null)
-        n.reconstruct()
+        n.onJoinWorld()
       }
     })
 

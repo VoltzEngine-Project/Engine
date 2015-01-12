@@ -1,6 +1,6 @@
 package com.builtbroken.mc.api.tile.node;
 
-import com.builtbroken.mc.api.tile.INodeProvider;
+import com.builtbroken.mc.api.tile.ITileNodeProvider;
 
 import java.util.HashMap;
 
@@ -20,13 +20,13 @@ public class NodeRegistry
 		INTERFACE_NODE_MAP.put(nodeInterface, nodeClass);
 	}
 
-	public static <N extends INode> N get(INodeProvider parent, Class<N> nodeInterface)
+	public static <N extends ITileModule> N get(ITileNodeProvider parent, Class<N> nodeInterface)
 	{
 		Class nodeClass = INTERFACE_NODE_MAP.get(nodeInterface);
 
 		try
 		{
-			return (N) nodeClass.getConstructor(INodeProvider.class).newInstance(parent);
+			return (N) nodeClass.getConstructor(ITileNodeProvider.class).newInstance(parent);
 		}
 		catch (Exception e)
 		{

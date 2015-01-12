@@ -5,7 +5,7 @@ import java.util.{Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
 import com.builtbroken.mc.api.IUpdate
-import com.builtbroken.mc.api.tile.INodeProvider
+import com.builtbroken.mc.api.tile.ITileNodeProvider
 import com.builtbroken.mc.lib.grid.UpdateTicker
 import com.builtbroken.mc.lib.grid.node.{NodeEnergy, TTileConnector}
 
@@ -24,7 +24,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpdate with TTileConnector[DCNode]
+class DCNode(parent: ITileNodeProvider) extends NodeEnergy[DCNode](parent) with IUpdate with TTileConnector[DCNode]
 {
   /**
    * Charges are pushed to positive terminals. Any connections that is NOT
@@ -66,7 +66,7 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
    */
   override def reconstruct()
   {
-    super.reconstruct()
+    super.onJoinWorld()
     UpdateTicker.threaded.addUpdater(this)
   }
 

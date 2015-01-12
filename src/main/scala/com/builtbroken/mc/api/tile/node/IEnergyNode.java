@@ -6,7 +6,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**  Simple interface that allows adding and removing energy from a node.
  *
  * @author Darkguardsman */
-public interface IEnergyNode extends INode
+public interface IEnergyNode extends ITileModule
 {
     /** Adds energy to the node returns energy added */
     public double addEnergy(ForgeDirection from, double wattage, boolean doAdd);

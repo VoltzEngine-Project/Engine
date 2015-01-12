@@ -1,11 +1,11 @@
 package com.builtbroken.mc.test.grid;
 
+import com.builtbroken.mc.api.tile.ITileNodeProvider;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import com.builtbroken.mc.api.tile.INodeProvider;
 import com.builtbroken.mc.lib.grid.branch.NodeBranchPart;
 import com.builtbroken.mc.prefab.tile.TileConductor;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
@@ -42,9 +42,9 @@ public class NodeConnectionTest extends AbstractTest
             //Test
             Location vec = center.add(side);
             TileEntity tile = vec.getTileEntity();
-            if(tile instanceof INodeProvider)
+            if(tile instanceof ITileNodeProvider)
             {
-                NodeBranchPart part = ((INodeProvider) tile).getNode(NodeBranchPart.class, side.getOpposite());
+                NodeBranchPart part = ((ITileNodeProvider) tile).getModule(NodeBranchPart.class, side.getOpposite());
                 if(part == null)
                     fail("Failed to get NodeBranchPart from tile at " + vec + " from side " + side.getOpposite());
             }

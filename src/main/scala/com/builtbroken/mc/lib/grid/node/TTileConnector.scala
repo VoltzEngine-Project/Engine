@@ -2,8 +2,8 @@ package com.builtbroken.mc.lib.grid.node
 
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
-import com.builtbroken.mc.api.tile.INodeProvider
-import com.builtbroken.mc.api.tile.node.INode
+import com.builtbroken.mc.api.tile.ITileNodeProvider
+import com.builtbroken.mc.api.tile.node.ITileModule
 
 /**
  * A trait applied to NodeConnector
@@ -38,11 +38,11 @@ trait TTileConnector[A <: AnyRef] extends NodeConnector[A]
     })
   }
 
-  protected def getNodeFrom(tile: TileEntity, from: ForgeDirection): INode =
+  protected def getNodeFrom(tile: TileEntity, from: ForgeDirection): ITileModule =
   {
-    if (tile.isInstanceOf[INodeProvider])
+    if (tile.isInstanceOf[ITileNodeProvider])
     {
-      val node = tile.asInstanceOf[INodeProvider].getNode(getCompareClass, from)
+      val node = tile.asInstanceOf[ITileNodeProvider].getModule(getCompareClass, from)
 
       if (node != null)
       {
@@ -56,5 +56,5 @@ trait TTileConnector[A <: AnyRef] extends NodeConnector[A]
   /**
    * The class used to compare when making connections
    */
-  protected def getCompareClass: Class[_ <: A with INode]
+  protected def getCompareClass: Class[_ <: A with ITileModule]
 }

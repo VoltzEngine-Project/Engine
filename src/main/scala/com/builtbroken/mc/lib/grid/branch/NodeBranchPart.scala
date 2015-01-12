@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.grid.branch
 
 import net.minecraftforge.common.util.ForgeDirection
 import com.builtbroken.mc.api.IGrid
-import com.builtbroken.mc.api.tile.{IGridProvider, INodeProvider}
+import com.builtbroken.mc.api.tile.{IGridProvider, ITileNodeProvider}
 import com.builtbroken.mc.lib.grid.branch.part.Part
 import com.builtbroken.mc.lib.grid.node.Node
 import com.builtbroken.mc.prefab.TConnector
@@ -15,7 +15,7 @@ import scala.beans.BeanProperty
  * A node that is part of a branch
  * @author DarkCow
  */
-abstract class NodeBranchPart(parent: INodeProvider) extends Node(parent) with TConnector[NodeBranchPart] with IGridProvider
+abstract class NodeBranchPart(parent: ITileNodeProvider) extends Node(parent) with TConnector[NodeBranchPart] with IGridProvider
 {
   @BeanProperty
   var branch : Part = null
@@ -55,13 +55,13 @@ abstract class NodeBranchPart(parent: INodeProvider) extends Node(parent) with T
 
   override def reconstruct()
   {
-    super.reconstruct()
+    super.onJoinWorld()
     buildConnections()
   }
 
   override def deconstruct()
   {
-    super.deconstruct()
+    super.onLeaveWorld()
     getConnections.clear()
     setGrid(null)
     if(branch != null)
@@ -80,9 +80,9 @@ abstract class NodeBranchPart(parent: INodeProvider) extends Node(parent) with T
   override def updateConnection(dir: ForgeDirection, loc: Location)
   {
     val tile = loc.getTileEntity
-    if(tile != null && tile.isInstanceOf[INodeProvider])
+    if(tile != null && tile.isInstanceOf[ITileNodeProvider])
     {
-        val node : NodeBranchPart = tile.asInstanceOf[INodeProvider].getNode(classOf[NodeBranchPart], dir.getOpposite)
+        val node : NodeBranchPart = tile.asInstanceOf[ITileNodeProvider].getModule(classOf[NodeBranchPart], dir.getOpposite)
 
         if (canConnect(node, dir.getOpposite))
         {

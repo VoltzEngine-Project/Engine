@@ -12,7 +12,7 @@ import java.util.Set;
  * @deprecated use IConnector
  */
 @Deprecated
-public interface INodeConnector<A> extends INode
+public interface INodeConnector<A> extends ITileModule
 {
     /**
 	 * Can the object connect to this node. Only called on connection update logic, and shouldn't be called per tick.

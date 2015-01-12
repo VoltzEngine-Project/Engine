@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.grid;
 
 import com.builtbroken.mc.api.IGrid;
 import com.builtbroken.mc.api.tile.IGridProvider;
-import com.builtbroken.mc.api.tile.node.INode;
+import com.builtbroken.mc.api.tile.node.ITileModule;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,8 +37,8 @@ public class Grid<N> implements IGrid<N>
 			{
 				if (node instanceof IGridProvider)
 					((IGridProvider) node).setGrid(null);
-				if (node instanceof INode)
-					((INode) node).deconstruct();
+				if (node instanceof ITileModule)
+					((ITileModule) node).onLeaveWorld();
 			}
 			//empty the node list
 			getNodes().clear();

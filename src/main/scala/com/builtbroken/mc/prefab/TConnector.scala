@@ -1,6 +1,6 @@
 package com.builtbroken.mc.prefab
 
-import com.builtbroken.mc.api.tile.{IConnector, INodeProvider}
+import com.builtbroken.mc.api.tile.{IConnector, ITileNodeProvider}
 import com.builtbroken.mc.lib.helper.wrapper.BitmaskWrapper._
 import com.builtbroken.mc.lib.transform.vector.{TVectorWorld, Location}
 import net.minecraftforge.common.util.ForgeDirection
@@ -88,9 +88,9 @@ trait TConnector[N] extends IConnector[N] with TVectorWorld
     val tile = loc.getTileEntity
     if(tile != null)
     {
-      if(tile.isInstanceOf[INodeProvider])
+      if(tile.isInstanceOf[ITileNodeProvider])
       {
-        val node = getNodeFromConnection(tile.asInstanceOf[INodeProvider], dir)
+        val node = getNodeFromConnection(tile.asInstanceOf[ITileNodeProvider], dir)
         if(node != null)
         {
           if (canConnect(node.asInstanceOf[N], dir.getOpposite))
@@ -103,5 +103,5 @@ trait TConnector[N] extends IConnector[N] with TVectorWorld
     }
   }
 
-  def getNodeFromConnection(provider: INodeProvider, dir: ForgeDirection) : N
+  def getNodeFromConnection(provider: ITileNodeProvider, dir: ForgeDirection) : N
 }

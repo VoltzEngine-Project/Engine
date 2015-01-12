@@ -3,7 +3,7 @@ package com.builtbroken.mc.lib.grid.node
 import java.util.{Map => JMap, Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
-import com.builtbroken.mc.api.tile.INodeProvider
+import com.builtbroken.mc.api.tile.ITileNodeProvider
 import com.builtbroken.mc.api.tile.node.INodeConnector
 import com.builtbroken.mc.lib.helper.wrapper.BitmaskWrapper._
 
@@ -17,7 +17,7 @@ import scala.collection.mutable
  * @tparam A - The type of objects this node can connect to.
  * @author Darkguardsman, Calclavia
  */
-abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(parent) with INodeConnector[A]
+abstract class NodeConnector[A <: AnyRef](parent: ITileNodeProvider) extends Node(parent) with INodeConnector[A]
 {
   /** The bitmask containing sides that this node may connect to */
   var connectionMask = 0x3F
@@ -89,7 +89,7 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
    */
   override def reconstruct()
   {
-    super.reconstruct()
+    super.onJoinWorld()
     val prevCon = connectedMask
     clearConnections()
     rebuild()
@@ -107,7 +107,7 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
 
   override def deconstruct()
   {
-    super.deconstruct()
+    super.onLeaveWorld()
     clearConnections()
     isInvalid = true
   }

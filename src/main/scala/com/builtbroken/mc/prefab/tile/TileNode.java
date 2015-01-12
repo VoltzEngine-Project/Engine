@@ -1,11 +1,11 @@
 package com.builtbroken.mc.prefab.tile;
 
+import com.builtbroken.mc.api.tile.ITileNodeProvider;
+import com.builtbroken.mc.api.tile.node.ITileModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
 import com.builtbroken.mc.api.ISave;
-import com.builtbroken.mc.api.tile.node.INode;
-import com.builtbroken.mc.api.tile.INodeProvider;
 import com.builtbroken.mc.api.IUpdate;
 
 import java.util.*;
@@ -18,7 +18,7 @@ import java.util.*;
  *
  * @author Darkguardsman
  */
-public abstract class TileNode extends Tile implements INodeProvider
+public abstract class TileNode extends Tile implements ITileNodeProvider
 {
 	public TileNode(Material material)
 	{
@@ -42,11 +42,11 @@ public abstract class TileNode extends Tile implements INodeProvider
 
 	private void reconstructNode()
 	{
-		for (INode node : getNodes())
+		for (ITileModule node : getNodes())
 		{
 			if (node != null)
 			{
-				node.reconstruct();
+				node.onJoinWorld();
 			}
 		}
 	}
@@ -62,7 +62,7 @@ public abstract class TileNode extends Tile implements INodeProvider
 	public void update()
 	{
 		super.update();
-		for (INode node : getNodes())
+		for (ITileModule node : getNodes())
 		{
 			if (node instanceof IUpdate)
 			{
@@ -77,32 +77,32 @@ public abstract class TileNode extends Tile implements INodeProvider
 	@Override
 	public void invalidate()
 	{
-		for (INode node : getNodes())
+		for (ITileModule node : getNodes())
 		{
 			if (node != null)
 			{
-				node.deconstruct();
+				node.onLeaveWorld();
 			}
 		}
 		super.invalidate();
 	}
 
     /** Grabs any node that needs called by save() load() invalidate() update() onJoinWorld() etc */
-	protected final List<INode> getNodes()
+	protected final List<ITileModule> getNodes()
 	{
-		List<INode> nodes = new LinkedList<INode>();
+		List<ITileModule> nodes = new LinkedList<ITileModule>();
 		getNodes(nodes);
 		return nodes;
 	}
 
 	/** Grabs any node that needs called by save() load() invalidate() update() onJoinWorld() etc */
-	public abstract void getNodes(List<INode> nodes);
+	public abstract void getNodes(List<ITileModule> nodes);
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
-		for (INode node : getNodes())
+		for (ITileModule node : getNodes())
 		{
 			if (node instanceof ISave)
 			{
@@ -115,7 +115,7 @@ public abstract class TileNode extends Tile implements INodeProvider
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
-		for (INode node : getNodes())
+		for (ITileModule node : getNodes())
 		{
 			if (node instanceof ISave)
 			{

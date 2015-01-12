@@ -1,9 +1,9 @@
 package com.builtbroken.mc.prefab.tile;
 
+import com.builtbroken.mc.api.tile.node.ITileModule;
 import com.builtbroken.mc.lib.grid.electric.NodeElectric;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.util.ForgeDirection;
-import com.builtbroken.mc.api.tile.node.INode;
 import com.builtbroken.mc.lib.grid.branch.NodeBranchPart;
 
 import java.util.List;
@@ -29,14 +29,14 @@ public class TileConductor extends TileNode
     }
 
     @Override
-    public <N extends INode> N getNode(Class<? extends N> nodeType, ForgeDirection from)
+    public <N extends ITileModule> N getModule(Class<? extends N> nodeType, ForgeDirection from)
     {
         //TODO fix later when implement junk tests
         return (N) getNode();
     }
 
     @Override
-    public void getNodes(List<INode> nodes)
+    public void getNodes(List<ITileModule> nodes)
     {
         nodes.add(getNode());
     }
