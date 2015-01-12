@@ -715,15 +715,6 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
     //=========================
 
     /**
-     * Called in the world.
-     */
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side)
-    {
-        return getIcon();
-    }
-
-    /**
      * Called either by an item, or in a world.
      */
     @SideOnly(Side.CLIENT)
@@ -744,10 +735,29 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
         return getIcon(side);
     }
 
+    /**
+     * Called in the world.
+     */
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side)
+    {
+        return getIcon();
+    }
+
     @SideOnly(Side.CLIENT)
     public IIcon getIcon()
     {
-        return icons.get(getTextureName());
+        return getIcon(getTextureName());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(String name)
+    {
+        if(icons != null && icons.containsKey(name))
+        {
+            return icons.get(name);
+        }
+        return null;
     }
 
     @SideOnly(Side.CLIENT)
