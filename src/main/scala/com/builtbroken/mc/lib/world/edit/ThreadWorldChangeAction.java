@@ -6,7 +6,7 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import com.builtbroken.mc.api.event.TriggerCause;
 import net.minecraftforge.common.MinecraftForge;
-import com.builtbroken.mc.lib.transform.vector.VectorWorld;
+import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.api.event.WorldChangeActionEvent;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 
@@ -23,7 +23,7 @@ import java.util.Iterator;
 public class ThreadWorldChangeAction extends Thread
 {
     /** Location of the Blast */
-    public final VectorWorld position;
+    public final Location position;
     /** Blast instance */
     public final IWorldChangeAction blast;
     /** Trigger cause of the blast */
@@ -41,7 +41,7 @@ public class ThreadWorldChangeAction extends Thread
      * @param blast - blast instance used to remove blocks and build a list
      * @param triggerCause - cause of the explosion
      */
-    public ThreadWorldChangeAction(VectorWorld vec, IWorldChangeAction blast, TriggerCause triggerCause)
+    public ThreadWorldChangeAction(Location vec, IWorldChangeAction blast, TriggerCause triggerCause)
     {
         this.position = vec;
         this.blast = blast;

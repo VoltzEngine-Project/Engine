@@ -1,12 +1,12 @@
 package com.builtbroken.mc.testing.debug;
 
+import com.builtbroken.jlib.data.IPos3D;
+import com.builtbroken.mc.api.IPosWorld;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.builtbroken.mc.api.tile.node.INode;
 import com.builtbroken.mc.api.tile.INodeProvider;
-import com.builtbroken.mc.lib.transform.vector.IVector3;
-import com.builtbroken.mc.lib.transform.vector.IVectorWorld;
 
 /**
  * @author Darkguardsman
@@ -67,9 +67,9 @@ public class FrameNodeDebug extends FrameDebug
 		{
 			return ((TileEntity) nodeProvider).zCoord;
 		}
-		else if (nodeProvider instanceof IVector3)
+		else if (nodeProvider instanceof IPos3D)
 		{
-			return ((IVector3) nodeProvider).z();
+			return ((IPos3D) nodeProvider).z();
 		}
 		return super.z();
 	}
@@ -81,9 +81,9 @@ public class FrameNodeDebug extends FrameDebug
 		{
 			return ((TileEntity) nodeProvider).xCoord;
 		}
-		else if (nodeProvider instanceof IVector3)
+		else if (nodeProvider instanceof IPos3D)
 		{
-			return ((IVector3) nodeProvider).x();
+			return ((IPos3D) nodeProvider).x();
 		}
 		return super.x();
 	}
@@ -95,9 +95,9 @@ public class FrameNodeDebug extends FrameDebug
 		{
 			return ((TileEntity) nodeProvider).yCoord;
 		}
-		else if (nodeProvider instanceof IVector3)
+		else if (nodeProvider instanceof IPos3D)
 		{
-			return ((IVector3) nodeProvider).y();
+			return ((IPos3D) nodeProvider).y();
 		}
 		return super.y();
 	}
@@ -109,9 +109,9 @@ public class FrameNodeDebug extends FrameDebug
 		{
 			return ((TileEntity) nodeProvider).getWorldObj();
 		}
-		else if (nodeProvider instanceof IVectorWorld)
+		else if (nodeProvider instanceof IPosWorld)
 		{
-			return ((IVectorWorld) nodeProvider).world();
+			return ((IPosWorld) nodeProvider).world();
 		}
 		return super.world();
 	}

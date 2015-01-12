@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.transform.vector
 
 import java.lang.Double.doubleToLongBits
-
+import com.builtbroken.jlib.data.IPos3D
 import com.google.common.io.ByteArrayDataInput
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
@@ -19,9 +19,9 @@ import scala.collection.convert.wrapAll._
 /**
  * @author Calclavia
  */
-object Vector3
+object Pos
 {
-  def getLook(entity: Entity, distance: Double): Vector3 =
+  def getLook(entity: Entity, distance: Double): Pos =
   {
     var f1 = 0D
     var f2 = 0D
@@ -34,7 +34,7 @@ object Vector3
       f2 = Math.sin(-entity.rotationYaw * 0.017453292F - Math.PI)
       f3 = -Math.cos(-entity.rotationPitch * 0.017453292F)
       f4 = Math.sin(-entity.rotationPitch * 0.017453292F)
-      return new Vector3((f2 * f3), f4, (f1 * f3))
+      return new Pos((f2 * f3), f4, (f1 * f3))
     }
     else
     {
@@ -44,11 +44,11 @@ object Vector3
       f4 = Math.sin(-f2 * 0.017453292F - Math.PI)
       val f5 = -Math.cos(-f1 * 0.017453292F)
       val f6 = Math.sin(-f1 * 0.017453292F)
-      return new Vector3((f4 * f5), f6, (f3 * f5))
+      return new Pos((f4 * f5), f6, (f3 * f5))
     }
   }
 
-  def getLook(yaw: Double, pitch: Double, distance: Double): Vector3 =
+  def getLook(yaw: Double, pitch: Double, distance: Double): Pos =
   {
     var f1 = 0D
     var f2 = 0D
@@ -61,7 +61,7 @@ object Vector3
       f2 = Math.sin(-yaw * 0.017453292F - Math.PI.asInstanceOf[Float])
       f3 = -Math.cos(-pitch * 0.017453292F)
       f4 = Math.sin(-pitch * 0.017453292F)
-      return new Vector3((f2 * f3), f4, (f1 * f3))
+      return new Pos((f2 * f3), f4, (f1 * f3))
     }
     else
     {
@@ -71,26 +71,26 @@ object Vector3
       f4 = Math.sin(-f2 * 0.017453292F - Math.PI.asInstanceOf[Float])
       val f5 = -Math.cos(-f1 * 0.017453292F)
       val f6 = Math.sin(-f1 * 0.017453292F)
-      return new Vector3((f4 * f5), f6, (f3 * f5))
+      return new Pos((f4 * f5), f6, (f3 * f5))
     }
   }
 
-  def zero = new Vector3()
+  def zero = new Pos()
 
-  def up = new Vector3(ForgeDirection.UP)
+  def up = new Pos(ForgeDirection.UP)
 
-  def down = new Vector3(ForgeDirection.DOWN)
+  def down = new Pos(ForgeDirection.DOWN)
 
-  def north = new Vector3(ForgeDirection.NORTH)
+  def north = new Pos(ForgeDirection.NORTH)
 
-  def south = new Vector3(ForgeDirection.SOUTH)
+  def south = new Pos(ForgeDirection.SOUTH)
 
-  def east = new Vector3(ForgeDirection.EAST)
+  def east = new Pos(ForgeDirection.EAST)
 
-  def west = new Vector3(ForgeDirection.WEST)
+  def west = new Pos(ForgeDirection.WEST)
 }
 
-class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends IVector3 with Ordered[Vector3] with Cloneable
+class Pos(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends IPos3D with Ordered[Pos] with Cloneable
 {
   def this() = this(0, 0, 0)
 
@@ -102,7 +102,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
 
   def this(entity: Entity) = this(entity.posX, entity.posY, entity.posZ)
 
-  def this(vec: IVector3) = this(vec.x, vec.y, vec.z)
+  def this(vec: IPos3D) = this(vec.x, vec.y, vec.z)
 
   def this(nbt: NBTTagCompound) = this(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
 
@@ -144,7 +144,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   }
 
 
-  def set(x: Double, y: Double, z: Double): Vector3 =
+  def set(x: Double, y: Double, z: Double): Pos =
   {
     this.x = x
     this.y = y
@@ -152,9 +152,9 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this
   }
 
-  def set(n: Double): Vector3 = set(n, n, n)
+  def set(n: Double): Pos = set(n, n, n)
 
-  def set(vec: IVector3): Vector3 = set(vec.x, vec.y, vec.z)
+  def set(vec: IPos3D): Pos = set(vec.x, vec.y, vec.z)
 
   //=========================
   //========Accessors========
@@ -178,7 +178,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
 
   def toVec3 = Vec3.createVectorHelper(x, y, z)
 
-  def toVector2: Vector2 = new Vector2(x, z)
+  def toVector2: Pos2D = new Pos2D(x, z)
 
   def toArray = Array(x, y, z)
 
@@ -197,15 +197,15 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     }
   }
 
-  def toEulerAngle(target: Vector3): EulerAngle = (clone - target).toEulerAngle
+  def toEulerAngle(target: Pos): EulerAngle = (clone - target).toEulerAngle
 
   def toEulerAngle = new EulerAngle(Math.toDegrees(Math.atan2(x, z)), Math.toDegrees(-Math.atan2(y, Math.hypot(z, x))))
 
   def toIntNBT: NBTTagCompound = writeIntNBT(new NBTTagCompound)
 
-  def unary_+ : Vector3 = this
+  def unary_+ : Pos = this
 
-  def unary_- : Vector3 = this * -1
+  def unary_- : Pos = this * -1
 
   //=========================
   //========NBT==============
@@ -249,33 +249,33 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
 
   def normalize = this / magnitude
 
-  def round: Vector3 = new Vector3(Math.round(x), Math.round(y), Math.round(z))
+  def round: Pos = new Pos(Math.round(x), Math.round(y), Math.round(z))
 
-  def ceil: Vector3 = new Vector3(Math.ceil(x), Math.ceil(y), Math.ceil(z))
+  def ceil: Pos = new Pos(Math.ceil(x), Math.ceil(y), Math.ceil(z))
 
-  def floor: Vector3 = new Vector3(Math.floor(x), Math.floor(y), Math.floor(z))
+  def floor: Pos = new Pos(Math.floor(x), Math.floor(y), Math.floor(z))
 
-  def max(other: IVector3): Vector3 = new Vector3(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z))
+  def max(other: IPos3D): Pos = new Pos(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z))
 
-  def min(other: IVector3): Vector3 = new Vector3(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z))
+  def min(other: IPos3D): Pos = new Pos(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z))
 
-  def reciprocal: Vector3 = new Vector3(1 / x, 1 / y, 1 / z)
+  def reciprocal: Pos = new Pos(1 / x, 1 / y, 1 / z)
 
   //=========================
   //==Double Handling========
   //=========================
 
-  def sub(amount: Double): Vector3 = this - amount
+  def sub(amount: Double): Pos = this - amount
 
-  def subtract(amount: Double): Vector3 = this - amount
+  def subtract(amount: Double): Pos = this - amount
 
-  def -(amount: Double): Vector3 = new Vector3(x - amount, y - amount, z - amount)
+  def -(amount: Double): Pos = new Pos(x - amount, y - amount, z - amount)
 
-  def subEquals(amount: Double): Vector3 = this - amount
+  def subEquals(amount: Double): Pos = this - amount
 
-  def subtractEquals(amount: Double): Vector3 = this - amount
+  def subtractEquals(amount: Double): Pos = this - amount
 
-  def -=(amount: Double): Vector3 =
+  def -=(amount: Double): Pos =
   {
     x -= amount
     y -= amount
@@ -283,25 +283,25 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this
   }
 
-  def sub(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x - x, this.y - y, this.z - z)
+  def sub(x: Double, y: Double, z: Double): Pos = new Pos(this.x - x, this.y - y, this.z - z)
 
-  def subtract(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x - x, this.y - y, this.z - z)
+  def subtract(x: Double, y: Double, z: Double): Pos = new Pos(this.x - x, this.y - y, this.z - z)
 
-  def -(x: Double, y: Double, z: Double): Vector3 = new Vector3(this.x - x, this.y - y, this.z - z)
+  def -(x: Double, y: Double, z: Double): Pos = new Pos(this.x - x, this.y - y, this.z - z)
 
-  def subEquals(x: Double, y: Double, z: Double): Vector3 = this -=(x, y, z)
+  def subEquals(x: Double, y: Double, z: Double): Pos = this -=(x, y, z)
 
-  def subtractEquals(x: Double, y: Double, z: Double): Vector3 = this -=(x, y, z)
+  def subtractEquals(x: Double, y: Double, z: Double): Pos = this -=(x, y, z)
 
-  def -=(x: Double, y: Double, z: Double): Vector3 = set(new Vector3(this.x - x, this.y - y, this.z - z))
+  def -=(x: Double, y: Double, z: Double): Pos = set(new Pos(this.x - x, this.y - y, this.z - z))
 
-  def add(amount: Double): Vector3 = this + amount
+  def add(amount: Double): Pos = this + amount
 
-  def +(amount: Double): Vector3 = new Vector3(x + amount, y + amount, z + amount)
+  def +(amount: Double): Pos = new Pos(x + amount, y + amount, z + amount)
 
-  def addEquals(amount: Double): Vector3 = this + amount
+  def addEquals(amount: Double): Pos = this + amount
 
-  def +=(amount: Double): Vector3 =
+  def +=(amount: Double): Pos =
   {
     x += amount
     y += amount
@@ -309,27 +309,27 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this
   }
 
-  def add(ax: Double, ay: Double, az: Double): Vector3 = this +(ax, ay, az)
+  def add(ax: Double, ay: Double, az: Double): Pos = this +(ax, ay, az)
 
-  def +(ax: Double, ay: Double, az: Double): Vector3 = new Vector3(this.x + ax, this.y + ay, this.z + az)
+  def +(ax: Double, ay: Double, az: Double): Pos = new Pos(this.x + ax, this.y + ay, this.z + az)
 
-  def addEquals(x: Double, y: Double, z: Double): Vector3 = this +=(x, y, z)
+  def addEquals(x: Double, y: Double, z: Double): Pos = this +=(x, y, z)
 
-  def +=(x: Double, y: Double, z: Double): Vector3 = set(new Vector3(this.x + x, this.y + y, this.z + z))
+  def +=(x: Double, y: Double, z: Double): Pos = set(new Pos(this.x + x, this.y + y, this.z + z))
 
-  def multi(amount: Double): Vector3 = this * amount
+  def multi(amount: Double): Pos = this * amount
 
-  def multiply(amount: Double): Vector3 = this * amount
+  def multiply(amount: Double): Pos = this * amount
 
-  def *(amount: Double): Vector3 = new Vector3(x * amount, y * amount, z * amount)
+  def *(amount: Double): Pos = new Pos(x * amount, y * amount, z * amount)
 
-  def divide(amount: Double): Vector3 = this / amount
+  def divide(amount: Double): Pos = this / amount
 
-  def /(amount: Double): Vector3 = new Vector3(x / amount, y / amount, z / amount)
+  def /(amount: Double): Pos = new Pos(x / amount, y / amount, z / amount)
 
-  def multiplyEquals(amount: Double): Vector3 = this *= amount
+  def multiplyEquals(amount: Double): Pos = this *= amount
 
-  def *=(amount: Double): Vector3 =
+  def *=(amount: Double): Pos =
   {
     this.x *= amount
     this.y *= amount
@@ -337,9 +337,9 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this
   }
 
-  def divideEquals(amount: Double): Vector3 = this /= amount
+  def divideEquals(amount: Double): Pos = this /= amount
 
-  def /=(amount: Double): Vector3 =
+  def /=(amount: Double): Pos =
   {
     this.x /= amount
     this.y /= amount
@@ -351,17 +351,17 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   // Vec3 handling
   //====================
 
-  def subtract(amount: Vec3): Vector3 = this - amount
+  def subtract(amount: Vec3): Pos = this - amount
 
-  def -(amount: Vec3): Vector3 = new Vector3(x - amount.xCoord, y - amount.yCoord, z - amount.zCoord)
+  def -(amount: Vec3): Pos = new Pos(x - amount.xCoord, y - amount.yCoord, z - amount.zCoord)
 
   def distance(other: Vec3): Double = (this - other).magnitude
 
-  def subEquals(amount: Vec3): Vector3 = this -= amount
+  def subEquals(amount: Vec3): Pos = this -= amount
 
-  def subtractEquals(amount: Vec3): Vector3 = this -= amount
+  def subtractEquals(amount: Vec3): Pos = this -= amount
 
-  def -=(amount: Vec3): Vector3 =
+  def -=(amount: Vec3): Pos =
   {
     x -= amount.xCoord
     y -= amount.yCoord
@@ -369,13 +369,13 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this
   }
 
-  def add(amount: Vec3): Vector3 = this + amount
+  def add(amount: Vec3): Pos = this + amount
 
-  def +(amount: Vec3): Vector3 = new Vector3(x + amount.xCoord, y + amount.yCoord, z + amount.zCoord)
+  def +(amount: Vec3): Pos = new Pos(x + amount.xCoord, y + amount.yCoord, z + amount.zCoord)
 
-  def addEquals(amount: Vec3): Vector3 = this += amount
+  def addEquals(amount: Vec3): Pos = this += amount
 
-  def +=(amount: Vec3): Vector3 =
+  def +=(amount: Vec3): Pos =
   {
     x = amount.xCoord + x
     y = amount.yCoord + y
@@ -383,13 +383,13 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this
   }
 
-  def multiply(amount: Vec3): Vector3 = this * amount
+  def multiply(amount: Vec3): Pos = this * amount
 
-  def *(amount: Vec3): Vector3 = new Vector3(x * amount.xCoord, y * amount.yCoord, z * amount.zCoord)
+  def *(amount: Vec3): Pos = new Pos(x * amount.xCoord, y * amount.yCoord, z * amount.zCoord)
 
-  def multiplyEquals(amount: Vec3): Vector3 = this *= amount
+  def multiplyEquals(amount: Vec3): Pos = this *= amount
 
-  def *=(amount: Vec3): Vector3 =
+  def *=(amount: Vec3): Pos =
   {
     x *= amount.xCoord
     y *= amount.yCoord
@@ -397,13 +397,13 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this;
   }
 
-  def divide(amount: Vec3): Vector3 = this * amount
+  def divide(amount: Vec3): Pos = this * amount
 
-  def /(amount: Vec3): Vector3 = new Vector3(x / amount.xCoord, y / amount.yCoord, z / amount.zCoord)
+  def /(amount: Vec3): Pos = new Pos(x / amount.xCoord, y / amount.yCoord, z / amount.zCoord)
 
-  def divideEquals(amount: Vec3): Vector3 = this /= amount
+  def divideEquals(amount: Vec3): Pos = this /= amount
 
-  def /=(amount: Vec3): Vector3 =
+  def /=(amount: Vec3): Pos =
   {
     x /= amount.xCoord
     y /= amount.yCoord
@@ -411,7 +411,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this;
   }
 
-  def midPoint(pos: Vec3): Vector3 = new Vector3((x + pos.xCoord) / 2, (y + pos.yCoord) / 2, (z + pos.zCoord) / 2)
+  def midPoint(pos: Vec3): Pos = new Pos((x + pos.xCoord) / 2, (y + pos.yCoord) / 2, (z + pos.zCoord) / 2)
 
   def dot(other: Vec3) = $(other)
 
@@ -419,7 +419,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
 
   def cross(other: Vec3) = %(other)
 
-  def %(other: Vec3): Vector3 = new Vector3(y * other.zCoord - z * other.yCoord, z * other.xCoord - x * other.zCoord, x * other.yCoord - y * other.xCoord)
+  def %(other: Vec3): Pos = new Pos(y * other.zCoord - z * other.yCoord, z * other.xCoord - x * other.zCoord, x * other.yCoord - y * other.xCoord)
 
 
 
@@ -427,17 +427,17 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
   // IVector3 handling
   //====================
 
-  def subtract(amount: IVector3): Vector3 = this - amount
+  def subtract(amount: IPos3D): Pos = this - amount
 
-  def -(amount: IVector3): Vector3 = new Vector3(x - amount.x, y - amount.y, z - amount.z)
+  def -(amount: IPos3D): Pos = new Pos(x - amount.x, y - amount.y, z - amount.z)
 
-  def distance(other: IVector3): Double = (this - other).magnitude
+  def distance(other: IPos3D): Double = (this - other).magnitude
 
-  def subEquals(amount: IVector3): Vector3 = this -= amount
+  def subEquals(amount: IPos3D): Pos = this -= amount
 
-  def subtractEquals(amount: IVector3): Vector3 = this -= amount
+  def subtractEquals(amount: IPos3D): Pos = this -= amount
 
-  def -=(amount: IVector3): Vector3 =
+  def -=(amount: IPos3D): Pos =
   {
     x -= amount.x
     y -= amount.y
@@ -445,13 +445,13 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this
   }
 
-  def add(amount: IVector3): Vector3 = this + amount
+  def add(amount: IPos3D): Pos = this + amount
 
-  def +(amount: IVector3): Vector3 = new Vector3(x + amount.x, y + amount.y, z + amount.z)
+  def +(amount: IPos3D): Pos = new Pos(x + amount.x, y + amount.y, z + amount.z)
 
-  def addEquals(amount: IVector3): Vector3 = this += amount
+  def addEquals(amount: IPos3D): Pos = this += amount
 
-  def +=(amount: IVector3): Vector3 =
+  def +=(amount: IPos3D): Pos =
   {
     x = amount.x + x
     y = amount.y + y
@@ -459,13 +459,13 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this
   }
 
-  def multiply(amount: IVector3): Vector3 = this * amount
+  def multiply(amount: IPos3D): Pos = this * amount
 
-  def *(amount: IVector3): Vector3 = new Vector3(x * amount.x, y * amount.y, z * amount.z)
+  def *(amount: IPos3D): Pos = new Pos(x * amount.x, y * amount.y, z * amount.z)
 
-  def multiplyEquals(amount: IVector3): Vector3 = this *= amount
+  def multiplyEquals(amount: IPos3D): Pos = this *= amount
 
-  def *=(amount: IVector3): Vector3 =
+  def *=(amount: IPos3D): Pos =
   {
     x *= amount.x
     y *= amount.y
@@ -473,13 +473,13 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this;
   }
 
-  def divide(amount: IVector3): Vector3 = this * amount
+  def divide(amount: IPos3D): Pos = this * amount
 
-  def /(amount: IVector3): Vector3 = new Vector3(x / amount.x, y / amount.y, z / amount.z)
+  def /(amount: IPos3D): Pos = new Pos(x / amount.x, y / amount.y, z / amount.z)
 
-  def divideEquals(amount: IVector3): Vector3 = this /= amount
+  def divideEquals(amount: IPos3D): Pos = this /= amount
 
-  def /=(amount: IVector3): Vector3 =
+  def /=(amount: IPos3D): Pos =
   {
     x /= amount.x
     y /= amount.y
@@ -489,62 +489,62 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
 
   /** Point between this point and another */
   @Deprecated
-  def midpoint(pos: IVector3): Vector3 = midPoint(pos)
+  def midpoint(pos: IPos3D): Pos = midPoint(pos)
 
-  def midPoint(pos: IVector3): Vector3 = new Vector3((x + pos.x) / 2, (y + pos.y) / 2, (z + pos.z) / 2)
+  def midPoint(pos: IPos3D): Pos = new Pos((x + pos.x) / 2, (y + pos.y) / 2, (z + pos.z) / 2)
 
-  def dot(other: IVector3) = $(other)
+  def dot(other: IPos3D) = $(other)
 
-  def $(other: IVector3) = x * other.x + y * other.y + z * other.z
+  def $(other: IPos3D) = x * other.x + y * other.y + z * other.z
 
-  def cross(other: IVector3) = %(other)
+  def cross(other: IPos3D) = %(other)
 
-  def %(other: IVector3): Vector3 = new Vector3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
+  def %(other: IPos3D): Pos = new Pos(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
 
 
   //=========================
   //ForgeDirection handling
   //=========================
-  def add(amount: ForgeDirection): Vector3 = this + amount
+  def add(amount: ForgeDirection): Pos = this + amount
 
-  def +(amount: ForgeDirection): Vector3 = this + new Vector3(amount)
+  def +(amount: ForgeDirection): Pos = this + new Pos(amount)
 
-  def addEquals(amount: ForgeDirection): Vector3 = this += amount
+  def addEquals(amount: ForgeDirection): Pos = this += amount
 
-  def +=(amount: ForgeDirection): Vector3 = set(this + new Vector3(amount))
+  def +=(amount: ForgeDirection): Pos = set(this + new Pos(amount))
 
 
-  def subtract(amount: ForgeDirection): Vector3 = this - amount
+  def subtract(amount: ForgeDirection): Pos = this - amount
 
-  def -(amount: ForgeDirection): Vector3 = this - new Vector3(amount)
+  def -(amount: ForgeDirection): Pos = this - new Pos(amount)
 
-  def subEquals(amount: ForgeDirection): Vector3 = this -= amount
+  def subEquals(amount: ForgeDirection): Pos = this -= amount
 
-  def -=(amount: ForgeDirection): Vector3 = set(this - new Vector3(amount))
+  def -=(amount: ForgeDirection): Pos = set(this - new Pos(amount))
 
   //=========================
   //EnumFacing handling
   //=========================
-  def add(amount: EnumFacing): Vector3 = this + amount
+  def add(amount: EnumFacing): Pos = this + amount
 
-  def +(amount: EnumFacing): Vector3 = this + new Vector3(amount)
+  def +(amount: EnumFacing): Pos = this + new Pos(amount)
 
-  def addEquals(amount: EnumFacing): Vector3 = this += amount
+  def addEquals(amount: EnumFacing): Pos = this += amount
 
-  def +=(amount: EnumFacing): Vector3 = set(this + new Vector3(amount))
+  def +=(amount: EnumFacing): Pos = set(this + new Pos(amount))
 
 
-  def subtract(amount: EnumFacing): Vector3 = this - amount
+  def subtract(amount: EnumFacing): Pos = this - amount
 
-  def -(amount: EnumFacing): Vector3 = this - new Vector3(amount)
+  def -(amount: EnumFacing): Pos = this - new Pos(amount)
 
-  def subEquals(amount: EnumFacing): Vector3 = this -= amount
+  def subEquals(amount: EnumFacing): Pos = this -= amount
 
-  def -=(amount: EnumFacing): Vector3 = set(this - new Vector3(amount))
+  def -=(amount: EnumFacing): Pos = set(this - new Pos(amount))
 
 
   /** @return The perpendicular vector to the axis. */
-  def perpendicular: Vector3 =
+  def perpendicular: Pos =
   {
     if (this.z == 0.0F)
     {
@@ -553,25 +553,25 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return this.xCross
   }
 
-  def xCross = new Vector3(0.0D, this.z, -this.y)
+  def xCross = new Pos(0.0D, this.z, -this.y)
 
-  def zCross = new Vector3(-this.y, this.x, 0.0D)
+  def zCross = new Pos(-this.y, this.x, 0.0D)
 
   def isZero = x == 0 && y == 0 && z == 0
 
-  def transform(transformer: ITransform): Vector3 = transformer.transform(this)
+  def transform(transformer: ITransform): Pos = transformer.transform(this)
 
   /**
    * Gets the angle between this vector and another vector.
    * @return Angle in radians
    */
-  def angle(other: IVector3) = Math.acos((this $ other) / (magnitude * new Vector3(other).magnitude))
+  def angle(other: IPos3D) = Math.acos((this $ other) / (magnitude * new Pos(other).magnitude))
 
-  def anglePreNorm(other: IVector3) = Math.acos(this $ other)
+  def anglePreNorm(other: IPos3D) = Math.acos(this $ other)
 
-  def getAround(world: World, side: ForgeDirection, range: Int): java.util.List[Vector3] =
+  def getAround(world: World, side: ForgeDirection, range: Int): java.util.List[Pos] =
   {
-    val list: java.util.List[Vector3] = new java.util.ArrayList[Vector3]()
+    val list: java.util.List[Pos] = new java.util.ArrayList[Pos]()
 
     val dx: Int = side match
     {
@@ -598,17 +598,17 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
       {
         for (z <- (zi - dz) to (zi + dz))
         {
-          list.add(new Vector3(x, y, z))
+          list.add(new Pos(x, y, z))
         }
       }
     }
     return list
   }
 
-  def rayTrace(world: World, dir: Vector3, dist: Double): MovingObjectPosition = rayTrace(world, this + (dir * dist))
+  def rayTrace(world: World, dir: Pos, dist: Double): MovingObjectPosition = rayTrace(world, this + (dir * dist))
 
 
-  def rayTrace(world: World, end: Vector3): MovingObjectPosition =
+  def rayTrace(world: World, end: Pos): MovingObjectPosition =
   {
     val block = rayTraceBlocks(world, end)
     val entity = rayTraceEntities(world, end)
@@ -618,16 +618,16 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     if (entity == null)
       return block
 
-    if (distance(new Vector3(block.hitVec)) < distance(new Vector3(entity.hitVec)))
+    if (distance(new Pos(block.hitVec)) < distance(new Pos(entity.hitVec)))
       return block
 
     return entity
   }
 
 
-  def rayTraceBlocks(world: World, end: Vector3): MovingObjectPosition = world.rayTraceBlocks(toVec3, end.toVec3)
+  def rayTraceBlocks(world: World, end: Pos): MovingObjectPosition = world.rayTraceBlocks(toVec3, end.toVec3)
 
-  def rayTraceEntities(world: World, end: Vector3): MovingObjectPosition =
+  def rayTraceEntities(world: World, end: Pos): MovingObjectPosition =
   {
     var closestEntityMOP: MovingObjectPosition = null
     var closetDistance = 0D
@@ -661,7 +661,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
             }
             else
             {
-              val dist = distance(new Vector3(hit.hitVec))
+              val dist = distance(new Pos(hit.hitVec))
 
               if (dist < closetDistance || closetDistance == 0)
               {
@@ -786,16 +786,16 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
 
   override def equals(o: Any): Boolean =
   {
-    if (o.isInstanceOf[IVector3])
+    if (o.isInstanceOf[IPos3D])
     {
-      val other = o.asInstanceOf[IVector3]
+      val other = o.asInstanceOf[IPos3D]
       return other.x == x && other.y == y && other.z == z
     }
 
     return false
   }
 
-  override def compare(that: Vector3): Int =
+  override def compare(that: Pos): Int =
   {
     if (x < that.x || y < that.y || z < that.z)
       return -1
@@ -806,7 +806,7 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends I
     return 0
   }
 
-  override def clone: Vector3 = new Vector3(x, y, z)
+  override def clone: Pos = new Pos(x, y, z)
 
   override def toString = "Vector3[" + x + "," + y + "," + z + "]"
 }

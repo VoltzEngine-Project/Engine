@@ -6,7 +6,7 @@ import com.builtbroken.mc.api.tile.{IGridProvider, INodeProvider}
 import com.builtbroken.mc.lib.grid.branch.part.Part
 import com.builtbroken.mc.lib.grid.node.Node
 import com.builtbroken.mc.prefab.TConnector
-import com.builtbroken.mc.lib.transform.vector.VectorWorld
+import com.builtbroken.mc.lib.transform.vector.Location
 
 import scala.beans.BeanProperty
 ;
@@ -77,7 +77,7 @@ abstract class NodeBranchPart(parent: INodeProvider) extends Node(parent) with T
       obj.getGrid.merge(getGrid)
   }
 
-  override def updateConnection(dir: ForgeDirection, loc: VectorWorld)
+  override def updateConnection(dir: ForgeDirection, loc: Location)
   {
     val tile = loc.getTileEntity
     if(tile != null && tile.isInstanceOf[INodeProvider])

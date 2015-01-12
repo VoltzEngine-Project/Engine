@@ -1,9 +1,10 @@
 package com.builtbroken.mc.lib.transform.rotation
 
+import com.builtbroken.jlib.data.IPos3D
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
-import com.builtbroken.mc.lib.transform.vector.Vector3
+import com.builtbroken.mc.lib.transform.vector.Pos
 import com.builtbroken.mc.lib.transform.{AbstractOperation, ITransform}
 
 /**
@@ -111,9 +112,9 @@ class EulerAngle(var yaw: Double, var pitch: Double, var roll: Double) extends A
 
   def isWithin(other: EulerAngle, margin: Double): Boolean = absoluteDifference(other).toTuple.productIterator.exists(i => i.asInstanceOf[Double] > margin)
 
-  override def transform(vector: Vector3) = vector.transform(toQuaternion)
+  override def transform(vector: IPos3D) = new Pos(vector).transform(toQuaternion)
 
-  def toVector: Vector3 = new Vector3(-Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch))
+  def toVector: Pos = new Pos(-Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch))
 
   def toAngleAxis: AngleAxis =
   {
@@ -131,11 +132,11 @@ class EulerAngle(var yaw: Double, var pitch: Double, var roll: Double) extends A
     val z = c1 * s2 * c3 - s1 * c2 * s3
 
     val angle = 2 * Math.acos(w)
-    var axis = new Vector3(x, y, z)
+    var axis = new Pos(x, y, z)
 
     if (axis.magnitudeSquared < 0.001)
     {
-      axis = new Vector3(0, 0, -1)
+      axis = new Pos(0, 0, -1)
     }
     else
     {

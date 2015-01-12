@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.helper.wrapper
 
 import com.builtbroken.mc.api.ISave
 import com.builtbroken.mc.core.network.netty.IByteBufObject
-import com.builtbroken.mc.lib.transform.vector.{Vector2, Vector3}
+import com.builtbroken.mc.lib.transform.vector.{Pos2D, Pos}
 import cpw.mods.fml.common.network.ByteBufUtils
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
@@ -32,8 +32,8 @@ object ByteBufWrapper
         case x: Short => buf.readShort()
         case x: Long => buf.readLong()
         case x: IByteBufObject => x.readBytes(buf)
-        case x: Vector3 => new Vector3(buf)
-        case x: Vector2 => new Vector2(buf)
+        case x: Pos => new Pos(buf)
+        case x: Pos2D => new Pos2D(buf)
         case x: NBTTagCompound => buf.readTag()
         case x: FluidTank => buf.readTank()
         case x: ISave => x.load(buf.readTag())
@@ -48,9 +48,9 @@ object ByteBufWrapper
 
     def readTank() = new FluidTank(buf.readInt()).readFromNBT(readTag())
 
-    def readVector2() = new Vector2(buf)
+    def readVector2() = new Pos2D(buf)
 
-    def readVector3() = new Vector3(buf)
+    def readVector3() = new Pos(buf)
 
     def readTag() = ByteBufUtils.readTag(buf)
 
@@ -90,8 +90,8 @@ object ByteBufWrapper
           case x: Short => buf <<< x
           case x: Long => buf <<< x
           case x: IByteBufObject => x.writeBytes(buf)
-          case x: Vector3 => x.writeByteBuf(buf)
-          case x: Vector2 => x.writeByteBuf(buf)
+          case x: Pos => x.writeByteBuf(buf)
+          case x: Pos2D => x.writeByteBuf(buf)
           case x: NBTTagCompound => buf <<< x
           case x: FluidTank => buf <<< x
           case x: ISave => buf <<< x

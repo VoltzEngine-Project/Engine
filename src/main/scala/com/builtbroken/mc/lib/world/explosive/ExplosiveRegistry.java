@@ -6,7 +6,7 @@ import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.mod.config.Config;
-import com.builtbroken.mc.lib.transform.vector.VectorWorld;
+import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.IWorldChangeAction;
 import com.builtbroken.mc.lib.world.edit.WorldChangeHelper;
 
@@ -83,7 +83,7 @@ public final class ExplosiveRegistry
      */
     public static WorldChangeHelper.ChangeResult triggerExplosive(World world, double x, double y, double z, IExplosive ex, TriggerCause triggerCause, int multi, NBTTagCompound tag)
     {
-        return triggerExplosive(new VectorWorld(world, x, y, z), ex, triggerCause, multi, tag);
+        return triggerExplosive(new Location(world, x, y, z), ex, triggerCause, multi, tag);
     }
 
     /**
@@ -95,7 +95,7 @@ public final class ExplosiveRegistry
      * @param multi        - size of the action
      * @return if the result completed, was blocked, or failed
      */
-    public static WorldChangeHelper.ChangeResult triggerExplosive(VectorWorld loc, IExplosive ex, TriggerCause triggerCause, int multi, NBTTagCompound tag)
+    public static WorldChangeHelper.ChangeResult triggerExplosive(Location loc, IExplosive ex, TriggerCause triggerCause, int multi, NBTTagCompound tag)
     {
         if (isRegistered(ex))
         {

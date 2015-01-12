@@ -3,7 +3,7 @@ package com.builtbroken.mc.test.transform.region;
 import junit.framework.TestCase;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.builtbroken.mc.lib.transform.region.Cuboid;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 /**
  * Created by robert on 12/14/2014.
@@ -15,7 +15,7 @@ public class CuboidTest extends TestCase
     @Override
     protected void setUp()
     {
-        cube = new Cuboid(new Vector3(-0.5, -0.5, -0.5), new Vector3(0.5, 0.5, 0.5));
+        cube = new Cuboid(new Pos(-0.5, -0.5, -0.5), new Pos(0.5, 0.5, 0.5));
     }
 
     public void testXOverlap()
@@ -43,7 +43,7 @@ public class CuboidTest extends TestCase
     {
         for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
         {
-            Vector3 vec = new Vector3(dir).multi(0.3);
+            Pos vec = new Pos(dir).multi(0.3);
             Cuboid c = cube.add(vec);
             if (!cube.doesOverlap(c))
             {
@@ -63,7 +63,7 @@ public class CuboidTest extends TestCase
         {
             for (int side = 0; side < 4; side++)
             {
-                Vector3 vec = new Vector3(dir).multi(0.3);
+                Pos vec = new Pos(dir).multi(0.3);
                 switch (dir)
                 {
                     case DOWN:
@@ -118,10 +118,10 @@ public class CuboidTest extends TestCase
             Cuboid above = cube;
             assertEquals("Failed center collision check for side " + dir, true, cube.isInsideBounds(above));
 
-            above = above.add(new Vector3(dir));
+            above = above.add(new Pos(dir));
             assertEquals("Failed collision check one for side " + dir, false, cube.isInsideBounds(above));
 
-            above = above.add(new Vector3(dir));
+            above = above.add(new Pos(dir));
             assertEquals("Failed collision check two for side " + dir, false, cube.isInsideBounds(above));
         }
     }

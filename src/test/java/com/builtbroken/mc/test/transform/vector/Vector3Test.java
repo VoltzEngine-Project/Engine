@@ -2,7 +2,7 @@ package com.builtbroken.mc.test.transform.vector;
 
 import junit.framework.TestCase;
 import org.junit.Assert;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 /**
  * Created by robert on 10/27/2014.
@@ -12,7 +12,7 @@ public class Vector3Test extends TestCase
     /**Simple addition test for Vector3 */
     public void testAddition() throws Exception
     {
-        Vector3 vec = new Vector3(0, 1, 0);
+        Pos vec = new Pos(0, 1, 0);
         vec = vec.add(1, 1, 1);
 
         Assert.assertEquals(2.0, vec.y(), 0);
@@ -23,7 +23,7 @@ public class Vector3Test extends TestCase
     /**Simple addition test for Vector3 */
     public void testSubtraction() throws Exception
     {
-        Vector3 vec = new Vector3(0, 1, 0);
+        Pos vec = new Pos(0, 1, 0);
         vec = vec.subtract(1, 1, 1);
 
         Assert.assertEquals(0.0, vec.y(), 0);

@@ -2,7 +2,7 @@ package com.builtbroken.mc.test.transform.vector;
 
 import junit.framework.TestCase;
 import com.builtbroken.mc.lib.transform.sorting.Vector3DistanceComparator;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,14 +15,14 @@ public class Vector3Sorter extends TestCase
 {
     public void testClosestSorter()
     {
-        List<Vector3> list = new ArrayList();
-        Vector3 vec_1 = newVector(list, 1, 0, 1);
-        Vector3 vec_2 = newVector(list, 2, 0, 2);
-        Vector3 vec_3 = newVector(list, 3, 0, 3);
-        Vector3 vec_4 = newVector(list, -1, 0, -2);
-        Vector3 vec_5 = newVector(list, -4, 0, -4);
+        List<Pos> list = new ArrayList();
+        Pos vec_1 = newVector(list, 1, 0, 1);
+        Pos vec_2 = newVector(list, 2, 0, 2);
+        Pos vec_3 = newVector(list, 3, 0, 3);
+        Pos vec_4 = newVector(list, -1, 0, -2);
+        Pos vec_5 = newVector(list, -4, 0, -4);
 
-        Collections.sort(list, new Vector3DistanceComparator(new Vector3(0, 0, 0)));
+        Collections.sort(list, new Vector3DistanceComparator(new Pos(0, 0, 0)));
         assertEquals(list.get(0), vec_1);
         assertEquals(list.get(1), vec_4);
         assertEquals(list.get(2), vec_2);
@@ -30,9 +30,9 @@ public class Vector3Sorter extends TestCase
         assertEquals(list.get(4), vec_5);
     }
 
-    private Vector3 newVector(List<Vector3> list, int x, int y, int z)
+    private Pos newVector(List<Pos> list, int x, int y, int z)
     {
-        Vector3 vec = new Vector3(x, y, z);
+        Pos vec = new Pos(x, y, z);
         list.add(vec);
         return vec;
     }

@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.world.WorldUtility;
 import com.builtbroken.mc.lib.transform.rotation.Quaternion;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.EnumSet;
 
@@ -56,7 +56,7 @@ public class RenderItemOverlayUtility
 		{
 			if (inventory[i] != null)
 			{
-				Vector3 translation = new Vector3((double) (i / matrixX) / ((double) matrixX) + (0.5 / (matrixX)), 1.1, (double) (i % matrixZ) / ((double) matrixZ) + (0.5 / (matrixZ))).add(-0.5);
+				Pos translation = new Pos((double) (i / matrixX) / ((double) matrixX) + (0.5 / (matrixX)), 1.1, (double) (i % matrixZ) / ((double) matrixZ) + (0.5 / (matrixZ))).add(-0.5);
 				translation.multiply(0.85);
 				GL11.glPushMatrix();
 				GL11.glTranslated(x + 0.5f, y + 0.5f, z + 0.5f);
@@ -64,7 +64,7 @@ public class RenderItemOverlayUtility
 				GL11.glTranslated(translation.x(), translation.y(), translation.z());
 				GL11.glScalef(scale, scale, scale);
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-				renderItem(tileEntity.getWorldObj(), ForgeDirection.UP, inventory[i], new Vector3(0, 0, 0), 0, 4);
+				renderItem(tileEntity.getWorldObj(), ForgeDirection.UP, inventory[i], new Pos(0, 0, 0), 0, 4);
 				GL11.glPopMatrix();
 
 				if (isLooking)
@@ -72,7 +72,7 @@ public class RenderItemOverlayUtility
 					GL11.glPushMatrix();
 					GL11.glTranslated(x, y, z);
 					int angle = WorldUtility.getAngleFromForgeDirection(WorldUtility.invertX(dir));
-					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.transform(new Quaternion(angle, Vector3.up())).add(0.5).add(new Vector3(0, 0.3, 0)));
+					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.transform(new Quaternion(angle, Pos.up())).add(0.5).add(new Pos(0, 0.3, 0)));
 					GL11.glPopMatrix();
 				}
 			}
@@ -226,7 +226,7 @@ public class RenderItemOverlayUtility
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var11 * scale, var12 * scale);
 	}
 
-	public static void renderItem(World world, ForgeDirection dir, ItemStack itemStack, Vector3 position, float rotationYaw, int angle)
+	public static void renderItem(World world, ForgeDirection dir, ItemStack itemStack, Pos position, float rotationYaw, int angle)
 	{
 		if (itemStack != null)
 		{

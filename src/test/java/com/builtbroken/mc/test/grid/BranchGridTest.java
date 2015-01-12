@@ -2,7 +2,6 @@ package com.builtbroken.mc.test.grid;
 
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
-import junit.framework.TestCase;
 import net.minecraft.tileentity.TileEntity;
 import com.builtbroken.mc.lib.grid.branch.BranchedGrid;
 import com.builtbroken.mc.lib.grid.branch.part.Branch;
@@ -10,9 +9,7 @@ import com.builtbroken.mc.lib.grid.branch.part.Junction;
 import com.builtbroken.mc.lib.grid.branch.part.Part;
 import com.builtbroken.mc.prefab.tile.TileConductor;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
-import org.junit.After;
-import org.junit.Before;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -111,7 +108,7 @@ public class BranchGridTest extends AbstractTest
             System.out.println("Something went wrong building " + name + ".\n No tile was found to get grid from.");
             for(TileEntity t : world.tiles)
             {
-                System.out.println("Tile: " + t + "   Vec: " + new Vector3(t));
+                System.out.println("Tile: " + t + "   Vec: " + new Pos(t));
             }
             fail();
         }

@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
 import org.lwjgl.opengl.GL11._
 import com.builtbroken.mc.lib.render.{RenderBlockUtility, RenderUtility}
-import com.builtbroken.mc.lib.transform.vector.Vector3
+import com.builtbroken.mc.lib.transform.vector.Pos
 import com.builtbroken.mc.lib.helper.wrapper.BitmaskWrapper._
 
 /**
@@ -30,7 +30,7 @@ trait RenderConnectedTexture extends Tile
    * The Tessellator is already drawing.
    * @return true if vertices were added to the tessellator
    */
-  override def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
+  override def renderStatic(renderer: RenderBlocks, pos: Pos, pass: Int): Boolean =
   {
     var sideMap = 0
 

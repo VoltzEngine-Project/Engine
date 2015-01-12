@@ -1,9 +1,9 @@
 package com.builtbroken.mc.testing.debug;
 
+import com.builtbroken.mc.api.IPosWorld;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import com.builtbroken.mc.api.IUpdate;
-import com.builtbroken.mc.lib.transform.vector.IVectorWorld;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -16,7 +16,7 @@ import java.awt.event.WindowEvent;
  * @author Darkguardsman
  */
 @SuppressWarnings("serial")
-public class FrameDebug extends Frame implements IVectorWorld
+public class FrameDebug extends Frame implements IPosWorld
 {
 	protected long tick = 0;
 	/**

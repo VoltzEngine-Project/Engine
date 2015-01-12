@@ -1,7 +1,7 @@
 package com.builtbroken.mc.api.tile.node;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 public interface IMechanicalNode extends IEnergyNode
 {
@@ -17,5 +17,5 @@ public interface IMechanicalNode extends IEnergyNode
 
 	public IMechanicalNode setLoad(double load);
 
-	public Vector3 position();
+	public Pos position();
 }

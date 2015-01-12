@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.RenderBlocks
 import net.minecraftforge.common.util.ForgeDirection
 import com.builtbroken.mc.api.tile.IRotatable
 import com.builtbroken.mc.lib.render.{RenderBlockAdvanced, RenderUtility}
-import com.builtbroken.mc.lib.transform.vector.Vector3
+import com.builtbroken.mc.lib.transform.vector.Pos
 import com.builtbroken.mc.lib.helper.RotationUtility
 
 /**
@@ -20,7 +20,7 @@ trait RenderRotatedTexture extends Tile with IRotatable
   var renderBlocks: RenderBlockAdvanced = null
 
   @SideOnly(Side.CLIENT)
-  override def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
+  override def renderStatic(renderer: RenderBlocks, pos: Pos, pass: Int): Boolean =
   {
     if (renderBlocks == null)
       renderBlocks = new RenderBlockAdvanced()

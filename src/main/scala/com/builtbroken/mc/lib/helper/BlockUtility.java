@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.helper;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -104,12 +104,12 @@ public class BlockUtility
     /**
      * Sets a block in a sneaky way to bypass some restraints.
      */
-    public static void setBlockSneaky(World world, Vector3 position, Block block, int metadata, TileEntity tileEntity)
+    public static void setBlockSneaky(World world, Pos position, Block block, int metadata, TileEntity tileEntity)
     {
         if (block != null && world != null)
         {
             Chunk chunk = world.getChunkFromChunkCoords(position.xi() >> 4, position.zi() >> 4);
-            Vector3 chunkPosition = new Vector3(position.xi() & 0xF, position.yi() & 0xF, position.zi() & 0xF);
+            Pos chunkPosition = new Pos(position.xi() & 0xF, position.yi() & 0xF, position.zi() & 0xF);
 
             int heightMapIndex = chunkPosition.zi() << 4 | chunkPosition.xi();
 
@@ -145,7 +145,7 @@ public class BlockUtility
                 {
                     if (position.yi() >= heightMapValue)
                     {
-                        relightBlock(chunk, chunkPosition.clone().add(new Vector3(0, 1, 0)));
+                        relightBlock(chunk, chunkPosition.clone().add(new Pos(0, 1, 0)));
                     }
                 }
                 else if (position.yi() == heightMapValue - 1)
@@ -175,7 +175,7 @@ public class BlockUtility
      * @param chunk
      * @param position
      */
-    public static void relightBlock(Chunk chunk, Vector3 position)
+    public static void relightBlock(Chunk chunk, Pos position)
     {
         try
         {
@@ -194,7 +194,7 @@ public class BlockUtility
      * @param chunk
      * @param position
      */
-    public static void propagateSkylightOcclusion(Chunk chunk, Vector3 position)
+    public static void propagateSkylightOcclusion(Chunk chunk, Pos position)
     {
         try
         {

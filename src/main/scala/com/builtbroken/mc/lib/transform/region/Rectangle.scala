@@ -1,18 +1,18 @@
 package com.builtbroken.mc.lib.transform.region
 
 import java.math.{BigDecimal, MathContext, RoundingMode}
-
+import com.builtbroken.jlib.data.IPos2D
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
-import com.builtbroken.mc.lib.transform.vector.{IVector2, Vector2}
+import com.builtbroken.mc.lib.transform.vector.Pos2D
 
-class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
+class Rectangle(var min: Pos2D, var max: Pos2D) extends Shape[Rectangle]
 {
-  def this() = this(new Vector2, new Vector2)
+  def this() = this(new Pos2D, new Pos2D)
 
-  def this(vec: Vector2, expansion: Double) = this(vec, vec + expansion)
+  def this(vec: Pos2D, expansion: Double) = this(vec, vec + expansion)
 
-  def this(minX: Double, minY: Double, maxX: Double, maxY: Double) = this(new Vector2(minX, minY), new Vector2(maxX, maxY))
+  def this(minX: Double, minY: Double, maxX: Double, maxY: Double) = this(new Pos2D(minX, minY), new Pos2D(maxX, maxY))
 
   def this(rect: Rectangle) = this(rect.min.clone, rect.max.clone)
 
@@ -30,18 +30,18 @@ class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
 
   override def +(amount: Rectangle): Rectangle = new Rectangle(min + amount.min, max + amount.max)
 
-  def +(vec: Vector2): Rectangle = new Rectangle(min + vec, max + vec)
+  def +(vec: Pos2D): Rectangle = new Rectangle(min + vec, max + vec)
 
-  def +=(vec: Vector2): Rectangle =
+  def +=(vec: Pos2D): Rectangle =
   {
     min += vec
     max += vec
     return this
   }
 
-  def -(vec: Vector2): Rectangle = this + (vec * -1)
+  def -(vec: Pos2D): Rectangle = this + (vec * -1)
 
-  def -=(vec: Vector2): Rectangle = this += (vec * -1)
+  def -=(vec: Pos2D): Rectangle = this += (vec * -1)
 
   def *(amount: Double): Rectangle = new Rectangle(min * amount, max * amount)
 
@@ -55,7 +55,7 @@ class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
   /** Checks if the point is inside the shape */
   override def isWithin(x: Double, y: Double): Boolean = y >= this.min.y && y <= this.max.y && x >= this.min.x && x <= this.max.x
 
-  def isWithin_rotated(p: IVector2): Boolean =
+  def isWithin_rotated(p: IPos2D): Boolean =
   {
     //Rect corners
     val cornerB = this.cornerB()
@@ -72,9 +72,9 @@ class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
   }
 
   def cornerA() = min
-  def cornerB() = new Vector2(min.x, max.y)
+  def cornerB() = new Pos2D(min.x, max.y)
   def cornerC() = max
-  def cornerD() = new Vector2(max.x, min.y)
+  def cornerD() = new Pos2D(max.x, min.y)
 
   /**
    * Returns whether the given region intersects with this one.

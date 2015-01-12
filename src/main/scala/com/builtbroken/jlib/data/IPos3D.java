@@ -1,11 +1,11 @@
-package com.builtbroken.mc.lib.transform.vector;
+package com.builtbroken.jlib.data;
 
 /**
  * Useful interface to define that an object has a 3D location.
  *
  * @author DarkGuardsman
  */
-public interface IVector3 extends IVector2
+public interface IPos3D extends IPos2D
 {
 	double z();
 }

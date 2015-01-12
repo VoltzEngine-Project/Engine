@@ -18,7 +18,7 @@ import com.builtbroken.mc.lib.render.RenderUtility;
 import com.builtbroken.jlib.data.science.units.UnitDisplay;
 import com.builtbroken.jlib.data.science.units.UnitDisplay.Unit;
 import com.builtbroken.mc.lib.transform.region.Rectangle;
-import com.builtbroken.mc.lib.transform.vector.Vector2;
+import com.builtbroken.mc.lib.transform.vector.Pos2D;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 
 import java.util.HashMap;
@@ -75,7 +75,7 @@ public class GuiContainerBase extends GuiContainer
 		{
 			Entry<Rectangle, String> entry = it.next();
 
-			if (entry.getKey().isWithin2D(new Vector2(mouseX - this.guiLeft, mouseY - this.guiTop)))
+			if (entry.getKey().isWithin2D(new Pos2D(mouseX - this.guiLeft, mouseY - this.guiTop)))
 			{
 				this.tooltip = entry.getValue();
 				break;
@@ -158,7 +158,7 @@ public class GuiContainerBase extends GuiContainer
 
 		if (tooltip != null && tooltip != "")
 		{
-			if (new Rectangle(x, y, (int) (text.length() * 4.8), 12).isWithin2D(new Vector2(mouseX, mouseY)))
+			if (new Rectangle(x, y, (int) (text.length() * 4.8), 12).isWithin2D(new Pos2D(mouseX, mouseY)))
 			{
 				this.tooltip = tooltip;
 			}
@@ -314,7 +314,7 @@ public class GuiContainerBase extends GuiContainer
 		}*/
 
 		//TODO: Check if this rect works.
-		if (new Rectangle(x, y, x + display.length() * 5, y + 9).isWithin2D(new Vector2(mouseX, mouseY)))
+		if (new Rectangle(x, y, x + display.length() * 5, y + 9).isWithin2D(new Pos2D(mouseX, mouseY)))
 		{
 			if (Mouse.isButtonDown(0) && this.lastChangeFrameTime <= 0)
 			{
@@ -354,7 +354,7 @@ public class GuiContainerBase extends GuiContainer
 			}
 		}
 */
-		if (new Rectangle(x, y, x + display.length() * 5, y + 9).isWithin2D(new Vector2(mouseX, mouseY)))
+		if (new Rectangle(x, y, x + display.length() * 5, y + 9).isWithin2D(new Pos2D(mouseX, mouseY)))
 		{
 			if (Mouse.isButtonDown(0) && this.lastChangeFrameTime <= 0)
 			{

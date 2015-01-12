@@ -1,13 +1,13 @@
 package com.builtbroken.mc.lib.transform.region
 
 import java.util
-
+import com.builtbroken.jlib.data.IPos3D
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.MathHelper
 import net.minecraft.world.World
-import com.builtbroken.mc.lib.transform.vector.{IVector3, Vector3}
+import com.builtbroken.mc.lib.transform.vector.Pos
 import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper._
 
 /** 3D Ball shaped region in the world.
@@ -15,7 +15,7 @@ import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper._
   *
   * Created by robert on 12/18/2014.
   */
-class Sphere(c: IVector3, var r: Double) extends Shape3D[Sphere](c)
+class Sphere(c: IPos3D, var r: Double) extends Shape3D[Sphere](c)
 {
   override def set(other: Sphere): Sphere =
   {
@@ -26,11 +26,11 @@ class Sphere(c: IVector3, var r: Double) extends Shape3D[Sphere](c)
 
   override def +(amount: Double): Sphere = new Sphere(center, r + amount)
 
-  override def +(amount: Sphere): Sphere = new Sphere(new Vector3(center).midPoint(amount.center), r + amount.r)
+  override def +(amount: Sphere): Sphere = new Sphere(new Pos(center).midPoint(amount.center), r + amount.r)
 
   override def *(amount: Double): Sphere = new Sphere(center, r * amount)
 
-  override def *(amount: Sphere): Sphere = new Sphere(new Vector3(center).midPoint(amount.center), r * amount.r)
+  override def *(amount: Sphere): Sphere = new Sphere(new Pos(center).midPoint(amount.center), r * amount.r)
 
   override def writeByteBuf(data: ByteBuf): ByteBuf =
   {
@@ -56,7 +56,7 @@ class Sphere(c: IVector3, var r: Double) extends Shape3D[Sphere](c)
 
   override def getVolume: Double = (4 * Math.PI * (r * r * r)) / 3
 
-  override def isWithin(x: Double, y: Double, z: Double): Boolean = new Vector3(x, y, z).subtract(x, y, z).magnitude <= this.r
+  override def isWithin(x: Double, y: Double, z: Double): Boolean = new Pos(x, y, z).subtract(x, y, z).magnitude <= this.r
 
   def getEntities[E <: Entity](world: World, clazz: Class[E]): java.util.List[E] =
   {
@@ -88,7 +88,7 @@ class Sphere(c: IVector3, var r: Double) extends Shape3D[Sphere](c)
             {
               val entity = list1.get(l).asInstanceOf[Entity];
 
-              if (ClassIsAssignableFrom.isAssignableFrom(clazz, entity.getClass()) && distance3D(new Vector3(entity)) <= r)
+              if (ClassIsAssignableFrom.isAssignableFrom(clazz, entity.getClass()) && distance3D(new Pos(entity)) <= r)
               {
                 list.add(entity.asInstanceOf[E]);
               }

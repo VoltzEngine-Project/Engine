@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
-import com.builtbroken.mc.lib.transform.vector.VectorWorld;
+import com.builtbroken.mc.lib.transform.vector.Location;
 
 import java.util.LinkedHashMap;
 import java.util.UUID;
@@ -48,7 +48,7 @@ public class DummyPlayer extends FakePlayer
         return FAKE_PLAYERS.get(world);
     }
 
-    public static boolean useItemAt(ItemStack itemStack, VectorWorld location, ForgeDirection direction)
+    public static boolean useItemAt(ItemStack itemStack, Location location, ForgeDirection direction)
     {
         return useItemAt(itemStack, location.world(), location.xi(), location.yi(), location.zi(), direction.ordinal(), 0, 0, 0);
     }

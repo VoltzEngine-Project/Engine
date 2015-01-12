@@ -1,11 +1,9 @@
 package com.builtbroken.mc.prefab.tile;
 
-import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.transform.region.Cuboid;
-import com.builtbroken.mc.lib.transform.vector.Vector2;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos2D;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,7 +24,6 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -45,11 +42,12 @@ public class BlockTile extends Block implements ITileEntityProvider
         super(tile.material);
         this.staticTile = tile;
         this.staticTile.setBlock(this);
+        this.opaque = isOpaqueCube();
+        this.setBlockBounds(this.staticTile.bounds.min().xf(), this.staticTile.bounds.min().yf(), this.staticTile.bounds.min().zf(), this.staticTile.bounds.max().xf(), this.staticTile.bounds.max().yf(), this.staticTile.bounds.max().zf());
+
         setBlockName(prefix + staticTile.name);
         setBlockTextureName(prefix + staticTile.textureName);
         setCreativeTab(staticTile.creativeTab == null ? tab : staticTile.creativeTab);
-        opaque = isOpaqueCube();
-        this.staticTile = tile;
         setLightOpacity(isOpaqueCube() ?  255 : 0);
         setHardness(staticTile.hardness);
         setResistance(staticTile.resistance);
@@ -87,7 +85,7 @@ public class BlockTile extends Block implements ITileEntityProvider
     public float getExplosionResistance(Entity entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ)
     {
         inject(world, x, y, z);
-        float resistance = getTile(world, x, y, z).getExplosionResistance(entity, new Vector3(explosionX, explosionY, explosionZ));
+        float resistance = getTile(world, x, y, z).getExplosionResistance(entity, new Pos(explosionX, explosionY, explosionZ));
         eject();
         return resistance;
     }
@@ -162,7 +160,7 @@ public class BlockTile extends Block implements ITileEntityProvider
     public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ)
     {
         inject(world, x, y, z);
-        getTile(world, x, y, z).onNeighborChanged(new Vector3(tileX, tileY, tileZ));
+        getTile(world, x, y, z).onNeighborChanged(new Pos(tileX, tileY, tileZ));
         eject();
     }
 
@@ -170,7 +168,7 @@ public class BlockTile extends Block implements ITileEntityProvider
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
     {
         inject(world, x, y, z);
-        boolean value = getTile(world, x, y, z).onPlayerActivated(player, side, new Vector3(hitX, hitY, hitZ));
+        boolean value = getTile(world, x, y, z).onPlayerActivated(player, side, new Pos(hitX, hitY, hitZ));
         eject();
         return value;
     }
@@ -203,14 +201,17 @@ public class BlockTile extends Block implements ITileEntityProvider
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
     {
         inject(world, x, y, z);
-        Cuboid cube = new Cuboid(aabb).subtract(new Vector3(x, y, z));
+        Cuboid cube = new Cuboid(aabb).subtract(new Pos(x, y, z));
         Iterable<Cuboid> bounds = getTile(world, x, y, z).getCollisionBoxes(cube, entity);
 
         if (bounds != null)
         {
             for (Cuboid cuboid: bounds)
             {
-                list.add((cuboid.add(new Vector3(x, y, z))).toAABB());
+                if(cuboid.isInsideBounds(cube))
+                {
+                    list.add((cuboid.add(new Pos(x, y, z))).toAABB());
+                }
             }
         }
         eject();
@@ -385,7 +386,7 @@ public class BlockTile extends Block implements ITileEntityProvider
     {
         if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
         {
-            InventoryUtility.dropItemStack(world, new Vector3(x, y, z), itemStack);
+            InventoryUtility.dropItemStack(world, new Pos(x, y, z), itemStack);
         }
     }
 
@@ -405,24 +406,24 @@ public class BlockTile extends Block implements ITileEntityProvider
 
     }
 
-    public static Vector2 getClickedFace(Byte hitSide, float hitX, float hitY, float hitZ)
+    public static Pos2D getClickedFace(Byte hitSide, float hitX, float hitY, float hitZ)
     {
         switch (hitSide)
         {
             case 0:
-                return new Vector2(1 - hitX, hitZ);
+                return new Pos2D(1 - hitX, hitZ);
             case 1:
-                return new Vector2(hitX, hitZ);
+                return new Pos2D(hitX, hitZ);
             case 2:
-                return new Vector2(1 - hitX, 1 - hitY);
+                return new Pos2D(1 - hitX, 1 - hitY);
             case 3:
-                return new Vector2(hitX, 1 - hitY);
+                return new Pos2D(hitX, 1 - hitY);
             case 4:
-                return new Vector2(hitZ, 1 - hitY);
+                return new Pos2D(hitZ, 1 - hitY);
             case 5:
-                return new Vector2(1 - hitZ, 1 - hitY);
+                return new Pos2D(1 - hitZ, 1 - hitY);
             default:
-                return new Vector2(0.5, 0.5);
+                return new Pos2D(0.5, 0.5);
         }
     }
 

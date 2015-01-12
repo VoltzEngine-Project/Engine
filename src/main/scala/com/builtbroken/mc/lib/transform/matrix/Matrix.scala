@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.transform.matrix
 
-import com.builtbroken.mc.lib.transform.vector.Vector3
+import com.builtbroken.jlib.data.IPos3D
+import com.builtbroken.mc.lib.transform.vector.Pos
 
 import scala.Array._
 
@@ -56,12 +57,12 @@ class Matrix(val row: Int, val column: Int)
    * @param vector - A vector to be multiplied
    * @return The vector multiplied with the matrix.
    */
-  def *(vector: Vector3): Vector3 =
+  def *(vector: IPos3D): Pos =
   {
     val newX = vector.x * matrix(0)(0) + vector.y * matrix(0)(1) + vector.z * matrix(0)(2)
     val newY = vector.x * matrix(1)(0) + vector.y * matrix(1)(1) + vector.z * matrix(1)(2)
     val newZ = vector.x * matrix(2)(0) + vector.y * matrix(2)(1) + vector.z * matrix(2)(2)
-    return new Vector3(newX, newY, newZ)
+    return new Pos(newX, newY, newZ)
   }
 
   def multiply(otherMatrix: Matrix) = this * otherMatrix

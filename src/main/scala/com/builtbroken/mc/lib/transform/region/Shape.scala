@@ -1,10 +1,10 @@
 package com.builtbroken.mc.lib.transform.region
 
+import com.builtbroken.jlib.data.{IPos3D, IPos2D}
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.Vec3
 import com.builtbroken.mc.lib.transform.AbstractOperation
-import com.builtbroken.mc.lib.transform.vector.{IVector2, IVector3}
 import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper._
 
 /** Prefab for 2D shapes, assumes that if the shape is placed into the world that
@@ -32,10 +32,10 @@ abstract class Shape[T <: Shape[T]] extends AbstractOperation[T]
   //====================
 
   /** Checks if the point is inside the shape */
-  def isWithin2D(vec: IVector2): Boolean = isWithin(vec.x, vec.y)
+  def isWithin2D(vec: IPos2D): Boolean = isWithin(vec.x, vec.y)
 
   /** Checks if the point is inside the shape */
-  def isWithin(vec: IVector3): Boolean = isWithin(vec.x, vec.y, vec.z)
+  def isWithin(vec: IPos3D): Boolean = isWithin(vec.x, vec.y, vec.z)
 
   /** Checks if the point is inside the shape */
   def isWithin(vec: Vec3): Boolean = isWithin(vec.xCoord, vec.yCoord, vec.zCoord)

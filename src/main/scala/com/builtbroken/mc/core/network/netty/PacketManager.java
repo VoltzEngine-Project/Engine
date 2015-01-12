@@ -1,8 +1,9 @@
 package com.builtbroken.mc.core.network.netty;
 
+import com.builtbroken.jlib.data.IPos3D;
+import com.builtbroken.mc.api.IPosWorld;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
-import com.builtbroken.mc.lib.mod.loadable.ILoadableProxy;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
@@ -15,14 +16,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper;
 import com.builtbroken.mc.core.network.packet.PacketEntity;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
-import com.builtbroken.mc.lib.transform.vector.IVector3;
-import com.builtbroken.mc.lib.transform.vector.IVectorWorld;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.EnumMap;
 
@@ -129,17 +127,17 @@ public class PacketManager implements ILoadable
 		this.channelEnumMap.get(Side.SERVER).writeAndFlush(message);
 	}
 
-	public void sendToAllAround(AbstractPacket message, IVectorWorld point, double range)
+	public void sendToAllAround(AbstractPacket message, IPosWorld point, double range)
 	{
 		sendToAllAround(message, point.world(), point, range);
 	}
 
-	public void sendToAllAround(AbstractPacket message, World world, IVector3 point, double range)
+	public void sendToAllAround(AbstractPacket message, World world, IPos3D point, double range)
 	{
 		sendToAllAround(message, world, point.x(), point.y(), point.z(), range);
 	}
 
-	public void sendToAllAround(AbstractPacket message, World world, Vector3 point, double range)
+	public void sendToAllAround(AbstractPacket message, World world, Pos point, double range)
 	{
 		sendToAllAround(message, world, point.x(), point.y(), point.z(), range);
 	}

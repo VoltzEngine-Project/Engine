@@ -1,5 +1,6 @@
-package com.builtbroken.mc.lib.transform.vector;
+package com.builtbroken.mc.api;
 
+import com.builtbroken.jlib.data.IPos3D;
 import net.minecraft.world.World;
 
 /**
@@ -7,7 +8,7 @@ import net.minecraft.world.World;
  *
  * @author DarkGuardsman
  */
-public interface IVectorWorld extends IVector3
+public interface IPosWorld extends IPos3D
 {
 	World world();
 }

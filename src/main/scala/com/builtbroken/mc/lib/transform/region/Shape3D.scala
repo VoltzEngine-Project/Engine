@@ -1,9 +1,10 @@
 package com.builtbroken.mc.lib.transform.region
 
+import com.builtbroken.jlib.data.{IPos3D, IPos2D}
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 import com.builtbroken.mc.lib.transform.rotation.IRotation
-import com.builtbroken.mc.lib.transform.vector.{Vector3, IVector2, IVector3, TVector3}
+import com.builtbroken.mc.lib.transform.vector.{Pos, TVector3}
 import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper._
 
 /** Prefab for any 3D shape, any 2D shape that is used with this prefab will switch y for z as it
@@ -12,14 +13,14 @@ import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper._
   *
  * Created by robert on 12/18/2014.
  */
-abstract class Shape3D[T <: Shape3D[T]](var center: IVector3) extends Shape[T] with TVector3 with IRotation
+abstract class Shape3D[T <: Shape3D[T]](var center: IPos3D) extends Shape[T] with TVector3 with IRotation
 {
   var pitch: Double = 0;
   var roll: Double = 0;
 
   def this(nbt: NBTTagCompound) =
   {
-    this(new Vector3(nbt.getCompoundTag("center")))
+    this(new Pos(nbt.getCompoundTag("center")))
     yaw = nbt.getDouble("yaw")
     pitch = nbt.getDouble("pitch")
     roll = nbt.getDouble("roll")
@@ -27,7 +28,7 @@ abstract class Shape3D[T <: Shape3D[T]](var center: IVector3) extends Shape[T] w
 
   def this(data: ByteBuf) =
   {
-    this(new Vector3(data))
+    this(new Pos(data))
     yaw = data.readDouble
     pitch = data.readDouble
     roll = data.readDouble
@@ -68,16 +69,16 @@ abstract class Shape3D[T <: Shape3D[T]](var center: IVector3) extends Shape[T] w
   def isWithin(x: Double, y: Double, z: Double): Boolean
 
   /** Center of the 3D shape */
-  def getCenter: IVector3 = center
+  def getCenter: IPos3D = center
 
   /** Is the vector(x, z) inside the shape */
   override def isWithin(x: Double, z: Double): Boolean = isWithin(x, this.y, z)
 
   /** Is the vector(x, z) inside the shape */
-  override def isWithin2D(vec: IVector2): Boolean = isWithin(vec.x, this.y, vec.y)
+  override def isWithin2D(vec: IPos2D): Boolean = isWithin(vec.x, this.y, vec.y)
 
   /** Is the vector(x, y, z) inside the shape */
-  override def isWithin(vec: IVector3): Boolean = isWithin(vec.x, vec.y, vec.z)
+  override def isWithin(vec: IPos3D): Boolean = isWithin(vec.x, vec.y, vec.z)
 
   override def x: Double = getCenter.x()
 
@@ -96,7 +97,7 @@ abstract class Shape3D[T <: Shape3D[T]](var center: IVector3) extends Shape[T] w
 
   override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
-    nbt.setTag("center", new Vector3(center).writeNBT(new NBTTagCompound))
+    nbt.setTag("center", new Pos(center).writeNBT(new NBTTagCompound))
     super.writeNBT(nbt)
     nbt.setDouble("pitch", pitch)
     nbt.setDouble("roll", roll)

@@ -2,7 +2,6 @@ package com.builtbroken.mc.test.grid;
 
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
-import junit.framework.TestCase;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -10,7 +9,7 @@ import com.builtbroken.mc.api.tile.INodeProvider;
 import com.builtbroken.mc.lib.grid.branch.NodeBranchPart;
 import com.builtbroken.mc.prefab.tile.TileConductor;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
-import com.builtbroken.mc.lib.transform.vector.VectorWorld;
+import com.builtbroken.mc.lib.transform.vector.Location;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,7 +22,7 @@ import java.util.Map;
 public class NodeConnectionTest extends AbstractTest
 {
     private FakeWorld world;
-    VectorWorld center;
+    Location center;
 
     @Test
     public void testWireExists()
@@ -41,7 +40,7 @@ public class NodeConnectionTest extends AbstractTest
             buildWireInDir(side);
 
             //Test
-            VectorWorld vec = center.add(side);
+            Location vec = center.add(side);
             TileEntity tile = vec.getTileEntity();
             if(tile instanceof INodeProvider)
             {
@@ -138,7 +137,7 @@ public class NodeConnectionTest extends AbstractTest
 
     private void buildWireInDir(ForgeDirection dir)
     {
-        VectorWorld vec = center.add(dir);
+        Location vec = center.add(dir);
         vec.setBlock(WireMap.wire());
 
         assertNotNull("Failed to place wire at " + vec, vec.getBlock());
@@ -159,7 +158,7 @@ public class NodeConnectionTest extends AbstractTest
     public void setUpForTest(String name)
     {
         world = new FakeWorld();
-        center = new VectorWorld(world, 8, 8, 8);
+        center = new Location(world, 8, 8, 8);
     }
 
     @Override

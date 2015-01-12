@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.transform.vector
 
+import com.builtbroken.jlib.data.IPos2D
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.entity.Entity
 
@@ -8,7 +9,7 @@ import net.minecraft.entity.Entity
  *
  * Created by robert(Darkguardsman) on 9/25/2014.
  */
-trait TVector2 extends IVector2
+trait TPos extends IPos2D
 {
   override def x: Double =
   {
@@ -41,7 +42,7 @@ trait TVector2 extends IVector2
   def yi : Int = y.asInstanceOf[Int]
 
   /** Gets this object as a Vector2 */
-  def toVector2 : Vector2 = new Vector2(x(), y())
+  def toVector2 : Pos2D = new Pos2D(x(), y())
 
-  def distance2D( vec : IVector2) : Double = toVector2.distance(new Vector2(vec.x(), vec.y()))
+  def distance2D( vec : IPos2D) : Double = toVector2.distance(new Pos2D(vec.x(), vec.y()))
 }

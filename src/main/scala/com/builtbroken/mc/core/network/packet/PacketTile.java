@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.IPacketReceiver;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 /**
  * Packet type designed to be used with Tiles
@@ -104,14 +104,14 @@ public class PacketTile extends PacketType
 				catch (IndexOutOfBoundsException ex)
 				{
 					System.out.println("Packet sent to a Tile[" + tile + "] failed to provide a packet ID");
-					System.out.println("Location: " + new Vector3(x, y, z));
+					System.out.println("Location: " + new Pos(x, y, z));
 					return;
 				}
 				receiver.read(buf, id, player, this);
 			}
 			catch (Exception e)
 			{
-				System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Vector3(x, y, z));
+				System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Pos(x, y, z));
 				e.printStackTrace();
 			}
 		}
@@ -124,17 +124,17 @@ public class PacketTile extends PacketType
 			}
 			catch (IndexOutOfBoundsException e)
 			{
-				System.out.println("Packet sent to a TileEntity was read out side its bounds [" + tile + "] in " + new Vector3(x, y, z));
+				System.out.println("Packet sent to a TileEntity was read out side its bounds [" + tile + "] in " + new Pos(x, y, z));
 			}
 			catch (Exception e)
 			{
-				System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Vector3(x, y, z));
+				System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Pos(x, y, z));
 				e.printStackTrace();
 			}
 		}
 		else
 		{
-			System.out.println("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error [" + tile + "] in " + new Vector3(x, y, z));
+			System.out.println("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error [" + tile + "] in " + new Pos(x, y, z));
 		}
 	}
 }

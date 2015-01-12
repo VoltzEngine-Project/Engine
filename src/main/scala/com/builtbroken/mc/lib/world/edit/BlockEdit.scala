@@ -5,14 +5,14 @@ import net.minecraft.entity.Entity
 import net.minecraft.init.Blocks
 import net.minecraft.util.{AxisAlignedBB, EnumFacing}
 import net.minecraft.world.World
-import com.builtbroken.mc.lib.transform.vector.VectorWorld
+import com.builtbroken.mc.lib.transform.vector.Location
 
 /** Simple version of Vector3 that is used to track location
   * along with the block to be set at that location.
   *
   * Created by robert on 12/2/2014.
   */
-class BlockEdit(w: World, x: Double, y: Double, z: Double) extends VectorWorld(w, x, y, z)
+class BlockEdit(w: World, x: Double, y: Double, z: Double) extends Location(w, x, y, z)
 {
   // Used to double check in case the block changes before we place the block
 

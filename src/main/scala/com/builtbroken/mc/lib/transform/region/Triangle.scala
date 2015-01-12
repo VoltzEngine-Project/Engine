@@ -1,19 +1,20 @@
 package com.builtbroken.mc.lib.transform.region
 
+import com.builtbroken.jlib.data.IPos2D
 import io.netty.buffer.ByteBuf
 import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper._
 import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
-import com.builtbroken.mc.lib.transform.vector.{Vector2, IVector2}
+import com.builtbroken.mc.lib.transform.vector.Pos2D
 
 /** Triangle shape. Assumes that connections go
   * a -> b -> c -> a forming a triangle shape
  * Created by robert on 12/14/2014.
  */
-class Triangle(var a: IVector2, var b: IVector2, var c: IVector2) extends Shape[Triangle]
+class Triangle(var a: IPos2D, var b: IPos2D, var c: IPos2D) extends Shape[Triangle]
 {
   override def getArea: Double = Math.abs(a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) /  2
 
-  override def isWithin2D(vec: IVector2): Boolean = ???
+  override def isWithin2D(vec: IPos2D): Boolean = ???
 
   override def set(other: Triangle): Triangle =
   {
@@ -27,20 +28,20 @@ class Triangle(var a: IVector2, var b: IVector2, var c: IVector2) extends Shape[
   /** Checks if the point is inside the shape */
   override def isWithin(x: Double, y: Double): Boolean =
   {
-    val p = new Vector2(x, y)
+    val p = new Pos2D(x, y)
     var ab = new Triangle(a, b, p).getArea
     var bc = new Triangle(b, c, p).getArea
     var ca = new Triangle(c, a, p).getArea
     return (ab + bc + ca) <= getArea
   }
 
-  override def +(amount: Double): Triangle = new Triangle(new Vector2(a.x + amount, a.y + amount), new Vector2(b.x + amount, b.y + amount), new Vector2(c.x + amount, c.y + amount))
+  override def +(amount: Double): Triangle = new Triangle(new Pos2D(a.x + amount, a.y + amount), new Pos2D(b.x + amount, b.y + amount), new Pos2D(c.x + amount, c.y + amount))
 
   override def +(t: Triangle): Triangle =
   {
-    val newA = new Vector2(a.x + t.a.x, a.y + t.a.y)
-    val newB = new Vector2(b.x + t.b.x, b.y + t.b.y)
-    val newC  = new Vector2(b.x + t.b.x, b.y + t.b.y)
+    val newA = new Pos2D(a.x + t.a.x, a.y + t.a.y)
+    val newB = new Pos2D(b.x + t.b.x, b.y + t.b.y)
+    val newC  = new Pos2D(b.x + t.b.x, b.y + t.b.y)
     return new Triangle(newA, newB, newC)
   }
 
@@ -55,20 +56,20 @@ class Triangle(var a: IVector2, var b: IVector2, var c: IVector2) extends Shape[
   override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
     val list: NBTTagList  = new NBTTagList();
-    list.appendTag(new Vector2(a.x, a.y).writeNBT(nbt))
-    list.appendTag(new Vector2(b.x, b.y).writeNBT(nbt))
-    list.appendTag(new Vector2(c.x, c.y).writeNBT(nbt))
+    list.appendTag(new Pos2D(a.x, a.y).writeNBT(nbt))
+    list.appendTag(new Pos2D(b.x, b.y).writeNBT(nbt))
+    list.appendTag(new Pos2D(c.x, c.y).writeNBT(nbt))
     nbt.setTag("abc", list);
     return nbt
   }
 
-  override def *(amount: Double): Triangle = new Triangle(new Vector2(a.x * amount, a.y * amount), new Vector2(b.x * amount, b.y * amount), new Vector2(c.x * amount, c.y * amount))
+  override def *(amount: Double): Triangle = new Triangle(new Pos2D(a.x * amount, a.y * amount), new Pos2D(b.x * amount, b.y * amount), new Pos2D(c.x * amount, c.y * amount))
 
   override def *(t: Triangle): Triangle =
   {
-    val newA = new Vector2(a.x * t.a.x, a.y * t.a.y)
-    val newB = new Vector2(b.x * t.b.x, b.y * t.b.y)
-    val newC  = new Vector2(b.x * t.b.x, b.y * t.b.y)
+    val newA = new Pos2D(a.x * t.a.x, a.y * t.a.y)
+    val newB = new Pos2D(b.x * t.b.x, b.y * t.b.y)
+    val newC  = new Pos2D(b.x * t.b.x, b.y * t.b.y)
     return new Triangle(newA, newB, newC)
   }
 

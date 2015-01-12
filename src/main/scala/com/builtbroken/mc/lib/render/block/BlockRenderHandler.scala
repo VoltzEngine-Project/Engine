@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.render.block
 
 import com.builtbroken.mc.prefab.tile.{Tile, BlockTile}
-import com.builtbroken.mc.lib.transform.vector.Vector3
+import com.builtbroken.mc.lib.transform.vector.Pos
 import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.RenderBlocks
@@ -59,7 +59,7 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
 
     if (renderer != null)
     {
-      return renderer.renderStatic(renderBlocks, new Vector3(x, y, z), 0);
+      return renderer.renderStatic(renderBlocks, new Pos(x, y, z), 0);
     }
 
     return false

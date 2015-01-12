@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound
  * An abstract class that manages arithmetic operations.
  * @author Calclavia
  */
+@Deprecated
 abstract class AbstractOperation[T <: AbstractOperation[T]]
 {
   def set(other: T): T

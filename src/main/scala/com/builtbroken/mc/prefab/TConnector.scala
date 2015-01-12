@@ -2,7 +2,7 @@ package com.builtbroken.mc.prefab
 
 import com.builtbroken.mc.api.tile.{IConnector, INodeProvider}
 import com.builtbroken.mc.lib.helper.wrapper.BitmaskWrapper._
-import com.builtbroken.mc.lib.transform.vector.{TVectorWorld, VectorWorld}
+import com.builtbroken.mc.lib.transform.vector.{TVectorWorld, Location}
 import net.minecraftforge.common.util.ForgeDirection
 
 /**
@@ -83,7 +83,7 @@ trait TConnector[N] extends IConnector[N] with TVectorWorld
     }
   }
 
-  def updateConnection(dir: ForgeDirection, loc: VectorWorld)
+  def updateConnection(dir: ForgeDirection, loc: Location)
   {
     val tile = loc.getTileEntity
     if(tile != null)

@@ -12,8 +12,8 @@ import net.minecraftforge.fluids.*;
 import com.builtbroken.jlib.type.Pair;
 import com.builtbroken.mc.prefab.inventory.AutoCraftingManager;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
-import com.builtbroken.mc.lib.transform.vector.VectorWorld;
+import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.lib.transform.vector.Location;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -51,13 +51,13 @@ public class FluidUtility
 		replacableBlocks.add(Blocks.torch);
 	}
 
-	public static int getFluidAmountFromBlock(World world, Vector3 vector)
+	public static int getFluidAmountFromBlock(World world, Pos vector)
 	{
 		FluidStack fluidStack = getFluidStackFromBlock(world, vector);
 		return fluidStack != null ? fluidStack.amount : 0;
 	}
 
-	public static FluidStack getFluidStackFromBlock(World world, Vector3 vector)
+	public static FluidStack getFluidStackFromBlock(World world, Pos vector)
 	{
 		Block block = vector.getBlock(world);
 		int meta = vector.getBlockMetadata(world);
@@ -85,7 +85,7 @@ public class FluidUtility
 		return null;
 	}
 
-	public static FluidTankInfo[] getTankInfo(World world, Vector3 posiiton, ForgeDirection from)
+	public static FluidTankInfo[] getTankInfo(World world, Pos posiiton, ForgeDirection from)
 	{
 		TileEntity tile = posiiton.getTileEntity(world);
 
@@ -122,7 +122,7 @@ public class FluidUtility
 		return 0;
 	}
 
-	public static double getAveragePercentageFilledForSides(Class classMask, double defaultFill, World world, Vector3 position, ForgeDirection... sides)
+	public static double getAveragePercentageFilledForSides(Class classMask, double defaultFill, World world, Pos position, ForgeDirection... sides)
 	{
 		double fullness = defaultFill;
 		int count = 1;
@@ -153,7 +153,7 @@ public class FluidUtility
 	 * @param vector - 3D location in world
 	 * @return @Fluid that the block is
 	 */
-	public static Fluid getFluidFromBlock(World world, Vector3 vector)
+	public static Fluid getFluidFromBlock(World world, Pos vector)
 	{
 		return FluidUtility.getFluidFromBlockID(vector.getBlock(world));
 	}
@@ -211,7 +211,7 @@ public class FluidUtility
 	 * @Note sets the block with a client update only. Doesn't tick the block allowing for better
 	 * placement of fluid that can flow infinitely
 	 */
-	public static FluidStack drainBlock(World world, Vector3 position, boolean doDrain)
+	public static FluidStack drainBlock(World world, Pos position, boolean doDrain)
 	{
 		return drainBlock(world, position, doDrain, 3);
 	}
@@ -223,7 +223,7 @@ public class FluidUtility
 	 * @param update  - block update flag to use
 	 * @return FluidStack drained from the block
 	 */
-	public static FluidStack drainBlock(World world, Vector3 position, boolean doDrain, int update)
+	public static FluidStack drainBlock(World world, Pos position, boolean doDrain, int update)
 	{
 		if (world == null || position == null)
 		{
@@ -243,7 +243,7 @@ public class FluidUtility
 			{
 				if (doDrain)
 				{
-					Vector3 vec = position.clone().add(ForgeDirection.UP);
+					Pos vec = position.clone().add(ForgeDirection.UP);
 
 					if (vec.getBlock(world) == Blocks.water)
 					{
@@ -272,7 +272,7 @@ public class FluidUtility
 	/**
 	 * Checks to see if a non-fluid block is able to be filled with fluid
 	 */
-	public static boolean isFillableBlock(World world, Vector3 node)
+	public static boolean isFillableBlock(World world, Pos node)
 	{
 		if (world == null || node == null)
 		{
@@ -300,7 +300,7 @@ public class FluidUtility
 	/**
 	 * Checks to see if a fluid related block is able to be filled
 	 */
-	public static boolean isFillableFluid(World world, Vector3 node)
+	public static boolean isFillableFluid(World world, Pos node)
 	{
 		if (world == null || node == null)
 		{
@@ -329,7 +329,7 @@ public class FluidUtility
 	 *
 	 * @return
 	 */
-	public static int fillBlock(World world, Vector3 node, FluidStack stack, boolean doFill)
+	public static int fillBlock(World world, Pos node, FluidStack stack, boolean doFill)
 	{
 		if ((isFillableBlock(world, node) || isFillableFluid(world, node)) && stack != null && stack.amount >= FluidContainerRegistry.BUCKET_VOLUME)
 		{
@@ -338,7 +338,7 @@ public class FluidUtility
 				Block block = node.getBlock(world);
 				int meta = node.getBlockMetadata(world);
 
-				Vector3 vec = node.clone().add(ForgeDirection.UP);
+				Pos vec = node.clone().add(ForgeDirection.UP);
 
 				if (block != null)
 				{
@@ -368,7 +368,7 @@ public class FluidUtility
 	 * @param ignore - ForgeDirections to ignore
 	 * @return amount of fluid that was used from the stack
 	 */
-	public static int fillTanksAllSides(World world, Vector3 origin, FluidStack stack, boolean doFill, ForgeDirection... ignore)
+	public static int fillTanksAllSides(World world, Pos origin, FluidStack stack, boolean doFill, ForgeDirection... ignore)
 	{
 		int filled = 0;
 		FluidStack fillStack = stack != null ? stack.copy() : null;
@@ -403,7 +403,7 @@ public class FluidUtility
 	 * @param direction - direction to fill in from the origin
 	 * @return amount of fluid that was used from the stack
 	 */
-	public static int fillTankSide(World world, Vector3 origin, FluidStack stack, boolean doFill, ForgeDirection direction)
+	public static int fillTankSide(World world, Pos origin, FluidStack stack, boolean doFill, ForgeDirection direction)
 	{
 		TileEntity entity = origin.clone().add(direction).getTileEntity(world);
 		if (entity instanceof IFluidHandler && ((IFluidHandler) entity).canFill(direction.getOpposite(), stack.getFluid()))
@@ -511,7 +511,7 @@ public class FluidUtility
 							}
 							else
 							{
-								InventoryUtility.dropItemStack(new VectorWorld(entityplayer), filled);
+								InventoryUtility.dropItemStack(new Location(entityplayer), filled);
 							}
 						}
 						tank.drain(ForgeDirection.UNKNOWN, fluid.amount, true);
