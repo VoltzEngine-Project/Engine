@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.transform.region
 
-import com.builtbroken.jlib.data.{IPos3D, IPos2D}
+import com.builtbroken.jlib.data.vector.{IPos3D, IPos2D}
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 import com.builtbroken.mc.lib.transform.rotation.IRotation

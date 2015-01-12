@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.transform.vector
 
-import com.builtbroken.jlib.data.IPos2D
+import com.builtbroken.jlib.data.vector.IPos2D
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.entity.Entity
 
@@ -42,7 +42,7 @@ trait TPos extends IPos2D
   def yi : Int = y.asInstanceOf[Int]
 
   /** Gets this object as a Vector2 */
-  def toVector2 : Pos2D = new Pos2D(x(), y())
+  def toVector2 : Point = new Point(x(), y())
 
-  def distance2D( vec : IPos2D) : Double = toVector2.distance(new Pos2D(vec.x(), vec.y()))
+  def distance2D( vec : IPos2D) : Double = toVector2.distance(new Point(vec.x(), vec.y()))
 }

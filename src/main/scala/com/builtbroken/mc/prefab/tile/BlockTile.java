@@ -2,7 +2,7 @@ package com.builtbroken.mc.prefab.tile;
 
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.transform.region.Cuboid;
-import com.builtbroken.mc.lib.transform.vector.Pos2D;
+import com.builtbroken.mc.lib.transform.vector.Point;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import cpw.mods.fml.relauncher.Side;
@@ -406,24 +406,24 @@ public class BlockTile extends Block implements ITileEntityProvider
 
     }
 
-    public static Pos2D getClickedFace(Byte hitSide, float hitX, float hitY, float hitZ)
+    public static Point getClickedFace(Byte hitSide, float hitX, float hitY, float hitZ)
     {
         switch (hitSide)
         {
             case 0:
-                return new Pos2D(1 - hitX, hitZ);
+                return new Point(1 - hitX, hitZ);
             case 1:
-                return new Pos2D(hitX, hitZ);
+                return new Point(hitX, hitZ);
             case 2:
-                return new Pos2D(1 - hitX, 1 - hitY);
+                return new Point(1 - hitX, 1 - hitY);
             case 3:
-                return new Pos2D(hitX, 1 - hitY);
+                return new Point(hitX, 1 - hitY);
             case 4:
-                return new Pos2D(hitZ, 1 - hitY);
+                return new Point(hitZ, 1 - hitY);
             case 5:
-                return new Pos2D(1 - hitZ, 1 - hitY);
+                return new Point(1 - hitZ, 1 - hitY);
             default:
-                return new Pos2D(0.5, 0.5);
+                return new Point(0.5, 0.5);
         }
     }
 

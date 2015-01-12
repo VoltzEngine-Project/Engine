@@ -1,4 +1,4 @@
-package com.builtbroken.jlib.data;
+package com.builtbroken.jlib.data.vector;
 
 /**
  * Useful interface to define that an object has a 2D location.

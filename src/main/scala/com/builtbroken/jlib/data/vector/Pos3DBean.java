@@ -1,12 +1,17 @@
-package com.builtbroken.jlib.data;
+package com.builtbroken.jlib.data.vector;
 
 /**
  * Most basic version of Pos that only contains the data. Useful for
  * just passing data into and out of storage.
  *
+ * The interface IPos3D is not implemented to avoid causing automatic casting issues
+ * for classes that extend this object. This allows for the object to be extended to
+ * create a higher level version of the location data. That may not want to be casted
+ * to the interface
+ *
  * Created by robert on 1/11/2015.
  */
-public class Pos3DBean extends Pos2DBean implements IPos3D
+public class Pos3DBean extends Pos2DBean
 {
     private final double z;
 
@@ -16,7 +21,6 @@ public class Pos3DBean extends Pos2DBean implements IPos3D
         this.z = z;
     }
 
-    @Override
     public double z()
     {
         return z;

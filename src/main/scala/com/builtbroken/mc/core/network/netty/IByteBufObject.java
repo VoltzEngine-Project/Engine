@@ -10,13 +10,7 @@ import io.netty.buffer.ByteBuf;
  */
 public interface IByteBufObject
 {
-	/**
-	 * @param buf a {@link io.netty.buffer.ByteBuf} to write to.
-	 */
-	public void writeBytes(ByteBuf buf);
 
-	/**
-	 * @param buf a {@link io.netty.buffer.ByteBuf} to read from
-	 */
-	public void readBytes(ByteBuf buf);
+
+
 }

@@ -1,8 +1,7 @@
 package com.builtbroken.mc.lib.transform.rotation
 
 import java.lang.Double._
-
-import com.builtbroken.jlib.data.IPos3D
+import com.builtbroken.jlib.data.vector.IPos3D
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 import com.builtbroken.mc.lib.transform.ITransform

@@ -1,11 +1,19 @@
-package com.builtbroken.jlib.data;
+package com.builtbroken.jlib.data.vector;
 
 /** Most basic version of Pos that only contains the data. Useful for
  * just passing data into and out of storage.
  *
+ *  The interface IPos2D is not implemented to avoid causing automatic casting issues
+ * for classes that extend this object. This allows for the object to be extended to
+ * create a higher level version of the location data. That may not want to be casted
+ * to the interface. For example IPos3D would share the same data as IPos2D but would
+ * cause issues if both shared the same interface. Especially with using scala wrappers
+ * that use the interface for math operators. As the wrapper would treat IPos3D as the
+ * same data as IPos2D.
+ *
  * Created by robert on 1/11/2015.
  */
-public class Pos2DBean implements IPos2D, Cloneable
+public class Pos2DBean implements Cloneable
 {
     private final double x;
     private final double y;
@@ -16,7 +24,7 @@ public class Pos2DBean implements IPos2D, Cloneable
         this.y = y;
     }
 
-    @Override
+
     public double x()
     {
         return x;
@@ -32,7 +40,7 @@ public class Pos2DBean implements IPos2D, Cloneable
         return (int)x;
     }
 
-    @Override
+
     public double y()
     {
         return y;

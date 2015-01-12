@@ -1,11 +1,15 @@
-package com.builtbroken.jlib.data;
+package com.builtbroken.jlib.data.vector;
 
 /**
  * Useful interface to define that an object has a 3D location.
  *
  * @author DarkGuardsman
  */
-public interface IPos3D extends IPos2D
+public interface IPos3D
 {
+    double x();
+
+    double y();
+
 	double z();
 }

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.testing.debug;
 
-import com.builtbroken.jlib.data.IPos3D;
+import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IPosWorld;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

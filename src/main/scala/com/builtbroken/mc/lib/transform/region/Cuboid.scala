@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.transform.region
 
 import java.math.{BigDecimal, MathContext, RoundingMode}
 import java.util.{ArrayList, List}
-import com.builtbroken.jlib.data.IPos3D
+import com.builtbroken.jlib.data.vector.IPos3D
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity

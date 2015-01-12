@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.transform.vector
 
-import com.builtbroken.jlib.data.IPos3D
+import com.builtbroken.jlib.data.vector.IPos3D
 import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
 

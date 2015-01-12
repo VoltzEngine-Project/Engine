@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.helper;
 
+import com.builtbroken.mc.lib.transform.vector.Point;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -8,7 +9,6 @@ import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.jlib.data.science.units.UnitHelper;
-import com.builtbroken.mc.lib.transform.vector.Pos2D;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.io.File;
@@ -217,9 +217,9 @@ public class NBTUtility
 		{
 			tag.setTag(key, (NBTTagCompound) value);
 		}
-		else if (value instanceof Pos2D)
+		else if (value instanceof Point)
 		{
-			tag.setString(key, "NBT:SAVE:VECTOR:2:" + ((Pos2D) value).x() + ":" + ((Pos2D) value).y());
+			tag.setString(key, "NBT:SAVE:VECTOR:2:" + ((Point) value).x() + ":" + ((Point) value).y());
 		}
 		else if (value instanceof Pos)
 		{
@@ -287,7 +287,7 @@ public class NBTUtility
 						String[] nums = str.split(":");
 						if (UnitHelper.tryToParseDouble(nums[0]) == 2)
 						{
-							return new Pos2D(UnitHelper.tryToParseDouble(nums[1]), UnitHelper.tryToParseDouble(nums[2]));
+							return new Point(UnitHelper.tryToParseDouble(nums[1]), UnitHelper.tryToParseDouble(nums[2]));
 						}
 						if (UnitHelper.tryToParseDouble(nums[0]) == 3)
 						{

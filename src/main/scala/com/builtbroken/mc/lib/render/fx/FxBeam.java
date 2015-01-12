@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.render.fx;
 
-import com.builtbroken.jlib.data.IPos3D;
+import com.builtbroken.jlib.data.vector.IPos3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.grid;
 
-import com.builtbroken.jlib.data.IPos3D;
+import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IPosWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

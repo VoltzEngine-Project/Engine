@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.transform.vector
 
 import java.lang.Double.doubleToLongBits
-import com.builtbroken.jlib.data.IPos3D
+import com.builtbroken.jlib.data.vector.IPos3D
 import com.google.common.io.ByteArrayDataInput
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
@@ -178,7 +178,7 @@ class Pos(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends IPos3
 
   def toVec3 = Vec3.createVectorHelper(x, y, z)
 
-  def toVector2: Pos2D = new Pos2D(x, z)
+  def toVector2: Point = new Point(x, z)
 
   def toArray = Array(x, y, z)
 

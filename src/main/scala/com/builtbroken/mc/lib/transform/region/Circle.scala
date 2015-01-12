@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.transform.region
 
-import com.builtbroken.mc.lib.transform.vector.Pos2D
+import com.builtbroken.mc.lib.transform.vector.Point
 
 /** Simple point with a radius. Can be used for just about anything including
   * Collision boxes, detection areas, effects, and GUIs
@@ -18,9 +18,9 @@ import com.builtbroken.mc.lib.transform.vector.Pos2D
   * ..............\.............\...
  * Created by robert on 12/17/2014.
  */
-class Circle(var center: Pos2D, var r: Double) extends Shape[Circle]
+class Circle(var center: Point, var r: Double) extends Shape[Circle]
 {
-  def this(center: Pos2D)
+  def this(center: Point)
   {
     this(center, 1)
   }
@@ -32,7 +32,7 @@ class Circle(var center: Pos2D, var r: Double) extends Shape[Circle]
 
   def isWithin(x: Double, y: Double): Boolean =
   {
-    return center.distance(new Pos2D(x, y)) <= r
+    return center.distance(new Point(x, y)) <= r
   }
 
   override def set(other: Circle): Circle =

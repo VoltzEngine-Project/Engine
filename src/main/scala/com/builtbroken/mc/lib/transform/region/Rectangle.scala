@@ -1,18 +1,19 @@
 package com.builtbroken.mc.lib.transform.region
 
 import java.math.{BigDecimal, MathContext, RoundingMode}
-import com.builtbroken.jlib.data.IPos2D
+
+import com.builtbroken.jlib.data.vector.IPos2D
+import com.builtbroken.mc.lib.transform.vector.Point
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
-import com.builtbroken.mc.lib.transform.vector.Pos2D
 
-class Rectangle(var min: Pos2D, var max: Pos2D) extends Shape[Rectangle]
+class Rectangle(var min: Point, var max: Point) extends Shape[Rectangle]
 {
-  def this() = this(new Pos2D, new Pos2D)
+  def this() = this(new Point, new Point)
 
-  def this(vec: Pos2D, expansion: Double) = this(vec, vec + expansion)
+  def this(vec: Point, expansion: Double) = this(vec, vec.add(expansion))
 
-  def this(minX: Double, minY: Double, maxX: Double, maxY: Double) = this(new Pos2D(minX, minY), new Pos2D(maxX, maxY))
+  def this(minX: Double, minY: Double, maxX: Double, maxY: Double) = this(new Point(minX, minY), new Point(maxX, maxY))
 
   def this(rect: Rectangle) = this(rect.min.clone, rect.max.clone)
 
@@ -26,26 +27,18 @@ class Rectangle(var min: Pos2D, var max: Pos2D) extends Shape[Rectangle]
   /**
    * Operations
    */
-  override def +(amount: Double): Rectangle = new Rectangle(min + amount, max + amount)
+  override def +(amount: Double): Rectangle = new Rectangle(min.add(amount), max.add(amount))
 
-  override def +(amount: Rectangle): Rectangle = new Rectangle(min + amount.min, max + amount.max)
+  override def +(amount: Rectangle): Rectangle = new Rectangle(min.add(amount.min), max.add(amount.max))
 
-  def +(vec: Pos2D): Rectangle = new Rectangle(min + vec, max + vec)
+  def +(vec: Point): Rectangle = new Rectangle(min.add(vec), max.add(vec))
 
-  def +=(vec: Pos2D): Rectangle =
-  {
-    min += vec
-    max += vec
-    return this
-  }
 
-  def -(vec: Pos2D): Rectangle = this + (vec * -1)
+  def -(vec: Point): Rectangle = this + (vec.multiply(-1))
 
-  def -=(vec: Pos2D): Rectangle = this += (vec * -1)
+  def *(amount: Double): Rectangle = new Rectangle(min.multiply(amount), max.multiply(amount))
 
-  def *(amount: Double): Rectangle = new Rectangle(min * amount, max * amount)
-
-  def *(amount: Rectangle): Rectangle = new Rectangle(min * amount.min, max * amount.max)
+  def *(amount: Rectangle): Rectangle = new Rectangle(min.multiply(amount.min), max.multiply(amount.max))
 
 
 
@@ -72,9 +65,9 @@ class Rectangle(var min: Pos2D, var max: Pos2D) extends Shape[Rectangle]
   }
 
   def cornerA() = min
-  def cornerB() = new Pos2D(min.x, max.y)
+  def cornerB() = new Point(min.x, max.y)
   def cornerC() = max
-  def cornerD() = new Pos2D(max.x, min.y)
+  def cornerD() = new Point(max.x, min.y)
 
   /**
    * Returns whether the given region intersects with this one.
@@ -100,8 +93,8 @@ class Rectangle(var min: Pos2D, var max: Pos2D) extends Shape[Rectangle]
 
   override def writeByteBuf(data: ByteBuf): ByteBuf =
   {
-    min.writeByteBuf(data)
-    max.writeByteBuf(data)
+    min.writeBytes(data)
+    max.writeBytes(data)
     return data
   }
 
