@@ -2,14 +2,14 @@ package com.builtbroken.mc.prefab
 
 import com.builtbroken.mc.api.tile.{IConnector, ITileModuleProvider}
 import com.builtbroken.mc.lib.helper.wrapper.BitmaskWrapper._
-import com.builtbroken.mc.lib.node.AbstractNode
 import com.builtbroken.mc.lib.transform.vector.Location
+import com.builtbroken.mc.prefab.tile.module.TileModule
 import net.minecraftforge.common.util.ForgeDirection
 
 /**
  * Created by robert on 11/12/2014.
  */
-trait TConnector[N] extends AbstractNode with IConnector[N]
+trait TConnector[N] extends TileModule with IConnector[N]
 {
   /** The bitmask containing sides that this node may connect to */
   var allowedConnections = 0x3F

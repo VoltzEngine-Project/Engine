@@ -1,9 +1,9 @@
 package com.builtbroken.mc.lib.grid;
 
 import com.builtbroken.mc.api.IUpdate;
-import com.builtbroken.mc.lib.node.AbstractNode;
+import com.builtbroken.mc.prefab.tile.module.TileModule;
 
-public class GridTicking<N extends AbstractNode> extends Grid<N> implements IUpdate {
+public class GridTicking<N extends TileModule> extends Grid<N> implements IUpdate {
 
     public GridTicking(Class node)
     {

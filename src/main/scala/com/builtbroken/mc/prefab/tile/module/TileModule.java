@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.node;
+package com.builtbroken.mc.prefab.tile.module;
 
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.IUpdate;
@@ -13,11 +13,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**
  * Created by robert on 1/12/2015.
  */
-public class AbstractNode implements ITileModule, IWorldPosition, IUpdate
+public class TileModule implements ITileModule, IWorldPosition, IUpdate
 {
     private final ITileModuleProvider parent;
 
-    public AbstractNode(ITileModuleProvider parent)
+    public TileModule(ITileModuleProvider parent)
     {
         this.parent = parent;
         if (!(parent instanceof TileEntity))

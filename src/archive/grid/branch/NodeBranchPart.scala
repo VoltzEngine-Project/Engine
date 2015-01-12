@@ -3,9 +3,9 @@ package com.builtbroken.mc.lib.grid.branch
 import com.builtbroken.mc.api.IGrid
 import com.builtbroken.mc.api.tile.{IGridProvider, ITileModuleProvider}
 import com.builtbroken.mc.lib.grid.branch.part.Part
-import com.builtbroken.mc.lib.node.AbstractNode
 import com.builtbroken.mc.lib.transform.vector.Location
 import com.builtbroken.mc.prefab.TConnector
+import com.builtbroken.mc.prefab.tile.module.TileModule
 import net.minecraftforge.common.util.ForgeDirection
 
 import scala.beans.BeanProperty
@@ -15,7 +15,7 @@ import scala.beans.BeanProperty
  * A node that is part of a branch
  * @author DarkCow
  */
-abstract class NodeBranchPart(parent: ITileModuleProvider) extends AbstractNode(parent) with TConnector[NodeBranchPart] with IGridProvider
+abstract class NodeBranchPart(parent: ITileModuleProvider) extends TileModule(parent) with TConnector[NodeBranchPart] with IGridProvider
 {
   @BeanProperty
   var branch : Part = null

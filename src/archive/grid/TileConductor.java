@@ -13,7 +13,7 @@ import java.util.List;
  * used as a template for creating wire, pipes, or grid based blocks.
  * @author Darkguardsman
  */
-public class TileConductor extends TileNode
+public class TileConductor extends TileModuleMachine
 {
     public NodeBranchPart node;
 

@@ -1,8 +1,7 @@
 package com.builtbroken.mc.lib.grid.node
 
 import java.util.{Map => JMap, Set => JSet}
-
-import com.builtbroken.mc.lib.node.AbstractNode
+import com.builtbroken.mc.prefab.tile.module.TileModule
 import net.minecraftforge.common.util.ForgeDirection
 import com.builtbroken.mc.api.tile.ITileModuleProvider
 import com.builtbroken.mc.api.tile.node.INodeConnector
@@ -18,7 +17,7 @@ import scala.collection.mutable
  * @tparam A - The type of objects this node can connect to.
  * @author Darkguardsman, Calclavia
  */
-abstract class NodeConnector[A <: AnyRef](parent: ITileModuleProvider) extends AbstractNode(parent) with INodeConnector[A]
+abstract class NodeConnector[A <: AnyRef](parent: ITileModuleProvider) extends TileModule(parent) with INodeConnector[A]
 {
   /** The bitmask containing sides that this node may connect to */
   var connectionMask = 0x3F

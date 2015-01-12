@@ -80,8 +80,9 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     protected int nextCleanupTick = 200;
     protected final Set<EntityPlayer> playersUsing = new HashSet();
 
-    public Tile(Material material)
+    public Tile(String name, Material material)
     {
+        this.name = name;
         this.material = material;
     }
 
