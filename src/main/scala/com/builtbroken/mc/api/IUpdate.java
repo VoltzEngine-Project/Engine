@@ -2,29 +2,14 @@ package com.builtbroken.mc.api;
 
 /**
  * Applies to objects that can receive update tick calls.
- *
- * @Calclavia
  */
 public interface IUpdate
 {
-	/**
-	 * Updates the network. Called by the {UpdateTicker}.
-	 *
-	 * @param deltaTime - The time taken in seconds between the last update.
-	 */
-	public void update(double deltaTime);
-
-	/**
-	 * Can this updater update?
-	 *
-	 * @return True to allow update(deltaTime) to be called.
-	 */
-	public boolean canUpdate();
-
-	/**
-	 * Should this updater continue receiving updates?
-	 *
-	 * @return True to leave the updater in the ticker. False to remove the updater from the ticker.
-	 */
-	public boolean continueUpdate();
+    /**
+     * Called to update the object when registered to a tick handler
+     * @return true if the object should keep updating, if false it will
+     * be removed from the tick handler. In which it is up to you to re-add
+     * it whe it needs more updates.
+     */
+	public boolean update();
 }

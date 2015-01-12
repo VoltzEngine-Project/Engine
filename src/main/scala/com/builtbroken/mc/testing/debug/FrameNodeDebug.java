@@ -2,7 +2,7 @@ package com.builtbroken.mc.testing.debug;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IPosWorld;
-import com.builtbroken.mc.api.tile.ITileNodeProvider;
+import com.builtbroken.mc.api.tile.ITileModuleProvider;
 import com.builtbroken.mc.api.tile.node.ITileModule;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -14,7 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 @SuppressWarnings("serial")
 public class FrameNodeDebug extends FrameDebug
 {
-	protected ITileNodeProvider nodeProvider = null;
+	protected ITileModuleProvider nodeProvider = null;
 	/**
 	 * Linked node
 	 */
@@ -31,7 +31,7 @@ public class FrameNodeDebug extends FrameDebug
 		this.nodeClazz = nodeClazz;
 	}
 
-	public FrameNodeDebug(ITileNodeProvider node, Class<? extends ITileModule> nodeClazz)
+	public FrameNodeDebug(ITileModuleProvider node, Class<? extends ITileModule> nodeClazz)
 	{
 		super();
 		this.nodeProvider = node;
@@ -49,9 +49,9 @@ public class FrameNodeDebug extends FrameDebug
 	 */
 	public ITileModule getNode()
 	{
-		if (tile instanceof ITileNodeProvider && nodeClazz != null)
+		if (tile instanceof ITileModuleProvider && nodeClazz != null)
 		{
-			return ((ITileNodeProvider) tile).getModule(nodeClazz, ForgeDirection.UNKNOWN);
+			return ((ITileModuleProvider) tile).getModule(nodeClazz, ForgeDirection.UNKNOWN);
 		}
 		else if (nodeProvider != null && nodeClazz != null)
 		{

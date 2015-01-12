@@ -114,7 +114,7 @@ public class BranchGridTest extends AbstractTest
         }
 
         //Trigger grid to update since we do not have a tick handler
-        grid.update(0);
+        grid.update();
     }
 
     @Override

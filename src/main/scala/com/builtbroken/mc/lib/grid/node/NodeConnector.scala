@@ -2,8 +2,9 @@ package com.builtbroken.mc.lib.grid.node
 
 import java.util.{Map => JMap, Set => JSet}
 
+import com.builtbroken.mc.lib.node.AbstractNode
 import net.minecraftforge.common.util.ForgeDirection
-import com.builtbroken.mc.api.tile.ITileNodeProvider
+import com.builtbroken.mc.api.tile.ITileModuleProvider
 import com.builtbroken.mc.api.tile.node.INodeConnector
 import com.builtbroken.mc.lib.helper.wrapper.BitmaskWrapper._
 
@@ -17,7 +18,7 @@ import scala.collection.mutable
  * @tparam A - The type of objects this node can connect to.
  * @author Darkguardsman, Calclavia
  */
-abstract class NodeConnector[A <: AnyRef](parent: ITileNodeProvider) extends Node(parent) with INodeConnector[A]
+abstract class NodeConnector[A <: AnyRef](parent: ITileModuleProvider) extends AbstractNode(parent) with INodeConnector[A]
 {
   /** The bitmask containing sides that this node may connect to */
   var connectionMask = 0x3F
@@ -87,7 +88,7 @@ abstract class NodeConnector[A <: AnyRef](parent: ITileNodeProvider) extends Nod
    * Called to rebuild the connection map.
    * This is a general way used to search all adjacent TileEntity and attempt a connection
    */
-  override def reconstruct()
+  override def onJoinWorld()
   {
     super.onJoinWorld()
     val prevCon = connectedMask
@@ -105,7 +106,7 @@ abstract class NodeConnector[A <: AnyRef](parent: ITileNodeProvider) extends Nod
 
   }
 
-  override def deconstruct()
+  override def onLeaveWorld()
   {
     super.onLeaveWorld()
     clearConnections()

@@ -4,7 +4,6 @@ import java.util.List
 
 import net.minecraft.command.{CommandBase, ICommandSender, WrongUsageException}
 import net.minecraft.util.ChatComponentText
-import com.builtbroken.mc.lib.grid.UpdateTicker
 
 object RECommand extends CommandBase
 {
@@ -24,18 +23,6 @@ object RECommand extends CommandBase
       if (args(0).equalsIgnoreCase("version"))
       {
         sender.addChatMessage(new ChatComponentText("Version: " + References.VERSION +"  Build: " + References.BUILD_VERSION))
-      }
-      if (args(0).equalsIgnoreCase("gridinfo"))
-      {
-        sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Tick rate: " + (if (UpdateTicker.threaded.pause) "Paused" else (if (UpdateTicker.threaded.getDeltaTime > 0) 1 / UpdateTicker.threaded.getDeltaTime.asInstanceOf[Double] else 0) * 1000 + "/s")))
-        sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Grids running: " + UpdateTicker.threaded.getUpdaterCount))
-        return
-      }
-      if (args(0).equalsIgnoreCase("gridpause"))
-      {
-        UpdateTicker.threaded.pause = !UpdateTicker.threaded.pause
-        sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Ticking grids running state: " + !UpdateTicker.threaded.pause))
-        return
       }
 
         throw new WrongUsageException(this.getCommandUsage(sender))

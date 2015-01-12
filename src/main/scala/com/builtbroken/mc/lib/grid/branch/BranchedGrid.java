@@ -1,7 +1,6 @@
 package com.builtbroken.mc.lib.grid.branch;
 
 import com.builtbroken.mc.lib.grid.GridTicking;
-import com.builtbroken.mc.lib.grid.UpdateTicker;
 import com.builtbroken.mc.lib.grid.branch.part.Part;
 
 import java.util.HashSet;
@@ -27,7 +26,7 @@ public class BranchedGrid extends GridTicking<NodeBranchPart>
     public BranchedGrid(Class cla)
     {
         super(cla);
-        UpdateTicker.threaded().addUpdater(this);
+        //UpdateTicker.threaded().addUpdater(this);
     }
 
     public Set<Part> getParts()
@@ -50,15 +49,16 @@ public class BranchedGrid extends GridTicking<NodeBranchPart>
     }
 
     @Override
-    public void update(double delta)
+    public boolean update()
     {
-        super.update(delta);
+        super.update();
         if(markForMapping)
         {
             GridPathfinder pathfinder = new GridPathfinder(this);
             parts = pathfinder.generateParts();
             markForMapping = false;
         }
+        return true;
     }
 
     @Override

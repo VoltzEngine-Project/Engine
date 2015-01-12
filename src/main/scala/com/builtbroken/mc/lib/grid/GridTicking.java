@@ -1,29 +1,35 @@
 package com.builtbroken.mc.lib.grid;
 
 import com.builtbroken.mc.api.IUpdate;
-import com.builtbroken.mc.lib.grid.node.Node;
+import com.builtbroken.mc.lib.node.AbstractNode;
 
-public class GridTicking<N extends Node> extends Grid<N> implements IUpdate {
+public class GridTicking<N extends AbstractNode> extends Grid<N> implements IUpdate {
 
     public GridTicking(Class node)
     {
         super(node);
-        UpdateTicker.threaded().addUpdater(this);
     }
 
     @Override
-    public void update(double deltaTime)
+    public void add(N node)
     {
-        for(N node : this.getNodes())
+        super.add(node);
+        if(getNodes().size() > 0)
         {
-            if(node instanceof IUpdate && ((IUpdate) node).canUpdate())
-                ((IUpdate)node).update(deltaTime);
+            // TODO UpdateTicker.threaded().addUpdater(this);
         }
     }
 
     @Override
-    public boolean canUpdate() {return getNodes().size() > 0; }
-
-    @Override
-    public boolean continueUpdate() { return canUpdate();}
+    public boolean update()
+    {
+        for(N node : this.getNodes())
+        {
+            if(node instanceof IUpdate)
+            {
+                ((IUpdate) node).update();
+            }
+        }
+        return getNodes().size() > 0;
+    }
 }

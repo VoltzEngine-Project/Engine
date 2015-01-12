@@ -1,6 +1,6 @@
 package com.builtbroken.mc.api.tile.node;
 
-import com.builtbroken.mc.api.tile.ITileNodeProvider;
+import com.builtbroken.mc.api.tile.ITileModuleProvider;
 
 /** Applied to an object that acts as a peace of a larger machine. Allowing for the machine to delegate handling to
  * this module. An example of its use is handling energy/wire connections for the tile. */
@@ -16,6 +16,6 @@ public interface ITileModule
 	public void onLeaveWorld();
 
     /** The object that houses this node */
-    public ITileNodeProvider getParent();
+    public ITileModuleProvider getParent();
 
 }

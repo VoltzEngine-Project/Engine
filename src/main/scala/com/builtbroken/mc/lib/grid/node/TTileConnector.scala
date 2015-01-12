@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.grid.node
 
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
-import com.builtbroken.mc.api.tile.ITileNodeProvider
+import com.builtbroken.mc.api.tile.ITileModuleProvider
 import com.builtbroken.mc.api.tile.node.ITileModule
 
 /**
@@ -19,7 +19,7 @@ trait TTileConnector[A <: AnyRef] extends NodeConnector[A]
     {
       if (canConnect(toDir))
       {
-        val tile = (toVectorWorld + toDir).getTileEntity
+        val tile = (toLocation + toDir).getTileEntity
 
         if (tile != null)
         {
@@ -40,9 +40,9 @@ trait TTileConnector[A <: AnyRef] extends NodeConnector[A]
 
   protected def getNodeFrom(tile: TileEntity, from: ForgeDirection): ITileModule =
   {
-    if (tile.isInstanceOf[ITileNodeProvider])
+    if (tile.isInstanceOf[ITileModuleProvider])
     {
-      val node = tile.asInstanceOf[ITileNodeProvider].getModule(getCompareClass, from)
+      val node = tile.asInstanceOf[ITileModuleProvider].getModule(getCompareClass, from)
 
       if (node != null)
       {

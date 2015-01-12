@@ -21,9 +21,10 @@ public class UpdatedLabel extends Label implements IUpdate
 	}
 
 	@Override
-	public void update(double deltaSecs)
+	public boolean update()
 	{
 		this.setText(buildLabel());
+        return start_string != null;
 	}
 
 	/**
@@ -32,17 +33,5 @@ public class UpdatedLabel extends Label implements IUpdate
 	public String buildLabel()
 	{
 		return start_string;
-	}
-
-	@Override
-	public boolean canUpdate()
-	{
-		return start_string != null;
-	}
-
-	@Override
-	public boolean continueUpdate()
-	{
-		return true;
 	}
 }

@@ -1,12 +1,12 @@
 package com.builtbroken.mc.lib.grid.node
 
-import com.builtbroken.mc.api.tile.ITileNodeProvider
+import com.builtbroken.mc.api.tile.ITileModuleProvider
 import com.builtbroken.mc.lib.grid.energy.EnergyStorage
 import com.builtbroken.mc.prefab.TEnergyBuffer
 
 /** Node which acts like glorified battery for storing energy.
  */
-abstract class NodeEnergy[A <: AnyRef](parent:ITileNodeProvider) extends NodeConnector[A](parent) with TEnergyBuffer
+abstract class NodeEnergy[A <: AnyRef](parent:ITileModuleProvider) extends NodeConnector[A](parent) with TEnergyBuffer
 {
   var buffer : EnergyStorage = new EnergyStorage();
 

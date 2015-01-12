@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.grid.node
 
-import com.builtbroken.mc.api.tile.ITileNodeProvider
+import com.builtbroken.mc.api.tile.ITileModuleProvider
 import com.builtbroken.mc.lib.grid.GridNode
 import scala.collection.convert.wrapAll._
 /**
@@ -9,20 +9,20 @@ import scala.collection.convert.wrapAll._
  * @tparam A The type this node connects to
  * @author Calclavia
  */
-abstract class NodeGrid[A <: NodeGrid[A]](parent: ITileNodeProvider) extends NodeConnector[A](parent) //with INodeGrid
+abstract class NodeGrid[A <: NodeGrid[A]](parent: ITileModuleProvider) extends NodeConnector[A](parent) //with INodeGrid
 {
   protected var _grid: GridNode[A] = null
 
   /** Event called after a grid reconstructs itself */
   var onGridReconstruct: () => Unit = () => ()
 
-  override def reconstruct()
+  override def onJoinWorld()
   {
     super.onJoinWorld()
     grid.reconstruct(this.asInstanceOf[A])
   }
 
-  override def deconstruct()
+  override def onLeaveWorld()
   {
     /**
      * Attempt to remove connections to this node in other nodes

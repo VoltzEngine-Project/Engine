@@ -1,14 +1,15 @@
 package com.builtbroken.mc.prefab
 
-import com.builtbroken.mc.api.tile.{IConnector, ITileNodeProvider}
+import com.builtbroken.mc.api.tile.{IConnector, ITileModuleProvider}
 import com.builtbroken.mc.lib.helper.wrapper.BitmaskWrapper._
-import com.builtbroken.mc.lib.transform.vector.{TVectorWorld, Location}
+import com.builtbroken.mc.lib.node.AbstractNode
+import com.builtbroken.mc.lib.transform.vector.Location
 import net.minecraftforge.common.util.ForgeDirection
 
 /**
  * Created by robert on 11/12/2014.
  */
-trait TConnector[N] extends IConnector[N] with TVectorWorld
+trait TConnector[N] extends AbstractNode with IConnector[N]
 {
   /** The bitmask containing sides that this node may connect to */
   var allowedConnections = 0x3F
@@ -78,7 +79,7 @@ trait TConnector[N] extends IConnector[N] with TVectorWorld
   {
     for(dir <- ForgeDirection.VALID_DIRECTIONS)
     {
-      val loc = toVectorWorld + dir
+      val loc = toLocation + dir
       updateConnection(dir, loc)
     }
   }
@@ -88,9 +89,9 @@ trait TConnector[N] extends IConnector[N] with TVectorWorld
     val tile = loc.getTileEntity
     if(tile != null)
     {
-      if(tile.isInstanceOf[ITileNodeProvider])
+      if(tile.isInstanceOf[ITileModuleProvider])
       {
-        val node = getNodeFromConnection(tile.asInstanceOf[ITileNodeProvider], dir)
+        val node = getNodeFromConnection(tile.asInstanceOf[ITileModuleProvider], dir)
         if(node != null)
         {
           if (canConnect(node.asInstanceOf[N], dir.getOpposite))
@@ -103,5 +104,5 @@ trait TConnector[N] extends IConnector[N] with TVectorWorld
     }
   }
 
-  def getNodeFromConnection(provider: ITileNodeProvider, dir: ForgeDirection) : N
+  def getNodeFromConnection(provider: ITileModuleProvider, dir: ForgeDirection) : N
 }

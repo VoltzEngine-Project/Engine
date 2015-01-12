@@ -1,12 +1,12 @@
 package com.builtbroken.mc.lib.grid.branch
 
-import net.minecraftforge.common.util.ForgeDirection
 import com.builtbroken.mc.api.IGrid
-import com.builtbroken.mc.api.tile.{IGridProvider, ITileNodeProvider}
+import com.builtbroken.mc.api.tile.{IGridProvider, ITileModuleProvider}
 import com.builtbroken.mc.lib.grid.branch.part.Part
-import com.builtbroken.mc.lib.grid.node.Node
-import com.builtbroken.mc.prefab.TConnector
+import com.builtbroken.mc.lib.node.AbstractNode
 import com.builtbroken.mc.lib.transform.vector.Location
+import com.builtbroken.mc.prefab.TConnector
+import net.minecraftforge.common.util.ForgeDirection
 
 import scala.beans.BeanProperty
 ;
@@ -15,7 +15,7 @@ import scala.beans.BeanProperty
  * A node that is part of a branch
  * @author DarkCow
  */
-abstract class NodeBranchPart(parent: ITileNodeProvider) extends Node(parent) with TConnector[NodeBranchPart] with IGridProvider
+abstract class NodeBranchPart(parent: ITileModuleProvider) extends AbstractNode(parent) with TConnector[NodeBranchPart] with IGridProvider
 {
   @BeanProperty
   var branch : Part = null
@@ -53,13 +53,13 @@ abstract class NodeBranchPart(parent: ITileNodeProvider) extends Node(parent) wi
     return connector != null;
   }
 
-  override def reconstruct()
+  override def onJoinWorld()
   {
     super.onJoinWorld()
     buildConnections()
   }
 
-  override def deconstruct()
+  override def onLeaveWorld()
   {
     super.onLeaveWorld()
     getConnections.clear()
@@ -80,9 +80,9 @@ abstract class NodeBranchPart(parent: ITileNodeProvider) extends Node(parent) wi
   override def updateConnection(dir: ForgeDirection, loc: Location)
   {
     val tile = loc.getTileEntity
-    if(tile != null && tile.isInstanceOf[ITileNodeProvider])
+    if(tile != null && tile.isInstanceOf[ITileModuleProvider])
     {
-        val node : NodeBranchPart = tile.asInstanceOf[ITileNodeProvider].getModule(classOf[NodeBranchPart], dir.getOpposite)
+        val node : NodeBranchPart = tile.asInstanceOf[ITileModuleProvider].getModule(classOf[NodeBranchPart], dir.getOpposite)
 
         if (canConnect(node, dir.getOpposite))
         {

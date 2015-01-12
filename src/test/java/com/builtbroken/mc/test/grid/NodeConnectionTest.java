@@ -1,6 +1,6 @@
 package com.builtbroken.mc.test.grid;
 
-import com.builtbroken.mc.api.tile.ITileNodeProvider;
+import com.builtbroken.mc.api.tile.ITileModuleProvider;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import net.minecraft.block.Block;
@@ -42,9 +42,9 @@ public class NodeConnectionTest extends AbstractTest
             //Test
             Location vec = center.add(side);
             TileEntity tile = vec.getTileEntity();
-            if(tile instanceof ITileNodeProvider)
+            if(tile instanceof ITileModuleProvider)
             {
-                NodeBranchPart part = ((ITileNodeProvider) tile).getModule(NodeBranchPart.class, side.getOpposite());
+                NodeBranchPart part = ((ITileModuleProvider) tile).getModule(NodeBranchPart.class, side.getOpposite());
                 if(part == null)
                     fail("Failed to get NodeBranchPart from tile at " + vec + " from side " + side.getOpposite());
             }

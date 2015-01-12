@@ -186,7 +186,7 @@ public class FrameDebug extends Frame implements IPosWorld
 		{
 			if (component instanceof IUpdate)
 			{
-				((IUpdate) component).update(0.05);
+				((IUpdate) component).update();
 			}
 		}
 	}

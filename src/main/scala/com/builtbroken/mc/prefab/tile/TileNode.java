@@ -1,6 +1,6 @@
 package com.builtbroken.mc.prefab.tile;
 
-import com.builtbroken.mc.api.tile.ITileNodeProvider;
+import com.builtbroken.mc.api.tile.ITileModuleProvider;
 import com.builtbroken.mc.api.tile.node.ITileModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -18,7 +18,7 @@ import java.util.*;
  *
  * @author Darkguardsman
  */
-public abstract class TileNode extends Tile implements ITileNodeProvider
+public abstract class TileNode extends Tile implements ITileModuleProvider
 {
 	public TileNode(Material material)
 	{
@@ -66,10 +66,7 @@ public abstract class TileNode extends Tile implements ITileNodeProvider
 		{
 			if (node instanceof IUpdate)
 			{
-				if (((IUpdate) node).canUpdate())
-				{
-					((IUpdate) node).update(1/20);
-				}
+				((IUpdate) node).update();
 			}
 		}
 	}
