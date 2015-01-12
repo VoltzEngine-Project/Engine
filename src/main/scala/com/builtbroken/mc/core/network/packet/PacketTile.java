@@ -14,7 +14,7 @@ import com.builtbroken.mc.lib.transform.vector.Pos;
  * @author tgame14
  * @since 26/05/14
  */
-public class PacketTile extends PacketType
+public class PacketTile extends AbstractPacket
 {
 	public int x;
 	public int y;
@@ -26,31 +26,17 @@ public class PacketTile extends PacketType
 	}
 
 	/**
-	 * @param x    - location
-	 * @param y    - location
-	 * @param z    - location
-	 * @param args -  data to send, first arg should be packetID if
-	 *             the tile is an instance of {@code IPacketIDReceiver}
-	 *             Should never be null
-	 */
-	public PacketTile(int x, int y, int z, Object... args)
-	{
-		super(args);
-
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-
-	/**
 	 * @param tile - TileEntity to send this packet to, only used for location data
 	 * @param args -  data to send, first arg should be packetID if
 	 *             the tile is an instance of {@code IPacketIDReceiver}
 	 *             Should never be null
 	 */
-	public PacketTile(TileEntity tile, Object... args)
+	public PacketTile(TileEntity tile, int id, Object... args)
 	{
-		this(tile.xCoord, tile.yCoord, tile.zCoord, args);
+		super(id, args);
+        this.x = tile.xCoord;
+        this.y = tile.yCoord;
+        this.z = tile.zCoord;
 	}
 
 	@Override
@@ -59,7 +45,7 @@ public class PacketTile extends PacketType
 		buffer.writeInt(x);
 		buffer.writeInt(y);
 		buffer.writeInt(z);
-		buffer.writeBytes(data());
+		super.encodeInto(ctx, buffer);
 	}
 
 	@Override
@@ -68,7 +54,7 @@ public class PacketTile extends PacketType
 		x = buffer.readInt();
 		y = buffer.readInt();
 		z = buffer.readInt();
-		data_$eq(buffer.slice());
+		super.decodeInto(ctx, buffer);
 	}
 
 	@Override
@@ -85,7 +71,6 @@ public class PacketTile extends PacketType
 
 	public void handle(EntityPlayer player)
 	{
-		sender_$eq(player);
 
 		TileEntity tile = player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
 
@@ -94,7 +79,7 @@ public class PacketTile extends PacketType
 			try
 			{
 				IPacketIDReceiver receiver = (IPacketIDReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
-				ByteBuf buf = data().slice();
+				ByteBuf buf = data.slice();
 
 				int id;
 				try
@@ -120,7 +105,7 @@ public class PacketTile extends PacketType
 			try
 			{
 				IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
-				receiver.read(data().slice(), player, this);
+				receiver.read(player, this);
 			}
 			catch (IndexOutOfBoundsException e)
 			{

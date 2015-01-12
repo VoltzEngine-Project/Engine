@@ -4,7 +4,6 @@ import com.builtbroken.mc.core.network.packet.AbstractPacket;
 import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import com.builtbroken.mc.core.network.packet.PacketEntity;
 import com.builtbroken.mc.core.network.packet.PacketPlayerItem;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 
@@ -17,7 +16,7 @@ public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<Abst
 	public ResonantChannelHandler()
 	{
 		this.addDiscriminator(0, PacketTile.class);
-		this.addDiscriminator(1, PacketEntity.class);
+		//this.addDiscriminator(1, PacketEntity.class);
 		this.addDiscriminator(2, PacketPlayerItem.class);
 
 	}

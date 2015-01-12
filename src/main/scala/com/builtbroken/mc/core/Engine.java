@@ -1,15 +1,13 @@
 package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
-import com.builtbroken.mc.core.annotation.TestAnnotation;
-import com.builtbroken.mc.core.content.load.CrusherRecipeLoad;
-import com.builtbroken.mc.core.content.load.GrinderRecipeLoad;
+import com.builtbroken.mc.core.content.resources.load.CrusherRecipeLoad;
+import com.builtbroken.mc.core.content.resources.load.GrinderRecipeLoad;
 import com.builtbroken.mc.core.handler.InteractionHandler;
 import com.builtbroken.mc.core.content.BlockOre;
 import com.builtbroken.mc.core.content.ItemBlockOre;
 import com.builtbroken.mc.prefab.recipe.MRHandlerItemStack;
 import com.builtbroken.mc.prefab.recipe.MRSmelterHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;

@@ -1,13 +1,11 @@
-package com.builtbroken.mc.core.content.load;
+package com.builtbroken.mc.core.content.resources.load;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.api.recipe.RecipeRegisterResult;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.builtbroken.mc.prefab.recipe.MRItemStack;
-import com.builtbroken.mc.prefab.recipe.MachineRecipe;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

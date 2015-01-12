@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.ore;
+package com.builtbroken.mc.lib.world.generator;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;

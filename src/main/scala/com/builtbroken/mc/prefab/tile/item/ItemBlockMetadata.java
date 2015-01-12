@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.tile;
+package com.builtbroken.mc.prefab.tile.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;

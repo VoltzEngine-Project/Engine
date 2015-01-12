@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.damage;
+package com.builtbroken.mc.core.content.damage;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;

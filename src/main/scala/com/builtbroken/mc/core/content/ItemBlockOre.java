@@ -4,8 +4,7 @@ import com.builtbroken.mc.core.content.resources.Ores;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-import com.builtbroken.mc.prefab.tile.ItemBlockMetadata;
+import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.mc.core.References;
 
 /**

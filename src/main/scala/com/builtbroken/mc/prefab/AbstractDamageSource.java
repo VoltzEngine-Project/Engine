@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.damage;
+package com.builtbroken.mc.prefab;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

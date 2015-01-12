@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.ore;
+package com.builtbroken.mc.lib.world.generator;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;

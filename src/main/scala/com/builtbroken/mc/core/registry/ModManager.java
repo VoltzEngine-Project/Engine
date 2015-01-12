@@ -11,7 +11,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import com.builtbroken.mc.prefab.tile.ItemBlockMetadata;
+import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.lib.render.block.ItemRenderHandler;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
