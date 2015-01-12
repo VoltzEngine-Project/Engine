@@ -4,9 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.Explosion;
 import net.minecraftforge.common.util.ForgeDirection;
 
-/** Object that tell how a block or entity how it was triggered. Use like
- * an internal event system rather than passing threw forge's even system. Is
- * designed to be used only with explosive like blocks, items, and entities.
+/** Object that can tell a block or entity how it was triggered. Used as
+ * an internal event system for explosive triggering.
  * Created on 11/18/2014.
  * @author Darkguardsman
  */
