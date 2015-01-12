@@ -174,4 +174,9 @@ public abstract class AbstractPacket
     public void handleServerSide(EntityPlayer player)
     {
     }
+
+    public void send()
+    {
+        Engine.instance.packetHandler.sendToAll(this);
+    }
 }
