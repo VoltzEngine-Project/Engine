@@ -34,7 +34,7 @@ buildProps.withReader {
 
 version = "${project.minecraft.version}-${config.version.mod.minor}.${config.version.mod.revis}"
 
-if (project.getProperty("bambooshortPlanName") == "Voltz-Dev") {
+if (project.getProperty("bambooshortPlanName") == "BBM-Dev") {
     group = "dev.builtbroken.voltzengine"
     archivesBaseName = "VoltzEngine"
 } else {
