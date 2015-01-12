@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.content;
+package com.builtbroken.mc.core.content.load;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.prefab.recipe.MRItemStack;
@@ -10,9 +10,9 @@ import java.util.List;
 /**
  * Created by robert on 1/10/2015.
  */
-public class CrusherRecipeLoad extends MachineRecipeLoader
+public class GrinderRecipeLoad extends MachineRecipeLoader
 {
-    public CrusherRecipeLoad()
+    public GrinderRecipeLoad()
     {
         super(MachineRecipeType.ITEM_GRINDER);
     }
@@ -20,7 +20,7 @@ public class CrusherRecipeLoad extends MachineRecipeLoader
     @Override
     protected void generateRecipes(List<MRItemStack> recipes)
     {
-        recipes.add(newRecipe(Blocks.cobblestone).addInputOption(Blocks.stone));
-        recipes.add(newRecipe(new ItemStack(Blocks.cobblestone, 4)).addInputOption(Blocks.stonebrick));
+        recipes.add(newRecipe(Blocks.sand).addInputOption(Blocks.stone).addInputOption(Blocks.cobblestone));
+        recipes.add(newRecipe(new ItemStack(Blocks.sand, 4)).addInputOption(Blocks.sandstone));
     }
 }

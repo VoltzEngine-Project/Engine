@@ -1,7 +1,5 @@
-package com.builtbroken.mc.core.resources.content;
+package com.builtbroken.mc.core.content;
 
-import com.builtbroken.mc.core.resources.GeneratedOreItem;
-import com.builtbroken.mc.core.resources.OreItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -36,10 +34,7 @@ public class ItemOreResource extends Item
     @SideOnly(Side.CLIENT) @Override
     public void registerIcons(IIconRegister reg)
     {
-        for(GeneratedOreItem item : OreItemRegistry.generators)
-        {
-            item.registerIcons(reg);
-        }
+
     }
 
     @SideOnly(Side.CLIENT) @Override

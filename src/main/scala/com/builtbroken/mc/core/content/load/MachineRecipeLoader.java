@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.content;
+package com.builtbroken.mc.core.content.load;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.api.recipe.RecipeRegisterResult;

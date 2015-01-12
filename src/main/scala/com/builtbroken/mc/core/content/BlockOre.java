@@ -1,6 +1,7 @@
-package com.builtbroken.mc.core.resources.content;
+package com.builtbroken.mc.core.content;
 
-import com.builtbroken.mc.core.resources.DefinedResources;
+import com.builtbroken.mc.core.content.resources.GenMaterial;
+import com.builtbroken.mc.core.content.resources.Ores;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -10,6 +11,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.OreDictionary;
 import com.builtbroken.mc.core.References;
 
@@ -22,12 +24,14 @@ import java.util.List;
  */
 public class BlockOre extends Block
 {
-    public int set = 0;
     public IIcon[] icon = new IIcon[16];
 
-    public BlockOre()
+    private String type;
+
+    public BlockOre(String type)
     {
         super(Material.rock);
+        this.type = type;
         setCreativeTab(CreativeTabs.tabBlock);
     }
 
@@ -46,23 +50,18 @@ public class BlockOre extends Block
     @SideOnly(Side.CLIENT) @Override
     public void registerBlockIcons(IIconRegister reg)
     {
-        for(int i = 0; i < 16; i++)
+        for(Ores ore : Ores.values())
         {
-            //TODO change this to not use ore dictionary
-            icon[i] = reg.registerIcon(References.PREFIX + OreDictionary.getOreName(OreDictionary.getOreIDs(new ItemStack(this, 1, i))[0]));
+            icon[ore.ordinal()] = reg.registerIcon(References.PREFIX + type + "_" + ore.name().toLowerCase() + "_ore");
         }
     }
 
     @SideOnly(Side.CLIENT) @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list)
     {
-        for(int i = set * 16; i < (set * 16) + 16 && i < DefinedResources.values().length; i++)
+        for(Ores ore : Ores.values())
         {
-            DefinedResources re = DefinedResources.values()[i];
-            if(re.block == this && re.generateOres && re.requested)
-            {
-                list.add(new ItemStack(item, 1, re.meta));
-            }
+            list.add(new ItemStack(item, 1, ore.ordinal()));
         }
     }
 }

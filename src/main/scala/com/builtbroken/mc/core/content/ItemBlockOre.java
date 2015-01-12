@@ -1,5 +1,7 @@
-package com.builtbroken.mc.core.resources.content;
+package com.builtbroken.mc.core.content;
 
+import com.builtbroken.mc.core.content.resources.Ores;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -19,10 +21,9 @@ public class ItemBlockOre extends ItemBlockMetadata
     @Override
     public String getUnlocalizedName(ItemStack itemstack)
     {
-        String s = OreDictionary.getOreName(OreDictionary.getOreIDs(new ItemStack(this, 1, itemstack.getItemDamage()))[0]);
-        if(s != null && !s.isEmpty())
+        if(itemstack.getItemDamage() < Ores.values().length)
         {
-            return "tile." + References.PREFIX + s;
+            return "tile." + References.PREFIX + "ore"+ LanguageUtility.capitalizeFirst(Ores.values()[itemstack.getItemDamage()].name().toLowerCase());
         }
         return super.getUnlocalizedName(itemstack);
     }

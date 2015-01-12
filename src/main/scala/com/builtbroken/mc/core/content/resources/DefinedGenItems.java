@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.resources;
+package com.builtbroken.mc.core.content.resources;
 
 /** List of known items to generate per material
  * Created by robert on 11/23/2014.
@@ -23,10 +23,5 @@ public enum DefinedGenItems
     private DefinedGenItems(boolean gen)
     {
         this.shouldGenerate = gen;
-    }
-
-    public GeneratedOreItem getGen()
-    {
-        return new GeneratedOreItem(name().toLowerCase());
     }
 }

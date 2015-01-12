@@ -1,12 +1,12 @@
-# Resonant Engine Language Properties
+# voltzengine Engine Language Properties
 # @author Calclavia and Vexatos
 
 death.attack.electrocution=%1$s starb durch einen Stromschlag!
 
 ## Creative Testing Blocks
-tile.resonant:creativeBuilder.name=Kreativ-Bauer
-tile.resonant:infiniteEnergy.name=Unendlich Energie
-tile.resonant:infiniteFluid.name=Unendlich Flüssigkeit
+tile.voltzengine:creativeBuilder.name=Kreativ-Bauer
+tile.voltzengine:infiniteEnergy.name=Unendlich Energie
+tile.voltzengine:infiniteFluid.name=Unendlich Flüssigkeit
 
 ## Tools
 toolmode.mode=Modus
@@ -14,8 +14,8 @@ toolmode.general.name=Generell
 toolmode.rotation.name=Drehung
 
 # Items
-item.resonant:screwdriver.name=Schraubendreher
-item.resonant:screwdriver.tooltip=Genutzt, um Blöcke zu konfigurieren. Shift-rechtsklicke, um Modus zu ändern.
+item.voltzengine:screwdriver.name=Schraubendreher
+item.voltzengine:screwdriver.tooltip=Genutzt, um Blöcke zu konfigurieren. Shift-rechtsklicke, um Modus zu ändern.
 
 #Misc
 # %0 goes before the localized name of the shift key, %1 goes after

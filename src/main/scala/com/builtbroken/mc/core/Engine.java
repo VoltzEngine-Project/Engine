@@ -2,11 +2,11 @@ package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.annotation.TestAnnotation;
-import com.builtbroken.mc.core.content.CrusherRecipeLoad;
-import com.builtbroken.mc.core.content.GrinderRecipeLoad;
+import com.builtbroken.mc.core.content.load.CrusherRecipeLoad;
+import com.builtbroken.mc.core.content.load.GrinderRecipeLoad;
 import com.builtbroken.mc.core.handler.InteractionHandler;
-import com.builtbroken.mc.core.resources.content.BlockOre;
-import com.builtbroken.mc.core.resources.content.ItemBlockOre;
+import com.builtbroken.mc.core.content.BlockOre;
+import com.builtbroken.mc.core.content.ItemBlockOre;
 import com.builtbroken.mc.prefab.recipe.MRHandlerItemStack;
 import com.builtbroken.mc.prefab.recipe.MRSmelterHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -30,7 +30,7 @@ import com.builtbroken.mc.core.content.ItemInstaHole;
 import com.builtbroken.mc.core.content.tool.ToolMode;
 import com.builtbroken.mc.core.content.tool.ToolModeGeneral;
 import com.builtbroken.mc.core.content.tool.ToolModeRotation;
-import com.builtbroken.mc.core.resources.*;
+import com.builtbroken.mc.core.content.resources.*;
 import com.builtbroken.mc.lib.grid.UpdateTicker;
 import com.builtbroken.mc.lib.grid.UpdateTicker$;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
@@ -54,15 +54,21 @@ public class Engine
 {
 	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
+
     @SidedProxy(clientSide = "com.builtbroken.mc.core.ClientProxy", serverSide = "com.builtbroken.mc.core.CommonProxy")
 	public static CommonProxy proxy;
-	@Mod.Metadata(References.ID)
+
+    @Mod.Metadata(References.ID)
 	public static ModMetadata metadata;
-	@Instance(References.ID)
+
+    @Instance(References.ID)
 	public static Engine instance;
-	public static Block ore = null;
+
+
+    public static Block ore = null;
 	public static Item itemWrench;
     public static Item instaHole;
+
     private static boolean oresRequested = false;
 	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 	private LoadableHandler loadables = new LoadableHandler();
@@ -71,25 +77,9 @@ public class Engine
 	 * Requests that all ores are generated
 	 * Must be called in pre-init
 	 */
-    @TestAnnotation
-	public static void requestAllOres()
-	{
-		for (DefinedResources resource : DefinedResources.values())
-		{
-			requestOre(resource);
-		}
-	}
-
-	/**
-	 * Requests that all ores are generated
-	 * Must be called in pre-init
-	 *
-	 * @param resource - resource to request its ore to generate, still restricted by configs
-	 */
-	public static void requestOre(DefinedResources resource)
+	public static void requestOres()
 	{
 		oresRequested = true;
-		resource.requested = true;
 	}
 
 	@EventHandler
@@ -154,8 +144,8 @@ public class Engine
         //Late registration of content
         if(oresRequested)
         {
-            ore = contentRegistry.newBlock("ReOres", BlockOre.class, ItemBlockOre.class);
-            DefinedResources.registerSet(0, ore, References.CONFIGURATION);
+            ore = contentRegistry.newBlock(References.ID +"StoneOre", new BlockOre("stone"), ItemBlockOre.class);
+            Ores.registerSet(ore, References.CONFIGURATION);
         }
 
 		loadables.init();

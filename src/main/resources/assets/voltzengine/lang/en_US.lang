@@ -1,176 +1,173 @@
-# Resonant Engine Language Properties
-# @author Calclavia
-
 death.attack.electrocution=%1$s got electrocuted!
 
-tile.resonant:unknown.name=Unknown Block
-item.resonant:unknown.name=Unknown Item
+tile.voltzengine:unknown.name=Unknown Block
+item.voltzengine:unknown.name=Unknown Item
 
 ## Ores
-tile.resonant:oreCopper.name=Copper Ore
-tile.resonant:oreTin.name=Tin Ore
-tile.resonant:oreSilver.name=Silver Ore
-tile.resonant:oreLead.name=Lead Ore
-tile.resonant:oreZinc.name=Zinc Ore
-tile.resonant:oreNickel.name=Nickel Ore
-tile.resonant:oreAluminium.name=Bauxite Ore
-tile.resonant:oreMagnesium.name=Magnesite Ore
-tile.resonant:oreUranium.name=Uranium Ore
+tile.voltzengine:oreCopper.name=Copper Ore
+tile.voltzengine:oreTin.name=Tin Ore
+tile.voltzengine:oreSilver.name=Silver Ore
+tile.voltzengine:oreLead.name=Lead Ore
+tile.voltzengine:oreZinc.name=Zinc Ore
+tile.voltzengine:oreNickel.name=Nickel Ore
+tile.voltzengine:oreAluminium.name=Bauxite Ore
+tile.voltzengine:oreMagnesite.name=Magnesite Ore
+tile.voltzengine:oreUranium.name=Uranium Ore
 
 ## Dust
-item.resonant:dustCopper.name=Copper Dust
-item.resonant:dustTin.name=Tin Dust
-item.resonant:dustSilver.name=Silver Dust
-item.resonant:dustLead.name=Lead Dust
-item.resonant:dustZinc.name=Zinc Dust
-item.resonant:dustNickel.name=Nickel Dust
-item.resonant:dustAluminium.name=Aluminium Dust
-item.resonant:dustMagnesium.name=Magnesium Dust
+item.voltzengine:dustCopper.name=Copper Dust
+item.voltzengine:dustTin.name=Tin Dust
+item.voltzengine:dustSilver.name=Silver Dust
+item.voltzengine:dustLead.name=Lead Dust
+item.voltzengine:dustZinc.name=Zinc Dust
+item.voltzengine:dustNickel.name=Nickel Dust
+item.voltzengine:dustAluminium.name=Aluminium Dust
+item.voltzengine:dustMagnesium.name=Magnesium Dust
 
-item.resonant:dustSteel.name=Steel Dust
-item.resonant:dustBrass.name=Brass Clump
-item.resonant:dustBronze.name=Bronze Clump
+item.voltzengine:dustSteel.name=Steel Dust
+item.voltzengine:dustBrass.name=Brass Clump
+item.voltzengine:dustBronze.name=Bronze Clump
 
 ## Ruble
-item.resonant:rubbleCopper.name=Copper Rubble
-item.resonant:rubbleTin.name=Tin Rubble
-item.resonant:rubbleSilver.name=Silver Rubble
-item.resonant:rubbleLead.name=Lead Rubble
-item.resonant:rubbleZinc.name=Zinc Rubble
-item.resonant:rubbleNickel.name=Nickel Rubble
-item.resonant:rubbleAluminium.name=Aluminium Rubble
-item.resonant:rubbleMagnesium.name=Magnesium Rubble
+item.voltzengine:rubbleCopper.name=Copper Rubble
+item.voltzengine:rubbleTin.name=Tin Rubble
+item.voltzengine:rubbleSilver.name=Silver Rubble
+item.voltzengine:rubbleLead.name=Lead Rubble
+item.voltzengine:rubbleZinc.name=Zinc Rubble
+item.voltzengine:rubbleNickel.name=Nickel Rubble
+item.voltzengine:rubbleAluminium.name=Aluminium Rubble
+item.voltzengine:rubbleMagnesium.name=Magnesium Rubble
 
 ## Ingot
-item.resonant:ingotCopper.name=Copper Ingot
-item.resonant:ingotTin.name=Tin Ingot
-item.resonant:ingotSilver.name=Silver Ingot
-item.resonant:ingotLead.name=Lead Ingot
-item.resonant:ingotZinc.name=Zinc Ingot
-item.resonant:ingotNickel.name=Nickel Ingot
-item.resonant:ingotAluminium.name=Aluminium Ingot
-item.resonant:ingotMagnesium.name=Magnesium Ingot
+item.voltzengine:ingotCopper.name=Copper Ingot
+item.voltzengine:ingotTin.name=Tin Ingot
+item.voltzengine:ingotSilver.name=Silver Ingot
+item.voltzengine:ingotLead.name=Lead Ingot
+item.voltzengine:ingotZinc.name=Zinc Ingot
+item.voltzengine:ingotNickel.name=Nickel Ingot
+item.voltzengine:ingotAluminium.name=Aluminium Ingot
+item.voltzengine:ingotMagnesium.name=Magnesium Ingot
 
-item.resonant:ingotSteel.name=Steel Ingot
-item.resonant:ingotBrass.name=Brass Ingot
-item.resonant:ingotBronze.name=Bronze Ingot
+item.voltzengine:ingotSteel.name=Steel Ingot
+item.voltzengine:ingotBrass.name=Brass Ingot
+item.voltzengine:ingotBronze.name=Bronze Ingot
 
 ## Plate
-item.resonant:plateCopper.name=Copper Plate
-item.resonant:plateTin.name=Tin Plate
-item.resonant:plateSilver.name=Silver Plate
-item.resonant:plateLead.name=Lead Plate
-item.resonant:plateZinc.name=Zinc Plate
-item.resonant:plateNickel.name=Nickel Plate
-item.resonant:plateAluminium.name=Aluminium Plate
-item.resonant:plateMagnesium.name=Magnesium Plate
+item.voltzengine:plateCopper.name=Copper Plate
+item.voltzengine:plateTin.name=Tin Plate
+item.voltzengine:plateSilver.name=Silver Plate
+item.voltzengine:plateLead.name=Lead Plate
+item.voltzengine:plateZinc.name=Zinc Plate
+item.voltzengine:plateNickel.name=Nickel Plate
+item.voltzengine:plateAluminium.name=Aluminium Plate
+item.voltzengine:plateMagnesium.name=Magnesium Plate
 
-item.resonant:plateSteel.name=Steel Plate
-item.resonant:plateBrass.name=Brass Plate
-item.resonant:plateBronze.name=Bronze Plate
+item.voltzengine:plateSteel.name=Steel Plate
+item.voltzengine:plateBrass.name=Brass Plate
+item.voltzengine:plateBronze.name=Bronze Plate
 
 ## Rod
-item.resonant:rodCopper.name=Copper Rod
-item.resonant:rodTin.name=Tin Rod
-item.resonant:rodSilver.name=Silver Rod
-item.resonant:rodLead.name=Lead Rod
-item.resonant:rodZinc.name=Zinc Rod
-item.resonant:rodNickel.name=Nickel Rod
-item.resonant:rodAluminium.name=Aluminium Rod
-item.resonant:rodMagnesium.name=Magnesium Rod
+item.voltzengine:rodCopper.name=Copper Rod
+item.voltzengine:rodTin.name=Tin Rod
+item.voltzengine:rodSilver.name=Silver Rod
+item.voltzengine:rodLead.name=Lead Rod
+item.voltzengine:rodZinc.name=Zinc Rod
+item.voltzengine:rodNickel.name=Nickel Rod
+item.voltzengine:rodAluminium.name=Aluminium Rod
+item.voltzengine:rodMagnesium.name=Magnesium Rod
 
-item.resonant:rodSteel.name=Steel Rod
-item.resonant:rodBrass.name=Brass Rod
-item.resonant:rodBronze.name=Bronze Rod
+item.voltzengine:rodSteel.name=Steel Rod
+item.voltzengine:rodBrass.name=Brass Rod
+item.voltzengine:rodBronze.name=Bronze Rod
 
 ## Gear
-item.resonant:gearCopper.name=Copper Gear
-item.resonant:gearTin.name=Tin Gear
-item.resonant:gearSilver.name=Silver Gear
-item.resonant:gearLead.name=Lead Gear
-item.resonant:gearZinc.name=Zinc Gear
-item.resonant:gearNickel.name=Nickel Gear
-item.resonant:gearAluminium.name=Aluminium Gear
-item.resonant:gearMagnesium.name=Magnesium Gear
+item.voltzengine:gearCopper.name=Copper Gear
+item.voltzengine:gearTin.name=Tin Gear
+item.voltzengine:gearSilver.name=Silver Gear
+item.voltzengine:gearLead.name=Lead Gear
+item.voltzengine:gearZinc.name=Zinc Gear
+item.voltzengine:gearNickel.name=Nickel Gear
+item.voltzengine:gearAluminium.name=Aluminium Gear
+item.voltzengine:gearMagnesium.name=Magnesium Gear
 
-item.resonant:gearSteel.name=Steel Gear
-item.resonant:gearBrass.name=Brass Gear
-item.resonant:gearBronze.name=Bronze Gear
+item.voltzengine:gearSteel.name=Steel Gear
+item.voltzengine:gearBrass.name=Brass Gear
+item.voltzengine:gearBronze.name=Bronze Gear
 
 ## Ax Head
-item.resonant:axHeadCopper.name=Copper Ax Head
-item.resonant:axHeadTin.name=Tin Ax Head
-item.resonant:axHeadSilver.name=Silver Ax Head
-item.resonant:axHeadLead.name=Lead Ax Head
-item.resonant:axHeadZinc.name=Zinc Ax Head
-item.resonant:axHeadNickel.name=Nickel Ax Head
-item.resonant:axHeadAluminium.name=Aluminium Ax Head
-item.resonant:axHeadMagnesium.name=Magnesium Ax Head
+item.voltzengine:axHeadCopper.name=Copper Ax Head
+item.voltzengine:axHeadTin.name=Tin Ax Head
+item.voltzengine:axHeadSilver.name=Silver Ax Head
+item.voltzengine:axHeadLead.name=Lead Ax Head
+item.voltzengine:axHeadZinc.name=Zinc Ax Head
+item.voltzengine:axHeadNickel.name=Nickel Ax Head
+item.voltzengine:axHeadAluminium.name=Aluminium Ax Head
+item.voltzengine:axHeadMagnesium.name=Magnesium Ax Head
 
-item.resonant:axHeadSteel.name=Steel Ax Head
-item.resonant:axHeadBrass.name=Brass Ax Head
-item.resonant:axHeadBronze.name=Bronze Ax Head
+item.voltzengine:axHeadSteel.name=Steel Ax Head
+item.voltzengine:axHeadBrass.name=Brass Ax Head
+item.voltzengine:axHeadBronze.name=Bronze Ax Head
 
 ## Shovel Head
-item.resonant:shovelHeadCopper.name=Copper Shovel Head
-item.resonant:shovelHeadTin.name=Tin Shovel Head
-item.resonant:shovelHeadSilver.name=Silver Shovel Head
-item.resonant:shovelHeadLead.name=Lead Shovel Head
-item.resonant:shovelHeadZinc.name=Zinc Shovel Head
-item.resonant:shovelHeadNickel.name=Nickel Shovel Head
-item.resonant:shovelHeadAluminium.name=Aluminium Shovel Head
-item.resonant:shovelHeadMagnesium.name=Magnesium Shovel Head
+item.voltzengine:shovelHeadCopper.name=Copper Shovel Head
+item.voltzengine:shovelHeadTin.name=Tin Shovel Head
+item.voltzengine:shovelHeadSilver.name=Silver Shovel Head
+item.voltzengine:shovelHeadLead.name=Lead Shovel Head
+item.voltzengine:shovelHeadZinc.name=Zinc Shovel Head
+item.voltzengine:shovelHeadNickel.name=Nickel Shovel Head
+item.voltzengine:shovelHeadAluminium.name=Aluminium Shovel Head
+item.voltzengine:shovelHeadMagnesium.name=Magnesium Shovel Head
 
-item.resonant:shovelHeadSteel.name=Steel Shovel Head
-item.resonant:shovelHeadBrass.name=Brass Shovel Head
-item.resonant:shovelHeadBronze.name=Bronze Shovel Head
+item.voltzengine:shovelHeadSteel.name=Steel Shovel Head
+item.voltzengine:shovelHeadBrass.name=Brass Shovel Head
+item.voltzengine:shovelHeadBronze.name=Bronze Shovel Head
 
 ## Sword Blade
-item.resonant:swordBladeCopper.name=Copper Sword Blade
-item.resonant:swordBladeTin.name=Tin Sword Blade
-item.resonant:swordBladeSilver.name=Silver Sword Blade
-item.resonant:swordBladeLead.name=Lead Sword Blade
-item.resonant:swordBladeZinc.name=Zinc Sword Blade
-item.resonant:swordBladeNickel.name=Nickel Sword Blade
-item.resonant:swordBladeAluminium.name=Aluminium Sword Blade
-item.resonant:swordBladeMagnesium.name=Magnesium Sword Blade
+item.voltzengine:swordBladeCopper.name=Copper Sword Blade
+item.voltzengine:swordBladeTin.name=Tin Sword Blade
+item.voltzengine:swordBladeSilver.name=Silver Sword Blade
+item.voltzengine:swordBladeLead.name=Lead Sword Blade
+item.voltzengine:swordBladeZinc.name=Zinc Sword Blade
+item.voltzengine:swordBladeNickel.name=Nickel Sword Blade
+item.voltzengine:swordBladeAluminium.name=Aluminium Sword Blade
+item.voltzengine:swordBladeMagnesium.name=Magnesium Sword Blade
 
-item.resonant:shovelHeadSteel.name=Steel Shovel Head
-item.resonant:shovelHeadBrass.name=Brass Shovel Head
-item.resonant:shovelHeadBronze.name=Bronze Shovel Head
+item.voltzengine:shovelHeadSteel.name=Steel Shovel Head
+item.voltzengine:shovelHeadBrass.name=Brass Shovel Head
+item.voltzengine:shovelHeadBronze.name=Bronze Shovel Head
 
 ## Pick Head
-item.resonant:pickHeadCopper.name=Copper Pick Head
-item.resonant:pickHeadTin.name=Tin Pick Head
-item.resonant:pickHeadSilver.name=Silver Pick Head
-item.resonant:pickHeadLead.name=Lead Pick Head
-item.resonant:pickHeadZinc.name=Zinc Pick Head
-item.resonant:pickHeadNickel.name=Nickel Pick Head
-item.resonant:pickHeadAluminium.name=Aluminium Pick Head
-item.resonant:pickHeadMagnesium.name=Magnesium Pick Head
+item.voltzengine:pickHeadCopper.name=Copper Pick Head
+item.voltzengine:pickHeadTin.name=Tin Pick Head
+item.voltzengine:pickHeadSilver.name=Silver Pick Head
+item.voltzengine:pickHeadLead.name=Lead Pick Head
+item.voltzengine:pickHeadZinc.name=Zinc Pick Head
+item.voltzengine:pickHeadNickel.name=Nickel Pick Head
+item.voltzengine:pickHeadAluminium.name=Aluminium Pick Head
+item.voltzengine:pickHeadMagnesium.name=Magnesium Pick Head
 
-item.resonant:pickHeadSteel.name=Steel Pick Head
-item.resonant:pickHeadBrass.name=Brass Pick Head
-item.resonant:pickHeadBronze.name=Bronze Pick Head
+item.voltzengine:pickHeadSteel.name=Steel Pick Head
+item.voltzengine:pickHeadBrass.name=Brass Pick Head
+item.voltzengine:pickHeadBronze.name=Bronze Pick Head
 
 ## Hoe Head
-item.resonant:hoeHeadCopper.name=Copper Hoe Head
-item.resonant:hoeHeadTin.name=Tin Hoe Head
-item.resonant:hoeHeadSilver.name=Silver Hoe Head
-item.resonant:hoeHeadLead.name=Lead Hoe Head
-item.resonant:hoeHeadZinc.name=Zinc Hoe Head
-item.resonant:hoeHeadNickel.name=Nickel Hoe Head
-item.resonant:hoeHeadAluminium.name=Aluminium Hoe Head
-item.resonant:hoeHeadMagnesium.name=Magnesium Hoe Head
+item.voltzengine:hoeHeadCopper.name=Copper Hoe Head
+item.voltzengine:hoeHeadTin.name=Tin Hoe Head
+item.voltzengine:hoeHeadSilver.name=Silver Hoe Head
+item.voltzengine:hoeHeadLead.name=Lead Hoe Head
+item.voltzengine:hoeHeadZinc.name=Zinc Hoe Head
+item.voltzengine:hoeHeadNickel.name=Nickel Hoe Head
+item.voltzengine:hoeHeadAluminium.name=Aluminium Hoe Head
+item.voltzengine:hoeHeadMagnesium.name=Magnesium Hoe Head
 
-item.resonant:hoeHeadSteel.name=Steel Hoe Head
-item.resonant:hoeHeadBrass.name=Brass Hoe Head
-item.resonant:hoeHeadBronze.name=Bronze Hoe Head
+item.voltzengine:hoeHeadSteel.name=Steel Hoe Head
+item.voltzengine:hoeHeadBrass.name=Brass Hoe Head
+item.voltzengine:hoeHeadBronze.name=Bronze Hoe Head
 
 ## Creative Testing Blocks
-tile.resonant:creativeBuilder.name=Creative Builder
-tile.resonant:infiniteEnergy.name=Infinite Energy
-tile.resonant:infiniteFluid.name=Infinite Fluid
+tile.voltzengine:creativeBuilder.name=Creative Builder
+tile.voltzengine:infiniteEnergy.name=Infinite Energy
+tile.voltzengine:infiniteFluid.name=Infinite Fluid
 
 ## Tools
 toolmode.mode=Mode
@@ -178,8 +175,8 @@ toolmode.general.name=General
 toolmode.rotation.name=Rotation
 
 # Items
-item.resonant:screwdriver.name=Screwdriver
-item.resonant:screwdriver.tooltip=Used to configure blocks. Shift-right click to change mode.
+item.voltzengine:screwdriver.name=Screwdriver
+item.voltzengine:screwdriver.tooltip=Used to configure blocks. Shift-right click to change mode.
 
 #Misc
 # %0 goes before the localized name of the shift key, %1 goes after
@@ -191,8 +188,8 @@ info.energycapacity.waila=Maximum Energy Level
 
 info.isCraftingOnlyItem=Crafting Item
 
-info.resonant:explosive.name=Explosive
-info.resonant:explosive.size.name=Size
+info.voltzengine:explosive.name=Explosive
+info.voltzengine:explosive.size.name=Size
 
 ## Permissions
 root.machine=Manage Machine
