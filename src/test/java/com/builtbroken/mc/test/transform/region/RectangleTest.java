@@ -68,7 +68,7 @@ public class RectangleTest extends TestCase
 
             for (Point vec : l)
             {
-                boolean flag = !rotated ? rect.isWithin2D(vec) : rect.isWithin_rotated(vec);
+                boolean flag = !rotated ? rect.isWithin(vec) : rect.isWithin_rotated(vec);
 
                 //Debug for when the checks fail and we need to know why
                 if (flag != inside)

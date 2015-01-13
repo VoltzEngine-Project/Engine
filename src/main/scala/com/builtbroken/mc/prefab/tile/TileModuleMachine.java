@@ -1,9 +1,10 @@
 package com.builtbroken.mc.prefab.tile;
 
+import com.builtbroken.mc.api.ISave;
+import com.builtbroken.mc.api.IUpdate;
 import com.builtbroken.mc.api.tile.IInventoryProvider;
 import com.builtbroken.mc.api.tile.ISided;
 import com.builtbroken.mc.api.tile.ITileModuleProvider;
-import com.builtbroken.mc.api.tile.node.IExternalInventory;
 import com.builtbroken.mc.api.tile.node.ITileModule;
 import com.builtbroken.mc.prefab.tile.module.TileModuleInventory;
 import net.minecraft.block.Block;
@@ -13,11 +14,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import com.builtbroken.mc.api.ISave;
-import com.builtbroken.mc.api.IUpdate;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Prefab designed to automate all node interaction of the time.
@@ -29,18 +31,18 @@ import java.util.*;
  */
 public class TileModuleMachine extends TileMachine implements ITileModuleProvider, IInventoryProvider, ISidedInventory
 {
-    protected HashMap<String, List<ITileModule>> modules = new HashMap();
+    protected List<ITileModule> modules = new ArrayList();
     protected TileModuleInventory inventory_module = null;
 
-	public TileModuleMachine(String name, Material material)
-	{
-		super(name, material);
-	}
+    public TileModuleMachine(String name, Material material)
+    {
+        super(name, material);
+    }
 
-	@Override
-	public void onNeighborChanged(Block block)
-	{
-		super.onNeighborChanged(block);
+    @Override
+    public void onNeighborChanged(Block block)
+    {
+        super.onNeighborChanged(block);
         for (ITileModule node : getNodes())
         {
             if (node != null)
@@ -48,12 +50,12 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
                 node.onParentChange();
             }
         }
-	}
+    }
 
-	@Override
-	public void onWorldJoin()
-	{
-		super.onWorldJoin();
+    @Override
+    public void onWorldJoin()
+    {
+        super.onWorldJoin();
         for (ITileModule node : getNodes())
         {
             if (node != null)
@@ -61,130 +63,94 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
                 node.onJoinWorld();
             }
         }
-	}
+    }
 
-	@Override
-	public void update()
-	{
-		super.update();
-		for (ITileModule node : getNodes())
-		{
-			if (node instanceof IUpdate)
-			{
-				((IUpdate) node).update();
-			}
-		}
-	}
-
-	@Override
-	public void invalidate()
-	{
-		for (ITileModule node : getNodes())
-		{
-			if (node != null)
-			{
-				node.onLeaveWorld();
-			}
-		}
-		super.invalidate();
-	}
-
-    /** Grabs any node that needs called by save() load() invalidate() update() onJoinWorld() etc */
-	protected final List<ITileModule> getNodes()
-	{
-		List<ITileModule> nodes = new LinkedList<ITileModule>();
-		getNodes(nodes);
-		return nodes;
-	}
-
-	/** Grabs any node that needs called by save() load() invalidate() update() onJoinWorld() etc */
-	public void getNodes(List<ITileModule> nodes)
+    @Override
+    public void update()
     {
-        for(List<ITileModule> list : modules.values())
+        super.update();
+        for (ITileModule node : getNodes())
         {
-            if(list != null)
-                nodes.addAll(list);
+            if (node instanceof IUpdate)
+            {
+                ((IUpdate) node).update();
+            }
         }
+    }
+
+    @Override
+    public void invalidate()
+    {
+        for (ITileModule node : getNodes())
+        {
+            if (node != null)
+            {
+                node.onLeaveWorld();
+            }
+        }
+        super.invalidate();
+    }
+
+    /**
+     * Grabs any node that needs called by save() load() invalidate() update() onJoinWorld() etc
+     */
+    protected final List<ITileModule> getNodes()
+    {
+        return modules;
     }
 
     @Override
     public <N extends ITileModule> N getModule(Class<? extends N> nodeType, ForgeDirection from)
     {
-        if(modules.containsKey("inventory") && IInventory.class.isAssignableFrom(nodeType))
+        for (ITileModule module : getNodes())
         {
-            List<ITileModule> list = modules.get("inventory");
-            for(ITileModule module : list)
+            if (!(module instanceof ISided) || ((ISided) module).isValidForSide(from))
             {
-                if(!(module instanceof ISided) || ((ISided) module).isValidForSide(from))
+                if (nodeType.isAssignableFrom(module.getClass()))
                 {
-                    if(nodeType.isAssignableFrom(module.getClass()))
-                    {
-                        return (N) module;
-                    }
-                }
-            }
-        }
-        else
-        {
-            for(ITileModule module : getNodes())
-            {
-                if(!(module instanceof ISided) || ((ISided) module).isValidForSide(from))
-                {
-                    if(nodeType.isAssignableFrom(module.getClass()))
-                    {
-                        return (N) module;
-                    }
+                    return (N) module;
                 }
             }
         }
         return null;
     }
 
-    public void addModule(String id, ITileModule module)
+    public boolean addInventoryModule(int size)
     {
-        List<ITileModule> list = null;
-
-        if(modules.containsKey(id))
-            list = modules.get(id);
-
-        if(list != null)
-            list = new ArrayList();
-
-        list.add(module);
-        modules.put(id, list);
+        if(inventory_module != null)
+        {
+            inventory_module = new TileModuleInventory(this, size);
+            modules.add(inventory_module);
+            return true;
+        }
+        return false;
     }
 
-    public void addInventoryModule(int size)
+    @Override
+    public void readFromNBT(NBTTagCompound nbt)
     {
-        inventory_module = new TileModuleInventory(this, size);
-        addModule("inventory", inventory_module);
+        super.readFromNBT(nbt);
+        for (ITileModule node : getNodes())
+        {
+            if (node instanceof ISave)
+            {
+                ((ISave) node).load(nbt);
+            }
+        }
     }
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbt)
-	{
-		super.readFromNBT(nbt);
-		for (ITileModule node : getNodes())
-		{
-			if (node instanceof ISave)
-			{
-				((ISave) node).load(nbt);
-			}
-		}
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		super.writeToNBT(nbt);
-		for (ITileModule node : getNodes())
-		{
-			if (node instanceof ISave)
-			{
-				((ISave) node).save(nbt);
-			}
-		}
-	}
+    @Override
+    public void writeToNBT(NBTTagCompound nbt)
+    {
+        super.writeToNBT(nbt);
+        for (ITileModule node : getNodes())
+        {
+            if (node instanceof ISave)
+            {
+                ((ISave) node).save(nbt);
+            }
+        }
+    }
 
     @Override
     public TileModuleInventory getInventory()
@@ -211,7 +177,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public int[] getAccessibleSlotsFromSide(int side)
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().getAccessibleSlotsFromSide(side);
         }
@@ -221,7 +187,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public boolean canInsertItem(int slot, ItemStack itemStack, int side)
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().canInsertItem(side, itemStack, side);
         }
@@ -231,7 +197,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public boolean canExtractItem(int slot, ItemStack itemStack, int side)
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().canExtractItem(side, itemStack, side);
         }
@@ -241,7 +207,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public int getSizeInventory()
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().getSizeInventory();
         }
@@ -251,7 +217,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public ItemStack getStackInSlot(int slot)
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().getStackInSlot(slot);
         }
@@ -261,7 +227,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public ItemStack decrStackSize(int slot, int amount)
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().decrStackSize(slot, amount);
         }
@@ -271,7 +237,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public ItemStack getStackInSlotOnClosing(int slot)
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().getStackInSlotOnClosing(slot);
         }
@@ -281,7 +247,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack)
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             getInventory().setInventorySlotContents(slot, stack);
         }
@@ -290,7 +256,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public String getInventoryName()
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().getInventoryName();
         }
@@ -300,7 +266,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public boolean hasCustomInventoryName()
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().hasCustomInventoryName();
         }
@@ -310,7 +276,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public int getInventoryStackLimit()
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().getInventoryStackLimit();
         }
@@ -320,7 +286,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public boolean isUseableByPlayer(EntityPlayer player)
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().isUseableByPlayer(player);
         }
@@ -330,7 +296,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public void openInventory()
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             getInventory().openInventory();
         }
@@ -339,7 +305,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public void closeInventory()
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             getInventory().closeInventory();
         }
@@ -348,7 +314,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack)
     {
-        if(getInventory() != null)
+        if (getInventory() != null)
         {
             return getInventory().isItemValidForSlot(slot, stack);
         }

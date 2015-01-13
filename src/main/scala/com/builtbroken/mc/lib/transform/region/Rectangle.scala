@@ -4,10 +4,8 @@ import java.math.{BigDecimal, MathContext, RoundingMode}
 
 import com.builtbroken.jlib.data.vector.IPos2D
 import com.builtbroken.mc.lib.transform.vector.Point
-import io.netty.buffer.ByteBuf
-import net.minecraft.nbt.NBTTagCompound
 
-class Rectangle(var min: Point, var max: Point) extends Shape[Rectangle]
+class Rectangle(var min: Point, var max: Point) extends Shape2D(min.midpoint(max))
 {
   def this() = this(new Point, new Point)
 
@@ -17,32 +15,8 @@ class Rectangle(var min: Point, var max: Point) extends Shape[Rectangle]
 
   def this(rect: Rectangle) = this(rect.min.clone, rect.max.clone)
 
-  override def set(other: Rectangle): Rectangle =
-  {
-    min = other.min.clone
-    max = other.max.clone
-    return this
-  }
-
-  /**
-   * Operations
-   */
-  override def +(amount: Double): Rectangle = new Rectangle(min.add(amount), max.add(amount))
-
-  override def +(amount: Rectangle): Rectangle = new Rectangle(min.add(amount.min), max.add(amount.max))
-
-  def +(vec: Point): Rectangle = new Rectangle(min.add(vec), max.add(vec))
-
-
-  def -(vec: Point): Rectangle = this + (vec.multiply(-1))
-
-  def *(amount: Double): Rectangle = new Rectangle(min.multiply(amount), max.multiply(amount))
-
-  def *(amount: Rectangle): Rectangle = new Rectangle(min.multiply(amount.min), max.multiply(amount.max))
-
-
   /** Checks if the point is inside the shape */
-  override def isWithin(x: Double, y: Double): Boolean = y >= this.min.y && y <= this.max.y && x >= this.min.x && x <= this.max.x
+  override def isWithin(p: IPos2D): Boolean = p.y >= this.min.y && p.y <= this.max.y && p.x >= this.min.x && p.x <= this.max.x
 
   def isWithin_rotated(p: IPos2D): Boolean =
   {
@@ -79,20 +53,6 @@ class Rectangle(var min: Point, var max: Point) extends Shape[Rectangle]
 
   override def getSizeY: Double = max.y - min.y
 
-
-  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
-  {
-    nbt.setTag("min", min.toNBT)
-    nbt.setTag("max", max.toNBT)
-    return nbt
-  }
-
-  override def writeByteBuf(data: ByteBuf): ByteBuf =
-  {
-    min.writeBytes(data)
-    max.writeBytes(data)
-    return data
-  }
 
   override def toString: String =
   {
