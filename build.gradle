@@ -81,6 +81,17 @@ processResources {
 	}
 }
 
+publishing {
+  publications {
+    myPublication(MavenPublication) {      
+      pom.withXml {
+        asNode().appendNode('description', 'Created on ' + getDate())
+      }
+    }
+  }
+}
+
+
 archivesBaseName = "VolzEngine"
 
 repositories {
