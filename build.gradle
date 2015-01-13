@@ -48,7 +48,7 @@ version = "${project.minecraft.version}-${config.version.mod.major}.${config.ver
 if (project.hasProperty("bambooBuildNumber"))
     version += project.bambooBuildNumber
 else
-    version += "NIGHTLY"
+    version += getDate()
 
 println "version = "+ version
 
@@ -61,7 +61,7 @@ minecraft {
 		replace "@BUILD@", project.bambooBuildNumber
 	}
 	else {
-		replace "@BUILD@", "nightly"
+		replace "@BUILD@", getDate()
 	}
 }
 processResources {
@@ -108,4 +108,10 @@ dependencies
     compile "mcp.mobius.waila:Waila:1.5.8a_1.7.10"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.0.+:dev"
     compile "net.industrial-craft:industrialcraft-2:2.2.654-experimental:api"
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
 }
