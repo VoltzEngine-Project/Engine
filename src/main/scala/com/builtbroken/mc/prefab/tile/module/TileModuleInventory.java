@@ -25,7 +25,7 @@ public class TileModuleInventory extends ExternalInventory implements ITileModul
         super(inv, slots);
         if(!(inv instanceof ITileModuleProvider))
         {
-            throw new IllegalArgumentException("Module requires that the parent is an instance of ITileModuleProvider");
+            throw new IllegalArgumentException("TileModuleInventory requires that the parent is an instance of ITileModuleProvider");
         }
     }
 

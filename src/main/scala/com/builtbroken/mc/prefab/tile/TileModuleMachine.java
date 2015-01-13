@@ -1,12 +1,17 @@
 package com.builtbroken.mc.prefab.tile;
 
+import com.builtbroken.mc.api.tile.IInventoryProvider;
 import com.builtbroken.mc.api.tile.ISided;
 import com.builtbroken.mc.api.tile.ITileModuleProvider;
+import com.builtbroken.mc.api.tile.node.IExternalInventory;
 import com.builtbroken.mc.api.tile.node.ITileModule;
 import com.builtbroken.mc.prefab.tile.module.TileModuleInventory;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import com.builtbroken.mc.api.ISave;
 import com.builtbroken.mc.api.IUpdate;
@@ -22,9 +27,10 @@ import java.util.*;
  *
  * @author Darkguardsman
  */
-public class TileModuleMachine extends TileMachine implements ITileModuleProvider
+public class TileModuleMachine extends TileMachine implements ITileModuleProvider, IInventoryProvider, ISidedInventory
 {
     protected HashMap<String, List<ITileModule>> modules = new HashMap();
+    protected TileModuleInventory inventory_module = null;
 
 	public TileModuleMachine(String name, Material material)
 	{
@@ -150,7 +156,8 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
 
     public void addInventoryModule(int size)
     {
-        addModule("inventory", new TileModuleInventory(this, size));
+        inventory_module = new TileModuleInventory(this, size);
+        addModule("inventory", inventory_module);
     }
 
 	@Override
@@ -178,4 +185,173 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
 			}
 		}
 	}
+
+    @Override
+    public TileModuleInventory getInventory()
+    {
+        return inventory_module;
+    }
+
+    @Override
+    public boolean canStore(ItemStack stack, int slot, ForgeDirection side)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean canRemove(ItemStack stack, int slot, ForgeDirection side)
+    {
+        return false;
+    }
+
+    //==================================
+    //====== Inventory redirects =======
+    //==================================
+
+    @Override
+    public int[] getAccessibleSlotsFromSide(int side)
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().getAccessibleSlotsFromSide(side);
+        }
+        return new int[0];
+    }
+
+    @Override
+    public boolean canInsertItem(int slot, ItemStack itemStack, int side)
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().canInsertItem(side, itemStack, side);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack itemStack, int side)
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().canExtractItem(side, itemStack, side);
+        }
+        return false;
+    }
+
+    @Override
+    public int getSizeInventory()
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().getSizeInventory();
+        }
+        return 0;
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int slot)
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().getStackInSlot(slot);
+        }
+        return null;
+    }
+
+    @Override
+    public ItemStack decrStackSize(int slot, int amount)
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().decrStackSize(slot, amount);
+        }
+        return null;
+    }
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int slot)
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().getStackInSlotOnClosing(slot);
+        }
+        return null;
+    }
+
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack stack)
+    {
+        if(getInventory() != null)
+        {
+            getInventory().setInventorySlotContents(slot, stack);
+        }
+    }
+
+    @Override
+    public String getInventoryName()
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().getInventoryName();
+        }
+        return "";
+    }
+
+    @Override
+    public boolean hasCustomInventoryName()
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().hasCustomInventoryName();
+        }
+        return false;
+    }
+
+    @Override
+    public int getInventoryStackLimit()
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().getInventoryStackLimit();
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player)
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().isUseableByPlayer(player);
+        }
+        return false;
+    }
+
+    @Override
+    public void openInventory()
+    {
+        if(getInventory() != null)
+        {
+            getInventory().openInventory();
+        }
+    }
+
+    @Override
+    public void closeInventory()
+    {
+        if(getInventory() != null)
+        {
+            getInventory().closeInventory();
+        }
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack)
+    {
+        if(getInventory() != null)
+        {
+            return getInventory().isItemValidForSlot(slot, stack);
+        }
+        return false;
+    }
 }
