@@ -3,7 +3,7 @@ package com.builtbroken.mc.prefab.tile;
 import com.builtbroken.mc.api.tile.ISided;
 import com.builtbroken.mc.api.tile.ITileModuleProvider;
 import com.builtbroken.mc.api.tile.node.ITileModule;
-import com.builtbroken.mc.prefab.tile.module.InventoryModule;
+import com.builtbroken.mc.prefab.tile.module.TileModuleInventory;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.inventory.IInventory;
@@ -150,7 +150,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
 
     public void addInventoryModule(int size)
     {
-        addModule("inventory", new InventoryModule(this, size));
+        addModule("inventory", new TileModuleInventory(this, size));
     }
 
 	@Override
