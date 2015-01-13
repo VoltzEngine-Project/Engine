@@ -85,7 +85,19 @@ publishing {
   publications {
     myPublication(MavenPublication) {      
       pom.withXml {
-        asNode().appendNode('description', 'Created on ' + getDate())
+        from components.java
+        asNode().appendNode('description', 'Created on ' + getDate())        
+        def deps = configurations.compile.allDependencies
+        def dep_node = asNode().appendNode('dependencies')
+        
+        def dependencyNode = dep_node.appendNode('dependency')
+            dependencyNode.appendNode('groupId', 'net.industrial-craft')
+            dependencyNode.appendNode('artifactId', 'industrialcraft-2')
+            dependencyNode.appendNode('version', '2.2.654-experimental')
+        dependencyNode = dep_node.appendNode('dependency')
+            dependencyNode.appendNode('groupId', 'net.minecraftforge')
+            dependencyNode.appendNode('artifactId', 'forge')
+            dependencyNode.appendNode('version', project.version.forge)
       }
     }
   }
