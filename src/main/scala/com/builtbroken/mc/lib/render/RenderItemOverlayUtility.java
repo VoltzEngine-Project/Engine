@@ -72,7 +72,7 @@ public class RenderItemOverlayUtility
 					GL11.glPushMatrix();
 					GL11.glTranslated(x, y, z);
 					int angle = WorldUtility.getAngleFromForgeDirection(WorldUtility.invertX(dir));
-					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.transform(new Quaternion(angle, Pos.up())).add(0.5).add(new Pos(0, 0.3, 0)));
+					RenderUtility.renderFloatingText("" + inventory[i].stackSize, new Pos(translation.transform(new Quaternion(angle, Pos.up))).add(0.5).add(new Pos(0, 0.3, 0)));
 					GL11.glPopMatrix();
 				}
 			}

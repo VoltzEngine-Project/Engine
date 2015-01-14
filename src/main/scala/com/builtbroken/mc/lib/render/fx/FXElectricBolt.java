@@ -155,7 +155,7 @@ public class FXElectricBolt extends EntityFX
 				for (int i = 1; i < splitAmount; i++)
 				{
 					//Vector3 offsetVec = segment.difference.perpendicular().rotate(this.rand.nextFloat() * 360.0F, segment.difference).multiply((this.rand.nextFloat() - 0.5F) * offset);
-					Pos offsetVec = segment.difference.perpendicular().transform(new Quaternion(this.rand.nextFloat() * 360.0F, segment.difference)).multiply((this.rand.nextFloat() - 0.5F) * offset);
+					Pos offsetVec = new Pos(segment.difference.perpendicular().transform(new Quaternion(this.rand.nextFloat() * 360.0F, segment.difference))).multiply((this.rand.nextFloat() - 0.5F) * offset);
 					Pos basepoint = startPoint.clone().add(subSegment.clone().multiply(i));
 					newPoints[i] = new BoltPoint(basepoint, offsetVec);
 				}
@@ -173,9 +173,9 @@ public class FXElectricBolt extends EntityFX
 					if ((i != 0) && (this.rand.nextFloat() < splitChance))
 					{
 						//Vector3 splitrot = next.difference.xCross().rotate(this.rand.nextFloat() * 360.0F, next.difference);
-						Pos splitrot = next.difference.xCross().transform(new Quaternion(this.rand.nextFloat() * 360.0F, next.difference));
+						Pos splitrot = new Pos(next.difference.xCross().transform(new Quaternion(this.rand.nextFloat() * 360.0F, next.difference)));
 						//Vector3 diff = next.difference.clone().rotate((this.rand.nextFloat() * 0.66F + 0.33F) * splitAngle, splitrot).multiply(splitLength);
-						Pos diff = next.difference.clone().transform(new Quaternion((this.rand.nextFloat() * 0.66F + 0.33F) * splitAngle, splitrot)).multiply(splitLength);
+						Pos diff = new Pos(next.difference.clone().transform(new Quaternion((this.rand.nextFloat() * 0.66F + 0.33F) * splitAngle, splitrot))).multiply(splitLength);
 						this.maxSplitID += 1;
 						this.splitparents.put(this.maxSplitID, next.splitID);
 						BoltSegment split = new BoltSegment(newPoints[i], new BoltPoint(newPoints[(i + 1)].basePoint, newPoints[(i + 1)].offSet.clone().add(diff)), segment.weight / 2.0F, next.segmentID, this.maxSplitID);

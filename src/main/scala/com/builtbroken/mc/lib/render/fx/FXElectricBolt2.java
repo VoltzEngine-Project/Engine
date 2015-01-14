@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.render.fx;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -61,11 +62,6 @@ public class FXElectricBolt2 extends EntityFX
 		this.rand = new Random();
 		this.start = new BoltPoint(startVec);
 		this.end = new BoltPoint(targetVec);
-
-		if (this.end.y() == Double.POSITIVE_INFINITY)
-		{
-			this.end.y(Minecraft.getMinecraft().thePlayer.posY + 30);
-		}
 
 		/** By default, we do an electrical color */
 		this.segmentCount = 1;
@@ -155,7 +151,7 @@ public class FXElectricBolt2 extends EntityFX
 			 */
 			for (int i = 1; i < splitAmount; i++)
 			{
-				Pos newOffset = segment.difference.perpendicular().transform(new Quaternion(this.rand.nextFloat() * 360, segment.difference)).multiply((this.rand.nextFloat() - 0.5F) * offset);
+				Pos newOffset = new Pos(segment.difference.perpendicular().transform(new Quaternion(this.rand.nextFloat() * 360, segment.difference))).multiply((this.rand.nextFloat() - 0.5F) * offset);
 				Pos basePoint = startPoint.clone().add(subSegment.clone().multiply(i));
 
 				newPoints[i] = new BoltPoint(basePoint, newOffset);
@@ -173,8 +169,8 @@ public class FXElectricBolt2 extends EntityFX
 
 				if ((i != 0) && (this.rand.nextFloat() < splitChance))
 				{
-					Pos splitrot = next.difference.xCross().transform(new Quaternion(this.rand.nextFloat() * 360, next.difference));
-					Pos diff = next.difference.clone().transform(new Quaternion((this.rand.nextFloat() * 0.66F + 0.33F) * splitAngle, splitrot)).multiply(splitLength);
+					IPos3D splitrot = next.difference.xCross().transform(new Quaternion(this.rand.nextFloat() * 360, next.difference));
+					Pos diff = new Pos(next.difference.clone().transform(new Quaternion((this.rand.nextFloat() * 0.66F + 0.33F) * splitAngle, splitrot))).multiply(splitLength);
 					this.maxSplitID += 1;
 					this.parentIDMap.put(this.maxSplitID, next.splitID);
 					BoltSegment split = new BoltSegment(newPoints[i], new BoltPoint(newPoints[(i + 1)].base, newPoints[(i + 1)].offset.clone().add(diff)), segment.alpha / 2f, next.id, this.maxSplitID);

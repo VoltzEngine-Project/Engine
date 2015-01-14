@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.inventory;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -320,17 +321,17 @@ public class InventoryUtility
 	/**
 	 * Drops an item stack on the floor.
 	 */
-	public static void dropItemStack(World world, Pos position, ItemStack itemStack)
+	public static void dropItemStack(World world, IPos3D position, ItemStack itemStack)
 	{
 		dropItemStack(world, position, itemStack, 10);
 	}
 
-	public static void dropItemStack(World world, Pos position, ItemStack itemStack, int delay)
+	public static void dropItemStack(World world, IPos3D position, ItemStack itemStack, int delay)
 	{
 		dropItemStack(world, position, itemStack, delay, 0f);
 	}
 
-	public static void dropItemStack(World world, Pos position, ItemStack itemStack, int delay, float randomAmount)
+	public static void dropItemStack(World world, IPos3D position, ItemStack itemStack, int delay, float randomAmount)
 	{
 		dropItemStack(world, position.x(), position.y(), position.z(), itemStack, delay, randomAmount);
 	}

@@ -65,49 +65,6 @@ public class InteractionHandler
         return Minecraft.getMinecraft().objectMouseOver;
     }
 
-    /**
-     * Gets the block the entity is aiming
-     *
-     * @param entity   - entity to trace the aim from
-     * @param distance - range to trace
-     * @return hit position
-     */
-    public static Location getAimHit(EntityLivingBase entity, double distance)
-    {
-        MovingObjectPosition m = getMouseOver(entity, distance);
-        if (m != null)
-        {
-            if (m.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
-            {
-                return new Location(entity.worldObj, m.blockX, m.blockY, m.blockZ);
-            }
-            else if (m.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY)
-            {
-                return new Location(m.entityHit);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Gets the block the entity is aiming at up to 10 blocks away
-     *
-     * @param entity   - entity to trace the aim from
-     * @param distance - range to trace
-     * @return hit object
-     */
-    public static MovingObjectPosition getMouseOver(EntityLivingBase entity, double distance)
-    {
-        Pos start = new Pos(entity);
-
-        Pos aim = new Pos(entity.getLook(1));
-        Pos extended = aim.multiply(distance);
-        aim.addEquals(start);
-        extended.addEquals(start);
-
-        return aim.rayTrace(entity.worldObj, extended);
-    }
-
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event)
     {

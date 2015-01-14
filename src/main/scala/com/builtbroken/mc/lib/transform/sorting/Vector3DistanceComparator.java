@@ -1,30 +1,31 @@
 package com.builtbroken.mc.lib.transform.sorting;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.Comparator;
 
-public class Vector3DistanceComparator implements Comparator<Pos>
+public class Vector3DistanceComparator implements Comparator<IPos3D>
 {
-    final Pos center;
+    final IPos3D center;
     final boolean closest;
 
-    public Vector3DistanceComparator(Pos center)
+    public Vector3DistanceComparator(IPos3D center)
     {
        this(center, true);
     }
 
-    public Vector3DistanceComparator(Pos center, boolean closest)
+    public Vector3DistanceComparator(IPos3D center, boolean closest)
     {
         this.center = center;
         this.closest = closest;
     }
 
     @Override
-    public int compare(Pos o1, Pos o2)
+    public int compare(IPos3D o1, IPos3D o2)
     {
-        double d = o1.distance(center);
-        double d2 = o2.distance(center);
+        double d = new Pos(o1).distance(center);
+        double d2 = new Pos(o2).distance(center);
         return d > d2 ? 1 : d == d2 ? 0 : -1;
     }
 }

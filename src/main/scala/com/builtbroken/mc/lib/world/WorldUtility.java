@@ -35,19 +35,19 @@ public class WorldUtility
 			default:
 				break;
 			case UP:
-				vec.transform(new Quaternion(180, Pos.east()));
+				vec.transform(new Quaternion(180, Pos.east));
 				break;
 			case NORTH:
-				vec.transform(new Quaternion(90, Pos.west()));
+				vec.transform(new Quaternion(90, Pos.west));
 				break;
 			case SOUTH:
-				vec.transform(new Quaternion(90, Pos.east()));
+				vec.transform(new Quaternion(90, Pos.east));
 				break;
 			case WEST:
-				vec.transform(new Quaternion(90, Pos.north()));
+				vec.transform(new Quaternion(90, Pos.north));
 				break;
 			case EAST:
-				vec.transform(new Quaternion(90, Pos.south()));
+				vec.transform(new Quaternion(90, Pos.south));
 				break;
 		}
 	}

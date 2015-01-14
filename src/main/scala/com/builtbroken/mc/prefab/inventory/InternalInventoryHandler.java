@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.inventory;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -23,11 +24,11 @@ import java.util.Set;
 public class InternalInventoryHandler
 {
 	public World world;
-	Pos location;
+	IPos3D location;
 	Set<ItemStack> filteredItems;
 	boolean inverted;
 
-	public InternalInventoryHandler(World world, Pos location, Set<ItemStack> filters, boolean inverted)
+	public InternalInventoryHandler(World world, IPos3D location, Set<ItemStack> filters, boolean inverted)
 	{
 		this.world = world;
 		this.location = location;
@@ -43,7 +44,7 @@ public class InternalInventoryHandler
 
 	public InternalInventoryHandler(Location location, Set<ItemStack> filters, boolean inverted)
 	{
-		this(location.world(), location, filters, inverted);
+		this(location.world, location, filters, inverted);
 	}
 
 	public InternalInventoryHandler(TileEntity tile)
@@ -59,7 +60,7 @@ public class InternalInventoryHandler
 
 	public void throwItem(ForgeDirection direction, ItemStack items)
 	{
-		throwItem(this.location.clone().add(direction), items);
+		throwItem(new Pos(this.location).add(direction), items);
 	}
 
 	/**
@@ -88,7 +89,7 @@ public class InternalInventoryHandler
 			ItemStack remainingStack = item.copy();
 			for (ForgeDirection direction : directions)
 			{
-				remainingStack = tryPlaceInPosition(remainingStack, this.location.clone().add(direction), direction.getOpposite());
+				remainingStack = tryPlaceInPosition(remainingStack, new Pos(this.location).add(direction), direction.getOpposite());
 			}
 			return remainingStack;
 		}
@@ -316,7 +317,7 @@ public class InternalInventoryHandler
 
 	public ItemStack tryGrabFromPosition(ForgeDirection dir, int ammount)
 	{
-		return tryGrabFromPosition(location.clone(), dir, ammount);
+		return tryGrabFromPosition(new Pos(location), dir, ammount);
 	}
 
 	/**

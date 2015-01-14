@@ -31,7 +31,7 @@ class Quaternion extends Cloneable with ITransform
    * @param angle - Radians
    * @param axis - Axis to rotate around
    */
-  def this(angle: Double, axis: Pos)
+  def this(angle: Double, axis: IPos3D)
   {
     this()
     setAroundAxis(axis.x, axis.y, axis.z, angle)

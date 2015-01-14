@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.world.schematic;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.ISave;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -54,10 +55,7 @@ public class SchematicMap extends Schematic implements ISave
 		if (this.schematicSize != null)
 		{
 			this.init = true;
-			this.schematicCenter = new Pos();
-			this.schematicCenter.x(this.schematicSize.x() / 2);
-			// this.schematicCenter.y = this.schematicSize.y() / 2;
-			this.schematicCenter.z(this.schematicSize.z() / 2);
+			this.schematicCenter = new Pos(this.schematicSize.x() / 2, 0, this.schematicSize.z() / 2);
 		}
 	}
 
@@ -104,19 +102,19 @@ public class SchematicMap extends Schematic implements ISave
 					{
 						meta = 0;
 					}
-					Pos setPos = spot.clone().subtract(this.schematicCenter).add(entry.getKey());
+					Pos setPos = spot.toVector3().subtract(this.schematicCenter).add(entry.getKey());
 					if (checkWorld)
 					{
 						if (checkIfWorldIsLoaded)
 						{
-							Chunk chunk = spot.world().getChunkFromBlockCoords(setPos.xi(), setPos.zi());
+							Chunk chunk = spot.world.getChunkFromBlockCoords(setPos.xi(), setPos.zi());
 							if (!chunk.isChunkLoaded)
 							{
 								continue;
 							}
 						}
-						Block checkID = setPos.getBlock(spot.world());
-						int checkMeta = setPos.getBlockMetadata(spot.world());
+						Block checkID = setPos.getBlock(spot.world);
+						int checkMeta = setPos.getBlockMetadata(spot.world);
 						if (checkID == block && checkMeta == meta)
 						{
 							continue;
@@ -208,18 +206,22 @@ public class SchematicMap extends Schematic implements ISave
 					{
 						blockMeta = Integer.parseInt(blockData[1]);
 					}
+                    int x = 0;
+                    int y = 0;
+                    int z = 0;
 					if (blockData.length > 2)
 					{
-						blockPostion.x(Integer.parseInt(blockData[2]));
+						x = Integer.parseInt(blockData[2]);
 					}
 					if (blockData.length > 3)
 					{
-						blockPostion.y(Integer.parseInt(blockData[3]));
+                        y = Integer.parseInt(blockData[3]);
 					}
 					if (blockData.length > 4)
 					{
-						blockPostion.z(Integer.parseInt(blockData[4]));
+                        z = Integer.parseInt(blockData[4]);
 					}
+                    blockPostion = new Pos(x, y, z);
 				}
 				catch (Exception e)
 				{
@@ -264,7 +266,7 @@ public class SchematicMap extends Schematic implements ISave
 		}
 	}
 
-	public SchematicMap loadWorldSelection(World world, Pos pos, Pos pos2)
+	public SchematicMap loadWorldSelection(World world, IPos3D pos, IPos3D pos2)
 	{
 		int deltaX, deltaY, deltaZ;
 		Pos start = new Pos(pos.x() > pos2.x() ? pos2.x() : pos.x(), pos.y() > pos2.y() ? pos2.y() : pos.y(), pos.z() > pos2.z() ? pos2.z() : pos.z());

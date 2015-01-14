@@ -2,22 +2,20 @@ package com.builtbroken.mc.lib.transform.region
 
 import java.math.{BigDecimal, MathContext, RoundingMode}
 import java.util.{ArrayList, List}
+
 import com.builtbroken.jlib.data.vector.IPos3D
-import io.netty.buffer.ByteBuf
+import com.builtbroken.mc.lib.transform.vector.{Point, Pos}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{AxisAlignedBB, Vec3}
 import net.minecraft.world.World
-import com.builtbroken.mc.lib.transform.vector.Pos
-import com.builtbroken.mc.lib.transform.{AbstractOperation, ITransform}
-class Cuboid(var min: Pos, var max: Pos) extends AbstractOperation[Cuboid]
+class Cuboid(var min: IPos3D, var max: IPos3D)
 {
-  def this() = this(new Pos, new Pos)
+  def this() = this(new Pos(), new Pos())
 
-  def this(amount: Double) = this(new Pos, new Pos(amount))
+  def this(amount: Double) = this(new Pos(), new Pos(amount))
 
-  def this(cuboid: Cuboid) = this(cuboid.min.clone, cuboid.max.clone)
+  def this(cuboid: Cuboid) = this(cuboid.min, cuboid.max)
 
   def this(minx: Double, miny: Double, minz: Double, maxx: Double, maxy: Double, maxz: Double) = this(new Pos(minx, miny, minz), new Pos(maxx, maxy, maxz))
 
@@ -27,70 +25,24 @@ class Cuboid(var min: Pos, var max: Pos) extends AbstractOperation[Cuboid]
 
   def toAABB: AxisAlignedBB = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z)
 
-  def toRectangle: Rectangle = new Rectangle(min.toVector2, max.toVector2)
+  def toRectangle: Rectangle = new Rectangle(new Point(min), new Point(max))
 
-  override def set(other: Cuboid): Cuboid =
+  def set(other: Cuboid): Cuboid =
   {
-    min = other.min.clone
-    max = other.max.clone
+    min = other.min
+    max = other.max
     return this
   }
 
   /**
    * Conversion
    */
-  override def round: Cuboid = new Cuboid(min.round, max.round)
 
-  override def ceil: Cuboid = new Cuboid(min.ceil, max.ceil)
+  def add(vec: IPos3D): Cuboid = this.add(vec)
 
-  override def floor: Cuboid = new Cuboid(min.floor, max.floor)
+  def add(x: Double, y: Double, z: Double): Cuboid = this.add(new Pos(x, y, z))
 
-  override def max(other: Cuboid): Cuboid = new Cuboid(min.max(other.min), max.max(other.max))
-
-  override def min(other: Cuboid): Cuboid = new Cuboid(min.min(other.min), max.min(other.max))
-
-  override def reciprocal(): Cuboid = new Cuboid(min.reciprocal, max.reciprocal)
-
-  /**
-   * Operations
-   */
-  override def +(amount: Double): Cuboid = new Cuboid(min + amount, max + amount)
-
-  override def +(amount: Cuboid): Cuboid = new Cuboid(min + amount.min, max + amount.max)
-
-  def +(vec: IPos3D): Cuboid = new Cuboid(min + vec, max + vec)
-
-  def +=(vec: IPos3D): Cuboid =
-  {
-    min += vec
-    max += vec
-    return this
-  }
-
-  def -(vec: IPos3D): Cuboid = new Cuboid(min - vec, max - vec)
-
-  def -=(vec: IPos3D): Cuboid =
-  {
-    min -= vec
-    max -= vec
-    return this
-  }
-
-  def add(vec: IPos3D): Cuboid = this + vec
-
-  def add(x: Double, y: Double, z: Double): Cuboid = this + new Pos(x, y, z)
-
-  def addSet(vec: IPos3D): Cuboid = this += vec
-
-  def subtract(vec: IPos3D): Cuboid = this - vec
-
-  def subtractSet(vec: IPos3D): Cuboid = this -= vec
-
-  def *(amount: Double): Cuboid = new Cuboid(min * amount, max * amount)
-
-  def *(amount: Cuboid): Cuboid = new Cuboid(min * amount.min, max * amount.max)
-
-  def transform(transform: ITransform): Cuboid = new Cuboid(min.transform(transform), max.transform(transform))
+  def subtract(vec: IPos3D): Cuboid = this.subtract(vec)
 
   def setBounds(block: Block): Cuboid =
   {
@@ -176,19 +128,19 @@ class Cuboid(var min: Pos, var max: Pos) extends AbstractOperation[Cuboid]
    */
   def isWithin(min: Double, max: Double, a: Double , b: Double) : Boolean = a + 1E-5 >= min  && b - 1E-5 <= max
 
-  def center: Pos = (min + max) / 2
+  def center: Pos = new Pos((max.x() - min.x()) / 2, (max.y() - min.y()) / 2, (max.z() - min.z()) / 2)
 
-  def expand(difference: Pos): Cuboid =
+  def expand(d: IPos3D): Cuboid =
   {
-    min - difference
-    max + difference
+    min = new Pos(min.x() - d.x(), min.y() - d.y(), min.z() - d.z())
+    max = new Pos(max.x() + d.x(), max.y() + d.y(), max.z() + d.z())
     return this
   }
 
-  def expand(difference: Double): Cuboid =
+  def expand(d: Double): Cuboid =
   {
-    min - difference
-    max + difference
+    min = new Pos(min.x() - d, min.y() - d, min.z() - d)
+    max = new Pos(max.x() + d, max.y() + d, max.z() + d)
     return this
   }
 
@@ -198,11 +150,11 @@ class Cuboid(var min: Pos, var max: Pos) extends AbstractOperation[Cuboid]
    */
   def foreach(callback: Pos => Unit)
   {
-    for (x <- min.xi until max.xi)
+    for (x <- min.x().asInstanceOf[Int] until max.x().asInstanceOf[Int])
     {
-      for (y <- min.yi until max.yi)
+      for (y <- min.y().asInstanceOf[Int] until max.y().asInstanceOf[Int])
       {
-        for (z <- min.zi until max.zi)
+        for (z <- min.z().asInstanceOf[Int] until max.z().asInstanceOf[Int])
         {
           callback(new Pos(x, y, z).floor);
         }
@@ -311,20 +263,6 @@ class Cuboid(var min: Pos, var max: Pos) extends AbstractOperation[Cuboid]
   def getEntities[E <: Entity](world: World, entityClass: Class[E]): List[E] = world.getEntitiesWithinAABB(entityClass, toAABB).asInstanceOf[List[E]]
 
   def getEntitiesExclude(world: World, entity: Entity): List[Entity] = world.getEntitiesWithinAABBExcludingEntity(entity, toAABB).asInstanceOf[List[Entity]]
-
-  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
-  {
-    nbt.setTag("min", min.toNBT)
-    nbt.setTag("max", max.toNBT)
-    return nbt
-  }
-
-  override def writeByteBuf(data: ByteBuf): ByteBuf =
-  {
-    min.writeByteBuf(data)
-    max.writeByteBuf(data)
-    return data
-  }
 
   override def toString: String =
   {

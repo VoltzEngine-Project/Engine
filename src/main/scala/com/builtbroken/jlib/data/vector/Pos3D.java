@@ -35,13 +35,22 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
     }
 
 
-
     public R sub(double x, double y, double z)
     {
         return add(-x, -y, -z);
     }
 
+    public R subtract(double x, double y, double z)
+    {
+        return add(-x, -y, -z);
+    }
+
     public R sub(IPos3D other)
+{
+    return sub(other.x(), other.y(), other.z());
+}
+
+    public R subtract(IPos3D other)
     {
         return sub(other.x(), other.y(), other.z());
     }
@@ -52,7 +61,20 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
         return sub(a, a, a);
     }
 
+    public R subtract(double a)
+    {
+        return sub(a, a, a);
+    }
 
+    public double distance(IPos3D pos)
+    {
+        return sub(pos).magnitude();
+    }
+
+    public double distance(double x, double y, double z)
+    {
+        return sub(x, y, z).magnitude();
+    }
 
     public R multiply(IPos3D other)
     {
@@ -71,7 +93,6 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
     }
 
 
-
     public R divide(IPos3D other)
     {
         return divide(other.x(), other.y(), other.z());
@@ -88,14 +109,44 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
         return divide(a, a, a);
     }
 
-    public double dotProduct(IPos3D other)
+    public double dot(IPos3D other)
     {
-        return x() * other.x() + y() * other.y() + z() * other.z();
+        return dot(other.x(), other.y(), other.z());
     }
 
-    public R crossProduct(IPos3D other)
+    public double dot(double x, double y, double z)
     {
-        return newPos(y() * other.z() - z * other.y(), z * other.x() - x() * other.z(), x() * other.y() - y() * other.x());
+        return x() * x + y() * y + z() * z;
+    }
+
+    public R cross(IPos3D other)
+    {
+        return newPos(other.x(), other.y(), other.z());
+    }
+
+    public R cross(double x, double y, double z)
+    {
+        return newPos(y() * z - z * y, z * x - x() * z, x() * y - y() * x);
+    }
+
+    /**
+     * Creates a new point that represents the max between the two points
+     *
+     * @return new Pos
+     */
+    public R max(IPos3D other)
+    {
+        return newPos(Math.max(x(), other.x()), Math.max(y(), other.y()), Math.max(z(), other.z()));
+    }
+
+    /**
+     * Creates a new point that represents the min between the two points
+     *
+     * @return new Pos
+     */
+    public R min(IPos3D other)
+    {
+        return newPos(Math.min(x(), other.x()), Math.min(y(), other.y()), Math.max(z(), other.z()));
     }
 
     public R midPoint(IPos3D pos)
@@ -120,14 +171,36 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
         return z;
     }
 
-    public double zf()
+    public float zf()
     {
         return (float) z;
     }
 
-    public double zi()
+    public int zi()
     {
         return (int) z;
+    }
+
+    /**
+     * @return The perpendicular vector to the axis.
+     */
+    public R perpendicular()
+    {
+        if (this.z == 0.0F)
+        {
+            return this.zCross();
+        }
+        return this.xCross();
+    }
+
+    public R xCross()
+    {
+        return newPos(0.0D, this.z(), -this.y());
+    }
+
+    public R zCross()
+    {
+        return newPos(-this.y(), this.x(), 0.0D);
     }
 
     @Override
@@ -139,7 +212,7 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
     @Override
     public R newPos(double x, double y)
     {
-        return newPos(x, y , z);
+        return newPos(x, y, z);
     }
 
     public abstract R newPos(double x, double y, double z);
@@ -153,7 +226,7 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
         long hash = (x ^ (x >>> 32));
         hash = 31 * hash + y ^ (y >>> 32);
         hash = 31 * hash + z ^ (z >>> 32);
-        return (int)hash;
+        return (int) hash;
     }
 
     @Override
@@ -161,7 +234,7 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
     {
         if (o instanceof IPos3D)
         {
-            return ((IPos3D)o).x() == x() && ((IPos3D)o).y() == y() && ((IPos3D)o).z() == z();
+            return ((IPos3D) o).x() == x() && ((IPos3D) o).y() == y() && ((IPos3D) o).z() == z();
         }
         return false;
     }

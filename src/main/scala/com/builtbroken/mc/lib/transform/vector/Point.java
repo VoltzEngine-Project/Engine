@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.transform.vector;
 
 import com.builtbroken.jlib.data.vector.IPos2D;
+import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.data.vector.Pos2D;
 import com.builtbroken.jlib.data.vector.Pos2DBean;
 import com.builtbroken.mc.core.network.IByteBufWriter;
@@ -22,6 +23,16 @@ public class Point extends Pos2D<Point> implements IByteBufWriter, IPos2D
     public Point()
     {
         this(0, 0);
+    }
+
+    public Point(IPos2D pos)
+    {
+        this(pos.x(), pos.y());
+    }
+
+    public Point(IPos3D pos)
+    {
+        this(pos.x(), pos.y());
     }
 
     public Point(ByteBuf data)

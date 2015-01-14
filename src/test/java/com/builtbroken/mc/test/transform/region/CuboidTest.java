@@ -43,7 +43,7 @@ public class CuboidTest extends TestCase
     {
         for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
         {
-            Pos vec = new Pos(dir).multi(0.3);
+            Pos vec = new Pos(dir).multiply(0.3);
             Cuboid c = cube.add(vec);
             if (!cube.doesOverlap(c))
             {
@@ -63,7 +63,7 @@ public class CuboidTest extends TestCase
         {
             for (int side = 0; side < 4; side++)
             {
-                Pos vec = new Pos(dir).multi(0.3);
+                Pos vec = new Pos(dir).multiply(0.3);
                 switch (dir)
                 {
                     case DOWN:

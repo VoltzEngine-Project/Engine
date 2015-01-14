@@ -50,7 +50,7 @@ public class DummyPlayer extends FakePlayer
 
     public static boolean useItemAt(ItemStack itemStack, Location location, ForgeDirection direction)
     {
-        return useItemAt(itemStack, location.world(), location.xi(), location.yi(), location.zi(), direction.ordinal(), 0, 0, 0);
+        return useItemAt(itemStack, location.world, location.xi(), location.yi(), location.zi(), direction.ordinal(), 0, 0, 0);
     }
 
     public static boolean useItemAt(ItemStack itemStack, World world, int x, int y, int z, int side)

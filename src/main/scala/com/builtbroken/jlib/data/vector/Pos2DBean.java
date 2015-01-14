@@ -30,12 +30,12 @@ public class Pos2DBean implements Cloneable
         return x;
     }
 
-    public double xf()
+    public float xf()
     {
         return (float)x;
     }
 
-    public double xi()
+    public int xi()
     {
         return (int)x;
     }
@@ -46,12 +46,12 @@ public class Pos2DBean implements Cloneable
         return y;
     }
 
-    public double yf()
+    public float yf()
     {
         return (float)y;
     }
 
-    public double yi()
+    public int yi()
     {
         return (int)y;
     }

@@ -43,7 +43,7 @@ public class BlockTile extends Block implements ITileEntityProvider
         this.staticTile = tile;
         this.staticTile.setBlock(this);
         this.opaque = isOpaqueCube();
-        this.setBlockBounds(this.staticTile.bounds.min().xf(), this.staticTile.bounds.min().yf(), this.staticTile.bounds.min().zf(), this.staticTile.bounds.max().xf(), this.staticTile.bounds.max().yf(), this.staticTile.bounds.max().zf());
+        this.setBlockBounds((float)this.staticTile.bounds.min().x(), (float)this.staticTile.bounds.min().y(), (float)this.staticTile.bounds.min().z(), (float)this.staticTile.bounds.max().x(), (float)this.staticTile.bounds.max().y(), (float)this.staticTile.bounds.max().z());
 
         setBlockName(prefix + staticTile.name);
         setBlockTextureName(prefix + staticTile.textureName);
