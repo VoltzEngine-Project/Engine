@@ -6,6 +6,7 @@ cache:
 sudo: false
 before_install:
   - git submodule update --init --recursive
+  - chmod a+x gradlew
 notifications:
  irc:
   channels:
@@ -14,7 +15,7 @@ notifications:
    - "%{build_number} (%{branch} - %{commit}: %{commit_message} : %{author}): %{message} (%{build_url})"
 install: true
 script:
-  - gradle build -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 --refresh-dependencies
+  - gradlew build -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 --refresh-dependencies
 jdk:
   - oraclejdk7
   - openjdk6
