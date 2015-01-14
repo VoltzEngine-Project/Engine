@@ -115,7 +115,7 @@ public class CuboidTest extends TestCase
     {
         for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
         {
-            Cuboid above = cube;
+            Cuboid above = cube.clone();
             assertEquals("Failed center collision check for side " + dir, true, cube.isInsideBounds(above));
 
             above = above.add(new Pos(dir));

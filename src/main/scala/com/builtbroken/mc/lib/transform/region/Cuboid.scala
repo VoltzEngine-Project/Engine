@@ -38,7 +38,12 @@ class Cuboid(var min: IPos3D, var max: IPos3D)
    * Conversion
    */
 
-  def add(vec: IPos3D): Cuboid = this.add(vec)
+  def add(vec: IPos3D): Cuboid =
+  {
+    min = new Pos(min).add(vec)
+    max = new Pos(max).add(vec)
+    return this;
+  }
 
   def add(x: Double, y: Double, z: Double): Cuboid = this.add(new Pos(x, y, z))
 
@@ -117,7 +122,7 @@ class Cuboid(var min: IPos3D, var max: IPos3D)
   def isWithinZ(v: Vec3): Boolean = isWithinZ(v.zCoord)
   def isWithinZ(v: IPos3D): Boolean = isWithinZ(v.z())
   
-  def isWithin(min: Double, max: Double, v: Double) : Boolean = v + 1E-5 >= min  && v  - 1E-5 <= max
+  def isWithin(min: Double, max: Double, v: Double) : Boolean = v >= min + 1E-5  && v <= max - 1E-5
 
   /** Checks to see if a line segment is within the defined line. Assume the lines overlap each other.
    * @param min - min point
