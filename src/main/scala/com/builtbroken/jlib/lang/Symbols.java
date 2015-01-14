@@ -30,14 +30,12 @@ public enum Symbols
     EQUALS('='),
     BACKSLASH('\\'),
     FORWARDSLASH('/'),
-    COPYRIGHT('©'),
     LESS_THAN('<'),
     GREATER_THAN('>'),
     VERTICAL_BAR('|'),
     PERIOD('.'),
     QUESTION('?'),
-    STAR('*'),
-    TRADE_MARK('™');
+    STAR('*');
 
     private final char c;
 
