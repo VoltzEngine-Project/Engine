@@ -15,7 +15,7 @@ notifications:
    - "%{build_number} (%{branch} - %{commit}: %{commit_message} : %{author}): %{message} (%{build_url})"
 install: true
 script:
-  - gradlew build -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 --refresh-dependencies
+  - ./gradlew build -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 --refresh-dependencies
 jdk:
   - oraclejdk7
   - openjdk6
