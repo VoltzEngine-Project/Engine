@@ -118,10 +118,10 @@ repositories {
     maven { 
         name 'OC Maven'
         url = "http://maven.cil.li/" }
-    //maven {
-    //    name = "ic2"
+    maven {
+        name = "ic2"
         url = "http://maven.ic2.player.to/"
-    //}
+    }
 }
 
 dependencies 
