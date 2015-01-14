@@ -97,7 +97,7 @@ publishing {
         dependencyNode = dep_node.appendNode('dependency')
             dependencyNode.appendNode('groupId', 'net.minecraftforge')
             dependencyNode.appendNode('artifactId', 'forge')
-            dependencyNode.appendNode('version', project.version.forge)
+            dependencyNode.appendNode('version', minecraft.apiVersion)
       }
     }
   }
