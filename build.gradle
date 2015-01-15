@@ -94,7 +94,7 @@ publishing {
             //dependencyNode.appendNode('groupId', 'net.industrial-craft')
            // dependencyNode.appendNode('artifactId', 'industrialcraft-2')
             //dependencyNode.appendNode('version', '2.2.654-experimental')
-        dependencyNode = dep_node.appendNode('dependency')
+        def dependencyNode = dep_node.appendNode('dependency')
             dependencyNode.appendNode('groupId', 'net.minecraftforge')
             dependencyNode.appendNode('artifactId', 'forge')
             dependencyNode.appendNode('version', minecraft.apiVersion)
