@@ -19,3 +19,5 @@ output/
 *.iws
 *.idea/
 logs/
+html/downloads/
+downloads/
