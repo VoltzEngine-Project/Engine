@@ -47,7 +47,12 @@ class Cuboid(var min: IPos3D, var max: IPos3D)
 
   def add(x: Double, y: Double, z: Double): Cuboid = this.add(new Pos(x, y, z))
 
-  def subtract(vec: IPos3D): Cuboid = this.subtract(vec)
+  def subtract(vec: IPos3D): Cuboid =
+  {
+    min = new Pos(min).sub(vec)
+    max = new Pos(max).sub(vec)
+    return this;
+  }
 
   def setBounds(block: Block): Cuboid =
   {
