@@ -15,10 +15,6 @@ public class RenderTileDummy extends TileEntitySpecialRenderer
     {
         if(tile instanceof Tile)
         {
-            //GL11.glPushMatrix();
-            //Render.renderOffsetAABB(((Tile) tile).getCollisionBounds().toAABB(), x, y, z);
-            //GL11.glPopMatrix();
-
             ((Tile) tile).renderDynamic(new Pos(x, y, z), f, 0);
         }
     }

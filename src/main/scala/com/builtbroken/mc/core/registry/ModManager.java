@@ -139,7 +139,7 @@ public class ModManager
 		{
 			proxy.registerTileEntity(name, modPrefix, newTile.getClass());
 
-			if (!spatial.renderTileEntity)
+			if (spatial.renderTileEntity)
 			{
 				proxy.registerDummyRenderer(newTile.getClass());
 			}
