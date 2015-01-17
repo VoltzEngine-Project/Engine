@@ -24,9 +24,6 @@ public class CommonProxy extends AbstractProxy
 	@Override
 	public void init()
 	{
-		if (Loader.isModLoaded("UniversalElectricity"))
-		{
-			throw new RuntimeException("UniversalElectricity is already contained within Resonant Engine and shouldn't be installed as a standalone");
-		}
+
 	}
 }
