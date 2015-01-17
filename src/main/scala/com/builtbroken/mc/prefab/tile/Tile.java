@@ -1,14 +1,15 @@
 package com.builtbroken.mc.prefab.tile;
 
+import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
+import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.block.RenderTileDummy;
 import com.builtbroken.mc.lib.transform.region.Cuboid;
-import com.builtbroken.mc.lib.transform.vector.IVectorWorld;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
-import com.builtbroken.mc.lib.transform.vector.VectorWorld;
+import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.helper.WrenchUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -39,13 +40,12 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
  * Created by robert on 1/4/2015.
  */
-public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUsing
+public abstract class Tile extends TileEntity implements IWorldPosition, IPlayerUsing
 {
     //Static block vars, never use in your tile
     private BlockTile block = null;
@@ -75,14 +75,16 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
     public boolean dynamicRendererCrashed = false;
     public boolean renderNormalBlock = true;
     public boolean renderTileEntity = true;
+    public int renderType = BlockRenderHandler.ID; //renderNormalBlock will force this to zero
 
     //Tile Vars
     protected long ticks = 0L;
     protected int nextCleanupTick = 200;
     protected final Set<EntityPlayer> playersUsing = new HashSet();
 
-    public Tile(Material material)
+    public Tile(String name, Material material)
     {
+        this.name = name;
         this.material = material;
     }
 
@@ -192,7 +194,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      * @param hit    - Vector3 location of the spot hit on the block
      * @return true if the click event was used
      */
-    public boolean onPlayerActivated(EntityPlayer player, int side, Vector3 hit)
+    public boolean onPlayerActivated(EntityPlayer player, int side, Pos hit)
     {
         if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem(), xi(), yi(), zi()))
         {
@@ -214,7 +216,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      * @param hit    - Vector3 location of the spot hit on the block
      * @return true if the click event was used
      */
-    protected boolean onPlayerRightClick(EntityPlayer player, int side, Vector3 hit)
+    protected boolean onPlayerRightClick(EntityPlayer player, int side, Pos hit)
     {
         return false;
     }
@@ -227,7 +229,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      * @param hit    - Vector3 location of the spot hit on the block
      * @return true if the click event was used
      */
-    protected boolean onPlayerRightClickWrench(EntityPlayer player, int side, Vector3 hit)
+    protected boolean onPlayerRightClickWrench(EntityPlayer player, int side, Pos hit)
     {
         return false;
     }
@@ -390,14 +392,14 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
         return access;
     }
 
-    public Vector3 toVector3()
+    public Pos toVector3()
     {
-        return new Vector3(x(), y(), z());
+        return new Pos(x(), y(), z());
     }
 
-    public VectorWorld toVectorWorld()
+    public Location toVectorWorld()
     {
-        return new VectorWorld(world(), x(), y(), z());
+        return new Location(world(), x(), y(), z());
     }
 
     //=========================
@@ -477,7 +479,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      *
      * @param pos
      */
-    public void onNeighborChanged(Vector3 pos)
+    public void onNeighborChanged(Pos pos)
     {
     }
 
@@ -556,7 +558,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox()
     {
-        return getCollisionBounds().clone().add(this).toAABB();
+        return getCollisionBounds().clone().add(x(), y(), z()).toAABB();
     }
 
     public Cuboid getCollisionBounds()
@@ -683,7 +685,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      * @param explosionPosition - The position in which the explosion is ocurring at
      * @return A value representing the explosive resistance
      */
-    public float getExplosionResistance(Entity entity, Vector3 explosionPosition)
+    public float getExplosionResistance(Entity entity, Pos explosionPosition)
     {
         return getExplosionResistance(entity);
     }
@@ -715,15 +717,6 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
     //=========================
 
     /**
-     * Called in the world.
-     */
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side)
-    {
-        return getIcon();
-    }
-
-    /**
      * Called either by an item, or in a world.
      */
     @SideOnly(Side.CLIENT)
@@ -744,10 +737,29 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
         return getIcon(side);
     }
 
+    /**
+     * Called in the world.
+     */
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side)
+    {
+        return getIcon();
+    }
+
     @SideOnly(Side.CLIENT)
     public IIcon getIcon()
     {
-        return icons.get(getTextureName());
+        return getIcon(getTextureName());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(String name)
+    {
+        if(icons != null && icons.containsKey(name))
+        {
+            return icons.get(name);
+        }
+        return null;
     }
 
     @SideOnly(Side.CLIENT)
@@ -868,7 +880,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      * @return true if vertices were added to the tessellator
      */
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(RenderBlocks renderer, Vector3 pos, int pass)
+    public boolean renderStatic(RenderBlocks renderer, Pos pos, int pass)
     {
         return false;
     }
@@ -901,7 +913,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
             {
                 try
                 {
-                    renderDynamic(new Vector3(-0.5, -0.5, -0.5), 0, 0);
+                    renderDynamic(new Pos(-0.5, -0.5, -0.5), 0, 0);
                 } catch (Exception e)
                 {
                     dynamicRendererCrashed = true;
@@ -922,7 +934,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      * @param pass  The render pass, 1 or 0
      */
     @SideOnly(Side.CLIENT)
-    public void renderDynamic(Vector3 pos, float frame, int pass)
+    public void renderDynamic(Pos pos, float frame, int pass)
     {
         TileEntitySpecialRenderer tesr = getSpecialRenderer();
 
@@ -982,7 +994,7 @@ public abstract class Tile extends TileEntity implements IVectorWorld, IPlayerUs
      */
     public void sendPacket(AbstractPacket packet, double distance)
     {
-        Engine.instance.packetHandler.sendToAllAround(packet, ((IVectorWorld)this), distance);
+        Engine.instance.packetHandler.sendToAllAround(packet, ((IWorldPosition)this), distance);
     }
 
     public void sendPacketToGuiUsers(AbstractPacket packet)

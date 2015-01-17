@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
  * Created by robert on 1/5/2015.
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target({ ElementType.METHOD })
 public @interface TestAnnotation
 {
 }

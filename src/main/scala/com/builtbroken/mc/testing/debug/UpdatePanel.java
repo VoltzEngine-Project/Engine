@@ -23,26 +23,15 @@ public class UpdatePanel extends JPanel implements IUpdate
 	}
 
 	@Override
-	public void update(double deltaSecs)
+	public boolean update()
 	{
 		for (Component component : getComponents())
 		{
 			if (component instanceof IUpdate)
 			{
-				((IUpdate) component).update(deltaSecs);
+				((IUpdate) component).update();
 			}
 		}
-	}
-
-	@Override
-	public boolean canUpdate()
-	{
-		return this.getComponents().length > 0;
-	}
-
-	@Override
-	public boolean continueUpdate()
-	{
-		return true;
+        return true;
 	}
 }

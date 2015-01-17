@@ -1,12 +1,12 @@
 package com.builtbroken.mc.lib.transform.rotation
 
 import java.lang.Double._
-
+import com.builtbroken.jlib.data.vector.IPos3D
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 import com.builtbroken.mc.lib.transform.ITransform
 import com.builtbroken.mc.lib.transform.matrix.Matrix
-import com.builtbroken.mc.lib.transform.vector.Vector3
+import com.builtbroken.mc.lib.transform.vector.Pos
 
 /**
  * A defined angle axis rotation. Recommend to use Quaternions as they are generally faster.
@@ -15,11 +15,11 @@ import com.builtbroken.mc.lib.transform.vector.Vector3
  * axis - A unit vector to rotate around
  * @author Calclavia
  */
-class AngleAxis(var angle: Double = 0D, var axis: Vector3 = new Vector3) extends Cloneable with ITransform
+class AngleAxis(var angle: Double = 0D, var axis: Pos = new Pos) extends Cloneable with ITransform
 {
   def this(nbt: NBTTagCompound)
   {
-    this(nbt.getDouble("angle"), new Vector3(nbt))
+    this(nbt.getDouble("angle"), new Pos(nbt))
   }
 
   def ceil = new AngleAxis(Math.ceil(angle), axis.ceil)
@@ -31,7 +31,7 @@ class AngleAxis(var angle: Double = 0D, var axis: Vector3 = new Vector3) extends
   /**
    * TODO: Alternatively we can transform vai quaternion.
    */
-  override def transform(vector: Vector3) = toRotationMatrix * vector
+  override def transform(vector: IPos3D) = toRotationMatrix * vector
 
   /**
    * Creates a rotation matrix for an angle-axis rotation around this vector.

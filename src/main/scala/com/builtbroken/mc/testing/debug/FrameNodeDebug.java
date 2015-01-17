@@ -1,12 +1,12 @@
 package com.builtbroken.mc.testing.debug;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.api.IWorldPosition;
+import com.builtbroken.mc.api.tile.ITileModuleProvider;
+import com.builtbroken.mc.api.tile.node.ITileModule;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import com.builtbroken.mc.api.tile.node.INode;
-import com.builtbroken.mc.api.tile.INodeProvider;
-import com.builtbroken.mc.lib.transform.vector.IVector3;
-import com.builtbroken.mc.lib.transform.vector.IVectorWorld;
 
 /**
  * @author Darkguardsman
@@ -14,31 +14,31 @@ import com.builtbroken.mc.lib.transform.vector.IVectorWorld;
 @SuppressWarnings("serial")
 public class FrameNodeDebug extends FrameDebug
 {
-	protected INodeProvider nodeProvider = null;
+	protected ITileModuleProvider nodeProvider = null;
 	/**
 	 * Linked node
 	 */
-	protected INode node = null;
-	protected Class<? extends INode> nodeClazz = null;
+	protected ITileModule node = null;
+	protected Class<? extends ITileModule> nodeClazz = null;
 
 	/**
 	 * Are we debugging a node
 	 */
 
-	public FrameNodeDebug(TileEntity tile, Class<? extends INode> nodeClazz)
+	public FrameNodeDebug(TileEntity tile, Class<? extends ITileModule> nodeClazz)
 	{
 		super(tile);
 		this.nodeClazz = nodeClazz;
 	}
 
-	public FrameNodeDebug(INodeProvider node, Class<? extends INode> nodeClazz)
+	public FrameNodeDebug(ITileModuleProvider node, Class<? extends ITileModule> nodeClazz)
 	{
 		super();
 		this.nodeProvider = node;
 		this.nodeClazz = nodeClazz;
 	}
 
-	public FrameNodeDebug(INode node)
+	public FrameNodeDebug(ITileModule node)
 	{
 		super();
 		this.node = node;
@@ -47,15 +47,15 @@ public class FrameNodeDebug extends FrameDebug
 	/**
 	 * Gets the node used for debug
 	 */
-	public INode getNode()
+	public ITileModule getNode()
 	{
-		if (tile instanceof INodeProvider && nodeClazz != null)
+		if (tile instanceof ITileModuleProvider && nodeClazz != null)
 		{
-			return ((INodeProvider) tile).getNode(nodeClazz, ForgeDirection.UNKNOWN);
+			return ((ITileModuleProvider) tile).getModule(nodeClazz, ForgeDirection.UNKNOWN);
 		}
 		else if (nodeProvider != null && nodeClazz != null)
 		{
-			return nodeProvider.getNode(nodeClazz, ForgeDirection.UNKNOWN);
+			return nodeProvider.getModule(nodeClazz, ForgeDirection.UNKNOWN);
 		}
 		return node;
 	}
@@ -67,9 +67,9 @@ public class FrameNodeDebug extends FrameDebug
 		{
 			return ((TileEntity) nodeProvider).zCoord;
 		}
-		else if (nodeProvider instanceof IVector3)
+		else if (nodeProvider instanceof IPos3D)
 		{
-			return ((IVector3) nodeProvider).z();
+			return ((IPos3D) nodeProvider).z();
 		}
 		return super.z();
 	}
@@ -81,9 +81,9 @@ public class FrameNodeDebug extends FrameDebug
 		{
 			return ((TileEntity) nodeProvider).xCoord;
 		}
-		else if (nodeProvider instanceof IVector3)
+		else if (nodeProvider instanceof IPos3D)
 		{
-			return ((IVector3) nodeProvider).x();
+			return ((IPos3D) nodeProvider).x();
 		}
 		return super.x();
 	}
@@ -95,9 +95,9 @@ public class FrameNodeDebug extends FrameDebug
 		{
 			return ((TileEntity) nodeProvider).yCoord;
 		}
-		else if (nodeProvider instanceof IVector3)
+		else if (nodeProvider instanceof IPos3D)
 		{
-			return ((IVector3) nodeProvider).y();
+			return ((IPos3D) nodeProvider).y();
 		}
 		return super.y();
 	}
@@ -109,9 +109,9 @@ public class FrameNodeDebug extends FrameDebug
 		{
 			return ((TileEntity) nodeProvider).getWorldObj();
 		}
-		else if (nodeProvider instanceof IVectorWorld)
+		else if (nodeProvider instanceof IWorldPosition)
 		{
-			return ((IVectorWorld) nodeProvider).world();
+			return ((IWorldPosition) nodeProvider).world();
 		}
 		return super.world();
 	}

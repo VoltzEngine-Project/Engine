@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.transform;
 
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 /**
  * Applied to objects that can transform vectors
@@ -9,5 +10,5 @@ import com.builtbroken.mc.lib.transform.vector.Vector3;
  */
 public interface ITransform
 {
-	public Vector3 transform(Vector3 vector);
+	public IPos3D transform(IPos3D vector);
 }

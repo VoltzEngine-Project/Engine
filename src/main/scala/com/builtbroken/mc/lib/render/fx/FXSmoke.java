@@ -4,12 +4,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.world.World;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 @SideOnly(Side.CLIENT)
 public class FXSmoke extends EntitySmokeFX
 {
-	public FXSmoke(World par1World, Vector3 position, float red, float green, float blue, float scale, double distance)
+	public FXSmoke(World par1World, Pos position, float red, float green, float blue, float scale, double distance)
 	{
 		super(par1World, position.x(), position.y(), position.z(), 0, 0, 0, scale);
 		this.renderDistanceWeight = distance;

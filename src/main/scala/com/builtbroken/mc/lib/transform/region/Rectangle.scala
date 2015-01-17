@@ -2,60 +2,23 @@ package com.builtbroken.mc.lib.transform.region
 
 import java.math.{BigDecimal, MathContext, RoundingMode}
 
-import io.netty.buffer.ByteBuf
-import net.minecraft.nbt.NBTTagCompound
-import com.builtbroken.mc.lib.transform.vector.{IVector2, Vector2}
+import com.builtbroken.jlib.data.vector.IPos2D
+import com.builtbroken.mc.lib.transform.vector.Point
 
-class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
+class Rectangle(var min: Point, var max: Point) extends Shape2D(min.midpoint(max))
 {
-  def this() = this(new Vector2, new Vector2)
+  def this() = this(new Point, new Point)
 
-  def this(vec: Vector2, expansion: Double) = this(vec, vec + expansion)
+  def this(vec: Point, expansion: Double) = this(vec, vec.add(expansion))
 
-  def this(minX: Double, minY: Double, maxX: Double, maxY: Double) = this(new Vector2(minX, minY), new Vector2(maxX, maxY))
+  def this(minX: Double, minY: Double, maxX: Double, maxY: Double) = this(new Point(minX, minY), new Point(maxX, maxY))
 
   def this(rect: Rectangle) = this(rect.min.clone, rect.max.clone)
 
-  override def set(other: Rectangle): Rectangle =
-  {
-    min = other.min.clone
-    max = other.max.clone
-    return this
-  }
-
-  /**
-   * Operations
-   */
-  override def +(amount: Double): Rectangle = new Rectangle(min + amount, max + amount)
-
-  override def +(amount: Rectangle): Rectangle = new Rectangle(min + amount.min, max + amount.max)
-
-  def +(vec: Vector2): Rectangle = new Rectangle(min + vec, max + vec)
-
-  def +=(vec: Vector2): Rectangle =
-  {
-    min += vec
-    max += vec
-    return this
-  }
-
-  def -(vec: Vector2): Rectangle = this + (vec * -1)
-
-  def -=(vec: Vector2): Rectangle = this += (vec * -1)
-
-  def *(amount: Double): Rectangle = new Rectangle(min * amount, max * amount)
-
-  def *(amount: Rectangle): Rectangle = new Rectangle(min * amount.min, max * amount.max)
-
-
-
-
-
-
   /** Checks if the point is inside the shape */
-  override def isWithin(x: Double, y: Double): Boolean = y >= this.min.y && y <= this.max.y && x >= this.min.x && x <= this.max.x
+  override def isWithin(p: IPos2D): Boolean = p.y >= this.min.y && p.y <= this.max.y && p.x >= this.min.x && p.x <= this.max.x
 
-  def isWithin_rotated(p: IVector2): Boolean =
+  def isWithin_rotated(p: IPos2D): Boolean =
   {
     //Rect corners
     val cornerB = this.cornerB()
@@ -72,9 +35,9 @@ class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
   }
 
   def cornerA() = min
-  def cornerB() = new Vector2(min.x, max.y)
+  def cornerB() = new Point(min.x, max.y)
   def cornerC() = max
-  def cornerD() = new Vector2(max.x, min.y)
+  def cornerD() = new Point(max.x, min.y)
 
   /**
    * Returns whether the given region intersects with this one.
@@ -90,20 +53,6 @@ class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
 
   override def getSizeY: Double = max.y - min.y
 
-
-  override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
-  {
-    nbt.setTag("min", min.toNBT)
-    nbt.setTag("max", max.toNBT)
-    return nbt
-  }
-
-  override def writeByteBuf(data: ByteBuf): ByteBuf =
-  {
-    min.writeByteBuf(data)
-    max.writeByteBuf(data)
-    return data
-  }
 
   override def toString: String =
   {

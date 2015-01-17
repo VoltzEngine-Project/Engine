@@ -1,6 +1,8 @@
 package com.builtbroken.mc.prefab.inventory;
 
+import com.builtbroken.mc.api.ISave;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -9,7 +11,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.builtbroken.mc.api.tile.IInventoryProvider;
 import com.builtbroken.mc.api.tile.node.IExternalInventory;
 
-public class ExternalInventory implements IExternalInventory
+public class ExternalInventory implements IExternalInventory, ISidedInventory, ISave
 {
 	/**
 	 * Default slot max count

@@ -1,18 +1,20 @@
 package com.builtbroken.mc.lib.world.edit
 
+import com.builtbroken.jlib.data.vector.IPos3D
+import com.builtbroken.mc.api.IWorldPosition
+import com.builtbroken.mc.lib.transform.vector.AbstractLocation
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.init.Blocks
 import net.minecraft.util.{AxisAlignedBB, EnumFacing}
 import net.minecraft.world.World
-import com.builtbroken.mc.lib.transform.vector.VectorWorld
 
 /** Simple version of Vector3 that is used to track location
   * along with the block to be set at that location.
   *
   * Created by robert on 12/2/2014.
   */
-class BlockEdit(w: World, x: Double, y: Double, z: Double) extends VectorWorld(w, x, y, z)
+class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocation[BlockEdit](w, x, y, z) with IPos3D with IWorldPosition
 {
   // Used to double check in case the block changes before we place the block
 
@@ -63,14 +65,6 @@ class BlockEdit(w: World, x: Double, y: Double, z: Double) extends VectorWorld(w
       prev_block = getBlock
       prev_meta = getBlockMetadata
     }
-  }
-
-  override def set(x: Double, y: Double, z: Double) : BlockEdit =
-  {
-    super.set(x, y, z)
-    if(_bounds != null)
-      AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1)
-    return this
   }
   
   def getBounds : AxisAlignedBB =
@@ -136,4 +130,6 @@ class BlockEdit(w: World, x: Double, y: Double, z: Double) extends VectorWorld(w
 
     return BlockEditResult.BLOCKED
   }
+
+  override def newPos(x: Double, y: Double, z: Double): BlockEdit = new BlockEdit(world, x, y, z);
 }

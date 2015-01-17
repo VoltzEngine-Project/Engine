@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.helper;
 
+import com.builtbroken.mc.lib.transform.vector.Point;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -8,8 +9,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.jlib.data.science.units.UnitHelper;
-import com.builtbroken.mc.lib.transform.vector.Vector2;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -217,13 +217,13 @@ public class NBTUtility
 		{
 			tag.setTag(key, (NBTTagCompound) value);
 		}
-		else if (value instanceof Vector2)
+		else if (value instanceof Point)
 		{
-			tag.setString(key, "NBT:SAVE:VECTOR:2:" + ((Vector2) value).x() + ":" + ((Vector2) value).y());
+			tag.setString(key, "NBT:SAVE:VECTOR:2:" + ((Point) value).x() + ":" + ((Point) value).y());
 		}
-		else if (value instanceof Vector3)
+		else if (value instanceof Pos)
 		{
-			tag.setString(key, "NBT:SAVE:VECTOR:3:" + ((Vector3) value).x() + ":" + ((Vector3) value).y() + ":" + ((Vector3) value).z());
+			tag.setString(key, "NBT:SAVE:VECTOR:3:" + ((Pos) value).x() + ":" + ((Pos) value).y() + ":" + ((Pos) value).z());
 		}
 		return tag;
 
@@ -287,11 +287,11 @@ public class NBTUtility
 						String[] nums = str.split(":");
 						if (UnitHelper.tryToParseDouble(nums[0]) == 2)
 						{
-							return new Vector2(UnitHelper.tryToParseDouble(nums[1]), UnitHelper.tryToParseDouble(nums[2]));
+							return new Point(UnitHelper.tryToParseDouble(nums[1]), UnitHelper.tryToParseDouble(nums[2]));
 						}
 						if (UnitHelper.tryToParseDouble(nums[0]) == 3)
 						{
-							return new Vector3(UnitHelper.tryToParseDouble(nums[1]), UnitHelper.tryToParseDouble(nums[2]), UnitHelper.tryToParseDouble(nums[3]));
+							return new Pos(UnitHelper.tryToParseDouble(nums[1]), UnitHelper.tryToParseDouble(nums[2]), UnitHelper.tryToParseDouble(nums[3]));
 						}
 					}
 					return null;

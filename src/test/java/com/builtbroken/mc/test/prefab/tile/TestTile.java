@@ -60,7 +60,7 @@ public class TestTile extends AbstractTest
     {
         public TileTest()
         {
-            super(Material.rock);
+            super("testTile", Material.rock);
         }
 
         @Override

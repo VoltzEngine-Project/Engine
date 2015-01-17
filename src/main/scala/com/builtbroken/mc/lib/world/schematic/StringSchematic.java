@@ -3,7 +3,7 @@ package com.builtbroken.mc.lib.world.schematic;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.jlib.type.Pair;
 
 import java.util.HashMap;
@@ -104,9 +104,9 @@ public class StringSchematic extends Schematic
     }
 
     @Override
-    public HashMap<Vector3, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size)
+    public HashMap<Pos, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size)
     {
-        HashMap<Vector3, Pair<Block, Integer>> map = new HashMap();
+        HashMap<Pos, Pair<Block, Integer>> map = new HashMap();
         for (int y = 0; y < mapToBuild.length; y++)
         {
             for (int z = 0; z < mapToBuild[y].length; z++)
@@ -116,7 +116,7 @@ public class StringSchematic extends Schematic
                 {
                     if (charMap.containsKey(chars[x]))
                     {
-                        map.put(new Vector3(x, y, z), charMap.get(chars[x]));
+                        map.put(new Pos(x, y, z), charMap.get(chars[x]));
                     }
                 }
             }

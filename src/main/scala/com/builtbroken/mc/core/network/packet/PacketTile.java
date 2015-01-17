@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.IPacketReceiver;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 /**
  * Packet type designed to be used with Tiles
@@ -14,7 +14,7 @@ import com.builtbroken.mc.lib.transform.vector.Vector3;
  * @author tgame14
  * @since 26/05/14
  */
-public class PacketTile extends PacketType
+public class PacketTile extends AbstractPacket
 {
 	public int x;
 	public int y;
@@ -26,31 +26,17 @@ public class PacketTile extends PacketType
 	}
 
 	/**
-	 * @param x    - location
-	 * @param y    - location
-	 * @param z    - location
-	 * @param args -  data to send, first arg should be packetID if
-	 *             the tile is an instance of {@code IPacketIDReceiver}
-	 *             Should never be null
-	 */
-	public PacketTile(int x, int y, int z, Object... args)
-	{
-		super(args);
-
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-
-	/**
 	 * @param tile - TileEntity to send this packet to, only used for location data
 	 * @param args -  data to send, first arg should be packetID if
 	 *             the tile is an instance of {@code IPacketIDReceiver}
 	 *             Should never be null
 	 */
-	public PacketTile(TileEntity tile, Object... args)
+	public PacketTile(TileEntity tile, int id, Object... args)
 	{
-		this(tile.xCoord, tile.yCoord, tile.zCoord, args);
+		super(id, args);
+        this.x = tile.xCoord;
+        this.y = tile.yCoord;
+        this.z = tile.zCoord;
 	}
 
 	@Override
@@ -59,7 +45,7 @@ public class PacketTile extends PacketType
 		buffer.writeInt(x);
 		buffer.writeInt(y);
 		buffer.writeInt(z);
-		buffer.writeBytes(data());
+		super.encodeInto(ctx, buffer);
 	}
 
 	@Override
@@ -68,7 +54,7 @@ public class PacketTile extends PacketType
 		x = buffer.readInt();
 		y = buffer.readInt();
 		z = buffer.readInt();
-		data_$eq(buffer.slice());
+		super.decodeInto(ctx, buffer);
 	}
 
 	@Override
@@ -85,7 +71,6 @@ public class PacketTile extends PacketType
 
 	public void handle(EntityPlayer player)
 	{
-		sender_$eq(player);
 
 		TileEntity tile = player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
 
@@ -94,7 +79,7 @@ public class PacketTile extends PacketType
 			try
 			{
 				IPacketIDReceiver receiver = (IPacketIDReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
-				ByteBuf buf = data().slice();
+				ByteBuf buf = data.slice();
 
 				int id;
 				try
@@ -104,14 +89,14 @@ public class PacketTile extends PacketType
 				catch (IndexOutOfBoundsException ex)
 				{
 					System.out.println("Packet sent to a Tile[" + tile + "] failed to provide a packet ID");
-					System.out.println("Location: " + new Vector3(x, y, z));
+					System.out.println("Location: " + new Pos(x, y, z));
 					return;
 				}
 				receiver.read(buf, id, player, this);
 			}
 			catch (Exception e)
 			{
-				System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Vector3(x, y, z));
+				System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Pos(x, y, z));
 				e.printStackTrace();
 			}
 		}
@@ -120,21 +105,21 @@ public class PacketTile extends PacketType
 			try
 			{
 				IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
-				receiver.read(data().slice(), player, this);
+				receiver.read(player, this);
 			}
 			catch (IndexOutOfBoundsException e)
 			{
-				System.out.println("Packet sent to a TileEntity was read out side its bounds [" + tile + "] in " + new Vector3(x, y, z));
+				System.out.println("Packet sent to a TileEntity was read out side its bounds [" + tile + "] in " + new Pos(x, y, z));
 			}
 			catch (Exception e)
 			{
-				System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Vector3(x, y, z));
+				System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Pos(x, y, z));
 				e.printStackTrace();
 			}
 		}
 		else
 		{
-			System.out.println("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error [" + tile + "] in " + new Vector3(x, y, z));
+			System.out.println("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error [" + tile + "] in " + new Pos(x, y, z));
 		}
 	}
 }

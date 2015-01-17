@@ -15,7 +15,7 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.DummyPlayer;
 import com.builtbroken.mc.lib.helper.wrapper.BitmaskWrapper;
 import com.builtbroken.mc.lib.transform.rotation.Quaternion;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,26 +28,26 @@ import java.util.Map;
  */
 public class WorldUtility
 {
-	public static void rotateVectorFromDirection(Vector3 vec, ForgeDirection dir)
+	public static void rotateVectorFromDirection(Pos vec, ForgeDirection dir)
 	{
 		switch (dir)
 		{
 			default:
 				break;
 			case UP:
-				vec.transform(new Quaternion(180, Vector3.east()));
+				vec.transform(new Quaternion(180, Pos.east));
 				break;
 			case NORTH:
-				vec.transform(new Quaternion(90, Vector3.west()));
+				vec.transform(new Quaternion(90, Pos.west));
 				break;
 			case SOUTH:
-				vec.transform(new Quaternion(90, Vector3.east()));
+				vec.transform(new Quaternion(90, Pos.east));
 				break;
 			case WEST:
-				vec.transform(new Quaternion(90, Vector3.north()));
+				vec.transform(new Quaternion(90, Pos.north));
 				break;
 			case EAST:
-				vec.transform(new Quaternion(90, Vector3.south()));
+				vec.transform(new Quaternion(90, Pos.south));
 				break;
 		}
 	}
@@ -124,7 +124,7 @@ public class WorldUtility
 		return getSurroundingTileEntities(ent.getWorldObj(), ent.xCoord, ent.yCoord, ent.zCoord);
 	}
 
-	public static TileEntity[] getSurroundingTileEntities(World world, Vector3 vec)
+	public static TileEntity[] getSurroundingTileEntities(World world, Pos vec)
 	{
 		return getSurroundingTileEntities(world, vec.xi(), vec.yi(), vec.zi());
 	}
@@ -174,12 +174,12 @@ public class WorldUtility
 	/**
 	 * gets all EntityItems in a location using a start and end point
 	 */
-	public static List<EntityItem> findAllItemsIn(World world, Vector3 start, Vector3 end)
+	public static List<EntityItem> findAllItemsIn(World world, Pos start, Pos end)
 	{
 		return world.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(start.x(), start.y(), start.z(), end.x(), end.y(), end.z()));
 	}
 
-	public static List<EntityItem> getEntitiesInDirection(World world, Vector3 center, ForgeDirection dir)
+	public static List<EntityItem> getEntitiesInDirection(World world, Pos center, ForgeDirection dir)
 	{
 		List<EntityItem> list = world.selectEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(center.x() + dir.offsetX, center.y() + dir.offsetY, center.z() + dir.offsetZ, center.x() + dir.offsetX + 1, center.y() + dir.offsetY + 1, center.z() + dir.offsetZ + 1), IEntitySelector.selectAnything);
 		return list.size() > 0 ? list : null;
@@ -194,7 +194,7 @@ public class WorldUtility
 	 * @param disiredItems - list of item that are being looked for
 	 * @return a list of EntityItem that match the itemStacks desired
 	 */
-	public static List<EntityItem> findSelectItems(World world, Vector3 start, Vector3 end, List<ItemStack> disiredItems)
+	public static List<EntityItem> findSelectItems(World world, Pos start, Pos end, List<ItemStack> disiredItems)
 	{
 		List<EntityItem> entityItems = findAllItemsIn(world, start, end);
 		return filterEntityItemsList(entityItems, disiredItems);

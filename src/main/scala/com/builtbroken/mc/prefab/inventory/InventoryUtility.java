@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.inventory;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,8 +15,8 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.builtbroken.mc.lib.helper.DummyPlayer;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
-import com.builtbroken.mc.lib.transform.vector.VectorWorld;
+import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.lib.transform.vector.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +109,7 @@ public class InventoryUtility
 		return toInsert;
 	}
 
-	public static ItemStack putStackInInventory(VectorWorld position, ItemStack toInsert, int side, boolean force)
+	public static ItemStack putStackInInventory(Location position, ItemStack toInsert, int side, boolean force)
 	{
 		TileEntity tile = position.getTileEntity();
 
@@ -284,7 +285,7 @@ public class InventoryUtility
 		return null;
 	}
 
-	public static void dropBlockAsItem(World world, Vector3 position)
+	public static void dropBlockAsItem(World world, Pos position)
 	{
 		dropBlockAsItem(world, position.xi(), position.yi(), position.zi(), false);
 	}
@@ -302,7 +303,7 @@ public class InventoryUtility
 
 				for (ItemStack itemStack : items)
 				{
-					dropItemStack(world, new Vector3(x, y, z), itemStack, 10);
+					dropItemStack(world, new Pos(x, y, z), itemStack, 10);
 				}
 			}
 			if (destroy)
@@ -312,7 +313,7 @@ public class InventoryUtility
 		}
 	}
 
-	public static void dropItemStack(VectorWorld position, ItemStack itemStack)
+	public static void dropItemStack(Location position, ItemStack itemStack)
 	{
 		dropItemStack(position.world(), position, itemStack);
 	}
@@ -320,17 +321,17 @@ public class InventoryUtility
 	/**
 	 * Drops an item stack on the floor.
 	 */
-	public static void dropItemStack(World world, Vector3 position, ItemStack itemStack)
+	public static void dropItemStack(World world, IPos3D position, ItemStack itemStack)
 	{
 		dropItemStack(world, position, itemStack, 10);
 	}
 
-	public static void dropItemStack(World world, Vector3 position, ItemStack itemStack, int delay)
+	public static void dropItemStack(World world, IPos3D position, ItemStack itemStack, int delay)
 	{
 		dropItemStack(world, position, itemStack, delay, 0f);
 	}
 
-	public static void dropItemStack(World world, Vector3 position, ItemStack itemStack, int delay, float randomAmount)
+	public static void dropItemStack(World world, IPos3D position, ItemStack itemStack, int delay, float randomAmount)
 	{
 		dropItemStack(world, position.x(), position.y(), position.z(), itemStack, delay, randomAmount);
 	}
@@ -391,7 +392,7 @@ public class InventoryUtility
 		{
 			try
 			{
-				Vector3 rightClickPos = new Vector3(x, y, z);
+				Pos rightClickPos = new Pos(x, y, z);
 
 				if (world.isAirBlock(x, y, z))
 				{

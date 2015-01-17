@@ -12,7 +12,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidBlock;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 /**
  * Basic projectile like entity that moves in a strait line without gravity.
@@ -23,7 +23,7 @@ import com.builtbroken.mc.lib.transform.vector.Vector3;
  */
 public abstract class EntityProjectile extends Entity implements IProjectile
 {
-    public Vector3 sourceOfProjectile = null;
+    public Pos sourceOfProjectile = null;
     public Entity firedByEntity = null;
 
     protected boolean canDamage = false;
@@ -41,22 +41,22 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         this.ignoreFrustumCheck = true;
     }
 
-    public static Vector3 getEntityAim(EntityLivingBase entity)
+    public static Pos getEntityAim(EntityLivingBase entity)
     {
         float f1 = MathHelper.cos(-entity.rotationYaw * 0.017453292F - (float)Math.PI);
         float f2 = MathHelper.sin(-entity.rotationYaw * 0.017453292F - (float)Math.PI);
         float f3 = -MathHelper.cos(-entity.rotationPitch * 0.017453292F);
         float f4 = MathHelper.sin(-entity.rotationPitch * 0.017453292F);
-        return new Vector3((double) (f2 * f3), (double) f4, (double) (f1 * f3));
+        return new Pos((double) (f2 * f3), (double) f4, (double) (f1 * f3));
     }
 
     public EntityProjectile(EntityLivingBase entity)
     {
         this(entity.worldObj);
 
-        Vector3 launcher = new Vector3(entity).add(new Vector3(0, 1, 0));
-        Vector3 playerAim = getEntityAim(entity);
-        Vector3 start = launcher.add(playerAim.multiply(2));
+        Pos launcher = new Pos(entity).add(new Pos(0, 1, 0));
+        Pos playerAim = getEntityAim(entity);
+        Pos start = launcher.add(playerAim.multiply(2));
 
         this.firedByEntity = entity;
         this.sourceOfProjectile = start;
@@ -65,7 +65,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         this.rotationPitch = entity.rotationPitch;
     }
 
-    public EntityProjectile(World w, Vector3 startAndSource)
+    public EntityProjectile(World w, Pos startAndSource)
     {
         this(w);
         this.sourceOfProjectile = startAndSource;
@@ -204,9 +204,9 @@ public abstract class EntityProjectile extends Entity implements IProjectile
      * @param t - number of ticks to predicted for flight path
      * @return predicted position of the project, should not be null
      */
-    public Vector3 getPredictedPosition(int t)
+    public Pos getPredictedPosition(int t)
     {
-        Vector3 newPos = new Vector3(this);
+        Pos newPos = new Pos(this);
 
         for (int i = 0; i < t; i++)
         {
@@ -241,7 +241,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
     protected void readEntityFromNBT(NBTTagCompound nbt)
     {
         if(nbt.hasKey("startPos"))
-            sourceOfProjectile = new Vector3(nbt.getCompoundTag("startPos"));
+            sourceOfProjectile = new Pos(nbt.getCompoundTag("startPos"));
         _ticksInAir = nbt.getInteger("ticksInAir");
         _ticksInGround = nbt.getInteger("ticksInGround");
         _health = nbt.getFloat("health");

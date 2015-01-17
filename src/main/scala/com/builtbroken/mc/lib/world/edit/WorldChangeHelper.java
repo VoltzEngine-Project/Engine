@@ -4,7 +4,7 @@ import cpw.mods.fml.common.eventhandler.Event;
 import com.builtbroken.mc.api.event.TriggerCause;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import com.builtbroken.mc.lib.transform.vector.VectorWorld;
+import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.api.event.WorldChangeActionEvent;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 
@@ -24,7 +24,7 @@ public class WorldChangeHelper
      */
     public static ChangeResult doAction(World world, double x, double y, double z, IWorldChangeAction action, TriggerCause triggerCause)
     {
-        return doAction(new VectorWorld(world, x, y, z), action, triggerCause);
+        return doAction(new Location(world, x, y, z), action, triggerCause);
     }
 
     /** Called to do a change action in the world
@@ -34,7 +34,7 @@ public class WorldChangeHelper
      * @param triggerCause - cause of the trigger
      * @return if the result completed, was blocked, or failed
      */
-    public static ChangeResult doAction(VectorWorld loc, IWorldChangeAction action, TriggerCause triggerCause)
+    public static ChangeResult doAction(Location loc, IWorldChangeAction action, TriggerCause triggerCause)
     {
         if (action != null)
         {
@@ -74,7 +74,7 @@ public class WorldChangeHelper
      * @param blast - action instance
      * @return list of block locations changes
      */
-    public static Collection<BlockEdit> getEffectedBlocks(VectorWorld vec, TriggerCause triggerCause, IWorldChangeAction blast)
+    public static Collection<BlockEdit> getEffectedBlocks(Location vec, TriggerCause triggerCause, IWorldChangeAction blast)
     {
         Collection<BlockEdit> effectedBlocks = blast.getEffectedBlocks();
         //Triggers an event allowing other mods to edit the block list

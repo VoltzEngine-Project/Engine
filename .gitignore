@@ -1,5 +1,4 @@
 /bin
-/html
 /out
 /run
 *.classpath
@@ -20,3 +19,6 @@ output/
 *.iws
 *.idea/
 logs/
+html/downloads/
+downloads/
+settings/

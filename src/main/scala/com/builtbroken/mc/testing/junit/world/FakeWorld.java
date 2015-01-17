@@ -1,6 +1,6 @@
 package com.builtbroken.mc.testing.junit.world;
 
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.testing.junit.ModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -121,7 +121,7 @@ public class FakeWorld extends World
         }
         else
         {
-            throw new RuntimeException("Something Attempted to place a block out side of the test area " + new Vector3(x, y, z));
+            throw new RuntimeException("Something Attempted to place a block out side of the test area " + new Pos(x, y, z));
         }
     }
 

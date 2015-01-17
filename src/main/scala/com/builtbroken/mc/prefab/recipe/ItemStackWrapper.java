@@ -90,4 +90,19 @@ public class ItemStackWrapper
 
         return item && meta && nbt && size;
     }
+
+    @Override
+    public int hashCode()
+    {
+        int hashCode = 1;
+        if(itemStack != null)
+        {
+            //http://stackoverflow.com/questions/9648305/creating-a-hashcode-method-java
+            hashCode = 31 * hashCode + itemStack.getItem().hashCode();
+            hashCode = 31 * hashCode + itemStack.getItemDamage();
+            hashCode = 31 * hashCode + itemStack.stackSize;
+            hashCode = 31 * hashCode + (itemStack.getTagCompound() != null ? itemStack.getTagCompound().hashCode() : 0);
+        }
+        return hashCode;
+    }
 }

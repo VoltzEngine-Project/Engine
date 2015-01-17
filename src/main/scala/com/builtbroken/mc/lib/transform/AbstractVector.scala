@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.transform
 /**
  * @author Calclavia
  */
+@Deprecated
 abstract class AbstractVector[T <: AbstractVector[T]] extends AbstractOperation[T]
 {
   /**

@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.render.fx;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,8 +15,7 @@ import com.builtbroken.mc.lib.render.RenderUtility;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import com.builtbroken.mc.lib.transform.vector.IVector3;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.awt.*;
 
@@ -35,19 +35,19 @@ public class FxBeam extends EntityFX
     private float rotPitch = 0.0F;
     private float prevYaw = 0.0F;
     private float prevPitch = 0.0F;
-    private IVector3 target = new Vector3();
+    private IPos3D target = new Pos();
     private float endModifier = 1.0F;
     public boolean reverse = false;
     public boolean pulse = true;
     private int rotationSpeed = 20;
     private float prevSize = 0.0F;
 
-    public FxBeam(ResourceLocation texture, World par1World, IVector3 position, IVector3 target2, Color color, int age)
+    public FxBeam(ResourceLocation texture, World par1World, IPos3D position, IPos3D target2, Color color, int age)
     {
         this(texture, par1World, position, target2, color.getRed(), color.getGreen(), color.getBlue(), age);
     }
 
-    public FxBeam(ResourceLocation texture, World par1World, IVector3 position, IVector3 target2, float red, float green, float blue, int age)
+    public FxBeam(ResourceLocation texture, World par1World, IPos3D position, IPos3D target2, float red, float green, float blue, int age)
     {
         super(par1World, position.x(), position.y(), position.z(), 0.0D, 0.0D, 0.0D);
         this.texture = texture;
@@ -63,7 +63,7 @@ public class FxBeam extends EntityFX
         float xd = (float) (this.posX - this.target.x());
         float yd = (float) (this.posY - this.target.y());
         float zd = (float) (this.posZ - this.target.z());
-        this.length = (float) new Vector3(this).distance(this.target);
+        this.length = (float) new Pos(this).distance(this.target);
         double var7 = MathHelper.sqrt_double(xd * xd + zd * zd);
         this.rotYaw = ((float) (Math.atan2(xd, zd) * 180.0D / 3.141592653589793D));
         this.rotPitch = ((float) (Math.atan2(yd, var7) * 180.0D / 3.141592653589793D));

@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import com.builtbroken.mc.lib.world.WorldUtility;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -160,7 +160,7 @@ public class RenderUtility
 		glTranslatef(0.5F, 0.5F, 0.5F);
 	}
 
-	public static void renderFloatingText(String text, Vector3 position)
+	public static void renderFloatingText(String text, Pos position)
 	{
 		renderFloatingText(text, position, 0xFFFFFF);
 	}
@@ -170,7 +170,7 @@ public class RenderUtility
 	 *
 	 * @author Briman0094
 	 */
-	public static void renderFloatingText(String text, Vector3 position, int color)
+	public static void renderFloatingText(String text, Pos position, int color)
 	{
 		renderFloatingText(text, position.x(), position.y(), position.z(), color);
 	}

@@ -1,9 +1,9 @@
 package com.builtbroken.mc.lib.transform.rotation
 
 import java.math.{BigDecimal, MathContext, RoundingMode}
-
+import com.builtbroken.jlib.data.vector.IPos3D
 import com.builtbroken.mc.lib.transform.ITransform
-import com.builtbroken.mc.lib.transform.vector.Vector3
+import com.builtbroken.mc.lib.transform.vector.Pos
 
 /**
  * Quaternion class designed to be used for the rotation of objects.
@@ -31,7 +31,7 @@ class Quaternion extends Cloneable with ITransform
    * @param angle - Radians
    * @param axis - Axis to rotate around
    */
-  def this(angle: Double, axis: Vector3)
+  def this(angle: Double, axis: IPos3D)
   {
     this()
     setAroundAxis(axis.x, axis.y, axis.z, angle)
@@ -72,7 +72,7 @@ class Quaternion extends Cloneable with ITransform
     return set(Math.cos(angle), ax * d4, ay * d4, az * d4)
   }
 
-  def setAroundAxis(axis: Vector3, angle: Double): Quaternion =
+  def setAroundAxis(axis: Pos, angle: Double): Quaternion =
   {
     return setAroundAxis(axis.x, axis.y, axis.z, angle)
   }
@@ -132,13 +132,13 @@ class Quaternion extends Cloneable with ITransform
    * @param vector
    * @return
    */
-  override def transform(vector: Vector3): Vector3 =
+  override def transform(vector: IPos3D): Pos =
   {
     val d = -x * vector.x - y * vector.y - z * vector.z
     val d1 = w * vector.x + y * vector.z - z * vector.y
     val d2 = w * vector.y - x * vector.z + z * vector.x
     val d3 = w * vector.z + x * vector.y - y * vector.x
-    return new Vector3(d1 * w - d * x - d2 * z + d3 * y, d2 * w - d * y + d1 * z - d3 * x, d3 * w - d * z - d1 * y + d2 * x)
+    return new Pos(d1 * w - d * x - d2 * z + d3 * y, d2 * w - d * y + d1 * z - d3 * x, d3 * w - d * z - d1 * y + d2 * x)
   }
 
   override def toString: String =

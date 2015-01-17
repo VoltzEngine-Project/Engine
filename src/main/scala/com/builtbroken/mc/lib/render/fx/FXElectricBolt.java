@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.render.RenderUtility;
 import com.builtbroken.mc.lib.transform.rotation.Quaternion;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.*;
 
@@ -43,8 +43,8 @@ public class FXElectricBolt extends EntityFX
 	/**
 	 * Electric Bolt's start and end positions;
 	 */
-	private Vector3 start;
-	private Vector3 end;
+	private Pos start;
+	private Pos end;
 	/**
 	 * An array of the segments of the bolt.
 	 */
@@ -57,7 +57,7 @@ public class FXElectricBolt extends EntityFX
 	 */
 	private boolean isCalculated;
 
-	public FXElectricBolt(World world, Vector3 startVec, Vector3 targetVec, long seed)
+	public FXElectricBolt(World world, Pos startVec, Pos targetVec, long seed)
 	{
 		super(world, startVec.x(), startVec.y(), startVec.z(), 0.0D, 0.0D, 0.0D);
 
@@ -95,10 +95,10 @@ public class FXElectricBolt extends EntityFX
 		this.finalizeBolt();
 	}
 
-	private static Vector3 getRelativeViewVector(Vector3 pos)
+	private static Pos getRelativeViewVector(Pos pos)
 	{
 		EntityPlayer renderentity = Minecraft.getMinecraft().thePlayer;
-		return new Vector3((float) renderentity.posX - pos.x(), (float) renderentity.posY - pos.y(), (float) renderentity.posZ - pos.z());
+		return new Pos((float) renderentity.posX - pos.x(), (float) renderentity.posY - pos.y(), (float) renderentity.posZ - pos.z());
 	}
 
 	public FXElectricBolt setMultiplier(float m)
@@ -143,20 +143,20 @@ public class FXElectricBolt extends EntityFX
 			for (BoltSegment segment : oldSegments)
 			{
 				prev = segment.prevSegment;
-				Vector3 subSegment = segment.difference.multiply(1.0F / splitAmount);
+				Pos subSegment = segment.difference.multiply(1.0F / splitAmount);
 
 				/** Creates an array of new bolt points. The first and last points of the bolts are
 				 * the respected start and end points of the current segment. */
 				BoltPoint[] newPoints = new BoltPoint[splitAmount + 1];
-				Vector3 startPoint = segment.startBolt.point;
+				Pos startPoint = segment.startBolt.point;
 				newPoints[0] = segment.startBolt;
 				newPoints[splitAmount] = segment.endBolt;
 
 				for (int i = 1; i < splitAmount; i++)
 				{
 					//Vector3 offsetVec = segment.difference.perpendicular().rotate(this.rand.nextFloat() * 360.0F, segment.difference).multiply((this.rand.nextFloat() - 0.5F) * offset);
-					Vector3 offsetVec = segment.difference.perpendicular().transform(new Quaternion(this.rand.nextFloat() * 360.0F, segment.difference)).multiply((this.rand.nextFloat() - 0.5F) * offset);
-					Vector3 basepoint = startPoint.clone().add(subSegment.clone().multiply(i));
+					Pos offsetVec = new Pos(segment.difference.perpendicular().transform(new Quaternion(this.rand.nextFloat() * 360.0F, segment.difference))).multiply((this.rand.nextFloat() - 0.5F) * offset);
+					Pos basepoint = startPoint.clone().add(subSegment.clone().multiply(i));
 					newPoints[i] = new BoltPoint(basepoint, offsetVec);
 				}
 
@@ -173,9 +173,9 @@ public class FXElectricBolt extends EntityFX
 					if ((i != 0) && (this.rand.nextFloat() < splitChance))
 					{
 						//Vector3 splitrot = next.difference.xCross().rotate(this.rand.nextFloat() * 360.0F, next.difference);
-						Vector3 splitrot = next.difference.xCross().transform(new Quaternion(this.rand.nextFloat() * 360.0F, next.difference));
+						Pos splitrot = new Pos(next.difference.xCross().transform(new Quaternion(this.rand.nextFloat() * 360.0F, next.difference)));
 						//Vector3 diff = next.difference.clone().rotate((this.rand.nextFloat() * 0.66F + 0.33F) * splitAngle, splitrot).multiply(splitLength);
-						Vector3 diff = next.difference.clone().transform(new Quaternion((this.rand.nextFloat() * 0.66F + 0.33F) * splitAngle, splitrot)).multiply(splitLength);
+						Pos diff = new Pos(next.difference.clone().transform(new Quaternion((this.rand.nextFloat() * 0.66F + 0.33F) * splitAngle, splitrot))).multiply(splitLength);
 						this.maxSplitID += 1;
 						this.splitparents.put(this.maxSplitID, next.splitID);
 						BoltSegment split = new BoltSegment(newPoints[i], new BoltPoint(newPoints[(i + 1)].basePoint, newPoints[(i + 1)].offSet.clone().add(diff)), segment.weight / 2.0F, next.segmentID, this.maxSplitID);
@@ -288,7 +288,7 @@ public class FXElectricBolt extends EntityFX
 	 */
 	private void renderBolt(Tessellator tessellator, float partialframe, float cosyaw, float cospitch, float sinyaw, float cossinpitch, int pass)
 	{
-		Vector3 playerVector = new Vector3(sinyaw * -cospitch, -cossinpitch / cosyaw, cosyaw * cospitch);
+		Pos playerVector = new Pos(sinyaw * -cospitch, -cossinpitch / cosyaw, cosyaw * cospitch);
 		float voltage = this.particleAge >= 0 ? ((float) this.particleAge / (float) this.particleMaxAge) : 0.0F;
 
 		float mainAlpha = 1.0F;
@@ -309,10 +309,10 @@ public class FXElectricBolt extends EntityFX
 			if (renderSegment != null && renderSegment.segmentID <= renderlength)
 			{
 				float width = (float) (this.boltWidth * (getRelativeViewVector(renderSegment.startBolt.point).magnitude() / 5.0F + 1.0F) * (1.0F + renderSegment.weight) * 0.5F);
-				Vector3 diff1 = playerVector.cross(renderSegment.prevDiff).multiply(width / renderSegment.sinPrev);
-				Vector3 diff2 = playerVector.cross(renderSegment.nextDiff).multiply(width / renderSegment.sinNext);
-				Vector3 startvec = renderSegment.startBolt.point;
-				Vector3 endvec = renderSegment.endBolt.point;
+				Pos diff1 = playerVector.cross(renderSegment.prevDiff).multiply(width / renderSegment.sinPrev);
+				Pos diff2 = playerVector.cross(renderSegment.nextDiff).multiply(width / renderSegment.sinNext);
+				Pos startvec = renderSegment.startBolt.point;
+				Pos endvec = renderSegment.endBolt.point;
 				float rx1 = (float) (startvec.x() - interpPosX);
 				float ry1 = (float) (startvec.y() - interpPosY);
 				float rz1 = (float) (startvec.z() - interpPosZ);
@@ -327,7 +327,7 @@ public class FXElectricBolt extends EntityFX
 
 				if (renderSegment.nextSegment == null)
 				{
-					Vector3 roundend = renderSegment.endBolt.point.clone().add(renderSegment.difference.clone().normalize().multiply(width));
+					Pos roundend = renderSegment.endBolt.point.clone().add(renderSegment.difference.clone().normalize().multiply(width));
 					float rx3 = (float) (roundend.x() - interpPosX);
 					float ry3 = (float) (roundend.y() - interpPosY);
 					float rz3 = (float) (roundend.z() - interpPosZ);
@@ -339,7 +339,7 @@ public class FXElectricBolt extends EntityFX
 
 				if (renderSegment.prevSegment == null)
 				{
-					Vector3 roundend = renderSegment.startBolt.point.clone().subtract(renderSegment.difference.clone().normalize().multiply(width));
+					Pos roundend = renderSegment.startBolt.point.clone().subtract(renderSegment.difference.clone().normalize().multiply(width));
 					float rx3 = (float) (roundend.x() - interpPosX);
 					float ry3 = (float) (roundend.y() - interpPosY);
 					float rz3 = (float) (roundend.z() - interpPosZ);
@@ -418,11 +418,11 @@ public class FXElectricBolt extends EntityFX
 
 	public class BoltPoint
 	{
-		Vector3 point;
-		Vector3 basePoint;
-		Vector3 offSet;
+		Pos point;
+		Pos basePoint;
+		Pos offSet;
 
-		public BoltPoint(Vector3 basePoint, Vector3 offSet)
+		public BoltPoint(Pos basePoint, Pos offSet)
 		{
 			this.point = basePoint.clone().add(offSet);
 			this.basePoint = basePoint;
@@ -434,11 +434,11 @@ public class FXElectricBolt extends EntityFX
 	{
 		public BoltPoint startBolt;
 		public BoltPoint endBolt;
-		public Vector3 difference;
+		public Pos difference;
 		public BoltSegment prevSegment;
 		public BoltSegment nextSegment;
-		public Vector3 nextDiff;
-		public Vector3 prevDiff;
+		public Pos nextDiff;
+		public Pos prevDiff;
 		public float sinPrev;
 		public float sinNext;
 		/**
@@ -458,9 +458,9 @@ public class FXElectricBolt extends EntityFX
 			this.calculateDifference();
 		}
 
-		public BoltSegment(Vector3 start, Vector3 end)
+		public BoltSegment(Pos start, Pos end)
 		{
-			this(new BoltPoint(start, new Vector3(0.0D, 0.0D, 0.0D)), new BoltPoint(end, new Vector3(0.0D, 0.0D, 0.0D)), 1.0F, 0, 0);
+			this(new BoltPoint(start, new Pos(0.0D, 0.0D, 0.0D)), new BoltPoint(end, new Pos(0.0D, 0.0D, 0.0D)), 1.0F, 0, 0);
 		}
 
 		public void calculateDifference()
@@ -472,8 +472,8 @@ public class FXElectricBolt extends EntityFX
 		{
 			if (this.prevSegment != null)
 			{
-				Vector3 prevdiffnorm = this.prevSegment.difference.clone().normalize();
-				Vector3 thisdiffnorm = this.difference.clone().normalize();
+				Pos prevdiffnorm = this.prevSegment.difference.clone().normalize();
+				Pos thisdiffnorm = this.difference.clone().normalize();
 				this.prevDiff = thisdiffnorm.add(prevdiffnorm).normalize();
 				this.sinPrev = ((float) Math.sin(thisdiffnorm.anglePreNorm(prevdiffnorm.multiply(-1.0F)) / 2.0F));
 			}
@@ -484,8 +484,8 @@ public class FXElectricBolt extends EntityFX
 			}
 			if (this.nextSegment != null)
 			{
-				Vector3 nextdiffnorm = this.nextSegment.difference.clone().normalize();
-				Vector3 thisdiffnorm = this.difference.clone().normalize();
+				Pos nextdiffnorm = this.nextSegment.difference.clone().normalize();
+				Pos thisdiffnorm = this.difference.clone().normalize();
 				this.nextDiff = thisdiffnorm.add(nextdiffnorm).normalize();
 				this.sinNext = ((float) Math.sin(thisdiffnorm.anglePreNorm(nextdiffnorm.multiply(-1.0F)) / 2.0F));
 			}

@@ -1,8 +1,8 @@
 package com.builtbroken.mc.lib.transform.sorting;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import com.builtbroken.mc.lib.transform.vector.IVector3;
 
 import java.util.Comparator;
 
@@ -28,9 +28,9 @@ public class VecComparators
 			{
 				y = ((Entity) arg0).posY;
 			}
-			else if (arg0 instanceof IVector3)
+			else if (arg0 instanceof IPos3D)
 			{
-				y = ((IVector3) arg0).y();
+				y = ((IPos3D) arg0).y();
 			}
 
 			if (arg1 instanceof TileEntity)
@@ -41,36 +41,36 @@ public class VecComparators
 			{
 				y2 = ((Entity) arg1).posY;
 			}
-			else if (arg1 instanceof IVector3)
+			else if (arg1 instanceof IPos3D)
 			{
-				y2 = ((IVector3) arg1).y();
+				y2 = ((IPos3D) arg1).y();
 			}
 			return Double.compare(y, y2);
 		}
 	}
 
-	public static class VectorYCoordSorter implements Comparator<IVector3>
+	public static class VectorYCoordSorter implements Comparator<IPos3D>
 	{
 		@Override
-		public int compare(IVector3 arg0, IVector3 arg1)
+		public int compare(IPos3D arg0, IPos3D arg1)
 		{
 			return Double.compare(arg0.y(), arg1.y());
 		}
 	}
 
-	public static class VectorXCoordSorter implements Comparator<IVector3>
+	public static class VectorXCoordSorter implements Comparator<IPos3D>
 	{
 		@Override
-		public int compare(IVector3 arg0, IVector3 arg1)
+		public int compare(IPos3D arg0, IPos3D arg1)
 		{
 			return Double.compare(arg0.x(), arg1.x());
 		}
 	}
 
-	public static class VectorZCoordSorter implements Comparator<IVector3>
+	public static class VectorZCoordSorter implements Comparator<IPos3D>
 	{
 		@Override
-		public int compare(IVector3 arg0, IVector3 arg1)
+		public int compare(IPos3D arg0, IPos3D arg1)
 		{
 			return Double.compare(arg0.z(), arg1.z());
 		}

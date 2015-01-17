@@ -1,9 +1,9 @@
 package com.builtbroken.mc.testing.debug;
 
+import com.builtbroken.mc.api.IWorldPosition;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import com.builtbroken.mc.api.IUpdate;
-import com.builtbroken.mc.lib.transform.vector.IVectorWorld;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -16,7 +16,7 @@ import java.awt.event.WindowEvent;
  * @author Darkguardsman
  */
 @SuppressWarnings("serial")
-public class FrameDebug extends Frame implements IVectorWorld
+public class FrameDebug extends Frame implements IWorldPosition
 {
 	protected long tick = 0;
 	/**
@@ -186,7 +186,7 @@ public class FrameDebug extends Frame implements IVectorWorld
 		{
 			if (component instanceof IUpdate)
 			{
-				((IUpdate) component).update(0.05);
+				((IUpdate) component).update();
 			}
 		}
 	}

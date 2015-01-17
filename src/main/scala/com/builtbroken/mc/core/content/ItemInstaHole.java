@@ -8,7 +8,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import com.builtbroken.mc.core.resources.content.BlockOre;
 
 /** Used to create a hole in the ground for looking at world generation amounts, caves, etc
  * Created by robert on 11/25/2014.

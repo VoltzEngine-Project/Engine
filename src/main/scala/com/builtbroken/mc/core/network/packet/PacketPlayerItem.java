@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
  * @author tgame14
  * @since 26/05/14
  */
-public class PacketPlayerItem extends PacketType
+public class PacketPlayerItem extends AbstractPacket
 {
 	public int slotId;
 
@@ -19,29 +19,29 @@ public class PacketPlayerItem extends PacketType
 
 	}
 
-	public PacketPlayerItem(int slotId, Object... args)
+	public PacketPlayerItem(int id, int slotId, Object... args)
 	{
-		super(args);
+		super(id, args);
 		this.slotId = slotId;
 	}
 
-	public PacketPlayerItem(EntityPlayer player, Object... args)
+	public PacketPlayerItem(int id, EntityPlayer player, Object... args)
 	{
-		this(player.inventory.currentItem, args);
+		this(id, player.inventory.currentItem, args);
 	}
 
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
 	{
 		buffer.writeInt(slotId);
-		buffer.writeBytes(data());
+        super.encodeInto(ctx, buffer);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
 	{
 		slotId = buffer.readInt();
-		data_$eq(buffer.slice());
+		super.decodeInto(ctx, buffer);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class PacketPlayerItem extends PacketType
 
 		if (stack != null && stack.getItem() instanceof IPacketReceiver)
 		{
-			((IPacketReceiver) stack.getItem()).read(data(), player, this);
+			((IPacketReceiver) stack.getItem()).read(player, this);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class PacketPlayerItem extends PacketType
 
 		if (stack != null && stack.getItem() instanceof IPacketReceiver)
 		{
-			((IPacketReceiver) stack.getItem()).read(data(), player, this);
+			((IPacketReceiver) stack.getItem()).read(player, this);
 		}
 	}
 }

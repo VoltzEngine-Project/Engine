@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.helper.path;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.*;
 
@@ -16,33 +16,33 @@ public class PathfinderAStar extends Pathfinder
 	/**
 	 * The set of tentative permissions to be evaluated, initially containing the start node
 	 */
-	public Set<Vector3> openSet;
+	public Set<Pos> openSet;
 
 	/**
 	 * The map of navigated permissions storing the data of which position came from which in the format
 	 * of: X came from Y.
 	 */
-	public HashMap<Vector3, Vector3> navigationMap;
+	public HashMap<Pos, Pos> navigationMap;
 
 	/**
 	 * Score values, used to determine the score for a path to evaluate how optimal the path is.
 	 * G-Score is the cost along the best known path while F-Score is the total cost.
 	 */
-	public HashMap<Vector3, Double> gScore, fScore;
+	public HashMap<Pos, Double> gScore, fScore;
 
 	/**
 	 * The node in which the pathfinder is trying to reach.
 	 */
-	public Vector3 goal;
+	public Pos goal;
 
-	public PathfinderAStar(IPathCallBack callBack, Vector3 goal)
+	public PathfinderAStar(IPathCallBack callBack, Pos goal)
 	{
 		super(callBack);
 		this.goal = goal;
 	}
 
 	@Override
-	public boolean findNodes(Vector3 start)
+	public boolean findNodes(Pos start)
 	{
 		this.reset();
 		this.openSet.add(start);
@@ -52,11 +52,11 @@ public class PathfinderAStar extends Pathfinder
 		while (!this.openSet.isEmpty())
 		{
 			// Current is the node in openset having the lowest f_score[] value
-			Vector3 currentNode = null;
+			Pos currentNode = null;
 
 			double lowestFScore = 0;
 
-			for (Vector3 node : this.openSet)
+			for (Pos node : this.openSet)
 			{
 				if (currentNode == null || this.fScore.get(node) < lowestFScore)
 				{
@@ -84,7 +84,7 @@ public class PathfinderAStar extends Pathfinder
 			this.openSet.remove(currentNode);
 			this.closedSet.add(currentNode);
 
-			for (Vector3 neighbor : getNeighborNodes(currentNode))
+			for (Pos neighbor : getNeighborNodes(currentNode))
 			{
 				double tentativeGScore = this.gScore.get(currentNode) + currentNode.distance(neighbor);
 
@@ -112,19 +112,19 @@ public class PathfinderAStar extends Pathfinder
 	@Override
 	public Pathfinder reset()
 	{
-		this.openSet = new HashSet<Vector3>();
-		this.navigationMap = new HashMap<Vector3, Vector3>();
-		this.gScore = new HashMap<Vector3, Double>();
-		this.fScore = new HashMap<Vector3, Double>();
+		this.openSet = new HashSet<Pos>();
+		this.navigationMap = new HashMap<Pos, Pos>();
+		this.gScore = new HashMap<Pos, Double>();
+		this.fScore = new HashMap<Pos, Double>();
 		return super.reset();
 	}
 
 	/**
 	 * A recursive function to back track and find the path in which we have analyzed.
 	 */
-	public List<Vector3> reconstructPath(HashMap<Vector3, Vector3> nagivationMap, Vector3 current_node)
+	public List<Pos> reconstructPath(HashMap<Pos, Pos> nagivationMap, Pos current_node)
 	{
-		List<Vector3> path = new LinkedList<Vector3>();
+		List<Pos> path = new LinkedList<Pos>();
 		path.add(current_node);
 
 		if (nagivationMap.containsKey(current_node))
@@ -141,7 +141,7 @@ public class PathfinderAStar extends Pathfinder
 	/**
 	 * @return An estimated cost between two points.
 	 */
-	public double getHeuristicEstimatedCost(Vector3 start, Vector3 goal)
+	public double getHeuristicEstimatedCost(Pos start, Pos goal)
 	{
 		return start.distance(goal);
 	}
@@ -149,7 +149,7 @@ public class PathfinderAStar extends Pathfinder
 	/**
 	 * @return A Set of neighboring Vector3 positions.
 	 */
-	public Set<Vector3> getNeighborNodes(Vector3 vector)
+	public Set<Pos> getNeighborNodes(Pos vector)
 	{
 		if (this.callBackCheck != null)
 		{
@@ -157,7 +157,7 @@ public class PathfinderAStar extends Pathfinder
 		}
 		else
 		{
-			Set<Vector3> neighbors = new HashSet<Vector3>();
+			Set<Pos> neighbors = new HashSet<Pos>();
 
 			for (int i = 0; i < 6; i++)
 			{

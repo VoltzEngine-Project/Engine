@@ -17,8 +17,14 @@ buildscript {
 }
 
 apply from: './BuiltBrokenScripts/index.gradle'
+apply plugin: 'forge'
 
 ext.buildProps = file "build.properties"
+
+println "Current Minecraft version = " + minecraft.apiVersion
+
+def currentJvm = org.gradle.internal.jvm.Jvm.current()
+println "Current Java version = " + currentJvm
 
 buildProps.withReader {
     def prop = new Properties()
@@ -26,9 +32,7 @@ buildProps.withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
-version = "${project.minecraft.version}-${config.version.mod.minor}.${config.version.mod.revis}"
-
-if (project.getProperty("bambooshortPlanName") == "Voltz-Dev") {
+if (project.getProperty("bambooshortPlanName") == "BBM-Dev") {
     group = "dev.builtbroken.voltzengine"
     archivesBaseName = "VoltzEngine"
 } else {
@@ -36,14 +40,16 @@ if (project.getProperty("bambooshortPlanName") == "Voltz-Dev") {
     archivesBaseName = "VoltzEngine"
 }
 
+println archivesBaseName 
 
+version = "${project.minecraft.version}-${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}b"
 
 // This is used to set the local version
 if (project.hasProperty("bambooBuildNumber"))
     version += project.bambooBuildNumber
 else
-    version += "NIGHTLY"
-    
+    version += getDate()
+
 println "version = "+ version
 
 minecraft {
@@ -51,21 +57,20 @@ minecraft {
 	replace "@MINOR@", config.version.mod.minor
 	replace "@REVIS@", config.version.mod.revis
 	
-	if (System.getenv("BUILD_NUMBER") != null) {
-		replace "@BUILD@", System.getenv("BUILD_NUMBER")
+	if (project.hasProperty("bambooBuildNumber")) {
+		replace "@BUILD@", project.bambooBuildNumber
 	}
 	else {
-		replace "@BUILD@", 1
+		replace "@BUILD@", getDate()
 	}
 }
-
 processResources {
 	from(sourceSets.main.resources.srcDirs) {
 		//include '**/*.lang'
 		include '**/*.info'
 		include '**/*.properties'
 
-		expand 'version': project.version, 'mcversion': config.version.minecraft
+		expand 'version': project.version, 'mcversion': project.minecraft.version
 		// replace version and MCVersion
 	}
 
@@ -75,6 +80,29 @@ processResources {
 		exclude '**/*.properties'
 	}
 }
+
+publishing {
+  publications {
+    myPublication(MavenPublication) {      
+      pom.withXml {
+        from components.java
+        asNode().appendNode('description', 'Created on ' + getDate())        
+        def deps = configurations.compile.allDependencies
+        def dep_node = asNode().appendNode('dependencies')
+        
+        //def dependencyNode = dep_node.appendNode('dependency')
+            //dependencyNode.appendNode('groupId', 'net.industrial-craft')
+           // dependencyNode.appendNode('artifactId', 'industrialcraft-2')
+            //dependencyNode.appendNode('version', '2.2.654-experimental')
+        //def dependencyNode = dep_node.appendNode('dependency')
+            //dependencyNode.appendNode('groupId', 'net.minecraftforge')
+            //dependencyNode.appendNode('artifactId', 'forge')
+            //dependencyNode.appendNode('version', minecraft.apiVersion)
+      }
+    }
+  }
+}
+
 
 archivesBaseName = "VolzEngine"
 
@@ -98,10 +126,15 @@ repositories {
 
 dependencies 
 {
-    compile project("processor")
     testCompile 'junit:junit:4.11'
     compile 'junit:junit:4.11'
     compile "mcp.mobius.waila:Waila:1.5.8a_1.7.10"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.0.+:dev"
     compile "net.industrial-craft:industrialcraft-2:2.2.654-experimental:api"
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
 }

@@ -1,6 +1,7 @@
 package com.builtbroken.mc.prefab.recipe;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
+import ic2.api.item.ItemWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -53,7 +54,19 @@ public class MRItemStack extends MachineRecipe<ItemStack, ItemStackWrapper>
     @Override
     public boolean shouldHandleRecipe(Object[] inputs)
     {
-        return inputs != null && inputs.length == 1 && getValidInputs().contains(MachineRecipeType.toItemStack(inputs[0]));
+        return inputs != null && inputs.length == 1 && getValidInputs().contains(wrap(inputs[0]));
+    }
+
+    public ItemStackWrapper wrap(Object object)
+    {
+        if(object instanceof ItemStackWrapper)
+            return (ItemStackWrapper) object;
+        ItemStack stack = MachineRecipeType.toItemStack(object);
+        if(stack != null)
+        {
+            return new ItemStackWrapper(stack);
+        }
+        return null;
     }
 
     @Override

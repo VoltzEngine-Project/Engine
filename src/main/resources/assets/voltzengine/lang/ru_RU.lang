@@ -1,176 +1,176 @@
-# Resonant Engine Language Properties
+# voltzengine Engine Language Properties
 # @author Adaptivity
 
 death.attack.electrocution=%1$s получил разряд электрического тока!
 
-tile.resonant:unknown.name=Неизвестный блок
-item.resonant:unknown.name=Неизвестный предмет
+tile.voltzengine:unknown.name=Неизвестный блок
+item.voltzengine:unknown.name=Неизвестный предмет
 
 ## Ores
-tile.resonant:oreCopper.name=Медная руда
-tile.resonant:oreTin.name=Оловянная руда
-tile.resonant:oreSilver.name=Серебряная руда
-tile.resonant:oreLead.name=Свинцовая руда
-tile.resonant:oreZinc.name=Цинковая руда
-tile.resonant:oreNickel.name=Никелевая руда
-tile.resonant:oreAluminium.name=Бокситовая руда
-tile.resonant:oreMagnesium.name=Магнезитовая руда
-tile.resonant:oreUranium.name=Урановая руда
+tile.voltzengine:oreCopper.name=Медная руда
+tile.voltzengine:oreTin.name=Оловянная руда
+tile.voltzengine:oreSilver.name=Серебряная руда
+tile.voltzengine:oreLead.name=Свинцовая руда
+tile.voltzengine:oreZinc.name=Цинковая руда
+tile.voltzengine:oreNickel.name=Никелевая руда
+tile.voltzengine:oreAluminium.name=Бокситовая руда
+tile.voltzengine:oreMagnesium.name=Магнезитовая руда
+tile.voltzengine:oreUranium.name=Урановая руда
 
 ## Dust
-item.resonant:dustCopper.name=Медная пыль
-item.resonant:dustTin.name=Оловянная пыль
-item.resonant:dustSilver.name=Серебряная пыль
-item.resonant:dustLead.name=Свинцовая пыль
-item.resonant:dustZinc.name=Цинковая пыль
-item.resonant:dustNickel.name=Никелевая пыль
-item.resonant:dustAluminium.name=Алюминиевая пыль
-item.resonant:dustMagnesium.name=Магниевая пыль
+item.voltzengine:dustCopper.name=Медная пыль
+item.voltzengine:dustTin.name=Оловянная пыль
+item.voltzengine:dustSilver.name=Серебряная пыль
+item.voltzengine:dustLead.name=Свинцовая пыль
+item.voltzengine:dustZinc.name=Цинковая пыль
+item.voltzengine:dustNickel.name=Никелевая пыль
+item.voltzengine:dustAluminium.name=Алюминиевая пыль
+item.voltzengine:dustMagnesium.name=Магниевая пыль
 
-item.resonant:dustSteel.name=Стальная пыль
-item.resonant:dustBrass.name=Латунная глыба
-item.resonant:dustBronze.name=Бронзовая глыба
+item.voltzengine:dustSteel.name=Стальная пыль
+item.voltzengine:dustBrass.name=Латунная глыба
+item.voltzengine:dustBronze.name=Бронзовая глыба
 
 ## Ruble
-item.resonant:rubbleCopper.name=Медный бут
-item.resonant:rubbleTin.name=Оловянный бут
-item.resonant:rubbleSilver.name=Серебряный бут
-item.resonant:rubbleLead.name=Свинцовый бут
-item.resonant:rubbleZinc.name=Цинковый бут
-item.resonant:rubbleNickel.name=Никелевый бут
-item.resonant:rubbleAluminium.name=Алюминиевый бут
-item.resonant:rubbleMagnesium.name=Магниевый бут
+item.voltzengine:rubbleCopper.name=Медный бут
+item.voltzengine:rubbleTin.name=Оловянный бут
+item.voltzengine:rubbleSilver.name=Серебряный бут
+item.voltzengine:rubbleLead.name=Свинцовый бут
+item.voltzengine:rubbleZinc.name=Цинковый бут
+item.voltzengine:rubbleNickel.name=Никелевый бут
+item.voltzengine:rubbleAluminium.name=Алюминиевый бут
+item.voltzengine:rubbleMagnesium.name=Магниевый бут
 
 ## Ingot
-item.resonant:ingotCopper.name=Медный слиток
-item.resonant:ingotTin.name=Оловянный слиток
-item.resonant:ingotSilver.name=Серебряный слиток
-item.resonant:ingotLead.name=Свинцовый слиток
-item.resonant:ingotZinc.name=Цинковый слиток
-item.resonant:ingotNickel.name=Никелевый слиток
-item.resonant:ingotAluminium.name=Алюминиевый слиток
-item.resonant:ingotMagnesium.name=Магниевый слиток
+item.voltzengine:ingotCopper.name=Медный слиток
+item.voltzengine:ingotTin.name=Оловянный слиток
+item.voltzengine:ingotSilver.name=Серебряный слиток
+item.voltzengine:ingotLead.name=Свинцовый слиток
+item.voltzengine:ingotZinc.name=Цинковый слиток
+item.voltzengine:ingotNickel.name=Никелевый слиток
+item.voltzengine:ingotAluminium.name=Алюминиевый слиток
+item.voltzengine:ingotMagnesium.name=Магниевый слиток
 
-item.resonant:ingotSteel.name=Стальной слиток
-item.resonant:ingotBrass.name=Латунный слиток
-item.resonant:ingotBronze.name=Бронзовый слиток
+item.voltzengine:ingotSteel.name=Стальной слиток
+item.voltzengine:ingotBrass.name=Латунный слиток
+item.voltzengine:ingotBronze.name=Бронзовый слиток
 
 ## Plate
-item.resonant:plateCopper.name=Медная пластина
-item.resonant:plateTin.name=Оловянная пластина
-item.resonant:plateSilver.name=Серебряная пластина
-item.resonant:plateLead.name=Свинцовая пластина
-item.resonant:plateZinc.name=Цинковая пластина
-item.resonant:plateNickel.name=Никелевая пластина
-item.resonant:plateAluminium.name=Алюминиевая пластина
-item.resonant:plateMagnesium.name=Магниевая пластина
+item.voltzengine:plateCopper.name=Медная пластина
+item.voltzengine:plateTin.name=Оловянная пластина
+item.voltzengine:plateSilver.name=Серебряная пластина
+item.voltzengine:plateLead.name=Свинцовая пластина
+item.voltzengine:plateZinc.name=Цинковая пластина
+item.voltzengine:plateNickel.name=Никелевая пластина
+item.voltzengine:plateAluminium.name=Алюминиевая пластина
+item.voltzengine:plateMagnesium.name=Магниевая пластина
 
-item.resonant:plateSteel.name=Стальная пластина
-item.resonant:plateBrass.name=Латунная пластина
-item.resonant:plateBronze.name=Бронзовая пластина
+item.voltzengine:plateSteel.name=Стальная пластина
+item.voltzengine:plateBrass.name=Латунная пластина
+item.voltzengine:plateBronze.name=Бронзовая пластина
 
 ## Rod
-item.resonant:rodCopper.name=Медный стержень
-item.resonant:rodTin.name=Оловянный стержень
-item.resonant:rodSilver.name=Серебряный стержень
-item.resonant:rodLead.name=Свинцовый стержень
-item.resonant:rodZinc.name=Цинковый стержень
-item.resonant:rodNickel.name=Никелевый стержень
-item.resonant:rodAluminium.name=Алюминиевый стержень
-item.resonant:rodMagnesium.name=Магниевый стержень
+item.voltzengine:rodCopper.name=Медный стержень
+item.voltzengine:rodTin.name=Оловянный стержень
+item.voltzengine:rodSilver.name=Серебряный стержень
+item.voltzengine:rodLead.name=Свинцовый стержень
+item.voltzengine:rodZinc.name=Цинковый стержень
+item.voltzengine:rodNickel.name=Никелевый стержень
+item.voltzengine:rodAluminium.name=Алюминиевый стержень
+item.voltzengine:rodMagnesium.name=Магниевый стержень
 
-item.resonant:rodSteel.name=Стальной стержень
-item.resonant:rodBrass.name=Латунный стержень
-item.resonant:rodBronze.name=Бронзовый стержень
+item.voltzengine:rodSteel.name=Стальной стержень
+item.voltzengine:rodBrass.name=Латунный стержень
+item.voltzengine:rodBronze.name=Бронзовый стержень
 
 ## Gear
-item.resonant:gearCopper.name=Медная шестерня
-item.resonant:gearTin.name=Оловянная шестерня
-item.resonant:gearSilver.name=Серебряная шестерня
-item.resonant:gearLead.name=Свинцовая шестерня
-item.resonant:gearZinc.name=Цинковая шестерня
-item.resonant:gearNickel.name=Никелевая шестерня
-item.resonant:gearAluminium.name=Алюминиевая шестерня
-item.resonant:gearMagnesium.name=Магниевая шестерня
+item.voltzengine:gearCopper.name=Медная шестерня
+item.voltzengine:gearTin.name=Оловянная шестерня
+item.voltzengine:gearSilver.name=Серебряная шестерня
+item.voltzengine:gearLead.name=Свинцовая шестерня
+item.voltzengine:gearZinc.name=Цинковая шестерня
+item.voltzengine:gearNickel.name=Никелевая шестерня
+item.voltzengine:gearAluminium.name=Алюминиевая шестерня
+item.voltzengine:gearMagnesium.name=Магниевая шестерня
 
-item.resonant:gearSteel.name=Стальная шестерня
-item.resonant:gearBrass.name=Латунная шестерня
-item.resonant:gearBronze.name=Бронзовая шестерня
+item.voltzengine:gearSteel.name=Стальная шестерня
+item.voltzengine:gearBrass.name=Латунная шестерня
+item.voltzengine:gearBronze.name=Бронзовая шестерня
 
 ## Ax Head
-item.resonant:axHeadCopper.name=Медный обух топора
-item.resonant:axHeadTin.name=Оловянный обух топора
-item.resonant:axHeadSilver.name=Серебряный обух топора
-item.resonant:axHeadLead.name=Свинцовый обух топора
-item.resonant:axHeadZinc.name=Цинковый обух топора
-item.resonant:axHeadNickel.name=Никелевый обух топора
-item.resonant:axHeadAluminium.name=Алюминиевый обух топора
-item.resonant:axHeadMagnesium.name=Магниевый обух топора
+item.voltzengine:axHeadCopper.name=Медный обух топора
+item.voltzengine:axHeadTin.name=Оловянный обух топора
+item.voltzengine:axHeadSilver.name=Серебряный обух топора
+item.voltzengine:axHeadLead.name=Свинцовый обух топора
+item.voltzengine:axHeadZinc.name=Цинковый обух топора
+item.voltzengine:axHeadNickel.name=Никелевый обух топора
+item.voltzengine:axHeadAluminium.name=Алюминиевый обух топора
+item.voltzengine:axHeadMagnesium.name=Магниевый обух топора
 
-item.resonant:axHeadSteel.name=Стальной обух топора
-item.resonant:axHeadBrass.name=Латунный обух топора
-item.resonant:axHeadBronze.name=Бронзовый обух топора
+item.voltzengine:axHeadSteel.name=Стальной обух топора
+item.voltzengine:axHeadBrass.name=Латунный обух топора
+item.voltzengine:axHeadBronze.name=Бронзовый обух топора
 
 ## Shovel Head
-item.resonant:shovelHeadCopper.name=Медный штык лопаты
-item.resonant:shovelHeadTin.name=Оловянный штык лопаты
-item.resonant:shovelHeadSilver.name=Серебряный штык лопаты
-item.resonant:shovelHeadLead.name=Свинцовый штык лопаты
-item.resonant:shovelHeadZinc.name=Цинковый штык лопаты
-item.resonant:shovelHeadNickel.name=Никелевый штык лопаты
-item.resonant:shovelHeadAluminium.name=Алюминиевый штык лопаты
-item.resonant:shovelHeadMagnesium.name=Магниевый штык лопаты
+item.voltzengine:shovelHeadCopper.name=Медный штык лопаты
+item.voltzengine:shovelHeadTin.name=Оловянный штык лопаты
+item.voltzengine:shovelHeadSilver.name=Серебряный штык лопаты
+item.voltzengine:shovelHeadLead.name=Свинцовый штык лопаты
+item.voltzengine:shovelHeadZinc.name=Цинковый штык лопаты
+item.voltzengine:shovelHeadNickel.name=Никелевый штык лопаты
+item.voltzengine:shovelHeadAluminium.name=Алюминиевый штык лопаты
+item.voltzengine:shovelHeadMagnesium.name=Магниевый штык лопаты
 
-item.resonant:shovelHeadSteel.name=Стальной штык лопаты
-item.resonant:shovelHeadBrass.name=Латунный штык лопаты
-item.resonant:shovelHeadBronze.name=Бронзовый штык лопаты
+item.voltzengine:shovelHeadSteel.name=Стальной штык лопаты
+item.voltzengine:shovelHeadBrass.name=Латунный штык лопаты
+item.voltzengine:shovelHeadBronze.name=Бронзовый штык лопаты
 
 ## Sword Blade
-item.resonant:swordBladeCopper.name=Медное лезвия меча
-item.resonant:swordBladeTin.name=Оловянное лезвия меча
-item.resonant:swordBladeSilver.name=Серебряное лезвия меча
-item.resonant:swordBladeLead.name=Свинцовое лезвия меча
-item.resonant:swordBladeZinc.name=Цинковое лезвия меча
-item.resonant:swordBladeNickel.name=Никелевое лезвия меча
-item.resonant:swordBladeAluminium.name=Алюминиевое лезвия меча
-item.resonant:swordBladeMagnesium.name=Магниевое лезвия меча
+item.voltzengine:swordBladeCopper.name=Медное лезвия меча
+item.voltzengine:swordBladeTin.name=Оловянное лезвия меча
+item.voltzengine:swordBladeSilver.name=Серебряное лезвия меча
+item.voltzengine:swordBladeLead.name=Свинцовое лезвия меча
+item.voltzengine:swordBladeZinc.name=Цинковое лезвия меча
+item.voltzengine:swordBladeNickel.name=Никелевое лезвия меча
+item.voltzengine:swordBladeAluminium.name=Алюминиевое лезвия меча
+item.voltzengine:swordBladeMagnesium.name=Магниевое лезвия меча
 
-item.resonant:shovelHeadSteel.name=Стальной штык лопаты
-item.resonant:shovelHeadBrass.name=Латунный штык лопаты
-item.resonant:shovelHeadBronze.name=Бронзовый штык лопаты
+item.voltzengine:shovelHeadSteel.name=Стальной штык лопаты
+item.voltzengine:shovelHeadBrass.name=Латунный штык лопаты
+item.voltzengine:shovelHeadBronze.name=Бронзовый штык лопаты
 
 ## Pick Head
-item.resonant:pickHeadCopper.name=Медный обух кирки
-item.resonant:pickHeadTin.name=Оловянный обух кирки
-item.resonant:pickHeadSilver.name=Серебряный обух кирки
-item.resonant:pickHeadLead.name=Свинцовый обух кирки
-item.resonant:pickHeadZinc.name=Цинковый обух кирки
-item.resonant:pickHeadNickel.name=Никелевый обух кирки
-item.resonant:pickHeadAluminium.name=Алюминиевый обух кирки
-item.resonant:pickHeadMagnesium.name=Магниевый обух кирки
+item.voltzengine:pickHeadCopper.name=Медный обух кирки
+item.voltzengine:pickHeadTin.name=Оловянный обух кирки
+item.voltzengine:pickHeadSilver.name=Серебряный обух кирки
+item.voltzengine:pickHeadLead.name=Свинцовый обух кирки
+item.voltzengine:pickHeadZinc.name=Цинковый обух кирки
+item.voltzengine:pickHeadNickel.name=Никелевый обух кирки
+item.voltzengine:pickHeadAluminium.name=Алюминиевый обух кирки
+item.voltzengine:pickHeadMagnesium.name=Магниевый обух кирки
 
-item.resonant:pickHeadSteel.name=Стальной обух кирки
-item.resonant:pickHeadBrass.name=Латунный обух кирки
-item.resonant:pickHeadBronze.name=Бронзовый обух кирки
+item.voltzengine:pickHeadSteel.name=Стальной обух кирки
+item.voltzengine:pickHeadBrass.name=Латунный обух кирки
+item.voltzengine:pickHeadBronze.name=Бронзовый обух кирки
 
 ## Hoe Head
-item.resonant:hoeHeadCopper.name=Медный обух мотыги
-item.resonant:hoeHeadTin.name=Оловянный обух мотыги
-item.resonant:hoeHeadSilver.name=Серебряный обух мотыги
-item.resonant:hoeHeadLead.name=Свинцовый обух мотыги
-item.resonant:hoeHeadZinc.name=Цинковый обух мотыги
-item.resonant:hoeHeadNickel.name=Никелевый обух мотыги
-item.resonant:hoeHeadAluminium.name=Алюминиевый обух мотыги
-item.resonant:hoeHeadMagnesium.name=Магниевый обух мотыги
+item.voltzengine:hoeHeadCopper.name=Медный обух мотыги
+item.voltzengine:hoeHeadTin.name=Оловянный обух мотыги
+item.voltzengine:hoeHeadSilver.name=Серебряный обух мотыги
+item.voltzengine:hoeHeadLead.name=Свинцовый обух мотыги
+item.voltzengine:hoeHeadZinc.name=Цинковый обух мотыги
+item.voltzengine:hoeHeadNickel.name=Никелевый обух мотыги
+item.voltzengine:hoeHeadAluminium.name=Алюминиевый обух мотыги
+item.voltzengine:hoeHeadMagnesium.name=Магниевый обух мотыги
 
-item.resonant:hoeHeadSteel.name=Стальной обух мотыги
-item.resonant:hoeHeadBrass.name=Латунный обух мотыги
-item.resonant:hoeHeadBronze.name=Бронзовый обух мотыги
+item.voltzengine:hoeHeadSteel.name=Стальной обух мотыги
+item.voltzengine:hoeHeadBrass.name=Латунный обух мотыги
+item.voltzengine:hoeHeadBronze.name=Бронзовый обух мотыги
 
 ## Creative Testing Blocks
-tile.resonant:creativeBuilder.name=Строитель для творческого режима
-tile.resonant:infiniteEnergy.name=Бесконечная энергия
-tile.resonant:infiniteFluid.name=Бесконечная жидкость
+tile.voltzengine:creativeBuilder.name=Строитель для творческого режима
+tile.voltzengine:infiniteEnergy.name=Бесконечная энергия
+tile.voltzengine:infiniteFluid.name=Бесконечная жидкость
 
 ## Tools
 toolmode.mode=Режим
@@ -178,8 +178,8 @@ toolmode.general.name=Общий
 toolmode.rotation.name=Вращение
 
 # Items
-item.resonant:screwdriver.name=Отвёртка
-item.resonant:screwdriver.tooltip=Используется для настройки блоков. Приседание-ПКМ, чтобы изменить режим.
+item.voltzengine:screwdriver.name=Отвёртка
+item.voltzengine:screwdriver.tooltip=Используется для настройки блоков. Приседание-ПКМ, чтобы изменить режим.
 
 #Misc
 # %0 goes before the localized name of the shift key, %1 goes after
@@ -191,8 +191,8 @@ info.energycapacity.waila=Максимальный энергетический 
 
 info.isCraftingOnlyItem=Предмет созданий
 
-info.resonant:explosive.name=Взрывчатка
-info.resonant:explosive.size.name=Размер
+info.voltzengine:explosive.name=Взрывчатка
+info.voltzengine:explosive.size.name=Размер
 
 ## Permissions
 root.machine=Управление механизмом

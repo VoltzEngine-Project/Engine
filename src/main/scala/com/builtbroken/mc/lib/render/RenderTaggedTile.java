@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import com.builtbroken.mc.api.tile.ITagRender;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -61,7 +61,7 @@ public abstract class RenderTaggedTile extends TileEntitySpecialRenderer
 
 								if (entry.getKey() != null)
 								{
-									RenderUtility.renderFloatingText(entry.getKey(), new Vector3(x, y, z).add(new Vector3(0.5, i * 0.25f + height, 0.5f)), entry.getValue());
+									RenderUtility.renderFloatingText(entry.getKey(), new Pos(x, y, z).add(new Pos(0.5, i * 0.25f + height, 0.5f)), entry.getValue());
 								}
 
 								i++;

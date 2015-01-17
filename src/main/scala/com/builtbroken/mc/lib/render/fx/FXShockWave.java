@@ -8,17 +8,17 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Sphere;
 import com.builtbroken.mc.lib.render.RenderUtility;
-import com.builtbroken.mc.lib.transform.vector.Vector3;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 
 @SideOnly(Side.CLIENT)
 public class FXShockWave extends EntityFX
 {
-	public FXShockWave(World par1World, Vector3 position, float par8, float par10, float par12, double distance)
+	public FXShockWave(World par1World, Pos position, float par8, float par10, float par12, double distance)
 	{
 		this(par1World, position, par8, par10, par12, 1.0F, distance);
 	}
 
-	public FXShockWave(World par1World, Vector3 position, float r, float g, float b, float size, double distance)
+	public FXShockWave(World par1World, Pos position, float r, float g, float b, float size, double distance)
 	{
 		super(par1World, position.x(), position.y(), position.z(), 0.0D, 0.0D, 0.0D);
 		this.particleRed = r;
