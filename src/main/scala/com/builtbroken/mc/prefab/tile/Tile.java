@@ -5,6 +5,7 @@ import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
+import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.block.RenderTileDummy;
 import com.builtbroken.mc.lib.transform.region.Cuboid;
 import com.builtbroken.mc.lib.transform.vector.Pos;
@@ -74,6 +75,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     public boolean dynamicRendererCrashed = false;
     public boolean renderNormalBlock = true;
     public boolean renderTileEntity = true;
+    public int renderType = BlockRenderHandler.ID; //renderNormalBlock will force this to zero
 
     //Tile Vars
     protected long ticks = 0L;

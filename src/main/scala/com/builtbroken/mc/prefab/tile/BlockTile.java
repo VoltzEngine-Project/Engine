@@ -290,7 +290,7 @@ public class BlockTile extends Block implements ITileEntityProvider
     @SideOnly(Side.CLIENT)
     public int getRenderType()
     {
-        return BlockRenderHandler.ID;
+        return staticTile.renderNormalBlock ? 0 : staticTile.renderType;
     }
 
     @SideOnly(Side.CLIENT)
