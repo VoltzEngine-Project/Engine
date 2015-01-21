@@ -138,3 +138,6 @@ def getDate() {
     def formattedDate = date.format('yyyyMMddHHmmss')
     return formattedDate
 }
+
+
+file("VoltzEngine.txt").text = version;
