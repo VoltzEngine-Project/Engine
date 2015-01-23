@@ -113,7 +113,7 @@ public final class ExplosiveRegistry
      */
     public static boolean isRegistered(IExplosive explosive)
     {
-        return explosive.getID() != null && !explosive.getID().isEmpty() && idToExplosiveMap.containsKey(explosive.getID());
+        return explosive != null && explosive.getID() != null && !explosive.getID().isEmpty() && idToExplosiveMap.containsKey(explosive.getID());
     }
 
     /**
