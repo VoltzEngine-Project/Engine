@@ -27,10 +27,17 @@ public abstract class EntityProjectile extends Entity implements IProjectile
     public Entity firedByEntity = null;
 
     protected boolean canDamage = false;
+    protected boolean isNoMotionInX;
+    protected boolean isNoMotionInY;
+    protected boolean isNoMotionInZ;
+
+    protected int kill_ticks = 240 /* 2 mins */; /* 144000  2 hours */
 
     private int _ticksInAir = -1;
     private int _ticksInGround = -1;
     private float _health = -1;
+
+
 
     public EntityProjectile(World w)
     {
@@ -84,20 +91,32 @@ public abstract class EntityProjectile extends Entity implements IProjectile
     public void onUpdate()
     {
         super.onUpdate();
-        setTicksInAir(getTicksInAir() + 1);
+        if(!this.onGround)
+            setTicksInAir(getTicksInAir() + 1);
 
         if (!this.worldObj.isRemote && this.getTicksInAir() >= 0)
         {
+            isNoMotionInX = this.motionX <= 0.01 && this.motionX >= -0.01;
+            isNoMotionInY = this.motionY <= 0.01 && this.motionY >= -0.01;
+            isNoMotionInZ = this.motionZ <= 0.01 && this.motionZ >= -0.01;
+
             //Update on ground tick tracker
             if(this.onGround)
                 this.setTicksInGround(this.getTicksInGround() + 1);
             else
                 this.setTicksInGround(0);
 
+
+
+            //Apply Gravity if we are still in the air but not moving in the Y
+            if(!onGround && isNoMotionInY)
+                this.motionY = Math.max(Math.min(-9.8 / 20, 0), -1);
+
+
             //Missile stopped moving
-            if (this.motionX <= 0.001 && this.motionY <= 0.001 && this.motionZ <= 0.001)
+            if (isNoMotionInX && isNoMotionInY && isNoMotionInZ)
             {
-                onStoppedMoving();
+                 onStoppedMoving();
             }
 
             //Update movement logic
@@ -136,7 +155,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
 
     public boolean shouldKillProjectile()
     {
-        return this.posY < -640.0D || this.posY > 100000 || this.getTicksInAir() > 100000;
+        return this.posY < -640.0D || this.posY > 100000 || this.getTicksInAir() > kill_ticks;
     }
 
     /** Checks if the projectile has collided with something
