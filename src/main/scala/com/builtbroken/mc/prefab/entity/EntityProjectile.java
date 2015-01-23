@@ -91,6 +91,19 @@ public abstract class EntityProjectile extends Entity implements IProjectile
     public void onUpdate()
     {
         super.onUpdate();
+        //Safety to make sure vars are inited if null
+        if(sourceOfProjectile == null)
+        {
+            sourceOfProjectile = new Pos((Entity)this);
+        }
+        if(firedByEntity == null)
+        {
+            firedByEntity = this;
+        }
+
+
+        super.onUpdate();
+
         if(!this.onGround)
             setTicksInAir(getTicksInAir() + 1);
 
