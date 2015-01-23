@@ -6,8 +6,10 @@ import com.builtbroken.mc.core.content.resources.load.GrinderRecipeLoad;
 import com.builtbroken.mc.core.handler.InteractionHandler;
 import com.builtbroken.mc.core.content.BlockOre;
 import com.builtbroken.mc.core.content.ItemBlockOre;
+import com.builtbroken.mc.core.registry.EngineCommand;
 import com.builtbroken.mc.prefab.recipe.MRHandlerItemStack;
 import com.builtbroken.mc.prefab.recipe.MRSmelterHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -17,6 +19,8 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.command.ICommandManager;
+import net.minecraft.command.ServerCommandManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -169,7 +173,16 @@ public class Engine
         References.CONFIGURATION.save();
 	}
 
-	@EventHandler
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event)
+    {
+        // Setup command
+        ICommandManager commandManager = FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
+        ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
+        serverCommandManager.registerCommand(new EngineCommand());
+    }
+
+	//@EventHandler
 	public void serverStopped(FMLServerStoppedEvent event)
 	{
 	}

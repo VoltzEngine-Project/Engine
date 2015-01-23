@@ -6,8 +6,10 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -68,8 +70,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         this.firedByEntity = entity;
         this.sourceOfProjectile = start;
         this.setPosition(start.x(), start.y(), start.z());
-        this.rotationYaw = entity.rotationYaw;
-        this.rotationPitch = entity.rotationPitch;
+        this.rotationYaw = -entity.rotationYaw;
+        this.rotationPitch = -entity.rotationPitch;
     }
 
     public EntityProjectile(World w, Pos startAndSource)
@@ -91,6 +93,19 @@ public abstract class EntityProjectile extends Entity implements IProjectile
     public void onUpdate()
     {
         super.onUpdate();
+        //Safety to make sure vars are inited if null
+        if(sourceOfProjectile == null)
+        {
+            sourceOfProjectile = new Pos((Entity)this);
+        }
+        if(firedByEntity == null)
+        {
+            firedByEntity = this;
+        }
+
+
+        super.onUpdate();
+
         if(!this.onGround)
             setTicksInAir(getTicksInAir() + 1);
 
