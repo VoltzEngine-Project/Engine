@@ -126,7 +126,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         this.prevRotationPitch = this.rotationPitch;
         this.prevRotationYaw = this.rotationYaw;
 
-        if (this.posY < -640.0D)
+        if (this.posY < -640.0D || this.posY > 100000 || this.getTicksInAir() > 100000)
         {
             this.kill();
         }
