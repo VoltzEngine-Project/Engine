@@ -126,12 +126,17 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         this.prevRotationPitch = this.rotationPitch;
         this.prevRotationYaw = this.rotationYaw;
 
-        if (this.posY < -640.0D || this.posY > 100000 || this.getTicksInAir() > 100000)
+        if (shouldKillProjectile())
         {
             this.kill();
         }
 
         this.worldObj.theProfiler.endSection();
+    }
+
+    public boolean shouldKillProjectile()
+    {
+        return this.posY < -640.0D || this.posY > 100000 || this.getTicksInAir() > 100000;
     }
 
     /** Checks if the projectile has collided with something
