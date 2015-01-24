@@ -1,26 +1,25 @@
 package com.builtbroken.mc.prefab.entity;
 
 import com.builtbroken.mc.lib.helper.DamageUtility;
+import com.builtbroken.mc.lib.transform.rotation.EulerAngle;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidBlock;
-import com.builtbroken.mc.lib.transform.vector.Pos;
 
 /**
  * Basic projectile like entity that moves in a strait line without gravity.
  * Handles basic collision and provides methods for changing behavior during
  * impact and movement.
- *
+ * <p/>
  * Created by robert on 11/30/2014.
  */
 public abstract class EntityProjectile extends Entity implements IProjectile
@@ -36,9 +35,9 @@ public abstract class EntityProjectile extends Entity implements IProjectile
     protected int kill_ticks = 240 /* 2 mins */; /* 144000  2 hours */
 
     private int _ticksInAir = -1;
+    private int _ticksNotMoving = -1;
     private int _ticksInGround = -1;
     private float _health = -1;
-
 
 
     public EntityProjectile(World w)
@@ -52,8 +51,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile
 
     public static Pos getEntityAim(EntityLivingBase entity)
     {
-        float f1 = MathHelper.cos(-entity.rotationYaw * 0.017453292F - (float)Math.PI);
-        float f2 = MathHelper.sin(-entity.rotationYaw * 0.017453292F - (float)Math.PI);
+        float f1 = MathHelper.cos(-entity.rotationYaw * 0.017453292F - (float) Math.PI);
+        float f2 = MathHelper.sin(-entity.rotationYaw * 0.017453292F - (float) Math.PI);
         float f3 = -MathHelper.cos(-entity.rotationPitch * 0.017453292F);
         float f4 = MathHelper.sin(-entity.rotationPitch * 0.017453292F);
         return new Pos((double) (f2 * f3), (double) f4, (double) (f1 * f3));
@@ -70,8 +69,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         this.firedByEntity = entity;
         this.sourceOfProjectile = start;
         this.setPosition(start.x(), start.y(), start.z());
-        this.rotationYaw = -entity.rotationYaw;
-        this.rotationPitch = -entity.rotationPitch;
+        this.rotationYaw = entity.rotationYaw - 180;
+        this.rotationPitch = entity.rotationPitch;
     }
 
     public EntityProjectile(World w, Pos startAndSource)
@@ -93,21 +92,17 @@ public abstract class EntityProjectile extends Entity implements IProjectile
     public void onUpdate()
     {
         super.onUpdate();
+        setTicksInAir(getTicksInAir() + 1);
+
         //Safety to make sure vars are inited if null
-        if(sourceOfProjectile == null)
+        if (sourceOfProjectile == null)
         {
-            sourceOfProjectile = new Pos((Entity)this);
+            sourceOfProjectile = new Pos((Entity) this);
         }
-        if(firedByEntity == null)
+        if (firedByEntity == null)
         {
             firedByEntity = this;
         }
-
-
-        super.onUpdate();
-
-        if(!this.onGround)
-            setTicksInAir(getTicksInAir() + 1);
 
         if (!this.worldObj.isRemote && this.getTicksInAir() >= 0)
         {
@@ -116,29 +111,25 @@ public abstract class EntityProjectile extends Entity implements IProjectile
             isNoMotionInZ = this.motionZ <= 0.01 && this.motionZ >= -0.01;
 
             //Update on ground tick tracker
-            if(this.onGround)
+            if (this.onGround)
                 this.setTicksInGround(this.getTicksInGround() + 1);
             else
                 this.setTicksInGround(0);
 
-
-
-            //Apply Gravity if we are still in the air but not moving in the Y
-            if(!onGround && isNoMotionInY)
-                this.motionY = Math.max(Math.min(-9.8 / 20, 0), -1);
-
-
-            //Missile stopped moving
-            if (isNoMotionInX && isNoMotionInY && isNoMotionInZ)
-            {
-                 onStoppedMoving();
-            }
-
             //Update movement logic
-            if(!checkForAndTriggerCollision())
+            if (!checkForAndTriggerCollision())
             {
+                if (!onGround && isNoMotionInY)
+                {
+                    this.motionY -= 0.5;
+                }
                 updateMotion();
                 this.moveEntity(this.motionX, this.motionY, this.motionZ);
+            }
+
+            if (isNoMotionInX && isNoMotionInY && isNoMotionInZ)
+            {
+                onStoppedMoving();
             }
         }
     }
@@ -146,26 +137,12 @@ public abstract class EntityProjectile extends Entity implements IProjectile
     @Override
     public void onEntityUpdate()
     {
-        this.worldObj.theProfiler.startSection("entityBaseTick");
-
-        if (this.ridingEntity != null && this.ridingEntity.isDead)
-        {
-            this.ridingEntity = null;
-        }
-
-        this.prevDistanceWalkedModified = this.distanceWalkedModified;
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
-        this.prevRotationPitch = this.rotationPitch;
-        this.prevRotationYaw = this.rotationYaw;
+        super.onEntityUpdate();
 
         if (shouldKillProjectile())
         {
             this.kill();
         }
-
-        this.worldObj.theProfiler.endSection();
     }
 
     public boolean shouldKillProjectile()
@@ -173,7 +150,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         return this.posY < -640.0D || this.posY > 100000 || this.getTicksInAir() > kill_ticks;
     }
 
-    /** Checks if the projectile has collided with something
+    /**
+     * Checks if the projectile has collided with something
      * Then triggers methods saying the projectile has collided with something
      *
      * @return true if the collision stops the projectile from moving
@@ -183,7 +161,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         boolean stopped = false;
         //Handle collision with blocks
         Block block = this.worldObj.getBlock((int) this.posX, (int) this.posY, (int) this.posZ);
-        if(block != null && !block.isAir(worldObj, (int) posX, (int) posY, (int) posZ) && !(block instanceof IFluidBlock || block instanceof BlockLiquid))
+        if (block != null && !block.isAir(worldObj, (int) posX, (int) posY, (int) posZ) && !(block instanceof IFluidBlock || block instanceof BlockLiquid))
         {
             stopped = onCollideWithBlock(block, (int) posX, (int) posY, (int) posZ);
         }
@@ -198,12 +176,15 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         return stopped;
     }
 
-    /** Called each tick to update motion and angles of the entity */
+    /**
+     * Called each tick to update motion and angles of the entity
+     */
     protected void updateMotion()
     {
         this.rotationPitch = (float) (Math.atan(this.motionY / (Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ))) * 180 / Math.PI);
         this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180 / Math.PI);
-        if(isCollided)
+
+        if (isCollided)
         {
             motionX = 0;
             motionY = 0;
@@ -211,34 +192,45 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         }
     }
 
-    /** Called when the missile hits a block
+    /**
+     * Called when the missile hits a block
      *
      * @param block - block hit
-     * @param x - xCoord of block
-     * @param y - xCoord of block
-     * @param z  - xCoord of block
+     * @param x     - xCoord of block
+     * @param y     - xCoord of block
+     * @param z     - xCoord of block
      * @return true if the missile should stop
      */
     protected boolean onCollideWithBlock(Block block, int x, int y, int z)
     {
         onStoppedMoving();
-        onImpact();
         return true;
     }
 
-    /** Called when the projectile stops moving */
+    /**
+     * Called when the projectile stops moving
+     */
     protected void onStoppedMoving()
     {
-
+        _ticksNotMoving++;
+        if(_ticksNotMoving > 200 && getTicksInAir() > 0)
+        {
+            setDead();
+        }
+        if(isCollided || onGround)
+            onImpact();
     }
 
-    /** Called when the missile hit something and stopped */
+    /**
+     * Called when the missile hit something and stopped
+     */
     protected void onImpact()
     {
         this.setDead();
     }
 
-    /** Gets the predicted position of the projectile
+    /**
+     * Gets the predicted position of the projectile
      *
      * @param t - number of ticks to predicted for flight path
      * @return predicted position of the project, should not be null
@@ -249,7 +241,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
 
         for (int i = 0; i < t; i++)
         {
-          newPos.add(motionX, motionY, motionZ);
+            newPos.add(motionX, motionY, motionZ);
         }
 
         return newPos;
@@ -264,7 +256,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile
         return super.getCollisionBox(entity);
     }
 
-    /** Checks if this projectile should ignore collisions
+    /**
+     * Checks if this projectile should ignore collisions
      * if it hits the entity in question
      *
      * @param entity - entity that will collide with
@@ -279,7 +272,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
     @Override
     protected void readEntityFromNBT(NBTTagCompound nbt)
     {
-        if(nbt.hasKey("startPos"))
+        if (nbt.hasKey("startPos"))
             sourceOfProjectile = new Pos(nbt.getCompoundTag("startPos"));
         _ticksInAir = nbt.getInteger("ticksInAir");
         _ticksInGround = nbt.getInteger("ticksInGround");
@@ -289,7 +282,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
     @Override
     protected void writeEntityToNBT(NBTTagCompound nbt)
     {
-        if(sourceOfProjectile != null)
+        if (sourceOfProjectile != null)
             nbt.setTag("startPos", sourceOfProjectile.writeNBT(new NBTTagCompound()));
         nbt.setInteger("ticksInAir", this.getTicksInAir());
         nbt.setInteger("ticksInGround", this.getTicksInGround());
@@ -300,19 +293,19 @@ public abstract class EntityProjectile extends Entity implements IProjectile
     public void setThrowableHeading(double motionX, double motionY, double motionZ, float power, float spread)
     {
         float square = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
-        motionX /= (double)square;
-        motionY /= (double)square;
-        motionZ /= (double)square;
+        motionX /= (double) square;
+        motionY /= (double) square;
+        motionZ /= (double) square;
 
         //Calculate spread area
-        motionX += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)spread;
-        motionY += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)spread;
-        motionZ += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)spread;
+        motionX += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) spread;
+        motionY += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) spread;
+        motionZ += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) spread;
 
         //Apply power
-        motionX *= (double)power;
-        motionY *= (double)power;
-        motionZ *= (double)power;
+        motionX *= (double) power;
+        motionY *= (double) power;
+        motionZ *= (double) power;
 
         //Set motion
         this.motionX = motionX;
@@ -321,8 +314,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile
 
         //Set angles
         float f3 = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
-        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(motionX, motionZ) * 180.0D / Math.PI);
-        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(motionY, (double)f3) * 180.0D / Math.PI);
+        this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(motionX, motionZ) * 180.0D / Math.PI);
+        this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(motionY, (double) f3) * 180.0D / Math.PI);
 
         //Set default values
         this.setTicksInAir(0);
@@ -330,9 +323,9 @@ public abstract class EntityProjectile extends Entity implements IProjectile
 
     public void setMotion(int power)
     {
-        motionX = (double)(-MathHelper.sin(rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float)Math.PI));
-        motionZ = (double)(MathHelper.cos(rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float)Math.PI));
-        motionY = (double)(-MathHelper.sin(rotationPitch / 180.0F * (float)Math.PI));
+        motionX = (double) (-MathHelper.sin(rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI));
+        motionZ = (double) (MathHelper.cos(rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI));
+        motionY = (double) (-MathHelper.sin(rotationPitch / 180.0F * (float) Math.PI));
 
         motionX *= power;
         motionY *= power;
@@ -356,6 +349,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
 
     /**
      * Called when the projectile is destroyed by damage source
+     *
      * @param source - source of damage
      * @param damage - amount of damage
      */
@@ -372,7 +366,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
 
     public int getTicksInGround()
     {
-        if(worldObj == null || !worldObj.isRemote)
+        if (worldObj == null || !worldObj.isRemote)
         {
             return _ticksInGround;
         }
@@ -390,7 +384,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
 
     public int getTicksInAir()
     {
-        if(worldObj == null || !worldObj.isRemote)
+        if (worldObj == null || !worldObj.isRemote)
         {
             return _ticksInAir;
         }
@@ -408,7 +402,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
 
     public final float getHealth()
     {
-        if(worldObj == null || !worldObj.isRemote)
+        if (worldObj == null || !worldObj.isRemote)
         {
             return _health;
         }
