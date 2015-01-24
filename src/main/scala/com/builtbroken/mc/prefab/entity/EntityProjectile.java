@@ -119,7 +119,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile
             //Update movement logic
             if (!checkForAndTriggerCollision())
             {
-                if (!onGround && isNoMotionInY)
+                if (isNoMotionInY)
                 {
                     this.motionY -= 0.5;
                 }

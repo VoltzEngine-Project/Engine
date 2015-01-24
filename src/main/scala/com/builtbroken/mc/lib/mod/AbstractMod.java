@@ -61,5 +61,10 @@ public abstract class AbstractMod
         return config;
     }
 
+    public ModManager getManager()
+    {
+        return this.manager;
+    }
+
     public abstract AbstractProxy getProxy();
 }
