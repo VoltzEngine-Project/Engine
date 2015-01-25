@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -976,6 +977,12 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
         world().setBlockMetadataWithNotify(xi(), yi(), zi(), meta, 3);
     }
 
+    public NBTTagCompound getSaveData()
+    {
+        NBTTagCompound tag = new NBTTagCompound();
+        writeToNBT(tag);
+        return tag;
+    }
     @Override
     public final Packet getDescriptionPacket()
     {
