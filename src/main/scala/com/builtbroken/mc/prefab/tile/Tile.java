@@ -869,6 +869,18 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
         return 0xFFFFFF;
     }
 
+    @SideOnly(Side.CLIENT)
+    public int getBlockColor()
+    {
+        return 16777215;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int getRenderColor(int p_149741_1_)
+    {
+        return 16777215;
+    }
+
     //=========================
     //==== Renderers ==========
     //=========================
@@ -994,7 +1006,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
      */
     public void sendPacket(AbstractPacket packet, double distance)
     {
-        Engine.instance.packetHandler.sendToAllAround(packet, ((IWorldPosition)this), distance);
+        Engine.instance.packetHandler.sendToAllAround(packet, world(), xi(), yi(), zi(), distance);
     }
 
     public void sendPacketToGuiUsers(AbstractPacket packet)

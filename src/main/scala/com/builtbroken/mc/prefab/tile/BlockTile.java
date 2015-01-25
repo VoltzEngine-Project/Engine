@@ -323,6 +323,21 @@ public class BlockTile extends Block implements ITileEntityProvider
         return value;
     }
 
+    @SideOnly(Side.CLIENT)
+    public int getBlockColor()
+    {
+        return staticTile.getBlockColor();
+    }
+
+    /**
+     * Returns the color this block should be rendered. Used by leaves.
+     */
+    @SideOnly(Side.CLIENT)
+    public int getRenderColor(int i)
+    {
+        return staticTile.getRenderColor(i);
+    }
+
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player)
     {
