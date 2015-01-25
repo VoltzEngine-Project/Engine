@@ -1,12 +1,12 @@
 package com.builtbroken.mc.core.network.packet;
 
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.IPacketReceiver;
-import com.builtbroken.mc.lib.transform.vector.Pos;
 
 /**
  * Packet type designed to be used with Tiles
@@ -14,7 +14,7 @@ import com.builtbroken.mc.lib.transform.vector.Pos;
  * @author tgame14
  * @since 26/05/14
  */
-public class PacketTile extends AbstractPacket
+public class PacketTile extends PacketType
 {
 	public int x;
 	public int y;
@@ -26,17 +26,31 @@ public class PacketTile extends AbstractPacket
 	}
 
 	/**
+	 * @param x    - location
+	 * @param y    - location
+	 * @param z    - location
+	 * @param args -  data to send, first arg should be packetID if
+	 *             the tile is an instance of {@code IPacketIDReceiver}
+	 *             Should never be null
+	 */
+	public PacketTile(int x, int y, int z, Object... args)
+	{
+		super(args);
+
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+
+	/**
 	 * @param tile - TileEntity to send this packet to, only used for location data
 	 * @param args -  data to send, first arg should be packetID if
 	 *             the tile is an instance of {@code IPacketIDReceiver}
 	 *             Should never be null
 	 */
-	public PacketTile(TileEntity tile, int id, Object... args)
+	public PacketTile(TileEntity tile, Object... args)
 	{
-		super(id, args);
-        this.x = tile.xCoord;
-        this.y = tile.yCoord;
-        this.z = tile.zCoord;
+		this(tile.xCoord, tile.yCoord, tile.zCoord, args);
 	}
 
 	@Override
@@ -45,7 +59,7 @@ public class PacketTile extends AbstractPacket
 		buffer.writeInt(x);
 		buffer.writeInt(y);
 		buffer.writeInt(z);
-		super.encodeInto(ctx, buffer);
+		buffer.writeBytes(data());
 	}
 
 	@Override
@@ -54,7 +68,7 @@ public class PacketTile extends AbstractPacket
 		x = buffer.readInt();
 		y = buffer.readInt();
 		z = buffer.readInt();
-		super.decodeInto(ctx, buffer);
+		data_$eq(buffer.slice());
 	}
 
 	@Override
@@ -71,6 +85,7 @@ public class PacketTile extends AbstractPacket
 
 	public void handle(EntityPlayer player)
 	{
+		sender_$eq(player);
 
 		TileEntity tile = player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
 
@@ -79,7 +94,7 @@ public class PacketTile extends AbstractPacket
 			try
 			{
 				IPacketIDReceiver receiver = (IPacketIDReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
-				ByteBuf buf = data.slice();
+				ByteBuf buf = data().slice();
 
 				int id;
 				try
@@ -105,7 +120,7 @@ public class PacketTile extends AbstractPacket
 			try
 			{
 				IPacketReceiver receiver = (IPacketReceiver) player.getEntityWorld().getTileEntity(this.x, this.y, this.z);
-				receiver.read(player, this);
+				receiver.read(data().slice(), player, this);
 			}
 			catch (IndexOutOfBoundsException e)
 			{
