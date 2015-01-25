@@ -2,7 +2,6 @@ package com.builtbroken.mc.lib.mod.loadable;
 
 import cpw.mods.fml.common.Loader;
 
-import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,20 +20,20 @@ import java.util.Set;
  */
 public class LoadableHandler
 {
-	private Set<ILoadable> loadables = new HashSet();
-	private LoadPhase phase = LoadPhase.PRELAUNCH;
+    private Set<ILoadable> loadables = new HashSet();
+    private LoadPhase phase = LoadPhase.PRELAUNCH;
 
     public void applyModule(Class<?> clazz)
     {
         applyModule(clazz, true);
     }
 
-	/**
-	 * Applies a specific ILoadable module to be loaded.
-	 */
-	public void applyModule(Class<?> clazz, boolean load)
-	{
-		if (load)
+    /**
+     * Applies a specific ILoadable module to be loaded.
+     */
+    public void applyModule(Class<?> clazz, boolean load)
+    {
+        if (load)
         {
             if (clazz.getAnnotation(LoadWithMod.class) != null)
             {
@@ -61,76 +60,82 @@ public class LoadableHandler
                 {
                     loadables.add((ILoadable) module);
                 }
-            } catch (Exception e)
-            {
-                e.printStackTrace();
             }
-        }	}
+            catch (InstantiationException e)
+            {
+                throw new RuntimeException(e);
+            }
+            catch (IllegalAccessException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
-	/**
-	 * Call for modules late or as already existing modules, DO NOT CALL FOR REGISTERED Proxies!
-	 */
-	public void applyModule(ILoadable module)
-	{
-		loadables.add(module);
+    /**
+     * Call for modules late or as already existing modules, DO NOT CALL FOR REGISTERED Proxies!
+     */
+    public void applyModule(ILoadable module)
+    {
+        loadables.add(module);
 
-		switch (phase)
-		{
-			case DONE:
-				break;
-			case POSTINIT:
-				module.preInit();
-				module.init();
-				module.postInit();
-				break;
-			case INIT:
-				module.preInit();
-				module.init();
-				break;
-			case PREINIT:
+        switch (phase)
+        {
+            case DONE:
+                break;
+            case POSTINIT:
+                module.preInit();
+                module.init();
+                module.postInit();
+                break;
+            case INIT:
+                module.preInit();
+                module.init();
+                break;
+            case PREINIT:
 
-		}
-	}
+        }
+    }
 
-	public void preInit()
-	{
-		phase = LoadPhase.PREINIT;
+    public void preInit()
+    {
+        phase = LoadPhase.PREINIT;
 
-		for (ILoadable proxy : loadables)
-		{
-			proxy.preInit();
-		}
+        for (ILoadable proxy : loadables)
+        {
+            proxy.preInit();
+        }
 
-	}
+    }
 
-	public void init()
-	{
-		phase = LoadPhase.INIT;
+    public void init()
+    {
+        phase = LoadPhase.INIT;
 
-		for (ILoadable proxy : loadables)
-		{
-			proxy.init();
-		}
-	}
+        for (ILoadable proxy : loadables)
+        {
+            proxy.init();
+        }
+    }
 
-	public void postInit()
-	{
-		phase = LoadPhase.POSTINIT;
+    public void postInit()
+    {
+        phase = LoadPhase.POSTINIT;
 
-		for (ILoadable proxy : loadables)
-		{
-			proxy.postInit();
-		}
+        for (ILoadable proxy : loadables)
+        {
+            proxy.postInit();
+        }
 
-		phase = LoadPhase.DONE;
-	}
+        phase = LoadPhase.DONE;
+    }
 
-	public enum LoadPhase
-	{
-		PRELAUNCH,
-		PREINIT,
-		INIT,
-		POSTINIT,
-		DONE
-	}
+    public enum LoadPhase
+    {
+        PRELAUNCH,
+        PREINIT,
+        INIT,
+        POSTINIT,
+        DONE
+    }
 }
