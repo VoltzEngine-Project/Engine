@@ -42,6 +42,7 @@ public abstract class AbstractMod
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, getProxy());
         config = new Configuration(event.getSuggestedConfigurationFile());
+        getConfig().load();
         loader.applyModule(getProxy());
         loader.preInit();
     }
@@ -54,6 +55,7 @@ public abstract class AbstractMod
     public void postInit(FMLPostInitializationEvent event)
     {
         loader.postInit();
+        getConfig().save();
     }
 
     public Configuration getConfig()
