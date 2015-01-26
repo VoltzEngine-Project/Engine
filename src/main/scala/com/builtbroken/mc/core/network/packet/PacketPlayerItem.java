@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.network.packet;
 
+import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.IPacketReceiver;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -49,10 +50,17 @@ public class PacketPlayerItem extends PacketType
 	{
 		ItemStack stack = player.inventory.getStackInSlot(this.slotId);
 
-		if (stack != null && stack.getItem() instanceof IPacketReceiver)
-		{
-			((IPacketReceiver) stack.getItem()).read(data(), player, this);
-		}
+		if (stack != null)
+        {
+            if (stack.getItem() instanceof IPacketReceiver)
+            {
+                ((IPacketReceiver) stack.getItem()).read(data(), player, this);
+            }
+            else if(stack.getItem() instanceof IPacketIDReceiver)
+            {
+                ((IPacketIDReceiver) stack.getItem()).read(data(), data().readInt(), player, this);
+            }
+        }
 	}
 
 	@Override
@@ -60,9 +68,16 @@ public class PacketPlayerItem extends PacketType
 	{
 		ItemStack stack = player.inventory.getStackInSlot(this.slotId);
 
-		if (stack != null && stack.getItem() instanceof IPacketReceiver)
-		{
-			((IPacketReceiver) stack.getItem()).read(data(), player, this);
-		}
+        if (stack != null)
+        {
+            if (stack.getItem() instanceof IPacketReceiver)
+            {
+                ((IPacketReceiver) stack.getItem()).read(data(), player, this);
+            }
+            else if(stack.getItem() instanceof IPacketIDReceiver)
+            {
+                ((IPacketIDReceiver) stack.getItem()).read(data(), data().readInt(), player, this);
+            }
+        }
 	}
 }
