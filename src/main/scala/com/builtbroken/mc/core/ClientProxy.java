@@ -5,6 +5,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Loader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -61,8 +62,19 @@ public class ClientProxy extends CommonProxy
 	}
 
 	@Override
-	public EntityPlayer getClientPlayer()
+	public EntityClientPlayerMP getClientPlayer()
 	{
 		return Minecraft.getMinecraft().thePlayer;
 	}
+
+    public World getClientWorld()
+    {
+        return getClientPlayer() != null ? getClientPlayer().worldObj : null;
+    }
+
+    @Override
+    public int getPlayerDim()
+    {
+        return getClientWorld() != null ? getClientWorld().provider.dimensionId : 0;
+    }
 }
