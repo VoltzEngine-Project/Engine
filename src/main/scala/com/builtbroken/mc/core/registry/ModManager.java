@@ -194,13 +194,12 @@ public class ModManager
 		}
 		catch (InstantiationException e)
 		{
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		catch (IllegalAccessException e)
 		{
-			e.printStackTrace();
+            throw new RuntimeException(e);
 		}
-		return null;
 	}
 
 	/**
