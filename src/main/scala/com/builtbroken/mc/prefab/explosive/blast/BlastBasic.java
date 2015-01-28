@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.explosive;
+package com.builtbroken.mc.prefab.explosive.blast;
 
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosiveContainer;
@@ -9,7 +9,6 @@ import com.builtbroken.mc.lib.helper.MathUtility;
 import com.builtbroken.mc.lib.transform.sorting.Vector3DistanceComparator;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
-import com.builtbroken.mc.lib.world.explosive.Blast;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.entity.Entity;

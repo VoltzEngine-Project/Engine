@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.explosive;
+package com.builtbroken.mc.prefab.explosive.blast;
 
 import com.builtbroken.mc.testing.debug.profiler.Profiler;
 

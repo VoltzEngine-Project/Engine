@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.world.explosive;
+package com.builtbroken.mc.prefab.explosive.blast;
 
 import com.builtbroken.mc.api.IWorldPosition;
 import net.minecraftforge.common.util.ForgeDirection;
