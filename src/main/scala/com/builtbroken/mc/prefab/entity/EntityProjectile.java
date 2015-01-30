@@ -1,523 +1,441 @@
 package com.builtbroken.mc.prefab.entity;
 
-import com.builtbroken.mc.lib.helper.DamageUtility;
 import com.builtbroken.mc.lib.transform.vector.Pos;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
 import net.minecraft.block.Block;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.IFluidBlock;
 
-import java.util.List;
-
-/**
- * Basic projectile like entity that moves in a strait line without gravity.
- * Handles basic collision and provides methods for changing behavior during
- * impact and movement.
- * <p/>
- * Created by robert on 11/30/2014.
- */
-public abstract class EntityProjectile extends EntityBase implements IProjectile
+public class EntityProjectile extends Entity implements IProjectile
 {
-    public Pos sourceOfProjectile = null;
-    public Entity firedByEntity = null;
+    /** The owner of this arrow. */
+    public Entity shootingEntity;
+    public Pos sourceOfProjectile;
 
-    protected boolean isNoMotionInX;
-    protected boolean isNoMotionInY;
-    protected boolean isNoMotionInZ;
+    //Settings
+    protected int inGroundKillTime = 1200;
+    protected int inAirKillTime = 1200;
+    protected DamageSource impact_damageSource = DamageSource.anvil;
 
-    protected int kill_ticks = 240 /* 2 mins */; /* 144000  2 hours */
+    //In ground data
+    private int xTile = -1;
+    private int yTile = -1;
+    private int zTile = -1;
+    private Block inBlockID;
+    private int inData;
+    private boolean inGround;
 
-    private int _ticksInAir = -1;
-    private int _ticksNotMoving = -1;
-    private int _ticksInGround = -1;
+    //Timers
+    protected int ticksInGround;
+    protected int ticksInAir;
 
-
-    public EntityProjectile(World w)
+    public EntityProjectile(World world)
     {
-        super(w);
-        this.setSize(1F, 1F);
-        this.renderDistanceWeight = 3;
-        this.isImmuneToFire = true;
-        this.ignoreFrustumCheck = true;
+        super(world);
+        this.renderDistanceWeight = 10.0D;
+        this.setSize(0.5F, 0.5F);
     }
 
-    @Deprecated
-    public static Pos getEntityAim(EntityLivingBase entity)
+    public EntityProjectile(World world, double x, double y, double z)
     {
-        //float f1 = MathHelper.cos(-entity.rotationYaw * 0.017453292F - (float) Math.PI);
-        //float f2 = MathHelper.sin(-entity.rotationYaw * 0.017453292F - (float) Math.PI);
-        //float f3 = -MathHelper.cos(-entity.rotationPitch * 0.017453292F);
-        //float f4 = MathHelper.sin(-entity.rotationPitch * 0.017453292F);
-        //new Pos((double) (f2 * f3), (double) f4, (double) (f1 * f3))
-        return Pos.getLook(entity, 1);
+        super(world);
+        this.setPosition(x, y, z);
+        this.sourceOfProjectile = new Pos(x, y, z);
+        this.yOffset = 0.0F;
     }
 
-    public EntityProjectile(EntityLivingBase entity)
+    public EntityProjectile(World world, EntityLivingBase shooter, EntityLivingBase target, float p_i1755_4_, float p_i1755_5_)
     {
-        this(entity.worldObj);
+        this(world);
+        this.shootingEntity = shooter;
+        this.sourceOfProjectile = new Pos(shooter);
 
-        Pos launcher = new Pos(entity).add(new Pos(0, 1, 0));
-        Pos playerAim = getEntityAim(entity);
-        Pos start = launcher.add(playerAim.multiply(2));
+        this.posY = shooter.posY + (double)shooter.getEyeHeight() - 0.10000000149011612D;
+        double d0 = target.posX - shooter.posX;
+        double d1 = target.boundingBox.minY + (double)(target.height / 3.0F) - this.posY;
+        double d2 = target.posZ - shooter.posZ;
+        double d3 = (double)MathHelper.sqrt_double(d0 * d0 + d2 * d2);
 
-        this.firedByEntity = entity;
-        this.sourceOfProjectile = start;
-        this.setPosition(start.x(), start.y(), start.z());
-        this.rotationYaw = entity.rotationYaw - 180;
-        this.rotationPitch = entity.rotationPitch;
+        if (d3 >= 1.0E-7D)
+        {
+            float f2 = (float)(Math.atan2(d2, d0) * 180.0D / Math.PI) - 90.0F;
+            float f3 = (float)(-(Math.atan2(d1, d3) * 180.0D / Math.PI));
+            double d4 = d0 / d3;
+            double d5 = d2 / d3;
+            this.setLocationAndAngles(shooter.posX + d4, this.posY, shooter.posZ + d5, f2, f3);
+            this.yOffset = 0.0F;
+            float f4 = (float)d3 * 0.2F;
+            this.setThrowableHeading(d0, d1 + (double)f4, d2, p_i1755_4_, p_i1755_5_);
+        }
     }
 
-    public EntityProjectile(World w, Pos startAndSource)
+    public EntityProjectile(World world, EntityLivingBase shooter, float f)
     {
-        this(w);
-        this.sourceOfProjectile = startAndSource;
-        this.setPosition(startAndSource.x(), startAndSource.y(), startAndSource.z());
+        super(world);
+        this.renderDistanceWeight = 10.0D;
+        this.shootingEntity = shooter;
+        this.sourceOfProjectile = new Pos(shooter);
+
+        this.setSize(0.5F, 0.5F);
+        this.setLocationAndAngles(shooter.posX, shooter.posY + (double)shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
+        this.posX -= (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
+        this.posY -= 0.10000000149011612D;
+        this.posZ -= (double)(MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
+        this.setPosition(this.posX, this.posY, this.posZ);
+        this.yOffset = 0.0F;
+        this.motionX = (double)(-MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI));
+        this.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI));
+        this.motionY = (double)(-MathHelper.sin(this.rotationPitch / 180.0F * (float)Math.PI));
+        this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, f * 1.5F, 1.0F);
     }
 
     @Override
     protected void entityInit()
     {
-        super.entityInit();
-        this.dataWatcher.addObject(17, _ticksInAir);
-        this.dataWatcher.addObject(16, _ticksInGround);
     }
+
 
     @Override
     public void onUpdate()
     {
         super.onUpdate();
 
-        //Safety to make sure vars are inited if null
-        if (sourceOfProjectile == null)
+        //Update rotation to match motion
+        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            sourceOfProjectile = new Pos((Entity) this);
-        }
-        if (firedByEntity == null)
-        {
-            firedByEntity = this;
+            float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
         }
 
-        if (!this.worldObj.isRemote && this.getTicksInAir() != -1)
+
+        //Get block we are face-palmed into
+        Block block = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
+
+        if (block.getMaterial() != Material.air)
         {
+            block.setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
+            AxisAlignedBB axisalignedbb = block.getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
 
-            isNoMotionInX = this.motionX <= 0.01 && this.motionX >= -0.01;
-            isNoMotionInY = this.motionY <= 0.01 && this.motionY >= -0.01;
-            isNoMotionInZ = this.motionZ <= 0.01 && this.motionZ >= -0.01;
-
-            //Update on ground tick tracker
-            if (this.onGround)
+            if (axisalignedbb != null && axisalignedbb.isVecInside(Vec3.createVectorHelper(this.posX, this.posY, this.posZ)))
             {
-                this.setTicksInGround(this.getTicksInGround() + 1);
-                this.setTicksInAir(0);
+                this.inGround = true;
+            }
+        }
+
+        //Handle stuck in ground
+        if (this.inGround)
+        {
+            int j = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
+
+            if (block == this.inBlockID && j == this.inData)
+            {
+                ++this.ticksInGround;
+
+                if (this.ticksInGround == inGroundKillTime)
+                {
+                    this.setDead();
+                    return;
+                }
             }
             else
             {
-                setTicksInAir(getTicksInAir() + 1);
-                this.setTicksInGround(0);
+                this.inGround = false;
+                this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
+                this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
+                this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
+                this.ticksInGround = 0;
+                this.ticksInAir = 0;
             }
-
-            //Update movement logic
-            if (!checkAndHandleEntityCollisions())
-            {
-                if (isNoMotionInY)
-                {
-                    this.addVelocity(0, -0.5, 0);
-                }
-                updateMotion();
-                this.moveFlying((float) this.motionX, (float) this.motionY, (float) this.motionZ);
-            }
-            if (isNoMotionInX && isNoMotionInY && isNoMotionInZ)
-            {
-                onStoppedMoving();
-            }
-        }
-    }
-
-    @Override
-    public void onEntityUpdate()
-    {
-        super.onEntityUpdate();
-
-        if (shouldKillProjectile())
-        {
-            this.kill();
-        }
-    }
-
-    public boolean shouldKillProjectile()
-    {
-        return this.posY < -640.0D || this.posY > 100000 || this.getTicksInAir() > kill_ticks;
-    }
-
-    /**
-     * Checks if the projectile has collided with something
-     * Then triggers methods saying the projectile has collided with something
-     *
-     * @return true if the collision stops the projectile from moving
-     */
-    protected boolean checkAndHandleEntityCollisions()
-    {
-        //TODO handle entity collision
-        return false;
-    }
-
-    /**
-     * Called each tick to update motion and angles of the entity
-     */
-    protected void updateMotion()
-    {
-        moveFlying((float) motionX, (float) motionY, (float) motionZ);
-    }
-
-    @Override
-    public void moveFlying(float deltaX, float deltaY, float deltaZ)
-    {
-        move(deltaX, deltaY, deltaZ);
-    }
-
-    @Override
-    public void moveEntity(double deltaX, double deltaY, double deltaZ)
-    {
-        move(deltaX, deltaY, deltaZ);
-        if (!this.noClip && !isCollided)
-        {
-            this.updateFallState(motionY, this.onGround);
-        }
-    }
-
-    protected void move(double deltaX, double deltaY, double deltaZ)
-    {
-        double originalMotionX = motionX;
-        double originalMotionY = motionY;
-        double originalMotionZ = motionZ;
-
-        if (this.noClip)
-        {
-            this.boundingBox.offset(deltaX, deltaY, deltaZ);
-            alignToBounds();
         }
         else
         {
-            offsetForCollisions(deltaX, deltaY, deltaZ);
-
-            //Update collision checks
-            this.isCollidedHorizontally = originalMotionX != motionX || originalMotionZ != motionZ;
-            this.isCollidedVertically = originalMotionY != motionY;
-            this.onGround = originalMotionY != motionY && originalMotionY < 0.0D;
-            this.isCollided = this.isCollidedHorizontally || this.isCollidedVertically;
-
-            //if motion changed then this means it hit something
-            if (originalMotionX != motionX)
-                this.motionX = 0.0D;
-            if (isCollidedVertically)
-                this.motionY = 0.0D;
-            if (originalMotionZ != motionZ)
-                this.motionZ = 0.0D;
-
-            if (isCollided)
+            ++this.ticksInAir;
+            if(ticksInAir >= inAirKillTime)
             {
-                this.triggerBlockCollisions();
-                motionX = 0;
-                motionY = 0;
-                motionZ = 0;
+                this.setDead();
+                return;
             }
-        }
-    }
 
-    /**
-     * Pushes the entity out of its collision so its not overlapping
-     *
-     * @param deltaX
-     * @param deltaY
-     * @param deltaZ
-     */
-    protected void offsetForCollisions(double deltaX, double deltaY, double deltaZ)
-    {
-        //Calculate Y Offset
-        List list = this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox.addCoord(deltaX, deltaY, deltaZ));
+            //Do raytrace TODO move to prefab entity for reuse
+            Vec3 vec31 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+            Vec3 vec3 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            MovingObjectPosition movingobjectposition = this.worldObj.func_147447_a(vec31, vec3, false, true, false);
+            vec31 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+            vec3 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
-        for (int i = 0; i < list.size(); ++i)
-        {
-            motionY = ((AxisAlignedBB) list.get(i)).calculateYOffset(this.boundingBox, motionY);
-        }
-
-        //Calculate x offset
-        for (int j = 0; j < list.size(); ++j)
-        {
-            motionX = ((AxisAlignedBB) list.get(j)).calculateXOffset(this.boundingBox, motionX);
-        }
-
-        //Calculate z offset
-        for (int j = 0; j < list.size(); ++j)
-        {
-            motionZ = ((AxisAlignedBB) list.get(j)).calculateZOffset(this.boundingBox, motionZ);
-        }
-
-        this.boundingBox.offset(motionX, motionY, motionZ);
-
-        alignToBounds();
-    }
-
-    /**
-     * Called when the projectile collides with the collision box of a Block.
-     * Air blocks are ignored to reduce method calls
-     *
-     * @param block - block hit
-     * @param x     - xCoord of block
-     * @param y     - xCoord of block
-     * @param z     - xCoord of block
-     */
-    protected void onCollideWithBlock(Block block, int x, int y, int z)
-    {
-        if (block != null && !block.isAir(worldObj, x, y, z))
-        {
-            if(!canPassThrewBlock(block, x, y, z))
+            if (movingobjectposition != null)
             {
-                try
-                {
-                    block.onEntityCollidedWithBlock(this.worldObj, x, y, z, this);
-                } catch (Throwable throwable)
-                {
-                    CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Colliding entity with block");
-                    CrashReportCategory crashreportcategory = crashreport.makeCategory("Block being collided with");
-                    CrashReportCategory.func_147153_a(crashreportcategory, x, y, z, block, this.worldObj.getBlockMetadata(x, y, z));
-                    throw new ReportedException(crashreport);
-                }
-                onImpact();
+                vec3 = Vec3.createVectorHelper(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
             }
-            onPassThrewBlock(block, x, y, z);
-        }
-    }
 
-    /**
-     * Called to check if the projectile can pass threw a block
-     * @return true if the projectile can pass threw or break threw the block
-     */
-    protected boolean canPassThrewBlock(Block block, int x, int y, int z)
-    {
-        if(block instanceof IFluidBlock)
-        {
-            Fluid fluid = ((IFluidBlock) block).getFluid();
-            if(fluid == null || fluid.isGaseous())
+            //Handle entity collision boxes
+            Entity entity = null;
+            List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+            double d0 = 0.0D;
+            int i;
+            float f1;
+
+            for (i = 0; i < list.size(); ++i)
             {
-                return true;
-            }
-        }
-        return false;
-    }
+                Entity entity1 = (Entity)list.get(i);
 
-    /**
-     * Called for each block the projectile passes threw or collided with when it stops.
-     * Air blocks are ignored by default
-     */
-    protected void onPassThrewBlock(Block block, int x, int y, int z)
-    {
-
-    }
-
-    @Override
-    @Deprecated /* redirects to triggerBlockCollisions */
-    protected void func_145775_I()
-    {
-        triggerBlockCollisions();
-    }
-
-    /**
-     * Checks for any block this overlaps with and handles collision calls for the block
-     */
-    protected void triggerBlockCollisions()
-    {
-        int min_x = MathHelper.floor_double(this.boundingBox.minX + 0.001D);
-        int min_y = MathHelper.floor_double(this.boundingBox.minY + 0.001D);
-        int min_z = MathHelper.floor_double(this.boundingBox.minZ + 0.001D);
-        int max_x = MathHelper.ceiling_double_int(this.boundingBox.maxX - 0.001D);
-        int max_y = MathHelper.ceiling_double_int(this.boundingBox.maxY - 0.001D);
-        int max_z = MathHelper.ceiling_double_int(this.boundingBox.maxZ - 0.001D);
-
-        if (this.worldObj.checkChunksExist(min_x, min_y, min_z, max_x, max_y, max_z))
-        {
-            for (int cx = min_x; cx <= max_x; ++cx)
-            {
-                for (int cy = min_y; cy <= max_y; ++cy)
+                if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity || this.ticksInAir >= 5))
                 {
-                    for (int cz = min_z; cz <= max_z; ++cz)
+                    f1 = 0.3F;
+                    AxisAlignedBB axisalignedbb1 = entity1.boundingBox.expand((double)f1, (double)f1, (double)f1);
+                    MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(vec31, vec3);
+
+                    if (movingobjectposition1 != null)
                     {
-                        Block block = this.worldObj.getBlock(cx, cy, cz);
-                        if (block != null)
+                        double d1 = vec31.distanceTo(movingobjectposition1.hitVec);
+
+                        if (d1 < d0 || d0 == 0.0D)
                         {
-                            onCollideWithBlock(block, cx, cy, cz);
+                            entity = entity1;
+                            d0 = d1;
                         }
                     }
                 }
             }
+
+            //If we collided with an entity, set hit to entity
+            if (entity != null)
+            {
+                movingobjectposition = new MovingObjectPosition(entity);
+            }
+
+            if (movingobjectposition != null)
+            {
+                //Handle entity hit
+                if (movingobjectposition.entityHit != null)
+                {
+                   handleEntityCollision(movingobjectposition, movingobjectposition.entityHit);
+                }
+                else //Handle block hit
+                {
+                    handleBlockCollision(movingobjectposition);
+                }
+            }
+            updateMotion();
         }
     }
 
-    /**
-     * Called when the projectile stops moving
-     */
-    protected void onStoppedMoving()
+    protected void handleBlockCollision(MovingObjectPosition movingobjectposition)
     {
-        _ticksNotMoving++;
-        if (_ticksNotMoving > 200 && getTicksInAir() != -1)
+        this.xTile = movingobjectposition.blockX;
+        this.yTile = movingobjectposition.blockY;
+        this.zTile = movingobjectposition.blockZ;
+
+        this.inBlockID = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
+        this.inData = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
+
+        this.motionX = (double)((float)(movingobjectposition.hitVec.xCoord - this.posX));
+        this.motionY = (double)((float)(movingobjectposition.hitVec.yCoord - this.posY));
+        this.motionZ = (double)((float)(movingobjectposition.hitVec.zCoord - this.posZ));
+
+        float velocity = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+        this.posX -= this.motionX / (double)velocity * 0.05000000074505806D;
+        this.posY -= this.motionY / (double)velocity * 0.05000000074505806D;
+        this.posZ -= this.motionZ / (double)velocity * 0.05000000074505806D;
+        //TODO this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+        this.inGround = true;
+
+        if (this.inBlockID.getMaterial() != Material.air)
         {
-            setDead();
+            this.inBlockID.onEntityCollidedWithBlock(this.worldObj, this.xTile, this.yTile, this.zTile, this);
         }
+        onImpactTile();
     }
 
-    /**
-     * Called when the missile hit something and stopped
-     */
-    protected void onImpact()
+    protected void onImpactTile()
     {
         this.setDead();
     }
 
+    protected void handleEntityCollision(MovingObjectPosition movingobjectposition, Entity entityHit)
+    {
+        onImpactEntity(entityHit, MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ));
+    }
+
+    protected void onImpactEntity(Entity entityHit, float velocity)
+    {
+        int damage = MathHelper.ceiling_double_int((double)velocity * 2);
+
+        //If entity takes damage add velocity to entity
+        if (impact_damageSource != null && entityHit.attackEntityFrom(impact_damageSource, (float)damage))
+        {
+            if (entityHit instanceof EntityLivingBase)
+            {
+                float vel_horizontal = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+                if (vel_horizontal > 0.0F)
+                {
+                    entityHit.addVelocity(this.motionX * 0.6000000238418579D / (double)vel_horizontal, 0.1D, this.motionZ * 0.6000000238418579D / (double)vel_horizontal);
+                }
+            }
+
+        }
+        this.setDead();
+    }
+
+    protected void updateMotion()
+    {
+        this.posX += this.motionX;
+        this.posY += this.motionY;
+        this.posZ += this.motionZ;
+        float f2 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+        this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+
+        for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f2) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
+        {
+            ;
+        }
+
+        while (this.rotationPitch - this.prevRotationPitch >= 180.0F)
+        {
+            this.prevRotationPitch += 360.0F;
+        }
+
+        while (this.rotationYaw - this.prevRotationYaw < -180.0F)
+        {
+            this.prevRotationYaw -= 360.0F;
+        }
+
+        while (this.rotationYaw - this.prevRotationYaw >= 180.0F)
+        {
+            this.prevRotationYaw += 360.0F;
+        }
+
+        this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
+        this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
+
+        //Decrease motion so the projectile stops
+        decreaseMotion();
+
+        //Set position
+        this.setPosition(this.posX, this.posY, this.posZ);
+
+        //Adjust for collision
+        this.func_145775_I();
+    }
+
+    protected void decreaseMotion()
+    {
+        this.motionX *= 0.99F;
+        this.motionY *= 0.99F;
+        this.motionZ *= 0.99F;
+        //Add gravity so the projectile will fall
+        this.motionY -= 0.05F;
+    }
 
 
     @Override
-    public AxisAlignedBB getCollisionBox(Entity entity)
+    public void setThrowableHeading(double xx, double yy, double zz, float multiplier, float p_70186_8_)
     {
-        if (ignoreCollisionForEntity(entity))
-            return null;
+        //Normalize
+        float velocity = MathHelper.sqrt_double(xx * xx + yy * yy + zz * zz);
+        xx /= (double)velocity;
+        yy /= (double)velocity;
+        zz /= (double)velocity;
 
-        return super.getCollisionBox(entity);
-    }
+        //Add randomization to make the arrow miss
+        xx += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)p_70186_8_;
+        yy += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)p_70186_8_;
+        zz += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)p_70186_8_;
 
-    /**
-     * Checks if this projectile should ignore collisions
-     * if it hits the entity in question
-     *
-     * @param entity - entity that will collide with
-     * @return true if collision should be ignored
-     */
-    protected boolean ignoreCollisionForEntity(Entity entity)
-    {
-        //Prevent collision with firing entity for first few ticks
-        return entity == firedByEntity && getTicksInAir() <= 50;
-    }
-
-    @Override
-    protected void readEntityFromNBT(NBTTagCompound nbt)
-    {
-        if (nbt.hasKey("startPos"))
-            sourceOfProjectile = new Pos(nbt.getCompoundTag("startPos"));
-        _ticksInAir = nbt.getInteger("ticksInAir");
-        _ticksInGround = nbt.getInteger("ticksInGround");
-
-    }
-
-    @Override
-    protected void writeEntityToNBT(NBTTagCompound nbt)
-    {
-        if (sourceOfProjectile != null)
-            nbt.setTag("startPos", sourceOfProjectile.writeNBT(new NBTTagCompound()));
-        nbt.setInteger("ticksInAir", this.getTicksInAir());
-        nbt.setInteger("ticksInGround", this.getTicksInGround());
-    }
-
-    @Override
-    public void setThrowableHeading(double motionX, double motionY, double motionZ, float power, float spread)
-    {
-        float square = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
-        motionX /= (double) square;
-        motionY /= (double) square;
-        motionZ /= (double) square;
-
-        //Calculate spread area
-        motionX += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) spread;
-        motionY += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) spread;
-        motionZ += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) spread;
-
-        //Apply power
-        motionX *= (double) power;
-        motionY *= (double) power;
-        motionZ *= (double) power;
+        //Add multiplier
+        xx *= (double)multiplier;
+        yy *= (double)multiplier;
+        zz *= (double)multiplier;
 
         //Set motion
-        this.motionX = motionX;
-        this.motionY = motionY;
-        this.motionZ = motionZ;
+        this.motionX = xx;
+        this.motionY = yy;
+        this.motionZ = zz;
 
-        //Set angles
-        float f3 = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
-        this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(motionX, motionZ) * 180.0D / Math.PI);
-        this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(motionY, (double) f3) * 180.0D / Math.PI);
-
-        //Set default values
-        this.setTicksInAir(0);
+        //Update rotation
+        float f3 = MathHelper.sqrt_double(xx * xx + zz * zz);
+        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(xx, zz) * 180.0D / Math.PI);
+        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(yy, (double)f3) * 180.0D / Math.PI);
+        this.ticksInGround = 0;
     }
 
-    public void setMotion(int power)
+    @Override @SideOnly(Side.CLIENT)
+    public void setPositionAndRotation2(double p_70056_1_, double p_70056_3_, double p_70056_5_, float p_70056_7_, float p_70056_8_, int p_70056_9_)
     {
-        motionX = (double) (-MathHelper.sin(rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI));
-        motionZ = (double) (MathHelper.cos(rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI));
-        motionY = (double) (-MathHelper.sin(rotationPitch / 180.0F * (float) Math.PI));
-
-        motionX *= power;
-        motionY *= power;
-        motionZ *= power;
+        this.setPosition(p_70056_1_, p_70056_3_, p_70056_5_);
+        this.setRotation(p_70056_7_, p_70056_8_);
     }
 
-    @Override
-    public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch)
+    @Override @SideOnly(Side.CLIENT)
+    public void setVelocity(double xx, double yy, double zz)
     {
-        this.setPosition(this.posX, this.posY, this.posZ);
-        this.setRotation(yaw, pitch);
-    }
+        this.motionX = xx;
+        this.motionY = yy;
+        this.motionZ = zz;
 
-    @Override
-    public boolean canBeCollidedWith()
-    {
-        return true;
-    }
-
-    public int getTicksInGround()
-    {
-        if (worldObj == null || !worldObj.isRemote)
+        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            return _ticksInGround;
-        }
-        return this.dataWatcher.getWatchableObjectInt(16);
-    }
-
-    public void setTicksInGround(int ticks)
-    {
-        if (!this.worldObj.isRemote)
-        {
-            _ticksInGround = ticks;
-            this.dataWatcher.updateObject(16, ticks);
-        }
-    }
-
-    public int getTicksInAir()
-    {
-        if (worldObj == null || !worldObj.isRemote)
-        {
-            return _ticksInAir;
-        }
-        return this.dataWatcher.getWatchableObjectInt(17);
-    }
-
-    public void setTicksInAir(int ticks)
-    {
-        if (!this.worldObj.isRemote)
-        {
-            _ticksInAir = ticks;
-            this.dataWatcher.updateObject(17, ticks);
+            float f = MathHelper.sqrt_double(xx * xx + zz * zz);
+            this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(xx, zz) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(yy, (double)f) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch;
+            this.prevRotationYaw = this.rotationYaw;
+            this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+            this.ticksInGround = 0;
         }
     }
 
     @Override
-    public boolean canBePushed()
+    public void writeEntityToNBT(NBTTagCompound nbt)
     {
-        return true;
+        nbt.setShort("xTile", (short) this.xTile);
+        nbt.setShort("yTile", (short) this.yTile);
+        nbt.setShort("zTile", (short) this.zTile);
+        nbt.setShort("life", (short) this.ticksInGround);
+        nbt.setByte("inTile", (byte) Block.getIdFromBlock(this.inBlockID));
+        nbt.setByte("inData", (byte) this.inData);
+        nbt.setByte("inGround", (byte) (this.inGround ? 1 : 0));
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound nbt)
+    {
+        this.xTile = nbt.getShort("xTile");
+        this.yTile = nbt.getShort("yTile");
+        this.zTile = nbt.getShort("zTile");
+        this.ticksInGround = nbt.getShort("life");
+        this.inBlockID = Block.getBlockById(nbt.getByte("inTile") & 255);
+        this.inData = nbt.getByte("inData") & 255;
+        this.inGround = nbt.getByte("inGround") == 1;
+    }
+
+    @Override
+    protected boolean canTriggerWalking()
+    {
+        return false;
+    }
+
+    @Override @SideOnly(Side.CLIENT)
+    public float getShadowSize()
+    {
+        return 0.0F;
+    }
+
+    @Override
+    public boolean canAttackWithItem()
+    {
+        return false;
     }
 }
