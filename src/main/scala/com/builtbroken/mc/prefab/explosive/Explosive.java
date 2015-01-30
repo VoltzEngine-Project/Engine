@@ -1,5 +1,6 @@
-package com.builtbroken.mc.lib.world.explosive;
+package com.builtbroken.mc.prefab.explosive;
 
+import com.builtbroken.mc.prefab.explosive.blast.Blast;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;

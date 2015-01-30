@@ -1,6 +1,5 @@
 package com.builtbroken.mc.prefab.tile;
 
-import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.transform.region.Cuboid;
 import com.builtbroken.mc.lib.transform.vector.Point;
 import com.builtbroken.mc.lib.transform.vector.Pos;
@@ -43,12 +42,12 @@ public class BlockTile extends Block implements ITileEntityProvider
         this.staticTile = tile;
         this.staticTile.setBlock(this);
         this.opaque = isOpaqueCube();
-        this.setBlockBounds((float)this.staticTile.bounds.min().x(), (float)this.staticTile.bounds.min().y(), (float)this.staticTile.bounds.min().z(), (float)this.staticTile.bounds.max().x(), (float)this.staticTile.bounds.max().y(), (float)this.staticTile.bounds.max().z());
+        this.setBlockBounds((float) this.staticTile.bounds.min().x(), (float) this.staticTile.bounds.min().y(), (float) this.staticTile.bounds.min().z(), (float) this.staticTile.bounds.max().x(), (float) this.staticTile.bounds.max().y(), (float) this.staticTile.bounds.max().z());
 
         setBlockName(prefix + staticTile.name);
         setBlockTextureName(prefix + staticTile.textureName);
         setCreativeTab(staticTile.creativeTab == null ? tab : staticTile.creativeTab);
-        setLightOpacity(isOpaqueCube() ?  255 : 0);
+        setLightOpacity(isOpaqueCube() ? 255 : 0);
         setHardness(staticTile.hardness);
         setResistance(staticTile.resistance);
         setStepSound(staticTile.stepSound);
@@ -206,9 +205,9 @@ public class BlockTile extends Block implements ITileEntityProvider
 
         if (bounds != null)
         {
-            for (Cuboid cuboid: bounds)
+            for (Cuboid cuboid : bounds)
             {
-                if(cuboid.isInsideBounds(cube))
+                if (cuboid.isInsideBounds(cube))
                 {
                     list.add((cuboid.add(new Pos(x, y, z))).toAABB());
                 }
@@ -241,7 +240,7 @@ public class BlockTile extends Block implements ITileEntityProvider
     public boolean shouldSideBeRendered(IBlockAccess access, int x, int y, int z, int side)
     {
         inject(access, x, y, z);
-        boolean value =staticTile.shouldSideBeRendered(side);
+        boolean value = staticTile.shouldSideBeRendered(side);
         eject();
         return value;
     }
@@ -276,9 +275,9 @@ public class BlockTile extends Block implements ITileEntityProvider
     }
 
     @Override
-    public boolean isOpaqueCube() 
+    public boolean isOpaqueCube()
     {
-        return staticTile==null||staticTile.isOpaque;
+        return staticTile == null || staticTile.isOpaque;
     }
 
     @Override
@@ -288,39 +287,61 @@ public class BlockTile extends Block implements ITileEntityProvider
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public int getRenderType()
     {
         return staticTile.renderNormalBlock ? 0 : staticTile.renderType;
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public IIcon getIcon(IBlockAccess access, int x, int y, int z, int side)
     {
         inject(access, x, y, z);
-        IIcon value = getTile(access, x, y, z).getIcon(side);
+        IIcon value = getTile(access, x, y, z).getIcon(side, access.getBlockMetadata(x, y, z));
         eject();
         return value;
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public IIcon getIcon(int side, int meta)
     {
         return staticTile.getIcon(side, meta);
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
         staticTile.registerIcons(iconRegister);
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public int colorMultiplier(IBlockAccess access, int x, int y, int z)
     {
         inject(access, x, y, z);
         int value = getTile(access, x, y, z).getColorMultiplier();
         eject();
         return value;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public int getBlockColor()
+    {
+        return staticTile.getBlockColor();
+    }
+
+    /**
+     * Returns the color this block should be rendered. Used by leaves.
+     */
+    @SideOnly(Side.CLIENT)
+    @Override
+    public int getRenderColor(int i)
+    {
+        return staticTile.getRenderColor(i);
     }
 
     @Override

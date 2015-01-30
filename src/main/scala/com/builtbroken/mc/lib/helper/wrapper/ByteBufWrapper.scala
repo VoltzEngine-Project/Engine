@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.helper.wrapper
 
 import com.builtbroken.mc.api.ISave
-import com.builtbroken.mc.core.network.{IByteBufReader, IByteBufWriter}
+import com.builtbroken.mc.core.network.{IByteBufWriter, IByteBufReader}
 import com.builtbroken.mc.lib.transform.vector.{Pos, Point}
 import cpw.mods.fml.common.network.ByteBufUtils
 import io.netty.buffer.ByteBuf

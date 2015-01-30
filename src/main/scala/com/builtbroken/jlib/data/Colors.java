@@ -13,6 +13,7 @@ public enum Colors
 	DARK_AQUA("\u00a73", new Color(  0, 170, 170 )),
 	DARK_RED("\u00a74", new Color(  170, 0, 0 )),
 	PURPLE("\u00a75", new Color(  170, 0, 170 )),
+    CORRUPTION_PURPLE("\u00a75", new Color(  71, 57, 124 )),
 	ORANGE("\u00a76", new Color(  255, 170, 0 )),
 	GREY("\u00a77", new Color(  170, 170, 170 )),
 	DARK_GREY("\u00a78", Color.DARK_GRAY),

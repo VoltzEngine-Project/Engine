@@ -26,4 +26,9 @@ public class CommonProxy extends AbstractProxy
 	{
 
 	}
+
+    public int getPlayerDim()
+    {
+        throw new UnsupportedOperationException("This method can not be called server side");
+    }
 }

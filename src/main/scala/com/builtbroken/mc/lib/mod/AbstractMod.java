@@ -7,6 +7,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraftforge.common.config.Configuration;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /** Default layout for a mod class to make it easier to keep mod.class
  * in the same general design and do the same general actions.
@@ -27,6 +29,7 @@ public abstract class AbstractMod
 {
     protected LoadableHandler loader;
     protected ModManager manager;
+    protected Logger logger;
     private Configuration config;
 
     /**
@@ -36,12 +39,14 @@ public abstract class AbstractMod
     {
         loader = new LoadableHandler();
         manager = new ModManager().setPrefix(domain);
+        logger = LogManager.getLogger(domain);
     }
 
     public void preInit(FMLPreInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, getProxy());
         config = new Configuration(event.getSuggestedConfigurationFile());
+        getConfig().load();
         loader.applyModule(getProxy());
         loader.preInit();
     }
@@ -54,12 +59,20 @@ public abstract class AbstractMod
     public void postInit(FMLPostInitializationEvent event)
     {
         loader.postInit();
+        getConfig().save();
     }
 
     public Configuration getConfig()
     {
         return config;
     }
+
+    public ModManager getManager()
+    {
+        return this.manager;
+    }
+
+    public Logger logger() { return this.logger; }
 
     public abstract AbstractProxy getProxy();
 }

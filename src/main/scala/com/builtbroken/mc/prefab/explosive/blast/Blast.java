@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.world.explosive;
+package com.builtbroken.mc.prefab.explosive.blast;
 
 import com.builtbroken.mc.api.IWorldPosition;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -77,7 +77,8 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition
     @Override
     public void handleBlockPlacement(BlockEdit vec)
     {
-        vec.place();
+        if(vec.hasChanged())
+            vec.place();
     }
 
     @Override

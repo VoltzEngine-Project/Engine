@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.world.edit
 
 import com.builtbroken.jlib.data.vector.IPos3D
 import com.builtbroken.mc.api.IWorldPosition
-import com.builtbroken.mc.lib.transform.vector.AbstractLocation
+import com.builtbroken.mc.lib.transform.vector.{Location, AbstractLocation}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.init.Blocks
@@ -44,9 +44,10 @@ class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocat
   var checkForEntity = false
   
   private var _bounds : AxisAlignedBB = null
-  
 
   def this() = this(null, 0, 0, 0)
+
+  def this(location: Location) = this(location.world(), location.x(), location.y(), location.z())
 
   def set(block: Block, meta: Int, doDrops: Boolean, checkEquals: Boolean) : BlockEdit =
   {
@@ -130,6 +131,8 @@ class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocat
 
     return BlockEditResult.BLOCKED
   }
+
+  def hasChanged() : Boolean = prev_block != block || prev_meta != meta
 
   override def newPos(x: Double, y: Double, z: Double): BlockEdit = new BlockEdit(world, x, y, z);
 }

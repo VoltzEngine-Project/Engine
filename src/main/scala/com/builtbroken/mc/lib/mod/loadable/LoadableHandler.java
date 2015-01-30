@@ -1,9 +1,11 @@
 package com.builtbroken.mc.lib.mod.loadable;
 
+import com.builtbroken.jlib.type.Pair;
 import cpw.mods.fml.common.Loader;
 
-import java.lang.annotation.Annotation;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -21,20 +23,20 @@ import java.util.Set;
  */
 public class LoadableHandler
 {
-	private Set<ILoadable> loadables = new HashSet();
-	private LoadPhase phase = LoadPhase.PRELAUNCH;
+    private HashMap<ILoadable, Pair<Boolean, Boolean>> loadables = new HashMap();
+    private LoadPhase phase = LoadPhase.PRELAUNCH;
 
     public void applyModule(Class<?> clazz)
     {
         applyModule(clazz, true);
     }
 
-	/**
-	 * Applies a specific ILoadable module to be loaded.
-	 */
-	public void applyModule(Class<?> clazz, boolean load)
-	{
-		if (load)
+    /**
+     * Applies a specific ILoadable module to be loaded.
+     */
+    public void applyModule(Class<?> clazz, boolean load)
+    {
+        if (load)
         {
             if (clazz.getAnnotation(LoadWithMod.class) != null)
             {
@@ -54,83 +56,104 @@ public class LoadableHandler
 
                     if (subProxy.shouldLoad())
                     {
-                        loadables.add(subProxy);
+                        loadables.put(subProxy, new Pair(false, false));
                     }
                 }
                 else if (module instanceof ILoadable)
                 {
-                    loadables.add((ILoadable) module);
+                    loadables.put((ILoadable) module, new Pair(false, false));
                 }
-            } catch (Exception e)
-            {
-                e.printStackTrace();
             }
-        }	}
+            catch (InstantiationException e)
+            {
+                throw new RuntimeException(e);
+            }
+            catch (IllegalAccessException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
-	/**
-	 * Call for modules late or as already existing modules, DO NOT CALL FOR REGISTERED Proxies!
-	 */
-	public void applyModule(ILoadable module)
-	{
-		loadables.add(module);
+    /**
+     * Call for modules late or as already existing modules, DO NOT CALL FOR REGISTERED Proxies!
+     */
+    public void applyModule(ILoadable module)
+    {
+        loadables.put(module, new Pair(false, false));
 
-		switch (phase)
-		{
-			case DONE:
-				break;
-			case POSTINIT:
-				module.preInit();
-				module.init();
-				module.postInit();
-				break;
-			case INIT:
-				module.preInit();
-				module.init();
-				break;
-			case PREINIT:
+        switch (phase)
+        {
+            case DONE:
+                break;
+            case POSTINIT:
+                module.preInit();
+                module.init();
+                module.postInit();
+                break;
+            case INIT:
+                module.preInit();
+                module.init();
+                break;
+            case PREINIT:
 
-		}
-	}
+        }
+    }
 
-	public void preInit()
-	{
-		phase = LoadPhase.PREINIT;
+    public void preInit()
+    {
+        phase = LoadPhase.PREINIT;
 
-		for (ILoadable proxy : loadables)
-		{
-			proxy.preInit();
-		}
+        for (Map.Entry<ILoadable, Pair<Boolean, Boolean>> proxy : loadables.entrySet())
+        {
+            proxy.getKey().preInit();
+        }
 
-	}
+    }
 
-	public void init()
-	{
-		phase = LoadPhase.INIT;
+    public void init()
+    {
+        phase = LoadPhase.INIT;
 
-		for (ILoadable proxy : loadables)
-		{
-			proxy.init();
-		}
-	}
+        for (Map.Entry<ILoadable, Pair<Boolean, Boolean>> proxy : loadables.entrySet())
+        {
+            if(!proxy.getValue().left())
+            {
+                proxy.getValue().setLeft(true);
+                proxy.getKey().preInit();
+            }
+            proxy.getKey().init();
+        }
+    }
 
-	public void postInit()
-	{
-		phase = LoadPhase.POSTINIT;
+    public void postInit()
+    {
+        phase = LoadPhase.POSTINIT;
 
-		for (ILoadable proxy : loadables)
-		{
-			proxy.postInit();
-		}
+        for (Map.Entry<ILoadable, Pair<Boolean, Boolean>> proxy : loadables.entrySet())
+        {
+            if(!proxy.getValue().left())
+            {
+                proxy.getValue().setLeft(true);
+                proxy.getKey().preInit();
+            }
+            if(!proxy.getValue().right())
+            {
+                proxy.getValue().setRight(true);
+        proxy.getKey().init();
+    }
+    proxy.getKey().postInit();
+}
 
-		phase = LoadPhase.DONE;
-	}
+phase = LoadPhase.DONE;
+        }
 
-	public enum LoadPhase
-	{
-		PRELAUNCH,
-		PREINIT,
-		INIT,
-		POSTINIT,
-		DONE
-	}
+public enum LoadPhase
+{
+    PRELAUNCH,
+    PREINIT,
+        INIT,
+        POSTINIT,
+        DONE
+    }
 }

@@ -249,4 +249,10 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
 
         return 0;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Pos3D [" + this.x() + "," + this.y() + "," + this.z()  + "]";
+    }
 }
