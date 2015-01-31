@@ -97,29 +97,6 @@ curse {
     // addGameversion "1.7.0", "1.7.4"
 }
 
-publishing {
-  publications {
-    myPublication(MavenPublication) {      
-      pom.withXml {
-        from components.java
-        asNode().appendNode('description', 'Created on ' + getDate())        
-        def deps = configurations.compile.allDependencies
-        def dep_node = asNode().appendNode('dependencies')
-        
-        //def dependencyNode = dep_node.appendNode('dependency')
-            //dependencyNode.appendNode('groupId', 'net.industrial-craft')
-           // dependencyNode.appendNode('artifactId', 'industrialcraft-2')
-            //dependencyNode.appendNode('version', '2.2.654-experimental')
-        //def dependencyNode = dep_node.appendNode('dependency')
-            //dependencyNode.appendNode('groupId', 'net.minecraftforge')
-            //dependencyNode.appendNode('artifactId', 'forge')
-            //dependencyNode.appendNode('version', minecraft.apiVersion)
-      }
-    }
-  }
-}
-
-
 archivesBaseName = "VolzEngine"
 
 repositories {
@@ -148,12 +125,10 @@ dependencies
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.0.+:dev"
     //compile "net.industrial-craft:industrialcraft-2:2.2.654-experimental:api"
 }
-
 def getDate() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMddHHmmss')
     return formattedDate
 }
-
 
 file("VoltzEngine.txt").text = version;
