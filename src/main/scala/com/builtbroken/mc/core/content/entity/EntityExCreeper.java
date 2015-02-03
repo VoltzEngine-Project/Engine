@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.entity;
+package com.builtbroken.mc.core.content.entity;
 
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
@@ -19,14 +19,14 @@ import net.minecraft.world.World;
  * and can be used to make alternate creepers.
  * Created by robert on 1/31/2015.
  */
-public class EntityCreeperEx extends EntityMob implements IExplosiveHolder
+public class EntityExCreeper extends EntityMob implements IExplosiveHolder
 {
     protected int fuseTicks = 30;
     protected double ex_size = 3;
     protected IExplosiveHandler ex;
     protected NBTTagCompound ex_data;
 
-    public EntityCreeperEx(World w)
+    public EntityExCreeper(World w)
     {
         super(w);
         this.tasks.addTask(1, new EntityAISwimming(this));
@@ -38,7 +38,7 @@ public class EntityCreeperEx extends EntityMob implements IExplosiveHolder
         this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false));
     }
 
-    public EntityCreeperEx(Location location, IExplosiveHandler ex, double size, NBTTagCompound tag)
+    public EntityExCreeper(Location location, IExplosiveHandler ex, double size, NBTTagCompound tag)
     {
         this(location.world);
         this.setPosition(location.x(), location.y(), location.z());
@@ -52,7 +52,7 @@ public class EntityCreeperEx extends EntityMob implements IExplosiveHolder
 
     public static void replaceCreeper(EntityCreeper creeper, IExplosiveHandler ex, double size, NBTTagCompound data)
     {
-        EntityCreeperEx cex = new EntityCreeperEx(new Location(creeper), ex, size, data);
+        EntityExCreeper cex = new EntityExCreeper(new Location(creeper), ex, size, data);
         creeper.setDead();
         creeper.worldObj.removeEntity(creeper);
         cex.worldObj.spawnEntityInWorld(cex);

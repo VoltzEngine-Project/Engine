@@ -1,8 +1,8 @@
 package com.builtbroken.mc.core;
 
+import com.builtbroken.mc.core.content.entity.EntityExCreeper;
+import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
-import com.builtbroken.mc.prefab.entity.EntityCreeperEx;
-import com.builtbroken.mc.prefab.entity.RenderCreeper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.client.Minecraft;
@@ -33,7 +33,7 @@ public class ClientProxy extends CommonProxy
     public void init()
     {
         super.init();
-        RenderingRegistry.registerEntityRenderingHandler(EntityCreeperEx.class, new RenderCreeper());
+        RenderingRegistry.registerEntityRenderingHandler(EntityExCreeper.class, new RenderExCreeper());
     }
 
 	@Override
