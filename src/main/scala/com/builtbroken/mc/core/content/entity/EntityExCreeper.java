@@ -1,8 +1,10 @@
 package com.builtbroken.mc.core.content.entity;
 
 import com.builtbroken.mc.api.event.TriggerCause;
+import com.builtbroken.mc.api.explosive.IExCreeperHandler;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.api.explosive.IExplosiveHolder;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import cpw.mods.fml.common.network.ByteBufUtils;
@@ -16,6 +18,7 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 /**
@@ -74,6 +77,26 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
     {
         super.entityInit();
         this.dataWatcher.addObject(16, Byte.valueOf((byte) -1));
+    }
+
+    @Override
+    public String getCommandSenderName()
+    {
+        if(this.hasCustomNameTag())
+        {
+            return this.getCustomNameTag();
+        }
+        else if(ex instanceof IExCreeperHandler)
+        {
+            String s = ((IExCreeperHandler) ex).getTranslationKey(this);
+            if(s != null && !s.isEmpty())
+            {
+                String translation = LanguageUtility.getLocal(s  + ".name");
+                if(translation != null && !translation.isEmpty())
+                    return translation;
+            }
+        }
+        return LanguageUtility.getLocal("entity.creeper.name");
     }
 
     @Override
