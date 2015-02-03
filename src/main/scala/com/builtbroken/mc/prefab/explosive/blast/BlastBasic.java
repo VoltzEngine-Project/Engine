@@ -336,7 +336,7 @@ public class BlastBasic extends Blast
 
 
     @Override
-    public BlastBasic setYield(int size)
+    public BlastBasic setYield(double size)
     {
         super.setYield(size);
         //Most of the time radius equals size of the explosion
@@ -360,7 +360,7 @@ public class BlastBasic extends Blast
 
         public WrapperExplosion(BlastBasic blast)
         {
-            super(blast.world(), blast.explosionBlameEntity, blast.x(), blast.y(), blast.z(), blast.size);
+            super(blast.world(), blast.explosionBlameEntity, blast.x(), blast.y(), blast.z(), (float)blast.size);
             this.blast = blast;
         }
     }

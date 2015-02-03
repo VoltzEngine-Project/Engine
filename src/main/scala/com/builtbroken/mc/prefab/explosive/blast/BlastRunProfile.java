@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class BlastRunProfile extends RunProfile
 {
-    public final int size;
+    public final double size;
     public final float energy;
     public final Pos center;
     public int tilesPathed = 0;

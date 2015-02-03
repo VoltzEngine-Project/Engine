@@ -29,7 +29,7 @@ public interface IExplosive
      * @param size  - size of the explosive, will be used to set radius using ex. (size * min_radius)
      * @return instanceof IWorldChangeAction that tells what blocks and entities are to be effected
 	 */
-	public IWorldChangeAction createBlastForTrigger(World world, double x, double y, double z, TriggerCause triggerCause, int size, NBTTagCompound tag);
+	public IWorldChangeAction createBlastForTrigger(World world, double x, double y, double z, TriggerCause triggerCause, double size, NBTTagCompound tag);
 
     /** Gets estimated range info for the given trigger and size
      *

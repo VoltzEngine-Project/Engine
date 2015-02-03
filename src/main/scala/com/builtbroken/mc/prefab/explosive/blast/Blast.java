@@ -15,7 +15,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition
 {
     public World world;
     public int x, y, z;
-    public int size = 1;
+    public double size = 1;
     public float eUnitPerBlock = 5F;
 
     public TriggerCause cause = new TriggerCause.TriggerCauseRedstone(ForgeDirection.UNKNOWN, 15);
@@ -37,7 +37,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition
         return this;
     }
 
-    public Blast setYield(int size)
+    public Blast setYield(double size)
     {
         this.size = size;
         return this;

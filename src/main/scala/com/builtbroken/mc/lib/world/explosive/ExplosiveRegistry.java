@@ -95,7 +95,7 @@ public final class ExplosiveRegistry
      * @param multi        - size of the action
      * @return if the result completed, was blocked, or failed
      */
-    public static WorldChangeHelper.ChangeResult triggerExplosive(Location loc, IExplosive ex, TriggerCause triggerCause, int multi, NBTTagCompound tag)
+    public static WorldChangeHelper.ChangeResult triggerExplosive(Location loc, IExplosive ex, TriggerCause triggerCause, double multi, NBTTagCompound tag)
     {
         if (isRegistered(ex))
         {

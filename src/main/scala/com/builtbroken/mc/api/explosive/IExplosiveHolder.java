@@ -14,5 +14,5 @@ public interface IExplosiveHolder extends IExplosiveContainer
      * @param nbt - data used to trigger the explosive
      * @return true if it was set, false if it was rejected
      */
-    public boolean setExplosive(IExplosive ex, int size, NBTTagCompound nbt);
+    public boolean setExplosive(IExplosive ex, double size, NBTTagCompound nbt);
 }
