@@ -10,8 +10,9 @@ public interface IExplosiveHolder extends IExplosiveContainer
     /**
      * Sets what explosive the container uses
      * @param ex - registered explosive handler
+     * @param size - size, or load of the explosive
      * @param nbt - data used to trigger the explosive
      * @return true if it was set, false if it was rejected
      */
-    public boolean setExplosive(IExplosive ex, NBTTagCompound nbt);
+    public boolean setExplosive(IExplosive ex, int size, NBTTagCompound nbt);
 }
