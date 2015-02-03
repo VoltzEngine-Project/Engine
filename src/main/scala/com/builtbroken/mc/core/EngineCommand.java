@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.registry;
+package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.prefab.entity.EntityProjectile;
