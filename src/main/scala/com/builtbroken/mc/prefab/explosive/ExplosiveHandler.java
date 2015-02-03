@@ -1,12 +1,12 @@
 package com.builtbroken.mc.prefab.explosive;
 
+import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.prefab.explosive.blast.Blast;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import com.builtbroken.mc.api.event.TriggerCause;
-import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.world.edit.IWorldChangeAction;
@@ -18,7 +18,7 @@ import java.util.List;
  * <p/>
  * Created by robert on 11/19/2014.
  */
-public class Explosive implements IExplosive
+public class ExplosiveHandler implements IExplosiveHandler
 {
     /**
      * unlocalized and registry name
@@ -40,7 +40,7 @@ public class Explosive implements IExplosive
      *
      * @param blastClass - class extending blast
      */
-    public Explosive(Class<? extends Blast> blastClass)
+    public ExplosiveHandler(Class<? extends Blast> blastClass)
     {
         this(blastClass.getSimpleName(), blastClass, 1);
     }
@@ -51,7 +51,7 @@ public class Explosive implements IExplosive
      * @param name       - name to use for registry id
      * @param blastClass - class extending blast
      */
-    public Explosive(String name, Class<? extends Blast> blastClass)
+    public ExplosiveHandler(String name, Class<? extends Blast> blastClass)
     {
         this(name, blastClass, 1);
     }
@@ -63,7 +63,7 @@ public class Explosive implements IExplosive
      * @param blastClass - class extending blast
      * @param multiplier - value to mutliply the size by
      */
-    public Explosive(String name, Class<? extends Blast> blastClass, int multiplier)
+    public ExplosiveHandler(String name, Class<? extends Blast> blastClass, int multiplier)
     {
         this.translationKey = name;
         this.blastClass = blastClass;

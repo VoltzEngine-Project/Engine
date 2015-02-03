@@ -1,7 +1,7 @@
 package com.builtbroken.mc.api.items;
 
+import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import net.minecraft.item.ItemStack;
-import com.builtbroken.mc.api.explosive.IExplosive;
 
 /** Applied to items that contain an explosive instance.
  *
@@ -18,5 +18,5 @@ public interface IExplosiveItem
      * @param stack - itemstack that contains an instance of this item
      * @return explosive instance, or null if it doesn't contain one
      */
-    public IExplosive getExplosive(ItemStack stack);
+    public IExplosiveHandler getExplosive(ItemStack stack);
 }

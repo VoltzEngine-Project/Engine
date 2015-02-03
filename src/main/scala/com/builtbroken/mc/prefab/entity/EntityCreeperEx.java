@@ -1,7 +1,7 @@
 package com.builtbroken.mc.prefab.entity;
 
 import com.builtbroken.mc.api.event.TriggerCause;
-import com.builtbroken.mc.api.explosive.IExplosive;
+import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.api.explosive.IExplosiveHolder;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
@@ -23,7 +23,7 @@ public class EntityCreeperEx extends EntityMob implements IExplosiveHolder
 {
     protected int fuseTicks = 30;
     protected double ex_size = 3;
-    protected IExplosive ex;
+    protected IExplosiveHandler ex;
     protected NBTTagCompound ex_data;
 
     public EntityCreeperEx(World w)
@@ -38,19 +38,19 @@ public class EntityCreeperEx extends EntityMob implements IExplosiveHolder
         this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false));
     }
 
-    public EntityCreeperEx(Location location, IExplosive ex, double size, NBTTagCompound tag)
+    public EntityCreeperEx(Location location, IExplosiveHandler ex, double size, NBTTagCompound tag)
     {
         this(location.world);
         this.setPosition(location.x(), location.y(), location.z());
         this.setExplosive(ex, size, tag);
     }
 
-    public static void replaceCreeper(EntityCreeper creeper, IExplosive ex)
+    public static void replaceCreeper(EntityCreeper creeper, IExplosiveHandler ex)
     {
         replaceCreeper(creeper, ex, 2, null);
     }
 
-    public static void replaceCreeper(EntityCreeper creeper, IExplosive ex, double size, NBTTagCompound data)
+    public static void replaceCreeper(EntityCreeper creeper, IExplosiveHandler ex, double size, NBTTagCompound data)
     {
         EntityCreeperEx cex = new EntityCreeperEx(new Location(creeper), ex, size, data);
         creeper.setDead();
@@ -112,13 +112,13 @@ public class EntityCreeperEx extends EntityMob implements IExplosiveHolder
     }
 
     @Override
-    public IExplosive getExplosive()
+    public IExplosiveHandler getExplosive()
     {
         return ex;
     }
 
     @Override
-    public boolean setExplosive(IExplosive ex, double size, NBTTagCompound nbt)
+    public boolean setExplosive(IExplosiveHandler ex, double size, NBTTagCompound nbt)
     {
         this.ex_size = size;
         this.ex = ex;

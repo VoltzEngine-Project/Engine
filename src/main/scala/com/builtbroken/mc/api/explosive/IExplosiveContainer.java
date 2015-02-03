@@ -1,7 +1,5 @@
 package com.builtbroken.mc.api.explosive;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 /**
  * An object that contains a reference to IExplosive. Carried by explosives, grenades and missile
  * entities etc.
@@ -11,5 +9,5 @@ import net.minecraft.nbt.NBTTagCompound;
 public interface IExplosiveContainer
 {
     /** Registered explosive handler */
-	public IExplosive getExplosive();
+	public IExplosiveHandler getExplosive();
 }

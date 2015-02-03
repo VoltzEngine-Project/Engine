@@ -1,9 +1,9 @@
 package com.builtbroken.mc.lib.world.explosive;
 
+import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import com.builtbroken.mc.api.event.TriggerCause;
-import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.mod.config.Config;
 import com.builtbroken.mc.lib.transform.vector.Location;
@@ -18,8 +18,8 @@ import java.util.*;
  */
 public final class ExplosiveRegistry
 {
-    private static final HashMap<String, IExplosive> idToExplosiveMap = new HashMap();
-    private static final HashMap<String, List<IExplosive>> modToExplosiveMap = new HashMap();
+    private static final HashMap<String, IExplosiveHandler> idToExplosiveMap = new HashMap();
+    private static final HashMap<String, List<IExplosiveHandler>> modToExplosiveMap = new HashMap();
 
     @Config
     public static boolean LOG_REGISTERING_EXPLOSIVES = true;
@@ -32,7 +32,7 @@ public final class ExplosiveRegistry
      * @param ex    - explosive instance
      * @return explosive instance
      */
-    public static IExplosive registerOrGetExplosive(String modID, String id, IExplosive ex)
+    public static IExplosiveHandler registerOrGetExplosive(String modID, String id, IExplosiveHandler ex)
     {
         if (registerExplosive(modID, id, ex))
             return ex;
@@ -47,7 +47,7 @@ public final class ExplosiveRegistry
      * @param ex    - explosive instance
      * @return false an explosive is already registered by the ID
      */
-    public static boolean registerExplosive(String modID, String id, IExplosive ex)
+    public static boolean registerExplosive(String modID, String id, IExplosiveHandler ex)
     {
         if (!isRegistered(ex) && !idToExplosiveMap.containsKey(id))
         {
@@ -56,7 +56,7 @@ public final class ExplosiveRegistry
             ex.onRegistered(id, modID);
 
             //Save explosive to modID
-            List<IExplosive> list;
+            List<IExplosiveHandler> list;
             if(modToExplosiveMap.containsKey(modID))
                 list = modToExplosiveMap.get(modID);
             else
@@ -81,7 +81,7 @@ public final class ExplosiveRegistry
      * @param multi        - size of the action
      * @return if the result completed, was blocked, or failed
      */
-    public static WorldChangeHelper.ChangeResult triggerExplosive(World world, double x, double y, double z, IExplosive ex, TriggerCause triggerCause, int multi, NBTTagCompound tag)
+    public static WorldChangeHelper.ChangeResult triggerExplosive(World world, double x, double y, double z, IExplosiveHandler ex, TriggerCause triggerCause, int multi, NBTTagCompound tag)
     {
         return triggerExplosive(new Location(world, x, y, z), ex, triggerCause, multi, tag);
     }
@@ -95,7 +95,7 @@ public final class ExplosiveRegistry
      * @param multi        - size of the action
      * @return if the result completed, was blocked, or failed
      */
-    public static WorldChangeHelper.ChangeResult triggerExplosive(Location loc, IExplosive ex, TriggerCause triggerCause, double multi, NBTTagCompound tag)
+    public static WorldChangeHelper.ChangeResult triggerExplosive(Location loc, IExplosiveHandler ex, TriggerCause triggerCause, double multi, NBTTagCompound tag)
     {
         if (isRegistered(ex))
         {
@@ -111,7 +111,7 @@ public final class ExplosiveRegistry
      * @param explosive - explosive
      * @return false if the explosive id is empty, or not contained in the registry map
      */
-    public static boolean isRegistered(IExplosive explosive)
+    public static boolean isRegistered(IExplosiveHandler explosive)
     {
         return explosive != null && explosive.getID() != null && !explosive.getID().isEmpty() && idToExplosiveMap.containsKey(explosive.getID());
     }
@@ -122,7 +122,7 @@ public final class ExplosiveRegistry
      * @param name - string to match
      * @return explosive if it was registered
      */
-    public static IExplosive get(String name)
+    public static IExplosiveHandler get(String name)
     {
         return idToExplosiveMap.get(name);
     }
@@ -132,7 +132,7 @@ public final class ExplosiveRegistry
      *
      * @return arraylist
      */
-    public static Collection<IExplosive> getExplosives()
+    public static Collection<IExplosiveHandler> getExplosives()
     {
         return idToExplosiveMap.values();
     }
@@ -149,7 +149,7 @@ public final class ExplosiveRegistry
      * @param modID - valid mod id
      * @return list or empty list if mod is not found
      */
-    public static List<IExplosive> getExplosives(String modID)
+    public static List<IExplosiveHandler> getExplosives(String modID)
     {
         if(modToExplosiveMap.containsKey(modID))
             return modToExplosiveMap.get(modID);
@@ -161,7 +161,7 @@ public final class ExplosiveRegistry
      *
      * @return hashmap
      */
-    public static HashMap<String, IExplosive> getExplosiveMap()
+    public static HashMap<String, IExplosiveHandler> getExplosiveMap()
     {
         return idToExplosiveMap;
     }

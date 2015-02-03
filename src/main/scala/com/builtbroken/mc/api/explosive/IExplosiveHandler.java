@@ -14,7 +14,7 @@ import java.util.List;
  * Use trigger to express how the blast will be created rather than creating
  * a new explosive instance per different blast.
  */
-public interface IExplosive
+public interface IExplosiveHandler
 {
 
 	/** Attempt to trigger the explosive at the location for the trigger cause.

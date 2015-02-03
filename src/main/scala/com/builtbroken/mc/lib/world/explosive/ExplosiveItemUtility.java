@@ -1,10 +1,10 @@
 package com.builtbroken.mc.lib.world.explosive;
 
+import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.api.items.IExplosiveItem;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
@@ -32,7 +32,7 @@ public class ExplosiveItemUtility
     {
         if (stack != null && stack.getItem() instanceof IExplosiveItem)
         {
-            IExplosive ex = ((IExplosiveItem) stack.getItem()).getExplosive(stack);
+            IExplosiveHandler ex = ((IExplosiveItem) stack.getItem()).getExplosive(stack);
             if (ex != null)
             {
                 lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(getExplosive(stack).getTranslationKey() +".name"));
@@ -53,7 +53,7 @@ public class ExplosiveItemUtility
     public static void getSubItems(Item item, List list)
     {
         //TODO link in with blacklist
-        for (IExplosive ex : ExplosiveRegistry.getExplosives())
+        for (IExplosiveHandler ex : ExplosiveRegistry.getExplosives())
         {
             ItemStack stack = new ItemStack(item);
             ExplosiveItemUtility.setExplosive(stack, ex);
@@ -68,7 +68,7 @@ public class ExplosiveItemUtility
      * @param itemStack - stack to access NBT
      * @return explosive instance of null if the explosive doesn't exist or NBT is empty
      */
-    public static IExplosive getExplosive(ItemStack itemStack)
+    public static IExplosiveHandler getExplosive(ItemStack itemStack)
     {
         return getExplosive(itemStack.getTagCompound());
     }
@@ -79,7 +79,7 @@ public class ExplosiveItemUtility
      * @param tag - NBT tag to access
      * @return explosive instance, null if the tag is empty or explosive doesn't exist
      */
-    public static IExplosive getExplosive(NBTTagCompound tag)
+    public static IExplosiveHandler getExplosive(NBTTagCompound tag)
     {
         if (tag != null)
         {
@@ -105,7 +105,7 @@ public class ExplosiveItemUtility
      * @param itemStack - - stack to access NBT
      * @param ex        - explosive name to encode
      */
-    public static void setExplosive(ItemStack itemStack, IExplosive ex)
+    public static void setExplosive(ItemStack itemStack, IExplosiveHandler ex)
     {
         if (ex != null)
         {
@@ -122,7 +122,7 @@ public class ExplosiveItemUtility
      * @param tag - nbt tag to encode to
      * @param ex  - explosive name to encode
      */
-    public static void setExplosive(NBTTagCompound tag, IExplosive ex)
+    public static void setExplosive(NBTTagCompound tag, IExplosiveHandler ex)
     {
         if (ex != null)
         {
