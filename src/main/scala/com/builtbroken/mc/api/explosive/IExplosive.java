@@ -6,7 +6,7 @@ package com.builtbroken.mc.api.explosive;
  *
  * @author Calclavia, Darkguardsman
  */
-public interface IExplosiveContainer
+public interface IExplosive
 {
     /** Registered explosive handler */
 	public IExplosiveHandler getExplosive();

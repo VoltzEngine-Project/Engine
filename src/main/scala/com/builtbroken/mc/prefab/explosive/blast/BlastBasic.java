@@ -1,7 +1,7 @@
 package com.builtbroken.mc.prefab.explosive.blast;
 
 import com.builtbroken.mc.api.event.TriggerCause;
-import com.builtbroken.mc.api.explosive.IExplosiveContainer;
+import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.DamageUtility;
@@ -230,7 +230,7 @@ public class BlastBasic extends Blast
             //the current explosion is running in with a little bit in the opposite direction
 
             //Trigger break event so blocks can do X action
-            if (!(block instanceof BlockTNT) && !(vec.getTileEntity() instanceof IExplosiveContainer))
+            if (!(block instanceof BlockTNT) && !(vec.getTileEntity() instanceof IExplosive))
             {
                 block.onBlockDestroyedByExplosion(world, vec.xi(), vec.yi(), vec.zi(), wrapperExplosion);
             }

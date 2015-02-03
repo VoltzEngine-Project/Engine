@@ -5,7 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 /** Anything that can contain an explosive in a way that the explosive can be inserted/set
  * Created by robert on 2/1/2015.
  */
-public interface IExplosiveHolder extends IExplosiveContainer
+public interface IExplosiveHolder extends IExplosive
 {
     /**
      * Sets what explosive the container uses
