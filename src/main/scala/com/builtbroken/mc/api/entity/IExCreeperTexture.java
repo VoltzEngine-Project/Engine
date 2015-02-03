@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 /**
  * Created by robert on 2/3/2015.
  */
-public interface IExCreeperRender
+public interface IExCreeperTexture
 {
     /**
      * Gets the texture to use instead of the default creeper texture
@@ -14,5 +14,5 @@ public interface IExCreeperRender
      * @param entity - entity that will use the texture for its renderer
      * @return Valid resource location, or null to use default texture
      */
-    public ResourceLocation getTexture(Entity entity);
+    public ResourceLocation getCreeperTexture(Entity entity);
 }

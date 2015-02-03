@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.content.entity;
 
-import com.builtbroken.mc.api.entity.IExCreeperRender;
+import com.builtbroken.mc.api.entity.IExCreeperTexture;
 import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -30,9 +30,9 @@ public class RenderExCreeper extends RenderLiving
         if(entity instanceof IExplosive)
         {
             IExplosiveHandler ex = ((IExplosive) entity).getExplosive();
-            if(ex instanceof IExCreeperRender)
+            if(ex instanceof IExCreeperTexture)
             {
-                ResourceLocation texture = ((IExCreeperRender) ex).getTexture(entity);
+                ResourceLocation texture = ((IExCreeperTexture) ex).getCreeperTexture(entity);
                 if(texture != null && !texture.getResourcePath().contains("missing"))
                     return texture;
             }
