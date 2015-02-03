@@ -5,6 +5,10 @@ import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.api.explosive.IExplosiveHolder;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import io.netty.buffer.ByteBuf;
+import li.cil.repack.org.luaj.vm2.ast.Exp;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
@@ -19,7 +23,7 @@ import net.minecraft.world.World;
  * and can be used to make alternate creepers.
  * Created by robert on 1/31/2015.
  */
-public class EntityExCreeper extends EntityMob implements IExplosiveHolder
+public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEntityAdditionalSpawnData
 {
     protected int fuseTicks = 30;
     protected double ex_size = 3;
@@ -168,6 +172,40 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder
             ex_size = Math.max(nbt.getDouble("size"), 1.0);
             if (nbt.hasKey("ex_data"))
                 ex_data = nbt.getCompoundTag("ex_data");
+        }
+    }
+
+    @Override
+    public void writeSpawnData(ByteBuf buffer)
+    {
+        buffer.writeBoolean(ex != null);
+        if(ex != null)
+        {
+            ByteBufUtils.writeUTF8String(buffer, ex.getID());
+            if(ex_data != null)
+            {
+                ByteBufUtils.writeTag(buffer, ex_data);
+            }
+            else
+            {
+                ByteBufUtils.writeTag(buffer, new NBTTagCompound());
+            }
+        }
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf buffer)
+    {
+        boolean ex_exists = buffer.readBoolean();
+        if(ex_exists)
+        {
+            ex = ExplosiveRegistry.get(ByteBufUtils.readUTF8String(buffer));
+            ex_data = ByteBufUtils.readTag(buffer);
+        }
+        else
+        {
+            ex = null;
+            ex_data = null;
         }
     }
 
