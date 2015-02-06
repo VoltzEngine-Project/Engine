@@ -248,6 +248,10 @@ public class ModManager
         {
             GameRegistry.registerBlock(block, ItemBlockMetadata.class, name);
         }
+        if(block instanceof IRegistryInit)
+        {
+            ((IRegistryInit) block).onRegistered();
+        }
         return block;
     }
 
@@ -337,6 +341,10 @@ public class ModManager
 
             items.put(item, name);
             GameRegistry.registerItem(item, name);
+            if(item instanceof IRegistryInit)
+            {
+                ((IRegistryInit) item).onRegistered();
+            }
         }
 
         return item;
