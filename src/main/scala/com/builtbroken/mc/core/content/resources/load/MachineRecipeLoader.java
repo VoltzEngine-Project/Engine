@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class MachineRecipeLoader extends AbstractLoadable
 {
-    protected final MachineRecipeType type;
+    protected final String type;
 
-    public MachineRecipeLoader(MachineRecipeType type)
+    public MachineRecipeLoader(String type)
     {
         this.type = type;
     }
@@ -31,7 +31,7 @@ public class MachineRecipeLoader extends AbstractLoadable
         generateRecipes(recipes);
         for(MRItemStack recipe : recipes)
         {
-            RecipeRegisterResult result = type.registerRecipe(recipe);
+            RecipeRegisterResult result = MachineRecipeType.getHandler(type).registerRecipe(recipe);
             if(result != RecipeRegisterResult.REGISTERED)
             {
                 References.LOGGER.warn("" + this.getClass().getSimpleName() +" failed to register recipe " + recipe);

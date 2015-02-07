@@ -12,10 +12,10 @@ import java.util.*;
  */
 public abstract class MRHandler<O extends Object, K extends Object> implements IMachineRecipeHandler
 {
-    public MachineRecipeType type;
+    public final String type;
     public Map<K, List<IMachineRecipe>> recipes = new HashMap();
 
-    public MRHandler(MachineRecipeType type)
+    public MRHandler(String type)
     {
         this.type = type;
     }

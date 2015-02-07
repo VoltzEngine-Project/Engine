@@ -28,19 +28,19 @@ public class TestMRHItemStack extends AbstractTest
     {
         super.setUpForEntireClass();
         ModRegistry.init();
-        this.handler = new MRHandlerItemStack(MachineRecipeType.ITEM_CRUSHER);
+        this.handler = new MRHandlerItemStack(MachineRecipeType.ITEM_CRUSHER.INTERNAL_NAME);
 
     }
 
     public void testAddRecipe()
     {
-        RecipeRegisterResult result = handler.registerRecipe(new MRItemStack(MachineRecipeType.ITEM_CRUSHER, Blocks.stone).addInputOption(Blocks.stone));
+        RecipeRegisterResult result = handler.registerRecipe(new MRItemStack(MachineRecipeType.ITEM_CRUSHER.INTERNAL_NAME, Blocks.stone).addInputOption(Blocks.stone));
         assertEquals("Failed to register recipe", RecipeRegisterResult.REGISTERED, result);
     }
 
     public void testGetRecipe()
     {
-        RecipeRegisterResult result = handler.registerRecipe(new MRItemStack(MachineRecipeType.ITEM_CRUSHER, Blocks.bedrock).addInputOption(Blocks.bedrock));
+        RecipeRegisterResult result = handler.registerRecipe(new MRItemStack(MachineRecipeType.ITEM_CRUSHER.INTERNAL_NAME, Blocks.bedrock).addInputOption(Blocks.bedrock));
         assertEquals("Failed to register recipe", RecipeRegisterResult.REGISTERED, result);
 
         ItemStack out = handler.getRecipe(new Object[]{new ItemStack(Blocks.bedrock)}, 0, 0);

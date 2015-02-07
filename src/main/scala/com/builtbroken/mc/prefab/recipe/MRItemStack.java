@@ -13,34 +13,34 @@ public class MRItemStack extends MachineRecipe<ItemStack, ItemStackWrapper>
 {
     public final ItemStackWrapper output;
 
-    public MRItemStack(MachineRecipeType type, ItemStackWrapper output)
+    public MRItemStack(String type, ItemStackWrapper output)
     {
         super(type);
         this.output = output;
         this.inputs = new ItemStackList();
     }
 
-    public MRItemStack(MachineRecipeType type, ItemStack output)
+    public MRItemStack(String type, ItemStack output)
     {
         this(type, new ItemStackWrapper(output));
     }
 
-    public MRItemStack(MachineRecipeType type, Item output)
+    public MRItemStack(String type, Item output)
     {
         this(type, new ItemStackWrapper(output));
     }
 
-    public MRItemStack(MachineRecipeType type, Item output, int meta)
+    public MRItemStack(String type, Item output, int meta)
     {
         this(type, new ItemStack(output, meta));
     }
 
-    public MRItemStack(MachineRecipeType type, Block output)
+    public MRItemStack(String type, Block output)
     {
         this(type, new ItemStackWrapper(output));
     }
 
-    public MRItemStack(MachineRecipeType type, Block output, int meta)
+    public MRItemStack(String type, Block output, int meta)
     {
         this(type, new ItemStack(output, meta));
     }

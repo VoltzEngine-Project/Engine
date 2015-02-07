@@ -18,7 +18,7 @@ public interface IMachineRecipe<O extends Object, I extends Object>
     /**
      * Type of recipe
      */
-    public MachineRecipeType getType();
+    public String getType();
 
     /**
      * Gets the input items as simple as possible

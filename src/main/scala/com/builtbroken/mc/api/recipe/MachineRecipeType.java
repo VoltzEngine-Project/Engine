@@ -13,29 +13,47 @@ import net.minecraft.item.ItemStack;
 public enum MachineRecipeType
 {
     /** MC furnace recipes, Ore -> Ingot */
-    ITEM_SMELTER,
+    ITEM_SMELTER("smelter"),
     /** Item to Dust recipes, Ore -> Dust */
-    ITEM_GRINDER,
+    ITEM_GRINDER("ore.grinder"),
     /** Item to rubble recipes, Ore -> Rubble */
-    ITEM_CRUSHER,
+    ITEM_CRUSHER("ore.crusher"),
     /** Item to clean item recipes, ore rubble -> metal rubble */
-    ITEM_WASHER,
+    ITEM_WASHER("ore.washer"),
     /** Item to cut up item, Logs -> Planks */
-    ITEM_SAWMILL,
+    ITEM_SAWMILL("sawmill"),
     /** Item to items used to craft it, Chest -> 8 planks. Make sure to return the least valuable version of the recipe */
-    ITEM_SALVAGER,
+    ITEM_SALVAGER("salvager"),
     /** Fluid + Fluid -> New Fluid */
-    FLUID_MIXER,
+    FLUID_MIXER("fluid.mixer"),
     /** Item -> Molten Fluid */
-    FLUID_SMELTER,
+    FLUID_SMELTER("fluid.smelter"),
     /** Fluid -> Item */
-    FLUID_SOLIDIFIER;
+    FLUID_SOLIDIFIER("fluid.solidifier");
 
     private IMachineRecipeHandler handler;
+    public final String INTERNAL_NAME;
+
+    private MachineRecipeType(String name)
+    {
+        this.INTERNAL_NAME = name;
+    }
 
     public IMachineRecipeHandler getHandler()
     {
         return handler;
+    }
+
+    public static IMachineRecipeHandler getHandler(String name)
+    {
+        for(MachineRecipeType type : values())
+        {
+            if(type.INTERNAL_NAME.equalsIgnoreCase(name))
+            {
+                return type.getHandler();
+            }
+        }
+        return null;
     }
 
     /**

@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
  */
 public class MRHandlerItemStack extends MRHandler<ItemStack, ItemStackWrapper>
 {
-    public MRHandlerItemStack(MachineRecipeType type)
+    public MRHandlerItemStack(String type)
     {
         super(type);
     }

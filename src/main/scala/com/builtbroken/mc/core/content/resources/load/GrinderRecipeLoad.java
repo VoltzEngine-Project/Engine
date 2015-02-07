@@ -14,7 +14,7 @@ public class GrinderRecipeLoad extends MachineRecipeLoader
 {
     public GrinderRecipeLoad()
     {
-        super(MachineRecipeType.ITEM_GRINDER);
+        super(MachineRecipeType.ITEM_GRINDER.INTERNAL_NAME);
     }
 
     @Override

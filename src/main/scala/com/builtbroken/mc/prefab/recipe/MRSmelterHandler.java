@@ -11,7 +11,7 @@ public class MRSmelterHandler extends MRHandlerItemStack
 {
     public MRSmelterHandler()
     {
-        super(MachineRecipeType.ITEM_SMELTER);
+        super(MachineRecipeType.ITEM_SMELTER.INTERNAL_NAME);
     }
 
     @Override

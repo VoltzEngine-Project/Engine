@@ -14,7 +14,7 @@ public class CrusherRecipeLoad extends MachineRecipeLoader
 {
     public CrusherRecipeLoad()
     {
-        super(MachineRecipeType.ITEM_GRINDER);
+        super(MachineRecipeType.ITEM_GRINDER.INTERNAL_NAME);
     }
 
     @Override

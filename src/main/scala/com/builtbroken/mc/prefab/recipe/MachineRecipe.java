@@ -12,16 +12,16 @@ import java.util.List;
  */
 public abstract class MachineRecipe<O extends Object, I extends Object> implements IMachineRecipe<O, I>
 {
-    protected final MachineRecipeType type;
+    protected final String type;
     protected List<I> inputs = new ArrayList();
 
-    public MachineRecipe(MachineRecipeType type)
+    public MachineRecipe(String type)
     {
         this.type = type;
     }
 
     @Override
-    public MachineRecipeType getType()
+    public String getType()
     {
         return type;
     }
