@@ -1,12 +1,12 @@
 package com.builtbroken.mc.core.registry;
 
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.core.registry.implement.IPostInit;
+import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -21,6 +21,9 @@ import java.util.WeakHashMap;
  * Helper class that can be used to reduce the amount of code used to handle general object registration. Handles basic block and item
  * creation threw reflection. As well follows up by setting a common creative tab, mod prefix, localization name, and texture name.
  *
+ * If you use this make sure to init prefix, call {@link #fireInit()}, and {@link #firePostInit()}. If you fail to do so the manager will
+ * not fully function. As well most of your blocks will not recipe the correct method calls from the manager.
+ *
  * @author DarkGuardsman, Calclavia
  */
 public class ModManager
@@ -30,6 +33,11 @@ public class ModManager
 
     public final WeakHashMap<Block, String> blocks = new WeakHashMap();
     public final WeakHashMap<Item, String> items = new WeakHashMap();
+
+    /**
+     * List of every object registered threw this manager, is cleared at the end of postInit
+     */
+    private final ArrayList temp_registry_list = new ArrayList();
 
     public String modPrefix;
     public CreativeTabs defaultTab;
@@ -143,12 +151,14 @@ public class ModManager
         spatial.setBlock(block);
 
         block = newBlock(name, block, spatial.itemBlock);
+        temp_registry_list.add(spatial);
 
         Tile newTile = spatial.newTile();
         if (newTile != null)
         {
             proxy.registerTileEntity(name, modPrefix, block, newTile);
-
+            if (newTile.getClass() != spatial.getClass())
+                temp_registry_list.add(newTile);
             if (spatial.renderTileEntity)
             {
                 proxy.registerDummyRenderer(newTile.getClass());
@@ -219,13 +229,14 @@ public class ModManager
      */
     public <C extends Block> C newBlock(String name, C block, Class<? extends ItemBlock> itemBlock)
     {
-        if(name == null || name.isEmpty())
+        if (name == null || name.isEmpty())
         {
             name = LanguageUtility.decapitalizeFirst(block.getClass().getSimpleName().replace("Block", ""));
         }
         // Register block with item block
         proxy.registerBlock(this, name, modPrefix, block, itemBlock);
         blocks.put(block, name);
+        temp_registry_list.add(block);
         return block;
     }
 
@@ -271,26 +282,24 @@ public class ModManager
             }
 
             return (C) newItem(name, item);
-        }
-        catch (NoSuchMethodException e)
+        } catch (NoSuchMethodException e)
         {
             throw new RuntimeException(name() + "Failed to create item [" + name + "] due to invalid constructor", e);
-        }
-        catch (InstantiationException e)
+        } catch (InstantiationException e)
         {
             throw new RuntimeException(name() + "Failed to create item [" + name + "]", e);
-        }
-        catch (IllegalAccessException e)
+        } catch (IllegalAccessException e)
         {
             throw new RuntimeException(name() + "Failed to create item [" + name + "] due to access issue", e);
-        }
-        catch (InvocationTargetException e)
+        } catch (InvocationTargetException e)
         {
             throw new RuntimeException(name() + "Failed to create item [" + name + "] when invoking constructor", e);
         }
     }
 
-    /** Registers a new item using its class as the registry name
+    /**
+     * Registers a new item using its class as the registry name
+     *
      * @param item - item instance to register
      * @return item instance
      */
@@ -301,20 +310,41 @@ public class ModManager
 
     /**
      * Registers a new item
+     *
      * @param name - name to register with, as well use for icon & lang name if missing
      * @param item - item instance to register
      * @return item instance
      */
     public Item newItem(String name, Item item)
     {
-        if(name == null || name.isEmpty())
+        if (name == null || name.isEmpty())
         {
-            References.LOGGER.warn(name() +" Registry name was not provided for item " + item + " using class name to prevent game from crashing. This may cause world loading issues in the future.");
+            References.LOGGER.warn(name() + " Registry name was not provided for item " + item + " using class name to prevent game from crashing. This may cause world loading issues in the future.");
             name = LanguageUtility.decapitalizeFirst(item.getClass().getSimpleName().replace("Item", ""));
         }
         proxy.registerItem(this, name, modPrefix, item);
         items.put(item, name);
+        temp_registry_list.add(item);
         return item;
+    }
+
+    public void fireInit()
+    {
+        for(Object object: temp_registry_list)
+        {
+            proxy.onRegistry(object);
+        }
+    }
+
+    public void firePostInit()
+    {
+        for(Object object: temp_registry_list)
+        {
+            if(object instanceof IPostInit)
+            {
+                ((IPostInit) object).onPostInit();
+            }
+        }
     }
 
 

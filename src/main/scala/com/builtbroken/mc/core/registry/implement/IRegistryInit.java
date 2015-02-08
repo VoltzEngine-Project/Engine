@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.registry;
+package com.builtbroken.mc.core.registry.implement;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

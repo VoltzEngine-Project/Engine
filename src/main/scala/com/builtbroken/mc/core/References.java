@@ -15,11 +15,9 @@ public final class References
 {
 	public static final String ID = "VoltzEngine";
 	public static final String NAME = "Voltz Engine";
-	/**
-	 * The configuration file.
-	 */
-	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(),"voltz/" + NAME.replace(" ", "") + ".cfg"));
-	public static final Logger LOGGER = LogManager.getLogger(NAME);
+
+    @Deprecated /** Use Engine.instance.logger */
+	public static Logger LOGGER;
 
     public static final String MAJOR_VERSION = "@MAJOR@";
 	public static final String MINOR_VERSION = "@MINOR@";

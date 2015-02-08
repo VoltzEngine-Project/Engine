@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.potion;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,10 +56,7 @@ public abstract class CustomPotion extends Potion
 
 	public static int getPotionID(String name, int id)
 	{
-		References.CONFIGURATION.load();
-		int finalID = References.CONFIGURATION.get("Potion ID", name + " ID", id).getInt(id);
-		References.CONFIGURATION.save();
-		return finalID;
+		return Engine.instance.getConfig().get("Potion ID", name + " ID", id).getInt(id);
 	}
 
 	/**

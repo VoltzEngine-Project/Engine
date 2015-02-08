@@ -1,9 +1,11 @@
 package com.builtbroken.mc.lib.mod;
 
+import com.builtbroken.mc.core.registry.implement.IPostInit;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import net.minecraft.block.Block;
 import net.minecraftforge.common.config.Configuration;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
@@ -54,11 +56,13 @@ public abstract class AbstractMod
     public void init(FMLInitializationEvent event)
     {
         loader.init();
+        getManager().fireInit();
     }
 
     public void postInit(FMLPostInitializationEvent event)
     {
         loader.postInit();
+        getManager().firePostInit();
         getConfig().save();
     }
 

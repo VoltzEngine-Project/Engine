@@ -2,11 +2,11 @@ package com.builtbroken.mc.core.registry;
 
 import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.lib.render.block.ItemRenderHandler;
 import com.builtbroken.mc.lib.render.block.RenderTileDummy;
 import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -58,11 +58,6 @@ public class ClientRegistryProxy extends CommonRegistryProxy
                 References.LOGGER.error(manager.name() + " Failed to access creativeTab field for block " + name);
             }
         }
-
-        if(block instanceof IRegistryInit)
-        {
-            ((IRegistryInit) block).onClientRegistered();
-        }
     }
 
     @Override
@@ -83,11 +78,6 @@ public class ClientRegistryProxy extends CommonRegistryProxy
         {
             item.setCreativeTab(manager.defaultTab);
         }
-
-        if(item instanceof IRegistryInit)
-        {
-            ((IRegistryInit) item).onClientRegistered();
-        }
     }
 
     @Override
@@ -98,10 +88,6 @@ public class ClientRegistryProxy extends CommonRegistryProxy
         {
             ItemRenderHandler.register(new ItemStack(block).getItem(), (ISimpleItemRenderer) tile);
         }
-        if(tile instanceof IRegistryInit)
-        {
-            ((IRegistryInit) tile).onClientRegistered();
-        }
     }
 
     @Override
@@ -110,6 +96,16 @@ public class ClientRegistryProxy extends CommonRegistryProxy
         if (!TileEntityRendererDispatcher.instance.mapSpecialRenderers.containsKey(clazz))
         {
             ClientRegistry.bindTileEntitySpecialRenderer(clazz, new RenderTileDummy());
+        }
+    }
+
+    @Override
+    public void onRegistry(Object object)
+    {
+        super.onRegistry(object);
+        if(object instanceof IRegistryInit)
+        {
+            ((IRegistryInit) object).onClientRegistered();
         }
     }
 }

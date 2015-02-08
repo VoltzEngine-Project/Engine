@@ -6,6 +6,8 @@ import com.builtbroken.mc.core.content.resources.load.GrinderRecipeLoad;
 import com.builtbroken.mc.core.handler.InteractionHandler;
 import com.builtbroken.mc.core.content.BlockOre;
 import com.builtbroken.mc.core.content.ItemBlockOre;
+import com.builtbroken.mc.lib.mod.AbstractMod;
+import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.prefab.recipe.MRHandlerItemStack;
 import com.builtbroken.mc.prefab.recipe.MRSmelterHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -49,7 +51,7 @@ import java.util.Arrays;
  */
 
 @Mod(modid = References.ID, name = References.NAME, version = References.VERSION)
-public class Engine
+public class Engine extends AbstractMod
 {
 	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
@@ -70,9 +72,13 @@ public class Engine
 
     private static boolean oresRequested = false;
 	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
-	private LoadableHandler loadables = new LoadableHandler();
 
-	/**
+    public Engine()
+    {
+        super(References.PREFIX);
+    }
+
+    /**
 	 * Requests that all ores are generated
 	 * Must be called in pre-init
 	 */
@@ -84,16 +90,16 @@ public class Engine
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt)
 	{
+        super.preInit(evt);
+        References.LOGGER = logger;
 		ConfigScanner.instance().generateSets(evt.getAsmData());
-		ConfigHandler.sync(References.CONFIGURATION, References.DOMAIN);
-
-		References.CONFIGURATION.load();
+		ConfigHandler.sync(getConfig(), References.DOMAIN);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
-		loadables.applyModule(proxy);
-		loadables.applyModule(packetHandler);
-        loadables.applyModule(CrusherRecipeLoad.class);
-        loadables.applyModule(GrinderRecipeLoad.class);
+		loader.applyModule(proxy);
+        loader.applyModule(packetHandler);
+        loader.applyModule(CrusherRecipeLoad.class);
+        loader.applyModule(GrinderRecipeLoad.class);
 
 		PotionUtility.resizePotionArray();
 		MinecraftForge.EVENT_BUS.register(this);
@@ -114,7 +120,7 @@ public class Engine
 		 */
         if(runningAsDev)
             instaHole = contentRegistry.newItem(new ItemInstaHole());
-		if (References.CONFIGURATION.get("Content", "LoadScrewDriver", true).getBoolean(true))
+		if (getConfig().get("Content", "LoadScrewDriver", true).getBoolean(true))
 		{
 			itemWrench = new ItemScrewdriver();
 			GameRegistry.registerItem(itemWrench, "screwdriver", References.ID);
@@ -123,12 +129,13 @@ public class Engine
 		//BlockCreativeBuilder.register(new SchematicTestRoom());
 		//Finish and close all resources
 
-		loadables.preInit();
+        loader.preInit();
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent evt)
 	{
+        super.init(evt);
 		Engine.metadata.modId = References.NAME;
 		Engine.metadata.name = References.NAME;
 		Engine.metadata.description = References.NAME + " is a mod developement framework designed to assist in creation of mods. It provided basic classes for packet handling, tile creation, inventory handling, saving/loading of NBT, and general all around prefabs.";
@@ -144,17 +151,17 @@ public class Engine
         if(oresRequested)
         {
             ore = contentRegistry.newBlock(References.ID +"StoneOre", new BlockOre("stone"), ItemBlockOre.class);
-            Ores.registerSet(ore, References.CONFIGURATION);
+            Ores.registerSet(ore, getConfig());
         }
 
-		loadables.init();
+        loader.init();
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt)
 	{
-
-		loadables.postInit();
+        super.postInit(evt);
+        loader.postInit();
 
 		OreDictionary.registerOre("ingotGold", Items.gold_ingot);
 		OreDictionary.registerOre("ingotIron", Items.iron_ingot);
@@ -168,9 +175,13 @@ public class Engine
 		//MachineRecipes.instance.addRecipe(RecipeType.ITEM_GRINDER.name(), Blocks.cobblestone, Blocks.sand);
 		//MachineRecipes.instance.addRecipe(RecipeType.ITEM_GRINDER.name(), Blocks.gravel, Blocks.sand);
 		//MachineRecipes.instance.addRecipe(RecipeType.ITEM_GRINDER.name(), Blocks.glass, Blocks.sand);
-
-        References.CONFIGURATION.save();
 	}
+
+    @Override
+    public AbstractProxy getProxy()
+    {
+        return proxy;
+    }
 
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event)
