@@ -46,6 +46,24 @@ public class ItemStackWrapper
         this.nbt_compare = false;
     }
 
+    public ItemStackWrapper setMetaCompare(boolean b)
+    {
+        this.meta_compare = b;
+        return this;
+    }
+
+    public ItemStackWrapper setNBTCompare(boolean b)
+    {
+        this.nbt_compare = b;
+        return this;
+    }
+
+    public ItemStackWrapper setStackCompare(boolean b)
+    {
+        this.stack_size = b;
+        return this;
+    }
+
     @Override
     public boolean equals(Object object)
     {
