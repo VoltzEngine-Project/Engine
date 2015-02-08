@@ -16,7 +16,7 @@ public class ItemStackWrapper
 
     public ItemStackWrapper(ItemStack itemStack)
     {
-        if(itemStack != null)
+        if (itemStack != null)
         {
             this.itemStack = itemStack;
             if (!itemStack.getHasSubtypes())
@@ -78,7 +78,7 @@ public class ItemStackWrapper
         else if (object instanceof ItemStack || object instanceof ItemStackWrapper)
         {
             ItemStack i = object instanceof ItemStack ? (ItemStack) object : ((ItemStackWrapper) object).itemStack;
-            item = itemStack.isItemEqual(i);
+            item = itemStack.getItem() == i.getItem();
             if (meta_compare)
                 meta = itemStack.getItemDamage() == i.getItemDamage();
             if (stack_size)
@@ -107,7 +107,7 @@ public class ItemStackWrapper
         {
             if (object instanceof Item)
             {
-                item = itemStack.getItem() == (Item) object;
+                item = itemStack.getItem() == object;
             }
             else if (object instanceof Block)
             {
@@ -122,13 +122,16 @@ public class ItemStackWrapper
     public int hashCode()
     {
         int hashCode = 1;
-        if(itemStack != null)
+        if (itemStack != null)
         {
             //http://stackoverflow.com/questions/9648305/creating-a-hashcode-method-java
             hashCode = 31 * hashCode + itemStack.getItem().hashCode();
-            hashCode = 31 * hashCode + itemStack.getItemDamage();
-            hashCode = 31 * hashCode + itemStack.stackSize;
-            hashCode = 31 * hashCode + (itemStack.getTagCompound() != null ? itemStack.getTagCompound().hashCode() : 0);
+            if (meta_compare)
+                hashCode = 31 * hashCode + itemStack.getItemDamage();
+            if (stack_size)
+                hashCode = 31 * hashCode + itemStack.stackSize;
+            if (nbt_compare)
+                hashCode = 31 * hashCode + (itemStack.getTagCompound() != null ? itemStack.getTagCompound().hashCode() : 0);
         }
         else
         {

@@ -121,10 +121,10 @@ public class ItemStackWrapperTest extends AbstractTest
 
     public void testCheckMetadataCompare()
     {
-        ItemStackWrapper a = new ItemStackWrapper(new ItemStack(Items.apple, 1, 1));
-        ItemStackWrapper b = new ItemStackWrapper(new ItemStack(Items.apple, 1, 2));
+        ItemStackWrapper a = new ItemStackWrapper(new ItemStack(Items.coal, 1, 0));
+        ItemStackWrapper b = new ItemStackWrapper(new ItemStack(Items.coal, 1, 1));
         assertFalse(a.equals(b));
-        b = new ItemStackWrapper(new ItemStack(Items.apple, 1, 1));
+        b = new ItemStackWrapper(new ItemStack(Items.coal, 1, 0));
         assertTrue(a.equals(b));
     }
 
@@ -173,6 +173,11 @@ public class ItemStackWrapperTest extends AbstractTest
         ItemStackWrapper b = new ItemStackWrapper(new ItemStack(Items.apple));
 
         assertFalse(a.equals(b));
+        assertTrue(b.equals(a));
+
+        HashMap<ItemStackWrapper, Boolean> map = new HashMap();
+        map.put(b, true);
+        assertTrue(map.containsKey(a.setStackCompare(false)));
     }
 
     //Check if Wrapper equals stack
@@ -205,16 +210,28 @@ public class ItemStackWrapperTest extends AbstractTest
 
     public void testHashCodeNotEquals()
     {
+        //Check for item compare
         ItemStackWrapper a = new ItemStackWrapper(new ItemStack(Items.apple));
         ItemStackWrapper b = new ItemStackWrapper(new ItemStack(Items.stone_axe));
         assertFalse("Hash codes should not equal", a.hashCode() == b.hashCode());
 
+        a = new ItemStackWrapper(new ItemStack(Items.apple));
+        b = new ItemStackWrapper(new ItemStack(Items.apple));
+        assertTrue("Hash codes should equal", a.hashCode() == b.hashCode());
+
+        //Check for stack compare when turned off, which is default
         a = new ItemStackWrapper(new ItemStack(Items.apple, 2));
         b = new ItemStackWrapper(new ItemStack(Items.apple, 1));
+        assertTrue("Hash codes should equal as stack size is not compared", a.hashCode() == b.hashCode());
+
+        //Check for stack compare when turned on
+        a = new ItemStackWrapper(new ItemStack(Items.apple, 2)).setStackCompare(true);
+        b = new ItemStackWrapper(new ItemStack(Items.apple, 1)).setStackCompare(true);
         assertFalse("Hash codes should not equal", a.hashCode() == b.hashCode());
 
-        a = new ItemStackWrapper(new ItemStack(Items.apple, 1, 0));
-        b = new ItemStackWrapper(new ItemStack(Items.apple, 1, 1));
+        //Check for meta compare
+        a = new ItemStackWrapper(new ItemStack(Items.apple, 1, 0)).setMetaCompare(true);
+        b = new ItemStackWrapper(new ItemStack(Items.apple, 1, 1)).setMetaCompare(true);
         assertFalse("Hash codes should not equal", a.hashCode() == b.hashCode());
     }
 }
