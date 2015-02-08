@@ -200,20 +200,19 @@ public class BlockTile extends Block implements ITileEntityProvider
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
     {
         inject(world, x, y, z);
-        Cuboid cube = new Cuboid(aabb).subtract(new Pos(x, y, z));
-        Iterable<Cuboid> bounds = getTile(world, x, y, z).getCollisionBoxes(cube, entity);
-
+        Iterable<Cuboid> bounds = getTile(world, x, y, z).getCollisionBoxes(new Cuboid(aabb).subtract(new Pos(x, y, z)), entity);
+        eject();
         if (bounds != null)
         {
             for (Cuboid cuboid : bounds)
             {
-                if (cuboid.isInsideBounds(cube))
+                AxisAlignedBB bb = cuboid.toAABB().offset(x, y, z);
+                if (aabb.intersectsWith(bb))
                 {
-                    list.add((cuboid.add(new Pos(x, y, z))).toAABB());
+                    list.add(bb);
                 }
             }
         }
-        eject();
     }
 
     @SideOnly(Side.CLIENT)
