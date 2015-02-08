@@ -2,6 +2,7 @@ package com.builtbroken.mc.core.registry;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
+import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
@@ -85,7 +86,7 @@ public class ModManager
             return newBlock(spatial);
         } catch (Exception e)
         {
-            throw new RuntimeException("Block [" + spatialClass.getSimpleName() + "] failed to be created:", e);
+            throw new RuntimeException(name() + " Tile [" + spatialClass.getSimpleName() + "] failed to be created:", e);
         }
     }
 
@@ -115,16 +116,13 @@ public class ModManager
     {
         if (spatial.name == null || spatial.name.isEmpty())
         {
-            References.LOGGER.warn("Tile: " + spatial + " has no defined name to register with and could cause issues with world loading. In order to prevent the game from crashing we are falling back to using the class name.");
+            References.LOGGER.warn(name() + " Tile: " + spatial + " has no defined name to register with and could cause issues with world loading. In order to prevent the game from crashing we are falling back to using the class name.");
         }
 
         BlockTile block = new BlockTile(spatial, modPrefix, defaultTab);
         spatial.setBlock(block);
 
-        blocks.put(block, name);
-        GameRegistry.registerBlock(block, spatial.itemBlock, name);
-
-        spatial.onRegistered();
+        block = newBlock(name, block, spatial.itemBlock);
 
         Tile newTile = spatial.newTile();
         if (newTile != null)
@@ -159,35 +157,27 @@ public class ModManager
     /**
      * Creates a new instance of the block class as long as it has a default constructor
      */
-    public Block newBlock(String name, Class<? extends Block> blockClazz, Class<? extends ItemBlock> itemBlockClass)
+    public Block newBlock(String name, Class<? extends Block> blockClazz)
     {
-        try
-        {
-            return newBlock(name, blockClazz.newInstance(), itemBlockClass);
-        } catch (InstantiationException e)
-        {
-            e.printStackTrace();
-        } catch (IllegalAccessException e)
-        {
-            e.printStackTrace();
-        }
-        return null;
+        return newBlock(name, blockClazz, null);
     }
 
     /**
      * Creates a new instance of the block class as long as it has a default constructor
      */
-    public Block newBlock(String name, Class<? extends Block> blockClazz)
+    public Block newBlock(String name, Class<? extends Block> blockClazz, Class<? extends ItemBlock> itemBlockClass)
     {
         try
         {
-            return newBlock(name, blockClazz.newInstance());
-        } catch (InstantiationException e)
+            return newBlock(name, blockClazz.newInstance(), itemBlockClass);
+        }
+        catch (InstantiationException e)
         {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e)
+            throw new RuntimeException(name() + " Failed to create block from class " + blockClazz, e);
+        }
+        catch (IllegalAccessException e)
         {
-            throw new RuntimeException(e);
+            throw new RuntimeException(name() + " Failed to access class " + blockClazz, e);
         }
     }
 
@@ -199,7 +189,7 @@ public class ModManager
      */
     public <C extends Block> C newBlock(String name, C block)
     {
-        return newBlock(name, block, ItemBlock.class);
+        return newBlock(name, block, null);
     }
 
     /**
@@ -211,43 +201,42 @@ public class ModManager
      */
     public <C extends Block> C newBlock(String name, C block, Class<? extends ItemBlock> itemBlockClass)
     {
-        //Set block name if not present
-        if (!block.getUnlocalizedName().contains(modPrefix))
-        {
-            block.setBlockName(modPrefix + name);
-        }
-
         //Set texture name, reflection is used to prevent overriding the blocks existing name
         try
         {
-            Field field = block.getClass().getField("field_149768_d");
-            if (field == null)
-            {
-                field = block.getClass().getField("textureName");
-            }
-            field.setAccessible(true);
-
+            Field field = ReflectionUtility.getMCField(Block.class, "textureName");
             if (field.get(block) == null)
             {
                 block.setBlockTextureName(modPrefix + name);
             }
-        } catch (NoSuchFieldException e)
+        }
+        catch (IllegalAccessException e)
         {
-            block.setBlockTextureName(modPrefix + name);
-        } catch (IllegalAccessException e)
+            References.LOGGER.error(name() + " Failed to access textureName field for block " + name);
+        }
+
+        //Sets creative tab
+        if(defaultTab != null)
         {
-            block.setBlockTextureName(modPrefix + name);
+            try
+            {
+                Field field = ReflectionUtility.getMCField(Block.class, "displayOnCreativeTab");
+                if (field.get(block) == null)
+                {
+                    block.setCreativeTab(defaultTab);
+                }
+            }
+            catch (IllegalAccessException e)
+            {
+                References.LOGGER.error(name() + " Failed to access creativeTab field for block " + name);
+            }
         }
 
         // Register block with item block
-        if (itemBlockClass != null)
-        {
-            GameRegistry.registerBlock(block, itemBlockClass, name);
-        }
-        else
-        {
-            GameRegistry.registerBlock(block, ItemBlockMetadata.class, name);
-        }
+        GameRegistry.registerBlock(block, itemBlockClass != null ? itemBlockClass : ItemBlock.class, name);
+        blocks.put(block, name);
+
+        //Call on registered if the interface is in use
         if(block instanceof IRegistryInit)
         {
             ((IRegistryInit) block).onRegistered();
@@ -348,5 +337,11 @@ public class ModManager
         }
 
         return item;
+    }
+
+
+    public String name()
+    {
+        return "ModManager[" + (modPrefix == null || modPrefix.isEmpty() ? hashCode() : modPrefix) + "]";
     }
 }
