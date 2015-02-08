@@ -16,11 +16,20 @@ public class ItemStackWrapper
 
     public ItemStackWrapper(ItemStack itemStack)
     {
-        this.itemStack = itemStack;
-        if(!itemStack.getHasSubtypes())
+        if(itemStack != null)
+        {
+            this.itemStack = itemStack;
+            if (!itemStack.getHasSubtypes())
+                meta_compare = false;
+            if (itemStack.getTagCompound() == null)
+                nbt_compare = false;
+        }
+        else
+        {
+            this.itemStack = null;
             meta_compare = false;
-        if(itemStack.getTagCompound() == null)
             nbt_compare = false;
+        }
     }
 
     public ItemStackWrapper(Item item)
@@ -102,6 +111,10 @@ public class ItemStackWrapper
             hashCode = 31 * hashCode + itemStack.getItemDamage();
             hashCode = 31 * hashCode + itemStack.stackSize;
             hashCode = 31 * hashCode + (itemStack.getTagCompound() != null ? itemStack.getTagCompound().hashCode() : 0);
+        }
+        else
+        {
+            return super.hashCode();
         }
         return hashCode;
     }
