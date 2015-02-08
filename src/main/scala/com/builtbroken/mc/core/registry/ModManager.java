@@ -126,10 +126,17 @@ public class ModManager
      */
     public BlockTile newBlock(String name, Tile spatial)
     {
-        if (spatial.name == null || spatial.name.isEmpty())
+        if (name == null || name.isEmpty())
         {
-            References.LOGGER.warn(name() + " Tile: " + spatial + " has no defined name to register with and could cause issues with world loading. In order to prevent the game from crashing we are falling back to using the class name.");
-            name = spatial.name != null ? spatial.name : spatial.getClass().getSimpleName();
+            if (spatial.name != null && !spatial.name.isEmpty())
+            {
+                name = spatial.name;
+            }
+            else
+            {
+                References.LOGGER.warn(name() + " Tile: " + spatial + " has no defined name to register with and could cause issues with world loading. In order to prevent the game from crashing we are falling back to using the class name.");
+                name = LanguageUtility.decapitalizeFirst(spatial.getClass().getSimpleName().replace("Tile", ""));
+            }
         }
 
         BlockTile block = new BlockTile(spatial, modPrefix, defaultTab);
@@ -212,6 +219,10 @@ public class ModManager
      */
     public <C extends Block> C newBlock(String name, C block, Class<? extends ItemBlock> itemBlock)
     {
+        if(name == null || name.isEmpty())
+        {
+            name = LanguageUtility.decapitalizeFirst(block.getClass().getSimpleName().replace("Block", ""));
+        }
         // Register block with item block
         proxy.registerBlock(this, name, modPrefix, block, itemBlock);
         blocks.put(block, name);
