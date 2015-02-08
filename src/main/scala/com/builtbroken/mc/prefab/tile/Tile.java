@@ -80,7 +80,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     public int renderType = BlockRenderHandler.ID; //renderNormalBlock will force this to zero
 
     //Tile Vars
-    protected long ticks = 0L;
+    public long ticks = 0L;
     protected int nextCleanupTick = 200;
     protected final Set<EntityPlayer> playersUsing = new HashSet();
 
