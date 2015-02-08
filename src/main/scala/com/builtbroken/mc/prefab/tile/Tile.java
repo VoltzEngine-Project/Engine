@@ -5,6 +5,7 @@ import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
+import com.builtbroken.mc.core.registry.IRegistryInit;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.block.RenderTileDummy;
 import com.builtbroken.mc.lib.transform.region.Cuboid;
@@ -46,7 +47,7 @@ import java.util.*;
 /**
  * Created by robert on 1/4/2015.
  */
-public abstract class Tile extends TileEntity implements IWorldPosition, IPlayerUsing
+public abstract class Tile extends TileEntity implements IWorldPosition, IPlayerUsing, IRegistryInit
 {
     //Static block vars, never use in your tile
     private BlockTile block = null;
@@ -407,11 +408,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     //=== Events ==============
     //=========================
 
-    /** Called after the block has been registered.
-     * Use this time to register recipes, events, or
-     * any other data that needs to exist with this
-     * block. Do not register client, or server only
-     * content as this is called both sides */
+    @Override
     public void onRegistered()
     {
 
