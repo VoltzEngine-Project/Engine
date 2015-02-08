@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -117,7 +118,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
 
     public boolean addInventoryModule(int size)
     {
-        if(inventory_module != null)
+        if(inventory_module == null)
         {
             inventory_module = new TileModuleInventory(this, size);
             modules.add(inventory_module);
