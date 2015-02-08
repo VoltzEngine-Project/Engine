@@ -98,6 +98,10 @@ public class ClientRegistryProxy extends CommonRegistryProxy
         {
             ItemRenderHandler.register(new ItemStack(block).getItem(), (ISimpleItemRenderer) tile);
         }
+        if(tile instanceof IRegistryInit)
+        {
+            ((IRegistryInit) tile).onClientRegistered();
+        }
     }
 
     @Override
