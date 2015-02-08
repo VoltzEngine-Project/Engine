@@ -414,6 +414,12 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
 
     }
 
+    @Override @SideOnly(Side.CLIENT)
+    public void onClientRegistered()
+    {
+
+    }
+
     public void onAdded()
     {
         onWorldJoin();
