@@ -108,14 +108,10 @@ public class ExternalInventory implements IExternalInventory, ISidedInventory, I
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack insertStack)
 	{
-		ItemStack pre_stack = this.getContainedItems()[slot] != null ? this.getContainedItems()[slot].copy() : null;
+		ItemStack pre_stack = getStackInSlot(slot) != null ? getStackInSlot(slot).copy() : null;
 		this.getContainedItems()[slot] = insertStack;
 
-		if (insertStack != null && insertStack.stackSize > this.getInventoryStackLimit())
-		{
-			insertStack.stackSize = this.getInventoryStackLimit();
-		}
-		if (!InventoryUtility.stacksMatchExact(pre_stack, getContainedItems()[slot]))
+		if (!InventoryUtility.stacksMatchExact(pre_stack, getStackInSlot(slot)))
 		{
 			markDirty();
 		}
