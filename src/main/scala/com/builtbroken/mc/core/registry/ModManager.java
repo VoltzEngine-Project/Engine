@@ -2,10 +2,8 @@ package com.builtbroken.mc.core.registry;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
-import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -14,7 +12,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
@@ -63,6 +61,20 @@ public class ModManager
      */
     public BlockTile newBlock(Class<? extends Tile> spatialClass, Object... args)
     {
+        return newBlock(null, spatialClass, args);
+    }
+
+    /**
+     * Creates a new block based on the Tile class provided
+     * Handles most common registration and data input tasks for the creation of the block.
+     * This includes registering the block, tile, built in item & tile renders. It also inits
+     * the instance used for the block itself.
+     *
+     * @param spatialClass - class that will provide all the data to be used when creating the block.
+     * @param args         - arguments needed to create a new instance of the spatial class
+     */
+    public BlockTile newBlock(String name, Class<? extends Tile> spatialClass, Object... args)
+    {
         try
         {
             Tile spatial;
@@ -83,7 +95,7 @@ public class ModManager
                 spatial = spatialClass.newInstance();
             }
 
-            return newBlock(spatial);
+            return newBlock(name, spatial);
         } catch (Exception e)
         {
             throw new RuntimeException(name() + " Tile [" + spatialClass.getSimpleName() + "] failed to be created:", e);
@@ -100,7 +112,7 @@ public class ModManager
      */
     public BlockTile newBlock(Tile spatial)
     {
-        return newBlock(spatial.name != null ? spatial.name : spatial.getClass().getSimpleName(), spatial);
+        return newBlock(null, spatial);
     }
 
     /**
@@ -117,6 +129,7 @@ public class ModManager
         if (spatial.name == null || spatial.name.isEmpty())
         {
             References.LOGGER.warn(name() + " Tile: " + spatial + " has no defined name to register with and could cause issues with world loading. In order to prevent the game from crashing we are falling back to using the class name.");
+            name = spatial.name != null ? spatial.name : spatial.getClass().getSimpleName();
         }
 
         BlockTile block = new BlockTile(spatial, modPrefix, defaultTab);
@@ -170,12 +183,10 @@ public class ModManager
         try
         {
             return newBlock(name, blockClazz.newInstance(), itemBlockClass);
-        }
-        catch (InstantiationException e)
+        } catch (InstantiationException e)
         {
             throw new RuntimeException(name() + " Failed to create block from class " + blockClazz, e);
-        }
-        catch (IllegalAccessException e)
+        } catch (IllegalAccessException e)
         {
             throw new RuntimeException(name() + " Failed to access class " + blockClazz, e);
         }
@@ -195,57 +206,15 @@ public class ModManager
     /**
      * Doesn't create a new block but applies the required blockName, textureName, and registers the block
      *
-     * @param name           - name the block will be registed with, localization, and texture name
-     * @param block          - instance of the block
-     * @param itemBlockClass - item block used with the block
+     * @param name      - name the block will be registed with, localization, and texture name
+     * @param block     - instance of the block
+     * @param itemBlock - item block used with the block
      */
-    public <C extends Block> C newBlock(String name, C block, Class<? extends ItemBlock> itemBlockClass)
+    public <C extends Block> C newBlock(String name, C block, Class<? extends ItemBlock> itemBlock)
     {
-        if(block.getUnlocalizedName() == null || block.getUnlocalizedName().contains("null"))
-        {
-            block.setBlockName(name);
-        }
-
-        //Set texture name, reflection is used to prevent overriding the blocks existing name
-        try
-        {
-            Field field = ReflectionUtility.getMCField(Block.class, "textureName");
-            if (field.get(block) == null)
-            {
-                block.setBlockTextureName(modPrefix + name);
-            }
-        }
-        catch (IllegalAccessException e)
-        {
-            References.LOGGER.error(name() + " Failed to access textureName field for block " + name);
-        }
-
-        //Sets creative tab
-        if(defaultTab != null)
-        {
-            try
-            {
-                Field field = ReflectionUtility.getMCField(Block.class, "displayOnCreativeTab");
-                if (field.get(block) == null)
-                {
-                    block.setCreativeTab(defaultTab);
-                }
-            }
-            catch (IllegalAccessException e)
-            {
-                References.LOGGER.error(name() + " Failed to access creativeTab field for block " + name);
-            }
-        }
-
         // Register block with item block
-        GameRegistry.registerBlock(block, itemBlockClass != null ? itemBlockClass : ItemBlock.class, name);
+        proxy.registerBlock(this, name, modPrefix, block, itemBlock);
         blocks.put(block, name);
-
-        //Call on registered if the interface is in use
-        if(block instanceof IRegistryInit)
-        {
-            ((IRegistryInit) block).onRegistered();
-        }
         return block;
     }
 
@@ -257,7 +226,7 @@ public class ModManager
      */
     public <C extends Item> C newItem(Class<C> clazz, Object... args)
     {
-        return newItem(LanguageUtility.decapitalizeFirst(clazz.getSimpleName().replace("Item", "")), clazz, args);
+        return newItem(null, clazz, args);
     }
 
     /**
@@ -291,56 +260,49 @@ public class ModManager
             }
 
             return (C) newItem(name, item);
-        } catch (Exception e)
+        }
+        catch (NoSuchMethodException e)
         {
-            e.printStackTrace();
-            throw new RuntimeException("Item [" + name + "] failed to be created: " + e.getLocalizedMessage(), e.fillInStackTrace());
+            throw new RuntimeException(name() + "Failed to create item [" + name + "] due to invalid constructor", e);
+        }
+        catch (InstantiationException e)
+        {
+            throw new RuntimeException(name() + "Failed to create item [" + name + "]", e);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new RuntimeException(name() + "Failed to create item [" + name + "] due to access issue", e);
+        }
+        catch (InvocationTargetException e)
+        {
+            throw new RuntimeException(name() + "Failed to create item [" + name + "] when invoking constructor", e);
         }
     }
 
+    /** Registers a new item using its class as the registry name
+     * @param item - item instance to register
+     * @return item instance
+     */
     public Item newItem(Item item)
     {
-        try
-        {
-            return newItem(LanguageUtility.decapitalizeFirst(item.getClass().getSimpleName().replace("Item", "")), item);
-        } catch (StringIndexOutOfBoundsException e)
-        {
-            System.out.println("Item: " + item + "   Class: " + item.getClass());
-            throw e;
-        } catch (IllegalArgumentException e)
-        {
-            System.out.println("Item: " + item + "   Class: " + item.getClass());
-            throw e;
-        }
+        return newItem(null, item);
     }
 
+    /**
+     * Registers a new item
+     * @param name - name to register with, as well use for icon & lang name if missing
+     * @param item - item instance to register
+     * @return item instance
+     */
     public Item newItem(String name, Item item)
     {
-        if (item != null)
+        if(name == null || name.isEmpty())
         {
-            if (modPrefix != null)
-            {
-                item.setUnlocalizedName(modPrefix + name);
-
-                if (ReflectionHelper.getPrivateValue(Item.class, item, "iconString", "field_111218_cA") == null)
-                {
-                    item.setTextureName(modPrefix + name);
-                }
-            }
-
-            if (defaultTab != null)
-            {
-                item.setCreativeTab(defaultTab);
-            }
-
-            items.put(item, name);
-            GameRegistry.registerItem(item, name);
-            if(item instanceof IRegistryInit)
-            {
-                ((IRegistryInit) item).onRegistered();
-            }
+            References.LOGGER.warn(name() +" Registry name was not provided for item " + item + " using class name to prevent game from crashing. This may cause world loading issues in the future.");
+            name = LanguageUtility.decapitalizeFirst(item.getClass().getSimpleName().replace("Item", ""));
         }
-
+        proxy.registerItem(this, name, modPrefix, item);
+        items.put(item, name);
         return item;
     }
 
