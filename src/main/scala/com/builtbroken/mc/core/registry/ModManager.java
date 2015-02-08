@@ -201,6 +201,11 @@ public class ModManager
      */
     public <C extends Block> C newBlock(String name, C block, Class<? extends ItemBlock> itemBlockClass)
     {
+        if(block.getUnlocalizedName() == null || block.getUnlocalizedName().contains("null"))
+        {
+            block.setBlockName(name);
+        }
+
         //Set texture name, reflection is used to prevent overriding the blocks existing name
         try
         {
