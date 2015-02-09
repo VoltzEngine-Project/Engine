@@ -151,7 +151,8 @@ public class PacketManager implements ILoadable
 
 	public void sendToAllAround(AbstractPacket message, World world, double x, double y, double z, double range)
 	{
-		sendToAllAround(message, new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, range));
+        if(world != null)
+		    sendToAllAround(message, new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, range));
 	}
 
 	@SideOnly(Side.CLIENT)
