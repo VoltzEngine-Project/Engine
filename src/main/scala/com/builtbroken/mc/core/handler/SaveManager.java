@@ -291,7 +291,7 @@ public class SaveManager
     }
 
     @SubscribeEvent
-    public void worldSave(WorldEvent evt)
+    public void worldSave(WorldEvent.Save evt)
     {
         for (IVirtualObject ref : instance().objects)
         {
