@@ -4,6 +4,7 @@ import com.builtbroken.jlib.data.vector.IPos3D;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryLargeChest;
@@ -456,35 +457,66 @@ public class InventoryUtility
 	 */
 	public static void consumeHeldItem(EntityPlayer player)
 	{
-		ItemStack stack = player.inventory.getCurrentItem();
-		if (player != null && stack != null)
-		{
-			stack = stack.copy();
-			if (stack.getItem().hasContainerItem(stack))
-			{
-				if (stack.stackSize == 1)
-				{
-					stack = stack.getItem().getContainerItem(stack);
-				}
-				else
-				{
-					player.inventory.addItemStackToInventory(stack.getItem().getContainerItem(stack.splitStack(1)));
-				}
-			}
-			else
-			{
-				if (stack.stackSize == 1)
-				{
-					stack = null;
-				}
-				else
-				{
-					stack.splitStack(1);
-				}
-			}
-			player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
-		}
+        if (!player.capabilities.isCreativeMode)
+        {
+            ItemStack stack = player.inventory.getCurrentItem();
+            if (player != null && stack != null)
+            {
+                stack = stack.copy();
+                if (stack.getItem().hasContainerItem(stack))
+                {
+                    if (stack.stackSize == 1)
+                    {
+                        stack = stack.getItem().getContainerItem(stack);
+                    }
+                    else
+                    {
+                        player.inventory.addItemStackToInventory(stack.getItem().getContainerItem(stack.splitStack(1)));
+                    }
+                }
+                else
+                {
+                    if (stack.stackSize == 1)
+                    {
+                        stack = null;
+                    }
+                    else
+                    {
+                        stack.splitStack(1);
+                    }
+                }
+                player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
+            }
+        }
 	}
+
+    /**
+     * Consumes the item in hand and then returns an empty bucket. Assumes that you
+     * have already checked the item is a bucket. As well that the return of the bucket
+     * is an empty bucket. If the item is not a bucket and doesn't return a bucket don't
+     * use this method. Instead use #consumeHeldItem()
+     * @param player
+     */
+    public static void consumeBucketInHand(EntityPlayer player)
+    {
+        if (!player.capabilities.isCreativeMode)
+        {
+            ItemStack bucket = new ItemStack(Items.bucket);
+            if (player.getHeldItem().stackSize == 1)
+            {
+                player.inventory.mainInventory[player.inventory.currentItem] = bucket;
+            }
+            else if (player.getHeldItem().stackSize > 1)
+            {
+                player.getHeldItem().stackSize--;
+                if (!player.inventory.addItemStackToInventory(bucket))
+                {
+                    InventoryUtility.dropItemStack(new Location(player), bucket);
+                }
+            }
+            player.inventoryContainer.detectAndSendChanges();
+        }
+    }
 
 	/**
 	 * Called to consume an ItemStack in a way that is mod supported. This mainly just allows fluid
