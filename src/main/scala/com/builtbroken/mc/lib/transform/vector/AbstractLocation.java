@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 
 /**
@@ -184,5 +185,15 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     public String toString()
     {
         return "VectorWorld [" + this.x() + "," + this.y() + "," + this.z() + "," + this.world + "]";
+    }
+
+    public boolean isChunkLoaded()
+    {
+        return getChunk().isChunkLoaded;
+    }
+
+    public Chunk getChunk()
+    {
+        return world.getChunkFromBlockCoords(xi(), zi());
     }
 }
