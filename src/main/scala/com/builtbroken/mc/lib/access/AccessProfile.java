@@ -9,6 +9,7 @@ import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.api.IVirtualObject;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.core.handler.SaveManager;
+import net.minecraft.world.World;
 
 import java.io.File;
 import java.util.*;
@@ -368,7 +369,13 @@ public class AccessProfile implements IVirtualObject
 
 	}
 
-	@Override
+    @Override
+    public boolean shouldSaveForWorld(World world)
+    {
+        return world != null && world.provider.dimensionId == 0;
+    }
+
+    @Override
 	public String toString()
 	{
 		return LanguageUtility.getLocal("info.accessprofile.tostring").replaceAll("%p", this.profileName.toString()).replaceAll("%g", groups.toString());

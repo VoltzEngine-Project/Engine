@@ -1,5 +1,7 @@
 package com.builtbroken.mc.api;
 
+import net.minecraft.world.World;
+
 import java.io.File;
 
 /**
@@ -20,5 +22,13 @@ public interface IVirtualObject extends ISave
 	 * loaded from and decide if it wants to use the location as its getSaveFile return
 	 */
 	public void setSaveFile(File file);
+
+    /**
+     * Save events are triggered when the world saves. Use this to
+     * decide if you need to save to file when the world does.
+     * @param world
+     * @return
+     */
+    public boolean shouldSaveForWorld(World world);
 
 }
