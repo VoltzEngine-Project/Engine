@@ -550,7 +550,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     public Iterable<Cuboid> getCollisionBoxes(Cuboid intersect, Entity entity)
     {
         List<Cuboid> boxes = new ArrayList<Cuboid>();
-        boxes.add(bounds);
+        boxes.add(getCollisionBounds());
         return boxes;
     }
 
