@@ -6,6 +6,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
@@ -53,29 +54,55 @@ public class EngineCommand extends CommandBase
             }
             else if (sender instanceof EntityPlayer)
             {
+                int radius = 100;
+                EntityPlayer entityPlayer = (EntityPlayer) sender;
+
+                if(args.length >= 2 && args[2] != null)
+                {
+                    try
+                    {
+                        radius = Integer.parseInt(args[2]);
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        sender.addChatMessage(new ChatComponentText("Radius needs to be an integer"));
+                    }
+                }
                 if (args[1].equalsIgnoreCase("projectiles"))
                 {
-
-                    EntityPlayer entityPlayer = (EntityPlayer) sender;
-                    int radius = 100;
-
+                    int m = 0;
                     for (Entity entity : getEntitiesWithin(entityPlayer, radius))
                     {
                         if (entity instanceof EntityProjectile)
                         {
+                            m++;
                             entity.setDead();
                         }
                     }
 
-                    sender.addChatMessage(new ChatComponentText("Removed all projectile entities within " + radius + "^3 blocks."));
+                    sender.addChatMessage(new ChatComponentText("Removed " + m + " projectile entities within " + radius + " block radius."));
                 }
                 else if (args[1].equalsIgnoreCase("mobs"))
                 {
                     butcher((EntityPlayer) sender, 100);
                 }
+                else if(args[1].equalsIgnoreCase("all"))
+                {
+                    int m = 0;
+                    for (Entity entity : getEntitiesWithin(entityPlayer, radius))
+                    {
+                        if (entity instanceof EntityLiving)
+                        {
+                            m++;
+                            entity.setDead();
+                        }
+                    }
+
+                    sender.addChatMessage(new ChatComponentText("Removed " + m + " living entities within " + radius + " block radius."));
+                }
                 else
                 {
-                    throw new WrongUsageException(this.getCommandUsage(sender));
+                    sender.addChatMessage(new ChatComponentText("Not sure what your trying to remove?"));
                 }
             }
             else
@@ -102,15 +129,17 @@ public class EngineCommand extends CommandBase
 
     public void butcher(EntityPlayer entityPlayer, double radius)
     {
+        int m = 0;
         for (Entity entity : getEntitiesWithin(entityPlayer, radius))
         {
             if (entity instanceof IMob)
             {
+                m++;
                 entity.setDead();
             }
         }
 
-        entityPlayer.addChatComponentMessage(new ChatComponentText("Removed all projectile entities within " + radius + "^3 blocks."));
+        entityPlayer.addChatComponentMessage(new ChatComponentText("Removed " + m + " mobs entities within " + radius + " block radius."));
     }
 
     private List<Entity> getEntitiesWithin(EntityPlayer entityPlayer, double radius)
