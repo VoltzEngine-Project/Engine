@@ -6,6 +6,7 @@ import com.builtbroken.mc.core.content.resources.load.GrinderRecipeLoad;
 import com.builtbroken.mc.core.handler.InteractionHandler;
 import com.builtbroken.mc.core.content.BlockOre;
 import com.builtbroken.mc.core.content.ItemBlockOre;
+import com.builtbroken.mc.core.proxy.NEIProxy;
 import com.builtbroken.mc.lib.mod.AbstractMod;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.prefab.recipe.MRHandlerItemStack;
@@ -100,6 +101,7 @@ public class Engine extends AbstractMod
         loader.applyModule(packetHandler);
         loader.applyModule(CrusherRecipeLoad.class);
         loader.applyModule(GrinderRecipeLoad.class);
+        loader.applyModule(NEIProxy.class);
 
 		PotionUtility.resizePotionArray();
 		MinecraftForge.EVENT_BUS.register(this);
