@@ -91,7 +91,7 @@ public class EngineCommand extends CommandBase
                     }
                     else if (args[1].equalsIgnoreCase("mobs"))
                     {
-                        butcher(entityPlayer, 100);
+                        butcher(entityPlayer, radius);
                     }
                     else if (args[1].equalsIgnoreCase("all"))
                     {
