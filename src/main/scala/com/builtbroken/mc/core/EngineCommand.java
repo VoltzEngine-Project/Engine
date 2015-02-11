@@ -1,16 +1,12 @@
 package com.builtbroken.mc.core;
 
-import com.builtbroken.mc.prefab.entity.EntityProjectile;
 import com.builtbroken.mc.prefab.entity.selector.EntitySelector;
 import com.builtbroken.mc.prefab.entity.selector.EntitySelectors;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
@@ -22,6 +18,11 @@ import java.util.List;
  */
 public class EngineCommand extends CommandBase
 {
+    public static boolean disableCommands = false;
+    public static boolean disableRemoveCommand = false;
+    public static boolean disableButcherCommand = false;
+    public static boolean disableClearCommand = false;
+
     @Override
     public String getCommandName()
     {
@@ -42,8 +43,15 @@ public class EngineCommand extends CommandBase
             sender.addChatMessage(new ChatComponentText("/" + getCommandName() + " version"));
             if (sender instanceof EntityPlayer)
             {
-                sender.addChatMessage(new ChatComponentText("/" + getCommandName() + " remove help"));
-                sender.addChatMessage(new ChatComponentText("/" + getCommandName() + " butcher"));
+                if (!disableRemoveCommand)
+                    sender.addChatMessage(new ChatComponentText("/" + getCommandName() + " remove help"));
+                if (!disableButcherCommand)
+                    sender.addChatMessage(new ChatComponentText("/" + getCommandName() + " butcher"));
+                if(!disableClearCommand)
+                {
+                    sender.addChatMessage(new ChatComponentText("/" + getCommandName() + " clearinv <player>"));
+                    sender.addChatMessage(new ChatComponentText("/" + getCommandName() + " cleararmor <player>"));
+                }
             }
         }
         else if (args[0].equalsIgnoreCase("version"))
@@ -53,23 +61,23 @@ public class EngineCommand extends CommandBase
         else if (sender instanceof EntityPlayer)
         {
             EntityPlayer entityPlayer = (EntityPlayer) sender;
-            if (args[0].equalsIgnoreCase("remove"))
+            if (!disableRemoveCommand && args[0].equalsIgnoreCase("remove"))
             {
                 handleRemoveCommand(entityPlayer, args);
             }
-            else if (args[0].equalsIgnoreCase("butcher"))
+            else if (!disableButcherCommand && args[0].equalsIgnoreCase("butcher"))
             {
                 butcher((EntityPlayer) sender, 100);
             }
-            else if(args[0].equalsIgnoreCase("clearinv"))
+            else if (!disableClearCommand && args[0].equalsIgnoreCase("clearinv"))
             {
                 EntityPlayer p;
-                if(args.length > 1)
+                if (args.length > 1)
                     p = getPlayer(sender, args[1]);
                 else
                     p = entityPlayer;
 
-                if(p != null)
+                if (p != null)
                 {
                     for (int slot = 0; slot < p.inventory.mainInventory.length; slot++)
                     {
@@ -78,15 +86,15 @@ public class EngineCommand extends CommandBase
                     p.inventoryContainer.detectAndSendChanges();
                 }
             }
-            else if(args[0].equalsIgnoreCase("cleararmor"))
+            else if (!disableClearCommand && args[0].equalsIgnoreCase("cleararmor"))
             {
                 EntityPlayer p;
-                if(args.length > 1)
+                if (args.length > 1)
                     p = getPlayer(sender, args[1]);
                 else
                     p = entityPlayer;
 
-                if(p != null)
+                if (p != null)
                 {
                     for (int slot = 0; slot < p.inventory.armorInventory.length; slot++)
                     {
@@ -109,7 +117,7 @@ public class EngineCommand extends CommandBase
     public void butcher(EntityPlayer entityPlayer, double radius)
     {
         List<Entity> list = EntitySelectors.MOB_SELECTOR.selector().getEntities(entityPlayer, radius);
-        for(Entity entity: list)
+        for (Entity entity : list)
         {
             entity.setDead();
         }
@@ -119,7 +127,7 @@ public class EngineCommand extends CommandBase
     @Override
     public List addTabCompletionOptions(ICommandSender sender, String[] args)
     {
-        if(args != null && args.length > 0 && args[0] != null)
+        if (args != null && args.length > 0 && args[0] != null)
         {
             if (sender instanceof EntityPlayer)
             {
@@ -161,13 +169,12 @@ public class EngineCommand extends CommandBase
                 try
                 {
                     radius = Integer.parseInt(args[2]);
-                    if(radius > 1000)
+                    if (radius > 1000)
                     {
                         entityPlayer.addChatMessage(new ChatComponentText("To prevent lag/crashes radius is limited to 1000"));
                         return;
                     }
-                }
-                catch (NumberFormatException e)
+                } catch (NumberFormatException e)
                 {
                     entityPlayer.addChatMessage(new ChatComponentText("Radius needs to be an integer"));
                     return;
@@ -189,19 +196,19 @@ public class EngineCommand extends CommandBase
             {
                 selector = EntitySelectors.LIVING_SELECTOR.selector();
             }
-            else if(args[1].equalsIgnoreCase("items"))
+            else if (args[1].equalsIgnoreCase("items"))
             {
                 selector = EntitySelectors.ITEM_SELECTOR.selector();
             }
 
-            if(selector == null)
+            if (selector == null)
             {
                 entityPlayer.addChatMessage(new ChatComponentText("Not sure what you are trying to remove?"));
             }
             else
             {
                 List<Entity> list = selector.getEntities(entityPlayer, radius);
-                for(Entity entity: list)
+                for (Entity entity : list)
                 {
                     entity.setDead();
                 }

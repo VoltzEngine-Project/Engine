@@ -66,12 +66,14 @@ public class Engine extends AbstractMod
     @Instance(References.ID)
 	public static Engine instance;
 
-
     public static Block ore = null;
 	public static Item itemWrench;
     public static Item instaHole;
 
     private static boolean oresRequested = false;
+
+
+
 	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 
     public Engine()
@@ -107,6 +109,13 @@ public class Engine extends AbstractMod
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance());
 		MinecraftForge.EVENT_BUS.register(new InteractionHandler());
+
+        //Manually registered configs TODO setup threw sync system (once the system is tested)
+        EngineCommand.disableCommands = getConfig().getBoolean("DisableServerCommands", "Commands", false, "Turns off all commands built into Voltz Engine");
+        EngineCommand.disableButcherCommand = getConfig().getBoolean("DisableButcherCommands", "Commands", false, "Turns off butcher command");
+        EngineCommand.disableClearCommand = getConfig().getBoolean("DisableClearCommands", "Commands", false, "Turns off clear command");
+        EngineCommand.disableRemoveCommand = getConfig().getBoolean("DisableRemoverCommands", "Commands", false, "Turns off remove command");
+
 
         MachineRecipeType.ITEM_SMELTER.setHandler(new MRSmelterHandler());
         MachineRecipeType.ITEM_GRINDER.setHandler(new MRHandlerItemStack(MachineRecipeType.ITEM_GRINDER.INTERNAL_NAME));
@@ -188,10 +197,13 @@ public class Engine extends AbstractMod
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event)
     {
-        // Setup command
-        ICommandManager commandManager = FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
-        ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
-        serverCommandManager.registerCommand(new EngineCommand());
+        if(!EngineCommand.disableCommands)
+        {
+            // Setup command
+            ICommandManager commandManager = FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
+            ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
+            serverCommandManager.registerCommand(new EngineCommand());
+        }
     }
 
 	//@EventHandler
