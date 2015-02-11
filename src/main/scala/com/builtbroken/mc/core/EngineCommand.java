@@ -80,7 +80,6 @@ public class EngineCommand extends CommandBase
             }
             else if(args[0].equalsIgnoreCase("cleararmor"))
             {
-
                 EntityPlayer p;
                 if(args.length > 1)
                     p = getPlayer(sender, args[1]);
@@ -144,7 +143,6 @@ public class EngineCommand extends CommandBase
         return entityPlayer.worldObj.getEntitiesWithinAABB(Entity.class, bounds);
     }
 
-
     protected void handleRemoveCommand(EntityPlayer entityPlayer, String[] args)
     {
         if (args.length == 1 || args[1].equalsIgnoreCase("help"))
@@ -157,7 +155,7 @@ public class EngineCommand extends CommandBase
         {
             int radius = 100;
 
-            //Get radius from player if inputed
+            //Get radius from player
             if (args.length >= 2 && args[2] != null)
             {
                 try
@@ -191,6 +189,10 @@ public class EngineCommand extends CommandBase
             {
                 selector = EntitySelectors.LIVING_SELECTOR.selector();
             }
+            else if(args[1].equalsIgnoreCase("items"))
+            {
+                selector = EntitySelectors.ITEM_SELECTOR.selector();
+            }
 
             if(selector == null)
             {
@@ -203,7 +205,7 @@ public class EngineCommand extends CommandBase
                 {
                     entity.setDead();
                 }
-                entityPlayer.addChatMessage(new ChatComponentText("Removed " + list.size() + " " + args[1] +" within " + radius + " block radius"));
+                entityPlayer.addChatMessage(new ChatComponentText("Removed " + list.size() + " " + args[1] + " entities within " + radius + " block radius"));
             }
         }
     }
