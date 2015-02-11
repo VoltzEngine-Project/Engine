@@ -18,7 +18,7 @@ public class ItemStackWrapper
     {
         if (itemStack != null)
         {
-            this.itemStack = itemStack;
+            this.itemStack = itemStack.copy();
             if (!itemStack.getHasSubtypes())
                 meta_compare = false;
             if (itemStack.getTagCompound() == null)
