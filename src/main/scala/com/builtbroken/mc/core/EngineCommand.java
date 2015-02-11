@@ -43,8 +43,6 @@ public class EngineCommand extends CommandBase
                 sender.addChatMessage(new ChatComponentText("/" + getCommandName() + " remove help"));
                 sender.addChatMessage(new ChatComponentText("/" + getCommandName() + " butcher"));
             }
-            //sender.addChatMessage(new ChatComponentText("/" + getCommandName() + " gridinfo"));
-            //sender.addChatMessage(new ChatComponentText("/" + getCommandName() + " gridpause"));
         }
         else if (args[0].equalsIgnoreCase("version"))
         {
