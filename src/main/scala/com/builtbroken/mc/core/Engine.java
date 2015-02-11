@@ -1,6 +1,7 @@
 package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
+import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.content.resources.load.CrusherRecipeLoad;
 import com.builtbroken.mc.core.content.resources.load.GrinderRecipeLoad;
 import com.builtbroken.mc.core.handler.InteractionHandler;
@@ -38,7 +39,6 @@ import com.builtbroken.mc.core.content.resources.*;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
 import com.builtbroken.mc.lib.mod.config.ConfigScanner;
 import com.builtbroken.mc.core.registry.ModManager;
-import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import com.builtbroken.mc.core.network.netty.PacketManager;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.core.handler.SaveManager;
@@ -111,10 +111,10 @@ public class Engine extends AbstractMod
 		MinecraftForge.EVENT_BUS.register(new InteractionHandler());
 
         //Manually registered configs TODO setup threw sync system (once the system is tested)
-        EngineCommand.disableCommands = getConfig().getBoolean("DisableServerCommands", "Commands", false, "Turns off all commands built into Voltz Engine");
-        EngineCommand.disableButcherCommand = getConfig().getBoolean("DisableButcherCommands", "Commands", false, "Turns off butcher command");
-        EngineCommand.disableClearCommand = getConfig().getBoolean("DisableClearCommands", "Commands", false, "Turns off clear command");
-        EngineCommand.disableRemoveCommand = getConfig().getBoolean("DisableRemoverCommands", "Commands", false, "Turns off remove command");
+        CommandVE.disableCommands = getConfig().getBoolean("DisableServerCommands", "Commands", false, "Turns off all commands built into Voltz Engine");
+        CommandVE.disableButcherCommand = getConfig().getBoolean("DisableButcherCommands", "Commands", false, "Turns off butcher command");
+        CommandVE.disableClearCommand = getConfig().getBoolean("DisableClearCommands", "Commands", false, "Turns off clear command");
+        CommandVE.disableRemoveCommand = getConfig().getBoolean("DisableRemoverCommands", "Commands", false, "Turns off remove command");
 
 
         MachineRecipeType.ITEM_SMELTER.setHandler(new MRSmelterHandler());
@@ -197,12 +197,12 @@ public class Engine extends AbstractMod
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event)
     {
-        if(!EngineCommand.disableCommands)
+        if(!CommandVE.disableCommands)
         {
             // Setup command
             ICommandManager commandManager = FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
             ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
-            serverCommandManager.registerCommand(new EngineCommand());
+            serverCommandManager.registerCommand(new CommandVE());
         }
     }
 
