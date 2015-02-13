@@ -1,11 +1,16 @@
 package com.builtbroken.mc.core.content;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -17,6 +22,18 @@ public class ItemInstaHole extends Item
     public ItemInstaHole()
     {
         this.setCreativeTab(CreativeTabs.tabTools);
+    }
+
+    @SideOnly(Side.CLIENT) @Override
+    public IIcon getIcon(ItemStack stack, int pass)
+    {
+        return Items.stone_shovel.getIcon(stack, pass);
+    }
+
+    @SideOnly(Side.CLIENT) @Override
+    public void registerIcons(IIconRegister p_94581_1_)
+    {
+        //No icon to register
     }
 
     @Override
