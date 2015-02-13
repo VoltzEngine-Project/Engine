@@ -37,27 +37,11 @@ public class AbstractCommand extends CommandBase
     @Override
     public void processCommand(ICommandSender sender, String[] args)
     {
-        if(isHelpCommand(args))
+        if(!handleHelp(sender, args))
         {
-            int p = 0;
-            if(args.length >= 2)
+            if (!(sender instanceof EntityPlayer && handleEntityPlayerCommand((EntityPlayer) sender, args)) && !handleConsoleCommand(sender, args))
             {
-                try
-                {
-                    p = Integer.parseInt(args[1]);
-                }
-                catch(NumberFormatException e)
-                {
-
-                }
-            }
-            printHelp(sender, p);
-        }
-        else
-        {
-            if (sender instanceof EntityPlayer && !handleEntityPlayerCommand((EntityPlayer) sender, args) || !handleConsoleCommand(sender, args))
-            {
-                sender.addChatMessage(new ChatComponentText("Error: Unknown sub command"));
+                sender.addChatMessage(new ChatComponentText("Error: Unknown chat command"));
             }
         }
     }
@@ -65,6 +49,28 @@ public class AbstractCommand extends CommandBase
     public boolean isHelpCommand(String[] args)
     {
         return args == null || args.length == 0 || args[0] == null || args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?");
+    }
+
+    public boolean handleHelp(ICommandSender sender, String[] args)
+    {
+        if (isHelpCommand(args))
+        {
+            int p = 0;
+            if (args != null && args.length >= 2)
+            {
+                try
+                {
+                    p = Integer.parseInt(args[1]);
+                }
+                catch (NumberFormatException e)
+                {
+
+                }
+            }
+            printHelp(sender, p);
+            return true;
+        }
+        return false;
     }
 
     public boolean handleEntityPlayerCommand(EntityPlayer player, String[] args)
@@ -80,19 +86,24 @@ public class AbstractCommand extends CommandBase
     protected void printHelp(ICommandSender sender, int p)
     {
         List<String> items = new ArrayList();
-        items.add("====== help -" + getCommandName() + "- page " + p +" ======");
         getHelpOutput(sender, items);
-        items.add("");
 
+        sender.addChatMessage(new ChatComponentText("====== help -" + getPrefix().replace("/", "") + "- page " + p +" ======"));
         for(int i = 0 + (p * 10); i < 10 + (p * 10) && i < items.size(); i++)
         {
-            sender.addChatMessage(new ChatComponentText("/" + items.get(i)));
+            sender.addChatMessage(new ChatComponentText(getPrefix() + " " + items.get(i)));
         }
+        sender.addChatMessage(new ChatComponentText(""));
+    }
+
+    public String getPrefix()
+    {
+        return "/" + getCommandName();
     }
 
     public void getHelpOutput(ICommandSender sender, List<String> items)
     {
-        items.add(getCommandName() + " help");
+        items.add("help");
     }
 
     protected final String[] playersOnlineByUsername()
@@ -102,7 +113,7 @@ public class AbstractCommand extends CommandBase
 
     protected String[] removeFront(String[] array)
     {
-        if (array.length == 1)
+        if (array.length > 1)
         {
             String[] a = new String[array.length - 1];
             for (int i = 0; i < a.length; i++)

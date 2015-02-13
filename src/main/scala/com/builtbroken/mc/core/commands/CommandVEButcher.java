@@ -2,6 +2,7 @@ package com.builtbroken.mc.core.commands;
 
 import com.builtbroken.mc.prefab.commands.SubCommand;
 import com.builtbroken.mc.prefab.entity.selector.EntitySelectors;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
@@ -28,5 +29,11 @@ public class CommandVEButcher extends SubCommand
         }
         entityPlayer.addChatComponentMessage(new ChatComponentText("Removed " + list.size() + " mobs entities within " + 100 + " block radius."));
         return true;
+    }
+
+    @Override
+    public void getHelpOutput(ICommandSender sender, List<String> items)
+    {
+        items.add("");
     }
 }

@@ -23,23 +23,7 @@ public class CommandVERemove extends SubCommand
     @Override
     public boolean handleEntityPlayerCommand(EntityPlayer entityPlayer, String[] args)
     {
-        if (isHelpCommand(args))
-        {
-            int p = 0;
-            if (args.length >= 2)
-            {
-                try
-                {
-                    p = Integer.parseInt(args[1]);
-                } catch (NumberFormatException e)
-                {
-
-                }
-            }
-            printHelp(entityPlayer, p);
-            return true;
-        }
-        else
+        if(!handleHelp(entityPlayer, args))
         {
             int radius = 100;
 
@@ -93,21 +77,20 @@ public class CommandVERemove extends SubCommand
                 {
                     entity.setDead();
                 }
-                entityPlayer.addChatMessage(new ChatComponentText("Removed " + list.size() + " " + args[1] + " entities within " + radius + " block radius"));
+                entityPlayer.addChatMessage(new ChatComponentText("Removed " + list.size() + " " + args[0] + " entities within " + radius + " block radius"));
                 return true;
             }
+            return false;
         }
-        return false;
+        return true;
     }
 
     @Override
-    protected void printHelp(ICommandSender sender, int p)
+    public void getHelpOutput(ICommandSender sender, List<String> items)
     {
-        if (sender instanceof EntityPlayer)
-        {
-            sender.addChatMessage(new ChatComponentText("/" + super_command + " " + getCommandName() + " remove projectiles <radius>"));
-            sender.addChatMessage(new ChatComponentText("/" + super_command + " " + getCommandName() + " remove mobs <radius>"));
-            sender.addChatMessage(new ChatComponentText("/" + super_command + " " + getCommandName() + " remove all <radius>"));
-        }
+        items.add("projectiles <radius>");
+        items.add("mobs <radius>");
+        items.add("living <radius>");
+        items.add("items <radius>");
     }
 }

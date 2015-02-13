@@ -56,25 +56,17 @@ public class ModularCommand extends SubCommand
     }
 
     @Override
-    protected void printHelp(ICommandSender sender, int p)
-    {
-        List<String> items = new ArrayList();
-        items.add("====== help -" + (super_command != null ? super_command.getCommandName() : "") + " " +getCommandName() + "- page " + p +" ======");
-        getHelpOutput(sender, items);
-        items.add("");
-
-        for(int i = 0 + (p * 10); i < 10 + (p * 10) && i < items.size(); i++)
-        {
-            sender.addChatMessage(new ChatComponentText("/" + (super_command != null ? super_command.getCommandName() : "") + items.get(i)));
-        }
-    }
-
-    @Override
     public void getHelpOutput(ICommandSender sender, List<String> items)
     {
+        List<String> commands;
         for (AbstractCommand command : subCommands)
         {
-            command.getHelpOutput(sender, items);
+            commands = new ArrayList();
+            command.getHelpOutput(sender, commands);
+            for(String s : commands)
+            {
+                items.add(command.getCommandName() + " " + s);
+            }
         }
     }
 
