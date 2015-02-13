@@ -626,4 +626,24 @@ public class InventoryUtility
 
 		return count;
 	}
+
+    public static ArrayList getAllItemsInPlayerInventory(EntityPlayer entity)
+    {
+        ArrayList<ItemStack> itemsToDrop = new ArrayList();
+        for(int slot = 0; slot < entity.inventory.mainInventory.length; slot++)
+        {
+            if(entity.inventory.mainInventory[slot] != null)
+            {
+                itemsToDrop.add(entity.inventory.mainInventory[slot]);
+            }
+        }
+        for(int slot = 0; slot < entity.inventory.armorInventory.length; slot++)
+        {
+            if(entity.inventory.armorInventory[slot] != null)
+            {
+                itemsToDrop.add(entity.inventory.armorInventory[slot]);
+            }
+        }
+        return itemsToDrop;
+    }
 }
