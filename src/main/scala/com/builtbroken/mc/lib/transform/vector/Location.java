@@ -2,8 +2,11 @@ package com.builtbroken.mc.lib.transform.vector;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -12,7 +15,9 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
-public class Location extends AbstractLocation<Location>  implements IWorldPosition, IPos3D
+import java.util.Random;
+
+public class Location extends AbstractLocation<Location> implements IWorldPosition, IPos3D
 {
     public Location(World world, double x, double y, double z)
     {
@@ -63,5 +68,48 @@ public class Location extends AbstractLocation<Location>  implements IWorldPosit
     public Location newPos(double x, double y, double z)
     {
         return new Location(world, x, y, z);
+    }
+
+    public void playSound(String sound, float volume, float pitch)
+    {
+        world().playSound(x(), y(), z(), sound, volume, pitch, false);
+    }
+
+    public void playSound(Block block)
+    {
+        Block.SoundType soundtype = block.stepSound;
+        playSound(soundtype.getStepResourcePath(), soundtype.getVolume() * 0.5F, soundtype.getPitch() * 0.75F);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void spawnParticle(String t, IPos3D vel)
+    {
+        spawnParticle(t, vel.x(), vel.y(), vel.z());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void spawnParticle(String t, double vel_x, double vel_y, double vel_z)
+    {
+        world().spawnParticle(t, x(), y(), z(), vel_x, vel_y, vel_z);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void playBlockBreakAnimation()
+    {
+        Block block = getBlock();
+        if (block != null && block.getMaterial() != Material.air)
+        {
+            //Play block sound
+            playSound(block);
+
+            //Spawn random particles
+            Random rand = world().rand;
+            for (int i = 0; i < 3 + rand.nextInt(20); i++)
+            {
+                Location v = addRandom(rand, 0.5);
+                Pos vel = new Pos().addRandom(rand, 0.2);
+                v.spawnParticle("blockcrack_" + Block.getIdFromBlock(block) + "_" + v.getBlockMetadata(), vel);
+            }
+        }
     }
 }
