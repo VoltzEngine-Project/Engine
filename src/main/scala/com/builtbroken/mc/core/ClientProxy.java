@@ -2,6 +2,7 @@ package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.content.entity.RenderExCreeper;
+import com.builtbroken.mc.core.handler.PlayerKeyHandler;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -12,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import com.builtbroken.mc.lib.render.model.loader.FixedTechneModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * The Resonant Engine client proxy
@@ -27,7 +29,8 @@ public class ClientProxy extends CommonProxy
 	public void preInit()
 	{
 		RenderingRegistry.registerBlockHandler(new BlockRenderHandler());
-	}
+        MinecraftForge.EVENT_BUS.register(new PlayerKeyHandler());
+    }
 
     @Override
     public void init()
