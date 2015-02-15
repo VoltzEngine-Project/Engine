@@ -3,6 +3,7 @@ package com.builtbroken.mc.core;
 import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
+import com.builtbroken.mc.lib.render.RenderSelection;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -30,6 +31,7 @@ public class ClientProxy extends CommonProxy
 	{
 		RenderingRegistry.registerBlockHandler(new BlockRenderHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerKeyHandler());
+        MinecraftForge.EVENT_BUS.register(new RenderSelection());
     }
 
     @Override
