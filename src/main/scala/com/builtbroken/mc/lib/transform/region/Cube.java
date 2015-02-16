@@ -24,7 +24,7 @@ public class Cube extends Shape3D implements Cloneable
 
     public Cube()
     {
-        this(new Pos(0, -1, 0), new Pos(0 , -1, 0));
+        this(new Pos(0, -1, 0), new Pos(0, -1, 0));
     }
 
     public Cube(IPos3D min, IPos3D max)
@@ -65,6 +65,20 @@ public class Cube extends Shape3D implements Cloneable
     public Rectangle toRectangle()
     {
         return isValid() ? new Rectangle(new Point(min()), new Point(max())) : null;
+    }
+
+    public NBTTagCompound toNBT()
+    {
+        return save(new NBTTagCompound());
+    }
+
+    public NBTTagCompound save(NBTTagCompound tag)
+    {
+        if (pointOne != null)
+            tag.setTag("min_pos", new Pos(pointOne).writeNBT(new NBTTagCompound()));
+        if (pointTwo != null)
+            tag.setTag("max_pos", new Pos(pointOne).writeNBT(new NBTTagCompound()));
+        return tag;
     }
 
 
@@ -345,9 +359,15 @@ public class Cube extends Shape3D implements Cloneable
         return 0;
     }
 
-    public IPos3D pointOne() { return pointOne; }
+    public IPos3D pointOne()
+    {
+        return pointOne;
+    }
 
-    public IPos3D pointTwo() { return pointTwo; }
+    public IPos3D pointTwo()
+    {
+        return pointTwo;
+    }
 
     public Pos min()
     {
@@ -371,13 +391,13 @@ public class Cube extends Shape3D implements Cloneable
 
     public double distance(Vec3 v)
     {
-        if(!isValid())
+        if (!isValid())
         {
-            if(min() != null)
+            if (min() != null)
             {
                 return new Pos(min()).distance(v);
             }
-            else if(max() != null)
+            else if (max() != null)
             {
                 return new Pos(max()).distance(v);
             }
@@ -391,13 +411,13 @@ public class Cube extends Shape3D implements Cloneable
 
     public double distance(IPos3D v)
     {
-        if(!isValid())
+        if (!isValid())
         {
-            if(min() != null)
+            if (min() != null)
             {
                 return new Pos(min()).distance(v);
             }
-            else if(max() != null)
+            else if (max() != null)
             {
                 return new Pos(max()).distance(v);
             }
