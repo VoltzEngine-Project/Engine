@@ -1,7 +1,7 @@
 package com.builtbroken.mc.prefab.entity.selector;
 
 import com.builtbroken.mc.api.IWorldPosition;
-import com.builtbroken.mc.lib.transform.region.Cuboid;
+import com.builtbroken.mc.lib.transform.region.Cube;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
@@ -53,7 +53,7 @@ public class EntitySelector implements IEntitySelector
         return getEntities(world, bb);
     }
 
-    public List<Entity> getEntities(World world, Cuboid cube)
+    public List<Entity> getEntities(World world, Cube cube)
     {
         return world == null || cube == null ? new ArrayList() : getEntities(world, cube.toAABB());
     }
