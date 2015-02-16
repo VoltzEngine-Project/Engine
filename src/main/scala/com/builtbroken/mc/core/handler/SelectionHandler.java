@@ -2,7 +2,7 @@ package com.builtbroken.mc.core.handler;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketSelectionData;
-import com.builtbroken.mc.lib.transform.region.Cuboid;
+import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.google.common.collect.Maps;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -25,7 +25,7 @@ public class SelectionHandler
 {
     public static final SelectionHandler INSTANCE = new SelectionHandler();
 
-    private static final HashMap<EntityPlayer, Cuboid> selections = Maps.newHashMap();
+    private static final HashMap<EntityPlayer, Cube> selections = Maps.newHashMap();
 
     private SelectionHandler()
     {
@@ -35,13 +35,13 @@ public class SelectionHandler
      * gets the selection of the player, or creates one if none exists.
      * This is mainly so we dont have to deal with NPEs later.
      */
-    public static Cuboid getSelection(EntityPlayer player)
+    public static Cube getSelection(EntityPlayer player)
     {
-        Cuboid out = INSTANCE.selections.get(player);
+        Cube out = INSTANCE.selections.get(player);
 
         if (out == null)
         {
-            out = new Cuboid(null, null);
+            out = new Cube(null, null);
             INSTANCE.selections.put(player, out);
         }
 
@@ -52,7 +52,7 @@ public class SelectionHandler
      * gets the selection of the player, or creates one if none exists.
      * This is mainly so we dont have to deal with NPEs later.
      */
-    public static void setSelection(EntityPlayer player, Cuboid cuboid)
+    public static void setSelection(EntityPlayer player, Cube cuboid)
     {
         INSTANCE.selections.put(player, cuboid);
         if (!player.worldObj.isRemote)
@@ -67,19 +67,18 @@ public class SelectionHandler
      */
     private void clearSelection(EntityPlayer player)
     {
-        Cuboid select = selections.get(player);
+        Cube select = selections.get(player);
         if (select != null)
         {
-            select.min_$eq(null);
-            select.max_$eq(null);
+            select.set(null, null);
         }
     }
 
     public static void updatePlayerRenderData(EntityPlayerMP player)
     {
-        List<Cuboid> cubes = new ArrayList();
+        List<Cube> cubes = new ArrayList();
         cubes.add(getSelection(player));
-        for (Cuboid cube : selections.values())
+        for (Cube cube : selections.values())
         {
             if (cube.distance(new Pos(player)) <= 64)
             {

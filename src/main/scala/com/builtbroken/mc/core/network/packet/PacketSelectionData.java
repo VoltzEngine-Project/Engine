@@ -1,12 +1,11 @@
 package com.builtbroken.mc.core.network.packet;
 
 import com.builtbroken.mc.lib.render.RenderSelection;
-import com.builtbroken.mc.lib.transform.region.Cuboid;
+import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
@@ -23,9 +22,9 @@ public class PacketSelectionData extends PacketType
 
     }
 
-    List<Cuboid> cubes;
+    List<Cube> cubes;
 
-    public PacketSelectionData(List<Cuboid> cubes)
+    public PacketSelectionData(List<Cube> cubes)
     {
         this.cubes = cubes;
     }
@@ -36,7 +35,7 @@ public class PacketSelectionData extends PacketType
         NBTTagCompound tag = new NBTTagCompound();
         NBTTagList list = new NBTTagList();
         tag.setInteger("count", cubes.size());
-        for(Cuboid cube: cubes)
+        for(Cube cube: cubes)
         {
             NBTTagCompound nbt = new NBTTagCompound();
             NBTTagCompound a = new NBTTagCompound();
@@ -56,19 +55,19 @@ public class PacketSelectionData extends PacketType
     {
         NBTTagCompound tag = ByteBufUtils.readTag(buffer);
         NBTTagList list = tag.getTagList("cubes", 10);
-        List<Cuboid> cubes = new ArrayList();
+        List<Cube> cubes = new ArrayList();
 
         for(int i = 0; i < list.tagCount(); i++)
         {
             NBTTagCompound nbt = list.getCompoundTagAt(i);
             Pos a = new Pos(nbt.getCompoundTag("a"));
             Pos b = new Pos(nbt.getCompoundTag("b"));
-            cubes.add(new Cuboid(a, b));
+            cubes.add(new Cube(a, b));
         }
 
         //Clear old selections
         RenderSelection.cube_render_list.clear();
-        RenderSelection.selection = new Cuboid();
+        RenderSelection.selection = new Cube();
 
         //Add new selections
         if(cubes.size() > 0)

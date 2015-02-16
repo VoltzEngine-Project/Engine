@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.render;
 
 import com.builtbroken.jlib.data.Colors;
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.lib.transform.region.Cuboid;
+import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -21,22 +21,22 @@ import java.util.List;
  */
 public class RenderSelection
 {
-    public static List<Cuboid> cube_render_list = new ArrayList();
-    public static Cuboid selection = new Cuboid();
+    public static List<Cube> cube_render_list = new ArrayList();
+    public static Cube selection = new Cube();
 
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void render(RenderWorldLastEvent event)
     {
-        for (Cuboid cube : cube_render_list)
+        for (Cube cube : cube_render_list)
         {
             render(cube, false, false);
         }
         render(selection, true, true);
     }
 
-    public static void render(Cuboid selection, boolean mark_points, boolean is_selection)
+    public static void render(Cube selection, boolean mark_points, boolean is_selection)
     {
         GL11.glPushMatrix();
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -109,7 +109,7 @@ public class RenderSelection
                 GL11.glColor3f(Colors.DARK_RED.color().getRed(), Colors.DARK_RED.color().getBlue(), Colors.DARK_RED.color().getGreen());
 
 
-            renderBlockBoxTo(tess, new Pos(selection.xSize(), -selection.ySize(), -selection.zSize()));
+            renderBlockBoxTo(tess, new Pos(selection.getSizeX(), -selection.getSizeY(), -selection.getSizeZ()));
         }
 
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);

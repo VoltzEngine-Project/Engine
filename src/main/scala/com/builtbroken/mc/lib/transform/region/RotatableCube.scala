@@ -1,18 +1,15 @@
 package com.builtbroken.mc.lib.transform.region
 
-import net.minecraft.util.AxisAlignedBB
-import com.builtbroken.mc.lib.transform.rotation.IRotation
-import com.builtbroken.mc.lib.transform.vector.Point
 import com.builtbroken.mc.lib.helper.MathUtility
+import com.builtbroken.mc.lib.transform.vector.Point
+import net.minecraft.util.AxisAlignedBB
 
 /**
  * Created by robert on 12/14/2014.
  */
-class RotatableCube extends Cuboid with IRotation
+@Deprecated
+class RotatableCube extends Cube
 {
-  var yaw: Double = 0
-  var pitch: Double = 0
-  var roll: Double = 0
 
   override def intersects(x: Double, y: Double, z: Double): Boolean =
   {
@@ -37,12 +34,12 @@ class RotatableCube extends Cuboid with IRotation
   {
     if (yaw.asInstanceOf[Int] != 0 || pitch.asInstanceOf[Int] != 0)
     {
-      return doesOverlap(new Cuboid(box))
+      return doesOverlap(new Cube(box))
     }
     return super.doesOverlap(box);
   }
 
-  override def doesOverlap(box: Cuboid): Boolean =
+  override def doesOverlap(box: Cube): Boolean =
   {
     if (yaw.asInstanceOf[Int] != 0 || pitch.asInstanceOf[Int] != 0)
     {
@@ -51,7 +48,7 @@ class RotatableCube extends Cuboid with IRotation
         return false;
 
       //Corner check TODO replace with better check in case we get a zero corner overlap
-      for (v <- getCorners(box))
+      for (v <- Cube.getCorners(box))
       {
         if (intersects(v))
           return true

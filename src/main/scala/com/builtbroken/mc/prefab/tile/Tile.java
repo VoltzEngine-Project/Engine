@@ -8,7 +8,7 @@ import com.builtbroken.mc.core.network.packet.AbstractPacket;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.block.RenderTileDummy;
-import com.builtbroken.mc.lib.transform.region.Cuboid;
+import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.helper.WrenchUtility;
@@ -65,7 +65,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     public Block.SoundType stepSound = Block.soundTypeStone;
     public Class<? extends ItemBlock> itemBlock = ItemBlock.class;
 
-    protected Cuboid bounds = new Cuboid(0, 0, 0, 1, 1, 1);
+    protected Cube bounds = new Cube(0, 0, 0, 1, 1, 1);
 
     //Icon vars
     @SideOnly(Side.CLIENT)
@@ -547,14 +547,14 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     /**
      * Collision Note that all bounds done in the the tile is relative to the tile's position.
      */
-    public Iterable<Cuboid> getCollisionBoxes(Cuboid intersect, Entity entity)
+    public Iterable<Cube> getCollisionBoxes(Cube intersect, Entity entity)
     {
-        List<Cuboid> boxes = new ArrayList<Cuboid>();
+        List<Cube> boxes = new ArrayList<Cube>();
         boxes.add(getCollisionBounds());
         return boxes;
     }
 
-    public Cuboid getSelectBounds()
+    public Cube getSelectBounds()
     {
         return bounds;
     }
@@ -565,7 +565,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
         return getCollisionBounds().clone().add(x(), y(), z()).toAABB();
     }
 
-    public Cuboid getCollisionBounds()
+    public Cube getCollisionBounds()
     {
         return bounds;
     }
