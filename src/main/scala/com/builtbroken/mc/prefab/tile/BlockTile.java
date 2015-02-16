@@ -1,6 +1,6 @@
 package com.builtbroken.mc.prefab.tile;
 
-import com.builtbroken.mc.lib.transform.region.Cuboid;
+import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Point;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
@@ -200,11 +200,11 @@ public class BlockTile extends Block implements ITileEntityProvider
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
     {
         inject(world, x, y, z);
-        Iterable<Cuboid> bounds = getTile(world, x, y, z).getCollisionBoxes(new Cuboid(aabb).subtract(new Pos(x, y, z)), entity);
+        Iterable<Cube> bounds = getTile(world, x, y, z).getCollisionBoxes(new Cube(aabb).subtract(new Pos(x, y, z)), entity);
         eject();
         if (bounds != null)
         {
-            for (Cuboid cuboid : bounds)
+            for (Cube cuboid : bounds)
             {
                 AxisAlignedBB bb = cuboid.toAABB().offset(x, y, z);
                 if (aabb.intersectsWith(bb))
