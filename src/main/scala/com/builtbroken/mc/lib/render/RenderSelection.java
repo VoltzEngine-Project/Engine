@@ -22,7 +22,7 @@ import java.util.List;
 public class RenderSelection
 {
     public static List<Cube> cube_render_list = new ArrayList();
-    public static Cube selection = new Cube();
+    public static Cube selection = null;
 
 
     @SideOnly(Side.CLIENT)
@@ -31,9 +31,11 @@ public class RenderSelection
     {
         for (Cube cube : cube_render_list)
         {
-            render(cube, false, false);
+            if (cube != null)
+                render(cube, false, false);
         }
-        render(selection, true, true);
+        if (selection != null)
+            render(selection, true, true);
     }
 
     public static void render(Cube selection, boolean mark_points, boolean is_selection)
@@ -49,65 +51,52 @@ public class RenderSelection
 
         boolean render1 = false;
 
-        if (mark_points)
+        // render p1
+        if (selection.pointOne() != null)
         {
-            // render p1
-            if (selection.min() != null)
-            {
-                IPos3D vec1 = selection.min();
-                GL11.glTranslated(vec1.x() - RenderManager.renderPosX, vec1.y() + 1 - RenderManager.renderPosY, vec1.z() - RenderManager.renderPosZ);
-                GL11.glScalef(1.0F, -1.0F, -1.0F);
-                if (is_selection)
-                    GL11.glColor3f(255, 0, 0);
-                else
-                    GL11.glColor3f(Colors.RED.color().getRed(), Colors.RED.color().getBlue(), Colors.RED.color().getGreen());
-                renderBlockBox(tess);
-                render1 = true;
-            }
-
-            // render p2
-            if (selection.max() != null)
-            {
-                IPos3D p1 = selection.min();
-                IPos3D p2 = selection.max();
-
-                if (render1)
-                {
-                    float x = (float) (p2.x() - p1.x());
-                    float y = (float) (p1.y() - p2.y()) + 1;
-                    float z = (float) (p1.z() - p2.z()) - 1;
-
-                    GL11.glTranslated(x, y, z);
-                }
-                else
-                {
-                    GL11.glTranslated(p2.x() - RenderManager.renderPosX, p2.y() + 1 - RenderManager.renderPosY, p2.z() - RenderManager.renderPosZ);
-                }
-
-                GL11.glScalef(1.0F, -1.0F, -1.0F);
-                if (is_selection)
-                    GL11.glColor3f(0, 255, 0);
-                else
-                    GL11.glColor3f(Colors.CORRUPTION_PURPLE.color().getRed(), Colors.CORRUPTION_PURPLE.color().getBlue(), Colors.CORRUPTION_PURPLE.color().getGreen());
-                renderBlockBox(tess);
-            }
+            IPos3D vec1 = selection.pointOne();
+            GL11.glTranslated(vec1.x() - RenderManager.renderPosX, vec1.y() + 1 - RenderManager.renderPosY, vec1.z() - RenderManager.renderPosZ);
+            GL11.glScalef(1.0F, -1.0F, -1.0F);
+            GL11.glColor3f(255, 0, 0);
+            renderBlockBox(tess);
+            render1 = true;
         }
 
-        if (selection.min() != null && selection.max() != null)
+        // render p2
+        if (selection.pointTwo() != null)
         {
-            float x = (float) (selection.min().x() - selection.max().x());
-            float y = (float) (selection.min().y() - selection.max().y());
-            float z = (float) (selection.min().z() - selection.max().z()) - 1;
+            IPos3D p1 = selection.pointOne();
+            IPos3D p2 = selection.pointTwo();
+
+            if (render1)
+            {
+                float x = (float) (p2.x() - p1.x());
+                float y = (float) (p1.y() - p2.y()) + 1;
+                float z = (float) (p1.z() - p2.z()) - 1;
+
+                GL11.glTranslated(x, y, z);
+            }
+            else
+            {
+                GL11.glTranslated(p2.x() - RenderManager.renderPosX, p2.y() + 1 - RenderManager.renderPosY, p2.z() - RenderManager.renderPosZ);
+            }
+
+            GL11.glScalef(1.0F, -1.0F, -1.0F);
+            GL11.glColor3f(0, 255, 0);
+            renderBlockBox(tess);
+        }
+
+        if (selection.isValid())
+        {
+            float x = (float) (selection.min().xf() - selection.pointTwo().x());
+            float y = (float) (selection.min().yf() - selection.pointTwo().y());
+            float z = (float) (selection.min().zf() - selection.pointTwo().z()) - 1;
 
             // translate to the low point..
             GL11.glTranslated(x, y, z);
 
             GL11.glScalef(1.0F, -1.0F, -1.0F);
-            if (is_selection)
-                GL11.glColor3f(0, 5, 100);
-            else
-                GL11.glColor3f(Colors.DARK_RED.color().getRed(), Colors.DARK_RED.color().getBlue(), Colors.DARK_RED.color().getGreen());
-
+            GL11.glColor3f(0, 5, 100);
 
             renderBlockBoxTo(tess, new Pos(selection.getSizeX(), -selection.getSizeY(), -selection.getSizeZ()));
         }

@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.network.netty;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.*;
 import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
 import io.netty.buffer.ByteBuf;
@@ -23,12 +24,14 @@ public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<Abst
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, AbstractPacket packet, ByteBuf target) throws Exception
 	{
-		packet.encodeInto(ctx, target);
+        //Engine.instance.logger().info("ChannelHandler: Encoder " + packet.getClass().getSimpleName());
+        packet.encodeInto(ctx, target);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, AbstractPacket packet)
 	{
+        //Engine.instance.logger().info("ChannelHandler: Decoder " + packet.getClass().getSimpleName());
 		packet.decodeInto(ctx, source);
 	}
 }

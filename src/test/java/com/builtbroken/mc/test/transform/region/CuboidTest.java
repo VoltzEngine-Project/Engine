@@ -1,9 +1,9 @@
 package com.builtbroken.mc.test.transform.region;
 
 import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import junit.framework.TestCase;
 import net.minecraftforge.common.util.ForgeDirection;
-import com.builtbroken.mc.lib.transform.vector.Pos;
 
 /**
  * Created by robert on 12/14/2014.
@@ -68,36 +68,60 @@ public class CuboidTest extends TestCase
                 {
                     case DOWN:
                     case UP:
-                        switch(side)
+                        switch (side)
                         {
-                            case 0: vec.add(0.3, 0, 0.3); break;
-                            case 1: vec.add(-0.3, 0, 0.3);break;
-                            case 2: vec.add(0.3, 0, -0.3);break;
-                            case 3: vec.add(-0.3, 0, -0.3); break;
+                            case 0:
+                                vec.add(0.3, 0, 0.3);
+                                break;
+                            case 1:
+                                vec.add(-0.3, 0, 0.3);
+                                break;
+                            case 2:
+                                vec.add(0.3, 0, -0.3);
+                                break;
+                            case 3:
+                                vec.add(-0.3, 0, -0.3);
+                                break;
                         }
                     case NORTH:
                     case SOUTH:
-                        switch(side)
+                        switch (side)
                         {
-                            case 0: vec.add(0.3, 0.3, 0); break;
-                            case 1: vec.add(-0.3, 0.3, 0);break;
-                            case 2: vec.add(0.3, -0.3, 0);break;
-                            case 3: vec.add(-0.3, -0.3, 0); break;
+                            case 0:
+                                vec.add(0.3, 0.3, 0);
+                                break;
+                            case 1:
+                                vec.add(-0.3, 0.3, 0);
+                                break;
+                            case 2:
+                                vec.add(0.3, -0.3, 0);
+                                break;
+                            case 3:
+                                vec.add(-0.3, -0.3, 0);
+                                break;
                         }
                         break;
                     case WEST:
                     case EAST:
-                        switch(side)
+                        switch (side)
                         {
-                            case 0: vec.add(0, 0.3, 0.3); break;
-                            case 1: vec.add(0, -0.3, 0.3);break;
-                            case 2: vec.add(0, 0.3, -0.3);break;
-                            case 3: vec.add(0, -0.3, -0.3); break;
+                            case 0:
+                                vec.add(0, 0.3, 0.3);
+                                break;
+                            case 1:
+                                vec.add(0, -0.3, 0.3);
+                                break;
+                            case 2:
+                                vec.add(0, 0.3, -0.3);
+                                break;
+                            case 3:
+                                vec.add(0, -0.3, -0.3);
+                                break;
                         }
                         break;
                 }
 
-                Cube c = cube.add(vec);
+                Cube c = cube.clone().add(vec);
                 if (!cube.doesOverlap(c))
                 {
                     System.out.println("Cube:  " + cube);

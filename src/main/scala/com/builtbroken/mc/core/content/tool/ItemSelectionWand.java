@@ -57,13 +57,13 @@ public class ItemSelectionWand extends Item
 
             if (player.isSneaking())
             {
-                select.setMin(location.toVector3());
+                select.setPointOne(location.toVector3());
                 if (Engine.runningAsDev)
                     player.addChatComponentMessage(new ChatComponentText(("Point One: " + select)));
             }
             else
             {
-                select.setMax(location.toVector3());
+                select.setPointTwo(location.toVector3());
                 if (Engine.runningAsDev)
                     player.addChatComponentMessage(new ChatComponentText(("Point Two: " + select)));
             }

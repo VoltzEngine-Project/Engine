@@ -80,7 +80,7 @@ public class SelectionHandler
         cubes.add(getSelection(player));
         for (Cube cube : selections.values())
         {
-            if (cube.distance(new Pos(player)) <= 64)
+            if (cube.distance(new Pos(player)) <= 160)
             {
                 cubes.add(cube);
             }
@@ -113,18 +113,13 @@ public class SelectionHandler
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
-        if (!event.world.isRemote && event.phase == TickEvent.Phase.END)
+        if (!event.world.isRemote && event.phase == TickEvent.Phase.END && event.world.getWorldInfo().getWorldTime() % 5 == 0)
         {
-            if (event.world.getWorldInfo().getWorldTime() % 5 == 0)
+            //Sort threw all players in world and update render data
+            for (Object obj : event.world.playerEntities)
             {
-                //Sort threw all players in world and update render data
-                for (Object obj : event.world.playerEntities)
-                {
-                    if (obj instanceof EntityPlayerMP)
-                    {
-                        updatePlayerRenderData((EntityPlayerMP) obj);
-                    }
-                }
+                if (obj instanceof EntityPlayerMP)
+                    updatePlayerRenderData((EntityPlayerMP) obj);
             }
         }
     }

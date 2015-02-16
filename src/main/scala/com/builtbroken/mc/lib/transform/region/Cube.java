@@ -17,12 +17,14 @@ import java.util.List;
  */
 public class Cube extends Shape3D implements Cloneable
 {
-    private IPos3D min;
-    private IPos3D max;
+    private IPos3D pointOne;
+    private IPos3D pointTwo;
+    private Pos lowerPoint;
+    private Pos higherPoint;
 
     public Cube()
     {
-        this(new Pos(), new Pos());
+        this(new Pos(0, -1, 0), new Pos(0 , -1, 0));
     }
 
     public Cube(IPos3D min, IPos3D max)
@@ -45,9 +47,10 @@ public class Cube extends Shape3D implements Cloneable
     {
         super(nbt);
         if (nbt.hasKey("min_pos"))
-            min = new Pos(nbt.getCompoundTag("min_pos"));
+            pointOne = new Pos(nbt.getCompoundTag("min_pos"));
         if (nbt.hasKey("max_pos"))
-            max = new Pos(nbt.getCompoundTag("max_pos"));
+            pointTwo = new Pos(nbt.getCompoundTag("max_pos"));
+        recalc();
     }
 
     //////////////////////
@@ -56,12 +59,12 @@ public class Cube extends Shape3D implements Cloneable
 
     public AxisAlignedBB toAABB()
     {
-        return isValid() ? AxisAlignedBB.getBoundingBox(min.x(), min.y(), min.z(), max.x(), max.y(), max.z()) : null;
+        return isValid() ? AxisAlignedBB.getBoundingBox(min().x(), min().y(), min().z(), max().x(), max().y(), max().z()) : null;
     }
 
     public Rectangle toRectangle()
     {
-        return isValid() ? new Rectangle(new Point(min), new Point(max)) : null;
+        return isValid() ? new Rectangle(new Point(min()), new Point(max())) : null;
     }
 
 
@@ -78,9 +81,9 @@ public class Cube extends Shape3D implements Cloneable
     {
         if (isValid())
         {
-            min = new Pos(min.x() + x, min.y() + y, min.z() + z);
-            max = new Pos(max.x() + x, max.y() + y, max.z() + z);
-            validate();
+            pointOne = new Pos(pointOne.x() + x, pointOne.y() + y, pointOne.z() + z);
+            pointTwo = new Pos(pointTwo.x() + x, pointTwo.y() + y, pointTwo.z() + z);
+            recalc();
         }
         return this;
     }
@@ -94,9 +97,9 @@ public class Cube extends Shape3D implements Cloneable
     {
         if (isValid())
         {
-            min = new Pos(min.x() - x, min.y() - y, min.z() - z);
-            max = new Pos(max.x() - x, max.y() - y, max.z() - z);
-            validate();
+            pointOne = new Pos(pointOne.x() - x, pointOne.y() - y, pointOne.z() - z);
+            pointTwo = new Pos(pointTwo.x() - x, pointTwo.y() - y, pointTwo.z() - z);
+            recalc();
         }
         return this;
     }
@@ -132,7 +135,7 @@ public class Cube extends Shape3D implements Cloneable
 
     public boolean doesOverlap(Cube box)
     {
-        return box.isValid() && doesOverlap(box.min.x(), box.min.y(), box.min.z(), box.max.x(), box.max.y(), box.max.z());
+        return box.isValid() && doesOverlap(box.min().x(), box.min().y(), box.min().z(), box.max().x(), box.max().y(), box.max().z());
     }
 
     public boolean doesOverlap(double x, double y, double z, double i, double j, double k)
@@ -142,27 +145,27 @@ public class Cube extends Shape3D implements Cloneable
 
     public boolean isOutSideX(double x, double i)
     {
-        return (min.x() > x || i > max.x());
+        return (min().x() > x || i > max().x());
     }
 
     public boolean isOutSideY(double y, double j)
     {
-        return (min.y() > y || j > max.y());
+        return (min().y() > y || j > max().y());
     }
 
     public boolean isOutSideZ(double z, double k)
     {
-        return (min.z() > z || k > max.z());
+        return (min().z() > z || k > max().z());
     }
 
     public boolean isInsideBounds(double x, double y, double z, double i, double j, double k)
     {
-        return isWithin(min.x(), max.x(), x, i) && isWithin(min.y(), max.y(), y, j) && isWithin(min.z(), max.z(), z, k);
+        return isWithin(min().x(), max().x(), x, i) && isWithin(min().y(), max().y(), y, j) && isWithin(min().z(), max().z(), z, k);
     }
 
     public boolean isInsideBounds(Cube other)
     {
-        return isInsideBounds(other.min.x(), other.min.y(), other.min.z(), other.max.x(), other.max.y(), other.max.z());
+        return isInsideBounds(other.min().x(), other.min().y(), other.min().z(), other.max().x(), other.max().y(), other.max().z());
     }
 
     public boolean isInsideBounds(AxisAlignedBB other)
@@ -192,7 +195,7 @@ public class Cube extends Shape3D implements Cloneable
 
     public boolean isWithinX(double v)
     {
-        return isWithinRange(min.x(), max.x(), v);
+        return isWithinRange(min().x(), max().x(), v);
     }
 
     public boolean isWithinX(Vec3 v)
@@ -207,7 +210,7 @@ public class Cube extends Shape3D implements Cloneable
 
     public boolean isWithinY(double v)
     {
-        return isWithinRange(min.y(), max.y(), v);
+        return isWithinRange(min().y(), max().y(), v);
     }
 
     public boolean isWithinY(Vec3 v)
@@ -222,7 +225,7 @@ public class Cube extends Shape3D implements Cloneable
 
     public boolean isWithinZ(double v)
     {
-        return isWithinRange(min.z(), max.z(), v);
+        return isWithinRange(min().z(), max().z(), v);
     }
 
     public boolean isWithinZ(Vec3 v)
@@ -243,10 +246,10 @@ public class Cube extends Shape3D implements Cloneable
     /**
      * Checks to see if a line segment is within the defined line. Assume the lines overlap each other.
      *
-     * @param min - min point
-     * @param max - max point
-     * @param a   - min line point
-     * @param b   - max line point
+     * @param min - pointOne point
+     * @param max - pointTwo point
+     * @param a   - pointOne line point
+     * @param b   - pointTwo line point
      * @return true if the line segment is within the bounds
      */
     public boolean isWithin(double min, double max, double a, double b)
@@ -259,17 +262,17 @@ public class Cube extends Shape3D implements Cloneable
         IPos3D[] array = new IPos3D[8];
         if (box.isValid())
         {
-            double l = box.max.x() - box.min.x();
-            double w = box.max.z() - box.min.z();
-            double h = box.max.y() - box.min.y();
-            array[0] = new Pos(box.min.x(), box.min.y(), box.min.z());
-            array[1] = new Pos(box.min.x(), box.min.y() + h, box.min.z());
-            array[2] = new Pos(box.min.x(), box.min.y() + h, box.min.z() + w);
-            array[3] = new Pos(box.min.x(), box.min.y(), box.min.z() + w);
-            array[4] = new Pos(box.min.x() + l, box.min.y(), box.min.z());
-            array[5] = new Pos(box.min.x() + l, box.min.y() + h, box.min.z());
-            array[6] = new Pos(box.min.x() + l, box.min.y() + h, box.min.z() + w);
-            array[7] = new Pos(box.min.x() + l, box.min.y(), box.min.z() + w);
+            double l = box.pointTwo.x() - box.pointOne.x();
+            double w = box.pointTwo.z() - box.pointOne.z();
+            double h = box.pointTwo.y() - box.pointOne.y();
+            array[0] = new Pos(box.pointOne.x(), box.pointOne.y(), box.pointOne.z());
+            array[1] = new Pos(box.pointOne.x(), box.pointOne.y() + h, box.pointOne.z());
+            array[2] = new Pos(box.pointOne.x(), box.pointOne.y() + h, box.pointOne.z() + w);
+            array[3] = new Pos(box.pointOne.x(), box.pointOne.y(), box.pointOne.z() + w);
+            array[4] = new Pos(box.pointOne.x() + l, box.pointOne.y(), box.pointOne.z());
+            array[5] = new Pos(box.pointOne.x() + l, box.pointOne.y() + h, box.pointOne.z());
+            array[6] = new Pos(box.pointOne.x() + l, box.pointOne.y() + h, box.pointOne.z() + w);
+            array[7] = new Pos(box.pointOne.x() + l, box.pointOne.y(), box.pointOne.z() + w);
         }
         return array;
     }
@@ -317,7 +320,7 @@ public class Cube extends Shape3D implements Cloneable
     {
         if (isValid())
         {
-            return max.x() - min.x();
+            return max().x() - min().x() + 1;
         }
         return 0;
     }
@@ -327,7 +330,7 @@ public class Cube extends Shape3D implements Cloneable
     {
         if (isValid())
         {
-            return max.y() - min.y();
+            return max().y() - min().y() + 1;
         }
         return 0;
     }
@@ -337,19 +340,23 @@ public class Cube extends Shape3D implements Cloneable
     {
         if (isValid())
         {
-            return max.z() - min.z();
+            return max().z() - min().z() + 1;
         }
         return 0;
     }
 
-    public IPos3D min()
+    public IPos3D pointOne() { return pointOne; }
+
+    public IPos3D pointTwo() { return pointTwo; }
+
+    public Pos min()
     {
-        return min;
+        return lowerPoint;
     }
 
-    public IPos3D max()
+    public Pos max()
     {
-        return max;
+        return higherPoint;
     }
 
     public boolean isSquared()
@@ -364,11 +371,41 @@ public class Cube extends Shape3D implements Cloneable
 
     public double distance(Vec3 v)
     {
+        if(!isValid())
+        {
+            if(min() != null)
+            {
+                return new Pos(min()).distance(v);
+            }
+            else if(max() != null)
+            {
+                return new Pos(max()).distance(v);
+            }
+            else
+            {
+                return Double.MIN_VALUE;
+            }
+        }
         return center.distance(v);
     }
 
     public double distance(IPos3D v)
     {
+        if(!isValid())
+        {
+            if(min() != null)
+            {
+                return new Pos(min()).distance(v);
+            }
+            else if(max() != null)
+            {
+                return new Pos(max()).distance(v);
+            }
+            else
+            {
+                return Double.MIN_VALUE;
+            }
+        }
         return center.distance(v);
     }
 
@@ -413,34 +450,34 @@ public class Cube extends Shape3D implements Cloneable
     ///Setters
     /////////////////////
 
-    public void setMin(IPos3D pos)
+    public void setPointOne(IPos3D pos)
     {
-        this.min = pos;
-        validate();
+        this.pointOne = pos;
+        recalc();
     }
 
-    public void setMax(IPos3D pos)
+    public void setPointTwo(IPos3D pos)
     {
-        this.max = pos;
-        validate();
+        this.pointTwo = pos;
+        recalc();
     }
 
     public void set(IPos3D min, IPos3D max)
     {
-        this.min = min;
-        this.max = max;
-        validate();
+        this.pointOne = min;
+        this.pointTwo = max;
+        recalc();
     }
 
     public Cube set(Cube cube)
     {
-        this.set(cube.min != null ? new Pos(cube.min()) : null, cube.max() != null ? new Pos(cube.max()) : null);
+        this.set(cube.min() != null ? new Pos(cube.min()) : null, cube.max() != null ? new Pos(cube.max()) : null);
         return this;
     }
 
     public Cube setBlockBounds(Block block)
     {
-        block.setBlockBounds((float) min.x(), (float) min.y(), (float) min.z(), (float) max.x(), (float) max.y(), (float) max.z());
+        block.setBlockBounds((float) min().x(), (float) min().y(), (float) min().z(), (float) max().x(), (float) max().y(), (float) max().z());
         return this;
     }
 
@@ -448,10 +485,14 @@ public class Cube extends Shape3D implements Cloneable
      * Called after the cube's data has changed in order
      * to update any internal data.
      */
-    protected void validate()
+    protected void recalc()
     {
-        if (isValid())
-            this.center = new Pos(min.x() + (getSizeX() / 2), min.y() + (getSizeY() / 2), min.z() + (getSizeZ() / 2));
+        if (pointOne != null && pointTwo != null)
+        {
+            lowerPoint = new Pos(Math.min(pointOne.x(), pointTwo.x()), Math.min(pointOne.y(), pointTwo.y()), Math.min(pointOne.z(), pointTwo.z()));
+            higherPoint = new Pos(Math.max(pointOne.x(), pointTwo.x()), Math.max(pointOne.y(), pointTwo.y()), Math.max(pointOne.z(), pointTwo.z()));
+            this.center = new Pos(min().x() + (getSizeX() / 2), min().y() + (getSizeY() / 2), min().z() + (getSizeZ() / 2));
+        }
         else
             this.center = null;
     }
@@ -461,19 +502,19 @@ public class Cube extends Shape3D implements Cloneable
      */
     public boolean isValid()
     {
-        return min != null && max != null;
+        return min() != null && max() != null && min().y() > -1 && max().y() > -1;
     }
 
     @Override
     public Cube clone()
     {
-        return new Cube(min, max);
+        return new Cube(pointOne, pointTwo);
     }
 
     @Override
     public String toString()
     {
-        return "Cube[" + min + "  " + max + "]";
+        return "Cube[" + pointOne + "  " + pointTwo + "]";
     }
 
     @Override
@@ -481,7 +522,7 @@ public class Cube extends Shape3D implements Cloneable
     {
         if (other instanceof Cube)
         {
-            return ((Cube) other).min == min && ((Cube) other).max == max;
+            return ((Cube) other).pointOne == pointOne && ((Cube) other).pointTwo == pointTwo;
         }
         return false;
     }
