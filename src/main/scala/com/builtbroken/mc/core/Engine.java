@@ -147,8 +147,6 @@ public class Engine extends AbstractMod
             itemWrench = getManager().newItem("ve.screwdriver", new ItemScrewdriver());
         if (getConfig().get("Content", "LoadSelectionTool", true).getBoolean(true))
             itemSelectionTool = getManager().newItem("ve.selectiontool", new ItemSelectionWand());
-
-        loader.preInit();
     }
 
     @EventHandler
@@ -174,15 +172,12 @@ public class Engine extends AbstractMod
             ore = contentRegistry.newBlock(References.ID + "StoneOre", new BlockOre("stone"), ItemBlockOre.class);
             Ores.registerSet(ore, getConfig());
         }
-
-        loader.init();
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent evt)
     {
         super.postInit(evt);
-        loader.postInit();
 
         OreDictionary.registerOre("ingotGold", Items.gold_ingot);
         OreDictionary.registerOre("ingotIron", Items.iron_ingot);

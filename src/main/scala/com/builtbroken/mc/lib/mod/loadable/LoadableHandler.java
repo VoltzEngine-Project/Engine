@@ -4,9 +4,7 @@ import com.builtbroken.jlib.type.Pair;
 import cpw.mods.fml.common.Loader;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * The Object that handles the load calls or submods of the mod
@@ -63,12 +61,10 @@ public class LoadableHandler
                 {
                     loadables.put((ILoadable) module, new Pair(false, false));
                 }
-            }
-            catch (InstantiationException e)
+            } catch (InstantiationException e)
             {
                 throw new RuntimeException(e);
-            }
-            catch (IllegalAccessException e)
+            } catch (IllegalAccessException e)
             {
                 throw new RuntimeException(e);
             }
@@ -107,8 +103,8 @@ public class LoadableHandler
         for (Map.Entry<ILoadable, Pair<Boolean, Boolean>> proxy : loadables.entrySet())
         {
             proxy.getKey().preInit();
+            proxy.getValue().setLeft(true);
         }
-
     }
 
     public void init()
@@ -117,12 +113,13 @@ public class LoadableHandler
 
         for (Map.Entry<ILoadable, Pair<Boolean, Boolean>> proxy : loadables.entrySet())
         {
-            if(!proxy.getValue().left())
+            if (!proxy.getValue().left())
             {
                 proxy.getValue().setLeft(true);
                 proxy.getKey().preInit();
             }
             proxy.getKey().init();
+            proxy.getValue().setRight(true);
         }
     }
 
@@ -132,26 +129,26 @@ public class LoadableHandler
 
         for (Map.Entry<ILoadable, Pair<Boolean, Boolean>> proxy : loadables.entrySet())
         {
-            if(!proxy.getValue().left())
+            if (!proxy.getValue().left())
             {
                 proxy.getValue().setLeft(true);
                 proxy.getKey().preInit();
             }
-            if(!proxy.getValue().right())
+            if (!proxy.getValue().right())
             {
                 proxy.getValue().setRight(true);
-        proxy.getKey().init();
-    }
-    proxy.getKey().postInit();
-}
-
-phase = LoadPhase.DONE;
+                proxy.getKey().init();
+            }
+            proxy.getKey().postInit();
         }
 
-public enum LoadPhase
-{
-    PRELAUNCH,
-    PREINIT,
+        phase = LoadPhase.DONE;
+    }
+
+    public enum LoadPhase
+    {
+        PRELAUNCH,
+        PREINIT,
         INIT,
         POSTINIT,
         DONE

@@ -53,11 +53,11 @@ public class CommandPermissionsRegistry
             String node;
             if (command.getClass().toString().startsWith("class net.minecraft.command"))
             {
-                node = ALL.toString() + "mc." + name;
+                node = ALL.toString() + ".mc." + name;
             }
             else
             {
-                node = ALL.toString() + command.getClass().toString().replace("class ", "");
+                node = ALL.toString() + "." + command.getClass().toString().replace("class ", "");
             }
             logger.info("Registering command " + name + " with permission node " + node);
             registerNodeForCommand(command, node);
