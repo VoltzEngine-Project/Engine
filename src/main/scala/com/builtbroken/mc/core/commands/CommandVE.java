@@ -48,7 +48,7 @@ public class CommandVE extends ModularCommand
         if(sub_command_new == null)
         {
             sub_command_new = new ModularCommand("new");
-            INSTANCE.addCommand(sub_command_new);
+            addCommand(sub_command_new);
         }
         sub_command_new.addCommand(command);
     }
@@ -58,7 +58,7 @@ public class CommandVE extends ModularCommand
         if(sub_command_remove == null)
         {
             sub_command_remove = new ModularCommand("remove");
-            INSTANCE.addCommand(sub_command_remove);
+            addCommand(sub_command_remove);
         }
         sub_command_remove.addCommand(command);
     }
@@ -68,7 +68,7 @@ public class CommandVE extends ModularCommand
         if(sub_command_dump == null)
         {
             sub_command_dump = new ModularCommand("dump");
-            INSTANCE.addCommand(sub_command_dump);
+            addCommand(sub_command_dump);
         }
         sub_command_dump.addCommand(command);
     }

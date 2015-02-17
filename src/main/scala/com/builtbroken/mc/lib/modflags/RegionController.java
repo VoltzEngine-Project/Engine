@@ -31,6 +31,11 @@ public class RegionController implements IVirtualObject
     public final int dim;
     protected List<Region> regions = new ArrayList(); //TODO break into segments in case we get a lot of regions per world
 
+    static
+    {
+        SaveManager.registerClass("regionContoller", RegionController.class);
+    }
+
     public RegionController(int dim)
     {
         this.dim = dim;

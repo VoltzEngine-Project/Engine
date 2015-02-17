@@ -34,6 +34,11 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
 
     public AccessProfile profile;
 
+    static
+    {
+        SaveManager.registerClass("permissionHandler", CommandPermissionHandler.class);
+    }
+
     @Override
     public void preInit()
     {
