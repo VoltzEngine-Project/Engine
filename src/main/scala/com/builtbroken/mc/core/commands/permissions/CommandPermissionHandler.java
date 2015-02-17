@@ -8,9 +8,11 @@ import com.builtbroken.mc.lib.access.AccessGroup;
 import com.builtbroken.mc.lib.access.AccessProfile;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CommandEvent;
@@ -50,7 +52,10 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
         //TODO add flat file support
         //TODO add XML file support
         //Load old permission system or create new one
-        load(NBTUtility.loadData(getSaveFile()));
+        if(MinecraftServer.getServer() != null)
+        {
+            load(NBTUtility.loadData(getSaveFile()));
+        }
 
         //Register with the save manager so this will save each world save
         SaveManager.register(this);
@@ -59,6 +64,7 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
     @SubscribeEvent
     public void onCommand(CommandEvent event)
     {
+        System.out.println("Received command event");
         if (event.sender instanceof EntityPlayer)
         {
             System.out.println("Player: " + event.sender + "\n\tOpped: " + Engine.isPlayerOpped((EntityPlayer) event.sender));
@@ -143,5 +149,11 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
         profile.addGroup(mod_group);
         profile.addGroup(dev_group);
         profile.addGroup(user_group);
+    }
+
+    @Override
+    public boolean shouldLoad()
+    {
+        return FMLCommonHandler.instance().getEffectiveSide().isServer();
     }
 }

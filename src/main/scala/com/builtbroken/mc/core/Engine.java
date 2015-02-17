@@ -4,6 +4,7 @@ import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.permissions.CommandPermissionHandler;
 import com.builtbroken.mc.core.commands.permissions.CommandPermissionsRegistry;
+import com.builtbroken.mc.core.commands.permissions.PermissionsCommandManager;
 import com.builtbroken.mc.core.content.BlockOre;
 import com.builtbroken.mc.core.content.ItemBlockOre;
 import com.builtbroken.mc.core.content.ItemInstaHole;
@@ -18,6 +19,7 @@ import com.builtbroken.mc.core.network.netty.PacketManager;
 import com.builtbroken.mc.core.proxy.NEIProxy;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.helper.PotionUtility;
+import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.lib.mod.AbstractMod;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
@@ -44,10 +46,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 
 /**
@@ -62,7 +66,7 @@ public class Engine extends AbstractMod
     public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
     public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
 
-    @SidedProxy(clientSide = "com.builtbroken.mc.core.ClientProxy", serverSide = "com.builtbroken.mc.core.CommonProxy")
+    @SidedProxy(clientSide = "com.builtbroken.mc.core.ClientProxy", serverSide = "com.builtbroken.mc.core.ServerProxy")
     public static CommonProxy proxy;
 
     @Mod.Metadata(References.ID)
@@ -110,11 +114,11 @@ public class Engine extends AbstractMod
         MinecraftForge.EVENT_BUS.register(SelectionHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(SelectionHandler.INSTANCE);
 
-        loader.applyModule(proxy);
         loader.applyModule(packetHandler);
         loader.applyModule(CrusherRecipeLoad.class);
         loader.applyModule(GrinderRecipeLoad.class);
         loader.applyModule(NEIProxy.class);
+        loader.applyModule(CommandPermissionHandler.GLOBAL);
 
         PotionUtility.resizePotionArray();
 
@@ -215,7 +219,12 @@ public class Engine extends AbstractMod
             //Call init on permission registry so it can build permissions for other mods
             if(CommandPermissionHandler.enablePermissions)
             {
-                CommandPermissionsRegistry.init(commandManager, serverCommandManager);
+                Engine.instance.logger().info("Loading Permissions Module");
+                CommandPermissionsRegistry.init(serverCommandManager);
+            }
+            else
+            {
+                Engine.instance.logger().info("Permissions Module has been disabled");
             }
         }
     }
