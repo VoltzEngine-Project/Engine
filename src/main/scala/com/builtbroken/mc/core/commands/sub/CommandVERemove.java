@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.commands;
+package com.builtbroken.mc.core.commands.sub;
 
 import com.builtbroken.mc.prefab.commands.SubCommand;
 import com.builtbroken.mc.prefab.entity.selector.EntitySelector;

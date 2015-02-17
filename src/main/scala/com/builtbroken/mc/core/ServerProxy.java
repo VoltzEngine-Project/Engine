@@ -42,22 +42,7 @@ public class ServerProxy extends CommonProxy
             //Load up permission commands here, since they don't work without this the permission manager being setup
             CommandVE.INSTANCE.addToNewCommand(new CommandNewGroup());
             CommandVE.INSTANCE.addToRemoveCommand(new CommandRemoveGroup());
-        }
-    }
-
-    @Override
-    public void postInit()
-    {
-        super.postInit();
-        //Call init on permission registry so it can build permissions for other mods
-        if (CommandPermissionHandler.enablePermissions)
-        {
-            Engine.instance.logger().info("Loading Permissions Module");
-            CommandPermissionsRegistry.init(FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager());
-        }
-        else
-        {
-            Engine.instance.logger().info("Permissions Module has been disabled");
+            CommandVE.INSTANCE.addToDumpCommand(new CommandDumpPermissions());
         }
     }
 }

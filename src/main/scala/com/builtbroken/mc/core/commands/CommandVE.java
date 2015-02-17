@@ -2,6 +2,10 @@ package com.builtbroken.mc.core.commands;
 
 import com.builtbroken.mc.core.commands.modflags.CommandNewRegion;
 import com.builtbroken.mc.core.commands.modflags.CommandRemoveRegion;
+import com.builtbroken.mc.core.commands.sub.CommandVEButcher;
+import com.builtbroken.mc.core.commands.sub.CommandVEClear;
+import com.builtbroken.mc.core.commands.sub.CommandVERemove;
+import com.builtbroken.mc.core.commands.sub.CommandVEVersion;
 import com.builtbroken.mc.prefab.commands.AbstractCommand;
 import com.builtbroken.mc.prefab.commands.ModularCommand;
 
@@ -20,6 +24,7 @@ public class CommandVE extends ModularCommand
     public static final CommandVE INSTANCE = new CommandVE();
     private ModularCommand sub_command_new;
     private ModularCommand sub_command_remove;
+    private ModularCommand sub_command_dump;
 
     private CommandVE()
     {
@@ -56,5 +61,15 @@ public class CommandVE extends ModularCommand
             INSTANCE.addCommand(sub_command_remove);
         }
         sub_command_remove.addCommand(command);
+    }
+
+    public void addToDumpCommand(AbstractCommand command)
+    {
+        if(sub_command_dump == null)
+        {
+            sub_command_dump = new ModularCommand("dump");
+            INSTANCE.addCommand(sub_command_dump);
+        }
+        sub_command_dump.addCommand(command);
     }
 }

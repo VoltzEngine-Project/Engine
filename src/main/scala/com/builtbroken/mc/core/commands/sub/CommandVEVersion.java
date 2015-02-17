@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.commands;
+package com.builtbroken.mc.core.commands.sub;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.prefab.commands.SubCommand;
