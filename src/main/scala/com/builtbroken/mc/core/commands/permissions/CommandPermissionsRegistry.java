@@ -21,7 +21,7 @@ public class CommandPermissionsRegistry
     public static final HashMap<ICommand, String> commandToNodeMap = new HashMap();
 
 
-    public static void init(ServerCommandManager serverCommandManager)
+    public static void init(ICommandManager serverCommandManager)
     {
         //TODO loop threw all registered commands and create permissions nodes for them
         Map map = serverCommandManager.getCommands();

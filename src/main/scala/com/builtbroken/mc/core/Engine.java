@@ -215,29 +215,7 @@ public class Engine extends AbstractMod
 
             //Register commands
             serverCommandManager.registerCommand(new CommandVE());
-
-            //Call init on permission registry so it can build permissions for other mods
-            if(CommandPermissionHandler.enablePermissions)
-            {
-                Engine.instance.logger().info("Loading Permissions Module");
-                CommandPermissionsRegistry.init(serverCommandManager);
-            }
-            else
-            {
-                Engine.instance.logger().info("Permissions Module has been disabled");
-            }
         }
-    }
-
-    //@EventHandler
-    public void serverStopped(FMLServerStoppedEvent event)
-    {
-    }
-
-    @EventHandler
-    public void onServerStopping(FMLServerStoppingEvent evt)
-    {
-        SaveManager.saveAll();
     }
 
     public static boolean isPlayerOpped(EntityPlayer player)

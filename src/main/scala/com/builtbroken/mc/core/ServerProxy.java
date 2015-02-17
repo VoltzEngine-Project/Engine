@@ -1,6 +1,7 @@
 package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.core.commands.permissions.CommandPermissionHandler;
+import com.builtbroken.mc.core.commands.permissions.CommandPermissionsRegistry;
 import com.builtbroken.mc.core.commands.permissions.PermissionsCommandManager;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -38,6 +39,22 @@ public class ServerProxy extends CommonProxy
                 Engine.instance.logger().error("Failed to override command manager as our access was blocked");
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void postInit()
+    {
+        super.postInit();
+        //Call init on permission registry so it can build permissions for other mods
+        if(CommandPermissionHandler.enablePermissions)
+        {
+            Engine.instance.logger().info("Loading Permissions Module");
+            CommandPermissionsRegistry.init(FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager());
+        }
+        else
+        {
+            Engine.instance.logger().info("Permissions Module has been disabled");
         }
     }
 }

@@ -61,16 +61,6 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
         SaveManager.register(this);
     }
 
-    @SubscribeEvent
-    public void onCommand(CommandEvent event)
-    {
-        System.out.println("Received command event");
-        if (event.sender instanceof EntityPlayer)
-        {
-            System.out.println("Player: " + event.sender + "\n\tOpped: " + Engine.isPlayerOpped((EntityPlayer) event.sender));
-        }
-    }
-
     @Override
     public File getSaveFile()
     {
