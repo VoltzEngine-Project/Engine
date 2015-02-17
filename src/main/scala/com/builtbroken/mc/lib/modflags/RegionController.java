@@ -55,7 +55,7 @@ public class RegionController implements IVirtualObject
     @Override
     public File getSaveFile()
     {
-        return new File(NBTUtility.getSaveDirectory(), "modflags/region_dim_" + dim +".dat");
+        return new File(NBTUtility.getSaveDirectory(), "ve/modflags/region_dim_" + dim +".dat");
     }
 
     @Override

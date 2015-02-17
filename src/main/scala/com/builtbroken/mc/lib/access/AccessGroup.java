@@ -155,6 +155,11 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
 		this.nodes.add(node);
 	}
 
+    public void addNode(Permission node)
+    {
+        addNode(node.toString());
+    }
+
 	/**
 	 * Removes a permission node from the group
 	 */

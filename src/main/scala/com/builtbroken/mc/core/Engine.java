@@ -2,6 +2,8 @@ package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.commands.CommandVE;
+import com.builtbroken.mc.core.commands.permissions.CommandPermissionHandler;
+import com.builtbroken.mc.core.commands.permissions.CommandPermissionsRegistry;
 import com.builtbroken.mc.core.content.BlockOre;
 import com.builtbroken.mc.core.content.ItemBlockOre;
 import com.builtbroken.mc.core.content.ItemInstaHole;
@@ -37,9 +39,12 @@ import net.minecraft.block.Block;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -203,7 +208,15 @@ public class Engine extends AbstractMod
             // Setup command
             ICommandManager commandManager = FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
             ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
+
+            //Register commands
             serverCommandManager.registerCommand(new CommandVE());
+
+            //Call init on permission registry so it can build permissions for other mods
+            if(CommandPermissionHandler.enablePermissions)
+            {
+                CommandPermissionsRegistry.init(commandManager, serverCommandManager);
+            }
         }
     }
 
@@ -216,6 +229,21 @@ public class Engine extends AbstractMod
     public void onServerStopping(FMLServerStoppingEvent evt)
     {
         SaveManager.saveAll();
+    }
+
+    public static boolean isPlayerOpped(EntityPlayer player)
+    {
+        return player instanceof EntityPlayerMP && isPlayerOpped((EntityPlayerMP)player);
+    }
+
+    public static boolean isPlayerOpped(EntityPlayerMP player)
+    {
+        //Taken from EntityPlayerMP#canCommandSenderUseCommand(Integer, String)
+        if (player.mcServer.getConfigurationManager().func_152596_g(player.getGameProfile()))
+        {
+            return player.mcServer.getConfigurationManager().func_152603_m().func_152683_b(player.getGameProfile()) != null;
+        }
+        return false;
     }
 
 }

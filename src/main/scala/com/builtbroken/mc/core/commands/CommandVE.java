@@ -11,6 +11,7 @@ public class CommandVE extends ModularCommand
     public static boolean disableRemoveCommand = false;
     public static boolean disableButcherCommand = false;
     public static boolean disableClearCommand = false;
+    public static boolean disableRegionCommand = false;
 
     public CommandVE()
     {
@@ -22,5 +23,7 @@ public class CommandVE extends ModularCommand
         addCommand(new CommandVEVersion());
         if (!disableClearCommand)
             addCommand(new CommandVEClear());
+
+        addCommand(new CommandNew());
     }
 }
