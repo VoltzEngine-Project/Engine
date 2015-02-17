@@ -214,7 +214,7 @@ public class Engine extends AbstractMod
             ServerCommandManager serverCommandManager = ((ServerCommandManager) commandManager);
 
             //Register commands
-            serverCommandManager.registerCommand(new CommandVE());
+            serverCommandManager.registerCommand(CommandVE.INSTANCE);
         }
     }
 

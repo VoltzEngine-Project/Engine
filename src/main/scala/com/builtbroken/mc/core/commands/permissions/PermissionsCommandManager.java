@@ -9,14 +9,24 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CommandEvent;
 
 /**
+ * Overrides the behavior of MC's default command manager. Allow interception
+ * of commands to do permission checking. As well allows OP only commands
+ * to be used by any user.
  * Created by robert on 2/17/2015.
  */
 public class PermissionsCommandManager extends ServerCommandManager
 {
-
     public boolean hasPermissionForCommand(ICommandSender sender, ICommand command, String[] args)
     {
-        return CommandPermissionHandler.GLOBAL.canExecuteCommand(sender, command, args)  || command.canCommandSenderUseCommand(sender);
+        return CommandPermissionHandler.GLOBAL.canExecuteCommand(sender, command, args) || command.canCommandSenderUseCommand(sender);
+    }
+
+    @Override
+    public ICommand registerCommand(ICommand command)
+    {
+        if (command != null)
+            CommandPermissionsRegistry.handle(command, command.getCommandName());
+        return super.registerCommand(command);
     }
 
     @Override
@@ -34,7 +44,7 @@ public class PermissionsCommandManager extends ServerCommandManager
         String command_name = args[0];
         args = dropFirstString(args);
 
-        ICommand icommand = (ICommand)this.getCommands().get(command_name);
+        ICommand icommand = (ICommand) this.getCommands().get(command_name);
         int usernameIndex = this.getUsernameIndex(icommand, args);
         int j = 0;
         ChatComponentTranslation chatcomponenttranslation;
@@ -76,8 +86,7 @@ public class PermissionsCommandManager extends ServerCommandManager
                         {
                             icommand.processCommand(sender, args);
                             ++j;
-                        }
-                        catch (CommandException commandexception1)
+                        } catch (CommandException commandexception1)
                         {
                             ChatComponentTranslation chatcomponenttranslation1 = new ChatComponentTranslation(commandexception1.getMessage(), commandexception1.getErrorOjbects());
                             chatcomponenttranslation1.getChatStyle().setColor(EnumChatFormatting.RED);
@@ -93,8 +102,7 @@ public class PermissionsCommandManager extends ServerCommandManager
                     {
                         icommand.processCommand(sender, args);
                         ++j;
-                    }
-                    catch (CommandException commandexception)
+                    } catch (CommandException commandexception)
                     {
                         chatcomponenttranslation = new ChatComponentTranslation(commandexception.getMessage(), commandexception.getErrorOjbects());
                         chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
@@ -108,20 +116,17 @@ public class PermissionsCommandManager extends ServerCommandManager
                 chatcomponenttranslation2.getChatStyle().setColor(EnumChatFormatting.RED);
                 sender.addChatMessage(chatcomponenttranslation2);
             }
-        }
-        catch (WrongUsageException wrongusageexception)
+        } catch (WrongUsageException wrongusageexception)
         {
-            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new Object[] {new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.getErrorOjbects())});
+            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new Object[]{new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.getErrorOjbects())});
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
             sender.addChatMessage(chatcomponenttranslation);
-        }
-        catch (CommandException commandexception2)
+        } catch (CommandException commandexception2)
         {
             chatcomponenttranslation = new ChatComponentTranslation(commandexception2.getMessage(), commandexception2.getErrorOjbects());
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
             sender.addChatMessage(chatcomponenttranslation);
-        }
-        catch (Throwable throwable)
+        } catch (Throwable throwable)
         {
             chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception", new Object[0]);
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);

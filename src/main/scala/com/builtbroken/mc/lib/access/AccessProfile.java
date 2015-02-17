@@ -275,7 +275,7 @@ public class AccessProfile implements IVirtualObject
 
 	public AccessGroup getGroup(String name)
 	{
-		return AccessUtility.getGroup(this.getGroups(), name);
+		return AccessUtility.getGroup(this.getGroups(), name.toLowerCase());
 	}
 
 	public boolean addGroup(AccessGroup group)

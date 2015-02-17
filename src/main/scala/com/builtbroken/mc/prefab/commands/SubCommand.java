@@ -1,6 +1,7 @@
 package com.builtbroken.mc.prefab.commands;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 
 import java.util.ArrayList;

@@ -21,45 +21,23 @@ public class CommandPermissionsRegistry
     public static final HashMap<ICommand, String> commandToNodeMap = new HashMap();
 
 
-    public static void init(ICommandManager serverCommandManager)
+    public static void handle(ICommand command, String name)
     {
-        //TODO loop threw all registered commands and create permissions nodes for them
-        Map map = serverCommandManager.getCommands();
-        logger.info("Processing commands registered to MC's Command Manager");
-        for(Object o : map.entrySet())
+        //Don't re-add nodes if something has already registered that command
+        if(!commandToNodeMap.containsKey(command))
         {
-            if(o instanceof Map.Entry)
+            String node;
+            if(command.getClass().toString().startsWith("class net.minecraft.command"))
             {
-                try
-                {
-                    String command_name = (String) ((Map.Entry) o).getKey();
-                    ICommand command = (ICommand) ((Map.Entry) o).getValue();
-                    //Don't re-add nodes if something has already registered that command
-                    if(!commandToNodeMap.containsKey(command))
-                    {
-                        String node;
-                        if(command.getClass().toString().startsWith("class net.minecraft.command"))
-                        {
-                            node = "mc." + command_name;
-                        }
-                        else
-                        {
-                            node = command.getClass().toString();
-                        }
-                        logger.info("Registering command " + command_name + " with permission node " + node);
-                        commandToNodeMap.put(command, node);
-                    }
-                }
-                catch(Exception e)
-                {
-                    if(Engine.runningAsDev)
-                        e.printStackTrace();
-                    else
-                        logger.error("Failed to process entry " + o);
-                }
+                node = "mc." + name;
             }
+            else
+            {
+                node = command.getClass().toString();
+            }
+            logger.info("Registering command " + name + " with permission node " + node);
+            commandToNodeMap.put(command, node);
         }
-        logger.info("Done processing commands...");
     }
 
     public static String getNodeFor(ICommand command, String[] args)

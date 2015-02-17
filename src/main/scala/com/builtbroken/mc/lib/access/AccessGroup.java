@@ -24,7 +24,7 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
 
 	public AccessGroup(String group_name, AccessUser... users)
 	{
-		super(group_name, users);
+		super(group_name.toLowerCase(), users);
 		this.creation_time = System.currentTimeMillis();
 	}
 
