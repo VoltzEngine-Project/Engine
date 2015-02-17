@@ -61,4 +61,13 @@ public class CommandPermissionsRegistry
         }
         logger.info("Done processing commands...");
     }
+
+    public static String getNodeFor(ICommand command, String[] args)
+    {
+        if(command != null && commandToNodeMap.containsKey(command))
+        {
+            return commandToNodeMap.get(command);
+        }
+        return "null";
+    }
 }

@@ -6,10 +6,14 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.handler.SaveManager;
 import com.builtbroken.mc.lib.access.AccessGroup;
 import com.builtbroken.mc.lib.access.AccessProfile;
+import com.builtbroken.mc.lib.access.AccessUser;
+import com.builtbroken.mc.lib.access.IProfileContainer;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -22,7 +26,7 @@ import java.io.File;
 /**
  * Created by robert on 2/17/2015.
  */
-public class CommandPermissionHandler extends AbstractLoadable implements IVirtualObject
+public class CommandPermissionHandler extends AbstractLoadable implements IVirtualObject, IProfileContainer
 {
     public static final CommandPermissionHandler GLOBAL = new CommandPermissionHandler();
 
@@ -33,7 +37,7 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
     @Override
     public void preInit()
     {
-        enablePermissions = !Engine.instance.getConfig().getBoolean("DisablePermissionsSystem", "Commands", false, "Turns off BE built in command permission system");
+        enablePermissions = Engine.instance.getConfig().getBoolean("EnablePermissionSystem", "Commands", Engine.runningAsDev, "Enabled Voltz Engine built in command permission system that works much like Bukkit's PermissionEx Plugin");
     }
 
     @Override
@@ -145,5 +149,44 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
     public boolean shouldLoad()
     {
         return FMLCommonHandler.instance().getEffectiveSide().isServer();
+    }
+
+    public boolean canExecuteCommand(ICommandSender sender, ICommand command, String[] args)
+    {
+        if(sender instanceof EntityPlayer)
+        {
+            AccessUser user = getAccessProfile().getUserAccess((EntityPlayer) sender);
+            String node = CommandPermissionsRegistry.getNodeFor(command, args);
+            return user.hasNode(node) || user.hasNode(CommandPermissionsRegistry.ALL.toString());
+        }
+        return false;
+    }
+
+    @Override
+    public AccessProfile getAccessProfile()
+    {
+        if(profile == null)
+        {
+            generateNew();
+        }
+        return profile;
+    }
+
+    @Override
+    public void setAccessProfile(AccessProfile profile)
+    {
+
+    }
+
+    @Override
+    public boolean canAccess(String username)
+    {
+        return true;
+    }
+
+    @Override
+    public void onProfileChange()
+    {
+
     }
 }
