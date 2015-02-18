@@ -56,7 +56,7 @@ public class PermissionsRegistry
         //Don't re-add nodes if something has already registered that command
         if (!commandToNodeMap.containsKey(command))
         {
-            String node = command.getClass().toString().replace(" class", "");
+            String node = command.getClass().toString().replace("class ", "");
             for(Map.Entry<String, String> p : packageToNodePrefix.entrySet())
             {
                 if(p.getValue() != null && !p.getValue().isEmpty() && node.startsWith(p.getKey()))
