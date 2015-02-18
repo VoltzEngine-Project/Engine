@@ -43,6 +43,8 @@ public class ServerProxy extends CommonProxy
             CommandVE.INSTANCE.addToNewCommand(new CommandNewGroup());
             CommandVE.INSTANCE.addToRemoveCommand(new CommandRemoveGroup());
             CommandVE.INSTANCE.addToDumpCommand(new CommandDumpPermissions());
+            CommandVE.INSTANCE.addToAddUserCommand(new CommandAddUserToGroup());
+            CommandVE.INSTANCE.addToRemoveUserCommand(new CommandRemoveUserFromGroup());
         }
     }
 }
