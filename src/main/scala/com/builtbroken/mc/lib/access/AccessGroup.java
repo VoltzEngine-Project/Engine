@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.access;
 
 import com.builtbroken.mc.api.ISave;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import com.builtbroken.jlib.type.Group;
@@ -47,15 +48,48 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
 	}
 
 	@Override
-	public boolean addMemeber(AccessUser obj)
+	public boolean addMember(AccessUser obj)
 	{
-		if (super.addMemeber(obj))
+        //TODO trigger super profile that a new member was added
+		if (super.addMember(obj))
 		{
 			obj.setGroup(this);
 			return true;
 		}
 		return false;
 	}
+
+    public boolean addMember(String name)
+    {
+        //TODO trigger super profile that a new member was added
+        if(getMember(name) == null)
+        {
+            return addMember(new AccessUser(name));
+        }
+        return false;
+    }
+
+    public boolean addMember(EntityPlayer player)
+    {
+        //TODO trigger super profile that a new member was added
+        return player != null && addMember(player.getCommandSenderName());
+    }
+
+    public boolean removeMember(EntityPlayer player)
+    {
+        return player != null && removeMember(player.getCommandSenderName());
+    }
+
+    public boolean removeMember(String name)
+    {
+        //TODO trigger super profile that a member removed
+        AccessUser user = getMember(name);
+        if(user != null)
+        {
+            return super.removeMember(user);
+        }
+        return false;
+    }
 
 	@Override
 	public NBTTagCompound save(NBTTagCompound nbt)
@@ -106,7 +140,7 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
 		for (int i = 0; i < userList.tagCount(); ++i)
 		{
 			AccessUser user = AccessUser.loadFromNBT((NBTTagCompound) userList.getCompoundTagAt(i));
-			this.addMemeber(user);
+			this.addMember(user);
 		}
 
 		// Load permission permissions

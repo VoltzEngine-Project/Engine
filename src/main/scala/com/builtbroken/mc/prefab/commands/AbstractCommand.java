@@ -113,12 +113,20 @@ public class AbstractCommand extends CommandBase
 
     protected String[] removeFront(String[] array)
     {
-        if (array.length > 1)
+        return removeFront(array, 1);
+    }
+
+    protected String[] removeFront(String[] array, int count)
+    {
+        if(count  <= 0)
+            count = 1;
+
+        if (array.length > count)
         {
-            String[] a = new String[array.length - 1];
+            String[] a = new String[array.length - count];
             for (int i = 0; i < a.length; i++)
             {
-                a[i] = array[i + 1];
+                a[i] = array[i + count];
             }
             return a;
         }

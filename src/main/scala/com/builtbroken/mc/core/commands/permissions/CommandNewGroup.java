@@ -30,17 +30,17 @@ public class CommandNewGroup extends SubCommand
         if (args.length > 0)
         {
             String name = args[0];
-            if(CommandPermissionHandler.GLOBAL.getAccessProfile().getGroup(name) == null)
+            if (CommandPermissionHandler.GLOBAL.getAccessProfile().getGroup(name) == null)
             {
                 AccessGroup toExtend = null;
-                if(args.length > 1 && args[1].equalsIgnoreCase("extend"))
+                if (args.length > 1 && args[1].equalsIgnoreCase("extend"))
                 {
-                    if(args.length > 2)
+                    if (args.length > 2)
                     {
                         String extendName = args[2];
                         toExtend = CommandPermissionHandler.GLOBAL.getAccessProfile().getGroup(extendName);
                     }
-                    if(toExtend == null)
+                    if (toExtend == null)
                     {
                         sender.addChatMessage(new ChatComponentText("Error: Unknown group to extend"));
                         return true;
@@ -48,11 +48,18 @@ public class CommandNewGroup extends SubCommand
                 }
 
                 AccessGroup group = new AccessGroup(name);
-                if(toExtend != null)
+                if (toExtend != null)
                 {
                     group.setToExtend(toExtend);
                 }
-                CommandPermissionHandler.GLOBAL.getAccessProfile().addGroup(group);
+                if (CommandPermissionHandler.GLOBAL.getAccessProfile().addGroup(group))
+                {
+                    sender.addChatMessage(new ChatComponentText("Group added"));
+                }
+                else
+                {
+                    sender.addChatMessage(new ChatComponentText("Error adding group"));
+                }
             }
             else
             {

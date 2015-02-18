@@ -1,8 +1,8 @@
 package com.builtbroken.mc.core.commands.permissions;
 
 import com.builtbroken.jlib.lang.StringHelpers;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.access.Permission;
-import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import net.minecraft.command.ICommand;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +20,7 @@ public class CommandPermissionsRegistry
 {
     public static final Logger logger = LogManager.getLogger("VE-Permissions");
     public static final HashMap<ICommand, String> commandToNodeMap = new HashMap();
+    public static final HashMap<String, String> packageToNodePrefix = new HashMap();
 
     private static int longestCommandLength = 0;
 
@@ -30,12 +31,17 @@ public class CommandPermissionsRegistry
 
     static
     {
-
+        packageToNodePrefix.put("net.minecraft.command", "minecraft");
+        packageToNodePrefix.put("net.minecraftforge", "forge");
+        packageToNodePrefix.put("com.builtbroken", "bbm");
+        packageToNodePrefix.put("li.cil.oc", "oc");
+        packageToNodePrefix.put("buildcraft", "buildcraft");
+        packageToNodePrefix.put("mcp.mobius.waila", "waila");
     }
 
     public static void registerNodeForCommand(ICommand command, String node)
     {
-        if(command != null && node != null && !node.isEmpty())
+        if (command != null && node != null && !node.isEmpty())
         {
             if (command.getCommandName() != null && command.getCommandName().length() > longestCommandLength)
                 longestCommandLength = command.getCommandName().length();
@@ -50,16 +56,21 @@ public class CommandPermissionsRegistry
         //Don't re-add nodes if something has already registered that command
         if (!commandToNodeMap.containsKey(command))
         {
-            String node;
-            if (command.getClass().toString().startsWith("class net.minecraft.command"))
+            String node = command.getClass().toString().replace(" class", "");
+            for(Map.Entry<String, String> p : packageToNodePrefix.entrySet())
             {
-                node = ALL.toString() + ".mc." + name;
+                if(p.getValue() != null && !p.getValue().isEmpty() && node.startsWith(p.getKey()))
+                {
+                    node = ALL.toString() + "." + p.getValue() + "." + name;
+                    break;
+                }
             }
-            else
+            if(!node.startsWith(ALL.toString()))
             {
-                node = ALL.toString() + "." + command.getClass().toString().replace("class ", "");
+                node = ALL.toString() + "." + node;
             }
-            logger.info("Registering command " + name + " with permission node " + node);
+            if (Engine.runningAsDev) //Reduce console spam, since server owners don't care
+                logger.info("Registering command " + name + " with permission node " + node);
             registerNodeForCommand(command, node);
         }
     }
@@ -76,7 +87,7 @@ public class CommandPermissionsRegistry
     public static void dumpNodesToFile()
     {
         File file = new File(NBTUtility.getBaseDirectory(), "permissionNodes.txt");
-        if(file.exists())
+        if (file.exists())
         {
             file.delete();
         }
@@ -87,15 +98,15 @@ public class CommandPermissionsRegistry
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 
-            bw.write("" +StringHelpers.padRight("Name", longestCommandLength) + "  | Permission Node |");
+            bw.write("" + StringHelpers.padRight("Name", longestCommandLength) + "  | Permission Node |");
             bw.newLine();
             int i = 0;
             for (Map.Entry<ICommand, String> entry : commandToNodeMap.entrySet())
             {
-                bw.write("  " +StringHelpers.padRight(entry.getKey().getCommandName(), longestCommandLength) + "   " + entry.getValue());
+                bw.write("  " + StringHelpers.padRight(entry.getKey().getCommandName(), longestCommandLength) + "   " + entry.getValue());
                 bw.newLine();
                 i++;
-                if(i >= 5)
+                if (i >= 5)
                 {
                     i = 0;
                     bw.newLine();
@@ -103,12 +114,10 @@ public class CommandPermissionsRegistry
             }
 
             bw.close();
-        }
-        catch (FileNotFoundException e)
+        } catch (FileNotFoundException e)
         {
             e.printStackTrace();
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             e.printStackTrace();
         }

@@ -25,6 +25,9 @@ public class CommandVE extends ModularCommand
     private ModularCommand sub_command_new;
     private ModularCommand sub_command_remove;
     private ModularCommand sub_command_dump;
+    private ModularCommand sub_command_add;
+    private ModularCommand sub_command_add_user;
+    private ModularCommand sub_command_remove_user;
 
     private CommandVE()
     {
@@ -36,7 +39,7 @@ public class CommandVE extends ModularCommand
         addCommand(new CommandVEVersion());
         if (!disableClearCommand)
             addCommand(new CommandVEClear());
-        if(!disableModflagCommands)
+        if (!disableModflagCommands)
         {
             addToNewCommand(new CommandNewRegion());
             addToRemoveCommand(new CommandRemoveRegion());
@@ -45,7 +48,7 @@ public class CommandVE extends ModularCommand
 
     public void addToNewCommand(AbstractCommand command)
     {
-        if(sub_command_new == null)
+        if (sub_command_new == null)
         {
             sub_command_new = new ModularCommand("new");
             addCommand(sub_command_new);
@@ -55,7 +58,7 @@ public class CommandVE extends ModularCommand
 
     public void addToRemoveCommand(AbstractCommand command)
     {
-        if(sub_command_remove == null)
+        if (sub_command_remove == null)
         {
             sub_command_remove = new ModularCommand("remove");
             addCommand(sub_command_remove);
@@ -65,11 +68,41 @@ public class CommandVE extends ModularCommand
 
     public void addToDumpCommand(AbstractCommand command)
     {
-        if(sub_command_dump == null)
+        if (sub_command_dump == null)
         {
             sub_command_dump = new ModularCommand("dump");
             addCommand(sub_command_dump);
         }
         sub_command_dump.addCommand(command);
+    }
+
+    public void addToAddCommand(AbstractCommand command)
+    {
+        if (sub_command_add == null)
+        {
+            sub_command_add = new ModularCommand("add");
+            addCommand(sub_command_add);
+        }
+        sub_command_add.addCommand(command);
+    }
+
+    public void addToAddUserCommand(SubCommandUser command)
+    {
+        if (sub_command_add_user == null)
+        {
+            sub_command_add_user = new CommandAddUser();
+            addToAddCommand(sub_command_add_user);
+        }
+        sub_command_add_user.addCommand(command);
+    }
+
+    public void addToRemoveUserCommand(SubCommandUser command)
+    {
+        if (sub_command_remove_user == null)
+        {
+            sub_command_remove_user = new CommandRemoveUser();
+            addToRemoveCommand(sub_command_remove_user);
+        }
+        sub_command_remove_user.addCommand(command);
     }
 }

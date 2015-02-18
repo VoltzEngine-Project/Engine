@@ -36,7 +36,7 @@ public class AccessProfile implements IVirtualObject
 	/**
 	 * A list of all groups attached to this profile
 	 */
-	protected Set<AccessGroup> groups = new LinkedHashSet();
+	protected List<AccessGroup> groups = new ArrayList();
 
 	/**
 	 * Display name of the profile for the user to easily read
@@ -228,7 +228,7 @@ public class AccessProfile implements IVirtualObject
 
 			if (group != null)
 			{
-				bool = group.addMemeber(user);
+				bool = group.addMember(user);
 			}
 			if (bool)
 			{
@@ -244,7 +244,7 @@ public class AccessProfile implements IVirtualObject
 		for (AccessGroup group : this.groups)
 		{
 			AccessUser user = group.getMember(player);
-			if (user != null && group.removeMemeber(user))
+			if (user != null && group.removeMember(user))
 			{
 				re = true;
 			}
@@ -278,6 +278,23 @@ public class AccessProfile implements IVirtualObject
 		return AccessUtility.getGroup(this.getGroups(), name.toLowerCase());
 	}
 
+    public AccessGroup removeGroup(String name)
+    {
+        return removeGroup(getGroup(name));
+    }
+
+    public AccessGroup removeGroup(AccessGroup group)
+    {
+        if(group != null && getGroups().contains(group))
+        {
+            if(getGroups().remove(group))
+            {
+                this.onProfileUpdate();
+            }
+        }
+        return group;
+    }
+
 	public boolean addGroup(AccessGroup group)
 	{
 		if (!this.groups.contains(group))
@@ -296,11 +313,11 @@ public class AccessProfile implements IVirtualObject
 		return this.getGroup("owner");
 	}
 
-	public Set<AccessGroup> getGroups()
+	public List<AccessGroup> getGroups()
 	{
 		if (this.groups == null)
 		{
-			AccessUtility.loadNewGroupSet(this);
+			return new ArrayList();
 		}
 		return this.groups;
 	}

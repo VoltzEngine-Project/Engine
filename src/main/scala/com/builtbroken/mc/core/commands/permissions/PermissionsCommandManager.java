@@ -24,9 +24,12 @@ public class PermissionsCommandManager extends ServerCommandManager
     @Override
     public ICommand registerCommand(ICommand command)
     {
-        if (command != null)
+        if(command!= null && command.getCommandName() != null)
+        {
             CommandPermissionsRegistry.handle(command, command.getCommandName());
-        return super.registerCommand(command);
+            return super.registerCommand(command);
+        }
+        return command;
     }
 
     @Override

@@ -21,7 +21,7 @@ public class Group<J>
 		{
 			for (J obj : js)
 			{
-				this.addMemeber(obj);
+				this.addMember(obj);
 			}
 		}
 	}
@@ -36,26 +36,26 @@ public class Group<J>
 		return obj != null && !members.contains(obj);
 	}
 
-	public boolean addMemeber(J obj)
+	public boolean addMember(J obj)
 	{
 		return this.isValid(obj) ? members.add(obj) : false;
 	}
 
-	public void addMemebers(Collection<J> members)
+	public void addMembers(Collection<J> members)
 	{
 		for (J mem : members)
 		{
-			addMemeber(mem);
+			addMember(mem);
 		}
 
 	}
 
-	public boolean removeMemeber(J obj)
+	public boolean removeMember(J obj)
 	{
 		return members.remove(obj);
 	}
 
-	public boolean isMemeber(J obj)
+	public boolean isMember(J obj)
 	{
 		return members.contains(obj);
 	}
