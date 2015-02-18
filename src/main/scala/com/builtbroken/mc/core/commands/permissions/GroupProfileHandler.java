@@ -111,18 +111,39 @@ public class GroupProfileHandler extends AbstractLoadable implements IVirtualObj
 
         //Create admin group - Power to Ban, Make Regions, and adjust settings
         AccessGroup admin_group = new AccessGroup("Admin");
+        admin_group.addNode("root.minecraft.difficulty");
+        admin_group.addNode("root.minecraft.setworldspawn");
+        admin_group.addNode("root.minecraft.give");
+        admin_group.addNode("root.minecraft.gamemode");
+        admin_group.addNode("root.minecraft.summon");
+        admin_group.addNode("root.minecraft.spawnpoint");
 
         //Create mod group - Power to kick, temp-ban, and silence users
         AccessGroup mod_group = new AccessGroup("Moderator");
+        mod_group.addNode("root.minecraft.whitelist");
+        mod_group.addNode("root.minecraft.ban-ip");
+        mod_group.addNode("root.minecraft.pardon-ip");
+        mod_group.addNode("root.minecraft.time");
+        mod_group.addNode("root.minecraft.save-all");
+        mod_group.addNode("root.minecraft.pardon");
+        mod_group.addNode("root.minecraft.ban");
+        mod_group.addNode("root.minecraft.weather");
+        mod_group.addNode("root.minecraft.toggledownfall");
+        mod_group.addNode("root.minecraft.tp");
 
         //Create dev group - sub version of user just for show
         AccessGroup dev_group = new AccessGroup("Dev");
+        dev_group.addNode("root.minecraft.debug");
 
         //Create media group - sub version of user just for show
         AccessGroup media_group = new AccessGroup("Media");
+        media_group.addNode("root.minecraft.seed");
 
         //Create user group - default group
         AccessGroup user_group = new AccessGroup("User");
+        user_group.addNode("root.minecraft.help");
+        user_group.addNode("root.minecraft.me");
+        user_group.addNode("root.minecraft.tell");
 
         //Extend groups
         owner_group.setToExtend(admin_group);
