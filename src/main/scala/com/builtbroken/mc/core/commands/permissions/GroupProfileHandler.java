@@ -172,7 +172,7 @@ public class GroupProfileHandler extends AbstractLoadable implements IVirtualObj
         {
             AccessUser user = getAccessProfile().getUserAccess((EntityPlayer) sender);
             String node = PermissionsRegistry.getNodeFor(command, args);
-            return user.hasNode(node) || user.hasNode(PermissionsRegistry.ALL.toString());
+            return user.hasNode(node);
         }
         return false;
     }

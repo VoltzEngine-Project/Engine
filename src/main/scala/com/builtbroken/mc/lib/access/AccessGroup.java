@@ -134,7 +134,7 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
 		}
 
 		// Load users
-		NBTTagList userList = nbt.getTagList("users", 0);
+		NBTTagList userList = nbt.getTagList("users", 10);
 		getMembers().clear();
 
 		for (int i = 0; i < userList.tagCount(); ++i)
@@ -144,7 +144,7 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
 		}
 
 		// Load permission permissions
-		NBTTagList nodeList = nbt.getTagList("permissions", 0);
+		NBTTagList nodeList = nbt.getTagList("permissions", 10);
 		this.nodes.clear();
 		for (int i = 0; i < nodeList.tagCount(); ++i)
 		{

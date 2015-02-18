@@ -2,7 +2,6 @@ package com.builtbroken.mc.prefab.commands;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class ModularCommand extends SubCommand
     public ModularCommand addCommand(AbstractCommand command)
     {
         subCommands.add(command);
-        if(command instanceof SubCommand)
+        if (command instanceof SubCommand)
         {
             ((SubCommand) command).setSuperCommand(this);
         }
@@ -32,26 +31,38 @@ public class ModularCommand extends SubCommand
     @Override
     public boolean handleEntityPlayerCommand(EntityPlayer player, String[] args)
     {
-        for (AbstractCommand command : subCommands)
+        if (isHelpCommand(args))
         {
-            if (command.getCommandName().equalsIgnoreCase(args[0]) && command.handleEntityPlayerCommand(player, removeFront(args)))
-            {
-                return true;
-            }
+            handleHelp(player, args);
+            return true;
         }
+        else
+            for (AbstractCommand command : subCommands)
+            {
+                if (command.getCommandName().equalsIgnoreCase(args[0]) && command.handleEntityPlayerCommand(player, removeFront(args)))
+                {
+                    return true;
+                }
+            }
         return false;
     }
 
     @Override
     public boolean handleConsoleCommand(ICommandSender sender, String[] args)
     {
-        for (AbstractCommand command : subCommands)
+        if (isHelpCommand(args))
         {
-            if (command.getCommandName().equalsIgnoreCase(args[0]) && command.handleConsoleCommand(sender, removeFront(args)))
-            {
-                return true;
-            }
+            handleHelp(sender, args);
+            return true;
         }
+        else
+            for (AbstractCommand command : subCommands)
+            {
+                if (command.getCommandName().equalsIgnoreCase(args[0]) && command.handleConsoleCommand(sender, removeFront(args)))
+                {
+                    return true;
+                }
+            }
         return false;
     }
 
@@ -63,7 +74,7 @@ public class ModularCommand extends SubCommand
         {
             commands = new ArrayList();
             command.getHelpOutput(sender, commands);
-            for(String s : commands)
+            for (String s : commands)
             {
                 items.add(command.getCommandName() + " " + s);
             }
@@ -78,7 +89,7 @@ public class ModularCommand extends SubCommand
             for (AbstractCommand command : subCommands)
             {
                 List l = command.addTabCompletionOptions(sender, removeFront(args));
-                if(l != null && !l.isEmpty())
+                if (l != null && !l.isEmpty())
                 {
                     return l;
                 }

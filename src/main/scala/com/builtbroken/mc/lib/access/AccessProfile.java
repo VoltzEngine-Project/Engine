@@ -176,7 +176,6 @@ public class AccessProfile implements IVirtualObject
 	/**
 	 * EntityPlayer version should be used as usernames are not longer going to be supported.
 	 */
-	@Deprecated
 	public AccessUser getUserAccess(String username)
 	{
 		for (AccessGroup group : this.groups)
