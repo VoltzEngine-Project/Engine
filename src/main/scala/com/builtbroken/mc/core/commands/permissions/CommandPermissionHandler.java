@@ -11,15 +11,12 @@ import com.builtbroken.mc.lib.access.IProfileContainer;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.CommandEvent;
 
 import java.io.File;
 
@@ -48,7 +45,7 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
     @Override
     public void init()
     {
-        if(enablePermissions)
+        if (enablePermissions)
         {
             MinecraftForge.EVENT_BUS.register(CommandPermissionHandler.GLOBAL);
         }
@@ -60,14 +57,6 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
         //TODO add database support
         //TODO add flat file support
         //TODO add XML file support
-        //Load old permission system or create new one
-        if(MinecraftServer.getServer() != null)
-        {
-            load(NBTUtility.loadData(getSaveFile()));
-        }
-
-        //Register with the save manager so this will save each world save
-        SaveManager.register(this);
     }
 
     @Override
@@ -92,7 +81,7 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
     public void load(NBTTagCompound nbt)
     {
         //String version = nbt.getString("ve_version"); - for later
-        if(nbt.hasKey("profile"))
+        if (nbt.hasKey("profile"))
             profile = new AccessProfile(nbt.getCompoundTag("profile"));
         else
             generateNew();
@@ -102,10 +91,10 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
     public NBTTagCompound save(NBTTagCompound nbt)
     {
         //Save Version and Build number in case we change how save/loading works between versions
-        nbt.setString("ve_version", References.VERSION + "b"+ References.BUILD_VERSION);
+        nbt.setString("ve_version", References.VERSION + "b" + References.BUILD_VERSION);
 
         //Save Profile
-        if(profile != null)
+        if (profile != null)
         {
             nbt.setTag("profile", profile.save(new NBTTagCompound()));
         }
@@ -158,7 +147,7 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
 
     public boolean canExecuteCommand(ICommandSender sender, ICommand command, String[] args)
     {
-        if(sender instanceof EntityPlayer)
+        if (sender instanceof EntityPlayer)
         {
             AccessUser user = getAccessProfile().getUserAccess((EntityPlayer) sender);
             String node = CommandPermissionsRegistry.getNodeFor(command, args);
@@ -170,9 +159,10 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
     @Override
     public AccessProfile getAccessProfile()
     {
-        if(profile == null)
+        if (profile == null)
         {
-            generateNew();
+            load(NBTUtility.loadData(getSaveFile()));
+            SaveManager.register(this);
         }
         return profile;
     }

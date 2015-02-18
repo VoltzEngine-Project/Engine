@@ -330,7 +330,7 @@ public class AccessProfile implements IVirtualObject
 		this.profileID = nbt.getString("profileID");
 
 		//Load groups
-		NBTTagList group_list = nbt.getTagList("groups", 0);
+		NBTTagList group_list = nbt.getTagList("groups", 10);
 		if (group_list != null && group_list.tagCount() > 0)
 		{
 			this.groups.clear();
