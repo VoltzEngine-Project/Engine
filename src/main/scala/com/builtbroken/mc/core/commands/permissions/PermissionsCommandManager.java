@@ -18,7 +18,7 @@ public class PermissionsCommandManager extends ServerCommandManager
 {
     public boolean hasPermissionForCommand(ICommandSender sender, ICommand command, String[] args)
     {
-        return CommandPermissionHandler.GLOBAL.canExecuteCommand(sender, command, args) || command.canCommandSenderUseCommand(sender);
+        return GroupProfileHandler.GLOBAL.canExecuteCommand(sender, command, args) || command.canCommandSenderUseCommand(sender);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class PermissionsCommandManager extends ServerCommandManager
     {
         if(command!= null && command.getCommandName() != null)
         {
-            CommandPermissionsRegistry.handle(command, command.getCommandName());
+            PermissionsRegistry.handle(command, command.getCommandName());
             return super.registerCommand(command);
         }
         return command;

@@ -16,7 +16,7 @@ import java.util.Map;
  * Handles all permission nodes generated or registered for commands
  * Created by robert on 2/17/2015.
  */
-public class CommandPermissionsRegistry
+public class PermissionsRegistry
 {
     public static final Logger logger = LogManager.getLogger("VE-Permissions");
     public static final HashMap<ICommand, String> commandToNodeMap = new HashMap();

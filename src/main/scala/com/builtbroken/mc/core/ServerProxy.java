@@ -2,6 +2,7 @@ package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.permissions.*;
+import com.builtbroken.mc.core.commands.permissions.sub.*;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.server.MinecraftServer;
@@ -17,7 +18,7 @@ public class ServerProxy extends CommonProxy
     public void init()
     {
         super.init();
-        if (CommandPermissionHandler.enablePermissions)
+        if (GroupProfileHandler.enablePermissions)
         {
             Engine.instance.logger().info("Overriding MC's CommandManager");
             Field field = ReflectionUtility.getMCField(MinecraftServer.class, "commandManager");

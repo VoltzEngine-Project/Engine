@@ -1,5 +1,6 @@
-package com.builtbroken.mc.core.commands.permissions;
+package com.builtbroken.mc.core.commands.permissions.sub;
 
+import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.lib.access.AccessGroup;
 import com.builtbroken.mc.prefab.commands.SubCommand;
 import net.minecraft.command.ICommandSender;
@@ -30,15 +31,15 @@ public class CommandRemoveGroup extends SubCommand
         if (args.length > 0)
         {
             String name = args[0];
-            if (CommandPermissionHandler.GLOBAL.getAccessProfile().getGroup(name) != null)
+            if (GroupProfileHandler.GLOBAL.getAccessProfile().getGroup(name) != null)
             {
                 AccessGroup group = new AccessGroup(name);
-                if(CommandPermissionHandler.GLOBAL.getAccessProfile().removeGroup(group) != null)
+                if(GroupProfileHandler.GLOBAL.getAccessProfile().removeGroup(group) != null)
                 {
                     if(group.getExtendGroup() != null)
                     {
                         int i = 0;
-                        for(AccessGroup g : CommandPermissionHandler.GLOBAL.getAccessProfile().getGroups())
+                        for(AccessGroup g : GroupProfileHandler.GLOBAL.getAccessProfile().getGroups())
                         {
                             if(g.getExtendGroup().getName().equalsIgnoreCase(group.getName()))
                             {

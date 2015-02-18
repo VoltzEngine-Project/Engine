@@ -1,5 +1,6 @@
-package com.builtbroken.mc.core.commands.permissions;
+package com.builtbroken.mc.core.commands.permissions.sub;
 
+import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.lib.access.AccessGroup;
 import com.builtbroken.mc.prefab.commands.SubCommand;
 import net.minecraft.command.ICommandSender;
@@ -32,7 +33,7 @@ public class CommandGroups extends SubCommand
         else if (args[0].equalsIgnoreCase("list"))
         {
             sender.addChatMessage(new ChatComponentText("==== Groups ===="));
-            for (AccessGroup group : CommandPermissionHandler.GLOBAL.getAccessProfile().getGroups())
+            for (AccessGroup group : GroupProfileHandler.GLOBAL.getAccessProfile().getGroups())
             {
                 sender.addChatMessage(new ChatComponentText("  Group[" + group.getName() + (group.getExtendGroupName() != null ? " extends " + group.getExtendGroupName() : "") + "]  Members: " + group.getMembers().size()));
             }

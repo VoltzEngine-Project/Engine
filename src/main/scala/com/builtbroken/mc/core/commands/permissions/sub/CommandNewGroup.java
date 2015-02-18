@@ -1,5 +1,6 @@
-package com.builtbroken.mc.core.commands.permissions;
+package com.builtbroken.mc.core.commands.permissions.sub;
 
+import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.lib.access.AccessGroup;
 import com.builtbroken.mc.prefab.commands.SubCommand;
 import net.minecraft.command.ICommandSender;
@@ -30,7 +31,7 @@ public class CommandNewGroup extends SubCommand
         if (args.length > 0)
         {
             String name = args[0];
-            if (CommandPermissionHandler.GLOBAL.getAccessProfile().getGroup(name) == null)
+            if (GroupProfileHandler.GLOBAL.getAccessProfile().getGroup(name) == null)
             {
                 AccessGroup toExtend = null;
                 if (args.length > 1 && args[1].equalsIgnoreCase("extend"))
@@ -38,7 +39,7 @@ public class CommandNewGroup extends SubCommand
                     if (args.length > 2)
                     {
                         String extendName = args[2];
-                        toExtend = CommandPermissionHandler.GLOBAL.getAccessProfile().getGroup(extendName);
+                        toExtend = GroupProfileHandler.GLOBAL.getAccessProfile().getGroup(extendName);
                     }
                     if (toExtend == null)
                     {
@@ -52,7 +53,7 @@ public class CommandNewGroup extends SubCommand
                 {
                     group.setToExtend(toExtend);
                 }
-                if (CommandPermissionHandler.GLOBAL.getAccessProfile().addGroup(group))
+                if (GroupProfileHandler.GLOBAL.getAccessProfile().addGroup(group))
                 {
                     sender.addChatMessage(new ChatComponentText("Group added"));
                 }

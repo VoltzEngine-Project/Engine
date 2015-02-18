@@ -1,6 +1,7 @@
-package com.builtbroken.mc.core.commands.permissions;
+package com.builtbroken.mc.core.commands.permissions.sub;
 
 import com.builtbroken.mc.core.commands.SubCommandUser;
+import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.lib.access.AccessGroup;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,9 +12,9 @@ import java.util.List;
 /**
  * Created by robert on 2/18/2015.
  */
-public class CommandRemoveUserFromGroup extends SubCommandUser
+public class CommandAddUserToGroup extends SubCommandUser
 {
-    public CommandRemoveUserFromGroup()
+    public CommandAddUserToGroup()
     {
         super("group");
     }
@@ -30,20 +31,20 @@ public class CommandRemoveUserFromGroup extends SubCommandUser
         if (args.length > 0)
         {
             String name = args[0];
-            if (CommandPermissionHandler.GLOBAL.getAccessProfile().getGroup(name) != null)
+            if (GroupProfileHandler.GLOBAL.getAccessProfile().getGroup(name) != null)
             {
                 AccessGroup group = new AccessGroup(name);
-                if (group.removeMember(user))
+                if (group.addMember(user))
                 {
-                    sender.addChatMessage(new ChatComponentText("User removed from group"));
+                    sender.addChatMessage(new ChatComponentText("User added to group"));
                 }
-                else if(group.getMember(user) == null)
+                else if(group.getMember(user) != null)
                 {
-                    sender.addChatMessage(new ChatComponentText("User doesn't exist in that group"));
+                    sender.addChatMessage(new ChatComponentText("Error: User already added"));
                 }
                 else
                 {
-                    sender.addChatMessage(new ChatComponentText("Error removing user from group"));
+                    sender.addChatMessage(new ChatComponentText("Error adding user to group"));
                 }
             }
             else

@@ -2,9 +2,7 @@ package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.commands.CommandVE;
-import com.builtbroken.mc.core.commands.permissions.CommandPermissionHandler;
-import com.builtbroken.mc.core.commands.permissions.CommandPermissionsRegistry;
-import com.builtbroken.mc.core.commands.permissions.PermissionsCommandManager;
+import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.core.content.BlockOre;
 import com.builtbroken.mc.core.content.ItemBlockOre;
 import com.builtbroken.mc.core.content.ItemInstaHole;
@@ -19,7 +17,6 @@ import com.builtbroken.mc.core.network.netty.PacketManager;
 import com.builtbroken.mc.core.proxy.NEIProxy;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.helper.PotionUtility;
-import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.lib.mod.AbstractMod;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
@@ -46,12 +43,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 
 /**
@@ -118,7 +112,7 @@ public class Engine extends AbstractMod
         loader.applyModule(CrusherRecipeLoad.class);
         loader.applyModule(GrinderRecipeLoad.class);
         loader.applyModule(NEIProxy.class);
-        loader.applyModule(CommandPermissionHandler.GLOBAL);
+        loader.applyModule(GroupProfileHandler.GLOBAL);
 
         PotionUtility.resizePotionArray();
 

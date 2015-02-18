@@ -23,9 +23,9 @@ import java.io.File;
 /**
  * Created by robert on 2/17/2015.
  */
-public class CommandPermissionHandler extends AbstractLoadable implements IVirtualObject, IProfileContainer
+public class GroupProfileHandler extends AbstractLoadable implements IVirtualObject, IProfileContainer
 {
-    public static final CommandPermissionHandler GLOBAL = new CommandPermissionHandler();
+    public static final GroupProfileHandler GLOBAL = new GroupProfileHandler();
 
     public static boolean enablePermissions = true;
 
@@ -33,7 +33,7 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
 
     static
     {
-        SaveManager.registerClass("permissionHandler", CommandPermissionHandler.class);
+        SaveManager.registerClass("permissionHandler", GroupProfileHandler.class);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
     {
         if (enablePermissions)
         {
-            MinecraftForge.EVENT_BUS.register(CommandPermissionHandler.GLOBAL);
+            MinecraftForge.EVENT_BUS.register(GroupProfileHandler.GLOBAL);
         }
     }
 
@@ -107,7 +107,7 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
 
         //Create owner group - Power to do everything, AKA /OP
         AccessGroup owner_group = new AccessGroup("Owner");
-        owner_group.addNode(CommandPermissionsRegistry.ALL);
+        owner_group.addNode(PermissionsRegistry.ALL);
 
         //Create admin group - Power to Ban, Make Regions, and adjust settings
         AccessGroup admin_group = new AccessGroup("Admin");
@@ -150,8 +150,8 @@ public class CommandPermissionHandler extends AbstractLoadable implements IVirtu
         if (sender instanceof EntityPlayer)
         {
             AccessUser user = getAccessProfile().getUserAccess((EntityPlayer) sender);
-            String node = CommandPermissionsRegistry.getNodeFor(command, args);
-            return user.hasNode(node) || user.hasNode(CommandPermissionsRegistry.ALL.toString());
+            String node = PermissionsRegistry.getNodeFor(command, args);
+            return user.hasNode(node) || user.hasNode(PermissionsRegistry.ALL.toString());
         }
         return false;
     }
