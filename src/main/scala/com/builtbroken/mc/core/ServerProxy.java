@@ -1,7 +1,8 @@
 package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.core.commands.CommandVE;
-import com.builtbroken.mc.core.commands.permissions.*;
+import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
+import com.builtbroken.mc.core.commands.permissions.PermissionsCommandManager;
 import com.builtbroken.mc.core.commands.permissions.sub.*;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -40,13 +41,16 @@ public class ServerProxy extends CommonProxy
 
         if (FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager() instanceof PermissionsCommandManager)
         {
-            //Load up permission commands here, since they don't work without this the permission manager being setup
+            //Load up permission commands here, since they don't work if the permission fails to setup correctly
             CommandVE.INSTANCE.addToNewCommand(new CommandNewGroup());
             CommandVE.INSTANCE.addToRemoveCommand(new CommandRemoveGroup());
             CommandVE.INSTANCE.addToDumpCommand(new CommandDumpPermissions());
-            CommandVE.INSTANCE.addToAddUserCommand(new CommandAddUserToGroup());
-            CommandVE.INSTANCE.addToRemoveUserCommand(new CommandRemoveUserFromGroup());
+            CommandVE.INSTANCE.addToAddUserCommand(new GSCUser(false));
+            CommandVE.INSTANCE.addToRemoveUserCommand(new GSCUser(true));
+            CommandVE.INSTANCE.addToAddPermCommand(new GSCPerm(false));
+            CommandVE.INSTANCE.addToRemovePermCommand(new GSCPerm(true));
             CommandVE.INSTANCE.addCommand(new CommandGroups());
+            CommandVE.INSTANCE.addToGroupCommand(new GSCList());
         }
     }
 }

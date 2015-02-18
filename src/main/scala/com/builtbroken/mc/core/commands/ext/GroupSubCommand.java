@@ -1,6 +1,5 @@
-package com.builtbroken.mc.core.commands.permissions.sub;
+package com.builtbroken.mc.core.commands.ext;
 
-import com.builtbroken.mc.core.commands.SubCommandUser;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.lib.access.AccessGroup;
 import net.minecraft.command.ICommandSender;
@@ -9,14 +8,19 @@ import net.minecraft.util.ChatComponentText;
 
 import java.util.List;
 
-/**
+/** Prefab for any command which needs to know what group its access first
  * Created by robert on 2/18/2015.
  */
-public class CommandRemoveUserFromGroup extends SubCommandUser
+public abstract class GroupSubCommand extends SubCommandWithName
 {
-    public CommandRemoveUserFromGroup()
+    public GroupSubCommand()
     {
-        super("group");
+        this("group");
+    }
+
+    public GroupSubCommand(String name)
+    {
+        super(name);
     }
 
     @Override
@@ -33,19 +37,7 @@ public class CommandRemoveUserFromGroup extends SubCommandUser
             String name = args[0];
             if (GroupProfileHandler.GLOBAL.getAccessProfile().getGroup(name) != null)
             {
-                AccessGroup group = new AccessGroup(name);
-                if (group.removeMember(user))
-                {
-                    sender.addChatMessage(new ChatComponentText("User removed from group"));
-                }
-                else if(group.getMember(user) == null)
-                {
-                    sender.addChatMessage(new ChatComponentText("User doesn't exist in that group"));
-                }
-                else
-                {
-                    sender.addChatMessage(new ChatComponentText("Error removing user from group"));
-                }
+                return handle(sender, GroupProfileHandler.GLOBAL.getAccessProfile().getGroup(name), user, removeFront(args));
             }
             else
             {
@@ -58,6 +50,8 @@ public class CommandRemoveUserFromGroup extends SubCommandUser
         }
         return true;
     }
+
+    public abstract boolean handle(ICommandSender sender, AccessGroup group, String user, String[] args);
 
     @Override
     public void getHelpOutput(ICommandSender sender, List<String> items)

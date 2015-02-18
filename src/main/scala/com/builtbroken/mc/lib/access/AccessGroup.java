@@ -167,19 +167,29 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
 	 */
 	public boolean hasNode(String node)
 	{
-		if (node.contains(".*"))
-		{
-			String tempNode = node.replaceAll(".*", "");
-			for (String headNode : nodes)
-			{
-				if (tempNode.contains(headNode))
-				{
-					return true;
-				}
-			}
-		}
-		return this.nodes.contains(node) || this.getExtendGroup() != null && this.getExtendGroup().hasNode(node);
+		return hasExactNode(node) ||hasNodeInGroup(node) || this.getExtendGroup() != null && this.getExtendGroup().hasNode(node);
 	}
+
+    public boolean hasNodeInGroup(String node)
+    {
+        if (node.contains(".*"))
+        {
+            String tempNode = node.replaceAll(".*", "");
+            for (String headNode : nodes)
+            {
+                if (tempNode.contains(headNode))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean hasExactNode(String node)
+    {
+        return this.nodes.contains(node);
+    }
 
 	/**
 	 * Adds a permission node to the group

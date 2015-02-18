@@ -1,7 +1,10 @@
 package com.builtbroken.mc.core.commands;
 
+import com.builtbroken.mc.core.commands.ext.ModularCommandRemoveAdd;
+import com.builtbroken.mc.core.commands.ext.SubCommandWithName;
 import com.builtbroken.mc.core.commands.modflags.CommandNewRegion;
 import com.builtbroken.mc.core.commands.modflags.CommandRemoveRegion;
+import com.builtbroken.mc.core.commands.permissions.sub.GroupCommand;
 import com.builtbroken.mc.core.commands.sub.CommandVEButcher;
 import com.builtbroken.mc.core.commands.sub.CommandVEClear;
 import com.builtbroken.mc.core.commands.sub.CommandVERemove;
@@ -28,6 +31,10 @@ public class CommandVE extends ModularCommand
     private ModularCommand sub_command_add;
     private ModularCommand sub_command_add_user;
     private ModularCommand sub_command_remove_user;
+    private ModularCommand sub_command_add_perm;
+    private ModularCommand sub_command_remove_perm;
+    private ModularCommand sub_command_group;
+
 
     private CommandVE()
     {
@@ -86,23 +93,53 @@ public class CommandVE extends ModularCommand
         sub_command_add.addCommand(command);
     }
 
-    public void addToAddUserCommand(SubCommandUser command)
+    public void addToAddUserCommand(SubCommandWithName command)
     {
         if (sub_command_add_user == null)
         {
-            sub_command_add_user = new CommandAddUser();
+            sub_command_add_user = new ModularCommandRemoveAdd("user", "user", false);
             addToAddCommand(sub_command_add_user);
         }
         sub_command_add_user.addCommand(command);
     }
 
-    public void addToRemoveUserCommand(SubCommandUser command)
+    public void addToRemoveUserCommand(SubCommandWithName command)
     {
         if (sub_command_remove_user == null)
         {
-            sub_command_remove_user = new CommandRemoveUser();
+            sub_command_remove_user = new ModularCommandRemoveAdd("user", "user", true);
             addToRemoveCommand(sub_command_remove_user);
         }
         sub_command_remove_user.addCommand(command);
+    }
+
+    public void addToAddPermCommand(SubCommandWithName command)
+    {
+        if (sub_command_add_perm == null)
+        {
+            sub_command_add_perm = new ModularCommandRemoveAdd("perm", "node", false);
+            addToAddCommand(sub_command_add_perm);
+        }
+        sub_command_add_perm.addCommand(command);
+    }
+
+    public void addToRemovePermCommand(SubCommandWithName command)
+    {
+        if (sub_command_remove_perm == null)
+        {
+            sub_command_remove_perm = new ModularCommandRemoveAdd("perm", "node", true);
+            addToRemoveCommand(sub_command_remove_perm);
+        }
+        sub_command_remove_perm.addCommand(command);
+    }
+
+    public void addToGroupCommand(SubCommandWithName command)
+    {
+        if (sub_command_group == null)
+        {
+            sub_command_group = new GroupCommand();
+            addCommand(sub_command_group);
+        }
+        sub_command_group.addCommand(command);
     }
 }

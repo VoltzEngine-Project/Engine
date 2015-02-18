@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.commands;
+package com.builtbroken.mc.core.commands.ext;
 
 import com.builtbroken.mc.prefab.commands.AbstractCommand;
 import com.builtbroken.mc.prefab.commands.ModularCommand;
@@ -9,18 +9,24 @@ import net.minecraft.util.ChatComponentText;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Command designed to add users to some group. Uses sub commands
- * to allow support of any group type. Examples are permission groups,
- * and region groups.
- * <p/>
+/** Prefab designed to be used as a super command for a series of remove or add sub commands.
+ * For example /command remove perm mc.help from group user
+ * This prefab would fall in place as the perm command that is a sub command of remove. In which
+ * this command will pass the permission node to the group command. Which then will remove
+ * the node from group user.
+ *
  * Created by robert on 2/18/2015.
  */
-public class CommandRemoveUser extends ModularCommand
+public class ModularCommandRemoveAdd extends ModularCommand
 {
-    public CommandRemoveUser()
+    final boolean remove;
+    final String type;
+
+    public ModularCommandRemoveAdd(String name, String type, boolean remove)
     {
-        super("user");
+        super(name);
+        this.type = type;
+        this.remove = remove;
     }
 
     @Override
@@ -45,36 +51,47 @@ public class CommandRemoveUser extends ModularCommand
                 {
                     String command = args[1];
                     String[] a = removeFront(args, 2);
-                    if (command.equalsIgnoreCase("from"))
+                    if (!remove && command.equalsIgnoreCase("to") || remove && command.equalsIgnoreCase("from"))
                     {
                         if (args.length > 2)
                         {
                             command = args[2];
                             a = removeFront(a);
                         }
+                        else if(remove)
+                        {
+                            sender.addChatMessage(new ChatComponentText("Need to know what to remove the " + type + " from"));
+                            return true;
+                        }
                         else
                         {
-                            sender.addChatMessage(new ChatComponentText("Need to know what to remove the user from"));
+                            sender.addChatMessage(new ChatComponentText("Need to know what to add the " + type + " to"));
                             return true;
                         }
                     }
                     for (AbstractCommand c : subCommands)
                     {
-                        if (c instanceof SubCommandUser && c.getCommandName().equalsIgnoreCase(command) && ((SubCommandUser) c).handleConsoleCommand(sender, username, a))
+                        if (c instanceof SubCommandWithName && c.getCommandName().equalsIgnoreCase(command) && ((SubCommandWithName) c).handleConsoleCommand(sender, username, a))
                         {
                             return true;
                         }
                     }
                     sender.addChatMessage(new ChatComponentText("Unknown sub command"));
                 }
+                else if(remove)
+                {
+                    sender.addChatMessage(new ChatComponentText("Need to know what to remove the " + type + " from"));
+                    return true;
+                }
                 else
                 {
-                    sender.addChatMessage(new ChatComponentText("Need to know what to remove the user from"));
+                    sender.addChatMessage(new ChatComponentText("Need to know what to add the " + type + " to"));
+                    return true;
                 }
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("Empty user names are not permitted"));
+                sender.addChatMessage(new ChatComponentText("Empty names are not permitted"));
             }
         }
         return true;
@@ -90,7 +107,7 @@ public class CommandRemoveUser extends ModularCommand
             command.getHelpOutput(sender, commands);
             for(String s : commands)
             {
-                items.add(command.getCommandName() + " [username] from " + s);
+                items.add(command.getCommandName() + " [" + type +"] " + (remove ? "from" : "to") + " " + s);
             }
         }
     }

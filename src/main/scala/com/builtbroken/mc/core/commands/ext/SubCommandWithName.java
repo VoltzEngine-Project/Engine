@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.commands;
+package com.builtbroken.mc.core.commands.ext;
 
 import com.builtbroken.mc.prefab.commands.AbstractCommand;
 import com.builtbroken.mc.prefab.commands.SubCommand;
@@ -8,9 +8,9 @@ import net.minecraft.entity.player.EntityPlayer;
 /**
  * Created by robert on 2/18/2015.
  */
-public class SubCommandUser extends SubCommand
+public class SubCommandWithName extends SubCommand
 {
-    public SubCommandUser(String name)
+    public SubCommandWithName(String name)
     {
         super(name);
     }
