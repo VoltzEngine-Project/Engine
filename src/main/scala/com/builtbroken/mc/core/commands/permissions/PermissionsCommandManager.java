@@ -18,7 +18,7 @@ public class PermissionsCommandManager extends ServerCommandManager
 {
     public boolean hasPermissionForCommand(ICommandSender sender, ICommand command, String[] args)
     {
-        return GroupProfileHandler.GLOBAL.canExecuteCommand(sender, command, args) || command.canCommandSenderUseCommand(sender);
+        return GroupProfileHandler.GLOBAL.canExecuteCommand(sender, command, args);
     }
 
     @Override

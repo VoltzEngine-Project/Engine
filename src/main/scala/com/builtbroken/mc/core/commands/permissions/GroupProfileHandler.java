@@ -174,7 +174,7 @@ public class GroupProfileHandler extends AbstractLoadable implements IVirtualObj
             String node = PermissionsRegistry.getNodeFor(command, args);
             return user.hasNode(node);
         }
-        return false;
+        return command.canCommandSenderUseCommand(sender);
     }
 
     @Override
