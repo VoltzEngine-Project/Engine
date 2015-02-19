@@ -11,7 +11,7 @@ import static org.objectweb.asm.Opcodes.*;
 /**
  * @author Calclavia
  */
-public class Transformer implements IClassTransformer
+public class ChunkTransformer implements IClassTransformer
 {
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes)
