@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * A class to help you out with strings
  *
- * @author Calclavia
+ * @author Calclavia, Darkguardsman
  */
 public class LanguageUtility
 {
@@ -17,13 +17,25 @@ public class LanguageUtility
 	}
 
 	/**
-	 * Gets the local text of your translation based on the given key. This will look through your
-	 * mod's translation file that was previously registered. Make sure you enter the full name.
+	 * Grabs the localization for the string provided. Make sure the string
+     * matches the exact key in a translation file.
+     * @param key - translation key, Example 'tile.sometile.name' or 'tile.modname:sometile.name'
+     * @return translated key, or the same string provided if the key didn't match anything
 	 */
 	public static String getLocal(String key)
 	{
 		return wrap(key).getLocal();
 	}
+
+    /**
+     * Same as getLocal(String) but appends '.name' if it is missing
+     * @param key - translation key, Example 'tile.sometile.name' or 'tile.modname:sometile.name'
+     * @return translated key, or the same string provided if the key didn't match anything
+     */
+    public static String getLocalName(String key)
+    {
+        return wrap(key + (key.endsWith(".name") ? ".name" : "")).getLocal();
+    }
 
 	public static List<String> splitStringPerWord(String string, int characters)
 	{

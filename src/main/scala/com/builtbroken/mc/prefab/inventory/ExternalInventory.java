@@ -120,7 +120,7 @@ public class ExternalInventory implements IExternalInventory, ISidedInventory, I
 	@Override
 	public String getInventoryName()
 	{
-		return "container.chest";
+		return "container." + host.getClass().getSimpleName();
 	}
 
 	@Override
