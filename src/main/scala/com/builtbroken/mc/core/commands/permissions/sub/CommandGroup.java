@@ -31,35 +31,28 @@ public class CommandGroup extends ModularCommand
     @Override
     public boolean handleConsoleCommand(ICommandSender sender, String[] args)
     {
-        if(isHelpCommand(args))
+        String name = args[0];
+        AccessGroup group = GroupProfileHandler.GLOBAL.getAccessProfile().getGroup(name);
+        if (group != null)
         {
-            handleHelp(sender, args);
-        }
-        else
-        {
-            String name = args[0];
-            AccessGroup group = GroupProfileHandler.GLOBAL.getAccessProfile().getGroup(name);
-            if (group != null)
+            if (args.length > 1)
             {
-                if (args.length > 1)
+                for (AbstractCommand command : subCommands)
                 {
-                    for (AbstractCommand command : subCommands)
+                    if (command instanceof GroupSubCommand && command.getCommandName().equalsIgnoreCase(args[1]))
                     {
-                        if (command instanceof GroupSubCommand && command.getCommandName().equalsIgnoreCase(args[1]))
+                        if (((GroupSubCommand) command).handle(sender, group, "", removeFront(args, 2)))
                         {
-                            if (((GroupSubCommand) command).handle(sender, GroupProfileHandler.GLOBAL.getAccessProfile().getGroup(name), "", removeFront(args, 2)))
-                            {
-                                return true;
-                            }
+                            return true;
                         }
                     }
                 }
-                sender.addChatMessage(new ChatComponentText("Unknown group sub command"));
             }
-            else
-            {
-                sender.addChatMessage(new ChatComponentText("Unknown group"));
-            }
+            sender.addChatMessage(new ChatComponentText("Unknown group sub command"));
+        }
+        else
+        {
+            sender.addChatMessage(new ChatComponentText("Unknown group"));
         }
         return true;
     }
@@ -72,9 +65,9 @@ public class CommandGroup extends ModularCommand
         {
             commands = new ArrayList();
             command.getHelpOutput(sender, commands);
-            for(String s : commands)
+            for (String s : commands)
             {
-                items.add("[name] " + command.getCommandName() + " " +  s);
+                items.add("[name] " + command.getCommandName() + " " + s);
             }
         }
     }
