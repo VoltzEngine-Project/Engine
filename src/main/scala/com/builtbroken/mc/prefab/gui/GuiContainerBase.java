@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.gui;
 
+import com.builtbroken.jlib.data.Colors;
 import com.builtbroken.mc.lib.transform.vector.Point;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -21,6 +22,7 @@ import com.builtbroken.jlib.data.science.units.UnitDisplay.Unit;
 import com.builtbroken.mc.lib.transform.region.Rectangle;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -49,14 +51,34 @@ public class GuiContainerBase extends GuiContainer
 		this.baseTexture = References.GUI_EMPTY_FILE;
 	}
 
+    protected void drawString(String str, int x, int y, int color)
+    {
+        fontRendererObj.drawString(str, x, y, color);
+    }
+
 	protected void drawString(String str, int x, int y)
 	{
-		fontRendererObj.drawString(str, x, y, 4210752);
+        drawString(str, x, y, 4210752);
 	}
 
-	protected void drawStringCentered(String str, int x, int y)
+    protected void drawString(String str, int x, int y, Color color)
+    {
+        drawString(str, x, y, Colors.getIntFromColor(color));
+    }
+
+    protected void drawStringCentered(String str, int x, int y)
+    {
+        drawStringCentered(str, x, y, 4210752);
+    }
+
+    protected void drawStringCentered(String str, int x, int y, Color color)
+    {
+        drawStringCentered(str, x, y, Colors.getIntFromColor(color));
+    }
+
+	protected void drawStringCentered(String str, int x, int y, int color)
 	{
-		drawString(str, x - (fontRendererObj.getStringWidth(str) / 2), y);
+		drawString(str, x - (fontRendererObj.getStringWidth(str) / 2), y, color);
 	}
 
 	@Override

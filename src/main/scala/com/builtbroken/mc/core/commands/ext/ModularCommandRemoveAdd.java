@@ -107,7 +107,7 @@ public class ModularCommandRemoveAdd extends ModularCommand
             command.getHelpOutput(sender, commands);
             for(String s : commands)
             {
-                items.add(command.getCommandName() + " [" + type +"] " + (remove ? "from" : "to") + " " + s);
+                items.add("[" + type + "] " + (remove ? "from" : "to") + " " + command.getCommandName() + " " + s);
             }
         }
     }

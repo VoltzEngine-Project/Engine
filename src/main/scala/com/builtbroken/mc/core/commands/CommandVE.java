@@ -1,10 +1,13 @@
 package com.builtbroken.mc.core.commands;
 
+import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.core.commands.ext.ModularCommandRemoveAdd;
 import com.builtbroken.mc.core.commands.ext.SubCommandWithName;
+import com.builtbroken.mc.core.commands.ext.UserSubCommand;
 import com.builtbroken.mc.core.commands.modflags.CommandNewRegion;
 import com.builtbroken.mc.core.commands.modflags.CommandRemoveRegion;
-import com.builtbroken.mc.core.commands.permissions.sub.GroupCommand;
+import com.builtbroken.mc.core.commands.permissions.sub.CommandGroup;
+import com.builtbroken.mc.core.commands.permissions.sub.CommandUser;
 import com.builtbroken.mc.core.commands.sub.CommandVEButcher;
 import com.builtbroken.mc.core.commands.sub.CommandVEClear;
 import com.builtbroken.mc.core.commands.sub.CommandVERemove;
@@ -34,6 +37,7 @@ public class CommandVE extends ModularCommand
     private ModularCommand sub_command_add_perm;
     private ModularCommand sub_command_remove_perm;
     private ModularCommand sub_command_group;
+    private ModularCommand sub_command_user;
 
 
     private CommandVE()
@@ -133,13 +137,23 @@ public class CommandVE extends ModularCommand
         sub_command_remove_perm.addCommand(command);
     }
 
-    public void addToGroupCommand(SubCommandWithName command)
+    public void addToGroupCommand(GroupSubCommand command)
     {
         if (sub_command_group == null)
         {
-            sub_command_group = new GroupCommand();
+            sub_command_group = new CommandGroup();
             addCommand(sub_command_group);
         }
         sub_command_group.addCommand(command);
+    }
+
+    public void addToUserCommand(UserSubCommand command)
+    {
+        if (sub_command_user == null)
+        {
+            sub_command_user = new CommandUser();
+            addCommand(sub_command_user);
+        }
+        sub_command_user.addCommand(command);
     }
 }

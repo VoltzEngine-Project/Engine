@@ -32,6 +32,12 @@ public class CommandVEButcher extends SubCommand
     }
 
     @Override
+    public boolean isHelpCommand(String[] args)
+    {
+        return false;
+    }
+
+    @Override
     public void getHelpOutput(ICommandSender sender, List<String> items)
     {
         items.add("");

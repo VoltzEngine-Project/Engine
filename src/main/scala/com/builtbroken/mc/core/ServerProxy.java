@@ -19,6 +19,7 @@ public class ServerProxy extends CommonProxy
     public void init()
     {
         super.init();
+        GroupProfileHandler.enablePermissions = Engine.instance.getConfig().getBoolean("EnablePermissionSystem", "Commands", Engine.runningAsDev, "Enabled Voltz Engine built in command permission system that works much like Bukkit's PermissionEx Plugin");
         if (GroupProfileHandler.enablePermissions)
         {
             Engine.instance.logger().info("Overriding MC's CommandManager");
@@ -52,6 +53,7 @@ public class ServerProxy extends CommonProxy
             CommandVE.INSTANCE.addToRemovePermCommand(new GSCPerm(true));
             CommandVE.INSTANCE.addCommand(new CommandGroups());
             CommandVE.INSTANCE.addToGroupCommand(new GSCList());
+            CommandVE.INSTANCE.addToUserCommand(new USCList());
         }
     }
 }

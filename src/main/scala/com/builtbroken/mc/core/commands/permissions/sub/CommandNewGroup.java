@@ -75,6 +75,12 @@ public class CommandNewGroup extends SubCommand
     }
 
     @Override
+    public boolean isHelpCommand(String[] args)
+    {
+        return args != null && args.length > 0 && (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?"));
+    }
+
+    @Override
     public void getHelpOutput(ICommandSender sender, List<String> items)
     {
         items.add("[name]");

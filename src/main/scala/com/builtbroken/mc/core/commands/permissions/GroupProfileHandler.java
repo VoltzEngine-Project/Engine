@@ -37,12 +37,6 @@ public class GroupProfileHandler extends AbstractLoadable implements IVirtualObj
     }
 
     @Override
-    public void preInit()
-    {
-        enablePermissions = Engine.instance.getConfig().getBoolean("EnablePermissionSystem", "Commands", Engine.runningAsDev, "Enabled Voltz Engine built in command permission system that works much like Bukkit's PermissionEx Plugin");
-    }
-
-    @Override
     public void init()
     {
         if (enablePermissions)

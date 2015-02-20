@@ -130,6 +130,6 @@ public class AbstractCommand extends CommandBase
             }
             return a;
         }
-        return null;
+        return new String[0];
     }
 }

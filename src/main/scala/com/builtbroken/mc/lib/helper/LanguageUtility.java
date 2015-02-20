@@ -34,7 +34,7 @@ public class LanguageUtility
      */
     public static String getLocalName(String key)
     {
-        return wrap(key + (key.endsWith(".name") ? ".name" : "")).getLocal();
+        return wrap(key + (!key.endsWith(".name") ? ".name" : "")).getLocal();
     }
 
 	public static List<String> splitStringPerWord(String string, int characters)

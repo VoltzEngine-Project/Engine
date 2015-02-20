@@ -1,6 +1,7 @@
 package com.builtbroken.mc.core.commands.permissions.sub;
 
 import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
+import com.builtbroken.mc.core.commands.ext.UserSubCommand;
 import com.builtbroken.mc.lib.access.AccessGroup;
 import com.builtbroken.mc.lib.access.AccessUser;
 import net.minecraft.command.ICommandSender;
@@ -11,25 +12,25 @@ import java.util.List;
 /**
  * Created by robert on 2/18/2015.
  */
-public class GSCList extends GroupSubCommand
+public class USCList extends UserSubCommand
 {
-    public GSCList()
+    public USCList()
     {
         super("list");
     }
 
     @Override
-    public boolean handle(ICommandSender sender, AccessGroup group, String user, String[] args)
+    public boolean handle(ICommandSender sender, AccessUser user, String[] args)
     {
         //TODO add page support, so we don't spam the console
         if (args != null && args.length >= 0)
         {
             if (args[0].equalsIgnoreCase("perms"))
             {
-                if(group.getNodes() != null && group.getNodes().size() > 0)
+                if(user.nodes != null && user.nodes.size() > 0)
                 {
                     sender.addChatMessage(new ChatComponentText("==== Permission Nodes ====="));
-                    for (String node : group.getNodes())
+                    for (String node : user.nodes)
                     {
                         sender.addChatMessage(new ChatComponentText(node));
                     }
@@ -38,23 +39,6 @@ public class GSCList extends GroupSubCommand
                 else
                 {
                     sender.addChatMessage(new ChatComponentText("No perms to list"));
-                }
-                return true;
-            }
-            else if (args[0].equalsIgnoreCase("users") || args[0].equalsIgnoreCase("members"))
-            {
-                if(group.getMembers() != null && group.getMembers().size() > 0)
-                {
-                    sender.addChatMessage(new ChatComponentText("===== Members ====="));
-                    for (AccessUser u : group.getMembers())
-                    {
-                        sender.addChatMessage(new ChatComponentText(u.getName()));
-                    }
-                    sender.addChatMessage(new ChatComponentText(""));
-                }
-                else
-                {
-                    sender.addChatMessage(new ChatComponentText("Group contains no members"));
                 }
                 return true;
             }

@@ -26,11 +26,7 @@ public class CommandGroups extends SubCommand
     @Override
     public boolean handleConsoleCommand(ICommandSender sender, String[] args)
     {
-        if (isHelpCommand(args))
-        {
-            handleHelp(sender, args);
-        }
-        else if (args[0].equalsIgnoreCase("list"))
+        if (args[0].equalsIgnoreCase("list"))
         {
             sender.addChatMessage(new ChatComponentText("==== Groups ===="));
             for (AccessGroup group : GroupProfileHandler.GLOBAL.getAccessProfile().getGroups())

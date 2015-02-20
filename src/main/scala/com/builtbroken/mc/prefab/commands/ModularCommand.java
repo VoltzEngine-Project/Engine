@@ -37,13 +37,24 @@ public class ModularCommand extends SubCommand
             return true;
         }
         else
+        {
             for (AbstractCommand command : subCommands)
             {
-                if (command.getCommandName().equalsIgnoreCase(args[0]) && command.handleEntityPlayerCommand(player, removeFront(args)))
+                if (command.getCommandName().equalsIgnoreCase(args[0]))
                 {
-                    return true;
+                    String[] a = removeFront(args);
+                    if (command.isHelpCommand(a))
+                    {
+                        command.handleHelp(player, a);
+                        return true;
+                    }
+                    else if (command.handleEntityPlayerCommand(player, a))
+                    {
+                        return true;
+                    }
                 }
             }
+        }
         return false;
     }
 
@@ -56,13 +67,24 @@ public class ModularCommand extends SubCommand
             return true;
         }
         else
+        {
             for (AbstractCommand command : subCommands)
             {
-                if (command.getCommandName().equalsIgnoreCase(args[0]) && command.handleConsoleCommand(sender, removeFront(args)))
+                if (command.getCommandName().equalsIgnoreCase(args[0]))
                 {
-                    return true;
+                    String[] a = removeFront(args);
+                    if (command.isHelpCommand(a))
+                    {
+                        command.handleHelp(sender, a);
+                        return true;
+                    }
+                    else if (command.handleConsoleCommand(sender, a))
+                    {
+                        return true;
+                    }
                 }
             }
+        }
         return false;
     }
 

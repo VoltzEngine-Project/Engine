@@ -2,6 +2,7 @@ package com.builtbroken.mc.core.commands.permissions;
 
 import com.builtbroken.mc.core.Engine;
 import net.minecraft.command.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
@@ -18,7 +19,7 @@ public class PermissionsCommandManager extends ServerCommandManager
 {
     public boolean hasPermissionForCommand(ICommandSender sender, ICommand command, String[] args)
     {
-        return GroupProfileHandler.GLOBAL.canExecuteCommand(sender, command, args);
+        return sender instanceof EntityPlayer && Engine.isPlayerOpped((EntityPlayer) sender) || GroupProfileHandler.GLOBAL.canExecuteCommand(sender, command, args);
     }
 
     @Override

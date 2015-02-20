@@ -15,9 +15,9 @@ import java.util.List;
 /**
  * Created by robert on 2/18/2015.
  */
-public class GroupCommand extends ModularCommand
+public class CommandGroup extends ModularCommand
 {
-    public GroupCommand()
+    public CommandGroup()
     {
         super("group");
     }
@@ -74,7 +74,7 @@ public class GroupCommand extends ModularCommand
             command.getHelpOutput(sender, commands);
             for(String s : commands)
             {
-                items.add("[name] " + command.getCommandName() +  s);
+                items.add("[name] " + command.getCommandName() + " " +  s);
             }
         }
     }
