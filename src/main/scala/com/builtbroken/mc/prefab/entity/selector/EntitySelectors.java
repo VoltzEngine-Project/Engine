@@ -52,4 +52,13 @@ public enum EntitySelectors
     {
         return selector;
     }
+
+    public static EntitySelectors get(int selector)
+    {
+        if(selector >= 0 && selector < values().length)
+        {
+            return values()[selector];
+        }
+        return LIVING_SELECTOR;
+    }
 }
