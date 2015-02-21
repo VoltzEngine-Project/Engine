@@ -94,6 +94,7 @@ object ByteBufWrapper
           case x: NBTTagCompound => buf <<< x
           case x: FluidTank => buf <<< x
           case x: ISave => buf <<< x
+          case x: ItemStack => ByteBufUtils.writeItemStack(buf, x)
           case _ => throw new IllegalArgumentException("Resonant Engine ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
         }
       }
