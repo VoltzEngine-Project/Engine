@@ -469,4 +469,14 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R>
     {
         return getBlock(world).getExplosionResistance(cause, world, xi(), yi(), zi(), xx, yy, zz);
     }
+
+    public boolean isAboveBedrock()
+    {
+        return y() > 0;
+    }
+
+    public boolean isInsideMap()
+    {
+        return isAboveBedrock() && y() < 255;
+    }
 }
