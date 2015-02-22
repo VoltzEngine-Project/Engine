@@ -68,7 +68,7 @@ public class UniversalRecipe
 		PRIMARY_PLATE = new UniversalRecipe("plateSteel", "advancedAlloy", new ItemStack(Blocks.iron_block));
 		SECONDARY_PLATE = new UniversalRecipe("plateBronze", "carbonPlate", new ItemStack(Blocks.brick_block));
 		// Miscs
-		CIRCUIT_T1 = new UniversalRecipe("circuitBasic", "electronicCircuit", new ItemStack(Blocks.unlit_redstone_torch));
+		CIRCUIT_T1 = new UniversalRecipe("circuitBasic", "electronicCircuit", new ItemStack(Items.redstone));
 		CIRCUIT_T2 = new UniversalRecipe("circuitAdvanced", "advancedCircuit", new ItemStack(Items.repeater));
 		CIRCUIT_T3 = new UniversalRecipe("circuitElite", "iridiumPlate", new ItemStack(Items.comparator));
 
