@@ -3,6 +3,9 @@ death.attack.electrocution=%1$s got electrocuted!
 tile.voltzengine:unknown.name=Unknown Block
 item.voltzengine:unknown.name=Unknown Item
 
+## Explosives
+explosive.voltzengine:tnt.name=TNT
+
 ## Ores
 tile.voltzengine:oreCopper.name=Copper Ore
 tile.voltzengine:oreTin.name=Tin Ore
