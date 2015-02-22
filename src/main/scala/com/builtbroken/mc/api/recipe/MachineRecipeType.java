@@ -28,6 +28,8 @@ public enum MachineRecipeType
     PLATE_PRESS("metal.press"),
     /**Plate to round casing recipes  */
     PLATE_ROLLER("metal.roller"),
+    /** Rivets two items together */
+    PLATE_RIVETER("metal.riveter"),
     /** Fluid + Fluid -> New Fluid */
     FLUID_MIXER("fluid.mixer"),
     /** Item -> Molten Fluid */
