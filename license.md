@@ -1,4 +1,5 @@
-# Educational Public License Version 1.0.0 
+# Built Broken Public License 
+#### Version 1.0.2 
 
 The following license is subject to change at anytime with or without notice and will take effect immediately. By using this license, you agree to all the following terms below.
 
