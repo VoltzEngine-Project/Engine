@@ -24,6 +24,10 @@ public enum MachineRecipeType
     ITEM_SAWMILL("sawmill"),
     /** Item to items used to craft it, Chest -> 8 planks. Make sure to return the least valuable version of the recipe */
     ITEM_SALVAGER("salvager"),
+    /**Ingot to metal item recipes, ingot -> steel plate, steel plate -> gun part plate */
+    PLATE_PRESS("metal.press"),
+    /**Plate to round casing recipes  */
+    PLATE_ROLLER("metal.roller"),
     /** Fluid + Fluid -> New Fluid */
     FLUID_MIXER("fluid.mixer"),
     /** Item -> Molten Fluid */
