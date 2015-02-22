@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.tile;
 
+import cofh.api.energy.IEnergyConnection;
 import com.builtbroken.mc.api.ISave;
 import com.builtbroken.mc.api.IUpdate;
 import com.builtbroken.mc.api.tile.IInventoryProvider;
@@ -30,7 +31,7 @@ import java.util.List;
  *
  * @author Darkguardsman
  */
-public class TileModuleMachine extends TileMachine implements ITileModuleProvider, IInventoryProvider, ISidedInventory
+public class TileModuleMachine extends TileMachine implements ITileModuleProvider, IInventoryProvider, ISidedInventory, IEnergyConnection
 {
     protected List<ITileModule> modules = new ArrayList();
     protected TileModuleInventory inventory_module = null;
@@ -319,6 +320,16 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
         {
             return getInventory().isItemValidForSlot(slot, stack);
         }
+        return false;
+    }
+
+    //==================================
+    //========== RF Support ============
+    //==================================
+
+    @Override
+    public boolean canConnectEnergy(ForgeDirection from)
+    {
         return false;
     }
 }

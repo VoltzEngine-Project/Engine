@@ -76,6 +76,9 @@ public class Engine extends AbstractMod
 
     private static boolean oresRequested = false;
 
+    //TODO move these to compatibility handlers later
+    public static double TO_RF_RATIO = 500;
+    public static double TO_BC_RATIO = 50;
 
     public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 

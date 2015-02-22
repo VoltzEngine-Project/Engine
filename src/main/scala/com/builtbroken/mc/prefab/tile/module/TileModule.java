@@ -16,6 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class TileModule implements ITileModule, IWorldPosition, IUpdate
 {
     private final ITileModuleProvider parent;
+    private boolean[] canConnect = new boolean[]{true, true, true, true, true, true};
 
     public TileModule(ITileModuleProvider parent)
     {
@@ -26,6 +27,16 @@ public class TileModule implements ITileModule, IWorldPosition, IUpdate
         }
     }
 
+    public boolean allowConnection(ForgeDirection side)
+    {
+        return side == ForgeDirection.UNKNOWN || canConnect[side.ordinal()];
+    }
+
+    public void setAllowConnection(ForgeDirection side, boolean t)
+    {
+        if(side != ForgeDirection.UNKNOWN)
+            canConnect[side.ordinal()] = t;
+    }
 
     @Override
     public boolean update()
