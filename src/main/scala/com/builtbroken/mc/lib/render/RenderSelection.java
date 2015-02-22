@@ -52,7 +52,7 @@ public class RenderSelection
         boolean render1 = false;
 
         // render p1
-        if (selection.pointOne() != null)
+        if (selection.pointOne() != null && selection.pointOne().y() >= 0)
         {
             IPos3D vec1 = selection.pointOne();
             GL11.glTranslated(vec1.x() - RenderManager.renderPosX, vec1.y() + 1 - RenderManager.renderPosY, vec1.z() - RenderManager.renderPosZ);
@@ -63,7 +63,7 @@ public class RenderSelection
         }
 
         // render p2
-        if (selection.pointTwo() != null)
+        if (selection.pointTwo() != null && selection.pointOne().y() >= 0)
         {
             IPos3D p1 = selection.pointOne();
             IPos3D p2 = selection.pointTwo();
