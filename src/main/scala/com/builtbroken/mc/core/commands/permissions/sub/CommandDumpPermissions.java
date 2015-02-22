@@ -29,4 +29,10 @@ public class CommandDumpPermissions extends SubCommand
         PermissionsRegistry.dumpNodesToFile();
         return true;
     }
+
+    @Override
+    public boolean isHelpCommand(String[] args)
+    {
+        return false;
+    }
 }
