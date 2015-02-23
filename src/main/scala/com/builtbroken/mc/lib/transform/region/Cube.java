@@ -581,51 +581,43 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
         if (pos != null)
         {
             //If we are near the center return true even if the corners are too far away
-            if(center.distance(pos) <= distance)
+            if(center != null && center.distance(pos) <= distance)
                 return true;
 
             //If we are inside then we should be able to render the bounds
             if(isWithin(pos))
                 return true;
 
-            //Are we close to the x bounds
-            if (pos.x() < lowerPoint.x())
+            if (lowerPoint != null && higherPoint != null)
             {
-                if (lowerPoint.x() - pos.x() > distance)
+                if (pos.x() <= lowerPoint.x() && lowerPoint.x() - pos.x() >= distance)
                     return false;
-            }
-            else if (pos.x() > higherPoint.x())
-            {
-                if (pos.y() - higherPoint.y() > distance)
-                    return false;
-            } //Else we are inside the x bounds
 
-            //Are we close to the y bounds
-            if (pos.y() < lowerPoint.y())
-            {
-                //Too far above return false
-                if (lowerPoint.y() - pos.y() > distance)
+                if (pos.y() <= lowerPoint.y() && lowerPoint.y() - pos.y() >= distance)
                     return false;
-            }
-            else if (pos.y() > higherPoint.y())
-            {
-                //Too far bellow return false
-                if (pos.y() - higherPoint.y() > distance)
-                    return false;
-            }
 
-            //Are we close the the z bounds
-            if (pos.z() < lowerPoint.z())
-            {
-                if (lowerPoint.z() - pos.z() > distance)
+                if (pos.z() <= lowerPoint.z() && lowerPoint.z() - pos.z() >= distance)
+                    return true;
+
+                if (pos.x() >= higherPoint.x() && pos.x() - higherPoint.x() >= distance)
                     return false;
-            }
-            else if (pos.z() > higherPoint.z())
-            {
-                if (pos.z() - higherPoint.z() > distance)
+
+                if (pos.y() >= higherPoint.y() && pos.y() - higherPoint.y() >= distance)
                     return false;
+
+                if (pos.z() >= higherPoint.z() && pos.z() - higherPoint.z() >= distance)
+                    return false;
+
+                return true;
             }
-            return true;
+            else if(lowerPoint != null)
+            {
+                return lowerPoint.distance(pos) <= distance;
+            }
+            else if(higherPoint != null)
+            {
+                return higherPoint.distance(pos) <= distance;
+            }
         }
         return false;
     }
