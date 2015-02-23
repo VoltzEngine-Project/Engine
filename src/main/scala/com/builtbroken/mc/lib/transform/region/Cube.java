@@ -48,10 +48,10 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
     public Cube(NBTTagCompound nbt)
     {
         super(nbt);
-        if (nbt.hasKey("min_pos"))
-            pointOne = new Pos(nbt.getCompoundTag("min_pos"));
-        if (nbt.hasKey("max_pos"))
-            pointTwo = new Pos(nbt.getCompoundTag("max_pos"));
+        if (nbt.hasKey("pointOne"))
+            pointOne = new Pos(nbt.getCompoundTag("pointOne"));
+        if (nbt.hasKey("pointTwo"))
+            pointTwo = new Pos(nbt.getCompoundTag("pointTwo"));
         recalc();
     }
 
@@ -95,9 +95,9 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
     public NBTTagCompound save(NBTTagCompound tag)
     {
         if (pointOne != null)
-            tag.setTag("min_pos", new Pos(pointOne).writeNBT(new NBTTagCompound()));
+            tag.setTag("pointOne", new Pos(pointOne).writeNBT(new NBTTagCompound()));
         if (pointTwo != null)
-            tag.setTag("max_pos", new Pos(pointOne).writeNBT(new NBTTagCompound()));
+            tag.setTag("pointTwo", new Pos(pointTwo).writeNBT(new NBTTagCompound()));
         return tag;
     }
 
