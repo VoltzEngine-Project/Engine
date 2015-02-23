@@ -141,7 +141,7 @@ public class RegionController implements IVirtualObject
                 tag.setString("region_name", entry.getKey());
                 list.appendTag(entry.getValue().save(tag));
             }
-            nbt.setTag("regions", nbt);
+            nbt.setTag("regions", list);
         }
         return nbt;
     }
