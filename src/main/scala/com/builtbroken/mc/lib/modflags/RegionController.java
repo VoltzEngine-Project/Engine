@@ -83,11 +83,20 @@ public class RegionController implements IVirtualObject
         return  regions;
     }
 
+    public boolean removeRegion(Region region)
+    {
+        if(regions.containsKey(region.name))
+        {
+            return regions.remove(region.name) != null;
+        }
+        return false;
+    }
+
     public Region createNewRegion(String name, Cube cube)
     {
         if(getRegion(name) == null && cube.isValid())
         {
-            Region region = new Region();
+            Region region = new Region(name);
             region.segments.add(cube);
             regions.put(name, region);
             return region;
@@ -122,9 +131,10 @@ public class RegionController implements IVirtualObject
             NBTTagList list = nbt.getTagList("regions", 10);
             for(int i = 0; i < list.tagCount(); i++)
             {
-                Region region = new Region();
+                String name = list.getCompoundTagAt(i).getString("region_name");
+                Region region = new Region(name);
                 region.load(list.getCompoundTagAt(i));
-                regions.put(list.getCompoundTagAt(i).getString("region_name"), region);
+                regions.put(name, region);
             }
         }
     }
@@ -216,6 +226,4 @@ public class RegionController implements IVirtualObject
             }
         }
     }
-
-
 }

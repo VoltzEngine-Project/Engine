@@ -24,15 +24,14 @@ public abstract class SubCommandRegion extends SubCommandWithName
     }
 
     @Override
-    public boolean handleEntityPlayerCommand(EntityPlayer player, String user, String[] args)
+    public boolean handleEntityPlayerCommand(EntityPlayer player, String name, String[] args)
     {
         if (args.length > 0)
         {
-            String name = args[0];
             Region region = RegionManager.getControllerForWorld(player.worldObj).getRegion(name);
             if (region != null)
             {
-                return handle(player, region, user, removeFront(args));
+                return handle(player, region, removeFront(args));
             }
             else
             {
@@ -53,7 +52,7 @@ public abstract class SubCommandRegion extends SubCommandWithName
         return true;
     }
 
-    public abstract boolean handle(ICommandSender sender, Region region, String user, String[] args);
+    public abstract boolean handle(ICommandSender sender, Region region, String[] args);
 
     @Override
     public void getHelpOutput(ICommandSender sender, List<String> items)
