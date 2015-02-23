@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.network.packet;
 
-import com.builtbroken.mc.lib.render.RenderSelection;
+import com.builtbroken.mc.core.handler.RenderSelection;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import cpw.mods.fml.common.network.ByteBufUtils;

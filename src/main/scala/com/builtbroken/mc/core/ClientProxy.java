@@ -3,7 +3,7 @@ package com.builtbroken.mc.core;
 import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
-import com.builtbroken.mc.lib.render.RenderSelection;
+import com.builtbroken.mc.core.handler.RenderSelection;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
