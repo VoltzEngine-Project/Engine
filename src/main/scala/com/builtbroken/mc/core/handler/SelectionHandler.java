@@ -39,7 +39,7 @@ public class SelectionHandler
      */
     public static Cube getSelection(EntityPlayer player)
     {
-        Cube out = INSTANCE.selections.get(player);
+        Cube out = INSTANCE.selections.get(player.getCommandSenderName());
 
         if (out == null)
         {
@@ -128,7 +128,7 @@ public class SelectionHandler
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
-        if (!event.world.isRemote && event.phase == TickEvent.Phase.END && event.world.getWorldInfo().getWorldTime() % 5 == 0)
+        if (!event.world.isRemote && event.phase == TickEvent.Phase.END && event.world.getWorldInfo().getWorldTime() % 20 == 0)
         {
             //Sort threw all players in world and update render data
             for (Object obj : event.world.playerEntities)

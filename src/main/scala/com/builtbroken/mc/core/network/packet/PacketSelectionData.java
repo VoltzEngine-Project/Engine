@@ -2,13 +2,9 @@ package com.builtbroken.mc.core.network.packet;
 
 import com.builtbroken.mc.core.handler.RenderSelection;
 import com.builtbroken.mc.lib.transform.region.Cube;
-import com.builtbroken.mc.lib.transform.vector.Pos;
-import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +28,15 @@ public class PacketSelectionData extends AbstractPacket
         this.selection = selection;
         this.cubes = cubes;
         this.regions = regions;
+
+        if (this.selection == null)
+            this.selection = new Cube();
+
+        if (this.cubes == null)
+            this.cubes = new ArrayList();
+
+        if (this.regions == null)
+            this.regions = new ArrayList();
     }
 
     @Override
@@ -45,7 +50,7 @@ public class PacketSelectionData extends AbstractPacket
         for (Cube cube : cubes)
         {
             if (cube.pointOne() != null || cube.pointTwo() != null)
-               cube.writeBytes(buffer);
+                cube.writeBytes(buffer);
         }
 
         //Write regions
@@ -60,21 +65,23 @@ public class PacketSelectionData extends AbstractPacket
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
+        RenderSelection.cube_render_list.clear();
+        RenderSelection.region_render_list.clear();
         //Read selection
         RenderSelection.selection = new Cube(buffer);
 
         //Read other player's selections to render
         int count = buffer.readInt();
-        for(int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             RenderSelection.cube_render_list.add(new Cube(buffer));
         }
 
         //Read region bounds
         count = buffer.readInt();
-        for(int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
-            RenderSelection.cube_render_list.add(new Cube(buffer));
+            RenderSelection.region_render_list.add(new Cube(buffer));
         }
     }
 
