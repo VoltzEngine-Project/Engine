@@ -26,21 +26,14 @@ public abstract class SubCommandRegion extends SubCommandWithName
     @Override
     public boolean handleEntityPlayerCommand(EntityPlayer player, String name, String[] args)
     {
-        if (args.length > 0)
+        Region region = RegionManager.getControllerForWorld(player.worldObj).getRegion(name);
+        if (region != null)
         {
-            Region region = RegionManager.getControllerForWorld(player.worldObj).getRegion(name);
-            if (region != null)
-            {
-                return handle(player, region, removeFront(args));
-            }
-            else
-            {
-                player.addChatMessage(new ChatComponentText("Unknown region"));
-            }
+            return handle(player, region, removeFront(args));
         }
         else
         {
-            player.addChatMessage(new ChatComponentText("Missing region name"));
+            player.addChatMessage(new ChatComponentText("Unknown region"));
         }
         return true;
     }
@@ -48,7 +41,7 @@ public abstract class SubCommandRegion extends SubCommandWithName
     @Override
     public boolean handleConsoleCommand(ICommandSender sender, String user, String[] args)
     {
-        sender.addChatMessage(new ChatComponentText("This command can't be used from console"));
+        sender.addChatMessage(new ChatComponentText("This command can't be used from the console"));
         return true;
     }
 
