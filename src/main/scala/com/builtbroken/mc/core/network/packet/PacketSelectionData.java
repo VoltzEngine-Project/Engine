@@ -49,16 +49,14 @@ public class PacketSelectionData extends AbstractPacket
         buffer.writeInt(cubes.size());
         for (Cube cube : cubes)
         {
-            if (cube.pointOne() != null || cube.pointTwo() != null)
-                cube.writeBytes(buffer);
+            cube.writeBytes(buffer);
         }
 
         //Write regions
         buffer.writeInt(regions.size());
         for (Cube cube : regions)
         {
-            if (cube.pointOne() != null || cube.pointTwo() != null)
-                cube.writeBytes(buffer);
+            cube.writeBytes(buffer);
         }
     }
 
@@ -72,17 +70,19 @@ public class PacketSelectionData extends AbstractPacket
 
         //Read other player's selections to render
         int count = buffer.readInt();
-        for (int i = 0; i < count; i++)
-        {
-            RenderSelection.cube_render_list.add(new Cube(buffer));
-        }
+        if (count > 0)
+            for (int i = 0; i < count; i++)
+            {
+                RenderSelection.cube_render_list.add(new Cube(buffer));
+            }
 
         //Read region bounds
         count = buffer.readInt();
-        for (int i = 0; i < count; i++)
-        {
-            RenderSelection.region_render_list.add(new Cube(buffer));
-        }
+        if (count > 0)
+            for (int i = 0; i < count; i++)
+            {
+                RenderSelection.region_render_list.add(new Cube(buffer));
+            }
     }
 
     @Override
