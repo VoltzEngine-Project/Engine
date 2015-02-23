@@ -1,8 +1,10 @@
 package com.builtbroken.mc.lib.transform.region;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.core.network.IByteBufWriter;
 import com.builtbroken.mc.lib.transform.vector.Point;
 import com.builtbroken.mc.lib.transform.vector.Pos;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,7 +17,7 @@ import java.util.List;
 /**
  * Created by robert on 2/16/2015.
  */
-public class Cube extends Shape3D implements Cloneable
+public class Cube extends Shape3D implements Cloneable, IByteBufWriter
 {
     private IPos3D pointOne;
     private IPos3D pointTwo;
@@ -51,6 +53,24 @@ public class Cube extends Shape3D implements Cloneable
         if (nbt.hasKey("max_pos"))
             pointTwo = new Pos(nbt.getCompoundTag("max_pos"));
         recalc();
+    }
+
+    public Cube(ByteBuf buf)
+    {
+        this(new Pos(buf), new Pos(buf));
+    }
+
+    @Override
+    public ByteBuf writeBytes(ByteBuf buf)
+    {
+        buf.writeDouble(pointOne != null ? pointOne.x() : 0);
+        buf.writeDouble(pointOne != null ? pointOne.y() : -1);
+        buf.writeDouble(pointOne != null ? pointOne.z() : 0);
+
+        buf.writeDouble(pointTwo != null ? pointTwo.x() : 0);
+        buf.writeDouble(pointTwo != null ? pointTwo.y() : -1);
+        buf.writeDouble(pointTwo != null ? pointTwo.z() : 0);
+        return buf;
     }
 
     //////////////////////
@@ -543,6 +563,52 @@ public class Cube extends Shape3D implements Cloneable
         if (other instanceof Cube)
         {
             return ((Cube) other).pointOne == pointOne && ((Cube) other).pointTwo == pointTwo;
+        }
+        return false;
+    }
+
+    public boolean isCloseToAnyCorner(IPos3D pos, int distance)
+    {
+        if (pos != null)
+        {
+            //Are we close to the x bounds
+            if (pos.x() < lowerPoint.x())
+            {
+                if (lowerPoint.x() - pos.x() > distance)
+                    return false;
+            }
+            else if (pos.x() > higherPoint.x())
+            {
+                if (pos.y() - lowerPoint.y() > distance)
+                    return false;
+            } //Else we are inside the x bounds
+
+            //Are we close to the y bounds
+            if (pos.y() < lowerPoint.y())
+            {
+                //Too far above return false
+                if (lowerPoint.y() - pos.y() > distance)
+                    return false;
+            }
+            else if (pos.y() > higherPoint.y())
+            {
+                //Too far bellow return false
+                if (pos.y() - lowerPoint.y() > distance)
+                    return false;
+            }
+
+            //Are we close the the z bounds
+            if (pos.z() < lowerPoint.z())
+            {
+                if (lowerPoint.z() - pos.z() > distance)
+                    return false;
+            }
+            else if (pos.z() > higherPoint.z())
+            {
+                if (pos.z() - lowerPoint.z() > distance)
+                    return false;
+            }
+            return true;
         }
         return false;
     }
