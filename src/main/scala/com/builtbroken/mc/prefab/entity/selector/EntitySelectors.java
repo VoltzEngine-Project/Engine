@@ -1,8 +1,7 @@
 package com.builtbroken.mc.prefab.entity.selector;
 
-import net.minecraft.command.IEntitySelector;
-
-/** Enum of simple and commonly used selectors when sorting entities lists
+/**
+ * Enum of simple and commonly used selectors when sorting entities lists
  * Created by robert on 2/10/2015.
  */
 public enum EntitySelectors
@@ -38,7 +37,11 @@ public enum EntitySelectors
     /**
      * Selects all instances of IProjectile
      */
-    PROJECTILE_SELECTOR(new EntityLivingSelector().selectProjectiles());
+    PROJECTILE_SELECTOR(new EntityLivingSelector().selectProjectiles()),
+    /**
+     * Selects all XP orbs
+     */
+    XP_SELECTOR(new EntityXpSelector());
 
     private final EntitySelector selector;
 
@@ -55,7 +58,7 @@ public enum EntitySelectors
 
     public static EntitySelectors get(int selector)
     {
-        if(selector >= 0 && selector < values().length)
+        if (selector >= 0 && selector < values().length)
         {
             return values()[selector];
         }
