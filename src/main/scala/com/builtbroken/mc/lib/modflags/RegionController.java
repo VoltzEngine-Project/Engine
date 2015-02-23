@@ -6,6 +6,7 @@ import com.builtbroken.mc.core.handler.SaveManager;
 import com.builtbroken.mc.lib.access.AccessUser;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.modflags.events.PlayerRegionEvent;
+import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import cpw.mods.fml.common.eventhandler.Event;
@@ -21,7 +22,9 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** Controls all protected regions for a single world
  * Created by robert on 2/16/2015.
@@ -29,7 +32,7 @@ import java.util.List;
 public class RegionController implements IVirtualObject
 {
     public final int dim;
-    protected List<Region> regions = new ArrayList(); //TODO break into segments in case we get a lot of regions per world
+    protected HashMap<String, Region> regions = new HashMap(); //TODO break into segments in case we get a lot of regions per world
 
     static
     {
@@ -44,10 +47,17 @@ public class RegionController implements IVirtualObject
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    public Region getRegion(String name)
+    {
+        if(regions.containsKey(name))
+            return regions.get(name);
+        return null;
+    }
+
     public List<Region> getRegionsAtLocation(IPos3D pos)
     {
         List<Region> list = new ArrayList();
-        for(Region region: regions)
+        for(Region region: regions.values())
         {
             if(region.doesContainPoint(pos))
             {
@@ -55,6 +65,17 @@ public class RegionController implements IVirtualObject
             }
         }
         return list;
+    }
+
+    public Region createNewRegion(String name, Cube cube)
+    {
+        if(getRegion(name) == null && cube.isValid())
+        {
+            Region region = new Region();
+            region.segments.add(cube);
+            return region;
+        }
+        return null;
     }
 
     @Override
@@ -86,7 +107,7 @@ public class RegionController implements IVirtualObject
             {
                 Region region = new Region();
                 region.load(list.getCompoundTagAt(i));
-                regions.add(region);
+                regions.put(list.getCompoundTagAt(i).getString("region_name"), region);
             }
         }
     }
@@ -97,9 +118,11 @@ public class RegionController implements IVirtualObject
         if(!regions.isEmpty())
         {
             NBTTagList list = new NBTTagList();
-            for(Region region : regions)
+            for(Map.Entry<String, Region> entry : regions.entrySet())
             {
-                list.appendTag(region.save(new NBTTagCompound()));
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setString("region_name", entry.getKey());
+                list.appendTag(entry.getValue().save(tag));
             }
             nbt.setTag("regions", nbt);
         }
@@ -155,7 +178,7 @@ public class RegionController implements IVirtualObject
                     {
                         EntityPlayer player = (EntityPlayer) object;
                         Location location = new Location(player);
-                        for(Region region : regions)
+                        for(Region region : regions.values())
                         {
                             if(region.doesContainPoint(location) && !region.players_in_region.contains(player))
                             {

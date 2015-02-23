@@ -1,14 +1,17 @@
 package com.builtbroken.mc.core.commands.modflags;
 
-import com.builtbroken.mc.prefab.commands.SubCommand;
+import com.builtbroken.mc.core.commands.ext.SubCommandRegion;
+import com.builtbroken.mc.lib.modflags.Region;
+import net.minecraft.command.ICommandSender;
 
 /**
  * Created by robert on 2/17/2015.
  */
-public class CommandRemoveRegion extends SubCommand
+public class CommandRemoveRegion extends SubCommandRegion
 {
-    public CommandRemoveRegion()
+    @Override
+    public boolean handle(ICommandSender sender, Region region, String user, String[] args)
     {
-        super("region");
+        return false;
     }
 }
