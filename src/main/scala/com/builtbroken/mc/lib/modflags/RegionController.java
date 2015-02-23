@@ -89,6 +89,7 @@ public class RegionController implements IVirtualObject
         {
             Region region = new Region();
             region.segments.add(cube);
+            regions.put(name, region);
             return region;
         }
         return null;
