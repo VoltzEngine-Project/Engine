@@ -567,10 +567,27 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
         return false;
     }
 
+    /**
+     * Mainly used by the selection render to see if camera is close enough to
+     * the bounds to render. Mainly checks for distance to corner, center, and is
+     * in side bounds.
+     *
+     * @param pos - location to check from
+     * @param distance - distance to check
+     * @return true if any conditions are meet
+     */
     public boolean isCloseToAnyCorner(IPos3D pos, int distance)
     {
         if (pos != null)
         {
+            //If we are near the center return true even if the corners are too far away
+            if(center.distance(pos) <= distance)
+                return true;
+
+            //If we are inside then we should be able to render the bounds
+            if(isWithin(pos))
+                return true;
+
             //Are we close to the x bounds
             if (pos.x() < lowerPoint.x())
             {
@@ -579,7 +596,7 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
             }
             else if (pos.x() > higherPoint.x())
             {
-                if (pos.y() - lowerPoint.y() > distance)
+                if (pos.y() - higherPoint.y() > distance)
                     return false;
             } //Else we are inside the x bounds
 
@@ -593,7 +610,7 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
             else if (pos.y() > higherPoint.y())
             {
                 //Too far bellow return false
-                if (pos.y() - lowerPoint.y() > distance)
+                if (pos.y() - higherPoint.y() > distance)
                     return false;
             }
 
@@ -605,7 +622,7 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
             }
             else if (pos.z() > higherPoint.z())
             {
-                if (pos.z() - lowerPoint.z() > distance)
+                if (pos.z() - higherPoint.z() > distance)
                     return false;
             }
             return true;
