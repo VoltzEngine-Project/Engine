@@ -13,6 +13,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import java.util.List;
 public class RenderSelection
 {
     public static List<Cube> cube_render_list = new ArrayList();
+    public static List<Cube> region_render_list = new ArrayList();
     public static Cube selection = null;
 
 
@@ -32,13 +34,19 @@ public class RenderSelection
         for (Cube cube : cube_render_list)
         {
             if (cube != null)
-                render(cube, false, false);
+                render(cube, Colors.DARK_GREY.color());
+        }
+        for (Cube cube : region_render_list)
+        {
+            //TODO hide corner selection renders so only the main box renders for regions
+            if (cube != null)
+                render(cube, Colors.DARK_RED.color());
         }
         if (selection != null)
-            render(selection, true, true);
+            render(selection, new Color(0, 5, 210));
     }
 
-    public static void render(Cube selection, boolean mark_points, boolean is_selection)
+    public static void render(Cube selection, Color box_color)
     {
         GL11.glPushMatrix();
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -96,7 +104,7 @@ public class RenderSelection
             GL11.glTranslated(x, y, z);
 
             GL11.glScalef(1.0F, -1.0F, -1.0F);
-            GL11.glColor3f(0, 5, 100);
+            GL11.glColor3f(box_color.getRed(), box_color.getGreen(), box_color.getBlue());
 
             renderBlockBoxTo(tess, new Pos(selection.getSizeX(), -selection.getSizeY(), -selection.getSizeZ()));
         }

@@ -2,6 +2,8 @@ package com.builtbroken.mc.core.handler;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketSelectionData;
+import com.builtbroken.mc.lib.modflags.Region;
+import com.builtbroken.mc.lib.modflags.RegionManager;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.google.common.collect.Maps;
@@ -25,7 +27,7 @@ public class SelectionHandler
 {
     public static final SelectionHandler INSTANCE = new SelectionHandler();
 
-    private static final HashMap<EntityPlayer, Cube> selections = Maps.newHashMap();
+    private static final HashMap<String, Cube> selections = Maps.newHashMap();
 
     private SelectionHandler()
     {
@@ -42,7 +44,7 @@ public class SelectionHandler
         if (out == null)
         {
             out = new Cube(null, null);
-            INSTANCE.selections.put(player, out);
+            INSTANCE.selections.put(player.getCommandSenderName(), out);
         }
 
         return out;
@@ -54,7 +56,7 @@ public class SelectionHandler
      */
     public static void setSelection(EntityPlayer player, Cube cuboid)
     {
-        INSTANCE.selections.put(player, cuboid);
+        INSTANCE.selections.put(player.getCommandSenderName(), cuboid);
         if (!player.worldObj.isRemote)
         {
             if (player instanceof EntityPlayerMP)
@@ -77,15 +79,28 @@ public class SelectionHandler
     public static void updatePlayerRenderData(EntityPlayerMP player)
     {
         List<Cube> cubes = new ArrayList();
-        cubes.add(getSelection(player));
+        List<Cube> regions = new ArrayList();
+        Cube selection = getSelection(player);
+
         for (Cube cube : selections.values())
         {
-            if (cube.distance(new Pos(player)) <= 160)
+            if (cube != selection && cube.distance(new Pos(player)) <= 160)
             {
                 cubes.add(cube);
             }
         }
-        Engine.instance.packetHandler.sendToPlayer(new PacketSelectionData(cubes), player);
+        for(Region region : RegionManager.getControllerForWorld(player.worldObj).getRegionsNear(player, 160))
+        {
+            for(Cube cube : region.segments)
+            {
+                if(cube.isCloseToAnyCorner(new Pos(player), 160))
+                {
+                    regions.add(cube);
+                }
+            }
+        }
+
+        Engine.instance.packetHandler.sendToPlayer(new PacketSelectionData(selection, cubes, regions), player);
     }
 
     // ===========================================

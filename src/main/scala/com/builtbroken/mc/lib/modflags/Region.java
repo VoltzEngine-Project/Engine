@@ -5,6 +5,7 @@ import com.builtbroken.mc.api.ISave;
 import com.builtbroken.mc.lib.access.AccessProfile;
 import com.builtbroken.mc.lib.access.IProfileContainer;
 import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.lib.transform.vector.Location;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -94,5 +95,17 @@ public class Region implements ISave, IProfileContainer
     public void onProfileChange()
     {
 
+    }
+
+    public boolean isCloseToAnyCorner(Location location, int distance)
+    {
+        for(Cube cube : segments)
+        {
+            if(cube.isCloseToAnyCorner(location, distance))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

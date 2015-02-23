@@ -19,74 +19,62 @@ import java.util.List;
 public class PacketSelectionData extends AbstractPacket
 {
     List<Cube> cubes;
+    List<Cube> regions;
+    Cube selection;
 
     public PacketSelectionData()
     {
 
     }
 
-    public PacketSelectionData(List<Cube> cubes)
+    public PacketSelectionData(Cube selection, List<Cube> cubes, List<Cube> regions)
     {
+        this.selection = selection;
         this.cubes = cubes;
+        this.regions = regions;
     }
 
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
-        NBTTagCompound tag = new NBTTagCompound();
-        NBTTagList list = new NBTTagList();
+        //Write player's selection
+        selection.writeBytes(buffer);
+
+        //Write cubes
+        buffer.writeInt(cubes.size());
         for (Cube cube : cubes)
         {
-            if (cube.max() != null || cube.min() != null)
-            {
-                NBTTagCompound nbt = new NBTTagCompound();
-                NBTTagCompound a = new NBTTagCompound();
-                NBTTagCompound b = new NBTTagCompound();
-                if (cube.min() != null)
-                {
-                    new Pos(cube.min()).writeNBT(a);
-                    nbt.setTag("a", a);
-                }
-                if (cube.max() != null)
-                {
-                    new Pos(cube.max()).writeNBT(b);
-                    nbt.setTag("b", b);
-                }
-                list.appendTag(nbt);
-            }
+            if (cube.pointOne() != null || cube.pointTwo() != null)
+               cube.writeBytes(buffer);
         }
-        tag.setTag("cubes", list);
-        ByteBufUtils.writeTag(buffer, tag);
+
+        //Write regions
+        buffer.writeInt(regions.size());
+        for (Cube cube : regions)
+        {
+            if (cube.pointOne() != null || cube.pointTwo() != null)
+                cube.writeBytes(buffer);
+        }
     }
 
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
-        NBTTagCompound tag = ByteBufUtils.readTag(buffer);
-        NBTTagList list = tag.getTagList("cubes", 10);
-        List<Cube> cubes = new ArrayList();
+        //Read selection
+        RenderSelection.selection = new Cube(buffer);
 
-        for (int i = 0; i < list.tagCount(); i++)
+        //Read other player's selections to render
+        int count = buffer.readInt();
+        for(int i = 0; i < count; i++)
         {
-            NBTTagCompound nbt = list.getCompoundTagAt(i);
-            Pos a = nbt.hasKey("a") ? new Pos(nbt.getCompoundTag("a")) : null;
-            Pos b = nbt.hasKey("b") ? new Pos(nbt.getCompoundTag("b")) : null;
-            cubes.add(new Cube(a, b));
+            RenderSelection.cube_render_list.add(new Cube(buffer));
         }
 
-        //Clear old selections
-        RenderSelection.cube_render_list.clear();
-        RenderSelection.selection = new Cube();
-
-        //Add new selections
-        if (cubes.size() > 0)
+        //Read region bounds
+        count = buffer.readInt();
+        for(int i = 0; i < count; i++)
         {
-            RenderSelection.selection = cubes.get(0);
-            cubes.remove(0);
-            if (cubes.size() > 0)
-            {
-                RenderSelection.cube_render_list = cubes;
-            }
+            RenderSelection.cube_render_list.add(new Cube(buffer));
         }
     }
 

@@ -13,6 +13,7 @@ import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ChatComponentText;
@@ -36,7 +37,7 @@ public class RegionController implements IVirtualObject
 
     static
     {
-        SaveManager.registerClass("regionContoller", RegionController.class);
+        SaveManager.registerClass("regionController", RegionController.class);
     }
 
     public RegionController(int dim)
@@ -65,6 +66,21 @@ public class RegionController implements IVirtualObject
             }
         }
         return list;
+    }
+
+    public List<Region> getRegionsNear(EntityPlayerMP player, int distance)
+    {
+        List<Region> regions = new ArrayList();
+        Location location = new Location(player);
+
+        for(Region region : this.regions.values())
+        {
+            if(region.isCloseToAnyCorner(location, distance))
+            {
+                regions.add(region);
+            }
+        }
+        return  regions;
     }
 
     public Region createNewRegion(String name, Cube cube)
@@ -199,4 +215,6 @@ public class RegionController implements IVirtualObject
             }
         }
     }
+
+
 }
