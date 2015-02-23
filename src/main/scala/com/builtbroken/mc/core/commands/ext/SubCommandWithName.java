@@ -16,14 +16,22 @@ public class SubCommandWithName extends SubCommand
     }
 
     @Override
-    public final boolean handleEntityPlayerCommand(EntityPlayer player, String[] args)
+    public boolean handleEntityPlayerCommand(EntityPlayer player, String[] args)
     {
+        if(args.length > 0)
+        {
+            return handleEntityPlayerCommand(player, args[0], removeFront(args));
+        }
         return false;
     }
 
     @Override
-    public final boolean handleConsoleCommand(ICommandSender sender, String[] args)
+    public boolean handleConsoleCommand(ICommandSender sender, String[] args)
     {
+        if(args.length > 0)
+        {
+            return handleConsoleCommand(sender, args[0], removeFront(args));
+        }
         return false;
     }
 
