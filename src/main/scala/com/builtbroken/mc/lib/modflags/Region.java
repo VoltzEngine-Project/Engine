@@ -55,12 +55,15 @@ public class Region implements ISave, IProfileContainer
     @Override
     public NBTTagCompound save(NBTTagCompound nbt)
     {
-        NBTTagList list = new NBTTagList();
-        for (Cube cube : segments)
+        if(segments.size() > 0)
         {
-            list.appendTag(cube.toNBT());
+            NBTTagList list = new NBTTagList();
+            for (Cube cube : segments)
+            {
+                list.appendTag(cube.toNBT());
+            }
+            nbt.setTag("segments", list);
         }
-        nbt.setTag("segments", list);
 
         NBTTagCompound tag = new NBTTagCompound();
         profile.save(tag);
