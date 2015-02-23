@@ -12,26 +12,46 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<AbstractPacket>
 {
-	public ResonantChannelHandler()
-	{
-		this.addDiscriminator(0, PacketTile.class);
-		this.addDiscriminator(1, PacketEntity.class);
-		this.addDiscriminator(2, PacketPlayerItem.class);
+    public boolean silenceStackTrace = false; //TODO add command and config
+
+    public ResonantChannelHandler()
+    {
+        this.addDiscriminator(0, PacketTile.class);
+        this.addDiscriminator(1, PacketEntity.class);
+        this.addDiscriminator(2, PacketPlayerItem.class);
         this.addDiscriminator(3, PacketPlayerItemMode.class);
         this.addDiscriminator(4, PacketSelectionData.class);
-	}
+    }
 
-	@Override
-	public void encodeInto(ChannelHandlerContext ctx, AbstractPacket packet, ByteBuf target) throws Exception
-	{
-        //Engine.instance.logger().info("ChannelHandler: Encoder " + packet.getClass().getSimpleName());
-        packet.encodeInto(ctx, target);
-	}
+    @Override
+    public void encodeInto(ChannelHandlerContext ctx, AbstractPacket packet, ByteBuf target) throws Exception
+    {
+        try
+        {
+            packet.encodeInto(ctx, target);
+        }
+        catch (Exception e)
+        {
+            if (!silenceStackTrace)
+                Engine.instance.logger().error("Failed to encode packet " + packet, e);
+            else
+                Engine.instance.logger().error("Failed to encode packet " + packet + " E: " + e.getMessage());
+        }
+    }
 
-	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, AbstractPacket packet)
-	{
-        //Engine.instance.logger().info("ChannelHandler: Decoder " + packet.getClass().getSimpleName());
-		packet.decodeInto(ctx, source);
-	}
+    @Override
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, AbstractPacket packet)
+    {
+        try
+        {
+            packet.decodeInto(ctx, source);
+        }
+        catch (Exception e)
+        {
+            if (!silenceStackTrace)
+                Engine.instance.logger().error("Failed to decode packet " + packet, e);
+            else
+                Engine.instance.logger().error("Failed to decode packet " + packet + " E: " + e.getMessage());
+        }
+    }
 }
