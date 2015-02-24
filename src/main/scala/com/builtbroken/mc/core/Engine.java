@@ -6,6 +6,7 @@ import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.core.content.BlockOre;
 import com.builtbroken.mc.core.content.ItemBlockOre;
 import com.builtbroken.mc.core.content.ItemInstaHole;
+import com.builtbroken.mc.core.content.parts.ItemParts;
 import com.builtbroken.mc.core.content.resources.Ores;
 import com.builtbroken.mc.core.content.resources.load.CrusherRecipeLoad;
 import com.builtbroken.mc.core.content.resources.load.GrinderRecipeLoad;
@@ -73,6 +74,7 @@ public class Engine extends AbstractMod
     public static Item itemWrench;
     public static Item instaHole;
     public static Item itemSelectionTool;
+    public static Item itemCraftingParts;
 
     private static boolean oresRequested = false;
 
@@ -135,6 +137,8 @@ public class Engine extends AbstractMod
         ToolMode.REGISTRY.add(new ToolModeGeneral());
         ToolMode.REGISTRY.add(new ToolModeRotation());
 
+        if(runningAsDev)
+            itemCraftingParts = contentRegistry.newItem(ItemParts.class);
         /**
          * Multiblock Handling
          */
