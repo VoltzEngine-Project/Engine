@@ -1,0 +1,240 @@
+death.attack.electrocution=%1$ s'est fait électrocuté !
+
+tile.voltzengine:unknown.name=Bloc inconnu
+item.voltzengine:unknown.name=Elément inconnu
+
+## Explosives
+explosive.voltzengine:tnt.name=TNT
+
+## Ores
+tile.voltzengine:oreCopper.name=Minerai de cuivre
+tile.voltzengine:oreTin.name=Minerai d'étain
+tile.voltzengine:oreSilver.name=Minerai d'argent
+tile.voltzengine:oreLead.name=Minerai de plomb
+tile.voltzengine:oreZinc.name=Minerai de zinc
+tile.voltzengine:oreNickel.name=Minerai de nickel
+tile.voltzengine:oreAluminium.name=Minerai de bauxite
+tile.voltzengine:oreMagnesite.name=Minerai de magnésite
+tile.voltzengine:oreUranium.name=Minerai d'uranium
+
+## Dust
+item.voltzengine:dustCopper.name=Poussière de cuivre
+item.voltzengine:dustTin.name=Poussière d'étain
+item.voltzengine:dustSilver.name=Poussière d'argent
+item.voltzengine:dustLead.name=Poussière de plomb
+item.voltzengine:dustZinc.name=Poussière de zinc
+item.voltzengine:dustNickel.name=Poussière de nickel
+item.voltzengine:dustAluminium.name=Poussière d'aluminum
+item.voltzengine:dustMagnesium.name=Poussière de magnésium
+
+item.voltzengine:dustSteel.name=Poussière d'acier
+item.voltzengine:dustBrass.name=Agglomérat de laiton
+item.voltzengine:dustBronze.name=Agglomérat de bronze
+
+## Ruble
+item.voltzengine:rubbleCopper.name=Gravats de cuivre
+item.voltzengine:rubbleTin.name=Gravats d'étain
+item.voltzengine:rubbleSilver.name=Gravats d'argent
+item.voltzengine:rubbleLead.name=Gravats de plomb
+item.voltzengine:rubbleZinc.name=Gravats de zinc
+item.voltzengine:rubbleNickel.name=Gravats de nickel
+item.voltzengine:rubbleAluminium.name=Gravats d'aluminium
+item.voltzengine:rubbleMagnesium.name=Gravats de magnésium
+
+## Ingot
+item.voltzengine:ingotCopper.name=Lingot de cuivre
+item.voltzengine:ingotTin.name=Lingot d'étain
+item.voltzengine:ingotSilver.name=Lingot d'argent
+item.voltzengine:ingotLead.name=Lingot de plomb
+item.voltzengine:ingotZinc.name=Lingot de zinc
+item.voltzengine:ingotNickel.name=Lingot de nickel
+item.voltzengine:ingotAluminium.name=Lingot d'aluminium
+item.voltzengine:ingotMagnesium.name=Lingot de magnésium
+
+item.voltzengine:ingotSteel.name=Lingot d'acier
+item.voltzengine:ingotBrass.name=Lingot de laiton
+item.voltzengine:ingotBronze.name=Lingot de bronze
+
+## Plate
+item.voltzengine:plateCopper.name=Plaque de cuivre
+item.voltzengine:plateTin.name=Plaque d'étain
+item.voltzengine:plateSilver.name=Plaque d'argent
+item.voltzengine:plateLead.name=Plaque de plomb
+item.voltzengine:plateZinc.name=Plaque de zinc
+item.voltzengine:plateNickel.name=Plaque de nickel
+item.voltzengine:plateAluminium.name=Plaque d'aluminium
+item.voltzengine:plateMagnesium.name=Plaque de magnésium
+
+item.voltzengine:plateSteel.name=Plaque d'acier
+item.voltzengine:plateBrass.name=Plaque de laiton
+item.voltzengine:plateBronze.name=Plaque de bronze
+
+## Rod
+item.voltzengine:rodCopper.name=Tige de cuivre
+item.voltzengine:rodTin.name=Tige d'étain
+item.voltzengine:rodSilver.name=Tige d'argent
+item.voltzengine:rodLead.name=Tige de plomb
+item.voltzengine:rodZinc.name=Tige  de zinc
+item.voltzengine:rodNickel.name=Tige de nickel
+item.voltzengine:rodAluminium.name=Tige d'aluminium
+item.voltzengine:rodMagnesium.name=Tige de magnésium
+
+item.voltzengine:rodSteel.name=Tige d'acier
+item.voltzengine:rodBrass.name=Tige de laiton
+item.voltzengine:rodBronze.name=Tige de bronze
+
+## Gear
+item.voltzengine:gearCopper.name=Mécanisme de cuivre
+item.voltzengine:gearTin.name=Mécanisme d'étain
+item.voltzengine:gearSilver.name=Mécanisme d'argent
+item.voltzengine:gearLead.name=Mécanisme de plomb
+item.voltzengine:gearZinc.name=Mécanisme de zinc
+item.voltzengine:gearNickel.name=Mécanisme de nickel
+item.voltzengine:gearAluminium.name=Mécanisme d'aluminium
+item.voltzengine:gearMagnesium.name=Mécanisme de magnésium
+
+item.voltzengine:gearSteel.name=Mécanisme d'acier
+item.voltzengine:gearBrass.name=Mécanisme de laiton
+item.voltzengine:gearBronze.name=Mécanisme de bronze
+
+## Ax Head
+item.voltzengine:axHeadCopper.name=Tête de hache en cuivre
+item.voltzengine:axHeadTin.name=Tête de hache en étain
+item.voltzengine:axHeadSilver.name=Tête de hache en argent
+item.voltzengine:axHeadLead.name=Tête de hache en plomb
+item.voltzengine:axHeadZinc.name=Tête de hache en zinc
+item.voltzengine:axHeadNickel.name=Tête de hache en nickel
+item.voltzengine:axHeadAluminium.name=Tête de hache en aluminium
+item.voltzengine:axHeadMagnesium.name=Tête de hache en magnésium
+
+item.voltzengine:axHeadSteel.name=Tête de hache en acier
+item.voltzengine:axHeadBrass.name=Tête de hache en laiton
+item.voltzengine:axHeadBronze.name=Tête de hache en bronze
+
+## Shovel Head
+item.voltzengine:shovelHeadCopper.name=Tête de pelle en cuivre
+item.voltzengine:shovelHeadTin.name=Tête de pelle en étain
+item.voltzengine:shovelHeadSilver.name=Tête de pelle en argent
+item.voltzengine:shovelHeadLead.name=Tête de pelle en plomb
+item.voltzengine:shovelHeadZinc.name=Tête de pelle en zinc
+item.voltzengine:shovelHeadNickel.name=Tête de pelle en nickel
+item.voltzengine:shovelHeadAluminium.name=Tête de pelle en aluminium
+item.voltzengine:shovelHeadMagnesium.name=Tête de pelle en magnésium
+
+item.voltzengine:shovelHeadSteel.name=Tête de pelle en acier
+item.voltzengine:shovelHeadBrass.name=Tête de pelle en laiton
+item.voltzengine:shovelHeadBronze.name=Tête de pelle en bronze
+
+## Sword Blade
+item.voltzengine:swordBladeCopper.name=Lame d'épée en cuivre
+item.voltzengine:swordBladeTin.name=Lame d'épée en étain
+item.voltzengine:swordBladeSilver.name=Lame d'épée en argent
+item.voltzengine:swordBladeLead.name=Lame d'épée en plomb
+item.voltzengine:swordBladeZinc.name=Lame d'épée en zinc
+item.voltzengine:swordBladeNickel.name=Lame d'épée en nickel
+item.voltzengine:swordBladeAluminium.name=Lame d'épée en aluminium
+item.voltzengine:swordBladeMagnesium.name=Lame d'épée en magnésium
+
+item.voltzengine:swordBladeSteel.name=Lame d'épée en acier
+item.voltzengine:swordBladeBrass.name=Lame d'épée en laiton
+item.voltzengine:swordBladeBronze.name=Lame d'épée en bronze
+
+## Pick Head
+item.voltzengine:pickHeadCopper.name=Tête de pioche en cuivre
+item.voltzengine:pickHeadTin.name=Tête de pioche en étain
+item.voltzengine:pickHeadSilver.name=Tête de pioche en argent
+item.voltzengine:pickHeadLead.name=Tête de pioche en plomb
+item.voltzengine:pickHeadZinc.name=Tête de pioche en zinc
+item.voltzengine:pickHeadNickel.name=Tête de pioche en nickel
+item.voltzengine:pickHeadAluminium.name=Tête de pioche en aluminium
+item.voltzengine:pickHeadMagnesium.name=Tête de pioche en magnésium
+
+item.voltzengine:pickHeadSteel.name=Tête de pioche en acier
+item.voltzengine:pickHeadBrass.name=Tête de pioche en laiton
+item.voltzengine:pickHeadBronze.name=Tête de pioche en bronze
+
+## Hoe Head
+item.voltzengine:hoeHeadCopper.name=Tête de houe en cuivre
+item.voltzengine:hoeHeadTin.name=Tête de houe en étain
+item.voltzengine:hoeHeadSilver.name=Tête de houe en argent
+item.voltzengine:hoeHeadLead.name=Tête de houe en plomb
+item.voltzengine:hoeHeadZinc.name=Tête de houe en zing
+item.voltzengine:hoeHeadNickel.name=Tête de houe en nickel
+item.voltzengine:hoeHeadAluminium.name=Tête de houe en aluminium
+item.voltzengine:hoeHeadMagnesium.name=Tête de houe en magnésium
+
+item.voltzengine:hoeHeadSteel.name=Tête de houe en acier
+item.voltzengine:hoeHeadBrass.name=Tête de houe en laiton
+item.voltzengine:hoeHeadBronze.name=Tête de houe en bronze
+
+## Creative Testing Blocks
+tile.voltzengine:creativeBuilder.name=Constructeur créatif
+tile.voltzengine:infiniteEnergy.name=Energie infini
+tile.voltzengine:infiniteFluid.name=Fluide infini
+
+## Tools
+toolmode.mode=Mode
+toolmode.general.name=Général
+toolmode.rotation.name=Rotation
+
+# Items
+item.voltzengine:screwdriver.name=Tournevis
+item.voltzengine:screwdriver.tooltip=Utilisé pour configurer les blocs. Maj-clique droit pour changer de mode.
+
+#Misc
+# %0 goes before the localized name of the shift key, %1 goes after
+tooltip.noShift=Appuyez sur #0Maj#1 pour des informations
+info.recipes.tooltip=Appuyez sur #0J#1 pour les materiaux
+
+info.energylevel.waila=Niveau d'énergie actuel
+info.energycapacity.waila=Niveau d'énergie maximum
+
+info.isCraftingOnlyItem=Traitement d'éléments
+
+info.voltzengine:explosive.name=Explosif
+info.voltzengine:explosive.size.name=Taille
+
+## Permissions
+root.machine=Gérer la machine
+root.machine.enable=Active la machine
+root.machine.disable=Désactive la machine
+root.machine.open=Ouvrir la machine
+root.machine.off=Eteindre la machine
+root.machine.on=Allumer la machine
+root.machine.lock=Verrouiller la machine
+root.machine.unlock=Déverrouiller la machine
+root.machine.upgrade=Améliorer la machine
+root.machine.downgrade=Dégrader la machine
+root.machine.config=Configurer la machine
+
+root.group=Gestion de groupes
+root.group.user=Gestion d'utilisateur
+root.group.user.add=Ajouter un utilisateur
+root.group.user.remove=Supprimer l'utilisateur
+root.group.entity=Gestion d'entité
+root.group.entity.add=Ajouter une entité
+root.group.entity.remove=Supprimer l'entité
+root.group.permission=Modifier les permissions de groupe
+root.group.permission.add=Ajouter des permissions de groupe
+root.group.permission.remove=Supprimer des permissions de groupe
+root.group.admin=Adminitrer le groupe
+root.group.owner=Modifier le propriétaire du groupe
+
+root.profile=Profil d'administrateur
+root.profile.admin=Profil d'administrateur
+root.profile.owner=Modifier le profil du propriétaire
+root.profile.addGroup=Ajouter un groupe
+root.profile.removeGroup=Supprimer le groupe
+root.profile.modifyGroup=Modifier le groupe
+root.profile.enable=Active le profil
+root.profile.user=Gestion des profil utilisateur
+
+root.inventory=Gestion d'inventaire
+root.inventory.lock=Verrouiller l'inventaire
+root.inventory.unlock=Déverrouiller l'inventaire
+root.inventory.input=Entrée d'inventaire
+root.inventory.open=Ouvrir l'inventaire
+root.inventory.output=Sortie d'inventaire
+root.inventory.enable=Activer l'inventaire
+root.inventory.disable=Désactiver l'inventaire
+root.inventory.modify=Modifier l'inventaire
