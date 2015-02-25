@@ -135,7 +135,7 @@ item.voltzengine:swordBladeNickel.name=Nickel Sword Blade
 item.voltzengine:swordBladeAluminium.name=Aluminium Sword Blade
 item.voltzengine:swordBladeMagnesium.name=Magnesium Sword Blade
 
-item.voltzengine:shovelHeadSteel.name=Steel Shovel Head
+item.voltzengine:shovelHeadSteel.name=Steel Shovel Head # oups !!!
 item.voltzengine:shovelHeadBrass.name=Brass Shovel Head
 item.voltzengine:shovelHeadBronze.name=Bronze Shovel Head
 
