@@ -1,20 +1,21 @@
 package com.builtbroken.mc.lib.mod;
 
-import com.builtbroken.mc.core.registry.implement.IPostInit;
+import com.builtbroken.mc.core.registry.ModManager;
+import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import net.minecraft.block.Block;
 import net.minecraftforge.common.config.Configuration;
-import com.builtbroken.mc.core.registry.ModManager;
-import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/** Default layout for a mod class to make it easier to keep mod.class
+import java.io.File;
+
+/**
+ * Default layout for a mod class to make it easier to keep mod.class
  * in the same general design and do the same general actions.
- *
+ * <p/>
  * You will still need to place @Mod at the top of the class, create your own proxies,
  * and do other tasks that can't be abstracted out due to @Annotations
  *
@@ -23,15 +24,14 @@ import org.apache.logging.log4j.Logger;
  * @SidedProxy
  * @EventHandler
  * @Mod.Metadata
- * @ModstatInfo
- *
- * Created by robert on 12/7/2014.
+ * @ModstatInfo Created by robert on 12/7/2014.
  */
 public abstract class AbstractMod
 {
     protected LoadableHandler loader;
     protected ModManager manager;
     protected Logger logger;
+    protected String configPath;
     private Configuration config;
 
     /**
@@ -47,7 +47,10 @@ public abstract class AbstractMod
     public void preInit(FMLPreInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, getProxy());
-        config = new Configuration(event.getSuggestedConfigurationFile());
+        if (configPath == null || configPath.isEmpty())
+            config = new Configuration(event.getSuggestedConfigurationFile());
+        else
+            config = new Configuration(new File(event.getModConfigurationDirectory(), configPath));
         getConfig().load();
         loader.applyModule(getProxy());
         loader.preInit();
@@ -76,7 +79,10 @@ public abstract class AbstractMod
         return this.manager;
     }
 
-    public Logger logger() { return this.logger; }
+    public Logger logger()
+    {
+        return this.logger;
+    }
 
     public abstract AbstractProxy getProxy();
 }

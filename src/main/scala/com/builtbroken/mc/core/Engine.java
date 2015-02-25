@@ -6,6 +6,7 @@ import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.core.content.BlockOre;
 import com.builtbroken.mc.core.content.ItemBlockOre;
 import com.builtbroken.mc.core.content.ItemInstaHole;
+import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
 import com.builtbroken.mc.core.content.parts.ItemParts;
 import com.builtbroken.mc.core.content.resources.Ores;
 import com.builtbroken.mc.core.content.resources.load.CrusherRecipeLoad;
@@ -22,11 +23,15 @@ import com.builtbroken.mc.lib.mod.AbstractMod;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
 import com.builtbroken.mc.lib.mod.config.ConfigScanner;
+import com.builtbroken.mc.lib.world.edit.PlacementData;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
+import com.builtbroken.mc.lib.world.heat.HeatDataManager;
+import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
 import com.builtbroken.mc.prefab.explosive.ExplosiveHandler;
 import com.builtbroken.mc.prefab.explosive.blast.BlastBasic;
 import com.builtbroken.mc.prefab.recipe.MRHandlerItemStack;
 import com.builtbroken.mc.prefab.recipe.MRSmelterHandler;
+import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -45,6 +50,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Arrays;
@@ -71,12 +77,15 @@ public class Engine extends AbstractMod
     public static Engine instance;
 
     public static Block ore = null;
+    public static Block heatedStone;
     public static Item itemWrench;
     public static Item instaHole;
     public static Item itemSelectionTool;
     public static Item itemCraftingParts;
 
     private static boolean oresRequested = false;
+    public static boolean heatedRockRequested = false;
+    public static boolean enabledHeatMap = true;
 
     //TODO move these to compatibility handlers later
     public static double TO_RF_RATIO = 500;
@@ -84,9 +93,12 @@ public class Engine extends AbstractMod
 
     public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 
+    private Configuration heatDataConfig;
+
     public Engine()
     {
         super(References.PREFIX);
+        configPath = "ve/VoltzEngine.cfg";
     }
 
     /**
@@ -112,6 +124,10 @@ public class Engine extends AbstractMod
         MinecraftForge.EVENT_BUS.register(new InteractionHandler());
         MinecraftForge.EVENT_BUS.register(SelectionHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(SelectionHandler.INSTANCE);
+
+        heatDataConfig = new Configuration(evt.getModConfigurationDirectory(), "ve/HeatMap.cfg");
+        heatDataConfig.load();
+        enabledHeatMap = heatDataConfig.getBoolean("EnabledHeatMap", Configuration.CATEGORY_GENERAL, true, "Heat map handles interaction of heat based energy and the world. Disable only if it causes issues or you want to reduce world size. If disabled it can prevent machines from working.");
 
         loader.applyModule(packetHandler);
         loader.applyModule(CrusherRecipeLoad.class);
@@ -173,12 +189,28 @@ public class Engine extends AbstractMod
             ore = contentRegistry.newBlock(References.ID + "StoneOre", new BlockOre("stone"), ItemBlockOre.class);
             Ores.registerSet(ore, getConfig());
         }
+
+        if(heatedRockRequested)
+        {
+            heatedStone = contentRegistry.newBlock(References.PREFIX + "HeatedRock", BlockHeatedStone.class, ItemBlockMetadata.class);
+            if(enabledHeatMap)
+            {
+                HeatedBlockRegistry.addNewConversion(Blocks.stone, new PlacementData(heatedStone, 15), 600);
+                HeatedBlockRegistry.addNewConversion(heatedStone, Blocks.lava, 1200);
+            }
+        }
+
+        if(enabledHeatMap)
+        {
+            HeatedBlockRegistry.init(heatDataConfig);
+        }
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent evt)
     {
         super.postInit(evt);
+        heatDataConfig.save();
 
         OreDictionary.registerOre("ingotGold", Items.gold_ingot);
         OreDictionary.registerOre("ingotIron", Items.iron_ingot);
