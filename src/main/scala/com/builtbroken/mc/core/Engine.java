@@ -25,7 +25,6 @@ import com.builtbroken.mc.lib.mod.config.ConfigHandler;
 import com.builtbroken.mc.lib.mod.config.ConfigScanner;
 import com.builtbroken.mc.lib.world.edit.PlacementData;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
-import com.builtbroken.mc.lib.world.heat.HeatDataManager;
 import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
 import com.builtbroken.mc.prefab.explosive.ExplosiveHandler;
 import com.builtbroken.mc.prefab.explosive.blast.BlastBasic;
@@ -195,8 +194,8 @@ public class Engine extends AbstractMod
             heatedStone = contentRegistry.newBlock(References.PREFIX + "HeatedRock", BlockHeatedStone.class, ItemBlockMetadata.class);
             if(enabledHeatMap)
             {
-                HeatedBlockRegistry.addNewConversion(Blocks.stone, new PlacementData(heatedStone, 15), 600);
-                HeatedBlockRegistry.addNewConversion(heatedStone, Blocks.lava, 1200);
+                HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementData(heatedStone, 15), 600);
+                HeatedBlockRegistry.addNewHeatingConversion(heatedStone, Blocks.lava, 1200);
             }
         }
 

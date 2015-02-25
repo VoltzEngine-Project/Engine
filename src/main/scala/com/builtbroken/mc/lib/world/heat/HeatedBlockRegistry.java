@@ -16,42 +16,86 @@ import java.util.HashMap;
  */
 public class HeatedBlockRegistry
 {
-    public static HashMap<Block, BlockConversionData> data = new HashMap();
-    public static HashMap<Material, Integer> default__conversion_temp_mat = new HashMap();
+    public static HashMap<Block, BlockConversionData> warm_up_conversion = new HashMap();
+    public static HashMap<Block, BlockConversionData> cool_down_conversion = new HashMap();
+
+    public static HashMap<Material, Integer> default_melting_point_mat = new HashMap();
+    public static HashMap<Material, Integer> default_temp_mat = new HashMap();
+
+    public static HashMap<Integer, Integer> default_temp_dim = new HashMap();
 
     static
     {
-        default__conversion_temp_mat.put(Material.carpet, 600);
-        default__conversion_temp_mat.put(Material.cloth, 600);
-        default__conversion_temp_mat.put(Material.wood, 800);
-        default__conversion_temp_mat.put(Material.rock, 1200);
-        default__conversion_temp_mat.put(Material.clay, 2000);
-        default__conversion_temp_mat.put(Material.anvil, 1900);
-        default__conversion_temp_mat.put(Material.iron, 1900);
-        default__conversion_temp_mat.put(Material.water, 393);
-        default__conversion_temp_mat.put(Material.snow, 293);
-        default__conversion_temp_mat.put(Material.ice, 293);
-        default__conversion_temp_mat.put(Material.packedIce, 293);
+        default_temp_dim.put(1, 327);
+        default_temp_dim.put(0, 293);
+        default_temp_dim.put(-1, 227);
+
+        default_melting_point_mat.put(Material.carpet, 600);
+        default_melting_point_mat.put(Material.cloth, 600);
+        default_melting_point_mat.put(Material.wood, 800);
+        default_melting_point_mat.put(Material.rock, 1200);
+        default_melting_point_mat.put(Material.clay, 2000);
+        default_melting_point_mat.put(Material.anvil, 1900);
+        default_melting_point_mat.put(Material.iron, 1900);
+        default_melting_point_mat.put(Material.water, 373);
+        default_melting_point_mat.put(Material.snow, 273);
+        default_melting_point_mat.put(Material.ice, 273);
+        default_melting_point_mat.put(Material.packedIce, 273);
+        default_melting_point_mat.put(Material.craftedSnow, 273);
+
+        default_temp_mat.put(Material.ice, 253); //slightly bellow freezing
+        default_temp_mat.put(Material.packedIce, 253);
+        default_temp_mat.put(Material.snow, 253);
+        default_temp_mat.put(Material.craftedSnow, 253);
     }
 
-    public static void addNewConversion(Block block, Block result, int kelvin)
+    public static void addNewHeatingConversion(Block block, Block result, int kelvin)
     {
-        addNewConversion(block, new PlacementData(result, -1), kelvin);
+        addNewHeatingConversion(block, new PlacementData(result, -1), kelvin);
     }
 
-    public static void addNewConversion(Block block, PlacementData result, int kelvin)
+    public static void addNewHeatingConversion(Block block, PlacementData result, int kelvin)
     {
-        addNewConversion(new PlacementData(block, -1), result, kelvin);
+        addNewHeatingConversion(new PlacementData(block, -1), result, kelvin);
     }
 
-    public static void addNewConversion(PlacementData block, PlacementData result, int kelvin)
+    public static void addNewHeatingConversion(PlacementData block, PlacementData result, int kelvin)
     {
-        if (data.containsKey(block.block()))
+        if (warm_up_conversion.containsKey(block.block()))
         {
-            Engine.instance.logger().error("HeatedBlockRegistry: Block[" + block + "] conversion to " + data.get(block.block()) +" is being replaced by " + result);
+            Engine.instance.logger().error("HeatedBlockRegistry: Block[" + block + "] conversion to " + warm_up_conversion.get(block.block()) + " is being replaced by " + result);
 
         }
-        data.put(block.block(), new BlockConversionData(block, result, kelvin));
+        warm_up_conversion.put(block.block(), new BlockConversionData(block, result, kelvin));
+    }
+
+    public static PlacementData getResult(Block block)
+    {
+        BlockConversionData conversion = getData(block);
+        if (conversion != null)
+        {
+            return conversion.resulting_block;
+        }
+        return null;
+    }
+
+    public static PlacementData getResultWarmUp(Block block, int temp)
+    {
+        return null;
+    }
+
+    public static PlacementData getResultCoolDown(Block block, int temp)
+    {
+        return null;
+    }
+
+    public static BlockConversionData getData(Block block)
+    {
+        if (warm_up_conversion.containsKey(block))
+        {
+            return warm_up_conversion.get(block);
+        }
+        return null;
     }
 
     public static void init(Configuration config)
@@ -59,10 +103,10 @@ public class HeatedBlockRegistry
         config.setCategoryComment("Block_Heat_Conversions", "Conversion of one block into another when a lot of heat is added. \'Air\' as an entry means the block turned into dust");
 
         //Constant data
-        addNewConversion(Blocks.ice, Blocks.water, (int) TemperatureUnit.Fahrenheit.conversion.toKelvin(32));
-        addNewConversion(Blocks.obsidian, Blocks.lava, 1293);
-        addNewConversion(Blocks.stone, Blocks.lava, 1293);
-        addNewConversion(Blocks.grass, Blocks.dirt, 600); //Made up conversion
+        addNewHeatingConversion(Blocks.ice, Blocks.water, (int) TemperatureUnit.Fahrenheit.conversion.toKelvin(32));
+        addNewHeatingConversion(Blocks.obsidian, Blocks.lava, 1293);
+        addNewHeatingConversion(Blocks.stone, Blocks.lava, 1293);
+        addNewHeatingConversion(Blocks.grass, Blocks.dirt, 600); //Made up conversion
 
         //Everything else not registered, init with default data to make life simple
         if (Block.blockRegistry instanceof FMLControlledNamespacedRegistry)
@@ -90,9 +134,9 @@ public class HeatedBlockRegistry
                             Object c_obj = reg.getObject(conversion);
                             if (c_obj instanceof Block)
                             {
-                                if (!data.containsKey(obj))
+                                if (!warm_up_conversion.containsKey(obj))
                                 {
-                                    addNewConversion((Block) obj, (Block) c_obj, 600);
+                                    addNewHeatingConversion((Block) obj, (Block) c_obj, 600);
                                 }
                             }
                             else
