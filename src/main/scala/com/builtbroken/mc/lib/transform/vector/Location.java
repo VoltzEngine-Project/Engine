@@ -14,6 +14,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Random;
 
@@ -111,5 +112,10 @@ public class Location extends AbstractLocation<Location> implements IWorldPositi
                 v.spawnParticle("blockcrack_" + Block.getIdFromBlock(block) + "_" + v.getBlockMetadata(), vel);
             }
         }
+    }
+
+    public boolean isSideSolid(ForgeDirection side)
+    {
+        return getBlock().isSideSolid(world(), xi(), yi(), zi(), side);
     }
 }
