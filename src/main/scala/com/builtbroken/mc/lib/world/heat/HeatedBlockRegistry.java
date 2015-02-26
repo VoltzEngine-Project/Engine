@@ -7,6 +7,7 @@ import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 
 import java.util.HashMap;
@@ -71,7 +72,7 @@ public class HeatedBlockRegistry
 
     public static PlacementData getResult(Block block)
     {
-        BlockConversionData conversion = getData(block);
+        BlockConversionData conversion = getWarnUpData(block);
         if (conversion != null)
         {
             return conversion.resulting_block;
@@ -81,21 +82,54 @@ public class HeatedBlockRegistry
 
     public static PlacementData getResultWarmUp(Block block, int temp)
     {
+        BlockConversionData conversion = getWarnUpData(block);
+        if (conversion != null && conversion.temp_kelvin <= temp)
+        {
+            return conversion.resulting_block;
+        }
         return null;
     }
 
     public static PlacementData getResultCoolDown(Block block, int temp)
     {
+        BlockConversionData conversion = getCoolDownData(block);
+        if (conversion != null && conversion.temp_kelvin >= temp)
+        {
+            return conversion.resulting_block;
+        }
         return null;
     }
 
-    public static BlockConversionData getData(Block block)
+    public static BlockConversionData getWarnUpData(Block block)
     {
         if (warm_up_conversion.containsKey(block))
         {
             return warm_up_conversion.get(block);
         }
         return null;
+    }
+
+    public static BlockConversionData getCoolDownData(Block block)
+    {
+        if (cool_down_conversion.containsKey(block))
+        {
+            return cool_down_conversion.get(block);
+        }
+        return null;
+    }
+
+    public static int getDefaultTemp(World world, Block block)
+    {
+        Material mat = block.getMaterial();
+        if(default_temp_mat.containsKey(mat))
+        {
+            return default_temp_mat.get(mat);
+        }
+        else if(default_temp_dim.containsKey(world.provider.dimensionId))
+        {
+            return default_temp_dim.get(world.provider.dimensionId);
+        }
+        return 293; //20c, 69f, room temp
     }
 
     public static void init(Configuration config)
