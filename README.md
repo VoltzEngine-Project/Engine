@@ -15,6 +15,10 @@ The following sites are permitted to profit off the engine within the bounds of 
 * ShadowCity.net
 * BuiltBroken.com 
 
+Pull Requests
+======
+Send them to the Development branch otherwise they will be closed.
+
 ## Compile
 Run the Build.bat in the scripts folder for local .jar creation. 
 
