@@ -39,9 +39,10 @@ public abstract class BlastSimplePath extends Blast
                 {
                     pathed.add(location);
                     BlockEdit edit = changeBlock(loc);
-                    if (edit.hasChanged())
+                    if (edit == null || edit.hasChanged())
                     {
-                        list.add(edit);
+                        if (edit != null)
+                            list.add(edit);
                         path(location.add(dir), list);
                     }
                 }
