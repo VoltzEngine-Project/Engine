@@ -21,7 +21,7 @@ import java.util.Random;
  */
 public class BlockHeatedStone extends Block
 {
-    protected BlockHeatedStone()
+    public BlockHeatedStone()
     {
         super(Material.rock);
         this.setHardness(1.5f);
