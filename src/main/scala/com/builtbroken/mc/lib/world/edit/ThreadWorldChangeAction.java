@@ -68,19 +68,33 @@ public class ThreadWorldChangeAction extends Thread
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
-        if(event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
+        try
         {
-            Iterator<BlockEdit> it = effectedBlocks.iterator();
-            int c = 0;
-            while(it.hasNext() && c++ <= blocksPerTick)
+            if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
             {
-                blast.handleBlockPlacement(it.next());
-                it.remove();
+                Iterator<BlockEdit> it = effectedBlocks.iterator();
+                int c = 0;
+                while (it.hasNext() && c++ <= blocksPerTick)
+                {
+                    try
+                    {
+                        blast.handleBlockPlacement(it.next());
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    it.remove();
+                }
+            }
+            if (effectedBlocks == null || effectedBlocks.isEmpty())
+            {
+                FMLCommonHandler.instance().bus().unregister(this);
             }
         }
-        if(effectedBlocks.isEmpty())
+        catch(Exception e)
         {
-            FMLCommonHandler.instance().bus().unregister(this);
+            e.printStackTrace();
         }
     }
 }
