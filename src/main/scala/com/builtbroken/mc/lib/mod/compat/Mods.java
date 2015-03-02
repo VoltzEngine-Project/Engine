@@ -18,8 +18,6 @@ public enum Mods
     WAILA("Waila");
 
     public final String mod_id;
-    private boolean isLoaded = false;
-    private boolean checkLoad = false;
 
     private Mods(String id)
     {
@@ -28,11 +26,6 @@ public enum Mods
 
     public boolean isLoaded()
     {
-        if(!checkLoad || !Loader.instance().isInState(LoaderState.AVAILABLE))
-        {
-            isLoaded = Loader.isModLoaded(mod_id);
-            checkLoad = true;
-        }
-        return isLoaded;
+        return Loader.isModLoaded(mod_id);
     }
 }

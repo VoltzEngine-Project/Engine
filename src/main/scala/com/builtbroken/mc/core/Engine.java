@@ -21,6 +21,7 @@ import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.lib.mod.AbstractMod;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
+import com.builtbroken.mc.lib.mod.compat.oc.OCProxy;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
 import com.builtbroken.mc.lib.mod.config.ConfigScanner;
 import com.builtbroken.mc.lib.world.edit.PlacementData;
@@ -133,6 +134,7 @@ public class Engine extends AbstractMod
         loader.applyModule(GrinderRecipeLoad.class);
         loader.applyModule(NEIProxy.class);
         loader.applyModule(GroupProfileHandler.GLOBAL);
+        loader.applyModule(OCProxy.class);
 
         PotionUtility.resizePotionArray();
 
