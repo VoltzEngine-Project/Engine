@@ -6,12 +6,12 @@ import com.builtbroken.mc.api.tile.IPlayerUsing;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
+import com.builtbroken.mc.lib.helper.WrenchUtility;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.block.RenderTileDummy;
 import com.builtbroken.mc.lib.transform.region.Cube;
-import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.lib.transform.vector.Location;
-import com.builtbroken.mc.lib.helper.WrenchUtility;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -118,12 +118,12 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
         if (ticks >= Long.MAX_VALUE)
             ticks = 0;
         ticks += 1;
-        if(ticks % nextCleanupTick == 0)
+        if (ticks % nextCleanupTick == 0)
         {
             doCleanupCheck();
-            nextCleanupTick = 100 + (int)(world().rand.nextFloat() * 2000);
+            nextCleanupTick = 100 + (int) (world().rand.nextFloat() * 2000);
         }
-        if(getPlayersUsing().size() > 0)
+        if (getPlayersUsing().size() > 0)
         {
             doUpdateGuiUsers();
         }
@@ -414,7 +414,8 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
 
     }
 
-    @Override @SideOnly(Side.CLIENT)
+    @Override
+    @SideOnly(Side.CLIENT)
     public void onClientRegistered()
     {
 
@@ -759,7 +760,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(String name)
     {
-        if(icons != null && icons.containsKey(name))
+        if (icons != null && icons.containsKey(name))
         {
             return icons.get(name);
         }
@@ -986,6 +987,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
         writeToNBT(tag);
         return tag;
     }
+
     @Override
     public final Packet getDescriptionPacket()
     {
@@ -997,33 +999,47 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
         return null;
     }
 
-    /** Sends the desc packet to all players around this tile */
+    /**
+     * Sends the desc packet to all players around this tile
+     */
     public void sendDescPacket()
     {
         sendPacket(getDescPacket());
     }
 
-    /** Sends the packet to all players around this tile
-     * @param packet - packet to send */
+    /**
+     * Sends the packet to all players around this tile
+     *
+     * @param packet - packet to send
+     */
     public void sendPacket(AbstractPacket packet)
     {
         sendPacket(packet, 64);
     }
 
-    /** Sends the packet to all players around this tile
-     * @param packet - packet to send
+    /**
+     * Sends the packet to all players around this tile
+     *
+     * @param packet   - packet to send
      * @param distance - distance in blocks to search for players
      */
     public void sendPacket(AbstractPacket packet, double distance)
     {
-        Engine.instance.packetHandler.sendToAllAround(packet, world(), xi(), yi(), zi(), distance);
+        if (isServer())
+            Engine.instance.packetHandler.sendToAllAround(packet, world(), xi(), yi(), zi(), distance);
+    }
+
+    public void sendPacketToServer(AbstractPacket packet)
+    {
+        if (isClient())
+            Engine.instance.packetHandler.sendToServer(packet);
     }
 
     public void sendPacketToGuiUsers(AbstractPacket packet)
     {
-        for(EntityPlayer player : getPlayersUsing())
+        for (EntityPlayer player : getPlayersUsing())
         {
-            if(player instanceof EntityPlayerMP)
+            if (player instanceof EntityPlayerMP)
             {
                 Engine.instance.packetHandler.sendToPlayer(packet, (EntityPlayerMP) player);
             }
