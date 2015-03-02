@@ -9,44 +9,46 @@ public enum EntitySelectors
     /*
     * Selects any entity that implements IMob
     */
-    MOB_SELECTOR(new EntityLivingSelector().selectMobs()),
+    MOB_SELECTOR("Monsters", new EntityLivingSelector().selectMobs()),
     /**
      * Selects all instances of EntityLivngBase
      */
-    LIVING_SELECTOR(new EntityLivingSelector().selectLiving()),
+    LIVING_SELECTOR("Living", new EntityLivingSelector().selectLiving()),
     /**
      * Selects any entity that implements IAnimals
      */
-    ANIMAL_SELECTOR(new EntityLivingSelector().selectAnimals()),
+    ANIMAL_SELECTOR("Animals", new EntityLivingSelector().selectAnimals()),
     /**
      * Selects all non-creative players, and fake players
      */
-    PLAYER_SELECTOR(new EntityLivingSelector().selectPlayers()),
+    PLAYER_SELECTOR("Players", new EntityLivingSelector().selectPlayers()),
     /**
      * Selects all players including creative mode players, and fake players
      */
-    PLAYER_CREATIVE_SELECTOR(new EntityLivingSelector().selectPlayers().selectCreative().ignoreDamage()),
+    PLAYER_CREATIVE_SELECTOR("Creative Players", new EntityLivingSelector().selectPlayers().selectCreative().ignoreDamage()),
     /**
      * Selects all instances of EntityMinecraft
      */
-    CART_SELECTOR(new EntityLivingSelector().selectCarts()),
+    CART_SELECTOR("Carts", new EntityLivingSelector().selectCarts()),
     /**
      * Selects all instances of EntityItem
      */
-    ITEM_SELECTOR(new EntityItemSelector()),
+    ITEM_SELECTOR("Items", new EntityItemSelector()),
     /**
      * Selects all instances of IProjectile
      */
-    PROJECTILE_SELECTOR(new EntityLivingSelector().selectProjectiles()),
+    PROJECTILE_SELECTOR("Projectiles", new EntityLivingSelector().selectProjectiles()),
     /**
      * Selects all XP orbs
      */
-    XP_SELECTOR(new EntityXpSelector());
+    XP_SELECTOR("Xp Orbs", new EntityXpSelector());
 
     private final EntitySelector selector;
+    private final String DISPLAY_NAME;
 
-    private EntitySelectors(EntitySelector selector)
+    private EntitySelectors(String name, EntitySelector selector)
     {
+        this.DISPLAY_NAME = name;
         this.selector = selector;
         this.selector.lock();
     }
@@ -63,5 +65,10 @@ public enum EntitySelectors
             return values()[selector];
         }
         return LIVING_SELECTOR;
+    }
+
+    public String displayName()
+    {
+        return DISPLAY_NAME;
     }
 }
