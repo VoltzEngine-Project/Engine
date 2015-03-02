@@ -20,7 +20,8 @@ public enum Ores
     NICKEL(15, 60, 5, 8),
     BAUXITE(15, 60, 5, 10),
     MAGNESITE(5, 10, 3, 6),
-    URANIUM(5, 30, 2, 4);
+    URANIUM(5, 30, 2, 4),
+    PLATINUM(15, 60, 3, 10);
 
     private int minY = 1;
     private int maxY = 100;
