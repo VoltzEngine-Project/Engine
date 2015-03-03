@@ -58,6 +58,13 @@ public class GuiContainerBase extends GuiContainer
         this.baseTexture = References.GUI_MC_BASE;
     }
 
+    @Override
+    public void initGui()
+    {
+        super.initGui();
+        fields.clear();
+    }
+
     protected void drawString(String str, int x, int y, int color)
     {
         fontRendererObj.drawString(str, x, y, color);
