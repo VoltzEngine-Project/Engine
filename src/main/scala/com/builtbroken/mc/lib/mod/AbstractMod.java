@@ -44,13 +44,29 @@ public abstract class AbstractMod
         logger = LogManager.getLogger(domain);
     }
 
+    public AbstractMod(String domain, String configName)
+    {
+        this(domain);
+        this.configPath = configName + ".cfg";
+    }
+
     public void preInit(FMLPreInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, getProxy());
-        if (configPath == null || configPath.isEmpty())
-            config = new Configuration(event.getSuggestedConfigurationFile());
+        if(this.getClass().toString().contains("com.builtbroken"))
+        {
+            if (configPath == null || configPath.isEmpty())
+                config = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/" + event.getSuggestedConfigurationFile().getName()));
+            else
+                config = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/" + configPath));
+        }
         else
-            config = new Configuration(new File(event.getModConfigurationDirectory(), configPath));
+        {
+            if (configPath == null || configPath.isEmpty())
+                config = new Configuration(event.getSuggestedConfigurationFile());
+            else
+                config = new Configuration(new File(event.getModConfigurationDirectory(), configPath));
+        }
         getConfig().load();
         loader.applyModule(getProxy());
         loader.preInit();

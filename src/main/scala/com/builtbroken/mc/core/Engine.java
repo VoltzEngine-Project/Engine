@@ -54,6 +54,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.io.File;
 import java.util.Arrays;
 
 /**
@@ -98,8 +99,7 @@ public class Engine extends AbstractMod
 
     public Engine()
     {
-        super(References.PREFIX);
-        configPath = "ve/VoltzEngine.cfg";
+        super(References.PREFIX, "VoltzEngine");
     }
 
     /**
@@ -126,7 +126,7 @@ public class Engine extends AbstractMod
         MinecraftForge.EVENT_BUS.register(SelectionHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(SelectionHandler.INSTANCE);
 
-        heatDataConfig = new Configuration(evt.getModConfigurationDirectory(), "ve/HeatMap.cfg");
+        heatDataConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "ve/HeatMap.cfg"));
         heatDataConfig.load();
         enabledHeatMap = heatDataConfig.getBoolean("EnabledHeatMap", Configuration.CATEGORY_GENERAL, true, "Heat map handles interaction of heat based energy and the world. Disable only if it causes issues or you want to reduce world size. If disabled it can prevent machines from working.");
 

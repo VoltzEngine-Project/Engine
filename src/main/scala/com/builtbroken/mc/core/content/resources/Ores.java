@@ -40,7 +40,7 @@ public enum Ores
     {
         for(Ores ore: values())
         {
-            if (config.getBoolean("WorldGen", "Enable_Ore_" + LanguageUtility.capitalizeFirst(ore.name()) + "_Generation", true, ""))
+            if (config.getBoolean("" + LanguageUtility.capitalizeFirst(ore.name()) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
             {
                 GameRegistry.registerWorldGenerator(new OreGenReplaceStone("ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase()), new ItemStack(block, 1, ore.ordinal()), ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
             }
