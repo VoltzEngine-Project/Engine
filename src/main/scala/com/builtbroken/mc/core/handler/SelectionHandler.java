@@ -44,7 +44,7 @@ public class SelectionHandler
 
         if (out == null)
         {
-            out = new Selection(null, null);
+            out = new Selection();
             INSTANCE.selections.put(player.getCommandSenderName(), out);
         }
 

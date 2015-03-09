@@ -23,6 +23,11 @@ public class Selection extends Cube
 {
     protected World world;
 
+    public Selection()
+    {
+        this(null, new Cube());
+    }
+
     public Selection(World world, Cube cube)
     {
         super(cube);
