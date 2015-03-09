@@ -4,6 +4,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.handler.SelectionHandler;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.lib.world.edit.Selection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -53,7 +54,7 @@ public class ItemSelectionWand extends Item
     {
         if (!location.world().isRemote)
         {
-            Cube select = SelectionHandler.getSelection(player);
+            Selection select = SelectionHandler.getSelection(player);
 
             if (player.isSneaking())
             {

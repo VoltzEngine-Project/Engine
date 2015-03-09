@@ -6,6 +6,7 @@ import com.builtbroken.mc.lib.modflags.Region;
 import com.builtbroken.mc.lib.modflags.RegionManager;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.lib.world.edit.Selection;
 import com.google.common.collect.Maps;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -27,7 +28,7 @@ public class SelectionHandler
 {
     public static final SelectionHandler INSTANCE = new SelectionHandler();
 
-    private static final HashMap<String, Cube> selections = Maps.newHashMap();
+    private static final HashMap<String, Selection> selections = Maps.newHashMap();
 
     private SelectionHandler()
     {
@@ -37,13 +38,13 @@ public class SelectionHandler
      * gets the selection of the player, or creates one if none exists.
      * This is mainly so we dont have to deal with NPEs later.
      */
-    public static Cube getSelection(EntityPlayer player)
+    public static Selection getSelection(EntityPlayer player)
     {
-        Cube out = INSTANCE.selections.get(player.getCommandSenderName());
+        Selection out = INSTANCE.selections.get(player.getCommandSenderName());
 
         if (out == null)
         {
-            out = new Cube(null, null);
+            out = new Selection(null, null);
             INSTANCE.selections.put(player.getCommandSenderName(), out);
         }
 
@@ -54,7 +55,7 @@ public class SelectionHandler
      * gets the selection of the player, or creates one if none exists.
      * This is mainly so we dont have to deal with NPEs later.
      */
-    public static void setSelection(EntityPlayer player, Cube cuboid)
+    public static void setSelection(EntityPlayer player, Selection cuboid)
     {
         INSTANCE.selections.put(player.getCommandSenderName(), cuboid);
         if (!player.worldObj.isRemote)
@@ -69,7 +70,7 @@ public class SelectionHandler
      */
     private void clearSelection(EntityPlayer player)
     {
-        Cube select = selections.get(player);
+        Selection select = selections.get(player);
         if (select != null)
         {
             select.set(null, null);

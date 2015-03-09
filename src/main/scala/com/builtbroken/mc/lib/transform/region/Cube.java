@@ -35,6 +35,11 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
         set(min, max);
     }
 
+    public Cube(Cube cube)
+    {
+        this(cube.pointOne(), cube.pointTwo());
+    }
+
     public Cube(double x, double y, double z, double i, double j, double k)
     {
         this(new Pos(x, y, z), new Pos(i, j, k));
