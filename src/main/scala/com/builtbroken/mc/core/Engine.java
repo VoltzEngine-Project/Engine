@@ -174,7 +174,7 @@ public class Engine extends AbstractMod
         super.init(evt);
         Engine.metadata.modId = References.NAME;
         Engine.metadata.name = References.NAME;
-        Engine.metadata.description = References.NAME + " is a content creation toolkit designed at making modding easier";
+        Engine.metadata.description = References.NAME + " is a content creation toolkit";
         Engine.metadata.url = "http://www.builtbroken.com/pages/voltzengine/";
         Engine.metadata.version = References.VERSION + References.BUILD_VERSION;
         Engine.metadata.authorList = Arrays.asList("DarkCow");
@@ -194,7 +194,8 @@ public class Engine extends AbstractMod
 
         if(heatedRockRequested)
         {
-            heatedStone = contentRegistry.newBlock(References.PREFIX + "HeatedRock", BlockHeatedStone.class, ItemBlockMetadata.class);
+            heatedStone = contentRegistry.newBlock("VEHeatedRock", BlockHeatedStone.class, ItemBlockMetadata.class);
+            NEIProxy.hideItem(heatedStone);
             if(enabledHeatMap)
             {
                 HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementData(heatedStone, 15), 600);
