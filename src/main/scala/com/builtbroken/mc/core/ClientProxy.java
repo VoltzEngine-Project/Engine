@@ -21,11 +21,6 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class ClientProxy extends CommonProxy
 {
-	static
-	{
-		AdvancedModelLoader.registerModelHandler(new FixedTechneModelLoader());
-	}
-
 	@Override
 	public void preInit()
 	{
