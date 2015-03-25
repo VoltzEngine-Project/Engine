@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.lib.render.model.FixedTechneModel;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
 import net.minecraftforge.client.model.IModelCustomLoader;
@@ -71,8 +72,14 @@ public class EngineModelLoader
         return loader.loadInstance(resource);
     }
 
-    public static Collection<String> getSupportedSuffixes()
+    public static FixedTechneModel loadTechneModel(ResourceLocation resource)
     {
-        return instances.keySet();
+        IModelCustom model = loadModel(resource);
+        if(!(model instanceof FixedTechneModel))
+        {
+            Engine.instance.logger().error("The resource name %s is not a techne model", resource);
+            throw new IllegalArgumentException("The resource name is not supported");
+        }
+        return (FixedTechneModel) model;
     }
 }
