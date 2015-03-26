@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.world.explosive;
 
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
+import com.builtbroken.mc.core.Engine;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import com.builtbroken.mc.api.event.TriggerCause;
@@ -20,9 +21,6 @@ public final class ExplosiveRegistry
 {
     private static final HashMap<String, IExplosiveHandler> idToExplosiveMap = new HashMap();
     private static final HashMap<String, List<IExplosiveHandler>> modToExplosiveMap = new HashMap();
-
-    @Config
-    public static boolean LOG_REGISTERING_EXPLOSIVES = true;
 
     /**
      * Registers or gets an instanceof of explosive
@@ -49,26 +47,29 @@ public final class ExplosiveRegistry
      */
     public static boolean registerExplosive(String modID, String id, IExplosiveHandler ex)
     {
-        if (!isRegistered(ex) && !idToExplosiveMap.containsKey(id))
+        if(Engine.instance.explosiveConfig.getBoolean("enable_" + id, modID, true, ""))
         {
-            //Register explosive
-            idToExplosiveMap.put(id, ex);
-            ex.onRegistered(id, modID);
+            if (!isRegistered(ex) && !idToExplosiveMap.containsKey(id))
+            {
+                //Register explosive
+                idToExplosiveMap.put(id, ex);
+                ex.onRegistered(id, modID);
 
-            //Save explosive to modID
-            List<IExplosiveHandler> list;
-            if(modToExplosiveMap.containsKey(modID))
-                list = modToExplosiveMap.get(modID);
-            else
-                list = new ArrayList();
-            list.add(ex);
-            modToExplosiveMap.put(modID, list);
+                //Save explosive to modID
+                List<IExplosiveHandler> list;
+                if (modToExplosiveMap.containsKey(modID))
+                    list = modToExplosiveMap.get(modID);
+                else
+                    list = new ArrayList();
+                list.add(ex);
+                modToExplosiveMap.put(modID, list);
 
-            //Generate log to console
-            if(LOG_REGISTERING_EXPLOSIVES)
-                References.LOGGER.info("ExplosiveRegistry> Mod: " + modID + "  Registered explosive instance " + ex);
+                //Generate log to console
+                if (Engine.log_registering_explosives)
+                    Engine.instance.logger().info("ExplosiveRegistry> Mod: " + modID + "  Registered explosive instance " + ex);
 
-            return true;
+                return true;
+            }
         }
         return false;
     }

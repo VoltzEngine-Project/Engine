@@ -85,21 +85,27 @@ public class Engine extends AbstractMod
     public static Item itemSelectionTool;
     public static Item itemCraftingParts;
 
+    //Interal trigger booleans
     private static boolean oresRequested = false;
     public static boolean heatedRockRequested = false;
+
+    public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
+
+    //config files
+    public Configuration heatDataConfig;
+    public Configuration explosiveConfig;
+
+    //Configs
     public static boolean enabledHeatMap = true;
+    public static boolean log_registering_explosives = false;
 
     //TODO move these to compatibility handlers later
     public static double TO_RF_RATIO = 500;
     public static double TO_BC_RATIO = 50;
 
-    public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
-
-    private Configuration heatDataConfig;
-
     public Engine()
     {
-        super(References.PREFIX, "VoltzEngine");
+        super(References.PREFIX, "ve/VoltzEngine");
     }
 
     /**
@@ -126,9 +132,17 @@ public class Engine extends AbstractMod
         MinecraftForge.EVENT_BUS.register(SelectionHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(SelectionHandler.INSTANCE);
 
-        heatDataConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "ve/HeatMap.cfg"));
+        heatDataConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "bbm/ve/HeatMap.cfg"));
+        explosiveConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "bbm/ve/Explosives.cfg"));
+
+        //Load heat configs
         heatDataConfig.load();
-        enabledHeatMap = heatDataConfig.getBoolean("EnabledHeatMap", Configuration.CATEGORY_GENERAL, true, "Heat map handles interaction of heat based energy and the world. Disable only if it causes issues or you want to reduce world size. If disabled it can prevent machines from working.");
+        enabledHeatMap = heatDataConfig.getBoolean("EnabledHeatMap", Configuration.CATEGORY_GENERAL, true, "Heat map handles interaction of heat based energy and the world. Disable only if it causes issues or you want to reduce world file size. If disabled it can prevent machines from working.");
+
+        //Load explosive configs
+        explosiveConfig.load();
+        log_registering_explosives = explosiveConfig.getBoolean("EnableRegisterLogging", Configuration.CATEGORY_GENERAL, false, "Adds debug each time a mod registers an explosive handler. Should only be enabled to figure out which mod is overriding another mod's explosive");
+
 
         loader.applyModule(packetHandler);
         loader.applyModule(CrusherRecipeLoad.class);
@@ -214,6 +228,7 @@ public class Engine extends AbstractMod
     {
         super.postInit(evt);
         heatDataConfig.save();
+        explosiveConfig.save();
 
         OreDictionary.registerOre("ingotGold", Items.gold_ingot);
         OreDictionary.registerOre("ingotIron", Items.iron_ingot);
