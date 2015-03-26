@@ -12,15 +12,13 @@ import java.util.List;
  */
 public abstract class BlastSimplePath extends Blast
 {
-    private List<Location> pathed = new ArrayList();
-    private Location center;
+    protected List<Location> pathed = new ArrayList();
+    protected Location center;
 
     @Override
     public void getEffectedBlocks(List<BlockEdit> list)
     {
         center = new Location(world(), x(), y(), z());
-        //TODO get side of explosive to restrict directions that can be accessed.
-        //TODO This way we avoid passing threw walls if the source block was not converted.
         for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
         {
             //Center point will be looped back over in the first path call
@@ -35,9 +33,9 @@ public abstract class BlastSimplePath extends Blast
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
             {
                 Location loc = location.add(dir);
-                if (shouldPath(location))
+                if (shouldPath(loc))
                 {
-                    pathed.add(location);
+                    pathed.add(loc);
                     BlockEdit edit = changeBlock(loc);
                     if (edit == null || edit.hasChanged())
                     {
