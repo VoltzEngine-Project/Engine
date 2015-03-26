@@ -44,7 +44,6 @@ public abstract class BlastSimplePath extends Blast
      */
     public void path(final Location node, final List<BlockEdit> list)
     {
-        System.out.println(node.distance(center));
         pathed_locations.add(node);
         if (shouldPath(node))
         {
