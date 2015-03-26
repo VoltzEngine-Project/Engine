@@ -8,50 +8,76 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Very simple version of the the BasicBlast the will
+ * path find in all directions. Doesn't do any extra
+ * checks beyond distance and can path.
  * Created by robert on 1/28/2015.
  */
 public abstract class BlastSimplePath extends Blast
 {
-    protected List<Location> pathed = new ArrayList();
+    /**
+     * List of locations already check by the pathfinder, used to prevent infinite loops
+     */
+    protected List<Location> pathed_locations = new ArrayList();
+    /**
+     * Starting location or center of the blast as a location object
+     */
     protected Location center;
 
     @Override
     public void getEffectedBlocks(List<BlockEdit> list)
     {
         center = new Location(world(), x(), y(), z());
+        //Temp fix to solve if center is an air block
         for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
         {
-            //Center point will be looped back over in the first path call
             path(center.add(dir), list);
         }
     }
 
-    public void path(Location location, List<BlockEdit> list)
+    /**
+     * Called to path the node location in all directions looking
+     * for blocks to edit
+     *
+     * @param node - node, should not be null
+     * @param list - list to add edits to, should not be null
+     */
+    public void path(final Location node, final List<BlockEdit> list)
     {
-        if (location.distance(center) <= size)
+        System.out.println(node.distance(center));
+        pathed_locations.add(node);
+        if (shouldPath(node))
         {
+            final BlockEdit edit = changeBlock(node);
+            if (edit != null && edit.hasChanged())
+                list.add(edit);
+
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
             {
-                Location loc = location.add(dir);
-                if (shouldPath(loc))
-                {
-                    pathed.add(loc);
-                    BlockEdit edit = changeBlock(loc);
-                    if (edit == null || edit.hasChanged())
-                    {
-                        if (edit != null)
-                            list.add(edit);
-                        path(location.add(dir), list);
-                    }
-                }
+                final Location next = node.add(dir);
+                if (!pathed_locations.contains(next))
+                    path(next, list);
             }
         }
     }
 
+    /**
+     * Called to see what block the location's block will change to
+     *
+     * @param location - location to get data from
+     * @return null for ignore, or BlockEdit for anything else
+     */
     public abstract BlockEdit changeBlock(Location location);
 
+    /**
+     * Called to check if the location should be pathed
+     * Can be used for any check including distance, and block infomration
+     *
+     * @param location - location to check
+     * @return true if it can be pathed
+     */
     public boolean shouldPath(Location location)
     {
-        return !pathed.contains(location);
+        return location.distance(center) <= size;
     }
 }
