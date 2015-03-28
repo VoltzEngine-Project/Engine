@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.registry;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
@@ -134,29 +135,30 @@ public class ModManager
      */
     public BlockTile newBlock(String name, Tile spatial)
     {
-        if (name == null || name.isEmpty())
+        String actual_name = name;
+        if (actual_name == null || actual_name.isEmpty())
         {
             if (spatial.name != null && !spatial.name.isEmpty())
             {
-                name = spatial.name;
+                actual_name = spatial.name;
             }
             else
             {
-                References.LOGGER.warn(name() + " Tile: " + spatial + " has no defined name to register with and could cause issues with world loading. In order to prevent the game from crashing we are falling back to using the class name.");
-                name = LanguageUtility.decapitalizeFirst(spatial.getClass().getSimpleName().replace("Tile", ""));
+                Engine.instance.logger().warn(name() + " Tile: " + spatial + " has no defined name to register with and could cause issues with world loading. In order to prevent the game from crashing we are falling back to using the class name.");
+                actual_name = LanguageUtility.decapitalizeFirst(spatial.getClass().getSimpleName().replace("Tile", ""));
             }
         }
 
         BlockTile block = new BlockTile(spatial, modPrefix, defaultTab);
         spatial.setBlock(block);
 
-        block = newBlock(name, block, spatial.itemBlock);
+        block = newBlock(actual_name, block, spatial.itemBlock);
         temp_registry_list.add(spatial);
 
         Tile newTile = spatial.newTile();
         if (newTile != null)
         {
-            proxy.registerTileEntity(name, modPrefix, block, newTile);
+            proxy.registerTileEntity(actual_name, modPrefix, block, newTile);
             if (newTile.getClass() != spatial.getClass())
                 temp_registry_list.add(newTile);
             if (spatial.renderTileEntity)
