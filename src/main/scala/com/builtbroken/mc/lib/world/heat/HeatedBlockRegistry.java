@@ -161,7 +161,7 @@ public class HeatedBlockRegistry
 
                     if (temp > 0)
                     {
-                        String conversion = config.getString("", "Heat_Conversions", reg.getNameForObject(Blocks.air), "");
+                        String conversion = config.getString(name, "Heat_Conversions", reg.getNameForObject(Blocks.air), "");
 
                         if (reg.getObject(conversion) != null)
                         {

@@ -216,17 +216,18 @@ public class Engine extends AbstractMod
                 HeatedBlockRegistry.addNewHeatingConversion(heatedStone, Blocks.lava, 1200);
             }
         }
-
-        if(enabledHeatMap)
-        {
-            HeatedBlockRegistry.init(heatDataConfig);
-        }
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent evt)
     {
         super.postInit(evt);
+
+        //All blocks should be loaded before post init so we can init things that need to iterate over the block list
+        if(enabledHeatMap)
+            HeatedBlockRegistry.init(heatDataConfig);
+
+        //Save configs as this is our last chance
         heatDataConfig.save();
         explosiveConfig.save();
 
