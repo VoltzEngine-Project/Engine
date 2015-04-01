@@ -92,8 +92,8 @@ public class Engine extends AbstractMod
     public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 
     //config files
-    public Configuration heatDataConfig;
-    public Configuration explosiveConfig;
+    public static Configuration heatDataConfig;
+    public static Configuration explosiveConfig;
 
     //Configs
     public static boolean enabledHeatMap = true;

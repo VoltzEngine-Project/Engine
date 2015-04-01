@@ -47,7 +47,7 @@ public final class ExplosiveRegistry
      */
     public static boolean registerExplosive(String modID, String id, IExplosiveHandler ex)
     {
-        if(Engine.instance.explosiveConfig.getBoolean("enable_" + id, modID, true, ""))
+        if(Engine.explosiveConfig == null || Engine.explosiveConfig.getBoolean("enable_" + id, modID, true, ""))
         {
             if (!isRegistered(ex) && !idToExplosiveMap.containsKey(id))
             {
