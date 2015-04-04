@@ -3,29 +3,49 @@ package com.builtbroken.mc.prefab.entity;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.UUID;
+
+/**
+ * Modified version of the arrow projectile to be more abstract
+ *
+ * @author Darkguardsman
+ */
 public class EntityProjectile extends Entity implements IProjectile
 {
-    /** The owner of this arrow. */
+    /**
+     * The entity who shot this projectile and can be used for damage calculations
+     * As well useful for causing argo on the shooter
+     */
     public Entity shootingEntity;
+    /**
+     * Used to track shooting entity after being loaded from a save
+     */
+    public UUID shootingEntityUUID;
+    /**
+     * Location the projectile was fired from, use this over the shooting entity
+     * to force argo on the source of the projectile. This way things like
+     * zombies don't auto go to players. Instead they can move towards the firing
+     * location. Think of it like moving towards the sound of the weapon.
+     */
     public Pos sourceOfProjectile;
 
     //Settings
     protected int inGroundKillTime = 1200;
     protected int inAirKillTime = 1200;
+    /**
+     * Damage source to do on impact
+     */
+    //TODO replace with method allowing more complex calculations
     protected DamageSource impact_damageSource = DamageSource.anvil;
 
     //In ground data
@@ -61,22 +81,22 @@ public class EntityProjectile extends Entity implements IProjectile
         this.shootingEntity = shooter;
         this.sourceOfProjectile = new Pos(shooter);
 
-        this.posY = shooter.posY + (double)shooter.getEyeHeight() - 0.10000000149011612D;
+        this.posY = shooter.posY + (double) shooter.getEyeHeight() - 0.10000000149011612D;
         double d0 = target.posX - shooter.posX;
-        double d1 = target.boundingBox.minY + (double)(target.height / 3.0F) - this.posY;
+        double d1 = target.boundingBox.minY + (double) (target.height / 3.0F) - this.posY;
         double d2 = target.posZ - shooter.posZ;
-        double d3 = (double)MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+        double d3 = (double) MathHelper.sqrt_double(d0 * d0 + d2 * d2);
 
         if (d3 >= 1.0E-7D)
         {
-            float f2 = (float)(Math.atan2(d2, d0) * 180.0D / Math.PI) - 90.0F;
-            float f3 = (float)(-(Math.atan2(d1, d3) * 180.0D / Math.PI));
+            float f2 = (float) (Math.atan2(d2, d0) * 180.0D / Math.PI) - 90.0F;
+            float f3 = (float) (-(Math.atan2(d1, d3) * 180.0D / Math.PI));
             double d4 = d0 / d3;
             double d5 = d2 / d3;
             this.setLocationAndAngles(shooter.posX + d4, this.posY, shooter.posZ + d5, f2, f3);
             this.yOffset = 0.0F;
-            float f4 = (float)d3 * 0.2F;
-            this.setThrowableHeading(d0, d1 + (double)f4, d2, p_i1755_4_, p_i1755_5_);
+            float f4 = (float) d3 * 0.2F;
+            this.setThrowableHeading(d0, d1 + (double) f4, d2, p_i1755_4_, p_i1755_5_);
         }
     }
 
@@ -88,15 +108,15 @@ public class EntityProjectile extends Entity implements IProjectile
         this.sourceOfProjectile = new Pos(shooter);
 
         this.setSize(0.5F, 0.5F);
-        this.setLocationAndAngles(shooter.posX, shooter.posY + (double)shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
-        this.posX -= (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
+        this.setLocationAndAngles(shooter.posX, shooter.posY + (double) shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
+        this.posX -= (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
         this.posY -= 0.10000000149011612D;
-        this.posZ -= (double)(MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
+        this.posZ -= (double) (MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
         this.setPosition(this.posX, this.posY, this.posZ);
         this.yOffset = 0.0F;
-        this.motionX = (double)(-MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI));
-        this.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI));
-        this.motionY = (double)(-MathHelper.sin(this.rotationPitch / 180.0F * (float)Math.PI));
+        this.motionX = (double) (-MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
+        this.motionZ = (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
+        this.motionY = (double) (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI));
         this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, f * 1.5F, 1.0F);
     }
 
@@ -115,8 +135,8 @@ public class EntityProjectile extends Entity implements IProjectile
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
             float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-            this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
-            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
+            this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f) * 180.0D / Math.PI);
         }
 
 
@@ -152,9 +172,9 @@ public class EntityProjectile extends Entity implements IProjectile
             else
             {
                 this.inGround = false;
-                this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
-                this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
-                this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
+                this.motionX *= (double) (this.rand.nextFloat() * 0.2F);
+                this.motionY *= (double) (this.rand.nextFloat() * 0.2F);
+                this.motionZ *= (double) (this.rand.nextFloat() * 0.2F);
                 this.ticksInGround = 0;
                 this.ticksInAir = 0;
             }
@@ -162,7 +182,7 @@ public class EntityProjectile extends Entity implements IProjectile
         else
         {
             ++this.ticksInAir;
-            if(ticksInAir >= inAirKillTime)
+            if (ticksInAir >= inAirKillTime)
             {
                 this.setDead();
                 return;
@@ -189,12 +209,12 @@ public class EntityProjectile extends Entity implements IProjectile
 
             for (i = 0; i < list.size(); ++i)
             {
-                Entity entity1 = (Entity)list.get(i);
+                Entity entity1 = (Entity) list.get(i);
 
                 if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity || this.ticksInAir >= 5))
                 {
                     f1 = 0.3F;
-                    AxisAlignedBB axisalignedbb1 = entity1.boundingBox.expand((double)f1, (double)f1, (double)f1);
+                    AxisAlignedBB axisalignedbb1 = entity1.boundingBox.expand((double) f1, (double) f1, (double) f1);
                     MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(vec31, vec3);
 
                     if (movingobjectposition1 != null)
@@ -221,7 +241,7 @@ public class EntityProjectile extends Entity implements IProjectile
                 //Handle entity hit
                 if (movingobjectposition.entityHit != null)
                 {
-                   handleEntityCollision(movingobjectposition, movingobjectposition.entityHit);
+                    handleEntityCollision(movingobjectposition, movingobjectposition.entityHit);
                 }
                 else //Handle block hit
                 {
@@ -241,14 +261,14 @@ public class EntityProjectile extends Entity implements IProjectile
         this.inBlockID = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
         this.inData = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
 
-        this.motionX = (double)((float)(movingobjectposition.hitVec.xCoord - this.posX));
-        this.motionY = (double)((float)(movingobjectposition.hitVec.yCoord - this.posY));
-        this.motionZ = (double)((float)(movingobjectposition.hitVec.zCoord - this.posZ));
+        this.motionX = (double) ((float) (movingobjectposition.hitVec.xCoord - this.posX));
+        this.motionY = (double) ((float) (movingobjectposition.hitVec.yCoord - this.posY));
+        this.motionZ = (double) ((float) (movingobjectposition.hitVec.zCoord - this.posZ));
 
         float velocity = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-        this.posX -= this.motionX / (double)velocity * 0.05000000074505806D;
-        this.posY -= this.motionY / (double)velocity * 0.05000000074505806D;
-        this.posZ -= this.motionZ / (double)velocity * 0.05000000074505806D;
+        this.posX -= this.motionX / (double) velocity * 0.05000000074505806D;
+        this.posY -= this.motionY / (double) velocity * 0.05000000074505806D;
+        this.posZ -= this.motionZ / (double) velocity * 0.05000000074505806D;
         //TODO this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
         this.inGround = true;
 
@@ -271,17 +291,17 @@ public class EntityProjectile extends Entity implements IProjectile
 
     protected void onImpactEntity(Entity entityHit, float velocity)
     {
-        int damage = MathHelper.ceiling_double_int((double)velocity * 2);
+        int damage = MathHelper.ceiling_double_int((double) velocity * 2);
 
         //If entity takes damage add velocity to entity
-        if (impact_damageSource != null && entityHit.attackEntityFrom(impact_damageSource, (float)damage))
+        if (impact_damageSource != null && entityHit.attackEntityFrom(impact_damageSource, (float) damage))
         {
             if (entityHit instanceof EntityLivingBase)
             {
                 float vel_horizontal = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
                 if (vel_horizontal > 0.0F)
                 {
-                    entityHit.addVelocity(this.motionX * 0.6000000238418579D / (double)vel_horizontal, 0.1D, this.motionZ * 0.6000000238418579D / (double)vel_horizontal);
+                    entityHit.addVelocity(this.motionX * 0.6000000238418579D / (double) vel_horizontal, 0.1D, this.motionZ * 0.6000000238418579D / (double) vel_horizontal);
                 }
             }
 
@@ -295,9 +315,9 @@ public class EntityProjectile extends Entity implements IProjectile
         this.posY += this.motionY;
         this.posZ += this.motionZ;
         float f2 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-        this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+        this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
-        for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f2) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
+        for (this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f2) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
         {
             ;
         }
@@ -345,19 +365,19 @@ public class EntityProjectile extends Entity implements IProjectile
     {
         //Normalize
         float velocity = MathHelper.sqrt_double(xx * xx + yy * yy + zz * zz);
-        xx /= (double)velocity;
-        yy /= (double)velocity;
-        zz /= (double)velocity;
+        xx /= (double) velocity;
+        yy /= (double) velocity;
+        zz /= (double) velocity;
 
         //Add randomization to make the arrow miss
-        xx += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)p_70186_8_;
-        yy += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)p_70186_8_;
-        zz += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)p_70186_8_;
+        xx += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) p_70186_8_;
+        yy += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) p_70186_8_;
+        zz += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) p_70186_8_;
 
         //Add multiplier
-        xx *= (double)multiplier;
-        yy *= (double)multiplier;
-        zz *= (double)multiplier;
+        xx *= (double) multiplier;
+        yy *= (double) multiplier;
+        zz *= (double) multiplier;
 
         //Set motion
         this.motionX = xx;
@@ -366,19 +386,21 @@ public class EntityProjectile extends Entity implements IProjectile
 
         //Update rotation
         float f3 = MathHelper.sqrt_double(xx * xx + zz * zz);
-        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(xx, zz) * 180.0D / Math.PI);
-        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(yy, (double)f3) * 180.0D / Math.PI);
+        this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(xx, zz) * 180.0D / Math.PI);
+        this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(yy, (double) f3) * 180.0D / Math.PI);
         this.ticksInGround = 0;
     }
 
-    @Override @SideOnly(Side.CLIENT)
+    @Override
+    @SideOnly(Side.CLIENT)
     public void setPositionAndRotation2(double p_70056_1_, double p_70056_3_, double p_70056_5_, float p_70056_7_, float p_70056_8_, int p_70056_9_)
     {
         this.setPosition(p_70056_1_, p_70056_3_, p_70056_5_);
         this.setRotation(p_70056_7_, p_70056_8_);
     }
 
-    @Override @SideOnly(Side.CLIENT)
+    @Override
+    @SideOnly(Side.CLIENT)
     public void setVelocity(double xx, double yy, double zz)
     {
         this.motionX = xx;
@@ -388,8 +410,8 @@ public class EntityProjectile extends Entity implements IProjectile
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
             float f = MathHelper.sqrt_double(xx * xx + zz * zz);
-            this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(xx, zz) * 180.0D / Math.PI);
-            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(yy, (double)f) * 180.0D / Math.PI);
+            this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(xx, zz) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(yy, (double) f) * 180.0D / Math.PI);
             this.prevRotationPitch = this.rotationPitch;
             this.prevRotationYaw = this.rotationYaw;
             this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
@@ -407,6 +429,12 @@ public class EntityProjectile extends Entity implements IProjectile
         nbt.setByte("inTile", (byte) Block.getIdFromBlock(this.inBlockID));
         nbt.setByte("inData", (byte) this.inData);
         nbt.setByte("inGround", (byte) (this.inGround ? 1 : 0));
+        if (sourceOfProjectile != null)
+            nbt.setTag("sourcePos", sourceOfProjectile.toNBT());
+        if (shootingEntity != null)
+        {
+            nbt.setString("Shooter-UUID", shootingEntity.getUniqueID().toString());
+        }
     }
 
     @Override
@@ -419,6 +447,12 @@ public class EntityProjectile extends Entity implements IProjectile
         this.inBlockID = Block.getBlockById(nbt.getByte("inTile") & 255);
         this.inData = nbt.getByte("inData") & 255;
         this.inGround = nbt.getByte("inGround") == 1;
+        if (nbt.hasKey("sourcePos"))
+            sourceOfProjectile = new Pos(nbt.getCompoundTag("sourcePos"));
+        if (nbt.hasKey("Shooter-UUID"))
+        {
+            shootingEntityUUID = UUID.fromString(nbt.getString("Shooter-UUID"));
+        }
     }
 
     @Override
@@ -427,7 +461,8 @@ public class EntityProjectile extends Entity implements IProjectile
         return false;
     }
 
-    @Override @SideOnly(Side.CLIENT)
+    @Override
+    @SideOnly(Side.CLIENT)
     public float getShadowSize()
     {
         return 0.0F;
