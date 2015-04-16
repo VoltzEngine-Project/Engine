@@ -6,6 +6,7 @@ import com.builtbroken.mc.lib.transform.ITransform;
 import com.builtbroken.mc.lib.transform.rotation.EulerAngle;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * Created by robert on 1/13/2015.
  */
-public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R>
+public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implements IPosition
 {
     public AbstractPos()
     {
@@ -478,5 +479,26 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R>
     public boolean isInsideMap()
     {
         return isAboveBedrock() && y() < 255;
+    }
+
+    //===================
+    //==ILocation Accessors==
+    //===================
+    @Override
+    public double getX()
+    {
+        return x();
+    }
+
+    @Override
+    public double getY()
+    {
+        return y();
+    }
+
+    @Override
+    public double getZ()
+    {
+        return z();
     }
 }

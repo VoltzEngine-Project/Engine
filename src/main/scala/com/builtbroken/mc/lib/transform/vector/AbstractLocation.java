@@ -4,6 +4,7 @@ import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.dispenser.ILocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -16,7 +17,7 @@ import net.minecraftforge.common.DimensionManager;
 /**
  * Created by robert on 1/13/2015.
  */
-public abstract class AbstractLocation<R extends AbstractLocation> extends AbstractPos<R>
+public abstract class AbstractLocation<R extends AbstractLocation> extends AbstractPos<R> implements ILocation
 {
     public World world;
 
@@ -67,6 +68,11 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     }
 
     public World world()
+    {
+        return world;
+    }
+
+    public World getWorld()
     {
         return world;
     }
