@@ -7,6 +7,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.dispenser.ILocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -48,6 +49,11 @@ public class Location extends AbstractLocation<Location> implements IWorldPositi
     public Location(IWorldPosition vec)
     {
         this(vec.world(), vec.x(), vec.y(), vec.z());
+    }
+
+    public Location(ILocation loc)
+    {
+        this(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ());
     }
 
     public Location(World world, IPos3D vector)
