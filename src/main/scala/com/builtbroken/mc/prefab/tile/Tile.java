@@ -1,5 +1,7 @@
 package com.builtbroken.mc.prefab.tile;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.jlib.data.vector.Pos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
@@ -394,12 +396,24 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
         return access;
     }
 
+    @Deprecated
     public Pos toVector3()
     {
         return new Pos(x(), y(), z());
     }
 
+    public Pos toPos()
+    {
+        return new Pos(x(), y(), z());
+    }
+
+    @Deprecated
     public Location toVectorWorld()
+    {
+        return new Location(world(), x(), y(), z());
+    }
+
+    public Location toLocation()
     {
         return new Location(world(), x(), y(), z());
     }
