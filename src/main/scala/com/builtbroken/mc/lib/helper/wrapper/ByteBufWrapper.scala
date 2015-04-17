@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.helper.wrapper
 
 import com.builtbroken.mc.api.ISave
+import com.builtbroken.mc.core.References
 import com.builtbroken.mc.core.network.{IByteBufWriter, IByteBufReader}
 import com.builtbroken.mc.lib.transform.vector.{Pos, Point}
 import cpw.mods.fml.common.network.ByteBufUtils
@@ -95,14 +96,14 @@ object ByteBufWrapper
           case x: FluidTank => buf <<< x
           case x: ISave => buf <<< x
           case x: ItemStack => ByteBufUtils.writeItemStack(buf, x)
-          case _ => throw new IllegalArgumentException("Resonant Engine ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
+          case _ => throw new IllegalArgumentException(References.NAME + ": ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
         }
       }
       catch
         {
           case ie: IllegalArgumentException =>
           {
-            if (ie.getMessage.contains("Resonant Engine"))
+            if (ie.getMessage.contains(References.NAME))
             {
               ie.printStackTrace()
             }
