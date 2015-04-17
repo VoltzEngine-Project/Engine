@@ -976,6 +976,29 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     //==== Helpers ==============
     //===========================
 
+    public double distance(Entity entity)
+    {
+        return distance(entity.posX, entity.posY, entity.posZ);
+    }
+
+    public double distance(IPos3D pos)
+    {
+        if(pos instanceof Pos3D)
+        {
+            return ((Pos3D) pos).distance(x() + 0.5, y() + 0.5, z() + 0.5);
+        }
+        return distance(pos.x(), pos.y(), pos.z());
+    }
+
+    public double distance(double x, double y, double z)
+    {
+        double xx = x() - x;
+        double yy = y() - y;
+        double zz = z() - z;
+
+        return Math.sqrt(xx * xx + yy * yy + zz * zz);
+    }
+
     public void setMeta(int meta)
     {
         world().setBlockMetadataWithNotify(xi(), yi(), zi(), meta, 3);
