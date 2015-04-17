@@ -41,6 +41,12 @@ public class MathUtility
 		return Math.min(Math.max(value, -bounds), bounds);
 	}
 
+
+    public static short randomShort()
+    {
+        return (short)(rand.nextInt(Short.MAX_VALUE * 2) - Short.MAX_VALUE);
+    }
+
 	/**
 	 * Generates an array of random numbers
 	 *
@@ -331,4 +337,5 @@ public class MathUtility
     {
         return (4 * Math.PI * (radius * radius * radius)) / 3;
     }
+
 }
