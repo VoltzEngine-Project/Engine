@@ -41,6 +41,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -1111,5 +1112,10 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
             else return 0;
         }
         return 0;
+    }
+
+    public ForgeDirection determineForgeDirection(EntityLivingBase entityLiving)
+    {
+        return ForgeDirection.getOrientation(determineOrientation(entityLiving));
     }
 }
