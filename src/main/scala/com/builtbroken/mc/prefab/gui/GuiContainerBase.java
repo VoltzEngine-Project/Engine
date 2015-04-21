@@ -62,7 +62,8 @@ public class GuiContainerBase extends GuiContainer
     public void initGui()
     {
         super.initGui();
-        fields.clear();
+        this.buttonList.clear();
+        this.fields.clear();
     }
 
     protected void drawString(String str, int x, int y, int color)
