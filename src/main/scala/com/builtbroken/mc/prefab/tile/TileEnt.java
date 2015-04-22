@@ -1,6 +1,8 @@
 package com.builtbroken.mc.prefab.tile;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
+import com.builtbroken.mc.core.network.packet.AbstractPacket;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
 import io.netty.buffer.ByteBuf;
@@ -57,10 +59,19 @@ public class TileEnt extends Tile
 
     }
 
-    public void sendDescPacket()
+    @Override
+    public AbstractPacket getDescPacket()
     {
-        PacketTile packet = new PacketTile(this, DESCRIPTION_PACKET_ID);
-        writeDescPacket(packet.data());
-        sendPacket(packet);
+        try
+        {
+            PacketTile packet = new PacketTile(this, DESCRIPTION_PACKET_ID);
+            writeDescPacket(packet.data());
+            return packet;
+        }
+        catch(Exception e)
+        {
+            Engine.instance.logger().error("Failed to write description packet for " + this + "  ", e);
+        }
+        return null;
     }
 }
