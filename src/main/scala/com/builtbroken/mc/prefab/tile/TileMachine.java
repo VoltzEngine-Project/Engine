@@ -1,6 +1,7 @@
 package com.builtbroken.mc.prefab.tile;
 
 import com.builtbroken.mc.api.tile.IRotation;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -29,7 +30,7 @@ public class TileMachine extends TileEnt implements IRotation
     @Override
     public ForgeDirection getDirection()
     {
-        if(facing == null)
+        if (facing == null)
             facing = ForgeDirection.NORTH;
         return facing;
     }
@@ -38,7 +39,7 @@ public class TileMachine extends TileEnt implements IRotation
     public void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
-        if(nbt.hasKey("facing"))
+        if (nbt.hasKey("facing"))
             this.facing = ForgeDirection.getOrientation(nbt.getByte("facing"));
     }
 
@@ -46,7 +47,19 @@ public class TileMachine extends TileEnt implements IRotation
     public void writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
-        if(facing != null && facing != ForgeDirection.NORTH)
-            nbt.setByte("facing", (byte)facing.ordinal());
+        if (facing != null && facing != ForgeDirection.NORTH)
+            nbt.setByte("facing", (byte) facing.ordinal());
+    }
+
+    @Override
+    public void readDescPacket(ByteBuf buf)
+    {
+        facing = ForgeDirection.getOrientation(buf.readByte());
+    }
+
+    @Override
+    public void writeDescPacket(ByteBuf buf)
+    {
+        buf.writeByte(facing != null ? facing.ordinal() : 2);
     }
 }
