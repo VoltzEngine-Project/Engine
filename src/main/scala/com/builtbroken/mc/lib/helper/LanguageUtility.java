@@ -58,6 +58,35 @@ public class LanguageUtility
         return wrap(key + (!key.endsWith(".name") ? ".name" : "")).getLocal();
     }
 
+
+    /**
+     * Uses the language file as a place to store settings
+     * for GUI components that use translations. In which
+     * the same component may need to change sizes with
+     * changes in words.
+     *
+     * @param key - string to use to look up the result
+     * @param backup - returned if key fails to be found or parsed
+     * @return integer parsed from a lang file
+     */
+    public static Integer getLangSetting(String key, int backup)
+    {
+        String result = getLocal(key);
+        if(result != null && !result.isEmpty())
+        {
+            try
+            {
+                return Integer.parseInt(key);
+            }
+            catch(NumberFormatException e)
+            {
+                if (Engine.runningAsDev)
+                    Engine.instance.logger().error("LanguageUtility.getLangSetting(" + key + ")", e);
+            }
+        }
+        return backup;
+    }
+
     /**
      * Helper version of getLocalName that places the translated string inside
      * minecraft's chat component system.
