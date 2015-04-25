@@ -8,6 +8,7 @@ import com.builtbroken.mc.api.tile.IPlayerUsing;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
+import com.builtbroken.mc.lib.helper.MathUtility;
 import com.builtbroken.mc.lib.helper.WrenchUtility;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.block.RenderTileDummy;
@@ -1092,7 +1093,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     {
         if (entityLiving != null)
         {
-            if (MathHelper.func_154353_e(entityLiving.posX - x()) < 2.0F && MathHelper.func_154353_e(entityLiving.posZ - z()) < 2.0F)
+            if (MathUtility.func_154353_e(entityLiving.posX - x()) < 2.0F && MathUtility.func_154353_e(entityLiving.posZ - z()) < 2.0F)
             {
                 double var5 = entityLiving.posY + 1.82D - entityLiving.yOffset;
                 if (var5 - y() > 2.0D)

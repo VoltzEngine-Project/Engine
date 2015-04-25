@@ -338,4 +338,15 @@ public class MathUtility
         return (4 * Math.PI * (radius * radius * radius)) / 3;
     }
 
+
+    /**
+     * MC method that has been copies to remove the @SideOnly(Side.CLIENT)
+     * @param p_154353_0_
+     * @return
+     */
+    public static int func_154353_e(double p_154353_0_)
+    {
+        return (int)(p_154353_0_ >= 0.0D ? p_154353_0_ : -p_154353_0_ + 1.0D);
+    }
+
 }
