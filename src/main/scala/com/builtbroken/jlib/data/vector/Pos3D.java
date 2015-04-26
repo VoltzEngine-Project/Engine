@@ -56,9 +56,9 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
     }
 
     public R sub(IPos3D other)
-{
-    return sub(other.x(), other.y(), other.z());
-}
+    {
+        return sub(other.x(), other.y(), other.z());
+    }
 
     public R subtract(IPos3D other)
     {
@@ -263,6 +263,6 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
     @Override
     public String toString()
     {
-        return "Pos3D [" + this.x() + "," + this.y() + "," + this.z()  + "]";
+        return "Pos3D [" + this.x() + "," + this.y() + "," + this.z() + "]";
     }
 }
