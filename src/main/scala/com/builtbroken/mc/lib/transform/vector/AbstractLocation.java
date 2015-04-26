@@ -110,7 +110,7 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
      */
     public Block getBlock()
     {
-        if (world != null)
+        if (world != null && world.getChunkProvider().chunkExists(xi() / 16, zi() / 16))
             return super.getBlock(world);
         else
             return null;
