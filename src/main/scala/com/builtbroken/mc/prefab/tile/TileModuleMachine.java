@@ -6,6 +6,7 @@ import com.builtbroken.mc.api.IUpdate;
 import com.builtbroken.mc.api.tile.IInventoryProvider;
 import com.builtbroken.mc.api.tile.ISided;
 import com.builtbroken.mc.api.tile.ITileModuleProvider;
+import com.builtbroken.mc.api.tile.node.IExternalInventory;
 import com.builtbroken.mc.api.tile.node.ITileModule;
 import com.builtbroken.mc.prefab.tile.module.TileModuleInventory;
 import net.minecraft.block.Block;
@@ -155,7 +156,7 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     }
 
     @Override
-    public TileModuleInventory getInventory()
+    public IInventory getInventory()
     {
         return inventory_module;
     }
@@ -179,9 +180,9 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public int[] getAccessibleSlotsFromSide(int side)
     {
-        if (getInventory() != null)
+        if (getInventory() instanceof ISidedInventory)
         {
-            return getInventory().getAccessibleSlotsFromSide(side);
+            return ((ISidedInventory)getInventory()).getAccessibleSlotsFromSide(side);
         }
         return new int[0];
     }
@@ -189,9 +190,9 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public boolean canInsertItem(int slot, ItemStack itemStack, int side)
     {
-        if (getInventory() != null)
+        if (getInventory() instanceof ISidedInventory)
         {
-            return getInventory().canInsertItem(side, itemStack, side);
+            return ((ISidedInventory)getInventory()).canInsertItem(side, itemStack, side);
         }
         return false;
     }
@@ -199,9 +200,9 @@ public class TileModuleMachine extends TileMachine implements ITileModuleProvide
     @Override
     public boolean canExtractItem(int slot, ItemStack itemStack, int side)
     {
-        if (getInventory() != null)
+        if (getInventory() instanceof ISidedInventory)
         {
-            return getInventory().canExtractItem(side, itemStack, side);
+            return ((ISidedInventory)getInventory()).canExtractItem(side, itemStack, side);
         }
         return false;
     }

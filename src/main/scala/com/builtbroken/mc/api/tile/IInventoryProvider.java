@@ -1,5 +1,6 @@
 package com.builtbroken.mc.api.tile;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.builtbroken.mc.api.tile.node.IExternalInventory;
@@ -15,7 +16,7 @@ import com.builtbroken.mc.api.tile.node.IExternalInventory;
 public interface IInventoryProvider
 {
     /** External inventory object */
-	public IExternalInventory getInventory();
+	public IInventory getInventory();
 
     /** Call back for IExternalInventory to check if the item can be stored */
 	public boolean canStore(ItemStack stack, int slot, ForgeDirection side);
