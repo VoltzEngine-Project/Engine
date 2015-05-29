@@ -1,7 +1,6 @@
 package com.builtbroken.mc.prefab.recipe;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
-import ic2.api.item.ItemWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
