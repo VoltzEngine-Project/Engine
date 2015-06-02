@@ -100,7 +100,13 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
         return data;
     }
 
+    @Deprecated
     public Pos toVector3()
+    {
+        return new Pos(x(), y(), z());
+    }
+
+    public Pos toPos()
     {
         return new Pos(x(), y(), z());
     }
