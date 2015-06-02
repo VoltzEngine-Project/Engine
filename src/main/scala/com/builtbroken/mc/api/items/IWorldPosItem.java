@@ -19,11 +19,20 @@ public interface IWorldPosItem
      * Creates a new object each method call
      * @return Location(World, x, y, z)
      */
-    public IWorldPosition getLocation(ItemStack stack);
+    IWorldPosition getLocation(ItemStack stack);
 
     /**
      * Sets the location data in the Item's NBT
      * @param loc
      */
-    public void setLocation(ItemStack stack, IWorldPosition loc);
+    void setLocation(ItemStack stack, IWorldPosition loc);
+
+    /**
+     * Used by the item to prevent access directly to the stored data. Designed
+     * to prevent tiles from direct access to data.
+     * @param stack - itemstack
+     * @param obj - entity or tile normally, object that is access that data
+     * @return true if the data can be accessed
+     */
+    boolean canAccessLocation(ItemStack stack, Object obj);
 }
