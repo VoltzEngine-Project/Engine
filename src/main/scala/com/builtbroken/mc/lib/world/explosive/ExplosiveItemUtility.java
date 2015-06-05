@@ -20,6 +20,7 @@ public class ExplosiveItemUtility
 {
     public static final String EXPLOSIVE_SAVE = "explosiveString";
     public static final String SIZE_SAVE = "exSize";
+
     /**
      * Adds information to the tool tip of the item
      *
@@ -30,17 +31,51 @@ public class ExplosiveItemUtility
      */
     public static void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean b)
     {
-        if (stack != null && stack.getItem() instanceof IExplosiveItem)
+        if (stack != null)
         {
-            IExplosiveHandler ex = ((IExplosiveItem) stack.getItem()).getExplosive(stack);
+            if(stack.getItem() instanceof IExplosiveItem)
+            {
+                addInformation(stack, ((IExplosiveItem) stack.getItem()).getExplosive(stack), player, lines, b);
+            }
+            else
+            {
+                lines.add(LanguageUtility.getLocalName("error.stack.invalid.IExplosiveItem"));
+            }
+        }
+        else
+        {
+            lines.add(LanguageUtility.getLocalName("error.null_stack"));
+        }
+    }
+
+    /**
+     * Adds information to the tool tip of the item
+     *
+     * @param stack  - itemstack to get the tooltip info for
+     * @param player - player who is viewing the item
+     * @param lines  - list of lines to add to the tool tip
+     * @param b      - unknown?
+     */
+    public static void addInformation(ItemStack stack, IExplosiveHandler ex, EntityPlayer player, List lines, boolean b)
+    {
+        if (stack != null)
+        {
             if (ex != null)
             {
-                lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(getExplosive(stack).getTranslationKey() +".name"));
+                lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(getExplosive(stack).getTranslationKey() + ".name"));
                 List<String> l = new ArrayList();
                 ex.addInfoToItem(stack, l);
-                for(String s : l)
+                for (String s : l)
                     lines.add(s);
             }
+            else
+            {
+                lines.add(LanguageUtility.getLocalName("explosive.error.null_ex"));
+            }
+        }
+        else
+        {
+            lines.add(LanguageUtility.getLocalName("error.null_stack"));
         }
     }
 
