@@ -38,6 +38,7 @@ public final class References
     public static final ResourceLocation GUI__MC_EMPTY_FILE = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "mc_base_empty.png");
     public static final ResourceLocation GUI_MC_BASE = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "mc_base.png");
 	public static final ResourceLocation GUI_COMPONENTS = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "gui_components.png");
+	public static final ResourceLocation GREY_TEXTURE = new ResourceLocation(DOMAIN, TEXTURE_DIRECTORY + "models/grey.png");
 
     public static final String BLOCK_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "blocks/";
 	public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items/";

@@ -1,0 +1,138 @@
+package com.builtbroken.jlib.model;
+
+import com.builtbroken.mc.lib.transform.vector.Pos;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ * http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
+ */
+public class IcoSphereCreator
+{
+    private Mesh geometry;
+    private int index;
+    private HashMap<Long, Integer> middlePointIndexCache;
+
+    // add vertex to mesh, fix position to be on unit sphere, return index
+    private int addVertex(Pos p)
+    {
+        double length = Math.sqrt(p.getX() * p.getX() + p.getY() * p.getY() + p.getZ() * p.getZ());
+        geometry.addVert(new Pos(p.getX() / length, p.getY() / length, p.getZ() / length));
+        return index++;
+    }
+
+    // return index of point in the middle of p1 and p2
+    private int getMiddlePoint(int p1, int p2)
+    {
+        // first check if we have it already
+        boolean firstIsSmaller = p1 < p2;
+        long smallerIndex = firstIsSmaller ? p1 : p2;
+        long greaterIndex = firstIsSmaller ? p2 : p1;
+        long  key = (smallerIndex << 32) + greaterIndex;
+
+
+        if (this.middlePointIndexCache.containsKey(key))
+        {
+            return this.middlePointIndexCache.get(key);
+        }
+
+        // not in cache, calculate it
+        Pos point1 = this.geometry.getVertices().get(p1);
+        Pos point2 = this.geometry.getVertices().get(p1);
+        Pos middle = new Pos(
+            (point1.x() + point2.x()) / 2.0,
+            (point1.y() + point2.y()) / 2.0,
+            (point1.z() + point2.z()) / 2.0);
+
+        // add vertex makes sure point is on unit sphere
+        int i = addVertex(middle); 
+
+        // store it, return index
+        this.middlePointIndexCache.put(key, i);
+        return i;
+    }
+
+    public Mesh Create(int recursionLevel)
+    {
+        this.geometry = new Mesh();
+        this.middlePointIndexCache = new HashMap();
+        this.index = 0;
+
+        // create 12 vertices of a icosahedron
+        double t = (1.0 + Math.sqrt(5.0)) / 2.0;
+
+        addVertex(new Pos(-1,  t,  0));
+        addVertex(new Pos( 1,  t,  0));
+        addVertex(new Pos(-1, -t,  0));
+        addVertex(new Pos( 1, -t,  0));
+
+        addVertex(new Pos( 0, -1,  t));
+        addVertex(new Pos( 0,  1,  t));
+        addVertex(new Pos( 0, -1, -t));
+        addVertex(new Pos( 0,  1, -t));
+
+        addVertex(new Pos( t,  0, -1));
+        addVertex(new Pos( t,  0,  1));
+        addVertex(new Pos(-t,  0, -1));
+        addVertex(new Pos(-t,  0,  1));
+
+
+        // create 20 triangles of the icosahedron
+        List<Face> faces = new ArrayList();
+
+        // 5 faces around point 0
+        faces.add(new Face(0, 11, 5));
+        faces.add(new Face(0, 5, 1));
+        faces.add(new Face(0, 1, 7));
+        faces.add(new Face(0, 7, 10));
+        faces.add(new Face(0, 10, 11));
+
+        // 5 adjacent faces 
+        faces.add(new Face(1, 5, 9));
+        faces.add(new Face(5, 11, 4));
+        faces.add(new Face(11, 10, 2));
+        faces.add(new Face(10, 7, 6));
+        faces.add(new Face(7, 1, 8));
+
+        // 5 faces around point 3
+        faces.add(new Face(3, 9, 4));
+        faces.add(new Face(3, 4, 2));
+        faces.add(new Face(3, 2, 6));
+        faces.add(new Face(3, 6, 8));
+        faces.add(new Face(3, 8, 9));
+
+        // 5 adjacent faces 
+        faces.add(new Face(4, 9, 5));
+        faces.add(new Face(2, 4, 11));
+        faces.add(new Face(6, 2, 10));
+        faces.add(new Face(8, 6, 7));
+        faces.add(new Face(9, 8, 1));
+
+
+        // refine triangles
+        for (int i = 0; i < recursionLevel; i++)
+        {
+            List<Face> faces2 = new ArrayList();
+            for (Face tri : faces)
+            {
+                // replace triangle by 4 triangles
+                int a = getMiddlePoint(tri.getVertexIndices()[0], tri.getVertexIndices()[1]);
+                int b = getMiddlePoint(tri.getVertexIndices()[1], tri.getVertexIndices()[2]);
+                int c = getMiddlePoint(tri.getVertexIndices()[2], tri.getVertexIndices()[0]);
+
+                faces2.add(new Face(tri.getVertexIndices()[0], a, c));
+                faces2.add(new Face(tri.getVertexIndices()[1], b, a));
+                faces2.add(new Face(tri.getVertexIndices()[2], c, b));
+                faces2.add(new Face(a, b, c));
+            }
+            faces = faces2;
+        }
+
+        // done, now add triangles to mesh
+        this.geometry.getFaces().addAll(faces);
+
+        return this.geometry;        
+    }
+}
