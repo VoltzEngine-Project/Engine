@@ -17,7 +17,7 @@ public class Model
 
     public void render()
     {
-        GL11.glBegin(GL11.GL_TRIANGLES);
+        GL11.glBegin(GL11.GL_LINE_LOOP);
         for(Mesh m : meshes)
         {
             for (Face face : m.getFaces())
@@ -44,6 +44,7 @@ public class Model
                 }
                 catch(ArrayIndexOutOfBoundsException e)
                 {
+                    e.printStackTrace();
                     Engine.instance.logger().error("Failed to render face " + v1_index +" " + v2_index + " " + v3_index);
                 }
             }

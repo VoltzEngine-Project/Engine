@@ -40,7 +40,7 @@ public class IcoSphereCreator
 
         // not in cache, calculate it
         Pos point1 = this.geometry.getVertices().get(p1);
-        Pos point2 = this.geometry.getVertices().get(p1);
+        Pos point2 = this.geometry.getVertices().get(p2);
         Pos middle = new Pos(
             (point1.x() + point2.x()) / 2.0,
             (point1.y() + point2.y()) / 2.0,
