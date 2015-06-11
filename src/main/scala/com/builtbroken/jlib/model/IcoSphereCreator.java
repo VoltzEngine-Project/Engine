@@ -1,5 +1,6 @@
 package com.builtbroken.jlib.model;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Point;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 
@@ -159,18 +160,18 @@ public class IcoSphereCreator
 
         for(Face face : this.geometry.getFaces())
         {
-            /* Code bellow the comment was derived from this code
-                triangle ( v1, v2, v3 )
-                edge1 = v2-v1
-                edge2 = v3-v1
-                triangle.normal = cross(edge1, edge2).normalize()
-             */
             Pos v1 = geometry.getVertices().get(face.vertexIndices[0]);
-            Pos v2 = geometry.getVertices().get(face.vertexIndices[0]);
-            Pos v3 = geometry.getVertices().get(face.vertexIndices[0]);
+            Pos v2 = geometry.getVertices().get(face.vertexIndices[1]);
+            Pos v3 = geometry.getVertices().get(face.vertexIndices[2]);
 
-            //Create the normal from the cross product of edge1 and edge2
-            geometry.normals.add(v2.sub(v1).cross(v3.sub(v1)).normalize());
+            //Generate normals
+            //Special thanks to this site https://www.opengl.org/wiki/Calculating_a_Surface_Normal
+            Pos u = v2.sub(v1);
+            Pos v = v3.sub(v1);
+            double x = (u.y() * v.z()) - (u.z() * v.y());
+            double y = (u.z() * v.x()) - (u.x() * v.z());
+            double z = (u.x() * v.y()) - (u.y() * v.x());
+            geometry.normals.add(new Pos(x, y, z).normalize());
 
             face.normalIndices[0] = geometry.normals.size() - 1;
             face.normalIndices[1] = geometry.normals.size() - 1;
