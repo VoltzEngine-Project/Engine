@@ -131,20 +131,47 @@ public class IcoSphereCreator
             for (Face tri : faces)
             {
                 // replace triangle by 4 triangles
-                int a = getMiddlePoint(tri.getVertexIndices()[0], tri.getVertexIndices()[1]);
-                int b = getMiddlePoint(tri.getVertexIndices()[1], tri.getVertexIndices()[2]);
-                int c = getMiddlePoint(tri.getVertexIndices()[2], tri.getVertexIndices()[0]);
+                int a = getMiddlePoint(tri.vertexIndices[0], tri.vertexIndices[1]);
+                int b = getMiddlePoint(tri.vertexIndices[1], tri.vertexIndices[2]);
+                int c = getMiddlePoint(tri.vertexIndices[2], tri.vertexIndices[0]);
 
-                faces2.add(new Face(tri.getVertexIndices()[0], a, c));
-                faces2.add(new Face(tri.getVertexIndices()[1], b, a));
-                faces2.add(new Face(tri.getVertexIndices()[2], c, b));
+                faces2.add(new Face(tri.vertexIndices[0], a, c));
+                faces2.add(new Face(tri.vertexIndices[1], b, a));
+                faces2.add(new Face(tri.vertexIndices[2], c, b));
                 faces2.add(new Face(a, b, c));
             }
             faces = faces2;
         }
 
+
+
+        /* TODO implement vertex normals
+         * vertex v1, v2, v3, ....
+         * triangle tr1, tr2, tr3 // all share vertex v1
+         * v1.normal = normalize( tr1.normal + tr2.normal + tr3.normal )
+         */
         // done, now add triangles to mesh
         this.geometry.getFaces().addAll(faces);
+
+        for(Face face : this.geometry.getFaces())
+        {
+            /* Code bellow the comment was derived from this code
+                triangle ( v1, v2, v3 )
+                edge1 = v2-v1
+                edge2 = v3-v1
+                triangle.normal = cross(edge1, edge2).normalize()
+             */
+            Pos v1 = geometry.getVertices().get(face.vertexIndices[0]);
+            Pos v2 = geometry.getVertices().get(face.vertexIndices[0]);
+            Pos v3 = geometry.getVertices().get(face.vertexIndices[0]);
+
+            //Create the normal from the cross product of edge1 and edge2
+            geometry.normals.add(v2.sub(v1).cross(v3.sub(v1)).normalize());
+
+            face.normalIndices[0] = geometry.normals.size() - 1;
+            face.normalIndices[1] = geometry.normals.size() - 1;
+            face.normalIndices[2] = geometry.normals.size() - 1;
+        }
 
         return this.geometry;
     }

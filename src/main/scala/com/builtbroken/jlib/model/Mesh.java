@@ -11,33 +11,18 @@ import java.util.List;
  */
 public class Mesh
 {
-    private final List<Pos> vertices = new ArrayList<Pos>();
-    private final List<Point> textureCoordinates = new ArrayList<Point>();
-    private final List<Pos> normals = new ArrayList<Pos>();
-    private final List<Face> faces = new ArrayList<Face>();
-
-    public boolean hasTextureCoordinates() {
-        return getTextureCoordinates().size() > 0;
-    }
-
-    public boolean hasNormals() {
-        return getNormals().size() > 0;
-    }
+    public final List<Pos> vertices = new ArrayList<Pos>();
+    public final List<Point> textureCoordinates = new ArrayList<Point>();
+    public final List<Pos> normals = new ArrayList<Pos>();
+    public final List<Face> faces = new ArrayList<Face>();
 
     public void addVert(Pos pos)
     {
         this.vertices.add(pos);
     }
+
     public List<Pos> getVertices() {
         return vertices;
-    }
-
-    public List<Point> getTextureCoordinates() {
-        return textureCoordinates;
-    }
-
-    public List<Pos> getNormals() {
-        return normals;
     }
 
     public List<Face> getFaces() {
