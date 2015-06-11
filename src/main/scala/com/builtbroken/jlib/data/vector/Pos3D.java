@@ -1,5 +1,7 @@
 package com.builtbroken.jlib.data.vector;
 
+import com.builtbroken.mc.lib.helper.MathUtility;
+
 import java.util.Random;
 
 /**
@@ -137,6 +139,37 @@ public abstract class Pos3D<R extends Pos3D> extends Pos2D<R>
     public R cross(double x, double y, double z)
     {
         return newPos(y() * z - z * y, z * x - x() * z, x() * y - y() * x);
+    }
+
+    //https://keithmaggio.wordpress.com/2011/02/15/math-magician-lerp-slerp-and-nlerp/
+    public R lerp(IPos3D end, float percent)
+    {
+        return newPos(x() + percent * (end.x() - x()), y() + percent * (end.y() - y()), z() + percent * (end.z() - z()));
+    }
+
+    //TODO test before using as its been slightly butchered to fit the method calls of this class
+    public R Slerp(IPos3D end, float percent)
+    {
+        // Dot product - the cosine of the angle between 2 vectors.
+        double dot = MathUtility.dclamp(dot(end), -1.0f, 1.0f);
+
+        // Acos(dot) returns the angle between start and end,
+        // And multiplying that by percent returns the angle between
+        // start and the final result.
+        double theta = Math.acos(dot) * percent;
+        R relativeVec = (R) (newPos((end.x() - x()) * dot, (end.y() - y()) * dot, (end.z() - z()) * dot).normalize());
+
+        // The final result.
+        double x = x() * Math.cos(theta) + relativeVec.x() * Math.sin(theta);
+        double y = y() * Math.cos(theta) + relativeVec.y() * Math.sin(theta);
+        double z = z() * Math.cos(theta) + relativeVec.z() * Math.sin(theta);
+
+        return newPos(x, y, z);
+    }
+
+    public R nlerp(IPos3D end, float percent)
+    {
+        return (R) lerp(end, percent).normalize();
     }
 
     /**

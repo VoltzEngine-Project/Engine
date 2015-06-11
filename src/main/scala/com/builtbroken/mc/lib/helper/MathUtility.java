@@ -201,6 +201,22 @@ public class MathUtility
 		}
 	}
 
+	public static double dclamp(double var, double min, double max)
+	{
+		if (var < min)
+		{
+			return min;
+		}
+		else if (var > max)
+		{
+			return max;
+		}
+		else
+		{
+			return var;
+		}
+	}
+
 	/**
 	 * Clamps an angle to 360 degree circle
 	 */

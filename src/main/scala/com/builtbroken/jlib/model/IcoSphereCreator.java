@@ -30,7 +30,7 @@ public class IcoSphereCreator
         boolean firstIsSmaller = p1 < p2;
         long smallerIndex = firstIsSmaller ? p1 : p2;
         long greaterIndex = firstIsSmaller ? p2 : p1;
-        long  key = (smallerIndex << 32) + greaterIndex;
+        long key = (smallerIndex << 32) + greaterIndex;
 
 
         if (this.middlePointIndexCache.containsKey(key))
@@ -42,18 +42,31 @@ public class IcoSphereCreator
         Pos point1 = this.geometry.getVertices().get(p1);
         Pos point2 = this.geometry.getVertices().get(p2);
         Pos middle = new Pos(
-            (point1.x() + point2.x()) / 2.0,
-            (point1.y() + point2.y()) / 2.0,
-            (point1.z() + point2.z()) / 2.0);
+                (point1.x() + point2.x()) / 2.0,
+                (point1.y() + point2.y()) / 2.0,
+                (point1.z() + point2.z()) / 2.0);
 
         // add vertex makes sure point is on unit sphere
-        int i = addVertex(middle); 
+        int i = addVertex(middle);
 
         // store it, return index
         this.middlePointIndexCache.put(key, i);
         return i;
     }
 
+    /**
+     * Generates an Iso Sphere using a sub divide process
+     * 1 - > 12 vert
+     * 2 - > 42 vert
+     * 3 - > 62
+     * 4 - > 642
+     * 5 - > 2562
+     * 6 - > 10242
+     * 7 - > 40962
+     *
+     * @param recursionLevel - number of times to sub divide the triangles into 4 more triangles
+     * @return Mesh containing the data for the sphere
+     */
     public Mesh Create(int recursionLevel)
     {
         this.geometry = new Mesh();
@@ -63,20 +76,20 @@ public class IcoSphereCreator
         // create 12 vertices of a icosahedron
         double t = (1.0 + Math.sqrt(5.0)) / 2.0;
 
-        addVertex(new Pos(-1,  t,  0));
-        addVertex(new Pos( 1,  t,  0));
-        addVertex(new Pos(-1, -t,  0));
-        addVertex(new Pos( 1, -t,  0));
+        addVertex(new Pos(-1, t, 0));
+        addVertex(new Pos(1, t, 0));
+        addVertex(new Pos(-1, -t, 0));
+        addVertex(new Pos(1, -t, 0));
 
-        addVertex(new Pos( 0, -1,  t));
-        addVertex(new Pos( 0,  1,  t));
-        addVertex(new Pos( 0, -1, -t));
-        addVertex(new Pos( 0,  1, -t));
+        addVertex(new Pos(0, -1, t));
+        addVertex(new Pos(0, 1, t));
+        addVertex(new Pos(0, -1, -t));
+        addVertex(new Pos(0, 1, -t));
 
-        addVertex(new Pos( t,  0, -1));
-        addVertex(new Pos( t,  0,  1));
-        addVertex(new Pos(-t,  0, -1));
-        addVertex(new Pos(-t,  0,  1));
+        addVertex(new Pos(t, 0, -1));
+        addVertex(new Pos(t, 0, 1));
+        addVertex(new Pos(-t, 0, -1));
+        addVertex(new Pos(-t, 0, 1));
 
 
         // create 20 triangles of the icosahedron
@@ -133,6 +146,6 @@ public class IcoSphereCreator
         // done, now add triangles to mesh
         this.geometry.getFaces().addAll(faces);
 
-        return this.geometry;        
+        return this.geometry;
     }
 }

@@ -14,11 +14,15 @@ import java.util.List;
 public class Model
 {
     public final List<Mesh> meshes = new ArrayList();
+    public boolean line = false;
 
     public void render()
     {
-        GL11.glBegin(GL11.GL_LINE_LOOP);
-        for(Mesh m : meshes)
+        if (line)
+            GL11.glBegin(GL11.GL_LINE_LOOP);
+        else
+            GL11.glBegin(GL11.GL_TRIANGLES);
+        for (Mesh m : meshes)
         {
             for (Face face : m.getFaces())
             {
@@ -41,14 +45,13 @@ public class Model
                     //GL11.glNormal3f(n3.xf(), n3.yf(), n3.zf());
                     Pos v3 = m.getVertices().get(v3_index);
                     GL11.glVertex3f(v3.xf(), v3.yf(), v3.zf());
-                }
-                catch(ArrayIndexOutOfBoundsException e)
+                } catch (ArrayIndexOutOfBoundsException e)
                 {
                     e.printStackTrace();
-                    Engine.instance.logger().error("Failed to render face " + v1_index +" " + v2_index + " " + v3_index);
+                    Engine.instance.logger().error("Failed to render face " + v1_index + " " + v2_index + " " + v3_index);
                 }
             }
         }
-        GL11. glEnd();
+        GL11.glEnd();
     }
 }
