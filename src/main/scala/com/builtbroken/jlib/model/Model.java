@@ -50,18 +50,21 @@ public class Model
         }
         GL11.glEnd();
 
-        GL11.glColor3f(Color.BLUE.getRed(), Color.BLUE.getGreen(), Color.BLUE.getBlue());
-        for (Mesh m : meshes)
+        if(render_normals)
         {
-            for (Face face : m.getFaces())
+            GL11.glColor3f(Color.BLUE.getRed(), Color.BLUE.getGreen(), Color.BLUE.getBlue());
+            for (Mesh m : meshes)
             {
-                Pos center = center2(m.vertices.get(face.vertexIndices[0]), m.vertices.get(face.vertexIndices[1]), m.vertices.get(face.vertexIndices[2]));
-                Pos out = center.add(m.normals.get(face.normalIndices[0]));
+                for (Face face : m.getFaces())
+                {
+                    Pos center = center2(m.vertices.get(face.vertexIndices[0]), m.vertices.get(face.vertexIndices[1]), m.vertices.get(face.vertexIndices[2]));
+                    Pos out = center.add(m.normals.get(face.normalIndices[0]));
 
-                GL11.glBegin(GL11.GL_LINE_LOOP);
-                GL11.glVertex3f(center.xf(), center.yf(), center.zf());
-                GL11.glVertex3f(out.xf(), out.yf(), out.zf());
-                GL11.glEnd();
+                    GL11.glBegin(GL11.GL_LINE_LOOP);
+                    GL11.glVertex3f(center.xf(), center.yf(), center.zf());
+                    GL11.glVertex3f(out.xf(), out.yf(), out.zf());
+                    GL11.glEnd();
+                }
             }
         }
     }
