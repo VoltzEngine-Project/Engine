@@ -1,5 +1,6 @@
 package com.builtbroken.jlib.model;
 
+import com.builtbroken.mc.lib.transform.vector.Point;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.ArrayList;
@@ -152,6 +153,9 @@ public class IcoSphereCreator
          */
         // done, now add triangles to mesh
         this.geometry.getFaces().addAll(faces);
+        this.geometry.textureCoordinates.add(new Point(0, 0));
+        this.geometry.textureCoordinates.add(new Point(0.5, 1));
+        this.geometry.textureCoordinates.add(new Point(1, 0));
 
         for(Face face : this.geometry.getFaces())
         {
@@ -171,6 +175,10 @@ public class IcoSphereCreator
             face.normalIndices[0] = geometry.normals.size() - 1;
             face.normalIndices[1] = geometry.normals.size() - 1;
             face.normalIndices[2] = geometry.normals.size() - 1;
+
+            face.textureCoordinateIndices[0] = 0;
+            face.textureCoordinateIndices[1] = 1;
+            face.textureCoordinateIndices[2] = 2;
         }
 
         return this.geometry;
