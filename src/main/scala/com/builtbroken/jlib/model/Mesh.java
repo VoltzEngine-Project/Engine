@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Dark on 6/10/2015.
  */
-public class Mesh
+public class Mesh implements Cloneable
 {
     public final List<Pos> vertices = new ArrayList<Pos>();
     public final List<Point> textureCoordinates = new ArrayList<Point>();
@@ -27,5 +27,17 @@ public class Mesh
 
     public List<Face> getFaces() {
         return faces;
+    }
+
+    @Override
+    public Mesh clone()
+    {
+        Mesh mesh = new Mesh();
+        mesh.vertices.addAll(vertices);
+        mesh.textureCoordinates.addAll(textureCoordinates);
+        mesh.normals.addAll(normals);
+        for(Face face : faces)
+            mesh.faces.add(face.clone());
+        return mesh;
     }
 }

@@ -12,11 +12,18 @@ import java.util.List;
  * Created by Dark on 6/10/2015.
  * https://github.com/OskarVeerhoek/YouTube-tutorials/blob/master/src/episode_24/ModelDemo.java
  */
-public class Model
+public class Model implements Cloneable
 {
     public final List<Mesh> meshes = new ArrayList();
     public boolean render_wireframe = false;
     public boolean render_normals = false;
+
+    public Model(Mesh... meshes)
+    {
+        if (meshes != null)
+            for (Mesh mesh : meshes)
+                this.meshes.add(mesh);
+    }
 
     public void render()
     {
@@ -41,8 +48,7 @@ public class Model
 
                     //Three
                     renderVert(m, face, 2);
-                }
-                catch (ArrayIndexOutOfBoundsException e)
+                } catch (ArrayIndexOutOfBoundsException e)
                 {
                     e.printStackTrace();
                 }
@@ -50,7 +56,7 @@ public class Model
         }
         GL11.glEnd();
 
-        if(render_normals)
+        if (render_normals)
         {
             GL11.glColor3f(Color.BLUE.getRed(), Color.BLUE.getGreen(), Color.BLUE.getBlue());
             for (Mesh m : meshes)
@@ -77,7 +83,7 @@ public class Model
         Pos v1 = m.getVertices().get(face.vertexIndices[i]);
         GL11.glVertex3f(v1.xf(), v1.yf(), v1.zf());
 
-        if(m.textureCoordinates.size() >= face.textureCoordinateIndices[i])
+        if (m.textureCoordinates.size() >= face.textureCoordinateIndices[i])
         {
             Point t1 = m.textureCoordinates.get(face.textureCoordinateIndices[i]);
             GL11.glTexCoord2f(t1.xf(), t1.yf());
@@ -87,5 +93,16 @@ public class Model
     static Pos center2(Pos v1, Pos v2, Pos v3)
     {
         return v1.add(v2).add(v3).divide(3);
+    }
+
+    @Override
+    public Model clone()
+    {
+        Model model = new Model();
+        for(Mesh mesh : meshes)
+            model.meshes.add(mesh.clone());
+        model.render_normals = render_normals;
+        model.render_wireframe = render_wireframe;
+        return model;
     }
 }

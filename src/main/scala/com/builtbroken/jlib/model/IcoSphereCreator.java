@@ -13,9 +13,58 @@ import java.util.List;
  */
 public class IcoSphereCreator
 {
+    //I know this only saves milli seconds but meh
+    private static final HashMap<Integer, Mesh> SPHERE_CACHE = new HashMap();
+
     private Mesh geometry;
     private int index;
     private HashMap<Long, Integer> middlePointIndexCache;
+
+    public static void init_cache()
+    {
+        SPHERE_CACHE.clear();
+        for (int i = 0; i < 6; i++)
+        {
+            IcoSphereCreator creator = new IcoSphereCreator();
+            SPHERE_CACHE.put(i, creator.Create(i));
+        }
+    }
+
+    /**
+     * Creates a new mesh sphere
+     * @param level - number of times to subdivide the triangles
+     * @return mesh ico sphere, if mesh is cached it will clone
+     */
+    public static Mesh create(int level)
+    {
+        return create(level, true);
+    }
+
+    /**
+     * Creates a new mesh sphere
+     * @param level - number of times to subdivide the triangles
+     * @param cache - should the mesh be cached for faster creation,
+     *                  false if you know your not going to need
+     *                  the mesh again
+     * @return mesh ico sphere, if mesh is cached it will clone
+     */
+    public static Mesh create(int level, boolean cache)
+    {
+        if (!SPHERE_CACHE.containsKey(level) || SPHERE_CACHE.get(level) == null)
+        {
+            IcoSphereCreator creator = new IcoSphereCreator();
+            if(cache)
+            {
+                SPHERE_CACHE.put(level, creator.Create(level));
+            }
+            else
+            {
+                return creator.Create(level);
+            }
+        }
+        return SPHERE_CACHE.get(level).clone();
+
+    }
 
     // add vertex to mesh, fix position to be on unit sphere, return index
     private int addVertex(Pos p)
@@ -69,7 +118,7 @@ public class IcoSphereCreator
      * @param recursionLevel - number of times to sub divide the triangles into 4 more triangles
      * @return Mesh containing the data for the sphere
      */
-    public Mesh Create(int recursionLevel)
+    private Mesh Create(int recursionLevel)
     {
         this.geometry = new Mesh();
         this.middlePointIndexCache = new HashMap();
@@ -158,7 +207,7 @@ public class IcoSphereCreator
         this.geometry.textureCoordinates.add(new Point(0.5, 1));
         this.geometry.textureCoordinates.add(new Point(1, 0));
 
-        for(Face face : this.geometry.getFaces())
+        for (Face face : this.geometry.getFaces())
         {
             Pos v1 = geometry.getVertices().get(face.vertexIndices[0]);
             Pos v2 = geometry.getVertices().get(face.vertexIndices[1]);
