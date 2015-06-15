@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -158,16 +159,25 @@ public class ModManager
         Tile newTile = spatial.newTile();
         if (newTile != null)
         {
-            proxy.registerTileEntity(actual_name, modPrefix, block, newTile);
-            if (newTile.getClass() != spatial.getClass())
-                temp_registry_list.add(newTile);
-            if (spatial.renderTileEntity)
-            {
-                proxy.registerDummyRenderer(newTile.getClass());
-            }
+            registerTile(actual_name, block, spatial, newTile);
         }
 
         return block;
+    }
+
+    public void registerTile(String actual_name, Block block, Tile spatial, Tile newTile)
+    {
+        registerTileEntity(actual_name, block, newTile);
+        if (newTile.getClass() != spatial.getClass())
+            temp_registry_list.add(newTile);
+        if (spatial.renderTileEntity)
+        {
+            proxy.registerDummyRenderer(newTile.getClass());
+        }
+    }
+    public void registerTileEntity(String actual_name, Block block, TileEntity tile)
+    {
+        proxy.registerTileEntity(actual_name, modPrefix, block, tile);
     }
 
     /**

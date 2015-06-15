@@ -2,6 +2,7 @@ package com.builtbroken.jlib.model;
 
 import com.builtbroken.mc.lib.transform.vector.Point;
 import com.builtbroken.mc.lib.transform.vector.Pos;
+import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Created by Dark on 6/10/2015.
  * https://github.com/OskarVeerhoek/YouTube-tutorials/blob/master/src/episode_24/ModelDemo.java
+ * http://thecodinguniverse.com/wp-content/uploads/2012/07/OpenGL-Shapes.png
  */
 public class Model implements Cloneable
 {
@@ -73,6 +75,28 @@ public class Model implements Cloneable
                 }
             }
         }
+    }
+
+    public void tessellate()
+    {
+        Tessellator.instance.startDrawing(GL11.GL_TRIANGLES);
+        for (Mesh m : meshes)
+        {
+            for (Face face : m.getFaces())
+            {
+                tessVert(m, face, 0);
+                tessVert(m, face, 1);
+                tessVert(m, face, 2);
+            }
+        }
+        Tessellator.instance.draw();
+    }
+
+    protected void tessVert(Mesh m, Face face, int i)
+    {
+        Pos n1 = m.vertices.get(face.vertexIndices[i]);
+        Point t1 = m.textureCoordinates.get(face.textureCoordinateIndices[i]);
+        Tessellator.instance.addVertexWithUV(n1.xf(), n1.yf(), n1.zf(), t1.xf(), t1.yf());
     }
 
     protected void renderVert(Mesh m, Face face, int i)
