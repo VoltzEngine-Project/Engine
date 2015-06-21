@@ -610,10 +610,8 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
                 if (pos.y() >= higherPoint.y() && pos.y() - higherPoint.y() >= distance)
                     return false;
 
-                if (pos.z() >= higherPoint.z() && pos.z() - higherPoint.z() >= distance)
-                    return false;
+                return !(pos.z() >= higherPoint.z() && pos.z() - higherPoint.z() >= distance);
 
-                return true;
             }
             else if(lowerPoint != null)
             {

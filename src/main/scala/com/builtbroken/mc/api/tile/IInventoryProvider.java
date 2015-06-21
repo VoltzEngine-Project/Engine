@@ -16,11 +16,11 @@ import com.builtbroken.mc.api.tile.node.IExternalInventory;
 public interface IInventoryProvider
 {
     /** External inventory object */
-	public IInventory getInventory();
+    IInventory getInventory();
 
     /** Call back for IExternalInventory to check if the item can be stored */
-	public boolean canStore(ItemStack stack, int slot, ForgeDirection side);
+    boolean canStore(ItemStack stack, int slot, ForgeDirection side);
 
     /** Call back for IExternalInventory to check if the item can be removed */
-	public boolean canRemove(ItemStack stack, int slot, ForgeDirection side);
+    boolean canRemove(ItemStack stack, int slot, ForgeDirection side);
 }

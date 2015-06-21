@@ -24,7 +24,7 @@ public enum PressureUnit
 	String name;
 	float conversionToPa;
 
-	private PressureUnit(String name, String symbol, String units, float conversionToPa)
+	PressureUnit(String name, String symbol, String units, float conversionToPa)
 	{
 		this.name = name;
 		this.symbol = symbol;
@@ -32,7 +32,7 @@ public enum PressureUnit
 		this.conversionToPa = conversionToPa;
 	}
 
-	private PressureUnit(String name, String symbol, String units, String detailedUnits, float conversionToPa)
+	PressureUnit(String name, String symbol, String units, String detailedUnits, float conversionToPa)
 	{
 		this(name, symbol, units, conversionToPa);
 		this.unitsDetaled = detailedUnits;

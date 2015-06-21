@@ -14,5 +14,5 @@ public interface IByteBufWriter
     /**
      * @param buf a {@link io.netty.buffer.ByteBuf} to write to.
      */
-    public ByteBuf writeBytes(ByteBuf buf);
+    ByteBuf writeBytes(ByteBuf buf);
 }

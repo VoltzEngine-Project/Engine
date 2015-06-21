@@ -47,7 +47,7 @@ public class RecipeUtility
 		{
 			if (obj instanceof IRecipe)
 			{
-				if (((IRecipe) obj).equals(recipe) || obj == recipe)
+				if (obj.equals(recipe) || obj == recipe)
 				{
 					CraftingManager.getInstance().getRecipeList().remove(obj);
 					CraftingManager.getInstance().getRecipeList().add(newRecipe);
@@ -88,7 +88,7 @@ public class RecipeUtility
 			{
 				if (obj instanceof IRecipe)
 				{
-					if (((IRecipe) obj).equals(recipe) || obj == recipe)
+					if (obj.equals(recipe) || obj == recipe)
 					{
 						CraftingManager.getInstance().getRecipeList().remove(obj);
 						return true;

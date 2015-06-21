@@ -18,22 +18,22 @@ public interface IMachineRecipe<O extends Object, I extends Object>
     /**
      * Type of recipe
      */
-    public String getType();
+    String getType();
 
     /**
      * Gets the input items as simple as possible
      */
-    public Collection<I> getValidInputs();
+    Collection<I> getValidInputs();
 
     /**
      * Gets the output items, mainly used for NEI
      */
-    public O getOutput();
+    O getOutput();
 
     /**
      * Called before processing the recipe, or if more than one handler exists for the input items
      */
-    public boolean shouldHandleRecipe(Object[] inputs);
+    boolean shouldHandleRecipe(Object[] inputs);
 
     /**
      * Called to handle the recipe
@@ -43,5 +43,5 @@ public interface IMachineRecipe<O extends Object, I extends Object>
      * @param failureChance - chance to fail, optional
      * @return result
      */
-    public O handleRecipe(Object[] inputs, float extraChance, float failureChance);
+    O handleRecipe(Object[] inputs, float extraChance, float failureChance);
 }

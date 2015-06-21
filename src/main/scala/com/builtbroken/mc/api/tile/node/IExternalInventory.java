@@ -13,10 +13,10 @@ public interface IExternalInventory extends IInventory
 	/**
 	 * Gets the inventory array. ForgeDirection.UNKOWN must return all sides
 	 */
-	public ItemStack[] getContainedItems();
+	ItemStack[] getContainedItems();
 
 	/**
 	 * Deletes all the items in the inventory
 	 */
-	public void clear();
+	void clear();
 }

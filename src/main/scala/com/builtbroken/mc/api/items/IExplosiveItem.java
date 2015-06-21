@@ -18,5 +18,5 @@ public interface IExplosiveItem
      * @param stack - itemstack that contains an instance of this item
      * @return explosive instance, or null if it doesn't contain one
      */
-    public IExplosiveHandler getExplosive(ItemStack stack);
+    IExplosiveHandler getExplosive(ItemStack stack);
 }

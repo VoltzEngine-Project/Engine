@@ -14,7 +14,7 @@ public interface IEnergyCapacitor
      * @param from side coming  into the machine
      * @return amount of energy stored on the side
      */
-    public int getEnergyForSide(ForgeDirection from);
+    int getEnergyForSide(ForgeDirection from);
 
     /**
      * Sets how much energy the tile contains for the side
@@ -26,7 +26,7 @@ public interface IEnergyCapacitor
      *
      * @param from side coming  into the machine
      */
-    public void setEnergyForSide(ForgeDirection from, int energy);
+    void setEnergyForSide(ForgeDirection from, int energy);
 
     /**
      * Used to see how much energy the tile can stored
@@ -34,5 +34,5 @@ public interface IEnergyCapacitor
      * @param from side coming  into the machine
      * @return amount of energy the tile could stored on the side
      */
-    public int getMaxEnergyForSide(ForgeDirection from);
+    int getMaxEnergyForSide(ForgeDirection from);
 }

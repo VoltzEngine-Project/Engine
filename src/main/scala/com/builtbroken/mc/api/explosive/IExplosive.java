@@ -9,5 +9,5 @@ package com.builtbroken.mc.api.explosive;
 public interface IExplosive
 {
     /** Registered explosive handler */
-	public IExplosiveHandler getExplosive();
+    IExplosiveHandler getExplosive();
 }

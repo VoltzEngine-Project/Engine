@@ -7,9 +7,9 @@ package com.builtbroken.mc.lib.mod.loadable;
  */
 public interface ILoadable
 {
-	public void preInit();
+	void preInit();
 
-	public void init();
+	void init();
 
-	public void postInit();
+	void postInit();
 }

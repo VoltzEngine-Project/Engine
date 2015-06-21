@@ -16,6 +16,6 @@ public interface IPacketReceiver
 	 * @param player - player that is receiving the packet
 	 * @param packet - The packet instance that was sending this packet.
 	 */
-	public void read(ByteBuf buf, EntityPlayer player, PacketType packet);
+	void read(ByteBuf buf, EntityPlayer player, PacketType packet);
 
 }

@@ -188,13 +188,13 @@ public enum ChemElement
 
 	public HeatingData heatData;
 
-	private ChemElement(String[] name, String symbol, float atomicMass, float density, ElementProperty type, MatterPhase defaultPhase)
+	ChemElement(String[] name, String symbol, float atomicMass, float density, ElementProperty type, MatterPhase defaultPhase)
 	{
 		this(name[0], symbol, atomicMass, density, type, defaultPhase);
 		this.elementNames = name;
 	}
 
-	private ChemElement(String name, String symbol, float atomicMass, float density, ElementProperty type, MatterPhase defaultPhase)
+	ChemElement(String name, String symbol, float atomicMass, float density, ElementProperty type, MatterPhase defaultPhase)
 	{
 		this.elementName = name;
 		this.elementSymbol = symbol;
@@ -204,7 +204,7 @@ public enum ChemElement
 		this.density = density;
 	}
 
-	private ChemElement(String name, String symbol, float atomicMass, float density, ElementProperty type, MatterPhase defaultPhase, HeatingData heatData)
+	ChemElement(String name, String symbol, float atomicMass, float density, ElementProperty type, MatterPhase defaultPhase, HeatingData heatData)
 	{
 		this(name, symbol, atomicMass, density, type, defaultPhase);
 		this.heatData = heatData;

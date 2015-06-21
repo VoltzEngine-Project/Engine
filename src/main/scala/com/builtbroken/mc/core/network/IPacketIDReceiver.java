@@ -9,5 +9,5 @@ import com.builtbroken.mc.core.network.packet.PacketType;
  */
 public interface IPacketIDReceiver
 {
-	public boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type);
+	boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type);
 }

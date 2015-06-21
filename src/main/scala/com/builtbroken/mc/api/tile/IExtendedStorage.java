@@ -9,5 +9,5 @@ import net.minecraft.item.ItemStack;
  */
 public interface IExtendedStorage
 {
-	public ItemStack addStackToStorage(ItemStack stack);
+	ItemStack addStackToStorage(ItemStack stack);
 }

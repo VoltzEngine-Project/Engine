@@ -15,5 +15,5 @@ public interface ILinkable
      * @return translation key of the response to linking, if it starts with error
      * it will not link
      */
-    public String link(Location pos, short pass);
+    String link(Location pos, short pass);
 }

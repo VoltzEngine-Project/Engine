@@ -71,7 +71,7 @@ public enum TemperatureUnit
 	public String name, symbol;
 	public ITempConversion conversion;
 
-	private TemperatureUnit(String name, String symbol, ITempConversion conversion)
+	TemperatureUnit(String name, String symbol, ITempConversion conversion)
 	{
 		this.name = name;
 		this.symbol = symbol;
@@ -89,10 +89,10 @@ public enum TemperatureUnit
 		return TemperatureUnit.convert(this, unit, temperature);
 	}
 
-	public static interface ITempConversion
+	public interface ITempConversion
 	{
-		public float toKelvin(float temp);
+		float toKelvin(float temp);
 
-		public float fromKelvin(float temp);
+		float fromKelvin(float temp);
 	}
 }

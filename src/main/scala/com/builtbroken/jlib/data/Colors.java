@@ -33,7 +33,7 @@ public enum Colors
     //TODO replace with Color object
 	public final Color color;
 
-	private Colors(String s, Color color)
+	Colors(String s, Color color)
 	{
 		code = s;
 		this.color = color;

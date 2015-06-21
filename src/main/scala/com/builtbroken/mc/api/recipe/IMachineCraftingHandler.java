@@ -20,6 +20,6 @@ public interface IMachineCraftingHandler
      * @param outputSlots  - inventory slots that can be outputted to
      * @param storageSlots - optional, used for more complex tiles
      */
-    public void doCrafting(IInventory inv, Object inputs, Object outputs, int[] inputSlots, int[] outputSlots, int[] storageSlots);
+    void doCrafting(IInventory inv, Object inputs, Object outputs, int[] inputSlots, int[] outputSlots, int[] storageSlots);
 
 }

@@ -11,12 +11,12 @@ public interface IEnergyBufferItem
     /**
      * Get the amount of energy currently stored in the item.
      */
-    public double getEnergy(ItemStack theItem);
+    double getEnergy(ItemStack theItem);
 
     /**
      * Get the max amount of energy that can be stored in the item.
      */
-    public double getEnergyCapacity(ItemStack theItem);
+    double getEnergyCapacity(ItemStack theItem);
 
     /**
      * Sets the amount of energy in the ItemStack. Use recharge or discharge instead of calling this
@@ -25,5 +25,5 @@ public interface IEnergyBufferItem
      * @param itemStack - the ItemStack.
      * @param energy    - Amount of electrical energy.
      */
-    public void setEnergy(ItemStack itemStack, double energy);
+    void setEnergy(ItemStack itemStack, double energy);
 }

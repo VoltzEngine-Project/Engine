@@ -39,7 +39,7 @@ public enum Symbols
 
     private final char c;
 
-    private Symbols(char c)
+    Symbols(char c)
     {
         this.c = c;
     }

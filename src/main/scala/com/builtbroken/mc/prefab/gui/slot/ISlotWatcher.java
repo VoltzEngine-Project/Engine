@@ -8,5 +8,5 @@ public interface ISlotWatcher
 	/**
 	 * Will trigger if the watched slot has changed
 	 */
-	public void slotContentsChanged(int slot);
+	void slotContentsChanged(int slot);
 }

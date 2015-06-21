@@ -7,15 +7,15 @@ import com.builtbroken.mc.api.tile.ITileModuleProvider;
 public interface ITileModule
 {
 	/** Called when the machine has loaded into the world */
-	public void onJoinWorld();
+    void onJoinWorld();
 
     /** Parent block has changed, use this time to rebuild data based on the world */
-    public void onParentChange();
+    void onParentChange();
 
 	/** Called when the module is removed from the machine, or the machine is removed from the world */
-	public void onLeaveWorld();
+    void onLeaveWorld();
 
     /** The object that houses this node */
-    public ITileModuleProvider getParent();
+    ITileModuleProvider getParent();
 
 }

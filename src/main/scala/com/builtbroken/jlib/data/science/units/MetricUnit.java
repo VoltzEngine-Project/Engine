@@ -32,7 +32,7 @@ public enum MetricUnit
 	 */
 	public float value;
 
-	private MetricUnit(String name, String symbol, float value)
+	MetricUnit(String name, String symbol, float value)
 	{
 		this.name = name;
 		this.symbol = symbol;

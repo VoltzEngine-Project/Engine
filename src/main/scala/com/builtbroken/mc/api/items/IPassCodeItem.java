@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
  */
 public interface IPassCodeItem
 {
-    public short getCode(ItemStack stack);
+    short getCode(ItemStack stack);
 
-    public void setCode(ItemStack stack, short code);
+    void setCode(ItemStack stack, short code);
 }

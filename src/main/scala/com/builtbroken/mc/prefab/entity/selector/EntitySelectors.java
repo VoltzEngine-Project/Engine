@@ -46,7 +46,7 @@ public enum EntitySelectors
     private final EntitySelector selector;
     private final String DISPLAY_NAME;
 
-    private EntitySelectors(String name, EntitySelector selector)
+    EntitySelectors(String name, EntitySelector selector)
     {
         this.DISPLAY_NAME = name;
         this.selector = selector;

@@ -44,7 +44,7 @@ public enum ImperialUnits
 	public String name, symbol;
 	float toFeet;
 
-	private ImperialUnits(String name, String symbol, float toFeet)
+	ImperialUnits(String name, String symbol, float toFeet)
 	{
 		this.name = name;
 		this.symbol = symbol;

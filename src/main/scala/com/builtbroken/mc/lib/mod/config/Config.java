@@ -35,13 +35,13 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Config
 {
-	public String category() default Configuration.CATEGORY_GENERAL;
+	String category() default Configuration.CATEGORY_GENERAL;
 
 	/**
 	 * The default key would be the name of the field. The name of the field must be in camel case.
 	 */
-	public String key() default "";
+	String key() default "";
 
-	public String comment() default "";
+	String comment() default "";
 
 }

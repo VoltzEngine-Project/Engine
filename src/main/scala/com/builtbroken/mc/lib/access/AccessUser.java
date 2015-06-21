@@ -100,7 +100,7 @@ public class AccessUser implements ISave
         this.nodes.clear();
         for (int i = 0; i < userList.tagCount(); ++i)
         {
-            this.nodes.add(((NBTTagCompound) userList.getCompoundTagAt(i)).getString("name"));
+            this.nodes.add(userList.getCompoundTagAt(i).getString("name"));
         }
     }
 

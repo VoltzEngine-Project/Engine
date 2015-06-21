@@ -17,12 +17,12 @@ public interface IExCreeperHandler
      * @return Valid resource location, or null to use default texture
      */
     @SideOnly(Side.CLIENT)
-    public ResourceLocation getCreeperTexture(Entity entity);
+    ResourceLocation getCreeperTexture(Entity entity);
 
     /**
      * Gets the string key to use for the translation of the creeper name
      * @param entity - creeper
      * @return valid string for translating
      */
-    public String getTranslationKey(Entity entity);
+    String getTranslationKey(Entity entity);
 }

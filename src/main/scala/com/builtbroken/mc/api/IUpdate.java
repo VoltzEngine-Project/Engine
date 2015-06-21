@@ -11,5 +11,5 @@ public interface IUpdate
      * be removed from the tick handler. In which it is up to you to re-add
      * it whe it needs more updates.
      */
-	public boolean update();
+    boolean update();
 }

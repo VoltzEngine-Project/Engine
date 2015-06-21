@@ -13,7 +13,7 @@ public interface IEnergyItem
 	 * @param doRecharge If false, the charge will only be simulated.
 	 * @return Amount of energy that was accepted by the item.
 	 */
-	public double recharge(ItemStack itemStack, double energy, boolean doRecharge);
+	double recharge(ItemStack itemStack, double energy, boolean doRecharge);
 
 	/**
 	 * Removes energy from an item. Returns the quantity of energy that was removed. This should
@@ -24,5 +24,5 @@ public interface IEnergyItem
 	 * @param doDischarge If false, the discharge will only be simulated.
 	 * @return Amount of energy that was removed from the item.
 	 */
-	public double discharge(ItemStack itemStack, double energy, boolean doDischarge);
+	double discharge(ItemStack itemStack, double energy, boolean doDischarge);
 }

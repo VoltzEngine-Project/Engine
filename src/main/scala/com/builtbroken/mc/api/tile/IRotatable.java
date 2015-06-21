@@ -13,5 +13,5 @@ import net.minecraftforge.common.util.ForgeDirection;
 public interface IRotatable extends IRotation
 {
 	/** Sets the facing direction, is not supported by all machines */
-	public void setDirection(ForgeDirection direction);
+	void setDirection(ForgeDirection direction);
 }

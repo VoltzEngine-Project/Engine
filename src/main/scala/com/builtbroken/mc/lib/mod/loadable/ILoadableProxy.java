@@ -8,5 +8,5 @@ public interface ILoadableProxy extends ILoadable
     /**
      * Should we load this loadable
      */
-	public boolean shouldLoad();
+    boolean shouldLoad();
 }

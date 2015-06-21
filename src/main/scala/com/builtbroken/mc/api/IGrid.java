@@ -9,17 +9,17 @@ import java.util.Set;
 public interface IGrid<N>
 {
     /** Gets all objects that act as nodes in this grid */
-    public Set<N> getNodes();
+    Set<N> getNodes();
 
     /** Adds a node to the grid */
-    public void add(N node);
+    void add(N node);
 
     /** Removes a node from the grid */
-    public void remove(N node);
+    void remove(N node);
 
     /** Asks the grid to rebuild */
-    public void reconstruct();
+    void reconstruct();
 
     /** Asks teh grid to destroy */
-    public void deconstruct();
+    void deconstruct();
 }

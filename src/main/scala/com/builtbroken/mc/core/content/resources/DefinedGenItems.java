@@ -20,7 +20,7 @@ public enum DefinedGenItems
     public boolean shouldGenerate;
     public boolean requested = false;
 
-    private DefinedGenItems(boolean gen)
+    DefinedGenItems(boolean gen)
     {
         this.shouldGenerate = gen;
     }

@@ -12,5 +12,5 @@ public interface IByteBufReader
      * @param buf a {@link io.netty.buffer.ByteBuf} to read from
      * @return instance of the object
      */
-    public Object readBytes(ByteBuf buf);
+    Object readBytes(ByteBuf buf);
 }

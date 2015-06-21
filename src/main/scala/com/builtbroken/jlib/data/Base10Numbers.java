@@ -27,7 +27,7 @@ public enum Base10Numbers
 
     private final char c;
 
-    private Base10Numbers(char c)
+    Base10Numbers(char c)
     {
         this.c = c;
     }

@@ -9,5 +9,5 @@ import net.minecraft.item.ItemStack;
  */
 public interface IPassCode
 {
-    public short getCode();
+    short getCode();
 }

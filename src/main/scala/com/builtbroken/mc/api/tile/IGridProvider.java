@@ -8,8 +8,8 @@ import com.builtbroken.mc.api.IGrid;
 public interface IGridProvider
 {
     /** Sets the grid reference */
-    public void setGrid(IGrid grid);
+    void setGrid(IGrid grid);
 
     /** Gets the grid reference */
-    public IGrid getGrid();
+    IGrid getGrid();
 }

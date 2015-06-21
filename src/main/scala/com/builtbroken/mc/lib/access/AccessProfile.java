@@ -337,7 +337,7 @@ public class AccessProfile implements IVirtualObject
 			for (int i = 0; i < group_list.tagCount(); i++)
 			{
 				AccessGroup group = new AccessGroup("");
-				group.load((NBTTagCompound) group_list.getCompoundTagAt(i));
+				group.load(group_list.getCompoundTagAt(i));
 				this.groups.add(group);
 			}
 			//Set group extensions

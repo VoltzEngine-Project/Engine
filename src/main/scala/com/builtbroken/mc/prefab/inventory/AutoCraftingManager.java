@@ -89,7 +89,7 @@ public class AutoCraftingManager
 					else if (recipe instanceof ShapelessOreRecipe)
 					{
 						ShapelessOreRecipe oreRecipe = (ShapelessOreRecipe) recipe;
-						ArrayList oreRecipeInput = (ArrayList) ReflectionHelper.getPrivateValue(ShapelessOreRecipe.class, oreRecipe, "input");
+						ArrayList oreRecipeInput = ReflectionHelper.getPrivateValue(ShapelessOreRecipe.class, oreRecipe, "input");
 						for (Object obj : oreRecipeInput)
 						{
 							System.out.println(obj);
@@ -129,7 +129,7 @@ public class AutoCraftingManager
 						else if (object instanceof ShapedOreRecipe)
 						{
 							ShapedOreRecipe oreRecipe = (ShapedOreRecipe) object;
-							Object[] recipeItems = (Object[]) ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, oreRecipe, "input");
+							Object[] recipeItems = ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, oreRecipe, "input");
 							ItemStack[] actualResources;
 							if (recipeItems != null)
 							{
@@ -277,7 +277,7 @@ public class AutoCraftingManager
 				else if (object instanceof ShapedOreRecipe)
 				{
 					ShapedOreRecipe oreRecipe = (ShapedOreRecipe) object;
-					Object[] oreRecipeInput = (Object[]) ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, oreRecipe, "input");
+					Object[] oreRecipeInput = ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, oreRecipe, "input");
 
 					ArrayList<ItemStack> hasResources = this.hasResource(oreRecipeInput);
 
@@ -290,7 +290,7 @@ public class AutoCraftingManager
 				else if (object instanceof ShapelessOreRecipe)
 				{
 					ShapelessOreRecipe oreRecipe = (ShapelessOreRecipe) object;
-					ArrayList oreRecipeInput = (ArrayList) ReflectionHelper.getPrivateValue(ShapelessOreRecipe.class, oreRecipe, "input");
+					ArrayList oreRecipeInput = ReflectionHelper.getPrivateValue(ShapelessOreRecipe.class, oreRecipe, "input");
 
 					List<ItemStack> hasResources = this.hasResource(oreRecipeInput.toArray());
 
@@ -497,11 +497,11 @@ public class AutoCraftingManager
 		return false;
 	}
 
-	public static interface IAutoCrafter
+	public interface IAutoCrafter
 	{
 		/**
 		 * The slots used by the crafter for resources
 		 */
-		public int[] getCraftingInv();
+		int[] getCraftingInv();
 	}
 }

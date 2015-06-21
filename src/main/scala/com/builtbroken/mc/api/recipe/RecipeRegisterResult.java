@@ -21,5 +21,5 @@ public enum RecipeRegisterResult
     /** Handler is null, only used for the MachineRecipeType enum */
     NO_HANDLER,
     /** Failed with an unknown error */
-    FAILED;
+    FAILED
 }

@@ -116,13 +116,13 @@ public class PermissionsCommandManager extends ServerCommandManager
             }
             else
             {
-                ChatComponentTranslation chatcomponenttranslation2 = new ChatComponentTranslation("commands.generic.permission", new Object[0]);
+                ChatComponentTranslation chatcomponenttranslation2 = new ChatComponentTranslation("commands.generic.permission");
                 chatcomponenttranslation2.getChatStyle().setColor(EnumChatFormatting.RED);
                 sender.addChatMessage(chatcomponenttranslation2);
             }
         } catch (WrongUsageException wrongusageexception)
         {
-            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new Object[]{new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.getErrorOjbects())});
+            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.getErrorOjbects()));
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
             sender.addChatMessage(chatcomponenttranslation);
         } catch (CommandException commandexception2)
@@ -132,7 +132,7 @@ public class PermissionsCommandManager extends ServerCommandManager
             sender.addChatMessage(chatcomponenttranslation);
         } catch (Throwable throwable)
         {
-            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception", new Object[0]);
+            chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception");
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
             sender.addChatMessage(chatcomponenttranslation);
             Engine.instance.logger().error("Failed to process command: \'" + cmd + "\'", throwable);

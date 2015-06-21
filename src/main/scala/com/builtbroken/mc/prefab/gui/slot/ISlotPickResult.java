@@ -15,5 +15,5 @@ public interface ISlotPickResult
 	 * @param slot         - slot in the container class the item came from
 	 * @param itemStack    - item stack pulled from the slot
 	 */
-	public void onPickUpFromSlot(EntityPlayer entityPlayer, int slot, ItemStack itemStack);
+	void onPickUpFromSlot(EntityPlayer entityPlayer, int slot, ItemStack itemStack);
 }

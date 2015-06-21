@@ -19,7 +19,7 @@ public interface IConnector<N>
      * @param from - desired side to connect, may be null for internal connectons
      * @return true if the object can connect based on direction, and type
      */
-    public boolean canConnect(N connection, ForgeDirection from);
+    boolean canConnect(N connection, ForgeDirection from);
 
     /**
      * Map of connections by the sides they connected to. Is not limited to one
@@ -27,6 +27,6 @@ public interface IConnector<N>
      * this side ends up being ForgeDirection.Unknown
      * @return map of connections, or empty map in place of null/no connections
      */
-    public Map<N, ForgeDirection> getConnections();
+    Map<N, ForgeDirection> getConnections();
 
 }

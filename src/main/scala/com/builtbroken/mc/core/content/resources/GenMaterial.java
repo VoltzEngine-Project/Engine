@@ -20,5 +20,5 @@ public enum GenMaterial
     ALUMINIUM,
     MAGNESIUM,
     URANIUM,
-    BRASS;
+    BRASS
 }

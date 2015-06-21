@@ -3,7 +3,6 @@ package com.builtbroken.mc.core.content.resources.load;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.prefab.recipe.fluid.MRFluidStack;
 import com.builtbroken.mc.prefab.recipe.fluid.MRLoaderFluidStack;
-import com.builtbroken.mc.prefab.recipe.item.MRItemStack;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

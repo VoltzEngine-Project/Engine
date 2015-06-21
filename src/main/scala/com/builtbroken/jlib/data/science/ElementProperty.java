@@ -15,7 +15,7 @@ public enum ElementProperty
 
 	final String name;
 
-	private ElementProperty(String name)
+	ElementProperty(String name)
 	{
 		this.name = name;
 	}

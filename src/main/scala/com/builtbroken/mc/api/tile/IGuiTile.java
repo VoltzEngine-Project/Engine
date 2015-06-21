@@ -14,7 +14,7 @@ public interface IGuiTile
      * @param player The player viewing the Gui
      * @return A GuiScreen/Container to be displayed to the user, null if none.
      */
-    public Object getServerGuiElement(int ID, EntityPlayer player);
+    Object getServerGuiElement(int ID, EntityPlayer player);
 
     /**
      * Returns a Container to be displayed to the user. On the client side, this
@@ -25,5 +25,5 @@ public interface IGuiTile
      * @param player The player viewing the Gui
      * @return A GuiScreen/Container to be displayed to the user, null if none.
      */
-    public Object getClientGuiElement(int ID, EntityPlayer player);
+    Object getClientGuiElement(int ID, EntityPlayer player);
 }

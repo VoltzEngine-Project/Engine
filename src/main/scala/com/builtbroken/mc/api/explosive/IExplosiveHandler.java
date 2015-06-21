@@ -29,7 +29,7 @@ public interface IExplosiveHandler
      * @param size  - size of the explosive, will be used to set radius using ex. (size * min_radius)
      * @return instanceof IWorldChangeAction that tells what blocks and entities are to be effected
 	 */
-	public IWorldChangeAction createBlastForTrigger(World world, double x, double y, double z, TriggerCause triggerCause, double size, NBTTagCompound tag);
+    IWorldChangeAction createBlastForTrigger(World world, double x, double y, double z, TriggerCause triggerCause, double size, NBTTagCompound tag);
 
     /** Gets estimated range info for the given trigger and size
      *
@@ -37,19 +37,19 @@ public interface IExplosiveHandler
      * @param lines - list to add info to display for the item tooltip
      * @return min and max pair
      */
-    public void addInfoToItem(ItemStack stack, List<String> lines);
+    void addInfoToItem(ItemStack stack, List<String> lines);
 
     /**
      * Called when the explosive is registered
      * @param id - name the explosive was registered with
      * @param modID - mod the explosive was registered by
      */
-    public void onRegistered(String id, String modID);
+    void onRegistered(String id, String modID);
 
     /** Gets the key to use for translating the name */
-    public String getTranslationKey();
+    String getTranslationKey();
 
     /** Gets the id this was registered with */
-    public String getID();
+    String getID();
 
 }

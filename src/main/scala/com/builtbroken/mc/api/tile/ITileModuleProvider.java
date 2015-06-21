@@ -13,5 +13,5 @@ public interface ITileModuleProvider
 	 * @param from     - The direction.
 	 * @return Returns the node object.
 	 */
-	public <N extends ITileModule> N getModule(Class<? extends N> nodeType, ForgeDirection from);
+	<N extends ITileModule> N getModule(Class<? extends N> nodeType, ForgeDirection from);
 }

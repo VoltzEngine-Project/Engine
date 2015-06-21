@@ -20,5 +20,5 @@ public interface IPressure
      * pos will say the side is an output,
      * zero will say the side has no effect on default pressure, but will still receive pressure if connections exist
      */
-    public double getPressure(NodeType type, ForgeDirection side);
+    double getPressure(NodeType type, ForgeDirection side);
 }

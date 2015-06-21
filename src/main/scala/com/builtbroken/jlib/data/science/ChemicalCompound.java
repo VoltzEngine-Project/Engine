@@ -35,7 +35,7 @@ public enum ChemicalCompound
 
 	public final HeatingData heatingData;
 
-	private ChemicalCompound(String name, String formula, MatterPhase phase, float molarMass, float density, HeatingData data)
+	ChemicalCompound(String name, String formula, MatterPhase phase, float molarMass, float density, HeatingData data)
 	{
 		this.compoundName = name;
 		this.formula = formula;

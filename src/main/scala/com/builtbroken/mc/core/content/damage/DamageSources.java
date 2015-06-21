@@ -15,7 +15,7 @@ public enum DamageSources
 
     private DamageSource source;
 
-    private DamageSources(DamageSource source)
+    DamageSources(DamageSource source)
     {
         this.source = source;
     }
@@ -31,8 +31,8 @@ public enum DamageSources
         return source;
     }
 
-    public static interface EntitySource
+    public interface EntitySource
     {
-        public DamageSource getDamageSource(Entity entity);
+        DamageSource getDamageSource(Entity entity);
     }
 }

@@ -19,7 +19,7 @@ public enum ElectricUnit
 	public String name;
 	public String symbol;
 
-	private ElectricUnit(String name, String symbol)
+	ElectricUnit(String name, String symbol)
 	{
 		this.name = name;
 		this.symbol = symbol;

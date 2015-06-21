@@ -28,7 +28,7 @@ public enum Ores
     private int amountPerChunk = 16;
     private int amountPerBranch = 5;
 
-    private Ores(int min, int max, int amountPerBranch, int amountPerChunk)
+    Ores(int min, int max, int amountPerBranch, int amountPerChunk)
     {
         this.minY = min;
         this.maxY = max;

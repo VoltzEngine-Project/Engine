@@ -381,11 +381,7 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
     public boolean isBlockEqual(World world, Block block)
     {
         Block b = getBlock(world);
-        if (b != null && b == block)
-        {
-            return true;
-        }
-        return false;
+        return b != null && b == block;
     }
 
     public Block getBlock(IBlockAccess world)

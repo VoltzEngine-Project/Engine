@@ -14,7 +14,7 @@ public interface IMachineRecipeHandler<O extends Object>
      *
      * @return true if the recipe was registered
      */
-    public RecipeRegisterResult registerRecipe(IMachineRecipe recipe);
+    RecipeRegisterResult registerRecipe(IMachineRecipe recipe);
 
     /**
      * Called to get a recipe for the list of inputs. Extra and failure
@@ -31,15 +31,15 @@ public interface IMachineRecipeHandler<O extends Object>
      *                      and not supported by all machines.
      * @return outputs for a valid recipe, or null for anything else
      */
-    public O getRecipe(Object[] items, float extraChance, float failureChance);
+    O getRecipe(Object[] items, float extraChance, float failureChance);
 
     /**
      * Gets all recipes registered to this machine type
      */
-    public Collection<IMachineRecipe> getRecipes(Object[] items);
+    Collection<IMachineRecipe> getRecipes(Object[] items);
 
     /**
      * Gets all recipes registered to this machine type
      */
-    public Collection<IMachineRecipe> getRecipes();
+    Collection<IMachineRecipe> getRecipes();
 }

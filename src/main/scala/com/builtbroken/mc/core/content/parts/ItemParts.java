@@ -50,7 +50,7 @@ public class ItemParts extends Item implements IRegistryInit
         items.add(new ItemStack(item, 1, 0));
     }
 
-    public static enum EnumParts
+    public enum EnumParts
     {
         PARTS("random.parts", "part.random"),
         BASIC_CIRCUIT("circuitBasic", "circuit.t1");
@@ -59,7 +59,7 @@ public class ItemParts extends Item implements IRegistryInit
         public final String name;
         protected IIcon icon;
 
-        private EnumParts(String oreName, String name)
+        EnumParts(String oreName, String name)
         {
             this.oreName = oreName;
             this.name = name;

@@ -40,7 +40,7 @@ public enum MachineRecipeType
     private IMachineRecipeHandler handler;
     public final String INTERNAL_NAME;
 
-    private MachineRecipeType(String name)
+    MachineRecipeType(String name)
     {
         this.INTERNAL_NAME = name;
     }

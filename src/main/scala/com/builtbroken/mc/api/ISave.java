@@ -10,8 +10,8 @@ import net.minecraft.nbt.NBTTagCompound;
 public interface ISave
 {
     /** Called to load the object from NBT */
-    public void load(NBTTagCompound nbt);
+    void load(NBTTagCompound nbt);
 
     /** Called to save the object to NBT */
-    public NBTTagCompound save(NBTTagCompound nbt);
+    NBTTagCompound save(NBTTagCompound nbt);
 }

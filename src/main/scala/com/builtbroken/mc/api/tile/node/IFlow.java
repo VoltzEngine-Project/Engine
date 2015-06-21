@@ -17,5 +17,5 @@ public interface IFlow
      * @return neg numbers are ignored as flow rate is bi-directional.
      * Zero will result in no flow rate on this side, and any pos will result in a restricted flow rate.
      */
-    public double getFlow(NodeType type, ForgeDirection side);
+    double getFlow(NodeType type, ForgeDirection side);
 }

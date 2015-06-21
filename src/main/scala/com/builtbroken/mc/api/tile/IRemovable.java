@@ -12,29 +12,29 @@ import java.util.List;
  *
  * @author Darkguardsman
  */
-public abstract interface IRemovable
+public interface IRemovable
 {
 	/** Items to place in the player's inventory, or drop if the player has no space left */
-	public List<ItemStack> getRemovedItems(EntityPlayer entity);
+	List<ItemStack> getRemovedItems(EntityPlayer entity);
 
 	/** Drops the tile on sneak right click with a registered wrench */
-	public static interface ISneakWrenchable extends IRemovable{}
+	interface ISneakWrenchable extends IRemovable{}
 
     /** Drops the tile on right click with a registered wrench */
-	public static interface IWrenchable extends IRemovable{}
+	interface IWrenchable extends IRemovable{}
 
     /** Drops the tile on sneak right click with an empty hand */
-	public static interface ISneakPickup extends IRemovable{}
+	interface ISneakPickup extends IRemovable{}
 
     /** Drops the tile on right click with an empty hand */
-	public static interface IPickup extends IRemovable{}
+	interface IPickup extends IRemovable{}
 
 	/** Custom version of IRemovable that lets the tile decide if it can be picked up */
-	public static interface ICustomRemoval extends IRemovable
+	interface ICustomRemoval extends IRemovable
 	{
 		/**
 		 * Can the tile be removed by the player. Use this to force tool interaction for removal.
 		 */
-		public boolean canBeRemoved(EntityPlayer entity);
+		boolean canBeRemoved(EntityPlayer entity);
 	}
 }

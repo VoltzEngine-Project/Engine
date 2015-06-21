@@ -12,5 +12,5 @@ public interface ILinkFeedback
      * Called when this tile is linked to another tile
      * @param location - location of the machine this one was linked to
      */
-    public void onLinked(Location location);
+    void onLinked(Location location);
 }

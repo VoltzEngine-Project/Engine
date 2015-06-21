@@ -40,12 +40,12 @@ public class SelectionHandler
      */
     public static Selection getSelection(EntityPlayer player)
     {
-        Selection out = INSTANCE.selections.get(player.getCommandSenderName());
+        Selection out = selections.get(player.getCommandSenderName());
 
         if (out == null)
         {
             out = new Selection();
-            INSTANCE.selections.put(player.getCommandSenderName(), out);
+            selections.put(player.getCommandSenderName(), out);
         }
 
         return out;
@@ -57,7 +57,7 @@ public class SelectionHandler
      */
     public static void setSelection(EntityPlayer player, Selection cuboid)
     {
-        INSTANCE.selections.put(player.getCommandSenderName(), cuboid);
+        selections.put(player.getCommandSenderName(), cuboid);
         if (!player.worldObj.isRemote)
         {
             if (player instanceof EntityPlayerMP)

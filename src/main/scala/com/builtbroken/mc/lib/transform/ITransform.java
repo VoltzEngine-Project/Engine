@@ -10,5 +10,5 @@ import com.builtbroken.mc.lib.transform.vector.Pos;
  */
 public interface ITransform
 {
-	public IPos3D transform(IPos3D vector);
+	IPos3D transform(IPos3D vector);
 }

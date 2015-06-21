@@ -16,18 +16,18 @@ public interface IModeItem
      * @param stack - stack to pull data from
      * @return current mode
      */
-    public int getMode(ItemStack stack);
+    int getMode(ItemStack stack);
 
     /** Sets the current mode of the tool
      * @param stack - stack to set the mode into
      */
-    public void setMode(ItemStack stack, int mode);
+    void setMode(ItemStack stack, int mode);
 
     /**
      * Sub version of the interface that will automatically be
      * handled by Voltz Engine.
      */
-    public static interface IModeScrollItem extends IModeItem
+    interface IModeScrollItem extends IModeItem
     {
         /**
          * Called to handle scrolling to next mode. Due to mouse
@@ -41,6 +41,6 @@ public interface IModeItem
          * @param delta - change in mode
          * @return the new mode
          */
-        public int cycleMode(ItemStack stack, EntityPlayer player, int delta);
+        int cycleMode(ItemStack stack, EntityPlayer player, int delta);
     }
 }

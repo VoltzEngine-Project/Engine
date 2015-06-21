@@ -15,13 +15,13 @@ public interface IVirtualObject extends ISave
 	/**
 	 * File this is saved as, don't create anything here as the manager will do that for you
 	 */
-	public File getSaveFile();
+	File getSaveFile();
 
 	/**
 	 * Will only be called after an object has been loaded. Allows the object to know were its been
 	 * loaded from and decide if it wants to use the location as its getSaveFile return
 	 */
-	public void setSaveFile(File file);
+	void setSaveFile(File file);
 
     /**
      * Save events are triggered when the world saves. Use this to
@@ -29,6 +29,6 @@ public interface IVirtualObject extends ISave
      * @param world
      * @return
      */
-    public boolean shouldSaveForWorld(World world);
+	boolean shouldSaveForWorld(World world);
 
 }

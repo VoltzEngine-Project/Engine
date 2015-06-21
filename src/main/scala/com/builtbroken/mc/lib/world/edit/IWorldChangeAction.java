@@ -21,7 +21,7 @@ public interface IWorldChangeAction
      * is wasteful.
      * @return number of blocks to change per tick, zero and bellow are treated as not mutli-threaded
      */
-    public int shouldThreadAction();
+    int shouldThreadAction();
 
     /**
      * Gets all blocks effected by the blast, during this call never edit anything in the world. Instead
@@ -30,12 +30,12 @@ public interface IWorldChangeAction
      * be feed back into the doEffect method.
      * @return list of vectors containing the block to set at that location
      */
-    public Collection<BlockEdit> getEffectedBlocks();
+    Collection<BlockEdit> getEffectedBlocks();
 
     /** Called to actually effect blocks from the list return by getEffectedBlocks.
      * @param blocks - block to change
      */
-    public void handleBlockPlacement(BlockEdit blocks);
+    void handleBlockPlacement(BlockEdit blocks);
 
     /** Called to effect other things than blocks like entities.
      * Called before and after blocks have been placed into the world.
@@ -43,5 +43,5 @@ public interface IWorldChangeAction
      * after the first call.
      * @param beforeBlocksPlaced - if true this means no blocks have been placed, false all blocks have been placed
      */
-    public void doEffectOther(boolean beforeBlocksPlaced);
+    void doEffectOther(boolean beforeBlocksPlaced);
 }

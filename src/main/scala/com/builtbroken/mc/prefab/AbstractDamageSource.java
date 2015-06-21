@@ -50,19 +50,19 @@ public abstract class AbstractDamageSource extends DamageSource
 		{
 			if (StatCollector.canTranslate(machineKillTranslation))
 			{
-				return new ChatComponentTranslation(machineKillTranslation, new Object[] { victum.func_145748_c_() });
+				return new ChatComponentTranslation(machineKillTranslation, victum.func_145748_c_());
 			}
 		}
 		else if (attacker != null)
 		{
 			if (StatCollector.canTranslate(playerKillTranslation))
 			{
-				return new ChatComponentTranslation(playerKillTranslation, new Object[] { victum.func_145748_c_(), attacker.func_145748_c_() });
+				return new ChatComponentTranslation(playerKillTranslation, victum.func_145748_c_(), attacker.func_145748_c_());
 			}
 		}
 		else if (StatCollector.canTranslate(deathTranslation))
 		{
-			return new ChatComponentTranslation(deathTranslation, new Object[] { victum.func_145748_c_() });
+			return new ChatComponentTranslation(deathTranslation, victum.func_145748_c_());
 		}
 		return null;
 	}

@@ -30,6 +30,6 @@ public enum EnglishLetters
     W,
     X,
     Y,
-    Z;
+    Z
 
 }

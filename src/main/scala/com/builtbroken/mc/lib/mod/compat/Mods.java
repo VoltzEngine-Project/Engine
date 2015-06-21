@@ -19,7 +19,7 @@ public enum Mods
 
     public final String mod_id;
 
-    private Mods(String id)
+    Mods(String id)
     {
         this.mod_id = id;
     }

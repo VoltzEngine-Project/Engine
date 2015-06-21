@@ -146,10 +146,6 @@ public class OreGenReplace extends OreGenerator
 		{
 			return false;
 		}
-		if (this.ignoreEnd && chunkGenerator instanceof ChunkProviderEnd)
-		{
-			return false;
-		}
-		return true;
+		return !(this.ignoreEnd && chunkGenerator instanceof ChunkProviderEnd);
 	}
 }

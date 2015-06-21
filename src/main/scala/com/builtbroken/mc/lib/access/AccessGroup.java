@@ -139,7 +139,7 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
 
         for (int i = 0; i < userList.tagCount(); ++i)
         {
-            AccessUser user = AccessUser.loadFromNBT((NBTTagCompound) userList.getCompoundTagAt(i));
+            AccessUser user = AccessUser.loadFromNBT(userList.getCompoundTagAt(i));
             this.addMember(user);
         }
 
@@ -148,7 +148,7 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
         this.nodes.clear();
         for (int i = 0; i < nodeList.tagCount(); ++i)
         {
-            this.nodes.add(((NBTTagCompound) nodeList.getCompoundTagAt(i)).getString("name"));
+            this.nodes.add(nodeList.getCompoundTagAt(i).getString("name"));
         }
 
         // Load creation date
