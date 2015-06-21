@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.recipe;
+package com.builtbroken.mc.prefab.recipe.extend;
 
 import com.builtbroken.mc.api.recipe.IMachineRecipe;
 import com.builtbroken.mc.api.recipe.IMachineRecipeHandler;

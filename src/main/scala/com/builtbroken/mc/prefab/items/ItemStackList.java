@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.recipe;
+package com.builtbroken.mc.prefab.items;
 
 import net.minecraft.item.ItemStack;
 

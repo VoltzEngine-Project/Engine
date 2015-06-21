@@ -3,8 +3,8 @@ package com.builtbroken.mc.test.prefab.recipe;
 import com.builtbroken.mc.api.recipe.IMachineRecipe;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.api.recipe.RecipeRegisterResult;
-import com.builtbroken.mc.prefab.recipe.MRHandlerItemStack;
-import com.builtbroken.mc.prefab.recipe.MRItemStack;
+import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;
+import com.builtbroken.mc.prefab.recipe.item.MRItemStack;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.ModRegistry;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import org.junit.runner.RunWith;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by robert on 1/10/2015.

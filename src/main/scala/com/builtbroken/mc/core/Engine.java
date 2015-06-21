@@ -30,8 +30,8 @@ import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
 import com.builtbroken.mc.prefab.explosive.ExplosiveHandler;
 import com.builtbroken.mc.prefab.explosive.blast.BlastBasic;
-import com.builtbroken.mc.prefab.recipe.MRHandlerItemStack;
-import com.builtbroken.mc.prefab.recipe.MRSmelterHandler;
+import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;
+import com.builtbroken.mc.prefab.recipe.item.MRSmelterHandler;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -98,6 +98,9 @@ public class Engine extends AbstractMod
     //Configs
     public static boolean enabledHeatMap = true;
     public static boolean log_registering_explosives = false;
+
+    /** Conversion ratio of ingot to fluid volume, based on Tinkers *in theory* */
+    public static int INGOT_VOLUME = 144;
 
     //TODO move these to compatibility handlers later
     public static double TO_RF_RATIO = 500;

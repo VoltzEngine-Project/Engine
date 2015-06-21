@@ -1,7 +1,7 @@
 package com.builtbroken.mc.test.wrapper;
 
 import com.builtbroken.mc.lib.helper.MathUtility;
-import com.builtbroken.mc.prefab.recipe.ItemStackWrapper;
+import com.builtbroken.mc.prefab.items.ItemStackWrapper;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.ModRegistry;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;

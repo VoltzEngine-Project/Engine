@@ -1,10 +1,11 @@
-package com.builtbroken.mc.core.content.resources.load;
+package com.builtbroken.mc.prefab.recipe.extend;
 
+import com.builtbroken.mc.api.recipe.IMachineRecipe;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.api.recipe.RecipeRegisterResult;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
-import com.builtbroken.mc.prefab.recipe.MRItemStack;
+import com.builtbroken.mc.prefab.recipe.item.MRItemStack;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Created by robert on 1/10/2015.
  */
-public class MachineRecipeLoader extends AbstractLoadable
+public class MachineRecipeLoader<I extends IMachineRecipe> extends AbstractLoadable
 {
     protected final String type;
 
@@ -27,9 +28,9 @@ public class MachineRecipeLoader extends AbstractLoadable
     @Override
     public final void init()
     {
-        List<MRItemStack> recipes = new ArrayList();
+        List<I> recipes = new ArrayList();
         generateRecipes(recipes);
-        for(MRItemStack recipe : recipes)
+        for(I recipe : recipes)
         {
             RecipeRegisterResult result = MachineRecipeType.getHandler(type).registerRecipe(recipe);
             if(result != RecipeRegisterResult.REGISTERED)
@@ -39,23 +40,10 @@ public class MachineRecipeLoader extends AbstractLoadable
         }
     }
 
-    protected void generateRecipes(List<MRItemStack> recipes)
+    protected void generateRecipes(List<I> recipes)
     {
         //recipes.add(newRecipe(Blocks.cobblestone).addInputOption(Blocks.stone));
     }
 
-    protected MRItemStack newRecipe(Block output)
-    {
-        return new MRItemStack(type, new ItemStack(output));
-    }
 
-    protected MRItemStack newRecipe(Item output)
-    {
-        return new MRItemStack(type, new ItemStack(output));
-    }
-
-    protected MRItemStack newRecipe(ItemStack output)
-    {
-        return new MRItemStack(type, output);
-    }
 }

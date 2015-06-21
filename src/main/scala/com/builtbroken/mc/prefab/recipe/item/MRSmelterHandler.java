@@ -1,6 +1,7 @@
-package com.builtbroken.mc.prefab.recipe;
+package com.builtbroken.mc.prefab.recipe.item;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
+import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 
