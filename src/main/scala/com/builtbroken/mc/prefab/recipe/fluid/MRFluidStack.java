@@ -19,7 +19,7 @@ public class MRFluidStack extends MachineRecipe<FluidStack, ItemStackWrapper>
     public MRFluidStack(String type, FluidStack output)
     {
         super(type);
-        this.output = output;
+        this.output = output.copy();
         this.inputs = new ItemStackList();
     }
 

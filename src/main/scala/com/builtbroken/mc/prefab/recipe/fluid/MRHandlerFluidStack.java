@@ -22,7 +22,7 @@ public class MRHandlerFluidStack extends MRHandler<FluidStack, ItemStackWrapper>
     @Override
     protected boolean isValidInput(Object object)
     {
-        return toOutputType(object) != null;
+        return getKeyFor(object) != null;
     }
 
     @Override

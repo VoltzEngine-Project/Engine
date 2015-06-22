@@ -2,14 +2,10 @@ package com.builtbroken.mc.prefab.recipe.fluid;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.prefab.recipe.extend.MachineRecipeLoader;
-import com.builtbroken.mc.prefab.recipe.item.MRItemStack;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.util.List;
 
 /**
  * Created by Dark on 6/21/2015.
@@ -38,9 +34,9 @@ public class MRLoaderFluidStack extends MachineRecipeLoader<MRFluidStack>
     protected Fluid registerFluid(String name)
     {
         Fluid fluid = new Fluid(name);
-        if(FluidRegistry.registerFluid(fluid))
+        if(!FluidRegistry.registerFluid(fluid) && FluidRegistry.getFluid(name) == null)
         {
-            return fluid;
+            Engine.instance.logger().error("Failed to register fluid " + name + " with no fluid registered to name");
         }
         return FluidRegistry.getFluid(name);
     }
@@ -48,12 +44,13 @@ public class MRLoaderFluidStack extends MachineRecipeLoader<MRFluidStack>
     protected Fluid registerMoltenFluid(String name)
     {
         Fluid fluid = new Fluid(name);
-        if(FluidRegistry.registerFluid(fluid))
+        fluid.setViscosity(16000);
+        fluid.setLuminosity(12);
+        if(!FluidRegistry.registerFluid(fluid) && FluidRegistry.getFluid(name) == null)
         {
-            fluid.setViscosity(16000);
-            fluid.setLuminosity(12);
-            return fluid;
+            Engine.instance.logger().error("Failed to register fluid " + name + " with no fluid registered to name");
         }
+
         return FluidRegistry.getFluid(name);
     }
 }
