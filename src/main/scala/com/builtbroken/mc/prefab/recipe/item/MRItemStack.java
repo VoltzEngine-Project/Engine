@@ -1,6 +1,5 @@
 package com.builtbroken.mc.prefab.recipe.item;
 
-import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.prefab.items.ItemStackList;
 import com.builtbroken.mc.prefab.items.ItemStackWrapper;
 import com.builtbroken.mc.prefab.recipe.extend.MachineRecipe;
@@ -56,20 +55,10 @@ public class MRItemStack extends MachineRecipe<ItemStack, ItemStackWrapper>
     @Override
     public boolean shouldHandleRecipe(Object[] inputs)
     {
-        return inputs != null && inputs.length == 1 && getValidInputs().contains(wrap(inputs[0]));
+        return inputs != null && inputs.length == 1 && getValidInputs().contains(wrapToItemStack(inputs[0]));
     }
 
-    public ItemStackWrapper wrap(Object object)
-    {
-        if(object instanceof ItemStackWrapper)
-            return (ItemStackWrapper) object;
-        ItemStack stack = MachineRecipeType.toItemStack(object);
-        if(stack != null)
-        {
-            return new ItemStackWrapper(stack);
-        }
-        return null;
-    }
+
 
     @Override
     public ItemStack handleRecipe(Object[] inputs, float extraChance, float failureChance)

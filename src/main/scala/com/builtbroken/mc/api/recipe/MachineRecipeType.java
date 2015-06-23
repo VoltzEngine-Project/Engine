@@ -24,18 +24,22 @@ public enum MachineRecipeType
     ITEM_SAWMILL("sawmill"),
     /** Item to items used to craft it, Chest -> 8 planks. Make sure to return the least valuable version of the recipe */
     ITEM_SALVAGER("salvager"),
+
     /**Ingot to metal item recipes, ingot -> steel plate, steel plate -> gun part plate */
     PLATE_PRESS("metal.press"),
     /**Plate to round casing recipes  */
     PLATE_ROLLER("metal.roller"),
     /** Rivets two items together */
     PLATE_RIVETER("metal.riveter"),
+
     /** Fluid + Fluid -> New Fluid */
     FLUID_MIXER("fluid.mixer"),
     /** Item -> Molten Fluid */
     FLUID_SMELTER("fluid.smelter"),
-    /** Fluid -> Item */
-    FLUID_SOLIDIFIER("fluid.solidifier");
+    /** Fluid -> Item, for non-molten items only */
+    FLUID_SOLIDIFIER("fluid.solidifier"),
+    /** Fluid -> Item, for molten fluids only */
+    FLUID_CAST("fluid.cast");
 
     private IMachineRecipeHandler handler;
     public final String INTERNAL_NAME;

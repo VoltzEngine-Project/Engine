@@ -8,7 +8,7 @@ import cpw.mods.fml.common.network.ByteBufUtils
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.fluids.FluidTank
+import net.minecraftforge.fluids.{FluidStack, FluidTank}
 
 /**
  * Some alias methods to make packets more pleasant.
@@ -139,6 +139,12 @@ object ByteBufWrapper
     {
       buf <<< tank.getCapacity
       buf <<< tank.writeToNBT(new NBTTagCompound)
+      buf
+    }
+
+    def <<<(stack: FluidStack) : ByteBuf =
+    {
+      buf <<< stack.writeToNBT(new NBTTagCompound)
       buf
     }
 
