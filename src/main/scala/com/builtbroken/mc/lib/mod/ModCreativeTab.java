@@ -1,14 +1,13 @@
 package com.builtbroken.mc.lib.mod;
 
+import com.builtbroken.mc.core.Engine;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Prefab creative tab to either create a fast creative tab or reduce code
@@ -46,9 +45,50 @@ public class ModCreativeTab extends CreativeTabs
     @Override
     public void displayAllReleventItems(List list)
     {
-        super.displayAllReleventItems(list);
+        //TODO maybe cache?
+        Iterator iterator = Item.itemRegistry.iterator();
 
-        if(itemSorter != null && !list.isEmpty())
+        while (iterator.hasNext())
+        {
+            Item item = (Item) iterator.next();
+
+            if (item != null)
+            {
+                for (CreativeTabs tab : item.getCreativeTabs())
+                {
+                    if (tab == this)
+                    {
+                        List temp_list = new ArrayList();
+                        item.getSubItems(item, this, temp_list);
+                        for (Object o : temp_list)
+                        {
+                            if (o instanceof ItemStack)
+                            {
+                                if (((ItemStack) o).getItem() != null)
+                                {
+                                    list.add(o);
+                                }
+                                else
+                                {
+                                    Engine.instance.logger().error("Item: " + item + "  attempted to add a stack with a null item to creative tab " + this);
+                                }
+                            }
+                            else
+                            {
+                                Engine.instance.logger().error("Item: " + item + "  attempted to add a non ItemStack to creative tab " + this);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (this.func_111225_m() != null)
+        {
+            this.addEnchantmentBooksToList(list, this.func_111225_m());
+        }
+
+        if (itemSorter != null && !list.isEmpty())
         {
             Collections.sort(list, itemSorter);
         }
@@ -57,9 +97,13 @@ public class ModCreativeTab extends CreativeTabs
     @Override
     public ItemStack getIconItemStack()
     {
-        if (itemStack == null)
+        if (itemStack == null || itemStack.getItem() == null)
         {
-            itemStack = new ItemStack(Items.iron_door);
+            if (itemStack == null)
+                Engine.instance.logger().error("ItemStack used for creative tab " + this.getTabLabel() + " is null");
+            else
+                Engine.instance.logger().error("ItemStack used for creative tab " + this.getTabLabel() + " contains a null Item reference");
+            itemStack = new ItemStack(Blocks.redstone_block);
         }
         return itemStack;
     }
@@ -67,11 +111,7 @@ public class ModCreativeTab extends CreativeTabs
     @Override
     public Item getTabIconItem()
     {
-        if (itemStack == null)
-        {
-            itemStack = new ItemStack(Items.iron_door);
-        }
-        return itemStack.getItem();
+        return getIconItemStack().getItem();
     }
 
     public static abstract class ItemSorter implements Comparator
@@ -79,7 +119,7 @@ public class ModCreativeTab extends CreativeTabs
         @Override
         public int compare(Object o1, Object o2)
         {
-            if(o1 instanceof ItemStack && o2 instanceof ItemStack)
+            if (o1 instanceof ItemStack && o2 instanceof ItemStack)
             {
                 return compareItem((ItemStack) o1, (ItemStack) o2);
             }
