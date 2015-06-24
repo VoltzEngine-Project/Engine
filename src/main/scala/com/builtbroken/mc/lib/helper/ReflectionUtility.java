@@ -241,11 +241,10 @@ public class ReflectionUtility extends ReflectionHelper
             {
                 Engine.instance.logger().info("Failed to find field '" + fieldName + "' printing debug info");
                 Engine.instance.logger().info("\tFMLDeobfuscatingRemapper clazz internal name = " + FMLDeobfuscatingRemapper.INSTANCE.unmap(clazz.getName().replace('.', '/')));
-                Engine.instance.logger().info("\tObfusactionReflectionHelper.remapFieldsNames(" + clazz.getName() +", " + fieldName +") returned " + ObfuscationReflectionHelper.remapFieldNames(clazz.getName(), fieldName));
-                for(Field field : getAllFields(clazz))
-                {
-                    Engine.instance.logger().info("\tField: " + field);
-                }
+                String[] re = ObfuscationReflectionHelper.remapFieldNames(clazz.getName(), fieldName);
+                Engine.instance.logger().info("\tObfusactionReflectionHelper.remapFieldsNames(" + clazz.getName() +", " + fieldName +") returned " + re);
+                for(String s : re)
+                    Engine.instance.logger().info("\t\t -" + s);
                 return null;
             }
         }
