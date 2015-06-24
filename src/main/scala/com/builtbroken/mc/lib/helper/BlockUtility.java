@@ -19,19 +19,19 @@ import java.util.HashMap;
  */
 public class BlockUtility
 {
-	private static HashMap<Block, Float> BLOCK_HARDNESS = new HashMap();
+    private static HashMap<Block, Float> BLOCK_HARDNESS = new HashMap();
     private static HashMap<Block, Float> BLOCK_RESISTANCE = new HashMap();
 
     /**
      * Obfuscation names for reflection
      */
-    public static final String[] CHUNK_RELIGHT_BLOCK = { "relightBlock", "func_76615_h" };
-    public static final String[] CHUNK_PROPOGATE_SKY_LIGHT_OCCLUSION = { "propagateSkylightOcclusion", "func_76595_e" };
+    public static final String[] CHUNK_RELIGHT_BLOCK = {"relightBlock", "func_76615_h"};
+    public static final String[] CHUNK_PROPOGATE_SKY_LIGHT_OCCLUSION = {"propagateSkylightOcclusion", "func_76595_e"};
 
-    /** Gets the block's resistance without using location data required by the
+    /**
+     * Gets the block's resistance without using location data required by the
      * block's getResistance method. Uses a combination of a cache and reflection
      * to get access to the data.
-     *
      *
      * @param block - block, can't be null
      * @return
@@ -50,27 +50,24 @@ public class BlockUtility
             Field field = ReflectionUtility.getMCField(Block.class, "blockResistance");
             BLOCK_RESISTANCE.put(block, field.getFloat(block));
             return BLOCK_RESISTANCE.get(block);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
-            if(Engine.runningAsDev)
-                Engine.instance.logger().catching(e);
-            else
-                Engine.instance.logger().info("Failed to reflect into Block.class to get block resistance");
+            Engine.instance.logger().info("Failed to reflect into Block.class to get block resistance");
+            Engine.instance.logger().catching(e);
         }
         return 0;
     }
 
-    /** Gets the block's hardness without using location data required by the
+    /**
+     * Gets the block's hardness without using location data required by the
      * block's getHardness method. Uses a combination of a cache and reflection
      * to get access to the data.
-     *
      *
      * @param block - block, if null will return 0
      * @return
      */
-	public static float getBlockHardness(Block block)
-	{
+    public static float getBlockHardness(Block block)
+    {
         //Get block hardness from cache so we don't need to use reflection every time
         if (BLOCK_HARDNESS.containsKey(block))
         {
@@ -83,26 +80,25 @@ public class BlockUtility
             Field field = ReflectionUtility.getMCField(Block.class, "blockHardness");
             BLOCK_HARDNESS.put(block, field.getFloat(block));
             return BLOCK_HARDNESS.get(block);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
-            if(Engine.runningAsDev)
-                Engine.instance.logger().catching(e);
-            else
-                Engine.instance.logger().info("Failed to reflect into Block.class to get block hardness");
+            Engine.instance.logger().info("Failed to reflect into Block.class to get block hardness");
+            Engine.instance.logger().catching(e);
         }
         return 0;
-	}
+    }
 
-    /** Gets the hardness value of the block represented by
+    /**
+     * Gets the hardness value of the block represented by
      * the itemstack. Doesn't check if the item is not an ItemBlock
+     *
      * @param stack - stack
      * @return hardness value
      */
-	public static float getBlockHardness(ItemStack stack)
-	{
+    public static float getBlockHardness(ItemStack stack)
+    {
         return getBlockHardness(Block.getBlockFromItem(stack.getItem()));
-	}
+    }
 
     /**
      * Sets a block in a sneaky way to bypass some restraints.
@@ -184,8 +180,7 @@ public class BlockUtility
         {
             Method m = ReflectionHelper.findMethod(Chunk.class, null, CHUNK_RELIGHT_BLOCK, int.class, int.class, int.class);
             m.invoke(chunk, position.xi(), position.yi(), position.zi());
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -203,8 +198,7 @@ public class BlockUtility
         {
             Method m = ReflectionHelper.findMethod(Chunk.class, null, CHUNK_PROPOGATE_SKY_LIGHT_OCCLUSION, int.class, int.class);
             m.invoke(chunk, position.xi(), position.zi());
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
