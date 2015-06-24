@@ -21,7 +21,7 @@ public class PotionUtility
                 potions[i] = Potion.potionTypes[i];
             }
             //1.7.10 potion array -> "field_76425_a" in srg_name;
-            ReflectionUtility.setMCFieldWithCatch(Potion.class, null, "potionTypes", potions);
+            ReflectionUtility.setMCFieldWithCatch(Potion.class, null, "potionTypes", "field_76425_a", potions);
         }
 	}
 }

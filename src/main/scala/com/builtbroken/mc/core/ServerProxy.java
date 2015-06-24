@@ -23,9 +23,7 @@ public class ServerProxy extends CommonProxy
         if (GroupProfileHandler.enablePermissions)
         {
             Engine.instance.logger().info("Overriding MC's CommandManager");
-            Field field = ReflectionUtility.getMCField(MinecraftServer.class, "commandManager");
-            if(field == null)
-                field = ReflectionUtility.getMCField(MinecraftServer.class, "field_71321_q");
+            Field field = ReflectionUtility.getMCField(MinecraftServer.class, "commandManager", "field_71321_q");
             try
             {
                 ReflectionUtility.setFinalField(FMLCommonHandler.instance().getMinecraftServerInstance(), field, new PermissionsCommandManager());

@@ -1,9 +1,6 @@
 package com.builtbroken.mc.lib.helper;
 
-import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Level;
 
@@ -22,110 +19,115 @@ import java.util.List;
  */
 public class ReflectionUtility extends ReflectionHelper
 {
-	/**
-	 * Looks for a constructor matching the argument given.
-	 *
-	 * @param clazz - class to look for the constructor in
-	 * @param args  - arguments that the constructor should have
-	 * @return first match found
-	 */
-	public static <e extends Object> Constructor<e> getConstructorWithArgs(Class<e> clazz, Object... args)
-	{
-		if (clazz != null)
-		{
-			Constructor<?>[] constructors = clazz.getConstructors();
-			for (Constructor<?> constructor : constructors)
-			{
-				if (constructor.getParameterTypes().length == args.length)
-				{
-					Class<?>[] pType = constructor.getParameterTypes();
-					for (int i = 0; i < pType.length; i++)
-					{
-						if (!pType[i].equals(args[i].getClass()))
-						{
-							continue;
-						}
-						if (i == pType.length - 1)
-						{
+    /**
+     * Looks for a constructor matching the argument given.
+     *
+     * @param clazz - class to look for the constructor in
+     * @param args  - arguments that the constructor should have
+     * @return first match found
+     */
+    public static <e extends Object> Constructor<e> getConstructorWithArgs(Class<e> clazz, Object... args)
+    {
+        if (clazz != null)
+        {
+            Constructor<?>[] constructors = clazz.getConstructors();
+            for (Constructor<?> constructor : constructors)
+            {
+                if (constructor.getParameterTypes().length == args.length)
+                {
+                    Class<?>[] pType = constructor.getParameterTypes();
+                    for (int i = 0; i < pType.length; i++)
+                    {
+                        if (!pType[i].equals(args[i].getClass()))
+                        {
+                            continue;
+                        }
+                        if (i == pType.length - 1)
+                        {
                             try
                             {
-                                Constructor<e> con = (Constructor<e>)constructor;
+                                Constructor<e> con = (Constructor<e>) constructor;
                                 return con;
-                            }
-                            catch (ClassCastException e)
+                            } catch (ClassCastException e)
                             {
 
                             }
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
-    /** Sets a field inside of Minecraft's code that is normally srg or obfuscated
+    /**
+     * Sets a field inside of Minecraft's code that is normally srg or obfuscated
      *
-     * @param clazz - class to look for the field in
-     * @param instance - - instance of the class, null will assume static field
+     * @param clazz     - class to look for the field in
+     * @param instance  - - instance of the class, null will assume static field
      * @param fieldName - name of the field as seen in readable version of the code
-     * @param newValue - value to set the field too
-     * @throws NoSuchFieldException - field is not found, can easily happen if you provide the wrong field name or the name changed
+     * @param newValue  - value to set the field too
+     * @throws NoSuchFieldException   - field is not found, can easily happen if you provide the wrong field name or the name changed
      * @throws IllegalAccessException - should never happen as long as Forge/Minecraft don't implement a security manager.
      */
-    public static void setMCFieldWithCatch(Class clazz, Object instance, String fieldName, Object newValue)
+    public static void setMCFieldWithCatch(Class clazz, Object instance, String fieldName, String fieldName2, Object newValue)
     {
         try
         {
-            setMCField(clazz, instance, fieldName, newValue);
-        }
-        catch (NoSuchFieldException e)
+            setMCField(clazz, instance, fieldName, fieldName2, newValue);
+        } catch (NoSuchFieldException e)
         {
             References.LOGGER.catching(Level.ERROR, e);
-        }
-        catch (IllegalAccessException e)
+        } catch (IllegalAccessException e)
         {
             References.LOGGER.catching(Level.ERROR, e);
         }
     }
-    /** Sets a field inside of Minecraft's code that is normally srg or obfuscated
+
+    /**
+     * Sets a field inside of Minecraft's code that is normally srg or obfuscated
      *
-     * @param clazz - class to look for the field in
-     * @param instance - - instance of the class, null will assume static field
+     * @param clazz     - class to look for the field in
+     * @param instance  - - instance of the class, null will assume static field
      * @param fieldName - name of the field as seen in readable version of the code
-     * @param newValue - value to set the field too
-     * @throws NoSuchFieldException - field is not found, can easily happen if you provide the wrong field name or the name changed
+     * @param newValue  - value to set the field too
+     * @throws NoSuchFieldException   - field is not found, can easily happen if you provide the wrong field name or the name changed
      * @throws IllegalAccessException - should never happen as long as Forge/Minecraft don't implement a security manager.
      */
-    public static void setMCField(Class clazz, Object instance, String fieldName, Object newValue) throws NoSuchFieldException, IllegalAccessException
+    public static void setMCField(Class clazz, Object instance, String fieldName, String fieldName2, Object newValue) throws NoSuchFieldException, IllegalAccessException
     {
         int m = -1;
 
-        String fieldName_ = getMCFieldName(clazz, fieldName);
-        Field field = clazz.getField(fieldName_);
+        Field field = getMCField(clazz, fieldName, fieldName2);
 
         //Set the field to public
         field.setAccessible(true);
 
         //Removed final modifier
-        if(Modifier.isFinal(field.getModifiers()))
+        if (Modifier.isFinal(field.getModifiers()))
             m = removeFinalFromField(field);
 
         //Sets field value
         field.set(instance, newValue);
 
         //Restores final modifier
-        if(m != -1)
+        if (m != -1)
             setModifiers(field, m);
+    }
+
+    @Deprecated
+    public static void setMCField(Class clazz, Object instance, String fieldName, Object newValue) throws NoSuchFieldException, IllegalAccessException
+    {
+        setMCField(clazz, instance, fieldName, fieldName, newValue);
     }
 
     public static void printFields(Class clazz)
     {
         System.out.println("==== Outputting Fields Names ====");
         System.out.println("\tClass: " + clazz);
-        for(String name : getFieldNames(clazz))
+        for (String name : getFieldNames(clazz))
         {
-            System.out.println("\t"+name);
+            System.out.println("\t" + name);
         }
         System.out.println("==== Done Listing Field Names ====");
     }
@@ -133,10 +135,10 @@ public class ReflectionUtility extends ReflectionHelper
     public static List<String> getFieldNames(Class clazz)
     {
         List<String> fieldNames = new ArrayList<String>();
-        for(Field f : getAllFields(clazz))
+        for (Field f : getAllFields(clazz))
         {
             String name = f.getName();
-            if(!fieldNames.contains(name))
+            if (!fieldNames.contains(name))
                 fieldNames.add(name);
         }
         return fieldNames;
@@ -169,14 +171,12 @@ public class ReflectionUtility extends ReflectionHelper
         try
         {
             method = clazz.getMethod(name, args);
-        }
-        catch (NoSuchMethodException e)
+        } catch (NoSuchMethodException e)
         {
             try
             {
                 method = clazz.getDeclaredMethod(name, args);
-            }
-            catch (NoSuchMethodException e2)
+            } catch (NoSuchMethodException e2)
             {
 
             }
@@ -191,15 +191,15 @@ public class ReflectionUtility extends ReflectionHelper
         return fields;
     }
 
-    public static List<Method> getAllMethods(Class clazz, Class< ? extends Annotation>... annotations) throws ClassNotFoundException
+    public static List<Method> getAllMethods(Class clazz, Class<? extends Annotation>... annotations) throws ClassNotFoundException
     {
         List<Method> fields = getAllMethods(clazz);
         List<Method> returns = new ArrayList();
         Iterator<Method> it = fields.iterator();
-        while(it.hasNext())
+        while (it.hasNext())
         {
             Method m = it.next();
-            for(Class< ? extends Annotation> an : annotations)
+            for (Class<? extends Annotation> an : annotations)
             {
                 if (m.isAnnotationPresent(an))
                 {
@@ -224,84 +224,75 @@ public class ReflectionUtility extends ReflectionHelper
         return fields;
     }
 
-    public static Field getMCField(Class clazz, String fieldName)
+    public static Field getMCField(Class clazz, String fieldName, String fieldName2)
     {
-        Field f;
-        try
-        {
-            f = clazz.getField(getMCFieldName(clazz, fieldName));
-        }
-        catch(NoSuchFieldException e)
+        Field f = null;
+        for (int i = 0; i < 4; i++)
         {
             try
             {
-                f = clazz.getDeclaredField(getMCFieldName(clazz, fieldName));
-            }
-            catch(NoSuchFieldException e2)
+                if (i == 0 || i == 2)
+                    f = clazz.getField(i == 0 ? fieldName : fieldName2);
+                else
+                    f = clazz.getDeclaredField(i == 1 ? fieldName : fieldName2);
+            } catch (NoSuchFieldException e)
             {
-                Engine.instance.logger().info("Failed to find field '" + fieldName + "' printing debug info");
-                Engine.instance.logger().info("\tFMLDeobfuscatingRemapper clazz internal name = " + FMLDeobfuscatingRemapper.INSTANCE.unmap(clazz.getName().replace('.', '/')));
-                String[] re = ObfuscationReflectionHelper.remapFieldNames(clazz.getName(), fieldName);
-                Engine.instance.logger().info("\tObfusactionReflectionHelper.remapFieldsNames(" + clazz.getName() +", " + fieldName +") returned " + re);
-                for(String s : re)
-                    Engine.instance.logger().info("\t\t -" + s);
-                return null;
+
             }
         }
-
-        f.setAccessible(true);
+        if (f != null)
+            f.setAccessible(true);
         return f;
     }
 
-    public static String getMCFieldName(Class clazz, String fieldName)
-    {
-        String[] fields = ObfuscationReflectionHelper.remapFieldNames(clazz.getName(), fieldName);
-        if(fields != null && fields.length > 0)
-            return fields[0];
-        return fieldName;
-    }
-
-
-    /** Sets a final field, will remove final modified, and will make the field public for access.
+    /**
+     * Sets a final field, will remove final modified, and will make the field public for access.
      *
      * @param fieldname - name of the field to set
-     * @param newValue - value to set the field too
-     * @throws NullPointerException - if you failed to provide a field
-     * @throws NoSuchFieldException - if the field was not found, which should never happen
+     * @param newValue  - value to set the field too
+     * @throws NullPointerException   - if you failed to provide a field
+     * @throws NoSuchFieldException   - if the field was not found, which should never happen
      * @throws IllegalAccessException - if a security manager prevents access to the class, there most likely
-     * shouldn't be one over MC classes. However, with how lex is blocking modder access to things this is very
-     * likely to change. If this happens use ASM or an access transformer.
+     *                                shouldn't be one over MC classes. However, with how lex is blocking modder access to things this is very
+     *                                likely to change. If this happens use ASM or an access transformer.
      */
-    public static void setFinalStaticMCField(Class clazz, String fieldname, Object newValue) throws NoSuchFieldException, IllegalAccessException
+    public static void setFinalStaticMCField(Class clazz, String fieldname, String fieldName2, Object newValue) throws NoSuchFieldException, IllegalAccessException
     {
-        setFinalStaticField(clazz.getField(getMCFieldName(clazz, fieldname)), newValue);
+        setFinalStaticField(getMCField(clazz, fieldname, fieldName2), newValue);
     }
 
-    /** Sets a final field, will remove final modified, and will make the field public for access.
+    @Deprecated
+    public static void setFinalStaticMCField(Class clazz, String fieldname, Object newValue) throws NoSuchFieldException, IllegalAccessException
+    {
+        setFinalStaticField(getMCField(clazz, fieldname, fieldname), newValue);
+    }
+    /**
+     * Sets a final field, will remove final modified, and will make the field public for access.
      *
-     * @param field - field to set, uses reflection to mess with the field object
+     * @param field    - field to set, uses reflection to mess with the field object
      * @param newValue - value to set the field too
-     * @throws NullPointerException - if you failed to provide a field
-     * @throws NoSuchFieldException - if the field was not found, which should never happen
+     * @throws NullPointerException   - if you failed to provide a field
+     * @throws NoSuchFieldException   - if the field was not found, which should never happen
      * @throws IllegalAccessException - if a security manager prevents access to the class, there most likely
-     * shouldn't be one over MC classes. However, with how lex is blocking modder access to things this is very
-     * likely to change. If this happens use ASM or an access transformer.
+     *                                shouldn't be one over MC classes. However, with how lex is blocking modder access to things this is very
+     *                                likely to change. If this happens use ASM or an access transformer.
      */
     public static void setFinalStaticField(Field field, Object newValue) throws NoSuchFieldException, IllegalAccessException
     {
-       setFinalField(null, field, newValue);
+        setFinalField(null, field, newValue);
     }
 
-    /** Sets a final field, will remove final modified, and will make the field public for access.
+    /**
+     * Sets a final field, will remove final modified, and will make the field public for access.
      *
      * @param instance - instance of the class, null will assume static field
-     * @param field - field to set, uses reflection to mess with the field object
+     * @param field    - field to set, uses reflection to mess with the field object
      * @param newValue - value to set the field too
-     * @throws NullPointerException - if you failed to provide a field
-     * @throws NoSuchFieldException - if the field was not found, which should never happen
+     * @throws NullPointerException   - if you failed to provide a field
+     * @throws NoSuchFieldException   - if the field was not found, which should never happen
      * @throws IllegalAccessException - if a security manager prevents access to the class, there most likely
-     * shouldn't be one over MC classes. However, with how lex is blocking modder access to things this is very
-     * likely to change. If this happens use ASM or an access transformer.
+     *                                shouldn't be one over MC classes. However, with how lex is blocking modder access to things this is very
+     *                                likely to change. If this happens use ASM or an access transformer.
      */
     public static void setFinalField(Object instance, Field field, Object newValue) throws NoSuchFieldException, IllegalAccessException
     {
@@ -313,11 +304,12 @@ public class ReflectionUtility extends ReflectionHelper
         field.set(instance, newValue);
     }
 
-    /** Removes final off of the field so it can be set
+    /**
+     * Removes final off of the field so it can be set
      *
      * @param field - field to remove final off of
-     * @return  the previous modifier state so it can be restored
-     * @throws NoSuchFieldException - field not found, should never happen
+     * @return the previous modifier state so it can be restored
+     * @throws NoSuchFieldException   - field not found, should never happen
      * @throws IllegalAccessException - field can be manipulated
      */
     public static int removeFinalFromField(Field field) throws NoSuchFieldException, IllegalAccessException
@@ -327,7 +319,8 @@ public class ReflectionUtility extends ReflectionHelper
 
     /**
      * Sets a fields modifiers, mainly used for removing final modifiers and then restoring it after settings the field
-     * @param field - field to mess with
+     *
+     * @param field    - field to mess with
      * @param modifier - modifers to set
      * @return modifiers before they were changed
      * @throws NoSuchFieldException

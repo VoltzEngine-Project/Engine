@@ -32,7 +32,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
         //Set texture name, reflection is used to prevent overriding the blocks existing name
         try
         {
-            Field field = ReflectionUtility.getMCField(Block.class, "textureName");
+            Field field = ReflectionUtility.getMCField(Block.class, "textureName", "field_149768_d");
             if (field == null)
             {
                 Engine.instance.logger().error(manager.name() + " Failed to access textureName field for block " + name);
@@ -54,7 +54,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
         {
             try
             {
-                Field field = ReflectionUtility.getMCField(Block.class, "displayOnCreativeTab");
+                Field field = ReflectionUtility.getMCField(Block.class, "displayOnCreativeTab", "field_149772_a");
                 if (field == null)
                 {
                     References.LOGGER.error(manager.name() + " Failed to access creativeTab field for block " + name);

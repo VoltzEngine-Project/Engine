@@ -47,7 +47,7 @@ public class BlockUtility
         //Get the block using reflection as the field is private
         try
         {
-            Field field = ReflectionUtility.getMCField(Block.class, "blockResistance");
+            Field field = ReflectionUtility.getMCField(Block.class, "blockResistance", "field_149781_w");
             BLOCK_RESISTANCE.put(block, field.getFloat(block));
             return BLOCK_RESISTANCE.get(block);
         } catch (Exception e)
@@ -77,7 +77,7 @@ public class BlockUtility
         //Get the block using reflection as the field is private
         try
         {
-            Field field = ReflectionUtility.getMCField(Block.class, "blockHardness");
+            Field field = ReflectionUtility.getMCField(Block.class, "blockHardness", "field_149782_v");
             BLOCK_HARDNESS.put(block, field.getFloat(block));
             return BLOCK_HARDNESS.get(block);
         } catch (Exception e)
