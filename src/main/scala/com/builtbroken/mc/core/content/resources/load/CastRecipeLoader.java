@@ -41,14 +41,28 @@ public class CastRecipeLoader extends MachineRecipeLoader<CastingRecipe>
         {
             if (oreName.contains("ingot"))
             {
-                String fluidName = oreName.replace("ingot", "").toLowerCase();
-                Fluid fluid = FluidRegistry.getFluid(fluidName);
-                if (fluid != null)
-                {
-                    recipes.add(newRecipe("ingot", fluid, OreDictionary.getOres(oreName).get(0)));
-                }
+                CastingRecipe recipe = newRecipe("ingot", oreName);
+                if (recipe != null)
+                    recipes.add(recipe);
+            }
+            else if (oreName.contains("nugget"))
+            {
+                CastingRecipe recipe = newRecipe("nugget", oreName);
+                if (recipe != null)
+                    recipes.add(recipe);
             }
         }
+    }
+
+    public CastingRecipe newRecipe(String type, String oreName)
+    {
+        String fluidName = oreName.replace(type, "").toLowerCase();
+        Fluid fluid = FluidRegistry.getFluid(fluidName);
+        if (fluid != null)
+        {
+            return newRecipe(type, fluid, OreDictionary.getOres(oreName).get(0));
+        }
+        return null;
     }
 
     public CastingRecipe newRecipe(String type, Fluid fluid, ItemStack output)
