@@ -1,8 +1,11 @@
 package com.builtbroken.mc.lib.helper;
 
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import org.apache.logging.log4j.Level;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -13,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.logging.log4j.Level;
 
 /**
  * @author DarkGuardsman
@@ -238,6 +239,13 @@ public class ReflectionUtility extends ReflectionHelper
             }
             catch(NoSuchFieldException e2)
             {
+                Engine.instance.logger().info("Failed to find field '" + fieldName + "' printing debug info");
+                Engine.instance.logger().info("\tFMLDeobfuscatingRemapper clazz internal name = " + FMLDeobfuscatingRemapper.INSTANCE.unmap(clazz.getName().replace('.', '/')));
+                Engine.instance.logger().info("\tObfusactionReflectionHelper.remapFieldsNames(" + clazz.getName() +", " + fieldName +") returned " + ObfuscationReflectionHelper.remapFieldNames(clazz.getName(), fieldName));
+                for(Field field : getAllFields(clazz))
+                {
+                    Engine.instance.logger().info("\tField: " + field);
+                }
                 return null;
             }
         }
