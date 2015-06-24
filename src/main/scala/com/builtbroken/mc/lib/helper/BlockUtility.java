@@ -5,7 +5,6 @@ import com.builtbroken.mc.lib.transform.vector.Pos;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import com.builtbroken.mc.core.References;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -52,10 +51,12 @@ public class BlockUtility
             BLOCK_RESISTANCE.put(block, field.getFloat(block));
             return BLOCK_RESISTANCE.get(block);
         }
-        catch (IllegalAccessException e)
+        catch (Exception e)
         {
             if(Engine.runningAsDev)
-                References.LOGGER.catching(e);
+                Engine.instance.logger().catching(e);
+            else
+                Engine.instance.logger().info("Failed to reflect into Block.class to get block resistance");
         }
         return 0;
     }
@@ -83,10 +84,12 @@ public class BlockUtility
             BLOCK_HARDNESS.put(block, field.getFloat(block));
             return BLOCK_HARDNESS.get(block);
         }
-        catch (IllegalAccessException e)
+        catch (Exception e)
         {
             if(Engine.runningAsDev)
-                References.LOGGER.catching(e);
+                Engine.instance.logger().catching(e);
+            else
+                Engine.instance.logger().info("Failed to reflect into Block.class to get block hardness");
         }
         return 0;
 	}
