@@ -2,7 +2,6 @@ package com.builtbroken.mc.prefab.recipe.extend;
 
 import com.builtbroken.mc.api.recipe.IMachineRecipe;
 import com.builtbroken.mc.api.recipe.IMachineRecipeHandler;
-import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.api.recipe.RecipeRegisterResult;
 
 import java.util.*;
@@ -44,17 +43,7 @@ public abstract class MRHandler<O extends Object, K extends Object> implements I
                 RecipeRegisterResult result = isValidRecipe(recipe);
                 if (result == RecipeRegisterResult.REGISTERED)
                 {
-                    for (Object o : recipe.getValidInputs())
-                    {
-                        K key = getKeyFor(o);
-                        List<IMachineRecipe> list = null;
-                        if (recipes.containsKey(key))
-                            list = recipes.get(key);
-                        if (list == null)
-                            list = new ArrayList();
-                        list.add(recipe);
-                        recipes.put(key, list);
-                    }
+                   doRegister(recipe);
                 }
                 return result;
             }
@@ -64,6 +53,22 @@ public abstract class MRHandler<O extends Object, K extends Object> implements I
             }
         }
         return RecipeRegisterResult.FAILED;
+    }
+
+
+    protected void doRegister(IMachineRecipe recipe)
+    {
+        for (Object o : recipe.getValidInputs())
+        {
+            K key = getKeyFor(o);
+            List<IMachineRecipe> list = null;
+            if (recipes.containsKey(key))
+                list = recipes.get(key);
+            if (list == null)
+                list = new ArrayList();
+            list.add(recipe);
+            recipes.put(key, list);
+        }
     }
 
     /**

@@ -7,14 +7,14 @@ import java.util.Collection;
  * For example grinding ore into dust is always about the same process
  * Created by robert on 1/9/2015.
  */
-public interface IMachineRecipeHandler<O extends Object>
+public interface IMachineRecipeHandler<O extends Object, R extends IMachineRecipe>
 {
     /**
      * Registers a recipe to this handler
      *
      * @return true if the recipe was registered
      */
-    RecipeRegisterResult registerRecipe(IMachineRecipe recipe);
+    RecipeRegisterResult registerRecipe(R recipe);
 
     /**
      * Called to get a recipe for the list of inputs. Extra and failure
@@ -36,10 +36,10 @@ public interface IMachineRecipeHandler<O extends Object>
     /**
      * Gets all recipes registered to this machine type
      */
-    Collection<IMachineRecipe> getRecipes(Object[] items);
+    Collection<R> getRecipes(Object[] items);
 
     /**
      * Gets all recipes registered to this machine type
      */
-    Collection<IMachineRecipe> getRecipes();
+    Collection<R> getRecipes();
 }

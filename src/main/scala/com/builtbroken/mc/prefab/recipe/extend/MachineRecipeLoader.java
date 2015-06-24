@@ -22,7 +22,7 @@ public class MachineRecipeLoader<I extends IMachineRecipe> extends AbstractLoada
     }
 
     @Override
-    public final void init()
+    public void init()
     {
         List<I> recipes = new ArrayList();
         generateRecipes(recipes);

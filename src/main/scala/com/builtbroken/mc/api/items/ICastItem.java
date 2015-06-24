@@ -29,6 +29,13 @@ public interface ICastItem
     int getFluidCapacity(ItemStack stack);
 
     /**
+     * Type of cast
+     * @param stack - this item
+     * @return valid type registered with Molten cast handler
+     */
+    String getCastType(ItemStack stack);
+
+    /**
      * Called when the cast is completely filled and the cast timer finishes
      *
      * @param stack      - this item
