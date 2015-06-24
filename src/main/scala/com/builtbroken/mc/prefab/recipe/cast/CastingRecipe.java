@@ -1,7 +1,7 @@
 package com.builtbroken.mc.prefab.recipe.cast;
 
 import com.builtbroken.mc.api.items.ICastItem;
-import com.builtbroken.mc.api.recipe.IMachineRecipe;
+import com.builtbroken.mc.api.recipe.ICastingRecipe;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Dark on 6/23/2015.
  */
-public class CastingRecipe implements IMachineRecipe<ItemStack, FluidStack>
+public class CastingRecipe implements ICastingRecipe
 {
     protected final ItemStack output;
     protected final List<FluidStack> inputs;
@@ -75,5 +75,11 @@ public class CastingRecipe implements IMachineRecipe<ItemStack, FluidStack>
     public ItemStack handleRecipe(Object[] inputs, float extraChance, float failureChance)
     {
         return getOutput();
+    }
+
+    @Override
+    public String getCastType()
+    {
+        return cast_type;
     }
 }
