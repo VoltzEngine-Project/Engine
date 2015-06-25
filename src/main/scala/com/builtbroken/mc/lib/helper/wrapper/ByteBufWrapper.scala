@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.helper.wrapper
 
 import com.builtbroken.mc.api.ISave
-import com.builtbroken.mc.core.References
+import com.builtbroken.mc.core.{Engine, References}
 import com.builtbroken.mc.core.network.{IByteBufWriter, IByteBufReader}
 import com.builtbroken.mc.lib.transform.vector.{Pos, Point}
 import cpw.mods.fml.common.network.ByteBufUtils
@@ -76,6 +76,12 @@ object ByteBufWrapper
      */
     def <<<(data: Any): ByteBuf =
     {
+      if(data == null)
+      {
+        if(Engine.runningAsDev)
+          Engine.instance.logger().error("Attempted to write null to ByteBuf ", new RuntimeException())
+        return buf
+      }
       try
       {
         data match
