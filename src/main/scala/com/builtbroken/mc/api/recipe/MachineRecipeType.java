@@ -89,11 +89,6 @@ public enum MachineRecipeType
         return RecipeRegisterResult.NO_HANDLER;
     }
 
-    public Object getRecipe(Object... items)
-    {
-        return getRecipe(0, 0, items);
-    }
-
     public Object getRecipe(float extra_chance, float fail_chance, Object... items)
     {
         if (getHandler() != null)
