@@ -39,14 +39,19 @@ public class RenderItemOverlayUtility
 
     public static void renderIcon(IIcon icon, int sheet, Pos pos, ForgeDirection direction, boolean thick)
     {
-        renderIcon(icon, sheet, pos.xf(), pos.yf(), pos.zf(), thick, direction);
+        renderIcon(icon, sheet, 1, pos, direction, thick);
     }
 
-    public static void renderIcon(IIcon icon, int sheet, float x, float y, float z, boolean thick, ForgeDirection direction)
+    public static void renderIcon(IIcon icon, int sheet, float scale, Pos pos, ForgeDirection direction, boolean thick)
+    {
+        renderIcon(icon, sheet, scale, pos.xf(), pos.yf(), pos.zf(), thick, direction);
+    }
+
+    public static void renderIcon(IIcon icon, int sheet, float scale, float x, float y, float z, boolean thick, ForgeDirection direction)
     {
         GL11.glPushMatrix();
-        GL11.glScalef(0.5128205F, 0.5128205F, 0.5128205F);
         GL11.glTranslated(x, y, z);
+        GL11.glScalef(scale, scale, scale);
         switch (direction)
         {
             case UP:
