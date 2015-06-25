@@ -3,7 +3,6 @@ package com.builtbroken.mc.core.registry;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
-import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
@@ -22,7 +21,7 @@ import java.util.WeakHashMap;
 /**
  * Helper class that can be used to reduce the amount of code used to handle general object registration. Handles basic block and item
  * creation threw reflection. As well follows up by setting a common creative tab, mod prefix, localization name, and texture name.
- *
+ * <p/>
  * If you use this make sure to init prefix, call {@link #fireInit()}, and {@link #firePostInit()}. If you fail to do so the manager will
  * not fully function. As well most of your blocks will not recipe the correct method calls from the manager.
  *
@@ -137,6 +136,10 @@ public class ModManager
     public BlockTile newBlock(String name, Tile spatial)
     {
         String actual_name = name;
+
+        debug("-----------------------------------------------------------");
+        debug(" Creating new spatial block name='" + name + "'  Tile='" + spatial + "'");
+
         if (actual_name == null || actual_name.isEmpty())
         {
             if (spatial.name != null && !spatial.name.isEmpty())
@@ -157,11 +160,12 @@ public class ModManager
         temp_registry_list.add(spatial);
 
         Tile newTile = spatial.newTile();
+        debug("\t NewTile='" + newTile + "'");
         if (newTile != null)
         {
             registerTile(actual_name, block, spatial, newTile);
         }
-
+        debug("-----------------------------------------------------------");
         return block;
     }
 
@@ -172,11 +176,14 @@ public class ModManager
             temp_registry_list.add(newTile);
         if (spatial.renderTileEntity)
         {
+            debug("\tDetected tile renderer");
             proxy.registerDummyRenderer(newTile.getClass());
         }
     }
+
     public void registerTileEntity(String actual_name, Block block, TileEntity tile)
     {
+        debug("\tRegistering tile " + tile + " with name " + actual_name);
         proxy.registerTileEntity(actual_name, modPrefix, block, tile);
     }
 
@@ -331,7 +338,7 @@ public class ModManager
     {
         if (name == null || name.isEmpty())
         {
-            References.LOGGER.warn(name() + " Registry name was not provided for item " + item + " using class name to prevent game from crashing. This may cause world loading issues in the future.");
+            References.LOGGER.debug(name() + " Registry name was not provided for item " + item + " using class name to prevent game from crashing. This may cause world loading issues in the future.");
             name = LanguageUtility.decapitalizeFirst(item.getClass().getSimpleName().replace("Item", ""));
         }
         proxy.registerItem(this, name, modPrefix, item);
@@ -342,7 +349,7 @@ public class ModManager
 
     public void fireInit()
     {
-        for(Object object: temp_registry_list)
+        for (Object object : temp_registry_list)
         {
             proxy.onRegistry(object);
         }
@@ -350,18 +357,23 @@ public class ModManager
 
     public void firePostInit()
     {
-        for(Object object: temp_registry_list)
+        for (Object object : temp_registry_list)
         {
-            if(object instanceof IPostInit)
+            if (object instanceof IPostInit)
             {
                 ((IPostInit) object).onPostInit();
             }
         }
     }
 
-
     public String name()
     {
         return "ModManager[" + (modPrefix == null || modPrefix.isEmpty() ? hashCode() : modPrefix) + "]";
+    }
+
+    public void debug(String s)
+    {
+        if (Engine.runningAsDev)
+            Engine.instance.logger().info(name() + s);
     }
 }
