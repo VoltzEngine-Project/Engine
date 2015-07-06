@@ -1,6 +1,7 @@
 package com.builtbroken.mc.core.content.resources.load;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.prefab.recipe.cast.CastingRecipe;
 import com.builtbroken.mc.prefab.recipe.cast.MRHandlerCast;
 import com.builtbroken.mc.prefab.recipe.extend.MachineRecipeLoader;
@@ -10,6 +11,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,6 +58,12 @@ public class CastRecipeLoader extends MachineRecipeLoader<CastingRecipe>
 
     public CastingRecipe newRecipe(String type, String oreName)
     {
+        ArrayList ores = OreDictionary.getOres(oreName);
+        if (ores == null || ores.size() == 0)
+        {
+            Engine.instance.logger().error("[CastRecipeLoader]Attempted to create a recipe with an oreName[" + oreName + "] without an ItemStack.  Ores: " + ores);
+            return null;
+        }
         String fluidName = oreName.replace(type, "").toLowerCase();
         Fluid fluid = FluidRegistry.getFluid(fluidName);
         if (fluid != null)
