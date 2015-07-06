@@ -70,7 +70,7 @@ import java.util.Arrays;
  * @author Calclavia, DarkGuardsman
  */
 
-@Mod(modid = References.ID, name = References.NAME, version = References.VERSION)
+@Mod(modid = References.ID, name = References.NAME, version = References.VERSION, acceptableRemoteVersions = "*")
 public class Engine extends AbstractMod
 {
     public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
