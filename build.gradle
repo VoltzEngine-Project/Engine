@@ -17,9 +17,12 @@ buildscript {
     }
 }
 
-apply from: './BuiltBrokenScripts/index.gradle'
-apply plugin: 'forge'
-apply plugin: 'curseforge'
+plugins {
+  id 'com.matthewprenger.cursegradle' version '1.0.1'
+}
+
+apply from: 'https://raw.githubusercontent.com/BuiltBrokenModding/BuiltBrokenScripts/buildScripts/index.gradle'
+apply plugin: "forge"
 
 ext.buildProps = file "build.properties"
 
@@ -83,20 +86,20 @@ processResources {
 	}
 }
 
-curse {
-    apiKey = project.dmodcurse
-    projectId = "227048"
-    // my project url is http://minecraft.curseforge.com/mc-mods/227048-voltz-engine
-    changelog = ""
-    releaseType = "alpha"
+//curse {
+//    apiKey = project.dmodcurse
+//    projectId = "227048"
+//    // my project url is http://minecraft.curseforge.com/mc-mods/227048-voltz-engine
+//    changelog = ""
+//    releaseType = "alpha"
 
-    // the default obfuscated jar is uploaded by default
-    // artifact = project.file("some/jar/to/upload.jar")
-
-    // allows you to add extra compatible MC versions. The one specified in the minecraft{} block is used by default.
-    addGameVersion "1.7.10"
-    // addGameversion "1.7.0", "1.7.4"
-}
+//    // the default obfuscated jar is uploaded by default
+//    // artifact = project.file("some/jar/to/upload.jar")
+//
+//    // allows you to add extra compatible MC versions. The one specified in the minecraft{} block is used by default.
+//    addGameVersion "1.7.10"
+//    // addGameversion "1.7.0", "1.7.4"
+//}
 
 archivesBaseName = "VolzEngine"
 
@@ -140,7 +143,7 @@ dependencies
 {
     testCompile 'junit:junit:4.11'
     compile 'junit:junit:4.11'
-    compile "mcp.mobius.waila:Waila:1.5.8a_1.7.10"
+    compile "mcp.mobius.waila:Waila:1.5.11-RC1_1.7.10"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.0.+:dev"
     //compile "net.industrial-craft:industrialcraft-2:2.2.654-experimental:api"
 }
