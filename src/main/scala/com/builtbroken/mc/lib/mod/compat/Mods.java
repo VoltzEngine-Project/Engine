@@ -1,7 +1,6 @@
 package com.builtbroken.mc.lib.mod.compat;
 
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.LoaderState;
 
 /**
  * Created by robert on 12/31/2014.
@@ -15,7 +14,8 @@ public enum Mods
     BOP( "BiomesOPlenty"),
     BC("BuildCraft|Core"),
     IC2("IC2"),
-    WAILA("Waila");
+    WAILA("Waila"),
+    DRAGON_API("DragonAPI");
 
     public final String mod_id;
 
