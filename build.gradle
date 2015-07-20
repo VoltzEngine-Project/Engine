@@ -77,7 +77,7 @@ minecraft {
 
 jar{
   from ('./src/main/scala') {
-    include 'META-INF/DragonAPI_at.cfg'
+    include 'META-INF/VE_at.cfg'
   }
 }
 processResources {
