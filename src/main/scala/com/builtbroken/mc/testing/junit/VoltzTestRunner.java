@@ -20,6 +20,13 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
 
+/**
+* Test runner for Voltz Engine Unit tests. 
+* As a note for Minecraft Mod developers. You are welcome to copy this Unit test and included it in your projects. So long
+* as you provide credit to any develop that works on the file. As well do not profit off the project or violate any EULA or laws.
+*
+* @author Darkguardsman
+*/
 public class VoltzTestRunner extends Runner
 {
     protected Class<? extends AbstractTest> clazz;
