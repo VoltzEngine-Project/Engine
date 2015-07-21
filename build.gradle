@@ -76,7 +76,7 @@ minecraft {
 }
 
 jar{
-  from ('./src/main/scala') {
+  from ('./src/main/resources') {
     include 'META-INF/VE_at.cfg'
   }
 }
