@@ -124,8 +124,10 @@ jar {
             "Implementation-Title": archivesBaseName,
             "Implementation-Version": project.version,
             "Git-Hash": gitHash,
+			"FMLAT": "VE_at.cfg"
     )
 }
+
 
 repositories {
     maven {
