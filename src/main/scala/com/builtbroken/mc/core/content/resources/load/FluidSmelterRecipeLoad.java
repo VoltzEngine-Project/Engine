@@ -28,13 +28,14 @@ public class FluidSmelterRecipeLoad extends MRLoaderFluidStack
     @Override
     protected void generateRecipes(List<MRFluidStack> recipes)
     {
+        ///TODO add a config to not generate new fluids if they don't exist
         loaded = true;
-        moltenIron = registerMoltenFluid("iron");
+        moltenIron = registerMoltenFluid("iron.molten");
         recipes.add(newRecipe(moltenIron, 2, new ItemStack(Blocks.iron_ore)));
         recipes.add(newRecipe(moltenIron, 1, new ItemStack(Items.iron_ingot)));
 
 
-        moltenGold = registerMoltenFluid("gold");
+        moltenGold = registerMoltenFluid("gold.molten");
         recipes.add(newRecipe(moltenGold, 2, new ItemStack(Blocks.gold_ore)));
         recipes.add(newRecipe(moltenGold, 1, new ItemStack(Items.gold_ingot)));
     }
