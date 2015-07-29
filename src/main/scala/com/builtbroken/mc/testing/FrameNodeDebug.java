@@ -1,9 +1,10 @@
-package com.builtbroken.mc.testing.debug;
+package com.builtbroken.mc.testing;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.tile.ITileModuleProvider;
 import com.builtbroken.mc.api.tile.node.ITileModule;
+import com.builtbroken.mc.testing.debug.FrameDebug;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
