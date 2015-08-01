@@ -46,18 +46,32 @@ public class MathUtility
 		return var;
 	}
 
-	/**
-	 * Clamps an angle to 360 degree circle
-	 */
-	public static float clampAngleTo360(float var)
-	{
-		return MathUtility.clampAngle(var, 0, 360);
-	}
-
 	public static double clampAngleTo180(double var)
 	{
 		return MathUtility.clampAngle(var, -180, 180);
 	}
+
+    /** Gets the volume of a sphere
+     *
+     * @param radius - distance from center
+     * @return exact volume
+     */
+    public static double getSphereVolume(double radius)
+    {
+        return (4 * Math.PI * (radius * radius * radius)) / 3;
+    }
+
+
+    /**
+     * MC method that has been copies to remove the @SideOnly(Side.CLIENT)
+     * @param p_154353_0_
+     * @return
+     */
+    public static int func_154353_e(double p_154353_0_)
+    {
+        return (int)(p_154353_0_ >= 0.0D ? p_154353_0_ : -p_154353_0_ + 1.0D);
+    }
+
 
 	/**
 	 * gets the facing direction using the yaw angle
@@ -85,25 +99,12 @@ public class MathUtility
 		}
 	}
 
-    /** Gets the volume of a sphere
-     *
-     * @param radius - distance from center
-     * @return exact volume
-     */
-    public static double getSphereVolume(double radius)
-    {
-        return (4 * Math.PI * (radius * radius * radius)) / 3;
-    }
-
-
-    /**
-     * MC method that has been copies to remove the @SideOnly(Side.CLIENT)
-     * @param p_154353_0_
-     * @return
-     */
-    public static int func_154353_e(double p_154353_0_)
-    {
-        return (int)(p_154353_0_ >= 0.0D ? p_154353_0_ : -p_154353_0_ + 1.0D);
-    }
+	/**
+	 * gets the facing direction using the yaw angle
+	 */
+	public static ForgeDirection getFacingDirectionFromAngle(double yaw)
+	{
+		return getFacingDirectionFromAngle((float) yaw);
+	}
 
 }
