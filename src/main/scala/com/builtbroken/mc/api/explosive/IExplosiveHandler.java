@@ -1,10 +1,10 @@
 package com.builtbroken.mc.api.explosive;
 
+import com.builtbroken.mc.api.event.TriggerCause;
+import com.builtbroken.mc.lib.world.edit.IWorldChangeAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import com.builtbroken.mc.api.event.TriggerCause;
-import com.builtbroken.mc.lib.world.edit.IWorldChangeAction;
 
 import java.util.List;
 
@@ -51,5 +51,4 @@ public interface IExplosiveHandler
 
     /** Gets the id this was registered with */
     String getID();
-
 }
