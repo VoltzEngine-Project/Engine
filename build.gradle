@@ -145,6 +145,10 @@ repositories {
         name = "ic2"
         url = "http://maven.ic2.player.to/"
     }
+        maven{
+        name="bbm"
+        url="http://ci.builtbroken.com/maven/"
+    }
 }
 
 dependencies 
@@ -153,6 +157,8 @@ dependencies
     compile 'junit:junit:4.11'
     compile "mcp.mobius.waila:Waila:1.5.11-RC1_1.7.10"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.0.+:dev"
+    compile "com.builtbroken.codinglib:CodingLib:0.0.+:deobf"
+    compile "com.builtbroken.minecraftjunit:MinecraftJUnit:1.7.10-0.+:deobf"
     testRuntime 'org.slf4j:slf4j-simple:1.7.10'
     //compile "net.industrial-craft:industrialcraft-2:2.2.654-experimental:api"
 }
