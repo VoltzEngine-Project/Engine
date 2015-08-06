@@ -147,14 +147,14 @@ repositories {
     }
     maven { 
         name 'OC Maven'
-        url = "http://maven.cil.li/" }
+        url = "http://maven.cil.li" }
     maven {
         name = "ic2"
-        url = "http://maven.ic2.player.to/"
+        url = "http://maven.ic2.player.to"
     }
     maven{
         name="bbm"
-        url="http://ci.builtbroken.com/maven/"
+        url="http://ci.builtbroken.com/maven"
     }
     maven {
         name "xcompwiz"
