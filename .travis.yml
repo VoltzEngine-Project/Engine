@@ -13,7 +13,7 @@ notifications:
    - "irc.esper.net#BBM-bots"
   template:
    - "%{build_number} (%{branch} - %{commit}: %{commit_message} : %{author}): %{message} (%{build_url})"
-install: ./gradlew setupCIWorkspace
+install: ./gradlew setupCIWorkspace -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 -S -i --refresh-dependencies
 script:
   - ./gradlew build coveralls jacocoTestReport -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 -S -i --refresh-dependencies
 jdk:
