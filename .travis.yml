@@ -1,9 +1,4 @@
 language: java
-cache:
-  directories:
-    - $HOME/.gradle
-    - .gradle
-sudo: false
 before_install:
   - git submodule update --init --recursive
   - chmod a+x gradlew
