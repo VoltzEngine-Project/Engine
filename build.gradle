@@ -21,6 +21,8 @@ plugins {
   id 'com.matthewprenger.cursegradle' version '1.0.1'
   id 'net.saliman.cobertura' version '2.2.5'
   id 'com.github.kt3k.coveralls' version '2.0.1'
+  id "com.github.johnrengelman.shadow" version "1.2.2"
+  
 }
 
 apply from: 'https://raw.githubusercontent.com/BuiltBrokenModding/BuiltBrokenScripts/buildScripts/index.gradle'
@@ -117,7 +119,7 @@ if (new File(projectDir, '.git').exists()) {
     gitHash = repo.log().find().abbreviatedId
 }
 
-jar { 
+jar {
     manifest.mainAttributes(
             "Built-By": System.getProperty('user.name'),
             "Created-By": currentJvm,
@@ -128,40 +130,21 @@ jar {
     )
 }
 
+configure([compileJava, compileTestJava]) {
+    options.compilerArgs += ['-Xlint:all', '-Xlint:-path']
+    options.deprecation = true
+    options.encoding = 'utf8'
+}
 
-repositories {
-    maven {
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
-    }
-    maven {
-        name 'CB Repo'
-        url "http://chickenbones.net/maven/"
-    }
-    maven { 
-        name 'OC Maven'
-        url = "http://maven.cil.li/" }
-    maven {
-        name = "ic2"
-        url = "http://maven.ic2.player.to/"
-    }
-        maven{
-        name="bbm"
-        url="http://ci.builtbroken.com/maven/"
+
+shadowJar {
+    dependencies {
+        include(dependency('compile "com.builtbroken.codinglib:CodingLib:0.0.+:deobf"'))
     }
 }
 
-dependencies 
-{
-    testCompile 'junit:junit:4.11'
-    compile 'junit:junit:4.11'
-    compile "mcp.mobius.waila:Waila:1.5.11-RC1_1.7.10"
-    compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.0.+:dev"
-    compile "com.builtbroken.codinglib:CodingLib:0.0.+:deobf"
-    compile "com.builtbroken.minecraftjunit:MinecraftJUnit:1.7.10-0.+:deobf"
-    testRuntime 'org.slf4j:slf4j-simple:1.7.10'
-    //compile "net.industrial-craft:industrialcraft-2:2.2.654-experimental:api"
-}
+build.dependsOn shadowJar
+
 def getDate() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMddHHmmss')
