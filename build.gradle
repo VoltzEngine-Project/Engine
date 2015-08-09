@@ -22,7 +22,6 @@ plugins {
   id 'net.saliman.cobertura' version '2.2.5'
   id 'com.github.kt3k.coveralls' version '2.0.1'
   id "com.github.johnrengelman.shadow" version "1.2.2"
-  
 }
 
 apply from: 'https://raw.githubusercontent.com/BuiltBrokenModding/BuiltBrokenScripts/buildScripts/index.gradle'
@@ -164,21 +163,21 @@ repositories {
 
 dependencies 
 {
-    compile 'junit:junit:4.11'
-    compile "mcp.mobius.waila:Waila:1.5.11-RC1_1.7.10"
-    compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.0.+:dev"
-    compile "com.builtbroken.codinglib:CodingLib:0.0.+:deobf"
-    compile "com.builtbroken.minecraftjunit:MinecraftJUnit:1.7.10-0.+:deobf"
+    //compile 'junit:junit:4.11'
+    //compile "mcp.mobius.waila:Waila:1.5.11-RC1_1.7.10"
+    //compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.9.39:dev"
+    //compile "com.builtbroken.codinglib:CodingLib:0.0.+:deobf"
+    compile "com.builtbroken.minecraftjunit:MinecraftJUnit:1.7.10-0.4.0b11"
     testRuntime 'org.slf4j:slf4j-simple:1.7.10'
     //compile "net.industrial-craft:industrialcraft-2:2.2.654-experimental:api"
-    compile "com.xcompwiz.mystcraft:mystcraft:0.12.3.00:dev"
+    //compile "com.xcompwiz.mystcraft:mystcraft:0.12.3.00:dev"
 }
 
 
 
 shadowJar {
     dependencies {
-        include(dependency('compile "com.builtbroken.codinglib:CodingLib:0.0.+:deobf"'))
+        include(dependency('compile "com.builtbroken.codinglib:CodingLib:0.0.1b4:deobf"'))
     }
 }
 
