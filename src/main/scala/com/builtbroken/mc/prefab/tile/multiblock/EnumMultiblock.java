@@ -1,7 +1,5 @@
 package com.builtbroken.mc.prefab.tile.multiblock;
 
-import net.minecraft.block.ITileEntityProvider;
-
 /** Enum of different mutliblock tiles that can be used to restrict connections
  * Created by Dark on 7/4/2015.
  */
@@ -20,7 +18,5 @@ public enum EnumMultiblock
     /* 8 */MECH_INV,
     /* 9 */MECH_ENERGY,
     /* 10 */MECH_TANK,
-    /* 11 */TANK_INV_ENERGY,;
-
-    private ITileEntityProvider creator;
+    /* 11 */TANK_INV_ENERGY;
 }

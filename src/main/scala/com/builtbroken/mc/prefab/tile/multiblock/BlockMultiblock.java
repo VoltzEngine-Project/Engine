@@ -2,6 +2,7 @@ package com.builtbroken.mc.prefab.tile.multiblock;
 
 import codechicken.lib.vec.Vector3;
 import com.builtbroken.mc.api.tile.IMultiTile;
+import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiTank;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -120,6 +121,13 @@ public class BlockMultiblock extends BlockContainer
     @Override
     public TileEntity createNewTileEntity(World world, int meta)
     {
+        if(meta >=0 && meta < EnumMultiblock.values().length)
+        {
+            switch (EnumMultiblock.values()[meta])
+            {
+                case TANK: new TileMultiTank();
+            }
+        }
         return new TileMulti();
     }
 
