@@ -102,7 +102,7 @@ public class SchematicMap extends Schematic implements ISave
 					{
 						meta = 0;
 					}
-					Pos setPos = spot.toVector3().subtract(this.schematicCenter).add(entry.getKey());
+					Pos setPos = spot.toPos().subtract(this.schematicCenter).add(entry.getKey());
 					if (checkWorld)
 					{
 						if (checkIfWorldIsLoaded)
