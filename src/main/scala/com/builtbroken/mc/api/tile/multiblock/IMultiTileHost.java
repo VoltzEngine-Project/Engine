@@ -1,6 +1,7 @@
-package com.builtbroken.mc.api.tile;
+package com.builtbroken.mc.api.tile.multiblock;
 
 import codechicken.lib.vec.Vector3;
+import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.Explosion;
 

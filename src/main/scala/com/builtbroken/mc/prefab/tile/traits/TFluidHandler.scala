@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.tile.`trait`
+package com.builtbroken.mc.prefab.tile.traits
 
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
@@ -7,7 +7,7 @@ import net.minecraftforge.fluids._
  * Created by Dark on 8/9/2015.
  */
 trait TFluidHandler extends IFluidHandler {
-  abstract def getTank(fluid: Fluid): IFluidTank
+  def getTank(fluid: Fluid): IFluidTank
 
   @Override
   def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int = {

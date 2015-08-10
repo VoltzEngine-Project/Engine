@@ -1,4 +1,4 @@
-package com.builtbroken.mc.api.tile;
+package com.builtbroken.mc.api.tile.multiblock;
 
 /**
  * Created by Dark on 8/9/2015.

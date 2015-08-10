@@ -1,7 +1,7 @@
 package com.builtbroken.mc.prefab.tile.multiblock.types
 
 import com.builtbroken.mc.api.tile.ITankProvider
-import com.builtbroken.mc.prefab.tile.`trait`.TFluidHandler
+import com.builtbroken.mc.prefab.tile.traits.TFluidHandler
 import com.builtbroken.mc.prefab.tile.multiblock.TileMulti
 import net.minecraftforge.fluids.{IFluidTank, FluidTank, Fluid}
 

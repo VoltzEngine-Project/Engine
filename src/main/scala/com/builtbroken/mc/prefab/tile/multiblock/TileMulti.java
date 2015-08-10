@@ -1,7 +1,7 @@
 package com.builtbroken.mc.prefab.tile.multiblock;
 
-import com.builtbroken.mc.api.tile.IMultiTile;
-import com.builtbroken.mc.api.tile.IMultiTileHost;
+import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
+import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import net.minecraft.tileentity.TileEntity;
 
 /**
