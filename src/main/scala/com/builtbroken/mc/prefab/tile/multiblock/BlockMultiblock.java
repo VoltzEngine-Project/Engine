@@ -1,11 +1,13 @@
 package com.builtbroken.mc.prefab.tile.multiblock;
 
 import codechicken.lib.vec.Vector3;
+import com.builtbroken.mc.api.tile.IInventoryProvider;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiInv;
 import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiTank;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -23,6 +25,10 @@ import java.util.Random;
  */
 public class BlockMultiblock extends BlockContainer
 {
+    public static ITileEntityProvider EU_ENERGY_TILE_PROVIDER;
+    public static ITileEntityProvider RF_ENERGY_TILE_PROVIDER;
+    public static ITileEntityProvider ENERGY_TILE_PROVIDER;
+
     protected BlockMultiblock()
     {
         super(Material.circuits);
@@ -127,9 +133,15 @@ public class BlockMultiblock extends BlockContainer
             switch (EnumMultiblock.values()[meta])
             {
                 case TANK:
-                    new TileMultiTank();
+                    return new TileMultiTank();
                 case INVENTORY:
-                    new TileMultiInv();
+                    return new TileMultiInv();
+                case ENERGY_EU:
+                    return EU_ENERGY_TILE_PROVIDER != null ? EU_ENERGY_TILE_PROVIDER.createNewTileEntity(world, meta) : new TileMulti();
+                case ENERGY_RF:
+                    return RF_ENERGY_TILE_PROVIDER != null ? RF_ENERGY_TILE_PROVIDER.createNewTileEntity(world, meta) : new TileMulti();
+                case ENERGY:
+                    return ENERGY_TILE_PROVIDER != null ? ENERGY_TILE_PROVIDER.createNewTileEntity(world, meta) : new TileMulti();
             }
         }
         return new TileMulti();

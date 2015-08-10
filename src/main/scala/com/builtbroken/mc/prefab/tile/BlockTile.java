@@ -197,7 +197,7 @@ public class BlockTile extends BlockContainer
         eject();
     }
 
-    @Override
+    @Override @SuppressWarnings("unchecked")
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
     {
         inject(world, x, y, z);
