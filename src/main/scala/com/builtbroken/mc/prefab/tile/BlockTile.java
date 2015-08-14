@@ -7,6 +7,7 @@ import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -30,7 +31,7 @@ import java.util.Random;
 /**
  * Created by robert on 1/4/2015.
  */
-public class BlockTile extends Block implements ITileEntityProvider
+public class BlockTile extends BlockContainer
 {
     public Tile staticTile = null;
 
@@ -196,7 +197,7 @@ public class BlockTile extends Block implements ITileEntityProvider
         eject();
     }
 
-    @Override
+    @Override @SuppressWarnings("unchecked")
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
     {
         inject(world, x, y, z);

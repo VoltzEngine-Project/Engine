@@ -57,7 +57,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
                 Field field = ReflectionUtility.getMCField(Block.class, "displayOnCreativeTab", "field_149772_a");
                 if (field == null)
                 {
-                    References.LOGGER.error(manager.name() + " Failed to access creativeTab field for block " + name);
+                    Engine.instance.logger().error(manager.name() + " Failed to access creativeTab field for block " + name);
                     block.setCreativeTab(manager.defaultTab);
                 }
                 else if (field.get(block) == null)
@@ -66,7 +66,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
                 }
             } catch (IllegalAccessException e)
             {
-                References.LOGGER.error(manager.name() + " Failed to access creativeTab field for block " + name);
+                Engine.instance.logger().error(manager.name() + " Failed to access creativeTab field for block " + name);
                 block.setCreativeTab(manager.defaultTab);
             }
         }
