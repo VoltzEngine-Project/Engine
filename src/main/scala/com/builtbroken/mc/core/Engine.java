@@ -66,6 +66,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
@@ -150,11 +151,16 @@ public class Engine
         heatDataConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/HeatMap.cfg"));
         explosiveConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/Explosives.cfg"));
 
+        loader = new LoadableHandler();
+        manager = new ModManager().setPrefix(References.DOMAIN);
+        logger = LogManager.getLogger(References.DOMAIN);
+
         config.load();
         heatDataConfig.load();
         explosiveConfig.load();
 
         References.LOGGER = logger;
+        loader = new LoadableHandler();
         ConfigScanner.instance().generateSets(event.getAsmData());
         ConfigHandler.sync(getConfig(), References.DOMAIN);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
