@@ -3,6 +3,7 @@ package com.builtbroken.mc.prefab.energy;
 import com.builtbroken.mc.api.energy.IEnergyBuffer;
 
 /**
+ * Basic implementation of energy buffer
  * Created by Dark on 8/15/2015.
  */
 public class EnergyBuffer implements IEnergyBuffer

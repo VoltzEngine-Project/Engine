@@ -1,6 +1,8 @@
 package com.builtbroken.mc.api.energy;
 
-/** Simple interface applied to objects that store energy
+/**
+ * Simple interface applied to objects that store energy. Normally when exposing this to other object to use the energy is expressed in VE joules.
+ * If you are storing in another type then convert before returning.
  * Created by Dark on 8/15/2015.
  */
 public interface IEnergyBuffer

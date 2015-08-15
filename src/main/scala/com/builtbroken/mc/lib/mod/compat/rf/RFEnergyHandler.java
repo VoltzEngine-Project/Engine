@@ -5,7 +5,6 @@ import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyStorage;
 import com.builtbroken.mc.lib.mod.compat.energy.EnergyHandler;
-import com.builtbroken.mc.lib.mod.compat.energy.UniversalEnergySystem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -15,10 +14,15 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public class RFEnergyHandler extends EnergyHandler
 {
+    public static double RATIO;
+    public static double RECIPROCAL_RATIO;
+
     //TODO ensure that ratio does come with a loss in energy due to rounding errors
     public RFEnergyHandler(double ratio)
     {
         super("thermalexpansion", "rf", "flux", "rf", ratio);
+        RATIO = ratio;
+        RECIPROCAL_RATIO = reciprocal_ratio;
         //TODO load handler even if TE or it's core is not loaded
         //Instead check that the 4 API files used exist then load so we support any mod that uses RF
     }
@@ -31,7 +35,8 @@ public class RFEnergyHandler extends EnergyHandler
             if (handler instanceof IEnergyHandler)
             {
                 return ((IEnergyHandler) handler).receiveEnergy(direction, (int) (energy * ratio), doReceive) * reciprocal_ratio;
-            } else if (handler instanceof IEnergyStorage)
+            }
+            else if (handler instanceof IEnergyStorage)
             {
                 return ((IEnergyStorage) handler).receiveEnergy((int) (energy * ratio), doReceive) * reciprocal_ratio;
             }
@@ -47,7 +52,8 @@ public class RFEnergyHandler extends EnergyHandler
             if (handler instanceof IEnergyHandler)
             {
                 return ((IEnergyHandler) handler).extractEnergy(direction, (int) (energy * ratio), doExtract) * reciprocal_ratio;
-            } else if (handler instanceof IEnergyStorage)
+            }
+            else if (handler instanceof IEnergyStorage)
             {
                 return ((IEnergyStorage) handler).extractEnergy((int) (energy * ratio), doExtract) * reciprocal_ratio;
             }
