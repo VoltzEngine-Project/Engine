@@ -1,7 +1,6 @@
 package com.builtbroken.mc.prefab.tile.multiblock;
 
 import codechicken.lib.vec.Vector3;
-import com.builtbroken.mc.api.tile.IInventoryProvider;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiInv;
 import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiTank;
@@ -29,7 +28,7 @@ public class BlockMultiblock extends BlockContainer
     public static ITileEntityProvider RF_ENERGY_TILE_PROVIDER;
     public static ITileEntityProvider ENERGY_TILE_PROVIDER;
 
-    protected BlockMultiblock()
+    public BlockMultiblock()
     {
         super(Material.circuits);
         this.setHardness(2f);

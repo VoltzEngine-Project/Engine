@@ -1,12 +1,10 @@
 package com.builtbroken.mc.lib.mod.compat.energy;
 
-import cpw.mods.fml.common.Loader;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class EnergyHandler
 {
-		public final String modID;
 		public final String moduleName;
 		public final String fullUnit;
 		public final String unit;
@@ -14,28 +12,20 @@ public abstract class EnergyHandler
 		/**
 		 * Multiply UE energy by this ratio to convert it to the forgien ratio.
 		 */
-		public double ratio;
+		public double toForgienEnergy;
 
 		/**
 		 * Multiply the forgien energy by this ratio to convert it into UE energy.
 		 */
-		public double reciprocal_ratio;
+		public double toUEEnergy;
 
-		public boolean isEnabled;
-
-		public EnergyHandler(String modID, String moduleName, String fullUnit, String unit, double ratio)
+		public EnergyHandler(String moduleName, String fullUnit, String unit, double ratio)
 		{
-			this.modID = modID;
 			this.moduleName = moduleName;
 			this.fullUnit = fullUnit;
 			this.unit = unit;
-			this.ratio = 1.0 / ratio;
-			this.reciprocal_ratio = ratio;
-		}
-
-		public boolean isLoaded()
-		{
-			return Loader.isModLoaded(this.modID);
+			this.toForgienEnergy = 1.0 / ratio;
+			this.toUEEnergy = ratio;
 		}
 
 		public abstract double receiveEnergy(Object handler, ForgeDirection direction, double energy, boolean doReceive);

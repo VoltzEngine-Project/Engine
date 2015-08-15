@@ -25,6 +25,10 @@ public class TestEnergyBuffer extends AbstractTest
         filled = buffer.addEnergyToStorage(10, true);
         Assert.assertTrue("Buffer should have returned 10", filled == 10);
         Assert.assertTrue("Buffer should have 10 energy units stored", buffer.getEnergyStored() == 10);
+
+        filled = buffer.addEnergyToStorage(-10, true);
+        Assert.assertTrue("Buffer should have returned 0", filled == 0);
+        Assert.assertTrue("Buffer should have 10 energy units stored", buffer.getEnergyStored() == 10);
     }
 
     public void testMaxFill()
@@ -52,6 +56,10 @@ public class TestEnergyBuffer extends AbstractTest
         drained = buffer.removeEnergyFromStorage(10, true);
         Assert.assertTrue("Buffer should have returned 10", drained == 10);
         Assert.assertTrue("Buffer should have 90 energy units stored", buffer.getEnergyStored() == 90);
+
+        drained = buffer.addEnergyToStorage(-10, true);
+        Assert.assertTrue("Buffer should have returned 0", drained == 0);
+        Assert.assertTrue("Buffer should have 10 energy units stored", buffer.getEnergyStored() == 90);
     }
 
     public void testMaxDrain()
