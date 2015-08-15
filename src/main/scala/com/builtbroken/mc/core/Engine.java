@@ -160,7 +160,6 @@ public class Engine
         explosiveConfig.load();
 
         References.LOGGER = logger;
-        loader = new LoadableHandler();
         ConfigScanner.instance().generateSets(event.getAsmData());
         ConfigHandler.sync(getConfig(), References.DOMAIN);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
