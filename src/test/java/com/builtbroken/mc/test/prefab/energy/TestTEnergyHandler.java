@@ -33,7 +33,7 @@ public class TestTEnergyHandler extends AbstractTest
         block = new BlockTEnergyHandler();
         ModRegistry.registerBlock(block, "test:TEnergyHandler");
         GameRegistry.registerTileEntity(TileTEnergyHandler.class, "test:TEnergyHandler");
-        handler = new RFEnergyHandler(2);
+        handler = new RFEnergyHandler(2); //Never change conversion ratio for this test as it will cause all tests to fail in this class
     }
 
     public void testPlacement()
@@ -48,14 +48,6 @@ public class TestTEnergyHandler extends AbstractTest
         world.setBlockToAir(0, 10, 0);
         Assert.assertTrue("Block should be air", world.getBlock(0, 10, 0) == Blocks.air);
         Assert.assertTrue("There should be a null", world.getTileEntity(0, 10, 0) == null);
-    }
-
-    public void testEnergyStorage()
-    {
-        world.setBlock(0, 10, 0, block);
-
-
-        world.setBlockToAir(0, 10, 0);
     }
 
     public void testFill()
@@ -83,26 +75,27 @@ public class TestTEnergyHandler extends AbstractTest
         world.setBlockToAir(0, 10, 0);
     }
 
-    public void testMaxFill()
-    {
-        world.setBlock(0, 10, 0, block);
-
-
-        world.setBlockToAir(0, 10, 0);
-    }
-
     public void testDrain()
     {
         world.setBlock(0, 10, 0, block);
 
+        TileTEnergyHandler tile = (TileTEnergyHandler) world.getTileEntity(0, 10, 0);
 
-        world.setBlockToAir(0, 10, 0);
-    }
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+        {
+            tile.buffer().addEnergyToStorage(tile.buffer().getMaxBufferSize(), true);
+            int drained = tile.extractEnergy(dir, 10, true);
+            Assert.assertTrue("Buffer should have returned 10, instead it returned " + drained, drained == 10);
+            Assert.assertTrue("Buffer should still be full as we faked energy transfer, returned " + tile.getEnergyStored(dir), tile.getEnergyStored(dir) == 50);
 
-    public void testMaxDrain()
-    {
-        world.setBlock(0, 10, 0, block);
+            drained = tile.extractEnergy(dir, 10, false);
+            Assert.assertTrue("Buffer should have returned 10, instead returned " + drained, drained == 10);
+            Assert.assertTrue("Buffer should have 10 energy units stored, stored " + tile.getEnergyStored(dir), tile.getEnergyStored(dir) == 40);
 
+            drained = tile.extractEnergy(dir, -10, false);
+            Assert.assertTrue("Buffer should have returned 0, instead returned" + drained, drained == 0);
+            Assert.assertTrue("Buffer should have 10 energy units stored, instead has " + tile.getEnergyStored(dir), tile.getEnergyStored(dir) == 40);
+        }
 
         world.setBlockToAir(0, 10, 0);
     }
