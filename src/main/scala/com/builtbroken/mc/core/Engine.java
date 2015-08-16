@@ -39,9 +39,7 @@ import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;
 import com.builtbroken.mc.prefab.recipe.item.MRSmelterHandler;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.mc.prefab.tile.multiblock.BlockMultiblock;
-import com.builtbroken.mc.prefab.tile.multiblock.TileMulti;
-import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiInv;
-import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiTank;
+import com.builtbroken.mc.prefab.tile.multiblock.EnumMultiblock;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -53,7 +51,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -273,9 +270,7 @@ public class Engine
         if (multiBlockRequested)
         {
             multiBlock = contentRegistry.newBlock("veMultiBlock", BlockMultiblock.class);
-            GameRegistry.registerTileEntity(TileMulti.class, "veTileMulti");
-            GameRegistry.registerTileEntity(TileMultiInv.class, "veTileMultiInv");
-            GameRegistry.registerTileEntity(TileMultiTank.class, "veTileMultiTank");
+            EnumMultiblock.register();
         }
 
         if (heatedRockRequested)
