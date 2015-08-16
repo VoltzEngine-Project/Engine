@@ -71,6 +71,11 @@ public enum EnumMultiblock
         this.provider = provider;
     }
 
+    public String getName()
+    {
+        return name;
+    }
+
     public TileMulti newTile(World world, int meta)
     {
         if (provider != null)
