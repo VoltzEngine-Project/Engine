@@ -5,7 +5,6 @@ import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyStorage;
 import com.builtbroken.mc.lib.mod.compat.energy.EnergyHandler;
-import com.builtbroken.mc.lib.mod.compat.energy.UniversalEnergySystem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -15,10 +14,15 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public class RFEnergyHandler extends EnergyHandler
 {
+    public static double TO_RF_FROM_UE;
+    public static double TO_UE_FROM_RF;
+
     //TODO ensure that ratio does come with a loss in energy due to rounding errors
     public RFEnergyHandler(double ratio)
     {
-        super("thermalexpansion", "rf", "flux", "rf", ratio);
+        super("rf", "flux", "rf", ratio);
+        TO_RF_FROM_UE = toForgienEnergy;
+        TO_UE_FROM_RF = toUEEnergy;
         //TODO load handler even if TE or it's core is not loaded
         //Instead check that the 4 API files used exist then load so we support any mod that uses RF
     }
@@ -30,10 +34,11 @@ public class RFEnergyHandler extends EnergyHandler
         {
             if (handler instanceof IEnergyHandler)
             {
-                return ((IEnergyHandler) handler).receiveEnergy(direction, (int) (energy * ratio), doReceive) * reciprocal_ratio;
-            } else if (handler instanceof IEnergyStorage)
+                return ((IEnergyHandler) handler).receiveEnergy(direction, (int) (energy * toForgienEnergy), doReceive) * toUEEnergy;
+            }
+            else if (handler instanceof IEnergyStorage)
             {
-                return ((IEnergyStorage) handler).receiveEnergy((int) (energy * ratio), doReceive) * reciprocal_ratio;
+                return ((IEnergyStorage) handler).receiveEnergy((int) (energy * toForgienEnergy), doReceive) * toUEEnergy;
             }
         }
         return 0;
@@ -46,10 +51,11 @@ public class RFEnergyHandler extends EnergyHandler
         {
             if (handler instanceof IEnergyHandler)
             {
-                return ((IEnergyHandler) handler).extractEnergy(direction, (int) (energy * ratio), doExtract) * reciprocal_ratio;
-            } else if (handler instanceof IEnergyStorage)
+                return ((IEnergyHandler) handler).extractEnergy(direction, (int) (energy * toForgienEnergy), doExtract) * toUEEnergy;
+            }
+            else if (handler instanceof IEnergyStorage)
             {
-                return ((IEnergyStorage) handler).extractEnergy((int) (energy * ratio), doExtract) * reciprocal_ratio;
+                return ((IEnergyStorage) handler).extractEnergy((int) (energy * toForgienEnergy), doExtract) * toUEEnergy;
             }
         }
         return 0;
@@ -76,13 +82,13 @@ public class RFEnergyHandler extends EnergyHandler
     @Override
     public double getEnergy(Object obj, ForgeDirection direction)
     {
-        return obj instanceof IEnergyStorage ? ((IEnergyStorage) obj).getEnergyStored() * reciprocal_ratio : 0;
+        return obj instanceof IEnergyStorage ? ((IEnergyStorage) obj).getEnergyStored() * toUEEnergy : 0;
     }
 
     @Override
     public double getMaxEnergy(Object obj, ForgeDirection direction)
     {
-        return obj instanceof IEnergyStorage ? ((IEnergyStorage) obj).getMaxEnergyStored() * reciprocal_ratio : 0;
+        return obj instanceof IEnergyStorage ? ((IEnergyStorage) obj).getMaxEnergyStored() * toUEEnergy : 0;
     }
 
     @Override
@@ -90,7 +96,7 @@ public class RFEnergyHandler extends EnergyHandler
     {
         if (is != null && is.getItem() instanceof IEnergyContainerItem)
         {
-            return ((IEnergyContainerItem) is.getItem()).receiveEnergy(is, (int) (joules * ratio), docharge) * reciprocal_ratio;
+            return ((IEnergyContainerItem) is.getItem()).receiveEnergy(is, (int) (joules * toForgienEnergy), docharge) * toUEEnergy;
         }
         return 0;
     }
@@ -100,7 +106,7 @@ public class RFEnergyHandler extends EnergyHandler
     {
         if (is != null && is.getItem() instanceof IEnergyContainerItem)
         {
-            return ((IEnergyContainerItem) is.getItem()).extractEnergy(is, (int) (joules * ratio), doDischarge) * reciprocal_ratio;
+            return ((IEnergyContainerItem) is.getItem()).extractEnergy(is, (int) (joules * toForgienEnergy), doDischarge) * toUEEnergy;
         }
         return 0;
     }
@@ -108,19 +114,19 @@ public class RFEnergyHandler extends EnergyHandler
     @Override
     public ItemStack getItemWithCharge(ItemStack itemStack, double energy)
     {
-        chargeItem(itemStack, (energy * ratio), true);
+        chargeItem(itemStack, (energy * toForgienEnergy), true);
         return itemStack;
     }
 
     @Override
     public double getEnergyItem(ItemStack is)
     {
-        return is != null && is.getItem() instanceof IEnergyContainerItem ? ((IEnergyContainerItem) is.getItem()).getEnergyStored(is) * reciprocal_ratio : 0;
+        return is != null && is.getItem() instanceof IEnergyContainerItem ? ((IEnergyContainerItem) is.getItem()).getEnergyStored(is) * toUEEnergy : 0;
     }
 
     @Override
     public double getMaxEnergyItem(ItemStack is)
     {
-        return is != null && is.getItem() instanceof IEnergyContainerItem ? ((IEnergyContainerItem) is.getItem()).getMaxEnergyStored(is) * reciprocal_ratio : 0;
+        return is != null && is.getItem() instanceof IEnergyContainerItem ? ((IEnergyContainerItem) is.getItem()).getMaxEnergyStored(is) * toUEEnergy : 0;
     }
 }

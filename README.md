@@ -15,6 +15,9 @@ The following sites are permitted to profit off the engine within the bounds of 
 * ShadowCity.net
 * BuiltBroken.com 
 
+## Code Coverage
+[![codecov.io](http://codecov.io/github/BuiltBrokenModding/VoltzEngine/coverage.svg?branch=development)](http://codecov.io/github/BuiltBrokenModding/VoltzEngine?branch=development)
+
 Pull Requests
 ======
 Send them to the Development branch otherwise they will be closed.

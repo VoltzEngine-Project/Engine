@@ -1,8 +1,7 @@
 package com.builtbroken.mc.prefab.tile.multiblock;
 
-import codechicken.lib.vec.Vector3;
-import com.builtbroken.mc.api.tile.IInventoryProvider;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiInv;
 import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiTank;
 import net.minecraft.block.Block;
@@ -29,7 +28,7 @@ public class BlockMultiblock extends BlockContainer
     public static ITileEntityProvider RF_ENERGY_TILE_PROVIDER;
     public static ITileEntityProvider ENERGY_TILE_PROVIDER;
 
-    protected BlockMultiblock()
+    public BlockMultiblock()
     {
         super(Material.circuits);
         this.setHardness(2f);
@@ -110,7 +109,7 @@ public class BlockMultiblock extends BlockContainer
         IMultiTile tile = getTile(world, x, y, z);
         if (tile != null && tile.getHost() != null)
         {
-            tile.getHost().onMultiTileActivated(tile, player, side, new Vector3(xHit, yHit, zHit));
+            tile.getHost().onMultiTileActivated(tile, player, side, new Pos(xHit, yHit, zHit));
         }
         return false;
     }
