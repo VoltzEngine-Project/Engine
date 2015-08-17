@@ -101,8 +101,8 @@ public enum EnumMultiblock
         //Cache so look up is a little faster
         for (EnumMultiblock e : values())
         {
-            if (e.name == null && e.name.isEmpty())
-                cache.put(e.name, e);
+            if (e.name != null && !e.name.isEmpty())
+                cache.put(e.name.toLowerCase(), e);
         }
         init = true;
     }
@@ -124,9 +124,9 @@ public enum EnumMultiblock
         if (!init)
             init();
 
-        if (cache.containsKey(name))
+        if (cache.containsKey(name.toLowerCase()))
         {
-            return cache.get(name);
+            return cache.get(name.toLowerCase());
         }
         return null;
     }

@@ -1,6 +1,7 @@
 package com.builtbroken.mc.prefab.tile.multiblock;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.core.Engine;
 import net.minecraft.tileentity.TileEntity;
@@ -64,6 +65,11 @@ public class MultiBlockHelper
                 if (enumType != null)
                 {
                     world.setBlock((int) location.x(), (int) location.y(), (int) location.z(), Engine.multiBlock, enumType.ordinal(), 2);
+                    TileEntity ent = world.getTileEntity((int) location.x(), (int) location.y(), (int) location.z());
+                    if (ent instanceof IMultiTile)
+                    {
+                        ((IMultiTile) ent).setHost(tile);
+                    }
                 }
                 else
                 {
