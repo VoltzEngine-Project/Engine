@@ -21,7 +21,6 @@ output/
 logs/
 html/downloads/
 downloads/
-settings/
 *.xml
 VoltzEngine.txt
 APP-AuthTest/
