@@ -1,19 +1,27 @@
 package com.builtbroken.mc.prefab.tile.multiblock;
 
+import com.builtbroken.mc.api.tile.client.IIconCallBack;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiInv;
 import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiTank;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -31,7 +39,33 @@ public class BlockMultiblock extends BlockContainer
     public BlockMultiblock()
     {
         super(Material.circuits);
+        this.setBlockName("veMultiBlock");
         this.setHardness(2f);
+    }
+
+    @Override
+    public int getRenderType()
+    {
+        return -1;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister reg)
+    {
+        //this.blockIcon = p_149651_1_.registerIcon(this.getTextureName());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
+    {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IMultiTile && ((IMultiTile) tile).getHost() instanceof IIconCallBack)
+        {
+            return ((IIconCallBack) ((IMultiTile) tile).getHost()).getIconForSide(world, x, y, z, side);
+        }
+        return Blocks.iron_bars.blockIcon;
     }
 
     @Override

@@ -40,6 +40,7 @@ import com.builtbroken.mc.prefab.recipe.item.MRSmelterHandler;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.mc.prefab.tile.multiblock.BlockMultiblock;
 import com.builtbroken.mc.prefab.tile.multiblock.EnumMultiblock;
+import com.builtbroken.mc.prefab.tile.multiblock.ItemBlockMulti;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -269,7 +270,8 @@ public class Engine
 
         if (multiBlockRequested)
         {
-            multiBlock = contentRegistry.newBlock("veMultiBlock", BlockMultiblock.class);
+            multiBlock = contentRegistry.newBlock("veMultiBlock", BlockMultiblock.class, ItemBlockMulti.class);
+            NEIProxy.hideItem(multiBlock);
             EnumMultiblock.register();
         }
 

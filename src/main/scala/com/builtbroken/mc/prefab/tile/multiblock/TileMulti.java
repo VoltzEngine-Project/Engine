@@ -2,6 +2,7 @@ package com.builtbroken.mc.prefab.tile.multiblock;
 
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
+import com.builtbroken.mc.lib.transform.region.Cube;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -9,7 +10,10 @@ import net.minecraft.tileentity.TileEntity;
  */
 public class TileMulti extends TileEntity implements IMultiTile
 {
-    IMultiTileHost host;
+    private IMultiTileHost host;
+    public boolean shouldRenderBlock = false;
+    public Cube overrideRenderBounds;
+
 
     @Override
     public IMultiTileHost getHost()
