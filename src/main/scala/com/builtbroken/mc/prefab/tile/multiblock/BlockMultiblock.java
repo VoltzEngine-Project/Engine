@@ -2,6 +2,7 @@ package com.builtbroken.mc.prefab.tile.multiblock;
 
 import com.builtbroken.mc.api.tile.client.IIconCallBack;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
+import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiInv;
 import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiTank;
@@ -18,6 +19,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
@@ -41,6 +43,22 @@ public class BlockMultiblock extends BlockContainer
         super(Material.circuits);
         this.setBlockName("veMultiBlock");
         this.setHardness(2f);
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
+    {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof TileMulti)
+        {
+            Cube cube = ((TileMulti) tile).collisonBounds;
+            if (cube != null)
+            {
+                cube.add(x, y, z);
+                return cube.toAABB();
+            }
+        }
+        return AxisAlignedBB.getBoundingBox((double) x + this.minX, (double) y + this.minY, (double) z + this.minZ, (double) x + this.maxX, (double) y + this.maxY, (double) z + this.maxZ);
     }
 
     @Override
