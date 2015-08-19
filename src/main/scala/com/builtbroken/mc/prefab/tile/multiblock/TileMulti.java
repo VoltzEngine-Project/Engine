@@ -13,7 +13,7 @@ public class TileMulti extends TileEntity implements IMultiTile
     private IMultiTileHost host;
     public boolean shouldRenderBlock = false;
     public Cube overrideRenderBounds;
-    public Cube collisonBounds;
+    public Cube collisionBounds;
 
 
     @Override

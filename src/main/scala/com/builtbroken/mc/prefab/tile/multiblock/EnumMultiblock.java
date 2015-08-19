@@ -50,8 +50,8 @@ public enum EnumMultiblock
     /* 9 */TANK_INV_ENERGY;
 
     private String name;
-    private Class<? extends TileMulti> clazz;
-    private ITileEntityProvider provider;
+    public Class<? extends TileMulti> clazz;
+    public ITileEntityProvider provider;
 
     private static boolean init = false;
     private static boolean reg = false;

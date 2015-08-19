@@ -13,7 +13,6 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -51,7 +50,7 @@ public class BlockMultiblock extends BlockContainer
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileMulti)
         {
-            Cube cube = ((TileMulti) tile).collisonBounds;
+            Cube cube = ((TileMulti) tile).collisionBounds;
             if (cube != null)
             {
                 cube.add(x, y, z);
