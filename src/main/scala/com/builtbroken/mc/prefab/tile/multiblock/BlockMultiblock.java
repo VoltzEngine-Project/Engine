@@ -24,6 +24,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -63,7 +64,81 @@ public class BlockMultiblock extends BlockContainer
     @Override
     public int getRenderType()
     {
-        return -1;
+        return MultiBlockRenderHelper.INSTANCE.getRenderId();
+    }
+
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
+    {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof TileMulti)
+        {
+            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+            {
+                Pos pos = new Pos(x, y, z).add(dir);
+                Block b = pos.getBlock(world);
+                if (((TileMulti) tile).connectedBlocks.containsKey(dir))
+                {
+                    //TODO notify that a block has changed
+                    if (((TileMulti) tile).connectedBlocks.get(dir) != b)
+                        ((TileMulti) tile).connectedBlocks.remove(dir);
+                }
+                if (b != null && !b.isAir(world, x, y, z))
+                {
+                    ((TileMulti) tile).connectedBlocks.put(dir, b);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ)
+    {
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side)
+    {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof TileMulti)
+        {
+            Cube cube = ((TileMulti) tile).overrideRenderBounds;
+            if (cube != null)
+            {
+                switch (side)
+                {
+                    case 0:
+                        return cube.min().y() > 0.0D || !isOpaqueCube();
+                    case 1:
+                        return cube.max().y() < 1.0D || !isOpaqueCube();
+                    case 2:
+                        return cube.min().z() > 0.0D || !isOpaqueCube();
+                    case 3:
+                        return cube.max().z() < 1.0D || !isOpaqueCube();
+                    case 4:
+                        return cube.min().x() > 0.0D || !isOpaqueCube();
+                    case 5:
+                        return cube.max().x() < 1.0D || !isOpaqueCube();
+                }
+            }
+        }
+        switch (side)
+        {
+            case 0:
+                return minY > 0.0D || !isOpaqueCube();
+            case 1:
+                return maxY < 1.0D || !isOpaqueCube();
+            case 2:
+                return minZ > 0.0D || !isOpaqueCube();
+            case 3:
+                return maxZ < 1.0D || !isOpaqueCube();
+            case 4:
+                return minX > 0.0D || !isOpaqueCube();
+            case 5:
+                return maxX < 1.0D || !isOpaqueCube();
+        }
+        return false;
     }
 
     @Override
