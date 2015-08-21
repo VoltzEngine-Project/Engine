@@ -12,7 +12,7 @@ trait TEnergyHandler extends IEnergyHandler {
   def receiveEnergy(from: ForgeDirection, maxReceive: Int, simulate: Boolean): Int = {
 
     if (maxReceive > 0 && getBattery(from) != null) {
-      val added: Double = getBattery(from).addEnergyToStorage((maxReceive * RFEnergyHandler.TO_UE_FROM_RF).asInstanceOf[Int], !simulate);
+      val added: Double = getBattery(from).addEnergyToStorage((maxReceive * RFEnergyHandler.TO_UE_FROM_RF).asInstanceOf[Int], !simulate)
       val converted: Double = added * RFEnergyHandler.TO_RF_FROM_UE
 
       //In theory this should prevent energy from being wasted
@@ -33,7 +33,7 @@ trait TEnergyHandler extends IEnergyHandler {
 
       //In theory this should prevent energy from being wasted
       if (!simulate) {
-        val extra: Double = converted - converted.asInstanceOf[Int];
+        val extra: Double = converted - converted.asInstanceOf[Int]
         getBattery(from).addEnergyToStorage((extra * RFEnergyHandler.TO_UE_FROM_RF).asInstanceOf[Int], !simulate)
       }
 

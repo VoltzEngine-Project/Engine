@@ -14,7 +14,7 @@ trait TFluidHandler extends IFluidHandler {
     if (resource != null && getTank(resource.getFluid) != null) {
       return getTank(resource.getFluid).fill(resource, doFill)
     }
-    return 0;
+    return 0
   }
 
   @Override
@@ -22,7 +22,7 @@ trait TFluidHandler extends IFluidHandler {
     if (resource != null && getTank(resource.getFluid) != null) {
       return getTank(resource.getFluid).drain(resource.amount, doDrain)
     }
-    return null;
+    return null
   }
 
   @Override
@@ -30,14 +30,14 @@ trait TFluidHandler extends IFluidHandler {
     if (getTank(null) != null) {
       return getTank(null).drain(maxDrain, doDrain)
     }
-    return null;
+    return null
   }
 
   @Override
-  def canFill(from: ForgeDirection, fluid: Fluid): Boolean = getTank(fluid) != null;
+  def canFill(from: ForgeDirection, fluid: Fluid): Boolean = getTank(fluid) != null
 
   @Override
-  def canDrain(from: ForgeDirection, fluid: Fluid): Boolean = getTank(fluid) != null;
+  def canDrain(from: ForgeDirection, fluid: Fluid): Boolean = getTank(fluid) != null
 
   @Override
   def getTankInfo(from: ForgeDirection): Array[FluidTankInfo] = if (getTank(null) != null) Array(getTank(null).getInfo) else null

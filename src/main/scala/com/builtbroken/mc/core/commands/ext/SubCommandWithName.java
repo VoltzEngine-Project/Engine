@@ -1,6 +1,5 @@
 package com.builtbroken.mc.core.commands.ext;
 
-import com.builtbroken.mc.prefab.commands.AbstractCommand;
 import com.builtbroken.mc.prefab.commands.SubCommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,21 +17,13 @@ public class SubCommandWithName extends SubCommand
     @Override
     public boolean handleEntityPlayerCommand(EntityPlayer player, String[] args)
     {
-        if(args.length > 0)
-        {
-            return handleEntityPlayerCommand(player, args[0], removeFront(args));
-        }
-        return false;
+        return args.length > 0 && handleEntityPlayerCommand(player, args[0], removeFront(args));
     }
 
     @Override
     public boolean handleConsoleCommand(ICommandSender sender, String[] args)
     {
-        if(args.length > 0)
-        {
-            return handleConsoleCommand(sender, args[0], removeFront(args));
-        }
-        return false;
+        return args.length > 0 && handleConsoleCommand(sender, args[0], removeFront(args));
     }
 
     public boolean handleEntityPlayerCommand(EntityPlayer player, String user, String[] args)

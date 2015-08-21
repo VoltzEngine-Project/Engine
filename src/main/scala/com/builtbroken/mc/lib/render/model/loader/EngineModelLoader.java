@@ -1,6 +1,5 @@
 package com.builtbroken.mc.lib.render.model.loader;
 
-import java.util.Collection;
 import java.util.Map;
 
 import com.builtbroken.mc.core.Engine;
@@ -10,11 +9,9 @@ import net.minecraftforge.client.model.IModelCustom;
 import net.minecraftforge.client.model.IModelCustomLoader;
 import net.minecraftforge.client.model.ModelFormatException;
 import net.minecraftforge.client.model.obj.ObjModelLoader;
-import net.minecraftforge.client.model.techne.TechneModelLoader;
 
 import com.google.common.collect.Maps;
 
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

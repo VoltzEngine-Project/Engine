@@ -1,6 +1,5 @@
 package com.builtbroken.mc.core.content;
 
-import com.builtbroken.mc.core.content.resources.GenMaterial;
 import com.builtbroken.mc.core.content.resources.Ores;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -11,8 +10,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.oredict.OreDictionary;
 import com.builtbroken.mc.core.References;
 
 import java.util.List;

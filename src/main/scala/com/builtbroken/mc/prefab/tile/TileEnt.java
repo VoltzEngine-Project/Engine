@@ -1,7 +1,6 @@
 package com.builtbroken.mc.prefab.tile;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
@@ -28,11 +27,7 @@ public class TileEnt extends Tile
         {
             return getClass().newInstance();
         }
-        catch (InstantiationException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e)
+        catch (InstantiationException | IllegalAccessException e)
         {
             e.printStackTrace();
         }

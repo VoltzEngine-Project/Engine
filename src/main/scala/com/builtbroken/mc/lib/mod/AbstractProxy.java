@@ -1,7 +1,6 @@
 package com.builtbroken.mc.lib.mod;
 
 import com.builtbroken.mc.api.tile.IGuiTile;
-import com.builtbroken.mc.prefab.tile.Tile;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

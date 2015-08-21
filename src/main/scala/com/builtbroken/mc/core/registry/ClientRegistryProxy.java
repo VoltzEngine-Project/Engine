@@ -2,7 +2,6 @@ package com.builtbroken.mc.core.registry;
 
 import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.lib.render.block.ItemRenderHandler;

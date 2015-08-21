@@ -1,6 +1,5 @@
 package com.builtbroken.mc.core.commands.modflags;
 
-import com.builtbroken.mc.core.commands.ext.SubCommandRegion;
 import com.builtbroken.mc.core.handler.SelectionHandler;
 import com.builtbroken.mc.lib.modflags.Region;
 import com.builtbroken.mc.lib.modflags.RegionManager;

@@ -21,7 +21,7 @@ public class Region implements ISave, IProfileContainer
     //TODO crease super cube bounds to make checking if something is inside the region easier
     public List<Cube> segments = new ArrayList();
     public List<EntityPlayer> players_in_region = new ArrayList();
-    public List<String> flags = new ArrayList<String>();
+    public List<String> flags = new ArrayList<>();
 
     public AccessProfile profile;
 

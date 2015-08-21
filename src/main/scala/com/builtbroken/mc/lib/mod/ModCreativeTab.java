@@ -46,11 +46,10 @@ public class ModCreativeTab extends CreativeTabs
     public void displayAllReleventItems(List list)
     {
         //TODO maybe cache?
-        Iterator iterator = Item.itemRegistry.iterator();
 
-        while (iterator.hasNext())
+        for (Object anItemRegistry : Item.itemRegistry)
         {
-            Item item = (Item) iterator.next();
+            Item item = (Item) anItemRegistry;
 
             if (item != null)
             {

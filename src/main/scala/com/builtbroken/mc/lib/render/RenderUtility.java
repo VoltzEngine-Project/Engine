@@ -25,11 +25,11 @@ import static org.lwjgl.opengl.GL11.*;
 public class RenderUtility
 {
 	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
-	public static final HashMap<String, ResourceLocation> resourceCahce = new HashMap<String, ResourceLocation>();
+	public static final HashMap<String, ResourceLocation> resourceCahce = new HashMap<>();
 	/**
 	 * Icon loading map for external icon registration.
 	 */
-	public static final HashMap<String, IIcon> loadedIconMap = new HashMap<String, IIcon>();
+	public static final HashMap<String, IIcon> loadedIconMap = new HashMap<>();
 	public static RenderBlocks renderBlocks = new RenderBlocks();
 
 	public static ResourceLocation getResource(String domain, String name)
@@ -266,8 +266,7 @@ public class RenderUtility
 		FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
 
 		int requiredWidth = Math.max(fontRenderer.getStringWidth(text), 1);
-		int lineHeight = fontRenderer.FONT_HEIGHT + 2;
-		int requiredHeight = lineHeight;
+		int requiredHeight = fontRenderer.FONT_HEIGHT + 2;
 		float scaler = 0.8f;
 		float scaleX = (displayWidth / requiredWidth);
 		float scaleY = (displayHeight / requiredHeight);

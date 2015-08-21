@@ -22,16 +22,16 @@ public class AccessUtility
 	/**
 	 * Map of default groups and those group permissions permissions. Used to build a new group set.
 	 */
-	public static final HashMap<String, List<String>> groupDefaultNodes = new LinkedHashMap<String, List<String>>();
+	public static final HashMap<String, List<String>> groupDefaultNodes = new LinkedHashMap<>();
 	/**
 	 * Map of default groups and the group it extends. Used to build a new group set.
 	 */
-	public static final HashMap<String, String> groupDefaultExtends = new LinkedHashMap<String, String>();
+	public static final HashMap<String, String> groupDefaultExtends = new LinkedHashMap<>();
 
 	// Pre-loads the default groups
 	static
 	{
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		// Owner group defaults
 		list.add(Permissions.PROFILE_OWNER.toString());
 		list.add(Permissions.inventoryDisable.toString());
@@ -39,7 +39,7 @@ public class AccessUtility
 		list.add(Permissions.profile.toString());
 
 		// Admin group defaults
-		List<String> list2 = new ArrayList<String>();
+		List<String> list2 = new ArrayList<>();
 		list2.add(Permissions.PROFILE_ADMIN.toString());
 		list2.add(Permissions.inventoryModify.toString());
 		list2.add(Permissions.inventoryLock.toString());
@@ -48,7 +48,7 @@ public class AccessUtility
 		list2.add(Permissions.group.toString());
 
 		// User group defaults
-		List<String> list3 = new ArrayList<String>();
+		List<String> list3 = new ArrayList<>();
 		list3.add(Permissions.PROFILE_USER.toString());
 		list3.add(Permissions.inventoryOpen.toString());
 		list3.add(Permissions.inventoryInput.toString());
@@ -121,7 +121,7 @@ public class AccessUtility
 	 */
 	public static List<AccessGroup> buildNewGroup()
 	{
-		List<AccessGroup> groups = new ArrayList<AccessGroup>();
+		List<AccessGroup> groups = new ArrayList<>();
 
 		// Create groups and load permissions
 		for (Entry<String, List<String>> entry : groupDefaultNodes.entrySet())

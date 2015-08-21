@@ -1,7 +1,6 @@
 package com.builtbroken.mc.core.content.resources.load;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
-import com.builtbroken.mc.prefab.recipe.extend.MachineRecipeLoader;
 import com.builtbroken.mc.prefab.recipe.item.MRItemStack;
 import com.builtbroken.mc.prefab.recipe.item.MRLoaderItemStack;
 import net.minecraft.init.Blocks;

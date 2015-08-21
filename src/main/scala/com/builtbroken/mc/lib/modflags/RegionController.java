@@ -85,11 +85,7 @@ public class RegionController implements IVirtualObject
 
     public boolean removeRegion(Region region)
     {
-        if(regions.containsKey(region.name))
-        {
-            return regions.remove(region.name) != null;
-        }
-        return false;
+        return regions.containsKey(region.name) && regions.remove(region.name) != null;
     }
 
     public Region createNewRegion(String name, Cube cube)

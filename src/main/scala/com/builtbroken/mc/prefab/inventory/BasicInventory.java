@@ -1,14 +1,11 @@
 package com.builtbroken.mc.prefab.inventory;
 
 import com.builtbroken.mc.api.ISave;
-import com.builtbroken.mc.api.tile.IInventoryProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Created by robert on 5/1/2015.

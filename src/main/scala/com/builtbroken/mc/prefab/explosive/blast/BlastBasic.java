@@ -3,7 +3,6 @@ package com.builtbroken.mc.prefab.explosive.blast;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.DamageUtility;
 import com.builtbroken.mc.lib.helper.MathUtility;
 import com.builtbroken.mc.lib.transform.sorting.Vector3DistanceComparator;
@@ -93,7 +92,7 @@ public class BlastBasic extends Blast
         //Generate debug info
         if (Engine.runningAsDev)
         {
-            References.LOGGER.info(profile.getOutputSimple());
+            Engine.instance.logger().info(profile.getOutputSimple());
         }
     }
 

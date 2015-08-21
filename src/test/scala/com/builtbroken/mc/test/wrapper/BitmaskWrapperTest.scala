@@ -56,9 +56,9 @@ class BitmaskWrapperTest extends TestCase
     var mask = 0
     for(dir <- ForgeDirection.VALID_DIRECTIONS)
     {
-      mask = mask.openMask(dir);
+      mask = mask.openMask(dir)
       Assert.assertTrue("Mask should contain " + dir, mask.mask(dir))
-      mask = mask.closeMask(dir);
+      mask = mask.closeMask(dir)
       Assert.assertTrue("Mask should not contain " + dir, !mask.mask(dir))
     }
   }

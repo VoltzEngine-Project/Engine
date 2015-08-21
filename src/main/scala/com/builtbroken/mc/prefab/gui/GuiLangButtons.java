@@ -1,7 +1,6 @@
 package com.builtbroken.mc.prefab.gui;
 
 import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.lib.transform.vector.Point;
 import net.minecraft.client.gui.GuiButton;
 
 /** Version of MC's button that auto translates and positions using a lang file

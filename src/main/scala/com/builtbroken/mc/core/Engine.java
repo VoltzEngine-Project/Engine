@@ -365,11 +365,7 @@ public class Engine
     public static boolean isPlayerOpped(EntityPlayerMP player)
     {
         //Taken from EntityPlayerMP#canCommandSenderUseCommand(Integer, String)
-        if (player.mcServer.getConfigurationManager().func_152596_g(player.getGameProfile()))
-        {
-            return player.mcServer.getConfigurationManager().func_152603_m().func_152683_b(player.getGameProfile()) != null;
-        }
-        return false;
+        return player.mcServer.getConfigurationManager().func_152596_g(player.getGameProfile()) && player.mcServer.getConfigurationManager().func_152603_m().func_152683_b(player.getGameProfile()) != null;
     }
 
 }

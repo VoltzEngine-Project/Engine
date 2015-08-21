@@ -1,9 +1,7 @@
 package com.builtbroken.mc.core.commands.permissions.sub;
 
-import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.core.commands.ext.UserSubCommand;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
-import com.builtbroken.mc.lib.access.AccessGroup;
 import com.builtbroken.mc.lib.access.AccessUser;
 import com.builtbroken.mc.prefab.commands.AbstractCommand;
 import com.builtbroken.mc.prefab.commands.ModularCommand;

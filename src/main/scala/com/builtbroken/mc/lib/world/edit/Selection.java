@@ -113,7 +113,7 @@ public class Selection extends Cube
      */
     public List<Pos> getBlockLocations(Block block, int meta, int size)
     {
-        List<Pos> list = new LinkedList<Pos>();
+        List<Pos> list = new LinkedList<>();
         for (int y = min().yi(); y <= max().yi(); y++)
         {
             for (int x = min().xi(); x <= max().xi(); x++)
@@ -150,7 +150,7 @@ public class Selection extends Cube
      */
     public List<Pos> getLocationsWithin(Location location, int size, int distance)
     {
-        List<Pos> list = new LinkedList<Pos>();
+        List<Pos> list = new LinkedList<>();
         if (distance > 0)
         {
             int min_y = (int) Math.max(min().yi(), location.y() - distance);

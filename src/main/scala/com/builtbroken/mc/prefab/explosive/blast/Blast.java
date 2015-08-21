@@ -64,7 +64,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition
     @Override
     public final Collection<BlockEdit> getEffectedBlocks()
     {
-        List<BlockEdit> list = new LinkedList<BlockEdit>();
+        List<BlockEdit> list = new LinkedList<>();
         getEffectedBlocks(list);
         return list;
     }

@@ -1,6 +1,5 @@
 package com.builtbroken.mc.core.asm;
 
-import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.block.Block;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkEvent;

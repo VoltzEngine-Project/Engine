@@ -112,10 +112,10 @@ public class PathfinderAStar extends Pathfinder
 	@Override
 	public Pathfinder reset()
 	{
-		this.openSet = new HashSet<Pos>();
-		this.navigationMap = new HashMap<Pos, Pos>();
-		this.gScore = new HashMap<Pos, Double>();
-		this.fScore = new HashMap<Pos, Double>();
+		this.openSet = new HashSet<>();
+		this.navigationMap = new HashMap<>();
+		this.gScore = new HashMap<>();
+		this.fScore = new HashMap<>();
 		return super.reset();
 	}
 
@@ -124,7 +124,7 @@ public class PathfinderAStar extends Pathfinder
 	 */
 	public List<Pos> reconstructPath(HashMap<Pos, Pos> nagivationMap, Pos current_node)
 	{
-		List<Pos> path = new LinkedList<Pos>();
+		List<Pos> path = new LinkedList<>();
 		path.add(current_node);
 
 		if (nagivationMap.containsKey(current_node))
@@ -157,7 +157,7 @@ public class PathfinderAStar extends Pathfinder
 		}
 		else
 		{
-			Set<Pos> neighbors = new HashSet<Pos>();
+			Set<Pos> neighbors = new HashSet<>();
 
 			for (int i = 0; i < 6; i++)
 			{

@@ -83,7 +83,7 @@ public class WorldChangeHelper
         //If we have blocks to edit then register with the event handler
         if (effectedBlocks == null)
         {
-            return new ArrayList<BlockEdit>();
+            return new ArrayList<>();
         }
         return effectedBlocks;
     }

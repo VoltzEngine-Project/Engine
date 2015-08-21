@@ -152,7 +152,7 @@ public class ASMHelper
 
 	public static Map<LabelNode, LabelNode> cloneLabels(InsnList insns)
 	{
-		HashMap<LabelNode, LabelNode> labelMap = new HashMap<LabelNode, LabelNode>();
+		HashMap<LabelNode, LabelNode> labelMap = new HashMap<>();
 		for (AbstractInsnNode insn = insns.getFirst(); insn != null; insn = insn.getNext())
 		{
 			if (insn.getType() == 8)
@@ -181,7 +181,7 @@ public class ASMHelper
 
 	public static List<TryCatchBlockNode> cloneTryCatchBlocks(Map<LabelNode, LabelNode> labelMap, List<TryCatchBlockNode> tcblocks)
 	{
-		ArrayList<TryCatchBlockNode> clone = new ArrayList<TryCatchBlockNode>();
+		ArrayList<TryCatchBlockNode> clone = new ArrayList<>();
 		for (TryCatchBlockNode node : tcblocks)
 		{
 			clone.add(new TryCatchBlockNode(labelMap.get(node.start), labelMap.get(node.end), labelMap.get(node.handler), node.type));
@@ -192,7 +192,7 @@ public class ASMHelper
 
 	public static List<LocalVariableNode> cloneLocals(Map<LabelNode, LabelNode> labelMap, List<LocalVariableNode> locals)
 	{
-		ArrayList<LocalVariableNode> clone = new ArrayList<LocalVariableNode>();
+		ArrayList<LocalVariableNode> clone = new ArrayList<>();
 		for (LocalVariableNode node : locals)
 		{
 			clone.add(new LocalVariableNode(node.name, node.desc, node.signature, labelMap.get(node.start), labelMap.get(node.end), node.index));

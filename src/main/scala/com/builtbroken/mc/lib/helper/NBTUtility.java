@@ -2,7 +2,6 @@ package com.builtbroken.mc.lib.helper;
 
 import com.builtbroken.jlib.data.science.units.UnitHelper;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.transform.vector.Point;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.mojang.authlib.GameProfile;
@@ -46,7 +45,7 @@ public class NBTUtility
             return true;
         } catch (Exception e)
         {
-            References.LOGGER.fatal("Failed to save " + file.getName() + ".dat!");
+            Engine.instance.logger().fatal("Failed to save " + file.getName() + ".dat!");
             e.printStackTrace();
             return false;
         }

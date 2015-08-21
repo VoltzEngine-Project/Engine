@@ -48,8 +48,8 @@ public class FXElectricBolt extends EntityFX
 	/**
 	 * An array of the segments of the bolt.
 	 */
-	private ArrayList<BoltSegment> segments = new ArrayList<BoltSegment>();
-	private HashMap<Integer, Integer> splitparents = new HashMap<Integer, Integer>();
+	private ArrayList<BoltSegment> segments = new ArrayList();
+	private HashMap<Integer, Integer> splitparents = new HashMap();
 	private int maxSplitID = 0;
 	private Random rand;
 	/**
@@ -222,7 +222,7 @@ public class FXElectricBolt extends EntityFX
 
 	private void recalculateDifferences()
 	{
-		HashMap<Integer, Integer> lastActiveSegment = new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> lastActiveSegment = new HashMap<>();
 
 		Collections.sort(this.segments, new Comparator()
 		{

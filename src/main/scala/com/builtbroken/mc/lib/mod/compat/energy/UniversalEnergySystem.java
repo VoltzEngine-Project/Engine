@@ -17,13 +17,13 @@ public class UniversalEnergySystem
     //Multiply UE by this value to convert to RF
     public static final double redstoneFluxRatio = 1;
 
-    public static final Set<EnergyHandler> loadedModules = new LinkedHashSet<EnergyHandler>();
+    public static final Set<EnergyHandler> loadedModules = new LinkedHashSet<>();
 
     /**
      * A cache to know which module to use with when facing objects with a specific class.
      */
-    public static final HashMap<Class, EnergyHandler> energyHandlerCache = new HashMap<Class, EnergyHandler>();
-    public static final HashMap<Class, EnergyHandler> energyStorageCache = new HashMap<Class, EnergyHandler>();
+    public static final HashMap<Class, EnergyHandler> energyHandlerCache = new HashMap<>();
+    public static final HashMap<Class, EnergyHandler> energyStorageCache = new HashMap<>();
 
     public static void register(EnergyHandler module)
     {

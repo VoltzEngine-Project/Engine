@@ -2,11 +2,10 @@ package com.builtbroken.mc.lib.helper;
 
 import buildcraft.api.tools.IToolWrench;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.content.tool.ItemScrewdriver;
 import com.builtbroken.mc.lib.mod.compat.Mods;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.core.content.tool.ItemScrewdriver;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -55,10 +54,10 @@ public class WrenchUtility
                     }
                 } catch (ClassNotFoundException e)
                 {
-                    References.LOGGER.error("Failed to use reflection for IC2 Wrench support");
+                    Engine.instance.logger().error("Failed to use reflection for IC2 Wrench support");
                     if (Engine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Engine.instance.logger().catching(e);
                     }
                 }
             }
@@ -123,10 +122,10 @@ public class WrenchUtility
                     }
                 } catch (ClassNotFoundException e)
                 {
-                    References.LOGGER.error("Failed to use reflection for IC2 Wrench support");
+                    Engine.instance.logger().error("Failed to use reflection for IC2 Wrench support");
                     if (Engine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Engine.instance.logger().catching(e);
                     }
                 }
             }
@@ -184,31 +183,31 @@ public class WrenchUtility
                     }
                 } catch (ClassNotFoundException e)
                 {
-                    References.LOGGER.error("Failed to use reflection to get IC2 wrench classes");
+                    Engine.instance.logger().error("Failed to use reflection to get IC2 wrench classes");
                     if (Engine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Engine.instance.logger().catching(e);
                     }
                 } catch (NoSuchMethodException e)
                 {
-                    References.LOGGER.error("Failed to use reflection to access IC2 wrench methods");
+                    Engine.instance.logger().error("Failed to use reflection to access IC2 wrench methods");
                     if (Engine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Engine.instance.logger().catching(e);
                     }
                 } catch (InvocationTargetException e)
                 {
-                    References.LOGGER.error("Failed to use reflection to invoke IC2 wrench methods");
+                    Engine.instance.logger().error("Failed to use reflection to invoke IC2 wrench methods");
                     if (Engine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Engine.instance.logger().catching(e);
                     }
                 } catch (IllegalAccessException e)
                 {
-                    References.LOGGER.error("Reflection failure: Something is blocking access to IC2 wrench methods");
+                    Engine.instance.logger().error("Reflection failure: Something is blocking access to IC2 wrench methods");
                     if (Engine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Engine.instance.logger().catching(e);
                     }
                 }
             }

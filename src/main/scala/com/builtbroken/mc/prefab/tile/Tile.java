@@ -262,7 +262,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     //===========================
     public ArrayList<ItemStack> getDrops(int metadata, int fortune)
     {
-        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> drops = new ArrayList<>();
         if (getBlockType() != null)
         {
             drops.add(new ItemStack(getBlockType(), quantityDropped(metadata, fortune), metadataDropped(metadata, fortune)));
@@ -566,7 +566,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
      */
     public Iterable<Cube> getCollisionBoxes(Cube intersect, Entity entity)
     {
-        List<Cube> boxes = new ArrayList<Cube>();
+        List<Cube> boxes = new ArrayList<>();
         boxes.add(getCollisionBounds());
         return boxes;
     }

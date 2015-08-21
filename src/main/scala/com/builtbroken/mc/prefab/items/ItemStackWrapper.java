@@ -103,7 +103,7 @@ public class ItemStackWrapper
                 }
             }
         }
-        else if (meta_compare == false && nbt_compare == false && stack_size == false)
+        else if (!meta_compare && !nbt_compare && !stack_size)
         {
             if (object instanceof Item)
             {

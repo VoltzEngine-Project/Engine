@@ -78,12 +78,11 @@ public class PermissionsCommandManager extends ServerCommandManager
                     //Executes the command on several players if listed
                     EntityPlayerMP[] players = PlayerSelector.matchPlayers(sender, args[usernameIndex]);
                     String s2 = args[usernameIndex];
-                    EntityPlayerMP[] aentityplayermp1 = players;
                     int k = players.length;
 
                     for (int l = 0; l < k; ++l)
                     {
-                        EntityPlayerMP entityplayermp = aentityplayermp1[l];
+                        EntityPlayerMP entityplayermp = players[l];
                         args[usernameIndex] = entityplayermp.getCommandSenderName();
 
                         try

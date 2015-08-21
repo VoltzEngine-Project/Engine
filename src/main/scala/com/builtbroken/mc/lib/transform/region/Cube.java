@@ -565,11 +565,7 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
     @Override
     public boolean equals(Object other)
     {
-        if (other instanceof Cube)
-        {
-            return ((Cube) other).pointOne == pointOne && ((Cube) other).pointTwo == pointTwo;
-        }
-        return false;
+        return other instanceof Cube && ((Cube) other).pointOne == pointOne && ((Cube) other).pointTwo == pointTwo;
     }
 
     /**

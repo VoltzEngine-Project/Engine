@@ -1,12 +1,7 @@
 package com.builtbroken.mc.core;
 
-import cpw.mods.fml.common.Loader;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.config.Configuration;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.File;
 
 /**
  * References too common static objects used by Resonant Engine and its sub mods

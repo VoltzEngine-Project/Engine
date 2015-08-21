@@ -1,27 +1,16 @@
 package com.builtbroken.mc.prefab.tile;
 
-import cofh.api.energy.IEnergyConnection;
 import com.builtbroken.mc.api.ISave;
 import com.builtbroken.mc.api.IUpdate;
-import com.builtbroken.mc.api.tile.IInventoryProvider;
 import com.builtbroken.mc.api.tile.ISided;
 import com.builtbroken.mc.api.tile.ITileModuleProvider;
-import com.builtbroken.mc.api.tile.node.IExternalInventory;
 import com.builtbroken.mc.api.tile.node.ITileModule;
-import com.builtbroken.mc.prefab.tile.module.TileModuleInventory;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import javax.swing.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

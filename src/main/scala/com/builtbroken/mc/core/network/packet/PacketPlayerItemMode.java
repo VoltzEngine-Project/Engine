@@ -2,8 +2,6 @@ package com.builtbroken.mc.core.network.packet;
 
 import com.builtbroken.mc.api.items.IModeItem;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.network.IPacketIDReceiver;
-import com.builtbroken.mc.core.network.IPacketReceiver;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 

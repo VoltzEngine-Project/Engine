@@ -233,11 +233,7 @@ public class BlockMultiblock extends BlockContainer
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float xHit, float yHit, float zHit)
     {
         IMultiTile tile = getTile(world, x, y, z);
-        if (tile != null && tile.getHost() != null)
-        {
-            return tile.getHost().onMultiTileActivated(tile, player, side, new Pos(xHit, yHit, zHit));
-        }
-        return false;
+        return tile != null && tile.getHost() != null && tile.getHost().onMultiTileActivated(tile, player, side, new Pos(xHit, yHit, zHit));
     }
 
     @Override

@@ -10,7 +10,6 @@ import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
-import li.cil.repack.org.luaj.vm2.ast.Exp;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
@@ -18,7 +17,6 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 /**
@@ -82,17 +80,17 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
     @Override
     public String getCommandSenderName()
     {
-        if(this.hasCustomNameTag())
+        if (this.hasCustomNameTag())
         {
             return this.getCustomNameTag();
         }
-        else if(ex instanceof IExCreeperHandler)
+        else if (ex instanceof IExCreeperHandler)
         {
             String s = ((IExCreeperHandler) ex).getTranslationKey(this);
-            if(s != null && !s.isEmpty())
+            if (s != null && !s.isEmpty())
             {
-                String translation = LanguageUtility.getLocal(s  + ".name");
-                if(translation != null && !translation.isEmpty())
+                String translation = LanguageUtility.getLocal(s + ".name");
+                if (translation != null && !translation.isEmpty())
                     return translation;
             }
         }
@@ -202,10 +200,10 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
     public void writeSpawnData(ByteBuf buffer)
     {
         buffer.writeBoolean(ex != null);
-        if(ex != null)
+        if (ex != null)
         {
             ByteBufUtils.writeUTF8String(buffer, ex.getID());
-            if(ex_data != null)
+            if (ex_data != null)
             {
                 ByteBufUtils.writeTag(buffer, ex_data);
             }
@@ -220,7 +218,7 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
     public void readSpawnData(ByteBuf buffer)
     {
         boolean ex_exists = buffer.readBoolean();
-        if(ex_exists)
+        if (ex_exists)
         {
             ex = ExplosiveRegistry.get(ByteBufUtils.readUTF8String(buffer));
             ex_data = ByteBufUtils.readTag(buffer);

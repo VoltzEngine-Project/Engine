@@ -54,7 +54,6 @@ public enum EnumMultiblock
     public ITileEntityProvider provider;
 
     private static boolean init = false;
-    private static boolean reg = false;
     private static final HashMap<String, EnumMultiblock> cache = new HashMap();
 
     EnumMultiblock() {}
@@ -116,7 +115,6 @@ public enum EnumMultiblock
                 GameRegistry.registerTileEntity(e.clazz, e.name);
             }
         }
-        reg = true;
     }
 
     public static EnumMultiblock get(String name)

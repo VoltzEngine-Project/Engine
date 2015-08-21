@@ -80,8 +80,8 @@ public class Pathfinder
 
 	public Pathfinder reset()
 	{
-		this.closedSet = new LinkedHashSet<Pos>();
-		this.results = new LinkedList<Pos>();
+		this.closedSet = new LinkedHashSet<>();
+		this.results = new LinkedList<>();
 		return this;
 	}
 }

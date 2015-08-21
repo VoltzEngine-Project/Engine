@@ -9,7 +9,7 @@ import java.util.List;
 
 public abstract class ToolMode
 {
-	public static final List<ToolMode> REGISTRY = new ArrayList<ToolMode>();
+	public static final List<ToolMode> REGISTRY = new ArrayList<>();
 
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player)
 	{

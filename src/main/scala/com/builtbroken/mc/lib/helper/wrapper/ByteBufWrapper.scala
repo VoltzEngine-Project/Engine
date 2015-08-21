@@ -14,15 +14,11 @@ import net.minecraftforge.fluids.{FluidStack, FluidTank}
  * Some alias methods to make packets more pleasant.
  * @author anti344, Calclavia
  */
-object ByteBufWrapper
-{
+object ByteBufWrapper {
 
-  implicit class ByteBufWrapper(buf: ByteBuf)
-  {
-    def read[T](sample: T): T =
-    {
-      return (sample match
-      {
+  implicit class ByteBufWrapper(buf: ByteBuf) {
+    def read[T](sample: T): T = {
+      return (sample match {
         case x: Array[Any] => readArray(x)
         case x: Int => buf.readInt()
         case x: Float => buf.readFloat()
@@ -42,8 +38,7 @@ object ByteBufWrapper
       }).asInstanceOf[T]
     }
 
-    def readArray(data: Array[Any]): Array[Any] =
-    {
+    def readArray(data: Array[Any]): Array[Any] = {
       return data map read
     }
 
@@ -59,13 +54,11 @@ object ByteBufWrapper
 
     def readString() = ByteBufUtils.readUTF8String(buf)
 
-    def >>>>(f: (NBTTagCompound => Unit))
-    {
+    def >>>>(f: (NBTTagCompound => Unit)) {
       f(buf.readTag())
     }
 
-    def >>>(obj: ISave)
-    {
+    def >>>(obj: ISave) {
       obj.load(buf.readTag())
     }
 
@@ -74,18 +67,14 @@ object ByteBufWrapper
      * @param data
      * @return
      */
-    def <<<(data: Any): ByteBuf =
-    {
-      if(data == null)
-      {
-        if(Engine.runningAsDev)
+    def <<<(data: Any): ByteBuf = {
+      if (data == null) {
+        if (Engine.runningAsDev)
           Engine.instance.logger().error("Attempted to write null to ByteBuf ", new RuntimeException())
         return buf
       }
-      try
-      {
-        data match
-        {
+      try {
+        data match {
           case x: Array[Any] => this <<< x
           case x: Seq[Any] => this <<< x
           case x: Int => buf <<< x
@@ -105,119 +94,99 @@ object ByteBufWrapper
           case _ => throw new IllegalArgumentException(References.NAME + ": ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
         }
       }
-      catch
-        {
-          case ie: IllegalArgumentException =>
-          {
-            if (ie.getMessage.contains(References.NAME))
-            {
-              ie.printStackTrace()
-            }
-            else
-            {
-              throw ie
-            }
+      catch {
+        case ie: IllegalArgumentException =>
+
+          if (ie.getMessage.contains(References.NAME)) {
+            ie.printStackTrace()
           }
-        }
+          else {
+            throw ie
+          }
+      }
       buf
     }
 
-    def <<<(data: Array[Any]): ByteBuf =
-    {
+    def <<<(data: Array[Any]): ByteBuf = {
       data foreach (this <<< _)
       buf
     }
 
-    def <<<(data: Seq[Any]): ByteBuf =
-    {
+    def <<<(data: Seq[Any]): ByteBuf = {
       data foreach (this <<< _)
       buf
     }
 
-    def <<<<(f: (NBTTagCompound => Unit))
-    {
+    def <<<<(f: (NBTTagCompound => Unit)) {
       val nbt = new NBTTagCompound
       f(nbt)
       buf <<< nbt
     }
 
-    def <<<(tank: FluidTank): ByteBuf =
-    {
+    def <<<(tank: FluidTank): ByteBuf = {
       buf <<< tank.getCapacity
       buf <<< tank.writeToNBT(new NBTTagCompound)
       buf
     }
 
-    def <<<(stack: FluidStack) : ByteBuf =
-    {
+    def <<<(stack: FluidStack): ByteBuf = {
       buf <<< stack.writeToNBT(new NBTTagCompound)
       buf
     }
 
-    def <<<(saveObj: ISave): ByteBuf =
-    {
+    def <<<(saveObj: ISave): ByteBuf = {
       val nbt = new NBTTagCompound
       saveObj.save(nbt)
       buf <<< nbt
       buf
     }
 
-    def <<<(boolean: Boolean): ByteBuf =
-    {
+    def <<<(boolean: Boolean): ByteBuf = {
       buf.writeBoolean(boolean)
       buf
     }
 
-    def <<<(byte: Byte): ByteBuf =
-    {
+    def <<<(byte: Byte): ByteBuf = {
       buf.writeByte(byte)
       buf
     }
 
-    def <<<(short: Short): ByteBuf =
-    {
+    def <<<(short: Short): ByteBuf = {
       buf.writeShort(short)
       buf
     }
 
-    def <<<(int: Int): ByteBuf =
-    {
+    def <<<(int: Int): ByteBuf = {
       buf.writeInt(int)
       buf
     }
 
-    def <<<(long: Long): ByteBuf =
-    {
+    def <<<(long: Long): ByteBuf = {
       buf.writeLong(long)
       buf
     }
 
-    def <<<(float: Float): ByteBuf =
-    {
+    def <<<(float: Float): ByteBuf = {
       buf.writeFloat(float)
       buf
     }
 
-    def <<<(double: Double): ByteBuf =
-    {
+    def <<<(double: Double): ByteBuf = {
       buf.writeDouble(double)
       buf
     }
 
-    def <<<(nbt: NBTTagCompound): ByteBuf =
-    {
+    def <<<(nbt: NBTTagCompound): ByteBuf = {
       ByteBufUtils.writeTag(buf, nbt)
       buf
     }
 
-    def <<<(stack: ItemStack): ByteBuf =
-    {
+    def <<<(stack: ItemStack): ByteBuf = {
       ByteBufUtils.writeItemStack(buf, stack)
       buf
     }
 
-    def <<<(str: String): ByteBuf =
-    {
+    def <<<(str: String): ByteBuf = {
       ByteBufUtils.writeUTF8String(buf, str)
       buf
     }

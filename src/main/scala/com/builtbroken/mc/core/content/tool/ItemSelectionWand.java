@@ -2,7 +2,6 @@ package com.builtbroken.mc.core.content.tool;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.handler.SelectionHandler;
-import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.Selection;
 import cpw.mods.fml.relauncher.Side;
@@ -58,13 +57,13 @@ public class ItemSelectionWand extends Item
 
             if (player.isSneaking())
             {
-                select.setPointOne(location.toVector3());
+                select.setPointOne(location.toPos());
                 if (Engine.runningAsDev)
                     player.addChatComponentMessage(new ChatComponentText(("Point One: " + select)));
             }
             else
             {
-                select.setPointTwo(location.toVector3());
+                select.setPointTwo(location.toPos());
                 if (Engine.runningAsDev)
                     player.addChatComponentMessage(new ChatComponentText(("Point Two: " + select)));
             }

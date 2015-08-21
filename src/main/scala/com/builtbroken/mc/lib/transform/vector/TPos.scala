@@ -21,7 +21,7 @@ trait TPos extends IPos2D
     {
       return this.asInstanceOf[Entity].posX
     }
-    return 0;
+    return 0
   }
 
   def xi : Int = x.asInstanceOf[Int]
@@ -36,7 +36,7 @@ trait TPos extends IPos2D
     {
       return this.asInstanceOf[Entity].posY
     }
-    return 0;
+    return 0
   }
 
   def yi : Int = y.asInstanceOf[Int]

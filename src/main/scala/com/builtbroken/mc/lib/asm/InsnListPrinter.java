@@ -17,7 +17,7 @@ public class InsnListPrinter extends Textifier
 		text.clear();
 		if (labelNames == null)
 		{
-			labelNames = new HashMap<Label, String>();
+			labelNames = new HashMap<>();
 		}
 		else
 		{
@@ -47,7 +47,7 @@ public class InsnListPrinter extends Textifier
 		text.clear();
 		if (labelNames == null)
 		{
-			labelNames = new HashMap<Label, String>();
+			labelNames = new HashMap<>();
 		}
 		else
 		{
@@ -93,7 +93,7 @@ public class InsnListPrinter extends Textifier
 		text.clear();
 		if (labelNames == null)
 		{
-			labelNames = new HashMap<Label, String>();
+			labelNames = new HashMap<>();
 		}
 		else
 		{

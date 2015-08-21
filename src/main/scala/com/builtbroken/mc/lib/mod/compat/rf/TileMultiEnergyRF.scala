@@ -12,7 +12,7 @@ class TileMultiEnergyRF extends TileMulti with TEnergyHandler {
 
   override protected def getBattery(from: ForgeDirection): IEnergyBuffer = {
     if (getHost != null && getHost.isInstanceOf[IEnergyBufferProvider]) {
-      return getHost.asInstanceOf[IEnergyBufferProvider].getEnergyBuffer(from);
+      return getHost.asInstanceOf[IEnergyBufferProvider].getEnergyBuffer(from)
     }
     return null
   }

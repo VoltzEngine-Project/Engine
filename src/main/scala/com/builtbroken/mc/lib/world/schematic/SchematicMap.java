@@ -33,11 +33,11 @@ public class SchematicMap extends Schematic implements ISave
 	public static final String BLOCK_REF_SAVE_NAME = "BlockRef";
 	public static final String BLOCK_MAP_SAVE_NAME = "BlockMap";
 
-	private static final LinkedHashMap<String, Block> BLOCK_SAVE_MAP = new LinkedHashMap<String, Block>();
-	private static final LinkedHashMap<Block, String> BLOCK_SAVE_MAP_REV = new LinkedHashMap<Block, String>();
+	private static final LinkedHashMap<String, Block> BLOCK_SAVE_MAP = new LinkedHashMap<>();
+	private static final LinkedHashMap<Block, String> BLOCK_SAVE_MAP_REV = new LinkedHashMap<>();
 	public Pos schematicSize;
 	public Pos schematicCenter;
-	public LinkedHashMap<Pos, Pair<Block, Integer>> block_map = new LinkedHashMap<Pos, Pair<Block, Integer>>();
+	public LinkedHashMap<Pos, Pair<Block, Integer>> block_map = new LinkedHashMap<>();
 	public boolean init = false;
 	protected String name;
 
@@ -63,7 +63,7 @@ public class SchematicMap extends Schematic implements ISave
 	{
 		if (this.block_map != null)
 		{
-			HashMap<Pos, ItemStack> blocksToPlace = new HashMap<Pos, ItemStack>();
+			HashMap<Pos, ItemStack> blocksToPlace = new HashMap<>();
 			this.getBlocksToPlace(spot, blocksToPlace, doWorldCheck, doWorldCheck);
 			for (Entry<Pos, ItemStack> entry : blocksToPlace.entrySet())
 			{
@@ -227,7 +227,7 @@ public class SchematicMap extends Schematic implements ISave
 				{
 					e.printStackTrace();
 				}
-				this.block_map.put(blockPostion, new Pair<Block, Integer>(block, blockMeta));
+				this.block_map.put(blockPostion, new Pair<>(block, blockMeta));
 			}
 		}
 
@@ -305,7 +305,7 @@ public class SchematicMap extends Schematic implements ISave
 				{
 					Block block = world.getBlock((int) start.x() + x, (int) start.y() + y, (int) start.z() + z);
 					int blockMeta = world.getBlockMetadata((int) start.x() + x, (int) start.y() + y, (int) start.z() + z);
-					sch.block_map.put(new Pos(x, y, z), new Pair<Block, Integer>(block, blockMeta));
+					sch.block_map.put(new Pos(x, y, z), new Pair<>(block, blockMeta));
 				}
 			}
 		}

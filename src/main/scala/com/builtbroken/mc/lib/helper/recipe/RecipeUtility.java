@@ -20,7 +20,7 @@ public class RecipeUtility
 
 	public static List<IRecipe> getRecipesByOutput(ItemStack output)
 	{
-		List<IRecipe> list = new ArrayList<IRecipe>();
+		List<IRecipe> list = new ArrayList<>();
 
 		for (Object obj : CraftingManager.getInstance().getRecipeList())
 		{

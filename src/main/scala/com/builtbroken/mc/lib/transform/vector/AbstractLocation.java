@@ -186,11 +186,7 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     @Override
     public boolean equals(Object obj)
     {
-        if (obj instanceof IWorldPosition)
-        {
-            return (super.equals(obj)) && this.world == ((IWorldPosition) obj).world();
-        }
-        return false;
+        return obj instanceof IWorldPosition && (super.equals(obj)) && this.world == ((IWorldPosition) obj).world();
     }
 
     @Override

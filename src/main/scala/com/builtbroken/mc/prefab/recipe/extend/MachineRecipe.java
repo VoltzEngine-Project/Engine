@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Created by robert on 1/10/2015.
  */
+@SuppressWarnings("TypeParameterExplicitlyExtendsObject")
 public abstract class MachineRecipe<O extends Object, I extends Object> implements IMachineRecipe<O, I>
 {
     protected final String type;

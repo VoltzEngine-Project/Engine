@@ -17,8 +17,8 @@ public class FluidRenderUtility
 {
 	public static final int DISPLAY_STAGES = 100;
 	//private static final BlockRenderInfo liquidBlock = new BlockRenderInfo();
-	private static Map<Fluid, int[]> flowingRenderCache = new HashMap<Fluid, int[]>();
-	private static Map<Fluid, int[]> stillRenderCache = new HashMap<Fluid, int[]>();
+	private static Map<Fluid, int[]> flowingRenderCache = new HashMap<>();
+	private static Map<Fluid, int[]> stillRenderCache = new HashMap<>();
 
 	public static ResourceLocation getFluidSheet(FluidStack fluidStack)
 	{
