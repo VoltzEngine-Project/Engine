@@ -5,9 +5,11 @@ import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -151,6 +153,26 @@ public class MultiBlockHelper
                         }
                     }
                 }
+            }
+        }
+    }
+
+    public static void destroyMultiBlockStructure(IMultiTileHost host)
+    {
+        if (host instanceof TileEntity)
+        {
+            HashMap<IPos3D, String> map = host.getLayoutOfMultiBlock();
+            if (map != null && !map.isEmpty())
+            {
+                World world = ((TileEntity) host).getWorldObj();
+                int x = ((TileEntity) host).xCoord;
+                int y = ((TileEntity) host).yCoord;
+                int z = ((TileEntity) host).zCoord;
+                for (Map.Entry<IPos3D, String> entry : map.entrySet())
+                {
+                    world.setBlockToAir((int) (x + entry.getKey().x()), (int) (y + entry.getKey().y()), (int) (z + entry.getKey().z()));
+                }
+                InventoryUtility.dropBlockAsItem(world, x, y, z, true);
             }
         }
     }
