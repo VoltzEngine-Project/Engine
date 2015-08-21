@@ -60,6 +60,9 @@ processResources {
 	}
 }
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 import org.ajoberstar.grgit.Grgit
 
 def gitHash = 'unknown'
