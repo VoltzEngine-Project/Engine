@@ -79,11 +79,11 @@ jar {
     )
 }
 
-configure([compileJava, compileTestJava]) {
-    options.compilerArgs += ['-Xlint:all', '-Xlint:-path']
-    options.deprecation = true
-    options.encoding = 'utf8'
-}
+//configure([compileJava, compileTestJava]) {
+//    options.compilerArgs += ['-Xlint:all', '-Xlint:-path']
+//    options.deprecation = true
+//    options.encoding = 'utf8'
+//}
 jacocoTestReport {
     reports {
         xml.enabled = true // coveralls plugin depends on xml format report
