@@ -17,6 +17,7 @@ import com.builtbroken.mc.core.content.tool.*;
 import com.builtbroken.mc.core.handler.InteractionHandler;
 import com.builtbroken.mc.core.handler.SaveManager;
 import com.builtbroken.mc.core.handler.SelectionHandler;
+import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.netty.PacketManager;
 import com.builtbroken.mc.core.proxy.NEIProxy;
 import com.builtbroken.mc.core.registry.ModManager;
@@ -166,6 +167,7 @@ public class Engine
         MinecraftForge.EVENT_BUS.register(SaveManager.instance());
         MinecraftForge.EVENT_BUS.register(new InteractionHandler());
         MinecraftForge.EVENT_BUS.register(SelectionHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(TileTaskTickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(SelectionHandler.INSTANCE);
 
 

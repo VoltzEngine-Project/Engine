@@ -3,6 +3,7 @@ package com.builtbroken.mc.prefab.tile.multiblock;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
@@ -25,6 +26,9 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     public boolean shouldRenderBlock = false;
     public Cube overrideRenderBounds;
     public Cube collisionBounds;
+
+    public int ticks = 0;
+    public boolean remove = false;
 
     public HashMap<ForgeDirection, Block> connectedBlocks = new HashMap();
 
@@ -51,9 +55,29 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     }
 
     @Override
+    public void updateEntity()
+    {
+        super.updateEntity();
+
+        if (!remove && ticks == 5)
+        {
+            if (getHost() == null)
+            {
+                getWorldObj().setBlockToAir(xCoord, yCoord, zCoord);
+            }
+            else
+            {
+                TileTaskTickHandler.INSTANCE.addTileToBeRemoved(this);
+            }
+        }
+        ticks++;
+    }
+
+
+    @Override
     public boolean canUpdate()
     {
-        return false;
+        return ticks <= 5;
     }
 
     @Override

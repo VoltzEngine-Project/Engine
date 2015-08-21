@@ -37,7 +37,7 @@ public class MultiBlockRenderHelper implements ISimpleBlockRenderingHandler
 
         if (tile instanceof TileMulti && ((TileMulti) tile).shouldRenderBlock)
         {
-            System.out.println("Rendering Block " + x + "x " + y + "y " + "z " + "Block: " + block);
+            //System.out.println("Rendering Block " + x + "x " + y + "y " + "z " + "Block: " + block);
             GL11.glPushMatrix();
             Tessellator t = Tessellator.instance;
 
