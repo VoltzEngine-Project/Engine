@@ -5,6 +5,7 @@ import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -88,8 +89,7 @@ public class MultiBlockHelper
                         ((IMultiTile) ent).setHost(tile);
                         setData(dataString, (IMultiTile) ent);
                     }
-                }
-                else
+                } else
                 {
                     Engine.instance.logger().error("MultiBlockHelper: type[" + i + ", " + type + "] is not a invalid multi tile type, this is most likely an error in " + tile);
                 }
@@ -109,21 +109,18 @@ public class MultiBlockHelper
                 data = new String[]{dataString};
             for (String d : data)
             {
-                System.out.println("Processing data > " + d);
                 if (d.contains("="))
                 {
                     String lowerCase = d.toLowerCase();
-                    System.out.println("\tLowerCase: " + lowerCase);
                     String value = lowerCase.substring(lowerCase.indexOf("=") + 1, lowerCase.length());
-                    System.out.println("\tValue: " + value);
+
                     if (lowerCase.startsWith("renderblock"))
                     {
                         if (value.equals("true"))
                         {
                             ((TileMulti) ent).shouldRenderBlock = true;
                         }
-                    }
-                    else if (lowerCase.startsWith("bounds"))
+                    } else if (lowerCase.startsWith("bounds"))
                     {
                         if (value.contains("{") && value.contains("}") && value.contains(","))
                         {
@@ -137,7 +134,8 @@ public class MultiBlockHelper
                                     try
                                     {
                                         ints[se] = Integer.parseInt(values[se]);
-                                    } catch (NumberFormatException e)
+                                    }
+                                    catch (NumberFormatException e)
                                     {
                                         failed = true;
                                         break;
@@ -170,7 +168,11 @@ public class MultiBlockHelper
                 int z = ((TileEntity) host).zCoord;
                 for (Map.Entry<IPos3D, String> entry : map.entrySet())
                 {
-                    world.setBlockToAir((int) (x + entry.getKey().x()), (int) (y + entry.getKey().y()), (int) (z + entry.getKey().z()));
+                    Pos pos = new Pos(x, y, z).add(entry.getKey());
+                    TileEntity tile = pos.getTileEntity(world);
+                    if (tile instanceof IMultiTile)
+                        ((IMultiTile) tile).setHost(null);
+                    pos.setBlockToAir(world);
                 }
                 InventoryUtility.dropBlockAsItem(world, x, y, z, true);
             }

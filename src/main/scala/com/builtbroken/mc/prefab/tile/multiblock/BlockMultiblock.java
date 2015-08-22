@@ -73,21 +73,7 @@ public class BlockMultiblock extends BlockContainer
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileMulti)
         {
-            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-            {
-                Pos pos = new Pos(x, y, z).add(dir);
-                Block b = pos.getBlock(world);
-                if (((TileMulti) tile).connectedBlocks.containsKey(dir))
-                {
-                    //TODO notify that a block has changed
-                    if (((TileMulti) tile).connectedBlocks.get(dir) != b)
-                        ((TileMulti) tile).connectedBlocks.remove(dir);
-                }
-                if (b != null && !b.isAir(world, x, y, z))
-                {
-                    ((TileMulti) tile).connectedBlocks.put(dir, b);
-                }
-            }
+            ((TileMulti)tile).updateConnections();
         }
     }
 

@@ -53,6 +53,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -121,7 +122,9 @@ public class Engine
     public static boolean enabledHeatMap = true;
     public static boolean log_registering_explosives = false;
 
-    /** Conversion ratio of ingot to fluid volume, based on Tinkers *in theory* */
+    /**
+     * Conversion ratio of ingot to fluid volume, based on Tinkers *in theory*
+     */
     public static int INGOT_VOLUME = 144;
 
     //TODO move these to compatibility handlers later
@@ -207,7 +210,8 @@ public class Engine
                     shouldLoadRFHandler = false;
                     break;
                 }
-            } catch (ClassNotFoundException e)
+            }
+            catch (ClassNotFoundException e)
             {
                 shouldLoadRFHandler = false;
                 logger().error("Not loading RF support as we couldn't detect one of cofh's energy classes");
@@ -272,9 +276,7 @@ public class Engine
 
         if (multiBlockRequested)
         {
-            multiBlock = contentRegistry.newBlock("veMultiBlock", BlockMultiblock.class, ItemBlockMulti.class);
-            NEIProxy.hideItem(multiBlock);
-            EnumMultiblock.register();
+            loadMultiBlock();
         }
 
         if (heatedRockRequested)
@@ -290,6 +292,22 @@ public class Engine
 
         loader.init();
         getManager().fireInit();
+    }
+
+    /**
+     * Helper method to load multi block code. Never call this
+     * for a mod while MC is running. As VoltzEngine should have
+     * ownership of the tile to prevent data loss.
+     */
+    public static void loadMultiBlock()
+    {
+        if (multiBlock == null)
+        {
+            multiBlock = new BlockMultiblock();
+            GameRegistry.registerBlock(multiBlock, ItemBlockMulti.class, "veMultiBlock");
+            NEIProxy.hideItem(multiBlock);
+            EnumMultiblock.register();
+        }
     }
 
     @EventHandler

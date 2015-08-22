@@ -8,6 +8,7 @@ import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -61,11 +62,14 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
 
         if (!remove && ticks == 5)
         {
+            if (ticks == 0)
+            {
+                updateConnections();
+            }
             if (getHost() == null)
             {
                 getWorldObj().setBlockToAir(xCoord, yCoord, zCoord);
-            }
-            else
+            } else
             {
                 TileTaskTickHandler.INSTANCE.addTileToBeRemoved(this);
             }
@@ -73,6 +77,24 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
         ticks++;
     }
 
+    public void updateConnections()
+    {
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+        {
+            Pos pos = new Pos(this).add(dir);
+            Block b = pos.getBlock(getWorldObj());
+            if (connectedBlocks.containsKey(dir))
+            {
+                //TODO notify that a block has changed
+                if (connectedBlocks.get(dir) != b)
+                    connectedBlocks.remove(dir);
+            }
+            if (b != null && !b.isAir(getWorldObj(), xCoord, yCoord, zCoord))
+            {
+                connectedBlocks.put(dir, b);
+            }
+        }
+    }
 
     @Override
     public boolean canUpdate()

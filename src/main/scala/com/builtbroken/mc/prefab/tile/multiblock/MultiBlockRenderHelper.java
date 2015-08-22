@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -37,74 +38,10 @@ public class MultiBlockRenderHelper implements ISimpleBlockRenderingHandler
 
         if (tile instanceof TileMulti && ((TileMulti) tile).shouldRenderBlock)
         {
-            //System.out.println("Rendering Block " + x + "x " + y + "y " + "z " + "Block: " + block);
-            GL11.glPushMatrix();
-            Tessellator t = Tessellator.instance;
-
-            GL11.glColor4f(1, 1, 1, 1);
-
-            if (((TileMulti) tile).overrideRenderBounds != null)
-            {
-                final Cube c = ((TileMulti) tile).overrideRenderBounds;
-                renderBlocks.setRenderBounds(c.min().x(), c.min().y(), c.min().z(), c.max().x(), c.max().y(), c.max().z());
-            } else
-            {
-                renderBlocks.setRenderBounds(0, 0, 0, 1, 1, 1);
-            }
-
-            //t.startDrawingQuads();
-            IIcon useTexture;
-
-            if (block.shouldSideBeRendered(world, x, y, z, 0))
-            {
-                System.out.println("Rendering side 0");
-                useTexture = block.getIcon(world, x, y, z, 0);
-                t.setNormal(0.0F, -1.0F, 0.0F);
-                renderBlocks.renderFaceYNeg(block, 0, 0, 0, useTexture);
-            }
-
-            if (block.shouldSideBeRendered(world, x, y, z, 1))
-            {
-                System.out.println("Rendering side 1");
-                useTexture = block.getIcon(world, x, y, z, 1);
-                t.setNormal(0.0F, 1.0F, 0.0F);
-                renderBlocks.renderFaceYPos(block, 0, 0, 0, useTexture);
-            }
-            if (block.shouldSideBeRendered(world, x, y, z, 2))
-            {
-                System.out.println("Rendering side 2");
-                useTexture = block.getIcon(world, x, y, z, 2);
-                t.setNormal(0.0F, 0.0F, -1.0F);
-                renderBlocks.renderFaceZNeg(block, 0, 0, 0, useTexture);
-            }
-
-            if (block.shouldSideBeRendered(world, x, y, z, 3))
-            {
-                System.out.println("Rendering side 3");
-                useTexture = block.getIcon(world, x, y, z, 3);
-                t.setNormal(0.0F, 0.0F, 1.0F);
-                renderBlocks.renderFaceZPos(block, 0, 0, 0, useTexture);
-            }
-
-            if (block.shouldSideBeRendered(world, x, y, z, 4))
-            {
-                System.out.println("Rendering side 4");
-                useTexture = block.getIcon(world, x, y, z, 4);
-                t.setNormal(-1.0F, 0.0F, 0.0F);
-                renderBlocks.renderFaceXNeg(block, 0, 0, 0, useTexture);
-            }
-
-            if (block.shouldSideBeRendered(world, x, y, z, 5))
-            {
-                System.out.println("Rendering side 5");
-                useTexture = block.getIcon(world, x, y, z, 5);
-                t.setNormal(1.0F, 0.0F, 0.0F);
-                renderBlocks.renderFaceXPos(block, 0, 0, 0, useTexture);
-            }
-            //t.draw();
-
-            GL11.glPopMatrix();
-            return true;
+            System.out.println("Rendering block " + x + "x " + y + "y " + z + "z ");
+            block.setBlockBoundsBasedOnState(world, x, y, z);
+            renderBlocks.setRenderBoundsFromBlock(block);
+            return renderBlocks.renderStandardBlock(block, x, y, z);
         }
         return false;
     }
