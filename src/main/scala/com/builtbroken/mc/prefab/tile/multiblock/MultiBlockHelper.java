@@ -7,8 +7,11 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
+import com.builtbroken.mc.prefab.tile.Tile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +21,8 @@ import java.util.Map;
  */
 public class MultiBlockHelper
 {
+    private static final Logger logger = LogManager.getLogger("VE-MultiBlockHelper");
+
     /**
      * Builds a multi block structure using data from the provided tile
      *
@@ -49,21 +54,21 @@ public class MultiBlockHelper
                 String dataString = null;
                 if (location == null)
                 {
-                    Engine.instance.logger().error("MultiBlockHelper: location[" + i + "] is null, this is most likely in error in " + tile);
+                    logger.error("MultiBlockHelper: location[" + i + "] is null, this is most likely in error in " + tile);
                     i++;
                     continue;
                 }
 
                 if (type == null)
                 {
-                    Engine.instance.logger().error("MultiBlockHelper: type[" + i + "] is null, this is most likely in error in " + tile);
+                    logger.error("MultiBlockHelper: type[" + i + "] is null, this is most likely in error in " + tile);
                     i++;
                     continue;
                 }
 
                 if (type.isEmpty())
                 {
-                    Engine.instance.logger().error("MultiBlockHelper: type[" + i + "] is empty, this is most likely in error in " + tile);
+                    logger.error("MultiBlockHelper: type[" + i + "] is empty, this is most likely in error in " + tile);
                     i++;
                     continue;
                 }
@@ -91,10 +96,13 @@ public class MultiBlockHelper
                     }
                 } else
                 {
-                    Engine.instance.logger().error("MultiBlockHelper: type[" + i + ", " + type + "] is not a invalid multi tile type, this is most likely an error in " + tile);
+                    logger.error("MultiBlockHelper: type[" + i + ", " + type + "] is not a invalid multi tile type, this is most likely an error in " + tile);
                 }
                 i++;
             }
+        } else
+        {
+            logger.error("Tile[" + tile + "] didn't return a structure map");
         }
     }
 
@@ -148,10 +156,20 @@ public class MultiBlockHelper
                                     ((TileMulti) ent).collisionBounds = new Cube(ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]);
                                 }
                             }
+                        } else
+                        {
+                            logger.error("Tile[" + ent + "] failed to parse bounds data " + d + " as it missing '{', '}, or ',");
                         }
                     }
+                } else
+                {
+                    logger.error("Tile[" + ent + "] failed to parse " + d + " as it doesn't contain '='");
                 }
             }
+        } else
+        {
+            if (!(ent instanceof TileMulti))
+                logger.error("Tile[" + ent + "] needs to be an instanceof TileMulti in order to set data");
         }
     }
 
@@ -175,7 +193,13 @@ public class MultiBlockHelper
                     pos.setBlockToAir(world);
                 }
                 InventoryUtility.dropBlockAsItem(world, x, y, z, true);
+            } else
+            {
+                logger.error("Tile[" + host + "]'s structure map is empty");
             }
+        } else
+        {
+            logger.error("Tile[" + host + "] is not an instanceof TileEntity");
         }
     }
 }
