@@ -184,9 +184,11 @@ public class MultiBlockHelper
                 int x = ((TileEntity) host).xCoord;
                 int y = ((TileEntity) host).yCoord;
                 int z = ((TileEntity) host).zCoord;
+                Pos center = new Pos(x, y, z);
+
                 for (Map.Entry<IPos3D, String> entry : map.entrySet())
                 {
-                    Pos pos = new Pos(x, y, z).add(entry.getKey());
+                    Pos pos = new Pos(entry.getKey());
                     TileEntity tile = pos.getTileEntity(world);
                     if (tile instanceof IMultiTile)
                         ((IMultiTile) tile).setHost(null);
