@@ -6,7 +6,6 @@ import com.builtbroken.mc.api.recipe.RecipeRegisterResult;
 import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;
 import com.builtbroken.mc.prefab.recipe.item.MRItemStack;
 import com.builtbroken.mc.testing.junit.AbstractTest;
-import com.builtbroken.mc.testing.junit.ModRegistry;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -26,7 +25,6 @@ public class TestMRHItemStack extends AbstractTest
     public void setUpForEntireClass()
     {
         super.setUpForEntireClass();
-        ModRegistry.init();
         this.handler = new MRHandlerItemStack(MachineRecipeType.ITEM_CRUSHER.INTERNAL_NAME);
 
     }

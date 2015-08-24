@@ -3,7 +3,6 @@ package com.builtbroken.mc.test.wrapper;
 import com.builtbroken.mc.lib.helper.MathUtility;
 import com.builtbroken.mc.prefab.items.ItemStackWrapper;
 import com.builtbroken.mc.testing.junit.AbstractTest;
-import com.builtbroken.mc.testing.junit.ModRegistry;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -27,7 +26,6 @@ public class ItemStackWrapperTest extends AbstractTest
     public void setUpForEntireClass()
     {
         super.setUpForEntireClass();
-        ModRegistry.init();
     }
 
     //Reason 1 why we use the ItemStack wrapper
