@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Random;
 
-public class Location extends AbstractLocation<Location> implements IWorldPosition, IPos3D
+public class Location extends AbstractLocation<Location> implements IWorldPosition, IPos3D, Comparable<IWorldPosition>
 {
     public Location(World world, double x, double y, double z)
     {
@@ -123,5 +123,23 @@ public class Location extends AbstractLocation<Location> implements IWorldPositi
     public boolean isSideSolid(ForgeDirection side)
     {
         return getBlock().isSideSolid(world(), xi(), yi(), zi(), side);
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        return o instanceof IWorldPosition && this.world == ((IWorldPosition) o).world() && ((IWorldPosition) o).x() == x() && ((IWorldPosition) o).y() == y() && ((IWorldPosition) o).z() == z();
+    }
+
+    @Override
+    public int compareTo(IWorldPosition that)
+    {
+        if (world().provider.dimensionId < that.world().provider.dimensionId || x() < that.x() || y() < that.y() || z() < that.z())
+            return -1;
+
+        if (world().provider.dimensionId > that.world().provider.dimensionId || x() > that.x() || y() > that.y() || z() > that.z())
+            return 1;
+
+        return 0;
     }
 }
