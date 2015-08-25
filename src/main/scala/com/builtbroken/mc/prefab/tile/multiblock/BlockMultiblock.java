@@ -24,7 +24,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -73,7 +72,7 @@ public class BlockMultiblock extends BlockContainer
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileMulti)
         {
-            ((TileMulti)tile).updateConnections();
+            ((TileMulti) tile).updateConnections();
         }
     }
 
@@ -200,9 +199,20 @@ public class BlockMultiblock extends BlockContainer
         IMultiTile tile = getTile(world, x, y, z);
         if (tile != null && tile.getHost() != null)
         {
-            tile.getHost().onMultiTileBroken(tile);
+            tile.getHost().onMultiTileBroken(tile, null, true);
         }
         super.breakBlock(world, x, y, z, block, meta);
+    }
+
+    @Override
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
+    {
+        IMultiTile tile = getTile(world, x, y, z);
+        if (tile != null && tile.getHost() != null)
+        {
+            tile.getHost().onMultiTileBroken(tile, player, willHarvest);
+        }
+        return removedByPlayer(world, player, x, y, z);
     }
 
     @Override
@@ -211,7 +221,7 @@ public class BlockMultiblock extends BlockContainer
         IMultiTile tile = getTile(world, x, y, z);
         if (tile != null && tile.getHost() != null)
         {
-            tile.getHost().onMultiTileBrokenByExplosion(tile, ex);
+            tile.getHost().onMultiTileBroken(tile, ex, true);
         }
     }
 

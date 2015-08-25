@@ -7,7 +7,6 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
-import com.builtbroken.mc.prefab.tile.Tile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
@@ -94,13 +93,15 @@ public class MultiBlockHelper
                         ((IMultiTile) ent).setHost(tile);
                         setData(dataString, (IMultiTile) ent);
                     }
-                } else
+                }
+                else
                 {
                     logger.error("MultiBlockHelper: type[" + i + ", " + type + "] is not a invalid multi tile type, this is most likely an error in " + tile);
                 }
                 i++;
             }
-        } else
+        }
+        else
         {
             logger.error("Tile[" + tile + "] didn't return a structure map");
         }
@@ -128,7 +129,8 @@ public class MultiBlockHelper
                         {
                             ((TileMulti) ent).shouldRenderBlock = true;
                         }
-                    } else if (lowerCase.startsWith("bounds"))
+                    }
+                    else if (lowerCase.startsWith("bounds"))
                     {
                         if (value.contains("{") && value.contains("}") && value.contains(","))
                         {
@@ -142,8 +144,7 @@ public class MultiBlockHelper
                                     try
                                     {
                                         ints[se] = Integer.parseInt(values[se]);
-                                    }
-                                    catch (NumberFormatException e)
+                                    } catch (NumberFormatException e)
                                     {
                                         failed = true;
                                         break;
@@ -156,24 +157,33 @@ public class MultiBlockHelper
                                     ((TileMulti) ent).collisionBounds = new Cube(ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]);
                                 }
                             }
-                        } else
+                        }
+                        else
                         {
                             logger.error("Tile[" + ent + "] failed to parse bounds data " + d + " as it missing '{', '}, or ',");
                         }
                     }
-                } else
+                }
+                else
                 {
                     logger.error("Tile[" + ent + "] failed to parse " + d + " as it doesn't contain '='");
                 }
             }
-        } else
+        }
+        else
         {
             if (!(ent instanceof TileMulti))
                 logger.error("Tile[" + ent + "] needs to be an instanceof TileMulti in order to set data");
         }
     }
 
+    @Deprecated
     public static void destroyMultiBlockStructure(IMultiTileHost host)
+    {
+        destroyMultiBlockStructure(host, true);
+    }
+
+    public static void destroyMultiBlockStructure(IMultiTileHost host, boolean doDrops)
     {
         if (host instanceof TileEntity)
         {
@@ -194,12 +204,17 @@ public class MultiBlockHelper
                         ((IMultiTile) tile).setHost(null);
                     pos.setBlockToAir(world);
                 }
-                InventoryUtility.dropBlockAsItem(world, x, y, z, true);
-            } else
+                if (doDrops)
+                    InventoryUtility.dropBlockAsItem(world, x, y, z, true);
+                else
+                    world.setBlockToAir(x, y, z);
+            }
+            else
             {
                 logger.error("Tile[" + host + "]'s structure map is empty");
             }
-        } else
+        }
+        else
         {
             logger.error("Tile[" + host + "] is not an instanceof TileEntity");
         }

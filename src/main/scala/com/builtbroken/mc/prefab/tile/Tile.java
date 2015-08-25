@@ -700,6 +700,39 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     }
 
     /**
+     * Called to see if the block can be placed at the location
+     *
+     * @return true if it can be placed
+     */
+    public boolean canPlaceBlockAt()
+    {
+        return world().getBlock(xi(), yi(), zi()).isReplaceable(world(), xi(), yi(), zi());
+    }
+
+    /**
+     * Called when the player removes a block
+     *
+     * @param player      - user doing the action
+     * @param willHarvest - did the player harvest the block, eg should it drop items
+     * @return true if the action was used and the block changed
+     */
+    public boolean removeByPlayer(EntityPlayer player, boolean willHarvest)
+    {
+        return world().setBlockToAir(xi(), yi(), zi());
+    }
+
+    /**
+     * Called to see if the block can be placed on the side of a block at the location
+     *
+     * @param side - side
+     * @return
+     */
+    public boolean canPlaceBlockOnSide(ForgeDirection side)
+    {
+        return canPlaceBlockAt();
+    }
+
+    /**
      * Gets the explosive resistance of this block.
      *
      * @param entity            - The affecting entity
@@ -999,7 +1032,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
 
     public double distance(IPos3D pos)
     {
-        if(pos instanceof Pos3D)
+        if (pos instanceof Pos3D)
         {
             return ((Pos3D) pos).distance(x() + 0.5, y() + 0.5, z() + 0.5);
         }

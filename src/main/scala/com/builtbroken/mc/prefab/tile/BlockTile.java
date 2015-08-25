@@ -22,6 +22,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +143,15 @@ public class BlockTile extends BlockContainer
     }
 
     @Override
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
+    {
+        inject(world, x, y, z);
+        boolean b = getTile(world, x, y, z).removeByPlayer(player, willHarvest);
+        eject();
+        return b;
+    }
+
+    @Override
     public int quantityDropped(int meta, int fortune, Random random)
     {
         return staticTile.quantityDropped(meta, fortune);
@@ -153,6 +163,23 @@ public class BlockTile extends BlockContainer
         inject(world, x, y, z);
         getTile(world, x, y, z).onNeighborChanged(block);
         eject();
+    }
+
+    public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side)
+    {
+        inject(world, x, y, z);
+        boolean b = getTile(world, x, y, z).canPlaceBlockOnSide(ForgeDirection.getOrientation(side));
+        eject();
+        return b;
+    }
+
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z)
+    {
+        inject(world, x, y, z);
+        boolean b = getTile(world, x, y, z).canPlaceBlockAt();
+        eject();
+        return b;
     }
 
     @Override
@@ -196,7 +223,8 @@ public class BlockTile extends BlockContainer
         eject();
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
     {
         inject(world, x, y, z);
