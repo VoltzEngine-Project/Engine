@@ -39,7 +39,7 @@ public class BlockMultiblock extends BlockContainer
 
     public BlockMultiblock()
     {
-        super(Material.circuits);
+        super(Material.rock);
         this.setBlockName("veMultiBlock");
         this.setHardness(2f);
     }
