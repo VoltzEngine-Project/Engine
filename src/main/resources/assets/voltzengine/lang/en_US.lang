@@ -177,6 +177,12 @@ toolmode.mode=Mode
 toolmode.general.name=General
 toolmode.rotation.name=Rotation
 
+## GPS
+gps.pos.set.name=GPS Data Saved
+gps.error.pos.invalid.name=Invalid Location
+gps.data.transferred.name=Data transferred
+gps.cleared.name=GPS Data Cleared
+
 # Items
 item.voltzengine:screwdriver.name=Screwdriver
 item.voltzengine:screwdriver.tooltip=Used to configure blocks. Shift-right click to change mode.
