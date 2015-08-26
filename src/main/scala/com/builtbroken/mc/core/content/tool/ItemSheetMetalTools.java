@@ -33,6 +33,7 @@ public class ItemSheetMetalTools extends Item implements IPostInit
     {
         this.setMaxStackSize(1);
         this.setHasSubtypes(true);
+        this.setUnlocalizedName(References.PREFIX + "sheetMetalTools");
     }
 
     @Override
@@ -49,12 +50,22 @@ public class ItemSheetMetalTools extends Item implements IPostInit
         this.shears = reg.registerIcon(References.PREFIX + "sheetMetalShears");
     }
 
+    public String getUnlocalizedName(ItemStack stack)
+    {
+        String type = getType(stack);
+        if (type != null && !type.isEmpty())
+        {
+            return super.getUnlocalizedName() + "." + type;
+        }
+        return super.getUnlocalizedName();
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List list)
     {
         list.add(getTool("hammer"));
-        list.add(getTool("shear"));
+        list.add(getTool("shears"));
     }
 
     public static ItemStack getTool(String type)

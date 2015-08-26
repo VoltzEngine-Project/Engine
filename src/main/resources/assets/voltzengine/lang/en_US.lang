@@ -186,6 +186,10 @@ toolmode.mode=Mode
 toolmode.general.name=General
 toolmode.rotation.name=Rotation
 
+item.voltzengine:sheetMetalTools.name=Sheet Metal Tool
+item.voltzengine:sheetMetalTools.hammer.name=Sheet Metal Hammer
+item.voltzengine:sheetMetalTools.shears.name=Sheet Metal Shears
+
 ## GPS
 gps.pos.set.name=GPS Data Saved
 gps.error.pos.invalid.name=Invalid Location
