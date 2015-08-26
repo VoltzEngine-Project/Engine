@@ -167,6 +167,15 @@ item.voltzengine:hoeHeadSteel.name=Steel Hoe Head
 item.voltzengine:hoeHeadBrass.name=Brass Hoe Head
 item.voltzengine:hoeHeadBronze.name=Bronze Hoe Head
 
+## Sheet Metal
+item.voltzengine:sheetMetal.name=Sheet Metal
+item.voltzengine:sheetMetal.metalSheet.name=Sheet Metal
+item.voltzengine:sheetMetal.metalSheet_half.name=1/2 Sheet Metal
+item.voltzengine:sheetMetal.metalSheet_quarter.name=1/4 Sheet Metal
+item.voltzengine:sheetMetal.metalSheet_third.name=1/3 Sheet Metal
+item.voltzengine:sheetMetal.metalSheetTriangle.name=Sheet Metal Wedge
+item.voltzengine:sheetMetal.metalCone.name=Sheet Metal Cone
+
 ## Creative Testing Blocks
 tile.voltzengine:creativeBuilder.name=Creative Builder
 tile.voltzengine:infiniteEnergy.name=Infinite Energy

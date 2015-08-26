@@ -20,6 +20,15 @@ public class ItemSheetMetal extends Item
     public ItemSheetMetal()
     {
         this.setHasSubtypes(true);
+        this.setUnlocalizedName(References.PREFIX + "sheetMetal");
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack)
+    {
+        if (stack.getItemDamage() >= 0 && stack.getItemDamage() < SheetMetal.values().length)
+            return super.getUnlocalizedName() + "." + SheetMetal.values()[stack.getItemDamage()].name;
+        return super.getUnlocalizedName();
     }
 
     @Override

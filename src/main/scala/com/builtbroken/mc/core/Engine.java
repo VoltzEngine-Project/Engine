@@ -177,7 +177,7 @@ public class Engine
         explosiveConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/Explosives.cfg"));
 
         loader = new LoadableHandler();
-        manager = new ModManager().setPrefix(References.DOMAIN);
+        manager = new ModManager().setPrefix(References.DOMAIN).setTab(CreativeTabs.tabAllSearch);
         logger = LogManager.getLogger(References.DOMAIN);
 
         config.load();
@@ -307,7 +307,7 @@ public class Engine
         if (getConfig().getBoolean("Content", "LoadSheetMetal", sheetMetalRequested, "Loads up all content and recipes for sheet metal."))
         {
             itemSheetMetalTools = getManager().newItem("veSheetMetalTools", ItemSheetMetalTools.class);
-            itemSheetMetal = getManager().newItem("vsSheetMetal", ItemSheetMetal.class);
+            itemSheetMetal = getManager().newItem("veSheetMetal", ItemSheetMetal.class);
         }
 
         if (getConfig().getBoolean("Content", "LoadHeatedRocks", heatedRockRequested, "Loads up heated rocks which are used to give explosions an extra short term effect on stone."))
