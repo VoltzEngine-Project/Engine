@@ -67,6 +67,7 @@ public class ItemSheetMetal extends Item
         FULL("metalSheet"),
         HALF("metalSheet_half"),
         QUARTER("metalSheet_quarter"),
+        EIGHTH("metalSheet_eighth"),
         THIRD("metalSheet_third"),
         TRIANGLE("metalSheetTriangle"),
         CONE("metalCone");

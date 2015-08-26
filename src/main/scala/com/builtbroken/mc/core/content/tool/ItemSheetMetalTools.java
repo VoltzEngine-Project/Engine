@@ -2,7 +2,11 @@ package com.builtbroken.mc.core.content.tool;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.core.content.resources.ItemSheetMetal;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
+import com.builtbroken.mc.core.registry.implement.IRegistryInit;
+import com.builtbroken.mc.lib.helper.recipe.UniversalRecipe;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -12,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.List;
 
@@ -19,9 +24,11 @@ import java.util.List;
  * Basic tool used in hand crafting recipes for sheet metal
  * Created by Dark on 8/25/2015.
  */
-public class ItemSheetMetalTools extends Item implements IPostInit
+public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryInit
 {
     public static boolean ENABLE_TOOL_DAMAGE = true;
+    public static int MAX_SHEARS_DAMAGE = 600;
+    public static int MAX_HAMMER_DAMAGE = 800;
 
     @SideOnly(Side.CLIENT)
     IIcon hammer;
@@ -39,7 +46,41 @@ public class ItemSheetMetalTools extends Item implements IPostInit
     @Override
     public void onPostInit()
     {
+        if (Engine.itemSheetMetal != null)
+        {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), "IH", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'H', getHammer()));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.HALF.ordinal()), "IC", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), 'C', getShears()));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.QUARTER.ordinal()), "IC", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.HALF.ordinal()), 'C', getShears()));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.EIGHTH.ordinal()), "IC", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.QUARTER.ordinal()), 'C', getShears()));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 3, ItemSheetMetal.SheetMetal.THIRD.ordinal()), "I", "C", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), 'C', getShears()));
 
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.TRIANGLE.ordinal()), "I ", " C", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), 'C', getShears()));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.CONE.ordinal()), "I ", " H", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.TRIANGLE.ordinal()), 'H', getHammer()));
+        }
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(getHammer(), "III", " I ", " S ", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
+        GameRegistry.addRecipe(new ShapedOreRecipe(getShears(), "I I", " I ", "S S", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
+    }
+
+    @Override
+    public void onRegistered()
+    {
+        this.ENABLE_TOOL_DAMAGE = Engine.instance.getConfig().getBoolean("EnableToolDamage", "SheetMetalContent", true, "Enables tools taking damage in crafting recipes");
+        this.MAX_HAMMER_DAMAGE = Engine.instance.getConfig().getInt("MaxHammerDamage", "SheetMetalContent", MAX_HAMMER_DAMAGE, 0, 10000, "Max damage the sheet metal hammer can take before breaking");
+        this.MAX_SHEARS_DAMAGE = Engine.instance.getConfig().getInt("MaxShearsDamage", "SheetMetalContent", MAX_SHEARS_DAMAGE, 0, 10000, "Max damage the sheet metal shears can take before breaking");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void onClientRegistered()
+    {
+
+    }
+
+    @Override
+    public int getMaxDamage()
+    {
+        return 100;
     }
 
     @Override
@@ -64,8 +105,18 @@ public class ItemSheetMetalTools extends Item implements IPostInit
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List list)
     {
-        list.add(getTool("hammer"));
-        list.add(getTool("shears"));
+        list.add(getHammer());
+        list.add(getShears());
+    }
+
+    public static ItemStack getHammer()
+    {
+        return getTool("hammer");
+    }
+
+    public static ItemStack getShears()
+    {
+        return getTool("shears");
     }
 
     public static ItemStack getTool(String type)
@@ -83,7 +134,7 @@ public class ItemSheetMetalTools extends Item implements IPostInit
         {
             switch (type)
             {
-                case "shear":
+                case "shears":
                     return shears;
                 case "hammer":
                     return hammer;
