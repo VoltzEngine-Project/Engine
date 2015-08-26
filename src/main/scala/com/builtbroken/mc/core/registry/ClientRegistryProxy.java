@@ -41,8 +41,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
             {
                 block.setBlockTextureName(modPrefix + name);
             }
-        }
-        catch (IllegalAccessException e)
+        } catch (IllegalAccessException e)
         {
             Engine.instance.logger().error(manager.name() + " Failed to access textureName field for block " + name);
             block.setBlockTextureName(modPrefix + name);
@@ -51,21 +50,8 @@ public class ClientRegistryProxy extends CommonRegistryProxy
         //Sets creative tab
         if (manager.defaultTab != null)
         {
-            try
+            if (ReflectionHelper.getPrivateValue(Block.class, block, "displayOnCreativeTab", "field_149772_a") == null)
             {
-                Field field = ReflectionUtility.getMCField(Block.class, "displayOnCreativeTab", "field_149772_a");
-                if (field == null)
-                {
-                    Engine.instance.logger().error(manager.name() + " Failed to access creativeTab field for block " + name);
-                    block.setCreativeTab(manager.defaultTab);
-                }
-                else if (field.get(block) == null)
-                {
-                    block.setCreativeTab(manager.defaultTab);
-                }
-            } catch (IllegalAccessException e)
-            {
-                Engine.instance.logger().error(manager.name() + " Failed to access creativeTab field for block " + name);
                 block.setCreativeTab(manager.defaultTab);
             }
         }
@@ -77,8 +63,10 @@ public class ClientRegistryProxy extends CommonRegistryProxy
         super.registerItem(manager, name, modPrefix, item);
         if (modPrefix != null)
         {
-            //TODO make forced item name optional
-            item.setUnlocalizedName(modPrefix + name);
+            if (ReflectionHelper.getPrivateValue(Item.class, item, "unlocalizedName", "field_77774_bZ") == null)
+            {
+                item.setUnlocalizedName(modPrefix + name);
+            }
 
             if (ReflectionHelper.getPrivateValue(Item.class, item, "iconString", "field_111218_cA") == null)
             {
