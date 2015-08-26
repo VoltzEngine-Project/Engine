@@ -39,7 +39,6 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     public ItemSheetMetalTools()
     {
         this.setMaxStackSize(1);
-        this.setHasSubtypes(true);
         this.setUnlocalizedName(References.PREFIX + "sheetMetalTools");
     }
 
@@ -66,8 +65,8 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     public void onRegistered()
     {
         this.ENABLE_TOOL_DAMAGE = Engine.instance.getConfig().getBoolean("EnableToolDamage", "SheetMetalContent", true, "Enables tools taking damage in crafting recipes");
-        this.MAX_HAMMER_DAMAGE = Engine.instance.getConfig().getInt("MaxHammerDamage", "SheetMetalContent", MAX_HAMMER_DAMAGE, 0, 10000, "Max damage the sheet metal hammer can take before breaking");
-        this.MAX_SHEARS_DAMAGE = Engine.instance.getConfig().getInt("MaxShearsDamage", "SheetMetalContent", MAX_SHEARS_DAMAGE, 0, 10000, "Max damage the sheet metal shears can take before breaking");
+        this.MAX_HAMMER_DAMAGE = Engine.instance.getConfig().getInt("MaxHammerDamage", "SheetMetalContent", MAX_HAMMER_DAMAGE, 10, 10000, "Max damage the sheet metal hammer can take before breaking");
+        this.MAX_SHEARS_DAMAGE = Engine.instance.getConfig().getInt("MaxShearsDamage", "SheetMetalContent", MAX_SHEARS_DAMAGE, 10, 10000, "Max damage the sheet metal shears can take before breaking");
     }
 
     @Override
@@ -78,8 +77,16 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     }
 
     @Override
-    public int getMaxDamage()
+    public int getMaxDamage(ItemStack stack)
     {
+        String type = getType(stack);
+        if ("hammer".equals(type))
+        {
+            return MAX_HAMMER_DAMAGE;
+        } else if ("shears".equals(type))
+        {
+            return MAX_SHEARS_DAMAGE;
+        }
         return 100;
     }
 

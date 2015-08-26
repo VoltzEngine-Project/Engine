@@ -233,7 +233,8 @@ public class Engine
                     shouldLoadRFHandler = false;
                     break;
                 }
-            } catch (ClassNotFoundException e)
+            }
+            catch (ClassNotFoundException e)
             {
                 shouldLoadRFHandler = false;
                 logger().error("Not loading RF support as we couldn't detect one of cofh's energy classes");
@@ -290,7 +291,7 @@ public class Engine
         //FMLCommonHandler.instance().bus().register(UpdateTicker$.MODULE$.world());
 
         //Late registration of content
-        if (getConfig().getBoolean("Content", "LoadOres", sheetMetalRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
+        if (getConfig().getBoolean("Content", "LoadOres", oresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
         {
             ore = contentRegistry.newBlock(References.ID + "StoneOre", new BlockOre("stone"), ItemBlockOre.class);
             Ores.registerSet(ore, getConfig());
@@ -304,7 +305,7 @@ public class Engine
             EnumMultiblock.register();
         }
 
-        if (getConfig().getBoolean("Content", "LoadSheetMetal", sheetMetalRequested, "Loads up all content and recipes for sheet metal."))
+        if (sheetMetalRequested || getConfig().getBoolean("SheetMetalContent", "ForceLoadContent", sheetMetalRequested, "Forces the sheet metal items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves."))
         {
             itemSheetMetalTools = getManager().newItem("veSheetMetalTools", ItemSheetMetalTools.class);
             itemSheetMetal = getManager().newItem("veSheetMetal", ItemSheetMetal.class);

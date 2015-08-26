@@ -16,6 +16,7 @@ tile.voltzengine:oreNickel.name=Nickel Ore
 tile.voltzengine:oreAluminium.name=Bauxite Ore
 tile.voltzengine:oreMagnesite.name=Magnesite Ore
 tile.voltzengine:oreUranium.name=Uranium Ore
+tile.voltzengine:orePlatinum.name=Platinum Ore
 
 ## Dust
 item.voltzengine:dustCopper.name=Copper Dust
