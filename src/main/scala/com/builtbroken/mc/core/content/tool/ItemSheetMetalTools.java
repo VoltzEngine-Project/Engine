@@ -6,6 +6,7 @@ import com.builtbroken.mc.core.content.resources.ItemSheetMetal;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.recipe.UniversalRecipe;
+import com.builtbroken.mc.prefab.recipe.item.sheetmetal.RecipeSheetMetal;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -16,7 +17,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.List;
 
@@ -47,18 +47,18 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     {
         if (Engine.itemSheetMetal != null)
         {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), "IH", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'H', getHammer()));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.HALF.ordinal()), "IC", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), 'C', getShears()));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.QUARTER.ordinal()), "IC", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.HALF.ordinal()), 'C', getShears()));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.EIGHTH.ordinal()), "IC", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.QUARTER.ordinal()), 'C', getShears()));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 3, ItemSheetMetal.SheetMetal.THIRD.ordinal()), "I", "C", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), "IH", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'H', getHammer()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.HALF.ordinal()), "IC", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.QUARTER.ordinal()), "IC", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.HALF.ordinal()), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.EIGHTH.ordinal()), "IC", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.QUARTER.ordinal()), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(new ItemStack(Engine.itemSheetMetal, 3, ItemSheetMetal.SheetMetal.THIRD.ordinal()), "I", "C", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), 'C', getShears()));
 
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.TRIANGLE.ordinal()), "I ", " C", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), 'C', getShears()));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.CONE.ordinal()), "I ", " H", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.TRIANGLE.ordinal()), 'H', getHammer()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(new ItemStack(Engine.itemSheetMetal, 2, ItemSheetMetal.SheetMetal.TRIANGLE.ordinal()), "I ", " C", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.FULL.ordinal()), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.CONE.ordinal()), "I ", " H", 'I', new ItemStack(Engine.itemSheetMetal, 1, ItemSheetMetal.SheetMetal.TRIANGLE.ordinal()), 'H', getHammer()));
         }
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(getHammer(), "III", " I ", " S ", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
-        GameRegistry.addRecipe(new ShapedOreRecipe(getShears(), "I I", " I ", "S S", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
+        GameRegistry.addRecipe(new RecipeSheetMetal(getHammer(), "III", " I ", " S ", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
+        GameRegistry.addRecipe(new RecipeSheetMetal(getShears(), "I I", " I ", "S S", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
     }
 
     @Override
@@ -73,7 +73,6 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     @SideOnly(Side.CLIENT)
     public void onClientRegistered()
     {
-
     }
 
     @Override
@@ -83,7 +82,8 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
         if ("hammer".equals(type))
         {
             return MAX_HAMMER_DAMAGE;
-        } else if ("shears".equals(type))
+        }
+        else if ("shears".equals(type))
         {
             return MAX_SHEARS_DAMAGE;
         }
@@ -179,17 +179,17 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     @Override
     public boolean doesContainerItemLeaveCraftingGrid(ItemStack stack)
     {
-        return !(stack.getItemDamage() > 0);
+        return !hasContainerItem(stack);
     }
 
     @Override
     public ItemStack getContainerItem(ItemStack itemStack)
     {
-        if (itemStack.getItemDamage() > 0)
+        if (itemStack.getItemDamage() <= getMaxDamage(itemStack))
         {
             ItemStack stack = itemStack.copy();
             if (ENABLE_TOOL_DAMAGE)
-                stack.setItemDamage(stack.getItemDamage() - 1);
+                stack.setItemDamage(stack.getItemDamage() + 1);
             return stack;
         }
         return null;
@@ -198,6 +198,6 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     @Override
     public boolean hasContainerItem(ItemStack stack)
     {
-        return !(stack.getItemDamage() > 0);
+        return stack.getItemDamage() <= getMaxDamage(stack);
     }
 }

@@ -14,7 +14,9 @@ import com.builtbroken.mc.core.content.resources.load.CastRecipeLoader;
 import com.builtbroken.mc.core.content.resources.load.CrusherRecipeLoad;
 import com.builtbroken.mc.core.content.resources.load.FluidSmelterRecipeLoad;
 import com.builtbroken.mc.core.content.resources.load.GrinderRecipeLoad;
-import com.builtbroken.mc.core.content.tool.*;
+import com.builtbroken.mc.core.content.tool.ItemScrewdriver;
+import com.builtbroken.mc.core.content.tool.ItemSelectionWand;
+import com.builtbroken.mc.core.content.tool.ItemSheetMetalTools;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolMode;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeGeneral;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeRotation;
@@ -42,6 +44,7 @@ import com.builtbroken.mc.prefab.recipe.cast.MRHandlerCast;
 import com.builtbroken.mc.prefab.recipe.fluid.MRHandlerFluidStack;
 import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;
 import com.builtbroken.mc.prefab.recipe.item.MRSmelterHandler;
+import com.builtbroken.mc.prefab.recipe.item.sheetmetal.RecipeSheetMetal;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.mc.prefab.tile.multiblock.BlockMultiblock;
 import com.builtbroken.mc.prefab.tile.multiblock.EnumMultiblock;
@@ -67,11 +70,14 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.Arrays;
+
+import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 
 /**
  * Mob class for Resonant Engine that handles common loading
@@ -233,8 +239,7 @@ public class Engine
                     shouldLoadRFHandler = false;
                     break;
                 }
-            }
-            catch (ClassNotFoundException e)
+            } catch (ClassNotFoundException e)
             {
                 shouldLoadRFHandler = false;
                 logger().error("Not loading RF support as we couldn't detect one of cofh's energy classes");
@@ -307,6 +312,7 @@ public class Engine
 
         if (sheetMetalRequested || getConfig().getBoolean("SheetMetalContent", "ForceLoadContent", sheetMetalRequested, "Forces the sheet metal items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves."))
         {
+            RecipeSorter.register(References.PREFIX + "sheetMetalTools", RecipeSheetMetal.class, SHAPED, "after:minecraft:shaped");
             itemSheetMetalTools = getManager().newItem("veSheetMetalTools", ItemSheetMetalTools.class);
             itemSheetMetal = getManager().newItem("veSheetMetal", ItemSheetMetal.class);
         }

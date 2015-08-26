@@ -2,17 +2,15 @@ package com.builtbroken.mc.prefab.recipe.item.sheetmetal;
 
 import com.builtbroken.mc.core.content.tool.ItemSheetMetalTools;
 import com.builtbroken.mc.prefab.recipe.item.RecipeShapedOre;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**
+ * Recipe designed to better handle support for sheet metal tools
  * Created by Cow Pi on 8/26/2015.
  */
-public class RecipeSheetMetalHammer extends RecipeShapedOre
+public class RecipeSheetMetal extends RecipeShapedOre
 {
-    public RecipeSheetMetalHammer(ItemStack result, Object... recipe)
+    public RecipeSheetMetal(ItemStack result, Object... recipe)
     {
         super(result, recipe);
     }
@@ -21,6 +19,10 @@ public class RecipeSheetMetalHammer extends RecipeShapedOre
     protected ItemStack toItemStack(Object in)
     {
         if (in instanceof String && in.equals("sheetMetalShears"))
+        {
+            return ItemSheetMetalTools.getHammer();
+        }
+        else if (in instanceof String && in.equals("sheetMetalHammer"))
         {
             return ItemSheetMetalTools.getHammer();
         }
