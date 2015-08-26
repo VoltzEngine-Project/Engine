@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.content.tool;
+package com.builtbroken.mc.core.content.tool.screwdriver;
 
 public class ToolModeGeneral extends ToolMode
 {

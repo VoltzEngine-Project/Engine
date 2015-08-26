@@ -8,12 +8,16 @@ import com.builtbroken.mc.core.content.ItemBlockOre;
 import com.builtbroken.mc.core.content.ItemInstaHole;
 import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
 import com.builtbroken.mc.core.content.parts.ItemParts;
+import com.builtbroken.mc.core.content.resources.ItemSheetMetal;
 import com.builtbroken.mc.core.content.resources.Ores;
 import com.builtbroken.mc.core.content.resources.load.CastRecipeLoader;
 import com.builtbroken.mc.core.content.resources.load.CrusherRecipeLoad;
 import com.builtbroken.mc.core.content.resources.load.FluidSmelterRecipeLoad;
 import com.builtbroken.mc.core.content.resources.load.GrinderRecipeLoad;
 import com.builtbroken.mc.core.content.tool.*;
+import com.builtbroken.mc.core.content.tool.screwdriver.ToolMode;
+import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeGeneral;
+import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeRotation;
 import com.builtbroken.mc.core.handler.InteractionHandler;
 import com.builtbroken.mc.core.handler.SaveManager;
 import com.builtbroken.mc.core.handler.SelectionHandler;
@@ -42,12 +46,9 @@ import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.mc.prefab.tile.multiblock.BlockMultiblock;
 import com.builtbroken.mc.prefab.tile.multiblock.EnumMultiblock;
 import com.builtbroken.mc.prefab.tile.multiblock.ItemBlockMulti;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.ModMetadata;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -103,12 +104,15 @@ public class Engine
     public static Block multiBlock;
 
     public static Item itemWrench;
+    public static Item itemSheetMetalTools;
+    public static Item itemSheetMetal;
     public static Item instaHole;
     public static Item itemSelectionTool;
     public static Item itemCraftingParts;
 
     //Interal trigger booleans
     private static boolean oresRequested = false;
+    private static boolean sheetMetalRequested = false;
     private static boolean multiBlockRequested = false;
     public static boolean heatedRockRequested = false;
 
@@ -137,12 +141,31 @@ public class Engine
      */
     public static void requestOres()
     {
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+            throw new RuntimeException("Ores can only be requested in Pre-Init phase");
         oresRequested = true;
     }
 
+    /**
+     * Requests basic multiblock code to be loaded up
+     * Must be called in pre-init
+     */
     public static void requestMultiBlock()
     {
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+            throw new RuntimeException("Mulit block content can only be requested in Pre-Init phase");
         multiBlockRequested = true;
+    }
+
+    /**
+     * Requests sheet metal content to be loaded up
+     * Must be called in pre-init
+     */
+    public static void requestSheetMetalContent()
+    {
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+            throw new RuntimeException("Sheet metal content can only be requested in Pre-Init phase");
+        sheetMetalRequested = true;
     }
 
     @EventHandler
@@ -210,8 +233,7 @@ public class Engine
                     shouldLoadRFHandler = false;
                     break;
                 }
-            }
-            catch (ClassNotFoundException e)
+            } catch (ClassNotFoundException e)
             {
                 shouldLoadRFHandler = false;
                 logger().error("Not loading RF support as we couldn't detect one of cofh's energy classes");
@@ -268,7 +290,7 @@ public class Engine
         //FMLCommonHandler.instance().bus().register(UpdateTicker$.MODULE$.world());
 
         //Late registration of content
-        if (oresRequested)
+        if (getConfig().getBoolean("Content", "LoadOres", sheetMetalRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
         {
             ore = contentRegistry.newBlock(References.ID + "StoneOre", new BlockOre("stone"), ItemBlockOre.class);
             Ores.registerSet(ore, getConfig());
@@ -276,10 +298,19 @@ public class Engine
 
         if (multiBlockRequested)
         {
-            loadMultiBlock();
+            multiBlock = new BlockMultiblock();
+            GameRegistry.registerBlock(multiBlock, ItemBlockMulti.class, "veMultiBlock");
+            NEIProxy.hideItem(multiBlock);
+            EnumMultiblock.register();
         }
 
-        if (heatedRockRequested)
+        if (getConfig().getBoolean("Content", "LoadSheetMetal", sheetMetalRequested, "Loads up all content and recipes for sheet metal."))
+        {
+            itemSheetMetalTools = getManager().newItem("veSheetMetalTools", ItemSheetMetalTools.class);
+            itemSheetMetal = getManager().newItem("vsSheetMetal", ItemSheetMetal.class);
+        }
+
+        if (getConfig().getBoolean("Content", "LoadHeatedRocks", heatedRockRequested, "Loads up heated rocks which are used to give explosions an extra short term effect on stone."))
         {
             heatedStone = contentRegistry.newBlock("VEHeatedRock", BlockHeatedStone.class, ItemBlockMetadata.class);
             NEIProxy.hideItem(heatedStone);
@@ -292,22 +323,6 @@ public class Engine
 
         loader.init();
         getManager().fireInit();
-    }
-
-    /**
-     * Helper method to load multi block code. Never call this
-     * for a mod while MC is running. As VoltzEngine should have
-     * ownership of the tile to prevent data loss.
-     */
-    public static void loadMultiBlock()
-    {
-        if (multiBlock == null)
-        {
-            multiBlock = new BlockMultiblock();
-            GameRegistry.registerBlock(multiBlock, ItemBlockMulti.class, "veMultiBlock");
-            NEIProxy.hideItem(multiBlock);
-            EnumMultiblock.register();
-        }
     }
 
     @EventHandler

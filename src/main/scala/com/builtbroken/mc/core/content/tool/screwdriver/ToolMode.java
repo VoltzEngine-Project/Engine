@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.content.tool;
+package com.builtbroken.mc.core.content.tool.screwdriver;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
