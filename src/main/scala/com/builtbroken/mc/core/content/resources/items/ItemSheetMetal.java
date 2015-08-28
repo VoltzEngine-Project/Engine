@@ -109,7 +109,12 @@ public class ItemSheetMetal extends Item
 
         public ItemStack stack()
         {
-            return new ItemStack(Engine.itemSheetMetal, 1, ordinal());
+            return stack(1);
+        }
+
+        public ItemStack stack(int size)
+        {
+            return new ItemStack(Engine.itemSheetMetal, size, ordinal());
         }
     }
 }

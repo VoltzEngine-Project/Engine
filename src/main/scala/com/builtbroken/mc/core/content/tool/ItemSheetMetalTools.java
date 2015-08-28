@@ -50,28 +50,28 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
         {
             //Plate creation
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.FULL.stack(), "IH", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'H', getHammer()));
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.RIVETS.stack(), "H","I", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'H', getHammer()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.RIVETS.stack(16), "H","I", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'H', getHammer()));
 
             //Sheet metal reduction recipes
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.HALF.stack(), "IC", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'C', getShears()));
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.QUARTER.stack(), "IC", 'I', ItemSheetMetal.SheetMetal.HALF.stack(), 'C', getShears()));
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.EIGHTH.stack(), "IC", 'I', ItemSheetMetal.SheetMetal.EIGHTH.stack(), 'C', getShears()));
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.THIRD.stack(), "I", "C", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.HALF.stack(2), "IC", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.QUARTER.stack(2), "IC", 'I', ItemSheetMetal.SheetMetal.HALF.stack(), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.EIGHTH.stack(2), "IC", 'I', ItemSheetMetal.SheetMetal.QUARTER.stack(), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.THIRD.stack(3), "I", "C", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'C', getShears()));
 
             //Cone creations
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.TRIANGLE.stack(), "I ", " C", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.TRIANGLE.stack(2), "I ", " C", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'C', getShears()));
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CONE.stack(), "I ", " H", 'I', ItemSheetMetal.SheetMetal.CONE.stack(), 'H', getHammer()));
 
             //Curved plates
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CURVED_1.stack(), "IH", 'I', ItemSheetMetal.SheetMetal.FULL, 'H', getHammer()));
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CURVED_2.stack(), "IH", 'I', ItemSheetMetal.SheetMetal.CURVED_1, 'H', getHammer()));
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CURVED_3.stack(), "IH", 'I', ItemSheetMetal.SheetMetal.CURVED_2, 'H', getHammer()));
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CURVED_4.stack(), "IH", 'I', ItemSheetMetal.SheetMetal.CURVED_3, 'H', getHammer()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CURVED_1.stack(), "IH", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'H', getHammer()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CURVED_2.stack(), "IH", 'I', ItemSheetMetal.SheetMetal.CURVED_1.stack(), 'H', getHammer()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CURVED_3.stack(), "IH", 'I', ItemSheetMetal.SheetMetal.CURVED_2.stack(), 'H', getHammer()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CURVED_4.stack(), "IH", 'I', ItemSheetMetal.SheetMetal.CURVED_3.stack(), 'H', getHammer()));
 
             //Cylinders
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.SMALL_CYLINDER.stack(), "IRH", 'I', ItemSheetMetal.SheetMetal.CURVED_4, 'H', getHammer()));
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.HALF_CYLINDER.stack(), "IRI", 'I', ItemSheetMetal.SheetMetal.CURVED_4, 'R', ItemSheetMetal.SheetMetal.RIVETS));
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CYLINDER.stack(), "IRI", 'I', ItemSheetMetal.SheetMetal.HALF_CYLINDER, 'R', ItemSheetMetal.SheetMetal.RIVETS));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.SMALL_CYLINDER.stack(), "IRH", 'I', ItemSheetMetal.SheetMetal.CURVED_4.stack(), 'H', getHammer(), 'R', ItemSheetMetal.SheetMetal.RIVETS.stack()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.HALF_CYLINDER.stack(), "IRI", 'I', ItemSheetMetal.SheetMetal.CURVED_4.stack(), 'R', ItemSheetMetal.SheetMetal.RIVETS.stack()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CYLINDER.stack(), "IRI", 'I', ItemSheetMetal.SheetMetal.HALF_CYLINDER.stack(), 'R', ItemSheetMetal.SheetMetal.RIVETS.stack()));
         }
 
         GameRegistry.addRecipe(new RecipeSheetMetal(getHammer(), "III", " I ", " S ", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
