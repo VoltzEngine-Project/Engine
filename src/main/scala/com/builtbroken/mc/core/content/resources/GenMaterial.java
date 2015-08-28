@@ -1,5 +1,7 @@
 package com.builtbroken.mc.core.content.resources;
 
+import java.awt.*;
+
 /**
  * Generic set of ore types that are commonly found in most mods, and MC itself
  *
@@ -7,6 +9,7 @@ package com.builtbroken.mc.core.content.resources;
  */
 public enum GenMaterial
 {
+    UNKNOWN,
 	COPPER,
 	TIN,
     BRONZE,
@@ -20,5 +23,16 @@ public enum GenMaterial
     ALUMINIUM,
     MAGNESIUM,
     URANIUM,
-    BRASS
+    BRASS;
+
+
+    /** Color to use for render the texture */
+    public Color color;
+
+    GenMaterial(){}
+
+    GenMaterial(Color color)
+    {
+        this.color = color;
+    }
 }

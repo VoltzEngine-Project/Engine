@@ -8,7 +8,7 @@ import com.builtbroken.mc.core.content.ItemBlockOre;
 import com.builtbroken.mc.core.content.ItemInstaHole;
 import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
 import com.builtbroken.mc.core.content.parts.ItemParts;
-import com.builtbroken.mc.core.content.resources.ItemSheetMetal;
+import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
 import com.builtbroken.mc.core.content.resources.Ores;
 import com.builtbroken.mc.core.content.resources.load.CastRecipeLoader;
 import com.builtbroken.mc.core.content.resources.load.CrusherRecipeLoad;
