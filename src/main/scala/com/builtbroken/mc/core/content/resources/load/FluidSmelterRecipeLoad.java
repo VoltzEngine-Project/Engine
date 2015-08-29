@@ -10,7 +10,7 @@ import net.minecraftforge.fluids.Fluid;
 
 import java.util.List;
 
-/**
+/** Loadable for fluid smelting machine recipes
  * Created by Dark on 6/21/2015.
  */
 public class FluidSmelterRecipeLoad extends MRLoaderFluidStack

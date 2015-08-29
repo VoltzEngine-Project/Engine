@@ -361,10 +361,13 @@ public class Engine
             }
         }
 
+        logger.info("Starting resource generator");
+        long start = System.nanoTime();
         for (DefinedGenItems genItem : DefinedGenItems.values())
         {
             if (genItem.isRequested())
             {
+                logger.info("\tGenerating " + genItem.name);
                 genItem.item = getManager().newItem("ve" + LanguageUtility.capitalizeFirst(genItem.name), new ItemGenMaterial(genItem));
                 for (GenMaterial mat : GenMaterial.values())
                 {
@@ -379,6 +382,7 @@ public class Engine
                 }
             }
         }
+        logger.info("Done... Took " + (System.nanoTime() - start) + "ns");
 
         loader.init();
         getManager().fireInit();
