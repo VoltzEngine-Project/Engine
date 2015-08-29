@@ -1,5 +1,8 @@
 package com.builtbroken.mc.core.content.resources;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,10 @@ public enum DefinedGenItems
     public final List<GenMaterial> ignoreMaterials;
     /** Name of icon file */
     public final String iconName;
+    /** Called inside the Engine.class to trigger loading of the item */
+    private boolean requested = false;
+    /** Item representing this generated item */
+    public Item item;
 
     DefinedGenItems(String name, GenMaterial... mats)
     {
@@ -40,5 +47,25 @@ public enum DefinedGenItems
                 ignoreMaterials.add(mat);
             }
         }
+    }
+
+    public void requestToLoad()
+    {
+        this.requested = true;
+    }
+
+    public boolean isRequested()
+    {
+        return this.requested;
+    }
+
+    public ItemStack stack(GenMaterial mat)
+    {
+        return stack(mat, 1);
+    }
+
+    public ItemStack stack(GenMaterial mat, int stackSize)
+    {
+        return new ItemStack(item, stackSize, mat.ordinal());
     }
 }

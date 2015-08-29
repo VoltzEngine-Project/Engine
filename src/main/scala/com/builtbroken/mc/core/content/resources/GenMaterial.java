@@ -10,12 +10,14 @@ import java.awt.*;
 public enum GenMaterial
 {
     UNKNOWN,
-	COPPER,
-	TIN,
-    BRONZE,
+    //http://www.colorcombos.com/colors/C87533
+	COPPER(new Color(200, 117, 51)),
+	TIN(new Color(192, 192, 192)),
+    BRONZE(new Color(205, 127, 50)),
 	IRON,
     STEEL,
-	SILVER,
+    //https://en.wikipedia.org/wiki/Silver_%28color%29
+	SILVER(new Color(192, 192, 192)),
 	GOLD,
     LEAD,
     ZINC,

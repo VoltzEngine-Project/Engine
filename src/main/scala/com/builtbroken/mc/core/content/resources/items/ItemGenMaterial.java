@@ -6,9 +6,11 @@ import com.builtbroken.mc.core.content.resources.GenMaterial;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.omg.SendingContext.RunTime;
 
 import java.util.List;
 
@@ -23,8 +25,17 @@ public class ItemGenMaterial extends Item
     public ItemGenMaterial(DefinedGenItems itemType)
     {
         this.itemType = itemType;
+        if (itemType == null)
+            throw new RuntimeException("Item type can not be null for ItemGenMaterial");
         this.setHasSubtypes(true);
         this.setCreativeTab(CreativeTabs.tabMaterials);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister reg)
+    {
+        this.itemIcon = reg.registerIcon(References.PREFIX + itemType.iconName);
     }
 
     @Override
@@ -48,7 +59,7 @@ public class ItemGenMaterial extends Item
     {
         for (GenMaterial mat : GenMaterial.values())
         {
-            if (!itemType.ignoreMaterials.contains(mat))
+            if (mat != GenMaterial.UNKNOWN && !itemType.ignoreMaterials.contains(mat))
             {
                 list.add(new ItemStack(item, 1, mat.ordinal()));
             }

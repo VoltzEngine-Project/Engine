@@ -8,6 +8,9 @@ import com.builtbroken.mc.core.content.ItemBlockOre;
 import com.builtbroken.mc.core.content.ItemInstaHole;
 import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
 import com.builtbroken.mc.core.content.parts.ItemParts;
+import com.builtbroken.mc.core.content.resources.DefinedGenItems;
+import com.builtbroken.mc.core.content.resources.GenMaterial;
+import com.builtbroken.mc.core.content.resources.items.ItemGenMaterial;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
 import com.builtbroken.mc.core.content.resources.Ores;
 import com.builtbroken.mc.core.content.resources.load.CastRecipeLoader;
@@ -27,6 +30,7 @@ import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.netty.PacketManager;
 import com.builtbroken.mc.core.proxy.NEIProxy;
 import com.builtbroken.mc.core.registry.ModManager;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.lib.mod.compat.Mods;
@@ -67,6 +71,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
@@ -77,6 +82,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.util.Arrays;
 
+import static com.builtbroken.mc.core.content.resources.GenMaterial.GOLD;
+import static com.builtbroken.mc.core.content.resources.GenMaterial.IRON;
+import static com.builtbroken.mc.core.content.resources.GenMaterial.URANIUM;
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 
 /**
@@ -153,13 +161,40 @@ public class Engine
     }
 
     /**
+     * Requests that resources like ingots and dust are loaded
+     */
+    public static void requestResources()
+    {
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+            throw new RuntimeException("Resources can only be requested in Pre-Init phase");
+        DefinedGenItems.DUST.requestToLoad();
+        DefinedGenItems.RUBBLE.requestToLoad();
+        DefinedGenItems.INGOT.requestToLoad();
+        DefinedGenItems.PLATE.requestToLoad();
+        DefinedGenItems.ROD.requestToLoad();
+        DefinedGenItems.GEAR.requestToLoad();
+    }
+
+    public static void requestToolParts()
+    {
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+            throw new RuntimeException("Tool Parts can only be requested in Pre-Init phase");
+        DefinedGenItems.AX_HEAD.requestToLoad();
+        DefinedGenItems.SHOVEL_HEAD.requestToLoad();
+        DefinedGenItems.HOE_HEAD.requestToLoad();
+        DefinedGenItems.PICK_HEAD.requestToLoad();
+        DefinedGenItems.SWORD_BLADE.requestToLoad();
+    }
+
+
+    /**
      * Requests basic multiblock code to be loaded up
      * Must be called in pre-init
      */
     public static void requestMultiBlock()
     {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
-            throw new RuntimeException("Mulit block content can only be requested in Pre-Init phase");
+            throw new RuntimeException("Multi block content can only be requested in Pre-Init phase");
         multiBlockRequested = true;
     }
 
@@ -239,7 +274,8 @@ public class Engine
                     shouldLoadRFHandler = false;
                     break;
                 }
-            } catch (ClassNotFoundException e)
+            }
+            catch (ClassNotFoundException e)
             {
                 shouldLoadRFHandler = false;
                 logger().error("Not loading RF support as we couldn't detect one of cofh's energy classes");
@@ -325,6 +361,19 @@ public class Engine
             {
                 HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementData(heatedStone, 15), 600);
                 HeatedBlockRegistry.addNewHeatingConversion(heatedStone, Blocks.lava, 1200);
+            }
+        }
+
+        for (DefinedGenItems genItem : DefinedGenItems.values())
+        {
+            if (genItem.isRequested())
+            {
+                genItem.item = getManager().newItem("ve" + LanguageUtility.capitalizeFirst(genItem.name().toLowerCase()), new ItemGenMaterial(genItem));
+                for (GenMaterial mat : GenMaterial.values())
+                {
+                    ItemStack stack = genItem.stack(mat);
+                    OreDictionary.registerOre(genItem.name().toLowerCase() + LanguageUtility.capitalizeFirst(mat.name().toLowerCase()), stack);
+                }
             }
         }
 
