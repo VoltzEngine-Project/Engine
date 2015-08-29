@@ -10,9 +10,9 @@ import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
 import com.builtbroken.mc.core.content.parts.ItemParts;
 import com.builtbroken.mc.core.content.resources.DefinedGenItems;
 import com.builtbroken.mc.core.content.resources.GenMaterial;
+import com.builtbroken.mc.core.content.resources.Ores;
 import com.builtbroken.mc.core.content.resources.items.ItemGenMaterial;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
-import com.builtbroken.mc.core.content.resources.Ores;
 import com.builtbroken.mc.core.content.resources.load.CastRecipeLoader;
 import com.builtbroken.mc.core.content.resources.load.CrusherRecipeLoad;
 import com.builtbroken.mc.core.content.resources.load.FluidSmelterRecipeLoad;
@@ -82,9 +82,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.util.Arrays;
 
-import static com.builtbroken.mc.core.content.resources.GenMaterial.GOLD;
-import static com.builtbroken.mc.core.content.resources.GenMaterial.IRON;
-import static com.builtbroken.mc.core.content.resources.GenMaterial.URANIUM;
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 
 /**
@@ -168,6 +165,7 @@ public class Engine
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
             throw new RuntimeException("Resources can only be requested in Pre-Init phase");
         DefinedGenItems.DUST.requestToLoad();
+        DefinedGenItems.DUST_IMPURE.requestToLoad();
         DefinedGenItems.RUBBLE.requestToLoad();
         DefinedGenItems.INGOT.requestToLoad();
         DefinedGenItems.PLATE.requestToLoad();
@@ -274,8 +272,7 @@ public class Engine
                     shouldLoadRFHandler = false;
                     break;
                 }
-            }
-            catch (ClassNotFoundException e)
+            } catch (ClassNotFoundException e)
             {
                 shouldLoadRFHandler = false;
                 logger().error("Not loading RF support as we couldn't detect one of cofh's energy classes");
@@ -368,11 +365,17 @@ public class Engine
         {
             if (genItem.isRequested())
             {
-                genItem.item = getManager().newItem("ve" + LanguageUtility.capitalizeFirst(genItem.name().toLowerCase()), new ItemGenMaterial(genItem));
+                genItem.item = getManager().newItem("ve" + LanguageUtility.capitalizeFirst(genItem.name), new ItemGenMaterial(genItem));
                 for (GenMaterial mat : GenMaterial.values())
                 {
-                    ItemStack stack = genItem.stack(mat);
-                    OreDictionary.registerOre(genItem.name().toLowerCase() + LanguageUtility.capitalizeFirst(mat.name().toLowerCase()), stack);
+                    if (mat == GenMaterial.UNKNOWN)
+                    {
+                        NEIProxy.hideItem(new ItemStack(genItem.item, 1, GenMaterial.UNKNOWN.ordinal()));
+                    }
+                    else if (!genItem.ignoreMaterials.contains(mat))
+                    {
+                        OreDictionary.registerOre(genItem.oreDict + LanguageUtility.capitalizeFirst(mat.name().toLowerCase()), genItem.stack(mat));
+                    }
                 }
             }
         }
@@ -387,20 +390,11 @@ public class Engine
         //All blocks should be loaded before post init so we can init things that need to iterate over the block list
         if (enabledHeatMap)
             HeatedBlockRegistry.init(heatDataConfig);
-
-
         OreDictionary.registerOre("ingotGold", Items.gold_ingot);
         OreDictionary.registerOre("ingotIron", Items.iron_ingot);
         OreDictionary.registerOre("oreGold", Blocks.gold_ore);
         OreDictionary.registerOre("oreIron", Blocks.iron_ore);
         OreDictionary.registerOre("oreLapis", Blocks.lapis_ore);
-        //MachineRecipes.instance.addRecipe(RecipeType.ITEM_SMELTER.name(), new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone));
-        //MachineRecipes.instance.addRecipe(RecipeType.ITEM_CRUSHER.name(), Blocks.cobblestone, Blocks.gravel);
-        //MachineRecipes.instance.addRecipe(RecipeType.ITEM_CRUSHER.name(), Blocks.stone, Blocks.cobblestone);
-        //MachineRecipes.instance.addRecipe(RecipeType.ITEM_CRUSHER.name(), Blocks.chest, new ItemStack(Blocks.planks, 7, 0));
-        //MachineRecipes.instance.addRecipe(RecipeType.ITEM_GRINDER.name(), Blocks.cobblestone, Blocks.sand);
-        //MachineRecipes.instance.addRecipe(RecipeType.ITEM_GRINDER.name(), Blocks.gravel, Blocks.sand);
-        //MachineRecipes.instance.addRecipe(RecipeType.ITEM_GRINDER.name(), Blocks.glass, Blocks.sand);
 
         loader.postInit();
         getManager().firePostInit();

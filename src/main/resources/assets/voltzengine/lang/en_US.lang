@@ -27,10 +27,32 @@ item.voltzengine:dustZinc.name=Zinc Dust
 item.voltzengine:dustNickel.name=Nickel Dust
 item.voltzengine:dustAluminium.name=Aluminium Dust
 item.voltzengine:dustMagnesium.name=Magnesium Dust
-
 item.voltzengine:dustSteel.name=Steel Dust
-item.voltzengine:dustBrass.name=Brass Clump
-item.voltzengine:dustBronze.name=Bronze Clump
+item.voltzengine:dustBrass.name=Brass Dust
+item.voltzengine:dustBronze.name=Bronze Dust
+item.voltzengine:dustIron.name=Iron Dust
+item.voltzengine:dustGold.name=Gold Dust
+item.voltzengine:dustStone.name=Stone Dust
+item.voltzengine:dustWood.name=Wood Dust
+item.voltzengine:dustUranium.name=Uranium Dust
+
+## Impure Dust
+item.voltzengine:dustImpureCopper.name=Impure Copper Dust
+item.voltzengine:dustImpureTin.name=Impure Tin Dust
+item.voltzengine:dustImpureSilver.name=Impure Silver Dust
+item.voltzengine:dustImpureLead.name=Impure Lead Dust
+item.voltzengine:dustImpureZinc.name=Impure Zinc Dust
+item.voltzengine:dustImpureNickel.name=Impure Nickel Dust
+item.voltzengine:dustImpureAluminium.name=Impure Aluminium Dust
+item.voltzengine:dustImpureMagnesium.name=Impure Magnesium Dust
+item.voltzengine:dustImpureSteel.name=Impure Steel Dust
+item.voltzengine:dustImpureBrass.name=Impure Brass Dust
+item.voltzengine:dustImpureBronze.name=Impure Bronze Dust
+item.voltzengine:dustImpureIron.name=Impure Iron Dust
+item.voltzengine:dustImpureGold.name=Impure Gold Dust
+item.voltzengine:dustImpureStone.name=Impure Stone Dust
+item.voltzengine:dustImpureWood.name=Impure Wood Dust
+item.voltzengine:dustImpureUranium.name=Impure Uranium Dust
 
 ## Ruble
 item.voltzengine:rubbleCopper.name=Copper Rubble
@@ -41,6 +63,11 @@ item.voltzengine:rubbleZinc.name=Zinc Rubble
 item.voltzengine:rubbleNickel.name=Nickel Rubble
 item.voltzengine:rubbleAluminium.name=Aluminium Rubble
 item.voltzengine:rubbleMagnesium.name=Magnesium Rubble
+item.voltzengine:rubbleIron.name=Iron Rubble
+item.voltzengine:rubbleGold.name=Gold Rubble
+item.voltzengine:rubbleStone.name=Cobble Stone
+item.voltzengine:rubbleWood.name=Wood Chunks
+item.voltzengine:rubbleUranium.name=Uranium Rubble
 
 ## Ingot
 item.voltzengine:ingotCopper.name=Copper Ingot
@@ -51,7 +78,6 @@ item.voltzengine:ingotZinc.name=Zinc Ingot
 item.voltzengine:ingotNickel.name=Nickel Ingot
 item.voltzengine:ingotAluminium.name=Aluminium Ingot
 item.voltzengine:ingotMagnesium.name=Magnesium Ingot
-
 item.voltzengine:ingotSteel.name=Steel Ingot
 item.voltzengine:ingotBrass.name=Brass Ingot
 item.voltzengine:ingotBronze.name=Bronze Ingot
@@ -65,10 +91,13 @@ item.voltzengine:plateZinc.name=Zinc Plate
 item.voltzengine:plateNickel.name=Nickel Plate
 item.voltzengine:plateAluminium.name=Aluminium Plate
 item.voltzengine:plateMagnesium.name=Magnesium Plate
-
 item.voltzengine:plateSteel.name=Steel Plate
 item.voltzengine:plateBrass.name=Brass Plate
 item.voltzengine:plateBronze.name=Bronze Plate
+item.voltzengine:plateIron.name=Iron Plate
+item.voltzengine:plateGold.name=Gold Plate
+item.voltzengine:plateStone.name=Stone Plate
+item.voltzengine:plateWood.name=Wooden Plate
 
 ## Rod
 item.voltzengine:rodCopper.name=Copper Rod
@@ -79,10 +108,13 @@ item.voltzengine:rodZinc.name=Zinc Rod
 item.voltzengine:rodNickel.name=Nickel Rod
 item.voltzengine:rodAluminium.name=Aluminium Rod
 item.voltzengine:rodMagnesium.name=Magnesium Rod
-
 item.voltzengine:rodSteel.name=Steel Rod
 item.voltzengine:rodBrass.name=Brass Rod
 item.voltzengine:rodBronze.name=Bronze Rod
+item.voltzengine:rodGold.name=Gold Rod
+item.voltzengine:rodIron.name=Iron Rod
+item.voltzengine:rodStone.name=Stone Rod
+item.voltzengine:rodWood.name=Wooden Rod
 
 ## Gear
 item.voltzengine:gearCopper.name=Copper Gear
@@ -93,7 +125,10 @@ item.voltzengine:gearZinc.name=Zinc Gear
 item.voltzengine:gearNickel.name=Nickel Gear
 item.voltzengine:gearAluminium.name=Aluminium Gear
 item.voltzengine:gearMagnesium.name=Magnesium Gear
-
+item.voltzengine:gearWood.name=Wooden Gear
+item.voltzengine:gearGold.name=Gold Gear
+item.voltzengine:gearIron.name=Iron Gear
+item.voltzengine:gearStone.name=Stone Gear
 item.voltzengine:gearSteel.name=Steel Gear
 item.voltzengine:gearBrass.name=Brass Gear
 item.voltzengine:gearBronze.name=Bronze Gear
@@ -107,10 +142,14 @@ item.voltzengine:axHeadZinc.name=Zinc Ax Head
 item.voltzengine:axHeadNickel.name=Nickel Ax Head
 item.voltzengine:axHeadAluminium.name=Aluminium Ax Head
 item.voltzengine:axHeadMagnesium.name=Magnesium Ax Head
-
 item.voltzengine:axHeadSteel.name=Steel Ax Head
 item.voltzengine:axHeadBrass.name=Brass Ax Head
 item.voltzengine:axHeadBronze.name=Bronze Ax Head
+item.voltzengine:axHeadIron.name=Iron Ax Head
+item.voltzengine:axHeadGold.name=Gold Ax Head
+item.voltzengine:axHeadStone.name=Stone Ax Head
+item.voltzengine:axHeadWood.name=Wooden Ax Head
+
 
 ## Shovel Head
 item.voltzengine:shovelHeadCopper.name=Copper Shovel Head
@@ -121,10 +160,13 @@ item.voltzengine:shovelHeadZinc.name=Zinc Shovel Head
 item.voltzengine:shovelHeadNickel.name=Nickel Shovel Head
 item.voltzengine:shovelHeadAluminium.name=Aluminium Shovel Head
 item.voltzengine:shovelHeadMagnesium.name=Magnesium Shovel Head
-
 item.voltzengine:shovelHeadSteel.name=Steel Shovel Head
 item.voltzengine:shovelHeadBrass.name=Brass Shovel Head
 item.voltzengine:shovelHeadBronze.name=Bronze Shovel Head
+item.voltzengine:shovelHeadIron.name=Iron Shovel Head
+item.voltzengine:shovelHeadGold.name=Gold Shovel Head
+item.voltzengine:shovelHeadStone.name=Stone Shovel Head
+item.voltzengine:shovelHeadWood.name=Wooden Shovel Head
 
 ## Sword Blade
 item.voltzengine:swordBladeCopper.name=Copper Sword Blade
@@ -135,10 +177,13 @@ item.voltzengine:swordBladeZinc.name=Zinc Sword Blade
 item.voltzengine:swordBladeNickel.name=Nickel Sword Blade
 item.voltzengine:swordBladeAluminium.name=Aluminium Sword Blade
 item.voltzengine:swordBladeMagnesium.name=Magnesium Sword Blade
-
 item.voltzengine:shovelHeadSteel.name=Steel Shovel Head
 item.voltzengine:shovelHeadBrass.name=Brass Shovel Head
 item.voltzengine:shovelHeadBronze.name=Bronze Shovel Head
+\item.voltzengine:shovelHeadIron.name=Iron Shovel Head
+item.voltzengine:shovelHeadGold.name=Gold Shovel Head
+item.voltzengine:shovelHeadStone.name=Stone Shovel Head
+item.voltzengine:shovelHeadWood.name=Wooden Shovel Head
 
 ## Pick Head
 item.voltzengine:pickHeadCopper.name=Copper Pick Head
@@ -149,10 +194,13 @@ item.voltzengine:pickHeadZinc.name=Zinc Pick Head
 item.voltzengine:pickHeadNickel.name=Nickel Pick Head
 item.voltzengine:pickHeadAluminium.name=Aluminium Pick Head
 item.voltzengine:pickHeadMagnesium.name=Magnesium Pick Head
-
 item.voltzengine:pickHeadSteel.name=Steel Pick Head
 item.voltzengine:pickHeadBrass.name=Brass Pick Head
 item.voltzengine:pickHeadBronze.name=Bronze Pick Head
+item.voltzengine:pickHeadIron.name=Iron Pick Head
+item.voltzengine:pickHeadGold.name=Gold Pick Head
+item.voltzengine:pickHeadStone.name=Stone Pick Head
+item.voltzengine:pickHeadWood.name=Wooden Pick Head
 
 ## Hoe Head
 item.voltzengine:hoeHeadCopper.name=Copper Hoe Head
@@ -163,10 +211,13 @@ item.voltzengine:hoeHeadZinc.name=Zinc Hoe Head
 item.voltzengine:hoeHeadNickel.name=Nickel Hoe Head
 item.voltzengine:hoeHeadAluminium.name=Aluminium Hoe Head
 item.voltzengine:hoeHeadMagnesium.name=Magnesium Hoe Head
-
 item.voltzengine:hoeHeadSteel.name=Steel Hoe Head
 item.voltzengine:hoeHeadBrass.name=Brass Hoe Head
 item.voltzengine:hoeHeadBronze.name=Bronze Hoe Head
+item.voltzengine:hoeHeadIron.name=Iron Hoe Head
+item.voltzengine:hoeHeadGold.name=Gold Hoe Head
+item.voltzengine:hoeHeadStone.name=Stone Hoe Head
+item.voltzengine:hoeHeadWood.name=Wooden Hoe Head
 
 ## Sheet Metal
 item.voltzengine:sheetMetal.name=Sheet Metal

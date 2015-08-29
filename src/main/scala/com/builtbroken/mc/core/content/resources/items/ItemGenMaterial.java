@@ -46,7 +46,7 @@ public class ItemGenMaterial extends Item
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        return "item." + References.PREFIX + itemType.name().toLowerCase() + LanguageUtility.capitalizeFirst(getMaterial(stack).name().toLowerCase());
+        return "item." + References.PREFIX + itemType.name + LanguageUtility.capitalizeFirst(getMaterial(stack).name().toLowerCase());
     }
 
     public GenMaterial getMaterial(ItemStack stack)
