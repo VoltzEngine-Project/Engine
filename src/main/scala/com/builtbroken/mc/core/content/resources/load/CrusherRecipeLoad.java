@@ -20,7 +20,7 @@ public class CrusherRecipeLoad extends MRLoaderItemStack
 {
     public CrusherRecipeLoad()
     {
-        super(MachineRecipeType.ITEM_GRINDER.INTERNAL_NAME);
+        super(MachineRecipeType.ITEM_CRUSHER.INTERNAL_NAME);
     }
 
     @Override
