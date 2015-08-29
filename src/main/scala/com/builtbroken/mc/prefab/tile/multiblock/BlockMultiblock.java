@@ -142,7 +142,7 @@ public class BlockMultiblock extends BlockContainer
         {
             return ((IIconCallBack) ((IMultiTile) tile).getHost()).getIconForSide(world, x, y, z, side);
         }
-        return Blocks.iron_bars.blockIcon;
+        return Blocks.iron_bars.getIcon(0, 0);
     }
 
     @Override

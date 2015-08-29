@@ -152,7 +152,7 @@ public class MultiBlockHelper
                                 }
                                 if (!failed)
                                 {
-                                    if (((TileMulti) ent).worldObj.isRemote)
+                                    if (((TileMulti) ent).getWorldObj().isRemote)
                                         ((TileMulti) ent).overrideRenderBounds = new Cube(ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]);
                                     ((TileMulti) ent).collisionBounds = new Cube(ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]);
                                 }
