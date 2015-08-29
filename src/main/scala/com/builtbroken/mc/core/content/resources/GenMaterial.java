@@ -1,5 +1,7 @@
 package com.builtbroken.mc.core.content.resources;
 
+import net.minecraftforge.fluids.Fluid;
+
 import java.awt.*;
 
 /**
@@ -32,6 +34,9 @@ public enum GenMaterial
 
     /** Color to use for render the texture */
     public final Color color;
+
+    /** Molten fluid for this material, does not apply to all types */
+    public Fluid moltenFluid;
 
     GenMaterial(Color color)
     {

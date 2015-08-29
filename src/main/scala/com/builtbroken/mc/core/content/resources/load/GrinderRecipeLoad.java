@@ -98,7 +98,7 @@ public class GrinderRecipeLoad extends MRLoaderItemStack
 
                     if (DefinedGenItems.HOE_HEAD.item != null)
                     {
-                        recipes.add(newRecipe(DefinedGenItems.DUST.stack(mat)).addInputOption(DefinedGenItems.HOE_HEAD.stack(mat, 2)));
+                        recipes.add(newRecipe(DefinedGenItems.DUST.stack(mat, 2)).addInputOption(DefinedGenItems.HOE_HEAD.stack(mat)));
                     }
                 }
             }

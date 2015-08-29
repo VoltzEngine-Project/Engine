@@ -6,6 +6,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.List;
 
 /**
  * Created by Dark on 6/21/2015.
@@ -52,5 +55,17 @@ public class MRLoaderFluidStack extends MachineRecipeLoader<MRFluidStack>
         }
 
         return FluidRegistry.getFluid(name);
+    }
+
+    protected void processOreRecipes(List<MRFluidStack> recipes, Fluid output, int ingots, String input)
+    {
+        List<ItemStack> oreList = OreDictionary.getOres(input);
+        for(ItemStack stack : oreList)
+        {
+            if(stack != null && stack.getItem() != null)
+            {
+                recipes.add(newRecipe(output, ingots, stack));
+            }
+        }
     }
 }
