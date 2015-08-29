@@ -1,9 +1,9 @@
 package com.builtbroken.mc.core.content.resources;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +16,9 @@ import static com.builtbroken.mc.core.content.resources.GenMaterial.*;
 public enum DefinedGenItems
 {
     DUST("dust"),
+    DIRTY_DUST("dirty_dust", WOOD, STONE),
     RUBBLE("ruble"),
-    INGOT("ingot", IRON, GOLD),
+    INGOT("ingot", IRON, GOLD, STONE, WOOD),
     PLATE("plate", URANIUM),
     ROD("rod", URANIUM),
     GEAR("gear", URANIUM),
@@ -66,6 +67,22 @@ public enum DefinedGenItems
 
     public ItemStack stack(GenMaterial mat, int stackSize)
     {
+        if (mat == UNKNOWN)
+        {
+            return null;
+        }
+
+        if (this == INGOT)
+        {
+            if (mat == IRON)
+            {
+                return new ItemStack(Items.iron_ingot, stackSize, 0);
+            }
+            else if (mat == GOLD)
+            {
+                return new ItemStack(Items.gold_ingot, stackSize, 0);
+            }
+        }
         return new ItemStack(item, stackSize, mat.ordinal());
     }
 }

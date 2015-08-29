@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import org.omg.SendingContext.RunTime;
 
 import java.util.List;
 
@@ -22,11 +21,17 @@ public class ItemGenMaterial extends Item
 {
     public final DefinedGenItems itemType;
 
+    /**
+     * @param itemType - type of item this is, should not be duplicated and should never be null
+     * @throws RuntimeException if ItemType is null
+     */
     public ItemGenMaterial(DefinedGenItems itemType)
     {
-        this.itemType = itemType;
         if (itemType == null)
             throw new RuntimeException("Item type can not be null for ItemGenMaterial");
+
+        this.itemType = itemType;
+        this.setUnlocalizedName(References.PREFIX + itemType.name().toLowerCase());
         this.setHasSubtypes(true);
         this.setCreativeTab(CreativeTabs.tabMaterials);
     }
