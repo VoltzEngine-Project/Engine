@@ -40,7 +40,7 @@ public class FluidSmelterRecipeLoad extends MRLoaderFluidStack
         {
             if (material != GenMaterial.UNKNOWN && material != GenMaterial.WOOD)
             {
-                material.moltenFluid = registerMoltenFluid("gold.molten");
+                material.moltenFluid = registerMoltenFluid(material.name().toLowerCase() + ".molten");
                 String type = LanguageUtility.capitalizeFirst(material.name().toLowerCase());
                 processOreRecipes(recipes, material.moltenFluid, 2, "ore" + type);
                 processOreRecipes(recipes, material.moltenFluid, 1, "ingot" + type);
