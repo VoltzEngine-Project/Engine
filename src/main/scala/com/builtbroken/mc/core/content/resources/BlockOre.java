@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.content;
+package com.builtbroken.mc.core.content.resources;
 
 import com.builtbroken.mc.core.content.resources.Ores;
 import cpw.mods.fml.relauncher.Side;

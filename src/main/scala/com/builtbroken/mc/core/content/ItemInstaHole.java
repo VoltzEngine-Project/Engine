@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.content;
 
+import com.builtbroken.mc.core.content.resources.BlockOre;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

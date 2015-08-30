@@ -6,7 +6,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Random;
 
@@ -53,7 +52,6 @@ public abstract class OreGenerator implements IWorldGenerator
 		this.harvestLevel = harvestLevel;
 		this.oreBlock = block;
 		this.oreMeta = meta;
-		OreDictionary.registerOre(name, new ItemStack(block, 1, meta));
 		block.setHarvestLevel(this.harvestTool, this.harvestLevel, meta);
 	}
 

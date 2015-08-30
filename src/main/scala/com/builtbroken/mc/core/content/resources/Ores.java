@@ -6,8 +6,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
+ * List of ores that generate in Voltz Engine
  * Created by robert on 1/11/2015.
  */
 public enum Ores
@@ -38,11 +40,14 @@ public enum Ores
 
     public static void registerSet(Block block, Configuration config)
     {
-        for(Ores ore: values())
+        for (Ores ore : values())
         {
             if (config.getBoolean("" + LanguageUtility.capitalizeFirst(ore.name()) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
             {
-                GameRegistry.registerWorldGenerator(new OreGenReplaceStone("ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase()), new ItemStack(block, 1, ore.ordinal()), ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
+                String oreName = "ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase());
+                ItemStack stack = new ItemStack(block, 1, ore.ordinal());
+                GameRegistry.registerWorldGenerator(new OreGenReplaceStone(oreName, stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
+                OreDictionary.registerOre(oreName, stack);
             }
         }
     }
