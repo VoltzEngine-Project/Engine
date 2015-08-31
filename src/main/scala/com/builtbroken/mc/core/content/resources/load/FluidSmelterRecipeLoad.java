@@ -53,6 +53,7 @@ public class FluidSmelterRecipeLoad extends MRLoaderFluidStack
                         recipes.add(newRecipe(material.moltenFluid, 1, genItem.stack(material)));
                     }
                 }
+
                 if (DefinedGenItems.AX_HEAD.item != null)
                 {
                     recipes.add(newRecipe(material.moltenFluid, 3, DefinedGenItems.AX_HEAD.stack(material)));

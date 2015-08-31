@@ -30,6 +30,9 @@ public enum Ores
     private int amountPerChunk = 16;
     private int amountPerBranch = 5;
 
+    private Block block;
+    private String oreDictName;
+
     Ores(int min, int max, int amountPerBranch, int amountPerChunk)
     {
         this.minY = min;
@@ -38,16 +41,27 @@ public enum Ores
         this.amountPerChunk = amountPerChunk;
     }
 
+    public ItemStack stack()
+    {
+        return stack(1);
+    }
+
+    public ItemStack stack(int stackSize)
+    {
+        return new ItemStack(block, stackSize, ordinal());
+    }
+
     public static void registerSet(Block block, Configuration config)
     {
         for (Ores ore : values())
         {
             if (config.getBoolean("" + LanguageUtility.capitalizeFirst(ore.name()) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
             {
-                String oreName = "ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase());
-                ItemStack stack = new ItemStack(block, 1, ore.ordinal());
-                GameRegistry.registerWorldGenerator(new OreGenReplaceStone(oreName, stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
-                OreDictionary.registerOre(oreName, stack);
+                ore.block = block;
+                ore.oreDictName = "ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase());
+                ItemStack stack = ore.stack();
+                GameRegistry.registerWorldGenerator(new OreGenReplaceStone(ore.oreDictName, stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
+                OreDictionary.registerOre(ore.oreDictName, stack);
             }
         }
     }

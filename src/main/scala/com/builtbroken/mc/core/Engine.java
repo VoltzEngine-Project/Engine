@@ -81,6 +81,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 
@@ -402,6 +403,18 @@ public class Engine
 
         loader.postInit();
         getManager().firePostInit();
+
+        if (oresRequested)
+        {
+            for (Ores ore : Ores.values())
+            {
+                List<ItemStack> ingots = OreDictionary.getOres("ingot" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase()));
+                if (ingots != null && !ingots.isEmpty())
+                {
+                    GameRegistry.addSmelting(ore.stack(), ingots.get(0), 0.01f);
+                }
+            }
+        }
 
         //Save configs as this is our last chance
         heatDataConfig.save();
