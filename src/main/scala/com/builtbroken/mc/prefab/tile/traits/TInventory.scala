@@ -13,7 +13,7 @@ import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
  */
 trait TInventory extends IInventory with ISave {
   protected var slots: Int = 0
-  protected var containedItems: Array[ItemStack]
+  protected var containedItems: Array[ItemStack] = null
 
   def getSizeInventory: Int = slots
 
