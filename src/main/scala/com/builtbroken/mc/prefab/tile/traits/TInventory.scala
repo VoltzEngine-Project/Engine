@@ -95,9 +95,6 @@ trait TInventory extends IInventory with ISave {
     return 64
   }
 
-  def markDirty {
-  }
-
   def isUseableByPlayer(par1EntityPlayer: EntityPlayer): Boolean = {
     return true
   }
