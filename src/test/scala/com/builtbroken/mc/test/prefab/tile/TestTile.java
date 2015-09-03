@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-/**
+/** JUnit test for {@link Tile}
  * Created by robert on 1/6/2015.
  */
 @RunWith(VoltzTestRunner.class)
@@ -30,7 +30,7 @@ public class TestTile extends AbstractTest
 
     public void testPlacement()
     {
-        FakeWorld world = new FakeWorld(5);
+        FakeWorld world = FakeWorld.newWorld("TileTest");
         world.setBlock(0, 0, 0, getBlock());
 
         Block block = world.getBlock(0, 0, 0);

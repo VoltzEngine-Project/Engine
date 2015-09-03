@@ -29,7 +29,7 @@ public class TestTEnergyHandler extends AbstractTest
     @Override
     public void setUpForEntireClass()
     {
-        world = new FakeWorld();
+        world = FakeWorld.newWorld("TEnergyHandlerTest");
         block = new BlockTEnergyHandler();
         ModRegistry.registerBlock(block, "test:TEnergyHandler");
         GameRegistry.registerTileEntity(TileTEnergyHandler.class, "test:TEnergyHandler");

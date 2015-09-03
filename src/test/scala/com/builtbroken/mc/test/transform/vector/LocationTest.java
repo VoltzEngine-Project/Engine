@@ -23,8 +23,8 @@ public class LocationTest extends AbstractTest
     @Test
     public void testEquals()
     {
-        World world = new FakeWorld();
-        World world2 = new FakeWorld();
+        World world = FakeWorld.newWorld("LocationTest");
+        World world2 = FakeWorld.newWorld("LocationTest2");
 
         Location location = new Location(world, 0, 0, 0);
         Location location2 = new Location(world, 0, 0, 0);
@@ -60,8 +60,8 @@ public class LocationTest extends AbstractTest
         Assert.assertTrue("Should not contain location", !list.contains(new Location(null, 0, 0, 0)));
 
         //Repeat with world not null
-        World world = new FakeWorld();
-        World world2 = new FakeWorld();
+        World world = FakeWorld.newWorld("LocationTest");
+        World world2 = FakeWorld.newWorld("LocationTest");
 
         list.add(new Location(world, 0, 0, 0));
 
@@ -84,8 +84,8 @@ public class LocationTest extends AbstractTest
         Assert.assertTrue("Should not contain location", !map.containsKey(new Location(null, 0, 0, 0)));
 
         //Repeat with world not null
-        World world = new FakeWorld();
-        World world2 = new FakeWorld();
+        World world = FakeWorld.newWorld("LocationTest");
+        World world2 = FakeWorld.newWorld("LocationTest");
 
         map.put(new Location(world, 0, 0, 0), "mama");
 
