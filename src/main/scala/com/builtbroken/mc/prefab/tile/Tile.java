@@ -205,6 +205,35 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
 
     }
 
+    @Override
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+        super.readFromNBT(nbt);
+        if (nbt.hasKey("tileOwnerMostSigBit") && nbt.hasKey("tileOwnerLeastSigBit"))
+        {
+            this.owner = new UUID(nbt.getLong("tileOwnerMostSigBit"), nbt.getLong("tileOwnerLeastSigBit"));
+        }
+        if (nbt.hasKey("tileOwnerUsername"))
+        {
+            this.username = nbt.getString("tileOwnerUsername");
+        }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt)
+    {
+        super.writeToNBT(nbt);
+        if (owner != null)
+        {
+            nbt.setLong("tileOwnerMostSigBit", this.owner.getMostSignificantBits());
+            nbt.setLong("tileOwnerLeastSigBit", this.owner.getLeastSignificantBits());
+        }
+        if (username != null && !username.isEmpty())
+        {
+            nbt.setString("tileOwnerUsername", this.username);
+        }
+    }
+
     /** BLOCK, called from the world when the block is updated */
     public void blockUpdate()
     {
@@ -488,6 +517,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
 
     /**
      * Converts the tile into a position using its coords
+     *
      * @return new Pos with the Tile's location
      */
     public Pos toPos()
@@ -503,6 +533,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
 
     /**
      * Converts the tile into a position using its coords
+     *
      * @return new Location with the Tile's location
      */
     public Location toLocation()
