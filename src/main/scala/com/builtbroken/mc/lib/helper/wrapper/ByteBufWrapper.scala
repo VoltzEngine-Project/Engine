@@ -70,7 +70,7 @@ object ByteBufWrapper {
     def <<<(data: Any): ByteBuf = {
       if (data == null) {
         if (Engine.runningAsDev)
-          Engine.instance.logger().error("Attempted to write null to ByteBuf ", new RuntimeException())
+          Engine.logger().error("Attempted to write null to ByteBuf ", new RuntimeException())
         return buf
       }
       try {

@@ -3,14 +3,10 @@ package com.builtbroken.mc.core;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
-import com.builtbroken.mc.core.content.resources.BlockOre;
-import com.builtbroken.mc.core.content.resources.ItemBlockOre;
 import com.builtbroken.mc.core.content.ItemInstaHole;
 import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
 import com.builtbroken.mc.core.content.parts.ItemParts;
-import com.builtbroken.mc.core.content.resources.DefinedGenItems;
-import com.builtbroken.mc.core.content.resources.GenMaterial;
-import com.builtbroken.mc.core.content.resources.Ores;
+import com.builtbroken.mc.core.content.resources.*;
 import com.builtbroken.mc.core.content.resources.items.ItemGenMaterial;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
 import com.builtbroken.mc.core.content.resources.load.CastRecipeLoader;
@@ -108,7 +104,7 @@ public class Engine
 
     protected LoadableHandler loader;
     protected ModManager manager;
-    protected Logger logger;
+    protected static Logger logger = LogManager.getLogger(References.DOMAIN);
     private Configuration config;
 
     public static Block ore = null;
@@ -218,7 +214,6 @@ public class Engine
 
         loader = new LoadableHandler();
         manager = new ModManager().setPrefix(References.DOMAIN).setTab(CreativeTabs.tabAllSearch);
-        logger = LogManager.getLogger(References.DOMAIN);
 
         config.load();
         heatDataConfig.load();
@@ -437,9 +432,9 @@ public class Engine
         return this.manager;
     }
 
-    public Logger logger()
+    public static Logger logger()
     {
-        return this.logger;
+        return logger;
     }
 
 
