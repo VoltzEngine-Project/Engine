@@ -463,4 +463,44 @@ public class Engine
         return player.mcServer.getConfigurationManager().func_152596_g(player.getGameProfile()) && player.mcServer.getConfigurationManager().func_152603_m().func_152683_b(player.getGameProfile()) != null;
     }
 
+    /**
+     * Use to print errors to the logger. If engine instance is null it will
+     * throw the error message as an exception. This is designed for JUnit
+     * tests that want to handle exceptions rather than see printlns.
+     *
+     * @param msg   - message that describes the issue
+     * @param error - error to throw
+     * @throws Throwable - throws an exception if {@link Engine#instance}
+     */
+    public static void error(String msg, Throwable error) throws Throwable
+    {
+        if (instance == null)
+        {
+            throw error;
+        }
+        else
+        {
+            logger().error(msg, error);
+        }
+    }
+
+    /**
+     * Use to print errors to the logger. If engine instance is null it will
+     * throw the error message as an exception. This is designed for JUnit
+     * tests that want to handle exceptions rather than see printlns.
+     *
+     * @param msg - message that describes the issue
+     * @throws Throwable - throws an exception if {@link Engine#instance}
+     */
+    public static void error(String msg)
+    {
+        if (instance == null)
+        {
+            throw new RuntimeException(msg);
+        }
+        else
+        {
+            logger().error(msg);
+        }
+    }
 }
