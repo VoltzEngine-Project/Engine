@@ -15,6 +15,7 @@ import com.builtbroken.mc.lib.render.block.RenderTileDummy;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.prefab.tile.entity.TileEntityBase;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -36,7 +37,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
@@ -69,7 +69,7 @@ import java.util.*;
  * <p/>
  * Created by Robert(DarkGuardsman) on 1/4/2015.
  */
-public abstract class Tile extends TileEntity implements IWorldPosition, IPlayerUsing, IRegistryInit
+public abstract class Tile extends TileEntityBase implements IWorldPosition, IPlayerUsing, IRegistryInit
 {
     //Static block vars, never use in your tile
     /** STATIC BLOCK, block for this tile. Will not be initialized in each tile */
