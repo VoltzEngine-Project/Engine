@@ -54,6 +54,7 @@ to change.
 * Francogp          - Spanish translation
 * Johni0702         - Contributor
 * JohnyCilohokla    - Contributor
+* Kolatra           - Contributor
 * Maeyanie          - Mod Compatibility
 * Mattredsox        - Contributor
 * Micdoodle8        - Mod Compatibility
