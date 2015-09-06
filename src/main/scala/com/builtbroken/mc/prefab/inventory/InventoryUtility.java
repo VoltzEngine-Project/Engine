@@ -291,6 +291,15 @@ public class InventoryUtility
 		dropBlockAsItem(world, position.xi(), position.yi(), position.zi(), false);
 	}
 
+	/**
+	 * Attempts to drop the block at the location as an item. Does not check what the block is
+	 * and can fail if the block doesn't contain items.
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param destroy - will break the block
+	 */
 	public static void dropBlockAsItem(World world, int x, int y, int z, boolean destroy)
 	{
 		if (!world.isRemote)
@@ -339,9 +348,6 @@ public class InventoryUtility
 
 	public static void dropItemStack(World world, double x, double y, double z, ItemStack itemStack, int delay, float randomAmount)
 	{
-		assert world.isRemote : "Inventory Utility [Can not drop ItemStacks client side @" + x + "x " + y + "y " + z + "z]";
-		assert itemStack == null : "Inventory Utility [Can not drop null ItemStacks @" + x + "x " + y + "y " + z + "z]";
-
 		if (!world.isRemote && itemStack != null)
 		{
 			double randomX = 0;
