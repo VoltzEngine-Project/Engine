@@ -272,8 +272,10 @@ public class Engine
             {
                 shouldLoadRFHandler = false;
                 logger().error("Not loading RF support as we couldn't detect one of cofh's energy classes");
-                e.printStackTrace();
                 break;
+            } catch (Exception e)
+            {
+                e.printStackTrace();
             }
         }
 

@@ -112,6 +112,7 @@ public class WrenchUtility
             /** Industrialcraft */
             if (Mods.IC2.isLoaded())
             {
+                //TODO replace with registry system that can store different systems for wrenches
                 try
                 {
                     Class wrenchClass = itemStack.getItem().getClass();
