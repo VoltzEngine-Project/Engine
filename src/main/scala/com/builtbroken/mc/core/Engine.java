@@ -82,7 +82,7 @@ import java.util.List;
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 
 /**
- * Mob class for Resonant Engine that handles common loading
+ * Mod class for Voltz Engine that handles common loading
  *
  * @author Calclavia, DarkGuardsman
  */

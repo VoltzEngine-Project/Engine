@@ -4,7 +4,7 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.Logger;
 
 /**
- * References too common static objects used by Resonant Engine and its sub mods
+ * References to common static objects used by Voltz Engine and its sub mods
  */
 public final class References
 {
