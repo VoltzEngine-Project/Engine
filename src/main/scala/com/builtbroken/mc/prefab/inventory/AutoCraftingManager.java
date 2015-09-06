@@ -263,7 +263,7 @@ public class AutoCraftingManager
 					if (this.hasResource(((ShapedRecipes) object).recipeItems) != null)
 					{
 						this.printDebug("IdealRecipe", "Shaped Recipe Found");
-						return new Pair<ItemStack, ItemStack[]>(object.getRecipeOutput().copy(), ((ShapedRecipes) object).recipeItems);
+						return new Pair<>(object.getRecipeOutput().copy(), ((ShapedRecipes) object).recipeItems);
 					}
 				}
 				else if (object instanceof ShapelessRecipes)
@@ -271,7 +271,7 @@ public class AutoCraftingManager
 					if (this.hasResource(((ShapelessRecipes) object).recipeItems.toArray(new ItemStack[1])) != null)
 					{
 						this.printDebug("IdealRecipe", "Shapeless Recipe Found");
-						return new Pair<ItemStack, ItemStack[]>(object.getRecipeOutput().copy(), (ItemStack[]) ((ShapelessRecipes) object).recipeItems.toArray(new ItemStack[1]));
+						return new Pair<>(object.getRecipeOutput().copy(), (ItemStack[]) ((ShapelessRecipes) object).recipeItems.toArray(new ItemStack[1]));
 					}
 				}
 				else if (object instanceof ShapedOreRecipe)
@@ -284,7 +284,7 @@ public class AutoCraftingManager
 					if (hasResources != null)
 					{
 						this.printDebug("IdealRecipe", "ShapedOre Recipe Found");
-						return new Pair<ItemStack, ItemStack[]>(object.getRecipeOutput().copy(), hasResources.toArray(new ItemStack[1]));
+						return new Pair<>(object.getRecipeOutput().copy(), hasResources.toArray(new ItemStack[1]));
 					}
 				}
 				else if (object instanceof ShapelessOreRecipe)
@@ -297,7 +297,7 @@ public class AutoCraftingManager
 					if (hasResources != null)
 					{
 						this.printDebug("IdealRecipe", "ShapelessOre Recipe Found");
-						return new Pair<ItemStack, ItemStack[]>(object.getRecipeOutput().copy(), hasResources.toArray(new ItemStack[1]));
+						return new Pair<>(object.getRecipeOutput().copy(), hasResources.toArray(new ItemStack[1]));
 					}
 				}
 			}
@@ -346,7 +346,7 @@ public class AutoCraftingManager
 				this.printDebug("ResourceChecker", "Looking for " + recipeItems.toString());
 			}
 			/** The actual amount of resource required. Each ItemStack will only have stacksize of 1. */
-			ArrayList<ItemStack> actualResources = new ArrayList<ItemStack>();
+			ArrayList<ItemStack> actualResources = new ArrayList<>();
 
 			int itemMatch = 0;
 			int itemInList = 0;

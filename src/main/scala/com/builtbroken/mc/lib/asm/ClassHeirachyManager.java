@@ -18,7 +18,7 @@ import java.util.HashSet;
  */
 public class ClassHeirachyManager implements IClassTransformer
 {
-    public static HashMap<String, SuperCache> superclasses = new HashMap<String, SuperCache>();
+    public static HashMap<String, SuperCache> superclasses = new HashMap<>();
     private static LaunchClassLoader cl = (LaunchClassLoader) ClassHeirachyManager.class.getClassLoader();
 
     static
@@ -198,7 +198,7 @@ public class ClassHeirachyManager implements IClassTransformer
 
     public static class SuperCache
     {
-        public HashSet<String> parents = new HashSet<String>();
+        public HashSet<String> parents = new HashSet<>();
         String superclass;
         private boolean flattened;
 
@@ -214,7 +214,7 @@ public class ClassHeirachyManager implements IClassTransformer
                 return;
             }
 
-            for (String s : new ArrayList<String>(parents))
+            for (String s : new ArrayList<>(parents))
             {
                 SuperCache c = declareClass(s);
                 if (c != null)

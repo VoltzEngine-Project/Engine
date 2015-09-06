@@ -43,34 +43,47 @@ public class CastRecipeLoader extends MachineRecipeLoader<CastingRecipe>
         {
             if (oreName.contains("ingot"))
             {
-                CastingRecipe recipe = newRecipe("ingot", oreName);
-                if (recipe != null)
-                    recipes.add(recipe);
+                ArrayList ores = OreDictionary.getOres(oreName);
+                if (ores == null || ores.size() == 0)
+                {
+                    Engine.instance.logger().error("[CastRecipeLoader]Attempted to create a recipe with an oreName[" + oreName + "] without an ItemStack.  Ores: " + ores);
+                    continue;
+                }
+                String fluidName = oreName.replace("ingot", "").toLowerCase();
+                Fluid fluid = FluidRegistry.getFluid(fluidName);
+                if (fluid != null)
+                {
+                    recipes.add(newRecipe("ingot", fluid, OreDictionary.getOres(oreName).get(0)));
+                }
+                //Conversion for tinker's fluid names
+                fluid = FluidRegistry.getFluid(fluidName + ".molten");
+                if (fluid != null)
+                {
+                    recipes.add(newRecipe("ingot", fluid, OreDictionary.getOres(oreName).get(0)));
+                }
             }
             else if (oreName.contains("nugget"))
             {
-                CastingRecipe recipe = newRecipe("nugget", oreName);
-                if (recipe != null)
-                    recipes.add(recipe);
+                ArrayList ores = OreDictionary.getOres(oreName);
+                if (ores == null || ores.size() == 0)
+                {
+                    Engine.instance.logger().error("[CastRecipeLoader]Attempted to create a recipe with an oreName[" + oreName + "] without an ItemStack.  Ores: " + ores);
+                    continue;
+                }
+                String fluidName = oreName.replace("nugget", "").toLowerCase();
+                Fluid fluid = FluidRegistry.getFluid(fluidName);
+                if (fluid != null)
+                {
+                    recipes.add(newRecipe("nugget", fluid, OreDictionary.getOres(oreName).get(0)));
+                }
+                //Conversion for tinker's fluid names
+                fluid = FluidRegistry.getFluid(fluidName + ".molten");
+                if (fluid != null)
+                {
+                    recipes.add(newRecipe("nugget", fluid, OreDictionary.getOres(oreName).get(0)));
+                }
             }
         }
-    }
-
-    public CastingRecipe newRecipe(String type, String oreName)
-    {
-        ArrayList ores = OreDictionary.getOres(oreName);
-        if (ores == null || ores.size() == 0)
-        {
-            Engine.instance.logger().error("[CastRecipeLoader]Attempted to create a recipe with an oreName[" + oreName + "] without an ItemStack.  Ores: " + ores);
-            return null;
-        }
-        String fluidName = oreName.replace(type, "").toLowerCase();
-        Fluid fluid = FluidRegistry.getFluid(fluidName);
-        if (fluid != null)
-        {
-            return newRecipe(type, fluid, OreDictionary.getOres(oreName).get(0));
-        }
-        return null;
     }
 
     public CastingRecipe newRecipe(String type, Fluid fluid, ItemStack output)

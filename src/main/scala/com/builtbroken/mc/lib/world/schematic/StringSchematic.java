@@ -78,7 +78,7 @@ public class StringSchematic extends Schematic
      */
     public StringSchematic addBlock(Character c, Block block, int meta)
     {
-        charMap.put(c, new Pair<Block, Integer>(block, 0 & 15));
+        charMap.put(c, new Pair<>(block, 0 & 15));
         return this;
     }
 

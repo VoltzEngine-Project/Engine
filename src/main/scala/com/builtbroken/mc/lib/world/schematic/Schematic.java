@@ -65,7 +65,7 @@ public abstract class Schematic
 		HashMap<Pos, Pair<Block, Integer>> returnMap = new HashMap();
 		for (int i = 0; i < length; i++)
 		{
-			returnMap.put(new Pos(dir).multiply(i).add(start), new Pair<Block, Integer>(block, meta));
+			returnMap.put(new Pos(dir).multiply(i).add(start), new Pair<>(block, meta));
 		}
 		return returnMap;
 	}
@@ -105,14 +105,14 @@ public abstract class Schematic
 			// X sides
 			for (int x = 0; x <= sizeX * 2; x++)
 			{
-				returnMap.put(new Pos(x, 0, 0).add(start), new Pair<Block, Integer>(block, meta));
-				returnMap.put(new Pos(x, 0, sizeZ * 2).add(start), new Pair<Block, Integer>(block, meta));
+				returnMap.put(new Pos(x, 0, 0).add(start), new Pair<>(block, meta));
+				returnMap.put(new Pos(x, 0, sizeZ * 2).add(start), new Pair<>(block, meta));
 			}
 			// Z sides
 			for (int z = 0; z <= sizeZ * 2; z++)
 			{
-				returnMap.put(new Pos(0, 0, z).add(start), new Pair<Block, Integer>(block, meta));
-				returnMap.put(new Pos(sizeX * 2, 0, z).add(start), new Pair<Block, Integer>(block, meta));
+				returnMap.put(new Pos(0, 0, z).add(start), new Pair<>(block, meta));
+				returnMap.put(new Pos(sizeX * 2, 0, z).add(start), new Pair<>(block, meta));
 			}
 		}
 		else
@@ -120,10 +120,10 @@ public abstract class Schematic
 			// All sides, used verses the other way as it cuts the time in half
 			for (int s = 0; s <= sizeX * 2; s++)
 			{
-				returnMap.put(new Pos(s, 0, 0).add(start), new Pair<Block, Integer>(block, meta));
-				returnMap.put(new Pos(s, 0, sizeZ * 2).add(start), new Pair<Block, Integer>(block, meta));
-				returnMap.put(new Pos(0, 0, s).add(start), new Pair<Block, Integer>(block, meta));
-				returnMap.put(new Pos(sizeZ * 2, 0, s).add(start), new Pair<Block, Integer>(block, meta));
+				returnMap.put(new Pos(s, 0, 0).add(start), new Pair<>(block, meta));
+				returnMap.put(new Pos(s, 0, sizeZ * 2).add(start), new Pair<>(block, meta));
+				returnMap.put(new Pos(0, 0, s).add(start), new Pair<>(block, meta));
+				returnMap.put(new Pos(sizeZ * 2, 0, s).add(start), new Pair<>(block, meta));
 			}
 		}
 		return returnMap;

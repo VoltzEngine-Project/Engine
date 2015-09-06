@@ -29,7 +29,7 @@ public class FXElectricBolt2 extends EntityFX
 {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(References.DOMAIN, References.MODEL_PATH + "fadedSphere.png");
 	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
-	private final Map<Integer, Integer> parentIDMap = new HashMap<Integer, Integer>();
+	private final Map<Integer, Integer> parentIDMap = new HashMap<>();
 	/**
 	 * The maximum length of the bolt
 	 */
@@ -51,7 +51,7 @@ public class FXElectricBolt2 extends EntityFX
 	/**
 	 * An array of the segments of the bolt.
 	 */
-	private List<BoltSegment> segments = new ArrayList<BoltSegment>();
+	private List<BoltSegment> segments = new ArrayList<>();
 	private int maxSplitID;
 	private Random rand;
 
@@ -194,7 +194,7 @@ public class FXElectricBolt2 extends EntityFX
 
 	private void recalculate()
 	{
-		HashMap<Integer, Integer> lastActiveSegment = new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> lastActiveSegment = new HashMap<>();
 
 		Collections.sort(this.segments, new Comparator()
 		{

@@ -21,8 +21,11 @@ output/
 logs/
 html/downloads/
 downloads/
-settings/
 *.xml
 VoltzEngine.txt
 APP-AuthTest/
 CompiledWith.txt
+banned-ips.json
+banned-players.json
+ops.json
+whitelist.json

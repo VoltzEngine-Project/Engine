@@ -1,7 +1,6 @@
 package com.builtbroken.mc.lib.mod.compat.oc;
 
 import com.builtbroken.jlib.data.vector.IPos2D;
-import com.builtbroken.mc.api.IWorldPosition;
 import li.cil.oc.api.driver.Converter;
 
 import java.util.Map;

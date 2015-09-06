@@ -1,6 +1,5 @@
 package com.builtbroken.mc.prefab.entity.selector;
 
-import com.builtbroken.mc.prefab.entity.EntityProjectile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;

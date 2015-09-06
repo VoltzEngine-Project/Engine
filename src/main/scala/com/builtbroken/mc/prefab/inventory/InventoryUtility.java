@@ -566,7 +566,7 @@ public class InventoryUtility
 
 		if (stack != null)
 		{
-			List<Integer> slot_list = new ArrayList<Integer>();
+			List<Integer> slot_list = new ArrayList<>();
 
 			if (slots != null & slots.length > 0)
 			{
@@ -602,7 +602,7 @@ public class InventoryUtility
 
 		if (compare != null)
 		{
-			List<Integer> slot_list = new ArrayList<Integer>();
+			List<Integer> slot_list = new ArrayList<>();
 
 			if (slots != null & slots.length > 0)
 			{

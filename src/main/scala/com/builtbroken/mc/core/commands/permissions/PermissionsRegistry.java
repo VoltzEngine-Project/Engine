@@ -114,9 +114,6 @@ public class PermissionsRegistry
             }
 
             bw.close();
-        } catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
         } catch (IOException e)
         {
             e.printStackTrace();

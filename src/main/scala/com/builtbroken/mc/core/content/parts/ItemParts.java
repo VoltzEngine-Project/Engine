@@ -52,8 +52,24 @@ public class ItemParts extends Item implements IRegistryInit
 
     public enum EnumParts
     {
+        /**
+         Proto Board
+         Wooden Board
+         Phenloic Board
+         Fibreglass Board
+         Basic Circuit Board
+         Circuit Board
+         Advanced Circuit Board
+         Basic Electronic Circuit Board
+         Electronic Circuit Board
+         Processing Board
+         */
+
         PARTS("random.parts", "part.random"),
-        BASIC_CIRCUIT("circuitBasic", "circuit.t1");
+        WOODEN_BOARD("circuitWooden", "circuit.t1"),
+        PROTO_BOARD("circuitProto", "circuit.t2"),
+        BASIC_CIRCUIT("circuitBasic", "circuit.t3"),
+        ;
 
         public final String oreName;
         public final String name;

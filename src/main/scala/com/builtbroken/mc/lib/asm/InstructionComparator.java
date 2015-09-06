@@ -86,7 +86,7 @@ public class InstructionComparator
 			return list;
 		}
 
-		HashMap<LabelNode, LabelNode> labels = new HashMap<LabelNode, LabelNode>();
+		HashMap<LabelNode, LabelNode> labels = new HashMap<>();
 		for (AbstractInsnNode insn = list.getFirst(); insn != null; insn = insn.getNext())
 		{
 			if (insn instanceof LabelNode)
@@ -127,7 +127,7 @@ public class InstructionComparator
 
 	public static List<Integer> insnListFind(InsnList haystack, InsnList needle)
 	{
-		LinkedList<Integer> list = new LinkedList<Integer>();
+		LinkedList<Integer> list = new LinkedList<>();
 		for (int start = 0; start <= haystack.size() - needle.size(); start++)
 		{
 			if (insnListMatches(haystack, needle, start))
@@ -141,7 +141,7 @@ public class InstructionComparator
 
 	public static List<AbstractInsnNode> insnListFindStart(InsnList haystack, InsnList needle)
 	{
-		LinkedList<AbstractInsnNode> callNodes = new LinkedList<AbstractInsnNode>();
+		LinkedList<AbstractInsnNode> callNodes = new LinkedList<>();
 		for (int callPoint : insnListFind(haystack, needle))
 		{
 			callNodes.add(haystack.get(callPoint));
@@ -151,7 +151,7 @@ public class InstructionComparator
 
 	public static List<AbstractInsnNode> insnListFindEnd(InsnList haystack, InsnList needle)
 	{
-		LinkedList<AbstractInsnNode> callNodes = new LinkedList<AbstractInsnNode>();
+		LinkedList<AbstractInsnNode> callNodes = new LinkedList<>();
 		for (int callPoint : insnListFind(haystack, needle))
 		{
 			callNodes.add(haystack.get(callPoint + needle.size() - 1));
@@ -161,7 +161,7 @@ public class InstructionComparator
 
 	public static List<InsnListSection> insnListFindL(InsnList haystack, InsnList needle)
 	{
-		HashSet<LabelNode> controlFlowLabels = new HashSet<LabelNode>();
+		HashSet<LabelNode> controlFlowLabels = new HashSet<>();
 
 		for (AbstractInsnNode insn = haystack.getFirst(); insn != null; insn = insn.getNext())
 		{
@@ -191,7 +191,7 @@ public class InstructionComparator
 			}
 		}
 
-		LinkedList<InsnListSection> list = new LinkedList<InsnListSection>();
+		LinkedList<InsnListSection> list = new LinkedList<>();
 		nextsection:
 		for (int start = 0; start <= haystack.size() - needle.size(); start++)
 		{

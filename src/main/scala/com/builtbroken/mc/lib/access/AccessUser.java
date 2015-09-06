@@ -19,7 +19,7 @@ public class AccessUser implements ISave
     protected boolean isTempary = false;
     protected NBTTagCompound extraData;
     protected AccessGroup group;
-    public List<String> nodes = new ArrayList<String>();
+    public List<String> nodes = new ArrayList<>();
 
     public AccessUser(String username)
     {

@@ -10,7 +10,7 @@ import scala.Array._
  */
 object Matrix
 {
-  implicit def arrayToMatrix(m: Array[Array[Double]]) = new Matrix(m)
+  implicit def arrayToMatrix(m: Array[Array[Double]]) : Matrix = new Matrix(m)
 }
 
 class Matrix(val row: Int, val column: Int)

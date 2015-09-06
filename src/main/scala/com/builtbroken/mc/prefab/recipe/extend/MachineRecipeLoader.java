@@ -4,6 +4,7 @@ import com.builtbroken.mc.api.recipe.IMachineRecipe;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.api.recipe.RecipeRegisterResult;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 
 import java.util.ArrayList;
@@ -41,5 +42,9 @@ public class MachineRecipeLoader<I extends IMachineRecipe> extends AbstractLoada
         //recipes.add(newRecipe(Blocks.cobblestone).addInputOption(Blocks.stone));
     }
 
-
+    @Override
+    public boolean shouldLoad()
+    {
+        return Engine.instance.getConfig().getBoolean("Generator" + LanguageUtility.capitalizeFirst(type) + "Recipes", "AutoGenerator", true, "Disables the auto generator, which in turns prevents recipes from generating");
+    }
 }

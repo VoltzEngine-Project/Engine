@@ -3,7 +3,6 @@ package com.builtbroken.mc.lib.transform.vector;
 import com.builtbroken.jlib.data.vector.IPos2D;
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.data.vector.Pos2D;
-import com.builtbroken.jlib.data.vector.Pos2DBean;
 import com.builtbroken.mc.core.network.IByteBufWriter;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;

@@ -36,7 +36,7 @@ public class InternalInventoryHandler
 
 		if (filteredItems == null)
 		{
-			filteredItems = new HashSet<ItemStack>();
+			filteredItems = new HashSet<>();
 		}
 
 		this.inverted = inverted;
@@ -367,7 +367,7 @@ public class InternalInventoryHandler
 	{
 		if (this.filteredItems == null)
 		{
-			this.filteredItems = new HashSet<ItemStack>();
+			this.filteredItems = new HashSet<>();
 		}
 		return this.filteredItems;
 	}

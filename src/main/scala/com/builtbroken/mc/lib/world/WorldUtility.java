@@ -1,5 +1,10 @@
 package com.builtbroken.mc.lib.world;
 
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.lib.helper.DummyPlayer;
+import com.builtbroken.mc.lib.helper.wrapper.BitmaskWrapper;
+import com.builtbroken.mc.lib.transform.rotation.Quaternion;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.command.IEntitySelector;
@@ -11,11 +16,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
-import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.helper.DummyPlayer;
-import com.builtbroken.mc.lib.helper.wrapper.BitmaskWrapper;
-import com.builtbroken.mc.lib.transform.rotation.Quaternion;
-import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -205,7 +205,7 @@ public class WorldUtility
 	 */
 	public static List<EntityItem> filterEntityItemsList(List<EntityItem> entityItems, List<ItemStack> disiredItems)
 	{
-		List<EntityItem> newItemList = new ArrayList<EntityItem>();
+		List<EntityItem> newItemList = new ArrayList<>();
 		for (ItemStack itemStack : disiredItems)
 		{
 			for (EntityItem entityItem : entityItems)
@@ -225,7 +225,7 @@ public class WorldUtility
 	 */
 	public static List<EntityItem> filterOutEntityItems(List<Entity> entities)
 	{
-		List<EntityItem> newEntityList = new ArrayList<EntityItem>();
+		List<EntityItem> newEntityList = new ArrayList<>();
 
 		for (Entity entity : entities)
 		{
@@ -247,7 +247,7 @@ public class WorldUtility
 	 */
 	public static List<ItemStack> filterItems(List<ItemStack> totalItems, List<ItemStack> desiredItems)
 	{
-		List<ItemStack> newItemList = new ArrayList<ItemStack>();
+		List<ItemStack> newItemList = new ArrayList<>();
 
 		for (ItemStack entityItem : totalItems)
 		{
@@ -277,16 +277,16 @@ public class WorldUtility
 				nameToClassMap.put(findTileID, replaceTile);
 				classToNameMap.put(replaceTile, findTileID);
 				classToNameMap.remove(findTile);
-				References.LOGGER.info("Replaced TileEntity: " + findTile);
+				Engine.instance.logger().info("Replaced TileEntity: " + findTile);
 			}
 			else
 			{
-				References.LOGGER.error("Failed to replace TileEntity: " + findTile);
+				Engine.instance.logger().error("Failed to replace TileEntity: " + findTile);
 			}
 		}
 		catch (Exception e)
 		{
-			References.LOGGER.error("Failed to replace TileEntity: " + findTile);
+			Engine.instance.logger().error("Failed to replace TileEntity: " + findTile);
 			e.printStackTrace();
 		}
 	}
@@ -327,7 +327,7 @@ public class WorldUtility
 		ArrayList<ItemStack> dropsList = block.getDrops(world, i, j, k, meta, 0);
 		float dropChance = ForgeEventFactory.fireBlockHarvesting(dropsList, world, block, i, j, k, meta, 0, 1.0F, false, DummyPlayer.get(world));
 
-		ArrayList<ItemStack> returnList = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> returnList = new ArrayList<>();
 		for (ItemStack s : dropsList)
 		{
 			if (world.rand.nextFloat() <= dropChance)

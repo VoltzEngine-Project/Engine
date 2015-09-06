@@ -1,6 +1,6 @@
 package com.builtbroken.mc.prefab.gui.slot;
 
-import com.builtbroken.mc.lib.mod.compat.energy.EnergyHandler;
+import com.builtbroken.mc.lib.mod.compat.energy.UniversalEnergySystem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -15,7 +15,7 @@ public class SlotEnergyItem extends Slot
     @Override
     public boolean isItemValid(ItemStack compareStack)
     {
-        return EnergyHandler.isHandler(compareStack, null);
+        return UniversalEnergySystem.isHandler(compareStack, null);
     }
 
 }

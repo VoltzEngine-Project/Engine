@@ -6,8 +6,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
+ * List of ores that generate in Voltz Engine
  * Created by robert on 1/11/2015.
  */
 public enum Ores
@@ -28,6 +30,9 @@ public enum Ores
     private int amountPerChunk = 16;
     private int amountPerBranch = 5;
 
+    private Block block;
+    private String oreDictName;
+
     Ores(int min, int max, int amountPerBranch, int amountPerChunk)
     {
         this.minY = min;
@@ -36,13 +41,27 @@ public enum Ores
         this.amountPerChunk = amountPerChunk;
     }
 
+    public ItemStack stack()
+    {
+        return stack(1);
+    }
+
+    public ItemStack stack(int stackSize)
+    {
+        return new ItemStack(block, stackSize, ordinal());
+    }
+
     public static void registerSet(Block block, Configuration config)
     {
-        for(Ores ore: values())
+        for (Ores ore : values())
         {
             if (config.getBoolean("" + LanguageUtility.capitalizeFirst(ore.name()) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
             {
-                GameRegistry.registerWorldGenerator(new OreGenReplaceStone("ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase()), new ItemStack(block, 1, ore.ordinal()), ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
+                ore.block = block;
+                ore.oreDictName = "ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase());
+                ItemStack stack = ore.stack();
+                GameRegistry.registerWorldGenerator(new OreGenReplaceStone(ore.oreDictName, stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
+                OreDictionary.registerOre(ore.oreDictName, stack);
             }
         }
     }

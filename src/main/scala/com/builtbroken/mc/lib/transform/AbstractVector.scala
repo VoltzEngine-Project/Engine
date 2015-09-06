@@ -13,7 +13,7 @@ abstract class AbstractVector[T <: AbstractVector[T]] extends AbstractOperation[
 
   def $(other: T): Double
 
-  final def magnitudeSquared: Double = this.asInstanceOf[T] $ this.asInstanceOf[T];
+  final def magnitudeSquared: Double = this.asInstanceOf[T] $ this.asInstanceOf[T]
 
   final def magnitude = Math.sqrt(magnitudeSquared)
 

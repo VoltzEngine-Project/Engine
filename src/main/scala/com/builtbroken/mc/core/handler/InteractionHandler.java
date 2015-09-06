@@ -1,24 +1,22 @@
 package com.builtbroken.mc.core.handler;
 
+import com.builtbroken.mc.api.tile.IRemovable;
+import com.builtbroken.mc.api.tile.IRemovable.*;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.helper.WrenchUtility;
+import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
-import com.builtbroken.mc.api.tile.IRemovable;
-import com.builtbroken.mc.api.tile.IRemovable.*;
-import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.transform.vector.Pos;
-import com.builtbroken.mc.lib.transform.vector.Location;
-import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 
 import java.util.List;
 
@@ -133,7 +131,7 @@ public class InteractionHandler
                             }
                         } catch (Exception e)
                         {
-                            References.LOGGER.error("Failed to pick up block using event system");
+                            Engine.instance.logger().error("Failed to pick up block using event system");
                             e.printStackTrace();
                         }
                     }

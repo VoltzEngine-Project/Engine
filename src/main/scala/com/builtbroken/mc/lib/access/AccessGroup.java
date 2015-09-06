@@ -62,11 +62,7 @@ public class AccessGroup extends Group<AccessUser> implements ISave, Cloneable
     public boolean addMember(String name)
     {
         //TODO trigger super profile that a new member was added
-        if (getMember(name) == null)
-        {
-            return addMember(new AccessUser(name));
-        }
-        return false;
+        return getMember(name) == null && addMember(new AccessUser(name));
     }
 
     public boolean addMember(EntityPlayer player)

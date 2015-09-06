@@ -7,7 +7,7 @@ import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -22,6 +22,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.Random;
 /**
  * Created by robert on 1/4/2015.
  */
-public class BlockTile extends Block implements ITileEntityProvider
+public class BlockTile extends BlockContainer
 {
     public Tile staticTile = null;
 
@@ -142,6 +143,15 @@ public class BlockTile extends Block implements ITileEntityProvider
     }
 
     @Override
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
+    {
+        inject(world, x, y, z);
+        boolean b = getTile(world, x, y, z).removeByPlayer(player, willHarvest);
+        eject();
+        return b;
+    }
+
+    @Override
     public int quantityDropped(int meta, int fortune, Random random)
     {
         return staticTile.quantityDropped(meta, fortune);
@@ -153,6 +163,23 @@ public class BlockTile extends Block implements ITileEntityProvider
         inject(world, x, y, z);
         getTile(world, x, y, z).onNeighborChanged(block);
         eject();
+    }
+
+    public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side)
+    {
+        inject(world, x, y, z);
+        boolean b = getTile(world, x, y, z).canPlaceBlockOnSide(ForgeDirection.getOrientation(side));
+        eject();
+        return b;
+    }
+
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z)
+    {
+        inject(world, x, y, z);
+        boolean b = getTile(world, x, y, z).canPlaceBlockAt();
+        eject();
+        return b;
     }
 
     @Override
@@ -197,6 +224,7 @@ public class BlockTile extends Block implements ITileEntityProvider
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
     {
         inject(world, x, y, z);

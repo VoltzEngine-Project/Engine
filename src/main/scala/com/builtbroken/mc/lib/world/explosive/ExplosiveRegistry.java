@@ -1,15 +1,13 @@
 package com.builtbroken.mc.lib.world.explosive;
 
+import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import com.builtbroken.mc.api.event.TriggerCause;
-import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.mod.config.Config;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.IWorldChangeAction;
 import com.builtbroken.mc.lib.world.edit.WorldChangeHelper;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 import java.util.*;
 
@@ -82,7 +80,7 @@ public final class ExplosiveRegistry
      * @param multi        - size of the action
      * @return if the result completed, was blocked, or failed
      */
-    public static WorldChangeHelper.ChangeResult triggerExplosive(World world, double x, double y, double z, IExplosiveHandler ex, TriggerCause triggerCause, int multi, NBTTagCompound tag)
+    public static WorldChangeHelper.ChangeResult triggerExplosive(World world, double x, double y, double z, IExplosiveHandler ex, TriggerCause triggerCause, double multi, NBTTagCompound tag)
     {
         return triggerExplosive(new Location(world, x, y, z), ex, triggerCause, multi, tag);
     }

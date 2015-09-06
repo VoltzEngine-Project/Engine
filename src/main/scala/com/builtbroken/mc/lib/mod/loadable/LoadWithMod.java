@@ -1,9 +1,7 @@
 package com.builtbroken.mc.lib.mod.loadable;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 /**
  * Created by robert on 1/10/2015.

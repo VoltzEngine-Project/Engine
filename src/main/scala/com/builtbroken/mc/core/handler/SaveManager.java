@@ -2,12 +2,12 @@ package com.builtbroken.mc.core.handler;
 
 import com.builtbroken.mc.api.ISave;
 import com.builtbroken.mc.api.IVirtualObject;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,19 +34,19 @@ public class SaveManager
     /**
      * Map of save names with there class file
      */
-    private HashMap<String, Class<?>> idToClassMap = new HashMap<String, Class<?>>();
+    private HashMap<String, Class<?>> idToClassMap = new HashMap<>();
     /**
      * Reverse of the idToClassMap
      */
-    private HashMap<Class<?>, String> classToIDMap = new HashMap<Class<?>, String>();
+    private HashMap<Class<?>, String> classToIDMap = new HashMap<>();
     /**
      * List of object to save on the next save call
      */
-    private LinkedHashSet<IVirtualObject> saveList = new LinkedHashSet<IVirtualObject>();
+    private LinkedHashSet<IVirtualObject> saveList = new LinkedHashSet<>();
     /**
      * Object that save each time the world saves
      */
-    private LinkedHashSet<IVirtualObject> objects = new LinkedHashSet<IVirtualObject>();
+    private LinkedHashSet<IVirtualObject> objects = new LinkedHashSet<>();
     /**
      * Last cpu time that the save manager tried to save a file
      */
@@ -186,8 +186,8 @@ public class SaveManager
                         ((ISave) obj).load(nbt);
                     } catch (Exception e)
                     {
-                        References.LOGGER.catching(Level.FATAL, e);
-                        References.LOGGER.fatal("SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
+                        Engine.instance.logger().catching(Level.FATAL, e);
+                        Engine.instance.logger().fatal("SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
                         obj = null;
                     }
                 }
@@ -200,7 +200,7 @@ public class SaveManager
             }
         } catch (Exception e)
         {
-            FMLLog.fine("[Resonant Engine]SaveManager: Error trying to load object from save");
+            FMLLog.severe("[Voltz Engine]SaveManager: Error trying to load object from save");
             e.printStackTrace();
         }
         return null;

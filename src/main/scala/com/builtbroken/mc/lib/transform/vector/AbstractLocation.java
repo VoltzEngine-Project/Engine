@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 
-/**
+/** Prefab for location data that doesn't implement IWorldPosition
  * Created by robert on 1/13/2015.
  */
 public abstract class AbstractLocation<R extends AbstractLocation> extends AbstractPos<R> implements ILocation
@@ -184,19 +184,15 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(Object o)
     {
-        if (obj instanceof IWorldPosition)
-        {
-            return (super.equals(obj)) && this.world == ((IWorldPosition) obj).world();
-        }
-        return false;
+        return o instanceof AbstractLocation && this.world == ((AbstractLocation) o).world() && ((AbstractLocation) o).x() == x() && ((AbstractLocation) o).y() == y() && ((AbstractLocation) o).z() == z();
     }
 
     @Override
     public String toString()
     {
-        return "VectorWorld [" + this.x() + "," + this.y() + "," + this.z() + "," + this.world + "]";
+        return "WorldLocation [" + this.x() + "," + this.y() + "," + this.z() + "," + this.world + "]";
     }
 
     public boolean isChunkLoaded()

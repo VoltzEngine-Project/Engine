@@ -9,6 +9,7 @@ import java.util.*;
 /**
  * Created by robert on 1/9/2015.
  */
+@SuppressWarnings("TypeParameterExplicitlyExtendsObject")
 public abstract class MRHandler<O extends Object, K extends Object> implements IMachineRecipeHandler
 {
     public final String type;

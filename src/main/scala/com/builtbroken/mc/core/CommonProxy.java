@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 
 /**
- * The Resonant Engine common proxy
+ * The Voltz Engine common proxy
  *
  * @author Calclavia
  */

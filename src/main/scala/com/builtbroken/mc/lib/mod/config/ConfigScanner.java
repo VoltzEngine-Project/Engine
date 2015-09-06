@@ -17,8 +17,8 @@ public class ConfigScanner
 
 	private ConfigScanner()
 	{
-		this.configs = new LinkedHashSet<ASMDataTable.ASMData>();
-		this.classes = new LinkedHashSet<Class>();
+		this.configs = new LinkedHashSet<>();
+		this.classes = new LinkedHashSet<>();
 	}
 
 	public static ConfigScanner instance()

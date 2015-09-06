@@ -1,11 +1,7 @@
 package com.builtbroken.mc.lib.transform.vector;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.jlib.data.vector.Pos3D;
-import com.builtbroken.mc.lib.transform.ITransform;
-import com.builtbroken.mc.lib.transform.rotation.EulerAngle;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -13,8 +9,6 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**

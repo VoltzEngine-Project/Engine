@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 public class DummyPlayer extends FakePlayer
 {
-    private static final LinkedHashMap<World, DummyPlayer> FAKE_PLAYERS = new LinkedHashMap<World, DummyPlayer>();
+    private static final LinkedHashMap<World, DummyPlayer> FAKE_PLAYERS = new LinkedHashMap<>();
 
     public DummyPlayer(World world, String name, String sufix)
     {

@@ -40,12 +40,9 @@ import java.util.zip.ZipInputStream;
 public class FixedTechneModel extends ModelBase implements IModelCustom
 {
 	public static final List<String> cubeTypes = Arrays.asList("d9e621f7-957f-4b77-b1ae-20dcd0da7751", "de81aa14-bd60-4228-8d8d-5238bcd3caaa");
-	public Map<String, ModelRenderer> parts = new LinkedHashMap<String, ModelRenderer>();
+	public Map<String, ModelRenderer> parts = new LinkedHashMap();
 	private String fileName;
-	private Map<String, byte[]> zipContents = new HashMap<String, byte[]>();
-	private String texture = null;
-	private int textureName;
-	private boolean textureNameSet = false;
+	private Map<String, byte[]> zipContents = new HashMap();
 
 	public FixedTechneModel(ResourceLocation resource) throws ModelFormatException
 	{
@@ -113,7 +110,7 @@ public class FixedTechneModel extends ModelBase implements IModelCustom
 			Node modelTexture = modelAttributes.getNamedItem("texture");
 			if (modelTexture != null)
 			{
-				texture = modelTexture.getTextContent();
+				//TODO texture = modelTexture.getTextContent();
 			}
 
 			NodeList textureSize = document.getElementsByTagName("TextureSize");
@@ -179,29 +176,26 @@ public class FixedTechneModel extends ModelBase implements IModelCustom
 						{
 							shapeChildValue = shapeChildValue.trim();
 
-							if (shapeChildName.equals("IsMirrored"))
+							switch (shapeChildName)
 							{
-								mirrored = !shapeChildValue.equals("False");
-							}
-							else if (shapeChildName.equals("Offset"))
-							{
-								offset = shapeChildValue.split(",");
-							}
-							else if (shapeChildName.equals("Position"))
-							{
-								position = shapeChildValue.split(",");
-							}
-							else if (shapeChildName.equals("Rotation"))
-							{
-								rotation = shapeChildValue.split(",");
-							}
-							else if (shapeChildName.equals("Size"))
-							{
-								size = shapeChildValue.split(",");
-							}
-							else if (shapeChildName.equals("TextureOffset"))
-							{
-								textureOffset = shapeChildValue.split(",");
+								case "IsMirrored":
+									mirrored = !shapeChildValue.equals("False");
+									break;
+								case "Offset":
+									offset = shapeChildValue.split(",");
+									break;
+								case "Position":
+									position = shapeChildValue.split(",");
+									break;
+								case "Rotation":
+									rotation = shapeChildValue.split(",");
+									break;
+								case "Size":
+									size = shapeChildValue.split(",");
+									break;
+								case "TextureOffset":
+									textureOffset = shapeChildValue.split(",");
+									break;
 							}
 						}
 					}

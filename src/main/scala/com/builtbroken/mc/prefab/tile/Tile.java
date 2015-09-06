@@ -15,6 +15,9 @@ import com.builtbroken.mc.lib.render.block.RenderTileDummy;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.prefab.tile.entity.TileEntityBase;
+import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -33,7 +36,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
@@ -49,63 +52,131 @@ import org.lwjgl.opengl.GL12;
 import java.util.*;
 
 /**
- * Created by robert on 1/4/2015.
+ * Base class for VE's tile system that combines the Block and Tile class to make implementing
+ * new blocks faster. It does have some memory overhead due to the number of fields each class
+ * stores. Though the amount of memory used is very little. If it becomes an issue it is recommended to just use
+ * the classic Block & TileEntity system from Minecraft. As this will have less memory overhead but will take
+ * more work to implement the same functionality.
+ * <p/>
+ * In order for this class to work it needs to be registered threw the ModManager or something similar. In
+ * which a new BlockTile will be created with a static version of this class in it.
+ * <p/>
+ * Just as a note the system is designed in a special way in order to function. This class will act as a
+ * redirect for your Block & Tile. If a method or Field has BLOCK in the java doc it is treated like
+ * a static value. If it has the world TILE in the java doc the it is primary directed at the tile instance
+ * at the block location. If it can't find the tile it will redirect to the static tile that is your Block.
+ * <p/>
+ * <p/>
+ * Created by Robert(DarkGuardsman) on 1/4/2015.
  */
-public abstract class Tile extends TileEntity implements IWorldPosition, IPlayerUsing, IRegistryInit
+public abstract class Tile extends TileEntityBase implements IWorldPosition, IPlayerUsing, IRegistryInit
 {
     //Static block vars, never use in your tile
+    /** STATIC BLOCK, block for this tile. Will not be initialized in each tile */
     private BlockTile block = null;
+    /** STATIC BLOCK, injected by the BlockTile for methods calls */
     private IBlockAccess access = null;
+    /** STATIC BLOCK, Mod domain, injected when the tile is built */
     public String domain;
 
     //Block vars
+    /** BLOCK, name of the block for this tile */
     public String name;
+    /** BLOCK, creative tab to use for listing this tile */
     public CreativeTabs creativeTab;
+    /** BLOCK, material type for the block to use for varies checks */
     public Material material = Material.clay;
+    /** BLOCK, hardness value for mining speed */
     public float hardness = 1;
+    /** BLOCK, resistance value for explosions */
     public float resistance = 1;
+    /** BLOCK, can this tile emmit redstone */
     public boolean canEmmitRedstone = false;
+    /** BLOCK, is the block solid (true) or can it be seen threw (false) */
     public boolean isOpaque = false;
+    /** BLOCK, sound this tile makes when entities step on it */
     public Block.SoundType stepSound = Block.soundTypeStone;
+    /** BLOCK, ItemBlock class to register with this tile */
     public Class<? extends ItemBlock> itemBlock = ItemBlock.class;
 
+    /** Collision box for this tile, also used for selection and any other size value for the block */
     protected Cube bounds = new Cube(0, 0, 0, 1, 1, 1);
 
     //Icon vars
+    /** Map of icons by name */
     @SideOnly(Side.CLIENT)
     protected HashMap<String, IIcon> icons;
+    /** Should the tile use the helper functionality for registering and getting textures by sides */
     protected boolean useSidedTextures = false;
+    /** Name of the main texture for the block */
     protected String textureName;
 
     //Renderer vars
+    /** TILE, Triggered when dynamic renderer crashes to prevent more errors from spamming chat */
     public boolean dynamicRendererCrashed = false;
+    /** BLOCK, Should we render a normal block */
     public boolean renderNormalBlock = true;
+    /** BLOCK, Should we render a TileEntitySpecialRenderer */
     public boolean renderTileEntity = true;
+    /** BLOCK, Render Type used by the block for checking how to render */
     public int renderType = BlockRenderHandler.ID; //renderNormalBlock will force this to zero
 
     //Tile Vars
+    /** TILE, Current tick count, starts when the tile is placed */
     public long ticks = 0L;
+    /** TILE, Next tick when cleanup code will be called to check the sanity of the tile */
     protected int nextCleanupTick = 200;
+    /** TILE, Set of player's with this tile's interface open, mainly used for GUI packet updates */
     protected final Set<EntityPlayer> playersUsing = new HashSet();
+    /** TILE, Owner of the tile as a UUID, primary method for getting the player who owns this tile */
+    protected UUID owner;
+    /** TILE, Owner of the tile as a String, mainly used for display or quick checks */
+    protected String username;
 
+    /** STATIC BLOCK, main method for creating a new Static Tile */
     public Tile(String name, Material material)
     {
         this.name = name;
         this.material = material;
     }
 
+    /** TILE, use this to initialize a tile without setting block data */
+    public Tile()
+    {
+
+    }
+
     /**
-     * Used to detect if the block is a tile or data object for creating blocks
+     * BLOCK
+     * <p/>
+     * Called to create a new tile for the block. First call will
+     * be the used to see if the BlockTile is a plain Block or Tile Block
      *
-     * @return Normally you want to return a new instance of this
+     * @return Normally you want to return a new instance of this but
+     * can do anything you want. Null will tell the registery system
+     * that this block spawns no TileEntities
      */
     public abstract Tile newTile();
 
+    /**
+     * BLOCK
+     * <p/>
+     * Overloaded version of newTile that passes in world and block meta
+     *
+     * @param world - world the tile will be placed into
+     * @param meta  - meta value the block was set will
+     * @return new tile
+     */
     public Tile newTile(World world, int meta)
     {
         return newTile();
     }
 
+    /**
+     * TILE, Called by the world to update the tile. Never
+     * call this from your owner code. Use Update() method
+     * as this is set final to ensure base functionality.
+     */
     @Override
     public final void updateEntity()
     {
@@ -134,13 +205,43 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
 
     }
 
+    @Override
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+        super.readFromNBT(nbt);
+        if (nbt.hasKey("tileOwnerMostSigBit") && nbt.hasKey("tileOwnerLeastSigBit"))
+        {
+            this.owner = new UUID(nbt.getLong("tileOwnerMostSigBit"), nbt.getLong("tileOwnerLeastSigBit"));
+        }
+        if (nbt.hasKey("tileOwnerUsername"))
+        {
+            this.username = nbt.getString("tileOwnerUsername");
+        }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt)
+    {
+        super.writeToNBT(nbt);
+        if (owner != null)
+        {
+            nbt.setLong("tileOwnerMostSigBit", this.owner.getMostSignificantBits());
+            nbt.setLong("tileOwnerLeastSigBit", this.owner.getLeastSignificantBits());
+        }
+        if (username != null && !username.isEmpty())
+        {
+            nbt.setString("tileOwnerUsername", this.username);
+        }
+    }
+
+    /** BLOCK, called from the world when the block is updated */
     public void blockUpdate()
     {
         update();
     }
 
     /**
-     * Called first update() call of the tile. Use
+     * TILE, Called first update() call of the tile. Use
      * this to init any values that are needed right
      * after the tile has been fully placed into the
      * world.
@@ -150,6 +251,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     }
 
     /**
+     * TILE,
      * Called each tick as long as the the tile can update.
      */
     public void update()
@@ -158,6 +260,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     }
 
     /**
+     * TILE,
      * Called each tick that users
      * have the Gui open. Is called
      * both sides and should be used
@@ -169,6 +272,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     }
 
     /**
+     * TILE,
      * Called every so many ticks to ask the tile to check
      * for errors and cleanup data. Mainly used to clear
      * out caches that are no longer needed.
@@ -262,7 +366,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     //===========================
     public ArrayList<ItemStack> getDrops(int metadata, int fortune)
     {
-        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> drops = new ArrayList<>();
         if (getBlockType() != null)
         {
             drops.add(new ItemStack(getBlockType(), quantityDropped(metadata, fortune), metadataDropped(metadata, fortune)));
@@ -310,6 +414,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
 
 
     /**
+     * BLOCK,
      * Gets all sub versions of this block to add to the creative menu
      *
      * @param item         - Item object of the block
@@ -379,16 +484,22 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
         return getWorldObj();
     }
 
+    /** BLOCK, is only called for the static tile */
     public void setBlock(BlockTile block)
     {
         this.block = block;
     }
 
+    /** STATIC BLOCk, is only called by BlockTile for the static version of this tile */
     public void setAccess(IBlockAccess access)
     {
         this.access = access;
     }
 
+    /**
+     * Can be called from both a Block or Tile version. Tile version will always return
+     * World. Block version will try to return IBlockAccess but can be null
+     */
     public IBlockAccess getAccess()
     {
         if (world() != null)
@@ -404,6 +515,11 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
         return new Pos(x(), y(), z());
     }
 
+    /**
+     * Converts the tile into a position using its coords
+     *
+     * @return new Pos with the Tile's location
+     */
     public Pos toPos()
     {
         return new Pos(x(), y(), z());
@@ -415,6 +531,11 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
         return new Location(world(), x(), y(), z());
     }
 
+    /**
+     * Converts the tile into a position using its coords
+     *
+     * @return new Location with the Tile's location
+     */
     public Location toLocation()
     {
         return new Location(world(), x(), y(), z());
@@ -454,6 +575,10 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
      */
     public void onPlaced(EntityLivingBase entityLiving, ItemStack itemStack)
     {
+        if (entityLiving instanceof EntityPlayer)
+        {
+            setOwner((EntityPlayer) entityLiving);
+        }
     }
 
     /**
@@ -566,7 +691,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
      */
     public Iterable<Cube> getCollisionBoxes(Cube intersect, Entity entity)
     {
-        List<Cube> boxes = new ArrayList<Cube>();
+        List<Cube> boxes = new ArrayList<>();
         boxes.add(getCollisionBounds());
         return boxes;
     }
@@ -700,6 +825,39 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     }
 
     /**
+     * Called to see if the block can be placed at the location
+     *
+     * @return true if it can be placed
+     */
+    public boolean canPlaceBlockAt()
+    {
+        return world().getBlock(xi(), yi(), zi()).isReplaceable(world(), xi(), yi(), zi());
+    }
+
+    /**
+     * Called when the player removes a block
+     *
+     * @param player      - user doing the action
+     * @param willHarvest - did the player harvest the block, eg should it drop items
+     * @return true if the action was used and the block changed
+     */
+    public boolean removeByPlayer(EntityPlayer player, boolean willHarvest)
+    {
+        return world().setBlockToAir(xi(), yi(), zi());
+    }
+
+    /**
+     * Called to see if the block can be placed on the side of a block at the location
+     *
+     * @param side - side
+     * @return
+     */
+    public boolean canPlaceBlockOnSide(ForgeDirection side)
+    {
+        return canPlaceBlockAt();
+    }
+
+    /**
      * Gets the explosive resistance of this block.
      *
      * @param entity            - The affecting entity
@@ -731,6 +889,49 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
     public boolean isServer()
     {
         return !world().isRemote;
+    }
+
+    //==========================
+    //== Owner Helper Methods ==
+    //==========================
+
+    public UUID getOwnerID()
+    {
+        return owner;
+    }
+
+    public String getOwnerName()
+    {
+        GameProfile profile = getOwnerProfile();
+        if (profile != null)
+            return profile.getName();
+        return null;
+    }
+
+    public GameProfile getOwnerProfile()
+    {
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient())
+            return null;
+        return MinecraftServer.getServer().func_152358_ax().func_152652_a(owner);
+    }
+
+    public void setOwnerID(UUID id)
+    {
+        this.owner = id;
+    }
+
+    public void setOwner(EntityPlayer player)
+    {
+        if (player != null)
+        {
+            setOwnerID(player.getGameProfile().getId());
+            this.username = player.getCommandSenderName();
+        }
+        else
+        {
+            setOwnerID(null);
+            this.username = null;
+        }
     }
 
     //=========================
@@ -999,7 +1200,7 @@ public abstract class Tile extends TileEntity implements IWorldPosition, IPlayer
 
     public double distance(IPos3D pos)
     {
-        if(pos instanceof Pos3D)
+        if (pos instanceof Pos3D)
         {
             return ((Pos3D) pos).distance(x() + 0.5, y() + 0.5, z() + 0.5);
         }

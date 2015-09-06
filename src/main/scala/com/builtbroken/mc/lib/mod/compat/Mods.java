@@ -15,7 +15,8 @@ public enum Mods
     BC("BuildCraft|Core"),
     IC2("IC2"),
     WAILA("Waila"),
-    DRAGON_API("DragonAPI");
+    DRAGON_API("DragonAPI"),
+    RF("");
 
     public final String mod_id;
 

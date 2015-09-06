@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.helper;
 
-import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.core.Engine;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Level;
 
@@ -11,7 +11,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -26,6 +25,7 @@ public class ReflectionUtility extends ReflectionHelper
      * @param args  - arguments that the constructor should have
      * @return first match found
      */
+    @SuppressWarnings("TypeParameterExplicitlyExtendsObject")
     public static <e extends Object> Constructor<e> getConstructorWithArgs(Class<e> clazz, Object... args)
     {
         if (clazz != null)
@@ -46,11 +46,10 @@ public class ReflectionUtility extends ReflectionHelper
                         {
                             try
                             {
-                                Constructor<e> con = (Constructor<e>) constructor;
-                                return con;
+                                return (Constructor<e>) constructor;
                             } catch (ClassCastException e)
                             {
-
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -75,12 +74,9 @@ public class ReflectionUtility extends ReflectionHelper
         try
         {
             setMCField(clazz, instance, fieldName, fieldName2, newValue);
-        } catch (NoSuchFieldException e)
+        } catch (NoSuchFieldException | IllegalAccessException e)
         {
-            References.LOGGER.catching(Level.ERROR, e);
-        } catch (IllegalAccessException e)
-        {
-            References.LOGGER.catching(Level.ERROR, e);
+            Engine.instance.logger().catching(Level.ERROR, e);
         }
     }
 
@@ -134,7 +130,7 @@ public class ReflectionUtility extends ReflectionHelper
 
     public static List<String> getFieldNames(Class clazz)
     {
-        List<String> fieldNames = new ArrayList<String>();
+        List<String> fieldNames = new ArrayList<>();
         for (Field f : getAllFields(clazz))
         {
             String name = f.getName();
@@ -173,12 +169,15 @@ public class ReflectionUtility extends ReflectionHelper
             method = clazz.getMethod(name, args);
         } catch (NoSuchMethodException e)
         {
+            if (Engine.runningAsDev)
+                Engine.instance.logger().error("A: Failed to find declared method " + method);
             try
             {
                 method = clazz.getDeclaredMethod(name, args);
             } catch (NoSuchMethodException e2)
             {
-
+                if (Engine.runningAsDev)
+                    Engine.instance.logger().error("B: Failed to find declared method " + method);
             }
         }
         return method;
@@ -191,14 +190,13 @@ public class ReflectionUtility extends ReflectionHelper
         return fields;
     }
 
+    @SafeVarargs
     public static List<Method> getAllMethods(Class clazz, Class<? extends Annotation>... annotations) throws ClassNotFoundException
     {
         List<Method> fields = getAllMethods(clazz);
         List<Method> returns = new ArrayList();
-        Iterator<Method> it = fields.iterator();
-        while (it.hasNext())
+        for (Method m : fields)
         {
-            Method m = it.next();
             for (Class<? extends Annotation> an : annotations)
             {
                 if (m.isAnnotationPresent(an))
@@ -237,7 +235,8 @@ public class ReflectionUtility extends ReflectionHelper
                     f = clazz.getDeclaredField(i == 1 ? fieldName : fieldName2);
             } catch (NoSuchFieldException e)
             {
-
+                if (Engine.runningAsDev)
+                    Engine.instance.logger().error(i + ": Failed to find " + ((i == 1 || i == 3) ? "declaried" : "") + " field " + ((i == 0 || i == 1) ? "" + fieldName : "" + fieldName2));
             }
         }
         if (f != null)
@@ -266,6 +265,7 @@ public class ReflectionUtility extends ReflectionHelper
     {
         setFinalStaticField(getMCField(clazz, fieldname, fieldname), newValue);
     }
+
     /**
      * Sets a final field, will remove final modified, and will make the field public for access.
      *

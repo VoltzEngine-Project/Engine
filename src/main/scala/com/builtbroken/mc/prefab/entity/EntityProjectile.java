@@ -166,7 +166,6 @@ public class EntityProjectile extends Entity implements IProjectile
                 if (this.ticksInGround == inGroundKillTime)
                 {
                     this.setDead();
-                    return;
                 }
             }
             else

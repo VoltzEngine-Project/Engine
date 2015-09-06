@@ -21,8 +21,8 @@ object ASMUtility
       }
     }
     val clinit: MethodNode = new MethodNode(Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC, "<clinit>", Type.getMethodDescriptor(Type.VOID_TYPE), null, null)
-    clinit.instructions.add(new InsnNode(Opcodes.RETURN));
-    cnode.methods.add(clinit);
-    return clinit;
+    clinit.instructions.add(new InsnNode(Opcodes.RETURN))
+    cnode.methods.add(clinit)
+    return clinit
   }
 }

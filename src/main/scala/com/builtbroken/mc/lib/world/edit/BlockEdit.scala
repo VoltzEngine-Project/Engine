@@ -22,20 +22,20 @@ class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocat
   var prev_block: Block = Blocks.air
 
   /** 0-15 meta that was at the location */
-  var prev_meta: Int = 0;
+  var prev_meta: Int = 0
 
   //Placement data
   /** Block to place */
   var block: Block = Blocks.air
   /** 0-15 meta value to place */
-  var meta: Int = 0;
+  var meta: Int = 0
 
   /** direction placed from */
   var face: EnumFacing = null
 
   //Extra data for set use cases
   /** Force energy used to place it */
-  var energy: Float = 0;
+  var energy: Float = 0
   /** Drop block that was at the location */
   var doItemDrop = false
   /** Ensure prev_block is the same */
@@ -51,8 +51,8 @@ class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocat
 
   def set(block: Block, meta: Int, doDrops: Boolean, checkEquals: Boolean) : BlockEdit =
   {
-    this.block = block;
-    this.meta = meta;
+    this.block = block
+    this.meta = meta
     doItemDrop = doDrops
     logPrevBlock()
     return this
@@ -87,7 +87,7 @@ class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocat
     if (world != null)
     {
       //Check if the chunk exists and is loaded to prevent loading/creating new chunks
-      val chunk = world.getChunkFromBlockCoords(xi, zi);
+      val chunk = world.getChunkFromBlockCoords(xi, zi)
       if (chunk != null && chunk.isChunkLoaded)
       {
         //Check if the prev_block still exists
@@ -134,5 +134,5 @@ class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocat
 
   def hasChanged() : Boolean = prev_block != block || prev_meta != meta
 
-  override def newPos(x: Double, y: Double, z: Double): BlockEdit = new BlockEdit(world, x, y, z);
+  override def newPos(x: Double, y: Double, z: Double): BlockEdit = new BlockEdit(world, x, y, z)
 }

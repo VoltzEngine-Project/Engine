@@ -15,7 +15,7 @@ class RotatableCube extends Cube
   {
     //Radius check to exclude by distance
     if (distance(x, y, z) > radius)
-      return false;
+      return false
 
     return isWithinXZ(x, y, z) && isWithinYZ(x, y, z)
   }
@@ -36,7 +36,7 @@ class RotatableCube extends Cube
     {
       return doesOverlap(new Cube(box))
     }
-    return super.doesOverlap(box);
+    return super.doesOverlap(box)
   }
 
   override def doesOverlap(box: Cube): Boolean =
@@ -45,7 +45,7 @@ class RotatableCube extends Cube
     {
       //Radius check to quick exclude
       if (distance(box) - box.radius > radius)
-        return false;
+        return false
 
       //Corner check TODO replace with better check in case we get a zero corner overlap
       for (v <- Cube.getCorners(box))
@@ -53,7 +53,7 @@ class RotatableCube extends Cube
         if (intersects(v))
           return true
       }
-      return false;
+      return false
     }
     return true
   }

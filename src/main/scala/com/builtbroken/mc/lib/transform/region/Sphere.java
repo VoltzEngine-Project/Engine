@@ -1,6 +1,5 @@
 package com.builtbroken.mc.lib.transform.region;
 
-import com.builtbroken.mc.api.tile.node.ITileModule;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
@@ -54,7 +53,7 @@ public class Sphere extends Shape3D
         //world.getEntitiesWithinAABB()
         for (int i1 = minX; i1 <= maxX; i1++)
         {
-            for (int j1 = minZ; i1 <= maxZ; i1++)
+            for (int j1 = minZ; j1 <= maxZ; j1++)
             {
                 if (world.getChunkProvider().chunkExists(i1, j1))
                 {

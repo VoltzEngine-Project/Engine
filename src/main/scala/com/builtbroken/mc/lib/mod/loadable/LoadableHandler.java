@@ -61,10 +61,7 @@ public class LoadableHandler
                 {
                     loadables.put((ILoadable) module, new Pair(false, false));
                 }
-            } catch (InstantiationException e)
-            {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e)
+            } catch (InstantiationException | IllegalAccessException e)
             {
                 throw new RuntimeException(e);
             }

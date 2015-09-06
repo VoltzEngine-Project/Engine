@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class UniversalRecipe
 {
-    public static final ArrayList<UniversalRecipe> RECIPES = new ArrayList<UniversalRecipe>();
+    public static final ArrayList<UniversalRecipe> RECIPES = new ArrayList<>();
 
     /**
      * Primary Metal: Steel

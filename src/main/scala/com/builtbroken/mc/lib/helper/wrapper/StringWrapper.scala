@@ -16,7 +16,7 @@ object StringWrapper
 
   implicit class WrappedString(str: String)
   {
-    def getLocal: String = StatCollector.translateToLocal(str);
+    def getLocal: String = StatCollector.translateToLocal(str)
 
     def listWrap(characters: Int): JList[String] = wrap(characters).toList
 

@@ -21,7 +21,7 @@ trait TVector3 extends TPos with IPos3D
     {
       return this.asInstanceOf[Entity].posZ
     }
-    return 0;
+    return 0
   }
 
   def zi : Int = z.asInstanceOf[Int]

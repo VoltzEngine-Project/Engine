@@ -2,6 +2,7 @@ package com.builtbroken.mc.core.content.tool;
 
 import buildcraft.api.tools.IToolWrench;
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.core.content.tool.screwdriver.ToolMode;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

@@ -1,7 +1,6 @@
 package com.builtbroken.mc.core.registry;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.prefab.tile.BlockTile;
@@ -338,7 +337,7 @@ public class ModManager
     {
         if (name == null || name.isEmpty())
         {
-            References.LOGGER.debug(name() + " Registry name was not provided for item " + item + " using class name to prevent game from crashing. This may cause world loading issues in the future.");
+            Engine.instance.logger().debug(name() + " Registry name was not provided for item " + item + " using class name to prevent game from crashing. This may cause world loading issues in the future.");
             name = LanguageUtility.decapitalizeFirst(item.getClass().getSimpleName().replace("Item", ""));
         }
         proxy.registerItem(this, name, modPrefix, item);

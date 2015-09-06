@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.world.schematic;
 
-import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.core.Engine;
 
 import java.util.HashMap;
 
@@ -41,7 +41,7 @@ public final class SchematicRegistry extends HashMap<String, Schematic>
 		}
 		else
 		{
-			References.LOGGER.error("Failed to register schematic as the name '" + name + "' is already in use.\nSchematic: " + schematic
+			Engine.instance.logger().error("Failed to register schematic as the name '" + name + "' is already in use.\nSchematic: " + schematic
 					+ " Class: " + schematic.getClass());
 		}
 	}

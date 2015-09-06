@@ -1,7 +1,6 @@
 package com.builtbroken.mc.prefab.potion;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.References;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
@@ -73,7 +72,6 @@ public abstract class CustomPotion extends Potion
 		if (shouldRemoveEffect(ent, amplifier))
 		{
 			removeEffect(ent);
-			return;
 		}
 	}
 

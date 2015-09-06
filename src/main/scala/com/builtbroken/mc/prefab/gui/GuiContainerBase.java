@@ -26,7 +26,6 @@ import org.lwjgl.opengl.GL12;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 
 public class GuiContainerBase extends GuiContainer
@@ -121,12 +120,8 @@ public class GuiContainerBase extends GuiContainer
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
-        Iterator<Entry<Rectangle, String>> it = this.tooltips.entrySet().iterator();
-
-        while (it.hasNext())
+        for (Entry<Rectangle, String> entry : this.tooltips.entrySet())
         {
-            Entry<Rectangle, String> entry = it.next();
-
             if (entry.getKey().isWithin(new Point(mouseX - this.guiLeft, mouseY - this.guiTop)))
             {
                 this.tooltip = entry.getValue();

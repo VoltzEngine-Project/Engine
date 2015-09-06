@@ -1,6 +1,7 @@
 package com.builtbroken.mc.prefab.explosive;
 
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.prefab.explosive.blast.Blast;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -76,13 +77,9 @@ public class ExplosiveHandler implements IExplosiveHandler
         try
         {
             return blastClass.newInstance().setLocation(world, (int) x, (int) y, (int) z).setYield(yieldMultiplier * multiplier).setCause(triggerCause);
-        } catch (InstantiationException e)
+        } catch (InstantiationException | IllegalAccessException e)
         {
-            References.LOGGER.log(Level.ERROR, "Failed to create blast object");
-            e.printStackTrace();
-        } catch (IllegalAccessException e)
-        {
-            References.LOGGER.log(Level.ERROR, "Failed to create blast object");
+            Engine.instance.logger().log(Level.ERROR, "Failed to create blast object");
             e.printStackTrace();
         }
         return null;
