@@ -200,7 +200,7 @@ public class SaveManager
             }
         } catch (Exception e)
         {
-            FMLLog.fine("[Resonant Engine]SaveManager: Error trying to load object from save");
+            FMLLog.severe("[Voltz Engine]SaveManager: Error trying to load object from save");
             e.printStackTrace();
         }
         return null;

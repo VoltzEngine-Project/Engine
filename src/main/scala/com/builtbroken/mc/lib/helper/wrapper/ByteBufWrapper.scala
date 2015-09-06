@@ -34,7 +34,7 @@ object ByteBufWrapper {
         case x: NBTTagCompound => buf.readTag()
         case x: FluidTank => buf.readTank()
         case x: ISave => x.load(buf.readTag())
-        case _ => throw new IllegalArgumentException("Resonant Engine ByteBuf attempt to read an invalid object [" + sample + "] of class [" + sample.getClass + "]")
+        case _ => throw new IllegalArgumentException("Voltz Engine ByteBuf attempt to read an invalid object [" + sample + "] of class [" + sample.getClass + "]")
       }).asInstanceOf[T]
     }
 

@@ -21,7 +21,7 @@ public class FXEnderPortalPartical extends EntityPortalFX
 		}
 		catch (Exception e)
 		{
-			FMLLog.warning("[Resonant Engine] Failed to correctly spawn portal effects.");
+			FMLLog.warning("[Voltz Engine] Failed to correctly spawn portal effects.");
 		}
 		this.renderDistanceWeight = distance;
 	}

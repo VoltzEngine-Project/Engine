@@ -28,7 +28,7 @@ public class ChunkTransformer implements IClassTransformer
 
 				if (m.s_name.equals("func_150807_a"))
 				{
-                    Engine.instance.logger().info("[Resonant-Engine] Found method " + m.s_name);
+                    Engine.instance.logger().info("[Voltz-Engine] Found method " + m.s_name);
 					InsnList list = new InsnList();
 					list.add(new VarInsnNode(ALOAD, 0));
 					list.add(new VarInsnNode(ILOAD, 1));
@@ -36,7 +36,7 @@ public class ChunkTransformer implements IClassTransformer
 					list.add(new VarInsnNode(ILOAD, 3));
 					list.add(new VarInsnNode(ALOAD, 4));
 					list.add(new VarInsnNode(ILOAD, 5));
-					list.add(new MethodInsnNode(INVOKESTATIC, "resonant/engine/asm/StaticForwarder", "chunkSetBlockEvent", "(Lnet/minecraft/world/chunk/Chunk;IIILnet/minecraft/block/Block;I)V"));
+					list.add(new MethodInsnNode(INVOKESTATIC, "com/builtbroken/mc/core/asm/StaticForwarder", "chunkSetBlockEvent", "(Lnet/minecraft/world/chunk/Chunk;IIILnet/minecraft/block/Block;I)V"));
 
 					AbstractInsnNode lastInsn = method.instructions.getLast();
 					while (lastInsn instanceof LabelNode || lastInsn instanceof LineNumberNode)

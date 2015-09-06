@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
- * The Resonant Engine client proxy
+ * The Voltz Engine client proxy
  */
 public class ClientProxy extends CommonProxy
 {
