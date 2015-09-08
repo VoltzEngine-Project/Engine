@@ -11,41 +11,79 @@ public class MavenDep extends Dep
     final String repoURL;
     final String groupID;
     final String artifactID;
-    final String version;
     final String classifier;
     final String ext;
+    String build_seperator = "b";
 
-    public MavenDep(String mavenRepo, String groupId, String artifactId, String version)
+    final int major;
+    final int minor;
+    final int revis;
+    final int build;
+
+    public MavenDep(String mavenRepo, String groupId, String artifactId, int major, int minor, int revis, int build)
     {
-        this(mavenRepo, groupId, artifactId, version, "", ".jar");
+        this(mavenRepo, groupId, artifactId, major, minor, revis, build, "", ".jar");
     }
 
-    public MavenDep(String mavenRepo, String groupId, String artifactId, String version, String classifier)
+    public MavenDep(String mavenRepo, String groupId, String artifactId, int major, int minor, int revis, int build, String classifier)
     {
-        this(mavenRepo, groupId, artifactId, version, classifier, ".jar");
+        this(mavenRepo, groupId, artifactId, major, minor, revis, build, classifier, ".jar");
     }
 
-    public MavenDep(String mavenRepo, String groupId, String artifactId, String version, String classifier, String ext)
+    public MavenDep(String mavenRepo, String groupId, String artifactId, int major, int minor, int revis, int build, String classifier, String ext)
     {
-        this.repoURL = mavenRepo.isEmpty() ? "http://ci.builtbroken.com/maven/" : mavenRepo;
+        this.repoURL = mavenRepo;
 
         this.groupID = groupId;
         this.artifactID = artifactId;
-        this.version = version;
+        this.major = major;
+        this.minor = minor;
+        this.revis = revis;
+        this.build = build;
 
         this.classifier = classifier;
         this.ext = ext;
     }
 
-    public String getDir()
+    public String getMavenFolderPath()
     {
-        return this.groupID.replaceAll("\\.", "/") + "/" + this.artifactID + "/" + this.version;
+        return this.groupID.replaceAll("\\.", "/") + "/" + this.artifactID + "/" + this.version();
+    }
+
+    public String version()
+    {
+        return major + "." + minor + "." + revis + build_seperator + build;
     }
 
     @Override
-    public String getPath()
+    public String getFileName()
     {
-        return getDir() + "/" + this.artifactID + "-" + this.version + (this.classifier.isEmpty() ? "" : "-" + this.classifier) + this.ext;
+        return this.artifactID + "-" + this.version() + (this.classifier.isEmpty() ? "" : "-" + this.classifier) + this.ext;
+    }
+
+    @Override
+    public String getGenericFileName()
+    {
+        return artifactID;
+    }
+
+    @Override
+    public boolean isNewerVersion(String fileName)
+    {
+        String version = fileName.replace(artifactID + "-", "");
+        int major = Integer.parseInt(version.substring(0, 1));
+        int minor = Integer.parseInt(version.substring(2, 3));
+        int revis = Integer.parseInt(version.substring(4, 5));
+        int build = Integer.parseInt(version.substring(6, version.length() - 1));
+        if (major < this.major)
+            return false;
+        if (minor < this.minor)
+            return false;
+        if (revis < this.revis)
+            return false;
+        if (build <= this.build)
+            return false;
+        return true;
     }
 
     @Override
@@ -53,9 +91,8 @@ public class MavenDep extends Dep
     {
         try
         {
-            return new URL(this.repoURL + getPath());
-        }
-        catch (MalformedURLException e)
+            return new URL(this.repoURL + getMavenFolderPath() + "/" + getFileName());
+        } catch (MalformedURLException e)
         {
             throw new RuntimeException(e);
         }

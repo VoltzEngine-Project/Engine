@@ -78,6 +78,7 @@ jar {
             "Implementation-Title": archivesBaseName,
             "Implementation-Version": project.version,
             "Git-Hash": gitHash,
+            "FMLCorePlugin": "com.builtbroken.mc.core.EngineCoreMod",
             "FMLAT": "VE_at.cfg"
     )
 }
