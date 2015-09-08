@@ -37,6 +37,17 @@ println archivesBaseName
 def currentJvm = org.gradle.internal.jvm.Jvm.current()
 println "Current Java version = " + currentJvm
 
+minecraft {
+    replace "@bbm_url@", bbm_url
+    replace "@CL@", coding_lib
+    replace "@CL-name@", CL_name
+    replace "@CL_maj@", CL_major
+    replace "@CL_min@", CL_minor
+    replace "@CL_rev@", CL_revis
+    replace "@CL_bu@", CL_build
+}
+
+
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
