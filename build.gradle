@@ -37,7 +37,11 @@ println archivesBaseName
 def currentJvm = org.gradle.internal.jvm.Jvm.current()
 println "Current Java version = " + currentJvm
 
+javadoc.dependsOn(sourceMainJava)
+javadoc.dependsOn(sourceMainScala)
+
 minecraft {
+    replaceIn "com/builtbroken/mc/core/deps/DepDownloader.java"
     replace "@bbm_url@", bbm_url
     replace "@CL@", coding_lib
     replace "@CL-name@", CL_name
@@ -46,6 +50,7 @@ minecraft {
     replace "@CL_rev@", CL_revis
     replace "@CL_bu@", CL_build
 }
+
 
 
 processResources {
