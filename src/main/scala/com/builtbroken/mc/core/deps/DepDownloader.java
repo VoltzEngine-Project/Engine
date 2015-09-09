@@ -85,7 +85,8 @@ public class DepDownloader
     public static void load()
     {
         DepDownloader downloader = new DepDownloader();
-        downloader.depsToLoad.add(new MavenDep("@bbm_url@", "@CL@", "@CL-name@", @CL_maj@, @CL_min@, @CL_rev@, @CL_bu@));
+
+        downloader.depsToLoad.add(new MavenDep("@bbm_url@", "@CL@", "@CL-name@", "@CL_maj@", "@CL_min@", "@CL_rev@", "@CL_bu@"));
         downloader.start();
     }
 }
