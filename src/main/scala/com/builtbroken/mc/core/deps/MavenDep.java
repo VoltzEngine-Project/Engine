@@ -20,6 +20,12 @@ public class MavenDep extends Dep
     final int revis;
     final int build;
 
+    public MavenDep(String mavenRepo, String groupId, String artifactId, String major, String minor, String revis, String build)
+    {
+        //TODO replace string parsing with something like new Version(major, minor, revis, build) that will auto parse and convert to int
+        this(mavenRepo, groupId, artifactId, Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(revis), Integer.parseInt(build));
+    }
+
     public MavenDep(String mavenRepo, String groupId, String artifactId, int major, int minor, int revis, int build)
     {
         this(mavenRepo, groupId, artifactId, major, minor, revis, build, "", ".jar");
