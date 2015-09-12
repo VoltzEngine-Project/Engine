@@ -65,6 +65,7 @@ public class DepDownloader
                 if (!found)
                 {
                     FileDownloader.downloadDep(dep);
+                    addClasspath(file);
                 }
             }
         }
