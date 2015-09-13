@@ -13,9 +13,9 @@ import org.junit.runner.RunWith;
  * Created by Dark on 9/12/2015.
  */
 @RunWith(VoltzTestRunner.class)
-public class TileEntityTest extends AbstractTileEntityTest<TileEntityFurnace, BlockFurnace>
+public class TestTileEntityTestPrefab extends AbstractTileEntityTest<TileEntityFurnace, BlockFurnace>
 {
-    public TileEntityTest()
+    public TestTileEntityTestPrefab()
     {
         super((BlockFurnace) Blocks.furnace, TileEntityFurnace.class);
     }

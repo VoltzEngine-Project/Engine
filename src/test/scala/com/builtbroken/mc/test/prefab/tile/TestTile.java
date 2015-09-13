@@ -12,7 +12,8 @@ import net.minecraft.tileentity.TileEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-/** JUnit test for {@link Tile}
+/**
+ * JUnit test for {@link Tile}
  * Created by robert on 1/6/2015.
  */
 @RunWith(VoltzTestRunner.class)
@@ -20,12 +21,30 @@ public class TestTile extends AbstractTest
 {
     public static Block testBlock;
 
+    /* Use this to generate methods for a class for unit testing, saves so much time
+    public void testDel()
+    {
+        Logger logger = LogManager.getLogger("");
+        Method[] methods = Tile.class.getDeclaredMethods();
+        for (Method method : methods)
+        {
+            logger.info("@Test");
+            logger.info("Public void test" + LanguageUtility.capitalizeFirst(method.getName()) + "()");
+            logger.info("{");
+            logger.info("\tFakeWorld world = FakeWorld.newWorld(\"Test" + LanguageUtility.capitalizeFirst(method.getName()) + "\");");
+            logger.info("\tworld.setBlock(0, 0, 0, block);");
+            logger.info("}");
+            logger.info("");
+        }
+        fail();
+    } */
+
     @Test
     public void testCreation()
     {
-        assertNotNull("Test block returned null",getBlock());
+        assertNotNull("Test block returned null", getBlock());
         assertTrue("Test block is not an instance of BlockTile", getBlock() instanceof BlockTile);
-        assertNotNull("Test block's static tile returned null",((BlockTile) getBlock()).staticTile);
+        assertNotNull("Test block's static tile returned null", ((BlockTile) getBlock()).staticTile);
     }
 
     public void testPlacement()

@@ -1,5 +1,6 @@
 package com.builtbroken.mc.testing.tile;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
@@ -17,8 +18,13 @@ import org.junit.Test;
  */
 public class AbstractTileEntityTest<T extends TileEntity, B extends Block> extends AbstractTest
 {
-    protected final Class<T> tileClazz;
-    protected final B block;
+    protected Class<T> tileClazz;
+    protected B block;
+
+    public AbstractTileEntityTest()
+    {
+
+    }
 
     public AbstractTileEntityTest(B block, Class<T> tileClazz)
     {
@@ -37,6 +43,16 @@ public class AbstractTileEntityTest<T extends TileEntity, B extends Block> exten
             //Already registered
         }
 
+    }
+
+    @Override
+    public void setUpForEntireClass()
+    {
+        if(Engine.instance == null)
+        {
+            Engine.instance = new Engine();
+            Engine.instance.packetHandler.init();
+        }
     }
 
     protected T newTile()

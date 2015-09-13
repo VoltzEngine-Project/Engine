@@ -207,7 +207,6 @@ public class Engine
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, getProxy());
         config = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/VoltzEngine.cfg"));
         heatDataConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/HeatMap.cfg"));
         explosiveConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/Explosives.cfg"));
