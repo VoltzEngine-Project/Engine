@@ -18,6 +18,5 @@ script:
   - ./gradlew build javadoc coveralls jacocoTestReport -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 -S -i --refresh-dependencies
 jdk:
   - oraclejdk7
-  - oraclejdk8
 after_success:
   - bash <(curl -s https://codecov.io/bash)
