@@ -6,6 +6,7 @@ import com.builtbroken.mc.testing.junit.world.FakeWorld;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import org.junit.Test;
 
@@ -138,9 +139,9 @@ public class AbstractTileEntityTest<T extends TileEntity, B extends Block> exten
     @Test
     public void testUpdateEntity()
     {
-        T tile = newTile();
         FakeWorld world = FakeWorld.newWorld("testUpdateEntity");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        TileEntity tile = world.getTileEntity(10, 11, 12);
 
         for (int i = 0; i < 1000; i++)
         {
@@ -181,112 +182,134 @@ public class AbstractTileEntityTest<T extends TileEntity, B extends Block> exten
     @Test
     public void testGetMaxRenderDistanceSquared()
     {
-        T tile = newTile();
+
         FakeWorld world = FakeWorld.newWorld("testGetMaxRenderDistanceSquared");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        double d = world.getTileEntity(10, 11, 12).getMaxRenderDistanceSquared();
+        assertTrue(d >= 0);
     }
 
     @Test
     public void testGetBlockType()
     {
-        T tile = newTile();
         FakeWorld world = FakeWorld.newWorld("testGetBlockType");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        assertTrue(world.getTileEntity(10, 11, 12).getBlockType() == block);
     }
 
     @Test
     public void testGetDescriptionPacket()
     {
-        T tile = newTile();
         FakeWorld world = FakeWorld.newWorld("testGetDescriptionPacket");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        world.getTileEntity(10, 11, 12).getDescriptionPacket();
     }
 
     @Test
     public void testIsInvalid()
     {
-        T tile = newTile();
         FakeWorld world = FakeWorld.newWorld("testIsInvalid");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        world.getTileEntity(10, 11, 12).isInvalid();
     }
 
     @Test
     public void testInvalidate()
     {
-        T tile = newTile();
         FakeWorld world = FakeWorld.newWorld("testInvalidate");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        TileEntity tile = world.getTileEntity(10, 11, 12);
+        tile.invalidate();
+        assertTrue(tile.isInvalid());
     }
 
     @Test
     public void testValidate()
     {
-        T tile = newTile();
         FakeWorld world = FakeWorld.newWorld("testValidate");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        TileEntity tile = world.getTileEntity(10, 11, 12);
+        tile.validate();
+        assertTrue(!tile.isInvalid());
     }
 
     @Test
     public void testReceiveClientEvent()
     {
-        T tile = newTile();
+        //Test for no errors/crash plus enforce unit test on this method
         FakeWorld world = FakeWorld.newWorld("testReceiveClientEvent");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        assertFalse("Might want to implement a test for this if you return true", world.getTileEntity(10, 11, 12).receiveClientEvent(0, 0));
     }
 
     @Test
     public void testUpdateContainingBlockInfo()
     {
-        T tile = newTile();
+        //Test for no errors/crash
         FakeWorld world = FakeWorld.newWorld("testUpdateContainingBlockInfo");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        world.getTileEntity(10, 11, 12).updateContainingBlockInfo();
     }
 
     @Test
     public void testCanUpdate()
     {
-        T tile = newTile();
+        //Test for no errors/crash
         FakeWorld world = FakeWorld.newWorld("testCanUpdate");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        world.getTileEntity(10, 11, 12).canUpdate();
     }
 
     @Test
     public void testOnDataPacket()
     {
-        T tile = newTile();
+        //Test for no errors/crash
         FakeWorld world = FakeWorld.newWorld("testOnDataPacket");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        world.getTileEntity(10, 11, 12).onDataPacket(null, null);
     }
 
     @Test
     public void testOnChunkUnload()
     {
-        T tile = newTile();
+        //Test for no errors/crash
         FakeWorld world = FakeWorld.newWorld("testOnChunkUnload");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        world.getTileEntity(10, 11, 12).onChunkUnload();
     }
 
     @Test
     public void testShouldRefresh()
     {
-        T tile = newTile();
+        //Test for no errors/crash
         FakeWorld world = FakeWorld.newWorld("testShouldRefresh");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        world.getTileEntity(10, 11, 12).shouldRefresh(block, block, world.getBlockMetadata(10, 11, 12), world.getBlockMetadata(10, 11, 12), world, 10, 11, 12);
     }
 
     @Test
     public void testShouldRenderInPass()
     {
-        T tile = newTile();
         FakeWorld world = FakeWorld.newWorld("testShouldRenderInPass");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        world.getTileEntity(10, 11, 12).shouldRenderInPass(0);
     }
 
     @Test
     public void testGetRenderBoundingBox()
     {
-        T tile = newTile();
         FakeWorld world = FakeWorld.newWorld("testGetRenderBoundingBox");
-        tile.setWorldObj(world);
+        world.setBlock(10, 11, 12, block);
+        AxisAlignedBB bounds = world.getTileEntity(10, 11, 12).getRenderBoundingBox();
+        if(bounds != null)
+        {
+            //Check to ensure bounds are not inverted
+            assertFalse(bounds.minX > bounds.maxX);
+            assertFalse(bounds.minY > bounds.maxY);
+            assertFalse(bounds.minZ > bounds.maxZ);
+
+            //Check to ensure that bound are not all the same
+            assertFalse(bounds.minZ == bounds.maxZ && bounds.minY == bounds.maxY && bounds.minZ == bounds.maxZ);
+        }
     }
 }
