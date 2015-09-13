@@ -48,6 +48,15 @@ public class AbstractTileEntityTest<T extends TileEntity, B extends Block> exten
     @Override
     public void setUpForEntireClass()
     {
+        super.setUpForEntireClass();
+        if(tileClazz == null)
+        {
+            throw new IllegalArgumentException("TileClass can not be null");
+        }
+        if(block == null)
+        {
+            throw new IllegalArgumentException("Block can not be null");
+        }
         if(Engine.instance == null)
         {
             Engine.instance = new Engine();
