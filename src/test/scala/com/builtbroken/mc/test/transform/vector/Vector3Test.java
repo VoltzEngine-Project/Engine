@@ -9,7 +9,7 @@ import com.builtbroken.mc.lib.transform.vector.Pos;
  */
 public class Vector3Test extends TestCase
 {
-    /**Simple addition test for Vector3 */
+    /** Simple addition test for Vector3 */
     public void testAddition() throws Exception
     {
         Pos vec = new Pos(0, 1, 0);
@@ -20,7 +20,7 @@ public class Vector3Test extends TestCase
         Assert.assertEquals(1.0, vec.z(), 0);
     }
 
-    /**Simple addition test for Vector3 */
+    /** Simple addition test for Vector3 */
     public void testSubtraction() throws Exception
     {
         Pos vec = new Pos(0, 1, 0);
