@@ -7,6 +7,7 @@ import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import com.builtbroken.mc.testing.tile.AbstractTileTest;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.tileentity.TileEntity;
 import org.junit.runner.RunWith;
 
 /**
@@ -23,6 +24,7 @@ public class TestTileTestPrefab extends AbstractTileTest<TestTileTestPrefab.Tile
         BlockTile block = new BlockTile(tile, "TestTileTestPrefab", CreativeTabs.tabAllSearch);
         tile.setBlock(block);
         this.block = ModRegistry.registerBlock(block, "TestTileTest");
+        TileEntity.addMapping(tileClazz, "TestTileTestPrefab");
     }
 
     @Override
@@ -36,6 +38,7 @@ public class TestTileTestPrefab extends AbstractTileTest<TestTileTestPrefab.Tile
         public TileTestTest()
         {
             super("TileTestTest", Material.cloth);
+            this.textureName = "stone";
         }
 
         @Override

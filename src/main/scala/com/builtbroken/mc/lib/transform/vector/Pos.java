@@ -12,6 +12,7 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
+ * Basic implementation of Pos3D that contains helper methods for interacting with MC worlds
  * Created by robert on 1/13/2015.
  */
 public class Pos extends AbstractPos<Pos> implements IPos3D
@@ -153,5 +154,23 @@ public class Pos extends AbstractPos<Pos> implements IPos3D
             double f6 = Math.sin(-f1 * 0.017453292F);
             return new Pos((f4 * f5), f6, (f3 * f5));
         }
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        return object instanceof IPos3D && Math.abs(((IPos3D) object).x() - x()) <= 0.001 && Math.abs(((IPos3D) object).y() - y()) <= 0.001 && Math.abs(((IPos3D) object).z() - z()) <= 0.001;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        long x = Double.doubleToLongBits(this.x() * 100 / 100);
+        long y = Double.doubleToLongBits(this.y() * 100 / 100);
+        long z = Double.doubleToLongBits(this.z() * 100 / 100);
+        long hash = (x ^ (x >>> 32));
+        hash = 31 * hash + y ^ (y >>> 32);
+        hash = 31 * hash + z ^ (z >>> 32);
+        return (int) hash;
     }
 }

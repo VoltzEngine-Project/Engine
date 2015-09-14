@@ -738,13 +738,13 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     //TODO: Get rid of parameters
     public boolean shouldSideBeRendered(int side)
     {
-        return (side == 0 && this.bounds.min().y() > 0.0D)
+        return bounds == null || (side == 0 && this.bounds.min().y() > 0.0D)
                 || (side == 1 && this.bounds.max().y() < 1.0D)
                 || (side == 2 && this.bounds.min().z() > 0.0D)
                 || (side == 3 && this.bounds.max().z() < 1.0D)
                 || (side == 4 && this.bounds.min().x() > 0.0D)
                 || (side == 5 && this.bounds.max().x() < 1.0D)
-                || !access.getBlock(xi(), yi(), zi()).isOpaqueCube();
+                || !getAccess().getBlock(xi(), yi(), zi()).isOpaqueCube();
     }
 
 
@@ -1080,6 +1080,10 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     @SideOnly(Side.CLIENT)
     public void registerSideTextureSet(IIconRegister iconRegister)
     {
+        if (icons == null)
+        {
+            icons = new HashMap();
+        }
         icons.put(getTextureName(), iconRegister.registerIcon(getTextureName() + "_top"));
         icons.put(getTextureName(), iconRegister.registerIcon(getTextureName() + "_side"));
         icons.put(getTextureName(), iconRegister.registerIcon(getTextureName() + "_bottom"));
@@ -1209,9 +1213,9 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 
     public double distance(double x, double y, double z)
     {
-        double xx = x() - x;
-        double yy = y() - y;
-        double zz = z() - z;
+        double xx = x() + 0.5 - x;
+        double yy = y() + 0.5 - y;
+        double zz = z() + 0.5 - z;
 
         return Math.sqrt(xx * xx + yy * yy + zz * zz);
     }

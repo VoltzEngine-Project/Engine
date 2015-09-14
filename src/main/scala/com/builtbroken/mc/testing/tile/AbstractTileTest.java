@@ -1,17 +1,25 @@
 package com.builtbroken.mc.testing.tile;
 
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
+import com.builtbroken.mc.testing.junit.icons.SudoIconReg;
 import com.builtbroken.mc.testing.junit.server.FakeDedicatedServer;
 import com.builtbroken.mc.testing.junit.testers.TestPlayer;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
 import com.builtbroken.mc.testing.junit.world.FakeWorldServer;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.junit.Test;
@@ -19,6 +27,8 @@ import org.junit.Test;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * prefab for testing Tile objects. Tries to
@@ -388,6 +398,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestSetBlockBoundsBasedOnState");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.setBlockBoundsBasedOnState();
     }
 
     @Test
@@ -395,6 +407,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestSetTextureName");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.setTextureName("texture");
     }
 
     @Test
@@ -402,6 +416,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetBlockMetadata");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getBlockMetadata();
     }
 
     @Test
@@ -409,13 +425,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestCanSilkHarvest");
         world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testGetDescriptionpacket()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestGetDescriptionpacket");
-        world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.canSilkHarvest(player, 0);
     }
 
     @Test
@@ -423,6 +434,11 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestShouldSideBeRendered");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        for (int i = 0; i < 6; i++)
+        {
+            tile.shouldSideBeRendered(i);
+        }
     }
 
     @Test
@@ -430,13 +446,12 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetCollisionBounds");
         world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testGetRenderBoundingBox()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestGetRenderBoundingBox");
-        world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        Cube cube = tile.getCollisionBounds();
+        if (cube != null)
+        {
+            //TODO test too see if cube is valid
+        }
     }
 
     @Test
@@ -444,6 +459,11 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetWeakRedstonepower");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        for (int i = 0; i < 6; i++)
+        {
+            tile.getWeakRedstonePower(i);
+        }
     }
 
     @Test
@@ -451,6 +471,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetRenderBlockpass");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getRenderBlockPass();
     }
 
     @Test
@@ -458,6 +480,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetRenderColor");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getRenderColor(0);
     }
 
     @Test
@@ -465,6 +489,9 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestDetermineOrientation");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.determineOrientation(player);
+        //TODO maybe check to ensure direction is valid
     }
 
     @Test
@@ -472,13 +499,22 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetplayersUsing");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getPlayersUsing();
     }
 
     @Test
     public void testRemoveByplayer()
     {
         FakeWorld world = FakeWorld.newWorld("TestRemoveByplayer");
+
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.removeByPlayer(player, true);
+
+        world.setBlock(0, 0, 0, block);
+        tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.removeByPlayer(player, false);
     }
 
     @Test
@@ -486,6 +522,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestNotifyBlocksOfNeighborChange");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.notifyBlocksOfNeighborChange();
     }
 
     @Test
@@ -493,6 +531,12 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetExplosionResistance");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getExplosionResistance(player);
+
+        world.setBlock(0, 0, 0, block);
+        tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getExplosionResistance(player, new Pos(2));
     }
 
     @Test
@@ -500,6 +544,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestRenderInventory");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.renderInventory(new ItemStack(block));
     }
 
     @Test
@@ -507,6 +553,11 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestSendDescpacket");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        if (tile.getDescPacket() != null)
+        {
+            tile.sendDescPacket();
+        }
     }
 
     @Test
@@ -514,6 +565,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestSendpacketToServer");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.sendPacketToServer(new PacketTile(tile));
     }
 
     @Test
@@ -521,6 +574,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetColorMultiplier");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getColorMultiplier();
     }
 
     @Test
@@ -528,13 +583,23 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetCollisionBoxes");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        Iterable<Cube> cubes = tile.getCollisionBoxes(new Cube(-2, -2, -2, 2, 2, 2), player);
+        assertTrue(cubes != null);
+        for (Cube cube : cubes)
+        {
+            assertTrue(cube != null);
+            //TODO check if the cube is valid
+        }
     }
 
     @Test
-    public void testSendpacketToGuiUsers()
+    public void testSendPacketToGuiUsers()
     {
         FakeWorld world = FakeWorld.newWorld("TestSendpacketToGuiUsers");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.sendPacketToGuiUsers(new PacketTile(tile));
     }
 
     @Test
@@ -542,27 +607,41 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestDetermineForgeDirection");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.determineForgeDirection(player);
     }
 
     @Test
-    public void testGetStrongRedstonepower()
+    public void testGetStrongRedstonePower()
     {
         FakeWorld world = FakeWorld.newWorld("TestGetStrongRedstonepower");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        for (int i = 0; i < 6; i++)
+        {
+            tile.getStrongRedstonePower(i);
+        }
     }
 
     @Test
-    public void testCanplaceBlockAt()
+    public void testCanPlaceBlockAt()
     {
         FakeWorld world = FakeWorld.newWorld("TestCanplaceBlockAt");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.canPlaceBlockAt();
     }
 
     @Test
-    public void testCanplaceBlockOnSide()
+    public void testCanPlaceBlockOnSide()
     {
         FakeWorld world = FakeWorld.newWorld("TestCanplaceBlockOnSide");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+        {
+            tile.canPlaceBlockOnSide(dir);
+        }
     }
 
     @Test
@@ -570,6 +649,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestRandomDisplayTick");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.randomDisplayTick();
     }
 
     @Test
@@ -577,13 +658,19 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestRegisterSideTextureSet");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        SudoIconReg reg = new SudoIconReg();
+        //TODO check to see if the texture exists
+        tile.registerSideTextureSet(reg);
     }
 
     @Test
-    public void testGetOwnerprofile()
+    public void testGetOwnerProfile()
     {
         FakeWorld world = FakeWorld.newWorld("TestGetOwnerprofile");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getOwnerProfile();
     }
 
     @Test
@@ -591,6 +678,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetSpecialRenderer");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getSpecialRenderer();
     }
 
     @Test
@@ -598,6 +687,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestIsIndirectlypowered");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.isIndirectlyPowered();
     }
 
     @Test
@@ -605,6 +696,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestHasSpecialRenderer");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.hasSpecialRenderer();
     }
 
     @Test
@@ -612,13 +705,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestNewTile");
         world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testGetBlockType()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestGetBlockType");
-        world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.newTile();
     }
 
     @Test
@@ -626,6 +714,14 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetSubBlocks");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        List<ItemStack> list = new ArrayList();
+        tile.getSubBlocks(Item.getItemFromBlock(block), block.getCreativeTabToDisplayOn(), list);
+        for (ItemStack stack : list)
+        {
+            assertTrue(stack != null);
+            assertTrue(stack.getItem() != null);
+        }
     }
 
     @Test
@@ -633,13 +729,10 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestTopos");
         world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testToVectorWorld()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestToVectorWorld");
-        world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        Pos pos = tile.toPos();
+        Pos pos2 = new Pos(tile.x(), tile.y(), tile.z());
+        assertTrue("Pos " + pos + " does not equal " + pos2, pos.equals(pos2));
     }
 
     @Test
@@ -647,6 +740,14 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetDrops");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        List<ItemStack> items = tile.getDrops(0, 0);
+        for (ItemStack stack : items)
+        {
+            assertTrue(stack != null);
+            assertTrue(stack.getItem() != null);
+            //TODO check for creative mod only items
+        }
     }
 
     @Test
@@ -654,20 +755,26 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestOnWorldJoin");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.onWorldJoin();
     }
 
     @Test
-    public void testOnplaced()
+    public void testOnPlaced()
     {
         FakeWorld world = FakeWorld.newWorld("TestOnplaced");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.onPlaced(player, new ItemStack(block));
     }
 
     @Test
-    public void testOnpostplaced()
+    public void testOnPostplaced()
     {
         FakeWorld world = FakeWorld.newWorld("TestOnpostplaced");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.onPostPlaced(0);
     }
 
     @Test
@@ -675,20 +782,14 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestOnRemove");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.onRemove(block, 0);
     }
 
     @Test
     public void testGetTileBlock()
     {
-        FakeWorld world = FakeWorld.newWorld("TestGetTileBlock");
-        world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testWriteToNBT()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestWriteToNBT");
-        world.setBlock(0, 0, 0, block);
+        assertTrue(block.staticTile.getTileBlock() == block);
     }
 
     @Test
@@ -696,6 +797,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestOpenGui");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.openGui(player, 0, Engine.instance);
     }
 
     @Test
@@ -703,6 +806,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestOnAdded");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.onAdded();
     }
 
     @Test
@@ -710,6 +815,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestToItemStack");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        ItemStack stack = tile.toItemStack();
     }
 
     @Test
@@ -717,6 +824,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestOnCollide");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.onCollide(player);
     }
 
     @Test
@@ -724,20 +833,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetAccess");
         world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testToVector3()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestToVector3");
-        world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testReadFromNBT()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestReadFromNBT");
-        world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        assertTrue(tile.getAccess() == world);
     }
 
     @Test
@@ -745,6 +842,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestSetAccess");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.setAccess(world);
     }
 
     @Test
@@ -752,6 +851,14 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetpickBlock");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+        {
+            for (int i = 0; i < 256; i++)
+            {
+                tile.getPickBlock(new MovingObjectPosition(0, 0, 0, dir.ordinal(), getNextClick(dir, i).toVec3(), true));
+            }
+        }
     }
 
     @Test
@@ -759,6 +866,12 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestToLocation");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        Location loc = tile.toLocation();
+        assertTrue(loc.world == world);
+        assertTrue(loc.xi() == tile.xCoord);
+        assertTrue(loc.yi() == tile.yCoord);
+        assertTrue(loc.zi() == tile.zCoord);
     }
 
     @Test
@@ -766,6 +879,9 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestOnRegistered");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.onRegistered();
+
     }
 
     @Test
@@ -773,6 +889,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestBlockUpdate");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.blockUpdate();
     }
 
     @Test
@@ -780,6 +898,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestFirstTick");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.firstTick();
     }
 
     @Test
@@ -787,6 +907,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetBlockColor");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getBlockColor();
     }
 
     @Test
@@ -794,6 +916,27 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetSideIcon");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.registerIcons(new SudoIconReg());
+        try
+        {
+            Method method = Tile.class.getDeclaredMethod("getSideIcon", Integer.TYPE, Integer.TYPE);
+            method.setAccessible(true);
+            for (int i = 0; i < 6; i++)
+            {
+                method.invoke(tile, 0, i);
+            }
+        } catch (NoSuchMethodException e)
+        {
+            fail("Could not find method getTextureName");
+        } catch (InvocationTargetException e)
+        {
+            e.printStackTrace();
+            fail("Failed to invoke method getTextureName");
+        } catch (IllegalAccessException e)
+        {
+            fail("Couldn't access method getTextureName");
+        }
     }
 
     @Test
@@ -801,6 +944,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetOwnerID");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getOwnerID();
     }
 
     @Test
@@ -808,6 +953,22 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestDistance");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+        {
+            Pos pos = new Pos(0.5).add(dir);
+            Pos center = tile.toPos();
+            double distance = tile.distance(pos.x(), pos.y(), pos.z());
+            assertTrue("Distance = " + distance + "  Pos = " + pos + "  Center = " + center, Math.abs(distance - 1) <= 0.01);
+
+            player.setLocationAndAngles(pos.x(), pos.y(), pos.z(), 0, 0);
+            distance = tile.distance(player);
+            assertTrue("Distance = " + distance + "  Pos = " + pos + "  Center = " + center, Math.abs(distance - 1) <= 0.01);
+
+            distance = tile.distance(pos);
+            assertTrue("Distance = " + distance + "  Pos = " + pos + "  Center = " + center, Math.abs(distance - 1) <= 0.01);
+        }
     }
 
     @Test
@@ -815,6 +976,23 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestScheduleTick");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        try
+        {
+            Method method = Tile.class.getDeclaredMethod("scheduleTick", Integer.TYPE);
+            method.setAccessible(true);
+            method.invoke(tile, 0);
+        } catch (NoSuchMethodException e)
+        {
+            fail("Could not find method scheduleTick");
+        } catch (InvocationTargetException e)
+        {
+            e.printStackTrace();
+            fail("Failed to invoke method scheduleTick");
+        } catch (IllegalAccessException e)
+        {
+            fail("Couldn't access method scheduleTick");
+        }
     }
 
     @Test
@@ -822,13 +1000,9 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetSaveData");
         world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testRenderDynamic()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestRenderDynamic");
-        world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        NBTTagCompound tag = tile.getSaveData();
+        assertTrue(tag != null && !tag.hasNoTags());
     }
 
     @Test
@@ -836,6 +1010,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestIsClient");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.isClient();
     }
 
     @Test
@@ -843,6 +1019,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestSetOwner");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.setOwner(player);
     }
 
     @Test
@@ -850,6 +1028,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestSetMeta");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.setMeta(10);
     }
 
     @Test
@@ -857,6 +1037,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestRegisterIcons");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.registerIcons(new SudoIconReg());
     }
 
     @Test
@@ -864,6 +1046,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestSetOwnerID");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.setOwnerID(player.getGameProfile().getId());
     }
 
     @Test
@@ -871,6 +1055,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetDescpacket");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getDescPacket();
     }
 
     @Test
@@ -878,6 +1064,23 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestUpdateLight");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        try
+        {
+            Method method = Tile.class.getDeclaredMethod("updateLight");
+            method.setAccessible(true);
+            method.invoke(tile);
+        } catch (NoSuchMethodException e)
+        {
+            fail("Could not find method updateLight");
+        } catch (InvocationTargetException e)
+        {
+            e.printStackTrace();
+            fail("Failed to invoke method updateLight");
+        } catch (IllegalAccessException e)
+        {
+            fail("Couldn't access method updateLight");
+        }
     }
 
     @Test
@@ -885,6 +1088,12 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetIcon");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.registerIcons(new SudoIconReg());
+        tile.getIcon();
+        tile.getIcon(1);
+        tile.getIcon(0, 0);
+        tile.getIcon(tile.name);
     }
 
     @Test
@@ -892,6 +1101,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestOnFillRain");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.onFillRain();
     }
 
     @Test
@@ -899,6 +1110,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetOwnerName");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getOwnerName();
     }
 
     @Test
@@ -906,13 +1119,23 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestMarkUpdate");
         world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testGetTopIcon()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestGetTopIcon");
-        world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        try
+        {
+            Method method = Tile.class.getDeclaredMethod("markUpdate");
+            method.setAccessible(true);
+            method.invoke(tile);
+        } catch (NoSuchMethodException e)
+        {
+            fail("Could not find method markUpdate");
+        } catch (InvocationTargetException e)
+        {
+            e.printStackTrace();
+            fail("Failed to invoke method markUpdate");
+        } catch (IllegalAccessException e)
+        {
+            fail("Couldn't access method markUpdate");
+        }
     }
 
     @Test
@@ -920,6 +1143,23 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestMarkRender");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        try
+        {
+            Method method = Tile.class.getDeclaredMethod("markRender");
+            method.setAccessible(true);
+            method.invoke(tile);
+        } catch (NoSuchMethodException e)
+        {
+            fail("Could not find method markRender");
+        } catch (InvocationTargetException e)
+        {
+            e.printStackTrace();
+            fail("Failed to invoke method markRender");
+        } catch (IllegalAccessException e)
+        {
+            fail("Couldn't access method markRender");
+        }
     }
 
     @Test
@@ -927,6 +1167,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestIsServer");
         world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.isServer();
     }
 
     @Test
@@ -934,13 +1176,8 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestGetLightValue");
         world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testGetBottomIcon()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestGetBottomIcon");
-        world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.getLightValue();
     }
 
     @Test
@@ -948,13 +1185,11 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestIsSolid");
         world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testRenderStatic()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestRenderStatic");
-        world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        for (int i = 0; i < 6; i++)
+        {
+            tile.isSolid(i);
+        }
     }
 
     @Test
@@ -962,12 +1197,7 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         FakeWorld world = FakeWorld.newWorld("TestTickRate");
         world.setBlock(0, 0, 0, block);
-    }
-
-    @Test
-    public void testGetMetadata()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestGetMetadata");
-        world.setBlock(0, 0, 0, block);
+        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
+        tile.tickRate();
     }
 }
