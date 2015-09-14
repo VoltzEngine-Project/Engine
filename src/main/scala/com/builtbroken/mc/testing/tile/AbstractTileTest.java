@@ -1091,8 +1091,11 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
         Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
         tile.registerIcons(new SudoIconReg());
         tile.getIcon();
-        tile.getIcon(1);
-        tile.getIcon(0, 0);
+        for (int i = 0; i < 6; i++)
+        {
+            tile.getIcon(i);
+            tile.getIcon(i, 0);
+        }
         tile.getIcon(tile.name);
     }
 
