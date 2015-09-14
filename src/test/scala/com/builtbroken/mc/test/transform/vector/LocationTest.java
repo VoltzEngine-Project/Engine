@@ -4,9 +4,8 @@ import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
-
-import junit.framework.Assert;
 import net.minecraft.world.World;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
