@@ -13,13 +13,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
+/** Test for {@link Location}
  * Created by robert on 4/25/2015.
  */
 @RunWith(VoltzTestRunner.class)
 public class LocationTest extends AbstractTest
 {
-
     @Test
     public void testEquals()
     {
