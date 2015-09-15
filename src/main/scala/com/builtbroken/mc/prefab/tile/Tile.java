@@ -379,9 +379,9 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
      */
     public Block getBlockType()
     {
-        if (access != null)
+        if (getAccess() != null)
         {
-            Block b = access.getBlock(xi(), yi(), zi());
+            Block b = getAccess().getBlock(xi(), yi(), zi());
             if (b == null)
             {
                 return block;
