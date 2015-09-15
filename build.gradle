@@ -23,7 +23,6 @@ plugins {
   id "com.github.johnrengelman.shadow" version "1.2.2"
 }
 
-
 apply from: 'https://raw.githubusercontent.com/BuiltBrokenModding/BuiltBrokenScripts/buildScripts/index.gradle'
 apply plugin: 'forge'
 apply plugin: 'curseforge'
@@ -66,7 +65,6 @@ processResources {
 		// replace version and MCVersion
 	}
     
-
 	// copy everything else, thats not text
 	from(sourceSets.main.resources.srcDirs) {
 		exclude '**/*.info'
