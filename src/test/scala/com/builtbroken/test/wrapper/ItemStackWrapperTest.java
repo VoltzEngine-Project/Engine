@@ -1,4 +1,4 @@
-package com.builtbroken.mc.test.wrapper;
+package com.builtbroken.test.wrapper;
 
 import com.builtbroken.mc.lib.helper.MathUtility;
 import com.builtbroken.mc.prefab.items.ItemStackWrapper;

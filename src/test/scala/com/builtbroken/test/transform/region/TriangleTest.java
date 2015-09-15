@@ -1,4 +1,4 @@
-package com.builtbroken.mc.test.transform.region;
+package com.builtbroken.test.transform.region;
 
 import com.builtbroken.mc.lib.transform.vector.Point;
 import junit.framework.TestCase;

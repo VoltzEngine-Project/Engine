@@ -1,4 +1,4 @@
-package com.builtbroken.mc.test.prefab.energy;
+package com.builtbroken.test.prefab.energy;
 
 import com.builtbroken.mc.lib.mod.compat.rf.RFEnergyHandler;
 import com.builtbroken.mc.testing.junit.AbstractTest;

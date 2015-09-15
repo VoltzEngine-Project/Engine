@@ -1,4 +1,4 @@
-package com.builtbroken.mc.test.prefab.energy;
+package com.builtbroken.test.prefab.energy;
 
 import com.builtbroken.mc.prefab.energy.EnergyBuffer;
 import com.builtbroken.mc.testing.junit.AbstractTest;
