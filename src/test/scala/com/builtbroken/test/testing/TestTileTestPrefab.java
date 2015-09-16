@@ -1,13 +1,9 @@
 package com.builtbroken.test.testing;
 
-import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
-import com.builtbroken.mc.testing.junit.ModRegistry;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import com.builtbroken.mc.testing.tile.AbstractTileTest;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.tileentity.TileEntity;
 import org.junit.runner.RunWith;
 
 /**
@@ -15,16 +11,11 @@ import org.junit.runner.RunWith;
  * Created by robert on 1/6/2015.
  */
 @RunWith(VoltzTestRunner.class)
-public class TestTileTestPrefab extends AbstractTileTest<TestTileTestPrefab.TileTestTest, BlockTile>
+public class TestTileTestPrefab extends AbstractTileTest<TestTileTestPrefab.TileTestTest>
 {
-    public TestTileTestPrefab()
+    public TestTileTestPrefab() throws InstantiationException, IllegalAccessException
     {
-        this.tileClazz = TileTestTest.class;
-        Tile tile = new TileTestTest();
-        BlockTile block = new BlockTile(tile, "TestTileTestPrefab", CreativeTabs.tabAllSearch);
-        tile.setBlock(block);
-        this.block = ModRegistry.registerBlock(block, "TestTileTest");
-        TileEntity.addMapping(tileClazz, "TestTileTestPrefab");
+        super("TestTileTest", TileTestTest.class);
     }
 
     @Override

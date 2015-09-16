@@ -2,18 +2,22 @@ package com.builtbroken.mc.testing.tile;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketTile;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
+import com.builtbroken.mc.testing.junit.ModRegistry;
 import com.builtbroken.mc.testing.junit.icons.SudoIconReg;
 import com.builtbroken.mc.testing.junit.server.FakeDedicatedServer;
 import com.builtbroken.mc.testing.junit.testers.TestPlayer;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
 import com.builtbroken.mc.testing.junit.world.FakeWorldServer;
 import com.mojang.authlib.GameProfile;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,7 +38,7 @@ import java.util.List;
  * prefab for testing Tile objects. Tries to
  * Created by Dark on 9/11/2015.
  */
-public class AbstractTileTest<T extends Tile, B extends BlockTile> extends AbstractTileEntityTest<T, B>
+public class AbstractTileTest<T extends Tile> extends AbstractTileEntityTest<T, BlockTile>
 {
     //These are only used for testing player interaction, if you only need a world create a new FakeWorld
     /** MC server instance for the entire class file to use */
@@ -43,15 +47,18 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     protected FakeWorldServer world;
     /** Tester that has not choice in what to test, test between tests but not deleted. Make sure to cleanup non-vanilla data between tests */
     protected TestPlayer player;
+    /** Places a block at zero zero zero automatically of meta data value 0 */
+    protected boolean autoPlaceBlock = false;
 
-    public AbstractTileTest()
+    public AbstractTileTest(String name, Class<T> clazz) throws IllegalAccessException, InstantiationException
     {
-
-    }
-
-    public AbstractTileTest(B block, String name, Class<T> tileClazz)
-    {
-        super(block, name, tileClazz);
+        name = LanguageUtility.capitalizeFirst(name);
+        this.tileClazz = clazz;
+        Tile tile = clazz.newInstance();
+        BlockTile block = new BlockTile(tile, "Block" + name, CreativeTabs.tabAllSearch);
+        tile.setBlock(block);
+        this.block = ModRegistry.registerBlock(block, "Block" + name);
+        TileEntity.addMapping(tileClazz, "Tile" + name);
     }
 
     @Override
@@ -68,13 +75,23 @@ public class AbstractTileTest<T extends Tile, B extends BlockTile> extends Abstr
     {
         super.setUpForTest(name);
         player.reset();
+        world.setBlock(0, 0, 0, block);
+    }
+
+    @Override
+    public void tearDownForTest(String name)
+    {
+        super.tearDownForTest(name);
+        world.setBlockToAir(0, 0, 0);
+        world.tick();
+        assertTrue("Block at [0,0,0] should be air after test is finished", world.getBlock(0, 0, 0) == Blocks.air);
     }
 
     @Test
     public void testCoverage()
     {
         Method[] methods = Tile.class.getMethods();
-        assertTrue("There are " + methods.length + " but should be ", methods.length == 139);
+        assertTrue("There are " + methods.length + " but should be 139", methods.length == 139);
     }
 
     @Test
