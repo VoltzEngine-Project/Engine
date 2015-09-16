@@ -1,4 +1,4 @@
-package com.builtbroken.mc.test.prefab.energy
+package com.builtbroken.test.prefab.energy
 
 import com.builtbroken.mc.api.energy.IEnergyBuffer
 import com.builtbroken.mc.lib.mod.compat.rf.TEnergyHandler

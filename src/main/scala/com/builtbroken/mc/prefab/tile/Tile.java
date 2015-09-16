@@ -377,23 +377,30 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     /**
      * Block object that goes to this tile
      */
+    @Override
     public Block getBlockType()
     {
-        if (access != null)
+        if (getAccess() != null && block == null)
         {
-            Block b = access.getBlock(xi(), yi(), zi());
-            if (b == null)
+            Block b = getAccess().getBlock(xi(), yi(), zi());
+            if (b instanceof BlockTile)
             {
-                return block;
+                block = (BlockTile) b;
             }
-            return b;
+            else
+            {
+                //This should never happen but just in case... it is handled to prevent world crashes
+                Engine.error("Block at tile location " + toLocation() + " is not an instance of BlockTile. Destroying block " + b + " to prevent errors.");
+                invalidate();
+                world().setBlockToAir(xi(), yi(), zi());
+            }
         }
         return block;
     }
 
     public BlockTile getTileBlock()
     {
-        return block;
+        return (BlockTile)getBlockType();
     }
 
     /**
@@ -502,11 +509,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
      */
     public IBlockAccess getAccess()
     {
-        if (world() != null)
-        {
-            return world();
-        }
-        return access;
+        return world() != null ? world() : access;
     }
 
     @Deprecated
@@ -648,7 +651,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     //==========================
     public void notifyBlocksOfNeighborChange()
     {
-        world().notifyBlocksOfNeighborChange(xi(), yi(), zi(), block);
+        world().notifyBlocksOfNeighborChange(xi(), yi(), zi(), getBlockType());
     }
 
     protected void markRender()

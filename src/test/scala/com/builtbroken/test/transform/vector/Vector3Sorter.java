@@ -1,4 +1,4 @@
-package com.builtbroken.mc.test.transform.vector;
+package com.builtbroken.test.transform.vector;
 
 import junit.framework.TestCase;
 import com.builtbroken.mc.lib.transform.sorting.Vector3DistanceComparator;

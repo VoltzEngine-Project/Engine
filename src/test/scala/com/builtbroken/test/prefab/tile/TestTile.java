@@ -1,4 +1,4 @@
-package com.builtbroken.mc.test.prefab.tile;
+package com.builtbroken.test.prefab.tile;
 
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;

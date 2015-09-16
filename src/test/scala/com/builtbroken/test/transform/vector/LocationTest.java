@@ -1,4 +1,4 @@
-package com.builtbroken.mc.test.transform.vector;
+package com.builtbroken.test.transform.vector;
 
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.testing.junit.AbstractTest;
