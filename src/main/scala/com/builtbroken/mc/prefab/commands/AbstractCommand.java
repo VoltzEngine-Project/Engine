@@ -173,6 +173,41 @@ public class AbstractCommand extends CommandBase
     }
 
     /**
+     * Lists all players currently online using the player object
+     *
+     * @return list of players
+     */
+    protected final List<EntityPlayer> getPlayersOnline()
+    {
+        return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+    }
+
+    /**
+     * Adds a chat message to all players in the list
+     *
+     * @param players - list of players, shouldn't be null, can be empty, not checked
+     * @param msg     - msg to display the the user, shouldn't be null or empty, not checked
+     */
+    protected void addChatToPlayers(List<EntityPlayer> players, String msg)
+    {
+        ChatComponentText chatComponentText = new ChatComponentText(msg);
+        for (EntityPlayer player : players)
+        {
+            player.addChatComponentMessage(chatComponentText);
+        }
+    }
+
+    /**
+     * Adds a chat message to all players currently logged in
+     *
+     * @param msg - msg to display the the user, shouldn't be null or empty, not checked
+     */
+    protected void addChatToAllPlayers(String msg)
+    {
+        addChatToPlayers(getPlayersOnline(), msg);
+    }
+
+    /**
      * Turns the args array back into a string for commands
      * that have mutli-word values
      *
@@ -234,16 +269,6 @@ public class AbstractCommand extends CommandBase
             return a;
         }
         return new String[0];
-    }
-
-    /**
-     * Lists all players currently online using the player object
-     *
-     * @return list of players
-     */
-    protected final List<EntityPlayer> getPlayersOnline()
-    {
-        return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
     }
 
     @Override
