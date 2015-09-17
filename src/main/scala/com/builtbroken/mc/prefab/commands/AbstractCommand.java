@@ -136,7 +136,7 @@ public class AbstractCommand extends CommandBase
      *
      * @return list of players
      */
-    protected List<EntityPlayer> getPlayersOnline()
+    protected final List<EntityPlayer> getPlayersOnline()
     {
         return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
     }
