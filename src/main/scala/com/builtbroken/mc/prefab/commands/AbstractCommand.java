@@ -36,7 +36,7 @@ public class AbstractCommand extends CommandBase
     @Override
     public void processCommand(ICommandSender sender, String[] args)
     {
-        if(!handleHelp(sender, args))
+        if (!handleHelp(sender, args))
         {
             if (!(sender instanceof EntityPlayer && handleEntityPlayerCommand((EntityPlayer) sender, args)) && !handleConsoleCommand(sender, args))
             {
@@ -60,8 +60,7 @@ public class AbstractCommand extends CommandBase
                 try
                 {
                     p = Integer.parseInt(args[1]);
-                }
-                catch (NumberFormatException e)
+                } catch (NumberFormatException e)
                 {
 
                 }
@@ -87,8 +86,8 @@ public class AbstractCommand extends CommandBase
         List<String> items = new ArrayList();
         getHelpOutput(sender, items);
 
-        sender.addChatMessage(new ChatComponentText("====== help -" + getPrefix().replace("/", "") + "- page " + p +" ======"));
-        for(int i = 0 + (p * 10); i < 10 + (p * 10) && i < items.size(); i++)
+        sender.addChatMessage(new ChatComponentText("====== help -" + getPrefix().replace("/", "") + "- page " + p + " ======"));
+        for (int i = 0 + (p * 10); i < 10 + (p * 10) && i < items.size(); i++)
         {
             sender.addChatMessage(new ChatComponentText(getPrefix() + " " + items.get(i)));
         }
@@ -117,7 +116,7 @@ public class AbstractCommand extends CommandBase
 
     protected String[] removeFront(String[] array, int count)
     {
-        if(count  <= 0)
+        if (count <= 0)
             count = 1;
 
         if (array.length > count)
@@ -130,6 +129,16 @@ public class AbstractCommand extends CommandBase
             return a;
         }
         return new String[0];
+    }
+
+    /**
+     * Lists all players currently online using the player object
+     *
+     * @return list of players
+     */
+    protected List<EntityPlayer> getPlayersOnline()
+    {
+        return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
     }
 
     @Override
