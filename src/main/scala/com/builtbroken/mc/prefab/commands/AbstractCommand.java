@@ -109,6 +109,35 @@ public class AbstractCommand extends CommandBase
         return MinecraftServer.getServer().getAllUsernames();
     }
 
+    /**
+     * Turns the args array back into a string for commands
+     * that have mutli-word values
+     *
+     * @param args - array of strings, can't be null, values can't be null, not checked
+     * @return string combining the array
+     */
+    public final String combine(String[] args)
+    {
+        return combine(args, 0, args.length);
+    }
+
+    /**
+     * Turns the args array back into a string for commands
+     * that have mutli-word values
+     *
+     * @param args - array of strings, can't be null, values can't be null, not checked
+     * @return string combining the array
+     */
+    public final String combine(String[] args, int start, int end)
+    {
+        String s = args[start];
+        for (int i = start + 1; i < args.length && i < end; i++)
+        {
+            s += " " + args[i];
+        }
+        return s.trim();
+    }
+
     protected String[] removeFront(String[] array)
     {
         return removeFront(array, 1);
