@@ -1,7 +1,7 @@
 [{
-    "modid": "BuiltBrokenLib",
-    "name": "Built Broken Modding Lib",
-    "description": "Built Broken Modding Lib is a basic library and engine use to create mods.",
+    "modid": "VoltzEngine",
+    "name": "VoltzEngine",
+    "description": "VoltzEngine is a basic library and engine use to create mods.",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "http://builtbroken.com/",
