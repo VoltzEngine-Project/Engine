@@ -1,6 +1,9 @@
 package com.builtbroken.mc.core;
 
+import com.google.common.eventbus.EventBus;
+
 import cpw.mods.fml.common.DummyModContainer;
+import cpw.mods.fml.common.LoadController;
 import cpw.mods.fml.common.ModMetadata;
 
 /**
@@ -24,5 +27,11 @@ public class EnginePreloader extends DummyModContainer
     public EnginePreloader()
     {
         super(md);
+    }
+
+    @Override
+    public boolean registerBus(EventBus bus, LoadController controller)
+    {
+        return true;
     }
 }

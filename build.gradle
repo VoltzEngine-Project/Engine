@@ -93,6 +93,10 @@ jar {
             "FMLCorePlugin": "com.builtbroken.mc.core.EngineCoreMod",
             "FMLAT": "VE_at.cfg"
     )
+	manifest {
+		attributes 'FMLCorePlugin': 'com.builtbroken.mc.core.EngineCoreMod',
+				'FMLCorePluginContainsFMLMod': 'true'
+	}
 }
 
 //configure([compileJava, compileTestJava]) {
