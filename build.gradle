@@ -31,7 +31,6 @@ apply plugin: 'jacoco'
 apply from: 'https://raw.githubusercontent.com/BuiltBrokenModding/BuiltBrokenScripts/buildScripts/scripts/forge/deps.gradle'
 
 println "Current Minecraft version = " + minecraft.apiVersion
-println archivesBaseName
 
 def currentJvm = org.gradle.internal.jvm.Jvm.current()
 println "Current Java version = " + currentJvm
@@ -40,6 +39,17 @@ javadoc.dependsOn(sourceMainJava)
 javadoc.dependsOn(sourceMainScala)
 
 minecraft {
+    replaceIn "References.java"
+    replace "@MAJOR@", version_major
+    replace "@MINOR@", version_minor
+    replace "@REVIS@", version_revis
+	
+    if (project.hasProperty("bambooBuildNumber")) {
+        replace "@BUILD@", project.bambooBuildNumber
+    }
+    else {
+        replace "@BUILD@", getDate()
+    }
     replaceIn "com/builtbroken/mc/core/deps/DepDownloader.java"
     replace "@bbm_url@", bbm_url
     replace "@CL@", coding_lib
@@ -108,3 +118,9 @@ jacocoTestReport {
 }
 
 file("VoltzEngine.txt").text = version;
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
+}
