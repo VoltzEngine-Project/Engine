@@ -79,7 +79,9 @@ public class ItemSheetMetal extends Item
         /** Wedge or triangle shape equal to half of a plate */
         TRIANGLE("metalSheetTriangle"),
         /** Cone shape made from a triangle plate */
-        CONE("metalCone"),
+        CONE_MICRO("metalCone_micro"),
+        /** Cone shape made from 3 triangle plates */
+        CONE_SMALL("metalCone_small"),
         /** Slightly curved */
         CURVED_1("metalSheet_curved1"),
         /** Slightly more curved */
@@ -95,7 +97,11 @@ public class ItemSheetMetal extends Item
         /** Average tube shape about 3/4 of a meter diameter */
         CYLINDER("metalSheet_cylinder"),
         /** Small bolt that is pressed together to bind sheet metal together */
-        RIVETS("rivets");
+        RIVETS("rivets"),
+        /** Triangle cut in half */
+        FIN_MICRO("metalSheet_microFin"),
+        /** Triangle cut in half */
+        FIN_SMALL("metalSheet_smallFin");
 
         @SideOnly(Side.CLIENT)
         public IIcon icon;

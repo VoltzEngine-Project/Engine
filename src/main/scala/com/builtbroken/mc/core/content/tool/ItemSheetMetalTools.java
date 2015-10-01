@@ -59,8 +59,13 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.THIRD.stack(3), "I", "C", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'C', getShears()));
 
             //Cone creations
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.TRIANGLE.stack(2), "I ", " C", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'C', getShears()));
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CONE.stack(), "I ", " H", 'I', ItemSheetMetal.SheetMetal.CONE.stack(), 'H', getHammer()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.TRIANGLE.stack(4), "I ", " C", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CONE_MICRO.stack(), "I ", " H", 'I', ItemSheetMetal.SheetMetal.TRIANGLE.stack(), 'H', getHammer()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CONE_SMALL.stack(), " I ", "IHI", " I ", 'I', ItemSheetMetal.SheetMetal.TRIANGLE.stack(), 'H', getHammer()));
+
+            //Fine creation
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.FIN_MICRO.stack(2), "C", "I", 'I', ItemSheetMetal.SheetMetal.TRIANGLE.stack(), 'C', getShears()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.FIN_SMALL.stack(2), "I ", " C", 'I', ItemSheetMetal.SheetMetal.HALF.stack(), 'C', getShears()));
 
             //Curved plates
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CURVED_1.stack(), "IH", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'H', getHammer()));
