@@ -6,10 +6,13 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -27,6 +30,19 @@ public class BlockHeatedStone extends Block
         this.setHardness(1.5f);
         this.setResistance(10.0f);
         this.setBlockName(References.PREFIX + "hotrock");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister p_149651_1_)
+    {
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side, int meta)
+    {
+        return Blocks.stone.getIcon(side, meta);
     }
 
     @Override
@@ -49,7 +65,7 @@ public class BlockHeatedStone extends Block
     @Override
     public void updateTick(World world, int x, int y, int z, Random rand)
     {
-        if(world.getBlockMetadata(x, y, z) > 0)
+        if (world.getBlockMetadata(x, y, z) > 0)
         {
             world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) - 1, 3);
             world.scheduleBlockUpdate(x, y, z, this, getTicksForMeta(world.getBlockMetadata(x, y, z)));
@@ -60,9 +76,50 @@ public class BlockHeatedStone extends Block
         }
     }
 
-    @Override @SideOnly(Side.CLIENT)
+    @Override
+    @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, List items)
     {
         items.add(new ItemStack(item, 1, 15));
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int colorMultiplier(IBlockAccess world, int x, int y, int z)
+    {
+        int meta = world.getBlockMetadata(x, y, z);
+        switch (meta)
+        {
+            case 0:
+                return Integer.parseInt("FFE6E6", 16);
+            case 1:
+                return Integer.parseInt("FFCCCC", 16);
+            case 2:
+                return Integer.parseInt("FFB2B2", 16);
+            case 3:
+                return Integer.parseInt("FF9999", 16);
+            case 4:
+                return Integer.parseInt("FF8080", 16);
+            case 5:
+                return Integer.parseInt("FF6666", 16);
+            case 6:
+                return Integer.parseInt("FF4D4D", 16);
+            case 7:
+                return Integer.parseInt("FF3333", 16);
+            case 8:
+                return Integer.parseInt("FF1919", 16);
+            case 9:
+                return Integer.parseInt("FF0000", 16);
+            case 10:
+                return Integer.parseInt("E60000", 16);
+            case 11:
+                return Integer.parseInt("B20000", 16);
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+                return Integer.parseInt("990000", 16);
+        }
+        return 16777215;
     }
 }
