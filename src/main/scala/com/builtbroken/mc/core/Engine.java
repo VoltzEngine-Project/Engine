@@ -112,7 +112,7 @@ public class Engine
     public static Block multiBlock;
 
     public static Item itemWrench;
-    public static Item itemSheetMetalTools;
+    public static ItemSheetMetalTools itemSheetMetalTools;
     public static Item itemSheetMetal;
     public static Item instaHole;
     public static Item itemSelectionTool;
