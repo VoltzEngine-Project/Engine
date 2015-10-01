@@ -326,7 +326,7 @@ public class Engine
         //FMLCommonHandler.instance().bus().register(UpdateTicker$.MODULE$.world());
 
         //Late registration of content
-        if (getConfig().getBoolean("Content", "LoadOres", oresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
+        if (getConfig().getBoolean("LoadOres", "Content",  oresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
         {
             ore = contentRegistry.newBlock(References.ID + "StoneOre", new BlockOre("stone"), ItemBlockOre.class);
             Ores.registerSet(ore, getConfig());
@@ -340,14 +340,14 @@ public class Engine
             EnumMultiblock.register();
         }
 
-        if (sheetMetalRequested || getConfig().getBoolean("SheetMetalContent", "ForceLoadContent", sheetMetalRequested, "Forces the sheet metal items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves."))
+        if (sheetMetalRequested || getConfig().getBoolean("ForceLoadContent", "SheetMetalContent",  sheetMetalRequested, "Forces the sheet metal items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves."))
         {
             RecipeSorter.register(References.PREFIX + "sheetMetalTools", RecipeSheetMetal.class, SHAPED, "after:minecraft:shaped");
             itemSheetMetalTools = getManager().newItem("veSheetMetalTools", ItemSheetMetalTools.class);
             itemSheetMetal = getManager().newItem("veSheetMetal", ItemSheetMetal.class);
         }
 
-        if (getConfig().getBoolean("Content", "LoadHeatedRocks", heatedRockRequested, "Loads up heated rocks which are used to give explosions an extra short term effect on stone."))
+        if (getConfig().getBoolean("LoadHeatedRocks", "Content",  heatedRockRequested, "Loads up heated rocks which are used to give explosions an extra short term effect on stone."))
         {
             heatedStone = contentRegistry.newBlock("VEHeatedRock", BlockHeatedStone.class, ItemBlockMetadata.class);
             NEIProxy.hideItem(heatedStone);
