@@ -21,6 +21,7 @@ plugins {
   id 'net.saliman.cobertura' version '2.2.5'
   id 'com.github.kt3k.coveralls' version '2.0.1'
   id "com.github.johnrengelman.shadow" version "1.2.2"
+  id "net.franz-becker.gradle-lombok" version "1.3"
 }
 
 apply from: 'https://raw.githubusercontent.com/BuiltBrokenModding/BuiltBrokenScripts/buildScripts/index.gradle'
@@ -83,6 +84,12 @@ if (new File(projectDir, '.git').exists()) {
     gitHash = repo.log().find().abbreviatedId
 }
 
+lombok { 
+    // optional: values below are the defaults
+    version = "1.16.4"
+    sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
+}
+
 jar {
     manifest.mainAttributes(
             "Built-By": System.getProperty('user.name'),
@@ -98,6 +105,8 @@ jar {
 				'FMLCorePluginContainsFMLMod': 'true'
 	}
 }
+
+
 
 //configure([compileJava, compileTestJava]) {
 //    options.compilerArgs += ['-Xlint:all', '-Xlint:-path']
