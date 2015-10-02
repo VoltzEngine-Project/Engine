@@ -24,12 +24,12 @@ import com.builtbroken.mc.core.handler.SaveManager;
 import com.builtbroken.mc.core.handler.SelectionHandler;
 import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.netty.PacketManager;
-import com.builtbroken.mc.core.proxy.NEIProxy;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.lib.mod.compat.Mods;
+import com.builtbroken.mc.lib.mod.compat.nei.NEIProxy;
 import com.builtbroken.mc.lib.mod.compat.oc.OCProxy;
 import com.builtbroken.mc.lib.mod.compat.rf.RFLoader;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
@@ -44,6 +44,7 @@ import com.builtbroken.mc.prefab.recipe.cast.MRHandlerCast;
 import com.builtbroken.mc.prefab.recipe.fluid.MRHandlerFluidStack;
 import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;
 import com.builtbroken.mc.prefab.recipe.item.MRSmelterHandler;
+import com.builtbroken.mc.prefab.recipe.item.RecipeTool;
 import com.builtbroken.mc.prefab.recipe.item.sheetmetal.RecipeSheetMetal;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.mc.prefab.tile.multiblock.BlockMultiblock;
@@ -245,6 +246,9 @@ public class Engine
         MachineRecipeType.FLUID_SMELTER.setHandler(new MRHandlerFluidStack(MachineRecipeType.FLUID_SMELTER.INTERNAL_NAME));
         MachineRecipeType.FLUID_CAST.setHandler(new MRHandlerCast());
 
+        RecipeSorter.register(References.PREFIX + "sheetMetalTools", RecipeSheetMetal.class, SHAPED, "after:minecraft:shaped");
+        RecipeSorter.register(References.PREFIX + "Tools", RecipeTool.class, SHAPED, "after:minecraft:shaped");
+
         loader.applyModule(getProxy());
         loader.applyModule(packetHandler);
         loader.applyModule(CrusherRecipeLoad.class);
@@ -342,7 +346,6 @@ public class Engine
 
         if (sheetMetalRequested || getConfig().getBoolean("ForceLoadContent", "SheetMetalContent",  sheetMetalRequested, "Forces the sheet metal items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves."))
         {
-            RecipeSorter.register(References.PREFIX + "sheetMetalTools", RecipeSheetMetal.class, SHAPED, "after:minecraft:shaped");
             itemSheetMetalTools = getManager().newItem("veSheetMetalTools", ItemSheetMetalTools.class);
             itemSheetMetal = getManager().newItem("veSheetMetal", ItemSheetMetal.class);
         }

@@ -28,15 +28,4 @@ public class RecipeSheetMetal extends RecipeShapedOre
         }
         return super.toItemStack(in);
     }
-
-    @Override
-    public boolean itemMatches(ItemStack target, ItemStack input, boolean strict)
-    {
-        if (!strict && target != null && target.getItem() instanceof ItemSheetMetalTools && input != null && input.getItem() instanceof ItemSheetMetalTools)
-        {
-            return ((ItemSheetMetalTools) target.getItem()).getType(target).equals(((ItemSheetMetalTools) input.getItem()).getType(input));
-        }
-        return super.itemMatches(target, input, strict);
-    }
-
 }

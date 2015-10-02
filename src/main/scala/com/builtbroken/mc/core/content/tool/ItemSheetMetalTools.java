@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.content.tool;
 
+import com.builtbroken.mc.api.items.IItemTool;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
@@ -17,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.List;
 
@@ -24,7 +26,7 @@ import java.util.List;
  * Basic tool used in hand crafting recipes for sheet metal
  * Created by Dark on 8/25/2015.
  */
-public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryInit
+public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryInit, IItemTool
 {
     public static boolean ENABLE_TOOL_DAMAGE = true;
     public static int MAX_SHEARS_DAMAGE = 600;
@@ -50,7 +52,7 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
         {
             //Plate creation
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.FULL.stack(), "IH", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'H', getHammer()));
-            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.RIVETS.stack(16), "H","I", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'H', getHammer()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.RIVETS.stack(16), "H", "I", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'H', getHammer()));
 
             //Sheet metal reduction recipes
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.HALF.stack(2), "IC", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'C', getShears()));
@@ -79,8 +81,8 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CYLINDER.stack(), "IRI", 'I', ItemSheetMetal.SheetMetal.HALF_CYLINDER.stack(), 'R', ItemSheetMetal.SheetMetal.RIVETS.stack()));
         }
 
-        GameRegistry.addRecipe(new RecipeSheetMetal(getHammer(), "III", " I ", " S ", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
-        GameRegistry.addRecipe(new RecipeSheetMetal(getShears(), "I I", " I ", "S S", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
+        GameRegistry.addRecipe(new ShapedOreRecipe(getHammer(), "III", " I ", " S ", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
+        GameRegistry.addRecipe(new ShapedOreRecipe(getShears(), "I I", " I ", "S S", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
     }
 
     @Override
@@ -100,11 +102,12 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     @Override
     public int getMaxDamage(ItemStack stack)
     {
-        String type = getType(stack);
+        String type = getToolType(stack);
         if ("hammer".equals(type))
         {
             return MAX_HAMMER_DAMAGE;
-        } else if ("shears".equals(type))
+        }
+        else if ("shears".equals(type))
         {
             return MAX_SHEARS_DAMAGE;
         }
@@ -121,7 +124,7 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
 
     public String getUnlocalizedName(ItemStack stack)
     {
-        String type = getType(stack);
+        String type = getToolType(stack);
         if (type != null && !type.isEmpty())
         {
             return super.getUnlocalizedName() + "." + type;
@@ -150,14 +153,14 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     public static ItemStack getTool(String type)
     {
         ItemStack stack = new ItemStack(Engine.itemSheetMetalTools);
-        ((ItemSheetMetalTools) Engine.itemSheetMetalTools).setType(stack, type);
+        Engine.itemSheetMetalTools.setToolType(stack, type);
         return stack;
     }
 
     @Override
     public IIcon getIcon(ItemStack stack, int pass)
     {
-        String type = getType(stack);
+        String type = getToolType(stack);
         if (type != null && !type.isEmpty())
         {
             switch (type)
@@ -184,12 +187,20 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
         return 1;
     }
 
-    public String getType(ItemStack stack)
+    @Override
+    public String getToolType(ItemStack stack)
     {
         return stack.getTagCompound() != null && stack.getTagCompound().hasKey("toolType") ? stack.getTagCompound().getString("toolType") : null;
     }
 
-    public void setType(ItemStack stack, String type)
+    @Override
+    public String getToolCategory(ItemStack stack)
+    {
+        return "sheetmetal";
+    }
+
+    @Override
+    public void setToolType(ItemStack stack, String type)
     {
         if (stack.getTagCompound() == null)
             stack.setTagCompound(new NBTTagCompound());
