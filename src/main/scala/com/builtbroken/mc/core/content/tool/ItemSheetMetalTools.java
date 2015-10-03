@@ -47,7 +47,7 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     @Override
     public void onPostInit()
     {
-
+        //TODO add sheet metal bucket(and/or recipe if we decided to make a metal bucket with different sub materials)
         if (Engine.itemSheetMetal != null)
         {
             //Plate creation
