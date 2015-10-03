@@ -331,7 +331,7 @@ public class Engine
         //FMLCommonHandler.instance().bus().register(UpdateTicker$.MODULE$.world());
 
         //Late registration of content
-        if (getConfig().getBoolean("LoadOres", "Content", oresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
+        if ((getConfig().hasKey("Content", "LoadOres") || oresRequested) && getConfig().getBoolean("LoadOres", "Content", oresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
         {
             ore = contentRegistry.newBlock(References.ID + "StoneOre", new BlockOre("stone"), ItemBlockOre.class);
             Ores.registerSet(ore, getConfig());
@@ -366,7 +366,7 @@ public class Engine
         long start = System.nanoTime();
         for (DefinedGenItems genItem : DefinedGenItems.values())
         {
-            if ((getConfig().hasKey(genItem.name, "ForceLoadContent") || genItem.isRequested()) && getConfig().getBoolean(genItem.name, "ForceLoadContent", genItem.isRequested(), "Forces the items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.") || genItem.isRequested())
+            if ((getConfig().hasKey("ForceLoadContent", genItem.name) || genItem.isRequested()) && getConfig().getBoolean(genItem.name, "ForceLoadContent", genItem.isRequested(), "Forces the items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.") || genItem.isRequested())
             {
                 logger.info("\tGenerating " + genItem.name);
                 genItem.item = getManager().newItem("ve" + LanguageUtility.capitalizeFirst(genItem.name), new ItemGenMaterial(genItem));
