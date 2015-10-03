@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core;
 
+import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
@@ -303,11 +304,11 @@ public class Engine
         /**
          * Multiblock Handling
          */
-        if (getConfig().get("Content", "LoadInstantHole", runningAsDev).getBoolean(runningAsDev))
+        if (getConfig().get("Content", "LoadInstantHole", runningAsDev, "This is a developer tool for checking if ores generated correctly. It creates a chunk sized hole in the ground replacing stone with air, and air with glass. Never enable or give this to normal users as it can be used for greifing.").getBoolean(runningAsDev))
             instaHole = contentRegistry.newItem("ve.instanthole", new ItemInstaHole());
-        if (getConfig().get("Content", "LoadScrewDriver", true).getBoolean(true))
+        if (getConfig().get("Content", "LoadScrewDriver", true, "Basic tool for configuring, rotating, and picking up machines.").getBoolean(true))
             itemWrench = getManager().newItem("ve.screwdriver", new ItemScrewdriver());
-        if (getConfig().get("Content", "LoadSelectionTool", true).getBoolean(true))
+        if (getConfig().get("Content", "LoadSelectionTool", true, "Admin tool for selecting areas on the ground for world manipulation or other tasks.").getBoolean(true))
             itemSelectionTool = getManager().newItem("ve.selectiontool", new ItemSelectionWand());
 
         loader.preInit();
@@ -330,7 +331,7 @@ public class Engine
         //FMLCommonHandler.instance().bus().register(UpdateTicker$.MODULE$.world());
 
         //Late registration of content
-        if (getConfig().getBoolean("LoadOres", "Content",  oresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
+        if (getConfig().getBoolean("LoadOres", "Content", oresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
         {
             ore = contentRegistry.newBlock(References.ID + "StoneOre", new BlockOre("stone"), ItemBlockOre.class);
             Ores.registerSet(ore, getConfig());
@@ -344,13 +345,13 @@ public class Engine
             EnumMultiblock.register();
         }
 
-        if (sheetMetalRequested || getConfig().getBoolean("ForceLoadContent", "SheetMetalContent",  sheetMetalRequested, "Forces the sheet metal items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves."))
+        if (sheetMetalRequested || getConfig().getBoolean("SheetMetal", "ForceLoadContent", sheetMetalRequested, "Forces the sheet metal items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves."))
         {
             itemSheetMetalTools = getManager().newItem("veSheetMetalTools", ItemSheetMetalTools.class);
             itemSheetMetal = getManager().newItem("veSheetMetal", ItemSheetMetal.class);
         }
 
-        if (getConfig().getBoolean("LoadHeatedRocks", "Content",  heatedRockRequested, "Loads up heated rocks which are used to give explosions an extra short term effect on stone."))
+        if (getConfig().getBoolean("LoadHeatedRocks", "Content", heatedRockRequested, "Loads up heated rocks which are used to give explosions an extra short term effect on stone."))
         {
             heatedStone = contentRegistry.newBlock("VEHeatedRock", BlockHeatedStone.class, ItemBlockMetadata.class);
             NEIProxy.hideItem(heatedStone);
@@ -365,24 +366,24 @@ public class Engine
         long start = System.nanoTime();
         for (DefinedGenItems genItem : DefinedGenItems.values())
         {
-            if (genItem.isRequested())
+            if ((getConfig().hasKey(genItem.name, "ForceLoadContent") || genItem.isRequested()) && getConfig().getBoolean(genItem.name, "ForceLoadContent", genItem.isRequested(), "Forces the items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.") || genItem.isRequested())
             {
                 logger.info("\tGenerating " + genItem.name);
                 genItem.item = getManager().newItem("ve" + LanguageUtility.capitalizeFirst(genItem.name), new ItemGenMaterial(genItem));
                 for (GenMaterial mat : GenMaterial.values())
                 {
-                    if (mat == GenMaterial.UNKNOWN)
+                    if (mat == GenMaterial.UNKNOWN || genItem.ignoreMaterials.contains(mat))
                     {
-                        NEIProxy.hideItem(new ItemStack(genItem.item, 1, GenMaterial.UNKNOWN.ordinal()));
+                        NEIProxy.hideItem(new ItemStack(genItem.item, 1, mat.ordinal()));
                     }
-                    else if (!genItem.ignoreMaterials.contains(mat))
+                    else
                     {
                         OreDictionary.registerOre(genItem.oreDict + LanguageUtility.capitalizeFirst(mat.name().toLowerCase()), genItem.stack(mat));
                     }
                 }
             }
         }
-        logger.info("Done... Took " + (System.nanoTime() - start) + "ns");
+        logger.info("Done... Took " + StringHelpers.formatTimeDifference(start, System.nanoTime()));
 
         loader.init();
         getManager().fireInit();
