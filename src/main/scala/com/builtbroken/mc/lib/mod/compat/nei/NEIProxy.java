@@ -40,6 +40,8 @@ public class NEIProxy extends AbstractLoadable
     {
         if (!lock)
         {
+            //Only run once as the list is static
+            lock = true;
             try
             {
                 Class nei_api_class = Class.forName("codechicken.nei.api.API");
@@ -73,11 +75,9 @@ public class NEIProxy extends AbstractLoadable
             } catch (ClassNotFoundException e)
             {
                 Engine.instance.logger().error("Failed to locate NEI API class", e);
-                lock = true;
             } catch (NoSuchMethodException e)
             {
                 Engine.instance.logger().error("Failed to locate NEI hideItem method", e);
-                lock = true;
             } catch (InvocationTargetException e)
             {
                 Engine.instance.logger().error("Failed to invoke NEI hideItem method", e);
