@@ -12,12 +12,21 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Extended version of {@link ShapedOreRecipe}
+ *
+ * @author DarkCow
+ * @version Oct 2, 2015
+ */
 public class RecipeShapedOre extends ShapedOreRecipe
 {
     private static final int MAX_CRAFT_GRID_WIDTH = 3;
     private static final int MAX_CRAFT_GRID_HEIGHT = 3;
-    int w = 0;
-    int h = 0;
+
+    /** Width of the recipe */
+    protected int w = 0;
+    /** Height of the recipe */
+    protected int h = 0;
 
     public RecipeShapedOre(Block result, Object... recipe) { this(new ItemStack(result), recipe); }
 
@@ -29,6 +38,7 @@ public class RecipeShapedOre extends ShapedOreRecipe
         getV();
     }
 
+    /** Pulls a few values from a super class that are marked as protected with no accessors */
     private void getV()
     {
         try
@@ -46,6 +56,12 @@ public class RecipeShapedOre extends ShapedOreRecipe
         }
     }
 
+    /**
+     * Converts an object into an itemstack
+     *
+     * @param in - object
+     * @return new ItemStack instance or null if it couldn't be converted
+     */
     protected ItemStack toItemStack(Object in)
     {
         if (in instanceof ItemStack)
@@ -74,7 +90,7 @@ public class RecipeShapedOre extends ShapedOreRecipe
         {
             for (int y = 0; y <= MAX_CRAFT_GRID_HEIGHT - h; ++y)
             {
-                if (checkMatch(inv, x, y, false))
+                if (doMatch(inv, x, y, false))
                 {
                     return true;
                 }
@@ -84,8 +100,17 @@ public class RecipeShapedOre extends ShapedOreRecipe
         return false;
     }
 
+    /**
+     * Handles the actually matching of the recipe regardless of the location in the GUI
+     *
+     * @param inv    - inventory the slots are in
+     * @param startX - start slot
+     * @param startY - start slot
+     * @param mirror - process for mirrored
+     * @return true if the recipe matches
+     */
     @SuppressWarnings("unchecked")
-    private boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror)
+    protected boolean doMatch(InventoryCrafting inv, int startX, int startY, boolean mirror)
     {
         for (int x = 0; x < MAX_CRAFT_GRID_WIDTH; x++)
         {
@@ -141,7 +166,16 @@ public class RecipeShapedOre extends ShapedOreRecipe
         return true;
     }
 
-    public boolean itemMatches(ItemStack target, ItemStack input, boolean strict)
+    /**
+     * Checks if the two items match each other based on some conditions. Override to change the conditions
+     * based on the target or input itemstack
+     *
+     * @param target - item we are looking/testing against
+     * @param input  - item that is passed in as the input
+     * @param strict - is the metadata value for the recipe strict
+     * @return true if the items match all conditions
+     */
+    protected boolean itemMatches(ItemStack target, ItemStack input, boolean strict)
     {
         if (input == null && target != null || input != null && target == null)
         {
