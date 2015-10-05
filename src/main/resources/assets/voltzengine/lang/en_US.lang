@@ -19,6 +19,14 @@ tile.voltzengine:oreAluminium.name=Bauxite Ore
 tile.voltzengine:oreMagnesite.name=Magnesite Ore
 tile.voltzengine:oreUranium.name=Uranium Ore
 tile.voltzengine:orePlatinum.name=Platinum Ore
+tile.voltzengine:oreAmazonite.name=Amazonite Ore
+tile.voltzengine:oreSmokeyquartz.name=Smokey Quartz Ore
+tile.voltzengine:oreOnyxblack.name=Black Banded Onyx Ore
+tile.voltzengine:oreOnyxred.name=Red Banded Onyx Ore
+tile.voltzengine:oreGarnetgreen.name=Green Garnet Ore
+tile.voltzengine:oreGarnetred.name=Red Garnet Ore
+tile.voltzengine:oreGarnetorange.name=Orange Garnet Ore
+tile.voltzengine:oreGarnetyellow.name=Yellow Garnet Ore
 
 ## Dust
 item.voltzengine:dustCopper.name=Copper Dust

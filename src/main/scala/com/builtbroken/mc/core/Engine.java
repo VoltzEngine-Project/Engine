@@ -61,6 +61,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.client.resources.Language;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.creativetab.CreativeTabs;
@@ -77,6 +78,7 @@ import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -110,6 +112,7 @@ public class Engine
     private Configuration config;
 
     public static Block ore = null;
+    public static Block gemOre = null;
     public static Block heatedStone;
     public static Block multiBlock;
 
@@ -121,7 +124,8 @@ public class Engine
     public static Item itemCraftingParts;
 
     //Interal trigger booleans
-    private static boolean oresRequested = false;
+    private static boolean metallicOresRequested = false;
+    private static boolean gemOresRequested = false;
     private static boolean sheetMetalRequested = false;
     private static boolean multiBlockRequested = false;
     public static boolean heatedRockRequested = false;
@@ -152,8 +156,15 @@ public class Engine
     public static void requestOres()
     {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
-            throw new RuntimeException("Ores can only be requested in Pre-Init phase");
-        oresRequested = true;
+            throw new RuntimeException("Ores can only be requested in Pre-Init phase!");
+        metallicOresRequested = true;
+    }
+
+    public static void requestGemOres()
+    {
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+            throw new RuntimeException("Ores can only be requested in Pre-Init phase!");
+        gemOresRequested = true;
     }
 
     /**
@@ -331,10 +342,16 @@ public class Engine
         //FMLCommonHandler.instance().bus().register(UpdateTicker$.MODULE$.world());
 
         //Late registration of content
-        if ((getConfig().hasKey("Content", "LoadOres") || oresRequested) && getConfig().getBoolean("LoadOres", "Content", oresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
+        if ((getConfig().hasKey("Content", "LoadOres") || metallicOresRequested) && getConfig().getBoolean("LoadOres", "Content", metallicOresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
         {
             ore = contentRegistry.newBlock(References.ID + "StoneOre", new BlockOre("stone"), ItemBlockOre.class);
-            Ores.registerSet(ore, getConfig());
+            MetallicOres.registerSet(ore, getConfig());
+        }
+
+        if ((getConfig().hasKey("Content", "LoadGemOres") || gemOresRequested) && getConfig().getBoolean("LoadGemOres", "Content", gemOresRequested, "Loads up Gem Ores."))
+        {
+            gemOre = contentRegistry.newBlock(References.ID + "GemOre", new BlockGemOre("gem"), ItemBlockGemOre.class);
+            GemOres.registerSet(ore, getConfig());
         }
 
         if (multiBlockRequested)
@@ -404,9 +421,21 @@ public class Engine
         loader.postInit();
         getManager().firePostInit();
 
-        if (oresRequested)
+        if (metallicOresRequested)
         {
-            for (Ores ore : Ores.values())
+            for (MetallicOres ore : MetallicOres.values())
+            {
+                List<ItemStack> ingots = OreDictionary.getOres("ingot" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase()));
+                if (ingots != null && !ingots.isEmpty())
+                {
+                    GameRegistry.addSmelting(ore.stack(), ingots.get(0), 0.01f);
+                }
+            }
+        }
+
+        if (gemOresRequested)
+        {
+            for (GemOres ore : GemOres.values())
             {
                 List<ItemStack> ingots = OreDictionary.getOres("ingot" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase()));
                 if (ingots != null && !ingots.isEmpty())
