@@ -46,6 +46,16 @@ item.voltzengine:dustStone.name=Stone Dust
 item.voltzengine:dustWood.name=Wood Dust
 item.voltzengine:dustUranium.name=Uranium Dust
 
+## Gem
+item.voltzengine:gemAmazonite.name=Amazonite Gem
+item.voltzengine:gemSmokeyquartz.name=Smokey Quartz Gem
+item.voltzengine:gemOnyxblack.name=Black Onyx Gem
+item.voltzengine:gemOnyxred.name=Red Onyx Gem
+item.voltzengine:gemGarnetgreen.name=Green Garnet Gem
+item.voltzengine:gemGarnetorange.name=Orange Garnet Gem
+item.voltzengine:gemGarnetred.name=Red Garnet Gem
+item.voltzengine:gemGarnetyellow.name=Yellow Garnet Gem
+
 ## Impure Dust
 item.voltzengine:dustImpureCopper.name=Impure Copper Dust
 item.voltzengine:dustImpureTin.name=Impure Tin Dust

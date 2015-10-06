@@ -8,6 +8,8 @@ import com.builtbroken.mc.core.content.ItemInstaHole;
 import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
 import com.builtbroken.mc.core.content.parts.ItemParts;
 import com.builtbroken.mc.core.content.resources.*;
+import com.builtbroken.mc.core.content.resources.items.Gems;
+import com.builtbroken.mc.core.content.resources.items.ItemGems;
 import com.builtbroken.mc.core.content.resources.items.ItemGenMaterial;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
 import com.builtbroken.mc.core.content.resources.load.CastRecipeLoader;
@@ -122,6 +124,7 @@ public class Engine
     public static Item instaHole;
     public static Item itemSelectionTool;
     public static Item itemCraftingParts;
+    public static Item gem = null;
 
     //Interal trigger booleans
     private static boolean metallicOresRequested = false;
@@ -351,7 +354,9 @@ public class Engine
         if ((getConfig().hasKey("Content", "LoadGemOres") || gemOresRequested) && getConfig().getBoolean("LoadGemOres", "Content", gemOresRequested, "Loads up Gem Ores."))
         {
             gemOre = contentRegistry.newBlock(References.ID + "GemOre", new BlockGemOre("gem"), ItemBlockGemOre.class);
-            GemOres.registerSet(ore, getConfig());
+            GemOres.registerSet(gemOre, getConfig());
+            gem = contentRegistry.newItem(References.ID + "Gem", ItemGems.class);
+            Gems.registerSet(gem, getConfig());
         }
 
         if (multiBlockRequested)

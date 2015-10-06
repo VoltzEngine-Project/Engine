@@ -1,8 +1,10 @@
 package com.builtbroken.mc.core.content.resources;
 
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.core.content.resources.items.Gems;
 
 import java.util.List;
+import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -58,6 +60,34 @@ public class BlockGemOre extends Block
         for(GemOres ore : GemOres.values())
         {
             list.add(new ItemStack(item, 1, ore.ordinal()));
+        }
+    }
+
+    @Override
+    public Item getItemDropped(int meta, Random random, int fortune)
+    {
+        switch (meta)
+        {
+            case 1:
+                return null;
+            case 2:
+                return null;
+            case 3:
+                return null;
+            case 4:
+                return null;
+            case 5:
+                return null;
+            case 6:
+                return null;
+            case 7:
+                return null;
+            case 8:
+                return null;
+            case 9:
+                return null;
+            default:
+                return null;
         }
     }
 }
