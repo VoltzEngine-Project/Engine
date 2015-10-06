@@ -13,7 +13,7 @@ import net.minecraft.util.StatCollector;
  */
 public abstract class AbstractDamageSource extends DamageSource
 {
-    /** Soure of the damage( can be an entity, tile, or the world itself) */
+    /** Source of the damage (can be an entity, tile, or the world itself) */
 	protected Object damageSource;
 
 	public AbstractDamageSource(String damageType)

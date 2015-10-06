@@ -12,7 +12,7 @@ import net.minecraftforge.oredict.OreDictionary;
  * List of ores that generate in Voltz Engine
  * Created by robert on 1/11/2015.
  */
-public enum Ores
+public enum MetallicOres
 {
     TIN(15, 60, 5, 15),
     COPPER(15, 60, 5, 20),
@@ -33,7 +33,7 @@ public enum Ores
     private Block block;
     private String oreDictName;
 
-    Ores(int min, int max, int amountPerBranch, int amountPerChunk)
+    MetallicOres(int min, int max, int amountPerBranch, int amountPerChunk)
     {
         this.minY = min;
         this.maxY = max;
@@ -53,7 +53,7 @@ public enum Ores
 
     public static void registerSet(Block block, Configuration config)
     {
-        for (Ores ore : values())
+        for (MetallicOres ore : MetallicOres.values())
         {
             if (config.getBoolean("" + LanguageUtility.capitalizeFirst(ore.name()) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
             {
