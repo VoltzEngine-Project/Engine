@@ -8,14 +8,14 @@ cache:
     - .gradle
 sudo: false
 notifications:
- irc:
-  channels:
+  irc:
+    channels:
    - "irc.esper.net#BBM-bots"
+    skip_join: true
   template:
       - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message} "
       - "Change view : %{compare_url}"
       - "Build details : %{build_url} : duration : %{duration}"
-
 install: true
 script:
   - ./gradlew build javadoc coveralls jacocoTestReport -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 -S -i --refresh-dependencies
