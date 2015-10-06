@@ -10,7 +10,7 @@ sudo: false
 notifications:
   irc:
     channels:
-   - "irc.esper.net#BBM-bots"
+      - "irc.esper.net#BBM-bots"
     skip_join: true
   template:
       - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message} "
