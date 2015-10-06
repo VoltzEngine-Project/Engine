@@ -433,18 +433,6 @@ public class Engine
             }
         }
 
-        if (gemOresRequested)
-        {
-            for (GemOres ore : GemOres.values())
-            {
-                List<ItemStack> ingots = OreDictionary.getOres("ingot" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase()));
-                if (ingots != null && !ingots.isEmpty())
-                {
-                    GameRegistry.addSmelting(ore.stack(), ingots.get(0), 0.01f);
-                }
-            }
-        }
-
         //Save configs as this is our last chance
         heatDataConfig.save();
         explosiveConfig.save();
