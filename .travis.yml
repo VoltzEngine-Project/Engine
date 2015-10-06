@@ -12,7 +12,9 @@ notifications:
   channels:
    - "irc.esper.net#BBM-bots"
   template:
-   - "%{build_number} (%{branch} - %{commit}: %{commit_message} : %{author}): %{message} (%{build_url})"
+      - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
+      - "Change view : %{compare_url}"
+      - "Build details : %{build_url}"
 install: true
 script:
   - ./gradlew build javadoc coveralls jacocoTestReport -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 -S -i --refresh-dependencies
