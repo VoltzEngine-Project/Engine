@@ -33,6 +33,7 @@ apply from: 'https://raw.githubusercontent.com/BuiltBrokenModding/BuiltBrokenScr
 
 println "Current Minecraft version = " + minecraft.apiVersion
 
+def currentJvm = org.gradle.internal.jvm.Jvm.current()
 println "Current Java version = " + currentJvm
 
 javadoc.dependsOn(sourceMainJava)
