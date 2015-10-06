@@ -2,6 +2,7 @@ package com.builtbroken.mc.core.content.resources;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.content.resources.items.Gems;
+import com.builtbroken.mc.core.content.resources.items.ItemGems;
 
 import java.util.List;
 import java.util.Random;
@@ -69,23 +70,23 @@ public class BlockGemOre extends Block
         switch (meta)
         {
             case 1:
-                return null;
+                return ItemGems.getItemById(1);
             case 2:
-                return null;
+                return ItemGems.getItemById(2);
             case 3:
-                return null;
+                return ItemGems.getItemById(3);
             case 4:
-                return null;
+                return ItemGems.getItemById(4);
             case 5:
-                return null;
+                return ItemGems.getItemById(5);
             case 6:
-                return null;
+                return ItemGems.getItemById(6);
             case 7:
-                return null;
+                return ItemGems.getItemById(7);
             case 8:
-                return null;
+                return ItemGems.getItemById(8);
             case 9:
-                return null;
+                return ItemGems.getItemById(9);
             default:
                 return null;
         }
