@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.items;
 
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -85,22 +86,7 @@ public class ItemStackWrapper
                 size = itemStack.stackSize == i.stackSize;
             if (nbt_compare)
             {
-                if (itemStack.getTagCompound() == null && i.getTagCompound() == null)
-                {
-                    nbt = true;
-                }
-                else if (itemStack.getTagCompound() != null && i.getTagCompound() == null)
-                {
-                    nbt = false;
-                }
-                else if (itemStack.getTagCompound() == null && i.getTagCompound() != null)
-                {
-                    nbt = false;
-                } //TODO this may need to be manually done
-                else if (itemStack.getTagCompound().equals(i.getTagCompound()))
-                {
-                    nbt = true;
-                }
+                nbt = InventoryUtility.doesStackNBTMatch(itemStack, i);
             }
         }
         else if (!meta_compare && !nbt_compare && !stack_size)
