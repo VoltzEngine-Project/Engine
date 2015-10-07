@@ -45,6 +45,12 @@ public class BlockMultiblock extends BlockContainer
     }
 
     @Override
+    public boolean isOpaqueCube()
+    {
+        return false;
+    }
+
+    @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
     {
         TileEntity tile = world.getTileEntity(x, y, z);

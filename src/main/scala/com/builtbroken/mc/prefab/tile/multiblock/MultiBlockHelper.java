@@ -5,6 +5,7 @@ import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.tileentity.TileEntity;
@@ -30,7 +31,7 @@ public class MultiBlockHelper
      */
     public static void buildMultiBlock(World world, IMultiTileHost tile)
     {
-        buildMultiBlock(world, tile, false);
+        buildMultiBlock(world, tile, false, false);
     }
 
     /**
@@ -41,6 +42,19 @@ public class MultiBlockHelper
      * @param validate - if true will check if a tile already exists at location rather than placing a new one
      */
     public static void buildMultiBlock(World world, IMultiTileHost tile, boolean validate)
+    {
+        buildMultiBlock(world, tile, validate, false);
+    }
+
+    /**
+     * Builds a multi block structure using data from the provided tile
+     *
+     * @param world    - world
+     * @param tile     - multiblock host
+     * @param validate - if true will check if a tile already exists at location rather than placing a new one
+     * @param offset   - offset the map position by the tile center
+     */
+    public static void buildMultiBlock(World world, IMultiTileHost tile, boolean validate, boolean offset)
     {
         Map<IPos3D, String> map = tile.getLayoutOfMultiBlock();
         if (map != null && !map.isEmpty())
@@ -81,10 +95,18 @@ public class MultiBlockHelper
                 EnumMultiblock enumType = EnumMultiblock.get(type);
                 if (enumType != null)
                 {
+                    //Moves the position based on the location of the host
+                    if (offset)
+                    {
+                        location = new Location((TileEntity) tile).add(location);
+                    }
                     TileEntity ent = world.getTileEntity((int) location.x(), (int) location.y(), (int) location.z());
                     if (!validate || ent == null || enumType.clazz != ent.getClass())
                     {
-                        world.setBlock((int) location.x(), (int) location.y(), (int) location.z(), Engine.multiBlock, enumType.ordinal(), 2);
+                        if (!world.setBlock((int) location.x(), (int) location.y(), (int) location.z(), Engine.multiBlock, enumType.ordinal(), 3))
+                        {
+                            logger.error("MultiBlockHelper: type[" + i + ", " + type + "] error block was not placed ");
+                        }
                         ent = world.getTileEntity((int) location.x(), (int) location.y(), (int) location.z());
                     }
 
@@ -92,6 +114,10 @@ public class MultiBlockHelper
                     {
                         ((IMultiTile) ent).setHost(tile);
                         setData(dataString, (IMultiTile) ent);
+                    }
+                    else
+                    {
+                        logger.error("MultiBlockHelper: type[" + i + ", " + type + "] tile at location is not IMultiTile, " + ent);
                     }
                 }
                 else
@@ -113,7 +139,7 @@ public class MultiBlockHelper
         {
             String[] data;
             if (dataString.contains("|"))
-                data = dataString.split("|");
+                data = dataString.split(";");
             else
                 data = new String[]{dataString};
             for (String d : data)
@@ -163,6 +189,10 @@ public class MultiBlockHelper
                             logger.error("Tile[" + ent + "] failed to parse bounds data " + d + " as it missing '{', '}, or ',");
                         }
                     }
+                    else
+                    {
+                        logger.error("Tile[" + ent + "] didn't parse " + d);
+                    }
                 }
                 else
                 {
@@ -185,6 +215,11 @@ public class MultiBlockHelper
 
     public static void destroyMultiBlockStructure(IMultiTileHost host, boolean doDrops)
     {
+        destroyMultiBlockStructure(host, doDrops, false);
+    }
+
+    public static void destroyMultiBlockStructure(IMultiTileHost host, boolean doDrops, boolean offset)
+    {
         if (host instanceof TileEntity)
         {
             HashMap<IPos3D, String> map = host.getLayoutOfMultiBlock();
@@ -199,6 +234,10 @@ public class MultiBlockHelper
                 for (Map.Entry<IPos3D, String> entry : map.entrySet())
                 {
                     Pos pos = new Pos(entry.getKey());
+                    if (offset)
+                    {
+                        pos = pos.add(center);
+                    }
                     TileEntity tile = pos.getTileEntity(world);
                     if (tile instanceof IMultiTile)
                         ((IMultiTile) tile).setHost(null);
