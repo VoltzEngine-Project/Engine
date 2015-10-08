@@ -7,6 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
+import java.util.Collection;
+import java.util.HashMap;
+
 /**
  * Created by robert on 5/1/2015.
  */
@@ -17,10 +20,8 @@ public class BasicInventory implements ISave, IInventory
      */
     protected int slots;
 
-    /**
-     * Items contained in this inv
-     */
-    protected ItemStack[] containedItems;
+    /** Map of the inventory */
+    protected HashMap<Integer, ItemStack> inventoryMap = new HashMap();
 
     public BasicInventory(int slots)
     {
@@ -33,21 +34,17 @@ public class BasicInventory implements ISave, IInventory
         return slots;
     }
 
-    public ItemStack[] getContainedItems()
+    public Collection<ItemStack> getContainedItems()
     {
-        if (this.containedItems == null)
-        {
-            this.containedItems = new ItemStack[this.getSizeInventory()];
-        }
-        return this.containedItems;
+        return this.inventoryMap.values();
     }
 
     @Override
     public ItemStack getStackInSlot(int slot)
     {
-        if (slot < getContainedItems().length)
+        if (slot >= 0 && slot < getSizeInventory())
         {
-            return this.getContainedItems()[slot];
+            return this.inventoryMap.containsKey(slot) ? this.inventoryMap.get(slot) : null;
         }
         return null;
     }
@@ -55,24 +52,24 @@ public class BasicInventory implements ISave, IInventory
     @Override
     public ItemStack decrStackSize(int slot, int ammount)
     {
-        if (this.getContainedItems()[slot] != null)
+        if (this.getStackInSlot(slot) != null)
         {
             ItemStack var3;
 
-            if (this.getContainedItems()[slot].stackSize <= ammount)
+            if (this.getStackInSlot(slot).stackSize <= ammount)
             {
-                var3 = this.getContainedItems()[slot];
-                getContainedItems()[slot] = null;
+                var3 = this.getStackInSlot(slot);
+                setInventorySlotContents(slot, null);
                 markDirty();
                 return var3;
             }
             else
             {
-                var3 = this.getContainedItems()[slot].splitStack(ammount);
+                var3 = this.getStackInSlot(slot).splitStack(ammount);
 
-                if (this.getContainedItems()[slot].stackSize == 0)
+                if (this.getStackInSlot(slot).stackSize == 0)
                 {
-                    this.getContainedItems()[slot] = null;
+                    setInventorySlotContents(slot, null);
                 }
 
                 markDirty();
@@ -86,12 +83,12 @@ public class BasicInventory implements ISave, IInventory
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int par1)
+    public ItemStack getStackInSlotOnClosing(int slot)
     {
-        if (this.getContainedItems()[par1] != null)
+        if (this.getStackInSlot(slot) != null)
         {
-            ItemStack var2 = this.getContainedItems()[par1];
-            this.getContainedItems()[par1] = null;
+            ItemStack var2 = this.getStackInSlot(slot);
+            this.inventoryMap.remove(slot);
             return var2;
         }
         else
@@ -104,7 +101,7 @@ public class BasicInventory implements ISave, IInventory
     public void setInventorySlotContents(int slot, ItemStack insertStack)
     {
         ItemStack pre_stack = getStackInSlot(slot) != null ? getStackInSlot(slot).copy() : null;
-        this.getContainedItems()[slot] = insertStack;
+        setInventorySlotContents(slot, insertStack);
 
         if (!InventoryUtility.stacksMatchExact(pre_stack, getStackInSlot(slot)))
         {
@@ -163,7 +160,7 @@ public class BasicInventory implements ISave, IInventory
     @Override
     public void load(NBTTagCompound nbt)
     {
-        this.containedItems = null;
+        this.inventoryMap.clear();
 
         NBTTagList nbtList = nbt.getTagList("Items", 10);
 

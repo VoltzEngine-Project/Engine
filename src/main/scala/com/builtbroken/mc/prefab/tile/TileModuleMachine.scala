@@ -10,6 +10,7 @@ import net.minecraft.block.material.Material
 class TileModuleMachine(name: String, material: Material) extends TileModuleMachineBase(name, material) with TSidedInvProvider
 {
   def addInventoryModule(size: Int): Boolean = {
+    super.readFromNBT()
     if (inventory_module == null) {
       inventory_module = new TileModuleInventory(this, size)
       modules.add(inventory_module)

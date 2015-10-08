@@ -25,7 +25,6 @@ public class TileModuleMachineBase extends TileMachine implements ITileModulePro
 {
     protected List<ITileModule> modules = new ArrayList();
 
-
     public TileModuleMachineBase(String name, Material material)
     {
         super(name, material);

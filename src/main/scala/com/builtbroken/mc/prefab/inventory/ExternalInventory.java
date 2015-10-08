@@ -92,7 +92,6 @@ public class ExternalInventory extends BasicInventory implements IExternalInvent
     @Override
     public void clear()
     {
-        this.containedItems = null;
-        this.getContainedItems();
+        this.inventoryMap.clear();
     }
 }
