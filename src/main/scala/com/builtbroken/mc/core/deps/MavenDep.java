@@ -15,10 +15,7 @@ public class MavenDep extends Dep
     final String ext;
     String build_seperator = "b";
 
-    final int major;
-    final int minor;
-    final int revis;
-    final int build;
+    final Version version;
 
     public MavenDep(String mavenRepo, String groupId, String artifactId, String major, String minor, String revis, String build)
     {
@@ -42,11 +39,7 @@ public class MavenDep extends Dep
 
         this.groupID = groupId;
         this.artifactID = artifactId;
-        this.major = major;
-        this.minor = minor;
-        this.revis = revis;
-        this.build = build;
-
+        version = new Version(major, minor, revis, build);
         this.classifier = classifier;
         this.ext = ext;
     }
@@ -58,7 +51,7 @@ public class MavenDep extends Dep
 
     public String version()
     {
-        return major + "." + minor + "." + revis + build_seperator + build;
+        return version.toString();
     }
 
     @Override
@@ -76,20 +69,24 @@ public class MavenDep extends Dep
     @Override
     public boolean isNewerVersion(String fileName)
     {
-        String version = fileName.replace(artifactID + "-", "");
-        int major = Integer.parseInt(version.substring(0, 1));
-        int minor = Integer.parseInt(version.substring(2, 3));
-        int revis = Integer.parseInt(version.substring(4, 5));
-        int build = Integer.parseInt(version.substring(6, version.length() - 1));
-        if (major < this.major)
-            return false;
-        if (minor < this.minor)
-            return false;
-        if (revis < this.revis)
-            return false;
-        if (build <= this.build)
-            return false;
-        return true;
+        return this.version.isNewer(getVersion(fileName));
+    }
+
+    /**
+     * Converts the file name into a version object
+     *
+     * @param fileName - name of the file, including extension
+     * @return version
+     */
+    public Version getVersion(String fileName)
+    {
+        int firstIndex = fileName.indexOf("-");
+        int secondIndex = fileName.indexOf("-", firstIndex);
+        if (secondIndex < 0)
+        {
+            secondIndex = fileName.lastIndexOf(".");
+        }
+        return new Version(fileName.substring(firstIndex, secondIndex));
     }
 
     @Override

@@ -555,7 +555,11 @@ public class InventoryUtility
      */
     public static boolean stacksMatchExact(ItemStack stackA, ItemStack stackB)
     {
-        return stacksMatch(stackA, stackB) && stackA.stackSize == stackB.stackSize;
+        if (stackA != null && stackB != null)
+        {
+            return stackA.isItemEqual(stackB) && doesStackNBTMatch(stackA, stackB) && stackA.stackSize == stackB.stackSize;
+        }
+        return stackA == null && stackB == null;
     }
 
     /**
@@ -567,15 +571,11 @@ public class InventoryUtility
      */
     public static boolean stacksMatch(ItemStack stackA, ItemStack stackB)
     {
-        if (stackA == null && stackB == null)
-        {
-            return true;
-        }
-        else if (stackA != null && stackB != null)
+        if (stackA != null && stackB != null)
         {
             return stackA.isItemEqual(stackB) && doesStackNBTMatch(stackA, stackB);
         }
-        return false;
+        return stackA == null && stackB == null;
     }
 
     /**
