@@ -38,35 +38,38 @@ public class DepDownloader
         {
             //TODO add md5 check to ensure it is the right file and a user didn't rename it for lolz
             File file = new File(dep.getOutputFolderPath(), dep.getFileName());
-            if (!file.exists())
+
+            //TODO add JOption pane to ask user if they want to download missing files
+            boolean found = false;
+            for (File nextFile : v_modsDir.listFiles())
             {
-                //TODO add JOption pane to ask user if they want to download missing files
-                boolean found = false;
-                for (File f : v_modsDir.listFiles())
+                try
                 {
-                    if (f.getName().contains(dep.getGenericFileName()))
+                    //Checks to see if the file name is close enough to what we are looking to check
+                    if (nextFile.getName().contains(dep.getGenericFileName()))
                     {
-                        if (dep.isNewerVersion(f.getName()))
+                        //If file name is the same or is a newer version then we found the file
+                        if (file.getName().equals(file.getName()) || dep.isNewerVersion(nextFile.getName()))
                         {
                             found = true;
                         }
+                        //Keep iterating to remove all old versions of the file
                         else
                         {
-                            try
-                            {
-                                f.delete();
-                            } catch (Exception e)
-                            {
-                                throw new RuntimeException("Failed to delete old versions of " + dep.getGenericFileName() + ". Crashing game to prevent more issues, try deleting the file manually and restarting the game", e);
-                            }
+
+                            nextFile.delete();
+
                         }
                     }
-                }
-                if (!found)
+                } catch (Exception e)
                 {
-                    FileDownloader.downloadDep(dep);
-                    addClasspath(file);
+                    throw new RuntimeException("Failed to parse file " + nextFile.getName() + ". Crashing game to prevent more issues, try deleting the file manually and restarting the game", e);
                 }
+            }
+            if (!found)
+            {
+                FileDownloader.downloadDep(dep);
+                addClasspath(file);
             }
         }
     }

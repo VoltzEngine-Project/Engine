@@ -16,7 +16,10 @@ public class EngineCoreMod implements IFMLLoadingPlugin
     public EngineCoreMod()
     {
         //TODO see if there is a better place to load this as a construct is not designed for downloading
-        DepDownloader.load();
+        if(System.getProperty("development") == null || !System.getProperty("development").equalsIgnoreCase("true"))
+        {
+            DepDownloader.load();
+        }
     }
 
     @Override
