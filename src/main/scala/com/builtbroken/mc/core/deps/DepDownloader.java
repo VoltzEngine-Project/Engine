@@ -1,8 +1,6 @@
 package com.builtbroken.mc.core.deps;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.FMLInjectionData;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import javax.swing.*;
@@ -45,6 +43,7 @@ public class DepDownloader
             //TODO add JOption pane to ask user if they want to download missing files
 
             boolean found = false;
+            File newestFile = null;
             for (File nextFile : v_modsDir.listFiles())
             {
                 try
@@ -53,16 +52,19 @@ public class DepDownloader
                     if (nextFile.getName().contains(dep.getGenericFileName()))
                     {
                         //If file name is the same or is a newer version then we found the file
-                        if (file.getName().equals(file.getName()) || dep.isNewerVersion(nextFile.getName()))
+                        if (nextFile.getName().equals(file.getName()) || dep.isNewerVersion(nextFile.getName()))
                         {
+                            if (newestFile != null)
+                            {
+                                newestFile.delete();
+                            }
+                            newestFile = file;
                             found = true;
                         }
                         //Keep iterating to remove all old versions of the file
                         else
                         {
-
                             nextFile.delete();
-
                         }
                     }
                 } catch (Exception e)
@@ -72,7 +74,8 @@ public class DepDownloader
             }
             if (!found)
             {
-                if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+                Thread thr = Thread.currentThread();
+                if (!thr.getName().equals("Server thread"))
                 {
                     int reply = JOptionPane.showConfirmDialog(null, "Missing required version of " + dep.getGenericFileName() + ". Do you want to download?\nIf you click no the game will close as it will crash without this file.", "Missing dependency", JOptionPane.YES_OPTION);
                     if (reply != JOptionPane.YES_OPTION)
@@ -101,7 +104,8 @@ public class DepDownloader
     public static void load()
     {
         DepDownloader downloader = new DepDownloader();
-        downloader.depsToLoad.add(new MavenDep("@bbm_url@", "@CL@", "@CL-name@", "@CL_maj@", "@CL_min@", "@CL_rev@", "@CL_bu@", "universal"));
+        //downloader.depsToLoad.add(new MavenDep("@bbm_url@", "@CL@", "@CL-name@", "@CL_maj@", "@CL_min@", "@CL_rev@", "@CL_bu@", "universal"));
+        downloader.depsToLoad.add(new MavenDep("http://api.dmodoomsirius.me/", "com/builtbroken/codinglib", "CodingLib", "0", "0", "2", "26", "universal"));
         downloader.start();
     }
 }
