@@ -23,14 +23,20 @@ public class Version
 
     public Version(String version)
     {
-        int firstDot = version.indexOf(".");
-        int secondDot = version.indexOf(".", firstDot + 1);
-        int thirdDot = version.indexOf("b", secondDot + 1);
+        try
+        {
+            int firstDot = version.indexOf(".");
+            int secondDot = version.indexOf(".", firstDot + 1);
+            int thirdDot = version.indexOf("b", secondDot + 1);
 
-        major = Integer.parseInt(version.substring(0, firstDot));
-        minor = Integer.parseInt(version.substring(firstDot + 1, secondDot));
-        revis = Integer.parseInt(version.substring(secondDot + 1, thirdDot));
-        build = Integer.parseInt(version.substring(thirdDot + 1, version.length()));
+            major = Integer.parseInt(version.substring(0, firstDot));
+            minor = Integer.parseInt(version.substring(firstDot + 1, secondDot));
+            revis = Integer.parseInt(version.substring(secondDot + 1, thirdDot));
+            build = Integer.parseInt(version.substring(thirdDot + 1, version.length()));
+        } catch (Exception e)
+        {
+            throw new RuntimeException("Failed to parse version string '" + version + "'", e);
+        }
     }
 
     /**
