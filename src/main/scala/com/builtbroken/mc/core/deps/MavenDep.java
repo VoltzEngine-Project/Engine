@@ -4,42 +4,50 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * File dependency that can be downloaded from a meven location
  * Created by Dark on 7/29/2015.
  */
 public class MavenDep extends Dep
 {
-    final String repoURL;
-    final String groupID;
-    final String artifactID;
-    final String classifier;
-    final String ext;
-    String build_seperator = "b";
+    public final String repoURL;
+    public final String groupID;
+    public final String artifactID;
+    public String classifier;
+    public final String ext;
 
-    final Version version;
+    public final Version version;
 
     public MavenDep(String mavenRepo, String groupId, String artifactId, String major, String minor, String revis, String build)
     {
-        //TODO replace string parsing with something like new Version(major, minor, revis, build) that will auto parse and convert to int
-        this(mavenRepo, groupId, artifactId, Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(revis), Integer.parseInt(build));
+        this(mavenRepo, groupId, artifactId, major, minor, revis, build, "");
+    }
+
+    public MavenDep(String mavenRepo, String groupId, String artifactId, String major, String minor, String revis, String build, String classifier)
+    {
+        this(mavenRepo, groupId, artifactId, Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(revis), Integer.parseInt(build), classifier);
     }
 
     public MavenDep(String mavenRepo, String groupId, String artifactId, int major, int minor, int revis, int build)
     {
-        this(mavenRepo, groupId, artifactId, major, minor, revis, build, "", ".jar");
+        this(mavenRepo, groupId, artifactId, new Version(major, minor, revis, build), "", ".jar");
     }
 
     public MavenDep(String mavenRepo, String groupId, String artifactId, int major, int minor, int revis, int build, String classifier)
     {
-        this(mavenRepo, groupId, artifactId, major, minor, revis, build, classifier, ".jar");
+        this(mavenRepo, groupId, artifactId, new Version(major, minor, revis, build), classifier, ".jar");
     }
 
     public MavenDep(String mavenRepo, String groupId, String artifactId, int major, int minor, int revis, int build, String classifier, String ext)
     {
-        this.repoURL = mavenRepo;
+       this(mavenRepo, groupId, artifactId, new Version(major, minor, revis, build), classifier, ext);
+    }
 
+    public MavenDep(String mavenRepo, String groupId, String artifactId, Version version, String classifier, String ext)
+    {
+        this.repoURL = mavenRepo;
         this.groupID = groupId;
         this.artifactID = artifactId;
-        version = new Version(major, minor, revis, build);
+        this.version = version;
         this.classifier = classifier;
         this.ext = ext;
     }
@@ -85,6 +93,10 @@ public class MavenDep extends Dep
         if (secondIndex < 0)
         {
             secondIndex = fileName.lastIndexOf(".");
+        }
+        else if (classifier == null || classifier.isEmpty())
+        {
+            classifier = fileName.substring(secondIndex + 1, fileName.lastIndexOf("."));
         }
         return new Version(fileName.substring(firstIndex, secondIndex));
     }

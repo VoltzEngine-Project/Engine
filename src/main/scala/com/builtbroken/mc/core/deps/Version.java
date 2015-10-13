@@ -57,4 +57,14 @@ public class Version
     {
         return major + "." + minor + "." + revis + "b" + build;
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof Version)
+        {
+            return ((Version) obj).major == major && ((Version) obj).minor == minor && ((Version) obj).revis == revis && ((Version) obj).build == build;
+        }
+        return false;
+    }
 }
