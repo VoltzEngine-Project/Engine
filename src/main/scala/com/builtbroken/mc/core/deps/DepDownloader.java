@@ -1,8 +1,11 @@
 package com.builtbroken.mc.core.deps;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.FMLInjectionData;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
+import javax.swing.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ public class DepDownloader
             File file = new File(dep.getOutputFolderPath(), dep.getFileName());
 
             //TODO add JOption pane to ask user if they want to download missing files
+
             boolean found = false;
             for (File nextFile : v_modsDir.listFiles())
             {
@@ -68,6 +72,14 @@ public class DepDownloader
             }
             if (!found)
             {
+                if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+                {
+                    int reply = JOptionPane.showConfirmDialog(null, "Missing required version of " + dep.getGenericFileName() + ". Do you want to download?\nIf you click no the game will close as it will crash without this file.", "Missing dependency", JOptionPane.YES_OPTION);
+                    if (reply != JOptionPane.YES_OPTION)
+                    {
+                        return;
+                    }
+                }
                 FileDownloader.downloadDep(dep);
                 addClasspath(file);
             }

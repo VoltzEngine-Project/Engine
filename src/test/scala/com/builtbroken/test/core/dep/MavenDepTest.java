@@ -43,4 +43,17 @@ public class MavenDepTest extends TestCase
             assertEquals(dep.version, new Version(0, 1, 5, 12));
         }
     }
+
+    @Test
+    public void testGetVersion()
+    {
+        //CodingLib-0.0.2b26-universal.jar  CodingLib-0.0.1b12.jar
+        MavenDep dep = new MavenDep("maven", "groupID", "artifactId", 0, 1, 5, 12);
+
+        Version version = dep.getVersion("CodingLib-0.0.2b26-universal.jar");
+        assertEquals(version, new Version(0, 0, 2, 26));
+
+        version = dep.getVersion("CodingLib-0.0.1b12.jar");
+        assertEquals(version, new Version(0, 0, 1, 12));
+    }
 }

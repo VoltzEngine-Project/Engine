@@ -39,7 +39,7 @@ public class MavenDep extends Dep
 
     public MavenDep(String mavenRepo, String groupId, String artifactId, int major, int minor, int revis, int build, String classifier, String ext)
     {
-       this(mavenRepo, groupId, artifactId, new Version(major, minor, revis, build), classifier, ext);
+        this(mavenRepo, groupId, artifactId, new Version(major, minor, revis, build), classifier, ext);
     }
 
     public MavenDep(String mavenRepo, String groupId, String artifactId, Version version, String classifier, String ext)
@@ -88,8 +88,12 @@ public class MavenDep extends Dep
      */
     public Version getVersion(String fileName)
     {
+        if (fileName == null || fileName.isEmpty())
+        {
+            throw new IllegalArgumentException("File name for getVersion(String filename) can not be null or empty");
+        }
         int firstIndex = fileName.indexOf("-");
-        int secondIndex = fileName.indexOf("-", firstIndex);
+        int secondIndex = fileName.indexOf("-", firstIndex + 1);
         if (secondIndex < 0)
         {
             secondIndex = fileName.lastIndexOf(".");
@@ -98,7 +102,7 @@ public class MavenDep extends Dep
         {
             classifier = fileName.substring(secondIndex + 1, fileName.lastIndexOf("."));
         }
-        return new Version(fileName.substring(firstIndex, secondIndex));
+        return new Version(fileName.substring(firstIndex + 1, secondIndex));
     }
 
     @Override

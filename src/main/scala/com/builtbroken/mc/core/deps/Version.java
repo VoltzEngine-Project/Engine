@@ -23,12 +23,22 @@ public class Version
 
     public Version(String version)
     {
+        if (version == null || version.isEmpty())
+        {
+            throw new IllegalArgumentException("Version can't be created with an empty or null string value");
+        }
+
+        int firstDot = version.indexOf(".");
+        int secondDot = version.indexOf(".", firstDot + 1);
+        int thirdDot = version.indexOf("b", secondDot + 1);
+
+        if (firstDot < 0 || secondDot < 0 || thirdDot < 0)
+        {
+            throw new IllegalArgumentException("Invalid version string " + version);
+        }
+
         try
         {
-            int firstDot = version.indexOf(".");
-            int secondDot = version.indexOf(".", firstDot + 1);
-            int thirdDot = version.indexOf("b", secondDot + 1);
-
             major = Integer.parseInt(version.substring(0, firstDot));
             minor = Integer.parseInt(version.substring(firstDot + 1, secondDot));
             revis = Integer.parseInt(version.substring(secondDot + 1, thirdDot));
