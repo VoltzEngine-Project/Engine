@@ -1,6 +1,7 @@
 package com.builtbroken.mc.prefab.inventory;
 
 import com.builtbroken.mc.api.ISave;
+import com.builtbroken.mc.core.Engine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -100,12 +101,26 @@ public class BasicInventory implements ISave, IInventory
     @Override
     public void setInventorySlotContents(int slot, ItemStack insertStack)
     {
-        ItemStack pre_stack = getStackInSlot(slot) != null ? getStackInSlot(slot).copy() : null;
-        setInventorySlotContents(slot, insertStack);
-
-        if (!InventoryUtility.stacksMatchExact(pre_stack, getStackInSlot(slot)))
+        if (slot >= 0 && slot < getSizeInventory())
         {
-            markDirty();
+            ItemStack pre_stack = getStackInSlot(slot) != null ? getStackInSlot(slot).copy() : null;
+            if (insertStack != null)
+            {
+                inventoryMap.put(slot, insertStack);
+            }
+            else if (inventoryMap.containsKey(slot))
+            {
+                inventoryMap.remove(slot);
+            }
+
+            if (!InventoryUtility.stacksMatchExact(pre_stack, getStackInSlot(slot)))
+            {
+                markDirty();
+            }
+        }
+        else
+        {
+            Engine.error("BasicInventory: something tried to set slot " + slot + " which is outside the 0 - " + (getSizeInventory() - 1) + " limit");
         }
     }
 
@@ -136,7 +151,7 @@ public class BasicInventory implements ISave, IInventory
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack)
     {
-        return i >= this.getSizeInventory();
+        return i >= this.getSizeInventory() && i < getSizeInventory();
     }
 
     @Override
