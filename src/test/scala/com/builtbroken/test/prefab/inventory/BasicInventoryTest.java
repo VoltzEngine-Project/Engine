@@ -30,7 +30,8 @@ public class BasicInventoryTest extends AbstractTest
     public void testSetAndGetSlots()
     {
         BasicInventory inv = new BasicInventory(10);
-
+        Engine engine = Engine.instance;
+        Engine.instance = null;
         try
         {
             inv.setInventorySlotContents(-1, new ItemStack(Items.record_11));
@@ -98,6 +99,7 @@ public class BasicInventoryTest extends AbstractTest
         {
 
         }
+        Engine.instance = engine;
     }
 
     @Test
