@@ -1,5 +1,6 @@
 package com.builtbroken.test.prefab.inventory;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.prefab.inventory.BasicInventory;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import com.builtbroken.mc.testing.junit.AbstractTest;
@@ -33,10 +34,13 @@ public class BasicInventoryTest extends AbstractTest
         try
         {
             inv.setInventorySlotContents(-1, new ItemStack(Items.record_11));
+            if (Engine.instance != null)
+            {
+                System.out.println("Engine instance should have been null");
+            }
             fail("Didn't throw error");
         } catch (RuntimeException e)
         {
-
         }
         try
         {
@@ -44,7 +48,6 @@ public class BasicInventoryTest extends AbstractTest
             fail("Didn't throw error");
         } catch (RuntimeException e)
         {
-
         }
         //Test set when slot is null
         for (int i = 0; i < 10; i++)
