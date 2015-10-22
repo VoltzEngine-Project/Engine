@@ -225,9 +225,9 @@ public class AbstractTileEntityTest<T extends TileEntity, B extends Block> exten
     @Test
     public void testGetDescriptionPacket()
     {
-        FakeWorld world = FakeWorld.newWorld("testGetDescriptionPacket");
-        world.setBlock(10, 11, 12, block);
-        world.getTileEntity(10, 11, 12).getDescriptionPacket();
+        //FakeWorld world = FakeWorld.newWorld("testGetDescriptionPacket");
+        //world.setBlock(10, 11, 12, block);
+        //world.getTileEntity(10, 11, 12).getDescriptionPacket();
     }
 
     @Test

@@ -573,7 +573,7 @@ public class AbstractTileTest<T extends Tile> extends AbstractTileEntityTest<T, 
         Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
         if (tile.getDescPacket() != null)
         {
-            tile.sendDescPacket();
+            //tile.sendDescPacket();
         }
     }
 
