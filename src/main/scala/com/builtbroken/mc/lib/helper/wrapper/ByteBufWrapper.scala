@@ -8,6 +8,7 @@ import cpw.mods.fml.common.network.ByteBufUtils
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{FluidStack, FluidTank}
 
 /**
@@ -91,6 +92,7 @@ object ByteBufWrapper {
           case x: FluidTank => buf <<< x
           case x: ISave => buf <<< x
           case x: ItemStack => ByteBufUtils.writeItemStack(buf, x)
+          case x: ForgeDirection => x.ordinal().asInstanceOf[Byte]
           case _ => throw new IllegalArgumentException(References.NAME + ": ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
         }
       }
