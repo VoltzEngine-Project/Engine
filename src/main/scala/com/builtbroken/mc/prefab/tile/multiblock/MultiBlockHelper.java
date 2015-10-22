@@ -220,6 +220,11 @@ public class MultiBlockHelper
 
     public static void destroyMultiBlockStructure(IMultiTileHost host, boolean doDrops, boolean offset)
     {
+        destroyMultiBlockStructure(host, doDrops, offset, true);
+    }
+
+    public static void destroyMultiBlockStructure(IMultiTileHost host, boolean doDrops, boolean offset, boolean killHost)
+    {
         if (host instanceof TileEntity)
         {
             HashMap<IPos3D, String> map = host.getLayoutOfMultiBlock();
@@ -244,8 +249,8 @@ public class MultiBlockHelper
                     pos.setBlockToAir(world);
                 }
                 if (doDrops)
-                    InventoryUtility.dropBlockAsItem(world, x, y, z, true);
-                else
+                    InventoryUtility.dropBlockAsItem(world, x, y, z, killHost);
+                else if (killHost)
                     world.setBlockToAir(x, y, z);
             }
             else
