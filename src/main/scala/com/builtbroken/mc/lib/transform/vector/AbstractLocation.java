@@ -14,7 +14,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 
-/** Prefab for location data that doesn't implement IWorldPosition
+/**
+ * Prefab for location data that doesn't implement IWorldPosition
  * Created by robert on 1/13/2015.
  */
 public abstract class AbstractLocation<R extends AbstractLocation> extends AbstractPos<R> implements ILocation
@@ -100,12 +101,20 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
         return data;
     }
 
+    /**
+     * @Depricated use {@link #toPos()}
+     */
     @Deprecated
     public Pos toVector3()
     {
         return new Pos(x(), y(), z());
     }
 
+    /**
+     * Converts the location to a position
+     *
+     * @return new position from the location data
+     */
     public Pos toPos()
     {
         return new Pos(x(), y(), z());
@@ -122,6 +131,11 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
             return null;
     }
 
+    /**
+     * Gets the meta value of the block at the location
+     *
+     * @return meta value or -1 if the world is null
+     */
     public int getBlockMetadata()
     {
         if (world != null)
@@ -130,57 +144,146 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
             return -1;
     }
 
+    /**
+     * Gets the tile entity at the location. Will return null if the world is null or the tile is invalid.
+     *
+     * @return tile entity, can be null
+     */
     public TileEntity getTileEntity()
     {
         if (world != null)
-            return super.getTileEntity(world);
-        else
-            return null;
+        {
+            TileEntity tile = world.getTileEntity(xi(), yi(), zi());
+            return tile.isInvalid() ? null : tile;
+        }
+        return null;
     }
 
+    /**
+     * Gets the block's resistance to being mined
+     *
+     * @return value of resistance
+     */
     public float getHardness()
     {
         return super.getHardness(world);
     }
 
+    /**
+     * Gets the resistance value of the block to explosives
+     *
+     * @param cause - sources of the explosive
+     * @param xx    - location of the explosion
+     * @param yy    - location of the explosion
+     * @param zz    - location of the explosion
+     * @return value of resistance to the explosion
+     */
     public float getResistance(Entity cause, double xx, double yy, double zz)
     {
         return getBlock(world).getExplosionResistance(cause, world, xi(), yi(), zi(), xx, yy, zz);
     }
 
+    /**
+     * Replaces the block at the location with a new block
+     *
+     * @param block    - block to place
+     * @param metadata - meta value to place 0-15
+     * @param notify   - notification level to use when placing the block
+     * @return true if it was repalced
+     */
     public boolean setBlock(Block block, int metadata, int notify)
     {
         return super.setBlock(world, block, metadata, notify);
     }
 
+    /**
+     * Replaces the block at the location with a new block
+     *
+     * @param block    - block to place
+     * @param metadata - meta value to place 0-15
+     * @return true if it was repalced
+     */
     public boolean setBlock(Block block, int metadata)
     {
         return super.setBlock(world, block, metadata);
     }
 
+    /**
+     * Replaces the block at the location with a new block
+     *
+     * @param block - block to place
+     * @return true if it was repalced
+     */
     public boolean setBlock(Block block)
     {
         return super.setBlock(world, block);
     }
 
+    /**
+     * Removes the block at the location and replaces it with an air block
+     *
+     * @return true if the block was replaced
+     */
     public boolean setBlockToAir()
     {
         return super.setBlockToAir(world);
     }
 
+    /**
+     * Is the block an air block
+     *
+     * @return true if the block is an air block
+     */
     public boolean isAirBlock()
     {
         return super.isAirBlock(world);
     }
 
+    /**
+     * Is the block passed in equal to the block at the location
+     *
+     * @param block - block to check
+     * @return true if they match
+     */
     public boolean isBlockEqual(Block block)
     {
         return super.isBlockEqual(world, block);
     }
 
+    /**
+     * Checks if the block at the locate is freezable
+     *
+     * @return true if the block can be frozen
+     */
     public boolean isBlockFreezable()
     {
         return super.isBlockFreezable(world);
+    }
+
+    /**
+     * Checks if the chunk is loaded at the location
+     *
+     * @return true if the chunk is loaded
+     */
+    public boolean isChunkLoaded()
+    {
+        return getChunk().isChunkLoaded;
+    }
+
+    /**
+     * Gets the chunk from the location data
+     *
+     * @return chunk the location is in
+     */
+    public Chunk getChunk()
+    {
+        return world.getChunkFromBlockCoords(xi(), zi());
+    }
+
+    /** Marks a block for update */
+    public void markForUpdate()
+    {
+        super.markForUpdate(world);
     }
 
     @Override
@@ -193,15 +296,5 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     public String toString()
     {
         return "WorldLocation [" + this.x() + "," + this.y() + "," + this.z() + "," + this.world + "]";
-    }
-
-    public boolean isChunkLoaded()
-    {
-        return getChunk().isChunkLoaded;
-    }
-
-    public Chunk getChunk()
-    {
-        return world.getChunkFromBlockCoords(xi(), zi());
     }
 }

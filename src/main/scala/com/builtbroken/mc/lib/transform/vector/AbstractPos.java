@@ -18,6 +18,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.List;
 
 /**
+ * Abstract version of Pos3D for interaction with the minecraft world
  * Created by robert on 1/13/2015.
  */
 public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implements IPosition
@@ -141,8 +142,8 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
 
     public IPos3D transform(ITransform transformer)
     {
-        if(this instanceof IPos3D)
-            return transformer.transform((IPos3D)this);
+        if (this instanceof IPos3D)
+            return transformer.transform((IPos3D) this);
         return null;
     }
 
@@ -262,7 +263,7 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
 
     public MovingObjectPosition rayTrace(World world, IPos3D dir, double dist)
     {
-         return rayTrace(world, new Pos(x() + dir.x() * dist, y() +  dir.y() * dist, z() + dir.z() * dist));
+        return rayTrace(world, new Pos(x() + dir.x() * dist, y() + dir.y() * dist, z() + dir.z() * dist));
     }
 
 
@@ -298,7 +299,7 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
 
         List checkEntities = world.getEntitiesWithinAABB(Entity.class, scanRegion);
 
-        for(Object obj : checkEntities)
+        for (Object obj : checkEntities)
         {
             Entity entity = (Entity) obj;
             if (entity != null && entity.canBeCollidedWith() && entity.boundingBox != null)
@@ -387,7 +388,7 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
     public Block getBlock(IBlockAccess world)
     {
         if (world != null)
-            return world.getBlock(xi(), yi(), zi()) ;
+            return world.getBlock(xi(), yi(), zi());
         else
             return null;
     }
@@ -403,7 +404,7 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
     public TileEntity getTileEntity(IBlockAccess world)
     {
         if (world != null)
-            return world.getTileEntity(xi(), yi(), zi()) ;
+            return world.getTileEntity(xi(), yi(), zi());
         else
             return null;
     }
@@ -419,6 +420,7 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
 
     /**
      * Gets the resistance of a block using block.getResistance method
+     *
      * @param cause - entity that triggered/is the explosion
      */
     public float getResistance(Entity cause)
@@ -428,6 +430,7 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
 
     /**
      * Gets the resistance of a block using block.getResistance method
+     *
      * @param cause - entity that triggered/is the explosion
      */
     public float getResistanceToEntity(Entity cause)
@@ -437,6 +440,7 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
 
     /**
      * Gets the resistance of a block using block.getResistance method
+     *
      * @param cause - entity that triggered/is the explosion
      */
     public float getResistanceToEntity(World world, Entity cause)
@@ -446,6 +450,7 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
 
     /**
      * Gets the resistance of a block using block.getResistance method
+     *
      * @param world - world to check in
      * @param cause - entity that triggered/is the explosion
      */
@@ -456,11 +461,12 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
 
     /**
      * Gets the resistance of a block using block.getResistance method
+     *
      * @param world - world to check in
      * @param cause - entity that triggered/is the explosion
-     * @param xx - xPos location of the explosion
-     * @param yy - xPos location of the explosion
-     * @param zz - xPos location of the explosion
+     * @param xx    - xPos location of the explosion
+     * @param yy    - xPos location of the explosion
+     * @param zz    - xPos location of the explosion
      */
     public float getResistance(World world, Entity cause, double xx, double yy, double zz)
     {
@@ -475,6 +481,16 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
     public boolean isInsideMap()
     {
         return isAboveBedrock() && y() < 255;
+    }
+
+    /**
+     * Marks a block for update
+     *
+     * @param world - world to update the location in
+     */
+    public void markForUpdate(World world)
+    {
+        world.markBlockForUpdate(xi(), yi(), zi());
     }
 
     //===================
