@@ -304,6 +304,7 @@ public class MultiBlockHelper
                 }
                 pos.markForUpdate();
             }
+            center.markForUpdate(world);
         }
         else
         {
