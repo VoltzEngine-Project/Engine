@@ -102,6 +102,10 @@ public class PacketTile extends PacketType
     public void handle(EntityPlayer player, TileEntity tile)
     {
         sender_$eq(player);
+        if (tile.isInvalid())
+        {
+            System.out.println("Packet sent to an invalid TileEntity [" + tile + "] in " + new Pos(x, y, z));
+        }
         if (tile instanceof IPacketIDReceiver)
         {
             try
