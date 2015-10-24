@@ -10,10 +10,13 @@ import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -262,5 +265,91 @@ public class MultiBlockHelper
         {
             logger.error("Tile[" + host + "] is not an instanceof TileEntity");
         }
+    }
+
+    /**
+     * Runs a world update on all members of the structure
+     *
+     * @param world
+     * @param host
+     * @param offset - off set the location data by the center of the host
+     */
+    public static void updateStructure(World world, IMultiTileHost host, boolean offset)
+    {
+        //TODO junit test
+        if (!(host instanceof TileEntity))
+        {
+            Engine.error("Tile host is not an instance of TileEntity");
+        }
+        if (world == null)
+        {
+            Engine.error("Tile host is not an instance of TileEntity");
+        }
+
+
+        HashMap<IPos3D, String> map = host.getLayoutOfMultiBlock();
+        if (map != null && !map.isEmpty())
+        {
+            int x = ((TileEntity) host).xCoord;
+            int y = ((TileEntity) host).yCoord;
+            int z = ((TileEntity) host).zCoord;
+            Pos center = new Pos(x, y, z);
+
+            for (Map.Entry<IPos3D, String> entry : map.entrySet())
+            {
+                Location pos = new Location(world, entry.getKey());
+                if (offset)
+                {
+                    pos = pos.add(center);
+                }
+                pos.markForUpdate();
+            }
+        }
+        else
+        {
+            logger.error("Tile[" + host + "]'s structure map is empty");
+        }
+    }
+
+    /**
+     * Gets all the chunk that the structure is located in. UNFINISHED
+     *
+     * @param world  - world the structure is located in
+     * @param host   - host of the structure
+     * @param offset - off set the location data by the center of the host
+     * @return
+     */
+    public static List<Chunk> getChunks(World world, IMultiTileHost host, boolean offset)
+    {
+        //TODO junit test
+        if (!(host instanceof TileEntity))
+        {
+            Engine.error("Tile host is not an instance of TileEntity");
+        }
+        HashMap<IPos3D, String> map = host.getLayoutOfMultiBlock();
+        if (map != null && !map.isEmpty())
+        {
+            List<Chunk> chunks = new ArrayList<Chunk>();
+
+            //TODO optimize as this is not the best way, in terms of CPU, to find all chunks
+            for (Map.Entry<IPos3D, String> entry : map.entrySet())
+            {
+                Location pos = new Location(world, entry.getKey());
+                if (offset)
+                {
+                    pos = pos.add(((TileEntity) host).xCoord, ((TileEntity) host).yCoord, ((TileEntity) host).zCoord);
+                }
+                if (!chunks.contains(pos.getChunk()))
+                {
+                    chunks.add(pos.getChunk());
+                }
+            }
+            return chunks;
+        }
+        else
+        {
+            Engine.error("Tile host[" + host + "] did have a map");
+        }
+        return new ArrayList();
     }
 }
