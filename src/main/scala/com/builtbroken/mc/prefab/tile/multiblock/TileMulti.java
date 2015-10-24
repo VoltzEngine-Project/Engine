@@ -43,6 +43,10 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     public void setHost(IMultiTileHost host)
     {
         this.host = host;
+        if(host == null && worldObj != null && !worldObj.loadedTileEntityList.contains(this))
+        {
+            worldObj.addTileEntity(this);
+        }
     }
 
     @Override
@@ -60,7 +64,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     {
         super.updateEntity();
 
-        if (!remove && ticks == 5)
+        if (!remove && ticks % 5 == 0)
         {
             if (ticks == 0)
             {
@@ -94,12 +98,6 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
                 connectedBlocks.put(dir, b);
             }
         }
-    }
-
-    @Override
-    public boolean canUpdate()
-    {
-        return ticks <= 5;
     }
 
     @Override
