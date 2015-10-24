@@ -23,10 +23,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Calclavia
+ * Series of helper classes for dealing with any kind of inventory
+ *
+ * @author Calclavia, DarkCow(aka Darkguardsman, Robert)
  */
 public class InventoryUtility
 {
+    /**
+     * Used to combine two chests together to make a large chest
+     *
+     * @param inv - inventory that is an instance of TileEntityChest
+     * @return new InventoryLargeChest
+     */
     public static IInventory checkChestInv(IInventory inv)
     {
         if (inv instanceof TileEntityChest)
@@ -60,70 +68,107 @@ public class InventoryUtility
         return inv;
     }
 
-    public static ItemStack putStackInInventory(IInventory inventory, ItemStack toInsert, boolean force)
+    /**
+     * Places the stack into the inventory in the first slot it can find
+     *
+     * @param inventory            - inventory to scan
+     * @param toInsert             - stack to insert into the inventory
+     * @param ignoreIsValidForSlot - ignores the {@link IInventory#isItemValidForSlot(int, ItemStack)} check on
+     *                             inventories. Not normally used but is here just in case it is needed.
+     * @return what is left of the item stack after inserting
+     */
+    public static ItemStack putStackInInventory(IInventory inventory, ItemStack toInsert, boolean ignoreIsValidForSlot)
     {
-        inventory = checkChestInv(inventory);
+        //Work around for chests having a shared inventory
+        if (inventory instanceof TileEntityChest)
+            inventory = checkChestInv(inventory);
 
         for (int slot = 0; slot < inventory.getSizeInventory(); slot++)
         {
-            if (!force)
+            if (ignoreIsValidForSlot || inventory.isItemValidForSlot(slot, toInsert))
             {
-                if (!inventory.isItemValidForSlot(slot, toInsert))
+                //TODO check if the follow code is valid and segment into reusable method
+                ItemStack slot_stack = inventory.getStackInSlot(slot);
+
+                if (slot_stack == null)
                 {
-                    continue;
-                }
-            }
-
-            ItemStack slot_stack = inventory.getStackInSlot(slot);
-
-            if (slot_stack == null)
-            {
-                inventory.setInventorySlotContents(slot, toInsert);
-                return null;
-            }
-            else if (slot_stack.isItemEqual(toInsert) && slot_stack.stackSize < slot_stack.getMaxStackSize())
-            {
-                if (slot_stack.stackSize + toInsert.stackSize <= slot_stack.getMaxStackSize())
-                {
-                    ItemStack toSet = toInsert.copy();
-                    toSet.stackSize += slot_stack.stackSize;
-
-                    inventory.setInventorySlotContents(slot, toSet);
+                    inventory.setInventorySlotContents(slot, toInsert);
                     return null;
                 }
-                else
+                else if (slot_stack.isItemEqual(toInsert) && slot_stack.stackSize < slot_stack.getMaxStackSize())
                 {
-                    int rejects = (slot_stack.stackSize + toInsert.stackSize) - slot_stack.getMaxStackSize();
+                    if (slot_stack.stackSize + toInsert.stackSize <= slot_stack.getMaxStackSize())
+                    {
+                        ItemStack toSet = toInsert.copy();
+                        toSet.stackSize += slot_stack.stackSize;
 
-                    ItemStack toSet = toInsert.copy();
-                    toSet.stackSize = slot_stack.getMaxStackSize();
+                        inventory.setInventorySlotContents(slot, toSet);
+                        return null;
+                    }
+                    else
+                    {
+                        int rejects = (slot_stack.stackSize + toInsert.stackSize) - slot_stack.getMaxStackSize();
 
-                    ItemStack remains = toInsert.copy();
-                    remains.stackSize = rejects;
+                        ItemStack toSet = toInsert.copy();
+                        toSet.stackSize = slot_stack.getMaxStackSize();
 
-                    inventory.setInventorySlotContents(slot, toSet);
+                        ItemStack remains = toInsert.copy();
+                        remains.stackSize = rejects;
 
-                    toInsert = remains;
+                        inventory.setInventorySlotContents(slot, toSet);
+
+                        toInsert = remains;
+                    }
                 }
             }
         }
         return toInsert;
     }
 
-    public static ItemStack putStackInInventory(Location position, ItemStack toInsert, int side, boolean force)
+    /**
+     * Tries to place the into a valid tile at the location. If the tile is not an inventory it will
+     * return the unused toInsert stack.
+     *
+     * @param position - position to check for a tile
+     * @param toInsert - stack to insert into the tile
+     * @param side     - side to insert the item into (0-5)
+     * @param force    - overrides {@link IInventory#isItemValidForSlot(int, ItemStack)} check
+     * @return what is left of the toInsert stack
+     */
+    public static ItemStack insertStack(Location position, ItemStack toInsert, int side, boolean force)
     {
-        TileEntity tile = position.getTileEntity();
-
-        if (tile instanceof IInventory)
-        {
-            return putStackInInventory((IInventory) tile, toInsert, force);
-        }
-
-        InventoryUtility.dropItemStack(position.world(), position, toInsert, 20, 0);
-
-        return null;
+        return insertStack(position.getTileEntity(), toInsert, side, force);
     }
 
+    /**
+     * Tries to place the into a valid tile at the location. If the tile is not an inventory it will
+     * return the unused toInsert stack.
+     *
+     * @param tile     - tile to place the item into
+     * @param toInsert - stack to insert into the tile
+     * @param side     - side to insert the item into (0-5)
+     * @param force    - overrides {@link IInventory#isItemValidForSlot(int, ItemStack)} check
+     * @return what is left of the toInsert stack
+     */
+    public static ItemStack insertStack(TileEntity tile, ItemStack toInsert, int side, boolean force)
+    {
+        if (tile instanceof IInventory)
+        {
+            return putStackInInventory((IInventory) tile, toInsert, side, force);
+        }
+        return toInsert;
+    }
+
+    /**
+     * Tries to place an item into the inventory. If the inventory is not an instance of {@link ISidedInventory} it
+     * will ignore the side param.
+     *
+     * @param inventory - inventory to insert the item into
+     * @param itemStack - stack to insert
+     * @param side      - side to inser the item into (0-5)
+     * @param force-    overrides {@link IInventory#isItemValidForSlot(int, ItemStack)} check
+     * @return what is left of the toInsert stack
+     */
     public static ItemStack putStackInInventory(IInventory inventory, ItemStack itemStack, int side, boolean force)
     {
         ItemStack toInsert = itemStack != null ? itemStack.copy() : null;
@@ -136,52 +181,47 @@ public class InventoryUtility
             else
             {
                 ISidedInventory sidedInventory = (ISidedInventory) inventory;
-                int[] slots = sidedInventory.getAccessibleSlotsFromSide(ForgeDirection.getOrientation(side).getOpposite().ordinal());
+                int[] slots = sidedInventory.getAccessibleSlotsFromSide(side);
 
                 if (slots != null && slots.length != 0)
                 {
-                    for (int get = 0; get <= slots.length - 1; get++)
+                    for (int get = 0; get < slots.length; get++)
                     {
                         int slotID = slots[get];
 
-                        if (!force)
+                        if (force || sidedInventory.isItemValidForSlot(slotID, toInsert) && sidedInventory.canInsertItem(slotID, toInsert, side))
                         {
-                            if (!sidedInventory.isItemValidForSlot(slotID, toInsert) && !sidedInventory.canInsertItem(slotID, toInsert, ForgeDirection.getOrientation(side).getOpposite().ordinal()))
+                            ItemStack inSlot = inventory.getStackInSlot(slotID);
+
+                            if (inSlot == null)
                             {
-                                continue;
-                            }
-                        }
-
-                        ItemStack inSlot = inventory.getStackInSlot(slotID);
-
-                        if (inSlot == null)
-                        {
-                            inventory.setInventorySlotContents(slotID, toInsert);
-                            return null;
-                        }
-                        else if (inSlot.isItemEqual(toInsert) && inSlot.stackSize < inSlot.getMaxStackSize())
-                        {
-                            if (inSlot.stackSize + toInsert.stackSize <= inSlot.getMaxStackSize())
-                            {
-                                ItemStack toSet = toInsert.copy();
-                                toSet.stackSize += inSlot.stackSize;
-
-                                inventory.setInventorySlotContents(slotID, toSet);
+                                inventory.setInventorySlotContents(slotID, toInsert);
                                 return null;
                             }
-                            else
+                            else if (inSlot.isItemEqual(toInsert) && inSlot.stackSize < inSlot.getMaxStackSize())
                             {
-                                int rejects = (inSlot.stackSize + toInsert.stackSize) - inSlot.getMaxStackSize();
+                                if (inSlot.stackSize + toInsert.stackSize <= inSlot.getMaxStackSize())
+                                {
+                                    ItemStack toSet = toInsert.copy();
+                                    toSet.stackSize += inSlot.stackSize;
 
-                                ItemStack toSet = toInsert.copy();
-                                toSet.stackSize = inSlot.getMaxStackSize();
+                                    inventory.setInventorySlotContents(slotID, toSet);
+                                    return null;
+                                }
+                                else
+                                {
+                                    int rejects = (inSlot.stackSize + toInsert.stackSize) - inSlot.getMaxStackSize();
 
-                                ItemStack remains = toInsert.copy();
-                                remains.stackSize = rejects;
+                                    ItemStack toSet = toInsert.copy();
+                                    toSet.stackSize = inSlot.getMaxStackSize();
 
-                                inventory.setInventorySlotContents(slotID, toSet);
+                                    ItemStack remains = toInsert.copy();
+                                    remains.stackSize = rejects;
 
-                                toInsert = remains;
+                                    inventory.setInventorySlotContents(slotID, toSet);
+
+                                    toInsert = remains;
+                                }
                             }
                         }
                     }
@@ -695,5 +735,222 @@ public class InventoryUtility
             }
         }
         return itemsToDrop;
+    }
+
+    /**
+     * Called to handle a slot based input and output section. This handler will
+     * to place the item into the slot connected with the id. If
+     * it can't then it will try to remove an item from the slot.
+     *
+     * @param player - player who is accessing the inventory slot
+     * @param inv    - inventory to access the slot from
+     * @param slot   - slot ID to access
+     * @return true if something happened false if nothing happened.
+     */
+    public static boolean handleSlot(EntityPlayer player, IInventory inv, int slot)
+    {
+        return handleSlot(player, inv, slot, -1);
+    }
+
+    /**
+     * Called to handle a slot based input and output section. This handler will
+     * to place the item into the slot connected with the id. If
+     * it can't then it will try to remove an item from the slot.
+     *
+     * @param player - player who is accessing the inventory slot
+     * @param inv    - inventory to access the slot from
+     * @param slot   - slot ID to access
+     * @return true if something happened false if nothing happened.
+     */
+    public static boolean handleSlot(EntityPlayer player, IInventory inv, int slot, int items)
+    {
+        if (player != null && inv != null && slot >= 0 && slot < inv.getSizeInventory())
+        {
+            if (!addItemToSlot(player, inv, slot, items))
+            {
+                return removeItemFromSlot(player, inv, slot, items);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Called to add the item the player is holding into the slot
+     *
+     * @param player - player who is accessing the item
+     * @param slot   - slot to place the item into
+     * @return true if the item was added, false if nothing happended
+     */
+    public static boolean addItemToSlot(EntityPlayer player, IInventory inv, int slot)
+    {
+        return addItemToSlot(player, inv, slot, -1);
+    }
+
+    /**
+     * Called to add the item the player is holding into the slot
+     *
+     * @param player - player who is accessing the item
+     * @param slot   - slot to place the item into
+     * @return true if the item was added, false if nothing happended
+     */
+    public static boolean addItemToSlot(EntityPlayer player, IInventory inv, int slot, int items)
+    {
+        //Check if input is valid
+        if (player.getHeldItem() != null && inv.isItemValidForSlot(slot, player.getHeldItem()))
+        {
+            //Only can add items if slot is empty or matches input
+            if (inv.getStackInSlot(slot) == null || stacksMatch(player.getHeldItem(), inv.getStackInSlot(slot)))
+            {
+                //Find out how much space we have left
+                int roomLeftInSlot = roomLeftInSlotForStack(inv, player.getHeldItem(), slot);
+                //Find out how many items to add to slot
+                int itemsToAdd = Math.min(roomLeftInSlot, Math.min(player.getHeldItem().stackSize, items == -1 ? roomLeftInSlot : items));
+                //Add items already in slot since we are going to set the slot
+                if (inv.getStackInSlot(slot) != null)
+                    itemsToAdd += inv.getStackInSlot(slot).stackSize;
+
+                inv.setInventorySlotContents(slot, player.getHeldItem().copy());
+                inv.getStackInSlot(slot).stackSize = itemsToAdd;
+
+                //Ignore creative mode
+                if (!player.capabilities.isCreativeMode)
+                {
+                    player.getHeldItem().stackSize -= itemsToAdd;
+                    if (player.getHeldItem().stackSize <= 0)
+                    {
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                    }
+                    player.inventoryContainer.detectAndSendChanges();
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Finds how much space is left in the inventory slot
+     *
+     * @param inv  - inventory to check, can't be null
+     * @param slot - slot to check, needs to be a valid slot as it's not checked
+     * @return amount of room left in the slot
+     */
+    public static int roomLeftInSlot(IInventory inv, int slot)
+    {
+        if (inv.getStackInSlot(slot) != null)
+        {
+            int maxSpace = Math.min(inv.getStackInSlot(slot).getMaxStackSize(), inv.getInventoryStackLimit());
+            return maxSpace - inv.getStackInSlot(slot).stackSize;
+        }
+        return inv.getInventoryStackLimit();
+    }
+
+    /**
+     * Gets the room left in the stack
+     *
+     * @param stack - stack to check, can't be null
+     * @return amount of room left
+     */
+    public static int roomLeftInStack(ItemStack stack)
+    {
+        return stack.getMaxStackSize() - stack.stackSize;
+    }
+
+    /**
+     * Checks how much space is left in the inventory for the stack
+     *
+     * @param inv   - inventory to check, can't be null
+     * @param stack - stack to check, can't be null
+     * @param slot  - slot to check, needs to be valid as not checked
+     * @return amount of room left
+     */
+    public static int roomLeftInSlotForStack(IInventory inv, ItemStack stack, int slot)
+    {
+        int maxSpace = Math.min(stack.getMaxStackSize(), inv.getInventoryStackLimit());
+        if (inv.getStackInSlot(slot) != null)
+        {
+            return maxSpace - inv.getStackInSlot(slot).stackSize;
+        }
+        return maxSpace;
+    }
+
+    /**
+     * Checks how much space is left in the player's held hand.
+     * <p/>
+     * Does check again player's inventory limit in case
+     * another mod changes it. Should prevent issues
+     * with this method in inventory overhaul mods.
+     *
+     * @param player - player to check, can't be null
+     * @return amount of room left
+     */
+    public static int spaceInPlayersHand(EntityPlayer player)
+    {
+        return player.getHeldItem() == null ? player.inventory.getInventoryStackLimit() : Math.min(player.inventory.getInventoryStackLimit(), player.getHeldItem().getMaxStackSize()) - player.getHeldItem().stackSize;
+    }
+
+    /**
+     * Removes items from a slot and tries to place them into the player's inventory.
+     * If the items can't be placed into the inventory they are dropped.
+     *
+     * @param player - player accessing the inventory
+     * @param inv    - inventory being accessed
+     * @param slot   - slot being accessed
+     * @return true if items were removed, false if nothing happened
+     */
+    public static boolean removeItemFromSlot(EntityPlayer player, IInventory inv, int slot)
+    {
+        return removeItemFromSlot(player, inv, slot, -1);
+    }
+
+    /**
+     * Removes items from a slot and tries to place them into the player's inventory.
+     * If the items can't be placed into the inventory they are dropped.
+     *
+     * @param player - player accessing the inventory
+     * @param inv    - inventory being accessed
+     * @param slot   - slot being accessed
+     * @param items  - number of items being removed
+     * @return true if items were removed, false if nothing happened
+     */
+    public static boolean removeItemFromSlot(EntityPlayer player, IInventory inv, int slot, int items)
+    {
+        if (inv.getStackInSlot(slot) != null && items >= -1 && items != 0)
+        {
+            int spaceInHand = spaceInPlayersHand(player);
+            int itemsToMove = Math.min(Math.min(spaceInHand, inv.getStackInSlot(slot).getMaxStackSize()), items == -1 ? inv.getInventoryStackLimit() : items);
+
+            //Create clone of slot stack, only not used in one use case
+            ItemStack stack = inv.getStackInSlot(slot).copy();
+            stack.stackSize = itemsToMove;
+
+            //Moves items to player
+            if (player.getHeldItem() == null)
+            {
+                player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
+            }
+            else if (spaceInHand > 0)
+            {
+                player.getHeldItem().stackSize += itemsToMove;
+            }
+            else if (!player.inventory.addItemStackToInventory(stack))
+            {
+                InventoryUtility.dropItemStack(new Location(player), stack);
+            }
+
+            //Remove items from slot
+            if (itemsToMove >= inv.getStackInSlot(slot).stackSize)
+            {
+                inv.setInventorySlotContents(slot, null);
+            }
+            else
+            {
+                inv.getStackInSlot(slot).stackSize -= itemsToMove;
+            }
+
+            player.inventoryContainer.detectAndSendChanges();
+            return true;
+        }
+        return false;
     }
 }
