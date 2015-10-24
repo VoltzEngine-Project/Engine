@@ -14,11 +14,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.HashMap;
 
 /**
+ * Basic implementation of a multi block
  * Created by Dark on 8/9/2015.
  */
 public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiver
@@ -40,10 +42,16 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     }
 
     @Override
+    public boolean canUpdate()
+    {
+        return DimensionManager.getWorld(0) != null;
+    }
+
+    @Override
     public void setHost(IMultiTileHost host)
     {
         this.host = host;
-        if(host == null && worldObj != null && !worldObj.loadedTileEntityList.contains(this))
+        if (host == null && worldObj != null && !worldObj.loadedTileEntityList.contains(this))
         {
             worldObj.addTileEntity(this);
         }
@@ -73,7 +81,8 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
             if (getHost() == null)
             {
                 getWorldObj().setBlockToAir(xCoord, yCoord, zCoord);
-            } else
+            }
+            else
             {
                 TileTaskTickHandler.INSTANCE.addTileToBeRemoved(this);
             }
