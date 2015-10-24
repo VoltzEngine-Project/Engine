@@ -3,6 +3,7 @@ package com.builtbroken.test.transform.vector;
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.lib.transform.vector.AbstractLocation;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import com.builtbroken.mc.testing.junit.server.FakeDedicatedServer;
@@ -11,6 +12,7 @@ import com.builtbroken.mc.testing.junit.world.FakeWorldServer;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Blocks;
@@ -157,7 +159,7 @@ public class TestAbstractLocation extends AbstractTest
     }
 
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#equals(Object) */
+    /** Tests {@link AbstractLocation#equals(Object) */
     public void testEquals()
     {
         TLocation location = new TLocation(world, 1, 2, 3);
@@ -217,7 +219,7 @@ public class TestAbstractLocation extends AbstractTest
         }));
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#toString() */
+    /** Tests {@link AbstractLocation#toString() */
     public void testToString()
     {
         String s = "WorldLocation [1.0x,2.0y,3.0z," + world.provider.dimensionId + "d]";
@@ -225,7 +227,7 @@ public class TestAbstractLocation extends AbstractTest
         assertTrue("Should be " + s + " but is " + s2, s.equals(s2));
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#getBlock() */
+    /** Tests {@link AbstractLocation#getBlock() */
     public void testGetBlock()
     {
         world.setBlock(0, 10, 10, Blocks.ice);
@@ -233,7 +235,7 @@ public class TestAbstractLocation extends AbstractTest
         world.setBlockToAir(0, 10, 10);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#isBlockEqual(Block) */
+    /** Tests {@link AbstractLocation#isBlockEqual(Block) */
     public void testIsBlockEqual()
     {
         world.setBlock(0, 10, 10, Blocks.ice);
@@ -242,7 +244,7 @@ public class TestAbstractLocation extends AbstractTest
         assertFalse(new TLocation(world, 0, 10, 10).isBlockEqual(Blocks.ice));
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#markForUpdate() */
+    /** Tests {@link AbstractLocation#markForUpdate() */
     public void testMarkForUpdate()
     {
         world.setBlock(0, 10, 10, Blocks.ice);
@@ -250,7 +252,7 @@ public class TestAbstractLocation extends AbstractTest
         world.setBlockToAir(0, 10, 10);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#getHardness() */
+    /** Tests {@link AbstractLocation#getHardness() */
     public void testGetHardness()
     {
         world.setBlock(0, 10, 10, Blocks.ice);
@@ -258,7 +260,7 @@ public class TestAbstractLocation extends AbstractTest
         world.setBlockToAir(0, 10, 10);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#isChunkLoaded() */
+    /** Tests {@link AbstractLocation#isChunkLoaded() */
     public void testIsChunkLoaded()
     {
         //Range needs to be high due to spawn range
@@ -270,7 +272,7 @@ public class TestAbstractLocation extends AbstractTest
         world.setBlockToAir(1000, 10, 10);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#getTileEntity() */
+    /** Tests {@link AbstractLocation#getTileEntity() */
     public void testGetTileEntity()
     {
         TLocation location = new TLocation(world, 20, 10, 10);
@@ -283,82 +285,136 @@ public class TestAbstractLocation extends AbstractTest
         assertTrue(location.getTileEntity() == null);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#getResistance(Entity, double, double, double) */
+    /** Tests {@link AbstractLocation#getResistance(Entity, double, double, double) */
     public void testGetResistance()
     {
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#setBlock(Block, int) */
+    /** Tests {@link AbstractLocation#setBlock(Block, int) */
     public void testSetBlock1()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        location.setBlock(Blocks.wool, 2);
+        assertSame(world.getBlock(20, 10, 10), Blocks.wool);
+        assertEquals(world.getBlockMetadata(20, 10, 10), 2);
+        world.setBlockToAir(20, 10, 10);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#setBlock(Block) */
+    /** Tests {@link AbstractLocation#setBlock(Block) */
     public void testSetBlock2()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        location.setBlock(Blocks.wool);
+        assertSame(world.getBlock(20, 10, 10), Blocks.wool);
+        world.setBlockToAir(20, 10, 10);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#setBlock(Block, int, int) */
+    /** Tests {@link AbstractLocation#setBlock(Block, int, int) */
     public void testSetBlock3()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        location.setBlock(Blocks.wool, 3, 3);
+        assertSame(world.getBlock(20, 10, 10), Blocks.wool);
+        assertEquals(world.getBlockMetadata(20, 10, 10), 3);
+        world.setBlockToAir(20, 10, 10);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#isAirBlock() */
+    /** Tests {@link AbstractLocation#isAirBlock() */
     public void testIsAirBlock()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        assertTrue("" + location.getBlock(), location.isAirBlock());
+        world.setBlock(20, 10, 10, Blocks.stone);
+        assertFalse(location.isAirBlock());
+        world.setBlockToAir(20, 10, 10);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#setBlockToAir() */
+    /** Tests {@link AbstractLocation#setBlockToAir() */
     public void testSetBlockToAir()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        world.setBlock(20, 10, 10, Blocks.stone);
+        location.setBlockToAir();
+        assertTrue(world.getBlock(20, 10, 10).isAir(world, 20, 10, 10));
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#getChunk() */
+    /** Tests {@link AbstractLocation#getChunk() */
     public void testGetChunk()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        assertNotNull(location.getChunk());
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#world() */
+    /** Tests {@link AbstractLocation#world() */
     public void testWorld()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        assertSame(location.world(), world);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#getWorld() */
+    /** Tests {@link AbstractLocation#getWorld() */
     public void testGetWorld()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        assertSame(location.getWorld(), world);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#writeNBT(NBTTagCompound) */
+    /** Tests {@link AbstractLocation#writeNBT(NBTTagCompound) */
     public void testWriteNBT()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        NBTTagCompound tag = location.writeNBT(new NBTTagCompound());
+        assertTrue(location.equals(new TLocation(tag)));
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#toVector3() */
+    /** Tests {@link AbstractLocation#toVector3() */
     public void testToVector3()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        Pos pos = location.toVector3();
+        assertTrue(pos.equals(new Pos(20, 10, 10)));
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#toPos() */
+    /** Tests {@link AbstractLocation#toPos() */
     public void testToPos()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        Pos pos = location.toPos();
+        assertTrue(pos.equals(new Pos(20, 10, 10)));
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#writeByteBuf(ByteBuf) */
+    /** Tests {@link AbstractLocation#writeByteBuf(ByteBuf) */
     public void testWriteByteBuf()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        ByteBuf buf = Unpooled.buffer();
+        location.writeByteBuf(buf);
+        assertTrue(location.equals(new TLocation(buf)));
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#getBlockMetadata() */
+    /** Tests {@link AbstractLocation#getBlockMetadata() */
     public void testGetBlockMetadata()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        world.setBlock(20, 10, 10, Blocks.wool, 3, 3);
+        assertEquals(location.getBlockMetadata(), 3);
+        world.setBlockToAir(20, 10, 10);
     }
 
-    /** Tests {@link class com.builtbroken.mc.lib.transform.vector.AbstractLocation#isBlockFreezable() */
+    /** Tests {@link AbstractLocation#isBlockFreezable() */
     public void testIsBlockFreezable()
     {
+        TLocation location = new TLocation(world, 20, 10, 10);
+        world.setBlock(20, 10, 10, Blocks.wool, 3, 3);
+        assertFalse(location.isBlockFreezable());
+        //world.setBlock(20, 10, 10, Blocks.flowing_water);
+        //assertTrue(location.isBlockFreezable());
+        //TODO find a way to test this as only water can freeze in a snow biome
+        //Eg. we can't set the biome for the map just yet
+        world.setBlockToAir(20, 10, 10);
     }
 
-    /** Used to test AbstractLocation since it is abstract */
+    /** Used to test {@link AbstractLocation} */
     private static class TLocation extends AbstractLocation<TLocation>
     {
         public TLocation(World world, double x, double y, double z)
