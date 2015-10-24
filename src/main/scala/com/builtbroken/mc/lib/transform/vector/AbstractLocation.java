@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 
@@ -20,6 +21,7 @@ import net.minecraftforge.common.DimensionManager;
  */
 public abstract class AbstractLocation<R extends AbstractLocation> extends AbstractPos<R> implements ILocation
 {
+    /** Minecraft world for this location */
     public World world;
 
     public AbstractLocation(World world, double x, double y, double z)
@@ -28,51 +30,104 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
         this.world = world;
     }
 
+    /**
+     * Creates a location from NBT data
+     *
+     * @param nbt - valid data, can't be null
+     */
     public AbstractLocation(NBTTagCompound nbt)
     {
         this(DimensionManager.getWorld(nbt.getInteger("dimension")), nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"));
     }
 
+    /**
+     * Creates a location from a ByteBuf
+     *
+     * @param data - data, should contain int, double, double, double
+     */
     public AbstractLocation(ByteBuf data)
     {
         this(DimensionManager.getWorld(data.readInt()), data.readDouble(), data.readDouble(), data.readDouble());
     }
 
+    /**
+     * Create a location from an entity's location data
+     *
+     * @param entity - entity in the world, should be valid
+     */
     public AbstractLocation(Entity entity)
     {
         this(entity.worldObj, entity.posX, entity.posY, entity.posZ);
     }
 
+    /**
+     * Creates a location from a tile
+     *
+     * @param tile - valid tile with a world
+     */
     public AbstractLocation(TileEntity tile)
     {
         this(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
     }
 
+    /**
+     * Creates a location from an {@link IWorldPosition}, basically clones it
+     *
+     * @param vec - valid location
+     */
     public AbstractLocation(IWorldPosition vec)
     {
         this(vec.world(), vec.x(), vec.y(), vec.z());
     }
 
+    /**
+     * Creates a location from a world and {@link IPos3D} combo
+     *
+     * @param world  - valid world, can be null but not recommended
+     * @param vector - location data, should be valid
+     */
     public AbstractLocation(World world, IPos3D vector)
     {
         this(world, vector.x(), vector.y(), vector.z());
     }
 
+    /**
+     * Creates a location from a world and {@link Vec3} combo
+     *
+     * @param world - valid world, can be null but not recommended
+     * @param vec   - minecraft vector
+     */
     public AbstractLocation(World world, Vec3 vec)
     {
         this(world, vec.xCoord, vec.yCoord, vec.zCoord);
     }
 
+    /**
+     * Creates a location from a world and {@link MovingObjectPosition} combo
+     *
+     * @param world  - valid world, can be null but not recommended
+     * @param target - miencraft moving object position
+     */
     public AbstractLocation(World world, MovingObjectPosition target)
     {
         this(world, target.hitVec);
     }
 
+    /**
+     * Gets the world instance
+     *
+     * @return a world
+     */
     public World world()
     {
         return world;
     }
 
+    /**
+     * Gets the world instance
+     *
+     * @return a world
+     */
     public World getWorld()
     {
         return world;
@@ -154,7 +209,7 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
         if (world != null)
         {
             TileEntity tile = world.getTileEntity(xi(), yi(), zi());
-            return tile.isInvalid() ? null : tile;
+            return tile == null || tile.isInvalid() ? null : tile;
         }
         return null;
     }
@@ -267,7 +322,12 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
      */
     public boolean isChunkLoaded()
     {
-        return getChunk().isChunkLoaded;
+        //For some reason the server has it's own chunk provider that actually checks if the chunk exists
+        if (world instanceof WorldServer)
+        {
+            return ((WorldServer) world).theChunkProviderServer.chunkExists(xi() >> 4, zi() >> 4) && getChunk().isChunkLoaded;
+        }
+        return world.getChunkProvider().chunkExists(xi() >> 4, zi() >> 4) && getChunk().isChunkLoaded;
     }
 
     /**
@@ -295,6 +355,6 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     @Override
     public String toString()
     {
-        return "WorldLocation [" + this.x() + "," + this.y() + "," + this.z() + "," + this.world + "]";
+        return "WorldLocation [" + this.x() + "x," + this.y() + "y," + this.z() + "z," + (this.world == null ? "n" : this.world.provider == null ? "p" : this.world.provider.dimensionId) + "d]";
     }
 }
