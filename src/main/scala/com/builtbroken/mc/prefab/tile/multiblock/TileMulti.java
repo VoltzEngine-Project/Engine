@@ -55,7 +55,8 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
         {
             worldObj.addTileEntity(this);
         }
-        Engine.instance.packetHandler.sendToAllAround(getDescPacket(), this);
+        if (!worldObj.isRemote)
+            Engine.instance.packetHandler.sendToAllAround(getDescPacket(), this);
     }
 
     @Override
