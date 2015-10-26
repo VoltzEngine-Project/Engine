@@ -55,6 +55,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
         {
             worldObj.addTileEntity(this);
         }
+        Engine.instance.packetHandler.sendToAllAround(getDescPacket(), this);
     }
 
     @Override
@@ -116,10 +117,29 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
         {
             if (id == 1)
             {
+                //Update host data for client use
+                Pos pos = new Pos(buf);
+                if (pos.isZero())
+                {
+                    this.setHost(null);
+                }
+                else
+                {
+                    TileEntity tile = pos.getTileEntity(worldObj);
+                    if (tile instanceof IMultiTileHost)
+                    {
+                        this.setHost((IMultiTileHost) tile);
+                    }
+                }
+                //Update should render
                 boolean prev = shouldRenderBlock;
                 shouldRenderBlock = buf.readBoolean();
+
+                //Update render bounds
                 if (buf.readBoolean())
                     overrideRenderBounds = new Cube(buf);
+                else
+                    overrideRenderBounds = new Cube(0, 0, 0, 1, 1, 1);
 
                 if (prev != shouldRenderBlock)
                 {
@@ -134,10 +154,16 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     @Override
     public Packet getDescriptionPacket()
     {
+        return Engine.instance.packetHandler.toMCPacket(getDescPacket());
+    }
+
+    public PacketTile getDescPacket()
+    {
+        Pos pos = getHost() != null ? new Pos((TileEntity) getHost()) : new Pos();
         if (overrideRenderBounds != null)
-            return Engine.instance.packetHandler.toMCPacket(new PacketTile(this, 1, shouldRenderBlock, true, overrideRenderBounds));
+            return new PacketTile(this, 1, pos, shouldRenderBlock, true, overrideRenderBounds);
         else
-            return Engine.instance.packetHandler.toMCPacket(new PacketTile(this, 1, shouldRenderBlock, false));
+            return new PacketTile(this, 1, pos, shouldRenderBlock, false);
     }
 
     @Override
