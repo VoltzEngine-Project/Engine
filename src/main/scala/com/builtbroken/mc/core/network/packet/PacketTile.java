@@ -1,12 +1,15 @@
 package com.builtbroken.mc.core.network.packet;
 
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.network.IPacketIDReceiver;
+import com.builtbroken.mc.core.network.IPacketReceiver;
+import com.builtbroken.mc.core.network.ex.PacketIDException;
+import com.builtbroken.mc.core.network.ex.PacketTileReadException;
+import com.builtbroken.mc.lib.transform.vector.Location;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import com.builtbroken.mc.core.network.IPacketIDReceiver;
-import com.builtbroken.mc.core.network.IPacketReceiver;
 
 /**
  * Packet type designed to be used with Tiles
@@ -101,12 +104,17 @@ public class PacketTile extends PacketType
      */
     public void handle(EntityPlayer player, TileEntity tile)
     {
+        Location location = new Location(player.worldObj, x, y, z);
         sender_$eq(player);
-        if (tile.isInvalid())
+        if (tile == null)
         {
-            System.out.println("Packet sent to an invalid TileEntity [" + tile + "] in " + new Pos(x, y, z));
+            Engine.instance.logger().error(new PacketTileReadException(location, "Null tile"));
         }
-        if (tile instanceof IPacketIDReceiver)
+        else if (tile.isInvalid())
+        {
+            Engine.instance.logger().error(new PacketTileReadException(location, "Invalidated tile"));
+        }
+        else if (tile instanceof IPacketIDReceiver)
         {
             try
             {
@@ -119,15 +127,16 @@ public class PacketTile extends PacketType
                     id = buf.readInt();
                 } catch (IndexOutOfBoundsException ex)
                 {
-                    System.out.println("Packet sent to a Tile[" + tile + "] failed to provide a packet ID");
-                    System.out.println("Location: " + new Pos(x, y, z));
+                    Engine.instance.logger().error(new PacketIDException(location));
                     return;
                 }
                 receiver.read(buf, id, player, this);
+            } catch (IndexOutOfBoundsException e)
+            {
+                Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
             } catch (Exception e)
             {
-                System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Pos(x, y, z));
-                e.printStackTrace();
+                Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
             }
         }
         else if (tile instanceof IPacketReceiver)
@@ -138,16 +147,16 @@ public class PacketTile extends PacketType
                 receiver.read(data().slice(), player, this);
             } catch (IndexOutOfBoundsException e)
             {
-                System.out.println("Packet sent to a TileEntity was read out side its bounds [" + tile + "] in " + new Pos(x, y, z));
+                Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
             } catch (Exception e)
             {
-                System.out.println("Packet sent to a TileEntity failed to be received [" + tile + "] in " + new Pos(x, y, z));
+                Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
                 e.printStackTrace();
             }
         }
         else
         {
-            System.out.println("Packet was sent to a tile not implementing IPacketReceiver, this is a coding error [" + tile + "] in " + new Pos(x, y, z));
+            Engine.instance.logger().error(new PacketTileReadException(location, "Unsupported action for tile"));
         }
     }
 }
