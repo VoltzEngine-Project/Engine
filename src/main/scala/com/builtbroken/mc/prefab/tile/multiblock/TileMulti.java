@@ -31,7 +31,6 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     public Cube collisionBounds;
 
     public int ticks = 0;
-    public boolean remove = false;
 
     public HashMap<ForgeDirection, Block> connectedBlocks = new HashMap();
 
@@ -73,13 +72,12 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     public void updateEntity()
     {
         super.updateEntity();
-
-        if (!remove && ticks % 5 == 0)
+        if (ticks == 0)
         {
-            if (ticks == 0)
-            {
-                updateConnections();
-            }
+            updateConnections();
+        }
+        if (!worldObj.isRemote && ticks % 20 == 0)
+        {
             if (getHost() == null)
             {
                 getWorldObj().setBlockToAir(xCoord, yCoord, zCoord);
