@@ -122,7 +122,7 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
         //TODO maybe add a way to convert convert any vector into a direction from origin
         for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
         {
-            if (x() == dir.offsetX && y() == dir.offsetY && z() == dir.offsetZ)
+            if (xi() == dir.offsetX && yi() == dir.offsetY && zi() == dir.offsetZ)
             {
                 return dir;
             }
