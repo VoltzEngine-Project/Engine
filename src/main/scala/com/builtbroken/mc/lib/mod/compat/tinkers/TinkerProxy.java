@@ -35,49 +35,49 @@ public class TinkerProxy extends AbstractLoadable
             if (recipe.output.getItem() == DefinedGenItems.GEAR.item)
             {
                 it.remove();
+                System.out.println("Removed casting recipe for " + recipe.output);
             }
         }
 
         //Add smelting values
         for (GenMaterial mat : GenMaterial.values())
         {
-            if (OreDictionary.getOreID("ingot" + LanguageUtility.capitalizeFirst(mat.name().toLowerCase())) != -1)
+            if (OreDictionary.getOres("ingot" + LanguageUtility.capitalizeFirst(mat.name().toLowerCase()), false).size() > 0)
             {
-
-                Fluid fluid = FluidRegistry.getFluid(mat.name().toLowerCase());
+                Fluid fluid = FluidRegistry.getFluid(mat.name().toLowerCase() + ".molten");
                 if (fluid != null)
                 {
-                    if (!DefinedGenItems.GEAR.ignoreMaterials.contains(mat))
+                    if (DefinedGenItems.GEAR.item != null && !DefinedGenItems.GEAR.ignoreMaterials.contains(mat))
                     {
                         //TODO get block per material
                         Smeltery.addMelting(new ItemStack(DefinedGenItems.GEAR.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144));
                     }
 
-                    if (!DefinedGenItems.ROD.ignoreMaterials.contains(mat))
+                    if (DefinedGenItems.ROD.item != null && !DefinedGenItems.ROD.ignoreMaterials.contains(mat))
                     {
                         //TODO get block per material
                         Smeltery.addMelting(new ItemStack(DefinedGenItems.ROD.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 72));
                     }
 
-                    if (!DefinedGenItems.PLATE.ignoreMaterials.contains(mat))
+                    if (DefinedGenItems.PLATE.item != null && !DefinedGenItems.PLATE.ignoreMaterials.contains(mat))
                     {
                         //TODO get block per material
                         Smeltery.addMelting(new ItemStack(DefinedGenItems.PLATE.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144));
                     }
 
-                    if (!DefinedGenItems.RUBBLE.ignoreMaterials.contains(mat))
+                    if (DefinedGenItems.RUBBLE.item != null && !DefinedGenItems.RUBBLE.ignoreMaterials.contains(mat))
                     {
                         //TODO get block per material
                         Smeltery.addMelting(new ItemStack(DefinedGenItems.RUBBLE.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144));
                     }
 
-                    if (!DefinedGenItems.DUST.ignoreMaterials.contains(mat))
+                    if (DefinedGenItems.DUST.item != null && !DefinedGenItems.DUST.ignoreMaterials.contains(mat))
                     {
                         //TODO get block per material
                         Smeltery.addMelting(new ItemStack(DefinedGenItems.DUST.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144));
                     }
 
-                    if (!DefinedGenItems.DUST_IMPURE.ignoreMaterials.contains(mat))
+                    if (DefinedGenItems.DUST_IMPURE.item != null && !DefinedGenItems.DUST_IMPURE.ignoreMaterials.contains(mat))
                     {
                         //TODO get block per material
                         Smeltery.addMelting(new ItemStack(DefinedGenItems.DUST_IMPURE.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144));
