@@ -18,7 +18,7 @@ notifications:
       - "Build details : %{build_url} : duration : %{duration}"
 install: true
 script:
-  - ./gradlew build javadoc coveralls jacocoTestReport publish -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 -S -i --refresh-dependencies
+  - ./gradlew build javadoc coveralls jacocoTestReport publish -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 -Plocal=true -S -i --refresh-dependencies
 jdk:
   - oraclejdk7
 after_success:
