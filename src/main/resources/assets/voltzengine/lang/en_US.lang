@@ -274,6 +274,11 @@ item.voltzengine:sheetMetalTools.name=Sheet Metal Tool
 item.voltzengine:sheetMetalTools.hammer.name=Sheet Metal Hammer
 item.voltzengine:sheetMetalTools.shears.name=Sheet Metal Shears
 
+item.voltzengine:simpleTools.hammer.name=Stone Hammer
+item.voltzengine:simpleTools.chisel.name=Stone Chisel
+item.voltzengine:simpleTools.drill.name=Stone Drill
+item.voltzengine:simpleTools.file.name=Stone File
+
 ## GPS
 gps.pos.set.name=GPS Data Saved
 gps.error.pos.invalid.name=Invalid Location

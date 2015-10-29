@@ -12,13 +12,11 @@ import com.builtbroken.mc.core.content.resources.items.Gems;
 import com.builtbroken.mc.core.content.resources.items.ItemGems;
 import com.builtbroken.mc.core.content.resources.items.ItemGenMaterial;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
-import com.builtbroken.mc.core.content.resources.load.CastRecipeLoader;
-import com.builtbroken.mc.core.content.resources.load.CrusherRecipeLoad;
-import com.builtbroken.mc.core.content.resources.load.FluidSmelterRecipeLoad;
-import com.builtbroken.mc.core.content.resources.load.GrinderRecipeLoad;
+import com.builtbroken.mc.core.content.resources.load.*;
 import com.builtbroken.mc.core.content.tool.ItemScrewdriver;
 import com.builtbroken.mc.core.content.tool.ItemSelectionWand;
 import com.builtbroken.mc.core.content.tool.ItemSheetMetalTools;
+import com.builtbroken.mc.core.content.tool.ItemSimpleCraftingTool;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolMode;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeGeneral;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeRotation;
@@ -35,6 +33,7 @@ import com.builtbroken.mc.lib.mod.compat.Mods;
 import com.builtbroken.mc.lib.mod.compat.nei.NEIProxy;
 import com.builtbroken.mc.lib.mod.compat.oc.OCProxy;
 import com.builtbroken.mc.lib.mod.compat.rf.RFLoader;
+import com.builtbroken.mc.lib.mod.compat.tinkers.TinkerProxy;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
 import com.builtbroken.mc.lib.mod.config.ConfigScanner;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
@@ -63,7 +62,6 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.Language;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.creativetab.CreativeTabs;
@@ -80,7 +78,6 @@ import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -119,6 +116,7 @@ public class Engine
     public static Block multiBlock;
 
     public static Item itemWrench;
+    public static ItemSimpleCraftingTool itemSimpleCraftingTools;
     public static ItemSheetMetalTools itemSheetMetalTools;
     public static Item itemSheetMetal;
     public static Item instaHole;
@@ -132,6 +130,7 @@ public class Engine
     private static boolean sheetMetalRequested = false;
     private static boolean multiBlockRequested = false;
     public static boolean heatedRockRequested = false;
+    public static boolean simpleToolsRequested = false;
 
     public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 
@@ -210,6 +209,17 @@ public class Engine
     }
 
     /**
+     * Requests simple tool code to be loaded up
+     * Must be called in pre-init
+     */
+    public static void requestSimpleTools()
+    {
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+            throw new RuntimeException("Multi block content can only be requested in Pre-Init phase");
+        simpleToolsRequested = true;
+    }
+
+    /**
      * Requests sheet metal content to be loaded up
      * Must be called in pre-init
      */
@@ -270,9 +280,13 @@ public class Engine
         loader.applyModule(GrinderRecipeLoad.class);
         loader.applyModule(FluidSmelterRecipeLoad.class);
         loader.applyModule(CastRecipeLoader.class);
+        loader.applyModule(GearRecipeLoader.class);
+        loader.applyModule(RodRecipeLoader.class);
+        loader.applyModule(PlateRecipeLoader.class);
         loader.applyModule(NEIProxy.class);
         loader.applyModule(GroupProfileHandler.GLOBAL);
         loader.applyModule(OCProxy.class, Mods.OC.isLoaded());
+        loader.applyModule(TinkerProxy.class, Mods.TINKERS.isLoaded());
 
         //Check if RF api exists
         boolean shouldLoadRFHandler = true;
@@ -367,10 +381,18 @@ public class Engine
             EnumMultiblock.register();
         }
 
-        if (sheetMetalRequested || getConfig().getBoolean("SheetMetal", "ForceLoadContent", sheetMetalRequested, "Forces the sheet metal items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves."))
+        boolean forceLoadSheetMetal = (sheetMetalRequested || getConfig().hasKey("SheetMetalContent", "ForceLoad")) && getConfig().getBoolean("ForceLoad", "SheetMetalContent", true, "Forces the sheet metal items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.");
+        boolean forceLoadSimpleTools = (simpleToolsRequested || getConfig().hasKey("SimpleToolsContent", "ForceLoad")) && getConfig().getBoolean("ForceLoad", "SimpleToolsContent", true, "Forces the simple tools items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.");
+
+        if (sheetMetalRequested || forceLoadSheetMetal)
         {
             itemSheetMetalTools = getManager().newItem("veSheetMetalTools", ItemSheetMetalTools.class);
             itemSheetMetal = getManager().newItem("veSheetMetal", ItemSheetMetal.class);
+        }
+
+        if (simpleToolsRequested || forceLoadSimpleTools)
+        {
+            itemSimpleCraftingTools = getManager().newItem("veSimpleTools", ItemSimpleCraftingTool.class);
         }
 
         if (getConfig().getBoolean("LoadHeatedRocks", "Content", heatedRockRequested, "Loads up heated rocks which are used to give explosions an extra short term effect on stone."))

@@ -27,9 +27,10 @@ public enum GenMaterial
     ALUMINIUM(new Color(151, 164, 159)),
     MAGNESIUM(new Color(133, 146, 141)),
     URANIUM(new Color(140, 196, 114)),
-    BRASS(new Color(153, 144, 65)),
+    BRASS(new Color(127, 118, 62)),
     STONE(new Color(93, 102, 97)),
-    WOOD(new Color(81, 62, 5));
+    WOOD(new Color(97, 77, 5)),
+    DIAMOND(new Color(20, 110, 100));
 
 
     /** Color to use for render the texture */

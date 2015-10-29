@@ -1,6 +1,5 @@
 package com.builtbroken.mc.core.content.tool;
 
-import com.builtbroken.mc.api.items.IItemTool;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
@@ -16,7 +15,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -26,9 +24,8 @@ import java.util.List;
  * Basic tool used in hand crafting recipes for sheet metal
  * Created by Dark on 8/25/2015.
  */
-public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryInit, IItemTool
+public class ItemSheetMetalTools extends ItemAbstractCraftingTool implements IPostInit, IRegistryInit
 {
-    public static boolean ENABLE_TOOL_DAMAGE = true;
     public static int MAX_SHEARS_DAMAGE = 600;
     public static int MAX_HAMMER_DAMAGE = 800;
 
@@ -40,8 +37,11 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
 
     public ItemSheetMetalTools()
     {
+        super("SheetMetal");
         this.setMaxStackSize(1);
+        this.setHasSubtypes(true);
         this.setUnlocalizedName(References.PREFIX + "sheetMetalTools");
+        this.setCreativeTab(CreativeTabs.tabTools);
     }
 
     @Override
@@ -89,15 +89,9 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     @Override
     public void onRegistered()
     {
-        this.ENABLE_TOOL_DAMAGE = Engine.instance.getConfig().getBoolean("EnableToolDamage", "SheetMetalContent", true, "Enables tools taking damage in crafting recipes");
+        super.onRegistered();
         this.MAX_HAMMER_DAMAGE = Engine.instance.getConfig().getInt("MaxHammerDamage", "SheetMetalContent", MAX_HAMMER_DAMAGE, 10, 10000, "Max damage the sheet metal hammer can take before breaking");
         this.MAX_SHEARS_DAMAGE = Engine.instance.getConfig().getInt("MaxShearsDamage", "SheetMetalContent", MAX_SHEARS_DAMAGE, 10, 10000, "Max damage the sheet metal shears can take before breaking");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void onClientRegistered()
-    {
     }
 
     @Override
@@ -121,16 +115,6 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     {
         this.hammer = reg.registerIcon(References.PREFIX + "sheetMetalHammer");
         this.shears = reg.registerIcon(References.PREFIX + "sheetMetalShears");
-    }
-
-    public String getUnlocalizedName(ItemStack stack)
-    {
-        String type = getToolType(stack);
-        if (type != null && !type.isEmpty())
-        {
-            return super.getUnlocalizedName() + "." + type;
-        }
-        return super.getUnlocalizedName();
     }
 
     @Override
@@ -189,48 +173,8 @@ public class ItemSheetMetalTools extends Item implements IPostInit, IRegistryIni
     }
 
     @Override
-    public String getToolType(ItemStack stack)
-    {
-        return stack.getTagCompound() != null && stack.getTagCompound().hasKey("toolType") ? stack.getTagCompound().getString("toolType") : null;
-    }
-
-    @Override
     public String getToolCategory(ItemStack stack)
     {
         return "sheetmetal";
-    }
-
-    @Override
-    public void setToolType(ItemStack stack, String type)
-    {
-        if (stack.getTagCompound() == null)
-            stack.setTagCompound(new NBTTagCompound());
-
-        stack.getTagCompound().setString("toolType", type);
-    }
-
-    @Override
-    public boolean doesContainerItemLeaveCraftingGrid(ItemStack stack)
-    {
-        return !hasContainerItem(stack);
-    }
-
-    @Override
-    public ItemStack getContainerItem(ItemStack itemStack)
-    {
-        if (itemStack.getItemDamage() <= getMaxDamage(itemStack))
-        {
-            ItemStack stack = itemStack.copy();
-            if (ENABLE_TOOL_DAMAGE)
-                stack.setItemDamage(stack.getItemDamage() + 1);
-            return stack;
-        }
-        return null;
-    }
-
-    @Override
-    public boolean hasContainerItem(ItemStack stack)
-    {
-        return stack.getItemDamage() <= getMaxDamage(stack);
     }
 }
