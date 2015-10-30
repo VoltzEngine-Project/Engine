@@ -54,8 +54,10 @@ public abstract class BlastSimplePath extends Blast
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
             {
                 final Location next = node.add(dir);
-                if (!pathed_locations.contains(next))
+                if (shouldPathTo(node, next))
+                {
                     path(next, list);
+                }
             }
         }
     }
@@ -78,5 +80,10 @@ public abstract class BlastSimplePath extends Blast
     public boolean shouldPath(Location location)
     {
         return location.distance(center) <= size;
+    }
+
+    public boolean shouldPathTo(Location last, Location next)
+    {
+        return !pathed_locations.contains(next);
     }
 }
