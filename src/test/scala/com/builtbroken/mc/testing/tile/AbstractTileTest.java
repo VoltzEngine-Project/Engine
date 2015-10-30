@@ -38,7 +38,7 @@ import java.util.List;
  * prefab for testing Tile objects. Tries to
  * Created by Dark on 9/11/2015.
  */
-public class AbstractTileTest<T extends Tile> extends AbstractTileEntityTest<T, BlockTile>
+public abstract class AbstractTileTest<T extends Tile> extends AbstractTileEntityTest<T, BlockTile>
 {
     //These are only used for testing player interaction, if you only need a world create a new FakeWorld
     /** MC server instance for the entire class file to use */

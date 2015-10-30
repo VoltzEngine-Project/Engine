@@ -16,7 +16,7 @@ import org.junit.Test;
  * the basic methods automatically to reduce testing them again.
  * Created by Dark on 9/11/2015.
  */
-public class AbstractTileEntityTest<T extends TileEntity, B extends Block> extends AbstractTest
+public abstract class AbstractTileEntityTest<T extends TileEntity, B extends Block> extends AbstractTest
 {
     protected Class<T> tileClazz;
     protected B block;
