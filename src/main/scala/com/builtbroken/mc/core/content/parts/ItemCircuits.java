@@ -34,15 +34,15 @@ public class ItemCircuits extends Item implements IRegistryInit, IPostInit
         if (Engine.itemSimpleCraftingTools != null)
         {
             GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits), "wcw", "dpt", "wrw", 'w', "wireTin", 'p', "plankWood", 'c', Items.clay_ball, 'r', Items.redstone, 'd', Engine.itemSimpleCraftingTools.getDrill(), 't', Engine.itemSimpleCraftingTools.getCutters()));
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1), "wcw", "dpt", "wrw", 'w', "wireCopper", 'p', "plateCopper", 'c', Items.clay_ball, 'r', Items.redstone, 'd', Engine.itemSimpleCraftingTools.getDrill(), 't', Engine.itemSimpleCraftingTools.getCutters()));
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 2), "wcw", "dpt", "wrw", 'w', "wireGold", 'p', "plateGold", 'c', Items.clay_ball, 'r', Items.redstone, 'd', Engine.itemSimpleCraftingTools.getDrill(), 't', Engine.itemSimpleCraftingTools.getCutters()));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 1), "wcw", "dpt", "wrw", 'w', "wireCopper", 'p', "plateCopper", 'c', Items.clay_ball, 'r', Items.redstone, 'd', Engine.itemSimpleCraftingTools.getDrill(), 't', Engine.itemSimpleCraftingTools.getCutters()));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 2), "wcw", "dpt", "wrw", 'w', "wireGold", 'p', "plateGold", 'c', Items.clay_ball, 'r', Items.redstone, 'd', Engine.itemSimpleCraftingTools.getDrill(), 't', Engine.itemSimpleCraftingTools.getCutters()));
 
         }
         else
         {
             GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits), "wcw", "rpr", "wcw", 'w', "wireTin", 'p', "plankWood", 'c', "clay", 'r', Items.redstone));
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1), "wcw", "rpr", "wcw", 'w', "wireCopper", 'p', "ingotIron", 'c', "clay", 'r', Items.redstone));
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 2), "wcw", "rpr", "wcw", 'w', "wireGold", 'p', "ingotGold", 'c', "clay", 'r', Items.redstone));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 1), "wcw", "rpr", "wcw", 'w', "wireCopper", 'p', "ingotIron", 'c', "clay", 'r', Items.redstone));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 2), "wcw", "rpr", "wcw", 'w', "wireGold", 'p', "ingotGold", 'c', "clay", 'r', Items.redstone));
 
         }
     }
