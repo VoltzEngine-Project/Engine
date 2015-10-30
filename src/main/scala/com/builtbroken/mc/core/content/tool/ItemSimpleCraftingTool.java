@@ -99,6 +99,7 @@ public class ItemSimpleCraftingTool extends ItemAbstractCraftingTool implements 
         list.add(getChisel());
         list.add(getDrill());
         list.add(getFile());
+        list.add(getCutters());
     }
 
     public static ItemStack getTool(String type)
