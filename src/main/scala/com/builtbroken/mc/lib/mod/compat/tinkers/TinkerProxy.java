@@ -110,6 +110,42 @@ public class TinkerProxy extends AbstractLoadable
                         //TODO get block per material
                         Smeltery.addMelting(new ItemStack(DefinedGenItems.DUST_IMPURE.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144));
                     }
+
+                    if (DefinedGenItems.SCREW.item != null && !DefinedGenItems.SCREW.ignoreMaterials.contains(mat))
+                    {
+                        //TODO get block per material
+                        Smeltery.addMelting(new ItemStack(DefinedGenItems.SCREW.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 16));
+                    }
+
+                    if (DefinedGenItems.WIRE.item != null && !DefinedGenItems.WIRE.ignoreMaterials.contains(mat))
+                    {
+                        //TODO get block per material
+                        Smeltery.addMelting(new ItemStack(DefinedGenItems.WIRE.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 16));
+                    }
+
+                    if (DefinedGenItems.AX_HEAD.item != null && !DefinedGenItems.AX_HEAD.ignoreMaterials.contains(mat))
+                    {
+                        //TODO get block per material
+                        Smeltery.addMelting(new ItemStack(DefinedGenItems.AX_HEAD.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144 * 3));
+                    }
+
+                    if (DefinedGenItems.HOE_HEAD.item != null && !DefinedGenItems.HOE_HEAD.ignoreMaterials.contains(mat))
+                    {
+                        //TODO get block per material
+                        Smeltery.addMelting(new ItemStack(DefinedGenItems.HOE_HEAD.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144 * 2));
+                    }
+
+                    if (DefinedGenItems.SHOVEL_HEAD.item != null && !DefinedGenItems.SHOVEL_HEAD.ignoreMaterials.contains(mat))
+                    {
+                        //TODO get block per material
+                        Smeltery.addMelting(new ItemStack(DefinedGenItems.SHOVEL_HEAD.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144));
+                    }
+
+                    if (DefinedGenItems.SWORD_BLADE.item != null && !DefinedGenItems.SWORD_BLADE.ignoreMaterials.contains(mat))
+                    {
+                        //TODO get block per material
+                        Smeltery.addMelting(new ItemStack(DefinedGenItems.SWORD_BLADE.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144 * 2));
+                    }
                 }
             }
         }

@@ -6,7 +6,7 @@ import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.core.content.ItemInstaHole;
 import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
-import com.builtbroken.mc.core.content.parts.ItemParts;
+import com.builtbroken.mc.core.content.parts.ItemCircuits;
 import com.builtbroken.mc.core.content.resources.*;
 import com.builtbroken.mc.core.content.resources.items.Gems;
 import com.builtbroken.mc.core.content.resources.items.ItemGems;
@@ -121,7 +121,7 @@ public class Engine
     public static Item itemSheetMetal;
     public static Item instaHole;
     public static Item itemSelectionTool;
-    public static Item itemCraftingParts;
+    public static Item itemCircuits;
     public static Item gem = null;
 
     //Interal trigger booleans
@@ -131,6 +131,7 @@ public class Engine
     private static boolean multiBlockRequested = false;
     public static boolean heatedRockRequested = false;
     public static boolean simpleToolsRequested = false;
+    public static boolean circuitsRequested = false;
 
     public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 
@@ -183,6 +184,9 @@ public class Engine
         DefinedGenItems.PLATE.requestToLoad();
         DefinedGenItems.ROD.requestToLoad();
         DefinedGenItems.GEAR.requestToLoad();
+        DefinedGenItems.NUGGET.requestToLoad();
+        DefinedGenItems.WIRE.requestToLoad();
+        DefinedGenItems.SCREW.requestToLoad();
     }
 
     public static void requestToolParts()
@@ -196,6 +200,16 @@ public class Engine
         DefinedGenItems.SWORD_BLADE.requestToLoad();
     }
 
+    /**
+     * Requests simple tool code to be loaded up
+     * Must be called in pre-init
+     */
+    public static void requestCircuits()
+    {
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+            throw new RuntimeException("Circuit content can only be requested in Pre-Init phase");
+        circuitsRequested = true;
+    }
 
     /**
      * Requests basic multiblock code to be loaded up
@@ -215,7 +229,7 @@ public class Engine
     public static void requestSimpleTools()
     {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
-            throw new RuntimeException("Multi block content can only be requested in Pre-Init phase");
+            throw new RuntimeException("Simple tool content can only be requested in Pre-Init phase");
         simpleToolsRequested = true;
     }
 
@@ -283,6 +297,9 @@ public class Engine
         loader.applyModule(GearRecipeLoader.class);
         loader.applyModule(RodRecipeLoader.class);
         loader.applyModule(PlateRecipeLoader.class);
+        loader.applyModule(NuggetRecipeLoader.class);
+        loader.applyModule(WireRecipeLoader.class);
+        loader.applyModule(ScrewRecipeLoader.class);
         loader.applyModule(NEIProxy.class);
         loader.applyModule(GroupProfileHandler.GLOBAL);
         loader.applyModule(OCProxy.class, Mods.OC.isLoaded());
@@ -327,8 +344,7 @@ public class Engine
         ToolMode.REGISTRY.add(new ToolModeGeneral());
         ToolMode.REGISTRY.add(new ToolModeRotation());
 
-        if (runningAsDev)
-            itemCraftingParts = contentRegistry.newItem(ItemParts.class);
+
         /**
          * Multiblock Handling
          */
@@ -383,11 +399,17 @@ public class Engine
 
         boolean forceLoadSheetMetal = (sheetMetalRequested || getConfig().hasKey("SheetMetalContent", "ForceLoad")) && getConfig().getBoolean("ForceLoad", "SheetMetalContent", true, "Forces the sheet metal items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.");
         boolean forceLoadSimpleTools = (simpleToolsRequested || getConfig().hasKey("SimpleToolsContent", "ForceLoad")) && getConfig().getBoolean("ForceLoad", "SimpleToolsContent", true, "Forces the simple tools items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.");
+        boolean forceLoadCircuits = (circuitsRequested || getConfig().hasKey("Content", "LoadCircuits")) && getConfig().getBoolean("LoadCircuits", "Content", true, "Forces the simple tools items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.");
 
         if (sheetMetalRequested || forceLoadSheetMetal)
         {
             itemSheetMetalTools = getManager().newItem("veSheetMetalTools", ItemSheetMetalTools.class);
             itemSheetMetal = getManager().newItem("veSheetMetal", ItemSheetMetal.class);
+        }
+
+        if (circuitsRequested || forceLoadCircuits)
+        {
+            itemCircuits = getManager().newItem("veCircuits", ItemCircuits.class);
         }
 
         if (simpleToolsRequested || forceLoadSimpleTools)

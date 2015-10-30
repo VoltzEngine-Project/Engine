@@ -38,7 +38,13 @@ public enum DefinedGenItems
     /** Head to a miner's pickax */
     PICK_HEAD("head_pick", URANIUM),
     /** Head to a farming hoe */
-    HOE_HEAD("head_hoe", URANIUM);
+    HOE_HEAD("head_hoe", URANIUM),
+    /** Used to attach parts to each other. */
+    SCREW("screw", URANIUM),
+    /** Cable */
+    WIRE("wire", URANIUM, DIAMOND),
+    /** Small piece of metal */
+    NUGGET("nugget", URANIUM, DIAMOND, GOLD, WOOD, STONE);
 
     /** Material types to ignore when generating the item */
     public final List<GenMaterial> ignoreMaterials;

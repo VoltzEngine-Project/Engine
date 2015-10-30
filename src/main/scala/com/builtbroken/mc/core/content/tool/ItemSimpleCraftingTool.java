@@ -30,6 +30,7 @@ public class ItemSimpleCraftingTool extends ItemAbstractCraftingTool implements 
     public static int MAX_HAMMER_DAMAGE = 200;
     public static int MAX_CHISEL_DAMAGE = 200;
     public static int MAX_DRILL_DAMAGE = 300;
+    public static int MAX_CUTTER_DAMAGE = 300;
 
     @SideOnly(Side.CLIENT)
     IIcon hammer;
@@ -42,6 +43,9 @@ public class ItemSimpleCraftingTool extends ItemAbstractCraftingTool implements 
 
     @SideOnly(Side.CLIENT)
     IIcon file;
+
+    @SideOnly(Side.CLIENT)
+    IIcon cutter;
 
 
     public ItemSimpleCraftingTool()
@@ -81,6 +85,10 @@ public class ItemSimpleCraftingTool extends ItemAbstractCraftingTool implements 
 
         //Drill recipe
         GameRegistry.addRecipe(new RecipeShapedOre(getDrill(), "tGs", "Gtt", "sF ", 's', "string", 'G', "gearWood", 'F', "flint", 't', "stickWood"));
+
+        //Cutter recipe
+        GameRegistry.addRecipe(new RecipeTool(getCutters(), "tft", "dsh", "g g", 's', "ironScrew", 'g', "ironRod", 't', "ingotIron", 'd', getDrill(), 'h', getHammer(), 'f', getFile()));
+
     }
 
     @Override
@@ -115,6 +123,11 @@ public class ItemSimpleCraftingTool extends ItemAbstractCraftingTool implements 
         return getTool("drill");
     }
 
+    public static ItemStack getCutters()
+    {
+        return getTool("cutter");
+    }
+
     public static ItemStack getFile()
     {
         return getTool("file");
@@ -140,12 +153,20 @@ public class ItemSimpleCraftingTool extends ItemAbstractCraftingTool implements 
         {
             return MAX_CHISEL_DAMAGE;
         }
+        else if ("cutter".equals(type))
+        {
+            return MAX_CUTTER_DAMAGE;
+        }
         return 100;
     }
 
     @Override
     public String getToolCategory(ItemStack stack)
     {
+        if (getToolType(stack).equalsIgnoreCase("cutter"))
+        {
+            return "iron";
+        }
         return "stone";
     }
 
@@ -157,6 +178,7 @@ public class ItemSimpleCraftingTool extends ItemAbstractCraftingTool implements 
         this.chisel = reg.registerIcon(References.PREFIX + "stoneChisel");
         this.drill = reg.registerIcon(References.PREFIX + "stoneDrill");
         this.file = reg.registerIcon(References.PREFIX + "stoneFile");
+        this.cutter = reg.registerIcon(References.PREFIX + "ironCutters");
     }
 
     @Override
@@ -190,6 +212,17 @@ public class ItemSimpleCraftingTool extends ItemAbstractCraftingTool implements 
                         return drill;
                     case "file":
                         return file;
+                }
+            }
+        }
+        else if (getToolCategory(stack).equalsIgnoreCase("iron"))
+        {
+            if (type != null && !type.isEmpty())
+            {
+                switch (type)
+                {
+                    case "cutter":
+                        return cutter;
                 }
             }
         }

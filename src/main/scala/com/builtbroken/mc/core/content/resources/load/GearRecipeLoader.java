@@ -3,10 +3,14 @@ package com.builtbroken.mc.core.content.resources.load;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.content.resources.DefinedGenItems;
 import com.builtbroken.mc.core.content.resources.GenMaterial;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.builtbroken.mc.prefab.recipe.item.RecipeTool;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.EnumSet;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -35,53 +39,22 @@ public class GearRecipeLoader extends AbstractLoadable
                         'C', Engine.itemSimpleCraftingTools.getChisel(),
                         'D', Engine.itemSimpleCraftingTools.getDrill()));
 
-                //TODO change tools to iron
-                GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.GEAR.item, 1, GenMaterial.TIN.ordinal()),
-                        "WH", "DC",
-                        'W', "ingotTin",
-                        'H', Engine.itemSimpleCraftingTools.getHammer(),
-                        'C', Engine.itemSimpleCraftingTools.getChisel(),
-                        'D', Engine.itemSimpleCraftingTools.getDrill()));
+                EnumSet<GenMaterial> mats = EnumSet.allOf(GenMaterial.class);
+                mats.remove(GenMaterial.UNKNOWN);
 
-                //TODO change tools to iron
-                GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.GEAR.item, 1, GenMaterial.COPPER.ordinal()),
-                        "WH", "DC",
-                        'W', "ingotCopper",
-                        'H', Engine.itemSimpleCraftingTools.getHammer(),
-                        'C', Engine.itemSimpleCraftingTools.getChisel(),
-                        'D', Engine.itemSimpleCraftingTools.getDrill()));
-
-                //TODO change tools to iron
-                GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.GEAR.item, 1, GenMaterial.BRONZE.ordinal()),
-                        "WH", "DC",
-                        'W', "ingotBronze",
-                        'H', Engine.itemSimpleCraftingTools.getHammer(),
-                        'C', Engine.itemSimpleCraftingTools.getChisel(),
-                        'D', Engine.itemSimpleCraftingTools.getDrill()));
-
-                //TODO change tools to iron
-                GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.GEAR.item, 1, GenMaterial.STEEL.ordinal()),
-                        "WH", "DC",
-                        'W', "ingotSteel",
-                        'H', Engine.itemSimpleCraftingTools.getHammer(),
-                        'C', Engine.itemSimpleCraftingTools.getChisel(),
-                        'D', Engine.itemSimpleCraftingTools.getDrill()));
-
-                //TODO change tools to iron
-                GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.GEAR.item, 1, GenMaterial.IRON.ordinal()),
-                        "WH", "DC",
-                        'W', "ingotIron",
-                        'H', Engine.itemSimpleCraftingTools.getHammer(),
-                        'C', Engine.itemSimpleCraftingTools.getChisel(),
-                        'D', Engine.itemSimpleCraftingTools.getDrill()));
-
-                //TODO change tools to iron
-                GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.GEAR.item, 1, GenMaterial.DIAMOND.ordinal()),
-                        "WH", "DC",
-                        'W', "gemDiamond",
-                        'H', Engine.itemSimpleCraftingTools.getHammer(),
-                        'C', Engine.itemSimpleCraftingTools.getChisel(),
-                        'D', Engine.itemSimpleCraftingTools.getDrill()));
+                for (GenMaterial material : mats)
+                {
+                    if (OreDictionary.getOres("ingot" + LanguageUtility.capitalizeFirst(material.name().toLowerCase()), false).size() > 0 && !DefinedGenItems.GEAR.ignoreMaterials.contains(material))
+                    {
+                        //TODO change tools to iron
+                        GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.GEAR.item, 1, material.ordinal()),
+                                "WH", "DC",
+                                'W', "ingot" + LanguageUtility.capitalizeFirst(material.name().toLowerCase()),
+                                'H', Engine.itemSimpleCraftingTools.getHammer(),
+                                'C', Engine.itemSimpleCraftingTools.getChisel(),
+                                'D', Engine.itemSimpleCraftingTools.getDrill()));
+                    }
+                }
             }
         }
     }
