@@ -447,6 +447,10 @@ public class Engine
                         OreDictionary.registerOre(genItem.oreDict + LanguageUtility.capitalizeFirst(mat.name().toLowerCase()), genItem.stack(mat));
                     }
                 }
+                if (genItem == DefinedGenItems.INGOT && getConfig().getBoolean("EnableCheapSteelRecipe", "Content", true, "Enables iron ingot to steel ingot smelting recipe. Only disable if another recipe for steel exists or most items will be uncraftable."))
+                {
+                    GameRegistry.addSmelting(Items.iron_ingot, genItem.stack(GenMaterial.STEEL), 0f);
+                }
             }
         }
         logger.info("Done... Took " + StringHelpers.formatTimeDifference(start, System.nanoTime()));
