@@ -72,6 +72,7 @@ public class BlastBasic extends Blast
     @Override
     public void getEffectedBlocks(List<BlockEdit> list)
     {
+        //TODO disable profiler if not in debug mode
         HashMap<BlockEdit, Float> map = new HashMap();
         profile.startSection("getEffectedBlocks");
 

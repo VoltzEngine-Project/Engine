@@ -3,7 +3,7 @@ package com.builtbroken.mc.prefab.explosive.blast;
 
 import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.lib.transform.vector.Pos;
-import com.builtbroken.mc.testing.debug.profiler.RunProfile;
+import com.builtbroken.jlib.profiler.RunProfile;
 
 import java.util.ArrayList;
 import java.util.Collections;
