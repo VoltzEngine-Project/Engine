@@ -90,7 +90,7 @@ import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
  * @author Calclavia, DarkGuardsman
  */
 
-@Mod(modid = References.ID, name = References.NAME, version = References.VERSION, acceptableRemoteVersions = "*")
+@Mod(modid = References.ID, name = References.NAME, version = References.VERSION, acceptableRemoteVersions = "*", dependencies = "after:TConstruct")
 public class Engine
 {
     public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);

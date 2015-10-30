@@ -1,9 +1,11 @@
 package com.builtbroken.mc.lib.mod.compat.tinkers;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.content.resources.DefinedGenItems;
 import com.builtbroken.mc.core.content.resources.GenMaterial;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
+import mantle.utils.ItemMetaWrapper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -15,7 +17,9 @@ import tconstruct.library.crafting.CastingRecipe;
 import tconstruct.library.crafting.LiquidCasting;
 import tconstruct.library.crafting.Smeltery;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -50,7 +54,31 @@ public class TinkerProxy extends AbstractLoadable
                     if (DefinedGenItems.GEAR.item != null && !DefinedGenItems.GEAR.ignoreMaterials.contains(mat))
                     {
                         //TODO get block per material
+                        ItemMetaWrapper item = new ItemMetaWrapper(new ItemStack(DefinedGenItems.GEAR.item, 1, mat.ordinal()));
+                        try
+                        {
+                            Field field = Smeltery.class.getDeclaredField("smeltingList");
+                            field.setAccessible(true);
+                            Map<ItemMetaWrapper, FluidStack> smeltingList = (Map<ItemMetaWrapper, FluidStack>) field.get(Smeltery.instance);
+
+                            field = Smeltery.class.getDeclaredField("temperatureList");
+                            field.setAccessible(true);
+                            Map<ItemMetaWrapper, Integer> temperatureList = (Map<ItemMetaWrapper, Integer>) field.get(Smeltery.instance);
+
+                            field = Smeltery.class.getDeclaredField("renderIndex");
+                            field.setAccessible(true);
+                            Map<ItemMetaWrapper, ItemStack> renderIndex = (Map<ItemMetaWrapper, ItemStack>) field.get(Smeltery.instance);
+
+                            System.out.println(smeltingList.remove(item));
+                            System.out.println(temperatureList.remove(item));
+                            System.out.println(renderIndex.remove(item));
+
+                        } catch (Exception e)
+                        {
+                            Engine.instance.logger().error("Failed to reflect into tinkers to correct a duplication bug for gears.", e);
+                        }
                         Smeltery.addMelting(new ItemStack(DefinedGenItems.GEAR.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144));
+
                     }
 
                     if (DefinedGenItems.ROD.item != null && !DefinedGenItems.ROD.ignoreMaterials.contains(mat))
