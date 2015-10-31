@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/** Profile data for blast basic
+/**
+ * Profile data for blast basic
  * Created by robert on 12/10/2014.
  */
 public class BlastRunProfile extends RunProfile
@@ -24,7 +25,7 @@ public class BlastRunProfile extends RunProfile
 
     public BlastRunProfile(BlastBasic blast)
     {
-        super("icbm.blast."+ blast.getClass().getSimpleName() + "#"+ System.nanoTime());
+        super("icbm.blast." + blast.getClass().getSimpleName() + "#" + System.nanoTime());
         this.size = blast.size;
         this.energy = blast.energy;
         this.center = new Pos(blast.x, blast.y, blast.z);
@@ -44,16 +45,20 @@ public class BlastRunProfile extends RunProfile
         stringBuilder.append("\n");
 
         long averageBlockIterationTime = 0;
-        for (Long n : blockIterationTimes)
+        if (blockIterationTimes.size() > 0)
         {
-            averageBlockIterationTime += n;
-        }
-        averageBlockIterationTime /= blockIterationTimes.size();
+            for (Long n : blockIterationTimes)
+            {
+                averageBlockIterationTime += n;
+            }
+            averageBlockIterationTime /= blockIterationTimes.size();
 
-        Collections.sort(blockIterationTimes);
-        stringBuilder.append("\nAvg B Time: " + StringHelpers.formatNanoTime(averageBlockIterationTime));
-        stringBuilder.append("\nMin B Time: " + StringHelpers.formatNanoTime(blockIterationTimes.get(0)));
-        stringBuilder.append("\nMax B Time: " + StringHelpers.formatNanoTime(blockIterationTimes.get(blockIterationTimes.size() - 1)));
+
+            Collections.sort(blockIterationTimes);
+            stringBuilder.append("\nAvg B Time: " + StringHelpers.formatNanoTime(averageBlockIterationTime));
+            stringBuilder.append("\nMin B Time: " + StringHelpers.formatNanoTime(blockIterationTimes.get(0)));
+            stringBuilder.append("\nMax B Time: " + StringHelpers.formatNanoTime(blockIterationTimes.get(blockIterationTimes.size() - 1)));
+        }
         stringBuilder.append("\n");
     }
 }
