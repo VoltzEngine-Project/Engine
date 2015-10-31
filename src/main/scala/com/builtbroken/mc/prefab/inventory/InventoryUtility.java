@@ -2,6 +2,7 @@ package com.builtbroken.mc.prefab.inventory;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.lib.helper.DummyPlayer;
+import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import net.minecraft.block.Block;
@@ -627,19 +628,7 @@ public class InventoryUtility
      */
     public static boolean doesStackNBTMatch(ItemStack stackA, ItemStack stackB)
     {
-        if (stackA.getTagCompound() == null && stackB.getTagCompound() == null)
-        {
-            return true;
-        }
-        else if (stackA.getTagCompound() != null && stackB.getTagCompound() == null)
-        {
-            return false;
-        }
-        else if (stackA.getTagCompound() == null && stackB.getTagCompound() != null)
-        {
-            return false;
-        }
-        return stackA.getTagCompound().equals(stackB.getTagCompound());
+        return NBTUtility.doTagsMatch(stackA.getTagCompound(), stackB.getTagCompound());
     }
 
     /**

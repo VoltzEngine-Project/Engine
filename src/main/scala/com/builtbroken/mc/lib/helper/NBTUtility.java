@@ -65,7 +65,7 @@ public class NBTUtility
     {
         try
         {
-            if(file == null)
+            if (file == null)
             {
                 throw new FileNotFoundException("File is null so can not be found");
             }
@@ -78,13 +78,11 @@ public class NBTUtility
                 Engine.instance.logger().info("Save file " + file + "\n\tdoes not exist in the save folder! Generating new NBT data in it's place.");
                 return new NBTTagCompound();
             }
-        }
-        catch (FileNotFoundException e)
+        } catch (FileNotFoundException e)
         {
             Engine.instance.logger().error("Save Loader Error, File not found " + file, e);
             return new NBTTagCompound();
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             Engine.instance.logger().error("Save Loader Error, Failed to read " + file, e);
             return new NBTTagCompound();
@@ -334,14 +332,26 @@ public class NBTUtility
         return null;
     }
 
-    public static NBTTagCompound saveProfile(NBTTagCompound nbt, GameProfile profile)
+    /**
+     * Saves a user's profile to disc
+     *
+     * @param nbt - NBT containing the profile
+     * @return tag with the saved data, should be the same as the passed in nbt value
+     */
+    public static NBTTagCompound saveProfile(final NBTTagCompound nbt, final GameProfile profile)
     {
         nbt.setString("UUID", profile.getId().toString());
         nbt.setString("username", profile.getName());
         return nbt;
     }
 
-    public static GameProfile loadProfile(NBTTagCompound nbt)
+    /**
+     * Loads a user's profile from the disc
+     *
+     * @param nbt - NBT containing the profile
+     * @return new profile generated from the nbt
+     */
+    public static GameProfile loadProfile(final NBTTagCompound nbt)
     {
         if (nbt.getString("UUID").split("-").length == 5)
         {
@@ -355,4 +365,29 @@ public class NBTUtility
 
         return null;
     }
+
+    /***
+     * Checks if two NBT tag compounds match each other
+     *
+     * @param tag
+     * @param tag2
+     * @return true if they match, includes if both are null as matching
+     */
+    public static boolean doTagsMatch(final NBTTagCompound tag, final NBTTagCompound tag2)
+    {
+        if (tag == null && tag2 == null)
+        {
+            return true;
+        }
+        else if (tag != null && tag2 == null)
+        {
+            return false;
+        }
+        else if (tag == null && tag2 != null)
+        {
+            return false;
+        }
+        return tag.equals(tag2);
+    }
+
 }
