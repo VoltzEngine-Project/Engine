@@ -49,12 +49,12 @@ public class EntityProjectile extends Entity implements IProjectile
     protected DamageSource impact_damageSource = DamageSource.anvil;
 
     //In ground data
-    private int xTile = -1;
-    private int yTile = -1;
-    private int zTile = -1;
-    private Block inBlockID;
-    private int inData;
-    private boolean inGround;
+    protected int xTile = -1;
+    protected int yTile = -1;
+    protected int zTile = -1;
+    protected Block inBlockID;
+    protected int inData;
+    protected boolean inGround;
 
     //Timers
     protected int ticksInGround;
@@ -280,7 +280,6 @@ public class EntityProjectile extends Entity implements IProjectile
 
     protected void onImpactTile()
     {
-        this.setDead();
     }
 
     protected void handleEntityCollision(MovingObjectPosition movingobjectposition, Entity entityHit)
