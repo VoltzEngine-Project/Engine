@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.FMLInjectionData;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -74,8 +75,7 @@ public class DepDownloader
             }
             if (!found)
             {
-                Thread thr = Thread.currentThread();
-                if (!thr.getName().equals("Server thread"))
+                if (!GraphicsEnvironment.isHeadless())
                 {
                     int reply = JOptionPane.showConfirmDialog(null, "Missing required version of " + dep.getGenericFileName() + ". Do you want to download?\nIf you click no the game will close as it will crash without this file.", "Missing dependency", JOptionPane.YES_OPTION);
                     if (reply != JOptionPane.YES_OPTION)
