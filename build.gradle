@@ -99,7 +99,7 @@ task curseTest {
     println uploading to curseForge
     dependsOn curseforge227048
   }
-}
+} 
 
 jar {
     manifest.mainAttributes(
