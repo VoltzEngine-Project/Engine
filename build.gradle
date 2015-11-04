@@ -16,8 +16,6 @@ buildscript {
     }
 }
 
-
-
 plugins {
   id 'com.matthewprenger.cursegradle' version '1.0.1'
   id 'net.saliman.cobertura' version '2.2.5'
@@ -92,6 +90,17 @@ lombok {
     sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
 }
 
+task curseTest {
+  onlyIf {
+    grgit.log().find { it.message.contains('[deploy]') }
+  }
+  doLast {
+    // do your other grgit stuff
+    println uploading to curseForge
+    dependsOn curseforge227048
+  }
+}
+
 jar {
     manifest.mainAttributes(
             "Built-By": System.getProperty('user.name'),
@@ -108,13 +117,6 @@ jar {
 	}
 }
 
-
-
-//configure([compileJava, compileTestJava]) {
-//    options.compilerArgs += ['-Xlint:all', '-Xlint:-path']
-//    options.deprecation = true
-//    options.encoding = 'utf8'
-//}
 jacocoTestReport {
     reports {
         xml.enabled = true // coveralls plugin depends on xml format report
