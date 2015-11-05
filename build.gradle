@@ -108,6 +108,8 @@ task curseTest {
 
 }
 
+build dependsOn curseforge
+
 jar {
     manifest.mainAttributes(
             "Built-By": System.getProperty('user.name'),
