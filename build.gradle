@@ -124,8 +124,11 @@ jar {
             "Git-Hash": gitHash,
             "FMLCorePlugin": "com.builtbroken.mc.core.EngineCoreMod",
             "FMLAT": "VE_at.cfg"
-			"FMLCorePluginContainsFMLMod": "true"
     )
+	manifest {
+		attributes 'FMLCorePlugin': 'com.builtbroken.mc.core.EngineCoreMod',
+				'FMLCorePluginContainsFMLMod': 'true'
+	}
 }
 
 jacocoTestReport {
