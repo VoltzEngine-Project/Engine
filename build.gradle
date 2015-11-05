@@ -102,8 +102,10 @@ task curseTest {
   doLast {
     // do your other grgit stuff
     println "uploading to curseForge"
-    tasks.javadoc.dependsOn curseforge227048
+    tasks.build.dependsOn curseforge227048
   }
+  mustRunAfter "deobfJar"
+
 }
 
 jar {
