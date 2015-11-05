@@ -99,12 +99,12 @@ task deployCurse {
 
 import org.ajoberstar.grgit.Commit
 
-task curseTest {
-  if ( grgit.log().find ) { it.fullMessage.contains("[deploy]") {
-  curseTest.dependsOn deployCurse
-  }
-}
-}
+//task curseTest {
+//  if ( grgit.log().find ) { it.fullMessage.contains("[deploy]") {
+//  curseTest.dependsOn deployCurse
+//  }
+//}
+//}
 //tasks.build.dependsOn tasks.curseforge
 
 jar {
