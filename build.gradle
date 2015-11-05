@@ -94,7 +94,7 @@ lombok {
 }
 
 task deployCurse {
-     //dependsOn curseforge227048
+    dependsOn 'curseforge227048'
 }
 
 import org.ajoberstar.grgit.Commit
