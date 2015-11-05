@@ -97,12 +97,12 @@ import org.ajoberstar.grgit.Commit
 
 task curseTest {
   onlyIf {
-    grgit.log().find { it.fullMessage.contains('deploy') }
+    grgit.log().find { it.fullMessage.contains("[deploy]") }
   }
   doLast {
     // do your other grgit stuff
     println "uploading to curseForge"
-    tasks.publish.dependsOn curseforge227048
+    tasks.javadoc.dependsOn curseforge227048
   }
 }
 
