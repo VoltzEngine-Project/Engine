@@ -93,6 +93,10 @@ lombok {
     sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
 }
 
+task deployCurse {
+     //dependsOn curseforge227048
+}
+
 import org.ajoberstar.grgit.Commit
 
 task curseTest {
@@ -104,16 +108,12 @@ task curseTest {
     println "uploading to curseForge"
     //tasks.build.dependsOn curseforge227048
   }
-  //tasks.deployCurse.dependsOn tasks.deployCurse
+  tasks.deployCurse.dependsOn tasks.deployCurse
   mustRunAfter "deobfJar"
 
 }
 
 //tasks.build.dependsOn tasks.curseforge
-
-task deployCurse {
-     dependsOn makePretty
-}
 
 jar {
     manifest.mainAttributes(
