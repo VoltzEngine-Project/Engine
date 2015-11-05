@@ -99,26 +99,12 @@ task deployCurse {
 
 import org.ajoberstar.grgit.Commit
 
-//task curseTest {
-//  onlyIf {
-//    grgit.log().find { it.fullMessage.contains("[deploy]") }
-//  }
-//  doLast {
-//    // do your other grgit stuff
-//    println "uploading to curseForge"
-//    //tasks.build.dependsOn curseforge227048
-//  }
-//  tasks.build.dependsOn tasks.deployCurse
-//  mustRunAfter "deobfJar"
-//
-//}
-
 task curseTest {
-  if grgit.log().find { it.fullMessage.contains("[deploy]") {
+  if ( grgit.log().find ) { it.fullMessage.contains("[deploy]") {
   curseTest.dependsOn deployCurse
   }
 }
-
+}
 //tasks.build.dependsOn tasks.curseforge
 
 jar {
