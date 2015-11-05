@@ -102,13 +102,18 @@ task curseTest {
   doLast {
     // do your other grgit stuff
     println "uploading to curseForge"
-    tasks.build.dependsOn curseforge227048
+    //tasks.build.dependsOn curseforge227048
   }
+  //tasks.deployCurse.dependsOn tasks.deployCurse
   mustRunAfter "deobfJar"
 
 }
 
-build dependsOn curseforge
+//tasks.build.dependsOn tasks.curseforge
+
+task deployCurse {
+     dependsOn makePretty
+}
 
 jar {
     manifest.mainAttributes(
