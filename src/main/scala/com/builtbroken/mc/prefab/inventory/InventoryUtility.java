@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -617,6 +618,35 @@ public class InventoryUtility
             return stackA.isItemEqual(stackB) && doesStackNBTMatch(stackA, stackB);
         }
         return stackA == null && stackB == null;
+    }
+
+    /**
+     * Checks if two stacks match each other using item, meta, and nbt to compare. If
+     * this fails then it attempts to use the object's OreDictionary name to match.
+     *
+     * @param stackA - item stack a
+     * @param stackB - item stack a
+     * @return true if they match
+     */
+    public static boolean stacksMatchWithOreNames(ItemStack stackA, ItemStack stackB)
+    {
+        if (stacksMatch(stackA, stackB))
+            return true;
+        if (stackA != null && stackB != null)
+        {
+            //TODO this might be a bad idea if an item has a lot of ids
+            List<Integer> a = new ArrayList();
+            for (int i : OreDictionary.getOreIDs(stackA))
+            {
+                a.add(i);
+            }
+            for (int i : OreDictionary.getOreIDs(stackB))
+            {
+                if (a.contains(i))
+                    return true;
+            }
+        }
+        return false;
     }
 
     /**
