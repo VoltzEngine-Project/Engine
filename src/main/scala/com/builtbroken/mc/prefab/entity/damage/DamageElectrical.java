@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.content.damage;
+package com.builtbroken.mc.prefab.entity.damage;
 
 import com.builtbroken.mc.prefab.AbstractDamageSource;
 
@@ -7,7 +7,6 @@ import com.builtbroken.mc.prefab.AbstractDamageSource;
  *
  * @author Darkguardsman
  */
-@Deprecated
 public class DamageElectrical extends AbstractDamageSource
 {
     //TODO replace code calclavia removed, add Factory to setup damage type correctly
