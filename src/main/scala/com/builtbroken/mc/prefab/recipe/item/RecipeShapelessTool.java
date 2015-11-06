@@ -6,24 +6,24 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 /**
- * Recipe that handles tool with metadata for damage. These tools do not leave the grid but rather take damage.
+ * Shapeless version of {@link RecipeTool}
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
- * Created by Dark(DarkGuardsman, Robert) on 10/2/2015.
+ * Created by Dark(DarkGuardsman, Robert) on 11/6/2015.
  */
-public class RecipeTool extends RecipeShapedOre
+public class RecipeShapelessTool extends RecipeShapelessOre
 {
-    public RecipeTool(Block result, Object... recipe)
+    public RecipeShapelessTool(Block result, Object... recipe)
     {
         super(result, recipe);
     }
 
-    public RecipeTool(Item result, Object... recipe)
+    public RecipeShapelessTool(Item result, Object... recipe)
     {
         super(result, recipe);
     }
 
-    public RecipeTool(ItemStack result, Object... recipe)
+    public RecipeShapelessTool(ItemStack result, Object... recipe)
     {
         super(result, recipe);
     }
