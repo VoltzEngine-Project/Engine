@@ -632,6 +632,18 @@ public class InventoryUtility
     {
         if (stacksMatch(stackA, stackB))
             return true;
+        return stacksMatchWithOreNames2(stackA, stackB) != null;
+    }
+
+    /**
+     * Compares two stack with each other using ore names.
+     *
+     * @param stackA - item stack a
+     * @param stackB - item stack a
+     * @return matched ore name
+     */
+    public static String stacksMatchWithOreNames2(ItemStack stackA, ItemStack stackB)
+    {
         if (stackA != null && stackB != null)
         {
             //TODO this might be a bad idea if an item has a lot of ids
@@ -643,10 +655,10 @@ public class InventoryUtility
             for (int i : OreDictionary.getOreIDs(stackB))
             {
                 if (a.contains(i))
-                    return true;
+                    return OreDictionary.getOreName(i);
             }
         }
-        return false;
+        return null;
     }
 
     /**
