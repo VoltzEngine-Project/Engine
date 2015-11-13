@@ -1,12 +1,13 @@
 package com.builtbroken.mc.lib.world.edit;
 
-import cpw.mods.fml.common.eventhandler.Event;
+import com.builtbroken.mc.api.edit.IWorldChangeAction;
+import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
+import com.builtbroken.mc.api.event.WorldChangeActionEvent;
+import com.builtbroken.mc.lib.transform.vector.Location;
+import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import com.builtbroken.mc.lib.transform.vector.Location;
-import com.builtbroken.mc.api.event.WorldChangeActionEvent;
-import com.builtbroken.mc.lib.world.edit.BlockEdit;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,10 +51,10 @@ public class WorldChangeHelper
                 }
                 else
                 {
-                    Collection<BlockEdit> effectedBlocks = getEffectedBlocks(loc, triggerCause, action);
+                    Collection<IWorldEdit> effectedBlocks = getEffectedBlocks(loc, triggerCause, action);
                     if (effectedBlocks != null && !effectedBlocks.isEmpty()) ;
                     {
-                        for (BlockEdit v : effectedBlocks)
+                        for (IWorldEdit v : effectedBlocks)
                         {
                             action.handleBlockPlacement(v);
                         }
@@ -74,16 +75,16 @@ public class WorldChangeHelper
      * @param blast - action instance
      * @return list of block locations changes
      */
-    public static Collection<BlockEdit> getEffectedBlocks(Location vec, TriggerCause triggerCause, IWorldChangeAction blast)
+    public static Collection<IWorldEdit> getEffectedBlocks(Location vec, TriggerCause triggerCause, IWorldChangeAction blast)
     {
-        Collection<BlockEdit> effectedBlocks = blast.getEffectedBlocks();
+        Collection<IWorldEdit> effectedBlocks = blast.getEffectedBlocks();
         //Triggers an event allowing other mods to edit the block list
         MinecraftForge.EVENT_BUS.post(new WorldChangeActionEvent.FinishedCalculatingEffectEvent(vec, effectedBlocks, blast, triggerCause));
 
         //If we have blocks to edit then register with the event handler
         if (effectedBlocks == null)
         {
-            return new ArrayList<>();
+            return new ArrayList();
         }
         return effectedBlocks;
     }

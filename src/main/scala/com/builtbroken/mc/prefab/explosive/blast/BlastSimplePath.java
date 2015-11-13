@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.explosive.blast;
 
+import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -25,7 +26,7 @@ public abstract class BlastSimplePath extends Blast
     protected Location center;
 
     @Override
-    public void getEffectedBlocks(List<BlockEdit> list)
+    public void getEffectedBlocks(List<IWorldEdit> list)
     {
         center = new Location(world(), x(), y(), z());
         //Temp fix to solve if center is an air block
@@ -42,7 +43,7 @@ public abstract class BlastSimplePath extends Blast
      * @param node - node, should not be null
      * @param list - list to add edits to, should not be null
      */
-    public void path(final Location node, final List<BlockEdit> list)
+    public void path(final Location node, final List<IWorldEdit> list)
     {
         pathed_locations.add(node);
         if (shouldPath(node))

@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Level;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.lib.world.edit.IWorldChangeAction;
+import com.builtbroken.mc.api.edit.IWorldChangeAction;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.explosive.blast;
 
+import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.core.Engine;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * Prefab for simple blasts
  * Created by robert on 11/19/2014.
  */
 //TODO use pathfinder for emp to allow for EMP shielding
@@ -57,7 +59,7 @@ public class BlastBasic extends Blast
     /**
      * Blocks to call after all blocks are removed in case they do updates when destroyed
      */
-    protected List<BlockEdit> postCallDestroyMethod = new ArrayList();
+    protected List<IWorldEdit> postCallDestroyMethod = new ArrayList();
     /**
      * Profilier for the blast
      */
@@ -70,7 +72,7 @@ public class BlastBasic extends Blast
 
 
     @Override
-    public void getEffectedBlocks(List<BlockEdit> list)
+    public void getEffectedBlocks(List<IWorldEdit> list)
     {
         //TODO disable profiler if not in debug mode
         HashMap<BlockEdit, Float> map = new HashMap();
@@ -203,16 +205,16 @@ public class BlastBasic extends Blast
     {
         //Update debug info
         if (vec.isAirBlock(world))
-            profile.airBlocksPathed++;
+        { profile.airBlocksPathed++; }
         else
-            profile.blocksRemoved++;
+        { profile.blocksRemoved++; }
         //Get cost
         return (vec.getHardness() >= 0 ? energy - (float) Math.max(vec.getResistance(explosionBlameEntity, x, y, z), 0.5) : -1);
 
     }
 
     @Override
-    public void handleBlockPlacement(BlockEdit vec)
+    public void handleBlockPlacement(IWorldEdit vec)
     {
         Block block = vec.getBlock();
         TileEntity tile = vec.getTileEntity();
@@ -222,7 +224,7 @@ public class BlastBasic extends Blast
         // {
         //     ((IForceField) tile).weakenForceField((int) vec.energy() * 100);
         // }
-        if (vec.block() == Blocks.air || vec.block() == Blocks.fire)
+        if (vec.getNewBlock() == Blocks.air || vec.getNewBlock() == Blocks.fire)
         {
             //TODO add energy value of explosion to this explosion if it is small
             //TODO maybe trigger explosion inside this thread allowing for controlled over lap
@@ -232,7 +234,7 @@ public class BlastBasic extends Blast
             //Trigger break event so blocks can do X action
             if (!(block instanceof BlockTNT) && !(vec.getTileEntity() instanceof IExplosive))
             {
-                block.onBlockDestroyedByExplosion(world, vec.xi(), vec.yi(), vec.zi(), wrapperExplosion);
+                block.onBlockDestroyedByExplosion(world, (int) vec.x(), (int) vec.y(), (int) vec.z(), wrapperExplosion);
             }
             else
             {
@@ -259,7 +261,7 @@ public class BlastBasic extends Blast
     protected BlockEdit onBlockMapped(BlockEdit change, float energyExpended, float energyLeft)
     {
         if (energyExpended > energyLeft)
-            change.doItemDrop_$eq(true);
+        { change.doItemDrop_$eq(true); }
         return change;
     }
 
@@ -360,7 +362,7 @@ public class BlastBasic extends Blast
 
         public WrapperExplosion(BlastBasic blast)
         {
-            super(blast.world(), blast.explosionBlameEntity, blast.x(), blast.y(), blast.z(), (float)blast.size);
+            super(blast.world(), blast.explosionBlameEntity, blast.x(), blast.y(), blast.z(), (float) blast.size);
             this.blast = blast;
         }
     }

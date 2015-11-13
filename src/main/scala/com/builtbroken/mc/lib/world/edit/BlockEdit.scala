@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.world.edit
 
 import com.builtbroken.jlib.data.vector.IPos3D
 import com.builtbroken.mc.api.IWorldPosition
+import com.builtbroken.mc.api.edit.IWorldEdit
 import com.builtbroken.mc.lib.transform.vector.{Location, AbstractLocation}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
@@ -14,7 +15,7 @@ import net.minecraft.world.World
   *
   * Created by robert on 12/2/2014.
   */
-class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocation[BlockEdit](w, x, y, z) with IPos3D with IWorldPosition
+class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocation[BlockEdit](w, x, y, z) with IPos3D with IWorldEdit
 {
   // Used to double check in case the block changes before we place the block
 
@@ -68,7 +69,7 @@ class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocat
     }
   }
   
-  def getBounds : AxisAlignedBB =
+  override def getBounds : AxisAlignedBB =
   {
     if(_bounds == null)
       AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1)
@@ -81,7 +82,7 @@ class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocat
     *
     * @return result of the placement
     */
-  def place(): BlockEditResult =
+  override def place(): BlockEditResult =
   {
     //We can not place a block without a world
     if (world != null)
@@ -132,7 +133,11 @@ class BlockEdit(w: World, x: Double, y: Double, z: Double) extends AbstractLocat
     return BlockEditResult.BLOCKED
   }
 
-  def hasChanged() : Boolean = prev_block != block || prev_meta != meta
+  override def hasChanged() : Boolean = prev_block != block || prev_meta != meta
 
   override def newPos(x: Double, y: Double, z: Double): BlockEdit = new BlockEdit(world, x, y, z)
+
+  override def getNewBlock: Block = block
+
+  override def getNewMeta: Int = meta
 }

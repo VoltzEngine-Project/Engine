@@ -4,7 +4,7 @@ import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Location;
-import com.builtbroken.mc.lib.world.edit.IWorldChangeAction;
+import com.builtbroken.mc.api.edit.IWorldChangeAction;
 import com.builtbroken.mc.lib.world.edit.WorldChangeHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;

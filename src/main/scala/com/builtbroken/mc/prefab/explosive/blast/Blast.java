@@ -1,11 +1,11 @@
 package com.builtbroken.mc.prefab.explosive.blast;
 
 import com.builtbroken.mc.api.IWorldPosition;
-import net.minecraftforge.common.util.ForgeDirection;
-import com.builtbroken.mc.lib.world.edit.IWorldChangeAction;
-import net.minecraft.world.World;
+import com.builtbroken.mc.api.edit.IWorldChangeAction;
+import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
-import com.builtbroken.mc.lib.world.edit.BlockEdit;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -62,20 +62,20 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition
     }
 
     @Override
-    public final Collection<BlockEdit> getEffectedBlocks()
+    public final Collection<IWorldEdit> getEffectedBlocks()
     {
-        List<BlockEdit> list = new LinkedList<>();
+        List<IWorldEdit> list = new LinkedList<>();
         getEffectedBlocks(list);
         return list;
     }
 
-    public void getEffectedBlocks(List<BlockEdit> list)
+    public void getEffectedBlocks(List<IWorldEdit> list)
     {
 
     }
 
     @Override
-    public void handleBlockPlacement(BlockEdit vec)
+    public void handleBlockPlacement(IWorldEdit vec)
     {
         if(vec.hasChanged())
             vec.place();

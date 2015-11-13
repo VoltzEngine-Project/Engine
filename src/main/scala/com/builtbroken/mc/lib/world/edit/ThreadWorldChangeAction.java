@@ -1,5 +1,7 @@
 package com.builtbroken.mc.lib.world.edit;
 
+import com.builtbroken.mc.api.edit.IWorldChangeAction;
+import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.event.WorldChangeActionEvent;
 import com.builtbroken.mc.core.Engine;
@@ -32,7 +34,7 @@ public class ThreadWorldChangeAction extends Thread
     public int blocksPerTick = 20;
 
     /** Blocks to remove from the world */
-    private Collection<BlockEdit> effectedBlocks;
+    private Collection<IWorldEdit> effectedBlocks;
 
     /**
      * Constructor, nothing should be null and blast should be created with the center equaling
@@ -80,7 +82,7 @@ public class ThreadWorldChangeAction extends Thread
         {
             if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
             {
-                Iterator<BlockEdit> it = effectedBlocks.iterator();
+                Iterator<IWorldEdit> it = effectedBlocks.iterator();
                 int c = 0;
                 while (it.hasNext() && c++ <= blocksPerTick)
                 {
