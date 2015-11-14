@@ -1,6 +1,8 @@
 package com.builtbroken.mc.lib.world.edit;
 
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
+import com.builtbroken.mc.api.edit.IWorldChangeAudio;
+import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.event.WorldChangeActionEvent;
@@ -43,6 +45,14 @@ public class WorldChangeHelper
             MinecraftForge.EVENT_BUS.post(event);
             if (!event.isCanceled())
             {
+                if(action instanceof IWorldChangeAudio)
+                {
+                    ((IWorldChangeAudio) action).doStartAudio();
+                }
+                if(action instanceof IWorldChangeGraphics)
+                {
+                    ((IWorldChangeGraphics) action).doStartDisplay();
+                }
                 action.doEffectOther(true);
                 if (action.shouldThreadAction() > 0)
                 {
@@ -57,10 +67,27 @@ public class WorldChangeHelper
                         for (IWorldEdit v : effectedBlocks)
                         {
                             action.handleBlockPlacement(v);
+                            if(action instanceof IWorldChangeAudio)
+                            {
+                                ((IWorldChangeAudio) action).playAudioForEdit(v);
+                            }
+                            if(action instanceof IWorldChangeGraphics)
+                            {
+                                ((IWorldChangeGraphics) action).displayEffectForEdit(v);
+                            }
                         }
                     }
+                    if(action instanceof IWorldChangeAudio)
+                    {
+                        ((IWorldChangeAudio) action).doEndAudio();
+                    }
+                    if(action instanceof IWorldChangeGraphics)
+                    {
+                        ((IWorldChangeGraphics) action).doEndDisplay();
+                    }
+                    action.doEffectOther(false);
                 }
-                action.doEffectOther(false);
+
                 return ChangeResult.COMPLETED;
             }
             return ChangeResult.BLOCKED;

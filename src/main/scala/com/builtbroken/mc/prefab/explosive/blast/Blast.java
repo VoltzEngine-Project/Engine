@@ -2,8 +2,12 @@ package com.builtbroken.mc.prefab.explosive.blast;
 
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
+import com.builtbroken.mc.api.edit.IWorldChangeAudio;
+import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
+import com.builtbroken.mc.core.Engine;
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -11,7 +15,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class Blast implements IWorldChangeAction, IWorldPosition
+public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics
 {
     public World world;
     public int x, y, z;
@@ -20,7 +24,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition
 
     public TriggerCause cause = new TriggerCause.TriggerCauseRedstone(ForgeDirection.UNKNOWN, 15);
 
-    public Blast(){}
+    public Blast() {}
 
     public Blast(World world, int x, int y, int z, int size)
     {
@@ -77,8 +81,8 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition
     @Override
     public void handleBlockPlacement(IWorldEdit vec)
     {
-        if(vec.hasChanged())
-            vec.place();
+        if (vec.hasChanged())
+        { vec.place(); }
     }
 
     @Override
@@ -112,4 +116,49 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition
     }
 
 
+    @Override
+    public void playAudioForEdit(IWorldEdit blocks)
+    {
+        try
+        {
+            world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(blocks.getBlock()));
+        }
+        catch (Exception e)
+        {
+            if (Engine.runningAsDev)
+            {
+                Engine.logger().error("Failed to play audio for block " + blocks, e);
+            }
+        }
+    }
+
+    @Override
+    public void doStartAudio()
+    {
+
+    }
+
+    @Override
+    public void doEndAudio()
+    {
+
+    }
+
+    @Override
+    public void displayEffectForEdit(IWorldEdit blocks)
+    {
+
+    }
+
+    @Override
+    public void doStartDisplay()
+    {
+
+    }
+
+    @Override
+    public void doEndDisplay()
+    {
+
+    }
 }

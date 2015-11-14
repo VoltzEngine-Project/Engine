@@ -1,6 +1,8 @@
 package com.builtbroken.mc.lib.world.edit;
 
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
+import com.builtbroken.mc.api.edit.IWorldChangeAudio;
+import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.event.WorldChangeActionEvent;
@@ -69,7 +71,8 @@ public class ThreadWorldChangeAction extends Thread
             {
                 FMLCommonHandler.instance().bus().register(this);
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Engine.instance.logger().error("World Change action thread[" + this + "] has failed to execute correctly.", e);
         }
@@ -80,18 +83,35 @@ public class ThreadWorldChangeAction extends Thread
     {
         try
         {
-            if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
+            if (event.phase == TickEvent.Phase.END)
             {
                 Iterator<IWorldEdit> it = effectedBlocks.iterator();
                 int c = 0;
                 while (it.hasNext() && c++ <= blocksPerTick)
                 {
+                    IWorldEdit edit = it.next();
                     try
                     {
-                        blast.handleBlockPlacement(it.next());
-                    } catch (Exception e)
+                        if (event.side == Side.SERVER)
+                        {
+                            blast.handleBlockPlacement(edit);
+                        }
+                        if (blast instanceof IWorldChangeAudio)
+                        {
+                            ((IWorldChangeAudio) blast).playAudioForEdit(edit);
+                        }
+                        if (blast instanceof IWorldChangeGraphics)
+                        {
+                            ((IWorldChangeGraphics) blast).displayEffectForEdit(edit);
+                        }
+                    }
+                    catch (Exception e)
                     {
-                        e.printStackTrace();
+                        Engine.instance.logger().error("Failed to place block for change action"
+                                + "\nSide: " + event.side
+                                + "\nChangeAction: " + blast
+                                + "\nEdit: " + edit
+                                , e);
                     }
                     it.remove();
                 }
@@ -99,10 +119,20 @@ public class ThreadWorldChangeAction extends Thread
             if (effectedBlocks == null || effectedBlocks.isEmpty())
             {
                 FMLCommonHandler.instance().bus().unregister(this);
+                if (blast instanceof IWorldChangeAudio)
+                {
+                    ((IWorldChangeAudio) blast).doEndAudio();
+                }
+                if (blast instanceof IWorldChangeGraphics)
+                {
+                    ((IWorldChangeGraphics) blast).doEndDisplay();
+                }
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
-            e.printStackTrace();
+            Engine.instance.logger().error("Crash while processing world change " + blast, e);
+            //TODO insert crash protection to kill thread if crashing continues
         }
     }
 }
