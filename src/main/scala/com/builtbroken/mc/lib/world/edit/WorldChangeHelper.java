@@ -15,13 +15,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
+ * Helper class for triggering and running world change actions.
  * Created by robert on 12/2/2014.
  */
-public class WorldChangeHelper
+public final class WorldChangeHelper
 {
-    /** Called to do a change action in the world
+    /**
+     * Called to do a change action in the world
      *
-     * @param action - instance of the change
+     * @param action       - instance of the change
      * @param triggerCause - cause of the trigger
      * @return if the result completed, was blocked, or failed
      */
@@ -30,61 +32,74 @@ public class WorldChangeHelper
         return doAction(new Location(world, x, y, z), action, triggerCause);
     }
 
-    /** Called to do a change action in the world
+    /**
+     * Called to do a change action in the world
      *
-     * @param loc - location in the world
-     * @param action - instance of the change
+     * @param loc          - location in the world
+     * @param action       - instance of the change
      * @param triggerCause - cause of the trigger
      * @return if the result completed, was blocked, or failed
      */
     public static ChangeResult doAction(Location loc, IWorldChangeAction action, TriggerCause triggerCause)
     {
+        //No action handling, no action created
         if (action != null)
         {
+            //Trigger even to allow blocking explosives
             Event event = new WorldChangeActionEvent.ActionCreated(loc, action, triggerCause);
             MinecraftForge.EVENT_BUS.post(event);
+
+            //If even is canceled do nothing
             if (!event.isCanceled())
             {
-                if(action instanceof IWorldChangeAudio)
+                //Trigger start animations and audio
+                if (action instanceof IWorldChangeAudio)
                 {
                     ((IWorldChangeAudio) action).doStartAudio();
                 }
-                if(action instanceof IWorldChangeGraphics)
+                if (action instanceof IWorldChangeGraphics)
                 {
                     ((IWorldChangeGraphics) action).doStartDisplay();
                 }
+                //Trigger pre-destruction effects ( such as mob damage and force calculations)
                 action.doEffectOther(true);
+
+                //Check if we want to run as a thread
                 if (action.shouldThreadAction() > 0)
                 {
-                    ThreadWorldChangeAction thread = new ThreadWorldChangeAction(loc, action, triggerCause);
+                    //Generate thread and return completed as we have no way to track what happens(effectively)
+                    ThreadWorldChangeAction thread = new ThreadWorldChangeAction(loc.clone(), action, triggerCause);
                     thread.start();
                 }
                 else
                 {
+                    //Same code as a thread but in this thread.
                     Collection<IWorldEdit> effectedBlocks = getEffectedBlocks(loc, triggerCause, action);
-                    if (effectedBlocks != null && !effectedBlocks.isEmpty()) ;
+                    if (effectedBlocks != null && !effectedBlocks.isEmpty())
                     {
                         for (IWorldEdit v : effectedBlocks)
                         {
                             action.handleBlockPlacement(v);
-                            if(action instanceof IWorldChangeAudio)
+                            if (action instanceof IWorldChangeAudio)
                             {
                                 ((IWorldChangeAudio) action).playAudioForEdit(v);
                             }
-                            if(action instanceof IWorldChangeGraphics)
+                            if (action instanceof IWorldChangeGraphics)
                             {
                                 ((IWorldChangeGraphics) action).displayEffectForEdit(v);
                             }
                         }
                     }
-                    if(action instanceof IWorldChangeAudio)
+                    //Trigger ending animations and audio
+                    if (action instanceof IWorldChangeAudio)
                     {
                         ((IWorldChangeAudio) action).doEndAudio();
                     }
-                    if(action instanceof IWorldChangeGraphics)
+                    if (action instanceof IWorldChangeGraphics)
                     {
                         ((IWorldChangeGraphics) action).doEndDisplay();
                     }
+                    //Trigger ending effects
                     action.doEffectOther(false);
                 }
 
@@ -95,11 +110,12 @@ public class WorldChangeHelper
         return ChangeResult.FAILED;
     }
 
-    /** Gets a list of blocks that change will effect
+    /**
+     * Gets a list of blocks that change will effect
      *
-     * @param vec - location in the world
+     * @param vec          - location in the world
      * @param triggerCause - cause
-     * @param blast - action instance
+     * @param blast        - action instance
      * @return list of block locations changes
      */
     public static Collection<IWorldEdit> getEffectedBlocks(Location vec, TriggerCause triggerCause, IWorldChangeAction blast)
@@ -116,10 +132,14 @@ public class WorldChangeHelper
         return effectedBlocks;
     }
 
+    /** Enum of return types for action completion. */
     public enum ChangeResult
     {
+        /** Main action code completed without issues */
         COMPLETED,
+        /** Action code failed to run do to a set of conditions */
         FAILED,
+        /** Action was blocked or prevented from proceeding */
         BLOCKED
     }
 }

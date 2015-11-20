@@ -7,6 +7,8 @@ import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -14,6 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics
 {
@@ -119,15 +122,18 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     @Override
     public void playAudioForEdit(IWorldEdit blocks)
     {
-        try
+        if(world.isRemote)
         {
-            world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(blocks.getBlock()));
-        }
-        catch (Exception e)
-        {
-            if (Engine.runningAsDev)
+            try
             {
-                Engine.logger().error("Failed to play audio for block " + blocks, e);
+                world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(blocks.getBlock()));
+            }
+            catch (Exception e)
+            {
+                if (Engine.runningAsDev)
+                {
+                    Engine.logger().error("Failed to play audio for block " + blocks, e);
+                }
             }
         }
     }
@@ -135,19 +141,31 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     @Override
     public void doStartAudio()
     {
-
+        world.playAuxSFX(1002, x, y, z, 0);
     }
 
     @Override
     public void doEndAudio()
     {
-
+        world.playAuxSFX(1002, x, y, z, 0);
     }
 
     @Override
     public void displayEffectForEdit(IWorldEdit blocks)
     {
+        if(world.isRemote)
+        {
+            Location v = new Location(blocks);
+            v.playBlockBreakAnimation();
 
+            Random rand = blocks.world().rand;
+            for (int i = 0; i < 3 + rand.nextInt(10); i++)
+            {
+                v = new Location(blocks).addRandom(rand, 0.5);
+                Pos vel = new Pos().addRandom(rand, 0.2);
+                v.spawnParticle("portal", vel);
+            }
+        }
     }
 
     @Override
