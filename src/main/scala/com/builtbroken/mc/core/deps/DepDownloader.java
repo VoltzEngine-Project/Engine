@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.deps;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.FMLInjectionData;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
@@ -77,9 +78,11 @@ public class DepDownloader
             {
                 if (!GraphicsEnvironment.isHeadless())
                 {
-                    int reply = JOptionPane.showConfirmDialog(null, "Missing required version of " + dep.getGenericFileName() + ". Do you want to download?\nIf you click no the game will close as it will crash without this file.", "Missing dependency", JOptionPane.YES_OPTION);
+                    //TODO parent box to MC window
+                    int reply = JOptionPane.showConfirmDialog(null, "Missing required version of " + dep.getGenericFileName() + " for Voltz Engine. Do you want to download?\nIf you click no the game will close as it will crash without this file.", "Missing dependency", JOptionPane.YES_OPTION);
                     if (reply != JOptionPane.YES_OPTION)
                     {
+                        FMLCommonHandler.instance().exitJava(1, false);
                         return;
                     }
                 }
