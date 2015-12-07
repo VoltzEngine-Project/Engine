@@ -131,7 +131,7 @@ public class BlastBasic extends Blast
             if (e >= 0)
             {
                 //Add block to effect list
-                vec.energy_$eq(energy);
+                vec.energy = energy;
                 onBlockMapped(vec, e, energy - e);
                 map.put(vec, energy - e);
 
@@ -146,7 +146,7 @@ public class BlastBasic extends Blast
                         {
                             BlockEdit v = new BlockEdit(world, vec.x(), vec.y(), vec.z());
                             v = v.add(dir);
-                            v.face_$eq(dir);
+                            v.face = dir;
                             v.logPrevBlock();
                             sides.add(v);
                         }
@@ -160,10 +160,10 @@ public class BlastBasic extends Blast
                     {
                         float eToSpend = (e / sides.size()) + (e % sides.size());
                         e -= eToSpend;
-                        EnumFacing face = side == null ? getOpposite(f.face()) : side;
+                        EnumFacing face = side == null ? getOpposite(f.face) : side;
                         if (!map.containsKey(f) || map.get(f) < eToSpend)
                         {
-                            f.face_$eq(face);
+                            f.face = face;
                             expand(map, f, eToSpend, face, iteration + 1);
                         }
                     }
@@ -205,9 +205,13 @@ public class BlastBasic extends Blast
     {
         //Update debug info
         if (vec.isAirBlock(world))
-        { profile.airBlocksPathed++; }
+        {
+            profile.airBlocksPathed++;
+        }
         else
-        { profile.blocksRemoved++; }
+        {
+            profile.blocksRemoved++;
+        }
         //Get cost
         return (vec.getHardness() >= 0 ? energy - (float) Math.max(vec.getResistance(explosionBlameEntity, x, y, z), 0.5) : -1);
 
@@ -261,7 +265,9 @@ public class BlastBasic extends Blast
     protected BlockEdit onBlockMapped(BlockEdit change, float energyExpended, float energyLeft)
     {
         if (energyExpended > energyLeft)
-        { change.doItemDrop_$eq(true); }
+        {
+            change.doItemDrop = true;
+        }
         return change;
     }
 
