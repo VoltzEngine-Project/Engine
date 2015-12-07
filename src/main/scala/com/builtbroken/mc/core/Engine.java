@@ -38,6 +38,7 @@ import com.builtbroken.mc.lib.mod.config.ConfigHandler;
 import com.builtbroken.mc.lib.mod.config.ConfigScanner;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import com.builtbroken.mc.lib.world.edit.PlacementData;
+import com.builtbroken.mc.lib.world.edit.ThreadWorldAction;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
 import com.builtbroken.mc.prefab.explosive.ExplosiveHandler;
@@ -159,14 +160,18 @@ public class Engine
     public static void requestOres()
     {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+        {
             throw new RuntimeException("Ores can only be requested in Pre-Init phase!");
+        }
         metallicOresRequested = true;
     }
 
     public static void requestGemOres()
     {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+        {
             throw new RuntimeException("Ores can only be requested in Pre-Init phase!");
+        }
         gemOresRequested = true;
     }
 
@@ -176,7 +181,9 @@ public class Engine
     public static void requestResources()
     {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+        {
             throw new RuntimeException("Resources can only be requested in Pre-Init phase");
+        }
         DefinedGenItems.DUST.requestToLoad();
         DefinedGenItems.DUST_IMPURE.requestToLoad();
         DefinedGenItems.RUBBLE.requestToLoad();
@@ -192,7 +199,9 @@ public class Engine
     public static void requestToolParts()
     {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+        {
             throw new RuntimeException("Tool Parts can only be requested in Pre-Init phase");
+        }
         DefinedGenItems.AX_HEAD.requestToLoad();
         DefinedGenItems.SHOVEL_HEAD.requestToLoad();
         DefinedGenItems.HOE_HEAD.requestToLoad();
@@ -207,7 +216,9 @@ public class Engine
     public static void requestCircuits()
     {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+        {
             throw new RuntimeException("Circuit content can only be requested in Pre-Init phase");
+        }
         circuitsRequested = true;
     }
 
@@ -218,7 +229,9 @@ public class Engine
     public static void requestMultiBlock()
     {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+        {
             throw new RuntimeException("Multi block content can only be requested in Pre-Init phase");
+        }
         multiBlockRequested = true;
     }
 
@@ -229,7 +242,9 @@ public class Engine
     public static void requestSimpleTools()
     {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+        {
             throw new RuntimeException("Simple tool content can only be requested in Pre-Init phase");
+        }
         simpleToolsRequested = true;
     }
 
@@ -240,7 +255,9 @@ public class Engine
     public static void requestSheetMetalContent()
     {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+        {
             throw new RuntimeException("Sheet metal content can only be requested in Pre-Init phase");
+        }
         sheetMetalRequested = true;
     }
 
@@ -317,12 +334,14 @@ public class Engine
                     shouldLoadRFHandler = false;
                     break;
                 }
-            } catch (ClassNotFoundException e)
+            }
+            catch (ClassNotFoundException e)
             {
                 shouldLoadRFHandler = false;
                 logger().error("Not loading RF support as we couldn't detect one of cofh's energy classes");
                 break;
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -349,11 +368,17 @@ public class Engine
          * Multiblock Handling
          */
         if (getConfig().get("Content", "LoadInstantHole", runningAsDev, "This is a developer tool for checking if ores generated correctly. It creates a chunk sized hole in the ground replacing stone with air, and air with glass. Never enable or give this to normal users as it can be used for greifing.").getBoolean(runningAsDev))
+        {
             instaHole = contentRegistry.newItem("ve.instanthole", new ItemInstaHole());
+        }
         if (getConfig().get("Content", "LoadScrewDriver", true, "Basic tool for configuring, rotating, and picking up machines.").getBoolean(true))
+        {
             itemWrench = getManager().newItem("ve.screwdriver", new ItemScrewdriver());
+        }
         if (getConfig().get("Content", "LoadSelectionTool", true, "Admin tool for selecting areas on the ground for world manipulation or other tasks.").getBoolean(true))
+        {
             itemSelectionTool = getManager().newItem("ve.selectiontool", new ItemSelectionWand());
+        }
 
         loader.preInit();
     }
@@ -464,7 +489,9 @@ public class Engine
     {
         //All blocks should be loaded before post init so we can init things that need to iterate over the block list
         if (enabledHeatMap)
+        {
             HeatedBlockRegistry.init(heatDataConfig);
+        }
         OreDictionary.registerOre("ingotGold", Items.gold_ingot);
         OreDictionary.registerOre("ingotIron", Items.iron_ingot);
         OreDictionary.registerOre("oreGold", Blocks.gold_ore);
@@ -486,10 +513,19 @@ public class Engine
             }
         }
 
+        //Creates world change threads for ques
+        int threads = getConfig().getInt("WorldActionThreads", "Multi-Threading", Runtime.getRuntime().availableProcessors() - 1, 0, 100, "Creates the number of threads to be used for processing changes to the world. Used by mods like ICBM to calculate explosives before removing blocks from the world. Try to keep this one less than the number of processors you have. This way minecraft is not chocked out for CPU time.");
+        for (int i = 0; i < threads; i++)
+        {
+            new ThreadWorldAction("" + i);
+        }
+
         //Save configs as this is our last chance
         heatDataConfig.save();
         explosiveConfig.save();
         getConfig().save();
+
+
     }
 
     public AbstractProxy getProxy()

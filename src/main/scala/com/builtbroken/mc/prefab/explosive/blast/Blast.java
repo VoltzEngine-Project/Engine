@@ -18,6 +18,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Prefab for implement explosive blast actions
+ */
 public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics
 {
     public World world;
@@ -85,7 +88,9 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     public void handleBlockPlacement(IWorldEdit vec)
     {
         if (vec.hasChanged())
-        { vec.place(); }
+        {
+            vec.place();
+        }
     }
 
     @Override
@@ -122,7 +127,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     @Override
     public void playAudioForEdit(IWorldEdit blocks)
     {
-        if(world.isRemote)
+        if (world.isRemote)
         {
             try
             {
@@ -153,7 +158,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     @Override
     public void displayEffectForEdit(IWorldEdit blocks)
     {
-        if(world.isRemote)
+        if (world.isRemote)
         {
             Location v = new Location(blocks);
             v.playBlockBreakAnimation();
@@ -178,5 +183,39 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     public void doEndDisplay()
     {
 
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == this)
+        {
+            return true;
+        }
+        if (obj.getClass() == getClass() && obj instanceof Blast)
+        {
+            if (((Blast) obj).world != world)
+            {
+                return false;
+            }
+            else if (((Blast) obj).x != x)
+            {
+                return false;
+            }
+            else if (((Blast) obj).y != y)
+            {
+                return false;
+            }
+            else if (((Blast) obj).z != z)
+            {
+                return false;
+            }
+            else if (((Blast) obj).size != size)
+            {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 }

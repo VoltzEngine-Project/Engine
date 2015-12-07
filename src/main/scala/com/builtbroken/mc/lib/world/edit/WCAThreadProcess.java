@@ -11,7 +11,6 @@ import com.builtbroken.mc.lib.transform.vector.Location;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Collection;
@@ -24,7 +23,7 @@ import java.util.Iterator;
  *
  * @author Darkguardsman
  */
-public class ThreadWorldChangeAction extends Thread
+public class WCAThreadProcess
 {
     /** Location of the Blast */
     public final Location position;
@@ -46,16 +45,13 @@ public class ThreadWorldChangeAction extends Thread
      * @param blast        - blast instance used to remove blocks and build a list
      * @param triggerCause - cause of the explosion
      */
-    public ThreadWorldChangeAction(Location vec, IWorldChangeAction blast, TriggerCause triggerCause)
+    public WCAThreadProcess(Location vec, IWorldChangeAction blast, TriggerCause triggerCause)
     {
-        super("WorldChangeAction[" + vec + ", " + blast + "]");
         this.position = vec;
         this.blast = blast;
         this.triggerCause = triggerCause;
-        this.setPriority(Thread.NORM_PRIORITY);
     }
 
-    @Override
     public void run()
     {
         try
@@ -92,7 +88,7 @@ public class ThreadWorldChangeAction extends Thread
                     IWorldEdit edit = it.next();
                     try
                     {
-                        if (event.side == Side.SERVER)
+                        if (!event.world.isRemote)
                         {
                             blast.handleBlockPlacement(edit);
                         }
@@ -134,5 +130,64 @@ public class ThreadWorldChangeAction extends Thread
             Engine.instance.logger().error("Crash while processing world change " + blast, e);
             //TODO insert crash protection to kill thread if crashing continues
         }
+    }
+
+    /**
+     * Places this process into a que to be run. If no thread exist it will call
+     * the {@link WCAThreadProcess#run()} method. This way there is no chance
+     * or loss of effect created by the process.
+     */
+    public void que()
+    {
+        for (ThreadWorldAction thread : ThreadWorldAction.threads.values())
+        {
+            if (thread.contains(this))
+            {
+                return;
+            }
+        }
+        int lowest = Integer.MAX_VALUE;
+        ThreadWorldAction lowestThread = null;
+        for (ThreadWorldAction thread : ThreadWorldAction.threads.values())
+        {
+            if (thread.qued() < lowest)
+            {
+                lowest = thread.qued();
+                lowestThread = thread;
+            }
+        }
+        if (lowestThread != null)
+        {
+            lowestThread.que(this);
+        }
+        else
+        {
+            run();
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == this)
+        {
+            return true;
+        }
+        if (obj instanceof WCAThreadProcess)
+        {
+            if (((WCAThreadProcess) obj).position != position)
+            {
+                return false;
+            }
+            else if (((WCAThreadProcess) obj).blast != blast)
+            {
+                return false;
+            }
+            else if (((WCAThreadProcess) obj).triggerCause != triggerCause)
+            {
+                return false;
+            }
+        }
+        return false;
     }
 }

@@ -64,32 +64,49 @@ public final class WorldChangeHelper
                 //Trigger pre-destruction effects ( such as mob damage and force calculations)
                 action.doEffectOther(true);
 
-                //Check if we want to run as a thread
-                if (action.shouldThreadAction() > 0)
+                if (!loc.world.isRemote)
                 {
-                    //Generate thread and return completed as we have no way to track what happens(effectively)
-                    ThreadWorldChangeAction thread = new ThreadWorldChangeAction(loc.clone(), action, triggerCause);
-                    thread.start();
+                    //Check if we want to run as a thread
+                    if (action.shouldThreadAction() > 0)
+                    {
+                        //Generate thread and return completed as we have no way to track what happens(effectively)
+                        WCAThreadProcess thread = new WCAThreadProcess(loc.clone(), action, triggerCause);
+                        thread.que();
+                    }
+                    else
+                    {
+                        //Same code as a thread but in this thread.
+                        Collection<IWorldEdit> effectedBlocks = getEffectedBlocks(loc, triggerCause, action);
+                        if (effectedBlocks != null && !effectedBlocks.isEmpty())
+                        {
+                            for (IWorldEdit v : effectedBlocks)
+                            {
+                                action.handleBlockPlacement(v);
+                                if (action instanceof IWorldChangeAudio)
+                                {
+                                    ((IWorldChangeAudio) action).playAudioForEdit(v);
+                                }
+                                if (action instanceof IWorldChangeGraphics)
+                                {
+                                    ((IWorldChangeGraphics) action).displayEffectForEdit(v);
+                                }
+                            }
+                        }
+                        //Trigger ending animations and audio
+                        if (action instanceof IWorldChangeAudio)
+                        {
+                            ((IWorldChangeAudio) action).doEndAudio();
+                        }
+                        if (action instanceof IWorldChangeGraphics)
+                        {
+                            ((IWorldChangeGraphics) action).doEndDisplay();
+                        }
+                        //Trigger ending effects
+                        action.doEffectOther(false);
+                    }
                 }
                 else
                 {
-                    //Same code as a thread but in this thread.
-                    Collection<IWorldEdit> effectedBlocks = getEffectedBlocks(loc, triggerCause, action);
-                    if (effectedBlocks != null && !effectedBlocks.isEmpty())
-                    {
-                        for (IWorldEdit v : effectedBlocks)
-                        {
-                            action.handleBlockPlacement(v);
-                            if (action instanceof IWorldChangeAudio)
-                            {
-                                ((IWorldChangeAudio) action).playAudioForEdit(v);
-                            }
-                            if (action instanceof IWorldChangeGraphics)
-                            {
-                                ((IWorldChangeGraphics) action).displayEffectForEdit(v);
-                            }
-                        }
-                    }
                     //Trigger ending animations and audio
                     if (action instanceof IWorldChangeAudio)
                     {
