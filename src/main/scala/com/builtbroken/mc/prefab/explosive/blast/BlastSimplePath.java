@@ -49,7 +49,7 @@ public abstract class BlastSimplePath extends Blast
         if (shouldPath(node))
         {
             final BlockEdit edit = changeBlock(node);
-            if (edit != null && edit.hasChanged())
+            if (edit != null && !list.contains(edit) && edit.hasChanged())
                 list.add(edit);
 
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)

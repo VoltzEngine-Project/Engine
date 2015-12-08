@@ -42,6 +42,16 @@ public class LocationTest extends AbstractTest
 
         //Test pos not equal
         Assert.assertNotSame("Location one & two should not equal each other",location, location2);
+
+
+        //Test decimal point
+        location = new Location(world, 1, 2.0, 3.0f);
+        location2 = new Location(world, 1, 2.0, 3.0f);
+
+        //Test would equals
+        Assert.assertEquals("Location one should equal itself", location, location);
+        Assert.assertEquals("Location two should equal itself",location2, location2);
+        Assert.assertEquals("Location one & two should equal each other",location, location2);
     }
 
     @Test
@@ -67,6 +77,12 @@ public class LocationTest extends AbstractTest
         //Test basic contains
         Assert.assertTrue("Should contain location", list.contains(new Location(world, 0, 0, 0)));
         Assert.assertTrue("Should not contain location", !list.contains(new Location(world2, 0, 0, 0)));
+
+        list.add(new Location(world, 0, 1.00, 0));
+
+        //Test basic contains
+        Assert.assertTrue("Should contain location", list.contains(new Location(world, 0, 1.00, 0)));
+        Assert.assertTrue("Should not contain location", !list.contains(new Location(world2, 0, 1.00, 0)));
     }
 
     public void testMap()

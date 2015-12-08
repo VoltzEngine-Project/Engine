@@ -236,7 +236,10 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
 
         if (obj instanceof BlockEdit)
         {
-            return ((BlockEdit) obj).xi() == xi() && ((BlockEdit) obj).yi() == yi() && ((BlockEdit) obj).zi() == zi();
+            return ((BlockEdit) obj).world == world
+                    && ((BlockEdit) obj).xi() == xi()
+                    && ((BlockEdit) obj).yi() == yi()
+                    && ((BlockEdit) obj).zi() == zi();
         }
         return false;
     }
