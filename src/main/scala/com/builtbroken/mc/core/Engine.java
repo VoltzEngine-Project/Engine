@@ -347,6 +347,23 @@ public class Engine
             }
         }
 
+        /*
+        try
+        {
+            if(!getConfig().getBoolean("DisableDataCollection", Configuration.CATEGORY_GENERAL, false, "Allows opting out of data collection and data reporting services. Data is only used to improve the quality of mods and is not shared. What is collected? Times Run, Blocks Placed, Mods Installed, Mod Versions, and Number of Crashes."))
+            {
+                Class googleAn = Class.forName("com.dmurph.tracking.AnalyticsConfigData");
+                if (googleAn != null)
+                {
+                    loader.applyModule(GoogleAnalytics.class);
+                }
+            }
+        }
+        catch (ClassNotFoundException e)
+        {
+            logger().error("Failed to find Analytics class file");
+        } */
+
         if (shouldLoadRFHandler)
         {
             loader.applyModule(RFLoader.class);
@@ -614,4 +631,6 @@ public class Engine
             logger().error(msg);
         }
     }
+
+
 }

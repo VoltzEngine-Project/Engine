@@ -39,7 +39,7 @@ public class TinkerProxy extends AbstractLoadable
             if (recipe.output.getItem() == DefinedGenItems.GEAR.item)
             {
                 it.remove();
-                System.out.println("Removed casting recipe for " + recipe.output);
+                //System.out.println("Removed casting recipe for " + recipe.output);
             }
         }
 
@@ -69,16 +69,15 @@ public class TinkerProxy extends AbstractLoadable
                             field.setAccessible(true);
                             Map<ItemMetaWrapper, ItemStack> renderIndex = (Map<ItemMetaWrapper, ItemStack>) field.get(Smeltery.instance);
 
-                            System.out.println(smeltingList.remove(item));
-                            System.out.println(temperatureList.remove(item));
-                            System.out.println(renderIndex.remove(item));
+                            smeltingList.remove(item);
+                            temperatureList.remove(item);
+                            renderIndex.remove(item);
 
                         } catch (Exception e)
                         {
                             Engine.instance.logger().error("Failed to reflect into tinkers to correct a duplication bug for gears.", e);
                         }
                         Smeltery.addMelting(new ItemStack(DefinedGenItems.GEAR.item, 1, mat.ordinal()), Blocks.iron_block, 0, 600, new FluidStack(fluid, 144));
-
                     }
 
                     if (DefinedGenItems.ROD.item != null && !DefinedGenItems.ROD.ignoreMaterials.contains(mat))

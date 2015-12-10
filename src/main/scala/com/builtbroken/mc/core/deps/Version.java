@@ -71,6 +71,10 @@ public class Version
     @Override
     public String toString()
     {
+        if(build == -1)
+        {
+            return major + "." + minor + "." + revis;
+        }
         return major + "." + minor + "." + revis + "b" + build;
     }
 
