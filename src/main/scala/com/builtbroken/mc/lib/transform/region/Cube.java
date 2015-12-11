@@ -54,9 +54,13 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
     {
         super(nbt);
         if (nbt.hasKey("pointOne"))
+        {
             pointOne = new Pos(nbt.getCompoundTag("pointOne"));
+        }
         if (nbt.hasKey("pointTwo"))
+        {
             pointTwo = new Pos(nbt.getCompoundTag("pointTwo"));
+        }
         recalc();
     }
 
@@ -100,9 +104,13 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
     public NBTTagCompound save(NBTTagCompound tag)
     {
         if (pointOne != null)
+        {
             tag.setTag("pointOne", new Pos(pointOne).writeNBT(new NBTTagCompound()));
+        }
         if (pointTwo != null)
+        {
             tag.setTag("pointTwo", new Pos(pointTwo).writeNBT(new NBTTagCompound()));
+        }
         return tag;
     }
 
@@ -330,11 +338,17 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
     {
         double m = 0;
         if (getSizeX() > m)
+        {
             m = getSizeX();
+        }
         if (getSizeY() > m)
+        {
             m = getSizeY();
+        }
         if (getSizeZ() > m)
+        {
             m = getSizeZ();
+        }
         return m;
     }
 
@@ -539,7 +553,9 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
             this.center = new Pos(min().x() + (getSizeX() / 2), min().y() + (getSizeY() / 2), min().z() + (getSizeZ() / 2));
         }
         else
+        {
             this.center = null;
+        }
     }
 
     /**
@@ -573,7 +589,7 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
      * the bounds to render. Mainly checks for distance to corner, center, and is
      * in side bounds.
      *
-     * @param pos - location to check from
+     * @param pos      - location to check from
      * @param distance - distance to check
      * @return true if any conditions are meet
      */
@@ -582,42 +598,77 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
         if (pos != null)
         {
             //If we are near the center return true even if the corners are too far away
-            if(center != null && center.distance(pos) <= distance)
+            if (center != null && center.distance(pos) <= distance)
+            {
                 return true;
+            }
 
             //If we are inside then we should be able to render the bounds
-            if(isWithin(pos))
+            if (isWithin(pos))
+            {
                 return true;
+            }
 
             if (lowerPoint != null && higherPoint != null)
             {
                 if (pos.x() <= lowerPoint.x() && lowerPoint.x() - pos.x() >= distance)
+                {
                     return false;
+                }
 
                 if (pos.y() <= lowerPoint.y() && lowerPoint.y() - pos.y() >= distance)
+                {
                     return false;
+                }
 
                 if (pos.z() <= lowerPoint.z() && lowerPoint.z() - pos.z() >= distance)
+                {
                     return true;
+                }
 
                 if (pos.x() >= higherPoint.x() && pos.x() - higherPoint.x() >= distance)
+                {
                     return false;
+                }
 
                 if (pos.y() >= higherPoint.y() && pos.y() - higherPoint.y() >= distance)
+                {
                     return false;
+                }
 
                 return !(pos.z() >= higherPoint.z() && pos.z() - higherPoint.z() >= distance);
 
             }
-            else if(lowerPoint != null)
+            else if (lowerPoint != null)
             {
                 return lowerPoint.distance(pos) <= distance;
             }
-            else if(higherPoint != null)
+            else if (higherPoint != null)
             {
                 return higherPoint.distance(pos) <= distance;
             }
         }
         return false;
+    }
+
+    /**
+     * Limits the cube to the world bounds
+     *
+     * @return this
+     */
+    public Cube cropToWorld()
+    {
+        Pos one = min();
+        Pos two = max();
+        if (min().y() < 0)
+        {
+            one = new Pos(min().x(), 0, min().y());
+        }
+        if (max().y() > 255)
+        {
+            two = new Pos(min().x(), 255, min().y());
+        }
+        set(one, two);
+        return this;
     }
 }
