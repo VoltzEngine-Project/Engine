@@ -50,6 +50,7 @@ public class WCAThreadProcess
         this.position = vec;
         this.blast = blast;
         this.triggerCause = triggerCause;
+        blocksPerTick = blast.shouldThreadAction();
     }
 
     public void run()
