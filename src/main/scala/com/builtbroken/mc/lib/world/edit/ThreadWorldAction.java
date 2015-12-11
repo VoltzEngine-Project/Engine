@@ -1,6 +1,9 @@
 package com.builtbroken.mc.lib.world.edit;
 
+import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.core.Engine;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,6 +16,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ThreadWorldAction extends Thread
 {
     private Queue<WCAThreadProcess> que = new ConcurrentLinkedQueue<>();
+    private boolean waiting = false;
+    private boolean kill = false;
+    private Logger logger;
 
     public static final ConcurrentHashMap<String, ThreadWorldAction> threads = new ConcurrentHashMap();
 
@@ -21,6 +27,7 @@ public class ThreadWorldAction extends Thread
         super("WorldChangeAction[" + name + "]");
         this.setPriority(Thread.NORM_PRIORITY);
         threads.put(name, this);
+        logger = LogManager.getLogger("WorldChangeAction[" + name + "]");
     }
 
     @Override
@@ -28,14 +35,38 @@ public class ThreadWorldAction extends Thread
     {
         try
         {
-            if (que.size() > 0)
+            while (!kill)
             {
-                WCAThreadProcess process = que.poll();
-                process.run();
-            }
-            else
-            {
-                wait(1000);
+                if (que.size() > 0)
+                {
+                    WCAThreadProcess process = que.poll();
+                    debug("Running process " + process);
+                    long ticks = System.nanoTime();
+                    process.run();
+                    ticks = System.nanoTime() - ticks;
+                    debug("Finished " + process + " in " + StringHelpers.formatNanoTime(ticks));
+                }
+                else
+                {
+                    try
+                    {
+                        debug("sleeping");
+                        waiting = true;
+                        synchronized (this)
+                        {
+                            wait(10000);
+                        }
+                    }
+                    catch (IllegalMonitorStateException e)
+                    {
+                        Engine.instance.logger().error(this + " has failed and is terminating...", e);
+                        kill = true;
+                    }
+                    catch (InterruptedException e)
+                    {
+                        debug("interrupted");
+                    }
+                }
             }
         }
         catch (Exception e)
@@ -53,8 +84,19 @@ public class ThreadWorldAction extends Thread
     {
         if (!contains(process))
         {
+            debug("Added " + process + " to que");
             que.add(process);
-            notify();
+            if (waiting)
+            {
+                debug("waking");
+                //http://tutorials.jenkov.com/java-concurrency/thread-signaling.html
+                synchronized (this)
+                {
+                    waiting = false;
+                    notify();
+                    debug("woken");
+                }
+            }
         }
     }
 
@@ -77,5 +119,24 @@ public class ThreadWorldAction extends Thread
     public int qued()
     {
         return que.size();
+    }
+
+    public void kill()
+    {
+        this.kill = true;
+    }
+
+    /**
+     * Prints a debug msg to console if debug
+     * mode is enabled
+     *
+     * @param msg - message to print
+     */
+    protected void debug(String msg)
+    {
+        if (Engine.runningAsDev)
+        {
+            logger.info(this + " | " + msg);
+        }
     }
 }

@@ -56,10 +56,7 @@ import com.builtbroken.mc.prefab.tile.multiblock.ItemBlockMulti;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -139,6 +136,7 @@ public class Engine
     //config files
     public static Configuration heatDataConfig;
     public static Configuration explosiveConfig;
+    public static int actionProcessorThreads = 3;
 
     //Configs
     public static boolean enabledHeatMap = true;
@@ -531,11 +529,8 @@ public class Engine
         }
 
         //Creates world change threads for ques
-        int threads = getConfig().getInt("WorldActionThreads", "Multi-Threading", Runtime.getRuntime().availableProcessors() - 1, 0, 100, "Creates the number of threads to be used for processing changes to the world. Used by mods like ICBM to calculate explosives before removing blocks from the world. Try to keep this one less than the number of processors you have. This way minecraft is not chocked out for CPU time.");
-        for (int i = 0; i < threads; i++)
-        {
-            new ThreadWorldAction("" + i);
-        }
+        actionProcessorThreads = getConfig().getInt("WorldActionThreads", "Multi-Threading", Runtime.getRuntime().availableProcessors() - 1, 0, 100, "Creates the number of threads to be used for processing changes to the world. Used by mods like ICBM to calculate explosives before removing blocks from the world. Try to keep this one less than the number of processors you have. This way minecraft is not chocked out for CPU time.");
+
 
         //Save configs as this is our last chance
         heatDataConfig.save();
@@ -577,6 +572,25 @@ public class Engine
 
             //Register commands
             serverCommandManager.registerCommand(CommandVE.INSTANCE);
+        }
+
+        for (int i = 0; i < actionProcessorThreads; i++)
+        {
+            Thread thread = new ThreadWorldAction("" + i);
+            thread.start();
+        }
+    }
+
+    @EventHandler
+    public void serverStopping(FMLServerStoppingEvent event)
+    {
+        //TODO save qued objects
+        synchronized (ThreadWorldAction.threads)
+        {
+            for (ThreadWorldAction thread : ThreadWorldAction.threads.values())
+            {
+                thread.kill();
+            }
         }
     }
 
