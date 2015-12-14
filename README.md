@@ -56,6 +56,7 @@ to change.
 * JohnyCilohokla    - Contributor
 * Kolatra           - Contributor
 * Maeyanie          - Mod Compatibility
+* MattDahEpic       - Contributor
 * Mattredsox        - Contributor
 * Micdoodle8        - Mod Compatibility
 * Parker8283        - Contributor
