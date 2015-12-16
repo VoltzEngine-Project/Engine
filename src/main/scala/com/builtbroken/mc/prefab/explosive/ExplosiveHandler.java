@@ -1,16 +1,17 @@
 package com.builtbroken.mc.prefab.explosive;
 
+import com.builtbroken.mc.api.edit.IWorldChangeAction;
+import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.prefab.explosive.blast.Blast;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
-import com.builtbroken.mc.api.event.TriggerCause;
-import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.api.edit.IWorldChangeAction;
 
 import java.util.List;
 
@@ -86,9 +87,16 @@ public class ExplosiveHandler implements IExplosiveHandler
     }
 
     @Override
-    public void addInfoToItem(ItemStack stack, List<String> lines)
+    public void addInfoToItem(EntityPlayer player, ItemStack stack, List<String> lines)
     {
         lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.size.name") + ": " + multiplier);
+        addInfoToItem(stack, lines);
+    }
+
+    @Deprecated
+    protected void addInfoToItem(ItemStack stack, List<String> lines)
+    {
+
     }
 
     @Override

@@ -64,7 +64,7 @@ public class ExplosiveItemUtility
             {
                 lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(getExplosive(stack).getTranslationKey() + ".name"));
                 List<String> l = new ArrayList();
-                ex.addInfoToItem(stack, l);
+                ex.addInfoToItem(player, stack, l);
                 for (String s : l)
                     lines.add(s);
             }
