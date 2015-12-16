@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -72,7 +71,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     }
 
     @Override
-    public final Collection<IWorldEdit> getEffectedBlocks()
+    public List<IWorldEdit> getEffectedBlocks()
     {
         List<IWorldEdit> list = new LinkedList<>();
         getEffectedBlocks(list);
