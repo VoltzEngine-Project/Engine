@@ -81,6 +81,18 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
         super(vec);
     }
 
+    public BlockEdit(IWorldPosition vec, Block block)
+    {
+        super(vec);
+        set(block, 0, false, true);
+    }
+
+    public BlockEdit(IWorldPosition vec, Block block, int meta)
+    {
+        super(vec);
+        set(block, meta, false, true);
+    }
+
     public BlockEdit(World world, IPos3D vector)
     {
         super(world, vector);
@@ -112,6 +124,49 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
         this.doItemDrop = doDrop;
         logPrevBlock();
         this.checkForPrevBlockEquals = checkEquals;
+        return this;
+    }
+
+    /**
+     * Sets placement data
+     *
+     * @param block
+     * @return this
+     */
+    public BlockEdit set(Block block)
+    {
+        return set(block, 0, false, true);
+    }
+
+    /**
+     * Sets placement data
+     *
+     * @param block
+     * @return this
+     */
+    public BlockEdit set(Block block, int meta)
+    {
+        return set(block, meta, false, true);
+    }
+
+    /**
+     * Sets placement data to air
+     *
+     * @return this
+     */
+    public BlockEdit setAir()
+    {
+        return set(Blocks.air, 0, false, true);
+    }
+
+    /**
+     * Toggles blocks to drop during placement
+     *
+     * @return this
+     */
+    public BlockEdit doDrops()
+    {
+        this.doItemDrop = true;
         return this;
     }
 
