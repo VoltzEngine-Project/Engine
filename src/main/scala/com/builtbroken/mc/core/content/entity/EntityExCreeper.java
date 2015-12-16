@@ -151,6 +151,18 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
         return true;
     }
 
+    @Override
+    public NBTTagCompound getAdditionalExplosiveData()
+    {
+        return ex_data;
+    }
+
+    @Override
+    public double getExplosiveSize()
+    {
+        return ex_size;
+    }
+
     protected void explode()
     {
         if (!this.worldObj.isRemote)
