@@ -11,9 +11,10 @@ import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -22,22 +23,29 @@ import java.util.Random;
  */
 public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics
 {
+    /** Current world */
     public World world;
+    /** Center coords of the blast */
     public int x, y, z;
+    /** Size of the explosive */
     public double size = 1;
+    /** Energy cost to damage each block */
     public float eUnitPerBlock = 5F;
+    /** Used to stop the explosion mid action */
+    public boolean killExplosion = false;
 
+    /** Cause of the explosion */
     public TriggerCause cause = new TriggerCause.TriggerCauseRedstone(ForgeDirection.UNKNOWN, 15);
 
     public Blast() {}
 
-    public Blast(World world, int x, int y, int z, int size)
+    public Blast(final World world, int x, int y, int z, int size)
     {
         setLocation(world, x, y, z);
         setYield(size);
     }
 
-    public Blast setLocation(World world, int x, int y, int z)
+    public Blast setLocation(final World world, int x, int y, int z)
     {
         this.world = world;
         this.x = x;
@@ -58,7 +66,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
         return this;
     }
 
-    public Blast setCause(TriggerCause cause)
+    public Blast setCause(final TriggerCause cause)
     {
         this.cause = cause;
         return this;
@@ -73,18 +81,24 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     @Override
     public List<IWorldEdit> getEffectedBlocks()
     {
-        List<IWorldEdit> list = new LinkedList<>();
+        List<IWorldEdit> list = new ArrayList<IWorldEdit>();
         getEffectedBlocks(list);
         return list;
     }
 
-    public void getEffectedBlocks(List<IWorldEdit> list)
+    /**
+     * Called by {@link #getEffectedBlocks()} to make processing
+     * a list of blocks eaiser.
+     *
+     * @param list - list to add changes too.
+     */
+    public void getEffectedBlocks(final List<IWorldEdit> list)
     {
 
     }
 
     @Override
-    public void handleBlockPlacement(IWorldEdit vec)
+    public void handleBlockPlacement(final IWorldEdit vec)
     {
         if (vec != null && vec.hasChanged())
         {
@@ -96,6 +110,22 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     public void doEffectOther(boolean beforeBlocksPlaced)
     {
 
+    }
+
+    @Override
+    public void killAction(boolean willSave)
+    {
+        this.killExplosion = true;
+    }
+
+    /**
+     * Checks if the world action should be killed
+     *
+     * @return true if the action should be killed
+     */
+    protected boolean shouldKillAction()
+    {
+        return killExplosion || world == null || world.provider == null || DimensionManager.getWorld(world.provider.dimensionId) == null;
     }
 
     @Override

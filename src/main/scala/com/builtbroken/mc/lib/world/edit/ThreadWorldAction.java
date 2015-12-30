@@ -62,6 +62,19 @@ public class ThreadWorldAction extends Thread
         {
             Engine.instance.logger().error("World Change action thread[" + this + "] has failed to execute correctly.", e);
         }
+        finally
+        {
+            //Clean up to prevent process from running after world has closed
+            if(que.size() > 0)
+            {
+                Engine.instance.logger().info("Killing " + this + " with processes left to run...");
+                for(WCAThreadProcess process : que)
+                {
+                    Engine.instance.logger().info("\t" + process);
+                    process.killAction();
+                }
+            }
+        }
     }
 
     /**

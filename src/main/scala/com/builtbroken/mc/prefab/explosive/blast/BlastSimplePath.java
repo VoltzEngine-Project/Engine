@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.explosive.blast;
 
+import com.builtbroken.mc.api.edit.IWorldChangeLayeredAction;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Location;
@@ -18,7 +19,7 @@ import java.util.Queue;
  * checks beyond distance and can path.
  * Created by robert on 1/28/2015.
  */
-public abstract class BlastSimplePath extends Blast
+public abstract class BlastSimplePath extends Blast implements IWorldChangeLayeredAction
 {
     protected long lastUpdate = -1;
     /**
@@ -33,6 +34,10 @@ public abstract class BlastSimplePath extends Blast
     /** Set to use recursive pathfinder. */
     public boolean recursive = false;
 
+    protected Queue<Location> stack = new LinkedList();
+    protected int layers = 1;
+    protected int blocksPerLayer = 100;
+
     public BlastSimplePath() {}
 
     public BlastSimplePath(World world, int x, int y, int z, int size)
@@ -43,7 +48,6 @@ public abstract class BlastSimplePath extends Blast
     @Override
     public void getEffectedBlocks(List<IWorldEdit> list)
     {
-        pathed_locations.clear();
         center = new Location(world(), (int) x() + 0.5, (int) y() + 0.5, (int) z() + 0.5);
         //Temp fix to solve if center is an air block
         for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
@@ -59,6 +63,40 @@ public abstract class BlastSimplePath extends Blast
         }
     }
 
+    @Override
+    public Blast setYield(double size)
+    {
+        double prev = this.size;
+        super.setYield(size);
+        if (prev != size)
+        {
+            double volume = 4 / 3 * Math.PI * size * size * size;
+            int i = (int) (volume / (double) blocksPerLayer);
+            if (i > 0)
+            {
+                layers = i;
+            }
+            else
+            {
+                layers = 1;
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public int getLayers()
+    {
+        return layers;
+    }
+
+    @Override
+    public boolean shouldContinueAction(int layer)
+    {
+        return true;
+    }
+
+
     /**
      * Does the entire pathfinder in one go instead of recursing onto itself.
      *
@@ -67,23 +105,41 @@ public abstract class BlastSimplePath extends Blast
      */
     public void pathEntire(final Location startNode, final List<IWorldEdit> list)
     {
+        pathEntire(startNode, list, blocksPerLayer);
+    }
+
+    /**
+     * Does the entire pathfinder in one go instead of recursing onto itself.
+     *
+     * @param startNode - starting point
+     * @param list      - list of edits
+     */
+    public void pathEntire(final Location startNode, final List<IWorldEdit> list, final int count)
+    {
         if (shouldPath(startNode))
         {
-            //Get first edit
-            list.add(changeBlock(startNode));
+            if(stack.isEmpty())
+            {
+                //Get first edit
+                list.add(changeBlock(startNode));
 
-            //Create stack to store current path nodes
-            Queue<Location> stack = new LinkedList();
-            stack.offer(startNode);
-            pathed_locations.add(startNode);
+                //Create stack to store current path nodes
+                stack.offer(startNode);
+                pathed_locations.add(startNode);
+            }
+
+            int currentCount = 0;
 
             //Loop until we run out of nodes
-            while (!stack.isEmpty())
+            boolean shouldExit = false;
+            while (!stack.isEmpty() && !shouldExit && currentCount < count)
             {
-                if(lastUpdate != -1)
+                shouldExit = shouldKillAction();
+                currentCount++;
+                if (lastUpdate != -1)
                 {
                     long time = System.nanoTime();
-                    if(time - lastUpdate > 1e+8)
+                    if (time - lastUpdate > 1e+8)
                     {
                         lastUpdate = time;
                         Engine.instance.logger().info("PathEntireUpdate: " + list.size() + " entries added, " + stack.size() + " in stack");
@@ -129,33 +185,36 @@ public abstract class BlastSimplePath extends Blast
      */
     public void pathNext(final Location node, final List<IWorldEdit> list)
     {
-        //Prevent re-adding the same node again
-        if (!pathed_locations.contains(node))
+        if (!shouldKillAction())
         {
-            pathed_locations.add(node);
-        }
-
-        //Check if we can path the current node
-        if (shouldPath(node))
-        {
-            //Get Block edit for the location that we can path
-            final BlockEdit edit = changeBlock(node);
-
-            //Avoid adding empty edits or existing edits
-            if (edit != null && !list.contains(edit) && edit.hasChanged())
+            //Prevent re-adding the same node again
+            if (!pathed_locations.contains(node))
             {
-                list.add(edit);
+                pathed_locations.add(node);
             }
 
-            //Loop over all 6 sides
-            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+            //Check if we can path the current node
+            if (shouldPath(node))
             {
-                //Generated next node
-                final Location next = node.add(dir);
-                //Check if we can path to next node from this node
-                if (shouldPathTo(node, next))
+                //Get Block edit for the location that we can path
+                final BlockEdit edit = changeBlock(node);
+
+                //Avoid adding empty edits or existing edits
+                if (edit != null && !list.contains(edit) && edit.hasChanged())
                 {
-                    pathNext(next, list);
+                    list.add(edit);
+                }
+
+                //Loop over all 6 sides
+                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+                {
+                    //Generated next node
+                    final Location next = node.add(dir);
+                    //Check if we can path to next node from this node
+                    if (shouldPathTo(node, next))
+                    {
+                        pathNext(next, list);
+                    }
                 }
             }
         }
@@ -178,11 +237,11 @@ public abstract class BlastSimplePath extends Blast
      */
     public boolean shouldPath(Location location)
     {
-        return center.distance(location.xi() + 0.5, location.yi() + 0.5, location.zi() + 0.5) <= size;
+        return !shouldKillAction() && center.distance(location.xi() + 0.5, location.yi() + 0.5, location.zi() + 0.5) <= size;
     }
 
     public boolean shouldPathTo(Location last, Location next)
     {
-        return next.y() >= 0 && next.y() <= 255 && !pathed_locations.contains(next);
+        return !shouldKillAction() && next.y() >= 0 && next.y() <= 255 && !pathed_locations.contains(next);
     }
 }

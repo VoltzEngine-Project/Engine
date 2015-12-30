@@ -1,20 +1,15 @@
 package com.builtbroken.mc.lib.world.edit;
 
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
-import com.builtbroken.mc.api.edit.IWorldChangeAudio;
-import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
+import com.builtbroken.mc.api.edit.IWorldChangeLayeredAction;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.event.WorldChangeActionEvent;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Location;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Low priority Multi-thread for IWorldChangeActions
@@ -57,17 +52,25 @@ public class WCAThreadProcess
     {
         try
         {
-            //Collects the init list of blocks from the blast
-            effectedBlocks = blast.getEffectedBlocks();
+            if (blast instanceof IWorldChangeLayeredAction && ((IWorldChangeLayeredAction) blast).getLayers() > 1)
+            {
+                for (int i = 0; i < ((IWorldChangeLayeredAction) blast).getLayers(); i++)
+                {
+                    effectedBlocks = blast.getEffectedBlocks();
+                    //Triggers an event allowing other mods to edit the block list
+                    MinecraftForge.EVENT_BUS.post(new WorldChangeActionEvent.FinishedCalculatingEffectEvent(position, effectedBlocks, blast, triggerCause));
+                    WorldEditQueHandler.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
+                }
+            }
+            else
+            {
+                //Collects the init list of blocks from the blast
+                effectedBlocks = blast.getEffectedBlocks();
+            }
 
             //Triggers an event allowing other mods to edit the block list
             MinecraftForge.EVENT_BUS.post(new WorldChangeActionEvent.FinishedCalculatingEffectEvent(position, effectedBlocks, blast, triggerCause));
-
-            //If we have blocks to edit then register with the event handler
-            if (effectedBlocks != null && !effectedBlocks.isEmpty())
-            {
-                FMLCommonHandler.instance().bus().register(this);
-            }
+            WorldEditQueHandler.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
         }
         catch (Exception e)
         {
@@ -75,63 +78,15 @@ public class WCAThreadProcess
         }
     }
 
-    @SubscribeEvent
-    public void onWorldTick(TickEvent.WorldTickEvent event)
+    /**
+     * Called to kill the process.
+     */
+    public void killAction()
     {
-        try
-        {
-            if (event.phase == TickEvent.Phase.END)
-            {
-                Iterator<IWorldEdit> it = effectedBlocks.iterator();
-                int c = 0;
-                while (it.hasNext() && c++ <= blocksPerTick)
-                {
-                    IWorldEdit edit = it.next();
-                    try
-                    {
-                        if (!event.world.isRemote)
-                        {
-                            blast.handleBlockPlacement(edit);
-                        }
-                        if (blast instanceof IWorldChangeAudio)
-                        {
-                            ((IWorldChangeAudio) blast).playAudioForEdit(edit);
-                        }
-                        if (blast instanceof IWorldChangeGraphics)
-                        {
-                            ((IWorldChangeGraphics) blast).displayEffectForEdit(edit);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Engine.instance.logger().error("Failed to place block for change action"
-                                + "\nSide: " + event.side
-                                + "\nChangeAction: " + blast
-                                + "\nEdit: " + edit
-                                , e);
-                    }
-                    it.remove();
-                }
-            }
-            if (effectedBlocks == null || effectedBlocks.isEmpty())
-            {
-                FMLCommonHandler.instance().bus().unregister(this);
-                if (blast instanceof IWorldChangeAudio)
-                {
-                    ((IWorldChangeAudio) blast).doEndAudio();
-                }
-                if (blast instanceof IWorldChangeGraphics)
-                {
-                    ((IWorldChangeGraphics) blast).doEndDisplay();
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            Engine.instance.logger().error("Crash while processing world change " + blast, e);
-            //TODO insert crash protection to kill thread if crashing continues
-        }
+        //TODO change so it saves
+        this.blast.killAction(false);
     }
+
 
     /**
      * Places this process into a que to be run. If no thread exist it will call

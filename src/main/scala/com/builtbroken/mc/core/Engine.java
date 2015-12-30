@@ -39,6 +39,7 @@ import com.builtbroken.mc.lib.mod.config.ConfigScanner;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import com.builtbroken.mc.lib.world.edit.PlacementData;
 import com.builtbroken.mc.lib.world.edit.ThreadWorldAction;
+import com.builtbroken.mc.lib.world.edit.WorldEditQueHandler;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
 import com.builtbroken.mc.prefab.explosive.ExplosiveHandler;
@@ -282,6 +283,7 @@ public class Engine
         MinecraftForge.EVENT_BUS.register(SaveManager.instance());
         MinecraftForge.EVENT_BUS.register(new InteractionHandler());
         MinecraftForge.EVENT_BUS.register(SelectionHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(new WorldEditQueHandler());
         FMLCommonHandler.instance().bus().register(TileTaskTickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(SelectionHandler.INSTANCE);
 
@@ -589,6 +591,7 @@ public class Engine
         {
             for (ThreadWorldAction thread : ThreadWorldAction.threads.values())
             {
+                logger().info("Killing thread " + thread);
                 thread.kill();
             }
         }
