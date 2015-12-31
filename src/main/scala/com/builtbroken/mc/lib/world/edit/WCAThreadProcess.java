@@ -56,10 +56,13 @@ public class WCAThreadProcess
             {
                 for (int i = 0; i < ((IWorldChangeLayeredAction) blast).getLayers(); i++)
                 {
-                    effectedBlocks = blast.getEffectedBlocks();
-                    //Triggers an event allowing other mods to edit the block list
-                    MinecraftForge.EVENT_BUS.post(new WorldChangeActionEvent.FinishedCalculatingEffectEvent(position, effectedBlocks, blast, triggerCause));
-                    WorldEditQueHandler.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
+                    if(((IWorldChangeLayeredAction) blast).shouldContinueAction(i))
+                    {
+                        effectedBlocks = blast.getEffectedBlocks();
+                        //Triggers an event allowing other mods to edit the block list
+                        MinecraftForge.EVENT_BUS.post(new WorldChangeActionEvent.FinishedCalculatingEffectEvent(position, effectedBlocks, blast, triggerCause));
+                        WorldEditQueHandler.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
+                    }
                 }
             }
             else

@@ -93,7 +93,7 @@ public abstract class BlastSimplePath extends Blast implements IWorldChangeLayer
     @Override
     public boolean shouldContinueAction(int layer)
     {
-        return true;
+        return layer == 0 || !stack.isEmpty();
     }
 
 
@@ -142,7 +142,7 @@ public abstract class BlastSimplePath extends Blast implements IWorldChangeLayer
                     if (time - lastUpdate > 1e+8)
                     {
                         lastUpdate = time;
-                        Engine.instance.logger().info("PathEntireUpdate: " + list.size() + " entries added, " + stack.size() + " in stack");
+                        Engine.instance.logger().info("PathEntireUpdate: " + list.size() + " entries added, " + stack.size() + " in stack, " + pathed_locations.size() + " nodes pathed.");
                     }
                 }
                 //Pop a node off the stack each iteration
@@ -237,11 +237,11 @@ public abstract class BlastSimplePath extends Blast implements IWorldChangeLayer
      */
     public boolean shouldPath(Location location)
     {
-        return !shouldKillAction() && center.distance(location.xi() + 0.5, location.yi() + 0.5, location.zi() + 0.5) <= size;
+        return center.distance(location.xi() + 0.5, location.yi() + 0.5, location.zi() + 0.5) <= size;
     }
 
     public boolean shouldPathTo(Location last, Location next)
     {
-        return !shouldKillAction() && next.y() >= 0 && next.y() <= 255 && !pathed_locations.contains(next);
+        return next.y() >= 0 && next.y() <= 255 && !pathed_locations.contains(next);
     }
 }
