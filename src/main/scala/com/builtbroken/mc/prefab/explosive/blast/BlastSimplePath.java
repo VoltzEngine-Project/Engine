@@ -36,7 +36,7 @@ public abstract class BlastSimplePath extends Blast implements IWorldChangeLayer
 
     protected Queue<Location> stack = new LinkedList();
     protected int layers = 1;
-    protected int blocksPerLayer = 100;
+    protected int blocksPerLayer = 500;
 
     public BlastSimplePath() {}
 
