@@ -9,6 +9,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CommandEvent;
 
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * Overrides the behavior of MC's default command manager. Allow interception
  * of commands to do permission checking. As well allows OP only commands
@@ -138,6 +141,25 @@ public class PermissionsCommandManager extends ServerCommandManager
         }
 
         return j;
+    }
+
+    @Override
+    public List getPossibleCommands(ICommandSender sender)
+    {
+        List arraylist = super.getPossibleCommands(sender);
+        if(arraylist != null)
+        {
+            Iterator it = arraylist.iterator();
+            while(it.hasNext())
+            {
+                ICommand obj = (ICommand) it.next();
+                if(obj.getCommandName() == null || obj.getCommandUsage(sender) == null)
+                {
+                    it.remove();
+                }
+            }
+        }
+        return arraylist;
     }
 
     private int getUsernameIndex(ICommand command, String[] args)
