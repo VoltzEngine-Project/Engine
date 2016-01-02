@@ -23,7 +23,6 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
@@ -45,13 +44,6 @@ public class TestAbstractLocation extends AbstractTest
     protected FakeWorldServer world;
     /** Tester that has not choice in what to test, test between tests but not deleted. Make sure to cleanup non-vanilla data between tests */
     protected TestPlayer player;
-
-    @Test
-    public void testCoverage()
-    {
-        assertSame(TLocation.class.getConstructors().length, AbstractLocation.class.getConstructors().length);
-        checkNumberOfDeclaredMethods(AbstractLocation.class, 23);
-    }
 
     @Override
     public void setUpForEntireClass()
