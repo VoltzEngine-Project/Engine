@@ -4,7 +4,6 @@ import com.builtbroken.mc.api.edit.IWorldChangeLayeredAction;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Location;
-import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -161,7 +160,7 @@ public abstract class BlastSimplePath extends Blast implements IWorldChangeLayer
                             stack.offer(nextNode);
 
                             //Get Block edit for the location that we can path
-                            final BlockEdit edit = changeBlock(nextNode);
+                            final IWorldEdit edit = changeBlock(nextNode);
 
                             //Avoid adding empty edits or existing edits
                             if (edit != null && !list.contains(edit) && edit.hasChanged())
@@ -197,7 +196,7 @@ public abstract class BlastSimplePath extends Blast implements IWorldChangeLayer
             if (shouldPath(node))
             {
                 //Get Block edit for the location that we can path
-                final BlockEdit edit = changeBlock(node);
+                final IWorldEdit edit = changeBlock(node);
 
                 //Avoid adding empty edits or existing edits
                 if (edit != null && !list.contains(edit) && edit.hasChanged())
@@ -226,7 +225,7 @@ public abstract class BlastSimplePath extends Blast implements IWorldChangeLayer
      * @param location - location to get data from
      * @return null for ignore, or BlockEdit for anything else
      */
-    public abstract BlockEdit changeBlock(Location location);
+    public abstract IWorldEdit changeBlock(Location location);
 
     /**
      * Called to check if the location should be pathed
