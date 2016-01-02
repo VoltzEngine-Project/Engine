@@ -12,6 +12,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 
@@ -181,9 +182,13 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     public Block getBlock()
     {
         if (world != null && world.getChunkProvider().chunkExists(xi() / 16, zi() / 16))
+        {
             return super.getBlock(world);
+        }
         else
+        {
             return null;
+        }
     }
 
     /**
@@ -194,9 +199,13 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     public int getBlockMetadata()
     {
         if (world != null)
+        {
             return super.getBlockMetadata(world);
+        }
         else
+        {
             return -1;
+        }
     }
 
     /**
@@ -236,6 +245,16 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     public float getResistance(Entity cause, double xx, double yy, double zz)
     {
         return getBlock(world).getExplosionResistance(cause, world, xi(), yi(), zi(), xx, yy, zz);
+    }
+
+    /**
+     * Grabs the BiomeGen data
+     *
+     * @return
+     */
+    public BiomeGenBase getBiomeGen()
+    {
+        return world().getBiomeGenForCoords(xi(), zi());
     }
 
     /**
@@ -313,6 +332,16 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     public boolean isBlockFreezable()
     {
         return super.isBlockFreezable(world);
+    }
+
+    /**
+     * Checks if the block is replaceable
+     *
+     * @return true if it can be replaced
+     */
+    public boolean isReplaceable()
+    {
+        return getBlock().isReplaceable(world, xi(), yi(), zi());
     }
 
     /**
