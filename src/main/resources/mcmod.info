@@ -1,10 +1,10 @@
 [{
     "modid": "VoltzEngine",
-    "name": "VoltzEngine",
-    "description": "VoltzEngine is a basic library and engine use to create mods.",
+    "name": "${modname}",
+    "description": "${description}",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "http://builtbroken.com/",
+    "url": "${url}",
     "updateUrl": "",
     "authors": ["DarkCow"],
     "credits": "Calcalvia, Alex_hawks, Tgame14, Dmod, Hangcow, etc.. will add the rest later",
