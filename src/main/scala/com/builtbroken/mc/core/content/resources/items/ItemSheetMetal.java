@@ -101,7 +101,9 @@ public class ItemSheetMetal extends Item
         /** Triangle cut in half */
         FIN_MICRO("metalSheet_microFin"),
         /** Triangle cut in half */
-        FIN_SMALL("metalSheet_smallFin");
+        FIN_SMALL("metalSheet_smallFin"),
+        /** Cone shape made from 3 triangle plates */
+        CONE_MEDIUM("metalCone_medium"),;
 
         @SideOnly(Side.CLIENT)
         public IIcon icon;

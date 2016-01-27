@@ -65,6 +65,7 @@ public class ItemSheetMetalTools extends ItemAbstractCraftingTool implements IPo
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.TRIANGLE.stack(4), "I ", " C", 'I', ItemSheetMetal.SheetMetal.FULL.stack(), 'C', getShears()));
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CONE_MICRO.stack(), "I ", " H", 'I', ItemSheetMetal.SheetMetal.TRIANGLE.stack(), 'H', getHammer()));
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CONE_SMALL.stack(), " I ", "IHI", " I ", 'I', ItemSheetMetal.SheetMetal.TRIANGLE.stack(), 'H', getHammer()));
+            GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CONE_MEDIUM.stack(), " II", "IHI", "II ", 'I', ItemSheetMetal.SheetMetal.TRIANGLE.stack(), 'H', getHammer()));
 
             //Fine creation
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.FIN_MICRO.stack(2), "C", "I", 'I', ItemSheetMetal.SheetMetal.TRIANGLE.stack(), 'C', getShears()));
