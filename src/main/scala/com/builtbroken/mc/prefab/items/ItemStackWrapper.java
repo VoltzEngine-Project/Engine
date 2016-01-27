@@ -107,9 +107,10 @@ public class ItemStackWrapper
     @Override
     public int hashCode()
     {
-        int hashCode = 1;
+
         if (itemStack != null)
         {
+            int hashCode = 1;
             //http://stackoverflow.com/questions/9648305/creating-a-hashcode-method-java
             hashCode = 31 * hashCode + itemStack.getItem().hashCode();
             if (meta_compare)
@@ -118,11 +119,17 @@ public class ItemStackWrapper
                 hashCode = 31 * hashCode + itemStack.stackSize;
             if (nbt_compare)
                 hashCode = 31 * hashCode + (itemStack.getTagCompound() != null ? itemStack.getTagCompound().hashCode() : 0);
+            return hashCode;
         }
         else
         {
             return super.hashCode();
         }
-        return hashCode;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "ItemStackWrapper[" + itemStack + "]";
     }
 }

@@ -81,6 +81,14 @@ public class ItemStackWrapperTest extends AbstractTest
         HashMap<ItemStackWrapper, String> list = new HashMap();
         list.put(a, "string");
         assertTrue("List.contains(ItemStackWrapper) failed", list.containsKey(b));
+
+
+        a = new ItemStackWrapper(new ItemStack(Items.coal, 10));
+        b = new ItemStackWrapper(new ItemStack(Items.coal));
+        assertTrue("Wrappers failed to equal each other", a.equals(b));
+        list = new HashMap();
+        list.put(a, "string");
+        assertTrue("List.contains(ItemStackWrapper) failed", list.containsKey(b));
     }
 
     //Check if Wrapper equals items
@@ -202,6 +210,11 @@ public class ItemStackWrapperTest extends AbstractTest
     {
         ItemStackWrapper a = new ItemStackWrapper(new ItemStack(Items.apple));
         ItemStackWrapper b = new ItemStackWrapper(new ItemStack(Items.apple));
+        assertTrue("Wrappers failed to equal each other", a.equals(b));
+        assertTrue("Hash codes don't equal", a.hashCode() == b.hashCode());
+
+        a = new ItemStackWrapper(new ItemStack(Items.coal));
+        b = new ItemStackWrapper(new ItemStack(Items.coal, 10));
         assertTrue("Wrappers failed to equal each other", a.equals(b));
         assertTrue("Hash codes don't equal", a.hashCode() == b.hashCode());
     }
