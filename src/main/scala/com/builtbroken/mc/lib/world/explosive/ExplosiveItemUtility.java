@@ -33,7 +33,7 @@ public class ExplosiveItemUtility
     {
         if (stack != null)
         {
-            if(stack.getItem() instanceof IExplosiveItem)
+            if (stack.getItem() instanceof IExplosiveItem)
             {
                 addInformation(stack, ((IExplosiveItem) stack.getItem()).getExplosive(stack), player, lines, b);
             }
@@ -66,7 +66,9 @@ public class ExplosiveItemUtility
                 List<String> l = new ArrayList();
                 ex.addInfoToItem(player, stack, l);
                 for (String s : l)
+                {
                     lines.add(s);
+                }
             }
             else
             {
@@ -145,9 +147,15 @@ public class ExplosiveItemUtility
         if (ex != null)
         {
             if (itemStack.getTagCompound() == null)
+            {
                 itemStack.setTagCompound(new NBTTagCompound());
+            }
 
             setExplosive(itemStack.getTagCompound(), ex);
+        }
+        else if (itemStack.getTagCompound() != null && itemStack.getTagCompound().hasKey(ExplosiveItemUtility.EXPLOSIVE_SAVE))
+        {
+            itemStack.getTagCompound().removeTag(ExplosiveItemUtility.EXPLOSIVE_SAVE);
         }
     }
 
@@ -174,7 +182,9 @@ public class ExplosiveItemUtility
     public static int getSize(ItemStack itemStack)
     {
         if (itemStack.getTagCompound() == null)
+        {
             itemStack.setTagCompound(new NBTTagCompound());
+        }
 
         return getSize(itemStack.getTagCompound());
     }
@@ -199,10 +209,20 @@ public class ExplosiveItemUtility
      */
     public static NBTTagCompound setSize(ItemStack itemStack, double size)
     {
-        if (itemStack.getTagCompound() == null)
-            itemStack.setTagCompound(new NBTTagCompound());
+        if (size != 0)
+        {
+            if (itemStack.getTagCompound() == null)
+            {
+                itemStack.setTagCompound(new NBTTagCompound());
+            }
 
-        return setSize(itemStack.getTagCompound(), size);
+            return setSize(itemStack.getTagCompound(), size);
+        }
+        else if (itemStack.getTagCompound() != null && itemStack.getTagCompound().hasKey(ExplosiveItemUtility.SIZE_SAVE))
+        {
+            itemStack.getTagCompound().removeTag(ExplosiveItemUtility.SIZE_SAVE);
+        }
+        return itemStack.getTagCompound();
     }
 
     /**

@@ -117,4 +117,10 @@ public class ExplosiveHandler implements IExplosiveHandler
     {
         return id;
     }
+
+    @Override
+    public String toString()
+    {
+        return "ExHandler[" + getID() + "]";
+    }
 }
