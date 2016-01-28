@@ -11,9 +11,9 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-        classpath 'org.ajoberstar:gradle-git:1.3.2'
-        classpath 'org.ajoberstar:grgit:1.4.1'
+      classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+      classpath 'org.ajoberstar:gradle-git:1.3.2'
+      classpath 'org.ajoberstar:grgit:1.4.1'
     }
 }
 
@@ -45,6 +45,9 @@ minecraft {
     replace "@CL_bu@", CL_build
 }
 
+def currentJvm = org.gradle.internal.jvm.Jvm.current()
+println "Current Java version = " + currentJvm
+
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
@@ -58,7 +61,13 @@ task deployCurse {
     dependsOn 'curseforge227048'
 }
 
-import org.ajoberstar.grgit.Commit
+import org.ajoberstar.grgit.*
+
+def gitHash = 'unknown'
+if (new File(projectDir, '.git').exists()) {
+    def repo = Grgit.open(project.file('.'))
+    gitHash = repo.log().find().abbreviatedId
+}
 
 //task curseTest {
 //  if ( grgit.log().find ) { it.fullMessage.contains("[deploy]") {
@@ -67,6 +76,18 @@ import org.ajoberstar.grgit.Commit
 //}
 //}
 //tasks.build.dependsOn tasks.curseforge
+
+jar {
+     manifest.mainAttributes(
+            "Built-By": System.getProperty('user.name'),
+            "Created-By": currentJvm,
+            "Implementation-Title": archivesBaseName,
+            "Implementation-Version": project.version,
+            "Git-Hash": gitHash,
+            "FMLCorePlugin": coremod,
+            "FMLCorePluginContainsFMLMod": "true",
+            "FMLAT": "VE_at.cfg")
+}
 
 jacocoTestReport {
     reports {
