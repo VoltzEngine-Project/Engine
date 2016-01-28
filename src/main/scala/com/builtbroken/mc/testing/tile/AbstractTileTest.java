@@ -557,15 +557,6 @@ public abstract class AbstractTileTest<T extends Tile> extends AbstractTileEntit
     }
 
     @Test
-    public void testRenderInventory()
-    {
-        FakeWorld world = FakeWorld.newWorld("TestRenderInventory");
-        world.setBlock(0, 0, 0, block);
-        Tile tile = ((Tile) world.getTileEntity(0, 0, 0));
-        tile.renderInventory(new ItemStack(block));
-    }
-
-    @Test
     public void testSendDescpacket()
     {
         FakeWorld world = FakeWorld.newWorld("TestSendDescpacket");
@@ -931,6 +922,7 @@ public abstract class AbstractTileTest<T extends Tile> extends AbstractTileEntit
     @Test
     public void testGetSideIcon()
     {
+
         FakeWorld world = FakeWorld.newWorld("TestGetSideIcon");
         world.setBlock(0, 0, 0, block);
         Tile tile = ((Tile) world.getTileEntity(0, 0, 0));

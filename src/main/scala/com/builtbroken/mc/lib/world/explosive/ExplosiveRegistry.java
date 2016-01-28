@@ -187,6 +187,43 @@ public final class ExplosiveRegistry
         return false;
     }
 
+    /**
+     * Removes an item from the explosive item system. Normally
+     * only used for JUnit testing but still functions in any
+     * other condition.
+     *
+     * @param stack - item to remove
+     * @return true if the item was registered
+     */
+    public static boolean unregisterExplosiveItem(ItemStack stack)
+    {
+        ItemStackWrapper wrapper = new ItemStackWrapper(stack);
+        if (itemToExplosive.containsKey(wrapper))
+        {
+            IExplosiveHandler ex = itemToExplosive.get(wrapper);
+            itemToExplosive.remove(wrapper);
+
+            if (explosiveToItems.containsKey(ex))
+            {
+                List<ItemStackWrapper> list = explosiveToItems.get(ex);
+                if (list != null)
+                {
+                    if (list.contains(wrapper))
+                    {
+                        list.remove(wrapper);
+                    }
+                    explosiveToItems.put(ex, list);
+                }
+            }
+            if (itemToExplosiveSize.containsKey(wrapper))
+            {
+                itemToExplosiveSize.remove(stack);
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * Called to trigger an explosion at the location

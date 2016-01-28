@@ -191,7 +191,9 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 
         //Increase tick
         if (ticks >= Long.MAX_VALUE)
+        {
             ticks = 0;
+        }
         ticks += 1;
         if (ticks % nextCleanupTick == 0)
         {
@@ -358,7 +360,9 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     public void openGui(EntityPlayer player, int gui, Object mod)
     {
         if (isServer())
+        {
             player.openGui(mod, gui, world(), xi(), yi(), zi());
+        }
     }
 
     //===========================
@@ -400,7 +404,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 
     public BlockTile getTileBlock()
     {
-        return (BlockTile)getBlockType();
+        return (BlockTile) getBlockType();
     }
 
     /**
@@ -718,18 +722,26 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     public int getMetadata()
     {
         if (getAccess() != null)
+        {
             return getAccess().getBlockMetadata(xi(), yi(), zi());
+        }
         else
+        {
             return 0;
+        }
     }
 
     @Override
     public int getBlockMetadata()
     {
         if (world() == null)
+        {
             return 0;
+        }
         else
+        {
             return super.getBlockMetadata();
+        }
     }
 
     @Override
@@ -907,14 +919,18 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     {
         GameProfile profile = getOwnerProfile();
         if (profile != null)
+        {
             return profile.getName();
+        }
         return null;
     }
 
     public GameProfile getOwnerProfile()
     {
         if (FMLCommonHandler.instance().getEffectiveSide().isClient())
+        {
             return null;
+        }
         return MinecraftServer.getServer().func_152358_ax().func_152652_a(owner);
     }
 
@@ -991,9 +1007,13 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     protected String getTextureName()
     {
         if (textureName == null)
+        {
             return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name;
+        }
         else
+        {
             return block.staticTile.domain + textureName;
+        }
     }
 
     /**
@@ -1007,7 +1027,9 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     {
         IIcon icon = icons.get(getTextureName() + "_top");
         if (icon == null)
+        {
             icon = icons.get(getTextureName());
+        }
         return icon;
     }
 
@@ -1022,7 +1044,9 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     {
         IIcon icon = icons.get(getTextureName() + "_bottom");
         if (icon == null)
+        {
             icon = icons.get(getTextureName());
+        }
         return icon;
     }
 
@@ -1048,10 +1072,16 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     @SideOnly(Side.CLIENT)
     protected IIcon getSideIcon(int meta, int side)
     {
-        IIcon icon = icons.get(getTextureName() + "_side");
-        if (icon == null)
-            icon = icons.get(getTextureName());
-        return icon;
+        if (icons != null)
+        {
+            IIcon icon = icons.get(getTextureName() + "_side");
+            if (icon == null)
+            {
+                icon = icons.get(getTextureName());
+            }
+            return icon;
+        }
+        return null;
     }
 
     public void setTextureName(String value)
@@ -1155,7 +1185,8 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
                 try
                 {
                     renderDynamic(new Pos(-0.5, -0.5, -0.5), 0, 0);
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     dynamicRendererCrashed = true;
                     renderNormalBlock = true;
@@ -1273,13 +1304,17 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     public void sendPacket(AbstractPacket packet, double distance)
     {
         if (isServer())
+        {
             Engine.instance.packetHandler.sendToAllAround(packet, world(), xi(), yi(), zi(), distance);
+        }
     }
 
     public void sendPacketToServer(AbstractPacket packet)
     {
         if (isClient())
+        {
             Engine.instance.packetHandler.sendToServer(packet);
+        }
     }
 
     public void sendPacketToGuiUsers(AbstractPacket packet)
@@ -1314,11 +1349,26 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
                 }
             }
             int rotation = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-            if (rotation == 0) return 2;
-            else if (rotation == 1) return 5;
-            else if (rotation == 2) return 3;
-            else if (rotation == 3) return 4;
-            else return 0;
+            if (rotation == 0)
+            {
+                return 2;
+            }
+            else if (rotation == 1)
+            {
+                return 5;
+            }
+            else if (rotation == 2)
+            {
+                return 3;
+            }
+            else if (rotation == 3)
+            {
+                return 4;
+            }
+            else
+            {
+                return 0;
+            }
         }
         return 0;
     }
