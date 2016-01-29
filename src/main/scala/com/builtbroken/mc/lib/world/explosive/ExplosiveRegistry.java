@@ -33,7 +33,7 @@ public final class ExplosiveRegistry
     /** Item to size of explosive, only used to none IExplosive items */
     private static final HashMap<ItemStackWrapper, Double> itemToExplosiveSize = new HashMap();
     /** Explosive handler to items */
-    private static final HashMap<IExplosiveHandler, List<ItemStackWrapper>> explosiveToItems = new HashMap();
+    public static final HashMap<IExplosiveHandler, List<ItemStackWrapper>> explosiveToItems = new HashMap();
 
     /**
      * Registers or gets an instanceof of explosive
@@ -107,7 +107,7 @@ public final class ExplosiveRegistry
         if (item != null && item.getItem() instanceof IExplosiveItem)
         {
             IExplosiveHandler ex = ((IExplosiveItem) item.getItem()).getExplosive(item);
-            registerExplosiveItem(item, ex);
+            return registerExplosiveItem(item, ex);
         }
         return false;
     }
