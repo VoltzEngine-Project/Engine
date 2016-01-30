@@ -10,6 +10,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -26,7 +27,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     /** Current world */
     public World world;
     /** Center coords of the blast */
-    public int x, y, z;
+    public double x, y, z;
     /** Size of the explosive */
     public double size = 1;
     /** Energy cost to damage each block */
@@ -36,6 +37,8 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
 
     /** Cause of the explosion */
     public TriggerCause cause = new TriggerCause.TriggerCauseRedstone(ForgeDirection.UNKNOWN, 15);
+    /** Custom NBT data provided by the explosive */
+    public NBTTagCompound additionBlastData;
 
     public Blast() {}
 
@@ -45,7 +48,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
         setYield(size);
     }
 
-    public Blast setLocation(final World world, int x, int y, int z)
+    public Blast setLocation(final World world, double x, double y, double z)
     {
         this.world = world;
         this.x = x;
@@ -160,7 +163,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
         {
             try
             {
-                world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(blocks.getBlock()));
+                world.playAuxSFX(2001, (int)x, (int)y, (int)z, Block.getIdFromBlock(blocks.getBlock()));
             }
             catch (Exception e)
             {
@@ -175,13 +178,13 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     @Override
     public void doStartAudio()
     {
-        world.playAuxSFX(1002, x, y, z, 0);
+        world.playAuxSFX(1002, (int)x, (int)y, (int)z, 0);
     }
 
     @Override
     public void doEndAudio()
     {
-        world.playAuxSFX(1002, x, y, z, 0);
+        world.playAuxSFX(1002, (int)x, (int)y, (int)z, 0);
     }
 
     @Override

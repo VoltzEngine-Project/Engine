@@ -2,7 +2,6 @@ package com.builtbroken.mc.prefab.explosive;
 
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
 import com.builtbroken.mc.api.event.TriggerCause;
-import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
@@ -20,14 +19,8 @@ import java.util.List;
  * <p/>
  * Created by robert on 11/19/2014.
  */
-public class ExplosiveHandler implements IExplosiveHandler
+public class ExplosiveHandler extends AbstractExplosiveHandler
 {
-    /**
-     * unlocalized and registry name
-     */
-    protected String translationKey;
-    protected String id;
-    protected String modID;
     /**
      * Class to generate explosives from
      */
@@ -67,7 +60,7 @@ public class ExplosiveHandler implements IExplosiveHandler
      */
     public ExplosiveHandler(String name, Class<? extends Blast> blastClass, int multiplier)
     {
-        this.translationKey = name;
+        super(name);
         this.blastClass = blastClass;
         this.multiplier = multiplier;
     }
@@ -77,7 +70,12 @@ public class ExplosiveHandler implements IExplosiveHandler
     {
         try
         {
-            return blastClass.newInstance().setLocation(world, (int) x, (int) y, (int) z).setYield(yieldMultiplier * multiplier).setCause(triggerCause);
+            Blast blast = blastClass.newInstance();
+            blast.setLocation(world, (int) x, (int) y, (int) z);
+            blast.setYield(yieldMultiplier * multiplier);
+            blast.setCause(triggerCause);
+            blast.additionBlastData = tag;
+            return blast;
         } catch (InstantiationException | IllegalAccessException e)
         {
             Engine.instance.logger().log(Level.ERROR, "Failed to create blast object");
@@ -97,30 +95,5 @@ public class ExplosiveHandler implements IExplosiveHandler
     protected void addInfoToItem(ItemStack stack, List<String> lines)
     {
 
-    }
-
-    @Override
-    public void onRegistered(String id, String modID)
-    {
-        this.id = id;
-        this.modID = modID;
-    }
-
-    @Override
-    public String getTranslationKey()
-    {
-        return "explosive." + modID + ":" +translationKey;
-    }
-
-    @Override
-    public String getID()
-    {
-        return id;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "ExHandler[" + getID() + "]";
     }
 }

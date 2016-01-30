@@ -280,12 +280,14 @@ public class Engine
         NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(proxy);
         MinecraftForge.EVENT_BUS.register(SaveManager.instance());
         MinecraftForge.EVENT_BUS.register(new InteractionHandler());
         MinecraftForge.EVENT_BUS.register(SelectionHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(new WorldEditQueHandler());
         FMLCommonHandler.instance().bus().register(TileTaskTickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(SelectionHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(proxy);
 
 
         //Load heat configs

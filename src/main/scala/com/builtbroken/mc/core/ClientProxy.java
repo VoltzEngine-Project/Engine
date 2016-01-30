@@ -1,18 +1,25 @@
 package com.builtbroken.mc.core;
 
+import com.builtbroken.mc.api.explosive.IExplosiveHandler;
+import com.builtbroken.mc.api.explosive.ITexturedExplosiveHandler;
 import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
 import com.builtbroken.mc.core.handler.RenderSelection;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
+import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.prefab.tile.multiblock.MultiBlockRenderHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -79,5 +86,17 @@ public class ClientProxy extends CommonProxy
     public int getPlayerDim()
     {
         return getClientWorld() != null ? getClientWorld().provider.dimensionId : 0;
+    }
+
+    @SideOnly(Side.CLIENT) @SubscribeEvent
+    public void onStitch(TextureStitchEvent.Pre event)
+    {
+        for (IExplosiveHandler handler : ExplosiveRegistry.getExplosives())
+        {
+            if (handler instanceof ITexturedExplosiveHandler)
+            {
+                ((ITexturedExplosiveHandler) handler).registerExplosiveHandlerIcons(event.map);
+            }
+        }
     }
 }
