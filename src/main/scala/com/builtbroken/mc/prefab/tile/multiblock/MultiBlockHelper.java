@@ -248,8 +248,10 @@ public class MultiBlockHelper
                     }
                     TileEntity tile = pos.getTileEntity(world);
                     if (tile instanceof IMultiTile)
+                    {
                         ((IMultiTile) tile).setHost(null);
-                    pos.setBlockToAir(world);
+                        pos.setBlockToAir(world);
+                    }
                 }
                 if (doDrops)
                     InventoryUtility.dropBlockAsItem(world, x, y, z, killHost);
