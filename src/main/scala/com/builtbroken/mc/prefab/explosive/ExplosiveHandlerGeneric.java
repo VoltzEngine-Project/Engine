@@ -15,11 +15,12 @@ import org.apache.logging.log4j.Level;
 import java.util.List;
 
 /**
- * Prefab explosive container for generating blasts when triggered
+ * Generic way to trigger an explosive without coding an explosive handler.
+ * It not meant to be extended as it uses reflection to create the blast.
  * <p/>
  * Created by robert on 11/19/2014.
  */
-public class ExplosiveHandler extends AbstractExplosiveHandler
+public final class ExplosiveHandlerGeneric extends AbstractExplosiveHandler
 {
     /**
      * Class to generate explosives from
@@ -35,7 +36,7 @@ public class ExplosiveHandler extends AbstractExplosiveHandler
      *
      * @param blastClass - class extending blast
      */
-    public ExplosiveHandler(Class<? extends Blast> blastClass)
+    public ExplosiveHandlerGeneric(Class<? extends Blast> blastClass)
     {
         this(blastClass.getSimpleName(), blastClass, 1);
     }
@@ -46,7 +47,7 @@ public class ExplosiveHandler extends AbstractExplosiveHandler
      * @param name       - name to use for registry id
      * @param blastClass - class extending blast
      */
-    public ExplosiveHandler(String name, Class<? extends Blast> blastClass)
+    public ExplosiveHandlerGeneric(String name, Class<? extends Blast> blastClass)
     {
         this(name, blastClass, 1);
     }
@@ -58,7 +59,7 @@ public class ExplosiveHandler extends AbstractExplosiveHandler
      * @param blastClass - class extending blast
      * @param multiplier - value to mutliply the size by
      */
-    public ExplosiveHandler(String name, Class<? extends Blast> blastClass, int multiplier)
+    public ExplosiveHandlerGeneric(String name, Class<? extends Blast> blastClass, int multiplier)
     {
         super(name);
         this.blastClass = blastClass;
@@ -88,12 +89,5 @@ public class ExplosiveHandler extends AbstractExplosiveHandler
     public void addInfoToItem(EntityPlayer player, ItemStack stack, List<String> lines)
     {
         lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.size.name") + ": " + multiplier);
-        addInfoToItem(stack, lines);
-    }
-
-    @Deprecated
-    protected void addInfoToItem(ItemStack stack, List<String> lines)
-    {
-
     }
 }
