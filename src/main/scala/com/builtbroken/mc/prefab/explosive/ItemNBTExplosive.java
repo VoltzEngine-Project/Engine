@@ -1,7 +1,7 @@
 package com.builtbroken.mc.prefab.explosive;
 
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
-import com.builtbroken.mc.api.items.IExplosiveHolderItem;
+import com.builtbroken.mc.api.items.IExplosiveItem;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveItemUtility;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 1/28/2016.
  */
-public class ItemNBTExplosive extends Item implements IExplosiveHolderItem
+public class ItemNBTExplosive extends Item implements IExplosiveItem
 {
     @Override
     public String getUnlocalizedName(ItemStack stack)
@@ -24,7 +24,7 @@ public class ItemNBTExplosive extends Item implements IExplosiveHolderItem
         return super.getUnlocalizedName(stack);
     }
 
-    @Override
+
     public boolean setExplosive(ItemStack stack, IExplosiveHandler ex, double size, NBTTagCompound nbt)
     {
         if (stack != null && size > 0)
