@@ -5,7 +5,6 @@ import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.api.explosive.IExplosiveHolder;
-import com.builtbroken.mc.api.items.IExplosiveHolderItem;
 import com.builtbroken.mc.api.items.IExplosiveItem;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Location;
@@ -99,7 +98,6 @@ public final class ExplosiveRegistry
      * Registers an item as an explosive for crafting recipes
      *
      * @param item - item to be used in crafting, must be an instance of {@link IExplosiveItem}
-     *             Uses {@link com.builtbroken.mc.api.items.IExplosiveHolderItem} to get size
      * @return true if it was registered
      */
     public static boolean registerExplosiveItem(ItemStack item)
@@ -312,9 +310,9 @@ public final class ExplosiveRegistry
     {
         if (stack != null)
         {
-            if (stack.getItem() instanceof IExplosiveHolderItem)
+            if (stack.getItem() instanceof IExplosiveItem)
             {
-                return ((IExplosiveHolderItem) stack.getItem()).getExplosiveSize(stack);
+                return ((IExplosiveItem) stack.getItem()).getExplosiveSize(stack);
             }
             return getExplosiveSize(new ItemStackWrapper(stack));
         }
@@ -331,9 +329,9 @@ public final class ExplosiveRegistry
     {
         if (stack != null && stack.itemStack != null)
         {
-            if (stack.itemStack.getItem() instanceof IExplosiveHolderItem)
+            if (stack.itemStack.getItem() instanceof IExplosiveItem)
             {
-                return ((IExplosiveHolderItem) stack.itemStack.getItem()).getExplosiveSize(stack.itemStack);
+                return ((IExplosiveItem) stack.itemStack.getItem()).getExplosiveSize(stack.itemStack);
             }
             if (itemToExplosiveSize.containsKey(stack))
             {
