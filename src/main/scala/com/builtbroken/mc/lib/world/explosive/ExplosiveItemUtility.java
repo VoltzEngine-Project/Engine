@@ -1,13 +1,12 @@
 package com.builtbroken.mc.lib.world.explosive;
 
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
+import com.builtbroken.mc.api.items.IExplosiveItem;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import com.builtbroken.mc.api.items.IExplosiveItem;
-import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.helper.LanguageUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +61,6 @@ public class ExplosiveItemUtility
         {
             if (ex != null)
             {
-                lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(ex.getTranslationKey() + ".name"));
                 List<String> l = new ArrayList();
                 ex.addInfoToItem(player, stack, l);
                 for (String s : l)

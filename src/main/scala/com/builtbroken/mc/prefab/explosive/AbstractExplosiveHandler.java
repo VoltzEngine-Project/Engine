@@ -1,6 +1,9 @@
 package com.builtbroken.mc.prefab.explosive;
 
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
+import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
+import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -22,7 +25,7 @@ public abstract class AbstractExplosiveHandler implements IExplosiveHandler
     /**
      * Creates an explosive using a blast class, and name
      *
-     * @param name       - name to use for registry id
+     * @param name - name to use for registry id
      */
     public AbstractExplosiveHandler(String name)
     {
@@ -32,7 +35,26 @@ public abstract class AbstractExplosiveHandler implements IExplosiveHandler
     @Override
     public void addInfoToItem(EntityPlayer player, ItemStack stack, List<String> lines)
     {
+        lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(getTranslationKey() + ".name"));
+        if (stack != null && ExplosiveRegistry.getExplosiveSize(stack) > 0)
+        {
+            String s = LanguageUtility.getLocal("info." + References.PREFIX + "explosive.yield.name");
+            if (s != null && !s.isEmpty())
+            {
+                lines.add(String.format(s, ExplosiveRegistry.getExplosiveSize(stack) * getYieldModifier(stack)));
+            }
+        }
+    }
 
+    /**
+     * Amount to modify the yield of an explosive
+     *
+     * @param stack
+     * @return
+     */
+    protected double getYieldModifier(ItemStack stack)
+    {
+        return 1;
     }
 
     @Override
@@ -45,7 +67,7 @@ public abstract class AbstractExplosiveHandler implements IExplosiveHandler
     @Override
     public String getTranslationKey()
     {
-        return "explosive." + modID + ":" +translationKey;
+        return "explosive." + modID + ":" + translationKey;
     }
 
     @Override
