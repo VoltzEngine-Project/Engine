@@ -3,7 +3,7 @@ package com.builtbroken.test.lib.ex;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
-import com.builtbroken.mc.prefab.explosive.ExplosiveHandler;
+import com.builtbroken.mc.prefab.explosive.ExplosiveHandlerGeneric;
 import com.builtbroken.mc.prefab.explosive.ItemNBTExplosive;
 import com.builtbroken.mc.prefab.explosive.blast.BlastBasic;
 import com.builtbroken.mc.prefab.items.ItemStackWrapper;
@@ -38,7 +38,7 @@ public class TestExplosiveRegistry extends AbstractTest
     public void testRegisterExplosiveItem()
     {
         setUpForEntireClass();
-        IExplosiveHandler TNT = new ExplosiveHandler("tnt", BlastBasic.class, 1);
+        IExplosiveHandler TNT = new ExplosiveHandlerGeneric("tnt", BlastBasic.class, 1);
         ExplosiveRegistry.registerOrGetExplosive(References.DOMAIN, "TNT", TNT);
         ExplosiveRegistry.registerExplosiveItem(new ItemStack(Blocks.tnt), ExplosiveRegistry.get("TNT"), 2);
 
