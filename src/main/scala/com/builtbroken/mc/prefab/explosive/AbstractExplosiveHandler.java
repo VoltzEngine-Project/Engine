@@ -1,6 +1,7 @@
 package com.builtbroken.mc.prefab.explosive;
 
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
+import com.builtbroken.mc.api.items.IExplosiveContainerItem;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
@@ -36,12 +37,27 @@ public abstract class AbstractExplosiveHandler implements IExplosiveHandler
     public void addInfoToItem(EntityPlayer player, ItemStack stack, List<String> lines)
     {
         lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(getTranslationKey() + ".name"));
-        if (stack != null && ExplosiveRegistry.getExplosiveSize(stack) > 0)
+        if (stack != null)
         {
-            String s = LanguageUtility.getLocal("info." + References.PREFIX + "explosive.yield.name");
-            if (s != null && !s.isEmpty())
+            if (stack.getItem() instanceof IExplosiveContainerItem)
             {
-                lines.add(String.format(s, ExplosiveRegistry.getExplosiveSize(stack) * getYieldModifier(stack)));
+                ItemStack ex_stack = ((IExplosiveContainerItem) stack.getItem()).getExplosiveStack(stack);
+                if (ex_stack != null)
+                {
+                    String s = LanguageUtility.getLocal("info." + References.PREFIX + "explosive.item.name");
+                    if (s != null && !s.isEmpty())
+                    {
+                        lines.add(s + ": " + ex_stack.getDisplayName());
+                    }
+                }
+            }
+            if (ExplosiveRegistry.getExplosiveSize(stack) > 0)
+            {
+                String s = LanguageUtility.getLocal("info." + References.PREFIX + "explosive.yield.name");
+                if (s != null && !s.isEmpty())
+                {
+                    lines.add(String.format(s, ExplosiveRegistry.getExplosiveSize(stack) * getYieldModifier(stack)));
+                }
             }
         }
     }

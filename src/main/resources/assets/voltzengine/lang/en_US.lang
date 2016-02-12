@@ -388,6 +388,7 @@ info.isCraftingOnlyItem=Crafting Item
 info.voltzengine:explosive.name=Explosive
 info.voltzengine:explosive.size.name=Size
 info.voltzengine:explosive.yield.name=Yield: %.2fm radius
+info.voltzengine:explosive.item.name=ExItem
 
 ## Permissions
 root.machine=Manage Machine
