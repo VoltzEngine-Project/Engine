@@ -62,7 +62,7 @@ public class ExplosiveItemUtility
         {
             if (ex != null)
             {
-                lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(getExplosive(stack).getTranslationKey() + ".name"));
+                lines.add(LanguageUtility.getLocal("info." + References.PREFIX + "explosive.name") + ": " + LanguageUtility.getLocal(ex.getTranslationKey() + ".name"));
                 List<String> l = new ArrayList();
                 ex.addInfoToItem(player, stack, l);
                 for (String s : l)
@@ -87,6 +87,7 @@ public class ExplosiveItemUtility
      * @param item - item to get sub items for
      * @param list - list to add sub item too
      */
+    @Deprecated
     public static void getSubItems(Item item, List list)
     {
         //TODO link in with blacklist
