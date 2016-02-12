@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.world.explosive;
 
+import com.builtbroken.jlib.type.Pair;
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosive;
@@ -23,14 +24,22 @@ import java.util.*;
  */
 public final class ExplosiveRegistry
 {
+    //Constants, in theory these are inlined during compile time
+    public static final String EXPONENTIAL = "exponential";
+    private static final double ONE_THIRD = 1.0 / 3.0;
+    private static final double FOUR_THIRDS_PI = (4.0 / 3.0) * Math.PI;
+    private static final double PI_X_4 = 4 * Math.PI;
+
     /** Explosive ID to explosive handler */
     private static final HashMap<String, IExplosiveHandler> idToExplosiveMap = new HashMap();
     /** Mod id to explosives */
     private static final HashMap<String, List<IExplosiveHandler>> modToExplosiveMap = new HashMap();
     /** Item to explosive */
     private static final HashMap<ItemStackWrapper, IExplosiveHandler> itemToExplosive = new HashMap();
-    /** Item to size of explosive, only used to none IExplosive items */
-    private static final HashMap<ItemStackWrapper, Double> itemToExplosiveSize = new HashMap();
+    /** Item to size of explosive & scaling type, only used to none IExplosive items */
+    private static final HashMap<ItemStackWrapper, Pair<Double, String>> itemToExplosiveSize = new HashMap();
+    /** Cache of Item to size of the explosive scaled by {@link ItemStack#stackSize} */
+    private static final HashMap<ItemStackWrapper, HashMap<Integer, Double>> itemToExplosiveSizeScaled = new HashMap();
     /** Explosive handler to items */
     public static final HashMap<IExplosiveHandler, List<ItemStackWrapper>> explosiveToItems = new HashMap();
 
@@ -178,7 +187,7 @@ public final class ExplosiveRegistry
             ItemStackWrapper wrapper = new ItemStackWrapper(item);
             if (!itemToExplosiveSize.containsKey(wrapper))
             {
-                itemToExplosiveSize.put(wrapper, size);
+                itemToExplosiveSize.put(wrapper, new Pair(size, EXPONENTIAL));
             }
             return true;
         }
@@ -320,26 +329,72 @@ public final class ExplosiveRegistry
     }
 
     /**
-     * Gets the size of the explosive
+     * Gets the size of the explosive. If {@link ItemStackWrapper#itemStack}'s
+     * {@link ItemStack#getItem()} is an instance of {@link IExplosiveItem} it
+     * will return the value of {@link IExplosiveItem#getExplosiveSize(ItemStack)}
+     * before attempting to use cached values.
+     * <p/>
+     * If cache values are used and not stored they will be calculated. If no
+     * value was registered it will return 0.
+     * <p/>
+     * If 0 is returned assume the explosive does not function or has
+     * a single block effect.
      *
-     * @param stack
-     * @return
+     * @param wrapper - wrapper containing a valid ItemStack
+     * @return a value equal to or greater than zero in terms of meters
      */
-    public static double getExplosiveSize(ItemStackWrapper stack)
+    public static double getExplosiveSize(ItemStackWrapper wrapper)
     {
-        if (stack != null && stack.itemStack != null)
+        if (wrapper != null && wrapper.itemStack != null)
         {
-            if (stack.itemStack.getItem() instanceof IExplosiveItem)
+            //Return value from interface first
+            if (wrapper.itemStack.getItem() instanceof IExplosiveItem)
             {
-                return ((IExplosiveItem) stack.itemStack.getItem()).getExplosiveSize(stack.itemStack);
+                return ((IExplosiveItem) wrapper.itemStack.getItem()).getExplosiveSize(wrapper.itemStack);
             }
-            if (itemToExplosiveSize.containsKey(stack))
+            //Return cached values that were registered
+            if (itemToExplosiveSize.containsKey(wrapper))
             {
-                return itemToExplosiveSize.get(stack);
+                Pair<Double, String> pair = itemToExplosiveSize.get(wrapper);
+                if (pair != null && pair.right().equals(EXPONENTIAL))
+                {
+                    //Init cache if null
+                    if (!itemToExplosiveSizeScaled.containsKey(wrapper))
+                    {
+                        itemToExplosiveSizeScaled.put(wrapper, new HashMap<Integer, Double>());
+                    }
+
+                    HashMap<Integer, Double> map = itemToExplosiveSizeScaled.get(wrapper);
+                    //Init cached scale size if null
+                    if (!map.containsKey(wrapper.itemStack.stackSize))
+                    {
+                        map.put(wrapper.itemStack.stackSize, getExplosiveSize(pair.left(), wrapper.itemStack.stackSize));
+                    }
+                    return map.get(wrapper.itemStack.stackSize);
+                }
             }
             return 0;
         }
         return 0;
+    }
+
+    /**
+     * Used to scale the explosive size based on it's volume to get a new
+     * radius value.
+     *
+     * @param sizePerUnit   - original size for a single value
+     * @param scaleByFactor - scale factor
+     * @return new size
+     */
+    public static double getExplosiveSize(double sizePerUnit, double scaleByFactor)
+    {
+        //http://www.calculatorsoup.com/calculators/geometry-solids/sphere.php
+        //Get volume of a single unit
+        double volume = FOUR_THIRDS_PI * sizePerUnit * sizePerUnit * sizePerUnit;
+        //Scale the volume by the # of explosives
+        volume = volume * scaleByFactor;
+        //Find new radius from volume and return value
+        return Math.pow((3 * volume) / PI_X_4, ONE_THIRD); //TODO see if we can remove the exponent
     }
 
     /**
