@@ -42,8 +42,7 @@ import com.builtbroken.mc.lib.world.edit.ThreadWorldAction;
 import com.builtbroken.mc.lib.world.edit.WorldEditQueHandler;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
-import com.builtbroken.mc.prefab.explosive.ExplosiveHandler;
-import com.builtbroken.mc.prefab.explosive.blast.BlastBasic;
+import com.builtbroken.mc.prefab.explosive.handler.ExplosiveHandlerTNT;
 import com.builtbroken.mc.prefab.recipe.cast.MRHandlerCast;
 import com.builtbroken.mc.prefab.recipe.fluid.MRHandlerFluidStack;
 import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;
@@ -399,7 +398,7 @@ public class Engine
             itemSelectionTool = getManager().newItem("ve.selectiontool", new ItemSelectionWand());
         }
 
-        ExplosiveRegistry.registerOrGetExplosive(References.DOMAIN, "TNT", new ExplosiveHandler("tnt", BlastBasic.class, 1));
+        ExplosiveRegistry.registerOrGetExplosive(References.DOMAIN, "TNT", new ExplosiveHandlerTNT());
         ExplosiveRegistry.registerExplosiveItem(new ItemStack(Blocks.tnt), ExplosiveRegistry.get("TNT"), 2);
         ExplosiveRegistry.registerExplosiveItem(new ItemStack(Items.gunpowder), ExplosiveRegistry.get("TNT"), 0.5);
         //Creeper skull

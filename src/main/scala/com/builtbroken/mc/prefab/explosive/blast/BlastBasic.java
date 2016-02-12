@@ -31,7 +31,7 @@ import java.util.List;
  * Created by robert on 11/19/2014.
  */
 //TODO use pathfinder for emp to allow for EMP shielding
-public class BlastBasic extends Blast
+public class BlastBasic<B extends BlastBasic> extends Blast<B>
 {
     /**
      * DamageSourse to attack entities with
@@ -325,7 +325,7 @@ public class BlastBasic extends Blast
     }
 
     @Override
-    public Blast setCause(TriggerCause cause)
+    public B setCause(TriggerCause cause)
     {
         super.setCause(cause);
         //Create entity to check for blast resistance values on blocks
@@ -339,18 +339,18 @@ public class BlastBasic extends Blast
             explosionBlameEntity.setPosition(x, y, z);
         }
         wrapperExplosion = new WrapperExplosion(this);
-        return this;
+        return (B)this;
     }
 
 
     @Override
-    public BlastBasic setYield(double size)
+    public B setYield(double size)
     {
         super.setYield(size);
         //Most of the time radius equals size of the explosion
         radius = size;
         calcStartingEnergy();
-        return this;
+        return (B)this;
     }
 
     /**

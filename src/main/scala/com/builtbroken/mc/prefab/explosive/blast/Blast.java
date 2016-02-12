@@ -22,7 +22,7 @@ import java.util.Random;
 /**
  * Prefab for implement explosive blast actions
  */
-public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics
+public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics
 {
     /** Current world */
     public World world;
@@ -37,8 +37,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
 
     /** Cause of the explosion */
     public TriggerCause cause = new TriggerCause.TriggerCauseRedstone(ForgeDirection.UNKNOWN, 15);
-    /** Custom NBT data provided by the explosive */
-    public NBTTagCompound additionBlastData;
+    private NBTTagCompound additionBlastData;
 
     public Blast() {}
 
@@ -48,31 +47,48 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
         setYield(size);
     }
 
-    public Blast setLocation(final World world, double x, double y, double z)
+    public B setLocation(final World world, double x, double y, double z)
     {
         this.world = world;
         this.x = x;
         this.y = y;
         this.z = z;
-        return this;
+        return (B) this;
     }
 
-    public Blast setYield(double size)
+    public B setYield(double size)
     {
         this.size = size;
-        return this;
+        return (B) this;
     }
 
-    public Blast setEnergyPerBlock(float f)
+    public B setEnergyPerBlock(float f)
     {
         this.eUnitPerBlock = f;
-        return this;
+        return (B) this;
     }
 
-    public Blast setCause(final TriggerCause cause)
+    public B setCause(final TriggerCause cause)
     {
         this.cause = cause;
-        return this;
+        return (B) this;
+    }
+
+    /**
+     * Sets the custome NBT data to be used by the explosive
+     *
+     * @param additionBlastData
+     */
+    public B setAdditionBlastData(NBTTagCompound additionBlastData)
+    {
+        this.additionBlastData = additionBlastData;
+        return (B)this;
+    }
+
+    /** Custom NBT data provided by the explosive */
+    public NBTTagCompound getAdditionBlastData()
+    {
+        return additionBlastData;
     }
 
     @Override
@@ -163,7 +179,7 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
         {
             try
             {
-                world.playAuxSFX(2001, (int)x, (int)y, (int)z, Block.getIdFromBlock(blocks.getBlock()));
+                world.playAuxSFX(2001, (int) x, (int) y, (int) z, Block.getIdFromBlock(blocks.getBlock()));
             }
             catch (Exception e)
             {
@@ -178,13 +194,13 @@ public abstract class Blast implements IWorldChangeAction, IWorldPosition, IWorl
     @Override
     public void doStartAudio()
     {
-        world.playAuxSFX(1002, (int)x, (int)y, (int)z, 0);
+        world.playAuxSFX(1002, (int) x, (int) y, (int) z, 0);
     }
 
     @Override
     public void doEndAudio()
     {
-        world.playAuxSFX(1002, (int)x, (int)y, (int)z, 0);
+        world.playAuxSFX(1002, (int) x, (int) y, (int) z, 0);
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.Queue;
  * checks beyond distance and can path.
  * Created by robert on 1/28/2015.
  */
-public abstract class BlastSimplePath extends Blast implements IWorldChangeLayeredAction
+public abstract class BlastSimplePath<B extends BlastSimplePath> extends Blast<B> implements IWorldChangeLayeredAction
 {
     protected long lastUpdate = -1;
     /**
@@ -63,7 +63,7 @@ public abstract class BlastSimplePath extends Blast implements IWorldChangeLayer
     }
 
     @Override
-    public Blast setYield(double size)
+    public B setYield(double size)
     {
         double prev = this.size;
         super.setYield(size);
@@ -80,7 +80,7 @@ public abstract class BlastSimplePath extends Blast implements IWorldChangeLayer
                 layers = 1;
             }
         }
-        return this;
+        return (B)this;
     }
 
     @Override

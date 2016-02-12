@@ -74,7 +74,7 @@ public class ExplosiveHandler extends AbstractExplosiveHandler
             blast.setLocation(world, (int) x, (int) y, (int) z);
             blast.setYield(yieldMultiplier * multiplier);
             blast.setCause(triggerCause);
-            blast.additionBlastData = tag;
+            blast.setAdditionBlastData(tag);
             return blast;
         } catch (InstantiationException | IllegalAccessException e)
         {
