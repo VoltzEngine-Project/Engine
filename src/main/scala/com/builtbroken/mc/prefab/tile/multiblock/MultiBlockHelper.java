@@ -142,9 +142,13 @@ public class MultiBlockHelper
         {
             String[] data;
             if (dataString.contains("|"))
+            {
                 data = dataString.split(";");
+            }
             else
+            {
                 data = new String[]{dataString};
+            }
             for (String d : data)
             {
                 if (d.contains("="))
@@ -173,7 +177,8 @@ public class MultiBlockHelper
                                     try
                                     {
                                         ints[se] = Integer.parseInt(values[se]);
-                                    } catch (NumberFormatException e)
+                                    }
+                                    catch (NumberFormatException e)
                                     {
                                         failed = true;
                                         break;
@@ -182,7 +187,9 @@ public class MultiBlockHelper
                                 if (!failed)
                                 {
                                     if (((TileMulti) ent).getWorldObj().isRemote)
+                                    {
                                         ((TileMulti) ent).overrideRenderBounds = new Cube(ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]);
+                                    }
                                     ((TileMulti) ent).collisionBounds = new Cube(ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]);
                                 }
                             }
@@ -206,7 +213,9 @@ public class MultiBlockHelper
         else
         {
             if (!(ent instanceof TileMulti))
+            {
                 logger.error("Tile[" + ent + "] needs to be an instanceof TileMulti in order to set data");
+            }
         }
     }
 
@@ -216,16 +225,37 @@ public class MultiBlockHelper
         destroyMultiBlockStructure(host, true);
     }
 
+    /**
+     * Breaks down the multiblock structure linked to the host
+     *
+     * @param host    - host providing the layout of the structure
+     * @param doDrops - attempt to drop blocks?
+     */
     public static void destroyMultiBlockStructure(IMultiTileHost host, boolean doDrops)
     {
         destroyMultiBlockStructure(host, doDrops, false);
     }
 
+    /**
+     * Breaks down the multiblock stucture linked to the host
+     *
+     * @param host    - host providing the layour of the structure
+     * @param doDrops - attempt to drop blocks?
+     * @param offset  - offset the layout by the location of the host?
+     */
     public static void destroyMultiBlockStructure(IMultiTileHost host, boolean doDrops, boolean offset)
     {
         destroyMultiBlockStructure(host, doDrops, offset, true);
     }
 
+    /**
+     * Breaks down the multiblock stucture linked to the host
+     *
+     * @param host     - host providing the layour of the structure
+     * @param doDrops  - attempt to drop blocks?
+     * @param offset   - offset the layout by the location of the host?
+     * @param killHost - destroy the host block as well?
+     */
     public static void destroyMultiBlockStructure(IMultiTileHost host, boolean doDrops, boolean offset, boolean killHost)
     {
         if (host instanceof TileEntity)
@@ -254,9 +284,13 @@ public class MultiBlockHelper
                     }
                 }
                 if (doDrops)
+                {
                     InventoryUtility.dropBlockAsItem(world, x, y, z, killHost);
+                }
                 else if (killHost)
+                {
                     world.setBlockToAir(x, y, z);
+                }
             }
             else
             {
