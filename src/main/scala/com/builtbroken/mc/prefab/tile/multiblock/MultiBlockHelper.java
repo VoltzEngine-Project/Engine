@@ -143,7 +143,7 @@ public class MultiBlockHelper
             String[] data;
             if (dataString.contains("|"))
             {
-                data = dataString.split(";");
+                data = dataString.split("|");
             }
             else
             {
@@ -170,13 +170,13 @@ public class MultiBlockHelper
                             String[] values = value.split(",");
                             if (values.length == 6)
                             {
-                                int[] ints = new int[6];
+                                double[] ints = new double[6];
                                 boolean failed = false;
                                 for (int se = 0; se < 6; se++)
                                 {
                                     try
                                     {
-                                        ints[se] = Integer.parseInt(values[se]);
+                                        ints[se] = Double.parseDouble(values[se].replace("f", ""));
                                     }
                                     catch (NumberFormatException e)
                                     {

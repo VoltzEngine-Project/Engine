@@ -56,7 +56,9 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
             worldObj.addTileEntity(this);
         }
         if (!worldObj.isRemote)
+        {
             Engine.instance.packetHandler.sendToAllAround(getDescPacket(), this);
+        }
     }
 
     @Override
@@ -83,7 +85,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
             {
                 getWorldObj().setBlockToAir(xCoord, yCoord, zCoord);
             }
-            else
+            else if (getWorldObj().loadedTileEntityList.contains(this))
             {
                 TileTaskTickHandler.INSTANCE.addTileToBeRemoved(this);
             }
@@ -101,7 +103,9 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
             {
                 //TODO notify that a block has changed
                 if (connectedBlocks.get(dir) != b)
+                {
                     connectedBlocks.remove(dir);
+                }
             }
             if (b != null && !b.isAir(getWorldObj(), xCoord, yCoord, zCoord))
             {
@@ -137,9 +141,13 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
 
                 //Update render bounds
                 if (buf.readBoolean())
+                {
                     overrideRenderBounds = new Cube(buf);
+                }
                 else
+                {
                     overrideRenderBounds = new Cube(0, 0, 0, 1, 1, 1);
+                }
 
                 if (prev != shouldRenderBlock)
                 {
@@ -161,14 +169,18 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     {
         Pos pos = getHost() != null ? new Pos((TileEntity) getHost()) : new Pos();
         if (overrideRenderBounds != null)
+        {
             return new PacketTile(this, 1, pos, shouldRenderBlock, true, overrideRenderBounds);
+        }
         else
+        {
             return new PacketTile(this, 1, pos, shouldRenderBlock, false);
+        }
     }
 
     @Override
     public String toString()
     {
-        return getClass().getSimpleName() + "[ DIM@" + (worldObj != null && worldObj.provider != null ? worldObj.provider.dimensionId : "null") + xCoord + "x " + yCoord + "y " + zCoord + "z " + "]";
+        return getClass().getSimpleName() + "[ DIM@" + (worldObj != null && worldObj.provider != null ? worldObj.provider.dimensionId + " " : "null ") + xCoord + "x " + yCoord + "y " + zCoord + "z " + "]@" + hashCode();
     }
 }
