@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 /**
@@ -25,7 +26,7 @@ import java.util.HashMap;
  */
 public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiver
 {
-    private IMultiTileHost host;
+    private WeakReference<IMultiTileHost> hostWeakReference;
     public boolean shouldRenderBlock = false;
     public Cube overrideRenderBounds;
     public Cube collisionBounds;
@@ -37,7 +38,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     @Override
     public IMultiTileHost getHost()
     {
-        return host;
+        return hostWeakReference != null ? hostWeakReference.get() : null;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     @Override
     public void setHost(IMultiTileHost host)
     {
-        this.host = host;
+        this.hostWeakReference = new WeakReference(host);
         if (host == null && worldObj != null && !worldObj.loadedTileEntityList.contains(this))
         {
             worldObj.addTileEntity(this);
@@ -61,9 +62,9 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     @Override
     public void invalidate()
     {
-        if (host != null)
+        if (getHost() != null)
         {
-            host.onTileInvalidate(this);
+            getHost().onTileInvalidate(this);
         }
         super.invalidate();
     }
