@@ -1,11 +1,13 @@
 package com.builtbroken.mc.core.handler;
 
+import com.builtbroken.mc.core.Engine;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -18,24 +20,27 @@ public class TileTaskTickHandler
 
     private List<TileEntity> removeList = new ArrayList();
 
-    private TileTaskTickHandler()
-    {
-
-    }
-
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
         if (event.world.isRemote)
+        {
             FMLCommonHandler.instance().bus().unregister(this);
+        }
 
         if (event.phase == TickEvent.Phase.END && removeList.size() > 0)
         {
-            for (TileEntity tile : removeList)
+            Iterator<TileEntity> it = removeList.iterator();
+            while (it.hasNext())
             {
+                TileEntity tile = it.next();
                 if (tile.getWorldObj() == event.world)
                 {
-                    tile.getWorldObj().loadedTileEntityList.remove(this);
+                    if(tile.getWorldObj().loadedTileEntityList.remove(this))
+                    {
+                        debug("\tremoved " + tile + " from tick system");
+                    }
+                    it.remove();
                 }
             }
         }
@@ -48,7 +53,18 @@ public class TileTaskTickHandler
      */
     public void addTileToBeRemoved(TileEntity tile)
     {
-        if (!removeList.contains(tile))
+        if (!removeList.contains(tile) && tile.getWorldObj().loadedTileEntityList.contains(tile))
+        {
+            debug("Added " + tile);
             removeList.add(tile);
+        }
+    }
+
+    private void debug(String msg)
+    {
+        if (Engine.runningAsDev)
+        {
+           // Engine.logger().info("TileTaskTickHandler: " + msg);
+        }
     }
 }
