@@ -5,4 +5,4 @@ VoltzEngine Version:
 ---------------------
 Crash Report:
 ----------
-Explain issue in detail.
+Explain issue in detail:
