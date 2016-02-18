@@ -47,17 +47,38 @@ public abstract class BlastSimplePath<B extends BlastSimplePath> extends Blast<B
     @Override
     public void getEffectedBlocks(List<IWorldEdit> list)
     {
-        center = new Location(world(), (int) x() + 0.5, (int) y() + 0.5, (int) z() + 0.5);
-        //Temp fix to solve if center is an air block
-        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+        Location c = new Location(world(), (int) x(), (int) y(), (int) z());
+        center = c.add(0.5);
+        if (shouldPath(c))
         {
             if (recursive)
             {
-                pathNext(center.add(dir), list);
+                pathNext(c, list);
+
             }
             else
             {
-                pathEntire(center.add(dir), list);
+                pathEntire(c, list);
+            }
+        }
+        else
+        {
+            //Temp fix to solve if center is an air block
+            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+            {
+                Location location = center.add(dir);
+                if (shouldPath(location))
+                {
+                    if (recursive)
+                    {
+                        pathNext(location, list);
+
+                    }
+                    else
+                    {
+                        pathEntire(location, list);
+                    }
+                }
             }
         }
     }
@@ -69,18 +90,23 @@ public abstract class BlastSimplePath<B extends BlastSimplePath> extends Blast<B
         super.setYield(size);
         if (prev != size)
         {
-            double volume = 4 / 3 * Math.PI * size * size * size;
-            int i = (int) (volume / (double) blocksPerLayer);
-            if (i > 0)
-            {
-                layers = i;
-            }
-            else
-            {
-                layers = 1;
-            }
+            calculateLayers();
         }
-        return (B)this;
+        return (B) this;
+    }
+
+    public final void calculateLayers()
+    {
+        double volume = 4 / 3 * Math.PI * size * size * size;
+        int i = (int) (volume / (double) blocksPerLayer);
+        if (i > 0)
+        {
+            layers = i;
+        }
+        else
+        {
+            layers = 1;
+        }
     }
 
     @Override
@@ -117,7 +143,7 @@ public abstract class BlastSimplePath<B extends BlastSimplePath> extends Blast<B
     {
         if (shouldPath(startNode))
         {
-            if(stack.isEmpty())
+            if (stack.isEmpty())
             {
                 //Get first edit
                 list.add(changeBlock(startNode));

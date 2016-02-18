@@ -282,13 +282,22 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
     }
 
     @Override
+    public int hashCode()
+    {
+        int result = 31 + (world() != null && world().provider != null ? world().provider.dimensionId : 0);
+        result = 31 * result + xi();
+        result = 31 * result + yi();
+        result = 31 * result + zi();
+        return result;
+    }
+
+    @Override
     public boolean equals(Object obj)
     {
         if (obj == this)
         {
             return true;
         }
-
         if (obj instanceof BlockEdit)
         {
             return ((BlockEdit) obj).world == world
@@ -297,5 +306,10 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
                     && ((BlockEdit) obj).zi() == zi();
         }
         return false;
+    }
+
+    public String toString()
+    {
+        return "BlockEdit[ " + (world() != null && world().provider != null ? world().provider.dimensionId : null) + "d, " + xi() + "x, " + yi() + "y, " + zi() + "z]";
     }
 }
