@@ -198,13 +198,26 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
         if (ticks % nextCleanupTick == 0)
         {
             doCleanupCheck();
-            nextCleanupTick = 100 + (int) (world().rand.nextFloat() * 2000);
+            nextCleanupTick = getNextCleanupTick();
         }
         if (getPlayersUsing().size() > 0)
         {
             doUpdateGuiUsers();
         }
 
+    }
+
+    /**
+     * Called to get the next cleanup tick call.
+     * <p/>
+     * Note: Should be random to avoid several tiles from
+     * spiking the CPU when updating at the same time.
+     *
+     * @return number of ticks, must be greater than zero
+     */
+    protected int getNextCleanupTick()
+    {
+        return 100 + (int) (world().rand.nextFloat() * 2000);
     }
 
     @Override
