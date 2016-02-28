@@ -425,6 +425,7 @@ public class Engine
         if ((getConfig().hasKey("Content", "LoadOres") || metallicOresRequested) && getConfig().getBoolean("LoadOres", "Content", metallicOresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
         {
             ore = contentRegistry.newBlock(References.ID + "StoneOre", new BlockOre("stone"), ItemBlockOre.class);
+            ore.setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
             MetallicOres.registerSet(ore, getConfig());
         }
 
