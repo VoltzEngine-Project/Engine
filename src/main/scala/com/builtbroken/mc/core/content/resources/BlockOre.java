@@ -60,4 +60,10 @@ public class BlockOre extends Block
             list.add(new ItemStack(item, 1, ore.ordinal()));
         }
     }
+
+    @Override
+    protected boolean canSilkHarvest()
+    {
+        return true;
+    }
 }

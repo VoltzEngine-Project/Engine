@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.content.resources;
+package com.builtbroken.mc.core.content.resources.gems;
 
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.world.generator.OreGenReplaceStone;
@@ -54,6 +54,7 @@ public enum GemOres
 
     public static void registerSet(Block block, Configuration config)
     {
+        //TODO implement defined ore gen, for example have gems spawn only near lava, only in sand, only in dirt, etc
         for (GemOres ore : GemOres.values())
         {
             if (config.getBoolean("" + LanguageUtility.capitalizeFirst(ore.name()) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
