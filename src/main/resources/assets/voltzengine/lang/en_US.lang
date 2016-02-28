@@ -16,6 +16,7 @@ tile.voltzengine:oreLead.name=Lead Ore
 tile.voltzengine:oreZinc.name=Zinc Ore
 tile.voltzengine:oreNickel.name=Nickel Ore
 tile.voltzengine:oreAluminium.name=Bauxite Ore
+tile.voltzengine:oreBauxite.name=Bauxite Ore
 tile.voltzengine:oreMagnesite.name=Magnesite Ore
 tile.voltzengine:oreUranium.name=Uranium Ore
 tile.voltzengine:orePlatinum.name=Platinum Ore
