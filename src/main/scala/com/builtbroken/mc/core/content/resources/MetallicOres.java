@@ -20,8 +20,8 @@ public enum MetallicOres
     LEAD(15, 30, 5, 4),
     ZINC(20, 40, 5, 20),
     NICKEL(15, 60, 5, 8),
-    BAUXITE(15, 60, 5, 10),
-    MAGNESITE(5, 10, 3, 6),
+    BAUXITE("oreAluminum", 15, 60, 5, 10),
+    MAGNESITE("oreMagnesium", 5, 10, 3, 6),
     URANIUM(5, 30, 2, 4),
     PLATINUM(15, 60, 3, 10);
 
@@ -32,6 +32,11 @@ public enum MetallicOres
 
     private Block block;
     private String oreDictName;
+
+    MetallicOres(String oreName, int min, int max, int amountPerBranch, int amountPerChunk)
+    {
+        this.oreDictName = oreName;
+    }
 
     MetallicOres(int min, int max, int amountPerBranch, int amountPerChunk)
     {
@@ -58,11 +63,19 @@ public enum MetallicOres
             if (config.getBoolean("" + LanguageUtility.capitalizeFirst(ore.name()) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
             {
                 ore.block = block;
-                ore.oreDictName = "ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase());
                 ItemStack stack = ore.stack();
-                GameRegistry.registerWorldGenerator(new OreGenReplaceStone(ore.oreDictName, stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
+                GameRegistry.registerWorldGenerator(new OreGenReplaceStone(ore.getOreName(), stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
                 OreDictionary.registerOre(ore.oreDictName, stack);
             }
         }
+    }
+
+    public String getOreName()
+    {
+        if(oreDictName == null)
+        {
+            oreDictName = "ore" + LanguageUtility.capitalizeFirst(name().toLowerCase());
+        }
+        return oreDictName;
     }
 }

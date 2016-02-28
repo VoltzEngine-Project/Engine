@@ -16,13 +16,13 @@ import static com.builtbroken.mc.core.content.resources.GenMaterial.*;
 public enum DefinedGenItems
 {
     /** Mostly pure macerated metal */
-    DUST("dust"),
+    DUST("dust", DIAMOND),
     /** Impure macerated metal containing unknown other elements, most likely rock */
-    DUST_IMPURE("dustImpure", WOOD, STONE, BRASS, BRONZE, STEEL),
+    DUST_IMPURE("dustImpure", WOOD, STONE, BRASS, BRONZE, STEEL, DIAMOND),
     /** Crushed ore */
-    RUBBLE("rubble", BRASS, BRONZE, STEEL),
+    RUBBLE("rubble", BRASS, BRONZE, STEEL, DIAMOND),
     /** Solid bar of metal */
-    INGOT("ingot", IRON, GOLD, STONE, WOOD, URANIUM),
+    INGOT("ingot", IRON, GOLD, STONE, WOOD, URANIUM, DIAMOND),
     /** Solid 1m^2 shape of metal */
     PLATE("plate", URANIUM),
     /** Solid Cylinder of metal */

@@ -500,6 +500,12 @@ public class Engine
                 }
             }
         }
+        if (metallicOresRequested)
+        {
+            //Register alt ore names
+            OreDictionary.registerOre("oreBauxite", MetallicOres.BAUXITE.stack());
+            OreDictionary.registerOre("oreMagnesite", MetallicOres.MAGNESITE.stack());
+        }
         logger.info("Done... Took " + StringHelpers.formatTimeDifference(start, System.nanoTime()));
 
         loader.init();
@@ -527,10 +533,22 @@ public class Engine
         {
             for (MetallicOres ore : MetallicOres.values())
             {
-                List<ItemStack> ingots = OreDictionary.getOres("ingot" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase()));
-                if (ingots != null && !ingots.isEmpty())
+                List<ItemStack> ingots = OreDictionary.getOres(ore.getOreName().replace("ore", "ingot"));
+                if(!ingots.isEmpty())
                 {
-                    GameRegistry.addSmelting(ore.stack(), ingots.get(0), 0.01f);
+                    ItemStack ingotStack = ingots.get(0);
+                    if(ingotStack == null)
+                    {
+                        int i = 1;
+                        while (ingotStack == null && i < ingots.size())
+                        {
+                            ingotStack = ingots.get(i);
+                        }
+                    }
+                    if (ingotStack != null)
+                    {
+                        GameRegistry.addSmelting(ore.stack(), ingotStack, 0.01f);
+                    }
                 }
             }
         }

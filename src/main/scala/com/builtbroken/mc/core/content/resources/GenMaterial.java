@@ -30,7 +30,8 @@ public enum GenMaterial
     BRASS(new Color(127, 118, 62)),
     STONE(new Color(93, 102, 97)),
     WOOD(new Color(97, 77, 5)),
-    DIAMOND(new Color(20, 110, 100));
+    DIAMOND(new Color(20, 110, 100)),
+    PLATINUM(new Color(193, 221, 218));
 
 
     /** Color to use for render the texture */
