@@ -1,7 +1,6 @@
 package com.builtbroken.mc.core.content.resources.gems;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.core.content.resources.DefinedGenItems;
 import com.builtbroken.mc.core.content.resources.GenMaterial;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import cpw.mods.fml.relauncher.Side;

@@ -69,7 +69,6 @@ public class BlockGemOre extends Block
     @Override
     public Item getItemDropped(int meta, Random random, int var)
     {
-
         return Item.getItemFromBlock(this);
     }
 }

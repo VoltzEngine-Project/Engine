@@ -19,15 +19,15 @@ public enum GemTypes
     //http://www.wikihow.com/Cut-Gems
 
     /** Still attached to stone */
-    ORE("ore", "GemOre"),
+    ORE("ore", "gemOre"),
     /** Bit rough and dirty */
-    RAW("raw", "GemRaw"),
+    RAW("raw", "gemRaw"),
     /** Cleaned up but not cut */
-    UNCUT("uncut", "GemUncut" , EMERALD),
+    UNCUT("uncut", "gemUncut" , EMERALD, QUARTZ),
     /** Generalized cut */
-    CUT("cut", "Gem"),
+    CUT("cut", "gem"),
     /** Nice and shiny */
-    POLISHED("polished", "PolishedGem");
+    POLISHED("polished", "gemPolished");
 
     /** Material types to ignore when generating the item */
     public final List<Gems> ignoreMaterials;

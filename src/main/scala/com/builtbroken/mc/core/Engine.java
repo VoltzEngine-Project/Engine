@@ -8,8 +8,7 @@ import com.builtbroken.mc.core.content.ItemInstaHole;
 import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
 import com.builtbroken.mc.core.content.parts.ItemCircuits;
 import com.builtbroken.mc.core.content.resources.*;
-import com.builtbroken.mc.core.content.resources.gems.BlockGemOre;
-import com.builtbroken.mc.core.content.resources.gems.GemOres;
+import com.builtbroken.mc.core.content.resources.gems.*;
 import com.builtbroken.mc.core.content.resources.items.ItemGenMaterial;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
 import com.builtbroken.mc.core.content.resources.load.*;
@@ -157,6 +156,16 @@ public class Engine
      */
     public static void requestOres()
     {
+        requestMetalOres();
+        requestGemOres();
+    }
+
+    /**
+     * Requests that all metal ores load
+     * Must be called in pre-init
+     */
+    public static void requestMetalOres()
+    {
         if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
         {
             throw new RuntimeException("Ores can only be requested in Pre-Init phase!");
@@ -192,6 +201,14 @@ public class Engine
         DefinedGenItems.NUGGET.requestToLoad();
         DefinedGenItems.WIRE.requestToLoad();
         DefinedGenItems.SCREW.requestToLoad();
+        //TODO remove if statement when gems are nice
+        if (runningAsDev)
+        {
+            for (GemTypes types : GemTypes.values())
+            {
+                types.requestToLoad();
+            }
+        }
     }
 
     public static void requestToolParts()
@@ -433,8 +450,19 @@ public class Engine
         {
             gemOre = contentRegistry.newBlock(References.ID + "GemOre", new BlockGemOre("gem"), ItemBlockGemOre.class);
             GemOres.registerSet(gemOre, getConfig());
-            gem = contentRegistry.newItem(References.ID + "Gem", ItemGems.class);
-            Gems.registerSet(gem, getConfig());
+        }
+
+        for (GemTypes types : GemTypes.values())
+        {
+            if (types.isRequested())
+            {
+                types.item = new ItemGem(types);
+                contentRegistry.newItem("Gem" + LanguageUtility.capitalizeFirst(types.name) + "Item", types.item);
+                for (Gems gem : Gems.values())
+                {
+                    OreDictionary.registerOre(types.oreDict + gem.getOreName(), types.stack(gem));
+                }
+            }
         }
 
         if (multiBlockRequested)
@@ -535,10 +563,10 @@ public class Engine
             for (MetallicOres ore : MetallicOres.values())
             {
                 List<ItemStack> ingots = OreDictionary.getOres(ore.getOreName().replace("ore", "ingot"));
-                if(!ingots.isEmpty())
+                if (!ingots.isEmpty())
                 {
                     ItemStack ingotStack = ingots.get(0);
-                    if(ingotStack == null)
+                    if (ingotStack == null)
                     {
                         int i = 1;
                         while (ingotStack == null && i < ingots.size())
