@@ -278,14 +278,35 @@ public class EntityProjectile extends Entity implements IProjectile
         onImpactTile();
     }
 
+    /**
+     * Called when the projectile impacts a tile. Used
+     * data stored in entity to get tile data.
+     */
     protected void onImpactTile()
     {
     }
 
+    /**
+     * Handles entity being impacted by the projectile
+     *
+     * @param movingobjectposition
+     * @param entityHit
+     */
     protected void handleEntityCollision(MovingObjectPosition movingobjectposition, Entity entityHit)
     {
-        onImpactEntity(entityHit, MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ));
+        onImpactEntity(entityHit, getVelocity());
     }
+
+    /**
+     * Calculates and returns the velocity of the object. Has no direction...
+     *
+     * @return velocity >= 0
+     */
+    protected float getVelocity()
+    {
+        return MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+    }
+
 
     protected void onImpactEntity(Entity entityHit, float velocity)
     {
@@ -427,7 +448,9 @@ public class EntityProjectile extends Entity implements IProjectile
         nbt.setByte("inData", (byte) this.inData);
         nbt.setByte("inGround", (byte) (this.inGround ? 1 : 0));
         if (sourceOfProjectile != null)
+        {
             nbt.setTag("sourcePos", sourceOfProjectile.toNBT());
+        }
         if (shootingEntity != null)
         {
             nbt.setString("Shooter-UUID", shootingEntity.getUniqueID().toString());
@@ -445,7 +468,9 @@ public class EntityProjectile extends Entity implements IProjectile
         this.inData = nbt.getByte("inData") & 255;
         this.inGround = nbt.getByte("inGround") == 1;
         if (nbt.hasKey("sourcePos"))
+        {
             sourceOfProjectile = new Pos(nbt.getCompoundTag("sourcePos"));
+        }
         if (nbt.hasKey("Shooter-UUID"))
         {
             shootingEntityUUID = UUID.fromString(nbt.getString("Shooter-UUID"));
