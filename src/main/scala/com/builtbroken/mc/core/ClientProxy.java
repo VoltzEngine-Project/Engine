@@ -88,14 +88,28 @@ public class ClientProxy extends CommonProxy
         return getClientWorld() != null ? getClientWorld().provider.dimensionId : 0;
     }
 
-    @SideOnly(Side.CLIENT) @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
     public void onStitch(TextureStitchEvent.Pre event)
     {
-        for (IExplosiveHandler handler : ExplosiveRegistry.getExplosives())
+        if (event.map.getTextureType() == 0)
         {
-            if (handler instanceof ITexturedExplosiveHandler)
+            for (IExplosiveHandler handler : ExplosiveRegistry.getExplosives())
             {
-                ((ITexturedExplosiveHandler) handler).registerExplosiveHandlerIcons(event.map);
+                if (handler instanceof ITexturedExplosiveHandler)
+                {
+                    ((ITexturedExplosiveHandler) handler).registerExplosiveHandlerIcons(event.map, true);
+                }
+            }
+        }
+        else if (event.map.getTextureType() == 1)
+        {
+            for (IExplosiveHandler handler : ExplosiveRegistry.getExplosives())
+            {
+                if (handler instanceof ITexturedExplosiveHandler)
+                {
+                    ((ITexturedExplosiveHandler) handler).registerExplosiveHandlerIcons(event.map, false);
+                }
             }
         }
     }
