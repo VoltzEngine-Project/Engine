@@ -41,6 +41,7 @@ import com.builtbroken.mc.lib.world.edit.ThreadWorldAction;
 import com.builtbroken.mc.lib.world.edit.WorldEditQueHandler;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
+import com.builtbroken.mc.lib.world.radar.RadarRegistry;
 import com.builtbroken.mc.prefab.explosive.handler.ExplosiveHandlerTNT;
 import com.builtbroken.mc.prefab.recipe.cast.MRHandlerCast;
 import com.builtbroken.mc.prefab.recipe.fluid.MRHandlerFluidStack;
@@ -300,6 +301,7 @@ public class Engine
         MinecraftForge.EVENT_BUS.register(SaveManager.instance());
         MinecraftForge.EVENT_BUS.register(new InteractionHandler());
         MinecraftForge.EVENT_BUS.register(SelectionHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new RadarRegistry());
         FMLCommonHandler.instance().bus().register(new WorldEditQueHandler());
         FMLCommonHandler.instance().bus().register(TileTaskTickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(SelectionHandler.INSTANCE);
