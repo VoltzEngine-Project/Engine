@@ -26,9 +26,7 @@ public final class ExplosiveRegistry
 {
     //Constants, in theory these are inlined during compile time
     public static final String EXPONENTIAL = "exponential";
-    private static final double ONE_THIRD = 1.0 / 3.0;
-    private static final double FOUR_THIRDS_PI = (4.0 / 3.0) * Math.PI;
-    private static final double PI_X_4 = 4 * Math.PI;
+
 
     /** Explosive ID to explosive handler */
     private static final HashMap<String, IExplosiveHandler> idToExplosiveMap = new HashMap();
@@ -388,13 +386,14 @@ public final class ExplosiveRegistry
      */
     public static double getExplosiveSize(double sizePerUnit, double scaleByFactor)
     {
+        final double FOUR_THIRDS_PI = (4.0 / 3.0) * Math.PI;
         //http://www.calculatorsoup.com/calculators/geometry-solids/sphere.php
         //Get volume of a single unit
         double volume = FOUR_THIRDS_PI * sizePerUnit * sizePerUnit * sizePerUnit;
         //Scale the volume by the # of explosives
         volume = volume * scaleByFactor;
         //Find new radius from volume and return value
-        return Math.pow((3 * volume) / PI_X_4, ONE_THIRD); //TODO see if we can remove the exponent
+        return Math.cbrt(volume / FOUR_THIRDS_PI); //TODO see if we can remove the exponent
     }
 
     /**
@@ -456,5 +455,28 @@ public final class ExplosiveRegistry
     public static HashMap<String, IExplosiveHandler> getExplosiveMap()
     {
         return idToExplosiveMap;
+    }
+
+    /**
+     * NEVER USE THIS METHOD OUTSIDE OF JUNIT TESTING
+     *
+     * Clears all data stored by the registry. This is designed
+     * to wipe the registry between unit tests.
+     */
+    public static void _clearRegistry()
+    {
+        if (!Engine.isJUnitTest())
+        {
+            Engine.error("Clearing the registry should never be called out side of JUnit Testing");
+        }
+        else
+        {
+            idToExplosiveMap.clear();
+            modToExplosiveMap.clear();
+            itemToExplosive.clear();
+            itemToExplosiveSize.clear();
+            itemToExplosiveSizeScaled.clear();
+            explosiveToItems.clear();
+        }
     }
 }
