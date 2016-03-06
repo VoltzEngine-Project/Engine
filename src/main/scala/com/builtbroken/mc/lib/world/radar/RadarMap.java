@@ -6,9 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.chunk.Chunk;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * System designed to track moving or stationary targets on a 2D map. Can be used to detect objects or visualize objects in an area. Mainly
@@ -42,6 +40,26 @@ public class RadarMap
      */
     public void update()
     {
+        //TODO consider multi-threading if number of entries is too high (need to ensure runs in less than 10ms~)
+        for (Map.Entry<ChunkCoordIntPair, List<RadarObject>> entry : chunk_to_entities.entrySet())
+        {
+            if (entry.getValue() != null)
+            {
+                Iterator<RadarObject> it = entry.getValue().iterator();
+                while (it.hasNext())
+                {
+                    RadarObject object = it.next();
+                    if (entry.getKey() != object.getChunkCoordIntPair())
+                    {
+                        it.remove();
+                        if (object.isValid())
+                        {
+                            add(object);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public boolean add(Entity entity)
@@ -158,9 +176,9 @@ public class RadarMap
     public List<RadarObject> getRadarObjects(Cube cube, boolean exact)
     {
         List<RadarObject> list = new ArrayList();
-        for (int chunkX = (cube.min().xi() >> 4); chunkX <= (cube.max().xi() >> 4); chunkX++)
+        for (int chunkX = (cube.min().xi() >> 4) - 1; chunkX <= (cube.max().xi() >> 4) + 1; chunkX++)
         {
-            for (int chunkZ = (cube.min().zi() >> 4); chunkZ <= (cube.max().zi() >> 4); chunkZ++)
+            for (int chunkZ = (cube.min().zi() >> 4) - 1; chunkZ <= (cube.max().zi() >> 4) + 1; chunkZ++)
             {
                 ChunkCoordIntPair p = new ChunkCoordIntPair(chunkX, chunkZ);
                 if (chunk_to_entities.containsKey(p))

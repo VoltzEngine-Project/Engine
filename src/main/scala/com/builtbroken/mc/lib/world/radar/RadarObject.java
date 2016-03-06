@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.world.radar;
 
 import com.builtbroken.mc.api.IWorldPosition;
+import net.minecraft.world.ChunkCoordIntPair;
 
 import java.lang.ref.WeakReference;
 
@@ -28,5 +29,10 @@ public abstract class RadarObject<J> implements IWorldPosition
     public boolean isValid()
     {
         return reference != null && reference.get() != null;
+    }
+
+    public ChunkCoordIntPair getChunkCoordIntPair()
+    {
+        return  new ChunkCoordIntPair((int)x() >> 4, (int)z() >> 4);
     }
 }
