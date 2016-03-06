@@ -110,7 +110,7 @@ class EulerAngle(var yaw: Double, var pitch: Double, var roll: Double) extends A
 
   def absoluteDifference(other: EulerAngle) = new EulerAngle(EulerAngle.angleDifference(yaw, other.yaw), EulerAngle.angleDifference(pitch, other.pitch), EulerAngle.angleDifference(roll, other.roll))
 
-  def isWithin(other: EulerAngle, margin: Double): Boolean = absoluteDifference(other).toTuple.productIterator.exists(i => i.asInstanceOf[Double] > margin)
+  def isWithin(other: EulerAngle, margin: Double): Boolean = absoluteDifference(other).toTuple.productIterator.exists(i => i.asInstanceOf[Double] < margin)
 
   override def transform(vector: IPos3D) = new Pos(vector).transform(toQuaternion)
 
