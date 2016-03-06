@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.content.tool;
 
-import com.builtbroken.mc.api.items.IItemTool;
+import com.builtbroken.mc.api.items.tools.IItemTool;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import cpw.mods.fml.relauncher.Side;

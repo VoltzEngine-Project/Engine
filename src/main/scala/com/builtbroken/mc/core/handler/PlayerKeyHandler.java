@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.handler;
 
-import com.builtbroken.mc.api.items.IModeItem;
+import com.builtbroken.mc.api.items.tools.IModeItem;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketPlayerItemMode;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.prefab.recipe.item;
 
-import com.builtbroken.mc.api.items.IItemTool;
+import com.builtbroken.mc.api.items.tools.IItemTool;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

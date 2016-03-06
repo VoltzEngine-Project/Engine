@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.network.packet;
 
-import com.builtbroken.mc.api.items.IModeItem;
+import com.builtbroken.mc.api.items.tools.IModeItem;
 import com.builtbroken.mc.core.Engine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

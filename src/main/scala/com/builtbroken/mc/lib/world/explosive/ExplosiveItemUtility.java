@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.world.explosive;
 
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
-import com.builtbroken.mc.api.items.IExplosiveItem;
+import com.builtbroken.mc.api.items.explosives.IExplosiveItem;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

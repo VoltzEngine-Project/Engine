@@ -1,16 +1,20 @@
 package com.builtbroken.mc.lib.world.radar;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.lib.transform.region.Cube;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -94,6 +98,50 @@ public final class RadarRegistry
         return RADAR_MAPS.get(dimID);
     }
 
+    /**
+     * Grabs all living radar objects within range
+     *
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @param distance
+     * @param selector - optional, used to refine list of entities
+     * @return list, never null
+     */
+    public static List<Entity> getAllLivingObjectsWithin(World world, double x, double y, double z, double distance, IEntitySelector selector)
+    {
+        return getAllLivingObjectsWithin(world, new Cube(x - distance, Math.max(0, y - distance), z - distance, x + distance, Math.min(255, y + distance), z + distance), selector);
+    }
+
+    /**
+     * Grabs all living radar objects within range
+     *
+     * @param world
+     * @param cube  - area to search for contacts
+     * @return list, never null
+     */
+    public static List<Entity> getAllLivingObjectsWithin(World world, Cube cube, IEntitySelector selector)
+    {
+        List<Entity> list = new ArrayList();
+        if (RADAR_MAPS.containsKey(world.provider.dimensionId))
+        {
+            List<RadarObject> objects = getRadarMapForWorld(world).getRadarObjects(cube, true);
+            for (RadarObject object : objects)
+            {
+                if (object instanceof RadarEntity && object.isValid())
+                {
+                    Entity entity = ((RadarEntity) object).reference.get();
+                    if (entity != null && !entity.isDead && (selector == null || selector.isEntityApplicable(entity)))
+                    {
+                        list.add(entity);
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
     @SubscribeEvent
     public void chunkUnload(ChunkEvent.Unload event)
     {
@@ -141,4 +189,5 @@ public final class RadarRegistry
             }
         }
     }
+
 }

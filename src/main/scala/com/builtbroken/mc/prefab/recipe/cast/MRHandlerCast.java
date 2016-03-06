@@ -1,6 +1,6 @@
 package com.builtbroken.mc.prefab.recipe.cast;
 
-import com.builtbroken.mc.api.items.ICastItem;
+import com.builtbroken.mc.api.items.crafting.ICastItem;
 import com.builtbroken.mc.api.recipe.*;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.prefab.items.ItemStackWrapper;

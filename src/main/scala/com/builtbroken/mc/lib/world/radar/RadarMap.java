@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.world.radar;
 
+import com.builtbroken.mc.lib.transform.region.Cube;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -135,6 +136,60 @@ public class RadarMap
     }
 
     /**
+     * Finds all contacts within chunk distances
+     *
+     * @param x        - world location x
+     * @param z        - world location x
+     * @param distance - distance m
+     * @return list of entries
+     */
+    public List<RadarObject> getRadarObjects(double x, double z, double distance)
+    {
+        return getRadarObjects(new Cube(x - distance, 0, z - distance, x + distance, 255, z + distance), true);
+    }
+
+    /**
+     * Finds all contacts within chunk distances
+     *
+     * @param cube  - area to search inside, approximated to chunk bounds
+     * @param exact - match exact cube size, overrides approximation
+     * @return list of entries
+     */
+    public List<RadarObject> getRadarObjects(Cube cube, boolean exact)
+    {
+        List<RadarObject> list = new ArrayList();
+        for (int chunkX = (cube.min().xi() >> 4); chunkX <= (cube.max().xi() >> 4); chunkX++)
+        {
+            for (int chunkZ = (cube.min().zi() >> 4); chunkZ <= (cube.max().zi() >> 4); chunkZ++)
+            {
+                ChunkCoordIntPair p = new ChunkCoordIntPair(chunkX, chunkZ);
+                if (chunk_to_entities.containsKey(p))
+                {
+                    List<RadarObject> objects = chunk_to_entities.get(p);
+                    if (objects != null)
+                    {
+                        if (exact)
+                        {
+                            for (RadarObject object : objects)
+                            {
+                                if (cube.isWithin(object.x(), object.y(), object.z()))
+                                {
+                                    list.add(object);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            list.addAll(objects);
+                        }
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
      * Dimension ID this map tracks
      *
      * @return valid dim ID.
@@ -163,4 +218,6 @@ public class RadarMap
     {
         return "RadarMap[" + dimID + "]";
     }
+
+
 }

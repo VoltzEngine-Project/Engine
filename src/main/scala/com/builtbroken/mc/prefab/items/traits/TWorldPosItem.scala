@@ -1,12 +1,12 @@
 package com.builtbroken.mc.prefab.items.traits
 
 import com.builtbroken.mc.api.IWorldPosition
-import com.builtbroken.mc.api.items.IWorldPosItem
+import com.builtbroken.mc.api.items.tools.IWorldPosItem
 import com.builtbroken.mc.lib.transform.vector.Location
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
-/** Prefab trait for { @link com.builtbroken.mc.api.items.IWorldPosItem }
+/** Prefab trait for { @link com.builtbroken.mc.api.items.tools.IWorldPosItem }
   * Created by Dark on 8/25/2015.
   */
 trait TWorldPosItem extends IWorldPosItem {

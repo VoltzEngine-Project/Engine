@@ -154,11 +154,6 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
     //////////////////////
     /// Collision Detection
     /////////////////////
-    @Override
-    public boolean isWithin(double x, double y, double z)
-    {
-        return false;
-    }
 
     public boolean intersects(Vec3 v)
     {
@@ -289,6 +284,13 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
     {
         return v >= min + 1E-5 && v <= max - 1E-5;
     }
+
+    @Override
+    public boolean isWithin(double x, double y, double z)
+    {
+        return isWithinX(x) && isWithinY(y) && isWithinZ(z);
+    }
+
 
     /**
      * Checks to see if a line segment is within the defined line. Assume the lines overlap each other.

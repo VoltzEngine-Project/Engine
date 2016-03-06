@@ -29,10 +29,4 @@ public abstract class RadarObject<J> implements IWorldPosition
     {
         return reference != null && reference.get() != null;
     }
-
-    @Override
-    public abstract boolean equals(Object object);
-
-    @Override
-    public abstract int hashCode();
 }
