@@ -3,8 +3,6 @@ package com.builtbroken.mc.lib.world.radar;
 import com.builtbroken.mc.api.IWorldPosition;
 import net.minecraft.world.ChunkCoordIntPair;
 
-import java.lang.ref.WeakReference;
-
 /**
  * Special type of weak reference used to track radar objects. This prevents the radar system from holding on to
  * references that should be unloaded from the map.
@@ -14,22 +12,12 @@ import java.lang.ref.WeakReference;
  */
 public abstract class RadarObject<J> implements IWorldPosition
 {
-    protected final WeakReference<J> reference;
-
-    public RadarObject(J referent)
-    {
-        this.reference = new WeakReference<J>(referent);
-    }
-
     /**
      * Is the radar object valid?
      *
      * @return true if the object is valid, normally a null check
      */
-    public boolean isValid()
-    {
-        return reference != null && reference.get() != null;
-    }
+    public abstract boolean isValid();
 
     public ChunkCoordIntPair getChunkCoordIntPair()
     {

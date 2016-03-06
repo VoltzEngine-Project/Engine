@@ -22,6 +22,7 @@ public class RadarMap
 
     /** Map of chunk coords( converted to long) to radar contacts in that chunk */
     protected HashMap<ChunkCoordIntPair, List<RadarObject>> chunk_to_entities = new HashMap();
+    protected List<RadarObject> allEntities = new ArrayList();
 
 
     /**
@@ -56,6 +57,10 @@ public class RadarMap
                         {
                             add(object);
                         }
+                        else
+                        {
+                            allEntities.remove(object);
+                        }
                     }
                 }
             }
@@ -74,28 +79,31 @@ public class RadarMap
 
     public boolean add(RadarObject object)
     {
-        ChunkCoordIntPair pair = getChunkValue((int) object.x(), (int) object.y());
-        List<RadarObject> list;
+        if (!allEntities.contains(object))
+        {
+            ChunkCoordIntPair pair = getChunkValue((int) object.x(), (int) object.z());
+            List<RadarObject> list;
 
-        //Get list or make new
-        if (chunk_to_entities.containsKey(pair))
-        {
-            list = chunk_to_entities.get(pair);
-        }
-        else
-        {
-            list = new ArrayList();
-        }
+            //Get list or make new
+            if (chunk_to_entities.containsKey(pair))
+            {
+                list = chunk_to_entities.get(pair);
+            }
+            else
+            {
+                list = new ArrayList();
+            }
 
-        //Check if object is not already added
-        if (!list.contains(object))
-        {
-            list.add(object);
-            //TODO fire map update event
-            //TODO fire map add event
-            //Update map
-            chunk_to_entities.put(pair, list);
-            return true;
+            //Check if object is not already added
+            if (!list.contains(object))
+            {
+                list.add(object);
+                //TODO fire map update event
+                //TODO fire map add event
+                //Update map
+                chunk_to_entities.put(pair, list);
+                return true;
+            }
         }
         return false;
     }
@@ -112,7 +120,8 @@ public class RadarMap
 
     public boolean remove(RadarObject object)
     {
-        ChunkCoordIntPair pair = getChunkValue((int) object.x(), (int) object.y());
+        ChunkCoordIntPair pair = getChunkValue((int) object.x(), (int) object.z());
+        allEntities.remove(object);
         if (chunk_to_entities.containsKey(pair))
         {
             List<RadarObject> list = chunk_to_entities.get(pair);
@@ -138,8 +147,12 @@ public class RadarMap
         ChunkCoordIntPair pair = chunk.getChunkCoordIntPair();
         if (chunk_to_entities.containsKey(pair))
         {
+            for (RadarObject object : chunk_to_entities.get(pair))
+            {
+                //TODO fire remove event
+                allEntities.remove(object);
+            }
             chunk_to_entities.remove(pair);
-            //TODO go threw each object in list and fire remove event
         }
     }
 
@@ -190,9 +203,12 @@ public class RadarMap
                         {
                             for (RadarObject object : objects)
                             {
-                                if (cube.isWithin(object.x(), object.y(), object.z()))
+                                if (object.isValid())
                                 {
-                                    list.add(object);
+                                    if (cube.isWithin(object.x(), object.y(), object.z()))
+                                    {
+                                        list.add(object);
+                                    }
                                 }
                             }
                         }

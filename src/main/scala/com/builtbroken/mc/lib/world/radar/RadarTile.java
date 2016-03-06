@@ -11,58 +11,50 @@ import net.minecraft.world.World;
  */
 public class RadarTile extends RadarObject<TileEntity>
 {
+    TileEntity tile;
+
     public RadarTile(TileEntity referent)
     {
-        super(referent);
+        this.tile = referent;
+    }
+
+    @Override
+    public boolean isValid()
+    {
+        return tile != null && tile.hasWorldObj();
     }
 
     @Override
     public World world()
     {
-        if (reference != null && reference.get() != null)
-        {
-            return reference.get().getWorldObj();
-        }
-        return null;
+        return tile != null ? tile.getWorldObj() : null;
     }
 
     @Override
     public double x()
     {
-        if (reference != null && reference.get() != null)
-        {
-            return reference.get().xCoord + 0.5;
-        }
-        return 0;
+        return tile != null ? tile.xCoord + 0.5 : 0;
     }
 
     @Override
     public double y()
     {
-        if (reference != null && reference.get() != null)
-        {
-            return reference.get().yCoord + 0.5;
-        }
-        return 0;
+        return tile != null ? tile.yCoord + 0.5 : 0;
     }
 
     @Override
     public double z()
     {
-        if (reference != null && reference.get() != null)
-        {
-            return reference.get().zCoord + 0.5;
-        }
-        return 0;
+        return tile != null ? tile.zCoord + 0.5 : 0;
     }
 
     @Override
     public boolean equals(Object object)
     {
-        if (object instanceof TileEntity && reference.get() != null)
+        if (object instanceof TileEntity && tile != null)
         {
             //No need to compare world as radar contacts should only be stored per world
-            return new Pos((TileEntity) object).equals(new Pos(reference.get()));
+            return new Pos((TileEntity) object).equals(new Pos(tile));
         }
         return false;
     }
@@ -70,9 +62,9 @@ public class RadarTile extends RadarObject<TileEntity>
     @Override
     public int hashCode()
     {
-        if (reference.get() != null)
+        if (tile != null)
         {
-            return reference.get().hashCode();
+            return tile.hashCode();
         }
         return super.hashCode();
     }

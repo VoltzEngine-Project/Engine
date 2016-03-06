@@ -9,57 +9,49 @@ import net.minecraft.world.World;
  */
 public class RadarEntity extends RadarObject<Entity>
 {
+    protected Entity entity;
+
     public RadarEntity(Entity referent)
     {
-        super(referent);
+        this.entity = referent;
+    }
+
+    @Override
+    public boolean isValid()
+    {
+        return entity != null && !entity.isDead && entity.worldObj != null;
     }
 
     @Override
     public World world()
     {
-        if (reference != null && reference.get() != null)
-        {
-            return reference.get().worldObj;
-        }
-        return null;
+        return entity != null ? entity.worldObj : null;
     }
 
     @Override
     public double x()
     {
-        if (reference != null && reference.get() != null)
-        {
-            return reference.get().posX;
-        }
-        return 0;
+        return entity != null ? entity.posX : 0;
     }
 
     @Override
     public double y()
     {
-        if (reference != null && reference.get() != null)
-        {
-            return reference.get().posX;
-        }
-        return 0;
+        return entity != null ? entity.posY : 0;
     }
 
     @Override
     public double z()
     {
-        if (reference != null && reference.get() != null)
-        {
-            return reference.get().posZ;
-        }
-        return 0;
+        return entity != null ? entity.posZ : 0;
     }
 
     @Override
     public boolean equals(Object object)
     {
-        if (object instanceof Entity && reference.get() != null)
+        if (object instanceof Entity && entity != null)
         {
-            return object == reference.get() || ((Entity) object).getEntityId() == reference.get().getEntityId();
+            return object == entity || ((Entity) object).getEntityId() == entity.getEntityId();
         }
         return false;
     }
@@ -67,9 +59,9 @@ public class RadarEntity extends RadarObject<Entity>
     @Override
     public int hashCode()
     {
-        if (reference.get() != null)
+        if (entity != null)
         {
-            return reference.get().hashCode();
+            return entity.hashCode();
         }
         return super.hashCode();
     }

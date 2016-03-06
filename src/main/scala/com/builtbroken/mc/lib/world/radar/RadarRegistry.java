@@ -131,7 +131,7 @@ public final class RadarRegistry
             {
                 if (object instanceof RadarEntity && object.isValid())
                 {
-                    Entity entity = ((RadarEntity) object).reference.get();
+                    Entity entity = ((RadarEntity) object).entity;
                     if (entity != null && !entity.isDead && (selector == null || selector.isEntityApplicable(entity)))
                     {
                         list.add(entity);
