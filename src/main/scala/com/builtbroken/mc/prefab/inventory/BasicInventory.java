@@ -10,11 +10,14 @@ import net.minecraft.nbt.NBTTagList;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
+ * Simple inventory implementation
  * Created by robert on 5/1/2015.
  */
-public class BasicInventory implements ISave, IInventory
+public class BasicInventory implements ISave, IInventory, Iterable<Map.Entry<Integer, ItemStack>>
 {
     /**
      * Default slot max count
@@ -211,5 +214,47 @@ public class BasicInventory implements ISave, IInventory
 
         nbt.setTag("Items", nbtList);
         return nbt;
+    }
+
+    /**
+     * Called to see if the inventory is empty
+     *
+     * @return true if nothing is contained
+     */
+    public boolean isEmpty()
+    {
+        return inventoryMap.isEmpty();
+    }
+
+    @Override
+    public Iterator<Map.Entry<Integer, ItemStack>> iterator()
+    {
+        return inventoryMap.entrySet().iterator();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "BasicInventory[" + getInventoryName() + ", " + getSizeInventory() + "]@" + hashCode();
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (object == this)
+        {
+            return true;
+        }
+        else if (object instanceof BasicInventory)
+        {
+            return ((BasicInventory) object).slots == slots && ((BasicInventory) object).inventoryMap == inventoryMap;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return inventoryMap != null ? inventoryMap.hashCode() : super.hashCode();
     }
 }

@@ -391,6 +391,8 @@ public class InventoryUtility
 
     public static void dropItemStack(World world, double x, double y, double z, ItemStack itemStack, int delay, float randomAmount)
     {
+        //TODO fire drop events if not already done by forge
+        //TODO add banned item filtering, prevent creative mode only items from being dropped
         if (!world.isRemote && itemStack != null)
         {
             double randomX = 0;
