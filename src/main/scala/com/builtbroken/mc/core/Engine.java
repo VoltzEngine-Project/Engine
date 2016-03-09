@@ -551,11 +551,6 @@ public class Engine
         {
             HeatedBlockRegistry.init(heatDataConfig);
         }
-        OreDictionary.registerOre("ingotGold", Items.gold_ingot);
-        OreDictionary.registerOre("ingotIron", Items.iron_ingot);
-        OreDictionary.registerOre("oreGold", Blocks.gold_ore);
-        OreDictionary.registerOre("oreIron", Blocks.iron_ore);
-        OreDictionary.registerOre("oreLapis", Blocks.lapis_ore);
 
         loader.postInit();
         getManager().firePostInit();

@@ -135,7 +135,6 @@ public class GuiContainerBase extends GuiContainer
         }
 
         this.tooltip = "";
-
     }
 
     @Override

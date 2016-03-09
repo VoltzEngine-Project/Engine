@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.transform.rotation;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.helpers.MathHelper;
+import com.builtbroken.mc.core.network.IByteBufWriter;
 import com.builtbroken.mc.lib.transform.ITransform;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
@@ -17,7 +18,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  * <p/>
  * Original version by Calclavia
  */
-public class EulerAngle implements Cloneable, ITransform
+public class EulerAngle implements Cloneable, ITransform, IByteBufWriter
 {
     protected double yaw = 0;
     protected double pitch = 0;
@@ -46,6 +47,26 @@ public class EulerAngle implements Cloneable, ITransform
     public EulerAngle(double yaw, double pitch)
     {
         this(yaw, pitch, 0);
+    }
+
+    /**
+     * Creats a new EulerAngle from NBT
+     *
+     * @param tag - save
+     */
+    public EulerAngle(NBTTagCompound tag)
+    {
+        readFromNBT(tag);
+    }
+
+    /**
+     * Creates a new EulerAngle from data
+     *
+     * @param data - data, needs to have 3 doubles or will crash
+     */
+    public EulerAngle(ByteBuf data)
+    {
+        readByteBuf(data);
     }
 
     /**
@@ -408,11 +429,33 @@ public class EulerAngle implements Cloneable, ITransform
         return "EulerAngle[" + yaw + "," + pitch + "," + roll + "]";
     }
 
+    /**
+     * @Deprecated {@link #writeBytes(ByteBuf)}
+     * @param data
+     */
+    @Deprecated
     public void writeByteBuf(ByteBuf data)
     {
         data.writeDouble(yaw);
         data.writeDouble(pitch);
         data.writeDouble(roll);
+    }
+
+
+    @Override
+    public ByteBuf writeBytes(ByteBuf data)
+    {
+        data.writeDouble(yaw);
+        data.writeDouble(pitch);
+        data.writeDouble(roll);
+        return data;
+    }
+
+    public void readByteBuf(ByteBuf data)
+    {
+        yaw = data.readDouble();
+        pitch = data.readDouble();
+        roll = data.readDouble();
     }
 
     public NBTTagCompound writeNBT(NBTTagCompound nbt)
@@ -423,17 +466,54 @@ public class EulerAngle implements Cloneable, ITransform
         return nbt;
     }
 
-    public static double clampAngleTo360(double value)
+    public NBTTagCompound toNBT()
+    {
+        return writeNBT(new NBTTagCompound());
+    }
+
+    public EulerAngle readFromNBT(NBTTagCompound nbt)
+    {
+        yaw = nbt.getDouble("yaw");
+        pitch = nbt.getDouble("pitch");
+        roll = nbt.getDouble("roll");
+        return this;
+    }
+
+
+    /**
+     * Clamps all 3 angles to 360 degrees
+     *
+     * @return this
+     */
+    public EulerAngle clampTo360()
+    {
+        this.yaw = clampAngleTo360(yaw);
+        this.pitch = clampAngleTo360(pitch);
+        this.roll = clampAngleTo360(roll);
+        return this;
+    }
+
+    /**
+     * Moves this angle to the selected angle over time
+     *
+     * @param aim       - aim to move towards
+     * @param deltaTime - percent to move by
+     * @return this
+     */
+    public EulerAngle lerp(EulerAngle aim, double deltaTime)
+    {
+        this.yaw = MathHelper.lerp(yaw, aim.yaw, deltaTime);
+        this.pitch = MathHelper.lerp(pitch, aim.pitch, deltaTime);
+        this.roll = MathHelper.lerp(roll, aim.roll, deltaTime);
+        return this;
+    }
+
+    private final double clampAngleTo360(double value)
     {
         return clampAngle(value, -360, 360);
     }
 
-    public static double clampAngleTo180(double value)
-    {
-        return clampAngle(value, -180, 180);
-    }
-
-    public static double clampAngle(double value, double min, double max)
+    private final double clampAngle(double value, double min, double max)
     {
         double result = value;
         while (result < min)
@@ -493,21 +573,5 @@ public class EulerAngle implements Cloneable, ITransform
     public void setRoll(double v)
     {
         roll = v;
-    }
-
-    public EulerAngle clampTo360()
-    {
-        this.yaw = EulerAngle.clampAngleTo360(yaw);
-        this.pitch = EulerAngle.clampAngleTo360(pitch);
-        this.roll = EulerAngle.clampAngleTo360(roll);
-        return this;
-    }
-
-    public EulerAngle lerp(EulerAngle aim, double deltaTime)
-    {
-        this.yaw = MathHelper.lerp(yaw, aim.yaw, deltaTime);
-        this.pitch = MathHelper.lerp(pitch, aim.pitch, deltaTime);
-        this.roll = MathHelper.lerp(roll, aim.roll, deltaTime);
-        return this;
     }
 }
