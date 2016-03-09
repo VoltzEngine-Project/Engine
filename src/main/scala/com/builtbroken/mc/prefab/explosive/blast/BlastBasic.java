@@ -317,7 +317,7 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
     {
         if (!entity.isRiding())
         {
-            Pos motion = eVec.toEulerAngle(new Pos(x(), y(), z())).toVector().multiply(energyAppliedNearEntity);
+            Pos motion = eVec.toEulerAngle(new Pos(x(), y(), z())).toPos().multiply(energyAppliedNearEntity);
             entity.motionX += motion.xi() & 1;
             entity.motionY += motion.xi() & 1;
             entity.motionZ += motion.xi() & 1;
