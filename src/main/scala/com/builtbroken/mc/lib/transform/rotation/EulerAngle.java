@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.transform.rotation;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.jlib.helpers.MathHelper;
 import com.builtbroken.mc.lib.transform.ITransform;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
@@ -288,7 +289,7 @@ public class EulerAngle implements Cloneable, ITransform
      */
     public EulerAngle absoluteDifference(EulerAngle other)
     {
-        return new EulerAngle(EulerAngle.angleDifference(yaw, other.yaw), EulerAngle.angleDifference(pitch, other.pitch), EulerAngle.angleDifference(roll, other.roll));
+        return new EulerAngle(Math.abs(yaw - other.yaw), Math.abs(pitch - other.pitch), Math.abs(roll - other.roll));
     }
 
     /**
@@ -422,11 +423,6 @@ public class EulerAngle implements Cloneable, ITransform
         return nbt;
     }
 
-    public static double angleDifference(double angleA, double angleB)
-    {
-        return Math.abs(angleA - angleB);
-    }
-
     public static double clampAngleTo360(double value)
     {
         return clampAngle(value, -360, 360);
@@ -497,5 +493,21 @@ public class EulerAngle implements Cloneable, ITransform
     public void setRoll(double v)
     {
         roll = v;
+    }
+
+    public EulerAngle clampTo360()
+    {
+        this.yaw = EulerAngle.clampAngleTo360(yaw);
+        this.pitch = EulerAngle.clampAngleTo360(pitch);
+        this.roll = EulerAngle.clampAngleTo360(roll);
+        return this;
+    }
+
+    public EulerAngle lerp(EulerAngle aim, double deltaTime)
+    {
+        this.yaw = MathHelper.lerp(yaw, aim.yaw, deltaTime);
+        this.pitch = MathHelper.lerp(pitch, aim.pitch, deltaTime);
+        this.roll = MathHelper.lerp(roll, aim.roll, deltaTime);
+        return this;
     }
 }
