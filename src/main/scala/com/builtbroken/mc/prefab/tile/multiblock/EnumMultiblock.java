@@ -80,8 +80,14 @@ public enum EnumMultiblock
         if (provider != null)
         {
             TileEntity tile = provider.createNewTileEntity(world, meta);
+            if (tile == null)
+            {
+                tile = new TileMulti();
+            }
             if (tile instanceof TileMulti)
+            {
                 return (TileMulti) tile;
+            }
         }
         return null;
     }
@@ -101,7 +107,9 @@ public enum EnumMultiblock
         for (EnumMultiblock e : values())
         {
             if (e.name != null && !e.name.isEmpty())
+            {
                 cache.put(e.name.toLowerCase(), e);
+            }
         }
         init = true;
     }
@@ -120,7 +128,9 @@ public enum EnumMultiblock
     public static EnumMultiblock get(String name)
     {
         if (!init)
+        {
             init();
+        }
 
         if (cache.containsKey(name.toLowerCase()))
         {
