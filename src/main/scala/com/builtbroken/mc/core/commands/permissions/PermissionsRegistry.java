@@ -44,10 +44,14 @@ public class PermissionsRegistry
         if (command != null && node != null && !node.isEmpty())
         {
             if (command.getCommandName() != null && command.getCommandName().length() > longestCommandLength)
+            {
                 longestCommandLength = command.getCommandName().length();
+            }
 
             if (!commandToNodeMap.containsKey(command))
+            {
                 commandToNodeMap.put(command, node);
+            }
         }
     }
 
@@ -57,20 +61,22 @@ public class PermissionsRegistry
         if (!commandToNodeMap.containsKey(command))
         {
             String node = command.getClass().toString().replace("class ", "");
-            for(Map.Entry<String, String> p : packageToNodePrefix.entrySet())
+            for (Map.Entry<String, String> p : packageToNodePrefix.entrySet())
             {
-                if(p.getValue() != null && !p.getValue().isEmpty() && node.startsWith(p.getKey()))
+                if (p.getValue() != null && !p.getValue().isEmpty() && node.startsWith(p.getKey()))
                 {
                     node = ALL.toString() + "." + p.getValue() + "." + name;
                     break;
                 }
             }
-            if(!node.startsWith(ALL.toString()))
+            if (!node.startsWith(ALL.toString()))
             {
                 node = ALL.toString() + "." + node;
             }
             if (Engine.runningAsDev) //Reduce console spam, since server owners don't care
+            {
                 logger.info("Registering command " + name + " with permission node " + node);
+            }
             registerNodeForCommand(command, node);
         }
     }
@@ -114,7 +120,8 @@ public class PermissionsRegistry
             }
 
             bw.close();
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }

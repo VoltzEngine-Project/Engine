@@ -50,13 +50,36 @@ public class AccessUser implements ISave
     }
 
     /**
-     * Checks if this or it's supper group has the permission node
+     * Checks if the user has the permission node
+     *
+     * @param permission - node
+     * @return true if the user has the node or a super * node
+     */
+    public boolean hasNode(Permission permission)
+    {
+        return hasNode(permission.toString());
+    }
+
+    /**
+     * Checks if the user has the permission node
+     *
+     * @param node - node
+     * @return true if the user has the node or a super * node
      */
     public boolean hasNode(String node)
     {
         return hasExactNode(node) || hasNodeInUser(node) || this.getGroup() != null && this.getGroup().hasNode(node);
     }
 
+    /**
+     * Checks if the user has the permission node
+     * for this user only. Doesn't check group nodes
+     * user {@link #hasNode(String)} to check
+     * group as well
+     *
+     * @param node - node
+     * @return true if the user has the node or a super * node
+     */
     public boolean hasNodeInUser(String node)
     {
         String tempNode = node.replace(".*", "");
@@ -70,6 +93,12 @@ public class AccessUser implements ISave
         return false;
     }
 
+    /**
+     * Checks to see if the user has the exact node
+     *
+     * @param node - node
+     * @return true only if exact match is found
+     */
     public boolean hasExactNode(String node)
     {
         return this.nodes.contains(node);

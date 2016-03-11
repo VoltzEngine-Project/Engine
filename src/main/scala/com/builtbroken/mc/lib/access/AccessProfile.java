@@ -23,259 +23,249 @@ import java.util.*;
  */
 public class AccessProfile implements IVirtualObject
 {
-	/**
-	 * List of all AccessProfiles defined in the game
-	 */
-	private static final Set<AccessProfile> globalList = new LinkedHashSet();
+    /**
+     * List of all containers that use this profile to define some part of their functionality
+     */
+    private final Set<IProfileContainer> containers = Collections.newSetFromMap(new WeakHashMap<IProfileContainer, Boolean>());
 
-	/**
-	 * List of all containers that use this profile to define some part of their functionality
-	 */
-	private final Set<IProfileContainer> containers = Collections.newSetFromMap(new WeakHashMap<IProfileContainer, Boolean>());
+    /**
+     * A list of all groups attached to this profile
+     */
+    protected List<AccessGroup> groups = new ArrayList();
 
-	/**
-	 * A list of all groups attached to this profile
-	 */
-	protected List<AccessGroup> groups = new ArrayList();
+    /**
+     * Display name of the profile for the user to easily read
+     */
+    protected String profileName = "";
 
-	/**
-	 * Display name of the profile for the user to easily read
-	 */
-	protected String profileName = "";
+    /**
+     * Only used by global profiles that have no defined container. Defaults to localHost defining
+     * the profile as non-global
+     */
+    protected String profileID = "LocalHost";
 
-	/**
-	 * Only used by global profiles that have no defined container. Defaults to localHost defining
-	 * the profile as non-global
-	 */
-	protected String profileID = "LocalHost";
+    /**
+     * Is this profile global
+     */
+    protected boolean global = false;
 
-	/**
-	 * Is this profile global
-	 */
-	protected boolean global = false;
+    /**
+     * Save file by which this was loaded. Not currently used
+     */
+    protected File saveFile;
 
-	/**
-	 * Save file by which this was loaded. Not currently used
-	 */
-	protected File saveFile;
+    static {
+        SaveManager.registerClass("AccessProfile", AccessProfile.class);
+    }
 
-	static
-	{
-		SaveManager.registerClass("AccessProfile", AccessProfile.class);
-	}
+    public AccessProfile()
+    {
+        if (global) {
+            SaveManager.register(this);
+        }
+    }
 
-	public AccessProfile()
-	{
-		if (global)
-		{
-			SaveManager.register(this);
-			AccessProfile.globalList.add(this);
-		}
-	}
+    public AccessProfile(NBTTagCompound nbt)
+    {
+        this(nbt, false);
+    }
 
-	public AccessProfile(NBTTagCompound nbt)
-	{
-		this(nbt, false);
-	}
+    public AccessProfile(NBTTagCompound nbt, boolean global)
+    {
+        this();
+        this.load(nbt);
+        if (this.profileName == null || this.profileID == null) {
+            if (!global) {
+                this.generateNew("Default", (TileEntity) null);
+            }
+            else {
+                this.generateNew("New Group");
+            }
+        }
+    }
 
-	public AccessProfile(NBTTagCompound nbt, boolean global)
-	{
-		this();
-		this.load(nbt);
-		if (this.profileName == null || this.profileID == null)
-		{
-			if (!global)
-			{
-				this.generateNew("Default", null);
-			}
-			else
-			{
-				this.generateNew("New Group", "global");
-			}
-		}
-	}
+    /**
+     * Called to generate a new data for an
+     * access profile. Will set {@link #profileID},
+     * {@link #profileName}, and init {@link #groups}
+     * with registered defaults
+     *
+     * @param name - profile name, used in ID
+     * @return this
+     */
+    public AccessProfile generateNew(String name)
+    {
+        AccessUtility.loadNewGroupSet(this);
+        initName(name.trim(), "P_" + name + "_" + System.currentTimeMillis());
+        return this;
+    }
 
-	/**
-	 * Gets an access profile using its name ID
-	 */
-	public static AccessProfile get(String name)
-	{
-		for (AccessProfile profile : globalList)
-		{
-			if (profile.getID().equalsIgnoreCase(name))
-			{
-				return profile;
-			}
-		}
-		return null;
-	}
+    /**
+     * Called to generate a new data for an
+     * access profile. Will set {@link #profileID},
+     * {@link #profileName}, and init {@link #groups}
+     * with registered defaults
+     *
+     * @param name   - profile name, used in ID
+     * @param entity - tile that created this group
+     * @return this
+     */
+    public AccessProfile generateNew(String name, TileEntity entity)
+    {
+        AccessUtility.loadNewGroupSet(this);
+        initName(name.trim(), "LocalHost:" + name);
+        return this;
+    }
 
-	/**
-	 * Generates the default 3 group access profile
-	 */
-	public AccessProfile generateNew(String name, Object object)
-	{
-		AccessUtility.loadNewGroupSet(this);
-		this.profileName = name;
-		name.replaceAll(" ", "");
-		String id = null;
-		// Created by player for personal use
-		if (object instanceof EntityPlayer)
-		{
-			id = ((EntityPlayer) object).getCommandSenderName() + "_" + System.currentTimeMillis();
-			this.global = true;
-		}//Created by a tile
-		else if (object instanceof TileEntity || object == null)
-		{
-			id = "LocalHost:" + name;
-		}//created by the game or player for global use
-		else if (object instanceof String && ((String) object).equalsIgnoreCase("global"))
-		{
-			id = "P_" + name + "_" + System.currentTimeMillis();
-			this.global = true;
-		}
-		this.profileID = id;
-		return this;
-	}
+    /**
+     * Called to generate a new data for an
+     * access profile. Will set {@link #profileID},
+     * {@link #profileName}, and init {@link #groups}
+     * with registered defaults
+     *
+     * @param name   - profile name, used in ID
+     * @param player - user that created this group, used in profile id
+     * @return this
+     */
+    public AccessProfile generateNew(String name, EntityPlayer player)
+    {
+        AccessUtility.loadNewGroupSet(this);
+        initName(name, player.getCommandSenderName() + "_" + System.currentTimeMillis());
+        return this;
+    }
 
-	/**
-	 * Display name of the profile
-	 */
-	public String getName()
-	{
-		return this.profileName;
-	}
+    public AccessProfile initName(String name, String id)
+    {
+        this.profileName = name;
+        this.profileID = id;
+        return this;
+    }
 
-	/**
-	 * Save/Global id of the profie
-	 */
-	public String getID()
-	{
-		return this.profileID;
-	}
+    /**
+     * Display name of the profile
+     */
+    public String getName()
+    {
+        return this.profileName;
+    }
 
-	/**
-	 * Is this a global profile that is can be accessed by all objects
-	 */
-	public boolean isGlobal()
-	{
-		return this.global;
-	}
+    /**
+     * Save/Global id of the profie
+     */
+    public String getID()
+    {
+        return this.profileID;
+    }
 
-	/**
-	 * Gets the players Access object
-	 *
-	 * @param player - entity player
-	 * @return AccessUser for the player, or an empty AccessUser instance if player was not found
-	 */
-	public AccessUser getUserAccess(EntityPlayer player)
-	{
-		return getUserAccess(player.getCommandSenderName());
-	}
+    /**
+     * Is this a global profile that is can be accessed by all objects
+     */
+    public boolean isGlobal()
+    {
+        return this.global;
+    }
 
-	/**
-	 * EntityPlayer version should be used as usernames are not longer going to be supported.
-	 */
-	public AccessUser getUserAccess(String username)
-	{
-		for (AccessGroup group : this.groups)
-		{
-			AccessUser user = group.getMember(username);
-			if (user != null)
-			{
-				return user;
-			}
-		}
-		return new AccessUser(username);
-	}
+    /**
+     * Gets the players Access object
+     *
+     * @param player - entity player
+     * @return AccessUser for the player, or an empty AccessUser instance if player was not found
+     */
+    public AccessUser getUserAccess(EntityPlayer player)
+    {
+        return getUserAccess(player.getCommandSenderName());
+    }
 
-	public List<AccessUser> getUsers()
-	{
-		List<AccessUser> users = new ArrayList();
-		for (AccessGroup group : this.groups)
-		{
-			users.addAll(group.getMembers());
-		}
-		return users;
-	}
+    /**
+     * EntityPlayer version should be used as usernames are not longer going to be supported.
+     */
+    public AccessUser getUserAccess(String username)
+    {
+        for (AccessGroup group : this.groups) {
+            AccessUser user = group.getMember(username);
+            if (user != null) {
+                return user;
+            }
+        }
+        return new AccessUser(username);
+    }
 
-	public void addContainer(IProfileContainer container)
-	{
-		if (!this.containers.contains(container))
-		{
-			this.containers.add(container);
-		}
-	}
+    public List<AccessUser> getUsers()
+    {
+        List<AccessUser> users = new ArrayList();
+        for (AccessGroup group : this.groups) {
+            users.addAll(group.getMembers());
+        }
+        return users;
+    }
 
-	public boolean setUserAccess(String player, AccessGroup g)
-	{
-		return setUserAccess(player, g, true);
-	}
+    public void addContainer(IProfileContainer container)
+    {
+        if (!this.containers.contains(container)) {
+            this.containers.add(container);
+        }
+    }
 
-	public boolean setUserAccess(String player, AccessGroup g, boolean save)
-	{
-		return setUserAccess(new AccessUser(player).setTempary(!save), g);
-	}
+    public boolean setUserAccess(String player, AccessGroup g)
+    {
+        return setUserAccess(player, g, true);
+    }
 
-	public boolean setUserAccess(AccessUser user, AccessGroup group)
-	{
-		boolean bool = false;
+    public boolean setUserAccess(String player, AccessGroup g, boolean save)
+    {
+        return setUserAccess(new AccessUser(player).setTempary(!save), g);
+    }
 
-		if (user != null && user.getName() != null)
-		{
-			bool = this.removeUserAccess(user.getName()) && group == null;
+    public boolean setUserAccess(AccessUser user, AccessGroup group)
+    {
+        boolean bool = false;
 
-			if (group != null)
-			{
-				bool = group.addMember(user);
-			}
-			if (bool)
-			{
-				this.onProfileUpdate();
-			}
-		}
-		return bool;
-	}
+        if (user != null && user.getName() != null) {
+            bool = this.removeUserAccess(user.getName()) && group == null;
 
-	public boolean removeUserAccess(String player)
-	{
-		boolean re = false;
-		for (AccessGroup group : this.groups)
-		{
-			AccessUser user = group.getMember(player);
-			if (user != null && group.removeMember(user))
-			{
-				re = true;
-			}
-		}
-		if (re)
-		{
-			this.onProfileUpdate();
-		}
-		return re;
-	}
+            if (group != null) {
+                bool = group.addMember(user);
+            }
+            if (bool) {
+                this.onProfileUpdate();
+            }
+        }
+        return bool;
+    }
 
-	public void onProfileUpdate()
-	{
-		Iterator<IProfileContainer> it = containers.iterator();
-		while (it.hasNext())
-		{
-			IProfileContainer container = it.next();
-			if (container != null && this.equals(container.getAccessProfile()))
-			{
-				container.onProfileChange();
-			}
-			else
-			{
-				it.remove();
-			}
-		}
-	}
+    public boolean removeUserAccess(String player)
+    {
+        boolean re = false;
+        for (AccessGroup group : this.groups) {
+            AccessUser user = group.getMember(player);
+            if (user != null && group.removeMember(user)) {
+                re = true;
+            }
+        }
+        if (re) {
+            this.onProfileUpdate();
+        }
+        return re;
+    }
 
-	public AccessGroup getGroup(String name)
-	{
-		return AccessUtility.getGroup(this.getGroups(), name.toLowerCase());
-	}
+    public void onProfileUpdate()
+    {
+        Iterator<IProfileContainer> it = containers.iterator();
+        while (it.hasNext()) {
+            IProfileContainer container = it.next();
+            if (container != null && this.equals(container.getAccessProfile())) {
+                container.onProfileChange();
+            }
+            else {
+                it.remove();
+            }
+        }
+    }
+
+    public AccessGroup getGroup(String name)
+    {
+        return AccessUtility.getGroup(this.getGroups(), name.toLowerCase());
+    }
 
     public AccessGroup removeGroup(String name)
     {
@@ -284,106 +274,95 @@ public class AccessProfile implements IVirtualObject
 
     public AccessGroup removeGroup(AccessGroup group)
     {
-        if(group != null && getGroups().contains(group))
-        {
-            if(getGroups().remove(group))
-            {
+        if (group != null && getGroups().contains(group)) {
+            if (getGroups().remove(group)) {
                 this.onProfileUpdate();
             }
         }
         return group;
     }
 
-	public boolean addGroup(AccessGroup group)
-	{
-		if (!this.groups.contains(group))
-		{
-			if (this.groups.add(group))
-			{
-				this.onProfileUpdate();
-				return true;
-			}
-		}
-		return false;
-	}
+    public boolean addGroup(AccessGroup group)
+    {
+        if (!this.groups.contains(group)) {
+            if (this.groups.add(group)) {
+                this.onProfileUpdate();
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public AccessGroup getOwnerGroup()
-	{
-		return this.getGroup("owner");
-	}
+    public AccessGroup getOwnerGroup()
+    {
+        return this.getGroup("owner");
+    }
 
-	public List<AccessGroup> getGroups()
-	{
-		if (this.groups == null)
-		{
-			return new ArrayList();
-		}
-		return this.groups;
-	}
+    public List<AccessGroup> getGroups()
+    {
+        if (this.groups == null) {
+            return new ArrayList();
+        }
+        return this.groups;
+    }
 
-	@Override
-	public void load(NBTTagCompound nbt)
-	{
-		this.profileName = nbt.getString("name");
-		this.global = nbt.getBoolean("global");
-		this.profileID = nbt.getString("profileID");
+    @Override
+    public void load(NBTTagCompound nbt)
+    {
+        this.profileName = nbt.getString("name");
+        this.global = nbt.getBoolean("global");
+        this.profileID = nbt.getString("profileID");
 
-		//Load groups
-		NBTTagList group_list = nbt.getTagList("groups", 10);
-		if (group_list != null && group_list.tagCount() > 0)
-		{
-			this.groups.clear();
-			//Load group save data
-			for (int i = 0; i < group_list.tagCount(); i++)
-			{
-				AccessGroup group = new AccessGroup("");
-				group.load(group_list.getCompoundTagAt(i));
-				this.groups.add(group);
-			}
-			//Set group extensions
-			for (AccessGroup group : this.groups)
-			{
-				if (group.getExtendGroupName() != null)
-				{
-					group.setToExtend(this.getGroup(group.getExtendGroupName()));
-				}
-			}
-		}
-	}
+        //Load groups
+        NBTTagList group_list = nbt.getTagList("groups", 10);
+        if (group_list != null && group_list.tagCount() > 0) {
+            this.groups.clear();
+            //Load group save data
+            for (int i = 0; i < group_list.tagCount(); i++) {
+                AccessGroup group = new AccessGroup("");
+                group.load(group_list.getCompoundTagAt(i));
+                this.groups.add(group);
+            }
+            //Set group extensions
+            for (AccessGroup group : this.groups) {
+                if (group.getExtendGroupName() != null) {
+                    group.setToExtend(this.getGroup(group.getExtendGroupName()));
+                }
+            }
+        }
+    }
 
-	@Override
-	public NBTTagCompound save(NBTTagCompound nbt)
-	{
-		nbt.setString("name", this.profileName);
-		nbt.setBoolean("global", this.global);
-		nbt.setString("profileID", this.profileID);
-		NBTTagList groupTags = new NBTTagList();
-		for (AccessGroup group : this.getGroups())
-		{
-			NBTTagCompound groupTag = new NBTTagCompound();
-			group.save(groupTag);
-			groupTags.appendTag(groupTag);
-		}
-		nbt.setTag("groups", groupTags);
+    @Override
+    public NBTTagCompound save(NBTTagCompound nbt)
+    {
+        nbt.setString("name", this.profileName);
+        nbt.setBoolean("global", this.global);
+        nbt.setString("profileID", this.profileID);
+        NBTTagList groupTags = new NBTTagList();
+        for (AccessGroup group : this.getGroups()) {
+            NBTTagCompound groupTag = new NBTTagCompound();
+            group.save(groupTag);
+            groupTags.appendTag(groupTag);
+        }
+        nbt.setTag("groups", groupTags);
         return nbt;
-	}
+    }
 
-	@Override
-	public File getSaveFile()
-	{
-		if (this.saveFile == null)
-		{
-			this.saveFile = new File(NBTUtility.getSaveDirectory(MinecraftServer.getServer().getFolderName()), "Access/Profile/" + this.getID() + ".dat");
-		}
-		return this.saveFile;
-	}
+    @Override
+    public File getSaveFile()
+    {
+        if (this.saveFile == null) {
+            this.saveFile = new File(NBTUtility.getSaveDirectory(MinecraftServer.getServer().getFolderName()), "Access/Profile/" + this.getID() + ".dat");
+        }
+        return this.saveFile;
+    }
 
-	@Override
-	public void setSaveFile(File file)
-	{
-		this.saveFile = file;
+    @Override
+    public void setSaveFile(File file)
+    {
+        this.saveFile = file;
 
-	}
+    }
 
     @Override
     public boolean shouldSaveForWorld(World world)
@@ -392,8 +371,8 @@ public class AccessProfile implements IVirtualObject
     }
 
     @Override
-	public String toString()
-	{
-		return LanguageUtility.getLocal("info.accessprofile.tostring").replaceAll("%p", this.profileName.toString()).replaceAll("%g", groups.toString());
-	}
+    public String toString()
+    {
+        return LanguageUtility.getLocal("info.accessprofile.tostring").replaceAll("%p", this.profileName.toString()).replaceAll("%g", groups.toString());
+    }
 }

@@ -9,53 +9,59 @@ import java.util.List;
  */
 public class Permission extends TreeNode<Permission>
 {
-	public final String id;
+    public final String id;
 
-	public Permission(String id)
-	{
-		this.id = id;
-	}
+    private String cachedValue;
 
-	public Permission addChild(String perm)
-	{
-		return super.addChild(new Permission(perm));
-	}
+    public Permission(String id)
+    {
+        this.id = id;
+    }
 
-	public Permission find(String id)
-	{
-		for (Permission child : children)
-		{
-			if (child.id.equals(id))
-			{
-				return child;
-			}
-		}
+    public Permission addChild(String perm)
+    {
+        return super.addChild(new Permission(perm));
+    }
 
-		return null;
-	}
+    public Permission find(String id)
+    {
+        for (Permission child : children)
+        {
+            if (child.id.equals(id))
+            {
+                return child;
+            }
+        }
 
-	@Override
-	public boolean equals(Object o)
-	{
-		//TODO: This does not seem to work with large Scala sets?
-		return o instanceof Permission && o.toString().equals(toString());
-	}
+        return null;
+    }
 
-	@Override
-	public String toString()
-	{
-		List<Permission> list = getHierarchy();
+    @Override
+    public boolean equals(Object o)
+    {
+        //TODO: This does not seem to work with large Scala sets?
+        return o instanceof Permission && o.toString().equals(toString());
+    }
 
-		StringBuilder builder = new StringBuilder();
+    @Override
+    public String toString()
+    {
+        if (cachedValue == null || cachedValue.isEmpty())
+        {
+            List<Permission> list = getHierarchy();
 
-		for (Permission perm : list)
-		{
-			builder.append(perm.id);
-			builder.append(".");
-		}
+            StringBuilder builder = new StringBuilder();
 
-		builder.append(id);
+            for (Permission perm : list)
+            {
+                builder.append(perm.id);
+                builder.append(".");
+            }
 
-		return builder.toString();
-	}
+            builder.append(id);
+
+            cachedValue = builder.toString();
+        }
+        return cachedValue;
+    }
 }
