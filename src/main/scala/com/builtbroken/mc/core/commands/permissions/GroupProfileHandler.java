@@ -194,6 +194,18 @@ public class GroupProfileHandler extends AbstractLoadable implements IVirtualObj
     }
 
     @Override
+    public boolean hasNode(EntityPlayer player, String node)
+    {
+        return profile != null && getAccessProfile().hasNode(player, node);
+    }
+
+    @Override
+    public boolean hasNode(String username, String node)
+    {
+        return profile != null && getAccessProfile().hasNode(username, node);
+    }
+
+    @Override
     public void onProfileChange()
     {
 

@@ -35,9 +35,9 @@ public class Region implements ISave, IProfileContainer
     public boolean doesContainPoint(IPos3D pos)
     {
         //TODO look at reducing this list in case segments contains a lot of complex cubes
-        for(Cube cube : segments)
+        for (Cube cube : segments)
         {
-            if(cube.isWithin(pos))
+            if (cube.isWithin(pos))
             {
                 return true;
             }
@@ -57,13 +57,15 @@ public class Region implements ISave, IProfileContainer
             }
         }
         if (nbt.hasKey("profile"))
+        {
             setAccessProfile(new AccessProfile(nbt.getCompoundTag("profile")));
+        }
     }
 
     @Override
     public NBTTagCompound save(NBTTagCompound nbt)
     {
-        if(segments.size() > 0)
+        if (segments.size() > 0)
         {
             NBTTagList list = new NBTTagList();
             for (Cube cube : segments)
@@ -83,7 +85,7 @@ public class Region implements ISave, IProfileContainer
     @Override
     public AccessProfile getAccessProfile()
     {
-        if(profile == null)
+        if (profile == null)
         {
             profile = RegionManager.generateDefaultAccessProfile();
         }
@@ -99,7 +101,19 @@ public class Region implements ISave, IProfileContainer
     @Override
     public boolean canAccess(String username)
     {
-        return profile.getUserAccess(username).getGroup() != null;
+        return getAccessProfile().getUserAccess(username).getGroup() != null;
+    }
+
+    @Override
+    public boolean hasNode(EntityPlayer player, String node)
+    {
+        return profile != null && getAccessProfile().hasNode(player, node);
+    }
+
+    @Override
+    public boolean hasNode(String username, String node)
+    {
+        return profile != null && getAccessProfile().hasNode(username, node);
     }
 
     @Override
@@ -110,9 +124,9 @@ public class Region implements ISave, IProfileContainer
 
     public boolean isCloseToAnyCorner(Location location, int distance)
     {
-        for(Cube cube : segments)
+        for (Cube cube : segments)
         {
-            if(cube.isCloseToAnyCorner(location, distance))
+            if (cube.isCloseToAnyCorner(location, distance))
             {
                 return true;
             }

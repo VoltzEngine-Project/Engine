@@ -54,13 +54,15 @@ public class AccessProfile implements IVirtualObject
      */
     protected File saveFile;
 
-    static {
+    static
+    {
         SaveManager.registerClass("AccessProfile", AccessProfile.class);
     }
 
     public AccessProfile()
     {
-        if (global) {
+        if (global)
+        {
             SaveManager.register(this);
         }
     }
@@ -74,11 +76,14 @@ public class AccessProfile implements IVirtualObject
     {
         this();
         this.load(nbt);
-        if (this.profileName == null || this.profileID == null) {
-            if (!global) {
+        if (this.profileName == null || this.profileID == null)
+        {
+            if (!global)
+            {
                 this.generateNew("Default", (TileEntity) null);
             }
-            else {
+            else
+            {
                 this.generateNew("New Group");
             }
         }
@@ -181,52 +186,107 @@ public class AccessProfile implements IVirtualObject
      */
     public AccessUser getUserAccess(String username)
     {
-        for (AccessGroup group : this.groups) {
+        for (AccessGroup group : this.groups)
+        {
             AccessUser user = group.getMember(username);
-            if (user != null) {
+            if (user != null)
+            {
                 return user;
             }
         }
         return new AccessUser(username);
     }
 
+    /**
+     * List of all users, do not call often
+     * as it creates a new list.
+     *
+     * @return
+     */
     public List<AccessUser> getUsers()
     {
+        //TODO create wrapper that will fake a list but will in fact iterate over all groups
         List<AccessUser> users = new ArrayList();
-        for (AccessGroup group : this.groups) {
+        for (AccessGroup group : this.groups)
+        {
             users.addAll(group.getMembers());
         }
         return users;
     }
 
+    /**
+     * Adds a container to the profile so it can be
+     * notified of changes.
+     *
+     * @param container - tile using this profile
+     */
     public void addContainer(IProfileContainer container)
     {
-        if (!this.containers.contains(container)) {
+        if (!this.containers.contains(container))
+        {
             this.containers.add(container);
         }
     }
 
+    /**
+     * Removes a container from this profile.
+     *
+     * @param container - tile that was using this profile
+     */
+    public void removeContainer(IProfileContainer container)
+    {
+        if (this.containers.contains(container))
+        {
+            this.containers.remove(container);
+        }
+    }
+
+    /**
+     * Sets a player's access group
+     *
+     * @param player - user
+     * @param g      - group
+     * @return true if the user was added
+     */
     public boolean setUserAccess(String player, AccessGroup g)
     {
         return setUserAccess(player, g, true);
     }
 
+    /**
+     * Sets a player's access group
+     *
+     * @param player - user
+     * @param g      - group
+     * @param save   - true will save, false will be ignored when world is saved
+     * @return true if added
+     */
     public boolean setUserAccess(String player, AccessGroup g, boolean save)
     {
         return setUserAccess(new AccessUser(player).setTempary(!save), g);
     }
 
+    /**
+     * Sets a player's access group
+     *
+     * @param user  - user profile
+     * @param group - group profile
+     * @return true if the user was added
+     */
     public boolean setUserAccess(AccessUser user, AccessGroup group)
     {
         boolean bool = false;
 
-        if (user != null && user.getName() != null) {
+        if (user != null && user.getName() != null)
+        {
             bool = this.removeUserAccess(user.getName()) && group == null;
 
-            if (group != null) {
+            if (group != null)
+            {
                 bool = group.addMember(user);
             }
-            if (bool) {
+            if (bool)
+            {
                 this.onProfileUpdate();
             }
         }
@@ -236,13 +296,16 @@ public class AccessProfile implements IVirtualObject
     public boolean removeUserAccess(String player)
     {
         boolean re = false;
-        for (AccessGroup group : this.groups) {
+        for (AccessGroup group : this.groups)
+        {
             AccessUser user = group.getMember(player);
-            if (user != null && group.removeMember(user)) {
+            if (user != null && group.removeMember(user))
+            {
                 re = true;
             }
         }
-        if (re) {
+        if (re)
+        {
             this.onProfileUpdate();
         }
         return re;
@@ -251,12 +314,15 @@ public class AccessProfile implements IVirtualObject
     public void onProfileUpdate()
     {
         Iterator<IProfileContainer> it = containers.iterator();
-        while (it.hasNext()) {
+        while (it.hasNext())
+        {
             IProfileContainer container = it.next();
-            if (container != null && this.equals(container.getAccessProfile())) {
+            if (container != null && this.equals(container.getAccessProfile()))
+            {
                 container.onProfileChange();
             }
-            else {
+            else
+            {
                 it.remove();
             }
         }
@@ -274,8 +340,10 @@ public class AccessProfile implements IVirtualObject
 
     public AccessGroup removeGroup(AccessGroup group)
     {
-        if (group != null && getGroups().contains(group)) {
-            if (getGroups().remove(group)) {
+        if (group != null && getGroups().contains(group))
+        {
+            if (getGroups().remove(group))
+            {
                 this.onProfileUpdate();
             }
         }
@@ -284,8 +352,10 @@ public class AccessProfile implements IVirtualObject
 
     public boolean addGroup(AccessGroup group)
     {
-        if (!this.groups.contains(group)) {
-            if (this.groups.add(group)) {
+        if (!this.groups.contains(group))
+        {
+            if (this.groups.add(group))
+            {
                 this.onProfileUpdate();
                 return true;
             }
@@ -300,10 +370,23 @@ public class AccessProfile implements IVirtualObject
 
     public List<AccessGroup> getGroups()
     {
-        if (this.groups == null) {
+        if (this.groups == null)
+        {
             return new ArrayList();
         }
         return this.groups;
+    }
+
+
+    public boolean hasNode(EntityPlayer player, String node)
+    {
+        return getUserAccess(player).hasNode(node);
+    }
+
+
+    public boolean hasNode(String username, String node)
+    {
+        return getUserAccess(username).hasNode(node);
     }
 
     @Override
@@ -315,17 +398,21 @@ public class AccessProfile implements IVirtualObject
 
         //Load groups
         NBTTagList group_list = nbt.getTagList("groups", 10);
-        if (group_list != null && group_list.tagCount() > 0) {
+        if (group_list != null && group_list.tagCount() > 0)
+        {
             this.groups.clear();
             //Load group save data
-            for (int i = 0; i < group_list.tagCount(); i++) {
+            for (int i = 0; i < group_list.tagCount(); i++)
+            {
                 AccessGroup group = new AccessGroup("");
                 group.load(group_list.getCompoundTagAt(i));
                 this.groups.add(group);
             }
             //Set group extensions
-            for (AccessGroup group : this.groups) {
-                if (group.getExtendGroupName() != null) {
+            for (AccessGroup group : this.groups)
+            {
+                if (group.getExtendGroupName() != null)
+                {
                     group.setToExtend(this.getGroup(group.getExtendGroupName()));
                 }
             }
@@ -339,7 +426,8 @@ public class AccessProfile implements IVirtualObject
         nbt.setBoolean("global", this.global);
         nbt.setString("profileID", this.profileID);
         NBTTagList groupTags = new NBTTagList();
-        for (AccessGroup group : this.getGroups()) {
+        for (AccessGroup group : this.getGroups())
+        {
             NBTTagCompound groupTag = new NBTTagCompound();
             group.save(groupTag);
             groupTags.appendTag(groupTag);
@@ -351,7 +439,8 @@ public class AccessProfile implements IVirtualObject
     @Override
     public File getSaveFile()
     {
-        if (this.saveFile == null) {
+        if (this.saveFile == null)
+        {
             this.saveFile = new File(NBTUtility.getSaveDirectory(MinecraftServer.getServer().getFolderName()), "Access/Profile/" + this.getID() + ".dat");
         }
         return this.saveFile;

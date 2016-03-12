@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Used to define a users access to a terminal based object.
@@ -15,25 +16,54 @@ import java.util.List;
  */
 public class AccessUser implements ISave
 {
+    /** Username of player, main way to check owner */
     protected String username;
-    protected boolean isTempary = false;
-    protected NBTTagCompound extraData;
-    protected AccessGroup group;
-    public List<String> nodes = new ArrayList<>();
+    /** User's UUID, secondary way to check owner or main way if permission node is major */
+    protected UUID userID;
 
+    /** Toggle to note this user will not save, and is only used for a short time */
+    protected boolean isTempary = false;
+
+    /** Extra user data, only store permission related settings here */
+    protected NBTTagCompound extraData;
+    /** User's main group */
+    protected AccessGroup group;
+
+    /** List of permission nodes */
+    public List<String> nodes = new ArrayList();
+
+    /** Only use for save/load */
+    protected AccessUser()
+    {
+    }
+
+    /**
+     * @param username
+     * @deprecated use {@link #AccessUser(EntityPlayer)} as
+     * the main way to create new users. This way the UUID
+     * is stored correctly
+     */
+    @Deprecated
     public AccessUser(String username)
     {
         this.username = username;
     }
 
+    public AccessUser(String username, UUID id)
+    {
+        this.username = username;
+        this.userID = id;
+    }
+
     public AccessUser(EntityPlayer player)
     {
         this(player.getCommandSenderName());
+        userID = player.getGameProfile().getId();
     }
 
     public static AccessUser loadFromNBT(NBTTagCompound nbt)
     {
-        AccessUser user = new AccessUser("");
+        AccessUser user = new AccessUser();
         user.load(nbt);
         return user;
     }
@@ -117,6 +147,13 @@ public class AccessUser implements ISave
             usersTag.appendTag(accessData);
         }
         nbt.setTag("permissions", usersTag);
+        if (userID != null)
+        {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setLong("l", userID.getLeastSignificantBits());
+            tag.setLong("m", userID.getMostSignificantBits());
+            nbt.setTag("UUID", tag);
+        }
         return nbt;
     }
 
@@ -130,6 +167,13 @@ public class AccessUser implements ISave
         for (int i = 0; i < userList.tagCount(); ++i)
         {
             this.nodes.add(userList.getCompoundTagAt(i).getString("name"));
+        }
+        if (nbt.hasKey("UUID"))
+        {
+            NBTTagCompound tag = nbt.getCompoundTag("UUID");
+            long l = tag.getLong("l");
+            long m = tag.getLong("m");
+            userID = new UUID(m, l);
         }
     }
 
