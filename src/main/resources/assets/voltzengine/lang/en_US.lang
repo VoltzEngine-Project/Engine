@@ -5,6 +5,13 @@ item.voltzengine:unknown.name=Unknown Item
 
 tile.voltzengine:hotrock.name=Heated Stone
 
+## General
+text.general.feature.unimplemented=Not Implemented
+text.general.feature.wip=Work In Progress
+text.general.feature.broken=Broken
+text.general.feature.banned=Banned
+text.general.feature.disable=Disabled
+
 ## Explosives
 explosive.voltzengine:tnt.name=TNT
 

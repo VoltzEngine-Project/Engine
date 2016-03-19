@@ -56,7 +56,9 @@ public abstract class AbstractExplosiveHandler implements IExplosiveHandler
                 String s = LanguageUtility.getLocal("info." + References.PREFIX + "explosive.yield.name");
                 if (s != null && !s.isEmpty())
                 {
-                    lines.add(String.format(s, ExplosiveRegistry.getExplosiveSize(stack) * getYieldModifier(stack)));
+                    String yield = "" + (ExplosiveRegistry.getExplosiveSize(stack) * getYieldModifier(stack));
+                    yield = yield.substring(0, Math.min(yield.indexOf(".") + 2, yield.length()));
+                    lines.add(String.format(s, yield));
                 }
             }
         }
