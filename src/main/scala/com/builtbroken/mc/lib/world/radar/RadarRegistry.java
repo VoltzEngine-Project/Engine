@@ -17,46 +17,78 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * Map based system for tracking objects using a radar devices. Only works server side to prevent unwanted data from stacking up.
+ *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/5/2016.
  */
 public final class RadarRegistry
 {
+    //TODO add client side version for mini-map like systems
+    //TODO add per machine tracking map that uses line of sight so hills can block it's view. (Visible Area Cache in other words)
     /** World id to radar map */
     private static final HashMap<Integer, RadarMap> RADAR_MAPS = new HashMap();
 
+    /**
+     * Adds an entity to the radar map
+     *
+     * @param entity - entity
+     * @return true if added
+     */
     public static boolean add(Entity entity)
     {
-        if (entity != null && !entity.isDead && entity.worldObj != null)
+        if (entity != null && !entity.isDead && entity.worldObj != null && !entity.worldObj.isRemote)
         {
-            return getRadarMapForWorld(entity.worldObj).add(entity);
+            RadarMap map = getRadarMapForWorld(entity.worldObj);
+            return map != null ? getRadarMapForWorld(entity.worldObj).add(entity) : false;
         }
         return false;
     }
 
+    /**
+     * Adds an entity to the radar map
+     *
+     * @param tile - entity
+     * @return true if added
+     */
     public static boolean add(TileEntity tile)
     {
-        if (tile != null && tile.getWorldObj() != null)
+        if (tile != null && tile.getWorldObj() != null && !tile.getWorldObj().isRemote)
         {
-            return getRadarMapForWorld(tile.getWorldObj()).add(tile);
+            RadarMap map = getRadarMapForWorld(tile.getWorldObj());
+            return map != null ? getRadarMapForWorld(tile.getWorldObj()).add(tile) : false;
         }
         return false;
     }
 
+    /**
+     * Removes an entity from the radar map
+     *
+     * @param entity - entity
+     * @return true if removed
+     */
     public static boolean remove(Entity entity)
     {
         if (entity != null && !entity.isDead && entity.worldObj != null)
         {
-            return getRadarMapForWorld(entity.worldObj).remove(entity);
+            RadarMap map = getRadarMapForWorld(entity.worldObj);
+            return map != null ? getRadarMapForWorld(entity.worldObj).remove(entity) : false;
         }
         return false;
     }
 
+    /**
+     * Removes an entity from the radar map
+     *
+     * @param tile - entity
+     * @return true if removed
+     */
     public static boolean remove(TileEntity tile)
     {
         if (tile != null && tile.getWorldObj() != null)
         {
-            return getRadarMapForWorld(tile.getWorldObj()).remove(tile);
+            RadarMap map = getRadarMapForWorld(tile.getWorldObj());
+            return map != null ? getRadarMapForWorld(tile.getWorldObj()).remove(tile) : false;
         }
         return false;
     }
@@ -71,6 +103,14 @@ public final class RadarRegistry
     {
         if (world != null && world.provider != null)
         {
+            if (world.isRemote)
+            {
+                if (Engine.runningAsDev)
+                {
+                    Engine.logger().error("RadarRegistry: Radar data can not be requested client side.", new RuntimeException());
+                }
+                return null;
+            }
             return getRadarMapForDim(world.provider.dimensionId);
         }
         //Only throw an error in dev mode, ignore in normal runtime
@@ -126,17 +166,25 @@ public final class RadarRegistry
         List<Entity> list = new ArrayList();
         if (RADAR_MAPS.containsKey(world.provider.dimensionId))
         {
-            List<RadarObject> objects = getRadarMapForWorld(world).getRadarObjects(cube, true);
-            for (RadarObject object : objects)
+            RadarMap map = getRadarMapForWorld(world);
+            if (map != null)
             {
-                if (object instanceof RadarEntity && object.isValid())
+                List<RadarObject> objects = map.getRadarObjects(cube, true);
+                for (RadarObject object : objects)
                 {
-                    Entity entity = ((RadarEntity) object).entity;
-                    if (entity != null && !entity.isDead && (selector == null || selector.isEntityApplicable(entity)))
+                    if (object instanceof RadarEntity && object.isValid())
                     {
-                        list.add(entity);
+                        Entity entity = ((RadarEntity) object).entity;
+                        if (entity != null && !entity.isDead && (selector == null || selector.isEntityApplicable(entity)))
+                        {
+                            list.add(entity);
+                        }
                     }
                 }
+            }
+            else if (world.isRemote && Engine.runningAsDev)
+            {
+                Engine.logger().error("RadarRegistry: Radar data can not be requested client side.", new RuntimeException());
             }
         }
         return list;

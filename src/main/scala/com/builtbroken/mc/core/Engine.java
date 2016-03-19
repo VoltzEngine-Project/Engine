@@ -462,7 +462,10 @@ public class Engine
                 contentRegistry.newItem("Gem" + LanguageUtility.capitalizeFirst(types.name) + "Item", types.item);
                 for (Gems gem : Gems.values())
                 {
-                    OreDictionary.registerOre(types.oreDict + gem.getOreName(), types.stack(gem));
+                    if (gem != Gems.UNKNOWN)
+                    {
+                        OreDictionary.registerOre(types.oreDict + gem.getOreName(), types.stack(gem));
+                    }
                 }
             }
         }
@@ -698,11 +701,14 @@ public class Engine
         }
     }
 
-    public static boolean isJUnitTest() {
+    public static boolean isJUnitTest()
+    {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         List<StackTraceElement> list = Arrays.asList(stackTrace);
-        for (StackTraceElement element : list) {
-            if (element.getClassName().startsWith("org.junit.")) {
+        for (StackTraceElement element : list)
+        {
+            if (element.getClassName().startsWith("org.junit."))
+            {
                 return true;
             }
         }
