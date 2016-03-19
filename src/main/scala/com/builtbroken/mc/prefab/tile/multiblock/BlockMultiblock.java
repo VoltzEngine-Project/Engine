@@ -148,7 +148,14 @@ public class BlockMultiblock extends BlockContainer
         {
             return ((IIconCallBack) ((IMultiTile) tile).getHost()).getIconForSide(world, x, y, z, side);
         }
-        return Blocks.iron_bars.getIcon(0, 0);
+        return super.getIcon(0, 0);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int p_149691_1_, int p_149691_2_)
+    {
+        return Blocks.iron_block.getIcon(0, 0);
     }
 
     @Override
@@ -274,7 +281,9 @@ public class BlockMultiblock extends BlockContainer
     {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof IMultiTile)
+        {
             return (IMultiTile) tile;
+        }
         return null;
     }
 }
