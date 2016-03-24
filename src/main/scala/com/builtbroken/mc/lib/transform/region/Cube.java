@@ -8,10 +8,14 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -494,16 +498,86 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
     }
 
     /**
-     * Returns all entities in this region.
+     * Generates a list of all entities in the cube
+     *
+     * @param world - world to search
+     * @return list
      */
     public List<Entity> getEntities(World world)
     {
         return getEntities(world, Entity.class);
     }
 
+    /**
+     * Generates a list of all entities in the cube that extend the class
+     *
+     * @param world       - world to search
+     * @param entityClass - class to search for
+     * @return list
+     */
     public List getEntities(World world, Class<? extends Entity> entityClass)
     {
         return world.getEntitiesWithinAABB(entityClass, toAABB());
+    }
+
+    /**
+     * Scans threw the loaded chunks grab all tiles
+     *
+     * @param world - world to scan
+     * @return list
+     */
+    public List<TileEntity> getTilesInArea(World world)
+    {
+        List<TileEntity> tilesInArea = new ArrayList();
+        for (Chunk chunk : getChunks(world))
+        {
+            for (Object object : chunk.chunkTileEntityMap.values())
+            {
+                if (object instanceof TileEntity && ((TileEntity) object).isInvalid() && ((TileEntity) object).hasWorldObj() && isWithin(((TileEntity) object).xCoord, ((TileEntity) object).yCoord, ((TileEntity) object).zCoord))
+                {
+                    tilesInArea.add((TileEntity) object);
+                }
+            }
+        }
+        return tilesInArea;
+    }
+
+    /**
+     * Grabs chunks loaded in the region
+     *
+     * @param world - world to search
+     * @return
+     */
+    public List<Chunk> getChunks(World world)
+    {
+        return getChunks(world, true);
+    }
+
+    /**
+     * Grabs chunks in the cube
+     *
+     * @param world  - world to search
+     * @param loaded - only grab loaded chunks
+     * @return list
+     */
+    public List<Chunk> getChunks(World world, boolean loaded)
+    {
+        List<Chunk> chunks = new ArrayList();
+        for (int chunkX = (min().xi() >> 4) - 1; chunkX <= (max().xi() >> 4) + 1; chunkX++)
+        {
+            for (int chunkZ = (min().zi() >> 4) - 1; chunkZ <= (max().zi() >> 4) + 1; chunkZ++)
+            {
+                if (loaded || (!(world instanceof WorldServer) || ((WorldServer) world).theChunkProviderServer.chunkExists(chunkX, chunkZ)))
+                {
+                    Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
+                    if (chunk != null)
+                    {
+                        chunks.add(chunk);
+                    }
+                }
+            }
+        }
+        return chunks;
     }
 
 
