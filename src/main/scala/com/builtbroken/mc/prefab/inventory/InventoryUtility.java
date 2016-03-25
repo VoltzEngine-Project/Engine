@@ -83,7 +83,9 @@ public class InventoryUtility
     {
         //Work around for chests having a shared inventory
         if (inventory instanceof TileEntityChest)
+        {
             inventory = checkChestInv(inventory);
+        }
 
         for (int slot = 0; slot < inventory.getSizeInventory(); slot++)
         {
@@ -233,6 +235,69 @@ public class InventoryUtility
         return toInsert;
 
     }
+
+    /**
+     * Tries to place an item into the inventory. If the inventory is not an instance of {@link ISidedInventory} it
+     * will ignore the side param.
+     *
+     * @param inventory - inventory to insert the item into
+     * @param itemStack - stack to insert
+     * @param slots     - slot ids to insert into
+     * @param force     - overrides {@link IInventory#isItemValidForSlot(int, ItemStack)} check
+     * @return what is left of the toInsert stack
+     */
+    public static ItemStack putStackInInventory(IInventory inventory, ItemStack itemStack, int[] slots, boolean force)
+    {
+        ItemStack toInsert = itemStack != null ? itemStack.copy() : null;
+        if (toInsert != null)
+        {
+            ISidedInventory sidedInventory = (ISidedInventory) inventory;
+
+            for (int get = 0; get < slots.length; get++)
+            {
+                int slotID = slots[get];
+
+                if (force || sidedInventory.isItemValidForSlot(slotID, toInsert))
+                {
+                    ItemStack inSlot = inventory.getStackInSlot(slotID);
+
+                    if (inSlot == null)
+                    {
+                        inventory.setInventorySlotContents(slotID, toInsert);
+                        return null;
+                    }
+                    else if (stacksMatch(inSlot, toInsert) && inSlot.stackSize < inSlot.getMaxStackSize())
+                    {
+                        if (inSlot.stackSize + toInsert.stackSize <= inSlot.getMaxStackSize())
+                        {
+                            ItemStack toSet = toInsert.copy();
+                            toSet.stackSize += inSlot.stackSize;
+
+                            inventory.setInventorySlotContents(slotID, toSet);
+                            return null;
+                        }
+                        else
+                        {
+                            int rejects = (inSlot.stackSize + toInsert.stackSize) - inSlot.getMaxStackSize();
+
+                            ItemStack toSet = toInsert.copy();
+                            toSet.stackSize = inSlot.getMaxStackSize();
+
+                            ItemStack remains = toInsert.copy();
+                            remains.stackSize = rejects;
+
+                            inventory.setInventorySlotContents(slotID, toSet);
+
+                            toInsert = remains;
+                        }
+                    }
+                }
+            }
+        }
+        return toInsert;
+
+    }
+
 
     public static ItemStack takeTopItemFromInventory(IInventory inventory, int side)
     {
@@ -453,7 +518,8 @@ public class InventoryUtility
 
                 side ^= 1;
                 return DummyPlayer.useItemAt(itemStack, world, x, y - 1, z, side);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 e.printStackTrace();
 
@@ -633,7 +699,9 @@ public class InventoryUtility
     public static boolean stacksMatchWithOreNames(ItemStack stackA, ItemStack stackB)
     {
         if (stacksMatch(stackA, stackB))
+        {
             return true;
+        }
         return stacksMatchWithOreNames2(stackA, stackB) != null;
     }
 
@@ -657,7 +725,9 @@ public class InventoryUtility
             for (int i : OreDictionary.getOreIDs(stackB))
             {
                 if (a.contains(i))
+                {
                     return OreDictionary.getOreName(i);
+                }
             }
         }
         return null;
@@ -840,7 +910,9 @@ public class InventoryUtility
                 int itemsToAdd = Math.min(roomLeftInSlot, Math.min(player.getHeldItem().stackSize, items == -1 ? roomLeftInSlot : items));
                 //Add items already in slot since we are going to set the slot
                 if (inv.getStackInSlot(slot) != null)
+                {
                     itemsToAdd += inv.getStackInSlot(slot).stackSize;
+                }
 
                 inv.setInventorySlotContents(slot, player.getHeldItem().copy());
                 inv.getStackInSlot(slot).stackSize = itemsToAdd;

@@ -1,6 +1,7 @@
 package com.builtbroken.mc.core.asm;
 
 import com.builtbroken.mc.core.Engine;
+import net.minecraft.block.Block;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.tree.*;
 import com.builtbroken.mc.lib.asm.ASMHelper;
@@ -8,7 +9,7 @@ import com.builtbroken.mc.lib.asm.ObfMapping;
 
 import static org.objectweb.asm.Opcodes.*;
 
-/**
+/** {@link net.minecraft.world.chunk.Chunk#func_150807_a(int, int, int, Block, int)}
  * @author Calclavia
  */
 public class ChunkTransformer implements IClassTransformer

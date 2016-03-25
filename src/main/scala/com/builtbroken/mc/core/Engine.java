@@ -2,6 +2,7 @@ package com.builtbroken.mc.core;
 
 import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
+import com.builtbroken.mc.core.asm.ProxyASMTest;
 import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.core.content.ItemInstaHole;
@@ -325,6 +326,7 @@ public class Engine
         RecipeSorter.register(References.PREFIX + "sheetMetalTools", RecipeSheetMetal.class, SHAPED, "after:minecraft:shaped");
         RecipeSorter.register(References.PREFIX + "Tools", RecipeTool.class, SHAPED, "after:minecraft:shaped");
 
+        loader.applyModule(new ProxyASMTest());
         loader.applyModule(getProxy());
         loader.applyModule(packetHandler);
         loader.applyModule(CrusherRecipeLoad.class);
@@ -714,5 +716,4 @@ public class Engine
         }
         return false;
     }
-
 }
