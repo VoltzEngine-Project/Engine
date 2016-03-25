@@ -74,7 +74,7 @@ public class SaveManager
         {
             if (!instance().saveList.contains(object))
             {
-                instance().saveList.add((IVirtualObject) object);
+                instance().saveList.add(object);
             }
         }
     }
@@ -88,7 +88,7 @@ public class SaveManager
         {
             if (!instance().objects.contains(object))
             {
-                instance().saveList.add((IVirtualObject) object);
+                instance().saveList.add(object);
             }
         }
     }
