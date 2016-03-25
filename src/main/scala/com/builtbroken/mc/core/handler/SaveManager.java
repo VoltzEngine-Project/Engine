@@ -94,6 +94,23 @@ public class SaveManager
     }
 
     /**
+     * Called to remove the object from the save system
+     *
+     * @param obj
+     */
+    public static void unregister(IVirtualObject obj)
+    {
+        synchronized (instance())
+        {
+            if (instance().objects.contains(obj))
+            {
+                instance().objects.remove(obj);
+                instance().saveList.remove(obj);
+            }
+        }
+    }
+
+    /**
      * Call this to register a class with an id to be use in recreating an object from a save. Any
      * object that is registered to this should use a no parm constructor. Unless the class plans to
      * construct itself without using the save manager.
@@ -174,7 +191,8 @@ public class SaveManager
                             obj = clazz.newInstance();
                         }
                     }
-                } catch (Exception exception)
+                }
+                catch (Exception exception)
                 {
                     exception.printStackTrace();
                 }
@@ -184,7 +202,8 @@ public class SaveManager
                     try
                     {
                         ((ISave) obj).load(nbt);
-                    } catch (Exception e)
+                    }
+                    catch (Exception e)
                     {
                         Engine.instance.logger().catching(Level.FATAL, e);
                         Engine.instance.logger().fatal("SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
@@ -198,7 +217,8 @@ public class SaveManager
 
                 return obj;
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             FMLLog.severe("[Voltz Engine]SaveManager: Error trying to load object from save");
             e.printStackTrace();
@@ -267,7 +287,8 @@ public class SaveManager
                     throw new NullPointerException("SaveManager: Attempted to save a null object");
                 }
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             FMLLog.fine("[Resonant Engine]SaveManager: Error trying to save object class: " + (object != null ? object.getClass() : "null"));
             e.printStackTrace();
@@ -305,7 +326,9 @@ public class SaveManager
         {
             IVirtualObject ref = it.next();
             if (ref.shouldSaveForWorld(evt.world))
+            {
                 saveObject(ref);
+            }
         }
     }
 }
