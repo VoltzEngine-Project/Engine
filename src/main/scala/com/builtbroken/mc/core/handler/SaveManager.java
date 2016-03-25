@@ -68,11 +68,11 @@ public class SaveManager
      * Called when the object wants to be save only on the next save call. Will be removed from the
      * save manager after
      */
-    public static void markNeedsSaved(Object object)
+    public static void markNeedsSaved(IVirtualObject object)
     {
         synchronized (instance())
         {
-            if (object instanceof IVirtualObject && !instance().saveList.contains(object))
+            if (!instance().saveList.contains(object))
             {
                 instance().saveList.add((IVirtualObject) object);
             }
@@ -82,11 +82,11 @@ public class SaveManager
     /**
      * Registers the object to be saved on each world save event
      */
-    public static void register(Object object)
+    public static void register(IVirtualObject object)
     {
         synchronized (instance())
         {
-            if (object instanceof IVirtualObject && !instance().objects.contains(object))
+            if (!instance().objects.contains(object))
             {
                 instance().saveList.add((IVirtualObject) object);
             }
