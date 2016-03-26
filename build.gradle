@@ -95,3 +95,12 @@ jacocoTestReport {
         html.enabled = true
     }
 }
+
+task apiZip (type: Jar) {
+    classifier = "api"
+    from sourceSets*.allSource
+    include "com/builtbroken/mc/api/**"
+    destinationDir = file 'output'
+    mustRunAfter "jar"
+}
+tasks.build.dependsOn apiZip
