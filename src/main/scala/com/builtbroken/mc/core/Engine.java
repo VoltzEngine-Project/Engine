@@ -370,7 +370,7 @@ public class Engine
             catch (ClassNotFoundException e)
             {
                 shouldLoadRFHandler = false;
-                logger().error("Not loading RF support as we couldn't detect one of cofh's energy classes");
+                logger().error("Not loading RF support as we couldn't detect " + "cofh.api.energy." + s + " class or interface.");
                 break;
             }
             catch (Exception e)
