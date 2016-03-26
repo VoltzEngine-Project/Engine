@@ -329,6 +329,7 @@ public class Engine
         loader.applyModule(new ProxyASMTest());
         loader.applyModule(getProxy());
         loader.applyModule(packetHandler);
+        loader.applyModule(SmeltingRecipeLoad.class);
         loader.applyModule(CrusherRecipeLoad.class);
         loader.applyModule(GrinderRecipeLoad.class);
         loader.applyModule(FluidSmelterRecipeLoad.class);
@@ -368,23 +369,6 @@ public class Engine
                 e.printStackTrace();
             }
         }
-
-        /*
-        try
-        {
-            if(!getConfig().getBoolean("DisableDataCollection", Configuration.CATEGORY_GENERAL, false, "Allows opting out of data collection and data reporting services. Data is only used to improve the quality of mods and is not shared. What is collected? Times Run, Blocks Placed, Mods Installed, Mod Versions, and Number of Crashes."))
-            {
-                Class googleAn = Class.forName("com.dmurph.tracking.AnalyticsConfigData");
-                if (googleAn != null)
-                {
-                    loader.applyModule(GoogleAnalytics.class);
-                }
-            }
-        }
-        catch (ClassNotFoundException e)
-        {
-            logger().error("Failed to find Analytics class file");
-        } */
 
         if (shouldLoadRFHandler)
         {
@@ -532,6 +516,7 @@ public class Engine
                 }
                 if (genItem == DefinedGenItems.INGOT && getConfig().getBoolean("EnableCheapSteelRecipe", "Content", true, "Enables iron ingot to steel ingot smelting recipe. Only disable if another recipe for steel exists or most items will be uncraftable."))
                 {
+                    //TODO check to make sure doesn't conflict
                     GameRegistry.addSmelting(Items.iron_ingot, genItem.stack(GenMaterial.STEEL), 0f);
                 }
             }
