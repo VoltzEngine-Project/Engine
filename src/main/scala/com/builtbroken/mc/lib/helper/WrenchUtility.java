@@ -1,14 +1,13 @@
 package com.builtbroken.mc.lib.helper;
 
-import buildcraft.api.tools.IToolWrench;
-import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.content.tool.ItemScrewdriver;
-import com.builtbroken.mc.lib.mod.compat.Mods;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Utility to handle several different types of wrench implementation better.
@@ -17,6 +16,11 @@ import java.lang.reflect.Method;
  */
 public class WrenchUtility
 {
+    /** List of wrench data objects used to complete method called, basicly a proxy system. */
+    private static List<WrenchType> wrenchTypes = new ArrayList();
+    /** Internal cache for quicker look up on some items */
+    private static HashMap<Item, WrenchType> cache = new HashMap();
+
     /**
      * Is the item the player is hold a wrench
      */
@@ -32,37 +36,23 @@ public class WrenchUtility
     {
         if (itemStack != null)
         {
-            if (itemStack.getItem() instanceof IToolWrench)
+            if (itemStack.getItem() instanceof ItemScrewdriver)
             {
                 return true;
             }
-            else if (itemStack.getItem() instanceof ItemScrewdriver)
+            WrenchType type = getWrenchTypeFor(itemStack);
+            if (type != null && type.isWrench(itemStack))
             {
                 return true;
             }
-
-            /** Industrialcraft */
-            if (Mods.IC2.isLoaded())
+            for (WrenchType t : wrenchTypes)
             {
-                try
+                if (t.isWrench(itemStack))
                 {
-                    Class wrenchClass = itemStack.getItem().getClass();
-
-                    if (wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench") || wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrenchElectric"))
-                    {
-                        return true;
-                    }
-                } catch (ClassNotFoundException e)
-                {
-                    Engine.instance.logger().error("Failed to use reflection for IC2 Wrench support");
-                    if (Engine.runningAsDev)
-                    {
-                        Engine.instance.logger().catching(e);
-                    }
+                    return true;
                 }
             }
         }
-
         return false;
     }
 
@@ -100,34 +90,21 @@ public class WrenchUtility
     {
         if (player != null && itemStack != null)
         {
-            if (itemStack.getItem() instanceof IToolWrench)
-            {
-                return ((IToolWrench) itemStack.getItem()).canWrench(player, x, y, z);
-            }
-            else if (itemStack.getItem() instanceof ItemScrewdriver)
+            if (itemStack.getItem() instanceof ItemScrewdriver)
             {
                 return true;
             }
 
-            /** Industrialcraft */
-            if (Mods.IC2.isLoaded())
+            WrenchType type = getWrenchTypeFor(itemStack);
+            if (type != null && type.isUsableWrench(player, itemStack, x, y, z))
             {
-                //TODO replace with registry system that can store different systems for wrenches
-                try
+                return true;
+            }
+            for (WrenchType t : wrenchTypes)
+            {
+                if (t.isUsableWrench(player, itemStack, x, y, z))
                 {
-                    Class wrenchClass = itemStack.getItem().getClass();
-
-                    if (wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench") || wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrenchElectric"))
-                    {
-                        return itemStack.getItemDamage() < itemStack.getMaxDamage();
-                    }
-                } catch (ClassNotFoundException e)
-                {
-                    Engine.instance.logger().error("Failed to use reflection for IC2 Wrench support");
-                    if (Engine.runningAsDev)
-                    {
-                        Engine.instance.logger().catching(e);
-                    }
+                    return true;
                 }
             }
         }
@@ -163,58 +140,66 @@ public class WrenchUtility
     {
         if (isUsableWrench(player, itemStack, x, y, z))
         {
-            if (itemStack.getItem() instanceof IToolWrench)
+            WrenchType type = getWrenchTypeFor(itemStack);
+            if (type != null && type.damageWrench(player, itemStack, x, y, z))
             {
-                ((IToolWrench) itemStack.getItem()).wrenchUsed(player, x, y, z);
                 return true;
             }
-
-            /** Industrialcraft */
-            if (Mods.IC2.isLoaded())
+            for (WrenchType t : wrenchTypes)
             {
-                try
+                if (t.damageWrench(player, itemStack, x, y, z))
                 {
-                    Class wrenchClass = itemStack.getItem().getClass();
-
-                    if (wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrench") || wrenchClass == Class.forName("ic2.core.item.tool.ItemToolWrenchElectric"))
-                    {
-                        Method methodWrenchDamage = wrenchClass.getMethod("damage", ItemStack.class, Integer.TYPE, EntityPlayer.class);
-                        methodWrenchDamage.invoke(itemStack.getItem(), itemStack, 1, player);
-                        return true;
-                    }
-                } catch (ClassNotFoundException e)
-                {
-                    Engine.instance.logger().error("Failed to use reflection to get IC2 wrench classes");
-                    if (Engine.runningAsDev)
-                    {
-                        Engine.instance.logger().catching(e);
-                    }
-                } catch (NoSuchMethodException e)
-                {
-                    Engine.instance.logger().error("Failed to use reflection to access IC2 wrench methods");
-                    if (Engine.runningAsDev)
-                    {
-                        Engine.instance.logger().catching(e);
-                    }
-                } catch (InvocationTargetException e)
-                {
-                    Engine.instance.logger().error("Failed to use reflection to invoke IC2 wrench methods");
-                    if (Engine.runningAsDev)
-                    {
-                        Engine.instance.logger().catching(e);
-                    }
-                } catch (IllegalAccessException e)
-                {
-                    Engine.instance.logger().error("Reflection failure: Something is blocking access to IC2 wrench methods");
-                    if (Engine.runningAsDev)
-                    {
-                        Engine.instance.logger().catching(e);
-                    }
+                    return true;
                 }
             }
         }
-
         return false;
+    }
+
+    /**
+     * Cache lookup
+     *
+     * @param stack
+     * @return
+     */
+    public static WrenchType getWrenchTypeFor(ItemStack stack)
+    {
+        if (cache.containsKey(stack.getItem()))
+        {
+            return cache.get(stack.getItem());
+        }
+        return null;
+    }
+
+    public static void registerWrenchType(WrenchType type)
+    {
+        if (!wrenchTypes.contains(type))
+        {
+            wrenchTypes.add(type);
+        }
+    }
+
+    /**
+     * Data Object used to act as a proxy layer between the above methods
+     * and any interfaces. This way if the interfaces or classes are not
+     * loaded the game does not crash.
+     */
+    public static class WrenchType
+    {
+        public boolean isWrench(ItemStack itemStack)
+        {
+            return false;
+        }
+
+        public boolean damageWrench(EntityPlayer player, ItemStack itemStack, int x, int y, int z)
+        {
+            return false;
+        }
+
+        public boolean isUsableWrench(EntityPlayer player, ItemStack itemStack, int x, int y, int z)
+        {
+            return false;
+        }
     }
 
 }

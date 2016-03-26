@@ -30,6 +30,9 @@ import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.lib.mod.compat.Mods;
+import com.builtbroken.mc.lib.mod.compat.ae.AEProxy;
+import com.builtbroken.mc.lib.mod.compat.bc.BCProxy;
+import com.builtbroken.mc.lib.mod.compat.ic.ICProxy;
 import com.builtbroken.mc.lib.mod.compat.nei.NEIProxy;
 import com.builtbroken.mc.lib.mod.compat.oc.OCProxy;
 import com.builtbroken.mc.lib.mod.compat.rf.RFLoader;
@@ -326,9 +329,12 @@ public class Engine
         RecipeSorter.register(References.PREFIX + "sheetMetalTools", RecipeSheetMetal.class, SHAPED, "after:minecraft:shaped");
         RecipeSorter.register(References.PREFIX + "Tools", RecipeTool.class, SHAPED, "after:minecraft:shaped");
 
+        //Internal systems
         loader.applyModule(new ProxyASMTest());
         loader.applyModule(getProxy());
         loader.applyModule(packetHandler);
+        loader.applyModule(GroupProfileHandler.GLOBAL);
+        //Recipes
         loader.applyModule(SmeltingRecipeLoad.class);
         loader.applyModule(CrusherRecipeLoad.class);
         loader.applyModule(GrinderRecipeLoad.class);
@@ -340,10 +346,13 @@ public class Engine
         loader.applyModule(NuggetRecipeLoader.class);
         loader.applyModule(WireRecipeLoader.class);
         loader.applyModule(ScrewRecipeLoader.class);
-        loader.applyModule(NEIProxy.class);
-        loader.applyModule(GroupProfileHandler.GLOBAL);
+        //Mod Support
+        loader.applyModule(NEIProxy.class); //Uses reflection instead of API files
         loader.applyModule(OCProxy.class, Mods.OC.isLoaded());
         loader.applyModule(TinkerProxy.class, Mods.TINKERS.isLoaded());
+        loader.applyModule(AEProxy.class, Mods.AE.isLoaded());
+        loader.applyModule(ICProxy.class, Mods.IC2.isLoaded());
+        loader.applyModule(BCProxy.class, Mods.BC.isLoaded());
 
         //Check if RF api exists
         boolean shouldLoadRFHandler = true;

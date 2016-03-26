@@ -10,7 +10,7 @@ public enum Mods
 {
     OC("OpenComputers"),
     CC("ComputerCraft"),
-    AE("AppliedEnergistics"),
+    AE("appliedenergistics2"),
     AM2("arsmagica2"),
     BOP("BiomesOPlenty"),
     BC("BuildCraft|Core"),
