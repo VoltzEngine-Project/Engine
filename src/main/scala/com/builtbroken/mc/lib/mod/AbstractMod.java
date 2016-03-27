@@ -28,11 +28,18 @@ import java.io.File;
  */
 public abstract class AbstractMod
 {
+    /** Loader handler for proxies and loadable objects */
     protected LoadableHandler loader;
+    /** Manager for creating and handling content */
     protected ModManager manager;
+    /** Info or error logger */
     protected Logger logger;
+    /** Custom path to config file */
     protected String configPath;
+    /** Configuration file */
     private Configuration config;
+    /** Toggle to stop pre-init from firing in case extra handling needs to be done */
+    protected boolean fireProxyPreInit = true;
 
     /**
      * @param domain - mod id uses to register textures with, etc
@@ -53,23 +60,34 @@ public abstract class AbstractMod
     public void preInit(FMLPreInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, getProxy());
-        if(this.getClass().toString().contains("com.builtbroken"))
+        if (this.getClass().toString().contains("com.builtbroken"))
         {
             if (configPath == null || configPath.isEmpty())
+            {
                 config = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/" + event.getSuggestedConfigurationFile().getName()));
+            }
             else
+            {
                 config = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/" + configPath));
+            }
         }
         else
         {
             if (configPath == null || configPath.isEmpty())
+            {
                 config = new Configuration(event.getSuggestedConfigurationFile());
+            }
             else
+            {
                 config = new Configuration(new File(event.getModConfigurationDirectory(), configPath));
+            }
         }
         getConfig().load();
         loader.applyModule(getProxy());
-        loader.preInit();
+        if (fireProxyPreInit)
+        {
+            loader.preInit();
+        }
     }
 
     public void init(FMLInitializationEvent event)

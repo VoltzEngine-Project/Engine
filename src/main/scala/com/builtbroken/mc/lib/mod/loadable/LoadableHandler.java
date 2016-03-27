@@ -21,7 +21,9 @@ import java.util.Map;
  */
 public class LoadableHandler
 {
+    /** Map of loadable to pair(HasLoadedPreInit, HasLoadedInit) */
     private HashMap<ILoadable, Pair<Boolean, Boolean>> loadables = new HashMap();
+    /** Current phase of the loader. Doesn't always match current phase of MC. */
     private LoadPhase phase = LoadPhase.PRELAUNCH;
 
     public void applyModule(Class<?> clazz)

@@ -96,7 +96,7 @@ public class ModManager
                     paramTypes.add(arg.getClass());
                 }
 
-                spatial = spatialClass.getConstructor(paramTypes.toArray(new Class[paramTypes.size()])).newInstance();
+                spatial = (Tile)spatialClass.getConstructor(paramTypes.toArray(new Class[paramTypes.size()])).newInstance();
             }
             else
             {
@@ -104,7 +104,8 @@ public class ModManager
             }
 
             return newBlock(name, spatial);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             throw new RuntimeException(name() + " Tile [" + spatialClass.getSimpleName() + "] failed to be created:", e);
         }
@@ -172,7 +173,9 @@ public class ModManager
     {
         registerTileEntity(actual_name, block, newTile);
         if (newTile.getClass() != spatial.getClass())
+        {
             temp_registry_list.add(newTile);
+        }
         if (spatial.renderTileEntity)
         {
             debug("\tDetected tile renderer");
@@ -218,10 +221,12 @@ public class ModManager
         try
         {
             return newBlock(name, blockClazz.newInstance(), itemBlockClass);
-        } catch (InstantiationException e)
+        }
+        catch (InstantiationException e)
         {
             throw new RuntimeException(name() + " Failed to create block from class " + blockClazz, e);
-        } catch (IllegalAccessException e)
+        }
+        catch (IllegalAccessException e)
         {
             throw new RuntimeException(name() + " Failed to access class " + blockClazz, e);
         }
@@ -292,7 +297,7 @@ public class ModManager
                     paramTypes.add(arg.getClass());
                 }
 
-                item = clazz.getConstructor(paramTypes.toArray(new Class[paramTypes.size()])).newInstance();
+                item = (Item)clazz.getConstructor(paramTypes.toArray(new Class[paramTypes.size()])).newInstance();
             }
             else
             {
@@ -300,16 +305,20 @@ public class ModManager
             }
 
             return (C) newItem(name, item);
-        } catch (NoSuchMethodException e)
+        }
+        catch (NoSuchMethodException e)
         {
             throw new RuntimeException(name() + "Failed to create item [" + name + "] due to invalid constructor", e);
-        } catch (InstantiationException e)
+        }
+        catch (InstantiationException e)
         {
             throw new RuntimeException(name() + "Failed to create item [" + name + "]", e);
-        } catch (IllegalAccessException e)
+        }
+        catch (IllegalAccessException e)
         {
             throw new RuntimeException(name() + "Failed to create item [" + name + "] due to access issue", e);
-        } catch (InvocationTargetException e)
+        }
+        catch (InvocationTargetException e)
         {
             throw new RuntimeException(name() + "Failed to create item [" + name + "] when invoking constructor", e);
         }
@@ -373,6 +382,8 @@ public class ModManager
     public void debug(String s)
     {
         if (Engine.runningAsDev)
+        {
             Engine.instance.logger().info(name() + s);
+        }
     }
 }
