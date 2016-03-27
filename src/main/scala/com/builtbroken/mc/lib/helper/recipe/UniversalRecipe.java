@@ -60,7 +60,7 @@ public class UniversalRecipe
     static
     {
         // Metals
-        PRIMARY_METAL = new UniversalRecipe("ingotSteel", "plateiron", new ItemStack(Items.iron_ingot));
+        PRIMARY_METAL = new UniversalRecipe("ingotSteel", "plateIron", new ItemStack(Items.iron_ingot));
         SECONDARY_METAL = new UniversalRecipe("ingotBronze", new ItemStack(Items.brick));
 
         // Plates
@@ -76,7 +76,7 @@ public class UniversalRecipe
         BATTERY_BOX = new UniversalRecipe("batteryBox", "batBox", new ItemStack(Blocks.gold_block));
 
         WRENCH = new UniversalRecipe("wrench", "wrench", new ItemStack(Items.iron_axe));
-        WIRE = new UniversalRecipe("wire", "ironWire", "copperCableBlock", new ItemStack(Items.redstone));
+        WIRE = new UniversalRecipe("wire", "copperWire", "ironWire", "copperCableBlock", new ItemStack(Items.redstone));
 
         MOTOR = new UniversalRecipe("motor", "gear", "generator", new ItemStack(Blocks.piston));
         RUBBER = new UniversalRecipe("rubber", "itemRubber", new ItemStack(Items.slime_ball));
