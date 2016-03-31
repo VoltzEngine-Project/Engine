@@ -28,6 +28,7 @@ import com.builtbroken.mc.core.network.netty.PacketManager;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
+import com.builtbroken.mc.lib.helper.recipe.OreNames;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.lib.mod.compat.Mods;
 import com.builtbroken.mc.lib.mod.compat.ae.AEProxy;
@@ -419,6 +420,9 @@ public class Engine
         ExplosiveRegistry.registerExplosiveItem(new ItemStack(Items.skull, 1, 4), ExplosiveRegistry.get("TNT"), 0.3);
 
         loader.preInit();
+        OreDictionary.registerOre(OreNames.WOOD_STICK, Items.stick);
+        OreDictionary.registerOre(OreNames.STRING, Items.string);
+        OreDictionary.registerOre(OreNames.FLINT, Items.flint);
     }
 
     @EventHandler

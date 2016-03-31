@@ -3,6 +3,7 @@ package com.builtbroken.mc.core.content.tool;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
+import com.builtbroken.mc.lib.helper.recipe.OreNames;
 import com.builtbroken.mc.prefab.recipe.item.RecipeShapedOre;
 import com.builtbroken.mc.prefab.recipe.item.RecipeTool;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -14,7 +15,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
 
@@ -60,34 +60,26 @@ public class ItemSimpleCraftingTool extends ItemAbstractCraftingTool implements 
     @Override
     public void onPostInit()
     {
-        if (OreDictionary.getOreID("flint") == -1)
-        {
-            OreDictionary.registerOre("flint", Items.flint);
-        }
-        if (OreDictionary.getOreID("string") == -1)
-        {
-            OreDictionary.registerOre("string", Items.string);
-        }
         //Hammer recipe
-        GameRegistry.addRecipe(new RecipeShapedOre(getHammer(), "S", "t", 'S', "stone", 't', "stickWood"));
+        GameRegistry.addRecipe(new RecipeShapedOre(getHammer(), "S", "t", 'S', OreNames.STONE, 't', OreNames.WOOD_STICK));
         //Chisel recipe
-        GameRegistry.addRecipe(new RecipeShapedOre(getChisel(), "t", "S", 'S', "stone", 't', "stickWood"));
+        GameRegistry.addRecipe(new RecipeShapedOre(getChisel(), "t", "S", 'S', OreNames.STONE, 't', OreNames.WOOD_STICK));
 
         //File recipe
-        GameRegistry.addRecipe(new RecipeTool(getFile(), "th", "Sc", 'S', "stone", 't', "stickWood", 'c', getChisel(), 'h', getHammer()));
-        GameRegistry.addRecipe(new RecipeTool(getFile(), "tc", "Sh", 'S', "stone", 't', "stickWood", 'c', getChisel(), 'h', getHammer()));
+        GameRegistry.addRecipe(new RecipeTool(getFile(), "th", "Sc", 'S', OreNames.STONE, 't', OreNames.WOOD_STICK, 'c', getChisel(), 'h', getHammer()));
+        GameRegistry.addRecipe(new RecipeTool(getFile(), "tc", "Sh", 'S', OreNames.STONE, 't', OreNames.WOOD_STICK, 'c', getChisel(), 'h', getHammer()));
 
         if (Engine.itemSheetMetalTools != null)
         {
-            GameRegistry.addRecipe(new RecipeTool(getFile(), "th", "Sc", 'S', "stone", 't', "stickWood", 'c', getChisel(), 'h', Engine.itemSheetMetalTools.getHammer()));
-            GameRegistry.addRecipe(new RecipeTool(getFile(), "tc", "Sh", 'S', "stone", 't', "stickWood", 'c', getChisel(), 'h', Engine.itemSheetMetalTools.getHammer()));
+            GameRegistry.addRecipe(new RecipeTool(getFile(), "th", "Sc", 'S', OreNames.STONE, 't', OreNames.WOOD_STICK, 'c', getChisel(), 'h', Engine.itemSheetMetalTools.getHammer()));
+            GameRegistry.addRecipe(new RecipeTool(getFile(), "tc", "Sh", 'S', OreNames.STONE, 't', OreNames.WOOD_STICK, 'c', getChisel(), 'h', Engine.itemSheetMetalTools.getHammer()));
         }
 
         //Drill recipe
-        GameRegistry.addRecipe(new RecipeShapedOre(getDrill(), "tGs", "Gtt", "sF ", 's', "string", 'G', "gearWood", 'F', "flint", 't', "stickWood"));
+        GameRegistry.addRecipe(new RecipeShapedOre(getDrill(), "tGs", "Gtt", "sF ", 's', OreNames.STRING, 'G', OreNames.WOOD_GEAR, 'F', OreNames.FLINT, 't', OreNames.WOOD_STICK));
 
         //Cutter recipe
-        GameRegistry.addRecipe(new RecipeTool(getCutters(), "tft", "dsh", "g g", 's', "ironScrew", 'g', "ironRod", 't', "ingotIron", 'd', getDrill(), 'h', getHammer(), 'f', getFile()));
+        GameRegistry.addRecipe(new RecipeTool(getCutters(), "tft", "dsh", "g g", 's', OreNames.SCREW_IRON, 'g', OreNames.ROD_IRON, 't', OreNames.INGOT_IRON, 'd', getDrill(), 'h', getHammer(), 'f', getFile()));
 
     }
 

@@ -5,6 +5,7 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
+import com.builtbroken.mc.lib.helper.recipe.OreNames;
 import com.builtbroken.mc.lib.helper.recipe.UniversalRecipe;
 import com.builtbroken.mc.prefab.recipe.item.sheetmetal.RecipeSheetMetal;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -83,8 +84,8 @@ public class ItemSheetMetalTools extends ItemAbstractCraftingTool implements IPo
             GameRegistry.addRecipe(new RecipeSheetMetal(ItemSheetMetal.SheetMetal.CYLINDER.stack(), "IRI", 'I', ItemSheetMetal.SheetMetal.HALF_CYLINDER.stack(), 'R', ItemSheetMetal.SheetMetal.RIVETS.stack()));
         }
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(getHammer(), "III", " I ", " S ", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
-        GameRegistry.addRecipe(new ShapedOreRecipe(getShears(), "I I", " I ", "S S", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', Items.stick));
+        GameRegistry.addRecipe(new ShapedOreRecipe(getHammer(), "III", " I ", " S ", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', OreNames.WOOD_STICK));
+        GameRegistry.addRecipe(new ShapedOreRecipe(getShears(), "I I", " I ", "S S", 'I', UniversalRecipe.PRIMARY_METAL.get(), 'S', OreNames.WOOD_STICK));
     }
 
     @Override
