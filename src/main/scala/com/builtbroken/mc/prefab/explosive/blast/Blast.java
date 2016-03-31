@@ -6,7 +6,13 @@ import com.builtbroken.mc.api.edit.IWorldChangeAudio;
 import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
+import com.builtbroken.mc.core.Engine;
+import net.minecraft.enchantment.EnchantmentProtection;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -34,7 +40,9 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     public TriggerCause cause = new TriggerCause.TriggerCauseRedstone(ForgeDirection.UNKNOWN, 15);
     private NBTTagCompound additionBlastData;
 
-    public Blast() {}
+    public Blast()
+    {
+    }
 
     public Blast(final World world, int x, int y, int z, int size)
     {
@@ -77,7 +85,7 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     public B setAdditionBlastData(NBTTagCompound additionBlastData)
     {
         this.additionBlastData = additionBlastData;
-        return (B)this;
+        return (B) this;
     }
 
     /** Custom NBT data provided by the explosive */
@@ -126,6 +134,45 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
 
     }
 
+    protected void damageEntities(List<Entity> entities, DamageSource source)
+    {
+        damageEntities(entities, source, 1);
+    }
+
+    protected void damageEntities(List<Entity> entities, DamageSource source, float damageScale)
+    {
+        Vec3 vec3 = Vec3.createVectorHelper(x, y, z);
+        for (Entity entity : entities)
+        {
+            double distanceScaled = entity.getDistance(x, y, z) / size;
+
+            if (distanceScaled <= 1.0D)
+            {
+                double deltaX = entity.posX - x;
+                double deltaY = entity.posY + (double) entity.getEyeHeight() - y;
+                double deltaZ = entity.posZ - z;
+                double mag = (double) MathHelper.sqrt_double(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+
+                if (mag != 0.0D)
+                {
+                    deltaX /= mag;
+                    deltaY /= mag;
+                    deltaZ /= mag;
+                    double blockDensity = (double) this.world.getBlockDensity(vec3, entity.boundingBox);
+                    double force = (1.0D - distanceScaled) * blockDensity;
+                    if (source != null)
+                    {
+                        entity.attackEntityFrom(source, (float) (((force * force + force) / 16 * size) * damageScale + 1.0D));
+                    }
+                    double pushPercentage = EnchantmentProtection.func_92092_a(entity, force);
+                    entity.motionX += deltaX * pushPercentage;
+                    entity.motionY += deltaY * pushPercentage;
+                    entity.motionZ += deltaZ * pushPercentage;
+                }
+            }
+        }
+    }
+
     @Override
     public void killAction(boolean willSave)
     {
@@ -170,11 +217,17 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     @Override
     public void playAudioForEdit(IWorldEdit blocks)
     {
+        //TODO randomly play block audio
     }
 
     @Override
     public void doStartAudio()
     {
+        //TODO get custom audio
+        if (!world.isRemote)
+        {
+            world.playSoundEffect(x, y, z, "random.explode", 4.0F, (float) ((1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * size));
+        }
     }
 
     @Override
@@ -185,18 +238,73 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     @Override
     public void displayEffectForEdit(IWorldEdit blocks)
     {
+        //TODO randomize for large explosives to reduce lag
+        //TODO add config to disable effect spawning on both server and client
+        //TODO add config syncing to ensure server doesn't send render packets when not used by client
+        if (!world.isRemote)
+        {
+            //Generate random position near block
+            double posX = (double) ((float) blocks.x() + world.rand.nextFloat());
+            double posY = (double) ((float) blocks.y() + world.rand.nextFloat());
+            double posZ = (double) ((float) blocks.z() + world.rand.nextFloat());
+            //Get change in distance from explosive to block
+            double deltaX = posX - x;
+            double deltaY = posY - y;
+            double deltaZ = posZ - z;
+
+            //Convert the distance into a vector
+            double mag = (double) MathHelper.sqrt_double(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+            deltaX /= mag;
+            deltaY /= mag;
+            deltaZ /= mag;
+
+            //Randomize speed
+            double speedScale = 0.5D / (mag / size + 0.1D);
+            speedScale *= (double) (world.rand.nextFloat() * world.rand.nextFloat() + 0.3F);
+
+            //Scale direction by speed, turning it into velocity
+            deltaX *= speedScale;
+            deltaY *= speedScale;
+            deltaZ *= speedScale;
+
+            //Spawn particles
+            Engine.proxy.spawnParticle("explode", world, (posX + x * 1.0D) / 2.0D, (posY + y * 1.0D) / 2.0D, (posZ + z * 1.0D) / 2.0D, deltaX, deltaY, deltaZ);
+            Engine.proxy.spawnParticle("smoke", world, posX, posY, posZ, deltaX, deltaY, deltaZ);
+        }
     }
 
     @Override
     public void doStartDisplay()
     {
-
+        //TODO get custom effects
+        if (!world.isRemote)
+        {
+            if (this.size >= 2.0F)
+            {
+                Engine.proxy.spawnParticle("hugeexplosion", world, x, y, z, 1.0D, 0.0D, 0.0D);
+            }
+            else
+            {
+                Engine.proxy.spawnParticle("largeexplode", world, x, y, z, 1.0D, 0.0D, 0.0D);
+            }
+        }
     }
 
     @Override
     public void doEndDisplay()
     {
-
+        //TODO get custom effects
+        if (world.isRemote)
+        {
+            if (this.size >= 2.0F)
+            {
+                Engine.proxy.spawnParticle("hugeexplosion", world, x, y, z, 1.0D, 0.0D, 0.0D);
+            }
+            else
+            {
+                Engine.proxy.spawnParticle("largeexplode", world, x, y, z, 1.0D, 0.0D, 0.0D);
+            }
+        }
     }
 
     @Override
