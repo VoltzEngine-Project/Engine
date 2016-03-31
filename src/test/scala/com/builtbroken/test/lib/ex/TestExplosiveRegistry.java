@@ -44,7 +44,7 @@ public class TestExplosiveRegistry extends AbstractTest
 
         assertTrue(ExplosiveRegistry.get("TNT") == TNT);
         assertTrue(ExplosiveRegistry.get(new ItemStack(Blocks.tnt)) == TNT);
-        assertTrue(ExplosiveRegistry.getExplosiveSize(new ItemStack(Blocks.tnt)) == 2);
+        assertEquals(ExplosiveRegistry.getExplosiveSize(new ItemStack(Blocks.tnt)), 2.0);
         assertTrue(ExplosiveRegistry.getItems(TNT).contains(new ItemStackWrapper(new ItemStack(Blocks.tnt))));
 
         ItemStack stack = new ItemStack(explosive);

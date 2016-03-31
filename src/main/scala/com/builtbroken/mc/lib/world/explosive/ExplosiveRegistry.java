@@ -386,14 +386,13 @@ public final class ExplosiveRegistry
      */
     public static double getExplosiveSize(double sizePerUnit, double scaleByFactor)
     {
-        final double FOUR_THIRDS_PI = (4.0 / 3.0) * Math.PI;
         //http://www.calculatorsoup.com/calculators/geometry-solids/sphere.php
         //Get volume of a single unit
-        double volume = FOUR_THIRDS_PI * sizePerUnit * sizePerUnit * sizePerUnit;
+        double volume = (4.0 / 3.0) * Math.PI * sizePerUnit * sizePerUnit * sizePerUnit;
         //Scale the volume by the # of explosives
         volume = volume * scaleByFactor;
         //Find new radius from volume and return value
-        return Math.cbrt(volume / FOUR_THIRDS_PI); //TODO see if we can remove the exponent
+        return Math.pow((3.0 * volume) / (4.0 * Math.PI), 1.0 / 3.0);
     }
 
     /**
@@ -459,7 +458,7 @@ public final class ExplosiveRegistry
 
     /**
      * NEVER USE THIS METHOD OUTSIDE OF JUNIT TESTING
-     *
+     * <p/>
      * Clears all data stored by the registry. This is designed
      * to wipe the registry between unit tests.
      */
