@@ -84,6 +84,7 @@ public final class OreNames
     public static final String PLATE_MAGNESIUM = "plateMagnesium";
     public static final String PLATE_BRASS = "plateBrass";
     public static final String PLATE_PLATIUM = "platePlatinum";
+    public static final String PLATE_DIAMOND = "plateDiamond";
 
     public static final String ROD_IRON = "rodIron";
     public static final String ROD_GOLD = "rodGold";
@@ -99,8 +100,12 @@ public final class OreNames
     public static final String ROD_MAGNESIUM = "rodMagnesium";
     public static final String ROD_BRASS = "rodBrass";
     public static final String ROD_PLATIUM = "rodPlatinum";
+    public static final String ROD_DIAMOND = "rodDiamond";
+    public static final String ROD_STONE = "rodStone";
 
+    public static final String GEAR_WOOD = "gearWood";
     public static final String GEAR_IRON = "gearIron";
+    public static final String GEAR_STONE = "gearStone";
     public static final String GEAR_GOLD = "gearGold";
     public static final String GEAR_COPPER = "gearCopper";
     public static final String GEAR_TIN = "gearTin";
@@ -114,6 +119,7 @@ public final class OreNames
     public static final String GEAR_MAGNESIUM = "gearMagnesium";
     public static final String GEAR_BRASS = "gearBrass";
     public static final String GEAR_PLATIUM = "gearPlatinum";
+    public static final String GEAR_DIAMOND = "gearDiamond";
 
     public static final String SCREW_IRON = "screwIron";
     public static final String SCREW_GOLD = "screwGold";
@@ -129,6 +135,7 @@ public final class OreNames
     public static final String SCREW_MAGNESIUM = "screwMagnesium";
     public static final String SCREW_BRASS = "screwBrass";
     public static final String SCREW_PLATIUM = "screwPlatinum";
+    public static final String SCREW_DIAMOND = "screwDiamond";
 
     public static final String WIRE_IRON = "wireIron";
     public static final String WIRE_GOLD = "wireGold";
