@@ -4,6 +4,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
+import com.builtbroken.mc.lib.helper.recipe.OreNames;
 import com.builtbroken.mc.prefab.recipe.item.RecipeTool;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -26,6 +27,7 @@ public class ItemCircuits extends Item implements IRegistryInit, IPostInit
     {
         this.setUnlocalizedName(References.PREFIX + "circuits");
         this.setCreativeTab(CreativeTabs.tabMaterials);
+        this.setHasSubtypes(true);
     }
 
     @Override
@@ -33,17 +35,16 @@ public class ItemCircuits extends Item implements IRegistryInit, IPostInit
     {
         if (Engine.itemSimpleCraftingTools != null)
         {
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits), "wcw", "dpt", "wrw", 'w', "wireTin", 'p', "plankWood", 'c', Items.clay_ball, 'r', Items.redstone, 'd', Engine.itemSimpleCraftingTools.getDrill(), 't', Engine.itemSimpleCraftingTools.getCutters()));
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 1), "wcw", "dpt", "wrw", 'w', "wireCopper", 'p', "plateCopper", 'c', Items.clay_ball, 'r', Items.redstone, 'd', Engine.itemSimpleCraftingTools.getDrill(), 't', Engine.itemSimpleCraftingTools.getCutters()));
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 2), "wcw", "dpt", "wrw", 'w', "wireGold", 'p', "plateGold", 'c', Items.clay_ball, 'r', Items.redstone, 'd', Engine.itemSimpleCraftingTools.getDrill(), 't', Engine.itemSimpleCraftingTools.getCutters()));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits), "wcw", "dpt", "wrw", 'w', OreNames.WIRE_TIN, 'p', OreNames.WOOD, 'c', Items.clay_ball, 'r', OreNames.REDSTONE, 'd', Engine.itemSimpleCraftingTools.getDrill(), 't', Engine.itemSimpleCraftingTools.getCutters()));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 1), "wcw", "dpt", "wrw", 'w', OreNames.WIRE_COPPER, 'p', OreNames.PLATE_COPPER, 'c', Items.clay_ball, 'r', OreNames.REDSTONE, 'd', Engine.itemSimpleCraftingTools.getDrill(), 't', Engine.itemSimpleCraftingTools.getCutters()));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 2), "wcw", "dpt", "wrw", 'w', OreNames.WIRE_GOLD, 'p', OreNames.PLATE_GOLD, 'c', Items.clay_ball, 'r', OreNames.REDSTONE, 'd', Engine.itemSimpleCraftingTools.getDrill(), 't', Engine.itemSimpleCraftingTools.getCutters()));
 
         }
         else
         {
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits), "wcw", "rpr", "wcw", 'w', "wireTin", 'p', "plankWood", 'c', "clay", 'r', Items.redstone));
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 1), "wcw", "rpr", "wcw", 'w', "wireCopper", 'p', "ingotIron", 'c', "clay", 'r', Items.redstone));
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 2), "wcw", "rpr", "wcw", 'w', "wireGold", 'p', "ingotGold", 'c', "clay", 'r', Items.redstone));
-
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits), "wcw", "rpr", "wcw", 'w', OreNames.WIRE_TIN, 'p', OreNames.WOOD, 'c', "clay", 'r', OreNames.REDSTONE));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 1), "wcw", "rpr", "wcw", 'w', OreNames.WIRE_COPPER, 'p', OreNames.INGOT_IRON, 'c', "clay", 'r', OreNames.REDSTONE));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 2), "wcw", "rpr", "wcw", 'w', OreNames.WIRE_GOLD, 'p', OreNames.INGOT_GOLD, 'c', "clay", 'r', OreNames.REDSTONE));
         }
     }
 
@@ -119,7 +120,9 @@ public class ItemCircuits extends Item implements IRegistryInit, IPostInit
         public static EnumCircuits get(int meta)
         {
             if (meta >= 0 && meta < values().length)
+            {
                 return values()[meta];
+            }
             return null;
         }
     }
