@@ -91,7 +91,7 @@ public abstract class BlastSimplePath<B extends BlastSimplePath> extends Blast<B
         for(IWorldEdit vec : list)
         {
             //Ensure crops break with farmland to avoid floating crops
-            if (vec.getBlock() instanceof BlockFarmland)
+            if (vec != null && vec.getBlock() instanceof BlockFarmland)
             {
                 Block block = vec.world().getBlock((int) vec.x(), (int) vec.y() + 1, (int) vec.z());
                 if (block.canBlockStay(vec.world(), (int) vec.x(), (int) vec.y() + 1, (int) vec.z()) || block instanceof IPlantable || block instanceof IGrowable)
