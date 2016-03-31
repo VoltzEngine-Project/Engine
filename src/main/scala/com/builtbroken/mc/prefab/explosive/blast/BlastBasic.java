@@ -4,21 +4,19 @@ import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.helper.DamageUtility;
 import com.builtbroken.mc.lib.helper.MathUtility;
 import com.builtbroken.mc.lib.transform.sorting.Vector3DistanceComparator;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
+import com.builtbroken.mc.prefab.entity.selector.EntityDistanceSelector;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 
 import java.util.ArrayList;
@@ -31,6 +29,8 @@ import java.util.List;
  * Created by robert on 11/19/2014.
  */
 //TODO use pathfinder for emp to allow for EMP shielding
+//TODO replace with recursive pathfinder that doesn't keep calling expand, this will stack overflow
+//TODO update pathfinding methods to be more reusable
 public class BlastBasic<B extends BlastBasic> extends Blast<B>
 {
     /**
@@ -145,6 +145,7 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
                         if (dir != side)
                         {
                             BlockEdit v = new BlockEdit(world, vec.x(), vec.y(), vec.z());
+                            v.doDrops();
                             v = v.add(dir);
                             v.face = dir;
                             v.logPrevBlock();
@@ -221,7 +222,7 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
     public void handleBlockPlacement(IWorldEdit vec)
     {
         Block block = vec.getBlock();
-        TileEntity tile = vec.getTileEntity();
+        //TileEntity tile = vec.getTileEntity();
 
         // TODO re-add support MFFS support
         //if (tile instanceof IForceField)
@@ -277,50 +278,14 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
         if (!beforeBlocksPlaced)
         {
             //TODO wright own version of getEntitiesWithinAABB that takes a filter and cuboid(or Vector3 to Vector3)
+            //TODO ensure that the entity is in line of sight
+            //TODO ensure that the entity can be pathed by the explosive
             AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(x - size - 1, y - size - 1, z - size - 1, x + size + 1, y + size + 1, z + size + 1);
-            List list = world.getEntitiesWithinAABB(Entity.class, bounds);
+            List list = world.selectEntitiesWithinAABB(Entity.class, bounds, new EntityDistanceSelector(new Pos(x, y, z), size + 1, true));
             if (list != null && !list.isEmpty())
             {
-                for (Object obj : list)
-                {
-                    if (obj instanceof Entity)
-                    {
-                        effectEntity((Entity) obj);
-                    }
-                }
+                damageEntities(list, source);
             }
-        }
-    }
-
-    /**
-     * called to effect the entity
-     *
-     * @param entity
-     */
-    protected void effectEntity(Entity entity)
-    {
-        if (DamageUtility.canDamage(entity))
-        {
-            Pos eVec = new Pos(entity);
-            MovingObjectPosition hit = eVec.rayTrace(world, new Pos(x(), y(), z()));
-            if (hit == null || hit.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK)
-            {
-                float e = ((float) radius + 1 * 5) / (float) eVec.distance(new Pos(x(), y(), z()));
-
-                entity.attackEntityFrom(source, e);
-                applyMotion(entity, eVec, e);
-            }
-        }
-    }
-
-    protected void applyMotion(Entity entity, Pos eVec, float energyAppliedNearEntity)
-    {
-        if (!entity.isRiding())
-        {
-            Pos motion = eVec.toEulerAngle(new Pos(x(), y(), z())).toPos().multiply(energyAppliedNearEntity);
-            entity.motionX += motion.xi() & 1;
-            entity.motionY += motion.xi() & 1;
-            entity.motionZ += motion.xi() & 1;
         }
     }
 
@@ -339,7 +304,7 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
             explosionBlameEntity.setPosition(x, y, z);
         }
         wrapperExplosion = new WrapperExplosion(this);
-        return (B)this;
+        return (B) this;
     }
 
 
@@ -350,7 +315,7 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
         //Most of the time radius equals size of the explosion
         radius = size;
         calcStartingEnergy();
-        return (B)this;
+        return (B) this;
     }
 
     /**

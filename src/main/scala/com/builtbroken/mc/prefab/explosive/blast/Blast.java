@@ -7,6 +7,8 @@ import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.lib.transform.vector.Pos;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -235,9 +237,11 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     {
     }
 
+    /** See {@link RenderGlobal#doSpawnParticle(String, double, double, double, double, double, double)} for a list of vanilla particles */
     @Override
     public void displayEffectForEdit(IWorldEdit blocks)
     {
+
         //TODO randomize for large explosives to reduce lag
         //TODO add config to disable effect spawning on both server and client
         //TODO add config syncing to ensure server doesn't send render packets when not used by client
@@ -247,30 +251,45 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
             double posX = (double) ((float) blocks.x() + world.rand.nextFloat());
             double posY = (double) ((float) blocks.y() + world.rand.nextFloat());
             double posZ = (double) ((float) blocks.z() + world.rand.nextFloat());
-            //Get change in distance from explosive to block
-            double deltaX = posX - x;
-            double deltaY = posY - y;
-            double deltaZ = posZ - z;
 
-            //Convert the distance into a vector
-            double mag = (double) MathHelper.sqrt_double(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
-            deltaX /= mag;
-            deltaY /= mag;
-            deltaZ /= mag;
-
-            //Randomize speed
-            double speedScale = 0.5D / (mag / size + 0.1D);
-            speedScale *= (double) (world.rand.nextFloat() * world.rand.nextFloat() + 0.3F);
-
-            //Scale direction by speed, turning it into velocity
-            deltaX *= speedScale;
-            deltaY *= speedScale;
-            deltaZ *= speedScale;
-
+            Pos pos = randomMotion(posX, posY, posZ);
             //Spawn particles
-            Engine.proxy.spawnParticle("explode", world, (posX + x * 1.0D) / 2.0D, (posY + y * 1.0D) / 2.0D, (posZ + z * 1.0D) / 2.0D, deltaX, deltaY, deltaZ);
-            Engine.proxy.spawnParticle("smoke", world, posX, posY, posZ, deltaX, deltaY, deltaZ);
+            Engine.proxy.spawnParticle("explode", world, (posX + x * 1.0D) / 2.0D, (posY + y * 1.0D) / 2.0D, (posZ + z * 1.0D) / 2.0D, pos.x(), pos.y(), pos.z());
+            Engine.proxy.spawnParticle("smoke", world, posX, posY, posZ, pos.x(), pos.y(), pos.z());
         }
+    }
+
+    /**
+     * Generates a randomized heading from the center of the blast away from
+     * the blast.
+     *
+     * @param posX
+     * @param posY
+     * @param posZ
+     * @return
+     */
+    protected final Pos randomMotion(double posX, double posY, double posZ)
+    {
+        //Get change in distance from explosive to block
+        double deltaX = posX - x;
+        double deltaY = posY - y;
+        double deltaZ = posZ - z;
+
+        //Convert the distance into a vector
+        double mag = (double) MathHelper.sqrt_double(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+        deltaX /= mag;
+        deltaY /= mag;
+        deltaZ /= mag;
+
+        //Randomize speed
+        double speedScale = 0.5D / (mag / size + 0.1D);
+        speedScale *= (double) (world.rand.nextFloat() * world.rand.nextFloat() + 0.3F);
+
+        //Scale direction by speed, turning it into velocity
+        deltaX *= speedScale;
+        deltaY *= speedScale;
+        deltaZ *= speedScale;
+        return new Pos(deltaX, deltaY, deltaZ);
     }
 
     @Override

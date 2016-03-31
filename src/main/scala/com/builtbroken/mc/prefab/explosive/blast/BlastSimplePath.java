@@ -4,7 +4,12 @@ import com.builtbroken.mc.api.edit.IWorldChangeLayeredAction;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.lib.world.edit.BlockEdit;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFarmland;
+import net.minecraft.block.IGrowable;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
@@ -81,6 +86,25 @@ public abstract class BlastSimplePath<B extends BlastSimplePath> extends Blast<B
                 }
             }
         }
+        //TODO find a better way to handle this, for example inside the actual pathfinder loop
+        List<IWorldEdit> additions = new ArrayList();
+        for(IWorldEdit vec : list)
+        {
+            //Ensure crops break with farmland to avoid floating crops
+            if (vec.getBlock() instanceof BlockFarmland)
+            {
+                Block block = vec.world().getBlock((int) vec.x(), (int) vec.y() + 1, (int) vec.z());
+                if (block.canBlockStay(vec.world(), (int) vec.x(), (int) vec.y() + 1, (int) vec.z()) || block instanceof IPlantable || block instanceof IGrowable)
+                {
+                    BlockEdit edit = new BlockEdit(vec.world(), (int) vec.x(), (int) vec.y() + 1, (int) vec.z());
+                    if(!list.contains(edit))
+                    {
+                        additions.add(edit);
+                    }
+                }
+            }
+        }
+        list.addAll(additions);
     }
 
     @Override
