@@ -2,6 +2,7 @@ package com.builtbroken.test.lib;
 
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
@@ -13,4 +14,9 @@ import org.junit.runner.RunWith;
 @RunWith(VoltzTestRunner.class)
 public class TestInventoryUtility extends AbstractTest
 {
+    @Test
+    public void testEmpty()
+    {
+
+    }
 }
