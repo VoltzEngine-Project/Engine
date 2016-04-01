@@ -274,12 +274,12 @@ public class SaveManager
                         }
                         else
                         {
-                            throw new NullPointerException("SaveManager: Object save file path is null");
+                            throw new NullPointerException("SaveManager: Object save file path is null. " + object);
                         }
                     }
                     else
                     {
-                        throw new Exception("SaveManager: Object does not have a save ID");
+                        throw new Exception("SaveManager: Object does not have a save ID. " + object);
                     }
                 }
                 else
