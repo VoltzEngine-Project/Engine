@@ -52,28 +52,31 @@ public class WorldEditQueue extends LinkedList<IWorldEdit>
                 while (it.hasNext() && c++ <= editsPerTick)
                 {
                     IWorldEdit edit = it.next();
-                    try
+                    if(edit != null)
                     {
-                        if (!world.isRemote)
+                        try
                         {
-                            blast.handleBlockPlacement(edit);
+                            if (!world.isRemote)
+                            {
+                                blast.handleBlockPlacement(edit);
+                            }
+                            if (blast instanceof IWorldChangeAudio)
+                            {
+                                ((IWorldChangeAudio) blast).playAudioForEdit(edit);
+                            }
+                            if (blast instanceof IWorldChangeGraphics)
+                            {
+                                ((IWorldChangeGraphics) blast).displayEffectForEdit(edit);
+                            }
                         }
-                        if (blast instanceof IWorldChangeAudio)
+                        catch (Exception e)
                         {
-                            ((IWorldChangeAudio) blast).playAudioForEdit(edit);
+                            Engine.instance.logger().error("Failed to place block for change action"
+                                            + "\nSide: " + side
+                                            + "\nChangeAction: " + blast
+                                            + "\nEdit: " + edit
+                                    , e);
                         }
-                        if (blast instanceof IWorldChangeGraphics)
-                        {
-                            ((IWorldChangeGraphics) blast).displayEffectForEdit(edit);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Engine.instance.logger().error("Failed to place block for change action"
-                                + "\nSide: " + side
-                                + "\nChangeAction: " + blast
-                                + "\nEdit: " + edit
-                                , e);
                     }
                     it.remove();
                 }

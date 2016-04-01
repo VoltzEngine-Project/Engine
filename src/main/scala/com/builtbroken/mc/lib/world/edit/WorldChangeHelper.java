@@ -83,29 +83,32 @@ public final class WorldChangeHelper
                         {
                             for (IWorldEdit v : effectedBlocks)
                             {
-                                try
+                                if(v != null)
                                 {
-                                    action.handleBlockPlacement(v);
-                                }
-                                catch (Exception e)
-                                {
-                                    Engine.error("Failed to apply edit " + v + " for " + action);
-                                    returnValue = ChangeResult.PARTIAL_COMPLETE_WITH_FAILURE;
-                                }
-                                try
-                                {
-                                    if (action instanceof IWorldChangeAudio)
+                                    try
                                     {
-                                        ((IWorldChangeAudio) action).playAudioForEdit(v);
+                                        action.handleBlockPlacement(v);
                                     }
-                                    if (action instanceof IWorldChangeGraphics)
+                                    catch (Exception e)
                                     {
-                                        ((IWorldChangeGraphics) action).displayEffectForEdit(v);
+                                        Engine.error("Failed to apply edit " + v + " for " + action);
+                                        returnValue = ChangeResult.PARTIAL_COMPLETE_WITH_FAILURE;
                                     }
-                                }
-                                catch (Exception e)
-                                {
-                                    Engine.error("Failed to do graphics/audio for " + v + " for " + action);
+                                    try
+                                    {
+                                        if (action instanceof IWorldChangeAudio)
+                                        {
+                                            ((IWorldChangeAudio) action).playAudioForEdit(v);
+                                        }
+                                        if (action instanceof IWorldChangeGraphics)
+                                        {
+                                            ((IWorldChangeGraphics) action).displayEffectForEdit(v);
+                                        }
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Engine.error("Failed to do graphics/audio for " + v + " for " + action);
+                                    }
                                 }
                             }
                         }
