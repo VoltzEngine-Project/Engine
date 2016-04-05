@@ -115,7 +115,6 @@ public class BasicInventory implements ISave, IInventory, Iterable<Map.Entry<Int
             {
                 inventoryMap.remove(slot);
             }
-
             if (!InventoryUtility.stacksMatchExact(pre_stack, getStackInSlot(slot)))
             {
                 markDirty();
@@ -166,7 +165,6 @@ public class BasicInventory implements ISave, IInventory, Iterable<Map.Entry<Int
     @Override
     public void markDirty()
     {
-
     }
 
     @Override

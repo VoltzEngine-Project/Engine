@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.network.packet;
 
+import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.IPacketReceiver;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,48 +13,47 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public class PacketEntity extends PacketType
 {
-	protected int entityId;
+    protected int entityId;
 
-	public PacketEntity(Entity entity, Object... args)
-	{
-		super(args);
-		this.entityId = entity.getEntityId();
-	}
-
-	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
-	{
-		buffer.writeInt(this.entityId);
-		buffer.writeBytes(this.data());
-	}
-
-	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
-	{
-		this.entityId = buffer.readInt();
-		this.data_$eq(buffer.slice());
-
-	}
-
-	@Override
-	public void handleClientSide(EntityPlayer player)
-	{
-		Entity entity = player.getEntityWorld().getEntityByID(this.entityId);
-
-    if (entity instanceof IPacketReceiver)
+    public PacketEntity(Entity entity, Object... args)
     {
-        ((IPacketReceiver) entity).read(data(), player, this);
+        super(args);
+        this.entityId = entity.getEntityId();
     }
-}
 
-	@Override
-	public void handleServerSide(EntityPlayer player)
-	{
-		Entity entity = player.getEntityWorld().getEntityByID(this.entityId);
+    @Override
+    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
+    {
+        buffer.writeInt(this.entityId);
+        buffer.writeBytes(this.data());
+    }
 
-		if (entity instanceof IPacketReceiver)
-		{
-			((IPacketReceiver) entity).read(data(), player, this);
-		}
-	}
+    @Override
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
+    {
+        this.entityId = buffer.readInt();
+        this.data_$eq(buffer.slice());
+
+    }
+
+    @Override
+    public void handleClientSide(EntityPlayer player)
+    {
+        handleServerSide(player);
+    }
+
+    @Override
+    public void handleServerSide(EntityPlayer player)
+    {
+        Entity entity = player.getEntityWorld().getEntityByID(this.entityId);
+
+        if (entity instanceof IPacketIDReceiver)
+        {
+            ((IPacketIDReceiver) entity).read(data(), data().readInt(), player, this);
+        }
+        else if (entity instanceof IPacketReceiver)
+        {
+            ((IPacketReceiver) entity).read(data(), player, this);
+        }
+    }
 }
