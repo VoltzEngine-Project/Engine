@@ -19,10 +19,12 @@ import java.util.Map;
  */
 public class BasicInventory implements ISave, IInventory, Iterable<Map.Entry<Integer, ItemStack>>
 {
-    /**
-     * Default slot max count
-     */
+    /** Default slot max count */
     protected int slots;
+
+    /** How much to shift the start of the inventory map,
+     * used to adjust save/load process accordingly */
+    protected int shiftSlotStart = 0;
 
     /** Map of the inventory */
     protected HashMap<Integer, ItemStack> inventoryMap = new HashMap();
@@ -122,7 +124,7 @@ public class BasicInventory implements ISave, IInventory, Iterable<Map.Entry<Int
         }
         else
         {
-            Engine.error("BasicInventory: something tried to set slot " + slot + " which is outside the 0 - " + (getSizeInventory() - 1) + " limit");
+            Engine.error("BasicInventory: something tried to set " + insertStack + " into slot " + slot + " which is outside the 0 - " + (getSizeInventory() - 1) + " limit");
         }
     }
 
@@ -199,13 +201,13 @@ public class BasicInventory implements ISave, IInventory, Iterable<Map.Entry<Int
     {
         NBTTagList nbtList = new NBTTagList();
 
-        for (int i = 0; i < this.getSizeInventory(); ++i)
+        for (int i = shiftSlotStart; i < this.getSizeInventory() + shiftSlotStart; ++i)
         {
-            if (this.getStackInSlot(i) != null)
+            if (this.getStackInSlot(i + shiftSlotStart) != null)
             {
                 NBTTagCompound var4 = new NBTTagCompound();
                 var4.setByte("Slot", (byte) i);
-                this.getStackInSlot(i).writeToNBT(var4);
+                this.getStackInSlot(i + shiftSlotStart).writeToNBT(var4);
                 nbtList.appendTag(var4);
             }
         }
