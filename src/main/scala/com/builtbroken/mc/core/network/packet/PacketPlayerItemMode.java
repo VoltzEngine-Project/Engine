@@ -13,7 +13,7 @@ public class PacketPlayerItemMode extends PacketPlayerItem
 {
     public PacketPlayerItemMode()
     {
-
+        //Needed for forge to construct the packet
     }
 
     public PacketPlayerItemMode(int slotId, int mode)

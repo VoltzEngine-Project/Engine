@@ -20,7 +20,7 @@ public class PacketSelectionData extends AbstractPacket
 
     public PacketSelectionData()
     {
-
+        //Needed for forge to construct the packet
     }
 
     public PacketSelectionData(Cube selection, List<Cube> cubes, List<Cube> regions)

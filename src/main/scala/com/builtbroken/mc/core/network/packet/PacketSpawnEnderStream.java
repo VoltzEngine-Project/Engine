@@ -23,7 +23,7 @@ public class PacketSpawnEnderStream extends PacketType
 
     public PacketSpawnEnderStream()
     {
-
+        //Needed for forge to construct the packet
     }
 
     /**

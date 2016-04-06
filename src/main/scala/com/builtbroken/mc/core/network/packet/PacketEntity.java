@@ -15,6 +15,11 @@ public class PacketEntity extends PacketType
 {
     protected int entityId;
 
+    public PacketEntity()
+    {
+        //Needed for forge to construct the packet
+    }
+
     public PacketEntity(Entity entity, Object... args)
     {
         super(args);

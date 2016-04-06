@@ -25,7 +25,7 @@ public class PacketTile extends PacketType
 
     public PacketTile()
     {
-
+        //Needed for forge to construct the packet
     }
 
     /**

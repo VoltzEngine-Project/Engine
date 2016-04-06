@@ -23,7 +23,7 @@ public class PacketSpawnParticle extends PacketType
 
     public PacketSpawnParticle()
     {
-
+        //Needed for forge to construct the packet
     }
 
     public PacketSpawnParticle(String name, int dim, double x, double y, double z, double vx, double vy, double vz)

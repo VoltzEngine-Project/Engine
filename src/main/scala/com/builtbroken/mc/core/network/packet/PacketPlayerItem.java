@@ -17,7 +17,7 @@ public class PacketPlayerItem extends PacketType
 
 	public PacketPlayerItem()
 	{
-
+		//Needed for forge to construct the packet
 	}
 
 	public PacketPlayerItem(int slotId, Object... args)
