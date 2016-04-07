@@ -20,29 +20,52 @@ import java.util.LinkedList;
  */
 public class WorldEditQueue extends LinkedList<IWorldEdit>
 {
+    /** World to modify */
     public final World world;
-    /** Handler for changes */
-    protected final IWorldChangeAction blast;
-    /** Number of edits per tick */
-    protected final int editsPerTick;
+    /** Handler for that created the change list, and is responsible for apply changes. */
+    protected final IWorldChangeAction action;
+    /** Number of edits per tick, keep it low to reduce block lag */
+    protected final int editsPerTick; //TODO add a check to see if is near a player, if not accelerate block placement as there will be no packets to cause lag
 
-    public WorldEditQueue(World world, IWorldChangeAction blast, int edits)
+    /**
+     * Creates a new edit que
+     *
+     * @param world  - world to edit
+     * @param action - handler for changes made to the world
+     * @param edits  - number of edits to do per tick
+     */
+    public WorldEditQueue(World world, IWorldChangeAction action, int edits)
     {
         this.world = world;
-        this.blast = blast;
+        this.action = action;
         this.editsPerTick = edits;
     }
 
-    public WorldEditQueue(World world, IWorldChangeAction blast, int edits, Collection<IWorldEdit> c)
+    /**
+     * Creates a new edit que
+     *
+     * @param world  - world to edit
+     * @param action - handler for changes made to the world
+     * @param edits  - number of edits to do per tick
+     * @param c      - list of edits to apply to the world
+     */
+    public WorldEditQueue(World world, IWorldChangeAction action, int edits, Collection<IWorldEdit> c)
     {
         super(c);
         this.world = world;
         this.editsPerTick = edits;
-        this.blast = blast;
+        this.action = action;
     }
 
+    /**
+     * Runs the world edit que. Called each tick for each world
+     *
+     * @param world - world to edit blocks in, make sure it matches the attended world
+     * @param side  - is client or is server
+     */
     public void runQue(World world, Side side)
     {
+        //TODO fix so this is not called for each world
         if (world == this.world)
         {
             try
@@ -52,28 +75,28 @@ public class WorldEditQueue extends LinkedList<IWorldEdit>
                 while (it.hasNext() && c++ <= editsPerTick)
                 {
                     IWorldEdit edit = it.next();
-                    if(edit != null)
+                    if (edit != null)
                     {
                         try
                         {
                             if (!world.isRemote)
                             {
-                                blast.handleBlockPlacement(edit);
+                                action.handleBlockPlacement(edit);
                             }
-                            if (blast instanceof IWorldChangeAudio)
+                            if (action instanceof IWorldChangeAudio)
                             {
-                                ((IWorldChangeAudio) blast).playAudioForEdit(edit);
+                                ((IWorldChangeAudio) action).playAudioForEdit(edit);
                             }
-                            if (blast instanceof IWorldChangeGraphics)
+                            if (action instanceof IWorldChangeGraphics)
                             {
-                                ((IWorldChangeGraphics) blast).displayEffectForEdit(edit);
+                                ((IWorldChangeGraphics) action).displayEffectForEdit(edit);
                             }
                         }
                         catch (Exception e)
                         {
                             Engine.instance.logger().error("Failed to place block for change action"
                                             + "\nSide: " + side
-                                            + "\nChangeAction: " + blast
+                                            + "\nChangeAction: " + action
                                             + "\nEdit: " + edit
                                     , e);
                         }
@@ -82,20 +105,20 @@ public class WorldEditQueue extends LinkedList<IWorldEdit>
                 }
                 if (isEmpty())
                 {
-                    if (blast instanceof IWorldChangeAudio)
+                    if (action instanceof IWorldChangeAudio)
                     {
-                        ((IWorldChangeAudio) blast).doEndAudio();
+                        ((IWorldChangeAudio) action).doEndAudio();
                     }
-                    if (blast instanceof IWorldChangeGraphics)
+                    if (action instanceof IWorldChangeGraphics)
                     {
-                        ((IWorldChangeGraphics) blast).doEndDisplay();
+                        ((IWorldChangeGraphics) action).doEndDisplay();
                     }
                 }
 
             }
             catch (Exception e)
             {
-                Engine.instance.logger().error("Crash while processing world change " + blast, e);
+                Engine.instance.logger().error("Crash while processing world change " + action, e);
             }
         }
     }
@@ -128,6 +151,6 @@ public class WorldEditQueue extends LinkedList<IWorldEdit>
     @Override
     public String toString()
     {
-        return "WorldEditQueue[" + blast + ", " + editsPerTick + ", " + hashCode() + "]";
+        return "WorldEditQueue[" + action + ", " + editsPerTick + ", " + hashCode() + "]";
     }
 }

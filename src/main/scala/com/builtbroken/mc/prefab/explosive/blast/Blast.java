@@ -8,9 +8,13 @@ import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.lib.world.edit.BlockEdit;
+import com.builtbroken.mc.lib.world.edit.BlockEditResult;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -126,8 +130,38 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     {
         if (vec != null && vec.hasChanged())
         {
-            vec.place();
+            if (vec instanceof BlockEdit && ((BlockEdit) vec).doItemDrop)
+            {
+                //Get drops before setting blocks due
+                List<ItemStack> items = ((BlockEdit) vec).getDrops(getFortuneModifierForBlockDrop());
+                if (vec.place() == BlockEditResult.PLACED)
+                {
+                    //Drop items only if block was set correctly
+                    for (ItemStack item : items)
+                    {
+                        //sanity checks, rare but do trigger sometimes on poorly coded mods
+                        if (item != null && item.getItem() != null && item.stackSize > 0)
+                        {
+                            InventoryUtility.dropItemStack(world, ((BlockEdit) vec).xi(), ((BlockEdit) vec).yi(), ((BlockEdit) vec).zi(), item, 2, 1); //TODO increase random by power of the blast
+                        }
+                    }
+                }
+            }
+            else
+            {
+                vec.place();
+            }
         }
+    }
+
+    /**
+     * Amount of fortune bonus for items harvest from blocks
+     *
+     * @return value equal to or greater than zero
+     */
+    protected int getFortuneModifierForBlockDrop()
+    {
+        return 0;
     }
 
     @Override

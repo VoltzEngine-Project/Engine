@@ -49,7 +49,7 @@ public final class WorldChangeHelper
         {
             if (action instanceof Blast && ((Blast) action).world() == null)
             {
-                Engine.error("Error world is null in blast object when attempting to trigger " + action);
+                Engine.error("Error world is null in action object when attempting to trigger " + action);
                 return ChangeResult.FAILED;
             }
             //Trigger even to allow blocking explosives

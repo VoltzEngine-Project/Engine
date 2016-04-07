@@ -3,9 +3,7 @@ package com.builtbroken.mc.lib.world.edit;
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.edit.IWorldEdit;
-import com.builtbroken.mc.lib.helper.DummyPlayer;
 import com.builtbroken.mc.lib.transform.vector.AbstractLocation;
-import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -19,7 +17,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +33,9 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
     public Block prev_block = Blocks.air;
     /** 0-15 meta that was at the location */
     public int prev_meta = 0;
+
+    /** Cached to get drops at time of call */
+    public List<ItemStack> drops;
 
     /** Block to place */
     public Block newBlock = Blocks.air;
@@ -127,8 +127,8 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
         this.newBlock = block;
         this.newMeta = meta;
         this.doItemDrop = doDrop;
-        logPrevBlock();
         this.checkForPrevBlockEquals = checkEquals;
+        logPrevBlock();
         return this;
     }
 
@@ -252,33 +252,26 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
         {
             return BlockEditResult.ALREADY_PLACED;
         }
-
-        //Get a list of drops from the killed block
-        ArrayList<ItemStack> items = null;
-        float chance = 0;
-        if (doItemDrop)
-        {
-            items = getBlock().getDrops(world, xi(), yi(), zi(), getBlockMetadata(), 0);
-            chance = ForgeEventFactory.fireBlockHarvesting(items, world, getBlock(), xi(), yi(), zi(), getBlockMetadata(), 0, 0, false, DummyPlayer.get(world));
-        }
-
         //Place the block and check if the world says its placed
         if (super.setBlock(world, newBlock, newMeta))
         {
-            //Handle item drops
-            if (doItemDrop)
-            {
-                for (ItemStack item : items)
-                {
-                    if (item != null && item.getItem() != null && item.stackSize > 0 && world.rand.nextFloat() <= chance)
-                    {
-                        InventoryUtility.dropItemStack(world, xi(), yi(), zi(), item, 2, 0);
-                    }
-                }
-            }
             return BlockEditResult.PLACED;
         }
         return BlockEditResult.BLOCKED;
+    }
+
+    public List<ItemStack> getDrops()
+    {
+        return getDrops(0);
+    }
+
+    public List<ItemStack> getDrops(int f)
+    {
+        if (doItemDrop)
+        {
+            return getBlock().getDrops(world, xi(), yi(), zi(), getBlockMetadata(), f);
+        }
+        return new ArrayList();
     }
 
     @Override
