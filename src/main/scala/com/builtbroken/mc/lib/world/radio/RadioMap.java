@@ -187,7 +187,7 @@ public class RadioMap
             {
                 for (IRadioWaveReceiver receiver : receive_to_chunks.keySet())
                 {
-                    if (receiver != null)
+                    if (receiver != null && receiver != sender)
                     {
                         Cube receiverRange = receiver.getRadioReceiverRange();
                         if (receiverRange.doesOverlap(range))
@@ -209,7 +209,7 @@ public class RadioMap
                     {
                         for (IRadioWaveReceiver r : l)
                         {
-                            if (r != null && !receivers.contains(r))
+                            if (r != null && r != sender && !receivers.contains(r))
                             {
                                 receivers.add(r);
                             }
@@ -259,7 +259,7 @@ public class RadioMap
             List<IRadioWaveReceiver> receivers = new ArrayList();
             for (IRadioWaveReceiver receiver : receive_to_chunks.keySet())
             {
-                if (receiver != null)
+                if (receiver != null && receiver != sender)
                 {
                     Cube receiverRange = receiver.getRadioReceiverRange();
                     if (receiverRange.doesOverlap(range))
