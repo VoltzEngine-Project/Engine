@@ -330,7 +330,7 @@ public class ModManager
      * @param item - item instance to register
      * @return item instance
      */
-    public Item newItem(Item item)
+    public <C extends Item> C newItem(C item)
     {
         return newItem(null, item);
     }
@@ -342,7 +342,7 @@ public class ModManager
      * @param item - item instance to register
      * @return item instance
      */
-    public Item newItem(String name, Item item)
+    public <C extends Item> C newItem(String name, C item)
     {
         if (name == null || name.isEmpty())
         {

@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.transform.region;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.api.map.radio.IRadioWaveReceiver;
 import com.builtbroken.mc.core.network.IByteBufWriter;
 import com.builtbroken.mc.lib.transform.vector.Point;
 import com.builtbroken.mc.lib.transform.vector.Pos;
@@ -11,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -575,6 +577,26 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
                         chunks.add(chunk);
                     }
                 }
+            }
+        }
+        return chunks;
+    }
+
+    /**
+     * Gets a lit of chunk coords, used when a list of chunks is not actually need.
+     *
+     * @return list of coords using cube bounds
+     * @see {@link com.builtbroken.mc.lib.world.radio.RadioMap#add(IRadioWaveReceiver)}
+     * for an example of usage.
+     */
+    public List<ChunkCoordIntPair> getChunkCoords()
+    {
+        List<ChunkCoordIntPair> chunks = new ArrayList();
+        for (int chunkX = (min().xi() >> 4) - 1; chunkX <= (max().xi() >> 4) + 1; chunkX++)
+        {
+            for (int chunkZ = (min().zi() >> 4) - 1; chunkZ <= (max().zi() >> 4) + 1; chunkZ++)
+            {
+                chunks.add(new ChunkCoordIntPair(chunkX, chunkZ));
             }
         }
         return chunks;
