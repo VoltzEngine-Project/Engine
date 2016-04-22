@@ -24,6 +24,8 @@ import java.util.List;
  */
 public final class RadarRegistry
 {
+    /** Used only for event calls */
+    public static final RadarRegistry INSTANCE = new RadarRegistry();
     //TODO add client side version for mini-map like systems
     //TODO add per machine tracking map that uses line of sight so hills can block it's view. (Visible Area Cache in other words)
     /** World id to radar map */

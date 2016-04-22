@@ -17,6 +17,9 @@ import java.util.HashMap;
  */
 public final class RadioRegistry
 {
+    /** Used only for event calls */
+    public static final RadioRegistry INSTANCE = new RadioRegistry();
+
     /** World id to radio maps */
     private static final HashMap<Integer, RadioMap> RADIO_MAPS = new HashMap();
 

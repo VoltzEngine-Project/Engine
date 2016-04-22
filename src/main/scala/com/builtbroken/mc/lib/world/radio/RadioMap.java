@@ -283,14 +283,17 @@ public class RadioMap
     public List<IRadioWaveReceiver> getReceiversInRange(Cube range, List excludeList)
     {
         List<IRadioWaveReceiver> receivers = new ArrayList();
-        for (IRadioWaveReceiver receiver : receive_to_chunks.keySet())
+        if(range != null)
         {
-            if (receiver != null && (excludeList == null || !excludeList.contains(receiver)))
+            for (IRadioWaveReceiver receiver : receive_to_chunks.keySet())
             {
-                Cube receiverRange = receiver.getRadioReceiverRange();
-                if (receiverRange.doesOverlap(range))
+                if (receiver != null && (excludeList == null || !excludeList.contains(receiver)))
                 {
-                    receivers.add(receiver);
+                    Cube receiverRange = receiver.getRadioReceiverRange();
+                    if (receiverRange != null && range.doesOverlap(receiverRange))
+                    {
+                        receivers.add(receiver);
+                    }
                 }
             }
         }

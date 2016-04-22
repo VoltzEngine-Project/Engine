@@ -159,6 +159,9 @@ public class WirelessNetwork implements IWirelessNetwork
         //Update list if we still have a sender
         if (hub != null && hub.getWirelessCoverageArea() != null)
         {
+            //================================
+            //==Discovery Phase===============
+            //================================
             //Get all receivers in range
             Cube range = hub.getWirelessCoverageArea();
             RadioMap map = RadioRegistry.getRadioMapForWorld(hub.world());
@@ -170,16 +173,21 @@ public class WirelessNetwork implements IWirelessNetwork
                 {
                     if (receiver instanceof IWirelessConnector)
                     {
-                        addConnector((IWirelessConnector) receiver); //Add each receiver to the list
+                        if (!addConnector((IWirelessConnector) receiver) && wirelessConnectors.contains(receiver))
+                        {
+                            //Update connection list as connector is not going to update every tick
+                            for (IWirelessNetworkObject object : ((IWirelessConnector) receiver).getWirelessNetworkObjects())
+                            {
+                                addConnection(((IWirelessConnector) receiver), object);
+                            }
+                        }
                     }
                 }
             }
-            //Add sender to receiver list
-            if (hub instanceof IWirelessConnector)
-            {
-                addConnector((IWirelessConnector) hub);
-            }
 
+            //================================
+            //==Clean Up Phase================
+            //================================
             //Clear invalid connectors
             Iterator<IWirelessConnector> it2 = wirelessConnectors.iterator();
             while (it2.hasNext())
@@ -189,7 +197,7 @@ public class WirelessNetwork implements IWirelessNetwork
                 {
                     it2.remove();
                     clearConnections(con);
-                    //TODO notify listeners
+                    con.removeWirelessNetwork(this, ConnectionRemovedReason.TILE_INVALIDATE);
                 }
             }
 
@@ -219,15 +227,26 @@ public class WirelessNetwork implements IWirelessNetwork
     @Override
     public boolean addConnector(IWirelessConnector receiver)
     {
-        if (!wirelessConnectors.contains(receiver))
+        if (receiver.canConnectToNetwork(this) && !wirelessConnectors.contains(receiver))
         {
-            boolean b = wirelessConnectors.add(receiver); //TODO if not true, stop
-            List<IWirelessNetworkObject> objects = receiver.getWirelessNetworkObjects();
-            for (IWirelessNetworkObject object : objects)
+            boolean added = wirelessConnectors.add(receiver);
+            if (added)
             {
-                addConnection(object);
+                if (!attachedDevices.contains(receiver))
+                {
+                    attachedDevices.add(receiver);
+                    if (receiver instanceof IWirelessDataPoint)
+                    {
+                        dataPoints.add((IWirelessDataPoint) receiver);
+                    }
+                }
+                List<IWirelessNetworkObject> objects = receiver.getWirelessNetworkObjects();
+                for (IWirelessNetworkObject object : objects)
+                {
+                    addConnection(object);
+                }
             }
-            return b;
+            return added;
         }
         return false;
     }
@@ -246,17 +265,37 @@ public class WirelessNetwork implements IWirelessNetwork
         }
     }
 
+    /**
+     * Terminates the network and all connections
+     */
     public void kill()
     {
-        //TODO notify sub parts that the connection died
-        wirelessConnectors.clear();
-        attachedDevices.clear();
-        dataPoints.clear();
+        Iterator<IWirelessConnector> it2 = wirelessConnectors.iterator();
+        while (it2.hasNext())
+        {
+            IWirelessConnector con = it2.next();
+            con.removeWirelessNetwork(this, ConnectionRemovedReason.TILE_INVALIDATE);
+            it2.remove();
+        }
+
+        //Clear invalid attached devices
+        Iterator<IWirelessNetworkObject> it = attachedDevices.iterator();
+        while (it.hasNext())
+        {
+            IWirelessNetworkObject obj = it.next();
+            it.remove();
+            obj.removeWirelessNetwork(this, ConnectionRemovedReason.TILE_INVALIDATE);
+            if (obj instanceof IWirelessDataPoint)
+            {
+                dataPoints.remove(obj);
+                //TODO notify listeners
+            }
+        }
     }
 
     @Override
     public String toString()
     {
-        return "WirelessNetwork[" + hz + ", " + dataPoints.size() + "/" + attachedDevices.size() + " dataPoints, " + hub;
+        return "WirelessNetwork[" + hz + ", " + wirelessConnectors.size() + " connectors, " + dataPoints.size() + "/" + attachedDevices.size() + " dataPoints, " + hub;
     }
 }

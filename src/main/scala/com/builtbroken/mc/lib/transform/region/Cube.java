@@ -191,19 +191,19 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
         return !isOutSideX(x, i) || !isOutSideY(y, j) || !isOutSideZ(z, k);
     }
 
-    public boolean isOutSideX(double x, double i)
+    public boolean isOutSideX(double min, double max)
     {
-        return (min().x() > x || i > max().x());
+        return min().x() > min || max > max().x();
     }
 
-    public boolean isOutSideY(double y, double j)
+    public boolean isOutSideY(double max, double min)
     {
-        return (min().y() > y || j > max().y());
+        return min().y() > max || min > max().y();
     }
 
-    public boolean isOutSideZ(double z, double k)
+    public boolean isOutSideZ(double max, double min)
     {
-        return (min().z() > z || k > max().z());
+        return min().z() > max || min > max().z();
     }
 
     public boolean isInsideBounds(double x, double y, double z, double i, double j, double k)
