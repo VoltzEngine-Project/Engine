@@ -70,20 +70,25 @@ public class WirelessNetwork implements IWirelessNetwork
     }
 
     @Override
-    public void onConnectionAdded(IWirelessConnector connector, IWirelessNetworkObject object)
+    public boolean addConnection(IWirelessConnector connector, IWirelessNetworkObject object)
     {
-        addConnection(object);
-        List<IWirelessNetworkObject> objects = connectorToConnections.get(connector);
-        if (objects == null)
+        if (!attachedDevices.contains(object))
         {
-            objects = new ArrayList();
+            addConnection(object);
+            List<IWirelessNetworkObject> objects = connectorToConnections.get(connector);
+            if (objects == null)
+            {
+                objects = new ArrayList();
+            }
+            objects.add(object);
+            connectorToConnections.put(connector, objects);
+            return true; //TODO actually check it was added
         }
-        objects.add(object);
-        connectorToConnections.put(connector, objects);
+        return false;
     }
 
     @Override
-    public void onConnectionRemoved(IWirelessConnector connector, IWirelessNetworkObject object)
+    public boolean removeConnection(IWirelessConnector connector, IWirelessNetworkObject object)
     {
         //TODO notify sub parts that network has changed
         if (attachedDevices.contains(object))
@@ -101,18 +106,21 @@ public class WirelessNetwork implements IWirelessNetwork
                 dataPoints.remove(object);
             }
             object.removeWirelessNetwork(this, ConnectionRemovedReason.CONNECTION_LOST);
+            return true;
         }
+        return false;
     }
 
     @Override
-    public void onConnectionRemoved(IWirelessConnector connector)
+    public boolean removeConnector(IWirelessConnector connector)
     {
         //TODO notify sub parts that network has changed
         if (wirelessConnectors.contains(connector))
         {
-            wirelessConnectors.remove(connector);
             clearConnections(connector);
+            return wirelessConnectors.remove(connector);
         }
+        return false;
     }
 
     protected void clearConnections(IWirelessConnector connector)
@@ -154,7 +162,7 @@ public class WirelessNetwork implements IWirelessNetwork
             //Get all receivers in range
             Cube range = hub.getWirelessCoverageArea();
             RadioMap map = RadioRegistry.getRadioMapForWorld(hub.world());
-            List<IRadioWaveReceiver> receivers = map.getReceiversInRange(range, hub instanceof IRadioWaveReceiver ? (IRadioWaveReceiver)hub : null);
+            List<IRadioWaveReceiver> receivers = map.getReceiversInRange(range, hub instanceof IRadioWaveReceiver ? (IRadioWaveReceiver) hub : null);
             //Loop threw receivers
             if (!receivers.isEmpty())
             {
@@ -208,17 +216,20 @@ public class WirelessNetwork implements IWirelessNetwork
         }
     }
 
-    protected void addConnector(IWirelessConnector receiver)
+    @Override
+    public boolean addConnector(IWirelessConnector receiver)
     {
         if (!wirelessConnectors.contains(receiver))
         {
-            wirelessConnectors.add(receiver);
+            boolean b = wirelessConnectors.add(receiver); //TODO if not true, stop
             List<IWirelessNetworkObject> objects = receiver.getWirelessNetworkObjects();
             for (IWirelessNetworkObject object : objects)
             {
                 addConnection(object);
             }
+            return b;
         }
+        return false;
     }
 
     protected void addConnection(IWirelessNetworkObject object)
@@ -246,6 +257,6 @@ public class WirelessNetwork implements IWirelessNetwork
     @Override
     public String toString()
     {
-        return "WirelessNetwork[" + hz  + ", " + dataPoints + "/" + attachedDevices + " dataPoints, " + hub;
+        return "WirelessNetwork[" + hz + ", " + dataPoints.size() + "/" + attachedDevices.size() + " dataPoints, " + hub;
     }
 }
