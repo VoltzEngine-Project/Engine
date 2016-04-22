@@ -6,8 +6,12 @@ import com.builtbroken.mc.api.map.radio.wireless.*;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.world.radio.RadioMap;
 import com.builtbroken.mc.lib.world.radio.RadioRegistry;
+import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -26,6 +30,9 @@ public class WirelessNetwork implements IWirelessNetwork
 
     /** List of connectors to pull information from */
     protected final List<IWirelessConnector> wirelessConnectors = new ArrayList();
+
+    /** Map of connectors to connections, used mainly for cleanup */
+    protected final HashMap<IWirelessConnector, List<IWirelessNetworkObject>> connectorToConnections = new HashMap();
     /** Devices that are attached to the wireless network */
     protected final List<IWirelessNetworkObject> attachedDevices = new ArrayList();
     /** Quick access point for {@link #attachedDevices} that are data points */
@@ -65,15 +72,14 @@ public class WirelessNetwork implements IWirelessNetwork
     @Override
     public void onConnectionAdded(IWirelessConnector connector, IWirelessNetworkObject object)
     {
-        //TODO notify sub parts that network has changed
-        if (!attachedDevices.contains(object))
+        addConnection(object);
+        List<IWirelessNetworkObject> objects = connectorToConnections.get(connector);
+        if (objects == null)
         {
-            attachedDevices.add(object);
-            if (object instanceof IWirelessDataPoint)
-            {
-                dataPoints.add((IWirelessDataPoint) object);
-            }
+            objects = new ArrayList();
         }
+        objects.add(object);
+        connectorToConnections.put(connector, objects);
     }
 
     @Override
@@ -83,10 +89,18 @@ public class WirelessNetwork implements IWirelessNetwork
         if (attachedDevices.contains(object))
         {
             attachedDevices.remove(object);
+            List<IWirelessNetworkObject> objects = connectorToConnections.get(connector);
+            if (objects == null)
+            {
+                objects = new ArrayList();
+            }
+            objects.remove(object);
+            connectorToConnections.put(connector, objects);
             if (object instanceof IWirelessDataPoint)
             {
                 dataPoints.remove(object);
             }
+            object.removeWirelessNetwork(this, ConnectionRemovedReason.CONNECTION_LOST);
         }
     }
 
@@ -94,16 +108,36 @@ public class WirelessNetwork implements IWirelessNetwork
     public void onConnectionRemoved(IWirelessConnector connector)
     {
         //TODO notify sub parts that network has changed
-        if(wirelessConnectors.contains(connector))
+        if (wirelessConnectors.contains(connector))
         {
             wirelessConnectors.remove(connector);
-            for(IWirelessNetworkObject obj : connector.getWirelessNetworkObjects())
+            clearConnections(connector);
+        }
+    }
+
+    protected void clearConnections(IWirelessConnector connector)
+    {
+        //Clear cached connections
+        List<IWirelessNetworkObject> objects = connectorToConnections.get(connector);
+        if (objects != null)
+        {
+            for (IWirelessNetworkObject object : objects)
             {
-                attachedDevices.remove(obj);
-                if(obj instanceof IWirelessDataPoint)
+                attachedDevices.remove(object);
+                if (object instanceof IWirelessDataPoint)
                 {
-                    dataPoints.remove(obj);
+                    dataPoints.remove(object);
                 }
+            }
+        }
+        connectorToConnections.remove(connector);
+        //Double check by clearing objects that may not be cached but still added
+        for (IWirelessNetworkObject obj : connector.getWirelessNetworkObjects())
+        {
+            attachedDevices.remove(obj);
+            if (obj instanceof IWirelessDataPoint)
+            {
+                dataPoints.remove(obj);
             }
         }
     }
@@ -114,13 +148,6 @@ public class WirelessNetwork implements IWirelessNetwork
      */
     public void updateConnections()
     {
-        //TODO find better way to handle this that doesn't result in a clean slate each time
-        //TODO we need to keep track of additions and removals so sub parts can be updated
-        //Clear all as we have no way to ensure these are still connected
-        wirelessConnectors.clear();
-        attachedDevices.clear();
-        dataPoints.clear();
-
         //Update list if we still have a sender
         if (hub != null && hub.getRadioReceiverRange() != null)
         {
@@ -139,13 +166,46 @@ public class WirelessNetwork implements IWirelessNetwork
                     }
                 }
             }
+            //Add sender to receiver list
+            if (hub instanceof IWirelessConnector)
+            {
+                addConnector((IWirelessConnector) hub);
+            }
+
+            //Clear invalid connectors
+            Iterator<IWirelessConnector> it2 = wirelessConnectors.iterator();
+            while (it2.hasNext())
+            {
+                IWirelessConnector con = it2.next();
+                if (con instanceof TileEntity && ((TileEntity) con).isInvalid() || con instanceof Entity && !((Entity) con).isEntityAlive())
+                {
+                    it2.remove();
+                    clearConnections(con);
+                    //TODO notify listeners
+                }
+            }
+
+            //Clear invalid attached devices
+            Iterator<IWirelessNetworkObject> it = attachedDevices.iterator();
+            while (it.hasNext())
+            {
+                IWirelessNetworkObject obj = it.next();
+                if (obj instanceof TileEntity && ((TileEntity) obj).isInvalid() || obj instanceof Entity && !((Entity) obj).isEntityAlive())
+                {
+                    it.remove();
+                    obj.removeWirelessNetwork(this, ConnectionRemovedReason.TILE_INVALIDATE);
+                    if (obj instanceof IWirelessDataPoint)
+                    {
+                        dataPoints.remove(obj);
+                        //TODO notify listeners
+                    }
+                }
+            }
         }
-        //Add sender to receiver list
-        if (hub instanceof IWirelessConnector)
+        else
         {
-            addConnector((IWirelessConnector) hub);
+            kill();
         }
-        //TODO notify sub parts that network has changed
     }
 
     protected void addConnector(IWirelessConnector receiver)
@@ -156,14 +216,21 @@ public class WirelessNetwork implements IWirelessNetwork
             List<IWirelessNetworkObject> objects = receiver.getWirelessNetworkObjects();
             for (IWirelessNetworkObject object : objects)
             {
-                if (!attachedDevices.contains(object))
-                {
-                    attachedDevices.add(object);
-                    if (object instanceof IWirelessDataPoint)
-                    {
-                        dataPoints.add((IWirelessDataPoint) object);
-                    }
-                }
+                addConnection(object);
+            }
+        }
+    }
+
+    protected void addConnection(IWirelessNetworkObject object)
+    {
+        //TODO notify sub parts that network has changed
+        if (!attachedDevices.contains(object))
+        {
+            attachedDevices.add(object);
+            object.addWirelessNetwork(this);
+            if (object instanceof IWirelessDataPoint)
+            {
+                dataPoints.add((IWirelessDataPoint) object);
             }
         }
     }
@@ -174,5 +241,11 @@ public class WirelessNetwork implements IWirelessNetwork
         wirelessConnectors.clear();
         attachedDevices.clear();
         dataPoints.clear();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "WirelessNetwork[" + hz  + ", " + dataPoints + "/" + attachedDevices + " dataPoints, " + hub;
     }
 }
