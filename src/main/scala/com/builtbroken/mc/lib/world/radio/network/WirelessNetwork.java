@@ -149,12 +149,12 @@ public class WirelessNetwork implements IWirelessNetwork
     public void updateConnections()
     {
         //Update list if we still have a sender
-        if (hub != null && hub.getRadioReceiverRange() != null)
+        if (hub != null && hub.getWirelessCoverageArea() != null)
         {
             //Get all receivers in range
             Cube range = hub.getWirelessCoverageArea();
             RadioMap map = RadioRegistry.getRadioMapForWorld(hub.world());
-            List<IRadioWaveReceiver> receivers = map.getReceiversInRange(range, hub);
+            List<IRadioWaveReceiver> receivers = map.getReceiversInRange(range, hub instanceof IRadioWaveReceiver ? (IRadioWaveReceiver)hub : null);
             //Loop threw receivers
             if (!receivers.isEmpty())
             {
