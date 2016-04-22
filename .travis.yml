@@ -20,6 +20,6 @@ install: true
 script:
   - ./gradlew build javadoc coveralls jacocoTestReport publish -PbambooshortPlanName=VoltzEngine -Pdmodcurse=61545 -Plocal=true -S -i --refresh-dependencies
 jdk:
-  - oraclejdk7
+  - oraclejdk8
 after_success:
   - bash <(curl -s https://codecov.io/bash)
