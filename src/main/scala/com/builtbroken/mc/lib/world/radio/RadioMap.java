@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.world.radio;
 import com.builtbroken.mc.api.map.radio.IRadioWaveReceiver;
 import com.builtbroken.mc.api.map.radio.IRadioWaveSender;
 import com.builtbroken.mc.lib.transform.region.Cube;
+import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -256,20 +257,44 @@ public class RadioMap
         Cube range = sender.getRadioSenderRange();
         if (range != null)
         {
-            List<IRadioWaveReceiver> receivers = new ArrayList();
-            for (IRadioWaveReceiver receiver : receive_to_chunks.keySet())
+            sender_to_receivers_cache.put(sender, getReceiversInRange(range, sender instanceof IRadioWaveReceiver ? (IRadioWaveReceiver)sender : (IRadioWaveReceiver)null));
+        }
+    }
+
+    /**
+     * Gets a list of all receivers in the range
+     *
+     * @param range   - range to check inside
+     * @param exclude - object to ignore
+     * @return list of receivers, or empty list
+     */
+    public List<IRadioWaveReceiver> getReceiversInRange(Cube range, IRadioWaveReceiver exclude)
+    {
+        return getReceiversInRange(range, exclude != null ? Lists.newArrayList(exclude) : null);
+    }
+
+    /**
+     * Gets a list of all receivers in the range
+     *
+     * @param range       - range to check inside
+     * @param excludeList - tiles to ignore
+     * @return list of receivers, or empty list
+     */
+    public List<IRadioWaveReceiver> getReceiversInRange(Cube range, List excludeList)
+    {
+        List<IRadioWaveReceiver> receivers = new ArrayList();
+        for (IRadioWaveReceiver receiver : receive_to_chunks.keySet())
+        {
+            if (receiver != null && (excludeList == null || !excludeList.contains(receiver)))
             {
-                if (receiver != null && receiver != sender)
+                Cube receiverRange = receiver.getRadioReceiverRange();
+                if (receiverRange.doesOverlap(range))
                 {
-                    Cube receiverRange = receiver.getRadioReceiverRange();
-                    if (receiverRange.doesOverlap(range))
-                    {
-                        receivers.add(receiver);
-                    }
+                    receivers.add(receiver);
                 }
             }
-            sender_to_receivers_cache.put(sender, receivers);
         }
+        return receivers;
     }
 
     protected final ChunkCoordIntPair getChunkValue(int x, int z)
