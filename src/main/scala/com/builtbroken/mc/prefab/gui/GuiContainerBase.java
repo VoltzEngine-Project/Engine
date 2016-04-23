@@ -347,20 +347,17 @@ public class GuiContainerBase extends GuiContainer
         this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, meterWidth, meterHeight);
     }
 
-    protected void drawSlot(int x, int y, SlotType type, float r, float g, float b)
+    protected void drawSlot(int x, int y, EnumGuiIconSheet type, float r, float g, float b)
     {
-        this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
         GL11.glColor4f(r, g, b, 1.0F);
-
-        this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
-
-        if (type != SlotType.NONE)
+        EnumGuiIconSheet.NONE.draw(this, x, y);
+        if (type != EnumGuiIconSheet.NONE)
         {
-            this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 18 * type.ordinal(), 18, 18);
+            type.draw(this, x, y);
         }
     }
 
-    protected void drawSlot(int x, int y, SlotType type)
+    protected void drawSlot(int x, int y, EnumGuiIconSheet type)
     {
         this.drawSlot(x, y, type, 1, 1, 1);
     }
@@ -570,21 +567,5 @@ public class GuiContainerBase extends GuiContainer
                 }
             }
         }
-    }
-
-    public enum SlotType
-    {
-        NONE,
-        BATTERY,
-        LIQUID,
-        GAS,
-        ARR_UP,
-        ARR_DOWN,
-        ARR_LEFT,
-        ARR_RIGHT,
-        ARR_UP_RIGHT,
-        ARR_UP_LEFT,
-        ARR_DOWN_LEFT,
-        ARR_DOWN_RIGHT
     }
 }
