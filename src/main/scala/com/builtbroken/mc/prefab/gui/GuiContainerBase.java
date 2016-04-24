@@ -146,7 +146,9 @@ public class GuiContainerBase extends GuiContainer
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glDisable(GL11.GL_BLEND);
             for (GuiTextField field : fields)
+            {
                 field.drawTextBox();
+            }
         }
     }
 
@@ -157,10 +159,15 @@ public class GuiContainerBase extends GuiContainer
         for (GuiTextField field : fields)
         {
             field.textboxKeyTyped(c, id);
-            f = field.isFocused();
+            if (field.isFocused())
+            {
+                return;
+            }
         }
         if (!f)
+        {
             super.keyTyped(c, id);
+        }
     }
 
     @Override
@@ -168,7 +175,9 @@ public class GuiContainerBase extends GuiContainer
     {
         super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
         for (GuiTextField field : fields)
+        {
             field.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+        }
     }
 
     @Override
@@ -207,7 +216,9 @@ public class GuiContainerBase extends GuiContainer
         this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
 
         if (itemStack != null)
+        {
             this.drawItemStack(itemStack, this.containerWidth + x, this.containerHeight + y);
+        }
     }
 
     protected void drawItemStack(ItemStack itemStack, int x, int y)
@@ -350,10 +361,10 @@ public class GuiContainerBase extends GuiContainer
     protected void drawSlot(int x, int y, EnumGuiIconSheet type, float r, float g, float b)
     {
         GL11.glColor4f(r, g, b, 1.0F);
-        EnumGuiIconSheet.NONE.draw(this, x, y);
+        EnumGuiIconSheet.NONE.draw(this, x + containerWidth, y + containerHeight);
         if (type != EnumGuiIconSheet.NONE)
         {
-            type.draw(this, x, y);
+            type.draw(this, x + containerWidth, y + containerHeight);
         }
     }
 
