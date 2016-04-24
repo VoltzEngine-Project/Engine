@@ -22,9 +22,6 @@ import java.util.List;
  */
 public class WirelessNetwork implements IWirelessNetwork
 {
-    /** Frequency of the network */
-    public final float hz;
-
     /** Primary point for the network */
     protected IWirelessNetworkHub hub;
 
@@ -38,9 +35,8 @@ public class WirelessNetwork implements IWirelessNetwork
     /** Quick access point for {@link #attachedDevices} that are data points */
     protected final List<IWirelessDataPoint> dataPoints = new ArrayList();
 
-    public WirelessNetwork(float hz, IWirelessNetworkHub hub)
+    public WirelessNetwork(IWirelessNetworkHub hub)
     {
-        this.hz = hz;
         this.hub = hub;
     }
 
@@ -67,6 +63,12 @@ public class WirelessNetwork implements IWirelessNetwork
     public List<IWirelessNetworkObject> getAttachedObjects()
     {
         return attachedDevices;
+    }
+
+    @Override
+    public float getHz()
+    {
+        return hub.getBroadCastFrequency();
     }
 
     @Override
@@ -296,6 +298,6 @@ public class WirelessNetwork implements IWirelessNetwork
     @Override
     public String toString()
     {
-        return "WirelessNetwork[" + hz + ", " + wirelessConnectors.size() + " connectors, " + dataPoints.size() + "/" + attachedDevices.size() + " dataPoints, " + hub;
+        return "WirelessNetwork[" + hub.getBroadCastFrequency() + ", " + wirelessConnectors.size() + " connectors, " + dataPoints.size() + "/" + attachedDevices.size() + " dataPoints, " + hub;
     }
 }
