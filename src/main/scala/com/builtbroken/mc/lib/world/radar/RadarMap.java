@@ -24,6 +24,8 @@ public class RadarMap
     protected HashMap<ChunkCoordIntPair, List<RadarObject>> chunk_to_entities = new HashMap();
     protected List<RadarObject> allEntities = new ArrayList();
 
+    int ticks = 0;
+    static final int UPDATE_DELAY = 20;
 
     /**
      * Dimension ID
@@ -41,27 +43,59 @@ public class RadarMap
      */
     public void update()
     {
-        //TODO consider multi-threading if number of entries is too high (need to ensure runs in less than 10ms~)
-        for (Map.Entry<ChunkCoordIntPair, List<RadarObject>> entry : chunk_to_entities.entrySet())
+        if (ticks++ >= UPDATE_DELAY && chunk_to_entities.size() > 0)
         {
-            if (entry.getValue() != null)
+            ticks = 0;
+            //TODO consider multi-threading if number of entries is too high (need to ensure runs in less than 10ms~)
+            HashMap<RadarObject, ChunkCoordIntPair> removeList = new HashMap();
+            List<RadarObject> addList = new ArrayList();
+            for (Map.Entry<ChunkCoordIntPair, List<RadarObject>> entry : chunk_to_entities.entrySet())
             {
-                Iterator<RadarObject> it = entry.getValue().iterator();
-                while (it.hasNext())
+                if (entry.getValue() != null)
                 {
-                    RadarObject object = it.next();
-                    if (entry.getKey() != object.getChunkCoordIntPair())
+                    for (RadarObject object : entry.getValue())
                     {
-                        it.remove();
-                        if (object.isValid())
+                        if (entry.getKey() != object.getChunkCoordIntPair())
                         {
-                            add(object);
-                        }
-                        else
-                        {
-                            allEntities.remove(object);
+                            removeList.put(object, entry.getKey());
+                            if (object.isValid())
+                            {
+                                addList.add(object);
+                            }
                         }
                     }
+                }
+            }
+            for (Map.Entry<RadarObject, ChunkCoordIntPair> entry : removeList.entrySet())
+            {
+                allEntities.remove(entry.getKey());
+                List<RadarObject> list = chunk_to_entities.get(entry.getValue());
+                if (list != null)
+                {
+                    list.remove(entry.getKey());
+                    if (list.size() > 0)
+                    {
+                        chunk_to_entities.put(entry.getValue(), list);
+                    }
+                    else
+                    {
+                        chunk_to_entities.remove(entry.getValue());
+                    }
+                }
+                else
+                {
+                    chunk_to_entities.remove(entry.getValue());
+                }
+            }
+            addList.forEach(this::add);
+
+            Iterator<RadarObject> it = allEntities.iterator();
+            while (it.hasNext())
+            {
+                RadarObject object = it.next();
+                if (object.isValid())
+                {
+                    it.remove();
                 }
             }
         }
@@ -79,8 +113,9 @@ public class RadarMap
 
     public boolean add(RadarObject object)
     {
-        if (!allEntities.contains(object))
+        if (!allEntities.contains(object) && object.isValid())
         {
+            allEntities.add(object);
             ChunkCoordIntPair pair = getChunkValue((int) object.x(), (int) object.z());
             List<RadarObject> list;
 

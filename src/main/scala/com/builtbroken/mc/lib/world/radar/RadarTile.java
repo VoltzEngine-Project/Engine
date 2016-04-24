@@ -21,7 +21,7 @@ public class RadarTile extends RadarObject<TileEntity>
     @Override
     public boolean isValid()
     {
-        return tile != null && tile.hasWorldObj();
+        return tile != null && tile.hasWorldObj() && !tile.isInvalid();
     }
 
     @Override
@@ -51,10 +51,10 @@ public class RadarTile extends RadarObject<TileEntity>
     @Override
     public boolean equals(Object object)
     {
-        if (object instanceof TileEntity && tile != null)
+        if (object instanceof RadarTile)
         {
             //No need to compare world as radar contacts should only be stored per world
-            return new Pos((TileEntity) object).equals(new Pos(tile));
+            return ((RadarTile) object).tile == tile || new Pos(((RadarTile) object).tile).equals(new Pos(tile));
         }
         return false;
     }

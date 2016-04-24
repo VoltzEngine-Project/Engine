@@ -19,7 +19,7 @@ public class RadarEntity extends RadarObject<Entity>
     @Override
     public boolean isValid()
     {
-        return entity != null && !entity.isDead && entity.worldObj != null;
+        return entity != null && !entity.isEntityAlive() && entity.worldObj != null;
     }
 
     @Override
@@ -49,9 +49,9 @@ public class RadarEntity extends RadarObject<Entity>
     @Override
     public boolean equals(Object object)
     {
-        if (object instanceof Entity && entity != null)
+        if (object instanceof RadarEntity && ((RadarEntity) object).isValid())
         {
-            return object == entity || ((Entity) object).getEntityId() == entity.getEntityId();
+            return ((RadarEntity) object).entity == entity || ((RadarEntity) object).entity != null && entity != null && ((RadarEntity) object).entity.getEntityId() == entity.getEntityId();
         }
         return false;
     }
