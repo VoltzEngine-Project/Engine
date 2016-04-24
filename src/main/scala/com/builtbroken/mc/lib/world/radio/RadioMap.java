@@ -191,7 +191,7 @@ public class RadioMap
                     if (receiver != null && receiver != sender)
                     {
                         Cube receiverRange = receiver.getRadioReceiverRange();
-                        if (receiverRange.doesOverlap(range))
+                        if (range.doesOverlap(receiverRange) || receiverRange.doesOverlap(range))
                         {
                             receiver.receiveRadioWave(hz, sender, header, data);
                         }
