@@ -34,5 +34,15 @@ public class GuiButton2 extends GuiButton
         super(id, x, y, width, height, key);
     }
 
+    public GuiButton2 enable()
+    {
+        this.enabled = true;
+        return this;
+    }
 
+    public GuiButton2 disable()
+    {
+        this.enabled = false;
+        return this;
+    }
 }

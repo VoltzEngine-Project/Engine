@@ -53,6 +53,6 @@ public enum EnumGuiIconSheet
     public void draw(Gui gui, int x, int y)
     {
         Minecraft.getMinecraft().renderEngine.bindTexture(References.GUI_COMPONENTS);
-        gui.drawTexturedModalRect(x + (gui instanceof GuiContainerBase ? ((GuiContainerBase) gui).containerWidth : 0), y + (gui instanceof GuiContainerBase ? ((GuiContainerBase) gui).containerHeight : 0), this.x, this.y, 18, 18);
+        gui.drawTexturedModalRect(x, y, this.x, this.y, 18, 18);
     }
 }

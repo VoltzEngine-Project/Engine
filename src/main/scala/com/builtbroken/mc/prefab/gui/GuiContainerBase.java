@@ -350,10 +350,10 @@ public class GuiContainerBase extends GuiContainer
     protected void drawSlot(int x, int y, EnumGuiIconSheet type, float r, float g, float b)
     {
         GL11.glColor4f(r, g, b, 1.0F);
-        EnumGuiIconSheet.NONE.draw(this, x, y);
+        EnumGuiIconSheet.NONE.draw(this, x  + containerWidth, y + containerHeight);
         if (type != EnumGuiIconSheet.NONE)
         {
-            type.draw(this, x, y);
+            type.draw(this, x  + containerWidth, y + containerHeight);
         }
     }
 
