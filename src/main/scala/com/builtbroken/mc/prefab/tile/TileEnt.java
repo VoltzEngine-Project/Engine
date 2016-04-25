@@ -8,6 +8,9 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
  * Created by robert on 1/12/2015.
  */
@@ -25,6 +28,10 @@ public class TileEnt extends Tile
     {
         try
         {
+            if (Engine.runningAsDev && !GraphicsEnvironment.isHeadless())
+            {
+                JOptionPane.showMessageDialog(null, "Class: " + getClass() + " needs to implement the newTile() call! Rather than using reflection!", "InfoBox: Missing newTile()", JOptionPane.INFORMATION_MESSAGE);
+            }
             return getClass().newInstance();
         }
         catch (InstantiationException | IllegalAccessException e)
@@ -36,7 +43,7 @@ public class TileEnt extends Tile
 
     public boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type)
     {
-        if(id == DESCRIPTION_PACKET_ID)
+        if (id == DESCRIPTION_PACKET_ID)
         {
             readDescPacket(buf);
             return true;
@@ -63,7 +70,7 @@ public class TileEnt extends Tile
             writeDescPacket(packet.data());
             return packet;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Engine.instance.logger().error("Failed to write description packet for " + this + "  ", e);
         }
