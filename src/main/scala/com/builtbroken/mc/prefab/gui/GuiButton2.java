@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiButton;
 /**
  * Wrapper/Utility version of the default MC button
  * Is also used a prefab for buttons with more features
- * <p/>
+ * <p>
  * Created by robert on 4/23/2015.
  * TODO need a class name
  */
@@ -43,6 +43,12 @@ public class GuiButton2 extends GuiButton
     public GuiButton2 disable()
     {
         this.enabled = false;
+        return this;
+    }
+
+    public GuiButton2 setEnabled(boolean enabled)
+    {
+        this.enabled = enabled;
         return this;
     }
 }
