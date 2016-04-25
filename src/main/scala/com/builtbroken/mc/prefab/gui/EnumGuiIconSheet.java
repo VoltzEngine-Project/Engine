@@ -43,16 +43,25 @@ public enum EnumGuiIconSheet
 
     public final int x;
     public final int y;
+    public final int width;
+    public final int height;
 
     EnumGuiIconSheet(int row, int col)
     {
-        x = col * 18;
-        y = row * 18;
+        this(col * 18, row * 18, 18, 18);
+    }
+
+    EnumGuiIconSheet(int x, int y, int width, int height)
+    {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
     public void draw(Gui gui, int x, int y)
     {
         Minecraft.getMinecraft().renderEngine.bindTexture(References.GUI_COMPONENTS);
-        gui.drawTexturedModalRect(x, y, this.x, this.y, 18, 18);
+        gui.drawTexturedModalRect(x, y, this.x, this.y, width, height);
     }
 }
