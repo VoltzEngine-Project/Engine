@@ -187,6 +187,12 @@ public class WirelessNetwork implements IWirelessNetwork
                 }
             }
 
+            //Ensure we have added the primary sender if it is a connector
+            if (getPrimarySender() instanceof IWirelessConnector)
+            {
+                addConnector((IWirelessConnector) getPrimarySender());
+            }
+
             //================================
             //==Clean Up Phase================
             //================================
@@ -229,26 +235,33 @@ public class WirelessNetwork implements IWirelessNetwork
     @Override
     public boolean addConnector(IWirelessConnector receiver)
     {
-        if (receiver.canConnectToNetwork(this) && !wirelessConnectors.contains(receiver))
+        if (receiver.canConnectToNetwork(this))
         {
-            boolean added = wirelessConnectors.add(receiver);
-            if (added)
+            boolean added = false;
+            if (!wirelessConnectors.contains(receiver))
             {
-                if (!attachedDevices.contains(receiver))
+                added = wirelessConnectors.add(receiver);
+                if (added)
                 {
-                    attachedDevices.add(receiver);
-                    if (receiver instanceof IWirelessDataPoint)
+                    receiver.addWirelessNetwork(this);
+                    if (!attachedDevices.contains(receiver))
                     {
-                        dataPoints.add((IWirelessDataPoint) receiver);
+                        attachedDevices.add(receiver);
+                        if (receiver instanceof IWirelessDataPoint)
+                        {
+                            dataPoints.add((IWirelessDataPoint) receiver);
+                        }
                     }
                 }
-                List<IWirelessNetworkObject> objects = receiver.getWirelessNetworkObjects();
-                for (IWirelessNetworkObject object : objects)
-                {
-                    addConnection(object);
-                }
+            }
+            //Update connections,
+            List<IWirelessNetworkObject> objects = receiver.getWirelessNetworkObjects();
+            for (IWirelessNetworkObject object : objects)
+            {
+                addConnection(object);
             }
             return added;
+
         }
         return false;
     }
