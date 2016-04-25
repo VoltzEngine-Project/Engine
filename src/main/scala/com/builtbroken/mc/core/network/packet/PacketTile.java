@@ -125,18 +125,28 @@ public class PacketTile extends PacketType
                 try
                 {
                     id = buf.readInt();
-                } catch (IndexOutOfBoundsException ex)
+                }
+                catch (IndexOutOfBoundsException ex)
                 {
                     Engine.instance.logger().error(new PacketIDException(location));
                     return;
                 }
                 receiver.read(buf, id, player, this);
-            } catch (IndexOutOfBoundsException e)
+            }
+            catch (IndexOutOfBoundsException e)
             {
                 Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
-            } catch (Exception e)
+                Engine.instance.logger().error("Error: ", e);
+            }
+            catch (NullPointerException e)
+            {
+                Engine.instance.logger().error(new PacketTileReadException(location, "Null pointer while reading data", e));
+                Engine.instance.logger().error("Error: ", e);
+            }
+            catch (Exception e)
             {
                 Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
+                Engine.instance.logger().error("Error: ", e);
             }
         }
         else if (tile instanceof IPacketReceiver)
@@ -145,10 +155,12 @@ public class PacketTile extends PacketType
             {
                 IPacketReceiver receiver = (IPacketReceiver) tile;
                 receiver.read(data().slice(), player, this);
-            } catch (IndexOutOfBoundsException e)
+            }
+            catch (IndexOutOfBoundsException e)
             {
                 Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
                 e.printStackTrace();
