@@ -8,12 +8,22 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 /**
  * @author Zmaster
  */
 public class FxRocketFire extends EntityFX
 {
     public static final ResourceLocation icon = new ResourceLocation(References.DOMAIN, "textures/particle/soft.png");
+
+    public FxRocketFire(World world, Color color, double x, double y, double z, double motx, double moty, double motz)
+    {
+        this(world, x, y, z, motx, moty, motz);
+        this.particleRed = (color.getRed() / 255) + this.rand.nextFloat() / 10f;
+        this.particleGreen = (color.getGreen() / 255) + this.rand.nextFloat() / 5f;
+        this.particleBlue = (color.getBlue() / 255);
+    }
 
     public FxRocketFire(World world, double x, double y, double z, double motx, double moty, double motz)
     {
