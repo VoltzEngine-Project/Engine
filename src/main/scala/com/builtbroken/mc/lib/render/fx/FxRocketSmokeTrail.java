@@ -10,6 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 /**
  * @author Zmaster
  *         edited by DarkGuardsman
@@ -20,6 +22,16 @@ public class FxRocketSmokeTrail extends EntityFX
 
     public FxRocketSmokeTrail(World world, double x, double y, double z, double motx, double moty, double motz, int age)
     {
+        this(world, .4F, .4F, .4F, x, y, z, motx, moty, motz, age);
+    }
+
+    public FxRocketSmokeTrail(World world, Color color, double x, double y, double z, double motx, double moty, double motz, int age)
+    {
+        this(world, (color.getRed() / 255), (color.getGreen() / 255), (color.getBlue() / 255), x, y, z, motx, moty, motz, age);
+    }
+
+    public FxRocketSmokeTrail(World world, float r, float g, float b, double x, double y, double z, double motx, double moty, double motz, int age)
+    {
         super(world, x, y, z, motx, moty, motz);
 
         this.prevPosX = this.posX = this.lastTickPosX = x;
@@ -27,9 +39,9 @@ public class FxRocketSmokeTrail extends EntityFX
         this.prevPosZ = this.posZ = this.lastTickPosZ = z;
 
         float chroma = this.rand.nextFloat() * 0.2f;
-        this.particleRed = .4F + chroma;
-        this.particleGreen = .4F + chroma;
-        this.particleBlue = .4F + chroma;
+        this.particleRed = r + chroma;
+        this.particleGreen = g + chroma;
+        this.particleBlue = b + chroma;
         this.setSize(0.12F, 0.12F);
         this.particleScale *= this.rand.nextFloat() * 0.6F + 4F;
         this.motionX = motx;
