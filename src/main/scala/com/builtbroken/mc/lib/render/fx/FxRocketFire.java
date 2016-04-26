@@ -20,9 +20,9 @@ public class FxRocketFire extends EntityFX
     public FxRocketFire(World world, Color color, double x, double y, double z, double motx, double moty, double motz)
     {
         this(world, x, y, z, motx, moty, motz);
-        this.particleRed = (color.getRed() / 255) + this.rand.nextFloat() / 10f;
-        this.particleGreen = (color.getGreen() / 255) + this.rand.nextFloat() / 5f;
-        this.particleBlue = (color.getBlue() / 255);
+        this.particleRed = (color.getRed() / 255f); // + this.rand.nextFloat() / 10f;
+        this.particleGreen = (color.getGreen() / 255f); // + this.rand.nextFloat() / 5f;
+        this.particleBlue = (color.getBlue() / 255f);
     }
 
     public FxRocketFire(World world, double x, double y, double z, double motx, double moty, double motz)

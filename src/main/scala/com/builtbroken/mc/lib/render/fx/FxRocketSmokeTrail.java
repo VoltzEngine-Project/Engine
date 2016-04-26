@@ -27,7 +27,7 @@ public class FxRocketSmokeTrail extends EntityFX
 
     public FxRocketSmokeTrail(World world, Color color, double x, double y, double z, double motx, double moty, double motz, int age)
     {
-        this(world, (color.getRed() / 255), (color.getGreen() / 255), (color.getBlue() / 255), x, y, z, motx, moty, motz, age);
+        this(world, (color.getRed() / 255f), (color.getGreen() / 255f), (color.getBlue() / 255f), x, y, z, motx, moty, motz, age);
     }
 
     public FxRocketSmokeTrail(World world, float r, float g, float b, double x, double y, double z, double motx, double moty, double motz, int age)
