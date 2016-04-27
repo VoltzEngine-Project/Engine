@@ -60,12 +60,15 @@ public class CommandDebugRecipes extends SubCommand
                     }
                 }
                 HashMap<ItemStackWrapper, List<IRecipe>> recipeMap = new HashMap();
+                HashMap<Item, List<IRecipe>> itemToRecipes = new HashMap();
+
                 sender.addChatMessage(new ChatComponentText("Found " + items.size() + " items for the mod " + modID + " moving on to processing recipes"));
+
                 for (Object r : CraftingManager.getInstance().getRecipeList())
                 {
                     if (r instanceof IRecipe)
                     {
-                        if (items.contains(((IRecipe) r).getRecipeOutput()))
+                        if (((IRecipe) r).getRecipeOutput() != null && items.contains(((IRecipe) r).getRecipeOutput().getItem()))
                         {
                             ItemStackWrapper wrapper = new ItemStackWrapper(((IRecipe) r).getRecipeOutput());
                             List<IRecipe> list = recipeMap.get(wrapper);
@@ -75,17 +78,27 @@ public class CommandDebugRecipes extends SubCommand
                             }
                             list.add((IRecipe) r);
                             recipeMap.put(wrapper, list);
+                            itemToRecipes.put(((IRecipe) r).getRecipeOutput().getItem(), list);
+
                         }
                     }
                 }
                 sender.addChatMessage(new ChatComponentText("Mapped " + recipeMap.size() + " entries with recipes"));
                 if (args.length == 1 || args[1].equalsIgnoreCase("conflict"))
                 {
-
+                    sender.addChatMessage(new ChatComponentText("Not implemented yet"));
                     return true;
                 }
                 else if (args[1].equalsIgnoreCase("missing"))
                 {
+                    //TODO add handling for subtypes
+                    for (Item item : items)
+                    {
+                        if (!itemToRecipes.containsKey(item))
+                        {
+                            sender.addChatMessage(new ChatComponentText("Item[" + item + "] has no recipes for any subtype"));
+                        }
+                    }
                     return true;
                 }
             }
