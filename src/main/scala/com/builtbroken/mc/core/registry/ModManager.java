@@ -2,14 +2,17 @@ package com.builtbroken.mc.core.registry;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
+import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +23,7 @@ import java.util.WeakHashMap;
 /**
  * Helper class that can be used to reduce the amount of code used to handle general object registration. Handles basic block and item
  * creation threw reflection. As well follows up by setting a common creative tab, mod prefix, localization name, and texture name.
- * <p/>
+ * <p>
  * If you use this make sure to init prefix, call {@link #fireInit()}, and {@link #firePostInit()}. If you fail to do so the manager will
  * not fully function. As well most of your blocks will not recipe the correct method calls from the manager.
  *
@@ -297,7 +300,7 @@ public class ModManager
                     paramTypes.add(arg.getClass());
                 }
 
-                item = (Item)clazz.getConstructor(paramTypes.toArray(new Class[paramTypes.size()])).newInstance();
+                item = (Item) clazz.getConstructor(paramTypes.toArray(new Class[paramTypes.size()])).newInstance();
             }
             else
             {
@@ -355,6 +358,9 @@ public class ModManager
         return item;
     }
 
+    /**
+     * Called during init phase of mod loading
+     */
     public void fireInit()
     {
         for (Object object : temp_registry_list)
@@ -363,6 +369,9 @@ public class ModManager
         }
     }
 
+    /**
+     * Called during post init phase of mod loading
+     */
     public void firePostInit()
     {
         for (Object object : temp_registry_list)
@@ -370,6 +379,44 @@ public class ModManager
             if (object instanceof IPostInit)
             {
                 ((IPostInit) object).onPostInit();
+            }
+        }
+        for (Object object : temp_registry_list)
+        {
+            if (object instanceof IRecipeContainer)
+            {
+                List<IRecipe> recipes = new ArrayList();
+                ((IRecipeContainer) object).genRecipes(recipes);
+                for (IRecipe recipe : recipes)
+                {
+                    if (recipe.getRecipeOutput() != null)
+                    {
+                        if (recipe.getRecipeOutput().getItem() != null)
+                        {
+                            if (recipe.getRecipeOutput().getMaxStackSize() > 0)
+                            {
+                                //TODO check that input -> output
+                                //TODO check for basic errors
+                                //TODO check size
+                                //TODO check for missing items
+                                //TODO check for oreName replacement
+                                GameRegistry.addRecipe(recipe);
+                            }
+                            else if (Engine.runningAsDev)
+                            {
+                                throw new IllegalArgumentException("Recipe[" + recipe + "] output's stack size is less than 1");
+                            }
+                        }
+                        else if (Engine.runningAsDev)
+                        {
+                            throw new IllegalArgumentException("Recipe[" + recipe + "] output's item is null");
+                        }
+                    }
+                    else if (Engine.runningAsDev)
+                    {
+                        throw new IllegalArgumentException("Recipe[" + recipe + "] output is null");
+                    }
+                }
             }
         }
     }
