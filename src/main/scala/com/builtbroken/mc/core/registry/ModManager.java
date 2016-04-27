@@ -96,7 +96,7 @@ public class ModManager
                     paramTypes.add(arg.getClass());
                 }
 
-                spatial = (Tile)spatialClass.getConstructor(paramTypes.toArray(new Class[paramTypes.size()])).newInstance();
+                spatial = spatialClass.getConstructor(paramTypes.toArray(new Class[paramTypes.size()])).newInstance();
             }
             else
             {
