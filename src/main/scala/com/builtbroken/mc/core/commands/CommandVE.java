@@ -1,5 +1,7 @@
 package com.builtbroken.mc.core.commands;
 
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.commands.debug.CommandDebugRecipes;
 import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.core.commands.ext.ModularCommandRemoveAdd;
 import com.builtbroken.mc.core.commands.ext.SubCommandWithName;
@@ -37,6 +39,7 @@ public class CommandVE extends ModularCommand
     private ModularCommand sub_command_remove_perm;
     private ModularCommand sub_command_group;
     private ModularCommand sub_command_user;
+    private ModularCommand sub_command_debug;
 
 
     private CommandVE()
@@ -65,6 +68,20 @@ public class CommandVE extends ModularCommand
             region.addCommand(region_remove);
             addCommand(region);
         }
+        if(Engine.runningAsDev)
+        {
+            addToDebugCommand(new CommandDebugRecipes());
+        }
+    }
+
+    public void addToDebugCommand(AbstractCommand command)
+    {
+        if (sub_command_debug == null)
+        {
+            sub_command_debug = new ModularCommand("debug");
+            addCommand(sub_command_debug);
+        }
+        sub_command_debug.addCommand(command);
     }
 
     public void addToNewCommand(AbstractCommand command)
