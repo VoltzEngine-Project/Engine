@@ -22,6 +22,8 @@ public class ItemInstaHole extends Item
 {
     public ItemInstaHole()
     {
+        this.setHasSubtypes(true);
+        this.setMaxStackSize(1);
         this.setCreativeTab(CreativeTabs.tabTools);
     }
 

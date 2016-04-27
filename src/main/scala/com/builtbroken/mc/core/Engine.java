@@ -13,10 +13,7 @@ import com.builtbroken.mc.core.content.resources.gems.*;
 import com.builtbroken.mc.core.content.resources.items.ItemGenMaterial;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
 import com.builtbroken.mc.core.content.resources.load.*;
-import com.builtbroken.mc.core.content.tool.ItemScrewdriver;
-import com.builtbroken.mc.core.content.tool.ItemSelectionWand;
-import com.builtbroken.mc.core.content.tool.ItemSheetMetalTools;
-import com.builtbroken.mc.core.content.tool.ItemSimpleCraftingTool;
+import com.builtbroken.mc.core.content.tool.*;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolMode;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeGeneral;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeRotation;
@@ -126,6 +123,7 @@ public class Engine
     public static Item instaHole;
     public static Item itemSelectionTool;
     public static Item itemCircuits;
+    public static Item itemDevTool;
     public static Item gem = null;
 
     //Interal trigger booleans
@@ -407,6 +405,10 @@ public class Engine
         if (getConfig().get("Content", "LoadInstantHole", runningAsDev, "This is a developer tool for checking if ores generated correctly. It creates a chunk sized hole in the ground replacing stone with air, and air with glass. Never enable or give this to normal users as it can be used for greifing.").getBoolean(runningAsDev))
         {
             instaHole = contentRegistry.newItem("ve.instanthole", new ItemInstaHole());
+        }
+        if (getConfig().get("Content", "LoadDevDataTool", runningAsDev, "This is a developer tool for checking data on blocks and tile").getBoolean(runningAsDev))
+        {
+            itemDevTool = contentRegistry.newItem("ve.devTool", new ItemDevData());
         }
         if (getConfig().get("Content", "LoadScrewDriver", true, "Basic tool for configuring, rotating, and picking up machines.").getBoolean(true))
         {

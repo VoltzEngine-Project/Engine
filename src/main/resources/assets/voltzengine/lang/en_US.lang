@@ -362,6 +362,10 @@ toolmode.mode=Mode
 toolmode.general.name=General
 toolmode.rotation.name=Rotation
 
+item.voltzengine:devDataTool.name=Dev Data Tool
+item.voltzengine:devDataTool.0.name=[DEV] Simple Block Data
+item.voltzengine:devDataTool.1.name=[DEV] Reflective Tile Data
+
 item.voltzengine:sheetMetalTools.name=Sheet Metal Tool
 item.voltzengine:sheetMetalTools.hammer.name=Sheet Metal Hammer
 item.voltzengine:sheetMetalTools.shears.name=Sheet Metal Shears
@@ -385,7 +389,7 @@ link.error.pos.distance.max.name=Distance to high
 link.error.pos.distance.min.name=Distance to low
 link.error.tile.invalid.name=Invalid linking tile
 link.error.code.match.name=Link code doesn't match
-link.error.data.stored=Link data already stored
+link.error.data.stored.name=Link data already stored
 link.error.pos.loop.name=Can't link to self, loop detected
 link.error.tile.limit.max.name=Max linked tiles reached
 link.error.tile.already.added.name=Tile already linked
