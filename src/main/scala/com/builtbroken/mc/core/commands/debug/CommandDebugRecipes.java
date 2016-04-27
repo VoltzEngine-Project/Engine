@@ -2,7 +2,6 @@ package com.builtbroken.mc.core.commands.debug;
 
 import com.builtbroken.mc.prefab.commands.SubCommand;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
-import com.builtbroken.mc.prefab.items.ItemStackWrapper;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import cpw.mods.fml.common.Loader;
 import net.minecraft.block.Block;
@@ -11,11 +10,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ChatComponentText;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,31 +48,19 @@ public class CommandDebugRecipes extends SubCommand
                 List<Item> items = InventoryUtility.getItemsForMod(modID);
                 if (items != null && !items.isEmpty())
                 {
-                    HashMap<ItemStackWrapper, List<IRecipe>> recipeMap = new HashMap();
                     HashMap<Item, List<IRecipe>> itemToRecipes = new HashMap();
 
                     sender.addChatMessage(new ChatComponentText("Found " + items.size() + " items for the mod " + modID + " moving on to processing recipes"));
 
-                    for (Object r : CraftingManager.getInstance().getRecipeList())
+                    for (Item item : items)
                     {
-                        if (r instanceof IRecipe)
+                        List<IRecipe> recipes = InventoryUtility.getRecipesWithOutput(item);
+                        if(recipes != null && recipes.size() > 0)
                         {
-                            if (((IRecipe) r).getRecipeOutput() != null && items.contains(((IRecipe) r).getRecipeOutput().getItem()))
-                            {
-                                ItemStackWrapper wrapper = new ItemStackWrapper(((IRecipe) r).getRecipeOutput());
-                                List<IRecipe> list = recipeMap.get(wrapper);
-                                if (list == null)
-                                {
-                                    list = new ArrayList();
-                                }
-                                list.add((IRecipe) r);
-                                recipeMap.put(wrapper, list);
-                                itemToRecipes.put(((IRecipe) r).getRecipeOutput().getItem(), list);
-
-                            }
+                            itemToRecipes.put(item, recipes);
                         }
                     }
-                    sender.addChatMessage(new ChatComponentText("Mapped " + recipeMap.size() + " entries with recipes"));
+                    sender.addChatMessage(new ChatComponentText("Mapped " + itemToRecipes.size() + " entries with recipes"));
                     if (args.length == 1 || args[1].equalsIgnoreCase("conflict"))
                     {
                         sender.addChatMessage(new ChatComponentText("Not implemented yet"));

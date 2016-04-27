@@ -19,6 +19,7 @@ import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -51,11 +52,20 @@ public class InventoryUtility
      */
     public static void mapItems()
     {
+        //Empty old data
+        MOD_TO_ITEMS.clear();
+        NAME_TO_ITEM.clear();
+
+        //Start logging
         Engine.logger().info("Mapping item data...");
         long time = System.nanoTime();
 
+        //Get registry
         FMLControlledNamespacedRegistry<Item> registry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
         Set set = registry.getKeys();
+
+        Engine.logger().info("  " + set.size() + " entries detected");
+        //Loop all entries
         for (Object obj : set)
         {
             if (obj instanceof String)
@@ -128,7 +138,60 @@ public class InventoryUtility
      */
     public static void mapRecipes()
     {
+        ITEMSTACK_TO_RECIPES.clear();
+        ITEM_TO_RECIPES.clear();
 
+        Engine.logger().info("Mapping basic recipe data...");
+        Engine.logger().info("   " + CraftingManager.getInstance().getRecipeList().size() + " recipes detected.");
+
+        long time = System.nanoTime();
+
+        for (Object r : CraftingManager.getInstance().getRecipeList())
+        {
+            if (r instanceof IRecipe && ((IRecipe) r).getRecipeOutput() != null)
+            {
+                ItemStackWrapper wrapper = new ItemStackWrapper(((IRecipe) r).getRecipeOutput());
+                List<IRecipe> list = ITEMSTACK_TO_RECIPES.get(wrapper);
+                if (list == null)
+                {
+                    list = new ArrayList();
+                }
+                list.add((IRecipe) r);
+                ITEMSTACK_TO_RECIPES.put(wrapper, list);
+                ITEM_TO_RECIPES.put(((IRecipe) r).getRecipeOutput().getItem(), list);
+            }
+        }
+        Engine.logger().info(" Done in.. " + StringHelpers.formatNanoTime(System.nanoTime() - time));
+    }
+
+    /**
+     * Gets all recipes with the given output item
+     *
+     * @param item - item
+     * @return list or null if none were mapped
+     */
+    public static List<IRecipe> getRecipesWithOutput(Item item)
+    {
+        if (ITEM_TO_RECIPES.isEmpty())
+        {
+            mapRecipes();
+        }
+        return ITEM_TO_RECIPES.get(item);
+    }
+
+    /**
+     * Gets all recipes with the given output item
+     *
+     * @param item - item
+     * @return list or null if none were mapped
+     */
+    public static List<IRecipe> getRecipesWithOutput(ItemStack item)
+    {
+        if (ITEMSTACK_TO_RECIPES.isEmpty())
+        {
+            mapRecipes();
+        }
+        return ITEMSTACK_TO_RECIPES.get(new ItemStackWrapper(item));
     }
 
     /**
