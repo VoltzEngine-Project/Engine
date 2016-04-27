@@ -15,6 +15,8 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -94,10 +96,18 @@ public class ItemDevData extends Item
                         int i = 0;
                         for (Field field : ReflectionUtility.getAllFields(tile.getClass()))
                         {
-                            player.addChatComponentMessage(new ChatComponentText("Field[" + i++ + ", " + field.getName() + "] = " + field.get(tile)));
-                            if (i % 5 == 0)
+                            if (!Modifier.isStatic(field.getModifiers()))
                             {
-                                player.addChatComponentMessage(new ChatComponentText(""));
+                                field.setAccessible(true);
+                                Object obj = field.get(tile);
+                                if(!(obj instanceof Collection))
+                                {
+                                    player.addChatComponentMessage(new ChatComponentText("Field[" + (i++) + ", " + field.getName() + "] = " + obj));
+                                    if (i % 5 == 0)
+                                    {
+                                        player.addChatComponentMessage(new ChatComponentText(""));
+                                    }
+                                }
                             }
                         }
                     }
