@@ -108,7 +108,7 @@ public class ItemDevData extends Item
                 }
                 catch (Exception e)
                 {
-                    player.addChatComponentMessage(new ChatComponentText("Failed to reflect data! see log for details!"));
+                    player.addChatComponentMessage(new ChatComponentText("Failed to reflect data! see log for details! " + e.getMessage()));
                     e.printStackTrace();
                 }
             }
