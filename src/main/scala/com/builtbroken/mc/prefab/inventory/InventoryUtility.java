@@ -1,10 +1,14 @@
 package com.builtbroken.mc.prefab.inventory;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.jlib.lang.StringHelpers;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.helper.DummyPlayer;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.prefab.items.ItemStackWrapper;
+import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,8 +16,10 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryLargeChest;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -22,7 +28,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Series of helper classes for dealing with any kind of inventory
@@ -31,6 +39,98 @@ import java.util.List;
  */
 public class InventoryUtility
 {
+    private static final HashMap<String, List<Item>> MOD_TO_ITEMS = new HashMap();
+    private static final HashMap<String, Object> NAME_TO_ITEM = new HashMap();
+    private static final HashMap<Item, List<IRecipe>> ITEM_TO_RECIPES = new HashMap();
+    private static final HashMap<ItemStackWrapper, List<IRecipe>> ITEMSTACK_TO_RECIPES = new HashMap();
+
+    /**
+     * Called to map all registered items to
+     * several data points. Such as mod to
+     * items.
+     */
+    public static void mapItems()
+    {
+        Engine.logger().info("Mapping item data...");
+        long time = System.nanoTime();
+
+        FMLControlledNamespacedRegistry<Item> registry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
+        Set set = registry.getKeys();
+        for (Object obj : set)
+        {
+            if (obj instanceof String)
+            {
+                String name = (String) obj;
+                String modID = name.substring(0, name.indexOf(":"));
+                name = name.substring(name.indexOf(":") + 1, name.length()).toLowerCase();
+
+                Object entry = registry.getObject(obj);
+                if (entry instanceof Item)
+                {
+                    Item item = (Item) entry;
+
+                    //Map items to mod name
+                    List<Item> items = MOD_TO_ITEMS.get(modID);
+                    if (items == null)
+                    {
+                        items = new ArrayList();
+                    }
+                    items.add(item);
+                    MOD_TO_ITEMS.put(modID, items);
+
+                    //Map item name to item
+                    Object nameEntry = NAME_TO_ITEM.get(name);
+                    if (nameEntry != null)
+                    {
+                        if (nameEntry instanceof Item)
+                        {
+                            List<Item> list = new ArrayList();
+                            list.add(item);
+                            list.add((Item) nameEntry);
+                            NAME_TO_ITEM.put(name, list);
+                        }
+                        else if (nameEntry instanceof List)
+                        {
+                            ((List) nameEntry).add(item);
+                            NAME_TO_ITEM.put(name, nameEntry);
+                        }
+                    }
+                    else
+                    {
+                        NAME_TO_ITEM.put(name, item);
+                    }
+                }
+            }
+        }
+        Engine.logger().info(" Done in.. " + StringHelpers.formatNanoTime(System.nanoTime() - time));
+    }
+
+    /**
+     * Gets all items registered to a mod
+     *
+     * @param modid - mod's id
+     * @return list or null if nothing was registered
+     */
+    public static List<Item> getItemsForMod(String modid)
+    {
+        if (MOD_TO_ITEMS.isEmpty())
+        {
+            mapItems();
+        }
+        return MOD_TO_ITEMS.get(modid);
+    }
+
+    /**
+     * Called to map recipes to items and
+     * itemstacks. Used for varies purposes,
+     * such as, quicker filter checks, crafting,
+     * guis, and commands.
+     */
+    public static void mapRecipes()
+    {
+
+    }
+
     /**
      * Used to combine two chests together to make a large chest
      *
@@ -981,7 +1081,7 @@ public class InventoryUtility
 
     /**
      * Checks how much space is left in the player's held hand.
-     * <p/>
+     * <p>
      * Does check again player's inventory limit in case
      * another mod changes it. Should prevent issues
      * with this method in inventory overhaul mods.

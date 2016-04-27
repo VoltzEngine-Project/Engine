@@ -1,12 +1,16 @@
 package com.builtbroken.mc.core.commands.debug;
 
 import com.builtbroken.mc.prefab.commands.SubCommand;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import com.builtbroken.mc.prefab.items.ItemStackWrapper;
+import com.builtbroken.mc.prefab.tile.BlockTile;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ChatComponentText;
@@ -14,7 +18,6 @@ import net.minecraft.util.ChatComponentText;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Used to test for recipe conflicts and dump items without recipes
@@ -44,63 +47,72 @@ public class CommandDebugRecipes extends SubCommand
             if (Loader.isModLoaded(modID))
             {
                 sender.addChatMessage(new ChatComponentText("Checking data...."));
-                FMLControlledNamespacedRegistry<Item> registry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
-                Set set = registry.getKeys();
 
-                List<Item> items = new ArrayList();
-                for (Object obj : set)
+                List<Item> items = InventoryUtility.getItemsForMod(modID);
+                if (items != null && !items.isEmpty())
                 {
-                    if (obj instanceof String && ((String) obj).startsWith(modID))
-                    {
-                        Object entry = registry.getObject(obj);
-                        if (entry instanceof Item)
-                        {
-                            items.add((Item) entry);
-                        }
-                    }
-                }
-                HashMap<ItemStackWrapper, List<IRecipe>> recipeMap = new HashMap();
-                HashMap<Item, List<IRecipe>> itemToRecipes = new HashMap();
+                    HashMap<ItemStackWrapper, List<IRecipe>> recipeMap = new HashMap();
+                    HashMap<Item, List<IRecipe>> itemToRecipes = new HashMap();
 
-                sender.addChatMessage(new ChatComponentText("Found " + items.size() + " items for the mod " + modID + " moving on to processing recipes"));
+                    sender.addChatMessage(new ChatComponentText("Found " + items.size() + " items for the mod " + modID + " moving on to processing recipes"));
 
-                for (Object r : CraftingManager.getInstance().getRecipeList())
-                {
-                    if (r instanceof IRecipe)
+                    for (Object r : CraftingManager.getInstance().getRecipeList())
                     {
-                        if (((IRecipe) r).getRecipeOutput() != null && items.contains(((IRecipe) r).getRecipeOutput().getItem()))
+                        if (r instanceof IRecipe)
                         {
-                            ItemStackWrapper wrapper = new ItemStackWrapper(((IRecipe) r).getRecipeOutput());
-                            List<IRecipe> list = recipeMap.get(wrapper);
-                            if (list == null)
+                            if (((IRecipe) r).getRecipeOutput() != null && items.contains(((IRecipe) r).getRecipeOutput().getItem()))
                             {
-                                list = new ArrayList();
-                            }
-                            list.add((IRecipe) r);
-                            recipeMap.put(wrapper, list);
-                            itemToRecipes.put(((IRecipe) r).getRecipeOutput().getItem(), list);
+                                ItemStackWrapper wrapper = new ItemStackWrapper(((IRecipe) r).getRecipeOutput());
+                                List<IRecipe> list = recipeMap.get(wrapper);
+                                if (list == null)
+                                {
+                                    list = new ArrayList();
+                                }
+                                list.add((IRecipe) r);
+                                recipeMap.put(wrapper, list);
+                                itemToRecipes.put(((IRecipe) r).getRecipeOutput().getItem(), list);
 
+                            }
                         }
                     }
-                }
-                sender.addChatMessage(new ChatComponentText("Mapped " + recipeMap.size() + " entries with recipes"));
-                if (args.length == 1 || args[1].equalsIgnoreCase("conflict"))
-                {
-                    sender.addChatMessage(new ChatComponentText("Not implemented yet"));
-                    return true;
-                }
-                else if (args[1].equalsIgnoreCase("missing"))
-                {
-                    //TODO add handling for subtypes
-                    for (Item item : items)
+                    sender.addChatMessage(new ChatComponentText("Mapped " + recipeMap.size() + " entries with recipes"));
+                    if (args.length == 1 || args[1].equalsIgnoreCase("conflict"))
                     {
-                        if (!itemToRecipes.containsKey(item))
+                        sender.addChatMessage(new ChatComponentText("Not implemented yet"));
+                        return true;
+                    }
+                    else if (args[1].equalsIgnoreCase("missing"))
+                    {
+                        //TODO add handling for subtypes
+                        for (Item item : items)
                         {
-                            sender.addChatMessage(new ChatComponentText("Item[" + item + "] has no recipes for any subtype"));
+                            if (!itemToRecipes.containsKey(item))
+                            {
+                                if (item instanceof ItemBlock)
+                                {
+                                    Block block = ((ItemBlock) item).field_150939_a;
+                                    if (block instanceof BlockTile)
+                                    {
+                                        sender.addChatMessage(new ChatComponentText("Tile[" + ((BlockTile) block).staticTile.name + "] has no recipes for any subtype"));
+                                    }
+                                    else
+                                    {
+                                        sender.addChatMessage(new ChatComponentText("Block[" + block.getLocalizedName() + "] has no recipes for any subtype"));
+                                    }
+                                }
+                                else
+                                {
+                                    sender.addChatMessage(new ChatComponentText("Item[" + item.getItemStackDisplayName(new ItemStack(item)) + "] has no recipes for any subtype"));
+                                }
+                            }
                         }
                     }
-                    return true;
                 }
+                else
+                {
+                    sender.addChatMessage(new ChatComponentText("No items are mapped for the mod[" + modID + "]"));
+                }
+                return true;
             }
             else
             {
