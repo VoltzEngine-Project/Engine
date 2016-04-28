@@ -2,6 +2,7 @@ package com.builtbroken.mc.client;
 
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.api.explosive.ITexturedExplosiveHandler;
+import com.builtbroken.mc.api.items.explosives.IExplosiveContainerItem;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
@@ -41,24 +42,32 @@ public class ExplosiveRegistryClient
      * handler implements the interface. If it doesn't then
      * the map will be searched for the item.
      *
-     * @param item
+     * @param stack
      * @return item or missing icon
      */
-    public static IIcon getCornerIconFor(ItemStack item)
+    public static IIcon getCornerIconFor(final ItemStack stack)
     {
-        IExplosiveHandler handler = ExplosiveRegistry.get(item);
-        if (handler instanceof ITexturedExplosiveHandler)
+        ItemStack item = stack;
+        if (item.getItem() instanceof IExplosiveContainerItem)
         {
-            IIcon icon = ((ITexturedExplosiveHandler) handler).getBottomLeftCornerIcon(item);
-            if (icon != null)
-            {
-                return icon;
-            }
+            item = ((IExplosiveContainerItem) item.getItem()).getExplosiveStack(stack);
         }
-        ItemStackWrapper wrapper = new ItemStackWrapper(item);
-        if (EX_CORNER_ICONS.containsKey(wrapper))
+        if (item != null)
         {
-            return EX_CORNER_ICONS.get(wrapper);
+            IExplosiveHandler handler = ExplosiveRegistry.get(item);
+            if (handler instanceof ITexturedExplosiveHandler)
+            {
+                IIcon icon = ((ITexturedExplosiveHandler) handler).getBottomLeftCornerIcon(item);
+                if (icon != null)
+                {
+                    return icon;
+                }
+            }
+            ItemStackWrapper wrapper = new ItemStackWrapper(item);
+            if (EX_CORNER_ICONS.containsKey(wrapper))
+            {
+                return EX_CORNER_ICONS.get(wrapper);
+            }
         }
         return missing_corner_icon;
     }
