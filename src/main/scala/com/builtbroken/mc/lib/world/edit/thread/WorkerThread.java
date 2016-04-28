@@ -1,5 +1,6 @@
-package com.builtbroken.mc.lib.world.edit;
+package com.builtbroken.mc.lib.world.edit.thread;
 
+import com.builtbroken.mc.api.process.IThreadProcess;
 import com.builtbroken.mc.core.Engine;
 
 import java.util.Queue;
@@ -7,20 +8,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
+ * Thread used to do repeat tasks that need to run outside of the minecraft world.
+ *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 12/7/2015.
  */
-public class ThreadWorldAction extends Thread
+public class WorkerThread extends Thread
 {
-    private Queue<WCAThreadProcess> que = new ConcurrentLinkedQueue<>();
+    private Queue<IThreadProcess> que = new ConcurrentLinkedQueue<>();
     private boolean waiting = false;
     private boolean kill = false;
 
-    public static final ConcurrentHashMap<String, ThreadWorldAction> threads = new ConcurrentHashMap();
+    public static final ConcurrentHashMap<String, WorkerThread> threads = new ConcurrentHashMap();
 
-    public ThreadWorldAction(String name)
+    public WorkerThread(String name)
     {
-        super("WorldChangeAction[" + name + "]");
+        super("WorkerThread[" + name + "]");
         this.setPriority(Thread.NORM_PRIORITY);
         threads.put(name, this);
     }
@@ -34,8 +37,8 @@ public class ThreadWorldAction extends Thread
             {
                 if (que.size() > 0)
                 {
-                    WCAThreadProcess process = que.poll();
-                    process.run();
+                    IThreadProcess process = que.poll();
+                    process.runProcess();
                 }
                 else
                 {
@@ -65,10 +68,10 @@ public class ThreadWorldAction extends Thread
         finally
         {
             //Clean up to prevent process from running after world has closed
-            if(que.size() > 0)
+            if (que.size() > 0)
             {
                 Engine.instance.logger().info("Killing " + this + " with processes left to run...");
-                for(WCAThreadProcess process : que)
+                for (IThreadProcess process : que)
                 {
                     Engine.instance.logger().info("\t" + process);
                     process.killAction();
@@ -105,7 +108,7 @@ public class ThreadWorldAction extends Thread
      * @param process - process
      * @return true if it contains the process
      */
-    public boolean contains(WCAThreadProcess process)
+    public boolean contains(IThreadProcess process)
     {
         return que.contains(process);
     }

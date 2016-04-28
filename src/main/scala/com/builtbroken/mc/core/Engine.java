@@ -39,8 +39,8 @@ import com.builtbroken.mc.lib.mod.config.ConfigHandler;
 import com.builtbroken.mc.lib.mod.config.ConfigScanner;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import com.builtbroken.mc.lib.world.edit.PlacementData;
-import com.builtbroken.mc.lib.world.edit.ThreadWorldAction;
-import com.builtbroken.mc.lib.world.edit.WorldEditQueHandler;
+import com.builtbroken.mc.lib.world.edit.thread.WorkerThread;
+import com.builtbroken.mc.lib.world.edit.thread.WorldActionQue;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
 import com.builtbroken.mc.lib.world.radar.RadarRegistry;
@@ -309,7 +309,7 @@ public class Engine
         FMLCommonHandler.instance().bus().register(RadarRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(RadioRegistry.INSTANCE);
         FMLCommonHandler.instance().bus().register(RadioRegistry.INSTANCE);
-        FMLCommonHandler.instance().bus().register(new WorldEditQueHandler());
+        FMLCommonHandler.instance().bus().register(new WorldActionQue());
         FMLCommonHandler.instance().bus().register(TileTaskTickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(SelectionHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(proxy);
@@ -636,7 +636,7 @@ public class Engine
 
         for (int i = 0; i < actionProcessorThreads; i++)
         {
-            Thread thread = new ThreadWorldAction("" + i);
+            Thread thread = new WorkerThread("" + i);
             thread.start();
         }
     }
@@ -645,9 +645,9 @@ public class Engine
     public void serverStopping(FMLServerStoppingEvent event)
     {
         //TODO save qued objects
-        synchronized (ThreadWorldAction.threads)
+        synchronized (WorkerThread.threads)
         {
-            for (ThreadWorldAction thread : ThreadWorldAction.threads.values())
+            for (WorkerThread thread : WorkerThread.threads.values())
             {
                 logger().info("Killing thread " + thread);
                 thread.kill();

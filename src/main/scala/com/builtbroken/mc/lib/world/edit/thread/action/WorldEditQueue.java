@@ -1,9 +1,10 @@
-package com.builtbroken.mc.lib.world.edit;
+package com.builtbroken.mc.lib.world.edit.thread.action;
 
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
 import com.builtbroken.mc.api.edit.IWorldChangeAudio;
 import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
 import com.builtbroken.mc.api.edit.IWorldEdit;
+import com.builtbroken.mc.api.process.IWorldAction;
 import com.builtbroken.mc.core.Engine;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.world.World;
@@ -18,7 +19,7 @@ import java.util.LinkedList;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 12/30/2015.
  */
-public class WorldEditQueue extends LinkedList<IWorldEdit>
+public class WorldEditQueue extends LinkedList<IWorldEdit> implements IWorldAction
 {
     /** World to modify */
     public final World world;
@@ -57,12 +58,7 @@ public class WorldEditQueue extends LinkedList<IWorldEdit>
         this.action = action;
     }
 
-    /**
-     * Runs the world edit que. Called each tick for each world
-     *
-     * @param world - world to edit blocks in, make sure it matches the attended world
-     * @param side  - is client or is server
-     */
+    @Override
     public void runQue(World world, Side side)
     {
         //TODO fix so this is not called for each world
@@ -121,6 +117,12 @@ public class WorldEditQueue extends LinkedList<IWorldEdit>
                 Engine.instance.logger().error("Crash while processing world change " + action, e);
             }
         }
+    }
+
+    @Override
+    public boolean isQueDone()
+    {
+        return isEmpty();
     }
 
     @Override

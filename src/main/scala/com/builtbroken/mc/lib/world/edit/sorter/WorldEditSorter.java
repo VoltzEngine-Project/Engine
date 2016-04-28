@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.world.edit;
+package com.builtbroken.mc.lib.world.edit.sorter;
 
 import com.builtbroken.mc.api.edit.IWorldEdit;
 

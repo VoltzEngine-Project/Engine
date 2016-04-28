@@ -1,24 +1,27 @@
-package com.builtbroken.mc.lib.world.edit;
+package com.builtbroken.mc.lib.world.edit.thread;
 
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
 import com.builtbroken.mc.api.edit.IWorldChangeLayeredAction;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.event.WorldChangeActionEvent;
+import com.builtbroken.mc.api.process.IThreadProcess;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.lib.world.edit.thread.action.WorldChangeActionPost;
+import com.builtbroken.mc.lib.world.edit.thread.action.WorldEditQueue;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Collection;
 
 /**
  * Low priority Multi-thread for IWorldChangeActions
- * <p/>
+ * <p>
  * Calculates the impact then removes X amount of blocks at the end of the world tick
  *
  * @author Darkguardsman
  */
-public class WCAThreadProcess
+public class WCAThreadProcess implements IThreadProcess
 {
     /** Location of the Blast */
     public final Location position;
@@ -48,7 +51,8 @@ public class WCAThreadProcess
         blocksPerTick = blast.shouldThreadAction();
     }
 
-    public void run()
+    @Override
+    public void runProcess()
     {
         try
         {
@@ -56,14 +60,15 @@ public class WCAThreadProcess
             {
                 for (int i = 0; i < ((IWorldChangeLayeredAction) blast).getLayers(); i++)
                 {
-                    if(((IWorldChangeLayeredAction) blast).shouldContinueAction(i))
+                    if (((IWorldChangeLayeredAction) blast).shouldContinueAction(i))
                     {
                         effectedBlocks = blast.getEffectedBlocks();
                         //Triggers an event allowing other mods to edit the block list
                         MinecraftForge.EVENT_BUS.post(new WorldChangeActionEvent.FinishedCalculatingEffectEvent(position, effectedBlocks, blast, triggerCause));
-                        WorldEditQueHandler.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
+                        WorldActionQue.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
                     }
                 }
+                WorldActionQue.addEditQue(new WorldChangeActionPost(blast));
             }
             else
             {
@@ -73,7 +78,7 @@ public class WCAThreadProcess
 
             //Triggers an event allowing other mods to edit the block list
             MinecraftForge.EVENT_BUS.post(new WorldChangeActionEvent.FinishedCalculatingEffectEvent(position, effectedBlocks, blast, triggerCause));
-            WorldEditQueHandler.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
+            WorldActionQue.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
         }
         catch (Exception e)
         {
@@ -81,9 +86,7 @@ public class WCAThreadProcess
         }
     }
 
-    /**
-     * Called to kill the process.
-     */
+    @Override
     public void killAction()
     {
         //TODO change so it saves
@@ -91,14 +94,10 @@ public class WCAThreadProcess
     }
 
 
-    /**
-     * Places this process into a que to be run. If no thread exist it will call
-     * the {@link WCAThreadProcess#run()} method. This way there is no chance
-     * or loss of effect created by the process.
-     */
-    public void que()
+    @Override
+    public void queProcess()
     {
-        for (ThreadWorldAction thread : ThreadWorldAction.threads.values())
+        for (WorkerThread thread : WorkerThread.threads.values())
         {
             if (thread.contains(this))
             {
@@ -106,8 +105,8 @@ public class WCAThreadProcess
             }
         }
         int lowest = Integer.MAX_VALUE;
-        ThreadWorldAction lowestThread = null;
-        for (ThreadWorldAction thread : ThreadWorldAction.threads.values())
+        WorkerThread lowestThread = null;
+        for (WorkerThread thread : WorkerThread.threads.values())
         {
             if (thread.qued() < lowest)
             {
@@ -121,7 +120,7 @@ public class WCAThreadProcess
         }
         else
         {
-            run();
+            runProcess();
         }
     }
 
