@@ -3,6 +3,7 @@ package com.builtbroken.mc.client;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.api.explosive.ITexturedExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.prefab.items.ItemStackWrapper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -31,14 +32,17 @@ public class ExplosiveRegistryClient
     /** Map of explosive items to resource locations for registering icons, resources must be item icons */
     public static final HashMap<ItemStackWrapper, String> EX_CORNER_RESOURCES = new HashMap();
 
+    @SideOnly(Side.CLIENT)
+    public static IIcon missing_corner_icon;
+
     /**
      * Gets the corner icon for the explosive item. Defaults
      * to using {@link ITexturedExplosiveHandler} if the explosive
-     * handler implementes the interface. If it doesn't then
+     * handler implements the interface. If it doesn't then
      * the map will be searched for the item.
      *
      * @param item
-     * @return item or null if nothing was registered
+     * @return item or missing icon
      */
     public static IIcon getCornerIconFor(ItemStack item)
     {
@@ -56,7 +60,7 @@ public class ExplosiveRegistryClient
         {
             return EX_CORNER_ICONS.get(wrapper);
         }
-        return null;
+        return missing_corner_icon;
     }
 
     /**
@@ -106,6 +110,7 @@ public class ExplosiveRegistryClient
             {
                 EX_CORNER_ICONS.put(entry.getKey(), event.map.registerIcon(entry.getValue()));
             }
+            missing_corner_icon = event.map.registerIcon(References.PREFIX + "ex.icon.missing");
         }
     }
 }
