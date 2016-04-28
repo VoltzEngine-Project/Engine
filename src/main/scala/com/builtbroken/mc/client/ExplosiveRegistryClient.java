@@ -40,7 +40,7 @@ public class ExplosiveRegistryClient
      * @param item
      * @return item or null if nothing was registered
      */
-    public static IIcon getIconFor(ItemStack item)
+    public static IIcon getCornerIconFor(ItemStack item)
     {
         IExplosiveHandler handler = ExplosiveRegistry.get(item);
         if (handler instanceof ITexturedExplosiveHandler)
