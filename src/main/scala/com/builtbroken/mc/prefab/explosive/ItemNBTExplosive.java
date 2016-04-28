@@ -52,11 +52,15 @@ public class ItemNBTExplosive extends Item implements IExplosiveItem
     @Override
     public NBTTagCompound getAdditionalExplosiveData(ItemStack stack)
     {
-        if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("exData"))
+        if(stack.getTagCompound() == null)
         {
-            return stack.getTagCompound().getCompoundTag("exData");
+            stack.setTagCompound(new NBTTagCompound());
         }
-        return new NBTTagCompound();
+        if (!stack.getTagCompound().hasKey("exData"))
+        {
+            stack.getTagCompound().setTag("exData", new NBTTagCompound());
+        }
+        return stack.getTagCompound().getCompoundTag("exData");
     }
 
     @Override

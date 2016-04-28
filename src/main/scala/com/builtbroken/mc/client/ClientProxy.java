@@ -1,25 +1,25 @@
-package com.builtbroken.mc.core;
+package com.builtbroken.mc.client;
 
-import com.builtbroken.mc.api.explosive.IExplosiveHandler;
-import com.builtbroken.mc.api.explosive.ITexturedExplosiveHandler;
+import com.builtbroken.mc.core.CommonProxy;
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
 import com.builtbroken.mc.core.handler.RenderSelection;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
-import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.prefab.tile.multiblock.MultiBlockRenderHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -27,12 +27,21 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class ClientProxy extends CommonProxy
 {
+
+
     @Override
     public void preInit()
     {
+        FMLCommonHandler.instance().bus().register(new ExplosiveRegistryClient());
+        MinecraftForge.EVENT_BUS.register(new ExplosiveRegistryClient());
+
         RenderingRegistry.registerBlockHandler(new BlockRenderHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerKeyHandler());
         MinecraftForge.EVENT_BUS.register(new RenderSelection());
+
+        ExplosiveRegistryClient.registerIcon(new ItemStack(Items.gunpowder), References.PREFIX + "ex.icon.gunpowder");
+        ExplosiveRegistryClient.registerIcon(new ItemStack(Items.skull, 1, 4), References.PREFIX + "ex.icon.creeper_head");
+        ExplosiveRegistryClient.registerIcon(new ItemStack(Blocks.tnt), References.PREFIX + "ex.icon.tnt");
     }
 
     @Override
@@ -86,31 +95,5 @@ public class ClientProxy extends CommonProxy
     public int getPlayerDim()
     {
         return getClientWorld() != null ? getClientWorld().provider.dimensionId : 0;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onStitch(TextureStitchEvent.Pre event)
-    {
-        if (event.map.getTextureType() == 0)
-        {
-            for (IExplosiveHandler handler : ExplosiveRegistry.getExplosives())
-            {
-                if (handler instanceof ITexturedExplosiveHandler)
-                {
-                    ((ITexturedExplosiveHandler) handler).registerExplosiveHandlerIcons(event.map, true);
-                }
-            }
-        }
-        else if (event.map.getTextureType() == 1)
-        {
-            for (IExplosiveHandler handler : ExplosiveRegistry.getExplosives())
-            {
-                if (handler instanceof ITexturedExplosiveHandler)
-                {
-                    ((ITexturedExplosiveHandler) handler).registerExplosiveHandlerIcons(event.map, false);
-                }
-            }
-        }
     }
 }
