@@ -30,7 +30,7 @@ public class WCAThreadProcess implements IThreadProcess
     /** Trigger cause of the blast */
     public final TriggerCause triggerCause;
     /** Blocks per tick limiter */
-    public int blocksPerTick = 20;
+    public int blocksPerTick = 200;
 
     /** Blocks to remove from the world */
     private Collection<IWorldEdit> effectedBlocks;
