@@ -68,17 +68,16 @@ public class WCAThreadProcess implements IThreadProcess
                         WorldActionQue.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
                     }
                 }
-                WorldActionQue.addEditQue(new WorldChangeActionPost(blast));
             }
             else
             {
                 //Collects the init list of blocks from the blast
                 effectedBlocks = blast.getEffectedBlocks();
+                //Triggers an event allowing other mods to edit the block list
+                MinecraftForge.EVENT_BUS.post(new WorldChangeActionEvent.FinishedCalculatingEffectEvent(position, effectedBlocks, blast, triggerCause));
+                WorldActionQue.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
             }
-
-            //Triggers an event allowing other mods to edit the block list
-            MinecraftForge.EVENT_BUS.post(new WorldChangeActionEvent.FinishedCalculatingEffectEvent(position, effectedBlocks, blast, triggerCause));
-            WorldActionQue.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
+            WorldActionQue.addEditQue(new WorldChangeActionPost(blast));
         }
         catch (Exception e)
         {

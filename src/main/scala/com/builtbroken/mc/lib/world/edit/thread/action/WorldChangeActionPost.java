@@ -26,7 +26,7 @@ public class WorldChangeActionPost implements IWorldAction
     {
         if (!world.isRemote)
         {
-            action.doEffectOther(true);
+            action.doEffectOther(false);
             done = true;
         }
     }
