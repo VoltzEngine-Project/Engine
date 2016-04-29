@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.dispenser.ILocation;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
@@ -341,7 +342,18 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
      */
     public boolean isReplaceable()
     {
-        return getBlock().isReplaceable(world, xi(), yi(), zi());
+        Block block = getBlock();
+        return block == null || block == Blocks.air || block.isAir(world, xi(), yi(), zi()) || getBlock().isReplaceable(world, xi(), yi(), zi());
+    }
+
+    /**
+     * Checks to see if the tile can see the sky
+     *
+     * @return true if it can see sky, false if not or world is null
+     */
+    public boolean canSeeSky()
+    {
+        return world == null ? false : world.canBlockSeeTheSky(xi(), yi(), zi());
     }
 
     /**

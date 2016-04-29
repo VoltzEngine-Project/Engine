@@ -8,6 +8,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -143,7 +144,9 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
     public IPos3D transform(ITransform transformer)
     {
         if (this instanceof IPos3D)
+        {
             return transformer.transform((IPos3D) this);
+        }
         return null;
     }
 
@@ -273,12 +276,18 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
         MovingObjectPosition entity = rayTraceEntities(world, end);
 
         if (block == null)
+        {
             return entity;
+        }
         if (entity == null)
+        {
             return block;
+        }
 
         if (distance(new Pos(block.hitVec)) < distance(new Pos(entity.hitVec)))
+        {
             return block;
+        }
 
         return entity;
     }
@@ -356,9 +365,13 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
     public boolean setBlock(World world, Block block, int metadata, int notify)
     {
         if (world != null && block != null)
+        {
             return world.setBlock(xi(), yi(), zi(), block, metadata, notify);
+        }
         else
+        {
             return false;
+        }
     }
 
     public boolean setBlockToAir(World world)
@@ -379,6 +392,27 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
         return world.isBlockFreezable(xi(), yi(), zi());
     }
 
+    /**
+     * Checks if the block is replaceable
+     *
+     * @return true if it can be replaced
+     */
+    public boolean isReplaceable(World world)
+    {
+        Block block = getBlock(world);
+        return block == null || block == Blocks.air || block.isAir(world, xi(), yi(), zi()) || block.isReplaceable(world, xi(), yi(), zi());
+    }
+
+    /**
+     * Checks to see if the tile can see the sky
+     *
+     * @return true if it can see sky, false if not or world is null
+     */
+    public boolean canSeeSky(World world)
+    {
+        return world.canBlockSeeTheSky(xi(), yi(), zi());
+    }
+
     public boolean isBlockEqual(World world, Block block)
     {
         Block b = getBlock(world);
@@ -388,34 +422,50 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
     public Block getBlock(IBlockAccess world)
     {
         if (world != null)
+        {
             return world.getBlock(xi(), yi(), zi());
+        }
         else
+        {
             return null;
+        }
     }
 
     public int getBlockMetadata(IBlockAccess world)
     {
         if (world != null)
+        {
             return world.getBlockMetadata(xi(), yi(), zi());
+        }
         else
+        {
             return 0;
+        }
     }
 
     public TileEntity getTileEntity(IBlockAccess world)
     {
         if (world != null)
+        {
             return world.getTileEntity(xi(), yi(), zi());
+        }
         else
+        {
             return null;
+        }
     }
 
     public float getHardness(World world)
     {
         Block block = getBlock(world);
         if (block != null)
+        {
             return block.getBlockHardness(world, xi(), yi(), zi());
+        }
         else
+        {
             return 0;
+        }
     }
 
     /**
