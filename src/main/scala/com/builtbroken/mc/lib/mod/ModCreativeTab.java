@@ -7,7 +7,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Prefab creative tab to either create a fast creative tab or reduce code
@@ -99,9 +102,13 @@ public class ModCreativeTab extends CreativeTabs
         if (itemStack == null || itemStack.getItem() == null)
         {
             if (itemStack == null)
+            {
                 Engine.instance.logger().error("ItemStack used for creative tab " + this.getTabLabel() + " is null");
+            }
             else
+            {
                 Engine.instance.logger().error("ItemStack used for creative tab " + this.getTabLabel() + " contains a null Item reference");
+            }
             itemStack = new ItemStack(Blocks.redstone_block);
         }
         return itemStack;
@@ -111,6 +118,28 @@ public class ModCreativeTab extends CreativeTabs
     public Item getTabIconItem()
     {
         return getIconItemStack().getItem();
+    }
+
+    /**
+     * Helper method to add the item and it's sub types to a list
+     *
+     * @param list
+     * @param item
+     */
+    protected void add(List list, Item item)
+    {
+        item.getSubItems(item, this, list);
+    }
+
+    /**
+     * Helper method to add the item and it's sub types to a list
+     *
+     * @param list
+     * @param block
+     */
+    protected void add(List list, Block block)
+    {
+        block.getSubBlocks(Item.getItemFromBlock(block), this, list);
     }
 
     public static abstract class ItemSorter implements Comparator
