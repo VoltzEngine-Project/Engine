@@ -361,6 +361,12 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     }
 
     @Override
+    public boolean isCompleted()
+    {
+        return world == null || killExplosion;
+    }
+
+    @Override
     public boolean equals(Object obj)
     {
         if (obj == this)
