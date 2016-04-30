@@ -6,6 +6,7 @@ import com.builtbroken.mc.api.edit.IWorldChangeAudio;
 import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
+import com.builtbroken.mc.api.explosive.IBlast;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
@@ -29,7 +30,7 @@ import java.util.List;
 /**
  * Prefab for implement explosive blast actions
  */
-public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics
+public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics, IBlast
 {
     /** Current world */
     public World world;
@@ -65,29 +66,28 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
         return (B) this;
     }
 
+    @Override
     public B setYield(double size)
     {
         this.size = size;
         return (B) this;
     }
 
+    @Override
     public B setEnergyPerBlock(float f)
     {
         this.eUnitPerBlock = f;
         return (B) this;
     }
 
+    @Override
     public B setCause(final TriggerCause cause)
     {
         this.cause = cause;
         return (B) this;
     }
 
-    /**
-     * Sets the custome NBT data to be used by the explosive
-     *
-     * @param additionBlastData
-     */
+    @Override
     public B setAdditionBlastData(NBTTagCompound additionBlastData)
     {
         this.additionBlastData = additionBlastData;
