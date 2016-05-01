@@ -49,9 +49,10 @@ public class EntityProjectile extends Entity implements IProjectile
     protected DamageSource impact_damageSource = DamageSource.anvil;
 
     //In ground data
-    protected int xTile = -1;
-    protected int yTile = -1;
-    protected int zTile = -1;
+    public int xTile = -1;
+    public int yTile = -1;
+    public int zTile = -1;
+    public int sideTile = -1;
     protected Block inBlockID;
     protected int inData;
     protected boolean inGround;
@@ -256,6 +257,7 @@ public class EntityProjectile extends Entity implements IProjectile
         this.xTile = movingobjectposition.blockX;
         this.yTile = movingobjectposition.blockY;
         this.zTile = movingobjectposition.blockZ;
+        this.sideTile = movingobjectposition.sideHit;
 
         this.inBlockID = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
         this.inData = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
@@ -443,6 +445,7 @@ public class EntityProjectile extends Entity implements IProjectile
         nbt.setShort("xTile", (short) this.xTile);
         nbt.setShort("yTile", (short) this.yTile);
         nbt.setShort("zTile", (short) this.zTile);
+        nbt.setShort("sideTile", (short) this.sideTile);
         nbt.setShort("life", (short) this.ticksInGround);
         nbt.setByte("inTile", (byte) Block.getIdFromBlock(this.inBlockID));
         nbt.setByte("inData", (byte) this.inData);
@@ -463,6 +466,7 @@ public class EntityProjectile extends Entity implements IProjectile
         this.xTile = nbt.getShort("xTile");
         this.yTile = nbt.getShort("yTile");
         this.zTile = nbt.getShort("zTile");
+        this.sideTile = nbt.getShort("sideTile");
         this.ticksInGround = nbt.getShort("life");
         this.inBlockID = Block.getBlockById(nbt.getByte("inTile") & 255);
         this.inData = nbt.getByte("inData") & 255;
