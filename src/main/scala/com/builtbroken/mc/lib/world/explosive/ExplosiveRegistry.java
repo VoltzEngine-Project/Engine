@@ -331,10 +331,10 @@ public final class ExplosiveRegistry
      * {@link ItemStack#getItem()} is an instance of {@link IExplosiveItem} it
      * will return the value of {@link IExplosiveItem#getExplosiveSize(ItemStack)}
      * before attempting to use cached values.
-     * <p/>
+     * <p>
      * If cache values are used and not stored they will be calculated. If no
      * value was registered it will return 0.
-     * <p/>
+     * <p>
      * If 0 is returned assume the explosive does not function or has
      * a single block effect.
      *
@@ -378,21 +378,26 @@ public final class ExplosiveRegistry
 
     /**
      * Used to scale the explosive size based on it's volume to get a new
-     * radius value.
+     * radius value. The current equation uses a 2D circle to calculate
+     * the new radius.
      *
-     * @param sizePerUnit   - original size for a single value
+     * @param radius        - original size for a single value in m^2
      * @param scaleByFactor - scale factor
      * @return new size
      */
-    public static double getExplosiveSize(double sizePerUnit, double scaleByFactor)
+    public static double getExplosiveSize(double radius, double scaleByFactor)
     {
-        //http://www.calculatorsoup.com/calculators/geometry-solids/sphere.php
-        //Get volume of a single unit
-        double volume = (4.0 / 3.0) * Math.PI * sizePerUnit * sizePerUnit * sizePerUnit;
-        //Scale the volume by the # of explosives
-        volume = volume * scaleByFactor;
-        //Find new radius from volume and return value
-        return Math.pow((3.0 * volume) / (4.0 * Math.PI), 1.0 / 3.0);
+        //Too small
+        if (radius <= 0.01 || scaleByFactor <= 0.01)
+        {
+            return 0;
+        }
+        //Default
+        if (scaleByFactor <= 1.001)
+        {
+            return radius;
+        }
+        return Math.sqrt(scaleByFactor * radius * radius);
     }
 
     /**
@@ -458,7 +463,7 @@ public final class ExplosiveRegistry
 
     /**
      * NEVER USE THIS METHOD OUTSIDE OF JUNIT TESTING
-     * <p/>
+     * <p>
      * Clears all data stored by the registry. This is designed
      * to wipe the registry between unit tests.
      */

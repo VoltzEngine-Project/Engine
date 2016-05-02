@@ -29,6 +29,7 @@ public class BlockEditMove extends BlockEdit
     public BlockEditMove(IWorldPosition vec, IWorldPosition newPos)
     {
         super(vec);
+        this.newMovementLocation = new Location(newPos);
         logPrevBlock();
     }
 
