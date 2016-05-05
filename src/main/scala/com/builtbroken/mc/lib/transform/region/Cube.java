@@ -661,7 +661,7 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
      */
     public boolean isValid()
     {
-        return min() != null && max() != null && min().y() > -1 && max().y() > -1;
+        return min() != null && max() != null && !max().equals(min()) && min().y() > -1 && max().y() > -1;
     }
 
     @Override
