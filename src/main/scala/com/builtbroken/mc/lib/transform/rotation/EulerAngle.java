@@ -15,7 +15,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/8/2016.
- * <p/>
+ * <p>
  * Original version by Calclavia
  */
 public class EulerAngle implements Cloneable, ITransform, IByteBufWriter
@@ -430,8 +430,8 @@ public class EulerAngle implements Cloneable, ITransform, IByteBufWriter
     }
 
     /**
-     * @Deprecated {@link #writeBytes(ByteBuf)}
      * @param data
+     * @Deprecated {@link #writeBytes(ByteBuf)}
      */
     @Deprecated
     public void writeByteBuf(ByteBuf data)
@@ -508,6 +508,35 @@ public class EulerAngle implements Cloneable, ITransform, IByteBufWriter
         return this;
     }
 
+    /**
+     * Called to move towards the new yaw, uses lerp function to
+     * ensure animation stays consistent
+     *
+     * @param desiredYaw - desired position
+     * @param speed      - how fast to move, mainly a limit
+     * @return this
+     */
+    public EulerAngle moveYaw(double desiredYaw, double speed, double deltaTime)
+    {
+        double delta = Math.abs(desiredYaw - yaw);
+        if (delta < speed)
+        {
+            speed = delta;
+        }
+        double d = Math.abs(desiredYaw - (yaw + speed));
+        double d2 = Math.abs(desiredYaw - (yaw - speed));
+
+        if (d < d2)
+        {
+            this.yaw = MathHelper.lerp(yaw, yaw + speed, deltaTime);
+        }
+        else
+        {
+            this.yaw = MathHelper.lerp(yaw, yaw - speed, deltaTime);
+        }
+        return this;
+    }
+
     private final double clampAngleTo360(double value)
     {
         return clampAngle(value, -360, 360);
@@ -540,6 +569,50 @@ public class EulerAngle implements Cloneable, ITransform, IByteBufWriter
     public double roll()
     {
         return roll;
+    }
+
+    /**
+     * Is the angle near zero zero zero. Does
+     * not check for exact as 0.00001 != 0.00000
+     *
+     * @return true if values are near zero
+     */
+    public boolean isZero()
+    {
+        return isYawZero() && isPitchZero() && isRollZero();
+    }
+
+    /**
+     * Is the angle near zero. Does
+     * not check for exact as 0.00001 != 0.00000
+     *
+     * @return true if values are near zero
+     */
+    public boolean isYawZero()
+    {
+        return yaw <= 0.00001 && yaw >= -0.00001;
+    }
+
+    /**
+     * Is the angle near zero. Does
+     * not check for exact as 0.00001 != 0.00000
+     *
+     * @return true if values are near zero
+     */
+    public boolean isPitchZero()
+    {
+        return pitch <= 0.00001 && pitch >= -0.00001;
+    }
+
+    /**
+     * Is the angle near zero. Does
+     * not check for exact as 0.00001 != 0.00000
+     *
+     * @return true if values are near zero
+     */
+    public boolean isRollZero()
+    {
+        return roll <= 0.00001 && roll >= -0.00001;
     }
 
     @Deprecated
