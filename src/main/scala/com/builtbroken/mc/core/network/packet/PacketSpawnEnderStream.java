@@ -1,6 +1,7 @@
 package com.builtbroken.mc.core.network.packet;
 
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +27,10 @@ public class PacketSpawnEnderStream extends PacketType
         //Needed for forge to construct the packet
     }
 
+    public PacketSpawnEnderStream(int dim, IPos3D pos, IPos3D pos2)
+    {
+        this(dim, pos.x(), pos.y(), pos.z(), pos2.x(), pos2.y(), pos2.z());
+    }
     /**
      *
      * @param dim

@@ -25,6 +25,7 @@ public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<Abst
         this.addDiscriminator(6, PacketSpawnEnderStream.class);
         this.addDiscriminator(7, PacketSpawnParticleCircle.class);
         this.addDiscriminator(8, PacketBiomeData.class);
+        this.addDiscriminator(9, PacketSpawnParticleStream.class);
     }
 
     @Override

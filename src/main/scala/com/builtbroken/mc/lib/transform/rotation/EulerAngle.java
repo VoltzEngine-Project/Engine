@@ -316,14 +316,94 @@ public class EulerAngle implements Cloneable, ITransform, IByteBufWriter
     /**
      * Checks if the angle is within a margin of the other angle
      *
-     * @param other  - angle to check against
-     * @param margin - room for error
+     * @param other - angle to check against
+     * @param error - room for error in degrees
      * @return true if all 3 angles are near the margin value of error
      */
-    public boolean isWithin(EulerAngle other, double margin)
+    public boolean isWithin(EulerAngle other, double error)
     {
-        final EulerAngle angle = absoluteDifference(other);
-        return angle.yaw < margin && angle.pitch < margin && angle.roll < margin;
+        return other != null && isYawWithin(other.yaw, error) && isPitchWithin(other.pitch, error) && isRollWithin(other.roll, error);
+    }
+
+    /**
+     * Checks if the yaw is witch the error amount
+     *
+     * @param yaw   - desired yaw
+     * @param error - room for error in degrees, amount that
+     *              the current yaw can move by to be at the
+     *              desired yaw. If error is <b>negative</b> this
+     *              will always return false
+     * @return true if the current yaw is withing the error range
+     */
+    public boolean isYawWithin(double yaw, double error)
+    {
+        double delta = distanceYaw(yaw);
+        return delta <= error;
+    }
+
+    /**
+     * Checks if the pitch is witch the error amount
+     *
+     * @param pitch - desired pitch
+     * @param error - room for error in degrees, amount that
+     *              the current pitch can move by to be at the
+     *              desired pitch. If error is <b>negative</b> this
+     *              will always return false
+     * @return true if the current pitch is withing the error range
+     */
+    public boolean isPitchWithin(double pitch, double error)
+    {
+        double delta = distancePitch(pitch);
+        return delta <= error;
+    }
+
+    /**
+     * Checks if the roll is witch the error amount
+     *
+     * @param roll  - desired roll
+     * @param error - room for error in degrees, amount that
+     *              the current roll can move by to be at the
+     *              desired roll. If error is <b>negative</b> this
+     *              will always return false
+     * @return true if the current roll is withing the error range
+     */
+    public boolean isRollWithin(double roll, double error)
+    {
+        double delta = distanceRoll(roll);
+        return delta <= error;
+    }
+
+    /**
+     * Distance to the desired yaw from the current
+     *
+     * @param yaw - desired yaw
+     * @return distance;
+     */
+    public final double distanceYaw(double yaw)
+    {
+        return Math.abs(this.yaw - yaw);
+    }
+
+    /**
+     * Distance to the desired pitch from the current
+     *
+     * @param pitch - desired pitch
+     * @return distance;
+     */
+    public final double distancePitch(double pitch)
+    {
+        return Math.abs(this.pitch - pitch);
+    }
+
+    /**
+     * Distance to the desired roll from the current
+     *
+     * @param roll - desired roll
+     * @return distance;
+     */
+    public final double distanceRoll(double roll)
+    {
+        return Math.abs(this.roll - roll);
     }
 
     @Override
@@ -509,6 +589,23 @@ public class EulerAngle implements Cloneable, ITransform, IByteBufWriter
     }
 
     /**
+     * Moves towards the position with speed
+     *
+     * @param aim       - position to move towards
+     * @param speed     - speed to move at
+     * @param deltaTime - time difference to move, used for lerp function. Use
+     *                  one if you do not care to use lerp.
+     * @return this
+     */
+    public EulerAngle moveTowards(EulerAngle aim, double speed, double deltaTime)
+    {
+        moveYaw(aim.yaw, speed, deltaTime);
+        movePitch(aim.pitch, speed, deltaTime);
+        moveRoll(aim.roll, speed, deltaTime);
+        return this;
+    }
+
+    /**
      * Called to move towards the new yaw, uses lerp function to
      * ensure animation stays consistent
      *
@@ -519,9 +616,10 @@ public class EulerAngle implements Cloneable, ITransform, IByteBufWriter
     public EulerAngle moveYaw(double desiredYaw, double speed, double deltaTime)
     {
         double delta = Math.abs(desiredYaw - yaw);
-        if (delta < speed)
+        if (delta < speed || speed < 0)
         {
-            speed = delta;
+            yaw = desiredYaw;
+            return this;
         }
         double d = Math.abs(desiredYaw - (yaw + speed));
         double d2 = Math.abs(desiredYaw - (yaw - speed));
@@ -537,6 +635,66 @@ public class EulerAngle implements Cloneable, ITransform, IByteBufWriter
         return this;
     }
 
+    /**
+     * Called to move towards the new pitch, uses lerp function to
+     * ensure animation stays consistent
+     *
+     * @param desiredPitch - desired position
+     * @param speed        - how fast to move, mainly a limit
+     * @return this
+     */
+    public EulerAngle movePitch(double desiredPitch, double speed, double deltaTime)
+    {
+        double delta = Math.abs(desiredPitch - pitch);
+        if (delta < speed || speed < 0)
+        {
+            pitch = desiredPitch;
+            return this;
+        }
+        double d = Math.abs(desiredPitch - (pitch + speed));
+        double d2 = Math.abs(desiredPitch - (pitch - speed));
+
+        if (d < d2)
+        {
+            this.pitch = MathHelper.lerp(pitch, pitch + speed, deltaTime);
+        }
+        else
+        {
+            this.pitch = MathHelper.lerp(pitch, pitch - speed, deltaTime);
+        }
+        return this;
+    }
+
+    /**
+     * Called to move towards the new roll, uses lerp function to
+     * ensure animation stays consistent
+     *
+     * @param desiredRoll - desired position
+     * @param speed       - how fast to move, mainly a limit
+     * @return this
+     */
+    public EulerAngle moveRoll(double desiredRoll, double speed, double deltaTime)
+    {
+        double delta = Math.abs(desiredRoll - roll);
+        if (delta < speed || speed < 0)
+        {
+            roll = desiredRoll;
+            return this;
+        }
+        double d = Math.abs(desiredRoll - (roll + speed));
+        double d2 = Math.abs(desiredRoll - (roll - speed));
+
+        if (d < d2)
+        {
+            this.roll = MathHelper.lerp(roll, roll + speed, deltaTime);
+        }
+        else
+        {
+            this.roll = MathHelper.lerp(roll, roll - speed, deltaTime);
+        }
+        return this;
+    }
+
     private final double clampAngleTo360(double value)
     {
         return clampAngle(value, -360, 360);
@@ -544,7 +702,7 @@ public class EulerAngle implements Cloneable, ITransform, IByteBufWriter
 
     private final double clampAngle(double value, double min, double max)
     {
-        double result = value;
+        double result = value % 360;
         while (result < min)
         {
             result += 360;
