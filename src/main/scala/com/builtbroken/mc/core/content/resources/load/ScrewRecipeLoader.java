@@ -36,9 +36,8 @@ public class ScrewRecipeLoader extends AbstractLoadable
                     {
                         //TODO change tools to iron
                         GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.SCREW.item, 1, material.ordinal()),
-                                "WH", "CF",
+                                "WH", " F",
                                 'W', "nugget" + LanguageUtility.capitalizeFirst(material.name().toLowerCase()),
-                                'C', Engine.itemSimpleCraftingTools.getCutters(),
                                 'F', Engine.itemSimpleCraftingTools.getFile(),
                                 'H', Engine.itemSimpleCraftingTools.getHammer()));
                     }
