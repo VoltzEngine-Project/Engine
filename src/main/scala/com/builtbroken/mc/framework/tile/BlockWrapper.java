@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Wrapper class for senting Block method calls to {@link BlockProperties} object and  {@link TileAbstract} object.
+ * Wrapper class for senting Block method calls to {@link BlockProperties} object and  {@link TileEntityWrapper} object.
  *
  * @author Dark
  */
@@ -88,7 +88,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public void fillWithRain(World world, int x, int y, int z)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         inject(tile, world, x, y, z);
         if (tile instanceof IRainFallible)
         {
@@ -106,7 +106,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public float getExplosionResistance(Entity entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof IExplosiveResistance)
         {
             inject(tile, world, x, y, z);
@@ -121,7 +121,7 @@ public class BlockWrapper extends BlockContainer
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
     {
 
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof IPlayerLeftClick)
         {
             inject(tile, world, x, y, z);
@@ -133,7 +133,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public void onBlockAdded(World world, int x, int y, int z)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         inject(tile, world, x, y, z);
         tile.onAdded();
         eject(tile);
@@ -142,7 +142,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         inject(tile, world, x, y, z);
         tile.onPlaced(entityLiving, itemStack);
         eject(tile);
@@ -151,7 +151,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public void onPostBlockPlaced(World world, int x, int y, int z, int metadata)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         inject(tile, world, x, y, z);
         tile.onPostPlaced(metadata);
         eject(tile);
@@ -163,7 +163,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion ex)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof IDestroyedByExplosion)
         {
             inject(tile, world, x, y, z);
@@ -175,7 +175,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int par6)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         inject(tile, world, x, y, z);
         tile.onRemove(block, par6);
         eject(tile);
@@ -185,7 +185,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         inject(tile, world, x, y, z);
         boolean b = tile.removeByPlayer(player, willHarvest);
         eject(tile);
@@ -201,7 +201,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof INeighborBlock)
         {
             inject(tile, world, x, y, z);
@@ -213,7 +213,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof IPlaceable)
         {
             inject(tile, world, x, y, z);
@@ -227,7 +227,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public boolean canPlaceBlockAt(World world, int x, int y, int z)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof IPlaceable)
         {
             inject(tile, world, x, y, z);
@@ -241,7 +241,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof INeighborBlock)
         {
             inject(tile, world, x, y, z);
@@ -253,7 +253,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof IPlayerActivate)
         {
             inject(tile, world, x, y, z);
@@ -267,7 +267,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public void updateTick(World world, int x, int y, int z, Random par5Random)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         inject(tile, world, x, y, z);
         tile.blockUpdate();
         eject(tile);
@@ -276,7 +276,7 @@ public class BlockWrapper extends BlockContainer
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random par5Random)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof IRandomTick)
         {
             inject(tile, world, x, y, z);
@@ -288,7 +288,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof ITileCollide)
         {
             inject(tile, world, x, y, z);
@@ -301,7 +301,7 @@ public class BlockWrapper extends BlockContainer
     @SuppressWarnings("unchecked")
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof ITileCollide)
         {
             inject(tile, world, x, y, z);
@@ -328,7 +328,7 @@ public class BlockWrapper extends BlockContainer
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof ITileCollide)
         {
             inject(tile, world, x, y, z);
@@ -342,7 +342,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof ITileCollide)
         {
             inject(tile, world, x, y, z);
@@ -356,7 +356,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public boolean shouldSideBeRendered(IBlockAccess access, int x, int y, int z, int side)
     {
-        TileAbstract tile = getTile(access, x, y, z);
+        TileEntityWrapper tile = getTile(access, x, y, z);
         if (tile instanceof IBlockRender)
         {
             inject(tile, access, x, y, z);
@@ -370,7 +370,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public boolean isBlockSolid(IBlockAccess access, int x, int y, int z, int side)
     {
-        TileAbstract tile = getTile(access, x, y, z);
+        TileEntityWrapper tile = getTile(access, x, y, z);
         inject(tile, access, x, y, z);
         boolean value = getTile(access, x, y, z).isSolid(side);
         eject(tile);
@@ -383,7 +383,7 @@ public class BlockWrapper extends BlockContainer
         int value = 0;
         if (access != null)
         {
-            TileAbstract tile = getTile(access, x, y, z);
+            TileEntityWrapper tile = getTile(access, x, y, z);
             inject(tile, access, x, y, z);
             value = getTile(access, x, y, z).getLightValue();
             eject(tile);
@@ -421,7 +421,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public IIcon getIcon(IBlockAccess access, int x, int y, int z, int side)
     {
-        TileAbstract tile = getTile(access, x, y, z);
+        TileEntityWrapper tile = getTile(access, x, y, z);
         if (tile instanceof ITileTextured)
         {
             inject(tile, access, x, y, z);
@@ -450,7 +450,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public int colorMultiplier(IBlockAccess access, int x, int y, int z)
     {
-        TileAbstract tile = getTile(access, x, y, z);
+        TileEntityWrapper tile = getTile(access, x, y, z);
         if (tile instanceof IBlockRender)
         {
             inject(tile, access, x, y, z);
@@ -471,7 +471,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof ITileItem)
         {
             inject(tile, world, x, y, z);
@@ -485,7 +485,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
     {
-        TileAbstract tile = getTile(world, x, y, z);
+        TileEntityWrapper tile = getTile(world, x, y, z);
         if (tile instanceof ITileItem)
         {
             inject(tile, world, x, y, z);
@@ -521,7 +521,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public int isProvidingWeakPower(IBlockAccess access, int x, int y, int z, int side)
     {
-        TileAbstract tile = getTile(access, x, y, z);
+        TileEntityWrapper tile = getTile(access, x, y, z);
         if (tile instanceof IRedstone)
         {
             inject(tile, access, x, y, z);
@@ -535,7 +535,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public int isProvidingStrongPower(IBlockAccess access, int x, int y, int z, int side)
     {
-        TileAbstract tile = getTile(access, x, y, z);
+        TileEntityWrapper tile = getTile(access, x, y, z);
         if (tile instanceof IRedstone)
         {
             inject(tile, access, x, y, z);
@@ -549,7 +549,7 @@ public class BlockWrapper extends BlockContainer
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess access, int x, int y, int z)
     {
-        TileAbstract tile = getTile(access, x, y, z);
+        TileEntityWrapper tile = getTile(access, x, y, z);
         if (tile instanceof ITileBlockBounds)
         {
             inject(tile, access, x, y, z);
@@ -611,7 +611,7 @@ public class BlockWrapper extends BlockContainer
     /**
      * Injects and eject(tile);s data from the TileEntity.
      */
-    public void inject(TileAbstract tile, IBlockAccess access, int x, int y, int z)
+    public void inject(TileEntityWrapper tile, IBlockAccess access, int x, int y, int z)
     {
         if (tile.isBlock)
         {
@@ -629,7 +629,7 @@ public class BlockWrapper extends BlockContainer
         }
     }
 
-    public void eject(TileAbstract tile)
+    public void eject(TileEntityWrapper tile)
     {
         if (tile.isBlock)
         {
@@ -644,12 +644,12 @@ public class BlockWrapper extends BlockContainer
         }
     }
 
-    public TileAbstract getTile(IBlockAccess world, int x, int y, int z)
+    public TileEntityWrapper getTile(IBlockAccess world, int x, int y, int z)
     {
         TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof TileAbstract)
+        if (tile instanceof TileEntityWrapper)
         {
-            return ((TileAbstract) tile);
+            return ((TileEntityWrapper) tile);
         }
         return properties.staticTile;
     }

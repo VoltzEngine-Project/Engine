@@ -22,7 +22,7 @@ import java.util.HashMap;
  */
 public abstract class BlockProperties implements ITileEntityProvider
 {
-    protected static final HashMap<Class<? extends TileAbstract>, BlockProperties> classToData = new HashMap();
+    protected static final HashMap<Class<? extends TileEntityWrapper>, BlockProperties> classToData = new HashMap();
 
     /** Mod object that created this tile */
     public final IMod mod;
@@ -64,7 +64,7 @@ public abstract class BlockProperties implements ITileEntityProvider
     public Cube bounds;
 
     /** Wrapper for block calls that can not be sent to TileEntity */
-    public TileAbstract staticTile;
+    public TileEntityWrapper staticTile;
     public int blockColor;
 
     public BlockProperties(IMod mod)
@@ -76,13 +76,13 @@ public abstract class BlockProperties implements ITileEntityProvider
     public abstract TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_);
 
     /**
-     * Called to register {@link TileAbstract} class that will use this data object. IF you
+     * Called to register {@link TileEntityWrapper} class that will use this data object. IF you
      * do not register the class you will need to provide an alt way to get the TileData object.
-     * As it is needed in order for several methods in the {@link TileAbstract} class to function.
+     * As it is needed in order for several methods in the {@link TileEntityWrapper} class to function.
      */
     public abstract void registerTiles();
 
-    public static BlockProperties getDataFor(Class<? extends TileAbstract> aClass)
+    public static BlockProperties getDataFor(Class<? extends TileEntityWrapper> aClass)
     {
         if (classToData.containsKey(aClass))
         {
