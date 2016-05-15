@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.tile;
 
+import com.builtbroken.mc.framework.tile.api.IBlockTileHost;
 import com.builtbroken.mc.lib.mod.IMod;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.transform.region.Cube;
@@ -12,8 +13,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import java.util.HashMap;
-
 /**
  * Holds all data and basic logic for blocks.
  *
@@ -22,7 +21,6 @@ import java.util.HashMap;
  */
 public abstract class BlockProperties implements ITileEntityProvider
 {
-    protected static final HashMap<Class<? extends TileEntityWrapper>, BlockProperties> classToData = new HashMap();
 
     /** Mod object that created this tile */
     public final IMod mod;
@@ -64,7 +62,7 @@ public abstract class BlockProperties implements ITileEntityProvider
     public Cube bounds;
 
     /** Wrapper for block calls that can not be sent to TileEntity */
-    public TileEntityWrapper staticTile;
+    public IBlockTileHost staticTile;
     public int blockColor;
 
     public BlockProperties(IMod mod)
@@ -81,15 +79,6 @@ public abstract class BlockProperties implements ITileEntityProvider
      * As it is needed in order for several methods in the {@link TileEntityWrapper} class to function.
      */
     public abstract void registerTiles();
-
-    public static BlockProperties getDataFor(Class<? extends TileEntityWrapper> aClass)
-    {
-        if (classToData.containsKey(aClass))
-        {
-            return classToData.get(aClass);
-        }
-        return null;
-    }
 
     public void registerIcons(IIconRegister iconRegister, boolean blockLayer)
     {

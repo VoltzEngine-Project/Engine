@@ -1,22 +1,22 @@
 package com.builtbroken.mc.framework.tile;
 
-import com.builtbroken.mc.api.IWorldPosition;
+import com.builtbroken.mc.framework.tile.api.ITileHost;
 import com.builtbroken.mc.prefab.tile.entity.TileEntityBase;
-import net.minecraft.block.Block;
+import com.builtbroken.mc.prefab.tile.interfaces.tile.ITile;
 import net.minecraft.world.World;
 
 /**
- * Wrapper object for redirecting calls to the {@Tile} object
+ * Wrapper object for redirecting calls to the {@Tile} instance
  * <p>
  * Created by Robert(DarkGuardsman) on 4/11/2016
  */
-public final class TileEntityWrapper extends TileEntityBase implements IWorldPosition
+public final class TileEntityWrapper extends TileEntityBase implements ITileHost
 {
     /** Number of ticks that have passed since this object was created*/
     public long ticks = 0L;
 
     /** Tile object this is wrappered around */
-    public final Tile tile;
+    public final ITile tile;
 
     /** Default method for forge to use when loading this tile */
     public TileEntityWrapper()
@@ -25,7 +25,7 @@ public final class TileEntityWrapper extends TileEntityBase implements IWorldPos
     }
 
     /** Constructor to use when creating new instances of this object */
-    public TileEntityWrapper(Tile tile)
+    public TileEntityWrapper(ITile tile)
     {
         this.tile = tile;
     }
