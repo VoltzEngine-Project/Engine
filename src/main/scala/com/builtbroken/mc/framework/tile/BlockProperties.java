@@ -1,16 +1,15 @@
 package com.builtbroken.mc.framework.tile;
 
-import com.builtbroken.mc.framework.tile.api.IBlockTileHost;
+import com.builtbroken.mc.framework.tile.api.IBlockTile;
 import com.builtbroken.mc.lib.mod.IMod;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.prefab.tile.interfaces.tile.ITile;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 /**
@@ -19,7 +18,7 @@ import net.minecraft.world.World;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/11/2016.
  */
-public abstract class BlockProperties implements ITileEntityProvider
+public abstract class BlockProperties
 {
 
     /** Mod object that created this tile */
@@ -62,7 +61,7 @@ public abstract class BlockProperties implements ITileEntityProvider
     public Cube bounds;
 
     /** Wrapper for block calls that can not be sent to TileEntity */
-    public IBlockTileHost staticTile;
+    public IBlockTile staticTile;
     public int blockColor;
 
     public BlockProperties(IMod mod)
@@ -70,8 +69,12 @@ public abstract class BlockProperties implements ITileEntityProvider
         this.mod = mod;
     }
 
-    @Override
-    public abstract TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_);
+    /**
+     * Generates a new tile for the block and meta combo
+     *
+     * @return
+     */
+    public abstract ITile createNewTile(World world, int meta);
 
     /**
      * Called to register {@link TileEntityWrapper} class that will use this data object. IF you

@@ -42,6 +42,7 @@ public interface ITile extends IPos3D, IWorldPosition
     /**
      * Called each tick of the world, so long as tick > 0
      *
+     * @param tile  - if true the tick was called from the TileEntity, false is from the block
      * @param tick  - current tick, resets to one when value >= Long.MAX_VALUE - 5
      * @param delta - percent of time that has passed, should be near 1 if
      *              world is moving at recommended speed. If the time increases
@@ -50,7 +51,7 @@ public interface ITile extends IPos3D, IWorldPosition
      *              operations, just use it for animation or progress updated.
      *              En sure that recipe or other operations move at world's speed.
      */
-    void update(long tick, double delta);
+    void update(boolean tile, long tick, double delta);
 
     /** Called when the tile is added to the world. */
     void onAdded();
@@ -73,4 +74,19 @@ public interface ITile extends IPos3D, IWorldPosition
      * @return true if the block was changed
      */
     boolean removeByPlayer(EntityPlayer player, boolean willHarvest);
+
+    /**
+     * Light value produced by this tile
+     *
+     * @return
+     */
+    int getLightValue();
+
+    /**
+     * Is this tile solid on the side given
+     *
+     * @param side
+     * @return
+     */
+    boolean isSolid(int side);
 }

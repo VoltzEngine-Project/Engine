@@ -1,6 +1,10 @@
 package com.builtbroken.mc.framework.tile;
 
+import com.builtbroken.mc.framework.tile.api.IBlockWrapper;
+import com.builtbroken.mc.framework.tile.api.ITileHost;
 import com.builtbroken.mc.prefab.tile.interfaces.tile.ITile;
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
 
@@ -30,6 +34,26 @@ public class TileFramework
         if (classToData.containsKey(aClass))
         {
             return classToData.get(aClass);
+        }
+        return null;
+    }
+
+    public static BlockProperties getBlockDataFor(World world, int x, int y, int z)
+    {
+        Block block = world.getBlock(x, y, z);
+        if (block != null && block instanceof IBlockWrapper)
+        {
+            return ((IBlockWrapper) block).getBlockData(world, x, y, z);
+        }
+        return null;
+    }
+
+    public static ITile getTileFor(ITileHost host)
+    {
+        BlockProperties props = getBlockDataFor(host.world(), (int)host.x(), (int)host.y(), (int)host.z());
+        if(props != null)
+        {
+            return props.createNewTile(host.world(), host.world().getBlockMetadata((int)host.x(), (int)host.y(), (int)host.z()));
         }
         return null;
     }
