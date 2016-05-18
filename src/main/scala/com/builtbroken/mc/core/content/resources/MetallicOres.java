@@ -35,6 +35,7 @@ public enum MetallicOres
 
     MetallicOres(String oreName, int min, int max, int amountPerBranch, int amountPerChunk)
     {
+        this(min, max, amountPerBranch, amountPerChunk);
         this.oreDictName = oreName;
     }
 
