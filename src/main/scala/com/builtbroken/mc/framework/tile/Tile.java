@@ -34,7 +34,7 @@ public class Tile implements ITile
     }
 
     @Override
-    public void update(long tick, double delta)
+    public void update(boolean tile, long tick, double delta)
     {
 
     }
@@ -61,6 +61,18 @@ public class Tile implements ITile
     public boolean removeByPlayer(EntityPlayer player, boolean willHarvest)
     {
         return host != null && host.isBlock() ? world().setBlockToAir(xi(), yi(), zi()) : true;
+    }
+
+    @Override
+    public int getLightValue()
+    {
+        return 0;
+    }
+
+    @Override
+    public boolean isSolid(int side)
+    {
+        return false;
     }
 
     @Override
