@@ -333,7 +333,10 @@ public class Engine
         RecipeSorter.register(References.PREFIX + "Tools", RecipeTool.class, SHAPED, "after:minecraft:shaped");
 
         //Internal systems
-        loader.applyModule(new ProxyASMTest());
+        if (config.getBoolean("ASMTestingEnabled", "Internal", true, "Enables the testing of the internally used ASM code, used to ensure quality of the game. Only disable if you know the ASM is functional or there are issues with it running. Normally though if the ASM test fails then the ASM code itself was not injected. Which will result in several features of the mod not functioning correctly."))
+        {
+            loader.applyModule(new ProxyASMTest());
+        }
         loader.applyModule(getProxy());
         loader.applyModule(packetHandler);
         loader.applyModule(GroupProfileHandler.GLOBAL);
