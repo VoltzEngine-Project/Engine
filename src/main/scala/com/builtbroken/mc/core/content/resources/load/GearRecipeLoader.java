@@ -4,6 +4,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.content.resources.DefinedGenItems;
 import com.builtbroken.mc.core.content.resources.GenMaterial;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
+import com.builtbroken.mc.lib.helper.recipe.OreNames;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.builtbroken.mc.prefab.recipe.item.RecipeTool;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -25,16 +26,23 @@ public class GearRecipeLoader extends AbstractLoadable
         {
             if (Engine.itemSimpleCraftingTools != null)
             {
-                GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.GEAR.item, 1, GenMaterial.WOOD.ordinal()),
+                GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.GEAR.item, 2, GenMaterial.WOOD.ordinal()),
                         "WH", "DC",
-                        'W', "plankWood",
+                        'W', OreNames.WOOD,
                         'H', Engine.itemSimpleCraftingTools.getHammer(),
                         'C', Engine.itemSimpleCraftingTools.getChisel(),
                         'D', Engine.itemSimpleCraftingTools.getDrill()));
 
+                GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.GEAR.item, 2, GenMaterial.WOOD.ordinal()),
+                        "HS ", "SWS", " SC",
+                        'W', OreNames.WOOD,
+                        'S', OreNames.WOOD_STICK,
+                        'H', Engine.itemSimpleCraftingTools.getHammer(),
+                        'C', Engine.itemSimpleCraftingTools.getChisel()));
+
                 GameRegistry.addRecipe(new RecipeTool(new ItemStack(DefinedGenItems.GEAR.item, 1, GenMaterial.STONE.ordinal()),
                         "WH", "DC",
-                        'W', "stone",
+                        'W', OreNames.STONE,
                         'H', Engine.itemSimpleCraftingTools.getHammer(),
                         'C', Engine.itemSimpleCraftingTools.getChisel(),
                         'D', Engine.itemSimpleCraftingTools.getDrill()));
