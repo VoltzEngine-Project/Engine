@@ -72,7 +72,7 @@ public class Sphere extends Shape3D
                         {
                             Entity entity = (Entity) list1.get(l);
 
-                            if (ClassIsAssignableFrom.isAssignableFrom(clazz, entity.getClass()) && distance(new Pos(entity)) <= r)
+                            if (clazz.isAssignableFrom(entity.getClass()) && distance(new Pos(entity)) <= r)
                             {
                                 list.add((E)entity);
                             }
