@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.transform.vector;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.data.vector.Pos3D;
-import com.builtbroken.mc.lib.transform.ITransform;
+import com.builtbroken.jlib.data.vector.ITransform;
 import com.builtbroken.mc.lib.transform.rotation.EulerAngle;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;

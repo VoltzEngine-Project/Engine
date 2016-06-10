@@ -1,8 +1,7 @@
 package com.builtbroken.mc.lib.transform.rotation
 
 import java.math.{BigDecimal, MathContext, RoundingMode}
-import com.builtbroken.jlib.data.vector.IPos3D
-import com.builtbroken.mc.lib.transform.ITransform
+import com.builtbroken.jlib.data.vector.{ITransform, IPos3D}
 import com.builtbroken.mc.lib.transform.vector.Pos
 
 /**

@@ -3,7 +3,7 @@ package com.builtbroken.mc.lib.transform.rotation;
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.helpers.MathHelper;
 import com.builtbroken.mc.core.network.IByteBufWriter;
-import com.builtbroken.mc.lib.transform.ITransform;
+import com.builtbroken.jlib.data.vector.ITransform;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
