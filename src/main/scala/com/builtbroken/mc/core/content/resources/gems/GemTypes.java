@@ -1,8 +1,11 @@
 package com.builtbroken.mc.core.content.resources.gems;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +26,7 @@ public enum GemTypes
     /** Bit rough and dirty */
     RAW("raw", "gemRaw"),
     /** Cleaned up but not cut */
-    UNCUT("uncut", "gemUncut" , EMERALD, QUARTZ),
+    UNCUT("uncut", "gemUncut", EMERALD, QUARTZ),
     /** Generalized cut */
     CUT("cut", "gem"),
     /** Nice and shiny */
@@ -41,6 +44,9 @@ public enum GemTypes
     private boolean requested = false;
     /** Item representing this generated item */
     public Item item;
+
+    @SideOnly(Side.CLIENT)
+    public IIcon[] icons;
 
     GemTypes(String name, Gems... mats)
     {

@@ -11,19 +11,26 @@ import com.builtbroken.mc.lib.helper.LanguageUtility;
 public enum Gems
 {
     /** Placeholder/Mystery Gem */
-    UNKNOWN,
-    AMAZONITE,
-    QUARTZ,
-    QUARTZ_SMOKEY,
-    ONYX_BLACK,
-    ONYX_RED,
-    GARNET_GREEN,
-    GARNET_ORANGE,
-    GARNET_RED,
-    GARNET_YELLOW,
-    EMERALD;
+    UNKNOWN("null"),
+    AMAZONITE("amazonite"),
+    QUARTZ("quartz"),
+    QUARTZ_SMOKEY("quartz.smoke"),
+    ONYX_BLACK("onyx.black"),
+    ONYX_RED("onyx.red"),
+    GARNET_GREEN("garnet.green"),
+    GARNET_ORANGE("garnet.orange"),
+    GARNET_RED("garnet.red"),
+    GARNET_YELLOW("garnet.yellow"),
+    EMERALD("emerald");
 
     String oreName;
+
+    String itemTextureName;
+
+    Gems(String textureName)
+    {
+        this.itemTextureName = textureName;
+    }
 
 
     public String getOreName()

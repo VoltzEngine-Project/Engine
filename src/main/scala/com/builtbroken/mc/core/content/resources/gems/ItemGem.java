@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 import java.util.List;
 
@@ -39,7 +40,11 @@ public class ItemGem extends Item
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister reg)
     {
-        this.itemIcon = reg.registerIcon(References.PREFIX + itemType.iconName);
+        itemType.icons = new IIcon[Gems.values().length];
+        for(Gems gem : Gems.values())
+        {
+            itemType.icons[gem.ordinal()] = reg.registerIcon(References.PREFIX + "gem." + gem.itemTextureName);
+        }
     }
 
     @Override
