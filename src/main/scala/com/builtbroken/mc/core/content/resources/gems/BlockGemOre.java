@@ -10,7 +10,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -31,30 +33,33 @@ public class BlockGemOre extends Block
     }
 
     @Override
-    public int damageDropped(int m)
+    public int damageDropped(int meta)
     {
-        return m;
+        return meta;
     }
 
-    @SideOnly(Side.CLIENT) @Override
+    @SideOnly(Side.CLIENT)
+    @Override
     public IIcon getIcon(int side, int meta)
     {
         return icon[meta];
     }
 
-    @SideOnly(Side.CLIENT) @Override
+    @SideOnly(Side.CLIENT)
+    @Override
     public void registerBlockIcons(IIconRegister reg)
     {
-        for(GemOres ore : GemOres.values())
+        for (GemOres ore : GemOres.values())
         {
             icon[ore.ordinal()] = reg.registerIcon(References.PREFIX + type + "_" + ore.name().toLowerCase() + "_ore");
         }
     }
 
-    @SideOnly(Side.CLIENT) @Override
+    @SideOnly(Side.CLIENT)
+    @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list)
     {
-        for(GemOres ore : GemOres.values())
+        for (GemOres ore : GemOres.values())
         {
             list.add(new ItemStack(item, 1, ore.ordinal()));
         }
@@ -69,6 +74,36 @@ public class BlockGemOre extends Block
     @Override
     public Item getItemDropped(int meta, Random random, int var)
     {
+        if (meta >= 0 && meta < GemOres.values().length)
+        {
+            Item item = GemOres.values()[meta].getOreItem();
+            if (item != null)
+            {
+                return item;
+            }
+        }
         return Item.getItemFromBlock(this);
+    }
+
+    @Override
+    public int quantityDropped(int meta, int fortune, Random random)
+    {
+        //TODO implement increased drop rate
+        return super.quantityDropped(meta, fortune, random);
+    }
+
+    @Override
+    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
+    {
+        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+        int count = quantityDropped(metadata, fortune, world.rand);
+        Item item = getItemDropped(metadata, world.rand, fortune);
+
+        if (item != null)
+        {
+            ret.add(new ItemStack(item, count, item instanceof ItemGem ? GemOres.values()[metadata].gem.ordinal() : metadata));
+        }
+
+        return ret;
     }
 }

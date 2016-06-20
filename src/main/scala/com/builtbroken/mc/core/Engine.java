@@ -207,13 +207,7 @@ public class Engine
         DefinedGenItems.WIRE.requestToLoad();
         DefinedGenItems.SCREW.requestToLoad();
         //TODO remove if statement when gems are nice
-        if (runningAsDev)
-        {
-            for (GemTypes types : GemTypes.values())
-            {
-                types.requestToLoad();
-            }
-        }
+        GemTypes.UNCUT.requestToLoad();
     }
 
     public static void requestToolParts()

@@ -1,8 +1,6 @@
 package com.builtbroken.mc.core.content.resources.gems;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.core.content.resources.GenMaterial;
-import com.builtbroken.mc.lib.helper.LanguageUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -28,7 +26,9 @@ public class ItemGem extends Item
     public ItemGem(GemTypes itemType)
     {
         if (itemType == null)
+        {
             throw new RuntimeException("Item type can not be null for ItemGenMaterial");
+        }
 
         this.itemType = itemType;
         this.setUnlocalizedName(References.PREFIX + itemType.name().toLowerCase());
@@ -41,49 +41,51 @@ public class ItemGem extends Item
     public void registerIcons(IIconRegister reg)
     {
         itemType.icons = new IIcon[Gems.values().length];
-        for(Gems gem : Gems.values())
+        for (Gems gem : Gems.values())
         {
-            itemType.icons[gem.ordinal()] = reg.registerIcon(References.PREFIX + "gem." + gem.itemTextureName);
-        }
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack)
-    {
-        return "item." + References.PREFIX + itemType.name + LanguageUtility.capitalizeFirst(getMaterial(stack).name().toLowerCase());
-    }
-
-    public GenMaterial getMaterial(ItemStack stack)
-    {
-        if (stack.getItemDamage() >= 0 && stack.getItemDamage() < GenMaterial.values().length)
-        {
-            return GenMaterial.values()[stack.getItemDamage()];
-        }
-        return GenMaterial.UNKNOWN;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List list)
-    {
-        for (GenMaterial mat : GenMaterial.values())
-        {
-            if (mat != GenMaterial.UNKNOWN && !itemType.ignoreMaterials.contains(mat))
+            if(gem != Gems.UNKNOWN)
             {
-                list.add(new ItemStack(item, 1, mat.ordinal()));
+                itemType.icons[gem.ordinal()] = reg.registerIcon(References.PREFIX + "gem." + gem.name + "." + itemType.name);
             }
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack stack, int pass)
+    public IIcon getIconFromDamage(int meta)
     {
-        GenMaterial material = getMaterial(stack);
-        if (material.color != null)
+        if (meta >= 0 && meta < itemType.icons.length)
         {
-            return material.color.getRGB();
+            return itemType.icons[meta];
         }
-        return 16777215;
+        return this.itemIcon;
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack)
+    {
+        return "item." + References.PREFIX + "gem." + getMaterial(stack).name + "." + itemType.name;
+    }
+
+    public Gems getMaterial(ItemStack stack)
+    {
+        if (stack.getItemDamage() >= 0 && stack.getItemDamage() < Gems.values().length)
+        {
+            return Gems.values()[stack.getItemDamage()];
+        }
+        return Gems.UNKNOWN;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(Item item, CreativeTabs tab, List list)
+    {
+        for (Gems mat : Gems.values())
+        {
+            if (mat != Gems.UNKNOWN && !itemType.ignoreMaterials.contains(mat))
+            {
+                list.add(new ItemStack(item, 1, mat.ordinal()));
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ import com.builtbroken.mc.lib.world.generator.OreGenReplaceStone;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.config.Configuration;
@@ -17,14 +18,14 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public enum GemOres
 {
-    Amazonite(5, 20, 2, 15),
-    SmokeyQuartz(5, 20, 2, 15),
-    OnyxBlack(1, 5, 3, 10),
-    OnyxRed(15, 60, 5, 20),
-    GarnetGreen(15, 60, 5, 20),
-    GarnetOrange(10, 50, 3, 18),
-    GarnetRed(10, 50, 3, 18),
-    GarnetYellow(10, 50, 3, 18);
+    Amazonite(Gems.AMAZONITE, 5, 20, 2, 15),
+    SmokeyQuartz(Gems.QUARTZ_SMOKEY, 5, 20, 2, 15),
+    OnyxBlack(Gems.ONYX_BLACK, 1, 5, 3, 10),
+    OnyxRed(Gems.ONYX_RED, 15, 60, 5, 20),
+    GarnetGreen(Gems.GARNET_GREEN, 15, 60, 5, 20),
+    GarnetOrange(Gems.GARNET_ORANGE, 10, 50, 3, 18),
+    GarnetRed(Gems.GARNET_RED, 10, 50, 3, 18),
+    GarnetYellow(Gems.GARNET_YELLOW, 10, 50, 3, 18);
 
     private int minY = 1;
     private int maxY = 100;
@@ -34,8 +35,11 @@ public enum GemOres
     private Block block;
     private String oreDictName;
 
-    GemOres(int min, int max, int amountPerBranch, int amountPerChunk)
+    public final Gems gem;
+
+    GemOres(Gems gem, int min, int max, int amountPerBranch, int amountPerChunk)
     {
+        this.gem = gem;
         this.minY = min;
         this.maxY = max;
         this.amountPerBranch = amountPerBranch;
@@ -66,5 +70,10 @@ public enum GemOres
                 OreDictionary.registerOre(ore.oreDictName, stack);
             }
         }
+    }
+
+    public Item getOreItem()
+    {
+        return GemTypes.UNCUT.item;
     }
 }

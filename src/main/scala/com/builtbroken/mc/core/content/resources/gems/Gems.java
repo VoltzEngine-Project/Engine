@@ -14,7 +14,7 @@ public enum Gems
     UNKNOWN("null"),
     AMAZONITE("amazonite"),
     QUARTZ("quartz"),
-    QUARTZ_SMOKEY("quartz.smoke"),
+    QUARTZ_SMOKEY("quartz.smoky"),
     ONYX_BLACK("onyx.black"),
     ONYX_RED("onyx.red"),
     GARNET_GREEN("garnet.green"),
@@ -25,11 +25,11 @@ public enum Gems
 
     String oreName;
 
-    String itemTextureName;
+    String name;
 
-    Gems(String textureName)
+    Gems(String name)
     {
-        this.itemTextureName = textureName;
+        this.name = name;
     }
 
 

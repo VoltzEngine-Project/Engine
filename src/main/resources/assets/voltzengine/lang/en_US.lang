@@ -38,6 +38,18 @@ tile.voltzengine:oreGarnetred.name=Red Garnet Ore
 tile.voltzengine:oreGarnetorange.name=Orange Garnet Ore
 tile.voltzengine:oreGarnetyellow.name=Yellow Garnet Ore
 
+## Gems
+item.voltzengine:gem.amazonite.uncut=Amazonite Gem
+item.voltzengine:gem.quartz.uncut=Quartz Gem
+item.voltzengine:gem.quartz.smokey.uncut=Smoky Quartz Gem
+item.voltzengine:gem.onyx.black.uncut=Black Onyx
+item.voltzengine:gem.onyx.red.uncut=Red Onyx
+item.voltzengine:gem.garnet.green.uncut=Green Garnet
+item.voltzengine:gem.garnet.orange.uncut=Orange Garnet
+item.voltzengine:gem.garnet.red.uncut=Red Garnet
+item.voltzengine:gem.garnet.yellow.uncut=Yellow Garnet
+item.voltzengine:gem.emerald.uncut=Emerald
+
 ## Dust
 item.voltzengine:dustCopper.name=Copper Dust
 item.voltzengine:dustTin.name=Tin Dust
