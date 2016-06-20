@@ -458,7 +458,7 @@ public class Engine
 
         if ((getConfig().hasKey("Content", "LoadGemOres") || gemOresRequested) && getConfig().getBoolean("LoadGemOres", "Content", gemOresRequested, "Loads up Gem Ores."))
         {
-            gemOre = contentRegistry.newBlock(References.ID + "GemOre", new BlockGemOre("gem"), ItemBlockGemOre.class);
+            gemOre = contentRegistry.newBlock(References.ID + "GemOre", new BlockGemOre("stone"), ItemBlockGemOre.class);
             GemOres.registerSet(gemOre, getConfig());
         }
 
