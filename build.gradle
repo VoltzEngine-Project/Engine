@@ -24,6 +24,7 @@ plugins {
   //id "com.github.johnrengelman.shadow" version "1.2.2"
   id "net.franz-becker.gradle-lombok" version "1.3"
   id 'com.jfrog.bintray' version '1.1'
+  id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.32"
 }
 
 apply from: 'https://raw.githubusercontent.com/BuiltBrokenModding/BuiltBrokenScripts/buildScripts/index/index.gradle'
@@ -94,6 +95,24 @@ jacocoTestReport {
         xml.enabled = true // coveralls plugin depends on xml format report
         html.enabled = true
     }
+}
+
+task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
+	filePath = "changelog.html"
+	untaggedName = "Current release ${project.version}"
+	fromCommit = "9f90ae0c046977df53323bf6305e8bdb15cb8897"
+	toRef =  "HEAD"
+	templateContent = """
+{{#tags}}
+  <h3>{{name}}</h3>
+  <ul>
+    {{#commits}}
+    <li> <a href="https://github.com/BuiltBrokenModding/VoltzEngine/commit/{{hash}}" target=_blank> {{{message}}}</a>
+</li>
+    {{/commits}}
+  </ul>
+{{/tags}}
+"""
 }
 
 task apiZip (type: Jar) {
