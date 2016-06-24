@@ -2,7 +2,6 @@ package com.builtbroken.mc.prefab.json;
 
 import com.builtbroken.mc.content.VeContent;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
-import com.builtbroken.mc.prefab.json.data.JsonData;
 import com.builtbroken.mc.prefab.json.processors.JsonBlockProcessor;
 import com.builtbroken.mc.prefab.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
@@ -47,7 +46,7 @@ public class JsonBlockLoader extends AbstractLoadable
                 {
                     if (processor.canProcess(element))
                     {
-                        JsonData data = processor.process(element);
+                        Object data = processor.process(element);
                         break;
                     }
                 }

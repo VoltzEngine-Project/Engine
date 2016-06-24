@@ -11,7 +11,7 @@ import net.minecraft.block.Block;
  */
 public class BlockJson extends Block
 {
-    protected BlockJson(String name, String mat)
+    public BlockJson(String name, String mat)
     {
         super(MaterialDict.get(mat));
         setBlockName(name);
