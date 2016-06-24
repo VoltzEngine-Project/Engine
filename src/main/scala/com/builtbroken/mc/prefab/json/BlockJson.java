@@ -1,7 +1,7 @@
 package com.builtbroken.mc.prefab.json;
 
+import com.builtbroken.mc.lib.helper.MaterialDict;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 
 /**
  * Block generated through a json based file format... Used to reduce dependency on code
@@ -11,8 +11,9 @@ import net.minecraft.block.material.Material;
  */
 public class BlockJson extends Block
 {
-    protected BlockJson(Material p_i45394_1_)
+    protected BlockJson(String name, String mat)
     {
-        super(p_i45394_1_);
+        super(MaterialDict.get(mat));
+        setBlockName(name);
     }
 }

@@ -13,8 +13,13 @@ public class JsonProcessor<D extends JsonData>
      * Called to process a json block section
      * @return
      */
-    public boolean canProcess(D data, JsonElement element)
+    public boolean canProcess(JsonElement element)
     {
         return true;
+    }
+
+    public D process(JsonElement element)
+    {
+        return null;
     }
 }
