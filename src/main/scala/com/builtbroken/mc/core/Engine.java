@@ -80,7 +80,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
@@ -106,8 +108,8 @@ public class Engine
     @Instance(References.ID)
     public static Engine instance;
 
-    protected LoadableHandler loader;
-    protected ModManager manager;
+    public LoadableHandler loader;
+    public ModManager manager;
     protected static Logger logger = LogManager.getLogger(References.DOMAIN);
     private Configuration config;
 
@@ -124,7 +126,6 @@ public class Engine
     public static Item itemSelectionTool;
     public static Item itemCircuits;
     public static Item itemDevTool;
-    public static Item gem = null;
 
     //Interal trigger booleans
     private static boolean metallicOresRequested = false;
@@ -155,6 +156,11 @@ public class Engine
     public static double TO_RF_RATIO = 500;
     public static double TO_BC_RATIO = 50;
 
+    /** List of content that has been requested to load, replaces old load system */
+    protected static List<String> requestedContent = new ArrayList();
+    protected static HashMap<String, Block> requestedBlocks = new HashMap();
+    protected static HashMap<String, Item> requestedItems = new HashMap();
+
     /**
      * Requests that all ores are generated
      * Must be called in pre-init
@@ -163,6 +169,7 @@ public class Engine
     {
         requestMetalOres();
         requestGemOres();
+        requestedContent.add("ore");
     }
 
     /**

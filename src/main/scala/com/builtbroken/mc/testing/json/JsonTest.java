@@ -1,8 +1,9 @@
 package com.builtbroken.mc.testing.json;
 
 import com.builtbroken.mc.content.VeContent;
-import com.builtbroken.mc.prefab.json.BlockJsonMeta;
-import com.builtbroken.mc.prefab.json.processors.JsonBlockProcessor;
+import com.builtbroken.mc.prefab.json.block.BlockJson;
+import com.builtbroken.mc.prefab.json.block.meta.BlockJsonMeta;
+import com.builtbroken.mc.prefab.json.block.processor.JsonBlockProcessor;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import com.google.gson.JsonElement;
@@ -26,6 +27,7 @@ public class JsonTest extends AbstractTest
 {
     public void testJson() throws IOException
     {
+        //More or less an experiment to see how json works, but it does ensure that it loads our file
         URL url = VeContent.class.getClassLoader().getResource("content/vec/MetalOre.json");
         InputStream stream = url.openStream();
         JsonReader jsonReader = new JsonReader(new BufferedReader(new InputStreamReader(stream)));
@@ -33,6 +35,7 @@ public class JsonTest extends AbstractTest
         JsonObject object = element.getAsJsonObject();
     }
 
+    //Tests loading of the entire metal ore file
     public void testBlockProcessor() throws IOException
     {
         URL url = VeContent.class.getClassLoader().getResource("content/vec/MetalOre.json");
@@ -43,8 +46,10 @@ public class JsonTest extends AbstractTest
         JsonBlockProcessor processor = new JsonBlockProcessor();
         assertTrue(processor.canProcess(element));
 
-        Object obj = processor.process(element);
-        assertNotNull(obj);
-        assertTrue(obj instanceof BlockJsonMeta);
+        BlockJson block = processor.process(element);
+
+        //Basic Test
+        assertNotNull(block);
+        assertTrue(block instanceof BlockJsonMeta);
     }
 }
