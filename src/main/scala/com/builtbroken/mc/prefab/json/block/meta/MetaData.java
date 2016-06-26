@@ -18,12 +18,7 @@ public class MetaData
     /** List of ore names to register after block is registered */
     public List<String> oreNames;
 
-    public final int index;
-
-    public MetaData(int index)
-    {
-        this.index = index;
-    }
+    public int index;
 
     /**
      * Adds an ore name to be registered

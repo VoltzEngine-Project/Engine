@@ -14,7 +14,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 import cpw.mods.fml.common.registry.GameRegistry;
+import li.cil.oc.common.block.Item;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -115,5 +119,90 @@ public class JsonContentLoader extends AbstractLoadable
                 }
             }
         }
+    }
+
+    /**
+     * Takes a string and attempts to convert into into a useable
+     * {@link ItemStack}. Does not support NBT due to massive
+     * amount of nesting and complexity that NBT can have. If
+     * you want to use this try the Json version.
+     *
+     * @param string - simple string
+     * @return ItemStack, or null
+     */
+    public static ItemStack fromString(String string)
+    {
+        //TODO move to helper as this will be reused, not just in Json
+        if (string.startsWith("item[") || string.startsWith("block["))
+        {
+            String out = string.substring(string.indexOf("[") + 1, string.length() - 1); //ends ]
+            int meta = -1;
+
+            //Meta handling
+            if (out.contains("@"))
+            {
+                String[] split = out.split("@");
+                out = split[0];
+                try
+                {
+                    meta = Integer.parseInt(split[1]);
+                }
+                catch (NumberFormatException e)
+                {
+                    throw new IllegalArgumentException();
+                }
+            }
+
+            //Ensure domain, default to MC
+            if (!out.contains(":"))
+            {
+                out = "minecraft:" + out;
+            }
+            //TODO implement short hand eg cobble - > CobbleStone
+
+            if (string.startsWith("item["))
+            {
+                Object obj = Item.itemRegistry.getObject(out);
+                if (obj instanceof Item)
+                {
+                    if (meta > -1)
+                    {
+                        return new ItemStack((Item) obj);
+                    }
+                    else
+                    {
+                        return new ItemStack((Item) obj, 1, meta);
+                    }
+                }
+            }
+            else
+            {
+                Object obj = Block.blockRegistry.getObject(out);
+                if (obj instanceof Block)
+                {
+                    if (meta > -1)
+                    {
+                        return new ItemStack((Block) obj);
+                    }
+                    else
+                    {
+                        return new ItemStack((Block) obj, 1, meta);
+                    }
+                }
+            }
+        }
+        //Ore Names
+        else if (OreDictionary.doesOreNameExist(string))
+        {
+            List<ItemStack> ores = OreDictionary.getOres(string);
+            for (ItemStack stack : ores)
+            {
+                if (stack != null)
+                {
+                    return stack;
+                }
+            }
+        }
+        return null;
     }
 }

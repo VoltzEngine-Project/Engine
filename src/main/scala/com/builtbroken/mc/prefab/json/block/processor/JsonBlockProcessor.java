@@ -78,6 +78,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
                 {
                     if (block.meta[m] == null)
                     {
+                        meta.index = m;
                         block.meta[m] = meta;
                     }
                     else
