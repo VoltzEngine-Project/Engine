@@ -11,6 +11,8 @@ import com.builtbroken.mc.prefab.json.block.processor.JsonBlockWorldGenProcessor
 import com.builtbroken.mc.prefab.json.imp.IJsonGenObject;
 import com.builtbroken.mc.prefab.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -18,6 +20,7 @@ import li.cil.oc.common.block.Item;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.BufferedReader;
@@ -27,6 +30,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -204,5 +208,144 @@ public class JsonContentLoader extends AbstractLoadable
             }
         }
         return null;
+    }
+
+    public static ItemStack fromJson(JsonObject json)
+    {
+        ItemStack output = null;
+        String type = json.get("type").getAsString();
+        String item = json.get("item").getAsString();
+
+        int meta = -1;
+        if (json.has("meta"))
+        {
+            meta = json.get("meta").getAsInt();
+        }
+
+        if (type.equalsIgnoreCase("block"))
+        {
+            Object obj = Item.itemRegistry.getObject(item);
+            if (obj instanceof Block)
+            {
+                if (meta > -1)
+                {
+                    output = new ItemStack((Block) obj);
+                }
+                else
+                {
+                    output = new ItemStack((Block) obj, 1, meta);
+                }
+            }
+        }
+        else if (type.equalsIgnoreCase("item"))
+        {
+            Object obj = Item.itemRegistry.getObject(item);
+            if (obj instanceof Item)
+            {
+                if (meta > -1)
+                {
+                    return new ItemStack((Item) obj);
+                }
+                else
+                {
+                    return new ItemStack((Item) obj, 1, meta);
+                }
+            }
+        }
+        else if (type.equalsIgnoreCase("dict"))
+        {
+            List<ItemStack> ores = OreDictionary.getOres(item);
+            for (ItemStack stack : ores)
+            {
+                if (stack != null)
+                {
+                    output = stack;
+                    break;
+                }
+            }
+        }
+
+        if (output != null && json.has("nbt"))
+        {
+            NBTTagCompound tag = new NBTTagCompound();
+            processNBTTagCompound(json.getAsJsonObject("nbt"), tag);
+        }
+        return output;
+    }
+
+    /**
+     * Loads NBT data from a json object
+     *
+     * @param json - json object, converted to entry set
+     * @param tag  - tag to save the data to
+     */
+    public static void processNBTTagCompound(JsonObject json, NBTTagCompound tag)
+    {
+        for (Map.Entry<String, JsonElement> entry : json.entrySet())
+        {
+            if (entry.getValue().isJsonPrimitive())
+            {
+                JsonPrimitive primitive = entry.getValue().getAsJsonPrimitive();
+                if (primitive.isBoolean())
+                {
+                    tag.setBoolean(entry.getKey(), primitive.getAsBoolean());
+                }
+                else if (primitive.isNumber())
+                {
+                    tag.setInteger(entry.getKey(), primitive.getAsInt());
+                }
+                else if (primitive.isString())
+                {
+                    tag.setString(entry.getKey(), primitive.getAsString());
+                }
+            }
+            else if (entry.getValue().isJsonObject())
+            {
+                JsonObject object = entry.getValue().getAsJsonObject();
+                if (object.has("type"))
+                {
+                    String type = object.get("type").getAsString();
+                    if (type.equalsIgnoreCase("tagCompound"))
+                    {
+                        NBTTagCompound nbt = new NBTTagCompound();
+                        processNBTTagCompound(object, nbt);
+                        tag.setTag(entry.getKey(), nbt);
+                    }
+                    else if (type.equalsIgnoreCase("int"))
+                    {
+                        tag.setInteger(entry.getKey(), entry.getValue().getAsInt());
+                    }
+                    else if (type.equalsIgnoreCase("double"))
+                    {
+                        tag.setDouble(entry.getKey(), entry.getValue().getAsDouble());
+                    }
+                    else if (type.equalsIgnoreCase("float"))
+                    {
+                        tag.setFloat(entry.getKey(), entry.getValue().getAsFloat());
+                    }
+                    else if (type.equalsIgnoreCase("byte"))
+                    {
+                        tag.setByte(entry.getKey(), entry.getValue().getAsByte());
+                    }
+                    else if (type.equalsIgnoreCase("short"))
+                    {
+                        tag.setShort(entry.getKey(), entry.getValue().getAsShort());
+                    }
+                    else if (type.equalsIgnoreCase("long"))
+                    {
+                        tag.setLong(entry.getKey(), entry.getValue().getAsLong());
+                    }
+                    //TODO add byte array
+                    //TODO add int array
+                    //TODO add tag list
+                }
+                else
+                {
+                    NBTTagCompound nbt = new NBTTagCompound();
+                    processNBTTagCompound(object, nbt);
+                    tag.setTag(entry.getKey(), nbt);
+                }
+            }
+        }
     }
 }

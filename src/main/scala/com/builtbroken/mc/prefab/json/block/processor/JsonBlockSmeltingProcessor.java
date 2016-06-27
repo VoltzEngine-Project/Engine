@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.json.block.processor;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.builtbroken.mc.prefab.json.block.BlockJson;
 import com.builtbroken.mc.prefab.json.block.meta.MetaData;
@@ -25,44 +26,71 @@ public class JsonBlockSmeltingProcessor extends JsonBlockSubProcessor implements
     @Override
     public void process(BlockJson block, JsonElement element)
     {
-        SmeltingRecipe recipe = process(block, element.getAsJsonObject());
-        if (recipe != null)
+        try
         {
+            SmeltingRecipe recipe = process(block, element.getAsJsonObject());
             recipes.add(recipe);
+        }
+        catch (Exception e)
+        {
+            //TODO log errors in a list to display to users after MC is done loading
+            Engine.logger().error("JsonBlockSmeltingProcessor: Failed to process recipe data for " + block, e);
         }
     }
 
     @Override
     public void processMeta(MetaData meta, BlockJson block, JsonElement element)
     {
-        SmeltingRecipe recipe = process(block, element.getAsJsonObject());
-        if (recipe != null)
+        try
         {
+            SmeltingRecipe recipe = process(block, element.getAsJsonObject());
             recipe.inputMeta = meta.index;
             recipes.add(recipe);
         }
+        catch (Exception e)
+        {
+            //TODO log errors in a list to display to users after MC is done loading
+            Engine.logger().error("JsonBlockSmeltingProcessor: Failed to process recipe data for " + block + " @ " + meta, e);
+        }
     }
 
-    private SmeltingRecipe process(BlockJson block, JsonObject element)
+    /**
+     * Called to process recipe data from the json element
+     *
+     * @param block
+     * @param json  - data stored in a json object, must have an output key
+     * @return smelting recipe
+     * @throws IllegalArgumentException - if the input is invalid
+     */
+    public SmeltingRecipe process(BlockJson block, JsonObject json)
     {
         SmeltingRecipe recipe;
-        if (element.has("output"))
+        if (json.has("output"))
         {
-            JsonElement output = element.get("output");
+            JsonElement output = json.get("output");
             if (output.isJsonObject())
             {
-                recipe = new SmeltingRecipeJson(block, output.getAsJsonObject());
+                JsonObject json2 = output.getAsJsonObject();
+                if (!json2.has("item"))
+                {
+                    throw new IllegalArgumentException(this + " json data is missing a item entry used to figure out what to load.");
+                }
+                if (!json2.has("type"))
+                {
+                    throw new IllegalArgumentException(this + " json data is missing a type entry used to figure out what to load.");
+                }
+                recipe = new SmeltingRecipeJson(block, json2);
             }
             else
             {
                 recipe = new SmeltingRecipeText(block, output.getAsString());
             }
-            if (element.has("xp"))
+            if (json.has("xp"))
             {
-                recipe.xp = (float) element.get("xp").getAsDouble();
+                recipe.xp = (float) json.get("xp").getAsDouble();
             }
         }
-        return null;
+        throw new IllegalArgumentException(this + " json data is missing a item entry used to figure out what to load.");
     }
 
     @Override

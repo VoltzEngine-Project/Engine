@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.json.recipe.smelting;
 
+import com.builtbroken.mc.prefab.json.JsonContentLoader;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 
@@ -17,30 +18,16 @@ public class SmeltingRecipeJson extends SmeltingRecipe
     {
         super(input);
         this.json = json;
-        if(!json.has("type"))
-        {
-            throw new IllegalArgumentException(this + " json data is missing a type entry used to figure out what to load.");
-        }
+        //Error checking/data validation is done by loader
     }
 
     @Override
     public ItemStack getOutput()
     {
-        if(output == null)
+        if (output == null)
         {
-            String type = json.get("type").getAsString();
-            if(type.equalsIgnoreCase("block"))
-            {
-
-            }
-            else if(type.equalsIgnoreCase("item"))
-            {
-
-            }
-            else if(type.equalsIgnoreCase("dict"))
-            {
-
-            }
+            //Built late in case items are not loaded yet
+            output = JsonContentLoader.fromJson(json);
         }
         return output;
     }

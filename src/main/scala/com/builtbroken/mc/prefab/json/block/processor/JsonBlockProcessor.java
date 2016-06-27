@@ -37,8 +37,6 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
         JsonObject blockData = object.get("blockData").getAsJsonObject();
         if (blockData.has("name") && blockData.has("material"))
         {
-
-
             BlockJson block;
             if (object.has("subtypes"))
             {
