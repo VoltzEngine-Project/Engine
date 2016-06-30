@@ -1,6 +1,5 @@
 package com.builtbroken.mc.prefab.json;
 
-import com.builtbroken.mc.content.VeContent;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
@@ -93,7 +92,7 @@ public class JsonContentLoader extends AbstractLoadable
      */
     public static JsonElement loadJsonFileFromResources(String resource) throws IOException
     {
-        URL url = VeContent.class.getClassLoader().getResource(resource);
+        URL url = JsonContentLoader.class.getClassLoader().getResource(resource);
         InputStream stream = url.openStream();
         JsonReader jsonReader = new JsonReader(new BufferedReader(new InputStreamReader(stream)));
         JsonElement element = Streams.parse(jsonReader);
