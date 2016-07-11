@@ -90,6 +90,18 @@ jar {
             "FMLAT": "VE_at.cfg")
 }
 
+deobfJar {
+     manifest.mainAttributes(
+            "Built-By": System.getProperty('user.name'),
+            "Created-By": currentJvm,
+            "Implementation-Title": archivesBaseName,
+            "Implementation-Version": project.version,
+            "Git-Hash": gitHash,
+            "FMLCorePlugin": coremod,
+            "FMLCorePluginContainsFMLMod": "true",
+            "FMLAT": "VE_at.cfg")
+}
+
 jacocoTestReport {
     reports {
         xml.enabled = true // coveralls plugin depends on xml format report
