@@ -355,6 +355,7 @@ public class Engine
         loader.applyModule(WireRecipeLoader.class);
         loader.applyModule(ScrewRecipeLoader.class);
         //Mod Support
+        config.setCategoryComment("Mod_Support", "If true the proxy class for the mod will be loaded enabling support, set to false if support is not required or breaks the game.");
         loader.applyModule(NEIProxy.class); //Uses reflection instead of API files
         loader.applyModule(OCProxy.class, Mods.OC.isLoaded());
         loader.applyModule(TinkerProxy.class, Mods.TINKERS.isLoaded());

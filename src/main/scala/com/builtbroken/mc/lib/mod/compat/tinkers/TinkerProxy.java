@@ -4,7 +4,8 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.content.resources.DefinedGenItems;
 import com.builtbroken.mc.core.content.resources.GenMaterial;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
+import com.builtbroken.mc.lib.mod.ModProxy;
+import com.builtbroken.mc.lib.mod.compat.Mods;
 import mantle.utils.ItemMetaWrapper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -25,8 +26,13 @@ import java.util.Map;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 10/29/2015.
  */
-public class TinkerProxy extends AbstractLoadable
+public class TinkerProxy extends ModProxy
 {
+    public TinkerProxy()
+    {
+        super(Mods.TINKERS);
+    }
+
     @Override
     public void postInit()
     {

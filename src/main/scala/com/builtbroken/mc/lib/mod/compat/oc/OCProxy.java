@@ -1,14 +1,19 @@
 package com.builtbroken.mc.lib.mod.compat.oc;
 
+import com.builtbroken.mc.lib.mod.ModProxy;
 import com.builtbroken.mc.lib.mod.compat.Mods;
-import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import li.cil.oc.api.Driver;
 
 /**
  * Created by robert on 3/2/2015.
  */
-public class OCProxy extends AbstractLoadable
+public class OCProxy extends ModProxy
 {
+    public OCProxy()
+    {
+        super(Mods.OC);
+    }
+
     @Override
     public void init()
     {

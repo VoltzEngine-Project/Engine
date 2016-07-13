@@ -1,7 +1,8 @@
 package com.builtbroken.mc.lib.mod.compat.nei;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
+import com.builtbroken.mc.lib.mod.ModProxy;
+import com.builtbroken.mc.lib.mod.compat.Mods;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
@@ -14,11 +15,16 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NEIProxy extends AbstractLoadable
+public class NEIProxy extends ModProxy
 {
     private static boolean lock = false;
 
     private static List hideItems = new ArrayList();
+
+    public NEIProxy()
+    {
+        super(Mods.NEI);
+    }
 
     public static void hideItem(Item item)
     {

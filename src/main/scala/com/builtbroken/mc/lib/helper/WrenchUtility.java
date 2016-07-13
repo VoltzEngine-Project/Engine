@@ -40,6 +40,7 @@ public class WrenchUtility
             {
                 return true;
             }
+            //Checked each time for support of power tools, and selective items that are not always wrenches
             WrenchType type = getWrenchTypeFor(itemStack);
             if (type != null && type.isWrench(itemStack))
             {
