@@ -8,6 +8,7 @@ import cpw.mods.fml.common.Loader;
  */
 public enum Mods
 {
+    //TODO link github repos for each mod for look up
     OC("OpenComputers"),
     CC("ComputerCraft"),
     AE("appliedenergistics2"),
@@ -24,7 +25,9 @@ public enum Mods
     TF_FOUNDATION("ThermalFoundation"),
     CoFH_API_ENERGY("CoFHAPI|energy"),
     CoFH_CORE("CoFHCore"),
-    NEI("NotEnoughItems");
+    NEI("NotEnoughItems"),
+    //https://github.com/aidancbrady/Mekanism/blob/master/src/main/java/mekanism/common/Mekanism.java
+    MEKANISM("Mekanism");
 
     public final String mod_id;
 

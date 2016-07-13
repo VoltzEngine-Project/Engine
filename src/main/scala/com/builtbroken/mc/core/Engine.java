@@ -31,6 +31,7 @@ import com.builtbroken.mc.lib.mod.compat.Mods;
 import com.builtbroken.mc.lib.mod.compat.ae.AEProxy;
 import com.builtbroken.mc.lib.mod.compat.bc.BCProxy;
 import com.builtbroken.mc.lib.mod.compat.ic.ICProxy;
+import com.builtbroken.mc.lib.mod.compat.mek.MekProxy;
 import com.builtbroken.mc.lib.mod.compat.nei.NEIProxy;
 import com.builtbroken.mc.lib.mod.compat.oc.OCProxy;
 import com.builtbroken.mc.lib.mod.compat.rf.RFLoader;
@@ -360,6 +361,7 @@ public class Engine
         loader.applyModule(AEProxy.class, Mods.AE.isLoaded());
         loader.applyModule(ICProxy.class, Mods.IC2.isLoaded());
         loader.applyModule(BCProxy.class, Mods.BC.isLoaded());
+        loader.applyModule(MekProxy.class, Mods.MEKANISM.isLoaded());
 
         //Check if RF api exists
         boolean shouldLoadRFHandler = true;
