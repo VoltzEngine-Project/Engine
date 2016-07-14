@@ -57,8 +57,7 @@ public class AccessUser implements ISave
 
     public AccessUser(EntityPlayer player)
     {
-        this(player.getCommandSenderName());
-        userID = player.getGameProfile().getId();
+        this(player.getCommandSenderName(), player.getGameProfile().getId());
     }
 
     public static AccessUser loadFromNBT(NBTTagCompound nbt)
@@ -134,6 +133,52 @@ public class AccessUser implements ISave
         return this.nodes.contains(node);
     }
 
+    /**
+     * Removes a permission node from this user
+     * @param perm
+     * @return
+     */
+    public boolean removeNode(Permission perm)
+    {
+
+        return removeNode(perm.toString());
+    }
+
+    /**
+     * Adds a permission node to this user
+     * @param perm
+     * @return
+     */
+    public boolean addNode(Permission perm)
+    {
+        return addNode(perm.toString());
+    }
+
+    /**
+     * Removes a permission node from this user
+     * @param perm
+     * @return
+     */
+    public boolean removeNode(String perm)
+    {
+        return nodes.remove(perm);
+    }
+
+    /**
+     * Adds a permission node to this user
+     * @param perm
+     * @return
+     */
+    public boolean addNode(String perm)
+    {
+        //TODO if contains * remove all sub nodes
+        if(!hasExactNode(perm))
+        {
+            nodes.add(perm);
+        }
+        return false;
+    }
+
     @Override
     public NBTTagCompound save(NBTTagCompound nbt)
     {
@@ -177,6 +222,16 @@ public class AccessUser implements ISave
         }
     }
 
+    /**
+     * Saves the data to a new NBTTagCompound
+     *
+     * @return
+     */
+    public NBTTagCompound toNBT()
+    {
+        return save(new NBTTagCompound());
+    }
+
     public AccessUser setTempary(boolean si)
     {
         this.isTempary = si;
@@ -216,4 +271,24 @@ public class AccessUser implements ISave
         return "[User:" + this.getName() + "]";
     }
 
+    public AccessUser copyToNewUser(String username)
+    {
+        return copyData(new AccessUser(username));
+    }
+
+    public AccessUser copyToNewUser(EntityPlayer player)
+    {
+        return copyData(new AccessUser(player));
+    }
+
+    public AccessUser copyData(AccessUser user)
+    {
+        user.extraData = extraData;
+        user.group = group;
+        for (String node : nodes)
+        {
+            user.nodes.add(node);
+        }
+        return user;
+    }
 }
