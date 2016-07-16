@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.mod.compat.rf;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.lib.energy.UniversalEnergySystem;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.builtbroken.mc.prefab.tile.multiblock.BlockMultiblock;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -18,8 +19,7 @@ public class RFLoader extends AbstractLoadable
     {
         super.init();
         Engine.instance.logger().info("RF support loaded");
-        //TODO load energy handler
-        //TODO load RF tile for multiblocks
+        UniversalEnergySystem.register(new RFEnergyHandler(1)); //TODO add config setting
 
         if (Engine.multiBlock != null)
         {

@@ -4,7 +4,7 @@ import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyStorage;
-import com.builtbroken.mc.lib.mod.compat.energy.EnergyHandler;
+import com.builtbroken.mc.lib.energy.EnergyHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 

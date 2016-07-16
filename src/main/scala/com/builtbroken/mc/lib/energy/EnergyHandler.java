@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.mod.compat.energy;
+package com.builtbroken.mc.lib.energy;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;

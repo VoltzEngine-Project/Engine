@@ -1,11 +1,13 @@
-package com.builtbroken.mc.lib.mod.compat.energy;
+package com.builtbroken.mc.lib.energy;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * A module to extend for compatibility with other energy systems.
@@ -14,16 +16,16 @@ import java.util.Set;
  */
 public class UniversalEnergySystem
 {
-    //Multiply UE by this value to convert to RF
-    public static final double redstoneFluxRatio = 1;
-
-    public static final Set<EnergyHandler> loadedModules = new LinkedHashSet<>();
+    public static final List<EnergyHandler> loadedModules = new ArrayList();
 
     /**
      * A cache to know which module to use with when facing objects with a specific class.
      */
     public static final HashMap<Class, EnergyHandler> energyHandlerCache = new HashMap<>();
     public static final HashMap<Class, EnergyHandler> energyStorageCache = new HashMap<>();
+
+    /** Map of static objects(Block, Item) to thier handlers for quick reference */
+    private static final HashMap<Object, EnergyHandler> objectHandlerMap = new HashMap();
 
     public static void register(EnergyHandler module)
     {
@@ -49,6 +51,11 @@ public class UniversalEnergySystem
     {
         if (handler != null)
         {
+            if (objectHandlerMap.containsKey(handler))
+            {
+                return true;
+            }
+            //TODO move item stack handler to Item class map
             Class clazz = handler instanceof ItemStack ? ((ItemStack) handler).getItem().getClass() : handler.getClass();
 
             if (energyHandlerCache.containsKey(clazz))
@@ -60,6 +67,10 @@ public class UniversalEnergySystem
             {
                 if (module.doIsHandler(handler, dir))
                 {
+                    if (handler instanceof Item || handler instanceof Block)
+                    {
+                        objectHandlerMap.put(handler, module);
+                    }
                     energyHandlerCache.put(clazz, module);
                     return true;
                 }
@@ -169,6 +180,39 @@ public class UniversalEnergySystem
             return module.extractEnergy(handler, direction, energy, doExtract);
         }
         return 0;
+    }
+
+    /**
+     * Called to take an amount of energy from any side of a tile,
+     * <p>
+     * use {@link #extractEnergy(Object, ForgeDirection, double, boolean)} when
+     * possible to ensure connection logic is maintained. Only use this
+     * if there is no way to get the side being accessed.
+     *
+     * @param handler   - tile/multipart/etc getting the energy
+     * @param energy    - energy(should be possitive)
+     * @param doExtract - true will actually take the energy, false will test
+     * @return amount of energy taken
+     */
+    public static double extractEnergy(Object handler, double energy, boolean doExtract)
+    {
+        double energyLeft = energy;
+        for (ForgeDirection dir : ForgeDirection.values())
+        {
+            if (energyLeft > 0)
+            {
+                EnergyHandler module = getHandler(handler, dir);
+                if (module != null)
+                {
+                    energyLeft -= module.extractEnergy(handler, dir, energyLeft, doExtract);
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+        return energy - energyLeft;
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.prefab.gui.slot;
 
-import com.builtbroken.mc.lib.mod.compat.energy.UniversalEnergySystem;
+import com.builtbroken.mc.lib.energy.UniversalEnergySystem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
