@@ -33,5 +33,10 @@ public class RFLoader extends AbstractLoadable
                 }
             };
         }
+
+        if (Engine.runningAsDev)
+        {
+            Engine.instance.getManager().newBlock("RFDemoBattery", TileRFBattery.class);
+        }
     }
 }
