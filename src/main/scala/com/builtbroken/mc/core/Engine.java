@@ -370,7 +370,7 @@ public class Engine
         {
             try
             {
-                Class clazz = Class.forName("cofh.api.energy." + s);
+                Class clazz = Class.forName("cofh.api.energy." + s, false, this.getClass().getClassLoader());
                 if (clazz == null)
                 {
                     shouldLoadRFHandler = false;
