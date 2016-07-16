@@ -65,7 +65,7 @@ public class UniversalEnergySystem
 
             for (EnergyHandler module : loadedModules)
             {
-                if (module.doIsHandler(handler, dir))
+                if (dir != null ? module.doIsHandler(handler, dir) : module.doIsHandler(handler))
                 {
                     if (handler instanceof Item || handler instanceof Block)
                     {

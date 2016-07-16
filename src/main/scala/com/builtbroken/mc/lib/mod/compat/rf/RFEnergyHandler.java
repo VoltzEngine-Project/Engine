@@ -3,7 +3,6 @@ package com.builtbroken.mc.lib.mod.compat.rf;
 import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyStorage;
 import com.builtbroken.mc.lib.energy.EnergyHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -34,12 +33,12 @@ public class RFEnergyHandler extends EnergyHandler
         {
             if (handler instanceof IEnergyHandler)
             {
-                return ((IEnergyHandler) handler).receiveEnergy(direction, (int) (energy * toForgienEnergy), doReceive) * toUEEnergy;
+                return ((IEnergyHandler) handler).receiveEnergy(direction, (int) (energy * toForgienEnergy), !doReceive) * toUEEnergy;
             }
-            else if (handler instanceof IEnergyStorage)
-            {
-                return ((IEnergyStorage) handler).receiveEnergy((int) (energy * toForgienEnergy), doReceive) * toUEEnergy;
-            }
+            //else if (handler instanceof IEnergyStorage)
+            //{
+            //    return ((IEnergyStorage) handler).receiveEnergy((int) (energy * toForgienEnergy), doReceive) * toUEEnergy;
+            //}
         }
         return 0;
     }
@@ -51,12 +50,12 @@ public class RFEnergyHandler extends EnergyHandler
         {
             if (handler instanceof IEnergyHandler)
             {
-                return ((IEnergyHandler) handler).extractEnergy(direction, (int) (energy * toForgienEnergy), doExtract) * toUEEnergy;
+                return ((IEnergyHandler) handler).extractEnergy(direction, (int) (energy * toForgienEnergy), !doExtract) * toUEEnergy;
             }
-            else if (handler instanceof IEnergyStorage)
-            {
-                return ((IEnergyStorage) handler).extractEnergy((int) (energy * toForgienEnergy), doExtract) * toUEEnergy;
-            }
+            //else if (handler instanceof IEnergyStorage)
+            //{
+            //    return ((IEnergyStorage) handler).extractEnergy((int) (energy * toForgienEnergy), doExtract) * toUEEnergy;
+            //}
         }
         return 0;
     }
@@ -64,13 +63,19 @@ public class RFEnergyHandler extends EnergyHandler
     @Override
     public boolean doIsHandler(Object obj, ForgeDirection dir)
     {
-        return obj instanceof IEnergyStorage || obj instanceof IEnergyHandler;
+        return obj instanceof IEnergyHandler;
+    }
+
+    @Override
+    public boolean doIsHandler(Object obj)
+    {
+        return obj instanceof IEnergyHandler;
     }
 
     @Override
     public boolean doIsEnergyContainer(Object obj)
     {
-        return obj instanceof IEnergyStorage;
+        return obj instanceof IEnergyHandler;
     }
 
     @Override
@@ -82,13 +87,13 @@ public class RFEnergyHandler extends EnergyHandler
     @Override
     public double getEnergy(Object obj, ForgeDirection direction)
     {
-        return obj instanceof IEnergyStorage ? ((IEnergyStorage) obj).getEnergyStored() * toUEEnergy : 0;
+        return obj instanceof IEnergyHandler ? ((IEnergyHandler) obj).getEnergyStored(direction) * toUEEnergy : 0;
     }
 
     @Override
     public double getMaxEnergy(Object obj, ForgeDirection direction)
     {
-        return obj instanceof IEnergyStorage ? ((IEnergyStorage) obj).getMaxEnergyStored() * toUEEnergy : 0;
+        return obj instanceof IEnergyHandler ? ((IEnergyHandler) obj).getMaxEnergyStored(direction) * toUEEnergy : 0;
     }
 
     @Override
@@ -96,7 +101,7 @@ public class RFEnergyHandler extends EnergyHandler
     {
         if (is != null && is.getItem() instanceof IEnergyContainerItem)
         {
-            return ((IEnergyContainerItem) is.getItem()).receiveEnergy(is, (int) (joules * toForgienEnergy), docharge) * toUEEnergy;
+            return ((IEnergyContainerItem) is.getItem()).receiveEnergy(is, (int) (joules * toForgienEnergy), !docharge) * toUEEnergy;
         }
         return 0;
     }
@@ -106,7 +111,7 @@ public class RFEnergyHandler extends EnergyHandler
     {
         if (is != null && is.getItem() instanceof IEnergyContainerItem)
         {
-            return ((IEnergyContainerItem) is.getItem()).extractEnergy(is, (int) (joules * toForgienEnergy), doDischarge) * toUEEnergy;
+            return ((IEnergyContainerItem) is.getItem()).extractEnergy(is, (int) (joules * toForgienEnergy), !doDischarge) * toUEEnergy;
         }
         return 0;
     }

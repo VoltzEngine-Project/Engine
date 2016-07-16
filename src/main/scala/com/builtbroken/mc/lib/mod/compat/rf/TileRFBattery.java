@@ -61,7 +61,7 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
     public void update()
     {
         super.update();
-        if (ticks % 10 == 0 && energyHadChanged)
+        if (isServer() && ticks % 10 == 0 && energyHadChanged)
         {
             energyHadChanged = false;
             float percent = (float) energy / (float) maxEnergy;
@@ -151,20 +151,20 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
     public void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
-        nbt.setInteger("rf", energy);
+        energy = nbt.getInteger("rf");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
-        energy = nbt.getInteger("rf");
+        nbt.setInteger("rf", energy);
     }
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs creativeTabs, List list)
     {
-        for (int i = 0; i < 14; i++)
+        for (int i = 0; i < 15; i++)
         {
             list.add(new ItemStack(item, 1, i));
         }

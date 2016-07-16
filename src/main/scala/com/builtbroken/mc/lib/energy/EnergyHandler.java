@@ -54,6 +54,8 @@ public abstract class EnergyHandler
 
 		public abstract boolean doIsHandler(Object obj, ForgeDirection dir);
 
+	    public abstract boolean doIsHandler(Object obj);
+
 		public abstract boolean doIsEnergyContainer(Object obj);
 
 		public abstract boolean canConnect(Object obj, ForgeDirection direction, Object source);
