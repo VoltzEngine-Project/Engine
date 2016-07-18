@@ -140,10 +140,20 @@ task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
 }
 
 task apiZip (type: Jar) {
-    classifier = "api"
+    if (project.getProperty("bambooshortPlanName") == "BBM-Dev") classifier = "dev-api"
+    else classifier = "api"
     from sourceSets*.allSource
     include "com/builtbroken/mc/api/**"
     destinationDir = file 'output'
     mustRunAfter "jar"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication)
+        {
+            artifact apiZip
+        }
+    }
 }
 tasks.build.dependsOn apiZip
