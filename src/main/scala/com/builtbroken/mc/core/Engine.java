@@ -427,10 +427,12 @@ public class Engine
         }
 
         ExplosiveRegistry.registerOrGetExplosive(References.DOMAIN, "TNT", new ExplosiveHandlerTNT());
-        ExplosiveRegistry.registerExplosiveItem(new ItemStack(Blocks.tnt), ExplosiveRegistry.get("TNT"), 2);
-        ExplosiveRegistry.registerExplosiveItem(new ItemStack(Items.gunpowder), ExplosiveRegistry.get("TNT"), 0.5);
+
+        final int tntValue = 4;
+        ExplosiveRegistry.registerExplosiveItem(new ItemStack(Blocks.tnt), ExplosiveRegistry.get("TNT"), tntValue);
+        ExplosiveRegistry.registerExplosiveItem(new ItemStack(Items.gunpowder), ExplosiveRegistry.get("TNT"), tntValue / 5.0);
         //Creeper skull
-        ExplosiveRegistry.registerExplosiveItem(new ItemStack(Items.skull, 1, 4), ExplosiveRegistry.get("TNT"), 0.3);
+        ExplosiveRegistry.registerExplosiveItem(new ItemStack(Items.skull, 1, 4), ExplosiveRegistry.get("TNT"), tntValue / 10.0);
 
         loader.preInit();
         OreDictionary.registerOre(OreNames.WOOD_STICK, Items.stick);

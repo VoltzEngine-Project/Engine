@@ -40,6 +40,8 @@ public final class ExplosiveRegistry
     private static final HashMap<ItemStackWrapper, HashMap<Integer, Double>> itemToExplosiveSizeScaled = new HashMap();
     /** Explosive handler to items */
     public static final HashMap<IExplosiveHandler, List<ItemStackWrapper>> explosiveToItems = new HashMap();
+    /** Explosive handler to config scale */
+    public static final HashMap<IExplosiveHandler, Float> explosiveConfigScale = new HashMap();
 
     /**
      * Registers or gets an instanceof of explosive
@@ -51,11 +53,26 @@ public final class ExplosiveRegistry
      */
     public static IExplosiveHandler registerOrGetExplosive(String modID, String id, IExplosiveHandler ex)
     {
-        if (registerExplosive(modID, id, ex))
+        return registerOrGetExplosive(modID, id, ex, true, true);
+    }
+
+    /**
+     * Registers or gets an instanceof of explosive
+     *
+     * @param modID          - modID
+     * @param id             - name to register the explosive with
+     * @param ex             - explosive instance
+     * @param canDisable     - can the explosive be disable by users
+     * @param canConfigScale - can the explosive be scaled by users
+     * @return explosive instance
+     */
+    public static IExplosiveHandler registerOrGetExplosive(String modID, String id, IExplosiveHandler ex, boolean canDisable, boolean canConfigScale)
+    {
+        if (registerExplosive(modID, id, ex, canDisable, canConfigScale))
         {
             return ex;
         }
-        return get(id);
+        return get(id); //TODO move get call before register call
     }
 
     /**
@@ -68,7 +85,20 @@ public final class ExplosiveRegistry
      */
     public static boolean registerExplosive(String modID, String id, IExplosiveHandler ex)
     {
-        if (Engine.explosiveConfig == null || Engine.explosiveConfig.getBoolean("enable_" + id, modID, true, ""))
+        return registerExplosive(modID, id, ex, true, true);
+    }
+
+    /**
+     * Registers a new explosive
+     *
+     * @param modID - modID
+     * @param id    - name to register the explosive with
+     * @param ex    - explosive instance
+     * @return false an explosive is already registered by the ID
+     */
+    public static boolean registerExplosive(String modID, String id, IExplosiveHandler ex, boolean canDisable, boolean canConfigScale)
+    {
+        if (Engine.explosiveConfig == null || canDisable && Engine.explosiveConfig.getBoolean("enable_" + id, modID, true, ""))
         {
             if (!isRegistered(ex) && !idToExplosiveMap.containsKey(id))
             {
@@ -95,6 +125,10 @@ public final class ExplosiveRegistry
                     Engine.instance.logger().info("ExplosiveRegistry> Mod: " + modID + "  Registered explosive instance " + ex);
                 }
 
+                if (canConfigScale)
+                {
+                    explosiveConfigScale.put(ex, Engine.explosiveConfig.getFloat("scale_" + id, modID, 1f, 0, 100, "Changes the size of the explosive, 0 = nothing, 1 = 100% (same radius), 2 = 200%(2x size/radius, 4x blocks destroyed)"));
+                }
                 return true;
             }
         }
@@ -235,7 +269,7 @@ public final class ExplosiveRegistry
      *
      * @param ex           - explosive handler, used to create the IWorldChangeAction instance
      * @param triggerCause - cause of the trigger
-     * @param multi        - size of the action
+     * @param multi        - size of the action, can be scaled by user configs
      * @return if the result completed, was blocked, or failed
      */
     public static WorldChangeHelper.ChangeResult triggerExplosive(World world, double x, double y, double z, IExplosiveHandler ex, TriggerCause triggerCause, double multi, NBTTagCompound tag)
@@ -249,14 +283,14 @@ public final class ExplosiveRegistry
      * @param loc          - location in the world
      * @param ex           - explosive handler, used to create the IWorldChangeAction instance
      * @param triggerCause - cause of the trigger
-     * @param multi        - size of the action
+     * @param multi        - size of the action, can be scaled by user configs
      * @return if the result completed, was blocked, or failed
      */
     public static WorldChangeHelper.ChangeResult triggerExplosive(Location loc, IExplosiveHandler ex, TriggerCause triggerCause, double multi, NBTTagCompound tag)
     {
         if (isRegistered(ex))
         {
-            IWorldChangeAction blast = ex.createBlastForTrigger(loc.world(), loc.x(), loc.y(), loc.z(), triggerCause, multi, tag);
+            IWorldChangeAction blast = ex.createBlastForTrigger(loc.world(), loc.x(), loc.y(), loc.z(), triggerCause, multi * (explosiveConfigScale.containsKey(ex) ? explosiveConfigScale.get(ex) : 1), tag);
             return WorldChangeHelper.doAction(loc, blast, triggerCause);
         }
         return WorldChangeHelper.ChangeResult.FAILED;
