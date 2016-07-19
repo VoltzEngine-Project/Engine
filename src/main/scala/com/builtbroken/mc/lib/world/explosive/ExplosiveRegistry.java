@@ -290,7 +290,7 @@ public final class ExplosiveRegistry
     {
         if (isRegistered(ex))
         {
-            IWorldChangeAction blast = ex.createBlastForTrigger(loc.world(), loc.x(), loc.y(), loc.z(), triggerCause, multi * (explosiveConfigScale.containsKey(ex) ? explosiveConfigScale.get(ex) : 1), tag);
+            IWorldChangeAction blast = ex.createBlastForTrigger(loc.world(), loc.x(), loc.y(), loc.z(), triggerCause, multi * (explosiveConfigScale != null && explosiveConfigScale.containsKey(ex) ? explosiveConfigScale.get(ex) : 1), tag);
             return WorldChangeHelper.doAction(loc, blast, triggerCause);
         }
         return WorldChangeHelper.ChangeResult.FAILED;
