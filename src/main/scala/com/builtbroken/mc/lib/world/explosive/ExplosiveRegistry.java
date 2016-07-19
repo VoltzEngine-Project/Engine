@@ -125,7 +125,7 @@ public final class ExplosiveRegistry
                     Engine.instance.logger().info("ExplosiveRegistry> Mod: " + modID + "  Registered explosive instance " + ex);
                 }
 
-                if (canConfigScale)
+                if (canConfigScale && Engine.explosiveConfig != null)
                 {
                     explosiveConfigScale.put(ex, Engine.explosiveConfig.getFloat("scale_" + id, modID, 1f, 0, 100, "Changes the size of the explosive, 0 = nothing, 1 = 100% (same radius), 2 = 200%(2x size/radius, 4x blocks destroyed)"));
                 }
@@ -290,7 +290,7 @@ public final class ExplosiveRegistry
     {
         if (isRegistered(ex))
         {
-            IWorldChangeAction blast = ex.createBlastForTrigger(loc.world(), loc.x(), loc.y(), loc.z(), triggerCause, multi * (explosiveConfigScale != null && explosiveConfigScale.containsKey(ex) ? explosiveConfigScale.get(ex) : 1), tag);
+            IWorldChangeAction blast = ex.createBlastForTrigger(loc.world(), loc.x(), loc.y(), loc.z(), triggerCause, multi * (explosiveConfigScale.containsKey(ex) ? explosiveConfigScale.get(ex) : 1), tag);
             return WorldChangeHelper.doAction(loc, blast, triggerCause);
         }
         return WorldChangeHelper.ChangeResult.FAILED;
