@@ -216,6 +216,49 @@ public class UniversalEnergySystem
     }
 
     /**
+     * Grabs the potential amount of energy the tile contains. In most
+     * cases this is 6-7 times large due to sided behaviour of some objects
+     * that do not contain APIs for getting total tile energy value.
+     *
+     * @param handler - tile
+     * @return energy contained
+     */
+    public static double getPotentialEnergy(Object handler)
+    {
+        double energyContained = 0;
+        for (ForgeDirection dir : ForgeDirection.values())
+        {
+            EnergyHandler module = getHandler(handler, dir);
+            if (module != null)
+            {
+                energyContained += module.getEnergy(handler, dir);
+            }
+        }
+        return energyContained;
+    }
+
+    /**
+     * Gets energy contained in each side of a machine. Keep in
+     * mind some sides may share the same energy storage.
+     *
+     * @param handler - tile
+     * @return object containing energy values per side
+     */
+    public static EnergySides getEnergySided(Object handler)
+    {
+        EnergySides sides = new EnergySides();
+        for (ForgeDirection dir : ForgeDirection.values())
+        {
+            EnergyHandler module = getHandler(handler, dir);
+            if (module != null)
+            {
+                sides.set(dir, module.getEnergy(handler, dir));
+            }
+        }
+        return sides;
+    }
+
+    /**
      * Charge's an ItemStack with energy
      *
      * @param itemStack - stack being charged
