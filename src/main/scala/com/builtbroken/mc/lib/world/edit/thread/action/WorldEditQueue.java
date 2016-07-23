@@ -29,7 +29,7 @@ public class WorldEditQueue extends LinkedList<IWorldEdit> implements IWorldActi
     protected final int editsPerTick; //TODO add a check to see if is near a player, if not accelerate block placement as there will be no packets to cause lag
 
     /**
-     * Creates a new edit que
+     * Creates a new edit add
      *
      * @param world  - world to edit
      * @param action - handler for changes made to the world
@@ -43,7 +43,7 @@ public class WorldEditQueue extends LinkedList<IWorldEdit> implements IWorldActi
     }
 
     /**
-     * Creates a new edit que
+     * Creates a new edit add
      *
      * @param world  - world to edit
      * @param action - handler for changes made to the world

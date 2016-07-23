@@ -1,10 +1,11 @@
 package com.builtbroken.mc.lib.world.edit.thread;
 
+import com.builtbroken.mc.api.VoltzEngineAPI;
 import com.builtbroken.mc.api.process.IThreadProcess;
+import com.builtbroken.mc.api.process.IWorkerThread;
 import com.builtbroken.mc.core.Engine;
 
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -13,19 +14,18 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 12/7/2015.
  */
-public class WorkerThread extends Thread
+public class WorkerThread extends Thread implements IWorkerThread
 {
     private Queue<IThreadProcess> que = new ConcurrentLinkedQueue<>();
     private boolean waiting = false;
     private boolean kill = false;
 
-    public static final ConcurrentHashMap<String, WorkerThread> threads = new ConcurrentHashMap();
 
     public WorkerThread(String name)
     {
         super("WorkerThread[" + name + "]");
         this.setPriority(Thread.NORM_PRIORITY);
-        threads.put(name, this);
+        VoltzEngineAPI.WORKER_THREADS.put(name, this);
     }
 
     @Override
@@ -80,12 +80,8 @@ public class WorkerThread extends Thread
         }
     }
 
-    /**
-     * Adds a world change action process to the current thread que
-     *
-     * @param process
-     */
-    public void que(WCAThreadProcess process)
+    @Override
+    public void add(IThreadProcess process)
     {
         if (!contains(process))
         {
@@ -102,27 +98,19 @@ public class WorkerThread extends Thread
         }
     }
 
-    /**
-     * Checks if the thread contains the current process
-     *
-     * @param process - process
-     * @return true if it contains the process
-     */
+    @Override
     public boolean contains(IThreadProcess process)
     {
         return que.contains(process);
     }
 
-    /**
-     * Number of processes in que
-     *
-     * @return processes
-     */
-    public int qued()
+    @Override
+    public int containedProcesses()
     {
         return que.size();
     }
 
+    @Override
     public void kill()
     {
         this.kill = true;

@@ -1,6 +1,8 @@
 package com.builtbroken.mc.core;
 
 import com.builtbroken.jlib.lang.StringHelpers;
+import com.builtbroken.mc.api.VoltzEngineAPI;
+import com.builtbroken.mc.api.process.IWorkerThread;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.asm.ProxyASMTest;
 import com.builtbroken.mc.core.commands.CommandVE;
@@ -654,9 +656,9 @@ public class Engine
     public void serverStopping(FMLServerStoppingEvent event)
     {
         //TODO save qued objects
-        synchronized (WorkerThread.threads)
+        synchronized (VoltzEngineAPI.WORKER_THREADS)
         {
-            for (WorkerThread thread : WorkerThread.threads.values())
+            for (IWorkerThread thread : VoltzEngineAPI.WORKER_THREADS.values())
             {
                 logger().info("Killing thread " + thread);
                 thread.kill();

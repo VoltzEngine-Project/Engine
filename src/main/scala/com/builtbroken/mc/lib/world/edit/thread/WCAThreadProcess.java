@@ -92,37 +92,6 @@ public class WCAThreadProcess implements IThreadProcess
         this.blast.killAction(false);
     }
 
-
-    @Override
-    public void queProcess()
-    {
-        for (WorkerThread thread : WorkerThread.threads.values())
-        {
-            if (thread.contains(this))
-            {
-                return;
-            }
-        }
-        int lowest = Integer.MAX_VALUE;
-        WorkerThread lowestThread = null;
-        for (WorkerThread thread : WorkerThread.threads.values())
-        {
-            if (thread.qued() < lowest)
-            {
-                lowest = thread.qued();
-                lowestThread = thread;
-            }
-        }
-        if (lowestThread != null)
-        {
-            lowestThread.que(this);
-        }
-        else
-        {
-            runProcess();
-        }
-    }
-
     @Override
     public boolean equals(Object obj)
     {
