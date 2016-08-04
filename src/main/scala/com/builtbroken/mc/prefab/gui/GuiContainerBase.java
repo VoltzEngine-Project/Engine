@@ -291,8 +291,20 @@ public class GuiContainerBase extends GuiContainer
 
     protected void drawBar(int x, int y, float scale)
     {
+        drawBar(x, y, scale, null);
+    }
+
+    protected void drawBar(int x, int y, float scale, Color color)
+    {
         this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        if (color == null)
+        {
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        }
+        else
+        {
+            GL11.glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
+        }
 
         /** Draw background progress bar/ */
         this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 18, 0, 22, 15);
