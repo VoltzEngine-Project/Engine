@@ -5,6 +5,7 @@ public enum GuiSlotType
 	NONE,
 	BATTERY,
 	LIQUID,
+	FUEL,
 	ARR_UP,
 	ARR_DOWN,
 	ARR_LEFT,
