@@ -268,6 +268,7 @@ public class GuiContainerBase extends GuiContainer
         if(Engine.runningAsDev)
         {
             this.drawStringCentered("" + slot.getSlotIndex(), guiLeft + slot.xDisplayPosition + 9, guiTop + slot.yDisplayPosition + 9, Color.YELLOW);
+            this.drawStringCentered("" + slot.slotNumber, guiLeft + slot.xDisplayPosition + 9, guiTop + slot.yDisplayPosition + 1, Color.RED);
         }
     }
 
