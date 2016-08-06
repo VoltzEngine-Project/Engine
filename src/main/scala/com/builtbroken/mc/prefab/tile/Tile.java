@@ -772,7 +772,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
                 || (side == 3 && this.bounds.max().z() < 1.0D)
                 || (side == 4 && this.bounds.min().x() > 0.0D)
                 || (side == 5 && this.bounds.max().x() < 1.0D)
-                || !getAccess().getBlock(xi(), yi(), zi()).isOpaqueCube();
+                || !isOpaque;
     }
 
 
