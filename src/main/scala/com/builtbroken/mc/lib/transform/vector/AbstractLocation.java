@@ -141,7 +141,7 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     @Override
     public NBTTagCompound writeNBT(NBTTagCompound nbt)
     {
-        nbt.setInteger("dimension", world.provider.dimensionId);
+        nbt.setInteger("dimension", world != null && world.provider != null ? world.provider.dimensionId : 0);
         nbt.setDouble("x", x());
         nbt.setDouble("y", y());
         nbt.setDouble("z", z());
@@ -151,7 +151,7 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     @Override
     public ByteBuf writeByteBuf(ByteBuf data)
     {
-        data.writeInt(world.provider.dimensionId);
+        data.writeInt(world != null && world.provider != null ? world.provider.dimensionId : 0);
         data.writeDouble(x());
         data.writeDouble(y());
         data.writeDouble(z());
