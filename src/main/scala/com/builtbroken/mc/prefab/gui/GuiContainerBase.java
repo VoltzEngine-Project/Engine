@@ -3,6 +3,7 @@ package com.builtbroken.mc.prefab.gui;
 import com.builtbroken.jlib.data.Colors;
 import com.builtbroken.jlib.data.science.units.UnitDisplay;
 import com.builtbroken.jlib.data.science.units.UnitDisplay.Unit;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.render.RenderUtility;
@@ -263,7 +264,11 @@ public class GuiContainerBase extends GuiContainer
 
     protected void drawSlot(Slot slot)
     {
-        drawSlot(slot.xDisplayPosition - 1, slot.yDisplayPosition - 1);
+        drawSlot(slot.xDisplayPosition - 1, slot.yDisplayPosition - 1); //TODO get slot type from slot
+        if(Engine.runningAsDev)
+        {
+            this.drawStringCentered("" + slot.getSlotIndex(), guiLeft + slot.xDisplayPosition + 9, guiTop + slot.yDisplayPosition + 9, Color.YELLOW);
+        }
     }
 
     protected void drawSlot(int x, int y)
