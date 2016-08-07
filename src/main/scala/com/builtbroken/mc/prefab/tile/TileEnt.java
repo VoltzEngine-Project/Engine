@@ -45,7 +45,10 @@ public class TileEnt extends Tile
     {
         if (id == DESCRIPTION_PACKET_ID)
         {
-            readDescPacket(buf);
+            if(isClient())
+            {
+                readDescPacket(buf);
+            }
             return true;
         }
         return false;
