@@ -185,9 +185,12 @@ public class BlockTile extends BlockContainer
     @Override
     public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ)
     {
-        Tile tile = inject(world, x, y, z);
-        tile.onNeighborChanged(new Pos(tileX, tileY, tileZ));
-        eject();
+        if(!(world instanceof World) || !((World) world).isRemote)
+        {
+            Tile tile = inject(world, x, y, z);
+            tile.onNeighborChanged(new Pos(tileX, tileY, tileZ));
+            eject();
+        }
     }
 
     @Override
