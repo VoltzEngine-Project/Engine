@@ -54,12 +54,14 @@ public class TileMachine extends TileEnt implements IRotation
     @Override
     public void readDescPacket(ByteBuf buf)
     {
+        super.readDescPacket(buf);
         facing = ForgeDirection.getOrientation(buf.readByte());
     }
 
     @Override
     public void writeDescPacket(ByteBuf buf)
     {
-        buf.writeByte(facing != null ? facing.ordinal() : 2);
+        super.writeDescPacket(buf);
+        buf.writeByte((byte)(facing != null ? facing.ordinal() : 2));
     }
 }

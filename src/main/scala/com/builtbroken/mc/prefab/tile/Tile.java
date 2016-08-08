@@ -73,7 +73,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 {
     //Static block vars, never use in your tile
     /** STATIC BLOCK, block for this tile. Will not be initialized in each tile */
-    private BlockTile block = null;
+    public BlockTile block = null;
     /** STATIC BLOCK, injected by the BlockTile for methods calls */
     private IBlockAccess access = null;
     /** STATIC BLOCK, Mod domain, injected when the tile is built */

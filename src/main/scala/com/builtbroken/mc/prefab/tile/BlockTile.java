@@ -70,8 +70,8 @@ public class BlockTile extends BlockContainer
     @Override
     public void fillWithRain(World world, int x, int y, int z)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).onFillRain();
+        Tile tile = inject(world, x, y, z);
+        tile.onFillRain();
         eject();
     }
 
@@ -84,8 +84,8 @@ public class BlockTile extends BlockContainer
     @Override
     public float getExplosionResistance(Entity entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ)
     {
-        inject(world, x, y, z);
-        float resistance = getTile(world, x, y, z).getExplosionResistance(entity, new Pos(explosionX, explosionY, explosionZ));
+        Tile tile = inject(world, x, y, z);
+        float resistance = tile.getExplosionResistance(entity, new Pos(explosionX, explosionY, explosionZ));
         eject();
         return resistance;
     }
@@ -93,32 +93,32 @@ public class BlockTile extends BlockContainer
     @Override
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).onPlayerLeftClick(player);
+        Tile tile = inject(world, x, y, z);
+        tile.onPlayerLeftClick(player);
         eject();
     }
 
     @Override
     public void onBlockAdded(World world, int x, int y, int z)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).onAdded();
+        Tile tile = inject(world, x, y, z);
+        tile.onAdded();
         eject();
     }
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).onPlaced(entityLiving, itemStack);
+        Tile tile = inject(world, x, y, z);
+        tile.onPlaced(entityLiving, itemStack);
         eject();
     }
 
     @Override
     public void onPostBlockPlaced(World world, int x, int y, int z, int metadata)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).onPostPlaced(metadata);
+        Tile tile = inject(world, x, y, z);
+        tile.onPostPlaced(metadata);
         eject();
     }
 
@@ -128,16 +128,16 @@ public class BlockTile extends BlockContainer
     @Override
     public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion ex)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).onDestroyedByExplosion(ex);
+        Tile tile = inject(world, x, y, z);
+        tile.onDestroyedByExplosion(ex);
         eject();
     }
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int par6)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).onRemove(block, par6);
+        Tile tile = inject(world, x, y, z);
+        tile.onRemove(block, par6);
         eject();
         super.breakBlock(world, x, y, z, block, par6);
     }
@@ -145,8 +145,8 @@ public class BlockTile extends BlockContainer
     @Override
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
     {
-        inject(world, x, y, z);
-        boolean b = getTile(world, x, y, z).removeByPlayer(player, willHarvest);
+        Tile tile = inject(world, x, y, z);
+        boolean b = tile.removeByPlayer(player, willHarvest);
         eject();
         return b;
     }
@@ -160,15 +160,15 @@ public class BlockTile extends BlockContainer
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).onNeighborChanged(block);
+        Tile tile = inject(world, x, y, z);
+        tile.onNeighborChanged(block);
         eject();
     }
 
     public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side)
     {
-        inject(world, x, y, z);
-        boolean b = getTile(world, x, y, z).canPlaceBlockOnSide(ForgeDirection.getOrientation(side));
+        Tile tile = inject(world, x, y, z);
+        boolean b = tile.canPlaceBlockOnSide(ForgeDirection.getOrientation(side));
         eject();
         return b;
     }
@@ -176,8 +176,8 @@ public class BlockTile extends BlockContainer
     @Override
     public boolean canPlaceBlockAt(World world, int x, int y, int z)
     {
-        inject(world, x, y, z);
-        boolean b = getTile(world, x, y, z).canPlaceBlockAt();
+        Tile tile = inject(world, x, y, z);
+        boolean b = tile.canPlaceBlockAt();
         eject();
         return b;
     }
@@ -185,16 +185,16 @@ public class BlockTile extends BlockContainer
     @Override
     public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).onNeighborChanged(new Pos(tileX, tileY, tileZ));
+        Tile tile = inject(world, x, y, z);
+        tile.onNeighborChanged(new Pos(tileX, tileY, tileZ));
         eject();
     }
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
     {
-        inject(world, x, y, z);
-        boolean value = getTile(world, x, y, z).onPlayerActivated(player, side, new Pos(hitX, hitY, hitZ));
+        Tile tile = inject(world, x, y, z);
+        boolean value = tile.onPlayerActivated(player, side, new Pos(hitX, hitY, hitZ));
         eject();
         return value;
     }
@@ -202,24 +202,24 @@ public class BlockTile extends BlockContainer
     @Override
     public void updateTick(World world, int x, int y, int z, Random par5Random)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).blockUpdate();
+        Tile tile = inject(world, x, y, z);
+        tile.blockUpdate();
         eject();
     }
 
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random par5Random)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).randomDisplayTick();
+        Tile tile = inject(world, x, y, z);
+        tile.randomDisplayTick();
         eject();
     }
 
     @Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
     {
-        inject(world, x, y, z);
-        getTile(world, x, y, z).onCollide(entity);
+        Tile tile = inject(world, x, y, z);
+        tile.onCollide(entity);
         eject();
     }
 
@@ -227,8 +227,8 @@ public class BlockTile extends BlockContainer
     @SuppressWarnings("unchecked")
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
     {
-        inject(world, x, y, z);
-        Iterable<Cube> bounds = getTile(world, x, y, z).getCollisionBoxes(new Cube(aabb).subtract(new Pos(x, y, z)), entity);
+        Tile tile = inject(world, x, y, z);
+        Iterable<Cube> bounds = tile.getCollisionBoxes(new Cube(aabb).subtract(new Pos(x, y, z)), entity);
         eject();
         if (bounds != null)
         {
@@ -246,8 +246,7 @@ public class BlockTile extends BlockContainer
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
     {
-        inject(world, x, y, z);
-        Tile tile = getTile(world, x, y, z);
+        Tile tile = inject(world, x, y, z);
         AxisAlignedBB value = tile.getSelectBounds().clone().add(tile.x(), tile.y(), tile.z()).toAABB();
         eject();
         return value;
@@ -256,8 +255,7 @@ public class BlockTile extends BlockContainer
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
     {
-        inject(world, x, y, z);
-        Tile tile = getTile(world, x, y, z);
+        Tile tile = inject(world, x, y, z);
         AxisAlignedBB value = tile.getCollisionBounds().clone().add(tile.x(), tile.y(), tile.z()).toAABB();
         eject();
         return value;
@@ -266,7 +264,7 @@ public class BlockTile extends BlockContainer
     @Override
     public boolean shouldSideBeRendered(IBlockAccess access, int x, int y, int z, int side)
     {
-        inject(access, x, y, z);
+        Tile tile = inject(access, x, y, z);
         boolean value = staticTile.shouldSideBeRendered(side);
         eject();
         return value;
@@ -275,8 +273,8 @@ public class BlockTile extends BlockContainer
     @Override
     public boolean isBlockSolid(IBlockAccess access, int x, int y, int z, int side)
     {
-        inject(access, x, y, z);
-        boolean value = getTile(access, x, y, z).isSolid(side);
+        Tile tile = inject(access, x, y, z);
+        boolean value = tile.isSolid(side);
         eject();
         return value;
     }
@@ -287,8 +285,8 @@ public class BlockTile extends BlockContainer
         int value = 0;
         if (access != null)
         {
-            inject(access, x, y, z);
-            value = getTile(access, x, y, z).getLightValue();
+            Tile tile = inject(access, x, y, z);
+            value = tile.getLightValue();
             eject();
         }
         return value;
@@ -324,8 +322,8 @@ public class BlockTile extends BlockContainer
     @Override
     public IIcon getIcon(IBlockAccess access, int x, int y, int z, int side)
     {
-        inject(access, x, y, z);
-        IIcon value = getTile(access, x, y, z).getIcon(side, access.getBlockMetadata(x, y, z));
+        Tile tile = inject(access, x, y, z);
+        IIcon value = tile.getIcon(side, access.getBlockMetadata(x, y, z));
         eject();
         return value;
     }
@@ -348,8 +346,8 @@ public class BlockTile extends BlockContainer
     @Override
     public int colorMultiplier(IBlockAccess access, int x, int y, int z)
     {
-        inject(access, x, y, z);
-        int value = getTile(access, x, y, z).getColorMultiplier();
+        Tile tile = inject(access, x, y, z);
+        int value = tile.getColorMultiplier();
         eject();
         return value;
     }
@@ -374,16 +372,16 @@ public class BlockTile extends BlockContainer
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player)
     {
-        inject(world, x, y, z);
-        ItemStack value = getTile(world, x, y, z).getPickBlock(target);
+        Tile tile = inject(world, x, y, z);
+        ItemStack value = tile.getPickBlock(target);
         eject();
         return value;
     }
 
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
     {
-        inject(world, x, y, z);
-        ArrayList<ItemStack> value = getTile(world, x, y, z).getDrops(metadata, fortune);
+        Tile tile = inject(world, x, y, z);
+        ArrayList<ItemStack> value = tile.getDrops(metadata, fortune);
         eject();
         return value != null ? value : new ArrayList<ItemStack>();
     }
@@ -406,8 +404,8 @@ public class BlockTile extends BlockContainer
     @Override
     public int isProvidingWeakPower(IBlockAccess access, int x, int y, int z, int side)
     {
-        inject(access, x, y, z);
-        int value = getTile(access, x, y, z).getWeakRedstonePower(side);
+        Tile tile = inject(access, x, y, z);
+        int value = tile.getWeakRedstonePower(side);
         eject();
         return value;
     }
@@ -415,8 +413,8 @@ public class BlockTile extends BlockContainer
     @Override
     public int isProvidingStrongPower(IBlockAccess access, int x, int y, int z, int side)
     {
-        inject(access, x, y, z);
-        int value = getTile(access, x, y, z).getStrongRedstonePower(side);
+        Tile tile = inject(access, x, y, z);
+        int value = tile.getStrongRedstonePower(side);
         eject();
         return value;
     }
@@ -424,8 +422,8 @@ public class BlockTile extends BlockContainer
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess access, int x, int y, int z)
     {
-        inject(access, x, y, z);
-        getTile(access, x, y, z).setBlockBoundsBasedOnState();
+        Tile tile = inject(access, x, y, z);
+        tile.setBlockBoundsBasedOnState();
         eject();
     }
 
@@ -447,7 +445,7 @@ public class BlockTile extends BlockContainer
     @Override
     public int tickRate(World world)
     {
-        inject(world, 0, 0, 0);
+        Tile tile = inject(world, 0, 0, 0);
         int t = staticTile.tickRate();
         eject();
         return t;
@@ -479,7 +477,7 @@ public class BlockTile extends BlockContainer
     /**
      * Injects and eject();s data from the TileEntity.
      */
-    public void inject(IBlockAccess access, int x, int y, int z)
+    public Tile inject(IBlockAccess access, int x, int y, int z)
     {
         if (access instanceof World)
         {
@@ -491,12 +489,13 @@ public class BlockTile extends BlockContainer
         staticTile.yCoord = y;
         staticTile.zCoord = z;
 
-        TileEntity tile = access.getTileEntity(x, y, z);
-
-        if (tile instanceof Tile)
+        TileEntity tileEntity = access.getTileEntity(x, y, z);
+        if (tileEntity instanceof Tile)
         {
-            ((Tile) tile).setBlock(this);
+            ((Tile) tileEntity).setBlock(this);
         }
+
+        return tileEntity instanceof Tile ? (Tile) tileEntity : staticTile;
     }
 
     public void eject()
@@ -505,15 +504,5 @@ public class BlockTile extends BlockContainer
         staticTile.xCoord = 0;
         staticTile.yCoord = 0;
         staticTile.zCoord = 0;
-    }
-
-    public Tile getTile(IBlockAccess world, int x, int y, int z)
-    {
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof Tile)
-        {
-            return ((Tile) tile);
-        }
-        return staticTile;
     }
 }
