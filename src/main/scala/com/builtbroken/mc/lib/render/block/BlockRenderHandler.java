@@ -21,11 +21,11 @@ public class BlockRenderHandler implements ISimpleBlockRenderingHandler
     public final static int ID = RenderingRegistry.getNextAvailableRenderId();
 
     @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelID,  RenderBlocks renderer)
+    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
     {
         if (block instanceof BlockTile)
         {
-            Tile tile = ((BlockTile)block).staticTile;
+            Tile tile = ((BlockTile) block).staticTile;
 
             GL11.glEnable(GL12.GL_RESCALE_NORMAL);
             GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
@@ -39,8 +39,6 @@ public class BlockRenderHandler implements ISimpleBlockRenderingHandler
     @Override
     public boolean renderWorldBlock(IBlockAccess access, int x, int y, int z, Block block, int modelId, RenderBlocks renderBlocks)
     {
-        Tile renderer = null;
-
         /**
          * Try TileEntity rendering
          */
@@ -48,20 +46,22 @@ public class BlockRenderHandler implements ISimpleBlockRenderingHandler
 
         if (tile instanceof Tile)
         {
-            renderer = (Tile) tile;
+            return ((Tile) tile).renderStatic(renderBlocks, new Pos(x, y, z), 0);
         }
 
         /**
          * Try Block rendering
          */
-        if (renderer == null && block instanceof BlockTile)
+        if (block instanceof BlockTile)
         {
             BlockTile dummy = (BlockTile) block;
-            dummy.inject(access, x, y, z);
-            renderer = dummy.getTile(access, x, y, z);
+            tile = dummy.inject(access, x, y, z);
+            boolean b = ((Tile) tile).renderStatic(renderBlocks, new Pos(x, y, z), 0);
+            dummy.eject();
+            return b;
         }
 
-        return renderer != null && renderer.renderStatic(renderBlocks, new Pos(x, y, z), 0);
+        return false;
     }
 
     @Override
