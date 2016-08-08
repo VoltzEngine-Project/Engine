@@ -165,6 +165,7 @@ public class BlockTile extends BlockContainer
         eject();
     }
 
+    @Override
     public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side)
     {
         Tile tile = inject(world, x, y, z);
