@@ -6,6 +6,7 @@ item.voltzengine:unknown.name=Unknown Item
 tile.voltzengine:hotrock.name=Heated Stone
 
 tile.voltzengine:DemoRFBattery.name=Experimental RF Cell
+tile.voltzengine:DemoUEBattery.name=Experimental UE Cell
 
 ## General
 text.general.feature.unimplemented=Not Implemented
@@ -17,6 +18,9 @@ text.general.power.amount= %1 out of %2 units of power
 
 ## RF text
 text.rf.power.amount= %1 out of %2 redstone flux
+
+## Power text
+text.power.amount= %1 out of %2 joules
 
 ## Explosives
 explosive.voltzengine:tnt.name=TNT

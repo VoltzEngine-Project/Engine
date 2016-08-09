@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class UniversalEnergySystem
 {
+    /** List of all registered energy handlers */
     public static final List<EnergyHandler> loadedModules = new ArrayList();
 
     /**

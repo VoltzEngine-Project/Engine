@@ -33,6 +33,7 @@ public class RFEnergyHandler extends EnergyHandler
         {
             if (handler instanceof IEnergyHandler)
             {
+                //TODO check for rounding errors
                 return ((IEnergyHandler) handler).receiveEnergy(direction, (int) (energy * toForgienEnergy), !doReceive) * toUEEnergy;
             }
             //else if (handler instanceof IEnergyStorage)
