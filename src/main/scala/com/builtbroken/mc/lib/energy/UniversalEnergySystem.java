@@ -122,6 +122,7 @@ public class UniversalEnergySystem
 
     public static boolean canConnect(Object obj, ForgeDirection direction, Object source)
     {
+        //TODO prioritize UE code to prevent inf loops (RF#canConnect -> UESystem#canConnect -> RF#CanConnect....)
         EnergyHandler module = getHandler(obj, direction);
         return module != null && module.canConnect(obj, direction, source);
     }
@@ -162,6 +163,16 @@ public class UniversalEnergySystem
     public static double drain(Object handler, ForgeDirection direction, double energy, boolean doExtract)
     {
         return extractEnergy(handler, direction, energy, doExtract);
+    }
+
+    public static double clearEnergy(Object handler, boolean doAction)
+    {
+        EnergyHandler module = getHandler(handler, null);
+        if (module != null)
+        {
+            return module.clearEnergy(handler, doAction);
+        }
+        return 0;
     }
 
     /**

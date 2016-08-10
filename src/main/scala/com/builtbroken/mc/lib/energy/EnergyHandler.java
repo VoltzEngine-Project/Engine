@@ -69,4 +69,6 @@ public abstract class EnergyHandler
 		public abstract double getEnergyItem(ItemStack is);
 
 		public abstract double getMaxEnergyItem(ItemStack is);
-	}
+
+		public abstract double clearEnergy(Object handler, boolean doAction);
+}

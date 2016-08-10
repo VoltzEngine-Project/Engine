@@ -22,7 +22,7 @@ public class ClassTransformer implements IClassTransformer
     public byte[] transform(String name, String transformedName, byte[] bytes)
     {
         //Only functions on our classes
-        if (!transformedName.startsWith("com.builtbroken") || EngineCoreMod.templates.isEmpty())
+        if (transformedName.startsWith("net.minecraft") || EngineCoreMod.templates.isEmpty())
         {
             return bytes;
         }
@@ -35,27 +35,22 @@ public class ClassTransformer implements IClassTransformer
         {
             for (AnnotationNode nodes : cnode.visibleAnnotations)
             {
-                System.out.println(nodes);
-                if (nodes.desc.contains("builtbroken"))
+                if (nodes.desc.equals("Lcom/builtbroken/mc/api/InjectTemplate;"))
                 {
-                    if (nodes.desc.equals("Lcom/builtbroken/mc/api/InjectTemplate;"))
-                    {
                     /*
                      * The 2nd value in UniversalClass is the annotation we're looking for to filter
 					 * out which mod to deal with.
 					 */
-                        String flags = null;
+                    String flags = null;
 
-                        if (nodes.values != null && nodes.values.size() >= 2)
-                        {
-                            flags = (String) nodes.values.get(1);
-                        }
-
-                        changed |= injectTemplate(cnode, flags);
-                        break;
+                    if (nodes.values != null && nodes.values.size() >= 2)
+                    {
+                        flags = (String) nodes.values.get(1);
                     }
-                }
 
+                    changed |= injectTemplate(cnode, flags);
+                    break;
+                }
             }
         }
 

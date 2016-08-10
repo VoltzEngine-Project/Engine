@@ -19,7 +19,7 @@ public class RFLoader extends AbstractLoadable
     {
         super.init();
         Engine.instance.logger().info("RF support loaded");
-        UniversalEnergySystem.register(new RFEnergyHandler(1)); //TODO add config setting
+        UniversalEnergySystem.register(RFEnergyHandler.INSTANCE); //TODO add config setting
 
         if (Engine.multiBlock != null)
         {

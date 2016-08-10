@@ -37,7 +37,7 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
 
     //Settings
     private static int maxEnergy = 1000;
-    private static int iconsArrayLength = 15;
+    private static int iconsArrayLength = 16;
 
     @SideOnly(Side.CLIENT)
     private static IIcon[] icons;
@@ -98,7 +98,7 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
         topBotIcon = iconRegister.registerIcon(References.PREFIX + "metal_diamond");
         icons = new IIcon[iconsArrayLength];
         icons[0] = iconRegister.registerIcon(References.PREFIX + "battery/battery");
-        for (int i = 1; i <= 14; i++)
+        for (int i = 1; i < iconsArrayLength; i++)
         {
             icons[i] = iconRegister.registerIcon(References.PREFIX + "battery/battery" + i);
         }

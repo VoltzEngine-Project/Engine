@@ -142,8 +142,34 @@ public class ReflectionUtility extends ReflectionHelper
 
     public static List<Field> getAllFields(Class clazz)
     {
-        List<Field> fields = getFields(clazz);
-        fields.addAll(getDeclaredFields(clazz));
+        //http://stackoverflow.com/questions/16295949/get-all-fields-even-private-and-inherited-from-class
+        List<Field> fields = new ArrayList();
+        try
+        {
+            Class<?> current = clazz;
+            while (current.getSuperclass() != null)
+            {
+                current = current.getSuperclass();
+                for(Field field : current.getFields())
+                {
+                    if(!fields.contains(field))
+                    {
+                        fields.add(field);
+                    }
+                }
+                for(Field field : current.getDeclaredFields())
+                {
+                    if(!fields.contains(field))
+                    {
+                        fields.add(field);
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Engine.logger().error("Failed to get fields for " + clazz, e);
+        }
         return fields;
     }
 

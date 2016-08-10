@@ -2,7 +2,6 @@ package com.builtbroken.mc.lib.mod.compat.rf;
 
 import cofh.api.energy.IEnergyHandler;
 import com.builtbroken.mc.api.energy.IEnergyBufferProvider;
-import com.builtbroken.mc.lib.energy.UniversalEnergySystem;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
@@ -40,6 +39,6 @@ public abstract class TemplateTETile implements IEnergyHandler, IEnergyBufferPro
     @Override
     public boolean canConnectEnergy(ForgeDirection from)
     {
-        return UniversalEnergySystem.canConnect(this, from, this);
+        return true; //TODO add connection interface
     }
 }
