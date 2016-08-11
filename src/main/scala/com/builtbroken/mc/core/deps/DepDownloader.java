@@ -76,7 +76,7 @@ public class DepDownloader
             }
             if (!found)
             {
-                if (!GraphicsEnvironment.isHeadless())
+                if (!GraphicsEnvironment.isHeadless() && (System.getProperty("confirmDownloadDeps") == null || !System.getProperty("downloadDeps").equalsIgnoreCase("yes")))
                 {
                     //TODO parent box to MC window
                     int reply = JOptionPane.showConfirmDialog(null, "Missing required version of " + dep.getGenericFileName() + " for Voltz Engine. Do you want to download?\nIf you click no the game will close as it will crash without this file.", "Missing dependency", JOptionPane.YES_OPTION);
