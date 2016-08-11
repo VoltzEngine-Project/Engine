@@ -21,13 +21,14 @@ public class EngineCoreMod implements IFMLLoadingPlugin
         //TODO see if there is a better place to load this as a construct is not designed for downloading
 
         //Dev mod ignores downloading deps as we already have them
-        if(System.getProperty("development") == null || !System.getProperty("development").equalsIgnoreCase("true"))
+        if ((System.getProperty("development") == null || !System.getProperty("development").equalsIgnoreCase("true"))
+                && (System.getProperty("disableDepDownloader") == null || !System.getProperty("disableDepDownloader").equalsIgnoreCase("true")))
         {
             DepDownloader.load();
         }
 
         //Allows disabling ASM templates
-        if(System.getProperty("asmTemplates") == null || System.getProperty("asmTemplates").equalsIgnoreCase("true"))
+        if (System.getProperty("enableAsmTemplates") == null || System.getProperty("enableAsmTemplates").equalsIgnoreCase("true"))
         {
             TemplateManager.load();
         }
