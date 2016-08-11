@@ -15,25 +15,25 @@ public abstract class TemplateTETile implements IEnergyHandler, IEnergyBufferPro
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
     {
         //Static forward is used to prevent ASM errors
-        return StaticForwarder.receiveEnergy(this, from, maxReceive, simulate);
+        return RFStaticForwarder.receiveEnergy(this, from, maxReceive, simulate);
     }
 
     @Override
     public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
     {
-        return StaticForwarder.extractEnergy(this, from, maxExtract, simulate);
+        return RFStaticForwarder.extractEnergy(this, from, maxExtract, simulate);
     }
 
     @Override
     public int getEnergyStored(ForgeDirection from)
     {
-        return StaticForwarder.getEnergyStored(this, from);
+        return RFStaticForwarder.getEnergyStored(this, from);
     }
 
     @Override
     public int getMaxEnergyStored(ForgeDirection from)
     {
-        return StaticForwarder.getMaxEnergyStored(this, from);
+        return RFStaticForwarder.getMaxEnergyStored(this, from);
     }
 
     @Override
