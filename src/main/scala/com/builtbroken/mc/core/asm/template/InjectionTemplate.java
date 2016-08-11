@@ -1,7 +1,6 @@
 package com.builtbroken.mc.core.asm.template;
 
 
-import com.builtbroken.mc.core.EngineCoreMod;
 import com.builtbroken.mc.lib.asm.ASMHelper;
 import com.builtbroken.mc.lib.asm.ObfMapping;
 import net.minecraft.launchwrapper.LaunchClassLoader;
@@ -34,7 +33,7 @@ public class InjectionTemplate
      */
     public static InjectionTemplate getTemplate(String key)
     {
-        return EngineCoreMod.templates.containsKey(key) ? EngineCoreMod.templates.get(key) : null;
+        return TemplateManager.templates.containsKey(key) ? TemplateManager.templates.get(key) : null;
     }
 
     public InjectionTemplate(String className, List<String> interfaces)

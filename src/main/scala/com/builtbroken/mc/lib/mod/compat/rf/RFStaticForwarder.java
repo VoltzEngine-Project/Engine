@@ -1,7 +1,10 @@
 package com.builtbroken.mc.lib.mod.compat.rf;
 
 import com.builtbroken.mc.api.energy.IEnergyBufferProvider;
-import com.builtbroken.mc.lib.energy.UniversalEnergySystem;
+import com.builtbroken.mc.api.tile.ConnectionType;
+import com.builtbroken.mc.api.tile.ITileConnection;
+import com.builtbroken.mc.lib.transform.vector.Pos;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
@@ -52,8 +55,9 @@ public class RFStaticForwarder
     }
 
 
-    public boolean canConnectEnergy(IEnergyBufferProvider provider, ForgeDirection from)
+    public static boolean canConnectEnergy(IEnergyBufferProvider provider, ForgeDirection from)
     {
-        return UniversalEnergySystem.canConnect(provider, from, this);
+        TileEntity tile = new Pos((TileEntity) provider).sub(from).getTileEntity(((TileEntity) provider).getWorldObj()); //TODO check that this is the right tile
+        return !(provider instanceof ITileConnection) || ((ITileConnection) provider).canConnect(tile, ConnectionType.RF_POWER, from);
     }
 }

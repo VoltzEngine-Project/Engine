@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.mod.compat.ic;
 import com.builtbroken.mc.lib.helper.WrenchUtility;
 import com.builtbroken.mc.lib.mod.ModProxy;
 import com.builtbroken.mc.lib.mod.compat.Mods;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -19,5 +20,6 @@ public class ICProxy extends ModProxy
     public void init()
     {
         WrenchUtility.registerWrenchType(new ICWrenchProxy());
+        MinecraftForge.EVENT_BUS.register(ICStaticForwarder.INSTANCE);
     }
 }

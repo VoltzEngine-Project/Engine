@@ -10,9 +10,16 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public class ICHandler extends EnergyHandler
 {
+    /** Ratio of converting EU to UE power */
+    public static double TO_UE;
+    /** Ratio of converting UE to EU power */
+    public static double FROM_UE;
+
     public ICHandler()
     {
         super("IndustrialCraft", "Energy Unit", "eu", 10);
+        TO_UE = toForgienEnergy;
+        FROM_UE = toUEEnergy;
     }
 
     @Override

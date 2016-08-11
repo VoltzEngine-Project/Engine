@@ -3,6 +3,7 @@ package com.builtbroken.mc.prefab.tile;
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.data.vector.Pos3D;
 import com.builtbroken.mc.api.IWorldPosition;
+import com.builtbroken.mc.api.event.tile.TileEvent;
 import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
 import com.builtbroken.mc.core.Engine;
@@ -57,16 +58,16 @@ import java.util.*;
  * stores. Though the amount of memory used is very little. If it becomes an issue it is recommended to just use
  * the classic Block & TileEntity system from Minecraft. As this will have less memory overhead but will take
  * more work to implement the same functionality.
- * <p/>
+ * <p>
  * In order for this class to work it needs to be registered threw the ModManager or something similar. In
  * which a new BlockTile will be created with a static version of this class in it.
- * <p/>
+ * <p>
  * Just as a note the system is designed in a special way in order to function. This class will act as a
  * redirect for your Block & Tile. If a method or Field has BLOCK in the java doc it is treated like
  * a static value. If it has the world TILE in the java doc the it is primary directed at the tile instance
  * at the block location. If it can't find the tile it will redirect to the static tile that is your Block.
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * Created by Robert(DarkGuardsman) on 1/4/2015.
  */
 public abstract class Tile extends TileEntityBase implements IWorldPosition, IPlayerUsing, IRegistryInit
@@ -148,7 +149,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 
     /**
      * BLOCK
-     * <p/>
+     * <p>
      * Called to create a new tile for the block. First call will
      * be the used to see if the BlockTile is a plain Block or Tile Block
      *
@@ -160,7 +161,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 
     /**
      * BLOCK
-     * <p/>
+     * <p>
      * Overloaded version of newTile that passes in world and block meta
      *
      * @param world - world the tile will be placed into
@@ -207,9 +208,23 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 
     }
 
+    @Override
+    public void invalidate()
+    {
+        this.tileEntityInvalid = true;
+        TileEvent.onUnLoad(this);
+    }
+
+    @Override
+    public void validate()
+    {
+        this.tileEntityInvalid = false;
+        TileEvent.onLoad(this);
+    }
+
     /**
      * Called to get the next cleanup tick call.
-     * <p/>
+     * <p>
      * Note: Should be random to avoid several tiles from
      * spiking the CPU when updating at the same time.
      *

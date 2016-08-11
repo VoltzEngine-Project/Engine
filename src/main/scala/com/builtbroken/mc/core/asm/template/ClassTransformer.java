@@ -1,6 +1,5 @@
 package com.builtbroken.mc.core.asm.template;
 
-import com.builtbroken.mc.core.EngineCoreMod;
 import com.builtbroken.mc.lib.asm.ASMHelper;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassWriter;
@@ -22,7 +21,7 @@ public class ClassTransformer implements IClassTransformer
     public byte[] transform(String name, String transformedName, byte[] bytes)
     {
         //Only functions on our classes
-        if (transformedName.startsWith("net.minecraft") || EngineCoreMod.templates.isEmpty())
+        if (transformedName.startsWith("net.minecraft") || TemplateManager.templates.isEmpty())
         {
             return bytes;
         }
@@ -83,7 +82,7 @@ public class ClassTransformer implements IClassTransformer
 
         if (flags == null || flags.equals(""))
         {
-            for (InjectionTemplate template : EngineCoreMod.templates.values())
+            for (InjectionTemplate template : TemplateManager.templates.values())
             {
                 if (template != null)
                 {
@@ -96,11 +95,11 @@ public class ClassTransformer implements IClassTransformer
         {
             String[] separatedFlags = flags.split(";");
 
-            for (String separated : separatedFlags)
+            for (String templateKey : separatedFlags)
             {
-                if (InjectionTemplate.getTemplate(separated) != null)
+                if (InjectionTemplate.getTemplate(templateKey) != null)
                 {
-                    InjectionTemplate template = InjectionTemplate.getTemplate(separated);
+                    InjectionTemplate template = InjectionTemplate.getTemplate(templateKey);
 
                     if (template != null)
                     {
@@ -110,7 +109,6 @@ public class ClassTransformer implements IClassTransformer
                 }
             }
         }
-
         return changed;
     }
 }

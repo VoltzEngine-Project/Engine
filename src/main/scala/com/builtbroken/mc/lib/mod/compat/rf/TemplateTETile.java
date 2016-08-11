@@ -39,6 +39,6 @@ public abstract class TemplateTETile implements IEnergyHandler, IEnergyBufferPro
     @Override
     public boolean canConnectEnergy(ForgeDirection from)
     {
-        return true; //TODO add connection interface
+        return RFStaticForwarder.canConnectEnergy(this, from); //TODO add connection interface
     }
 }

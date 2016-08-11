@@ -14,12 +14,9 @@ import java.util.Map;
 @IFMLLoadingPlugin.MCVersion(value = "1.7.10")
 public class EngineCoreMod implements IFMLLoadingPlugin
 {
-
-
     public EngineCoreMod()
     {
         //TODO see if there is a better place to load this as a construct is not designed for downloading
-
         //Dev mod ignores downloading deps as we already have them
         if ((System.getProperty("development") == null || !System.getProperty("development").equalsIgnoreCase("true"))
                 && (System.getProperty("disableDepDownloader") == null || !System.getProperty("disableDepDownloader").equalsIgnoreCase("true")))
