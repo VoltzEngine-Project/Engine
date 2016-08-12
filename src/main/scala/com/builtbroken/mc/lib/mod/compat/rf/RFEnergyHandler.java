@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class RFEnergyHandler extends EnergyHandler
 {
-    public static final RFEnergyHandler INSTANCE = new RFEnergyHandler(1);
+    public static final RFEnergyHandler INSTANCE = new RFEnergyHandler(2); //TODO make ratio configurable
     /** Overrides handling for thermal expansion machines directly */
     public static RFEnergyHandler thermalExpansionHandler;
 
