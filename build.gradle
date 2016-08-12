@@ -114,6 +114,14 @@ sourcesJar {
             "FMLAT": "VE_at.cfg")
 }
 
+dependencies {
+   compile name: 'CoFHLib', version: "${cofhlib_version}", ext: 'jar'
+	compile name: 'CoFHCore', version: "${cofhcore_version}", ext: 'jar'
+	compile name: 'RedstoneArsenal', version: "${rars_version}", ext: 'jar'
+	compile name: 'ThermalExpansion', version: "${texpansion_version}", ext: 'jar'
+	compile name: 'ThermalFoundation', version: "${tfoundation_version}", ext: 'jar'
+}
+
 jacocoTestReport {
     reports {
         xml.enabled = true // coveralls plugin depends on xml format report
