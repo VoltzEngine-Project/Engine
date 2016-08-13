@@ -212,14 +212,20 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     public void invalidate()
     {
         this.tileEntityInvalid = true;
-        TileEvent.onUnLoad(this);
+        if (isServer())
+        {
+            TileEvent.onUnLoad(this);
+        }
     }
 
     @Override
     public void validate()
     {
         this.tileEntityInvalid = false;
-        TileEvent.onLoad(this);
+        if (isServer())
+        {
+            TileEvent.onLoad(this);
+        }
     }
 
     /**

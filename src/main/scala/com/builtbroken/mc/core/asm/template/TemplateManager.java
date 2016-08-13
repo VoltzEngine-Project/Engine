@@ -36,7 +36,7 @@ public class TemplateManager
             }
             if (Class.forName("ic2.api.energy.tile.IEnergySink") != null)
             {
-                templates.put("RF-IEnergySink", new InjectionTemplate(ICTemplateTile.class.getName(), Collections.singletonList("cofh.api.energy.IEnergySink")));
+                templates.put("IC-IEnergySink", new InjectionTemplate(ICTemplateTile.class.getName(), Collections.singletonList("ic2.api.energy.tile.IEnergySink")));
             }
         }
         catch (ClassNotFoundException e)

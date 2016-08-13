@@ -32,7 +32,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 7/16/2016.
  */
-@InjectTemplate(integration = "RF-IEnergyHandler")
+@InjectTemplate(integration = "RF-IEnergyHandler;IC-IEnergySink")
 public class TileUniversalBattery extends TileEnt implements IEnergyBufferProvider
 {
     //TODO move to testing repo

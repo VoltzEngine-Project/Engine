@@ -57,7 +57,7 @@ public class ICStaticForwarder
     @SubscribeEvent
     public void load(TileEvent.TileLoadEvent event)
     {
-        TileEntity sink = event.location.getTileEntity();
+        TileEntity sink = event.tile();
         if (sink instanceof IEnergySink && !FMLCommonHandler.instance().getEffectiveSide().isClient() && Info.isIc2Available())
         {
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergySink) sink));
@@ -67,7 +67,7 @@ public class ICStaticForwarder
     @SubscribeEvent
     public void unload(TileEvent.TileUnLoadEvent event)
     {
-        TileEntity sink = event.location.getTileEntity();
+        TileEntity sink = event.tile();
         if (sink instanceof IEnergySink && Info.isIc2Available())
         {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergySink) sink));
