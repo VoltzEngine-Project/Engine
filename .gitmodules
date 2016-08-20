@@ -4,3 +4,4 @@
 [submodule "BuiltBrokenScripts"]
 	path = BuiltBrokenScripts
 	url = https://github.com/BuiltBrokenModding/BuiltBrokenScripts.git
+	branch = buildScripts
