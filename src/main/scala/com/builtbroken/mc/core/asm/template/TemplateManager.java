@@ -1,8 +1,7 @@
 package com.builtbroken.mc.core.asm.template;
 
 import com.builtbroken.mc.api.InjectTemplate;
-import com.builtbroken.mc.lib.mod.compat.ic.ICTemplateTile;
-import com.builtbroken.mc.lib.mod.compat.rf.TemplateTETile;
+import com.builtbroken.mc.core.Engine;
 import net.minecraft.tileentity.TileEntity;
 
 import java.lang.annotation.Annotation;
@@ -12,6 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * Handles everything to do with ASM injection templates
+ *
+ * Yes this is a lazy solution to a complex problem, but meh its by far easier to deal with than manually coding 10+ class per tile.
+ *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 8/11/2016.
  */
@@ -25,23 +28,22 @@ public class TemplateManager
     public static final HashMap<Class, List<ITemplateCalls>> classToTemplateCalls = new HashMap();
 
     //TODO create an ASM system that can inject method calls for ITemplateCalls automatically to save time
-
     public static void load()
     {
         try
         {
             if (Class.forName("cofh.api.energy.IEnergyHandler") != null)
             {
-                templates.put("RF-IEnergyHandler", new InjectionTemplate(TemplateTETile.class.getName(), Collections.singletonList("cofh.api.energy.IEnergyHandler")));
+                templates.put("RF-IEnergyHandler", new InjectionTemplate("com.builtbroken.mc.lib.mod.compat.rf.TemplateTETile", Collections.singletonList("cofh.api.energy.IEnergyHandler")));
             }
             if (Class.forName("ic2.api.energy.tile.IEnergySink") != null)
             {
-                templates.put("IC-IEnergySink", new InjectionTemplate(ICTemplateTile.class.getName(), Collections.singletonList("ic2.api.energy.tile.IEnergySink")));
+                templates.put("IC-IEnergySink", new InjectionTemplate("com.builtbroken.mc.lib.mod.compat.ic.ICTemplateTile", Collections.singletonList("ic2.api.energy.tile.IEnergySink")));
             }
         }
-        catch (ClassNotFoundException e)
+        catch (Exception e)
         {
-            e.printStackTrace();
+            Engine.logger().error("Failed to load templates, ASM injection may fail or even crash", e);
         }
     }
 
