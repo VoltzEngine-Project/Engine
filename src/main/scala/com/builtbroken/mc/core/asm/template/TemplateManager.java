@@ -30,6 +30,7 @@ public class TemplateManager
     //TODO create an ASM system that can inject method calls for ITemplateCalls automatically to save time
     public static void load()
     {
+        Engine.logger().info("TemplateManager: loading ASM templates...");
         try
         {
             if (Class.forName("cofh.api.energy.IEnergyHandler") != null)
@@ -43,8 +44,9 @@ public class TemplateManager
         }
         catch (Exception e)
         {
-            Engine.logger().error("Failed to load templates, ASM injection may fail or even crash", e);
+            Engine.logger().error("TemplateManager: Failed to load templates, ASM injection may fail or even crash", e);
         }
+        Engine.logger().info("TemplateManager: Finished loading...");
     }
 
     /**

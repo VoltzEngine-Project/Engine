@@ -1,6 +1,7 @@
 package com.builtbroken.mc.core.asm.template;
 
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.asm.ASMHelper;
 import com.builtbroken.mc.lib.asm.ObfMapping;
 import net.minecraft.launchwrapper.LaunchClassLoader;
@@ -19,6 +20,9 @@ public class InjectionTemplate
      */
     public final String className;
     public final List<String> interfaces;
+
+    private boolean init = false;
+    private boolean failedToLoadClass = false;
 
     /**
      * The methods to be injected upon patch(ClassNode cnode);
@@ -40,14 +44,7 @@ public class InjectionTemplate
     {
         this.className = className;
         this.interfaces = interfaces;
-
-        ClassNode cnode = getClassNode(className);
-
-        for (MethodNode method : cnode.methods)
-        {
-            this.methodImplementations.add(method);
-            method.desc = new ObfMapping(cnode.name, method.name, method.desc).toRuntime().s_desc;
-        }
+        Engine.logger().info("TemplateManager: Loading template for " + className + " as long as interfaces " + interfaces + " exist");
     }
 
     /**
@@ -58,6 +55,12 @@ public class InjectionTemplate
      */
     public boolean patch(ClassNode cnode, boolean injectConstructor)
     {
+        //Init data, if return true then init failed
+        if (init())
+        {
+            return false;
+        }
+
         for (String interfaceName : this.interfaces)
         {
             String interfaceByteName = interfaceName.replace(".", "/");
@@ -105,15 +108,30 @@ public class InjectionTemplate
         return changed;
     }
 
-    private static ClassNode getClassNode(String name)
+    //Called late to avoid loading class data in the constructor
+    private boolean init()
     {
-        try
+        if (!init)
         {
-            return ASMHelper.createClassNode(((LaunchClassLoader) InjectionTemplate.class.getClassLoader()).getClassBytes(name.replace('/', '.')));
+            init = true;
+            try
+            {
+                final ClassNode cnode = ASMHelper.createClassNode(((LaunchClassLoader) InjectionTemplate.class.getClassLoader()).getClassBytes(className.replace('/', '.')));
+                for (MethodNode method : cnode.methods)
+                {
+                    this.methodImplementations.add(method);
+                    method.desc = new ObfMapping(cnode.name, method.name, method.desc).toRuntime().s_desc;
+                }
+            }
+            catch (IOException e)
+            {
+                //TODO error out in dev mode
+                //TODO make notation to users that this injector failed
+                e.printStackTrace();
+                failedToLoadClass = true;
+            }
         }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
+        return failedToLoadClass;
     }
+
 }

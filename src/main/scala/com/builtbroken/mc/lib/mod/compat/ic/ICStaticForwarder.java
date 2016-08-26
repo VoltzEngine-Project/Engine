@@ -9,7 +9,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
-import ic2.api.info.Info;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -58,7 +57,7 @@ public class ICStaticForwarder
     public void load(TileEvent.TileLoadEvent event)
     {
         TileEntity sink = event.tile();
-        if (sink instanceof IEnergySink && !FMLCommonHandler.instance().getEffectiveSide().isClient() && Info.isIc2Available())
+        if (sink instanceof IEnergySink && !FMLCommonHandler.instance().getEffectiveSide().isClient())
         {
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergySink) sink));
         }
@@ -68,7 +67,7 @@ public class ICStaticForwarder
     public void unload(TileEvent.TileUnLoadEvent event)
     {
         TileEntity sink = event.tile();
-        if (sink instanceof IEnergySink && Info.isIc2Available())
+        if (sink instanceof IEnergySink)
         {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergySink) sink));
         }
