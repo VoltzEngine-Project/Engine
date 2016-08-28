@@ -114,7 +114,7 @@ public class Engine
 
     public LoadableHandler loader;
     public ModManager manager;
-    protected static Logger logger = LogManager.getLogger(References.DOMAIN);
+    protected static Logger logger = LogManager.getLogger("VoltzEngine");
     private Configuration config;
 
     public static Block ore = null;

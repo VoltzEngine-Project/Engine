@@ -1,8 +1,8 @@
 package com.builtbroken.mc.core.asm.template;
 
 import com.builtbroken.mc.api.InjectTemplate;
-import com.builtbroken.mc.core.Engine;
-import net.minecraft.tileentity.TileEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Handles everything to do with ASM injection templates
- *
+ * <p>
  * Yes this is a lazy solution to a complex problem, but meh its by far easier to deal with than manually coding 10+ class per tile.
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -20,9 +20,12 @@ import java.util.List;
  */
 public class TemplateManager
 {
+    /** Grab the mod's main logger, in theory should be the same logger */
+    protected static final Logger logger = LogManager.getLogger("VoltzEngine");
+
     /** List of ASM injection templates to use on universal energy tiles */
     public static final HashMap<String, InjectionTemplate> templates = new HashMap();
-    /** Map of objects that handle additional method calls needed for templates to work, such as {@link TileEntity#validate()} */
+    /** Map of objects that handle additional method calls needed for templates to work, such as {@link net.minecraft.tileentity.TileEntity#validate()} */
     public static final HashMap<String, ITemplateCalls> additionalTemplateCalls = new HashMap();
     /** Cache of classes to template calls to make, provides a slight performance gain */
     public static final HashMap<Class, List<ITemplateCalls>> classToTemplateCalls = new HashMap();
@@ -30,7 +33,7 @@ public class TemplateManager
     //TODO create an ASM system that can inject method calls for ITemplateCalls automatically to save time
     public static void load()
     {
-        Engine.logger().info("TemplateManager: loading ASM templates...");
+        logger.info("TemplateManager: loading ASM templates...");
         try
         {
             if (Class.forName("cofh.api.energy.IEnergyHandler") != null)
@@ -44,9 +47,9 @@ public class TemplateManager
         }
         catch (Exception e)
         {
-            Engine.logger().error("TemplateManager: Failed to load templates, ASM injection may fail or even crash", e);
+            logger.error("TemplateManager: Failed to load templates, ASM injection may fail or even crash", e);
         }
-        Engine.logger().info("TemplateManager: Finished loading...");
+        logger.info("TemplateManager: Finished loading...");
     }
 
     /**
