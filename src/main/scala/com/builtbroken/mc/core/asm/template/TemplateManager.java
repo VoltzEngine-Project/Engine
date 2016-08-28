@@ -1,8 +1,7 @@
 package com.builtbroken.mc.core.asm.template;
 
 import com.builtbroken.mc.api.InjectTemplate;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.builtbroken.mc.core.EngineCoreMod;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -20,8 +19,6 @@ import java.util.List;
  */
 public class TemplateManager
 {
-    /** Grab the mod's main logger, in theory should be the same logger */
-    protected static final Logger logger = LogManager.getLogger("VoltzEngine");
 
     /** List of ASM injection templates to use on universal energy tiles */
     public static final HashMap<String, InjectionTemplate> templates = new HashMap();
@@ -33,7 +30,7 @@ public class TemplateManager
     //TODO create an ASM system that can inject method calls for ITemplateCalls automatically to save time
     public static void load()
     {
-        logger.info("TemplateManager: loading ASM templates...");
+        EngineCoreMod.logger.info("TemplateManager: loading ASM templates...");
         try
         {
             //Load RF support
@@ -43,7 +40,7 @@ public class TemplateManager
             }
             else
             {
-                logger.error("TemplateManager: Skipping RF support - class not found");
+                EngineCoreMod.logger.error("TemplateManager: Skipping RF support - class not found");
             }
 
             //Load IC2 support
@@ -53,14 +50,14 @@ public class TemplateManager
             }
             else
             {
-                logger.error("TemplateManager: Skipping IC2 support - class not found");
+                EngineCoreMod.logger.error("TemplateManager: Skipping IC2 support - class not found");
             }
         }
         catch (Exception e)
         {
-            logger.error("TemplateManager: Failed to load templates, ASM injection may fail or even crash", e);
+            EngineCoreMod.logger.error("TemplateManager: Failed to load templates, ASM injection may fail or even crash", e);
         }
-        logger.info("TemplateManager: Finished loading...");
+        EngineCoreMod.logger.info("TemplateManager: Finished loading...");
     }
 
     //Checks if a class exists

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.asm;
 
-import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.EngineCoreMod;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.init.Blocks;
@@ -25,7 +25,7 @@ public class ProxyASMTest extends AbstractProxy
 
         if(!chunkASM)
         {
-            Engine.error("\n\n\nFailed to get chunk update event when fired. This may mean the ASM for injecting this event didn't function. Code depending on this event may fail to function correctly.\n\n\n");
+            EngineCoreMod.logger.error("\n\n\nFailed to get chunk update event when fired. This may mean the ASM for injecting this event didn't function. Code depending on this event may fail to function correctly.\n\n\n");
         }
         MinecraftForge.EVENT_BUS.unregister(this);
     }

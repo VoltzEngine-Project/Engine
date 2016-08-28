@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.asm.template;
 
 
-import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.EngineCoreMod;
 import com.builtbroken.mc.lib.asm.ASMHelper;
 import com.builtbroken.mc.lib.asm.ObfMapping;
 import net.minecraft.launchwrapper.LaunchClassLoader;
@@ -44,7 +44,7 @@ public class InjectionTemplate
     {
         this.className = className;
         this.interfaces = interfaces;
-        Engine.logger().info("TemplateManager: Loading template for " + className + " as long as interfaces " + interfaces + " exist");
+        EngineCoreMod.logger.info("TemplateManager: Loading template for " + className + " as long as interfaces " + interfaces + " exist");
     }
 
     /**

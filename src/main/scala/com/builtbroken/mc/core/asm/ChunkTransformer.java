@@ -1,11 +1,11 @@
 package com.builtbroken.mc.core.asm;
 
-import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.EngineCoreMod;
+import com.builtbroken.mc.lib.asm.ASMHelper;
+import com.builtbroken.mc.lib.asm.ObfMapping;
 import net.minecraft.block.Block;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.tree.*;
-import com.builtbroken.mc.lib.asm.ASMHelper;
-import com.builtbroken.mc.lib.asm.ObfMapping;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -19,7 +19,7 @@ public class ChunkTransformer implements IClassTransformer
 	{
 		if (transformedName.equals("net.minecraft.world.chunk.Chunk"))
 		{
-            Engine.instance.logger().info("Transforming Chunk class for chunkModified event.");
+			EngineCoreMod.logger.info("Transforming Chunk class for chunkModified event.");
 
 			ClassNode cnode = ASMHelper.createClassNode(bytes);
 
@@ -29,7 +29,7 @@ public class ChunkTransformer implements IClassTransformer
 
 				if (m.s_name.equals("func_150807_a"))
 				{
-                    Engine.instance.logger().info("[Voltz-Engine] Found method " + m.s_name);
+					EngineCoreMod.logger.info("[Voltz-Engine] Found method " + m.s_name);
 					InsnList list = new InsnList();
 					list.add(new VarInsnNode(ALOAD, 0));
 					list.add(new VarInsnNode(ILOAD, 1));
@@ -54,7 +54,7 @@ public class ChunkTransformer implements IClassTransformer
 						method.instructions.insert(list);
 					}
 
-                    Engine.instance.logger().info("Injected instruction to method: " + m.s_name);
+					EngineCoreMod.logger.info("Injected instruction to method: " + m.s_name);
 				}
 			}
 

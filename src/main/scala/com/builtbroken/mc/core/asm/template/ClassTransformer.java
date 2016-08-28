@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.asm.template;
 
-import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.EngineCoreMod;
 import com.builtbroken.mc.lib.asm.ASMHelper;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassWriter;
@@ -114,7 +114,7 @@ public class ClassTransformer implements IClassTransformer
                 if (template != null)
                 {
                     changed |= template.patch(cnode, false);
-                    Engine.logger().info("TemplateClassTransformer: Injected " + template.className + " API into: " + cnode.name);
+                    EngineCoreMod.logger.info("TemplateClassTransformer: Injected " + template.className + " API into: " + cnode.name);
                 }
             }
         }
@@ -131,7 +131,7 @@ public class ClassTransformer implements IClassTransformer
                     if (template != null)
                     {
                         changed |= template.patch(cnode, false);
-                        Engine.logger().info("TemplateClassTransformer: Injected " + template.className + " API into: " + cnode.name);
+                        EngineCoreMod.logger.info("TemplateClassTransformer: Injected " + template.className + " API into: " + cnode.name);
                     }
                 }
             }
