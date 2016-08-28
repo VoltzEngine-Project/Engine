@@ -36,13 +36,24 @@ public class TemplateManager
         logger.info("TemplateManager: loading ASM templates...");
         try
         {
-            if (Class.forName("cofh.api.energy.IEnergyHandler") != null)
+            //Load RF support
+            if (classExists("cofh.api.energy.IEnergyHandler"))
             {
                 templates.put("RF-IEnergyHandler", new InjectionTemplate("com.builtbroken.mc.lib.mod.compat.rf.TemplateTETile", Collections.singletonList("cofh.api.energy.IEnergyHandler")));
             }
-            if (Class.forName("ic2.api.energy.tile.IEnergySink") != null)
+            else
+            {
+                logger.error("TemplateManager: Skipping RF support - class not found");
+            }
+
+            //Load IC2 support
+            if (classExists("ic2.api.energy.tile.IEnergySink"))
             {
                 templates.put("IC-IEnergySink", new InjectionTemplate("com.builtbroken.mc.lib.mod.compat.ic.ICTemplateTile", Collections.singletonList("ic2.api.energy.tile.IEnergySink")));
+            }
+            else
+            {
+                logger.error("TemplateManager: Skipping IC2 support - class not found");
             }
         }
         catch (Exception e)
@@ -50,6 +61,22 @@ public class TemplateManager
             logger.error("TemplateManager: Failed to load templates, ASM injection may fail or even crash", e);
         }
         logger.info("TemplateManager: Finished loading...");
+    }
+
+    //Checks if a class exists
+    private static boolean classExists(String clazz)
+    {
+        try
+        {
+            if (Class.forName(clazz) != null)
+            {
+                return true;
+            }
+        }
+        catch (ClassNotFoundException e2)
+        {
+        }
+        return false;
     }
 
     /**
