@@ -8,15 +8,6 @@ import net.minecraftforge.common.util.ForgeDirection
 /**
  * Created by Dark on 8/15/2015.
  */
-class TileMultiEnergyRF extends TileMulti with TEnergyHandler {
+class TileMultiEnergyRF extends TileMulti {
 
-  override protected def getBattery(from: ForgeDirection): IEnergyBuffer = {
-    if (getHost != null && getHost.isInstanceOf[IEnergyBufferProvider]) {
-      return getHost.asInstanceOf[IEnergyBufferProvider].getEnergyBuffer(from)
-    }
-    return null
-  }
-
-  //TODO maybe implement a way to set this per side per block
-  override def canConnectEnergy(from: ForgeDirection): Boolean = getBattery(from) != null
 }

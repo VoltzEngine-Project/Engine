@@ -21,6 +21,6 @@ public class TELoader extends ModProxy
     {
         super.init();
         Engine.instance.logger().info("Thermal Expansion support loaded");
-        RFEnergyHandler.thermalExpansionHandler = new TEEnergyHandler();
+        RFEnergyHandler.thermalExpansionHandler = new ThermalExpansionEnergyHandler();
     }
 }

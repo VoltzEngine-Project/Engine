@@ -10,9 +10,9 @@ import net.minecraftforge.common.util.ForgeDirection;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 8/10/2016.
  */
-public class TEEnergyHandler extends RFEnergyHandler
+public class ThermalExpansionEnergyHandler extends RFEnergyHandler
 {
-    public TEEnergyHandler()
+    public ThermalExpansionEnergyHandler()
     {
         super(RFEnergyHandler.INSTANCE.toUEEnergy);
     }

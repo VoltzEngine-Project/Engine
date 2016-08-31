@@ -12,7 +12,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
 
@@ -48,56 +47,6 @@ public class TestTEnergyHandler extends AbstractTest
         world.setBlockToAir(0, 10, 0);
         Assert.assertTrue("Block should be air", world.getBlock(0, 10, 0) == Blocks.air);
         Assert.assertTrue("There should be a null", world.getTileEntity(0, 10, 0) == null);
-    }
-
-    public void testFill()
-    {
-        world.setBlock(0, 10, 0, block);
-
-        TileTEnergyHandler tile = (TileTEnergyHandler) world.getTileEntity(0, 10, 0);
-
-        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-        {
-            tile.buffer().removeEnergyFromStorage(tile.buffer().getEnergyStored(), true);
-            int filled = tile.receiveEnergy(dir, 10, true);
-            Assert.assertTrue("Buffer should have returned 10, instead it returned " + filled, filled == 10);
-            Assert.assertTrue("Buffer should still be empty as we faked energy transfer, returned " + tile.getEnergyStored(dir), tile.getEnergyStored(dir) == 0);
-
-            filled = tile.receiveEnergy(dir, 10, false);
-            Assert.assertTrue("Buffer should have returned 10, instead returned " + filled, filled == 10);
-            Assert.assertTrue("Buffer should have 10 energy units stored, stored " + tile.getEnergyStored(dir), tile.getEnergyStored(dir) == 10);
-
-            filled = tile.receiveEnergy(dir, -10, false);
-            Assert.assertTrue("Buffer should have returned 0, instead returned" + filled, filled == 0);
-            Assert.assertTrue("Buffer should have 10 energy units stored, instead has " + tile.getEnergyStored(dir), tile.getEnergyStored(dir) == 10);
-        }
-
-        world.setBlockToAir(0, 10, 0);
-    }
-
-    public void testDrain()
-    {
-        world.setBlock(0, 10, 0, block);
-
-        TileTEnergyHandler tile = (TileTEnergyHandler) world.getTileEntity(0, 10, 0);
-
-        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-        {
-            tile.buffer().addEnergyToStorage(tile.buffer().getMaxBufferSize(), true);
-            int drained = tile.extractEnergy(dir, 10, true);
-            Assert.assertTrue("Buffer should have returned 10, instead it returned " + drained, drained == 10);
-            Assert.assertTrue("Buffer should still be full as we faked energy transfer, returned " + tile.getEnergyStored(dir), tile.getEnergyStored(dir) == 50);
-
-            drained = tile.extractEnergy(dir, 10, false);
-            Assert.assertTrue("Buffer should have returned 10, instead returned " + drained, drained == 10);
-            Assert.assertTrue("Buffer should have 10 energy units stored, stored " + tile.getEnergyStored(dir), tile.getEnergyStored(dir) == 40);
-
-            drained = tile.extractEnergy(dir, -10, false);
-            Assert.assertTrue("Buffer should have returned 0, instead returned" + drained, drained == 0);
-            Assert.assertTrue("Buffer should have 10 energy units stored, instead has " + tile.getEnergyStored(dir), tile.getEnergyStored(dir) == 40);
-        }
-
-        world.setBlockToAir(0, 10, 0);
     }
 
     public class BlockTEnergyHandler extends BlockContainer
