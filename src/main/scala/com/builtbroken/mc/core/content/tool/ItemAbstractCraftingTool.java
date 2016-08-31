@@ -38,7 +38,7 @@ public abstract class ItemAbstractCraftingTool extends Item implements IItemTool
     @Override
     public String getToolType(ItemStack stack)
     {
-        return stack.getTagCompound() != null && stack.getTagCompound().hasKey("toolType") ? stack.getTagCompound().getString("toolType") : null;
+        return stack.getTagCompound() != null && stack.getTagCompound().hasKey("toolType") ? stack.getTagCompound().getString("toolType") : "";
     }
 
     @Override
