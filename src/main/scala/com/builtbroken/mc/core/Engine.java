@@ -36,7 +36,9 @@ import com.builtbroken.mc.lib.mod.compat.ic.ICProxy;
 import com.builtbroken.mc.lib.mod.compat.mek.MekProxy;
 import com.builtbroken.mc.lib.mod.compat.nei.NEIProxy;
 import com.builtbroken.mc.lib.mod.compat.oc.OCProxy;
+import com.builtbroken.mc.lib.mod.compat.pe.ProjectEProxy;
 import com.builtbroken.mc.lib.mod.compat.rf.RFLoader;
+import com.builtbroken.mc.lib.mod.compat.te.TEProxy;
 import com.builtbroken.mc.lib.mod.compat.tinkers.TinkerProxy;
 import com.builtbroken.mc.lib.mod.compat.ue.TileUniversalBattery;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
@@ -366,6 +368,7 @@ public class Engine
         loader.applyModule(ICProxy.class, Mods.IC2.isLoaded());
         loader.applyModule(BCProxy.class, Mods.BC.isLoaded());
         loader.applyModule(MekProxy.class, Mods.MEKANISM.isLoaded());
+        loader.applyModule(ProjectEProxy.class, Mods.PROJECT_E.isLoaded());
 
         //Check if RF api exists
         boolean shouldLoadRFHandler = true;
@@ -395,6 +398,7 @@ public class Engine
         if (shouldLoadRFHandler)
         {
             loader.applyModule(RFLoader.class);
+            loader.applyModule(TEProxy.class, Mods.TF_EXPANSION.isLoaded());
         }
 
         PotionUtility.resizePotionArray();

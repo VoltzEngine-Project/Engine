@@ -9,9 +9,9 @@ import com.builtbroken.mc.lib.mod.compat.rf.RFEnergyHandler;
  * Loads support for thermal expansion
  * Created by Dark(DarkGuardsman, Robert) on 8/10/2016.
  */
-public class TELoader extends ModProxy
+public class TEProxy extends ModProxy
 {
-    public TELoader()
+    public TEProxy()
     {
         super(Mods.TF_EXPANSION);
     }

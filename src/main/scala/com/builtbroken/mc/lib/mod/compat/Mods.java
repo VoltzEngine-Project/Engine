@@ -27,7 +27,8 @@ public enum Mods
     CoFH_CORE("CoFHCore"),
     NEI("NotEnoughItems"),
     //https://github.com/aidancbrady/Mekanism/blob/master/src/main/java/mekanism/common/Mekanism.java
-    MEKANISM("Mekanism");
+    MEKANISM("Mekanism"),
+    PROJECT_E("ProjectE");
 
     public final String mod_id;
 

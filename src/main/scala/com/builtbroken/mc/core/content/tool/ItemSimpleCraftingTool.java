@@ -87,11 +87,20 @@ public class ItemSimpleCraftingTool extends ItemAbstractCraftingTool implements 
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List list)
     {
-        list.add(getHammer());
-        list.add(getChisel());
-        list.add(getDrill());
-        list.add(getFile());
-        list.add(getCutters());
+        for (ItemStack stack : getTools())
+        {
+            list.add(stack);
+        }
+    }
+
+    /**
+     * Gets a new array of all tool stacks implemented by this item
+     * @return array
+     */
+    public static ItemStack[] getTools()
+    {
+        //TODO cache to cut down on objects generated
+        return new ItemStack[]{getHammer(), getChisel(), getDrill(), getFile(), getCutters()};
     }
 
     public static ItemStack getTool(String type)
