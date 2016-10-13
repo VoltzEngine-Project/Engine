@@ -45,7 +45,7 @@ public class TileEnt extends Tile
     {
         if (id == DESCRIPTION_PACKET_ID)
         {
-            if(isClient())
+            if (isClient())
             {
                 readDescPacket(buf);
             }
@@ -54,11 +54,23 @@ public class TileEnt extends Tile
         return false;
     }
 
+    /**
+     * Called client side only to read
+     * the data from a description packet
+     *
+     * @param buf - what to read data from
+     */
     public void readDescPacket(ByteBuf buf)
     {
 
     }
 
+    /**
+     * Called server side to write the
+     * data for a description packet
+     *
+     * @param buf - what to write data to
+     */
     public void writeDescPacket(ByteBuf buf)
     {
 
