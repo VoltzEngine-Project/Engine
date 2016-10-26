@@ -4,6 +4,7 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.prefab.gui.GuiButton2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -14,7 +15,8 @@ import org.lwjgl.opengl.GL11;
  */
 public class GuiImageButton extends GuiButton2
 {
-    int u, v;
+    private int u, v;
+    private ResourceLocation textureOverride;
 
     protected GuiImageButton(int id, int x, int y, int width, int height, int u, int v)
     {
@@ -23,14 +25,40 @@ public class GuiImageButton extends GuiButton2
         this.v = v;
     }
 
+    /**
+     * Creates a new save button
+     *
+     * @param id
+     * @param x
+     * @param y
+     * @return
+     */
     public static GuiImageButton newSaveButton(int id, int x, int y)
     {
         return new GuiImageButton(id, x, y, 18, 18, 18, 162);
     }
 
+    /**
+     * Creates a new refresh button
+     *
+     * @param id
+     * @param x
+     * @param y
+     * @return
+     */
     public static GuiImageButton newRefreshButton(int id, int x, int y)
     {
         return new GuiImageButton(id, x, y, 18, 18, 18, 198);
+    }
+
+    /**
+     * Overrides the default texture for buttons
+     *
+     * @param location
+     */
+    public void setTexture(ResourceLocation location)
+    {
+        this.textureOverride = location;
     }
 
     @Override
@@ -38,7 +66,7 @@ public class GuiImageButton extends GuiButton2
     {
         if (this.visible)
         {
-            mc.getTextureManager().bindTexture(References.GUI_COMPONENTS);
+            mc.getTextureManager().bindTexture(textureOverride == null ? References.GUI_COMPONENTS : textureOverride);
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 

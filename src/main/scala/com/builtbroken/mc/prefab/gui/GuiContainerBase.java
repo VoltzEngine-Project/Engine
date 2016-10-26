@@ -9,6 +9,7 @@ import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.render.RenderUtility;
 import com.builtbroken.mc.lib.transform.region.Rectangle;
 import com.builtbroken.mc.lib.transform.vector.Point;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -64,6 +65,18 @@ public class GuiContainerBase extends GuiContainer
         super.initGui();
         this.buttonList.clear();
         this.fields.clear();
+    }
+
+    /**
+     * Adds a button to the GUI
+     * @param button
+     * @param <E>
+     * @return
+     */
+    protected  <E extends GuiButton> E addButton(E button)
+    {
+        buttonList.add(button);
+        return button;
     }
 
     protected void drawString(String str, int x, int y, int color)
