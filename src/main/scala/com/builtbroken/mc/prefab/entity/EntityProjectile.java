@@ -160,6 +160,7 @@ public class EntityProjectile extends Entity implements IProjectile
         {
             int j = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
 
+            //TODO allow this to be disabled
             if (block == this.inBlockID && j == this.inData)
             {
                 ++this.ticksInGround;
@@ -171,6 +172,7 @@ public class EntityProjectile extends Entity implements IProjectile
             }
             else
             {
+                //TODO change to apply gravity
                 this.inGround = false;
                 this.motionX *= (double) (this.rand.nextFloat() * 0.2F);
                 this.motionY *= (double) (this.rand.nextFloat() * 0.2F);
@@ -181,6 +183,7 @@ public class EntityProjectile extends Entity implements IProjectile
         }
         else
         {
+            //Kills the projectile if it moves forever into space
             ++this.ticksInAir;
             if (ticksInAir >= inAirKillTime)
             {
@@ -372,6 +375,7 @@ public class EntityProjectile extends Entity implements IProjectile
 
     protected void decreaseMotion()
     {
+        //TODO get friction value
         this.motionX *= 0.99F;
         this.motionY *= 0.99F;
         this.motionZ *= 0.99F;
