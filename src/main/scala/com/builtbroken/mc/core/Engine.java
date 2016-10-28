@@ -24,6 +24,7 @@ import com.builtbroken.mc.core.handler.SaveManager;
 import com.builtbroken.mc.core.handler.SelectionHandler;
 import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.netty.PacketManager;
+import com.builtbroken.mc.core.registry.MassRegistry;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
@@ -291,6 +292,10 @@ public class Engine
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+        //Init API values
+        VoltzEngineAPI.massRegistry = new MassRegistry();
+
+        //Load config files
         config = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/VoltzEngine.cfg"));
         heatDataConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/HeatMap.cfg"));
         explosiveConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/Explosives.cfg"));
