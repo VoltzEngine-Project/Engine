@@ -277,7 +277,7 @@ public class BlockUtility
             int rotation = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
             if (rotation == 0)
             {
-                return 2;
+                return 3;
             }
             else if (rotation == 1)
             {
@@ -285,7 +285,7 @@ public class BlockUtility
             }
             else if (rotation == 2)
             {
-                return 3;
+                return 2;
             }
             else if (rotation == 3)
             {

@@ -269,7 +269,7 @@ public class BlockTile extends BlockContainer
     public boolean shouldSideBeRendered(IBlockAccess access, int x, int y, int z, int side)
     {
         Tile tile = inject(access, x, y, z);
-        boolean value = staticTile.shouldSideBeRendered(side);
+        boolean value = tile.shouldSideBeRendered(side);
         eject();
         return value;
     }
@@ -427,8 +427,16 @@ public class BlockTile extends BlockContainer
     public void setBlockBoundsBasedOnState(IBlockAccess access, int x, int y, int z)
     {
         Tile tile = inject(access, x, y, z);
-        tile.setBlockBoundsBasedOnState();
+        Cube cube = tile.getCollisionBounds();
+        setBlockBounds(cube.min().xf(), cube.min().yf(), cube.min().zf(), cube.max().xf(), cube.max().yf(), cube.max().zf());
         eject();
+    }
+
+    @Override
+    public void setBlockBoundsForItemRender()
+    {
+        Cube cube = staticTile.getCollisionBounds();
+        setBlockBounds(cube.min().xf(), cube.min().yf(), cube.min().zf(), cube.max().xf(), cube.max().yf(), cube.max().zf());
     }
 
     @Override

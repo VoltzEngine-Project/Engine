@@ -739,7 +739,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 
     public Cube getSelectBounds()
     {
-        return bounds;
+        return getCollisionBounds();
     }
 
     @SideOnly(Side.CLIENT)
@@ -748,6 +748,15 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
         return getCollisionBounds().clone().add(x(), y(), z()).toAABB();
     }
 
+    /**
+     * Collision box of the cube without
+     * offset of the cube position.
+     * <p>
+     * {@link #getSelectBounds()} and {@link #getRenderBoundingBox()}
+     * call to this by default.
+     *
+     * @return cube, can't be null
+     */
     public Cube getCollisionBounds()
     {
         return bounds;
@@ -829,6 +838,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
         return 0;
     }
 
+    @Deprecated
     public void setBlockBoundsBasedOnState()
     {
 
