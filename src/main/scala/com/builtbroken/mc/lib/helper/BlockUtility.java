@@ -281,7 +281,7 @@ public class BlockUtility
             }
             else if (rotation == 1)
             {
-                return 5;
+                return 4;
             }
             else if (rotation == 2)
             {
@@ -289,7 +289,7 @@ public class BlockUtility
             }
             else if (rotation == 3)
             {
-                return 4;
+                return 5;
             }
             else
             {
