@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -507,6 +508,16 @@ public class RenderUtility
             tessellator.draw();
         }
         GL11.glPopMatrix();
+    }
+
+    public static void renderCube(AxisAlignedBB bounds, Block block)
+    {
+        renderCube(bounds.minX, bounds.minY, bounds.minZ, bounds.maxX, bounds.maxY, bounds.maxZ, block, null);
+    }
+
+    public static void renderCube(AxisAlignedBB bounds, Block block, IIcon icon)
+    {
+        renderCube(bounds.minX, bounds.minY, bounds.minZ, bounds.maxX, bounds.maxY, bounds.maxZ, block, icon);
     }
 
     public static void renderCube(double x1, double y1, double z1, double x2, double y2, double z2, Block block)
