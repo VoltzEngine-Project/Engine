@@ -1,8 +1,8 @@
 package com.builtbroken.mc.lib.transform.vector;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.jlib.data.vector.Pos3D;
 import com.builtbroken.jlib.data.vector.ITransform;
+import com.builtbroken.jlib.data.vector.Pos3D;
 import com.builtbroken.mc.lib.transform.rotation.EulerAngle;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
@@ -148,6 +148,16 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
             return transformer.transform((IPos3D) this);
         }
         return null;
+    }
+
+    /**
+     * Calls {@link Math#abs(double)} on each term of the pos data
+     *
+     * @return abs
+     */
+    public R absolute()
+    {
+        return newPos(Math.abs(x()), Math.abs(y()), Math.abs(z()));
     }
 
     //=========================
