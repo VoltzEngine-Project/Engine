@@ -233,6 +233,13 @@ public class InventoryUtility
         return inv;
     }
 
+    public static ItemStack copyStack(ItemStack stack, int stackSize)
+    {
+        ItemStack stack1 = stack.copy();
+        stack1.stackSize = stackSize;
+        return stack1;
+    }
+
     /**
      * Places the stack into the inventory in the first slot it can find
      *
