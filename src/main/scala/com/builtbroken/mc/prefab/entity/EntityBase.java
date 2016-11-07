@@ -1,21 +1,32 @@
 package com.builtbroken.mc.prefab.entity;
 
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.network.IPacketIDReceiver;
+import com.builtbroken.mc.core.network.packet.PacketEntity;
+import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.lib.helper.DamageUtility;
+import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 /**
+ * Base entity class to be shared by most entities
  * Created by robert on 1/24/2015.
  */
-public abstract class EntityBase extends Entity
+public abstract class EntityBase extends Entity implements IPacketIDReceiver
 {
+    /** Does the entity have HP to take damage. */
     protected boolean hasHealth = false;
+    /** What is the default max HP of the entity. */
     protected float maxHealth = 5;
-
+    /** The current HP of the entity. */
     private float _health = 0;
 
     public EntityBase(World world)
@@ -26,13 +37,16 @@ public abstract class EntityBase extends Entity
     @Override
     protected void entityInit()
     {
-        if(hasHealth)
+        if (hasHealth)
+        {
             this._health = getMaxHealth();
+        }
         this.dataWatcher.addObject(6, _health);
     }
 
     public void setHealth(float hp)
     {
+        //TODO recode to just use the data watcher
         _health = hp;
         this.dataWatcher.updateObject(6, Float.valueOf(MathHelper.clamp_float(hp, 0.0F, this.getMaxHealth())));
     }
@@ -112,5 +126,56 @@ public abstract class EntityBase extends Entity
     protected void writeEntityToNBT(NBTTagCompound nbt)
     {
         nbt.setFloat("health", this.getHealth());
+    }
+
+    @Override
+    public boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type)
+    {
+        if (worldObj.isRemote)
+        {
+            //Updates client if cargo changes
+            if (id == -1)
+            {
+                readDescData(buf);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Sends basic data that describes the entity
+     */
+    protected void sentDescriptionPacket()
+    {
+        final PacketEntity entity = new PacketEntity(this, -1);
+        writeDescData(entity.data());
+        Engine.instance.packetHandler.sendToAllAround(entity, new Location(this), 64);
+    }
+
+    /**
+     * Writes desc data to packet
+     *
+     * @param buffer - write area
+     */
+    public void writeDescData(ByteBuf buffer)
+    {
+        if (this instanceof IEntityAdditionalSpawnData)
+        {
+            ((IEntityAdditionalSpawnData) this).writeSpawnData(buffer);
+        }
+    }
+
+    /**
+     * Reads desc data from packet
+     *
+     * @param buffer - data
+     */
+    public void readDescData(ByteBuf buffer)
+    {
+        if (this instanceof IEntityAdditionalSpawnData)
+        {
+            ((IEntityAdditionalSpawnData) this).readSpawnData(buffer);
+        }
     }
 }
