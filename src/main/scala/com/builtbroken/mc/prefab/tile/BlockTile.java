@@ -458,7 +458,7 @@ public class BlockTile extends BlockContainer
     public int tickRate(World world)
     {
         Tile tile = inject(world, 0, 0, 0);
-        int t = staticTile.tickRate();
+        int t = tile.tickRate();
         eject();
         return t;
 
