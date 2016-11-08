@@ -762,6 +762,16 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
         return bounds;
     }
 
+    /**
+     * Render block size of the normal cube renderer
+     *
+     * @return cube, defaults to collision box
+     */
+    public Cube getBlockBounds()
+    {
+        return getCollisionBounds();
+    }
+
     public int getMetadata()
     {
         if (getAccess() != null)

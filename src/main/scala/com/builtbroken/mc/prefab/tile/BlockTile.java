@@ -427,7 +427,7 @@ public class BlockTile extends BlockContainer
     public void setBlockBoundsBasedOnState(IBlockAccess access, int x, int y, int z)
     {
         Tile tile = inject(access, x, y, z);
-        Cube cube = tile.getCollisionBounds();
+        Cube cube = tile.getBlockBounds();
         setBlockBounds(cube.min().xf(), cube.min().yf(), cube.min().zf(), cube.max().xf(), cube.max().yf(), cube.max().zf());
         eject();
     }
@@ -435,7 +435,7 @@ public class BlockTile extends BlockContainer
     @Override
     public void setBlockBoundsForItemRender()
     {
-        Cube cube = staticTile.getCollisionBounds();
+        Cube cube = staticTile.getBlockBounds();
         setBlockBounds(cube.min().xf(), cube.min().yf(), cube.min().zf(), cube.max().xf(), cube.max().yf(), cube.max().zf());
     }
 
