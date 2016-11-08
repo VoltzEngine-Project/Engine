@@ -22,8 +22,10 @@ public class BasicInventory implements ISave, IInventory, Iterable<Map.Entry<Int
     /** Default slot max count */
     protected int slots;
 
-    /** How much to shift the start of the inventory map,
-     * used to adjust save/load process accordingly */
+    /**
+     * How much to shift the start of the inventory map,
+     * used to adjust save/load process accordingly
+     */
     protected int shiftSlotStart = 0;
 
     /** Map of the inventory */
@@ -119,13 +121,25 @@ public class BasicInventory implements ISave, IInventory, Iterable<Map.Entry<Int
             }
             if (!InventoryUtility.stacksMatchExact(pre_stack, getStackInSlot(slot)))
             {
-                markDirty();
+                onInventoryChanged(slot, pre_stack, getStackInSlot(slot));
             }
         }
         else
         {
             Engine.error("BasicInventory: something tried to set " + insertStack + " into slot " + slot + " which is outside the 0 - " + (getSizeInventory() - 1) + " limit");
         }
+    }
+
+    /**
+     * Called when the stack in the inventory slot has changed
+     *
+     * @param slot
+     * @param prev
+     * @param item
+     */
+    protected void onInventoryChanged(int slot, ItemStack prev, ItemStack item)
+    {
+        markDirty();
     }
 
     @Override

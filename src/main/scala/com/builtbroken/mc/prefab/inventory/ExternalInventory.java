@@ -84,6 +84,12 @@ public class ExternalInventory extends BasicInventory implements IExternalInvent
     }
 
     @Override
+    protected void onInventoryChanged(int slot, ItemStack prev, ItemStack item)
+    {
+        host.onInventoryChanged(slot, prev, item);
+    }
+
+    @Override
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
         return true;
