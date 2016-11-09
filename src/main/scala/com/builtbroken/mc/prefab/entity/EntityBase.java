@@ -1,11 +1,12 @@
 package com.builtbroken.mc.prefab.entity;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketEntity;
 import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.lib.helper.DamageUtility;
-import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
@@ -20,7 +21,7 @@ import net.minecraft.world.World;
  * Base entity class to be shared by most entities
  * Created by robert on 1/24/2015.
  */
-public abstract class EntityBase extends Entity implements IPacketIDReceiver
+public abstract class EntityBase extends Entity implements IPacketIDReceiver, IWorldPosition, IPos3D
 {
     /** Does the entity have HP to take damage. */
     protected boolean hasHealth = false;
@@ -106,7 +107,7 @@ public abstract class EntityBase extends Entity implements IPacketIDReceiver
      */
     public Pos getPredictedPosition(int t)
     {
-        Pos newPos = new Pos(this);
+        Pos newPos = new Pos((Entity) this);
 
         for (int i = 0; i < t; i++)
         {
@@ -150,7 +151,7 @@ public abstract class EntityBase extends Entity implements IPacketIDReceiver
     {
         final PacketEntity entity = new PacketEntity(this, -1);
         writeDescData(entity.data());
-        Engine.instance.packetHandler.sendToAllAround(entity, new Location(this), 64);
+        Engine.instance.packetHandler.sendToAllAround(entity, (IWorldPosition) this, 64);
     }
 
     /**
@@ -177,5 +178,30 @@ public abstract class EntityBase extends Entity implements IPacketIDReceiver
         {
             ((IEntityAdditionalSpawnData) this).readSpawnData(buffer);
         }
+    }
+
+
+    @Override
+    public World world()
+    {
+        return worldObj;
+    }
+
+    @Override
+    public double x()
+    {
+        return posX;
+    }
+
+    @Override
+    public double y()
+    {
+        return posY;
+    }
+
+    @Override
+    public double z()
+    {
+        return posZ;
     }
 }

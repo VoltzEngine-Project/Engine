@@ -2,6 +2,7 @@ package com.builtbroken.mc.prefab.inventory;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.lang.StringHelpers;
+import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.helper.DummyPlayer;
 import com.builtbroken.mc.lib.helper.NBTUtility;
@@ -601,9 +602,9 @@ public class InventoryUtility
         }
     }
 
-    public static void dropItemStack(Location position, ItemStack itemStack)
+    public static void dropItemStack(IWorldPosition position, ItemStack itemStack)
     {
-        dropItemStack(position.world(), position, itemStack);
+        dropItemStack(position.world(), position.x(), position.y(), position.z(), itemStack, 10, 0f);
     }
 
     /**
