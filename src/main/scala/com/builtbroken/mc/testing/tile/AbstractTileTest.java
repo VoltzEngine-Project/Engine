@@ -88,13 +88,6 @@ public abstract class AbstractTileTest<T extends Tile> extends AbstractTileEntit
     }
 
     @Test
-    public void testCoverage()
-    {
-        Method[] methods = Tile.class.getMethods();
-        assertTrue("There are " + methods.length + " but should be 139", methods.length == 139);
-    }
-
-    @Test
     public void testX()
     {
         FakeWorld world = FakeWorld.newWorld("TestX");
