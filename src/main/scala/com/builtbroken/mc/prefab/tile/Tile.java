@@ -7,6 +7,7 @@ import com.builtbroken.mc.api.event.tile.TileEvent;
 import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.MathUtility;
@@ -1323,12 +1324,23 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
     @Override
     public final Packet getDescriptionPacket()
     {
-        return Engine.instance.packetHandler.toMCPacket(getDescPacket());
+        return canHandlePackets() ? Engine.instance.packetHandler.toMCPacket(getDescPacket()) : null;
     }
 
     public AbstractPacket getDescPacket()
     {
         return null;
+    }
+
+    /**
+     * Simple check to ensure that the current tile can functionally
+     * handle packets sent to the server or client.
+     *
+     * @return true if it can
+     */
+    protected boolean canHandlePackets()
+    {
+        return this instanceof IPacketIDReceiver || this instanceof IPacketIDReceiver;
     }
 
     /**
@@ -1357,7 +1369,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
      */
     public void sendPacket(AbstractPacket packet, double distance)
     {
-        if (isServer())
+        if (isServer() && canHandlePackets())
         {
             Engine.instance.packetHandler.sendToAllAround(packet, world(), xi(), yi(), zi(), distance);
         }
@@ -1365,7 +1377,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 
     public void sendPacketToServer(AbstractPacket packet)
     {
-        if (isClient())
+        if (isClient() && canHandlePackets())
         {
             Engine.instance.packetHandler.sendToServer(packet);
         }
@@ -1373,15 +1385,17 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 
     public void sendPacketToGuiUsers(AbstractPacket packet)
     {
-        for (EntityPlayer player : getPlayersUsing())
+        if (isServer() && canHandlePackets())
         {
-            if (player instanceof EntityPlayerMP)
+            for (EntityPlayer player : getPlayersUsing())
             {
-                Engine.instance.packetHandler.sendToPlayer(packet, (EntityPlayerMP) player);
+                if (player instanceof EntityPlayerMP)
+                {
+                    Engine.instance.packetHandler.sendToPlayer(packet, (EntityPlayerMP) player);
+                }
             }
         }
     }
-
 
     /**
      * gets the way this piston should face for that entity that placed it.

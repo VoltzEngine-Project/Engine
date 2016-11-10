@@ -31,7 +31,9 @@ public class TileMachine extends TileEnt implements IRotation
     public ForgeDirection getDirection()
     {
         if (facing == null)
+        {
             facing = ForgeDirection.NORTH;
+        }
         return facing;
     }
 
@@ -40,7 +42,9 @@ public class TileMachine extends TileEnt implements IRotation
     {
         super.readFromNBT(nbt);
         if (nbt.hasKey("facing"))
+        {
             this.facing = ForgeDirection.getOrientation(nbt.getByte("facing"));
+        }
     }
 
     @Override
@@ -48,7 +52,9 @@ public class TileMachine extends TileEnt implements IRotation
     {
         super.writeToNBT(nbt);
         if (facing != null && facing != ForgeDirection.NORTH)
+        {
             nbt.setByte("facing", (byte) facing.ordinal());
+        }
     }
 
     @Override
@@ -62,6 +68,6 @@ public class TileMachine extends TileEnt implements IRotation
     public void writeDescPacket(ByteBuf buf)
     {
         super.writeDescPacket(buf);
-        buf.writeByte((byte)(facing != null ? facing.ordinal() : 2));
+        buf.writeByte((byte) getDirection().ordinal());
     }
 }
