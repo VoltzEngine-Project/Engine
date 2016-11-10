@@ -466,23 +466,36 @@ public class InventoryUtility
             }
         }
         return toInsert;
-
     }
 
 
     public static ItemStack takeTopItemFromInventory(IInventory inventory, int side)
     {
+        return takeTopItemFromInventory(inventory, side, 1);
+    }
+
+    /**
+     * Pulls the top most item out of the inventory
+     *
+     * @param inventory - inventory to search, will use ISidedInventory if possible
+     * @param side      - side to access
+     * @param stackSize - stack size limit to pull, -1 will be maxx
+     * @return item or null if none found
+     */
+    public static ItemStack takeTopItemFromInventory(IInventory inventory, int side, int stackSize)
+    {
         if (!(inventory instanceof ISidedInventory))
         {
             for (int i = inventory.getSizeInventory() - 1; i >= 0; i--)
             {
-                if (inventory.getStackInSlot(i) != null)
+                final ItemStack slotStack = inventory.getStackInSlot(i);
+                if (slotStack != null)
                 {
-                    ItemStack toSend = inventory.getStackInSlot(i).copy();
-                    toSend.stackSize = 1;
-
-                    inventory.decrStackSize(i, 1);
-
+                    int amountToTake = stackSize <= 0 ? slotStack.getMaxStackSize() : Math.min(stackSize, slotStack.getMaxStackSize());
+                    amountToTake = Math.min(amountToTake, slotStack.stackSize);
+                    ItemStack toSend = slotStack.copy();
+                    toSend.stackSize = amountToTake;
+                    inventory.decrStackSize(i, amountToTake);
                     return toSend;
                 }
             }
@@ -497,16 +510,18 @@ public class InventoryUtility
                 for (int get = slots.length - 1; get >= 0; get--)
                 {
                     int slotID = slots[get];
-
-                    if (sidedInventory.getStackInSlot(slotID) != null)
+                    final ItemStack slotStack = sidedInventory.getStackInSlot(slotID);
+                    if (slotStack != null)
                     {
-                        ItemStack toSend = sidedInventory.getStackInSlot(slotID);
-                        toSend.stackSize = 1;
+                        int amountToTake = stackSize <= 0 ? slotStack.getMaxStackSize() : Math.min(stackSize, slotStack.getMaxStackSize());
+                        amountToTake = Math.min(amountToTake, slotStack.stackSize);
+
+                        ItemStack toSend = slotStack.copy();
+                        toSend.stackSize = amountToTake;
 
                         if (sidedInventory.canExtractItem(slotID, toSend, side))
                         {
-                            sidedInventory.decrStackSize(slotID, 1);
-
+                            sidedInventory.decrStackSize(slotID, amountToTake);
                             return toSend;
                         }
                     }
