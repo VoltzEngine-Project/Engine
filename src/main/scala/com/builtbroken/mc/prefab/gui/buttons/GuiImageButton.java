@@ -63,7 +63,7 @@ public class GuiImageButton extends GuiButton2
      */
     public static GuiImageButton newButton18(int id, int x, int y, int row, int col)
     {
-        return new GuiImageButton(id, x, y, 18, 18, row * 18, col * 18);
+        return new GuiImageButton(id, x, y, 18, 18, col * 18, row * 18);
     }
 
     /**
