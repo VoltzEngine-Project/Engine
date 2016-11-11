@@ -104,7 +104,7 @@ public class PacketTile extends PacketType
      */
     public void handle(EntityPlayer player, TileEntity tile)
     {
-        Location location = new Location(player.worldObj, x, y, z);
+        final Location location = new Location(player.worldObj, x, y, z);
         sender_$eq(player);
         if (tile == null)
         {
@@ -116,59 +116,73 @@ public class PacketTile extends PacketType
         }
         else if (tile instanceof IPacketIDReceiver)
         {
-            try
+            if (((IPacketIDReceiver) tile).shouldReadPacket(player, location, this))
             {
-                IPacketIDReceiver receiver = (IPacketIDReceiver) tile;
-                ByteBuf buf = data().slice();
-
-                int id;
                 try
                 {
-                    id = buf.readInt();
+                    IPacketIDReceiver receiver = (IPacketIDReceiver) tile;
+                    ByteBuf buf = data().slice();
+
+                    int id;
+                    try
+                    {
+                        id = buf.readInt();
+                    }
+                    catch (IndexOutOfBoundsException ex)
+                    {
+                        Engine.instance.logger().error(new PacketIDException(location));
+                        return;
+                    }
+                    receiver.read(buf, id, player, this);
                 }
-                catch (IndexOutOfBoundsException ex)
+                catch (IndexOutOfBoundsException e)
                 {
-                    Engine.instance.logger().error(new PacketIDException(location));
-                    return;
+                    Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
+                    Engine.instance.logger().error("Error: ", e);
                 }
-                receiver.read(buf, id, player, this);
+                catch (NullPointerException e)
+                {
+                    Engine.instance.logger().error(new PacketTileReadException(location, "Null pointer while reading data", e));
+                    Engine.instance.logger().error("Error: ", e);
+                }
+                catch (Exception e)
+                {
+                    Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
+                    Engine.instance.logger().error("Error: ", e);
+                }
             }
-            catch (IndexOutOfBoundsException e)
+            else
             {
-                Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
-                Engine.instance.logger().error("Error: ", e);
-            }
-            catch (NullPointerException e)
-            {
-                Engine.instance.logger().error(new PacketTileReadException(location, "Null pointer while reading data", e));
-                Engine.instance.logger().error("Error: ", e);
-            }
-            catch (Exception e)
-            {
-                Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
-                Engine.instance.logger().error("Error: ", e);
+                Engine.instance.logger().error("Error: " + tile + " rejected packet " + this + " due to invalid conditions.");
             }
         }
         else if (tile instanceof IPacketReceiver)
         {
-            try
+            if (((IPacketReceiver) tile).shouldReadPacket(player, location, this))
             {
-                IPacketReceiver receiver = (IPacketReceiver) tile;
-                receiver.read(data().slice(), player, this);
+                try
+                {
+                    IPacketReceiver receiver = (IPacketReceiver) tile;
+                    receiver.read(data().slice(), player, this);
+                }
+                catch (IndexOutOfBoundsException e)
+                {
+                    Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
+                }
+                catch (Exception e)
+                {
+                    Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
+                    e.printStackTrace();
+                }
             }
-            catch (IndexOutOfBoundsException e)
+            else
             {
-                Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
-            }
-            catch (Exception e)
-            {
-                Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
-                e.printStackTrace();
+                Engine.instance.logger().error("Error: " + tile + " rejected packet " + this + " due to invalid conditions.");
             }
         }
         else
         {
-            Engine.instance.logger().error(new PacketTileReadException(location, "Unsupported action for tile"));
+            Engine.instance.logger().error(new PacketTileReadException(location, "Unsupported action for " + tile));
         }
     }
 }
