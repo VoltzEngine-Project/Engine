@@ -52,13 +52,29 @@ public class GuiImageButton extends GuiButton2
     }
 
     /**
+     * Creates a new button with a width and height of 18 pixels
+     *
+     * @param id  - button id
+     * @param x   - pos x
+     * @param y   - pos y
+     * @param row - row in the texture sheet
+     * @param col - colume in the texture sheet
+     * @return button
+     */
+    public static GuiImageButton newButton18(int id, int x, int y, int row, int col)
+    {
+        return new GuiImageButton(id, x, y, 18, 18, row * 18, col * 18);
+    }
+
+    /**
      * Overrides the default texture for buttons
      *
      * @param location
      */
-    public void setTexture(ResourceLocation location)
+    public GuiImageButton setTexture(ResourceLocation location)
     {
         this.textureOverride = location;
+        return this;
     }
 
     @Override

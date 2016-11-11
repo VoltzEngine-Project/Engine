@@ -80,7 +80,7 @@ public class TileEnt extends Tile
      */
     public boolean shouldReadPacket(EntityPlayer player, IWorldPosition receiveLocation, PacketType packet)
     {
-        return new Location(player).distance(receiveLocation.x(), receiveLocation.y(), receiveLocation.z()) < 10 && packet instanceof PacketTile;
+        return isClient() || new Location(player).distance(receiveLocation.x(), receiveLocation.y(), receiveLocation.z()) < 10 && packet instanceof PacketTile;
     }
 
     /**
