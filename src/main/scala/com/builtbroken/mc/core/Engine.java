@@ -10,6 +10,7 @@ import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.core.content.ItemInstaHole;
 import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
 import com.builtbroken.mc.core.content.parts.ItemCircuits;
+import com.builtbroken.mc.core.content.parts.ItemCraftingParts;
 import com.builtbroken.mc.core.content.resources.*;
 import com.builtbroken.mc.core.content.resources.gems.*;
 import com.builtbroken.mc.core.content.resources.items.ItemGenMaterial;
@@ -133,12 +134,14 @@ public class Engine
     public static Item itemSelectionTool;
     public static Item itemCircuits;
     public static Item itemDevTool;
+    public static Item itemCraftingParts;
 
     //Interal trigger booleans
     private static boolean metallicOresRequested = false;
     private static boolean gemOresRequested = false;
     private static boolean sheetMetalRequested = false;
     private static boolean multiBlockRequested = false;
+    private static boolean craftingPartsRequested = false;
     public static boolean heatedRockRequested = false;
     public static boolean simpleToolsRequested = false;
     public static boolean circuitsRequested = false;
@@ -238,7 +241,7 @@ public class Engine
     }
 
     /**
-     * Requests simple tool code to be loaded up
+     * Requests circuits to be loaded up
      * Must be called in pre-init
      */
     public static void requestCircuits()
@@ -248,6 +251,19 @@ public class Engine
             throw new RuntimeException("Circuit content can only be requested in Pre-Init phase");
         }
         circuitsRequested = true;
+    }
+
+    /**
+     * Requests crafting parts to be loaded up
+     * Must be called in pre-init
+     */
+    public static void requestCraftingParts()
+    {
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+        {
+            throw new RuntimeException("Crafting parts can only be requested in Pre-Init phase");
+        }
+        craftingPartsRequested = true;
     }
 
     /**
@@ -511,7 +527,8 @@ public class Engine
 
         boolean forceLoadSheetMetal = (sheetMetalRequested || getConfig().hasKey("SheetMetalContent", "ForceLoad")) && getConfig().getBoolean("ForceLoad", "SheetMetalContent", true, "Forces the sheet metal items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.");
         boolean forceLoadSimpleTools = (simpleToolsRequested || getConfig().hasKey("SimpleToolsContent", "ForceLoad")) && getConfig().getBoolean("ForceLoad", "SimpleToolsContent", true, "Forces the simple tools items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.");
-        boolean forceLoadCircuits = (circuitsRequested || getConfig().hasKey("Content", "LoadCircuits")) && getConfig().getBoolean("LoadCircuits", "Content", true, "Forces the simple tools items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.");
+        boolean forceLoadCircuits = (circuitsRequested || getConfig().hasKey("Content", "LoadCircuits")) && getConfig().getBoolean("LoadCircuits", "Content", true, "Forces the circuit items to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.");
+        boolean forceLoadCraftingParts = (craftingPartsRequested || getConfig().hasKey("Content", "LoadCraftingParts")) && getConfig().getBoolean("LoadCraftingParts", "Content", true, "Forces the crafting items(Motors, coils, simple electrical parts) to load even if not requests. Content can still loaded if false as long as another mod requests the content for crafting. This config is designed to prevent items from vanishing in saves.");
 
         if (sheetMetalRequested || forceLoadSheetMetal)
         {
@@ -522,6 +539,11 @@ public class Engine
         if (circuitsRequested || forceLoadCircuits)
         {
             itemCircuits = getManager().newItem("veCircuits", ItemCircuits.class);
+        }
+
+        if (craftingPartsRequested || forceLoadCraftingParts)
+        {
+            itemCraftingParts = getManager().newItem("veCraftingParts", ItemCraftingParts.class);
         }
 
         if (simpleToolsRequested || forceLoadSimpleTools)

@@ -374,6 +374,13 @@ item.voltzengine:sheetMetal.metalSheet_cylinder.name=Sheet Metal Cylinder
 item.voltzengine:sheetMetal.metalSheet_halfCylinder.name=Half Sheet Metal Cylinder
 item.voltzengine:sheetMetal.rivets.name=Rivets
 
+## Crafting Parts
+item.voltzengine:craftingPart.copperCoil.name=Copper Coil
+item.voltzengine:craftingPart.dcMotor.name=DC Motor
+item.voltzengine:craftingPart.motor.name=Motor
+item.voltzengine:craftingPart.stepperMotor.name=Stepper Motor
+item.voltzengine:craftingPart.copperCoilStepper.name=Motor Coils Assembly
+
 ## Creative Testing Blocks
 tile.voltzengine:creativeBuilder.name=Creative Builder
 tile.voltzengine:infiniteEnergy.name=Infinite Energy
