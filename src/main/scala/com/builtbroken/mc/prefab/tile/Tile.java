@@ -6,6 +6,7 @@ import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.event.tile.TileEvent;
 import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
+import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
@@ -695,7 +696,15 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 
     protected void markRender()
     {
-        world().func_147479_m(xi(), yi(), zi());
+        if (this instanceof IMultiTileHost)
+        {
+            //TODO implement custom handling for multi-blocks as their textures are dependent on host
+            world().markBlockRangeForRenderUpdate(xi(), yi(), zi(), xi(), yi(), zi());
+        }
+        else
+        {
+            world().markBlockRangeForRenderUpdate(xi(), yi(), zi(), xi(), yi(), zi());
+        }
     }
 
     protected void markUpdate()
@@ -1369,7 +1378,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
      */
     public void sendPacket(AbstractPacket packet, double distance)
     {
-        if (isServer() && canHandlePackets())
+        if (world() != null && isServer() && canHandlePackets())
         {
             Engine.instance.packetHandler.sendToAllAround(packet, world(), xi(), yi(), zi(), distance);
         }
@@ -1377,7 +1386,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
 
     public void sendPacketToServer(AbstractPacket packet)
     {
-        if (isClient() && canHandlePackets())
+        if (world() != null && isClient() && canHandlePackets())
         {
             Engine.instance.packetHandler.sendToServer(packet);
         }
