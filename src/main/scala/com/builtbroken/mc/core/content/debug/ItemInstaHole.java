@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.content;
+package com.builtbroken.mc.core.content.debug;
 
 import com.builtbroken.mc.core.content.resources.BlockOre;
 import cpw.mods.fml.relauncher.Side;

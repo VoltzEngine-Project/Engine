@@ -2,12 +2,14 @@ package com.builtbroken.mc.prefab.inventory;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.lang.StringHelpers;
+import com.builtbroken.jlib.type.Pair;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.helper.DummyPlayer;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.prefab.inventory.filters.IInventoryFilter;
 import com.builtbroken.mc.prefab.items.ItemStackWrapper;
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraft.block.Block;
@@ -484,19 +486,56 @@ public class InventoryUtility
      */
     public static ItemStack takeTopItemFromInventory(IInventory inventory, int side, int stackSize)
     {
+        final Pair<ItemStack, Integer> result = findFirstItemInInventory(inventory, side, stackSize);
+        if (result != null)
+        {
+            inventory.decrStackSize(result.right(), result.left().stackSize);
+            return result.left();
+        }
+        return null;
+    }
+
+    /**
+     * Gets the first slot containing items
+     * <p>
+     * Does not actually consume the items
+     *
+     * @param inventory - inventory to search for items
+     * @param side      - side to access, used for {@link ISidedInventory}
+     * @param stackSize - amount to remove
+     * @return pair containing the removed stack, and item
+     */
+    public static Pair<ItemStack, Integer> findFirstItemInInventory(IInventory inventory, int side, int stackSize)
+    {
+        return findFirstItemInInventory(inventory, side, stackSize, null);
+    }
+
+    /**
+     * Gets the first slot containing items
+     * <p>
+     * Does not actually consume the items
+     *
+     * @param inventory - inventory to search for items
+     * @param side      - side to access, used for {@link ISidedInventory}
+     * @param stackSize - amount to remove
+     * @return pair containing the removed stack, and item
+     */
+    public static Pair<ItemStack, Integer> findFirstItemInInventory(IInventory inventory, int side, int stackSize, IInventoryFilter filter)
+    {
         if (!(inventory instanceof ISidedInventory))
         {
             for (int i = inventory.getSizeInventory() - 1; i >= 0; i--)
             {
                 final ItemStack slotStack = inventory.getStackInSlot(i);
-                if (slotStack != null)
+                if (slotStack != null && (filter == null || filter.isStackInFilter(slotStack)))
                 {
                     int amountToTake = stackSize <= 0 ? slotStack.getMaxStackSize() : Math.min(stackSize, slotStack.getMaxStackSize());
                     amountToTake = Math.min(amountToTake, slotStack.stackSize);
+
                     ItemStack toSend = slotStack.copy();
                     toSend.stackSize = amountToTake;
-                    inventory.decrStackSize(i, amountToTake);
-                    return toSend;
+                    //inventory.decrStackSize(i, amountToTake);
+                    return new Pair(toSend, i);
                 }
             }
         }
@@ -511,7 +550,7 @@ public class InventoryUtility
                 {
                     int slotID = slots[get];
                     final ItemStack slotStack = sidedInventory.getStackInSlot(slotID);
-                    if (slotStack != null)
+                    if (slotStack != null && (filter == null || filter.isStackInFilter(slotStack)))
                     {
                         int amountToTake = stackSize <= 0 ? slotStack.getMaxStackSize() : Math.min(stackSize, slotStack.getMaxStackSize());
                         amountToTake = Math.min(amountToTake, slotStack.stackSize);
@@ -521,8 +560,8 @@ public class InventoryUtility
 
                         if (sidedInventory.canExtractItem(slotID, toSend, side))
                         {
-                            sidedInventory.decrStackSize(slotID, amountToTake);
-                            return toSend;
+                            //sidedInventory.decrStackSize(slotID, amountToTake);
+                            return new Pair(toSend, slotID);
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.content.tool;
+package com.builtbroken.mc.core.content.debug;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;

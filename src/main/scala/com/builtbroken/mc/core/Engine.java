@@ -7,8 +7,10 @@ import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.asm.ProxyASMTest;
 import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
-import com.builtbroken.mc.core.content.ItemInstaHole;
 import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
+import com.builtbroken.mc.core.content.debug.ItemDevData;
+import com.builtbroken.mc.core.content.debug.ItemInstaHole;
+import com.builtbroken.mc.core.content.debug.TileInfInv;
 import com.builtbroken.mc.core.content.parts.ItemCircuits;
 import com.builtbroken.mc.core.content.parts.ItemCraftingParts;
 import com.builtbroken.mc.core.content.resources.*;
@@ -16,7 +18,10 @@ import com.builtbroken.mc.core.content.resources.gems.*;
 import com.builtbroken.mc.core.content.resources.items.ItemGenMaterial;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
 import com.builtbroken.mc.core.content.resources.load.*;
-import com.builtbroken.mc.core.content.tool.*;
+import com.builtbroken.mc.core.content.tool.ItemScrewdriver;
+import com.builtbroken.mc.core.content.tool.ItemSelectionWand;
+import com.builtbroken.mc.core.content.tool.ItemSheetMetalTools;
+import com.builtbroken.mc.core.content.tool.ItemSimpleCraftingTool;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolMode;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeGeneral;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeRotation;
@@ -125,6 +130,7 @@ public class Engine
     public static Block gemOre = null;
     public static Block heatedStone;
     public static Block multiBlock;
+    public static Block blockInfInventory;
 
     public static Item itemWrench;
     public static ItemSimpleCraftingTool itemSimpleCraftingTools;
@@ -452,6 +458,11 @@ public class Engine
         if (getConfig().get("Content", "LoadSelectionTool", true, "Admin tool for selecting areas on the ground for world manipulation or other tasks.").getBoolean(true))
         {
             itemSelectionTool = getManager().newItem("ve.selectiontool", new ItemSelectionWand());
+        }
+
+        if (Engine.runningAsDev)
+        {
+            blockInfInventory = getManager().newBlock(TileInfInv.class);
         }
 
         ExplosiveRegistry.registerOrGetExplosive(References.DOMAIN, "TNT", new ExplosiveHandlerTNT());
