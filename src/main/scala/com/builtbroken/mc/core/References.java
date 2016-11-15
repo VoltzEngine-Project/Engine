@@ -3,6 +3,8 @@ package com.builtbroken.mc.core;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
+
 /**
  * References to common static objects used by Voltz Engine and its sub mods
  */
@@ -39,4 +41,11 @@ public final class References
 	public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items/";
 	public static final String MODEL_PATH = "models/";
 	public static final String MODEL_DIRECTORY = DIRECTORY + MODEL_PATH;
+
+	/** Main run folder for everything MC */
+	public static File ROOT_FOLDER;
+	/** Config folder shared by all mods */
+	public static File GLOBAL_CONFIG_FOLDER;
+	/** Config folder shared by all mods */
+	public static File BBM_CONFIG_FOLDER;
 }

@@ -59,6 +59,7 @@ import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
 import com.builtbroken.mc.lib.world.radar.RadarRegistry;
 import com.builtbroken.mc.lib.world.radio.RadioRegistry;
 import com.builtbroken.mc.prefab.explosive.handler.ExplosiveHandlerTNT;
+import com.builtbroken.mc.prefab.json.JsonContentLoader;
 import com.builtbroken.mc.prefab.recipe.cast.MRHandlerCast;
 import com.builtbroken.mc.prefab.recipe.fluid.MRHandlerFluidStack;
 import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;
@@ -317,8 +318,13 @@ public class Engine
         //Init API values
         VoltzEngineAPI.massRegistry = new MassRegistry();
 
+        //Init run time references
+        References.GLOBAL_CONFIG_FOLDER = event.getModConfigurationDirectory();
+        References.ROOT_FOLDER = References.GLOBAL_CONFIG_FOLDER.getParentFile();
+        References.BBM_CONFIG_FOLDER = new File(event.getModConfigurationDirectory(), "bbm");
+
         //Load config files
-        config = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/VoltzEngine.cfg"));
+        config = new Configuration(new File(References.BBM_CONFIG_FOLDER, "ve/VoltzEngine.cfg"));
         heatDataConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/HeatMap.cfg"));
         explosiveConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/Explosives.cfg"));
 
@@ -386,6 +392,7 @@ public class Engine
         loader.applyModule(NuggetRecipeLoader.class);
         loader.applyModule(WireRecipeLoader.class);
         loader.applyModule(ScrewRecipeLoader.class);
+        loader.applyModule(JsonContentLoader.INSTANCE);
         //Mod Support
         config.setCategoryComment("Mod_Support", "If true the proxy class for the mod will be loaded enabling support, set to false if support is not required or breaks the game.");
         loader.applyModule(NEIProxy.class); //Uses reflection instead of API files

@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.json;
 
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
@@ -21,11 +22,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,17 +35,34 @@ import java.util.Map;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/24/2016.
  */
-public class JsonContentLoader extends AbstractLoadable
+public final class JsonContentLoader extends AbstractLoadable
 {
-    List<String> resources = new ArrayList();
-    List<JsonProcessor> processors = new ArrayList();
-    List<IJsonGenObject> generatedObjects = new ArrayList();
+    private final List<String> resources = new ArrayList();
+    private final List<String> extentionsToLoad = new ArrayList();
+
+    private final List<JsonProcessor> processors = new ArrayList();
+    private final List<IJsonGenObject> generatedObjects = new ArrayList();
     public JsonBlockProcessor blockProcessor;
+
+    public static JsonContentLoader INSTANCE = new JsonContentLoader();
+
+    private JsonContentLoader()
+    {
+    }
+
+    /**
+     * Adds the processor to the list of processors
+     *
+     * @param processor
+     */
+    public static void registerProcessor(JsonProcessor processor)
+    {
+        INSTANCE.processors.add(processor);
+    }
 
     @Override
     public void preInit()
     {
-        //TODO find mods that need shit loaded - MetaInf file -> Directories -> Sift
         blockProcessor = new JsonBlockProcessor();
         //Load processors
         processors.add(blockProcessor);
@@ -56,6 +73,20 @@ public class JsonContentLoader extends AbstractLoadable
     @Override
     public void init()
     {
+        //TODO move to a thread to improve load time
+        final File folder = new File(References.BBM_CONFIG_FOLDER, "json");
+        if (!folder.exists())
+        {
+            folder.mkdirs();
+        }
+        //We have an external folder we should see what it contains
+        else
+        {
+            loadResourcesFromFolder(folder);
+        }
+
+        loadResourcesFromPackage("content/", "content");
+
         for (String resource : resources)
         {
             try
@@ -80,6 +111,72 @@ public class JsonContentLoader extends AbstractLoadable
                 //Crash as the file may be important
                 throw new RuntimeException("Failed to load resource " + resource, e);
             }
+        }
+    }
+
+    /**
+     * Called to load json files from the folder
+     *
+     * @param folder
+     */
+    private void loadResourcesFromFolder(File folder)
+    {
+        for (File file : folder.listFiles())
+        {
+            if (file.isDirectory())
+            {
+                loadResourcesFromFolder(folder);
+            }
+            else if (file.getName().endsWith(".json"))
+            {
+                resources.add(file.getAbsolutePath());
+            }
+            else
+            {
+                String extension = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length());
+                if (extentionsToLoad.contains(extension))
+                {
+                    resources.add(file.getAbsolutePath());
+                }
+            }
+        }
+    }
+
+    /**
+     * Loads package
+     *
+     * @param folder   - package your looking to load data from
+     * @param location - that package's location
+     */
+    protected void loadResourcesFromPackage(String folder, String location)
+    {
+        try
+        {
+            final List<String> files = IOUtils.readLines(JsonContentLoader.class.getClassLoader().getResourceAsStream(folder), Charsets.UTF_8);
+            for (String s : files)
+            {
+                if (s.endsWith(".json"))
+                {
+                    resources.add(location + "/" + folder);
+                }
+                else if (s.lastIndexOf(".") > 1)
+                {
+                    String extension = s.substring(s.lastIndexOf(".") + 1, s.length());
+                    if (extentionsToLoad.contains(extension))
+                    {
+                        resources.add(location + "/" + folder);
+                    }
+                }
+                else
+                {
+                    loadResourcesFromPackage(s, location + "/" + folder);
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+
         }
     }
 
