@@ -1,5 +1,6 @@
 package com.builtbroken.mc.prefab.json;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
@@ -27,9 +28,7 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -38,11 +37,11 @@ import java.util.Map;
 public final class JsonContentLoader extends AbstractLoadable
 {
     /** Internal files for loading */
-    private final List<String> resources = new ArrayList();
+    private final List<String> classPathResources = new ArrayList();
     /** External files for loading */
-    private final List<File> files = new ArrayList();
+    private final List<File> externalFiles = new ArrayList();
     /** External jar files for loading */
-    private final List<File> jars = new ArrayList();
+    private final List<File> externalJarFiles = new ArrayList();
 
     /** Extensions that can be loaded by the system, defaults with .json */
     private final List<String> extensionsToLoad = new ArrayList();
@@ -86,6 +85,8 @@ public final class JsonContentLoader extends AbstractLoadable
     @Override
     public void init()
     {
+
+
         //TODO move to a thread to improve load time
         final File folder = new File(References.BBM_CONFIG_FOLDER, "json");
         if (!folder.exists())
@@ -106,7 +107,7 @@ public final class JsonContentLoader extends AbstractLoadable
 
         final List<JsonElement> elements = new ArrayList();
         //Load external files
-        for (File file : files)
+        for (File file : externalFiles)
         {
             try
             {
@@ -124,7 +125,7 @@ public final class JsonContentLoader extends AbstractLoadable
         }
 
         //Load internal files
-        for (String resource : resources)
+        for (String resource : classPathResources)
         {
             try
             {
@@ -156,7 +157,151 @@ public final class JsonContentLoader extends AbstractLoadable
         }
     }
 
-    private void process(JsonElement element)
+    public void sortSortingValues()
+    {
+        //Collect all entries to sort
+        ArrayList<String> sortingValues = new ArrayList();
+        for (JsonProcessor processor : processors)
+        {
+            String sortingKey = processor.getSortingString();
+            sortingValues.add(sortingKey);
+        }
+        //Run a basic sorter on the list to order it values, after:value, before:value:
+        Collections.sort(sortingValues, new StringSortingComparator());
+
+
+        LinkedList<String> sortedValues = new LinkedList();
+        while (!sortingValues.isEmpty())
+        {
+            //Sort out list
+            sortSortingValues(sortingValues, sortedValues);
+
+            //Exit point, prevents inf loop by removing bad entries and adding them to the end of the sorting list
+            if (!sortingValues.isEmpty())
+            {
+                //Loop threw what entries we have left
+                Iterator<String> it = sortingValues.iterator();
+                while (it.hasNext())
+                {
+                    String entry = it.next();
+                    if (entry.contains("@"))
+                    {
+                        String[] split = entry.split("@");
+                        String name = entry.split("@")[0];
+
+                        if (split[1].contains(":"))
+                        {
+                            split = split[1].split(":");
+                            boolean found = false;
+
+                            //Try too see if we have a valid entry left in our sorting list that might just contain a after: or before: preventing it from adding
+                            for (String v : sortingValues)
+                            {
+                                if (!v.equals(entry) && v.contains(split[1]))
+                                {
+                                    found = true;
+                                }
+                            }
+
+                            //If we have no category for the sorting entry add it to the master list
+                            if (!found)
+                            {
+                                Engine.logger().error("Bad sorting value for " + entry + " could not find category for " + split[1]);
+                                sortedValues.add(name);
+                                it.remove();
+                            }
+                        }
+                        //If entry is invalid add it
+                        else
+                        {
+                            Engine.logger().error("Bad sorting value for " + entry + " has no valid sorting data");
+                            sortedValues.add(name);
+                            it.remove();
+                        }
+                    }
+                    //Should never happen as entries with no sorting value should be added before here
+                    else
+                    {
+                        sortedValues.add(entry);
+                        it.remove();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Sorts the string values that will later be used as an index value
+     * to sort all .json files being processed
+     *
+     * @param sortingValues - list of unsorted values
+     * @param sortedValues  - list of sorted values and where values will be inserted into
+     */
+    public void sortSortingValues(List<String> sortingValues, List<String> sortedValues)
+    {
+        Iterator<String> it = sortingValues.iterator();
+        while (it.hasNext())
+        {
+            String entry = it.next();
+            if (entry.contains("@"))
+            {
+                String[] split = entry.split("@");
+                String name = split[0];
+                String sortValue = split[1];
+                //TODO add support for ; allowing sorting of several values
+
+                if (sortValue.contains(":"))
+                {
+                    split = sortValue.split(":");
+                    String prefix = split[0];
+                    String cat = split[1];
+                    boolean catFound = false;
+
+                    ListIterator<String> sortedIt = sortedValues.listIterator();
+                    while (sortedIt.hasNext())
+                    {
+                        String v = sortedIt.next();
+                        if (v.equalsIgnoreCase(cat))
+                        {
+                            catFound = true;
+                            if (prefix.equalsIgnoreCase("after"))
+                            {
+                                sortedIt.add(name);
+                            }
+                            else if (prefix.equalsIgnoreCase("before"))
+                            {
+                                sortedIt.previous();
+                                sortedIt.add(name);
+                            }
+                            else
+                            {
+                                Engine.logger().error("Bad sorting value for " + entry + " we can only read 'after' and 'before'");
+                                sortedValues.add(name);
+                                it.remove();
+                            }
+                            break;
+                        }
+                    }
+                    if (catFound)
+                    {
+                        it.remove();
+                    }
+                }
+                else
+                {
+                    sortedValues.add(name);
+                    it.remove();
+                }
+            }
+            else
+            {
+                sortedValues.add(entry);
+                it.remove();
+            }
+        }
+    }
+
+    public void process(JsonElement element)
     {
         for (JsonProcessor processor : processors)
         {
@@ -182,7 +327,7 @@ public final class JsonContentLoader extends AbstractLoadable
      *
      * @param folder
      */
-    private void loadResourcesFromFolder(File folder)
+    public void loadResourcesFromFolder(File folder)
     {
         for (File file : folder.listFiles())
         {
@@ -193,9 +338,13 @@ public final class JsonContentLoader extends AbstractLoadable
             else
             {
                 String extension = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length());
-                if (extensionsToLoad.contains(extension))
+                if (extension.equalsIgnoreCase("jar"))
                 {
-                    files.add(file);
+                    externalJarFiles.add(file);
+                }
+                else if (extensionsToLoad.contains(extension))
+                {
+                    externalFiles.add(file);
                 }
             }
         }
@@ -206,7 +355,7 @@ public final class JsonContentLoader extends AbstractLoadable
      *
      * @param folder - package your looking to load data from
      */
-    protected void loadResourcesFromPackage(String folder)
+    public void loadResourcesFromPackage(String folder)
     {
         //http://stackoverflow.com/questions/3923129/get-a-list-of-resources-from-classpath-directory
         try
@@ -220,7 +369,7 @@ public final class JsonContentLoader extends AbstractLoadable
                     String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
                     if (extensionsToLoad.contains(extension))
                     {
-                        resources.add(path);
+                        classPathResources.add(path);
                     }
                 }
                 else
@@ -518,6 +667,23 @@ public final class JsonContentLoader extends AbstractLoadable
                     tag.setTag(entry.getKey(), nbt);
                 }
             }
+        }
+    }
+
+    /**
+     * Used to sort a string list to always place sorting values at the
+     * end of the list for faster sorting later on.
+     */
+    public class StringSortingComparator implements Comparator<String>
+    {
+        @Override
+        public int compare(String o1, String o2)
+        {
+            if (o1.contains("@") && !o2.contains("@"))
+            {
+                return -1;
+            }
+            return o1.compareTo(o2);
         }
     }
 }
