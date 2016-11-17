@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.json.processors;
+package com.builtbroken.mc.lib.json.processors;
 
 /**
  * Loads basic item data from a processor

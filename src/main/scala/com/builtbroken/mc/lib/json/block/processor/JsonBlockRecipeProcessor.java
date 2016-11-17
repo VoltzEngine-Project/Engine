@@ -1,7 +1,7 @@
-package com.builtbroken.mc.prefab.json.block.processor;
+package com.builtbroken.mc.lib.json.block.processor;
 
-import com.builtbroken.mc.prefab.json.block.BlockJson;
-import com.builtbroken.mc.prefab.json.block.meta.MetaData;
+import com.builtbroken.mc.lib.json.block.BlockJson;
+import com.builtbroken.mc.lib.json.block.meta.MetaData;
 import com.google.gson.JsonElement;
 
 /**

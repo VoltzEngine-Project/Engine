@@ -1,6 +1,6 @@
-package com.builtbroken.mc.prefab.json.processors;
+package com.builtbroken.mc.lib.json.processors;
 
-import com.builtbroken.mc.prefab.json.imp.IJsonGenObject;
+import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.google.gson.JsonElement;
 
 /**

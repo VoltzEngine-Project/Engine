@@ -1,12 +1,12 @@
-package com.builtbroken.mc.prefab.json.block.processor;
+package com.builtbroken.mc.lib.json.block.processor;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
-import com.builtbroken.mc.prefab.json.block.BlockJson;
-import com.builtbroken.mc.prefab.json.block.meta.BlockJsonMeta;
-import com.builtbroken.mc.prefab.json.block.meta.MetaData;
-import com.builtbroken.mc.prefab.json.processors.JsonProcessor;
+import com.builtbroken.mc.lib.json.block.BlockJson;
+import com.builtbroken.mc.lib.json.block.meta.BlockJsonMeta;
+import com.builtbroken.mc.lib.json.block.meta.MetaData;
+import com.builtbroken.mc.lib.json.processors.JsonProcessor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

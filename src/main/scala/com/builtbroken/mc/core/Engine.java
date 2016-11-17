@@ -59,7 +59,7 @@ import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
 import com.builtbroken.mc.lib.world.radar.RadarRegistry;
 import com.builtbroken.mc.lib.world.radio.RadioRegistry;
 import com.builtbroken.mc.prefab.explosive.handler.ExplosiveHandlerTNT;
-import com.builtbroken.mc.prefab.json.JsonContentLoader;
+import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.prefab.recipe.cast.MRHandlerCast;
 import com.builtbroken.mc.prefab.recipe.fluid.MRHandlerFluidStack;
 import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;

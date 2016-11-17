@@ -1,12 +1,12 @@
-package com.builtbroken.mc.prefab.json.block.processor;
+package com.builtbroken.mc.lib.json.block.processor;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
-import com.builtbroken.mc.prefab.json.block.BlockJson;
-import com.builtbroken.mc.prefab.json.block.meta.MetaData;
-import com.builtbroken.mc.prefab.json.recipe.smelting.SmeltingRecipe;
-import com.builtbroken.mc.prefab.json.recipe.smelting.SmeltingRecipeJson;
-import com.builtbroken.mc.prefab.json.recipe.smelting.SmeltingRecipeText;
+import com.builtbroken.mc.lib.json.block.BlockJson;
+import com.builtbroken.mc.lib.json.block.meta.MetaData;
+import com.builtbroken.mc.lib.json.recipe.smelting.SmeltingRecipe;
+import com.builtbroken.mc.lib.json.recipe.smelting.SmeltingRecipeJson;
+import com.builtbroken.mc.lib.json.recipe.smelting.SmeltingRecipeText;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 

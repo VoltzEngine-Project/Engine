@@ -1,6 +1,6 @@
-package com.builtbroken.mc.prefab.json.block;
+package com.builtbroken.mc.lib.json.block;
 
-import com.builtbroken.mc.prefab.json.block.meta.BlockJsonMeta;
+import com.builtbroken.mc.lib.json.block.meta.BlockJsonMeta;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;

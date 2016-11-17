@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.json;
+package com.builtbroken.mc.lib.json;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
@@ -6,11 +6,11 @@ import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
-import com.builtbroken.mc.prefab.json.block.processor.JsonBlockProcessor;
-import com.builtbroken.mc.prefab.json.block.processor.JsonBlockSmeltingProcessor;
-import com.builtbroken.mc.prefab.json.block.processor.JsonBlockWorldGenProcessor;
-import com.builtbroken.mc.prefab.json.imp.IJsonGenObject;
-import com.builtbroken.mc.prefab.json.processors.JsonProcessor;
+import com.builtbroken.mc.lib.json.block.processor.JsonBlockProcessor;
+import com.builtbroken.mc.lib.json.block.processor.JsonBlockSmeltingProcessor;
+import com.builtbroken.mc.lib.json.block.processor.JsonBlockWorldGenProcessor;
+import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
+import com.builtbroken.mc.lib.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;

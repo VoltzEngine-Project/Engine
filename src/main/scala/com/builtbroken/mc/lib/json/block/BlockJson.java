@@ -1,8 +1,8 @@
-package com.builtbroken.mc.prefab.json.block;
+package com.builtbroken.mc.lib.json.block;
 
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.MaterialDict;
-import com.builtbroken.mc.prefab.json.imp.IJsonGenObject;
+import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

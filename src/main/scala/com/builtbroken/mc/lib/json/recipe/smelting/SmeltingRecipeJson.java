@@ -1,6 +1,6 @@
-package com.builtbroken.mc.prefab.json.recipe.smelting;
+package com.builtbroken.mc.lib.json.recipe.smelting;
 
-import com.builtbroken.mc.prefab.json.JsonContentLoader;
+import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 

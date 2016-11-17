@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.json.recipe.smelting;
+package com.builtbroken.mc.lib.json.recipe.smelting;
 
 import com.builtbroken.mc.core.Engine;
 import cpw.mods.fml.common.registry.GameRegistry;

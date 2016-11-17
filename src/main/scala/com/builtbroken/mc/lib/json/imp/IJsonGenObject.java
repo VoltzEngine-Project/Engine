@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.json.imp;
+package com.builtbroken.mc.lib.json.imp;
 
 /**
  * Applied to all objects created from Json data
