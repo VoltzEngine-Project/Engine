@@ -43,6 +43,8 @@ public abstract class AbstractMod implements IMod
 
     private final String domain;
 
+    public String modIssueTracker;
+
     /**
      * @param domain - mod id uses to register textures with, etc
      */
