@@ -99,11 +99,11 @@ public final class JsonContentLoader extends AbstractLoadable
         final List<JsonEntry> jsonEntries = loadResources();
 
         //Sorting
-        JsonEntryComparator comparator = new JsonEntryComparator(sortingIndexMap);
+        final JsonEntryComparator comparator = new JsonEntryComparator(sortingIndexMap);
         Collections.sort(jsonEntries, comparator);
 
         //Process all loaded elements
-        for (JsonEntry entry : jsonEntries)
+        for (final JsonEntry entry : jsonEntries)
         {
             try
             {
@@ -111,8 +111,9 @@ public final class JsonContentLoader extends AbstractLoadable
             }
             catch (Exception e)
             {
+                //TODO figure out who made the file
                 //Crash as the file may be important
-                throw new RuntimeException("Failed to process element: " + entry, e);
+                throw new RuntimeException("Failed to process entry from file " + entry.fileReadFrom + ". Make corrections to the file or contact the file's creator for the issue to be fixed.\n  Entry = " + entry, e);
             }
         }
     }
@@ -421,7 +422,7 @@ public final class JsonContentLoader extends AbstractLoadable
                 JsonReader jsonReader = new JsonReader(new BufferedReader(new InputStreamReader(stream)));
                 JsonElement element = Streams.parse(jsonReader);
                 stream.close();
-                loadJsonElement(element, entries);
+                loadJsonElement(resource, element, entries);
             }
         }
     }
@@ -441,18 +442,43 @@ public final class JsonContentLoader extends AbstractLoadable
             JsonReader jsonReader = new JsonReader(new BufferedReader(stream));
             JsonElement element = Streams.parse(jsonReader);
             stream.close();
-            loadJsonElement(element, entries);
+            loadJsonElement(file.getName(), element, entries);
         }
     }
 
-    public static void loadJsonElement(JsonElement element, List<JsonEntry> entries)
+    /**
+     * Loads the data from the element passed in and creates {@link JsonEntry} for processing
+     * later on.
+     *
+     * @param file    - file the element was read from
+     * @param element - the element to process
+     * @param entries - list to populate with new entries
+     */
+    public static void loadJsonElement(String file, JsonElement element, List<JsonEntry> entries)
     {
         if (element.isJsonObject())
         {
             JsonObject object = element.getAsJsonObject();
+            String author = null;
+            String helpSite = null;
+            if (object.has("author"))
+            {
+                JsonObject authorData = object.get("author").getAsJsonObject();
+                author = authorData.get("name").getAsString();
+                if (authorData.has("site"))
+                {
+                    helpSite = authorData.get("site").getAsString();
+                }
+            }
             for (Map.Entry<String, JsonElement> entry : object.entrySet())
             {
-                entries.add(new JsonEntry(entry.getKey(), entry.getValue()));
+                if (!entry.getKey().equalsIgnoreCase("author"))
+                {
+                    JsonEntry jsonEntry = new JsonEntry(entry.getKey(), file, entry.getValue());
+                    jsonEntry.author = author;
+                    jsonEntry.authorHelpSite = helpSite;
+                    entries.add(jsonEntry);
+                }
             }
         }
     }
@@ -731,10 +757,18 @@ public final class JsonContentLoader extends AbstractLoadable
         public final String name;
         /** Element entry that goes with the name key */
         public final JsonElement element;
+        /** File the entry was created from */
+        public final String fileReadFrom;
 
-        public JsonEntry(String name, JsonElement element)
+        /** Who create the entry in the file */
+        public String author;
+        /** Where the error can be reported if the file fails to read */
+        public String authorHelpSite;
+
+        public JsonEntry(String name, String fileReadFrom, JsonElement element)
         {
             this.name = name;
+            this.fileReadFrom = fileReadFrom;
             this.element = element;
         }
 
