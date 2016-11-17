@@ -1,6 +1,7 @@
 package com.builtbroken.mc.prefab.json.block.processor;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.builtbroken.mc.prefab.json.block.BlockJson;
 import com.builtbroken.mc.prefab.json.block.meta.BlockJsonMeta;
@@ -25,23 +26,34 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
     public static final HashMap<String, JsonBlockSubProcessor> subProcessors = new HashMap();
 
     @Override
-    public boolean canProcess(JsonElement element)
+    public String getMod()
     {
-        return element.isJsonObject() && element.getAsJsonObject().has("blockData");
+        return References.DOMAIN;
+    }
+
+    @Override
+    public String getJsonKey()
+    {
+        return "block";
+    }
+
+    @Override
+    public boolean canProcess(String key, JsonElement element)
+    {
+        return key.equalsIgnoreCase("block");
     }
 
     @Override
     public BlockJson process(JsonElement element)
     {
-        JsonObject object = element.getAsJsonObject();
-        JsonObject blockData = object.get("blockData").getAsJsonObject();
+        JsonObject blockData = element.getAsJsonObject();
         if (blockData.has("name") && blockData.has("material"))
         {
             BlockJson block;
-            if (object.has("subtypes"))
+            if (blockData.has("subtypes"))
             {
                 block = new BlockJsonMeta(blockData.get("name").getAsString(), blockData.get("material").getAsString());
-                readMeta((BlockJsonMeta) block, object.get("subtypes").getAsJsonArray());
+                readMeta((BlockJsonMeta) block, blockData.get("subtypes").getAsJsonArray());
             }
             else
             {
