@@ -58,7 +58,7 @@ public class TestJsonLoader extends AbstractTest
     /**
      * Tests {@link JsonContentLoader#sortSortingValues(List)}
      */
-    public void testSorting()
+    public void testSortingMap()
     {
         List<String> list = new ArrayList();
         list.add("ammo@after:ammoType");
