@@ -1,10 +1,15 @@
 package com.builtbroken.test.lib.json;
 
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
+import com.google.gson.JsonElement;
+import com.google.gson.internal.Streams;
+import com.google.gson.stream.JsonReader;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +22,75 @@ import java.util.Map;
 @RunWith(VoltzTestRunner.class)
 public class TestJsonLoader extends AbstractTest
 {
+    public static final String TEST_OBJECT_ONE = "{\n" +
+            "  \"author\": {\n" +
+            "    \"name\": \"mod\"\n" +
+            "  },\n" +
+            "\"block\": {\n" +
+            "    \"name\": \"block\"\n" +
+            "  }\n" +
+            "}";
+
+    /**
+     * Tests the constructor of the method
+     */
+    public void testConstructor()
+    {
+        JsonContentLoader loader = new JsonContentLoader();
+        assertTrue(loader.extensionsToLoad.contains("json"));
+        assertNotNull(loader.blockProcessor);
+    }
+
+    /**
+     * Tests the init methods and is
+     * basicly a full run down of the system
+     */
+    public void testInitMethods()
+    {
+        JsonContentLoader loader = new JsonContentLoader();
+        loader.ignoreFileLoading = true;
+
+        //Call preInit and setup data that it needs
+        References.BBM_CONFIG_FOLDER = new File("file");
+        loader.preInit();
+        References.BBM_CONFIG_FOLDER = null;
+        //Test everything that runs in the pre int method
+        assertEquals("json", loader.externalContentFolder.getName());
+        assertEquals("file", loader.externalContentFolder.getParentFile().getName());
+        assertEquals(1, loader.processors.size());
+        assertSame(loader.blockProcessor, loader.processors.get(0));
+        assertEquals(2, loader.blockProcessor.subProcessors.size());
+
+        //Call init and setup data it needs
+        loader.add(new FakeProcessor("ammo", "after:ammoType"));
+        loader.add(new FakeProcessor("clip", "after:ammoType"));
+        loader.add(new FakeProcessor("ammoType", null));
+
+        for (int i = 0; i < 13; i++)
+        {
+            JsonContentLoader.loadJsonElement("file" + i, createTestElement("ammo", "ammo" + i), loader.jsonEntries);
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            JsonContentLoader.loadJsonElement("file" + (13 + i), createTestElement("ammoType", "ammoType" + i), loader.jsonEntries);
+        }
+        for (int i = 0; i < 3; i++)
+        {
+            JsonContentLoader.loadJsonElement("file" + (13 + 5 + i), createTestElement("clip", "clip" + i), loader.jsonEntries);
+        }
+
+        loader.init();
+        //TODO test that all files loaded correctly
+        assertEquals(21, loader.generatedObjects.size());
+        assertEquals(0, loader.jsonEntries.size());
+        assertEquals(0, loader.externalFiles.size());
+        assertEquals(0, loader.classPathResources.size());
+        assertEquals(0, loader.externalJarFiles.size());
+
+        //Post init does nothing but is still called
+        loader.postInit();
+    }
+
     public void testFileSearch()
     {
 
@@ -70,22 +144,47 @@ public class TestJsonLoader extends AbstractTest
         list.add("gun@after:ammoType");
 
         Map<String, Integer> map = JsonContentLoader.sortSortingValues(list);
-        assertEquals(0, (int)map.get("block"));
-        assertEquals(1, (int)map.get("item"));
-        assertEquals(2, (int)map.get("ammoType"));
-        assertEquals(3, (int)map.get("ammo"));
-        assertEquals(4, (int)map.get("gun"));
-        assertEquals(5, (int)map.get("clip"));
-        assertEquals(6, (int)map.get("tile"));
+        assertEquals(0, (int) map.get("block"));
+        assertEquals(1, (int) map.get("item"));
+        assertEquals(2, (int) map.get("ammoType"));
+        assertEquals(3, (int) map.get("ammo"));
+        assertEquals(4, (int) map.get("gun"));
+        assertEquals(5, (int) map.get("clip"));
+        assertEquals(6, (int) map.get("tile"));
     }
 
-    //Data is stored at the bottom due to size
-    public static final String TEST_OBJECT_ONE = "{\n" +
-            "  \"author\": {\n" +
-            "    \"name\": \"mod\"\n" +
-            "  },\n" +
-            "\"block\": {\n" +
-            "    \"name\": \"block\"\n" +
-            "  }\n" +
-            "}";
+
+    /**
+     * Generates a json element from a string of data
+     *
+     * @param data - valid json data
+     * @return element containing processed data
+     */
+    private JsonElement createElement(String data)
+    {
+        JsonReader jsonReader = new JsonReader(new StringReader(data));
+        return Streams.parse(jsonReader);
+    }
+
+    /**
+     * Creates a test element that contains a single value
+     * held in the value of "name" inside of a key value
+     *
+     * @param key  - key that matches the processor that will
+     *             accept this element
+     * @param name - what you will test for
+     * @return generated json element
+     */
+    private JsonElement createTestElement(String key, String name)
+    {
+        String testData = "{\n" +
+                "  \"author\": {\n" +
+                "    \"name\": \"mod\"\n" +
+                "  },\n" +
+                "\"" + key + "\": {\n" +
+                "    \"name\": \"" + name + "\"\n" +
+                "  }\n" +
+                "}";
+        return createElement(testData);
+    }
 }

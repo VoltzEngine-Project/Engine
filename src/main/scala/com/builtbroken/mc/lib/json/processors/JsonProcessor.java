@@ -19,7 +19,7 @@ public abstract class JsonProcessor<D extends IJsonGenObject>
     /**
      * Gets the key that this processor uses
      * for most of it's actions.
-     *
+     * <p>
      * This is mainly used to help sort
      * entries before processing so items
      * load in order.
@@ -27,6 +27,15 @@ public abstract class JsonProcessor<D extends IJsonGenObject>
      * @return key
      */
     public abstract String getJsonKey();
+
+    /**
+     * Gets the order of loading
+     * <p>
+     * use values (after:key) or (before:key)
+     *
+     * @return string
+     */
+    public abstract String getLoadOrder();
 
     /**
      * Called to process a json block section

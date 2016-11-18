@@ -10,10 +10,12 @@ import com.google.gson.JsonElement;
 public class FakeProcessor extends JsonProcessor
 {
     public final String key;
+    public final String loadOrder;
 
-    public FakeProcessor(String key)
+    public FakeProcessor(String key, String loadOrder)
     {
         this.key = key;
+        this.loadOrder = loadOrder;
     }
 
     @Override
@@ -29,8 +31,33 @@ public class FakeProcessor extends JsonProcessor
     }
 
     @Override
+    public String getLoadOrder()
+    {
+        return loadOrder;
+    }
+
+    @Override
     public IJsonGenObject process(JsonElement element)
     {
-        return null;
+        return new FakeJsonGenObject(key, element);
+    }
+
+    public static class FakeJsonGenObject implements IJsonGenObject
+    {
+        public final String key;
+        public final JsonElement element;
+        public boolean registered = false;
+
+        public FakeJsonGenObject(String key, JsonElement element)
+        {
+            this.key = key;
+            this.element = element;
+        }
+
+        @Override
+        public void register()
+        {
+            registered = true;
+        }
     }
 }
