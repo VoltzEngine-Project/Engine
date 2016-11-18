@@ -5,12 +5,12 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
-import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.builtbroken.mc.lib.json.block.processor.JsonBlockProcessor;
 import com.builtbroken.mc.lib.json.block.processor.JsonBlockSmeltingProcessor;
 import com.builtbroken.mc.lib.json.block.processor.JsonBlockWorldGenProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -36,6 +36,9 @@ import java.util.*;
  */
 public final class JsonContentLoader extends AbstractLoadable
 {
+    /** Processor instance */
+    public static JsonContentLoader INSTANCE = new JsonContentLoader();
+
     /** Internal files for loading */
     private final List<String> classPathResources = new ArrayList();
     /** External files for loading */
@@ -54,11 +57,10 @@ public final class JsonContentLoader extends AbstractLoadable
     /** Block processor */
     public final JsonBlockProcessor blockProcessor;
 
-    /** Processor instance */
-    public static JsonContentLoader INSTANCE = new JsonContentLoader();
-    public static File externalContentFolder;
 
-    private JsonContentLoader()
+    public File externalContentFolder;
+
+    public JsonContentLoader()
     {
         extensionsToLoad.add("json");
         blockProcessor = new JsonBlockProcessor();
@@ -95,7 +97,18 @@ public final class JsonContentLoader extends AbstractLoadable
     public void init()
     {
         //Get a map of the index values for sorting loaded entries
-        final Map<String, Integer> sortingIndexMap = sortSortingValues();
+
+        //Collect all entries to sort
+        final ArrayList<String> processorKeys = new ArrayList();
+        for (JsonProcessor processor : processors)
+        {
+            String jsonKey = processor.getJsonKey();
+            processorKeys.add(jsonKey);
+        }
+        //Sort entries
+        final Map<String, Integer> sortingIndexMap = sortSortingValues(processorKeys);
+
+        //Load resources from file system
         final List<JsonEntry> jsonEntries = loadResources();
 
         //Sorting
@@ -107,7 +120,7 @@ public final class JsonContentLoader extends AbstractLoadable
         {
             try
             {
-                process(entry.name, entry.element);
+                process(entry.jsonKey, entry.element);
             }
             catch (Exception e)
             {
@@ -165,16 +178,14 @@ public final class JsonContentLoader extends AbstractLoadable
         return elements;
     }
 
-    /** Creates a map of entries used for sorting loaded files later */
-    public Map<String, Integer> sortSortingValues()
+    /**
+     * Creates a map of entries used for sorting loaded files later
+     *
+     * @param sortingValues - values to sort, entries in list are consumed
+     * @return Map of keys to sorting index values
+     */
+    public static Map<String, Integer> sortSortingValues(List<String> sortingValues)
     {
-        //Collect all entries to sort
-        final ArrayList<String> sortingValues = new ArrayList();
-        for (JsonProcessor processor : processors)
-        {
-            String sortingKey = processor.getJsonKey();
-            sortingValues.add(sortingKey);
-        }
         //Run a basic sorter on the list to order it values, after:value, before:value:
         Collections.sort(sortingValues, new StringSortingComparator());
 
@@ -209,6 +220,15 @@ public final class JsonContentLoader extends AbstractLoadable
                                 if (!v.equals(entry) && v.contains(split[1]))
                                 {
                                     found = true;
+                                    break;
+                                }
+                            }
+                            for (final String v : sortedValues)
+                            {
+                                if (!v.equals(entry) && v.contains(split[1]))
+                                {
+                                    found = true;
+                                    break;
                                 }
                             }
 
@@ -255,7 +275,7 @@ public final class JsonContentLoader extends AbstractLoadable
      * @param sortingValues - list of unsorted values
      * @param sortedValues  - list of sorted values and where values will be inserted into
      */
-    public void sortSortingValues(List<String> sortingValues, List<String> sortedValues)
+    public static void sortSortingValues(List<String> sortingValues, List<String> sortedValues)
     {
         Iterator<String> it = sortingValues.iterator();
         while (it.hasNext())
@@ -419,10 +439,8 @@ public final class JsonContentLoader extends AbstractLoadable
             if (url != null)
             {
                 InputStream stream = url.openStream();
-                JsonReader jsonReader = new JsonReader(new BufferedReader(new InputStreamReader(stream)));
-                JsonElement element = Streams.parse(jsonReader);
+                loadJson(resource, new InputStreamReader(stream), entries);
                 stream.close();
-                loadJsonElement(resource, element, entries);
             }
         }
     }
@@ -439,11 +457,23 @@ public final class JsonContentLoader extends AbstractLoadable
         if (file.exists() && file.isFile())
         {
             FileReader stream = new FileReader(file);
-            JsonReader jsonReader = new JsonReader(new BufferedReader(stream));
-            JsonElement element = Streams.parse(jsonReader);
+            loadJson(file.getName(), new BufferedReader(stream), entries);
             stream.close();
-            loadJsonElement(file.getName(), element, entries);
         }
+    }
+
+    /**
+     * Loads a json file from a reader
+     *
+     * @param fileName - file the reader loaded from, used only for error logs
+     * @param reader   - reader with the data
+     * @param entries  - place to put json entries into
+     */
+    public static void loadJson(String fileName, Reader reader, List<JsonEntry> entries)
+    {
+        JsonReader jsonReader = new JsonReader(reader);
+        JsonElement element = Streams.parse(jsonReader);
+        loadJsonElement(fileName, element, entries);
     }
 
     /**
@@ -732,18 +762,23 @@ public final class JsonContentLoader extends AbstractLoadable
     }
 
     /**
-     * Used to sort a string list to always place sorting values at the
-     * end of the list for faster sorting later on.
+     * Simple pre-sorter that attempt to place tagged string near the bottom
+     * so they are added after tags they depend on.
      */
-    public class StringSortingComparator implements Comparator<String>
+    public static class StringSortingComparator implements Comparator<String>
     {
         @Override
         public int compare(String o1, String o2)
         {
             if (o1.contains("@") && !o2.contains("@"))
             {
+                return 1;
+            }
+            else if (!o1.contains("@") && o2.contains("@"))
+            {
                 return -1;
             }
+            //TODO attempt to sort using before & after tags
             return o1.compareTo(o2);
         }
     }
@@ -754,7 +789,7 @@ public final class JsonContentLoader extends AbstractLoadable
     public static class JsonEntry
     {
         /** Name of the entry type, used for sorting */
-        public final String name;
+        public final String jsonKey;
         /** Element entry that goes with the name key */
         public final JsonElement element;
         /** File the entry was created from */
@@ -765,9 +800,9 @@ public final class JsonContentLoader extends AbstractLoadable
         /** Where the error can be reported if the file fails to read */
         public String authorHelpSite;
 
-        public JsonEntry(String name, String fileReadFrom, JsonElement element)
+        public JsonEntry(String jsonKey, String fileReadFrom, JsonElement element)
         {
-            this.name = name;
+            this.jsonKey = jsonKey;
             this.fileReadFrom = fileReadFrom;
             this.element = element;
         }
@@ -775,7 +810,7 @@ public final class JsonContentLoader extends AbstractLoadable
         @Override
         public String toString()
         {
-            return name + "[" + element + "]";
+            return jsonKey + "[" + element + "]";
         }
 
         @Override
@@ -783,7 +818,7 @@ public final class JsonContentLoader extends AbstractLoadable
         {
             if (object instanceof JsonEntry)
             {
-                return name.equals(((JsonEntry) object).name) && element.equals(((JsonEntry) object).element);
+                return jsonKey.equals(((JsonEntry) object).jsonKey) && element.equals(((JsonEntry) object).element);
             }
             return false;
         }
@@ -807,8 +842,8 @@ public final class JsonContentLoader extends AbstractLoadable
         @Override
         public int compare(JsonEntry o1, JsonEntry o2)
         {
-            int one = sortingIndexMap.get(o1.name);
-            int two = sortingIndexMap.get(o2.name);
+            int one = sortingIndexMap.get(o1.jsonKey);
+            int two = sortingIndexMap.get(o2.jsonKey);
             return Integer.compare(one, two);
         }
     }
