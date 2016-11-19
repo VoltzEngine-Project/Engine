@@ -21,12 +21,18 @@ public class PacketSpawnStream extends PacketType
 {
     public int dim;
     public int type;
+
     public double x;
     public double y;
     public double z;
+
     public double vx;
     public double vy;
     public double vz;
+
+    public float red;
+    public float green;
+    public float blue;
 
     public PacketSpawnStream()
     {
@@ -70,6 +76,12 @@ public class PacketSpawnStream extends PacketType
         buffer.writeDouble(vx);
         buffer.writeDouble(vy);
         buffer.writeDouble(vz);
+        if (type == 2)
+        {
+            buffer.writeFloat(red);
+            buffer.writeFloat(green);
+            buffer.writeFloat(blue);
+        }
     }
 
     @Override
@@ -83,6 +95,12 @@ public class PacketSpawnStream extends PacketType
         vx = buffer.readDouble();
         vy = buffer.readDouble();
         vz = buffer.readDouble();
+        if (type == 2)
+        {
+            red = buffer.readFloat();
+            green = buffer.readFloat();
+            blue = buffer.readFloat();
+        }
     }
 
     @Override
@@ -107,9 +125,15 @@ public class PacketSpawnStream extends PacketType
                     player.worldObj.spawnParticle("portal", d7, d8, d9, (double) f, (double) f1, (double) f2);
                 }
             }
-            else
+            else if (type == 1)
             {
                 FxBeam beam = new FxBeam(References.GREY_TEXTURE, player.worldObj, new Pos(x, y, z), new Pos(vx, vy, vz), Color.RED, 5);
+                FMLClientHandler.instance().getClient().effectRenderer.addEffect(beam);
+            }
+            else if (type == 2)
+            {
+                FxBeam beam = new FxBeam(References.GREY_TEXTURE, player.worldObj, new Pos(x, y, z), new Pos(vx, vy, vz), Color.RED, 5);
+                beam.setRGB(red, green, blue);
                 FMLClientHandler.instance().getClient().effectRenderer.addEffect(beam);
             }
         }

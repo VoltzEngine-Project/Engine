@@ -20,7 +20,7 @@ import com.builtbroken.mc.lib.transform.vector.Pos;
 import java.awt.*;
 
 /** Based off Thaumcraft's Beam Renderer.
- * 
+ *
  * @author Calclavia, Azanor */
 @SideOnly(Side.CLIENT)
 public class FxBeam extends EntityFX
