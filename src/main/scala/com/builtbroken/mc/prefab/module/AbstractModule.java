@@ -69,8 +69,6 @@ public abstract class AbstractModule implements IModule, IModuleHasMass
         stack.getTagCompound().setString(ModuleBuilder.SAVE_ID, getSaveID());
     }
 
-    protected abstract String getSaveID();
-
     @Override
     public ItemStack toStack()
     {
