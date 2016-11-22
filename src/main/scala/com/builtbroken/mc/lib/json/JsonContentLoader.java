@@ -522,7 +522,12 @@ public final class JsonContentLoader extends AbstractLoadable
             {
                 if (!entry.getKey().equalsIgnoreCase("author"))
                 {
-                    JsonEntry jsonEntry = new JsonEntry(entry.getKey(), file, entry.getValue());
+                    String key = entry.getKey();
+                    if(key.contains(":"))
+                    {
+                        key = key.split(":")[0];
+                    }
+                    JsonEntry jsonEntry = new JsonEntry(key, file, entry.getValue());
                     jsonEntry.author = author;
                     jsonEntry.authorHelpSite = helpSite;
                     entries.add(jsonEntry);
