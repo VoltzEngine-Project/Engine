@@ -79,10 +79,10 @@ public class ClassTransformer implements IClassTransformer
                 {
                     try
                     {
-                        File file = new File(".", "asmTestFolder/" + name + ".class");
+                        File file = new File(System.getProperty("user.dir"), "asmTestFolder/" + name + ".class");
                         if (!file.getParentFile().exists())
                         {
-                            file.mkdirs();
+                            file.getParentFile().mkdirs();
                         }
                         FileOutputStream fos = new FileOutputStream(file);
                         fos.write(data);
