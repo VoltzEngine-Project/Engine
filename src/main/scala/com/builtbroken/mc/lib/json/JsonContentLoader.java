@@ -165,13 +165,12 @@ public final class JsonContentLoader extends AbstractLoadable
         loadResourcesFromFolder(externalContentFolder);
         loadResourcesFromPackage("content/");
 
-        final List<JsonEntry> elements = new ArrayList();
         //Load external files
         for (File file : externalFiles)
         {
             try
             {
-                loadJsonFile(file, elements);
+                loadJsonFile(file, jsonEntries);
             }
             catch (IOException e)
             {
@@ -185,7 +184,7 @@ public final class JsonContentLoader extends AbstractLoadable
         {
             try
             {
-                loadJsonFileFromResources(resource, elements);
+                loadJsonFileFromResources(resource, jsonEntries);
             }
             catch (IOException e)
             {
