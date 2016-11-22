@@ -14,7 +14,8 @@ import java.util.Iterator;
 public class InventoryIterator implements Iterator<ItemStack>, Iterable<ItemStack>
 {
     private final IInventory inventory;
-    private int slot;
+    private int slot = -1;
+    private int nextSlot = 0;
     private boolean nonNullSlots;
 
     public InventoryIterator(IInventory inventory, boolean nonNullSlots)
@@ -23,24 +24,41 @@ public class InventoryIterator implements Iterator<ItemStack>, Iterable<ItemStac
         this.nonNullSlots = nonNullSlots;
     }
 
+    /**
+     * Current index/slot in the inventory
+     *
+     * @return slot number
+     */
     public int slot()
     {
         return slot;
+    }
+
+    /**
+     * Next slot in the search, this is normally just
+     * index + 1 however if {@link #nonNullSlots} is
+     * true this will be the next non-null value
+     * in the inventory.
+     *
+     * @return next slot index number
+     */
+    public int nextSlot()
+    {
+        return nextSlot;
     }
 
     @Override
     public boolean hasNext()
     {
         //Ensure the slot index moves forward automatically
-        if (nonNullSlots && inventory.getStackInSlot(slot) == null)
+        if (nonNullSlots && inventory.getStackInSlot(nextSlot) == null)
         {
-            do
+            while (nextSlot < inventory.getSizeInventory() && inventory.getStackInSlot(nextSlot) == null)
             {
-                slot++;
+                nextSlot += 1;
             }
-            while (slot < inventory.getSizeInventory() && inventory.getStackInSlot(slot) != null);
         }
-        return slot() < inventory.getSizeInventory();
+        return nextSlot < inventory.getSizeInventory() && (!nonNullSlots || inventory.getStackInSlot(nextSlot) != null);
     }
 
     @Override
@@ -50,7 +68,9 @@ public class InventoryIterator implements Iterator<ItemStack>, Iterable<ItemStac
         {
             return null;
         }
-        return inventory.getStackInSlot(slot++);
+        slot = nextSlot;
+        nextSlot += 1;
+        return inventory.getStackInSlot(slot);
     }
 
     @Override
