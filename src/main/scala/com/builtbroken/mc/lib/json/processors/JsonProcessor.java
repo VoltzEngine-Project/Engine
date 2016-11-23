@@ -60,7 +60,7 @@ public abstract class JsonProcessor<D extends IJsonGenObject>
     {
         for (String value : values)
         {
-            if (!object.has("name"))
+            if (!object.has(value))
             {
                 throw new IllegalArgumentException("File is missing " + value + " value " + object);
             }
