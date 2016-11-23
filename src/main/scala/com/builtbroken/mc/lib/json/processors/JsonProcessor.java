@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.json.processors;
 
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -48,4 +49,21 @@ public abstract class JsonProcessor<D extends IJsonGenObject>
     }
 
     public abstract D process(JsonElement element);
+
+    /**
+     * Quick way to check that required fields exist in the json file
+     *
+     * @param object
+     * @param values
+     */
+    public void ensureValuesExist(JsonObject object, String... values)
+    {
+        for (String value : values)
+        {
+            if (!object.has("name"))
+            {
+                throw new IllegalArgumentException("File is missing " + value + " value " + object);
+            }
+        }
+    }
 }
