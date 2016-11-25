@@ -12,8 +12,8 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -58,7 +58,7 @@ public class TestJsonLoader extends AbstractTest
         assertEquals("json", loader.externalContentFolder.getName());
         assertEquals("file", loader.externalContentFolder.getParentFile().getName());
         assertEquals(1, loader.processors.size());
-        assertSame(loader.blockProcessor, loader.processors.get(0));
+        assertSame(loader.blockProcessor, loader.processors.get("block"));
         assertEquals(2, loader.blockProcessor.subProcessors.size());
 
         //Call init and setup data it needs
@@ -119,14 +119,14 @@ public class TestJsonLoader extends AbstractTest
     public void testJsonLoad()
     {
         final StringReader reader = new StringReader(TEST_OBJECT_ONE);
-        final List<JsonContentLoader.JsonEntry> entryList = new ArrayList();
+        final HashMap<String, List<JsonContentLoader.JsonEntry>> entryList = new HashMap();
 
         JsonContentLoader.loadJson("someFile", reader, entryList);
 
         assertEquals(1, entryList.size());
-        assertEquals("block", entryList.get(0).jsonKey);
-        assertEquals("someFile", entryList.get(0).fileReadFrom);
-        assertEquals("mod", entryList.get(0).author);
+        assertEquals("block", entryList.get("block").get(0).jsonKey);
+        assertEquals("someFile", entryList.get("block").get(0).fileReadFrom);
+        assertEquals("mod", entryList.get("block").get(0).author);
     }
 
     /**
@@ -143,14 +143,14 @@ public class TestJsonLoader extends AbstractTest
         list.add("clip@after:ammoType");
         list.add("gun@after:ammoType");
 
-        Map<String, Integer> map = JsonContentLoader.sortSortingValues(list);
-        assertEquals(0, (int) map.get("block"));
-        assertEquals(1, (int) map.get("item"));
-        assertEquals(2, (int) map.get("ammoType"));
-        assertEquals(3, (int) map.get("ammo"));
-        assertEquals(4, (int) map.get("gun"));
-        assertEquals(5, (int) map.get("clip"));
-        assertEquals(6, (int) map.get("tile"));
+        List<String> list2 = JsonContentLoader.sortSortingValues(list);
+        assertEquals("block", list2.get(0));
+        assertEquals("item", list2.get(1));
+        assertEquals("ammoType", list2.get(2));
+        assertEquals("ammo", list2.get(3));
+        assertEquals("gun", list2.get(4));
+        assertEquals("clip", list2.get(5));
+        assertEquals("tile", list2.get(6));
     }
 
 

@@ -666,6 +666,13 @@ public class Engine
 
     }
 
+    @EventHandler
+    public void loadCompleteEvent(FMLLoadCompleteEvent event)
+    {
+        //Clean up resources to free up ram
+        JsonContentLoader.INSTANCE.clear();
+    }
+
     public AbstractProxy getProxy()
     {
         return proxy;
