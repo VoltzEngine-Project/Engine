@@ -51,14 +51,14 @@ public class InventoryIterator implements Iterator<ItemStack>, Iterable<ItemStac
     public boolean hasNext()
     {
         //Ensure the slot index moves forward automatically
-        if (nonNullSlots && inventory.getStackInSlot(nextSlot) == null)
+        if (nonNullSlots && inventory.getStackInSlot(nextSlot()) == null)
         {
-            while (nextSlot < inventory.getSizeInventory() && inventory.getStackInSlot(nextSlot) == null)
+            while (nextSlot() < inventory.getSizeInventory() && inventory.getStackInSlot(nextSlot()) == null)
             {
                 nextSlot += 1;
             }
         }
-        return nextSlot < inventory.getSizeInventory() && (!nonNullSlots || inventory.getStackInSlot(nextSlot) != null);
+        return nextSlot() < inventory.getSizeInventory() && (!nonNullSlots || inventory.getStackInSlot(nextSlot()) != null);
     }
 
     @Override
@@ -68,10 +68,19 @@ public class InventoryIterator implements Iterator<ItemStack>, Iterable<ItemStac
         {
             return null;
         }
-        slot = nextSlot;
+        slot = nextSlot();
         nextSlot += 1;
-        return inventory.getStackInSlot(slot);
+        return inventory.getStackInSlot(slot());
     }
+
+    @Override
+    public void remove()
+    {
+        inventory.setInventorySlotContents(slot(), null);
+    }
+
+    //TODO implement set slot from iterator
+    //TODO implement decrease slot size
 
     @Override
     public Iterator<ItemStack> iterator()
