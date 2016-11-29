@@ -25,6 +25,7 @@ import com.builtbroken.mc.core.content.tool.ItemSimpleCraftingTool;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolMode;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeGeneral;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeRotation;
+import com.builtbroken.mc.core.content.world.DevWorldLoader;
 import com.builtbroken.mc.core.handler.InteractionHandler;
 import com.builtbroken.mc.core.handler.SaveManager;
 import com.builtbroken.mc.core.handler.SelectionHandler;
@@ -35,6 +36,7 @@ import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.lib.helper.recipe.OreNames;
+import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.lib.mod.compat.Mods;
 import com.builtbroken.mc.lib.mod.compat.ae.AEProxy;
@@ -59,7 +61,6 @@ import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
 import com.builtbroken.mc.lib.world.radar.RadarRegistry;
 import com.builtbroken.mc.lib.world.radio.RadioRegistry;
 import com.builtbroken.mc.prefab.explosive.handler.ExplosiveHandlerTNT;
-import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.prefab.recipe.cast.MRHandlerCast;
 import com.builtbroken.mc.prefab.recipe.fluid.MRHandlerFluidStack;
 import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;
@@ -354,7 +355,6 @@ public class Engine
         FMLCommonHandler.instance().bus().register(SelectionHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(proxy);
 
-
         //Load heat configs
         enabledHeatMap = heatDataConfig.getBoolean("EnabledHeatMap", Configuration.CATEGORY_GENERAL, true, "Heat map handles interaction of heat based energy and the world. Disable only if it causes issues or you want to reduce world file size. If disabled it can prevent machines from working.");
 
@@ -403,6 +403,12 @@ public class Engine
         loader.applyModule(BCProxy.class, Mods.BC.isLoaded());
         loader.applyModule(MekProxy.class, Mods.MEKANISM.isLoaded());
         loader.applyModule(ProjectEProxy.class, Mods.PROJECT_E.isLoaded());
+
+        //Load dev only content
+        if (runningAsDev)
+        {
+            loader.applyModule(new DevWorldLoader());
+        }
 
         //Check if RF api exists
         boolean shouldLoadRFHandler = true;
