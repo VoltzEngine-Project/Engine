@@ -462,28 +462,31 @@ public final class JsonContentLoader extends AbstractLoadable
         //http://stackoverflow.com/questions/3923129/get-a-list-of-resources-from-classpath-directory
         try
         {
-            final List<String> files = IOUtils.readLines(JsonContentLoader.class.getClassLoader().getResourceAsStream(folder), Charsets.UTF_8);
-            for (String name : files)
+            InputStream stream = JsonContentLoader.class.getClassLoader().getResourceAsStream(folder);
+            if (stream != null)
             {
-                final String path = folder + (!folder.endsWith("/") ? "/" : "") + name;
-                if (name.lastIndexOf(".") > 1)
+                final List<String> files = IOUtils.readLines(stream, Charsets.UTF_8);
+                for (String name : files)
                 {
-                    String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
-                    if (extensionsToLoad.contains(extension))
+                    final String path = folder + (!folder.endsWith("/") ? "/" : "") + name;
+                    if (name.lastIndexOf(".") > 1)
                     {
-                        classPathResources.add(path);
+                        String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
+                        if (extensionsToLoad.contains(extension))
+                        {
+                            classPathResources.add(path);
+                        }
                     }
-                }
-                else
-                {
-                    loadResourcesFromPackage(path + "/");
+                    else
+                    {
+                        loadResourcesFromPackage(path + "/");
+                    }
                 }
             }
         }
-        catch (IOException e)
+        catch (Exception e)
         {
-            e.printStackTrace();
-
+            Engine.logger().error("Failed to load resources from class path.", e);
         }
     }
 
