@@ -2,7 +2,6 @@ package com.builtbroken.mc.core.content.world.chunks;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -21,9 +20,17 @@ import java.util.List;
  */
 public abstract class AbstractChunkProvider implements IChunkProvider
 {
+    /** World the generator functions inside. */
     protected final World worldObj;
+    /** Name of the generator */
     protected final String name;
 
+    /**
+     * Creates a new generator instance
+     *
+     * @param world - world the generator works in
+     * @param name  - name of the generator
+     */
     public AbstractChunkProvider(World world, String name)
     {
         this.worldObj = world;
@@ -39,84 +46,152 @@ public abstract class AbstractChunkProvider implements IChunkProvider
         return this.provideChunk(x, z);
     }
 
-
-    protected final void generatePlatform(Chunk chunk, int y_base, Block block)
+    /**
+     * Generates a platform the same size as the chunk (16x16 1 block thick)
+     *
+     * @param chunk - chunk to edit
+     * @param y     - y level to generate at
+     * @param block - block to place
+     * @param meta  - meta to place
+     */
+    protected final void generatePlatform(Chunk chunk, int y, Block block, int meta)
     {
-        generatePlatform(chunk, y_base, 16, 16, 0, 0, block);
+        generatePlatform(chunk, y, 16, 16, 0, 0, block, meta);
     }
 
-    protected final void generatePlatform(Chunk chunk, int y_base, int sizeX, int sizeZ, int startX, int startZ, Block block)
+    /**
+     * Generates a platform of the desired size
+     *
+     * @param chunk   - chunk to edit
+     * @param y       - y level to generate at
+     * @param sizeX   - size in the x axis (East- West)
+     * @param -       size in the z axis (South-North)
+     * @param startX  - start point to generate from
+     * @param startZ- start point to generate from
+     * @param block   - block to place
+     * @param meta    - meta to place
+     */
+    protected final void generatePlatform(Chunk chunk, int y, int sizeX, int sizeZ, int startX, int startZ, Block block, int meta)
     {
-        final int l = y_base >> 4;
-        ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[l];
-
-        if (extendedblockstorage == null)
-        {
-            extendedblockstorage = new ExtendedBlockStorage(y_base, !this.worldObj.provider.hasNoSky);
-            chunk.getBlockStorageArray()[l] = extendedblockstorage;
-        }
-
-
         for (int cx = startX; cx < startX + sizeX; ++cx)
         {
             for (int cz = startZ; cz < startZ + sizeZ; ++cz)
             {
-                extendedblockstorage.func_150818_a(cx, y_base & 15, cz, block);
+                setBlock(chunk, cx, y, cz, block, meta);
             }
         }
     }
 
-    protected final void generateSquare(Chunk chunk, int y_base, int sizeX, int sizeZ, int startX, int startZ, Block block)
+    /**
+     * Generate a rectangle shape that is not filled in, in other words the side of the rect only
+     *
+     * @param chunk   - chunk to edit
+     * @param y       - y level to generate at
+     * @param startX  - start point to generate from
+     * @param startZ- start point to generate from
+     * @param block   - block to place
+     * @param meta    - meta to place
+     */
+    protected final void generateSquare(Chunk chunk, int y, int sizeX, int sizeZ, int startX, int startZ, Block block, int meta)
     {
-        final int l = y_base >> 4;
-        ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[l];
-
-        if (extendedblockstorage == null)
-        {
-            extendedblockstorage = new ExtendedBlockStorage(y_base, !this.worldObj.provider.hasNoSky);
-            chunk.getBlockStorageArray()[l] = extendedblockstorage;
-        }
-
         for (int cz = startZ; cz < startZ + sizeZ; ++cz)
         {
-            extendedblockstorage.func_150818_a(startX, y_base & 15, cz, block);
-            extendedblockstorage.func_150818_a(startX + sizeX - 1, y_base & 15, cz, block);
+            setBlock(chunk, startX, y, cz, block, meta);
+            setBlock(chunk, startX + sizeX - 1, y, cz, block, meta);
         }
 
         for (int cx = startX + 1; cx < startX + sizeX - 1; ++cx)
         {
-            extendedblockstorage.func_150818_a(cx, y_base & 15, startZ, block);
-            extendedblockstorage.func_150818_a(cx, y_base & 15, startZ + sizeZ - 1, block);
+            setBlock(chunk, cx, y, startZ, block, meta);
+            setBlock(chunk, cx, y, startZ + sizeZ - 1, block, meta);
         }
     }
 
-    protected final void generateCorners(Chunk chunk, int y_base, int size, Block block)
+    /**
+     * Generate corners of a square shape
+     *
+     * @param chunk - chunk to edit
+     * @param y     - y level to generate at
+     * @param size  - size of the square
+     * @param block - block to place
+     * @param meta  - meta to place
+     */
+    protected final void generateCorners(Chunk chunk, int y, int size, Block block, int meta)
     {
-        generateCorners(chunk, y_base, size, 0, 0, block);
+        generateCorners(chunk, y, size, 0, 0, block, meta);
     }
 
-    protected final void generateCorners(Chunk chunk, int y_base, int size, int startX, int startZ, Block block)
+    /**
+     * Generate corners of a square shape
+     *
+     * @param chunk   - chunk to edit
+     * @param y       - y level to generate at
+     * @param size    - size of the square
+     * @param startX  - start point to generate from
+     * @param startZ- start point to generate from
+     * @param block   - block to place
+     * @param meta    - meta to place
+     */
+    protected final void generateCorners(Chunk chunk, int y, int size, int startX, int startZ, Block block, int meta)
     {
         final int reduction = 15 - size;
         final int small = reduction / 2;
         final int large = 15 - small;
-        generateCorners(chunk, y_base, small, large, startX, startZ, block);
+        generateCorners(chunk, y, small, large, startX, startZ, block, meta);
     }
 
-    protected final void generateCorners(Chunk chunk, int y_base, int small, int large, int startX, int startZ, Block block)
+    /**
+     * Generate corners of a square shape
+     *
+     * @param chunk   - chunk to edit
+     * @param y       - y level to generate at
+     * @param small   - smallest corner point (Where the square generates)
+     * @param large   - largest corner point
+     * @param startX  - start point to generate from
+     * @param startZ- start point to generate from
+     * @param block   - block to place
+     * @param meta    - meta to place
+     */
+    protected final void generateCorners(Chunk chunk, int y, int small, int large, int startX, int startZ, Block block, int meta)
     {
-        final int l = y_base >> 4;
+        setBlock(chunk, startX + small, y, startZ + small, block, meta);
+        setBlock(chunk, startX + large, y, startZ + small, block, meta);
+        setBlock(chunk, startX + small, y, startZ + large, block, meta);
+        setBlock(chunk, startX + large, y, startZ + large, block, meta);
+    }
+
+    /**
+     * Places a block inside of the chunks extends block storage
+     * <p>
+     * This will also set the light level if the block has a light level.
+     *
+     * @param chunk - chunk to edit
+     * @param y     - y level to place the block at
+     * @param x     - chunk internal x pos 0 to 15
+     * @param z     - chunk internal z pos 0 to 15
+     * @param block - block to place
+     * @param meta  - meta to place
+     */
+    protected final void setBlock(Chunk chunk, int x, int y, int z, Block block, int meta)
+    {
+        final int l = y >> 4;
         ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[l];
 
         if (extendedblockstorage == null)
         {
-            extendedblockstorage = new ExtendedBlockStorage(y_base, !this.worldObj.provider.hasNoSky);
+            extendedblockstorage = new ExtendedBlockStorage((y / 16) * 16, !this.worldObj.provider.hasNoSky);
             chunk.getBlockStorageArray()[l] = extendedblockstorage;
         }
-        extendedblockstorage.func_150818_a(startX + small, y_base & 15, startZ + small, Blocks.glowstone);
-        extendedblockstorage.func_150818_a(startX + large, y_base & 15, startZ + small, Blocks.glowstone);
-        extendedblockstorage.func_150818_a(startX + small, y_base & 15, startZ + large, Blocks.glowstone);
-        extendedblockstorage.func_150818_a(startX + large, y_base & 15, startZ + large, Blocks.glowstone);
+
+        extendedblockstorage.func_150818_a(x, y & 15, z, block);
+        if (meta >= 0 && meta < 16)
+        {
+            extendedblockstorage.setExtBlockMetadata(x, y & 15, z, meta);
+        }
+        if (block.getLightValue() > 0)
+        {
+            extendedblockstorage.setExtBlocklightValue(x, y & 15, z, block.getLightValue());
+        }
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.content.world;
 
+import com.builtbroken.mc.core.content.world.chunks.ChunkProviderChess;
 import com.builtbroken.mc.core.content.world.chunks.ChunkProviderEmpty;
 import com.builtbroken.mc.core.content.world.chunks.ChunkProviderStone;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
@@ -53,6 +54,20 @@ public final class DevWorldLoader extends AbstractLoadable
             public IChunkProvider getChunkGenerator(World world, String generatorOptions)
             {
                 return new ChunkProviderStone(world);
+            }
+
+            @Override
+            public boolean getCanBeCreated()
+            {
+                return true;
+            }
+        };
+        stoneWorldGenerator = new WorldType("chessTestWorld")
+        {
+            @Override
+            public IChunkProvider getChunkGenerator(World world, String generatorOptions)
+            {
+                return new ChunkProviderChess(world);
             }
 
             @Override

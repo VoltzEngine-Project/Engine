@@ -3,13 +3,12 @@ package com.builtbroken.mc.core.content.world.chunks;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 import java.util.Arrays;
 
-public class ChunkProviderStone extends AbstractChunkProvider
+public class ChunkProviderChess extends AbstractChunkProvider
 {
-    public ChunkProviderStone(World world)
+    public ChunkProviderChess(World world)
     {
         super(world, "stoneTestWorldGenerator");
     }
@@ -19,9 +18,9 @@ public class ChunkProviderStone extends AbstractChunkProvider
      * specified chunk from the map seed and chunk seed
      */
     @Override
-    public Chunk provideChunk(int chunkX, int chunkZ)
+    public Chunk provideChunk(final int chunkX, final int chunkZ)
     {
-        Chunk chunk = new Chunk(this.worldObj, chunkX, chunkZ);
+        final Chunk chunk = new Chunk(this.worldObj, chunkX, chunkZ);
 
         int y = 0;
         //Bedrock to prevent falling out of the world
@@ -31,6 +30,7 @@ public class ChunkProviderStone extends AbstractChunkProvider
         generatePlatform(chunk, y++, Blocks.bedrock, -1);
         generatePlatform(chunk, y++, Blocks.bedrock, -1);
 
+
         //20 layers of stone
         for (int i = 0; i <= 20; i++)
         {
@@ -38,27 +38,28 @@ public class ChunkProviderStone extends AbstractChunkProvider
             generatePlatform(chunk, y++, Blocks.stone, -1);
         }
 
-        //Top layer and chunk boards
-        generatePlatform(chunk, y, Blocks.stone, -1);
-        generateSquare(chunk, y, 16, 16, 0, 0, Blocks.coal_block, -1);
-
-        final int l = y >> 4;
-        ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[l];
-        generateCorners(chunk, y, 9, Blocks.glowstone, -1);
-        generateCorners(chunk, y, 5, 10, 0, 0, Blocks.glowstone, -1);
-
-        extendedblockstorage.func_150818_a(0, y & 15, 2, Blocks.glowstone);
-        extendedblockstorage.func_150818_a(0, y & 15, 13, Blocks.glowstone);
-
-        extendedblockstorage.func_150818_a(15, y & 15, 2, Blocks.glowstone);
-        extendedblockstorage.func_150818_a(15, y & 15, 13, Blocks.glowstone);
-
-        extendedblockstorage.func_150818_a(2, y & 15, 15, Blocks.glowstone);
-        extendedblockstorage.func_150818_a(13, y & 15, 15, Blocks.glowstone);
-
-        extendedblockstorage.func_150818_a(2, y & 15, 0, Blocks.glowstone);
-        extendedblockstorage.func_150818_a(13, y & 15, 0, Blocks.glowstone);
-
+        if (Math.abs(chunkX) % 2 == 0)
+        {
+            if (Math.abs(chunkZ) % 2 == 0)
+            {
+                generatePlatform(chunk, y++, Blocks.wool, 8);
+            }
+            else
+            {
+                generatePlatform(chunk, y++, Blocks.wool, 15);
+            }
+        }
+        else
+        {
+            if (Math.abs(chunkZ) % 2 == 1)
+            {
+                generatePlatform(chunk, y++, Blocks.wool, 8);
+            }
+            else
+            {
+                generatePlatform(chunk, y++, Blocks.wool, 15);
+            }
+        }
         //Not sure if we need to call this before biome
         chunk.generateSkylightMap();
 
