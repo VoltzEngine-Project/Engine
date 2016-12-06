@@ -3,7 +3,6 @@ package com.builtbroken.mc.core.asm.template;
 import com.builtbroken.mc.api.InjectTemplate;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.EngineCoreMod;
-import cpw.mods.fml.common.FMLCommonHandler;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ public class TemplateManager
     {
         try
         {
-            if (Class.forName(clazz, false, FMLCommonHandler.class.getClassLoader()) != null)
+            if (Class.forName(clazz, false, TemplateManager.class.getClassLoader()) != null)
             {
                 return true;
             }
