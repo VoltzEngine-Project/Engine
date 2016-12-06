@@ -36,11 +36,19 @@ public class ClassTransformer implements IClassTransformer
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes)
     {
+        if (EngineCoreMod.devMode)
+        {
+            EngineCoreMod.logger.info("com.builtbroken.mc.core.asm.template.transform(name='" + name + "'  transformedName='" + transformedName + "',  bytes);");
+        }
         try
         {
             //Only functions on our classes
             if (!shouldProcess(transformedName) || TemplateManager.templates.isEmpty())
             {
+                if (EngineCoreMod.devMode)
+                {
+                    EngineCoreMod.logger.info("\tClass is not in processing list so is ignored");
+                }
                 return bytes;
             }
 
@@ -54,10 +62,14 @@ public class ClassTransformer implements IClassTransformer
                 {
                     if (nodes.desc.equals("Lcom/builtbroken/mc/api/InjectTemplate;"))
                     {
-                    /*
-                     * The 2nd value in UniversalClass is the annotation we're looking for to filter
-					 * out which mod to deal with.
-					 */
+                        if (EngineCoreMod.devMode)
+                        {
+                            EngineCoreMod.logger.info("\t Class contains annotation, injecting code");
+                        }
+                         /*
+                         * The 2nd value in UniversalClass is the annotation we're looking for to filter
+                         * out which mod to deal with.
+                         */
                         String flags = null;
 
                         if (nodes.values != null && nodes.values.size() >= 2)
@@ -75,7 +87,7 @@ public class ClassTransformer implements IClassTransformer
             {
                 byte[] data = ASMHelper.createBytes(cnode, ClassWriter.COMPUTE_FRAMES);
 
-                if (System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true"))
+                if (EngineCoreMod.devMode)
                 {
                     try
                     {
@@ -146,7 +158,7 @@ public class ClassTransformer implements IClassTransformer
         {
             for (String path : permittedClassPaths)
             {
-                if (permittedClassPaths.equals(name) || name.startsWith(path))
+                if (permittedClassPaths.contains(name) || name.startsWith(path))
                 {
                     final String className = name.replace(".class", "").substring(name.lastIndexOf(".") + 1, name.length());
                     for (String prefix : permittedPrefixClass)

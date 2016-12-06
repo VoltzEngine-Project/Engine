@@ -18,6 +18,7 @@ public class EngineCoreMod implements IFMLLoadingPlugin
 {
     /** Grab the mod's main logger, in theory should be the same logger */
     public static final Logger logger = LogManager.getLogger("VoltzEngine");
+    public static boolean devMode = false;
 
     public EngineCoreMod()
     {
@@ -25,6 +26,8 @@ public class EngineCoreMod implements IFMLLoadingPlugin
         final boolean notDevMode = System.getProperty("development") == null || !System.getProperty("development").equalsIgnoreCase("true");
         final boolean doDownloads = System.getProperty("disableDepDownloader") == null || !System.getProperty("disableDepDownloader").equalsIgnoreCase("true");
         final boolean enableASM = System.getProperty("enableAsmTemplates") == null || System.getProperty("enableAsmTemplates").equalsIgnoreCase("true");
+
+        devMode = !notDevMode;
 
         if (notDevMode && doDownloads)
         {
