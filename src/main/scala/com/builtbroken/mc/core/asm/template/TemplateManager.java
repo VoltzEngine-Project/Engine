@@ -65,7 +65,7 @@ public class TemplateManager
     {
         try
         {
-            if (Class.forName(clazz, false, TemplateManager.class.getClassLoader()) != null)
+            if (Class.forName(clazz) != null)
             {
                 return true;
             }
