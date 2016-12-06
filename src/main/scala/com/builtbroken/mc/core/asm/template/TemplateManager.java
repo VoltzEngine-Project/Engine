@@ -1,7 +1,6 @@
 package com.builtbroken.mc.core.asm.template;
 
 import com.builtbroken.mc.api.InjectTemplate;
-import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.EngineCoreMod;
 
 import java.lang.annotation.Annotation;
@@ -73,7 +72,7 @@ public class TemplateManager
         }
         catch (ClassNotFoundException e2)
         {
-            Engine.logger().error("Failed to find class '" + clazz + "'");
+            EngineCoreMod.logger.error("Failed to find class '" + clazz + "'");
         }
         return false;
     }

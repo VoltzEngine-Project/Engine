@@ -668,8 +668,6 @@ public class Engine
         heatDataConfig.save();
         explosiveConfig.save();
         getConfig().save();
-
-
     }
 
     @EventHandler
