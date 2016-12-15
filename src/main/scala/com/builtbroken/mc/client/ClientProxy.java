@@ -8,6 +8,8 @@ import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
 import com.builtbroken.mc.core.handler.RenderSelection;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
+import com.builtbroken.mc.lib.render.fx.FxBeam;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.tile.multiblock.MultiBlockRenderHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -19,8 +21,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.awt.*;
 
 /**
  * The Voltz Engine client proxy
@@ -93,5 +98,12 @@ public class ClientProxy extends CommonProxy
     public int getPlayerDim()
     {
         return getClientWorld() != null ? getClientWorld().provider.dimensionId : 0;
+    }
+
+    @Override
+    public void spawnBeamFx(ResourceLocation location, World world, Pos start, Pos end, Color color, int ticksToLive)
+    {
+        FxBeam beam = new FxBeam(References.GREY_TEXTURE, world, start, end, color, 5);
+        FMLClientHandler.instance().getClient().effectRenderer.addEffect(beam);
     }
 }

@@ -2,10 +2,9 @@ package com.builtbroken.mc.core.network.packet;
 
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.render.fx.FxBeam;
 import com.builtbroken.mc.lib.transform.vector.Pos;
-import cpw.mods.fml.client.FMLClientHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
@@ -122,19 +121,16 @@ public class PacketSpawnStream extends PacketType
                     double d7 = vx + (x - vx) * d6 + (rand.nextDouble() - 0.5D) * 5.0D;
                     double d8 = vy + (y - vy) * d6 + (rand.nextDouble() - 0.5D) * 5.0D;
                     double d9 = vz + (z - vz) * d6 + (rand.nextDouble() - 0.5D) * 5.0D;
-                    player.worldObj.spawnParticle("portal", d7, d8, d9, (double) f, (double) f1, (double) f2);
+                    Engine.proxy.spawnParticle("portal", player.worldObj, d7, d8, d9, (double) f, (double) f1, (double) f2);
                 }
             }
             else if (type == 1)
             {
-                FxBeam beam = new FxBeam(References.GREY_TEXTURE, player.worldObj, new Pos(x, y, z), new Pos(vx, vy, vz), Color.RED, 5);
-                FMLClientHandler.instance().getClient().effectRenderer.addEffect(beam);
+                Engine.proxy.spawnBeamFx(References.GREY_TEXTURE, player.worldObj, new Pos(x, y, z), new Pos(vx, vy, vz), Color.RED, 5);
             }
             else if (type == 2)
             {
-                FxBeam beam = new FxBeam(References.GREY_TEXTURE, player.worldObj, new Pos(x, y, z), new Pos(vx, vy, vz), Color.RED, 5);
-                beam.setRGB(red, green, blue);
-                FMLClientHandler.instance().getClient().effectRenderer.addEffect(beam);
+                Engine.proxy.spawnBeamFx(References.GREY_TEXTURE, player.worldObj, new Pos(x, y, z), new Pos(vx, vy, vz), new Color(red, green, blue), 5);
             }
         }
     }

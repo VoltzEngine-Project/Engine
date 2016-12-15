@@ -25,6 +25,8 @@ public class ClassTransformer implements IClassTransformer
     public static final List<String> permittedClassPaths = new ArrayList();
     /** Prefixes of the classes that should be processed */
     public static final List<String> permittedPrefixClass = new ArrayList();
+    /** Enables a super detailed version of ASM debug */
+    public static boolean enableSuperDetails = false;
 
     static
     {
@@ -36,7 +38,7 @@ public class ClassTransformer implements IClassTransformer
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes)
     {
-        if (EngineCoreMod.devMode)
+        if (EngineCoreMod.devMode && enableSuperDetails)
         {
             EngineCoreMod.logger.info("com.builtbroken.mc.core.asm.template.transform(name='" + name + "'  transformedName='" + transformedName + "',  bytes);");
         }
@@ -45,7 +47,7 @@ public class ClassTransformer implements IClassTransformer
             //Only functions on our classes
             if (!shouldProcess(transformedName) || TemplateManager.templates.isEmpty())
             {
-                if (EngineCoreMod.devMode)
+                if (EngineCoreMod.devMode && enableSuperDetails)
                 {
                     EngineCoreMod.logger.info("\tClass is not in processing list so is ignored");
                 }
@@ -62,7 +64,7 @@ public class ClassTransformer implements IClassTransformer
                 {
                     if (nodes.desc.equals("Lcom/builtbroken/mc/api/InjectTemplate;"))
                     {
-                        if (EngineCoreMod.devMode)
+                        if (EngineCoreMod.devMode && enableSuperDetails)
                         {
                             EngineCoreMod.logger.info("\t Class contains annotation, injecting code");
                         }
