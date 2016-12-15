@@ -1,6 +1,7 @@
 package com.builtbroken.test.prefab.blast;
 
 import com.builtbroken.mc.api.edit.IWorldEdit;
+import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import com.builtbroken.mc.prefab.explosive.blast.BlastSimplePath;
@@ -56,7 +57,7 @@ public class TestBlastSimplePath extends AbstractTest
 
     private final List<IWorldEdit> popBlast(World world, int x, int y, int z, int size)
     {
-        TestBlastPath blast = new TestBlastPath();
+        TestBlastPath blast = new TestBlastPath(null);
         blast.setLocation(world, x, y, z);
         blast.setYield(size);
         List<IWorldEdit> edits = new ArrayList();
@@ -80,6 +81,11 @@ public class TestBlastSimplePath extends AbstractTest
 
     private class TestBlastPath extends BlastSimplePath<TestBlastPath>
     {
+        public TestBlastPath(IExplosiveHandler handler)
+        {
+            super(handler);
+        }
+
         @Override
         public IWorldEdit changeBlock(Location location)
         {

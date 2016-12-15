@@ -3,6 +3,7 @@ package com.builtbroken.mc.prefab.explosive.blast;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosive;
+import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.helper.MathUtility;
 import com.builtbroken.mc.lib.transform.sorting.Vector3DistanceComparator;
@@ -65,8 +66,9 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
      */
     protected BlastRunProfile profile;
 
-    public BlastBasic()
+    public BlastBasic(IExplosiveHandler handler)
     {
+        super(handler);
         profile = profiler.run(this);
     }
 

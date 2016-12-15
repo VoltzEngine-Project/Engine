@@ -24,6 +24,6 @@ public class ExplosiveHandlerTNT extends AbstractExplosiveHandler
     @Override
     public IWorldChangeAction createBlastForTrigger(World world, double x, double y, double z, TriggerCause triggerCause, double size, NBTTagCompound tag)
     {
-        return new BlastBasic().setLocation(world, x, y, z).setCause(triggerCause).setYield(size).setAdditionBlastData(tag);
+        return new BlastBasic(this).setLocation(world, x, y, z).setCause(triggerCause).setYield(size).setAdditionBlastData(tag);
     }
 }

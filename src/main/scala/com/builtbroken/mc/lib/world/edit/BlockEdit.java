@@ -4,6 +4,7 @@ import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.lib.transform.vector.AbstractLocation;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -252,9 +253,20 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
         {
             return BlockEditResult.ALREADY_PLACED;
         }
+        //Breaks block in order to drop items contained
+        if (doItemDrop)
+        {
+            InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), true);
+        }
         //Place the block and check if the world says its placed
         if (super.setBlock(world, newBlock, newMeta))
         {
+            //Checks if the block can stay to fix block issues (crops, plants, doors, plates, redstone)
+            if (!newBlock.canBlockStay(world, xi(), yi(), zi()))
+            {
+                //Drops the block
+                InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), true);
+            }
             return BlockEditResult.PLACED;
         }
         return BlockEditResult.BLOCKED;

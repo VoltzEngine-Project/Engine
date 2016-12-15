@@ -101,6 +101,12 @@ public class ClientProxy extends CommonProxy
     }
 
     @Override
+    public void spawnParticle(String name, World world, double x, double y, double z, double xx, double yy, double zz)
+    {
+        world.spawnParticle(name, x, y, z, xx, yy, zz);
+    }
+
+    @Override
     public void spawnBeamFx(ResourceLocation location, World world, Pos start, Pos end, Color color, int ticksToLive)
     {
         FxBeam beam = new FxBeam(References.GREY_TEXTURE, world, start, end, color, 5);

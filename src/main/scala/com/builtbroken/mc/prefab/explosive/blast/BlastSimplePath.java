@@ -2,6 +2,7 @@ package com.builtbroken.mc.prefab.explosive.blast;
 
 import com.builtbroken.mc.api.edit.IWorldChangeLayeredAction;
 import com.builtbroken.mc.api.edit.IWorldEdit;
+import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
@@ -42,11 +43,11 @@ public abstract class BlastSimplePath<B extends BlastSimplePath> extends Blast<B
     protected int layers = 1;
     protected int blocksPerLayer = 500;
 
-    public BlastSimplePath() {}
+    public BlastSimplePath(IExplosiveHandler handler) { super(handler);}
 
-    public BlastSimplePath(World world, int x, int y, int z, int size)
+    public BlastSimplePath(IExplosiveHandler handler, World world, int x, int y, int z, int size)
     {
-        super(world, x, y, z, size);
+        super(handler, world, x, y, z, size);
     }
 
     @Override

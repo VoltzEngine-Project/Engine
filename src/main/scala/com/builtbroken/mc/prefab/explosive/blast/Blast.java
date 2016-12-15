@@ -7,11 +7,15 @@ import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IBlast;
+import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.network.IByteBufReader;
+import com.builtbroken.mc.core.network.IByteBufWriter;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import com.builtbroken.mc.lib.world.edit.BlockEditResult;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
@@ -30,7 +34,7 @@ import java.util.List;
 /**
  * Prefab for implement explosive blast actions
  */
-public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics, IBlast
+public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics, IBlast, IByteBufReader, IByteBufWriter
 {
     /** Current world */
     public World world;
@@ -47,12 +51,16 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     public TriggerCause cause = new TriggerCause.TriggerCauseRedstone(ForgeDirection.UNKNOWN, 15);
     private NBTTagCompound additionBlastData;
 
-    public Blast()
+    public final IExplosiveHandler explosiveHandler;
+
+    public Blast(IExplosiveHandler handler)
     {
+        this.explosiveHandler = handler;
     }
 
-    public Blast(final World world, int x, int y, int z, int size)
+    public Blast(IExplosiveHandler handler, final World world, int x, int y, int z, int size)
     {
+        this(handler);
         setLocation(world, x, y, z);
         setYield(size);
     }
@@ -398,5 +406,19 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
             return true;
         }
         return false;
+    }
+
+    @Override
+    public B readBytes(ByteBuf buf)
+    {
+        //size and explosive data are already synced
+        return (B) this;
+    }
+
+    @Override
+    public ByteBuf writeBytes(ByteBuf buf)
+    {
+        //size and explosive data are already synced
+        return buf;
     }
 }
