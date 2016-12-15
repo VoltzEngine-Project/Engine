@@ -2,6 +2,7 @@ package com.builtbroken.mc.core;
 
 import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.api.VoltzEngineAPI;
+import com.builtbroken.mc.api.event.TriggerCauseRegistry;
 import com.builtbroken.mc.api.process.IWorkerThread;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.asm.ProxyASMTest;
@@ -71,6 +72,7 @@ import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.mc.prefab.tile.multiblock.BlockMultiblock;
 import com.builtbroken.mc.prefab.tile.multiblock.EnumMultiblock;
 import com.builtbroken.mc.prefab.tile.multiblock.ItemBlockMulti;
+import com.builtbroken.mc.prefab.trigger.TriggerNBTBuilder;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -403,6 +405,15 @@ public class Engine
         loader.applyModule(BCProxy.class, Mods.BC.isLoaded());
         loader.applyModule(MekProxy.class, Mods.MEKANISM.isLoaded());
         loader.applyModule(ProjectEProxy.class, Mods.PROJECT_E.isLoaded());
+
+
+        TriggerCauseRegistry.register("entity", new TriggerNBTBuilder("entity"));
+        TriggerCauseRegistry.register("impactEntity", new TriggerNBTBuilder("impactEntity"));
+        TriggerCauseRegistry.register("entityImpactBlock", new TriggerNBTBuilder("entityImpactBlock"));
+        TriggerCauseRegistry.register("entityImpactEntity", new TriggerNBTBuilder("entityImpactEntity"));
+        TriggerCauseRegistry.register("explosion", new TriggerNBTBuilder("explosion"));
+        TriggerCauseRegistry.register("fire", new TriggerNBTBuilder("fire"));
+        TriggerCauseRegistry.register("redstone", new TriggerNBTBuilder("redstone"));
 
         //Load dev only content
         if (runningAsDev)
