@@ -70,7 +70,7 @@ public class PacketBlast extends AbstractPacket
         }
         if (type == BlastPacketType.EDIT_DISPLAY)
         {
-            tag.setTag("edit", edit.save(new NBTTagCompound()));
+            tag.setTag("edit", edit.toNBT());
         }
         ByteBufUtils.writeTag(buffer, tag);
 
@@ -95,7 +95,7 @@ public class PacketBlast extends AbstractPacket
         }
 
         NBTTagCompound save = ByteBufUtils.readTag(buffer);
-        blast = (Blast) handler.createBlastForTrigger(Minecraft.getMinecraft().theWorld, x, y, z, TriggerCauseRegistry.rebuild(save.getCompoundTag("trigger")), size, save.getCompoundTag("explosiveData"));
+        blast = (Blast) handler.createBlastForTrigger(Minecraft.getMinecraft().theWorld, x, y, z, TriggerCauseRegistry.rebuild(save.getCompoundTag("trigger"), Minecraft.getMinecraft().theWorld), size, save.getCompoundTag("explosiveData"));
 
         if (type == BlastPacketType.EDIT_DISPLAY)
         {
