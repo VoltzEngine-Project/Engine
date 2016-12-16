@@ -491,7 +491,7 @@ public class Engine
 
         ExplosiveRegistry.registerOrGetExplosive(References.DOMAIN, "TNT", new ExplosiveHandlerTNT());
 
-        final int tntValue = 4;
+        final int tntValue = 8;
         ExplosiveRegistry.registerExplosiveItem(new ItemStack(Blocks.tnt), ExplosiveRegistry.get("TNT"), tntValue);
         ExplosiveRegistry.registerExplosiveItem(new ItemStack(Items.gunpowder), ExplosiveRegistry.get("TNT"), tntValue / 5.0);
         //Creeper skull

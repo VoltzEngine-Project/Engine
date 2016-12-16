@@ -103,7 +103,7 @@ public class ClientProxy extends CommonProxy
     @Override
     public void spawnParticle(String name, World world, double x, double y, double z, double xx, double yy, double zz)
     {
-        world.spawnParticle(name, x, y, z, xx, yy, zz);
+        Minecraft.getMinecraft().renderGlobal.spawnParticle(name, x, y, z, (float) xx, (float) yy, (float) zz);
     }
 
     @Override

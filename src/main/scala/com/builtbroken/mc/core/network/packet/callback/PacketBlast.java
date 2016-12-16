@@ -108,20 +108,27 @@ public class PacketBlast extends AbstractPacket
     @Override
     public void handleClientSide(EntityPlayer player)
     {
-        if (blast != null)
+        try
         {
-            switch (type)
+            if (blast != null)
             {
-                case PRE_BLAST_DISPLAY:
-                    blast.doStartDisplay();
-                    break;
-                case POST_BLAST_DISPLAY:
-                    blast.doEndDisplay();
-                    break;
-                case EDIT_DISPLAY:
-                    blast.displayEffectForEdit(edit);
-                    break;
+                switch (type)
+                {
+                    case PRE_BLAST_DISPLAY:
+                        blast.doStartDisplay();
+                        break;
+                    case POST_BLAST_DISPLAY:
+                        blast.doEndDisplay();
+                        break;
+                    case EDIT_DISPLAY:
+                        blast.displayEffectForEdit(edit);
+                        break;
+                }
             }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
