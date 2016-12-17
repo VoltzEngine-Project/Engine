@@ -6,6 +6,9 @@ import com.builtbroken.mc.api.edit.IWorldChangeAudio;
 import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
+import com.builtbroken.mc.api.event.blast.BlastEventBlockEdit;
+import com.builtbroken.mc.api.event.blast.BlastEventBlockRemoved;
+import com.builtbroken.mc.api.event.blast.BlastEventBlockReplaced;
 import com.builtbroken.mc.api.explosive.IBlast;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
@@ -19,6 +22,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -26,6 +30,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
@@ -136,7 +141,7 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     @Override
     public void handleBlockPlacement(final IWorldEdit vec)
     {
-        if (vec != null && vec.hasChanged())
+        if (vec != null && vec.hasChanged() && prePlace(vec))
         {
             if (vec instanceof BlockEdit && ((BlockEdit) vec).doItemDrop)
             {
@@ -159,7 +164,52 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
             {
                 vec.place();
             }
+            postPlace(vec);
         }
+    }
+
+    /**
+     * Called to do post block placement events
+     *
+     * @param vec
+     */
+    protected void postPlace(final IWorldEdit vec)
+    {
+        if (vec.getNewBlock() == Blocks.air)
+        {
+            MinecraftForge.EVENT_BUS.post(new BlastEventBlockRemoved.Post(this, world, vec.getBlock(), vec.getBlockMetadata(), (int) vec.x(), (int) vec.y(), (int) vec.z()));
+        }
+        else
+        {
+            MinecraftForge.EVENT_BUS.post(new BlastEventBlockReplaced.Post(this, world, vec.getBlock(), vec.getBlockMetadata(), vec.getNewBlock(), vec.getNewMeta(), (int) vec.x(), (int) vec.y(), (int) vec.z()));
+        }
+    }
+
+    /**
+     * Called before block placement to check that
+     * the placement is not canceled by an event
+     *
+     * @param vec - edit data, null and has changed checked
+     * @return true if should continue
+     */
+    protected boolean prePlace(final IWorldEdit vec)
+    {
+        BlastEventBlockEdit event;
+        if (vec.getNewBlock() == Blocks.air)
+        {
+            event = new BlastEventBlockRemoved.Pre(this, world, vec.getBlock(), vec.getBlockMetadata(), (int) vec.x(), (int) vec.y(), (int) vec.z());
+        }
+        else
+        {
+            event = new BlastEventBlockReplaced.Pre(this, world, vec.getBlock(), vec.getBlockMetadata(), vec.getNewBlock(), vec.getNewMeta(), (int) vec.x(), (int) vec.y(), (int) vec.z());
+        }
+
+        boolean result = MinecraftForge.EVENT_BUS.post(event);
+        if (vec instanceof BlockEdit && event instanceof BlastEventBlockReplaced.Pre)
+        {
+            ((BlockEdit) vec).set(((BlastEventBlockReplaced.Pre) event).newBlock, ((BlastEventBlockReplaced.Pre) event).newMeta);
+        }
+        return !result;
     }
 
     /**

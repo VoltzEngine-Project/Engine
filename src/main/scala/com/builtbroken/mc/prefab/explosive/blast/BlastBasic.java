@@ -2,6 +2,9 @@ package com.builtbroken.mc.prefab.explosive.blast;
 
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
+import com.builtbroken.mc.api.event.blast.BlastEventBlockEdit;
+import com.builtbroken.mc.api.event.blast.BlastEventBlockReplaced;
+import com.builtbroken.mc.api.event.blast.BlastEventDestroyBlock;
 import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
@@ -19,6 +22,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.Explosion;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -224,13 +228,6 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
     public void handleBlockPlacement(IWorldEdit vec)
     {
         Block block = vec.getBlock();
-        //TileEntity tile = vec.getTileEntity();
-
-        // TODO re-add support MFFS support
-        //if (tile instanceof IForceField)
-        // {
-        //     ((IForceField) tile).weakenForceField((int) vec.energy() * 100);
-        // }
         if (vec.getNewBlock() == Blocks.air || vec.getNewBlock() == Blocks.fire)
         {
             //TODO add energy value of explosion to this explosion if it is small
@@ -328,7 +325,29 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
         energy = (float) (MathUtility.getSphereVolume(radius) * eUnitPerBlock);
     }
 
+    @Override
+    protected void postPlace(final IWorldEdit vec)
+    {
 
+        MinecraftForge.EVENT_BUS.post(new BlastEventDestroyBlock.Post(this, BlastEventDestroyBlock.DestructionType.FORCE, world, vec.getBlock(), vec.getBlockMetadata(), (int) vec.x(), (int) vec.y(), (int) vec.z()));
+    }
+
+    @Override
+    protected boolean prePlace(final IWorldEdit vec)
+    {
+        BlastEventBlockEdit event = new BlastEventDestroyBlock.Pre(this, BlastEventDestroyBlock.DestructionType.FORCE, world, vec.getBlock(), vec.getBlockMetadata(), (int) vec.x(), (int) vec.y(), (int) vec.z());
+
+        boolean result = MinecraftForge.EVENT_BUS.post(event);
+        if (vec instanceof BlockEdit && event instanceof BlastEventBlockReplaced.Pre)
+        {
+            ((BlockEdit) vec).set(((BlastEventBlockReplaced.Pre) event).newBlock, ((BlastEventBlockReplaced.Pre) event).newMeta);
+        }
+        return !result;
+    }
+
+    /**
+     * Used to wrapper the blast into a minecraft explosion data object
+     */
     public static class WrapperExplosion extends Explosion
     {
         public final BlastBasic blast;

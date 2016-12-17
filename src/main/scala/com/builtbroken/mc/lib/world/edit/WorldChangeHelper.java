@@ -53,7 +53,7 @@ public final class WorldChangeHelper
                 Engine.error("Error world is null in action object when attempting to trigger " + action);
                 return ChangeResult.FAILED;
             }
-            //Trigger even to allow blocking explosives
+            //Trigger event to allow blocking explosives
             Event event = new WorldChangeActionEvent.ActionCreated(loc, action, triggerCause);
             MinecraftForge.EVENT_BUS.post(event);
 
