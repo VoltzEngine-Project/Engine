@@ -17,7 +17,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -227,14 +226,16 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
     @Override
     public void handleBlockPlacement(IWorldEdit vec)
     {
-        Block block = vec.getBlock();
-        if (vec.getNewBlock() == Blocks.air || vec.getNewBlock() == Blocks.fire)
+        if (vec != null && vec.hasChanged() && prePlace(vec))
         {
+            final Block block = vec.getBlock();
             //TODO add energy value of explosion to this explosion if it is small
             //TODO maybe trigger explosion inside this thread allowing for controlled over lap
             //TODO if we trigger the explosive move most of the energy in the same direction
             //the current explosion is running in with a little bit in the opposite direction
 
+            //TODO check that the block was destroyed (If not modify events fired)
+            //TODO add a damage event for blocks changed instead of destroyed
             //Trigger break event so blocks can do X action
             if (!(block instanceof BlockTNT) && !(vec.getTileEntity() instanceof IExplosive))
             {
@@ -247,6 +248,7 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
             }
 
             vec.place();
+            postPlace(vec);
         }
     }
 
@@ -328,7 +330,6 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
     @Override
     protected void postPlace(final IWorldEdit vec)
     {
-
         MinecraftForge.EVENT_BUS.post(new BlastEventDestroyBlock.Post(this, BlastEventDestroyBlock.DestructionType.FORCE, world, vec.getBlock(), vec.getBlockMetadata(), (int) vec.x(), (int) vec.y(), (int) vec.z()));
     }
 
