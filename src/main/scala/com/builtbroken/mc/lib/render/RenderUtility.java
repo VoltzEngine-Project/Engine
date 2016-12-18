@@ -537,6 +537,7 @@ public class RenderUtility
     public static void renderCube(double x1, double y1, double z1, double x2, double y2, double z2, Block block, IIcon overrideTexture, int meta)
     {
         GL11.glPushMatrix();
+        RenderManager.instance.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         Tessellator t = Tessellator.instance;
 
         GL11.glColor4f(1, 1, 1, 1);
