@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -85,6 +86,7 @@ public class BlastBasic<B extends BlastBasic> extends Blast<B>
 
         //Start path finder
         profile.startSection("Pathfinder");
+        list.add(new BlockEdit(this, Blocks.air, 0));
         triggerPathFinder(map, new BlockEdit(this.world, this.x, this.y, this.z), energy);
         profile.endSection("Pathfinder");
 

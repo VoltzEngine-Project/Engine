@@ -31,7 +31,7 @@ public class CommandVERemove extends SubCommand
         //Find out what entity selector to use
         if (name.equalsIgnoreCase("projectiles"))
         {
-            return EntitySelectors.PLAYER_SELECTOR.selector();
+            return EntitySelectors.PROJECTILE_SELECTOR.selector();
         }
         else if (name.equalsIgnoreCase("mobs"))
         {
