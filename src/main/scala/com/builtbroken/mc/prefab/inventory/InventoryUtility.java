@@ -13,15 +13,17 @@ import com.builtbroken.mc.prefab.inventory.filters.IInventoryFilter;
 import com.builtbroken.mc.prefab.items.ItemStackWrapper;
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryLargeChest;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
@@ -1282,5 +1284,79 @@ public class InventoryUtility
             return true;
         }
         return false;
+    }
+
+
+    /**
+     * Used to get the number of metal armor peices an entity is
+     * wearing
+     * Supports {@link EntityLiving} and {@link EntityPlayer} inventories
+     * fully.
+     * <p>
+     * Supports {@link EntityLivingBase} held item only
+     *
+     * @param entity
+     * @return
+     */
+    public static int getWornMetalCount(Entity entity)
+    {
+        int c = 0;
+        if (entity instanceof EntityPlayer)
+        {
+            for (final ItemStack stack : ((EntityPlayer) entity).inventory.armorInventory)
+            {
+                if (stack != null && stack.getItem() instanceof ItemArmor)
+                {
+                    final ItemArmor.ArmorMaterial mat = ((ItemArmor) stack.getItem()).getArmorMaterial();
+                    if (mat != ItemArmor.ArmorMaterial.CLOTH && mat != ItemArmor.ArmorMaterial.DIAMOND)
+                    {
+                        c += 1;
+                    }
+                }
+            }
+        }
+        else if (entity instanceof EntityCreature)
+        {
+            //Armor is stored in slots 1 - 4, 0 is held item and is taken care of by EntityLivingBase check
+            for (int i = 1; i <= 4; i++)
+            {
+                final ItemStack stack = ((EntityCreature) entity).getEquipmentInSlot(i);
+                if (stack != null && stack.getItem() instanceof ItemArmor)
+                {
+                    final ItemArmor.ArmorMaterial mat = ((ItemArmor) stack.getItem()).getArmorMaterial();
+                    if (mat != ItemArmor.ArmorMaterial.CLOTH && mat != ItemArmor.ArmorMaterial.DIAMOND)
+                    {
+                        c += 1;
+                    }
+                }
+            }
+        }
+
+        if (entity instanceof EntityLivingBase)
+        {
+            if (((EntityLivingBase) entity).getHeldItem() != null)
+            {
+                //TODO make a dictionary of material to item types
+                ItemStack held = ((EntityLivingBase) entity).getHeldItem();
+                Item heldItem = held.getItem();
+                if (heldItem instanceof ItemSword)
+                {
+                    String mat = ((ItemSword) heldItem).getToolMaterialName();
+                    if (mat.equalsIgnoreCase("iron") || mat.equalsIgnoreCase("gold"))
+                    {
+                        c += 1;
+                    }
+                }
+                else if (heldItem instanceof ItemTool)
+                {
+                    String mat = ((ItemTool) heldItem).getToolMaterialName();
+                    if (mat.equalsIgnoreCase("iron") || mat.equalsIgnoreCase("gold"))
+                    {
+                        c += 1;
+                    }
+                }
+            }
+        }
+        return c;
     }
 }

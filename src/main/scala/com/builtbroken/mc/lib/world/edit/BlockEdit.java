@@ -258,6 +258,10 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
         {
             InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), true);
         }
+        if (!newBlock.canPlaceBlockAt(world, xi(), yi(), zi()))
+        {
+            return BlockEditResult.INVALID_PLACEMENT;
+        }
         //Place the block and check if the world says its placed
         if (super.setBlock(world, newBlock, newMeta))
         {
@@ -266,6 +270,12 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
             {
                 //Drops the block
                 InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), true);
+            }
+            //Check to make blocks above this block are removed if invalid
+            Block block = world.getBlock(xi(), yi() + 1, zi());
+            if (!block.canBlockStay(world, xi(), yi() + 1, zi()))
+            {
+                InventoryUtility.dropBlockAsItem(world, xi(), yi() + 1, zi(), true);
             }
             return BlockEditResult.PLACED;
         }

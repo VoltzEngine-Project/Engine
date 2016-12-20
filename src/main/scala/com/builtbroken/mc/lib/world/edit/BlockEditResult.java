@@ -23,5 +23,7 @@ public enum BlockEditResult
     /** Block that was at the original location is no longer the same */
     PREV_BLOCK_CHANGED,
     /** Data provides is invalid */
-    INVALID
+    INVALID,
+    /** Block could not be placed at location */
+    INVALID_PLACEMENT
 }

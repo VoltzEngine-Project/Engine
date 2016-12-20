@@ -28,7 +28,17 @@ public enum DamageSources
         {
             return new DamageThermal(false, entity);
         }
-    });
+    }),
+    /** Radiation source from a microwave */
+    RAD_MICROWAVE(new DamageMicrowave()),
+    /** Radiation source from a conventional radio ative sources */
+    RAD_NUCLEAR(null),
+    /** Radiation source */
+    RAD_X_RAY(null),
+    /** Radiation source */
+    RAD_GAMMA(null),
+    /** Radiation source, sunlight.... should only be used if source is stupidly high */
+    RAD_UV(null);
 
     private DamageSource source;
     private IEntityDamageSource entitySource;
@@ -43,6 +53,7 @@ public enum DamageSources
         this(source);
         this.entitySource = sourceEntity;
     }
+
 
     public DamageSource getSource(Object cause)
     {
