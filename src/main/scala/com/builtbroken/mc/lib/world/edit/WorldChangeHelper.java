@@ -69,7 +69,7 @@ public final class WorldChangeHelper
                 if (!loc.world.isRemote)
                 {
                     //Check if we want to run as a thread
-                    if (action.shouldThreadAction() > 0)
+                    if (action.shouldThreadAction() > 0 || action.shouldThreadAction() == -2)
                     {
                         //Generate thread and return completed as we have no way to track what happens(effectively)
                         WCAThreadProcess thread = new WCAThreadProcess(loc.clone(), action, triggerCause);
