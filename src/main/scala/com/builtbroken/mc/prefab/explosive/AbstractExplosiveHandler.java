@@ -70,7 +70,13 @@ public abstract class AbstractExplosiveHandler implements IExplosiveHandler
      * @param stack
      * @return
      */
-    protected double getYieldModifier(ItemStack stack)
+    public double getYieldModifier(ItemStack stack)
+    {
+        return getYieldModifier();
+    }
+
+    @Override
+    public double getYieldModifier()
     {
         return 1;
     }
