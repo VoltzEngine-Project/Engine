@@ -83,6 +83,7 @@ item.voltzengine:dustPlatinum.name=Platinum Dust
 ## Gem
 item.voltzengine:gemAmazonite.name=Amazonite Gem
 item.voltzengine:gemSmokeyquartz.name=Smokey Quartz Gem
+item.voltzengine:gem.quartz.smoky.uncut.name=Uncut Smokey quartz Gem
 item.voltzengine:gemOnyxblack.name=Black Onyx Gem
 item.voltzengine:gemOnyxred.name=Red Onyx Gem
 item.voltzengine:gemGarnetgreen.name=Green Garnet Gem
@@ -359,6 +360,7 @@ item.voltzengine:sheetMetal.metalSheet_half.name=1/2 Sheet Metal
 item.voltzengine:sheetMetal.metalSheet_quarter.name=1/4 Sheet Metal
 item.voltzengine:sheetMetal.metalSheet_quarter.name=1/4 Sheet Metal
 item.voltzengine:sheetMetal.metalSheet_third.name=1/3 Sheet Metal
+item.voltzengine:sheetMetal.metalSheet_eighth.name=1/8 Sheet Metal
 item.voltzengine:sheetMetal.metalSheetTriangle.name=Sheet Metal Wedge
 item.voltzengine:sheetMetal.metalCone_micro.name=Sheet Metal Cone u
 item.voltzengine:sheetMetal.metalCone_small.name=Sheet Metal Cone s
