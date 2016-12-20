@@ -19,6 +19,9 @@ text.general.power.amount= %1 out of %2 units of power
 ## RF text
 text.rf.power.amount= %1 out of %2 redstone flux
 
+## General - Tooltips
+item.tooltip.description.more=Hold %key for details
+
 ## Power text
 text.power.amount= %1 out of %2 joules
 
