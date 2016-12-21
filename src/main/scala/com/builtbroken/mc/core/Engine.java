@@ -97,10 +97,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 
@@ -167,6 +164,7 @@ public class Engine
     public static boolean enabledHeatMap = true;
     public static boolean log_registering_explosives = false;
 
+    public static boolean XMAS = false;
     /**
      * Conversion ratio of ingot to fluid volume, based on Tinkers *in theory*
      */
@@ -501,6 +499,14 @@ public class Engine
         OreDictionary.registerOre(OreNames.WOOD_STICK, Items.stick);
         OreDictionary.registerOre(OreNames.STRING, Items.string);
         OreDictionary.registerOre(OreNames.FLINT, Items.flint);
+
+
+        Calendar calendar = Calendar.getInstance();
+
+        if (calendar.get(2) + 1 == 12 && calendar.get(5) >= 24 && calendar.get(5) <= 26)
+        {
+            XMAS = true;
+        }
     }
 
     @EventHandler

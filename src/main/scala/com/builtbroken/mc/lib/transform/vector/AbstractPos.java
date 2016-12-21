@@ -234,6 +234,11 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
         return divide(vec.xCoord, vec.yCoord, vec.zCoord);
     }
 
+    @Override
+    public R floor()
+    {
+        return newPos(Math.floor(x()), Math.floor(y()), Math.floor(z()));
+    }
 
     //=========================
     //========NBT==============

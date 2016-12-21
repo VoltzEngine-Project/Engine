@@ -15,6 +15,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -208,9 +209,9 @@ public abstract class EntityAbstractCart extends EntityBase implements IPacketID
             }
         }
 
-        Pos pos = new Pos((Entity) this).floor();
-        Block block = pos.getBlock(worldObj);
-        if (block == null)
+        Pos pos = new Pos(Math.floor(posX), Math.floor(posY), Math.floor(posZ)).floor();
+        Block block = pos.getBlock(world());
+        if (block == Blocks.air)
         {
             pos = pos.add(railSide);
             block = pos.getBlock(worldObj);
