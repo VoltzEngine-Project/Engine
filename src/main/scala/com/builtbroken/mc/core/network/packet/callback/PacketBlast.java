@@ -8,6 +8,8 @@ import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.prefab.explosive.blast.Blast;
 import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.client.Minecraft;
@@ -78,6 +80,7 @@ public class PacketBlast extends AbstractPacket
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
         type = BlastPacketType.values()[buffer.readInt()];

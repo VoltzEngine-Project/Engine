@@ -28,7 +28,10 @@ public abstract class AbstractPacket
      * @see {@link cpw.mods.fml.common.network.ByteBufUtils}
      * @see {@link com.builtbroken.mc.core.network.netty.PacketManager#writeData(io.netty.buffer.ByteBuf, Object...)}
      */
-    public abstract void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer);
+    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
+    {
+
+    }
 
     /**
      * Decode the packet data from the ByteBuf stream. Complex data sets may need specific data handlers
@@ -37,7 +40,10 @@ public abstract class AbstractPacket
      * @param buffer the buffer to decode from
      * @See {@link cpw.mods.fml.common.network.ByteBufUtils}
      */
-    public abstract void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer);
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
+    {
+
+    }
 
     /**
      * Handle a packet on the client side. Note this occurs after decoding has completed.
