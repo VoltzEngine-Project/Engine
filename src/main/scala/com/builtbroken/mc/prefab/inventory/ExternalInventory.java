@@ -39,7 +39,7 @@ public class ExternalInventory extends BasicInventory implements IExternalInvent
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack)
     {
-        return i >= this.getSizeInventory();
+        return i < this.getSizeInventory();
     }
 
     @Override

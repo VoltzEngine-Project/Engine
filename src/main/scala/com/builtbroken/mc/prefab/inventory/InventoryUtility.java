@@ -338,6 +338,37 @@ public class InventoryUtility
         return toInsert;
     }
 
+
+    /**
+     * Called to pull an item from an inventory at the lcoation
+     *
+     * @param position
+     * @param count
+     * @param side
+     * @return
+     */
+    public static ItemStack pullStack(Location position, int count, int side)
+    {
+        return pullStack(position.getTileEntity(), count, side);
+    }
+
+    /**
+     * Called to pull an item from an inventory at the lcoation
+     *
+     * @param tile  - tile to access
+     * @param count
+     * @param side
+     * @return
+     */
+    public static ItemStack pullStack(TileEntity tile, int count, int side)
+    {
+        if (tile instanceof IInventory)
+        {
+            return takeTopItemFromInventory(checkChestInv((IInventory) tile), count, side);
+        }
+        return null;
+    }
+
     /**
      * Tries to place an item into the inventory. If the inventory is not an instance of {@link ISidedInventory} it
      * will ignore the side param.
@@ -1358,5 +1389,62 @@ public class InventoryUtility
             }
         }
         return c;
+    }
+
+    /**
+     * Gets all slots that are contain items
+     *
+     * @param inventory - inventory to search
+     * @return array list of slots
+     */
+    public static ArrayList<Integer> getFilledSlots(IInventory inventory)
+    {
+        ArrayList<Integer> slots = new ArrayList();
+        for (int slot = 0; slot < inventory.getSizeInventory(); slot++)
+        {
+            if (inventory.getStackInSlot(slot) != null)
+            {
+                slots.add(slot);
+            }
+        }
+        return slots;
+    }
+
+    /**
+     * Gets all slots that are completely empty
+     *
+     * @param inventory - inventory to search
+     * @return array list of slots
+     */
+    public static ArrayList<Integer> getEmptySlots(IInventory inventory)
+    {
+        ArrayList<Integer> slots = new ArrayList();
+        for (int slot = 0; slot < inventory.getSizeInventory(); slot++)
+        {
+            if (inventory.getStackInSlot(slot) == null)
+            {
+                slots.add(slot);
+            }
+        }
+        return slots;
+    }
+
+    /**
+     * Gets all slots that are have room for inserting items
+     *
+     * @param inventory - inventory to search
+     * @return array list of slots
+     */
+    public static ArrayList<Integer> getSlotsWithSpace(IInventory inventory)
+    {
+        ArrayList<Integer> slots = new ArrayList();
+        for (int slot = 0; slot < inventory.getSizeInventory(); slot++)
+        {
+            if (roomLeftInSlot(inventory, slot) > 0)
+            {
+                slots.add(slot);
+            }
+        }
+        return slots;
     }
 }

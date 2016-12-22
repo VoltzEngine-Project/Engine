@@ -8,10 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Simple inventory implementation
@@ -27,6 +24,9 @@ public class BasicInventory implements ISave, IInventory, Iterable<Map.Entry<Int
      * used to adjust save/load process accordingly
      */
     protected int shiftSlotStart = 0;
+
+    protected boolean recalculateFillStatus = true;
+    protected boolean isFull = false;
 
     /** Map of the inventory */
     protected HashMap<Integer, ItemStack> inventoryMap = new HashMap();
@@ -121,6 +121,7 @@ public class BasicInventory implements ISave, IInventory, Iterable<Map.Entry<Int
             }
             if (!InventoryUtility.stacksMatchExact(pre_stack, getStackInSlot(slot)))
             {
+                recalculateFillStatus = true;
                 onInventoryChanged(slot, pre_stack, getStackInSlot(slot));
             }
         }
@@ -238,6 +239,40 @@ public class BasicInventory implements ISave, IInventory, Iterable<Map.Entry<Int
     public boolean isEmpty()
     {
         return inventoryMap.isEmpty();
+    }
+
+    public boolean isFull()
+    {
+        if (recalculateFillStatus)
+        {
+            recalculateFillStatus = false;
+
+            for (int i = 0; i < getSizeInventory(); i++)
+            {
+                if (InventoryUtility.roomLeftInSlot(this, i) > 0)
+                {
+                    isFull = false;
+                    return false;
+                }
+            }
+            isFull = true;
+        }
+        return isFull;
+    }
+
+    public ArrayList<Integer> getFilledSlots()
+    {
+        return InventoryUtility.getFilledSlots(this);
+    }
+
+    public ArrayList<Integer> getEmptySlots()
+    {
+        return InventoryUtility.getEmptySlots(this);
+    }
+
+    public ArrayList<Integer> getSlotsWithSpace()
+    {
+        return InventoryUtility.getSlotsWithSpace(this);
     }
 
     @Override
