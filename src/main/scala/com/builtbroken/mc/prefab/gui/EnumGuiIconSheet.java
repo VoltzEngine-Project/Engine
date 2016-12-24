@@ -1,6 +1,6 @@
 package com.builtbroken.mc.prefab.gui;
 
-import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.client.SharedAssets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
@@ -61,7 +61,7 @@ public enum EnumGuiIconSheet
 
     public void draw(Gui gui, int x, int y)
     {
-        Minecraft.getMinecraft().renderEngine.bindTexture(References.GUI_COMPONENTS);
+        Minecraft.getMinecraft().renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
         gui.drawTexturedModalRect(x, y, this.x, this.y, width, height);
     }
 }

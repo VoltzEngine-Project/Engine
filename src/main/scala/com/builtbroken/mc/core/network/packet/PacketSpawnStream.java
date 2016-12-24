@@ -2,8 +2,8 @@ package com.builtbroken.mc.core.network.packet;
 
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -126,11 +126,11 @@ public class PacketSpawnStream extends PacketType
             }
             else if (type == 1)
             {
-                Engine.proxy.spawnBeamFx(References.GREY_TEXTURE, player.worldObj, new Pos(x, y, z), new Pos(vx, vy, vz), Color.RED, 5);
+                Engine.proxy.spawnBeamFx(SharedAssets.GREY_TEXTURE, player.worldObj, new Pos(x, y, z), new Pos(vx, vy, vz), Color.RED, 5);
             }
             else if (type == 2)
             {
-                Engine.proxy.spawnBeamFx(References.GREY_TEXTURE, player.worldObj, new Pos(x, y, z), new Pos(vx, vy, vz), new Color(red, green, blue), 5);
+                Engine.proxy.spawnBeamFx(SharedAssets.GREY_TEXTURE, player.worldObj, new Pos(x, y, z), new Pos(vx, vy, vz), new Color(red, green, blue), 5);
             }
         }
     }

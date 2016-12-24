@@ -1,6 +1,6 @@
 package com.builtbroken.mc.prefab.gui.buttons;
 
-import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.prefab.gui.GuiButton2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -25,7 +25,7 @@ public class GuiLeftRightArrowButton extends GuiButton2
     {
         if (this.visible)
         {
-            mc.getTextureManager().bindTexture(References.GUI_COMPONENTS);
+            mc.getTextureManager().bindTexture(SharedAssets.GUI_COMPONENTS);
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 

@@ -1,8 +1,5 @@
 package com.builtbroken.mc.core;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
@@ -32,21 +29,6 @@ public final class References
     public static final String CHANNEL = "voltzengine";
     public static final String TEXTURE_DIRECTORY = "textures/";
     public static final String GUI_DIRECTORY = TEXTURE_DIRECTORY + "gui/";
-
-    /** @Deprecated Moved to {@link com.builtbroken.mc.client.SharedAssets} */
-    @SideOnly(Side.CLIENT)
-    @Deprecated
-    public static final ResourceLocation GUI_EMPTY_FILE = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "gui_empty.png");
-    @SideOnly(Side.CLIENT)
-    public static final ResourceLocation GUI_BASE = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "gui_base.png");
-    @SideOnly(Side.CLIENT)
-    public static final ResourceLocation GUI__MC_EMPTY_FILE = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "mc_base_empty.png");
-    @SideOnly(Side.CLIENT)
-    public static final ResourceLocation GUI_MC_BASE = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "mc_base.png");
-    @SideOnly(Side.CLIENT)
-    public static final ResourceLocation GUI_COMPONENTS = new ResourceLocation(DOMAIN, GUI_DIRECTORY + "gui_components.png");
-    @SideOnly(Side.CLIENT)
-    public static final ResourceLocation GREY_TEXTURE = new ResourceLocation(DOMAIN, TEXTURE_DIRECTORY + "models/grey.png");
 
     public static final String BLOCK_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "blocks/";
     public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items/";

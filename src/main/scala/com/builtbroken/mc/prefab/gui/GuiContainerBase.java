@@ -3,8 +3,8 @@ package com.builtbroken.mc.prefab.gui;
 import com.builtbroken.jlib.data.Colors;
 import com.builtbroken.jlib.data.science.units.UnitDisplay;
 import com.builtbroken.jlib.data.science.units.UnitDisplay.Unit;
+import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.render.RenderUtility;
 import com.builtbroken.mc.lib.transform.region.Rectangle;
@@ -50,13 +50,13 @@ public class GuiContainerBase extends GuiContainer
     public GuiContainerBase(Container container)
     {
         super(container);
-        this.baseTexture = References.GUI_MC_BASE;
+        this.baseTexture = SharedAssets.GUI_MC_BASE;
     }
 
     public GuiContainerBase()
     {
         this(new ContainerDummy());
-        this.baseTexture = References.GUI_MC_BASE;
+        this.baseTexture = SharedAssets.GUI_MC_BASE;
     }
 
     @Override
@@ -297,7 +297,7 @@ public class GuiContainerBase extends GuiContainer
 
     protected void drawSlot(int x, int y, GuiSlotType type, float r, float g, float b)
     {
-        this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+        this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
         GL11.glColor4f(r, g, b, 1.0F);
 
         this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
@@ -315,7 +315,7 @@ public class GuiContainerBase extends GuiContainer
 
     protected void drawBar(int x, int y, float scale, Color color)
     {
-        this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+        this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
         if (color == null)
         {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -338,7 +338,7 @@ public class GuiContainerBase extends GuiContainer
 
     protected void drawElectricity(int x, int y, float scale)
     {
-        this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+        this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         /** Draw background progress bar/ */
@@ -353,7 +353,7 @@ public class GuiContainerBase extends GuiContainer
 
     protected void drawMeter(int x, int y, float scale, float r, float g, float b)
     {
-        this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+        this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         /** Draw the background meter. */
@@ -371,7 +371,7 @@ public class GuiContainerBase extends GuiContainer
 
     protected void drawMeter(int x, int y, float scale, FluidStack liquidStack)
     {
-        this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+        this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -385,7 +385,7 @@ public class GuiContainerBase extends GuiContainer
         }
 
         /** Draw measurement lines */
-        this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+        this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
         this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, meterWidth, meterHeight);
     }
 
