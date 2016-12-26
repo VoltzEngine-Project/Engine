@@ -544,18 +544,34 @@ public class InventoryUtility
     }
 
     /**
+     * Gets the first slot containing items ignoring ISided or filter settings
+     * <p>
+     * Does not actually consume the items
+     *
+     * @param inventory - inventory to search for items
+     * @param stackSize - amount to remove
+     * @return pair containing the removed stack, and item
+     */
+    public static Pair<ItemStack, Integer> findFirstItemInInventory(IInventory inventory, int stackSize)
+    {
+        return findFirstItemInInventory(inventory, -1, stackSize);
+    }
+
+    /**
      * Gets the first slot containing items
      * <p>
      * Does not actually consume the items
      *
      * @param inventory - inventory to search for items
      * @param side      - side to access, used for {@link ISidedInventory}
+     *                  If this value is not between 0-5 it will not use
+     *                  ISideInventory and instead bypass the sided checks
      * @param stackSize - amount to remove
      * @return pair containing the removed stack, and item
      */
     public static Pair<ItemStack, Integer> findFirstItemInInventory(IInventory inventory, int side, int stackSize, IInventoryFilter filter)
     {
-        if (!(inventory instanceof ISidedInventory))
+        if (!(inventory instanceof ISidedInventory) || side == -1 || side > 5)
         {
             for (int i = inventory.getSizeInventory() - 1; i >= 0; i--)
             {
@@ -600,7 +616,6 @@ public class InventoryUtility
                 }
             }
         }
-
         return null;
     }
 

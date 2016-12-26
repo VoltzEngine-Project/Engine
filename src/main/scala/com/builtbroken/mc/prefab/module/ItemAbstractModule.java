@@ -5,7 +5,7 @@ import com.builtbroken.mc.api.items.IItemHasMass;
 import com.builtbroken.mc.api.modules.IModule;
 import com.builtbroken.mc.api.modules.IModuleHasMass;
 import com.builtbroken.mc.api.modules.IModuleItem;
-import net.minecraft.item.Item;
+import com.builtbroken.mc.prefab.items.ItemAbstract;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 10/26/2015.
  */
-public abstract class ItemAbstractModule<I extends IModule> extends Item implements IModuleItem, IItemHasMass
+public abstract class ItemAbstractModule<I extends IModule> extends ItemAbstract implements IModuleItem, IItemHasMass
 {
     @Override
     public String getUnlocalizedName(ItemStack stack)

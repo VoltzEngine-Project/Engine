@@ -14,13 +14,25 @@ import java.util.Set;
 /**
  * Created by robert on 12/28/2014.
  */
-public class ModuleBuilder
+public class ModuleBuilder<C extends IModule>
 {
+    /** Common ID used to save modules to NBT */
     public static final String SAVE_ID = "moduleID";
-    HashBiMap<String, Class<? extends AbstractModule>> idToCLassMap = HashBiMap.create();
+    /** Map of builder names to module set builders. */
+    public static final HashMap<String, ModuleBuilder> MODULE_BUILDERS = new HashMap();
+
+    HashBiMap<String, Class<C>> idToCLassMap = HashBiMap.create();
     HashMap<String, List<String>> modToModules = new HashMap();
 
-    protected boolean register(String mod_id, String name, Class<? extends AbstractModule> clazz)
+    /**
+     * Registers a module to be built by this builder
+     *
+     * @param mod_id - unique mod ID
+     * @param name   - unique module ID
+     * @param clazz  - class of the module, must have a constructor that takes an {@link ItemStack}
+     * @return true if the module registers correctly
+     */
+    protected boolean register(String mod_id, String name, Class<C> clazz)
     {
         //Value checks to prevent other modders from making mistakes
         if (clazz == null)
@@ -64,19 +76,36 @@ public class ModuleBuilder
         return false;
     }
 
+    /**
+     * Is the module by the ID registers
+     *
+     * @param id - unique id for the module
+     * @return true if the module is registered
+     */
     public boolean isRegistered(String id)
     {
         return this.idToCLassMap.containsKey(id);
     }
 
+    /**
+     * Gets all registered IDs for modules
+     *
+     * @return set of module keys
+     */
     public Set<String> getIDs()
     {
         return idToCLassMap.keySet();
     }
 
-    public String getID(AbstractModule module)
+    /**
+     * Gets the ID for the module
+     *
+     * @param module - module
+     * @return ID
+     */
+    public String getID(C module)
     {
-        Class<? extends AbstractModule> clazz = module.getClass();
+        Class clazz = module.getClass();
         if (idToCLassMap.inverse().containsKey(clazz))
         {
             return idToCLassMap.inverse().get(clazz);
@@ -91,7 +120,7 @@ public class ModuleBuilder
      *              to use to construct the module
      * @return the module or null if something went wrong
      */
-    public IModule build(ItemStack stack)
+    public C build(ItemStack stack)
     {
         if (stack != null && stack.getTagCompound() != null && stack.getTagCompound().hasKey(SAVE_ID))
         {
@@ -102,27 +131,41 @@ public class ModuleBuilder
                 {
                     try
                     {
-                        return idToCLassMap.get(id).getConstructor(ItemStack.class).newInstance(stack).load();
-                    } catch (InstantiationException e)
+                        C instance = idToCLassMap.get(id).getConstructor(ItemStack.class).newInstance(stack);
+                        instance.load(stack.getTagCompound());
+                        return instance;
+                    }
+                    catch (InstantiationException e)
                     {
                         Engine.logger().error("ModuleBuilder failed to create module from class " + idToCLassMap.get(id));
                         if (Engine.runningAsDev)
+                        {
                             e.printStackTrace();
-                    } catch (IllegalAccessException e)
+                        }
+                    }
+                    catch (IllegalAccessException e)
                     {
                         Engine.logger().error("ModuleBuilder was prevented access to class " + idToCLassMap.get(id));
                         if (Engine.runningAsDev)
+                        {
                             e.printStackTrace();
-                    } catch (NoSuchMethodException e)
+                        }
+                    }
+                    catch (NoSuchMethodException e)
                     {
                         Engine.logger().error("ModuleBuilder failed to find  constructor(ItemStack.class) for class " + idToCLassMap.get(id));
                         if (Engine.runningAsDev)
+                        {
                             e.printStackTrace();
-                    } catch (InvocationTargetException e)
+                        }
+                    }
+                    catch (InvocationTargetException e)
                     {
                         Engine.logger().error("ModuleBuilder failed to invoke constructor(ItemStack.class) for class " + idToCLassMap.get(id));
                         if (Engine.runningAsDev)
+                        {
                             e.printStackTrace();
+                        }
                     }
                 }
                 else
@@ -134,12 +177,16 @@ public class ModuleBuilder
         else if (stack != null)
         {
             if (Engine.runningAsDev)
+            {
                 Engine.logger().error("ModuleBuilder failed to create module due to NBT data being " + (stack.getTagCompound() == null ? "null" : "invalid ") + " for item stack " + stack);
+            }
         }
         else
         {
             if (Engine.runningAsDev)
+            {
                 Engine.logger().error("ModuleBuilder failed to create module due to stack being null");
+            }
         }
         return null;
     }
