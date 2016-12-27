@@ -32,7 +32,7 @@ public class ModuleBuilder<C extends IModule>
      * @param clazz  - class of the module, must have a constructor that takes an {@link ItemStack}
      * @return true if the module registers correctly
      */
-    protected boolean register(String mod_id, String name, Class<C> clazz)
+    public boolean register(String mod_id, String name, Class<C> clazz)
     {
         //Value checks to prevent other modders from making mistakes
         if (clazz == null)
