@@ -69,11 +69,12 @@ public class GuiContainerBase extends GuiContainer
 
     /**
      * Adds a button to the GUI
+     *
      * @param button
      * @param <E>
      * @return
      */
-    protected  <E extends GuiButton> E addButton(E button)
+    protected <E extends GuiButton> E addButton(E button)
     {
         buttonList.add(button);
         return button;
@@ -206,6 +207,7 @@ public class GuiContainerBase extends GuiContainer
         this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
     }
 
+    //TODO update and docs
     protected void drawBulb(int x, int y, boolean isOn)
     {
         this.mc.renderEngine.bindTexture(this.baseTexture);
@@ -222,6 +224,7 @@ public class GuiContainerBase extends GuiContainer
         }
     }
 
+    //TODO update and docs
     protected void drawSlot(int x, int y, ItemStack itemStack)
     {
         this.mc.renderEngine.bindTexture(this.baseTexture);
@@ -235,6 +238,7 @@ public class GuiContainerBase extends GuiContainer
         }
     }
 
+    //TODO update and docs
     protected void drawItemStack(ItemStack itemStack, int x, int y)
     {
         x += 1;
@@ -248,11 +252,13 @@ public class GuiContainerBase extends GuiContainer
         // GL11.glDisable(GL11.GL_BLEND);
     }
 
+    //TODO update and docs
     protected void drawTextWithTooltip(String textName, String format, int x, int y, int mouseX, int mouseY)
     {
         this.drawTextWithTooltip(textName, format, x, y, mouseX, mouseY, 4210752);
     }
 
+    //TODO update and docs
     protected void drawTextWithTooltip(String textName, String format, int x, int y, int mouseX, int mouseY, int color)
     {
         String name = LanguageUtility.getLocal("gui." + textName + ".name");
@@ -270,31 +276,36 @@ public class GuiContainerBase extends GuiContainer
         }
     }
 
+    //TODO update and docs
     protected void drawTextWithTooltip(String textName, int x, int y, int mouseX, int mouseY)
     {
         this.drawTextWithTooltip(textName, "%1", x, y, mouseX, mouseY);
     }
 
+    //TODO update and docs
     protected void drawSlot(Slot slot)
     {
         drawSlot(slot.xDisplayPosition - 1, slot.yDisplayPosition - 1); //TODO get slot type from slot
-        if(Engine.runningAsDev)
+        if (Engine.runningAsDev)
         {
             this.drawStringCentered("" + slot.getSlotIndex(), guiLeft + slot.xDisplayPosition + 9, guiTop + slot.yDisplayPosition + 9, Color.YELLOW);
             this.drawStringCentered("" + slot.slotNumber, guiLeft + slot.xDisplayPosition + 9, guiTop + slot.yDisplayPosition + 1, Color.RED);
         }
     }
 
+    //TODO update and docs
     protected void drawSlot(int x, int y)
     {
         this.drawSlot(x, y, GuiSlotType.NONE);
     }
 
+    //TODO update and docs
     protected void drawSlot(int x, int y, GuiSlotType type)
     {
         this.drawSlot(x, y, type, 1, 1, 1);
     }
 
+    //TODO update and docs
     protected void drawSlot(int x, int y, GuiSlotType type, float r, float g, float b)
     {
         this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
@@ -308,14 +319,159 @@ public class GuiContainerBase extends GuiContainer
         }
     }
 
-    protected void drawBar(int x, int y, float scale)
-    {
-        drawBar(x, y, scale, null);
-    }
-
-    protected void drawBar(int x, int y, float scale, Color color)
+    /**
+     * Draws a large green fill bar, with background, for
+     * use in rendering gauges or progress bars
+     *
+     * @param x       - render pos
+     * @param y       - render pos
+     * @param percent - 0f to 1f on how full the bar should render
+     * @param color   - color of the bar, null uses default
+     */
+    public void drawLargeBar(int x, int y, int w, float percent, Color color)
     {
         this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
+
+        int width = Math.round(percent * 138);
+        //Draws bar background
+        setColor(null);
+        drawRectWithScaledWidth(containerWidth + x, containerHeight + y, 54, 33, 140, 15, w);
+        //draws the percent fill bar
+        setColor(color);
+        drawRectWithScaledWidth(containerWidth + x + 1, containerHeight + y + 1, 55, 65, width, 13, w);
+    }
+
+    /**
+     * Draws a smaller green fill bar than {@link #drawLargeBar(int, int, int, float, Color)},
+     * with background, for use in rendering gauges or progress bars
+     *
+     * @param x       - render pos
+     * @param y       - render pos
+     * @param percent - 0f to 1f on how full the bar should render
+     * @param color   - color of the bar, null uses default
+     */
+    public void drawSmallBar(int x, int y, int w, float percent, Color color)
+    {
+        this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
+
+        final int width = Math.round(percent * 105);
+        //Draws bar background
+        setColor(null);
+        drawRectWithScaledWidth(containerWidth + x, containerHeight + y, 54, 0, 107, 11, w);
+
+        //draws the percent fill bar
+        setColor(color);
+        drawRectWithScaledWidth(containerWidth + x + 1, containerHeight + y + 1, 55, 24, width, 9, w);
+    }
+
+    /**
+     * Draws a smaller green fill bar than {@link #drawSmallBar(int, int, int, float, Color)},
+     * with background, for use in rendering gauges or progress bars
+     *
+     * @param x       - render pos
+     * @param y       - render pos
+     * @param percent - 0f to 1f on how full the bar should render
+     * @param color   - color of the bar, null uses default
+     */
+    public void drawMicroBar(int x, int y, float percent, Color color)
+    {
+        drawMicroBar(x, y, -1, percent, color);
+    }
+
+    /**
+     * Draws a smaller green fill bar than {@link #drawSmallBar(int, int, int, float, Color)},
+     * with background, for use in rendering gauges or progress bars
+     *
+     * @param x       - render pos
+     * @param y       - render pos
+     * @param w       - width of the bar, min 6
+     * @param percent - 0f to 1f on how full the bar should render
+     * @param color   - color of the bar, null uses default
+     */
+    public void drawMicroBar(int x, int y, int w, float percent, Color color)
+    {
+        //Local constants
+        final int backgroundWidth = 56;
+        final int fillBarWidth = 54;
+
+        //Test texture to correct resource
+        this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
+
+
+        //Render background bar
+        setColor(null);
+        drawRectWithScaledWidth(containerWidth + x, containerHeight + y, 54, 79, backgroundWidth, 7, w);
+
+
+        //Render foreground bar
+        final int width = Math.round(percent * fillBarWidth);
+        setColor(color);
+        drawRectWithScaledWidth(containerWidth + x + 1, containerHeight + y + 1, 55, 87, width, 5, w - 2);
+    }
+
+    /**
+     * Draws a rectangle with an increased or decreased width value
+     * <p>
+     * This works by duplicating the middle (3, width - 3) of the rectangle
+     *
+     * @param x        - render pos
+     * @param y        - render pos
+     * @param u        - x pos of the texture in it's texture sheet
+     * @param v        - y pos of the texture in it's texture sheet
+     * @param width    - width of the texture
+     * @param height   - height of the texture
+     * @param newWidth - new width to render the rectangle, minimal size of 6
+     */
+    protected void drawRectWithScaledWidth(int x, int y, int u, int v, int width, int height, int newWidth)
+    {
+        if(width > 0)
+        {
+            //If both widths are the same redirect to original call
+            if (newWidth <= 0 || width == newWidth)
+            {
+                drawTexturedModalRect(x, y, u, v, width, height);
+            }
+
+            //Size of the middle section of the image
+            final int midWidth = width - 6;
+
+            //Start cap of image rect
+            drawTexturedModalRect(x, y, u, v, 3, height);
+            x += 3;
+
+            //only render middle if it is larger than 6
+            if (newWidth > 6)
+            {
+                //Loop over number of sections that need to be rendered
+                int loops = newWidth / width;
+                while (loops > 0)
+                {
+                    drawTexturedModalRect(x, y, u + 3, v, midWidth, height);
+                    x += midWidth;
+                    loops -= 1;
+                }
+
+                //Check if there is a remainder that still needs rendered
+                loops = newWidth % width;
+                if (loops != 0)
+                {
+                    drawTexturedModalRect(x, y, u + 3, v, loops, height);
+                    x += loops;
+                }
+            }
+
+            //End cap of image rect
+            drawTexturedModalRect(x, y, u + width - 3, v, 3, height);
+        }
+    }
+
+    /**
+     * Sets the render color for the GUI render
+     *
+     * @param color - color, null will force default
+     */
+    protected void setColor(Color color)
+    {
         if (color == null)
         {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -324,18 +480,9 @@ public class GuiContainerBase extends GuiContainer
         {
             GL11.glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
         }
-
-        /** Draw background progress bar/ */
-        this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 18, 0, 22, 15);
-
-        if (scale > 0)
-        {
-            /** Draw white color actual progress. */
-            this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 18, 15, 22 - (int) (scale * 22), 15);
-        }
     }
 
-
+    //TODO update and docs
     protected void drawElectricity(int x, int y, float scale)
     {
         this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
@@ -351,6 +498,7 @@ public class GuiContainerBase extends GuiContainer
         }
     }
 
+    //TODO update and docs
     protected void drawMeter(int x, int y, float scale, float r, float g, float b)
     {
         this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
@@ -369,6 +517,7 @@ public class GuiContainerBase extends GuiContainer
         this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, this.meterWidth, this.meterHeight);
     }
 
+    //TODO update and docs
     protected void drawMeter(int x, int y, float scale, FluidStack liquidStack)
     {
         this.mc.renderEngine.bindTexture(SharedAssets.GUI_COMPONENTS);
@@ -404,11 +553,13 @@ public class GuiContainerBase extends GuiContainer
         this.drawSlot(x, y, type, 1, 1, 1);
     }
 
+    //TODO update and docs
     public void renderUniversalDisplay(int x, int y, double energy, int mouseX, int mouseY, Unit unit)
     {
         renderUniversalDisplay(x, y, energy, mouseX, mouseY, unit, false);
     }
 
+    //TODO update and docs
     public void renderUniversalDisplay(int x, int y, double energy, double maxEnergy, int mouseX, int mouseY, Unit unit, boolean symbol)
     {
         String displaySuffix = "";
@@ -451,6 +602,7 @@ public class GuiContainerBase extends GuiContainer
         fontRendererObj.drawString(display, x, y, 4210752);
     }
 
+    //TODO update and docs
     public void renderUniversalDisplay(int x, int y, double energy, int mouseX, int mouseY, Unit unit, boolean small)
     {
         String displaySuffix = "";
@@ -491,6 +643,7 @@ public class GuiContainerBase extends GuiContainer
         fontRendererObj.drawString(display, x, y, 4210752);
     }
 
+    //TODO update and docs
     public void drawTooltip(int x, int y, String... toolTips)
     {
         if (!GuiScreen.isShiftKeyDown())
