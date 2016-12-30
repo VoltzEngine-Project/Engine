@@ -406,7 +406,7 @@ public class GuiContainerBase extends GuiContainer
         //Render foreground bar
         final int width = Math.round(percent * fillBarWidth);
         setColor(color);
-        drawRectWithScaledWidth(containerWidth + x + 1, containerHeight + y + 1, 55, 87, width, 5, w - 2);
+        drawRectWithScaledWidth(containerWidth + x + 1, containerHeight + y + 1, 55, 87, width, 5, (int) ((w - 2) * percent));
     }
 
     /**
@@ -460,8 +460,11 @@ public class GuiContainerBase extends GuiContainer
                 }
             }
 
-            //End cap of image rect
-            drawTexturedModalRect(x, y, u + width - 3, v, 3, height);
+            if(width > 3)
+            {
+                //End cap of image rect
+                drawTexturedModalRect(x, y, u + width - 3, v, 3, height);
+            }
         }
     }
 
