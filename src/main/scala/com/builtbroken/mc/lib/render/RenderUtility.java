@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.render;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.lib.world.WorldUtility;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -537,7 +538,7 @@ public class RenderUtility
     public static void renderCube(double x1, double y1, double z1, double x2, double y2, double z2, Block block, IIcon overrideTexture, int meta)
     {
         GL11.glPushMatrix();
-        if(RenderManager.instance != null && RenderManager.instance.renderEngine != null && TextureMap.locationBlocksTexture != null)
+        if (RenderManager.instance != null && RenderManager.instance.renderEngine != null && TextureMap.locationBlocksTexture != null)
         {
             RenderManager.instance.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         }
@@ -588,11 +589,23 @@ public class RenderUtility
      * @param side
      * @return
      */
-    public static IIcon getTextureSafe(Block block, int meta, int side)
+    public static IIcon getTextureSafe(Block block, int side, int meta)
     {
         if (block != null)
         {
-            IIcon icon = block.getIcon(side, meta);
+            IIcon icon = null;
+
+            try
+            {
+                icon = block.getIcon(side, meta);
+            }
+            catch (Exception e)
+            {
+                if (Engine.runningAsDev)
+                {
+                    Engine.logger().error("Error getting icon for " + block + " M:" + meta + " S:" + side, e);
+                }
+            }
             if (icon == null)
             {
                 return Blocks.stone.getIcon(0, 0);
