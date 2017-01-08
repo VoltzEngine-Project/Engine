@@ -128,6 +128,7 @@ public class InteractionHandler
                                         event.entityPlayer.inventory.markDirty();
                                     }
                                 }
+                                event.entityPlayer.inventoryContainer.detectAndSendChanges();
                             }
                         } catch (Exception e)
                         {
