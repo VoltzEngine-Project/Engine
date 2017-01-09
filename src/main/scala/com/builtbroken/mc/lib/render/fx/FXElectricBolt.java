@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.render.fx;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -57,7 +58,7 @@ public class FXElectricBolt extends EntityFX
 	 */
 	private boolean isCalculated;
 
-	public FXElectricBolt(World world, Pos startVec, Pos targetVec, long seed)
+	public FXElectricBolt(World world, IPos3D startVec, IPos3D targetVec, long seed)
 	{
 		super(world, startVec.x(), startVec.y(), startVec.z(), 0.0D, 0.0D, 0.0D);
 
@@ -70,8 +71,8 @@ public class FXElectricBolt extends EntityFX
 			this.rand = new Random(seed);
 		}
 
-		this.start = startVec;
-		this.end = targetVec;
+		this.start = new Pos(startVec);
+		this.end = new Pos(targetVec);
 		/** By default, we do an electrical color */
 		this.particleAge = (3 + this.rand.nextInt(3) - 1);
 		this.particleRed = 0.55f + (this.rand.nextFloat() * 0.1f);
