@@ -94,7 +94,7 @@ public class Cube extends Shape3D implements Cloneable, IByteBufWriter
 
     public AxisAlignedBB toAABB()
     {
-        return isValid() ? AxisAlignedBB.getBoundingBox(min().x(), min().y(), min().z(), max().x(), max().y(), max().z()) : null;
+        return isValid() ? AxisAlignedBB.getBoundingBox(min().x(), min().y(), min().z(), max().x(), max().y(), max().z()) : AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
     }
 
     public Rectangle toRectangle()
