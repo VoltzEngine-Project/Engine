@@ -9,6 +9,7 @@ import com.builtbroken.mc.api.tile.IPlayerUsing;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
+import com.builtbroken.mc.core.network.IPacketReceiver;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.MathUtility;
@@ -1349,7 +1350,7 @@ public abstract class Tile extends TileEntityBase implements IWorldPosition, IPl
      */
     protected boolean canHandlePackets()
     {
-        return this instanceof IPacketIDReceiver || this instanceof IPacketIDReceiver;
+        return this instanceof IPacketIDReceiver || this instanceof IPacketReceiver;
     }
 
     /**
