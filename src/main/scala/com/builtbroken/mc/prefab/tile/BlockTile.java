@@ -1,5 +1,8 @@
 package com.builtbroken.mc.prefab.tile;
 
+import com.builtbroken.jlib.data.Colors;
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Point;
 import com.builtbroken.mc.lib.transform.vector.Pos;
@@ -17,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
@@ -29,14 +33,29 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by robert on 1/4/2015.
+ * Wrapper class used to encapsulate all block calls to the {@link Tile} object
+ * allowing for developers to focus on content creation rather than duplicate
+ * method calls, tile get calls, location checks, and wrappers to the {@link TileEntity}.
+ * <p>
+ * This class is designed to make creating complex tiles easier and should not
+ * be used for simple blocks. If the block only requires a few changes and a texture
+ * please use the normal block class. As this will remove the performance overhead
+ * that comes with using this system.
+ * <p>
+ * Created by Robert(DarkGuardsman, DarkCow) on 1/4/2015.
  */
 public class BlockTile extends BlockContainer
 {
+    /** Wrapper for any block call that does not go to the {@link TileEntity} version of the {@line Tile} object */
     public Tile staticTile = null;
 
-    private boolean hasTile = false;
-
+    /**
+     * Creates a new instance of the BlockTile
+     *
+     * @param tile   - static tile
+     * @param prefix - mod prefix
+     * @param tab    - default creative tab to use
+     */
     public BlockTile(Tile tile, String prefix, CreativeTabs tab)
     {
         super(tile.material);
@@ -186,7 +205,7 @@ public class BlockTile extends BlockContainer
     @Override
     public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ)
     {
-        if(!(world instanceof World) || !((World) world).isRemote)
+        if (!(world instanceof World) || !((World) world).isRemote)
         {
             Tile tile = inject(world, x, y, z);
             tile.onNeighborChanged(new Pos(tileX, tileY, tileZ));
@@ -197,10 +216,19 @@ public class BlockTile extends BlockContainer
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
     {
-        Tile tile = inject(world, x, y, z);
-        boolean value = tile.onPlayerActivated(player, side, new Pos(hitX, hitY, hitZ));
-        eject();
-        return value;
+        try
+        {
+            Tile tile = inject(world, x, y, z);
+            boolean value = tile.onPlayerActivated(player, side, new Pos(hitX, hitY, hitZ));
+            eject();
+            return value;
+        }
+        catch (Exception e)
+        {
+            outputError(world, x, y, z, "while right click block on side " + side, e);
+            player.addChatComponentMessage(new ChatComponentText(Colors.RED.code + LanguageUtility.getLocal("blockTile.error.onBlockActivated")));
+        }
+        return false;
     }
 
     @Override
@@ -428,7 +456,10 @@ public class BlockTile extends BlockContainer
     {
         Tile tile = inject(access, x, y, z);
         Cube cube = tile.getBlockBounds();
-        setBlockBounds(cube.min().xf(), cube.min().yf(), cube.min().zf(), cube.max().xf(), cube.max().yf(), cube.max().zf());
+        if (cube != null)
+        {
+            setBlockBounds(cube.min().xf(), cube.min().yf(), cube.min().zf(), cube.max().xf(), cube.max().yf(), cube.max().zf());
+        }
         eject();
     }
 
@@ -436,7 +467,10 @@ public class BlockTile extends BlockContainer
     public void setBlockBoundsForItemRender()
     {
         Cube cube = staticTile.getBlockBounds();
-        setBlockBounds(cube.min().xf(), cube.min().yf(), cube.min().zf(), cube.max().xf(), cube.max().yf(), cube.max().zf());
+        if(cube != null)
+        {
+            setBlockBounds(cube.min().xf(), cube.min().yf(), cube.min().zf(), cube.max().xf(), cube.max().yf(), cube.max().zf());
+        }
     }
 
     @Override
@@ -461,9 +495,18 @@ public class BlockTile extends BlockContainer
         int t = tile.tickRate();
         eject();
         return t;
-
     }
 
+    /**
+     * Converts the 3D location data of the face being clicked
+     * into a 2D {@link Point} for easier calculations
+     *
+     * @param hitSide - side of the block clicked
+     * @param hitX    - location
+     * @param hitY    - location
+     * @param hitZ    - location
+     * @return {@link Point}
+     */
     public static Point getClickedFace(Byte hitSide, float hitX, float hitY, float hitZ)
     {
         switch (hitSide)
@@ -510,11 +553,34 @@ public class BlockTile extends BlockContainer
         return tileEntity instanceof Tile ? (Tile) tileEntity : staticTile;
     }
 
+    /**
+     * Resets the cached location data to nil
+     */
     public void eject()
     {
         staticTile.setWorldObj(null);
         staticTile.xCoord = 0;
         staticTile.yCoord = 0;
         staticTile.zCoord = 0;
+    }
+
+    /**
+     * Outputs an error to console with location data
+     *
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @param msg
+     * @param e
+     */
+    protected void outputError(World world, int x, int y, int z, String msg, Throwable e)
+    {
+        String dim = "null";
+        if (world != null && world.provider != null)
+        {
+            dim = "" + world.provider.dimensionId;
+        }
+        Engine.logger().error("Error: " + msg + " \nLocation[" + dim + "w " + x + "x " + y + "y " + z + "z" + "]", e);
     }
 }

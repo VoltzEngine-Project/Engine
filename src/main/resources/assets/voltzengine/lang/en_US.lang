@@ -499,3 +499,6 @@ root.inventory.output=Output Inventory
 root.inventory.enable=Enable Inventory
 root.inventory.disable=Disable Inventory
 root.inventory.modify=Modify Inventory
+
+## Block Tile error messages
+blockTile.error.onBlockActivated=Unexpected error while click machine, see console for details or report the issue to an admin.
