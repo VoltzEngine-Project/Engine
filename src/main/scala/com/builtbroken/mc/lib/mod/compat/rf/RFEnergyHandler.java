@@ -5,7 +5,10 @@ import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.energy.EnergyHandler;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.lang.reflect.Field;
@@ -263,5 +266,54 @@ public class RFEnergyHandler extends EnergyHandler
     {
         //Overridden in sub versions of the object
         return false;
+    }
+
+    /**
+     * Helper method to export energy on all sides that the exporter can connect to
+     *
+     * @param world    - location
+     * @param x        - location
+     * @param y        - location
+     * @param z        - location
+     * @param exporter - tile exporting the energy, used only for connection checks
+     * @param energy   - amount of energy to export
+     * @return amount of energy left
+     */
+    protected static int exportEnergyAllSides(final World world, final int x, final int y, final int z, final IEnergyHandler exporter, final int energy)
+    {
+        if (energy > 0)
+        {
+            //Cache of connections to side
+            HashMap<ForgeDirection, IEnergyHandler> connections = new HashMap();
+            Pos center = new Pos(x, y, z);
+            //Loop all sides
+            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+            {
+                //Check if we can connect to side
+                if (exporter.canConnectEnergy(dir))
+                {
+                    //Get position relative to tile
+                    Pos pos = center.add(dir);
+                    TileEntity tile = pos.getTileEntity(world);
+                    //Check if it can accept energy
+                    if (tile instanceof IEnergyHandler && ((IEnergyHandler) tile).canConnectEnergy(dir.getOpposite()))
+                    {
+                        connections.put(dir, (IEnergyHandler) tile);
+                    }
+                }
+            }
+            //Loop connections with a divided energy value
+            if (connections.size() > 0)
+            {
+                int totalEnergy = energy;
+                for (Map.Entry<ForgeDirection, IEnergyHandler> entry : connections.entrySet())
+                {
+                    int energySplit = totalEnergy / connections.size();
+                    totalEnergy -= entry.getValue().receiveEnergy(entry.getKey().getOpposite(), energySplit, false);
+                }
+                return totalEnergy;
+            }
+        }
+        return energy;
     }
 }

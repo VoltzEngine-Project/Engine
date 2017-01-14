@@ -31,17 +31,22 @@ import java.util.List;
  */
 public class TileRFBattery extends TileEnt implements IEnergyHandler
 {
-    //TODO move to testing repo
-    private int energy = 0;
-    private boolean energyHadChanged = true;
-
     //Settings
-    private static int maxEnergy = 1000;
+    private static int maxEnergy = 1000000;
     private static int iconsArrayLength = 16;
 
     @SideOnly(Side.CLIENT)
     private static IIcon[] icons;
     private static IIcon topBotIcon;
+
+    //TODO move to testing repo
+    private int energy = 0;
+    private int cachedMeta = -1;
+    private boolean energyHadChanged = true;
+
+
+    /** Bitmask use to check if a wire can connect on a side **/
+    private byte canConnectSide = 0;
 
     public TileRFBattery()
     {
@@ -61,12 +66,35 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
     public void update()
     {
         super.update();
-        if (isServer() && ticks % 10 == 0 && energyHadChanged)
+        if (isServer())
         {
-            energyHadChanged = false;
-            float percent = (float) energy / (float) maxEnergy;
-            int meta = (int) (percent * iconsArrayLength);
-            world().setBlockMetadataWithNotify(xi(), yi(), zi(), meta, 3);
+            //Updates the block meta if the energy value has changed
+            if (energyHadChanged)
+            {
+                energyHadChanged = false;
+
+                //Find out what meta value the energy converts into
+                float percent = (float) energy / (float) maxEnergy;
+                int meta = (int) (percent * iconsArrayLength);
+
+                //Only trigger a block update if needed
+                if (cachedMeta == -1 || cachedMeta != meta)
+                {
+                    world().setBlockMetadataWithNotify(xi(), yi(), zi(), meta, 3);
+                    cachedMeta = world().getBlockMetadata(xi(), yi(), zi());
+                }
+            }
+            //If we have energy attempt to give it away
+            if (energy > 0)
+            {
+                int prev = energy;
+                energy = RFEnergyHandler.exportEnergyAllSides(world(), xi(), yi(), zi(), this, energy);
+                //Trigger update on next tick if energy value changed
+                if (prev != energy)
+                {
+                    energyHadChanged = true;
+                }
+            }
         }
     }
 
@@ -83,6 +111,17 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected boolean onPlayerRightClickWrench(EntityPlayer player, int side, Pos hit)
+    {
+        if (isServer())
+        {
+            toggleRenderSide(ForgeDirection.getOrientation(side));
+            player.addChatComponentMessage(new ChatComponentText("Side set to connect: " + canConnectEnergy(ForgeDirection.getOrientation(side))));
+        }
+        return true;
     }
 
     @Override
@@ -144,7 +183,26 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
     @Override
     public boolean canConnectEnergy(ForgeDirection from)
     {
-        return true;
+        return (canConnectSide & (1 << from.ordinal())) != 0;
+    }
+
+    public void setConnectSide(ForgeDirection direction, boolean isClear)
+    {
+        if (isClear)
+        {
+            canConnectSide = (byte) (canConnectSide | (1 << direction.ordinal()));
+        }
+        else
+        {
+            canConnectSide = (byte) (canConnectSide & ~(1 << direction.ordinal()));
+
+        }
+        markDirty();
+    }
+
+    public void toggleRenderSide(ForgeDirection direction)
+    {
+        this.setConnectSide(direction, !canConnectEnergy(direction));
     }
 
     @Override
