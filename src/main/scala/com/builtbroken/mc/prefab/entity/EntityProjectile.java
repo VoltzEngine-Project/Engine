@@ -103,6 +103,11 @@ public class EntityProjectile extends Entity implements IProjectile
 
     public EntityProjectile(World world, EntityLivingBase shooter, float f)
     {
+        this(world, shooter, f, 1);
+    }
+
+    public EntityProjectile(World world, EntityLivingBase shooter, float f, float distanceScale)
+    {
         super(world);
         this.renderDistanceWeight = 10.0D;
         this.shootingEntity = shooter;
@@ -110,9 +115,9 @@ public class EntityProjectile extends Entity implements IProjectile
 
         this.setSize(0.5F, 0.5F);
         this.setLocationAndAngles(shooter.posX, shooter.posY + (double) shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
-        this.posX -= (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
+        this.posX -= (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F * distanceScale);
         this.posY -= 0.10000000149011612D;
-        this.posZ -= (double) (MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
+        this.posZ -= (double) (MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F * distanceScale);
         this.setPosition(this.posX, this.posY, this.posZ);
         this.yOffset = 0.0F;
         this.motionX = (double) (-MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
@@ -315,22 +320,25 @@ public class EntityProjectile extends Entity implements IProjectile
 
     protected void onImpactEntity(Entity entityHit, float velocity)
     {
-        int damage = MathHelper.ceiling_double_int((double) velocity * 2);
-
-        //If entity takes damage add velocity to entity
-        if (impact_damageSource != null && entityHit.attackEntityFrom(impact_damageSource, (float) damage))
+        if(!worldObj.isRemote)
         {
-            if (entityHit instanceof EntityLivingBase)
-            {
-                float vel_horizontal = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-                if (vel_horizontal > 0.0F)
-                {
-                    entityHit.addVelocity(this.motionX * 0.6000000238418579D / (double) vel_horizontal, 0.1D, this.motionZ * 0.6000000238418579D / (double) vel_horizontal);
-                }
-            }
+            int damage = MathHelper.ceiling_double_int((double) velocity * 2);
 
+            //If entity takes damage add velocity to entity
+            if (impact_damageSource != null && entityHit.attackEntityFrom(impact_damageSource, (float) damage))
+            {
+                if (entityHit instanceof EntityLivingBase)
+                {
+                    float vel_horizontal = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+                    if (vel_horizontal > 0.0F)
+                    {
+                        entityHit.addVelocity(this.motionX * 0.6000000238418579D / (double) vel_horizontal, 0.1D, this.motionZ * 0.6000000238418579D / (double) vel_horizontal);
+                    }
+                }
+
+            }
+            this.setDead();
         }
-        this.setDead();
     }
 
     protected void updateMotion()
