@@ -52,16 +52,17 @@ tile.voltzengine:oreGarnetorange.name=Orange Garnet Ore
 tile.voltzengine:oreGarnetyellow.name=Yellow Garnet Ore
 
 ## Gems
-item.voltzengine:gem.amazonite.uncut=Amazonite Gem
-item.voltzengine:gem.quartz.uncut=Quartz Gem
-item.voltzengine:gem.quartz.smokey.uncut=Smoky Quartz Gem
-item.voltzengine:gem.onyx.black.uncut=Black Onyx
-item.voltzengine:gem.onyx.red.uncut=Red Onyx
-item.voltzengine:gem.garnet.green.uncut=Green Garnet
-item.voltzengine:gem.garnet.orange.uncut=Orange Garnet
-item.voltzengine:gem.garnet.red.uncut=Red Garnet
-item.voltzengine:gem.garnet.yellow.uncut=Yellow Garnet
-item.voltzengine:gem.emerald.uncut=Emerald
+item.voltzengine:gem.amazonite.uncut.name=Amazonite Gem
+item.voltzengine:gem.quartz.uncut.name=Quartz Gem
+item.voltzengine:gem.quartz.smokey.uncut.name=Smokey Quartz Gem
+item.voltzengine:gem.quartz.smoky.uncut.name=Uncut Smokey Quartz Gem
+item.voltzengine:gem.onyx.black.uncut.name=Black Onyx Gem
+item.voltzengine:gem.onyx.red.uncut.name=Red Onyx Gem
+item.voltzengine:gem.garnet.green.uncut.name=Green Garnet Gem
+item.voltzengine:gem.garnet.orange.uncut.name=Orange Garnet Gem
+item.voltzengine:gem.garnet.red.uncut.name=Red Garnet Gem
+item.voltzengine:gem.garnet.yellow.uncut.name=Yellow Garnet Gem
+item.voltzengine:gem.emerald.uncut.name=Emerald Gem
 
 ## Dust
 item.voltzengine:dustCopper.name=Copper Dust
@@ -82,17 +83,6 @@ item.voltzengine:dustWood.name=Wood Dust
 item.voltzengine:dustUranium.name=Uranium Dust
 item.voltzengine:dustDiamond.name=Diamond Dust
 item.voltzengine:dustPlatinum.name=Platinum Dust
-
-## Gem
-item.voltzengine:gemAmazonite.name=Amazonite Gem
-item.voltzengine:gemSmokeyquartz.name=Smokey Quartz Gem
-item.voltzengine:gem.quartz.smoky.uncut.name=Uncut Smokey quartz Gem
-item.voltzengine:gemOnyxblack.name=Black Onyx Gem
-item.voltzengine:gemOnyxred.name=Red Onyx Gem
-item.voltzengine:gemGarnetgreen.name=Green Garnet Gem
-item.voltzengine:gemGarnetorange.name=Orange Garnet Gem
-item.voltzengine:gemGarnetred.name=Red Garnet Gem
-item.voltzengine:gemGarnetyellow.name=Yellow Garnet Gem
 
 ## Impure Dust
 item.voltzengine:dustImpureCopper.name=Impure Copper Dust
