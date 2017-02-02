@@ -9,17 +9,19 @@ import net.minecraft.inventory.IInventory
 /**
  * Created by Cow Pi on 8/10/2015.
  */
-class TileMultiInv extends TileMulti with TSidedInvProvider {
+class TileMultiInv extends TileMulti with TSidedInvProvider[IInventory] {
 
   override def getInventory: IInventory = {
     if (getHost != null) {
       if (getHost.isInstanceOf[IMultiTileInvHost]) {
         return getHost.asInstanceOf[IMultiTileInvHost].getInventoryForTile(this)
       }
-      else if (getHost.isInstanceOf[IInventoryProvider]) {
-        return getHost.asInstanceOf[IInventoryProvider].getInventory
+      else if (getHost.isInstanceOf[IInventoryProvider[IInventory]]) {
+        return getHost.asInstanceOf[IInventoryProvider[IInventory]].getInventory
       }
     }
     return inventory_module
   }
+
+  override protected var inventory_module: IInventory = null
 }

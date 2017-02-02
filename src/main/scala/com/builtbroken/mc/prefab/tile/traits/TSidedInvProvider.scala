@@ -11,11 +11,11 @@ import net.minecraftforge.common.util.ForgeDirection
 /**
  * Created by Cow Pi on 8/10/2015.
  */
-trait TSidedInvProvider extends IInventoryProvider with ISidedInventory
+trait TSidedInvProvider[I <: IInventory] extends IInventoryProvider[I] with ISidedInventory
 {
-  protected var inventory_module: TileModuleInventory = null
-  
-  def getInventory: IInventory = {
+  protected var inventory_module: I;
+
+  def getInventory: I = {
     return inventory_module
   }
 
@@ -30,7 +30,7 @@ trait TSidedInvProvider extends IInventoryProvider with ISidedInventory
   //==================================
   //====== Inventory redirects =======
   //==================================
-  
+
   def getAccessibleSlotsFromSide(side: Int): Array[Int] = {
     if (getInventory.isInstanceOf[ISidedInventory]) {
       return (getInventory.asInstanceOf[ISidedInventory]).getAccessibleSlotsFromSide(side)
