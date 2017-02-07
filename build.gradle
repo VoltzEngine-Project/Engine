@@ -18,6 +18,7 @@ buildscript {
 }
 
 plugins {
+  id 'com.gradle.build-scan' version '1.4'
   id 'com.matthewprenger.cursegradle' version '1.0.1'
   id 'net.saliman.cobertura' version '2.2.5'
   id 'com.github.kt3k.coveralls' version '2.0.1'
@@ -52,7 +53,7 @@ println "Current Java version = " + currentJvm
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-lombok { 
+lombok {
     // optional: values below are the defaults
     version = "1.16.4"
     sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
@@ -115,7 +116,7 @@ sourcesJar {
 }
 
 dependencies {
-   compile name: 'CoFHLib', version: "${cofhlib_version}", ext: 'jar'
+    compile name: 'CoFHLib', version: "${cofhlib_version}", ext: 'jar'
 	compile name: 'CoFHCore', version: "${cofhcore_version}", ext: 'jar'
 	compile name: 'RedstoneArsenal', version: "${rars_version}", ext: 'jar'
 	compile name: 'ThermalExpansion', version: "${texpansion_version}", ext: 'jar'
@@ -129,24 +130,10 @@ jacocoTestReport {
     }
 }
 
-task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
-	filePath = "changelog.html"
-	untaggedName = "Current release ${project.version}"
-	fromCommit = "9f90ae0c046977df53323bf6305e8bdb15cb8897"
-	toRef =  "HEAD"
-	templateContent = """
-{{#tags}}
-  <h3>{{name}}</h3>
-  <ul>
-    {{#commits}}
-    <li> <a href="https://github.com/BuiltBrokenModding/VoltzEngine/commit/{{hash}}" target=_blank> {{{message}}}</a>
-</li>
-    {{/commits}}
-  </ul>
-{{/tags}}
-"""
+buildScan {
+    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+    licenseAgree = 'yes'
 }
-
 task apiZip (type: Jar) {
     if (project.getProperty("bambooshortPlanName") == "BBM-Dev") classifier = "dev-api"
     else classifier = "api"
@@ -163,5 +150,22 @@ publishing {
             artifact apiZip
         }
     }
+}
+
+task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
+    filePath = "changelog.html"
+    untaggedName = "Current release ${project.version}"
+    fromCommit = "2fe051cf727adce1be210a46f778aa8fe031331e"
+    toRef =  "HEAD"
+    templateContent = """
+{{#tags}}
+  <h3>{{name}}</h3>
+  <ul>
+    {{#commits}}
+    <li>{{{message}}}</li>
+    {{/commits}}
+  </ul>
+{{/tags}}
+"""
 }
 tasks.build.dependsOn apiZip
