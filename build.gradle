@@ -143,6 +143,26 @@ task apiZip (type: Jar) {
     mustRunAfter "jar"
 }
 
+task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
+    filePath = "changelog.html"
+    untaggedName = "Current release ${project.version}"
+    fromCommit = startGitRev
+    toRef =  "HEAD"
+    templateContent = """
+{{#tags}}
+<h1> Highly untested and may break world</h1>
+  <h3>{{name}}</h3>
+  <ul>
+    {{#commits}}
+    <li> <a href="https://github.com/BuiltBrokenModding/VoltzEngine/commit/{{hash}}" target=_blank> {{{message}}}</a>
+</li>
+    {{/commits}}
+  </ul>
+{{/tags}}
+"""
+}
+
+
 publishing {
     publications {
         mavenJava(MavenPublication)
