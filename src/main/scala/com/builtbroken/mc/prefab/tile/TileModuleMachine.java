@@ -1,23 +1,33 @@
 package com.builtbroken.mc.prefab.tile;
 
+import com.builtbroken.mc.api.ISave;
 import com.builtbroken.mc.api.tile.IInventoryProvider;
+import com.builtbroken.mc.api.tile.node.ITileModule;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * An extension of {@link TileModuleMachineBase} that provides pre-implementation for common
- * interfaces that most machines use.
+ * interfaces that are most machines used.
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 2/2/2017.
  */
 public abstract class TileModuleMachine<I extends IInventory> extends TileModuleMachineBase implements ISidedInventory, IInventoryProvider<I>
 {
+    /** Primary inventory container for this machine, all {@link IInventory} and {@link ISidedInventory} calls are wrapped to this object */
     protected I inventory_module;
 
+    /**
+     * Default constructor
+     *
+     * @param name     - name of the tile, used for localizations mainly
+     * @param material - material of the tile's block
+     */
     public TileModuleMachine(String name, Material material)
     {
         super(name, material);
@@ -29,6 +39,10 @@ public abstract class TileModuleMachine<I extends IInventory> extends TileModule
         if (inventory_module == null)
         {
             inventory_module = createInventory();
+            if (inventory_module instanceof ITileModule)
+            {
+                modules.add((ITileModule) inventory_module);
+            }
         }
         return inventory_module;
     }
@@ -42,6 +56,49 @@ public abstract class TileModuleMachine<I extends IInventory> extends TileModule
      */
     protected abstract I createInventory();
 
+    @Override
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+        super.readFromNBT(nbt);
+        //By calling getInventory() we force the inventory to exist
+        if (nbt.getBoolean("hasInventory") && getInventory() instanceof ISave)
+        {
+            ((ISave) getInventory()).load(nbt);
+        }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt)
+    {
+        super.writeToNBT(nbt);
+        //Cache if the inventory existed so it will force load
+        nbt.setBoolean("hasInventory", inventory_module != null);
+        //save inventory
+        if (inventory_module instanceof ISave)
+        {
+            ((ISave) inventory_module).save(nbt);
+        }
+    }
+
+    @Override
+    protected void readFromNBT(ITileModule module, NBTTagCompound nbt)
+    {
+        //loading is handled already for the inventory
+        if (module != inventory_module)
+        {
+            super.readFromNBT(module, nbt);
+        }
+    }
+
+    @Override
+    protected void writeToNBT(ITileModule module, NBTTagCompound nbt)
+    {
+        //saving is handled already for the inventory
+        if (module != inventory_module)
+        {
+            super.writeToNBT(module, nbt);
+        }
+    }
 
     //==================================
     //====== Inventory redirects =======

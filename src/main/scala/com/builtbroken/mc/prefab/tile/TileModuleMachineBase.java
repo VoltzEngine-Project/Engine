@@ -17,7 +17,7 @@ import java.util.List;
  * Prefab designed to automate all node interaction of the time.
  * Does use some reflection to generate a list of all fields holding nodes
  * This is only used for Java. For Scala classes, use traits instead.
- * <p/>
+ * <p>
  *
  * @author Darkguardsman
  */
@@ -113,10 +113,7 @@ public class TileModuleMachineBase extends TileMachine implements ITileModulePro
         super.readFromNBT(nbt);
         for (ITileModule node : getNodes())
         {
-            if (node instanceof ISave)
-            {
-                ((ISave) node).load(nbt);
-            }
+            readFromNBT(node, nbt);
         }
     }
 
@@ -126,10 +123,35 @@ public class TileModuleMachineBase extends TileMachine implements ITileModulePro
         super.writeToNBT(nbt);
         for (ITileModule node : getNodes())
         {
-            if (node instanceof ISave)
-            {
-                ((ISave) node).save(nbt);
-            }
+            writeToNBT(node, nbt);
+        }
+    }
+
+    /**
+     * Called to handle reading the module from NBT
+     *
+     * @param module
+     * @param nbt
+     */
+    protected void readFromNBT(ITileModule module, NBTTagCompound nbt)
+    {
+        if (module instanceof ISave)
+        {
+            ((ISave) module).load(nbt);
+        }
+    }
+
+    /**
+     * Called to handle saving the module from NBT
+     *
+     * @param module
+     * @param nbt
+     */
+    protected void writeToNBT(ITileModule module, NBTTagCompound nbt)
+    {
+        if (module instanceof ISave)
+        {
+            ((ISave) module).save(nbt);
         }
     }
 }
