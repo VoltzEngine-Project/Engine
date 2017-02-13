@@ -34,10 +34,21 @@ public class LanguageUtility
         if (key == null || key.isEmpty())
         {
             if (Engine.runningAsDev)
-                Engine.instance.logger().error("LanguageUtility.getLocal(" + key + ")", new RuntimeException());
+            {
+                Engine.instance.logger().error("LanguageUtility.getLocal(" + key + ") - invalid key", new RuntimeException());
+            }
             return "error.key.empty";
         }
-        return wrap(key).getLocal();
+        String translation = wrap(key).getLocal();
+        if (translation == null || translation.isEmpty())
+        {
+            if (Engine.runningAsDev)
+            {
+                Engine.instance.logger().error("LanguageUtility.getLocal(" + key + ") - no translation", new RuntimeException());
+            }
+            return key;
+        }
+        return translation;
     }
 
     /**
@@ -52,7 +63,9 @@ public class LanguageUtility
         if (key == null || key.isEmpty())
         {
             if (Engine.runningAsDev)
+            {
                 Engine.instance.logger().error("LanguageUtility.getLocalName(" + key + ")", new RuntimeException());
+            }
             return "error.key.empty";
         }
         return wrap(key + (!key.endsWith(".name") ? ".name" : "")).getLocal();
@@ -65,23 +78,25 @@ public class LanguageUtility
      * the same component may need to change sizes with
      * changes in words.
      *
-     * @param key - string to use to look up the result
+     * @param key    - string to use to look up the result
      * @param backup - returned if key fails to be found or parsed
      * @return integer parsed from a lang file
      */
     public static Integer getLangSetting(String key, int backup)
     {
         String result = getLocal(key);
-        if(result != null && !result.isEmpty())
+        if (result != null && !result.isEmpty())
         {
             try
             {
                 return Integer.parseInt(key);
             }
-            catch(NumberFormatException e)
+            catch (NumberFormatException e)
             {
                 if (Engine.runningAsDev)
+                {
                     Engine.instance.logger().error("LanguageUtility.getLangSetting(" + key + ")", e);
+                }
             }
         }
         return backup;
@@ -100,7 +115,9 @@ public class LanguageUtility
         if (translation == null || translation.isEmpty())
         {
             if (Engine.runningAsDev)
+            {
                 Engine.instance.logger().error("LanguageUtility.getLocalChat(" + key + ")", new RuntimeException());
+            }
             return new ChatComponentText("error.translation.empty");
         }
 
@@ -117,9 +134,13 @@ public class LanguageUtility
     public static void addChatToPlayer(EntityPlayer player, String key)
     {
         if (player != null)
+        {
             player.addChatComponentMessage(getLocalChat(key));
+        }
         else if (Engine.runningAsDev)
+        {
             Engine.instance.logger().error("LanguageUtility.addChatToPlayer(Null Player, " + key + ")", new RuntimeException());
+        }
     }
 
     public static List<String> splitStringPerWord(String string, int characters)

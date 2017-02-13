@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.mod.compat.rf;
 
 import cofh.api.energy.IEnergyHandler;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.transform.vector.Pos;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -44,6 +46,8 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
     private int cachedMeta = -1;
     private boolean energyHadChanged = true;
 
+    private boolean infinite = false;
+
 
     /** Bitmask use to check if a wire can connect on a side **/
     private byte canConnectSide = 0;
@@ -68,6 +72,10 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
         super.update();
         if (isServer())
         {
+            if (infinite)
+            {
+                energy = maxEnergy;
+            }
             //Updates the block meta if the energy value has changed
             if (energyHadChanged)
             {
@@ -106,6 +114,19 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
         {
             if (isServer())
             {
+                if (Engine.runningAsDev && player.getHeldItem() != null)
+                {
+                    if (player.getHeldItem().getItem() == Items.redstone)
+                    {
+                        energy = maxEnergy;
+                        player.addChatComponentMessage(new ChatComponentText("Energy has been restored to max"));
+                    }
+                    else if (player.getHeldItem().getItem() == Items.glowstone_dust)
+                    {
+                        infinite = !infinite;
+                        player.addChatComponentMessage(new ChatComponentText("Power set to infinite: " + infinite));
+                    }
+                }
                 player.addChatComponentMessage(new ChatComponentText(LanguageUtility.getLocal("text.rf.power.amount").replace("%1", "" + energy).replace("%2", "" + maxEnergy)));
             }
             return true;
@@ -210,6 +231,7 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
     {
         super.readFromNBT(nbt);
         energy = nbt.getInteger("rf");
+        infinite = nbt.getBoolean("infiniteEnergy");
     }
 
     @Override
@@ -217,6 +239,7 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
     {
         super.writeToNBT(nbt);
         nbt.setInteger("rf", energy);
+        nbt.setBoolean("infiniteEnergy", infinite);
     }
 
     @Override
