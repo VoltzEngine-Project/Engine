@@ -232,6 +232,7 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
         super.readFromNBT(nbt);
         energy = nbt.getInteger("rf");
         infinite = nbt.getBoolean("infiniteEnergy");
+        canConnectSide = nbt.getByte("connections");
     }
 
     @Override
@@ -240,6 +241,7 @@ public class TileRFBattery extends TileEnt implements IEnergyHandler
         super.writeToNBT(nbt);
         nbt.setInteger("rf", energy);
         nbt.setBoolean("infiniteEnergy", infinite);
+        nbt.setByte("connections", canConnectSide);
     }
 
     @Override

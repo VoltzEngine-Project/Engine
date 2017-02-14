@@ -108,13 +108,17 @@ public class EntityProjectile extends Entity implements IProjectile
 
     public EntityProjectile(World world, EntityLivingBase shooter, float f, float distanceScale)
     {
+        this(world, shooter.posX, shooter.posY + (double) shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch, f, distanceScale);
+    }
+
+    public EntityProjectile(World world, double x, double y, double z, float yaw, float pitch, float f, float distanceScale)
+    {
         super(world);
         this.renderDistanceWeight = 10.0D;
-        this.shootingEntity = shooter;
-        this.sourceOfProjectile = new Pos(shooter);
+        this.sourceOfProjectile = new Pos(x, y, z);
 
         this.setSize(0.5F, 0.5F);
-        this.setLocationAndAngles(shooter.posX, shooter.posY + (double) shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
+        this.setLocationAndAngles(x, y, z, yaw, pitch);
         this.posX -= (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F * distanceScale);
         this.posY -= 0.10000000149011612D;
         this.posZ -= (double) (MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F * distanceScale);
