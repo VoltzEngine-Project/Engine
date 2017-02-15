@@ -1,8 +1,10 @@
 package com.builtbroken.mc.client.effects.providers;
 
 import com.builtbroken.mc.client.effects.VisualEffectProvider;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketSpawnParticle;
 import com.builtbroken.mc.lib.render.fx.FXShockWave;
+import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -26,16 +28,19 @@ public class VEProviderShockWave extends VisualEffectProvider
         fx.motionX = mx;
         fx.motionY = my;
         fx.motionZ = mz;
+        FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
     }
 
-    public static void spawnEffect(World world, double x, double y, double z, double motionX, double motionY, double motionZ, float red, float green, float blue, float scale, double distance)
+    public static void spawnEffect(World world, double x, double y, double z, double motionX, double motionY, double motionZ, float red, float green, float blue, float scale, float distance)
     {
         PacketSpawnParticle packet = new PacketSpawnParticle("VEP_shockwave", world.provider.dimensionId, x, y, z, motionX, motionY, motionZ);
         packet.otherData = new NBTTagCompound();
         packet.otherData.setFloat("red", red);
         packet.otherData.setFloat("green", green);
         packet.otherData.setFloat("blue", blue);
-        packet.otherData.setDouble("scale", scale);
-        packet.otherData.setDouble("distance", distance);
+        packet.otherData.setFloat("scale", scale);
+        packet.otherData.setFloat("distance", distance);
+
+        Engine.instance.packetHandler.sendToAllAround(packet, world, x, y, z, 100);
     }
 }

@@ -47,6 +47,6 @@ public class VisualEffectRegistry
      */
     public VisualEffectProvider get(String name)
     {
-        return main.get(name.toLowerCase());
+        return main.effects.get(name.toLowerCase());
     }
 }
