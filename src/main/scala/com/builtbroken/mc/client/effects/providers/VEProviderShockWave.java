@@ -1,5 +1,6 @@
 package com.builtbroken.mc.client.effects.providers;
 
+import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.client.effects.VisualEffectProvider;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketSpawnParticle;
@@ -25,6 +26,7 @@ public class VEProviderShockWave extends VisualEffectProvider
     public void displayEffect(World world, double x, double y, double z, double mx, double my, double mz, NBTTagCompound otherData)
     {
         FXShockWave fx = new FXShockWave(world, x, y, z, otherData.getFloat("red"), otherData.getFloat("green"), otherData.getFloat("blue"), otherData.getFloat("scale"), otherData.getFloat("distance"));
+        fx.texture = SharedAssets.GREY_TEXTURE_40pAlpha;
         fx.motionX = mx;
         fx.motionY = my;
         fx.motionZ = mz;
@@ -40,7 +42,6 @@ public class VEProviderShockWave extends VisualEffectProvider
         packet.otherData.setFloat("blue", blue);
         packet.otherData.setFloat("scale", scale);
         packet.otherData.setFloat("distance", distance);
-
         Engine.instance.packetHandler.sendToAllAround(packet, world, x, y, z, 100);
     }
 }

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.render.fx;
 
-import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.lib.render.RenderUtility;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -15,7 +15,7 @@ import org.lwjgl.util.glu.Sphere;
 @SideOnly(Side.CLIENT)
 public class FXShockWave extends EntityFX
 {
-	public static ResourceLocation texture = new ResourceLocation(References.DOMAIN, "textures/fadedSphere");
+	public ResourceLocation texture;
 
 	public FXShockWave(World par1World, double x, double y, double z, float par8, float par10, float par12, double distance)
 	{
@@ -43,7 +43,7 @@ public class FXShockWave extends EntityFX
 		float f12 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTickRate - interpPosY);
 		float f13 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTickRate - interpPosZ);
 		GL11.glTranslated(f11, f12, f13);
-		FMLClientHandler.instance().getClient().renderEngine.bindTexture(texture);
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(texture != null ? texture : SharedAssets.GREY_TEXTURE);
 		RenderUtility.enableBlending();
 		RenderUtility.disableLighting();
 
