@@ -59,80 +59,88 @@ public class MultiBlockHelper
      */
     public static void buildMultiBlock(World world, IMultiTileHost tile, boolean validate, boolean offset)
     {
-        Map<IPos3D, String> map = tile.getLayoutOfMultiBlock();
-        if (map != null && !map.isEmpty())
+        if(Engine.multiBlock != null)
         {
-            int i = 0;
-            for (Map.Entry<IPos3D, String> entry : map.entrySet())
+            Map<IPos3D, String> map = tile.getLayoutOfMultiBlock();
+            if (map != null && !map.isEmpty())
             {
-                IPos3D location = entry.getKey();
-                String type = entry.getValue();
-                String dataString = null;
-                if (location == null)
+                int i = 0;
+                for (Map.Entry<IPos3D, String> entry : map.entrySet())
                 {
-                    logger.error("MultiBlockHelper: location[" + i + "] is null, this is most likely in error in " + tile);
-                    i++;
-                    continue;
-                }
-
-                if (type == null)
-                {
-                    logger.error("MultiBlockHelper: type[" + i + "] is null, this is most likely in error in " + tile);
-                    i++;
-                    continue;
-                }
-
-                if (type.isEmpty())
-                {
-                    logger.error("MultiBlockHelper: type[" + i + "] is empty, this is most likely in error in " + tile);
-                    i++;
-                    continue;
-                }
-
-                if (type.contains("#"))
-                {
-                    dataString = type.substring(type.indexOf("#") + 1, type.length());
-                    type = type.substring(0, type.indexOf("#"));
-                }
-
-                EnumMultiblock enumType = EnumMultiblock.get(type);
-                if (enumType != null)
-                {
-                    //Moves the position based on the location of the host
-                    if (offset)
+                    IPos3D location = entry.getKey();
+                    String type = entry.getValue();
+                    String dataString = null;
+                    if (location == null)
                     {
-                        location = new Location((TileEntity) tile).add(location);
+                        logger.error("MultiBlockHelper: location[" + i + "] is null, this is most likely in error in " + tile);
+                        i++;
+                        continue;
                     }
-                    TileEntity ent = world.getTileEntity((int) location.x(), (int) location.y(), (int) location.z());
-                    if (!validate || ent == null || enumType.clazz != ent.getClass())
+
+                    if (type == null)
                     {
-                        if (!world.setBlock((int) location.x(), (int) location.y(), (int) location.z(), Engine.multiBlock, enumType.ordinal(), 3))
+                        logger.error("MultiBlockHelper: type[" + i + "] is null, this is most likely in error in " + tile);
+                        i++;
+                        continue;
+                    }
+
+                    if (type.isEmpty())
+                    {
+                        logger.error("MultiBlockHelper: type[" + i + "] is empty, this is most likely in error in " + tile);
+                        i++;
+                        continue;
+                    }
+
+                    if (type.contains("#"))
+                    {
+                        dataString = type.substring(type.indexOf("#") + 1, type.length());
+                        type = type.substring(0, type.indexOf("#"));
+                    }
+
+                    EnumMultiblock enumType = EnumMultiblock.get(type);
+                    if (enumType != null)
+                    {
+                        //Moves the position based on the location of the host
+                        if (offset)
                         {
-                            logger.error("MultiBlockHelper: type[" + i + ", " + type + "] error block was not placed ");
+                            location = new Location((TileEntity) tile).add(location);
                         }
-                        ent = world.getTileEntity((int) location.x(), (int) location.y(), (int) location.z());
-                    }
+                        TileEntity ent = world.getTileEntity((int) location.x(), (int) location.y(), (int) location.z());
+                        if (!validate || ent == null || enumType.clazz != ent.getClass())
+                        {
+                            if (!world.setBlock((int) location.x(), (int) location.y(), (int) location.z(), Engine.multiBlock, enumType.ordinal(), 3))
+                            {
+                                logger.error("MultiBlockHelper: type[" + i + ", " + type + "] error block was not placed ");
+                            }
+                            ent = world.getTileEntity((int) location.x(), (int) location.y(), (int) location.z());
+                        }
 
-                    if (ent instanceof IMultiTile)
-                    {
-                        ((IMultiTile) ent).setHost(tile);
-                        setData(dataString, (IMultiTile) ent);
+                        if (ent instanceof IMultiTile)
+                        {
+                            ((IMultiTile) ent).setHost(tile);
+                            setData(dataString, (IMultiTile) ent);
+                        }
+                        else
+                        {
+                            logger.error("MultiBlockHelper: type[" + i + ", " + type + "] tile at location is not IMultiTile, " + ent);
+                        }
                     }
                     else
                     {
-                        logger.error("MultiBlockHelper: type[" + i + ", " + type + "] tile at location is not IMultiTile, " + ent);
+                        logger.error("MultiBlockHelper: type[" + i + ", " + type + "] is not a invalid multi tile type, this is most likely an error in " + tile);
                     }
+                    i++;
                 }
-                else
-                {
-                    logger.error("MultiBlockHelper: type[" + i + ", " + type + "] is not a invalid multi tile type, this is most likely an error in " + tile);
-                }
-                i++;
+            }
+            else
+            {
+                logger.error("Tile[" + tile + "] didn't return a structure map");
             }
         }
         else
         {
-            logger.error("Tile[" + tile + "] didn't return a structure map");
+            logger.error("MultiBlock was never registered, this is a critical error and can have negative effects on gameplay. " +
+                    "Make sure the block was not disabled in the configs and contact support to ensure nothing is broken", new RuntimeException());
         }
     }
 

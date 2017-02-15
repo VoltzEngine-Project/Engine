@@ -313,6 +313,23 @@ public class Engine
         sheetMetalRequested = true;
     }
 
+    /**
+     * Requests that the main modules be loaded
+     */
+    public static void requestBaseModules()
+    {
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+        {
+            throw new RuntimeException("Modules can only be requested to load in the pre-init phase");
+        }
+        requestOres();
+        requestResources();
+        requestCraftingParts();
+        requestCircuits();
+        requestSimpleTools();
+        requestSheetMetalContent();
+    }
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
