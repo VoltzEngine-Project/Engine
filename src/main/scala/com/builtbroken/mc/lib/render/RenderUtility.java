@@ -36,6 +36,15 @@ public class RenderUtility
     public static final HashMap<String, IIcon> loadedIconMap = new HashMap<>();
     public static RenderBlocks renderBlocks = new RenderBlocks();
 
+    public static RenderBlocks getBlockRenderer()
+    {
+        if(renderBlocks.blockAccess == null)
+        {
+            renderBlocks.blockAccess = Minecraft.getMinecraft().theWorld;
+        }
+        return renderBlocks;
+    }
+
     public static ResourceLocation getResource(String domain, String name)
     {
         String cacheName = domain + ":" + name;
