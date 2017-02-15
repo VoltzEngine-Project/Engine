@@ -1,10 +1,14 @@
 package com.builtbroken.mc.core.network.packet;
 
 
+import com.builtbroken.mc.client.effects.VisualEffectProvider;
+import com.builtbroken.mc.client.effects.VisualEffectRegistry;
+import com.builtbroken.mc.core.Engine;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -20,6 +24,7 @@ public class PacketSpawnParticle extends PacketType
     public double vx;
     public double vy;
     public double vz;
+    public NBTTagCompound otherData;
 
     public PacketSpawnParticle()
     {
@@ -49,6 +54,11 @@ public class PacketSpawnParticle extends PacketType
         buffer.writeDouble(vx);
         buffer.writeDouble(vy);
         buffer.writeDouble(vz);
+        buffer.writeBoolean(otherData != null);
+        if (otherData != null)
+        {
+            ByteBufUtils.writeTag(buffer, otherData);
+        }
     }
 
     @Override
@@ -62,14 +72,38 @@ public class PacketSpawnParticle extends PacketType
         vx = buffer.readDouble();
         vy = buffer.readDouble();
         vz = buffer.readDouble();
+        if (buffer.readBoolean())
+        {
+            otherData = ByteBufUtils.readTag(buffer);
+        }
     }
 
     @Override
     public void handleClientSide(EntityPlayer player)
     {
-        if (player.worldObj.provider.dimensionId == dim)
+        try
         {
-            player.worldObj.spawnParticle(name, x, y, z, vx, vy, vz);
+            if (name.startsWith("VEP_"))
+            {
+                String key = name.substring(4, name.length());
+                VisualEffectProvider provider = VisualEffectRegistry.main.get(key);
+                if (provider != null)
+                {
+                    provider.displayEffect(player.getEntityWorld(), x, y, z, vx, vy, vz, otherData != null ? otherData : new NBTTagCompound());
+                }
+                else if (Engine.runningAsDev)
+                {
+                    Engine.logger().error("Failed to find a visual effect provider for name= " + name + "");
+                }
+            }
+            else if (player.worldObj.provider.dimensionId == dim)
+            {
+                player.worldObj.spawnParticle(name, x, y, z, vx, vy, vz);
+            }
+        }
+        catch (Exception e)
+        {
+            Engine.logger().error("Failed handling particle spawn packet with [name=" + name + ", dim=" + dim + ",pos=" + x + ", " + y + ", " + z + ", Vel=" + vx + ", " + vy + ", " + vz + "]", e);
         }
     }
 }

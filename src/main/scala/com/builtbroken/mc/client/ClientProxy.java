@@ -1,5 +1,7 @@
 package com.builtbroken.mc.client;
 
+import com.builtbroken.mc.client.effects.VisualEffectRegistry;
+import com.builtbroken.mc.client.effects.providers.VEProviderShockWave;
 import com.builtbroken.mc.core.CommonProxy;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
@@ -45,6 +47,8 @@ public class ClientProxy extends CommonProxy
         ExplosiveRegistryClient.registerIcon(new ItemStack(Items.gunpowder), References.PREFIX + "ex.icon.gunpowder");
         ExplosiveRegistryClient.registerIcon(new ItemStack(Items.skull, 1, 4), References.PREFIX + "ex.icon.creeper_head");
         ExplosiveRegistryClient.registerIcon(new ItemStack(Blocks.tnt), References.PREFIX + "ex.icon.tnt");
+
+        VisualEffectRegistry.addEffectProvider(new VEProviderShockWave());
     }
 
     @Override
