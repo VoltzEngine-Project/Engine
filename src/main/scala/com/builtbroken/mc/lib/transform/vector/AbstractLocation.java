@@ -178,7 +178,9 @@ public abstract class AbstractLocation<R extends AbstractLocation> extends Abstr
     }
 
     /**
-     * World Access
+     * Called to get the block at the position.
+     *
+     * @return Block or null if the chunk is not loaded
      */
     public Block getBlock()
     {
