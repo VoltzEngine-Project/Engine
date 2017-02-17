@@ -136,6 +136,22 @@ public class InventoryUtility
     }
 
     /**
+     * Gets the item by name
+     * <p>
+     * (mod:name)
+     * <p>
+     * name needs to be exact for this method to function correctly.
+     *
+     * @param name - mod:name, registered string ID of the item
+     * @return item or null if not found
+     */
+    public static Item getItem(String name)
+    {
+        FMLControlledNamespacedRegistry<Item> registry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
+        return registry.getObject(name);
+    }
+
+    /**
      * Called to map recipes to items and
      * itemstacks. Used for varies purposes,
      * such as, quicker filter checks, crafting,
