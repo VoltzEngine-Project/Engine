@@ -1,7 +1,6 @@
 package com.builtbroken.mc.prefab.tile.multiblock;
 
-import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiInv;
-import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiTank;
+import com.builtbroken.mc.prefab.tile.multiblock.types.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
@@ -10,57 +9,49 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 
 /**
- * Enum of different mutliblock tiles that can be used to restrict connections
+ * Enum of different mutli-block tiles that can be used to control functionality of the structure.
+ * <p>
+ * As well improve handling by not using an et. al. approach to interfaces.
+ * <p>
  * Created by Dark on 7/4/2015.
  */
 public enum EnumMultiblock
 {
     /* Basic */
-    /* 0 */TILE("veTileMulti", TileMulti.class, new ITileEntityProvider()
-    {
-        @Override
-        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-        {
-            return new TileMulti();
-        }
-    }),
-    /* 1 */TANK("veTileMultiTank", TileMultiTank.class, new ITileEntityProvider()
-    {
-        @Override
-        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-        {
-            return new TileMultiTank();
-        }
-    }),
-    /* 2 */INVENTORY("veTileMultiInv", TileMultiInv.class, new ITileEntityProvider()
-    {
-        @Override
-        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-        {
-            return new TileMultiInv();
-        }
-    }),
-    /* 3 */ENERGY_RF,
-    /* 4 */ENERGY_EU,
-    /* 5 */ENERGY,
+    /* 0 */TILE("veTileMulti", TileMulti.class, (p_149915_1_, p_149915_2_) -> new TileMulti()),
+    /* 1 */TANK("veTileMultiTank", TileMultiTank.class, (p_149915_1_, p_149915_2_) -> new TileMultiTank()),
+    /* 2 */INVENTORY("veTileMultiInv", TileMultiInv.class, (p_149915_1_, p_149915_2_) -> new TileMultiInv()),
+    /* Energy Types */
+    /* 3 */ENERGY_RF("rfTileMulti"),
+    /* 4 */ENERGY_EU("euTileMulti"),//TODO implement
+    /* 5 */ENERGY("veTileMultiEnergy", TileMultiEnergy.class, (p_149915_1_, p_149915_2_) -> new TileMultiEnergy()),  //TODO implement universal energy version
     /* Combinations */
-    /* 6 */TANK_INV,
-    /* 7 */TANK_ENERGY,
-    /* 8 */INV_ENERGY,
-    /* 9 */TANK_INV_ENERGY;
+    /* 6 */TANK_INV("veTileMultiTankInv", TileMultiTankInv.class, (p_149915_1_, p_149915_2_) -> new TileMultiTankInv()),
+    /* 7 */TANK_ENERGY("veTileMultiTankEnergy", TileMultiTankEnergy.class, (p_149915_1_, p_149915_2_) -> new TileMultiTankEnergy()),//TODO implement universal energy version
+    /* 8 */INV_ENERGY("veTileMultiInvEnergy", TileMultiInvEnergy.class, (p_149915_1_, p_149915_2_) -> new TileMultiInvEnergy()),//TODO implement universal energy version
+    /* 9 */TANK_INV_ENERGY("veTileMultiTankInvEnergy", TileMultiTankInvEnergy.class, (p_149915_1_, p_149915_2_) -> new TileMultiTankInvEnergy());  //TODO implement universal energy version
 
-    private String name;
+    /** Registered name of the TileEntity.class and the reference name of the multi-block */
+    public final String name;
+    /** Class to register for this multi-block, not all entries will use this */
     public Class<? extends TileMulti> clazz;
+    /** Provider for the multi-block tile type, defaults to {@link #TILE if missing} */
     public ITileEntityProvider provider;
 
+    //Has the cached been initialized
     private static boolean init = false;
+    //Quick reference cached to improve speed of multi-block builder
     private static final HashMap<String, EnumMultiblock> cache = new HashMap();
 
-    EnumMultiblock() {}
+    EnumMultiblock(String name)
+    {
+        this.name = name;
+    }
 
     EnumMultiblock(String name, Class<? extends TileMulti> clazz)
     {
-        this(name, clazz, null);
+        this.name = name;
+        this.clazz = clazz;
     }
 
     EnumMultiblock(String name, Class<? extends TileMulti> clazz, ITileEntityProvider provider)
@@ -70,7 +61,7 @@ public enum EnumMultiblock
         this.provider = provider;
     }
 
-    public String getName()
+    public String getTileName()
     {
         return name;
     }
@@ -79,17 +70,13 @@ public enum EnumMultiblock
     {
         if (provider != null)
         {
-            TileEntity tile = provider.createNewTileEntity(world, meta);
-            if (tile == null)
-            {
-                tile = new TileMulti();
-            }
+            final TileEntity tile = provider.createNewTileEntity(world, meta);
             if (tile instanceof TileMulti)
             {
                 return (TileMulti) tile;
             }
         }
-        return null;
+        return new TileMulti();
     }
 
     public static TileMulti provideTile(World world, int meta)

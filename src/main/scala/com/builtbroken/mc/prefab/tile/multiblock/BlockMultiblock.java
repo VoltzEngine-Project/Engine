@@ -4,13 +4,10 @@ import com.builtbroken.mc.api.tile.client.IIconCallBack;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.lib.transform.vector.Pos;
-import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiInv;
-import com.builtbroken.mc.prefab.tile.multiblock.types.TileMultiTank;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,9 +30,6 @@ import java.util.Random;
  */
 public class BlockMultiblock extends BlockContainer
 {
-    public static ITileEntityProvider EU_ENERGY_TILE_PROVIDER;
-    public static ITileEntityProvider RF_ENERGY_TILE_PROVIDER;
-    public static ITileEntityProvider ENERGY_TILE_PROVIDER;
 
     public BlockMultiblock()
     {
@@ -258,23 +252,7 @@ public class BlockMultiblock extends BlockContainer
     @Override
     public TileEntity createNewTileEntity(World world, int meta)
     {
-        if (meta >= 0 && meta < EnumMultiblock.values().length)
-        {
-            switch (EnumMultiblock.values()[meta])
-            {
-                case TANK:
-                    return new TileMultiTank();
-                case INVENTORY:
-                    return new TileMultiInv();
-                case ENERGY_EU:
-                    return EU_ENERGY_TILE_PROVIDER != null ? EU_ENERGY_TILE_PROVIDER.createNewTileEntity(world, meta) : new TileMulti();
-                case ENERGY_RF:
-                    return RF_ENERGY_TILE_PROVIDER != null ? RF_ENERGY_TILE_PROVIDER.createNewTileEntity(world, meta) : new TileMulti();
-                case ENERGY:
-                    return ENERGY_TILE_PROVIDER != null ? ENERGY_TILE_PROVIDER.createNewTileEntity(world, meta) : new TileMulti();
-            }
-        }
-        return new TileMulti();
+        return EnumMultiblock.provideTile(world, meta);
     }
 
     protected IMultiTile getTile(World world, int x, int y, int z)
