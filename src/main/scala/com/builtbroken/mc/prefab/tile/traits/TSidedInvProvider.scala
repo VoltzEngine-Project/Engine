@@ -40,14 +40,14 @@ trait TSidedInvProvider[I <: IInventory] extends IInventoryProvider[I] with ISid
 
   def canInsertItem(slot: Int, itemStack: ItemStack, side: Int): Boolean = {
     if (getInventory.isInstanceOf[ISidedInventory]) {
-      return (getInventory.asInstanceOf[ISidedInventory]).canInsertItem(side, itemStack, side)
+      return (getInventory.asInstanceOf[ISidedInventory]).canInsertItem(slot, itemStack, side)
     }
     return false
   }
 
   def canExtractItem(slot: Int, itemStack: ItemStack, side: Int): Boolean = {
     if (getInventory.isInstanceOf[ISidedInventory]) {
-      return (getInventory.asInstanceOf[ISidedInventory]).canExtractItem(side, itemStack, side)
+      return (getInventory.asInstanceOf[ISidedInventory]).canExtractItem(slot, itemStack, side)
     }
     return false
   }
