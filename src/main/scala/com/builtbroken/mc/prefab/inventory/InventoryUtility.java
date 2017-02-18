@@ -11,7 +11,9 @@ import com.builtbroken.mc.lib.transform.vector.Location;
 import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.filters.IInventoryFilter;
 import com.builtbroken.mc.prefab.items.ItemStackWrapper;
+import com.google.common.collect.Table;
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -33,6 +35,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -148,7 +151,106 @@ public class InventoryUtility
     public static Item getItem(String name)
     {
         FMLControlledNamespacedRegistry<Item> registry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
-        return registry.getObject(name);
+        if (Item.itemRegistry.containsKey(name))
+        {
+            return registry.getObject(name);
+        }
+        return null;
+    }
+
+    public static Block getBlock(String name)
+    {
+        return Block.getBlockFromName(name);
+    }
+
+    /**
+     * Gets the item by name as an ItemStack of the meta value
+     * <p>
+     * (mod:name)
+     * <p>
+     * name needs to be exact for this method to function correctly.
+     *
+     * @param name - mod:name, registered string ID of the item
+     * @param meta - meta value (0-32,000)
+     * @return ItemStack or null if not found
+     */
+    public static ItemStack getItemStack(String name, int meta)
+    {
+        Item item = getItem(name);
+        if (item != null)
+        {
+            return new ItemStack(item, 1, meta);
+        }
+        return null;
+    }
+
+    /**
+     * Gets the item by name as an ItemStack
+     * <p>
+     * Attempts to use the {@link GameData#customItemStacks} to
+     * get the item first. This way any NBT data or other params
+     * can be copied to the stack.
+     * <p>
+     * Keep in mind the name value will be different for custom stacks
+     * than it will be for the actual registered item. So use this
+     * with caution and backup values.
+     * <p>
+     * (mod:name)
+     * <p>
+     * Name needs to be exact for this method to function correctly.
+     * Use {@link com.builtbroken.mc.core.commands.debug.CommandDebugItem}
+     * to get data on what the name actually is and sub types.
+     *
+     * @param name - mod:name, registered string ID of the item
+     * @return ItemStack or null if not found
+     */
+    public static ItemStack getItemStack(String name)
+    {
+        ItemStack is = null;
+        try
+        {
+            Field field = GameData.class.getDeclaredField("customItemStacks");
+            field.setAccessible(true);
+            String[] split = name.split(":");
+            is = ((Table<String, String, ItemStack>) field.get(null)).get(split[0], split[1]);
+            if (is != null && is.getItem() == null)
+            {
+                is = null;
+                Engine.logger().error("Error: CustomItemStack with name=" + name + " contains a null item", new RuntimeException());
+            }
+            if (is != null)
+            {
+                is = is.copy();
+            }
+        }
+        catch (Exception e)
+        {
+            if (Engine.runningAsDev)
+            {
+                Engine.logger().error("Failed to access customItemStack data", e);
+            }
+        }
+        if (is == null)
+        {
+            Item i = getItem(name);
+            if (i != null)
+            {
+                is = new ItemStack(i, 1, 0);
+            }
+        }
+        if (is == null)
+        {
+            Block b = getBlock(name);
+            if (b != null)
+            {
+                is = new ItemStack(b, 1, Short.MAX_VALUE);
+            }
+        }
+        if (is != null)
+        {
+            is.stackSize = 1;
+        }
+        return is;
     }
 
     /**
