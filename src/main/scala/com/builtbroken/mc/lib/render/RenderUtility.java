@@ -26,6 +26,9 @@ import java.util.Set;
 
 import static org.lwjgl.opengl.GL11.*;
 
+/**
+ * Helps with rendering Minecraft based objects
+ */
 public class RenderUtility
 {
     public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
@@ -34,11 +37,13 @@ public class RenderUtility
      * Icon loading map for external icon registration.
      */
     public static final HashMap<String, IIcon> loadedIconMap = new HashMap<>();
+    @Deprecated
+    /** This will be made private soon, use {@link #getBlockRenderer()} */
     public static RenderBlocks renderBlocks = new RenderBlocks();
 
     public static RenderBlocks getBlockRenderer()
     {
-        if(renderBlocks.blockAccess == null)
+        if (renderBlocks.blockAccess == null)
         {
             renderBlocks.blockAccess = Minecraft.getMinecraft().theWorld;
         }
@@ -555,33 +560,33 @@ public class RenderUtility
 
         GL11.glColor4f(1, 1, 1, 1);
 
-        renderBlocks.setRenderBounds(x1, y1, z1, x2, y2, z2);
+        getBlockRenderer().setRenderBounds(x1, y1, z1, x2, y2, z2);
 
         t.startDrawingQuads();
 
         IIcon useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 0, meta);
         t.setNormal(0.0F, -1.0F, 0.0F);
-        renderBlocks.renderFaceYNeg(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceYNeg(block, 0, 0, 0, useTexture);
 
         useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 1, meta);
         t.setNormal(0.0F, 1.0F, 0.0F);
-        renderBlocks.renderFaceYPos(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceYPos(block, 0, 0, 0, useTexture);
 
         useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 2, meta);
         t.setNormal(0.0F, 0.0F, -1.0F);
-        renderBlocks.renderFaceZNeg(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceZNeg(block, 0, 0, 0, useTexture);
 
         useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 3, meta);
         t.setNormal(0.0F, 0.0F, 1.0F);
-        renderBlocks.renderFaceZPos(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceZPos(block, 0, 0, 0, useTexture);
 
         useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 4, meta);
         t.setNormal(-1.0F, 0.0F, 0.0F);
-        renderBlocks.renderFaceXNeg(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceXNeg(block, 0, 0, 0, useTexture);
 
         useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 5, meta);
         t.setNormal(1.0F, 0.0F, 0.0F);
-        renderBlocks.renderFaceXPos(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceXPos(block, 0, 0, 0, useTexture);
         t.draw();
 
         GL11.glPopMatrix();

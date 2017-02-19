@@ -46,7 +46,10 @@ public class BlockRenderHandler implements ISimpleBlockRenderingHandler
 
         if (tile instanceof Tile)
         {
-            return ((Tile) tile).renderStatic(renderBlocks, new Pos(x, y, z), 0);
+            if(((Tile) tile).renderStatic(renderBlocks, new Pos(x, y, z), 0))
+            {
+                return true;
+            }
         }
 
         /**
