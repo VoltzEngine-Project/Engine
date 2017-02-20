@@ -59,12 +59,29 @@ public class MultiBlockHelper
      */
     public static void buildMultiBlock(World world, IMultiTileHost tile, boolean validate, boolean offset)
     {
-        if(Engine.multiBlock != null)
+        //Rare edge case, should never happen
+        if (world == null)
         {
+            logger.error("MultiBlockHelper: buildMultiBlock was called with a null world by " + tile, new RuntimeException());
+            return;
+        }
+        //Rare edge case, should never happen
+        if (tile == null)
+        {
+            logger.error("MultiBlockHelper: buildMultiBlock was called with a null tile ", new RuntimeException());
+            return;
+        }
+        //Multi-block should be registered but just in case a dev forgot
+        if (Engine.multiBlock != null)
+        {
+            //Get layout of multi-block for it's current state
             Map<IPos3D, String> map = tile.getLayoutOfMultiBlock();
+            //Ensure the map is not null or empty in case there is no structure to generate
             if (map != null && !map.isEmpty())
             {
+                //Keep track of position just for traceability
                 int i = 0;
+                //Loop all blocks and start placement
                 for (Map.Entry<IPos3D, String> entry : map.entrySet())
                 {
                     IPos3D location = entry.getKey();
