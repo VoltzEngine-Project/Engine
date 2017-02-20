@@ -15,7 +15,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class TileMachine extends TileEnt implements IRotation
 {
     /** Direction the machine is facing, try to use {@link #getFacing()} and {@link #setFacing(ForgeDirection)} */
-    protected ForgeDirection facing = ForgeDirection.NORTH;
+    protected ForgeDirection facing = ForgeDirection.UNKNOWN;
 
     /**
      * Creates a new TileMachine instance
@@ -26,6 +26,16 @@ public class TileMachine extends TileEnt implements IRotation
     public TileMachine(String name, Material material)
     {
         super(name, material);
+    }
+
+    @Override
+    public void firstTick()
+    {
+        super.firstTick();
+        if (useMetaForFacing())
+        {
+            facing = ForgeDirection.getOrientation(world().getBlockMetadata(xi(), yi(), zi()));
+        }
     }
 
     @Override
