@@ -492,3 +492,8 @@ root.inventory.modify=Modify Inventory
 
 ## Block Tile error messages
 blockTile.error.onBlockActivated=Unexpected error while click machine, see console for details or report the issue to an admin.
+
+## [DEV] World Types
+generator.voidTestWorld=Void Test World
+generator.stoneTestWorld=Stone Test World
+generator.chessTestWorld=Chess Test World
