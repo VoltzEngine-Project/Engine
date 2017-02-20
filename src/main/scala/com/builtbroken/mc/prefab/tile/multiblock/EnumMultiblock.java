@@ -18,18 +18,74 @@ import java.util.HashMap;
 public enum EnumMultiblock
 {
     /* Basic */
-    /* 0 */TILE("veTileMulti", TileMulti.class, (p_149915_1_, p_149915_2_) -> new TileMulti()),
-    /* 1 */TANK("veTileMultiTank", TileMultiTank.class, (p_149915_1_, p_149915_2_) -> new TileMultiTank()),
-    /* 2 */INVENTORY("veTileMultiInv", TileMultiInv.class, (p_149915_1_, p_149915_2_) -> new TileMultiInv()),
+    /* 0 */TILE("veTileMulti", TileMulti.class, new ITileEntityProvider()
+    {
+        @Override
+        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+        {
+            return new TileMulti();
+        }
+    }),
+    /* 1 */TANK("veTileMultiTank", TileMultiTank.class, new ITileEntityProvider()
+    {
+        @Override
+        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+        {
+            return new TileMultiTank();
+        }
+    }),
+    /* 2 */INVENTORY("veTileMultiInv", TileMultiInv.class, new ITileEntityProvider()
+    {
+        @Override
+        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+        {
+            return new TileMultiInv();
+        }
+    }),
     /* Energy Types */
-    /* 3 */ENERGY_RF("rfTileMulti"),
+    /* 3 */ENERGY_RF("rfTileMulti"), //RF code is setup in a proxy class
     /* 4 */ENERGY_EU("euTileMulti"),//TODO implement
-    /* 5 */ENERGY("veTileMultiEnergy", TileMultiEnergy.class, (p_149915_1_, p_149915_2_) -> new TileMultiEnergy()),  //TODO implement universal energy version
+    /* 5 */ENERGY("veTileMultiEnergy", TileMultiEnergy.class, new ITileEntityProvider()
+    {
+        @Override
+        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+        {
+            return new TileMultiEnergy();
+        }
+    }),  //TODO implement universal energy version
     /* Combinations */
-    /* 6 */TANK_INV("veTileMultiTankInv", TileMultiTankInv.class, (p_149915_1_, p_149915_2_) -> new TileMultiTankInv()),
-    /* 7 */TANK_ENERGY("veTileMultiTankEnergy", TileMultiTankEnergy.class, (p_149915_1_, p_149915_2_) -> new TileMultiTankEnergy()),//TODO implement universal energy version
-    /* 8 */INV_ENERGY("veTileMultiInvEnergy", TileMultiInvEnergy.class, (p_149915_1_, p_149915_2_) -> new TileMultiInvEnergy()),//TODO implement universal energy version
-    /* 9 */TANK_INV_ENERGY("veTileMultiTankInvEnergy", TileMultiTankInvEnergy.class, (p_149915_1_, p_149915_2_) -> new TileMultiTankInvEnergy());  //TODO implement universal energy version
+    /* 6 */TANK_INV("veTileMultiTankInv", TileMultiTankInv.class, new ITileEntityProvider()
+    {
+        @Override
+        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+        {
+            return new TileMultiTankInv();
+        }
+    }),
+    /* 7 */TANK_ENERGY("veTileMultiTankEnergy", TileMultiTankEnergy.class, new ITileEntityProvider()
+    {
+        @Override
+        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+        {
+            return new TileMultiTankEnergy();
+        }
+    }),//TODO implement universal energy version
+    /* 8 */INV_ENERGY("veTileMultiInvEnergy", TileMultiInvEnergy.class, new ITileEntityProvider()
+    {
+        @Override
+        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+        {
+            return new TileMultiInvEnergy();
+        }
+    }),//TODO implement universal energy version
+    /* 9 */TANK_INV_ENERGY("veTileMultiTankInvEnergy", TileMultiTankInvEnergy.class, new ITileEntityProvider()
+    {
+        @Override
+        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+        {
+            return new TileMultiTankInvEnergy();
+        }
+    });  //TODO implement universal energy version
 
     /** Registered name of the TileEntity.class and the reference name of the multi-block */
     public final String name;
