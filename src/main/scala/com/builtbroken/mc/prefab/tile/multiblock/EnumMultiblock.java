@@ -122,6 +122,12 @@ public enum EnumMultiblock
         return name;
     }
 
+    @Deprecated
+    public String getName()
+    {
+        return name;
+    }
+
     public TileMulti newTile(World world, int meta)
     {
         if (provider != null)
