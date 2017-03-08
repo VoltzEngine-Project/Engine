@@ -18,5 +18,8 @@ public abstract class VisualEffectProvider
         this.name = name;
     }
 
-    public abstract void displayEffect(World world, double x, double y, double z, double mx, double my, double mz, NBTTagCompound otherData);
+    public void displayEffect(World world, double x, double y, double z, double mx, double my, double mz, NBTTagCompound otherData)
+    {
+
+    }
 }

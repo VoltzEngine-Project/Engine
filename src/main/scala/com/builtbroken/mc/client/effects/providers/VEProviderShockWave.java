@@ -6,6 +6,8 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketSpawnParticle;
 import com.builtbroken.mc.lib.render.fx.FXShockWave;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -23,6 +25,7 @@ public class VEProviderShockWave extends VisualEffectProvider
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void displayEffect(World world, double x, double y, double z, double mx, double my, double mz, NBTTagCompound otherData)
     {
         FXShockWave fx = new FXShockWave(world, x, y, z, otherData.getFloat("red"), otherData.getFloat("green"), otherData.getFloat("blue"), otherData.getFloat("scale"), otherData.getFloat("distance"));
