@@ -2,16 +2,19 @@ package com.builtbroken.mc.lib.json.block.processor;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.builtbroken.mc.lib.json.block.BlockJson;
 import com.builtbroken.mc.lib.json.block.meta.BlockJsonMeta;
 import com.builtbroken.mc.lib.json.block.meta.MetaData;
+import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +27,20 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
 {
     /** Map of processors to run on unknown json object entries, used to process recipes and registry calls */
     public final HashMap<String, JsonBlockSubProcessor> subProcessors = new HashMap();
+
+    /** Keeps track of json fields that are used for block data directly and can not be used by sub processors */
+    public final List<String> blockFields = new ArrayList();
+
+    public JsonBlockProcessor()
+    {
+        //Field entries to prevent sub processors firing
+        // each entry need to be lower cased to work
+        blockFields.add("name");
+        blockFields.add("subtypes");
+        blockFields.add("material");
+        blockFields.add("localization");
+        blockFields.add("orename");
+    }
 
     @Override
     public String getMod()
@@ -44,28 +61,37 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
     }
 
     @Override
-    public boolean canProcess(String key, JsonElement element)
-    {
-        return key.equalsIgnoreCase("block");
-    }
-
-    @Override
-    public BlockJson process(JsonElement element)
+    public void process(JsonElement element, List<IJsonGenObject> objectList)
     {
         JsonObject blockData = element.getAsJsonObject();
         if (blockData.has("name") && blockData.has("material"))
         {
             BlockJson block;
+
+            //Meta data loading
             if (blockData.has("subtypes"))
             {
                 block = new BlockJsonMeta(blockData.get("name").getAsString(), blockData.get("material").getAsString());
-                readMeta((BlockJsonMeta) block, blockData.get("subtypes").getAsJsonArray());
+                //Call to load metadata
+                readMeta((BlockJsonMeta) block, blockData.get("subtypes").getAsJsonArray(), objectList);
             }
+            //No meta data
             else
             {
                 block = new BlockJson(blockData.get("name").getAsString(), blockData.get("material").getAsString());
             }
-            return block;
+
+            //Call to process extra tags from file
+            for (Map.Entry<String, JsonElement> entry : blockData.entrySet())
+            {
+                if (!blockFields.contains(entry.getKey().toLowerCase()))
+                {
+                    processUnknownEntry(entry.getKey(), entry.getValue(), block, null, objectList);
+                }
+            }
+
+            //Add block to object list
+            objectList.add(block);
         }
         else
         {
@@ -79,19 +105,24 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
      * @param block - meta block, unregistered
      * @param array - array of subtypes
      */
-    public void readMeta(BlockJsonMeta block, JsonArray array)
+    public void readMeta(BlockJsonMeta block, JsonArray array, List<IJsonGenObject> objectList)
     {
         //Loop every entry in the array, each entry should be meta values
         for (int i = 0; i < array.size() && i < 16; i++)
         {
             JsonObject json = array.get(i).getAsJsonObject();
             MetaData meta = new MetaData();
-            int m = readMetaEntry(block, meta, json);
+
+            //Reads the meta entry and then returns the meta to assign
+            int m = readMetaEntry(block, meta, json, objectList);
+
+            //Meta of -1 is invalid
             if (m != -1)
             {
                 //Meta is locked to 0-15
                 if (m >= 0 && m < 16)
                 {
+                    //Prevent overriding by mistake
                     if (block.meta[m] == null)
                     {
                         meta.index = m;
@@ -109,7 +140,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
             }
             else
             {
-                throw new IllegalArgumentException("JsonBlockProcessor: Each meta entry requires the value 'meta':int");
+                throw new IllegalArgumentException("JsonBlockProcessor: Each meta entry requires the value 'meta' of type Integer");
             }
         }
     }
@@ -122,7 +153,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
      * @param json
      * @return
      */
-    public int readMetaEntry(BlockJson block, MetaData data, JsonObject json)
+    public int readMetaEntry(BlockJson block, MetaData data, JsonObject json, List<IJsonGenObject> objectList)
     {
         int meta = -1;
         for (Map.Entry<String, JsonElement> entry : json.entrySet())
@@ -141,7 +172,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
             }
             else
             {
-                processUnknownEntry(entry.getKey(), entry.getValue(), block, data);
+                processUnknownEntry(entry.getKey(), entry.getValue(), block, data, objectList);
             }
         }
         return meta;
@@ -155,19 +186,19 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
      * @param block   - block being processed
      * @param data    - meta being processed, can be null if processing block only
      */
-    public void processUnknownEntry(String name, JsonElement element, BlockJson block, MetaData data)
+    public void processUnknownEntry(String name, JsonElement element, BlockJson block, MetaData data, List<IJsonGenObject> objectList)
     {
         if (subProcessors.containsKey(name))
         {
-            if (subProcessors.get(name).canProcess(element))
+            if (subProcessors.get(name).canProcess(name, element))
             {
                 if (data != null)
                 {
-                    subProcessors.get(name).processMeta(data, block, element);
+                    subProcessors.get(name).process(data, block, element, objectList);
                 }
                 else
                 {
-                    subProcessors.get(name).process(block, element);
+                    subProcessors.get(name).process(block, element, objectList);
                 }
             }
             else

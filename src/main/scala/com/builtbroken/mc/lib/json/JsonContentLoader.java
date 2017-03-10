@@ -421,15 +421,25 @@ public final class JsonContentLoader extends AbstractLoadable
         {
             if (processor.canProcess(key, element))
             {
-                if(processor.shouldLoad(element))
+                if (processor.shouldLoad(element))
                 {
-                    IJsonGenObject data = processor.process(element);
-                    data.register();
-                    if (data instanceof IRegistryInit)
+                    List<IJsonGenObject> objects = new ArrayList();
+                    processor.process(element, objects);
+
+                    boolean reg = false;
+                    for (IJsonGenObject data : objects)
                     {
-                        ((IRegistryInit) data).onRegistered();
+                        if (data != null)
+                        {
+                            data.register();
+                            if (data instanceof IRegistryInit)
+                            {
+                                ((IRegistryInit) data).onRegistered();
+                            }
+                            reg = true;
+                        }
                     }
-                    return generatedObjects.add(data);
+                    return reg;
                 }
                 return true; //Technically it was processed but just not added
             }

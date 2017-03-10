@@ -17,7 +17,7 @@ public class MetaData
     public String localization;
     /** List of ore names to register after block is registered */
     public List<String> oreNames;
-
+    /** Index in the meta array, between 0-15 */
     public int index;
 
     /**

@@ -6,6 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import cpw.mods.fml.common.Loader;
 
+import java.util.List;
+
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/24/2016.
@@ -50,7 +52,26 @@ public abstract class JsonProcessor<D extends IJsonGenObject>
         return key.equalsIgnoreCase(getJsonKey());
     }
 
-    public abstract D process(JsonElement element);
+    /**
+     * Called to process the element data
+     *
+     * @param element - data
+     * @param entries - list to add generated object to
+     */
+    public void process(JsonElement element, List<IJsonGenObject> entries)
+    {
+        D output = process(element);
+        if (output != null)
+        {
+            entries.add(output);
+        }
+    }
+
+    @Deprecated
+    public D process(JsonElement element)
+    {
+        return null;
+    }
 
     /**
      * Quick way to check that required fields exist in the json file
