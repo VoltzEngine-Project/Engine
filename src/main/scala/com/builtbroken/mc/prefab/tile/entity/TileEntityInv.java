@@ -1,155 +1,184 @@
 package com.builtbroken.mc.prefab.tile.entity;
 
+import com.builtbroken.mc.api.tile.IInventoryProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 
-public abstract class TileEntityInv extends TileEntity implements IInventory
+/**
+ * Simplified impelementation for {@link ISidedInventory} and {@link IInventoryProvider}
+ *
+ * @param <I> - inventory type to return for {@link #getInventory()}
+ */
+public abstract class TileEntityInv<I extends IInventory> extends TileEntityBase implements ISidedInventory, IInventoryProvider<I>
 {
-    protected ItemStack[] chestContents = new ItemStack[36];
+    /** Primary inventory container for this machine, all {@link IInventory} and {@link ISidedInventory} calls are wrapped to this object */
+    protected I inventory_module;
+
+    @Override
+    public I getInventory()
+    {
+        if (inventory_module == null)
+        {
+            inventory_module = createInventory();
+        }
+        return inventory_module;
+    }
+
+    /**
+     * Creates a new inventory instance.
+     * Called by {@link #getInventory()} if
+     * {@link #inventory_module} is null
+     *
+     * @return new inventory
+     */
+    protected abstract I createInventory();
+
+    @Override
+    public int[] getAccessibleSlotsFromSide(int side)
+    {
+        if (getInventory() instanceof ISidedInventory)
+        {
+            return ((ISidedInventory) getInventory()).getAccessibleSlotsFromSide(side);
+        }
+        return new int[0];
+    }
+
+    @Override
+    public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, int p_102007_3_)
+    {
+        if (getInventory() instanceof ISidedInventory)
+        {
+            return ((ISidedInventory) getInventory()).canInsertItem(p_102007_1_, p_102007_2_, p_102007_3_);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, int p_102008_3_)
+    {
+        if (getInventory() instanceof ISidedInventory)
+        {
+            return ((ISidedInventory) getInventory()).canInsertItem(p_102008_1_, p_102008_2_, p_102008_3_);
+        }
+        return false;
+    }
 
     @Override
     public int getSizeInventory()
     {
-        return 27;
+        if (getInventory() != null)
+        {
+            return getInventory().getSizeInventory();
+        }
+        return 0;
     }
 
     @Override
-    public ItemStack getStackInSlot(int p_70301_1_)
+    public ItemStack getStackInSlot(int slot)
     {
-        return this.chestContents[p_70301_1_];
+        if (getInventory() != null)
+        {
+            return getInventory().getStackInSlot(slot);
+        }
+        return null;
     }
 
     @Override
-    public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
+    public ItemStack decrStackSize(int slot, int amount)
     {
-        if (this.chestContents[p_70298_1_] != null)
+        if (getInventory() != null)
         {
-            ItemStack itemstack;
-
-            if (this.chestContents[p_70298_1_].stackSize <= p_70298_2_)
-            {
-                itemstack = this.chestContents[p_70298_1_];
-                this.chestContents[p_70298_1_] = null;
-                this.markDirty();
-                return itemstack;
-            }
-            else
-            {
-                itemstack = this.chestContents[p_70298_1_].splitStack(p_70298_2_);
-
-                if (this.chestContents[p_70298_1_].stackSize == 0)
-                {
-                    this.chestContents[p_70298_1_] = null;
-                }
-
-                this.markDirty();
-                return itemstack;
-            }
+            return getInventory().decrStackSize(slot, amount);
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int p_70304_1_)
+    public ItemStack getStackInSlotOnClosing(int slot)
     {
-        if (this.chestContents[p_70304_1_] != null)
+        if (getInventory() != null)
         {
-            ItemStack itemstack = this.chestContents[p_70304_1_];
-            this.chestContents[p_70304_1_] = null;
-            return itemstack;
+            return getInventory().getStackInSlotOnClosing(slot);
         }
-        else
+        return null;
+    }
+
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack stack)
+    {
+        if (getInventory() != null)
         {
-            return null;
+            getInventory().setInventorySlotContents(slot, stack);
         }
     }
 
     @Override
-    public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
+    public String getInventoryName()
     {
-        this.chestContents[p_70299_1_] = p_70299_2_;
-
-        if (p_70299_2_ != null && p_70299_2_.stackSize > this.getInventoryStackLimit())
+        if (getInventory() != null)
         {
-            p_70299_2_.stackSize = this.getInventoryStackLimit();
+            return getInventory().getInventoryName();
         }
-
-        this.markDirty();
+        return "inventory";
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound p_145839_1_)
+    public boolean hasCustomInventoryName()
     {
-        super.readFromNBT(p_145839_1_);
-        NBTTagList nbttaglist = p_145839_1_.getTagList("Items", 10);
-        this.chestContents = new ItemStack[this.getSizeInventory()];
-
-        for (int i = 0; i < nbttaglist.tagCount(); ++i)
+        if (getInventory() != null)
         {
-            NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-            int j = nbttagcompound1.getByte("Slot") & 255;
-
-            if (j >= 0 && j < this.chestContents.length)
-            {
-                this.chestContents[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-            }
+            return getInventory().hasCustomInventoryName();
         }
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound p_145841_1_)
-    {
-        super.writeToNBT(p_145841_1_);
-        NBTTagList nbttaglist = new NBTTagList();
-
-        for (int i = 0; i < this.chestContents.length; ++i)
-        {
-            if (this.chestContents[i] != null)
-            {
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                nbttagcompound1.setByte("Slot", (byte)i);
-                this.chestContents[i].writeToNBT(nbttagcompound1);
-                nbttaglist.appendTag(nbttagcompound1);
-            }
-        }
-
-        p_145841_1_.setTag("Items", nbttaglist);
+        return false;
     }
 
     @Override
     public int getInventoryStackLimit()
     {
-        return 64;
+        if (getInventory() != null)
+        {
+            return getInventory().getInventoryStackLimit();
+        }
+        return 0;
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
+    public boolean isUseableByPlayer(EntityPlayer player)
     {
-        return this.getWorldObj().getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : p_70300_1_.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+        if (getInventory() != null)
+        {
+            return getInventory().isUseableByPlayer(player);
+        }
+        return false;
     }
 
     @Override
     public void openInventory()
     {
-
+        if (getInventory() != null)
+        {
+            getInventory().openInventory();
+        }
     }
 
     @Override
     public void closeInventory()
     {
-
+        if (getInventory() != null)
+        {
+            getInventory().closeInventory();
+        }
     }
 
     @Override
-    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
+    public boolean isItemValidForSlot(int slot, ItemStack stack)
     {
-        return true;
+        if (getInventory() != null)
+        {
+            return getInventory().isItemValidForSlot(slot, stack);
+        }
+        return false;
     }
 }

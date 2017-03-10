@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.json.recipe.smelting;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -12,7 +13,7 @@ import net.minecraft.item.ItemStack;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/26/2016.
  */
-public class SmeltingRecipe
+public class JsonSmeltingRecipeData implements IJsonGenObject
 {
     /** {@link net.minecraft.item.Item} or {@link net.minecraft.block.Block} */
     public final Object input;
@@ -21,7 +22,7 @@ public class SmeltingRecipe
 
     public ItemStack output;
 
-    public SmeltingRecipe(Object input)
+    public JsonSmeltingRecipeData(Object input)
     {
         this.input = input;
         if (!(input instanceof Block || input instanceof Item))
@@ -30,6 +31,7 @@ public class SmeltingRecipe
         }
     }
 
+    @Override
     public void register()
     {
         ItemStack output = getOutput();

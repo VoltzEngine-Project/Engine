@@ -1,12 +1,10 @@
 package com.builtbroken.mc.lib.json.block.processor;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.builtbroken.mc.lib.json.block.BlockJson;
 import com.builtbroken.mc.lib.json.block.meta.MetaData;
-import com.builtbroken.mc.lib.json.recipe.smelting.SmeltingRecipe;
-import com.builtbroken.mc.lib.json.recipe.smelting.SmeltingRecipeJson;
-import com.builtbroken.mc.lib.json.recipe.smelting.SmeltingRecipeText;
+import com.builtbroken.mc.lib.json.recipe.smelting.JsonSmeltingRecipeData;
+import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -21,14 +19,14 @@ import java.util.List;
  */
 public class JsonBlockSmeltingProcessor extends JsonBlockSubProcessor implements ILoadable
 {
-    private List<SmeltingRecipe> recipes = new ArrayList();
+    private List<JsonSmeltingRecipeData> recipes = new ArrayList();
 
     @Override
     public void process(BlockJson block, JsonElement element)
     {
         try
         {
-            SmeltingRecipe recipe = process(block, element.getAsJsonObject());
+            JsonSmeltingRecipeData recipe = process(block, element.getAsJsonObject());
             recipes.add(recipe);
         }
         catch (Exception e)
@@ -43,7 +41,7 @@ public class JsonBlockSmeltingProcessor extends JsonBlockSubProcessor implements
     {
         try
         {
-            SmeltingRecipe recipe = process(block, element.getAsJsonObject());
+            JsonSmeltingRecipeData recipe = process(block, element.getAsJsonObject());
             recipe.inputMeta = meta.index;
             recipes.add(recipe);
         }
@@ -62,35 +60,9 @@ public class JsonBlockSmeltingProcessor extends JsonBlockSubProcessor implements
      * @return smelting recipe
      * @throws IllegalArgumentException - if the input is invalid
      */
-    public SmeltingRecipe process(BlockJson block, JsonObject json)
+    public JsonSmeltingRecipeData process(BlockJson block, JsonObject json)
     {
-        SmeltingRecipe recipe;
-        if (json.has("output"))
-        {
-            JsonElement output = json.get("output");
-            if (output.isJsonObject())
-            {
-                JsonObject json2 = output.getAsJsonObject();
-                if (!json2.has("item"))
-                {
-                    throw new IllegalArgumentException(this + " json data is missing a item entry used to figure out what to load.");
-                }
-                if (!json2.has("type"))
-                {
-                    throw new IllegalArgumentException(this + " json data is missing a type entry used to figure out what to load.");
-                }
-                recipe = new SmeltingRecipeJson(block, json2);
-            }
-            else
-            {
-                recipe = new SmeltingRecipeText(block, output.getAsString());
-            }
-            if (json.has("xp"))
-            {
-                recipe.xp = (float) json.get("xp").getAsDouble();
-            }
-        }
-        throw new IllegalArgumentException(this + " json data is missing a item entry used to figure out what to load.");
+        return null; //TODO implement
     }
 
     @Override
@@ -108,7 +80,7 @@ public class JsonBlockSmeltingProcessor extends JsonBlockSubProcessor implements
     @Override
     public void postInit()
     {
-        recipes.forEach(SmeltingRecipe::register);
+        recipes.forEach(JsonSmeltingRecipeData::register);
         recipes.clear(); //Clear cache to save that maybe 70kb of ram
     }
 }
