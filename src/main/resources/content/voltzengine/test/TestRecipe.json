@@ -3,6 +3,7 @@
     "name": "${voltzengine}"
   },
   "craftingGridRecipe": {
+    "loadCondition":"devMode",
     "type": "shaped",
     "output":"item@minecraft:stick",
     "grid": "   , S ,   ",

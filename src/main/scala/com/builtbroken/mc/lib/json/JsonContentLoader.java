@@ -421,13 +421,17 @@ public final class JsonContentLoader extends AbstractLoadable
         {
             if (processor.canProcess(key, element))
             {
-                IJsonGenObject data = processor.process(element);
-                data.register();
-                if (data instanceof IRegistryInit)
+                if(processor.shouldLoad(element))
                 {
-                    ((IRegistryInit) data).onRegistered();
+                    IJsonGenObject data = processor.process(element);
+                    data.register();
+                    if (data instanceof IRegistryInit)
+                    {
+                        ((IRegistryInit) data).onRegistered();
+                    }
+                    return generatedObjects.add(data);
                 }
-                return generatedObjects.add(data);
+                return true; //Technically it was processed but just not added
             }
             else
             {

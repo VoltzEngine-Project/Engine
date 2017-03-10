@@ -1,8 +1,10 @@
 package com.builtbroken.mc.lib.json.processors;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import cpw.mods.fml.common.Loader;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -65,5 +67,40 @@ public abstract class JsonProcessor<D extends IJsonGenObject>
                 throw new IllegalArgumentException("File is missing " + value + " value " + object);
             }
         }
+    }
+
+    /**
+     * Called to check if the processor should load the
+     * data and convert it.
+     * <p>
+     * Implemented separately from {@link #canProcess(String, JsonElement)}
+     * so to note that the processor could have loaded. However, some
+     * conditional has said for the content to not load.
+     *
+     * @param object - object entry of the data
+     * @return true if it should load
+     */
+    public boolean shouldLoad(JsonElement object)
+    {
+        if (object instanceof JsonObject)
+        {
+            if (((JsonObject) object).has("loadCondition"))
+            {
+                final String type = ((JsonObject) object).getAsJsonPrimitive("loadCondition").getAsString();
+                if (type.startsWith("mod@"))
+                {
+                    String modName = type.substring(4, type.length());
+                    if (!Loader.isModLoaded(modName))
+                    {
+                        return false;
+                    }
+                }
+                else if (type.equalsIgnoreCase("devMode"))
+                {
+                    return Engine.runningAsDev;
+                }
+            }
+        }
+        return true;
     }
 }
