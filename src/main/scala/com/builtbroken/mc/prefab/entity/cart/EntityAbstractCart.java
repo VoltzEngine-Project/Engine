@@ -105,10 +105,9 @@ public class EntityAbstractCart extends EntityBase implements IPacketIDReceiver,
     }
 
     @Override
-    public void setRotation(float yaw, float pitch)
+    public void setCartRotation(float yaw, float pitch)
     {
-        this.rotationYaw = yaw % 360.0F;
-        this.rotationPitch = pitch % 360.0F;
+        super.setRotation(yaw, pitch);
         invalidBox = true;
 
         float yaw2 = (float) MathUtility.clampAngleTo180(this.rotationYaw);
@@ -320,7 +319,7 @@ public class EntityAbstractCart extends EntityBase implements IPacketIDReceiver,
     }
 
     @Override
-    public void setMotion(double x, double y, double z)
+    public void setCartMotion(double x, double y, double z)
     {
         this.motionX = x;
         this.motionY = y;
