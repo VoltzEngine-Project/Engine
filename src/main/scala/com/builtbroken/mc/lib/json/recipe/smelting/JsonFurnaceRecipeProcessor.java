@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/24/2016.
  */
-public class JsonSmeltingProcessor extends JsonRecipeProcessor<JsonSmeltingRecipeData> implements IJsonBlockSubProcessor
+public class JsonFurnaceRecipeProcessor extends JsonRecipeProcessor<JsonFurnaceRecipeData> implements IJsonBlockSubProcessor
 {
     @Override
     public String getMod()
@@ -33,7 +33,7 @@ public class JsonSmeltingProcessor extends JsonRecipeProcessor<JsonSmeltingRecip
     }
 
     @Override
-    public JsonSmeltingRecipeData process(final Object out, final JsonElement element)
+    public JsonFurnaceRecipeData process(final Object out, final JsonElement element)
     {
         final JsonObject recipeData = element.getAsJsonObject();
 
@@ -58,6 +58,6 @@ public class JsonSmeltingProcessor extends JsonRecipeProcessor<JsonSmeltingRecip
         }
 
         //Make recipe
-        return new JsonSmeltingRecipeData(input, output, xp);
+        return new JsonFurnaceRecipeData(input, output, xp);
     }
 }

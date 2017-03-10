@@ -5,6 +5,7 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.block.BlockJson;
 import com.builtbroken.mc.lib.json.block.meta.BlockJsonMeta;
 import com.builtbroken.mc.lib.json.block.meta.MetaData;
+import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class JsonBlockProcessor extends JsonProcessor<BlockJson>
 {
     /** Map of processors to run on unknown json object entries, used to process recipes and registry calls */
-    public final HashMap<String, JsonBlockSubProcessor> subProcessors = new HashMap();
+    public final HashMap<String, IJsonBlockSubProcessor> subProcessors = new HashMap();
 
     /** Keeps track of json fields that are used for block data directly and can not be used by sub processors */
     public final List<String> blockFields = new ArrayList();
@@ -214,7 +215,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
         }
     }
 
-    public void addSubProcessor(String entryName, JsonBlockSubProcessor processor)
+    public void addSubProcessor(String entryName, IJsonBlockSubProcessor processor)
     {
         if (subProcessors.containsKey(entryName) && subProcessors.get(entryName) != null)
         {

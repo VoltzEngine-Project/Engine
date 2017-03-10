@@ -6,12 +6,12 @@ import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.json.block.processor.JsonBlockProcessor;
-import com.builtbroken.mc.lib.json.block.processor.JsonBlockSmeltingProcessor;
-import com.builtbroken.mc.lib.json.block.processor.JsonBlockWorldGenProcessor;
+import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.item.JsonItemProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
 import com.builtbroken.mc.lib.json.recipe.crafting.JsonCraftingRecipeProcessor;
+import com.builtbroken.mc.lib.json.recipe.smelting.JsonFurnaceRecipeProcessor;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -62,8 +62,10 @@ public final class JsonContentLoader extends AbstractLoadable
     public final JsonBlockProcessor blockProcessor;
     /** Item processor */
     public final JsonItemProcessor itemProcessor;
-    /** Crafting grid recipe processor */
+    /** Crafting grid recipe processor {@link net.minecraft.item.crafting.CraftingManager} */
     public final JsonCraftingRecipeProcessor craftingRecipeProcessor;
+    /** Furnace recipe processor {@link net.minecraft.item.crafting.FurnaceRecipes} */
+    public final JsonFurnaceRecipeProcessor furnaceRecipeProcessor;
 
 
     /** Used almost entirely by unit testing to disable file loading */
@@ -78,6 +80,7 @@ public final class JsonContentLoader extends AbstractLoadable
         blockProcessor = new JsonBlockProcessor();
         itemProcessor = new JsonItemProcessor();
         craftingRecipeProcessor = new JsonCraftingRecipeProcessor();
+        furnaceRecipeProcessor = new JsonFurnaceRecipeProcessor();
     }
 
     /**
@@ -88,6 +91,11 @@ public final class JsonContentLoader extends AbstractLoadable
     public void add(JsonProcessor processor)
     {
         processors.put(processor.getJsonKey(), processor);
+        if (processor instanceof IJsonBlockSubProcessor)
+        {
+            blockProcessor.addSubProcessor(processor.getJsonKey(), (IJsonBlockSubProcessor) processor);
+        }
+        //TODO add item sub processors
     }
 
     @Override
@@ -100,14 +108,10 @@ public final class JsonContentLoader extends AbstractLoadable
 
         //Load processors
         add(blockProcessor);
-        blockProcessor.addSubProcessor("smeltingRecipe", new JsonBlockSmeltingProcessor());
-        blockProcessor.addSubProcessor("worldGenerator", new JsonBlockWorldGenProcessor());
-
         add(itemProcessor);
-        //TODO implement sub processors
-
-        add(craftingRecipeProcessor); //TODO attach to item and block processor
-        //TODO add entities
+        //TODO add entity loading
+        add(craftingRecipeProcessor);
+        add(furnaceRecipeProcessor);
         //TODO add machine recipes
 
         //Resources are loaded before they can be processed to allow early processing
@@ -431,6 +435,7 @@ public final class JsonContentLoader extends AbstractLoadable
                     {
                         if (data != null)
                         {
+                            generatedObjects.add(data);
                             data.register();
                             if (data instanceof IRegistryInit)
                             {

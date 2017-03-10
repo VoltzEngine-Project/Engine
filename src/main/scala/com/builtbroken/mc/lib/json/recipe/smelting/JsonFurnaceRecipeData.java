@@ -13,14 +13,14 @@ import net.minecraft.item.ItemStack;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/26/2016.
  */
-public class JsonSmeltingRecipeData extends JsonRecipeData implements IJsonGenObject, IPostInit
+public class JsonFurnaceRecipeData extends JsonRecipeData implements IJsonGenObject, IPostInit
 {
     /** Input for the recipe */
     public final Object input;
     /** XP recipe of the recipe*/
     public float xp;
 
-    public JsonSmeltingRecipeData(Object input, Object output, float xp)
+    public JsonFurnaceRecipeData(Object input, Object output, float xp)
     {
         super(output);
         this.input = input;
@@ -32,9 +32,9 @@ public class JsonSmeltingRecipeData extends JsonRecipeData implements IJsonGenOb
     {
         ItemStack outputStack = toStack(output);
         ItemStack inputStack = toStack(input);
-        if (output != null)
+        if (outputStack != null)
         {
-            if (output != null)
+            if (inputStack != null)
             {
                 GameRegistry.addSmelting(inputStack, outputStack, xp);
             }

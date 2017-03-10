@@ -20,7 +20,6 @@ public abstract class JsonRecipeData implements IJsonGenObject
 {
     /** Output of the recipe */
     public Object output;
-    private boolean convertedOutput = false;
 
     public JsonRecipeData(Object output)
     {
@@ -92,35 +91,34 @@ public abstract class JsonRecipeData implements IJsonGenObject
 
     /**
      * Output of the recipe
+     * <p>
+     * Cache as this may be re-calculated each call
      *
      * @return
      */
     public ItemStack getOutput()
     {
-        if (!convertedOutput)
-        {
-            convertedOutput = true;
-
-            //Convert from string data
-            if (output instanceof String)
-            {
-                output = convert((String) output);
-            }
-            ItemStack stack = toStack(output);
-            if (stack != null)
-            {
-                output = stack;
-            }
-        }
-        return output instanceof ItemStack ? (ItemStack) output : null;
+        return toStack(output);
     }
 
+    /**
+     * Called to convert the object to a usable stack
+     *
+     * @param object - object
+     * @return stack or null if can't convert
+     */
     public ItemStack toStack(Object object)
     {
+        //Means the object has not been converted to usable data
+        if (object instanceof String && (((String) object).contains("@") || ((String) object).contains(":")))
+        {
+            return toStack(convert((String) object));
+        }
+
         //Convert to itemstack
         if (object instanceof Item)
         {
-            return new ItemStack((Block) object);
+            return new ItemStack((Item) object);
         }
         else if (object instanceof Block)
         {
