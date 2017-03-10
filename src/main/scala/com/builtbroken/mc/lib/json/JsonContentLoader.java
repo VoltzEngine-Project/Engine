@@ -9,7 +9,9 @@ import com.builtbroken.mc.lib.json.block.processor.JsonBlockProcessor;
 import com.builtbroken.mc.lib.json.block.processor.JsonBlockSmeltingProcessor;
 import com.builtbroken.mc.lib.json.block.processor.JsonBlockWorldGenProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
+import com.builtbroken.mc.lib.json.item.JsonItemProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.lib.json.recipe.crafting.JsonRecipeProcessor;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -58,6 +60,11 @@ public final class JsonContentLoader extends AbstractLoadable
 
     /** Block processor */
     public final JsonBlockProcessor blockProcessor;
+    /** Item processor */
+    public final JsonItemProcessor itemProcessor;
+    /** Crafting grid recipe processor */
+    public final JsonRecipeProcessor craftingRecipeProcessor;
+
 
     /** Used almost entirely by unit testing to disable file loading */
     public boolean ignoreFileLoading = false;
@@ -69,6 +76,8 @@ public final class JsonContentLoader extends AbstractLoadable
     {
         extensionsToLoad.add("json");
         blockProcessor = new JsonBlockProcessor();
+        itemProcessor = new JsonItemProcessor();
+        craftingRecipeProcessor = new JsonRecipeProcessor();
     }
 
     /**
@@ -90,10 +99,14 @@ public final class JsonContentLoader extends AbstractLoadable
         validateFilePaths();
 
         //Load processors
-        processors.put("block", blockProcessor);
+        add(blockProcessor);
         blockProcessor.addSubProcessor("smeltingRecipe", new JsonBlockSmeltingProcessor());
         blockProcessor.addSubProcessor("worldGenerator", new JsonBlockWorldGenProcessor());
-        //TODO add crafting recipes
+
+        add(itemProcessor);
+        //TODO implement sub processors
+
+        add(craftingRecipeProcessor); //TODO attach to item and block processor
         //TODO add entities
         //TODO add machine recipes
 

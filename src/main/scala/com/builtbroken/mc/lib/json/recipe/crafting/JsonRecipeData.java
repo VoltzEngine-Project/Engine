@@ -4,7 +4,6 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

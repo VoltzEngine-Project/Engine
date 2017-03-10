@@ -59,6 +59,7 @@ public class JsonRecipeProcessor extends JsonProcessor<JsonRecipeData>
         if (output == null)
         {
             ensureValuesExist(recipeData, "output");
+            output = recipeData.getAsJsonPrimitive("output").getAsString();
         }
 
         String type = recipeData.getAsJsonPrimitive("type").getAsString();

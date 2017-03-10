@@ -57,9 +57,11 @@ public class TestJsonLoader extends AbstractTest
         //Test everything that runs in the pre int method
         assertEquals("json", loader.externalContentFolder.getName());
         assertEquals("file", loader.externalContentFolder.getParentFile().getName());
-        assertEquals(1, loader.processors.size());
+        assertEquals(3, loader.processors.size());
         assertSame(loader.blockProcessor, loader.processors.get("block"));
         assertEquals(2, loader.blockProcessor.subProcessors.size());
+        assertSame(loader.itemProcessor, loader.processors.get("item"));
+        assertSame(loader.craftingRecipeProcessor, loader.processors.get("craftingGridRecipe"));
 
         //Call init and setup data it needs
         loader.add(new FakeProcessor("ammo", "after:ammoType"));
