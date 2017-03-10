@@ -11,7 +11,7 @@ import com.builtbroken.mc.lib.json.block.processor.JsonBlockWorldGenProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.item.JsonItemProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
-import com.builtbroken.mc.lib.json.recipe.crafting.JsonRecipeProcessor;
+import com.builtbroken.mc.lib.json.recipe.crafting.JsonCraftingRecipeProcessor;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -63,7 +63,7 @@ public final class JsonContentLoader extends AbstractLoadable
     /** Item processor */
     public final JsonItemProcessor itemProcessor;
     /** Crafting grid recipe processor */
-    public final JsonRecipeProcessor craftingRecipeProcessor;
+    public final JsonCraftingRecipeProcessor craftingRecipeProcessor;
 
 
     /** Used almost entirely by unit testing to disable file loading */
@@ -77,7 +77,7 @@ public final class JsonContentLoader extends AbstractLoadable
         extensionsToLoad.add("json");
         blockProcessor = new JsonBlockProcessor();
         itemProcessor = new JsonItemProcessor();
-        craftingRecipeProcessor = new JsonRecipeProcessor();
+        craftingRecipeProcessor = new JsonCraftingRecipeProcessor();
     }
 
     /**

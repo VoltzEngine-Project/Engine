@@ -23,7 +23,7 @@ import java.util.Map;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/9/2017.
  */
-public class JsonRecipeProcessor extends JsonProcessor<JsonRecipeData> implements IJsonBlockSubProcessor
+public class JsonCraftingRecipeProcessor extends JsonProcessor<JsonCraftingRecipeData> implements IJsonBlockSubProcessor
 {
     @Override
     public String getMod()
@@ -46,7 +46,7 @@ public class JsonRecipeProcessor extends JsonProcessor<JsonRecipeData> implement
     @Override
     public void process(JsonElement element, List<IJsonGenObject> objects)
     {
-        JsonRecipeData data = process(null, element);
+        JsonCraftingRecipeData data = process(null, element);
         if (data != null)
         {
             objects.add(data);
@@ -60,7 +60,7 @@ public class JsonRecipeProcessor extends JsonProcessor<JsonRecipeData> implement
      * @param element - data containing the recipe
      * @return recipe data
      */
-    public JsonRecipeData process(final Object out, final JsonElement element)
+    public JsonCraftingRecipeData process(final Object out, final JsonElement element)
     {
         final JsonObject recipeData = element.getAsJsonObject();
 
@@ -108,7 +108,7 @@ public class JsonRecipeProcessor extends JsonProcessor<JsonRecipeData> implement
                 data[i++] = entry.getValue();
             }
             //New recipe data
-            return new JsonRecipeData(output, data, true);
+            return new JsonCraftingRecipeData(output, data, true);
         }
         else if (type.equalsIgnoreCase("shapeless"))
         {
@@ -118,7 +118,7 @@ public class JsonRecipeProcessor extends JsonProcessor<JsonRecipeData> implement
             String[] items = recipeData.getAsJsonPrimitive("items").getAsString().split(",");
 
             //New recipe data
-            return new JsonRecipeData(output, items, false);
+            return new JsonCraftingRecipeData(output, items, false);
         }
         else
         {

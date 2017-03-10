@@ -20,13 +20,13 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/9/2017.
  */
-public class JsonRecipeData implements IJsonGenObject, IRecipeContainer
+public class JsonCraftingRecipeData implements IJsonGenObject, IRecipeContainer
 {
     public Object output;
     public final Object[] data;
     public final boolean shaped;
 
-    public JsonRecipeData(Object output, Object[] data, boolean shaped)
+    public JsonCraftingRecipeData(Object output, Object[] data, boolean shaped)
     {
         this.output = output;
         this.data = data;
