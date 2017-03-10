@@ -1,17 +1,12 @@
 package com.builtbroken.mc.lib.json.recipe.crafting;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.json.block.BlockJson;
-import com.builtbroken.mc.lib.json.block.meta.MetaData;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
-import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
-import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.lib.json.recipe.JsonRecipeProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +18,7 @@ import java.util.Map;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/9/2017.
  */
-public class JsonCraftingRecipeProcessor extends JsonProcessor<JsonCraftingRecipeData> implements IJsonBlockSubProcessor
+public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftingRecipeData> implements IJsonBlockSubProcessor
 {
     @Override
     public String getMod()
@@ -44,22 +39,6 @@ public class JsonCraftingRecipeProcessor extends JsonProcessor<JsonCraftingRecip
     }
 
     @Override
-    public void process(JsonElement element, List<IJsonGenObject> objects)
-    {
-        JsonCraftingRecipeData data = process(null, element);
-        if (data != null)
-        {
-            objects.add(data);
-        }
-    }
-
-    /**
-     * Called to process a recipe
-     *
-     * @param out     - optional, output item - if provided will not require output from recipe json
-     * @param element - data containing the recipe
-     * @return recipe data
-     */
     public JsonCraftingRecipeData process(final Object out, final JsonElement element)
     {
         final JsonObject recipeData = element.getAsJsonObject();
@@ -124,17 +103,5 @@ public class JsonCraftingRecipeProcessor extends JsonProcessor<JsonCraftingRecip
         {
             throw new IllegalArgumentException("File is contains an unknown grid recipe type of " + type + " that is not supported.");
         }
-    }
-
-    @Override
-    public void process(BlockJson block, JsonElement element, List<IJsonGenObject> objectList)
-    {
-        process(block, element);
-    }
-
-    @Override
-    public void process(MetaData data, BlockJson block, JsonElement element, List<IJsonGenObject> objectList)
-    {
-        process(new ItemStack(block, 1, data.index), element);
     }
 }
