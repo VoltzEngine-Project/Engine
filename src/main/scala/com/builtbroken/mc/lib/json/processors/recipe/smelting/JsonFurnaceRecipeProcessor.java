@@ -1,8 +1,8 @@
-package com.builtbroken.mc.lib.json.recipe.smelting;
+package com.builtbroken.mc.lib.json.processors.recipe.smelting;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
-import com.builtbroken.mc.lib.json.recipe.JsonRecipeProcessor;
+import com.builtbroken.mc.lib.json.processors.recipe.JsonRecipeProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 

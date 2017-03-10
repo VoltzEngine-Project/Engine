@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.json.block.meta;
+package com.builtbroken.mc.lib.json.processors.block.meta;
 
 import java.util.ArrayList;
 import java.util.List;

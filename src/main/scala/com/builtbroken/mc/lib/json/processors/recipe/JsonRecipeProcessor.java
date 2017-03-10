@@ -1,7 +1,7 @@
-package com.builtbroken.mc.lib.json.recipe;
+package com.builtbroken.mc.lib.json.processors.recipe;
 
-import com.builtbroken.mc.lib.json.block.BlockJson;
-import com.builtbroken.mc.lib.json.block.meta.MetaData;
+import com.builtbroken.mc.lib.json.processors.block.BlockJson;
+import com.builtbroken.mc.lib.json.processors.block.meta.MetaData;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;

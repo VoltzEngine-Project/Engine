@@ -1,6 +1,6 @@
-package com.builtbroken.mc.lib.json.block;
+package com.builtbroken.mc.lib.json.processors.block;
 
-import com.builtbroken.mc.lib.json.block.meta.BlockJsonMeta;
+import com.builtbroken.mc.lib.json.processors.block.meta.BlockJsonMeta;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;

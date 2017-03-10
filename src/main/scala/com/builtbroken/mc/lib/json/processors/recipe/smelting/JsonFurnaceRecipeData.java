@@ -1,9 +1,9 @@
-package com.builtbroken.mc.lib.json.recipe.smelting;
+package com.builtbroken.mc.lib.json.processors.recipe.smelting;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
-import com.builtbroken.mc.lib.json.recipe.JsonRecipeData;
+import com.builtbroken.mc.lib.json.processors.recipe.JsonRecipeData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 

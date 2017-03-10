@@ -1,8 +1,8 @@
-package com.builtbroken.mc.lib.json.recipe.crafting;
+package com.builtbroken.mc.lib.json.processors.recipe.crafting;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
-import com.builtbroken.mc.lib.json.recipe.JsonRecipeData;
+import com.builtbroken.mc.lib.json.processors.recipe.JsonRecipeData;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.json.block;
+package com.builtbroken.mc.lib.json.processors.block;
 
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.MaterialDict;

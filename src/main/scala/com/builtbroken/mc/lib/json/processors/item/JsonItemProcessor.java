@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.json.item;
+package com.builtbroken.mc.lib.json.processors.item;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;

@@ -1,7 +1,7 @@
-package com.builtbroken.mc.lib.json.block.meta;
+package com.builtbroken.mc.lib.json.processors.block.meta;
 
-import com.builtbroken.mc.lib.json.block.BlockJson;
-import com.builtbroken.mc.lib.json.block.ItemBlockJson;
+import com.builtbroken.mc.lib.json.processors.block.BlockJson;
+import com.builtbroken.mc.lib.json.processors.block.ItemBlockJson;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;

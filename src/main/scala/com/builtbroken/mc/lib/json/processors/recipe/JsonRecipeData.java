@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.json.recipe;
+package com.builtbroken.mc.lib.json.processors.recipe;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
