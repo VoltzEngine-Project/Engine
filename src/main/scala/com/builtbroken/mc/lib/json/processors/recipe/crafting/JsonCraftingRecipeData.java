@@ -37,7 +37,7 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
         //If output is a string convert
         if (output instanceof String)
         {
-            Object out = convert((String) output);
+            Object out = convertItemEntry((String) output);
             if (out != null)
             {
                 output = out;
@@ -63,7 +63,7 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
                 }
                 else if (convert)
                 {
-                    Object out = convert((String) dataObject);
+                    Object out = convertItemEntry((String) dataObject);
                     if (out != null)
                     {
                         data[i] = out;
@@ -104,7 +104,7 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
                 if (dataObject instanceof String)
                 {
                     //Convert entries to correct outputs
-                    Object out = convert((String) dataObject);
+                    Object out = convertItemEntry((String) dataObject);
                     if (out != null)
                     {
                         data[i] = out;

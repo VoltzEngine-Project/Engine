@@ -67,7 +67,6 @@ public abstract class JsonProcessor<D extends IJsonGenObject>
         }
     }
 
-    @Deprecated
     public D process(JsonElement element)
     {
         return null;

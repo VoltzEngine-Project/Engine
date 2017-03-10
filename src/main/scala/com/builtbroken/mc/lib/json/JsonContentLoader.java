@@ -5,13 +5,14 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
-import com.builtbroken.mc.lib.json.processors.block.processor.JsonBlockProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
-import com.builtbroken.mc.lib.json.processors.item.JsonItemProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.lib.json.processors.block.processor.JsonBlockProcessor;
+import com.builtbroken.mc.lib.json.processors.item.JsonItemProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.crafting.JsonCraftingRecipeProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.smelting.JsonFurnaceRecipeProcessor;
+import com.builtbroken.mc.lib.json.processors.world.JsonWorldOreGenProcessor;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -66,6 +67,8 @@ public final class JsonContentLoader extends AbstractLoadable
     public final JsonCraftingRecipeProcessor craftingRecipeProcessor;
     /** Furnace recipe processor {@link net.minecraft.item.crafting.FurnaceRecipes} */
     public final JsonFurnaceRecipeProcessor furnaceRecipeProcessor;
+    /** Processor for handling ore generation in the world */
+    public final JsonWorldOreGenProcessor worldOreGenProcessor;
 
 
     /** Used almost entirely by unit testing to disable file loading */
@@ -81,6 +84,7 @@ public final class JsonContentLoader extends AbstractLoadable
         itemProcessor = new JsonItemProcessor();
         craftingRecipeProcessor = new JsonCraftingRecipeProcessor();
         furnaceRecipeProcessor = new JsonFurnaceRecipeProcessor();
+        worldOreGenProcessor = new JsonWorldOreGenProcessor();
     }
 
     /**
@@ -110,6 +114,7 @@ public final class JsonContentLoader extends AbstractLoadable
         add(blockProcessor);
         add(itemProcessor);
         //TODO add entity loading
+        add(worldOreGenProcessor);
         add(craftingRecipeProcessor);
         add(furnaceRecipeProcessor);
         //TODO add machine recipes

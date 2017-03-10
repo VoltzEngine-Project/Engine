@@ -1,10 +1,10 @@
 package com.builtbroken.mc.lib.json.processors.recipe;
 
-import com.builtbroken.mc.lib.json.processors.block.BlockJson;
-import com.builtbroken.mc.lib.json.processors.block.meta.MetaData;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.lib.json.processors.block.BlockJson;
+import com.builtbroken.mc.lib.json.processors.block.meta.MetaData;
 import com.google.gson.JsonElement;
 import net.minecraft.item.ItemStack;
 
@@ -40,12 +40,20 @@ public abstract class JsonRecipeProcessor<D extends IJsonGenObject> extends Json
     @Override
     public void process(BlockJson block, JsonElement element, List<IJsonGenObject> objectList)
     {
-        process(block, element);
+        D object = process(block, element);
+        if (object != null)
+        {
+            objectList.add(object);
+        }
     }
 
     @Override
     public void process(MetaData data, BlockJson block, JsonElement element, List<IJsonGenObject> objectList)
     {
-        process(new ItemStack(block, 1, data.index), element);
+        D object = process(new ItemStack(block, 1, data.index), element);
+        if (object != null)
+        {
+            objectList.add(object);
+        }
     }
 }
