@@ -87,7 +87,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
                 data[i++] = entry.getValue();
             }
             //New recipe data
-            return new JsonCraftingRecipeData(output, data, true);
+            return new JsonCraftingRecipeData(output, data, true, grid.length > 3);
         }
         else if (type.equalsIgnoreCase("shapeless"))
         {
@@ -97,7 +97,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
             String[] items = recipeData.getAsJsonPrimitive("items").getAsString().split(",");
 
             //New recipe data
-            return new JsonCraftingRecipeData(output, items, false);
+            return new JsonCraftingRecipeData(output, items, false, items.length > 9);
         }
         else
         {

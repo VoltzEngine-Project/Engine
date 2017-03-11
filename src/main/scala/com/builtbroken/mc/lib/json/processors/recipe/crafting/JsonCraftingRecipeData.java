@@ -20,15 +20,16 @@ import java.util.List;
  */
 public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeContainer
 {
-
     public final Object[] data;
     public final boolean shaped;
+    public final boolean largeGrid;
 
-    public JsonCraftingRecipeData(Object output, Object[] data, boolean shaped)
+    public JsonCraftingRecipeData(Object output, Object[] data, boolean shaped, boolean largeGrid)
     {
         super(output);
         this.data = data;
         this.shaped = shaped;
+        this.largeGrid = largeGrid;
     }
 
     @Override

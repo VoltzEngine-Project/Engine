@@ -20,6 +20,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -232,7 +234,17 @@ public final class JsonContentLoader extends AbstractLoadable
     {
         //TODO implement threading to allow other mods to load while we load content
         loadResourcesFromFolder(externalContentFolder);
-        loadResourcesFromPackage("content/");
+        for (ModContainer container : Loader.instance().getModList())
+        {
+            //TODO load additional mod data directly from mod folder
+            File file = container.getSource();
+            System.out.println("" + file);
+            Object mod = container.getMod();
+            if (mod != null)
+            {
+                loadResourcesFromPackage(mod.getClass(), "content/" + container.getModId() + "/");
+            }
+        }
 
         //Load external files
         for (File file : externalFiles)
@@ -495,12 +507,13 @@ public final class JsonContentLoader extends AbstractLoadable
      *
      * @param folder - package your looking to load data from
      */
-    public void loadResourcesFromPackage(String folder)
+    public void loadResourcesFromPackage(Class clazz, String folder)
     {
         //http://stackoverflow.com/questions/3923129/get-a-list-of-resources-from-classpath-directory
         try
         {
-            InputStream stream = JsonContentLoader.class.getClassLoader().getResourceAsStream(folder);
+
+            InputStream stream = clazz.getClassLoader().getResourceAsStream(folder);
             if (stream != null)
             {
                 final List<String> files = IOUtils.readLines(stream, Charsets.UTF_8);
@@ -517,7 +530,7 @@ public final class JsonContentLoader extends AbstractLoadable
                     }
                     else
                     {
-                        loadResourcesFromPackage(path + "/");
+                        loadResourcesFromPackage(clazz, path + "/");
                     }
                 }
             }
