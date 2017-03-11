@@ -21,8 +21,7 @@ import java.util.Iterator;
  */
 public class ShapedOreRecipeLarge implements IRecipe
 {
-    private static int MAX_CRAFT_GRID_WIDTH = 4;
-    private static int MAX_CRAFT_GRID_HEIGHT = 4;
+    public static int SIZE = 4;
 
     private ItemStack output = null;
     private Object[] input = null;
@@ -167,9 +166,9 @@ public class ShapedOreRecipeLarge implements IRecipe
     @Override
     public boolean matches(InventoryCrafting inv, World world)
     {
-        for (int x = 0; x <= MAX_CRAFT_GRID_WIDTH - width; x++)
+        for (int x = 0; x <= SIZE - width; x++)
         {
-            for (int y = 0; y <= MAX_CRAFT_GRID_HEIGHT - height; ++y)
+            for (int y = 0; y <= SIZE - height; ++y)
             {
                 if (checkMatch(inv, x, y, false))
                 {
@@ -189,9 +188,9 @@ public class ShapedOreRecipeLarge implements IRecipe
     @SuppressWarnings("unchecked")
     private boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror)
     {
-        for (int x = 0; x < MAX_CRAFT_GRID_WIDTH; x++)
+        for (int x = 0; x < SIZE; x++)
         {
-            for (int y = 0; y < MAX_CRAFT_GRID_HEIGHT; y++)
+            for (int y = 0; y < SIZE; y++)
             {
                 int subX = x - startX;
                 int subY = y - startY;

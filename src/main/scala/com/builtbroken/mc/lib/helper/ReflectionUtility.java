@@ -322,12 +322,21 @@ public class ReflectionUtility extends ReflectionHelper
      */
     public static void setFinalField(Object instance, Field field, Object newValue) throws NoSuchFieldException, IllegalAccessException
     {
-        //TODO restore private and final modifiers if they existed
+        int m = -1;
+
+        //Set the field to public
         field.setAccessible(true);
 
+        //Removed final modifier
+        if (Modifier.isFinal(field.getModifiers()))
+            m = removeFinalFromField(field);
 
-        //Sets the field value
+        //Sets field value
         field.set(instance, newValue);
+
+        //Restores final modifier
+        if (m != -1)
+            setModifiers(field, m);
     }
 
     /**

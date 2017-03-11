@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.json.processors.recipe.crafting;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.lib.json.processors.recipe.JsonRecipeData;
+import com.builtbroken.mc.prefab.recipe.item.grid.ShapedOreRecipeLarge;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -81,15 +82,36 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
             //Create recipe
             if (output instanceof Block)
             {
-                recipes.add(new ShapedOreRecipe((Block) output, data));
+                if(largeGrid)
+                {
+                    recipes.add(new ShapedOreRecipeLarge((Block) output, data));
+                }
+                else
+                {
+                    recipes.add(new ShapedOreRecipe((Block) output, data));
+                }
             }
             else if (output instanceof Item)
             {
-                recipes.add(new ShapedOreRecipe((Item) output, data));
+                if(largeGrid)
+                {
+                    recipes.add(new ShapedOreRecipeLarge((Item) output, data));
+                }
+                else
+                {
+                    recipes.add(new ShapedOreRecipe((Item) output, data));
+                }
             }
             else if (output instanceof ItemStack)
             {
-                recipes.add(new ShapedOreRecipe((ItemStack) output, data));
+                if(largeGrid)
+                {
+                    recipes.add(new ShapedOreRecipeLarge((ItemStack) output, data));
+                }
+                else
+                {
+                    recipes.add(new ShapedOreRecipe((ItemStack) output, data));
+                }
             }
             else
             {
