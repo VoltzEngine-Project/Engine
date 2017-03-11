@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.deps;
 
+import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.dmurph.tracking.AnalyticsConfigData;
 import com.dmurph.tracking.JGoogleAnalyticsTracker;
@@ -11,21 +12,9 @@ import cpw.mods.fml.common.ModContainer;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 12/10/2015.
  */
-public class GoogleAnalytics implements ILoadable
+public class GoogleAnalytics extends AbstractLoadable implements ILoadable
 {
     //http://www.dmurph.com/2011/01/google-analytics-tracking-with-java/
-
-    @Override
-    public void preInit()
-    {
-
-    }
-
-    @Override
-    public void init()
-    {
-
-    }
 
     @Override
     public void postInit()

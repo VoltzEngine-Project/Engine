@@ -4,7 +4,11 @@ import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;
-import com.builtbroken.mc.lib.mod.loadable.ILoadable;
+import com.builtbroken.mc.core.network.packet.PacketEntity;
+import com.builtbroken.mc.core.network.packet.PacketTile;
+import com.builtbroken.mc.core.network.packet.PacketType;
+import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper;
+import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
@@ -17,10 +21,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper;
-import com.builtbroken.mc.core.network.packet.PacketEntity;
-import com.builtbroken.mc.core.network.packet.PacketTile;
-import com.builtbroken.mc.core.network.packet.PacketType;
 
 import java.util.EnumMap;
 
@@ -28,7 +28,7 @@ import java.util.EnumMap;
  * @author tgame14
  * @since 26/05/14
  */
-public class PacketManager implements ILoadable
+public class PacketManager extends AbstractLoadable
 {
     public final String channel;
     protected EnumMap<Side, FMLEmbeddedChannel> channelEnumMap;

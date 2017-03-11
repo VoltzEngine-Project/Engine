@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.mod;
 
 import com.builtbroken.mc.api.tile.IGuiTile;
-import com.builtbroken.mc.lib.mod.loadable.ILoadable;
+import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,23 +15,8 @@ import org.lwjgl.input.Keyboard;
 /**
  * An abstract proxy that can be extended by any mod.
  */
-public abstract class AbstractProxy implements IGuiHandler, ILoadable
+public abstract class AbstractProxy extends AbstractLoadable implements IGuiHandler
 {
-    public void preInit()
-    {
-
-    }
-
-    public void init()
-    {
-
-    }
-
-    public void postInit()
-    {
-
-    }
-
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
