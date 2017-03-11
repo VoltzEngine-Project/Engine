@@ -709,6 +709,7 @@ public class Engine
     {
         //Clean up resources to free up ram
         JsonContentLoader.INSTANCE.clear();
+        loader.lo
     }
 
     public AbstractProxy getProxy()

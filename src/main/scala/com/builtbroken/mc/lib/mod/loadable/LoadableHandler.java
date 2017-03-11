@@ -1,19 +1,20 @@
 package com.builtbroken.mc.lib.mod.loadable;
 
-import com.builtbroken.jlib.type.Pair;
 import cpw.mods.fml.common.Loader;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * The Object that handles the load calls or submods of the mod
- * <p/>
+ * <p>
  * to have the submodules work, You must register them in this class, Adding support for a submodule
  * includes only acquiring its class and throwing it in the registerModules method, this is handled
  * as such to allow turning these modules off by configuration, and disable them if the parent mod
  * is not loaded (Integration modules with other mods)
- * <p/>
+ * <p>
  * Replace @Mod annotation with this system and it allows better handling in the end of it
  *
  * @author tgame14, Calclavia
@@ -22,7 +23,7 @@ import java.util.Map;
 public class LoadableHandler
 {
     /** Map of loadable to pair(HasLoadedPreInit, HasLoadedInit) */
-    private HashMap<ILoadable, Pair<Boolean, Boolean>> loadables = new HashMap();
+    private HashMap<ILoadable, List<LoadPhase>> loadables = new HashMap();
     /** Current phase of the loader. Doesn't always match current phase of MC. */
     private LoadPhase phase = LoadPhase.PRELAUNCH;
 
@@ -56,14 +57,15 @@ public class LoadableHandler
 
                     if (subProxy.shouldLoad())
                     {
-                        loadables.put(subProxy, new Pair(false, false));
+                        loadables.put(subProxy, new ArrayList());
                     }
                 }
                 else if (module instanceof ILoadable)
                 {
-                    loadables.put((ILoadable) module, new Pair(false, false));
+                    loadables.put((ILoadable) module, new ArrayList());
                 }
-            } catch (InstantiationException | IllegalAccessException e)
+            }
+            catch (InstantiationException | IllegalAccessException e)
             {
                 throw new RuntimeException(e);
             }
@@ -75,7 +77,7 @@ public class LoadableHandler
      */
     public void applyModule(ILoadable module)
     {
-        loadables.put(module, new Pair(false, false));
+        loadables.put(module, new ArrayList());
 
         switch (phase)
         {
@@ -99,10 +101,10 @@ public class LoadableHandler
     {
         phase = LoadPhase.PREINIT;
 
-        for (Map.Entry<ILoadable, Pair<Boolean, Boolean>> proxy : loadables.entrySet())
+        for (Map.Entry<ILoadable, List<LoadPhase>> proxy : loadables.entrySet())
         {
             proxy.getKey().preInit();
-            proxy.getValue().setLeft(true);
+            proxy.getValue().add(LoadPhase.PREINIT);
         }
     }
 
@@ -110,15 +112,15 @@ public class LoadableHandler
     {
         phase = LoadPhase.INIT;
 
-        for (Map.Entry<ILoadable, Pair<Boolean, Boolean>> proxy : loadables.entrySet())
+        for (Map.Entry<ILoadable, List<LoadPhase>> proxy : loadables.entrySet())
         {
-            if (!proxy.getValue().left())
+            if (!proxy.getValue().contains(LoadPhase.PREINIT))
             {
-                proxy.getValue().setLeft(true);
+                proxy.getValue().add(LoadPhase.PREINIT);
                 proxy.getKey().preInit();
             }
             proxy.getKey().init();
-            proxy.getValue().setRight(true);
+            proxy.getValue().add(LoadPhase.INIT);
         }
     }
 
@@ -126,21 +128,47 @@ public class LoadableHandler
     {
         phase = LoadPhase.POSTINIT;
 
-        for (Map.Entry<ILoadable, Pair<Boolean, Boolean>> proxy : loadables.entrySet())
+        for (Map.Entry<ILoadable, List<LoadPhase>> proxy : loadables.entrySet())
         {
-            if (!proxy.getValue().left())
+            if (!proxy.getValue().contains(LoadPhase.PREINIT))
             {
-                proxy.getValue().setLeft(true);
+                proxy.getValue().add(LoadPhase.PREINIT);
                 proxy.getKey().preInit();
             }
-            if (!proxy.getValue().right())
+            if (!proxy.getValue().contains(LoadPhase.INIT))
             {
-                proxy.getValue().setRight(true);
+                proxy.getValue().add(LoadPhase.INIT);
                 proxy.getKey().init();
             }
             proxy.getKey().postInit();
+            proxy.getValue().add(LoadPhase.POSTINIT);
         }
+    }
 
+    public void loadComplete()
+    {
+        phase = LoadPhase.LOAD_COMPLETE;
+
+        for (Map.Entry<ILoadable, List<LoadPhase>> proxy : loadables.entrySet())
+        {
+            if (!proxy.getValue().contains(LoadPhase.PREINIT))
+            {
+                proxy.getValue().add(LoadPhase.PREINIT);
+                proxy.getKey().preInit();
+            }
+            if (!proxy.getValue().contains(LoadPhase.INIT))
+            {
+                proxy.getValue().add(LoadPhase.INIT);
+                proxy.getKey().init();
+            }
+            if (!proxy.getValue().contains(LoadPhase.POSTINIT))
+            {
+                proxy.getValue().add(LoadPhase.POSTINIT);
+                proxy.getKey().postInit();
+            }
+            proxy.getKey().loadComplete();
+            proxy.getValue().add(LoadPhase.LOAD_COMPLETE);
+        }
         phase = LoadPhase.DONE;
     }
 
@@ -150,6 +178,7 @@ public class LoadableHandler
         PREINIT,
         INIT,
         POSTINIT,
+        LOAD_COMPLETE,
         DONE
     }
 }
