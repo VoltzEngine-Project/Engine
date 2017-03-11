@@ -124,6 +124,7 @@ public class EntityAbstractCart extends EntityBase implements IPacketIDReceiver,
             facingDirection = ForgeDirection.EAST;
         }
         else if (yaw2 >= -135 && yaw2 <= -45)
+
         {
             facingDirection = ForgeDirection.WEST;
         }

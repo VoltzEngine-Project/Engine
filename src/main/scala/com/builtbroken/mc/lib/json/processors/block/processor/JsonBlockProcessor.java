@@ -40,7 +40,6 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
         blockFields.add("subtypes");
         blockFields.add("material");
         blockFields.add("localization");
-        blockFields.add("orename");
     }
 
     @Override
@@ -162,10 +161,6 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
             if (entry.getKey().equalsIgnoreCase("localization"))
             {
                 data.localization = entry.getValue().getAsString();
-            }
-            else if (entry.getKey().equalsIgnoreCase("oreName"))
-            {
-                data.addOreName(entry.getValue().getAsString());
             }
             else if (entry.getKey().equalsIgnoreCase("meta"))
             {

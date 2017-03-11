@@ -9,6 +9,7 @@ import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
 import com.builtbroken.mc.lib.json.processors.block.processor.JsonBlockProcessor;
+import com.builtbroken.mc.lib.json.processors.extra.JsonOreNameProcessor;
 import com.builtbroken.mc.lib.json.processors.item.JsonItemProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.crafting.JsonCraftingRecipeProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.smelting.JsonFurnaceRecipeProcessor;
@@ -109,10 +110,10 @@ public final class JsonContentLoader extends AbstractLoadable
         externalContentFolder = new File(References.BBM_CONFIG_FOLDER, "json");
         //Validate data
         validateFilePaths();
-
         //Load processors
         add(blockProcessor);
         add(itemProcessor);
+        add(new JsonOreNameProcessor());
         //TODO add entity loading
         add(worldOreGenProcessor);
         add(craftingRecipeProcessor);
