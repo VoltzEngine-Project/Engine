@@ -56,7 +56,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
         {
             ensureValuesExist(recipeData, "grid", "items");
             //Load grid as string, and split to get rows
-            String[] grid = recipeData.getAsJsonPrimitive("grid").getAsString().split(",");
+            String[] craftingGridRows = recipeData.getAsJsonPrimitive("grid").getAsString().split(",");
 
             //Load items as object
             JsonObject itemObject = recipeData.getAsJsonObject("items");
@@ -67,27 +67,82 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
             {
                 if (entry.getKey().length() == 1)
                 {
-                    items.put(entry.getKey().charAt(0), entry.getValue().getAsJsonPrimitive().getAsString());
+                    char c = entry.getKey().charAt(0);
+                    if (c == '.' || Character.isWhitespace(c))
+                    {
+                        throw new IllegalArgumentException("File contains invalid recipe data for item entry in recipe [" + entry.getKey() + " -> " + entry.getValue() + "]. Each entry must be a single character that is not a space or a '.' which is used in place of a space.");
+
+                    }
+                    items.put(c, entry.getValue().getAsJsonPrimitive().getAsString());
                 }
                 else
                 {
                     throw new IllegalArgumentException("File contains invalid recipe data for item entry in recipe [" + entry.getKey() + " -> " + entry.getValue() + "] each item must be represented by a single character.");
                 }
             }
-            //Convert everything to data for recipe
-            Object[] data = new Object[grid.length + items.size() * 2];
-            int i;
-            for (i = 0; i < grid.length; i++)
+
+            //validate grid layout and components
+            boolean largeGrid = false;
+            int size = 0;
+            for (int i = 0; i < craftingGridRows.length; i++)
             {
-                data[i] = grid[i];
+                String gridRow = craftingGridRows[i];
+                //Replace spacer
+                if (gridRow.contains("."))
+                {
+                    gridRow = gridRow.replace('.', ' ');
+                    craftingGridRows[i] = gridRow;
+                }
+
+                int l = craftingGridRows.length;
+
+                //Invalid recipe
+                if (size > 0 && l != size)
+                {
+                    throw new IllegalArgumentException("Crafting grid row[" + i + "] is not the same size of " + size + " as previous grid rows. This will prevent the recipe from loading correctly and needs to be fixed.");
+                }
+                //Increase size smaller, use for validation
+                if (l > size)
+                {
+                    size = l;
+                }
+                //if larger than 3 the grid needs to use a different recipe
+                if (l > 3)
+                {
+                    largeGrid = true;
+                }
+                //Ensure all components exist
+                final char[] chars = gridRow.toCharArray();
+                for (int charIndex = 0; charIndex < chars.length; charIndex++)
+                {
+                    final char c = chars[charIndex];
+                    //Ignore whitespace
+                    if (!Character.isWhitespace(c))
+                    {
+                        if (!items.containsKey(c))
+                        {
+                            throw new IllegalArgumentException("File is missing an entry for item linked to '" + c + "' for crafting grid row[" + i + "] index[" + charIndex + "] in recipe data -> " + recipeData);
+                        }
+                    }
+                }
+            }
+
+
+            //Convert everything to data for recipe
+            Object[] data = new Object[craftingGridRows.length + items.size() * 2];
+            int i;
+            for (i = 0; i < craftingGridRows.length; i++)
+            {
+                data[i] = craftingGridRows[i];
             }
             for (Map.Entry<Character, String> entry : items.entrySet())
             {
                 data[i++] = entry.getKey();
                 data[i++] = entry.getValue();
             }
+
             //New recipe data
-            return new JsonCraftingRecipeData(output, data, true, grid.length > 3);
+            return new JsonCraftingRecipeData(output, data, true, largeGrid);
         }
         else if (type.equalsIgnoreCase("shapeless"))
         {

@@ -12,6 +12,7 @@ import com.builtbroken.mc.lib.json.processors.block.processor.JsonBlockProcessor
 import com.builtbroken.mc.lib.json.processors.extra.JsonOreNameProcessor;
 import com.builtbroken.mc.lib.json.processors.item.JsonItemProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.crafting.JsonCraftingRecipeProcessor;
+import com.builtbroken.mc.lib.json.processors.recipe.replace.JsonRecipeReplacementProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.smelting.JsonFurnaceRecipeProcessor;
 import com.builtbroken.mc.lib.json.processors.world.JsonWorldOreGenProcessor;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
@@ -121,6 +122,7 @@ public final class JsonContentLoader extends AbstractLoadable
         add(worldOreGenProcessor);
         add(craftingRecipeProcessor);
         add(furnaceRecipeProcessor);
+        add(new JsonRecipeReplacementProcessor());
         //TODO add machine recipes
 
         //Resources are loaded before they can be processed to allow early processing

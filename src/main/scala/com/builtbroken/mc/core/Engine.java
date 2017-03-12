@@ -122,7 +122,7 @@ public class Engine
     @Instance(References.ID)
     public static Engine instance;
 
-    public LoadableHandler loader;
+    public LoadableHandler loader = new LoadableHandler();
     public ModManager manager;
     protected static Logger logger = LogManager.getLogger("VoltzEngine");
     private Configuration config;
@@ -346,7 +346,6 @@ public class Engine
         heatDataConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/HeatMap.cfg"));
         explosiveConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/Explosives.cfg"));
 
-        loader = new LoadableHandler();
         manager = new ModManager().setPrefix(References.DOMAIN).setTab(CreativeTabs.tabAllSearch);
 
         config.load();

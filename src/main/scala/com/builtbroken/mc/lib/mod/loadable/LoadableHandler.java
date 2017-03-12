@@ -2,10 +2,7 @@ package com.builtbroken.mc.lib.mod.loadable;
 
 import cpw.mods.fml.common.Loader;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The Object that handles the load calls or submods of the mod
@@ -20,12 +17,16 @@ import java.util.Map;
  * @author tgame14, Calclavia
  * @since 23/02/14
  */
-public class LoadableHandler
+public final class LoadableHandler
 {
     /** Map of loadable to pair(HasLoadedPreInit, HasLoadedInit) */
     private HashMap<ILoadable, List<LoadPhase>> loadables = new HashMap();
     /** Current phase of the loader. Doesn't always match current phase of MC. */
     private LoadPhase phase = LoadPhase.PRELAUNCH;
+
+    private List<ILoadable> waitingToBeAdded = new ArrayList();
+
+    private boolean running = false;
 
     public void applyModule(Class<?> clazz)
     {
@@ -77,99 +78,111 @@ public class LoadableHandler
      */
     public void applyModule(ILoadable module)
     {
-        loadables.put(module, new ArrayList());
-
-        switch (phase)
+        if (phase == LoadPhase.DONE || phase == LoadPhase.LOAD_COMPLETE && running)
         {
-            case DONE:
-                break;
-            case POSTINIT:
-                module.preInit();
-                module.init();
-                module.postInit();
-                break;
-            case INIT:
-                module.preInit();
-                module.init();
-                break;
-            case PREINIT:
-
+            throw new RuntimeException("Module '" + module + "' was added to late into loading phase to be added!!! To prevent damage to the game and saves the game will be closed.");
+        }
+        synchronized (waitingToBeAdded)
+        {
+            if (running)
+            {
+                waitingToBeAdded.add(module);
+            }
+            else
+            {
+                loadables.put(module, new ArrayList());
+            }
         }
     }
 
     public void preInit()
     {
-        phase = LoadPhase.PREINIT;
-
-        for (Map.Entry<ILoadable, List<LoadPhase>> proxy : loadables.entrySet())
-        {
-            proxy.getKey().preInit();
-            proxy.getValue().add(LoadPhase.PREINIT);
-        }
+        load(LoadPhase.PREINIT);
     }
 
     public void init()
     {
-        phase = LoadPhase.INIT;
-
-        for (Map.Entry<ILoadable, List<LoadPhase>> proxy : loadables.entrySet())
-        {
-            if (!proxy.getValue().contains(LoadPhase.PREINIT))
-            {
-                proxy.getValue().add(LoadPhase.PREINIT);
-                proxy.getKey().preInit();
-            }
-            proxy.getKey().init();
-            proxy.getValue().add(LoadPhase.INIT);
-        }
+        load(LoadPhase.INIT);
     }
 
     public void postInit()
     {
-        phase = LoadPhase.POSTINIT;
-
-        for (Map.Entry<ILoadable, List<LoadPhase>> proxy : loadables.entrySet())
-        {
-            if (!proxy.getValue().contains(LoadPhase.PREINIT))
-            {
-                proxy.getValue().add(LoadPhase.PREINIT);
-                proxy.getKey().preInit();
-            }
-            if (!proxy.getValue().contains(LoadPhase.INIT))
-            {
-                proxy.getValue().add(LoadPhase.INIT);
-                proxy.getKey().init();
-            }
-            proxy.getKey().postInit();
-            proxy.getValue().add(LoadPhase.POSTINIT);
-        }
+        load(LoadPhase.POSTINIT);
     }
 
     public void loadComplete()
     {
-        phase = LoadPhase.LOAD_COMPLETE;
-
-        for (Map.Entry<ILoadable, List<LoadPhase>> proxy : loadables.entrySet())
-        {
-            if (!proxy.getValue().contains(LoadPhase.PREINIT))
-            {
-                proxy.getValue().add(LoadPhase.PREINIT);
-                proxy.getKey().preInit();
-            }
-            if (!proxy.getValue().contains(LoadPhase.INIT))
-            {
-                proxy.getValue().add(LoadPhase.INIT);
-                proxy.getKey().init();
-            }
-            if (!proxy.getValue().contains(LoadPhase.POSTINIT))
-            {
-                proxy.getValue().add(LoadPhase.POSTINIT);
-                proxy.getKey().postInit();
-            }
-            proxy.getKey().loadComplete();
-            proxy.getValue().add(LoadPhase.LOAD_COMPLETE);
-        }
+        load(LoadPhase.LOAD_COMPLETE);
         phase = LoadPhase.DONE;
+    }
+
+    protected void load(LoadPhase untilPhase)
+    {
+        running = true;
+        phase = untilPhase;
+
+        if (!waitingToBeAdded.isEmpty())
+        {
+            for (ILoadable l : waitingToBeAdded)
+            {
+                loadables.put(l, new ArrayList());
+            }
+            waitingToBeAdded.clear();
+        }
+
+        Iterator<Map.Entry<ILoadable, List<LoadPhase>>> it = loadables.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<ILoadable, List<LoadPhase>> proxy = it.next();
+
+            //Pre init and up
+            if (untilPhase.ordinal() >= LoadPhase.PREINIT.ordinal())
+            {
+                if (!proxy.getValue().contains(LoadPhase.PREINIT))
+                {
+                    proxy.getValue().add(LoadPhase.PREINIT);
+                    proxy.getKey().preInit();
+                }
+
+                //Init and up
+                if (untilPhase.ordinal() >= LoadPhase.INIT.ordinal())
+                {
+                    if (!proxy.getValue().contains(LoadPhase.INIT))
+                    {
+                        proxy.getValue().add(LoadPhase.INIT);
+                        proxy.getKey().init();
+                    }
+
+                    //Post init and up
+                    if (untilPhase.ordinal() >= LoadPhase.POSTINIT.ordinal())
+                    {
+                        if (!proxy.getValue().contains(LoadPhase.POSTINIT))
+                        {
+                            proxy.getValue().add(LoadPhase.POSTINIT);
+                            proxy.getKey().postInit();
+                        }
+
+                        //Last phase
+                        if (untilPhase.ordinal() >= LoadPhase.LOAD_COMPLETE.ordinal())
+                        {
+                            if (!proxy.getValue().contains(LoadPhase.LOAD_COMPLETE))
+                            {
+                                proxy.getKey().loadComplete();
+                                proxy.getValue().add(LoadPhase.LOAD_COMPLETE);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //If ILoadable(s) were added from inside a loader recall load
+        if (!waitingToBeAdded.isEmpty())
+        {
+            load(untilPhase);
+        }
+
+        running = false;
     }
 
     public enum LoadPhase
