@@ -102,7 +102,7 @@ public final class JsonContentLoader extends AbstractLoadable
         //Register loaders
         if (processor instanceof ILoadable)
         {
-            Engine.instance.loader.applyModule((ILoadable) processor);
+            Engine.loader.applyModule((ILoadable) processor);
         }
         //TODO add item sub processors
     }

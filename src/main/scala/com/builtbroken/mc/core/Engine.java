@@ -123,7 +123,7 @@ public class Engine
     @Instance(References.ID)
     public static Engine instance;
 
-    public LoadableHandler loader = new LoadableHandler();
+    public static LoadableHandler loader = new LoadableHandler();
     public ModManager manager;
     protected static Logger logger = LogManager.getLogger("VoltzEngine");
     private Configuration config;
