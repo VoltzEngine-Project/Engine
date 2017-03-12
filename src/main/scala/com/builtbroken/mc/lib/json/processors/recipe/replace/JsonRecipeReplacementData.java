@@ -10,10 +10,17 @@ import com.builtbroken.mc.lib.json.processors.JsonGenData;
 public class JsonRecipeReplacementData extends JsonGenData implements ILoadComplete
 {
     boolean remove_all;
+    String outputValue;
+
+    public JsonRecipeReplacementData(String output, boolean remove_all)
+    {
+        this.outputValue = output;
+        this.remove_all = remove_all;
+    }
 
     @Override
-    public void lonLoadCompleted()
+    public void onLoadCompleted()
     {
-
+        Object output = convertItemEntry(outputValue);
     }
 }

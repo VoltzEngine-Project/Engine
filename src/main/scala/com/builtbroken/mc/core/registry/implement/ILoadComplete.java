@@ -16,5 +16,5 @@ public interface ILoadComplete
      * Do not use lightly as this really should
      * not be used much.
      */
-    void lonLoadCompleted();
+    void onLoadCompleted();
 }

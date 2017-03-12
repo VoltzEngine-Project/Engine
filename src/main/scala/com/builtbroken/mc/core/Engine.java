@@ -708,8 +708,10 @@ public class Engine
     public void loadCompleteEvent(FMLLoadCompleteEvent event)
     {
         //Clean up resources to free up ram
+        loader.loadComplete();
+
         JsonContentLoader.INSTANCE.clear();
-        loader.lo
+        //TODO clear load handler
     }
 
     public AbstractProxy getProxy()
