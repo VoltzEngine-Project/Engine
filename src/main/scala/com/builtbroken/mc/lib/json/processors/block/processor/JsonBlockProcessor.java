@@ -2,12 +2,12 @@ package com.builtbroken.mc.lib.json.processors.block.processor;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.json.processors.block.BlockJson;
-import com.builtbroken.mc.lib.json.processors.block.meta.BlockJsonMeta;
-import com.builtbroken.mc.lib.json.processors.block.meta.MetaData;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.lib.json.processors.block.BlockJson;
+import com.builtbroken.mc.lib.json.processors.block.meta.BlockJsonMeta;
+import com.builtbroken.mc.lib.json.processors.block.meta.MetaData;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -61,7 +61,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
     }
 
     @Override
-    public void process(JsonElement element, List<IJsonGenObject> objectList)
+    public boolean process(JsonElement element, List<IJsonGenObject> objectList)
     {
         JsonObject blockData = element.getAsJsonObject();
         if (blockData.has("name") && blockData.has("material"))
@@ -97,6 +97,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
         {
             throw new IllegalArgumentException("JsonBlockProcessor: BlockData requires a name and a material value");
         }
+        return true;
     }
 
     /**

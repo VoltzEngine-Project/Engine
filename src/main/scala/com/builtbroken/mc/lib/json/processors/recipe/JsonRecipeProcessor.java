@@ -19,13 +19,14 @@ import java.util.List;
 public abstract class JsonRecipeProcessor<D extends IJsonGenObject> extends JsonProcessor<D> implements IJsonBlockSubProcessor
 {
     @Override
-    public void process(JsonElement element, List<IJsonGenObject> objects)
+    public boolean process(JsonElement element, List<IJsonGenObject> objects)
     {
         D data = process(null, element);
         if (data != null)
         {
             objects.add(data);
         }
+        return true;
     }
 
     /**
