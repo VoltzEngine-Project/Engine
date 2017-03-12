@@ -3,7 +3,7 @@ package com.builtbroken.mc.lib.json.processors.recipe.crafting;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.lib.json.processors.recipe.JsonRecipeData;
-import com.builtbroken.mc.prefab.recipe.item.grid.ShapedOreRecipeLarge;
+import com.builtbroken.mc.prefab.recipe.item.grid.RecipeShapedOreLarge;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -84,7 +84,7 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
             {
                 if(largeGrid)
                 {
-                    recipes.add(new ShapedOreRecipeLarge((Block) output, data));
+                    recipes.add(new RecipeShapedOreLarge((Block) output, data));
                 }
                 else
                 {
@@ -95,7 +95,7 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
             {
                 if(largeGrid)
                 {
-                    recipes.add(new ShapedOreRecipeLarge((Item) output, data));
+                    recipes.add(new RecipeShapedOreLarge((Item) output, data));
                 }
                 else
                 {
@@ -106,7 +106,7 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
             {
                 if(largeGrid)
                 {
-                    recipes.add(new ShapedOreRecipeLarge((ItemStack) output, data));
+                    recipes.add(new RecipeShapedOreLarge((ItemStack) output, data));
                 }
                 else
                 {

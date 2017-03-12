@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.mod;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -126,6 +127,11 @@ public abstract class AbstractMod implements IMod
 
         //Close save file
         getConfig().save();
+    }
+
+    public void loadComplete(FMLLoadCompleteEvent event)
+    {
+        loader.loadComplete();
     }
 
     /**

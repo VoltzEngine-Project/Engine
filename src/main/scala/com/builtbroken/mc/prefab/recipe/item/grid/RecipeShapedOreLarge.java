@@ -19,7 +19,7 @@ import java.util.Iterator;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/11/2017.
  */
-public class ShapedOreRecipeLarge implements IRecipe
+public class RecipeShapedOreLarge implements IRecipe
 {
     public static int SIZE = 4;
 
@@ -29,17 +29,17 @@ public class ShapedOreRecipeLarge implements IRecipe
     private int height = 0;
     private boolean mirrored = true;
 
-    public ShapedOreRecipeLarge(Block result, Object... recipe)
+    public RecipeShapedOreLarge(Block result, Object... recipe)
     {
         this(new ItemStack(result), recipe);
     }
 
-    public ShapedOreRecipeLarge(Item result, Object... recipe)
+    public RecipeShapedOreLarge(Item result, Object... recipe)
     {
         this(new ItemStack(result), recipe);
     }
 
-    public ShapedOreRecipeLarge(ItemStack result, Object... recipe)
+    public RecipeShapedOreLarge(ItemStack result, Object... recipe)
     {
         output = result.copy();
 
@@ -242,7 +242,7 @@ public class ShapedOreRecipeLarge implements IRecipe
         return true;
     }
 
-    public ShapedOreRecipeLarge setMirrored(boolean mirror)
+    public RecipeShapedOreLarge setMirrored(boolean mirror)
     {
         mirrored = mirror;
         return this;
