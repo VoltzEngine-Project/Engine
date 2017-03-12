@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class JsonOreNameProcessor extends JsonProcessor<JsonOreNameData> implements IJsonBlockSubProcessor
 {
+    public static final String KEY = "oreName";
     @Override
     public String getMod()
     {
@@ -29,7 +30,7 @@ public class JsonOreNameProcessor extends JsonProcessor<JsonOreNameData> impleme
     @Override
     public String getJsonKey()
     {
-        return "oreName";
+        return KEY;
     }
 
     @Override
@@ -45,7 +46,7 @@ public class JsonOreNameProcessor extends JsonProcessor<JsonOreNameData> impleme
         ensureValuesExist(data, "name", "item");
         String name = data.getAsJsonPrimitive("name").getAsString();
         String item = data.getAsJsonPrimitive("item").getAsString();
-        return new JsonOreNameData(name, item);
+        return new JsonOreNameData(this, name, item);
     }
 
     @Override

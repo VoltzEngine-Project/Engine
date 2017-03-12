@@ -26,6 +26,7 @@ import java.util.Map;
  */
 public class JsonBlockProcessor extends JsonProcessor<BlockJson>
 {
+    public static final String KEY = "block";
     /** Map of processors to run on unknown json object entries, used to process recipes and registry calls */
     public final HashMap<String, IJsonBlockSubProcessor> subProcessors = new HashMap();
 
@@ -51,7 +52,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
     @Override
     public String getJsonKey()
     {
-        return "block";
+        return KEY;
     }
 
     @Override

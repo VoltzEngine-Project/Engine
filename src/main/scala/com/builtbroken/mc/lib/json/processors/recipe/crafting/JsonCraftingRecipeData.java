@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.json.processors.recipe.crafting;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
+import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.JsonRecipeData;
 import com.builtbroken.mc.prefab.recipe.item.grid.RecipeShapedOreLarge;
 import net.minecraft.block.Block;
@@ -25,9 +26,9 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
     public final boolean shaped;
     public final boolean largeGrid;
 
-    public JsonCraftingRecipeData(Object output, Object[] data, boolean shaped, boolean largeGrid)
+    public JsonCraftingRecipeData(IJsonProcessor processor, Object output, Object[] data, boolean shaped, boolean largeGrid)
     {
-        super(output);
+        super(processor, output);
         this.data = data;
         this.shaped = shaped;
         this.largeGrid = largeGrid;

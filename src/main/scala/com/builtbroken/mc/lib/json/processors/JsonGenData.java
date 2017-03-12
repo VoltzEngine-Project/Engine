@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.json.processors;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
+import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -16,10 +17,23 @@ import java.util.ArrayList;
  */
 public class JsonGenData implements IJsonGenObject
 {
+    public final IJsonProcessor processor;
+
+    public JsonGenData(IJsonProcessor processor)
+    {
+        this.processor = processor;
+    }
+
     @Override
     public void register()
     {
 
+    }
+
+    @Override
+    public String getLoader()
+    {
+        return processor.getJsonKey();
     }
 
     /**

@@ -19,4 +19,12 @@ public interface IJsonGenObject
      * content in the preInit and init phases
      */
     void register();
+
+    /**
+     * Unique key of the loader that created
+     * this gen object.
+     *
+     * @return key for loader
+     */
+    String getLoader();
 }

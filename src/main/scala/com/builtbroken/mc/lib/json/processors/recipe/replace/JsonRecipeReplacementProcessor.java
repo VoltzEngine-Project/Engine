@@ -6,6 +6,7 @@ import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.lib.json.processors.extra.JsonOreNameProcessor;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -41,7 +42,7 @@ public class JsonRecipeReplacementProcessor extends AbstractLoadable implements 
     @Override
     public String getLoadOrder()
     {
-        return null;
+        return "after:" + JsonOreNameProcessor.KEY;
     }
 
     @Override
@@ -62,7 +63,7 @@ public class JsonRecipeReplacementProcessor extends AbstractLoadable implements 
         String craftingType = jsonData.getAsJsonPrimitive("craftingType").getAsString();
         String item = jsonData.getAsJsonPrimitive("item").getAsString();
 
-        JsonRecipeReplacementData replacementDataEntry = new JsonRecipeReplacementData(item, craftingType, true);
+        JsonRecipeReplacementData replacementDataEntry = new JsonRecipeReplacementData(this, item, craftingType, true);
         //Remove and replace call
         if ("replace".equalsIgnoreCase(type))
         {

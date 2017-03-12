@@ -1,7 +1,9 @@
-package com.builtbroken.mc.lib.json.processors.item;
+package com.builtbroken.mc.lib.json.processors.item.processor;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.lib.json.processors.block.processor.JsonBlockProcessor;
+import com.builtbroken.mc.lib.json.processors.item.ItemJson;
 import com.google.gson.JsonElement;
 
 /**
@@ -12,6 +14,8 @@ import com.google.gson.JsonElement;
  */
 public class JsonItemProcessor extends JsonProcessor<ItemJson>
 {
+    public static final String KEY = "item";
+
     @Override
     public String getMod()
     {
@@ -21,13 +25,13 @@ public class JsonItemProcessor extends JsonProcessor<ItemJson>
     @Override
     public String getJsonKey()
     {
-        return "item";
+        return KEY;
     }
 
     @Override
     public String getLoadOrder()
     {
-        return "after:block";
+        return "after:" + JsonBlockProcessor.KEY;
     }
 
     @Override

@@ -33,6 +33,12 @@ public class BlockJson extends Block implements IRegistryInit, IJsonGenObject
         GameRegistry.registerBlock(this, name);
     }
 
+    @Override
+    public String getLoader()
+    {
+        return "block";
+    }
+
     public void setCreativeTab(String name)
     {
         //TODO implement

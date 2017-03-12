@@ -97,7 +97,9 @@ public class TestJsonLoader extends AbstractTest
 
         loader.init();
         //TODO test that all files loaded correctly
-        assertEquals(21, loader.generatedObjects.size());
+        assertEquals(13, loader.generatedObjects.get("ammo").size());
+        assertEquals(5, loader.generatedObjects.get("ammoType").size());
+        assertEquals(3, loader.generatedObjects.get("clip").size());
         assertEquals(0, loader.jsonEntries.size());
         assertEquals(0, loader.externalFiles.size());
         assertEquals(0, loader.classPathResources.size());

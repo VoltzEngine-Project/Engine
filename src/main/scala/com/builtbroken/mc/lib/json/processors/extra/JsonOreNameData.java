@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.json.processors.extra;
 
 import com.builtbroken.mc.core.registry.implement.IPostInit;
+import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -14,8 +15,9 @@ public class JsonOreNameData extends JsonGenData implements IPostInit
     public String name;
     public Object item;
 
-    public JsonOreNameData(String name, Object item)
+    public JsonOreNameData(IJsonProcessor processor, String name, Object item)
     {
+        super(processor);
         this.name = name;
         this.item = item;
     }

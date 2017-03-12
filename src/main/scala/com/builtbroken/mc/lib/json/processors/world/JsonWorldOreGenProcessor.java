@@ -83,7 +83,7 @@ public class JsonWorldOreGenProcessor extends JsonProcessor<JsonWorldOreGenData>
 
         if (type.equalsIgnoreCase("StoneOre"))
         {
-            return new JsonWorldOreGenData(oreBlock, oreName, min, max, branch, chunk);
+            return new JsonWorldOreGenData(this, oreBlock, oreName, min, max, branch, chunk);
         }
         else
         {

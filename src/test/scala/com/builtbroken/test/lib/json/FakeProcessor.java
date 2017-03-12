@@ -59,5 +59,11 @@ public class FakeProcessor extends JsonProcessor
         {
             registered = true;
         }
+
+        @Override
+        public String getLoader()
+        {
+            return "key";
+        }
     }
 }

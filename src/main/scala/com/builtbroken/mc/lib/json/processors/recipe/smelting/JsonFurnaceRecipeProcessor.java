@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.json.processors.recipe.smelting;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
+import com.builtbroken.mc.lib.json.processors.extra.JsonOreNameProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.JsonRecipeProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,6 +15,8 @@ import com.google.gson.JsonObject;
  */
 public class JsonFurnaceRecipeProcessor extends JsonRecipeProcessor<JsonFurnaceRecipeData> implements IJsonBlockSubProcessor
 {
+    public static final String KEY = "furnaceRecipe";
+
     @Override
     public String getMod()
     {
@@ -23,13 +26,13 @@ public class JsonFurnaceRecipeProcessor extends JsonRecipeProcessor<JsonFurnaceR
     @Override
     public String getJsonKey()
     {
-        return "furnaceRecipe";
+        return KEY;
     }
 
     @Override
     public String getLoadOrder()
     {
-        return "after:item";
+        return "after:" + JsonOreNameProcessor.KEY;
     }
 
     @Override
@@ -58,6 +61,6 @@ public class JsonFurnaceRecipeProcessor extends JsonRecipeProcessor<JsonFurnaceR
         }
 
         //Make recipe
-        return new JsonFurnaceRecipeData(input, output, xp);
+        return new JsonFurnaceRecipeData(this, input, output, xp);
     }
 }

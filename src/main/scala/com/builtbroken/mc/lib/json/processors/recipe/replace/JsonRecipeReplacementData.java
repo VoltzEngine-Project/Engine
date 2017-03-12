@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.json.processors.recipe.replace;
 
+import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import com.google.gson.JsonElement;
@@ -28,8 +29,9 @@ public class JsonRecipeReplacementData extends JsonGenData
     /** Json data that will need processed after recipe removal is finished */
     public HashMap<String, JsonElement> subProcessingData = new HashMap();
 
-    public JsonRecipeReplacementData(String output, String type, boolean remove_all)
+    public JsonRecipeReplacementData(IJsonProcessor processor, String output, String type, boolean remove_all)
     {
+        super(processor);
         this.outputValue = output;
         this.craftingType = type;
         this.remove_all = remove_all;

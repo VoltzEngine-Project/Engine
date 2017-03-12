@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.json.processors.world;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
+import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
 import com.builtbroken.mc.lib.world.generator.OreGenReplaceStone;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -24,8 +25,9 @@ public class JsonWorldOreGenData extends JsonGenData implements IPostInit
     int branchSize;
     int chunkLimit;
 
-    public JsonWorldOreGenData(Object block, String oreName, int min, int max, int branch, int chunk)
+    public JsonWorldOreGenData(IJsonProcessor processor, Object block, String oreName, int min, int max, int branch, int chunk)
     {
+        super(processor);
         this.block = block;
         this.oreName = oreName;
         this.min_y = min;

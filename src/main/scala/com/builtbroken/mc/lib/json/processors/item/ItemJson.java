@@ -14,4 +14,10 @@ public class ItemJson extends Item implements IJsonGenObject
     {
 
     }
+
+    @Override
+    public String getLoader()
+    {
+        return "item";
+    }
 }

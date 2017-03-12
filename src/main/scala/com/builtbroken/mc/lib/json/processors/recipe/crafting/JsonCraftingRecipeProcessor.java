@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.json.processors.recipe.crafting;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
+import com.builtbroken.mc.lib.json.processors.extra.JsonOreNameProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.JsonRecipeProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -20,6 +21,8 @@ import java.util.Map;
  */
 public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftingRecipeData> implements IJsonBlockSubProcessor
 {
+    public static final String KEY = "craftingGridRecipe";
+
     @Override
     public String getMod()
     {
@@ -29,13 +32,13 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
     @Override
     public String getJsonKey()
     {
-        return "craftingGridRecipe";
+        return KEY;
     }
 
     @Override
     public String getLoadOrder()
     {
-        return "after:item";
+        return "after:" + JsonOreNameProcessor.KEY;
     }
 
     @Override
@@ -82,7 +85,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
             }
 
             //validate grid layout and components
-            boolean largeGrid = false;
+            boolean largeGrid = craftingGridRows.length > 3;
             int size = 0;
             for (int i = 0; i < craftingGridRows.length; i++)
             {
@@ -94,7 +97,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
                     craftingGridRows[i] = gridRow;
                 }
 
-                int l = craftingGridRows.length;
+                int l = gridRow.length();
 
                 //Invalid recipe
                 if (size > 0 && l != size)
@@ -142,7 +145,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
             }
 
             //New recipe data
-            return new JsonCraftingRecipeData(output, data, true, largeGrid);
+            return new JsonCraftingRecipeData(this, output, data, true, largeGrid);
         }
         else if (type.equalsIgnoreCase("shapeless"))
         {
@@ -152,7 +155,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
             String[] items = recipeData.getAsJsonPrimitive("items").getAsString().split(",");
 
             //New recipe data
-            return new JsonCraftingRecipeData(output, items, false, items.length > 9);
+            return new JsonCraftingRecipeData(this, output, items, false, items.length > 9);
         }
         else
         {

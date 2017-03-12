@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.json.processors.recipe.smelting;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
+import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.JsonRecipeData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
@@ -20,9 +21,9 @@ public class JsonFurnaceRecipeData extends JsonRecipeData implements IJsonGenObj
     /** XP recipe of the recipe*/
     public float xp;
 
-    public JsonFurnaceRecipeData(Object input, Object output, float xp)
+    public JsonFurnaceRecipeData(IJsonProcessor processor, Object input, Object output, float xp)
     {
-        super(output);
+        super(processor, output);
         this.input = input;
         this.xp = xp;
     }
