@@ -1,10 +1,12 @@
 package com.builtbroken.mc.prefab.tile.entity;
 
+import com.builtbroken.mc.api.ISave;
 import com.builtbroken.mc.api.tile.IInventoryProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Simplified impelementation for {@link ISidedInventory} and {@link IInventoryProvider}
@@ -34,6 +36,29 @@ public abstract class TileEntityInv<I extends IInventory> extends TileEntityBase
      * @return new inventory
      */
     protected abstract I createInventory();
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+        super.readFromNBT(nbt);
+        if (nbt.hasKey("inventory") && getInventory() instanceof ISave)
+        {
+            NBTTagCompound tag = nbt.getCompoundTag("inventory");
+            ((ISave)getInventory()).load(tag);
+        }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt)
+    {
+        super.writeToNBT(nbt);
+        if (inventory_module != null && inventory_module instanceof ISave)
+        {
+            NBTTagCompound tag = new NBTTagCompound();
+            ((ISave)inventory_module).save(tag);
+            nbt.setTag("inventory", tag);
+        }
+    }
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side)

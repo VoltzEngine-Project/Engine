@@ -1,14 +1,20 @@
 package com.builtbroken.mc.prefab.tile;
 
 import com.builtbroken.mc.api.ISave;
+import com.builtbroken.mc.api.energy.IEnergyBufferProvider;
+import com.builtbroken.mc.api.tile.ConnectionType;
 import com.builtbroken.mc.api.tile.IInventoryProvider;
+import com.builtbroken.mc.api.tile.ITileConnection;
 import com.builtbroken.mc.api.tile.node.ITileModule;
+import com.builtbroken.mc.prefab.energy.EnergyBuffer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * An extension of {@link TileModuleMachineBase} that provides pre-implementation for common
@@ -17,10 +23,11 @@ import net.minecraft.nbt.NBTTagCompound;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 2/2/2017.
  */
-public abstract class TileModuleMachine<I extends IInventory> extends TileModuleMachineBase implements ISidedInventory, IInventoryProvider<I>
+public abstract class TileModuleMachine<I extends IInventory> extends TileModuleMachineBase implements ISidedInventory, IInventoryProvider<I>, IEnergyBufferProvider, ITileConnection
 {
     /** Primary inventory container for this machine, all {@link IInventory} and {@link ISidedInventory} calls are wrapped to this object */
     protected I inventory_module;
+    protected EnergyBuffer energyBuffer;
 
     /**
      * Default constructor
@@ -101,8 +108,44 @@ public abstract class TileModuleMachine<I extends IInventory> extends TileModule
     }
 
     //==================================
+    //========== Energy code ===========
+    //==================================
+
+    @Override
+    public EnergyBuffer getEnergyBuffer(ForgeDirection side)
+    {
+        if (energyBuffer == null && getEnergyBufferSize() > 0)
+        {
+            energyBuffer = new EnergyBuffer(getEnergyBufferSize());
+        }
+        return energyBuffer;
+    }
+
+    @Override
+    public boolean canConnect(TileEntity connection, ConnectionType type, ForgeDirection from)
+    {
+        return getEnergyBufferSize() > 0 && type == ConnectionType.POWER;
+    }
+
+    @Override
+    public boolean hasConnection(ConnectionType type, ForgeDirection side)
+    {
+        return false;
+    }
+
+    public int getEnergyBufferSize()
+    {
+        return 0;
+    }
+
+    //==================================
     //====== Inventory redirects =======
     //==================================
+
+    public void incrStackSize(int outputSlot, ItemStack stack)
+    {
+
+    }
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side)
