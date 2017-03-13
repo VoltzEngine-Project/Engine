@@ -15,9 +15,6 @@ import resonant.api.ITier;
  * @author Calclavia */
 public interface IExplosive extends ITier
 {
-    /** @return Gets the explosive's ID. */
-    public int getID();
-
     /** @return The unique name key in the ICBM language file. */
     public String getUnlocalizedName();
 

@@ -1,6 +1,5 @@
 package resonant.api.explosion;
 
-import icbm.classic.content.explosive.Explosive;
 import net.minecraft.nbt.NBTTagCompound;
 
 /** An object that contains a reference to IExplosive. Carried by explosives, grenades and missile
@@ -11,5 +10,5 @@ public interface IExplosiveContainer
 {
     public NBTTagCompound getTagCompound();
 
-    public Explosive getExplosiveType();
+    public IExplosive getExplosiveType();
 }
