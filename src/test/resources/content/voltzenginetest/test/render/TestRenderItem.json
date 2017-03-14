@@ -2,6 +2,7 @@
   "item":
   {
     "name":"testRenderItem",
+    "mod":"voltzenginetest",
     "id":"testRenderItem"
   }
 }

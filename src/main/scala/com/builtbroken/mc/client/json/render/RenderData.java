@@ -20,6 +20,8 @@ public class RenderData extends JsonGenData
 
     /** ID to reference the content that this render data belongs to */
     public final String contentID;
+    /** Type of render, defaults to VE render code */
+    public final String renderType;
 
     /** States for the renderer to handle */
     public HashMap<Integer, RenderState> renderStates = new HashMap();
@@ -27,10 +29,11 @@ public class RenderData extends JsonGenData
     /** Map for quickly looking up name of the state with it's render ID */
     private HashMap<String, RenderState> renderStatesByName = new HashMap();
 
-    public RenderData(IJsonProcessor processor, String contentID)
+    public RenderData(IJsonProcessor processor, String contentID, String type)
     {
         super(processor);
         this.contentID = contentID;
+        this.renderType = type;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.mod;
 
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
+import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
@@ -100,6 +101,7 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
         loadHandlers(loader);
         loadBlocks(manager);
         loadItems(manager);
+        JsonContentLoader.INSTANCE.claimContent(this);
 
         //Fire post load methods
         if (fireProxyPreInit)

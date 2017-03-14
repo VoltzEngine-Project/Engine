@@ -22,7 +22,7 @@ public class ItemJsonRenderer implements IItemRenderer
             RenderData data = ClientDataHandler.INSTANCE.getRenderData(((IJsonRenderStateProvider) item.getItem()).getRenderContentID(type, item));
             if (data != null)
             {
-                return data.shouldRenderType(type);
+                return (data.renderType == null || data.renderType.equalsIgnoreCase("ve")) && data.shouldRenderType(type);
             }
             return type != ItemRenderType.INVENTORY;
         }
@@ -38,7 +38,7 @@ public class ItemJsonRenderer implements IItemRenderer
             RenderData data = ClientDataHandler.INSTANCE.getRenderData(((IJsonRenderStateProvider) item.getItem()).getRenderContentID(type, item));
             if (data != null)
             {
-                return data.shouldRenderType(type);
+                return (data.renderType == null || data.renderType.equalsIgnoreCase("ve")) && data.shouldRenderType(type);
             }
             return type != ItemRenderType.INVENTORY;
         }

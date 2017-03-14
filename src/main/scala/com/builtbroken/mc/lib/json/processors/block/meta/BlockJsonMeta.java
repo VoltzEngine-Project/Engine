@@ -1,8 +1,9 @@
 package com.builtbroken.mc.lib.json.processors.block.meta;
 
+import com.builtbroken.mc.core.registry.ModManager;
+import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.processors.block.BlockJson;
 import com.builtbroken.mc.lib.json.processors.block.ItemBlockJson;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -20,9 +21,13 @@ public class BlockJsonMeta extends BlockJson
     }
 
     @Override
-    public void register()
+    public void register(IJsonGenMod mod, ModManager manager)
     {
-        GameRegistry.registerBlock(this, ItemBlockJson.class, name);
+        if (!registered)
+        {
+            registered = true;
+            manager.newBlock(ID, this, ItemBlockJson.class);
+        }
     }
 
     @Override
@@ -54,9 +59,9 @@ public class BlockJsonMeta extends BlockJson
         {
             if (meta[i] != null && meta[i].oreNames != null)
             {
-                for(String s : meta[i].oreNames)
+                for (String s : meta[i].oreNames)
                 {
-                    if(s != null && !s.isEmpty())
+                    if (s != null && !s.isEmpty())
                     {
                         //TODO impalement formatting replacement
                         OreDictionary.registerOre(s, new ItemStack(this, 1, i));

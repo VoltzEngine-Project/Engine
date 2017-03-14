@@ -4,6 +4,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraftforge.client.IItemRenderer;
 
+import java.util.List;
+
 /**
  * Applied to {@link com.builtbroken.mc.lib.json.imp.IJsonGenObject} or there products that have
  * generated json render state data
@@ -34,5 +36,18 @@ public interface IJsonRenderStateProvider
      * @return -1 to use the default, or the ID of the state
      */
     @SideOnly(Side.CLIENT)
-    int getRenderStateID(IItemRenderer.ItemRenderType renderType, Object objectBeingRendered);
+    default int getRenderStateID(IItemRenderer.ItemRenderType renderType, Object objectBeingRendered)
+    {
+        return -1;
+    }
+
+    /**
+     * Gets all content IDs used by this object
+     * <p>
+     * Used to register renderers.
+     *
+     * @return
+     */
+    @SideOnly(Side.CLIENT)
+    List<String> getRenderContentIDs();
 }

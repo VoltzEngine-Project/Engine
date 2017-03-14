@@ -3,6 +3,7 @@ package com.builtbroken.test.mod;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.mod.AbstractMod;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
+import com.builtbroken.mc.lib.mod.ModCreativeTab;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -29,6 +30,7 @@ public class EngineTestMod extends AbstractMod
     public EngineTestMod()
     {
         super(DOMAIN);
+        getManager().setTab(new ModCreativeTab(DOMAIN));
     }
 
     @Mod.EventHandler

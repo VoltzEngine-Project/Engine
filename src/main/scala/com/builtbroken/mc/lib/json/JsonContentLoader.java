@@ -165,11 +165,17 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public void claimContent(IJsonGenMod mod)
     {
-        for(List<IJsonGenObject> list : generatedObjects.values())
+        for (List<IJsonGenObject> list : generatedObjects.values())
         {
-            if(list != null && !list.isEmpty())
+            if (list != null && !list.isEmpty())
             {
-
+                for (IJsonGenObject object : list)
+                {
+                    if (object.getMod() != null && object.getMod().equals(mod.getDomain()))
+                    {
+                        object.register(mod, mod.getJsonContentManager());
+                    }
+                }
             }
         }
     }
