@@ -14,9 +14,9 @@ public class BlockJsonMeta extends BlockJson
 {
     public MetaData[] meta = new MetaData[16];
 
-    public BlockJsonMeta(String name, String mat)
+    public BlockJsonMeta(String name, String mat, String id, String mod)
     {
-        super(name, mat);
+        super(name, mat, id, mod);
     }
 
     @Override

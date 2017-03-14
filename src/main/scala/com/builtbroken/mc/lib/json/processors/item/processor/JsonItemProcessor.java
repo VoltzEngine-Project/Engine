@@ -1,10 +1,14 @@
 package com.builtbroken.mc.lib.json.processors.item.processor;
 
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
 import com.builtbroken.mc.lib.json.processors.block.processor.JsonBlockProcessor;
 import com.builtbroken.mc.lib.json.processors.item.ItemJson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import java.util.List;
 
 /**
  * Loads basic item data from a processor
@@ -35,8 +39,15 @@ public class JsonItemProcessor extends JsonProcessor<ItemJson>
     }
 
     @Override
-    public ItemJson process(JsonElement element)
+    public boolean process(JsonElement element, List<IJsonGenObject> objectList)
     {
-        return null;
+        JsonObject itemData = element.getAsJsonObject();
+        ensureValuesExist(itemData, "name", "id", "mod");
+        ItemJson item = new ItemJson(itemData.getAsJsonPrimitive("id").getAsString(), itemData.getAsJsonPrimitive("mod").getAsString(), itemData.getAsJsonPrimitive("name").getAsString());
+
+        //TODO implement subtypes and other data
+
+        objectList.add(item);
+        return true;
     }
 }

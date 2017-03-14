@@ -1,9 +1,10 @@
 package com.builtbroken.mc.lib.json.processors.block;
 
+import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.MaterialDict;
+import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -16,21 +17,27 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class BlockJson extends Block implements IRegistryInit, IJsonGenObject
 {
-    public String name;
+    /** Unique id to register the block with */
+    public final String ID;
+    /** Mod that owners the block */
+    public final String MOD;
+    /** Name of the block, used for localizations */
+    public final String name;
+
+    /** Localization of the block */
     public String localization = "tile.${name}";
+    /** Global ore dict name of the block */
     public String oreName;
 
-    public BlockJson(String name, String mat)
+    protected boolean registered = false;
+
+    public BlockJson(String name, String mat, String id, String mod)
     {
         super(MaterialDict.get(mat));
+        this.ID = id;
+        this.MOD = mod;
         this.name = name;
         this.setBlockName(localization.replace("${name}", name));
-    }
-
-    @Override
-    public void register()
-    {
-        GameRegistry.registerBlock(this, name);
     }
 
     @Override
@@ -39,9 +46,25 @@ public class BlockJson extends Block implements IRegistryInit, IJsonGenObject
         return "block";
     }
 
+    @Override
+    public String getMod()
+    {
+        return MOD;
+    }
+
     public void setCreativeTab(String name)
     {
         //TODO implement
+    }
+
+    @Override
+    public void register(IJsonGenMod mod, ModManager manager)
+    {
+        if (!registered)
+        {
+            registered = true;
+            manager.newBlock(ID, this);
+        }
     }
 
     @Override
@@ -62,6 +85,6 @@ public class BlockJson extends Block implements IRegistryInit, IJsonGenObject
     @Override
     public String toString()
     {
-        return "BlockJson[" + name +"]";
+        return "BlockJson[" + name + "]";
     }
 }

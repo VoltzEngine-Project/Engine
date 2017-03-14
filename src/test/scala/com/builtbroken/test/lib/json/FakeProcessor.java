@@ -65,5 +65,11 @@ public class FakeProcessor extends JsonProcessor
         {
             return "key";
         }
+
+        @Override
+        public String getMod()
+        {
+            return null;
+        }
     }
 }

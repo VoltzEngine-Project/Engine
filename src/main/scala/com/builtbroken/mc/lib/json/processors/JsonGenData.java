@@ -36,6 +36,12 @@ public class JsonGenData implements IJsonGenObject
         return processor.getJsonKey();
     }
 
+    @Override
+    public String getMod()
+    {
+        return null;
+    }
+
     /**
      * Used to convert string item entries
      * into output data that can be used in

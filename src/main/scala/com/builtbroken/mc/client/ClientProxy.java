@@ -2,6 +2,10 @@ package com.builtbroken.mc.client;
 
 import com.builtbroken.mc.client.effects.VisualEffectRegistry;
 import com.builtbroken.mc.client.effects.providers.VEProviderShockWave;
+import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.client.json.models.ModelJsonProcessor;
+import com.builtbroken.mc.client.json.render.RenderJsonProcessor;
+import com.builtbroken.mc.client.json.texture.TextureJsonProcessor;
 import com.builtbroken.mc.core.CommonProxy;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
@@ -9,6 +13,7 @@ import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
 import com.builtbroken.mc.core.handler.RenderSelection;
+import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.fx.FxBeam;
 import com.builtbroken.mc.lib.transform.vector.Pos;
@@ -43,6 +48,13 @@ public class ClientProxy extends CommonProxy
         RenderingRegistry.registerBlockHandler(new BlockRenderHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerKeyHandler());
         MinecraftForge.EVENT_BUS.register(new RenderSelection());
+
+        JsonContentLoader.INSTANCE.add(new TextureJsonProcessor());
+        JsonContentLoader.INSTANCE.add(new ModelJsonProcessor());
+        JsonContentLoader.INSTANCE.add(new RenderJsonProcessor());
+
+        JsonContentLoader.INSTANCE.process("texture");
+        MinecraftForge.EVENT_BUS.register(ClientDataHandler.INSTANCE);
 
         ExplosiveRegistryClient.registerIcon(new ItemStack(Items.gunpowder), References.PREFIX + "ex.icon.gunpowder");
         ExplosiveRegistryClient.registerIcon(new ItemStack(Items.skull, 1, 4), References.PREFIX + "ex.icon.creeper_head");

@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.mod;
 
 import com.builtbroken.mc.core.registry.ModManager;
+import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
@@ -27,7 +28,7 @@ import java.io.File;
  * @Mod.Metadata
  * @ModstatInfo Created by robert on 12/7/2014.
  */
-public abstract class AbstractMod implements IMod
+public abstract class AbstractMod implements IMod, IJsonGenMod
 {
     /** Loader handler for proxies and loadable objects */
     protected LoadableHandler loader;
@@ -194,6 +195,7 @@ public abstract class AbstractMod implements IMod
     }
 
     public abstract AbstractProxy getProxy();
+
 
     @Override
     public final String getPrefix()

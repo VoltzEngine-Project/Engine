@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.json;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
@@ -76,8 +77,11 @@ public final class JsonContentLoader extends AbstractLoadable
 
     public File externalContentFolder;
 
+    public ModManager modManager;
+
     public JsonContentLoader()
     {
+        modManager = new ModManager();
         extensionsToLoad.add("json");
         blockProcessor = new JsonBlockProcessor();
         itemProcessor = new JsonItemProcessor();
@@ -150,6 +154,23 @@ public final class JsonContentLoader extends AbstractLoadable
         for (String proccessorKey : sortingProcessorList)
         {
             handlePostCalls(generatedObjects.get(proccessorKey));
+        }
+    }
+
+    /**
+     * Called to claim content that has to be
+     * registered to the mod itself.
+     *
+     * @param mod - mod
+     */
+    public void claimContent(IJsonGenMod mod)
+    {
+        for(List<IJsonGenObject> list : generatedObjects.values())
+        {
+            if(list != null && !list.isEmpty())
+            {
+
+            }
         }
     }
 
@@ -675,7 +696,7 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public void handlePostCalls(List<IJsonGenObject> generatedObjects)
     {
-        if(generatedObjects != null && !generatedObjects.isEmpty())
+        if (generatedObjects != null && !generatedObjects.isEmpty())
         {
             for (IJsonGenObject obj : generatedObjects)
             {

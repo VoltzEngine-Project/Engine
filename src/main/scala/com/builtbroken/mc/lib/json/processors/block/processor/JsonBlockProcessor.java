@@ -65,39 +65,38 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
     public boolean process(JsonElement element, List<IJsonGenObject> objectList)
     {
         JsonObject blockData = element.getAsJsonObject();
-        if (blockData.has("name") && blockData.has("material"))
+        ensureValuesExist(blockData, "name", "material", "id", "mod");
+        BlockJson block;
+
+        String mod = blockData.getAsJsonPrimitive("mod").getAsString();
+        String id = blockData.getAsJsonPrimitive("id").getAsString();
+        String name = blockData.get("name").getAsString();
+        String material = blockData.get("material").getAsString();
+
+        //Meta data loading
+        if (blockData.has("subtypes"))
         {
-            BlockJson block;
-
-            //Meta data loading
-            if (blockData.has("subtypes"))
-            {
-                block = new BlockJsonMeta(blockData.get("name").getAsString(), blockData.get("material").getAsString());
-                //Call to load metadata
-                readMeta((BlockJsonMeta) block, blockData.get("subtypes").getAsJsonArray(), objectList);
-            }
-            //No meta data
-            else
-            {
-                block = new BlockJson(blockData.get("name").getAsString(), blockData.get("material").getAsString());
-            }
-
-            //Call to process extra tags from file
-            for (Map.Entry<String, JsonElement> entry : blockData.entrySet())
-            {
-                if (!blockFields.contains(entry.getKey().toLowerCase()))
-                {
-                    processUnknownEntry(entry.getKey(), entry.getValue(), block, null, objectList);
-                }
-            }
-
-            //Add block to object list
-            objectList.add(block);
+            block = new BlockJsonMeta(name, material, id, mod);
+            //Call to load metadata
+            readMeta((BlockJsonMeta) block, blockData.get("subtypes").getAsJsonArray(), objectList);
         }
+        //No meta data
         else
         {
-            throw new IllegalArgumentException("JsonBlockProcessor: BlockData requires a name and a material value");
+            block = new BlockJson(name, material, id, mod);
         }
+
+        //Call to process extra tags from file
+        for (Map.Entry<String, JsonElement> entry : blockData.entrySet())
+        {
+            if (!blockFields.contains(entry.getKey().toLowerCase()))
+            {
+                processUnknownEntry(entry.getKey(), entry.getValue(), block, null, objectList);
+            }
+        }
+
+        //Add block to object list
+        objectList.add(block);
         return true;
     }
 
