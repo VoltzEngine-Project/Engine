@@ -73,7 +73,7 @@ public class ItemJson extends Item implements IJsonGenObject, IJsonRenderStatePr
     public IIcon getIconFromDamage(int meta)
     {
         //Get texture from loader if has render data
-        if (initTexture)
+        if (!initTexture)
         {
             initTexture = true;
             RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID());
@@ -123,6 +123,6 @@ public class ItemJson extends Item implements IJsonGenObject, IJsonRenderStatePr
 
     public String getRenderContentID()
     {
-        return getUnlocalizedName();
+        return "item." + owner + ":" + ID;
     }
 }
