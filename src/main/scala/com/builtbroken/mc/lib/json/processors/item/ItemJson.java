@@ -1,6 +1,9 @@
 package com.builtbroken.mc.lib.json.processors.item;
 
+import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
+import com.builtbroken.mc.client.json.render.RenderData;
+import com.builtbroken.mc.client.json.render.RenderState;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
@@ -8,7 +11,10 @@ import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.item.processor.JsonItemProcessor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 
 import java.util.ArrayList;
@@ -29,6 +35,8 @@ public class ItemJson extends Item implements IJsonGenObject, IJsonRenderStatePr
     /** Was the content registered */
     protected boolean registered = false;
 
+    private boolean initTexture = false;
+
     /**
      * @param id   - unique id for the item to be registered
      * @param name - used to localize the item
@@ -38,6 +46,7 @@ public class ItemJson extends Item implements IJsonGenObject, IJsonRenderStatePr
         this.ID = id;
         this.owner = owner;
         setUnlocalizedName(owner + ":" + name);
+        setTextureName(owner + ":" + name);
     }
 
     @Override
@@ -49,6 +58,39 @@ public class ItemJson extends Item implements IJsonGenObject, IJsonRenderStatePr
             manager.newItem(ID, this);
             Engine.logger().info(this + " has been claimed by " + mod);
         }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister reg)
+    {
+        super.registerIcons(reg);
+        initTexture = false;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconFromDamage(int meta)
+    {
+        //Get texture from loader if has render data
+        if (initTexture)
+        {
+            initTexture = true;
+            RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID());
+            if (data != null)
+            {
+                RenderState state = data.getState(RenderData.INVENTORY_RENDER_ID);
+                if (!state.isModelRenderer())
+                {
+                    IIcon icon = state.getIcon();
+                    if (icon != null)
+                    {
+                        itemIcon = icon;
+                    }
+                }
+            }
+        }
+        return itemIcon != null ? itemIcon : Items.stick.getIconFromDamage(0);
     }
 
     @Override
@@ -68,13 +110,6 @@ public class ItemJson extends Item implements IJsonGenObject, IJsonRenderStatePr
     public String getRenderContentID(IItemRenderer.ItemRenderType renderType, Object objectBeingRendered)
     {
         return getRenderContentID();
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public int getRenderStateID(IItemRenderer.ItemRenderType renderType, Object objectBeingRendered)
-    {
-        return -1; //Use defaults
     }
 
     @SideOnly(Side.CLIENT)

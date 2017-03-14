@@ -87,7 +87,8 @@ public class ClientProxy extends CommonProxy
     public void postInit()
     {
         super.postInit();
-        registerItemJsonRenders("ve", new ItemJsonRenderer());
+        //Item that uses a model for all states
+        registerItemJsonRenders("VE-Item", new ItemJsonRenderer());
     }
 
     /**

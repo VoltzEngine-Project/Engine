@@ -1,0 +1,18 @@
+{
+  "render": {
+    "type":"VE-Item",
+    "contentID": "item.voltzenginetest:testVeItem",
+    "states": [
+      {
+        "id": 0,
+        "textureID": "ve.testItemTexture"
+      }
+    ]
+  },
+  "texture": {
+    "key": "ve.testItemTexture",
+    "domain": "voltzenginetest",
+    "name": "testTexture",
+    "type": "item"
+  }
+}

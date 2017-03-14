@@ -1,8 +1,10 @@
 package com.builtbroken.mc.client.json.render;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 import java.util.HashMap;
@@ -13,6 +15,7 @@ import java.util.HashMap;
  */
 public class RenderData extends JsonGenData
 {
+    public static final int DEFAULT_RENDER = -1;
     public static final int INVENTORY_RENDER_ID = 0;
     public static final int EQUIPPED_RENDER_ID = 1;
     public static final int FIRST_PERSON_RENDER_ID = 2;
@@ -96,36 +99,58 @@ public class RenderData extends JsonGenData
         ClientDataHandler.INSTANCE.addRenderData(contentID, this);
     }
 
-    public boolean render(IItemRenderer.ItemRenderType type)
+    /**
+     * Called to render the object in its state
+     *
+     * @param type - type of render being applied
+     * @param item - object being rendered
+     * @return
+     */
+    public boolean render(IItemRenderer.ItemRenderType type, Object item)
     {
-        switch (type)
-        {
-            case ENTITY:
-                return render(ENTITY_RENDER_ID);
-            case INVENTORY:
-                return render(INVENTORY_RENDER_ID);
-            case EQUIPPED:
-                return render(EQUIPPED_RENDER_ID);
-            case EQUIPPED_FIRST_PERSON:
-                return render(FIRST_PERSON_RENDER_ID);
-        }
-        return false;
+        return render(getRenderIDForState(type, item));
     }
 
-    public boolean shouldRenderType(IItemRenderer.ItemRenderType type)
+    /**
+     * Gets the render ID for the state of the object and renderer
+     *
+     * @param type - type of render being applied by Item rendering
+     * @param item - object being rendered (normally an entity, tile, or item)
+     * @return ID to use
+     */
+    public int getRenderIDForState(IItemRenderer.ItemRenderType type, Object item)
     {
-        switch (type)
+        int renderID = DEFAULT_RENDER;
+        if (item instanceof IJsonRenderStateProvider)
         {
-            case ENTITY:
-                return canRenderState(ENTITY_RENDER_ID);
-            case INVENTORY:
-                return canRenderState(INVENTORY_RENDER_ID);
-            case EQUIPPED:
-                return canRenderState(EQUIPPED_RENDER_ID);
-            case EQUIPPED_FIRST_PERSON:
-                return canRenderState(FIRST_PERSON_RENDER_ID);
+            renderID = ((IJsonRenderStateProvider) item).getRenderStateID(type, item);
         }
-        return false;
+        else if (item instanceof ItemStack && ((ItemStack) item).getItem() instanceof IJsonRenderStateProvider)
+        {
+            renderID = ((IJsonRenderStateProvider) ((ItemStack) item).getItem()).getRenderStateID(type, item);
+        }
+
+        //Use defaults if -1
+        if (renderID == DEFAULT_RENDER)
+        {
+            switch (type)
+            {
+                case ENTITY:
+                    return ENTITY_RENDER_ID;
+                case INVENTORY:
+                    return INVENTORY_RENDER_ID;
+                case EQUIPPED:
+                    return EQUIPPED_RENDER_ID;
+                case EQUIPPED_FIRST_PERSON:
+                    return FIRST_PERSON_RENDER_ID;
+            }
+        }
+        return renderID;
+    }
+
+    public boolean shouldRenderType(IItemRenderer.ItemRenderType type, Object item)
+    {
+        return canRenderState(getRenderIDForState(type, item));
     }
 
     public void add(int id, RenderState state)

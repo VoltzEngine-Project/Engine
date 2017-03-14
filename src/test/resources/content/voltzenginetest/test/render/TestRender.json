@@ -1,7 +1,7 @@
 {
   "render": {
-    "type":"VE",
-    "contentID": "armory.test.shotgun",
+    "type":"VE-Item",
+    "contentID": "item.",
     "states": [
       {
         "id": 0,

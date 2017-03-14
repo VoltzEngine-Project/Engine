@@ -1,5 +1,6 @@
 package com.builtbroken.mc.client.json;
 
+import com.builtbroken.mc.client.json.render.RenderData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraftforge.client.IItemRenderer;
@@ -38,7 +39,7 @@ public interface IJsonRenderStateProvider
     @SideOnly(Side.CLIENT)
     default int getRenderStateID(IItemRenderer.ItemRenderType renderType, Object objectBeingRendered)
     {
-        return -1;
+        return RenderData.DEFAULT_RENDER;
     }
 
     /**

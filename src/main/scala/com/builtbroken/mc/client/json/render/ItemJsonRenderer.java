@@ -22,7 +22,7 @@ public class ItemJsonRenderer implements IItemRenderer
             RenderData data = ClientDataHandler.INSTANCE.getRenderData(((IJsonRenderStateProvider) item.getItem()).getRenderContentID(type, item));
             if (data != null)
             {
-                return (data.renderType == null || data.renderType.equalsIgnoreCase("ve")) && data.shouldRenderType(type);
+                return data.shouldRenderType(type, item);
             }
             return type != ItemRenderType.INVENTORY;
         }
@@ -38,7 +38,7 @@ public class ItemJsonRenderer implements IItemRenderer
             RenderData data = ClientDataHandler.INSTANCE.getRenderData(((IJsonRenderStateProvider) item.getItem()).getRenderContentID(type, item));
             if (data != null)
             {
-                return (data.renderType == null || data.renderType.equalsIgnoreCase("ve")) && data.shouldRenderType(type);
+                return data.shouldRenderType(type, item);
             }
             return type != ItemRenderType.INVENTORY;
         }
@@ -52,28 +52,29 @@ public class ItemJsonRenderer implements IItemRenderer
         {
             RenderData data = ClientDataHandler.INSTANCE.getRenderData(((IJsonRenderStateProvider) item.getItem()).getRenderContentID(type, item));
             GL11.glPushMatrix();
-            switch (type)
+            if (data == null || !data.render(type, item))
             {
-                case ENTITY:
-                    GL11.glTranslatef(0, 0.3f, 0);
-                    break;
-                case EQUIPPED:
-                    GL11.glRotatef(-75, 1, 0, 0);
-                    GL11.glRotatef(30, 0, 0, 1);
-                    GL11.glRotatef(20, 0, 1, 0);
-                    GL11.glTranslatef(0.2f, -0.5f, -0f);
-                    GL11.glScalef(2, 2, 2);
-                    break;
-                case EQUIPPED_FIRST_PERSON:
-                    GL11.glTranslatef(-0.4f, 1.3f, 1f);
-                    GL11.glRotatef(-30, 0, 1, 0);
-                    GL11.glRotatef(13, 1, 0, 0);
-                    GL11.glScaled(1.8f, 1.8f, 1.8f);
-                    break;
-            }
-            if (data == null || !data.render(type))
-            {
-                //Backup renderer
+                switch (type)
+                {
+                    //TODO move this to render data to allow for overrides
+                    case ENTITY:
+                        GL11.glTranslatef(0, 0.3f, 0);
+                        break;
+                    case EQUIPPED:
+                        GL11.glRotatef(-75, 1, 0, 0);
+                        GL11.glRotatef(30, 0, 0, 1);
+                        GL11.glRotatef(20, 0, 1, 0);
+                        GL11.glTranslatef(0.2f, -0.5f, -0f);
+                        GL11.glScalef(2, 2, 2);
+                        break;
+                    case EQUIPPED_FIRST_PERSON:
+                        GL11.glTranslatef(-0.4f, 1.3f, 1f);
+                        GL11.glRotatef(-30, 0, 1, 0);
+                        GL11.glRotatef(13, 1, 0, 0);
+                        GL11.glScaled(1.8f, 1.8f, 1.8f);
+                        break;
+                }
+                //Backup renderer TODO change to standard item renderer
                 RenderUtility.renderCube(0, 0, 0, 1, 1, 1, Blocks.sponge);
             }
             GL11.glPopMatrix();
