@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.json.processors.extra;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
@@ -29,6 +30,10 @@ public class JsonOreNameData extends JsonGenData implements IPostInit
         if (stack != null)
         {
             OreDictionary.registerOre(name, stack);
+        }
+        else
+        {
+            Engine.error("JsonOreNameData: Failed to parse item, this will prevent the ore name '" + name + "' from being registered to " + item);
         }
     }
 }
