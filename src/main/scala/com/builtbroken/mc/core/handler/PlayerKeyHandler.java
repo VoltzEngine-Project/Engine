@@ -6,6 +6,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.user.PacketMouseClick;
 import com.builtbroken.mc.core.network.packet.user.PacketPlayerItemMode;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -41,7 +42,6 @@ public class PlayerKeyHandler
     }
 
     @SubscribeEvent
-    @SideOnly(Side.CLIENT)
     public void mouseHandler(MouseEvent e)
     {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
@@ -71,6 +71,14 @@ public class PlayerKeyHandler
                 }
             }
         }
+    }
+
+    //@SubscribeEvent
+    public void keyHandler(InputEvent.KeyInputEvent e)
+    {
+        //Use this to capture keys being hit without using key bindings
+        final int key = Keyboard.getEventKey();
+        final long time = System.currentTimeMillis();
     }
 
     private void keyTick(boolean tickEnd)
