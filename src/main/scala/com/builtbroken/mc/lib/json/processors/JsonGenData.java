@@ -63,45 +63,68 @@ public class JsonGenData implements IJsonGenObject
         }
         else if (in.startsWith("item@"))
         {
-            String itemName = in.substring(5, in.length());
-            if (itemName.contains("@"))
-            {
-                String[] data = itemName.split("@");
-                itemName = data[0];
-                int meta = Integer.parseInt(data[1]);
-                Item item = InventoryUtility.getItem(itemName);
-                if (item == null)
-                {
-                    Engine.logger().error("The item value of [" + itemName + "] is not register and will prevent the recipe from working. Recipe -> " + this);
-                    return null;
-                }
-                return new ItemStack(item, 1, meta);
-            }
-            return InventoryUtility.getItem(itemName);
+            return findItem(in.substring(5, in.length()));
         }
         else if (in.startsWith("block@"))
         {
-            String blockName = in.substring(6, in.length());
-            if (blockName.contains("@"))
+            return findBlock(in.substring(6, in.length()));
+        }
+        else if (in.contains(":"))
+        {
+            Object out = findBlock(in);
+            if (out == null)
             {
-                String[] data = blockName.split("@");
-                blockName = data[0];
-                int meta = Integer.parseInt(data[1]);
-                Block block = InventoryUtility.getBlock(blockName);
-                if (block == null)
-                {
-                    Engine.logger().error("The block value of [" + blockName + "] is not register and will prevent the recipe from working. Recipe -> " + this);
-                    return null;
-                }
-                return new ItemStack(block, 1, meta);
+                out = findItem(in);
             }
-            return InventoryUtility.getBlock(blockName);
+            return out;
+        }
+        else if (OreDictionary.doesOreNameExist(in))
+        {
+            return in;
         }
         else
         {
-            //TODO search blocks, items, then ore
+            //TODO search everything and spam errors telling people to not use generic names
+            //TODO add short hand look up for common items (cobble -> minecraft:cobblestone)
+            Engine.logger().error("Could not match value of [" + in + "] to any data set for items, blocks, or ore names. Recipe -> " + this);
         }
         return null;
+    }
+
+    protected Object findBlock(String blockName)
+    {
+        if (blockName.contains("@"))
+        {
+            String[] data = blockName.split("@");
+            blockName = data[0];
+            int meta = Integer.parseInt(data[1]);
+            Block block = InventoryUtility.getBlock(blockName);
+            if (block == null)
+            {
+                Engine.logger().error("The block value of [" + blockName + "] is not register and will prevent the recipe from working. Recipe -> " + this);
+                return null;
+            }
+            return new ItemStack(block, 1, meta);
+        }
+        return InventoryUtility.getBlock(blockName);
+    }
+
+    protected Object findItem(String itemName)
+    {
+        if (itemName.contains("@"))
+        {
+            String[] data = itemName.split("@");
+            itemName = data[0];
+            int meta = Integer.parseInt(data[1]);
+            Item item = InventoryUtility.getItem(itemName);
+            if (item == null)
+            {
+                Engine.logger().error("The item value of [" + itemName + "] is not register and will prevent the recipe from working. Recipe -> " + this);
+                return null;
+            }
+            return new ItemStack(item, 1, meta);
+        }
+        return InventoryUtility.getItem(itemName);
     }
 
 
