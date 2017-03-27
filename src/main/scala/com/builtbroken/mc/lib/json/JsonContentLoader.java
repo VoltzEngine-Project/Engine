@@ -305,6 +305,9 @@ public final class JsonContentLoader extends AbstractLoadable
     /** Loads resources from folders and class path */
     public void loadResources()
     {
+        Engine.logger().info("Loading json resources");
+
+        Engine.logger().info("\tScanning mod packages for json data");
         //TODO implement threading to allow other mods to load while we load content
         loadResourcesFromFolder(externalContentFolder);
         for (ModContainer container : Loader.instance().getModList())
@@ -315,10 +318,12 @@ public final class JsonContentLoader extends AbstractLoadable
             Object mod = container.getMod();
             if (mod != null)
             {
-                loadResourcesFromPackage(mod.getClass(), "content/" + container.getModId() + "/");
+                loadResourcesFromPackage(mod.getClass(), "content/" + container.getModId() + "/", 0);
             }
         }
+        Engine.logger().info("--------------------------------");
 
+        Engine.logger().info("\tScanning for external files");
         //Load external files
         for (File file : externalFiles)
         {
@@ -332,7 +337,9 @@ public final class JsonContentLoader extends AbstractLoadable
                 throw new RuntimeException("Failed to load resource " + file, e);
             }
         }
+        Engine.logger().info("--------------------------------");
 
+        Engine.logger().info("\tLoading class path resources as json");
         //Load internal files
         for (String resource : classPathResources)
         {
@@ -346,6 +353,8 @@ public final class JsonContentLoader extends AbstractLoadable
                 throw new RuntimeException("Failed to load resource " + resource, e);
             }
         }
+        Engine.logger().info("--------------------------------");
+        Engine.logger().info("Done....");
     }
 
     /**
@@ -558,12 +567,17 @@ public final class JsonContentLoader extends AbstractLoadable
      *
      * @param folder - package your looking to load data from
      */
-    public void loadResourcesFromPackage(Class clazz, String folder)
+    public void loadResourcesFromPackage(Class clazz, String folder, int depth)
     {
+        String indent = "";
+        for (int i = 0; i <= depth; i++)
+        {
+            indent += "\t";
+        }
+        Engine.logger().info(indent + "Scanning for files in " + folder);
         //http://stackoverflow.com/questions/3923129/get-a-list-of-resources-from-classpath-directory
         try
         {
-
             InputStream stream = clazz.getClassLoader().getResourceAsStream(folder);
             if (stream != null)
             {
@@ -576,12 +590,13 @@ public final class JsonContentLoader extends AbstractLoadable
                         String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
                         if (extensionsToLoad.contains(extension))
                         {
+                            Engine.logger().info(indent + "  Found " + name);
                             classPathResources.add(path);
                         }
                     }
                     else
                     {
-                        loadResourcesFromPackage(clazz, path + "/");
+                        loadResourcesFromPackage(clazz, path + "/", depth + 1);
                     }
                 }
             }
