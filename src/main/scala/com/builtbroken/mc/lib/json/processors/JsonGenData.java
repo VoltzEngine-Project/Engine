@@ -17,6 +17,10 @@ import java.util.ArrayList;
  */
 public class JsonGenData implements IJsonGenObject
 {
+    /** Person or group that created the object */
+    public String author;
+
+    /** Processor that created this object */
     public final IJsonProcessor processor;
 
     public JsonGenData(IJsonProcessor processor)
@@ -28,6 +32,12 @@ public class JsonGenData implements IJsonGenObject
     public void register()
     {
 
+    }
+
+    @Override
+    public void setAuthor(String name)
+    {
+        author = name;
     }
 
     @Override

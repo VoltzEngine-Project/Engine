@@ -38,6 +38,11 @@ public interface IJsonGenObject
     {
     }
 
+    default void setAuthor(String name)
+    {
+
+    }
+
     /**
      * Unique key of the loader that created
      * this gen object.

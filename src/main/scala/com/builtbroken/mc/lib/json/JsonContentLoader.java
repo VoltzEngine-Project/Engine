@@ -216,6 +216,13 @@ public final class JsonContentLoader extends AbstractLoadable
                         {
                             if (data != null)
                             {
+                                //Set author
+                                if(entry.author != null && !entry.author.isEmpty())
+                                {
+                                    data.setAuthor(entry.author);
+                                }
+
+                                //Add gen data to list
                                 List<IJsonGenObject> list = generatedObjects.get(processorKey);
                                 if (list == null)
                                 {
@@ -223,6 +230,8 @@ public final class JsonContentLoader extends AbstractLoadable
                                 }
                                 list.add(data);
                                 generatedObjects.put(processorKey, list);
+
+                                //Call registry methods
                                 data.register();
                                 if (data instanceof IRegistryInit)
                                 {
