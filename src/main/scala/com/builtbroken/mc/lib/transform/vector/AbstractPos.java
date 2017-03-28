@@ -287,7 +287,12 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
 
     public MovingObjectPosition rayTrace(World world, IPos3D end)
     {
-        MovingObjectPosition block = rayTraceBlocks(world, end);
+        return rayTrace(world, end, false, false, false);
+    }
+
+    public MovingObjectPosition rayTrace(World world, IPos3D end, boolean rightClickWithBoat, boolean doColliderCheck, boolean doMiss)
+    {
+        MovingObjectPosition block = rayTraceBlocks(world, end, rightClickWithBoat, doColliderCheck, doMiss);
         MovingObjectPosition entity = rayTraceEntities(world, end);
 
         if (block == null)
@@ -310,7 +315,12 @@ public abstract class AbstractPos<R extends AbstractPos> extends Pos3D<R> implem
 
     public MovingObjectPosition rayTraceBlocks(World world, IPos3D end)
     {
-        return world.rayTraceBlocks(toVec3(), Vec3.createVectorHelper(end.x(), end.y(), end.z()));
+        return rayTraceBlocks(world, end, false, false, false);
+    }
+
+    public MovingObjectPosition rayTraceBlocks(World world, IPos3D end, boolean b1, boolean b2, boolean b3)
+    {
+        return world.func_147447_a(toVec3(), Vec3.createVectorHelper(end.x(), end.y(), end.z()), b1, b2, b3);
     }
 
     public MovingObjectPosition rayTraceEntities(World world, IPos3D end)
