@@ -1,7 +1,380 @@
-# voltzengine Engine Language Properties
-# @author Calclavia and Vexatos
+death.attack.electrocution=%1$s wurde durch einen Stromschlag elektrisiert!
 
-death.attack.electrocution=%1$s starb durch einen Stromschlag!
+tile.voltzengine:unknown.name=Unbekannter Block
+item.voltzengine:unknown.name=Unbekannter Gegenstand
+
+tile.voltzengine:hotrock.name=Erhitzter Stein
+
+tile.voltzengine:DemoRFBattery.name=Experimentelle RF-Zelle
+tile.voltzengine:DemoUEBattery.name=Experimentelle UE-Zelle
+
+## General
+text.general.feature.unimplemented=Nicht implementiert
+text.general.feature.wip=In Arbeit
+text.general.feature.broken=Defekt
+text.general.feature.banned=Verbannt
+text.general.feature.disable=Deaktiviert
+text.general.power.amount= %1 von %2 Strom-Einheiten
+
+## RF text
+text.rf.power.amount= %1 von %2 Redstone Flux
+
+## General - Tooltips
+item.tooltip.description.more=Halte %key gedrückt für mehr Details
+
+## Power text
+text.power.amount= %1 von %2 Joule
+
+## Explosives
+explosive.voltzengine:tnt.name=TNT
+
+## Ores
+tile.voltzengine:oreCopper.name=Kupfererz
+tile.voltzengine:oreTin.name=Zinnerz
+tile.voltzengine:oreSilver.name=Silbererz
+tile.voltzengine:oreLead.name=Bleierz
+tile.voltzengine:oreZinc.name=Zinkerz
+tile.voltzengine:oreNickel.name=Nickelerz
+tile.voltzengine:oreAluminium.name=Bauxiterz
+tile.voltzengine:oreBauxite.name=Bauxiterz
+tile.voltzengine:oreMagnesite.name=Magnesiterz
+tile.voltzengine:oreUranium.name=Uranerz
+tile.voltzengine:orePlatinum.name=Platinerz
+
+## Ores, Gems
+tile.voltzengine:oreAmazonite.name=Amazoniterz
+tile.voltzengine:oreSmokeyquartz.name=Rauchquarzerz
+tile.voltzengine:oreOnyxblack.name=Schwarzes Bänderonyxerz
+tile.voltzengine:oreOnyxred.name=Rotes Bänderonyxerz
+tile.voltzengine:oreGarnetgreen.name=Grünes Granaterz
+tile.voltzengine:oreGarnetred.name=Rotes Granaterz
+tile.voltzengine:oreGarnetorange.name=Oranges Granaterz
+tile.voltzengine:oreGarnetyellow.name=Gelbes Granaterz
+
+## Gems
+item.voltzengine:gem.amazonite.uncut.name=Amazonit-Edelstein
+item.voltzengine:gem.quartz.uncut.name=Quarz-Edelstein
+item.voltzengine:gem.quartz.smokey.uncut.name=Rauchquarz-Edelstein
+item.voltzengine:gem.quartz.smoky.uncut.name=Ungeschliffener Rauchquarz-Edelstein
+item.voltzengine:gem.onyx.black.uncut.name=Schwarzer Onyx-Edelstein
+item.voltzengine:gem.onyx.red.uncut.name=Roter Onyx-Edelstein
+item.voltzengine:gem.garnet.green.uncut.name=Grüner Granat-Edelstein
+item.voltzengine:gem.garnet.orange.uncut.name=Oranger Granat-Edelstein
+item.voltzengine:gem.garnet.red.uncut.name=Roter Granat-Edelstein
+item.voltzengine:gem.garnet.yellow.uncut.name=Gelber Granat-Edelstein
+item.voltzengine:gem.emerald.uncut.name=Smaragd-Edelstein
+
+## Dust
+item.voltzengine:dustCopper.name=Kupferstaub
+item.voltzengine:dustTin.name=Zinnstaub
+item.voltzengine:dustSilver.name=Silberstaub
+item.voltzengine:dustLead.name=Bleistaub
+item.voltzengine:dustZinc.name=Zinkstaub
+item.voltzengine:dustNickel.name=Nickelstaub
+item.voltzengine:dustAluminium.name=Aluminiumstaub
+item.voltzengine:dustMagnesium.name=Magnesiumstaub
+item.voltzengine:dustSteel.name=Stahlstaub
+item.voltzengine:dustBrass.name=Messingstaub
+item.voltzengine:dustBronze.name=Bronzestaub
+item.voltzengine:dustIron.name=Eisenstaub
+item.voltzengine:dustGold.name=Goldstaub
+item.voltzengine:dustStone.name=Steinstaub
+item.voltzengine:dustWood.name=Holzstaub
+item.voltzengine:dustUranium.name=Uranstaub
+item.voltzengine:dustDiamond.name=Diamantstaub
+item.voltzengine:dustPlatinum.name=Platinstaub
+
+## Impure Dust
+item.voltzengine:dustImpureCopper.name=Unreiner Kupferstaub
+item.voltzengine:dustImpureTin.name=Unreiner Zinnstaub
+item.voltzengine:dustImpureSilver.name=Unreiner Silberstaub
+item.voltzengine:dustImpureLead.name=Unreiner Bleistaub
+item.voltzengine:dustImpureZinc.name=Unreiner Zinkstaub
+item.voltzengine:dustImpureNickel.name=Unreiner Nickelstaub
+item.voltzengine:dustImpureAluminium.name=Unreiner Aluminiumstaub
+item.voltzengine:dustImpureMagnesium.name=Unreiner Magnesiumstaub
+item.voltzengine:dustImpureSteel.name=Unreiner Stahlstaub
+item.voltzengine:dustImpureBrass.name=Unreiner Messingstaub
+item.voltzengine:dustImpureBronze.name=Unreiner Bronzestaub
+item.voltzengine:dustImpureIron.name=Unreiner Eisenstaub
+item.voltzengine:dustImpureGold.name=Unreiner Goldstaub
+item.voltzengine:dustImpureStone.name=Unreiner Steinstaub
+item.voltzengine:dustImpureWood.name=Unreiner Holzstaub
+item.voltzengine:dustImpureUranium.name=Unreiner Uranstaub
+item.voltzengine:dustImpureDiamond.name=Unreiner Diamantstaub
+item.voltzengine:dustImpurePlatinum.name=Unreiner Platinstaub
+
+## Rubble
+item.voltzengine:rubbleCopper.name=Kupfertrümmer
+item.voltzengine:rubbleTin.name=Zinntrümmer
+item.voltzengine:rubbleSilver.name=Silbertrümmer
+item.voltzengine:rubbleLead.name=Bleitrümmer
+item.voltzengine:rubbleZinc.name=Zinktrümmer
+item.voltzengine:rubbleNickel.name=Nickeltrümmer
+item.voltzengine:rubbleAluminium.name=Aluminiumtrümmer
+item.voltzengine:rubbleMagnesium.name=Magnesiumtrümmer
+item.voltzengine:rubbleIron.name=Eisentrümmer
+item.voltzengine:rubbleGold.name=Goldtrümmer
+item.voltzengine:rubbleStone.name=Steinschutt
+item.voltzengine:rubbleWood.name=Holzstücke
+item.voltzengine:rubbleUranium.name=Urantrümmer
+item.voltzengine:rubbleDiamond.name=Diamanttrümmer
+item.voltzengine:rubblePlatinum.name=Platintrümmer
+
+## Ingot
+item.voltzengine:ingotCopper.name=Kupferbarren
+item.voltzengine:ingotTin.name=Zinnbarren
+item.voltzengine:ingotSilver.name=Silberbarren
+item.voltzengine:ingotLead.name=Bleibarren
+item.voltzengine:ingotZinc.name=Zinkbarren
+item.voltzengine:ingotNickel.name=Nickelbarren
+item.voltzengine:ingotAluminium.name=Aluminiumbarren
+item.voltzengine:ingotMagnesium.name=Magnesiumbarren
+item.voltzengine:ingotSteel.name=Stahlbarren
+item.voltzengine:ingotBrass.name=Messingbarren
+item.voltzengine:ingotBronze.name=Bronzebarren
+item.voltzengine:ingotDiamond.name=Diamantbarren
+item.voltzengine:ingotPlatinum.name=Platinbarren
+
+## Plate
+item.voltzengine:plateCopper.name=Kupferplatte
+item.voltzengine:plateTin.name=Zinnplatte
+item.voltzengine:plateSilver.name=Silberplatte
+item.voltzengine:plateLead.name=Bleiplatte
+item.voltzengine:plateZinc.name=Zinkplatte
+item.voltzengine:plateNickel.name=Nickelplatte
+item.voltzengine:plateAluminium.name=Aluminiumplatte
+item.voltzengine:plateMagnesium.name=Magnesiumplatte
+item.voltzengine:plateSteel.name=Stahlplatte
+item.voltzengine:plateBrass.name=Messingplatte
+item.voltzengine:plateBronze.name=Bronzeplatte
+item.voltzengine:plateIron.name=Eisenplatte
+item.voltzengine:plateGold.name=Goldplatte
+item.voltzengine:plateStone.name=Steinplatte
+item.voltzengine:plateWood.name=Holzplatte
+item.voltzengine:plateDiamond.name=Diamantplatte
+item.voltzengine:platePlatinum.name=Platinplatte
+
+## Rod
+item.voltzengine:rodCopper.name=Kupferstange
+item.voltzengine:rodTin.name=Zinnstange
+item.voltzengine:rodSilver.name=Silberstange
+item.voltzengine:rodLead.name=Bleistange
+item.voltzengine:rodZinc.name=Zinkstange
+item.voltzengine:rodNickel.name=Nickelstange
+item.voltzengine:rodAluminium.name=Aluminiumstange
+item.voltzengine:rodMagnesium.name=Magnesiumstange
+item.voltzengine:rodSteel.name=Stahlstange
+item.voltzengine:rodBrass.name=Messingstange
+item.voltzengine:rodBronze.name=Bronzestange
+item.voltzengine:rodGold.name=Goldstange
+item.voltzengine:rodIron.name=Eisenstange
+item.voltzengine:rodStone.name=Steinstange
+item.voltzengine:rodWood.name=Holzstange
+item.voltzengine:rodDiamond.name=Diamantstange
+item.voltzengine:rodPlatinum.name=Platinstange
+
+## Gear
+item.voltzengine:gearCopper.name=Kupferzahnrad
+item.voltzengine:gearTin.name=Zinnzahnrad
+item.voltzengine:gearSilver.name=Silberzahnrad
+item.voltzengine:gearLead.name=Bleizahnrad
+item.voltzengine:gearZinc.name=Zinkzahnrad
+item.voltzengine:gearNickel.name=Nickelzahnrad
+item.voltzengine:gearAluminium.name=Aluminiumzahnrad
+item.voltzengine:gearMagnesium.name=Magnesiumzahnrad
+item.voltzengine:gearWood.name=Holzzahnrad
+item.voltzengine:gearGold.name=Goldzahnrad
+item.voltzengine:gearIron.name=Eisenzahnrad
+item.voltzengine:gearStone.name=Steinzahnrad
+item.voltzengine:gearSteel.name=Stahlzahnrad
+item.voltzengine:gearBrass.name=Messingzahnrad
+item.voltzengine:gearBronze.name=Bronzezahnrad
+item.voltzengine:gearDiamond.name=Diamantzahnrad
+item.voltzengine:gearPlatinum.name=Platinzahnrad
+
+## Ax Head
+item.voltzengine:axHeadCopper.name=Kupferaxtkopf
+item.voltzengine:axHeadTin.name=Zinnaxtkopf
+item.voltzengine:axHeadSilver.name=Silberaxtkopf
+item.voltzengine:axHeadLead.name=Bleiaxtkopf
+item.voltzengine:axHeadZinc.name=Zinkaxtkopf
+item.voltzengine:axHeadNickel.name=Nickelaxtkopf
+item.voltzengine:axHeadAluminium.name=Aluminiumaxtkopf
+item.voltzengine:axHeadMagnesium.name=Magnesiumaxtkopf
+item.voltzengine:axHeadSteel.name=Stahlaxtkopf
+item.voltzengine:axHeadBrass.name=Messingaxtkopf
+item.voltzengine:axHeadBronze.name=Bronzeaxtkopf
+item.voltzengine:axHeadIron.name=Eisenaxtkopf
+item.voltzengine:axHeadGold.name=Goldaxtkopf
+item.voltzengine:axHeadStone.name=Steinaxtkopf
+item.voltzengine:axHeadWood.name=Holzaxtkopf
+item.voltzengine:axHeadDiamond.name=Diamantaxtkopf
+item.voltzengine:axHeadPlatinum.name=Platinaxtkopf
+
+## Shovel Head
+item.voltzengine:shovelHeadCopper.name=Kupferschaufelkopf
+item.voltzengine:shovelHeadTin.name=Zinnschaufelkopf
+item.voltzengine:shovelHeadSilver.name=Silberschaufelkopf
+item.voltzengine:shovelHeadLead.name=Bleischaufelkopf
+item.voltzengine:shovelHeadZinc.name=Zinkschaufelkopf
+item.voltzengine:shovelHeadNickel.name=Nickelschaufelkopf
+item.voltzengine:shovelHeadAluminium.name=Aluminiumschaufelkopf
+item.voltzengine:shovelHeadMagnesium.name=Magnesiumschaufelkopf
+item.voltzengine:shovelHeadSteel.name=Stahlschaufelkopf
+item.voltzengine:shovelHeadBrass.name=Messingschaufelkopf
+item.voltzengine:shovelHeadBronze.name=Bronzeschaufelkopf
+item.voltzengine:shovelHeadIron.name=Eisenschaufelkopf
+item.voltzengine:shovelHeadGold.name=Goldschaufelkopf
+item.voltzengine:shovelHeadStone.name=Steinschaufelkopf
+item.voltzengine:shovelHeadWood.name=Holzschaufelkopf
+item.voltzengine:shovelHeadDiamond.name=Diamantschaufelkopf
+item.voltzengine:shovelHeadPlatinum.name=Platinschaufelkopf
+
+## Sword Blade
+item.voltzengine:swordBladeCopper.name=Kupferschwertklinge
+item.voltzengine:swordBladeTin.name=Zinnschwertklinge
+item.voltzengine:swordBladeSilver.name=Silberschwertklinge
+item.voltzengine:swordBladeLead.name=Bleischwertklinge
+item.voltzengine:swordBladeZinc.name=Zinkschwertklinge
+item.voltzengine:swordBladeNickel.name=Nickelschwertklinge
+item.voltzengine:swordBladeAluminium.name=Aluminiumschwertklinge
+item.voltzengine:swordBladeMagnesium.name=Magnesiumschwertklinge
+item.voltzengine:swordBladeSteel.name=Stahlschwertklinge
+item.voltzengine:swordBladeBrass.name=Messingschwertklinge
+item.voltzengine:swordBladeBronze.name=Bronzeschwertklinge
+item.voltzengine:swordBladeIron.name=Eisenschwertklinge
+item.voltzengine:swordBladeGold.name=Goldschwertklinge
+item.voltzengine:swordBladeStone.name=Steinschwertklinge
+item.voltzengine:swordBladeWood.name=Holzschwertklinge
+item.voltzengine:swordBladeDiamond.name=Diamantschwertklinge
+item.voltzengine:swordBladePlatinum.name=Platinschwertklinge
+
+## Pick Head
+item.voltzengine:pickHeadCopper.name=Kupferspitzhackenkopf
+item.voltzengine:pickHeadTin.name=Zinnspitzhackenkopf
+item.voltzengine:pickHeadSilver.name=Silberspitzhackenkopf
+item.voltzengine:pickHeadLead.name=Bleispitzhackenkopf
+item.voltzengine:pickHeadZinc.name=Zinkspitzhackenkopf
+item.voltzengine:pickHeadNickel.name=Nickelspitzhackenkopf
+item.voltzengine:pickHeadAluminium.name=Aluminiumspitzhackenkopf
+item.voltzengine:pickHeadMagnesium.name=Magnesiumspitzhackenkopf
+item.voltzengine:pickHeadSteel.name=Stahlspitzhackenkopf
+item.voltzengine:pickHeadBrass.name=Messingspitzhackenkopf
+item.voltzengine:pickHeadBronze.name=Bronzespitzhackenkopf
+item.voltzengine:pickHeadIron.name=Eisenspitzhackenkopf
+item.voltzengine:pickHeadGold.name=Goldspitzhackenkopf
+item.voltzengine:pickHeadStone.name=Steinspitzhackenkopf
+item.voltzengine:pickHeadWood.name=Holzspitzhackenkopf
+item.voltzengine:pickHeadDiamond.name=Diamantspitzhackenkopf
+item.voltzengine:pickHeadPlatinum.name=Platinspitzhackenkopf
+
+## Hoe Head
+item.voltzengine:hoeHeadCopper.name=Kupferfeldhackenkopf
+item.voltzengine:hoeHeadTin.name=Zinnfeldhackenkopf
+item.voltzengine:hoeHeadSilver.name=Silberfeldhackenkopf
+item.voltzengine:hoeHeadLead.name=Bleifeldhackenkopf
+item.voltzengine:hoeHeadZinc.name=Zinkfeldhackenkopf
+item.voltzengine:hoeHeadNickel.name=Nickelfeldhackenkopf
+item.voltzengine:hoeHeadAluminium.name=Aluminiumfeldhackenkopf
+item.voltzengine:hoeHeadMagnesium.name=Magnesiumfeldhackenkopf
+item.voltzengine:hoeHeadSteel.name=Stahlfeldhackenkopf
+item.voltzengine:hoeHeadBrass.name=Messingfeldhackenkopf
+item.voltzengine:hoeHeadBronze.name=Bronzefeldhackenkopf
+item.voltzengine:hoeHeadIron.name=Eisenfeldhackenkopf
+item.voltzengine:hoeHeadGold.name=Goldfeldhackenkopf
+item.voltzengine:hoeHeadStone.name=Steinfeldhackenkopf
+item.voltzengine:hoeHeadWood.name=Holzfeldhackenkopf
+item.voltzengine:hoeHeadDiamond.name=Diamantfeldhackenkopf
+item.voltzengine:hoeHeadPlatinum.name=Platinfeldhackenkopf
+
+## Wire
+item.voltzengine:wireCopper.name=Kupferdraht
+item.voltzengine:wireTin.name=Zinndraht
+item.voltzengine:wireSilver.name=Silberdraht
+item.voltzengine:wireLead.name=Bleidraht
+item.voltzengine:wireZinc.name=Zinkdraht
+item.voltzengine:wireNickel.name=Nickeldraht
+item.voltzengine:wireAluminium.name=Aluminiumdraht
+item.voltzengine:wireMagnesium.name=Magnesiumdraht
+item.voltzengine:wireSteel.name=Stahldraht
+item.voltzengine:wireBrass.name=Messingdraht
+item.voltzengine:wireBronze.name=Bronzedraht
+item.voltzengine:wireIron.name=Eisendraht
+item.voltzengine:wireGold.name=Golddraht
+item.voltzengine:wireStone.name=Steindraht
+item.voltzengine:wireWood.name=Holzdraht
+item.voltzengine:wireDiamond.name=Diamantdraht
+item.voltzengine:wirePlatinum.name=Platindraht
+
+## Screw
+item.voltzengine:screwCopper.name=Kupferschraube
+item.voltzengine:screwTin.name=Zinnschraube
+item.voltzengine:screwSilver.name=Silberschraube
+item.voltzengine:screwLead.name=Bleischraube
+item.voltzengine:screwZinc.name=Zinkschraube
+item.voltzengine:screwNickel.name=Nickelschraube
+item.voltzengine:screwAluminium.name=Aluminiumschraube
+item.voltzengine:screwMagnesium.name=Magnesiumschraube
+item.voltzengine:screwSteel.name=Stahlschraube
+item.voltzengine:screwBrass.name=Messingschraube
+item.voltzengine:screwBronze.name=Bronzeschraube
+item.voltzengine:screwIron.name=Eisenschraube
+item.voltzengine:screwGold.name=Goldschraube
+item.voltzengine:screwStone.name=Steinschraube
+item.voltzengine:screwWood.name=Holzschraube
+item.voltzengine:screwDiamond.name=Diamantschraube
+item.voltzengine:screwPlatinum.name=Platinschraube
+
+## Nugget
+item.voltzengine:nuggetCopper.name=Kupfernugget
+item.voltzengine:nuggetTin.name=Zinnnugget
+item.voltzengine:nuggetSilver.name=Silbernugget
+item.voltzengine:nuggetLead.name=Bleinugget
+item.voltzengine:nuggetZinc.name=Zinknugget
+item.voltzengine:nuggetNickel.name=Nickelnugget
+item.voltzengine:nuggetAluminium.name=Aluminiumnugget
+item.voltzengine:nuggetMagnesium.name=Magnesiumnugget
+item.voltzengine:nuggetSteel.name=Stahlnugget
+item.voltzengine:nuggetBrass.name=Messingnugget
+item.voltzengine:nuggetBronze.name=Bronzenugget
+item.voltzengine:nuggetIron.name=Eisennugget
+item.voltzengine:nuggetGold.name=Goldnugget
+item.voltzengine:nuggetStone.name=Steinnugget
+item.voltzengine:nuggetWood.name=Holznugget
+item.voltzengine:nuggetDiamond.name=Diamantnugget
+item.voltzengine:nuggetPlatinum.name=Platinnugget
+
+
+## Sheet Metal
+item.voltzengine:sheetMetal.name=Metallblech
+item.voltzengine:sheetMetal.metalSheet.name=Metallblech
+item.voltzengine:sheetMetal.metalSheet_half.name=1/2 Metallblech
+item.voltzengine:sheetMetal.metalSheet_quarter.name=1/4 Metallblech
+item.voltzengine:sheetMetal.metalSheet_quarter.name=1/4 Metallblech
+item.voltzengine:sheetMetal.metalSheet_third.name=1/3 Metallblech
+item.voltzengine:sheetMetal.metalSheet_eighth.name=1/8 Metallblech
+item.voltzengine:sheetMetal.metalSheetTriangle.name=Metallblech-Keil
+item.voltzengine:sheetMetal.metalCone_micro.name=Metallblech-Kegel u
+item.voltzengine:sheetMetal.metalCone_small.name=Metallblech-Kegel s
+item.voltzengine:sheetMetal.metalCone_medium.name=Metallblech-Kegel
+item.voltzengine:sheetMetal.metalSheet_microFin.name=Metallblech-Grat u
+item.voltzengine:sheetMetal.metalSheet_smallFin.name=Metallblech-Grat s
+item.voltzengine:sheetMetal.metalSheet_curved1.name=Gebogenes Metallblech
+item.voltzengine:sheetMetal.metalSheet_curved2.name=Gebogenes Metallblech
+item.voltzengine:sheetMetal.metalSheet_curved3.name=Gebogenes Metallblech
+item.voltzengine:sheetMetal.metalSheet_curved4.name=Gebogenes Metallblech
+item.voltzengine:sheetMetal.metalSheet_smallCylinder.name=Kleiner Metallblech-Zylinder
+item.voltzengine:sheetMetal.metalSheet_cylinder.name=Metallblech-Zylinder
+item.voltzengine:sheetMetal.metalSheet_halfCylinder.name=Halber Metallblech-Zylinder
+item.voltzengine:sheetMetal.rivets.name=Nieten
+
+## Crafting Parts
+item.voltzengine:craftingPart.copperCoil.name=Kupferspule
+item.voltzengine:craftingPart.dcMotor.name=Gleichstrommotor
+item.voltzengine:craftingPart.motor.name=Motor
+item.voltzengine:craftingPart.stepperMotor.name=Schrittmotor
+item.voltzengine:craftingPart.copperCoilStepper.name=Motorenspulen-Anordnung
 
 ## Creative Testing Blocks
 tile.voltzengine:creativeBuilder.name=Kreativ-Bauer
@@ -13,14 +386,114 @@ toolmode.mode=Modus
 toolmode.general.name=Generell
 toolmode.rotation.name=Drehung
 
+item.voltzengine:devDataTool.name=Entwickler-Datenwerkzeug
+item.voltzengine:devDataTool.0.name=[DEV] Simple Block Data
+item.voltzengine:devDataTool.1.name=[DEV] Reflective Tile Data
+
+item.voltzengine:sheetMetalTools.name=Metallblech-Werkzeug
+item.voltzengine:sheetMetalTools.hammer.name=Metallblech-Hammer
+item.voltzengine:sheetMetalTools.shears.name=Metallblech-Schere
+
+item.voltzengine:simpleTools.hammer.name=Steinhammer
+item.voltzengine:simpleTools.chisel.name=Steinmeißel
+item.voltzengine:simpleTools.drill.name=Steinbohrer
+item.voltzengine:simpleTools.file.name=Steinfeile
+item.voltzengine:simpleTools.cutter.name=Drahtschere
+
+## GPS
+gps.pos.set.name=GPS-Daten gespeichert
+gps.error.pos.invalid.name=Ungültige Position
+gps.data.transferred.name=Daten übertragen
+gps.cleared.name=GPS-Daten gelöscht
+
+## Linking
+link.error.world.match.name=Limited to save dim
+link.error.pos.invalid.name=Invalid linked location
+link.error.pos.distance.max.name=Distance to high
+link.error.pos.distance.min.name=Distance to low
+link.error.tile.invalid.name=Invalid linking tile
+link.error.code.match.name=Link code doesn't match
+link.error.data.stored.name=Link data already stored
+link.error.pos.loop.name=Can't link to self, loop detected
+link.error.tile.limit.max.name=Max linked tiles reached
+link.error.tile.already.added.name=Tile already linked
+link.cleared.name=Link data cleared
+link.pos.set.name=Link data set
+link.completed.name=Link Created
+
 # Items
-item.voltzengine:screwdriver.name=Schraubendreher
-item.voltzengine:screwdriver.tooltip=Genutzt, um Blöcke zu konfigurieren. Shift-rechtsklicke, um Modus zu ändern.
+item.voltzengine:screwdriver.name=Schraubenzieher
+item.voltzengine:screwdriver.tooltip=Wird verwendet, um Blöcke einzustellen. Shift-Rechtsklick um den Modus zu ändern.
+
+# Chips
+item.voltzengine:circuits.circuitBasic.name=Einfacher Schaltkreis
+item.voltzengine:circuits.circuitAdvanced.name=Erweiterter Schaltkreis
+item.voltzengine:circuits.circuitElite.name=Elite-Schaltkreis
 
 #Misc
 # %0 goes before the localized name of the shift key, %1 goes after
-tooltip.noShift=Halte #0Shift#1 für Informationen
-info.recipes.tooltip=Halte #0J#1 für Materialien
+info.voltzengine:tooltip.noShift=Halte #0shift#1 gedrückt für mehr Information
+info.recipes.tooltip=Halte #0J#1 gedrückt für Materialien
 
 info.energylevel.waila=Momentanes Energielevel
 info.energycapacity.waila=Maximales Energielevel
+
+info.isCraftingOnlyItem=Werksgegenstand
+
+info.voltzengine:explosive.name=Explosiv
+info.voltzengine:explosive.size.name=Größe
+info.voltzengine:explosive.yield.name=Detonationswert: %.2fm Radius
+info.voltzengine:explosive.item.name=ExItem
+
+## Permissions
+root.machine=Maschine verwalten
+root.machine.enable=Maschine aktivieren
+root.machine.disable=Maschine deaktivieren
+root.machine.open=Maschine öffnen
+root.machine.off=Maschine abstellen
+root.machine.on=Maschine anstellen
+root.machine.lock=Maschine abschließen
+root.machine.unlock=Maschine aufschließen
+root.machine.upgrade=Maschine aufstufen
+root.machine.downgrade=Maschine abstufen
+root.machine.config=Maschine einstellen
+
+root.group=Gruppen verwalten
+root.group.user=Benutzer verwalten
+root.group.user.add=Benutzer hinzufügen
+root.group.user.remove=Benutzer entfernen
+root.group.entity=Einheit verwalten
+root.group.entity.add=Einheit hinzufügen
+root.group.entity.remove=Einheit entfernen
+root.group.permission=Gruppenberechtigungen bearbeiten
+root.group.permission.add=Gruppenberechtigungen hinzufügen
+root.group.permission.remove=Gruppenberechtigungen entfernen
+root.group.admin=Administrationsgruppe
+root.group.owner=Gruppenbesitzer bearbeiten
+
+root.profile=Profile verwalten
+root.profile.admin=Administratorprofil
+root.profile.owner=Profilbesitzer bearbeiten
+root.profile.addGroup=Gruppe hinzufügen
+root.profile.removeGroup=Gruppe entfernen
+root.profile.modifyGroup=Gruppe bearbeiten
+root.profile.enable=Profil aktivieren
+root.profile.user=Benutzer verwalten
+
+root.inventory=Inventar verwalten
+root.inventory.lock=Inventar sperren
+root.inventory.unlock=Inventar entsperren
+root.inventory.input=Inventar eingeben
+root.inventory.open=Inventar öffnen
+root.inventory.output=Inventar ausgeben
+root.inventory.enable=Inventar aktivieren
+root.inventory.disable=Inventar deaktivieren
+root.inventory.modify=Inventar abändern
+
+## Block Tile error messages
+blockTile.error.onBlockActivated=Unerwarteter Fehler beim Klick auf die Maschine, siehe Konsole für Details oder melde das Problem einem Admin.
+
+## [DEV] World Types
+generator.voidTestWorld=Leere-Testwelt
+generator.stoneTestWorld=Stein-Testwelt
+generator.chessTestWorld=Schach-Testwelt
