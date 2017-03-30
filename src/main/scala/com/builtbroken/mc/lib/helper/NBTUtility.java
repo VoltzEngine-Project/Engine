@@ -43,7 +43,8 @@ public class NBTUtility
 
             // Calclavia.LOGGER.fine("Saved " + file.getName() + " NBT data file successfully.");
             return true;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Engine.instance.logger().fatal("Failed to save " + file.getName() + ".dat!");
             e.printStackTrace();
@@ -78,11 +79,13 @@ public class NBTUtility
                 Engine.instance.logger().info("Save file " + file + "\n\tdoes not exist in the save folder! Generating new NBT data in it's place.");
                 return new NBTTagCompound();
             }
-        } catch (FileNotFoundException e)
+        }
+        catch (FileNotFoundException e)
         {
             Engine.instance.logger().error("Save Loader Error, File not found " + file, e);
             return new NBTTagCompound();
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             Engine.instance.logger().error("Save Loader Error, Failed to read " + file, e);
             return new NBTTagCompound();
@@ -367,7 +370,14 @@ public class NBTUtility
     }
 
     /***
-     * Checks if two NBT tag compounds match each other
+     * Checks if two NBT tag compounds match each other.
+     * <p>
+     * null and empty tags are treated as the same.
+     * <p>
+     * so null == null, null == empty will both as matching
+     * <p>
+     * This is to avoid issues where an NBT tag was initialized but
+     * not data was set in the tag.
      *
      * @param tag
      * @param tag2
@@ -375,15 +385,17 @@ public class NBTUtility
      */
     public static boolean doTagsMatch(final NBTTagCompound tag, final NBTTagCompound tag2)
     {
-        if (tag == null && tag2 == null)
+        boolean firstTagEmpty = tag == null || tag.hasNoTags();
+        boolean firstTagEmpty2 = tag2 == null || tag2.hasNoTags();
+        if (firstTagEmpty && firstTagEmpty2)
         {
             return true;
         }
-        else if (tag != null && tag2 == null)
+        else if (!firstTagEmpty && firstTagEmpty2)
         {
             return false;
         }
-        else if (tag == null && tag2 != null)
+        else if (firstTagEmpty && !firstTagEmpty2)
         {
             return false;
         }

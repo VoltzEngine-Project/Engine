@@ -52,7 +52,7 @@ public abstract class AbstractModule implements IModule, IModuleHasMass
     }
 
     /** Loads from an ItemStack's NBT, can be used to clone modules */
-    public final void load(ItemStack stack)
+    public void load(ItemStack stack)
     {
         if (stack.getTagCompound() != null)
         {
@@ -61,12 +61,25 @@ public abstract class AbstractModule implements IModule, IModuleHasMass
     }
 
     @Override
-    public final void save(ItemStack stack)
+    public void save(ItemStack stack)
     {
-        stack.setTagCompound(new NBTTagCompound());
-        save(stack.getTagCompound());
+        NBTTagCompound tagCompound = new NBTTagCompound();
+        save(tagCompound);
+        if(saveTag())
+        {
+            tagCompound.setString(ModuleBuilder.SAVE_ID, getSaveID());
+        }
 
-        stack.getTagCompound().setString(ModuleBuilder.SAVE_ID, getSaveID());
+        //Only save to item if we have data to save
+        if(!tagCompound.hasNoTags())
+        {
+            stack.setTagCompound(tagCompound);
+        }
+    }
+
+    protected boolean saveTag()
+    {
+        return true;
     }
 
     @Override
