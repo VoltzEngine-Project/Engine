@@ -1,13 +1,13 @@
-package com.builtbroken.mc.lib.json.processors.block.processor;
+package com.builtbroken.mc.lib.json.processors.block;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
-import com.builtbroken.mc.lib.json.processors.block.BlockJson;
-import com.builtbroken.mc.lib.json.processors.block.meta.BlockJsonMeta;
-import com.builtbroken.mc.lib.json.processors.block.meta.MetaData;
+import com.builtbroken.mc.framework.block.BlockBase;
+import com.builtbroken.mc.framework.block.meta.BlockMeta;
+import com.builtbroken.mc.framework.block.meta.MetaData;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -24,7 +24,7 @@ import java.util.Map;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/24/2016.
  */
-public class JsonBlockProcessor extends JsonProcessor<BlockJson>
+public class JsonBlockProcessor extends JsonProcessor<BlockBase>
 {
     public static final String KEY = "block";
     /** Map of processors to run on unknown json object entries, used to process recipes and registry calls */
@@ -66,7 +66,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
     {
         JsonObject blockData = element.getAsJsonObject();
         ensureValuesExist(blockData, "name", "material", "id", "mod");
-        BlockJson block;
+        BlockBase block;
 
         String mod = blockData.getAsJsonPrimitive("mod").getAsString();
         String id = blockData.getAsJsonPrimitive("id").getAsString();
@@ -76,14 +76,14 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
         //Meta data loading
         if (blockData.has("subtypes"))
         {
-            block = new BlockJsonMeta(name, material, id, mod);
+            block = new BlockMeta(name, material, id, mod);
             //Call to load metadata
-            readMeta((BlockJsonMeta) block, blockData.get("subtypes").getAsJsonArray(), objectList);
+            readMeta((BlockMeta) block, blockData.get("subtypes").getAsJsonArray(), objectList);
         }
         //No meta data
         else
         {
-            block = new BlockJson(name, material, id, mod);
+            block = new BlockBase(name, material, id, mod);
         }
 
         //Call to process extra tags from file
@@ -106,7 +106,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
      * @param block - meta block, unregistered
      * @param array - array of subtypes
      */
-    public void readMeta(BlockJsonMeta block, JsonArray array, List<IJsonGenObject> objectList)
+    public void readMeta(BlockMeta block, JsonArray array, List<IJsonGenObject> objectList)
     {
         //Loop every entry in the array, each entry should be meta values
         for (int i = 0; i < array.size() && i < 16; i++)
@@ -154,7 +154,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
      * @param json
      * @return
      */
-    public int readMetaEntry(BlockJson block, MetaData data, JsonObject json, List<IJsonGenObject> objectList)
+    public int readMetaEntry(BlockBase block, MetaData data, JsonObject json, List<IJsonGenObject> objectList)
     {
         int meta = -1;
         for (Map.Entry<String, JsonElement> entry : json.entrySet())
@@ -183,7 +183,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockJson>
      * @param block   - block being processed
      * @param data    - meta being processed, can be null if processing block only
      */
-    public void processUnknownEntry(String name, JsonElement element, BlockJson block, MetaData data, List<IJsonGenObject> objectList)
+    public void processUnknownEntry(String name, JsonElement element, BlockBase block, MetaData data, List<IJsonGenObject> objectList)
     {
         if (subProcessors.containsKey(name))
         {

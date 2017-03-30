@@ -1,12 +1,14 @@
-package com.builtbroken.mc.lib.json.processors.block;
+package com.builtbroken.mc.framework.block;
 
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.MaterialDict;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
@@ -15,7 +17,7 @@ import net.minecraftforge.oredict.OreDictionary;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/24/2016.
  */
-public class BlockJson extends Block implements IRegistryInit, IJsonGenObject
+public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGenObject
 {
     /** Unique id to register the block with */
     public final String ID;
@@ -31,7 +33,7 @@ public class BlockJson extends Block implements IRegistryInit, IJsonGenObject
 
     protected boolean registered = false;
 
-    public BlockJson(String name, String mat, String id, String mod)
+    public BlockBase(String name, String mat, String id, String mod)
     {
         super(MaterialDict.get(mat));
         this.ID = id;
@@ -86,5 +88,11 @@ public class BlockJson extends Block implements IRegistryInit, IJsonGenObject
     public String toString()
     {
         return "BlockJson[" + name + "]";
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+    {
+        return null;
     }
 }

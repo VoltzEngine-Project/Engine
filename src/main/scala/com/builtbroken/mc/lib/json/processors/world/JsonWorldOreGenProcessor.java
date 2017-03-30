@@ -4,8 +4,8 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
-import com.builtbroken.mc.lib.json.processors.block.BlockJson;
-import com.builtbroken.mc.lib.json.processors.block.meta.MetaData;
+import com.builtbroken.mc.framework.block.BlockBase;
+import com.builtbroken.mc.framework.block.meta.MetaData;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.block.Block;
@@ -92,7 +92,7 @@ public class JsonWorldOreGenProcessor extends JsonProcessor<JsonWorldOreGenData>
     }
 
     @Override
-    public void process(BlockJson block, JsonElement element, List<IJsonGenObject> objectList)
+    public void process(BlockBase block, JsonElement element, List<IJsonGenObject> objectList)
     {
         JsonWorldOreGenData object = process(block, 0, block.oreName, element);
         if (object != null)
@@ -102,7 +102,7 @@ public class JsonWorldOreGenProcessor extends JsonProcessor<JsonWorldOreGenData>
     }
 
     @Override
-    public void process(MetaData data, BlockJson block, JsonElement element, List<IJsonGenObject> objectList)
+    public void process(MetaData data, BlockBase block, JsonElement element, List<IJsonGenObject> objectList)
     {
         JsonWorldOreGenData object = process(block, data.index, data.oreNames != null && data.oreNames.size() > 0 ? data.oreNames.get(0) : null, element);
         if (object != null)

@@ -1,9 +1,9 @@
-package com.builtbroken.mc.lib.json.processors.block.meta;
+package com.builtbroken.mc.framework.block.meta;
 
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
-import com.builtbroken.mc.lib.json.processors.block.BlockJson;
-import com.builtbroken.mc.lib.json.processors.block.ItemBlockJson;
+import com.builtbroken.mc.framework.block.BlockBase;
+import com.builtbroken.mc.framework.block.ItemBlockJson;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -11,11 +11,11 @@ import net.minecraftforge.oredict.OreDictionary;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/24/2016.
  */
-public class BlockJsonMeta extends BlockJson
+public class BlockMeta extends BlockBase
 {
     public MetaData[] meta = new MetaData[16];
 
-    public BlockJsonMeta(String name, String mat, String id, String mod)
+    public BlockMeta(String name, String mat, String id, String mod)
     {
         super(name, mat, id, mod);
     }

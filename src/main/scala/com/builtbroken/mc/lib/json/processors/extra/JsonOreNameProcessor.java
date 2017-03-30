@@ -4,8 +4,8 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
-import com.builtbroken.mc.lib.json.processors.block.BlockJson;
-import com.builtbroken.mc.lib.json.processors.block.meta.MetaData;
+import com.builtbroken.mc.framework.block.BlockBase;
+import com.builtbroken.mc.framework.block.meta.MetaData;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -50,7 +50,7 @@ public class JsonOreNameProcessor extends JsonProcessor<JsonOreNameData> impleme
     }
 
     @Override
-    public void process(BlockJson block, JsonElement element, List<IJsonGenObject> objectList)
+    public void process(BlockBase block, JsonElement element, List<IJsonGenObject> objectList)
     {
         if (element instanceof JsonObject)
         {
@@ -65,7 +65,7 @@ public class JsonOreNameProcessor extends JsonProcessor<JsonOreNameData> impleme
     }
 
     @Override
-    public void process(MetaData meta, BlockJson block, JsonElement element, List<IJsonGenObject> objectList)
+    public void process(MetaData meta, BlockBase block, JsonElement element, List<IJsonGenObject> objectList)
     {
         if (element instanceof JsonObject)
         {

@@ -1,7 +1,7 @@
-package com.builtbroken.mc.lib.json.processors.block.processor;
+package com.builtbroken.mc.lib.json.processors.block;
 
-import com.builtbroken.mc.lib.json.processors.block.BlockJson;
-import com.builtbroken.mc.lib.json.processors.block.meta.MetaData;
+import com.builtbroken.mc.framework.block.BlockBase;
+import com.builtbroken.mc.framework.block.meta.MetaData;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.google.gson.JsonElement;
@@ -23,13 +23,13 @@ public class JsonBlockSubProcessor implements IJsonBlockSubProcessor
     }
 
     @Override
-    public void process(BlockJson block, JsonElement element, List<IJsonGenObject> objectList)
+    public void process(BlockBase block, JsonElement element, List<IJsonGenObject> objectList)
     {
 
     }
 
     @Override
-    public void process(MetaData data, BlockJson block, JsonElement element, List<IJsonGenObject> objectList)
+    public void process(MetaData data, BlockBase block, JsonElement element, List<IJsonGenObject> objectList)
     {
 
     }

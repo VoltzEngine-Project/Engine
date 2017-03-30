@@ -1,6 +1,6 @@
-package com.builtbroken.mc.lib.json.processors.block;
+package com.builtbroken.mc.framework.block;
 
-import com.builtbroken.mc.lib.json.processors.block.meta.BlockJsonMeta;
+import com.builtbroken.mc.framework.block.meta.BlockMeta;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -58,9 +58,9 @@ public class ItemBlockJson extends ItemBlock
         return getBlockJson().localization;
     }
 
-    public BlockJsonMeta getBlockJson()
+    public BlockMeta getBlockJson()
     {
-        return (BlockJsonMeta) this.field_150939_a;
+        return (BlockMeta) this.field_150939_a;
     }
 
     @Override

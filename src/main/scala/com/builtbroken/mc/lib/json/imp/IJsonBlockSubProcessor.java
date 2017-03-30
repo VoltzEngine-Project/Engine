@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.json.imp;
 
-import com.builtbroken.mc.lib.json.processors.block.BlockJson;
-import com.builtbroken.mc.lib.json.processors.block.meta.MetaData;
+import com.builtbroken.mc.framework.block.BlockBase;
+import com.builtbroken.mc.framework.block.meta.MetaData;
 import com.google.gson.JsonElement;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public interface IJsonBlockSubProcessor
      * @param element    - data
      * @param objectList - list to add generated objects
      */
-    void process(BlockJson block, JsonElement element, List<IJsonGenObject> objectList);
+    void process(BlockBase block, JsonElement element, List<IJsonGenObject> objectList);
 
     /**
      * Called to process json data entry for meta data
@@ -34,5 +34,5 @@ public interface IJsonBlockSubProcessor
      *                   mind it can be null for block only data and is not registered to the block
      * @param objectList - list to add generated objects
      */
-    void process(MetaData data, BlockJson block, JsonElement element, List<IJsonGenObject> objectList);
+    void process(MetaData data, BlockBase block, JsonElement element, List<IJsonGenObject> objectList);
 }

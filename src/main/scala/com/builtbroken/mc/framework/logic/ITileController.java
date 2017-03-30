@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.logic;
+package com.builtbroken.mc.framework.logic;
 
 /**
  * Replaces {@link com.builtbroken.mc.prefab.tile.Tile}

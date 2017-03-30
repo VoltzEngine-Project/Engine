@@ -1,4 +1,4 @@
-package com.builtbroken.mc.prefab.logic;
+package com.builtbroken.mc.framework.logic;
 
 import com.builtbroken.mc.api.ISave;
 import com.builtbroken.mc.api.event.tile.TileEvent;
