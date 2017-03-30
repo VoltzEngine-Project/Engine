@@ -145,7 +145,7 @@ public class ItemStackWrapperTest extends AbstractTest
 
         //Compare Not null to Null
         a.itemStack.setTagCompound(new NBTTagCompound());
-        assertFalse("Failed Not Null equals Null NBT",a.equals(b));
+        assertTrue("Failed Not Null equals Null NBT",a.equals(b));
 
         //Compare Empty NBT
         a.itemStack.setTagCompound(new NBTTagCompound());
@@ -154,7 +154,7 @@ public class ItemStackWrapperTest extends AbstractTest
 
         //Compare Null to  Not Null
         a.itemStack.setTagCompound(null);
-        assertFalse("Failed Null equals Not Null NBT", a.equals(b));
+        assertTrue("Failed Null equals Not Null NBT", a.equals(b));
 
         //Compare same NBT with data
         a.itemStack.setTagCompound(new NBTTagCompound());
