@@ -7,15 +7,14 @@ import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.core.commands.ext.ModularCommandRemoveAdd;
 import com.builtbroken.mc.core.commands.ext.SubCommandWithName;
 import com.builtbroken.mc.core.commands.ext.UserSubCommand;
-import com.builtbroken.mc.core.commands.modflags.*;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandGroup;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandUser;
+import com.builtbroken.mc.core.commands.prefab.AbstractCommand;
+import com.builtbroken.mc.core.commands.prefab.ModularCommand;
 import com.builtbroken.mc.core.commands.sub.CommandVEButcher;
 import com.builtbroken.mc.core.commands.sub.CommandVEClear;
 import com.builtbroken.mc.core.commands.sub.CommandVERemove;
 import com.builtbroken.mc.core.commands.sub.CommandVEVersion;
-import com.builtbroken.mc.prefab.commands.AbstractCommand;
-import com.builtbroken.mc.prefab.commands.ModularCommand;
 
 /**
  * Created by robert on 1/23/2015.
@@ -53,22 +52,7 @@ public class CommandVE extends ModularCommand
         addCommand(new CommandVEVersion());
         if (!disableClearCommand)
             addCommand(new CommandVEClear());
-        if (!disableModflagCommands)
-        {
-            ModularCommand region_add = new ModularCommandRemoveAdd("region", "region", false);
-            ModularCommand region_remove = new ModularCommandRemoveAdd("region", "region", true);
-            ModularCommand region = new CommandRegion();
 
-            addToNewCommand(new CommandNewRegion());
-            addToRemoveCommand(new CommandRemoveRegion());
-
-            region_add.addCommand(new CommandAddUserToRegion());
-            region_remove.addCommand(new CommandRemoveUserFromRegion());
-
-            region.addCommand(region_add);
-            region.addCommand(region_remove);
-            addCommand(region);
-        }
         if(Engine.runningAsDev)
         {
             addToDebugCommand(new CommandDebugRecipes());

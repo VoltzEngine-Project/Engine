@@ -1,7 +1,7 @@
 package com.builtbroken.test.transform.region;
 
-import com.builtbroken.mc.lib.transform.region.Cube;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.region.Cube;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import junit.framework.TestCase;
 import net.minecraftforge.common.util.ForgeDirection;
 

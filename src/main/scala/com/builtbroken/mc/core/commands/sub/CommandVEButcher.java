@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.commands.sub;
 
 import com.builtbroken.jlib.lang.StringHelpers;
-import com.builtbroken.mc.prefab.commands.SubCommand;
+import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.prefab.entity.selector.EntitySelectors;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;

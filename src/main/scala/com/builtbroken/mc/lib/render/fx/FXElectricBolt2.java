@@ -12,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.transform.rotation.Quaternion;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.rotation.Quaternion;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 
 import java.util.*;
 

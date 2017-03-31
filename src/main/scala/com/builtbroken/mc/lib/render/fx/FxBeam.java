@@ -15,7 +15,7 @@ import com.builtbroken.mc.lib.render.RenderUtility;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 
 import java.awt.*;
 

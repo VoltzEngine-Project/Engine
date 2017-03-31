@@ -1,10 +1,10 @@
 package com.builtbroken.mc.lib.world.edit;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.lib.transform.region.Cube;
-import com.builtbroken.mc.lib.transform.sorting.Vector3DistanceComparator;
-import com.builtbroken.mc.lib.transform.vector.Location;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.region.Cube;
+import com.builtbroken.mc.imp.transform.sorting.Vector3DistanceComparator;
+import com.builtbroken.mc.imp.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;

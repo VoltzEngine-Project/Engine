@@ -7,7 +7,7 @@ import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.event.WorldChangeActionEvent;
 import com.builtbroken.mc.api.process.IThreadProcess;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.thread.action.WorldChangeActionPost;
 import com.builtbroken.mc.lib.world.edit.thread.action.WorldEditQueue;
 import net.minecraftforge.common.MinecraftForge;

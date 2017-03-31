@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.network.packet;
 
 import com.builtbroken.mc.core.handler.RenderSelection;
-import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.imp.transform.region.Cube;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Deprecated - moved and modified @see {@link com.builtbroken.mc.lib.mod.compat.nei.NEIProxy}
+ * @Deprecated - moved and modified @see {@link com.builtbroken.mc.mods.nei.NEIProxy}
  * Created by robert on 2/9/2015.
  */
 @Deprecated

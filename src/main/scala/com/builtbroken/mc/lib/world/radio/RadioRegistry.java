@@ -3,7 +3,7 @@ package com.builtbroken.mc.lib.world.radio;
 import com.builtbroken.mc.api.map.radio.IRadioWaveReceiver;
 import com.builtbroken.mc.api.map.radio.IRadioWaveSender;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.imp.transform.region.Cube;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;

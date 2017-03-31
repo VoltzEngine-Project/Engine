@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.world.radio;
 
 import com.builtbroken.mc.api.map.radio.IRadioWaveReceiver;
 import com.builtbroken.mc.api.map.radio.IRadioWaveSender;
-import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.imp.transform.region.Cube;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;

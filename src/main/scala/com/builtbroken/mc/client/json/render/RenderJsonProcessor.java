@@ -2,8 +2,8 @@ package com.builtbroken.mc.client.json.render;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
-import com.builtbroken.mc.lib.transform.rotation.EulerAngle;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

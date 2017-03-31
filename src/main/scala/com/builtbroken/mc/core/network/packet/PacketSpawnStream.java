@@ -4,7 +4,7 @@ package com.builtbroken.mc.core.network.packet;
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;

@@ -4,7 +4,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.JsonRecipeData;
-import com.builtbroken.mc.prefab.recipe.item.grid.RecipeShapedOreLarge;
+import com.builtbroken.mc.lib.recipe.item.grid.RecipeShapedOreLarge;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

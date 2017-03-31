@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.render.block;
 
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;

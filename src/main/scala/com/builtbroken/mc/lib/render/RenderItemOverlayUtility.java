@@ -1,8 +1,8 @@
 package com.builtbroken.mc.lib.render;
 
 import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.lib.transform.rotation.Quaternion;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.rotation.Quaternion;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.world.WorldUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.world.heat;
 
 import com.builtbroken.jlib.data.science.units.TemperatureUnit;
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import net.minecraft.world.World;
 
 import java.util.HashMap;

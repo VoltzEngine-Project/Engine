@@ -2,8 +2,8 @@ package com.builtbroken.mc.core.handler;
 
 import com.builtbroken.jlib.data.Colors;
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.lib.transform.region.Cube;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.region.Cube;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

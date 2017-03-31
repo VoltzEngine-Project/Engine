@@ -2,8 +2,8 @@ package com.builtbroken.mc.lib.helper;
 
 import com.builtbroken.jlib.data.science.units.UnitHelper;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.transform.vector.Point;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Point;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;

@@ -1,7 +1,6 @@
 package com.builtbroken.mc.lib.mod;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.mod.compat.Mods;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 
 /**

@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.world.edit;
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.type.Pair;
 import com.builtbroken.mc.api.IWorldPosition;
+import com.builtbroken.mc.api.edit.BlockEditResult;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

@@ -1,9 +1,9 @@
 package com.builtbroken.mc.lib.helper.wrapper
 
+import com.builtbroken.jlib.data.network.{IByteBufWriter, IByteBufReader}
 import com.builtbroken.mc.api.ISave
 import com.builtbroken.mc.core.{Engine, References}
-import com.builtbroken.mc.core.network.{IByteBufWriter, IByteBufReader}
-import com.builtbroken.mc.lib.transform.vector.{Pos, Point}
+import com.builtbroken.mc.imp.transform.vector.{Pos, Point}
 import cpw.mods.fml.common.network.ByteBufUtils
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
@@ -13,6 +13,7 @@ import net.minecraftforge.fluids.{FluidStack, FluidTank}
 
 /**
  * Some alias methods to make packets more pleasant.
+ *
  * @author anti344, Calclavia
  */
 object ByteBufWrapper {
@@ -65,6 +66,7 @@ object ByteBufWrapper {
 
     /**
      * Automatically determine how to write a specific piece of data.
+ *
      * @param data
      * @return
      */

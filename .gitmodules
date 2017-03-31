@@ -1,6 +1,3 @@
 [submodule "BuiltBrokenScripts"]
 	path = BuiltBrokenScripts
 	url = https://github.com/BuiltBrokenModding/BuiltBrokenScripts.git
-[submodule "src/main/scala/com/builtbroken/mc/api"]
-	path = src/main/scala/com/builtbroken/mc/api
-	url = https://github.com/BuiltBrokenModding/VoltzEngine-API.git

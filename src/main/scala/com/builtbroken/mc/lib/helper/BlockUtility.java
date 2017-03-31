@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.helper;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;

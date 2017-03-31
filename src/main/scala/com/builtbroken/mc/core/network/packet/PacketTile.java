@@ -5,7 +5,7 @@ import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.IPacketReceiver;
 import com.builtbroken.mc.core.network.ex.PacketIDException;
 import com.builtbroken.mc.core.network.ex.PacketTileReadException;
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;

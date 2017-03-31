@@ -1,6 +1,6 @@
 package com.builtbroken.test.prefab.energy;
 
-import com.builtbroken.mc.lib.mod.compat.rf.RFEnergyHandler;
+import com.builtbroken.mc.mods.rf.RFEnergyHandler;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.ModRegistry;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;

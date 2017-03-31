@@ -2,7 +2,7 @@ package com.builtbroken.test.prefab.blast;
 
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import com.builtbroken.mc.prefab.explosive.blast.BlastSimplePath;
 import com.builtbroken.mc.testing.junit.AbstractTest;

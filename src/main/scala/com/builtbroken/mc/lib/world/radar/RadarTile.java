@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.world.radar;
 
 
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 

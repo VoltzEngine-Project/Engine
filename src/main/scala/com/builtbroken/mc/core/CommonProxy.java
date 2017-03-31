@@ -4,7 +4,7 @@ import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.network.packet.PacketSpawnParticle;
 import com.builtbroken.mc.core.network.packet.PacketSpawnStream;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,9 +1,9 @@
 package com.builtbroken.test.transform.region;
 
-import com.builtbroken.mc.lib.transform.vector.Point;
+import com.builtbroken.mc.imp.transform.vector.Point;
 import junit.framework.TestCase;
-import com.builtbroken.mc.lib.transform.region.Rectangle;
-import com.builtbroken.mc.lib.transform.region.Triangle;
+import com.builtbroken.mc.imp.transform.region.Rectangle;
+import com.builtbroken.mc.imp.transform.region.Triangle;
 
 import java.util.LinkedList;
 import java.util.List;

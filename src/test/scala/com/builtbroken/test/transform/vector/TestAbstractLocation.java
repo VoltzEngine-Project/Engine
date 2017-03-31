@@ -2,8 +2,8 @@ package com.builtbroken.test.transform.vector;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
-import com.builtbroken.mc.lib.transform.vector.AbstractLocation;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.AbstractLocation;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import com.builtbroken.mc.testing.junit.server.FakeDedicatedServer;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * JUnit test for {@link com.builtbroken.mc.lib.transform.vector.AbstractLocation}
+ * JUnit test for {@link com.builtbroken.mc.imp.transform.vector.AbstractLocation}
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 10/24/2015.

@@ -2,8 +2,9 @@ package com.builtbroken.mc.lib.world.edit;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
+import com.builtbroken.mc.api.edit.BlockEditResult;
 import com.builtbroken.mc.api.edit.IWorldEdit;
-import com.builtbroken.mc.lib.transform.vector.AbstractLocation;
+import com.builtbroken.mc.imp.transform.vector.AbstractLocation;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;

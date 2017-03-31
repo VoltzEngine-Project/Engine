@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Location;
 
 import java.util.LinkedHashMap;
 import java.util.UUID;

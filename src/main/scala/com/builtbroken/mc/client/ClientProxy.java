@@ -20,7 +20,7 @@ import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.fx.FxBeam;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.prefab.tile.multiblock.MultiBlockRenderHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;

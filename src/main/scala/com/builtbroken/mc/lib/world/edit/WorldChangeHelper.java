@@ -7,7 +7,7 @@ import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.event.WorldChangeActionEvent;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.thread.WCAThreadProcess;
 import com.builtbroken.mc.prefab.explosive.blast.Blast;
 import cpw.mods.fml.common.eventhandler.Event;

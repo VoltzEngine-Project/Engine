@@ -2,9 +2,9 @@ package com.builtbroken.mc.core.content.resources.load;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.prefab.recipe.cast.CastingRecipe;
-import com.builtbroken.mc.prefab.recipe.cast.MRHandlerCast;
-import com.builtbroken.mc.prefab.recipe.extend.MachineRecipeLoader;
+import com.builtbroken.mc.lib.recipe.cast.CastingRecipe;
+import com.builtbroken.mc.lib.recipe.cast.MRHandlerCast;
+import com.builtbroken.mc.lib.recipe.extend.MachineRecipeLoader;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
