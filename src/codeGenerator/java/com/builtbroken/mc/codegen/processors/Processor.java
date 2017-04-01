@@ -41,9 +41,15 @@ public class Processor
     private boolean valid = true;
     private String key;
 
-    public Processor loadFile(File file) throws IOException
+    /**
+     * @param file   - file to load
+     * @param spacer - spacer for debug output, makes the messages look nice
+     * @return
+     * @throws IOException
+     */
+    public Processor loadFile(File file, String spacer) throws IOException
     {
-        Main.logger.info("Parsing Template: " + file);
+        Main.logger.info(spacer + "Parsing Template: " + file);
         //TODO load the file
         //TODO parse out all data
         //TODO ensure extends TileEntityWrapper and nothing else
@@ -70,7 +76,7 @@ public class Processor
             //Convert to string and parse imports
             String string = builder.toString();
             Matcher matcher = importPattern.matcher(string);
-            while(matcher.find())
+            while (matcher.find())
             {
                 for (int i = 1; i <= matcher.groupCount(); i++)
                 {
@@ -105,11 +111,11 @@ public class Processor
             //Match annotations from builder
             string = builder.toString();
             annotations.addAll(Parser.getAnnotations(string));
-            Main.logger.info("  Annotations:");
+            Main.logger.info(spacer + "  Annotations:");
             //Output annotation and parse
             for (String annotation : annotations)
             {
-                Main.logger.info("      " + annotation);
+                Main.logger.info(spacer + "      " + annotation);
                 if (annotation.startsWith("TileWrappedTemplate"))
                 {
                     String data = annotation.substring(annotation.indexOf("(") + 1, annotation.length() - 1);
@@ -119,7 +125,7 @@ public class Processor
 
             if (key == null)
             {
-                Main.logger.info("Class does not contain " + TileWrappedTemplate.class.getName() + " or the key set was empty");
+                Main.logger.info(spacer + "Class does not contain " + TileWrappedTemplate.class.getName() + " or the key set was empty");
                 valid = false;
                 return null;
             }
@@ -159,29 +165,29 @@ public class Processor
 
             //Remove comments and java docs from header
             matcher = multiLineCommentPattern.matcher(string);
-            while(matcher.find())
+            while (matcher.find())
             {
                 for (int i = 1; i <= matcher.groupCount(); i++)
                 {
                     String comment = "/*" + matcher.group(i) + "*/";
                     string = string.replace(comment, "");
-                    Main.logger.warn("Found comment '" + comment + "' nested inside class header, commends should not be nested inside the class header. Remove these to improve class parsing and to improve readability.");
+                    Main.logger.warn(spacer + "Found comment '" + comment + "' nested inside class header, commends should not be nested inside the class header. Remove these to improve class parsing and to improve readability.");
                 }
             }
 
             //Match for extends
-            Main.logger.info("  Extends:");
+            Main.logger.info(spacer + "  Extends:");
             matcher = extendsPattern.matcher(string);
             //Check if pattern 1 works, extends class implements
-            if(matcher.find())
+            if (matcher.find())
             {
                 classExtending = matcher.group(1).trim();
             }
             //else try pattern 2, extends class {
-            if(classExtending == null)
+            if (classExtending == null)
             {
                 matcher = extendsPattern2.matcher(string);
-                if(matcher.find())
+                if (matcher.find())
                 {
                     classExtending = matcher.group(1).trim();
                 }
@@ -190,37 +196,37 @@ public class Processor
             //Validate
             if (classExtending != null)
             {
-                Main.logger.info("      " + classExtending);
+                Main.logger.info(spacer + "      " + classExtending);
                 if (!classExtending.equals("TileEntityWrapper"))
                 {
-                    Main.logger.info("      Error class must extend " + TileEntityWrapper.class.getName());
+                    Main.logger.info(spacer + "      Error class must extend " + TileEntityWrapper.class.getName());
                     valid = false;
                     return this;
                 }
             }
             else
             {
-                Main.logger.info("      none");
-                Main.logger.info("      Error class must extend something");
+                Main.logger.info(spacer + "      none");
+                Main.logger.info(spacer + "      Error class must extend something");
                 valid = false;
                 return this;
             }
 
             //Match interfaces
-            Main.logger.info("  Interfaces:");
+            Main.logger.info(spacer + "  Interfaces:");
             matcher = implementsPattern.matcher(string);
-            while(matcher.find())
+            while (matcher.find())
             {
                 String[] imps = matcher.group(1).trim().split(",");
                 for (String imp : imps)
                 {
                     interfaces.add(imp.trim());
-                    Main.logger.info("      " + imp);
+                    Main.logger.info(spacer + "      " + imp);
                 }
             }
-            if(interfaces.isEmpty())
+            if (interfaces.isEmpty())
             {
-                Main.logger.info("      none");
+                Main.logger.info(spacer + "      none");
             }
 
             //Read reset of file

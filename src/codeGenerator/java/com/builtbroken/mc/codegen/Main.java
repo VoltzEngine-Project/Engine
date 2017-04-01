@@ -320,10 +320,12 @@ public class Main
             else
             {
                 logger.info(spacer + "--File: " + file.getName());
+                logger.info(spacer + " |------------------------->");
                 Processor processor = new Processor();
                 try
                 {
-                    processor = processor.loadFile(file);
+
+                    processor = processor.loadFile(file,  spacer + " | ");
                     //If returns null the file was not a template
                     if (processor != null)
                     {
@@ -343,6 +345,7 @@ public class Main
                     logger.info("Unexpected error while loading template from file " + file, e);
                     System.exit(1);
                 }
+                logger.info(spacer + " |------------------------->");
             }
         }
         return map;
