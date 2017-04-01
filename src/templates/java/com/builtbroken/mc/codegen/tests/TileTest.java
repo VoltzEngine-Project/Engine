@@ -13,7 +13,7 @@ import com.builtbroken.mc.prefab.inventory.ExternalInventory;
  * Created by Dark(DarkGuardsman, Robert) on 3/31/2017.
  */
 @TileWrapped(id = "codeGenTestTile", className = "TileEntityWrapperTest")
-@ExternalInventoryWrapped
+@ExternalInventoryWrapped(type = ExternalInventory.class)
 public class TileTest extends TileNode implements IInventoryProvider<ExternalInventory>
 {
     public ExternalInventory inventory;

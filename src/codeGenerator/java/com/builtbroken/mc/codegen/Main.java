@@ -2,9 +2,17 @@ package com.builtbroken.mc.codegen;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.objectweb.asm.xml.Processor;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -12,9 +20,13 @@ import java.util.HashMap;
  */
 public class Main
 {
+    public static Logger logger;
+    public static Pattern annotationPattern = Pattern.compile("@(.*?)\\)");
+    public static Pattern packagePattern = Pattern.compile("package(.*?);");
+
     public static void main(String... args)
     {
-        Logger logger = LogManager.getRootLogger();
+        logger = LogManager.getRootLogger();
 
         logger.info("VoltzEngine Code Generator v0.1.0");
         logger.info("Parsing arguments...");
@@ -35,6 +47,18 @@ public class Main
             {
                 targetFolder = new File(path);
             }
+            List<Processor> processors = getProcessors();
+
+            if (targetFolder.exists() && targetFolder.isDirectory())
+            {
+                logger.info("Scanning files");
+                handleDirectory(targetFolder, processors, 0);
+            }
+            else
+            {
+                logger.info("The target folder does not exist. Folder: " + targetFolder);
+                System.exit(1);
+            }
         }
         else
         {
@@ -43,6 +67,112 @@ public class Main
         }
 
         logger.info("Exiting...");
+    }
+
+    public static void handleDirectory(File directory, List<Processor> processors, int depth)
+    {
+        //Generate spacer to make debug look nice
+        String spacer;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i <= depth; i++)
+        {
+            builder.append("  ");
+        }
+        spacer = builder.toString();
+
+        logger.info(spacer + "*Directory: " + directory.getName());
+
+        File[] files = directory.listFiles();
+        for (File file : files)
+        {
+            if (file.isDirectory())
+            {
+                handleDirectory(file, processors, ++depth);
+            }
+            else
+            {
+                logger.info(spacer + "--File: " + file.getName());
+                try
+                {
+                    handleFile(file, processors, spacer);
+                }
+                catch (IOException e)
+                {
+                    logger.error("Unexpected exception while parsing " + file, e);
+                    System.exit(1);
+                }
+            }
+        }
+    }
+
+    public static void handleFile(File file, List<Processor> processors, String spacer) throws IOException
+    {
+        if (file.getName().endsWith(".java"))
+        {
+            String classPackage = null;
+            List<String> annotations = new ArrayList();
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            try
+            {
+                String line;
+
+                while ((line = br.readLine()) != null)
+                {
+                    //Ignore all import lines so not to parse {} or @ in imports
+                    if (!line.contains("import"))
+                    {
+                        if (line.contains("package"))
+                        {
+                            final Matcher matcher = packagePattern.matcher(line);
+                            if (matcher.matches())
+                            {
+                                classPackage = matcher.group(1).trim();
+                            }
+                        }
+                        else if (line.contains("@"))
+                        {
+                            final Matcher matcher = annotationPattern.matcher(line);
+                            if (matcher.matches())
+                            {
+                                for (int i = 1; i <= matcher.groupCount(); i++)
+                                {
+                                    annotations.add((matcher.group(i) + ")").trim());
+                                }
+                            }
+                        }
+                        //First { should be the end of the class header
+                        else if (line.contains("{"))
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                br.close();
+            }
+
+            logger.info(spacer + "  Package: " + classPackage);
+            logger.info(spacer + "  Annotations:");
+            for (String string : annotations)
+            {
+                logger.info(spacer + "      " + string);
+            }
+
+            //TODO match annotations to processors
+            //TODO generate files
+            //TODO if file already exists append
+            //TODO build list of all generated data to be registered
+        }
+    }
+
+    public static List<Processor> getProcessors()
+    {
+        List<Processor> list = new ArrayList();
+        //TODO replace with plugin system
+
+        return list;
     }
 
     /**
