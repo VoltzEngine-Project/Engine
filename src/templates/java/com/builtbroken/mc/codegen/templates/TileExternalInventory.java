@@ -22,7 +22,11 @@ public class TileExternalInventory extends TileEntityWrapper implements IInvento
         super(controller);
     }
 
-    //#Start#
+    //#StartFields#
+
+    //#EndFeidls#
+
+    //#StartMethods#
     @Override
     public IInventory getInventory()
     {
@@ -179,5 +183,5 @@ public class TileExternalInventory extends TileEntityWrapper implements IInvento
         }
         return false;
     }
-    //#End#
+    //#EndMethods#
 }

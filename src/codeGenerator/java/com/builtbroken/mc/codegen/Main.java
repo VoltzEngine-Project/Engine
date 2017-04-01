@@ -1,8 +1,9 @@
 package com.builtbroken.mc.codegen;
 
+import com.builtbroken.mc.codegen.processors.Processor;
+import com.builtbroken.mc.framework.logic.annotations.TileWrapped;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.objectweb.asm.xml.Processor;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,6 +24,7 @@ public class Main
     public static Logger logger;
     public static Pattern annotationPattern = Pattern.compile("@(.*?)\\)");
     public static Pattern packagePattern = Pattern.compile("package(.*?);");
+    public static final String TILE_WRAPPER_ANNOTATION = TileWrapped.class.getName();
 
     public static void main(String... args)
     {
@@ -153,11 +155,66 @@ public class Main
                 br.close();
             }
 
+            HashMap<String, String> annotationToData = new HashMap();
+            //Debug data
             logger.info(spacer + "  Package: " + classPackage);
             logger.info(spacer + "  Annotations:");
+
+            //Output annotation and parse
             for (String string : annotations)
             {
                 logger.info(spacer + "      " + string);
+
+                int firstParn = string.indexOf("(");
+                String annotation = string.substring(0, firstParn);
+                String data = string.substring(firstParn + 1, string.length() - 1);
+                annotationToData.put(annotation, data);
+            }
+
+            //Process annotations
+            if (annotationToData.containsKey(TILE_WRAPPER_ANNOTATION))
+            {
+                String[] data = annotationToData.get(TILE_WRAPPER_ANNOTATION).split(",");
+                String id = null;
+                String className = null;
+                for (String s : data)
+                {
+                    if (s.contains("id"))
+                    {
+                        id = s.split("=")[1].trim();
+                    }
+                    else if (s.contains("className"))
+                    {
+                        className = s.split("=")[1].trim();
+                    }
+                }
+
+                if (id == null)
+                {
+                    throw new RuntimeException("Missing id from " + TILE_WRAPPER_ANNOTATION + " annotation");
+                }
+                if (className == null)
+                {
+                    throw new RuntimeException("Missing className from " + TILE_WRAPPER_ANNOTATION + " annotation");
+                }
+
+                StringBuilder builder = new StringBuilder();
+                builder.append("//THIS IS A GENERATED CLASS FILE\n");
+                builder.append("package " + classPackage + ";\n");
+                builder.append("\n");
+
+                createImports(builder, processors);
+                builder.append("\n");
+
+                createClassHeader(builder, className, processors);
+                builder.append("{\n");
+                createBody(builder, processors);
+                builder.append("}");
+
+            }
+            else
+            {
+                logger.info(spacer + "  Does not contain " + TILE_WRAPPER_ANNOTATION);
             }
 
             //TODO match annotations to processors
@@ -167,10 +224,32 @@ public class Main
         }
     }
 
+    public static void createImports(StringBuilder builder, List<Processor> processors)
+    {
+        List<String> imports = new ArrayList();
+        for(Processor processor : processors)
+        {
+            List<String> importsFromProcessor = processor.getImports();
+        }
+    }
+
+    public static void createClassHeader(StringBuilder builder, String className, List<Processor> processors)
+    {
+
+    }
+
+    public static void createBody(StringBuilder builder, List<Processor> processors)
+    {
+
+    }
+
     public static List<Processor> getProcessors()
     {
-        List<Processor> list = new ArrayList();
         //TODO replace with plugin system
+        List<Processor> list = new ArrayList();
+        //TODO create processor
+        //TODO load processor data
+        //TODO parse processor templates
 
         return list;
     }
