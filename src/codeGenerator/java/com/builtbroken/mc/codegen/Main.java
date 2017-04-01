@@ -1,5 +1,6 @@
 package com.builtbroken.mc.codegen;
 
+import com.builtbroken.mc.codegen.processors.Parser;
 import com.builtbroken.mc.codegen.processors.Processor;
 import com.builtbroken.mc.framework.logic.annotations.TileWrapped;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +23,6 @@ import java.util.regex.Pattern;
 public class Main
 {
     public static Logger logger;
-    public static Pattern annotationPattern = Pattern.compile("@(.*?)\\)");
     public static Pattern packagePattern = Pattern.compile("package(.*?);");
     public static final String TILE_WRAPPER_ANNOTATION = TileWrapped.class.getName();
 
@@ -40,6 +40,9 @@ public class Main
         {
             File runFolder = new File(".");
             File targetFolder;
+            File templateFolder;
+
+            //Get source folder path
             String path = launchSettings.get("src");
             if (path.startsWith("."))
             {
@@ -49,10 +52,39 @@ public class Main
             {
                 targetFolder = new File(path);
             }
-            List<Processor> processors = getProcessors();
 
+            //Get template folder path
+            path = launchSettings.get("templates");
+            if (path.startsWith("."))
+            {
+                templateFolder = new File(runFolder, path.substring(1, path.length()));
+            }
+            else
+            {
+                templateFolder = new File(path);
+            }
+
+
+            //Ensure we have a template folder
+            if (!templateFolder.exists() || !templateFolder.isDirectory())
+            {
+                logger.info("The template folder does not exist. Folder: " + templateFolder);
+                System.exit(1);
+            }
+
+            //Ensure we have a target source folder
             if (targetFolder.exists() && targetFolder.isDirectory())
             {
+                //Load processors
+                HashMap<String, Processor> processors = getProcessors(templateFolder, 0);
+
+                //Ensure we have templates to use
+                if (processors.isEmpty())
+                {
+                    logger.info("No templates were loaded, can not continue with templates to use");
+                    System.exit(1);
+                }
+
                 logger.info("Scanning files");
                 handleDirectory(targetFolder, processors, 0);
             }
@@ -71,7 +103,7 @@ public class Main
         logger.info("Exiting...");
     }
 
-    public static void handleDirectory(File directory, List<Processor> processors, int depth)
+    public static void handleDirectory(File directory, HashMap<String, Processor> processors, int depth)
     {
         //Generate spacer to make debug look nice
         String spacer;
@@ -107,7 +139,7 @@ public class Main
         }
     }
 
-    public static void handleFile(File file, List<Processor> processors, String spacer) throws IOException
+    public static void handleFile(File file, HashMap<String, Processor> allProcessors, String spacer) throws IOException
     {
         if (file.getName().endsWith(".java"))
         {
@@ -133,14 +165,7 @@ public class Main
                         }
                         else if (line.contains("@"))
                         {
-                            final Matcher matcher = annotationPattern.matcher(line);
-                            if (matcher.matches())
-                            {
-                                for (int i = 1; i <= matcher.groupCount(); i++)
-                                {
-                                    annotations.add((matcher.group(i) + ")").trim());
-                                }
-                            }
+                            annotations.addAll(Parser.getAnnotations(line));
                         }
                         //First { should be the end of the class header
                         else if (line.contains("{"))
@@ -189,15 +214,34 @@ public class Main
                     }
                 }
 
+                //Ensure we have an ID
                 if (id == null)
                 {
                     throw new RuntimeException("Missing id from " + TILE_WRAPPER_ANNOTATION + " annotation");
                 }
+                //Ensure we have a class name
                 if (className == null)
                 {
                     throw new RuntimeException("Missing className from " + TILE_WRAPPER_ANNOTATION + " annotation");
                 }
 
+                //Get template processors for this file
+                List<Processor> processors = new ArrayList();
+                for (String key : annotationToData.keySet())
+                {
+                    if (allProcessors.containsKey(key))
+                    {
+                        processors.add(allProcessors.get(key));
+                    }
+                }
+
+                //If no templates are required use the empty template
+                if (processors.isEmpty())
+                {
+                    processors.add(allProcessors.get("Empty"));
+                }
+
+                //Start building file
                 StringBuilder builder = new StringBuilder();
                 builder.append("//THIS IS A GENERATED CLASS FILE\n");
                 builder.append("package " + classPackage + ";\n");
@@ -211,15 +255,13 @@ public class Main
                 createBody(builder, processors);
                 builder.append("}");
 
+                //TODO write file
+
             }
             else
             {
                 logger.info(spacer + "  Does not contain " + TILE_WRAPPER_ANNOTATION);
             }
-
-            //TODO match annotations to processors
-            //TODO generate files
-            //TODO if file already exists append
             //TODO build list of all generated data to be registered
         }
     }
@@ -227,10 +269,22 @@ public class Main
     public static void createImports(StringBuilder builder, List<Processor> processors)
     {
         List<String> imports = new ArrayList();
-        for(Processor processor : processors)
+        for (Processor processor : processors)
         {
             List<String> importsFromProcessor = processor.getImports();
+            for (String imp : importsFromProcessor)
+            {
+                //Prevent duplication
+                if (!imports.contains(imp))
+                {
+                    imports.add(imp);
+                    builder.append("import ");
+                    builder.append(imp);
+                    builder.append(";\n");
+                }
+            }
         }
+
     }
 
     public static void createClassHeader(StringBuilder builder, String className, List<Processor> processors)
@@ -243,15 +297,47 @@ public class Main
 
     }
 
-    public static List<Processor> getProcessors()
+    public static HashMap<String, Processor> getProcessors(File directory, int depth)
     {
-        //TODO replace with plugin system
-        List<Processor> list = new ArrayList();
-        //TODO create processor
-        //TODO load processor data
-        //TODO parse processor templates
+        String spacer;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i <= depth; i++)
+        {
+            builder.append("  ");
+        }
+        spacer = builder.toString();
 
-        return list;
+        logger.info(spacer + "*Directory: " + directory.getName());
+
+        HashMap<String, Processor> map = new HashMap();
+        File[] files = directory.listFiles();
+        for (File file : files)
+        {
+            if (file.isDirectory())
+            {
+                map.putAll(getProcessors(file, ++depth));
+            }
+            else
+            {
+                logger.info(spacer + "--File: " + file.getName());
+                Processor processor = new Processor();
+                try
+                {
+                    processor.loadFile(file);
+
+                    if (processor.isValid())
+                    {
+                        map.put(processor.getKey(), processor);
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.info("Unexpected error while loading template from file " + file, e);
+                    System.exit(1);
+                }
+            }
+        }
+        return map;
     }
 
     /**

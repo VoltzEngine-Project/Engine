@@ -7,6 +7,7 @@ import com.builtbroken.mc.framework.logic.wrapper.TileEntityWrapper;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/1/2017.
  */
+@TileWrappedTemplate(annotationName = "Empty")
 public class TileTemplate extends TileEntityWrapper
 {
     public TileTemplate(ITileNode controller)
@@ -27,7 +28,7 @@ public class TileTemplate extends TileEntityWrapper
 
     //#StartFields#
     //Place all of your fields between these two lines
-    //#EndFeidls#
+    //#EndFields#
 
     //#StartMethods#
     //Place all of your methods between these two lines
