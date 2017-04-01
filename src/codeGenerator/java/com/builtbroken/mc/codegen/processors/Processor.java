@@ -1,7 +1,6 @@
 package com.builtbroken.mc.codegen.processors;
 
 import com.builtbroken.mc.codegen.Main;
-import com.builtbroken.mc.codegen.templates.TileWrappedTemplate;
 import com.builtbroken.mc.framework.logic.wrapper.TileEntityWrapper;
 
 import java.io.BufferedReader;
@@ -49,7 +48,6 @@ public class Processor
      */
     public Processor loadFile(File file, String spacer) throws IOException
     {
-        Main.logger.info(spacer + "Parsing Template: " + file);
         //TODO load the file
         //TODO parse out all data
         //TODO ensure extends TileEntityWrapper and nothing else
@@ -119,7 +117,7 @@ public class Processor
                 if (annotation.startsWith("TileWrappedTemplate"))
                 {
                     String data = annotation.substring(annotation.indexOf("(") + 1, annotation.length() - 1);
-                    key = data.split("=")[1].trim();
+                    key = data.split("=")[1].replace("\"", "").trim();
                 }
             }
 

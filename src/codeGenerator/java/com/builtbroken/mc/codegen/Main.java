@@ -2,7 +2,6 @@ package com.builtbroken.mc.codegen;
 
 import com.builtbroken.mc.codegen.processors.Parser;
 import com.builtbroken.mc.codegen.processors.Processor;
-import com.builtbroken.mc.framework.logic.annotations.TileWrapped;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +23,7 @@ public class Main
 {
     public static Logger logger;
     public static Pattern packagePattern = Pattern.compile("package(.*?);");
-    public static final String TILE_WRAPPER_ANNOTATION = TileWrapped.class.getName();
+    public static final String TILE_WRAPPER_ANNOTATION = "TileWrapped";
 
     public static void main(String... args)
     {
@@ -75,6 +74,8 @@ public class Main
             //Ensure we have a target source folder
             if (targetFolder.exists() && targetFolder.isDirectory())
             {
+                logger.info("");
+                logger.info("Loading templates from " + templateFolder);
                 //Load processors
                 HashMap<String, Processor> processors = getProcessors(templateFolder, 0);
 
@@ -85,7 +86,8 @@ public class Main
                     System.exit(1);
                 }
 
-                logger.info("Scanning files");
+                logger.info("");
+                logger.info("Loading classes from " + targetFolder);
                 handleDirectory(targetFolder, processors, 0);
             }
             else
@@ -125,16 +127,19 @@ public class Main
             }
             else
             {
+                logger.info("");
                 logger.info(spacer + "--File: " + file.getName());
+                logger.info(spacer + " |------------------------->");
                 try
                 {
-                    handleFile(file, processors, spacer);
+                    handleFile(file, processors, spacer + " |");
                 }
                 catch (IOException e)
                 {
                     logger.error("Unexpected exception while parsing " + file, e);
                     System.exit(1);
                 }
+                logger.info(spacer + " |------------------------->");
             }
         }
     }
@@ -319,13 +324,14 @@ public class Main
             }
             else
             {
+                logger.info("");
                 logger.info(spacer + "--File: " + file.getName());
                 logger.info(spacer + " |------------------------->");
                 Processor processor = new Processor();
                 try
                 {
 
-                    processor = processor.loadFile(file,  spacer + " | ");
+                    processor = processor.loadFile(file, spacer + " | ");
                     //If returns null the file was not a template
                     if (processor != null)
                     {
