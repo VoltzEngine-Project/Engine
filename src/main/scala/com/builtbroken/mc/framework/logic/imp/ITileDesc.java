@@ -1,4 +1,4 @@
-package com.builtbroken.mc.framework.logic;
+package com.builtbroken.mc.framework.logic.imp;
 
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.AbstractPacket;

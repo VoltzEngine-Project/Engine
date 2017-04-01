@@ -1,8 +1,8 @@
 package com.builtbroken.mc.codegen.templates;
 
 import com.builtbroken.mc.api.tile.IInventoryProvider;
-import com.builtbroken.mc.framework.logic.ITileController;
-import com.builtbroken.mc.framework.logic.TileEntityWrapper;
+import com.builtbroken.mc.framework.logic.ITileNode;
+import com.builtbroken.mc.framework.logic.wrapper.TileEntityWrapper;
 import com.builtbroken.mc.framework.logic.annotations.ExternalInventoryWrapped;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
  */
 public class TileExternalInventory extends TileEntityWrapper implements IInventoryProvider, ISidedInventory
 {
-    public TileExternalInventory(ITileController controller)
+    public TileExternalInventory(ITileNode controller)
     {
         super(controller);
     }

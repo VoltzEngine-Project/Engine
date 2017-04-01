@@ -1,4 +1,4 @@
-package com.builtbroken.mc.framework.logic;
+package com.builtbroken.mc.framework.logic.wrapper;
 
 import com.builtbroken.mc.framework.block.BlockBase;
 
