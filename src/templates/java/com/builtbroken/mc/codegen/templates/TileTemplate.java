@@ -1,6 +1,6 @@
 package com.builtbroken.mc.codegen.templates;
 
-import com.builtbroken.mc.codegen.processors.TileWrappedTemplate;
+import com.builtbroken.mc.codegen.template.TileWrappedTemplate;
 import com.builtbroken.mc.framework.logic.ITileNode;
 import com.builtbroken.mc.framework.logic.wrapper.TileEntityWrapper;
 

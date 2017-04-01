@@ -1,9 +1,8 @@
 package com.builtbroken.mc.codegen.templates;
 
 import com.builtbroken.mc.api.tile.ITankProvider;
-import com.builtbroken.mc.codegen.processors.TileWrappedTemplate;
+import com.builtbroken.mc.codegen.template.TileWrappedTemplate;
 import com.builtbroken.mc.framework.logic.ITileNode;
-import com.builtbroken.mc.framework.logic.annotations.TankProviderWrapped;
 import com.builtbroken.mc.framework.logic.wrapper.TileEntityWrapper;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
