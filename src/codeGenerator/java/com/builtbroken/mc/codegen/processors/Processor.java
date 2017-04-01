@@ -110,7 +110,7 @@ public class Processor
             for (String annotation : annotations)
             {
                 Main.logger.info("      " + annotation);
-                if (annotation.startsWith(TileWrappedTemplate.class.getName()))
+                if (annotation.startsWith("TileWrappedTemplate"))
                 {
                     String data = annotation.substring(annotation.indexOf("(") + 1, annotation.length() - 1);
                     key = data.split("=")[1].trim();
@@ -170,7 +170,7 @@ public class Processor
             }
 
             //Match for extends
-            Main.logger.info("  Interfaces:");
+            Main.logger.info("  Extends:");
             matcher = extendsPattern.matcher(string);
             //Check if pattern 1 works, extends class implements
             if(matcher.find())
@@ -191,9 +191,9 @@ public class Processor
             if (classExtending != null)
             {
                 Main.logger.info("      " + classExtending);
-                if (!classExtending.equals(TileEntityWrapper.class.getName()))
+                if (!classExtending.equals("TileEntityWrapper"))
                 {
-                    Main.logger.info("      Error class must " + TileEntityWrapper.class.getName());
+                    Main.logger.info("      Error class must extend " + TileEntityWrapper.class.getName());
                     valid = false;
                     return this;
                 }
@@ -214,7 +214,7 @@ public class Processor
                 String[] imps = matcher.group(1).trim().split(",");
                 for (String imp : imps)
                 {
-                    interfaces.add(imp);
+                    interfaces.add(imp.trim());
                     Main.logger.info("      " + imp);
                 }
             }
